@@ -45,13 +45,3 @@ export class Graph {
     return edge;
   }
 }
-
-export function digraph(attributes: GraphAttributes = new GraphAttributes()): Graph {
-  const graph = new Graph('digraph', 'G', attributes);
-  return graph;
-}
-
-export function graph(attributes: GraphAttributes = new GraphAttributes()): Graph {
-  const graph = new Graph('graph', 'G', attributes);
-  return graph;
-}
