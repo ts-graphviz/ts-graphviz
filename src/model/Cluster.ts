@@ -1,15 +1,15 @@
-import { Node } from "./Node";
-import { GraphAttributes, EdgeAttributes, NodeAttributes, ClusterAttributes } from "./values/attributes";
-import { Edge } from "./Edge";
+import { Edge } from './Edge';
+import { Node } from './Node';
+import { ClusterAttributes, EdgeAttributes, GraphAttributes, NodeAttributes } from './values/attributes';
 
 export type GraphType = 'digraph' | 'graph' | 'subgraph';
 
 export class Graph {
-  private depth = 0;
   public readonly graph: GraphAttributes;
   public readonly edge = new EdgeAttributes();
   public readonly node = new NodeAttributes();
   public readonly cluster = new ClusterAttributes();
+  private depth = 0;
 
   private nodes: Map<string, Node> = new Map();
 

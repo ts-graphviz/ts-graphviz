@@ -6,5 +6,5 @@ export class Node {
     public readonly graph: Graph,
     public readonly id: string,
     public readonly attributes: NodeAttributes = new NodeAttributes(),
-  ) { }
+  ) {}
 }

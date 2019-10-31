@@ -1,5 +1,4 @@
-
-var attrs = {
+let attrs = {
   Damping: { usage: 'G', type: 'double' },
   K: { usage: 'GC', type: 'double' },
   URL: { usage: 'ENGC', type: 'escString' },

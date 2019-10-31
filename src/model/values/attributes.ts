@@ -1,3 +1,4 @@
+// tslint:disable: max-classes-per-file
 type GraphObjectType = 'edge' | 'node' | 'graph' | 'cluster';
 
 abstract class Attributes {
@@ -23,8 +24,7 @@ export class GraphAttributes extends Attributes {
       return '';
     }
     return '';
-  };
-
+  }
 }
 
 export class EdgeAttributes extends Attributes {
@@ -34,7 +34,7 @@ export class EdgeAttributes extends Attributes {
       return '';
     }
     return '';
-  };
+  }
 }
 
 export class NodeAttributes extends Attributes {
@@ -44,7 +44,7 @@ export class NodeAttributes extends Attributes {
       return '';
     }
     return '';
-  };
+  }
 }
 
 export class ClusterAttributes extends Attributes {
@@ -54,5 +54,5 @@ export class ClusterAttributes extends Attributes {
       return '';
     }
     return '';
-  };
+  }
 }

@@ -1,6 +1,6 @@
-import { Node } from "./Node";
-import { EdgeAttributes } from "./values/attributes";
-import { Graph } from "./Cluster";
+import { Graph } from './Cluster';
+import { Node } from './Node';
+import { EdgeAttributes } from './values/attributes';
 
 export class Edge {
   constructor(
