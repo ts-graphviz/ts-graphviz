@@ -1,0 +1,10 @@
+{
+  "name": "ts-graphviz",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.6.4"
+  }
+}
