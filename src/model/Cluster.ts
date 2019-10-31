@@ -20,25 +20,38 @@ export class Graph {
   constructor(
     public readonly type: GraphType,
     public readonly id: string,
-    attr: GraphAttributes = new GraphAttributes(),
+    attributes: GraphAttributes = new GraphAttributes(),
     public readonly parent?: Graph,
   ) {
-    this.graph = attr;
+    this.graph = attributes;
   }
 
-  public addSubgraph(id: string, attr?: ClusterAttributes) {
-    const graph = new Graph('subgraph', id, attr, this);
+  public createSubgraph(id: string, attributes?: ClusterAttributes): Graph {
+    const graph = new Graph('subgraph', id, attributes, this);
     graph.depth = this.depth + 1;
     this.subgraphs.set(id, graph);
+    return graph;
+  }
+
+  public createNode(id: string, attributes?: NodeAttributes): Node {
+    const node = new Node(this, id, attributes);
+    this.nodes.set(id, node);
+    return node;
+  }
+
+  public createEdge(from: Node, to: Node, attributes: EdgeAttributes): Edge {
+    const edge = new Edge(this, from, to, attributes);
+    this.edges.add(edge);
+    return edge;
   }
 }
 
-export function digraph(attr: GraphAttributes = new GraphAttributes()): Graph {
-  const graph = new Graph('digraph', 'G', attr);
+export function digraph(attributes: GraphAttributes = new GraphAttributes()): Graph {
+  const graph = new Graph('digraph', 'G', attributes);
   return graph;
 }
 
-export function graph(attr: GraphAttributes = new GraphAttributes()): Graph {
-  const graph = new Graph('graph', 'G', attr);
+export function graph(attributes: GraphAttributes = new GraphAttributes()): Graph {
+  const graph = new Graph('graph', 'G', attributes);
   return graph;
 }

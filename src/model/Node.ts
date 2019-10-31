@@ -1,8 +1,10 @@
-import { GraphType } from "./Cluster";
+import { Graph } from './Cluster';
+import { NodeAttributes } from './values/attributes';
 
 export class Node {
   constructor(
-    public readonly graph: GraphType,
+    public readonly graph: Graph,
     public readonly id: string,
+    public readonly attributes: NodeAttributes = new NodeAttributes(),
   ) { }
 }
