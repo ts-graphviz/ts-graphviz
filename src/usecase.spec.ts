@@ -1,15 +1,15 @@
-import { Graph } from './model/Cluster';
+import { Digraph, Graph } from './model/Dot';
 import { digraph, graph } from './usecase';
 
 describe('function digraph', () => {
-  it('should return Graph object, when excute digraph()', () => {
+  it('should return Digraph object, when execute digraph()', () => {
     const g = digraph();
-    expect(g).toBeInstanceOf(Graph);
+    expect(g).toBeInstanceOf(Digraph);
   });
 });
 
 describe('function graph', () => {
-  it('should return Graph object, when excute graph()', () => {
+  it('should return Graph object, when execute graph()', () => {
     const g = graph();
     expect(g).toBeInstanceOf(Graph);
   });

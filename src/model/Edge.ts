@@ -1,12 +1,12 @@
-import { Graph } from './Cluster';
+import { Dot } from './Dot';
 import { Node } from './Node';
 import { EdgeAttributes } from './values/attributes';
 
 export class Edge {
   constructor(
-    public readonly graph: Graph,
+    public readonly graph: Dot,
     public readonly from: Node,
     public readonly to: Node,
-    public readonly attributes: EdgeAttributes,
+    public readonly attributes: EdgeAttributes = new EdgeAttributes(),
   ) {}
 }

@@ -1,7 +1,7 @@
 // tslint:disable: max-classes-per-file
-type GraphObjectType = 'edge' | 'node' | 'graph' | 'cluster';
+type GraphObjectType = 'edge' | 'node' | 'graph' | 'cluster' | 'subgraph';
 
-abstract class Attributes {
+export abstract class Attributes {
   public abstract type: GraphObjectType;
   protected attrs: Map<string, any> = new Map();
   get size(): number {
@@ -49,6 +49,16 @@ export class NodeAttributes extends Attributes {
 
 export class ClusterAttributes extends Attributes {
   public type: GraphObjectType = 'cluster';
+  public toDot(): string {
+    if (this.size === 0) {
+      return '';
+    }
+    return '';
+  }
+}
+
+export class SubgraphAttributes extends Attributes {
+  public type: GraphObjectType = 'subgraph';
   public toDot(): string {
     if (this.size === 0) {
       return '';
