@@ -1,13 +1,7 @@
-import { Edge } from './Edge';
-import { Node } from './Node';
-import {
-  Attributes,
-  ClusterAttributes,
-  EdgeAttributes,
-  GraphAttributes,
-  NodeAttributes,
-  SubgraphAttributes,
-} from './values/attributes';
+import { Edge } from '../Edge';
+import { Node } from '../Node';
+import { Attributes, ClusterAttributes, EdgeAttributes, GraphAttributes, NodeAttributes } from '../values/attributes';
+import { Subgraph } from './Subgraph';
 
 // tslint:disable:max-classes-per-file
 
@@ -46,33 +40,5 @@ export abstract class Dot<ATTR extends Attributes = GraphAttributes> {
     const edge = new Edge(this, from, to, attributes);
     this.edges.add(edge);
     return edge;
-  }
-}
-
-export class Digraph extends Dot {
-  public type: GraphType = 'digraph';
-  constructor(id: string = 'G', attributes: GraphAttributes = new GraphAttributes()) {
-    super(id, attributes);
-  }
-}
-
-export class Graph extends Dot {
-  public type: GraphType = 'graph';
-  constructor(id: string = 'G', attributes: GraphAttributes = new GraphAttributes()) {
-    super(id, attributes);
-  }
-}
-
-export class Subgraph extends Dot<SubgraphAttributes> {
-  public type: GraphType = 'subgraph';
-  constructor(id: string, attributes: SubgraphAttributes = new SubgraphAttributes()) {
-    super(id, attributes);
-  }
-}
-
-export class SubgraphCluster extends Dot<ClusterAttributes> {
-  public type: GraphType = 'subgraph';
-  constructor(id: string, attributes: ClusterAttributes = new ClusterAttributes()) {
-    super(id, attributes);
   }
 }

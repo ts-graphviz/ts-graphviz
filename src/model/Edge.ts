@@ -1,4 +1,4 @@
-import { Dot } from './Dot';
+import { Dot } from './dot';
 import { Node } from './Node';
 import { EdgeAttributes } from './values/attributes';
 
