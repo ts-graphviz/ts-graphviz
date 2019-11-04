@@ -1,6 +1,10 @@
+import { Attributes } from '../attributes/Attributes';
+import { ClusterAttributes } from '../attributes/ClusterAttributes';
+import { EdgeAttributes } from '../attributes/EdgeAttributes';
+import { GraphAttributes } from '../attributes/GraphAttributes';
+import { NodeAttributes } from '../attributes/NodeAttributes';
 import { Edge } from '../Edge';
 import { Node } from '../Node';
-import { Attributes, ClusterAttributes, EdgeAttributes, GraphAttributes, NodeAttributes } from '../values/attributes';
 import { Subgraph } from './Subgraph';
 
 // tslint:disable:max-classes-per-file

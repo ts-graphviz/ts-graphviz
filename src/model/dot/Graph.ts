@@ -1,4 +1,4 @@
-import { GraphAttributes } from '../values/attributes';
+import { GraphAttributes } from '../attributes/GraphAttributes';
 import { Dot, GraphType } from './Dot';
 export class Graph extends Dot {
   public type: GraphType = 'graph';

@@ -1,4 +1,4 @@
-import { ClusterAttributes } from '../values/attributes';
+import { ClusterAttributes } from '../attributes/ClusterAttributes';
 import { Dot, GraphType } from './Dot';
 export class SubgraphCluster extends Dot<ClusterAttributes> {
   public type: GraphType = 'subgraph';

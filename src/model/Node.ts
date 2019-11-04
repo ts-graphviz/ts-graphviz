@@ -1,5 +1,5 @@
+import { NodeAttributes } from './attributes';
 import { Dot } from './dot';
-import { NodeAttributes } from './values/attributes';
 
 export class Node {
   constructor(

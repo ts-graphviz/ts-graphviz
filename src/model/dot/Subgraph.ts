@@ -1,4 +1,4 @@
-import { SubgraphAttributes } from '../values/attributes';
+import { SubgraphAttributes } from '../attributes/SubgraphAttributes';
 import { Dot, GraphType } from './Dot';
 export class Subgraph extends Dot<SubgraphAttributes> {
   public type: GraphType = 'subgraph';

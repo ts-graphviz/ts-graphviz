@@ -1,6 +1,6 @@
+import { EdgeAttributes } from './attributes';
 import { Dot } from './dot';
 import { Node } from './Node';
-import { EdgeAttributes } from './values/attributes';
 
 export class Edge {
   constructor(
