@@ -56,7 +56,7 @@ export class Subgraph extends Cluster<SubgraphAttributes> {
   }
 
   public isSubgraphCluster(): boolean {
-    return this.id.indexOf('cluster_') === 0;
+    return this.id.startsWith('cluster_');
   }
 
   public toDot(): string {
