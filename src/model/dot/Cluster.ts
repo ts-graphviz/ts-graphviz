@@ -1,21 +1,21 @@
 import { Attributes } from '../attributes/Attributes';
-import { ClusterAttributes } from '../attributes/ClusterAttributes';
 import { EdgeAttributes } from '../attributes/EdgeAttributes';
-import { GraphAttributes } from '../attributes/GraphAttributes';
 import { NodeAttributes } from '../attributes/NodeAttributes';
 import { Edge } from '../Edge';
 import { IDot } from '../interface';
 import { Node } from '../Node';
-import { Subgraph } from './Subgraph';
+
+import { SubgraphAttributes } from '../attributes';
+
+// tslint:disable: max-classes-per-file
 
 export type GraphType = 'digraph' | 'graph' | 'subgraph';
 
-export abstract class Dot<ATTR extends Attributes = GraphAttributes> implements IDot {
+export abstract class Cluster<ATTR extends Attributes> implements IDot {
   public abstract readonly type: GraphType;
   public readonly graph: ATTR;
   public readonly edge = new EdgeAttributes();
   public readonly node = new NodeAttributes();
-  public readonly cluster = new ClusterAttributes();
 
   private nodes: Map<string, Node> = new Map();
 
@@ -29,21 +29,37 @@ export abstract class Dot<ATTR extends Attributes = GraphAttributes> implements 
 
   public abstract toDot(): string;
 
-  public createSubgraph(id: string, attributes?: ClusterAttributes): Subgraph {
-    const graph = new Subgraph(id, attributes);
+  public createSubgraph(id: string): Subgraph {
+    const graph = new Subgraph(id);
     this.subgraphs.set(id, graph);
     return graph;
   }
 
   public createNode(id: string, attributes?: NodeAttributes): Node {
-    const node = new Node(this, id, attributes);
+    const node = new Node(id, attributes);
     this.nodes.set(id, node);
     return node;
   }
 
   public createEdge(from: Node, to: Node, attributes: EdgeAttributes): Edge {
-    const edge = new Edge(this, from, to, attributes);
+    const edge = new Edge(from, to, attributes);
     this.edges.add(edge);
     return edge;
+  }
+}
+
+export class Subgraph extends Cluster<SubgraphAttributes> {
+  public type: GraphType = 'subgraph';
+
+  constructor(id: string, attributes: SubgraphAttributes = new SubgraphAttributes()) {
+    super(id, attributes);
+  }
+
+  public isSubgraphCluster(): boolean {
+    return this.id.indexOf('cluster_') === 0;
+  }
+
+  public toDot(): string {
+    throw new Error('Method not implemented.');
   }
 }

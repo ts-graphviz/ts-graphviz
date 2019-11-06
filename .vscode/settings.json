@@ -9,5 +9,6 @@
   "markdownlint.config": {
     "default": true,
     "MD041": false
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
