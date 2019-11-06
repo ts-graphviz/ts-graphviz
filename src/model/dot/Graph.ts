@@ -1,6 +1,6 @@
 import { GraphAttributes } from '../attributes/GraphAttributes';
-import { Dot, GraphType } from './Dot';
-export class Graph extends Dot {
+import { Cluster, GraphType } from './Cluster';
+export class Graph extends Cluster<GraphAttributes> {
   public type: GraphType = 'graph';
   constructor(id: string = 'G', attributes: GraphAttributes = new GraphAttributes()) {
     super(id, attributes);
