@@ -5,4 +5,7 @@ export class Subgraph extends Dot<SubgraphAttributes> {
   constructor(id: string, attributes: SubgraphAttributes = new SubgraphAttributes()) {
     super(id, attributes);
   }
+  public toDot(): string {
+    throw new Error('Method not implemented.');
+  }
 }

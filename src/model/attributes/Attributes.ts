@@ -1,6 +1,8 @@
+import { IDot } from '../interface';
+
 export type GraphObjectType = 'edge' | 'node' | 'graph' | 'cluster' | 'subgraph';
 
-export abstract class Attributes {
+export abstract class Attributes implements IDot {
   public abstract type: GraphObjectType;
   protected attrs: Map<string, any> = new Map();
   get size(): number {
