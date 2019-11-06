@@ -1,16 +1,21 @@
+import { IDot } from '../interface';
+
 // tslint:disable:max-classes-per-file
 // tslint:disable: prettier
 
-export abstract class GraphVizValue {
-  constructor(protected value: any) {}
+export abstract class GraphVizValue implements IDot {
+  // tslint:disable-next-line: ban-types
+  constructor(protected value: Object) {}
   public toDot(): string {
     return this.value.toString();
   }
 }
 
 export class ArrowTypeValue extends GraphVizValue {
+  constructor(value: string);
+  constructor(value: any) { super(value); }
+
 }
-const a = new ArrowTypeValue({});
 export class AspectTypeValue extends GraphVizValue {
 }
 export class BoolValue extends GraphVizValue {
@@ -50,8 +55,12 @@ export class PortPosValue extends GraphVizValue {
 export class QuadTypeValue extends GraphVizValue {
 }
 export class RankdirValue extends GraphVizValue {
+  constructor(value: 'TB' | 'BT' | 'LR' | 'RL');
+  constructor(value: any) { super(value); }
 }
 export class RankTypeValue extends GraphVizValue {
+  constructor(value: 'same' | 'min' | 'source' | 'max' | 'sink');
+  constructor(value: any) { super(value); }
 }
 export class RectValue extends GraphVizValue {
 }
