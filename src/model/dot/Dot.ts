@@ -4,14 +4,13 @@ import { EdgeAttributes } from '../attributes/EdgeAttributes';
 import { GraphAttributes } from '../attributes/GraphAttributes';
 import { NodeAttributes } from '../attributes/NodeAttributes';
 import { Edge } from '../Edge';
+import { IDot } from '../interface';
 import { Node } from '../Node';
 import { Subgraph } from './Subgraph';
 
-// tslint:disable:max-classes-per-file
-
 export type GraphType = 'digraph' | 'graph' | 'subgraph';
 
-export abstract class Dot<ATTR extends Attributes = GraphAttributes> {
+export abstract class Dot<ATTR extends Attributes = GraphAttributes> implements IDot {
   public abstract readonly type: GraphType;
   public readonly graph: ATTR;
   public readonly edge = new EdgeAttributes();
@@ -27,6 +26,8 @@ export abstract class Dot<ATTR extends Attributes = GraphAttributes> {
   constructor(public id: string, attributes: ATTR) {
     this.graph = attributes;
   }
+
+  public abstract toDot(): string;
 
   public createSubgraph(id: string, attributes?: ClusterAttributes): Subgraph {
     const graph = new Subgraph(id, attributes);

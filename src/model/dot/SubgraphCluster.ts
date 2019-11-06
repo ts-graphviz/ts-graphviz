@@ -5,4 +5,7 @@ export class SubgraphCluster extends Dot<ClusterAttributes> {
   constructor(id: string, attributes: ClusterAttributes = new ClusterAttributes()) {
     super(id, attributes);
   }
+  public toDot(): string {
+    throw new Error('Method not implemented.');
+  }
 }
