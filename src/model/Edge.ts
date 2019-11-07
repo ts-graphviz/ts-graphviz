@@ -1,5 +1,5 @@
+import { IDot } from '../common/interface';
 import { EdgeAttributes } from './attributes';
-import { IDot } from './interface';
 import { Node } from './Node';
 
 export class Edge implements IDot {

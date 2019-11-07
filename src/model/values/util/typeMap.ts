@@ -7,7 +7,7 @@ import {
   DirTypeValue,
   DoubleValue,
   EscStringValue,
-  GraphVizValue,
+  GraphvizValue,
   IntValue,
   LayerListValue,
   LayerRangeValue,
@@ -29,11 +29,11 @@ import {
   StringValue,
   StyleValue,
   ViewPortValue,
-} from './valueType';
+} from '../valueType';
 
 type Type<T> = new (...args: any[]) => T;
 
-export const typeMap: Map<string, Type<GraphVizValue>> = new Map([
+export const typeMap: Map<string, Type<GraphvizValue>> = new Map([
   ['Damping', DoubleValue],
   ['K', DoubleValue],
   ['URL', EscStringValue],

@@ -1,3 +1,3 @@
 export * from './valueType';
-export * from './typeMap';
-export * from './attributesSets';
+export * from './util/typeMap';
+export * from './util/attributesSets';

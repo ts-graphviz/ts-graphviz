@@ -1,17 +1,17 @@
+import { GraphvizObject } from '../../common/abstract';
+import { IDot } from '../../common/interface';
+import { SubgraphAttributes } from '../attributes';
 import { Attributes } from '../attributes/Attributes';
 import { EdgeAttributes } from '../attributes/EdgeAttributes';
 import { NodeAttributes } from '../attributes/NodeAttributes';
 import { Edge } from '../Edge';
-import { IDot } from '../interface';
 import { Node } from '../Node';
-
-import { SubgraphAttributes } from '../attributes';
 
 // tslint:disable: max-classes-per-file
 
 export type GraphType = 'digraph' | 'graph' | 'subgraph';
 
-export abstract class Cluster<ATTR extends Attributes> implements IDot {
+export abstract class Cluster<ATTR extends Attributes> extends GraphvizObject implements IDot {
   public abstract readonly type: GraphType;
   public readonly graph: ATTR;
   public readonly edge = new EdgeAttributes();
@@ -24,6 +24,7 @@ export abstract class Cluster<ATTR extends Attributes> implements IDot {
   private subgraphs: Map<string, Subgraph> = new Map();
 
   constructor(public id: string, attributes: ATTR) {
+    super();
     this.graph = attributes;
   }
 
