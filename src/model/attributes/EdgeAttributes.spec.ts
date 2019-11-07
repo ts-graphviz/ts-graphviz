@@ -1,4 +1,4 @@
-import { GraphvizObject } from '../../common/abstract';
+import { GraphvizObject } from '../../common';
 import { EdgeAttributes } from './EdgeAttributes';
 
 describe('class EdgeAttributes', () => {

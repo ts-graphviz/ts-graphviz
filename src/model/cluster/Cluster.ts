@@ -1,5 +1,4 @@
-import { GraphvizObject } from '../../common/abstract';
-import { IDot } from '../../common/interface';
+import { GraphvizObject, IDot } from '../../common';
 import { SubgraphAttributes } from '../attributes';
 import { Attributes } from '../attributes/Attributes';
 import { EdgeAttributes } from '../attributes/EdgeAttributes';
@@ -11,6 +10,9 @@ import { Node } from '../Node';
 
 export type GraphType = 'digraph' | 'graph' | 'subgraph';
 
+/**
+ * @hidden
+ */
 export abstract class Cluster<ATTR extends Attributes> extends GraphvizObject implements IDot {
   public abstract readonly type: GraphType;
   public readonly graph: ATTR;
@@ -48,7 +50,9 @@ export abstract class Cluster<ATTR extends Attributes> extends GraphvizObject im
     return edge;
   }
 }
-
+/**
+ * @category Primary
+ */
 export class Subgraph extends Cluster<SubgraphAttributes> {
   public type: GraphType = 'subgraph';
 
