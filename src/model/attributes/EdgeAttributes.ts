@@ -1,4 +1,4 @@
-import { edgeAttributesSet } from '../values/attributesSets';
+import { edgeAttributesSet } from '../values/util/attributesSets';
 import { ColorValue, LblStringValue } from '../values/valueType';
 import { Attributes } from './Attributes';
 

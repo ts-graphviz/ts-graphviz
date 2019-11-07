@@ -1,5 +1,5 @@
+import { IDot } from '../common/interface';
 import { NodeAttributes } from './attributes';
-import { IDot } from './interface';
 
 export class Node implements IDot {
   constructor(public readonly id: string, public readonly attributes: NodeAttributes = new NodeAttributes()) {}

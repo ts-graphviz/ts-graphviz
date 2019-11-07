@@ -1,93 +1,96 @@
-import { IDot } from '../interface';
+import { GraphvizObject } from '../../common/abstract';
+import { IDot } from '../../common/interface';
 
 // tslint:disable:max-classes-per-file
 // tslint:disable: prettier
 
-export abstract class GraphVizValue implements IDot {
+export abstract class GraphvizValue extends GraphvizObject implements IDot {
   // tslint:disable-next-line: ban-types
-  constructor(protected value: Object) {}
+  constructor(protected value: Object) {
+    super();
+  }
   public toDot(): string {
     return this.value.toString();
   }
 }
 
-export class ArrowTypeValue extends GraphVizValue {
+export class ArrowTypeValue extends GraphvizValue {
   constructor(value: string);
   constructor(value: any) { super(value); }
 
 }
-export class AspectTypeValue extends GraphVizValue {
+export class AspectTypeValue extends GraphvizValue {
 }
-export class BoolValue extends GraphVizValue {
+export class BoolValue extends GraphvizValue {
 }
-export class ClusterModeValue extends GraphVizValue {
+export class ClusterModeValue extends GraphvizValue {
 }
-export class ColorValue extends GraphVizValue {
+export class ColorValue extends GraphvizValue {
   constructor(value: string);
   constructor(value: any) { super(value); }
   public toDot(): string {
     return `"${this.value}"`;
   }
 }
-export class DirTypeValue extends GraphVizValue {
+export class DirTypeValue extends GraphvizValue {
 }
-export class DoubleValue extends GraphVizValue {
+export class DoubleValue extends GraphvizValue {
 }
-export class EscStringValue extends GraphVizValue {
+export class EscStringValue extends GraphvizValue {
 }
-export class IntValue extends GraphVizValue {
+export class IntValue extends GraphvizValue {
 }
-export class LayerListValue extends GraphVizValue {
+export class LayerListValue extends GraphvizValue {
 }
-export class LayerRangeValue extends GraphVizValue {
+export class LayerRangeValue extends GraphvizValue {
 }
-export class LblStringValue extends GraphVizValue {
+export class LblStringValue extends GraphvizValue {
   constructor(value: string);
   constructor(value: any) { super(value); }
   public toDot(): string {
     return `"${this.value}"`;
   }
 }
-export class OutputModeValue extends GraphVizValue {
+export class OutputModeValue extends GraphvizValue {
 }
-export class PackModeValue extends GraphVizValue {
+export class PackModeValue extends GraphvizValue {
 }
-export class PagedirValue extends GraphVizValue {
+export class PagedirValue extends GraphvizValue {
 }
-export class PointValue extends GraphVizValue {
+export class PointValue extends GraphvizValue {
 }
-export class PointfValue extends GraphVizValue {
+export class PointfValue extends GraphvizValue {
 }
-export class PointfListValue extends GraphVizValue {
+export class PointfListValue extends GraphvizValue {
 }
-export class PortPosValue extends GraphVizValue {
+export class PortPosValue extends GraphvizValue {
 }
-export class QuadTypeValue extends GraphVizValue {
+export class QuadTypeValue extends GraphvizValue {
 }
-export class RankdirValue extends GraphVizValue {
+export class RankdirValue extends GraphvizValue {
   constructor(value: 'TB' | 'BT' | 'LR' | 'RL');
   constructor(value: any) { super(value); }
 }
-export class RankTypeValue extends GraphVizValue {
+export class RankTypeValue extends GraphvizValue {
   constructor(value: 'same' | 'min' | 'source' | 'max' | 'sink');
   constructor(value: any) { super(value); }
 }
-export class RectValue extends GraphVizValue {
+export class RectValue extends GraphvizValue {
 }
-export class ShapeValue extends GraphVizValue {
+export class ShapeValue extends GraphvizValue {
 }
-export class SmoothTypeValue extends GraphVizValue {
+export class SmoothTypeValue extends GraphvizValue {
 }
-export class StartTypeValue extends GraphVizValue {
+export class StartTypeValue extends GraphvizValue {
 }
-export class StringValue extends GraphVizValue {
+export class StringValue extends GraphvizValue {
   constructor(value: string);
   constructor(value: any) { super(value); }
   public toDot(): string {
     return `"${this.value}"`;
   }
 }
-export class StyleValue extends GraphVizValue {
+export class StyleValue extends GraphvizValue {
 }
-export class ViewPortValue extends GraphVizValue {
+export class ViewPortValue extends GraphvizValue {
 }
