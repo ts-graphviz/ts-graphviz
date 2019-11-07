@@ -1,3 +1,4 @@
+import { Type } from '../../../common';
 import {
   ArrowTypeValue,
   AspectTypeValue,
@@ -31,8 +32,9 @@ import {
   ViewPortValue,
 } from '../valueType';
 
-type Type<T> = new (...args: any[]) => T;
-
+/**
+ * @hidden
+ */
 export const typeMap: Map<string, Type<GraphvizValue>> = new Map([
   ['Damping', DoubleValue],
   ['K', DoubleValue],

@@ -1,3 +1,6 @@
+/**
+ * @hidden
+ */
 export const graphAttributesSet = new Set([
   'Damping',
   'K',
@@ -86,6 +89,9 @@ export const graphAttributesSet = new Set([
   'rank',
 ]);
 
+/**
+ * @hidden
+ */
 export const edgeAttributesSet = new Set([
   'URL',
   'arrowhead',
@@ -150,6 +156,9 @@ export const edgeAttributesSet = new Set([
   'rank',
 ]);
 
+/**
+ * @hidden
+ */
 export const nodeAttributesSet = new Set([
   'URL',
   'color',
@@ -197,6 +206,9 @@ export const nodeAttributesSet = new Set([
   'texmode',
 ]);
 
+/**
+ * @hidden
+ */
 export const clusterAttributesSet = new Set([
   'K',
   'URL',

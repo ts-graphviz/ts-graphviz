@@ -1,4 +1,5 @@
 {
   "mode": "file",
-  "out": "./doc"
+  "out": "./doc",
+  "categoryOrder": ["Primary", "Base", "Attributes", "Values", "*"]
 }

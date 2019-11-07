@@ -1,5 +1,8 @@
 import { GraphAttributes } from '../attributes/GraphAttributes';
 import { Cluster, GraphType } from './Cluster';
+/**
+ * @category Primary
+ */
 export class Digraph extends Cluster<GraphAttributes> {
   public type: GraphType = 'digraph';
   constructor(id: string = 'G', attributes: GraphAttributes = new GraphAttributes()) {

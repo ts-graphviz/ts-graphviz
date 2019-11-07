@@ -1,7 +1,9 @@
-import { GraphvizObject } from '../../common/abstract';
-import { IDot } from '../../common/interface';
+import { GraphvizObject, IDot } from '../../common';
 import { GraphvizValue, typeMap } from '../values';
 
+/**
+ * @category Attributes
+ */
 export abstract class Attributes extends GraphvizObject implements IDot {
   protected attrs: Map<string, GraphvizValue> = new Map();
   get size(): number {
