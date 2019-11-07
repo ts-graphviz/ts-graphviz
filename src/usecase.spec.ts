@@ -1,4 +1,4 @@
-import { Digraph, Graph } from './model/dot';
+import { Digraph, Graph } from './model/cluster';
 import { digraph, graph } from './usecase';
 
 describe('function digraph', () => {
