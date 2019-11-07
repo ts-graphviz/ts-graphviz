@@ -23,6 +23,11 @@ export class BoolValue extends GraphVizValue {
 export class ClusterModeValue extends GraphVizValue {
 }
 export class ColorValue extends GraphVizValue {
+  constructor(value: string);
+  constructor(value: any) { super(value); }
+  public toDot(): string {
+    return `"${this.value}"`;
+  }
 }
 export class DirTypeValue extends GraphVizValue {
 }
@@ -37,6 +42,11 @@ export class LayerListValue extends GraphVizValue {
 export class LayerRangeValue extends GraphVizValue {
 }
 export class LblStringValue extends GraphVizValue {
+  constructor(value: string);
+  constructor(value: any) { super(value); }
+  public toDot(): string {
+    return `"${this.value}"`;
+  }
 }
 export class OutputModeValue extends GraphVizValue {
 }
@@ -71,6 +81,11 @@ export class SmoothTypeValue extends GraphVizValue {
 export class StartTypeValue extends GraphVizValue {
 }
 export class StringValue extends GraphVizValue {
+  constructor(value: string);
+  constructor(value: any) { super(value); }
+  public toDot(): string {
+    return `"${this.value}"`;
+  }
 }
 export class StyleValue extends GraphVizValue {
 }
