@@ -1,4 +1,4 @@
-import { Digraph, Graph } from './model/dot';
+import { Digraph, Graph } from './model/cluster';
 
 export function digraph(): Digraph {
   const g = new Digraph();
