@@ -80,7 +80,7 @@ typings/
 # nuxt.js build output
 .nuxt
 
-# react / gatsby 
+# react / gatsby
 public/
 
 # vuepress build output
@@ -129,3 +129,5 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/macos
+
+dist
