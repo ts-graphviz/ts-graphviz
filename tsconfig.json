@@ -12,7 +12,8 @@
     "outDir": "dist/",
     "rootDir": "./src",
     "moduleResolution": "node",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "declaration": true
   },
   "include": [
     "src/**/*.ts"
