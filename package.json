@@ -5,6 +5,7 @@
   "author": "kamiazya <yuki@kamiazya.tech>",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
     "test": "jest",
     "lint": "tslint --project ./tsconfig.json"
   },
