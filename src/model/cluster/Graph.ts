@@ -10,7 +10,4 @@ export class Graph extends RootCluster<GraphAttributes> {
   constructor(id: string = 'G', attributes: GraphAttributes = new GraphAttributes()) {
     super(id, attributes);
   }
-  public toDot(): string {
-    throw new Error('Method not implemented.');
-  }
 }
