@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`class Graph renders correctly by toDot method has some attributes 1`] = `
+"graph G {
+  graph [
+    color = \\"red\\",
+  ];
+  edge [
+    label = \\"edge label\\",
+  ];
+  node [
+    xlabel = \\"node xlabel\\",
+  ];
+}"
+`;
+
+exports[`class Graph renders correctly by toDot method nodes and edge 1`] = `
+"graph G {
+  \\"node1\\";
+  \\"node2\\";
+  \\"node1\\" -- \\"node2\\";
+}"
+`;
+
+exports[`class Graph renders correctly by toDot method simple g 1`] = `
+"graph G {
+}"
+`;
+
+exports[`class Graph renders correctly by toDot method subgraphs 1`] = `
+"graph G {
+  \\"node1\\";
+  \\"node2\\";
+  subgraph A {
+    \\"A_node1\\";
+    \\"A_node2\\";
+    \\"A_node1\\" -- \\"A_node2\\";
+    \\"B_node1\\" -- \\"B_node2\\";
+  };
+  subgraph B {
+    \\"B_node1\\";
+    \\"B_node2\\";
+  };
+  \\"node1\\" -- \\"node2\\";
+}"
+`;
+
+exports[`class Graph renders correctly by toDot method subgraphs, depth 2 1`] = `
+"graph G {
+  \\"node1\\";
+  \\"node2\\";
+  subgraph depth1 {
+    \\"depth1_node1\\";
+    \\"depth1_node2\\";
+    subgraph depth2 {
+      \\"depth2_node1\\";
+      \\"depth2_node2\\";
+      \\"depth2_node1\\" -- \\"depth2_node2\\";
+    };
+    \\"depth1_node1\\" -- \\"depth1_node2\\";
+  };
+  \\"node1\\" -- \\"node2\\";
+}"
+`;
