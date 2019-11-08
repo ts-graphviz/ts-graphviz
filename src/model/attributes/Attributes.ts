@@ -1,10 +1,10 @@
-import { GraphvizObject, IDot } from '../../common';
+import { DotBase } from '../../common';
 import { GraphvizValue, typeMap } from '../values';
 
 /**
  * @category Attributes
  */
-export abstract class Attributes extends GraphvizObject implements IDot {
+export abstract class Attributes extends DotBase {
   protected attrs: Map<string, GraphvizValue> = new Map();
   get size(): number {
     return this.attrs.size;
@@ -24,5 +24,14 @@ export abstract class Attributes extends GraphvizObject implements IDot {
       }
     }
   }
-  public abstract toDot(): string;
+  public toDot(): string {
+    if (this.size === 0) {
+      return '';
+    }
+    return [
+      '[',
+      ...Array.from(this.attrs.entries()).map(([key, value]) => Attributes.indent(`${key} = ${value.toDot()},`)),
+      ']',
+    ].join('\n');
+  }
 }

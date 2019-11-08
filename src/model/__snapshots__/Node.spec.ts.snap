@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`class Node renders correctly by toDot method has some attributes 1`] = `
+"\\"test\\" [
+  label = \\"this is test\\",
+  color = \\"red\\",
+];"
+`;
+
+exports[`class Node renders correctly by toDot method simple node 1`] = `"\\"test\\";"`;

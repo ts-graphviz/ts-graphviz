@@ -1,4 +1,5 @@
-import { GraphvizObject } from '../../common';
+import { DotBase, GraphvizObject } from '../../common';
+import { Attributes } from './Attributes';
 import { EdgeAttributes } from './EdgeAttributes';
 
 describe('class EdgeAttributes', () => {
@@ -7,7 +8,10 @@ describe('class EdgeAttributes', () => {
     attrs = new EdgeAttributes();
   });
 
-  it('should be instance of GraphvizObject', () => {
+  it('should be instance of EdgeAttributes/Attributes/DotBase/GraphvizObject', () => {
+    expect(attrs).toBeInstanceOf(EdgeAttributes);
+    expect(attrs).toBeInstanceOf(Attributes);
+    expect(attrs).toBeInstanceOf(DotBase);
     expect(attrs).toBeInstanceOf(GraphvizObject);
   });
 

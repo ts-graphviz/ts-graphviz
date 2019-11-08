@@ -4,13 +4,13 @@ exports[`class EdgeAttributes renders correctly by toDot method no attributes 1`
 
 exports[`class EdgeAttributes renders correctly by toDot method one attribute 1`] = `
 "[
-  label=\\"test\\",
+  label = \\"test\\",
 ]"
 `;
 
 exports[`class EdgeAttributes renders correctly by toDot method some attributes 1`] = `
 "[
-  label=\\"test\\",
-  color=\\"red\\",
+  label = \\"test\\",
+  color = \\"red\\",
 ]"
 `;
