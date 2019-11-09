@@ -10,14 +10,23 @@ export abstract class GraphvizObject {}
  * @category Base
  */
 export abstract class DotBase extends GraphvizObject implements IDot {
+  /**
+   * @hidden
+   */
   protected static quoteString(src: string): string {
     return `"${src}"`;
   }
 
+  /**
+   * @hidden
+   */
   protected static joinLines(...lines: (string | undefined)[]): string {
     return lines.filter(l => typeof l === 'string').join('\n');
   }
 
+  /**
+   * @hidden
+   */
   protected static indent(src: string, depth: number = 1): string {
     const indent = ' '.repeat(2 * depth);
     return src
