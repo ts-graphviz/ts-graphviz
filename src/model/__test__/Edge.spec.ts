@@ -1,7 +1,7 @@
-import { DotBase, GraphvizObject } from '../common';
+import { DotBase, GraphvizObject } from '../../common';
 
-import { Edge } from './Edge';
-import { Node } from './Node';
+import { Edge } from '../Edge';
+import { Node } from '../Node';
 
 describe('class Edge', () => {
   let edge: Edge;

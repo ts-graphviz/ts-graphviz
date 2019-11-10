@@ -1,5 +1,5 @@
-import { Digraph, Graph } from './model/cluster';
-import { digraph, graph } from './usecase';
+import { Digraph, Graph } from '../model/cluster';
+import { digraph, graph } from '../usecase';
 
 describe('function digraph', () => {
   it('should return Digraph object, when execute digraph()', () => {

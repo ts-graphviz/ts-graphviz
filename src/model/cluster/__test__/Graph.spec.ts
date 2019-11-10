@@ -1,6 +1,6 @@
-import { DotBase, GraphvizObject } from '../../common';
-import { Cluster, RootCluster } from './Cluster';
-import { Graph } from './Graph';
+import { DotBase, GraphvizObject } from '../../../common';
+import { Cluster, RootCluster } from '../Cluster';
+import { Graph } from '../Graph';
 
 describe('class Graph', () => {
   let g: Graph;

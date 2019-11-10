@@ -1,6 +1,6 @@
-import { DotBase, GraphvizObject } from '../../common';
-import { Cluster, RootCluster } from './Cluster';
-import { Digraph } from './Digraph';
+import { DotBase, GraphvizObject } from '../../../common';
+import { Cluster, RootCluster } from '../Cluster';
+import { Digraph } from '../Digraph';
 
 describe('class Subgraph', () => {
   let g: Digraph;

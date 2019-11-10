@@ -1,5 +1,5 @@
-import { DotBase, GraphvizObject } from '../common';
-import { Node } from './Node';
+import { DotBase, GraphvizObject } from '../../common';
+import { Node } from '../Node';
 
 describe('class Node', () => {
   let node: Node;
