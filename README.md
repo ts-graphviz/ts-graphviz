@@ -1,4 +1,4 @@
-[![GitHub Action](https://github.com/kamiazya/typedoc-plugin-nomnoml/workflows/Node%20CI/badge.svg)](https://github.com/kamiazya/typedoc-plugin-nomnoml/actions?workflow=Node+CI)
+[![GitHub Action](https://github.com/kamiazya/ts-graphviz/workflows/Linux/badge.svg)](https://github.com/kamiazya/ts-graphviz/actions?workflow=Linux)
 
 # ts-graphviz
 

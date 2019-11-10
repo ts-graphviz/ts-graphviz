@@ -344,7 +344,7 @@
   resolved "https://registry.yarnpkg.com/@types/jest-diff/-/jest-diff-20.0.1.tgz#35cc15b9c4f30a18ef21852e255fdb02f6d59b89"
   integrity sha512-yALhelO3i0hqZwhjtcr6dYyaLoCHbAMshwtj6cGxTvHZAKXHsYGdff6E8EPw3xLKY0ELUTQ69Q1rQiJENnccMA==
 
-"@types/jest@^24.0.21":
+"@types/jest@^24.0.21", "@types/jest@^24.0.22":
   version "24.0.22"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.22.tgz#08a50be08e78aba850a1185626e71d31e2336145"
   integrity sha512-t2OvhNZnrNjlzi2i0/cxbLVM59WN15I2r1Qtb7wDv28PnV9IzrPtagFRey/S9ezdLD0zyh1XGMQIEQND2YEfrw==
@@ -1836,6 +1836,13 @@ jest-get-type@^24.9.0:
   version "24.9.0"
   resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-24.9.0.tgz#1684a0c8a50f2e4901b6644ae861f579eed2ef0e"
   integrity sha512-lUseMzAley4LhIcpSP9Jf+fTrQ4a1yHQwLNeeVa2cEmbCGeoZAtYPOIv8JaxLD/sUpKxetKGP+gsHl8f8TSj8Q==
+
+jest-graphviz@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/jest-graphviz/-/jest-graphviz-0.0.2.tgz#45241d6b46037a2e333e28d07dd0688a43cd8666"
+  integrity sha512-7qWws15BAl7FUWQG82nWjwdwZtYpHFSxjtS+qk740b+uvmJJBsK8/1Kn/tUpWhKr5NjylCBaxy5Y6FpRi8e9cg==
+  dependencies:
+    "@types/jest" "^24.0.22"
 
 jest-haste-map@^24.9.0:
   version "24.9.0"

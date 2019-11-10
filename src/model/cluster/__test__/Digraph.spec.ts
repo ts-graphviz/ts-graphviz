@@ -18,21 +18,27 @@ describe('class Subgraph', () => {
 
   describe('renders correctly by toDot method', () => {
     it('simple g', () => {
-      expect(g.toDot()).toMatchSnapshot();
+      const dot = g.toDot();
+      expect(dot).toMatchSnapshot();
+      expect(dot).toBeValidDot();
     });
 
     it('has some attributes', () => {
       g.attributes.edge.set('label', 'edge label');
       g.attributes.graph.set('color', 'red');
       g.attributes.node.set('xlabel', 'node xlabel');
-      expect(g.toDot()).toMatchSnapshot();
+      const dot = g.toDot();
+      expect(dot).toMatchSnapshot();
+      expect(dot).toBeValidDot();
     });
 
     it('nodes and edge', () => {
       const node1 = g.createNode('node1');
       const node2 = g.createNode('node2');
       g.createEdge(node1, node2);
-      expect(g.toDot()).toMatchSnapshot();
+      const dot = g.toDot();
+      expect(dot).toMatchSnapshot();
+      expect(dot).toBeValidDot();
     });
 
     it('subgraphs', () => {
@@ -49,7 +55,9 @@ describe('class Subgraph', () => {
       const node1 = g.createNode('node1');
       const node2 = g.createNode('node2');
       g.createEdge(node1, node2);
-      expect(g.toDot()).toMatchSnapshot();
+      const dot = g.toDot();
+      expect(dot).toMatchSnapshot();
+      expect(dot).toBeValidDot();
     });
 
     it('subgraphs, depth 2', () => {
@@ -66,7 +74,9 @@ describe('class Subgraph', () => {
       const node1 = g.createNode('node1');
       const node2 = g.createNode('node2');
       g.createEdge(node1, node2);
-      expect(g.toDot()).toMatchSnapshot();
+      const dot = g.toDot();
+      expect(dot).toMatchSnapshot();
+      expect(dot).toBeValidDot();
     });
   });
 });
