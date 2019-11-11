@@ -1,0 +1,12 @@
+.editorconfig
+.github
+.gitignore
+.prettierignore
+.prettierrc.json
+.vscode
+jest.config.js
+LICENSE
+src
+tsconfig.json
+tslint.json
+typedoc.json
