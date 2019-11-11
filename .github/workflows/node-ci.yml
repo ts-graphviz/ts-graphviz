@@ -52,8 +52,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: install graphviz
       run: |
-        sudo brew update
-        sudo brew install graphviz
+        brew update
+        brew install graphviz
     - name: Install dependencies
       run: yarn --frozen-lockfile --ignore-optional
       env:
