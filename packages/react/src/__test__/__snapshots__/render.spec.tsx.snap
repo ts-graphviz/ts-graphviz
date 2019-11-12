@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render render works 1`] = `
+<Context.Provider
+  value={Object {}}
+>
+  <Graphviz>
+    <Digraph />
+  </Graphviz>
+  ;
+</Context.Provider>
+`;
