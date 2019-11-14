@@ -10,3 +10,4 @@ src
 tsconfig.json
 tslint.json
 typedoc.json
+config

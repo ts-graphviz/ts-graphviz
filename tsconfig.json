@@ -9,7 +9,7 @@
     "allowJs": false,
     "alwaysStrict": true,
     "strictNullChecks": true,
-    "outDir": "dist/",
+    "outDir": "lib",
     "rootDir": "./src",
     "moduleResolution": "node",
     "esModuleInterop": true,

@@ -130,5 +130,5 @@ Temporary Items
 
 # End of https://www.gitignore.io/api/macos
 
-dist
+lib
 doc
