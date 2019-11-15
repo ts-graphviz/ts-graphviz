@@ -3,12 +3,13 @@ name: NodeCI
 on: [push]
 
 jobs:
-  test-on-linux:
-    name: Test on node ${{ matrix.node-version }} and ubuntu-latest
-    runs-on: ubuntu-latest
+  test:
+    name: Test on node ${{ matrix.node-version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         node-version: [8.x, 10.x, 12.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
     - uses: actions/checkout@v1
@@ -16,77 +17,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: install graphviz
-      run: |
-        sudo apt-get update
-        sudo apt-get install graphviz
-    - name: Install dependencies
-      run: yarn --frozen-lockfile --ignore-optional
-      env:
-        CI: 'true'
-    - name: Lint
-      run: yarn lint
-      env:
-        CI: 'true'
-    - name: Test
-      run: yarn test
-      env:
-        CI: 'true'
-    - name: Build
-      run: yarn build
-      env:
-        CI: 'true'
-
-  test-on-macos:
-    name: Test on node ${{ matrix.node-version }} and macos-latest
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        node-version: [8.x, 10.x, 12.x]
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }} on macos-latest
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: install graphviz
-      run: |
-        brew update
-        brew install graphviz
-    - name: Install dependencies
-      run: yarn --frozen-lockfile --ignore-optional
-      env:
-        CI: 'true'
-    - name: Lint
-      run: yarn lint
-      env:
-        CI: 'true'
-    - name: Test
-      run: yarn test
-      env:
-        CI: 'true'
-    - name: Build
-      run: yarn build
-      env:
-        CI: 'true'
-
-  test-on-windows:
-    name: Test on node ${{ matrix.node-version }} and windows-latest
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        node-version: [8.x, 10.x, 12.x]
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }} on windows-latest
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: install graphviz
-      run: |
-        choco install graphviz
+    - name: setup grapgviz
+      uses: kamiazya/setup-graphviz@v1
     - name: Install dependencies
       run: yarn --frozen-lockfile --ignore-optional
       env:
@@ -108,9 +40,7 @@ jobs:
     name: Publish to NPM
     runs-on: ubuntu-latest
     needs:
-      - test-on-linux
-      - test-on-macos
-      - test-on-windows
+      - test
     steps:
     - uses: actions/checkout@master
     - uses: actions/setup-node@v1
