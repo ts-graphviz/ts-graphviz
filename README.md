@@ -13,13 +13,13 @@ The plugin can then be installed using [npm](https://www.npmjs.com/):
 ### yarn
 
 ```bash
-yarn add -D ts-graphviz
+yarn add ts-graphviz
 ```
 
 ### npm
 
 ```bash
-npm install --save-dev ts-graphviz
+npm install ts-graphviz
 ```
 
 ## Usage
