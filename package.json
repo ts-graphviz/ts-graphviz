@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/kamiazya/ts-graphviz/issues"
   },
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
