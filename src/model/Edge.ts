@@ -16,7 +16,7 @@ export abstract class Edge extends DotBase {
 
   public toDot(): string {
     const arrow = this.arrow;
-    const target = Array.from(this.nodes.values())
+    const target = this.nodes
       .map(n => {
         if (n instanceof Node) {
           return Edge.quoteString(n.id);
