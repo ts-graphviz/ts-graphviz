@@ -4,8 +4,8 @@ import { Attributes } from '../attributes/Attributes';
 import { EdgeAttributes } from '../attributes/EdgeAttributes';
 import { NodeAttributes } from '../attributes/NodeAttributes';
 import { Context } from '../Context';
-import { Edge } from '../Edge';
-import { Node } from '../Node';
+import { DigraphEdge, Edge, GraphEdge } from '../Edge';
+import { isNodeLike, isNodeLikeObject, Node, NodeLike, NodeLikeObject } from '../Node';
 
 // tslint:disable: max-classes-per-file
 
@@ -56,9 +56,53 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
     return node;
   }
 
-  public createEdge(node1: Node, node2: Node, ...nodes: Node[]): Edge {
-    const edge = new Edge(this.context.graphType, node1, node2, ...nodes);
+  public getSubgraph(id: string): Subgraph | undefined {
+    return this.subgraphs.get(id);
+  }
+
+  public getNode(id: string): Node | undefined {
+    return this.nodes.get(id);
+  }
+
+  public createEdge(node1: NodeLike, node2: NodeLike, ...nodes: NodeLike[]): Edge;
+  public createEdge(...nodes: NodeLike[]): Edge;
+  public createEdge(node1: NodeLike, node2: NodeLike, ...nodes: NodeLike[]): Edge {
+    if ((isNodeLike(node1) && isNodeLike(node2)) === false) {
+      // TODO
+      throw new Error();
+    }
+
+    const edge = new (this.context.graphType === 'graph' ? GraphEdge : DigraphEdge)(
+      this.toNodeLikeObject(node1),
+      this.toNodeLikeObject(node2),
+      ...nodes.map(n => this.toNodeLikeObject(n)),
+    );
+
     this.edges.add(edge);
+    return edge;
+  }
+
+  public subgraph(id: string, callback: (subgraph: Subgraph) => void): Subgraph {
+    const subgraph = this.getSubgraph(id) ?? this.createSubgraph(id);
+    if (callback) {
+      callback(subgraph);
+    }
+    return subgraph;
+  }
+
+  public node(id: string, callback?: (edge: Node) => void): Node {
+    const node = this.getNode(id) ?? this.createNode(id);
+    if (callback) {
+      callback(node);
+    }
+    return node;
+  }
+
+  public edge(nodes: NodeLike[], callback?: (edge: Edge) => void): Edge {
+    const edge = this.createEdge(...nodes);
+    if (callback) {
+      callback(edge);
+    }
     return edge;
   }
 
@@ -81,6 +125,19 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
       '}',
     );
     return src;
+  }
+
+  private toNodeLikeObject(node: NodeLike): NodeLikeObject {
+    if (isNodeLikeObject(node)) {
+      return node;
+    }
+    // FIXME
+    const [id, port] = node.split(':');
+    const n = this.node(id);
+    if (port) {
+      return n.port(port);
+    }
+    return n;
   }
 }
 
