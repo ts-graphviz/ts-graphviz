@@ -2,7 +2,7 @@
 
 exports[`class Edge renders correctly by toDot method 3 nodes 1`] = `"\\"node1\\" -> \\"node2\\" -> \\"node3\\";"`;
 
-exports[`class Edge renders correctly by toDot method 3 nodes, but many args 1`] = `"\\"node1\\" -> \\"node2\\" -> \\"node3\\";"`;
+exports[`class Edge renders correctly by toDot method 3 nodes, but many args 1`] = `"\\"node1\\" -> \\"node2\\" -> \\"node3\\" -> \\"node1\\" -> \\"node2\\" -> \\"node3\\" -> \\"node1\\" -> \\"node2\\" -> \\"node3\\";"`;
 
 exports[`class Edge renders correctly by toDot method graphType is "graph" 1`] = `
 "\\"node1\\" -- \\"node2\\" [

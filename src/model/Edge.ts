@@ -1,29 +1,43 @@
 import { DotBase } from '../common';
 import { EdgeAttributes } from './attributes';
-import { RootClusterType } from './cluster';
-import { Node } from './Node';
+import { isNodeLikeObject, Node, NodeLikeObject } from './Node';
 
 /**
  * @category Primary
  */
-export class Edge extends DotBase {
-  private get arrow(): string {
-    return this.graphType === 'graph' ? '--' : '->';
-  }
+export abstract class Edge extends DotBase {
   public readonly attributes = new EdgeAttributes();
-  private readonly nodes: Set<Node>;
-  constructor(public readonly graphType: RootClusterType, node1: Node, node2: Node, ...nodes: Node[]) {
+  public readonly nodes: NodeLikeObject[];
+  protected abstract arrow: string;
+  constructor(node1: NodeLikeObject, node2: NodeLikeObject, ...nodes: NodeLikeObject[]) {
     super();
-    this.nodes = new Set([node1, node2, ...nodes].filter(n => n instanceof Node));
+    this.nodes = [node1, node2, ...nodes].filter(n => isNodeLikeObject(n));
   }
 
   public toDot(): string {
     const arrow = this.arrow;
-    const target = Array.from(this.nodes.values())
-      .map(n => Edge.quoteString(n.id))
+    const target = this.nodes
+      .map(n => {
+        if (n instanceof Node) {
+          return Edge.quoteString(n.id);
+        }
+        return Edge.quoteString(`${n.node.id}:${n.port}`);
+      })
       .join(` ${arrow} `);
     const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
     const src = `${target}${attrs};`;
     return src;
   }
+}
+
+/**
+ * @category Primary
+ */
+// tslint:disable-next-line: max-classes-per-file
+export class GraphEdge extends Edge {
+  protected arrow = '--';
+}
+// tslint:disable-next-line: max-classes-per-file
+export class DigraphEdge extends Edge {
+  protected arrow = '->';
 }

@@ -1,3 +1,4 @@
+import 'jest-graphviz';
 import { DotBase, GraphvizObject } from '../../../common';
 import { Cluster, RootCluster } from '../Cluster';
 import { Graph } from '../Graph';
