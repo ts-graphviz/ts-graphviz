@@ -27,6 +27,34 @@ jobs:
       run: yarn lint
       env:
         CI: 'true'
+    - name: Test
+      run: yarn test
+      env:
+        CI: 'true'
+    - name: Build
+      run: yarn build
+      env:
+        CI: 'true'
+
+  publish_coverage:
+    name: Publish test coverage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12.x on ubuntu-latest
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: setup grapgviz
+      uses: kamiazya/setup-graphviz@v1
+    - name: Install dependencies
+      run: yarn --frozen-lockfile --ignore-optional
+      env:
+        CI: 'true'
+    - name: Lint
+      run: yarn lint
+      env:
+        CI: 'true'
     - name: Test & publish code coverage
       uses: paambaati/codeclimate-action@v2.3.0
       env:
@@ -35,10 +63,6 @@ jobs:
       with:
         coverageCommand: yarn test
         debug: 'true'
-    - name: Build
-      run: yarn build
-      env:
-        CI: 'true'
 
   publish:
     name: Publish to NPM
