@@ -27,10 +27,14 @@ jobs:
       run: yarn lint
       env:
         CI: 'true'
-    - name: Test
-      run: yarn test
+    - name: Test & publish code coverage
+      uses: paambaati/codeclimate-action@v2.3.0
       env:
         CI: 'true'
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      with:
+        coverageCommand: yarn test
+        debug: 'true'
     - name: Build
       run: yarn build
       env:
