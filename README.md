@@ -48,6 +48,28 @@ const dot = g.toDot();
 console.log(dot);
 ```
 
+### Callback style API
+
+```typescript
+import { digraph } from 'ts-graphviz';
+
+const G = digraph('G', g => {
+  g.subgraph('A', A => {
+    const node1 = A.node('A_node1');
+    const node2 = A.node('A_node2');
+    A.edge([node1, node2]);
+  });
+  g.subgraph('B', B => {
+    const node1 = B.node('B_node1');
+    const node2 = B.node('B_node2');
+    B.edge([node1, node2]);
+  });
+  g.edge(['node1', 'node2']);
+});
+const dot = G.toDot();
+console.log(dot);
+```
+
 ### Output
 
 ```graphviz
