@@ -17,7 +17,7 @@
     "jest": "^24.9.0",
     "jest-graphviz": "^0.0.2",
     "prettier": "^1.19.1",
-    "ts-jest": "^24.1.0",
+    "ts-jest": "^24.2.0",
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
