@@ -7,6 +7,9 @@
   ],
   "jsRules": {},
   "rules": {
+    "interface-name": false,
+    "no-console": false,
+    "jsx-wrap-multiline": false,
     "prettier": true,
     "import-spacing": true,
     "array-type": false,
