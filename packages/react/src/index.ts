@@ -1,2 +1,2 @@
-export * from './render';
-export * from './instance';
+export * from './renderer';
+export * from './components';
