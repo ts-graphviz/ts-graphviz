@@ -14,6 +14,34 @@ exports[`class Subgraph renders correctly by toDot method has some attributes 1`
 }"
 `;
 
+exports[`class Subgraph renders correctly by toDot method label attribute behavior html like 1`] = `
+"digraph G {
+  graph [
+    label = <<B>this is test for graph label</B>>,
+  ];
+  edge [
+    label = <<U>this is test for edge label</U>>,
+  ];
+  node [
+    label = <<I>this is test for node label</I>>,
+  ];
+}"
+`;
+
+exports[`class Subgraph renders correctly by toDot method label attribute behavior plain text label to be quoted by double quotation 1`] = `
+"digraph G {
+  graph [
+    label = \\"this is test for graph label\\",
+  ];
+  edge [
+    label = \\"this is test for edge label\\",
+  ];
+  node [
+    label = \\"this is test for node label\\",
+  ];
+}"
+`;
+
 exports[`class Subgraph renders correctly by toDot method nodes and edge 1`] = `
 "digraph G {
   \\"node1\\";

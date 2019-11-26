@@ -83,9 +83,16 @@ export class LayerRangeValue extends GraphvizValue {
  * @category Values
  */
 export class LblStringValue extends GraphvizValue {
+  private isHTMLLike: boolean;
   constructor(value: string);
-  constructor(value: any) { super(value); }
+  constructor(value: any) {
+    super(value);
+    this.isHTMLLike = /^<.+>$/.test(value);
+  }
   public toDot(): string {
+    if (this.isHTMLLike) {
+      return this.value.toString();
+    }
     return `"${this.value}"`;
   }
 }
