@@ -86,8 +86,10 @@ export class LblStringValue extends GraphvizValue {
   private isHTMLLike: boolean;
   constructor(value: string);
   constructor(value: any) {
-    super(value);
-    this.isHTMLLike = /^<.+>$/.test(value);
+    const trimmed = value.trim();
+    const isHTMLLike = /^<.+>$/ms.test(trimmed);
+    super(isHTMLLike ? trimmed : value);
+    this.isHTMLLike = isHTMLLike;
   }
   public toDot(): string {
     if (this.isHTMLLike) {
