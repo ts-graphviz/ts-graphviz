@@ -44,5 +44,17 @@ describe('class Edge', () => {
       edge = new DigraphEdge(node1, node2, node3, node1, node2, node3, node1, node2, node3);
       expect(edge.toDot()).toMatchSnapshot();
     });
+
+    describe('label attribute behavior', () => {
+      it('plain text label to be quoted by double quotation', () => {
+        edge.attributes.set('label', 'this is test');
+        expect(edge.toDot()).toMatchSnapshot();
+      });
+
+      it('html like', () => {
+        edge.attributes.set('label', '<<B>this is test</B>>');
+        expect(edge.toDot()).toMatchSnapshot();
+      });
+    });
   });
 });

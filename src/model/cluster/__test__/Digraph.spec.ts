@@ -79,5 +79,25 @@ describe('class Subgraph', () => {
       expect(dot).toMatchSnapshot();
       expect(dot).toBeValidDot();
     });
+
+    describe('label attribute behavior', () => {
+      it('plain text label to be quoted by double quotation', () => {
+        g.attributes.graph.set('label', 'this is test for graph label');
+        g.attributes.edge.set('label', 'this is test for edge label');
+        g.attributes.node.set('label', 'this is test for node label');
+        const dot = g.toDot();
+        expect(dot).toMatchSnapshot();
+        expect(dot).toBeValidDot();
+      });
+
+      it('html like', () => {
+        g.attributes.graph.set('label', '<<B>this is test for graph label</B>>');
+        g.attributes.edge.set('label', '<<U>this is test for edge label</U>>');
+        g.attributes.node.set('label', '<<I>this is test for node label</I>>');
+        const dot = g.toDot();
+        expect(dot).toMatchSnapshot();
+        expect(dot).toBeValidDot();
+      });
+    });
   });
 });

@@ -23,5 +23,17 @@ describe('class Node', () => {
       node.attributes.set('color', 'red');
       expect(node.toDot()).toMatchSnapshot();
     });
+
+    describe('label attribute behavior', () => {
+      it('plain text label to be quoted by double quotation', () => {
+        node.attributes.set('label', 'this is test');
+        expect(node.toDot()).toMatchSnapshot();
+      });
+
+      it('html like', () => {
+        node.attributes.set('label', '<<B>this is test</B>>');
+        expect(node.toDot()).toMatchSnapshot();
+      });
+    });
   });
 });

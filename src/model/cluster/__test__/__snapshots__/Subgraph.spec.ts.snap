@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`class Subgraph root is Digraph label attribute behavior html like 1`] = `
+"subgraph test {
+  graph [
+    label = <<B>this is test for graph label</B>>,
+  ];
+  edge [
+    label = <<U>this is test for edge label</U>>,
+  ];
+  node [
+    label = <<I>this is test for node label</I>>,
+  ];
+};"
+`;
+
+exports[`class Subgraph root is Digraph label attribute behavior plain text label to be quoted by double quotation 1`] = `
+"subgraph test {
+  graph [
+    label = \\"this is test for graph label\\",
+  ];
+  edge [
+    label = \\"this is test for edge label\\",
+  ];
+  node [
+    label = \\"this is test for node label\\",
+  ];
+};"
+`;
+
+exports[`class Subgraph root is Graph label attribute behavior html like 1`] = `
+"subgraph test {
+  graph [
+    label = <<B>this is test for graph label</B>>,
+  ];
+  edge [
+    label = <<U>this is test for edge label</U>>,
+  ];
+  node [
+    label = <<I>this is test for node label</I>>,
+  ];
+};"
+`;
+
+exports[`class Subgraph root is Graph label attribute behavior plain text label to be quoted by double quotation 1`] = `
+"subgraph test {
+  graph [
+    label = \\"this is test for graph label\\",
+  ];
+  edge [
+    label = \\"this is test for edge label\\",
+  ];
+  node [
+    label = \\"this is test for node label\\",
+  ];
+};"
+`;
