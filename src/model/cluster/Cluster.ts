@@ -44,6 +44,40 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
     };
   }
 
+  public add(object: Node | Edge | Subgraph): void {
+    if (object instanceof Node) {
+      this.addNode(object);
+    } else if (object instanceof Edge) {
+      this.addEdge(object);
+    } else if (object instanceof Subgraph) {
+      this.addSubgraph(object);
+    }
+  }
+
+  public addNode(node: Node): void {
+    this.nodes.set(node.id, node);
+  }
+
+  public addEdge(edge: Edge): void {
+    this.edges.add(edge);
+  }
+
+  public addSubgraph(subgraph: Subgraph): void {
+    this.subgraphs.set(subgraph.id, subgraph);
+  }
+
+  public existNode(nodeId: string): boolean {
+    return this.nodes.has(nodeId);
+  }
+
+  public existEdge(edge: Edge): boolean {
+    return this.edges.has(edge);
+  }
+
+  public existSubgraph(subgraphId: string): boolean {
+    return this.subgraphs.has(subgraphId);
+  }
+
   public createSubgraph(id: string): Subgraph {
     const graph = new Subgraph(this.context, id);
     this.subgraphs.set(id, graph);
