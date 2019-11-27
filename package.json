@@ -1,12 +1,12 @@
 {
   "name": "ts-graphviz",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "author": "kamiazya <yuki@kamiazya.tech>",
   "description": "Graphviz library for TypeScript.",
   "homepage": "https://kamiazya.github.io/ts-graphviz/",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/kamiazya/ts-graphviz.git"
+    "type": "git",
+    "url": "https://github.com/kamiazya/ts-graphviz.git"
   },
   "bugs": {
     "url": "https://github.com/kamiazya/ts-graphviz/issues"
