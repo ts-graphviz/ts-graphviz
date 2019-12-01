@@ -1,5 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`class Subgraph root is Digraph addXxx existXxx APIs Edge operation methods works 1`] = `
+"subgraph test {
+  \\"node1\\";
+  \\"node2\\";
+  \\"node1\\" -> \\"node2\\";
+};"
+`;
+
+exports[`class Subgraph root is Digraph addXxx existXxx APIs Node operation methods works 1`] = `
+"subgraph test {
+  \\"node\\";
+};"
+`;
+
+exports[`class Subgraph root is Digraph addXxx existXxx APIs Subgraph operation methods works 1`] = `
+"subgraph test {
+  subgraph sub {
+  };
+};"
+`;
+
 exports[`class Subgraph root is Digraph label attribute behavior html like 1`] = `
 "subgraph test {
   graph [
@@ -25,6 +46,27 @@ exports[`class Subgraph root is Digraph label attribute behavior plain text labe
   node [
     label = \\"this is test for node label\\",
   ];
+};"
+`;
+
+exports[`class Subgraph root is Graph addXxx existXxx APIs Edge operation methods works 1`] = `
+"subgraph test {
+  \\"node1\\";
+  \\"node2\\";
+  \\"node1\\" -- \\"node2\\";
+};"
+`;
+
+exports[`class Subgraph root is Graph addXxx existXxx APIs Node operation methods works 1`] = `
+"subgraph test {
+  \\"node\\";
+};"
+`;
+
+exports[`class Subgraph root is Graph addXxx existXxx APIs Subgraph operation methods works 1`] = `
+"subgraph test {
+  subgraph sub {
+  };
 };"
 `;
 
