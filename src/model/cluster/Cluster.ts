@@ -79,7 +79,7 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
   }
 
   public createSubgraph(id: string): Subgraph {
-    const graph = new Subgraph(this.context, id);
+    const graph = this.context.createSubgraph(id);
     this.subgraphs.set(id, graph);
     return graph;
   }
