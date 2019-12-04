@@ -82,7 +82,7 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
     return edge;
   }
 
-  public subgraph(id: string, callback: (subgraph: Subgraph) => void): Subgraph {
+  public subgraph(id: string, callback?: (subgraph: Subgraph) => void): Subgraph {
     const subgraph = this.getSubgraph(id) ?? this.createSubgraph(id);
     if (callback) {
       callback(subgraph);
