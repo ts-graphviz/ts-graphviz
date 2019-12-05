@@ -1,4 +1,5 @@
 import { DotBase } from '../../common';
+import { indent, joinLines } from '../../utils/dot-rendering';
 import { SubgraphAttributes } from '../attributes';
 import { Attributes } from '../attributes/Attributes';
 import { EdgeAttributes } from '../attributes/EdgeAttributes';
@@ -118,12 +119,8 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
     const nodes = Array.from(this.nodes.values()).map(o => o.toDot());
     const subgraphs = Array.from(this.subgraphs.values()).map(o => o.toDot());
     const edges = Array.from(this.edges.values()).map(o => o.toDot());
-    const clusterContents = Cluster.joinLines(...commonAttributes, ...nodes, ...subgraphs, ...edges);
-    const src = Cluster.joinLines(
-      `${type} ${id} {`,
-      clusterContents ? Cluster.indent(clusterContents) : undefined,
-      '}',
-    );
+    const clusterContents = joinLines(...commonAttributes, ...nodes, ...subgraphs, ...edges);
+    const src = joinLines(`${type} ${id} {`, clusterContents ? indent(clusterContents) : undefined, '}');
     return src;
   }
 

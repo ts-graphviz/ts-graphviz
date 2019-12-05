@@ -1,4 +1,5 @@
 import { DotBase } from '../../common';
+import { indent } from '../../utils/dot-rendering';
 import { GraphvizValue, typeMap } from '../values';
 
 /**
@@ -30,7 +31,7 @@ export abstract class Attributes extends DotBase {
     }
     return [
       '[',
-      ...Array.from(this.attrs.entries()).map(([key, value]) => Attributes.indent(`${key} = ${value.toDot()},`)),
+      ...Array.from(this.attrs.entries()).map(([key, value]) => indent(`${key} = ${value.toDot()},`)),
       ']',
     ].join('\n');
   }

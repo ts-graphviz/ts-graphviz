@@ -1,4 +1,5 @@
 import { DotBase } from '../common';
+import { quoteString } from '../utils/dot-rendering';
 import { NodeAttributes } from './attributes';
 
 /**
@@ -11,7 +12,7 @@ export class Node extends DotBase {
   }
 
   public toDot(): string {
-    const target = Node.quoteString(this.id);
+    const target = quoteString(this.id);
     const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
     return `${target}${attrs};`;
   }
