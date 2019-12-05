@@ -1,0 +1,24 @@
+/**
+ * @hidden
+ */
+export function quoteString(src: string): string {
+  return `"${src}"`;
+}
+
+/**
+ * @hidden
+ */
+export function joinLines(...lines: (string | undefined)[]): string {
+  return lines.filter(l => typeof l === 'string').join('\n');
+}
+
+/**
+ * @hidden
+ */
+export function indent(src: string, depth: number = 1): string {
+  const space = ' '.repeat(2 * depth);
+  return src
+    .split('\n')
+    .map(l => `${space}${l}`)
+    .join('\n');
+}

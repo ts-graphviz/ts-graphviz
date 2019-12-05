@@ -1,4 +1,5 @@
 import { DotBase } from '../common';
+import { quoteString } from '../utils/dot-rendering';
 import { EdgeAttributes } from './attributes';
 import { isNodeLikeObject, Node, NodeLikeObject } from './Node';
 
@@ -19,9 +20,9 @@ export abstract class Edge extends DotBase {
     const target = this.nodes
       .map(n => {
         if (n instanceof Node) {
-          return Edge.quoteString(n.id);
+          return quoteString(n.id);
         }
-        return Edge.quoteString(`${n.node.id}:${n.port}`);
+        return quoteString(`${n.node.id}:${n.port}`);
       })
       .join(` ${arrow} `);
     const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
