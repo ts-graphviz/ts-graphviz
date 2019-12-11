@@ -50,7 +50,9 @@ exports[`function graph callback style 1`] = `
 
 exports[`function graph escape characters 1`] = `
 "graph \\"G\\\\n\\\\\\"\\" {
-  \\"a\\\\na\\";
+  \\"a\\\\na\\" [
+    label = \\"1\\\\n2\\\\n\\\\\\"\\\\n3\\",
+  ];
   \\"b\\\\\\"b\\";
   \\"c\\\\nc\\\\\\"\\";
   \\"a\\\\na\\" -- \\"b\\\\\\"b\\" -- \\"c\\\\nc\\\\\\"\\" [

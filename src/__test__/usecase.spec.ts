@@ -70,6 +70,7 @@ describe('function graph', () => {
   test('escape characters', () => {
     const G = graph('G\n"', g => {
       const a = g.node('a\na');
+      a.attributes.set('label', '1\n2\n"\n3');
       const b = g.node('b"b');
       const c = g.node('c\nc"');
       g.edge([a, b, c], e => {

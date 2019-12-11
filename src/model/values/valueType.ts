@@ -1,4 +1,5 @@
 import { GraphvizObject, IDot } from '../../common';
+import { escape, quote } from '../../utils/dot-rendering';
 
 // tslint:disable:max-classes-per-file
 // tslint:disable: prettier
@@ -95,7 +96,7 @@ export class LblStringValue extends GraphvizValue {
     if (this.isHTMLLike) {
       return this.value.toString();
     }
-    return `"${this.value}"`;
+    return quote(escape​​(`${this.value}`));
   }
 }
 /**
