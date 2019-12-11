@@ -1,5 +1,5 @@
 import { DotBase } from '../../common';
-import { indent, joinLines } from '../../utils/dot-rendering';
+import { escape, indent, joinLines, quote } from '../../utils/dot-rendering';
 import { SubgraphAttributes } from '../attributes';
 import { Attributes } from '../attributes/Attributes';
 import { EdgeAttributes } from '../attributes/EdgeAttributes';
@@ -109,7 +109,7 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
 
   public toDot(): string {
     const type = this.type;
-    const id = this.id;
+    const id = quote(escape(this.id));
     // attributes
     const commonAttributes = Object.entries(this.attributes)
       .filter(([_, attributes]) => attributes.size > 0)

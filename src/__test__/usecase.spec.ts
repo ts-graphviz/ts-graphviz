@@ -66,4 +66,18 @@ describe('function graph', () => {
     expect(dot).toMatchSnapshot();
     expect(dot).toBeValidDot();
   });
+
+  test('escape characters', () => {
+    const G = graph('G\n"', g => {
+      const a = g.node('a\na');
+      const b = g.node('b"b');
+      const c = g.node('c\nc"');
+      g.edge([a, b, c], e => {
+        e.attributes.set('color', 'red');
+      });
+    });
+    const dot = G.toDot();
+    expect(dot).toMatchSnapshot();
+    expect(dot).toBeValidDot();
+  });
 });

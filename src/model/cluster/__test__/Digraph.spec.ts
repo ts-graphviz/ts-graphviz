@@ -24,6 +24,20 @@ describe('class Subgraph', () => {
       expect(dot).toBeValidDot();
     });
 
+    it('should be escaped if id contains a newline character', () => {
+      g = new Digraph('1\n2\n');
+      const dot = g.toDot();
+      expect(dot).toMatchSnapshot();
+      expect(dot).toBeValidDot();
+    });
+
+    it('should be escaped if id contains a comma', () => {
+      g = new Digraph('1"2"');
+      const dot = g.toDot();
+      expect(dot).toMatchSnapshot();
+      expect(dot).toBeValidDot();
+    });
+
     it('has some attributes', () => {
       g.attributes.edge.set('label', 'edge label');
       g.attributes.graph.set('color', 'red');

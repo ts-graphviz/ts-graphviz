@@ -22,6 +22,16 @@ describe('class Edge', () => {
       expect(edge.toDot()).toMatchSnapshot();
     });
 
+    it('should be escaped if id contains a newline character', () => {
+      edge = new DigraphEdge(node1, new Node('1\n2\n'));
+      expect(edge.toDot()).toBe('"node1" -> "1\\n2\\n";');
+    });
+
+    it('should be escaped if id contains a comma', () => {
+      edge = new DigraphEdge(node1, new Node('1"2"'));
+      expect(edge.toDot()).toBe('"node1" -> "1\\"2\\"";');
+    });
+
     it('has some attributes', () => {
       edge.attributes.set('label', 'this is test');
       edge.attributes.set('color', 'red');
