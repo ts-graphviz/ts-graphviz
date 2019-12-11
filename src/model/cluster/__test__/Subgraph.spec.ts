@@ -42,6 +42,20 @@ describe('class Subgraph', () => {
         expect(subgraph.isSubgraphCluster()).toBe(false);
       });
 
+      it('should be escaped if id contains a newline character', () => {
+        subgraph = new Subgraph(g.context, '1\n2\n');
+        const dot = g.toDot();
+        expect(dot).toMatchSnapshot();
+        expect(dot).toBeValidDot();
+      });
+
+      it('should be escaped if id contains a comma', () => {
+        subgraph = new Subgraph(g.context, '1"2"');
+        const dot = g.toDot();
+        expect(dot).toMatchSnapshot();
+        expect(dot).toBeValidDot();
+      });
+
       it('should be subgraph cluster, when subgraph id is "cluster_test"', () => {
         subgraph = new Subgraph(g.context, 'cluster_test');
         expect(subgraph.isSubgraphCluster()).toBe(true);

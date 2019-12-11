@@ -1,7 +1,14 @@
 /**
  * @hidden
  */
-export function quoteString(src: string): string {
+export function escape(str: string): string {
+  return str.replace(/\n/g, '\\n').replace(/"/g, '\\"');
+}
+
+/**
+ * @hidden
+ */
+export function quote(src: string): string {
   return `"${src}"`;
 }
 

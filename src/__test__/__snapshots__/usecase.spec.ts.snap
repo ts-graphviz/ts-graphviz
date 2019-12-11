@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`function digraph callback style 1`] = `
-"digraph G {
+"digraph \\"G\\" {
   \\"aa\\";
   \\"bb\\";
   \\"cc\\";
-  subgraph A {
+  subgraph \\"A\\" {
     \\"Aaa\\" [
       color = \\"pink\\",
     ];
@@ -14,7 +14,7 @@ exports[`function digraph callback style 1`] = `
     ];
     \\"Acc\\";
     \\"E\\";
-    \\"Aaa:a\\" -> \\"Abb\\" -> \\"Acc\\" -> \\"E\\" [
+    \\"Aaa\\":\\"a\\" -> \\"Abb\\" -> \\"Acc\\" -> \\"E\\" [
       color = \\"red\\",
     ];
   };
@@ -25,11 +25,11 @@ exports[`function digraph callback style 1`] = `
 `;
 
 exports[`function graph callback style 1`] = `
-"graph G {
+"graph \\"G\\" {
   \\"aa\\";
   \\"bb\\";
   \\"cc\\";
-  subgraph A {
+  subgraph \\"A\\" {
     \\"Aaa\\" [
       color = \\"pink\\",
     ];
@@ -38,11 +38,24 @@ exports[`function graph callback style 1`] = `
     ];
     \\"Acc\\";
     \\"hoge\\";
-    \\"Aaa\\" -- \\"Abb\\" -- \\"Acc\\" -- \\"hoge:fuga\\" [
+    \\"Aaa\\" -- \\"Abb\\" -- \\"Acc\\" -- \\"hoge\\":\\"fuga\\" [
       color = \\"red\\",
     ];
   };
   \\"aa\\" -- \\"bb\\" -- \\"cc\\" [
+    color = \\"red\\",
+  ];
+}"
+`;
+
+exports[`function graph escape characters 1`] = `
+"graph \\"G\\\\n\\\\\\"\\" {
+  \\"a\\\\na\\" [
+    label = \\"1\\\\n2\\\\n\\\\\\"\\\\n3\\",
+  ];
+  \\"b\\\\\\"b\\";
+  \\"c\\\\nc\\\\\\"\\";
+  \\"a\\\\na\\" -- \\"b\\\\\\"b\\" -- \\"c\\\\nc\\\\\\"\\" [
     color = \\"red\\",
   ];
 }"
