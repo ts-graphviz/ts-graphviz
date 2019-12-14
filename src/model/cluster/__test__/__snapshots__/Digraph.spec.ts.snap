@@ -1,26 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`class Subgraph addXxx existXxx APIs Edge operation methods works 1`] = `
-"digraph \\"G\\" {
-  \\"node1\\";
-  \\"node2\\";
-  \\"node1\\" -> \\"node2\\";
-}"
-`;
-
-exports[`class Subgraph addXxx existXxx APIs Node operation methods works 1`] = `
-"digraph \\"G\\" {
-  \\"node\\";
-}"
-`;
-
-exports[`class Subgraph addXxx existXxx APIs Subgraph operation methods works 1`] = `
-"digraph \\"G\\" {
-  subgraph \\"sub\\" {
-  };
-}"
-`;
-
 exports[`class Subgraph renders correctly by toDot method has some attributes 1`] = `
 "digraph \\"G\\" {
   graph [

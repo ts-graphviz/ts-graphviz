@@ -1,26 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`class Graph addXxx existXxx APIs Edge operation methods works 1`] = `
-"graph \\"G\\" {
-  \\"node1\\";
-  \\"node2\\";
-  \\"node1\\" -- \\"node2\\";
-}"
-`;
-
-exports[`class Graph addXxx existXxx APIs Node operation methods works 1`] = `
-"graph \\"G\\" {
-  \\"node\\";
-}"
-`;
-
-exports[`class Graph addXxx existXxx APIs Subgraph operation methods works 1`] = `
-"graph \\"G\\" {
-  subgraph \\"sub\\" {
-  };
-}"
-`;
-
 exports[`class Graph renders correctly by toDot method has some attributes 1`] = `
 "graph \\"G\\" {
   graph [

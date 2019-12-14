@@ -117,16 +117,19 @@ describe('class Subgraph', () => {
     });
   });
 
-  describe('addXxx existXxx APIs', () => {
+  describe('addXxx existXxx removeXxx APIs', () => {
     it('Node operation methods works', () => {
       const id = 'node';
       expect(g.existNode(id)).toBe(false);
       const node = new Node(id);
       g.addNode(node);
       expect(g.existNode(id)).toBe(true);
-      const dot = g.toDot();
-      expect(dot).toMatchSnapshot();
-      expect(dot).toBeValidDot();
+      g.removeNode(node);
+      expect(g.existNode(id)).toBe(false);
+      g.addNode(node);
+      expect(g.existNode(id)).toBe(true);
+      g.removeNode(node.id);
+      expect(g.existNode(id)).toBe(false);
     });
 
     it('Edge operation methods works', () => {
@@ -135,9 +138,8 @@ describe('class Subgraph', () => {
       expect(g.existEdge(edge)).toBe(false);
       g.addEdge(edge);
       expect(g.existEdge(edge)).toBe(true);
-      const dot = g.toDot();
-      expect(dot).toMatchSnapshot();
-      expect(dot).toBeValidDot();
+      g.removeEdge(edge);
+      expect(g.existEdge(edge)).toBe(false);
     });
 
     it('Subgraph operation methods works', () => {
@@ -145,9 +147,12 @@ describe('class Subgraph', () => {
       expect(g.existSubgraph(sub.id)).toBe(false);
       g.addSubgraph(sub);
       expect(g.existSubgraph(sub.id)).toBe(true);
-      const dot = g.toDot();
-      expect(dot).toMatchSnapshot();
-      expect(dot).toBeValidDot();
+      g.removeSubgraph(sub);
+      expect(g.existSubgraph(sub.id)).toBe(false);
+      g.addSubgraph(sub);
+      expect(g.existSubgraph(sub.id)).toBe(true);
+      g.removeSubgraph(sub.id);
+      expect(g.existSubgraph(sub.id)).toBe(false);
     });
   });
 });
