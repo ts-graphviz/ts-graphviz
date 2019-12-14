@@ -1,4 +1,5 @@
 import { DotBase } from '../common';
+import { escape, quote } from '../utils/dot-rendering';
 import { EdgeAttributes } from './attributes';
 import { isNodeLikeObject, Node, NodeLikeObject } from './Node';
 
@@ -17,12 +18,7 @@ export abstract class Edge extends DotBase {
   public toDot(): string {
     const arrow = this.arrow;
     const target = this.nodes
-      .map(n => {
-        if (n instanceof Node) {
-          return Edge.quoteString(n.id);
-        }
-        return Edge.quoteString(`${n.node.id}:${n.port}`);
-      })
+      .map(n => (n instanceof Node ? quote(escape(n.id)) : `${quote(escape(n.node.id))}:${quote(escape(n.port))}`))
       .join(` ${arrow} `);
     const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
     const src = `${target}${attrs};`;

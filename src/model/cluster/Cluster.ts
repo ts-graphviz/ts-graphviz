@@ -1,4 +1,5 @@
 import { DotBase } from '../../common';
+import { escape, indent, joinLines, quote } from '../../utils/dot-rendering';
 import { SubgraphAttributes } from '../attributes';
 import { Attributes } from '../attributes/Attributes';
 import { EdgeAttributes } from '../attributes/EdgeAttributes';
@@ -138,7 +139,7 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
     return edge;
   }
 
-  public subgraph(id: string, callback: (subgraph: Subgraph) => void): Subgraph {
+  public subgraph(id: string, callback?: (subgraph: Subgraph) => void): Subgraph {
     const subgraph = this.getSubgraph(id) ?? this.createSubgraph(id);
     if (callback) {
       callback(subgraph);
@@ -164,7 +165,7 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
 
   public toDot(): string {
     const type = this.type;
-    const id = this.id;
+    const id = quote(escape(this.id));
     // attributes
     const commonAttributes = Object.entries(this.attributes)
       .filter(([_, attributes]) => attributes.size > 0)
@@ -174,12 +175,8 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
     const nodes = Array.from(this.nodes.values()).map(o => o.toDot());
     const subgraphs = Array.from(this.subgraphs.values()).map(o => o.toDot());
     const edges = Array.from(this.edges.values()).map(o => o.toDot());
-    const clusterContents = Cluster.joinLines(...commonAttributes, ...nodes, ...subgraphs, ...edges);
-    const src = Cluster.joinLines(
-      `${type} ${id} {`,
-      clusterContents ? Cluster.indent(clusterContents) : undefined,
-      '}',
-    );
+    const clusterContents = joinLines(...commonAttributes, ...nodes, ...subgraphs, ...edges);
+    const src = joinLines(`${type} ${id} {`, clusterContents ? indent(clusterContents) : undefined, '}');
     return src;
   }
 

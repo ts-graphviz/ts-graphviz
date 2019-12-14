@@ -18,6 +18,16 @@ describe('class Node', () => {
       expect(node.toDot()).toMatchSnapshot();
     });
 
+    it('should be escaped if id contains a newline character', () => {
+      node = new Node('1\n2\n');
+      expect(node.toDot()).toBe('"1\\n2\\n";');
+    });
+
+    it('should be escaped if id contains a comma', () => {
+      node = new Node('1"2"');
+      expect(node.toDot()).toBe('"1\\"2\\"";');
+    });
+
     it('has some attributes', () => {
       node.attributes.set('label', 'this is test');
       node.attributes.set('color', 'red');

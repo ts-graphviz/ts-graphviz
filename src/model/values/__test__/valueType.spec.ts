@@ -18,6 +18,7 @@ describe('valueType', () => {
         const dot = value.toDot();
         expect(dot).toMatch(DoubleQuotedValuePattern);
         expect(dot).not.toMatch(HTMLLikeValuePattern);
+        expect(dot).toMatchSnapshot();
       });
     });
 
