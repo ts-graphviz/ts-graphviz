@@ -45,10 +45,66 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
     };
   }
 
+  public add(object: Node | Edge | Subgraph): void {
+    if (object instanceof Node) {
+      this.addNode(object);
+    } else if (object instanceof Edge) {
+      this.addEdge(object);
+    } else if (object instanceof Subgraph) {
+      this.addSubgraph(object);
+    }
+  }
+
+  public addNode(node: Node): void {
+    this.nodes.set(node.id, node);
+  }
+
+  public addEdge(edge: Edge): void {
+    this.edges.add(edge);
+  }
+
+  public addSubgraph(subgraph: Subgraph): void {
+    this.subgraphs.set(subgraph.id, subgraph);
+  }
+
+  public existNode(nodeId: string): boolean {
+    return this.nodes.has(nodeId);
+  }
+
+  public existEdge(edge: Edge): boolean {
+    return this.edges.has(edge);
+  }
+
+  public existSubgraph(subgraphId: string): boolean {
+    return this.subgraphs.has(subgraphId);
+  }
+
   public createSubgraph(id: string): Subgraph {
-    const graph = new Subgraph(this.context, id);
+    const graph = this.context.createSubgraph(id);
     this.subgraphs.set(id, graph);
     return graph;
+  }
+
+  public remove(object: Node | Subgraph | Edge): void {
+    if (object instanceof Node) {
+      this.removeNode(object);
+    } else if (object instanceof Subgraph) {
+      this.removeSubgraph(object);
+    } else if (object instanceof Edge) {
+      this.removeEdge(object);
+    }
+  }
+
+  public removeNode(node: Node | string): void {
+    this.nodes.delete(node instanceof Node ? node.id : node);
+  }
+
+  public removeEdge(edge: Edge): void {
+    this.edges.delete(edge);
+  }
+
+  public removeSubgraph(subgraph: Subgraph | string): void {
+    this.subgraphs.delete(subgraph instanceof Subgraph ? subgraph.id : subgraph);
   }
 
   public createNode(id: string): Node {

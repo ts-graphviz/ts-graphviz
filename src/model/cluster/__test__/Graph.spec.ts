@@ -1,5 +1,7 @@
 import 'jest-graphviz';
 import { DotBase, GraphvizObject } from '../../../common';
+import { GraphEdge } from '../../Edge';
+import { Node } from '../../Node';
 import { Cluster, RootCluster } from '../Cluster';
 import { Graph } from '../Graph';
 
@@ -112,6 +114,45 @@ describe('class Graph', () => {
         expect(dot).toMatchSnapshot();
         expect(dot).toBeValidDot();
       });
+    });
+  });
+
+  describe('addXxx existXxx removeXxx APIs', () => {
+    it('Node operation methods works', () => {
+      const id = 'node';
+      expect(g.existNode(id)).toBe(false);
+      const node = new Node(id);
+      g.addNode(node);
+      expect(g.existNode(id)).toBe(true);
+      g.removeNode(node);
+      expect(g.existNode(id)).toBe(false);
+      g.addNode(node);
+      expect(g.existNode(id)).toBe(true);
+      g.removeNode(node.id);
+      expect(g.existNode(id)).toBe(false);
+    });
+
+    it('Edge operation methods works', () => {
+      const [node1, node2] = ['node1', 'node2'].map(id => g.createNode(id));
+      const edge = new GraphEdge(node1, node2);
+      expect(g.existEdge(edge)).toBe(false);
+      g.addEdge(edge);
+      expect(g.existEdge(edge)).toBe(true);
+      g.removeEdge(edge);
+      expect(g.existEdge(edge)).toBe(false);
+    });
+
+    it('Subgraph operation methods works', () => {
+      const sub = g.context.createSubgraph('sub');
+      expect(g.existSubgraph(sub.id)).toBe(false);
+      g.addSubgraph(sub);
+      expect(g.existSubgraph(sub.id)).toBe(true);
+      g.removeSubgraph(sub);
+      expect(g.existSubgraph(sub.id)).toBe(false);
+      g.addSubgraph(sub);
+      expect(g.existSubgraph(sub.id)).toBe(true);
+      g.removeSubgraph(sub.id);
+      expect(g.existSubgraph(sub.id)).toBe(false);
     });
   });
 });

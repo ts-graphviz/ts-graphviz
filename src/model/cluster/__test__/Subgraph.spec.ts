@@ -1,22 +1,28 @@
 import 'jest-graphviz';
 import { DotBase, GraphvizObject } from '../../../common';
+import { Type } from '../../../common/type';
+import { DigraphEdge, GraphEdge } from '../../Edge';
+import { Node } from '../../Node';
 import { Cluster, Subgraph } from '../Cluster';
 import { Digraph } from '../Digraph';
 import { Graph } from '../Graph';
 
 describe('class Subgraph', () => {
   let g: Digraph | Graph;
+  let EdgeClass: Type<DigraphEdge> | Type<GraphEdge>;
   const testCases: { title: string; beforeEachFunc: () => void }[] = [
     {
       title: 'root is Digraph',
       beforeEachFunc: () => {
         g = new Digraph();
+        EdgeClass = DigraphEdge;
       },
     },
     {
       title: 'root is Graph',
       beforeEachFunc: () => {
         g = new Graph();
+        EdgeClass = GraphEdge;
       },
     },
   ];
@@ -27,7 +33,7 @@ describe('class Subgraph', () => {
       let subgraph: Subgraph;
 
       beforeEach(() => {
-        subgraph = new Subgraph(g.context, 'test');
+        subgraph = g.context.createSubgraph('test');
       });
 
       it('should be instance of Subgraph/Cluster/DotBase/GraphvizObject', () => {
@@ -38,7 +44,7 @@ describe('class Subgraph', () => {
       });
 
       it('should be subgraph, when subgraph id is "test"', () => {
-        subgraph = new Subgraph(g.context, 'test');
+        subgraph = g.context.createSubgraph('test');
         expect(subgraph.isSubgraphCluster()).toBe(false);
       });
 
@@ -57,7 +63,7 @@ describe('class Subgraph', () => {
       });
 
       it('should be subgraph cluster, when subgraph id is "cluster_test"', () => {
-        subgraph = new Subgraph(g.context, 'cluster_test');
+        subgraph = g.context.createSubgraph('cluster_test');
         expect(subgraph.isSubgraphCluster()).toBe(true);
       });
 
@@ -76,6 +82,47 @@ describe('class Subgraph', () => {
           subgraph.attributes.node.set('label', '<<I>this is test for node label</I>>');
           expect(subgraph.toDot()).toMatchSnapshot();
           expect(g.toDot()).toBeValidDot();
+        });
+      });
+
+      describe('addXxx existXxx removeXxx APIs', () => {
+        it('Node operation methods works', () => {
+          const id = 'node';
+          expect(subgraph.existNode(id)).toBe(false);
+          const node = new Node(id);
+          subgraph.addNode(node);
+          expect(subgraph.existNode(id)).toBe(true);
+          subgraph.removeNode(node);
+          expect(subgraph.existNode(id)).toBe(false);
+          subgraph.addNode(node);
+          expect(subgraph.existNode(id)).toBe(true);
+          subgraph.removeNode(node.id);
+          expect(subgraph.existNode(id)).toBe(false);
+        });
+
+        it('Edge operation methods works', () => {
+          const [node1, node2] = ['node1', 'node2'].map(id => subgraph.createNode(id));
+          const edge = new EdgeClass(node1, node2);
+          expect(subgraph.existEdge(edge)).toBe(false);
+          subgraph.addEdge(edge);
+          expect(subgraph.existEdge(edge)).toBe(true);
+          expect(subgraph.toDot()).toMatchSnapshot();
+          subgraph.removeEdge(edge);
+          expect(subgraph.existEdge(edge)).toBe(false);
+        });
+
+        it('Subgraph operation methods works', () => {
+          const sub = subgraph.context.createSubgraph('sub');
+          expect(subgraph.existSubgraph(sub.id)).toBe(false);
+          subgraph.addSubgraph(sub);
+          expect(subgraph.existSubgraph(sub.id)).toBe(true);
+          expect(subgraph.toDot()).toMatchSnapshot();
+          subgraph.removeSubgraph(sub);
+          expect(subgraph.existSubgraph(sub.id)).toBe(false);
+          subgraph.addSubgraph(sub);
+          expect(subgraph.existSubgraph(sub.id)).toBe(true);
+          subgraph.removeSubgraph(sub.id);
+          expect(subgraph.existSubgraph(sub.id)).toBe(false);
         });
       });
     });

@@ -1,4 +1,4 @@
-import { Digraph, Graph, RootClusterType } from './cluster';
+import { Digraph, Graph, RootClusterType, Subgraph } from './cluster';
 
 export interface IContext {
   graphType: RootClusterType;
@@ -9,4 +9,8 @@ export class Context implements IContext {
     return this.root.type;
   }
   constructor(public readonly root: Graph | Digraph) {}
+
+  public createSubgraph(id: string): Subgraph {
+    return new Subgraph(this, id);
+  }
 }

@@ -1,5 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`class Subgraph root is Digraph addXxx existXxx removeXxx APIs Edge operation methods works 1`] = `
+"subgraph \\"test\\" {
+  \\"node1\\";
+  \\"node2\\";
+  \\"node1\\" -> \\"node2\\";
+};"
+`;
+
+exports[`class Subgraph root is Digraph addXxx existXxx removeXxx APIs Subgraph operation methods works 1`] = `
+"subgraph \\"test\\" {
+  subgraph \\"sub\\" {
+  };
+};"
+`;
+
 exports[`class Subgraph root is Digraph label attribute behavior html like 1`] = `
 "subgraph \\"test\\" {
   graph [
@@ -36,6 +51,21 @@ exports[`class Subgraph root is Digraph should be escaped if id contains a comma
 exports[`class Subgraph root is Digraph should be escaped if id contains a newline character 1`] = `
 "digraph \\"G\\" {
 }"
+`;
+
+exports[`class Subgraph root is Graph addXxx existXxx removeXxx APIs Edge operation methods works 1`] = `
+"subgraph \\"test\\" {
+  \\"node1\\";
+  \\"node2\\";
+  \\"node1\\" -- \\"node2\\";
+};"
+`;
+
+exports[`class Subgraph root is Graph addXxx existXxx removeXxx APIs Subgraph operation methods works 1`] = `
+"subgraph \\"test\\" {
+  subgraph \\"sub\\" {
+  };
+};"
 `;
 
 exports[`class Subgraph root is Graph label attribute behavior html like 1`] = `
