@@ -22,22 +22,19 @@ describe('class Graph', () => {
   describe('renders correctly by toDot method', () => {
     it('simple g', () => {
       const dot = g.toDot();
-      expect(dot).toMatchSnapshot();
-      expect(dot).toBeValidDot();
+      expect(dot).toBeValidDotAndMatchSnapshot();
     });
 
     it('should be escaped if id contains a newline character', () => {
       g = new Graph('1\n2\n');
       const dot = g.toDot();
-      expect(dot).toMatchSnapshot();
-      expect(dot).toBeValidDot();
+      expect(dot).toBeValidDotAndMatchSnapshot();
     });
 
     it('should be escaped if id contains a comma', () => {
       g = new Graph('1"2"');
       const dot = g.toDot();
-      expect(dot).toMatchSnapshot();
-      expect(dot).toBeValidDot();
+      expect(dot).toBeValidDotAndMatchSnapshot();
     });
 
     it('has some attributes', () => {
@@ -45,8 +42,7 @@ describe('class Graph', () => {
       g.attributes.graph.set('color', 'red');
       g.attributes.node.set('xlabel', 'node xlabel');
       const dot = g.toDot();
-      expect(dot).toMatchSnapshot();
-      expect(dot).toBeValidDot();
+      expect(dot).toBeValidDotAndMatchSnapshot();
     });
 
     it('nodes and edge', () => {
@@ -54,8 +50,7 @@ describe('class Graph', () => {
       const node2 = g.createNode('node2');
       g.createEdge(node1, node2);
       const dot = g.toDot();
-      expect(dot).toMatchSnapshot();
-      expect(dot).toBeValidDot();
+      expect(dot).toBeValidDotAndMatchSnapshot();
     });
 
     it('subgraphs', () => {
@@ -73,8 +68,7 @@ describe('class Graph', () => {
       const node2 = g.createNode('node2');
       g.createEdge(node1, node2);
       const dot = g.toDot();
-      expect(dot).toMatchSnapshot();
-      expect(dot).toBeValidDot();
+      expect(dot).toBeValidDotAndMatchSnapshot();
     });
 
     it('subgraphs, depth 2', () => {
@@ -92,8 +86,7 @@ describe('class Graph', () => {
       const node2 = g.createNode('node2');
       g.createEdge(node1, node2);
       const dot = g.toDot();
-      expect(dot).toMatchSnapshot();
-      expect(dot).toBeValidDot();
+      expect(dot).toBeValidDotAndMatchSnapshot();
     });
 
     describe('label attribute behavior', () => {
@@ -102,8 +95,7 @@ describe('class Graph', () => {
         g.attributes.edge.set('label', 'this is test for edge label');
         g.attributes.node.set('label', 'this is test for node label');
         const dot = g.toDot();
-        expect(dot).toMatchSnapshot();
-        expect(dot).toBeValidDot();
+        expect(dot).toBeValidDotAndMatchSnapshot();
       });
 
       it('html like', () => {
@@ -111,8 +103,7 @@ describe('class Graph', () => {
         g.attributes.edge.set('label', '<<U>this is test for edge label</U>>');
         g.attributes.node.set('label', '<<I>this is test for node label</I>>');
         const dot = g.toDot();
-        expect(dot).toMatchSnapshot();
-        expect(dot).toBeValidDot();
+        expect(dot).toBeValidDotAndMatchSnapshot();
       });
     });
   });

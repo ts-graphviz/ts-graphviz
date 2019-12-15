@@ -30,8 +30,7 @@ describe('function digraph', () => {
       });
     });
     const dot = G.toDot();
-    expect(dot).toMatchSnapshot();
-    expect(dot).toBeValidDot();
+    expect(dot).toBeValidDotAndMatchSnapshot();
   });
 });
 
@@ -63,8 +62,7 @@ describe('function graph', () => {
       });
     });
     const dot = G.toDot();
-    expect(dot).toMatchSnapshot();
-    expect(dot).toBeValidDot();
+    expect(dot).toBeValidDotAndMatchSnapshot();
   });
 
   test('escape characters', () => {
@@ -78,7 +76,6 @@ describe('function graph', () => {
       });
     });
     const dot = G.toDot();
-    expect(dot).toMatchSnapshot();
-    expect(dot).toBeValidDot();
+    expect(dot).toBeValidDotAndMatchSnapshot();
   });
 });
