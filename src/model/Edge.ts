@@ -1,6 +1,6 @@
 import { DotBase } from '../common';
 import { IEdgeTarget } from '../common/interface';
-import { Attributes } from './attributes';
+import { Attributes } from './Attributes';
 import { IContext } from './Context';
 import { isEdgeTarget } from './Node';
 
