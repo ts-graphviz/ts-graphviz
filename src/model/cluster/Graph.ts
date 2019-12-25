@@ -1,13 +1,14 @@
-import { GraphAttributes } from '../attributes/GraphAttributes';
 import { Context } from '../Context';
 import { RootCluster, RootClusterType } from './Cluster';
 /**
  * @category Primary
  */
-export class Graph extends RootCluster<GraphAttributes> {
-  public readonly context: Context = new Context(this);
+export class Graph extends RootCluster {
+  public readonly context: Context = new Context();
   public type: RootClusterType = 'graph';
-  constructor(id: string = 'G', attributes: GraphAttributes = new GraphAttributes()) {
-    super(id, attributes);
+  constructor(id?: string) {
+    super();
+    this.id = id;
+    this.context.root = this;
   }
 }

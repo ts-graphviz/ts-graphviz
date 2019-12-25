@@ -1,20 +1,27 @@
 import { DotBase } from '../common';
-import { escape, quote } from '../utils/dot-rendering';
-import { NodeAttributes } from './attributes';
+import { IEdgeTarget } from '../common/interface';
+import { Attributes } from './Attributes';
+import { Literal } from './Literal';
 
 /**
  * @category Primary
  */
-export class Node extends DotBase {
-  public readonly attributes: NodeAttributes = new NodeAttributes();
+export class Node extends DotBase implements IEdgeTarget {
+  public readonly idLiteral: Literal;
+  public readonly attributes = new Attributes();
   constructor(public readonly id: string) {
     super();
+    this.idLiteral = new Literal(id);
   }
 
   public toDot(): string {
-    const target = quote(escape(this.id));
+    const target = this.idLiteral.toDot();
     const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
     return `${target}${attrs};`;
+  }
+
+  public toEdgeTargetDot() {
+    return this.idLiteral.toDot();
   }
 
   public port(port: string): NodeWithPort {
@@ -23,17 +30,29 @@ export class Node extends DotBase {
 }
 
 // tslint:disable-next-line: max-classes-per-file
-export class NodeWithPort {
-  constructor(public readonly node: Node, public readonly port: string) {}
+export class NodeWithPort implements IEdgeTarget {
+  public readonly port: Literal;
+  constructor(public readonly node: Node, port: string) {
+    this.port = new Literal(port);
+  }
+
+  public toEdgeTargetDot() {
+    return `${this.node.idLiteral.toDot()}:${this.port.toDot()}`;
+  }
 }
 
-export type NodeLikeObject = Node | NodeWithPort;
-export type NodeLike = NodeLikeObject | string;
+export type EdgeTargetLike = IEdgeTarget | string;
 
-export function isNodeLikeObject(node: any): node is NodeLikeObject {
+/**
+ * @hidden
+ */
+export function isEdgeTarget(node: any): node is IEdgeTarget {
   return node instanceof Node || node instanceof NodeWithPort;
 }
 
-export function isNodeLike(node: any): node is NodeLike {
-  return typeof node === 'string' || isNodeLikeObject(node);
+/**
+ * @hidden
+ */
+export function isEdgeTargetLike(node: any): node is EdgeTargetLike {
+  return typeof node === 'string' || isEdgeTarget(node);
 }

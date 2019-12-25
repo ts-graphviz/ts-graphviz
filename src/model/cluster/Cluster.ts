@@ -1,12 +1,11 @@
 import { DotBase } from '../../common';
-import { escape, indent, joinLines, quote } from '../../utils/dot-rendering';
-import { SubgraphAttributes } from '../attributes';
-import { Attributes } from '../attributes/Attributes';
-import { EdgeAttributes } from '../attributes/EdgeAttributes';
-import { NodeAttributes } from '../attributes/NodeAttributes';
+import { IEdgeTarget } from '../../common/interface';
+import { concatWords, indent, joinLines } from '../../utils/dot-rendering';
+import { Attributes } from '../Attributes';
 import { Context } from '../Context';
-import { DigraphEdge, Edge, GraphEdge } from '../Edge';
-import { isNodeLike, isNodeLikeObject, Node, NodeLike, NodeLikeObject } from '../Node';
+import { Edge } from '../Edge';
+import { Literal } from '../Literal';
+import { EdgeTargetLike, isEdgeTarget, isEdgeTargetLike, Node } from '../Node';
 
 // tslint:disable: max-classes-per-file
 
@@ -16,34 +15,38 @@ export type ClusterType = RootClusterType | 'subgraph';
 /**
  * @hidden
  */
-export interface IClusterCommonAttributes<ATTR extends Attributes> {
-  graph: ATTR;
-  edge: EdgeAttributes;
-  node: NodeAttributes;
+export interface IClusterCommonAttributes {
+  graph: Attributes;
+  edge: Attributes;
+  node: Attributes;
 }
 
 /**
  * @hidden
  */
-export abstract class Cluster<ATTR extends Attributes> extends DotBase {
+export abstract class Cluster extends DotBase {
+  get id(): string | undefined {
+    return this.idLiteral?.value;
+  }
+
+  set id(idValue: string | undefined) {
+    this.idLiteral = typeof idValue === 'string' ? new Literal(idValue) : undefined;
+  }
   public abstract readonly context: Context;
   public abstract readonly type: ClusterType;
-  public readonly attributes: Readonly<IClusterCommonAttributes<ATTR>>;
+  public readonly attributes: Readonly<IClusterCommonAttributes> = {
+    graph: new Attributes(),
+    edge: new Attributes(),
+    node: new Attributes(),
+  };
+
+  private idLiteral?: Literal;
 
   private nodes: Map<string, Node> = new Map();
 
   private edges: Set<Edge> = new Set();
 
-  private subgraphs: Map<string, Subgraph> = new Map();
-
-  constructor(public readonly id: string, attributes: ATTR) {
-    super();
-    this.attributes = {
-      graph: attributes,
-      edge: new EdgeAttributes(),
-      node: new NodeAttributes(),
-    };
-  }
+  private subgraphs: Set<Subgraph> = new Set();
 
   public add(object: Node | Edge | Subgraph): void {
     if (object instanceof Node) {
@@ -64,7 +67,7 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
   }
 
   public addSubgraph(subgraph: Subgraph): void {
-    this.subgraphs.set(subgraph.id, subgraph);
+    this.subgraphs.add(subgraph);
   }
 
   public existNode(nodeId: string): boolean {
@@ -75,13 +78,13 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
     return this.edges.has(edge);
   }
 
-  public existSubgraph(subgraphId: string): boolean {
-    return this.subgraphs.has(subgraphId);
+  public existSubgraph(subgraph: Subgraph): boolean {
+    return this.subgraphs.has(subgraph);
   }
 
   public createSubgraph(id: string): Subgraph {
     const graph = this.context.createSubgraph(id);
-    this.subgraphs.set(id, graph);
+    this.subgraphs.add(graph);
     return graph;
   }
 
@@ -103,8 +106,8 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
     this.edges.delete(edge);
   }
 
-  public removeSubgraph(subgraph: Subgraph | string): void {
-    this.subgraphs.delete(subgraph instanceof Subgraph ? subgraph.id : subgraph);
+  public removeSubgraph(subgraph: Subgraph): void {
+    this.subgraphs.delete(subgraph);
   }
 
   public createNode(id: string): Node {
@@ -114,25 +117,26 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
   }
 
   public getSubgraph(id: string): Subgraph | undefined {
-    return this.subgraphs.get(id);
+    return Array.from(this.subgraphs.values()).find(subgraph => subgraph.id === id);
   }
 
   public getNode(id: string): Node | undefined {
     return this.nodes.get(id);
   }
 
-  public createEdge(node1: NodeLike, node2: NodeLike, ...nodes: NodeLike[]): Edge;
-  public createEdge(...nodes: NodeLike[]): Edge;
-  public createEdge(node1: NodeLike, node2: NodeLike, ...nodes: NodeLike[]): Edge {
-    if ((isNodeLike(node1) && isNodeLike(node2)) === false) {
+  public createEdge(target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
+  public createEdge(...targets: EdgeTargetLike[]): Edge;
+  public createEdge(target1: EdgeTargetLike, target2: EdgeTargetLike, ...targets: EdgeTargetLike[]): Edge {
+    if ((isEdgeTargetLike(target1) && isEdgeTargetLike(target2)) === false) {
       // TODO
       throw new Error();
     }
 
-    const edge = new (this.context.graphType === 'graph' ? GraphEdge : DigraphEdge)(
-      this.toNodeLikeObject(node1),
-      this.toNodeLikeObject(node2),
-      ...nodes.map(n => this.toNodeLikeObject(n)),
+    const edge = new Edge(
+      this.context,
+      this.toNodeLikeObject(target1),
+      this.toNodeLikeObject(target2),
+      ...targets.map(n => this.toNodeLikeObject(n)),
     );
 
     this.edges.add(edge);
@@ -155,7 +159,7 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
     return node;
   }
 
-  public edge(nodes: NodeLike[], callback?: (edge: Edge) => void): Edge {
+  public edge(nodes: EdgeTargetLike[], callback?: (edge: Edge) => void): Edge {
     const edge = this.createEdge(...nodes);
     if (callback) {
       callback(edge);
@@ -165,7 +169,7 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
 
   public toDot(): string {
     const type = this.type;
-    const id = quote(escape(this.id));
+    const id = this.idLiteral?.toDot();
     // attributes
     const commonAttributes = Object.entries(this.attributes)
       .filter(([_, attributes]) => attributes.size > 0)
@@ -176,12 +180,12 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
     const subgraphs = Array.from(this.subgraphs.values()).map(o => o.toDot());
     const edges = Array.from(this.edges.values()).map(o => o.toDot());
     const clusterContents = joinLines(...commonAttributes, ...nodes, ...subgraphs, ...edges);
-    const src = joinLines(`${type} ${id} {`, clusterContents ? indent(clusterContents) : undefined, '}');
+    const src = joinLines(concatWords(type, id, '{'), clusterContents ? indent(clusterContents) : undefined, '}');
     return src;
   }
 
-  private toNodeLikeObject(node: NodeLike): NodeLikeObject {
-    if (isNodeLikeObject(node)) {
+  private toNodeLikeObject(node: EdgeTargetLike): IEdgeTarget {
+    if (isEdgeTarget(node)) {
       return node;
     }
     // FIXME
@@ -194,24 +198,24 @@ export abstract class Cluster<ATTR extends Attributes> extends DotBase {
   }
 }
 
-export abstract class RootCluster<ATTR extends Attributes> extends Cluster<ATTR> {
+export abstract class RootCluster extends Cluster {
   public abstract readonly type: RootClusterType;
 }
 
 /**
  * @category Primary
  */
-export class Subgraph extends Cluster<SubgraphAttributes> {
+export class Subgraph extends Cluster {
   public type: ClusterType = 'subgraph';
-
-  constructor(public readonly context: Context, id: string, attributes: SubgraphAttributes = new SubgraphAttributes()) {
-    super(id, attributes);
+  constructor(public readonly context: Context) {
+    super();
   }
-
   public isSubgraphCluster(): boolean {
-    return this.id.startsWith('cluster_');
+    if (typeof this.id === 'string') {
+      return this.id.startsWith('cluster_');
+    }
+    return false;
   }
-
   public toDot(): string {
     return `${super.toDot()};`;
   }

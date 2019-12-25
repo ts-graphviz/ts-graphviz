@@ -1,20 +1,20 @@
-import { LblStringValue } from '../valueType';
+import { Literal } from '../Literal';
 
 const DoubleQuotedValuePattern = /^".+"$/ms;
 const HTMLLikeValuePattern = /^<.+>$/ms;
 
 describe('valueType', () => {
-  describe('LblStringValue', () => {
+  describe('Literal', () => {
     describe('plain string', () => {
       test.each([
-        ['test'],
+        ['te"st'],
         [
           `
           test
           `,
         ],
       ])('toDot result should be quoted', input => {
-        const value = new LblStringValue(input);
+        const value = new Literal(input);
         const dot = value.toDot();
         expect(dot).toMatch(DoubleQuotedValuePattern);
         expect(dot).not.toMatch(HTMLLikeValuePattern);
@@ -37,7 +37,7 @@ describe('valueType', () => {
           `,
         ],
       ])('toDot result should not be quoted', input => {
-        const value = new LblStringValue(input);
+        const value = new Literal(input);
         const dot = value.toDot();
         expect(dot).not.toMatch(DoubleQuotedValuePattern);
         expect(dot).toMatch(HTMLLikeValuePattern);

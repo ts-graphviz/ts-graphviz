@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`class Subgraph renders correctly by toDot method has some attributes 1`] = `
-"digraph \\"G\\" {
+"digraph {
   graph [
-    color = \\"red\\",
+    color = red,
   ];
   edge [
     label = \\"edge label\\",
@@ -15,7 +15,7 @@ exports[`class Subgraph renders correctly by toDot method has some attributes 1`
 `;
 
 exports[`class Subgraph renders correctly by toDot method label attribute behavior html like 1`] = `
-"digraph \\"G\\" {
+"digraph {
   graph [
     label = <<B>this is test for graph label</B>>,
   ];
@@ -29,7 +29,7 @@ exports[`class Subgraph renders correctly by toDot method label attribute behavi
 `;
 
 exports[`class Subgraph renders correctly by toDot method label attribute behavior plain text label to be quoted by double quotation 1`] = `
-"digraph \\"G\\" {
+"digraph {
   graph [
     label = \\"this is test for graph label\\",
   ];
@@ -43,10 +43,10 @@ exports[`class Subgraph renders correctly by toDot method label attribute behavi
 `;
 
 exports[`class Subgraph renders correctly by toDot method nodes and edge 1`] = `
-"digraph \\"G\\" {
-  \\"node1\\";
-  \\"node2\\";
-  \\"node1\\" -> \\"node2\\";
+"digraph {
+  node1;
+  node2;
+  node1 -> node2;
 }"
 `;
 
@@ -61,42 +61,42 @@ exports[`class Subgraph renders correctly by toDot method should be escaped if i
 `;
 
 exports[`class Subgraph renders correctly by toDot method simple g 1`] = `
-"digraph \\"G\\" {
+"digraph {
 }"
 `;
 
 exports[`class Subgraph renders correctly by toDot method subgraphs 1`] = `
-"digraph \\"G\\" {
-  \\"node1\\";
-  \\"node2\\";
-  subgraph \\"A\\" {
-    \\"A_node1\\";
-    \\"A_node2\\";
-    \\"A_node1\\" -> \\"A_node2\\";
-    \\"B_node1\\" -> \\"B_node2\\";
+"digraph {
+  node1;
+  node2;
+  subgraph A {
+    A_node1;
+    A_node2;
+    A_node1 -> A_node2;
+    B_node1 -> B_node2;
   };
-  subgraph \\"B\\" {
-    \\"B_node1\\";
-    \\"B_node2\\";
+  subgraph B {
+    B_node1;
+    B_node2;
   };
-  \\"node1\\" -> \\"node2\\";
+  node1 -> node2;
 }"
 `;
 
 exports[`class Subgraph renders correctly by toDot method subgraphs, depth 2 1`] = `
-"digraph \\"G\\" {
-  \\"node1\\";
-  \\"node2\\";
-  subgraph \\"depth1\\" {
-    \\"depth1_node1\\";
-    \\"depth1_node2\\";
-    subgraph \\"depth2\\" {
-      \\"depth2_node1\\";
-      \\"depth2_node2\\";
-      \\"depth2_node1\\" -> \\"depth2_node2\\";
+"digraph {
+  node1;
+  node2;
+  subgraph depth1 {
+    depth1_node1;
+    depth1_node2;
+    subgraph depth2 {
+      depth2_node1;
+      depth2_node2;
+      depth2_node1 -> depth2_node2;
     };
-    \\"depth1_node1\\" -> \\"depth1_node2\\";
+    depth1_node1 -> depth1_node2;
   };
-  \\"node1\\" -> \\"node2\\";
+  node1 -> node2;
 }"
 `;

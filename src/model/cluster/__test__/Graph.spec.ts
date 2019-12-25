@@ -1,6 +1,6 @@
 import 'jest-graphviz';
 import { DotBase, GraphvizObject } from '../../../common';
-import { GraphEdge } from '../../Edge';
+import { Edge } from '../../Edge';
 import { Node } from '../../Node';
 import { Cluster, RootCluster } from '../Cluster';
 import { Graph } from '../Graph';
@@ -125,7 +125,7 @@ describe('class Graph', () => {
 
     it('Edge operation methods works', () => {
       const [node1, node2] = ['node1', 'node2'].map(id => g.createNode(id));
-      const edge = new GraphEdge(node1, node2);
+      const edge = new Edge({ graphType: 'digraph' }, node1, node2);
       expect(g.existEdge(edge)).toBe(false);
       g.addEdge(edge);
       expect(g.existEdge(edge)).toBe(true);
@@ -135,15 +135,15 @@ describe('class Graph', () => {
 
     it('Subgraph operation methods works', () => {
       const sub = g.context.createSubgraph('sub');
-      expect(g.existSubgraph(sub.id)).toBe(false);
+      expect(g.existSubgraph(sub)).toBe(false);
       g.addSubgraph(sub);
-      expect(g.existSubgraph(sub.id)).toBe(true);
+      expect(g.existSubgraph(sub)).toBe(true);
       g.removeSubgraph(sub);
-      expect(g.existSubgraph(sub.id)).toBe(false);
+      expect(g.existSubgraph(sub)).toBe(false);
       g.addSubgraph(sub);
-      expect(g.existSubgraph(sub.id)).toBe(true);
-      g.removeSubgraph(sub.id);
-      expect(g.existSubgraph(sub.id)).toBe(false);
+      expect(g.existSubgraph(sub)).toBe(true);
+      g.removeSubgraph(sub);
+      expect(g.existSubgraph(sub)).toBe(false);
     });
   });
 });

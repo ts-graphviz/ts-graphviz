@@ -1,16 +1,18 @@
-import { Digraph, Graph, RootClusterType, Subgraph } from './cluster';
+import { RootCluster, RootClusterType, Subgraph } from './cluster';
 
 export interface IContext {
-  graphType: RootClusterType;
+  graphType: RootClusterType | undefined;
 }
 
 export class Context implements IContext {
-  get graphType(): RootClusterType {
-    return this.root.type;
+  get graphType(): RootClusterType | undefined {
+    return this.root?.type;
   }
-  constructor(public readonly root: Graph | Digraph) {}
+  public root?: RootCluster;
 
-  public createSubgraph(id: string): Subgraph {
-    return new Subgraph(this, id);
+  public createSubgraph(id?: string): Subgraph {
+    const subgraph = new Subgraph(this);
+    subgraph.id = id;
+    return subgraph;
   }
 }

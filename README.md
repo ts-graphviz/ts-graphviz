@@ -29,7 +29,7 @@ npm install ts-graphviz
 ```typescript
 import { digraph } from 'ts-graphviz';
 
-const g = digraph();
+const g = digraph('G');
 
 const subgraphA = g.createSubgraph('A');
 const nodeA1 = subgraphA.createNode('A_node1');
@@ -74,19 +74,19 @@ console.log(dot);
 
 ```graphviz
 digraph G {
-  "node1";
-  "node2";
+  node1;
+  node2;
   subgraph A {
-    "A_node1";
-    "A_node2";
-    "A_node1" -> "A_node2";
-    "B_node1" -> "B_node2";
+    A_node1;
+    A_node2;
+    A_node1 -> A_node2;
+    B_node1 -> B_node2;
   };
   subgraph B {
-    "B_node1";
-    "B_node2";
+    B_node1;
+    B_node2;
   };
-  "node1" -> "node2";
+  node1 -> node2;
 }
 ```
 

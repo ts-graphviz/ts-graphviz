@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`class Attributes renders correctly by toDot method no attributes 1`] = `""`;
+
+exports[`class Attributes renders correctly by toDot method one attribute 1`] = `
+"[
+  label = test,
+]"
+`;
+
+exports[`class Attributes renders correctly by toDot method some attributes 1`] = `
+"[
+  label = test,
+  color = red,
+]"
+`;

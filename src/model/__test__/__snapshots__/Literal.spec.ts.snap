@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`valueType Literal plain string toDot result should be quoted 1`] = `"\\"te\\\\\\"st\\""`;
+
+exports[`valueType Literal plain string toDot result should be quoted 2`] = `"\\"\\\\n          test\\\\n          \\""`;
