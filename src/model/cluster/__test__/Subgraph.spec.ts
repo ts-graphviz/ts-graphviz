@@ -1,7 +1,6 @@
 import 'jest-graphviz';
 import { DotBase, GraphvizObject } from '../../../common';
-import { Type } from '../../../common/type';
-import { DigraphEdge, GraphEdge } from '../../Edge';
+import { Edge } from '../../Edge';
 import { Node } from '../../Node';
 import { Cluster, Subgraph } from '../Cluster';
 import { Digraph } from '../Digraph';
@@ -9,20 +8,20 @@ import { Graph } from '../Graph';
 
 describe('class Subgraph', () => {
   let g: Digraph | Graph;
-  let EdgeClass: Type<DigraphEdge> | Type<GraphEdge>;
+  let createEdge: (...nodes: Node[]) => Edge;
   const testCases: { title: string; beforeEachFunc: () => void }[] = [
     {
       title: 'root is Digraph',
       beforeEachFunc: () => {
         g = new Digraph();
-        EdgeClass = DigraphEdge;
+        createEdge = (...nodes: Node[]) => new Edge({ graphType: 'graph' }, ...nodes);
       },
     },
     {
       title: 'root is Graph',
       beforeEachFunc: () => {
         g = new Graph();
-        EdgeClass = GraphEdge;
+        createEdge = (...nodes: Node[]) => new Edge({ graphType: 'graph' }, ...nodes);
       },
     },
   ];
@@ -49,13 +48,15 @@ describe('class Subgraph', () => {
       });
 
       it('should be escaped if id contains a newline character', () => {
-        subgraph = new Subgraph(g.context, '1\n2\n');
+        subgraph = new Subgraph(g.context);
+        subgraph.id = '1\n2\n';
         const dot = g.toDot();
         expect(dot).toBeValidDotAndMatchSnapshot();
       });
 
       it('should be escaped if id contains a comma', () => {
-        subgraph = new Subgraph(g.context, '1"2"');
+        subgraph = new Subgraph(g.context);
+        subgraph.id = '1"2"';
         const dot = g.toDot();
         expect(dot).toBeValidDotAndMatchSnapshot();
       });
@@ -100,7 +101,7 @@ describe('class Subgraph', () => {
 
         it('Edge operation methods works', () => {
           const [node1, node2] = ['node1', 'node2'].map(id => subgraph.createNode(id));
-          const edge = new EdgeClass(node1, node2);
+          const edge = createEdge(node1, node2);
           expect(subgraph.existEdge(edge)).toBe(false);
           subgraph.addEdge(edge);
           expect(subgraph.existEdge(edge)).toBe(true);
@@ -111,16 +112,16 @@ describe('class Subgraph', () => {
 
         it('Subgraph operation methods works', () => {
           const sub = subgraph.context.createSubgraph('sub');
-          expect(subgraph.existSubgraph(sub.id)).toBe(false);
+          expect(subgraph.existSubgraph(sub)).toBe(false);
           subgraph.addSubgraph(sub);
-          expect(subgraph.existSubgraph(sub.id)).toBe(true);
+          expect(subgraph.existSubgraph(sub)).toBe(true);
           expect(subgraph.toDot()).toMatchSnapshot();
           subgraph.removeSubgraph(sub);
-          expect(subgraph.existSubgraph(sub.id)).toBe(false);
+          expect(subgraph.existSubgraph(sub)).toBe(false);
           subgraph.addSubgraph(sub);
-          expect(subgraph.existSubgraph(sub.id)).toBe(true);
-          subgraph.removeSubgraph(sub.id);
-          expect(subgraph.existSubgraph(sub.id)).toBe(false);
+          expect(subgraph.existSubgraph(sub)).toBe(true);
+          subgraph.removeSubgraph(sub);
+          expect(subgraph.existSubgraph(sub)).toBe(false);
         });
       });
     });

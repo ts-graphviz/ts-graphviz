@@ -1,49 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`function digraph callback style 1`] = `
-"digraph \\"G\\" {
-  \\"aa\\";
-  \\"bb\\";
-  \\"cc\\";
-  subgraph \\"A\\" {
-    \\"Aaa\\" [
-      color = \\"pink\\",
+"digraph G {
+  aa;
+  bb;
+  cc;
+  subgraph A {
+    Aaa [
+      color = pink,
     ];
-    \\"Abb\\" [
-      color = \\"violet\\",
+    Abb [
+      color = violet,
     ];
-    \\"Acc\\";
-    \\"E\\";
-    \\"Aaa\\":\\"a\\" -> \\"Abb\\" -> \\"Acc\\" -> \\"E\\" [
-      color = \\"red\\",
+    Acc;
+    E;
+    Aaa:a -> Abb -> Acc -> E [
+      color = red,
     ];
   };
-  \\"aa\\" -> \\"bb\\" -> \\"cc\\" [
-    color = \\"red\\",
+  aa -> bb -> cc [
+    color = red,
   ];
 }"
 `;
 
 exports[`function graph callback style 1`] = `
-"graph \\"G\\" {
-  \\"aa\\";
-  \\"bb\\";
-  \\"cc\\";
-  subgraph \\"A\\" {
-    \\"Aaa\\" [
-      color = \\"pink\\",
+"graph G {
+  aa;
+  bb;
+  cc;
+  subgraph A {
+    Aaa [
+      color = pink,
     ];
-    \\"Abb\\" [
-      color = \\"violet\\",
+    Abb [
+      color = violet,
     ];
-    \\"Acc\\";
-    \\"hoge\\";
-    \\"Aaa\\" -- \\"Abb\\" -- \\"Acc\\" -- \\"hoge\\":\\"fuga\\" [
-      color = \\"red\\",
+    Acc;
+    hoge;
+    Aaa -- Abb -- Acc -- hoge:fuga [
+      color = red,
     ];
   };
-  \\"aa\\" -- \\"bb\\" -- \\"cc\\" [
-    color = \\"red\\",
+  aa -- bb -- cc [
+    color = red,
   ];
 }"
 `;
@@ -56,7 +56,7 @@ exports[`function graph escape characters 1`] = `
   \\"b\\\\\\"b\\";
   \\"c\\\\nc\\\\\\"\\";
   \\"a\\\\na\\" -- \\"b\\\\\\"b\\" -- \\"c\\\\nc\\\\\\"\\" [
-    color = \\"red\\",
+    color = red,
   ];
 }"
 `;

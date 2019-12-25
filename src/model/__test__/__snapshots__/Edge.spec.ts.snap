@@ -1,33 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`class Edge renders correctly by toDot method 3 nodes 1`] = `"\\"node1\\" -> \\"node2\\" -> \\"node3\\";"`;
+exports[`class Edge renders correctly by toDot method 3 nodes 1`] = `"node1 -> node2 -> node3;"`;
 
-exports[`class Edge renders correctly by toDot method 3 nodes, but many args 1`] = `"\\"node1\\" -> \\"node2\\" -> \\"node3\\" -> \\"node1\\" -> \\"node2\\" -> \\"node3\\" -> \\"node1\\" -> \\"node2\\" -> \\"node3\\";"`;
+exports[`class Edge renders correctly by toDot method 3 nodes, but many args 1`] = `"node1 -> node2 -> node3 -> node1 -> node2 -> node3 -> node1 -> node2 -> node3;"`;
 
 exports[`class Edge renders correctly by toDot method graphType is "graph" 1`] = `
-"\\"node1\\" -- \\"node2\\" [
+"node1 -- node2 [
   label = \\"this is test\\",
-  color = \\"red\\",
+  color = red,
 ];"
 `;
 
 exports[`class Edge renders correctly by toDot method has some attributes 1`] = `
-"\\"node1\\" -> \\"node2\\" [
+"node1 -> node2 [
   label = \\"this is test\\",
-  color = \\"red\\",
+  color = red,
 ];"
 `;
 
 exports[`class Edge renders correctly by toDot method label attribute behavior html like 1`] = `
-"\\"node1\\" -> \\"node2\\" [
+"node1 -> node2 [
   label = <<B>this is test</B>>,
 ];"
 `;
 
 exports[`class Edge renders correctly by toDot method label attribute behavior plain text label to be quoted by double quotation 1`] = `
-"\\"node1\\" -> \\"node2\\" [
+"node1 -> node2 [
   label = \\"this is test\\",
 ];"
 `;
 
-exports[`class Edge renders correctly by toDot method simple edge 1`] = `"\\"node1\\" -> \\"node2\\";"`;
+exports[`class Edge renders correctly by toDot method simple edge 1`] = `"node1 -> node2;"`;
