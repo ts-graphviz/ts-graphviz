@@ -22,6 +22,18 @@ describe('class Edge', () => {
       expect(edge.toDot()).toMatchSnapshot();
     });
 
+    describe('edge with comment', () => {
+      test('single line comment', () => {
+        edge.comment = 'this is comment.';
+        expect(edge.toDot()).toMatchSnapshot();
+      });
+
+      test('multi line comment', () => {
+        edge.comment = 'this is comment.\nsecond line.';
+        expect(edge.toDot()).toMatchSnapshot();
+      });
+    });
+
     it('should be escaped if id contains a newline character', () => {
       edge = new Edge({ graphType: 'digraph' }, node1, new Node('1\n2\n'));
       expect(edge.toDot()).toBe('node1 -> "1\\n2\\n";');

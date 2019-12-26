@@ -18,6 +18,18 @@ describe('class Node', () => {
       expect(node.toDot()).toMatchSnapshot();
     });
 
+    describe('node with comment', () => {
+      test('single line comment', () => {
+        node.comment = 'this is comment.';
+        expect(node.toDot()).toMatchSnapshot();
+      });
+
+      test('multi line comment', () => {
+        node.comment = 'this is comment.\nsecond line.';
+        expect(node.toDot()).toMatchSnapshot();
+      });
+    });
+
     it('should be escaped if id contains a newline character', () => {
       node = new Node('1\n2\n');
       expect(node.toDot()).toBe('"1\\n2\\n";');

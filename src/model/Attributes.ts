@@ -1,11 +1,12 @@
 import { DotBase } from '../common';
-import { indent } from '../utils/dot-rendering';
+import { commentOut, indent, joinLines } from '../utils/dot-rendering';
 import { Literal } from './Literal';
 
 /**
  * @category Attributes
  */
 export class Attributes extends DotBase {
+  public comment?: string;
   protected attrs: Map<string, Literal> = new Map();
   get size(): number {
     return this.attrs.size;
@@ -24,10 +25,12 @@ export class Attributes extends DotBase {
     if (this.size === 0) {
       return '';
     }
-    return [
+    const comment = this.comment ? indent(commentOut(this.comment)) : undefined;
+    return joinLines(
       '[',
+      comment,
       ...Array.from(this.attrs.entries()).map(([key, value]) => indent(`${key} = ${value.toDot()},`)),
       ']',
-    ].join('\n');
+    );
   }
 }

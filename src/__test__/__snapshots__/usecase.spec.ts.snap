@@ -24,6 +24,33 @@ exports[`function digraph callback style 1`] = `
 }"
 `;
 
+exports[`function digraph comment 1`] = `
+"// This is directed graph.
+digraph G {
+  // This is node a.
+  aa;
+  // This is node b.
+  bb;
+  // This is node c.
+  cc;
+  // It is subgraph A.
+  // It is not cluster
+  subgraph A {
+    // This is node Aaa in subgraph A.
+    Aaa [
+      // It will be filled by pink.
+      color = pink,
+    ];
+  };
+  // This is edge.
+  // It connects a, b and c.
+  aa -> bb -> cc [
+    // Edge line will draw with red.
+    color = red,
+  ];
+}"
+`;
+
 exports[`function graph callback style 1`] = `
 "graph G {
   aa;

@@ -1,6 +1,6 @@
 import { DotBase } from '../../common';
 import { IEdgeTarget } from '../../common/interface';
-import { concatWords, indent, joinLines } from '../../utils/dot-rendering';
+import { commentOut, concatWords, indent, joinLines } from '../../utils/dot-rendering';
 import { Attributes } from '../Attributes';
 import { Context } from '../Context';
 import { Edge } from '../Edge';
@@ -25,6 +25,7 @@ export interface IClusterCommonAttributes {
  * @hidden
  */
 export abstract class Cluster extends DotBase {
+  public comment?: string;
   get id(): string | undefined {
     return this.idLiteral?.value;
   }
@@ -168,6 +169,7 @@ export abstract class Cluster extends DotBase {
   }
 
   public toDot(): string {
+    const comment = this.comment ? commentOut(this.comment) : undefined;
     const type = this.type;
     const id = this.idLiteral?.toDot();
     // attributes
@@ -180,8 +182,13 @@ export abstract class Cluster extends DotBase {
     const subgraphs = Array.from(this.subgraphs.values()).map(o => o.toDot());
     const edges = Array.from(this.edges.values()).map(o => o.toDot());
     const clusterContents = joinLines(...commonAttributes, ...nodes, ...subgraphs, ...edges);
-    const src = joinLines(concatWords(type, id, '{'), clusterContents ? indent(clusterContents) : undefined, '}');
-    return src;
+    const dot = joinLines(
+      comment,
+      concatWords(type, id, '{'),
+      clusterContents ? indent(clusterContents) : undefined,
+      '}',
+    );
+    return dot;
   }
 
   private toNodeLikeObject(node: EdgeTargetLike): IEdgeTarget {

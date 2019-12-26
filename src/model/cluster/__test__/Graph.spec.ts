@@ -25,6 +25,18 @@ describe('class Graph', () => {
       expect(dot).toBeValidDotAndMatchSnapshot();
     });
 
+    describe('graph with comment', () => {
+      test('single line comment', () => {
+        g.comment = 'this is comment.';
+        expect(g.toDot()).toMatchSnapshot();
+      });
+
+      test('multi line comment', () => {
+        g.comment = 'this is comment.\nsecond line.';
+        expect(g.toDot()).toMatchSnapshot();
+      });
+    });
+
     it('should be escaped if id contains a newline character', () => {
       g = new Graph('1\n2\n');
       const dot = g.toDot();

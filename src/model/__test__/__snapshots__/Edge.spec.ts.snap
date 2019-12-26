@@ -4,6 +4,17 @@ exports[`class Edge renders correctly by toDot method 3 nodes 1`] = `"node1 -> n
 
 exports[`class Edge renders correctly by toDot method 3 nodes, but many args 1`] = `"node1 -> node2 -> node3 -> node1 -> node2 -> node3 -> node1 -> node2 -> node3;"`;
 
+exports[`class Edge renders correctly by toDot method edge with comment multi line comment 1`] = `
+"// this is comment.
+// second line.
+node1 -> node2;"
+`;
+
+exports[`class Edge renders correctly by toDot method edge with comment single line comment 1`] = `
+"// this is comment.
+node1 -> node2;"
+`;
+
 exports[`class Edge renders correctly by toDot method graphType is "graph" 1`] = `
 "node1 -- node2 [
   label = \\"this is test\\",

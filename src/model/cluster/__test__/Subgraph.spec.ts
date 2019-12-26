@@ -47,6 +47,18 @@ describe('class Subgraph', () => {
         expect(subgraph.isSubgraphCluster()).toBe(false);
       });
 
+      describe('subgraph with comment', () => {
+        test('single line comment', () => {
+          subgraph.comment = 'this is comment.';
+          expect(subgraph.toDot()).toMatchSnapshot();
+        });
+
+        test('multi line comment', () => {
+          subgraph.comment = 'this is comment.\nsecond line.';
+          expect(subgraph.toDot()).toMatchSnapshot();
+        });
+      });
+
       it('should be escaped if id contains a newline character', () => {
         subgraph = new Subgraph(g.context);
         subgraph.id = '1\n2\n';

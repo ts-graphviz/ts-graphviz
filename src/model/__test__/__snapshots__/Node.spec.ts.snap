@@ -19,4 +19,15 @@ exports[`class Node renders correctly by toDot method label attribute behavior p
 ];"
 `;
 
+exports[`class Node renders correctly by toDot method node with comment multi line comment 1`] = `
+"// this is comment.
+// second line.
+test;"
+`;
+
+exports[`class Node renders correctly by toDot method node with comment single line comment 1`] = `
+"// this is comment.
+test;"
+`;
+
 exports[`class Node renders correctly by toDot method simple node 1`] = `"test;"`;

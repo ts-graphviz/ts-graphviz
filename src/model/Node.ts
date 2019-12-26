@@ -1,5 +1,6 @@
 import { DotBase } from '../common';
 import { IEdgeTarget } from '../common/interface';
+import { commentOut, joinLines } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
 import { Literal } from './Literal';
 
@@ -7,6 +8,7 @@ import { Literal } from './Literal';
  * @category Primary
  */
 export class Node extends DotBase implements IEdgeTarget {
+  public comment?: string;
   public readonly idLiteral: Literal;
   public readonly attributes = new Attributes();
   constructor(public readonly id: string) {
@@ -15,9 +17,11 @@ export class Node extends DotBase implements IEdgeTarget {
   }
 
   public toDot(): string {
+    const comment = this.comment ? commentOut(this.comment) : undefined;
     const target = this.idLiteral.toDot();
     const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
-    return `${target}${attrs};`;
+    const dot = `${target}${attrs};`;
+    return joinLines(comment, dot);
   }
 
   public toEdgeTargetDot() {

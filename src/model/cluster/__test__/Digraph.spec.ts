@@ -5,7 +5,7 @@ import { Node } from '../../Node';
 import { Cluster, RootCluster } from '../Cluster';
 import { Digraph } from '../Digraph';
 
-describe('class Subgraph', () => {
+describe('class Digraph', () => {
   let g: Digraph;
   beforeEach(() => {
     g = new Digraph();
@@ -23,6 +23,18 @@ describe('class Subgraph', () => {
     it('simple g', () => {
       const dot = g.toDot();
       expect(dot).toBeValidDotAndMatchSnapshot();
+    });
+
+    describe('digraph with comment', () => {
+      test('single line comment', () => {
+        g.comment = 'this is comment.';
+        expect(g.toDot()).toMatchSnapshot();
+      });
+
+      test('multi line comment', () => {
+        g.comment = 'this is comment.\nsecond line.';
+        expect(g.toDot()).toMatchSnapshot();
+      });
     });
 
     it('should be escaped if id contains a newline character', () => {
