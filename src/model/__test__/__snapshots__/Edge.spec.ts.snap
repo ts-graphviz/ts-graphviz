@@ -29,16 +29,4 @@ exports[`class Edge renders correctly by toDot method has some attributes 1`] = 
 ];"
 `;
 
-exports[`class Edge renders correctly by toDot method label attribute behavior html like 1`] = `
-"node1 -> node2 [
-  label = <<B>this is test</B>>,
-];"
-`;
-
-exports[`class Edge renders correctly by toDot method label attribute behavior plain text label to be quoted by double quotation 1`] = `
-"node1 -> node2 [
-  label = \\"this is test\\",
-];"
-`;
-
 exports[`class Edge renders correctly by toDot method simple edge 1`] = `"node1 -> node2;"`;

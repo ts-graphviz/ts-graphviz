@@ -37,18 +37,6 @@ describe('class Graph', () => {
       });
     });
 
-    it('should be escaped if id contains a newline character', () => {
-      g = new Graph('1\n2\n');
-      const dot = g.toDot();
-      expect(dot).toBeValidDotAndMatchSnapshot();
-    });
-
-    it('should be escaped if id contains a comma', () => {
-      g = new Graph('1"2"');
-      const dot = g.toDot();
-      expect(dot).toBeValidDotAndMatchSnapshot();
-    });
-
     it('has some attributes', () => {
       g.attributes.edge.set('label', 'edge label');
       g.attributes.graph.set('color', 'red');

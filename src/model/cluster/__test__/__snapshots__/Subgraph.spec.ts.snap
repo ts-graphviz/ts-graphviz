@@ -43,16 +43,6 @@ exports[`class Subgraph root is Digraph label attribute behavior plain text labe
 };"
 `;
 
-exports[`class Subgraph root is Digraph should be escaped if id contains a comma 1`] = `
-"digraph {
-}"
-`;
-
-exports[`class Subgraph root is Digraph should be escaped if id contains a newline character 1`] = `
-"digraph {
-}"
-`;
-
 exports[`class Subgraph root is Digraph subgraph with comment multi line comment 1`] = `
 "// this is comment.
 // second line.
@@ -107,16 +97,6 @@ exports[`class Subgraph root is Graph label attribute behavior plain text label 
     label = \\"this is test for node label\\",
   ];
 };"
-`;
-
-exports[`class Subgraph root is Graph should be escaped if id contains a comma 1`] = `
-"graph {
-}"
-`;
-
-exports[`class Subgraph root is Graph should be escaped if id contains a newline character 1`] = `
-"graph {
-}"
 `;
 
 exports[`class Subgraph root is Graph subgraph with comment multi line comment 1`] = `

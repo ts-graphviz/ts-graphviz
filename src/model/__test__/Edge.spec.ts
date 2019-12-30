@@ -34,16 +34,6 @@ describe('class Edge', () => {
       });
     });
 
-    it('should be escaped if id contains a newline character', () => {
-      edge = new Edge({ graphType: 'digraph' }, node1, new Node('1\n2\n'));
-      expect(edge.toDot()).toBe('node1 -> "1\\n2\\n";');
-    });
-
-    it('should be escaped if id contains a comma', () => {
-      edge = new Edge({ graphType: 'digraph' }, node1, new Node('1"2"'));
-      expect(edge.toDot()).toBe('node1 -> "1\\"2\\"";');
-    });
-
     it('has some attributes', () => {
       edge.attributes.set('label', 'this is test');
       edge.attributes.set('color', 'red');
@@ -65,18 +55,6 @@ describe('class Edge', () => {
     it('3 nodes, but many args', () => {
       edge = new Edge({ graphType: 'digraph' }, node1, node2, node3, node1, node2, node3, node1, node2, node3);
       expect(edge.toDot()).toMatchSnapshot();
-    });
-
-    describe('label attribute behavior', () => {
-      it('plain text label to be quoted by double quotation', () => {
-        edge.attributes.set('label', 'this is test');
-        expect(edge.toDot()).toMatchSnapshot();
-      });
-
-      it('html like', () => {
-        edge.attributes.set('label', '<<B>this is test</B>>');
-        expect(edge.toDot()).toMatchSnapshot();
-      });
     });
   });
 });

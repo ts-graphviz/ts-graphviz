@@ -63,16 +63,6 @@ exports[`class Digraph renders correctly by toDot method nodes and edge 1`] = `
 }"
 `;
 
-exports[`class Digraph renders correctly by toDot method should be escaped if id contains a comma 1`] = `
-"digraph \\"1\\\\\\"2\\\\\\"\\" {
-}"
-`;
-
-exports[`class Digraph renders correctly by toDot method should be escaped if id contains a newline character 1`] = `
-"digraph \\"1\\\\n2\\\\n\\" {
-}"
-`;
-
 exports[`class Digraph renders correctly by toDot method simple g 1`] = `
 "digraph {
 }"

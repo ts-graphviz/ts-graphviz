@@ -30,32 +30,10 @@ describe('class Node', () => {
       });
     });
 
-    it('should be escaped if id contains a newline character', () => {
-      node = new Node('1\n2\n');
-      expect(node.toDot()).toBe('"1\\n2\\n";');
-    });
-
-    it('should be escaped if id contains a comma', () => {
-      node = new Node('1"2"');
-      expect(node.toDot()).toBe('"1\\"2\\"";');
-    });
-
     it('has some attributes', () => {
       node.attributes.set('label', 'this is test');
       node.attributes.set('color', 'red');
       expect(node.toDot()).toMatchSnapshot();
-    });
-
-    describe('label attribute behavior', () => {
-      it('plain text label to be quoted by double quotation', () => {
-        node.attributes.set('label', 'this is test');
-        expect(node.toDot()).toMatchSnapshot();
-      });
-
-      it('html like', () => {
-        node.attributes.set('label', '<<B>this is test</B>>');
-        expect(node.toDot()).toMatchSnapshot();
-      });
     });
   });
 });
