@@ -22,6 +22,24 @@ describe('valueType', () => {
       });
     });
 
+    describe('escape characters', () => {
+      test.each([
+        ['colon', '1:2', '"1:2"'],
+        ['semi-colon', '1;2', '"1;2"'],
+        ['equal', '1=2', '"1=2"'],
+        ['dash', '1-2', '"1-2"'],
+        ['sharp', '1#2', '"1#2"'],
+        ['space', '1 2', '"1 2"'],
+        ['newline', '1\n2', '"1\\n2"'],
+        ['tab', '1\t2', '"1\t2"'],
+        ['double-quotation', '1"2', '"1\\"2"'],
+        // tslint:disable-next-line: variable-name
+      ])('escaped if literal contains %s character', (_name, input, expected) => {
+        const value = new Literal(input);
+        expect(value.toDot()).toBe(expected);
+      });
+    });
+
     describe('HTML Like string', () => {
       test.each([
         ['<<B>hoge</B>>'],
@@ -41,6 +59,7 @@ describe('valueType', () => {
         const dot = value.toDot();
         expect(dot).not.toMatch(DoubleQuotedValuePattern);
         expect(dot).toMatch(HTMLLikeValuePattern);
+        expect(dot).toMatchSnapshot();
       });
     });
   });
