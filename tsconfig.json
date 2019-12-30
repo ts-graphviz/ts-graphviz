@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
+    "importHelpers": true,
     "target": "es5",
-    "module": "commonjs",
+    "module": "ES2015",
     "strict": true,
     "lib": [
       "esnext"
@@ -10,7 +11,7 @@
     "alwaysStrict": true,
     "strictNullChecks": true,
     "outDir": "lib",
-    "rootDir": "./src",
+    "rootDir": "src",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "declaration": true

@@ -12,18 +12,26 @@
     "url": "https://github.com/kamiazya/ts-graphviz/issues"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "unpkg": "lib/bundle.min.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "rollup -c",
     "test": "jest",
     "lint": "tslint --project ./tsconfig.json",
     "doc": "typedoc"
+  },
+  "dependencies": {
+    "tslib": "^1.10.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.21",
     "jest": "^24.9.0",
     "jest-graphviz": "^0.1.1",
     "prettier": "^1.18.2",
+    "rollup": "^1.27.14",
+    "rollup-plugin-terser": "^5.1.3",
+    "rollup-plugin-typescript2": "^0.25.3",
     "ts-jest": "^24.1.0",
     "tslint": "^5.20.0",
     "tslint-config-prettier": "^1.18.0",
