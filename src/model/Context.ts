@@ -1,4 +1,4 @@
-import { RootCluster, RootClusterType, Subgraph } from './cluster';
+import { RootCluster, RootClusterType, Subgraph } from './cluster/Cluster';
 
 export interface IContext {
   graphType: RootClusterType | undefined;
