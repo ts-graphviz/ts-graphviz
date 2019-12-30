@@ -24,7 +24,7 @@ export class Literal extends DotBase {
         stringValue = trimmed;
         this.isQuoteRequired = false;
       } else {
-        this.isQuoteRequired = /[#\s":;=\-']/g.test(stringValue);
+        this.isQuoteRequired = /[#\s":;=\-'/]/g.test(stringValue);
       }
     }
     this.value = stringValue;
