@@ -11,6 +11,10 @@
   "bugs": {
     "url": "https://github.com/kamiazya/ts-graphviz/issues"
   },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/kamiazya"
+  },
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
