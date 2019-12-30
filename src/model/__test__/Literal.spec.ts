@@ -33,6 +33,7 @@ describe('valueType', () => {
         ['newline', '1\n2', '"1\\n2"'],
         ['tab', '1\t2', '"1\t2"'],
         ['double-quotation', '1"2', '"1\\"2"'],
+        ['slash', '1/2', '"1/2"'],
         // tslint:disable-next-line: variable-name
       ])('escaped if literal contains %s character', (_name, input, expected) => {
         const value = new Literal(input);
