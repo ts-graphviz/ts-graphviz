@@ -47,6 +47,18 @@ describe('class Subgraph', () => {
         expect(subgraph.isSubgraphCluster()).toBe(false);
       });
 
+      describe('subgraph with comment', () => {
+        test('single line comment', () => {
+          subgraph.comment = 'this is comment.';
+          expect(subgraph.toDot()).toMatchSnapshot();
+        });
+
+        test('multi line comment', () => {
+          subgraph.comment = 'this is comment.\nsecond line.';
+          expect(subgraph.toDot()).toMatchSnapshot();
+        });
+      });
+
       it('should be subgraph cluster, when subgraph id is "cluster_test"', () => {
         subgraph = g.context.createSubgraph('cluster_test');
         expect(subgraph.isSubgraphCluster()).toBe(true);

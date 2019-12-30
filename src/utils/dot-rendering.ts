@@ -36,3 +36,13 @@ export function indent(src: string, depth: number = 1): string {
     .map(l => `${space}${l}`)
     .join('\n');
 }
+
+/**
+ * @hidden
+ */
+export function commentOut(src: string): string {
+  return src
+    .split('\n')
+    .map(l => `// ${l}`.trim())
+    .join('\n');
+}

@@ -18,6 +18,18 @@ describe('class Node', () => {
       expect(node.toDot()).toMatchSnapshot();
     });
 
+    describe('node with comment', () => {
+      test('single line comment', () => {
+        node.comment = 'this is comment.';
+        expect(node.toDot()).toMatchSnapshot();
+      });
+
+      test('multi line comment', () => {
+        node.comment = 'this is comment.\nsecond line.';
+        expect(node.toDot()).toMatchSnapshot();
+      });
+    });
+
     it('has some attributes', () => {
       node.attributes.set('label', 'this is test');
       node.attributes.set('color', 'red');

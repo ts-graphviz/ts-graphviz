@@ -25,6 +25,18 @@ describe('class Graph', () => {
       expect(dot).toBeValidDotAndMatchSnapshot();
     });
 
+    describe('graph with comment', () => {
+      test('single line comment', () => {
+        g.comment = 'this is comment.';
+        expect(g.toDot()).toMatchSnapshot();
+      });
+
+      test('multi line comment', () => {
+        g.comment = 'this is comment.\nsecond line.';
+        expect(g.toDot()).toMatchSnapshot();
+      });
+    });
+
     it('has some attributes', () => {
       g.attributes.edge.set('label', 'edge label');
       g.attributes.graph.set('color', 'red');

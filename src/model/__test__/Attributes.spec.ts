@@ -32,5 +32,21 @@ describe('class Attributes', () => {
       attrs.set('color', 'red');
       expect(attrs.toDot()).toMatchSnapshot();
     });
+
+    describe('edge with comment', () => {
+      beforeEach(() => {
+        attrs.set('label', 'test');
+        attrs.set('color', 'red');
+      });
+      test('single line comment', () => {
+        attrs.comment = 'this is comment.';
+        expect(attrs.toDot()).toMatchSnapshot();
+      });
+
+      test('multi line comment', () => {
+        attrs.comment = 'this is comment.\nsecond line.';
+        expect(attrs.toDot()).toMatchSnapshot();
+      });
+    });
   });
 });

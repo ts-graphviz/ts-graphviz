@@ -22,6 +22,18 @@ describe('class Edge', () => {
       expect(edge.toDot()).toMatchSnapshot();
     });
 
+    describe('edge with comment', () => {
+      test('single line comment', () => {
+        edge.comment = 'this is comment.';
+        expect(edge.toDot()).toMatchSnapshot();
+      });
+
+      test('multi line comment', () => {
+        edge.comment = 'this is comment.\nsecond line.';
+        expect(edge.toDot()).toMatchSnapshot();
+      });
+    });
+
     it('has some attributes', () => {
       edge.attributes.set('label', 'this is test');
       edge.attributes.set('color', 'red');

@@ -32,6 +32,34 @@ describe('function digraph', () => {
     const dot = G.toDot();
     expect(dot).toBeValidDotAndMatchSnapshot();
   });
+
+  test('comment', () => {
+    const G = digraph('G', g => {
+      g.comment = 'This is directed graph.';
+      const a = g.node('aa');
+      a.comment = 'This is node a.';
+      const b = g.node('bb');
+      b.comment = 'This is node b.';
+      const c = g.node('cc');
+      c.comment = 'This is node c.';
+      g.edge([a, b, c], e => {
+        e.comment = 'This is edge.\nIt connects a, b and c.';
+
+        e.attributes.set('color', 'red');
+        e.attributes.comment = 'Edge line will draw with red.';
+      });
+      g.subgraph('A', A => {
+        A.comment = 'It is subgraph A.\nIt is not cluster';
+        A.node('Aaa', n => {
+          n.comment = 'This is node Aaa in subgraph A.';
+          n.attributes.comment = 'It will be filled by pink.';
+          n.attributes.set('color', 'pink');
+        });
+      });
+    });
+    const dot = G.toDot();
+    expect(dot).toBeValidDotAndMatchSnapshot();
+  });
 });
 
 describe('function graph', () => {
