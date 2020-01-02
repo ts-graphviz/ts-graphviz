@@ -195,7 +195,6 @@ export abstract class Cluster extends DotBase {
     if (isEdgeTarget(node)) {
       return node;
     }
-    // FIXME
     const [id, port, compass] = node.split(':');
     const n = this.node(id);
     if (port) {
