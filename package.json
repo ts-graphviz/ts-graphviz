@@ -8,6 +8,10 @@
     "type": "git",
     "url": "https://github.com/kamiazya/ts-graphviz.git"
   },
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
   "bugs": {
     "url": "https://github.com/kamiazya/ts-graphviz/issues"
   },

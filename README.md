@@ -4,22 +4,32 @@
 
 [Graphviz](https://graphviz.gitlab.io/) library for TypeScript.
 
+## Key Feature
+
+- Export Dot language.
+- Support Node.js and Browser.
+  - UMD, ESM, CommonJS
+- No dependency.
+
 ## Installation
 
 The plugin can then be installed using [npm](https://www.npmjs.com/):
 
 [![NPM](https://nodei.co/npm/ts-graphviz.png)](https://nodei.co/npm/ts-graphviz/)
 
-### yarn
+### Package manager
 
 ```bash
+# yarn
 yarn add ts-graphviz
+# or npm
+npm install ts-graphviz
 ```
 
-### npm
+### Browser
 
-```bash
-npm install ts-graphviz
+```html
+<script src="//unpkg.com/ts-graphviz/lib/bundle.min.js"></script>
 ```
 
 ## Usage
@@ -89,6 +99,15 @@ digraph G {
   node1 -> node2;
 }
 ```
+
+## See Also
+
+Graphviz-dot Test and Integration
+
+- [jest-graphviz](https://github.com/kamiazya/jest-graphviz)
+  - Jest matchers that supports graphviz integration.
+- [setup-graphviz](https://github.com/kamiazya/setup-graphviz)
+  - GitHub Action to set up Graphviz cross-platform(Linux, macOS, Windows).
 
 ## License
 
