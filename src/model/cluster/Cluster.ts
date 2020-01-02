@@ -1,6 +1,6 @@
 import { DotBase } from '../../common';
 import { IEdgeTarget } from '../../common/interface';
-import { commentOut, concatWords, indent, joinLines } from '../../utils/dot-rendering';
+import { commentOut, concatWordsWithSpace, indent, joinLines } from '../../utils/dot-rendering';
 import { Attributes } from '../Attributes';
 import { Context } from '../Context';
 import { Edge } from '../Edge';
@@ -184,7 +184,7 @@ export abstract class Cluster extends DotBase {
     const clusterContents = joinLines(...commonAttributes, ...nodes, ...subgraphs, ...edges);
     const dot = joinLines(
       comment,
-      concatWords(type, id, '{'),
+      concatWordsWithSpace(type, id, '{'),
       clusterContents ? indent(clusterContents) : undefined,
       '}',
     );
@@ -196,10 +196,10 @@ export abstract class Cluster extends DotBase {
       return node;
     }
     // FIXME
-    const [id, port] = node.split(':');
+    const [id, port, compass] = node.split(':');
     const n = this.node(id);
     if (port) {
-      return n.port(port);
+      return n.port({ port, compass });
     }
     return n;
   }

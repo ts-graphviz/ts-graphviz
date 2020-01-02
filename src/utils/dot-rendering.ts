@@ -15,16 +15,24 @@ export function quote(src: string): string {
 /**
  * @hidden
  */
-export function concatWords(...lines: (string | undefined)[]): string {
-  return lines.filter(l => typeof l === 'string').join(' ');
+function concatWordsFactory(deciliter: string): (...lines: (string | undefined)[]) => string {
+  return (...lines: (string | undefined)[]) => lines.filter(l => typeof l === 'string').join(deciliter);
 }
 
 /**
  * @hidden
  */
-export function joinLines(...lines: (string | undefined)[]): string {
-  return lines.filter(l => typeof l === 'string').join('\n');
-}
+export const concatWordsWithSpace = concatWordsFactory(' ');
+
+/**
+ * @hidden
+ */
+export const concatWordsWithColon = concatWordsFactory(':');
+
+/**
+ * @hidden
+ */
+export const joinLines = concatWordsFactory('\n');
 
 /**
  * @hidden
