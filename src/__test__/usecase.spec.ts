@@ -1,6 +1,6 @@
 import 'jest-graphviz';
 import { Digraph, Graph } from '../model/cluster';
-import { digraph, graph } from '../usecase';
+import { digraph, graph, strict } from '../usecase';
 
 describe('function digraph', () => {
   it('should return Digraph object, when execute digraph()', () => {
@@ -105,5 +105,19 @@ describe('function graph', () => {
     });
     const dot = G.toDot();
     expect(dot).toBeValidDotAndMatchSnapshot();
+  });
+});
+
+describe('strict mode', () => {
+  it('should return Digraph object, when execute digraph()', () => {
+    const g = strict.digraph();
+    expect(g.strict).toBe(true);
+    expect(g).toBeInstanceOf(Digraph);
+  });
+
+  it('should return Graph object, when execute graph()', () => {
+    const g = strict.graph();
+    expect(g.strict).toBe(true);
+    expect(g).toBeInstanceOf(Graph);
   });
 });
