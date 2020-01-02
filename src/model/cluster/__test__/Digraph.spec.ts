@@ -25,6 +25,12 @@ describe('class Digraph', () => {
       expect(dot).toBeValidDotAndMatchSnapshot();
     });
 
+    it('strict graph', () => {
+      g.strict = true;
+      const dot = g.toDot();
+      expect(dot).toBeValidDotAndMatchSnapshot();
+    });
+
     describe('digraph with comment', () => {
       test('single line comment', () => {
         g.comment = 'this is comment.';
