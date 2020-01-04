@@ -68,6 +68,9 @@ exports[`function graph callback style 1`] = `
     Aaa -- Abb -- Acc -- hoge:fuga [
       color = red,
     ];
+    Aaa:a:w -- Abb:w -- Aaa:e -- Acc:r:e [
+      color = red,
+    ];
   };
   aa -- bb -- cc [
     color = red,
