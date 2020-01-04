@@ -15,8 +15,13 @@ export function quote(src: string): string {
 /**
  * @hidden
  */
+<<<<<<< HEAD
 function concatWordsFactory(deciliter: string): (...lines: (string | undefined)[]) => string {
   return (...lines: (string | undefined)[]) => lines.filter(l => typeof l === 'string').join(deciliter);
+=======
+export function concatWords(...words: (string | undefined)[]): string {
+  return words.filter(w => typeof w === 'string').join(' ');
+>>>>>>> 483ab5260897fa7fd94eed235dd09989e0f40146
 }
 
 /**
