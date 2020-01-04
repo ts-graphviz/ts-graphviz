@@ -69,6 +69,13 @@ exports[`class Digraph renders correctly by toDot method set attributes 1`] = `
 }"
 `;
 
+exports[`class Digraph renders correctly by toDot method set attributes by apply 1`] = `
+"digraph {
+  layout = dot;
+  dpi = 360;
+}"
+`;
+
 exports[`class Digraph renders correctly by toDot method simple g 1`] = `
 "digraph {
 }"

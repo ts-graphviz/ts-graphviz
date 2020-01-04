@@ -51,6 +51,14 @@ describe('class Subgraph', () => {
         expect(dot).toBeValidDotAndMatchSnapshot();
       });
 
+      test('set attributes by apply', () => {
+        g.apply({
+          rank: 'same',
+        });
+        const dot = g.toDot();
+        expect(dot).toBeValidDotAndMatchSnapshot();
+      });
+
       it('should be subgraph, when subgraph id is "test"', () => {
         subgraph = g.context.createSubgraph('test');
         expect(subgraph.isSubgraphCluster()).toBe(false);

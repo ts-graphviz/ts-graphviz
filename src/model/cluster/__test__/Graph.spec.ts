@@ -39,6 +39,15 @@ describe('class Graph', () => {
       expect(dot).toBeValidDotAndMatchSnapshot();
     });
 
+    test('set attributes by apply', () => {
+      g.apply({
+        layout: 'dot',
+        dpi: 360,
+      });
+      const dot = g.toDot();
+      expect(dot).toBeValidDotAndMatchSnapshot();
+    });
+
     describe('graph with comment', () => {
       test('single line comment', () => {
         g.comment = 'this is comment.';
