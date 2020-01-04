@@ -4,10 +4,12 @@
 .prettierignore
 .prettierrc.json
 .vscode
+CODE_OF_CONDUCT.md
+config
 jest.config.js
 LICENSE
+rollup.config.js
 src
 tsconfig.json
 tslint.json
 typedoc.json
-config
