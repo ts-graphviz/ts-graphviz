@@ -1,4 +1,4 @@
-import { Literal } from '../Literal';
+import { ID } from '../ID';
 
 const DoubleQuotedValuePattern = /^".+"$/ms;
 const HTMLLikeValuePattern = /^<.+>$/ms;
@@ -14,7 +14,7 @@ describe('valueType', () => {
           `,
         ],
       ])('toDot result should be quoted', input => {
-        const value = new Literal(input);
+        const value = new ID(input);
         const dot = value.toDot();
         expect(dot).toMatch(DoubleQuotedValuePattern);
         expect(dot).not.toMatch(HTMLLikeValuePattern);
@@ -36,7 +36,7 @@ describe('valueType', () => {
         ['slash', '1/2', '"1/2"'],
         // tslint:disable-next-line: variable-name
       ])('escaped if literal contains %s character', (_name, input, expected) => {
-        const value = new Literal(input);
+        const value = new ID(input);
         expect(value.toDot()).toBe(expected);
       });
     });
@@ -56,7 +56,7 @@ describe('valueType', () => {
           `,
         ],
       ])('toDot result should not be quoted', input => {
-        const value = new Literal(input);
+        const value = new ID(input);
         const dot = value.toDot();
         expect(dot).not.toMatch(DoubleQuotedValuePattern);
         expect(dot).toMatch(HTMLLikeValuePattern);

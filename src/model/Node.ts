@@ -1,27 +1,11 @@
 import { DotBase } from '../common';
 import { IEdgeTarget } from '../common/interface';
+import { Compass } from '../common/type';
 import { commentOut, concatWordsWithColon, joinLines } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
-import { Literal } from './Literal';
+import { ID } from './ID';
 
-type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c';
-// tslint:disable-next-line: no-namespace
-namespace Compass {
-  export const n: Compass = 'n';
-  export const ne: Compass = 'ne';
-  export const e: Compass = 'e';
-  export const se: Compass = 'se';
-  export const s: Compass = 's';
-  export const sw: Compass = 'sw';
-  export const w: Compass = 'w';
-  export const nw: Compass = 'nw';
-  export const c: Compass = 'c';
-  export const all: string[] = [n, ne, e, se, s, sw, w, nw, c];
-}
-
-export function isCompass(str: string): str is Compass {
-  return Compass.all.includes(str);
-}
+// tslint:disable: max-classes-per-file
 
 interface IPort {
   port: string;
@@ -29,17 +13,22 @@ interface IPort {
 }
 
 /**
+ * Node object.
  * @category Primary
  */
 export class Node extends DotBase implements IEdgeTarget {
+  /** Comments to include when outputting with toDot. */
   public comment?: string;
-  public readonly idLiteral: Literal;
+  /** @hidden */
+  public readonly idLiteral: ID;
+  /** @hidden */
   public readonly attributes = new Attributes();
   constructor(public readonly id: string) {
     super();
-    this.idLiteral = new Literal(id);
+    this.idLiteral = new ID(id);
   }
 
+  /** Convert Node to Dot language. */
   public toDot(): string {
     const comment = this.comment ? commentOut(this.comment) : undefined;
     const target = this.idLiteral.toDot();
@@ -47,11 +36,12 @@ export class Node extends DotBase implements IEdgeTarget {
     const dot = `${target}${attrs};`;
     return joinLines(comment, dot);
   }
-
-  public toEdgeTargetDot() {
+  /** Converts a Node to an EdgeTarget. */
+  public toEdgeTargetDot(): string {
     return this.idLiteral.toDot();
   }
 
+  /** Returns NodeWithPort with port and compass specified. */
   public port(port: string | Partial<IPort>): NodeWithPort {
     if (typeof port === 'string') {
       return new NodeWithPort(this, { port });
@@ -60,20 +50,29 @@ export class Node extends DotBase implements IEdgeTarget {
   }
 }
 
-// tslint:disable-next-line: max-classes-per-file
+/**
+ * An object that represents a Node where port and compass are specified.
+ * @category Primary
+ */
 export class NodeWithPort implements IEdgeTarget {
-  public readonly port?: Literal;
+  /** Specify port embedded in Label. */
+  public readonly port?: ID;
+  /** Specify the direction of the edge. */
   public readonly compass?: Compass;
   constructor(public readonly node: Node, port: Partial<IPort>) {
-    this.port = port.port ? new Literal(port.port) : undefined;
+    this.port = port.port ? new ID(port.port) : undefined;
     this.compass = port.compass;
   }
 
+  /** Converts a NodeWithPort to an EdgeTarget. */
   public toEdgeTargetDot() {
     return concatWordsWithColon(this.node.idLiteral.toDot(), this.port?.toDot(), this.compass);
   }
 }
 
+/**
+ * string or an object implementing IEdgeTarget.
+ */
 export type EdgeTargetLike = IEdgeTarget | string;
 
 /**

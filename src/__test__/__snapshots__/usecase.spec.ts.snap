@@ -17,7 +17,7 @@ exports[`function digraph callback style 1`] = `
     Aaa:a -> Abb -> Acc -> E [
       color = red,
     ];
-  };
+  }
   aa -> bb -> cc [
     color = red,
   ];
@@ -41,7 +41,7 @@ digraph G {
       // It will be filled by pink.
       color = pink,
     ];
-  };
+  }
   // This is edge.
   // It connects a, b and c.
   aa -> bb -> cc [
@@ -71,7 +71,7 @@ exports[`function graph callback style 1`] = `
     Aaa:a:w -- Abb:w -- Aaa:e -- Acc:r:e [
       color = red,
     ];
-  };
+  }
   aa -- bb -- cc [
     color = red,
   ];

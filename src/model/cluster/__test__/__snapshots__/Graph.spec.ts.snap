@@ -82,11 +82,11 @@ exports[`class Graph renders correctly by toDot method subgraphs 1`] = `
     A_node2;
     A_node1 -- A_node2;
     B_node1 -- B_node2;
-  };
+  }
   subgraph B {
     B_node1;
     B_node2;
-  };
+  }
   node1 -- node2;
 }"
 `;
@@ -102,9 +102,9 @@ exports[`class Graph renders correctly by toDot method subgraphs, depth 2 1`] = 
       depth2_node1;
       depth2_node2;
       depth2_node1 -- depth2_node2;
-    };
+    }
     depth1_node1 -- depth1_node2;
-  };
+  }
   node1 -- node2;
 }"
 `;

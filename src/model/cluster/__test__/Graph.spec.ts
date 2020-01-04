@@ -1,5 +1,5 @@
 import 'jest-graphviz';
-import { DotBase, GraphvizObject } from '../../../common';
+import { DotBase, GraphvizObject, RootClusterType } from '../../../common';
 import { Edge } from '../../Edge';
 import { Node } from '../../Node';
 import { Cluster, RootCluster } from '../Cluster';
@@ -131,7 +131,7 @@ describe('class Graph', () => {
 
     it('Edge operation methods works', () => {
       const [node1, node2] = ['node1', 'node2'].map(id => g.createNode(id));
-      const edge = new Edge({ graphType: 'digraph' }, node1, node2);
+      const edge = new Edge({ graphType: RootClusterType.digraph }, node1, node2);
       expect(g.existEdge(edge)).toBe(false);
       g.addEdge(edge);
       expect(g.existEdge(edge)).toBe(true);

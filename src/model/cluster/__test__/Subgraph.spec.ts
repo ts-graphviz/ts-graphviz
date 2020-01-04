@@ -47,6 +47,16 @@ describe('class Subgraph', () => {
         expect(subgraph.isSubgraphCluster()).toBe(false);
       });
 
+      test.each([
+        ['cluster', true],
+        ['cluster_hoge', true],
+        ['hoge_cluster', false],
+        ['example', false],
+      ])('if cluster named "%s", isSubgraphCluster should be %p', (id, expected) => {
+        subgraph = g.context.createSubgraph(id);
+        expect(subgraph.isSubgraphCluster()).toBe(expected);
+      });
+
       describe('subgraph with comment', () => {
         test('single line comment', () => {
           subgraph.comment = 'this is comment.';
