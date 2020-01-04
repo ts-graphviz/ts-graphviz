@@ -2,14 +2,29 @@ import { DotBase } from '../common';
 import { escape, quote } from '../utils/dot-rendering';
 
 /**
- * @category ID
+ * An ID is just a value.
+ * Designed as an immutable object.
+ *
+ * @description
+ * An ID is one of the following:
+ * - Any string of alphabetic ([a-zA-Z\200-\377]) characters, underscores ('_') or digits ([0-9]), not beginning with a digit;
+ * - a numeral [-]?(.[0-9]+ | [0-9]+(.[0-9]*)? );
+ * - any double-quoted string ("...") possibly containing escaped quotes (\")1;
+ * - an HTML string (<...>).
+ *
+ * @category Internal
  */
 export class ID extends DotBase {
   public readonly value: string;
 
+  /** @hidden */
+
   private isHTMLLike: boolean;
+  /** @hidden */
   private isNotString: boolean;
+  /** @hidden */
   private isQuoteRequired: boolean;
+
   constructor(value: string | number | boolean) {
     super();
     this.isNotString = typeof value !== 'string';
@@ -30,6 +45,9 @@ export class ID extends DotBase {
     this.value = stringValue;
   }
 
+  /**
+   * Determines whether quotes are required or HTML-Like labels and returns an appropriate string.
+   */
   public toDot(): string {
     if (this.isNotString || this.isHTMLLike) {
       return this.value;

@@ -8,12 +8,14 @@ import { isEdgeTarget } from './Node';
  * @category Primary
  */
 export class Edge extends DotBase {
+  /** Comments to include when outputting with toDot. */
   public comment?: string;
-
+  /** @hidden */
   public readonly attributes = new Attributes();
-  public readonly targets: IEdgeTarget[];
-
-  get arrow(): string {
+  /** @hidden */
+  private readonly targets: IEdgeTarget[];
+  /** @hidden */
+  private get dotArrow(): string {
     switch (this.context.graphType) {
       case RootClusterType.graph:
         return '--';
@@ -30,9 +32,10 @@ export class Edge extends DotBase {
     this.targets = [target1, target2, ...targets].filter(n => isEdgeTarget(n));
   }
 
+  /** Convert Edge to Dot language. */
   public toDot(): string {
     const comment = this.comment ? commentOut(this.comment) : undefined;
-    const arrow = ` ${this.arrow} `;
+    const arrow = ` ${this.dotArrow} `;
     const target = this.targets.map(n => n.toEdgeTargetDot()).join(arrow);
     const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
     const dot = `${target}${attrs};`;
