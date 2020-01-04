@@ -25,6 +25,14 @@ exports[`class Attributes renders correctly by toDot method one attribute 1`] = 
 ]"
 `;
 
+exports[`class Attributes renders correctly by toDot method set some attributes by apply 1`] = `
+"[
+  label = \\"this is test\\",
+  color = red,
+  fontsize = 16,
+]"
+`;
+
 exports[`class Attributes renders correctly by toDot method some attributes 1`] = `
 "[
   label = test,

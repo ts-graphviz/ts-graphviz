@@ -63,6 +63,19 @@ exports[`class Graph renders correctly by toDot method nodes and edge 1`] = `
 }"
 `;
 
+exports[`class Graph renders correctly by toDot method set attributes 1`] = `
+"graph {
+  dpi = 360;
+}"
+`;
+
+exports[`class Graph renders correctly by toDot method set attributes by apply 1`] = `
+"graph {
+  layout = dot;
+  dpi = 360;
+}"
+`;
+
 exports[`class Graph renders correctly by toDot method simple g 1`] = `
 "graph {
 }"

@@ -1,5 +1,6 @@
 import 'jest-graphviz';
 import { DotBase, GraphvizObject, RootClusterType } from '../../../common';
+import { AttributesBase } from '../../AttributesBase';
 import { Edge } from '../../Edge';
 import { Node } from '../../Node';
 import { Cluster, RootCluster } from '../Cluster';
@@ -11,10 +12,11 @@ describe('class Graph', () => {
     g = new Graph();
   });
 
-  it('should be instance of Graph/RootCluster/Cluster/DotBase/GraphvizObject', () => {
+  it('should be instance of Graph/RootCluster/Cluster/AttributesBase/DotBase/GraphvizObject', () => {
     expect(g).toBeInstanceOf(Graph);
     expect(g).toBeInstanceOf(RootCluster);
     expect(g).toBeInstanceOf(Cluster);
+    expect(g).toBeInstanceOf(AttributesBase);
     expect(g).toBeInstanceOf(DotBase);
     expect(g).toBeInstanceOf(GraphvizObject);
   });
@@ -27,6 +29,21 @@ describe('class Graph', () => {
 
     it('strict graph', () => {
       g.strict = true;
+      const dot = g.toDot();
+      expect(dot).toBeValidDotAndMatchSnapshot();
+    });
+
+    test('set attributes', () => {
+      g.set('dpi', 360);
+      const dot = g.toDot();
+      expect(dot).toBeValidDotAndMatchSnapshot();
+    });
+
+    test('set attributes by apply', () => {
+      g.apply({
+        layout: 'dot',
+        dpi: 360,
+      });
       const dot = g.toDot();
       expect(dot).toBeValidDotAndMatchSnapshot();
     });

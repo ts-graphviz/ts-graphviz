@@ -1,5 +1,6 @@
 import 'jest-graphviz';
 import { DotBase, GraphvizObject } from '../../../common';
+import { AttributesBase } from '../../AttributesBase';
 import { Edge } from '../../Edge';
 import { Node } from '../../Node';
 import { Cluster, Subgraph } from '../Cluster';
@@ -35,11 +36,27 @@ describe('class Subgraph', () => {
         subgraph = g.context.createSubgraph('test');
       });
 
-      it('should be instance of Subgraph/Cluster/DotBase/GraphvizObject', () => {
+      it('should be instance of Subgraph/Cluster/AttributesBase/DotBase/GraphvizObject', () => {
         expect(subgraph).toBeInstanceOf(Subgraph);
         expect(subgraph).toBeInstanceOf(Cluster);
+        expect(subgraph).toBeInstanceOf(AttributesBase);
         expect(subgraph).toBeInstanceOf(DotBase);
         expect(subgraph).toBeInstanceOf(GraphvizObject);
+      });
+
+      test('set attributes', () => {
+        subgraph.set('rank', 'same');
+        g.addSubgraph(subgraph);
+        const dot = g.toDot();
+        expect(dot).toBeValidDotAndMatchSnapshot();
+      });
+
+      test('set attributes by apply', () => {
+        g.apply({
+          rank: 'same',
+        });
+        const dot = g.toDot();
+        expect(dot).toBeValidDotAndMatchSnapshot();
       });
 
       it('should be subgraph, when subgraph id is "test"', () => {

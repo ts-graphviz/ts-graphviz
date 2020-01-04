@@ -1,5 +1,6 @@
 import { DotBase, GraphvizObject } from '../../common';
 import { Attributes } from '../Attributes';
+import { AttributesBase } from '../AttributesBase';
 
 describe('class Attributes', () => {
   let attrs: Attributes;
@@ -7,8 +8,9 @@ describe('class Attributes', () => {
     attrs = new Attributes();
   });
 
-  it('should be instance of Attributes/DotBase/GraphvizObject', () => {
+  it('should be instance of Attributes/AttributesBase/DotBase/GraphvizObject', () => {
     expect(attrs).toBeInstanceOf(Attributes);
+    expect(attrs).toBeInstanceOf(AttributesBase);
     expect(attrs).toBeInstanceOf(DotBase);
     expect(attrs).toBeInstanceOf(GraphvizObject);
   });
@@ -30,6 +32,15 @@ describe('class Attributes', () => {
     it('some attributes', () => {
       attrs.set('label', 'test');
       attrs.set('color', 'red');
+      expect(attrs.toDot()).toMatchSnapshot();
+    });
+
+    test('set some attributes by apply', () => {
+      attrs.apply({
+        label: 'this is test',
+        color: 'red',
+        fontsize: 16,
+      });
       expect(attrs.toDot()).toMatchSnapshot();
     });
 
