@@ -68,6 +68,11 @@ exports[`class Graph renders correctly by toDot method simple g 1`] = `
 }"
 `;
 
+exports[`class Graph renders correctly by toDot method strict graph 1`] = `
+"strict graph {
+}"
+`;
+
 exports[`class Graph renders correctly by toDot method subgraphs 1`] = `
 "graph {
   node1;

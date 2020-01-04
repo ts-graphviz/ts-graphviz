@@ -205,7 +205,17 @@ export abstract class Cluster extends DotBase {
 }
 
 export abstract class RootCluster extends Cluster {
+  public strict: boolean = false;
   public abstract readonly type: RootClusterType;
+
+  constructor(id?: string, public readonly context: Context = new Context()) {
+    super();
+    this.id = id;
+    this.context.root = this;
+  }
+  public toDot(): string {
+    return concatWordsWithSpace(this.strict ? 'strict' : undefined, super.toDot());
+  }
 }
 
 /**
