@@ -2,9 +2,9 @@ import { DotBase } from '../common';
 import { escape, quote } from '../utils/dot-rendering';
 
 /**
- * @category Literal
+ * @category ID
  */
-export class Literal extends DotBase {
+export class ID extends DotBase {
   public readonly value: string;
 
   private isHTMLLike: boolean;

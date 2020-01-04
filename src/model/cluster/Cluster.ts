@@ -4,7 +4,7 @@ import { commentOut, concatWordsWithSpace, indent, joinLines } from '../../utils
 import { Attributes } from '../Attributes';
 import { Context } from '../Context';
 import { Edge } from '../Edge';
-import { Literal } from '../Literal';
+import { ID } from '../ID';
 import { EdgeTargetLike, isEdgeTarget, isEdgeTargetLike, Node } from '../Node';
 
 // tslint:disable: max-classes-per-file
@@ -27,7 +27,7 @@ export abstract class Cluster extends DotBase {
   }
 
   set id(idValue: string | undefined) {
-    this.idLiteral = typeof idValue === 'string' ? new Literal(idValue) : undefined;
+    this.idLiteral = typeof idValue === 'string' ? new ID(idValue) : undefined;
   }
   public abstract readonly context: Context;
   public abstract readonly type: ClusterType;
@@ -37,7 +37,7 @@ export abstract class Cluster extends DotBase {
     node: new Attributes(),
   };
 
-  private idLiteral?: Literal;
+  private idLiteral?: ID;
 
   private nodes: Map<string, Node> = new Map();
 

@@ -3,7 +3,7 @@ import { IEdgeTarget } from '../common/interface';
 import { Compass } from '../common/type';
 import { commentOut, concatWordsWithColon, joinLines } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
-import { Literal } from './Literal';
+import { ID } from './ID';
 
 interface IPort {
   port: string;
@@ -15,11 +15,11 @@ interface IPort {
  */
 export class Node extends DotBase implements IEdgeTarget {
   public comment?: string;
-  public readonly idLiteral: Literal;
+  public readonly idLiteral: ID;
   public readonly attributes = new Attributes();
   constructor(public readonly id: string) {
     super();
-    this.idLiteral = new Literal(id);
+    this.idLiteral = new ID(id);
   }
 
   public toDot(): string {
@@ -44,10 +44,10 @@ export class Node extends DotBase implements IEdgeTarget {
 
 // tslint:disable-next-line: max-classes-per-file
 export class NodeWithPort implements IEdgeTarget {
-  public readonly port?: Literal;
+  public readonly port?: ID;
   public readonly compass?: Compass;
   constructor(public readonly node: Node, port: Partial<IPort>) {
-    this.port = port.port ? new Literal(port.port) : undefined;
+    this.port = port.port ? new ID(port.port) : undefined;
     this.compass = port.compass;
   }
 
