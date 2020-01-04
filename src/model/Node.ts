@@ -5,10 +5,27 @@ import { Attributes } from './Attributes';
 import { Literal } from './Literal';
 
 type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c';
+// tslint:disable-next-line: no-namespace
+namespace Compass {
+  export const n: Compass = 'n';
+  export const ne: Compass = 'ne';
+  export const e: Compass = 'e';
+  export const se: Compass = 'se';
+  export const s: Compass = 's';
+  export const sw: Compass = 'sw';
+  export const w: Compass = 'w';
+  export const nw: Compass = 'nw';
+  export const c: Compass = 'c';
+  export const all: string[] = [n, ne, e, se, s, sw, w, nw, c];
+}
+
+export function isCompass(str: string): str is Compass {
+  return Compass.all.includes(str);
+}
 
 interface IPort {
   port: string;
-  compass: Compass | string;
+  compass: Compass;
 }
 
 /**
@@ -46,7 +63,7 @@ export class Node extends DotBase implements IEdgeTarget {
 // tslint:disable-next-line: max-classes-per-file
 export class NodeWithPort implements IEdgeTarget {
   public readonly port?: Literal;
-  public readonly compass?: Compass | string;
+  public readonly compass?: Compass;
   constructor(public readonly node: Node, port: Partial<IPort>) {
     this.port = port.port ? new Literal(port.port) : undefined;
     this.compass = port.compass;

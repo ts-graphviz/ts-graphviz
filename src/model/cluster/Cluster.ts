@@ -5,7 +5,7 @@ import { Attributes } from '../Attributes';
 import { Context } from '../Context';
 import { Edge } from '../Edge';
 import { Literal } from '../Literal';
-import { EdgeTargetLike, isEdgeTarget, isEdgeTargetLike, Node } from '../Node';
+import { EdgeTargetLike, isCompass, isEdgeTarget, isEdgeTargetLike, Node } from '../Node';
 
 // tslint:disable: max-classes-per-file
 
@@ -197,7 +197,7 @@ export abstract class Cluster extends DotBase {
     }
     const [id, port, compass] = node.split(':');
     const n = this.node(id);
-    if (port) {
+    if (port && (compass === undefined || isCompass(compass))) {
       return n.port({ port, compass });
     }
     return n;
