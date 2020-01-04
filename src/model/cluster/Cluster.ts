@@ -214,7 +214,7 @@ export abstract class RootCluster extends Cluster {
     this.context.root = this;
   }
   public toDot(): string {
-    return concatWords(this.strict ? 'strict' : undefined, super.toDot());
+    return concatWordsWithSpace(this.strict ? 'strict' : undefined, super.toDot());
   }
 }
 
