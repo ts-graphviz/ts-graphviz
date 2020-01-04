@@ -15,11 +15,17 @@ export abstract class AttributesBase extends DotBase {
     return this.attrs.get(key);
   }
   /** Set a value to the attribute. */
-  public set(key: string, value: any): void {
+  public set(key: string, value: string | boolean | number | ID): void {
     if (value instanceof ID) {
       this.attrs.set(key, value);
     } else {
       this.attrs.set(key, new ID(value));
+    }
+  }
+
+  public apply(attributes: { [key: string]: string | boolean | number | ID }) {
+    for (const [key, value] of Object.entries(attributes)) {
+      this.set(key, value);
     }
   }
 }

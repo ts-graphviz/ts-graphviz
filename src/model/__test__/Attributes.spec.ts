@@ -33,6 +33,15 @@ describe('class Attributes', () => {
       expect(attrs.toDot()).toMatchSnapshot();
     });
 
+    test('set some attributes by apply', () => {
+      attrs.apply({
+        label: 'this is test',
+        color: 'red',
+        fontsize: 16,
+      });
+      expect(attrs.toDot()).toMatchSnapshot();
+    });
+
     describe('edge with comment', () => {
       beforeEach(() => {
         attrs.set('label', 'test');
