@@ -1,5 +1,6 @@
 import { DotBase, GraphvizObject } from '../../common';
 import { Attributes } from '../Attributes';
+import { AttributesBase } from '../AttributesBase';
 
 describe('class Attributes', () => {
   let attrs: Attributes;
@@ -7,8 +8,9 @@ describe('class Attributes', () => {
     attrs = new Attributes();
   });
 
-  it('should be instance of Attributes/DotBase/GraphvizObject', () => {
+  it('should be instance of Attributes/AttributesBase/DotBase/GraphvizObject', () => {
     expect(attrs).toBeInstanceOf(Attributes);
+    expect(attrs).toBeInstanceOf(AttributesBase);
     expect(attrs).toBeInstanceOf(DotBase);
     expect(attrs).toBeInstanceOf(GraphvizObject);
   });
