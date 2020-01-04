@@ -1,4 +1,4 @@
-import { Type } from './common/type';
+import { Type } from './common/util';
 import { Digraph, Graph, RootCluster } from './model/cluster';
 
 const builder = <G extends RootCluster>(cls: Type<G>, strictMode: boolean = false) => (

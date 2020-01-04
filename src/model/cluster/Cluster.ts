@@ -1,17 +1,13 @@
-import { DotBase } from '../../common';
+import { ClusterType, DotBase, isCompass, RootClusterType } from '../../common';
 import { IEdgeTarget } from '../../common/interface';
 import { commentOut, concatWordsWithSpace, indent, joinLines } from '../../utils/dot-rendering';
 import { Attributes } from '../Attributes';
 import { Context } from '../Context';
 import { Edge } from '../Edge';
 import { Literal } from '../Literal';
-import { EdgeTargetLike, isCompass, isEdgeTarget, isEdgeTargetLike, Node } from '../Node';
+import { EdgeTargetLike, isEdgeTarget, isEdgeTargetLike, Node } from '../Node';
 
 // tslint:disable: max-classes-per-file
-
-export type RootClusterType = 'digraph' | 'graph';
-
-export type ClusterType = RootClusterType | 'subgraph';
 /**
  * @hidden
  */
@@ -222,17 +218,14 @@ export abstract class RootCluster extends Cluster {
  * @category Primary
  */
 export class Subgraph extends Cluster {
-  public type: ClusterType = 'subgraph';
+  public type = ClusterType.subgraph;
   constructor(public readonly context: Context) {
     super();
   }
   public isSubgraphCluster(): boolean {
     if (typeof this.id === 'string') {
-      return this.id.startsWith('cluster_');
+      return this.id.startsWith('cluster');
     }
     return false;
-  }
-  public toDot(): string {
-    return `${super.toDot()};`;
   }
 }

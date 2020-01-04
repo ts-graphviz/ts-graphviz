@@ -1,7 +1,8 @@
-import { RootCluster, RootClusterType } from './Cluster';
+import { RootClusterType } from '../../common';
+import { RootCluster } from './Cluster';
 /**
  * @category Primary
  */
 export class Graph extends RootCluster {
-  public type: RootClusterType = 'graph';
+  public type = RootClusterType.graph;
 }

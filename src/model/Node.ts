@@ -1,27 +1,9 @@
 import { DotBase } from '../common';
 import { IEdgeTarget } from '../common/interface';
+import { Compass } from '../common/type';
 import { commentOut, concatWordsWithColon, joinLines } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
 import { Literal } from './Literal';
-
-type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c';
-// tslint:disable-next-line: no-namespace
-namespace Compass {
-  export const n: Compass = 'n';
-  export const ne: Compass = 'ne';
-  export const e: Compass = 'e';
-  export const se: Compass = 'se';
-  export const s: Compass = 's';
-  export const sw: Compass = 'sw';
-  export const w: Compass = 'w';
-  export const nw: Compass = 'nw';
-  export const c: Compass = 'c';
-  export const all: string[] = [n, ne, e, se, s, sw, w, nw, c];
-}
-
-export function isCompass(str: string): str is Compass {
-  return Compass.all.includes(str);
-}
 
 interface IPort {
   port: string;

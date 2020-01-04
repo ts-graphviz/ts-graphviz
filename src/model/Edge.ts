@@ -1,5 +1,4 @@
-import { DotBase } from '../common';
-import { IEdgeTarget } from '../common/interface';
+import { DotBase, IEdgeTarget, RootClusterType } from '../common';
 import { commentOut, joinLines } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
 import { IContext } from './Context';
@@ -14,6 +13,16 @@ export class Edge extends DotBase {
   public readonly attributes = new Attributes();
   public readonly targets: IEdgeTarget[];
 
+  get arrow(): string {
+    switch (this.context.graphType) {
+      case RootClusterType.graph:
+        return '--';
+      case RootClusterType.digraph:
+      default:
+        return '->';
+    }
+  }
+
   constructor(context: IContext, target1: IEdgeTarget, target2: IEdgeTarget);
   constructor(context: IContext, ...targets: IEdgeTarget[]);
   constructor(private context: IContext, target1: IEdgeTarget, target2: IEdgeTarget, ...targets: IEdgeTarget[]) {
@@ -23,8 +32,8 @@ export class Edge extends DotBase {
 
   public toDot(): string {
     const comment = this.comment ? commentOut(this.comment) : undefined;
-    const arrow = this.context.graphType === 'digraph' ? '->' : '--';
-    const target = this.targets.map(n => n.toEdgeTargetDot()).join(` ${arrow} `);
+    const arrow = ` ${this.arrow} `;
+    const target = this.targets.map(n => n.toEdgeTargetDot()).join(arrow);
     const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
     const dot = `${target}${attrs};`;
     return joinLines(comment, dot);
