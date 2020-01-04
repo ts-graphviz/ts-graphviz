@@ -37,8 +37,8 @@ export const joinLines = concatWordsFactory('\n');
 /**
  * @hidden
  */
-export function indent(src: string, depth: number = 1): string {
-  const space = ' '.repeat(2 * depth);
+export function indent(src: string): string {
+  const space = '  ';
   return src
     .split('\n')
     .map(l => `${space}${l}`)
