@@ -1,6 +1,7 @@
 import { DotBase, GraphvizObject } from '../../common';
 import { Attributes } from '../Attributes';
 import { AttributesBase } from '../AttributesBase';
+import { ID } from '../ID';
 
 describe('class Attributes', () => {
   let attrs: Attributes;
@@ -42,6 +43,12 @@ describe('class Attributes', () => {
         fontsize: 16,
       });
       expect(attrs.toDot()).toMatchSnapshot();
+    });
+
+    test('set/get attribute', () => {
+      const id = new ID('test');
+      attrs.set('label', id);
+      expect(attrs.get('label')).toBe(id);
     });
 
     describe('edge with comment', () => {

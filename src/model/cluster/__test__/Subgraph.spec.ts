@@ -1,5 +1,6 @@
 import 'jest-graphviz';
 import { DotBase, GraphvizObject } from '../../../common';
+import { IEdgeTarget } from '../../../common/interface';
 import { AttributesBase } from '../../AttributesBase';
 import { Edge } from '../../Edge';
 import { Node } from '../../Node';
@@ -9,20 +10,20 @@ import { Graph } from '../Graph';
 
 describe('class Subgraph', () => {
   let g: Digraph | Graph;
-  let createEdge: (...nodes: Node[]) => Edge;
+  let createEdge: (...targets: IEdgeTarget[]) => Edge;
   const testCases: { title: string; beforeEachFunc: () => void }[] = [
     {
       title: 'root is Digraph',
       beforeEachFunc: () => {
         g = new Digraph();
-        createEdge = (...nodes: Node[]) => new Edge({ graphType: 'graph' }, ...nodes);
+        createEdge = (...targets: IEdgeTarget[]) => new Edge({ graphType: 'graph' }, ...targets);
       },
     },
     {
       title: 'root is Graph',
       beforeEachFunc: () => {
         g = new Graph();
-        createEdge = (...nodes: Node[]) => new Edge({ graphType: 'graph' }, ...nodes);
+        createEdge = (...targets: IEdgeTarget[]) => new Edge({ graphType: 'graph' }, ...targets);
       },
     },
   ];
@@ -147,6 +148,56 @@ describe('class Subgraph', () => {
           expect(subgraph.existSubgraph(sub)).toBe(true);
           subgraph.removeSubgraph(sub);
           expect(subgraph.existSubgraph(sub)).toBe(false);
+        });
+
+        it('should be undefined, when id not set', () => {
+          const sub = subgraph.createSubgraph();
+          expect(sub.id).toBeUndefined();
+          expect(sub.isSubgraphCluster()).toBe(false);
+        });
+
+        test('add/remove/get operation', () => {
+          const sub = subgraph.context.createSubgraph('sub');
+          subgraph.add(sub);
+          expect(subgraph.existSubgraph(sub)).toBe(true);
+          expect(subgraph.getSubgraph('sub')).toBe(sub);
+          subgraph.remove(sub);
+          expect(subgraph.existSubgraph(sub)).toBe(false);
+
+          const node = new Node('test');
+          subgraph.add(node);
+          expect(subgraph.existNode('test')).toBe(true);
+          subgraph.remove(node);
+          expect(subgraph.existNode('test')).toBe(false);
+
+          const edge = createEdge(node.port('a'), node.port('b'));
+          subgraph.add(edge);
+          expect(subgraph.existEdge(edge)).toBe(true);
+          subgraph.remove(edge);
+          expect(subgraph.existEdge(edge)).toBe(false);
+        });
+
+        it('throws an error when the EdgeTarget element is missing', () => {
+          const n = subgraph.node('n');
+          expect(() => {
+            subgraph.edge([]);
+          }).toThrow();
+          expect(() => {
+            subgraph.edge([n]);
+          }).toThrow();
+        });
+
+        describe('subgraph method', () => {
+          it('should be an unnamed Subgraph, when a subgraph is created without specifying an ID.', () => {
+            const sub = g.subgraph();
+            expect(sub.id).toBeUndefined();
+          });
+
+          it('should be same object, when a subgraph with an existing ID is specified', () => {
+            const id = 'hoge';
+            const sub = g.createSubgraph(id);
+            expect(g.subgraph(id)).toBe(sub);
+          });
         });
       });
     });

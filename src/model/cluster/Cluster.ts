@@ -204,8 +204,7 @@ export abstract class Cluster extends AttributesBase {
   public createEdge(...targets: EdgeTargetLike[]): Edge;
   public createEdge(target1: EdgeTargetLike, target2: EdgeTargetLike, ...targets: EdgeTargetLike[]): Edge {
     if ((isEdgeTargetLike(target1) && isEdgeTargetLike(target2)) === false) {
-      // TODO
-      throw new Error();
+      throw new Error('The element of Edge target is missing or not satisfied as Edge target.');
     }
 
     const edge = new Edge(
