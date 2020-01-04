@@ -43,6 +43,14 @@ exports[`class Subgraph root is Digraph label attribute behavior plain text labe
 }"
 `;
 
+exports[`class Subgraph root is Digraph set attributes 1`] = `
+"digraph {
+  subgraph test {
+    rank = same;
+  }
+}"
+`;
+
 exports[`class Subgraph root is Digraph subgraph with comment multi line comment 1`] = `
 "// this is comment.
 // second line.
@@ -96,6 +104,14 @@ exports[`class Subgraph root is Graph label attribute behavior plain text label 
   node [
     label = \\"this is test for node label\\",
   ];
+}"
+`;
+
+exports[`class Subgraph root is Graph set attributes 1`] = `
+"graph {
+  subgraph test {
+    rank = same;
+  }
 }"
 `;
 

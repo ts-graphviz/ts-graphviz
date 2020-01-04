@@ -1,7 +1,8 @@
-import { ClusterType, DotBase, isCompass, RootClusterType } from '../../common';
+import { ClusterType, isCompass, RootClusterType } from '../../common';
 import { IEdgeTarget } from '../../common/interface';
 import { commentOut, concatWordsWithSpace, indent, joinLines } from '../../utils/dot-rendering';
 import { Attributes } from '../Attributes';
+import { AttributesBase } from '../AttributesBase';
 import { Context } from '../Context';
 import { Edge } from '../Edge';
 import { ID } from '../ID';
@@ -26,7 +27,7 @@ export interface IClusterCommonAttributes {
  * Base class for clusters.
  * @hidden
  */
-export abstract class Cluster extends DotBase {
+export abstract class Cluster extends AttributesBase {
   /** Cluster ID */
   get id(): string | undefined {
     return this.idLiteral?.value;
@@ -279,15 +280,16 @@ export abstract class Cluster extends DotBase {
     const type = this.type;
     const id = this.idLiteral?.toDot();
     // attributes
+    const attributes = Array.from(this.attrs.entries()).map(([key, value]) => `${key} = ${value.toDot()};`);
     const commonAttributes = Object.entries(this.attributes)
-      .filter(([_, attributes]) => attributes.size > 0)
-      .map(([key, attributes]) => `${key} ${attributes.toDot()};`);
+      .filter(([_, attrs]) => attrs.size > 0)
+      .map(([key, attrs]) => `${key} ${attrs.toDot()};`);
 
     // objects
     const nodes = Array.from(this.nodes.values()).map(o => o.toDot());
     const subgraphs = Array.from(this.subgraphs.values()).map(o => o.toDot());
     const edges = Array.from(this.edges.values()).map(o => o.toDot());
-    const clusterContents = joinLines(...commonAttributes, ...nodes, ...subgraphs, ...edges);
+    const clusterContents = joinLines(...attributes, ...commonAttributes, ...nodes, ...subgraphs, ...edges);
     const dot = joinLines(
       concatWordsWithSpace(type, id, '{'),
       clusterContents ? indent(clusterContents) : undefined,
