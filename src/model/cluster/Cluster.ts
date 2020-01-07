@@ -1,33 +1,30 @@
-import { ClusterType, isCompass, RootClusterType } from '../../common';
-import { IEdgeTarget } from '../../common/interface';
+import {
+  ClusterType,
+  EdgeTargetLike,
+  ICluster,
+  IClusterCommonAttributes,
+  IContext,
+  IEdge,
+  IEdgeTarget,
+  INode,
+  isCompass,
+  ISubgraph,
+} from '../../interface';
 import { commentOut, concatWordsWithSpace, indent, joinLines } from '../../utils/dot-rendering';
 import { Attributes } from '../Attributes';
 import { AttributesBase } from '../AttributesBase';
 import { Context } from '../Context';
 import { Edge } from '../Edge';
 import { ID } from '../ID';
-import { EdgeTargetLike, isEdgeTarget, isEdgeTargetLike, Node } from '../Node';
+import { isEdgeTarget, isEdgeTargetLike, Node } from '../Node';
 
 // tslint:disable: max-classes-per-file
-/**
- * Cluster common attribute interface.
- *
- * @hidden
- */
-export interface IClusterCommonAttributes {
-  /** Manage common attributes of graphs in a cluster. */
-  graph: Attributes;
-  /** Manage common attributes of edges in a cluster. */
-  edge: Attributes;
-  /** Manage common attributes of nodes in a cluster. */
-  node: Attributes;
-}
 
 /**
  * Base class for clusters.
  * @hidden
  */
-export abstract class Cluster extends AttributesBase {
+export abstract class Cluster extends AttributesBase implements ICluster {
   /** Cluster ID */
   get id(): string | undefined {
     return this.idLiteral?.value;
@@ -39,7 +36,7 @@ export abstract class Cluster extends AttributesBase {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
   /** The cluster context. */
-  public abstract readonly context: Context;
+  public abstract readonly context: IContext;
   /** Indicates the type of cluster. */
   public abstract readonly type: ClusterType;
   /** Common attributes of objects in the cluster. */
@@ -59,24 +56,24 @@ export abstract class Cluster extends AttributesBase {
    * Nodes in the cluster.
    * @hidden
    */
-  private nodes: Map<string, Node> = new Map();
+  private nodes: Map<string, INode> = new Map();
 
   /**
    * Edges in the cluster.
    * @hidden
    */
-  private edges: Set<Edge> = new Set();
+  private edges: Set<IEdge> = new Set();
 
   /**
    * Subgraphs in the cluster.
    * @hidden
    */
-  private subgraphs: Set<Subgraph> = new Set();
+  private subgraphs: Set<ISubgraph> = new Set();
 
   /**
    * Add Node, Edge and Subgraph to the cluster.
    */
-  public add(object: Node | Edge | Subgraph): void {
+  public add(object: INode | IEdge | ISubgraph): void {
     if (object instanceof Node) {
       this.addNode(object);
     } else if (object instanceof Edge) {
@@ -89,14 +86,14 @@ export abstract class Cluster extends AttributesBase {
   /**
    * Add a Node to the cluster.
    */
-  public addNode(node: Node): void {
+  public addNode(node: INode): void {
     this.nodes.set(node.id, node);
   }
 
   /**
    * Add Edge to the cluster.
    */
-  public addEdge(edge: Edge): void {
+  public addEdge(edge: IEdge): void {
     this.edges.add(edge);
   }
 
@@ -124,14 +121,14 @@ export abstract class Cluster extends AttributesBase {
   /**
    * Check if the Subgraph exists in the cluster.
    */
-  public existSubgraph(subgraph: Subgraph): boolean {
+  public existSubgraph(subgraph: ISubgraph): boolean {
     return this.subgraphs.has(subgraph);
   }
 
   /**
    * Create a Subgraph and add it to the cluster.
    */
-  public createSubgraph(id?: string): Subgraph {
+  public createSubgraph(id?: string): ISubgraph {
     const graph = this.context.createSubgraph(id);
     this.subgraphs.add(graph);
     return graph;
@@ -185,7 +182,7 @@ export abstract class Cluster extends AttributesBase {
    *
    * If there is no Subgraph with the specified id in the cluster, return undefined.
    */
-  public getSubgraph(id: string): Subgraph | undefined {
+  public getSubgraph(id: string): ISubgraph | undefined {
     return Array.from(this.subgraphs.values()).find(subgraph => subgraph.id === id);
   }
 
@@ -195,7 +192,7 @@ export abstract class Cluster extends AttributesBase {
    * @description
    * If there is no Node with the specified id in the cluster, return undefined.
    */
-  public getNode(id: string): Node | undefined {
+  public getNode(id: string): INode | undefined {
     return this.nodes.get(id);
   }
 
@@ -228,8 +225,8 @@ export abstract class Cluster extends AttributesBase {
    * @param id Subgraph ID.
    * @param callback Callback to operate Subgraph.
    */
-  public subgraph(id?: string, callback?: (subgraph: Subgraph) => void): Subgraph {
-    const subgraph: Subgraph = id ? this.getSubgraph(id) ?? this.createSubgraph(id) : this.createSubgraph();
+  public subgraph(id?: string, callback?: (subgraph: ISubgraph) => void): ISubgraph {
+    const subgraph: ISubgraph = id ? this.getSubgraph(id) ?? this.createSubgraph(id) : this.createSubgraph();
     if (callback) {
       callback(subgraph);
     }
@@ -246,7 +243,7 @@ export abstract class Cluster extends AttributesBase {
    * @param id Node ID.
    * @param callback Callback to operate Node.
    */
-  public node(id: string, callback?: (edge: Node) => void): Node {
+  public node(id: string, callback?: (node: INode) => void): INode {
     const node = this.getNode(id) ?? this.createNode(id);
     if (callback) {
       callback(node);
@@ -308,38 +305,6 @@ export abstract class Cluster extends AttributesBase {
       return n.port({ port, compass });
     }
     return n;
-  }
-}
-
-/**
- * Base class for RootCluster.
- */
-export abstract class RootCluster extends Cluster {
-  /**
-   * Strict mode.
-   *
-   * @description
-   * A graph may also be described as strict.
-   * This forbids the creation of multi-edges, i.e., there can be at most one edge with a given tail node and head node in the directed case.
-   * For undirected graphs, there can be at most one edge connected to the same two nodes.
-   * Subsequent edge statements using the same two nodes will identify the edge with the previously defined one and apply any attributes given in the edge statement.
-   */
-  public strict: boolean = false;
-
-  /** Indicates the type of cluster. */
-  public abstract readonly type: RootClusterType;
-
-  constructor(id?: string, public readonly context: Context = new Context()) {
-    super();
-    this.id = id;
-    this.context.root = this;
-  }
-
-  /** Convert RootCluster to Dot language. */
-  public toDot(): string {
-    const comment = this.comment ? commentOut(this.comment) : undefined;
-    const dot = concatWordsWithSpace(this.strict ? 'strict' : undefined, this.toDotWithoutComment());
-    return joinLines(comment, dot);
   }
 }
 

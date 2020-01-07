@@ -1,5 +1,10 @@
-import { Type } from './common/util';
 import { Digraph, Graph, RootCluster } from './model/cluster';
+
+/**
+ * Type indicating that it is a constructor of T.
+ * @hidden
+ */
+export type Type<T> = new (...args: any[]) => T;
 
 /** @hidden */
 const builder = <G extends RootCluster>(cls: Type<G>, strictMode: boolean = false) => (

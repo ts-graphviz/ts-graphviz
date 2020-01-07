@@ -1,4 +1,4 @@
-import { RootClusterType } from '../../common/type';
+import { RootClusterType } from '../../interface';
 import { Digraph } from '../cluster/Digraph';
 import { Graph } from '../cluster/Graph';
 import { Context } from '../Context';

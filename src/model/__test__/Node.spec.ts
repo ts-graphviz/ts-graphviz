@@ -1,4 +1,4 @@
-import { DotBase, GraphvizObject } from '../../common';
+import { DotBase, GraphvizObject } from '../../abstract';
 import { Node } from '../Node';
 
 describe('class Node', () => {

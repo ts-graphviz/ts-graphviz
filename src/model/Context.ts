@@ -1,15 +1,6 @@
-import { RootClusterType } from '../common';
-import { RootCluster, Subgraph } from './cluster/Cluster';
-
-/**
- * Interface for context.
- */
-export interface IContext {
-  /**
-   * Graph type.
-   */
-  graphType: RootClusterType | undefined;
-}
+import { IContext, RootClusterType } from '../interface';
+import { Subgraph } from './cluster/Cluster';
+import { RootCluster } from './cluster/RootCluster';
 
 /**
  * Graph context object.

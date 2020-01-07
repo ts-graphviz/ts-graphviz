@@ -1,22 +1,17 @@
-import { DotBase } from '../common';
-import { IEdgeTarget } from '../common/interface';
-import { Compass } from '../common/type';
+import { DotBase } from '../abstract';
+import { Compass, EdgeTargetLike, IEdgeTarget, IPort } from '../interface';
+import { INode, INodeWithPort } from '../interface';
 import { commentOut, concatWordsWithColon, joinLines } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
 import { ID } from './ID';
 
 // tslint:disable: max-classes-per-file
 
-interface IPort {
-  port: string;
-  compass: Compass;
-}
-
 /**
  * Node object.
  * @category Primary
  */
-export class Node extends DotBase implements IEdgeTarget {
+export class Node extends DotBase implements INode {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
   /** @hidden */
@@ -54,7 +49,7 @@ export class Node extends DotBase implements IEdgeTarget {
  * An object that represents a Node where port and compass are specified.
  * @category Primary
  */
-export class NodeWithPort implements IEdgeTarget {
+export class NodeWithPort implements INodeWithPort {
   /** Specify port embedded in Label. */
   public readonly port?: ID;
   /** Specify the direction of the edge. */
@@ -69,11 +64,6 @@ export class NodeWithPort implements IEdgeTarget {
     return concatWordsWithColon(this.node.idLiteral.toDot(), this.port?.toDot(), this.compass);
   }
 }
-
-/**
- * string or an object implementing IEdgeTarget.
- */
-export type EdgeTargetLike = IEdgeTarget | string;
 
 /**
  * @hidden

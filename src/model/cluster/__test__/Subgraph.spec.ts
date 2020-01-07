@@ -1,12 +1,14 @@
 import 'jest-graphviz';
-import { DotBase, GraphvizObject } from '../../../common';
-import { IEdgeTarget } from '../../../common/interface';
+import { DotBase, GraphvizObject } from '../../../abstract';
+import { IContext, IEdgeTarget, RootClusterType } from '../../../interface';
 import { AttributesBase } from '../../AttributesBase';
 import { Edge } from '../../Edge';
 import { Node } from '../../Node';
 import { Cluster, Subgraph } from '../Cluster';
 import { Digraph } from '../Digraph';
 import { Graph } from '../Graph';
+
+const GraphContext = { graphType: RootClusterType.graph } as IContext;
 
 describe('class Subgraph', () => {
   let g: Digraph | Graph;
@@ -16,14 +18,14 @@ describe('class Subgraph', () => {
       title: 'root is Digraph',
       beforeEachFunc: () => {
         g = new Digraph();
-        createEdge = (...targets: IEdgeTarget[]) => new Edge({ graphType: 'graph' }, ...targets);
+        createEdge = (...targets: IEdgeTarget[]) => new Edge(GraphContext, ...targets);
       },
     },
     {
       title: 'root is Graph',
       beforeEachFunc: () => {
         g = new Graph();
-        createEdge = (...targets: IEdgeTarget[]) => new Edge({ graphType: 'graph' }, ...targets);
+        createEdge = (...targets: IEdgeTarget[]) => new Edge(GraphContext, ...targets);
       },
     },
   ];
