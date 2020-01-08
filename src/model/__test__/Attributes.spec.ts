@@ -1,4 +1,4 @@
-import { DotBase, GraphvizObject } from '../../common';
+import { DotBase, GraphvizObject } from '../../abstract';
 import { Attributes } from '../Attributes';
 import { AttributesBase } from '../AttributesBase';
 import { ID } from '../ID';

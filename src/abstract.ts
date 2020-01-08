@@ -1,4 +1,4 @@
-import { IDot } from './interface';
+import { IDot } from './types';
 // tslint:disable: max-classes-per-file
 
 /**

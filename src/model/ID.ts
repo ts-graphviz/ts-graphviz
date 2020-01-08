@@ -1,4 +1,5 @@
-import { DotBase } from '../common';
+import { DotBase } from '../abstract';
+import { IID } from '../types';
 import { escape, quote } from '../utils/dot-rendering';
 
 /**
@@ -14,7 +15,7 @@ import { escape, quote } from '../utils/dot-rendering';
  *
  * @category Internal
  */
-export class ID extends DotBase {
+export class ID extends DotBase implements IID {
   public readonly value: string;
 
   /** @hidden */

@@ -1,7 +1,7 @@
-import { DotBase, IEdgeTarget, RootClusterType } from '../common';
+import { DotBase } from '../abstract';
+import { IContext, IEdgeTarget, RootClusterType } from '../types';
 import { commentOut, joinLines } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
-import { IContext } from './Context';
 import { isEdgeTarget } from './Node';
 
 /**
@@ -10,7 +10,7 @@ import { isEdgeTarget } from './Node';
 export class Edge extends DotBase {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
-  /** @hidden */
+  // TODO
   public readonly attributes = new Attributes();
   /** @hidden */
   private readonly targets: IEdgeTarget[];

@@ -1,12 +1,18 @@
-import { Type } from './common/util';
-import { Digraph, Graph, RootCluster } from './model/cluster';
+import { Context, Digraph, Graph, RootCluster } from './model';
+
+/**
+ * Type indicating that it is a constructor of T.
+ * @hidden
+ */
+export type Type<T> = new (...args: any[]) => T;
 
 /** @hidden */
 const builder = <G extends RootCluster>(cls: Type<G>, strictMode: boolean = false) => (
   id?: string,
   callback?: (g: G) => void,
 ): G => {
-  const g = new cls(id);
+  const ctx = new Context();
+  const g = new cls(ctx, id);
   if (typeof callback === 'function') {
     callback(g);
   }

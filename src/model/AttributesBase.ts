@@ -1,9 +1,10 @@
-import { DotBase } from '../common';
+import { DotBase } from '../abstract';
+import { IAttributesBase } from '../types';
 import { ID } from './ID';
 /**
  * @hidden
  */
-export abstract class AttributesBase extends DotBase {
+export abstract class AttributesBase extends DotBase implements IAttributesBase {
   /** @hidden */
   protected attrs: Map<string, ID> = new Map();
   /** The size of the attribute. */

@@ -1,5 +1,5 @@
 import 'jest-graphviz';
-import { Digraph, Graph } from '../model/cluster';
+import { Digraph, Graph } from '../model';
 import { digraph, graph, strict } from '../usecase';
 
 describe('function digraph', () => {

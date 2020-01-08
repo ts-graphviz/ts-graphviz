@@ -1,5 +1,5 @@
-import { RootClusterType } from '../../common';
-import { RootCluster } from './Cluster';
+import { RootClusterType } from '../types';
+import { RootCluster } from './RootCluster';
 /**
  * Graph object.
  *

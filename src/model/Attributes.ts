@@ -1,3 +1,4 @@
+import { IAttributes } from '../types';
 import { commentOut, indent, joinLines } from '../utils/dot-rendering';
 import { AttributesBase } from './AttributesBase';
 
@@ -6,7 +7,7 @@ import { AttributesBase } from './AttributesBase';
  *
  * @category Attributes
  */
-export class Attributes extends AttributesBase {
+export class Attributes extends AttributesBase implements IAttributes {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
 

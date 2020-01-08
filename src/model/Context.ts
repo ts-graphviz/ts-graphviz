@@ -1,15 +1,9 @@
-import { RootClusterType } from '../common';
-import { RootCluster, Subgraph } from './cluster/Cluster';
-
-/**
- * Interface for context.
- */
-export interface IContext {
-  /**
-   * Graph type.
-   */
-  graphType: RootClusterType | undefined;
-}
+import { Compass, EdgeTargetLike, ICluster, IContext, IEdgeTarget, RootClusterType } from '../types';
+import { Attributes } from './Attributes';
+import { Edge } from './Edge';
+import { isEdgeTarget, isEdgeTargetLike, Node } from './Node';
+import { RootCluster } from './RootCluster';
+import { Subgraph } from './Subgraph';
 
 /**
  * Graph context object.
@@ -27,5 +21,56 @@ export class Context implements IContext {
     const subgraph = new Subgraph(this);
     subgraph.id = id;
     return subgraph;
+  }
+
+  /**
+   * Create a Attributes.
+   */
+  public createAttributes(): Attributes {
+    return new Attributes();
+  }
+
+  /**
+   * Create a Node.
+   */
+  public createNode(id: string): Node {
+    return new Node(id);
+  }
+
+  /**
+   * Create a Edge.
+   */
+  public createEdge(cluster: ICluster, target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
+  public createEdge(cluster: ICluster, ...targets: EdgeTargetLike[]): Edge;
+  public createEdge(
+    cluster: ICluster,
+    target1: EdgeTargetLike,
+    target2: EdgeTargetLike,
+    ...targets: EdgeTargetLike[]
+  ): Edge {
+    if ((isEdgeTargetLike(target1) && isEdgeTargetLike(target2)) === false) {
+      throw new Error('The element of Edge target is missing or not satisfied as Edge target.');
+    }
+
+    const edge = new Edge(
+      this,
+      this.toNodeLikeObject(cluster, target1),
+      this.toNodeLikeObject(cluster, target2),
+      ...targets.map(n => this.toNodeLikeObject(cluster, n)),
+    );
+    return edge;
+  }
+
+  /** @hidden */
+  private toNodeLikeObject(cluster: ICluster, node: EdgeTargetLike): IEdgeTarget {
+    if (isEdgeTarget(node)) {
+      return node;
+    }
+    const [id, port, compass] = node.split(':');
+    const n = cluster.node(id);
+    if (port && (compass === undefined || Compass.is(compass))) {
+      return n.port({ port, compass });
+    }
+    return n;
   }
 }

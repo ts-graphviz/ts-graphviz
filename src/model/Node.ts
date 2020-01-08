@@ -1,28 +1,21 @@
-import { DotBase } from '../common';
-import { IEdgeTarget } from '../common/interface';
-import { Compass } from '../common/type';
+import { DotBase } from '../abstract';
+import { Compass, EdgeTargetLike, IEdgeTarget, INode, INodeWithPort, IPort } from '../types';
 import { commentOut, concatWordsWithColon, joinLines } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
 import { ID } from './ID';
 
 // tslint:disable: max-classes-per-file
 
-interface IPort {
-  port: string;
-  compass: Compass;
-}
-
 /**
  * Node object.
  * @category Primary
  */
-export class Node extends DotBase implements IEdgeTarget {
+export class Node extends DotBase implements INode {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
-  /** @hidden */
-  public readonly idLiteral: ID;
-  /** @hidden */
   public readonly attributes = new Attributes();
+  /** @hidden */
+  private readonly idLiteral: ID;
   constructor(public readonly id: string) {
     super();
     this.idLiteral = new ID(id);
@@ -31,7 +24,7 @@ export class Node extends DotBase implements IEdgeTarget {
   /** Convert Node to Dot language. */
   public toDot(): string {
     const comment = this.comment ? commentOut(this.comment) : undefined;
-    const target = this.idLiteral.toDot();
+    const target = this.toEdgeTargetDot();
     const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
     const dot = `${target}${attrs};`;
     return joinLines(comment, dot);
@@ -54,7 +47,7 @@ export class Node extends DotBase implements IEdgeTarget {
  * An object that represents a Node where port and compass are specified.
  * @category Primary
  */
-export class NodeWithPort implements IEdgeTarget {
+export class NodeWithPort implements INodeWithPort {
   /** Specify port embedded in Label. */
   public readonly port?: ID;
   /** Specify the direction of the edge. */
@@ -66,14 +59,9 @@ export class NodeWithPort implements IEdgeTarget {
 
   /** Converts a NodeWithPort to an EdgeTarget. */
   public toEdgeTargetDot() {
-    return concatWordsWithColon(this.node.idLiteral.toDot(), this.port?.toDot(), this.compass);
+    return concatWordsWithColon(this.node.toEdgeTargetDot(), this.port?.toDot(), this.compass);
   }
 }
-
-/**
- * string or an object implementing IEdgeTarget.
- */
-export type EdgeTargetLike = IEdgeTarget | string;
 
 /**
  * @hidden
