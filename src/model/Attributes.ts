@@ -1,4 +1,4 @@
-import { IAttributes } from '../interface';
+import { IAttributes } from '../types';
 import { commentOut, indent, joinLines } from '../utils/dot-rendering';
 import { AttributesBase } from './AttributesBase';
 

@@ -1,4 +1,4 @@
-import { ClusterType, IContext, ISubgraph } from '../../interface';
+import { ClusterType, IContext, ISubgraph } from '../types';
 import { Cluster } from './Cluster';
 
 /**

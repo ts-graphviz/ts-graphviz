@@ -88,14 +88,14 @@ export namespace Compass {
   export const nw: Compass = 'nw';
   /** Center */
   export const c: Compass = 'c';
-  export const all: ReadonlyArray<string> = [n, ne, e, se, s, sw, w, nw, c];
-}
 
-/**
- * Determine whether the character string satisfies the Compass condition.
- */
-export function isCompass(str: string): str is Compass {
-  return Compass.all.includes(str);
+  const all: ReadonlyArray<string> = [n, ne, e, se, s, sw, w, nw, c];
+  /**
+   * Determine whether the character string satisfies the Compass condition.
+   */
+  export function is(str: string): str is Compass {
+    return all.includes(str);
+  }
 }
 
 /**
@@ -125,7 +125,6 @@ export interface IHasComment {
 export interface IHasAttributes {
   readonly attributes: IAttributes;
 }
-
 export interface IID extends IDot {
   readonly value: string;
 }
@@ -179,6 +178,7 @@ export interface IContext {
    */
   graphType?: RootClusterType;
 
+  /** Root graph. */
   root?: IRootCluster;
 
   /**

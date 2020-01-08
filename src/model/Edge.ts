@@ -1,6 +1,5 @@
 import { DotBase } from '../abstract';
-import { IEdgeTarget, RootClusterType } from '../interface';
-import { IContext } from '../interface';
+import { IContext, IEdgeTarget, RootClusterType } from '../types';
 import { commentOut, joinLines } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
 import { isEdgeTarget } from './Node';

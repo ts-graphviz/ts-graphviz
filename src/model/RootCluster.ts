@@ -1,5 +1,5 @@
-import { IContext, IRootCluster, RootClusterType } from '../../interface';
-import { commentOut, concatWordsWithSpace, joinLines } from '../../utils/dot-rendering';
+import { IContext, IRootCluster, RootClusterType } from '../types';
+import { commentOut, concatWordsWithSpace, joinLines } from '../utils/dot-rendering';
 import { Cluster } from './Cluster';
 
 /**

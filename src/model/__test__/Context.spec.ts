@@ -1,7 +1,7 @@
-import { RootClusterType } from '../../interface';
-import { Digraph } from '../cluster/Digraph';
-import { Graph } from '../cluster/Graph';
+import { RootClusterType } from '../../types';
 import { Context } from '../Context';
+import { Digraph } from '../Digraph';
+import { Graph } from '../Graph';
 
 describe('class Context', () => {
   let context: Context;

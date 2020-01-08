@@ -1,5 +1,5 @@
 import { DotBase } from '../abstract';
-import { IAttributesBase } from '../interface';
+import { IAttributesBase } from '../types';
 import { ID } from './ID';
 /**
  * @hidden

@@ -1,5 +1,5 @@
 import { DotBase } from '../abstract';
-import { IID } from '../interface';
+import { IID } from '../types';
 import { escape, quote } from '../utils/dot-rendering';
 
 /**

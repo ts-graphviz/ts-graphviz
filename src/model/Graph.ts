@@ -1,4 +1,4 @@
-import { RootClusterType } from '../../interface';
+import { RootClusterType } from '../types';
 import { RootCluster } from './RootCluster';
 /**
  * Graph object.

@@ -1,11 +1,11 @@
 import 'jest-graphviz';
-import { DotBase, GraphvizObject } from '../../../abstract';
-import { AttributesBase } from '../../AttributesBase';
-import { Context } from '../../Context';
-import { Edge } from '../../Edge';
-import { Node } from '../../Node';
+import { DotBase, GraphvizObject } from '../../abstract';
+import { AttributesBase } from '../AttributesBase';
 import { Cluster } from '../Cluster';
+import { Context } from '../Context';
 import { Digraph } from '../Digraph';
+import { Edge } from '../Edge';
+import { Node } from '../Node';
 import { RootCluster } from '../RootCluster';
 
 describe('class Digraph', () => {

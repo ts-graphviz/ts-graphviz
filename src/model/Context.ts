@@ -1,9 +1,9 @@
-import { EdgeTargetLike, ICluster, IContext, IEdgeTarget, isCompass, RootClusterType } from '../interface';
+import { Compass, EdgeTargetLike, ICluster, IContext, IEdgeTarget, RootClusterType } from '../types';
 import { Attributes } from './Attributes';
-import { RootCluster } from './cluster/RootCluster';
-import { Subgraph } from './cluster/Subgraph';
 import { Edge } from './Edge';
 import { isEdgeTarget, isEdgeTargetLike, Node } from './Node';
+import { RootCluster } from './RootCluster';
+import { Subgraph } from './Subgraph';
 
 /**
  * Graph context object.
@@ -68,7 +68,7 @@ export class Context implements IContext {
     }
     const [id, port, compass] = node.split(':');
     const n = cluster.node(id);
-    if (port && (compass === undefined || isCompass(compass))) {
+    if (port && (compass === undefined || Compass.is(compass))) {
       return n.port({ port, compass });
     }
     return n;

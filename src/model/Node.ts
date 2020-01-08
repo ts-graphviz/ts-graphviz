@@ -1,6 +1,5 @@
 import { DotBase } from '../abstract';
-import { Compass, EdgeTargetLike, IEdgeTarget, IPort } from '../interface';
-import { INode, INodeWithPort } from '../interface';
+import { Compass, EdgeTargetLike, IEdgeTarget, INode, INodeWithPort, IPort } from '../types';
 import { commentOut, concatWordsWithColon, joinLines } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
 import { ID } from './ID';
@@ -14,10 +13,9 @@ import { ID } from './ID';
 export class Node extends DotBase implements INode {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
-  /** @hidden */
-  public readonly idLiteral: ID;
-  /** @hidden */
   public readonly attributes = new Attributes();
+  /** @hidden */
+  private readonly idLiteral: ID;
   constructor(public readonly id: string) {
     super();
     this.idLiteral = new ID(id);
@@ -26,7 +24,7 @@ export class Node extends DotBase implements INode {
   /** Convert Node to Dot language. */
   public toDot(): string {
     const comment = this.comment ? commentOut(this.comment) : undefined;
-    const target = this.idLiteral.toDot();
+    const target = this.toEdgeTargetDot();
     const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
     const dot = `${target}${attrs};`;
     return joinLines(comment, dot);
@@ -61,7 +59,7 @@ export class NodeWithPort implements INodeWithPort {
 
   /** Converts a NodeWithPort to an EdgeTarget. */
   public toEdgeTargetDot() {
-    return concatWordsWithColon(this.node.idLiteral.toDot(), this.port?.toDot(), this.compass);
+    return concatWordsWithColon(this.node.toEdgeTargetDot(), this.port?.toDot(), this.compass);
   }
 }
 

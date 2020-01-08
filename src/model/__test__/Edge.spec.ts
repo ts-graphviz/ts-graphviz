@@ -1,8 +1,8 @@
 import { DotBase, GraphvizObject } from '../../abstract';
-import { Digraph } from '../cluster/Digraph';
-import { Graph } from '../cluster/Graph';
 import { Context } from '../Context';
+import { Digraph } from '../Digraph';
 import { Edge } from '../Edge';
+import { Graph } from '../Graph';
 import { Node } from '../Node';
 
 describe('class Edge', () => {

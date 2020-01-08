@@ -7,10 +7,10 @@ import {
   IEdge,
   INode,
   ISubgraph,
-} from '../../interface';
-import { commentOut, concatWordsWithSpace, indent, joinLines } from '../../utils/dot-rendering';
-import { AttributesBase } from '../AttributesBase';
-import { ID } from '../ID';
+} from '../types';
+import { commentOut, concatWordsWithSpace, indent, joinLines } from '../utils/dot-rendering';
+import { AttributesBase } from './AttributesBase';
+import { ID } from './ID';
 
 /**
  * Base class for clusters.
