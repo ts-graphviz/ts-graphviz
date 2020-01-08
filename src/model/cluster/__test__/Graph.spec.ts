@@ -1,19 +1,19 @@
 import 'jest-graphviz';
 import { DotBase, GraphvizObject } from '../../../abstract';
-import { IContext, RootClusterType } from '../../../interface';
 import { AttributesBase } from '../../AttributesBase';
+import { Context } from '../../Context';
 import { Edge } from '../../Edge';
 import { Node } from '../../Node';
 import { Cluster } from '../Cluster';
 import { Graph } from '../Graph';
 import { RootCluster } from '../RootCluster';
 
-const DigraphContext = { graphType: RootClusterType.digraph } as IContext;
-
 describe('class Graph', () => {
   let g: Graph;
+  let context: Context;
   beforeEach(() => {
-    g = new Graph();
+    context = new Context();
+    g = new Graph(context);
   });
 
   it('should be instance of Graph/RootCluster/Cluster/AttributesBase/DotBase/GraphvizObject', () => {
@@ -152,7 +152,7 @@ describe('class Graph', () => {
 
     it('Edge operation methods works', () => {
       const [node1, node2] = ['node1', 'node2'].map(id => g.createNode(id));
-      const edge = new Edge(DigraphContext, node1, node2);
+      const edge = new Edge(context, node1, node2);
       expect(g.existEdge(edge)).toBe(false);
       g.addEdge(edge);
       expect(g.existEdge(edge)).toBe(true);

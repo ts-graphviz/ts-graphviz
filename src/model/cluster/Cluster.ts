@@ -5,20 +5,12 @@ import {
   IClusterCommonAttributes,
   IContext,
   IEdge,
-  IEdgeTarget,
   INode,
-  isCompass,
   ISubgraph,
 } from '../../interface';
 import { commentOut, concatWordsWithSpace, indent, joinLines } from '../../utils/dot-rendering';
-import { Attributes } from '../Attributes';
 import { AttributesBase } from '../AttributesBase';
-import { Context } from '../Context';
-import { Edge } from '../Edge';
 import { ID } from '../ID';
-import { isEdgeTarget, isEdgeTargetLike, Node } from '../Node';
-
-// tslint:disable: max-classes-per-file
 
 /**
  * Base class for clusters.
@@ -27,11 +19,11 @@ import { isEdgeTarget, isEdgeTargetLike, Node } from '../Node';
 export abstract class Cluster extends AttributesBase implements ICluster {
   /** Cluster ID */
   get id(): string | undefined {
-    return this.idLiteral?.value;
+    return this.internalID?.value;
   }
 
   set id(idValue: string | undefined) {
-    this.idLiteral = typeof idValue === 'string' ? new ID(idValue) : undefined;
+    this.internalID = typeof idValue === 'string' ? new ID(idValue) : undefined;
   }
   /** Comments to include when outputting with toDot. */
   public comment?: string;
@@ -40,17 +32,13 @@ export abstract class Cluster extends AttributesBase implements ICluster {
   /** Indicates the type of cluster. */
   public abstract readonly type: ClusterType;
   /** Common attributes of objects in the cluster. */
-  public readonly attributes: Readonly<IClusterCommonAttributes> = {
-    graph: new Attributes(),
-    edge: new Attributes(),
-    node: new Attributes(),
-  };
+  public abstract readonly attributes: Readonly<IClusterCommonAttributes>;
 
   /**
    * Actual status of ID used when outputting with toDot.
    * @hidden
    */
-  private idLiteral?: ID;
+  private internalID?: ID;
 
   /**
    * Nodes in the cluster.
@@ -71,19 +59,6 @@ export abstract class Cluster extends AttributesBase implements ICluster {
   private subgraphs: Set<ISubgraph> = new Set();
 
   /**
-   * Add Node, Edge and Subgraph to the cluster.
-   */
-  public add(object: INode | IEdge | ISubgraph): void {
-    if (object instanceof Node) {
-      this.addNode(object);
-    } else if (object instanceof Edge) {
-      this.addEdge(object);
-    } else if (object instanceof Subgraph) {
-      this.addSubgraph(object);
-    }
-  }
-
-  /**
    * Add a Node to the cluster.
    */
   public addNode(node: INode): void {
@@ -100,7 +75,7 @@ export abstract class Cluster extends AttributesBase implements ICluster {
   /**
    * Add a Subgraph to the cluster.
    */
-  public addSubgraph(subgraph: Subgraph): void {
+  public addSubgraph(subgraph: ISubgraph): void {
     this.subgraphs.add(subgraph);
   }
 
@@ -114,7 +89,7 @@ export abstract class Cluster extends AttributesBase implements ICluster {
   /**
    * Check if the Edge exists in the cluster.
    */
-  public existEdge(edge: Edge): boolean {
+  public existEdge(edge: IEdge): boolean {
     return this.edges.has(edge);
   }
 
@@ -135,44 +110,31 @@ export abstract class Cluster extends AttributesBase implements ICluster {
   }
 
   /**
-   * Remove Node, Edge and Subgraph from the cluster.
-   */
-  public remove(object: Node | Subgraph | Edge): void {
-    if (object instanceof Node) {
-      this.removeNode(object);
-    } else if (object instanceof Subgraph) {
-      this.removeSubgraph(object);
-    } else if (object instanceof Edge) {
-      this.removeEdge(object);
-    }
-  }
-
-  /**
    * Remove Node from the cluster.
    */
-  public removeNode(node: Node | string): void {
-    this.nodes.delete(node instanceof Node ? node.id : node);
+  public removeNode(node: INode | string): void {
+    this.nodes.delete(typeof node === 'string' ? node : node.id);
   }
 
   /**
    * Remove Edge from the cluster.
    */
-  public removeEdge(edge: Edge): void {
+  public removeEdge(edge: IEdge): void {
     this.edges.delete(edge);
   }
 
   /**
    * Remove Subgraph from the cluster.
    */
-  public removeSubgraph(subgraph: Subgraph): void {
+  public removeSubgraph(subgraph: ISubgraph): void {
     this.subgraphs.delete(subgraph);
   }
 
   /**
    * Create a Node in the cluster.
    */
-  public createNode(id: string): Node {
-    const node = new Node(id);
+  public createNode(id: string): INode {
+    const node = this.context.createNode(id);
     this.nodes.set(id, node);
     return node;
   }
@@ -197,20 +159,10 @@ export abstract class Cluster extends AttributesBase implements ICluster {
   }
 
   /** Create Edge and add it to the cluster. */
-  public createEdge(target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
-  public createEdge(...targets: EdgeTargetLike[]): Edge;
-  public createEdge(target1: EdgeTargetLike, target2: EdgeTargetLike, ...targets: EdgeTargetLike[]): Edge {
-    if ((isEdgeTargetLike(target1) && isEdgeTargetLike(target2)) === false) {
-      throw new Error('The element of Edge target is missing or not satisfied as Edge target.');
-    }
-
-    const edge = new Edge(
-      this.context,
-      this.toNodeLikeObject(target1),
-      this.toNodeLikeObject(target2),
-      ...targets.map(n => this.toNodeLikeObject(n)),
-    );
-
+  public createEdge(target1: EdgeTargetLike, target2: EdgeTargetLike): IEdge;
+  public createEdge(...targets: EdgeTargetLike[]): IEdge;
+  public createEdge(target1: EdgeTargetLike, target2: EdgeTargetLike, ...targets: EdgeTargetLike[]): IEdge {
+    const edge = this.context.createEdge(this, target1, target2, ...targets);
     this.edges.add(edge);
     return edge;
   }
@@ -257,7 +209,7 @@ export abstract class Cluster extends AttributesBase implements ICluster {
    * @param targets Edges.
    * @param callback Callback to operate Edge.
    */
-  public edge(targets: EdgeTargetLike[], callback?: (edge: Edge) => void): Edge {
+  public edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge {
     const edge = this.createEdge(...targets);
     if (callback) {
       callback(edge);
@@ -274,7 +226,7 @@ export abstract class Cluster extends AttributesBase implements ICluster {
   /** @hidden */
   protected toDotWithoutComment(): string {
     const type = this.type;
-    const id = this.idLiteral?.toDot();
+    const id = this.internalID?.toDot();
     // attributes
     const attributes = Array.from(this.attrs.entries()).map(([key, value]) => `${key} = ${value.toDot()};`);
     const commonAttributes = Object.entries(this.attributes)
@@ -292,37 +244,5 @@ export abstract class Cluster extends AttributesBase implements ICluster {
       '}',
     );
     return dot;
-  }
-
-  /** @hidden */
-  private toNodeLikeObject(node: EdgeTargetLike): IEdgeTarget {
-    if (isEdgeTarget(node)) {
-      return node;
-    }
-    const [id, port, compass] = node.split(':');
-    const n = this.node(id);
-    if (port && (compass === undefined || isCompass(compass))) {
-      return n.port({ port, compass });
-    }
-    return n;
-  }
-}
-
-/**
- * Subgraph object.
- * @category Primary
- */
-export class Subgraph extends Cluster {
-  /** Indicates the type of cluster. */
-  public type = ClusterType.subgraph;
-  constructor(public readonly context: Context) {
-    super();
-  }
-  /** Determines whether the Subgraph is a SubgraphCluster. */
-  public isSubgraphCluster(): boolean {
-    if (typeof this.id === 'string') {
-      return this.id.startsWith('cluster');
-    }
-    return false;
   }
 }

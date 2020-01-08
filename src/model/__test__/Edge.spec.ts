@@ -1,12 +1,17 @@
 import { DotBase, GraphvizObject } from '../../abstract';
-import { IContext, RootClusterType } from '../../interface';
+import { Digraph } from '../cluster/Digraph';
+import { Graph } from '../cluster/Graph';
+import { Context } from '../Context';
 import { Edge } from '../Edge';
 import { Node } from '../Node';
 
-const DigraphContext = { graphType: RootClusterType.digraph } as IContext;
-const GraphContext = { graphType: RootClusterType.graph } as IContext;
-
 describe('class Edge', () => {
+  let g: Graph | Digraph;
+  const DigraphContext = new Context();
+  g = new Digraph(DigraphContext);
+  const GraphContext = new Context();
+  g = new Graph(GraphContext);
+
   let edge: Edge;
 
   const [node1, node2, node3] = new Array(3).fill(true).map((_, i) => new Node(`node${i + 1}`));

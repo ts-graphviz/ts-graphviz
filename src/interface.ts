@@ -1,3 +1,4 @@
+import { Edge } from './model/Edge';
 // tslint:disable: no-namespace
 
 /**
@@ -178,20 +179,34 @@ export interface IContext {
    */
   graphType?: RootClusterType;
 
+  root?: IRootCluster;
+
   /**
-   * Create a Subgraph and add it to the cluster.
+   * Create a Subgraph.
    */
   createSubgraph(id?: string): ISubgraph;
+
+  /**
+   * Create a Attributes.
+   */
+  createAttributes(): IAttributes;
+
+  /**
+   * Create a Node.
+   */
+  createNode(id: string): INode;
+
+  /**
+   * Create a Edge.
+   */
+  createEdge(cluster: ICluster, target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
+  createEdge(cluster: ICluster, ...targets: EdgeTargetLike[]): Edge;
 }
 
-export interface ICluster extends IHasComment {
+export interface ICluster extends IHasComment, IAttributesBase {
   id?: string;
   readonly attributes: Readonly<IClusterCommonAttributes>;
   readonly context: IContext;
-  /**
-   * Add Node, Edge and Subgraph to the cluster.
-   */
-  add(object: INode | IEdge | ISubgraph): void;
   /**
    * Add a Node to the cluster.
    */
@@ -220,10 +235,6 @@ export interface ICluster extends IHasComment {
    * Check if the Subgraph exists in the cluster.
    */
   existSubgraph(subgraph: ISubgraph): boolean;
-  /**
-   * Remove Node, Edge and Subgraph from the cluster.
-   */
-  remove(object: INode | ISubgraph | IEdge): void;
   /**
    * Remove Node from the cluster.
    */

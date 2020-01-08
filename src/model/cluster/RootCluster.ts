@@ -1,7 +1,7 @@
-import { IRootCluster, RootClusterType } from '../../interface';
+import { IContext, IRootCluster, RootClusterType } from '../../interface';
 import { commentOut, concatWordsWithSpace, joinLines } from '../../utils/dot-rendering';
-import { Context } from '../Context';
 import { Cluster } from './Cluster';
+
 /**
  * Base class for RootCluster.
  */
@@ -18,7 +18,12 @@ export abstract class RootCluster extends Cluster implements IRootCluster {
   public strict: boolean = false;
   /** Indicates the type of cluster. */
   public abstract readonly type: RootClusterType;
-  constructor(id?: string, public readonly context: Context = new Context()) {
+  public attributes = {
+    graph: this.context.createAttributes(),
+    edge: this.context.createAttributes(),
+    node: this.context.createAttributes(),
+  };
+  constructor(public context: IContext, id?: string) {
     super();
     this.id = id;
     this.context.root = this;

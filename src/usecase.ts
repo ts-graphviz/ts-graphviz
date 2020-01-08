@@ -1,4 +1,5 @@
 import { Digraph, Graph, RootCluster } from './model/cluster';
+import { Context } from './model/Context';
 
 /**
  * Type indicating that it is a constructor of T.
@@ -11,7 +12,8 @@ const builder = <G extends RootCluster>(cls: Type<G>, strictMode: boolean = fals
   id?: string,
   callback?: (g: G) => void,
 ): G => {
-  const g = new cls(id);
+  const ctx = new Context();
+  const g = new cls(ctx, id);
   if (typeof callback === 'function') {
     callback(g);
   }
