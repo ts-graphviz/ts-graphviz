@@ -3462,10 +3462,10 @@ tr46@^1.0.1:
   dependencies:
     punycode "^2.1.0"
 
-ts-graphviz@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/ts-graphviz/-/ts-graphviz-0.4.1.tgz#cac4ee14a82c985b23d34a19fdcd78e2257cf589"
-  integrity sha512-g3A0G3MuJlDFcBkpLQso3F25d2QGngJpS/aPkvBEilcjGazkiV/I3nc6W5d6gATntwCSRFEDW9wfJgo7M+fFBQ==
+ts-graphviz@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/ts-graphviz/-/ts-graphviz-0.7.0.tgz#cbafcbcf8c8edd69b3946a4aa1a070d04881c371"
+  integrity sha512-Kt5KQEDFRKOdcszm8HCv3EFyBgoN7x1XrNXrPcG5HxbPr5AbXfLRZbtMKj8DV8T+7GV8R+kZO6ph74wmmOIdvA==
   dependencies:
     tslib "^1.10.0"
 
