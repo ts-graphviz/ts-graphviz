@@ -1,3 +1,11 @@
+import {
+  ClusterSubgraphAttribute,
+  EdgeAttribute,
+  NodeAttribute,
+  RootClusterAttribute,
+  SubgraphAttribute,
+} from './attribute';
+import { Attribute } from './attribute';
 import { Edge } from './model/Edge';
 // tslint:disable: no-namespace
 
@@ -122,20 +130,21 @@ export interface IHasComment {
   comment?: string;
 }
 
-export interface IHasAttributes {
-  readonly attributes: IAttributes;
+export interface IHasAttributes<T extends string> {
+  readonly attributes: IAttributes<T>;
 }
 export interface IID extends IDot {
   readonly value: string;
 }
 
-export interface IAttributesBase {
+export interface IAttributesBase<T extends string> {
   readonly size: number;
-  get(key: string): IID | undefined;
-  set(key: string, value: string | boolean | number | IID): void;
+  get(key: T): IID | undefined;
+  set(key: T, value: string | boolean | number | IID): void;
+  apply(attributes: { [key in T]?: string | boolean | number | IID }): void;
 }
 
-export interface IAttributes extends IAttributesBase, IHasComment, IDot {}
+export interface IAttributes<T extends string> extends IAttributesBase<T>, IHasComment, IDot {}
 
 export interface IPort {
   port: string;
@@ -148,12 +157,12 @@ export interface INodeWithPort extends IEdgeTarget {
   readonly compass?: Compass;
 }
 
-export interface INode extends IHasComment, IDot, IEdgeTarget, IHasAttributes {
+export interface INode extends IHasComment, IDot, IEdgeTarget, IHasAttributes<NodeAttribute> {
   readonly id: string;
   port(port: string | Partial<IPort>): INodeWithPort;
 }
 
-export interface IEdge extends IDot, IHasComment, IHasAttributes {}
+export interface IEdge extends IDot, IHasComment, IHasAttributes<EdgeAttribute> {}
 
 /**
  * Cluster common attribute interface.
@@ -162,11 +171,11 @@ export interface IEdge extends IDot, IHasComment, IHasAttributes {}
  */
 export interface IClusterCommonAttributes {
   /** Manage common attributes of graphs in a cluster. */
-  graph: IAttributes;
+  graph: IAttributes<SubgraphAttribute | ClusterSubgraphAttribute>;
   /** Manage common attributes of edges in a cluster. */
-  edge: IAttributes;
+  edge: IAttributes<EdgeAttribute>;
   /** Manage common attributes of nodes in a cluster. */
-  node: IAttributes;
+  node: IAttributes<NodeAttribute>;
 }
 
 /**
@@ -189,7 +198,7 @@ export interface IContext {
   /**
    * Create a Attributes.
    */
-  createAttributes(): IAttributes;
+  createAttributes<T extends string>(): IAttributes<T>;
 
   /**
    * Create a Node.
@@ -199,11 +208,11 @@ export interface IContext {
   /**
    * Create a Edge.
    */
-  createEdge(cluster: ICluster, target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
-  createEdge(cluster: ICluster, ...targets: EdgeTargetLike[]): Edge;
+  createEdge<T extends string>(cluster: ICluster<T>, target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
+  createEdge<T extends string>(cluster: ICluster<T>, ...targets: EdgeTargetLike[]): Edge;
 }
 
-export interface ICluster extends IHasComment, IAttributesBase {
+export interface ICluster<T extends string> extends IHasComment, IAttributesBase<T> {
   id?: string;
   readonly attributes: Readonly<IClusterCommonAttributes>;
   readonly context: IContext;
@@ -304,11 +313,11 @@ export interface ICluster extends IHasComment, IAttributesBase {
   edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge;
 }
 
-export interface ISubgraph extends ICluster, IDot {
+export interface ISubgraph extends ICluster<SubgraphAttribute | ClusterSubgraphAttribute>, IDot {
   isSubgraphCluster(): boolean;
 }
 
-export interface IRootCluster extends ICluster, IDot {
+export interface IRootCluster extends ICluster<RootClusterAttribute>, IDot {
   /**
    * Strict mode.
    *

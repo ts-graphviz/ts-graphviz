@@ -7,7 +7,7 @@ import { AttributesBase } from './AttributesBase';
  *
  * @category Attributes
  */
-export class Attributes extends AttributesBase implements IAttributes {
+export class Attributes<T extends string> extends AttributesBase<T> implements IAttributes<T> {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
 

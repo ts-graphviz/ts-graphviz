@@ -1,3 +1,4 @@
+import { ClusterSubgraphAttribute, EdgeAttribute, NodeAttribute, SubgraphAttribute } from '../attribute';
 import { ClusterType, IContext, ISubgraph } from '../types';
 import { Cluster } from './Cluster';
 
@@ -5,13 +6,13 @@ import { Cluster } from './Cluster';
  * Subgraph object.
  * @category Primary
  */
-export class Subgraph extends Cluster implements ISubgraph {
+export class Subgraph extends Cluster<SubgraphAttribute | ClusterSubgraphAttribute> implements ISubgraph {
   /** Indicates the type of cluster. */
   public type = ClusterType.subgraph;
   public attributes = {
-    graph: this.context.createAttributes(),
-    edge: this.context.createAttributes(),
-    node: this.context.createAttributes(),
+    graph: this.context.createAttributes<SubgraphAttribute | ClusterSubgraphAttribute>(),
+    edge: this.context.createAttributes<EdgeAttribute>(),
+    node: this.context.createAttributes<NodeAttribute>(),
   };
   constructor(public readonly context: IContext) {
     super();
