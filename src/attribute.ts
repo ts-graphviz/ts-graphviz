@@ -2915,3 +2915,13 @@ export type ClusterSubgraphAttribute =
   | typeof attribute.style
   | typeof attribute.target
   | typeof attribute.tooltip;
+
+/**
+ * Attribute types.
+ */
+export type Attribute =
+  | NodeAttribute
+  | EdgeAttribute
+  | RootClusterAttribute
+  | SubgraphAttribute
+  | ClusterSubgraphAttribute;
