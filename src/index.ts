@@ -1,3 +1,4 @@
+export * from './attribute';
 export * from './types';
 export * from './abstract';
 export * from './model';

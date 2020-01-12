@@ -26,7 +26,7 @@ export class Context implements IContext {
   /**
    * Create a Attributes.
    */
-  public createAttributes(): Attributes {
+  public createAttributes<T extends string>(): Attributes<T> {
     return new Attributes();
   }
 
@@ -40,10 +40,10 @@ export class Context implements IContext {
   /**
    * Create a Edge.
    */
-  public createEdge(cluster: ICluster, target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
-  public createEdge(cluster: ICluster, ...targets: EdgeTargetLike[]): Edge;
+  public createEdge(cluster: ICluster<any>, target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
+  public createEdge(cluster: ICluster<any>, ...targets: EdgeTargetLike[]): Edge;
   public createEdge(
-    cluster: ICluster,
+    cluster: ICluster<any>,
     target1: EdgeTargetLike,
     target2: EdgeTargetLike,
     ...targets: EdgeTargetLike[]
@@ -62,7 +62,7 @@ export class Context implements IContext {
   }
 
   /** @hidden */
-  private toNodeLikeObject(cluster: ICluster, node: EdgeTargetLike): IEdgeTarget {
+  private toNodeLikeObject(cluster: ICluster<any>, node: EdgeTargetLike): IEdgeTarget {
     if (isEdgeTarget(node)) {
       return node;
     }

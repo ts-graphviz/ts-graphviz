@@ -1,4 +1,5 @@
 import { DotBase } from '../abstract';
+import { NodeAttribute } from '../attribute';
 import { Compass, EdgeTargetLike, IEdgeTarget, INode, INodeWithPort, IPort } from '../types';
 import { commentOut, concatWordsWithColon, joinLines } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
@@ -13,7 +14,7 @@ import { ID } from './ID';
 export class Node extends DotBase implements INode {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
-  public readonly attributes = new Attributes();
+  public readonly attributes = new Attributes<NodeAttribute>();
   /** @hidden */
   private readonly idLiteral: ID;
   constructor(public readonly id: string) {

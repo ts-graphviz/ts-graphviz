@@ -4,19 +4,19 @@ import { ID } from './ID';
 /**
  * @hidden
  */
-export abstract class AttributesBase extends DotBase implements IAttributesBase {
+export abstract class AttributesBase<T extends string> extends DotBase implements IAttributesBase<T> {
   /** @hidden */
-  protected attrs: Map<string, ID> = new Map();
+  protected attrs: Map<T, ID> = new Map();
   /** The size of the attribute. */
   get size(): number {
     return this.attrs.size;
   }
   /** The size of the attribute. */
-  public get(key: string): ID | undefined {
+  public get(key: T): ID | undefined {
     return this.attrs.get(key);
   }
   /** Set a value to the attribute. */
-  public set(key: string, value: string | boolean | number | ID): void {
+  public set(key: T, value: string | boolean | number | ID): void {
     if (value instanceof ID) {
       this.attrs.set(key, value);
     } else {
@@ -24,9 +24,9 @@ export abstract class AttributesBase extends DotBase implements IAttributesBase 
     }
   }
 
-  public apply(attributes: { [key: string]: string | boolean | number | ID }) {
+  public apply(attributes: { [key in T]?: string | boolean | number | ID }) {
     for (const [key, value] of Object.entries(attributes)) {
-      this.set(key, value);
+      this.set(key as T, value as string | boolean | number | ID);
     }
   }
 }

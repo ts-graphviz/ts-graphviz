@@ -1,10 +1,11 @@
 import { DotBase, GraphvizObject } from '../../abstract';
+import { Attribute } from '../../attribute';
 import { Attributes } from '../Attributes';
 import { AttributesBase } from '../AttributesBase';
 import { ID } from '../ID';
 
 describe('class Attributes', () => {
-  let attrs: Attributes;
+  let attrs: Attributes<Attribute>;
   beforeEach(() => {
     attrs = new Attributes();
   });

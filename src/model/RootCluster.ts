@@ -1,3 +1,10 @@
+import {
+  ClusterSubgraphAttribute,
+  EdgeAttribute,
+  NodeAttribute,
+  RootClusterAttribute,
+  SubgraphAttribute,
+} from '../attribute';
 import { IContext, IRootCluster, RootClusterType } from '../types';
 import { commentOut, concatWordsWithSpace, joinLines } from '../utils/dot-rendering';
 import { Cluster } from './Cluster';
@@ -5,7 +12,7 @@ import { Cluster } from './Cluster';
 /**
  * Base class for RootCluster.
  */
-export abstract class RootCluster extends Cluster implements IRootCluster {
+export abstract class RootCluster extends Cluster<RootClusterAttribute> implements IRootCluster {
   /**
    * Strict mode.
    *
@@ -19,9 +26,9 @@ export abstract class RootCluster extends Cluster implements IRootCluster {
   /** Indicates the type of cluster. */
   public abstract readonly type: RootClusterType;
   public attributes = {
-    graph: this.context.createAttributes(),
-    edge: this.context.createAttributes(),
-    node: this.context.createAttributes(),
+    graph: this.context.createAttributes<SubgraphAttribute | ClusterSubgraphAttribute>(),
+    edge: this.context.createAttributes<EdgeAttribute>(),
+    node: this.context.createAttributes<NodeAttribute>(),
   };
   constructor(public context: IContext, id?: string) {
     super();

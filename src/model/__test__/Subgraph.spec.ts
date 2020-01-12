@@ -60,9 +60,10 @@ describe('class Subgraph', () => {
       });
 
       test('set attributes by apply', () => {
-        g.apply({
+        subgraph.apply({
           rank: 'same',
         });
+        g.addSubgraph(subgraph);
         const dot = g.toDot();
         expect(dot).toBeValidDotAndMatchSnapshot();
       });

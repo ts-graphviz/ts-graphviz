@@ -53,7 +53,9 @@ exports[`class Subgraph root is Digraph set attributes 1`] = `
 
 exports[`class Subgraph root is Digraph set attributes by apply 1`] = `
 "digraph {
-  rank = same;
+  subgraph test {
+    rank = same;
+  }
 }"
 `;
 
@@ -123,7 +125,9 @@ exports[`class Subgraph root is Graph set attributes 1`] = `
 
 exports[`class Subgraph root is Graph set attributes by apply 1`] = `
 "graph {
-  rank = same;
+  subgraph test {
+    rank = same;
+  }
 }"
 `;
 

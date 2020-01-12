@@ -16,7 +16,7 @@ import { ID } from './ID';
  * Base class for clusters.
  * @hidden
  */
-export abstract class Cluster extends AttributesBase implements ICluster {
+export abstract class Cluster<T extends string> extends AttributesBase<T> implements ICluster<T> {
   /** Cluster ID */
   get id(): string | undefined {
     return this.internalID?.value;
