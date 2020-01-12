@@ -5,7 +5,6 @@ import {
   RootClusterAttribute,
   SubgraphAttribute,
 } from './attribute';
-import { Attribute } from './attribute';
 import { Edge } from './model/Edge';
 // tslint:disable: no-namespace
 
