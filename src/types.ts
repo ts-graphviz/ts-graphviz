@@ -1,10 +1,4 @@
-import {
-  ClusterSubgraphAttribute,
-  EdgeAttribute,
-  NodeAttribute,
-  RootClusterAttribute,
-  SubgraphAttribute,
-} from './attribute';
+import { attribute } from './attribute';
 import { Edge } from './model/Edge';
 // tslint:disable: no-namespace
 
@@ -156,12 +150,12 @@ export interface INodeWithPort extends IEdgeTarget {
   readonly compass?: Compass;
 }
 
-export interface INode extends IHasComment, IDot, IEdgeTarget, IHasAttributes<NodeAttribute> {
+export interface INode extends IHasComment, IDot, IEdgeTarget, IHasAttributes<attribute.Node> {
   readonly id: string;
   port(port: string | Partial<IPort>): INodeWithPort;
 }
 
-export interface IEdge extends IDot, IHasComment, IHasAttributes<EdgeAttribute> {}
+export interface IEdge extends IDot, IHasComment, IHasAttributes<attribute.Edge> {}
 
 /**
  * Cluster common attribute interface.
@@ -170,11 +164,11 @@ export interface IEdge extends IDot, IHasComment, IHasAttributes<EdgeAttribute> 
  */
 export interface IClusterCommonAttributes {
   /** Manage common attributes of graphs in a cluster. */
-  graph: IAttributes<SubgraphAttribute | ClusterSubgraphAttribute>;
+  graph: IAttributes<attribute.Subgraph | attribute.ClusterSubgraph>;
   /** Manage common attributes of edges in a cluster. */
-  edge: IAttributes<EdgeAttribute>;
+  edge: IAttributes<attribute.Edge>;
   /** Manage common attributes of nodes in a cluster. */
-  node: IAttributes<NodeAttribute>;
+  node: IAttributes<attribute.Node>;
 }
 
 /**
@@ -312,11 +306,11 @@ export interface ICluster<T extends string> extends IHasComment, IAttributesBase
   edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge;
 }
 
-export interface ISubgraph extends ICluster<SubgraphAttribute | ClusterSubgraphAttribute>, IDot {
+export interface ISubgraph extends ICluster<attribute.Subgraph | attribute.ClusterSubgraph>, IDot {
   isSubgraphCluster(): boolean;
 }
 
-export interface IRootCluster extends ICluster<RootClusterAttribute>, IDot {
+export interface IRootCluster extends ICluster<attribute.RootCluster>, IDot {
   /**
    * Strict mode.
    *
