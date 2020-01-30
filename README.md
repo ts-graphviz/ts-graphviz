@@ -1,7 +1,4 @@
-[![GitHub Action](https://github.com/kamiazya/ts-graphviz/workflows/NodeCI/badge.svg)](https://github.com/kamiazya/ts-graphviz/actions?workflow=NodeCI) [![npm version](https://badge.fury.io/js/ts-graphviz.svg)](https://badge.fury.io/js/ts-graphviz) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier) [![Maintainability](https://api.codeclimate.com/v1/badges/12a586dde710859d58c7/maintainability)](https://codeclimate.com/github/kamiazya/ts-graphviz/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/12a586dde710859d58c7/test_coverage)](https://codeclimate.com/github/kamiazya/ts-graphviz/test_coverage) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+[![GitHub Action](https://github.com/kamiazya/ts-graphviz/workflows/NodeCI/badge.svg)](https://github.com/kamiazya/ts-graphviz/actions?workflow=NodeCI) [![npm version](https://badge.fury.io/js/ts-graphviz.svg)](https://badge.fury.io/js/ts-graphviz) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier) [![Maintainability](https://api.codeclimate.com/v1/badges/12a586dde710859d58c7/maintainability)](https://codeclimate.com/github/kamiazya/ts-graphviz/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/12a586dde710859d58c7/test_coverage)](https://codeclimate.com/github/kamiazya/ts-graphviz/test_coverage) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com) <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # ts-graphviz
 
@@ -116,17 +113,7 @@ Graphviz-dot Test and Integration
 - [setup-graphviz](https://github.com/kamiazya/setup-graphviz)
   - GitHub Action to set up Graphviz cross-platform(Linux, macOS, Windows).
 
-## License
-
-This software is released under the MIT License, see LICENSE.
-
-## Author
-
-[kamiazya(Yuki Yamazaki)](https://github.com/kamiazya)
-
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W5VDNO)
-
-## Contributors ✨
+## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
@@ -143,4 +130,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors)
+specification. Contributions of any kind welcome!
+
+## License
+
+This software is released under the MIT License, see LICENSE.
