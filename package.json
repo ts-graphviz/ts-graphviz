@@ -36,7 +36,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.21",
     "jest": "^24.9.0",
-    "jest-graphviz": "^0.1.1",
+    "jest-graphviz": "^0.2.0",
     "prettier": "^1.18.2",
     "rollup": "^1.27.14",
     "rollup-plugin-terser": "^5.1.3",
