@@ -5,6 +5,7 @@
 .prettierrc.json
 .vscode
 CODE_OF_CONDUCT.md
+CONTRIBUTING.md
 config
 jest.config.js
 LICENSE
