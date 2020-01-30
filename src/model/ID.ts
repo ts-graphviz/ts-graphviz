@@ -40,7 +40,7 @@ export class ID extends DotBase implements IID {
         stringValue = trimmed;
         this.isQuoteRequired = false;
       } else {
-        this.isQuoteRequired = /[#\s":;=\-'/]/g.test(stringValue);
+        this.isQuoteRequired = true;
       }
     }
     this.value = stringValue;

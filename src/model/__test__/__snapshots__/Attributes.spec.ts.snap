@@ -4,16 +4,16 @@ exports[`class Attributes renders correctly by toDot method edge with comment mu
 "[
   // this is comment.
   // second line.
-  label = test,
-  color = red,
+  label = \\"test\\",
+  color = \\"red\\",
 ]"
 `;
 
 exports[`class Attributes renders correctly by toDot method edge with comment single line comment 1`] = `
 "[
   // this is comment.
-  label = test,
-  color = red,
+  label = \\"test\\",
+  color = \\"red\\",
 ]"
 `;
 
@@ -21,21 +21,21 @@ exports[`class Attributes renders correctly by toDot method no attributes 1`] = 
 
 exports[`class Attributes renders correctly by toDot method one attribute 1`] = `
 "[
-  label = test,
+  label = \\"test\\",
 ]"
 `;
 
 exports[`class Attributes renders correctly by toDot method set some attributes by apply 1`] = `
 "[
   label = \\"this is test\\",
-  color = red,
+  color = \\"red\\",
   fontsize = 16,
 ]"
 `;
 
 exports[`class Attributes renders correctly by toDot method some attributes 1`] = `
 "[
-  label = test,
-  color = red,
+  label = \\"test\\",
+  color = \\"red\\",
 ]"
 `;

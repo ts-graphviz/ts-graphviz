@@ -1,21 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`class Node renders correctly by toDot method has some attributes 1`] = `
-"test [
+"\\"test\\" [
   label = \\"this is test\\",
-  color = red,
+  color = \\"red\\",
 ];"
 `;
 
 exports[`class Node renders correctly by toDot method node with comment multi line comment 1`] = `
 "// this is comment.
 // second line.
-test;"
+\\"test\\";"
 `;
 
 exports[`class Node renders correctly by toDot method node with comment single line comment 1`] = `
 "// this is comment.
-test;"
+\\"test\\";"
 `;
 
-exports[`class Node renders correctly by toDot method simple node 1`] = `"test;"`;
+exports[`class Node renders correctly by toDot method simple node 1`] = `"\\"test\\";"`;
