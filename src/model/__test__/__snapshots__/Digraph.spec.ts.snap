@@ -16,7 +16,7 @@ digraph {
 exports[`class Digraph renders correctly by toDot method has some attributes 1`] = `
 "digraph {
   graph [
-    color = red,
+    color = \\"red\\",
   ];
   edge [
     label = \\"edge label\\",
@@ -57,9 +57,9 @@ exports[`class Digraph renders correctly by toDot method label attribute behavio
 
 exports[`class Digraph renders correctly by toDot method nodes and edge 1`] = `
 "digraph {
-  node1;
-  node2;
-  node1 -> node2;
+  \\"node1\\";
+  \\"node2\\";
+  \\"node1\\" -> \\"node2\\";
 }"
 `;
 
@@ -71,7 +71,7 @@ exports[`class Digraph renders correctly by toDot method set attributes 1`] = `
 
 exports[`class Digraph renders correctly by toDot method set attributes by apply 1`] = `
 "digraph {
-  layout = dot;
+  layout = \\"dot\\";
   dpi = 360;
 }"
 `;
@@ -88,36 +88,36 @@ exports[`class Digraph renders correctly by toDot method strict graph 1`] = `
 
 exports[`class Digraph renders correctly by toDot method subgraphs 1`] = `
 "digraph {
-  node1;
-  node2;
-  subgraph A {
-    A_node1;
-    A_node2;
-    A_node1 -> A_node2;
-    B_node1 -> B_node2;
+  \\"node1\\";
+  \\"node2\\";
+  subgraph \\"A\\" {
+    \\"A_node1\\";
+    \\"A_node2\\";
+    \\"A_node1\\" -> \\"A_node2\\";
+    \\"B_node1\\" -> \\"B_node2\\";
   }
-  subgraph B {
-    B_node1;
-    B_node2;
+  subgraph \\"B\\" {
+    \\"B_node1\\";
+    \\"B_node2\\";
   }
-  node1 -> node2;
+  \\"node1\\" -> \\"node2\\";
 }"
 `;
 
 exports[`class Digraph renders correctly by toDot method subgraphs, depth 2 1`] = `
 "digraph {
-  node1;
-  node2;
-  subgraph depth1 {
-    depth1_node1;
-    depth1_node2;
-    subgraph depth2 {
-      depth2_node1;
-      depth2_node2;
-      depth2_node1 -> depth2_node2;
+  \\"node1\\";
+  \\"node2\\";
+  subgraph \\"depth1\\" {
+    \\"depth1_node1\\";
+    \\"depth1_node2\\";
+    subgraph \\"depth2\\" {
+      \\"depth2_node1\\";
+      \\"depth2_node2\\";
+      \\"depth2_node1\\" -> \\"depth2_node2\\";
     }
-    depth1_node1 -> depth1_node2;
+    \\"depth1_node1\\" -> \\"depth1_node2\\";
   }
-  node1 -> node2;
+  \\"node1\\" -> \\"node2\\";
 }"
 `;

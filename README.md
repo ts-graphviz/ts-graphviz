@@ -83,20 +83,20 @@ console.log(dot);
 ### Output
 
 ```graphviz
-digraph G {
-  node1;
-  node2;
-  subgraph A {
-    A_node1;
-    A_node2;
-    A_node1 -> A_node2;
-    B_node1 -> B_node2;
-  };
-  subgraph B {
-    B_node1;
-    B_node2;
-  };
-  node1 -> node2;
+digraph "G" {
+  "node1";
+  "node2";
+  subgraph "A" {
+    "A_node1";
+    "A_node2";
+    "A_node1" -> "A_node2";
+  }
+  subgraph "B" {
+    "B_node1";
+    "B_node2";
+    "B_node1" -> "B_node2";
+  }
+  "node1" -> "node2";
 }
 ```
 

@@ -106,6 +106,14 @@ describe('function graph', () => {
       g.edge([a, b, c], e => {
         e.attributes.set('color', 'red');
       });
+
+      g.subgraph('graph.name', s => {
+        const innerA = s.node('node.name');
+        innerA.attributes.set('label', 'node');
+        const innerB = s.node('another.name');
+        innerB.attributes.set('label', 'words with space and "quote"');
+        s.edge([innerA, innerB]);
+      });
     });
     const dot = G.toDot();
     expect(dot).toBeValidDotAndMatchSnapshot();
