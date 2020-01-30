@@ -100,6 +100,10 @@ digraph "G" {
 }
 ```
 
+## Contributing
+
+For more info on how to contribute to ts-graphviz, see the [docs](./CONTRIBUTING.md).
+
 ## See Also
 
 Graphviz-dot Test and Integration
