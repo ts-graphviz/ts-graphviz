@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "CommonJS",
     "jsx": "react",
     "strict": true,
     "moduleResolution": "node",

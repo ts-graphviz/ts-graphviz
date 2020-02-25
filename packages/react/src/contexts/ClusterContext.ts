@@ -1,4 +1,4 @@
 import React from 'react';
-import { Digraph, Graph, Subgraph } from 'ts-graphviz';
+import gv from 'ts-graphviz';
 
-export const ClusterContext = React.createContext<Graph | Digraph | Subgraph>(new Digraph());
+export const ClusterContext = React.createContext<gv.ICluster<any> | undefined>(undefined);
