@@ -1,4 +1,4 @@
 import React from 'react';
-import { Digraph, Graph } from 'ts-graphviz';
+import { Context } from 'ts-graphviz';
 
-export const GraphvizContext = React.createContext<Digraph | Graph>(new Digraph());
+export const GraphvizContext = React.createContext<Context>(new Context());
