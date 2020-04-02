@@ -8,3 +8,5 @@ export const Digraph: FC = ({ children }) => {
   const g = useMemo(() => new gv.Digraph(context), [context]);
   return <ClusterContext.Provider value={g}>{children}</ClusterContext.Provider>;
 };
+
+Digraph.displayName = 'Digraph';

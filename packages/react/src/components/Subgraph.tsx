@@ -7,3 +7,5 @@ export const Subgraph: FC<{ id: string }> = ({ children, id }) => {
   const subgraph = cluster?.createSubgraph(id);
   return <ClusterContext.Provider value={subgraph}>{children}</ClusterContext.Provider>;
 };
+
+Subgraph.displayName = 'Subgraph';

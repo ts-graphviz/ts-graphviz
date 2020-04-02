@@ -8,3 +8,5 @@ export const Graph: FC = ({ children }) => {
   const g = useMemo(() => new gv.Graph(context), [context]);
   return <ClusterContext.Provider value={g}>{children}</ClusterContext.Provider>;
 };
+
+Graph.displayName = 'Graph';

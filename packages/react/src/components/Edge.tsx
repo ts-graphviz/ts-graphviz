@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-export function Edge() {
+export const Edge: FC = () => {
   return <div />;
-}
+};
+
+Edge.displayName = 'Edge';
