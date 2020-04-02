@@ -6,3 +6,5 @@ export const Node: FC<{ id: string }> = ({ children, id }) => {
   const node = useMemo(() => cluster?.createNode(id), [cluster, id]);
   return <NodeContext.Provider value={node}>{children}</NodeContext.Provider>;
 };
+
+Node.displayName = 'Node';
