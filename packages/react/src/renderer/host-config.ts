@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import ReactReconciler from 'react-reconciler';
-import * as gv from 'ts-graphviz';
 import { Debug } from './debug';
 type Type = FC; // 'Digraph' | 'Graph' | 'Node' | 'Edge' | 'Subgraph';
 type Props = any;
@@ -68,7 +67,7 @@ export class HostConfig {
   }
   @Debug
   public resetAfterCommit(containerInfo: Container): void {
-    // NoOp
+    // containerInfo.setRoot
   }
 
   /**
@@ -162,10 +161,16 @@ export class HostConfig {
   @Debug
   public appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
     // NoOp
+    if (parentInstance.appendChild) {
+      parentInstance.appendChild(child);
+    }
   }
   @Debug
   public appendChildToContainer(container: Container, child: Instance | TextInstance): void {
-    // NoOp
+    console.log('A', child);
+    // if (container.appendChild) {
+    //   container.appendChild(child);
+    // }
   }
   @Debug
   public commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
