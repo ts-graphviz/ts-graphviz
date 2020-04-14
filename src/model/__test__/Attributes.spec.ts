@@ -46,10 +46,23 @@ describe('class Attributes', () => {
       expect(attrs.toDot()).toMatchSnapshot();
     });
 
-    test('set/get attribute', () => {
-      const id = new ID('test');
+    test('apply/clear attribute', () => {
+      attrs.apply({
+        label: 'this is test',
+        color: 'red',
+        fontsize: 16,
+      });
+      expect(attrs.size).toBe(3);
+      attrs.clear();
+      expect(attrs.size).toBe(0);
+    });
+
+    test('set/get/delete attribute', () => {
+      const id = 'test';
       attrs.set('label', id);
-      expect(attrs.get('label')).toBe(id);
+      expect(attrs.get('label')?.value).toBe(id);
+      attrs.delete('label');
+      expect(attrs.get('label')).toBeUndefined();
     });
 
     describe('edge with comment', () => {

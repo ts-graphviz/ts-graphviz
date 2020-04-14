@@ -1,5 +1,5 @@
 import { DotBase } from '../abstract';
-import { IAttributesBase } from '../types';
+import { AttributesObject, AttributesValue, IAttributesBase } from '../types';
 import { ID } from './ID';
 /**
  * @hidden
@@ -16,17 +16,21 @@ export abstract class AttributesBase<T extends string> extends DotBase implement
     return this.attrs.get(key);
   }
   /** Set a value to the attribute. */
-  public set(key: T, value: string | boolean | number | ID): void {
-    if (value instanceof ID) {
-      this.attrs.set(key, value);
-    } else {
-      this.attrs.set(key, new ID(value));
+  public set(key: T, value: AttributesValue): void {
+    this.attrs.set(key, new ID(value));
+  }
+
+  public delete(key: T): void {
+    this.attrs.delete(key);
+  }
+
+  public apply(attributes: AttributesObject<T>) {
+    for (const [key, value] of Object.entries(attributes)) {
+      this.set(key as T, value as string | boolean | number);
     }
   }
 
-  public apply(attributes: { [key in T]?: string | boolean | number | ID }) {
-    for (const [key, value] of Object.entries(attributes)) {
-      this.set(key as T, value as string | boolean | number | ID);
-    }
+  public clear() {
+    this.attrs.clear();
   }
 }
