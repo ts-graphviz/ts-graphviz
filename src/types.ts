@@ -130,11 +130,24 @@ export interface IID extends IDot {
   readonly value: string;
 }
 
+export type AttributesValue = string | number | boolean;
+
+export type AttributesObject<T extends string> = {
+  [key in T]?: AttributesValue;
+};
+
+export type EdgeAttributes = AttributesObject<attribute.Edge>;
+export type NodeAttributes = AttributesObject<attribute.Node>;
+export type RootClusterAttributes = AttributesObject<attribute.RootCluster>;
+export type ClusterSubgraphAttributes = AttributesObject<attribute.ClusterSubgraph>;
+
 export interface IAttributesBase<T extends string> {
   readonly size: number;
   get(key: T): IID | undefined;
-  set(key: T, value: string | boolean | number | IID): void;
-  apply(attributes: { [key in T]?: string | boolean | number | IID }): void;
+  set(key: T, value: AttributesValue): void;
+  apply(attributes: AttributesObject<T>): void;
+  delete(key: T): void;
+  clear(): void;
 }
 
 export interface IAttributes<T extends string> extends IAttributesBase<T>, IHasComment, IDot {}
