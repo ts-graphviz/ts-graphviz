@@ -4445,9 +4445,9 @@ tslint-config-prettier@^1.18.0:
   integrity sha512-xPw9PgNPLG3iKRxmK7DWr+Ea/SzrvfHtjFt5LBl61gk2UBG/DB9kCXRjv+xyIU1rUtnayLeMUVJBcMX8Z17nDg==
 
 tslint-plugin-prettier@^2.0.1:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/tslint-plugin-prettier/-/tslint-plugin-prettier-2.1.0.tgz#e2522d273cb9672d93d0e68f2514fe3c19698c3a"
-  integrity sha512-nMCpU+QSpXtydcWXeZF+3ljIbG/K8SHVZwB7K/MtuoQQFXxXN6watqTSBpVXCInuPFvmjiWkhxeMoUW4N0zgSg==
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/tslint-plugin-prettier/-/tslint-plugin-prettier-2.3.0.tgz#73fe71bf9f03842ac48c104122ca9b1de012ecf4"
+  integrity sha512-F9e4K03yc9xuvv+A0v1EmjcnDwpz8SpCD8HzqSDe0eyg34cBinwn9JjmnnRrNAs4HdleRQj7qijp+P/JTxt4vA==
   dependencies:
     eslint-plugin-prettier "^2.2.0"
     lines-and-columns "^1.1.6"
