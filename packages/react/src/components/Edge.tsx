@@ -1,10 +1,26 @@
 import React, { FC, useEffect, useMemo } from 'react';
-import { EdgeTargetLike } from 'ts-graphviz';
+import { attribute, EdgeTargetLike, IID } from 'ts-graphviz';
 import { useCluster } from '../hooks/useCluster';
 
-export const Edge: FC<{ targets: EdgeTargetLike[] }> = ({ children, targets }) => {
+interface Props {
+  targets: EdgeTargetLike[];
+  attributes: {
+    [key in Exclude<attribute.Edge, typeof attribute.label>]?: string | boolean | number | IID;
+  };
+  comment?: string;
+}
+
+export const Edge: FC<Props> = ({ children, targets, attributes, comment }) => {
   const cluster = useCluster();
   const edge = useMemo(() => cluster.createEdge(...targets), [cluster, targets]);
+  useEffect(() => {
+    edge.attributes.apply(attributes);
+  }, [edge, attributes]);
+
+  useEffect(() => {
+    edge.comment = comment;
+  }, [edge, comment]);
+
   useEffect(() => {
     return () => {
       cluster.removeEdge(edge);
