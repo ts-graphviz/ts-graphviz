@@ -1,10 +1,13 @@
-import React, { FC, useMemo } from 'react';
+import React, { forwardRef, useImperativeHandle, useMemo } from 'react';
+import { INode } from 'ts-graphviz';
 import { NodeContext } from '../contexts/NodeContext';
 import { useCluster } from '../hooks/useCluster';
-export const Node: FC<{ id: string }> = ({ children, id }) => {
+
+export const Node = forwardRef<INode, { id: string }>(({ children, id }, ref) => {
   const cluster = useCluster();
-  const node = useMemo(() => cluster?.createNode(id), [cluster, id]);
+  const node = useMemo(() => cluster.createNode(id), [cluster, id]);
+  useImperativeHandle(ref, () => node, [node]);
   return <NodeContext.Provider value={node}>{children}</NodeContext.Provider>;
-};
+});
 
 Node.displayName = 'Node';
