@@ -1,19 +1,17 @@
 import React, { FC, useEffect, useMemo } from 'react';
-import { attribute, EdgeTargetLike, IID } from 'ts-graphviz';
+import { EdgeAttributes, EdgeTargetLike } from 'ts-graphviz';
 import { useCluster } from '../hooks/useCluster';
 
-interface Props {
+type Props = {
   targets: EdgeTargetLike[];
-  attributes: {
-    [key in Exclude<attribute.Edge, typeof attribute.label>]?: string | boolean | number | IID;
-  };
   comment?: string;
-}
+} & EdgeAttributes;
 
-export const Edge: FC<Props> = ({ children, targets, attributes, comment }) => {
+export const Edge: FC<Props> = ({ children, targets, comment, ...attributes }) => {
   const cluster = useCluster();
   const edge = useMemo(() => cluster.createEdge(...targets), [cluster, targets]);
   useEffect(() => {
+    edge.attributes.clear();
     edge.attributes.apply(attributes);
   }, [edge, attributes]);
 
