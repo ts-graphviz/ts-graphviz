@@ -1,5 +1,8 @@
 import React from 'react';
+import { Context } from 'ts-graphviz';
 import { Digraph, Node, Subgraph, toDot } from '../src';
+
+const context = new Context();
 
 const result = toDot(
   <Digraph>
@@ -9,6 +12,7 @@ const result = toDot(
       <Node id={'bbb'} />
     </Subgraph>
   </Digraph>,
+  context,
 );
 
-console.log({ result });
+console.log(result);
