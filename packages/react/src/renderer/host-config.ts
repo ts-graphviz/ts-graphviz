@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import ReactReconciler from 'react-reconciler';
 import { Debug } from './debug';
+
 type Type = FC; // 'Digraph' | 'Graph' | 'Node' | 'Edge' | 'Subgraph';
 type Props = any;
 type Container = any;
@@ -37,11 +38,13 @@ export class HostConfig {
   // Temporary workaround for scenario where multiple renderers concurrently
   // render using the same context objects. E.g. React DOM and React ART on the
   // same page. DOM is the primary renderer; ART is the secondary renderer.
-  public isPrimaryRenderer: boolean = false;
+  public isPrimaryRenderer = false;
 
-  public supportsMutation: boolean = false;
-  public supportsPersistence: boolean = false;
-  public supportsHydration: boolean = false;
+  public supportsMutation = false;
+
+  public supportsPersistence = false;
+
+  public supportsHydration = false;
 
   @Debug
   public getPublicInstance(instance: Instance | TextInstance): PublicInstance {
@@ -52,6 +55,7 @@ export class HostConfig {
   public getRootHostContext(rootContainerInstance: Container): HostContext {
     return rootContainerInstance;
   }
+
   @Debug
   public getChildHostContext(
     parentHostContext: HostContext,
@@ -65,6 +69,7 @@ export class HostConfig {
   public prepareForCommit(containerInfo: Container): void {
     // NoOp
   }
+
   @Debug
   public resetAfterCommit(containerInfo: Container): void {
     // containerInfo.setRoot
@@ -84,10 +89,12 @@ export class HostConfig {
     // NoOp
     return type(props);
   }
+
   @Debug
   public appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
     parentInstance.appendChild(child);
   }
+
   @Debug
   public finalizeInitialChildren(
     parentInstance: Instance,
@@ -130,6 +137,7 @@ export class HostConfig {
   public shouldSetTextContent(type: Type, props: Props): boolean {
     return false;
   }
+
   @Debug
   public shouldDeprioritizeSubtree(type: Type, props: Props): boolean {
     return false;
@@ -149,6 +157,7 @@ export class HostConfig {
   public scheduleDeferredCallback(callback: () => any, options?: { timeout: number }): any {
     // NoOp
   }
+
   @Debug
   public cancelDeferredCallback(callbackID: any): void {
     // NoOp
@@ -165,6 +174,7 @@ export class HostConfig {
       parentInstance.appendChild(child);
     }
   }
+
   @Debug
   public appendChildToContainer(container: Container, child: Instance | TextInstance): void {
     console.log('A', child);
@@ -172,14 +182,17 @@ export class HostConfig {
     //   container.appendChild(child);
     // }
   }
+
   @Debug
   public commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
     // NoOp
   }
+
   @Debug
   public commitMount(instance: Instance, type: Type, newProps: Props, internalInstanceHandle: OpaqueHandle): void {
     // NoOp
   }
+
   @Debug
   public commitUpdate(
     instance: Instance,
@@ -191,6 +204,7 @@ export class HostConfig {
   ): void {
     // NoOp
   }
+
   @Debug
   public insertBefore(
     parentInstance: Instance,
@@ -199,6 +213,7 @@ export class HostConfig {
   ): void {
     // NoOp
   }
+
   @Debug
   public insertInContainerBefore(
     container: Container,
@@ -207,14 +222,17 @@ export class HostConfig {
   ): void {
     // NoOp
   }
+
   @Debug
   public removeChild(parentInstance: Instance, child: Instance | TextInstance): void {
     // NoOp
   }
+
   @Debug
   public removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
     // NoOp
   }
+
   @Debug
   public resetTextContent(instance: Instance): void {
     // NoOp

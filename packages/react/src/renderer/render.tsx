@@ -8,13 +8,13 @@ import { HostConfig } from './host-config';
 const hostConfig = new HostConfig();
 const reconciler = createReactReconciler(hostConfig);
 
-export function toDot(element: ReactNode, context: Context) {
+export function toDot(element: ReactNode, context: Context): string | undefined {
   const container = reconciler.createContainer({}, false, false);
   reconciler.updateContainer(
     <GraphvizContext.Provider value={context}>{element}</GraphvizContext.Provider>,
     container,
     null,
-    () => console.log('callback'),
+    () => undefined,
   );
   reconciler.getPublicRootInstance(container);
   return context.root?.toDot();

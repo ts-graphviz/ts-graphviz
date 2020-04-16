@@ -1,5 +1,6 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react';
-import { INode, NodeAttributes } from 'ts-graphviz';
+import React, { FC, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
+import { NodeAttributes } from 'ts-graphviz';
 import { NodeContext } from '../contexts/NodeContext';
 import { useCluster } from '../hooks/useCluster';
 
@@ -8,10 +9,9 @@ type Props = {
   comment?: string;
 } & NodeAttributes;
 
-export const Node = forwardRef<INode, Props>(({ children, id, comment, ...attributes }, ref) => {
+export const Node: FC<Props> = ({ children, id, comment, ...attributes }) => {
   const cluster = useCluster();
   const node = useMemo(() => cluster.createNode(id), [cluster, id]);
-  useImperativeHandle(ref, () => node, [node]);
   useEffect(() => {
     node.attributes.clear();
     node.attributes.apply(attributes);
@@ -21,11 +21,20 @@ export const Node = forwardRef<INode, Props>(({ children, id, comment, ...attrib
     node.comment = comment;
   }, [node, comment]);
   useEffect(() => {
-    return () => {
+    return (): void => {
       cluster.removeNode(node);
     };
   }, [cluster, node]);
   return <NodeContext.Provider value={node}>{children}</NodeContext.Provider>;
-});
+};
 
 Node.displayName = 'Node';
+
+Node.propTypes = {
+  id: PropTypes.string.isRequired,
+  comment: PropTypes.string,
+};
+
+Node.defaultProps = {
+  comment: undefined,
+};

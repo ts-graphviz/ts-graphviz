@@ -1,5 +1,7 @@
 import { useContext } from 'react';
-import { GraphvizContext } from '../contexts/GraphvizContext';
-export function useGraphviz() {
-  return useContext(GraphvizContext);
+import { IRootCluster } from 'ts-graphviz';
+import { RootClusterContext } from '../contexts/RootClusterContext';
+
+export function useRootCluster(): IRootCluster {
+  return useContext(RootClusterContext);
 }

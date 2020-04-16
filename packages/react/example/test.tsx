@@ -6,10 +6,10 @@ const context = new Context();
 
 const result = toDot(
   <Digraph>
-    <Node id={'aa'} />
+    <Node id="aa" />
 
-    <Subgraph id={'hoge'}>
-      <Node id={'bbb'} />
+    <Subgraph id="hoge">
+      <Node id="bbb" />
     </Subgraph>
   </Digraph>,
   context,

@@ -14,8 +14,8 @@ describe('toDot', () => {
   it('render works', () => {
     const dot = toDot(
       <Digraph>
-        <Node id={'a'} />
-        <Node id={'b'} />
+        <Node id="a" />
+        <Node id="b" />
       </Digraph>,
       context,
     );

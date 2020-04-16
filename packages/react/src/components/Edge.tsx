@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { EdgeAttributes, EdgeTargetLike } from 'ts-graphviz';
 import { useCluster } from '../hooks/useCluster';
 
@@ -20,7 +21,7 @@ export const Edge: FC<Props> = ({ children, targets, comment, ...attributes }) =
   }, [edge, comment]);
 
   useEffect(() => {
-    return () => {
+    return (): void => {
       cluster.removeEdge(edge);
     };
   }, [cluster, edge]);
@@ -28,3 +29,12 @@ export const Edge: FC<Props> = ({ children, targets, comment, ...attributes }) =
 };
 
 Edge.displayName = 'Edge';
+
+Edge.propTypes = {
+  targets: PropTypes.array.isRequired,
+  comment: PropTypes.string,
+};
+
+Edge.defaultProps = {
+  comment: undefined,
+};
