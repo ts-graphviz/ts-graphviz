@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { ClusterContext } from '../contexts/ClusterContext';
 import { useCluster } from '../hooks/useCluster';
 
@@ -11,7 +12,7 @@ export const Subgraph: FC<Props> = ({ children, id, comment }) => {
   const cluster = useCluster();
   const subgraph = useMemo(() => cluster.createSubgraph(id), [cluster, id]);
   useEffect(() => {
-    return () => {
+    return (): void => {
       cluster.removeSubgraph(subgraph);
     };
   }, [cluster, subgraph]);
@@ -23,3 +24,13 @@ export const Subgraph: FC<Props> = ({ children, id, comment }) => {
 };
 
 Subgraph.displayName = 'Subgraph';
+
+Subgraph.propTypes = {
+  id: PropTypes.string,
+  comment: PropTypes.string,
+};
+
+Subgraph.defaultProps = {
+  id: undefined,
+  comment: undefined,
+};
