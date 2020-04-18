@@ -4,7 +4,7 @@ import { Context } from 'ts-graphviz';
 import { Edge, Subgraph } from '../components';
 import { Digraph } from '../components/Digraph';
 import { Node } from '../components/Node';
-import { toDot } from '../renderer/render';
+import { renderToDot } from '../renderer/render';
 
 describe('toDot', () => {
   let context: Context;
@@ -12,7 +12,7 @@ describe('toDot', () => {
     context = new Context();
   });
   it('render works', () => {
-    const dot = toDot(
+    const dot = renderToDot(
       <Digraph>
         <Node id="a" />
         <Node id="b" />
@@ -24,7 +24,7 @@ describe('toDot', () => {
 
   it('render edge', () => {
     const nodes = ['a', 'b'];
-    const dot = toDot(
+    const dot = renderToDot(
       <Digraph>
         {nodes.map(id => (
           <Node id={id} key={id} />
@@ -38,7 +38,7 @@ describe('toDot', () => {
 
   it('render subgraph', () => {
     const nodes = ['a', 'b'];
-    const dot = toDot(
+    const dot = renderToDot(
       <Digraph>
         <Subgraph>
           {nodes.map(id => (
