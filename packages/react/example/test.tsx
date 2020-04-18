@@ -9,9 +9,9 @@ const result = renderToDot(
     <Node id="aa" />
 
     <Subgraph id="hoge">
-      <Node id="bbb" />
+      <Node id="bbb" label="aaa" />
     </Subgraph>
-    <Edge targets={['aa', 'bbb']} comment="aaaaa" label="aaa" />
+    <Edge targets={['aa', 'bbb']} comment="aaaaa" label={<b>aaa</b>} />
   </Digraph>,
   context,
 );
