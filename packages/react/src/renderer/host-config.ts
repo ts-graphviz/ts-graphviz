@@ -21,7 +21,22 @@ type NoTimeout = any;
 
 type OpaqueHandle = ReactReconciler.Fiber;
 
-export class HostConfig {
+export class HostConfig
+  implements
+    ReactReconciler.HostConfig<
+      Type,
+      Props,
+      Container,
+      Instance,
+      TextInstance,
+      HydratableInstance,
+      PublicInstance,
+      HostContext,
+      UpdatePayload,
+      ChildSet,
+      TimeoutHandle,
+      NoTimeout
+    > {
   public now = Date.now;
 
   public setTimeout = setTimeout;
