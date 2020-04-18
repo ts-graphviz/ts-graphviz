@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable no-console */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
+/* eslint-disable prefer-rest-params */
+
 export const Debug = (target: any, name: string, descriptor: PropertyDescriptor) => {
   const delegate = descriptor.value;
-  descriptor.value = function() {
+  descriptor.value = function debug() {
     const args: string[] = [];
-    // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < arguments.length; i++) {
       args.push(arguments[i]);
     }
