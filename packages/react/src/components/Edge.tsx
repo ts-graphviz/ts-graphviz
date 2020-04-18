@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, ReactElement } from 'react';
+import React, { FC, useEffect, useMemo, useCallback, ReactElement } from 'react';
 import PropTypes from 'prop-types';
 import gv from 'ts-graphviz';
 import { useCluster } from '../hooks/useCluster';
@@ -13,27 +13,26 @@ type Props = {
   comment?: string;
 } & ReactEdgeAttributes;
 
-function applyAttributes(edge: gv.IEdge, attributes: ReactEdgeAttributes, clear = false): void {
-  if (clear) {
-    edge.attributes.clear();
-  }
-  const { label, ...attrs } = attributes;
-  if (label) {
-    Object.assign(attrs, { label: renderId(label) });
-  }
-  edge.attributes.apply(attrs);
-}
-
-export const Edge: FC<Props> = ({ children, targets, comment, ...attributes }) => {
+const createEdge = ({ targets, comment, ...attributes }: Props): { edge: gv.IEdge } => {
   const cluster = useCluster();
+  const apply = useCallback((e: gv.IEdge, a: ReactEdgeAttributes, clear = false) => {
+    if (clear) {
+      e.attributes.clear();
+    }
+    const { label, ...attrs } = a;
+    if (label) {
+      Object.assign(attrs, { label: renderId(label) });
+    }
+    e.attributes.apply(attrs);
+  }, []);
   const edge = useMemo(() => {
     const e = cluster.createEdge(...targets);
     e.comment = comment;
-    applyAttributes(e, attributes);
+    apply(e, attributes);
     return e;
   }, [cluster, targets, comment, attributes]);
   useEffect(() => {
-    applyAttributes(edge, attributes, true);
+    apply(edge, attributes, true);
   }, [edge, attributes]);
 
   useEffect(() => {
@@ -45,6 +44,12 @@ export const Edge: FC<Props> = ({ children, targets, comment, ...attributes }) =
       cluster.removeEdge(edge);
     };
   }, [cluster, edge]);
+  return {
+    edge,
+  };
+};
+export const Edge: FC<Props> = ({ children, ...props }) => {
+  createEdge(props);
   return <>{children}</>;
 };
 

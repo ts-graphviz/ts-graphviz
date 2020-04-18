@@ -5,9 +5,13 @@ import { RootClusterContext } from '../contexts/RootClusterContext';
 import { ClusterContext } from '../contexts/ClusterContext';
 import { useGraphvizContext } from '../hooks/useContext';
 
-export const Digraph: FC = ({ children }) => {
+type Props = {
+  id?: string;
+};
+
+export const Digraph: FC<Props> = ({ children, id }) => {
   const context = useGraphvizContext();
-  const g = useMemo(() => new gv.Digraph(context), [context]);
+  const g = useMemo(() => new gv.Digraph(context, id), [context, id]);
   return (
     <RootClusterContext.Provider value={g}>
       <ClusterContext.Provider value={g}>{children}</ClusterContext.Provider>
@@ -18,9 +22,9 @@ export const Digraph: FC = ({ children }) => {
 Digraph.displayName = 'Digraph';
 
 Digraph.defaultProps = {
-  children: null,
+  id: undefined,
 };
 
 Digraph.propTypes = {
-  children: PropTypes.any,
+  id: PropTypes.string,
 };
