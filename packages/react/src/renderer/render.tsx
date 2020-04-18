@@ -15,6 +15,10 @@ export function renderToDot(element: ReactNode, context: Context): string | unde
     null,
     () => undefined,
   );
+  let dot: string | undefined;
   reconciler.getPublicRootInstance(container);
-  return context.root?.toDot();
+  reconciler.deferredUpdates(() => {
+    dot = context.root?.toDot();
+  });
+  return dot;
 }

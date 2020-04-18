@@ -1,35 +1,39 @@
-import React, { FC, useEffect, useMemo, ReactElement, isValidElement } from 'react';
+import React, { FC, useEffect, useMemo, ReactElement } from 'react';
 import PropTypes from 'prop-types';
-import { EdgeAttributes, EdgeTargetLike } from 'ts-graphviz';
-import { renderToStaticMarkup } from 'react-dom/server';
+import gv from 'ts-graphviz';
 import { useCluster } from '../hooks/useCluster';
+import { renderId } from '../utils/renderId';
 
-type ReactEdgeAttributes = Omit<EdgeAttributes, 'label'> & {
+type ReactEdgeAttributes = Omit<gv.EdgeAttributes, 'label'> & {
   label?: ReactElement | string;
 };
 
-function renderId(id?: ReactElement | string): string | undefined {
-  if (typeof id === 'string') {
-    return id;
-  }
-  if (isValidElement(id)) {
-    return renderToStaticMarkup(id);
-  }
-  return undefined;
-}
-
 type Props = {
-  targets: EdgeTargetLike[];
+  targets: gv.EdgeTargetLike[];
   comment?: string;
 } & ReactEdgeAttributes;
 
+function applyAttributes(edge: gv.IEdge, attributes: ReactEdgeAttributes, clear = false): void {
+  if (clear) {
+    edge.attributes.clear();
+  }
+  const { label, ...attrs } = attributes;
+  if (label) {
+    Object.assign(attrs, { label: renderId(label) });
+  }
+  edge.attributes.apply(attrs);
+}
+
 export const Edge: FC<Props> = ({ children, targets, comment, ...attributes }) => {
   const cluster = useCluster();
-  const edge = useMemo(() => cluster.createEdge(...targets), [cluster, targets]);
+  const edge = useMemo(() => {
+    const e = cluster.createEdge(...targets);
+    e.comment = comment;
+    applyAttributes(e, attributes);
+    return e;
+  }, [cluster, targets, comment, attributes]);
   useEffect(() => {
-    const { label, ...rest } = attributes;
-    edge.attributes.clear();
-    edge.attributes.apply({ label: renderId(label), ...rest });
+    applyAttributes(edge, attributes, true);
   }, [edge, attributes]);
 
   useEffect(() => {

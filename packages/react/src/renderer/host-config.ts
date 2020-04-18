@@ -3,7 +3,7 @@
 /* eslint-disable class-methods-use-this */
 import { FC } from 'react';
 import ReactReconciler from 'react-reconciler';
-import { Debug } from './debug';
+// import { Debug } from './debug';
 
 type Type = FC; // 'Digraph' | 'Graph' | 'Node' | 'Edge' | 'Subgraph';
 type Props = any;
@@ -56,17 +56,17 @@ export class HostConfig
 
   public supportsHydration = false;
 
-  @Debug
+  // @Debug
   public getPublicInstance(instance: Instance | TextInstance): PublicInstance {
     return instance;
   }
 
-  @Debug
+  // @Debug
   public getRootHostContext(rootContainerInstance: Container): HostContext {
     return {};
   }
 
-  @Debug
+  // @Debug
   public getChildHostContext(
     parentHostContext: HostContext,
     type: Type,
@@ -75,12 +75,12 @@ export class HostConfig
     return parentHostContext;
   }
 
-  @Debug
+  // @Debug
   public prepareForCommit(containerInfo: Container): void {
     // NoOp
   }
 
-  @Debug
+  // @Debug
   public resetAfterCommit(containerInfo: Container): void {
     // containerInfo.setRoot
   }
@@ -88,7 +88,7 @@ export class HostConfig
   /**
    * Create component instance
    */
-  @Debug
+  // @Debug
   public createInstance(
     type: Type,
     props: Props,
@@ -100,12 +100,12 @@ export class HostConfig
     return type(props);
   }
 
-  @Debug
+  // @Debug
   public appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
     parentInstance.appendChild(child);
   }
 
-  @Debug
+  // @Debug
   public finalizeInitialChildren(
     parentInstance: Instance,
     type: Type,
@@ -116,7 +116,7 @@ export class HostConfig
     return false;
   }
 
-  @Debug
+  // @Debug
   public prepareUpdate(
     instance: Instance,
     type: Type,
@@ -128,17 +128,17 @@ export class HostConfig
     return {};
   }
 
-  @Debug
+  // @Debug
   public shouldSetTextContent(type: Type, props: Props): boolean {
     return false;
   }
 
-  @Debug
+  // @Debug
   public shouldDeprioritizeSubtree(type: Type, props: Props): boolean {
     return false;
   }
 
-  @Debug
+  // @Debug
   public createTextInstance(
     text: string,
     rootContainerInstance: Container,
@@ -148,12 +148,12 @@ export class HostConfig
     return text;
   }
 
-  @Debug
+  // @Debug
   public scheduleDeferredCallback(callback: () => any, options?: { timeout: number }): any {
     // NoOp
   }
 
-  @Debug
+  // @Debug
   public cancelDeferredCallback(callbackID: any): void {
     // NoOp
   }
@@ -162,7 +162,7 @@ export class HostConfig
   //      Mutation
   //     (optional)
   // -------------------
-  @Debug
+  // @Debug
   public appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
     // NoOp
     if (parentInstance.appendChild) {
@@ -170,24 +170,24 @@ export class HostConfig
     }
   }
 
-  @Debug
+  // @Debug
   public appendChildToContainer(container: Container, child: Instance | TextInstance): void {
     // if (container.appendChild) {
     //   container.appendChild(child);
     // }
   }
 
-  @Debug
+  // @Debug
   public commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
     // NoOp
   }
 
-  @Debug
+  // @Debug
   public commitMount(instance: Instance, type: Type, newProps: Props, internalInstanceHandle: OpaqueHandle): void {
     // NoOp
   }
 
-  @Debug
+  // @Debug
   public commitUpdate(
     instance: Instance,
     updatePayload: UpdatePayload,
@@ -199,7 +199,7 @@ export class HostConfig
     // NoOp
   }
 
-  @Debug
+  // @Debug
   public insertBefore(
     parentInstance: Instance,
     child: Instance | TextInstance,
@@ -208,7 +208,7 @@ export class HostConfig
     // NoOp
   }
 
-  @Debug
+  // @Debug
   public insertInContainerBefore(
     container: Container,
     child: Instance | TextInstance,
@@ -217,17 +217,17 @@ export class HostConfig
     // NoOp
   }
 
-  @Debug
+  // @Debug
   public removeChild(parentInstance: Instance, child: Instance | TextInstance): void {
     // NoOp
   }
 
-  @Debug
+  // @Debug
   public removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
     // NoOp
   }
 
-  @Debug
+  // @Debug
   public resetTextContent(instance: Instance): void {
     // NoOp
   }
