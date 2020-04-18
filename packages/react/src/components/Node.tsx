@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, ReactElement } from 'react';
+import React, { FC, useEffect, useMemo, ReactElement, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import gv from 'ts-graphviz';
 import { NodeContext } from '../contexts/NodeContext';
@@ -14,27 +14,26 @@ type Props = {
   comment?: string;
 } & ReactNodeAttributes;
 
-function applyAttributes(node: gv.INode, attributes: ReactNodeAttributes, clear = false): void {
-  if (clear) {
-    node.attributes.clear();
-  }
-  const { label, ...attrs } = attributes;
-  if (label) {
-    Object.assign(attrs, { label: renderId(label) });
-  }
-  node.attributes.apply(attrs);
-}
-
-export const Node: FC<Props> = ({ children, id, comment, ...attributes }) => {
+const createNode = ({ id, comment, ...attributes }: Props): { node: gv.INode } => {
   const cluster = useCluster();
+  const apply = useCallback((n: gv.INode, a: ReactNodeAttributes, clear = false) => {
+    if (clear) {
+      n.attributes.clear();
+    }
+    const { label, ...attrs } = a;
+    if (label) {
+      Object.assign(attrs, { label: renderId(label) });
+    }
+    n.attributes.apply(attrs);
+  }, []);
   const node = useMemo(() => {
     const n = cluster.createNode(id);
-    applyAttributes(n, attributes);
+    apply(n, attributes);
     n.comment = comment;
     return n;
   }, [cluster, id, comment, attributes]);
   useEffect(() => {
-    applyAttributes(node, attributes, true);
+    apply(node, attributes, true);
   }, [node, attributes]);
 
   useEffect(() => {
@@ -45,6 +44,12 @@ export const Node: FC<Props> = ({ children, id, comment, ...attributes }) => {
       cluster.removeNode(node);
     };
   }, [cluster, node]);
+  return {
+    node,
+  };
+};
+export const Node: FC<Props> = ({ children, ...props }) => {
+  const { node } = createNode(props);
   return <NodeContext.Provider value={node}>{children}</NodeContext.Provider>;
 };
 
