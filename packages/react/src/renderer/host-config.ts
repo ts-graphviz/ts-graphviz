@@ -1,13 +1,14 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable class-methods-use-this */
 import { FC } from 'react';
 import ReactReconciler from 'react-reconciler';
 import { Debug } from './debug';
 
 type Type = FC; // 'Digraph' | 'Graph' | 'Node' | 'Edge' | 'Subgraph';
 type Props = any;
-type Container = any;
-// {
-//   g?: gv.Graph | gv.Digraph;
-// }
+type Container = {};
+
 type Instance = any; // gv.Digraph | gv.Graph | gv.Node | gv.Edge | gv.Subgraph;
 type TextInstance = any; // gv.LblStringValue;
 type HydratableInstance = any;
@@ -25,14 +26,8 @@ export class HostConfig {
 
   public setTimeout = setTimeout;
 
-  // public setTimeout(handler: (...args: any[]) => void, timeout: number): TimeoutHandle | NoTimeout {
-  //   console.log('setTimeout', { handler, timeout });
-  // }
   public clearTimeout = clearTimeout;
 
-  // public clearTimeout(handle: TimeoutHandle | NoTimeout): void {
-  //   console.log('clearTimeout', { handle });
-  // }
   public noTimeout: NoTimeout = -1; // TODO
 
   // Temporary workaround for scenario where multiple renderers concurrently
@@ -53,7 +48,7 @@ export class HostConfig {
 
   @Debug
   public getRootHostContext(rootContainerInstance: Container): HostContext {
-    return rootContainerInstance;
+    return {};
   }
 
   @Debug
@@ -103,13 +98,6 @@ export class HostConfig {
     rootContainerInstance: Container,
     hostContext: HostContext,
   ): boolean {
-    console.log('finalizeInitialChildren', {
-      parentInstance,
-      type,
-      props,
-      rootContainerInstance,
-      hostContext,
-    });
     return false;
   }
 
@@ -122,14 +110,6 @@ export class HostConfig {
     rootContainerInstance: Container,
     hostContext: HostContext,
   ): null | UpdatePayload {
-    console.log('prepareUpdate', {
-      instance,
-      type,
-      oldProps,
-      newProps,
-      rootContainerInstance,
-      hostContext,
-    });
     return {};
   }
 
@@ -177,7 +157,6 @@ export class HostConfig {
 
   @Debug
   public appendChildToContainer(container: Container, child: Instance | TextInstance): void {
-    console.log('A', child);
     // if (container.appendChild) {
     //   container.appendChild(child);
     // }
