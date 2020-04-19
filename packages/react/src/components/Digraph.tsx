@@ -5,7 +5,7 @@ import { ClusterContext } from '../contexts/ClusterContext';
 import { useDigraph, DigraphProps } from '../hooks/use-digraph';
 
 export const Digraph: FC<DigraphProps> = ({ children, ...props }) => {
-  const { digraph } = useDigraph(props);
+  const digraph = useDigraph(props);
   return (
     <RootClusterContext.Provider value={digraph}>
       <ClusterContext.Provider value={digraph}>{children}</ClusterContext.Provider>

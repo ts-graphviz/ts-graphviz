@@ -9,7 +9,7 @@ export type NodeProps = {
   comment?: string;
 } & ReactNodeAttributes;
 
-export const useNode = ({ id, comment, ...attributes }: NodeProps): { node: INode } => {
+export const useNode = ({ id, comment, ...attributes }: NodeProps): INode => {
   const cluster = useCluster();
   const apply = useCallback((n: INode, a: ReactNodeAttributes, clear = false) => {
     if (clear) {
@@ -39,7 +39,5 @@ export const useNode = ({ id, comment, ...attributes }: NodeProps): { node: INod
       cluster.removeNode(node);
     };
   }, [cluster, node]);
-  return {
-    node,
-  };
+  return node;
 };

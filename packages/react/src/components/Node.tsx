@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
 import PropTypes from 'prop-types';
-import { NodeContext } from '../contexts/NodeContext';
 import { useNode, NodeProps } from '../hooks/use-node';
 
 export const Node: FC<NodeProps> = ({ children, ...props }) => {
-  const { node } = useNode(props);
-  return <NodeContext.Provider value={node}>{children}</NodeContext.Provider>;
+  useNode(props);
+  return <>{children}</>;
 };
 
 Node.displayName = 'Node';

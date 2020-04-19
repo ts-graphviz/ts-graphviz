@@ -9,7 +9,7 @@ export type DigraphProps = {
   comment?: string;
 } & ReactRootClusterAttributes;
 
-export const useDigraph = ({ id, comment, ...attributes }: DigraphProps): { digraph: Digraph } => {
+export const useDigraph = ({ id, comment, ...attributes }: DigraphProps): Digraph => {
   const context = useGraphvizContext();
   const apply = useCallback((g: IRootCluster, a: ReactRootClusterAttributes, clear = false) => {
     if (clear) {
@@ -41,5 +41,5 @@ export const useDigraph = ({ id, comment, ...attributes }: DigraphProps): { digr
   useEffect(() => {
     digraph.comment = comment;
   }, [digraph, comment]);
-  return { digraph };
+  return digraph;
 };
