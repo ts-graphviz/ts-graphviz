@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "CommonJS",
+    "target": "ES5",
+    "module": "ES2015",
     "jsx": "react",
     "strict": true,
+    "rootDir": "src",
     "moduleResolution": "node",
     "lib": [
       "dom",
@@ -16,5 +17,15 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "experimentalDecorators": true
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx"
+  ]
 }
