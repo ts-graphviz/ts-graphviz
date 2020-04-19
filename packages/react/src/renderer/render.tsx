@@ -1,13 +1,9 @@
 import React, { ReactNode } from 'react';
-import createReactReconciler from 'react-reconciler';
 import { Context } from 'ts-graphviz';
 import { GraphvizContext } from '../components/contexts/GraphvizContext';
-import { HostConfig } from './host-config';
+import { reconciler } from './reconciler';
 
-const hostConfig = new HostConfig();
-const reconciler = createReactReconciler(hostConfig);
-
-export function renderToDot(element: ReactNode, context: Context): string | undefined {
+export function renderToDot(element: ReactNode, context: Context): string {
   const container = reconciler.createContainer({}, false, false);
   reconciler.updateContainer(
     <GraphvizContext.Provider value={context}>{element}</GraphvizContext.Provider>,
@@ -15,10 +11,5 @@ export function renderToDot(element: ReactNode, context: Context): string | unde
     null,
     () => undefined,
   );
-  let dot: string | undefined;
-  reconciler.getPublicRootInstance(container);
-  reconciler.deferredUpdates(() => {
-    dot = context.root?.toDot();
-  });
-  return dot;
+  return reconciler.flushSync(() => context.root?.toDot() || '');
 }

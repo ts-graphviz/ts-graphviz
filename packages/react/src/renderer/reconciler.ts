@@ -3,7 +3,6 @@
 /* eslint-disable class-methods-use-this */
 import { FC } from 'react';
 import ReactReconciler from 'react-reconciler';
-// import { Debug } from './debug';
 
 type Type = FC; // 'Digraph' | 'Graph' | 'Node' | 'Edge' | 'Subgraph';
 type Props = any;
@@ -319,3 +318,5 @@ export class HostConfig
   //   text: string,
   // ): void;
 }
+
+export const reconciler = ReactReconciler(new HostConfig());
