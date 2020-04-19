@@ -1,0 +1,15 @@
+.editorconfig
+.eslintrc.json
+.github
+.gitignore
+.prettierignore
+.prettierrc.json
+.vscode
+config
+coverage
+example
+jest.config.js
+LICENSE
+rollup.config.js
+src
+tsconfig.json
