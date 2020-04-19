@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from 'react';
 import PropTypes from 'prop-types';
-import { RootClusterContext } from '../contexts/RootClusterContext';
-import { ClusterContext } from '../contexts/ClusterContext';
+import { RootClusterContext } from './contexts/RootClusterContext';
+import { ClusterContext } from './contexts/ClusterContext';
 import { GraphProps, useGraph } from '../hooks/use-graph';
 import { useRenderedID } from '../hooks/use-rendered-id';
 

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import createReactReconciler from 'react-reconciler';
 import { Context } from 'ts-graphviz';
-import { GraphvizContext } from '../contexts/GraphvizContext';
+import { GraphvizContext } from '../components/contexts/GraphvizContext';
 import { HostConfig } from './host-config';
 
 const hostConfig = new HostConfig();
