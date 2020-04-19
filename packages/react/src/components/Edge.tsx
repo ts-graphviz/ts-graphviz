@@ -1,8 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, ReactElement, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useEdge, EdgeProps } from '../hooks/use-edge';
+import { renderId } from '../utils/renderId';
 
-export const Edge: FC<EdgeProps> = ({ children, ...props }) => {
+type Props = Omit<EdgeProps, 'label'> & {
+  label?: ReactElement | string;
+};
+
+export const Edge: FC<Props> = ({ children, label, ...props }) => {
+  const renderedLabel = useMemo(() => renderId(label), [label]);
+  if (renderedLabel !== undefined) Object.assign(props, { label: renderedLabel });
   useEdge(props);
   return <>{children}</>;
 };

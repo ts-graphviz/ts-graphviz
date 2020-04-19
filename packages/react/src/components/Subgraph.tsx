@@ -1,25 +1,17 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, ReactElement, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { ClusterContext } from '../contexts/ClusterContext';
-import { useCluster } from '../hooks/use-cluster';
+import { useSubgraph, SubgraphProps } from '../hooks/use-subgraph';
+import { renderId } from '../utils/renderId';
 
-interface Props {
-  id?: string;
-  comment?: string;
-}
+type Props = Omit<SubgraphProps, 'label'> & {
+  label?: ReactElement | string;
+};
 
-export const Subgraph: FC<Props> = ({ children, id, comment }) => {
-  const cluster = useCluster();
-  const subgraph = useMemo(() => cluster.createSubgraph(id), [cluster, id]);
-  useEffect(() => {
-    return (): void => {
-      cluster.removeSubgraph(subgraph);
-    };
-  }, [cluster, subgraph]);
-
-  useEffect(() => {
-    cluster.comment = comment;
-  }, [cluster, comment]);
+export const Subgraph: FC<Props> = ({ children, label, ...props }) => {
+  const renderedLabel = useMemo(() => renderId(label), [label]);
+  if (renderedLabel !== undefined) Object.assign(props, { label: renderedLabel });
+  const subgraph = useSubgraph(props);
   return <ClusterContext.Provider value={subgraph}>{children}</ClusterContext.Provider>;
 };
 
@@ -28,9 +20,11 @@ Subgraph.displayName = 'Subgraph';
 Subgraph.propTypes = {
   id: PropTypes.string,
   comment: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
 };
 
 Subgraph.defaultProps = {
   id: undefined,
   comment: undefined,
+  label: undefined,
 };
