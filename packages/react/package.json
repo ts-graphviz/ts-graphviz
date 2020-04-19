@@ -2,6 +2,24 @@
   "name": "react-graphviz",
   "version": "0.0.0",
   "license": "MIT",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "description": "Graphviz-dot Renderer for React.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kamiazya/react-graphviz.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kamiazya/react-graphviz/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/kamiazya"
+  },
+  "keywords": [
+    "graphviz",
+    "dot",
+    "react"
+  ],
   "main": "lib/index.js",
   "module": "lib/index.mjs",
   "types": "lib/index.d.ts",
