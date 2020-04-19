@@ -9,7 +9,7 @@ export type GraphProps = {
   comment?: string;
 } & ReactRootClusterAttributes;
 
-export const useGraph = ({ id, comment, ...attributes }: GraphProps): { graph: Graph } => {
+export const useGraph = ({ id, comment, ...attributes }: GraphProps): Graph => {
   const context = useGraphvizContext();
   const apply = useCallback((g: IRootCluster, a: ReactRootClusterAttributes, clear = false) => {
     if (clear) {
@@ -41,5 +41,5 @@ export const useGraph = ({ id, comment, ...attributes }: GraphProps): { graph: G
   useEffect(() => {
     graph.comment = comment;
   }, [graph, comment]);
-  return { graph };
+  return graph;
 };

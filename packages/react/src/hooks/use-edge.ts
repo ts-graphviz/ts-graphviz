@@ -9,7 +9,7 @@ export type EdgeProps = {
   comment?: string;
 } & ReactEdgeAttributes;
 
-export const useEdge = ({ targets, comment, ...attributes }: EdgeProps): { edge: IEdge } => {
+export const useEdge = ({ targets, comment, ...attributes }: EdgeProps): IEdge => {
   const cluster = useCluster();
   const apply = useCallback((e: IEdge, a: ReactEdgeAttributes, clear = false) => {
     if (clear) {
@@ -40,7 +40,5 @@ export const useEdge = ({ targets, comment, ...attributes }: EdgeProps): { edge:
       cluster.removeEdge(edge);
     };
   }, [cluster, edge]);
-  return {
-    edge,
-  };
+  return edge;
 };

@@ -5,7 +5,7 @@ import { ClusterContext } from '../contexts/ClusterContext';
 import { GraphProps, useGraph } from '../hooks/use-graph';
 
 export const Graph: FC<GraphProps> = ({ children, ...props }) => {
-  const { graph } = useGraph(props);
+  const graph = useGraph(props);
   return (
     <RootClusterContext.Provider value={graph}>
       <ClusterContext.Provider value={graph}>{children}</ClusterContext.Provider>
