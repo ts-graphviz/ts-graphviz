@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { ClusterContext } from '../contexts/ClusterContext';
-import { useCluster } from '../hooks/useCluster';
+import { useCluster } from '../hooks/use-cluster';
 
 interface Props {
   id?: string;
