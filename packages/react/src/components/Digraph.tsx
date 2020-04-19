@@ -1,16 +1,16 @@
-import React, { FC, ReactElement, useMemo } from 'react';
+import React, { FC, ReactElement } from 'react';
 import PropTypes from 'prop-types';
 import { RootClusterContext } from '../contexts/RootClusterContext';
 import { ClusterContext } from '../contexts/ClusterContext';
 import { useDigraph, DigraphProps } from '../hooks/use-digraph';
-import { renderId } from '../utils/renderId';
+import { useRenderedID } from '../hooks/use-rendered-id';
 
 type Props = Omit<DigraphProps, 'label'> & {
   label?: ReactElement | string;
 };
 
 export const Digraph: FC<Props> = ({ children, label, ...props }) => {
-  const renderedLabel = useMemo(() => renderId(label), [label]);
+  const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined) Object.assign(props, { label: renderedLabel });
   const digraph = useDigraph(props);
   return (
