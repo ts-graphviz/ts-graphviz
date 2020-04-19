@@ -1,6 +1,6 @@
 import { useMemo, useCallback, useEffect } from 'react';
 import { IRootCluster, Graph } from 'ts-graphviz';
-import { useGraphvizContext } from './use-context';
+import { useGraphvizContext } from './use-graphviz-context';
 import { renderId } from '../utils/renderId';
 import { ReactRootClusterAttributes } from '../types/attributes';
 
