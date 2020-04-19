@@ -1,23 +1,18 @@
 // tslint:disable: jsx-no-multiline-js
 import React from 'react';
-import { Context } from 'ts-graphviz';
-import { Edge, Subgraph } from '../components';
-import { Digraph } from '../components/Digraph';
-import { Node } from '../components/Node';
-import { renderToDot } from '../renderer/render';
+import { Edge } from '../../components/Edge';
+import { Subgraph } from '../../components/Subgraph';
+import { Digraph } from '../../components/Digraph';
+import { Node } from '../../components/Node';
+import { renderToDot } from '../render';
 
 describe('toDot', () => {
-  let context: Context;
-  beforeEach(() => {
-    context = new Context();
-  });
   it('render works', () => {
     const dot = renderToDot(
       <Digraph>
         <Node id="a" />
         <Node id="b" />
       </Digraph>,
-      context,
     );
     expect(dot).toMatchSnapshot();
   });
@@ -31,7 +26,6 @@ describe('toDot', () => {
         ))}
         <Edge targets={nodes} />
       </Digraph>,
-      context,
     );
     expect(dot).toMatchSnapshot();
   });
@@ -47,7 +41,6 @@ describe('toDot', () => {
           <Edge targets={nodes} />
         </Subgraph>
       </Digraph>,
-      context,
     );
     expect(dot).toMatchSnapshot();
   });
