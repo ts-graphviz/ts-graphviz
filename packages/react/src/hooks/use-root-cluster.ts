@@ -1,5 +1,5 @@
 import { useContext } from 'react';
 import { IRootCluster } from 'ts-graphviz';
-import { RootClusterContext } from '../components/contexts/RootClusterContext';
+import { RootCluster } from '../components/contexts/RootCluster';
 
-export const useRootCluster = (): IRootCluster => useContext(RootClusterContext);
+export const useRootCluster = (): IRootCluster => useContext(RootCluster);

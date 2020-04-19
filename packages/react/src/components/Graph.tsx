@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from 'react';
 import PropTypes from 'prop-types';
-import { RootClusterContext } from './contexts/RootClusterContext';
-import { ClusterContext } from './contexts/ClusterContext';
+import { RootCluster } from './contexts/RootCluster';
+import { Cluster } from './contexts/Cluster';
 import { GraphProps, useGraph } from '../hooks/use-graph';
 import { useRenderedID } from '../hooks/use-rendered-id';
 
@@ -14,9 +14,9 @@ export const Graph: FC<Props> = ({ children, label, ...props }) => {
   if (renderedLabel !== undefined) Object.assign(props, { label: renderedLabel });
   const graph = useGraph(props);
   return (
-    <RootClusterContext.Provider value={graph}>
-      <ClusterContext.Provider value={graph}>{children}</ClusterContext.Provider>
-    </RootClusterContext.Provider>
+    <RootCluster.Provider value={graph}>
+      <Cluster.Provider value={graph}>{children}</Cluster.Provider>
+    </RootCluster.Provider>
   );
 };
 

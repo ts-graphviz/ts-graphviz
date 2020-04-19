@@ -1,5 +1,5 @@
 import { useContext } from 'react';
 import { ICluster } from 'ts-graphviz';
-import { ClusterContext } from '../components/contexts/ClusterContext';
+import { Cluster } from '../components/contexts/Cluster';
 
-export const useCluster = <T extends string>(): ICluster<T> => useContext(ClusterContext);
+export const useCluster = <T extends string>(): ICluster<T> => useContext(Cluster);
