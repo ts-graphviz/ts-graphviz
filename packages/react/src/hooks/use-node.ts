@@ -26,10 +26,10 @@ export const useNode = ({ id, comment, ...attributes }: NodeProps): { node: INod
     apply(n, attributes);
     n.comment = comment;
     return n;
-  }, [cluster, id, comment, attributes]);
+  }, [cluster, id, apply, attributes, comment]);
   useEffect(() => {
     apply(node, attributes, true);
-  }, [node, attributes]);
+  }, [node, attributes, apply]);
 
   useEffect(() => {
     node.comment = comment;
