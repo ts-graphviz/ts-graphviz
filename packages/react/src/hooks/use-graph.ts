@@ -1,33 +1,20 @@
-import { useMemo, useCallback, useEffect } from 'react';
-import { IRootCluster, Graph } from 'ts-graphviz';
+import { useMemo, useEffect } from 'react';
+import { Graph, RootClusterAttributes } from 'ts-graphviz';
 import { useGraphvizContext } from './use-graphviz-context';
-import { renderId } from '../utils/renderId';
-import { ReactRootClusterAttributes } from '../types/attributes';
 
 export type GraphProps = {
   id?: string;
   comment?: string;
-} & ReactRootClusterAttributes;
+} & RootClusterAttributes;
 
 export const useGraph = ({ id, comment, ...attributes }: GraphProps): Graph => {
   const context = useGraphvizContext();
-  const apply = useCallback((g: IRootCluster, a: ReactRootClusterAttributes, clear = false) => {
-    if (clear) {
-      g.clear();
-    }
-    const { label, ...attrs } = a;
-    if (label) {
-      Object.assign(attrs, { label: renderId(label) });
-    }
-    g.apply(attrs);
-  }, []);
-
   const graph = useMemo(() => {
     const g = new Graph(context, id);
     g.comment = comment;
-    apply(g, attributes);
+    g.apply(attributes);
     return g;
-  }, [context, id, comment, apply, attributes]);
+  }, [context, id, comment, attributes]);
   useEffect(() => {
     return (): void => {
       context.root = undefined;
@@ -35,8 +22,9 @@ export const useGraph = ({ id, comment, ...attributes }: GraphProps): Graph => {
   }, [context]);
 
   useEffect(() => {
-    apply(graph, attributes, true);
-  }, [graph, attributes, apply]);
+    graph.clear();
+    graph.apply(attributes);
+  }, [graph, attributes]);
 
   useEffect(() => {
     graph.comment = comment;
