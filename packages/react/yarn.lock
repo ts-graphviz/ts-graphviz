@@ -2389,10 +2389,10 @@ jest-get-type@^24.9.0:
   resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-24.9.0.tgz#1684a0c8a50f2e4901b6644ae861f579eed2ef0e"
   integrity sha512-lUseMzAley4LhIcpSP9Jf+fTrQ4a1yHQwLNeeVa2cEmbCGeoZAtYPOIv8JaxLD/sUpKxetKGP+gsHl8f8TSj8Q==
 
-jest-graphviz@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/jest-graphviz/-/jest-graphviz-0.1.1.tgz#501f1b66acdbb0c66102b018ac34deb777f4c5a9"
-  integrity sha512-aLtThKjl1KlDP6xbIPDFcZZAfJyNzqdCdaPxH5xZejgLxwFNnLQJSM3uQON8KXs0nfggx87wnj0Vf9AFY3Q4Dw==
+jest-graphviz@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/jest-graphviz/-/jest-graphviz-0.2.0.tgz#2f1aa0c2048374953ef926e7c88e5dbeaf4f317d"
+  integrity sha512-nwGOIgNBRYOwr8xcYT5Ls3cadUdVbQUF0TNM0bOxa34g27sIXtFZIAWNo5M7ST9+lsnplUgvMfUaERbYbsAD+w==
   dependencies:
     "@types/jest" "^24.0.22"
     jest "^24.9.0"
