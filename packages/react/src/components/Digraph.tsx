@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from 'react';
 import PropTypes from 'prop-types';
-import { RootClusterContext } from './contexts/RootClusterContext';
-import { ClusterContext } from './contexts/ClusterContext';
+import { RootCluster } from './contexts/RootCluster';
+import { Cluster } from './contexts/Cluster';
 import { useDigraph, DigraphProps } from '../hooks/use-digraph';
 import { useRenderedID } from '../hooks/use-rendered-id';
 
@@ -14,9 +14,9 @@ export const Digraph: FC<Props> = ({ children, label, ...props }) => {
   if (renderedLabel !== undefined) Object.assign(props, { label: renderedLabel });
   const digraph = useDigraph(props);
   return (
-    <RootClusterContext.Provider value={digraph}>
-      <ClusterContext.Provider value={digraph}>{children}</ClusterContext.Provider>
-    </RootClusterContext.Provider>
+    <RootCluster.Provider value={digraph}>
+      <Cluster.Provider value={digraph}>{children}</Cluster.Provider>
+    </RootCluster.Provider>
   );
 };
 

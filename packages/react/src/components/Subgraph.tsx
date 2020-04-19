@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import PropTypes from 'prop-types';
-import { ClusterContext } from './contexts/ClusterContext';
+import { Cluster } from './contexts/Cluster';
 import { useSubgraph, SubgraphProps } from '../hooks/use-subgraph';
 import { useRenderedID } from '../hooks/use-rendered-id';
 
@@ -12,7 +12,7 @@ export const Subgraph: FC<Props> = ({ children, label, ...props }) => {
   const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined) Object.assign(props, { label: renderedLabel });
   const subgraph = useSubgraph(props);
-  return <ClusterContext.Provider value={subgraph}>{children}</ClusterContext.Provider>;
+  return <Cluster.Provider value={subgraph}>{children}</Cluster.Provider>;
 };
 
 Subgraph.displayName = 'Subgraph';
