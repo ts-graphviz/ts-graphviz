@@ -27,7 +27,7 @@ export const useGraph = ({ id, comment, ...attributes }: GraphProps): { graph: G
     g.comment = comment;
     apply(g, attributes);
     return g;
-  }, [context, id, comment, attributes]);
+  }, [context, id, comment, apply, attributes]);
   useEffect(() => {
     return (): void => {
       context.root = undefined;
@@ -36,7 +36,7 @@ export const useGraph = ({ id, comment, ...attributes }: GraphProps): { graph: G
 
   useEffect(() => {
     apply(graph, attributes, true);
-  }, [graph, attributes]);
+  }, [graph, attributes, apply]);
 
   useEffect(() => {
     graph.comment = comment;

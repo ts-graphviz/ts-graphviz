@@ -27,7 +27,7 @@ export const useDigraph = ({ id, comment, ...attributes }: DigraphProps): { digr
     g.comment = comment;
     apply(g, attributes);
     return g;
-  }, [context, id, comment, attributes]);
+  }, [context, id, comment, apply, attributes]);
   useEffect(() => {
     return (): void => {
       context.root = undefined;
@@ -36,7 +36,7 @@ export const useDigraph = ({ id, comment, ...attributes }: DigraphProps): { digr
 
   useEffect(() => {
     apply(digraph, attributes, true);
-  }, [digraph, attributes]);
+  }, [digraph, attributes, apply]);
 
   useEffect(() => {
     digraph.comment = comment;

@@ -26,10 +26,10 @@ export const useEdge = ({ targets, comment, ...attributes }: EdgeProps): { edge:
     e.comment = comment;
     apply(e, attributes);
     return e;
-  }, [cluster, targets, comment, attributes]);
+  }, [cluster, targets, comment, apply, attributes]);
   useEffect(() => {
     apply(edge, attributes, true);
-  }, [edge, attributes]);
+  }, [edge, attributes, apply]);
 
   useEffect(() => {
     edge.comment = comment;
