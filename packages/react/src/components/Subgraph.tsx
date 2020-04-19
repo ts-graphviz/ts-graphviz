@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import PropTypes from 'prop-types';
-import { ClusterContext } from '../contexts/ClusterContext';
+import { ClusterContext } from './contexts/ClusterContext';
 import { useSubgraph, SubgraphProps } from '../hooks/use-subgraph';
 import { useRenderedID } from '../hooks/use-rendered-id';
 
