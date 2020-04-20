@@ -21,7 +21,7 @@ $ npm install @ts-graphviz/react
 
 #### Script
 
-```typescript-react
+```tsx
 import React, { FC } from 'react';
 import { Digraph, Node, Subgraph, renderToDot, Edge } from '../src';
 
@@ -43,7 +43,7 @@ console.log(dot);
 
 #### Output dot
 
-```graphviz
+```dot
 digraph {
   dpi = 150;
   "nodeA";
