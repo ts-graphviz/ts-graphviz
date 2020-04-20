@@ -23,7 +23,7 @@ $ npm install @ts-graphviz/react
 
 ```tsx
 import React, { FC } from 'react';
-import { Digraph, Node, Subgraph, renderToDot, Edge } from '../src';
+import { Digraph, Node, Subgraph, renderToDot, Edge } from '@ts-graphviz/react';
 
 const Example: FC = () => (
   <Digraph dpi={150}>
