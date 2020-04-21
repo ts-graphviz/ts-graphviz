@@ -106,7 +106,9 @@ digraph "G" {
 
 Graphviz-dot Test and Integration
 
-- [jest-graphviz](https://github.com/kamiazya/jest-graphviz)
+- [@ts-graphviz/react](https://github.com/ts-graphviz/react)
+  - Graphviz-dot Renderer for React.
+- [jest-graphviz](https://github.com/ts-graphviz/jest-graphviz)
   - Jest matchers that supports graphviz integration.
 - [setup-graphviz](https://github.com/kamiazya/setup-graphviz)
   - GitHub Action to set up Graphviz cross-platform(Linux, macOS, Windows).
@@ -138,4 +140,4 @@ For more info on how to contribute to ts-graphviz, see the [docs](./CONTRIBUTING
 
 ## License
 
-This software is released under the MIT License, see LICENSE.
+This software is released under the MIT License, see [LICENSE](./LICENSE).
