@@ -8,6 +8,7 @@ export * from './hooks/use-edge';
 export * from './hooks/use-node';
 export * from './hooks/use-rendered-id';
 export * from './hooks/use-root-cluster';
+export * from './components/HtmlLike';
 export * from './components/Graph';
 export * from './components/Digraph';
 export * from './components/Subgraph';

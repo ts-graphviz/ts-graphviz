@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "ES5",
-    "module": "ES2015",
     "jsx": "react",
     "strict": true,
     "rootDir": "src",
