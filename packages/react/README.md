@@ -23,16 +23,28 @@ $ npm install @ts-graphviz/react
 
 ```tsx
 import React, { FC } from 'react';
-import { Digraph, Node, Subgraph, renderToDot, Edge } from '@ts-graphviz/react';
+import { Digraph, Node, Subgraph, renderToDot, Edge, DOT } from '@ts-graphviz/react';
 
 const Example: FC = () => (
   <Digraph dpi={150}>
-    <Node id="nodeA" />
+    <Node
+      id="nodeA"
+      shape="none"
+      label={
+        <DOT.TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+          <DOT.TR>
+            <DOT.TD>left</DOT.TD>
+            <DOT.TD PORT="m">middle</DOT.TD>
+            <DOT.TD PORT="r">right</DOT.TD>
+          </DOT.TR>
+        </DOT.TABLE>
+      }
+    />
 
     <Subgraph id="cluster" label="Cluster" labeljust="l">
       <Node id="nodeB" label="This is label for nodeB." />
     </Subgraph>
-    <Edge targets={['nodeA', 'nodeB']} comment="Edge from node A to B" label={<b>A to B</b>} />
+    <Edge targets={['nodeB', 'nodeA:m']} comment="Edge from node A to B" label={<DOT.B>A to B</DOT.B>} />
   </Digraph>
 );
 
@@ -46,7 +58,10 @@ console.log(dot);
 ```dot
 digraph {
   dpi = 150;
-  "nodeA";
+  "nodeA" [
+    shape = "none",
+    label = <<table BORDER="0" CELLBORDER="1" CELLSPACING="0"><tr><td>left</td><td PORT="m">middle</td><td PORT="r">right</td></tr></table>>,
+  ];
   "nodeB";
   subgraph "cluster" {
     labeljust = "l";
@@ -56,7 +71,7 @@ digraph {
     ];
   }
   // Edge from node A to B
-  "nodeA" -> "nodeB" [
+  "nodeB" -> "nodeA":"m" [
     label = <<b>A to B</b>>,
   ];
 }

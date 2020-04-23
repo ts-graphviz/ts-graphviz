@@ -40,6 +40,7 @@
     "import/extensions": "off",
     "import/prefer-default-export": "off",
     "react/forbid-prop-types": "off",
+    "react/jsx-wrap-multilines": "off",
     "react/prop-types": [
       2,
       {
