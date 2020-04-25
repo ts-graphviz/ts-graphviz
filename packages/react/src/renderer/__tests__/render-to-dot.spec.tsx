@@ -7,7 +7,7 @@ import { Digraph } from '../../components/Digraph';
 import { Node } from '../../components/Node';
 import { renderToDot } from '../render';
 
-describe('toDot', () => {
+describe('renderToDot', () => {
   it('render works', () => {
     const dot = renderToDot(
       <Digraph>
@@ -44,5 +44,10 @@ describe('toDot', () => {
       </Digraph>,
     );
     expect(dot).toBeValidDotAndMatchSnapshot();
+  });
+
+  it('render to be blank string', () => {
+    const dot = renderToDot(<></>);
+    expect(dot).toBe('');
   });
 });
