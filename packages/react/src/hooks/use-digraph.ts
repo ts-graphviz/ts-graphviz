@@ -7,7 +7,7 @@ export type DigraphProps = {
   comment?: string;
 } & RootClusterAttributes;
 
-export const useDigraph = ({ id, comment, ...attributes }: DigraphProps): Digraph => {
+export const useDigraph = ({ id, comment, ...attributes }: DigraphProps = {}): Digraph => {
   const context = useGraphvizContext();
   const digraph = useMemo(() => {
     const g = new Digraph(context, id);

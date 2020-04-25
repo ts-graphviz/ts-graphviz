@@ -7,7 +7,7 @@ export type GraphProps = {
   comment?: string;
 } & RootClusterAttributes;
 
-export const useGraph = ({ id, comment, ...attributes }: GraphProps): Graph => {
+export const useGraph = ({ id, comment, ...attributes }: GraphProps = {}): Graph => {
   const context = useGraphvizContext();
   const graph = useMemo(() => {
     const g = new Graph(context, id);

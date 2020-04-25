@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useRenderedID  1`] = `"hoge"`;
+
+exports[`useRenderedID  2`] = `"<<b>bold</b>>"`;
+
+exports[`useRenderedID  3`] = `"<<b>bold</b>>"`;
+
+exports[`useRenderedID  4`] = `"<<table BORDER=\\"0\\" CELLBORDER=\\"1\\" CELLSPACING=\\"0\\"><tr><td>left</td><td PORT=\\"m\\">middle</td><td PORT=\\"r\\">right</td></tr></table>>"`;

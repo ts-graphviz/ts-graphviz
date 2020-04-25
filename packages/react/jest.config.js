@@ -3,22 +3,11 @@ module.exports = {
   testEnvironment: 'node',
   verbose: true,
   collectCoverage: true,
-  setupFilesAfterEnv: [
-    '<rootDir>/config/jest/setup-jest.ts',
-  ],
-  roots: [
-    '<rootDir>/src'
-  ],
+  setupFilesAfterEnv: ['<rootDir>/config/jest/setup-jest.ts'],
+  roots: ['<rootDir>/src'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest'
+    '^.+\\.tsx?$': 'ts-jest',
   },
-  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
-  moduleFileExtensions: [
-    'ts',
-    'tsx',
-    'js',
-    'jsx',
-    'json',
-    'node',
-  ],
+  testMatch: ['**/(__tests__|__specs__)/**/*.(spec|test).(ts|tsx)'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };
