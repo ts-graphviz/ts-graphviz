@@ -2,6 +2,7 @@ import { Digraph, Graph, Subgraph } from 'ts-graphviz';
 import { renderHook } from '@testing-library/react-hooks';
 import { useCluster } from '../use-cluster';
 import { digraph, graph, graphInSubgraph, digraphInSubgraph } from './utils/wrapper';
+import { NoClusterErrorMessage } from '../../utils/errors';
 
 describe('useCluster', () => {
   describe('get parent cluster', () => {
@@ -32,5 +33,10 @@ describe('useCluster', () => {
       });
       expect(result.current).toBeInstanceOf(Subgraph);
     });
+  });
+
+  test('An error occurs when called outside the cluster', () => {
+    const { result } = renderHook(() => useCluster());
+    expect(result.error).toStrictEqual(Error(NoClusterErrorMessage));
   });
 });
