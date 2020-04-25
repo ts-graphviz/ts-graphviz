@@ -3127,14 +3127,13 @@ jest-get-type@^25.2.6:
   resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-25.2.6.tgz#0b0a32fab8908b44d508be81681487dbabb8d877"
   integrity sha512-DxjtyzOHjObRM+sM1knti6or+eOgcGU4xVSb2HNP1TqO4ahsT+rqZg+nyqHWJSvWgKC5cG3QjGFBqxLghiF/Ig==
 
-jest-graphviz@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/jest-graphviz/-/jest-graphviz-0.2.0.tgz#2f1aa0c2048374953ef926e7c88e5dbeaf4f317d"
-  integrity sha512-nwGOIgNBRYOwr8xcYT5Ls3cadUdVbQUF0TNM0bOxa34g27sIXtFZIAWNo5M7ST9+lsnplUgvMfUaERbYbsAD+w==
+jest-graphviz@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/jest-graphviz/-/jest-graphviz-0.3.1.tgz#83373f5a1d0fdf04d5c271523969389f0356dcd3"
+  integrity sha512-R9fR0mqRXwFBh1YeZpyhsF0E+n1h3EYz3PyWHW0fOjqp7mO/4rQppWf5fSXZBXiQfH5oVwUsKLP35NjB8c1Q4g==
   dependencies:
     "@types/jest" "^24.0.22"
     jest "^24.9.0"
-    jest-snapshot "^24.9.0"
 
 jest-haste-map@^24.9.0:
   version "24.9.0"

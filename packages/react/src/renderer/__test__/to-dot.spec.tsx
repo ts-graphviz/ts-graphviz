@@ -1,5 +1,6 @@
 // tslint:disable: jsx-no-multiline-js
 import React from 'react';
+import 'jest-graphviz';
 import { Edge } from '../../components/Edge';
 import { Subgraph } from '../../components/Subgraph';
 import { Digraph } from '../../components/Digraph';
@@ -14,7 +15,7 @@ describe('toDot', () => {
         <Node id="b" />
       </Digraph>,
     );
-    expect(dot).toMatchSnapshot();
+    expect(dot).toBeValidDotAndMatchSnapshot();
   });
 
   it('render edge', () => {
@@ -27,7 +28,7 @@ describe('toDot', () => {
         <Edge targets={nodes} />
       </Digraph>,
     );
-    expect(dot).toMatchSnapshot();
+    expect(dot).toBeValidDotAndMatchSnapshot();
   });
 
   it('render subgraph', () => {
@@ -42,6 +43,6 @@ describe('toDot', () => {
         </Subgraph>
       </Digraph>,
     );
-    expect(dot).toMatchSnapshot();
+    expect(dot).toBeValidDotAndMatchSnapshot();
   });
 });
