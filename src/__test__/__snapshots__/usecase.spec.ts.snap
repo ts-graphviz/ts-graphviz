@@ -1,101 +1,101 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`function digraph callback style 1`] = `
-"digraph \\"G\\" {
-  \\"aa\\";
-  \\"bb\\";
-  \\"cc\\";
-  subgraph \\"A\\" {
-    \\"Aaa\\" [
-      color = \\"pink\\",
+digraph "G" {
+  "aa";
+  "bb";
+  "cc";
+  subgraph "A" {
+    "Aaa" [
+      color = "pink",
     ];
-    \\"Abb\\" [
-      color = \\"violet\\",
+    "Abb" [
+      color = "violet",
     ];
-    \\"Acc\\";
-    \\"E\\";
-    \\"Aaa\\":\\"a\\" -> \\"Abb\\" -> \\"Acc\\" -> \\"E\\" [
-      color = \\"red\\",
+    "Acc";
+    "E";
+    "Aaa":"a" -> "Abb" -> "Acc" -> "E" [
+      color = "red",
     ];
   }
-  \\"aa\\" -> \\"bb\\" -> \\"cc\\" [
-    color = \\"red\\",
+  "aa" -> "bb" -> "cc" [
+    color = "red",
   ];
-}"
+}
 `;
 
 exports[`function digraph comment 1`] = `
-"// This is directed graph.
-digraph \\"G\\" {
+// This is directed graph.
+digraph "G" {
   // This is node a.
-  \\"aa\\";
+  "aa";
   // This is node b.
-  \\"bb\\";
+  "bb";
   // This is node c.
-  \\"cc\\";
+  "cc";
   // It is subgraph A.
   // It is not cluster
-  subgraph \\"A\\" {
+  subgraph "A" {
     // This is node Aaa in subgraph A.
-    \\"Aaa\\" [
+    "Aaa" [
       // It will be filled by pink.
-      color = \\"pink\\",
+      color = "pink",
     ];
   }
   // This is edge.
   // It connects a, b and c.
-  \\"aa\\" -> \\"bb\\" -> \\"cc\\" [
+  "aa" -> "bb" -> "cc" [
     // Edge line will draw with red.
-    color = \\"red\\",
+    color = "red",
   ];
-}"
+}
 `;
 
 exports[`function graph callback style 1`] = `
-"graph \\"G\\" {
-  \\"aa\\";
-  \\"bb\\";
-  \\"cc\\";
-  subgraph \\"A\\" {
-    \\"Aaa\\" [
-      color = \\"pink\\",
+graph "G" {
+  "aa";
+  "bb";
+  "cc";
+  subgraph "A" {
+    "Aaa" [
+      color = "pink",
     ];
-    \\"Abb\\" [
-      color = \\"violet\\",
+    "Abb" [
+      color = "violet",
     ];
-    \\"Acc\\";
-    \\"hoge\\";
-    \\"Aaa\\" -- \\"Abb\\" -- \\"Acc\\" -- \\"hoge\\":\\"fuga\\" [
-      color = \\"red\\",
+    "Acc";
+    "hoge";
+    "Aaa" -- "Abb" -- "Acc" -- "hoge":"fuga" [
+      color = "red",
     ];
-    \\"Aaa\\":\\"a\\":w -- \\"Abb\\":w -- \\"Aaa\\":\\"e\\" -- \\"Acc\\":\\"r\\":e [
-      color = \\"red\\",
+    "Aaa":"a":w -- "Abb":w -- "Aaa":"e" -- "Acc":"r":e [
+      color = "red",
     ];
   }
-  \\"aa\\" -- \\"bb\\" -- \\"cc\\" [
-    color = \\"red\\",
+  "aa" -- "bb" -- "cc" [
+    color = "red",
   ];
-}"
+}
 `;
 
 exports[`function graph escape characters 1`] = `
-"graph \\"G\\\\n\\\\\\"\\" {
-  \\"a\\\\na\\" [
-    label = \\"1\\\\n2\\\\n\\\\\\"\\\\n3\\",
+graph "G\\n\\"" {
+  "a\\na" [
+    label = "1\\n2\\n\\"\\n3",
   ];
-  \\"b\\\\\\"b\\";
-  \\"c\\\\nc\\\\\\"\\";
-  subgraph \\"graph.name\\" {
-    \\"node.name\\" [
-      label = \\"node\\",
+  "b\\"b";
+  "c\\nc\\"";
+  subgraph "graph.name" {
+    "node.name" [
+      label = "node",
     ];
-    \\"another.name\\" [
-      label = \\"words with space and \\\\\\"quote\\\\\\"\\",
+    "another.name" [
+      label = "words with space and \\"quote\\"",
     ];
-    \\"node.name\\" -- \\"another.name\\";
+    "node.name" -- "another.name";
   }
-  \\"a\\\\na\\" -- \\"b\\\\\\"b\\" -- \\"c\\\\nc\\\\\\"\\" [
-    color = \\"red\\",
+  "a\\na" -- "b\\"b" -- "c\\nc\\"" [
+    color = "red",
   ];
-}"
+}
 `;
