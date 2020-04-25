@@ -6,7 +6,7 @@ import { useGraphvizContext } from '../use-graphviz-context';
 describe('useGraphvizContext', () => {
   test('returns Context instance', () => {
     const { result } = renderHook(() => useGraphvizContext(), {
-      wrapper: context,
+      wrapper: context(),
     });
     expect(result.current).toBeInstanceOf(Context);
   });

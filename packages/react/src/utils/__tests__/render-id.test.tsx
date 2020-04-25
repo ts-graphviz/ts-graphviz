@@ -1,14 +1,20 @@
 import React from 'react';
-import { renderHook } from '@testing-library/react-hooks';
-import { context } from './utils/wrapper';
-import { useRenderedID } from '../use-rendered-id';
 import { DOT } from '../../components/HtmlLike';
+import { renderId } from '../render-id';
 
-describe('useRenderedID', () => {
+describe('renderId', () => {
+  test('return undefined when give parameter is undefined', () => {
+    expect(renderId(undefined)).toBeUndefined();
+  });
+
   test.each([
     'hoge',
     '<<b>bold</b>>',
     <DOT.B>bold</DOT.B>,
+    <>
+      label
+      <DOT.PORT>port</DOT.PORT>
+    </>,
     <DOT.TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
       <DOT.TR>
         <DOT.TD>left</DOT.TD>
@@ -16,10 +22,7 @@ describe('useRenderedID', () => {
         <DOT.TD PORT="r">right</DOT.TD>
       </DOT.TR>
     </DOT.TABLE>,
-  ])('', id => {
-    const { result } = renderHook(() => useRenderedID(id), {
-      wrapper: context(),
-    });
-    expect(result.current).toMatchSnapshot();
+  ])('case', id => {
+    expect(renderId(id)).toMatchSnapshot();
   });
 });

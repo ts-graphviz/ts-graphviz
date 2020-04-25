@@ -7,28 +7,28 @@ describe('useRootCluster', () => {
   describe('get root cluster', () => {
     test('returns Diagram instance in digraph wrapper', () => {
       const { result } = renderHook(() => useRootCluster(), {
-        wrapper: digraph,
+        wrapper: digraph(),
       });
       expect(result.current).toBeInstanceOf(Digraph);
     });
 
     test('returns Graph instance in graph wrapper', () => {
       const { result } = renderHook(() => useRootCluster(), {
-        wrapper: graph,
+        wrapper: graph(),
       });
       expect(result.current).toBeInstanceOf(Graph);
     });
 
     test('returns Graph instance in graphInSubgraph wrapper', () => {
       const { result } = renderHook(() => useRootCluster(), {
-        wrapper: graphInSubgraph,
+        wrapper: graphInSubgraph(),
       });
       expect(result.current).toBeInstanceOf(Graph);
     });
 
     test('returns Digraph instance in digraphInSubgraph wrapper', () => {
       const { result } = renderHook(() => useRootCluster(), {
-        wrapper: digraphInSubgraph,
+        wrapper: digraphInSubgraph(),
       });
       expect(result.current).toBeInstanceOf(Digraph);
     });

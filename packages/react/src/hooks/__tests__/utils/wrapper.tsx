@@ -1,50 +1,52 @@
-import React, { FC } from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import React, { FC, ComponentProps } from 'react';
 import { Context } from 'ts-graphviz';
 import { Digraph } from '../../../components/Digraph';
 import { Graph } from '../../../components/Graph';
 import { GraphvizContext } from '../../../components/contexts/GraphvizContext';
 import { Subgraph } from '../../../components/Subgraph';
 
-export const context: FC = ({ children }) => {
+export const context = (): FC => ({ children }) => {
   const ctx = new Context();
   return <GraphvizContext.Provider value={ctx}>{children}</GraphvizContext.Provider>;
 };
 
-export const digraph: FC = ({ children }) => {
+export const digraph = (props: ComponentProps<typeof Digraph> = {}): FC => ({ children }) => {
   const ctx = new Context();
   return (
     <GraphvizContext.Provider value={ctx}>
-      <Digraph>{children}</Digraph>
+      <Digraph {...props}>{children}</Digraph>
     </GraphvizContext.Provider>
   );
 };
 
-export const digraphInSubgraph: FC = ({ children }) => {
+export const digraphInSubgraph = (props: ComponentProps<typeof Subgraph> = {}): FC => ({ children }) => {
   const ctx = new Context();
   return (
     <GraphvizContext.Provider value={ctx}>
       <Digraph>
-        <Subgraph>{children}</Subgraph>
+        <Subgraph {...props}>{children}</Subgraph>
       </Digraph>
     </GraphvizContext.Provider>
   );
 };
 
-export const graph: FC = ({ children }) => {
+export const graph = (props: ComponentProps<typeof Graph> = {}): FC => ({ children }) => {
   const ctx = new Context();
   return (
     <GraphvizContext.Provider value={ctx}>
-      <Graph>{children}</Graph>
+      <Graph {...props}>{children}</Graph>
     </GraphvizContext.Provider>
   );
 };
 
-export const graphInSubgraph: FC = ({ children }) => {
+export const graphInSubgraph = (props: ComponentProps<typeof Subgraph> = {}): FC => ({ children }) => {
   const ctx = new Context();
   return (
     <GraphvizContext.Provider value={ctx}>
       <Graph>
-        <Subgraph>{children}</Subgraph>
+        <Subgraph {...props}>{children}</Subgraph>
       </Graph>
     </GraphvizContext.Provider>
   );

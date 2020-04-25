@@ -6,28 +6,28 @@ import { useSubgraph } from '../use-subgraph';
 describe('useSubgraph', () => {
   it('returns Subgraph instance in digraph warper', () => {
     const { result } = renderHook(() => useSubgraph(), {
-      wrapper: digraph,
+      wrapper: digraph(),
     });
     expect(result.current).toBeInstanceOf(Subgraph);
   });
 
   it('returns Subgraph instance in graph warper', () => {
     const { result } = renderHook(() => useSubgraph(), {
-      wrapper: graph,
+      wrapper: graph(),
     });
     expect(result.current).toBeInstanceOf(Subgraph);
   });
 
   it('returns Subgraph instance in graphInSubgraph warper', () => {
     const { result } = renderHook(() => useSubgraph(), {
-      wrapper: graphInSubgraph,
+      wrapper: graphInSubgraph(),
     });
     expect(result.current).toBeInstanceOf(Subgraph);
   });
 
   it('returns Subgraph instance in digraphInSubgraph warper', () => {
     const { result } = renderHook(() => useSubgraph(), {
-      wrapper: digraphInSubgraph,
+      wrapper: digraphInSubgraph(),
     });
     expect(result.current).toBeInstanceOf(Subgraph);
   });
