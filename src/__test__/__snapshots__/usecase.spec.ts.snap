@@ -13,7 +13,6 @@ digraph "G" {
       color = "violet",
     ];
     "Acc";
-    "E";
     "Aaa":"a" -> "Abb" -> "Acc" -> "E" [
       color = "red",
     ];
