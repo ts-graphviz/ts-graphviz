@@ -1,7 +1,8 @@
 import { Compass, EdgeTargetLike, ICluster, IContext, IEdgeTarget, RootClusterType } from '../types';
+import { concatWordsWithColon } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
 import { Edge } from './Edge';
-import { isEdgeTarget, isEdgeTargetLike, Node } from './Node';
+import { ForwardRefNode, isEdgeTarget, isEdgeTargetLike, Node } from './Node';
 import { RootCluster } from './RootCluster';
 import { Subgraph } from './Subgraph';
 
@@ -67,10 +68,16 @@ export class Context implements IContext {
       return node;
     }
     const [id, port, compass] = node.split(':');
-    const n = cluster.node(id);
-    if (port && (compass === undefined || Compass.is(compass))) {
-      return n.port({ port, compass });
+    const n = cluster.getNode(id);
+    if (n !== undefined) {
+      if (port && (compass === undefined || Compass.is(compass))) {
+        return n.port({ port, compass });
+      }
+      return n;
     }
-    return n;
+    if (Compass.is(compass)) {
+      return new ForwardRefNode(id, { port, compass });
+    }
+    return new ForwardRefNode(id, { port });
   }
 }

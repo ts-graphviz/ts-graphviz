@@ -65,10 +65,31 @@ export class NodeWithPort implements INodeWithPort {
 }
 
 /**
+ * @category Primary
+ * @hidden
+ */
+export class ForwardRefNode implements INodeWithPort {
+  public readonly id: ID;
+  public readonly port?: ID;
+  /** Specify the direction of the edge. */
+  public readonly compass?: Compass;
+  constructor(id: string, port: Partial<IPort>) {
+    this.id = new ID(id);
+    this.port = port.port ? new ID(port.port) : undefined;
+    this.compass = port.compass;
+  }
+
+  /** Converts a NodeWithPort to an EdgeTarget. */
+  public toEdgeTargetDot() {
+    return concatWordsWithColon(this.id.toDot(), this.port?.toDot(), this.compass);
+  }
+}
+
+/**
  * @hidden
  */
 export function isEdgeTarget(node: any): node is IEdgeTarget {
-  return node instanceof Node || node instanceof NodeWithPort;
+  return node instanceof Node || node instanceof NodeWithPort || node instanceof ForwardRefNode;
 }
 
 /**
