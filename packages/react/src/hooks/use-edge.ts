@@ -2,6 +2,8 @@ import { useEffect, useMemo } from 'react';
 import { EdgeTargetLike, IEdge, EdgeAttributes } from 'ts-graphviz';
 import { useCluster } from './use-cluster';
 import { EdgeTargetLengthErrorMessage } from '../utils/errors';
+import { useHasComment } from './use-comment';
+import { useHasAttributes } from './use-has-attributes';
 
 export type EdgeProps = {
   targets: EdgeTargetLike[];
@@ -19,15 +21,8 @@ export const useEdge = ({ targets, comment, ...attributes }: EdgeProps): IEdge =
     e.attributes.apply(attributes);
     return e;
   }, [cluster, targets, comment, attributes]);
-  useEffect(() => {
-    edge.attributes.clear();
-    edge.attributes.apply(attributes);
-  }, [edge, attributes]);
-
-  useEffect(() => {
-    edge.comment = comment;
-  }, [edge, comment]);
-
+  useHasComment(edge, comment);
+  useHasAttributes(edge, attributes);
   useEffect(() => {
     return (): void => {
       cluster.removeEdge(edge);

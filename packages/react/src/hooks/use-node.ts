@@ -1,6 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import { INode, NodeAttributes } from 'ts-graphviz';
 import { useCluster } from './use-cluster';
+import { useHasComment } from './use-comment';
+import { useHasAttributes } from './use-has-attributes';
 
 export type NodeProps = {
   id: string;
@@ -15,14 +17,8 @@ export const useNode = ({ id, comment, ...attributes }: NodeProps): INode => {
     n.comment = comment;
     return n;
   }, [cluster, id, attributes, comment]);
-  useEffect(() => {
-    node.attributes.clear();
-    node.attributes.apply(attributes);
-  }, [node, attributes]);
-
-  useEffect(() => {
-    node.comment = comment;
-  }, [node, comment]);
+  useHasComment(node, comment);
+  useHasAttributes(node, attributes);
   useEffect(() => {
     return (): void => {
       cluster.removeNode(node);
