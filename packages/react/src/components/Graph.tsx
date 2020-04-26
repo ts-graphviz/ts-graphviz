@@ -1,15 +1,21 @@
 import React, { FC, ReactElement } from 'react';
 import PropTypes from 'prop-types';
-import { RootCluster } from './contexts/RootCluster';
+import { RootCluster, NoRootCluster } from './contexts/RootCluster';
 import { Cluster } from './contexts/Cluster';
 import { GraphProps, useGraph } from '../hooks/use-graph';
 import { useRenderedID } from '../hooks/use-rendered-id';
+import { useRootCluster } from '../hooks/use-root-cluster';
+import { DuplicatedRootClusterErrorMessage } from '../utils/errors';
 
 type Props = Omit<GraphProps, 'label'> & {
   label?: ReactElement | string;
 };
 
 export const Graph: FC<Props> = ({ children, label, ...props }) => {
+  const root = useRootCluster();
+  if (root !== NoRootCluster) {
+    throw Error(DuplicatedRootClusterErrorMessage);
+  }
   const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined) Object.assign(props, { label: renderedLabel });
   const graph = useGraph(props);

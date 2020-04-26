@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { EdgeTargetLike, IEdge, EdgeAttributes } from 'ts-graphviz';
 import { useCluster } from './use-cluster';
+import { EdgeTargetLengthErrorMessage } from '../utils/errors';
 
 export type EdgeProps = {
   targets: EdgeTargetLike[];
@@ -9,6 +10,9 @@ export type EdgeProps = {
 
 export const useEdge = ({ targets, comment, ...attributes }: EdgeProps): IEdge => {
   const cluster = useCluster();
+  if (targets.length < 2) {
+    throw Error(EdgeTargetLengthErrorMessage);
+  }
   const edge = useMemo(() => {
     const e = cluster.createEdge(...targets);
     e.comment = comment;
