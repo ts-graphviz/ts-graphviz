@@ -4,6 +4,6 @@ exports[`useRenderedID  1`] = `"hoge"`;
 
 exports[`useRenderedID  2`] = `"<<b>bold</b>>"`;
 
-exports[`useRenderedID  3`] = `"<<b>bold</b>>"`;
+exports[`useRenderedID  3`] = `"<<B>bold</B>>"`;
 
-exports[`useRenderedID  4`] = `"<<table BORDER=\\"0\\" CELLBORDER=\\"1\\" CELLSPACING=\\"0\\"><tr><td>left</td><td PORT=\\"m\\">middle</td><td PORT=\\"r\\">right</td></tr></table>>"`;
+exports[`useRenderedID  4`] = `"<<TABLE BORDER=\\"0\\" CELLBORDER=\\"1\\" CELLSPACING=\\"0\\"><TR><TD>left</TD><TD PORT=\\"m\\">middle</TD><TD PORT=\\"r\\">right</TD></TR></TABLE>>"`;
