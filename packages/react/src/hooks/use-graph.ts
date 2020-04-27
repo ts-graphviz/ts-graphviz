@@ -1,33 +1,35 @@
 import { useMemo, useEffect } from 'react';
-import { Graph, RootClusterAttributes } from 'ts-graphviz';
+import { Graph, RootClusterAttributes, NodeAttributes, EdgeAttributes, ClusterSubgraphAttributes } from 'ts-graphviz';
 import { useGraphvizContext } from './use-graphviz-context';
+import { ClusterAttributesProps, useClusterAttributes } from './use-cluster-attributes';
+import { useHasComment } from './use-comment';
 
 export type GraphProps = {
   id?: string;
   comment?: string;
-} & RootClusterAttributes;
+  edge?: EdgeAttributes;
+  node?: NodeAttributes;
+  graph?: ClusterSubgraphAttributes;
+} & RootClusterAttributes &
+  ClusterAttributesProps;
 
-export const useGraph = ({ id, comment, ...attributes }: GraphProps = {}): Graph => {
+export const useGraph = ({ id, comment, edge, node, graph, ...attributes }: GraphProps = {}): Graph => {
   const context = useGraphvizContext();
-  const graph = useMemo(() => {
+  const memoGraph = useMemo(() => {
     const g = new Graph(context, id);
     g.comment = comment;
     g.apply(attributes);
+    g.attributes.node.apply(node ?? {});
+    g.attributes.edge.apply(edge ?? {});
+    g.attributes.graph.apply(graph ?? {});
     return g;
-  }, [context, id, comment, attributes]);
+  }, [context, id, comment, edge, node, graph, attributes]);
+  useHasComment(memoGraph, comment);
+  useClusterAttributes(memoGraph, attributes, { edge, node, graph });
   useEffect(() => {
     return (): void => {
       context.root = undefined;
     };
   }, [context]);
-
-  useEffect(() => {
-    graph.clear();
-    graph.apply(attributes);
-  }, [graph, attributes]);
-
-  useEffect(() => {
-    graph.comment = comment;
-  }, [graph, comment]);
-  return graph;
+  return memoGraph;
 };
