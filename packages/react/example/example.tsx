@@ -3,7 +3,6 @@ import { Digraph, Node, Subgraph, renderToDot, Edge, DOT } from '../src';
 
 const Example: FC = () => (
   <Digraph
-    dpi={150}
     rankdir="TB"
     edge={{
       color: 'blue',

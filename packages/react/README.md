@@ -27,7 +27,6 @@ import { Digraph, Node, Subgraph, renderToDot, Edge, DOT } from '@ts-graphviz/re
 
 const Example: FC = () => (
   <Digraph
-    dpi={150}
     rankdir="TB"
     edge={{
       color: 'blue',
@@ -67,7 +66,6 @@ console.log(dot);
 
 ```dot
 digraph {
-  dpi = 150;
   rankdir = "TB";
   edge [
     color = "blue",
