@@ -15,6 +15,15 @@ $ yarn add @ts-graphviz/react
 $ npm install @ts-graphviz/react
 ```
 
+### Peer Dependencies
+
+- [React](https://github.com/facebook/react/)(>=16.8)
+- [ts-graphviz](https://github.com/ts-graphviz/ts-graphviz)
+
+```bash
+$ yarn add react ts-graphviz
+```
+
 ## Usage
 
 ### Example
