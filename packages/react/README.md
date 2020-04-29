@@ -15,6 +15,15 @@ $ yarn add @ts-graphviz/react
 $ npm install @ts-graphviz/react
 ```
 
+### Peer Dependencies
+
+- [React](https://github.com/facebook/react/)(>=16.8)
+- [ts-graphviz](https://github.com/ts-graphviz/ts-graphviz)
+
+```bash
+$ yarn add react ts-graphviz
+```
+
 ## Usage
 
 ### Example
@@ -26,7 +35,16 @@ import React, { FC } from 'react';
 import { Digraph, Node, Subgraph, renderToDot, Edge, DOT } from '@ts-graphviz/react';
 
 const Example: FC = () => (
-  <Digraph dpi={150}>
+  <Digraph
+    rankdir="TB"
+    edge={{
+      color: 'blue',
+      fontcolor: 'blue',
+    }}
+    node={{
+      shape: 'none',
+    }}
+  >
     <Node
       id="nodeA"
       shape="none"
@@ -57,10 +75,17 @@ console.log(dot);
 
 ```dot
 digraph {
-  dpi = 150;
+  rankdir = "TB";
+  edge [
+    color = "blue",
+    fontcolor = "blue",
+  ];
+  node [
+    shape = "none",
+  ];
   "nodeA" [
     shape = "none",
-    label = <<table BORDER="0" CELLBORDER="1" CELLSPACING="0"><tr><td>left</td><td PORT="m">middle</td><td PORT="r">right</td></tr></table>>,
+    label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"><TR><TD>left</TD><TD PORT="m">middle</TD><TD PORT="r">right</TD></TR></TABLE>>,
   ];
   "nodeB";
   subgraph "cluster" {
@@ -72,12 +97,12 @@ digraph {
   }
   // Edge from node A to B
   "nodeB" -> "nodeA":"m" [
-    label = <<b>A to B</b>>,
+    label = <<B>A to B</B>>,
   ];
 }
 ```
 
-![dot](./example/example.png)
+![dot](./example/example.svg)
 
 ## See Also
 
