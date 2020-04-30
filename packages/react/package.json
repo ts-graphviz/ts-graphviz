@@ -29,19 +29,28 @@
   "scripts": {
     "build": "rollup -c",
     "test": "jest",
-    "lint": "eslint -c .eslintrc.json --ext ts,tsx src"
+    "lint": "eslint -c .eslintrc.json --ext ts,tsx src",
+    "storybook": "start-storybook -p 9000"
   },
   "peerDependencies": {
+    "@hpcc-js/wasm": "^0.3.13",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
     "ts-graphviz": ">=0.10.0"
+  },
+  "peerDependenciesMeta": {
+    "@hpcc-js/wasm": {
+      "optional": true
+    }
   },
   "dependencies": {
     "prop-types": "^15.7.2",
     "react-reconciler": "^0.24.0"
   },
   "devDependencies": {
+    "@hpcc-js/wasm": "^0.3.13",
     "@rollup/plugin-commonjs": "^11.1.0",
+    "@storybook/react": "^5.3.18",
     "@testing-library/react-hooks": "^3.2.1",
     "@types/prop-types": "^15.7.3",
     "@types/react": "^16.9.17",
@@ -49,6 +58,7 @@
     "@types/react-reconciler": "^0.18.0",
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
+    "babel-loader": "^8.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.10.1",
@@ -69,6 +79,7 @@
     "rollup-plugin-typescript2": "^0.27.0",
     "ts-graphviz": "^0.10.0",
     "ts-jest": "^25.3.1",
+    "ts-loader": "^7.0.2",
     "typescript": "^3.8.2"
   }
 }
