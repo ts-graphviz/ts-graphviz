@@ -1,12 +1,24 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Graphviz } from './Graphviz';
-import { Digraph } from '../components/Digraph';
-import { Node } from '../components/Node';
-import { Edge } from '../components/Edge';
-import { Subgraph } from '../components/Subgraph';
-import { DOT } from '../components/HtmlLike';
+import { Digraph } from '../../components/Digraph';
+import { Node } from '../../components/Node';
+import { Edge } from '../../components/Edge';
+import { Subgraph } from '../../components/Subgraph';
+import { DOT } from '../../components/HtmlLike';
 
 export default { title: 'Graphviz' };
+
+export const Small: FC = () => (
+  <Graphviz>
+    <Digraph>
+      <Node id="n1" />
+      <Node id="n2" />
+      <Node id="n3" />
+      <Edge targets={['n1', 'n2', 'n3']} />
+      <Edge targets={['n1', 'n3']} />
+    </Digraph>
+  </Graphviz>
+);
 
 export const Example: FC = () => (
   <Graphviz>
