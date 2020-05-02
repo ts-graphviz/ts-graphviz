@@ -9,6 +9,6 @@ config
 coverage
 jest.config.js
 LICENSE
-rollup.config.js
+rollup.build.ts
 src
 tsconfig.json

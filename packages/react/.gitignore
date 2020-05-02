@@ -130,4 +130,9 @@ Temporary Items
 
 # End of https://www.gitignore.io/api/macos
 
+# Output Modules
 lib
+lib.js
+lib.mjs
+web.js
+web.mjs
