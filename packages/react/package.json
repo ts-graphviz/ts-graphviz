@@ -23,8 +23,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "index.js",
-  "module": "index.mjs",
+  "main": "lib.js",
+  "module": "lib.mjs",
   "types": "lib/index.d.ts",
   "scripts": {
     "example": "ts-node example/example",
