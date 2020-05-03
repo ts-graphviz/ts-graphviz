@@ -23,32 +23,47 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
-  "module": "lib/index.mjs",
-  "types": "lib/index.d.ts",
+  "main": "core/index.js",
+  "module": "core/index.mjs",
+  "types": "core/index.d.ts",
   "scripts": {
-    "build": "rollup -c",
+    "example": "ts-node example/example",
+    "build": "ts-node rollup.build",
     "test": "jest",
-    "lint": "eslint -c .eslintrc.json --ext ts,tsx src"
+    "lint": "eslint -c .eslintrc.json --ext ts,tsx src",
+    "storybook": "start-storybook -p 9000",
+    "storybook:build": "build-storybook -c .storybook -o docs"
   },
   "peerDependencies": {
+    "@hpcc-js/wasm": "^0.3.13",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
     "ts-graphviz": ">=0.10.0"
+  },
+  "peerDependenciesMeta": {
+    "@hpcc-js/wasm": {
+      "optional": true
+    }
   },
   "dependencies": {
     "prop-types": "^15.7.2",
     "react-reconciler": "^0.24.0"
   },
   "devDependencies": {
+    "@hpcc-js/wasm": "^0.3.13",
     "@rollup/plugin-commonjs": "^11.1.0",
+    "@storybook/addon-knobs": "^5.3.18",
+    "@storybook/addon-storysource": "^5.3.18",
+    "@storybook/react": "^5.3.18",
     "@testing-library/react-hooks": "^3.2.1",
+    "@types/fs-extra": "^8.1.0",
     "@types/prop-types": "^15.7.3",
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "@types/react-reconciler": "^0.18.0",
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
+    "babel-loader": "^8.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.10.1",
@@ -58,6 +73,7 @@
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
+    "fs-extra": "^9.0.0",
     "jest": "^25.3.0",
     "jest-graphviz": "^0.3.1",
     "prettier": "^1.19.1",
@@ -69,6 +85,8 @@
     "rollup-plugin-typescript2": "^0.27.0",
     "ts-graphviz": "^0.10.0",
     "ts-jest": "^25.3.1",
+    "ts-loader": "^7.0.2",
+    "ts-node": "^8.9.1",
     "typescript": "^3.8.2"
   }
 }

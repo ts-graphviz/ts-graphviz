@@ -22,9 +22,11 @@
     "src/**/*.tsx"
   ],
   "exclude": [
+    "src/**/*.stories.tsx",
     "src/**/*.spec.ts",
     "src/**/*.spec.tsx",
     "src/**/*.test.ts",
-    "src/**/*.test.tsx"
+    "src/**/*.test.tsx",
+    "src/**/__tests__/**/*.ts"
   ]
 }
