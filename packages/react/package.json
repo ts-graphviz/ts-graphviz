@@ -31,7 +31,8 @@
     "build": "ts-node rollup.build",
     "test": "jest",
     "lint": "eslint -c .eslintrc.json --ext ts,tsx src",
-    "storybook": "start-storybook -p 9000"
+    "storybook": "start-storybook -p 9000",
+    "storybook:build": "build-storybook -c .storybook -o docs"
   },
   "peerDependencies": {
     "@hpcc-js/wasm": "^0.3.13",
@@ -51,6 +52,8 @@
   "devDependencies": {
     "@hpcc-js/wasm": "^0.3.13",
     "@rollup/plugin-commonjs": "^11.1.0",
+    "@storybook/addon-knobs": "^5.3.18",
+    "@storybook/addon-storysource": "^5.3.18",
     "@storybook/react": "^5.3.18",
     "@testing-library/react-hooks": "^3.2.1",
     "@types/fs-extra": "^8.1.0",

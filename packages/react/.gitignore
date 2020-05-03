@@ -136,3 +136,5 @@ lib.js
 lib.mjs
 web.js
 web.mjs
+docs
+*.d.ts
