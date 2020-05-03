@@ -19,20 +19,30 @@ $ npm install @ts-graphviz/react
 
 - [React](https://github.com/facebook/react/)(>=16.8)
 - [ts-graphviz](https://github.com/ts-graphviz/ts-graphviz)
+- [@hpcc-js/wasm](https://www.npmjs.com/package/@hpcc-js/wasm) (Optional)
 
 ```bash
+# Peer Dependencies
 $ yarn add react ts-graphviz
+# Optional Peer Dependencies
+$ yarn add @hpcc-js/wasm
 ```
 
-## Usage
+## API
 
-### Example
+### Core Module
+
+The core is designed to be independent of the execution environment.
+
+It is designed to work in both browsers and Node.js.
+
+It provides core components and hooks of `@ts-graphviz/react` and render functions.
 
 #### Script
 
 ```tsx
 import React, { FC } from 'react';
-import { Digraph, Node, Subgraph, renderToDot, Edge, DOT } from '@ts-graphviz/react';
+import { Digraph, Node, Subgraph, Edge, DOT, renderToDot } from '@ts-graphviz/react';
 
 const Example: FC = () => (
   <Digraph
@@ -87,7 +97,6 @@ digraph {
     shape = "none",
     label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"><TR><TD>left</TD><TD PORT="m">middle</TD><TD PORT="r">right</TD></TR></TABLE>>,
   ];
-  "nodeB";
   subgraph "cluster" {
     labeljust = "l";
     label = "Cluster";
@@ -103,6 +112,38 @@ digraph {
 ```
 
 ![dot](./example/example.svg)
+
+### Web Module
+
+The `Graphviz` component of `@ts-graphviz/react/web` can be rendered directly in the browser.
+
+Since this component uses the function of `@hpcc-js/wasm` internally, it is necessary to host `@hpcc-js/wasm/dist/graphviz.wasm` and specify its directory with `wasmFolder`.
+
+For development, I recommend using the one hosted by unpkg.
+
+```tsx
+import React, { FC } from 'react';
+import ReactDOM from 'react-dom';
+import { Digraph, Node, Edge } from '@ts-graphviz/react';
+import { Graphviz } from '@ts-graphviz/react/web';
+import { wasmFolder } from '@hpcc-js/wasm';
+
+wasmFolder('https://unpkg.com/@hpcc-js/wasm/dist/');
+
+const App: FC = () => (
+  <Graphviz>
+    <Digraph>
+      <Node id="n1" />
+      <Node id="n2" />
+      <Node id="n3" />
+      <Edge targets={['n1', 'n2', 'n3']} />
+      <Edge targets={['n1', 'n3']} />
+    </Digraph>
+  </Graphviz>
+);
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
 
 ## See Also
 

@@ -43,26 +43,21 @@ async function build({
 }
 
 (async (): Promise<void> => {
-  await Promise.all([remove('lib'), remove('lib.js'), remove('lib.mjs'), remove('web.js'), remove('web.mjs')]);
+  await Promise.all([remove('core'), remove('web')]);
   await Promise.all([
     build({
       input: 'src/index.ts',
-      output: 'lib',
+      output: 'core',
       declaration: true,
       external: ['react', 'react-dom/server', 'ts-graphviz', 'prop-types', 'react-reconciler'],
     }),
     build({
       input: 'src/web/index.ts',
-      output: 'lib/web',
+      output: 'core/web',
       declaration: false,
       external: ['react', 'react-dom/server', 'ts-graphviz', 'react-reconciler', '@hpcc-js/wasm'],
     }),
   ]);
 
-  await Promise.all([
-    move('lib/index.js', 'lib.js'),
-    move('lib/index.mjs', 'lib.mjs'),
-    move('lib/web/index.js', 'web.js'),
-    move('lib/web/index.mjs', 'web.mjs'),
-  ]);
+  await move('core/web', 'web');
 })();

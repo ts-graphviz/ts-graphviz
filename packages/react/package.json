@@ -23,9 +23,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib.js",
-  "module": "lib.mjs",
-  "types": "lib/index.d.ts",
+  "main": "core/index.js",
+  "module": "core/index.mjs",
+  "types": "core/index.d.ts",
   "scripts": {
     "example": "ts-node example/example",
     "build": "ts-node rollup.build",
