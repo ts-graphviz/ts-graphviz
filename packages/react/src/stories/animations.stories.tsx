@@ -31,14 +31,17 @@ export const CircoAnime: FC = () => {
     };
   }, [nodes, i, setNodes, setI]);
   return (
-    <Graphviz engine="circo">
-      <Digraph>
-        {nodes.map((n, j) => (
-          <Node id={n} key={n} shape={shapes[j % shapes.length]} />
-        ))}
-        <Edge targets={nodes} />
-        <Edge targets={[`n${i - 1}`, 'n0']} />
-      </Digraph>
-    </Graphviz>
+    <Graphviz
+      engine="circo"
+      dot={
+        <Digraph>
+          {nodes.map((n, j) => (
+            <Node id={n} key={n} shape={shapes[j % shapes.length]} />
+          ))}
+          <Edge targets={nodes} />
+          <Edge targets={[`n${i - 1}`, 'n0']} />
+        </Digraph>
+      }
+    />
   );
 };
