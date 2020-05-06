@@ -1,6 +1,6 @@
 # @ts-graphviz/react
 
-Graphviz-dot Renderer for React.
+Graphviz-dot Renderer using React.
 
 ## Installation
 
@@ -25,20 +25,16 @@ $ npm install @ts-graphviz/react
 # Peer Dependencies
 $ yarn add react ts-graphviz
 # Optional Peer Dependencies
-$ yarn add @hpcc-js/wasm
+$ yarn add @hpcc-js/wasm react-dom
 ```
+
+## DEMO
+
+- [Storybook](https://ts-graphviz.github.io/react/)
 
 ## API
 
-### Core Module
-
-The core is designed to be independent of the execution environment.
-
-It is designed to work in both browsers and Node.js.
-
-It provides core components and hooks of `@ts-graphviz/react` and render functions.
-
-#### Script
+### Script
 
 ```tsx
 import React, { FC } from 'react';
@@ -81,7 +77,7 @@ const dot = renderToDot(<Example />);
 console.log(dot);
 ```
 
-#### Output dot
+### Output dot
 
 ```dot
 digraph {
@@ -113,9 +109,9 @@ digraph {
 
 ![dot](./example/example.svg)
 
-### Web Module
+### Web
 
-The `Graphviz` component of `@ts-graphviz/react/web` can be rendered directly in the browser.
+The `Graphviz` component can be rendered directly in the browser.
 
 Since this component uses the function of `@hpcc-js/wasm` internally, it is necessary to host `@hpcc-js/wasm/dist/graphviz.wasm` and specify its directory with `wasmFolder`.
 
@@ -124,8 +120,7 @@ For development, I recommend using the one hosted by unpkg.
 ```tsx
 import React, { FC } from 'react';
 import ReactDOM from 'react-dom';
-import { Digraph, Node, Edge } from '@ts-graphviz/react';
-import { Graphviz } from '@ts-graphviz/react/web';
+import { Graphviz, Digraph, Node, Edge } from '@ts-graphviz/react';
 import { wasmFolder } from '@hpcc-js/wasm';
 
 wasmFolder('https://unpkg.com/@hpcc-js/wasm/dist/');

@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { select, withKnobs } from '@storybook/addon-knobs';
-import { Graphviz } from '../web';
-import { Digraph, Node, Edge, Subgraph, DOT } from '../index';
+import { Digraph, Node, Edge, Subgraph, Graphviz, DOT } from '../index';
 
 export default { title: 'Graphviz', decorators: [withKnobs] };
 

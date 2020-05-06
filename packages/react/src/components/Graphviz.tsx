@@ -1,8 +1,8 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable react/prop-types */
-import React, { FC, ReactElement, useMemo } from 'react';
-import { renderToDot } from '../../renderer/render';
-import { useRendered, Engine, Image, File } from '../hooks/rendered';
+import React, { FC, useMemo, ReactElement } from 'react';
+import { renderToDot } from '../renderer/render';
+import { useRendered, Engine, Image, File } from '../hooks/use-rendered';
 
 type Props = {
   children: ReactElement;
@@ -11,6 +11,9 @@ type Props = {
   files?: File[];
 };
 
+/**
+ * Web only
+ */
 export const Graphviz: FC<Props> = ({ children, engine, images, files }) => {
   const dot = useMemo(() => renderToDot(children), [children]);
   const rendered = useRendered(dot, engine, 'svg', { images, files });

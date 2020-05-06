@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { FC } from 'react';
 import { withKnobs, text, select, number } from '@storybook/addon-knobs';
-import { Graphviz } from '../web';
-import { Digraph, Graph, Node, Edge } from '../index';
+import { Graphviz, Digraph, Graph, Node, Edge } from '../index';
 
 export default { title: 'Graphviz/Components', decorators: [withKnobs] };
 

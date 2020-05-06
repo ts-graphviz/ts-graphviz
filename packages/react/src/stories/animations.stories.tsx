@@ -1,6 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Graphviz } from '../web';
-import { Digraph, Node, Edge } from '../index';
+import { Graphviz, Digraph, Node, Edge } from '../index';
 
 export default { title: 'Graphviz/Animations' };
 
