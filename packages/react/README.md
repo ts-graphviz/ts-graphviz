@@ -120,8 +120,7 @@ For development, I recommend using the one hosted by unpkg.
 ```tsx
 import React, { FC } from 'react';
 import ReactDOM from 'react-dom';
-import { Digraph, Node, Edge } from '@ts-graphviz/react';
-import { Graphviz } from '@ts-graphviz/react/web';
+import { Graphviz, Digraph, Node, Edge } from '@ts-graphviz/react';
 import { wasmFolder } from '@hpcc-js/wasm';
 
 wasmFolder('https://unpkg.com/@hpcc-js/wasm/dist/');
