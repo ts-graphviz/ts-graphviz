@@ -1,6 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Graphviz } from '../web';
-import { Digraph, Node, Edge } from '../index';
+import { Graphviz, Digraph, Node, Edge } from '../index';
 
 export default { title: 'Graphviz/Animations' };
 
@@ -31,17 +30,14 @@ export const CircoAnime: FC = () => {
     };
   }, [nodes, i, setNodes, setI]);
   return (
-    <Graphviz
-      engine="circo"
-      dot={
-        <Digraph>
-          {nodes.map((n, j) => (
-            <Node id={n} key={n} shape={shapes[j % shapes.length]} />
-          ))}
-          <Edge targets={nodes} />
-          <Edge targets={[`n${i - 1}`, 'n0']} />
-        </Digraph>
-      }
-    />
+    <Graphviz engine="circo">
+      <Digraph>
+        {nodes.map((n, j) => (
+          <Node id={n} key={n} shape={shapes[j % shapes.length]} />
+        ))}
+        <Edge targets={nodes} />
+        <Edge targets={[`n${i - 1}`, 'n0']} />
+      </Digraph>
+    </Graphviz>
   );
 };

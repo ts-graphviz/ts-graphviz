@@ -2,7 +2,7 @@ import { rollup } from 'rollup';
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
 import commonjs from '@rollup/plugin-commonjs';
-import { move, remove } from 'fs-extra';
+import { remove } from 'fs-extra';
 
 async function build({
   input,
@@ -43,21 +43,11 @@ async function build({
 }
 
 (async (): Promise<void> => {
-  await Promise.all([remove('core'), remove('web')]);
-  await Promise.all([
-    build({
-      input: 'src/index.ts',
-      output: 'core',
-      declaration: true,
-      external: ['react', 'react-dom/server', 'ts-graphviz', 'prop-types', 'react-reconciler'],
-    }),
-    build({
-      input: 'src/web/index.ts',
-      output: 'core/web',
-      declaration: false,
-      external: ['react', 'react-dom/server', 'ts-graphviz', 'react-reconciler', '@hpcc-js/wasm'],
-    }),
-  ]);
-
-  await move('core/web', 'web');
+  await remove('lib');
+  await build({
+    input: 'src/index.ts',
+    output: 'lib',
+    declaration: true,
+    external: ['react', 'react-dom/server', 'ts-graphviz', 'prop-types', 'react-reconciler', '@hpcc-js/wasm'],
+  });
 })();

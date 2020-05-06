@@ -7,11 +7,3 @@ exports[`Graphviz component render dot element 1`] = `
   </div>
 </div>
 `;
-
-exports[`Graphviz component render dot string 1`] = `
-<div>
-  <div>
-    {"dot":"digraph { a -&gt; b -&gt; c; a-&gt;c; }","format":"svg","ext":{"images":[],"files":[]}}
-  </div>
-</div>
-`;

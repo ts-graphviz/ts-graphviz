@@ -131,8 +131,7 @@ Temporary Items
 # End of https://www.gitignore.io/api/macos
 
 # Output Modules
-core
-web
+lib
 docs
 !src/**/*
 *.d.ts
