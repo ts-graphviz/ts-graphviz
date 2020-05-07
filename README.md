@@ -110,7 +110,7 @@ Graphviz-dot Test and Integration
   - Graphviz-dot Renderer for React.
 - [jest-graphviz](https://github.com/ts-graphviz/jest-graphviz)
   - Jest matchers that supports graphviz integration.
-- [setup-graphviz](https://github.com/kamiazya/setup-graphviz)
+- [setup-graphviz](https://github.com/ts-graphviz/setup-graphviz)
   - GitHub Action to set up Graphviz cross-platform(Linux, macOS, Windows).
 
 ## Contributors
