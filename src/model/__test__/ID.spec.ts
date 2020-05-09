@@ -13,7 +13,7 @@ describe('valueType', () => {
           test
           `,
         ],
-      ])('toDot result should be quoted', input => {
+      ])('toDot result should be quoted', (input) => {
         const value = new ID(input);
         const dot = value.toDot();
         expect(dot).toMatch(DoubleQuotedValuePattern);
@@ -55,7 +55,7 @@ describe('valueType', () => {
           >
           `,
         ],
-      ])('toDot result should not be quoted', input => {
+      ])('toDot result should not be quoted', (input) => {
         const value = new ID(input);
         const dot = value.toDot();
         expect(dot).not.toMatch(DoubleQuotedValuePattern);

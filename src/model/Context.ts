@@ -56,7 +56,7 @@ export class Context implements IContext {
       this,
       this.toNodeLikeObject(cluster, target1),
       this.toNodeLikeObject(cluster, target2),
-      ...targets.map(n => this.toNodeLikeObject(cluster, n)),
+      ...targets.map((n) => this.toNodeLikeObject(cluster, n)),
     );
     return edge;
   }

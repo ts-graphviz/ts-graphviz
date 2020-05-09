@@ -134,7 +134,7 @@ describe('class Subgraph', () => {
         });
 
         it('Edge operation methods works', () => {
-          const [node1, node2] = ['node1', 'node2'].map(id => subgraph.createNode(id));
+          const [node1, node2] = ['node1', 'node2'].map((id) => subgraph.createNode(id));
           const edge = createEdge(node1, node2);
           expect(subgraph.existEdge(edge)).toBe(false);
           subgraph.addEdge(edge);
