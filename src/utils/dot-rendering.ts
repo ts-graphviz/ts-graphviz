@@ -16,7 +16,7 @@ export function quote(src: string): string {
  * @hidden
  */
 function concatWordsFactory(deciliter: string): (...lines: (string | undefined)[]) => string {
-  return (...lines: (string | undefined)[]) => lines.filter(l => typeof l === 'string').join(deciliter);
+  return (...lines: (string | undefined)[]): string => lines.filter((l) => typeof l === 'string').join(deciliter);
 }
 
 /**
@@ -41,7 +41,7 @@ export function indent(src: string): string {
   const space = '  ';
   return src
     .split('\n')
-    .map(l => `${space}${l}`)
+    .map((l) => `${space}${l}`)
     .join('\n');
 }
 
@@ -51,6 +51,6 @@ export function indent(src: string): string {
 export function commentOut(src: string): string {
   return src
     .split('\n')
-    .map(l => `// ${l}`.trim())
+    .map((l) => `// ${l}`.trim())
     .join('\n');
 }

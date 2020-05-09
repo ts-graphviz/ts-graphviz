@@ -145,7 +145,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * If there is no Subgraph with the specified id in the cluster, return undefined.
    */
   public getSubgraph(id: string): ISubgraph | undefined {
-    return Array.from(this.subgraphs.values()).find(subgraph => subgraph.id === id);
+    return Array.from(this.subgraphs.values()).find((subgraph) => subgraph.id === id);
   }
 
   /**
@@ -230,13 +230,13 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
     // attributes
     const attributes = Array.from(this.attrs.entries()).map(([key, value]) => `${key} = ${value.toDot()};`);
     const commonAttributes = Object.entries(this.attributes)
-      .filter(([_, attrs]) => attrs.size > 0)
+      .filter(([, attrs]) => attrs.size > 0)
       .map(([key, attrs]) => `${key} ${attrs.toDot()};`);
 
     // objects
-    const nodes = Array.from(this.nodes.values()).map(o => o.toDot());
-    const subgraphs = Array.from(this.subgraphs.values()).map(o => o.toDot());
-    const edges = Array.from(this.edges.values()).map(o => o.toDot());
+    const nodes = Array.from(this.nodes.values()).map((o) => o.toDot());
+    const subgraphs = Array.from(this.subgraphs.values()).map((o) => o.toDot());
+    const edges = Array.from(this.edges.values()).map((o) => o.toDot());
     const clusterContents = joinLines(...attributes, ...commonAttributes, ...nodes, ...subgraphs, ...edges);
     const dot = joinLines(
       concatWordsWithSpace(type, id, '{'),

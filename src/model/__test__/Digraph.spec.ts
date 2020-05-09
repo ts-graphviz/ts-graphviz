@@ -151,7 +151,7 @@ describe('class Digraph', () => {
     });
 
     it('Edge operation methods works', () => {
-      const [node1, node2] = ['node1', 'node2'].map(id => g.createNode(id));
+      const [node1, node2] = ['node1', 'node2'].map((id) => g.createNode(id));
       const edge = new Edge(context, node1, node2);
       expect(g.existEdge(edge)).toBe(false);
       g.addEdge(edge);

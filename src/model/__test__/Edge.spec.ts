@@ -6,6 +6,7 @@ import { Graph } from '../Graph';
 import { Node } from '../Node';
 
 describe('class Edge', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let g: Graph | Digraph;
   const DigraphContext = new Context();
   g = new Digraph(DigraphContext);

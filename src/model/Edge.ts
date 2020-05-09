@@ -30,14 +30,14 @@ export class Edge extends DotBase {
   constructor(context: IContext, ...targets: IEdgeTarget[]);
   constructor(private context: IContext, target1: IEdgeTarget, target2: IEdgeTarget, ...targets: IEdgeTarget[]) {
     super();
-    this.targets = [target1, target2, ...targets].filter(n => isEdgeTarget(n));
+    this.targets = [target1, target2, ...targets].filter((n) => isEdgeTarget(n));
   }
 
   /** Convert Edge to Dot language. */
   public toDot(): string {
     const comment = this.comment ? commentOut(this.comment) : undefined;
     const arrow = ` ${this.dotArrow} `;
-    const target = this.targets.map(n => n.toEdgeTargetDot()).join(arrow);
+    const target = this.targets.map((n) => n.toEdgeTargetDot()).join(arrow);
     const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
     const dot = `${target}${attrs};`;
     return joinLines(comment, dot);
