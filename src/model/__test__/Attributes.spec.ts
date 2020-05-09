@@ -2,6 +2,7 @@ import { DotBase, GraphvizObject } from '../../abstract';
 import { attribute } from '../../attribute';
 import { Attributes } from '../Attributes';
 import { AttributesBase } from '../AttributesBase';
+import { toDot } from '../../utils/dot-rendering';
 
 describe('class Attributes', () => {
   let attrs: Attributes<attribute.Attribute>;
@@ -22,18 +23,18 @@ describe('class Attributes', () => {
 
   describe('renders correctly by toDot method', () => {
     it('no attributes', () => {
-      expect(attrs.toDot()).toMatchSnapshot();
+      expect(toDot(attrs)).toMatchSnapshot();
     });
 
     it('one attribute', () => {
       attrs.set('label', 'test');
-      expect(attrs.toDot()).toMatchSnapshot();
+      expect(toDot(attrs)).toMatchSnapshot();
     });
 
     it('some attributes', () => {
       attrs.set('label', 'test');
       attrs.set('color', 'red');
-      expect(attrs.toDot()).toMatchSnapshot();
+      expect(toDot(attrs)).toMatchSnapshot();
     });
 
     test('set some attributes by apply', () => {
@@ -42,7 +43,7 @@ describe('class Attributes', () => {
         color: 'red',
         fontsize: 16,
       });
-      expect(attrs.toDot()).toMatchSnapshot();
+      expect(toDot(attrs)).toMatchSnapshot();
     });
 
     test('apply/clear attribute', () => {
@@ -71,12 +72,12 @@ describe('class Attributes', () => {
       });
       test('single line comment', () => {
         attrs.comment = 'this is comment.';
-        expect(attrs.toDot()).toMatchSnapshot();
+        expect(toDot(attrs)).toMatchSnapshot();
       });
 
       test('multi line comment', () => {
         attrs.comment = 'this is comment.\nsecond line.';
-        expect(attrs.toDot()).toMatchSnapshot();
+        expect(toDot(attrs)).toMatchSnapshot();
       });
     });
   });

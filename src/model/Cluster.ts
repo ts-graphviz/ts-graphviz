@@ -1,16 +1,20 @@
+/* eslint-disable @typescript-eslint/no-use-before-define,max-classes-per-file */
+import { attribute } from '../attribute';
 import {
   ClusterType,
   EdgeTargetLike,
   ICluster,
   IClusterCommonAttributes,
-  IContext,
   IEdge,
   INode,
   ISubgraph,
+  Compass,
 } from '../types';
-import { commentOut, concatWordsWithSpace, indent, joinLines } from '../utils/dot-rendering';
 import { AttributesBase } from './AttributesBase';
-import { ID } from './ID';
+import { isEdgeTarget, ForwardRefNode, isEdgeTargetLike, Node } from './Node';
+import { Edge } from './Edge';
+import { IEdgeTarget } from '../types';
+import { Attributes } from './Attributes';
 
 /**
  * Base class for clusters.
@@ -18,45 +22,36 @@ import { ID } from './ID';
  */
 export abstract class Cluster<T extends string> extends AttributesBase<T> implements ICluster<T> {
   /** Cluster ID */
-  get id(): string | undefined {
-    return this.internalID?.value;
-  }
+  public id?: string;
 
-  set id(idValue: string | undefined) {
-    this.internalID = typeof idValue === 'string' ? new ID(idValue) : undefined;
-  }
   /** Comments to include when outputting with toDot. */
   public comment?: string;
-  /** The cluster context. */
-  public abstract readonly context: IContext;
   /** Indicates the type of cluster. */
   public abstract readonly type: ClusterType;
   /** Common attributes of objects in the cluster. */
   public abstract readonly attributes: Readonly<IClusterCommonAttributes>;
 
   /**
-   * Actual status of ID used when outputting with toDot.
-   * @hidden
-   */
-  private internalID?: ID;
-
-  /**
    * Nodes in the cluster.
    * @hidden
    */
-  private nodes: Map<string, INode> = new Map();
+  public nodes: Map<string, INode> = new Map();
 
   /**
    * Edges in the cluster.
    * @hidden
    */
-  private edges: Set<IEdge> = new Set();
+  public edges: Set<IEdge> = new Set();
 
   /**
    * Subgraphs in the cluster.
    * @hidden
    */
-  private subgraphs: Set<ISubgraph> = new Set();
+  public subgraphs: Set<ISubgraph> = new Set();
+
+  // private readonly internal = {
+  //   nodes: ReadonlyMap
+  // };
 
   /**
    * Add a Node to the cluster.
@@ -104,7 +99,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * Create a Subgraph and add it to the cluster.
    */
   public createSubgraph(id?: string): ISubgraph {
-    const graph = this.context.createSubgraph(id);
+    const graph = new Subgraph(id);
     this.subgraphs.add(graph);
     return graph;
   }
@@ -134,7 +129,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * Create a Node in the cluster.
    */
   public createNode(id: string): INode {
-    const node = this.context.createNode(id);
+    const node = new Node(id);
     this.nodes.set(id, node);
     return node;
   }
@@ -159,12 +154,32 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
   }
 
   /** Create Edge and add it to the cluster. */
-  public createEdge(target1: EdgeTargetLike, target2: EdgeTargetLike): IEdge;
-  public createEdge(...targets: EdgeTargetLike[]): IEdge;
-  public createEdge(target1: EdgeTargetLike, target2: EdgeTargetLike, ...targets: EdgeTargetLike[]): IEdge {
-    const edge = this.context.createEdge(this, target1, target2, ...targets);
+  public createEdge(targets: EdgeTargetLike[]): IEdge {
+    if (targets.length < 2 && (isEdgeTargetLike(targets[0]) && isEdgeTargetLike(targets[1])) === false) {
+      throw new Error('The element of Edge target is missing or not satisfied as Edge target.');
+    }
+    const edge = new Edge(targets.map((t) => this.toNodeLikeObject(t)));
     this.edges.add(edge);
     return edge;
+  }
+
+  /** @hidden */
+  private toNodeLikeObject(node: EdgeTargetLike): IEdgeTarget {
+    if (isEdgeTarget(node)) {
+      return node;
+    }
+    const [id, port, compass] = node.split(':');
+    const n = this.getNode(id);
+    if (n !== undefined) {
+      if (port && (compass === undefined || Compass.is(compass))) {
+        return n.port({ port, compass });
+      }
+      return n;
+    }
+    if (Compass.is(compass)) {
+      return new ForwardRefNode(id, { port, compass });
+    }
+    return new ForwardRefNode(id, { port });
   }
 
   /**
@@ -210,39 +225,34 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * @param callback Callback to operate Edge.
    */
   public edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge {
-    const edge = this.createEdge(...targets);
+    const edge = this.createEdge(targets);
     if (callback) {
       callback(edge);
     }
     return edge;
   }
+}
 
-  /** Convert Cluster to Dot language. */
-  public toDot(): string {
-    const comment = this.comment ? commentOut(this.comment) : undefined;
-    return joinLines(comment, this.toDotWithoutComment());
+/**
+ * Subgraph object.
+ * @category Primary
+ */
+export class Subgraph extends Cluster<attribute.Subgraph | attribute.ClusterSubgraph> implements ISubgraph {
+  /** Indicates the type of cluster. */
+  public type = ClusterType.subgraph;
+  public attributes = {
+    graph: new Attributes<attribute.ClusterSubgraph>(),
+    edge: new Attributes<attribute.Edge>(),
+    node: new Attributes<attribute.Node>(),
+  };
+  constructor(public readonly id?: string) {
+    super();
   }
-
-  /** @hidden */
-  protected toDotWithoutComment(): string {
-    const type = this.type;
-    const id = this.internalID?.toDot();
-    // attributes
-    const attributes = Array.from(this.attrs.entries()).map(([key, value]) => `${key} = ${value.toDot()};`);
-    const commonAttributes = Object.entries(this.attributes)
-      .filter(([, attrs]) => attrs.size > 0)
-      .map(([key, attrs]) => `${key} ${attrs.toDot()};`);
-
-    // objects
-    const nodes = Array.from(this.nodes.values()).map((o) => o.toDot());
-    const subgraphs = Array.from(this.subgraphs.values()).map((o) => o.toDot());
-    const edges = Array.from(this.edges.values()).map((o) => o.toDot());
-    const clusterContents = joinLines(...attributes, ...commonAttributes, ...nodes, ...subgraphs, ...edges);
-    const dot = joinLines(
-      concatWordsWithSpace(type, id, '{'),
-      clusterContents ? indent(clusterContents) : undefined,
-      '}',
-    );
-    return dot;
+  /** Determines whether the Subgraph is a SubgraphCluster. */
+  public isSubgraphCluster(): boolean {
+    if (typeof this.id === 'string') {
+      return this.id.startsWith('cluster');
+    }
+    return false;
   }
 }

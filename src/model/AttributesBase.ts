@@ -7,6 +7,11 @@ import { ID } from './ID';
 export abstract class AttributesBase<T extends string> extends DotBase implements IAttributesBase<T> {
   /** @hidden */
   protected attrs: Map<T, ID> = new Map();
+
+  public entries(): IterableIterator<[T, ID]> {
+    return this.attrs.entries();
+  }
+
   /** The size of the attribute. */
   get size(): number {
     return this.attrs.size;

@@ -4,7 +4,7 @@ exports[`class Subgraph root is Digraph addXxx existXxx removeXxx APIs Edge oper
 "subgraph \\"test\\" {
   \\"node1\\";
   \\"node2\\";
-  \\"node1\\" -- \\"node2\\";
+  \\"node1\\" -> \\"node2\\";
 }"
 `;
 

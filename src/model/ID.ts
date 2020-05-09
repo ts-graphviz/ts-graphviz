@@ -1,6 +1,5 @@
 import { DotBase } from '../abstract';
 import { IID } from '../types';
-import { escape, quote } from '../utils/dot-rendering';
 
 /**
  * An ID is just a value.
@@ -20,11 +19,11 @@ export class ID extends DotBase implements IID {
 
   /** @hidden */
 
-  private isHTMLLike: boolean;
+  public readonly isHTMLLike: boolean;
   /** @hidden */
-  private isNotString: boolean;
+  public readonly isNotString: boolean;
   /** @hidden */
-  private isQuoteRequired: boolean;
+  public readonly isQuoteRequired: boolean;
 
   constructor(value: string | number | boolean) {
     super();
@@ -44,19 +43,5 @@ export class ID extends DotBase implements IID {
       }
     }
     this.value = stringValue;
-  }
-
-  /**
-   * Determines whether quotes are required or HTML-Like labels and returns an appropriate string.
-   */
-  public toDot(): string {
-    if (this.isNotString || this.isHTMLLike) {
-      return this.value;
-    }
-    let value = this.value;
-    if (this.isQuoteRequired) {
-      value = quote(escape(value));
-    }
-    return value;
   }
 }

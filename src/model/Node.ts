@@ -1,30 +1,16 @@
 import { DotBase } from '../abstract';
 import { attribute } from '../attribute';
-import { Compass, EdgeTargetLike, IEdgeTarget, INode, INodeWithPort, IPort } from '../types';
-import { commentOut, concatWordsWithColon, joinLines } from '../utils/dot-rendering';
+import { EdgeTargetLike, IEdgeTarget, INode, INodeWithPort, IPort, IForwardRefNode } from '../types';
 import { Attributes } from './Attributes';
-import { ID } from './ID';
 
-// tslint:disable: max-classes-per-file
+// eslint:disable: max-classes-per-file
 
 /**
  * An object that represents a Node where port and compass are specified.
  * @category Primary
  */
 export class NodeWithPort implements INodeWithPort {
-  /** Specify port embedded in Label. */
-  public readonly port?: ID;
-  /** Specify the direction of the edge. */
-  public readonly compass?: Compass;
-  constructor(public readonly node: Node, port: Partial<IPort>) {
-    this.port = port.port ? new ID(port.port) : undefined;
-    this.compass = port.compass;
-  }
-
-  /** Converts a NodeWithPort to an EdgeTarget. */
-  public toEdgeTargetDot(): string {
-    return concatWordsWithColon(this.node.toEdgeTargetDot(), this.port?.toDot(), this.compass);
-  }
+  constructor(public readonly node: INode, public readonly port: Partial<IPort>) {}
 }
 
 /**
@@ -36,23 +22,8 @@ export class Node extends DotBase implements INode {
   public comment?: string;
   public readonly attributes = new Attributes<attribute.Node>();
   /** @hidden */
-  private readonly idLiteral: ID;
   constructor(public readonly id: string) {
     super();
-    this.idLiteral = new ID(id);
-  }
-
-  /** Convert Node to Dot language. */
-  public toDot(): string {
-    const comment = this.comment ? commentOut(this.comment) : undefined;
-    const target = this.toEdgeTargetDot();
-    const attrs = this.attributes.size > 0 ? ` ${this.attributes.toDot()}` : '';
-    const dot = `${target}${attrs};`;
-    return joinLines(comment, dot);
-  }
-  /** Converts a Node to an EdgeTarget. */
-  public toEdgeTargetDot(): string {
-    return this.idLiteral.toDot();
   }
 
   /** Returns NodeWithPort with port and compass specified. */
@@ -68,21 +39,8 @@ export class Node extends DotBase implements INode {
  * @category Primary
  * @hidden
  */
-export class ForwardRefNode implements INodeWithPort {
-  public readonly id: ID;
-  public readonly port?: ID;
-  /** Specify the direction of the edge. */
-  public readonly compass?: Compass;
-  constructor(id: string, port: Partial<IPort>) {
-    this.id = new ID(id);
-    this.port = port.port ? new ID(port.port) : undefined;
-    this.compass = port.compass;
-  }
-
-  /** Converts a NodeWithPort to an EdgeTarget. */
-  public toEdgeTargetDot(): string {
-    return concatWordsWithColon(this.id.toDot(), this.port?.toDot(), this.compass);
-  }
+export class ForwardRefNode implements IForwardRefNode {
+  constructor(public readonly id: string, public readonly port: Partial<IPort>) {}
 }
 
 /**

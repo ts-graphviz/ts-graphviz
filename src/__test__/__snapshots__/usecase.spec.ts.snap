@@ -67,7 +67,7 @@ graph "G" {
     "Aaa" -- "Abb" -- "Acc" -- "hoge":"fuga" [
       color = "red",
     ];
-    "Aaa":"a":w -- "Abb":w -- "Aaa":"e" -- "Acc":"r":e [
+    "Aaa":"a":"w" -- "Abb":"w" -- "Aaa":"e" -- "Acc":"r":"e" [
       color = "red",
     ];
   }

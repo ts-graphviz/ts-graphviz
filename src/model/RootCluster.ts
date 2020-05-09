@@ -1,7 +1,7 @@
 import { attribute } from '../attribute';
-import { IContext, IRootCluster, RootClusterType } from '../types';
-import { commentOut, concatWordsWithSpace, joinLines } from '../utils/dot-rendering';
+import { IRootCluster, RootClusterType } from '../types';
 import { Cluster } from './Cluster';
+import { Attributes } from './Attributes';
 
 /**
  * Base class for RootCluster.
@@ -20,19 +20,11 @@ export abstract class RootCluster extends Cluster<attribute.RootCluster> impleme
   /** Indicates the type of cluster. */
   public abstract readonly type: RootClusterType;
   public attributes = {
-    graph: this.context.createAttributes<attribute.Subgraph | attribute.ClusterSubgraph>(),
-    edge: this.context.createAttributes<attribute.Edge>(),
-    node: this.context.createAttributes<attribute.Node>(),
+    graph: new Attributes<attribute.Subgraph | attribute.ClusterSubgraph>(),
+    edge: new Attributes<attribute.Edge>(),
+    node: new Attributes<attribute.Node>(),
   };
-  constructor(public context: IContext, id?: string) {
+  constructor(public readonly id?: string) {
     super();
-    this.id = id;
-    this.context.root = this;
-  }
-  /** Convert RootCluster to Dot language. */
-  public toDot(): string {
-    const comment = this.comment ? commentOut(this.comment) : undefined;
-    const dot = concatWordsWithSpace(this.strict ? 'strict' : undefined, this.toDotWithoutComment());
-    return joinLines(comment, dot);
   }
 }

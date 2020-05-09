@@ -1,5 +1,4 @@
 import { attribute } from './attribute';
-import { Edge } from './model/Edge';
 // tslint:disable: no-namespace
 
 /**
@@ -102,16 +101,22 @@ export namespace Compass {
 /**
  * Objects that can be converted to the Dot language satisfy this interface.
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IDot {
-  toDot(): string;
+  // toDot(): string;
 }
+
+// export interface IDotStatic<T extends IDot> {
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   new (...args: any): T;
+//   toDot(context: IContext, dot: T): string;
+// }
 
 /**
  * Objects that can be Edge destinations satisfy this interface.
  */
-export interface IEdgeTarget {
-  toEdgeTargetDot(): string;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export type IEdgeTarget = INode | INodeWithPort | IForwardRefNode;
 
 /**
  * string or an object implementing IEdgeTarget.
@@ -150,20 +155,24 @@ export interface IAttributesBase<T extends string> {
   clear(): void;
 }
 
-export interface IAttributes<T extends string> extends IAttributesBase<T>, IHasComment, IDot {}
+export interface IAttributes<T extends string> extends IAttributesBase<T>, IHasComment {}
 
 export interface IPort {
   port: string;
   compass: Compass;
 }
 
-export interface INodeWithPort extends IEdgeTarget {
-  readonly port?: IID;
-  /** Specify the direction of the edge. */
-  readonly compass?: Compass;
+export interface INodeWithPort {
+  node: INode;
+  port: Partial<IPort>;
 }
 
-export interface INode extends IHasComment, IDot, IEdgeTarget, IHasAttributes<attribute.Node> {
+export interface IForwardRefNode {
+  id: string;
+  port: Partial<IPort>;
+}
+
+export interface INode extends IHasComment, IHasAttributes<attribute.Node> {
   readonly id: string;
   port(port: string | Partial<IPort>): INodeWithPort;
 }
@@ -195,37 +204,11 @@ export interface IContext {
 
   /** Root graph. */
   root?: IRootCluster;
-
-  /**
-   * Create a Subgraph.
-   */
-  createSubgraph(id?: string): ISubgraph;
-
-  /**
-   * Create a Attributes.
-   */
-  createAttributes<T extends string>(): IAttributes<T>;
-
-  /**
-   * Create a Node.
-   */
-  createNode(id: string): INode;
-
-  /**
-   * Create a Edge.
-   */
-  createEdge<T extends string>(cluster: ICluster<T>, target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
-  createEdge<T extends string>(cluster: ICluster<T>, ...targets: EdgeTargetLike[]): Edge;
 }
 
 export interface ICluster<T extends string> extends IHasComment, IAttributesBase<T> {
   id?: string;
   readonly attributes: Readonly<IClusterCommonAttributes>;
-  readonly context: IContext;
-  /**
-   * Add a Node to the cluster.
-   */
-  addNode(node: INode): void;
   /**
    * Add a Node to the cluster.
    */
@@ -285,8 +268,7 @@ export interface ICluster<T extends string> extends IHasComment, IAttributesBase
    */
   getNode(id: string): INode | undefined;
   /** Create Edge and add it to the cluster. */
-  createEdge(target1: EdgeTargetLike, target2: EdgeTargetLike): IEdge;
-  createEdge(...targets: EdgeTargetLike[]): IEdge;
+  createEdge(targets: EdgeTargetLike[]): IEdge;
   /**
    * Declarative API for Subgraph.
    *
@@ -319,11 +301,11 @@ export interface ICluster<T extends string> extends IHasComment, IAttributesBase
   edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge;
 }
 
-export interface ISubgraph extends ICluster<attribute.Subgraph | attribute.ClusterSubgraph>, IDot {
+export interface ISubgraph extends ICluster<attribute.Subgraph | attribute.ClusterSubgraph> {
   isSubgraphCluster(): boolean;
 }
 
-export interface IRootCluster extends ICluster<attribute.RootCluster>, IDot {
+export interface IRootCluster extends ICluster<attribute.RootCluster> {
   /**
    * Strict mode.
    *

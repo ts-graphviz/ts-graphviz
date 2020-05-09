@@ -2,18 +2,16 @@ import 'jest-graphviz';
 import { DotBase, GraphvizObject } from '../../abstract';
 import { AttributesBase } from '../AttributesBase';
 import { Cluster } from '../Cluster';
-import { Context } from '../Context';
 import { Digraph } from '../Digraph';
 import { Edge } from '../Edge';
 import { Node } from '../Node';
 import { RootCluster } from '../RootCluster';
+import { toDot } from '../../utils/dot-rendering';
 
 describe('class Digraph', () => {
   let g: Digraph;
-  let context: Context;
   beforeEach(() => {
-    context = new Context();
-    g = new Digraph(context);
+    g = new Digraph();
   });
 
   it('should be instance of Digraph/RootCluster/Cluster/AttributesBase/DotBase/GraphvizObject', () => {
@@ -27,20 +25,17 @@ describe('class Digraph', () => {
 
   describe('renders correctly by toDot method', () => {
     it('simple g', () => {
-      const dot = g.toDot();
-      expect(dot).toBeValidDotAndMatchSnapshot();
+      expect(toDot(g)).toBeValidDotAndMatchSnapshot();
     });
 
     it('strict graph', () => {
       g.strict = true;
-      const dot = g.toDot();
-      expect(dot).toBeValidDotAndMatchSnapshot();
+      expect(toDot(g)).toBeValidDotAndMatchSnapshot();
     });
 
     test('set attributes', () => {
       g.set('dpi', 360);
-      const dot = g.toDot();
-      expect(dot).toBeValidDotAndMatchSnapshot();
+      expect(toDot(g)).toBeValidDotAndMatchSnapshot();
     });
 
     test('set attributes by apply', () => {
@@ -48,19 +43,18 @@ describe('class Digraph', () => {
         layout: 'dot',
         dpi: 360,
       });
-      const dot = g.toDot();
-      expect(dot).toBeValidDotAndMatchSnapshot();
+      expect(toDot(g)).toBeValidDotAndMatchSnapshot();
     });
 
     describe('digraph with comment', () => {
       test('single line comment', () => {
         g.comment = 'this is comment.';
-        expect(g.toDot()).toMatchSnapshot();
+        expect(toDot(g)).toMatchSnapshot();
       });
 
       test('multi line comment', () => {
         g.comment = 'this is comment.\nsecond line.';
-        expect(g.toDot()).toMatchSnapshot();
+        expect(toDot(g)).toMatchSnapshot();
       });
     });
 
@@ -68,52 +62,48 @@ describe('class Digraph', () => {
       g.attributes.edge.set('label', 'edge label');
       g.attributes.graph.set('color', 'red');
       g.attributes.node.set('xlabel', 'node xlabel');
-      const dot = g.toDot();
-      expect(dot).toBeValidDotAndMatchSnapshot();
+      expect(toDot(g)).toBeValidDotAndMatchSnapshot();
     });
 
     it('nodes and edge', () => {
       const node1 = g.createNode('node1');
       const node2 = g.createNode('node2');
-      g.createEdge(node1, node2);
-      const dot = g.toDot();
-      expect(dot).toBeValidDotAndMatchSnapshot();
+      g.createEdge([node1, node2]);
+      expect(toDot(g)).toBeValidDotAndMatchSnapshot();
     });
 
     it('subgraphs', () => {
       const subgraphA = g.createSubgraph('A');
       const nodeA1 = subgraphA.createNode('A_node1');
       const nodeA2 = subgraphA.createNode('A_node2');
-      subgraphA.createEdge(nodeA1, nodeA2);
+      subgraphA.createEdge([nodeA1, nodeA2]);
 
       const subgraphB = g.createSubgraph('B');
       const nodeB1 = subgraphB.createNode('B_node1');
       const nodeB2 = subgraphB.createNode('B_node2');
-      subgraphA.createEdge(nodeB1, nodeB2);
+      subgraphA.createEdge([nodeB1, nodeB2]);
 
       const node1 = g.createNode('node1');
       const node2 = g.createNode('node2');
-      g.createEdge(node1, node2);
-      const dot = g.toDot();
-      expect(dot).toBeValidDotAndMatchSnapshot();
+      g.createEdge([node1, node2]);
+      expect(toDot(g)).toBeValidDotAndMatchSnapshot();
     });
 
     it('subgraphs, depth 2', () => {
       const subgraphDepth1 = g.createSubgraph('depth1');
       const nodeA1 = subgraphDepth1.createNode('depth1_node1');
       const nodeA2 = subgraphDepth1.createNode('depth1_node2');
-      subgraphDepth1.createEdge(nodeA1, nodeA2);
+      subgraphDepth1.createEdge([nodeA1, nodeA2]);
 
       const subgraphDepth2 = subgraphDepth1.createSubgraph('depth2');
       const nodeB1 = subgraphDepth2.createNode('depth2_node1');
       const nodeB2 = subgraphDepth2.createNode('depth2_node2');
-      subgraphDepth2.createEdge(nodeB1, nodeB2);
+      subgraphDepth2.createEdge([nodeB1, nodeB2]);
 
       const node1 = g.createNode('node1');
       const node2 = g.createNode('node2');
-      g.createEdge(node1, node2);
-      const dot = g.toDot();
-      expect(dot).toBeValidDotAndMatchSnapshot();
+      g.createEdge([node1, node2]);
+      expect(toDot(g)).toBeValidDotAndMatchSnapshot();
     });
 
     describe('label attribute behavior', () => {
@@ -121,16 +111,14 @@ describe('class Digraph', () => {
         g.attributes.graph.set('label', 'this is test for graph label');
         g.attributes.edge.set('label', 'this is test for edge label');
         g.attributes.node.set('label', 'this is test for node label');
-        const dot = g.toDot();
-        expect(dot).toBeValidDotAndMatchSnapshot();
+        expect(toDot(g)).toBeValidDotAndMatchSnapshot();
       });
 
       it('html like', () => {
         g.attributes.graph.set('label', '<<B>this is test for graph label</B>>');
         g.attributes.edge.set('label', '<<U>this is test for edge label</U>>');
         g.attributes.node.set('label', '<<I>this is test for node label</I>>');
-        const dot = g.toDot();
-        expect(dot).toBeValidDotAndMatchSnapshot();
+        expect(toDot(g)).toBeValidDotAndMatchSnapshot();
       });
     });
   });
@@ -151,8 +139,8 @@ describe('class Digraph', () => {
     });
 
     it('Edge operation methods works', () => {
-      const [node1, node2] = ['node1', 'node2'].map((id) => g.createNode(id));
-      const edge = new Edge(context, node1, node2);
+      const nodes = ['node1', 'node2'].map((id) => g.createNode(id));
+      const edge = new Edge(nodes);
       expect(g.existEdge(edge)).toBe(false);
       g.addEdge(edge);
       expect(g.existEdge(edge)).toBe(true);
@@ -161,9 +149,7 @@ describe('class Digraph', () => {
     });
 
     it('Subgraph operation methods works', () => {
-      const sub = g.context.createSubgraph('sub');
-      expect(g.existSubgraph(sub)).toBe(false);
-      g.addSubgraph(sub);
+      const sub = g.createSubgraph('sub');
       expect(g.existSubgraph(sub)).toBe(true);
       g.removeSubgraph(sub);
       expect(g.existSubgraph(sub)).toBe(false);

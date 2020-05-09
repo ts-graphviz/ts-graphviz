@@ -1,6 +1,7 @@
 import 'jest-graphviz';
 import { Digraph, Graph } from '../model';
 import { digraph, graph, strict } from '../usecase';
+import { toDot } from '../utils/dot-rendering';
 
 describe('function digraph', () => {
   it('should return Digraph object, when execute digraph()', () => {
@@ -29,7 +30,7 @@ describe('function digraph', () => {
         });
       });
     });
-    const dot = G.toDot();
+    const dot = toDot(G);
     expect(dot).toBeValidDotAndMatchSnapshot();
   });
 
@@ -57,7 +58,7 @@ describe('function digraph', () => {
         });
       });
     });
-    const dot = G.toDot();
+    const dot = toDot(G);
     expect(dot).toBeValidDotAndMatchSnapshot();
   });
 });
@@ -93,7 +94,7 @@ describe('function graph', () => {
         });
       });
     });
-    const dot = G.toDot();
+    const dot = toDot(G);
     expect(dot).toBeValidDotAndMatchSnapshot();
   });
 
@@ -115,7 +116,7 @@ describe('function graph', () => {
         s.edge([innerA, innerB]);
       });
     });
-    const dot = G.toDot();
+    const dot = toDot(G);
     expect(dot).toBeValidDotAndMatchSnapshot();
   });
 });

@@ -1,7 +1,6 @@
 export * from './ID';
 export * from './Attributes';
 export * from './Cluster';
-export * from './Subgraph';
 export * from './RootCluster';
 export * from './Graph';
 export * from './Digraph';

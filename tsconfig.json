@@ -5,6 +5,7 @@
     "module": "ES2015",
     "strict": true,
     "lib": [
+      "DOM",
       "esnext"
     ],
     "allowJs": false,

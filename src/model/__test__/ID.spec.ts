@@ -1,4 +1,5 @@
 import { ID } from '../ID';
+import { toDot } from '../../utils/dot-rendering';
 
 const DoubleQuotedValuePattern = /^".+"$/ms;
 const HTMLLikeValuePattern = /^<.+>$/ms;
@@ -15,7 +16,7 @@ describe('valueType', () => {
         ],
       ])('toDot result should be quoted', (input) => {
         const value = new ID(input);
-        const dot = value.toDot();
+        const dot = toDot(value);
         expect(dot).toMatch(DoubleQuotedValuePattern);
         expect(dot).not.toMatch(HTMLLikeValuePattern);
         expect(dot).toMatchSnapshot();
@@ -37,7 +38,8 @@ describe('valueType', () => {
         // tslint:disable-next-line: variable-name
       ])('escaped if literal contains %s character', (_name, input, expected) => {
         const value = new ID(input);
-        expect(value.toDot()).toBe(expected);
+        const dot = toDot(value);
+        expect(dot).toBe(expected);
       });
     });
 
@@ -57,7 +59,7 @@ describe('valueType', () => {
         ],
       ])('toDot result should not be quoted', (input) => {
         const value = new ID(input);
-        const dot = value.toDot();
+        const dot = toDot(value);
         expect(dot).not.toMatch(DoubleQuotedValuePattern);
         expect(dot).toMatch(HTMLLikeValuePattern);
         expect(dot).toMatchSnapshot();
