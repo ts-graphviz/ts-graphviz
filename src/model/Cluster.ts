@@ -230,7 +230,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
     // attributes
     const attributes = Array.from(this.attrs.entries()).map(([key, value]) => `${key} = ${value.toDot()};`);
     const commonAttributes = Object.entries(this.attributes)
-      .filter(([_, attrs]) => attrs.size > 0)
+      .filter(([, attrs]) => attrs.size > 0)
       .map(([key, attrs]) => `${key} ${attrs.toDot()};`);
 
     // objects

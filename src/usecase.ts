@@ -4,10 +4,11 @@ import { Context, Digraph, Graph, RootCluster } from './model';
  * Type indicating that it is a constructor of T.
  * @hidden
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Type<T> = new (...args: any[]) => T;
 
 /** @hidden */
-const builder = <G extends RootCluster>(cls: Type<G>, strictMode: boolean = false) => (
+const builder = <G extends RootCluster>(cls: Type<G>, strictMode = false) => (
   id?: string,
   callback?: (g: G) => void,
 ): G => {

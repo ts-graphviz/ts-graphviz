@@ -16,7 +16,7 @@ export abstract class RootCluster extends Cluster<attribute.RootCluster> impleme
    * For undirected graphs, there can be at most one edge connected to the same two nodes.
    * Subsequent edge statements using the same two nodes will identify the edge with the previously defined one and apply any attributes given in the edge statement.
    */
-  public strict: boolean = false;
+  public strict = false;
   /** Indicates the type of cluster. */
   public abstract readonly type: RootClusterType;
   public attributes = {

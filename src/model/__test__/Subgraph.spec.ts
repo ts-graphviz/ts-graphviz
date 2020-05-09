@@ -19,18 +19,18 @@ describe('class Subgraph', () => {
   const testCases: { title: string; beforeEachFunc: () => void }[] = [
     {
       title: 'root is Digraph',
-      beforeEachFunc: () => {
+      beforeEachFunc: (): void => {
         ctx = new Context();
         g = new Digraph(ctx);
-        createEdge = (...targets: IEdgeTarget[]) => new Edge(GraphContext, ...targets);
+        createEdge = (...targets: IEdgeTarget[]): Edge => new Edge(GraphContext, ...targets);
       },
     },
     {
       title: 'root is Graph',
-      beforeEachFunc: () => {
+      beforeEachFunc: (): void => {
         ctx = new Context();
         g = new Graph(ctx);
-        createEdge = (...targets: IEdgeTarget[]) => new Edge(GraphContext, ...targets);
+        createEdge = (...targets: IEdgeTarget[]): Edge => new Edge(GraphContext, ...targets);
       },
     },
   ];
@@ -163,27 +163,6 @@ describe('class Subgraph', () => {
           expect(sub.id).toBeUndefined();
           expect(sub.isSubgraphCluster()).toBe(false);
         });
-
-        // test('add/remove/get operation', () => {
-        //   const sub = subgraph.context.createSubgraph('sub');
-        //   subgraph.add(sub);
-        //   expect(subgraph.existSubgraph(sub)).toBe(true);
-        //   expect(subgraph.getSubgraph('sub')).toBe(sub);
-        //   subgraph.remove(sub);
-        //   expect(subgraph.existSubgraph(sub)).toBe(false);
-
-        //   const node = new Node('test');
-        //   subgraph.add(node);
-        //   expect(subgraph.existNode('test')).toBe(true);
-        //   subgraph.remove(node);
-        //   expect(subgraph.existNode('test')).toBe(false);
-
-        //   const edge = createEdge(node.port('a'), node.port('b'));
-        //   subgraph.add(edge);
-        //   expect(subgraph.existEdge(edge)).toBe(true);
-        //   subgraph.remove(edge);
-        //   expect(subgraph.existEdge(edge)).toBe(false);
-        // });
 
         it('throws an error when the EdgeTarget element is missing', () => {
           const n = subgraph.node('n');

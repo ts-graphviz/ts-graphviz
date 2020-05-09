@@ -24,13 +24,13 @@ export abstract class AttributesBase<T extends string> extends DotBase implement
     this.attrs.delete(key);
   }
 
-  public apply(attributes: AttributesObject<T>) {
+  public apply(attributes: AttributesObject<T>): void {
     for (const [key, value] of Object.entries(attributes)) {
       this.set(key as T, value as string | boolean | number);
     }
   }
 
-  public clear() {
+  public clear(): void {
     this.attrs.clear();
   }
 }

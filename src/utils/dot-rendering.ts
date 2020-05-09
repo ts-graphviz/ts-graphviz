@@ -16,7 +16,7 @@ export function quote(src: string): string {
  * @hidden
  */
 function concatWordsFactory(deciliter: string): (...lines: (string | undefined)[]) => string {
-  return (...lines: (string | undefined)[]) => lines.filter(l => typeof l === 'string').join(deciliter);
+  return (...lines: (string | undefined)[]): string => lines.filter(l => typeof l === 'string').join(deciliter);
 }
 
 /**

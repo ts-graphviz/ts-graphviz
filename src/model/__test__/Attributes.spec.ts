@@ -2,7 +2,6 @@ import { DotBase, GraphvizObject } from '../../abstract';
 import { attribute } from '../../attribute';
 import { Attributes } from '../Attributes';
 import { AttributesBase } from '../AttributesBase';
-import { ID } from '../ID';
 
 describe('class Attributes', () => {
   let attrs: Attributes<attribute.Attribute>;

@@ -1,5 +1,4 @@
 import { Compass, EdgeTargetLike, ICluster, IContext, IEdgeTarget, RootClusterType } from '../types';
-import { concatWordsWithColon } from '../utils/dot-rendering';
 import { Attributes } from './Attributes';
 import { Edge } from './Edge';
 import { ForwardRefNode, isEdgeTarget, isEdgeTargetLike, Node } from './Node';
@@ -41,10 +40,10 @@ export class Context implements IContext {
   /**
    * Create a Edge.
    */
-  public createEdge(cluster: ICluster<any>, target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
-  public createEdge(cluster: ICluster<any>, ...targets: EdgeTargetLike[]): Edge;
-  public createEdge(
-    cluster: ICluster<any>,
+  public createEdge<T extends string>(cluster: ICluster<T>, target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
+  public createEdge<T extends string>(cluster: ICluster<T>, ...targets: EdgeTargetLike[]): Edge;
+  public createEdge<T extends string>(
+    cluster: ICluster<T>,
     target1: EdgeTargetLike,
     target2: EdgeTargetLike,
     ...targets: EdgeTargetLike[]
@@ -63,7 +62,7 @@ export class Context implements IContext {
   }
 
   /** @hidden */
-  private toNodeLikeObject(cluster: ICluster<any>, node: EdgeTargetLike): IEdgeTarget {
+  private toNodeLikeObject<T extends string>(cluster: ICluster<T>, node: EdgeTargetLike): IEdgeTarget {
     if (isEdgeTarget(node)) {
       return node;
     }
