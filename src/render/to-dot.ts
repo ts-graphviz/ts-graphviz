@@ -1,13 +1,12 @@
-import { Edge } from '../model/Edge';
+import { Edge } from '../model/edges';
 import { Context } from './Context';
-import { RootClusterType, EdgeTarget, IContext, AttributesValue } from '../types';
-import { DotBase } from '../abstract';
-import { Node } from '../model/Node';
-import { ForwardRefNode } from '../model/values/ForwardRefNode';
-import { NodeWithPort } from '../model/values/NodeWithPort';
-import { Attributes } from '../model/Attributes';
-import { Cluster } from '../model/Cluster';
-import { RootCluster } from '../model/RootCluster';
+import { EdgeTarget, IContext, AttributesValue } from '../types';
+import { DotBase } from '../model/abstract';
+import { Node, ForwardRefNode, NodeWithPort } from '../model/nodes';
+import { Attributes } from '../model/attributes-base';
+import { Cluster, Subgraph } from '../model/clusters';
+import { RootCluster, Digraph, Graph } from '../model/root-clusters';
+
 /**
  * @hidden
  */
@@ -18,16 +17,45 @@ function escape(str: string): string {
 /**
  * @hidden
  */
-function wrap(src: string, wrapper: string): string {
-  return `${wrapper}${src}${wrapper}`;
+function wrap(word: string, wrapper: string): string {
+  return `${wrapper}${word}${wrapper}`;
 }
 
 /**
  * @hidden
  */
-function quote(src: string): string {
-  return wrap(src, '"');
+function wrapFactory(wrapper: string): (word: string) => string {
+  return (word: string): string => wrap(word, wrapper);
 }
+
+/**
+ * @hidden
+ */
+function leftPad(word: string, pad: string): string {
+  return `${pad}${word}`;
+}
+
+/**
+ * @hidden
+ */
+function leftPadFactory(pad: string): (word: string) => string {
+  return (word: string): string => leftPad(word, pad);
+}
+
+/**
+ * @hidden
+ */
+const quote = wrapFactory('"');
+
+/**
+ * @hidden
+ */
+const spaceWrap = wrapFactory(' ');
+
+/**
+ * @hidden
+ */
+const spaceLeftPad = leftPadFactory(' ');
 
 /**
  * @hidden
@@ -76,20 +104,69 @@ function isAttributeValue(value: unknown): value is AttributesValue {
   return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean';
 }
 
+function attributeValueToDot(value: AttributesValue): string {
+  let isHTMLLike = false;
+  let isNotString = false;
+  let isQuoteRequired = false;
+  isNotString = typeof value !== 'string';
+  let stringValue: string = typeof value === 'string' ? value : value.toString();
+  if (isNotString) {
+    isHTMLLike = false;
+    isQuoteRequired = false;
+  } else {
+    const trimmed = stringValue.trim();
+    isHTMLLike = /^<.+>$/ms.test(trimmed);
+    if (isHTMLLike) {
+      stringValue = trimmed;
+      isQuoteRequired = false;
+    } else {
+      isQuoteRequired = true;
+    }
+  }
+  if (isNotString || isHTMLLike) {
+    return stringValue;
+  }
+
+  if (isQuoteRequired) {
+    return quote(escape(stringValue));
+  }
+  return stringValue;
+}
+
+const keywords = {
+  graphEdge: '--',
+  digraphEdge: '->',
+  digraph: 'digraph',
+  graph: 'graph',
+  subgraph: 'subgraph',
+};
+
+function getClusterType<T extends string>(cluster: Cluster<T>): string | undefined {
+  if (cluster instanceof Digraph) {
+    return keywords.digraph;
+  }
+  if (cluster instanceof Graph) {
+    return keywords.graph;
+  }
+  if (cluster instanceof Subgraph) {
+    return keywords.subgraph;
+  }
+}
+
 export function toDot(object: DotBase | AttributesValue, context: IContext = new Context()): string {
   if (object instanceof Edge) {
     const comment = object.comment ? commentOut(object.comment) : undefined;
-    const arrow = wrap(context.graphType === RootClusterType.graph ? '--' : '->', ' ');
+    const arrow = spaceWrap(context.root instanceof Graph ? keywords.graphEdge : keywords.digraphEdge);
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     const target = object.targets.map((n) => toEdgeTargetDot(n, context)).join(arrow);
 
-    const attrs = object.attributes.size > 0 ? ` ${toDot(object.attributes, context)}` : '';
+    const attrs = object.attributes.size > 0 ? spaceLeftPad(toDot(object.attributes, context)) : '';
     const dot = `${target}${attrs};`;
     return joinLines(comment, dot);
   } else if (object instanceof RootCluster) {
     context.root = object;
     const comment = object.comment ? commentOut(object.comment) : undefined;
-    const type = object.type;
+    const type = getClusterType(object);
     const id = typeof object.id === 'string' ? toDot(object.id, context) : undefined;
     // attributes
     const attributes = Array.from(object.entries()).map(([key, value]) => `${key} = ${toDot(value, context)};`);
@@ -110,7 +187,7 @@ export function toDot(object: DotBase | AttributesValue, context: IContext = new
     return joinLines(comment, concatWordsWithSpace(object.strict ? 'strict' : undefined, dot));
   } else if (object instanceof Cluster) {
     const comment = object.comment ? commentOut(object.comment) : undefined;
-    const type = object.type;
+    const type = getClusterType(object);
     const id = typeof object.id === 'string' ? toDot(object.id) : undefined;
     // attributes
     const attributes = Array.from(object.entries()).map(([key, value]) => `${key} = ${toDot(value, context)};`);
@@ -151,32 +228,7 @@ export function toDot(object: DotBase | AttributesValue, context: IContext = new
       ']',
     );
   } else if (isAttributeValue(object)) {
-    let isHTMLLike = false;
-    let isNotString = false;
-    let isQuoteRequired = false;
-    isNotString = typeof object !== 'string';
-    let stringValue: string = typeof object === 'string' ? object : object.toString();
-    if (isNotString) {
-      isHTMLLike = false;
-      isQuoteRequired = false;
-    } else {
-      const trimmed = stringValue.trim();
-      isHTMLLike = /^<.+>$/ms.test(trimmed);
-      if (isHTMLLike) {
-        stringValue = trimmed;
-        isQuoteRequired = false;
-      } else {
-        isQuoteRequired = true;
-      }
-    }
-    if (isNotString || isHTMLLike) {
-      return stringValue;
-    }
-
-    if (isQuoteRequired) {
-      return quote(escape(stringValue));
-    }
-    return stringValue;
+    return attributeValueToDot(object);
   }
   return '';
 }

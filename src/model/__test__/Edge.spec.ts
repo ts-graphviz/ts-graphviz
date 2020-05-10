@@ -1,16 +1,16 @@
-import { DotBase, GraphvizObject } from '../../abstract';
-import { Edge } from '../Edge';
-import { Node } from '../Node';
+import { DotBase, GraphvizObject } from '../abstract';
+import { Edge } from '../edges';
+import { Node } from '../nodes';
 import { toDot } from '../../render/to-dot';
-import { IContext, RootClusterType } from '../../types';
+import { IContext } from '../../types';
+import { Digraph, Graph } from '../root-clusters';
 
 describe('class Edge', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const DigraphContext: IContext = {
-    graphType: RootClusterType.digraph,
+    root: new Digraph(),
   };
   const GraphContext: IContext = {
-    graphType: RootClusterType.graph,
+    root: new Graph(),
   };
 
   let edge: Edge;

@@ -1,70 +1,6 @@
 import { attribute } from './attribute';
 
 /**
- * Root cluster type.
- *
- * @description
- * digraph" if you want to use a directional graph.
- *
- * "graph" if you want to use an omnidirectional graph.
- */
-export type RootClusterType = 'digraph' | 'graph';
-export namespace RootClusterType {
-  /**
-   * A directional graph type.
-   */
-  export const digraph: RootClusterType = 'digraph';
-  /**
-   * An omnidirectional graph type.
-   */
-  export const graph: RootClusterType = 'graph';
-}
-
-/**
- * All of cluster type.
- * @description
- * If you want a hierarchy, use "subgraph".
- */
-export type ClusterType = RootClusterType | 'subgraph';
-export namespace ClusterType {
-  /**
-   * A directional graph type.
-   */
-  export const digraph: ClusterType = 'digraph';
-  /**
-   * An omnidirectional graph type.
-   */
-  export const graph: ClusterType = 'graph';
-  /**
-   * Graph that is not Root cluster.
-   *
-   * Represents the hierarchy of a graph.
-   */
-  export const subgraph: ClusterType = 'subgraph';
-}
-
-export type DotEntityType = ClusterType | 'node' | 'edge';
-export namespace DotEntityType {
-  /**
-   * A directional graph type.
-   */
-  export const digraph: DotEntityType = 'digraph';
-  /**
-   * An omnidirectional graph type.
-   */
-  export const graph: DotEntityType = 'graph';
-  /**
-   * Graph that is not Root cluster.
-   *
-   * Represents the hierarchy of a graph.
-   */
-  export const subgraph: DotEntityType = 'subgraph';
-
-  export const node: DotEntityType = 'node';
-  export const edge: DotEntityType = 'edge';
-}
-
-/**
  * Directive indicating which direction the Edge should point.
  */
 export type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c';
@@ -114,9 +50,6 @@ export interface IHasComment {
 
 export interface IHasAttributes<T extends string> {
   readonly attributes: IAttributes<T>;
-}
-export interface IID {
-  readonly value: string;
 }
 
 /**
@@ -188,10 +121,10 @@ export interface IClusterCommonAttributes {
  * Interface for context.
  */
 export interface IContext {
-  /**
-   * Graph type.
-   */
-  graphType?: RootClusterType;
+  // /**
+  //  * Graph type.
+  //  */
+  // graphType?: RootClusterType;
 
   /** Root graph. */
   root?: IRootCluster;

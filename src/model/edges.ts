@@ -1,7 +1,7 @@
-import { DotBase } from '../abstract';
+import { DotBase } from './abstract';
 import { attribute } from '../attribute';
 import { EdgeTarget } from '../types';
-import { Attributes } from './Attributes';
+import { Attributes } from './attributes-base';
 
 /**
  * @category Primary

@@ -1,7 +1,6 @@
-import { DotBase, GraphvizObject } from '../../abstract';
+import { DotBase, GraphvizObject } from '../abstract';
 import { attribute } from '../../attribute';
-import { Attributes } from '../Attributes';
-import { AttributesBase } from '../AttributesBase';
+import { Attributes, AttributesBase } from '../attributes-base';
 import { toDot } from '../../render/to-dot';
 
 describe('class Attributes', () => {

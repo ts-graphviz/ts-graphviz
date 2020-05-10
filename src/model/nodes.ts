@@ -1,9 +1,23 @@
-import { DotBase } from '../abstract';
+import { DotBase } from './abstract';
 import { attribute } from '../attribute';
-import { EdgeTargetLike, EdgeTarget, INode, IPort } from '../types';
-import { Attributes } from './Attributes';
-import { NodeWithPort } from './values/NodeWithPort';
-import { ForwardRefNode } from './values/ForwardRefNode';
+import { EdgeTargetLike, EdgeTarget, INode, IPort, IForwardRefNode, INodeWithPort } from '../types';
+import { Attributes } from './attributes-base';
+
+/**
+ * @category Primary
+ * @hidden
+ */
+export class ForwardRefNode implements IForwardRefNode {
+  constructor(public readonly id: string, public readonly port: Readonly<Partial<IPort>>) {}
+}
+
+/**
+ * An object that represents a Node where port and compass are specified.
+ * @category Primary
+ */
+export class NodeWithPort implements INodeWithPort {
+  constructor(public readonly node: INode, public readonly port: Partial<IPort>) {}
+}
 
 /**
  * Node object.

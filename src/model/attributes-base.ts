@@ -1,5 +1,5 @@
-import { DotBase } from '../abstract';
-import { AttributesObject, AttributesValue, IAttributesBase } from '../types';
+import { DotBase } from './abstract';
+import { AttributesObject, AttributesValue, IAttributesBase, IAttributes } from '../types';
 
 /**
  * @hidden
@@ -38,4 +38,14 @@ export abstract class AttributesBase<T extends string> extends DotBase implement
   public clear(): void {
     this.attrs.clear();
   }
+}
+
+/**
+ * A set of attribute values for any object.
+ *
+ * @category Attributes
+ */
+export class Attributes<T extends string> extends AttributesBase<T> implements IAttributes<T> {
+  /** Comments to include when outputting with toDot. */
+  public comment?: string;
 }

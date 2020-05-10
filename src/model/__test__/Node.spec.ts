@@ -1,5 +1,5 @@
-import { DotBase, GraphvizObject } from '../../abstract';
-import { Node } from '../Node';
+import { DotBase, GraphvizObject } from '../abstract';
+import { Node } from '../nodes';
 import { toDot } from '../../render/to-dot';
 
 describe('class Node', () => {

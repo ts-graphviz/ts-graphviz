@@ -1,20 +1,17 @@
 import 'jest-graphviz';
-import { DotBase, GraphvizObject } from '../../abstract';
-import { EdgeTarget, ISubgraph, IContext } from '../../types';
-import { AttributesBase } from '../AttributesBase';
-import { Cluster } from '../Cluster';
-import { Digraph } from '../Digraph';
-import { Edge } from '../Edge';
-import { Graph } from '../Graph';
-import { Node } from '../Node';
-import { Subgraph } from '../Cluster';
+import { DotBase, GraphvizObject } from '../abstract';
+import { ISubgraph, IContext } from '../../types';
+import { AttributesBase } from '../attributes-base';
+import { Cluster } from '../clusters';
+import { Digraph, Graph } from '../root-clusters';
+import { Node } from '../nodes';
+import { Subgraph } from '../clusters';
 import { toDot } from '../../render/to-dot';
 import { Context } from '../../render/Context';
 
 describe('class Subgraph', () => {
   let g: Digraph | Graph;
   let context: IContext;
-  let createEdge: (...targets: EdgeTarget[]) => Edge;
   const testCases: { title: string; beforeEachFunc: () => void }[] = [
     {
       title: 'root is Digraph',
@@ -22,7 +19,6 @@ describe('class Subgraph', () => {
         context = new Context();
         g = new Digraph();
         context.root = g;
-        createEdge = (...targets: EdgeTarget[]): Edge => new Edge(targets);
       },
     },
     {
@@ -31,7 +27,6 @@ describe('class Subgraph', () => {
         context = new Context();
         g = new Graph();
         context.root = g;
-        createEdge = (...targets: EdgeTarget[]): Edge => new Edge(targets);
       },
     },
   ];
@@ -135,10 +130,8 @@ describe('class Subgraph', () => {
         });
 
         it('Edge operation methods works', () => {
-          const [node1, node2] = ['node1', 'node2'].map((id) => subgraph.createNode(id));
-          const edge = createEdge(node1, node2);
-          expect(subgraph.existEdge(edge)).toBe(false);
-          subgraph.addEdge(edge);
+          const nodes = ['node1', 'node2'].map((id) => subgraph.createNode(id));
+          const edge = subgraph.createEdge(nodes);
           expect(subgraph.existEdge(edge)).toBe(true);
           expect(toDot(subgraph, context)).toMatchSnapshot();
           subgraph.removeEdge(edge);

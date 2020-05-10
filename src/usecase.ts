@@ -1,4 +1,4 @@
-import { Digraph, Graph, RootCluster } from './model';
+import { Digraph, Graph, RootCluster } from './model/root-clusters';
 
 /**
  * Type indicating that it is a constructor of T.

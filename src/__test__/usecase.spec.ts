@@ -1,5 +1,5 @@
 import 'jest-graphviz';
-import { Digraph, Graph } from '../model';
+import { Digraph, Graph } from '../model/root-clusters';
 import { digraph, graph, strict } from '../usecase';
 import { toDot } from '../render/to-dot';
 

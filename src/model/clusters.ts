@@ -1,21 +1,10 @@
 /* eslint-disable @typescript-eslint/no-use-before-define,max-classes-per-file */
 import { attribute } from '../attribute';
-import {
-  ClusterType,
-  EdgeTargetLike,
-  ICluster,
-  IClusterCommonAttributes,
-  IEdge,
-  INode,
-  ISubgraph,
-  Compass,
-} from '../types';
-import { AttributesBase } from './AttributesBase';
-import { isEdgeTarget, isEdgeTargetLike, Node } from './Node';
-import { ForwardRefNode } from './values/ForwardRefNode';
-import { Edge } from './Edge';
+import { EdgeTargetLike, ICluster, IClusterCommonAttributes, IEdge, INode, ISubgraph, Compass } from '../types';
+import { Attributes, AttributesBase } from './attributes-base';
+import { isEdgeTarget, isEdgeTargetLike, Node, ForwardRefNode } from './nodes';
+import { Edge } from './edges';
 import { EdgeTarget } from '../types';
-import { Attributes } from './Attributes';
 
 /**
  * Base class for clusters.
@@ -23,12 +12,11 @@ import { Attributes } from './Attributes';
  */
 export abstract class Cluster<T extends string> extends AttributesBase<T> implements ICluster<T> {
   /** Cluster ID */
-  public id?: string;
+  public readonly id?: string;
 
   /** Comments to include when outputting with toDot. */
   public comment?: string;
-  /** Indicates the type of cluster. */
-  public abstract readonly type: ClusterType;
+
   /** Common attributes of objects in the cluster. */
   public abstract readonly attributes: Readonly<IClusterCommonAttributes>;
 
@@ -239,8 +227,6 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
  * @category Primary
  */
 export class Subgraph extends Cluster<attribute.Subgraph | attribute.ClusterSubgraph> implements ISubgraph {
-  /** Indicates the type of cluster. */
-  public type = ClusterType.subgraph;
   public attributes = {
     graph: new Attributes<attribute.ClusterSubgraph>(),
     edge: new Attributes<attribute.Edge>(),

@@ -1,11 +1,10 @@
 import 'jest-graphviz';
-import { DotBase, GraphvizObject } from '../../abstract';
-import { AttributesBase } from '../AttributesBase';
-import { Cluster } from '../Cluster';
-import { Edge } from '../Edge';
-import { Graph } from '../Graph';
-import { Node } from '../Node';
-import { RootCluster } from '../RootCluster';
+import { DotBase, GraphvizObject } from '../abstract';
+import { AttributesBase } from '../attributes-base';
+import { Cluster } from '../clusters';
+import { Edge } from '../edges';
+import { Node } from '../nodes';
+import { RootCluster, Graph } from '../root-clusters';
 import { toDot } from '../../render/to-dot';
 
 describe('class Graph', () => {
