@@ -15,16 +15,8 @@ export default {
     {
       format: 'umd',
       name: 'graphviz',
-      file: './lib/bundle.js',
-    },
-    {
-      format: 'umd',
-      name: 'graphviz',
       file: './lib/bundle.min.js',
-      plugins: [terser()],
     },
   ],
-  plugins: [
-    typescript()
-  ]
-}
+  plugins: [typescript(), terser()],
+};

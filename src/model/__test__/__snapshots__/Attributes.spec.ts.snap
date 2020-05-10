@@ -17,7 +17,7 @@ exports[`class Attributes renders correctly by toDot method edge with comment si
 ]"
 `;
 
-exports[`class Attributes renders correctly by toDot method no attributes 1`] = `""`;
+exports[`class Attributes renders correctly by toDot method no attributes 1`] = `undefined`;
 
 exports[`class Attributes renders correctly by toDot method one attribute 1`] = `
 "[

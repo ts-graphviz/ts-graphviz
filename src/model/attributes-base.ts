@@ -45,7 +45,7 @@ export abstract class AttributesBase<T extends string> extends DotBase implement
  *
  * @category Attributes
  */
-export class Attributes<T extends string> extends AttributesBase<T> implements IAttributes<T> {
+export class Attributes<T extends string = string> extends AttributesBase<T> implements IAttributes<T> {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
 }
