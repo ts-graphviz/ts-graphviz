@@ -1,14 +1,14 @@
 import { DotBase } from '../abstract';
 import { AttributesObject, AttributesValue, IAttributesBase } from '../types';
-import { ID } from './ID';
+
 /**
  * @hidden
  */
 export abstract class AttributesBase<T extends string> extends DotBase implements IAttributesBase<T> {
   /** @hidden */
-  protected attrs: Map<T, ID> = new Map();
+  protected attrs: Map<T, AttributesValue> = new Map();
 
-  public entries(): IterableIterator<[T, ID]> {
+  public entries(): IterableIterator<[T, AttributesValue]> {
     return this.attrs.entries();
   }
 
@@ -17,12 +17,12 @@ export abstract class AttributesBase<T extends string> extends DotBase implement
     return this.attrs.size;
   }
   /** The size of the attribute. */
-  public get(key: T): ID | undefined {
+  public get(key: T): AttributesValue | undefined {
     return this.attrs.get(key);
   }
   /** Set a value to the attribute. */
   public set(key: T, value: AttributesValue): void {
-    this.attrs.set(key, new ID(value));
+    this.attrs.set(key, value);
   }
 
   public delete(key: T): void {

@@ -8,5 +8,5 @@ import { RootCluster } from './RootCluster';
  * @category Primary
  */
 export class Digraph extends RootCluster {
-  public type = RootClusterType.digraph;
+  public readonly type = RootClusterType.digraph;
 }

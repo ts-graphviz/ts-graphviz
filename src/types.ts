@@ -1,5 +1,4 @@
 import { attribute } from './attribute';
-// tslint:disable: no-namespace
 
 /**
  * Root cluster type.
@@ -99,29 +98,14 @@ export namespace Compass {
 }
 
 /**
- * Objects that can be converted to the Dot language satisfy this interface.
- */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IDot {
-  // toDot(): string;
-}
-
-// export interface IDotStatic<T extends IDot> {
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   new (...args: any): T;
-//   toDot(context: IContext, dot: T): string;
-// }
-
-/**
  * Objects that can be Edge destinations satisfy this interface.
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export type IEdgeTarget = INode | INodeWithPort | IForwardRefNode;
+export type EdgeTarget = INode | INodeWithPort | IForwardRefNode;
 
 /**
  * string or an object implementing IEdgeTarget.
  */
-export type EdgeTargetLike = IEdgeTarget | string;
+export type EdgeTargetLike = EdgeTarget | string;
 
 export interface IHasComment {
   /** Comments to include when outputting with toDot. */
@@ -131,10 +115,17 @@ export interface IHasComment {
 export interface IHasAttributes<T extends string> {
   readonly attributes: IAttributes<T>;
 }
-export interface IID extends IDot {
+export interface IID {
   readonly value: string;
 }
 
+/**
+ * An AttributesValue is one of the following:
+ * - Any string of alphabetic ([a-zA-Z\200-\377]) characters, underscores ('_') or digits ([0-9]), not beginning with a digit;
+ * - a numeral [-]?(.[0-9]+ | [0-9]+(.[0-9]*)? );
+ * - any double-quoted string ("...") possibly containing escaped quotes (\")1;
+ * - an HTML Like string (<...>).
+ */
 export type AttributesValue = string | number | boolean;
 
 export type AttributesObject<T extends string> = {
@@ -148,7 +139,7 @@ export type ClusterSubgraphAttributes = AttributesObject<attribute.ClusterSubgra
 
 export interface IAttributesBase<T extends string> {
   readonly size: number;
-  get(key: T): IID | undefined;
+  get(key: T): AttributesValue | undefined;
   set(key: T, value: AttributesValue): void;
   apply(attributes: AttributesObject<T>): void;
   delete(key: T): void;
@@ -177,7 +168,7 @@ export interface INode extends IHasComment, IHasAttributes<attribute.Node> {
   port(port: string | Partial<IPort>): INodeWithPort;
 }
 
-export interface IEdge extends IDot, IHasComment, IHasAttributes<attribute.Edge> {}
+export interface IEdge extends IHasComment, IHasAttributes<attribute.Edge> {}
 
 /**
  * Cluster common attribute interface.

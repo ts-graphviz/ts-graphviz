@@ -60,7 +60,7 @@ describe('class Attributes', () => {
     test('set/get/delete attribute', () => {
       const id = 'test';
       attrs.set('label', id);
-      expect(attrs.get('label')?.value).toBe(id);
+      expect(attrs.get('label')).toBe(id);
       attrs.delete('label');
       expect(attrs.get('label')).toBeUndefined();
     });

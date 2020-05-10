@@ -1,6 +1,6 @@
 import 'jest-graphviz';
 import { DotBase, GraphvizObject } from '../../abstract';
-import { IEdgeTarget, ISubgraph, IContext } from '../../types';
+import { EdgeTarget, ISubgraph, IContext } from '../../types';
 import { AttributesBase } from '../AttributesBase';
 import { Cluster } from '../Cluster';
 import { Digraph } from '../Digraph';
@@ -14,7 +14,7 @@ import { Context } from '../../render/Context';
 describe('class Subgraph', () => {
   let g: Digraph | Graph;
   let context: IContext;
-  let createEdge: (...targets: IEdgeTarget[]) => Edge;
+  let createEdge: (...targets: EdgeTarget[]) => Edge;
   const testCases: { title: string; beforeEachFunc: () => void }[] = [
     {
       title: 'root is Digraph',
@@ -22,7 +22,7 @@ describe('class Subgraph', () => {
         context = new Context();
         g = new Digraph();
         context.root = g;
-        createEdge = (...targets: IEdgeTarget[]): Edge => new Edge(targets);
+        createEdge = (...targets: EdgeTarget[]): Edge => new Edge(targets);
       },
     },
     {
@@ -31,7 +31,7 @@ describe('class Subgraph', () => {
         context = new Context();
         g = new Graph();
         context.root = g;
-        createEdge = (...targets: IEdgeTarget[]): Edge => new Edge(targets);
+        createEdge = (...targets: EdgeTarget[]): Edge => new Edge(targets);
       },
     },
   ];

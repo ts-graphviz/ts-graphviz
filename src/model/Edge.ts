@@ -1,6 +1,6 @@
 import { DotBase } from '../abstract';
 import { attribute } from '../attribute';
-import { IEdgeTarget } from '../types';
+import { EdgeTarget } from '../types';
 import { Attributes } from './Attributes';
 
 /**
@@ -12,7 +12,7 @@ export class Edge extends DotBase {
   // TODO
   public readonly attributes = new Attributes<attribute.Edge>();
 
-  constructor(public readonly targets: IEdgeTarget[]) {
+  constructor(public readonly targets: EdgeTarget[]) {
     super();
   }
 }

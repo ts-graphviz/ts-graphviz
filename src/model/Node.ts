@@ -1,17 +1,9 @@
 import { DotBase } from '../abstract';
 import { attribute } from '../attribute';
-import { EdgeTargetLike, IEdgeTarget, INode, INodeWithPort, IPort, IForwardRefNode } from '../types';
+import { EdgeTargetLike, EdgeTarget, INode, IPort } from '../types';
 import { Attributes } from './Attributes';
-
-// eslint:disable: max-classes-per-file
-
-/**
- * An object that represents a Node where port and compass are specified.
- * @category Primary
- */
-export class NodeWithPort implements INodeWithPort {
-  constructor(public readonly node: INode, public readonly port: Partial<IPort>) {}
-}
+import { NodeWithPort } from './values/NodeWithPort';
+import { ForwardRefNode } from './values/ForwardRefNode';
 
 /**
  * Node object.
@@ -36,17 +28,9 @@ export class Node extends DotBase implements INode {
 }
 
 /**
- * @category Primary
  * @hidden
  */
-export class ForwardRefNode implements IForwardRefNode {
-  constructor(public readonly id: string, public readonly port: Partial<IPort>) {}
-}
-
-/**
- * @hidden
- */
-export function isEdgeTarget(node: unknown): node is IEdgeTarget {
+export function isEdgeTarget(node: unknown): node is EdgeTarget {
   return node instanceof Node || node instanceof NodeWithPort || node instanceof ForwardRefNode;
 }
 

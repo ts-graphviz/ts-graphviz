@@ -5,8 +5,6 @@
  * @packageDocumentation
  */
 
-// tslint:disable:no-namespace variable-name
-
 /**
  * Module defining attributes.
  */

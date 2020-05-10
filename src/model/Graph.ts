@@ -8,5 +8,5 @@ import { RootCluster } from './RootCluster';
  * @category Primary
  */
 export class Graph extends RootCluster {
-  public type = RootClusterType.graph;
+  public readonly type = RootClusterType.graph;
 }

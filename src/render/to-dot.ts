@@ -1,9 +1,10 @@
 import { Edge } from '../model/Edge';
-import { ID } from '../model/ID';
 import { Context } from './Context';
-import { RootClusterType, IEdgeTarget, IContext } from '../types';
+import { RootClusterType, EdgeTarget, IContext, AttributesValue } from '../types';
 import { DotBase } from '../abstract';
-import { Node, ForwardRefNode, NodeWithPort } from '../model/Node';
+import { Node } from '../model/Node';
+import { ForwardRefNode } from '../model/values/ForwardRefNode';
+import { NodeWithPort } from '../model/values/NodeWithPort';
 import { Attributes } from '../model/Attributes';
 import { Cluster } from '../model/Cluster';
 import { RootCluster } from '../model/RootCluster';
@@ -71,7 +72,11 @@ function commentOut(src: string): string {
     .join('\n');
 }
 
-export function toDot(object: DotBase, context: IContext = new Context()): string {
+function isAttributeValue(value: unknown): value is AttributesValue {
+  return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean';
+}
+
+export function toDot(object: DotBase | AttributesValue, context: IContext = new Context()): string {
   if (object instanceof Edge) {
     const comment = object.comment ? commentOut(object.comment) : undefined;
     const arrow = wrap(context.graphType === RootClusterType.graph ? '--' : '->', ' ');
@@ -85,7 +90,7 @@ export function toDot(object: DotBase, context: IContext = new Context()): strin
     context.root = object;
     const comment = object.comment ? commentOut(object.comment) : undefined;
     const type = object.type;
-    const id = typeof object.id === 'string' ? toDot(new ID(object.id), context) : undefined;
+    const id = typeof object.id === 'string' ? toDot(object.id, context) : undefined;
     // attributes
     const attributes = Array.from(object.entries()).map(([key, value]) => `${key} = ${toDot(value, context)};`);
     const commonAttributes = Object.entries(object.attributes)
@@ -106,7 +111,7 @@ export function toDot(object: DotBase, context: IContext = new Context()): strin
   } else if (object instanceof Cluster) {
     const comment = object.comment ? commentOut(object.comment) : undefined;
     const type = object.type;
-    const id = typeof object.id === 'string' ? toDot(new ID(object.id), context) : undefined;
+    const id = typeof object.id === 'string' ? toDot(object.id) : undefined;
     // attributes
     const attributes = Array.from(object.entries()).map(([key, value]) => `${key} = ${toDot(value, context)};`);
     const commonAttributes = Object.entries(object.attributes)
@@ -131,15 +136,6 @@ export function toDot(object: DotBase, context: IContext = new Context()): strin
     const attrs = object.attributes.size > 0 ? ` ${toDot(object.attributes, context)}` : '';
     const dot = `${target}${attrs};`;
     return joinLines(comment, dot);
-  } else if (object instanceof ID) {
-    if (object.isNotString || object.isHTMLLike) {
-      return object.value;
-    }
-    let value = object.value;
-    if (object.isQuoteRequired) {
-      value = quote(escape(value));
-    }
-    return value;
   } else if (object instanceof Attributes) {
     if (object.size === 0) {
       return '';
@@ -154,27 +150,50 @@ export function toDot(object: DotBase, context: IContext = new Context()): strin
       ),
       ']',
     );
+  } else if (isAttributeValue(object)) {
+    let isHTMLLike = false;
+    let isNotString = false;
+    let isQuoteRequired = false;
+    isNotString = typeof object !== 'string';
+    let stringValue: string = typeof object === 'string' ? object : object.toString();
+    if (isNotString) {
+      isHTMLLike = false;
+      isQuoteRequired = false;
+    } else {
+      const trimmed = stringValue.trim();
+      isHTMLLike = /^<.+>$/ms.test(trimmed);
+      if (isHTMLLike) {
+        stringValue = trimmed;
+        isQuoteRequired = false;
+      } else {
+        isQuoteRequired = true;
+      }
+    }
+    if (isNotString || isHTMLLike) {
+      return stringValue;
+    }
+
+    if (isQuoteRequired) {
+      return quote(escape(stringValue));
+    }
+    return stringValue;
   }
   return '';
 }
 
-export function toEdgeTargetDot(object: IEdgeTarget, context: IContext): string {
+export function toEdgeTargetDot(object: EdgeTarget, context: IContext): string {
   if (object instanceof Node) {
-    return toDot(new ID(object.id), context);
+    return toDot(object.id, context);
   } else if (object instanceof NodeWithPort) {
     const { port, compass } = object.port;
     return concatWordsWithColon(
       toEdgeTargetDot(object.node, context),
-      port ? toDot(new ID(port), context) : undefined,
-      compass ? toDot(new ID(compass), context) : undefined,
+      port ? toDot(port, context) : undefined,
+      compass ? toDot(compass, context) : undefined,
     );
   } else if (object instanceof ForwardRefNode) {
     const { port, compass } = object.port;
-    return concatWordsWithColon(
-      toDot(new ID(object.id), context),
-      port ? toDot(new ID(port), context) : undefined,
-      compass,
-    );
+    return concatWordsWithColon(toDot(object.id, context), port ? toDot(port, context) : undefined, compass);
   }
   return '';
 }

@@ -11,9 +11,10 @@ import {
   Compass,
 } from '../types';
 import { AttributesBase } from './AttributesBase';
-import { isEdgeTarget, ForwardRefNode, isEdgeTargetLike, Node } from './Node';
+import { isEdgeTarget, isEdgeTargetLike, Node } from './Node';
+import { ForwardRefNode } from './values/ForwardRefNode';
 import { Edge } from './Edge';
-import { IEdgeTarget } from '../types';
+import { EdgeTarget } from '../types';
 import { Attributes } from './Attributes';
 
 /**
@@ -164,7 +165,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
   }
 
   /** @hidden */
-  private toNodeLikeObject(node: EdgeTargetLike): IEdgeTarget {
+  private toNodeLikeObject(node: EdgeTargetLike): EdgeTarget {
     if (isEdgeTarget(node)) {
       return node;
     }
