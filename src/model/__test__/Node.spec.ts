@@ -1,6 +1,6 @@
 import { DotBase, GraphvizObject } from '../../abstract';
 import { Node } from '../Node';
-import { toDot } from '../../utils/dot-rendering';
+import { toDot } from '../../render/to-dot';
 
 describe('class Node', () => {
   let node: Node;

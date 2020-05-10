@@ -6,7 +6,7 @@ import { Digraph } from '../Digraph';
 import { Edge } from '../Edge';
 import { Node } from '../Node';
 import { RootCluster } from '../RootCluster';
-import { toDot } from '../../utils/dot-rendering';
+import { toDot } from '../../render/to-dot';
 
 describe('class Digraph', () => {
   let g: Digraph;

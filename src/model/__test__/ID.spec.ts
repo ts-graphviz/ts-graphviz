@@ -1,5 +1,5 @@
 import { ID } from '../ID';
-import { toDot } from '../../utils/dot-rendering';
+import { toDot } from '../../render/to-dot';
 
 const DoubleQuotedValuePattern = /^".+"$/ms;
 const HTMLLikeValuePattern = /^<.+>$/ms;

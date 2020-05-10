@@ -1,7 +1,7 @@
 import { DotBase, GraphvizObject } from '../../abstract';
 import { Edge } from '../Edge';
 import { Node } from '../Node';
-import { toDot } from '../../utils/dot-rendering';
+import { toDot } from '../../render/to-dot';
 import { IContext, RootClusterType } from '../../types';
 
 describe('class Edge', () => {

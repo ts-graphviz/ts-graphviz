@@ -4,6 +4,7 @@ export * from './Cluster';
 export * from './RootCluster';
 export * from './Graph';
 export * from './Digraph';
-export * from './Context';
 export * from './Edge';
 export * from './Node';
+export * from '../render/Context';
+export * from '../render/to-dot';

@@ -8,8 +8,8 @@ import { Edge } from '../Edge';
 import { Graph } from '../Graph';
 import { Node } from '../Node';
 import { Subgraph } from '../Cluster';
-import { toDot } from '../../utils/dot-rendering';
-import { Context } from '../Context';
+import { toDot } from '../../render/to-dot';
+import { Context } from '../../render/Context';
 
 describe('class Subgraph', () => {
   let g: Digraph | Graph;

@@ -1,6 +1,6 @@
 import { Edge } from '../model/Edge';
 import { ID } from '../model/ID';
-import { Context } from '../model/Context';
+import { Context } from './Context';
 import { RootClusterType, IEdgeTarget, IContext } from '../types';
 import { DotBase } from '../abstract';
 import { Node, ForwardRefNode, NodeWithPort } from '../model/Node';

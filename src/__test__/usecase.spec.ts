@@ -1,7 +1,7 @@
 import 'jest-graphviz';
 import { Digraph, Graph } from '../model';
 import { digraph, graph, strict } from '../usecase';
-import { toDot } from '../utils/dot-rendering';
+import { toDot } from '../render/to-dot';
 
 describe('function digraph', () => {
   it('should return Digraph object, when execute digraph()', () => {

@@ -1,5 +1,5 @@
 import { IContext, RootClusterType } from '../types';
-import { RootCluster } from './RootCluster';
+import { RootCluster } from '../model/RootCluster';
 
 /**
  * Graph context object.

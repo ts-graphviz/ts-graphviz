@@ -6,7 +6,7 @@ import { Edge } from '../Edge';
 import { Graph } from '../Graph';
 import { Node } from '../Node';
 import { RootCluster } from '../RootCluster';
-import { toDot } from '../../utils/dot-rendering';
+import { toDot } from '../../render/to-dot';
 
 describe('class Graph', () => {
   let g: Graph;
