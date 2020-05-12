@@ -17,15 +17,15 @@ $ npm install @ts-graphviz/react
 
 ### Peer Dependencies
 
-- [React](https://github.com/facebook/react/)(>=16.8)
+- [React and ReactDOM](https://github.com/facebook/react/)(>=16.8)
 - [ts-graphviz](https://github.com/ts-graphviz/ts-graphviz)
 - [@hpcc-js/wasm](https://www.npmjs.com/package/@hpcc-js/wasm) (Optional)
 
 ```bash
 # Peer Dependencies
-$ yarn add react ts-graphviz
+$ yarn add react react-dom ts-graphviz
 # Optional Peer Dependencies
-$ yarn add @hpcc-js/wasm react-dom
+$ yarn add @hpcc-js/wasm
 ```
 
 ## DEMO
