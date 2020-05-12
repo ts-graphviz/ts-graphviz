@@ -22,6 +22,7 @@ async function build({
       typescript({
         tsconfigOverride: {
           compilerOptions: {
+            module: 'ESNext',
             declaration,
           },
         },
