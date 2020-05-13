@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-reconciler": "^0.24.0"
+    "react-reconciler": "^0.25.1"
   },
   "devDependencies": {
     "@hpcc-js/wasm": "^0.3.13",
