@@ -1,10 +1,9 @@
-import { IContext } from '../types';
-import { RootCluster } from '../model/root-clusters';
+import { IContext, IRootCluster } from '../types';
 
 /**
  * Graph context object.
  */
 export class Context implements IContext {
   /** Root graph. */
-  public root?: RootCluster;
+  public root?: IRootCluster;
 }
