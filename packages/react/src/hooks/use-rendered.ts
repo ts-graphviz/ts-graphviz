@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { graphviz } from '@hpcc-js/wasm';
+import { useState, useEffect, useMemo } from 'react';
 
 export type Format = 'svg' | 'dot' | 'json' | 'dot_json' | 'xdot_json';
 
@@ -24,11 +23,9 @@ export const useRendered = (
   },
 ): string | undefined => {
   const [rendered, setRendered] = useState<string>();
+  const graphviz = useMemo(() => import('@hpcc-js/wasm').then(wasm => wasm.graphviz), []);
   useEffect(() => {
-    (async (): Promise<void> => {
-      const result = await graphviz.layout(dot, format, engine, ext);
-      setRendered(result);
-    })();
-  }, [dot, engine, format, ext, setRendered]);
+    graphviz.then(gv => gv.layout(dot, format, engine, ext)).then(setRendered);
+  }, [dot, engine, format, ext, setRendered, graphviz]);
   return rendered;
 };
