@@ -22,7 +22,7 @@ describe('renderId', () => {
         <DOT.TD PORT="r">right</DOT.TD>
       </DOT.TR>
     </DOT.TABLE>,
-  ])('case', id => {
+  ])('case', (id) => {
     expect(renderId(id)).toMatchSnapshot();
   });
 });

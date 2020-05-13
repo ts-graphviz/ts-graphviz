@@ -23,9 +23,9 @@ export const useRendered = (
   },
 ): string | undefined => {
   const [rendered, setRendered] = useState<string>();
-  const graphviz = useMemo(() => import('@hpcc-js/wasm').then(wasm => wasm.graphviz), []);
+  const graphviz = useMemo(() => import('@hpcc-js/wasm').then((wasm) => wasm.graphviz), []);
   useEffect(() => {
-    graphviz.then(gv => gv.layout(dot, format, engine, ext)).then(setRendered);
+    graphviz.then((gv) => gv.layout(dot, format, engine, ext)).then(setRendered);
   }, [dot, engine, format, ext, setRendered, graphviz]);
   return rendered;
 };
