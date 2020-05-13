@@ -22,7 +22,7 @@ describe('renderToDot', () => {
     const nodes = ['a', 'b'];
     const dot = renderToDot(
       <Digraph>
-        {nodes.map(id => (
+        {nodes.map((id) => (
           <Node id={id} key={id} />
         ))}
         <Edge targets={nodes} />
@@ -36,7 +36,7 @@ describe('renderToDot', () => {
     const dot = renderToDot(
       <Digraph>
         <Subgraph>
-          {nodes.map(id => (
+          {nodes.map((id) => (
             <Node id={id} key={id} />
           ))}
           <Edge targets={nodes} />
