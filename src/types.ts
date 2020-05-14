@@ -79,7 +79,7 @@ export interface IAttributesBase<T extends string> {
   clear(): void;
 }
 
-export interface IAttributes<T extends string> extends IAttributesBase<T>, IHasComment {}
+export interface IAttributes<T extends string = string> extends IAttributesBase<T>, IHasComment {}
 
 export interface IPort {
   port: string;
@@ -120,12 +120,7 @@ export interface IClusterCommonAttributes {
 /**
  * Interface for context.
  */
-export interface IContext {
-  // /**
-  //  * Graph type.
-  //  */
-  // graphType?: RootClusterType;
-
+export interface IDotContext {
   /** Root graph. */
   root?: IRootCluster;
 }
@@ -241,3 +236,5 @@ export interface IRootCluster extends ICluster<attribute.RootCluster> {
    */
   strict: boolean;
 }
+
+export type Dot = IRootCluster | ISubgraph | IEdge | INode | IAttributes | AttributesValue;

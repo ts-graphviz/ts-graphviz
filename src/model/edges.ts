@@ -1,4 +1,4 @@
-import { DotBase } from './abstract';
+import { DotObject } from './abstract';
 import { attribute } from '../attribute';
 import { EdgeTarget } from '../types';
 import { Attributes } from './attributes-base';
@@ -6,7 +6,7 @@ import { Attributes } from './attributes-base';
 /**
  * @category Primary
  */
-export class Edge extends DotBase {
+export class Edge extends DotObject {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
   // TODO

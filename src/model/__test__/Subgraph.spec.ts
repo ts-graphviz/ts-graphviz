@@ -1,32 +1,33 @@
 import 'jest-graphviz';
-import { DotBase, GraphvizObject } from '../abstract';
-import { ISubgraph, IContext } from '../../types';
+import { DotObject, GraphvizObject } from '../abstract';
+import { ISubgraph, IDotContext } from '../../types';
 import { AttributesBase } from '../attributes-base';
 import { Cluster } from '../clusters';
-import { Digraph, Graph } from '../root-clusters';
+import { Digraph, Graph, RootCluster } from '../root-clusters';
 import { Node } from '../nodes';
 import { Subgraph } from '../clusters';
 import { toDot } from '../../render/to-dot';
-import { Context } from '../../render/Context';
 
 describe('class Subgraph', () => {
-  let g: Digraph | Graph;
-  let context: IContext;
+  let root: RootCluster;
+  let context: IDotContext;
   const testCases: { title: string; beforeEachFunc: () => void }[] = [
     {
       title: 'root is Digraph',
       beforeEachFunc: (): void => {
-        context = new Context();
-        g = new Digraph();
-        context.root = g;
+        root = new Digraph();
+        context = {
+          root,
+        };
       },
     },
     {
       title: 'root is Graph',
       beforeEachFunc: (): void => {
-        context = new Context();
-        g = new Graph();
-        context.root = g;
+        root = new Graph();
+        context = {
+          root,
+        };
       },
     },
   ];
@@ -37,21 +38,21 @@ describe('class Subgraph', () => {
       let subgraph: ISubgraph;
 
       beforeEach(() => {
-        subgraph = g.createSubgraph('test');
+        subgraph = root.createSubgraph('test');
       });
 
-      it('should be instance of Subgraph/Cluster/AttributesBase/DotBase/GraphvizObject', () => {
+      it('should be instance of Subgraph/Cluster/AttributesBase/DotObject/GraphvizObject', () => {
         expect(subgraph).toBeInstanceOf(Subgraph);
         expect(subgraph).toBeInstanceOf(Cluster);
         expect(subgraph).toBeInstanceOf(AttributesBase);
-        expect(subgraph).toBeInstanceOf(DotBase);
+        expect(subgraph).toBeInstanceOf(DotObject);
         expect(subgraph).toBeInstanceOf(GraphvizObject);
       });
 
       test('set attributes', () => {
         subgraph.set('rank', 'same');
-        g.addSubgraph(subgraph);
-        const dot = toDot(g, context);
+        root.addSubgraph(subgraph);
+        const dot = toDot(root, context);
         expect(dot).toBeValidDotAndMatchSnapshot();
       });
 
@@ -59,13 +60,13 @@ describe('class Subgraph', () => {
         subgraph.apply({
           rank: 'same',
         });
-        g.addSubgraph(subgraph);
-        const dot = toDot(g, context);
+        root.addSubgraph(subgraph);
+        const dot = toDot(root, context);
         expect(dot).toBeValidDotAndMatchSnapshot();
       });
 
       it('should be subgraph, when subgraph id is "test"', () => {
-        subgraph = g.createSubgraph('test');
+        subgraph = root.createSubgraph('test');
         expect(subgraph.isSubgraphCluster()).toBe(false);
       });
 
@@ -75,7 +76,7 @@ describe('class Subgraph', () => {
         ['hoge_cluster', false],
         ['example', false],
       ])('if cluster named "%s", isSubgraphCluster should be %p', (id, expected) => {
-        subgraph = g.createSubgraph(id);
+        subgraph = root.createSubgraph(id);
         expect(subgraph.isSubgraphCluster()).toBe(expected);
       });
 
@@ -92,7 +93,7 @@ describe('class Subgraph', () => {
       });
 
       it('should be subgraph cluster, when subgraph id is "cluster_test"', () => {
-        subgraph = g.createSubgraph('cluster_test');
+        subgraph = root.createSubgraph('cluster_test');
         expect(subgraph.isSubgraphCluster()).toBe(true);
       });
 
@@ -102,7 +103,7 @@ describe('class Subgraph', () => {
           subgraph.attributes.edge.set('label', 'this is test for edge label');
           subgraph.attributes.node.set('label', 'this is test for node label');
           expect(toDot(subgraph, context)).toMatchSnapshot();
-          expect(toDot(g, context)).toBeValidDot();
+          expect(toDot(root, context)).toBeValidDot();
         });
 
         it('html like', () => {
@@ -110,7 +111,7 @@ describe('class Subgraph', () => {
           subgraph.attributes.edge.set('label', '<<U>this is test for edge label</U>>');
           subgraph.attributes.node.set('label', '<<I>this is test for node label</I>>');
           expect(toDot(subgraph, context)).toMatchSnapshot();
-          expect(toDot(g, context)).toBeValidDot();
+          expect(toDot(root, context)).toBeValidDot();
         });
       });
 
@@ -168,14 +169,14 @@ describe('class Subgraph', () => {
 
         describe('subgraph method', () => {
           it('should be an unnamed Subgraph, when a subgraph is created without specifying an ID.', () => {
-            const sub = g.subgraph();
+            const sub = root.subgraph();
             expect(sub.id).toBeUndefined();
           });
 
           it('should be same object, when a subgraph with an existing ID is specified', () => {
             const id = 'hoge';
-            const sub = g.createSubgraph(id);
-            expect(g.subgraph(id)).toBe(sub);
+            const sub = root.createSubgraph(id);
+            expect(root.subgraph(id)).toBe(sub);
           });
         });
       });

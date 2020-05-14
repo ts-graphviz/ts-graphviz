@@ -1,4 +1,4 @@
-import { DotBase, GraphvizObject } from '../abstract';
+import { DotObject, GraphvizObject } from '../abstract';
 import { Node } from '../nodes';
 import { toDot } from '../../render/to-dot';
 
@@ -8,9 +8,9 @@ describe('class Node', () => {
     node = new Node('test');
   });
 
-  it('should be instance of Node/DotBase/GraphvizObject', () => {
+  it('should be instance of Node/DotObject/GraphvizObject', () => {
     expect(node).toBeInstanceOf(Node);
-    expect(node).toBeInstanceOf(DotBase);
+    expect(node).toBeInstanceOf(DotObject);
     expect(node).toBeInstanceOf(GraphvizObject);
   });
 

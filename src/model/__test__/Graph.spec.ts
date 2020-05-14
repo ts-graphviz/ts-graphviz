@@ -1,5 +1,5 @@
 import 'jest-graphviz';
-import { DotBase, GraphvizObject } from '../abstract';
+import { DotObject, GraphvizObject } from '../abstract';
 import { AttributesBase } from '../attributes-base';
 import { Cluster } from '../clusters';
 import { Edge } from '../edges';
@@ -13,12 +13,12 @@ describe('class Graph', () => {
     g = new Graph();
   });
 
-  it('should be instance of Graph/RootCluster/Cluster/AttributesBase/DotBase/GraphvizObject', () => {
+  it('should be instance of Graph/RootCluster/Cluster/AttributesBase/DotObject/GraphvizObject', () => {
     expect(g).toBeInstanceOf(Graph);
     expect(g).toBeInstanceOf(RootCluster);
     expect(g).toBeInstanceOf(Cluster);
     expect(g).toBeInstanceOf(AttributesBase);
-    expect(g).toBeInstanceOf(DotBase);
+    expect(g).toBeInstanceOf(DotObject);
     expect(g).toBeInstanceOf(GraphvizObject);
   });
 

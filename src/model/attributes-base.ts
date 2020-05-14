@@ -1,10 +1,10 @@
-import { DotBase } from './abstract';
+import { DotObject } from './abstract';
 import { AttributesObject, AttributesValue, IAttributesBase, IAttributes } from '../types';
 
 /**
  * @hidden
  */
-export abstract class AttributesBase<T extends string> extends DotBase implements IAttributesBase<T> {
+export abstract class AttributesBase<T extends string> extends DotObject implements IAttributesBase<T> {
   /** @hidden */
   protected attrs: Map<T, AttributesValue> = new Map();
 

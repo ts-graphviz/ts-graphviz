@@ -1,15 +1,15 @@
-import { DotBase, GraphvizObject } from '../abstract';
+import { DotObject, GraphvizObject } from '../abstract';
 import { Edge } from '../edges';
 import { Node } from '../nodes';
 import { toDot } from '../../render/to-dot';
-import { IContext } from '../../types';
+import { IDotContext } from '../../types';
 import { Digraph, Graph } from '../root-clusters';
 
 describe('class Edge', () => {
-  const DigraphContext: IContext = {
+  const DigraphContext: IDotContext = {
     root: new Digraph(),
   };
-  const GraphContext: IContext = {
+  const GraphContext: IDotContext = {
     root: new Graph(),
   };
 
@@ -20,9 +20,9 @@ describe('class Edge', () => {
     edge = new Edge([node1, node2]);
   });
 
-  it('should be instance of Edge/DotBase/GraphvizObject', () => {
+  it('should be instance of Edge/DotObject/GraphvizObject', () => {
     expect(edge).toBeInstanceOf(Edge);
-    expect(edge).toBeInstanceOf(DotBase);
+    expect(edge).toBeInstanceOf(DotObject);
     expect(edge).toBeInstanceOf(GraphvizObject);
   });
 

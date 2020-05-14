@@ -1,4 +1,4 @@
-import { DotBase, GraphvizObject } from '../abstract';
+import { DotObject, GraphvizObject } from '../abstract';
 import { attribute } from '../../attribute';
 import { Attributes, AttributesBase } from '../attributes-base';
 import { toDot } from '../../render/to-dot';
@@ -9,10 +9,10 @@ describe('class Attributes', () => {
     attrs = new Attributes();
   });
 
-  it('should be instance of Attributes/AttributesBase/DotBase/GraphvizObject', () => {
+  it('should be instance of Attributes/AttributesBase/DotObject/GraphvizObject', () => {
     expect(attrs).toBeInstanceOf(Attributes);
     expect(attrs).toBeInstanceOf(AttributesBase);
-    expect(attrs).toBeInstanceOf(DotBase);
+    expect(attrs).toBeInstanceOf(DotObject);
     expect(attrs).toBeInstanceOf(GraphvizObject);
   });
 

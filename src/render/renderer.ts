@@ -1,4 +1,11 @@
+import { AttributesValue, EdgeTarget, IDotContext } from '../types';
+import { Node } from '../model/nodes';
 import { Edge } from '../model/edges';
+import { NodeWithPort, ForwardRefNode } from '../model/nodes';
+import { RootCluster, Digraph, Graph } from '../model/root-clusters';
+import { Cluster, Subgraph } from '../model/clusters';
+import { Attributes } from '../model/attributes-base';
+import { DotObject } from '../model/abstract';
 import {
   commentOutIfExist,
   joinWith,
@@ -11,16 +18,11 @@ import {
   quote,
   concatWordsWithColon,
 } from './utils';
-import { Node } from '../model/nodes';
-import { AttributesValue, EdgeTarget, IContext } from '../types';
-import { NodeWithPort, ForwardRefNode } from '../model/nodes';
-import { RootCluster, Digraph, Graph } from '../model/root-clusters';
-import { Cluster, Subgraph } from '../model/clusters';
-import { Attributes } from '../model/attributes-base';
-import { Context } from './Context';
+
+export type Dot = DotObject | AttributesValue;
 
 export class Renderer {
-  constructor(private context: IContext = new Context()) {}
+  constructor(public readonly context: IDotContext = {}) {}
 
   private renderClusterType<T extends string>(cluster: Cluster<T>): string | undefined {
     if (cluster instanceof Digraph) {
@@ -37,21 +39,21 @@ export class Renderer {
     return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean';
   }
 
-  private renderAttributeValue(value: AttributesValue): string {
+  private renderAttributeValue(value: AttributesValue | undefined): string | undefined {
+    if (value === undefined) {
+      return undefined;
+    }
+    const isNotString = typeof value !== 'string';
     let isHTMLLike = false;
-    let isNotString = false;
     let isQuoteRequired = false;
-    isNotString = typeof value !== 'string';
     let stringValue: string = typeof value === 'string' ? value : value.toString();
     if (isNotString) {
       isHTMLLike = false;
-      isQuoteRequired = false;
     } else {
       const trimmed = stringValue.trim();
       isHTMLLike = /^<.+>$/ms.test(trimmed);
       if (isHTMLLike) {
         stringValue = trimmed;
-        isQuoteRequired = false;
       } else {
         isQuoteRequired = true;
       }
@@ -68,89 +70,118 @@ export class Renderer {
 
   public renderEdgeTarget(edgeTarget: EdgeTarget): string | undefined {
     if (edgeTarget instanceof Node) {
-      return this.render(edgeTarget.id);
+      return this.renderAttributeValue(edgeTarget.id);
     } else if (edgeTarget instanceof NodeWithPort) {
       const { port, compass } = edgeTarget.port;
-      return concatWordsWithColon(this.renderEdgeTarget(edgeTarget.node), this.render(port), this.render(compass));
+      return concatWordsWithColon(
+        this.renderEdgeTarget(edgeTarget.node),
+        this.renderAttributeValue(port),
+        this.renderAttributeValue(compass),
+      );
     } else if (edgeTarget instanceof ForwardRefNode) {
       const { port, compass } = edgeTarget.port;
-      return concatWordsWithColon(this.render(edgeTarget.id), this.render(port), this.render(compass));
+      return concatWordsWithColon(
+        this.renderAttributeValue(edgeTarget.id),
+        this.renderAttributeValue(port),
+        this.renderAttributeValue(compass),
+      );
     }
   }
 
-  public render(object: unknown): string | undefined {
-    if (object instanceof Edge) {
-      const comment = commentOutIfExist(object.comment);
-      const target = joinWith(
-        this.context.root instanceof Graph ? ' -- ' : ' -> ',
-        object.targets.map((n) => this.renderEdgeTarget(n)),
-      );
-      const attrs = object.attributes.size > 0 ? spaceLeftPad(this.render(object.attributes)) : undefined;
-      const dot = join(target, attrs, ';');
-      return joinLines(comment, dot);
+  private renderEdge(edge: Edge): string | undefined {
+    const comment = commentOutIfExist(edge.comment);
+    const target = joinWith(
+      this.context.root instanceof Graph ? ' -- ' : ' -> ',
+      edge.targets.map((n) => this.renderEdgeTarget(n)),
+    );
+    const attrs = edge.attributes.size > 0 ? spaceLeftPad(this.renderAttributes(edge.attributes)) : undefined;
+    const dot = join(target, attrs, ';');
+    return joinLines(comment, dot);
+  }
+
+  private renderRootCluster(rootCluster: RootCluster): string | undefined {
+    const comment = commentOutIfExist(rootCluster.comment);
+    const type = this.renderClusterType(rootCluster);
+    const id = this.renderAttributeValue(rootCluster.id);
+    // attributes
+    const attributes = Array.from(rootCluster.entries()).map(([key, value]) =>
+      join(key, ' = ', this.render(value), ';'),
+    );
+    const commonAttributes = Object.entries(rootCluster.attributes)
+      .filter(([, attrs]) => attrs.size > 0)
+      .map(([key, attrs]) => join(key, ' ', this.render(attrs), ';'));
+    // objects
+    const nodes = Array.from(rootCluster.nodes.values()).map((o) => this.render(o));
+    const subgraphs = Array.from(rootCluster.subgraphs.values()).map((o) => this.render(o));
+    const edges = Array.from(rootCluster.edges.values()).map((o) => this.render(o));
+    const clusterContents = joinLines(...attributes, ...commonAttributes, ...nodes, ...subgraphs, ...edges);
+    const dot = joinLines(
+      concatWordsWithSpace(type, id, '{'),
+      clusterContents.length > 0 ? indent(clusterContents) : undefined,
+      '}',
+    );
+    return joinLines(comment, concatWordsWithSpace(rootCluster.strict ? 'strict' : undefined, dot));
+  }
+
+  private renderSubgraph(subgraph: Subgraph): string | undefined {
+    const comment = commentOutIfExist(subgraph.comment);
+    const type = this.renderClusterType(subgraph);
+    const id = typeof subgraph.id === 'string' ? this.render(subgraph.id) : undefined;
+    // attributes
+    const attributes = Array.from(subgraph.entries()).map(([key, value]) => join(key, ' = ', this.render(value), ';'));
+    const commonAttributes = Object.entries(subgraph.attributes)
+      .filter(([, attrs]) => attrs.size > 0)
+      .map(([key, attrs]) => join(key, ' ', this.render(attrs), ';'));
+    // objects
+    const nodes = Array.from(subgraph.nodes.values()).map((o) => this.render(o));
+    const subgraphs = Array.from(subgraph.subgraphs.values()).map((o) => this.render(o));
+    const edges = Array.from(subgraph.edges.values()).map((o) => this.render(o));
+    const clusterContents = joinLines(...attributes, ...commonAttributes, ...nodes, ...subgraphs, ...edges);
+    const dot = joinLines(
+      concatWordsWithSpace(type, id, '{'),
+      clusterContents.length > 0 ? indent(clusterContents) : undefined,
+      '}',
+    );
+    return joinLines(comment, dot);
+  }
+
+  private renderNode(node: Node): string | undefined {
+    const comment = commentOutIfExist(node.comment);
+    const target = this.renderEdgeTarget(node);
+    const attrs = node.attributes.size > 0 ? spaceLeftPad(this.render(node.attributes)) : undefined;
+    const dot = join(target, attrs, ';');
+    return joinLines(comment, dot);
+  }
+  private renderAttributes(attributes: Attributes): string | undefined {
+    if (attributes.size === 0) {
+      return undefined;
+    }
+    return joinLines(
+      '[',
+      indent(
+        joinLines(
+          commentOutIfExist(attributes.comment),
+          ...Array.from(attributes.entries()).map(([key, value]) => join(key, ' = ', this.render(value), ',')),
+        ),
+      ),
+      ']',
+    );
+  }
+
+  public render(object: Dot): string | undefined {
+    if (this.isAttributeValue(object)) {
+      return this.renderAttributeValue(object);
+    } else if (object instanceof Node) {
+      return this.renderNode(object);
+    } else if (object instanceof Edge) {
+      return this.renderEdge(object);
+    } else if (object instanceof Attributes) {
+      return this.renderAttributes(object);
+    } else if (object instanceof Subgraph) {
+      return this.renderSubgraph(object);
     } else if (object instanceof RootCluster) {
       this.context.root = object;
-      const comment = commentOutIfExist(object.comment);
-      const type = this.renderClusterType(object);
-      const id = this.render(object.id);
-      // attributes
-      const attributes = Array.from(object.entries()).map(([key, value]) => join(key, ' = ', this.render(value), ';'));
-      const commonAttributes = Object.entries(object.attributes)
-        .filter(([, attrs]) => attrs.size > 0)
-        .map(([key, attrs]) => join(key, ' ', this.render(attrs), ';'));
-      // objects
-      const nodes = Array.from(object.nodes.values()).map((o) => this.render(o));
-      const subgraphs = Array.from(object.subgraphs.values()).map((o) => this.render(o));
-      const edges = Array.from(object.edges.values()).map((o) => this.render(o));
-      const clusterContents = joinLines(...attributes, ...commonAttributes, ...nodes, ...subgraphs, ...edges);
-      const dot = joinLines(
-        concatWordsWithSpace(type, id, '{'),
-        clusterContents.length > 0 ? indent(clusterContents) : undefined,
-        '}',
-      );
-      return joinLines(comment, concatWordsWithSpace(object.strict ? 'strict' : undefined, dot));
-    } else if (object instanceof Subgraph) {
-      const comment = commentOutIfExist(object.comment);
-      const type = this.renderClusterType(object);
-      const id = typeof object.id === 'string' ? this.render(object.id) : undefined;
-      // attributes
-      const attributes = Array.from(object.entries()).map(([key, value]) => join(key, ' = ', this.render(value), ';'));
-      const commonAttributes = Object.entries(object.attributes)
-        .filter(([, attrs]) => attrs.size > 0)
-        .map(([key, attrs]) => join(key, ' ', this.render(attrs), ';'));
-      // objects
-      const nodes = Array.from(object.nodes.values()).map((o) => this.render(o));
-      const subgraphs = Array.from(object.subgraphs.values()).map((o) => this.render(o));
-      const edges = Array.from(object.edges.values()).map((o) => this.render(o));
-      const clusterContents = joinLines(...attributes, ...commonAttributes, ...nodes, ...subgraphs, ...edges);
-      const dot = joinLines(
-        concatWordsWithSpace(type, id, '{'),
-        clusterContents.length > 0 ? indent(clusterContents) : undefined,
-        '}',
-      );
-      return joinLines(comment, dot);
-    } else if (object instanceof Node) {
-      const comment = commentOutIfExist(object.comment);
-      const target = this.renderEdgeTarget(object);
-      const attrs = object.attributes.size > 0 ? spaceLeftPad(this.render(object.attributes)) : undefined;
-      const dot = join(target, attrs, ';');
-      return joinLines(comment, dot);
-    } else if (object instanceof Attributes) {
-      if (object.size === 0) {
-        return undefined;
-      }
-      return joinLines(
-        '[',
-        indent(
-          joinLines(
-            commentOutIfExist(object.comment),
-            ...Array.from(object.entries()).map(([key, value]) => join(key, ' = ', this.render(value), ',')),
-          ),
-        ),
-        ']',
-      );
-    } else if (this.isAttributeValue(object)) {
-      return this.renderAttributeValue(object);
+      return this.renderRootCluster(object);
     }
   }
 }

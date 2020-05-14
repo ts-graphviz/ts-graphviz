@@ -1,4 +1,4 @@
-import { DotBase } from './abstract';
+import { DotObject } from './abstract';
 import { attribute } from '../attribute';
 import { EdgeTargetLike, EdgeTarget, INode, IPort, IForwardRefNode, INodeWithPort } from '../types';
 import { Attributes } from './attributes-base';
@@ -23,7 +23,7 @@ export class NodeWithPort implements INodeWithPort {
  * Node object.
  * @category Primary
  */
-export class Node extends DotBase implements INode {
+export class Node extends DotObject implements INode {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
   public readonly attributes = new Attributes<attribute.Node>();
