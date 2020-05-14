@@ -1,10 +1,18 @@
 /* eslint-disable @typescript-eslint/no-use-before-define,max-classes-per-file */
 import { attribute } from '../attribute';
-import { EdgeTargetLike, ICluster, IClusterCommonAttributes, IEdge, INode, ISubgraph, Compass } from '../types';
+import {
+  EdgeTarget,
+  EdgeTargetLike,
+  ICluster,
+  IClusterCommonAttributes,
+  IEdge,
+  INode,
+  ISubgraph,
+  Compass,
+} from '../types';
 import { Attributes, AttributesBase } from './attributes-base';
 import { isEdgeTarget, isEdgeTargetLike, Node, ForwardRefNode } from './nodes';
 import { Edge } from './edges';
-import { EdgeTarget } from '../types';
 
 /**
  * Base class for clusters.
@@ -24,64 +32,76 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * Nodes in the cluster.
    * @hidden
    */
-  public nodes: Map<string, INode> = new Map();
+  get nodes(): ReadonlyArray<INode> {
+    return Array.from(this.objects.nodes.values());
+  }
 
   /**
    * Edges in the cluster.
    * @hidden
    */
-  public edges: Set<IEdge> = new Set();
+  get edges(): ReadonlyArray<IEdge> {
+    return Array.from(this.objects.edges.values());
+  }
 
   /**
    * Subgraphs in the cluster.
    * @hidden
    */
-  public subgraphs: Set<ISubgraph> = new Set();
+  get subgraphs(): ReadonlyArray<ISubgraph> {
+    return Array.from(this.objects.subgraphs.values());
+  }
 
-  // private readonly internal = {
-  //   nodes: ReadonlyMap
-  // };
+  private readonly objects: Readonly<{
+    nodes: Map<string, INode>;
+    edges: Set<IEdge>;
+    subgraphs: Set<ISubgraph>;
+  }> = {
+    nodes: new Map(),
+    edges: new Set(),
+    subgraphs: new Set(),
+  };
 
   /**
    * Add a Node to the cluster.
    */
   public addNode(node: INode): void {
-    this.nodes.set(node.id, node);
+    this.objects.nodes.set(node.id, node);
   }
 
   /**
    * Add Edge to the cluster.
    */
   public addEdge(edge: IEdge): void {
-    this.edges.add(edge);
+    this.objects.edges.add(edge);
   }
 
   /**
    * Add a Subgraph to the cluster.
    */
   public addSubgraph(subgraph: ISubgraph): void {
-    this.subgraphs.add(subgraph);
+    this.objects.subgraphs.add(subgraph);
   }
 
   /**
    * Check if the Node exists in the cluster.
    */
   public existNode(nodeId: string): boolean {
-    return this.nodes.has(nodeId);
+    return this.objects.nodes.has(nodeId);
   }
 
   /**
    * Check if the Edge exists in the cluster.
    */
   public existEdge(edge: IEdge): boolean {
-    return this.edges.has(edge);
+    return this.objects.edges.has(edge);
   }
 
   /**
    * Check if the Subgraph exists in the cluster.
    */
   public existSubgraph(subgraph: ISubgraph): boolean {
-    return this.subgraphs.has(subgraph);
+    return this.objects.subgraphs.has(subgraph);
   }
 
   /**
@@ -89,7 +109,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    */
   public createSubgraph(id?: string): ISubgraph {
     const graph = new Subgraph(id);
-    this.subgraphs.add(graph);
+    this.objects.subgraphs.add(graph);
     return graph;
   }
 
@@ -97,21 +117,21 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * Remove Node from the cluster.
    */
   public removeNode(node: INode | string): void {
-    this.nodes.delete(typeof node === 'string' ? node : node.id);
+    this.objects.nodes.delete(typeof node === 'string' ? node : node.id);
   }
 
   /**
    * Remove Edge from the cluster.
    */
   public removeEdge(edge: IEdge): void {
-    this.edges.delete(edge);
+    this.objects.edges.delete(edge);
   }
 
   /**
    * Remove Subgraph from the cluster.
    */
   public removeSubgraph(subgraph: ISubgraph): void {
-    this.subgraphs.delete(subgraph);
+    this.objects.subgraphs.delete(subgraph);
   }
 
   /**
@@ -119,7 +139,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    */
   public createNode(id: string): INode {
     const node = new Node(id);
-    this.nodes.set(id, node);
+    this.objects.nodes.set(id, node);
     return node;
   }
 
@@ -129,7 +149,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * If there is no Subgraph with the specified id in the cluster, return undefined.
    */
   public getSubgraph(id: string): ISubgraph | undefined {
-    return Array.from(this.subgraphs.values()).find((subgraph) => subgraph.id === id);
+    return Array.from(this.objects.subgraphs.values()).find((subgraph) => subgraph.id === id);
   }
 
   /**
@@ -139,7 +159,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * If there is no Node with the specified id in the cluster, return undefined.
    */
   public getNode(id: string): INode | undefined {
-    return this.nodes.get(id);
+    return this.objects.nodes.get(id);
   }
 
   /** Create Edge and add it to the cluster. */
@@ -148,7 +168,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
       throw new Error('The element of Edge target is missing or not satisfied as Edge target.');
     }
     const edge = new Edge(targets.map((t) => this.toNodeLikeObject(t)));
-    this.edges.add(edge);
+    this.objects.edges.add(edge);
     return edge;
   }
 

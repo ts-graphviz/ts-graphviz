@@ -1,6 +1,6 @@
+import { EdgeTarget } from '../types';
 import { DotObject } from './abstract';
 import { attribute } from '../attribute';
-import { EdgeTarget } from '../types';
 import { Attributes } from './attributes-base';
 
 /**

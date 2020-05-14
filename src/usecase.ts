@@ -1,4 +1,5 @@
-import { Digraph, Graph, RootCluster } from './model/root-clusters';
+import { IRootCluster } from './types';
+import { Digraph, Graph } from './model/root-clusters';
 
 /**
  * Type indicating that it is a constructor of T.
@@ -8,7 +9,7 @@ import { Digraph, Graph, RootCluster } from './model/root-clusters';
 export type Type<T> = new (...args: any[]) => T;
 
 /** @hidden */
-const builder = <G extends RootCluster>(cls: Type<G>, strictMode = false) => (
+const builder = <G extends IRootCluster>(cls: Type<G>, strictMode = false) => (
   id?: string,
   callback?: (g: G) => void,
 ): G => {

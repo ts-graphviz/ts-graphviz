@@ -8,8 +8,8 @@ export abstract class AttributesBase<T extends string> extends DotObject impleme
   /** @hidden */
   protected attrs: Map<T, AttributesValue> = new Map();
 
-  public entries(): IterableIterator<[T, AttributesValue]> {
-    return this.attrs.entries();
+  get values(): ReadonlyArray<[T, AttributesValue]> {
+    return Array.from(this.attrs.entries());
   }
 
   /** The size of the attribute. */
@@ -31,7 +31,7 @@ export abstract class AttributesBase<T extends string> extends DotObject impleme
 
   public apply(attributes: AttributesObject<T>): void {
     for (const [key, value] of Object.entries(attributes)) {
-      this.set(key as T, value as string | boolean | number);
+      this.set(key as T, value as AttributesValue);
     }
   }
 

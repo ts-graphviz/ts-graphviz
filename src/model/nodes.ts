@@ -1,6 +1,6 @@
+import { EdgeTargetLike, EdgeTarget, INode, IPort, IForwardRefNode, INodeWithPort } from '../types';
 import { DotObject } from './abstract';
 import { attribute } from '../attribute';
-import { EdgeTargetLike, EdgeTarget, INode, IPort, IForwardRefNode, INodeWithPort } from '../types';
 import { Attributes } from './attributes-base';
 
 /**

@@ -1,3 +1,10 @@
+import { ICluster, ISubgraph, IEdge, INode, IRootCluster, IAttributes, AttributesValue, EdgeTarget } from '../types';
+import { Subgraph } from '../model/clusters';
+import { Edge } from '../model/edges';
+import { Node, NodeWithPort, ForwardRefNode } from '../model/nodes';
+import { RootCluster, Graph, Digraph } from '../model/root-clusters';
+import { Attributes } from '../model/attributes-base';
+
 export function escape(str: string): string {
   return str.replace(/\n/g, '\\n').replace(/"/g, '\\"');
 }
@@ -56,4 +63,125 @@ export function commentOut(src: string): string {
 }
 export function commentOutIfExist(src: string | undefined): string | undefined {
   return typeof src === 'string' ? commentOut(src) : undefined;
+}
+
+export function isSubgraph(object: unknown): object is ISubgraph {
+  return object instanceof Subgraph;
+}
+
+export function isEdge(object: unknown): object is IEdge {
+  return object instanceof Edge;
+}
+
+export function isNode(object: unknown): object is INode {
+  return object instanceof Node;
+}
+export function isNodeWithPort(object: unknown): object is NodeWithPort {
+  return object instanceof NodeWithPort;
+}
+
+export function isForwardRefNode(object: unknown): object is ForwardRefNode {
+  return object instanceof ForwardRefNode;
+}
+
+export function isRootCluster(object: unknown): object is IRootCluster {
+  return object instanceof RootCluster;
+}
+export function isDigraph(object: unknown): object is Digraph {
+  return object instanceof Digraph;
+}
+export function isGraph(object: unknown): object is Graph {
+  return object instanceof Graph;
+}
+
+export function isAttributes(object: unknown): object is IAttributes {
+  return object instanceof Attributes;
+}
+export function isAttributeValue(value: unknown): value is AttributesValue {
+  return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean';
+}
+export function renderClusterType(cluster: ICluster): string | undefined {
+  if (isDigraph(cluster)) {
+    return 'digraph';
+  }
+  if (isGraph(cluster)) {
+    return 'graph';
+  }
+  if (isSubgraph(cluster)) {
+    return 'subgraph';
+  }
+}
+
+export function renderAttributeValue(value: AttributesValue | undefined): string | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  const isNotString = typeof value !== 'string';
+  let isHTMLLike = false;
+  let isQuoteRequired = false;
+  let stringValue: string = typeof value === 'string' ? value : value.toString();
+  if (isNotString) {
+    isHTMLLike = false;
+  } else {
+    const trimmed = stringValue.trim();
+    isHTMLLike = /^<.+>$/ms.test(trimmed);
+    if (isHTMLLike) {
+      stringValue = trimmed;
+    } else {
+      isQuoteRequired = true;
+    }
+  }
+  if (isNotString || isHTMLLike) {
+    return stringValue;
+  }
+
+  if (isQuoteRequired) {
+    return quote(escape(stringValue));
+  }
+  return stringValue;
+}
+
+export function renderAttributeBuilder<T extends string>(
+  deciliter: string,
+): (v: [T, AttributesValue]) => string | undefined {
+  return ([key, value]): string | undefined => join(key, ' = ', renderAttributeValue(value), deciliter);
+}
+
+export const renderAttributeWithSemi: <T extends string>(
+  v: [T, AttributesValue],
+) => string | undefined = renderAttributeBuilder(';');
+
+export const renderAttributeWithComma: <T extends string>(
+  v: [T, AttributesValue],
+) => string | undefined = renderAttributeBuilder(',');
+
+export function renderAttributes(attributes: IAttributes): string | undefined {
+  if (attributes.size === 0) {
+    return undefined;
+  }
+  return joinLines(
+    '[',
+    indent(joinLines(commentOutIfExist(attributes.comment), ...attributes.values.map(renderAttributeWithComma))),
+    ']',
+  );
+}
+
+export function renderEdgeTarget(edgeTarget: EdgeTarget): string | undefined {
+  if (isNode(edgeTarget)) {
+    return renderAttributeValue(edgeTarget.id);
+  } else if (isNodeWithPort(edgeTarget)) {
+    const { port, compass } = edgeTarget.port;
+    return concatWordsWithColon(
+      renderAttributeValue(edgeTarget.node.id),
+      renderAttributeValue(port),
+      renderAttributeValue(compass),
+    );
+  } else if (isForwardRefNode(edgeTarget)) {
+    const { port, compass } = edgeTarget.port;
+    return concatWordsWithColon(
+      renderAttributeValue(edgeTarget.id),
+      renderAttributeValue(port),
+      renderAttributeValue(compass),
+    );
+  }
 }

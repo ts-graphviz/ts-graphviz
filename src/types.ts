@@ -72,6 +72,7 @@ export type ClusterSubgraphAttributes = AttributesObject<attribute.ClusterSubgra
 
 export interface IAttributesBase<T extends string> {
   readonly size: number;
+  values: ReadonlyArray<[T, AttributesValue]>;
   get(key: T): AttributesValue | undefined;
   set(key: T, value: AttributesValue): void;
   apply(attributes: AttributesObject<T>): void;
@@ -101,7 +102,9 @@ export interface INode extends IHasComment, IHasAttributes<attribute.Node> {
   port(port: string | Partial<IPort>): INodeWithPort;
 }
 
-export interface IEdge extends IHasComment, IHasAttributes<attribute.Edge> {}
+export interface IEdge extends IHasComment, IHasAttributes<attribute.Edge> {
+  targets: EdgeTarget[];
+}
 
 /**
  * Cluster common attribute interface.
@@ -125,9 +128,12 @@ export interface IDotContext {
   root?: IRootCluster;
 }
 
-export interface ICluster<T extends string> extends IHasComment, IAttributesBase<T> {
+export interface ICluster<T extends string = string> extends IHasComment, IAttributesBase<T> {
   id?: string;
   readonly attributes: Readonly<IClusterCommonAttributes>;
+  nodes: ReadonlyArray<INode>;
+  edges: ReadonlyArray<IEdge>;
+  subgraphs: ReadonlyArray<ISubgraph>;
   /**
    * Add a Node to the cluster.
    */
