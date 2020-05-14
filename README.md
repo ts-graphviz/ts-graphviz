@@ -39,31 +39,31 @@ npm install ts-graphviz
 ### Script
 
 ```typescript
-import { digraph } from 'ts-graphviz';
+import { digraph, toDot } from 'ts-graphviz';
 
 const g = digraph('G');
 
 const subgraphA = g.createSubgraph('A');
 const nodeA1 = subgraphA.createNode('A_node1');
 const nodeA2 = subgraphA.createNode('A_node2');
-subgraphA.createEdge(nodeA1, nodeA2);
+subgraphA.createEdge([nodeA1, nodeA2]);
 
 const subgraphB = g.createSubgraph('B');
 const nodeB1 = subgraphB.createNode('B_node1');
 const nodeB2 = subgraphB.createNode('B_node2');
-subgraphA.createEdge(nodeB1, nodeB2);
+subgraphA.createEdge([nodeB1, nodeB2]);
 
 const node1 = g.createNode('node1');
 const node2 = g.createNode('node2');
-g.createEdge(node1, node2);
-const dot = g.toDot();
+g.createEdge([node1, node2]);
+const dot = toDot(g);
 console.log(dot);
 ```
 
 ### Callback style API
 
 ```typescript
-import { digraph } from 'ts-graphviz';
+import { digraph, toDot } from 'ts-graphviz';
 
 const G = digraph('G', g => {
   g.subgraph('A', A => {
@@ -78,7 +78,7 @@ const G = digraph('G', g => {
   });
   g.edge(['node1', 'node2']);
 });
-const dot = G.toDot();
+const dot = toDot(g);
 console.log(dot);
 ```
 
