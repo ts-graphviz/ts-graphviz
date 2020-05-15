@@ -4,7 +4,6 @@ import {
   concatWordsWithSpace,
   indent,
   isAttributes,
-  isAttributeValue,
   isEdge,
   isGraph,
   isNode,
@@ -24,7 +23,7 @@ import {
 export class Renderer {
   constructor(public readonly context: IDotContext = {}) {}
 
-  protected renderNode(node: INode): string | undefined {
+  protected renderNode(node: INode): string {
     const comment = commentOutIfExist(node.comment);
     const target = renderEdgeTarget(node);
     const attrs = node.attributes.size > 0 ? spaceLeftPad(renderAttributes(node.attributes)) : undefined;
@@ -32,7 +31,7 @@ export class Renderer {
     return joinLines(comment, dot);
   }
 
-  protected renderEdge(edge: IEdge): string | undefined {
+  protected renderEdge(edge: IEdge): string {
     const comment = commentOutIfExist(edge.comment);
     const targets = joinWith(isGraph(this.context.root) ? ' -- ' : ' -> ', edge.targets.map(renderEdgeTarget));
     const attrs = edge.attributes.size > 0 ? spaceLeftPad(renderAttributes(edge.attributes)) : undefined;
@@ -40,9 +39,9 @@ export class Renderer {
     return joinLines(comment, dot);
   }
 
-  protected renderCluster(cluster: ICluster): string | undefined {
+  protected renderCluster(cluster: ICluster): string {
     const type = renderClusterType(cluster);
-    const id = renderAttributeValue(cluster.id);
+    const id = cluster.id !== undefined ? renderAttributeValue(cluster.id) : undefined;
     // attributes
     const attributes = cluster.values.map(renderAttributeWithSemi);
     const commonAttributes = Object.entries(cluster.attributes)
@@ -56,22 +55,20 @@ export class Renderer {
     return joinLines(concatWordsWithSpace(type, id, '{'), contents.length > 0 ? indent(contents) : undefined, '}');
   }
 
-  protected renderRootCluster(rootCluster: IRootCluster): string | undefined {
+  protected renderRootCluster(rootCluster: IRootCluster): string {
     const comment = commentOutIfExist(rootCluster.comment);
     const cluster = this.renderCluster(rootCluster);
     return joinLines(comment, concatWordsWithSpace(rootCluster.strict ? 'strict' : undefined, cluster));
   }
 
-  protected renderSubgraph(subgraph: ISubgraph): string | undefined {
+  protected renderSubgraph(subgraph: ISubgraph): string {
     const comment = commentOutIfExist(subgraph.comment);
     const cluster = this.renderCluster(subgraph);
     return joinLines(comment, cluster);
   }
 
-  public render(object: Dot): string | undefined {
-    if (isAttributeValue(object)) {
-      return renderAttributeValue(object);
-    } else if (isNode(object)) {
+  public render(object: Dot): string {
+    if (isNode(object)) {
       return this.renderNode(object);
     } else if (isEdge(object)) {
       return this.renderEdge(object);
@@ -83,5 +80,6 @@ export class Renderer {
       this.context.root = object;
       return this.renderRootCluster(object);
     }
+    return renderAttributeValue(object);
   }
 }

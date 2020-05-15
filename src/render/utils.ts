@@ -97,9 +97,7 @@ export function isGraph(object: unknown): object is Graph {
 export function isAttributes(object: unknown): object is IAttributes {
   return object instanceof Attributes;
 }
-export function isAttributeValue(value: unknown): value is AttributesValue {
-  return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean';
-}
+
 export function renderClusterType(cluster: ICluster): string | undefined {
   if (isDigraph(cluster)) {
     return 'digraph';
@@ -112,10 +110,7 @@ export function renderClusterType(cluster: ICluster): string | undefined {
   }
 }
 
-export function renderAttributeValue(value: AttributesValue | undefined): string | undefined {
-  if (value === undefined) {
-    return undefined;
-  }
+export function renderAttributeValue(value: AttributesValue): string {
   const isNotString = typeof value !== 'string';
   let isHTMLLike = false;
   let isQuoteRequired = false;
@@ -155,9 +150,9 @@ export const renderAttributeWithComma: <T extends string>(
   v: [T, AttributesValue],
 ) => string | undefined = renderAttributeBuilder(',');
 
-export function renderAttributes(attributes: IAttributes): string | undefined {
+export function renderAttributes(attributes: IAttributes): string {
   if (attributes.size === 0) {
-    return undefined;
+    return '';
   }
   return joinLines(
     '[',
@@ -173,15 +168,15 @@ export function renderEdgeTarget(edgeTarget: EdgeTarget): string | undefined {
     const { port, compass } = edgeTarget.port;
     return concatWordsWithColon(
       renderAttributeValue(edgeTarget.node.id),
-      renderAttributeValue(port),
-      renderAttributeValue(compass),
+      port !== undefined ? renderAttributeValue(port) : undefined,
+      compass !== undefined ? renderAttributeValue(compass) : undefined,
     );
   } else if (isForwardRefNode(edgeTarget)) {
     const { port, compass } = edgeTarget.port;
     return concatWordsWithColon(
       renderAttributeValue(edgeTarget.id),
-      renderAttributeValue(port),
-      renderAttributeValue(compass),
+      port !== undefined ? renderAttributeValue(port) : undefined,
+      compass !== undefined ? renderAttributeValue(compass) : undefined,
     );
   }
 }

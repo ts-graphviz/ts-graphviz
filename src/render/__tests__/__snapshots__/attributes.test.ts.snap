@@ -17,7 +17,7 @@ exports[`Attributes rendering renders correctly by toDot method edge with commen
 ]"
 `;
 
-exports[`Attributes rendering renders correctly by toDot method no attributes 1`] = `undefined`;
+exports[`Attributes rendering renders correctly by toDot method no attributes 1`] = `""`;
 
 exports[`Attributes rendering renders correctly by toDot method one attribute 1`] = `
 "[
