@@ -1,9 +1,9 @@
-import { toDot } from '../../../render/to-dot';
+import { toDot } from '../../render/to-dot';
 
-const DoubleQuotedValuePattern = /^".+"$/ms;
-const HTMLLikeValuePattern = /^<.+>$/ms;
+describe('AttributesValue rendering', () => {
+  const DoubleQuotedValuePattern = /^".+"$/ms;
+  const HTMLLikeValuePattern = /^<.+>$/ms;
 
-describe('valueType', () => {
   describe('Literal', () => {
     describe('plain string', () => {
       test.each([

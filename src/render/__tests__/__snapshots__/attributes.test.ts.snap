@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Attributes rendering renders correctly by toDot method edge with comment multi line comment 1`] = `
+"[
+  // this is comment.
+  // second line.
+  label = \\"test\\",
+  color = \\"red\\",
+]"
+`;
+
+exports[`Attributes rendering renders correctly by toDot method edge with comment single line comment 1`] = `
+"[
+  // this is comment.
+  label = \\"test\\",
+  color = \\"red\\",
+]"
+`;
+
+exports[`Attributes rendering renders correctly by toDot method no attributes 1`] = `undefined`;
+
+exports[`Attributes rendering renders correctly by toDot method one attribute 1`] = `
+"[
+  label = \\"test\\",
+]"
+`;
+
+exports[`Attributes rendering renders correctly by toDot method set some attributes by apply 1`] = `
+"[
+  label = \\"this is test\\",
+  color = \\"red\\",
+  fontsize = 16,
+]"
+`;
+
+exports[`Attributes rendering renders correctly by toDot method some attributes 1`] = `
+"[
+  label = \\"test\\",
+  color = \\"red\\",
+]"
+`;

@@ -72,7 +72,7 @@ export type ClusterSubgraphAttributes = AttributesObject<attribute.ClusterSubgra
 
 export interface IAttributesBase<T extends string> {
   readonly size: number;
-  values: ReadonlyArray<[T, AttributesValue]>;
+  readonly values: ReadonlyArray<[T, AttributesValue]>;
   get(key: T): AttributesValue | undefined;
   set(key: T, value: AttributesValue): void;
   apply(attributes: AttributesObject<T>): void;
@@ -88,13 +88,13 @@ export interface IPort {
 }
 
 export interface INodeWithPort {
-  node: INode;
-  port: Partial<IPort>;
+  readonly node: INode;
+  readonly port: Partial<IPort>;
 }
 
 export interface IForwardRefNode {
-  id: string;
-  port: Partial<IPort>;
+  readonly id: string;
+  readonly port: Partial<IPort>;
 }
 
 export interface INode extends IHasComment, IHasAttributes<attribute.Node> {
@@ -103,7 +103,7 @@ export interface INode extends IHasComment, IHasAttributes<attribute.Node> {
 }
 
 export interface IEdge extends IHasComment, IHasAttributes<attribute.Edge> {
-  targets: EdgeTarget[];
+  readonly targets: EdgeTarget[];
 }
 
 /**
@@ -129,11 +129,11 @@ export interface IDotContext {
 }
 
 export interface ICluster<T extends string = string> extends IHasComment, IAttributesBase<T> {
-  id?: string;
+  readonly id?: string;
   readonly attributes: Readonly<IClusterCommonAttributes>;
-  nodes: ReadonlyArray<INode>;
-  edges: ReadonlyArray<IEdge>;
-  subgraphs: ReadonlyArray<ISubgraph>;
+  readonly nodes: ReadonlyArray<INode>;
+  readonly edges: ReadonlyArray<IEdge>;
+  readonly subgraphs: ReadonlyArray<ISubgraph>;
   /**
    * Add a Node to the cluster.
    */

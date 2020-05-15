@@ -1,17 +1,10 @@
-import { DotObject, GraphvizObject } from '../abstract';
-import { Node } from '../nodes';
-import { toDot } from '../../render/to-dot';
+import { Node } from '../../model/nodes';
+import { toDot } from '../to-dot';
 
-describe('class Node', () => {
+describe('Node rendering', () => {
   let node: Node;
   beforeEach(() => {
     node = new Node('test');
-  });
-
-  it('should be instance of Node/DotObject/GraphvizObject', () => {
-    expect(node).toBeInstanceOf(Node);
-    expect(node).toBeInstanceOf(DotObject);
-    expect(node).toBeInstanceOf(GraphvizObject);
   });
 
   describe('renders correctly by toDot method', () => {
