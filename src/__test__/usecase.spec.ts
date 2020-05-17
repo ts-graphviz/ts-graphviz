@@ -3,6 +3,9 @@ import { Digraph, Graph } from '../model/root-clusters';
 import { digraph, graph, strict } from '../usecase';
 import { toDot } from '../render/to-dot';
 import { attribute } from '../attribute';
+import { Subgraph } from '../model/clusters';
+import { Node } from '../model/nodes';
+import { Edge } from '../model/edges';
 
 describe('function digraph', () => {
   it('should return Digraph object, when execute digraph()', () => {
@@ -119,6 +122,27 @@ describe('function digraph', () => {
     expect(dot).toBeValidDotAndMatchSnapshot();
   });
 
+  test('class base', () => {
+    const G = new Digraph();
+    const A = new Subgraph('A');
+    const node1 = new Node('A_node1', {
+      [attribute.color]: 'red',
+    });
+    const node2 = new Node('A_node2', {
+      [attribute.color]: 'blue',
+    });
+    const edge = new Edge([node1, node2], {
+      [attribute.label]: 'Edge Label',
+      [attribute.color]: 'pink',
+    });
+    G.addSubgraph(A);
+    A.addNode(node1);
+    A.addNode(node2);
+    A.addEdge(edge);
+    const dot = toDot(G);
+    expect(dot).toBeValidDotAndMatchSnapshot();
+  });
+
   test('callback style, set attributes by attributes object', () => {
     const G = digraph('G', (g) => {
       const a = g.node('aa');
@@ -178,6 +202,25 @@ describe('function graph', () => {
   it('should return Graph object, when execute graph()', () => {
     const g = graph();
     expect(g).toBeInstanceOf(Graph);
+  });
+
+  it('script style', () => {
+    const g = digraph('G');
+    const subgraphA = g.createSubgraph('A');
+    const nodeA1 = subgraphA.createNode('A_node1');
+    const nodeA2 = subgraphA.createNode('A_node2');
+    subgraphA.createEdge([nodeA1, nodeA2]);
+
+    const subgraphB = g.createSubgraph('B');
+    const nodeB1 = subgraphB.createNode('B_node1');
+    const nodeB2 = subgraphB.createNode('B_node2');
+    subgraphA.createEdge([nodeB1, nodeB2]);
+
+    const node1 = g.createNode('node1');
+    const node2 = g.createNode('node2');
+    g.createEdge([node1, node2]);
+    const dot = toDot(g);
+    expect(dot).toBeValidDotAndMatchSnapshot();
   });
 
   test('callback style', () => {

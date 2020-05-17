@@ -11,7 +11,6 @@
 - Export Dot language.
 - Support Node.js and Browser.
   - UMD, ESM, CommonJS
-- No dependency.
 
 ## Installation
 
@@ -34,9 +33,9 @@ npm install ts-graphviz
 <script src="//unpkg.com/ts-graphviz/lib/bundle.min.js"></script>
 ```
 
-## Usage
+## Examples
 
-### Script
+### Script style
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz';
@@ -60,31 +59,7 @@ const dot = toDot(g);
 console.log(dot);
 ```
 
-### Callback style API
-
-```typescript
-import { digraph, toDot } from 'ts-graphviz';
-
-const G = digraph('G', g => {
-  g.subgraph('A', A => {
-    const node1 = A.node('A_node1');
-    const node2 = A.node('A_node2');
-    A.edge([node1, node2]);
-  });
-  g.subgraph('B', B => {
-    const node1 = B.node('B_node1');
-    const node2 = B.node('B_node2');
-    B.edge([node1, node2]);
-  });
-  g.edge(['node1', 'node2']);
-});
-const dot = toDot(g);
-console.log(dot);
-```
-
-### Output
-
-```graphviz
+```dot
 digraph "G" {
   "node1";
   "node2";
@@ -92,13 +67,161 @@ digraph "G" {
     "A_node1";
     "A_node2";
     "A_node1" -> "A_node2";
+    "B_node1" -> "B_node2";
   }
   subgraph "B" {
     "B_node1";
     "B_node2";
-    "B_node1" -> "B_node2";
   }
   "node1" -> "node2";
+}
+```
+
+### Callback style
+
+```typescript
+import { digraph, toDot } from 'ts-graphviz';
+
+ const G = digraph('G', (g) => {
+  const a = g.node('aa');
+  const b = g.node('bb');
+  const c = g.node('cc');
+  g.edge([a, b, c], {
+    [attribute.color]: 'red',
+  });
+  g.subgraph('A', (A) => {
+    const Aa = A.node('Aaa', {
+      [attribute.color]: 'pink',
+    });
+
+    const Ab = A.node('Abb', {
+      [attribute.color]: 'violet',
+    });
+    const Ac = A.node('Acc');
+    A.edge([Aa.port('a'), Ab, Ac, 'E'], {
+      [attribute.color]: 'red',
+    });
+  });
+});
+console.log(dot);
+```
+
+```dot
+digraph "G" {
+  "aa";
+  "bb";
+  "cc";
+  subgraph "A" {
+    "Aaa" [
+      color = "pink",
+    ];
+    "Abb" [
+      color = "violet",
+    ];
+    "Acc";
+    "Aaa":"a" -> "Abb" -> "Acc" -> "E" [
+      color = "red",
+    ];
+  }
+  "aa" -> "bb" -> "cc" [
+    color = "red",
+  ];
+}
+```
+
+### Class base API
+
+```typescript
+import { Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
+
+const G = new Digraph();
+const A = new Subgraph('A');
+const node1 = new Node('node1', {
+  [attribute.color]: 'red',
+});
+const node2 = new Node('node2', {
+  [attribute.color]: 'blue',
+});
+const edge = new Edge([node1, node2], {
+  [attribute.label]: 'Edge Label',
+  [attribute.color]: 'pink',
+});
+G.addSubgraph(A);
+A.addNode(node1);
+A.addNode(node2);
+A.addEdge(edge);
+const dot = toDot(G);
+console.log(dot);
+```
+
+```dot
+digraph {
+  subgraph "A" {
+    "node1" [
+      color = "red",
+    ];
+    "node2" [
+      color = "blue",
+    ];
+    "node1" -> "node2" [
+      label = "Edge Label",
+      color = "pink",
+    ];
+  }
+}
+```
+
+### Custom Classes
+
+```typescript
+import { Digraph, Node, Edge, EdgeTarget, attribute, toDot } from 'ts-graphviz';
+
+class MyCustomDigraph extends Digraph {
+  constructor() {
+    super('G', {
+      [attribute.label]: 'This is Custom Digraph',
+    });
+  }
+}
+class MyCustomNode extends Node {
+  constructor(id: number) {
+    super(`node${id}`, {
+      [attribute.label]: `This is Custom Node ${id}`,
+    });
+  }
+}
+
+class MyCustomEdge extends Edge {
+  constructor(targets: ReadonlyArray<EdgeTarget>) {
+    super(targets, {
+      [attribute.label]: 'This is Custom Edge',
+    });
+  }
+}
+
+const digraph = new MyCustomDigraph();
+const node1 = new MyCustomNode(1);
+const node2 = new MyCustomNode(2);
+const edge = new MyCustomEdge([node1, node2]);
+digraph.addNode(node1);
+digraph.addNode(node2);
+digraph.addEdge(edge);
+const dot = toDot(g);
+console.log(dot);
+```
+
+```dot
+digraph "G" {
+  label = "This is Custom Digraph";
+  "node1" [
+    label = "This is Custom Node 1",
+  ];
+  "node2" [
+    label = "This is Custom Node 2",
+  ];
+  "node1" -> "node2" [
+    label = "This is Custom Edge",
+  ];
 }
 ```
 

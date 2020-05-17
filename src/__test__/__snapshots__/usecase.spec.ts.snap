@@ -46,6 +46,23 @@ digraph "G" {
 }
 `;
 
+exports[`function digraph class base 1`] = `
+digraph {
+  subgraph "A" {
+    "A_node1" [
+      color = "red",
+    ];
+    "A_node2" [
+      color = "blue",
+    ];
+    "A_node1" -> "A_node2" [
+      label = "Edge Label",
+      color = "pink",
+    ];
+  }
+}
+`;
+
 exports[`function digraph comment 1`] = `
 // This is directed graph.
 digraph "G" {
@@ -187,5 +204,23 @@ graph "G\\n\\"" {
   "a\\na" -- "b\\"b" -- "c\\nc\\"" [
     color = "red",
   ];
+}
+`;
+
+exports[`function graph script style 1`] = `
+digraph "G" {
+  "node1";
+  "node2";
+  subgraph "A" {
+    "A_node1";
+    "A_node2";
+    "A_node1" -> "A_node2";
+    "B_node1" -> "B_node2";
+  }
+  subgraph "B" {
+    "B_node1";
+    "B_node2";
+  }
+  "node1" -> "node2";
 }
 `;
