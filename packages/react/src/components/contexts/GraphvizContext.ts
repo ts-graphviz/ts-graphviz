@@ -1,7 +1,11 @@
 import React from 'react';
-import { Context } from 'ts-graphviz';
+import { IRootCluster } from 'ts-graphviz';
 
-export const NoContext = {} as Context;
+export type Context = {
+  root?: IRootCluster;
+};
+
+export const NoContext = {};
 
 export const GraphvizContext = React.createContext<Context>(NoContext);
 GraphvizContext.displayName = 'GraphvizContext';

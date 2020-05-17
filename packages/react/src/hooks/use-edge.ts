@@ -16,7 +16,7 @@ export const useEdge = ({ targets, comment, ...attributes }: EdgeProps): IEdge =
     throw Error(EdgeTargetLengthErrorMessage);
   }
   const edge = useMemo(() => {
-    const e = cluster.createEdge(...targets);
+    const e = cluster.createEdge(targets);
     e.comment = comment;
     e.attributes.apply(attributes);
     return e;

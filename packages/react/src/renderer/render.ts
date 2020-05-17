@@ -1,6 +1,6 @@
 import { ReactElement, createElement } from 'react';
-import { Context } from 'ts-graphviz';
-import { GraphvizContext } from '../components/contexts/GraphvizContext';
+import { toDot } from 'ts-graphviz';
+import { GraphvizContext, Context } from '../components/contexts/GraphvizContext';
 import { reconciler } from './reconciler';
 
 const noop = (): void => undefined;
@@ -22,7 +22,7 @@ export function render(element: ReactElement, context: Context): number {
 }
 
 export function renderToDot(element: ReactElement): string {
-  const context = new Context();
+  const context: Context = {};
   render(element, context);
-  return context.root?.toDot() || '';
+  return context.root ? toDot(context.root) : '';
 }

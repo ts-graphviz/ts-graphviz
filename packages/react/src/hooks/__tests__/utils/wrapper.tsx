@@ -1,30 +1,27 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { FC, ComponentProps } from 'react';
-import { Context } from 'ts-graphviz';
+
 import { Digraph } from '../../../components/Digraph';
 import { Graph } from '../../../components/Graph';
 import { GraphvizContext } from '../../../components/contexts/GraphvizContext';
 import { Subgraph } from '../../../components/Subgraph';
 
 export const context = (): FC => ({ children }) => {
-  const ctx = new Context();
-  return <GraphvizContext.Provider value={ctx}>{children}</GraphvizContext.Provider>;
+  return <GraphvizContext.Provider value={{}}>{children}</GraphvizContext.Provider>;
 };
 
 export const digraph = (props: ComponentProps<typeof Digraph> = {}): FC => ({ children }) => {
-  const ctx = new Context();
   return (
-    <GraphvizContext.Provider value={ctx}>
+    <GraphvizContext.Provider value={{}}>
       <Digraph {...props}>{children}</Digraph>
     </GraphvizContext.Provider>
   );
 };
 
 export const digraphInSubgraph = (props: ComponentProps<typeof Subgraph> = {}): FC => ({ children }) => {
-  const ctx = new Context();
   return (
-    <GraphvizContext.Provider value={ctx}>
+    <GraphvizContext.Provider value={{}}>
       <Digraph>
         <Subgraph {...props}>{children}</Subgraph>
       </Digraph>
@@ -33,18 +30,16 @@ export const digraphInSubgraph = (props: ComponentProps<typeof Subgraph> = {}): 
 };
 
 export const graph = (props: ComponentProps<typeof Graph> = {}): FC => ({ children }) => {
-  const ctx = new Context();
   return (
-    <GraphvizContext.Provider value={ctx}>
+    <GraphvizContext.Provider value={{}}>
       <Graph {...props}>{children}</Graph>
     </GraphvizContext.Provider>
   );
 };
 
 export const graphInSubgraph = (props: ComponentProps<typeof Subgraph> = {}): FC => ({ children }) => {
-  const ctx = new Context();
   return (
-    <GraphvizContext.Provider value={ctx}>
+    <GraphvizContext.Provider value={{}}>
       <Graph>
         <Subgraph {...props}>{children}</Subgraph>
       </Graph>
