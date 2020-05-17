@@ -2,15 +2,15 @@ import 'jest-graphviz';
 import { DotObject, GraphvizObject } from '../abstract';
 import { ISubgraph } from '../../types';
 import { AttributesBase } from '../attributes-base';
-import { Cluster } from '../clusters';
+import { Cluster, Subgraph } from '../clusters';
 import { Node } from '../nodes';
-import { Subgraph } from '../clusters';
+import { attribute } from '../../attribute';
 
 describe('class Subgraph', () => {
   let subgraph: ISubgraph;
 
   beforeEach(() => {
-    subgraph = new Subgraph('test');
+    subgraph = new Subgraph();
   });
 
   it('should be instance of Subgraph/Cluster/AttributesBase/DotObject/GraphvizObject', () => {
@@ -21,20 +21,72 @@ describe('class Subgraph', () => {
     expect(subgraph).toBeInstanceOf(GraphvizObject);
   });
 
-  test('set attributes', () => {
-    subgraph.set('rank', 'same');
-    expect(subgraph.get('rank')).toBe('same');
+  describe('Constructor', () => {
+    test('first argument is id, and second attributes object', () => {
+      subgraph = new Subgraph('test', {
+        [attribute.K]: 1,
+      });
+      expect(subgraph.id).toBe('test');
+      expect(subgraph.get(attribute.K)).toBe(1);
+    });
+    test('first argument is attributes object', () => {
+      subgraph = new Subgraph({
+        [attribute.K]: 1,
+      });
+      expect(subgraph.get(attribute.K)).toBe(1);
+    });
   });
 
-  test('set attributes by apply', () => {
-    subgraph.apply({
-      rank: 'same',
+  test('set attributes', () => {
+    subgraph.set(attribute.rank, 'same');
+    expect(subgraph.get(attribute.rank)).toBe('same');
+  });
+
+  describe('set attributes by apply', () => {
+    test('with attributes object', () => {
+      subgraph.apply({
+        [attribute.rank]: 'same',
+      });
+      expect(subgraph.get(attribute.rank)).toBe('same');
     });
-    expect(subgraph.get('rank')).toBe('same');
+
+    test('with entities', () => {
+      subgraph.apply([[attribute.rank, 'same']]);
+      expect(subgraph.get(attribute.rank)).toBe('same');
+    });
   });
 
   it('should be subgraph, when subgraph id is "test"', () => {
     expect(subgraph.isSubgraphCluster()).toBe(false);
+  });
+
+  test('create node with attributes', () => {
+    const node = subgraph.createNode('n', {
+      [attribute.label]: 'Label',
+    });
+    expect(node.id).toBe('n');
+    expect(node.attributes.size).toBe(1);
+  });
+
+  test('create edge with attributes', () => {
+    const nodes = ['node1', 'node2'].map((id) => subgraph.createNode(id));
+    const edge = subgraph.createEdge(nodes, {
+      [attribute.label]: 'Label',
+    });
+    expect(edge.attributes.size).toBe(1);
+  });
+
+  test('create subgraph with attributes', () => {
+    subgraph = subgraph.createSubgraph('test', {
+      [attribute.label]: 'Label',
+    });
+    expect(subgraph.id).toBe('test');
+    expect(subgraph.size).toBe(1);
+
+    subgraph = subgraph.createSubgraph({
+      [attribute.label]: 'Label',
+    });
+    expect(subgraph.size).toBe(1);
   });
 
   test.each([
@@ -45,11 +97,6 @@ describe('class Subgraph', () => {
   ])('if cluster named "%s", isSubgraphCluster should be %p', (id, expected) => {
     subgraph = new Subgraph(id);
     expect(subgraph.isSubgraphCluster()).toBe(expected);
-  });
-
-  it('should be subgraph cluster, when subgraph id is "cluster_test"', () => {
-    subgraph = new Subgraph('cluster_test');
-    expect(subgraph.isSubgraphCluster()).toBe(true);
   });
 
   describe('addXxx existXxx removeXxx APIs', () => {

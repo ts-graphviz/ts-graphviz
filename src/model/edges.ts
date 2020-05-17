@@ -1,4 +1,4 @@
-import { EdgeTarget } from '../types';
+import { EdgeTarget, EdgeAttributes, IAttributes } from '../types';
 import { DotObject } from './abstract';
 import { attribute } from '../attribute';
 import { Attributes } from './attributes-base';
@@ -9,10 +9,10 @@ import { Attributes } from './attributes-base';
 export class Edge extends DotObject {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
-  // TODO
-  public readonly attributes = new Attributes<attribute.Edge>();
+  public readonly attributes: IAttributes<attribute.Edge>;
 
-  constructor(public readonly targets: EdgeTarget[]) {
+  constructor(public readonly targets: ReadonlyArray<EdgeTarget>, attributes?: EdgeAttributes) {
     super();
+    this.attributes = new Attributes<attribute.Edge>(attributes);
   }
 }

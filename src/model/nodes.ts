@@ -1,4 +1,13 @@
-import { EdgeTargetLike, EdgeTarget, INode, IPort, IForwardRefNode, INodeWithPort } from '../types';
+import {
+  EdgeTargetLike,
+  EdgeTarget,
+  INode,
+  IPort,
+  IForwardRefNode,
+  INodeWithPort,
+  NodeAttributes,
+  IAttributes,
+} from '../types';
 import { DotObject } from './abstract';
 import { attribute } from '../attribute';
 import { Attributes } from './attributes-base';
@@ -26,10 +35,10 @@ export class NodeWithPort implements INodeWithPort {
 export class Node extends DotObject implements INode {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
-  public readonly attributes = new Attributes<attribute.Node>();
-  /** @hidden */
-  constructor(public readonly id: string) {
+  public readonly attributes: IAttributes<attribute.Node>;
+  constructor(public readonly id: string, attributes?: NodeAttributes) {
     super();
+    this.attributes = new Attributes<attribute.Node>(attributes);
   }
 
   /** Returns NodeWithPort with port and compass specified. */

@@ -5,8 +5,39 @@ import { Cluster } from '../clusters';
 import { Edge } from '../edges';
 import { Node } from '../nodes';
 import { RootCluster, Digraph, Graph } from '../root-clusters';
+import { attribute } from '../../attribute';
 
 describe('RootClusters', () => {
+  describe('Constructor', () => {
+    class TestRoot extends RootCluster {}
+    test('first argument is id, and second is strict, and third is attributes object', () => {
+      const root = new TestRoot('test', false, {
+        [attribute.label]: 'Label',
+      });
+      expect(root.id).toBe('test');
+      expect(root.strict).toBe(false);
+      expect(root.size).toBe(1);
+      expect(root.get(attribute.label)).toBe('Label');
+    });
+    test('first argument is id, and second attributes object', () => {
+      const root = new TestRoot('test', {
+        [attribute.label]: 'Label',
+      });
+      expect(root.id).toBe('test');
+      expect(root.strict).toBe(false);
+      expect(root.size).toBe(1);
+      expect(root.get(attribute.label)).toBe('Label');
+    });
+    test('first argument is strict, and second attributes object', () => {
+      const root = new TestRoot(true, {
+        [attribute.label]: 'Label',
+      });
+      expect(root.strict).toBe(true);
+      expect(root.size).toBe(1);
+      expect(root.get(attribute.label)).toBe('Label');
+    });
+  });
+
   describe.each([
     ['Digraph', (): RootCluster => new Digraph()],
     ['Graph', (): RootCluster => new Graph()],
@@ -16,7 +47,7 @@ describe('RootClusters', () => {
       g = rootClusterFactory();
     });
 
-    it(`should be instance of RootCluster/Cluster/AttributesBase/DotObject/GraphvizObject`, () => {
+    it('should be instance of RootCluster/Cluster/AttributesBase/DotObject/GraphvizObject', () => {
       expect(g).toBeInstanceOf(RootCluster);
       expect(g).toBeInstanceOf(Cluster);
       expect(g).toBeInstanceOf(AttributesBase);
@@ -25,7 +56,7 @@ describe('RootClusters', () => {
     });
 
     describe('addXxx existXxx removeXxx APIs', () => {
-      it('Node operation methods works', () => {
+      test('Node operation methods works', () => {
         const id = 'node';
         expect(g.existNode(id)).toBe(false);
         const node = new Node(id);
@@ -39,7 +70,7 @@ describe('RootClusters', () => {
         expect(g.existNode(id)).toBe(false);
       });
 
-      it('Edge operation methods works', () => {
+      test('Edge operation methods works', () => {
         const nodes = ['node1', 'node2'].map((id) => g.createNode(id));
         const edge = new Edge(nodes);
         expect(g.existEdge(edge)).toBe(false);
@@ -49,7 +80,7 @@ describe('RootClusters', () => {
         expect(g.existEdge(edge)).toBe(false);
       });
 
-      it('Subgraph operation methods works', () => {
+      test('Subgraph operation methods works', () => {
         const sub = g.createSubgraph('sub');
         expect(g.existSubgraph(sub)).toBe(true);
         g.removeSubgraph(sub);

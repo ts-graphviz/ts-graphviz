@@ -65,17 +65,19 @@ export type AttributesObject<T extends string> = {
   [key in T]?: AttributesValue;
 };
 
+export type AttributesEntities<T extends string> = readonly [T, AttributesValue][];
+
 export type EdgeAttributes = AttributesObject<attribute.Edge>;
 export type NodeAttributes = AttributesObject<attribute.Node>;
 export type RootClusterAttributes = AttributesObject<attribute.RootCluster>;
-export type ClusterSubgraphAttributes = AttributesObject<attribute.ClusterSubgraph>;
+export type ClusterSubgraphAttributes = AttributesObject<attribute.ClusterSubgraph | attribute.Subgraph>;
 
 export interface IAttributesBase<T extends string> {
   readonly size: number;
   readonly values: ReadonlyArray<[T, AttributesValue]>;
   get(key: T): AttributesValue | undefined;
   set(key: T, value: AttributesValue): void;
-  apply(attributes: AttributesObject<T>): void;
+  apply(attributes: AttributesObject<T> | AttributesEntities<T>): void;
   delete(key: T): void;
   clear(): void;
 }
@@ -103,7 +105,7 @@ export interface INode extends IHasComment, IHasAttributes<attribute.Node> {
 }
 
 export interface IEdge extends IHasComment, IHasAttributes<attribute.Edge> {
-  readonly targets: EdgeTarget[];
+  readonly targets: ReadonlyArray<EdgeTarget>;
 }
 
 /**
@@ -173,11 +175,12 @@ export interface ICluster<T extends string = string> extends IHasComment, IAttri
   /**
    * Create a Node in the cluster.
    */
-  createNode(id: string): INode;
+  createNode(id: string, attributes?: NodeAttributes): INode;
   /**
    * Create a Subgraph and add it to the cluster.
    */
-  createSubgraph(id?: string): ISubgraph;
+  createSubgraph(id?: string, attributes?: ClusterSubgraphAttributes): ISubgraph;
+  createSubgraph(attributes?: ClusterSubgraphAttributes): ISubgraph;
   /**
    * Get Subgraph in cluster by specifying id.
    *
@@ -193,7 +196,7 @@ export interface ICluster<T extends string = string> extends IHasComment, IAttri
    */
   getNode(id: string): INode | undefined;
   /** Create Edge and add it to the cluster. */
-  createEdge(targets: EdgeTargetLike[]): IEdge;
+  createEdge(targets: EdgeTargetLike[], attributes?: EdgeAttributes): IEdge;
   /**
    * Declarative API for Subgraph.
    *
@@ -202,9 +205,13 @@ export interface ICluster<T extends string = string> extends IHasComment, IAttri
    * If not, create a Subgraph.
    *
    * @param id Subgraph ID.
+   * @param attributes Subgraph attributes.
    * @param callback Callback to operate Subgraph.
    */
   subgraph(id?: string, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(id?: string, attributes?: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(attributes?: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(callback?: (subgraph: ISubgraph) => void): ISubgraph;
 
   /**
    * Declarative API for Node.
@@ -214,16 +221,20 @@ export interface ICluster<T extends string = string> extends IHasComment, IAttri
    * If not, create a Node.
    *
    * @param id Node ID.
+   * @param attributes Node attributes.
    * @param callback Callback to operate Node.
    */
-  node(id: string, callback?: (edge: INode) => void): INode;
+  node(id: string, callback?: (node: INode) => void): INode;
+  node(id: string, attributes?: NodeAttributes, callback?: (node: INode) => void): INode;
   /**
    * Declarative API for Edge.
    *
    * @param targets Edges.
+   * @param attributes Edge attributes.
    * @param callback Callback to operate Edge.
    */
   edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge;
+  edge(targets: EdgeTargetLike[], attributes?: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
 }
 
 export interface ISubgraph extends ICluster<attribute.Subgraph | attribute.ClusterSubgraph> {

@@ -1,5 +1,5 @@
 import { DotObject } from './abstract';
-import { AttributesObject, AttributesValue, IAttributesBase, IAttributes } from '../types';
+import { AttributesObject, AttributesValue, IAttributesBase, IAttributes, AttributesEntities } from '../types';
 
 /**
  * @hidden
@@ -7,6 +7,13 @@ import { AttributesObject, AttributesValue, IAttributesBase, IAttributes } from 
 export abstract class AttributesBase<T extends string> extends DotObject implements IAttributesBase<T> {
   /** @hidden */
   protected attrs: Map<T, AttributesValue> = new Map();
+
+  constructor(attributes?: AttributesObject<T>) {
+    super();
+    if (attributes !== undefined) {
+      this.apply(attributes);
+    }
+  }
 
   get values(): ReadonlyArray<[T, AttributesValue]> {
     return Array.from(this.attrs.entries());
@@ -29,8 +36,9 @@ export abstract class AttributesBase<T extends string> extends DotObject impleme
     this.attrs.delete(key);
   }
 
-  public apply(attributes: AttributesObject<T>): void {
-    for (const [key, value] of Object.entries(attributes)) {
+  public apply(attributes: AttributesObject<T> | AttributesEntities<T>): void {
+    const entries = Array.isArray(attributes) ? attributes : Object.entries(attributes);
+    for (const [key, value] of entries) {
       this.set(key as T, value as AttributesValue);
     }
   }

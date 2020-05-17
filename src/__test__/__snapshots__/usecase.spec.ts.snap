@@ -23,6 +23,29 @@ digraph "G" {
 }
 `;
 
+exports[`function digraph callback style, set attributes by attributes object 1`] = `
+digraph "G" {
+  "aa";
+  "bb";
+  "cc";
+  subgraph "A" {
+    "Aaa" [
+      color = "pink",
+    ];
+    "Abb" [
+      color = "violet",
+    ];
+    "Acc";
+    "Aaa":"a" -> "Abb" -> "Acc" -> "E" [
+      color = "red",
+    ];
+  }
+  "aa" -> "bb" -> "cc" [
+    color = "red",
+  ];
+}
+`;
+
 exports[`function digraph comment 1`] = `
 // This is directed graph.
 digraph "G" {
@@ -50,6 +73,51 @@ digraph "G" {
 }
 `;
 
+exports[`function digraph root create function id 1`] = `
+digraph "id" {
+}
+`;
+
+exports[`function digraph root create function id with attributes 1`] = `
+digraph "id" {
+  label = "Label";
+}
+`;
+
+exports[`function digraph root create function no id with attributes 1`] = `
+digraph {
+  label = "Label";
+}
+`;
+
+exports[`function digraph root create function no parameters 1`] = `
+digraph {
+}
+`;
+
+exports[`function digraph root create function strict id with attributes 1`] = `
+strict digraph "id" {
+  label = "Label";
+}
+`;
+
+exports[`function digraph root create function strict no id with attributes 1`] = `
+strict digraph {
+  label = "Label";
+}
+`;
+
+exports[`function digraph root create function strict no parameters 1`] = `
+strict digraph {
+}
+`;
+
+exports[`function digraph root create function strict with attributes 1`] = `
+strict digraph {
+  label = "Label";
+}
+`;
+
 exports[`function graph callback style 1`] = `
 graph "G" {
   "aa";
@@ -68,6 +136,29 @@ graph "G" {
       color = "red",
     ];
     "Aaa":"a":"w" -- "Abb":"w" -- "Aaa":"e" -- "Acc":"r":"e" [
+      color = "red",
+    ];
+  }
+  "aa" -- "bb" -- "cc" [
+    color = "red",
+  ];
+}
+`;
+
+exports[`function graph callback style, set attributes by attributes object 1`] = `
+graph "G" {
+  "aa";
+  "bb";
+  "cc";
+  subgraph "A" {
+    "Aaa" [
+      color = "pink",
+    ];
+    "Abb" [
+      color = "violet",
+    ];
+    "Acc";
+    "Aaa":"a" -- "Abb" -- "Acc" -- "E" [
       color = "red",
     ];
   }

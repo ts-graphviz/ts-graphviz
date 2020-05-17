@@ -2,11 +2,96 @@ import 'jest-graphviz';
 import { Digraph, Graph } from '../model/root-clusters';
 import { digraph, graph, strict } from '../usecase';
 import { toDot } from '../render/to-dot';
+import { attribute } from '../attribute';
 
 describe('function digraph', () => {
   it('should return Digraph object, when execute digraph()', () => {
     const g = digraph();
     expect(g).toBeInstanceOf(Digraph);
+  });
+
+  describe('root create function', () => {
+    test.each([
+      ['id', { size: 0, id: 'id', strict: false, g: digraph('id') }],
+      [
+        'id with attributes',
+        {
+          size: 1,
+          id: 'id',
+          strict: false,
+          g: digraph('id', {
+            [attribute.label]: 'Label',
+          }),
+        },
+      ],
+      [
+        'no parameters',
+        {
+          size: 0,
+          id: undefined,
+          strict: false,
+          g: digraph(),
+        },
+      ],
+      [
+        'strict no parameters',
+        {
+          size: 0,
+          id: undefined,
+          strict: true,
+          g: strict.digraph(),
+        },
+      ],
+      [
+        'no id with attributes',
+        {
+          size: 1,
+          id: undefined,
+          strict: false,
+          g: digraph({
+            [attribute.label]: 'Label',
+          }),
+        },
+      ],
+      [
+        'strict with attributes',
+        {
+          size: 1,
+          id: undefined,
+          strict: true,
+          g: strict.digraph({
+            [attribute.label]: 'Label',
+          }),
+        },
+      ],
+      [
+        'strict id with attributes',
+        {
+          size: 1,
+          id: 'id',
+          strict: true,
+          g: strict.digraph('id', {
+            [attribute.label]: 'Label',
+          }),
+        },
+      ],
+      [
+        'strict no id with attributes',
+        {
+          size: 1,
+          id: undefined,
+          strict: true,
+          g: strict.digraph({
+            [attribute.label]: 'Label',
+          }),
+        },
+      ],
+    ])('%s', (_, { id, size, strict, g }) => {
+      expect(g.id).toBe(id);
+      expect(g.size).toBe(size);
+      expect(g.strict).toBe(strict);
+      expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+    });
   });
 
   test('callback style', () => {
@@ -27,6 +112,32 @@ describe('function digraph', () => {
         const Ac = A.node('Acc');
         A.edge([Aa.port('a'), Ab, Ac, 'E'], (e) => {
           e.attributes.set('color', 'red');
+        });
+      });
+    });
+    const dot = toDot(G);
+    expect(dot).toBeValidDotAndMatchSnapshot();
+  });
+
+  test('callback style, set attributes by attributes object', () => {
+    const G = digraph('G', (g) => {
+      const a = g.node('aa');
+      const b = g.node('bb');
+      const c = g.node('cc');
+      g.edge([a, b, c], {
+        [attribute.color]: 'red',
+      });
+      g.subgraph('A', (A) => {
+        const Aa = A.node('Aaa', {
+          [attribute.color]: 'pink',
+        });
+
+        const Ab = A.node('Abb', {
+          [attribute.color]: 'violet',
+        });
+        const Ac = A.node('Acc');
+        A.edge([Aa.port('a'), Ab, Ac, 'E'], {
+          [attribute.color]: 'red',
         });
       });
     });
@@ -91,6 +202,32 @@ describe('function graph', () => {
 
         A.edge([Aa.port({ port: 'a', compass: 'w' }), Ab.port({ compass: 'w' }), 'Aaa:e', 'Acc:r:e'], (e) => {
           e.attributes.set('color', 'red');
+        });
+      });
+    });
+    const dot = toDot(G);
+    expect(dot).toBeValidDotAndMatchSnapshot();
+  });
+
+  test('callback style, set attributes by attributes object', () => {
+    const G = graph('G', (g) => {
+      const a = g.node('aa');
+      const b = g.node('bb');
+      const c = g.node('cc');
+      g.edge([a, b, c], {
+        [attribute.color]: 'red',
+      });
+      g.subgraph('A', (A) => {
+        const Aa = A.node('Aaa', {
+          [attribute.color]: 'pink',
+        });
+
+        const Ab = A.node('Abb', {
+          [attribute.color]: 'violet',
+        });
+        const Ac = A.node('Acc');
+        A.edge([Aa.port('a'), Ab, Ac, 'E'], {
+          [attribute.color]: 'red',
         });
       });
     });

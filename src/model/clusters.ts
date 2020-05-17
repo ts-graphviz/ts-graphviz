@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define,max-classes-per-file */
 import { attribute } from '../attribute';
 import {
+  ClusterSubgraphAttributes,
+  Compass,
+  EdgeAttributes,
   EdgeTarget,
   EdgeTargetLike,
   ICluster,
@@ -8,7 +11,7 @@ import {
   IEdge,
   INode,
   ISubgraph,
-  Compass,
+  NodeAttributes,
 } from '../types';
 import { Attributes, AttributesBase } from './attributes-base';
 import { isEdgeTarget, isEdgeTargetLike, Node, ForwardRefNode } from './nodes';
@@ -107,8 +110,12 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
   /**
    * Create a Subgraph and add it to the cluster.
    */
-  public createSubgraph(id?: string): ISubgraph {
-    const graph = new Subgraph(id);
+  public createSubgraph(id?: string, attributes?: ClusterSubgraphAttributes): ISubgraph;
+  public createSubgraph(attributes?: ClusterSubgraphAttributes): ISubgraph;
+  public createSubgraph(...args: unknown[]): ISubgraph {
+    const id = args.find((arg): arg is string => typeof arg === 'string');
+    const attributes = args.find((arg): arg is ClusterSubgraphAttributes => typeof arg === 'object');
+    const graph = new Subgraph(id, attributes);
     this.objects.subgraphs.add(graph);
     return graph;
   }
@@ -137,8 +144,8 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
   /**
    * Create a Node in the cluster.
    */
-  public createNode(id: string): INode {
-    const node = new Node(id);
+  public createNode(id: string, attributes?: NodeAttributes): INode {
+    const node = new Node(id, attributes);
     this.objects.nodes.set(id, node);
     return node;
   }
@@ -163,21 +170,24 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
   }
 
   /** Create Edge and add it to the cluster. */
-  public createEdge(targets: EdgeTargetLike[]): IEdge {
+  public createEdge(targets: EdgeTargetLike[], attributes?: EdgeAttributes): IEdge {
     if (targets.length < 2 && (isEdgeTargetLike(targets[0]) && isEdgeTargetLike(targets[1])) === false) {
-      throw new Error('The element of Edge target is missing or not satisfied as Edge target.');
+      throw Error('The element of Edge target is missing or not satisfied as Edge target.');
     }
-    const edge = new Edge(targets.map((t) => this.toNodeLikeObject(t)));
+    const edge = new Edge(
+      targets.map((t) => this.toEdgeTarget(t)),
+      attributes,
+    );
     this.objects.edges.add(edge);
     return edge;
   }
 
   /** @hidden */
-  private toNodeLikeObject(node: EdgeTargetLike): EdgeTarget {
-    if (isEdgeTarget(node)) {
-      return node;
+  private toEdgeTarget(target: EdgeTargetLike): EdgeTarget {
+    if (isEdgeTarget(target)) {
+      return target;
     }
-    const [id, port, compass] = node.split(':');
+    const [id, port, compass] = target.split(':');
     const n = this.getNode(id);
     if (n !== undefined) {
       if (port && (compass === undefined || Compass.is(compass))) {
@@ -201,9 +211,25 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * @param id Subgraph ID.
    * @param callback Callback to operate Subgraph.
    */
-  public subgraph(id?: string, callback?: (subgraph: ISubgraph) => void): ISubgraph {
+  public subgraph(id?: string, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  public subgraph(
+    id?: string,
+    attributes?: ClusterSubgraphAttributes,
+    callback?: (subgraph: ISubgraph) => void,
+  ): ISubgraph;
+  public subgraph(attributes?: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  public subgraph(callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  public subgraph(...args: unknown[]): ISubgraph {
+    const id = args.find((arg: unknown): arg is string => typeof arg === 'string');
+    const attributes = args.find(
+      (arg: unknown): arg is ClusterSubgraphAttributes => typeof arg === 'object' && arg !== null,
+    );
+    const callback = args.find((arg: unknown): arg is (subgraph: ISubgraph) => void => typeof arg === 'function');
     const subgraph: ISubgraph = id ? this.getSubgraph(id) ?? this.createSubgraph(id) : this.createSubgraph();
-    if (callback) {
+    if (attributes !== undefined) {
+      this.apply(attributes);
+    }
+    if (callback !== undefined) {
       callback(subgraph);
     }
     return subgraph;
@@ -219,9 +245,16 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * @param id Node ID.
    * @param callback Callback to operate Node.
    */
-  public node(id: string, callback?: (node: INode) => void): INode {
+  public node(id: string, callback?: (node: INode) => void): INode;
+  public node(id: string, attributes?: NodeAttributes, callback?: (node: INode) => void): INode;
+  public node(id: string, ...args: unknown[]): INode {
+    const attributes = args.find((arg: unknown): arg is NodeAttributes => typeof arg === 'object' && arg !== null);
+    const callback = args.find((arg: unknown): arg is (node: INode) => void => typeof arg === 'function');
     const node = this.getNode(id) ?? this.createNode(id);
-    if (callback) {
+    if (attributes !== undefined) {
+      node.attributes.apply(attributes);
+    }
+    if (callback !== undefined) {
       callback(node);
     }
     return node;
@@ -233,9 +266,13 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * @param targets Edges.
    * @param callback Callback to operate Edge.
    */
-  public edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge {
-    const edge = this.createEdge(targets);
-    if (callback) {
+  public edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge;
+  public edge(targets: EdgeTargetLike[], attributes?: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
+  public edge(targets: EdgeTargetLike[], ...args: unknown[]): IEdge {
+    const attributes = args.find((arg: unknown): arg is EdgeAttributes => typeof arg === 'object');
+    const callback = args.find((arg: unknown): arg is (edge: IEdge) => void => typeof arg === 'function');
+    const edge = this.createEdge(targets, attributes);
+    if (callback !== undefined) {
       callback(edge);
     }
     return edge;
@@ -247,13 +284,21 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
  * @category Primary
  */
 export class Subgraph extends Cluster<attribute.Subgraph | attribute.ClusterSubgraph> implements ISubgraph {
+  public readonly id?: string;
   public attributes = {
     graph: new Attributes<attribute.ClusterSubgraph>(),
     edge: new Attributes<attribute.Edge>(),
     node: new Attributes<attribute.Node>(),
   };
-  constructor(public readonly id?: string) {
+  constructor(id?: string, attributes?: ClusterSubgraphAttributes);
+  constructor(attributes?: ClusterSubgraphAttributes);
+  constructor(...args: unknown[]) {
     super();
+    this.id = args.find((arg): arg is string => typeof arg === 'string');
+    const attributes = args.find((arg): arg is ClusterSubgraphAttributes => typeof arg === 'object');
+    if (attributes !== undefined) {
+      this.apply(attributes);
+    }
   }
   /** Determines whether the Subgraph is a SubgraphCluster. */
   public isSubgraphCluster(): boolean {
