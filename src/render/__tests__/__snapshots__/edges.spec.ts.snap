@@ -1,49 +1,85 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Edge rendering Digraph context 3 nodes 1`] = `"\\"node1\\" -> \\"node2\\" -> \\"node3\\";"`;
+exports[`Edge rendering Digraph context 3 nodes 1`] = `
+digraph {
+  "node1" -> "node2";
+}
+`;
 
-exports[`Edge rendering Digraph context 3 nodes, but many args 1`] = `"\\"node1\\" -> \\"node2\\" -> \\"node3\\" -> \\"node1\\" -> \\"node2\\" -> \\"node3\\" -> \\"node1\\" -> \\"node2\\" -> \\"node3\\";"`;
+exports[`Edge rendering Digraph context 3 nodes, but many args 1`] = `
+digraph {
+  "node1" -> "node2";
+}
+`;
 
 exports[`Edge rendering Digraph context edge with comment multi line comment 1`] = `
-"// this is comment.
-// second line.
-\\"node1\\" -> \\"node2\\";"
+digraph {
+  // this is comment.
+  // second line.
+  "node1" -> "node2";
+}
 `;
 
 exports[`Edge rendering Digraph context edge with comment single line comment 1`] = `
-"// this is comment.
-\\"node1\\" -> \\"node2\\";"
+digraph {
+  // this is comment.
+  "node1" -> "node2";
+}
 `;
 
 exports[`Edge rendering Digraph context has some attributes 1`] = `
-"\\"node1\\" -> \\"node2\\" [
-  label = \\"this is test\\",
-  color = \\"red\\",
-];"
+digraph {
+  "node1" -> "node2" [
+    label = "this is test",
+    color = "red",
+  ];
+}
 `;
 
-exports[`Edge rendering Digraph context simple edge 1`] = `"\\"node1\\" -> \\"node2\\";"`;
+exports[`Edge rendering Digraph context simple edge 1`] = `
+digraph {
+  "node1" -> "node2";
+}
+`;
 
-exports[`Edge rendering Graph context 3 nodes 1`] = `"\\"node1\\" -- \\"node2\\" -- \\"node3\\";"`;
+exports[`Edge rendering Graph context 3 nodes 1`] = `
+graph {
+  "node1" -- "node2";
+}
+`;
 
-exports[`Edge rendering Graph context 3 nodes, but many args 1`] = `"\\"node1\\" -- \\"node2\\" -- \\"node3\\" -- \\"node1\\" -- \\"node2\\" -- \\"node3\\" -- \\"node1\\" -- \\"node2\\" -- \\"node3\\";"`;
+exports[`Edge rendering Graph context 3 nodes, but many args 1`] = `
+graph {
+  "node1" -- "node2";
+}
+`;
 
 exports[`Edge rendering Graph context edge with comment multi line comment 1`] = `
-"// this is comment.
-// second line.
-\\"node1\\" -- \\"node2\\";"
+graph {
+  // this is comment.
+  // second line.
+  "node1" -- "node2";
+}
 `;
 
 exports[`Edge rendering Graph context edge with comment single line comment 1`] = `
-"// this is comment.
-\\"node1\\" -- \\"node2\\";"
+graph {
+  // this is comment.
+  "node1" -- "node2";
+}
 `;
 
 exports[`Edge rendering Graph context has some attributes 1`] = `
-"\\"node1\\" -- \\"node2\\" [
-  label = \\"this is test\\",
-  color = \\"red\\",
-];"
+graph {
+  "node1" -- "node2" [
+    label = "this is test",
+    color = "red",
+  ];
+}
 `;
 
-exports[`Edge rendering Graph context simple edge 1`] = `"\\"node1\\" -- \\"node2\\";"`;
+exports[`Edge rendering Graph context simple edge 1`] = `
+graph {
+  "node1" -- "node2";
+}
+`;

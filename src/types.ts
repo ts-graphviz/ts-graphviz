@@ -122,14 +122,6 @@ export interface IClusterCommonAttributes {
   node: IAttributes<attribute.Node>;
 }
 
-/**
- * Interface for context.
- */
-export interface IDotContext {
-  /** Root graph. */
-  root?: IRootCluster;
-}
-
 export interface ICluster<T extends string = string> extends IHasComment, IAttributesBase<T> {
   readonly id?: string;
   readonly attributes: Readonly<IClusterCommonAttributes>;

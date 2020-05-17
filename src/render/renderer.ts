@@ -1,4 +1,4 @@
-import { IDotContext, Dot, INode, ISubgraph, ICluster, IEdge, IRootCluster } from '../types';
+import { Dot, INode, ISubgraph, ICluster, IEdge, IRootCluster } from '../types';
 import {
   commentOutIfExist,
   concatWordsWithSpace,
@@ -21,8 +21,7 @@ import {
 } from './utils';
 
 export class Renderer {
-  constructor(public readonly context: IDotContext = {}) {}
-
+  private root?: IRootCluster;
   protected renderNode(node: INode): string {
     const comment = commentOutIfExist(node.comment);
     const target = renderEdgeTarget(node);
@@ -33,7 +32,7 @@ export class Renderer {
 
   protected renderEdge(edge: IEdge): string {
     const comment = commentOutIfExist(edge.comment);
-    const targets = joinWith(isGraph(this.context.root) ? ' -- ' : ' -> ', edge.targets.map(renderEdgeTarget));
+    const targets = joinWith(isGraph(this.root) ? ' -- ' : ' -> ', edge.targets.map(renderEdgeTarget));
     const attrs = edge.attributes.size > 0 ? spaceLeftPad(renderAttributes(edge.attributes)) : undefined;
     const dot = join(targets, attrs, ';');
     return joinLines(comment, dot);
@@ -77,7 +76,7 @@ export class Renderer {
     } else if (isSubgraph(object)) {
       return this.renderSubgraph(object);
     } else if (isRootCluster(object)) {
-      this.context.root = object;
+      this.root = object;
       return this.renderRootCluster(object);
     }
     return renderAttributeValue(object);
