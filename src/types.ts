@@ -1,70 +1,4 @@
 import { attribute } from './attribute';
-import { Edge } from './model/Edge';
-// tslint:disable: no-namespace
-
-/**
- * Root cluster type.
- *
- * @description
- * digraph" if you want to use a directional graph.
- *
- * "graph" if you want to use an omnidirectional graph.
- */
-export type RootClusterType = 'digraph' | 'graph';
-export namespace RootClusterType {
-  /**
-   * A directional graph type.
-   */
-  export const digraph: RootClusterType = 'digraph';
-  /**
-   * An omnidirectional graph type.
-   */
-  export const graph: RootClusterType = 'graph';
-}
-
-/**
- * All of cluster type.
- * @description
- * If you want a hierarchy, use "subgraph".
- */
-export type ClusterType = RootClusterType | 'subgraph';
-export namespace ClusterType {
-  /**
-   * A directional graph type.
-   */
-  export const digraph: ClusterType = 'digraph';
-  /**
-   * An omnidirectional graph type.
-   */
-  export const graph: ClusterType = 'graph';
-  /**
-   * Graph that is not Root cluster.
-   *
-   * Represents the hierarchy of a graph.
-   */
-  export const subgraph: ClusterType = 'subgraph';
-}
-
-export type DotEntityType = ClusterType | 'node' | 'edge';
-export namespace DotEntityType {
-  /**
-   * A directional graph type.
-   */
-  export const digraph: DotEntityType = 'digraph';
-  /**
-   * An omnidirectional graph type.
-   */
-  export const graph: DotEntityType = 'graph';
-  /**
-   * Graph that is not Root cluster.
-   *
-   * Represents the hierarchy of a graph.
-   */
-  export const subgraph: DotEntityType = 'subgraph';
-
-  export const node: DotEntityType = 'node';
-  export const edge: DotEntityType = 'edge';
-}
 
 /**
  * Directive indicating which direction the Edge should point.
@@ -100,23 +34,14 @@ export namespace Compass {
 }
 
 /**
- * Objects that can be converted to the Dot language satisfy this interface.
- */
-export interface IDot {
-  toDot(): string;
-}
-
-/**
  * Objects that can be Edge destinations satisfy this interface.
  */
-export interface IEdgeTarget {
-  toEdgeTargetDot(): string;
-}
+export type EdgeTarget = INode | INodeWithPort | IForwardRefNode;
 
 /**
  * string or an object implementing IEdgeTarget.
  */
-export type EdgeTargetLike = IEdgeTarget | string;
+export type EdgeTargetLike = EdgeTarget | string;
 
 export interface IHasComment {
   /** Comments to include when outputting with toDot. */
@@ -126,49 +51,62 @@ export interface IHasComment {
 export interface IHasAttributes<T extends string> {
   readonly attributes: IAttributes<T>;
 }
-export interface IID extends IDot {
-  readonly value: string;
-}
 
+/**
+ * An AttributesValue is one of the following:
+ * - Any string of alphabetic ([a-zA-Z\200-\377]) characters, underscores ('_') or digits ([0-9]), not beginning with a digit;
+ * - a numeral [-]?(.[0-9]+ | [0-9]+(.[0-9]*)? );
+ * - any double-quoted string ("...") possibly containing escaped quotes (\")1;
+ * - an HTML Like string (<...>).
+ */
 export type AttributesValue = string | number | boolean;
 
 export type AttributesObject<T extends string> = {
   [key in T]?: AttributesValue;
 };
 
+export type AttributesEntities<T extends string> = readonly [T, AttributesValue][];
+
 export type EdgeAttributes = AttributesObject<attribute.Edge>;
 export type NodeAttributes = AttributesObject<attribute.Node>;
 export type RootClusterAttributes = AttributesObject<attribute.RootCluster>;
-export type ClusterSubgraphAttributes = AttributesObject<attribute.ClusterSubgraph>;
+export type ClusterSubgraphAttributes = AttributesObject<attribute.ClusterSubgraph | attribute.Subgraph>;
 
 export interface IAttributesBase<T extends string> {
   readonly size: number;
-  get(key: T): IID | undefined;
+  readonly values: ReadonlyArray<[T, AttributesValue]>;
+  get(key: T): AttributesValue | undefined;
   set(key: T, value: AttributesValue): void;
-  apply(attributes: AttributesObject<T>): void;
+  apply(attributes: AttributesObject<T> | AttributesEntities<T>): void;
   delete(key: T): void;
   clear(): void;
 }
 
-export interface IAttributes<T extends string> extends IAttributesBase<T>, IHasComment, IDot {}
+export interface IAttributes<T extends string = string> extends IAttributesBase<T>, IHasComment {}
 
 export interface IPort {
   port: string;
   compass: Compass;
 }
 
-export interface INodeWithPort extends IEdgeTarget {
-  readonly port?: IID;
-  /** Specify the direction of the edge. */
-  readonly compass?: Compass;
+export interface INodeWithPort {
+  readonly node: INode;
+  readonly port: Partial<IPort>;
 }
 
-export interface INode extends IHasComment, IDot, IEdgeTarget, IHasAttributes<attribute.Node> {
+export interface IForwardRefNode {
+  readonly id: string;
+  readonly port: Partial<IPort>;
+}
+
+export interface INode extends IHasComment, IHasAttributes<attribute.Node> {
   readonly id: string;
   port(port: string | Partial<IPort>): INodeWithPort;
 }
 
-export interface IEdge extends IDot, IHasComment, IHasAttributes<attribute.Edge> {}
+export interface IEdge extends IHasComment, IHasAttributes<attribute.Edge> {
+  readonly targets: ReadonlyArray<EdgeTarget>;
+}
 
 /**
  * Cluster common attribute interface.
@@ -184,48 +122,12 @@ export interface IClusterCommonAttributes {
   node: IAttributes<attribute.Node>;
 }
 
-/**
- * Interface for context.
- */
-export interface IContext {
-  /**
-   * Graph type.
-   */
-  graphType?: RootClusterType;
-
-  /** Root graph. */
-  root?: IRootCluster;
-
-  /**
-   * Create a Subgraph.
-   */
-  createSubgraph(id?: string): ISubgraph;
-
-  /**
-   * Create a Attributes.
-   */
-  createAttributes<T extends string>(): IAttributes<T>;
-
-  /**
-   * Create a Node.
-   */
-  createNode(id: string): INode;
-
-  /**
-   * Create a Edge.
-   */
-  createEdge<T extends string>(cluster: ICluster<T>, target1: EdgeTargetLike, target2: EdgeTargetLike): Edge;
-  createEdge<T extends string>(cluster: ICluster<T>, ...targets: EdgeTargetLike[]): Edge;
-}
-
-export interface ICluster<T extends string> extends IHasComment, IAttributesBase<T> {
-  id?: string;
+export interface ICluster<T extends string = string> extends IHasComment, IAttributesBase<T> {
+  readonly id?: string;
   readonly attributes: Readonly<IClusterCommonAttributes>;
-  readonly context: IContext;
-  /**
-   * Add a Node to the cluster.
-   */
-  addNode(node: INode): void;
+  readonly nodes: ReadonlyArray<INode>;
+  readonly edges: ReadonlyArray<IEdge>;
+  readonly subgraphs: ReadonlyArray<ISubgraph>;
   /**
    * Add a Node to the cluster.
    */
@@ -265,11 +167,12 @@ export interface ICluster<T extends string> extends IHasComment, IAttributesBase
   /**
    * Create a Node in the cluster.
    */
-  createNode(id: string): INode;
+  createNode(id: string, attributes?: NodeAttributes): INode;
   /**
    * Create a Subgraph and add it to the cluster.
    */
-  createSubgraph(id?: string): ISubgraph;
+  createSubgraph(id?: string, attributes?: ClusterSubgraphAttributes): ISubgraph;
+  createSubgraph(attributes?: ClusterSubgraphAttributes): ISubgraph;
   /**
    * Get Subgraph in cluster by specifying id.
    *
@@ -285,8 +188,7 @@ export interface ICluster<T extends string> extends IHasComment, IAttributesBase
    */
   getNode(id: string): INode | undefined;
   /** Create Edge and add it to the cluster. */
-  createEdge(target1: EdgeTargetLike, target2: EdgeTargetLike): IEdge;
-  createEdge(...targets: EdgeTargetLike[]): IEdge;
+  createEdge(targets: EdgeTargetLike[], attributes?: EdgeAttributes): IEdge;
   /**
    * Declarative API for Subgraph.
    *
@@ -295,9 +197,13 @@ export interface ICluster<T extends string> extends IHasComment, IAttributesBase
    * If not, create a Subgraph.
    *
    * @param id Subgraph ID.
+   * @param attributes Subgraph attributes.
    * @param callback Callback to operate Subgraph.
    */
   subgraph(id?: string, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(id?: string, attributes?: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(attributes?: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(callback?: (subgraph: ISubgraph) => void): ISubgraph;
 
   /**
    * Declarative API for Node.
@@ -307,23 +213,27 @@ export interface ICluster<T extends string> extends IHasComment, IAttributesBase
    * If not, create a Node.
    *
    * @param id Node ID.
+   * @param attributes Node attributes.
    * @param callback Callback to operate Node.
    */
-  node(id: string, callback?: (edge: INode) => void): INode;
+  node(id: string, callback?: (node: INode) => void): INode;
+  node(id: string, attributes?: NodeAttributes, callback?: (node: INode) => void): INode;
   /**
    * Declarative API for Edge.
    *
    * @param targets Edges.
+   * @param attributes Edge attributes.
    * @param callback Callback to operate Edge.
    */
   edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge;
+  edge(targets: EdgeTargetLike[], attributes?: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
 }
 
-export interface ISubgraph extends ICluster<attribute.Subgraph | attribute.ClusterSubgraph>, IDot {
+export interface ISubgraph extends ICluster<attribute.Subgraph | attribute.ClusterSubgraph> {
   isSubgraphCluster(): boolean;
 }
 
-export interface IRootCluster extends ICluster<attribute.RootCluster>, IDot {
+export interface IRootCluster extends ICluster<attribute.RootCluster> {
   /**
    * Strict mode.
    *
@@ -335,3 +245,5 @@ export interface IRootCluster extends ICluster<attribute.RootCluster>, IDot {
    */
   strict: boolean;
 }
+
+export type Dot = IRootCluster | ISubgraph | IEdge | INode | IAttributes | AttributesValue;
