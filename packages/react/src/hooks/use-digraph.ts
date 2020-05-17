@@ -13,7 +13,8 @@ export type DigraphProps = {
 export const useDigraph = ({ id, comment, edge, node, graph, ...attributes }: DigraphProps = {}): Digraph => {
   const context = useGraphvizContext();
   const digraph = useMemo(() => {
-    const g = new Digraph(context, id);
+    const g = new Digraph(id);
+    context.root = g;
     g.comment = comment;
     g.apply(attributes);
     g.attributes.node.apply(node ?? {});

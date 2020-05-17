@@ -1,6 +1,5 @@
 import { useContext } from 'react';
-import { Context } from 'ts-graphviz';
-import { GraphvizContext, NoContext } from '../components/contexts/GraphvizContext';
+import { GraphvizContext, NoContext, Context } from '../components/contexts/GraphvizContext';
 import { NoGraphvizContextErrorMessage } from '../utils/errors';
 
 export const useGraphvizContext = (): Context => {

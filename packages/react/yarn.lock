@@ -11397,10 +11397,10 @@ ts-dedent@^1.1.0:
   resolved "https://registry.yarnpkg.com/ts-dedent/-/ts-dedent-1.1.1.tgz#68fad040d7dbd53a90f545b450702340e17d18f3"
   integrity sha512-UGTRZu1evMw4uTPyYF66/KFd22XiU+jMaIuHrkIHQ2GivAXVlLV0v/vHrpOuTRf9BmpNHi/SO7Vd0rLu0y57jg==
 
-ts-graphviz@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/ts-graphviz/-/ts-graphviz-0.10.0.tgz#b88f46c178c6c77682c202000d64c962e3417f0d"
-  integrity sha512-jX1b2KPyKReHUTwLgsGL8bcASqjgMGVSbOr8xnrocInr3YeGnsOzI/78xyTgRLGqayVUBod+2xKDZdSyg0rtEw==
+ts-graphviz@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/ts-graphviz/-/ts-graphviz-0.12.0.tgz#fbbeaee6de632c1f553c3da517f7043a5fc09af9"
+  integrity sha512-Z99dqQXsDZmE+WXUXq3vf/Xzk8jmKqFotPHXucSl14hPfWZnu5ASMz5Wleila196RMPIyfY/4GLQTDtq+ySd9Q==
   dependencies:
     tslib "^1.10.0"
 

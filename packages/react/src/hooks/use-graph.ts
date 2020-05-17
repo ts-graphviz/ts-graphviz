@@ -16,7 +16,8 @@ export type GraphProps = {
 export const useGraph = ({ id, comment, edge, node, graph, ...attributes }: GraphProps = {}): Graph => {
   const context = useGraphvizContext();
   const memoGraph = useMemo(() => {
-    const g = new Graph(context, id);
+    const g = new Graph(id);
+    context.root = g;
     g.comment = comment;
     g.apply(attributes);
     g.attributes.node.apply(node ?? {});

@@ -1,7 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { Component, ReactElement } from 'react';
-import { Context } from 'ts-graphviz';
 import { render } from '../../../renderer/render';
 
 export function renderExpectToThrow(element: ReactElement, expectedError: string) {
@@ -28,9 +27,8 @@ export function renderExpectToThrow(element: ReactElement, expectedError: string
     }
   }
 
-  const context = new Context();
   try {
-    render(<ErrorBoundary>{element}</ErrorBoundary>, context);
+    render(<ErrorBoundary>{element}</ErrorBoundary>, {});
   } catch (e) {
     errors.push(e);
   }
