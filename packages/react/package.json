@@ -1,6 +1,6 @@
 {
   "name": "@ts-graphviz/react",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "license": "MIT",
   "author": "kamiazya <yuki@kamiazya.tech>",
   "description": "Graphviz-dot Renderer for React.",
