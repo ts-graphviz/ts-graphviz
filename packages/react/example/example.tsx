@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Digraph, Node, Subgraph, renderToDot, Edge, DOT } from '../src';
+import { ClusterPortal } from '../src/components/ClusterPortal';
 
 const Example: FC = () => (
   <Digraph
