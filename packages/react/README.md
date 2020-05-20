@@ -25,7 +25,7 @@ $ npm install @ts-graphviz/react
 
 ```bash
 # Peer Dependencies
-$ yarn add react react-dom ts-graphviz
+$ yarn add react react-dom ts-graphviz@"^0.12.0"
 # Optional Peer Dependencies
 $ yarn add @hpcc-js/wasm
 ```
