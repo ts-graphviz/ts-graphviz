@@ -1,4 +1,14 @@
-import { ICluster, ISubgraph, IEdge, INode, IRootCluster, IAttributes, AttributesValue, EdgeTarget } from '../types';
+import {
+  ICluster,
+  ISubgraph,
+  IEdge,
+  INode,
+  IRootCluster,
+  IAttributes,
+  AttributesValue,
+  EdgeTarget,
+  EdgeTargets,
+} from '../types';
 import { Subgraph } from '../model/clusters';
 import { Edge } from '../model/edges';
 import { Node, NodeWithPort, ForwardRefNode } from '../model/nodes';
@@ -179,4 +189,8 @@ export function renderEdgeTarget(edgeTarget: EdgeTarget): string | undefined {
       compass !== undefined ? renderAttributeValue(compass) : undefined,
     );
   }
+}
+
+export function renderEdgeTargets(edgeTargets: EdgeTargets): string | undefined {
+  return '{' + concatWordsWithSpace(...edgeTargets.map(renderEdgeTarget)) + '}';
 }

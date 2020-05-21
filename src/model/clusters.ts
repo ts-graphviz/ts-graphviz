@@ -12,9 +12,11 @@ import {
   INode,
   ISubgraph,
   NodeAttributes,
+  EdgeTargetsLike,
+  EdgeTargets,
 } from '../types';
 import { Attributes, AttributesBase } from './attributes-base';
-import { isEdgeTarget, isEdgeTargetLike, Node, ForwardRefNode } from './nodes';
+import { isEdgeTarget, isEdgeTargetLike, Node, ForwardRefNode, isEdgeTargetsLike } from './nodes';
 import { Edge } from './edges';
 
 /**
@@ -170,12 +172,12 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
   }
 
   /** Create Edge and add it to the cluster. */
-  public createEdge(targets: EdgeTargetLike[], attributes?: EdgeAttributes): IEdge {
+  public createEdge(targets: (EdgeTargetLike | EdgeTargetsLike)[], attributes?: EdgeAttributes): IEdge {
     if (targets.length < 2 && (isEdgeTargetLike(targets[0]) && isEdgeTargetLike(targets[1])) === false) {
       throw Error('The element of Edge target is missing or not satisfied as Edge target.');
     }
     const edge = new Edge(
-      targets.map((t) => this.toEdgeTarget(t)),
+      targets.map((t) => (isEdgeTargetsLike(t) ? this.toEdgeTargets(t) : this.toEdgeTarget(t))),
       attributes,
     );
     this.objects.edges.add(edge);
@@ -199,6 +201,14 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
       return new ForwardRefNode(id, { port, compass });
     }
     return new ForwardRefNode(id, { port });
+  }
+
+  /** @hidden */
+  private toEdgeTargets(targets: EdgeTargetsLike): EdgeTargets {
+    if (targets.length < 2 && (isEdgeTargetLike(targets[0]) && isEdgeTargetLike(targets[1])) === false) {
+      throw Error('EdgeTargets must have at least 2 elements.');
+    }
+    return targets.map((t) => this.toEdgeTarget(t));
   }
 
   /**

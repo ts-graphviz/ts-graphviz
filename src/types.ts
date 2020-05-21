@@ -37,11 +37,14 @@ export namespace Compass {
  * Objects that can be Edge destinations satisfy this interface.
  */
 export type EdgeTarget = INode | INodeWithPort | IForwardRefNode;
+export type EdgeTargets = ReadonlyArray<EdgeTarget>;
 
 /**
  * string or an object implementing IEdgeTarget.
  */
 export type EdgeTargetLike = EdgeTarget | string;
+
+export type EdgeTargetsLike = ReadonlyArray<EdgeTargetLike>;
 
 export interface IHasComment {
   /** Comments to include when outputting with toDot. */
@@ -105,7 +108,7 @@ export interface INode extends IHasComment, IHasAttributes<attribute.Node> {
 }
 
 export interface IEdge extends IHasComment, IHasAttributes<attribute.Edge> {
-  readonly targets: ReadonlyArray<EdgeTarget>;
+  readonly targets: ReadonlyArray<EdgeTarget | EdgeTargets>;
 }
 
 /**
@@ -188,7 +191,7 @@ export interface ICluster<T extends string = string> extends IHasComment, IAttri
    */
   getNode(id: string): INode | undefined;
   /** Create Edge and add it to the cluster. */
-  createEdge(targets: EdgeTargetLike[], attributes?: EdgeAttributes): IEdge;
+  createEdge(targets: (EdgeTargetLike | EdgeTargetsLike)[], attributes?: EdgeAttributes): IEdge;
   /**
    * Declarative API for Subgraph.
    *
@@ -225,8 +228,12 @@ export interface ICluster<T extends string = string> extends IHasComment, IAttri
    * @param attributes Edge attributes.
    * @param callback Callback to operate Edge.
    */
-  edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge;
-  edge(targets: EdgeTargetLike[], attributes?: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
+  edge(targets: (EdgeTargetLike | EdgeTargetsLike)[], callback?: (edge: IEdge) => void): IEdge;
+  edge(
+    targets: (EdgeTargetLike | EdgeTargetsLike)[],
+    attributes?: EdgeAttributes,
+    callback?: (edge: IEdge) => void,
+  ): IEdge;
 }
 
 export interface ISubgraph extends ICluster<attribute.Subgraph | attribute.ClusterSubgraph> {

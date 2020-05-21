@@ -1,4 +1,6 @@
 import { Dot, INode, ISubgraph, ICluster, IEdge, IRootCluster } from '../types';
+import { isEdgeTargetLike } from '../model/nodes';
+import { renderEdgeTargets } from './utils';
 import {
   commentOutIfExist,
   concatWordsWithSpace,
@@ -32,7 +34,10 @@ export class Renderer {
 
   protected renderEdge(edge: IEdge): string {
     const comment = commentOutIfExist(edge.comment);
-    const targets = joinWith(isGraph(this.root) ? ' -- ' : ' -> ', edge.targets.map(renderEdgeTarget));
+    const targets = joinWith(
+      isGraph(this.root) ? ' -- ' : ' -> ',
+      edge.targets.map((t) => (isEdgeTargetLike(t) ? renderEdgeTarget(t) : renderEdgeTargets(t))),
+    );
     const attrs = edge.attributes.size > 0 ? spaceLeftPad(renderAttributes(edge.attributes)) : undefined;
     const dot = join(targets, attrs, ';');
     return joinLines(comment, dot);

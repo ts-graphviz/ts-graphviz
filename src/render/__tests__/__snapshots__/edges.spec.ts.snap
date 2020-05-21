@@ -1,14 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Edge rendering Digraph context 3 nodes 1`] = `
+exports[`Edge rendering Digraph context custom edge 3 nodes 1`] = `
 digraph {
-  "node1" -> "node2";
+  "node1" -> "node2" -> "node3";
 }
 `;
 
-exports[`Edge rendering Digraph context 3 nodes, but many args 1`] = `
+exports[`Edge rendering Digraph context custom edge 3 nodes, but many args 1`] = `
 digraph {
-  "node1" -> "node2";
+  "node1" -> "node2" -> "node3" -> "node1" -> "node2" -> "node3" -> "node1" -> "node2" -> "node3";
+}
+`;
+
+exports[`Edge rendering Digraph context custom edge node group 1`] = `
+digraph {
+  "node1" -> {"node2" "node3"} -> "node4";
 }
 `;
 
@@ -42,15 +48,21 @@ digraph {
 }
 `;
 
-exports[`Edge rendering Graph context 3 nodes 1`] = `
+exports[`Edge rendering Graph context custom edge 3 nodes 1`] = `
 graph {
-  "node1" -- "node2";
+  "node1" -- "node2" -- "node3";
 }
 `;
 
-exports[`Edge rendering Graph context 3 nodes, but many args 1`] = `
+exports[`Edge rendering Graph context custom edge 3 nodes, but many args 1`] = `
 graph {
-  "node1" -- "node2";
+  "node1" -- "node2" -- "node3" -- "node1" -- "node2" -- "node3" -- "node1" -- "node2" -- "node3";
+}
+`;
+
+exports[`Edge rendering Graph context custom edge node group 1`] = `
+graph {
+  "node1" -- {"node2" "node3"} -- "node4";
 }
 `;
 

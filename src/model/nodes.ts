@@ -11,6 +11,7 @@ import {
 import { DotObject } from './abstract';
 import { attribute } from '../attribute';
 import { Attributes } from './attributes-base';
+import { EdgeTargetsLike } from '../types';
 
 /**
  * @category Primary
@@ -62,4 +63,10 @@ export function isEdgeTarget(node: unknown): node is EdgeTarget {
  */
 export function isEdgeTargetLike(node: unknown): node is EdgeTargetLike {
   return typeof node === 'string' || isEdgeTarget(node);
+}
+/**
+ * @hidden
+ */
+export function isEdgeTargetsLike(target: EdgeTargetLike | EdgeTargetsLike): target is EdgeTargetsLike {
+  return Array.isArray(target) && target.every(isEdgeTargetLike);
 }
