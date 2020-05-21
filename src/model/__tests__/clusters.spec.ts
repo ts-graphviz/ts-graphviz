@@ -69,11 +69,21 @@ describe('class Subgraph', () => {
   });
 
   test('create edge with attributes', () => {
-    const nodes = ['node1', 'node2'].map((id) => subgraph.createNode(id));
+    const nodes = Array(2)
+      .fill(true)
+      .map((_v, i) => subgraph.createNode(`node${i + 1}`));
     const edge = subgraph.createEdge(nodes, {
       [attribute.label]: 'Label',
     });
     expect(edge.attributes.size).toBe(1);
+  });
+
+  test('create edge by node group', () => {
+    const [node1, node2, node3, node4] = Array(4)
+      .fill(true)
+      .map((_v, i) => subgraph.createNode(`node${i + 1}`));
+    const edge = subgraph.createEdge([node1, [node2, node3], node4]);
+    expect(edge.targets.length).toBe(3);
   });
 
   test('create subgraph with attributes', () => {
@@ -115,7 +125,9 @@ describe('class Subgraph', () => {
     });
 
     it('Edge operation methods works', () => {
-      const nodes = ['node1', 'node2'].map((id) => subgraph.createNode(id));
+      const nodes = Array(2)
+        .fill(true)
+        .map((_v, i) => subgraph.createNode(`node${i + 1}`));
       const edge = subgraph.createEdge(nodes);
       expect(subgraph.existEdge(edge)).toBe(true);
       subgraph.removeEdge(edge);

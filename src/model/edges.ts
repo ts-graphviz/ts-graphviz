@@ -1,4 +1,4 @@
-import { EdgeTarget, EdgeAttributes, IAttributes } from '../types';
+import { EdgeTarget, EdgeAttributes, IAttributes, EdgeTargets } from '../types';
 import { DotObject } from './abstract';
 import { attribute } from '../attribute';
 import { Attributes } from './attributes-base';
@@ -11,7 +11,7 @@ export class Edge extends DotObject {
   public comment?: string;
   public readonly attributes: IAttributes<attribute.Edge>;
 
-  constructor(public readonly targets: ReadonlyArray<EdgeTarget>, attributes?: EdgeAttributes) {
+  constructor(public readonly targets: ReadonlyArray<EdgeTarget | EdgeTargets>, attributes?: EdgeAttributes) {
     super();
     this.attributes = new Attributes<attribute.Edge>(attributes);
   }

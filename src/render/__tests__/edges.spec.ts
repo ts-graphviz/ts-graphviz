@@ -8,7 +8,7 @@ import { IRootCluster } from '../../types';
 describe('Edge rendering', () => {
   let edge: Edge;
 
-  const [node1, node2, node3] = Array(3)
+  const [node1, node2, node3, node4] = Array(4)
     .fill(true)
     .map((_, i) => new Node(`node${i + 1}`));
 
@@ -47,14 +47,28 @@ describe('Edge rendering', () => {
       expect(toDot(root)).toBeValidDotAndMatchSnapshot();
     });
 
-    it('3 nodes', () => {
-      edge = new Edge([node1, node2, node3]);
-      expect(toDot(root)).toBeValidDotAndMatchSnapshot();
-    });
+    describe('custom edge', () => {
+      beforeEach(() => {
+        root = create();
+      });
 
-    it('3 nodes, but many args', () => {
-      edge = new Edge([node1, node2, node3, node1, node2, node3, node1, node2, node3]);
-      expect(toDot(root)).toBeValidDotAndMatchSnapshot();
+      it('node group', () => {
+        edge = new Edge([node1, [node2, node3], node4]);
+        root.addEdge(edge);
+        expect(toDot(root)).toBeValidDotAndMatchSnapshot();
+      });
+
+      it('3 nodes', () => {
+        edge = new Edge([node1, node2, node3]);
+        root.addEdge(edge);
+        expect(toDot(root)).toBeValidDotAndMatchSnapshot();
+      });
+
+      it('3 nodes, but many args', () => {
+        edge = new Edge([node1, node2, node3, node1, node2, node3, node1, node2, node3]);
+        root.addEdge(edge);
+        expect(toDot(root)).toBeValidDotAndMatchSnapshot();
+      });
     });
   });
 });
