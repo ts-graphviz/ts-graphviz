@@ -1,6 +1,6 @@
 {
   "name": "ts-graphviz",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "author": "kamiazya <yuki@kamiazya.tech>",
   "description": "Graphviz library for TypeScript.",
   "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
