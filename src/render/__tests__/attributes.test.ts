@@ -32,6 +32,14 @@ describe('Attributes rendering', () => {
       expect(toDot(attrs)).toMatchSnapshot();
     });
 
+    test('set undefined attributes by apply', () => {
+      attrs.apply({
+        label: undefined,
+      });
+      expect(attrs.size).toBe(0);
+      expect(toDot(attrs)).toMatchSnapshot();
+    });
+
     describe('edge with comment', () => {
       beforeEach(() => {
         attrs.set('label', 'test');

@@ -29,7 +29,9 @@ export abstract class AttributesBase<T extends string> extends DotObject impleme
   }
   /** Set a value to the attribute. */
   public set(key: T, value: AttributesValue): void {
-    this.attrs.set(key, value);
+    if (value !== null && value !== undefined) {
+      this.attrs.set(key, value);
+    }
   }
 
   public delete(key: T): void {

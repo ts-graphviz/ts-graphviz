@@ -33,6 +33,8 @@ exports[`Attributes rendering renders correctly by toDot method set some attribu
 ]"
 `;
 
+exports[`Attributes rendering renders correctly by toDot method set undefined attributes by apply 1`] = `""`;
+
 exports[`Attributes rendering renders correctly by toDot method some attributes 1`] = `
 "[
   label = \\"test\\",
