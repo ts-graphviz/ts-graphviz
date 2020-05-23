@@ -1,5 +1,6 @@
 import { toDot } from '../../render/to-dot';
 import { Attributes } from '../../model/attributes-base';
+import { attribute } from '../../attribute';
 
 describe('Attributes rendering', () => {
   let attrs: Attributes;
@@ -29,6 +30,14 @@ describe('Attributes rendering', () => {
         color: 'red',
         fontsize: 16,
       });
+      expect(toDot(attrs)).toMatchSnapshot();
+    });
+
+    test('set undefined attributes by apply', () => {
+      attrs.apply({
+        label: undefined,
+      });
+      expect(attrs.size).toBe(0);
       expect(toDot(attrs)).toMatchSnapshot();
     });
 
