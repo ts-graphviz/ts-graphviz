@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "importHelpers": true,
+    "module": "CommonJS",
+    "strict": true,
+    "lib": [
+      "esnext"
+    ],
+    "allowJs": false,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "rootDir": "..",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "declaration": true
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}
