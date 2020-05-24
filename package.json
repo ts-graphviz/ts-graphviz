@@ -26,6 +26,7 @@
   "license": "MIT",
   "scripts": {
     "build": "ts-node --project scripts/tsconfig.json scripts/build",
+    "denolize": "ts-node --project scripts/tsconfig.json scripts/denolize",
     "test": "jest",
     "lint": "eslint -c .eslintrc.json --ext ts,tsx src",
     "doc": "typedoc"

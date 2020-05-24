@@ -10,6 +10,7 @@
 CODE_OF_CONDUCT.md
 config
 CONTRIBUTING.md
+deno
 jest.config.js
 LICENSE
 rollup.config.js

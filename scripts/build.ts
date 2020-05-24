@@ -41,15 +41,7 @@ async function rollupDts({
     input: `${inputDir}/${input}`,
     plugins: [dts()],
   });
-  const matches = await new Promise<string[]>((resolve, reject) => {
-    glob(`${inputDir}/**/*.d.ts`, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+  const matches = glob.sync(`${inputDir}/**/*.d.ts`);
   await Promise.all(matches.map((match) => remove(match)));
 
   await bundle.write({

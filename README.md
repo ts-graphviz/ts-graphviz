@@ -9,7 +9,7 @@
 ## Key Feature
 
 - Export Dot language.
-- Support Node.js and Browser.
+- Support Node.js, Browser and Deno.
   - UMD, ESM, CommonJS
 
 ## Installation
@@ -80,7 +80,7 @@ digraph "G" {
 ### Callback style
 
 ```typescript
-import { digraph, toDot } from 'ts-graphviz';
+import { digraph, attribute, toDot } from 'ts-graphviz';
 
  const G = digraph('G', (g) => {
   const a = g.node('aa');
@@ -132,7 +132,7 @@ digraph "G" {
 ### Class base API
 
 ```typescript
-import { Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
+import { Digraph, Subgraph, Node, Edge, attribute, toDot } from 'ts-graphviz';
 
 const G = new Digraph();
 const A = new Subgraph('A');
