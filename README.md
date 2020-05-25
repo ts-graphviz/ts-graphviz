@@ -87,19 +87,19 @@ import { digraph, toDot } from 'ts-graphviz';
   const b = g.node('bb');
   const c = g.node('cc');
   g.edge([a, b, c], {
-    [attribute.color]: 'red',
+    [attribute.color]: 'red'
   });
   g.subgraph('A', (A) => {
     const Aa = A.node('Aaa', {
-      [attribute.color]: 'pink',
+      [attribute.color]: 'pink'
     });
 
     const Ab = A.node('Abb', {
-      [attribute.color]: 'violet',
+      [attribute.color]: 'violet'
     });
     const Ac = A.node('Acc');
     A.edge([Aa.port('a'), Ab, Ac, 'E'], {
-      [attribute.color]: 'red',
+      [attribute.color]: 'red'
     });
   });
 });
@@ -132,19 +132,19 @@ digraph "G" {
 ### Class base API
 
 ```typescript
-import { Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
+import { attribute, Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
 
 const G = new Digraph();
 const A = new Subgraph('A');
 const node1 = new Node('node1', {
-  [attribute.color]: 'red',
+  [attribute.color]: 'red'
 });
 const node2 = new Node('node2', {
-  [attribute.color]: 'blue',
+  [attribute.color]: 'blue'
 });
 const edge = new Edge([node1, node2], {
   [attribute.label]: 'Edge Label',
-  [attribute.color]: 'pink',
+  [attribute.color]: 'pink'
 });
 G.addSubgraph(A);
 A.addNode(node1);
@@ -186,7 +186,7 @@ class MyCustomDigraph extends Digraph {
 class MyCustomNode extends Node {
   constructor(id: number) {
     super(`node${id}`, {
-      [attribute.label]: `This is Custom Node ${id}`,
+      [attribute.label]: `This is Custom Node ${id}`
     });
   }
 }
@@ -194,7 +194,7 @@ class MyCustomNode extends Node {
 class MyCustomEdge extends Edge {
   constructor(targets: ReadonlyArray<EdgeTarget>) {
     super(targets, {
-      [attribute.label]: 'This is Custom Edge',
+      [attribute.label]: 'This is Custom Edge'
     });
   }
 }
