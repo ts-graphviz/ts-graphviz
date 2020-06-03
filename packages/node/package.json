@@ -1,6 +1,6 @@
 {
   "name": "@ts-graphviz/node",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Graphviz adapter for Node.js.",
   "main": "lib/index.js",
   "module": "lib/index.mjs",
