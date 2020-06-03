@@ -1,0 +1,47 @@
+{
+  "name": "@ts-graphviz/node",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "types": "lib/index.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts-graphviz/node.git"
+  },
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/node/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/kamiazya"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "eslint -c .eslintrc.json --ext ts,tsx src"
+  },
+  "peerDependencies": {
+    "ts-graphviz": "^0.13.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.9",
+    "@typescript-eslint/eslint-plugin": "^3.1.0",
+    "@typescript-eslint/parser": "^3.1.0",
+    "eslint": "^7.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-prettier": "^3.1.3",
+    "prettier": "^2.0.5",
+    "rollup": "^2.12.1",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "ts-graphviz": "^0.13.1",
+    "typescript": "^3.9.3"
+  }
+}
