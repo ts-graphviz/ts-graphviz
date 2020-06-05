@@ -1,6 +1,14 @@
 import cp from 'child_process';
 import { IRootCluster, toDot } from 'ts-graphviz';
 
+export type Fromat = 'png' | 'svg' | 'json' | 'jpg' | 'pdf' | 'xdot';
+
+export type RenderDotOption = {
+  format?: Fromat;
+  output?: string;
+  dotCommand?: string;
+};
+
 /**
  * Run dot command and output result to the specified path.
  *
@@ -29,25 +37,22 @@ import { IRootCluster, toDot } from 'ts-graphviz';
  *   });
  * });
  *
- * renderDot(G, path.resolve(__dirname, "./callback.svg"), {
+ * renderDot(G, {
  *   format: "svg",
+ *   output: path.resolve(__dirname, "./callback.svg"),
  * });
  * ```
  */
 export function renderDot(
   dot: IRootCluster | string,
-  output: string,
-  {
-    format = 'png',
-    dotCommand = 'dot',
-  }: {
-    format?: 'png' | 'svg' | 'json' | 'jpg' | 'pdf' | 'xdot';
-    dotCommand?: string;
-  } = {},
-): void {
+  { format = 'png', output = undefined, dotCommand = 'dot' }: RenderDotOption = {},
+): Buffer {
   const input = typeof dot === 'string' ? dot : toDot(dot);
-  const cmd = [dotCommand, `-T${format}`, '-o', output];
-  cp.execSync(cmd.join(' '), {
+  const cmd = [dotCommand, `-T${format}`];
+  if (typeof output === 'string') {
+    cmd.push('-o', output);
+  }
+  return cp.execSync(cmd.join(' '), {
     stdio: 'pipe',
     input,
   });
