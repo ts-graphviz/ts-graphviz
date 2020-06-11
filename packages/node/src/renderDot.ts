@@ -1,7 +1,7 @@
 import cp from 'child_process';
 import { IRootCluster, toDot } from 'ts-graphviz';
 
-export type Format = 'png' | 'svg' | 'json' | 'jpg' | 'pdf' | 'xdot';
+export type Format = 'png' | 'svg' | 'json' | 'jpg' | 'pdf' | 'xdot' | 'plain' | 'dot_json';
 
 export type RenderDotOption = {
   format?: Format;
