@@ -25,14 +25,8 @@ $ npm install @ts-graphviz/react
 
 ```bash
 # Peer Dependencies
-$ yarn add react react-dom ts-graphviz@"^0.12.0"
-# Optional Peer Dependencies
-$ yarn add @hpcc-js/wasm
+$ yarn add react react-dom ts-graphviz@"^0.13.1"
 ```
-
-## DEMO
-
-- [Storybook](https://ts-graphviz.github.io/react/)
 
 ## API
 
@@ -110,37 +104,6 @@ digraph {
 ```
 
 ![dot](./example/example.svg)
-
-### Web
-
-The `Graphviz` component can be rendered directly in the browser.
-
-Since this component uses the function of `@hpcc-js/wasm` internally, it is necessary to host `@hpcc-js/wasm/dist/graphviz.wasm` and specify its directory with `wasmFolder`.
-
-For development, I recommend using the one hosted by unpkg.
-
-```tsx
-import React, { FC } from 'react';
-import ReactDOM from 'react-dom';
-import { Graphviz, Digraph, Node, Edge } from '@ts-graphviz/react';
-import { wasmFolder } from '@hpcc-js/wasm';
-
-wasmFolder('https://unpkg.com/@hpcc-js/wasm/dist/');
-
-const App: FC = () => (
-  <Graphviz>
-    <Digraph>
-      <Node id="n1" />
-      <Node id="n2" />
-      <Node id="n3" />
-      <Edge targets={['n1', 'n2', 'n3']} />
-      <Edge targets={['n1', 'n3']} />
-    </Digraph>
-  </Graphviz>
-);
-
-ReactDOM.render(<App />, document.getElementById('root'));
-```
 
 ## See Also
 
