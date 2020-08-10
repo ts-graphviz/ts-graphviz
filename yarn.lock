@@ -4652,9 +4652,9 @@ rollup-pluginutils@^2.8.2:
     estree-walker "^0.6.1"
 
 rollup@^2.0.6:
-  version "2.10.7"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.10.7.tgz#7d1a9fa8de146615a098836480df6f8b31c2f058"
-  integrity sha512-rofUSH2i4GymWhQq6bfRaSiVbz4LEB4h/7+AhuXCaeOSwQqClD0hINjs59j8SyfQwcqe83NcVJAY2kjp0h33bQ==
+  version "2.23.1"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.23.1.tgz#d458d28386dc7660c2e8a4978bea6f9494046c20"
+  integrity sha512-Heyl885+lyN/giQwxA8AYT2GY3U+gOlTqVLrMQYno8Z1X9lAOpfXPiKiZCyPc25e9BLJM3Zlh957dpTlO4pa8A==
   optionalDependencies:
     fsevents "~2.1.2"
 
