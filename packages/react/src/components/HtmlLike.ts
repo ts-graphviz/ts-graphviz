@@ -56,9 +56,9 @@ export type TdProps = {
 };
 
 export type FontProps = {
-  color?: AttributesValue; // "color"
-  face?: AttributesValue; // "fontname"
-  point?: AttributesValue; // SIZE="value"
+  COLOR?: AttributesValue; // "color"
+  FACE?: AttributesValue; // "fontname"
+  'POINT-SIZE'?: AttributesValue; // "value"
 };
 
 export type BrProps = {
