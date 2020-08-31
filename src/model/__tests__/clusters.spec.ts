@@ -153,12 +153,8 @@ describe('class Subgraph', () => {
 
     it('throws an error when the EdgeTarget element is missing', () => {
       const n = subgraph.node('n');
-      expect(() => {
-        subgraph.edge([]);
-      }).toThrow();
-      expect(() => {
-        subgraph.edge([n]);
-      }).toThrow();
+      expect(() => subgraph.edge([])).toThrow();
+      expect(() => subgraph.edge([n])).toThrow();
     });
   });
 });

@@ -24,6 +24,12 @@ describe('class Edge', () => {
     });
   });
 
+  it('throws an error when the EdgeTarget element is missing', () => {
+    const n = new Node('id');
+    expect(() => new Edge([])).toThrow();
+    expect(() => new Edge([n])).toThrow();
+  });
+
   it('should be instance of Edge/DotObject/GraphvizObject', () => {
     expect(edge).toBeInstanceOf(Edge);
     expect(edge).toBeInstanceOf(DotObject);
