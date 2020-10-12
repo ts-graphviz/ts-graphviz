@@ -12,7 +12,7 @@ import { ExecuteOption } from './types';
  * ```ts
  * import path from "path";
  * import { digraph, attribute } from "ts-graphviz";
- * import { executeDot } from "@ts-graphviz/node";
+ * import { renderDot } from "@ts-graphviz/node";
  *
  * const G = digraph("G", (g) => {
  *   const a = g.node("aa");

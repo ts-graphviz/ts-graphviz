@@ -8,7 +8,7 @@ import { executeDot } from './executeDot';
  * ```ts
  * import path from "path";
  * import { digraph, attribute } from "ts-graphviz";
- * import { executeDot } from "@ts-graphviz/node";
+ * import { exportToFile } from "@ts-graphviz/node";
  *
  * const G = digraph("G", (g) => {
  *   const a = g.node("aa");

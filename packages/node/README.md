@@ -20,29 +20,45 @@ npm install @ts-graphviz/node
 
 ## Usage
 
-### `renderDot` function
+### High level API
 
-Run dot command and output result to the specified path or buffer.
+### `exportToFile` function
+
+Export the file by giving a dot.
 
 ```typescript
 const dot = 'digraph g { a -> b [label = "Hello World"] }';
-renderDot(dot, {
+
+await exportToFile(dot, {
   format: "png",
   output: path.resolve(__dirname, "./example.png"),
 });
 ```
 
-Currently supported formats are png, svg, json, jpg, pdf, xdot, plain, and dot_json.
+> **Note**: Currently supported formats are png, svg, json, jpg, pdf, xdot, plain, and dot_json.
+>
+> Other formats will be added if requested, so please give me a PR or issue.
 
-Other formats will be added if requested, so please give me a PR or issue.
+### `exportToBuffer` function
 
-#### ts-graphviz integration
+Returns the Graphviz output result as a buffer.
 
-You can also directly render by giving IRootCluster such as Digraph or Graph of ts-graphviz to the argument.
+```typescript
+const dot = 'digraph g { a -> b [label = "Hello World"] }';
+
+const imageBuffer = await exportToBuffer(dot, {
+  format: "png",
+});
+```
+
+### `ts-graphviz` integration
+
+In the high-level API, you can also specify RootCluster such as Digraph or Graph of `ts-graphviz` as an argument and render directly.
 
 ```typescript
 import path from "path";
-import { digraph, attribute, renderDot } from "ts-graphviz";
+import { digraph, attribute } from "ts-graphviz";
+import { exportToFile } from "@ts-graphviz/node";
 
 const G = digraph("G", (g) => {
   const a = g.node("aa");
@@ -65,11 +81,17 @@ const G = digraph("G", (g) => {
   });
 });
 
-renderDot(G, {
+await exportToFile(G, {
   format: "svg",
   output: path.resolve(__dirname, "./callback.svg"),
 });
 ```
+
+### Low level API
+
+### `executeDot` function
+
+A low-level API for wrappers for dot commands provided by Graphviz.
 
 ## See Also
 
