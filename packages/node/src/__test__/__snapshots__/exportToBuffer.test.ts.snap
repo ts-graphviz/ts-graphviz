@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`exportToBuffer input can be given as RootCluster type 1`] = `
+"digraph \\"g\\" {
+  \\"a\\" -> \\"b\\";
+}"
+`;
+
+exports[`exportToBuffer input can be given as string type 1`] = `"digraph g { a -> b; }"`;

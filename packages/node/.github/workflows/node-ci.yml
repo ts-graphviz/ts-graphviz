@@ -17,7 +17,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: setup grapgviz
+    - name: setup graphviz
       uses: ts-graphviz/setup-graphviz@v1
     - name: Install dependencies
       run: yarn --frozen-lockfile --ignore-optional
@@ -29,6 +29,10 @@ jobs:
         CI: 'true'
     - name: Build
       run: yarn build
+      env:
+        CI: 'true'
+    - name: Test
+      run: yarn test
       env:
         CI: 'true'
 

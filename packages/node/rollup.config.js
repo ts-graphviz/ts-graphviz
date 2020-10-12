@@ -13,5 +13,5 @@ export default {
     },
   ],
   plugins: [typescript()],
-  external: ['ts-graphviz', 'child_process'],
+  external: ['ts-graphviz', 'child_process', 'tmp-promise', 'util', 'fs'],
 };
