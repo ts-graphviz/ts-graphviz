@@ -1,6 +1,6 @@
 {
   "name": "@ts-graphviz/node",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Graphviz adapter for Node.js.",
   "author": "kamiazya <yuki@kamiazya.tech>",
   "main": "lib/index.js",
