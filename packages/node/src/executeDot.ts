@@ -5,24 +5,24 @@ import { ExecuteOption } from './types';
 /**
  * A low-level API for wrappers for dot commands provided by Graphviz.
  */
-export async function executeDot(dot: string, options: ExecuteOption = {}): Promise<Buffer> {
+export async function executeDot(
+  dot: string,
+  { format, output, dotCommand: cmd = 'dot', childProcessOptions = {} }: ExecuteOption = {},
+): Promise<Buffer> {
   const { fd, path, cleanup } = await file();
   try {
     await writeFile(fd, dot);
     await close(fd);
 
     const args: string[] = [];
-    if (typeof options.format === 'string') {
-      args.push(`-T${options.format}`);
+    if (typeof format === 'string') {
+      args.push(`-T${format}`);
     }
-    if (typeof options.output === 'string') {
-      args.push('-o', options.output);
+    if (typeof output === 'string') {
+      args.push('-o', output);
     }
     args.push(path);
-    const cmd = options.dotCommand ?? 'dot';
-    const { stdout } = await execFile(cmd, args, {
-      encoding: 'buffer',
-    });
+    const { stdout } = await execFile(cmd, args, { ...childProcessOptions, encoding: 'buffer' });
     return stdout;
   } finally {
     await cleanup();
