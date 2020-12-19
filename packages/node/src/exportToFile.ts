@@ -1,5 +1,5 @@
 import { IRootCluster, toDot } from 'ts-graphviz';
-import { DotOption, ExecuteDotOption } from './types';
+import { DotOption, ExecuteDotOption, OutputOption } from './types';
 import { executeDot } from './executeDot';
 
 /**
@@ -39,7 +39,7 @@ import { executeDot } from './executeDot';
  */
 export async function exportToFile(
   dot: IRootCluster | string,
-  options: Required<ExecuteDotOption> & DotOption,
+  options: Required<OutputOption> & ExecuteDotOption & DotOption,
 ): Promise<void> {
   const input = typeof dot === 'string' ? dot : toDot(dot);
   await executeDot(input, options);

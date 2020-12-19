@@ -9,9 +9,16 @@ export type DotOption = {
   childProcessOptions?: ChildProcessOptions;
 };
 
-export type ExecuteDotOption = {
+export type OutputOption = {
   format?: Format;
   output?: string;
+};
+
+export type ExecuteDotOption = OutputOption & {
+  /**
+   * Suppress warning messages.
+   */
+  suppressWarnings?: boolean;
 };
 
 export type ExecuteOption = ExecuteDotOption & DotOption;

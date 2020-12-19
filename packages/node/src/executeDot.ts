@@ -7,7 +7,7 @@ import { ExecuteOption } from './types';
  */
 export async function executeDot(
   dot: string,
-  { format, output, dotCommand: cmd = 'dot', childProcessOptions = {} }: ExecuteOption = {},
+  { format, output, suppressWarnings, dotCommand: cmd = 'dot', childProcessOptions = {} }: ExecuteOption = {},
 ): Promise<Buffer> {
   const { fd, path, cleanup } = await file();
   try {
@@ -15,6 +15,9 @@ export async function executeDot(
     await close(fd);
 
     const args: string[] = [];
+    if (suppressWarnings === true) {
+      args.push('-q');
+    }
     if (typeof format === 'string') {
       args.push(`-T${format}`);
     }

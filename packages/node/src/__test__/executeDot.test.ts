@@ -28,6 +28,15 @@ describe('executeDot', () => {
     });
   });
 
+  test('suppress warning messages as an option', async () => {
+    await executeDot(dot, {
+      suppressWarnings: true,
+    });
+    expect(execFile).toBeCalledWith('dot', ['-q', '/path/to/mock'], {
+      encoding: 'buffer',
+    });
+  });
+
   test('format can be specified as an option', async () => {
     await executeDot(dot, {
       format: 'pdf',
