@@ -192,48 +192,267 @@ export interface ICluster<T extends string = string> extends IHasComment, IAttri
   getNode(id: string): INode | undefined;
   /** Create Edge and add it to the cluster. */
   createEdge(targets: (EdgeTargetLike | EdgeTargetsLike)[], attributes?: EdgeAttributes): IEdge;
+
   /**
-   * Declarative API for Subgraph.
+   * Create a subgraph by specifying its id (or get it if it already exists).
    *
-   * @description
-   * If there is a Subgraph with the given ID, use it.
-   * If not, create a Subgraph.
+   * By specifying a callback function, the target subgraph can be received and manipulated as an argument.
+   *
+   * ```ts
+   * const G = digraph('G', (g) => {
+   *   // Create a cluster with id as A.
+   *   g.subgraph('A', (A) => {
+   *     // Create a node with id as A1 in cluster A.
+   *     A.node('A1');
+   *   });
+   * });
+   *
+   * console.log(toDot(G));
+   * // digraph "G" {
+   * //   subgraph "A" {
+   * //     "A1";
+   * //   }
+   * // }
+   * ```
    *
    * @param id Subgraph ID.
-   * @param attributes Subgraph attributes.
-   * @param callback Callback to operate Subgraph.
+   * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  subgraph(id?: string, callback?: (subgraph: ISubgraph) => void): ISubgraph;
-  subgraph(id?: string, attributes?: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
-  subgraph(attributes?: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(id: string, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  /**
+   * Create a subgraph (or get one if it already exists) and adapt the attributes.
+   *
+   * By specifying a callback function, the target subgraph can be received and manipulated as an argument.
+   *
+   * ```ts
+   * const G = digraph('G', (g) => {
+   *   // Create a cluster with id as A and specifying its attributes.
+   *   g.subgraph('A', { [attribute.color]: 'red', [attribute.label]: 'my label' }, (A) => {
+   *     // Create a node with id as A1 in cluster A.
+   *     A.node('A1');
+   *   });
+   * });
+   *
+   * console.log(toDot(G));
+   * // digraph "G" {
+   * //   subgraph "A" {
+   * //     color = "red";
+   * //     label = "my label";
+   * //     "A1";
+   * //   }
+   * // }
+   * ```
+   *
+   * @param id  Subgraph ID.
+   * @param attributes Object of attributes to be adapted to the subgraph.
+   * @param callback Callbacks for manipulating created or retrieved subgraph.
+   */
+  subgraph(id: string, attributes: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  /**
+   * Create anonymous subgraphs and and adapt the attributes.
+   *
+   * By specifying a callback function, the target subgraph can be received and manipulated as an argument.
+   *
+   * ```ts
+   * const G = digraph('G', (g) => {
+   *   // Create a anonymous cluster and specifying its attributes.
+   *   g.subgraph({ [attribute.color]: 'red', [attribute.label]: 'my label' }, (A) => {
+   *     // Create a node with id as A1 in anonymous cluster.
+   *     A.node('A1');
+   *   });
+   * });
+   *
+   * console.log(toDot(G));
+   * // digraph "G" {
+   * //   subgraph {
+   * //     color = "red";
+   * //     label = "my label";
+   * //     "A1";
+   * //   }
+   * // }
+   * ```
+   *
+   * @param attributes Object of attributes to be adapted to the subgraph.
+   * @param callback Callbacks for manipulating created or retrieved subgraph.
+   */
+  subgraph(attributes: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  /**
+   * Create anonymous subgraphs and manipulate them with callback functions.
+   *
+   * By specifying a callback function, the target subgraph can be received and manipulated as an argument.
+   *
+   * @param callback Callbacks for manipulating created or retrieved subgraph.
+   */
   subgraph(callback?: (subgraph: ISubgraph) => void): ISubgraph;
 
   /**
-   * Declarative API for Node.
+   * Create a node by specifying its id (or get it if it already exists).
    *
-   * @description
-   * If there is a Node with the given ID, use it.
-   * If not, create a Node.
+   * By specifying a callback function, the target node can be received and manipulated as an argument.
+   *
+   * ```ts
+   * const G = digraph('G', (g) => {
+   *   // Create a node with id as A.
+   *   g.node('A');
+   * });
+   *
+   * console.log(toDot(G));
+   * // digraph "G" {
+   * //   "A";
+   * // }
+   * ```
    *
    * @param id Node ID.
-   * @param attributes Node attributes.
-   * @param callback Callback to operate Node.
+   * @param callback Callbacks for manipulating created or retrieved node.
    */
   node(id: string, callback?: (node: INode) => void): INode;
-  node(id: string, attributes?: NodeAttributes, callback?: (node: INode) => void): INode;
   /**
-   * Declarative API for Edge.
+   * Create a node (or get one if it already exists) and adapt the attributes.
    *
-   * @param targets Edges.
-   * @param attributes Edge attributes.
-   * @param callback Callback to operate Edge.
+   * By specifying a callback function, the target node can be received and manipulated as an argument.
+   *
+   * ```ts
+   * const G = digraph('G', (g) => {
+   *   // Create a node by specifying its id and specifying its attributes.
+   *   g.node('A', {
+   *     [attribute.color]: 'red',
+   *     [attribute.label]: 'my label',
+   *   });
+   * });
+   *
+   * console.log(toDot(G));
+   * // digraph "G" {
+   * //   "A" [
+   * //     color = "red",
+   * //     label = "my label",
+   * //   ];
+   * // }
+   * ```
+   *
+   * @param id Node ID.
+   * @param attributes Object of attributes to be adapted to the node.
+   * @param callback Callbacks for manipulating created or retrieved node.
    */
-  edge(targets: (EdgeTargetLike | EdgeTargetsLike)[], callback?: (edge: IEdge) => void): IEdge;
-  edge(
-    targets: (EdgeTargetLike | EdgeTargetsLike)[],
-    attributes?: EdgeAttributes,
-    callback?: (edge: IEdge) => void,
-  ): IEdge;
+  node(id: string, attributes: NodeAttributes, callback?: (node: INode) => void): INode;
+  /**
+   * Set a common attribute for the nodes in the cluster.
+   *
+   * ```ts
+   * const G = digraph('G', (g) => {
+   *   // Set a common attribute for the nodes in the cluster.
+   *   g.node({
+   *     [attribute.color]: 'red',
+   *     [attribute.label]: 'my label',
+   *   });
+   * });
+   *
+   * console.log(toDot(G));
+   * // digraph "G" {
+   * //   node [
+   * //     color = "red",
+   * //     label = "my label",
+   * //   ];
+   * // }
+   * ```
+   *
+   * @param attributes Object of attributes to be adapted to the nodes.
+   */
+  node(attributes: NodeAttributes): void;
+  /**
+   * Create a edge.
+   *
+   * By specifying a callback function, the target edge can be received and manipulated as an argument.
+   *
+   * ```ts
+   * const G = digraph('G', (g) => {
+   *   // Create a edge.
+   *   g.edge(['a', 'b']);
+   * });
+   *
+   * console.log(toDot(G));
+   * // digraph "G" {
+   * //   "a" -> "b";
+   * // }
+   * ```
+   * @param targets Nodes.
+   * @param callback Callbacks for manipulating created or retrieved edge.
+   */
+  edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge;
+  /**
+   * Create a edge and adapt the attributes.
+   *
+   * By specifying a callback function, the target edge can be received and manipulated as an argument.
+   *
+   * ```ts
+   * const G = digraph('G', (g) => {
+   *   // Create a edge and specifying its attributes.
+   *   g.edge(['a', 'b'], {
+   *     [attribute.color]: 'red',
+   *     [attribute.label]: 'my label',
+   *   });
+   * });
+   *
+   * console.log(toDot(G));
+   * // digraph "G" {
+   * //   "a" -> "b" [
+   * //     color = "red",
+   * //     label = "my label",
+   * //   ];
+   * // }
+   * ```
+   *
+   * @param id Node ID.
+   * @param attributes Object of attributes to be adapted to the edge.
+   * @param callback Callbacks for manipulating created or retrieved edge.
+   */
+  edge(targets: EdgeTargetLike[], attributes: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
+  /**
+   * Set a common attribute for the edges in the cluster.
+   *
+   *
+   * ```ts
+   * const G = digraph('G', (g) => {
+   *   // Set a common attribute for the edges in the cluster.
+   *   g.edge({
+   *     [attribute.color]: 'red',
+   *     [attribute.label]: 'my label',
+   *   });
+   * });
+   *
+   * console.log(toDot(G));
+   * // digraph "G" {
+   * //   edge [
+   * //     color = "red",
+   * //     label = "my label",
+   * //   ];
+   * // }
+   * ```
+   * @param attributes Object of attributes to be adapted to the edges.
+   */
+  edge(attributes: EdgeAttributes): void;
+
+  /**
+   * Set a common attribute for the clusters in the cluster.
+   *
+   * ```ts
+   * const G = digraph('G', (g) => {
+   *   g.graph({
+   *     [attribute.color]: 'red',
+   *     [attribute.label]: 'my label',
+   *   });
+   * });
+   *
+   * console.log(toDot(G));
+   * // digraph "G" {
+   * //   graph [
+   * //     color = "red",
+   * //     label = "my label",
+   * //   ];
+   * // }
+   * ```
+   * @param attributes Object of attributes to be adapted to the clusters.
+   */
+  graph(attributes: ClusterSubgraphAttributes): void;
 }
 
 export interface ISubgraph extends ICluster<attribute.Subgraph | attribute.ClusterSubgraph> {
