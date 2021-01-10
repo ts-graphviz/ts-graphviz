@@ -37,6 +37,29 @@ describe('class Subgraph', () => {
     });
   });
 
+  describe('Declaratively set the attributes of the objects in the cluster', () => {
+    test('node', () => {
+      subgraph.node({
+        label: 'test label',
+      });
+      expect(subgraph.attributes.node.get(attribute.label)).toBe('test label');
+    });
+
+    test('edge', () => {
+      subgraph.edge({
+        label: 'test label',
+      });
+      expect(subgraph.attributes.edge.get(attribute.label)).toBe('test label');
+    });
+
+    test('graph', () => {
+      subgraph.graph({
+        label: 'test label',
+      });
+      expect(subgraph.attributes.graph.get(attribute.label)).toBe('test label');
+    });
+  });
+
   test('set attributes', () => {
     subgraph.set(attribute.rank, 'same');
     expect(subgraph.get(attribute.rank)).toBe('same');
