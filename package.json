@@ -28,7 +28,7 @@
     "build": "ts-node scripts/build",
     "test": "jest",
     "lint": "eslint -c .eslintrc.json --ext ts,tsx src",
-    "doc": "typedoc"
+    "doc": "typedoc src/index.ts"
   },
   "dependencies": {
     "tslib": "^2.1.0"
@@ -52,7 +52,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.29.0",
     "ts-jest": "^26.4.4",
-    "typedoc": "^0.18.0",
+    "typedoc": "^0.20.14",
     "typescript": "^4.1.3"
   }
 }
