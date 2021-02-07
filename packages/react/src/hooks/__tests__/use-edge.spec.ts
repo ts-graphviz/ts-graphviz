@@ -19,8 +19,22 @@ describe('useEdge', () => {
     expect(result.current).toBeInstanceOf(Edge);
   });
 
+  it('returns an Edge instance in a digraph wrapper for grouped edge targets', () => {
+    const { result } = renderHook(() => useEdge({ targets: ['a', ['b1', 'b2'], 'c'] }), {
+      wrapper: digraph(),
+    });
+    expect(result.current).toBeInstanceOf(Edge);
+  });
+
   it('returns Edge instance in graph wrapper', () => {
     const { result } = renderHook(() => useEdge({ targets: ['a', 'b'] }), {
+      wrapper: graph(),
+    });
+    expect(result.current).toBeInstanceOf(Edge);
+  });
+
+  it('returns an Edge instance in a graph wrapper for grouped edge targets', () => {
+    const { result } = renderHook(() => useEdge({ targets: ['a', ['b1', 'b2'], 'c'] }), {
       wrapper: graph(),
     });
     expect(result.current).toBeInstanceOf(Edge);
