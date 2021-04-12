@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import { AttributesValue } from 'ts-graphviz';
+import { ValueOf } from '../utils/value-of';
 
 export type TableProps = {
   ALIGN?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
@@ -84,24 +85,26 @@ export type SProps = NoAttributes;
 export type HrProps = NoAttributes;
 export type VrProps = NoAttributes;
 
-export enum DOT {
-  PORT = 'dot-port',
-  TABLE = 'dot-table',
-  TR = 'dot-tr',
-  TD = 'dot-td',
-  FONT = 'dot-font',
-  BR = 'dot-br',
-  IMG = 'dot-img',
-  I = 'dot-i',
-  B = 'dot-b',
-  U = 'dot-u',
-  O = 'dot-o',
-  SUB = 'dot-sub',
-  SUP = 'dot-sup',
-  S = 'dot-s',
-  HR = 'dot-hr',
-  VR = 'dot-vr',
-}
+export const DOT = Object.freeze({
+  PORT: 'dot-port',
+  TABLE: 'dot-table',
+  TR: 'dot-tr',
+  TD: 'dot-td',
+  FONT: 'dot-font',
+  BR: 'dot-br',
+  IMG: 'dot-img',
+  I: 'dot-i',
+  B: 'dot-b',
+  U: 'dot-u',
+  O: 'dot-o',
+  SUB: 'dot-sub',
+  SUP: 'dot-sup',
+  S: 'dot-s',
+  HR: 'dot-hr',
+  VR: 'dot-vr',
+} as const);
+
+export type DOT = ValueOf<typeof DOT>;
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
