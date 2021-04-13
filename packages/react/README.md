@@ -19,31 +19,20 @@ The module can then be installed using [npm](https://www.npmjs.com/):
 
 ```bash
 # yarn
-$ yarn add @ts-graphviz/react
+$ yarn add @ts-graphviz/react react
 # or npm
-$ npm install @ts-graphviz/react
+$ npm install -S @ts-graphviz/react react
 ```
 
-### Peer Dependencies
+> Install [React](https://github.com/facebook/react/) as peerDependencies at the same time.
 
-- [React and ReactDOM](https://github.com/facebook/react/)(>=16.8)
-- [ts-graphviz](https://github.com/ts-graphviz/ts-graphviz)
-- [@hpcc-js/wasm](https://www.npmjs.com/package/@hpcc-js/wasm) (Optional)
+## Example
 
-```bash
-# Peer Dependencies
-$ yarn add react react-dom ts-graphviz@"^0.13.1"
-```
-
-## API
-
-### Script
-
-```tsx
-import React, { FC } from 'react';
+```jsx
+import React from 'react';
 import { Digraph, Node, Subgraph, Edge, DOT, renderToDot } from '@ts-graphviz/react';
 
-const Example: FC = () => (
+const Example = () => (
   <Digraph
     rankdir="TB"
     edge={{
