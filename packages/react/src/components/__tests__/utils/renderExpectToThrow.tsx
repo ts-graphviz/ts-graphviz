@@ -3,10 +3,10 @@
 import React, { Component, ReactElement } from 'react';
 import { render } from '../../../renderer/render';
 
-export function renderExpectToThrow(element: ReactElement, expectedError: string) {
+export function renderExpectToThrow(element: ReactElement, expectedError: string): void {
   const errors: Error[] = [];
-  class ErrorBoundary extends Component<{}, { hasError: boolean }> {
-    constructor(props: {}) {
+  class ErrorBoundary extends Component<Record<string, unknown>, { hasError: boolean }> {
+    constructor(props: Record<string, unknown>) {
       super(props);
       this.state = { hasError: false };
     }

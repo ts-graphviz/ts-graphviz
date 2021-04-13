@@ -27,7 +27,7 @@ export type TableProps = {
   WIDTH?: AttributesValue; // "value"
 };
 
-type NoAttributes = {};
+type NoAttributes = Record<string, unknown>;
 
 export type TrProps = NoAttributes;
 

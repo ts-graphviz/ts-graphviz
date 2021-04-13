@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
@@ -6,7 +7,7 @@ import ReactReconciler from 'react-reconciler';
 
 type Type = FC;
 type Props = any;
-type Container = {};
+type Container = Record<string, never>;
 
 type Instance = any;
 type TextInstance = any;

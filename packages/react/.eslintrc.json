@@ -10,6 +10,9 @@
     "useJSXTextNode": true
   },
   "settings": {
+    "react": {
+      "version": "detect"
+    },
     "import/resolver": {
       "node": {
         "extensions": [
@@ -36,6 +39,8 @@
   ],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
+    "no-use-before-define": [0],
+    "@typescript-eslint/no-use-before-define": [1],
     "prettier/prettier": "error",
     "import/extensions": "off",
     "import/prefer-default-export": "off",
