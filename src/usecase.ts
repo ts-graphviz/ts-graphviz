@@ -1,5 +1,6 @@
 import { RootClusterAttributes } from './types';
 import { Digraph, Graph, RootCluster } from './model/root-clusters';
+import { TransformerCore } from './transformer';
 
 /**
  * Type indicating that it is a constructor of T.
@@ -47,3 +48,12 @@ export const strict = {
   /** API for creating omnidirectional graph objects in strict mode. */
   graph: builder(Graph, true),
 };
+
+/** @hidden */
+const transformer = new TransformerCore();
+
+export const parse: (dot: string) => RootCluster = transformer.parse.bind(transformer);
+
+export const dot: (template: TemplateStringsArray, ...substitutions: unknown[]) => RootCluster = transformer.dot.bind(
+  transformer,
+);

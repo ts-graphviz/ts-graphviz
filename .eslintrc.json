@@ -19,9 +19,8 @@
     "jest"
   ],
   "extends": [
-    "plugin:prettier/recommended",
+    "prettier",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
     "plugin:jest/recommended"
   ],
   "rules": {

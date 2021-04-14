@@ -8,3 +8,4 @@ export * from './model/edges';
 export * from './model/nodes';
 export * from './usecase';
 export * from './render/to-dot';
+export * as ast from './ast';
