@@ -69,7 +69,7 @@
 					<h2>Key Feature</h2>
 				</a>
 				<ul>
-					<li>Export/Parse Dot language.</li>
+					<li>Export Dot language.</li>
 					<li>TypeScript Support.</li>
 					<li>Supports multiple runtime and module.<ul>
 							<li>Node.js, Browser and <a href="https://github.com/ts-graphviz/deno">Deno</a>.</li>
@@ -279,23 +279,6 @@
   ];
 }
 </code></pre>
-				<a href="#parse" id="parse" style="color: inherit; text-decoration: none;">
-					<h3>Parse</h3>
-				</a>
-				<pre><code class="language-ts"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">parse</span><span style="color: #000000">, </span><span style="color: #001080">toDot</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;ts-graphviz&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #008000">// Parse a string written in dot language and convert it to a Digraph object.</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">G</span><span style="color: #000000"> = </span><span style="color: #795E26">parse</span><span style="color: #000000">(</span><span style="color: #A31515">`</span>
-<span style="color: #A31515">digraph hoge {</span>
-<span style="color: #A31515">  a -&gt; b;</span>
-<span style="color: #A31515">}`</span><span style="color: #000000">);</span>
-
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">toDot</span><span style="color: #000000">(</span><span style="color: #0070C1">G</span><span style="color: #000000">));</span>
-</code></pre>
-				<pre><code class="language-dot">digraph &quot;hoge&quot; {
-  &quot;a&quot; -&gt; &quot;b&quot;;
-}
-</code></pre>
 				<a href="#see-also" id="see-also" style="color: inherit; text-decoration: none;">
 					<h2>See Also</h2>
 				</a>
@@ -351,12 +334,6 @@
 					</li>
 					<li class=" tsd-kind-namespace">
 						<a href="modules/compass.html">Compass</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/ast.html">ast</a>
-					</li>
-					<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
-						<a href="modules/ast.attributes.html">ast.<wbr>Attributes</a>
 					</li>
 					<li class=" tsd-kind-namespace">
 						<a href="modules/attribute.html">attribute</a>
@@ -471,16 +448,10 @@
 						<a href="modules.html#digraph" class="tsd-kind-icon">digraph</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="modules.html#dot" class="tsd-kind-icon">dot</a>
-					</li>
-					<li class=" tsd-kind-function">
 						<a href="modules.html#graph" class="tsd-kind-icon">graph</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#isforwardrefnode" class="tsd-kind-icon">is<wbr>Forward<wbr>Ref<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#parse" class="tsd-kind-icon">parse</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#todot" class="tsd-kind-icon">to<wbr>Dot</a>
