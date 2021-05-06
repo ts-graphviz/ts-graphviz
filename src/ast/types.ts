@@ -4,8 +4,8 @@ type ValueOf<T> = T[keyof T];
 
 export const Kinds = Object.freeze({
   Graph: 'graph',
-  Attr: 'attr',
-  Attrs: 'attrs',
+  Attribute: 'attribute',
+  Attributes: 'attributes',
   Edge: 'edge',
   Node: 'node',
   Subgraph: 'subgraph',
@@ -25,11 +25,11 @@ export interface KeyValue {
   value: string;
 }
 
-export interface Attr extends KeyValue {
-  kind: typeof Kinds.Attr;
+export interface Attribute extends KeyValue {
+  kind: typeof Kinds.Attribute;
 }
 
-export namespace Attrs {
+export namespace Attributes {
   export const Target = Object.freeze({
     Graph: 'graph',
     Edge: 'edge',
@@ -39,9 +39,9 @@ export namespace Attrs {
 }
 
 export interface Attrs {
-  kind: typeof Kinds.Attrs;
-  target: Attrs.Target;
-  attrs: KeyValue[];
+  kind: typeof Kinds.Attributes;
+  target: Attributes.Target;
+  attributes: KeyValue[];
 }
 
 export interface NodeID {
@@ -53,13 +53,13 @@ export interface NodeID {
 export interface Edge {
   kind: typeof Kinds.Edge;
   targets: NodeID[];
-  attrs: KeyValue[];
+  attributes: KeyValue[];
 }
 
 export interface Node {
   kind: typeof Kinds.Node;
   id: string;
-  attrs: KeyValue[];
+  attributes: KeyValue[];
 }
 
 export interface Subgraph {
@@ -68,4 +68,4 @@ export interface Subgraph {
   children: GraphObject[];
 }
 
-export type GraphObject = Attr | Attrs | Edge | Node | Subgraph;
+export type GraphObject = Attribute | Attrs | Edge | Node | Subgraph;

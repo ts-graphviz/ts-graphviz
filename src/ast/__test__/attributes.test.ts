@@ -1,6 +1,6 @@
 import _ from 'ts-dedent';
 import { parse } from '../parse';
-import { Kinds, Attrs } from '../types';
+import { Kinds, Attributes } from '../types';
 
 test('node', () => {
   const dot = _`
@@ -15,9 +15,9 @@ test('node', () => {
   const result = parse(dot);
   expect(result.children).toMatchObject([
     {
-      kind: Kinds.Attrs,
-      target: Attrs.Target.Node,
-      attrs: [
+      kind: Kinds.Attributes,
+      target: Attributes.Target.Node,
+      attributes: [
         {
           key: 'style',
           value: 'filled',
@@ -47,9 +47,9 @@ test('edge', () => {
   const result = parse(dot);
   expect(result.children).toMatchObject([
     {
-      kind: Kinds.Attrs,
-      target: Attrs.Target.Edge,
-      attrs: [
+      kind: Kinds.Attributes,
+      target: Attributes.Target.Edge,
+      attributes: [
         {
           key: 'color',
           value: 'red',
@@ -72,9 +72,9 @@ test('graph', () => {
   const result = parse(dot);
   expect(result.children).toMatchObject([
     {
-      kind: Kinds.Attrs,
-      target: Attrs.Target.Graph,
-      attrs: [
+      kind: Kinds.Attributes,
+      target: Attributes.Target.Graph,
+      attributes: [
         {
           key: 'fillcolor',
           value: 'red',

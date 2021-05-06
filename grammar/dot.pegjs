@@ -29,7 +29,7 @@ StmtList
 
 Stmt
   = ClusterAttr
-  / Attrs
+  / Attributes
   / Edge
   / Subgraph
   / Node
@@ -37,23 +37,23 @@ Stmt
 ClusterAttr
   = key:ID _ '=' _ value:ID {
     return {
-      kind: 'attr',
+      kind: 'attribute',
       key: key,
       value: value
     };
   }
 
-Attrs
-  = target:('graph'i/'node'i/'edge'i) attrs:AttrList {
+Attributes
+  = target:('graph'i/'node'i/'edge'i) attributes:AttributeList {
      return {
-       kind: 'attrs',
+       kind: 'attributes',
        target: target,
-       attrs: attrs,
+       attributes: attributes,
      };
   }
 
-AttrList
-  = _ '[' _ list:AList? _ ']' _ rest:AttrList? {
+AttributeList
+  = _ '[' _ list:AList? _ ']' _ rest:AttributeList? {
     return (list || []).concat(rest || []);
   }
 
@@ -65,7 +65,7 @@ AList
         }].concat(rest || []);
     }
 
-IDList = _ id:node_id _ ',' ? rest:IDList? {
+IDList = _ id:NodeId _ ',' ? rest:IDList? {
     return [id].concat(rest || []);
 }
 
@@ -76,16 +76,16 @@ edgeTargetGroup
 
 
 edgeTarget
-  = id: (edgeTargetGroup / node_id) {
+  = id: (edgeTargetGroup / NodeId) {
     return id;
   }
 
 Edge
-  = id:(edgeTarget) rhs:edgeRHS attrs:AttrList? {
+  = id:(edgeTarget) rhs:edgeRHS attributes:AttributeList? {
        return {
          kind: 'edge',
          targets: [id, ...rhs.map((v: any) => v.id)],
-         attrs:attrs || []
+         attributes:attributes || []
        };
     }
 
@@ -102,15 +102,15 @@ edgeRHS
   }
 
 Node
-  = node_id:node_id attrs:AttrList? {
+  = node_id:NodeId attributes:AttributeList? {
     return {
       kind: 'node',
       id: node_id.id,
-      attrs: attrs || []
+      attributes: attributes || []
     };
   }
 
-node_id
+NodeId
   = id:ID port:port? {
       return port ? {
         id: id, ...port

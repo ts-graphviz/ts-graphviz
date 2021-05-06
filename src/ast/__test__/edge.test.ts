@@ -11,7 +11,7 @@ test('simple edge', () => {
   expect(result.children[0]).toMatchObject({
     kind: Kinds.Edge,
     targets: [{ id: 'a' }, { id: 'b' }],
-    attrs: [],
+    attributes: [],
   });
 });
 
@@ -29,11 +29,11 @@ test('edge with port', () => {
       { id: 'c', port: 'p3', compass: 'w' },
       { id: 'd', compass: 'w' },
     ],
-    attrs: [],
+    attributes: [],
   });
 });
 
-test('edge with attrs', () => {
+test('edge with attributes', () => {
   const result = parse(`
     digraph {
       a -> b [
@@ -45,7 +45,7 @@ test('edge with attrs', () => {
   expect(result.children[0]).toMatchObject({
     kind: Kinds.Edge,
     targets: [{ id: 'a' }, { id: 'b' }],
-    attrs: [
+    attributes: [
       {
         key: 'color',
         value: 'lightgrey',
@@ -70,7 +70,7 @@ test('grouped edge targets', () => {
       [{ id: 'a1' }, { id: 'a2' }],
       [{ id: 'b1' }, { id: 'b2' }],
     ],
-    attrs: [],
+    attributes: [],
   });
 });
 
@@ -92,6 +92,6 @@ test('grouped ported edge targets', () => {
         { id: 'b2', port: 'p3' },
       ],
     ],
-    attrs: [],
+    attributes: [],
   });
 });

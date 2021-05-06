@@ -11,11 +11,11 @@ test('simple node', () => {
   expect(result.children[0]).toMatchObject({
     kind: Kinds.Node,
     id: 'test',
-    attrs: [],
+    attributes: [],
   });
 });
 
-test('node with attrs', () => {
+test('node with attributes', () => {
   const result = parse(_`
     digraph {
       test [
@@ -28,7 +28,7 @@ test('node with attrs', () => {
   expect(result.children[0]).toMatchObject({
     kind: Kinds.Node,
     id: 'test',
-    attrs: [
+    attributes: [
       {
         key: 'style',
         value: 'filled',

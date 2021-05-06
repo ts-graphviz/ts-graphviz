@@ -8,13 +8,16 @@
 
 ## Key Feature
 
-- Export Dot language.
-- Support Node.js and Browser.
+- Export/Parse Dot language.
+- TypeScript Support.
+- Supports multiple runtime and module.
+  - Node.js, Browser and [Deno](https://github.com/ts-graphviz/deno).
   - UMD, ESM, CommonJS
+- Zero dependencies.
 
 ## Installation
 
-The plugin can then be installed using [npm](https://www.npmjs.com/):
+The package can then be installed using [npm](https://www.npmjs.com/):
 
 [![NPM](https://nodei.co/npm/ts-graphviz.png)](https://nodei.co/npm/ts-graphviz/)
 
@@ -22,9 +25,9 @@ The plugin can then be installed using [npm](https://www.npmjs.com/):
 
 ```bash
 # yarn
-yarn add ts-graphviz
+$ yarn add ts-graphviz
 # or npm
-npm install ts-graphviz
+$ npm install -S ts-graphviz
 ```
 
 ### Browser
@@ -103,6 +106,8 @@ import { digraph, toDot } from 'ts-graphviz';
     });
   });
 });
+
+const dot = toDot(G);
 console.log(dot);
 ```
 
@@ -222,6 +227,26 @@ digraph "G" {
   "node1" -> "node2" [
     label = "This is Custom Edge",
   ];
+}
+```
+
+### Parse
+
+```ts
+import { parse, toDot } from 'ts-graphviz';
+
+// Parse a string written in dot language and convert it to a Digraph object.
+const G = parse(`
+digraph hoge {
+  a -> b;
+}`);
+
+console.log(toDot(G));
+```
+
+```dot
+digraph "hoge" {
+  "a" -> "b";
 }
 ```
 

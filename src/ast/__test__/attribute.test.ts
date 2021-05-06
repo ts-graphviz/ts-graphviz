@@ -43,17 +43,17 @@ test.each([
   const result = parse(dot);
   expect(result.children).toMatchObject([
     {
-      kind: Kinds.Attr,
+      kind: Kinds.Attribute,
       key: 'style',
       value: 'filled',
     },
     {
-      kind: Kinds.Attr,
+      kind: Kinds.Attribute,
       key: 'color',
       value: 'lightgrey',
     },
     {
-      kind: Kinds.Attr,
+      kind: Kinds.Attribute,
       key: 'label',
       value: 'example #1',
     },

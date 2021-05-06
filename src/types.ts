@@ -36,7 +36,7 @@ export namespace Compass {
 /**
  * Objects that can be Edge destinations satisfy this interface.
  */
-export type EdgeTarget = INode | INodeWithPort | IForwardRefNode;
+export type EdgeTarget = INode | IForwardRefNode;
 export type EdgeTargets = ReadonlyArray<EdgeTarget>;
 
 /**
@@ -92,19 +92,13 @@ export interface IPort {
   compass: Compass;
 }
 
-export interface INodeWithPort {
-  readonly node: INode;
-  readonly port: Partial<IPort>;
-}
-
-export interface IForwardRefNode {
+export interface IForwardRefNode extends Partial<IPort> {
   readonly id: string;
-  readonly port: Partial<IPort>;
 }
 
 export interface INode extends IHasComment, IHasAttributes<attribute.Node> {
   readonly id: string;
-  port(port: string | Partial<IPort>): INodeWithPort;
+  port(port: string | Partial<IPort>): IForwardRefNode;
 }
 
 export interface IEdge extends IHasComment, IHasAttributes<attribute.Edge> {

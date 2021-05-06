@@ -1,33 +1,8 @@
-import {
-  EdgeTargetLike,
-  EdgeTarget,
-  INode,
-  IPort,
-  IForwardRefNode,
-  INodeWithPort,
-  NodeAttributes,
-  IAttributes,
-} from '../types';
+import { EdgeTargetLike, EdgeTarget, INode, IPort, IForwardRefNode, NodeAttributes, IAttributes } from '../types';
 import { DotObject } from './abstract';
 import { attribute } from '../attribute';
 import { Attributes } from './attributes-base';
 import { EdgeTargetsLike } from '../types';
-
-/**
- * @category Primary
- * @hidden
- */
-export class ForwardRefNode implements IForwardRefNode {
-  constructor(public readonly id: string, public readonly port: Readonly<Partial<IPort>>) {}
-}
-
-/**
- * An object that represents a Node where port and compass are specified.
- * @category Primary
- */
-export class NodeWithPort implements INodeWithPort {
-  constructor(public readonly node: INode, public readonly port: Partial<IPort>) {}
-}
 
 /**
  * Node object.
@@ -42,20 +17,24 @@ export class Node extends DotObject implements INode {
     this.attributes = new Attributes<attribute.Node>(attributes);
   }
 
-  /** Returns NodeWithPort with port and compass specified. */
-  public port(port: string | Partial<IPort>): NodeWithPort {
+  /** Returns ForwardRefNode with port and compass specified. */
+  public port(port: string | Partial<IPort>): IForwardRefNode {
     if (typeof port === 'string') {
-      return new NodeWithPort(this, { port });
+      return { id: this.id, port };
     }
-    return new NodeWithPort(this, port);
+    return { id: this.id, ...port };
   }
+}
+
+export function isForwardRefNode(object: unknown): object is IForwardRefNode {
+  return typeof object == 'object' && object !== null && typeof (object as IForwardRefNode).id === 'string';
 }
 
 /**
  * @hidden
  */
 export function isEdgeTarget(node: unknown): node is EdgeTarget {
-  return node instanceof Node || node instanceof NodeWithPort || node instanceof ForwardRefNode;
+  return node instanceof Node || isForwardRefNode(node);
 }
 
 /**
