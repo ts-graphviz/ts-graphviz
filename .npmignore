@@ -10,9 +10,8 @@
 CODE_OF_CONDUCT.md
 config
 CONTRIBUTING.md
-jest.config.js
+jest.config.ts
 LICENSE
-rollup.config.js
 src
 tsconfig.json
 typedoc.json

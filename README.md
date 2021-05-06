@@ -8,7 +8,7 @@
 
 ## Key Feature
 
-- Export/Parse Dot language.
+- Export Dot language.
 - TypeScript Support.
 - Supports multiple runtime and module.
   - Node.js, Browser and [Deno](https://github.com/ts-graphviz/deno).
@@ -227,26 +227,6 @@ digraph "G" {
   "node1" -> "node2" [
     label = "This is Custom Edge",
   ];
-}
-```
-
-### Parse
-
-```ts
-import { parse, toDot } from 'ts-graphviz';
-
-// Parse a string written in dot language and convert it to a Digraph object.
-const G = parse(`
-digraph hoge {
-  a -> b;
-}`);
-
-console.log(toDot(G));
-```
-
-```dot
-digraph "hoge" {
-  "a" -> "b";
 }
 ```
 

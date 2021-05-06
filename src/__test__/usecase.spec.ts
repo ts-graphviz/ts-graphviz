@@ -1,6 +1,6 @@
 import 'jest-graphviz';
 import { Digraph, Graph } from '../model/root-clusters';
-import { digraph, dot, graph, parse, strict } from '../usecase';
+import { digraph, graph, strict } from '../usecase';
 import { toDot } from '../render/to-dot';
 import { attribute } from '../attribute';
 import { Subgraph } from '../model/clusters';
@@ -312,21 +312,5 @@ describe('strict mode', () => {
     const g = strict.graph();
     expect(g.strict).toBe(true);
     expect(g).toBeInstanceOf(Graph);
-  });
-});
-
-describe('parse function', () => {
-  test('simple digraph', () => {
-    const G = parse('digraph {}');
-    expect(G).toBeInstanceOf(Digraph);
-    expect(G.strict).toStrictEqual(false);
-  });
-});
-
-describe('dot template tag', () => {
-  test('simple digraph', () => {
-    const G = dot`digraph {}`;
-    expect(G).toBeInstanceOf(Digraph);
-    expect(G.strict).toStrictEqual(false);
   });
 });
