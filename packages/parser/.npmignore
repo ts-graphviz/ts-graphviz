@@ -1,0 +1,13 @@
+.editorconfig
+.eslintignore
+.eslintrc.json
+.github
+.gitignore
+.prettierignore
+.prettierrc.json
+.vscode
+config
+jest.config.ts
+LICENSE
+src
+tsconfig.json

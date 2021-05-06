@@ -1,0 +1,59 @@
+name: NodeCI
+
+on: [push]
+
+jobs:
+  test:
+    name: Test on node ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      run: yarn --frozen-lockfile --ignore-optional
+      env:
+        CI: 'true'
+    - name: Lint
+      run: yarn lint
+      env:
+        CI: 'true'
+    - name: Test
+      run: yarn test
+      env:
+        CI: 'true'
+    - name: Build
+      run: yarn build
+      env:
+        CI: 'true'
+
+  publish:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    needs:
+      - test
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+        registry-url: https://registry.npmjs.org
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile --ignore-optional
+      if: contains(github.ref, 'tags/v')
+      env:
+        CI: 'true'
+    - name: Build
+      run: yarn build
+      if: contains(github.ref, 'tags/v')
+    - name: Publish to NPM
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+      if: contains(github.ref, 'tags/v')
