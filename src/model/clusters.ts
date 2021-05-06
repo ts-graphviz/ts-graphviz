@@ -16,7 +16,7 @@ import {
   EdgeTargets,
 } from '../types';
 import { Attributes, AttributesBase } from './attributes-base';
-import { isEdgeTarget, isEdgeTargetLike, Node, ForwardRefNode, isEdgeTargetsLike } from './nodes';
+import { isEdgeTarget, isEdgeTargetLike, Node, isEdgeTargetsLike } from './nodes';
 import { Edge } from './edges';
 
 /**
@@ -195,9 +195,9 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
       return n;
     }
     if (Compass.is(compass)) {
-      return new ForwardRefNode(id, { port, compass });
+      return { id, port, compass };
     }
-    return new ForwardRefNode(id, { port });
+    return { id, port };
   }
 
   /** @hidden */

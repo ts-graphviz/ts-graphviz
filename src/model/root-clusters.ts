@@ -32,7 +32,7 @@ export abstract class RootCluster extends Cluster<attribute.RootCluster> impleme
     super();
     this.id = args.find((arg): arg is string => typeof arg === 'string');
     this.strict = args.find((arg): arg is boolean => typeof arg === 'boolean') ?? false;
-    const attributes = args.find((arg): arg is RootClusterAttributes => typeof arg === 'object');
+    const attributes = args.find((arg): arg is RootClusterAttributes => typeof arg === 'object' && arg !== null);
     if (attributes !== undefined) {
       this.apply(attributes);
     }

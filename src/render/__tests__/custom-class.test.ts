@@ -1,3 +1,4 @@
+import 'jest-graphviz';
 import { toDot } from '../to-dot';
 import { Digraph, Graph } from '../../model/root-clusters';
 import { Node } from '../../model/nodes';

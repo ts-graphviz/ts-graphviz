@@ -1,5 +1,6 @@
 import { RootClusterAttributes } from './types';
 import { Digraph, Graph, RootCluster } from './model/root-clusters';
+import { Parser } from './parser';
 
 /**
  * Type indicating that it is a constructor of T.
@@ -47,3 +48,27 @@ export const strict = {
   /** API for creating omnidirectional graph objects in strict mode. */
   graph: builder(Graph, true),
 };
+
+/** @hidden */
+const parser = new Parser();
+
+/**
+ * Parse a character string written in dot language and convert it to a model.
+ *
+ * @param dot string written in the dot language.
+ *
+ * @example
+ *
+ * ```ts
+ * const G = parse(`
+ * digraph hoge {
+ *   a -> b;
+ * }`);
+ * console.log(toDot(G));
+ * ```
+ */
+export const parse: (dot: string) => RootCluster = parser.parse.bind(parser);
+
+export const dot: (template: TemplateStringsArray, ...substitutions: unknown[]) => RootCluster = parser.dot.bind(
+  parser,
+);
