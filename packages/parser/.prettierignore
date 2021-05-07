@@ -1,2 +1,2 @@
 node_modules
-src/ast/grammar/dot.pegjs.ts
+src/dot.pegjs.ts

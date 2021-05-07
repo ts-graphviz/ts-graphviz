@@ -178,11 +178,11 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c10 = function(strict: any, type: any, id: any, children: any): any {
         directed = type.toLowerCase() === "digraph";
         return {
-          kind: 'graph',
+          type: 'graph',
           id: id,
           directed: directed,
-          children: children ?? [],
           strict: !!strict,
+          children: children ?? [],
         };
       };
   const peg$c11 = ";";
@@ -193,7 +193,7 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c16 = peg$literalExpectation("=", false);
   const peg$c17 = function(key: any, value: any): any {
       return {
-        kind: 'attribute',
+        type: 'attribute',
         key: key,
         value: value
       };
@@ -204,7 +204,7 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c21 = peg$literalExpectation("edge", true);
   const peg$c22 = function(target: any, attributes: any): any {
        return {
-         kind: 'attributes',
+         type: 'attributes',
          target: target,
          attributes: attributes,
        };
@@ -236,9 +236,9 @@ function peg$parse(input: string, options?: IParseOptions) {
     };
   const peg$c35 = function(id: any, rhs: any, attributes: any): any {
          return {
-           kind: 'edge',
+           type: 'edge',
+           attributes:attributes || [],
            targets: [id, ...rhs.map((v: any) => v.id)],
-           attributes:attributes || []
          };
       };
   const peg$c36 = "->";
@@ -257,15 +257,17 @@ function peg$parse(input: string, options?: IParseOptions) {
     };
   const peg$c41 = function(node_id: any, attributes: any): any {
       return {
-        kind: 'node',
+        type: 'node',
         id: node_id.id,
         attributes: attributes || []
       };
     };
   const peg$c42 = function(id: any, port: any): any {
         return port ? {
+          type: 'id',
           id: id, ...port
         } : {
+          type: 'id',
           id: id
         };
     };

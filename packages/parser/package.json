@@ -27,7 +27,7 @@
     "parser"
   ],
   "scripts": {
-    "build:peg": "pegjs --plugin ts-pegjs -o src/ast/grammar/dot.pegjs.ts grammar/dot.pegjs",
+    "build:peg": "pegjs --plugin ts-pegjs -o src/dot.pegjs.ts grammar/dot.pegjs",
     "prebuild": "yarn build:peg",
     "build": "ts-node scripts/build",
     "pretest": "yarn build:peg",

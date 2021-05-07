@@ -16,11 +16,11 @@ Graph
   = _ strict:"strict"i? _ type:("graph"i / "digraph"i) _ id:ID? _ "{" children:StmtList ? _ "}" _ {
       directed = type.toLowerCase() === "digraph";
       return {
-        kind: 'graph',
+        type: 'graph',
         id: id,
         directed: directed,
-        children: children ?? [],
         strict: !!strict,
+        children: children ?? [],
       };
     }
 
@@ -37,7 +37,7 @@ Stmt
 ClusterAttr
   = key:ID _ '=' _ value:ID {
     return {
-      kind: 'attribute',
+      type: 'attribute',
       key: key,
       value: value
     };
@@ -46,7 +46,7 @@ ClusterAttr
 Attributes
   = target:('graph'i/'node'i/'edge'i) attributes:AttributeList {
      return {
-       kind: 'attributes',
+       type: 'attributes',
        target: target,
        attributes: attributes,
      };
@@ -83,9 +83,9 @@ edgeTarget
 Edge
   = id:(edgeTarget) rhs:edgeRHS attributes:AttributeList? {
        return {
-         kind: 'edge',
+         type: 'edge',
+         attributes:attributes || [],
          targets: [id, ...rhs.map((v: any) => v.id)],
-         attributes:attributes || []
        };
     }
 
@@ -104,7 +104,7 @@ edgeRHS
 Node
   = node_id:NodeId attributes:AttributeList? {
     return {
-      kind: 'node',
+      type: 'node',
       id: node_id.id,
       attributes: attributes || []
     };
@@ -113,8 +113,10 @@ Node
 NodeId
   = id:ID port:port? {
       return port ? {
+        type: 'id',
         id: id, ...port
       } : {
+        type: 'id',
         id: id
       };
   }
