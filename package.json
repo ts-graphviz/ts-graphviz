@@ -19,8 +19,11 @@
     "type": "github",
     "url": "https://github.com/sponsors/kamiazya"
   },
-  "main": "lib/index.js",
-  "module": "lib/index.mjs",
+  "main": "./lib/index.js",
+  "exports": {
+    "import": "./lib/index.mjs",
+    "require": "./lib/index.js"
+  },
   "unpkg": "lib/bundle.min.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
