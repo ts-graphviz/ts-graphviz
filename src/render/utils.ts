@@ -145,13 +145,11 @@ export function renderAttributeBuilder<T extends string>(
   return ([key, value]): string | undefined => join(key, ' = ', renderAttributeValue(value), deciliter);
 }
 
-export const renderAttributeWithSemi: <T extends string>(
-  v: [T, AttributesValue],
-) => string | undefined = renderAttributeBuilder(';');
+export const renderAttributeWithSemi: <T extends string>(v: [T, AttributesValue]) => string | undefined =
+  renderAttributeBuilder(';');
 
-export const renderAttributeWithComma: <T extends string>(
-  v: [T, AttributesValue],
-) => string | undefined = renderAttributeBuilder(',');
+export const renderAttributeWithComma: <T extends string>(v: [T, AttributesValue]) => string | undefined =
+  renderAttributeBuilder(',');
 
 export function renderAttributes(attributes: IAttributes): string {
   if (attributes.size === 0) {
