@@ -9,6 +9,6 @@
 config
 grammar
 jest.config.ts
-scripts
+rollup.config.js
 src
 tsconfig.json
