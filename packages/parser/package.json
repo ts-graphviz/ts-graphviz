@@ -36,8 +36,7 @@
     "lint": "eslint -c .eslintrc.json --ext ts src"
   },
   "dependencies": {
-    "ts-graphviz": "^0.15.0",
-    "tslib": "^2.2.0"
+    "ts-graphviz": "^0.15.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
