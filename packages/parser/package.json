@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "description": "Graphviz dot language parser for ts-graphviz.",
   "main": "lib/index.js",
-  "module": "lib/index.mjs",
+  "exports": {
+    "import": "./lib/index.mjs",
+    "default": "./lib/index.js"
+  },
   "types": "lib/index.d.ts",
   "author": "kamiazya <yuki@kamiazya.tech>",
   "license": "MIT",
