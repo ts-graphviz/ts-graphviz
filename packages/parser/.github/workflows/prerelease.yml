@@ -1,4 +1,4 @@
-name: NodeCI
+name: Prerelease
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
         required: true
 
 jobs:
-  publish:
+  prerelease:
     name: Prerelease
     runs-on: ubuntu-latest
     needs:
