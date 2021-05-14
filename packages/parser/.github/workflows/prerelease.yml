@@ -1,12 +1,6 @@
 name: Prerelease
 
 on:
-  workflow_run:
-    workflows:
-      - NodeCI
-    branches: [main]
-    types:
-      - completed
   workflow_dispatch:
     inputs:
       version:
@@ -17,8 +11,6 @@ jobs:
   prerelease:
     name: Prerelease
     runs-on: ubuntu-latest
-    needs:
-      - test
     steps:
     - uses: actions/checkout@master
     - uses: actions/setup-node@v1
