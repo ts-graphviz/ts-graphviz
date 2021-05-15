@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { ICluster } from 'ts-graphviz';
-import { Cluster, NoCluster } from '../components/contexts/Cluster';
+import { Cluster } from '../components/contexts/Cluster';
 import { NoClusterErrorMessage } from '../utils/errors';
 
 export function useCluster(): ICluster {
   const cluster = useContext(Cluster);
-  if (cluster === NoCluster) {
+  if (cluster === null) {
     throw Error(NoClusterErrorMessage);
   }
   return cluster;
