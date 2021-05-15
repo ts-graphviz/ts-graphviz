@@ -5,7 +5,6 @@ export type Context = {
   root?: IRootCluster;
 };
 
-export const NoContext = {};
-
-export const GraphvizContext = React.createContext<Context>(NoContext);
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+export const GraphvizContext = React.createContext<Context>(null!);
 GraphvizContext.displayName = 'GraphvizContext';
