@@ -4,7 +4,7 @@ import React, { FC, ComponentProps } from 'react';
 
 import { Digraph } from '../../../components/Digraph';
 import { Graph } from '../../../components/Graph';
-import { GraphvizContext } from '../../../components/contexts/GraphvizContext';
+import { GraphvizContext } from '../../../contexts/GraphvizContext';
 import { Subgraph } from '../../../components/Subgraph';
 
 export const context =

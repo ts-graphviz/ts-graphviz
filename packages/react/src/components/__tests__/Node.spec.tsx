@@ -2,8 +2,8 @@ import React from 'react';
 import 'jest-graphviz';
 import { Digraph } from '../Digraph';
 import { Node } from '../Node';
-import { DOT } from '../HtmlLike';
-import { renderToDot } from '../../renderer/render';
+import { DOT } from '../../labels';
+import { renderToDot } from '../../render';
 
 describe('Node', () => {
   test('pass without optional props and render correctly', () => {

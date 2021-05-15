@@ -1,12 +1,13 @@
 import { ReactElement, createElement } from 'react';
 import { toDot } from 'ts-graphviz';
-import { GraphvizContext, Context } from '../components/contexts/GraphvizContext';
+import { GraphvizContext } from './contexts/GraphvizContext';
 import { reconciler } from './reconciler';
-import { ClusterMap } from '../components/contexts/ClusterMap';
+import { ClusterMap } from './contexts/ClusterMap';
+import { IContext } from './types';
 
 const noop = (): void => undefined;
 
-export function render(element: ReactElement, context: Context): number {
+export function render(element: ReactElement, context: IContext): number {
   const container = reconciler.createContainer({}, 0, false, null);
   // Clusters
   return reconciler.updateContainer(
@@ -30,7 +31,7 @@ export function render(element: ReactElement, context: Context): number {
 }
 
 export function renderToDot(element: ReactElement): string {
-  const context: Context = {};
+  const context: IContext = {};
   render(element, context);
   return context.root ? toDot(context.root) : '';
 }

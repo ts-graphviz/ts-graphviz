@@ -1,5 +1,5 @@
 import React from 'react';
-import { DOT } from '../../components/HtmlLike';
+import { DOT } from '../labels';
 import { renderId } from '../render-id';
 
 describe('renderId', () => {

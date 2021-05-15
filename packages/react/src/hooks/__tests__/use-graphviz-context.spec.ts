@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { context } from './utils/wrapper';
 import { useGraphvizContext } from '../use-graphviz-context';
-import { NoGraphvizContextErrorMessage } from '../../utils/errors';
+import { NoGraphvizContextErrorMessage } from '../../errors';
 
 describe('useGraphvizContext', () => {
   test('returns {}', () => {

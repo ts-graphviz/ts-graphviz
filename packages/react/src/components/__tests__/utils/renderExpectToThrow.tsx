@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { Component, ReactElement } from 'react';
-import { render } from '../../../renderer/render';
+import { render } from '../../../render';
 
 export function renderExpectToThrow(element: ReactElement, expectedError: string): void {
   const errors: Error[] = [];

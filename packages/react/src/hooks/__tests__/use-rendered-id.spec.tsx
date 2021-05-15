@@ -2,7 +2,7 @@ import React from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { context } from './utils/wrapper';
 import { useRenderedID } from '../use-rendered-id';
-import { DOT } from '../../components/HtmlLike';
+import { DOT } from '../../labels';
 
 describe('useRenderedID', () => {
   test.each([

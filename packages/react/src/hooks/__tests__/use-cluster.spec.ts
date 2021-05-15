@@ -2,7 +2,7 @@ import { Digraph, Graph, Subgraph } from 'ts-graphviz';
 import { renderHook } from '@testing-library/react-hooks';
 import { useCluster } from '../use-cluster';
 import { digraph, graph, graphInSubgraph, digraphInSubgraph } from './utils/wrapper';
-import { NoClusterErrorMessage } from '../../utils/errors';
+import { NoClusterErrorMessage } from '../../errors';
 
 describe('useCluster', () => {
   describe('get parent cluster', () => {

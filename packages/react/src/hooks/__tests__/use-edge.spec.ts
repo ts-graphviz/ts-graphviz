@@ -2,7 +2,7 @@ import { Edge } from 'ts-graphviz';
 import { renderHook } from '@testing-library/react-hooks';
 import { useEdge } from '../use-edge';
 import { digraph, graph } from './utils/wrapper';
-import { EdgeTargetLengthErrorMessage } from '../../utils/errors';
+import { EdgeTargetLengthErrorMessage } from '../../errors';
 
 describe('useEdge', () => {
   it('returns Edge instance in digraph wrapper', () => {

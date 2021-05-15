@@ -1,14 +1,10 @@
-import React, { FC, ReactElement } from 'react';
+import React, { FC } from 'react';
 import PropTypes from 'prop-types';
-import { useNode, NodeProps } from '../hooks/use-node';
+import { useNode } from '../hooks/use-node';
 import { useRenderedID } from '../hooks/use-rendered-id';
+import { NodeComponentProps } from '../types';
 
-type Props = Omit<NodeProps, 'label' | 'xlabel'> & {
-  label?: ReactElement | string;
-  xlabel?: ReactElement | string;
-};
-
-export const Node: FC<Props> = ({ children, label, xlabel, ...props }) => {
+export const Node: FC<NodeComponentProps> = ({ children, label, xlabel, ...props }) => {
   const renderedLabel = useRenderedID(label);
   const renderedXlabel = useRenderedID(xlabel);
 

@@ -1,15 +1,12 @@
-import React, { FC, ReactElement, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Cluster } from './contexts/Cluster';
-import { useSubgraph, SubgraphProps } from '../hooks/use-subgraph';
+import { Cluster } from '../contexts/Cluster';
+import { useSubgraph } from '../hooks/use-subgraph';
 import { useRenderedID } from '../hooks/use-rendered-id';
 import { useClusterMap } from '../hooks/use-cluster-map';
+import { SubgraphComponentProps } from '../types';
 
-type Props = Omit<SubgraphProps, 'label'> & {
-  label?: ReactElement | string;
-};
-
-export const Subgraph: FC<Props> = ({ children, label, ...props }) => {
+export const Subgraph: FC<SubgraphComponentProps> = ({ children, label, ...props }) => {
   const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined) Object.assign(props, { label: renderedLabel });
   const subgraph = useSubgraph(props);

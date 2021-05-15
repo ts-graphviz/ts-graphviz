@@ -1,20 +1,17 @@
-import React, { FC, ReactElement, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { RootCluster, NoRootCluster } from './contexts/RootCluster';
-import { Cluster } from './contexts/Cluster';
-import { useDigraph, DigraphProps } from '../hooks/use-digraph';
+import { RootCluster } from '../contexts/RootCluster';
+import { Cluster } from '../contexts/Cluster';
+import { useDigraph } from '../hooks/use-digraph';
 import { useRenderedID } from '../hooks/use-rendered-id';
 import { useRootCluster } from '../hooks/use-root-cluster';
-import { DuplicatedRootClusterErrorMessage } from '../utils/errors';
+import { DuplicatedRootClusterErrorMessage } from '../errors';
 import { useClusterMap } from '../hooks/use-cluster-map';
+import { RootClusterComponentProps } from '../types';
 
-type Props = Omit<DigraphProps, 'label'> & {
-  label?: ReactElement | string;
-};
-
-export const Digraph: FC<Props> = ({ children, label, ...props }) => {
+export const Digraph: FC<RootClusterComponentProps> = ({ children, label, ...props }) => {
   const root = useRootCluster();
-  if (root !== NoRootCluster) {
+  if (root !== null) {
     throw Error(DuplicatedRootClusterErrorMessage);
   }
   const renderedLabel = useRenderedID(label);

@@ -1,11 +1,12 @@
 import { useContext } from 'react';
-import { GraphvizContext, NoContext, Context } from '../components/contexts/GraphvizContext';
-import { NoGraphvizContextErrorMessage } from '../utils/errors';
+import { GraphvizContext } from '../contexts/GraphvizContext';
+import { IContext } from '../types';
+import { NoGraphvizContextErrorMessage } from '../errors';
 
-export const useGraphvizContext = (): Context => {
+export function useGraphvizContext(): IContext {
   const context = useContext(GraphvizContext);
-  if (context === NoContext) {
+  if (context === null) {
     throw Error(NoGraphvizContextErrorMessage);
   }
   return context;
-};
+}

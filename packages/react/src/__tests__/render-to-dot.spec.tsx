@@ -1,10 +1,10 @@
 // tslint:disable: jsx-no-multiline-js
 import React from 'react';
 import 'jest-graphviz';
-import { Edge } from '../../components/Edge';
-import { Subgraph } from '../../components/Subgraph';
-import { Digraph } from '../../components/Digraph';
-import { Node } from '../../components/Node';
+import { Edge } from '../components/Edge';
+import { Subgraph } from '../components/Subgraph';
+import { Digraph } from '../components/Digraph';
+import { Node } from '../components/Node';
 import { renderToDot } from '../render';
 
 describe('renderToDot', () => {

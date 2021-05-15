@@ -1,16 +1,11 @@
 import { useMemo, useEffect } from 'react';
-import { ISubgraph, ClusterSubgraphAttributes } from 'ts-graphviz';
+import { ISubgraph } from 'ts-graphviz';
+import { SubgraphProps } from '../types';
 import { useCluster } from './use-cluster';
-import { useClusterAttributes, ClusterAttributesProps } from './use-cluster-attributes';
+import { useClusterAttributes } from './use-cluster-attributes';
 import { useHasComment } from './use-comment';
 
-export type SubgraphProps = {
-  id?: string;
-  comment?: string;
-} & ClusterSubgraphAttributes &
-  ClusterAttributesProps;
-
-export const useSubgraph = ({ id, comment, edge, node, graph, ...attributes }: SubgraphProps = {}): ISubgraph => {
+export function useSubgraph({ id, comment, edge, node, graph, ...attributes }: SubgraphProps = {}): ISubgraph {
   const cluster = useCluster();
   const subgraph = useMemo(() => {
     const g = cluster.createSubgraph(id);
@@ -29,4 +24,4 @@ export const useSubgraph = ({ id, comment, edge, node, graph, ...attributes }: S
     };
   }, [cluster, subgraph]);
   return subgraph;
-};
+}

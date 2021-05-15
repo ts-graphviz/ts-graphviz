@@ -1,6 +1,6 @@
 import React from 'react';
 import { Digraph } from '../Digraph';
-import { DuplicatedRootClusterErrorMessage } from '../../utils/errors';
+import { DuplicatedRootClusterErrorMessage } from '../../errors';
 import { renderExpectToThrow } from './utils/renderExpectToThrow';
 
 describe('Digraph', () => {

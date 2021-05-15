@@ -1,15 +1,11 @@
 import { useEffect, useMemo } from 'react';
-import { INode, NodeAttributes } from 'ts-graphviz';
+import { INode } from 'ts-graphviz';
+import { NodeProps } from '../types';
 import { useCluster } from './use-cluster';
 import { useHasComment } from './use-comment';
 import { useHasAttributes } from './use-has-attributes';
 
-export type NodeProps = {
-  id: string;
-  comment?: string;
-} & NodeAttributes;
-
-export const useNode = ({ id, comment, ...attributes }: NodeProps): INode => {
+export function useNode({ id, comment, ...attributes }: NodeProps): INode {
   const cluster = useCluster();
   const node = useMemo(() => {
     const n = cluster.createNode(id);
@@ -25,4 +21,4 @@ export const useNode = ({ id, comment, ...attributes }: NodeProps): INode => {
     };
   }, [cluster, node]);
   return node;
-};
+}

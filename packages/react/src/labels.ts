@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import { AttributesValue } from 'ts-graphviz';
-import { ValueOf } from '../utils/value-of';
+
+type ValueOf<T> = T[keyof T];
 
 export type TableProps = {
   ALIGN?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
