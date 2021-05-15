@@ -10,7 +10,7 @@ export type EdgeProps = {
   comment?: string;
 } & EdgeAttributes;
 
-export const useEdge = ({ targets, comment, ...attributes }: EdgeProps): IEdge => {
+export function useEdge({ targets, comment, ...attributes }: EdgeProps): IEdge {
   const cluster = useCluster();
   if (targets.length < 2) {
     throw Error(EdgeTargetLengthErrorMessage);
@@ -29,4 +29,4 @@ export const useEdge = ({ targets, comment, ...attributes }: EdgeProps): IEdge =
     };
   }, [cluster, edge]);
   return edge;
-};
+}

@@ -10,7 +10,7 @@ export type DigraphProps = {
 } & RootClusterAttributes &
   ClusterAttributesProps;
 
-export const useDigraph = ({ id, comment, edge, node, graph, ...attributes }: DigraphProps = {}): Digraph => {
+export function useDigraph({ id, comment, edge, node, graph, ...attributes }: DigraphProps = {}): Digraph {
   const context = useGraphvizContext();
   const digraph = useMemo(() => {
     const g = new Digraph(id);
@@ -30,4 +30,4 @@ export const useDigraph = ({ id, comment, edge, node, graph, ...attributes }: Di
     };
   }, [context]);
   return digraph;
-};
+}

@@ -10,7 +10,7 @@ export type SubgraphProps = {
 } & ClusterSubgraphAttributes &
   ClusterAttributesProps;
 
-export const useSubgraph = ({ id, comment, edge, node, graph, ...attributes }: SubgraphProps = {}): ISubgraph => {
+export function useSubgraph({ id, comment, edge, node, graph, ...attributes }: SubgraphProps = {}): ISubgraph {
   const cluster = useCluster();
   const subgraph = useMemo(() => {
     const g = cluster.createSubgraph(id);
@@ -29,4 +29,4 @@ export const useSubgraph = ({ id, comment, edge, node, graph, ...attributes }: S
     };
   }, [cluster, subgraph]);
   return subgraph;
-};
+}

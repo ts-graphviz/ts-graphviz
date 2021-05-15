@@ -9,7 +9,7 @@ export type NodeProps = {
   comment?: string;
 } & NodeAttributes;
 
-export const useNode = ({ id, comment, ...attributes }: NodeProps): INode => {
+export function useNode({ id, comment, ...attributes }: NodeProps): INode {
   const cluster = useCluster();
   const node = useMemo(() => {
     const n = cluster.createNode(id);
@@ -25,4 +25,4 @@ export const useNode = ({ id, comment, ...attributes }: NodeProps): INode => {
     };
   }, [cluster, node]);
   return node;
-};
+}
