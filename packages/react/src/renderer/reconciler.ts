@@ -11,6 +11,7 @@ type Container = Record<string, never>;
 
 type Instance = any;
 type TextInstance = any;
+type SuspenseInstance = any;
 type HydratableInstance = any;
 type PublicInstance = any;
 type HostContext = any;
@@ -29,14 +30,48 @@ export class HostConfig
       Container,
       Instance,
       TextInstance,
+      SuspenseInstance,
       HydratableInstance,
       PublicInstance,
       HostContext,
       UpdatePayload,
-      ChildSet,
+      ChildSet, // TODO Placeholder for undocumented API
       TimeoutHandle,
       NoTimeout
-    > {
+    >
+{
+  preparePortalMount(containerInfo: Container): void {
+    // NoOp
+  }
+
+  scheduleTimeout(fn: (...args: unknown[]) => unknown, delay?: number) {
+    // NoOp
+  }
+
+  cancelTimeout(id: any): void {
+    // NoOp
+  }
+
+  queueMicrotask(fn: () => void): void {
+    // NoOp
+  }
+
+  cloneInstance?: any;
+
+  cloneFundamentalInstance?: any;
+
+  createContainerChildSet?: any;
+
+  appendChildToContainerChildSet?: any;
+
+  finalizeContainerChildren?: any;
+
+  replaceContainerChildren?: any;
+
+  cloneHiddenInstance?: any;
+
+  cloneHiddenTextInstance?: any;
+
   public now = Date.now;
 
   public setTimeout = setTimeout;
@@ -72,8 +107,8 @@ export class HostConfig
     return parentHostContext;
   }
 
-  public prepareForCommit(containerInfo: Container): void {
-    // NoOp
+  public prepareForCommit(containerInfo: Container): Record<string, any> | null {
+    return null;
   }
 
   public resetAfterCommit(containerInfo: Container): void {

@@ -7,7 +7,7 @@ import { ClusterMap } from '../components/contexts/ClusterMap';
 const noop = (): void => undefined;
 
 export function render(element: ReactElement, context: Context): number {
-  const container = reconciler.createContainer({}, false, false);
+  const container = reconciler.createContainer({}, 0, false, null);
   // Clusters
   return reconciler.updateContainer(
     createElement(

@@ -33,7 +33,7 @@
     "airbnb",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
+    "prettier",
     "plugin:jest/recommended",
     "plugin:react-hooks/recommended"
   ],
