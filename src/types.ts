@@ -36,15 +36,22 @@ export namespace Compass {
 /**
  * Objects that can be Edge destinations satisfy this interface.
  */
-export type EdgeTarget = INode | IForwardRefNode;
-export type EdgeTargets = ReadonlyArray<EdgeTarget>;
+export type NodeRef = INode | IForwardRefNode;
+
+export type NodeRefGroup = NodeRef[];
 
 /**
  * string or an object implementing IEdgeTarget.
  */
-export type EdgeTargetLike = EdgeTarget | string;
+export type NodeRefLike = NodeRef | string;
 
-export type EdgeTargetsLike = ReadonlyArray<EdgeTargetLike>;
+export type NodeRefGroupLike = NodeRefLike[];
+
+export type EdgeTarget = NodeRef | NodeRefGroup;
+export type EdgeTargetLike = NodeRefLike | NodeRefGroupLike;
+
+export type EdgeTargetTuple = [from: EdgeTarget, to: EdgeTarget, ...rest: EdgeTarget[]];
+export type EdgeTargetLikeTuple = [from: EdgeTargetLike, to: EdgeTargetLike, ...rest: EdgeTargetLike[]];
 
 export interface IHasComment {
   /** Comments to include when outputting with toDot. */
@@ -102,7 +109,7 @@ export interface INode extends IHasComment, IHasAttributes<attribute.Node> {
 }
 
 export interface IEdge extends IHasComment, IHasAttributes<attribute.Edge> {
-  readonly targets: ReadonlyArray<EdgeTarget | EdgeTargets>;
+  readonly targets: EdgeTargetTuple;
 }
 
 /**
@@ -185,7 +192,7 @@ export interface ICluster<T extends string = string> extends IHasComment, IAttri
    */
   getNode(id: string): INode | undefined;
   /** Create Edge and add it to the cluster. */
-  createEdge(targets: (EdgeTargetLike | EdgeTargetsLike)[], attributes?: EdgeAttributes): IEdge;
+  createEdge(targets: EdgeTargetLikeTuple, attributes?: EdgeAttributes): IEdge;
 
   /**
    * Create a subgraph by specifying its id (or get it if it already exists).
@@ -371,7 +378,7 @@ export interface ICluster<T extends string = string> extends IHasComment, IAttri
    * @param targets Nodes.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
-  edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge;
+  edge(targets: EdgeTargetLikeTuple, callback?: (edge: IEdge) => void): IEdge;
   /**
    * Create a edge and adapt the attributes.
    *
@@ -399,7 +406,7 @@ export interface ICluster<T extends string = string> extends IHasComment, IAttri
    * @param attributes Object of attributes to be adapted to the edge.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
-  edge(targets: EdgeTargetLike[], attributes: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
+  edge(targets: EdgeTargetLikeTuple, attributes: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
   /**
    * Set a common attribute for the edges in the cluster.
    *

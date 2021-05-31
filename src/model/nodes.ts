@@ -1,8 +1,8 @@
-import { EdgeTargetLike, EdgeTarget, INode, IPort, IForwardRefNode, NodeAttributes, IAttributes } from '../types';
+import { NodeRefLike, NodeRef, INode, IPort, IForwardRefNode, NodeAttributes, IAttributes } from '../types';
 import { DotObject } from './abstract';
 import { attribute } from '../attribute';
 import { Attributes } from './attributes-base';
-import { EdgeTargetsLike } from '../types';
+import { NodeRefGroupLike } from '../types';
 
 /**
  * Node object.
@@ -26,26 +26,22 @@ export class Node extends DotObject implements INode {
   }
 }
 
+/** @hidden */
 export function isForwardRefNode(object: unknown): object is IForwardRefNode {
   return typeof object == 'object' && object !== null && typeof (object as IForwardRefNode).id === 'string';
 }
 
-/**
- * @hidden
- */
-export function isEdgeTarget(node: unknown): node is EdgeTarget {
+/** @hidden */
+export function isEdgeTarget(node: unknown): node is NodeRef {
   return node instanceof Node || isForwardRefNode(node);
 }
 
-/**
- * @hidden
- */
-export function isEdgeTargetLike(node: unknown): node is EdgeTargetLike {
+/** @hidden */
+export function isNodeRefLike(node: unknown): node is NodeRefLike {
   return typeof node === 'string' || isEdgeTarget(node);
 }
-/**
- * @hidden
- */
-export function isEdgeTargetsLike(target: EdgeTargetLike | EdgeTargetsLike): target is EdgeTargetsLike {
-  return Array.isArray(target) && target.every(isEdgeTargetLike);
+
+/** @hidden */
+export function isNodeRefGroupLike(target: NodeRefLike | NodeRefGroupLike): target is NodeRefGroupLike {
+  return Array.isArray(target) && target.every(isNodeRefLike);
 }

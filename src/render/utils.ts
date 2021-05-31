@@ -6,8 +6,8 @@ import {
   IRootCluster,
   IAttributes,
   AttributesValue,
-  EdgeTarget,
-  EdgeTargets,
+  NodeRef,
+  NodeRefGroup,
 } from '../types';
 import { Subgraph } from '../model/clusters';
 import { Edge } from '../model/edges';
@@ -162,20 +162,19 @@ export function renderAttributes(attributes: IAttributes): string {
   );
 }
 
-export function renderEdgeTarget(edgeTarget: EdgeTarget): string | undefined {
-  if (isNode(edgeTarget)) {
-    return renderAttributeValue(edgeTarget.id);
-  } else if (isForwardRefNode(edgeTarget)) {
-    const port = edgeTarget.port;
-    const compass = edgeTarget.compass;
+export function renderEdgeTarget(node: NodeRef): string | undefined {
+  if (isNode(node)) {
+    return renderAttributeValue(node.id);
+  } else if (isForwardRefNode(node)) {
+    const { id, port, compass } = node;
     return concatWordsWithColon(
-      renderAttributeValue(edgeTarget.id),
+      renderAttributeValue(id),
       port !== undefined ? renderAttributeValue(port) : undefined,
       compass !== undefined ? renderAttributeValue(compass) : undefined,
     );
   }
 }
 
-export function renderEdgeTargets(edgeTargets: EdgeTargets): string | undefined {
-  return '{' + concatWordsWithSpace(...edgeTargets.map(renderEdgeTarget)) + '}';
+export function renderEdgeTargets(group: NodeRefGroup): string | undefined {
+  return '{' + concatWordsWithSpace(...group.map(renderEdgeTarget)) + '}';
 }

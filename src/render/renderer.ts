@@ -1,5 +1,5 @@
 import { Dot, INode, ISubgraph, ICluster, IEdge, IRootCluster } from '../types';
-import { isEdgeTargetLike } from '../model/nodes';
+import { isNodeRefLike } from '../model/nodes';
 import { renderEdgeTargets } from './utils';
 import {
   commentOutIfExist,
@@ -36,7 +36,7 @@ export class Renderer {
     const comment = commentOutIfExist(edge.comment);
     const targets = joinWith(
       isGraph(this.root) ? ' -- ' : ' -> ',
-      edge.targets.map((t) => (isEdgeTargetLike(t) ? renderEdgeTarget(t) : renderEdgeTargets(t))),
+      edge.targets.map((t) => (isNodeRefLike(t) ? renderEdgeTarget(t) : renderEdgeTargets(t))),
     );
     const attrs = edge.attributes.size > 0 ? spaceLeftPad(renderAttributes(edge.attributes)) : undefined;
     const dot = join(targets, attrs, ';');
