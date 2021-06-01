@@ -2,7 +2,7 @@ import { EdgeAttributes, IAttributes, IEdge, EdgeTargetTuple } from '../types';
 import { DotObject } from './abstract';
 import { attribute } from '../attribute';
 import { Attributes } from './attributes-base';
-import { isNodeRefLike } from './nodes';
+import { isNodeRefLike } from './utils';
 
 /**
  * @category Primary

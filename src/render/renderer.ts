@@ -1,5 +1,5 @@
 import { Dot, INode, ISubgraph, ICluster, IEdge, IRootCluster } from '../types';
-import { isNodeRefLike } from '../model/nodes';
+import { isNodeRefLike } from '../model/utils';
 import { renderEdgeTargets } from './utils';
 import {
   commentOutIfExist,

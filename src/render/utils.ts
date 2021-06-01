@@ -11,9 +11,10 @@ import {
 } from '../types';
 import { Subgraph } from '../model/clusters';
 import { Edge } from '../model/edges';
-import { Node, isForwardRefNode } from '../model/nodes';
+import { Node } from '../model/nodes';
 import { RootCluster, Graph, Digraph } from '../model/root-clusters';
 import { Attributes } from '../model/attributes-base';
+import { isForwardRefNode } from '../model/utils';
 
 export function escape(str: string): string {
   return str.replace(/\n/g, '\\n').replace(/"/g, '\\"');

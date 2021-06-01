@@ -2,24 +2,20 @@
 import { attribute } from '../attribute';
 import {
   ClusterSubgraphAttributes,
-  Compass,
   EdgeAttributes,
-  NodeRef,
-  NodeRefLike,
   ICluster,
   IClusterCommonAttributes,
   IEdge,
   INode,
   ISubgraph,
   NodeAttributes,
-  NodeRefGroupLike,
-  NodeRefGroup,
   EdgeTargetTuple,
   EdgeTargetLikeTuple,
 } from '../types';
 import { Attributes, AttributesBase } from './attributes-base';
-import { isEdgeTarget, isNodeRefLike, Node, isNodeRefGroupLike } from './nodes';
+import { Node } from './nodes';
 import { Edge } from './edges';
+import { isNodeRefGroupLike, toNodeRef, toNodeRefGroup } from './utils';
 
 /**
  * Base class for clusters.
@@ -175,39 +171,10 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
 
   /** Create Edge and add it to the cluster. */
   public createEdge(targets: EdgeTargetLikeTuple, attributes?: EdgeAttributes): IEdge {
-    const ts = targets.map((t) =>
-      isNodeRefGroupLike(t) ? this.toEdgeTargets(t) : this.toEdgeTarget(t),
-    ) as EdgeTargetTuple;
+    const ts = targets.map((t) => (isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t))) as EdgeTargetTuple;
     const edge = new Edge(ts, attributes);
     this.objects.edges.add(edge);
     return edge;
-  }
-
-  /** @hidden */
-  private toEdgeTarget(target: NodeRefLike): NodeRef {
-    if (isEdgeTarget(target)) {
-      return target;
-    }
-    const [id, port, compass] = target.split(':');
-    const n = this.getNode(id);
-    if (n !== undefined) {
-      if (port && (compass === undefined || Compass.is(compass))) {
-        return n.port({ port, compass });
-      }
-      return n;
-    }
-    if (Compass.is(compass)) {
-      return { id, port, compass };
-    }
-    return { id, port };
-  }
-
-  /** @hidden */
-  private toEdgeTargets(targets: NodeRefGroupLike): NodeRefGroup {
-    if (targets.length < 2 && (isNodeRefLike(targets[0]) && isNodeRefLike(targets[1])) === false) {
-      throw Error('EdgeTargets must have at least 2 elements.');
-    }
-    return targets.map((t) => this.toEdgeTarget(t));
   }
 
   /**
