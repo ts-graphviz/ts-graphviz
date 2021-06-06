@@ -1,12 +1,12 @@
-import { ICluster, Digraph, Graph, RootCluster } from 'ts-graphviz';
+import { ICluster, Digraph, Graph, RootCluster, Subgraph, Node, Edge } from 'ts-graphviz';
 import { AST } from './ast';
 
-function applyToCluster(cluster: ICluster, stmts: AST.GraphObject[]): void {
-  for (const stmt of stmts) {
+function applyStatements(cluster: ICluster, statements: AST.ClusterStatement[]): void {
+  for (const stmt of statements) {
     switch (stmt.type) {
       case AST.Types.Subgraph:
         const subgraph = stmt.id ? cluster.subgraph(stmt.id) : cluster.subgraph();
-        applyToCluster(subgraph, stmt.children);
+        applyStatements(subgraph, stmt.body);
         break;
       case AST.Types.Attribute:
         cluster.set(stmt.key, stmt.value);
@@ -41,9 +41,35 @@ function applyToCluster(cluster: ICluster, stmts: AST.GraphObject[]): void {
   }
 }
 
-export function convert(root: AST.Graph): RootCluster {
-  const Root = root.directed ? Digraph : Graph;
-  const g = new Root(root.id, root.strict);
-  applyToCluster(g, root.children);
-  return g;
+export function convert(ast: AST.Graph): RootCluster;
+export function convert(ast: AST.Subgraph): Subgraph;
+export function convert(ast: AST.Node): Node;
+export function convert(ast: AST.Edge): Edge;
+export function convert(ast: AST.Graph | AST.Subgraph | AST.Node | AST.Edge): RootCluster | Subgraph | Node | Edge;
+export function convert(ast: AST.Graph | AST.Subgraph | AST.Node | AST.Edge): RootCluster | Subgraph | Node | Edge {
+  switch (ast.type) {
+    case AST.Types.Graph:
+      const Root = ast.directed ? Digraph : Graph;
+      const root = new Root(ast.id, ast.strict);
+      applyStatements(root, ast.body);
+      return root;
+    case AST.Types.Subgraph:
+      const subgraph = new Subgraph(ast.id);
+      applyStatements(subgraph, ast.body);
+      return subgraph;
+    case AST.Types.Edge:
+      const edge = new Edge(
+        ast.targets.map((t) => ({ id: t.id, port: t.port, compass: t.commpass })),
+        ast.attributes.reduce((prev, curr) => ({ ...prev, [curr.key]: curr.value }), {}),
+      );
+      return edge;
+    case AST.Types.Node:
+      const node = new Node(
+        ast.id,
+        ast.attributes.reduce((prev, curr) => ({ ...prev, [curr.key]: curr.value }), {}),
+      );
+      return node;
+    default:
+      throw Error();
+  }
 }

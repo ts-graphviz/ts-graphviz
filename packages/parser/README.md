@@ -24,11 +24,17 @@ $ npm install -S @ts-graphviz/parser
 
 ## High level API
 
-### `parse` function
+### `function parse(dot: string, options?: ParseOption)`
 
 Parse a string written in dot language and convert it to a model.
 
-The return value is a `Graph` or `Digraph` that inherits from `RootCluster`.
+The returned values are [ts-graphviz](https://github.com/ts-graphviz/ts-graphviz) models
+such as `Digraph`, `Graph`, `Node`, `Edge`, `Subgraph`.
+
+- Parameters
+  - `dot` -- string in the dot language to be parsed.
+  - `options.rule` -- Object type of dot string.
+    - This can be `"graph"`, `"subgraph"`, `"node"`, `"edge"`.
 
 ```ts
 import { parse } from '@ts-graphviz/parser';
@@ -63,6 +69,25 @@ try {
 }
 ```
 
+### Example: parse as Node instance
+
+```ts
+import { Node } from 'ts-graphviz';
+import { parse } from '@ts-graphviz/parser';
+
+const node = parse(
+  `test [
+    style=filled;
+    color=lightgrey;
+    label = "example #1";
+  ];`,
+  { rule: 'node' },
+);
+
+console.log(node instanceof Node);
+// true
+```
+
 ### `dot` tagged template
 
 > This is an experimental API.
@@ -91,12 +116,16 @@ const G = dot`
 The `AST` module provides the ability to handle the AST as a result of parsing the dot language
 for lower level operations.
 
-#### `AST.parse` function
+#### `function AST.parse(dot: string, options?: ParseOption)`
 
 The basic usage is the same as the `parse` function, except that it returns the dot language AST.
 
+- Parameters
+  - `dot` -- string in the dot language to be parsed.
+  - `options.rule` -- Object type of dot string.
+    - This can be `"graph"`, `"subgraph"`, `"node"`, `"edge"`, `"attributes"`, `"attribute", "cluster_statements"`.
+
 ```ts
-import { inspect } from 'util';
 import { AST } from '@ts-graphviz/parser';
 
 const ast = AST.parse(`
@@ -114,49 +143,70 @@ const ast = AST.parse(`
   }
 `);
 
-console.log(inspect(ast, false, 6));
+console.log(ast);
+// {
+//   type: 'graph',
+//   id: 'example',
+//   directed: true,
+//   strict: true,
+//   body: [
+//     {
+//       type: 'subgraph',
+//       id: 'cluster_0',
+//       body: [
+//         { type: 'attribute', key: 'label', value: 'Subgraph A' },
+//         {
+//           type: 'edge',
+//           targets: [ { id: 'a' }, { id: 'b' }, { id: 'c' }, { id: 'd' } ],
+//           attributes: []
+//         }
+//       ]
+//     },
+//     {
+//       type: 'subgraph',
+//       id: 'cluster_1',
+//       body: [
+//         { type: 'attribute', key: 'label', value: 'Subgraph B' },
+//         {
+//           type: 'edge',
+//           targets: [ { id: 'a' }, { id: 'f' } ],
+//           attributes: []
+//         },
+//         {
+//           type: 'edge',
+//           targets: [ { id: 'f' }, { id: 'c' } ],
+//           attributes: []
+//         }
+//       ]
+//     }
+//   ]
+// }
 ```
 
-In the case of the above code, the structure of AST is as follows.
+##### Example: Specifying the `rule` option
 
 ```ts
-{
-  type: 'graph',
-  id: 'example',
-  directed: true,
-  strict: true,
-  children: [
-    {
-      type: 'subgraph',
-      id: 'cluster_0',
-      children: [
-        { type: 'attribute', key: 'label', value: 'Subgraph A' },
-        {
-          type: 'edge',
-          targets: [ { id: 'a' }, { id: 'b' }, { id: 'c' }, { id: 'd' } ],
-          attributes: []
-        }
-      ]
-    },
-    {
-      type: 'subgraph',
-      id: 'cluster_1',
-      children: [
-        { type: 'attribute', key: 'label', value: 'Subgraph B' },
-        {
-          type: 'edge',
-          targets: [ { id: 'a' }, { id: 'f' } ],
-          attributes: []
-        },
-        {
-          type: 'edge',
-          targets: [ { id: 'f' }, { id: 'c' } ],
-          attributes: []
-        }
-      ]
-    }
-  ]
-}
+import { AST } from '@ts-graphviz/parser';
+
+const ast = AST.parse(
+  `test [
+    style=filled;
+    color=lightgrey;
+    label = "example #1";
+  ];`,
+  { rule: 'node' },
+);
+
+console.log(ast);
+// {
+//   type: 'node',
+//   id: 'test',
+//   attributes: [
+//     { key: 'style', value: 'filled' },
+//     { key: 'color', value: 'lightgrey' },
+//     { key: 'label', value: 'example #1' }
+//   ]
+// }
 ```
 
 ## See Also

@@ -30,7 +30,7 @@
     "parser"
   ],
   "scripts": {
-    "build:peg": "pegjs --plugin ts-pegjs -o src/dot.pegjs.ts grammar/dot.pegjs",
+    "build:peg": "pegjs --plugin ts-pegjs --allowed-start-rules graph,subgraph,node,edge,attributes,attribute,cluster_statements -o src/dot.pegjs.ts grammar/dot.pegjs && prettier --write './src/dot.pegjs.ts'",
     "prebuild": "yarn build:peg",
     "build": "rollup -c && prettier --write './lib/index.d.ts'",
     "pretest": "yarn build:peg",
