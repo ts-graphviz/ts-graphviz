@@ -1,5 +1,5 @@
 import { Compass } from 'ts-graphviz';
-import { parse as _parse, SyntaxError } from './dot.pegjs';
+import { parse as _parse } from './dot.peggy';
 
 /**
  * The `AST` module provides the ability to handle the AST as a result of parsing the dot language
@@ -228,13 +228,8 @@ export namespace AST {
     dot: string,
     { rule }: ParseOption = {},
   ): Graph | ClusterStatement | Subgraph | ClusterStatement[] {
-    try {
-      return _parse(dot, {
-        startRule: rule,
-      });
-    } catch (error) {
-      Object.setPrototypeOf(error, SyntaxError.prototype);
-      throw error;
-    }
+    return _parse(dot, {
+      startRule: rule,
+    });
   }
 }

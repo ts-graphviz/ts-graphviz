@@ -1,4 +1,4 @@
 node_modules
 lib
 doc
-src/dot.pegjs.ts
+src/dot.peggy.ts

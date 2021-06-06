@@ -11,5 +11,8 @@
     "MD007": false,
     "MD041": false
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.associations": {
+    "*.peggy": "pegjs"
+  }
 }
