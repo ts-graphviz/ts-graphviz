@@ -2,62 +2,31 @@ import _ from 'ts-dedent';
 import { AST } from '../ast';
 
 describe('attribute', () => {
-  test.each([
-    [
+  test('set value', () => {
+    const result = AST.parse('style=filled;', { rule: AST.Types.Attribute });
+    expect(result).toMatchSnapshot();
+  });
+
+  test('set quoted value', () => {
+    const result = AST.parse('label = "example #1";', { rule: AST.Types.Attribute });
+    expect(result).toMatchSnapshot();
+  });
+
+  test('set HTMLLike value', () => {
+    const result = AST.parse(
       _`
-        digraph {
-          style=filled;
-          color=lightgrey;
-          label = "example #1";
-        }
-      `,
-    ],
-    [
-      _`
-        digraph {
-          style=filled; color=lightgrey; label = "example #1";
-        }
-      `,
-    ],
-    [
-      _`
-        digraph {
-          style=
-          filled;
-          color
-          =lightgrey;
-          label = "example #1";
-        }
-      `,
-    ],
-    [
-      _`
-        digraph {
-          style=filled
-          color=lightgrey
-          label = "example #1"
-        }
-      `,
-    ],
-  ])('#', (dot) => {
-    const result = AST.parse(dot);
-    expect(result.body).toMatchObject([
-      {
-        type: AST.Types.Attribute,
-        key: 'style',
-        value: 'filled',
-      },
-      {
-        type: AST.Types.Attribute,
-        key: 'color',
-        value: 'lightgrey',
-      },
-      {
-        type: AST.Types.Attribute,
-        key: 'label',
-        value: 'example #1',
-      },
-    ]);
+      label = <
+        <table border="0">
+          <tr><td align="text">By default, td text is center-aligned</td></tr>
+          <tr><td align="text">This td is left aligned<br align="left" /></td></tr>
+          <tr><td align="text">this one centered<br align="center" /></td></tr>
+          <tr><td align="text">and this one right aligned<br align="right" /><br align="right"/></td></tr>
+          <tr><td align="text">The value of a closing<br align="left"/>&lt;br/&gt; tag<br align="center"/>refers to the preceeding text<br align="right"/></td></tr>
+        </table>
+      >`,
+      { rule: AST.Types.Attribute },
+    );
+    expect(result).toMatchSnapshot();
   });
 });
 
@@ -73,26 +42,7 @@ describe('attributes', () => {
     `,
       { rule: AST.Types.Attributes },
     );
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "attributes": Array [
-          Object {
-            "key": "style",
-            "value": "filled",
-          },
-          Object {
-            "key": "color",
-            "value": "lightgrey",
-          },
-          Object {
-            "key": "label",
-            "value": "example #1",
-          },
-        ],
-        "target": "node",
-        "type": "attributes",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
   test('edge', () => {
@@ -104,99 +54,26 @@ describe('attributes', () => {
       ];`,
       { rule: AST.Types.Attributes },
     );
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "attributes": Array [
-          Object {
-            "key": "color",
-            "value": "red",
-          },
-          Object {
-            "key": "label",
-            "value": "example example",
-          },
-        ],
-        "target": "edge",
-        "type": "attributes",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
   test('graph', () => {
     const result = AST.parse('graph [ fillcolor=red, label = "example example"];', {
       rule: AST.Types.Attributes,
     });
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "attributes": Array [
-          Object {
-            "key": "fillcolor",
-            "value": "red",
-          },
-          Object {
-            "key": "label",
-            "value": "example example",
-          },
-        ],
-        "target": "graph",
-        "type": "attributes",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 });
 
 describe('edge', () => {
   test('simple edge', () => {
     const result = AST.parse('a -> b;', { rule: AST.Types.Edge });
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "attributes": Array [],
-        "targets": Array [
-          Object {
-            "id": "a",
-            "type": "id",
-          },
-          Object {
-            "id": "b",
-            "type": "id",
-          },
-        ],
-        "type": "edge",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
   test('edge with port', () => {
     const result = AST.parse('a:p1 -> b:p2 -> c:p3:w -> d:w;', { rule: AST.Types.Edge });
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "attributes": Array [],
-        "targets": Array [
-          Object {
-            "id": "a",
-            "port": "p1",
-            "type": "id",
-          },
-          Object {
-            "id": "b",
-            "port": "p2",
-            "type": "id",
-          },
-          Object {
-            "compass": "w",
-            "id": "c",
-            "port": "p3",
-            "type": "id",
-          },
-          Object {
-            "compass": "w",
-            "id": "d",
-            "type": "id",
-          },
-        ],
-        "type": "edge",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
   test('edge with attributes', () => {
@@ -209,192 +86,73 @@ describe('edge', () => {
       `,
       { rule: AST.Types.Edge },
     );
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "attributes": Array [
-          Object {
-            "key": "color",
-            "value": "lightgrey",
-          },
-          Object {
-            "key": "label",
-            "value": "example #1",
-          },
-        ],
-        "targets": Array [
-          Object {
-            "id": "a",
-            "type": "id",
-          },
-          Object {
-            "id": "b",
-            "type": "id",
-          },
-        ],
-        "type": "edge",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
   test('grouped edge targets', () => {
     const result = AST.parse('{a1, a2} -> {b1, b2};', { rule: AST.Types.Edge });
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "attributes": Array [],
-        "targets": Array [
-          Array [
-            Object {
-              "id": "a1",
-              "type": "id",
-            },
-            Object {
-              "id": "a2",
-              "type": "id",
-            },
-          ],
-          Array [
-            Object {
-              "id": "b1",
-              "type": "id",
-            },
-            Object {
-              "id": "b2",
-              "type": "id",
-            },
-          ],
-        ],
-        "type": "edge",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
   test('grouped ported edge targets', () => {
     const result = AST.parse('{a1:p1, a2:p2:w} -> {b1:e, b2:p3};', { rule: AST.Types.Edge });
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "attributes": Array [],
-        "targets": Array [
-          Array [
-            Object {
-              "id": "a1",
-              "port": "p1",
-              "type": "id",
-            },
-            Object {
-              "compass": "w",
-              "id": "a2",
-              "port": "p2",
-              "type": "id",
-            },
-          ],
-          Array [
-            Object {
-              "compass": "e",
-              "id": "b1",
-              "type": "id",
-            },
-            Object {
-              "id": "b2",
-              "port": "p3",
-              "type": "id",
-            },
-          ],
-        ],
-        "type": "edge",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 });
+
+describe('subgraph', () => {
+  test('named subgraph', () => {
+    const result = AST.parse('subgraph hoge {}', { rule: AST.Types.Subgraph });
+    expect(result).toMatchSnapshot();
+  });
+
+  test('anonymous subgraph', () => {
+    const result = AST.parse('subgraph {}', { rule: AST.Types.Subgraph });
+    expect(result).toMatchSnapshot();
+  });
+
+  test('no keyword anonymous', () => {
+    const result = AST.parse('{}', { rule: AST.Types.Subgraph });
+    expect(result).toMatchSnapshot();
+  });
+});
+
 describe('graph', () => {
   test('digraph named test', () => {
     const result = AST.parse('digraph test {}');
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "body": Array [],
-        "directed": true,
-        "id": "test",
-        "strict": false,
-        "type": "graph",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
   test('strict digraph named test', () => {
     const result = AST.parse('strict digraph test {}');
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "body": Array [],
-        "directed": true,
-        "id": "test",
-        "strict": true,
-        "type": "graph",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
-  test('digraph named test(quated)', () => {
+  test('digraph named test(quoted)', () => {
     const result = AST.parse('digraph "test" {}');
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "body": Array [],
-        "directed": true,
-        "id": "test",
-        "strict": false,
-        "type": "graph",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
   test('anonymous digraph', () => {
     const result = AST.parse('digraph {}');
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "body": Array [],
-        "directed": true,
-        "id": null,
-        "strict": false,
-        "type": "graph",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
   test('graph named test', () => {
     const result = AST.parse('graph test {}');
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "body": Array [],
-        "directed": false,
-        "id": "test",
-        "strict": false,
-        "type": "graph",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
   test('strict graph named test', () => {
     const result = AST.parse('strict graph test {}');
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "body": Array [],
-        "directed": false,
-        "id": "test",
-        "strict": true,
-        "type": "graph",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 });
 
 describe('node', () => {
   test('simple node', () => {
     const result = AST.parse('test;', { rule: AST.Types.Node });
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "attributes": Array [],
-        "id": "test",
-        "type": "node",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 
   test('node with attributes', () => {
@@ -408,25 +166,6 @@ describe('node', () => {
       `,
       { rule: AST.Types.Node },
     );
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "attributes": Array [
-          Object {
-            "key": "style",
-            "value": "filled",
-          },
-          Object {
-            "key": "color",
-            "value": "lightgrey",
-          },
-          Object {
-            "key": "label",
-            "value": "example #1",
-          },
-        ],
-        "id": "test",
-        "type": "node",
-      }
-    `);
+    expect(result).toMatchSnapshot();
   });
 });

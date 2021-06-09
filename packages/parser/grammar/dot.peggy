@@ -4,28 +4,63 @@
  * This file is based on https://github.com/anvaka/dotparser
  */
 
-
-{
-  var directed: boolean | undefined;
-}
-
 start
   = graph
 
 graph
-  = _ strict:"strict"i? _ type:("graph"i / "digraph"i) _ id:id? _ "{" body:cluster_statements ? _ "}" _ {
-      directed = type.toLowerCase() === "digraph";
-      return {
-        type: 'graph',
-        id: id,
-        directed: directed,
-        strict: !!strict,
-        body: body ?? [],
-      };
-    }
+  = _ strict:"strict"i? _ type:("graph"i / "digraph"i) _ id:_literal? _ "{" body:cluster_statements ? _ "}" _ {
+    return {
+      type: 'graph',
+      id,
+      directed: type.toLowerCase() === "digraph",
+      strict: !!strict,
+      body: body ?? [],
+      location: location(),
+    };
+  }
 
 cluster_statements
   = _ s:_cluster_statement _ ";"? e:(_ other:_cluster_statement _";"?  { return other; })* { return [s].concat(e); }
+
+attribute
+  = key:_literal _ '=' _ value:_literal ';'? {
+    return {
+      type: 'attribute',
+      key,
+      value,
+      location: location(),
+    };
+  }
+
+attributes
+  = kind:('graph'i/'node'i/'edge'i) attributes:_attribute_list ';'? {
+    return {
+      type: 'attributes',
+      kind: kind.toLowerCase(),
+      attributes,
+      location: location(),
+    };
+  }
+
+edge
+  = id:(_edge_target) rhs:_edge_rhs attributes:_attribute_list? ';'? {
+    return {
+      type: 'edge',
+      attributes:attributes || [],
+      targets: [id, ...rhs],
+      location: location(),
+    };
+  }
+
+node
+  = id:_literal attributes:_attribute_list?';'? {
+    return {
+      type: 'node',
+      id: id,
+      attributes: attributes || [],
+      location: location(),
+    };
+  }
 
 _cluster_statement
   = attribute
@@ -34,129 +69,80 @@ _cluster_statement
   / subgraph
   / node
 
-attribute
-  = key:id _ '=' _ value:id ';'? {
-    return {
-      type: 'attribute',
-      key: key,
-      value: value,
-    };
-  }
-
-attributes
-  = target:('graph'i/'node'i/'edge'i) attributes:_attribute_list ';'? {
-     return {
-       type: 'attributes',
-       target: target,
-       attributes: attributes,
-     };
-  }
-
 _attribute_list
   = _ '[' _ list:_a_list? _ ']' _ rest:_attribute_list? {
     return (list || []).concat(rest || []);
   }
 
 _a_list
-  = _ key:id value:(_ '=' _ v:id {return v})? _ (',' / ';')? rest:_a_list? {
-        return [{
-          key:key,
-          value: value
-        }].concat(rest || []);
-    }
+  = _ key:_literal value:(_ '=' _ v:_literal {return v})? _ (',' / ';')? rest:_a_list? {
+    return [{ type: 'attribute', key, value, location: location() }].concat(rest || []);
+  }
 
-_id_list = _ id:node_ref _ ',' ? rest:_id_list? {
+_id_list
+  = _ id:node_ref _ ',' ? rest:_id_list? {
     return [id].concat(rest || []);
-}
+  }
 
 _edge_target_group
   = '{' s:_id_list? _ '}' {
     return s
   }
 
-
 _edge_target
-  = id: (_edge_target_group / node_ref) {
-    return id;
-  }
-
-edge
-  = id:(_edge_target) rhs:_edge_rhs attributes:_attribute_list? ';'? {
-       return {
-         type: 'edge',
-         attributes:attributes || [],
-         targets: [id, ...rhs],
-       };
-    }
+  = _edge_target_group / node_ref
 
 _edge_rhs
   = _ edgeop:('->'/'--') _ id:_edge_target _ rest:_edge_rhs? {
-      if (directed && edgeop === '--') {
-        throw Error();
-      }
-      return [id].concat(rest || []);
-  }
-
-node
-  = id:id attributes:_attribute_list?';'? {
-    return {
-      type: 'node',
-      id: id,
-      attributes: attributes || [],
-    };
+    return [id].concat(rest || []);
   }
 
 node_ref
-  = id:id port:_port? {
-      return port ? {
-        type: 'id',
-        id,
-        ...port,
-      } : {
-        type: 'id',
-        id,
-      };
-  }
-
-_port 'port'
-  = ':' port:id pt:(':' pt:_compass_pt {return pt})? {
-    if (['n','ne','e','se','s','sw','w','nw'].includes(port)) {
-      return {
-        compass: port,
-      };
-    } else if (pt) {
-      return {
-        port:port,
-        compass:pt
-      };
-    }
-    return {
-      port: port,
+  = id:_literal port:_port? {
+    return port ? {
+      type: 'node_ref',
+      id,
+      ...port,
+      location: location(),
+    } : {
+      type: 'node_ref',
+      id,
+      location: location(),
     };
   }
 
-subgraph
-  = subgraph_id:('subgraph'i _ id:id? _ { return id; })? '{' body:cluster_statements? _ '}' {
-        if (subgraph_id) {
-          return {
-            type:'subgraph',
-            id: subgraph_id,
-            body: body || [],
-          };
-        }
-        return {
-          type:'subgraph',
-          body: body || [],
-        };
-      }
+_port 'port'
+  = ':' port:_literal compass:(':' compass:_compass {return compass})? {
+    if (['n','ne','e','se','s','sw','w','nw'].includes(port)) {
+      return { compass: port };
+    } else if (compass) {
+      return { port, compass };
+    }
+    return { port };
+  }
 
-_compass_pt
+subgraph
+  = id:('subgraph'i _ _id:_literal? _ { return _id; })? '{' body:cluster_statements? _ '}' {
+    if (id) {
+      return {
+        type:'subgraph',
+        id,
+        body: body || [],
+        location: location(),
+      };
+    }
+    return {
+      type:'subgraph',
+      body: body || [],
+      location: location(),
+    };
+  }
+
+_compass
   = 'n'/'ne'/'e'/'se'/'s'/'sw'/'w'/'nw'
 
-id
-  = STRING
-  / NUMBER_STRING
-  / NUMBER
+_literal
+  = (v: (STRING / NUMBER_STRING / NUMBER) { return { type: 'literal', value: v, quoted: false, location: location() }; })
   / QUOTED_STRING
   / HTML_STRING
 
@@ -191,23 +177,31 @@ NUMBER "NUMBER"
  */
 HTML_STRING
   = v:html_raw_string {
-      return {
-        type:'id',
-        value:v.slice(1,v.length-1),
-        html:true
-      };
-    }
+    return {
+      type:'literal',
+      value:v.slice(1,v.length-1),
+      quoted: 'html',
+      location: location(),
+    };
+  }
 
 html_raw_string
   = '<' v:(html_char / html_raw_string)* '>' {
-      return '<' + v.join('') + '>';
-    }
+    return '<' + v.join('') + '>';
+  }
 
 html_char
   = v:(!('>'/'<') v:. { return v; })+ { return v.join(""); }
 
 QUOTED_STRING
-  = '"' chars:DoubleStringCharacter* '"' { return chars.join(""); }
+  = '"' chars:DoubleStringCharacter* '"' {
+    return {
+      type: 'literal',
+      value: chars.join(''),
+      quoted: true,
+      location: location(),
+    };
+  }
 
 DoubleStringCharacter
   = QuoteEscape

@@ -5,34 +5,37 @@ function applyStatements(cluster: ICluster, statements: AST.ClusterStatement[]):
   for (const stmt of statements) {
     switch (stmt.type) {
       case AST.Types.Subgraph:
-        const subgraph = stmt.id ? cluster.subgraph(stmt.id) : cluster.subgraph();
+        const subgraph = stmt.id ? cluster.subgraph(stmt.id.value) : cluster.subgraph();
         applyStatements(subgraph, stmt.body);
         break;
       case AST.Types.Attribute:
-        cluster.set(stmt.key, stmt.value);
+        cluster.set(stmt.key.value, stmt.value.value);
         break;
       case AST.Types.Node:
         cluster.node(
-          stmt.id,
-          stmt.attributes.reduce((prev, curr) => ({ ...prev, [curr.key]: curr.value }), {}),
+          stmt.id.value,
+          stmt.attributes.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
         );
         break;
       case AST.Types.Edge:
         cluster.edge(
-          stmt.targets.map((t) => ({ id: t.id, port: t.port, compass: t.commpass })),
-          stmt.attributes.reduce((prev, curr) => ({ ...prev, [curr.key]: curr.value }), {}),
+          stmt.targets.map((t) => ({ id: t.id.value, port: t.port?.value, compass: t.commpass?.value })),
+          stmt.attributes.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
         );
         break;
       case AST.Types.Attributes:
-        const attrs = stmt.attributes.reduce((prev, curr) => ({ ...prev, [curr.key]: curr.value }), {});
-        switch (stmt.target) {
-          case AST.Attributes.Target.Edge:
+        const attrs: { [key: string]: string } = stmt.attributes.reduce(
+          (prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }),
+          {},
+        );
+        switch (stmt.kind) {
+          case AST.Attributes.Kind.Edge:
             cluster.edge(attrs);
             break;
-          case AST.Attributes.Target.Node:
+          case AST.Attributes.Kind.Node:
             cluster.node(attrs);
             break;
-          case AST.Attributes.Target.Graph:
+          case AST.Attributes.Kind.Graph:
             cluster.graph(attrs);
             break;
         }
@@ -54,19 +57,19 @@ export function convert(ast: AST.Graph | AST.Subgraph | AST.Node | AST.Edge): Ro
       applyStatements(root, ast.body);
       return root;
     case AST.Types.Subgraph:
-      const subgraph = new Subgraph(ast.id);
+      const subgraph = new Subgraph(ast.id?.value);
       applyStatements(subgraph, ast.body);
       return subgraph;
     case AST.Types.Edge:
       const edge = new Edge(
-        ast.targets.map((t) => ({ id: t.id, port: t.port, compass: t.commpass })),
-        ast.attributes.reduce((prev, curr) => ({ ...prev, [curr.key]: curr.value }), {}),
+        ast.targets.map((t) => ({ id: t.id.value, port: t.port?.value, compass: t.commpass?.value })),
+        ast.attributes.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
       );
       return edge;
     case AST.Types.Node:
       const node = new Node(
-        ast.id,
-        ast.attributes.reduce((prev, curr) => ({ ...prev, [curr.key]: curr.value }), {}),
+        ast.id.value,
+        ast.attributes.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
       );
       return node;
     default:
