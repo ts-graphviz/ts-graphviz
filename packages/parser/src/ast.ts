@@ -8,12 +8,15 @@ import { parse as _parse, IFileRange } from './dot.peggy';
  * @alpha
  */
 export namespace AST {
+  export type FileRange = IFileRange;
   type ValueOf<T> = T[keyof T];
 
   /**
    * DOT object types.
    */
   export const Types = Object.freeze({
+    Dot: 'dot',
+    Comment: 'comment',
     Graph: 'graph',
     Attribute: 'attribute',
     Attributes: 'attributes',
@@ -26,6 +29,11 @@ export namespace AST {
   } as const);
   export type Types = ValueOf<typeof Types>;
 
+  export function isASTBaseNode(value: unknown): value is ASTBaseNode {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return typeof value === 'object' && value !== null && typeof (value as any).type === 'string';
+  }
+
   /**
    * AST node.
    */
@@ -35,11 +43,11 @@ export namespace AST {
      * must specify a type property.
      */
     type: string;
-    location: IFileRange;
+    location: FileRange;
   }
 
-  export interface ASTBaseCluster extends ASTBaseNode {
-    body: ClusterStatement[];
+  export interface ASTBaseParent<STMT extends ASTBaseNode = ASTBaseNode> extends ASTBaseNode {
+    body: STMT[];
   }
 
   export interface Literal<T extends string = string> extends ASTBaseNode {
@@ -48,12 +56,16 @@ export namespace AST {
     quoted: boolean | 'html';
   }
 
+  export interface Dot extends ASTBaseParent<DotStatement> {
+    type: typeof Types.Dot;
+  }
+
   /**
    * Graph AST object.
    */
-  export interface Graph extends ASTBaseCluster {
+  export interface Graph extends ASTBaseParent<ClusterStatement> {
     type: typeof Types.Graph;
-    id?: string;
+    id?: Literal;
     directed: boolean;
     strict: boolean;
   }
@@ -70,7 +82,28 @@ export namespace AST {
     type: typeof Types.Attribute;
   }
 
+  /**
+   * Comment AST object.
+   */
+  export interface Comment extends ASTBaseNode {
+    type: typeof Types.Comment;
+    kind: Comment.Kind;
+    value: string;
+  }
+  export namespace Comment {
+    export const Kind = Object.freeze({
+      Block: 'block',
+      Slash: 'slash',
+      Macro: 'macro',
+    } as const);
+    export type Kind = ValueOf<typeof Kind>;
+  }
+
   /** Attributes AST object. */
+  export interface Attributes extends ASTBaseParent<Attribute | Comment> {
+    type: typeof Types.Attributes;
+    kind: Attributes.Kind;
+  }
   export namespace Attributes {
     export const Kind = Object.freeze({
       Graph: Types.Graph,
@@ -78,12 +111,6 @@ export namespace AST {
       Node: Types.Node,
     } as const);
     export type Kind = ValueOf<typeof Kind>;
-  }
-
-  export interface Attributes extends ASTBaseNode {
-    type: typeof Types.Attributes;
-    kind: Attributes.Kind;
-    attributes: Attribute[];
   }
 
   export interface NodeRef extends ASTBaseNode {
@@ -94,28 +121,28 @@ export namespace AST {
   }
 
   /** Edge AST object. */
-  export interface Edge extends ASTBaseNode {
+  export interface Edge extends ASTBaseParent<Attribute> {
     type: typeof Types.Edge;
     targets: NodeRef[];
-    attributes: KeyValue[];
   }
 
   /** Node AST object. */
-  export interface Node extends ASTBaseNode {
+  export interface Node extends ASTBaseParent<Attribute> {
     type: typeof Types.Node;
     id: Literal;
-    attributes: KeyValue[];
   }
 
   /** Subgraph AST object. */
-  export interface Subgraph extends ASTBaseCluster {
+  export interface Subgraph extends ASTBaseParent<ClusterStatement> {
     type: typeof Types.Subgraph;
     id?: Literal;
   }
 
-  export type ClusterStatement = Attribute | Attributes | Edge | Node | Subgraph;
+  export type DotStatement = Graph | Comment;
+  export type ClusterStatement = Attribute | Attributes | Edge | Node | Subgraph | Comment;
 
   export type Rule =
+    | typeof Types.Dot
     | typeof Types.Graph
     | typeof Types.Node
     | typeof Types.Edge
@@ -125,7 +152,7 @@ export namespace AST {
     | typeof Types.ClusterStatements;
 
   /**
-   * Option interface for {@link AST.parse} function.
+   * Option interface for {@link parse} function.
    */
   export interface ParseOption<T extends Rule = Rule> {
     rule?: T;
@@ -133,12 +160,12 @@ export namespace AST {
 
   /**
    * The basic usage is the same as the `parse` function,
-   * except that it returns the dot language AST.
+   * except that it returns the dot language
    *
    * ```ts
    * import { AST } from '@ts-graphviz/parser';
    *
-   * const ast = AST.parse(`
+   * const ast = parse(`
    *   digraph example {
    *     node1 [
    *       label = "My Node",
@@ -148,65 +175,74 @@ export namespace AST {
    *
    * console.log(ast);
    * // {
-   * //   type: 'graph',
-   * //   id: {
-   * //     type: 'literal',
-   * //     value: 'example',
-   * //     quoted: false,
-   * //     location: {
-   * //       start: { offset: 11, line: 2, column: 11 },
-   * //       end: { offset: 18, line: 2, column: 18 }
-   * //     }
-   * //   },
-   * //   directed: true,
-   * //   strict: false,
+   * //   type: 'dot',
    * //   body: [
    * //     {
-   * //       type: 'node',
+   * //       type: 'graph',
    * //       id: {
    * //         type: 'literal',
-   * //         value: 'node1',
+   * //         value: 'example',
    * //         quoted: false,
    * //         location: {
-   * //           start: { offset: 25, line: 3, column: 5 },
-   * //           end: { offset: 30, line: 3, column: 10 }
+   * //           start: { offset: 11, line: 2, column: 11 },
+   * //           end: { offset: 18, line: 2, column: 18 }
    * //         }
    * //       },
-   * //       attributes: [
+   * //       directed: true,
+   * //       strict: false,
+   * //       body: [
    * //         {
-   * //           type: 'attribute',
-   * //           key: {
+   * //           type: 'node',
+   * //           id: {
    * //             type: 'literal',
-   * //             value: 'label',
+   * //             value: 'node1',
    * //             quoted: false,
    * //             location: {
-   * //               start: { offset: 39, line: 4, column: 7 },
-   * //               end: { offset: 44, line: 4, column: 12 }
+   * //               start: { offset: 25, line: 3, column: 5 },
+   * //               end: { offset: 30, line: 3, column: 10 }
    * //             }
    * //           },
-   * //           value: {
-   * //             type: 'literal',
-   * //             value: 'My Node',
-   * //             quoted: true,
-   * //             location: {
-   * //               start: { offset: 47, line: 4, column: 15 },
-   * //               end: { offset: 56, line: 4, column: 24 }
+   * //           body: [
+   * //             {
+   * //               type: 'attribute',
+   * //               key: {
+   * //                 type: 'literal',
+   * //                 value: 'label',
+   * //                 quoted: false,
+   * //                 location: {
+   * //                   start: { offset: 39, line: 4, column: 7 },
+   * //                   end: { offset: 44, line: 4, column: 12 }
+   * //                 }
+   * //               },
+   * //               value: {
+   * //                 type: 'literal',
+   * //                 value: 'My Node',
+   * //                 quoted: true,
+   * //                 location: {
+   * //                   start: { offset: 47, line: 4, column: 15 },
+   * //                   end: { offset: 56, line: 4, column: 24 }
+   * //                 }
+   * //               },
+   * //               location: {
+   * //                 start: { offset: 39, line: 4, column: 7 },
+   * //                 end: { offset: 57, line: 4, column: 25 }
+   * //               }
    * //             }
-   * //           },
+   * //           ],
    * //           location: {
-   * //             start: { offset: 39, line: 4, column: 7 },
-   * //             end: { offset: 57, line: 4, column: 25 }
+   * //             start: { offset: 25, line: 3, column: 5 },
+   * //             end: { offset: 63, line: 5, column: 6 }
    * //           }
    * //         }
    * //       ],
    * //       location: {
-   * //         start: { offset: 25, line: 3, column: 5 },
-   * //         end: { offset: 66, line: 6, column: 3 }
+   * //         start: { offset: 3, line: 2, column: 3 },
+   * //         end: { offset: 67, line: 6, column: 4 }
    * //       }
    * //     }
    * //   ],
    * //   location: {
-   * //     start: { offset: 0, line: 1, column: 1 },
+   * //     start: { offset: 3, line: 2, column: 3 },
    * //     end: { offset: 68, line: 7, column: 1 }
    * //   }
    * // }
@@ -218,7 +254,7 @@ export namespace AST {
    * "attributes", "attribute", "cluster_statements".
    *
    * @example
-   * const ast = AST.parse('test [ style=filled; ];', { rule: 'node' });
+   * const ast = parse('test [ style=filled; ];', { rule: 'node' });
    *
    * console.log(ast);
    * // {
@@ -232,7 +268,7 @@ export namespace AST {
    * //       end: { offset: 4, line: 1, column: 5 }
    * //     }
    * //   },
-   * //   attributes: [
+   * //   body: [
    * //     {
    * //       type: 'attribute',
    * //       key: {
@@ -277,11 +313,9 @@ export namespace AST {
   export function parse(dot: string, options: ParseOption<typeof Types.Attributes>): Attributes;
   export function parse(dot: string, options: ParseOption<typeof Types.Subgraph>): Subgraph;
   export function parse(dot: string, options: ParseOption<typeof Types.ClusterStatements>): ClusterStatement[];
-  export function parse(dot: string, options: ParseOption): Graph | ClusterStatement | ClusterStatement[];
-  export function parse(
-    dot: string,
-    { rule }: ParseOption = {},
-  ): Graph | ClusterStatement | Subgraph | ClusterStatement[] {
+  export function parse(dot: string, options: ParseOption<typeof Types.Dot>): Dot;
+  export function parse(dot: string, options: ParseOption): Dot | Graph | ClusterStatement | ClusterStatement[];
+  export function parse(dot: string, { rule }: ParseOption = {}): Dot | Graph | ClusterStatement | ClusterStatement[] {
     return _parse(dot, {
       startRule: rule,
     });

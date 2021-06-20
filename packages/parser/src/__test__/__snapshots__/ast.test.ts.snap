@@ -166,7 +166,7 @@ Object {
 
 exports[`attributes edge 1`] = `
 Object {
-  "attributes": Array [
+  "body": Array [
     Object {
       "key": Object {
         "location": Object {
@@ -187,9 +187,9 @@ Object {
       },
       "location": Object {
         "end": Object {
-          "column": 29,
-          "line": 3,
-          "offset": 48,
+          "column": 13,
+          "line": 2,
+          "offset": 19,
         },
         "start": Object {
           "column": 3,
@@ -241,9 +241,9 @@ Object {
           "offset": 48,
         },
         "start": Object {
-          "column": 13,
-          "line": 2,
-          "offset": 19,
+          "column": 3,
+          "line": 3,
+          "offset": 22,
         },
       },
       "type": "attribute",
@@ -285,7 +285,7 @@ Object {
 
 exports[`attributes graph 1`] = `
 Object {
-  "attributes": Array [
+  "body": Array [
     Object {
       "key": Object {
         "location": Object {
@@ -306,9 +306,9 @@ Object {
       },
       "location": Object {
         "end": Object {
-          "column": 49,
+          "column": 23,
           "line": 1,
-          "offset": 48,
+          "offset": 22,
         },
         "start": Object {
           "column": 9,
@@ -360,9 +360,9 @@ Object {
           "offset": 48,
         },
         "start": Object {
-          "column": 23,
+          "column": 24,
           "line": 1,
-          "offset": 22,
+          "offset": 23,
         },
       },
       "type": "attribute",
@@ -404,7 +404,7 @@ Object {
 
 exports[`attributes node 1`] = `
 Object {
-  "attributes": Array [
+  "body": Array [
     Object {
       "key": Object {
         "location": Object {
@@ -425,9 +425,9 @@ Object {
       },
       "location": Object {
         "end": Object {
-          "column": 24,
-          "line": 4,
-          "offset": 65,
+          "column": 16,
+          "line": 2,
+          "offset": 22,
         },
         "start": Object {
           "column": 3,
@@ -474,14 +474,14 @@ Object {
       },
       "location": Object {
         "end": Object {
-          "column": 24,
-          "line": 4,
-          "offset": 65,
+          "column": 19,
+          "line": 3,
+          "offset": 41,
         },
         "start": Object {
-          "column": 16,
-          "line": 2,
-          "offset": 22,
+          "column": 3,
+          "line": 3,
+          "offset": 25,
         },
       },
       "type": "attribute",
@@ -528,9 +528,9 @@ Object {
           "offset": 65,
         },
         "start": Object {
-          "column": 19,
-          "line": 3,
-          "offset": 41,
+          "column": 3,
+          "line": 4,
+          "offset": 44,
         },
       },
       "type": "attribute",
@@ -570,9 +570,260 @@ Object {
 }
 `;
 
+exports[`attributes with comment 1`] = `
+Object {
+  "body": Array [
+    Object {
+      "kind": "macro",
+      "location": Object {
+        "end": Object {
+          "column": 1,
+          "line": 3,
+          "offset": 22,
+        },
+        "start": Object {
+          "column": 4,
+          "line": 2,
+          "offset": 10,
+        },
+      },
+      "type": "comment",
+      "value": "comment 1",
+    },
+    Object {
+      "key": Object {
+        "location": Object {
+          "end": Object {
+            "column": 8,
+            "line": 3,
+            "offset": 29,
+          },
+          "start": Object {
+            "column": 3,
+            "line": 3,
+            "offset": 24,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "style",
+      },
+      "location": Object {
+        "end": Object {
+          "column": 16,
+          "line": 3,
+          "offset": 37,
+        },
+        "start": Object {
+          "column": 3,
+          "line": 3,
+          "offset": 24,
+        },
+      },
+      "type": "attribute",
+      "value": Object {
+        "location": Object {
+          "end": Object {
+            "column": 15,
+            "line": 3,
+            "offset": 36,
+          },
+          "start": Object {
+            "column": 9,
+            "line": 3,
+            "offset": 30,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "filled",
+      },
+    },
+  ],
+  "kind": "node",
+  "location": Object {
+    "end": Object {
+      "column": 2,
+      "line": 4,
+      "offset": 39,
+    },
+    "start": Object {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "attributes",
+}
+`;
+
+exports[`cluster_statements comments 1`] = `
+Array [
+  Object {
+    "kind": "slash",
+    "location": Object {
+      "end": Object {
+        "column": 1,
+        "line": 2,
+        "offset": 12,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "type": "comment",
+    "value": "comment1",
+  },
+  Object {
+    "kind": "slash",
+    "location": Object {
+      "end": Object {
+        "column": 1,
+        "line": 5,
+        "offset": 37,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 3,
+        "offset": 13,
+      },
+    },
+    "type": "comment",
+    "value": "comment2
+comment2",
+  },
+  Object {
+    "kind": "macro",
+    "location": Object {
+      "end": Object {
+        "column": 1,
+        "line": 7,
+        "offset": 49,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 6,
+        "offset": 38,
+      },
+    },
+    "type": "comment",
+    "value": "comment3",
+  },
+  Object {
+    "kind": "macro",
+    "location": Object {
+      "end": Object {
+        "column": 1,
+        "line": 10,
+        "offset": 72,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 8,
+        "offset": 50,
+      },
+    },
+    "type": "comment",
+    "value": "comment4
+comment4",
+  },
+  Object {
+    "kind": "block",
+    "location": Object {
+      "end": Object {
+        "column": 16,
+        "line": 10,
+        "offset": 87,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 10,
+        "offset": 72,
+      },
+    },
+    "type": "comment",
+    "value": "comment 5",
+  },
+]
+`;
+
+exports[`dot with comments 1`] = `
+Object {
+  "body": Array [
+    Object {
+      "kind": "block",
+      "location": Object {
+        "end": Object {
+          "column": 16,
+          "line": 1,
+          "offset": 15,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "type": "comment",
+      "value": "comment1",
+    },
+    Object {
+      "body": Array [],
+      "directed": true,
+      "location": Object {
+        "end": Object {
+          "column": 11,
+          "line": 2,
+          "offset": 26,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 2,
+          "offset": 16,
+        },
+      },
+      "strict": false,
+      "type": "graph",
+    },
+    Object {
+      "kind": "block",
+      "location": Object {
+        "end": Object {
+          "column": 16,
+          "line": 3,
+          "offset": 42,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 3,
+          "offset": 27,
+        },
+      },
+      "type": "comment",
+      "value": "comment2",
+    },
+  ],
+  "location": Object {
+    "end": Object {
+      "column": 16,
+      "line": 3,
+      "offset": 42,
+    },
+    "start": Object {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "dot",
+}
+`;
+
 exports[`edge edge with attributes 1`] = `
 Object {
-  "attributes": Array [
+  "body": Array [
     Object {
       "key": Object {
         "location": Object {
@@ -593,9 +844,9 @@ Object {
       },
       "location": Object {
         "end": Object {
-          "column": 24,
-          "line": 3,
-          "offset": 51,
+          "column": 19,
+          "line": 2,
+          "offset": 27,
         },
         "start": Object {
           "column": 3,
@@ -647,9 +898,9 @@ Object {
           "offset": 51,
         },
         "start": Object {
-          "column": 19,
-          "line": 2,
-          "offset": 27,
+          "column": 3,
+          "line": 3,
+          "offset": 30,
         },
       },
       "type": "attribute",
@@ -756,7 +1007,7 @@ Object {
 
 exports[`edge edge with port 1`] = `
 Object {
-  "attributes": Array [],
+  "body": Array [],
   "location": Object {
     "end": Object {
       "column": 31,
@@ -974,7 +1225,7 @@ Object {
 
 exports[`edge grouped edge targets 1`] = `
 Object {
-  "attributes": Array [],
+  "body": Array [],
   "location": Object {
     "end": Object {
       "column": 22,
@@ -1127,7 +1378,7 @@ Object {
 
 exports[`edge grouped ported edge targets 1`] = `
 Object {
-  "attributes": Array [],
+  "body": Array [],
   "location": Object {
     "end": Object {
       "column": 35,
@@ -1349,7 +1600,7 @@ Object {
 
 exports[`edge simple edge 1`] = `
 Object {
-  "attributes": Array [],
+  "body": Array [],
   "location": Object {
     "end": Object {
       "column": 8,
@@ -1436,7 +1687,6 @@ exports[`graph anonymous digraph 1`] = `
 Object {
   "body": Array [],
   "directed": true,
-  "id": null,
   "location": Object {
     "end": Object {
       "column": 11,
@@ -1646,7 +1896,7 @@ Object {
 
 exports[`node node with attributes 1`] = `
 Object {
-  "attributes": Array [
+  "body": Array [
     Object {
       "key": Object {
         "location": Object {
@@ -1667,9 +1917,9 @@ Object {
       },
       "location": Object {
         "end": Object {
-          "column": 24,
-          "line": 4,
-          "offset": 65,
+          "column": 16,
+          "line": 2,
+          "offset": 22,
         },
         "start": Object {
           "column": 3,
@@ -1716,14 +1966,14 @@ Object {
       },
       "location": Object {
         "end": Object {
-          "column": 24,
-          "line": 4,
-          "offset": 65,
+          "column": 19,
+          "line": 3,
+          "offset": 41,
         },
         "start": Object {
-          "column": 16,
-          "line": 2,
-          "offset": 22,
+          "column": 3,
+          "line": 3,
+          "offset": 25,
         },
       },
       "type": "attribute",
@@ -1770,9 +2020,9 @@ Object {
           "offset": 65,
         },
         "start": Object {
-          "column": 19,
-          "line": 3,
-          "offset": 41,
+          "column": 3,
+          "line": 4,
+          "offset": 44,
         },
       },
       "type": "attribute",
@@ -1830,7 +2080,7 @@ Object {
 
 exports[`node simple node 1`] = `
 Object {
-  "attributes": Array [],
+  "body": Array [],
   "id": Object {
     "location": Object {
       "end": Object {

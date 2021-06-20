@@ -30,7 +30,7 @@
     "parser"
   ],
   "scripts": {
-    "build:peggy": "peggy --plugin ts-pegjs --allowed-start-rules graph,subgraph,node,edge,attributes,attribute,cluster_statements -o src/dot.peggy.ts grammar/dot.peggy && prettier --write './src/dot.peggy.ts'",
+    "build:peggy": "peggy --plugin ts-pegjs --allowed-start-rules dot,graph,subgraph,node,edge,attributes,attribute,cluster_statements -o src/dot.peggy.ts grammar/dot.peggy && prettier --write './src/dot.peggy.ts'",
     "prebuild": "yarn build:peggy",
     "build": "rollup -c && prettier --write './lib/index.d.ts'",
     "pretest": "yarn build:peggy",

@@ -63,6 +63,19 @@ describe('attributes', () => {
     });
     expect(result).toMatchSnapshot();
   });
+
+  test('with comment', () => {
+    const result = AST.parse(
+      _`
+      node [
+         # comment 1
+        style=filled,
+      ]
+    `,
+      { rule: AST.Types.Attributes },
+    );
+    expect(result).toMatchSnapshot();
+  });
 });
 
 describe('edge', () => {
@@ -119,32 +132,32 @@ describe('subgraph', () => {
 
 describe('graph', () => {
   test('digraph named test', () => {
-    const result = AST.parse('digraph test {}');
+    const result = AST.parse('digraph test {}', { rule: AST.Types.Graph });
     expect(result).toMatchSnapshot();
   });
 
   test('strict digraph named test', () => {
-    const result = AST.parse('strict digraph test {}');
+    const result = AST.parse('strict digraph test {}', { rule: AST.Types.Graph });
     expect(result).toMatchSnapshot();
   });
 
   test('digraph named test(quoted)', () => {
-    const result = AST.parse('digraph "test" {}');
+    const result = AST.parse('digraph "test" {}', { rule: AST.Types.Graph });
     expect(result).toMatchSnapshot();
   });
 
   test('anonymous digraph', () => {
-    const result = AST.parse('digraph {}');
+    const result = AST.parse('digraph {}', { rule: AST.Types.Graph });
     expect(result).toMatchSnapshot();
   });
 
   test('graph named test', () => {
-    const result = AST.parse('graph test {}');
+    const result = AST.parse('graph test {}', { rule: AST.Types.Graph });
     expect(result).toMatchSnapshot();
   });
 
   test('strict graph named test', () => {
-    const result = AST.parse('strict graph test {}');
+    const result = AST.parse('strict graph test {}', { rule: AST.Types.Graph });
     expect(result).toMatchSnapshot();
   });
 });
@@ -165,6 +178,41 @@ describe('node', () => {
         ];
       `,
       { rule: AST.Types.Node },
+    );
+    expect(result).toMatchSnapshot();
+  });
+});
+
+describe('dot', () => {
+  test('with comments', () => {
+    const result = AST.parse(
+      _`
+      /** comment1 */
+      digraph {}
+      /** comment2 */
+      `,
+      { rule: AST.Types.Dot },
+    );
+    expect(result).toMatchSnapshot();
+  });
+});
+
+describe('cluster_statements', () => {
+  test('comments', () => {
+    const result = AST.parse(
+      _`
+      // comment1
+
+      // comment2
+      // comment2
+
+      # comment3
+
+      # comment4
+      # comment4
+      /** comment 5*/
+      `,
+      { rule: AST.Types.ClusterStatements },
     );
     expect(result).toMatchSnapshot();
   });

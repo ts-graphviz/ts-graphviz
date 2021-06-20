@@ -138,65 +138,74 @@ const ast = AST.parse(`
 
 console.log(ast);
 // {
-//   type: 'graph',
-//   id: {
-//     type: 'literal',
-//     value: 'example',
-//     quoted: false,
-//     location: {
-//       start: { offset: 11, line: 2, column: 11 },
-//       end: { offset: 18, line: 2, column: 18 }
-//     }
-//   },
-//   directed: true,
-//   strict: false,
+//   type: 'dot',
 //   body: [
 //     {
-//       type: 'node',
+//       type: 'graph',
 //       id: {
 //         type: 'literal',
-//         value: 'node1',
+//         value: 'example',
 //         quoted: false,
 //         location: {
-//           start: { offset: 25, line: 3, column: 5 },
-//           end: { offset: 30, line: 3, column: 10 }
+//           start: { offset: 11, line: 2, column: 11 },
+//           end: { offset: 18, line: 2, column: 18 }
 //         }
 //       },
-//       attributes: [
+//       directed: true,
+//       strict: false,
+//       body: [
 //         {
-//           type: 'attribute',
-//           key: {
+//           type: 'node',
+//           id: {
 //             type: 'literal',
-//             value: 'label',
+//             value: 'node1',
 //             quoted: false,
 //             location: {
-//               start: { offset: 39, line: 4, column: 7 },
-//               end: { offset: 44, line: 4, column: 12 }
+//               start: { offset: 25, line: 3, column: 5 },
+//               end: { offset: 30, line: 3, column: 10 }
 //             }
 //           },
-//           value: {
-//             type: 'literal',
-//             value: 'My Node',
-//             quoted: true,
-//             location: {
-//               start: { offset: 47, line: 4, column: 15 },
-//               end: { offset: 56, line: 4, column: 24 }
+//           body: [
+//             {
+//               type: 'attribute',
+//               key: {
+//                 type: 'literal',
+//                 value: 'label',
+//                 quoted: false,
+//                 location: {
+//                   start: { offset: 39, line: 4, column: 7 },
+//                   end: { offset: 44, line: 4, column: 12 }
+//                 }
+//               },
+//               value: {
+//                 type: 'literal',
+//                 value: 'My Node',
+//                 quoted: true,
+//                 location: {
+//                   start: { offset: 47, line: 4, column: 15 },
+//                   end: { offset: 56, line: 4, column: 24 }
+//                 }
+//               },
+//               location: {
+//                 start: { offset: 39, line: 4, column: 7 },
+//                 end: { offset: 57, line: 4, column: 25 }
+//               }
 //             }
-//           },
+//           ],
 //           location: {
-//             start: { offset: 39, line: 4, column: 7 },
-//             end: { offset: 57, line: 4, column: 25 }
+//             start: { offset: 25, line: 3, column: 5 },
+//             end: { offset: 63, line: 5, column: 6 }
 //           }
 //         }
 //       ],
 //       location: {
-//         start: { offset: 25, line: 3, column: 5 },
-//         end: { offset: 66, line: 6, column: 3 }
+//         start: { offset: 3, line: 2, column: 3 },
+//         end: { offset: 67, line: 6, column: 4 }
 //       }
 //     }
 //   ],
 //   location: {
-//     start: { offset: 0, line: 1, column: 1 },
+//     start: { offset: 3, line: 2, column: 3 },
 //     end: { offset: 68, line: 7, column: 1 }
 //   }
 // }
@@ -219,7 +228,7 @@ console.log(ast);
 //       end: { offset: 4, line: 1, column: 5 }
 //     }
 //   },
-//   attributes: [
+//   body: [
 //     {
 //       type: 'attribute',
 //       key: {

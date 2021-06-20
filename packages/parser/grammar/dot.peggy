@@ -4,89 +4,109 @@
  * This file is based on https://github.com/anvaka/dotparser
  */
 
-start
-  = graph
+{
+  function dedent(value: string): string {
+    const str = value.trim();
+    const matches = str.match(/\n([\t ]+|(?!\s).)/g);
+    if (matches) {
+      const indentLengths = matches.map((match) => match.match(/[\t ]/g)?.length ?? 0);
+      const pattern = new RegExp(`\n[\t ]{${Math.min(...indentLengths)}}`, 'g');
+      return str.replace(pattern, '\n');
+    }
+    return str;
+  }
+}
 
-graph
-  = _ strict:"strict"i? _ type:("graph"i / "digraph"i) _ id:_literal? _ "{" body:cluster_statements ? _ "}" _ {
+start = dot
+
+dot                = __ v:_dot __            { return v; }
+graph              = __ v:_graph __          { return v; }
+node               = __ v:_node __           { return v; }
+attributes         = __ v:_attributes __     { return v; }
+attribute          = __ v:_attribute __      { return v; }
+edge               = __ v:_edge __           { return v; }
+subgraph           = __ v:_subgraph __       { return v; }
+node_ref           = __ v:_node_ref __       { return v; }
+attibutes_item     = __ v:_attibutes_item __ { return v; }
+comment            = __ v:_comment __        { return v; }
+cluster_statements = (attribute / attributes / edge / subgraph / node / comment)*
+
+_dot
+  = c1:comment* graph:graph c2:comment* {
     return {
-      type: 'graph',
-      id,
-      directed: type.toLowerCase() === "digraph",
-      strict: !!strict,
-      body: body ?? [],
+      type: 'dot',
+      body: [...c1, graph, ...c2],
       location: location(),
     };
   }
 
-cluster_statements
-  = _ s:_cluster_statement _ ";"? e:(_ other:_cluster_statement _";"?  { return other; })* { return [s].concat(e); }
+_graph
+  = _strict:'strict'i? _ _kind:('graph'i / 'digraph'i) _ id:_literal? _ '{' body:cluster_statements __ '}' {
+    const strict = !!_strict;
+    const kind = _kind.toLowerCase();
+    const directed = kind === 'digraph';
+    return id !== null ?
+      { type: 'graph', id, directed, strict, body, location: location() }:
+      { type: 'graph', directed, strict, body, location: location() };
+  }
 
-attribute
-  = key:_literal _ '=' _ value:_literal ';'? {
+_attribute
+  = keyValue:_key_value ';'? {
     return {
       type: 'attribute',
-      key,
-      value,
+      ...keyValue,
       location: location(),
     };
   }
 
-attributes
-  = kind:('graph'i/'node'i/'edge'i) attributes:_attribute_list ';'? {
-    return {
-      type: 'attributes',
-      kind: kind.toLowerCase(),
-      attributes,
-      location: location(),
-    };
+_attributes
+  = _kind:('graph'i/'node'i/'edge'i) body:_attribute_list ';'? {
+    const kind = _kind.toLowerCase();
+    return { type: 'attributes', kind, body, location: location() };
   }
 
-edge
-  = id:(_edge_target) rhs:_edge_rhs attributes:_attribute_list? ';'? {
+_edge
+  = id:(_edge_target) rhs:_edge_rhs _body:_attribute_list? ';'? {
     return {
       type: 'edge',
-      attributes:attributes || [],
+      body: _body ?? [],
       targets: [id, ...rhs],
       location: location(),
     };
   }
 
-node
-  = id:_literal attributes:_attribute_list?';'? {
+_node
+  = id:_literal _body:_attribute_list?';'? {
     return {
       type: 'node',
-      id: id,
-      attributes: attributes || [],
+      id,
+      body: _body ?? [],
       location: location(),
     };
   }
 
-_cluster_statement
-  = attribute
-  / attributes
-  / edge
-  / subgraph
-  / node
+_key_value
+  = key:_literal _ '=' _ value:_literal {
+    return { key, value };
+  }
+
+_attibutes_item
+  = keyValue:_key_value _ (',' / ';')? {
+    return {
+      type: 'attribute',
+      ...keyValue,
+      location: location()
+    };
+  }
 
 _attribute_list
-  = _ '[' _ list:_a_list? _ ']' _ rest:_attribute_list? {
-    return (list || []).concat(rest || []);
-  }
-
-_a_list
-  = _ key:_literal value:(_ '=' _ v:_literal {return v})? _ (',' / ';')? rest:_a_list? {
-    return [{ type: 'attribute', key, value, location: location() }].concat(rest || []);
-  }
-
-_id_list
-  = _ id:node_ref _ ',' ? rest:_id_list? {
-    return [id].concat(rest || []);
+  = _ '[' list:(attibutes_item / comment)* ']' {
+    return list;
   }
 
 _edge_target_group
-  = '{' s:_id_list? _ '}' {
-    return s
+  = '{' id:node_ref rest:(','? v:node_ref { return v; })* __ '}' {
+    return [id, ...rest];
   }
 
 _edge_target
@@ -97,18 +117,9 @@ _edge_rhs
     return [id].concat(rest || []);
   }
 
-node_ref
+_node_ref
   = id:_literal port:_port? {
-    return port ? {
-      type: 'node_ref',
-      id,
-      ...port,
-      location: location(),
-    } : {
-      type: 'node_ref',
-      id,
-      location: location(),
-    };
+    return { type: 'node_ref', id, ...port, location: location() };
   }
 
 _port 'port'
@@ -121,30 +132,77 @@ _port 'port'
     return { port };
   }
 
-subgraph
-  = id:('subgraph'i _ _id:_literal? _ { return _id; })? '{' body:cluster_statements? _ '}' {
-    if (id) {
-      return {
-        type:'subgraph',
-        id,
-        body: body || [],
-        location: location(),
-      };
-    }
-    return {
-      type:'subgraph',
-      body: body || [],
-      location: location(),
-    };
+_subgraph_id
+  = 'subgraph'i _ id:_literal? _ {
+    return id;
+  }
+
+_subgraph
+  = id:_subgraph_id? '{' _body:cluster_statements? __ '}' {
+    const body = _body ?? [];
+    return id ?
+      { type: 'subgraph', id, body, location: location() }:
+      { type: 'subgraph', body, location: location() };
   }
 
 _compass
   = 'n'/'ne'/'e'/'se'/'s'/'sw'/'w'/'nw'
 
 _literal
-  = (v: (STRING / NUMBER_STRING / NUMBER) { return { type: 'literal', value: v, quoted: false, location: location() }; })
-  / QUOTED_STRING
-  / HTML_STRING
+  = QUOTED_STRING / HTML_STRING
+  / (
+    value: (STRING / NUMBER_STRING / NUMBER) {
+      return {
+        type: 'literal',
+        value,
+        quoted: false,
+        location: location(),
+      };
+    }
+  )
+
+_comment
+ = _block_comment / _slash_comment / _macro_comment
+
+_block_comment
+  = "/*" v:(!"*/" v:. {return v;})* "*/" {
+    return {
+      type: 'comment',
+      kind: 'block',
+      value: dedent(v.join('').replace(/[ \t]*\*/g, '')),
+      location: location(),
+    };
+  }
+
+_slash_comment
+  = lines:_slash_comment_line+ {
+    return {
+      type: 'comment',
+      kind: 'slash',
+      value: dedent(lines.join('\n')),
+      location: location(),
+    };
+  }
+
+_slash_comment_line
+  = _ "//" v:(!_newline v:. { return v; })* _newline? {
+    return v.join('');
+  }
+
+_macro_comment
+  = lines:_macro_comment_line+ {
+    return {
+      type: 'comment',
+      kind: 'macro',
+      value: dedent(lines.join('\n')),
+      location: location(),
+    };
+  }
+
+_macro_comment_line
+  = _ "#" v:(!_newline v:. { return v; })* _newline? {
+    return v.join('');
+  }
 
 STRING "UNICODE_STRING"
   = first:StringStart rest:StringPart* {
@@ -178,8 +236,8 @@ NUMBER "NUMBER"
 HTML_STRING
   = v:html_raw_string {
     return {
-      type:'literal',
-      value:v.slice(1,v.length-1),
+      type: 'literal',
+      value: v.slice(1,v.length-1),
       quoted: 'html',
       location: location(),
     };
@@ -233,31 +291,23 @@ chars
 char
   = [^"\\\0-\x1F\x7f]
   / '\\"' { return '"'; }
-  / '\\' NEWLINE { return ""; }
+  / '\\' _newlines { return ""; }
   / '\\' { return '\\'; }
 
+_ "whitespace"
+  = _whitespace*
 
-COMMENT "COMMENT"
- = (BLOCK_COMMENT / C_COMMENT / MACRO_COMMENT)
+__ "WHITESPACE"
+  = (_whitespace / _newline)*
 
-BLOCK_COMMENT "BLOCK_COMMENT"
-  = "/*" v:(!"*/" v:. {return v;})* "*/" { return v.join('') }
+_newline
+  = [\n\r]
 
-C_COMMENT "C_COMMENT"
-  = "//" v:(![\n] v:. { return v; })* [\n]? { return v.join(''); }
+_whitespace
+  = [ \t]
 
-MACRO_COMMENT "MACRO_COMMENT"
-  = "#" v:(![\n] v:. { return v; })* [\n]? { return v.join(''); }
-
-
-_ "WHITESPACE"
-  = (WHITESPACE / COMMENT)*
-
-NEWLINE
-  = [\n\r]+
-
-WHITESPACE
-  = ([ \t] / NEWLINE)+
+_newlines
+  = _newline+
 
 UnicodeLetter
   = Lu
