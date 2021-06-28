@@ -15,6 +15,8 @@
     }
     return str;
   }
+
+  const edgeops: { operator: '--' | '->'; location: IFileRange; }[] = [];
 }
 
 start = dot
@@ -45,6 +47,17 @@ _graph
     const strict = !!_strict;
     const kind = _kind.toLowerCase();
     const directed = kind === 'digraph';
+    for (const edgeop of edgeops) {
+      if (directed) {
+        if (edgeop.operator !== '->') {
+          error(`In digraph, it's necessary to describe with "->" operator to create edge.`, edgeop.location);
+        }
+      } else {
+        if (edgeop.operator !== '--') {
+          error(`In graph, it's necessary to describe with "--" operator to create edge.`, edgeop.location);
+        }
+      }
+    }
     return id !== null ?
       { type: 'graph', id, directed, strict, body, location: location() }:
       { type: 'graph', directed, strict, body, location: location() };
@@ -112,8 +125,14 @@ _edge_target_group
 _edge_target
   = _edge_target_group / node_ref
 
+_edge_operator
+  = operator:('->'/'--') {
+    return { operator, location: location() };
+  }
+
 _edge_rhs
-  = _ edgeop:('->'/'--') _ id:_edge_target _ rest:_edge_rhs? {
+  = _ edgeop:_edge_operator _ id:_edge_target _ rest:_edge_rhs? {
+    edgeops.push(edgeop);
     return [id].concat(rest || []);
   }
 

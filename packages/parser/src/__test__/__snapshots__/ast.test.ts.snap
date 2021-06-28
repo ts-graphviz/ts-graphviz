@@ -821,6 +821,91 @@ Object {
 }
 `;
 
+exports[`edge digraph edge 1`] = `
+Object {
+  "body": Array [],
+  "location": Object {
+    "end": Object {
+      "column": 8,
+      "line": 1,
+      "offset": 7,
+    },
+    "start": Object {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "targets": Array [
+    Object {
+      "id": Object {
+        "location": Object {
+          "end": Object {
+            "column": 2,
+            "line": 1,
+            "offset": 1,
+          },
+          "start": Object {
+            "column": 1,
+            "line": 1,
+            "offset": 0,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "a",
+      },
+      "location": Object {
+        "end": Object {
+          "column": 2,
+          "line": 1,
+          "offset": 1,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "type": "node_ref",
+    },
+    Object {
+      "id": Object {
+        "location": Object {
+          "end": Object {
+            "column": 7,
+            "line": 1,
+            "offset": 6,
+          },
+          "start": Object {
+            "column": 6,
+            "line": 1,
+            "offset": 5,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "b",
+      },
+      "location": Object {
+        "end": Object {
+          "column": 7,
+          "line": 1,
+          "offset": 6,
+        },
+        "start": Object {
+          "column": 6,
+          "line": 1,
+          "offset": 5,
+        },
+      },
+      "type": "node_ref",
+    },
+  ],
+  "type": "edge",
+}
+`;
+
 exports[`edge edge with attributes 1`] = `
 Object {
   "body": Array [
@@ -1223,6 +1308,91 @@ Object {
 }
 `;
 
+exports[`edge graph edge 1`] = `
+Object {
+  "body": Array [],
+  "location": Object {
+    "end": Object {
+      "column": 8,
+      "line": 1,
+      "offset": 7,
+    },
+    "start": Object {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "targets": Array [
+    Object {
+      "id": Object {
+        "location": Object {
+          "end": Object {
+            "column": 2,
+            "line": 1,
+            "offset": 1,
+          },
+          "start": Object {
+            "column": 1,
+            "line": 1,
+            "offset": 0,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "a",
+      },
+      "location": Object {
+        "end": Object {
+          "column": 2,
+          "line": 1,
+          "offset": 1,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "type": "node_ref",
+    },
+    Object {
+      "id": Object {
+        "location": Object {
+          "end": Object {
+            "column": 7,
+            "line": 1,
+            "offset": 6,
+          },
+          "start": Object {
+            "column": 6,
+            "line": 1,
+            "offset": 5,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "b",
+      },
+      "location": Object {
+        "end": Object {
+          "column": 7,
+          "line": 1,
+          "offset": 6,
+        },
+        "start": Object {
+          "column": 6,
+          "line": 1,
+          "offset": 5,
+        },
+      },
+      "type": "node_ref",
+    },
+  ],
+  "type": "edge",
+}
+`;
+
 exports[`edge grouped edge targets 1`] = `
 Object {
   "body": Array [],
@@ -1593,91 +1763,6 @@ Object {
         "type": "node_ref",
       },
     ],
-  ],
-  "type": "edge",
-}
-`;
-
-exports[`edge simple edge 1`] = `
-Object {
-  "body": Array [],
-  "location": Object {
-    "end": Object {
-      "column": 8,
-      "line": 1,
-      "offset": 7,
-    },
-    "start": Object {
-      "column": 1,
-      "line": 1,
-      "offset": 0,
-    },
-  },
-  "targets": Array [
-    Object {
-      "id": Object {
-        "location": Object {
-          "end": Object {
-            "column": 2,
-            "line": 1,
-            "offset": 1,
-          },
-          "start": Object {
-            "column": 1,
-            "line": 1,
-            "offset": 0,
-          },
-        },
-        "quoted": false,
-        "type": "literal",
-        "value": "a",
-      },
-      "location": Object {
-        "end": Object {
-          "column": 2,
-          "line": 1,
-          "offset": 1,
-        },
-        "start": Object {
-          "column": 1,
-          "line": 1,
-          "offset": 0,
-        },
-      },
-      "type": "node_ref",
-    },
-    Object {
-      "id": Object {
-        "location": Object {
-          "end": Object {
-            "column": 7,
-            "line": 1,
-            "offset": 6,
-          },
-          "start": Object {
-            "column": 6,
-            "line": 1,
-            "offset": 5,
-          },
-        },
-        "quoted": false,
-        "type": "literal",
-        "value": "b",
-      },
-      "location": Object {
-        "end": Object {
-          "column": 7,
-          "line": 1,
-          "offset": 6,
-        },
-        "start": Object {
-          "column": 6,
-          "line": 1,
-          "offset": 5,
-        },
-      },
-      "type": "node_ref",
-    },
   ],
   "type": "edge",
 }

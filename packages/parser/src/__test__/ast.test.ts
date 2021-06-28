@@ -79,8 +79,13 @@ describe('attributes', () => {
 });
 
 describe('edge', () => {
-  test('simple edge', () => {
+  test('digraph edge', () => {
     const result = AST.parse('a -> b;', { rule: AST.Types.Edge });
+    expect(result).toMatchSnapshot();
+  });
+
+  test('graph edge', () => {
+    const result = AST.parse('a -- b;', { rule: AST.Types.Edge });
     expect(result).toMatchSnapshot();
   });
 
@@ -159,6 +164,36 @@ describe('graph', () => {
   test('strict graph named test', () => {
     const result = AST.parse('strict graph test {}', { rule: AST.Types.Graph });
     expect(result).toMatchSnapshot();
+  });
+
+  describe('invalid edge', () => {
+    test('digraph have to use "->" operator in edge', () => {
+      expect(() => {
+        AST.parse(
+          _`
+          digraph {
+            a -- b;
+          }`,
+          { rule: AST.Types.Graph },
+        );
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"In digraph, it's necessary to describe with \\"->\\" operator to create edge."`,
+      );
+    });
+
+    test('graph have to use "--" operator in edge', () => {
+      expect(() => {
+        AST.parse(
+          _`
+          graph {
+            a -> b;
+          }`,
+          { rule: AST.Types.Graph },
+        );
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"In graph, it's necessary to describe with \\"--\\" operator to create edge."`,
+      );
+    });
   });
 });
 
