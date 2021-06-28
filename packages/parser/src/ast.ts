@@ -305,7 +305,7 @@ export namespace AST {
    *
    * @throws {SyntaxError}
    */
-  export function parse(dot: string): Graph;
+  export function parse(dot: string): Dot;
   export function parse(dot: string, options: ParseOption<typeof Types.Edge>): Edge;
   export function parse(dot: string, options: ParseOption<typeof Types.Node>): Node;
   export function parse(dot: string, options: ParseOption<typeof Types.Graph>): Graph;
