@@ -141,6 +141,8 @@ export namespace AST {
   export type DotStatement = Graph | Comment;
   export type ClusterStatement = Attribute | Attributes | Edge | Node | Subgraph | Comment;
 
+  export type ASTNode = Attribute | Attributes | Comment | Dot | Edge | Graph | Literal | Node | NodeRef | Subgraph;
+
   export type Rule =
     | typeof Types.Dot
     | typeof Types.Graph
