@@ -117,7 +117,7 @@ export namespace AST {
     type: typeof Types.NodeRef;
     id: Literal;
     port?: Literal;
-    commpass?: Literal<Compass>;
+    compass?: Literal<Compass>;
   }
 
   /** Edge AST object. */

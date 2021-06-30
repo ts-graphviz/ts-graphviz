@@ -51,7 +51,7 @@ function applyStatements(cluster: ICluster, statements: AST.ClusterStatement[]):
       case AST.Types.Edge:
         commentHolder.apply(
           cluster.edge(
-            stmt.targets.map((t) => ({ id: t.id.value, port: t.port?.value, compass: t.commpass?.value })),
+            stmt.targets.map((t) => ({ id: t.id.value, port: t.port?.value, compass: t.compass?.value })),
             stmt.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
           ),
           stmt.location,
@@ -103,7 +103,7 @@ export function convert(
       return subgraph;
     case AST.Types.Edge:
       const edge = new Edge(
-        ast.targets.map((t) => ({ id: t.id.value, port: t.port?.value, compass: t.commpass?.value })),
+        ast.targets.map((t) => ({ id: t.id.value, port: t.port?.value, compass: t.compass?.value })),
         ast.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
       );
       return edge;

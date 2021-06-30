@@ -1205,7 +1205,23 @@ Object {
       "type": "node_ref",
     },
     Object {
-      "compass": "w",
+      "compass": Object {
+        "location": Object {
+          "end": Object {
+            "column": 23,
+            "line": 1,
+            "offset": 22,
+          },
+          "start": Object {
+            "column": 22,
+            "line": 1,
+            "offset": 21,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "w",
+      },
       "id": Object {
         "location": Object {
           "end": Object {
@@ -1613,7 +1629,23 @@ Object {
         "type": "node_ref",
       },
       Object {
-        "compass": "w",
+        "compass": Object {
+          "location": Object {
+            "end": Object {
+              "column": 16,
+              "line": 1,
+              "offset": 15,
+            },
+            "start": Object {
+              "column": 15,
+              "line": 1,
+              "offset": 14,
+            },
+          },
+          "quoted": false,
+          "type": "literal",
+          "value": "w",
+        },
         "id": Object {
           "location": Object {
             "end": Object {

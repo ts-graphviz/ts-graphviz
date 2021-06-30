@@ -157,7 +157,7 @@ _subgraph
         : { type: 'subgraph', body, location: location() };
     }
 
-_compass
+_compass_keyword
   = "n"
   / "ne"
   / "e"
@@ -166,6 +166,18 @@ _compass
   / "sw"
   / "w"
   / "nw"
+
+_compass
+  = v:(
+    value:_compass_keyword { return { value, quoted: false }; }
+    / "\"" value:_compass_keyword "\"" { return { value, quoted: true }; }
+  ) {
+      return {
+        type: 'literal',
+        ...v,
+        location: location(),
+      };
+    }
 
 _literal
   = QUOTED_STRING
