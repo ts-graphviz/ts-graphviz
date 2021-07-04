@@ -1,6 +1,6 @@
 {
   "name": "@ts-graphviz/parser",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Graphviz dot language parser for ts-graphviz.",
   "main": "lib/index.js",
   "exports": {
