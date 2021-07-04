@@ -119,9 +119,13 @@
 								<li class="tsd-kind-type-alias"><a href="modules.html#edgeattributes" class="tsd-kind-icon">Edge<wbr>Attributes</a></li>
 								<li class="tsd-kind-type-alias"><a href="modules.html#edgetarget" class="tsd-kind-icon">Edge<wbr>Target</a></li>
 								<li class="tsd-kind-type-alias"><a href="modules.html#edgetargetlike" class="tsd-kind-icon">Edge<wbr>Target<wbr>Like</a></li>
-								<li class="tsd-kind-type-alias"><a href="modules.html#edgetargets" class="tsd-kind-icon">Edge<wbr>Targets</a></li>
-								<li class="tsd-kind-type-alias"><a href="modules.html#edgetargetslike" class="tsd-kind-icon">Edge<wbr>Targets<wbr>Like</a></li>
+								<li class="tsd-kind-type-alias"><a href="modules.html#edgetargetliketuple" class="tsd-kind-icon">Edge<wbr>Target<wbr>Like<wbr>Tuple</a></li>
+								<li class="tsd-kind-type-alias"><a href="modules.html#edgetargettuple" class="tsd-kind-icon">Edge<wbr>Target<wbr>Tuple</a></li>
 								<li class="tsd-kind-type-alias"><a href="modules.html#nodeattributes" class="tsd-kind-icon">Node<wbr>Attributes</a></li>
+								<li class="tsd-kind-type-alias"><a href="modules.html#noderef" class="tsd-kind-icon">Node<wbr>Ref</a></li>
+								<li class="tsd-kind-type-alias"><a href="modules.html#noderefgroup" class="tsd-kind-icon">Node<wbr>Ref<wbr>Group</a></li>
+								<li class="tsd-kind-type-alias"><a href="modules.html#noderefgrouplike" class="tsd-kind-icon">Node<wbr>Ref<wbr>Group<wbr>Like</a></li>
+								<li class="tsd-kind-type-alias"><a href="modules.html#nodereflike" class="tsd-kind-icon">Node<wbr>Ref<wbr>Like</a></li>
 								<li class="tsd-kind-type-alias"><a href="modules.html#rootclusterattributes" class="tsd-kind-icon">Root<wbr>Cluster<wbr>Attributes</a></li>
 							</ul>
 						</section>
@@ -136,7 +140,6 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function"><a href="modules.html#digraph" class="tsd-kind-icon">digraph</a></li>
 								<li class="tsd-kind-function"><a href="modules.html#graph" class="tsd-kind-icon">graph</a></li>
-								<li class="tsd-kind-function"><a href="modules.html#isforwardrefnode" class="tsd-kind-icon">is<wbr>Forward<wbr>Ref<wbr>Node</a></li>
 								<li class="tsd-kind-function"><a href="modules.html#todot" class="tsd-kind-icon">to<wbr>Dot</a></li>
 							</ul>
 						</section>
@@ -151,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">Attributes<wbr>Entities&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><a href="modules.html#attributesvalue" class="tsd-signature-type" data-tsd-kind="Type alias">AttributesValue</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L71">types.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L78">types.ts:78</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -167,7 +170,7 @@
 					<div class="tsd-signature tsd-kind-icon">Attributes<wbr>Object&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{</span><span class="tsd-signature-symbol">[ </span><span class="tsd-signature-type">key</span><span class="tsd-signature-symbol"> in </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">: </span><a href="modules.html#attributesvalue" class="tsd-signature-type" data-tsd-kind="Type alias">AttributesValue</a><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L67">types.ts:67</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L74">types.ts:74</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -183,7 +186,7 @@
 					<div class="tsd-signature tsd-kind-icon">Attributes<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L65">types.ts:65</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L72">types.ts:72</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -204,7 +207,7 @@
 					<div class="tsd-signature tsd-kind-icon">Cluster<wbr>Subgraph<wbr>Attributes<span class="tsd-signature-symbol">:</span> <a href="modules.html#attributesobject" class="tsd-signature-type" data-tsd-kind="Type alias">AttributesObject</a><span class="tsd-signature-symbol">&lt;</span><a href="modules/attribute.html#clustersubgraph" class="tsd-signature-type" data-tsd-kind="Type alias">ClusterSubgraph</a><span class="tsd-signature-symbol"> | </span><a href="modules/attribute.html#subgraph" class="tsd-signature-type" data-tsd-kind="Type alias">Subgraph</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L76">types.ts:76</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L83">types.ts:83</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -214,7 +217,7 @@
 					<div class="tsd-signature tsd-kind-icon">Compass<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;n&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;ne&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;e&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;se&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;s&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;sw&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;w&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;nw&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;c&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L6">types.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L6">types.ts:6</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -229,7 +232,7 @@
 					<div class="tsd-signature tsd-kind-icon">Dot<span class="tsd-signature-symbol">:</span> <a href="interfaces/irootcluster.html" class="tsd-signature-type" data-tsd-kind="Interface">IRootCluster</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/isubgraph.html" class="tsd-signature-type" data-tsd-kind="Interface">ISubgraph</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/iedge.html" class="tsd-signature-type" data-tsd-kind="Interface">IEdge</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/inode.html" class="tsd-signature-type" data-tsd-kind="Interface">INode</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/iattributes.html" class="tsd-signature-type" data-tsd-kind="Interface">IAttributes</a><span class="tsd-signature-symbol"> | </span><a href="modules.html#attributesvalue" class="tsd-signature-type" data-tsd-kind="Type alias">AttributesValue</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L469">types.ts:469</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L476">types.ts:476</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -239,57 +242,47 @@
 					<div class="tsd-signature tsd-kind-icon">Edge<wbr>Attributes<span class="tsd-signature-symbol">:</span> <a href="modules.html#attributesobject" class="tsd-signature-type" data-tsd-kind="Type alias">AttributesObject</a><span class="tsd-signature-symbol">&lt;</span><a href="modules/attribute.html#edge" class="tsd-signature-type" data-tsd-kind="Type alias">Edge</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L73">types.ts:73</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L80">types.ts:80</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="edgetarget" class="tsd-anchor"></a>
 					<h3>Edge<wbr>Target</h3>
-					<div class="tsd-signature tsd-kind-icon">Edge<wbr>Target<span class="tsd-signature-symbol">:</span> <a href="interfaces/inode.html" class="tsd-signature-type" data-tsd-kind="Interface">INode</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/iforwardrefnode.html" class="tsd-signature-type" data-tsd-kind="Interface">IForwardRefNode</a></div>
+					<div class="tsd-signature tsd-kind-icon">Edge<wbr>Target<span class="tsd-signature-symbol">:</span> <a href="modules.html#noderef" class="tsd-signature-type" data-tsd-kind="Type alias">NodeRef</a><span class="tsd-signature-symbol"> | </span><a href="modules.html#noderefgroup" class="tsd-signature-type" data-tsd-kind="Type alias">NodeRefGroup</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L39">types.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L50">types.ts:50</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Objects that can be Edge destinations satisfy this interface.</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="edgetargetlike" class="tsd-anchor"></a>
 					<h3>Edge<wbr>Target<wbr>Like</h3>
-					<div class="tsd-signature tsd-kind-icon">Edge<wbr>Target<wbr>Like<span class="tsd-signature-symbol">:</span> <a href="modules.html#edgetarget" class="tsd-signature-type" data-tsd-kind="Type alias">EdgeTarget</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<div class="tsd-signature tsd-kind-icon">Edge<wbr>Target<wbr>Like<span class="tsd-signature-symbol">:</span> <a href="modules.html#nodereflike" class="tsd-signature-type" data-tsd-kind="Type alias">NodeRefLike</a><span class="tsd-signature-symbol"> | </span><a href="modules.html#noderefgrouplike" class="tsd-signature-type" data-tsd-kind="Type alias">NodeRefGroupLike</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L45">types.ts:45</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>string or an object implementing IEdgeTarget.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias">
-					<a name="edgetargets" class="tsd-anchor"></a>
-					<h3>Edge<wbr>Targets</h3>
-					<div class="tsd-signature tsd-kind-icon">Edge<wbr>Targets<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><a href="modules.html#edgetarget" class="tsd-signature-type" data-tsd-kind="Type alias">EdgeTarget</a><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L40">types.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L51">types.ts:51</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
-					<a name="edgetargetslike" class="tsd-anchor"></a>
-					<h3>Edge<wbr>Targets<wbr>Like</h3>
-					<div class="tsd-signature tsd-kind-icon">Edge<wbr>Targets<wbr>Like<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><a href="modules.html#edgetargetlike" class="tsd-signature-type" data-tsd-kind="Type alias">EdgeTargetLike</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="edgetargetliketuple" class="tsd-anchor"></a>
+					<h3>Edge<wbr>Target<wbr>Like<wbr>Tuple</h3>
+					<div class="tsd-signature tsd-kind-icon">Edge<wbr>Target<wbr>Like<wbr>Tuple<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span>from<span class="tsd-signature-symbol">: </span><a href="modules.html#edgetargetlike" class="tsd-signature-type" data-tsd-kind="Type alias">EdgeTargetLike</a><span class="tsd-signature-symbol">, </span>to<span class="tsd-signature-symbol">: </span><a href="modules.html#edgetargetlike" class="tsd-signature-type" data-tsd-kind="Type alias">EdgeTargetLike</a><span class="tsd-signature-symbol">, </span>rest<span class="tsd-signature-symbol">: </span><a href="modules.html#edgetargetlike" class="tsd-signature-type" data-tsd-kind="Type alias">EdgeTargetLike</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L47">types.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L54">types.ts:54</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="edgetargettuple" class="tsd-anchor"></a>
+					<h3>Edge<wbr>Target<wbr>Tuple</h3>
+					<div class="tsd-signature tsd-kind-icon">Edge<wbr>Target<wbr>Tuple<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span>from<span class="tsd-signature-symbol">: </span><a href="modules.html#edgetarget" class="tsd-signature-type" data-tsd-kind="Type alias">EdgeTarget</a><span class="tsd-signature-symbol">, </span>to<span class="tsd-signature-symbol">: </span><a href="modules.html#edgetarget" class="tsd-signature-type" data-tsd-kind="Type alias">EdgeTarget</a><span class="tsd-signature-symbol">, </span>rest<span class="tsd-signature-symbol">: </span><a href="modules.html#edgetarget" class="tsd-signature-type" data-tsd-kind="Type alias">EdgeTarget</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L53">types.ts:53</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -299,9 +292,59 @@
 					<div class="tsd-signature tsd-kind-icon">Node<wbr>Attributes<span class="tsd-signature-symbol">:</span> <a href="modules.html#attributesobject" class="tsd-signature-type" data-tsd-kind="Type alias">AttributesObject</a><span class="tsd-signature-symbol">&lt;</span><a href="modules/attribute.html#node" class="tsd-signature-type" data-tsd-kind="Type alias">Node</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L74">types.ts:74</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L81">types.ts:81</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="noderef" class="tsd-anchor"></a>
+					<h3>Node<wbr>Ref</h3>
+					<div class="tsd-signature tsd-kind-icon">Node<wbr>Ref<span class="tsd-signature-symbol">:</span> <a href="interfaces/inode.html" class="tsd-signature-type" data-tsd-kind="Interface">INode</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/iforwardrefnode.html" class="tsd-signature-type" data-tsd-kind="Interface">IForwardRefNode</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L39">types.ts:39</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Objects that can be Edge destinations satisfy this interface.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="noderefgroup" class="tsd-anchor"></a>
+					<h3>Node<wbr>Ref<wbr>Group</h3>
+					<div class="tsd-signature tsd-kind-icon">Node<wbr>Ref<wbr>Group<span class="tsd-signature-symbol">:</span> <a href="modules.html#noderef" class="tsd-signature-type" data-tsd-kind="Type alias">NodeRef</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L41">types.ts:41</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="noderefgrouplike" class="tsd-anchor"></a>
+					<h3>Node<wbr>Ref<wbr>Group<wbr>Like</h3>
+					<div class="tsd-signature tsd-kind-icon">Node<wbr>Ref<wbr>Group<wbr>Like<span class="tsd-signature-symbol">:</span> <a href="modules.html#nodereflike" class="tsd-signature-type" data-tsd-kind="Type alias">NodeRefLike</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L48">types.ts:48</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="nodereflike" class="tsd-anchor"></a>
+					<h3>Node<wbr>Ref<wbr>Like</h3>
+					<div class="tsd-signature tsd-kind-icon">Node<wbr>Ref<wbr>Like<span class="tsd-signature-symbol">:</span> <a href="modules.html#noderef" class="tsd-signature-type" data-tsd-kind="Type alias">NodeRef</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L46">types.ts:46</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>string or an object implementing IEdgeTarget.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="rootclusterattributes" class="tsd-anchor"></a>
@@ -309,7 +352,7 @@
 					<div class="tsd-signature tsd-kind-icon">Root<wbr>Cluster<wbr>Attributes<span class="tsd-signature-symbol">:</span> <a href="modules.html#attributesobject" class="tsd-signature-type" data-tsd-kind="Type alias">AttributesObject</a><span class="tsd-signature-symbol">&lt;</span><a href="modules/attribute.html#rootcluster" class="tsd-signature-type" data-tsd-kind="Type alias">RootCluster</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/types.ts#L75">types.ts:75</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/types.ts#L82">types.ts:82</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -322,7 +365,7 @@
 					<div class="tsd-signature tsd-kind-icon">strict<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>digraph<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CreateRootFunction</span><span class="tsd-signature-symbol">&lt;</span><a href="classes/digraph.html" class="tsd-signature-type" data-tsd-kind="Class">Digraph</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>graph<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CreateRootFunction</span><span class="tsd-signature-symbol">&lt;</span><a href="classes/graph.html" class="tsd-signature-type" data-tsd-kind="Class">Graph</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/usecase.ts#L44">usecase.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/usecase.ts#L44">usecase.ts:44</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -358,7 +401,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/usecase.ts#L38">usecase.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/usecase.ts#L38">usecase.ts:38</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -401,7 +444,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/usecase.ts#L38">usecase.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/usecase.ts#L38">usecase.ts:38</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -441,7 +484,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/usecase.ts#L38">usecase.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/usecase.ts#L38">usecase.ts:38</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -481,7 +524,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/usecase.ts#L38">usecase.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/usecase.ts#L38">usecase.ts:38</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -530,7 +573,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/usecase.ts#L41">usecase.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/usecase.ts#L41">usecase.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -573,7 +616,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/usecase.ts#L41">usecase.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/usecase.ts#L41">usecase.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -613,7 +656,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/usecase.ts#L41">usecase.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/usecase.ts#L41">usecase.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -653,7 +696,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/usecase.ts#L41">usecase.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/usecase.ts#L41">usecase.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -686,29 +729,6 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="classes/graph.html" class="tsd-signature-type" data-tsd-kind="Class">Graph</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function">
-					<a name="isforwardrefnode" class="tsd-anchor"></a>
-					<h3>is<wbr>Forward<wbr>Ref<wbr>Node</h3>
-					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Forward<wbr>Ref<wbr>Node<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> is </span><a href="interfaces/iforwardrefnode.html" class="tsd-signature-type" data-tsd-kind="Interface">IForwardRefNode</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/model/nodes.ts#L29">model/nodes.ts:29</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>object: <span class="tsd-signature-type">unknown</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> is </span><a href="interfaces/iforwardrefnode.html" class="tsd-signature-type" data-tsd-kind="Interface">IForwardRefNode</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -722,7 +742,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/3f7ad41/src/render/to-dot.ts#L5">render/to-dot.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/ts-graphviz/ts-graphviz/blob/c0c7ed0/src/render/to-dot.ts#L5">render/to-dot.ts:5</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -841,13 +861,25 @@
 						<a href="modules.html#edgetargetlike" class="tsd-kind-icon">Edge<wbr>Target<wbr>Like</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="modules.html#edgetargets" class="tsd-kind-icon">Edge<wbr>Targets</a>
+						<a href="modules.html#edgetargetliketuple" class="tsd-kind-icon">Edge<wbr>Target<wbr>Like<wbr>Tuple</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="modules.html#edgetargetslike" class="tsd-kind-icon">Edge<wbr>Targets<wbr>Like</a>
+						<a href="modules.html#edgetargettuple" class="tsd-kind-icon">Edge<wbr>Target<wbr>Tuple</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#nodeattributes" class="tsd-kind-icon">Node<wbr>Attributes</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#noderef" class="tsd-kind-icon">Node<wbr>Ref</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#noderefgroup" class="tsd-kind-icon">Node<wbr>Ref<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#noderefgrouplike" class="tsd-kind-icon">Node<wbr>Ref<wbr>Group<wbr>Like</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#nodereflike" class="tsd-kind-icon">Node<wbr>Ref<wbr>Like</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#rootclusterattributes" class="tsd-kind-icon">Root<wbr>Cluster<wbr>Attributes</a>
@@ -860,9 +892,6 @@
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#graph" class="tsd-kind-icon">graph</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#isforwardrefnode" class="tsd-kind-icon">is<wbr>Forward<wbr>Ref<wbr>Node</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#todot" class="tsd-kind-icon">to<wbr>Dot</a>
