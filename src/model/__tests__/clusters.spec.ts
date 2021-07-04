@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import 'jest-graphviz';
 import { DotObject, GraphvizObject } from '../abstract';
-import { ISubgraph } from '../../types';
+import { EdgeTargetTuple, ISubgraph } from '../../types';
 import { AttributesBase } from '../attributes-base';
 import { Cluster, Subgraph } from '../clusters';
 import { Node } from '../nodes';
@@ -94,7 +95,7 @@ describe('class Subgraph', () => {
   test('create edge with attributes', () => {
     const nodes = Array(2)
       .fill(true)
-      .map((_v, i) => subgraph.createNode(`node${i + 1}`));
+      .map((_v, i) => subgraph.createNode(`node${i + 1}`)) as EdgeTargetTuple;
     const edge = subgraph.createEdge(nodes, {
       [attribute.label]: 'Label',
     });
@@ -150,7 +151,7 @@ describe('class Subgraph', () => {
     it('Edge operation methods works', () => {
       const nodes = Array(2)
         .fill(true)
-        .map((_v, i) => subgraph.createNode(`node${i + 1}`));
+        .map((_v, i) => subgraph.createNode(`node${i + 1}`)) as EdgeTargetTuple;
       const edge = subgraph.createEdge(nodes);
       expect(subgraph.existEdge(edge)).toBe(true);
       subgraph.removeEdge(edge);
@@ -176,8 +177,8 @@ describe('class Subgraph', () => {
 
     it('throws an error when the EdgeTarget element is missing', () => {
       const n = subgraph.node('n');
-      expect(() => subgraph.edge([])).toThrow();
-      expect(() => subgraph.edge([n])).toThrow();
+      expect(() => subgraph.edge([] as any as EdgeTargetTuple)).toThrow();
+      expect(() => subgraph.edge([n] as any as EdgeTargetTuple)).toThrow();
     });
   });
 });
