@@ -1,5 +1,5 @@
 import 'jest-graphviz';
-import { ISubgraph } from '../../types';
+import { EdgeTargetTuple, ISubgraph } from '../../types';
 import { Subgraph } from '../../model/clusters';
 import { toDot } from '../to-dot';
 
@@ -38,7 +38,7 @@ describe('Subgraph rendering', () => {
 
     describe('addXxx existXxx removeXxx APIs', () => {
       it('Edge operation methods works', () => {
-        const nodes = ['node1', 'node2'].map((id) => subgraph.createNode(id));
+        const nodes = ['node1', 'node2'].map((id) => subgraph.createNode(id)) as EdgeTargetTuple;
         const edge = subgraph.createEdge(nodes);
         expect(subgraph.existEdge(edge)).toBe(true);
         expect(toDot(subgraph)).toMatchSnapshot();

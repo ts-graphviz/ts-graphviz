@@ -1,6 +1,6 @@
 import { Dot, INode, ISubgraph, ICluster, IEdge, IRootCluster } from '../types';
-import { isEdgeTargetLike } from '../model/nodes';
-import { renderEdgeTargets } from './utils';
+import { isNodeRef } from '../model/utils';
+import { renderNodeRefGroup } from './utils';
 import {
   commentOutIfExist,
   concatWordsWithSpace,
@@ -18,7 +18,7 @@ import {
   renderAttributeValue,
   renderAttributeWithSemi,
   renderClusterType,
-  renderEdgeTarget,
+  renderNodeRef,
   spaceLeftPad,
 } from './utils';
 
@@ -26,7 +26,7 @@ export class Renderer {
   private root?: IRootCluster;
   protected renderNode(node: INode): string {
     const comment = commentOutIfExist(node.comment);
-    const target = renderEdgeTarget(node);
+    const target = renderNodeRef(node);
     const attrs = node.attributes.size > 0 ? spaceLeftPad(renderAttributes(node.attributes)) : undefined;
     const dot = join(target, attrs, ';');
     return joinLines(comment, dot);
@@ -36,7 +36,7 @@ export class Renderer {
     const comment = commentOutIfExist(edge.comment);
     const targets = joinWith(
       isGraph(this.root) ? ' -- ' : ' -> ',
-      edge.targets.map((t) => (isEdgeTargetLike(t) ? renderEdgeTarget(t) : renderEdgeTargets(t))),
+      edge.targets.map((t) => (isNodeRef(t) ? renderNodeRef(t) : renderNodeRefGroup(t))),
     );
     const attrs = edge.attributes.size > 0 ? spaceLeftPad(renderAttributes(edge.attributes)) : undefined;
     const dot = join(targets, attrs, ';');

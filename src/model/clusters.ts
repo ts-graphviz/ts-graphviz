@@ -2,22 +2,20 @@
 import { attribute } from '../attribute';
 import {
   ClusterSubgraphAttributes,
-  Compass,
   EdgeAttributes,
-  EdgeTarget,
-  EdgeTargetLike,
   ICluster,
   IClusterCommonAttributes,
   IEdge,
   INode,
   ISubgraph,
   NodeAttributes,
-  EdgeTargetsLike,
-  EdgeTargets,
+  EdgeTargetTuple,
+  EdgeTargetLikeTuple,
 } from '../types';
 import { Attributes, AttributesBase } from './attributes-base';
-import { isEdgeTarget, isEdgeTargetLike, Node, isEdgeTargetsLike } from './nodes';
+import { Node } from './nodes';
 import { Edge } from './edges';
+import { isNodeRefGroupLike, toNodeRef, toNodeRefGroup } from './utils';
 
 /**
  * Base class for clusters.
@@ -172,40 +170,11 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
   }
 
   /** Create Edge and add it to the cluster. */
-  public createEdge(targets: (EdgeTargetLike | EdgeTargetsLike)[], attributes?: EdgeAttributes): IEdge {
-    const edge = new Edge(
-      targets.map((t) => (isEdgeTargetsLike(t) ? this.toEdgeTargets(t) : this.toEdgeTarget(t))),
-      attributes,
-    );
+  public createEdge(targets: EdgeTargetLikeTuple, attributes?: EdgeAttributes): IEdge {
+    const ts = targets.map((t) => (isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t))) as EdgeTargetTuple;
+    const edge = new Edge(ts, attributes);
     this.objects.edges.add(edge);
     return edge;
-  }
-
-  /** @hidden */
-  private toEdgeTarget(target: EdgeTargetLike): EdgeTarget {
-    if (isEdgeTarget(target)) {
-      return target;
-    }
-    const [id, port, compass] = target.split(':');
-    const n = this.getNode(id);
-    if (n !== undefined) {
-      if (port && (compass === undefined || Compass.is(compass))) {
-        return n.port({ port, compass });
-      }
-      return n;
-    }
-    if (Compass.is(compass)) {
-      return { id, port, compass };
-    }
-    return { id, port };
-  }
-
-  /** @hidden */
-  private toEdgeTargets(targets: EdgeTargetsLike): EdgeTargets {
-    if (targets.length < 2 && (isEdgeTargetLike(targets[0]) && isEdgeTargetLike(targets[1])) === false) {
-      throw Error('EdgeTargets must have at least 2 elements.');
-    }
-    return targets.map((t) => this.toEdgeTarget(t));
   }
 
   /**
@@ -429,7 +398,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * @param targets Nodes.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
-  public edge(targets: EdgeTargetLike[], callback?: (edge: IEdge) => void): IEdge;
+  public edge(targets: EdgeTargetLikeTuple, callback?: (edge: IEdge) => void): IEdge;
   /**
    * Create a edge and adapt the attributes.
    *
@@ -457,7 +426,7 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * @param attributes Object of attributes to be adapted to the edge.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
-  public edge(targets: EdgeTargetLike[], attributes: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
+  public edge(targets: EdgeTargetLikeTuple, attributes: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
   /**
    * Set a common attribute for the edges in the cluster.
    *
@@ -482,9 +451,9 @@ export abstract class Cluster<T extends string> extends AttributesBase<T> implem
    * @param attributes Object of attributes to be adapted to the edges.
    */
   public edge(attributes: EdgeAttributes): void;
-  public edge(firstArg: EdgeTargetLike[] | EdgeAttributes, ...args: unknown[]): IEdge | void {
+  public edge(firstArg: EdgeTargetLikeTuple | EdgeAttributes, ...args: unknown[]): IEdge | void {
     if (Array.isArray(firstArg)) {
-      const targets = [...firstArg];
+      const targets = firstArg;
       const attributes = args.find((arg: unknown): arg is EdgeAttributes => typeof arg === 'object');
       const callback = args.find((arg: unknown): arg is (edge: IEdge) => void => typeof arg === 'function');
       const edge = this.createEdge(targets, attributes);
@@ -539,7 +508,7 @@ export class Subgraph extends Cluster<attribute.Subgraph | attribute.ClusterSubg
   constructor(...args: unknown[]) {
     super();
     this.id = args.find((arg): arg is string => typeof arg === 'string');
-    const attributes = args.find((arg): arg is ClusterSubgraphAttributes => typeof arg === 'object');
+    const attributes = args.find((arg): arg is ClusterSubgraphAttributes => typeof arg === 'object' && arg !== null);
     if (attributes !== undefined) {
       this.apply(attributes);
     }

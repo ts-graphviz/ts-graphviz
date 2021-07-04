@@ -6,6 +6,7 @@ import { Edge } from '../edges';
 import { Node } from '../nodes';
 import { RootCluster, Digraph, Graph } from '../root-clusters';
 import { attribute } from '../../attribute';
+import { EdgeTargetTuple } from '../../types';
 
 describe('RootClusters', () => {
   describe('Constructor', () => {
@@ -71,7 +72,7 @@ describe('RootClusters', () => {
       });
 
       test('Edge operation methods works', () => {
-        const nodes = ['node1', 'node2'].map((id) => g.createNode(id));
+        const nodes = ['node1', 'node2'].map((id) => g.createNode(id)) as EdgeTargetTuple;
         const edge = new Edge(nodes);
         expect(g.existEdge(edge)).toBe(false);
         g.addEdge(edge);

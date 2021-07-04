@@ -4,7 +4,7 @@ import { Digraph, Graph } from '../../model/root-clusters';
 import { Node } from '../../model/nodes';
 import { attribute } from '../../attribute';
 import { Edge } from '../../model/edges';
-import { EdgeTarget } from '../../types';
+import { EdgeTargetTuple } from '../../types';
 
 describe('class base API', () => {
   test('digraph', () => {
@@ -51,7 +51,7 @@ describe('class base API', () => {
     }
 
     class MyCustomEdge extends Edge {
-      constructor(targets: ReadonlyArray<EdgeTarget>) {
+      constructor(targets: EdgeTargetTuple) {
         super(targets, {
           [attribute.label]: `This is Custom Edge`,
         });
