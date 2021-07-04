@@ -163,7 +163,7 @@ export function renderAttributes(attributes: IAttributes): string {
   );
 }
 
-export function renderEdgeTarget(node: NodeRef): string | undefined {
+export function renderNodeRef(node: NodeRef): string | undefined {
   if (isNode(node)) {
     return renderAttributeValue(node.id);
   } else if (isForwardRefNode(node)) {
@@ -176,6 +176,6 @@ export function renderEdgeTarget(node: NodeRef): string | undefined {
   }
 }
 
-export function renderEdgeTargets(group: NodeRefGroup): string | undefined {
-  return '{' + concatWordsWithSpace(...group.map(renderEdgeTarget)) + '}';
+export function renderNodeRefGroup(group: NodeRefGroup): string | undefined {
+  return '{' + concatWordsWithSpace(...group.map(renderNodeRef)) + '}';
 }

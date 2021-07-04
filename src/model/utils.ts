@@ -7,13 +7,13 @@ export function isForwardRefNode(object: unknown): object is IForwardRefNode {
 }
 
 /** @hidden */
-export function isEdgeTarget(node: unknown): node is NodeRef {
+export function isNodeRef(node: unknown): node is NodeRef {
   return node instanceof Node || isForwardRefNode(node);
 }
 
 /** @hidden */
 export function isNodeRefLike(node: unknown): node is NodeRefLike {
-  return typeof node === 'string' || isEdgeTarget(node);
+  return typeof node === 'string' || isNodeRef(node);
 }
 
 /** @hidden */
@@ -23,7 +23,7 @@ export function isNodeRefGroupLike(target: NodeRefLike | NodeRefGroupLike): targ
 
 /** @hidden */
 export function toNodeRef(target: NodeRefLike): NodeRef {
-  if (isEdgeTarget(target)) {
+  if (isNodeRef(target)) {
     return target;
   }
   const [id, port, compass] = target.split(':');
