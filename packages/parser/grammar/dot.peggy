@@ -121,7 +121,14 @@ _attibutes_item
 
 _attribute_list = _ "[" list:(attibutes_item / comment)* "]" { return list; }
 
-_edge_target_group = "{" id:node_ref rest:(","? v:node_ref { return v; })* __ "}" { return [id, ...rest]; }
+_edge_target_group
+  = "{" id:node_ref rest:(","? v:node_ref { return v; })* __ "}" {
+      return {
+        type: 'node_ref_group',
+        body: [id, ...rest],
+        location: location(),
+      };
+    }
 
 _edge_target
   = _edge_target_group

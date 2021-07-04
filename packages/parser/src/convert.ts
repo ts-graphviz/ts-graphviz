@@ -1,4 +1,15 @@
-import { ICluster, Digraph, Graph, RootCluster, Subgraph, Node, Edge, IHasComment } from 'ts-graphviz';
+import {
+  ICluster,
+  Digraph,
+  Graph,
+  RootCluster,
+  Subgraph,
+  Node,
+  Edge,
+  IHasComment,
+  EdgeTarget,
+  EdgeTargetTuple,
+} from 'ts-graphviz';
 import { AST } from './ast';
 
 class CommentHolder {
@@ -26,6 +37,19 @@ class CommentHolder {
   }
 }
 
+function convertToEdgeTargetTuple(edge: AST.Edge): EdgeTargetTuple {
+  return edge.targets.map(
+    (t): EdgeTarget => {
+      switch (t.type) {
+        case AST.Types.NodeRef:
+          return { id: t.id.value, port: t.port?.value, compass: t.compass?.value };
+        case AST.Types.NodeRefGroup:
+          return t.body.map((t) => ({ id: t.id.value, port: t.port?.value, compass: t.compass?.value }));
+      }
+    },
+  ) as EdgeTargetTuple;
+}
+
 function applyStatements(cluster: ICluster, statements: AST.ClusterStatement[]): void {
   const commentHolder = new CommentHolder();
   for (const stmt of statements) {
@@ -51,7 +75,7 @@ function applyStatements(cluster: ICluster, statements: AST.ClusterStatement[]):
       case AST.Types.Edge:
         commentHolder.apply(
           cluster.edge(
-            stmt.targets.map((t) => ({ id: t.id.value, port: t.port?.value, compass: t.compass?.value })),
+            convertToEdgeTargetTuple(stmt),
             stmt.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
           ),
           stmt.location,
@@ -103,7 +127,7 @@ export function convert(
       return subgraph;
     case AST.Types.Edge:
       const edge = new Edge(
-        ast.targets.map((t) => ({ id: t.id.value, port: t.port?.value, compass: t.compass?.value })),
+        convertToEdgeTargetTuple(ast),
         ast.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
       );
       return edge;

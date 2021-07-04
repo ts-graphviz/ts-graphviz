@@ -23,6 +23,7 @@ export namespace AST {
     Edge: 'edge',
     Node: 'node',
     NodeRef: 'node_ref',
+    NodeRefGroup: 'node_ref_group',
     Subgraph: 'subgraph',
     Literal: 'literal',
     ClusterStatements: 'cluster_statements',
@@ -113,6 +114,7 @@ export namespace AST {
     export type Kind = ValueOf<typeof Kind>;
   }
 
+  /** NodeRef AST object. */
   export interface NodeRef extends ASTBaseNode {
     type: typeof Types.NodeRef;
     id: Literal;
@@ -120,10 +122,17 @@ export namespace AST {
     compass?: Literal<Compass>;
   }
 
+  /** NodeRefGroup AST object. */
+  export interface NodeRefGroup extends ASTBaseParent<NodeRef> {
+    type: typeof Types.NodeRefGroup;
+  }
+
+  export type EdgeTarget = NodeRef | NodeRefGroup;
+
   /** Edge AST object. */
   export interface Edge extends ASTBaseParent<Attribute> {
     type: typeof Types.Edge;
-    targets: NodeRef[];
+    targets: [from: EdgeTarget, to: EdgeTarget, ...rest: EdgeTarget[]];
   }
 
   /** Node AST object. */
@@ -141,7 +150,18 @@ export namespace AST {
   export type DotStatement = Graph | Comment;
   export type ClusterStatement = Attribute | Attributes | Edge | Node | Subgraph | Comment;
 
-  export type ASTNode = Attribute | Attributes | Comment | Dot | Edge | Graph | Literal | Node | NodeRef | Subgraph;
+  export type ASTNode =
+    | Attribute
+    | Attributes
+    | Comment
+    | Dot
+    | Edge
+    | Graph
+    | Literal
+    | Node
+    | NodeRef
+    | NodeRefGroup
+    | Subgraph;
 
   export type Rule =
     | typeof Types.Dot

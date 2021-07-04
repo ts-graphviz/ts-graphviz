@@ -1425,9 +1425,26 @@ Object {
     },
   },
   "targets": Array [
-    Array [
-      Object {
-        "id": Object {
+    Object {
+      "body": Array [
+        Object {
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 4,
+                "line": 1,
+                "offset": 3,
+              },
+              "start": Object {
+                "column": 2,
+                "line": 1,
+                "offset": 1,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "a1",
+          },
           "location": Object {
             "end": Object {
               "column": 4,
@@ -1440,26 +1457,26 @@ Object {
               "offset": 1,
             },
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "a1",
+          "type": "node_ref",
         },
-        "location": Object {
-          "end": Object {
-            "column": 4,
-            "line": 1,
-            "offset": 3,
+        Object {
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 8,
+                "line": 1,
+                "offset": 7,
+              },
+              "start": Object {
+                "column": 6,
+                "line": 1,
+                "offset": 5,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "a2",
           },
-          "start": Object {
-            "column": 2,
-            "line": 1,
-            "offset": 1,
-          },
-        },
-        "type": "node_ref",
-      },
-      Object {
-        "id": Object {
           "location": Object {
             "end": Object {
               "column": 8,
@@ -1472,28 +1489,43 @@ Object {
               "offset": 5,
             },
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "a2",
+          "type": "node_ref",
         },
-        "location": Object {
-          "end": Object {
-            "column": 8,
-            "line": 1,
-            "offset": 7,
-          },
-          "start": Object {
-            "column": 6,
-            "line": 1,
-            "offset": 5,
-          },
+      ],
+      "location": Object {
+        "end": Object {
+          "column": 9,
+          "line": 1,
+          "offset": 8,
         },
-        "type": "node_ref",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
       },
-    ],
-    Array [
-      Object {
-        "id": Object {
+      "type": "node_ref_group",
+    },
+    Object {
+      "body": Array [
+        Object {
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 16,
+                "line": 1,
+                "offset": 15,
+              },
+              "start": Object {
+                "column": 14,
+                "line": 1,
+                "offset": 13,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "b1",
+          },
           "location": Object {
             "end": Object {
               "column": 16,
@@ -1506,26 +1538,26 @@ Object {
               "offset": 13,
             },
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "b1",
+          "type": "node_ref",
         },
-        "location": Object {
-          "end": Object {
-            "column": 16,
-            "line": 1,
-            "offset": 15,
+        Object {
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 20,
+                "line": 1,
+                "offset": 19,
+              },
+              "start": Object {
+                "column": 18,
+                "line": 1,
+                "offset": 17,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "b2",
           },
-          "start": Object {
-            "column": 14,
-            "line": 1,
-            "offset": 13,
-          },
-        },
-        "type": "node_ref",
-      },
-      Object {
-        "id": Object {
           "location": Object {
             "end": Object {
               "column": 20,
@@ -1538,25 +1570,23 @@ Object {
               "offset": 17,
             },
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "b2",
+          "type": "node_ref",
         },
-        "location": Object {
-          "end": Object {
-            "column": 20,
-            "line": 1,
-            "offset": 19,
-          },
-          "start": Object {
-            "column": 18,
-            "line": 1,
-            "offset": 17,
-          },
+      ],
+      "location": Object {
+        "end": Object {
+          "column": 21,
+          "line": 1,
+          "offset": 20,
         },
-        "type": "node_ref",
+        "start": Object {
+          "column": 13,
+          "line": 1,
+          "offset": 12,
+        },
       },
-    ],
+      "type": "node_ref_group",
+    },
   ],
   "type": "edge",
 }
@@ -1578,38 +1608,26 @@ Object {
     },
   },
   "targets": Array [
-    Array [
-      Object {
-        "id": Object {
-          "location": Object {
-            "end": Object {
-              "column": 4,
-              "line": 1,
-              "offset": 3,
+    Object {
+      "body": Array [
+        Object {
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 4,
+                "line": 1,
+                "offset": 3,
+              },
+              "start": Object {
+                "column": 2,
+                "line": 1,
+                "offset": 1,
+              },
             },
-            "start": Object {
-              "column": 2,
-              "line": 1,
-              "offset": 1,
-            },
+            "quoted": false,
+            "type": "literal",
+            "value": "a1",
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "a1",
-        },
-        "location": Object {
-          "end": Object {
-            "column": 7,
-            "line": 1,
-            "offset": 6,
-          },
-          "start": Object {
-            "column": 2,
-            "line": 1,
-            "offset": 1,
-          },
-        },
-        "port": Object {
           "location": Object {
             "end": Object {
               "column": 7,
@@ -1617,19 +1635,65 @@ Object {
               "offset": 6,
             },
             "start": Object {
-              "column": 5,
+              "column": 2,
               "line": 1,
-              "offset": 4,
+              "offset": 1,
             },
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "p1",
+          "port": Object {
+            "location": Object {
+              "end": Object {
+                "column": 7,
+                "line": 1,
+                "offset": 6,
+              },
+              "start": Object {
+                "column": 5,
+                "line": 1,
+                "offset": 4,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "p1",
+          },
+          "type": "node_ref",
         },
-        "type": "node_ref",
-      },
-      Object {
-        "compass": Object {
+        Object {
+          "compass": Object {
+            "location": Object {
+              "end": Object {
+                "column": 16,
+                "line": 1,
+                "offset": 15,
+              },
+              "start": Object {
+                "column": 15,
+                "line": 1,
+                "offset": 14,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "w",
+          },
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 11,
+                "line": 1,
+                "offset": 10,
+              },
+              "start": Object {
+                "column": 9,
+                "line": 1,
+                "offset": 8,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "a2",
+          },
           "location": Object {
             "end": Object {
               "column": 16,
@@ -1637,96 +1701,65 @@ Object {
               "offset": 15,
             },
             "start": Object {
-              "column": 15,
-              "line": 1,
-              "offset": 14,
-            },
-          },
-          "quoted": false,
-          "type": "literal",
-          "value": "w",
-        },
-        "id": Object {
-          "location": Object {
-            "end": Object {
-              "column": 11,
-              "line": 1,
-              "offset": 10,
-            },
-            "start": Object {
               "column": 9,
               "line": 1,
               "offset": 8,
             },
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "a2",
-        },
-        "location": Object {
-          "end": Object {
-            "column": 16,
-            "line": 1,
-            "offset": 15,
-          },
-          "start": Object {
-            "column": 9,
-            "line": 1,
-            "offset": 8,
-          },
-        },
-        "port": Object {
-          "location": Object {
-            "end": Object {
-              "column": 14,
-              "line": 1,
-              "offset": 13,
+          "port": Object {
+            "location": Object {
+              "end": Object {
+                "column": 14,
+                "line": 1,
+                "offset": 13,
+              },
+              "start": Object {
+                "column": 12,
+                "line": 1,
+                "offset": 11,
+              },
             },
-            "start": Object {
-              "column": 12,
-              "line": 1,
-              "offset": 11,
-            },
+            "quoted": false,
+            "type": "literal",
+            "value": "p2",
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "p2",
+          "type": "node_ref",
         },
-        "type": "node_ref",
+      ],
+      "location": Object {
+        "end": Object {
+          "column": 17,
+          "line": 1,
+          "offset": 16,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
       },
-    ],
-    Array [
-      Object {
-        "id": Object {
-          "location": Object {
-            "end": Object {
-              "column": 24,
-              "line": 1,
-              "offset": 23,
+      "type": "node_ref_group",
+    },
+    Object {
+      "body": Array [
+        Object {
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 24,
+                "line": 1,
+                "offset": 23,
+              },
+              "start": Object {
+                "column": 22,
+                "line": 1,
+                "offset": 21,
+              },
             },
-            "start": Object {
-              "column": 22,
-              "line": 1,
-              "offset": 21,
-            },
+            "quoted": false,
+            "type": "literal",
+            "value": "b1",
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "b1",
-        },
-        "location": Object {
-          "end": Object {
-            "column": 26,
-            "line": 1,
-            "offset": 25,
-          },
-          "start": Object {
-            "column": 22,
-            "line": 1,
-            "offset": 21,
-          },
-        },
-        "port": Object {
           "location": Object {
             "end": Object {
               "column": 26,
@@ -1734,48 +1767,48 @@ Object {
               "offset": 25,
             },
             "start": Object {
-              "column": 25,
+              "column": 22,
               "line": 1,
-              "offset": 24,
+              "offset": 21,
             },
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "e",
-        },
-        "type": "node_ref",
-      },
-      Object {
-        "id": Object {
-          "location": Object {
-            "end": Object {
-              "column": 30,
-              "line": 1,
-              "offset": 29,
+          "port": Object {
+            "location": Object {
+              "end": Object {
+                "column": 26,
+                "line": 1,
+                "offset": 25,
+              },
+              "start": Object {
+                "column": 25,
+                "line": 1,
+                "offset": 24,
+              },
             },
-            "start": Object {
-              "column": 28,
-              "line": 1,
-              "offset": 27,
+            "quoted": false,
+            "type": "literal",
+            "value": "e",
+          },
+          "type": "node_ref",
+        },
+        Object {
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 30,
+                "line": 1,
+                "offset": 29,
+              },
+              "start": Object {
+                "column": 28,
+                "line": 1,
+                "offset": 27,
+              },
             },
+            "quoted": false,
+            "type": "literal",
+            "value": "b2",
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "b2",
-        },
-        "location": Object {
-          "end": Object {
-            "column": 33,
-            "line": 1,
-            "offset": 32,
-          },
-          "start": Object {
-            "column": 28,
-            "line": 1,
-            "offset": 27,
-          },
-        },
-        "port": Object {
           "location": Object {
             "end": Object {
               "column": 33,
@@ -1783,18 +1816,45 @@ Object {
               "offset": 32,
             },
             "start": Object {
-              "column": 31,
+              "column": 28,
               "line": 1,
-              "offset": 30,
+              "offset": 27,
             },
           },
-          "quoted": false,
-          "type": "literal",
-          "value": "p3",
+          "port": Object {
+            "location": Object {
+              "end": Object {
+                "column": 33,
+                "line": 1,
+                "offset": 32,
+              },
+              "start": Object {
+                "column": 31,
+                "line": 1,
+                "offset": 30,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "p3",
+          },
+          "type": "node_ref",
         },
-        "type": "node_ref",
+      ],
+      "location": Object {
+        "end": Object {
+          "column": 34,
+          "line": 1,
+          "offset": 33,
+        },
+        "start": Object {
+          "column": 21,
+          "line": 1,
+          "offset": 20,
+        },
       },
-    ],
+      "type": "node_ref_group",
+    },
   ],
   "type": "edge",
 }

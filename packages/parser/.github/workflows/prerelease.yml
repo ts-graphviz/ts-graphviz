@@ -12,25 +12,25 @@ jobs:
     name: Prerelease
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-node@v1
-      with:
-        node-version: 14.x
-        registry-url: https://registry.npmjs.org
-    - name: Validate Version
-      run: node -e 'if (!/\d+\.\d+\.\d\-\d+/.test("${{ github.event.inputs.version }}")) process.exit(1);'
-    - name: Install dependencies
-      run: yarn install --frozen-lockfile --ignore-optional
-      env:
-        CI: 'true'
-    - name: Build
-      run: yarn build
-    - name: Fix version
-      run: |-
-        cp package.json tmp.json
-        jq '.version|="${{ github.event.inputs.version }}"' tmp.json -M > package.json
-        rm -f tmp.json
-    - name: Publish to NPM
-      run: npm publish --tag next
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+          registry-url: https://registry.npmjs.org
+      - name: Validate Version
+        run: node -e 'if (!/\d+\.\d+\.\d\-\d+/.test("${{ github.event.inputs.version }}")) process.exit(1);'
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --ignore-optional
+        env:
+          CI: 'true'
+      - name: Build
+        run: yarn build
+      - name: Fix version
+        run: |-
+          cp package.json tmp.json
+          jq '.version|="${{ github.event.inputs.version }}"' tmp.json -M > package.json
+          rm -f tmp.json
+      - name: Publish to NPM
+        run: npm publish --tag next
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}

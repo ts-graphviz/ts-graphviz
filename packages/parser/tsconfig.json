@@ -3,9 +3,7 @@
     "importHelpers": true,
     "target": "es5",
     "strict": true,
-    "lib": [
-      "esnext"
-    ],
+    "lib": ["esnext"],
     "allowJs": false,
     "alwaysStrict": true,
     "strictNullChecks": true,
@@ -15,11 +13,6 @@
     "esModuleInterop": true,
     "declaration": true
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"]
 }
