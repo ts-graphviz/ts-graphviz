@@ -398,7 +398,7 @@ Object {
                     },
                     "quoted": false,
                     "type": "literal",
-                    "value": 180,
+                    "value": "180",
                   },
                 },
               ],

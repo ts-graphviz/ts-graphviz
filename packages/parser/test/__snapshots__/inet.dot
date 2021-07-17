@@ -1976,7 +1976,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 4,
+                "value": "4",
               },
             },
           ],

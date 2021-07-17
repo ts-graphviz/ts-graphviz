@@ -408,7 +408,7 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c98 = /^[0-9]/;
   const peg$c99 = peg$classExpectation([['0', '9']], false, false);
   const peg$c100 = function (n: any): any {
-    return parseFloat(text());
+    return text();
   };
   const peg$c101 = function (v: any): any {
     return {

@@ -832,7 +832,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 1000,
+                "value": "1000",
               },
             },
             Object {

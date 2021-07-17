@@ -53,7 +53,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 1,
+                "value": "1",
               },
             },
             Object {
@@ -285,7 +285,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 0.3,
+                "value": "0.3",
               },
             },
             Object {
@@ -334,7 +334,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 0.3,
+                "value": "0.3",
               },
             },
             Object {
@@ -537,7 +537,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 1,
+                "value": "1",
               },
               "location": Object {
                 "end": Object {
@@ -570,7 +570,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 2,
+                "value": "2",
               },
               "location": Object {
                 "end": Object {
@@ -603,7 +603,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 3,
+                "value": "3",
               },
               "location": Object {
                 "end": Object {
@@ -636,7 +636,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 4,
+                "value": "4",
               },
               "location": Object {
                 "end": Object {
@@ -669,7 +669,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 5,
+                "value": "5",
               },
               "location": Object {
                 "end": Object {
@@ -702,7 +702,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 6,
+                "value": "6",
               },
               "location": Object {
                 "end": Object {
@@ -735,7 +735,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 7,
+                "value": "7",
               },
               "location": Object {
                 "end": Object {
@@ -768,7 +768,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 8,
+                "value": "8",
               },
               "location": Object {
                 "end": Object {
@@ -801,7 +801,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 10,
+                "value": "10",
               },
               "location": Object {
                 "end": Object {
@@ -834,7 +834,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 20,
+                "value": "20",
               },
               "location": Object {
                 "end": Object {
@@ -867,7 +867,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 30,
+                "value": "30",
               },
               "location": Object {
                 "end": Object {
@@ -900,7 +900,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 40,
+                "value": "40",
               },
               "location": Object {
                 "end": Object {
@@ -933,7 +933,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 50,
+                "value": "50",
               },
               "location": Object {
                 "end": Object {
@@ -966,7 +966,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 60,
+                "value": "60",
               },
               "location": Object {
                 "end": Object {
@@ -999,7 +999,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 70,
+                "value": "70",
               },
               "location": Object {
                 "end": Object {
@@ -1032,7 +1032,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 80,
+                "value": "80",
               },
               "location": Object {
                 "end": Object {
@@ -2896,7 +2896,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 1,
+                "value": "1",
               },
               "location": Object {
                 "end": Object {
@@ -3109,7 +3109,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 2,
+                "value": "2",
               },
               "location": Object {
                 "end": Object {
@@ -3322,7 +3322,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 3,
+                "value": "3",
               },
               "location": Object {
                 "end": Object {
@@ -3535,7 +3535,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 4,
+                "value": "4",
               },
               "location": Object {
                 "end": Object {
@@ -3748,7 +3748,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 5,
+                "value": "5",
               },
               "location": Object {
                 "end": Object {
@@ -3961,7 +3961,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 6,
+                "value": "6",
               },
               "location": Object {
                 "end": Object {
@@ -4174,7 +4174,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 7,
+                "value": "7",
               },
               "location": Object {
                 "end": Object {
@@ -4387,7 +4387,7 @@ Object {
                 },
                 "quoted": false,
                 "type": "literal",
-                "value": 8,
+                "value": "8",
               },
               "location": Object {
                 "end": Object {
@@ -7763,7 +7763,7 @@ Object {
                     },
                     "quoted": false,
                     "type": "literal",
-                    "value": 10,
+                    "value": "10",
                   },
                   "location": Object {
                     "end": Object {
@@ -7845,7 +7845,7 @@ Object {
                     },
                     "quoted": false,
                     "type": "literal",
-                    "value": 20,
+                    "value": "20",
                   },
                   "location": Object {
                     "end": Object {
@@ -7927,7 +7927,7 @@ Object {
                     },
                     "quoted": false,
                     "type": "literal",
-                    "value": 30,
+                    "value": "30",
                   },
                   "location": Object {
                     "end": Object {
@@ -8009,7 +8009,7 @@ Object {
                     },
                     "quoted": false,
                     "type": "literal",
-                    "value": 40,
+                    "value": "40",
                   },
                   "location": Object {
                     "end": Object {
@@ -8091,7 +8091,7 @@ Object {
                     },
                     "quoted": false,
                     "type": "literal",
-                    "value": 50,
+                    "value": "50",
                   },
                   "location": Object {
                     "end": Object {
@@ -8173,7 +8173,7 @@ Object {
                     },
                     "quoted": false,
                     "type": "literal",
-                    "value": 60,
+                    "value": "60",
                   },
                   "location": Object {
                     "end": Object {
@@ -8255,7 +8255,7 @@ Object {
                     },
                     "quoted": false,
                     "type": "literal",
-                    "value": 70,
+                    "value": "70",
                   },
                   "location": Object {
                     "end": Object {
@@ -8337,7 +8337,7 @@ Object {
                     },
                     "quoted": false,
                     "type": "literal",
-                    "value": 80,
+                    "value": "80",
                   },
                   "location": Object {
                     "end": Object {
