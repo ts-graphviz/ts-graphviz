@@ -6,14 +6,6 @@ import 'jest-specific-snapshot';
 
 import { AST, SyntaxError } from '../src';
 
-declare global {
-  namespace jest {
-    interface Matchers<R, T> {
-      toMatchSpecificSnapshot(path: string): R;
-    }
-  }
-}
-
 const files = glob.sync(`${__dirname}/e2e/*`).sort();
 
 for (const file of files) {
