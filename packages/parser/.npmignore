@@ -7,8 +7,10 @@
 .prettierrc.json
 .vscode
 config
+coverage
 grammar
 jest.config.ts
 rollup.config.js
 src
+test
 tsconfig.json
