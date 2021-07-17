@@ -51,6 +51,7 @@
     "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-prettier": "^3.4.0",
     "jest": "^26.6.3",
+    "jest-specific-snapshot": "^5.0.0",
     "peggy": "^1.2.0",
     "prettier": "^2.2.1",
     "prettier-plugin-pegjs": "^0.4.0",

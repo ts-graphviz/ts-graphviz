@@ -1,0 +1,4552 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`gradient_colors.dot 1`] = `
+Object {
+  "body": Array [
+    Object {
+      "body": Array [
+        Object {
+          "key": Object {
+            "location": Object {
+              "end": Object {
+                "column": 19,
+                "line": 1,
+                "offset": 18,
+              },
+              "start": Object {
+                "column": 12,
+                "line": 1,
+                "offset": 11,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "bgcolor",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 24,
+              "line": 1,
+              "offset": 23,
+            },
+            "start": Object {
+              "column": 12,
+              "line": 1,
+              "offset": 11,
+            },
+          },
+          "type": "attribute",
+          "value": Object {
+            "location": Object {
+              "end": Object {
+                "column": 24,
+                "line": 1,
+                "offset": 23,
+              },
+              "start": Object {
+                "column": 20,
+                "line": 1,
+                "offset": 19,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "blue",
+          },
+        },
+        Object {
+          "body": Array [
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 32,
+                    "line": 4,
+                    "offset": 57,
+                  },
+                  "start": Object {
+                    "column": 23,
+                    "line": 4,
+                    "offset": 48,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "fontcolor",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 38,
+                  "line": 4,
+                  "offset": 63,
+                },
+                "start": Object {
+                  "column": 23,
+                  "line": 4,
+                  "offset": 48,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 38,
+                    "line": 4,
+                    "offset": 63,
+                  },
+                  "start": Object {
+                    "column": 33,
+                    "line": 4,
+                    "offset": 58,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "white",
+              },
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 5,
+                        "offset": 78,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 5,
+                        "offset": 73,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "style",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 23,
+                      "line": 5,
+                      "offset": 86,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 5,
+                      "offset": 73,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 22,
+                        "line": 5,
+                        "offset": 85,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 5,
+                        "offset": 79,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "filled",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 28,
+                        "line": 5,
+                        "offset": 91,
+                      },
+                      "start": Object {
+                        "column": 23,
+                        "line": 5,
+                        "offset": 86,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 35,
+                      "line": 5,
+                      "offset": 98,
+                    },
+                    "start": Object {
+                      "column": 23,
+                      "line": 5,
+                      "offset": 86,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 34,
+                        "line": 5,
+                        "offset": 97,
+                      },
+                      "start": Object {
+                        "column": 29,
+                        "line": 5,
+                        "offset": 92,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "box",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 44,
+                        "line": 5,
+                        "offset": 107,
+                      },
+                      "start": Object {
+                        "column": 35,
+                        "line": 5,
+                        "offset": 98,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 71,
+                      "line": 5,
+                      "offset": 134,
+                    },
+                    "start": Object {
+                      "column": 35,
+                      "line": 5,
+                      "offset": 98,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 70,
+                        "line": 5,
+                        "offset": 133,
+                      },
+                      "start": Object {
+                        "column": 45,
+                        "line": 5,
+                        "offset": 108,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "antiquewhite:aquamarine",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 72,
+                  "line": 5,
+                  "offset": 135,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 5,
+                  "offset": 66,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 74,
+                    "line": 5,
+                    "offset": 137,
+                  },
+                  "start": Object {
+                    "column": 72,
+                    "line": 5,
+                    "offset": 135,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n5",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 75,
+                  "line": 5,
+                  "offset": 138,
+                },
+                "start": Object {
+                  "column": 72,
+                  "line": 5,
+                  "offset": 135,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 6,
+                        "offset": 153,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 6,
+                        "offset": 148,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 26,
+                      "line": 6,
+                      "offset": 164,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 6,
+                      "offset": 148,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 25,
+                        "line": 6,
+                        "offset": 163,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 6,
+                        "offset": 154,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "ellipse",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 35,
+                        "line": 6,
+                        "offset": 173,
+                      },
+                      "start": Object {
+                        "column": 26,
+                        "line": 6,
+                        "offset": 164,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 52,
+                      "line": 6,
+                      "offset": 190,
+                    },
+                    "start": Object {
+                      "column": 26,
+                      "line": 6,
+                      "offset": 164,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 51,
+                        "line": 6,
+                        "offset": 189,
+                      },
+                      "start": Object {
+                        "column": 36,
+                        "line": 6,
+                        "offset": 174,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "bisque4:blue2",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 53,
+                  "line": 6,
+                  "offset": 191,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 6,
+                  "offset": 141,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 55,
+                    "line": 6,
+                    "offset": 193,
+                  },
+                  "start": Object {
+                    "column": 53,
+                    "line": 6,
+                    "offset": 191,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n4",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 56,
+                  "line": 6,
+                  "offset": 194,
+                },
+                "start": Object {
+                  "column": 53,
+                  "line": 6,
+                  "offset": 191,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 7,
+                        "offset": 209,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 7,
+                        "offset": 204,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 25,
+                      "line": 7,
+                      "offset": 219,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 7,
+                      "offset": 204,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 24,
+                        "line": 7,
+                        "offset": 218,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 7,
+                        "offset": 210,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "circle",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 34,
+                        "line": 7,
+                        "offset": 228,
+                      },
+                      "start": Object {
+                        "column": 25,
+                        "line": 7,
+                        "offset": 219,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 59,
+                      "line": 7,
+                      "offset": 253,
+                    },
+                    "start": Object {
+                      "column": 25,
+                      "line": 7,
+                      "offset": 219,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 58,
+                        "line": 7,
+                        "offset": 252,
+                      },
+                      "start": Object {
+                        "column": 35,
+                        "line": 7,
+                        "offset": 229,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "cadetblue1:chocolate1",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 60,
+                  "line": 7,
+                  "offset": 254,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 7,
+                  "offset": 197,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 62,
+                    "line": 7,
+                    "offset": 256,
+                  },
+                  "start": Object {
+                    "column": 60,
+                    "line": 7,
+                    "offset": 254,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n3",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 63,
+                  "line": 7,
+                  "offset": 257,
+                },
+                "start": Object {
+                  "column": 60,
+                  "line": 7,
+                  "offset": 254,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 8,
+                        "offset": 272,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 8,
+                        "offset": 267,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 26,
+                      "line": 8,
+                      "offset": 283,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 8,
+                      "offset": 267,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 25,
+                        "line": 8,
+                        "offset": 282,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 8,
+                        "offset": 273,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "diamond",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 35,
+                        "line": 8,
+                        "offset": 292,
+                      },
+                      "start": Object {
+                        "column": 26,
+                        "line": 8,
+                        "offset": 283,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 52,
+                      "line": 8,
+                      "offset": 309,
+                    },
+                    "start": Object {
+                      "column": 26,
+                      "line": 8,
+                      "offset": 283,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 51,
+                        "line": 8,
+                        "offset": 308,
+                      },
+                      "start": Object {
+                        "column": 36,
+                        "line": 8,
+                        "offset": 293,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "crimson:cyan4",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 53,
+                  "line": 8,
+                  "offset": 310,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 8,
+                  "offset": 260,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 55,
+                    "line": 8,
+                    "offset": 312,
+                  },
+                  "start": Object {
+                    "column": 53,
+                    "line": 8,
+                    "offset": 310,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n2",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 56,
+                  "line": 8,
+                  "offset": 313,
+                },
+                "start": Object {
+                  "column": 53,
+                  "line": 8,
+                  "offset": 310,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 9,
+                        "offset": 328,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 9,
+                        "offset": 323,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 27,
+                      "line": 9,
+                      "offset": 340,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 9,
+                      "offset": 323,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 26,
+                        "line": 9,
+                        "offset": 339,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 9,
+                        "offset": 329,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "triangle",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 36,
+                        "line": 9,
+                        "offset": 349,
+                      },
+                      "start": Object {
+                        "column": 27,
+                        "line": 9,
+                        "offset": 340,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 62,
+                      "line": 9,
+                      "offset": 375,
+                    },
+                    "start": Object {
+                      "column": 27,
+                      "line": 9,
+                      "offset": 340,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 61,
+                        "line": 9,
+                        "offset": 374,
+                      },
+                      "start": Object {
+                        "column": 37,
+                        "line": 9,
+                        "offset": 350,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "deepskyblue2:firebrick",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 63,
+                  "line": 9,
+                  "offset": 376,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 9,
+                  "offset": 316,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 65,
+                    "line": 9,
+                    "offset": 378,
+                  },
+                  "start": Object {
+                    "column": 63,
+                    "line": 9,
+                    "offset": 376,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n1",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 66,
+                  "line": 9,
+                  "offset": 379,
+                },
+                "start": Object {
+                  "column": 63,
+                  "line": 9,
+                  "offset": 376,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 10,
+                        "offset": 394,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 10,
+                        "offset": 389,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 27,
+                      "line": 10,
+                      "offset": 406,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 10,
+                      "offset": 389,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 26,
+                        "line": 10,
+                        "offset": 405,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 10,
+                        "offset": 395,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "pentagon",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 36,
+                        "line": 10,
+                        "offset": 415,
+                      },
+                      "start": Object {
+                        "column": 27,
+                        "line": 10,
+                        "offset": 406,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 53,
+                      "line": 10,
+                      "offset": 432,
+                    },
+                    "start": Object {
+                      "column": 27,
+                      "line": 10,
+                      "offset": 406,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 52,
+                        "line": 10,
+                        "offset": 431,
+                      },
+                      "start": Object {
+                        "column": 37,
+                        "line": 10,
+                        "offset": 416,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "gray24:gray88",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 54,
+                  "line": 10,
+                  "offset": 433,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 10,
+                  "offset": 382,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 56,
+                    "line": 10,
+                    "offset": 435,
+                  },
+                  "start": Object {
+                    "column": 54,
+                    "line": 10,
+                    "offset": 433,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n0",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 57,
+                  "line": 10,
+                  "offset": 436,
+                },
+                "start": Object {
+                  "column": 54,
+                  "line": 10,
+                  "offset": 433,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 8,
+                    "line": 12,
+                    "offset": 445,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 12,
+                    "offset": 440,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "label",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 24,
+                  "line": 12,
+                  "offset": 461,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 12,
+                  "offset": 440,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 23,
+                    "line": 12,
+                    "offset": 460,
+                  },
+                  "start": Object {
+                    "column": 11,
+                    "line": 12,
+                    "offset": 448,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "X11 Colors",
+              },
+            },
+          ],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 20,
+                "line": 4,
+                "offset": 45,
+              },
+              "start": Object {
+                "column": 11,
+                "line": 4,
+                "offset": 36,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "cluster_1",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 13,
+              "offset": 464,
+            },
+            "start": Object {
+              "column": 2,
+              "line": 4,
+              "offset": 27,
+            },
+          },
+          "type": "subgraph",
+        },
+        Object {
+          "body": Array [
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 32,
+                    "line": 14,
+                    "offset": 496,
+                  },
+                  "start": Object {
+                    "column": 23,
+                    "line": 14,
+                    "offset": 487,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "fontcolor",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 38,
+                  "line": 14,
+                  "offset": 502,
+                },
+                "start": Object {
+                  "column": 23,
+                  "line": 14,
+                  "offset": 487,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 38,
+                    "line": 14,
+                    "offset": 502,
+                  },
+                  "start": Object {
+                    "column": 33,
+                    "line": 14,
+                    "offset": 497,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "white",
+              },
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 15,
+                        "offset": 517,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 15,
+                        "offset": 512,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "style",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 23,
+                      "line": 15,
+                      "offset": 525,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 15,
+                      "offset": 512,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 22,
+                        "line": 15,
+                        "offset": 524,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 15,
+                        "offset": 518,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "filled",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 28,
+                        "line": 15,
+                        "offset": 530,
+                      },
+                      "start": Object {
+                        "column": 23,
+                        "line": 15,
+                        "offset": 525,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 35,
+                      "line": 15,
+                      "offset": 537,
+                    },
+                    "start": Object {
+                      "column": 23,
+                      "line": 15,
+                      "offset": 525,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 34,
+                        "line": 15,
+                        "offset": 536,
+                      },
+                      "start": Object {
+                        "column": 29,
+                        "line": 15,
+                        "offset": 531,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "box",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 44,
+                        "line": 15,
+                        "offset": 546,
+                      },
+                      "start": Object {
+                        "column": 35,
+                        "line": 15,
+                        "offset": 537,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 60,
+                      "line": 15,
+                      "offset": 562,
+                    },
+                    "start": Object {
+                      "column": 35,
+                      "line": 15,
+                      "offset": 537,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 59,
+                        "line": 15,
+                        "offset": 561,
+                      },
+                      "start": Object {
+                        "column": 45,
+                        "line": 15,
+                        "offset": 547,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "bisque:brown",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 61,
+                  "line": 15,
+                  "offset": 563,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 15,
+                  "offset": 505,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 64,
+                    "line": 15,
+                    "offset": 566,
+                  },
+                  "start": Object {
+                    "column": 61,
+                    "line": 15,
+                    "offset": 563,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n11",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 65,
+                  "line": 15,
+                  "offset": 567,
+                },
+                "start": Object {
+                  "column": 61,
+                  "line": 15,
+                  "offset": 563,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 16,
+                        "offset": 582,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 16,
+                        "offset": 577,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 26,
+                      "line": 16,
+                      "offset": 593,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 16,
+                      "offset": 577,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 25,
+                        "line": 16,
+                        "offset": 592,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 16,
+                        "offset": 583,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "ellipse",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 35,
+                        "line": 16,
+                        "offset": 602,
+                      },
+                      "start": Object {
+                        "column": 26,
+                        "line": 16,
+                        "offset": 593,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 55,
+                      "line": 16,
+                      "offset": 622,
+                    },
+                    "start": Object {
+                      "column": 26,
+                      "line": 16,
+                      "offset": 593,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 54,
+                        "line": 16,
+                        "offset": 621,
+                      },
+                      "start": Object {
+                        "column": 36,
+                        "line": 16,
+                        "offset": 603,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "green:darkorchid",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 56,
+                  "line": 16,
+                  "offset": 623,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 16,
+                  "offset": 570,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 59,
+                    "line": 16,
+                    "offset": 626,
+                  },
+                  "start": Object {
+                    "column": 56,
+                    "line": 16,
+                    "offset": 623,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n10",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 60,
+                  "line": 16,
+                  "offset": 627,
+                },
+                "start": Object {
+                  "column": 56,
+                  "line": 16,
+                  "offset": 623,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 17,
+                        "offset": 642,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 17,
+                        "offset": 637,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 25,
+                      "line": 17,
+                      "offset": 652,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 17,
+                      "offset": 637,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 24,
+                        "line": 17,
+                        "offset": 651,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 17,
+                        "offset": 643,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "circle",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 34,
+                        "line": 17,
+                        "offset": 661,
+                      },
+                      "start": Object {
+                        "column": 25,
+                        "line": 17,
+                        "offset": 652,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 54,
+                      "line": 17,
+                      "offset": 681,
+                    },
+                    "start": Object {
+                      "column": 25,
+                      "line": 17,
+                      "offset": 652,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 53,
+                        "line": 17,
+                        "offset": 680,
+                      },
+                      "start": Object {
+                        "column": 35,
+                        "line": 17,
+                        "offset": 662,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "deepskyblue:gold",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 55,
+                  "line": 17,
+                  "offset": 682,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 17,
+                  "offset": 630,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 57,
+                    "line": 17,
+                    "offset": 684,
+                  },
+                  "start": Object {
+                    "column": 55,
+                    "line": 17,
+                    "offset": 682,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n9",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 58,
+                  "line": 17,
+                  "offset": 685,
+                },
+                "start": Object {
+                  "column": 55,
+                  "line": 17,
+                  "offset": 682,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 18,
+                        "offset": 700,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 18,
+                        "offset": 695,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 26,
+                      "line": 18,
+                      "offset": 711,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 18,
+                      "offset": 695,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 25,
+                        "line": 18,
+                        "offset": 710,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 18,
+                        "offset": 701,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "diamond",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 35,
+                        "line": 18,
+                        "offset": 720,
+                      },
+                      "start": Object {
+                        "column": 26,
+                        "line": 18,
+                        "offset": 711,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 62,
+                      "line": 18,
+                      "offset": 747,
+                    },
+                    "start": Object {
+                      "column": 26,
+                      "line": 18,
+                      "offset": 711,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 61,
+                        "line": 18,
+                        "offset": 746,
+                      },
+                      "start": Object {
+                        "column": 36,
+                        "line": 18,
+                        "offset": 721,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "lightseagreen:orangered",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 63,
+                  "line": 18,
+                  "offset": 748,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 18,
+                  "offset": 688,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 65,
+                    "line": 18,
+                    "offset": 750,
+                  },
+                  "start": Object {
+                    "column": 63,
+                    "line": 18,
+                    "offset": 748,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n8",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 66,
+                  "line": 18,
+                  "offset": 751,
+                },
+                "start": Object {
+                  "column": 63,
+                  "line": 18,
+                  "offset": 748,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 19,
+                        "offset": 766,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 19,
+                        "offset": 761,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 27,
+                      "line": 19,
+                      "offset": 778,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 19,
+                      "offset": 761,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 26,
+                        "line": 19,
+                        "offset": 777,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 19,
+                        "offset": 767,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "triangle",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 36,
+                        "line": 19,
+                        "offset": 787,
+                      },
+                      "start": Object {
+                        "column": 27,
+                        "line": 19,
+                        "offset": 778,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 56,
+                      "line": 19,
+                      "offset": 807,
+                    },
+                    "start": Object {
+                      "column": 27,
+                      "line": 19,
+                      "offset": 778,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 55,
+                        "line": 19,
+                        "offset": 806,
+                      },
+                      "start": Object {
+                        "column": 37,
+                        "line": 19,
+                        "offset": 788,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "turquoise:salmon",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 57,
+                  "line": 19,
+                  "offset": 808,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 19,
+                  "offset": 754,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 59,
+                    "line": 19,
+                    "offset": 810,
+                  },
+                  "start": Object {
+                    "column": 57,
+                    "line": 19,
+                    "offset": 808,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n7",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 60,
+                  "line": 19,
+                  "offset": 811,
+                },
+                "start": Object {
+                  "column": 57,
+                  "line": 19,
+                  "offset": 808,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 20,
+                        "offset": 826,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 20,
+                        "offset": 821,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 27,
+                      "line": 20,
+                      "offset": 838,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 20,
+                      "offset": 821,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 26,
+                        "line": 20,
+                        "offset": 837,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 20,
+                        "offset": 827,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "pentagon",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 36,
+                        "line": 20,
+                        "offset": 847,
+                      },
+                      "start": Object {
+                        "column": 27,
+                        "line": 20,
+                        "offset": 838,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 50,
+                      "line": 20,
+                      "offset": 861,
+                    },
+                    "start": Object {
+                      "column": 27,
+                      "line": 20,
+                      "offset": 838,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 49,
+                        "line": 20,
+                        "offset": 860,
+                      },
+                      "start": Object {
+                        "column": 37,
+                        "line": 20,
+                        "offset": 848,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "snow:black",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 51,
+                  "line": 20,
+                  "offset": 862,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 20,
+                  "offset": 814,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 53,
+                    "line": 20,
+                    "offset": 864,
+                  },
+                  "start": Object {
+                    "column": 51,
+                    "line": 20,
+                    "offset": 862,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n6",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 54,
+                  "line": 20,
+                  "offset": 865,
+                },
+                "start": Object {
+                  "column": 51,
+                  "line": 20,
+                  "offset": 862,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 8,
+                    "line": 22,
+                    "offset": 874,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 22,
+                    "offset": 869,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "label",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 24,
+                  "line": 22,
+                  "offset": 890,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 22,
+                  "offset": 869,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 23,
+                    "line": 22,
+                    "offset": 889,
+                  },
+                  "start": Object {
+                    "column": 11,
+                    "line": 22,
+                    "offset": 877,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "SVG Colors",
+              },
+            },
+          ],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 20,
+                "line": 14,
+                "offset": 484,
+              },
+              "start": Object {
+                "column": 11,
+                "line": 14,
+                "offset": 475,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "cluster_2",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 23,
+              "offset": 893,
+            },
+            "start": Object {
+              "column": 2,
+              "line": 14,
+              "offset": 466,
+            },
+          },
+          "type": "subgraph",
+        },
+        Object {
+          "body": Array [
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 32,
+                    "line": 24,
+                    "offset": 925,
+                  },
+                  "start": Object {
+                    "column": 23,
+                    "line": 24,
+                    "offset": 916,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "fontcolor",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 38,
+                  "line": 24,
+                  "offset": 931,
+                },
+                "start": Object {
+                  "column": 23,
+                  "line": 24,
+                  "offset": 916,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 38,
+                    "line": 24,
+                    "offset": 931,
+                  },
+                  "start": Object {
+                    "column": 33,
+                    "line": 24,
+                    "offset": 926,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "white",
+              },
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 25,
+                        "offset": 946,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 25,
+                        "offset": 941,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "style",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 23,
+                      "line": 25,
+                      "offset": 954,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 25,
+                      "offset": 941,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 22,
+                        "line": 25,
+                        "offset": 953,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 25,
+                        "offset": 947,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "filled",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 28,
+                        "line": 25,
+                        "offset": 959,
+                      },
+                      "start": Object {
+                        "column": 23,
+                        "line": 25,
+                        "offset": 954,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 35,
+                      "line": 25,
+                      "offset": 966,
+                    },
+                    "start": Object {
+                      "column": 23,
+                      "line": 25,
+                      "offset": 954,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 34,
+                        "line": 25,
+                        "offset": 965,
+                      },
+                      "start": Object {
+                        "column": 29,
+                        "line": 25,
+                        "offset": 960,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "box",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 44,
+                        "line": 25,
+                        "offset": 975,
+                      },
+                      "start": Object {
+                        "column": 35,
+                        "line": 25,
+                        "offset": 966,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 69,
+                      "line": 25,
+                      "offset": 1000,
+                    },
+                    "start": Object {
+                      "column": 35,
+                      "line": 25,
+                      "offset": 966,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 68,
+                        "line": 25,
+                        "offset": 999,
+                      },
+                      "start": Object {
+                        "column": 45,
+                        "line": 25,
+                        "offset": 976,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/accent3/1:/accent3/3",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 70,
+                  "line": 25,
+                  "offset": 1001,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 25,
+                  "offset": 934,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 73,
+                    "line": 25,
+                    "offset": 1004,
+                  },
+                  "start": Object {
+                    "column": 70,
+                    "line": 25,
+                    "offset": 1001,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n17",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 74,
+                  "line": 25,
+                  "offset": 1005,
+                },
+                "start": Object {
+                  "column": 70,
+                  "line": 25,
+                  "offset": 1001,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 26,
+                        "offset": 1020,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 26,
+                        "offset": 1015,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 26,
+                      "line": 26,
+                      "offset": 1031,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 26,
+                      "offset": 1015,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 25,
+                        "line": 26,
+                        "offset": 1030,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 26,
+                        "offset": 1021,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "ellipse",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 35,
+                        "line": 26,
+                        "offset": 1040,
+                      },
+                      "start": Object {
+                        "column": 26,
+                        "line": 26,
+                        "offset": 1031,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 60,
+                      "line": 26,
+                      "offset": 1065,
+                    },
+                    "start": Object {
+                      "column": 26,
+                      "line": 26,
+                      "offset": 1031,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 59,
+                        "line": 26,
+                        "offset": 1064,
+                      },
+                      "start": Object {
+                        "column": 36,
+                        "line": 26,
+                        "offset": 1041,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/accent4/1:/accent4/4",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 61,
+                  "line": 26,
+                  "offset": 1066,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 26,
+                  "offset": 1008,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 64,
+                    "line": 26,
+                    "offset": 1069,
+                  },
+                  "start": Object {
+                    "column": 61,
+                    "line": 26,
+                    "offset": 1066,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n16",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 65,
+                  "line": 26,
+                  "offset": 1070,
+                },
+                "start": Object {
+                  "column": 61,
+                  "line": 26,
+                  "offset": 1066,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 27,
+                        "offset": 1085,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 27,
+                        "offset": 1080,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 25,
+                      "line": 27,
+                      "offset": 1095,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 27,
+                      "offset": 1080,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 24,
+                        "line": 27,
+                        "offset": 1094,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 27,
+                        "offset": 1086,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "circle",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 34,
+                        "line": 27,
+                        "offset": 1104,
+                      },
+                      "start": Object {
+                        "column": 25,
+                        "line": 27,
+                        "offset": 1095,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 59,
+                      "line": 27,
+                      "offset": 1129,
+                    },
+                    "start": Object {
+                      "column": 25,
+                      "line": 27,
+                      "offset": 1095,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 58,
+                        "line": 27,
+                        "offset": 1128,
+                      },
+                      "start": Object {
+                        "column": 35,
+                        "line": 27,
+                        "offset": 1105,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/accent5/1:/accent5/5",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 60,
+                  "line": 27,
+                  "offset": 1130,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 27,
+                  "offset": 1073,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 63,
+                    "line": 27,
+                    "offset": 1133,
+                  },
+                  "start": Object {
+                    "column": 60,
+                    "line": 27,
+                    "offset": 1130,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n15",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 64,
+                  "line": 27,
+                  "offset": 1134,
+                },
+                "start": Object {
+                  "column": 60,
+                  "line": 27,
+                  "offset": 1130,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 28,
+                        "offset": 1149,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 28,
+                        "offset": 1144,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 26,
+                      "line": 28,
+                      "offset": 1160,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 28,
+                      "offset": 1144,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 25,
+                        "line": 28,
+                        "offset": 1159,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 28,
+                        "offset": 1150,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "diamond",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 35,
+                        "line": 28,
+                        "offset": 1169,
+                      },
+                      "start": Object {
+                        "column": 26,
+                        "line": 28,
+                        "offset": 1160,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 60,
+                      "line": 28,
+                      "offset": 1194,
+                    },
+                    "start": Object {
+                      "column": 26,
+                      "line": 28,
+                      "offset": 1160,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 59,
+                        "line": 28,
+                        "offset": 1193,
+                      },
+                      "start": Object {
+                        "column": 36,
+                        "line": 28,
+                        "offset": 1170,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/accent6/1:/accent6/6",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 61,
+                  "line": 28,
+                  "offset": 1195,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 28,
+                  "offset": 1137,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 64,
+                    "line": 28,
+                    "offset": 1198,
+                  },
+                  "start": Object {
+                    "column": 61,
+                    "line": 28,
+                    "offset": 1195,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n14",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 65,
+                  "line": 28,
+                  "offset": 1199,
+                },
+                "start": Object {
+                  "column": 61,
+                  "line": 28,
+                  "offset": 1195,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 29,
+                        "offset": 1214,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 29,
+                        "offset": 1209,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 27,
+                      "line": 29,
+                      "offset": 1226,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 29,
+                      "offset": 1209,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 26,
+                        "line": 29,
+                        "offset": 1225,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 29,
+                        "offset": 1215,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "triangle",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 36,
+                        "line": 29,
+                        "offset": 1235,
+                      },
+                      "start": Object {
+                        "column": 27,
+                        "line": 29,
+                        "offset": 1226,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 61,
+                      "line": 29,
+                      "offset": 1260,
+                    },
+                    "start": Object {
+                      "column": 27,
+                      "line": 29,
+                      "offset": 1226,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 60,
+                        "line": 29,
+                        "offset": 1259,
+                      },
+                      "start": Object {
+                        "column": 37,
+                        "line": 29,
+                        "offset": 1236,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/accent7/1:/accent7/7",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 62,
+                  "line": 29,
+                  "offset": 1261,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 29,
+                  "offset": 1202,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 65,
+                    "line": 29,
+                    "offset": 1264,
+                  },
+                  "start": Object {
+                    "column": 62,
+                    "line": 29,
+                    "offset": 1261,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n13",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 66,
+                  "line": 29,
+                  "offset": 1265,
+                },
+                "start": Object {
+                  "column": 62,
+                  "line": 29,
+                  "offset": 1261,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 30,
+                        "offset": 1280,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 30,
+                        "offset": 1275,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 27,
+                      "line": 30,
+                      "offset": 1292,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 30,
+                      "offset": 1275,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 26,
+                        "line": 30,
+                        "offset": 1291,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 30,
+                        "offset": 1281,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "pentagon",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 36,
+                        "line": 30,
+                        "offset": 1301,
+                      },
+                      "start": Object {
+                        "column": 27,
+                        "line": 30,
+                        "offset": 1292,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 61,
+                      "line": 30,
+                      "offset": 1326,
+                    },
+                    "start": Object {
+                      "column": 27,
+                      "line": 30,
+                      "offset": 1292,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 60,
+                        "line": 30,
+                        "offset": 1325,
+                      },
+                      "start": Object {
+                        "column": 37,
+                        "line": 30,
+                        "offset": 1302,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/accent8/1:/accent8/8",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 62,
+                  "line": 30,
+                  "offset": 1327,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 30,
+                  "offset": 1268,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 65,
+                    "line": 30,
+                    "offset": 1330,
+                  },
+                  "start": Object {
+                    "column": 62,
+                    "line": 30,
+                    "offset": 1327,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n12",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 66,
+                  "line": 30,
+                  "offset": 1331,
+                },
+                "start": Object {
+                  "column": 62,
+                  "line": 30,
+                  "offset": 1327,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 8,
+                    "line": 32,
+                    "offset": 1340,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 32,
+                    "offset": 1335,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "label",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 29,
+                  "line": 32,
+                  "offset": 1361,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 32,
+                  "offset": 1335,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 28,
+                    "line": 32,
+                    "offset": 1360,
+                  },
+                  "start": Object {
+                    "column": 11,
+                    "line": 32,
+                    "offset": 1343,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "Brewer - accent",
+              },
+            },
+          ],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 20,
+                "line": 24,
+                "offset": 913,
+              },
+              "start": Object {
+                "column": 11,
+                "line": 24,
+                "offset": 904,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "cluster_3",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 33,
+              "offset": 1364,
+            },
+            "start": Object {
+              "column": 2,
+              "line": 24,
+              "offset": 895,
+            },
+          },
+          "type": "subgraph",
+        },
+        Object {
+          "body": Array [
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 32,
+                    "line": 34,
+                    "offset": 1396,
+                  },
+                  "start": Object {
+                    "column": 23,
+                    "line": 34,
+                    "offset": 1387,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "fontcolor",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 38,
+                  "line": 34,
+                  "offset": 1402,
+                },
+                "start": Object {
+                  "column": 23,
+                  "line": 34,
+                  "offset": 1387,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 38,
+                    "line": 34,
+                    "offset": 1402,
+                  },
+                  "start": Object {
+                    "column": 33,
+                    "line": 34,
+                    "offset": 1397,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "white",
+              },
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 35,
+                        "offset": 1417,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 35,
+                        "offset": 1412,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "style",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 23,
+                      "line": 35,
+                      "offset": 1425,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 35,
+                      "offset": 1412,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 22,
+                        "line": 35,
+                        "offset": 1424,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 35,
+                        "offset": 1418,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "filled",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 28,
+                        "line": 35,
+                        "offset": 1430,
+                      },
+                      "start": Object {
+                        "column": 23,
+                        "line": 35,
+                        "offset": 1425,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 35,
+                      "line": 35,
+                      "offset": 1437,
+                    },
+                    "start": Object {
+                      "column": 23,
+                      "line": 35,
+                      "offset": 1425,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 34,
+                        "line": 35,
+                        "offset": 1436,
+                      },
+                      "start": Object {
+                        "column": 29,
+                        "line": 35,
+                        "offset": 1431,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "box",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 44,
+                        "line": 35,
+                        "offset": 1446,
+                      },
+                      "start": Object {
+                        "column": 35,
+                        "line": 35,
+                        "offset": 1437,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 67,
+                      "line": 35,
+                      "offset": 1469,
+                    },
+                    "start": Object {
+                      "column": 35,
+                      "line": 35,
+                      "offset": 1437,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 66,
+                        "line": 35,
+                        "offset": 1468,
+                      },
+                      "start": Object {
+                        "column": 45,
+                        "line": 35,
+                        "offset": 1447,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/blues3/1:/blues3/2",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 68,
+                  "line": 35,
+                  "offset": 1470,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 35,
+                  "offset": 1405,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 71,
+                    "line": 35,
+                    "offset": 1473,
+                  },
+                  "start": Object {
+                    "column": 68,
+                    "line": 35,
+                    "offset": 1470,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n23",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 72,
+                  "line": 35,
+                  "offset": 1474,
+                },
+                "start": Object {
+                  "column": 68,
+                  "line": 35,
+                  "offset": 1470,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 36,
+                        "offset": 1489,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 36,
+                        "offset": 1484,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 26,
+                      "line": 36,
+                      "offset": 1500,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 36,
+                      "offset": 1484,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 25,
+                        "line": 36,
+                        "offset": 1499,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 36,
+                        "offset": 1490,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "ellipse",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 35,
+                        "line": 36,
+                        "offset": 1509,
+                      },
+                      "start": Object {
+                        "column": 26,
+                        "line": 36,
+                        "offset": 1500,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 58,
+                      "line": 36,
+                      "offset": 1532,
+                    },
+                    "start": Object {
+                      "column": 26,
+                      "line": 36,
+                      "offset": 1500,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 57,
+                        "line": 36,
+                        "offset": 1531,
+                      },
+                      "start": Object {
+                        "column": 36,
+                        "line": 36,
+                        "offset": 1510,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/blues4/1:/blues4/3",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 59,
+                  "line": 36,
+                  "offset": 1533,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 36,
+                  "offset": 1477,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 62,
+                    "line": 36,
+                    "offset": 1536,
+                  },
+                  "start": Object {
+                    "column": 59,
+                    "line": 36,
+                    "offset": 1533,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n22",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 63,
+                  "line": 36,
+                  "offset": 1537,
+                },
+                "start": Object {
+                  "column": 59,
+                  "line": 36,
+                  "offset": 1533,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 37,
+                        "offset": 1552,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 37,
+                        "offset": 1547,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 25,
+                      "line": 37,
+                      "offset": 1562,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 37,
+                      "offset": 1547,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 24,
+                        "line": 37,
+                        "offset": 1561,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 37,
+                        "offset": 1553,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "circle",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 34,
+                        "line": 37,
+                        "offset": 1571,
+                      },
+                      "start": Object {
+                        "column": 25,
+                        "line": 37,
+                        "offset": 1562,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 57,
+                      "line": 37,
+                      "offset": 1594,
+                    },
+                    "start": Object {
+                      "column": 25,
+                      "line": 37,
+                      "offset": 1562,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 56,
+                        "line": 37,
+                        "offset": 1593,
+                      },
+                      "start": Object {
+                        "column": 35,
+                        "line": 37,
+                        "offset": 1572,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/blues5/1:/blues5/4",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 58,
+                  "line": 37,
+                  "offset": 1595,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 37,
+                  "offset": 1540,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 61,
+                    "line": 37,
+                    "offset": 1598,
+                  },
+                  "start": Object {
+                    "column": 58,
+                    "line": 37,
+                    "offset": 1595,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n21",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 62,
+                  "line": 37,
+                  "offset": 1599,
+                },
+                "start": Object {
+                  "column": 58,
+                  "line": 37,
+                  "offset": 1595,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 38,
+                        "offset": 1614,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 38,
+                        "offset": 1609,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 26,
+                      "line": 38,
+                      "offset": 1625,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 38,
+                      "offset": 1609,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 25,
+                        "line": 38,
+                        "offset": 1624,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 38,
+                        "offset": 1615,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "diamond",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 35,
+                        "line": 38,
+                        "offset": 1634,
+                      },
+                      "start": Object {
+                        "column": 26,
+                        "line": 38,
+                        "offset": 1625,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 58,
+                      "line": 38,
+                      "offset": 1657,
+                    },
+                    "start": Object {
+                      "column": 26,
+                      "line": 38,
+                      "offset": 1625,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 57,
+                        "line": 38,
+                        "offset": 1656,
+                      },
+                      "start": Object {
+                        "column": 36,
+                        "line": 38,
+                        "offset": 1635,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/blues6/1:/blues6/5",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 59,
+                  "line": 38,
+                  "offset": 1658,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 38,
+                  "offset": 1602,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 62,
+                    "line": 38,
+                    "offset": 1661,
+                  },
+                  "start": Object {
+                    "column": 59,
+                    "line": 38,
+                    "offset": 1658,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n20",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 63,
+                  "line": 38,
+                  "offset": 1662,
+                },
+                "start": Object {
+                  "column": 59,
+                  "line": 38,
+                  "offset": 1658,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 39,
+                        "offset": 1677,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 39,
+                        "offset": 1672,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 27,
+                      "line": 39,
+                      "offset": 1689,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 39,
+                      "offset": 1672,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 26,
+                        "line": 39,
+                        "offset": 1688,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 39,
+                        "offset": 1678,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "triangle",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 36,
+                        "line": 39,
+                        "offset": 1698,
+                      },
+                      "start": Object {
+                        "column": 27,
+                        "line": 39,
+                        "offset": 1689,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 59,
+                      "line": 39,
+                      "offset": 1721,
+                    },
+                    "start": Object {
+                      "column": 27,
+                      "line": 39,
+                      "offset": 1689,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 58,
+                        "line": 39,
+                        "offset": 1720,
+                      },
+                      "start": Object {
+                        "column": 37,
+                        "line": 39,
+                        "offset": 1699,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/blues7/1:/blues7/6",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 60,
+                  "line": 39,
+                  "offset": 1722,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 39,
+                  "offset": 1665,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 63,
+                    "line": 39,
+                    "offset": 1725,
+                  },
+                  "start": Object {
+                    "column": 60,
+                    "line": 39,
+                    "offset": 1722,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n19",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 64,
+                  "line": 39,
+                  "offset": 1726,
+                },
+                "start": Object {
+                  "column": 60,
+                  "line": 39,
+                  "offset": 1722,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 15,
+                        "line": 40,
+                        "offset": 1741,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 40,
+                        "offset": 1736,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 27,
+                      "line": 40,
+                      "offset": 1753,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 40,
+                      "offset": 1736,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 26,
+                        "line": 40,
+                        "offset": 1752,
+                      },
+                      "start": Object {
+                        "column": 16,
+                        "line": 40,
+                        "offset": 1742,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "pentagon",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 36,
+                        "line": 40,
+                        "offset": 1762,
+                      },
+                      "start": Object {
+                        "column": 27,
+                        "line": 40,
+                        "offset": 1753,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 59,
+                      "line": 40,
+                      "offset": 1785,
+                    },
+                    "start": Object {
+                      "column": 27,
+                      "line": 40,
+                      "offset": 1753,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 58,
+                        "line": 40,
+                        "offset": 1784,
+                      },
+                      "start": Object {
+                        "column": 37,
+                        "line": 40,
+                        "offset": 1763,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "/blues8/1:/blues8/7",
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 60,
+                  "line": 40,
+                  "offset": 1786,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 40,
+                  "offset": 1729,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 63,
+                    "line": 40,
+                    "offset": 1789,
+                  },
+                  "start": Object {
+                    "column": 60,
+                    "line": 40,
+                    "offset": 1786,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n18",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 64,
+                  "line": 40,
+                  "offset": 1790,
+                },
+                "start": Object {
+                  "column": 60,
+                  "line": 40,
+                  "offset": 1786,
+                },
+              },
+              "type": "node",
+            },
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 8,
+                    "line": 42,
+                    "offset": 1799,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 42,
+                    "offset": 1794,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "label",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 28,
+                  "line": 42,
+                  "offset": 1819,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 42,
+                  "offset": 1794,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 27,
+                    "line": 42,
+                    "offset": 1818,
+                  },
+                  "start": Object {
+                    "column": 11,
+                    "line": 42,
+                    "offset": 1802,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "Brewer - blues",
+              },
+            },
+          ],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 20,
+                "line": 34,
+                "offset": 1384,
+              },
+              "start": Object {
+                "column": 11,
+                "line": 34,
+                "offset": 1375,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "cluster_4",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 43,
+              "offset": 1822,
+            },
+            "start": Object {
+              "column": 2,
+              "line": 34,
+              "offset": 1366,
+            },
+          },
+          "type": "subgraph",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 24,
+              "line": 45,
+              "offset": 1847,
+            },
+            "start": Object {
+              "column": 1,
+              "line": 45,
+              "offset": 1824,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 3,
+                    "line": 45,
+                    "offset": 1826,
+                  },
+                  "start": Object {
+                    "column": 1,
+                    "line": 45,
+                    "offset": 1824,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n3",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 3,
+                  "line": 45,
+                  "offset": 1826,
+                },
+                "start": Object {
+                  "column": 1,
+                  "line": 45,
+                  "offset": 1824,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 9,
+                    "line": 45,
+                    "offset": 1832,
+                  },
+                  "start": Object {
+                    "column": 7,
+                    "line": 45,
+                    "offset": 1830,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n9",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 9,
+                  "line": 45,
+                  "offset": 1832,
+                },
+                "start": Object {
+                  "column": 7,
+                  "line": 45,
+                  "offset": 1830,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 16,
+                    "line": 45,
+                    "offset": 1839,
+                  },
+                  "start": Object {
+                    "column": 13,
+                    "line": 45,
+                    "offset": 1836,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n15",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 16,
+                  "line": 45,
+                  "offset": 1839,
+                },
+                "start": Object {
+                  "column": 13,
+                  "line": 45,
+                  "offset": 1836,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 23,
+                    "line": 45,
+                    "offset": 1846,
+                  },
+                  "start": Object {
+                    "column": 20,
+                    "line": 45,
+                    "offset": 1843,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "n21",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 23,
+                  "line": 45,
+                  "offset": 1846,
+                },
+                "start": Object {
+                  "column": 20,
+                  "line": 45,
+                  "offset": 1843,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+      ],
+      "directed": true,
+      "id": Object {
+        "location": Object {
+          "end": Object {
+            "column": 10,
+            "line": 1,
+            "offset": 9,
+          },
+          "start": Object {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "G",
+      },
+      "location": Object {
+        "end": Object {
+          "column": 2,
+          "line": 46,
+          "offset": 1849,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "strict": false,
+      "type": "graph",
+    },
+  ],
+  "location": Object {
+    "end": Object {
+      "column": 1,
+      "line": 47,
+      "offset": 1850,
+    },
+    "start": Object {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "dot",
+}
+`;

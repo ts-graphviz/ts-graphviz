@@ -1,0 +1,139 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hello.dot 1`] = `
+Object {
+  "body": Array [
+    Object {
+      "body": Array [
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 24,
+              "line": 1,
+              "offset": 23,
+            },
+            "start": Object {
+              "column": 12,
+              "line": 1,
+              "offset": 11,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 17,
+                    "line": 1,
+                    "offset": 16,
+                  },
+                  "start": Object {
+                    "column": 12,
+                    "line": 1,
+                    "offset": 11,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "Hello",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 17,
+                  "line": 1,
+                  "offset": 16,
+                },
+                "start": Object {
+                  "column": 12,
+                  "line": 1,
+                  "offset": 11,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 24,
+                    "line": 1,
+                    "offset": 23,
+                  },
+                  "start": Object {
+                    "column": 19,
+                    "line": 1,
+                    "offset": 18,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "World",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 24,
+                  "line": 1,
+                  "offset": 23,
+                },
+                "start": Object {
+                  "column": 19,
+                  "line": 1,
+                  "offset": 18,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+      ],
+      "directed": true,
+      "id": Object {
+        "location": Object {
+          "end": Object {
+            "column": 10,
+            "line": 1,
+            "offset": 9,
+          },
+          "start": Object {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "G",
+      },
+      "location": Object {
+        "end": Object {
+          "column": 25,
+          "line": 1,
+          "offset": 24,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "strict": false,
+      "type": "graph",
+    },
+  ],
+  "location": Object {
+    "end": Object {
+      "column": 1,
+      "line": 2,
+      "offset": 25,
+    },
+    "start": Object {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "dot",
+}
+`;

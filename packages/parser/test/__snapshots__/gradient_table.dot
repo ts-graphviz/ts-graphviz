@@ -1,0 +1,559 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`gradient_table.dot 1`] = `
+Object {
+  "body": Array [
+    Object {
+      "body": Array [
+        Object {
+          "key": Object {
+            "location": Object {
+              "end": Object {
+                "column": 20,
+                "line": 1,
+                "offset": 19,
+              },
+              "start": Object {
+                "column": 13,
+                "line": 1,
+                "offset": 12,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "bgcolor",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 33,
+              "line": 1,
+              "offset": 32,
+            },
+            "start": Object {
+              "column": 13,
+              "line": 1,
+              "offset": 12,
+            },
+          },
+          "type": "attribute",
+          "value": Object {
+            "location": Object {
+              "end": Object {
+                "column": 33,
+                "line": 1,
+                "offset": 32,
+              },
+              "start": Object {
+                "column": 21,
+                "line": 1,
+                "offset": 20,
+              },
+            },
+            "quoted": true,
+            "type": "literal",
+            "value": "yellow:red",
+          },
+        },
+        Object {
+          "body": Array [
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 31,
+                    "line": 2,
+                    "offset": 63,
+                  },
+                  "start": Object {
+                    "column": 22,
+                    "line": 2,
+                    "offset": 54,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "fillcolor",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 45,
+                  "line": 2,
+                  "offset": 77,
+                },
+                "start": Object {
+                  "column": 22,
+                  "line": 2,
+                  "offset": 54,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 44,
+                    "line": 2,
+                    "offset": 76,
+                  },
+                  "start": Object {
+                    "column": 32,
+                    "line": 2,
+                    "offset": 64,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "blue:green",
+              },
+            },
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 50,
+                    "line": 2,
+                    "offset": 82,
+                  },
+                  "start": Object {
+                    "column": 45,
+                    "line": 2,
+                    "offset": 77,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "style",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 59,
+                  "line": 2,
+                  "offset": 91,
+                },
+                "start": Object {
+                  "column": 45,
+                  "line": 2,
+                  "offset": 77,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 59,
+                    "line": 2,
+                    "offset": 91,
+                  },
+                  "start": Object {
+                    "column": 51,
+                    "line": 2,
+                    "offset": 83,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "filled",
+              },
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 14,
+                        "line": 3,
+                        "offset": 105,
+                      },
+                      "start": Object {
+                        "column": 9,
+                        "line": 3,
+                        "offset": 100,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 23,
+                      "line": 3,
+                      "offset": 114,
+                    },
+                    "start": Object {
+                      "column": 9,
+                      "line": 3,
+                      "offset": 100,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 22,
+                        "line": 3,
+                        "offset": 113,
+                      },
+                      "start": Object {
+                        "column": 15,
+                        "line": 3,
+                        "offset": 106,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "diamond",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 32,
+                        "line": 3,
+                        "offset": 123,
+                      },
+                      "start": Object {
+                        "column": 23,
+                        "line": 3,
+                        "offset": 114,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 46,
+                      "line": 3,
+                      "offset": 137,
+                    },
+                    "start": Object {
+                      "column": 23,
+                      "line": 3,
+                      "offset": 114,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 45,
+                        "line": 3,
+                        "offset": 136,
+                      },
+                      "start": Object {
+                        "column": 33,
+                        "line": 3,
+                        "offset": 124,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "gold:brown",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 51,
+                        "line": 3,
+                        "offset": 142,
+                      },
+                      "start": Object {
+                        "column": 46,
+                        "line": 3,
+                        "offset": 137,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "style",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 61,
+                      "line": 3,
+                      "offset": 152,
+                    },
+                    "start": Object {
+                      "column": 46,
+                      "line": 3,
+                      "offset": 137,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 60,
+                        "line": 3,
+                        "offset": 151,
+                      },
+                      "start": Object {
+                        "column": 52,
+                        "line": 3,
+                        "offset": 143,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "radial",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 74,
+                        "line": 3,
+                        "offset": 165,
+                      },
+                      "start": Object {
+                        "column": 61,
+                        "line": 3,
+                        "offset": 152,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "gradientangle",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 78,
+                      "line": 3,
+                      "offset": 169,
+                    },
+                    "start": Object {
+                      "column": 61,
+                      "line": 3,
+                      "offset": 152,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 78,
+                        "line": 3,
+                        "offset": 169,
+                      },
+                      "start": Object {
+                        "column": 75,
+                        "line": 3,
+                        "offset": 166,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": 180,
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 79,
+                  "line": 3,
+                  "offset": 170,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 3,
+                  "offset": 94,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 12,
+                        "line": 4,
+                        "offset": 182,
+                      },
+                      "start": Object {
+                        "column": 7,
+                        "line": 4,
+                        "offset": 177,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "label",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 10,
+                      "line": 28,
+                      "offset": 1433,
+                    },
+                    "start": Object {
+                      "column": 7,
+                      "line": 4,
+                      "offset": 177,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 10,
+                        "line": 28,
+                        "offset": 1433,
+                      },
+                      "start": Object {
+                        "column": 13,
+                        "line": 4,
+                        "offset": 183,
+                      },
+                    },
+                    "quoted": "html",
+                    "type": "literal",
+                    "value": "
+ <TABLE border=\\"10\\" cellspacing=\\"10\\" cellpadding=\\"10\\" style=\\"rounded\\" bgcolor=\\"/rdylgn11/1:/rdylgn11/11\\" gradientangle=\\"315\\">
+	<TR><TD border=\\"3\\"  bgcolor=\\"/rdylgn11/1:/rdylgn11/2\\">00</TD>
+	<TD border=\\"3\\"  bgcolor=\\"/rdylgn11/2:/rdylgn11/3\\">01</TD>
+	<TD border=\\"3\\"  bgcolor=\\"/rdylgn11/3:/rdylgn11/4\\">02</TD>
+	<TD border=\\"3\\"  bgcolor=\\"/rdylgn11/4:/rdylgn11/5\\">03</TD>
+	</TR>
+
+	<TR><TD border=\\"3\\" bgcolor=\\"/rdylgn11/1:/rdylgn11/6\\" gradientangle=\\"270\\">10</TD>
+	<TD border=\\"3\\" rowspan=\\"2\\"  bgcolor=\\"/rdylgn11/3:/rdylgn11/9\\" gradientangle=\\"270\\">11</TD>
+	<TD border=\\"3\\"  bgcolor=\\"/rdylgn11/3:/rdylgn11/8\\" gradientangle=\\"270\\">12</TD>
+	<TD border=\\"3\\"  bgcolor=\\"/rdylgn11/4:/rdylgn11/9\\" gradientangle=\\"270\\">13</TD>
+	</TR>
+
+	<TR><TD border=\\"3\\"  bgcolor=\\"/rdylgn11/6:/rdylgn11/9\\" gradientangle=\\"270\\">20</TD>
+	<TD border=\\"3\\" colspan=\\"2\\"  bgcolor=\\"/rdylgn11/9:/rdylgn11/11\\">22</TD>
+	</TR>
+
+	<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"/rdylgn11/1:/rdylgn11/8\\">30</TD>
+	<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"/rdylgn11/1:/rdylgn11/8\\" gradientangle=\\"45\\">31</TD>
+	<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"/rdylgn11/1:/rdylgn11/8\\" gradientangle=\\"90\\" >32</TD>
+	<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"/rdylgn11/1:/rdylgn11/8\\" gradientangle=\\"180\\">33</TD>
+	</TR>
+
+</TABLE>",
+                  },
+                },
+              ],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 5,
+                    "line": 4,
+                    "offset": 175,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 4,
+                    "offset": 173,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "a0",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 12,
+                  "line": 28,
+                  "offset": 1435,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 4,
+                  "offset": 173,
+                },
+              },
+              "type": "node",
+            },
+          ],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 20,
+                "line": 2,
+                "offset": 52,
+              },
+              "start": Object {
+                "column": 12,
+                "line": 2,
+                "offset": 44,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "cluster1",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 2,
+              "line": 30,
+              "offset": 1438,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 2,
+              "offset": 35,
+            },
+          },
+          "type": "subgraph",
+        },
+      ],
+      "directed": true,
+      "id": Object {
+        "location": Object {
+          "end": Object {
+            "column": 10,
+            "line": 1,
+            "offset": 9,
+          },
+          "start": Object {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "G",
+      },
+      "location": Object {
+        "end": Object {
+          "column": 2,
+          "line": 32,
+          "offset": 1441,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "strict": false,
+      "type": "graph",
+    },
+  ],
+  "location": Object {
+    "end": Object {
+      "column": 1,
+      "line": 33,
+      "offset": 1442,
+    },
+    "start": Object {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "dot",
+}
+`;

@@ -1,0 +1,676 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`gradient_radial_angle.dot 1`] = `
+Object {
+  "body": Array [
+    Object {
+      "body": Array [
+        Object {
+          "key": Object {
+            "location": Object {
+              "end": Object {
+                "column": 20,
+                "line": 1,
+                "offset": 19,
+              },
+              "start": Object {
+                "column": 13,
+                "line": 1,
+                "offset": 12,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "bgcolor",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 35,
+              "line": 1,
+              "offset": 34,
+            },
+            "start": Object {
+              "column": 13,
+              "line": 1,
+              "offset": 12,
+            },
+          },
+          "type": "attribute",
+          "value": Object {
+            "location": Object {
+              "end": Object {
+                "column": 34,
+                "line": 1,
+                "offset": 33,
+              },
+              "start": Object {
+                "column": 21,
+                "line": 1,
+                "offset": 20,
+              },
+            },
+            "quoted": true,
+            "type": "literal",
+            "value": "purple:pink",
+          },
+        },
+        Object {
+          "key": Object {
+            "location": Object {
+              "end": Object {
+                "column": 40,
+                "line": 1,
+                "offset": 39,
+              },
+              "start": Object {
+                "column": 35,
+                "line": 1,
+                "offset": 34,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "style",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 49,
+              "line": 1,
+              "offset": 48,
+            },
+            "start": Object {
+              "column": 35,
+              "line": 1,
+              "offset": 34,
+            },
+          },
+          "type": "attribute",
+          "value": Object {
+            "location": Object {
+              "end": Object {
+                "column": 49,
+                "line": 1,
+                "offset": 48,
+              },
+              "start": Object {
+                "column": 41,
+                "line": 1,
+                "offset": 40,
+              },
+            },
+            "quoted": true,
+            "type": "literal",
+            "value": "filled",
+          },
+        },
+        Object {
+          "body": Array [
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 31,
+                    "line": 2,
+                    "offset": 79,
+                  },
+                  "start": Object {
+                    "column": 22,
+                    "line": 2,
+                    "offset": 70,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "fillcolor",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 45,
+                  "line": 2,
+                  "offset": 93,
+                },
+                "start": Object {
+                  "column": 22,
+                  "line": 2,
+                  "offset": 70,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 44,
+                    "line": 2,
+                    "offset": 92,
+                  },
+                  "start": Object {
+                    "column": 32,
+                    "line": 2,
+                    "offset": 80,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "blue:green",
+              },
+            },
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 50,
+                    "line": 2,
+                    "offset": 98,
+                  },
+                  "start": Object {
+                    "column": 45,
+                    "line": 2,
+                    "offset": 93,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "style",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 59,
+                  "line": 2,
+                  "offset": 107,
+                },
+                "start": Object {
+                  "column": 45,
+                  "line": 2,
+                  "offset": 93,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 59,
+                    "line": 2,
+                    "offset": 107,
+                  },
+                  "start": Object {
+                    "column": 51,
+                    "line": 2,
+                    "offset": 99,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "filled",
+              },
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 14,
+                        "line": 3,
+                        "offset": 121,
+                      },
+                      "start": Object {
+                        "column": 9,
+                        "line": 3,
+                        "offset": 116,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "shape",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 22,
+                      "line": 3,
+                      "offset": 129,
+                    },
+                    "start": Object {
+                      "column": 9,
+                      "line": 3,
+                      "offset": 116,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 21,
+                        "line": 3,
+                        "offset": 128,
+                      },
+                      "start": Object {
+                        "column": 15,
+                        "line": 3,
+                        "offset": 122,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "circle",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 31,
+                        "line": 3,
+                        "offset": 138,
+                      },
+                      "start": Object {
+                        "column": 22,
+                        "line": 3,
+                        "offset": 129,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "fillcolor",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 45,
+                      "line": 3,
+                      "offset": 152,
+                    },
+                    "start": Object {
+                      "column": 22,
+                      "line": 3,
+                      "offset": 129,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 44,
+                        "line": 3,
+                        "offset": 151,
+                      },
+                      "start": Object {
+                        "column": 32,
+                        "line": 3,
+                        "offset": 139,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "gold:brown",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 50,
+                        "line": 3,
+                        "offset": 157,
+                      },
+                      "start": Object {
+                        "column": 45,
+                        "line": 3,
+                        "offset": 152,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "style",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 60,
+                      "line": 3,
+                      "offset": 167,
+                    },
+                    "start": Object {
+                      "column": 45,
+                      "line": 3,
+                      "offset": 152,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 59,
+                        "line": 3,
+                        "offset": 166,
+                      },
+                      "start": Object {
+                        "column": 51,
+                        "line": 3,
+                        "offset": 158,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "literal",
+                    "value": "radial",
+                  },
+                },
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 73,
+                        "line": 3,
+                        "offset": 180,
+                      },
+                      "start": Object {
+                        "column": 60,
+                        "line": 3,
+                        "offset": 167,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "gradientangle",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 77,
+                      "line": 3,
+                      "offset": 184,
+                    },
+                    "start": Object {
+                      "column": 60,
+                      "line": 3,
+                      "offset": 167,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 77,
+                        "line": 3,
+                        "offset": 184,
+                      },
+                      "start": Object {
+                        "column": 74,
+                        "line": 3,
+                        "offset": 181,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": 180,
+                  },
+                },
+              ],
+              "kind": "node",
+              "location": Object {
+                "end": Object {
+                  "column": 78,
+                  "line": 3,
+                  "offset": 185,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 3,
+                  "offset": 110,
+                },
+              },
+              "type": "attributes",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "key": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 12,
+                        "line": 4,
+                        "offset": 197,
+                      },
+                      "start": Object {
+                        "column": 7,
+                        "line": 4,
+                        "offset": 192,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "label",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 10,
+                      "line": 96,
+                      "offset": 6839,
+                    },
+                    "start": Object {
+                      "column": 7,
+                      "line": 4,
+                      "offset": 192,
+                    },
+                  },
+                  "type": "attribute",
+                  "value": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 10,
+                        "line": 96,
+                        "offset": 6839,
+                      },
+                      "start": Object {
+                        "column": 13,
+                        "line": 4,
+                        "offset": 198,
+                      },
+                    },
+                    "quoted": "html",
+                    "type": "literal",
+                    "value": "
+ <TABLE border=\\"10\\" cellspacing=\\"10\\" cellpadding=\\"10\\" style=\\"rounded\\" bgcolor=\\"yellow:violet\\" gradientangle=\\"315\\">
+<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow\\"  gradientangle=\\"60\\">00</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:green\\"  gradientangle=\\"60\\">01</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"green\\"  gradientangle=\\"60\\">02</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"green:blue\\"  gradientangle=\\"60\\">03</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"blue\\"  gradientangle=\\"60\\">04</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"blue:purple\\"  gradientangle=\\"60\\">05</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"purple\\"  gradientangle=\\"60\\">06</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"purple:violet\\"  gradientangle=\\"60\\">07</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"violet\\"  gradientangle=\\"60\\">08</TD></TR>
+
+<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:gold\\"  gradientangle=\\"60\\">10</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:green\\"  gradientangle=\\"60\\">11</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:green\\"  gradientangle=\\"60\\">12</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:blue\\"  gradientangle=\\"60\\">13</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:blue\\"  gradientangle=\\"60\\">14</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:purple\\"  gradientangle=\\"60\\">15</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:purple\\"  gradientangle=\\"60\\">16</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:violet\\"  gradientangle=\\"60\\">17</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:violet\\"  gradientangle=\\"60\\">18</TD></TR>
+
+<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold\\"  gradientangle=\\"60\\">20</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:green\\"  gradientangle=\\"60\\">21</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:green\\"  gradientangle=\\"60\\">22</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:blue\\"  gradientangle=\\"60\\">23</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:blue\\"  gradientangle=\\"60\\">24</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:purple\\"  gradientangle=\\"60\\">25</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:purple\\"  gradientangle=\\"60\\">26</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:violet\\"  gradientangle=\\"60\\">27</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:violet\\"  gradientangle=\\"60\\">28</TD></TR>
+
+<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:orange\\"  gradientangle=\\"60\\">30</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:green\\"  gradientangle=\\"60\\">31</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:green\\"  gradientangle=\\"60\\">32</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:blue\\"  gradientangle=\\"60\\">33</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:blue\\"  gradientangle=\\"60\\">34</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:purple\\"  gradientangle=\\"60\\">35</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:purple\\"  gradientangle=\\"60\\">36</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:violet\\"  gradientangle=\\"60\\">37</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:violet\\"  gradientangle=\\"60\\">38</TD></TR>
+
+<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange\\"  gradientangle=\\"60\\">40</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:green\\"  gradientangle=\\"60\\">41</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:green\\"  gradientangle=\\"60\\">42</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:blue\\"  gradientangle=\\"60\\">43</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:blue\\"  gradientangle=\\"60\\">44</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:purple\\"  gradientangle=\\"60\\">45</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:purple\\"  gradientangle=\\"60\\">46</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:violet\\"  gradientangle=\\"60\\">47</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:violet\\"  gradientangle=\\"60\\">48</TD></TR>
+
+<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:red\\"  gradientangle=\\"60\\">50</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:green\\"  gradientangle=\\"60\\">51</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:green\\"  gradientangle=\\"60\\">52</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:blue\\"  gradientangle=\\"60\\">53</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:blue\\"  gradientangle=\\"60\\">54</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:purple\\"  gradientangle=\\"60\\">55</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:purple\\"  gradientangle=\\"60\\">56</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:violet\\"  gradientangle=\\"60\\">57</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:violet\\"  gradientangle=\\"60\\">58</TD></TR>
+
+<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red\\"  gradientangle=\\"60\\">60</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:green\\"  gradientangle=\\"60\\">61</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:green\\"  gradientangle=\\"60\\">62</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:blue\\"  gradientangle=\\"60\\">63</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:blue\\"  gradientangle=\\"60\\">64</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:purple\\"  gradientangle=\\"60\\">65</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:purple\\"  gradientangle=\\"60\\">66</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:violet\\"  gradientangle=\\"60\\">67</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:violet\\"  gradientangle=\\"60\\">68</TD></TR>
+
+<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:brown\\"  gradientangle=\\"60\\">70</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:green\\"  gradientangle=\\"60\\">71</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:green\\"  gradientangle=\\"60\\">72</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:blue\\"  gradientangle=\\"60\\">73</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:blue\\"  gradientangle=\\"60\\">74</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:purple\\"  gradientangle=\\"60\\">75</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:purple\\"  gradientangle=\\"60\\">76</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:violet\\"  gradientangle=\\"60\\">77</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:violet\\"  gradientangle=\\"60\\">78</TD></TR>
+
+<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown\\"  gradientangle=\\"60\\">80</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:green\\"  gradientangle=\\"60\\">81</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:green\\"  gradientangle=\\"60\\">82</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:blue\\"  gradientangle=\\"60\\">83</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:blue\\"  gradientangle=\\"60\\">84</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:purple\\"  gradientangle=\\"60\\">85</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:purple\\"  gradientangle=\\"60\\">86</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:violet\\"  gradientangle=\\"60\\">87</TD>
+<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:violet\\"  gradientangle=\\"60\\">88</TD></TR>
+
+</TABLE>",
+                  },
+                },
+              ],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 5,
+                    "line": 4,
+                    "offset": 190,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 4,
+                    "offset": 188,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "a0",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 12,
+                  "line": 96,
+                  "offset": 6841,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 4,
+                  "offset": 188,
+                },
+              },
+              "type": "node",
+            },
+          ],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 20,
+                "line": 2,
+                "offset": 68,
+              },
+              "start": Object {
+                "column": 12,
+                "line": 2,
+                "offset": 60,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "cluster1",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 2,
+              "line": 98,
+              "offset": 6844,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 2,
+              "offset": 51,
+            },
+          },
+          "type": "subgraph",
+        },
+      ],
+      "directed": true,
+      "id": Object {
+        "location": Object {
+          "end": Object {
+            "column": 10,
+            "line": 1,
+            "offset": 9,
+          },
+          "start": Object {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "G",
+      },
+      "location": Object {
+        "end": Object {
+          "column": 2,
+          "line": 100,
+          "offset": 6847,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "strict": false,
+      "type": "graph",
+    },
+  ],
+  "location": Object {
+    "end": Object {
+      "column": 1,
+      "line": 101,
+      "offset": 6848,
+    },
+    "start": Object {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "dot",
+}
+`;

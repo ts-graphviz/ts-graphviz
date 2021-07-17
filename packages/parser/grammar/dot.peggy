@@ -53,7 +53,7 @@ _dot
     }
 
 _graph
-  = _strict:"strict"i? _ _kind:("graph"i / "digraph"i) _ id:_literal? _ "{" body:cluster_statements __ "}" {
+  = _strict:"strict"i? _ _kind:("graph"i / "digraph"i) _ id:_literal? __ "{" body:cluster_statements __ "}" {
       const strict = !!_strict;
       const kind = _kind.toLowerCase();
       const directed = kind === 'digraph';
@@ -74,7 +74,7 @@ _graph
     }
 
 _attribute
-  = keyValue:_key_value ";"? {
+  = keyValue:_key_value _ ";"? {
       return {
         type: 'attribute',
         ...keyValue,
@@ -83,13 +83,13 @@ _attribute
     }
 
 _attributes
-  = _kind:("graph"i / "node"i / "edge"i) body:_attribute_list ";"? {
+  = _kind:("graph"i / "node"i / "edge"i) body:_attribute_list _ ";"? {
       const kind = _kind.toLowerCase();
       return { type: 'attributes', kind, body, location: location() };
     }
 
 _edge
-  = id:_edge_target rhs:_edge_rhs _body:_attribute_list? ";"? {
+  = id:_edge_target rhs:_edge_rhs _body:_attribute_list? _ ";"? {
       return {
         type: 'edge',
         body: _body ?? [],
@@ -99,7 +99,7 @@ _edge
     }
 
 _node
-  = id:_literal _body:_attribute_list? ";"? {
+  = id:_literal _ _body:_attribute_list? _ ";"? {
       return {
         type: 'node',
         id,
@@ -119,10 +119,10 @@ _attibutes_item
       };
     }
 
-_attribute_list = _ "[" list:(attibutes_item / comment)* "]" { return list; }
+_attribute_list = _ "[" list:(attibutes_item / comment)* __ "]" { return list; }
 
 _edge_target_group
-  = "{" id:node_ref rest:(","? v:node_ref { return v; })* __ "}" {
+  = "{" id:node_ref rest:(("," / ";")? v:node_ref { return v; })* ("," / ";")? __ "}" {
       return {
         type: 'node_ref_group',
         body: [id, ...rest],
