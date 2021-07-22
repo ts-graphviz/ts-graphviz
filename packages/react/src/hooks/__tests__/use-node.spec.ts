@@ -6,7 +6,7 @@ import { digraph } from './utils/wrapper';
 
 describe('useNode', () => {
   it('returns Node instance', () => {
-    const { result } = renderHook(() => useNode({ id: 'hoge' }), {
+    const { result } = renderHook(() => useNode('hoge'), {
       wrapper: digraph(),
     });
     expect(result.current).toBeInstanceOf(Node);

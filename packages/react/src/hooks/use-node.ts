@@ -1,12 +1,17 @@
 import { useEffect, useMemo } from 'react';
 import { INode } from 'ts-graphviz';
-import { NodeProps } from '../types';
-import { useCluster } from './use-cluster';
+import { NodeOptions } from '../types';
+import { useCurrentCluster } from './use-current-cluster';
 import { useHasComment } from './use-comment';
 import { useHasAttributes } from './use-has-attributes';
 
-export function useNode({ id, comment, ...attributes }: NodeProps): INode {
-  const cluster = useCluster();
+/**
+ * `useNode` is a hook that creates an instance of Node
+ * according to the object given by props.
+ */
+export function useNode(id: string, options: NodeOptions = {}): INode {
+  const { comment, ...attributes } = options;
+  const cluster = useCurrentCluster();
   const node = useMemo(() => {
     const n = cluster.createNode(id);
     n.attributes.apply(attributes);

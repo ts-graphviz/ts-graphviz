@@ -3,7 +3,7 @@
 import React, { Component, ReactElement } from 'react';
 import { render } from '../../../render';
 
-export function renderExpectToThrow(element: ReactElement, expectedError: string): void {
+export function renderExpectToThrow(element: ReactElement, ...expectedError: string[]): void {
   const errors: Error[] = [];
   class ErrorBoundary extends Component<Record<string, unknown>, { hasError: boolean }> {
     constructor(props: Record<string, unknown>) {
@@ -28,11 +28,11 @@ export function renderExpectToThrow(element: ReactElement, expectedError: string
   }
 
   try {
-    render(<ErrorBoundary>{element}</ErrorBoundary>, {});
+    render(<ErrorBoundary>{element}</ErrorBoundary>);
   } catch (e) {
     errors.push(e);
   }
+  expect(errors.length).toBeGreaterThanOrEqual(expectedError.length);
 
-  expect(errors.length).toBe(1);
-  expect(errors[0].message).toContain(expectedError);
+  expect(errors.map((e) => e.message)).toEqual(expect.arrayContaining(expectedError));
 }

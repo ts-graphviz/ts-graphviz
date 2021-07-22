@@ -1,5 +1,9 @@
 import React from 'react';
-import { IContext } from '../types';
+import { ICluster } from 'ts-graphviz';
+
+export interface IContext {
+  container?: ICluster;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const GraphvizContext = React.createContext<IContext>(null!);

@@ -1,22 +1,25 @@
 import React, { FC, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Cluster } from '../contexts/Cluster';
+import { CurrentCluster } from '../contexts/CurrentCluster';
 import { ClusterMap } from '../contexts/ClusterMap';
-import { useRootCluster } from '../hooks/use-root-cluster';
-import { ClusterPortalComponentProps } from '../types';
+import { useContainerCluster } from '../hooks/use-container-cluster';
+import { ClusterPortalProps } from '../types';
 
-export const ClusterPortal: FC<ClusterPortalComponentProps> = ({ children, name }) => {
-  const root = useRootCluster();
+/**
+ * ClusterPortal component.
+ */
+export const ClusterPortal: FC<ClusterPortalProps> = ({ children, id }) => {
+  const container = useContainerCluster();
   const map = useContext(ClusterMap);
-  const cluster = useMemo(() => (name ? map.get(name) ?? root : root), [root, map, name]);
-  return <Cluster.Provider value={cluster}>{children}</Cluster.Provider>;
+  const cluster = useMemo(() => (id ? map.get(id) ?? container : container), [container, map, id]);
+  return <CurrentCluster.Provider value={cluster}>{children}</CurrentCluster.Provider>;
 };
 
 ClusterPortal.displayName = 'ClusterPortal';
 ClusterPortal.defaultProps = {
-  name: undefined,
+  id: undefined,
 };
 
 ClusterPortal.propTypes = {
-  name: PropTypes.string,
+  id: PropTypes.string,
 };

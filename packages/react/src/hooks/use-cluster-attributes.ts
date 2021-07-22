@@ -1,11 +1,11 @@
 import { ICluster, AttributesObject } from 'ts-graphviz';
 import { useEffect } from 'react';
-import { ClusterAttributesProps } from '../types';
+import { ClusterCommonAttributesProps } from '../types';
 
 export function useClusterAttributes<T extends string>(
   cluster: ICluster<T>,
   attributes: AttributesObject<T>,
-  { edge, node, graph }: ClusterAttributesProps,
+  { edge, node, graph }: ClusterCommonAttributesProps,
 ): void {
   useEffect(() => {
     cluster.clear();

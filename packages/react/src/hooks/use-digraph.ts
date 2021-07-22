@@ -3,13 +3,18 @@ import { Digraph, IRootCluster } from 'ts-graphviz';
 import { useGraphvizContext } from './use-graphviz-context';
 import { useClusterAttributes } from './use-cluster-attributes';
 import { useHasComment } from './use-comment';
-import { RootClusterProps } from '../types';
+import { RootClusterOptions } from '../types';
 
-export function useDigraph({ id, comment, edge, node, graph, ...attributes }: RootClusterProps = {}): IRootCluster {
+/**
+ * `useDigraph` is a hook that creates an instance of Digraph
+ * according to the object given by props.
+ */
+export function useDigraph(options: RootClusterOptions = {}): IRootCluster {
+  const { id, comment, edge, node, graph, ...attributes } = options;
   const context = useGraphvizContext();
   const digraph = useMemo(() => {
     const g = new Digraph(id);
-    context.root = g;
+    context.container = g;
     g.comment = comment;
     g.apply(attributes);
     g.attributes.node.apply(node ?? {});
@@ -21,7 +26,7 @@ export function useDigraph({ id, comment, edge, node, graph, ...attributes }: Ro
   useClusterAttributes(digraph, attributes, { edge, node, graph });
   useEffect(() => {
     return (): void => {
-      context.root = undefined;
+      context.container = undefined;
     };
   }, [context]);
   return digraph;

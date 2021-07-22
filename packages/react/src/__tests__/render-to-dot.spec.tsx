@@ -45,9 +45,4 @@ describe('renderToDot', () => {
     );
     expect(dot).toBeValidDotAndMatchSnapshot();
   });
-
-  it('render to be blank string', () => {
-    const dot = renderToDot(<></>);
-    expect(dot).toBe('');
-  });
 });
