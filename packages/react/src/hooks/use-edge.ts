@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { EdgeTargetLike, EdgeTargetsLike, IEdge } from 'ts-graphviz';
+import { EdgeTargetLikeTuple, IEdge } from 'ts-graphviz';
 import { useCurrentCluster } from './use-current-cluster';
 import { EdgeTargetLengthErrorMessage } from '../errors';
 import { useHasComment } from './use-comment';
@@ -10,7 +10,7 @@ import { EdgeOptions } from '../types';
  * `useEdge` is a hook that creates an instance of Edge
  * according to the object given by props.
  */
-export function useEdge(targets: (EdgeTargetLike | EdgeTargetsLike)[], props: EdgeOptions = {}): IEdge {
+export function useEdge(targets: EdgeTargetLikeTuple, props: EdgeOptions = {}): IEdge {
   const { comment, ...attributes } = props;
   const cluster = useCurrentCluster();
   if (targets.length < 2) {

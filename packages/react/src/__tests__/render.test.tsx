@@ -1,7 +1,7 @@
 /* eslint-disable jest/expect-expect */
 import React from 'react';
 import 'jest-graphviz';
-import { digraph, toDot } from 'ts-graphviz';
+import { digraph, EdgeTargetLikeTuple, toDot } from 'ts-graphviz';
 import { Edge } from '../components/Edge';
 import { Node } from '../components/Node';
 import { renderExpectToThrow } from '../components/__tests__/utils/renderExpectToThrow';
@@ -24,17 +24,9 @@ describe('renderToDot', () => {
   });
 
   it('render to container subgraph test', () => {
-    const nodes = ['a', 'b'];
+    const nodes: EdgeTargetLikeTuple = ['a', 'b'];
     const G = digraph();
-    const subgraph = render(
-      <>
-        {nodes.map((id) => (
-          <Node id={id} key={id} />
-        ))}
-        <Edge targets={nodes} />
-      </>,
-      G.subgraph('test'),
-    );
+    const subgraph = render(<Edge targets={nodes} />, G.subgraph('test'));
     expect(G.subgraph('test')).toEqual(subgraph);
     expect(toDot(G)).toBeValidDotAndMatchSnapshot();
   });

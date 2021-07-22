@@ -2,8 +2,6 @@
 
 exports[`renderToDot render edge 1`] = `
 digraph {
-  "a";
-  "b";
   "a" -> "b";
 }
 `;
@@ -11,8 +9,6 @@ digraph {
 exports[`renderToDot render subgraph 1`] = `
 digraph {
   subgraph {
-    "a";
-    "b";
     "a" -> "b";
   }
 }

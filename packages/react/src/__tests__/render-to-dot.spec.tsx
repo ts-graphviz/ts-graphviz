@@ -1,6 +1,7 @@
 // tslint:disable: jsx-no-multiline-js
 import React from 'react';
 import 'jest-graphviz';
+import { EdgeTargetLikeTuple } from 'ts-graphviz';
 import { Edge } from '../components/Edge';
 import { Subgraph } from '../components/Subgraph';
 import { Digraph } from '../components/Digraph';
@@ -19,12 +20,9 @@ describe('renderToDot', () => {
   });
 
   it('render edge', () => {
-    const nodes = ['a', 'b'];
+    const nodes: EdgeTargetLikeTuple = ['a', 'b'];
     const dot = renderToDot(
       <Digraph>
-        {nodes.map((id) => (
-          <Node id={id} key={id} />
-        ))}
         <Edge targets={nodes} />
       </Digraph>,
     );
@@ -32,13 +30,10 @@ describe('renderToDot', () => {
   });
 
   it('render subgraph', () => {
-    const nodes = ['a', 'b'];
+    const nodes: EdgeTargetLikeTuple = ['a', 'b'];
     const dot = renderToDot(
       <Digraph>
         <Subgraph>
-          {nodes.map((id) => (
-            <Node id={id} key={id} />
-          ))}
           <Edge targets={nodes} />
         </Subgraph>
       </Digraph>,

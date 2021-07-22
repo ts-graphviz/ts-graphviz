@@ -3,8 +3,6 @@
 exports[`renderToDot render to container subgraph test 1`] = `
 digraph {
   subgraph "test" {
-    "a";
-    "b";
     "a" -> "b";
   }
 }

@@ -17,6 +17,8 @@ export const Edge: VFC<EdgeProps> = ({ targets, label, ...options }) => {
 Edge.displayName = 'Edge';
 
 Edge.propTypes = {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   targets: PropTypes.array.isRequired,
   comment: PropTypes.string,
   label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),

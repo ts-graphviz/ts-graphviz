@@ -4,10 +4,9 @@ import {
   NodeAttributes,
   ClusterSubgraphAttributes,
   RootClusterAttributes,
-  EdgeTargetLike,
-  EdgeTargetsLike,
   IHasComment,
   attribute,
+  EdgeTargetLikeTuple,
 } from 'ts-graphviz';
 
 /** Common attribute values of objects under cluster */
@@ -52,7 +51,7 @@ export interface RootClusterProps extends Omit<RootClusterOptions, typeof attrib
 /** Props for Edge component */
 export interface EdgeProps extends Omit<EdgeOptions, typeof attribute.label> {
   /** Edge targets */
-  targets: (EdgeTargetLike | EdgeTargetsLike)[];
+  targets: EdgeTargetLikeTuple;
   /** Edge label */
   label?: ReactElement | string;
 }
