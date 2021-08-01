@@ -1,0 +1,27 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg)](#contributors)",
+  "contributors": [
+    {
+      "login": "kamiazya",
+      "name": "Yuki Yamazaki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35218186?v=4",
+      "profile": "http://blog.kamiazya.tech/",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "parser",
+  "projectOwner": "ts-graphviz",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
