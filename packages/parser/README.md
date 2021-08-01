@@ -109,7 +109,7 @@ const G = dot`
 `;
 ```
 
-## Low lebel API
+## Low level API
 
 ### `AST` module
 
