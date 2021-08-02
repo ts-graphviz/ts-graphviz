@@ -104,6 +104,13 @@ function applyStatements(cluster: ICluster, statements: AST.ClusterStatement[]):
   }
 }
 
+/**
+ * Convert AST to ts-graphviz model.
+ *
+ * @param ast AST node.
+ *
+ * @alpha May change the publishing method.
+ */
 export function convert(ast: AST.Dot): RootCluster;
 export function convert(ast: AST.Graph): RootCluster;
 export function convert(ast: AST.Subgraph): Subgraph;

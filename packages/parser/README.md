@@ -111,6 +111,20 @@ const G = dot`
 `;
 ```
 
+### function convert(ast)
+
+> May change the publishing method.
+
+Convert AST to ts-graphviz model.
+
+```ts
+export function convert(ast: AST.Dot): RootCluster;
+export function convert(ast: AST.Graph): RootCluster;
+export function convert(ast: AST.Subgraph): Subgraph;
+export function convert(ast: AST.Node): Node;
+export function convert(ast: AST.Edge): Edge;
+```
+
 ## Low level API
 
 ### `AST` module
