@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`attribute set HTMLLike value 1`] = `
+exports[`parse attribute set HTMLLike value 1`] = `
 Object {
   "key": Object {
     "location": Object {
@@ -60,7 +60,7 @@ Object {
 }
 `;
 
-exports[`attribute set quoted value 1`] = `
+exports[`parse attribute set quoted value 1`] = `
 Object {
   "key": Object {
     "location": Object {
@@ -112,7 +112,7 @@ Object {
 }
 `;
 
-exports[`attribute set value 1`] = `
+exports[`parse attribute set value 1`] = `
 Object {
   "key": Object {
     "location": Object {
@@ -164,7 +164,7 @@ Object {
 }
 `;
 
-exports[`attributes edge 1`] = `
+exports[`parse attributes edge 1`] = `
 Object {
   "body": Array [
     Object {
@@ -283,7 +283,7 @@ Object {
 }
 `;
 
-exports[`attributes graph 1`] = `
+exports[`parse attributes graph 1`] = `
 Object {
   "body": Array [
     Object {
@@ -402,7 +402,7 @@ Object {
 }
 `;
 
-exports[`attributes node 1`] = `
+exports[`parse attributes node 1`] = `
 Object {
   "body": Array [
     Object {
@@ -570,7 +570,7 @@ Object {
 }
 `;
 
-exports[`attributes with comment 1`] = `
+exports[`parse attributes with comment 1`] = `
 Object {
   "body": Array [
     Object {
@@ -657,7 +657,7 @@ Object {
 }
 `;
 
-exports[`cluster_statements comments 1`] = `
+exports[`parse cluster_statements comments 1`] = `
 Array [
   Object {
     "kind": "slash",
@@ -749,7 +749,7 @@ comment4",
 ]
 `;
 
-exports[`dot with comments 1`] = `
+exports[`parse dot with comments 1`] = `
 Object {
   "body": Array [
     Object {
@@ -821,7 +821,7 @@ Object {
 }
 `;
 
-exports[`edge digraph edge 1`] = `
+exports[`parse edge digraph edge 1`] = `
 Object {
   "body": Array [],
   "location": Object {
@@ -906,7 +906,7 @@ Object {
 }
 `;
 
-exports[`edge edge with attributes 1`] = `
+exports[`parse edge edge with attributes 1`] = `
 Object {
   "body": Array [
     Object {
@@ -1090,7 +1090,7 @@ Object {
 }
 `;
 
-exports[`edge edge with port 1`] = `
+exports[`parse edge edge with port 1`] = `
 Object {
   "body": Array [],
   "location": Object {
@@ -1324,7 +1324,7 @@ Object {
 }
 `;
 
-exports[`edge graph edge 1`] = `
+exports[`parse edge graph edge 1`] = `
 Object {
   "body": Array [],
   "location": Object {
@@ -1409,7 +1409,7 @@ Object {
 }
 `;
 
-exports[`edge grouped edge targets 1`] = `
+exports[`parse edge grouped edge targets 1`] = `
 Object {
   "body": Array [],
   "location": Object {
@@ -1592,7 +1592,7 @@ Object {
 }
 `;
 
-exports[`edge grouped ported edge targets 1`] = `
+exports[`parse edge grouped ported edge targets 1`] = `
 Object {
   "body": Array [],
   "location": Object {
@@ -1860,7 +1860,7 @@ Object {
 }
 `;
 
-exports[`graph anonymous digraph 1`] = `
+exports[`parse graph anonymous digraph 1`] = `
 Object {
   "body": Array [],
   "directed": true,
@@ -1881,7 +1881,7 @@ Object {
 }
 `;
 
-exports[`graph digraph named test 1`] = `
+exports[`parse graph digraph named test 1`] = `
 Object {
   "body": Array [],
   "directed": true,
@@ -1919,7 +1919,7 @@ Object {
 }
 `;
 
-exports[`graph digraph named test(quoted) 1`] = `
+exports[`parse graph digraph named test(quoted) 1`] = `
 Object {
   "body": Array [],
   "directed": true,
@@ -1957,7 +1957,7 @@ Object {
 }
 `;
 
-exports[`graph graph named test 1`] = `
+exports[`parse graph graph named test 1`] = `
 Object {
   "body": Array [],
   "directed": false,
@@ -1995,7 +1995,7 @@ Object {
 }
 `;
 
-exports[`graph strict digraph named test 1`] = `
+exports[`parse graph strict digraph named test 1`] = `
 Object {
   "body": Array [],
   "directed": true,
@@ -2033,7 +2033,7 @@ Object {
 }
 `;
 
-exports[`graph strict graph named test 1`] = `
+exports[`parse graph strict graph named test 1`] = `
 Object {
   "body": Array [],
   "directed": false,
@@ -2071,7 +2071,7 @@ Object {
 }
 `;
 
-exports[`node node with attributes 1`] = `
+exports[`parse node node with attributes 1`] = `
 Object {
   "body": Array [
     Object {
@@ -2255,7 +2255,7 @@ Object {
 }
 `;
 
-exports[`node simple node 1`] = `
+exports[`parse node simple node 1`] = `
 Object {
   "body": Array [],
   "id": Object {
@@ -2291,7 +2291,7 @@ Object {
 }
 `;
 
-exports[`subgraph anonymous subgraph 1`] = `
+exports[`parse subgraph anonymous subgraph 1`] = `
 Object {
   "body": Array [],
   "location": Object {
@@ -2310,7 +2310,7 @@ Object {
 }
 `;
 
-exports[`subgraph named subgraph 1`] = `
+exports[`parse subgraph named subgraph 1`] = `
 Object {
   "body": Array [],
   "id": Object {
@@ -2346,7 +2346,7 @@ Object {
 }
 `;
 
-exports[`subgraph no keyword anonymous 1`] = `
+exports[`parse subgraph no keyword anonymous 1`] = `
 Object {
   "body": Array [],
   "location": Object {

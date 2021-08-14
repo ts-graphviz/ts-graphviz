@@ -250,7 +250,7 @@ StringPart
   = StringStart
   / UnicodeDigit
 
-NUMBER "NUMBER" = n:("-"? ("." [0-9]+ / [0-9]+ ("." [0-9]*)?)){ return text(); }
+NUMBER "NUMBER" = n:("-"? ("." [0-9]+ / [0-9]+ ("." [0-9]*)?)) { return text(); }
 
 /* html strings are enclosed in <>. The inside of those strings is xml.  All we
  * care about is a balanced number of <'s and >'s, so we can simplify our life

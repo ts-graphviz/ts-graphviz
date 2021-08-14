@@ -5,5 +5,6 @@ const config: Config.InitialOptions = {
   testEnvironment: 'node',
   verbose: true,
   collectCoverage: true,
+  snapshotSerializers: ['jest-snapshot-serializer-raw'],
 };
 export default config;

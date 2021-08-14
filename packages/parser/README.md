@@ -11,6 +11,17 @@
 
 Graphviz dot language parser for ts-graphviz.
 
+## Key Feature
+
+- Parse function that converts the DOT language to a [ta-graphviz](https://github.com/ts-graphviz/ts-graphviz) model.
+- Provides module that enables operations at AST level.
+- TypeScript Support.
+- Supports multiple runtime and module.
+  - Node.js, Browser and Deno.
+  - UMD, ESM, CommonJS
+
+![State Machine](./img/state-machine.svg)
+
 ## Installation
 
 The module can then be installed using [npm](https://www.npmjs.com/):
@@ -111,7 +122,7 @@ const G = dot`
 `;
 ```
 
-### function convert(ast)
+### `function convert(ast)`
 
 > May change the publishing method.
 
@@ -277,6 +288,15 @@ console.log(ast);
 //   }
 // }
 ```
+
+#### `function AST.stringify(ast: AST.ASTNode, options?: StringifyOption): string`
+
+Stringify Graphviz AST Node.
+
+- Parameters
+  - `ast` -- Graphviz AST node.
+- Returns
+  - DOT language string.
 
 ## See Also
 
