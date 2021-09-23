@@ -1,0 +1,7 @@
+{
+    "name": "ts-graphviz",
+    "dockerFile": "Dockerfile",
+    "extensions": [
+        "EditorConfig.EditorConfig"
+    ]
+}
