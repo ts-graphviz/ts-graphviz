@@ -1,11 +1,20 @@
 {
-    "name": "ts-graphviz",
-    "dockerFile": "Dockerfile",
-    "postCreateCommand": "yarn insyall --frozen-lockfile",
-    "extensions": [
-        "EditorConfig.EditorConfig",
-        "esbenp.prettier-vscode",
-        "dbaeumer.vscode-eslint",
-        "Orta.vscode-jest"
-    ]
+  "name": "ts-graphviz",
+  "dockerFile": "Dockerfile",
+  "postCreateCommand": "yarn insyall --frozen-lockfile",
+  "extensions": [
+      "EditorConfig.EditorConfig",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "Orta.vscode-jest"
+  ],
+  "settings": {
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false,
+    "editor.formatOnType": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "typescript.tsdk": "node_modules/typescript/lib"
+  }
 }

@@ -5,12 +5,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "eslint.exclude": ["**/dist/**", "**/node_modules/**"],
-  "markdownlint.config": {
-    "default": true,
-    "MD006": false,
-    "MD007": false,
-    "MD041": false
-  },
   "typescript.tsdk": "node_modules/typescript/lib"
 }
