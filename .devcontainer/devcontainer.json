@@ -1,0 +1,11 @@
+{
+    "name": "ts-graphviz",
+    "dockerFile": "Dockerfile",
+    "postCreateCommand": "yarn insyall --frozen-lockfile",
+    "extensions": [
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "Orta.vscode-jest"
+    ]
+}

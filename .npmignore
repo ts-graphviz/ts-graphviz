@@ -1,4 +1,5 @@
 .all-contributorsrc
+.devcontainer
 .editorconfig
 .eslintignore
 .eslintrc.json
