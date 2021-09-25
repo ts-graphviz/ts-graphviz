@@ -1,5 +1,5 @@
 import { ReactElement, isValidElement } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
+import { renderToStaticMarkup } from 'react-dom/server.js';
 
 export function renderId(id?: ReactElement | string): string | undefined {
   if (isValidElement(id)) {

@@ -22,7 +22,7 @@ const options = [
         },
       }),
     ],
-    external: ['react', 'react-dom/server', 'ts-graphviz', 'prop-types', 'react-reconciler'],
+    external: ['react', 'react-dom/server.js', 'ts-graphviz', 'prop-types', 'react-reconciler'],
     output: [
       {
         format: 'cjs',
