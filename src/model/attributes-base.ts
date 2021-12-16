@@ -1,10 +1,17 @@
 import { DotObject } from './abstract';
-import { AttributesObject, AttributesValue, IAttributesBase, IAttributes, AttributesEntities } from '../types';
+import {
+  AttributesObject,
+  AttributeKey,
+  AttributesValue,
+  IAttributesBase,
+  IAttributes,
+  AttributesEntities,
+} from '../types';
 
 /**
  * @hidden
  */
-export abstract class AttributesBase<T extends string> extends DotObject implements IAttributesBase<T> {
+export abstract class AttributesBase<T extends AttributeKey> extends DotObject implements IAttributesBase<T> {
   /** @hidden */
   protected attrs: Map<T, AttributesValue> = new Map();
 
@@ -55,7 +62,7 @@ export abstract class AttributesBase<T extends string> extends DotObject impleme
  *
  * @category Attributes
  */
-export class Attributes<T extends string = string> extends AttributesBase<T> implements IAttributes<T> {
+export class Attributes<T extends AttributeKey = AttributeKey> extends AttributesBase<T> implements IAttributes<T> {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
 }

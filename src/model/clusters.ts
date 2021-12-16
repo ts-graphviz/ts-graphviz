@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define,max-classes-per-file */
 import { attribute } from '../attribute';
 import {
+  AttributeKey,
   ClusterSubgraphAttributes,
   EdgeAttributes,
   ICluster,
@@ -21,7 +22,7 @@ import { isNodeRefGroupLike, toNodeRef, toNodeRefGroup } from './utils';
  * Base class for clusters.
  * @hidden
  */
-export abstract class Cluster<T extends string> extends AttributesBase<T> implements ICluster<T> {
+export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> implements ICluster<T> {
   /** Cluster ID */
   public readonly id?: string;
 
