@@ -5,7 +5,7 @@ import { EdgeAttributes, EdgeTargetTuple, IAttributes, IEdge } from './types';
 import { isNodeRefLike } from './nodes';
 
 /**
- * @category Primary
+ * @category Domain Model
  */
 export class Edge extends DotObject implements IEdge {
   /** Comments to include when outputting with toDot. */

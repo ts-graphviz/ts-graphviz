@@ -1,13 +1,13 @@
+import { Attribute, AttributeKey } from '../knowledge';
 import { DotObject } from './abstract';
-import { AttributeKey } from '../knowledge';
 import { IAttributesBase, AttributesValue, AttributesObject, AttributesEntities, IAttributes } from './types';
 
 /**
- * @hidden
+ * @category Domain Model
  */
 export abstract class AttributesBase<T extends AttributeKey> extends DotObject implements IAttributesBase<T> {
   /** @hidden */
-  protected attrs: Map<T, AttributesValue> = new Map();
+  protected attrs: Map<T, Attribute<T>> = new Map();
 
   constructor(attributes?: AttributesObject<T>) {
     super();
@@ -25,11 +25,11 @@ export abstract class AttributesBase<T extends AttributeKey> extends DotObject i
     return this.attrs.size;
   }
   /** The size of the attribute. */
-  public get(key: T): AttributesValue | undefined {
+  public get(key: T): Attribute<T> | undefined {
     return this.attrs.get(key);
   }
   /** Set a value to the attribute. */
-  public set(key: T, value: AttributesValue): void {
+  public set(key: T, value: Attribute<T>): void {
     if (value !== null && value !== undefined) {
       this.attrs.set(key, value);
     }
@@ -42,7 +42,7 @@ export abstract class AttributesBase<T extends AttributeKey> extends DotObject i
   public apply(attributes: AttributesObject<T> | AttributesEntities<T>): void {
     const entries = Array.isArray(attributes) ? attributes : Object.entries(attributes);
     for (const [key, value] of entries) {
-      this.set(key as T, value as AttributesValue);
+      this.set(key, value);
     }
   }
 
@@ -54,7 +54,7 @@ export abstract class AttributesBase<T extends AttributeKey> extends DotObject i
 /**
  * A set of attribute values for any object.
  *
- * @category Attributes
+ * @category Domain Model
  */
 export class Attributes<T extends AttributeKey = AttributeKey> extends AttributesBase<T> implements IAttributes<T> {
   /** Comments to include when outputting with toDot. */

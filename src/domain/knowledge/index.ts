@@ -1,2 +1,1 @@
-export * from './attributes';
-export * from './compass';
+export * from './attribute';

@@ -499,7 +499,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
 
 /**
  * Subgraph object.
- * @category Primary
+ * @category Domain Model
  */
 export class Subgraph extends Cluster<SubgraphAttributeKey | ClusterSubgraphAttributeKey> implements ISubgraph {
   public readonly id?: string;

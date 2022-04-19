@@ -11,6 +11,8 @@ import { IRootCluster, RootClusterAttributes } from './types';
 
 /**
  * Base class for RootCluster.
+ *
+ * @category Domain Model
  */
 export abstract class RootCluster extends Cluster<RootClusterAttributeKey> implements IRootCluster {
   public readonly id?: string;
@@ -50,7 +52,7 @@ export abstract class RootCluster extends Cluster<RootClusterAttributeKey> imple
  *
  * @description
  * An object representing an omnidirectional graph.
- * @category Primary
+ * @category Domain Model
  */
 export class Graph extends RootCluster {}
 
@@ -59,6 +61,6 @@ export class Graph extends RootCluster {}
  *
  * @description
  * The object representing a directional graph.
- * @category Primary
+ * @category Domain Model
  */
 export class Digraph extends RootCluster {}

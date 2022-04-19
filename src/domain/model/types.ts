@@ -2,7 +2,7 @@ import {
   Attribute,
   AttributeKey,
   ClusterSubgraphAttributeKey,
-  Compass,
+  attribute,
   EdgeAttributeKey,
   NodeAttributeKey,
   RootClusterAttributeKey,
@@ -12,7 +12,7 @@ import {
 /**
  * Objects that can be Edge destinations satisfy this interface.
  */
-export type NodeRef = INode | IForwardRefNode;
+export type NodeRef = INode | ForwardRefNode;
 
 export type NodeRefGroup = NodeRef[];
 
@@ -28,45 +28,6 @@ export type EdgeTargetLike = NodeRefLike | NodeRefGroupLike;
 
 export type EdgeTargetTuple = [from: EdgeTarget, to: EdgeTarget, ...rest: EdgeTarget[]];
 export type EdgeTargetLikeTuple = [from: EdgeTargetLike, to: EdgeTargetLike, ...rest: EdgeTargetLike[]];
-
-export interface IHasComment {
-  /** Comments to include when outputting with toDot. */
-  comment?: string;
-}
-
-export interface IHasAttributes<T extends AttributeKey> {
-  readonly attributes: IAttributes<T>;
-}
-
-export interface IPort {
-  port: string;
-  compass: Compass;
-}
-
-export interface INode extends IHasComment, IHasAttributes<NodeAttributeKey> {
-  readonly id: string;
-  port(port: string | Partial<IPort>): IForwardRefNode;
-}
-
-export interface IEdge extends IHasComment, IHasAttributes<EdgeAttributeKey> {
-  readonly targets: EdgeTargetTuple;
-}
-
-export interface IAttributes<T extends AttributeKey = AttributeKey> extends IAttributesBase<T>, IHasComment {}
-
-export interface IForwardRefNode extends Partial<IPort> {
-  readonly id: string;
-}
-
-export interface IAttributesBase<T extends AttributeKey> {
-  readonly size: number;
-  readonly values: ReadonlyArray<[T, AttributesValue]>;
-  get(key: T): AttributesValue | undefined;
-  set(key: T, value: AttributesValue): void;
-  apply(attributes: AttributesObject<T> | AttributesEntities<T>): void;
-  delete(key: T): void;
-  clear(): void;
-}
 
 /**
  * An AttributesValue is one of the following:
@@ -88,33 +49,63 @@ export type NodeAttributes = AttributesObject<NodeAttributeKey>;
 export type RootClusterAttributes = AttributesObject<RootClusterAttributeKey>;
 export type ClusterSubgraphAttributes = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey>;
 
+export interface HasComment {
+  /** Comments to include when outputting with toDot. */
+  comment?: string;
+}
+
+export interface HasAttributes<T extends AttributeKey> {
+  readonly attributes: IAttributes<T>;
+}
+
+export interface ForwardRefNode extends Partial<Port> {
+  readonly id: string;
+}
+
+export interface INode extends HasComment, HasAttributes<NodeAttributeKey> {
+  readonly id: string;
+  port(port: string | Partial<Port>): ForwardRefNode;
+}
+
+export interface IEdge extends HasComment, HasAttributes<EdgeAttributeKey> {
+  readonly targets: EdgeTargetTuple;
+}
+
+export interface IAttributes<T extends AttributeKey = AttributeKey> extends IAttributesBase<T>, HasComment {}
+
 export interface IAttributesBase<T extends AttributeKey> {
   readonly size: number;
   readonly values: ReadonlyArray<[T, AttributesValue]>;
-  get(key: T): AttributesValue | undefined;
-  set(key: T, value: AttributesValue): void;
+  get(key: T): Attribute<T> | undefined;
+  set(key: T, value: Attribute<T>): void;
   apply(attributes: AttributesObject<T> | AttributesEntities<T>): void;
   delete(key: T): void;
   clear(): void;
 }
 
-export interface IAttributes<T extends AttributeKey = AttributeKey> extends IAttributesBase<T>, IHasComment {}
+export interface IAttributesBase<T extends AttributeKey> {
+  readonly size: number;
+  readonly values: ReadonlyArray<[T, AttributesValue]>;
+  get(key: T): Attribute<T> | undefined;
+  set(key: T, value: Attribute<T>): void;
+  apply(attributes: AttributesObject<T> | AttributesEntities<T>): void;
+  delete(key: T): void;
+  clear(): void;
+}
 
-export interface IPort {
+export interface IAttributes<T extends AttributeKey = AttributeKey> extends IAttributesBase<T>, HasComment {}
+
+export interface Port {
   port: string;
-  compass: Compass;
+  compass: attribute.type.Compass;
 }
 
-export interface IForwardRefNode extends Partial<IPort> {
+export interface INode extends HasComment, HasAttributes<NodeAttributeKey> {
   readonly id: string;
+  port(port: string | Partial<Port>): ForwardRefNode;
 }
 
-export interface INode extends IHasComment, IHasAttributes<NodeAttributeKey> {
-  readonly id: string;
-  port(port: string | Partial<IPort>): IForwardRefNode;
-}
-
-export interface IEdge extends IHasComment, IHasAttributes<EdgeAttributeKey> {
+export interface IEdge extends HasComment, HasAttributes<EdgeAttributeKey> {
   readonly targets: EdgeTargetTuple;
 }
 
@@ -132,7 +123,7 @@ export interface IClusterCommonAttributes {
   node: IAttributes<NodeAttributeKey>;
 }
 
-export interface ICluster<T extends AttributeKey = AttributeKey> extends IHasComment, IAttributesBase<T> {
+export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComment, IAttributesBase<T> {
   readonly id?: string;
   readonly attributes: Readonly<IClusterCommonAttributes>;
   readonly nodes: ReadonlyArray<INode>;
@@ -408,7 +399,6 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends IHasCom
    * // }
    * ```
    *
-   * @param id Node ID.
    * @param attributes Object of attributes to be adapted to the edge.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */

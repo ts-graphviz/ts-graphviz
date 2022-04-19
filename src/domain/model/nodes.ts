@@ -1,11 +1,11 @@
 import { DotObject } from './abstract';
-import { Compass, NodeAttributeKey } from '../knowledge';
+import { attribute, NodeAttributeKey } from '../knowledge';
 import { Attributes } from './attributes-base';
 import {
   IAttributes,
-  IForwardRefNode,
+  ForwardRefNode,
   INode,
-  IPort,
+  Port,
   NodeAttributes,
   NodeRef,
   NodeRefGroup,
@@ -15,7 +15,7 @@ import {
 
 /**
  * Node object.
- * @category Primary
+ * @category Domain Model
  */
 export class Node extends DotObject implements INode {
   /** Comments to include when outputting with toDot. */
@@ -27,7 +27,7 @@ export class Node extends DotObject implements INode {
   }
 
   /** Returns ForwardRefNode with port and compass specified. */
-  public port(port: string | Partial<IPort>): IForwardRefNode {
+  public port(port: string | Partial<Port>): ForwardRefNode {
     if (typeof port === 'string') {
       return { id: this.id, port };
     }
@@ -36,8 +36,8 @@ export class Node extends DotObject implements INode {
 }
 
 /** @hidden */
-export function isForwardRefNode(object: unknown): object is IForwardRefNode {
-  return typeof object == 'object' && object !== null && typeof (object as IForwardRefNode).id === 'string';
+export function isForwardRefNode(object: unknown): object is ForwardRefNode {
+  return typeof object == 'object' && object !== null && typeof (object as ForwardRefNode).id === 'string';
 }
 
 /** @hidden */
@@ -61,7 +61,7 @@ export function toNodeRef(target: NodeRefLike): NodeRef {
     return target;
   }
   const [id, port, compass] = target.split(':');
-  if (Compass.is(compass)) {
+  if (attribute.type.Compass.is(compass)) {
     return { id, port, compass };
   }
   return { id, port };
