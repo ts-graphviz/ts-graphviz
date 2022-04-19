@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Renderer } from './renderer';
-import { Dot } from '../types';
+import { Renderer, Dot } from './renderer';
 
 export function toDot(object: Dot): string {
   const renderer = new Renderer();

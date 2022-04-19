@@ -1,12 +1,6 @@
 import { DotObject } from './abstract';
-import {
-  AttributesObject,
-  AttributeKey,
-  AttributesValue,
-  IAttributesBase,
-  IAttributes,
-  AttributesEntities,
-} from '../types';
+import { AttributeKey } from '../knowledge';
+import { IAttributesBase, AttributesValue, AttributesObject, AttributesEntities, IAttributes } from './types';
 
 /**
  * @hidden

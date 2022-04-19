@@ -1,6 +1,6 @@
 import { DotObject, GraphvizObject } from '../abstract';
 import { Node } from '../nodes';
-import { attribute } from '../../attribute';
+import { attribute } from '../../domain';
 
 describe('class Node', () => {
   let node: Node;

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import 'jest-graphviz';
+import { attribute } from '../../domain';
 import { DotObject, GraphvizObject } from '../abstract';
-import { EdgeTargetTuple, ISubgraph } from '../../types';
 import { AttributesBase } from '../attributes-base';
 import { Cluster, Subgraph } from '../clusters';
 import { Node } from '../nodes';
-import { attribute } from '../../attribute';
+import { EdgeTargetTuple, ISubgraph } from '../types';
 
 describe('class Subgraph', () => {
   let subgraph: ISubgraph;

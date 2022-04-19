@@ -1,12 +1,18 @@
-import { attribute } from '../attribute';
-import { IRootCluster, RootClusterAttributes } from '../types';
+import {
+  ClusterSubgraphAttributeKey,
+  EdgeAttributeKey,
+  NodeAttributeKey,
+  RootClusterAttributeKey,
+  SubgraphAttributeKey,
+} from '../knowledge';
 import { Cluster } from './clusters';
 import { Attributes } from './attributes-base';
+import { IRootCluster, RootClusterAttributes } from './types';
 
 /**
  * Base class for RootCluster.
  */
-export abstract class RootCluster extends Cluster<attribute.RootCluster> implements IRootCluster {
+export abstract class RootCluster extends Cluster<RootClusterAttributeKey> implements IRootCluster {
   public readonly id?: string;
   /**
    * Strict mode.
@@ -20,9 +26,9 @@ export abstract class RootCluster extends Cluster<attribute.RootCluster> impleme
   public strict: boolean;
 
   public attributes = {
-    graph: new Attributes<attribute.Subgraph | attribute.ClusterSubgraph>(),
-    edge: new Attributes<attribute.Edge>(),
-    node: new Attributes<attribute.Node>(),
+    graph: new Attributes<SubgraphAttributeKey | ClusterSubgraphAttributeKey>(),
+    edge: new Attributes<EdgeAttributeKey>(),
+    node: new Attributes<NodeAttributeKey>(),
   };
   constructor(id?: string, attributes?: RootClusterAttributes);
   constructor(id?: string, strict?: boolean, attributes?: RootClusterAttributes);

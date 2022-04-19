@@ -1,22 +1,26 @@
 /* eslint-disable @typescript-eslint/no-use-before-define,max-classes-per-file */
-import { attribute } from '../attribute';
 import {
   AttributeKey,
-  ClusterSubgraphAttributes,
-  EdgeAttributes,
+  SubgraphAttributeKey,
+  ClusterSubgraphAttributeKey,
+  EdgeAttributeKey,
+  NodeAttributeKey,
+} from '../knowledge';
+import { Attributes, AttributesBase } from './attributes-base';
+import { isNodeRefGroupLike, Node, toNodeRef, toNodeRefGroup } from './nodes';
+import { Edge } from './edges';
+import {
   ICluster,
   IClusterCommonAttributes,
-  IEdge,
   INode,
+  IEdge,
   ISubgraph,
+  ClusterSubgraphAttributes,
   NodeAttributes,
-  EdgeTargetTuple,
   EdgeTargetLikeTuple,
-} from '../types';
-import { Attributes, AttributesBase } from './attributes-base';
-import { Node } from './nodes';
-import { Edge } from './edges';
-import { isNodeRefGroupLike, toNodeRef, toNodeRefGroup } from './utils';
+  EdgeAttributes,
+  EdgeTargetTuple,
+} from './types';
 
 /**
  * Base class for clusters.
@@ -497,12 +501,12 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
  * Subgraph object.
  * @category Primary
  */
-export class Subgraph extends Cluster<attribute.Subgraph | attribute.ClusterSubgraph> implements ISubgraph {
+export class Subgraph extends Cluster<SubgraphAttributeKey | ClusterSubgraphAttributeKey> implements ISubgraph {
   public readonly id?: string;
   public attributes = {
-    graph: new Attributes<attribute.ClusterSubgraph>(),
-    edge: new Attributes<attribute.Edge>(),
-    node: new Attributes<attribute.Node>(),
+    graph: new Attributes<ClusterSubgraphAttributeKey>(),
+    edge: new Attributes<EdgeAttributeKey>(),
+    node: new Attributes<NodeAttributeKey>(),
   };
   constructor(id?: string, attributes?: ClusterSubgraphAttributes);
   constructor(attributes?: ClusterSubgraphAttributes);

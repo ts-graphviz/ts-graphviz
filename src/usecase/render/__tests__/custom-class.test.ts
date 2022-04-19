@@ -1,10 +1,7 @@
 import 'jest-graphviz';
 import { toDot } from '../to-dot';
-import { Digraph, Graph } from '../../model/root-clusters';
-import { Node } from '../../model/nodes';
-import { attribute } from '../../attribute';
-import { Edge } from '../../model/edges';
-import { EdgeTargetTuple } from '../../types';
+import { attribute } from '../../domain';
+import { Digraph, Graph, Node, Edge, EdgeTargetTuple } from '../../model';
 
 describe('class base API', () => {
   test('digraph', () => {

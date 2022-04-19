@@ -2,8 +2,8 @@
 import { DotObject, GraphvizObject } from '../abstract';
 import { Edge } from '../edges';
 import { Node } from '../nodes';
-import { attribute } from '../../attribute';
-import { EdgeTargetTuple } from '../../types';
+import { attribute } from '../../domain';
+import { EdgeTargetTuple } from '../types';
 
 describe('class Edge', () => {
   let edge: Edge;

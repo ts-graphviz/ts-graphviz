@@ -1,11 +1,7 @@
 import 'jest-graphviz';
-import { Digraph, Graph } from '../model/root-clusters';
-import { digraph, graph, strict } from '../usecase';
-import { toDot } from '../render/to-dot';
-import { attribute } from '../attribute';
-import { Subgraph } from '../model/clusters';
-import { Node } from '../model/nodes';
-import { Edge } from '../model/edges';
+import { attribute, Digraph, Graph, Subgraph, Node, Edge } from '../../domain';
+import { digraph, graph, strict } from '../builder';
+import { toDot } from '../render';
 
 describe('function digraph', () => {
   it('should return Digraph object, when execute digraph()', () => {

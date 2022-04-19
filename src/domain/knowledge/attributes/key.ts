@@ -2657,278 +2657,283 @@ export namespace attribute {
    * @category Attribute
    */
   export const z = 'z';
-
-  /**
-   * Attribute types available for edges.
-   */
-  export type Edge =
-    | typeof URL
-    | typeof arrowhead
-    | typeof arrowsize
-    | typeof arrowtail
-    | typeof color
-    | typeof colorscheme
-    | typeof comment
-    | typeof constraint
-    | typeof decorate
-    | typeof dir
-    | typeof edgeURL
-    | typeof edgehref
-    | typeof edgetarget
-    | typeof edgetooltip
-    | typeof fillcolor
-    | typeof fontcolor
-    | typeof fontname
-    | typeof fontsize
-    | typeof headURL
-    | typeof head_lp
-    | typeof headclip
-    | typeof headhref
-    | typeof headlabel
-    | typeof headport
-    | typeof headtarget
-    | typeof headtooltip
-    | typeof href
-    | typeof id
-    | typeof label
-    | typeof labelURL
-    | typeof labelangle
-    | typeof labeldistance
-    | typeof labelfloat
-    | typeof labelfontcolor
-    | typeof labelfontname
-    | typeof labelfontsize
-    | typeof labelhref
-    | typeof labeltarget
-    | typeof labeltooltip
-    | typeof layer
-    | typeof len
-    | typeof lhead
-    | typeof lp
-    | typeof ltail
-    | typeof minlen
-    | typeof nojustify
-    | typeof penwidth
-    | typeof pos
-    | typeof samehead
-    | typeof sametail
-    | typeof showboxes
-    | typeof style
-    | typeof tailURL
-    | typeof tail_lp
-    | typeof tailclip
-    | typeof tailhref
-    | typeof taillabel
-    | typeof tailport
-    | typeof tailtarget
-    | typeof tailtooltip
-    | typeof target
-    | typeof tooltip
-    | typeof weight
-    | typeof xlabel
-    | typeof xlp
-    | typeof _class;
-
-  /**
-   * Attribute types available for nodes.
-   */
-  export type Node =
-    | typeof URL
-    | typeof area
-    | typeof color
-    | typeof colorscheme
-    | typeof comment
-    | typeof distortion
-    | typeof fillcolor
-    | typeof fixedsize
-    | typeof fontcolor
-    | typeof fontname
-    | typeof fontsize
-    | typeof gradientangle
-    | typeof group
-    | typeof height
-    | typeof href
-    | typeof id
-    | typeof image
-    | typeof imagepos
-    | typeof imagescale
-    | typeof label
-    | typeof labelloc
-    | typeof layer
-    | typeof margin
-    | typeof nojustify
-    | typeof ordering
-    | typeof orientation
-    | typeof penwidth
-    | typeof peripheries
-    | typeof pin
-    | typeof pos
-    | typeof rects
-    | typeof regular
-    | typeof root
-    | typeof samplepoints
-    | typeof shape
-    | typeof shapefile
-    | typeof showboxes
-    | typeof sides
-    | typeof skew
-    | typeof sortv
-    | typeof style
-    | typeof target
-    | typeof tooltip
-    | typeof vertices
-    | typeof width
-    | typeof xlabel
-    | typeof xlp
-    | typeof z
-    | typeof _class;
-
-  /**
-   * Attribute types available for root cluster.
-   */
-  export type RootCluster =
-    | typeof Damping
-    | typeof K
-    | typeof URL
-    | typeof _background
-    | typeof bb
-    | typeof bgcolor
-    | typeof center
-    | typeof charset
-    | typeof clusterrank
-    | typeof colorscheme
-    | typeof comment
-    | typeof compound
-    | typeof concentrate
-    | typeof defaultdist
-    | typeof dim
-    | typeof dimen
-    | typeof diredgeconstraints
-    | typeof dpi
-    | typeof epsilon
-    | typeof esep
-    | typeof fontcolor
-    | typeof fontname
-    | typeof fontnames
-    | typeof fontpath
-    | typeof fontsize
-    | typeof forcelabels
-    | typeof gradientangle
-    | typeof href
-    | typeof id
-    | typeof imagepath
-    | typeof inputscale
-    | typeof label
-    | typeof label_scheme
-    | typeof labeljust
-    | typeof labelloc
-    | typeof landscape
-    | typeof layerlistsep
-    | typeof layers
-    | typeof layerselect
-    | typeof layersep
-    | typeof layout
-    | typeof levels
-    | typeof levelsgap
-    | typeof lheight
-    | typeof lp
-    | typeof lwidth
-    | typeof margin
-    | typeof maxiter
-    | typeof mclimit
-    | typeof mindist
-    | typeof mode
-    | typeof model
-    | typeof mosek
-    | typeof newrank
-    | typeof nodesep
-    | typeof nojustify
-    | typeof normalize
-    | typeof notranslate
-    | typeof nslimit
-    | typeof nslimit1
-    | typeof ordering
-    | typeof orientation
-    | typeof outputorder
-    | typeof overlap
-    | typeof overlap_scaling
-    | typeof overlap_shrink
-    | typeof pack
-    | typeof packmode
-    | typeof pad
-    | typeof page
-    | typeof pagedir
-    | typeof quadtree
-    | typeof quantum
-    | typeof rankdir
-    | typeof ranksep
-    | typeof ratio
-    | typeof remincross
-    | typeof repulsiveforce
-    | typeof resolution
-    | typeof root
-    | typeof rotate
-    | typeof rotation
-    | typeof scale
-    | typeof searchsize
-    | typeof sep
-    | typeof showboxes
-    | typeof size
-    | typeof smoothing
-    | typeof sortv
-    | typeof splines
-    | typeof start
-    | typeof style
-    | typeof stylesheet
-    | typeof target
-    | typeof truecolor
-    | typeof viewport
-    | typeof voro_margin
-    | typeof xdotversion
-    | typeof _class;
-
-  /**
-   * Attribute types available for subgraph.
-   */
-  export type Subgraph = typeof rank;
-
-  /**
-   * Attribute types available for cluster subgraph.
-   */
-  export type ClusterSubgraph =
-    | typeof K
-    | typeof URL
-    | typeof area
-    | typeof bgcolor
-    | typeof color
-    | typeof colorscheme
-    | typeof fillcolor
-    | typeof fontcolor
-    | typeof fontname
-    | typeof fontsize
-    | typeof gradientangle
-    | typeof href
-    | typeof id
-    | typeof label
-    | typeof labeljust
-    | typeof labelloc
-    | typeof layer
-    | typeof lheight
-    | typeof lp
-    | typeof lwidth
-    | typeof margin
-    | typeof nojustify
-    | typeof pencolor
-    | typeof penwidth
-    | typeof peripheries
-    | typeof sortv
-    | typeof style
-    | typeof target
-    | typeof tooltip
-    | typeof _class;
-
-  /**
-   * Attribute types.
-   */
-  export type Attribute = Node | Edge | RootCluster | Subgraph | ClusterSubgraph;
 }
+
+/**
+ * Attribute types available for edges.
+ */
+export type EdgeAttributeKey =
+  | typeof attribute.URL
+  | typeof attribute.arrowhead
+  | typeof attribute.arrowsize
+  | typeof attribute.arrowtail
+  | typeof attribute.color
+  | typeof attribute.colorscheme
+  | typeof attribute.comment
+  | typeof attribute.constraint
+  | typeof attribute.decorate
+  | typeof attribute.dir
+  | typeof attribute.edgeURL
+  | typeof attribute.edgehref
+  | typeof attribute.edgetarget
+  | typeof attribute.edgetooltip
+  | typeof attribute.fillcolor
+  | typeof attribute.fontcolor
+  | typeof attribute.fontname
+  | typeof attribute.fontsize
+  | typeof attribute.headURL
+  | typeof attribute.head_lp
+  | typeof attribute.headclip
+  | typeof attribute.headhref
+  | typeof attribute.headlabel
+  | typeof attribute.headport
+  | typeof attribute.headtarget
+  | typeof attribute.headtooltip
+  | typeof attribute.href
+  | typeof attribute.id
+  | typeof attribute.label
+  | typeof attribute.labelURL
+  | typeof attribute.labelangle
+  | typeof attribute.labeldistance
+  | typeof attribute.labelfloat
+  | typeof attribute.labelfontcolor
+  | typeof attribute.labelfontname
+  | typeof attribute.labelfontsize
+  | typeof attribute.labelhref
+  | typeof attribute.labeltarget
+  | typeof attribute.labeltooltip
+  | typeof attribute.layer
+  | typeof attribute.len
+  | typeof attribute.lhead
+  | typeof attribute.lp
+  | typeof attribute.ltail
+  | typeof attribute.minlen
+  | typeof attribute.nojustify
+  | typeof attribute.penwidth
+  | typeof attribute.pos
+  | typeof attribute.samehead
+  | typeof attribute.sametail
+  | typeof attribute.showboxes
+  | typeof attribute.style
+  | typeof attribute.tailURL
+  | typeof attribute.tail_lp
+  | typeof attribute.tailclip
+  | typeof attribute.tailhref
+  | typeof attribute.taillabel
+  | typeof attribute.tailport
+  | typeof attribute.tailtarget
+  | typeof attribute.tailtooltip
+  | typeof attribute.target
+  | typeof attribute.tooltip
+  | typeof attribute.weight
+  | typeof attribute.xlabel
+  | typeof attribute.xlp
+  | typeof attribute._class;
+
+/**
+ * Attribute types available for nodes.
+ */
+export type NodeAttributeKey =
+  | typeof attribute.URL
+  | typeof attribute.area
+  | typeof attribute.color
+  | typeof attribute.colorscheme
+  | typeof attribute.comment
+  | typeof attribute.distortion
+  | typeof attribute.fillcolor
+  | typeof attribute.fixedsize
+  | typeof attribute.fontcolor
+  | typeof attribute.fontname
+  | typeof attribute.fontsize
+  | typeof attribute.gradientangle
+  | typeof attribute.group
+  | typeof attribute.height
+  | typeof attribute.href
+  | typeof attribute.id
+  | typeof attribute.image
+  | typeof attribute.imagepos
+  | typeof attribute.imagescale
+  | typeof attribute.label
+  | typeof attribute.labelloc
+  | typeof attribute.layer
+  | typeof attribute.margin
+  | typeof attribute.nojustify
+  | typeof attribute.ordering
+  | typeof attribute.orientation
+  | typeof attribute.penwidth
+  | typeof attribute.peripheries
+  | typeof attribute.pin
+  | typeof attribute.pos
+  | typeof attribute.rects
+  | typeof attribute.regular
+  | typeof attribute.root
+  | typeof attribute.samplepoints
+  | typeof attribute.shape
+  | typeof attribute.shapefile
+  | typeof attribute.showboxes
+  | typeof attribute.sides
+  | typeof attribute.skew
+  | typeof attribute.sortv
+  | typeof attribute.style
+  | typeof attribute.target
+  | typeof attribute.tooltip
+  | typeof attribute.vertices
+  | typeof attribute.width
+  | typeof attribute.xlabel
+  | typeof attribute.xlp
+  | typeof attribute.z
+  | typeof attribute._class;
+
+/**
+ * Attribute types available for root cluster.
+ */
+export type RootClusterAttributeKey =
+  | typeof attribute.Damping
+  | typeof attribute.K
+  | typeof attribute.URL
+  | typeof attribute._background
+  | typeof attribute.bb
+  | typeof attribute.bgcolor
+  | typeof attribute.center
+  | typeof attribute.charset
+  | typeof attribute.clusterrank
+  | typeof attribute.colorscheme
+  | typeof attribute.comment
+  | typeof attribute.compound
+  | typeof attribute.concentrate
+  | typeof attribute.defaultdist
+  | typeof attribute.dim
+  | typeof attribute.dimen
+  | typeof attribute.diredgeconstraints
+  | typeof attribute.dpi
+  | typeof attribute.epsilon
+  | typeof attribute.esep
+  | typeof attribute.fontcolor
+  | typeof attribute.fontname
+  | typeof attribute.fontnames
+  | typeof attribute.fontpath
+  | typeof attribute.fontsize
+  | typeof attribute.forcelabels
+  | typeof attribute.gradientangle
+  | typeof attribute.href
+  | typeof attribute.id
+  | typeof attribute.imagepath
+  | typeof attribute.inputscale
+  | typeof attribute.label
+  | typeof attribute.label_scheme
+  | typeof attribute.labeljust
+  | typeof attribute.labelloc
+  | typeof attribute.landscape
+  | typeof attribute.layerlistsep
+  | typeof attribute.layers
+  | typeof attribute.layerselect
+  | typeof attribute.layersep
+  | typeof attribute.layout
+  | typeof attribute.levels
+  | typeof attribute.levelsgap
+  | typeof attribute.lheight
+  | typeof attribute.lp
+  | typeof attribute.lwidth
+  | typeof attribute.margin
+  | typeof attribute.maxiter
+  | typeof attribute.mclimit
+  | typeof attribute.mindist
+  | typeof attribute.mode
+  | typeof attribute.model
+  | typeof attribute.mosek
+  | typeof attribute.newrank
+  | typeof attribute.nodesep
+  | typeof attribute.nojustify
+  | typeof attribute.normalize
+  | typeof attribute.notranslate
+  | typeof attribute.nslimit
+  | typeof attribute.nslimit1
+  | typeof attribute.ordering
+  | typeof attribute.orientation
+  | typeof attribute.outputorder
+  | typeof attribute.overlap
+  | typeof attribute.overlap_scaling
+  | typeof attribute.overlap_shrink
+  | typeof attribute.pack
+  | typeof attribute.packmode
+  | typeof attribute.pad
+  | typeof attribute.page
+  | typeof attribute.pagedir
+  | typeof attribute.quadtree
+  | typeof attribute.quantum
+  | typeof attribute.rankdir
+  | typeof attribute.ranksep
+  | typeof attribute.ratio
+  | typeof attribute.remincross
+  | typeof attribute.repulsiveforce
+  | typeof attribute.resolution
+  | typeof attribute.root
+  | typeof attribute.rotate
+  | typeof attribute.rotation
+  | typeof attribute.scale
+  | typeof attribute.searchsize
+  | typeof attribute.sep
+  | typeof attribute.showboxes
+  | typeof attribute.size
+  | typeof attribute.smoothing
+  | typeof attribute.sortv
+  | typeof attribute.splines
+  | typeof attribute.start
+  | typeof attribute.style
+  | typeof attribute.stylesheet
+  | typeof attribute.target
+  | typeof attribute.truecolor
+  | typeof attribute.viewport
+  | typeof attribute.voro_margin
+  | typeof attribute.xdotversion
+  | typeof attribute._class;
+
+/**
+ * Attribute types available for subgraph.
+ */
+export type SubgraphAttributeKey = typeof attribute.rank;
+
+/**
+ * Attribute types available for cluster subgraph.
+ */
+export type ClusterSubgraphAttributeKey =
+  | typeof attribute.K
+  | typeof attribute.URL
+  | typeof attribute.area
+  | typeof attribute.bgcolor
+  | typeof attribute.color
+  | typeof attribute.colorscheme
+  | typeof attribute.fillcolor
+  | typeof attribute.fontcolor
+  | typeof attribute.fontname
+  | typeof attribute.fontsize
+  | typeof attribute.gradientangle
+  | typeof attribute.href
+  | typeof attribute.id
+  | typeof attribute.label
+  | typeof attribute.labeljust
+  | typeof attribute.labelloc
+  | typeof attribute.layer
+  | typeof attribute.lheight
+  | typeof attribute.lp
+  | typeof attribute.lwidth
+  | typeof attribute.margin
+  | typeof attribute.nojustify
+  | typeof attribute.pencolor
+  | typeof attribute.penwidth
+  | typeof attribute.peripheries
+  | typeof attribute.sortv
+  | typeof attribute.style
+  | typeof attribute.target
+  | typeof attribute.tooltip
+  | typeof attribute._class;
+
+/**
+ * Attribute types.
+ */
+export type AttributeKey =
+  | NodeAttributeKey
+  | EdgeAttributeKey
+  | RootClusterAttributeKey
+  | SubgraphAttributeKey
+  | ClusterSubgraphAttributeKey;

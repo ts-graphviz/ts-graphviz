@@ -1,5 +1,4 @@
-import { RootClusterAttributes } from './types';
-import { Digraph, Graph, RootCluster } from './model/root-clusters';
+import { Digraph, Graph, RootCluster, RootClusterAttributes } from '../domain';
 
 /**
  * Type indicating that it is a constructor of T.
