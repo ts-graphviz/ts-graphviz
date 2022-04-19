@@ -1,11 +1,4 @@
 /**
- * Package that defines the attribute type and attribute settings.
- *
- * @see {@link https://graphviz.org/_pages/doc/info/attrs.html}
- * @packageDocumentation
- */
-
-/**
  * Module defining attributes.
  * @category Domain Knowledge
  */

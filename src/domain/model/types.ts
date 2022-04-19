@@ -225,7 +225,7 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    * ```ts
    * const G = digraph('G', (g) => {
    *   // Create a cluster with id as A and specifying its attributes.
-   *   g.subgraph('A', { [colorAttributeKey]: 'red', [labelAttributeKey]: 'my label' }, (A) => {
+   *   g.subgraph('A', { [attribute.color]: 'red', [attribute.label]: 'my label' }, (A) => {
    *     // Create a node with id as A1 in cluster A.
    *     A.node('A1');
    *   });
@@ -254,7 +254,7 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    * ```ts
    * const G = digraph('G', (g) => {
    *   // Create a anonymous cluster and specifying its attributes.
-   *   g.subgraph({ [colorAttributeKey]: 'red', [labelAttributeKey]: 'my label' }, (A) => {
+   *   g.subgraph({ [attribute.color]: 'red', [attribute.label]: 'my label' }, (A) => {
    *     // Create a node with id as A1 in anonymous cluster.
    *     A.node('A1');
    *   });
@@ -313,8 +313,8 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    * const G = digraph('G', (g) => {
    *   // Create a node by specifying its id and specifying its attributes.
    *   g.node('A', {
-   *     [colorAttributeKey]: 'red',
-   *     [labelAttributeKey]: 'my label',
+   *     [attribute.color]: 'red',
+   *     [attribute.label]: 'my label',
    *   });
    * });
    *
@@ -339,8 +339,8 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    * const G = digraph('G', (g) => {
    *   // Set a common attribute for the nodes in the cluster.
    *   g.node({
-   *     [colorAttributeKey]: 'red',
-   *     [labelAttributeKey]: 'my label',
+   *     [attribute.color]: 'red',
+   *     [attribute.label]: 'my label',
    *   });
    * });
    *
@@ -385,8 +385,8 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    * const G = digraph('G', (g) => {
    *   // Create a edge and specifying its attributes.
    *   g.edge(['a', 'b'], {
-   *     [colorAttributeKey]: 'red',
-   *     [labelAttributeKey]: 'my label',
+   *     [attribute.color]: 'red',
+   *     [attribute.label]: 'my label',
    *   });
    * });
    *
@@ -411,8 +411,8 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    * const G = digraph('G', (g) => {
    *   // Set a common attribute for the edges in the cluster.
    *   g.edge({
-   *     [colorAttributeKey]: 'red',
-   *     [labelAttributeKey]: 'my label',
+   *     [attribute.color]: 'red',
+   *     [attribute.label]: 'my label',
    *   });
    * });
    *
@@ -434,8 +434,8 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    * ```ts
    * const G = digraph('G', (g) => {
    *   g.graph({
-   *     [colorAttributeKey]: 'red',
-   *     [labelAttributeKey]: 'my label',
+   *     [attribute.color]: 'red',
+   *     [attribute.label]: 'my label',
    *   });
    * });
    *

@@ -1,6 +1,5 @@
 import {
   isNodeRef,
-  // Dot,
   Subgraph,
   Edge,
   Node,
