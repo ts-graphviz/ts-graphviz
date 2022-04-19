@@ -1,4 +1,4 @@
-import { Node } from '../../model/nodes';
+import { Node } from '../../../domain';
 import { toDot } from '../to-dot';
 
 describe('Node rendering', () => {

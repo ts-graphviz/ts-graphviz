@@ -1,9 +1,6 @@
 import 'jest-graphviz';
-import { Edge } from '../../model/edges';
-import { Node } from '../../model/nodes';
-import { Digraph, Graph } from '../../model/root-clusters';
+import { IRootCluster, Digraph, Graph, Node, Edge } from '../../../domain';
 import { toDot } from '../to-dot';
-import { IRootCluster } from '../../types';
 
 describe('Edge rendering', () => {
   let edge: Edge;

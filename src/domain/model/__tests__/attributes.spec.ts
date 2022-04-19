@@ -1,4 +1,4 @@
-import { attribute } from '../../domain';
+import { attribute } from '../../knowledge';
 import { DotObject, GraphvizObject } from '../abstract';
 import { Attributes, AttributesBase } from '../attributes-base';
 

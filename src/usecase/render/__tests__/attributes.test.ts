@@ -1,5 +1,5 @@
 import { toDot } from '../../render/to-dot';
-import { Attributes } from '../../model/attributes-base';
+import { Attributes } from '../../../domain';
 
 describe('Attributes rendering', () => {
   let attrs: Attributes;

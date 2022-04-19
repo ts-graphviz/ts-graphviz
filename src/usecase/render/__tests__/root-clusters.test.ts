@@ -1,5 +1,5 @@
 import 'jest-graphviz';
-import { RootCluster, Digraph, Graph } from '../../model/root-clusters';
+import { RootCluster, Digraph, Graph } from '../../../domain';
 import { toDot } from '../../render/to-dot';
 
 describe('RootClusters rendering', () => {
