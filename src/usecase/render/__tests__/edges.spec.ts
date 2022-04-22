@@ -5,9 +5,7 @@ import { toDot } from '../to-dot';
 describe('Edge rendering', () => {
   let edge: Edge;
 
-  const [node1, node2, node3, node4] = Array(4)
-    .fill(true)
-    .map((_, i) => new Node(`node${i + 1}`));
+  const [node1, node2, node3, node4] = [...Array(4)].map((_, i) => new Node(`node${i + 1}`));
 
   beforeEach(() => {
     edge = new Edge([node1, node2]);

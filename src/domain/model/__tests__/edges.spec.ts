@@ -8,9 +8,7 @@ import { EdgeTargetTuple } from '../types';
 describe('class Edge', () => {
   let edge: Edge;
 
-  const targets = Array(2)
-    .fill(true)
-    .map((_, i) => new Node(`node${i + 1}`)) as EdgeTargetTuple;
+  const targets = [...Array(2)].map((_, i) => new Node(`node${i + 1}`)) as EdgeTargetTuple;
 
   beforeEach(() => {
     edge = new Edge(targets);
