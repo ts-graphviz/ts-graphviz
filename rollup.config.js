@@ -7,7 +7,7 @@ import { terser } from 'rollup-plugin-terser';
 const options = [
   {
     input: './src/index.ts',
-    plugins: [typescript(), terser()],
+    plugins: [typescript()],
     output: [
       {
         format: 'cjs',
@@ -21,6 +21,7 @@ const options = [
         format: 'umd',
         name: 'graphviz',
         file: './lib/bundle.min.js',
+        plugins: [terser()],
       },
     ],
   },

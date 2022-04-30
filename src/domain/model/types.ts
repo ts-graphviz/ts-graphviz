@@ -2,11 +2,11 @@ import {
   Attribute,
   AttributeKey,
   ClusterSubgraphAttributeKey,
-  attribute,
   EdgeAttributeKey,
   NodeAttributeKey,
   RootClusterAttributeKey,
   SubgraphAttributeKey,
+  type,
 } from '../knowledge';
 
 /**
@@ -71,18 +71,6 @@ export interface IEdge extends HasComment, HasAttributes<EdgeAttributeKey> {
   readonly targets: EdgeTargetTuple;
 }
 
-export interface IAttributes<T extends AttributeKey = AttributeKey> extends IAttributesBase<T>, HasComment {}
-
-export interface IAttributesBase<T extends AttributeKey> {
-  readonly size: number;
-  readonly values: ReadonlyArray<[T, AttributesValue]>;
-  get(key: T): Attribute<T> | undefined;
-  set(key: T, value: Attribute<T>): void;
-  apply(attributes: AttributesObject<T> | AttributesEntities<T>): void;
-  delete(key: T): void;
-  clear(): void;
-}
-
 export interface IAttributesBase<T extends AttributeKey> {
   readonly size: number;
   readonly values: ReadonlyArray<[T, AttributesValue]>;
@@ -97,7 +85,7 @@ export interface IAttributes<T extends AttributeKey = AttributeKey> extends IAtt
 
 export interface Port {
   port: string;
-  compass: attribute.type.Compass;
+  compass: type.Compass;
 }
 
 export interface INode extends HasComment, HasAttributes<NodeAttributeKey> {

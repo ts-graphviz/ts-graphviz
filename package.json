@@ -28,7 +28,7 @@
   "types": "lib/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c && prettier --write ./lib/index.d.ts",
+    "build": "rollup -c && prettier --write ./lib/index.*",
     "test": "jest",
     "format": "eslint -c .eslintrc.json --ext ts src --fix && prettier --write './src/**/*.ts'",
     "lint": "eslint -c .eslintrc.json --ext ts src",

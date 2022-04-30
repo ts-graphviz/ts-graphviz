@@ -1,5 +1,5 @@
 import { DotObject } from './abstract';
-import { attribute, NodeAttributeKey } from '../knowledge';
+import { NodeAttributeKey, type } from '../knowledge';
 import { Attributes } from './attributes-base';
 import {
   IAttributes,
@@ -56,12 +56,17 @@ export function isNodeRefGroupLike(target: NodeRefLike | NodeRefGroupLike): targ
 }
 
 /** @hidden */
+export function isCompass(c: string): c is type.Compass {
+  return ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c'].includes(c);
+}
+
+/** @hidden */
 export function toNodeRef(target: NodeRefLike): NodeRef {
   if (isNodeRef(target)) {
     return target;
   }
   const [id, port, compass] = target.split(':');
-  if (attribute.type.Compass.is(compass)) {
+  if (isCompass(compass)) {
     return { id, port, compass };
   }
   return { id, port };

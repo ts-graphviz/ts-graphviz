@@ -1,8 +1,4 @@
-/**
- * Module defining attributes.
- * @category Domain Knowledge
- */
-export namespace attribute {
+export interface AttributeDict {
   /**
    * Factor damping force motions.
    * On each iteration, a nodes movement is limited to this factor of its potential motion.
@@ -16,7 +12,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const Damping = 'Damping';
+  Damping: 'Damping';
 
   /**
    * Spring constant used in virtual physical model.
@@ -31,7 +27,7 @@ export namespace attribute {
    * @graphvizUsedBy GC
    * @category Attribute
    */
-  export const K = 'K';
+  K: 'K';
 
   /**
    * Hyperlinks incorporated into device-dependent output.
@@ -59,7 +55,7 @@ export namespace attribute {
    * @graphvizUsedBy ENGC
    * @category Attribute
    */
-  export const URL = 'URL';
+  URL: 'URL';
 
   /**
    * A string in the {@link https://graphviz.org/_pages/doc/info/output.html#d:xdot xdot format} specifying an arbitrary background.
@@ -72,7 +68,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const _background = '_background';
+  _background: '_background';
 
   /**
    * Indicates the preferred area for a node or empty cluster when laid out by patchwork.
@@ -85,7 +81,7 @@ export namespace attribute {
    * @graphvizUsedBy NC
    * @category Attribute
    */
-  export const area = 'area';
+  area: 'area';
 
   /**
    * Style of arrowhead on the head node of an edge.
@@ -99,7 +95,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const arrowhead = 'arrowhead';
+  arrowhead: 'arrowhead';
 
   /**
    * Multiplicative scale factor for arrowheads.
@@ -111,7 +107,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const arrowsize = 'arrowsize';
+  arrowsize: 'arrowsize';
 
   /**
    * Style of arrowhead on the tail node of an edge.
@@ -125,7 +121,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const arrowtail = 'arrowtail';
+  arrowtail: 'arrowtail';
 
   /**
    * Bounding box of drawing in points.
@@ -135,7 +131,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const bb = 'bb';
+  bb: 'bb';
 
   /**
    * When attached to the root graph, this color is used as the background for entire canvas.
@@ -148,7 +144,7 @@ export namespace attribute {
    * @graphvizUsedBy GC
    * @category Attribute
    */
-  export const bgcolor = 'bgcolor';
+  bgcolor: 'bgcolor';
 
   /**
    * If true, the drawing is centered in the output canvas.
@@ -159,7 +155,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const center = 'center';
+  center: 'center';
 
   /**
    * Specifies the character encoding used when interpreting string input as a text label.
@@ -174,7 +170,7 @@ export namespace attribute {
    *
    * @category Attribute
    */
-  export const charset = 'charset';
+  charset: 'charset';
 
   /**
    * Classnames to attach to the node, edge, graph, or cluster's SVG element.
@@ -185,7 +181,7 @@ export namespace attribute {
    * @graphvizDefault ""
    * @graphvizUsedBy ENCG
    */
-  export const _class = 'class';
+  _class: '_class';
   /**
    * Mode used for handling clusters.
    * If clusterrank is "local", a subgraph whose name begins with "cluster" is given special treatment.
@@ -201,7 +197,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const clusterrank = 'clusterrank';
+  clusterrank: 'clusterrank';
 
   /**
    * Basic drawing color for graphics, not text.
@@ -231,7 +227,7 @@ export namespace attribute {
    * @graphvizUsedBy ENC
    * @category Attribute
    */
-  export const color = 'color';
+  color: 'color';
 
   /**
    * This attribute specifies a color scheme namespace.
@@ -246,7 +242,7 @@ export namespace attribute {
    * @graphvizUsedBy ENCG
    * @category Attribute
    */
-  export const colorscheme = 'colorscheme';
+  colorscheme: 'colorscheme';
 
   /**
    * Comments are inserted into output.
@@ -258,7 +254,7 @@ export namespace attribute {
    * @graphvizUsedBy ENG
    * @category Attribute
    */
-  export const comment = 'comment';
+  comment: 'comment';
 
   /**
    * If true, allow edges between clusters. (See {@link lhead} and {@link ltail} below.)
@@ -270,7 +266,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const compound = 'compound';
+  compound: 'compound';
 
   /**
    * If true, use edge concentrators.
@@ -283,7 +279,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const concentrate = 'concentrate';
+  concentrate: 'concentrate';
 
   /**
    * If false, the edge is not used in ranking the nodes.
@@ -308,7 +304,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const constraint = 'constraint';
+  constraint: 'constraint';
 
   /**
    * If true, attach edge label to edge by a 2-segment polyline, underlining the label, then going to the closest point of spline.
@@ -319,7 +315,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const decorate = 'decorate';
+  decorate: 'decorate';
 
   /**
    * This specifies the distance between nodes in separate connected components.
@@ -333,7 +329,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const defaultdist = 'defaultdist';
+  defaultdist: 'defaultdist';
 
   /**
    * Set the number of dimensions used for the layout.
@@ -347,7 +343,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const dim = 'dim';
+  dim: 'dim';
 
   /**
    * Set the number of dimensions used for rendering.
@@ -368,7 +364,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const dimen = 'dimen';
+  dimen: 'dimen';
 
   /**
    * Set edge type for drawing arrowheads.
@@ -382,7 +378,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const dir = 'dir';
+  dir: 'dir';
 
   /**
    * Only valid when {@link mode}="ipsep".
@@ -397,7 +393,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const diredgeconstraints = 'diredgeconstraints';
+  diredgeconstraints: 'diredgeconstraints';
 
   /**
    * Distortion factor for {@link shape}=polygon.
@@ -409,7 +405,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const distortion = 'distortion';
+  distortion: 'distortion';
 
   /**
    * This specifies the expected number of pixels per inch on a display device.
@@ -423,7 +419,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const dpi = 'dpi';
+  dpi: 'dpi';
 
   /**
    * If **edgeURL** is defined, this is the link used for the non-label parts of an edge.
@@ -438,7 +434,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const edgeURL = 'edgeURL';
+  edgeURL: 'edgeURL';
 
   /**
    * Synonym for {@link edgeURL}.
@@ -450,7 +446,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const edgehref = 'edgehref';
+  edgehref: 'edgehref';
 
   /**
    * If the edge has a {@link URL} or {@link edgeURL} attribute, this attribute determines which window of the browser is used for the URL attached to the non-label part of the edge.
@@ -464,7 +460,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const edgetarget = 'edgetarget';
+  edgetarget: 'edgetarget';
 
   /**
    * Tooltip annotation attached to the non-label part of an edge.
@@ -477,7 +473,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const edgetooltip = 'edgetooltip';
+  edgetooltip: 'edgetooltip';
 
   /**
    * Terminating condition. If the length squared of all energy gradients are < **epsilon**, the algorithm stops.
@@ -489,7 +485,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const epsilon = 'epsilon';
+  epsilon: 'epsilon';
 
   /**
    * Margin used around polygons for purposes of spline edge routing.
@@ -503,7 +499,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const esep = 'esep';
+  esep: 'esep';
 
   /**
    * Color used to fill the background of a node or cluster assuming {@link style}=filled, or a filled arrowhead.
@@ -524,7 +520,7 @@ export namespace attribute {
    * @graphvizUsedBy NEC
    * @category Attribute
    */
-  export const fillcolor = 'fillcolor';
+  fillcolor: 'fillcolor';
 
   /**
    * If `false`, the size of a node is determined by smallest width and height needed to contain its label and image,
@@ -545,7 +541,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const fixedsize = 'fixedsize';
+  fixedsize: 'fixedsize';
 
   /**
    * Color used for text.
@@ -556,7 +552,7 @@ export namespace attribute {
    * @graphvizUsedBy ENGC
    * @category Attribute
    */
-  export const fontcolor = 'fontcolor';
+  fontcolor: 'fontcolor';
 
   /**
    * Font used for text.
@@ -585,7 +581,7 @@ export namespace attribute {
    * @graphvizUsedBy ENGC
    * @category Attribute
    */
-  export const fontname = 'fontname';
+  fontname: 'fontname';
 
   /**
    * Allows user control of how basic fontnames are represented in SVG output.
@@ -602,7 +598,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const fontnames = 'fontnames';
+  fontnames: 'fontnames';
 
   /**
    * Directory list used by libgd to search for bitmap fonts if Graphviz was not built with the fontconfig library.
@@ -617,7 +613,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const fontpath = 'fontpath';
+  fontpath: 'fontpath';
 
   /**
    * Font size, {@link https://graphviz.org/doc/info/attrs.html in points}, used for text.
@@ -629,7 +625,7 @@ export namespace attribute {
    * @graphvizUsedBy ENGC
    * @category Attribute
    */
-  export const fontsize = 'fontsize';
+  fontsize: 'fontsize';
 
   /**
    * If true, all {@link xlabel} attributes are placed,
@@ -641,7 +637,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const forcelabels = 'forcelabels';
+  forcelabels: 'forcelabels';
 
   /**
    * If a gradient fill is being used, this determines the angle of the fill.
@@ -657,7 +653,7 @@ export namespace attribute {
    * @graphvizUsedBy NCG
    * @category Attribute
    */
-  export const gradientangle = 'gradientangle';
+  gradientangle: 'gradientangle';
 
   /**
    * If the end points of an edge belong to the same group, i.e.,
@@ -670,7 +666,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const group = 'group';
+  group: 'group';
 
   /**
    * If **headURL** is defined, it is output as part of the head label of the edge.
@@ -684,7 +680,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const headURL = 'headURL';
+  headURL: 'headURL';
 
   /**
    * Position of an edge's head label, {@link https://graphviz.org/doc/info/attrs.html in points}.
@@ -696,7 +692,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const head_lp = 'head_lp';
+  head_lp: 'head_lp';
 
   /**
    * If true, the head of an edge is clipped to the boundary of the head node; otherwise,
@@ -708,7 +704,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const headclip = 'headclip';
+  headclip: 'headclip';
 
   /**
    * Synonym for {@link headURL}.
@@ -720,7 +716,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const headhref = 'headhref';
+  headhref: 'headhref';
 
   /**
    * Text label to be placed near head of edge.
@@ -732,7 +728,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const headlabel = 'headlabel';
+  headlabel: 'headlabel';
 
   /**
    * Indicates where on the head node to attach the head of the edge.
@@ -746,7 +742,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const headport = 'headport';
+  headport: 'headport';
 
   /**
    * If the edge has a {@link headURL}, this attribute determines which window of the browser is used for the URL.
@@ -760,7 +756,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const headtarget = 'headtarget';
+  headtarget: 'headtarget';
 
   /**
    * Tooltip annotation attached to the head of an edge.
@@ -773,7 +769,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const headtooltip = 'headtooltip';
+  headtooltip: 'headtooltip';
 
   /**
    * Height of node, in inches.
@@ -794,7 +790,7 @@ export namespace attribute {
    * @graphvizUsedBy GCNE
    * @category Attribute
    */
-  export const height = 'height';
+  height: 'height';
 
   /**
    * Synonym for {@link URL}.
@@ -806,7 +802,7 @@ export namespace attribute {
    * @graphvizUsedBy GCNE
    * @category Attribute
    */
-  export const href = 'href';
+  href: 'href';
 
   /**
    * Allows the graph author to provide an id for graph objects which is to be included in the output.
@@ -826,7 +822,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const id = 'id';
+  id: 'id';
 
   /**
    * Gives the name of a file containing an image to be displayed inside a node.
@@ -849,7 +845,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const image = 'image';
+  image: 'image';
 
   /**
    * Specifies a list of directories in which to look for image files as specified by the {@link image} attribute or using the IMG element in {@link https://graphviz.org/doc/info/shapes.html HTML-like labels}.
@@ -863,7 +859,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const imagepath = 'imagepath';
+  imagepath: 'imagepath';
 
   /**
    * Attribute controlling how an image is positioned within its containing node.
@@ -889,7 +885,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const imagepos = 'imagepos';
+  imagepos: 'imagepos';
 
   /**
    * Attribute controlling how an image fills its containing node.
@@ -909,7 +905,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const imagescale = 'imagescale';
+  imagescale: 'imagescale';
 
   /**
    * For layout algorithms that support initial input positions (specified by the pos attribute),
@@ -929,7 +925,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const inputscale = 'inputscale';
+  inputscale: 'inputscale';
 
   /**
    * Text label attached to objects.
@@ -948,7 +944,7 @@ export namespace attribute {
    * @graphvizUsedBy ENGC
    * @category Attribute
    */
-  export const label = 'label';
+  label: 'label';
 
   /**
    * If **labelURL** is defined, this is the link used for the label of an edge.
@@ -961,7 +957,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const labelURL = 'labelURL';
+  labelURL: 'labelURL';
 
   /**
    * The value indicates whether to treat a node whose name has the form |edgelabel|* as a special node representing an edge label.
@@ -978,7 +974,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const label_scheme = 'label_scheme';
+  label_scheme: 'label_scheme';
 
   /**
    * This, along with {@link labeldistance}, determine where the headlabel (taillabel) are placed with respect to the head (tail) in polar coordinates.
@@ -994,7 +990,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const labelangle = 'labelangle';
+  labelangle: 'labelangle';
 
   /**
    * Multiplicative scaling factor adjusting the distance that the headlabel(taillabel) is from the head(tail) node.
@@ -1008,7 +1004,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const labeldistance = 'labeldistance';
+  labeldistance: 'labeldistance';
 
   /**
    * If true, allows edge labels to be less constrained in position.
@@ -1020,7 +1016,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const labelfloat = 'labelfloat';
+  labelfloat: 'labelfloat';
 
   /**
    * Color used for headlabel and taillabel.
@@ -1032,7 +1028,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const labelfontcolor = 'labelfontcolor';
+  labelfontcolor: 'labelfontcolor';
 
   /**
    * Font used for headlabel and taillabel.
@@ -1044,7 +1040,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const labelfontname = 'labelfontname';
+  labelfontname: 'labelfontname';
 
   /**
    * Font size, {@link https://graphviz.org/doc/info/attrs.html in points}, used for headlabel and taillabel.
@@ -1057,7 +1053,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const labelfontsize = 'labelfontsize';
+  labelfontsize: 'labelfontsize';
 
   /**
    * Synonym for {@link labelURL}.
@@ -1069,7 +1065,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const labelhref = 'labelhref';
+  labelhref: 'labelhref';
 
   /**
    * Justification for cluster labels.
@@ -1083,7 +1079,7 @@ export namespace attribute {
    * @graphvizUsedBy GC
    * @category Attribute
    */
-  export const labeljust = 'labeljust';
+  labeljust: 'labeljust';
 
   /**
    * Vertical placement of labels for nodes, root graphs and clusters.
@@ -1106,7 +1102,7 @@ export namespace attribute {
    * @graphvizUsedBy NGC
    * @category Attribute
    */
-  export const labelloc = 'labelloc';
+  labelloc: 'labelloc';
 
   /**
    * If the edge has a {@link URL} or {@link labelURL} attribute, this attribute determines which window of the browser is used for the URL attached to the label.
@@ -1120,7 +1116,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const labeltarget = 'labeltarget';
+  labeltarget: 'labeltarget';
 
   /**
    * Tooltip annotation attached to label of an edge.
@@ -1133,7 +1129,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const labeltooltip = 'labeltooltip';
+  labeltooltip: 'labeltooltip';
 
   /**
    * If true, the graph is rendered in landscape mode.
@@ -1145,7 +1141,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const landscape = 'landscape';
+  landscape: 'landscape';
 
   /**
    * Specifies layers in which the node, edge or cluster is present.
@@ -1156,7 +1152,7 @@ export namespace attribute {
    * @graphvizUsedBy ENC
    * @category Attribute
    */
-  export const layer = 'layer';
+  layer: 'layer';
 
   /**
    * Specifies the separator characters used to split an attribute of type {@link layerRange} into a list of ranges.
@@ -1167,7 +1163,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const layerlistsep = 'layerlistsep';
+  layerlistsep: 'layerlistsep';
 
   /**
    * Specifies a linearly ordered list of layer names attached to the graph The graph is then output in separate layers.
@@ -1180,7 +1176,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const layers = 'layers';
+  layers: 'layers';
 
   /**
    * Selects a list of layers to be emitted.
@@ -1191,7 +1187,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const layerselect = 'layerselect';
+  layerselect: 'layerselect';
 
   /**
    * Specifies the separator characters used to split the {@link layers} attribute into a list of layer names.
@@ -1202,7 +1198,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const layersep = 'layersep';
+  layersep: 'layersep';
 
   /**
    * Specifies the name of the layout algorithm to use, such as "dot" or "neato".
@@ -1216,7 +1212,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const layout = 'layout';
+  layout: 'layout';
 
   /**
    * Preferred edge length, in inches.
@@ -1230,7 +1226,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const len = 'len';
+  len: 'len';
 
   /**
    * Number of levels allowed in the multilevel scheme.
@@ -1243,7 +1239,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const levels = 'levels';
+  levels: 'levels';
 
   /**
    * Specifies strictness of level constraints in neato when {@link mode}="ipsep" or "hier".
@@ -1257,7 +1253,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const levelsgap = 'levelsgap';
+  levelsgap: 'levelsgap';
 
   /**
    * Logical head of an edge.
@@ -1272,7 +1268,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const lhead = 'lhead';
+  lhead: 'lhead';
 
   /**
    * Height of graph or cluster label, in inches.
@@ -1283,7 +1279,7 @@ export namespace attribute {
    * @graphvizUsedBy GC
    * @category Attribute
    */
-  export const lheight = 'lheight';
+  lheight: 'lheight';
 
   /**
    * Label position, {@link https://graphviz.org/doc/info/attrs.html in points}.
@@ -1295,7 +1291,7 @@ export namespace attribute {
    * @graphvizUsedBy EGC
    * @category Attribute
    */
-  export const lp = 'lp';
+  lp: 'lp';
 
   /**
    * Logical tail of an edge.
@@ -1309,7 +1305,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const ltail = 'ltail';
+  ltail: 'ltail';
 
   /**
    * Width of graph or cluster label, in inches.
@@ -1320,7 +1316,7 @@ export namespace attribute {
    * @graphvizUsedBy GC
    * @category Attribute
    */
-  export const lwidth = 'lwidth';
+  lwidth: 'lwidth';
 
   /**
    * For graphs, this sets x and y margins of canvas, in inches.
@@ -1343,7 +1339,7 @@ export namespace attribute {
    * @graphvizUsedBy NCG
    * @category Attribute
    */
-  export const margin = 'margin';
+  margin: 'margin';
 
   /**
    * Sets the number of iterations used.
@@ -1358,7 +1354,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const maxiter = 'maxiter';
+  maxiter: 'maxiter';
 
   /**
    * Multiplicative scale factor used to alter the MinQuit (default = 8) and MaxIter (default = 24) parameters used during crossing minimization.
@@ -1371,7 +1367,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const mclimit = 'mclimit';
+  mclimit: 'mclimit';
 
   /**
    * Specifies the minimum separation between all nodes.
@@ -1384,7 +1380,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const mindist = 'mindist';
+  mindist: 'mindist';
 
   /**
    * Minimum edge length (rank difference between head and tail).
@@ -1397,7 +1393,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const minlen = 'minlen';
+  minlen: 'minlen';
 
   /**
    * Technique for optimizing the layout.
@@ -1419,7 +1415,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const mode = 'mode';
+  mode: 'mode';
 
   /**
    * This value specifies how the distance matrix is computed for the input graph.
@@ -1444,7 +1440,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const model = 'model';
+  model: 'model';
 
   /**
    * If Graphviz is built with MOSEK defined, mode=ipsep and mosek=true, the Mosek software (<www.mosek.com>) is use to solve the ipsep constraints.
@@ -1456,7 +1452,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const mosek = 'mosek';
+  mosek: 'mosek';
 
   /**
    * The original ranking algorithm in dot is recursive on clusters.
@@ -1475,7 +1471,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const newrank = 'newrank';
+  newrank: 'newrank';
 
   /**
    * In dot, this specifies the minimum space between two adjacent nodes in the same rank, in inches.
@@ -1489,7 +1485,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const nodesep = 'nodesep';
+  nodesep: 'nodesep';
 
   /**
    * By default, the justification of multi-line labels is done within the largest context that makes sense.
@@ -1504,7 +1500,7 @@ export namespace attribute {
    * @graphvizUsedBy GCNE
    * @category Attribute
    */
-  export const nojustify = 'nojustify';
+  nojustify: 'nojustify';
 
   /**
    * If set, normalize coordinates of final layout so that the first point is at the origin, and then rotate the layout so that the angle of the first edge is specified by the value of normalize in degrees.
@@ -1518,7 +1514,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const normalize = 'normalize';
+  normalize: 'normalize';
 
   /**
    * By default, the final layout is translated so that the lower-left corner of the bounding box is at the origin.
@@ -1532,7 +1528,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const notranslate = 'notranslate';
+  notranslate: 'notranslate';
 
   /**
    * Used to set number of iterations in network simplex applications.
@@ -1545,7 +1541,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const nslimit = 'nslimit';
+  nslimit: 'nslimit';
 
   /**
    * Used to set number of iterations in network simplex applications.
@@ -1558,7 +1554,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const nslimit1 = 'nslimit1';
+  nslimit1: 'nslimit1';
 
   /**
    * Angle, in degrees, used to rotate polygon node shapes. For any number of polygon sides, 0 degrees rotation results in a flat base.
@@ -1570,7 +1566,7 @@ export namespace attribute {
    * @graphvizUsedBy GN
    * @category Attribute
    */
-  export const ordering = 'ordering';
+  ordering: 'ordering';
 
   /**
    * If "[lL]*", set graph orientation to landscape Used only if {@link rotate} is not defined.
@@ -1581,7 +1577,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const orientation = 'orientation';
+  orientation: 'orientation';
 
   /**
    * Specify order in which nodes and edges are drawn.
@@ -1592,7 +1588,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const outputorder = 'outputorder';
+  outputorder: 'outputorder';
 
   /**
    * Determines if and how node overlaps should be removed.
@@ -1651,7 +1647,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const overlap = 'overlap';
+  overlap: 'overlap';
 
   /**
    * When overlap=prism, the layout is scaled by this factor, thereby removing a fair amount of node overlap,
@@ -1669,7 +1665,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const overlap_scaling = 'overlap_scaling';
+  overlap_scaling: 'overlap_scaling';
 
   /**
    * If true, the overlap removal algorithm will perform a compression pass to reduce the size of the layout.
@@ -1681,7 +1677,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const overlap_shrink = 'overlap_shrink';
+  overlap_shrink: 'overlap_shrink';
 
   /**
    * This is true if the value of pack is "true" (case-insensitive) or a non-negative integer.
@@ -1698,7 +1694,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const pack = 'pack';
+  pack: 'pack';
 
   /**
    * This indicates how connected components should be packed (cf. {@link https://graphviz.org/docs/attrs/packmode/ packMode}).
@@ -1710,7 +1706,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const packmode = 'packmode';
+  packmode: 'packmode';
 
   /**
    * The pad attribute specifies how much, in inches, to extend the drawing area around the minimal area needed to draw the graph.
@@ -1726,7 +1722,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const pad = 'pad';
+  pad: 'pad';
 
   /**
    * Width and height of output pages, in inches.
@@ -1746,7 +1742,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const page = 'page';
+  page: 'page';
 
   /**
    * If the page attribute is set and applicable, this attribute specifies the order in which the pages are emitted. This is limited to one of the 8 row or column major orders.
@@ -1757,7 +1753,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const pagedir = 'pagedir';
+  pagedir: 'pagedir';
 
   /**
    * Color used to draw the bounding box around a cluster.
@@ -1774,7 +1770,7 @@ export namespace attribute {
    * @graphvizUsedBy C
    * @category Attribute
    */
-  export const pencolor = 'pencolor';
+  pencolor: 'pencolor';
 
   /**
    * Specifies the width of the pen, in points, used to draw lines and curves, including the boundaries of edges and clusters.
@@ -1791,7 +1787,7 @@ export namespace attribute {
    * @graphvizUsedBy CNE
    * @category Attribute
    */
-  export const penwidth = 'penwidth';
+  penwidth: 'penwidth';
 
   /**
    * Set number of peripheries used in polygonal shapes and cluster boundaries.
@@ -1808,7 +1804,7 @@ export namespace attribute {
    * @graphvizUsedBy NC
    * @category Attribute
    */
-  export const peripheries = 'peripheries';
+  peripheries: 'peripheries';
 
   /**
    * If true and the node has a pos attribute on input, neato or fdp prevents the node from moving from the input position.
@@ -1829,7 +1825,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const pin = 'pin';
+  pin: 'pin';
 
   /**
    * Position of node, or spline control points.
@@ -1850,7 +1846,7 @@ export namespace attribute {
    * @graphvizUsedBy EN
    * @category Attribute
    */
-  export const pos = 'pos';
+  pos: 'pos';
 
   /**
    * Quadtree scheme to use.
@@ -1865,7 +1861,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const quadtree = 'quadtree';
+  quadtree: 'quadtree';
 
   /**
    * If **quantum** > 0.0, node label dimensions will be rounded to integral multiples of the quantum.
@@ -1877,7 +1873,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const quantum = 'quantum';
+  quantum: 'quantum';
 
   /**
    * Rank constraints on the nodes in a subgraph.
@@ -1893,7 +1889,7 @@ export namespace attribute {
    * @graphvizUsedBy S
    * @category Attribute
    */
-  export const rank = 'rank';
+  rank: 'rank';
 
   /**
    * Sets direction of graph layout.
@@ -1910,7 +1906,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const rankdir = 'rankdir';
+  rankdir: 'rankdir';
 
   /**
    * In dot, this gives the desired rank separation, in inches.
@@ -1933,7 +1929,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const ranksep = 'ranksep';
+  ranksep: 'ranksep';
 
   /**
    * Sets the aspect ratio (drawing height/drawing width) for the drawing.
@@ -1968,7 +1964,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const ratio = 'ratio';
+  ratio: 'ratio';
 
   /**
    * Rectangles for fields of records,
@@ -1980,7 +1976,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const rects = 'rects';
+  rects: 'rects';
 
   /**
    * If true, force polygon to be regular, i.e.,
@@ -1992,7 +1988,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const regular = 'regular';
+  regular: 'regular';
 
   /**
    * If true and there are multiple clusters, run crossing minimization a second time.
@@ -2004,7 +2000,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const remincross = 'remincross';
+  remincross: 'remincross';
 
   /**
    * The power of the repulsive force used in an extended Fruchterman-Reingold force directed model.
@@ -2018,7 +2014,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const repulsiveforce = 'repulsiveforce';
+  repulsiveforce: 'repulsiveforce';
 
   /**
    * This is a synonym for the {@link dpi} attribute.
@@ -2032,7 +2028,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const resolution = 'resolution';
+  resolution: 'resolution';
 
   /**
    * This specifies nodes to be used as the center of the layout and the root of the generated spanning tree.
@@ -2057,7 +2053,7 @@ export namespace attribute {
    * @graphvizUsedBy GN
    * @category Attribute
    */
-  export const root = 'root';
+  root: 'root';
 
   /**
    * If 90, set drawing orientation to landscape.
@@ -2068,7 +2064,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const rotate = 'rotate';
+  rotate: 'rotate';
 
   /**
    * Causes the final layout to be rotated counter-clockwise by the specified number of degrees.
@@ -2080,7 +2076,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const rotation = 'rotation';
+  rotation: 'rotation';
 
   /**
    * Edges with the same head and the same **samehead** value are aimed at the same point on the head.
@@ -2095,7 +2091,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const samehead = 'samehead';
+  samehead: 'samehead';
 
   /**
    * Edges with the same tail and the same sametail value are aimed at the same point on the tail.
@@ -2110,7 +2106,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const sametail = 'sametail';
+  sametail: 'sametail';
 
   /**
    * If the input graph defines the {@link vertices} attribute, and output is dot or xdot, this gives the number of points used for a node whose shape is a circle or ellipse.
@@ -2124,7 +2120,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const samplepoints = 'samplepoints';
+  samplepoints: 'samplepoints';
 
   /**
    * If set, after the initial layout, the layout is scaled by the given factors.
@@ -2136,7 +2132,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const scale = 'scale';
+  scale: 'scale';
 
   /**
    * During network simplex, maximum number of edges with negative cut values to search when looking for one with minimum cut value.
@@ -2148,7 +2144,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const searchsize = 'searchsize';
+  searchsize: 'searchsize';
 
   /**
    * Specifies margin to leave around nodes when removing node overlap.
@@ -2169,7 +2165,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const sep = 'sep';
+  sep: 'sep';
 
   /**
    * Set the shape of a node.
@@ -2180,7 +2176,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const shape = 'shape';
+  shape: 'shape';
 
   /**
    * (Deprecated) If defined, shapefile specifies a file containing user-supplied node content.
@@ -2196,7 +2192,7 @@ export namespace attribute {
    * @deprecated
    * @category Attribute
    */
-  export const shapefile = 'shapefile';
+  shapefile: 'shapefile';
 
   /**
    * Print guide boxes in PostScript at the beginning of routesplines if 1, or at the end if 2. (Debugging)
@@ -2209,7 +2205,7 @@ export namespace attribute {
    * @graphvizUsedBy ENG
    * @category Attribute
    */
-  export const showboxes = 'showboxes';
+  showboxes: 'showboxes';
 
   /**
    * Number of sides if {@link shape}=polygon.
@@ -2221,7 +2217,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const sides = 'sides';
+  sides: 'sides';
 
   /**
    * Maximum width and height of drawing, in inches.
@@ -2238,7 +2234,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const size = 'size';
+  size: 'size';
 
   /**
    * Skew factor for {@link shape}=polygon. Positive values skew top of polygon to right; negative to left.
@@ -2250,7 +2246,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const skew = 'skew';
+  skew: 'skew';
 
   /**
    * Specifies a post-processing step used to smooth out an uneven distribution of nodes.
@@ -2262,7 +2258,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const smoothing = 'smoothing';
+  smoothing: 'smoothing';
 
   /**
    * If {@link packmode} indicates an array packing, this attribute specifies an insertion order among the components,
@@ -2275,7 +2271,7 @@ export namespace attribute {
    * @graphvizUsedBy GCN
    * @category Attribute
    */
-  export const sortv = 'sortv';
+  sortv: 'sortv';
 
   /**
    * Controls how, and if, edges are represented.
@@ -2310,7 +2306,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const splines = 'splines';
+  splines: 'splines';
 
   /**
    * Parameter used to determine the initial layout of nodes.
@@ -2323,7 +2319,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const start = 'start';
+  start: 'start';
 
   /**
    * Set style information for components of the graph.
@@ -2350,7 +2346,7 @@ export namespace attribute {
    * @graphvizUsedBy ENCG
    * @category Attribute
    */
-  export const style = 'style';
+  style: 'style';
 
   /**
    * A URL or pathname specifying an XML style sheet, used in SVG output.
@@ -2362,7 +2358,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const stylesheet = 'stylesheet';
+  stylesheet: 'stylesheet';
 
   /**
    * If **tailURL** is defined, it is output as part of the tail label of the edge.
@@ -2376,7 +2372,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const tailURL = 'tailURL';
+  tailURL: 'tailURL';
 
   /**
    * Position of an edge's tail label, {@link https://graphviz.org/doc/info/attrs.html in points}.
@@ -2388,7 +2384,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const tail_lp = 'tail_lp';
+  tail_lp: 'tail_lp';
 
   /**
    * If true, the tail of an edge is clipped to the boundary of the tail node; otherwise,
@@ -2400,7 +2396,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const tailclip = 'tailclip';
+  tailclip: 'tailclip';
 
   /**
    * Synonym for {@link tailURL}.
@@ -2412,7 +2408,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const tailhref = 'tailhref';
+  tailhref: 'tailhref';
 
   /**
    * Text label to be placed near tail of edge.
@@ -2424,7 +2420,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const taillabel = 'taillabel';
+  taillabel: 'taillabel';
 
   /**
    * Indicates where on the tail node to attach the tail of the edge.
@@ -2436,7 +2432,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const tailport = 'tailport';
+  tailport: 'tailport';
 
   /**
    * If the edge has a {@link tailURL}, this attribute determines which window of the browser is used for the URL.
@@ -2450,7 +2446,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const tailtarget = 'tailtarget';
+  tailtarget: 'tailtarget';
 
   /**
    * Tooltip annotation attached to the tail of an edge.
@@ -2463,7 +2459,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const tailtooltip = 'tailtooltip';
+  tailtooltip: 'tailtooltip';
 
   /**
    * If the object has a URL, this attribute determines which window of the browser is used for the URL.
@@ -2476,7 +2472,7 @@ export namespace attribute {
    * @graphvizUsedBy ENGC
    * @category Attribute
    */
-  export const target = 'target';
+  target: 'target';
 
   /**
    * Tooltip annotation attached to the node or edge.
@@ -2491,7 +2487,7 @@ export namespace attribute {
    * @graphvizUsedBy NEC
    * @category Attribute
    */
-  export const tooltip = 'tooltip';
+  tooltip: 'tooltip';
 
   /**
    * If set explicitly to true or false, the value determines whether or not internal bitmap rendering relies on a truecolor color model or uses a color palette.
@@ -2510,7 +2506,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const truecolor = 'truecolor';
+  truecolor: 'truecolor';
 
   /**
    * If the input graph defines this attribute, the node is polygonal, and output is dot or xdot, this attribute provides the coordinates of the vertices of the node's polygon, in inches.
@@ -2522,7 +2518,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const vertices = 'vertices';
+  vertices: 'vertices';
 
   /**
    * Clipping window on final drawing.
@@ -2535,7 +2531,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const viewport = 'viewport';
+  viewport: 'viewport';
 
   /**
    * Factor to scale up drawing to allow margin for expansion in Voronoi technique.
@@ -2549,7 +2545,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const voro_margin = 'voro_margin';
+  voro_margin: 'voro_margin';
 
   /**
    * Weight of edge.
@@ -2566,7 +2562,7 @@ export namespace attribute {
    * @graphvizUsedBy E
    * @category Attribute
    */
-  export const weight = 'weight';
+  weight: 'weight';
 
   /**
    * Width of node, in inches.
@@ -2582,7 +2578,7 @@ export namespace attribute {
    * @graphvizUsedBy N
    * @category Attribute
    */
-  export const width = 'width';
+  width: 'width';
 
   /**
    * For xdot output, if this attribute is set, this determines the version of xdot used in output.
@@ -2594,7 +2590,7 @@ export namespace attribute {
    * @graphvizUsedBy G
    * @category Attribute
    */
-  export const xdotversion = 'xdotversion';
+  xdotversion: 'xdotversion';
 
   /**
    * External label for a node or edge.
@@ -2614,7 +2610,7 @@ export namespace attribute {
    * @graphvizUsedBy EN
    * @category Attribute
    */
-  export const xlabel = 'xlabel';
+  xlabel: 'xlabel';
 
   /**
    * Position of an exterior label, {@link https://graphviz.org/doc/info/attrs.html in points}.
@@ -2626,7 +2622,7 @@ export namespace attribute {
    * @graphvizUsedBy NE
    * @category Attribute
    */
-  export const xlp = 'xlp';
+  xlp: 'xlp';
 
   /**
    * Deprecated:Use {@link pos} attribute, along with {@link dimen} and/or {@link dim} to specify dimensions.
@@ -2650,1206 +2646,1175 @@ export namespace attribute {
    * @deprecated
    * @category Attribute
    */
-  export const z = 'z';
+  z: 'z';
+}
+
+/**
+ * Catalogue of the schemas/types/grammars expected by {@link https://graphviz.org/doc/info/attrs.html attributes}.
+ */
+export namespace type {
+  /**
+   * Directive indicating which direction the Edge should point.
+   */
+  export type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_';
 
   /**
-   * Catalogue of the schemas/types/grammars expected by {@link https://graphviz.org/doc/info/attrs.html attributes}.
+   * A double with an optional prefix `'+'`.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/addDouble/ addDouble}
    */
-  export namespace type {
+  export type AddDouble = `+${Double}`;
+
+  /**
+   * Double-precision floating point number.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/double/ double}
+   */
+  export type Double = number;
+
+  /**
+   * Port Position
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/portPos/ portPos}
+   */
+  export type PortPos = `${string}:${Compass}` | Compass;
+  /**
+   * A colon-separated list of doubles: `"%f(:%f)*"` where each %f is a double.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/doubleList/ doubleList}
+   */
+  export type DoubleList =
+    | Double
+    | `${Double}:${Double}`
+    | `${Double}:${Double}:${Double}`
+    | `${Double}:${Double}:${Double}:${Double}`
+    | `${Double}:${Double}:${Double}:${Double}:${Double}`
+    | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`
+    | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`
+    | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`
+    | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
+
+  /**
+   * Integer number.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/int/ int}
+   */
+  export type Int = number;
+
+  /**
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/shape/ shape}
+   */
+  export type Shape = string;
+
+  /**
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/smoothType/ smoothType}
+   */
+  export type SmoothType = 'none' | 'avg_dist' | 'graph_dist' | 'power_dist' | 'rng' | 'spring' | 'triangle';
+
+  /**
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/splineType/ splineType}
+   */
+  export type SplineType = SplineType.spline | string;
+  export namespace SplineType {
+    export type prefix = endp | startp | `${endp}${startp}` | '';
+    export type spline = `${prefix}point ${triple}`;
+    export type triple = `${Point} ${Point} ${Point}`;
+    export type endp = `e,${Double},${Double} `;
+    export type startp = `s,${Double},${Double} `;
+  }
+
+  /**
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/startType/ startType}
+   */
+  export type StartType = `${StartType.style}${StartType.seed}`;
+  export namespace StartType {
+    export type style = 'regular' | 'self' | 'random';
+    export type seed = number;
+  }
+
+  /**s
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/style/ style}
+   */
+  export type Style =
+    | Style.styleItem
+    | `${Style.styleItem},${Style.styleItem}`
+    | `${Style.styleItem},${Style.styleItem},${Style.styleItem}`
+    | `${Style.styleItem},${Style.styleItem},${Style.styleItem},${Style.styleItem}`;
+  export namespace Style {
+    export type styleItem =
+      | 'dashed'
+      | 'dotted'
+      | 'solid'
+      | 'invis'
+      | 'bold'
+      | 'tapered'
+      | 'filled'
+      | 'striped'
+      | 'wedged'
+      | 'diagonals'
+      | 'rounded'
+      | 'filled'
+      | 'striped'
+      | 'rounded'
+      | 'radial';
+  }
+
+  /**
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/viewPort/ viewPort}
+   */
+  export type ViewPort =
+    | `${Double},${Double},${Double},${Double},${Double}`
+    | `${Double},${Double},${Double},${string}`;
+
+  /**
+   * list of strings separated by characters from the layersep attribute (by default, colons, tabs or spaces),
+   * defining layer names and implicitly numbered 1,2,…
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/layerList/ layerList}
+   */
+  export type LayerList = string;
+
+  /**
+   * specifies a list of layers defined by the layers attribute.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/layerRange/ layerRange}
+   */
+  export type LayerRange = string;
+
+  /**
+   * String with Escape Sequences
+   *
+   * A string allowing escape sequences which are replaced according to the context.
+   *
+   * For node attributes, the substring `"\N"` is replaced by the name of the node,
+   * and the substring `"\G"` by the name of the graph.
+   *
+   * For graph or cluster attributes, the substring `"\G"` is replaced by the name of the graph or cluster.
+   *
+   * For edge attributes, the substring `"\E"` is replaced by the name of the edge, the substring `"\G"` is replaced by the name of the graph or cluster,
+   * and the substrings `"\T"` and `"\H"` by the names of the tail and head nodes,
+   * respectively.
+   *
+   * The name of an edge is the string formed from the name of the tail node,
+   * the appropriate edge operator (`"--"` or `"->"`) and the name of the head node.
+   *
+   * In all cases, the substring `"\L"` is replaced by the object's label attribute.
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/escString/ escString}
+   */
+  export type EscString = string;
+
+  /**
+   * @see {@link https://graphviz.org/doc/info/shapes.html#html HTML-Like Labels}
+   */
+  export type HTMLLikeLabel = `<${string}>`;
+
+  /**
+   * An escString or an HTML label.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/lblString/ lblString}
+   */
+  export type LblString = HTMLLikeLabel | EscString;
+
+  /**
+   * `"%f,%f('!')?"` representing the point (x,y).
+   *
+   * The optional `'!'` indicates the node position should not change (input-only).
+   *
+   * If dim=3, point may also have the format `"%f,%f,%f('!')?"` to represent the point (x,y,z).
+   */
+  export type Point = Point.position | `${Point.position}!`;
+
+  export namespace Point {
+    export type position =
+      | `%${Double},%${Double}`
+      | `%${Double},%${Double},%${Double}`
+      | `%${Double},%${Double},%${Double},%${Double},%${Double}`
+      | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
+      | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
+      | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
+      | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
+      | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${number}`;
+  }
+
+  /**
+   * A point with an optional prefix `'+'`.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/addPoint/ addPoint}
+   */
+  export type AddPoint = `+${Point}`;
+
+  /**
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/pointList/ pointList}
+   */
+  export type PointList =
+    | Point
+    | `${Point} ${Point}`
+    | `${Point} ${Point} ${Point}`
+    | `${Point} ${Point} ${Point} ${Point}`;
+
+  /**
+   * These specify the order in which nodes and edges are drawn in concrete output.
+   *
+   * - The default `"breadthfirst"` is the simplest, but when the graph layout does not avoid edge-node overlap, this mode will sometimes have edges drawn over nodes and sometimes on top of nodes.
+   * - If the mode `"nodesfirst"` is chosen, all nodes are drawn first, followed by the edges. This guarantees an edge-node overlap will not be mistaken for an edge ending at a node.
+   * - On the other hand, usually for aesthetic reasons, it may be desirable that all edges appear beneath nodes, even if the resulting drawing is ambiguous. This can be achieved by choosing `"edgesfirst"`.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/outputMode/ outputMode}
+   */
+  export type OutputMode = 'breadthfirst' | 'nodesfirst' | 'edgesfirst';
+
+  /**
+   * @see {@link https://graphviz.org/docs/attr-types/packMode/ packMode}
+   */
+  export type PackMode = 'node' | 'clust' | 'graph' | `array${string}`;
+
+  /**
+   * Using `"fast"` gives about a 2-4 times overall speedup compared with `"normal"`,
+   * though layout quality can suffer a little.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/quadType/ quadType}
+   */
+  export type QuadType = 'normal' | 'fast' | 'none';
+
+  /**
+   * Rank Direction
+   *
+   * Corresponding to directed graphs drawn from top to bottom,
+   * from left to right, from bottom to top, and from right to left, respectively.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankdir/ rankdir}
+   */
+  export type Rankdir = 'TB' | 'LR' | 'BT' | 'RL';
+
+  /**
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankType/ rankType}
+   */
+  export type RankType = 'same' | 'min' | 'source' | 'max' | 'sink';
+
+  /**
+   * `"%f,%f,%f,%f"`
+   *
+   * The rectangle `llx,lly,urx,ury` gives the coordinates, in points,
+   * of the lower-left corner `(llx,lly)` and the upper-right corner `(urx,ury)`.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/rect/ rect}
+   */
+  export type Rect = `${Double},${Double},${Double},${Double}`;
+
+  /**
+   * The examples above show a set of commonly used arrow shapes.
+   *
+   * There is a grammar of arrow shapes which can be used to describe a collection of 3,111,696 arrow
+   * combinations of the 42 variations of the primitive set of 11 arrows.
+   *
+   * @see {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType}
+   */
+  export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.aname}`;
+
+  export namespace ArrowType {
+    export type shape =
+      | 'box'
+      | 'crow'
+      | 'curve'
+      | 'icurve'
+      | 'diamond'
+      | 'dot'
+      | 'inv'
+      | 'none'
+      | 'normal'
+      | 'tee'
+      | 'vee';
+    export type side = 'l' | 'r';
+
+    export type modifiers = side | 'o' | `o${side}`;
+
+    export type aname = shape | `${modifiers}${shape}`;
+  }
+
+  /**
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/clusterMode/ clusterMode}
+   */
+  export type ClusterMode = 'local' | 'global' | 'none';
+
+  /**
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/color/ color}
+   */
+  export type Color = Color.RGB_RGBA | Color.HSV | Color.ColorName | number;
+  export namespace Color {
     /**
-     * Directive indicating which direction the Edge should point.
-     */
-    export type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_';
-    export namespace Compass {
-      /** Upper part */
-      export const n: Compass = 'n';
-      /** Upper left */
-      export const ne: Compass = 'ne';
-      /** Left part */
-      export const e: Compass = 'e';
-      /** Lower left */
-      export const se: Compass = 'se';
-      /** Lower part */
-      export const s: Compass = 's';
-      /** Lower right */
-      export const sw: Compass = 'sw';
-      /** Right part */
-      export const w: Compass = 'w';
-      /** Upper right */
-      export const nw: Compass = 'nw';
-      /** Center */
-      export const c: Compass = 'c';
-
-      /** Default */
-      export const _: Compass = '_';
-
-      const all: ReadonlyArray<string> = [n, ne, e, se, s, sw, w, nw, c, _];
-      /**
-       * Determine whether the character string satisfies the Compass condition.
-       */
-      export function is(str: string): str is Compass {
-        return all.includes(str);
-      }
-    }
-
-    /**
-     * A double with an optional prefix `'+'`.
+     * `"#%2x%2x%2x"` Red-Green-Blue (RGB)
      *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/addDouble/ addDouble}
-     */
-    export type AddDouble = `+${Double}`;
-
-    /**
-     * Double-precision floating point number.
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/double/ double}
-     */
-    export type Double = number;
-
-    /**
-     * Port Position
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/portPos/ portPos}
-     */
-    export type PortPos = `${string}:${Compass}` | Compass;
-    /**
-     * A colon-separated list of doubles: `"%f(:%f)*"` where each %f is a double.
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/doubleList/ doubleList}
-     */
-    export type DoubleList =
-      | Double
-      | `${Double}:${Double}`
-      | `${Double}:${Double}:${Double}`
-      | `${Double}:${Double}:${Double}:${Double}`
-      | `${Double}:${Double}:${Double}:${Double}:${Double}`
-      | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`
-      | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`
-      | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`
-      | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
-
-    /**
-     * Integer number.
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/int/ int}
-     */
-    export type Int = number;
-
-    /**
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/shape/ shape}
-     */
-    export type Shape = string;
-
-    /**
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/smoothType/ smoothType}
-     */
-    export type SmoothType = 'none' | 'avg_dist' | 'graph_dist' | 'power_dist' | 'rng' | 'spring' | 'triangle';
-
-    /**
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/splineType/ splineType}
-     */
-    export type SplineType = SplineType.spline | string;
-    export namespace SplineType {
-      export type prefix = endp | startp | `${endp}${startp}` | '';
-      export type spline = `${prefix}point ${triple}`;
-      export type triple = `${Point} ${Point} ${Point}`;
-      export type endp = `e,${Double},${Double} `;
-      export type startp = `s,${Double},${Double} `;
-    }
-
-    /**
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/startType/ startType}
-     */
-    export type StartType = `${StartType.style}${StartType.seed}`;
-    export namespace StartType {
-      export type style = 'regular' | 'self' | 'random';
-      export type seed = number;
-    }
-
-    /**s
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/style/ style}
-     */
-    export type Style =
-      | Style.styleItem
-      | `${Style.styleItem},${Style.styleItem}`
-      | `${Style.styleItem},${Style.styleItem},${Style.styleItem}`
-      | `${Style.styleItem},${Style.styleItem},${Style.styleItem},${Style.styleItem}`;
-    export namespace Style {
-      export type styleItem =
-        | 'dashed'
-        | 'dotted'
-        | 'solid'
-        | 'invis'
-        | 'bold'
-        | 'tapered'
-        | 'filled'
-        | 'striped'
-        | 'wedged'
-        | 'diagonals'
-        | 'rounded'
-        | 'filled'
-        | 'striped'
-        | 'rounded'
-        | 'radial';
-    }
-
-    /**
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/viewPort/ viewPort}
-     */
-    export type ViewPort =
-      | `${Double},${Double},${Double},${Double},${Double}`
-      | `${Double},${Double},${Double},${string}`;
-
-    /**
-     * list of strings separated by characters from the layersep attribute (by default, colons, tabs or spaces),
-     * defining layer names and implicitly numbered 1,2,…
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/layerList/ layerList}
-     */
-    export type LayerList = string;
-
-    /**
-     * specifies a list of layers defined by the layers attribute.
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/layerRange/ layerRange}
-     */
-    export type LayerRange = string;
-
-    /**
-     * String with Escape Sequences
-     *
-     * A string allowing escape sequences which are replaced according to the context.
-     *
-     * For node attributes, the substring `"\N"` is replaced by the name of the node,
-     * and the substring `"\G"` by the name of the graph.
-     *
-     * For graph or cluster attributes, the substring `"\G"` is replaced by the name of the graph or cluster.
-     *
-     * For edge attributes, the substring `"\E"` is replaced by the name of the edge, the substring `"\G"` is replaced by the name of the graph or cluster,
-     * and the substrings `"\T"` and `"\H"` by the names of the tail and head nodes,
-     * respectively.
-     *
-     * The name of an edge is the string formed from the name of the tail node,
-     * the appropriate edge operator (`"--"` or `"->"`) and the name of the head node.
-     *
-     * In all cases, the substring `"\L"` is replaced by the object's label attribute.
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/escString/ escString}
-     */
-    export type EscString = string;
-
-    /**
-     * @see {@link https://graphviz.org/doc/info/shapes.html#html HTML-Like Labels}
-     */
-    export type HTMLLikeLabel = `<${string}>`;
-
-    /**
-     * An escString or an HTML label.
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/lblString/ lblString}
-     */
-    export type LblString = HTMLLikeLabel | EscString;
-
-    /**
-     * `"%f,%f('!')?"` representing the point (x,y).
-     *
-     * The optional `'!'` indicates the node position should not change (input-only).
-     *
-     * If dim=3, point may also have the format `"%f,%f,%f('!')?"` to represent the point (x,y,z).
-     */
-    export type Point = Point.position | `${Point.position}!`;
-
-    export namespace Point {
-      export type position =
-        | `%${Double},%${Double}`
-        | `%${Double},%${Double},%${Double}`
-        | `%${Double},%${Double},%${Double},%${Double},%${Double}`
-        | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
-        | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
-        | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
-        | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
-        | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${number}`;
-    }
-
-    /**
-     * A point with an optional prefix `'+'`.
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/addPoint/ addPoint}
-     */
-    export type AddPoint = `+${Point}`;
-
-    /**
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/pointList/ pointList}
-     */
-    export type PointList =
-      | Point
-      | `${Point} ${Point}`
-      | `${Point} ${Point} ${Point}`
-      | `${Point} ${Point} ${Point} ${Point}`;
-
-    /**
-     * These specify the order in which nodes and edges are drawn in concrete output.
-     *
-     * - The default `"breadthfirst"` is the simplest, but when the graph layout does not avoid edge-node overlap, this mode will sometimes have edges drawn over nodes and sometimes on top of nodes.
-     * - If the mode `"nodesfirst"` is chosen, all nodes are drawn first, followed by the edges. This guarantees an edge-node overlap will not be mistaken for an edge ending at a node.
-     * - On the other hand, usually for aesthetic reasons, it may be desirable that all edges appear beneath nodes, even if the resulting drawing is ambiguous. This can be achieved by choosing `"edgesfirst"`.
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/outputMode/ outputMode}
-     */
-    export type OutputMode = 'breadthfirst' | 'nodesfirst' | 'edgesfirst';
-
-    /**
-     * @see {@link https://graphviz.org/docs/attr-types/packMode/ packMode}
-     */
-    export type PackMode = 'node' | 'clust' | 'graph' | `array${string}`;
-
-    /**
-     * Using `"fast"` gives about a 2-4 times overall speedup compared with `"normal"`,
-     * though layout quality can suffer a little.
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/quadType/ quadType}
-     */
-    export type QuadType = 'normal' | 'fast' | 'none';
-
-    /**
-     * Rank Direction
-     *
-     * Corresponding to directed graphs drawn from top to bottom,
-     * from left to right, from bottom to top, and from right to left, respectively.
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankdir/ rankdir}
-     */
-    export type Rankdir = 'TB' | 'LR' | 'BT' | 'RL';
-
-    /**
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankType/ rankType}
-     */
-    export type RankType = 'same' | 'min' | 'source' | 'max' | 'sink';
-
-    /**
-     * `"%f,%f,%f,%f"`
-     *
-     * The rectangle `llx,lly,urx,ury` gives the coordinates, in points,
-     * of the lower-left corner `(llx,lly)` and the upper-right corner `(urx,ury)`.
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/rect/ rect}
-     */
-    export type Rect = `${Double},${Double},${Double},${Double}`;
-
-    /**
-     * The examples above show a set of commonly used arrow shapes.
-     *
-     * There is a grammar of arrow shapes which can be used to describe a collection of 3,111,696 arrow
-     * combinations of the 42 variations of the primitive set of 11 arrows.
-     *
-     * @see {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType}
-     */
-    export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.aname}`;
-
-    export namespace ArrowType {
-      export type shape =
-        | 'box'
-        | 'crow'
-        | 'curve'
-        | 'icurve'
-        | 'diamond'
-        | 'dot'
-        | 'inv'
-        | 'none'
-        | 'normal'
-        | 'tee'
-        | 'vee';
-      export type side = 'l' | 'r';
-
-      export type modifiers = side | 'o' | `o${side}`;
-
-      export type aname = shape | `${modifiers}${shape}`;
-    }
-
-    /**
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/clusterMode/ clusterMode}
-     */
-    export type ClusterMode = 'local' | 'global' | 'none';
-
-    /**
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/color/ color}
-     */
-    export type Color = Color.RGB_RGBA | Color.HSV | Color.ColorName | number;
-    export namespace Color {
-      /**
-       * `"#%2x%2x%2x"` Red-Green-Blue (RGB)
-       *
-       * `"#%2x%2x%2x%2x"` Red-Green-Blue-Alpha (RGBA)
-       * @note A type that is too complicated to express in TypeScript.
-       */
-      export type RGB_RGBA = `#${string}`;
-
-      /**
-       * Hue-Saturation-Value (HSV) 0.0 <= H,S,V <= 1.0
-       */
-      export type HSV = `${number}+${number}+${number}`;
-
-      /**
-       * Color names are resolved in the context of a color scheme.
-       *
-       * Graphviz currently supports the X11 scheme, the SVG scheme, and the Brewer schemes, with X11 being the default.
-       * @see {@link https://graphviz.org/doc/info/colors.html Color Names}
-       */
-      export type ColorName =
-        | 'aliceblue'
-        | 'antiquewhite'
-        | 'antiquewhite1'
-        | 'antiquewhite2'
-        | 'antiquewhite3'
-        | 'antiquewhite4'
-        | 'aqua'
-        | 'aquamarine'
-        | 'aquamarine1'
-        | 'aquamarine2'
-        | 'aquamarine3'
-        | 'aquamarine4'
-        | 'azure'
-        | 'azure1'
-        | 'azure2'
-        | 'azure3'
-        | 'azure4'
-        | 'beige'
-        | 'bisque'
-        | 'bisque1'
-        | 'bisque2'
-        | 'bisque3'
-        | 'bisque4'
-        | 'black'
-        | 'blanchedalmond'
-        | 'blue'
-        | 'blue1'
-        | 'blue2'
-        | 'blue3'
-        | 'blue4'
-        | 'blueviolet'
-        | 'brown'
-        | 'brown1'
-        | 'brown2'
-        | 'brown3'
-        | 'brown4'
-        | 'burlywood'
-        | 'burlywood1'
-        | 'burlywood2'
-        | 'burlywood3'
-        | 'burlywood4'
-        | 'cadetblue'
-        | 'cadetblue1'
-        | 'cadetblue2'
-        | 'cadetblue3'
-        | 'cadetblue4'
-        | 'chartreuse'
-        | 'chartreuse1'
-        | 'chartreuse2'
-        | 'chartreuse3'
-        | 'chartreuse4'
-        | 'chocolate'
-        | 'chocolate1'
-        | 'chocolate2'
-        | 'chocolate3'
-        | 'chocolate4'
-        | 'coral'
-        | 'coral1'
-        | 'coral2'
-        | 'coral3'
-        | 'coral4'
-        | 'cornflowerblue'
-        | 'cornsilk'
-        | 'cornsilk1'
-        | 'cornsilk2'
-        | 'cornsilk3'
-        | 'cornsilk4'
-        | 'crimson'
-        | 'cyan'
-        | 'cyan1'
-        | 'cyan2'
-        | 'cyan3'
-        | 'cyan4'
-        | 'darkblue'
-        | 'darkcyan'
-        | 'darkgoldenrod'
-        | 'darkgoldenrod1'
-        | 'darkgoldenrod2'
-        | 'darkgoldenrod3'
-        | 'darkgoldenrod4'
-        | 'darkgray'
-        | 'darkgreen'
-        | 'darkgrey'
-        | 'darkkhaki'
-        | 'darkmagenta'
-        | 'darkolivegreen'
-        | 'darkolivegreen1'
-        | 'darkolivegreen2'
-        | 'darkolivegreen3'
-        | 'darkolivegreen4'
-        | 'darkorange'
-        | 'darkorange1'
-        | 'darkorange2'
-        | 'darkorange3'
-        | 'darkorange4'
-        | 'darkorchid'
-        | 'darkorchid1'
-        | 'darkorchid2'
-        | 'darkorchid3'
-        | 'darkorchid4'
-        | 'darkred'
-        | 'darksalmon'
-        | 'darkseagreen'
-        | 'darkseagreen1'
-        | 'darkseagreen2'
-        | 'darkseagreen3'
-        | 'darkseagreen4'
-        | 'darkslateblue'
-        | 'darkslategray'
-        | 'darkslategray1'
-        | 'darkslategray2'
-        | 'darkslategray3'
-        | 'darkslategray4'
-        | 'darkslategrey'
-        | 'darkturquoise'
-        | 'darkviolet'
-        | 'deeppink'
-        | 'deeppink1'
-        | 'deeppink2'
-        | 'deeppink3'
-        | 'deeppink4'
-        | 'deepskyblue'
-        | 'deepskyblue1'
-        | 'deepskyblue2'
-        | 'deepskyblue3'
-        | 'deepskyblue4'
-        | 'dimgray'
-        | 'dimgrey'
-        | 'dodgerblue'
-        | 'dodgerblue1'
-        | 'dodgerblue2'
-        | 'dodgerblue3'
-        | 'dodgerblue4'
-        | 'firebrick'
-        | 'firebrick1'
-        | 'firebrick2'
-        | 'firebrick3'
-        | 'firebrick4'
-        | 'floralwhite'
-        | 'forestgreen'
-        | 'fuchsia'
-        | 'gainsboro'
-        | 'ghostwhite'
-        | 'gold'
-        | 'gold1'
-        | 'gold2'
-        | 'gold3'
-        | 'gold4'
-        | 'goldenrod'
-        | 'goldenrod1'
-        | 'goldenrod2'
-        | 'goldenrod3'
-        | 'goldenrod4'
-        | 'gray'
-        | 'gray0'
-        | 'gray1'
-        | 'gray10'
-        | 'gray100'
-        | 'gray11'
-        | 'gray12'
-        | 'gray13'
-        | 'gray14'
-        | 'gray15'
-        | 'gray16'
-        | 'gray17'
-        | 'gray18'
-        | 'gray19'
-        | 'gray2'
-        | 'gray20'
-        | 'gray21'
-        | 'gray22'
-        | 'gray23'
-        | 'gray24'
-        | 'gray25'
-        | 'gray26'
-        | 'gray27'
-        | 'gray28'
-        | 'gray29'
-        | 'gray3'
-        | 'gray30'
-        | 'gray31'
-        | 'gray32'
-        | 'gray33'
-        | 'gray34'
-        | 'gray35'
-        | 'gray36'
-        | 'gray37'
-        | 'gray38'
-        | 'gray39'
-        | 'gray4'
-        | 'gray40'
-        | 'gray41'
-        | 'gray42'
-        | 'gray43'
-        | 'gray44'
-        | 'gray45'
-        | 'gray46'
-        | 'gray47'
-        | 'gray48'
-        | 'gray49'
-        | 'gray5'
-        | 'gray50'
-        | 'gray51'
-        | 'gray52'
-        | 'gray53'
-        | 'gray54'
-        | 'gray55'
-        | 'gray56'
-        | 'gray57'
-        | 'gray58'
-        | 'gray59'
-        | 'gray6'
-        | 'gray60'
-        | 'gray61'
-        | 'gray62'
-        | 'gray63'
-        | 'gray64'
-        | 'gray65'
-        | 'gray66'
-        | 'gray67'
-        | 'gray68'
-        | 'gray69'
-        | 'gray7'
-        | 'gray70'
-        | 'gray71'
-        | 'gray72'
-        | 'gray73'
-        | 'gray74'
-        | 'gray75'
-        | 'gray76'
-        | 'gray77'
-        | 'gray78'
-        | 'gray79'
-        | 'gray8'
-        | 'gray80'
-        | 'gray81'
-        | 'gray82'
-        | 'gray83'
-        | 'gray84'
-        | 'gray85'
-        | 'gray86'
-        | 'gray87'
-        | 'gray88'
-        | 'gray89'
-        | 'gray9'
-        | 'gray90'
-        | 'gray91'
-        | 'gray92'
-        | 'gray93'
-        | 'gray94'
-        | 'gray95'
-        | 'gray96'
-        | 'gray97'
-        | 'gray98'
-        | 'gray99'
-        | 'green'
-        | 'green1'
-        | 'green2'
-        | 'green3'
-        | 'green4'
-        | 'greenyellow'
-        | 'grey'
-        | 'grey0'
-        | 'grey1'
-        | 'grey10'
-        | 'grey100'
-        | 'grey11'
-        | 'grey12'
-        | 'grey13'
-        | 'grey14'
-        | 'grey15'
-        | 'grey16'
-        | 'grey17'
-        | 'grey18'
-        | 'grey19'
-        | 'grey2'
-        | 'grey20'
-        | 'grey21'
-        | 'grey22'
-        | 'grey23'
-        | 'grey24'
-        | 'grey25'
-        | 'grey26'
-        | 'grey27'
-        | 'grey28'
-        | 'grey29'
-        | 'grey3'
-        | 'grey30'
-        | 'grey31'
-        | 'grey32'
-        | 'grey33'
-        | 'grey34'
-        | 'grey35'
-        | 'grey36'
-        | 'grey37'
-        | 'grey38'
-        | 'grey39'
-        | 'grey4'
-        | 'grey40'
-        | 'grey41'
-        | 'grey42'
-        | 'grey43'
-        | 'grey44'
-        | 'grey45'
-        | 'grey46'
-        | 'grey47'
-        | 'grey48'
-        | 'grey49'
-        | 'grey5'
-        | 'grey50'
-        | 'grey51'
-        | 'grey52'
-        | 'grey53'
-        | 'grey54'
-        | 'grey55'
-        | 'grey56'
-        | 'grey57'
-        | 'grey58'
-        | 'grey59'
-        | 'grey6'
-        | 'grey60'
-        | 'grey61'
-        | 'grey62'
-        | 'grey63'
-        | 'grey64'
-        | 'grey65'
-        | 'grey66'
-        | 'grey67'
-        | 'grey68'
-        | 'grey69'
-        | 'grey7'
-        | 'grey70'
-        | 'grey71'
-        | 'grey72'
-        | 'grey73'
-        | 'grey74'
-        | 'grey75'
-        | 'grey76'
-        | 'grey77'
-        | 'grey78'
-        | 'grey79'
-        | 'grey8'
-        | 'grey80'
-        | 'grey81'
-        | 'grey82'
-        | 'grey83'
-        | 'grey84'
-        | 'grey85'
-        | 'grey86'
-        | 'grey87'
-        | 'grey88'
-        | 'grey89'
-        | 'grey9'
-        | 'grey90'
-        | 'grey91'
-        | 'grey92'
-        | 'grey93'
-        | 'grey94'
-        | 'grey95'
-        | 'grey96'
-        | 'grey97'
-        | 'grey98'
-        | 'grey99'
-        | 'honeydew'
-        | 'honeydew1'
-        | 'honeydew2'
-        | 'honeydew3'
-        | 'honeydew4'
-        | 'hotpink'
-        | 'hotpink1'
-        | 'hotpink2'
-        | 'hotpink3'
-        | 'hotpink4'
-        | 'indianred'
-        | 'indianred1'
-        | 'indianred2'
-        | 'indianred3'
-        | 'indianred4'
-        | 'indigo'
-        | 'invis'
-        | 'ivory'
-        | 'ivory1'
-        | 'ivory2'
-        | 'ivory3'
-        | 'ivory4'
-        | 'khaki'
-        | 'khaki1'
-        | 'khaki2'
-        | 'khaki3'
-        | 'khaki4'
-        | 'lavender'
-        | 'lavenderblush'
-        | 'lavenderblush1'
-        | 'lavenderblush2'
-        | 'lavenderblush3'
-        | 'lavenderblush4'
-        | 'lawngreen'
-        | 'lemonchiffon'
-        | 'lemonchiffon1'
-        | 'lemonchiffon2'
-        | 'lemonchiffon3'
-        | 'lemonchiffon4'
-        | 'lightblue'
-        | 'lightblue1'
-        | 'lightblue2'
-        | 'lightblue3'
-        | 'lightblue4'
-        | 'lightcoral'
-        | 'lightcyan'
-        | 'lightcyan1'
-        | 'lightcyan2'
-        | 'lightcyan3'
-        | 'lightcyan4'
-        | 'lightgoldenrod'
-        | 'lightgoldenrod1'
-        | 'lightgoldenrod2'
-        | 'lightgoldenrod3'
-        | 'lightgoldenrod4'
-        | 'lightgoldenrodyellow'
-        | 'lightgray'
-        | 'lightgreen'
-        | 'lightgrey'
-        | 'lightpink'
-        | 'lightpink1'
-        | 'lightpink2'
-        | 'lightpink3'
-        | 'lightpink4'
-        | 'lightsalmon'
-        | 'lightsalmon1'
-        | 'lightsalmon2'
-        | 'lightsalmon3'
-        | 'lightsalmon4'
-        | 'lightseagreen'
-        | 'lightskyblue'
-        | 'lightskyblue1'
-        | 'lightskyblue2'
-        | 'lightskyblue3'
-        | 'lightskyblue4'
-        | 'lightslateblue'
-        | 'lightslategray'
-        | 'lightslategrey'
-        | 'lightsteelblue'
-        | 'lightsteelblue1'
-        | 'lightsteelblue2'
-        | 'lightsteelblue3'
-        | 'lightsteelblue4'
-        | 'lightyellow'
-        | 'lightyellow1'
-        | 'lightyellow2'
-        | 'lightyellow3'
-        | 'lightyellow4'
-        | 'lime'
-        | 'limegreen'
-        | 'linen'
-        | 'magenta'
-        | 'magenta1'
-        | 'magenta2'
-        | 'magenta3'
-        | 'magenta4'
-        | 'maroon'
-        | 'maroon1'
-        | 'maroon2'
-        | 'maroon3'
-        | 'maroon4'
-        | 'mediumaquamarine'
-        | 'mediumblue'
-        | 'mediumorchid'
-        | 'mediumorchid1'
-        | 'mediumorchid2'
-        | 'mediumorchid3'
-        | 'mediumorchid4'
-        | 'mediumpurple'
-        | 'mediumpurple1'
-        | 'mediumpurple2'
-        | 'mediumpurple3'
-        | 'mediumpurple4'
-        | 'mediumseagreen'
-        | 'mediumslateblue'
-        | 'mediumspringgreen'
-        | 'mediumturquoise'
-        | 'mediumvioletred'
-        | 'midnightblue'
-        | 'mintcream'
-        | 'mistyrose'
-        | 'mistyrose1'
-        | 'mistyrose2'
-        | 'mistyrose3'
-        | 'mistyrose4'
-        | 'moccasin'
-        | 'navajowhite'
-        | 'navajowhite1'
-        | 'navajowhite2'
-        | 'navajowhite3'
-        | 'navajowhite4'
-        | 'navy'
-        | 'navyblue'
-        | 'none'
-        | 'oldlace'
-        | 'olive'
-        | 'olivedrab'
-        | 'olivedrab1'
-        | 'olivedrab2'
-        | 'olivedrab3'
-        | 'olivedrab4'
-        | 'orange'
-        | 'orange1'
-        | 'orange2'
-        | 'orange3'
-        | 'orange4'
-        | 'orangered'
-        | 'orangered1'
-        | 'orangered2'
-        | 'orangered3'
-        | 'orangered4'
-        | 'orchid'
-        | 'orchid1'
-        | 'orchid2'
-        | 'orchid3'
-        | 'orchid4'
-        | 'palegoldenrod'
-        | 'palegreen'
-        | 'palegreen1'
-        | 'palegreen2'
-        | 'palegreen3'
-        | 'palegreen4'
-        | 'paleturquoise'
-        | 'paleturquoise1'
-        | 'paleturquoise2'
-        | 'paleturquoise3'
-        | 'paleturquoise4'
-        | 'palevioletred'
-        | 'palevioletred1'
-        | 'palevioletred2'
-        | 'palevioletred3'
-        | 'palevioletred4'
-        | 'papayawhip'
-        | 'peachpuff'
-        | 'peachpuff1'
-        | 'peachpuff2'
-        | 'peachpuff3'
-        | 'peachpuff4'
-        | 'peru'
-        | 'pink'
-        | 'pink1'
-        | 'pink2'
-        | 'pink3'
-        | 'pink4'
-        | 'plum'
-        | 'plum1'
-        | 'plum2'
-        | 'plum3'
-        | 'plum4'
-        | 'powderblue'
-        | 'purple'
-        | 'purple1'
-        | 'purple2'
-        | 'purple3'
-        | 'purple4'
-        | 'rebeccapurple'
-        | 'red'
-        | 'red1'
-        | 'red2'
-        | 'red3'
-        | 'red4'
-        | 'rosybrown'
-        | 'rosybrown1'
-        | 'rosybrown2'
-        | 'rosybrown3'
-        | 'rosybrown4'
-        | 'royalblue'
-        | 'royalblue1'
-        | 'royalblue2'
-        | 'royalblue3'
-        | 'royalblue4'
-        | 'saddlebrown'
-        | 'salmon'
-        | 'salmon1'
-        | 'salmon2'
-        | 'salmon3'
-        | 'salmon4'
-        | 'sandybrown'
-        | 'seagreen'
-        | 'seagreen1'
-        | 'seagreen2'
-        | 'seagreen3'
-        | 'seagreen4'
-        | 'seashell'
-        | 'seashell1'
-        | 'seashell2'
-        | 'seashell3'
-        | 'seashell4'
-        | 'sienna'
-        | 'sienna1'
-        | 'sienna2'
-        | 'sienna3'
-        | 'sienna4'
-        | 'silver'
-        | 'skyblue'
-        | 'skyblue1'
-        | 'skyblue2'
-        | 'skyblue3'
-        | 'skyblue4'
-        | 'slateblue'
-        | 'slateblue1'
-        | 'slateblue2'
-        | 'slateblue3'
-        | 'slateblue4'
-        | 'slategray'
-        | 'slategray1'
-        | 'slategray2'
-        | 'slategray3'
-        | 'slategray4'
-        | 'slategrey'
-        | 'snow'
-        | 'snow1'
-        | 'snow2'
-        | 'snow3'
-        | 'snow4'
-        | 'springgreen'
-        | 'springgreen1'
-        | 'springgreen2'
-        | 'springgreen3'
-        | 'springgreen4'
-        | 'steelblue'
-        | 'steelblue1'
-        | 'steelblue2'
-        | 'steelblue3'
-        | 'steelblue4'
-        | 'tan'
-        | 'tan1'
-        | 'tan2'
-        | 'tan3'
-        | 'tan4'
-        | 'teal'
-        | 'thistle'
-        | 'thistle1'
-        | 'thistle2'
-        | 'thistle3'
-        | 'thistle4'
-        | 'tomato'
-        | 'tomato1'
-        | 'tomato2'
-        | 'tomato3'
-        | 'tomato4'
-        | 'transparent'
-        | 'turquoise'
-        | 'turquoise1'
-        | 'turquoise2'
-        | 'turquoise3'
-        | 'turquoise4'
-        | 'violet'
-        | 'violetred'
-        | 'violetred1'
-        | 'violetred2'
-        | 'violetred3'
-        | 'violetred4'
-        | 'webgray'
-        | 'webgreen'
-        | 'webgrey'
-        | 'webmaroon'
-        | 'webpurple'
-        | 'wheat'
-        | 'wheat1'
-        | 'wheat2'
-        | 'wheat3'
-        | 'wheat4'
-        | 'white'
-        | 'whitesmoke'
-        | 'x11gray'
-        | 'x11green'
-        | 'x11grey'
-        | 'x11maroon'
-        | 'x11purple'
-        | 'yellow'
-        | 'yellow1'
-        | 'yellow2'
-        | 'yellow3'
-        | 'yellow4'
-        | 'yellowgreen'
-        | 'aliceblue'
-        | 'antiquewhite'
-        | 'aqua'
-        | 'aquamarine'
-        | 'azure'
-        | 'beige'
-        | 'bisque'
-        | 'black'
-        | 'blanchedalmond'
-        | 'blue'
-        | 'blueviolet'
-        | 'brown'
-        | 'burlywood'
-        | 'cadetblue'
-        | 'chartreuse'
-        | 'chocolate'
-        | 'coral'
-        | 'cornflowerblue'
-        | 'cornsilk'
-        | 'crimson'
-        | 'cyan'
-        | 'darkblue'
-        | 'darkcyan'
-        | 'darkgoldenrod'
-        | 'darkgray'
-        | 'darkgreen'
-        | 'darkgrey'
-        | 'darkkhaki'
-        | 'darkmagenta'
-        | 'darkolivegreen'
-        | 'darkorange'
-        | 'darkorchid'
-        | 'darkred'
-        | 'darksalmon'
-        | 'darkseagreen'
-        | 'darkslateblue'
-        | 'darkslategray'
-        | 'darkslategrey'
-        | 'darkturquoise'
-        | 'darkviolet'
-        | 'deeppink'
-        | 'deepskyblue'
-        | 'dimgray'
-        | 'dimgrey'
-        | 'dodgerblue'
-        | 'firebrick'
-        | 'floralwhite'
-        | 'forestgreen'
-        | 'fuchsia'
-        | 'gainsboro'
-        | 'ghostwhite'
-        | 'gold'
-        | 'goldenrod'
-        | 'gray'
-        | 'grey'
-        | 'green'
-        | 'greenyellow'
-        | 'honeydew'
-        | 'hotpink'
-        | 'indianred'
-        | 'indigo'
-        | 'ivory'
-        | 'khaki'
-        | 'lavender'
-        | 'lavenderblush'
-        | 'lawngreen'
-        | 'lemonchiffon'
-        | 'lightblue'
-        | 'lightcoral'
-        | 'lightcyan'
-        | 'lightgoldenrodyellow'
-        | 'lightgray'
-        | 'lightgreen'
-        | 'lightgrey'
-        | 'lightpink'
-        | 'lightsalmon'
-        | 'lightseagreen'
-        | 'lightskyblue'
-        | 'lightslategray'
-        | 'lightslategrey'
-        | 'lightsteelblue'
-        | 'lightyellow'
-        | 'lime'
-        | 'limegreen'
-        | 'linen'
-        | 'magenta'
-        | 'maroon'
-        | 'mediumaquamarine'
-        | 'mediumblue'
-        | 'mediumorchid'
-        | 'mediumpurple'
-        | 'mediumseagreen'
-        | 'mediumslateblue'
-        | 'mediumspringgreen'
-        | 'mediumturquoise'
-        | 'mediumvioletred'
-        | 'midnightblue'
-        | 'mintcream'
-        | 'mistyrose'
-        | 'moccasin'
-        | 'navajowhite'
-        | 'navy'
-        | 'oldlace'
-        | 'olive'
-        | 'olivedrab'
-        | 'orange'
-        | 'orangered'
-        | 'orchid'
-        | 'palegoldenrod'
-        | 'palegreen'
-        | 'paleturquoise'
-        | 'palevioletred'
-        | 'papayawhip'
-        | 'peachpuff'
-        | 'peru'
-        | 'pink'
-        | 'plum'
-        | 'powderblue'
-        | 'purple'
-        | 'red'
-        | 'rosybrown'
-        | 'royalblue'
-        | 'saddlebrown'
-        | 'salmon'
-        | 'sandybrown'
-        | 'seagreen'
-        | 'seashell'
-        | 'sienna'
-        | 'silver'
-        | 'skyblue'
-        | 'slateblue'
-        | 'slategray'
-        | 'slategrey'
-        | 'snow'
-        | 'springgreen'
-        | 'steelblue'
-        | 'tan'
-        | 'teal'
-        | 'thistle'
-        | 'tomato'
-        | 'turquoise'
-        | 'violet'
-        | 'wheat'
-        | 'white'
-        | 'whitesmoke'
-        | 'yellow'
-        | 'yellowgreen';
-    }
-
-    /**
-     * A colon-separated list of weighted color values: WC(:WC)* where each WC has the form C(;F)? with C a color value and the optional F a floating-point number, 0 ≤ F ≤ 1.
-     *
-     * The sum of the floating-point numbers in a colorList must sum to at most 1.
-     *
+     * `"#%2x%2x%2x%2x"` Red-Green-Blue-Alpha (RGBA)
      * @note A type that is too complicated to express in TypeScript.
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/colorList/}
      */
-    export type ColorList = string;
+    export type RGB_RGBA = `#${string}`;
 
     /**
-     * Direction Type
-     *
-     * @see {@link https://graphviz.gitlab.io/docs/attr-types/dirType/ dirType}
+     * Hue-Saturation-Value (HSV) 0.0 <= H,S,V <= 1.0
      */
-    export type DirType = 'forward' | 'back' | 'both' | 'none';
+    export type HSV = `${number}+${number}+${number}`;
 
     /**
-     * Page Direction
+     * Color names are resolved in the context of a color scheme.
      *
-     * @see {@link https://graphviz.org/docs/attr-types/pagedir/ pagedir}
+     * Graphviz currently supports the X11 scheme, the SVG scheme, and the Brewer schemes, with X11 being the default.
+     * @see {@link https://graphviz.org/doc/info/colors.html Color Names}
      */
-    export type Pagedir = `${Pagedir.TB}${Pagedir.RL}`;
-    export namespace Pagedir {
-      export type TB = 'T' | 'B';
-      export type RL = 'R' | 'L';
-    }
+    export type ColorName =
+      | 'aliceblue'
+      | 'antiquewhite'
+      | 'antiquewhite1'
+      | 'antiquewhite2'
+      | 'antiquewhite3'
+      | 'antiquewhite4'
+      | 'aqua'
+      | 'aquamarine'
+      | 'aquamarine1'
+      | 'aquamarine2'
+      | 'aquamarine3'
+      | 'aquamarine4'
+      | 'azure'
+      | 'azure1'
+      | 'azure2'
+      | 'azure3'
+      | 'azure4'
+      | 'beige'
+      | 'bisque'
+      | 'bisque1'
+      | 'bisque2'
+      | 'bisque3'
+      | 'bisque4'
+      | 'black'
+      | 'blanchedalmond'
+      | 'blue'
+      | 'blue1'
+      | 'blue2'
+      | 'blue3'
+      | 'blue4'
+      | 'blueviolet'
+      | 'brown'
+      | 'brown1'
+      | 'brown2'
+      | 'brown3'
+      | 'brown4'
+      | 'burlywood'
+      | 'burlywood1'
+      | 'burlywood2'
+      | 'burlywood3'
+      | 'burlywood4'
+      | 'cadetblue'
+      | 'cadetblue1'
+      | 'cadetblue2'
+      | 'cadetblue3'
+      | 'cadetblue4'
+      | 'chartreuse'
+      | 'chartreuse1'
+      | 'chartreuse2'
+      | 'chartreuse3'
+      | 'chartreuse4'
+      | 'chocolate'
+      | 'chocolate1'
+      | 'chocolate2'
+      | 'chocolate3'
+      | 'chocolate4'
+      | 'coral'
+      | 'coral1'
+      | 'coral2'
+      | 'coral3'
+      | 'coral4'
+      | 'cornflowerblue'
+      | 'cornsilk'
+      | 'cornsilk1'
+      | 'cornsilk2'
+      | 'cornsilk3'
+      | 'cornsilk4'
+      | 'crimson'
+      | 'cyan'
+      | 'cyan1'
+      | 'cyan2'
+      | 'cyan3'
+      | 'cyan4'
+      | 'darkblue'
+      | 'darkcyan'
+      | 'darkgoldenrod'
+      | 'darkgoldenrod1'
+      | 'darkgoldenrod2'
+      | 'darkgoldenrod3'
+      | 'darkgoldenrod4'
+      | 'darkgray'
+      | 'darkgreen'
+      | 'darkgrey'
+      | 'darkkhaki'
+      | 'darkmagenta'
+      | 'darkolivegreen'
+      | 'darkolivegreen1'
+      | 'darkolivegreen2'
+      | 'darkolivegreen3'
+      | 'darkolivegreen4'
+      | 'darkorange'
+      | 'darkorange1'
+      | 'darkorange2'
+      | 'darkorange3'
+      | 'darkorange4'
+      | 'darkorchid'
+      | 'darkorchid1'
+      | 'darkorchid2'
+      | 'darkorchid3'
+      | 'darkorchid4'
+      | 'darkred'
+      | 'darksalmon'
+      | 'darkseagreen'
+      | 'darkseagreen1'
+      | 'darkseagreen2'
+      | 'darkseagreen3'
+      | 'darkseagreen4'
+      | 'darkslateblue'
+      | 'darkslategray'
+      | 'darkslategray1'
+      | 'darkslategray2'
+      | 'darkslategray3'
+      | 'darkslategray4'
+      | 'darkslategrey'
+      | 'darkturquoise'
+      | 'darkviolet'
+      | 'deeppink'
+      | 'deeppink1'
+      | 'deeppink2'
+      | 'deeppink3'
+      | 'deeppink4'
+      | 'deepskyblue'
+      | 'deepskyblue1'
+      | 'deepskyblue2'
+      | 'deepskyblue3'
+      | 'deepskyblue4'
+      | 'dimgray'
+      | 'dimgrey'
+      | 'dodgerblue'
+      | 'dodgerblue1'
+      | 'dodgerblue2'
+      | 'dodgerblue3'
+      | 'dodgerblue4'
+      | 'firebrick'
+      | 'firebrick1'
+      | 'firebrick2'
+      | 'firebrick3'
+      | 'firebrick4'
+      | 'floralwhite'
+      | 'forestgreen'
+      | 'fuchsia'
+      | 'gainsboro'
+      | 'ghostwhite'
+      | 'gold'
+      | 'gold1'
+      | 'gold2'
+      | 'gold3'
+      | 'gold4'
+      | 'goldenrod'
+      | 'goldenrod1'
+      | 'goldenrod2'
+      | 'goldenrod3'
+      | 'goldenrod4'
+      | 'gray'
+      | 'gray0'
+      | 'gray1'
+      | 'gray10'
+      | 'gray100'
+      | 'gray11'
+      | 'gray12'
+      | 'gray13'
+      | 'gray14'
+      | 'gray15'
+      | 'gray16'
+      | 'gray17'
+      | 'gray18'
+      | 'gray19'
+      | 'gray2'
+      | 'gray20'
+      | 'gray21'
+      | 'gray22'
+      | 'gray23'
+      | 'gray24'
+      | 'gray25'
+      | 'gray26'
+      | 'gray27'
+      | 'gray28'
+      | 'gray29'
+      | 'gray3'
+      | 'gray30'
+      | 'gray31'
+      | 'gray32'
+      | 'gray33'
+      | 'gray34'
+      | 'gray35'
+      | 'gray36'
+      | 'gray37'
+      | 'gray38'
+      | 'gray39'
+      | 'gray4'
+      | 'gray40'
+      | 'gray41'
+      | 'gray42'
+      | 'gray43'
+      | 'gray44'
+      | 'gray45'
+      | 'gray46'
+      | 'gray47'
+      | 'gray48'
+      | 'gray49'
+      | 'gray5'
+      | 'gray50'
+      | 'gray51'
+      | 'gray52'
+      | 'gray53'
+      | 'gray54'
+      | 'gray55'
+      | 'gray56'
+      | 'gray57'
+      | 'gray58'
+      | 'gray59'
+      | 'gray6'
+      | 'gray60'
+      | 'gray61'
+      | 'gray62'
+      | 'gray63'
+      | 'gray64'
+      | 'gray65'
+      | 'gray66'
+      | 'gray67'
+      | 'gray68'
+      | 'gray69'
+      | 'gray7'
+      | 'gray70'
+      | 'gray71'
+      | 'gray72'
+      | 'gray73'
+      | 'gray74'
+      | 'gray75'
+      | 'gray76'
+      | 'gray77'
+      | 'gray78'
+      | 'gray79'
+      | 'gray8'
+      | 'gray80'
+      | 'gray81'
+      | 'gray82'
+      | 'gray83'
+      | 'gray84'
+      | 'gray85'
+      | 'gray86'
+      | 'gray87'
+      | 'gray88'
+      | 'gray89'
+      | 'gray9'
+      | 'gray90'
+      | 'gray91'
+      | 'gray92'
+      | 'gray93'
+      | 'gray94'
+      | 'gray95'
+      | 'gray96'
+      | 'gray97'
+      | 'gray98'
+      | 'gray99'
+      | 'green'
+      | 'green1'
+      | 'green2'
+      | 'green3'
+      | 'green4'
+      | 'greenyellow'
+      | 'grey'
+      | 'grey0'
+      | 'grey1'
+      | 'grey10'
+      | 'grey100'
+      | 'grey11'
+      | 'grey12'
+      | 'grey13'
+      | 'grey14'
+      | 'grey15'
+      | 'grey16'
+      | 'grey17'
+      | 'grey18'
+      | 'grey19'
+      | 'grey2'
+      | 'grey20'
+      | 'grey21'
+      | 'grey22'
+      | 'grey23'
+      | 'grey24'
+      | 'grey25'
+      | 'grey26'
+      | 'grey27'
+      | 'grey28'
+      | 'grey29'
+      | 'grey3'
+      | 'grey30'
+      | 'grey31'
+      | 'grey32'
+      | 'grey33'
+      | 'grey34'
+      | 'grey35'
+      | 'grey36'
+      | 'grey37'
+      | 'grey38'
+      | 'grey39'
+      | 'grey4'
+      | 'grey40'
+      | 'grey41'
+      | 'grey42'
+      | 'grey43'
+      | 'grey44'
+      | 'grey45'
+      | 'grey46'
+      | 'grey47'
+      | 'grey48'
+      | 'grey49'
+      | 'grey5'
+      | 'grey50'
+      | 'grey51'
+      | 'grey52'
+      | 'grey53'
+      | 'grey54'
+      | 'grey55'
+      | 'grey56'
+      | 'grey57'
+      | 'grey58'
+      | 'grey59'
+      | 'grey6'
+      | 'grey60'
+      | 'grey61'
+      | 'grey62'
+      | 'grey63'
+      | 'grey64'
+      | 'grey65'
+      | 'grey66'
+      | 'grey67'
+      | 'grey68'
+      | 'grey69'
+      | 'grey7'
+      | 'grey70'
+      | 'grey71'
+      | 'grey72'
+      | 'grey73'
+      | 'grey74'
+      | 'grey75'
+      | 'grey76'
+      | 'grey77'
+      | 'grey78'
+      | 'grey79'
+      | 'grey8'
+      | 'grey80'
+      | 'grey81'
+      | 'grey82'
+      | 'grey83'
+      | 'grey84'
+      | 'grey85'
+      | 'grey86'
+      | 'grey87'
+      | 'grey88'
+      | 'grey89'
+      | 'grey9'
+      | 'grey90'
+      | 'grey91'
+      | 'grey92'
+      | 'grey93'
+      | 'grey94'
+      | 'grey95'
+      | 'grey96'
+      | 'grey97'
+      | 'grey98'
+      | 'grey99'
+      | 'honeydew'
+      | 'honeydew1'
+      | 'honeydew2'
+      | 'honeydew3'
+      | 'honeydew4'
+      | 'hotpink'
+      | 'hotpink1'
+      | 'hotpink2'
+      | 'hotpink3'
+      | 'hotpink4'
+      | 'indianred'
+      | 'indianred1'
+      | 'indianred2'
+      | 'indianred3'
+      | 'indianred4'
+      | 'indigo'
+      | 'invis'
+      | 'ivory'
+      | 'ivory1'
+      | 'ivory2'
+      | 'ivory3'
+      | 'ivory4'
+      | 'khaki'
+      | 'khaki1'
+      | 'khaki2'
+      | 'khaki3'
+      | 'khaki4'
+      | 'lavender'
+      | 'lavenderblush'
+      | 'lavenderblush1'
+      | 'lavenderblush2'
+      | 'lavenderblush3'
+      | 'lavenderblush4'
+      | 'lawngreen'
+      | 'lemonchiffon'
+      | 'lemonchiffon1'
+      | 'lemonchiffon2'
+      | 'lemonchiffon3'
+      | 'lemonchiffon4'
+      | 'lightblue'
+      | 'lightblue1'
+      | 'lightblue2'
+      | 'lightblue3'
+      | 'lightblue4'
+      | 'lightcoral'
+      | 'lightcyan'
+      | 'lightcyan1'
+      | 'lightcyan2'
+      | 'lightcyan3'
+      | 'lightcyan4'
+      | 'lightgoldenrod'
+      | 'lightgoldenrod1'
+      | 'lightgoldenrod2'
+      | 'lightgoldenrod3'
+      | 'lightgoldenrod4'
+      | 'lightgoldenrodyellow'
+      | 'lightgray'
+      | 'lightgreen'
+      | 'lightgrey'
+      | 'lightpink'
+      | 'lightpink1'
+      | 'lightpink2'
+      | 'lightpink3'
+      | 'lightpink4'
+      | 'lightsalmon'
+      | 'lightsalmon1'
+      | 'lightsalmon2'
+      | 'lightsalmon3'
+      | 'lightsalmon4'
+      | 'lightseagreen'
+      | 'lightskyblue'
+      | 'lightskyblue1'
+      | 'lightskyblue2'
+      | 'lightskyblue3'
+      | 'lightskyblue4'
+      | 'lightslateblue'
+      | 'lightslategray'
+      | 'lightslategrey'
+      | 'lightsteelblue'
+      | 'lightsteelblue1'
+      | 'lightsteelblue2'
+      | 'lightsteelblue3'
+      | 'lightsteelblue4'
+      | 'lightyellow'
+      | 'lightyellow1'
+      | 'lightyellow2'
+      | 'lightyellow3'
+      | 'lightyellow4'
+      | 'lime'
+      | 'limegreen'
+      | 'linen'
+      | 'magenta'
+      | 'magenta1'
+      | 'magenta2'
+      | 'magenta3'
+      | 'magenta4'
+      | 'maroon'
+      | 'maroon1'
+      | 'maroon2'
+      | 'maroon3'
+      | 'maroon4'
+      | 'mediumaquamarine'
+      | 'mediumblue'
+      | 'mediumorchid'
+      | 'mediumorchid1'
+      | 'mediumorchid2'
+      | 'mediumorchid3'
+      | 'mediumorchid4'
+      | 'mediumpurple'
+      | 'mediumpurple1'
+      | 'mediumpurple2'
+      | 'mediumpurple3'
+      | 'mediumpurple4'
+      | 'mediumseagreen'
+      | 'mediumslateblue'
+      | 'mediumspringgreen'
+      | 'mediumturquoise'
+      | 'mediumvioletred'
+      | 'midnightblue'
+      | 'mintcream'
+      | 'mistyrose'
+      | 'mistyrose1'
+      | 'mistyrose2'
+      | 'mistyrose3'
+      | 'mistyrose4'
+      | 'moccasin'
+      | 'navajowhite'
+      | 'navajowhite1'
+      | 'navajowhite2'
+      | 'navajowhite3'
+      | 'navajowhite4'
+      | 'navy'
+      | 'navyblue'
+      | 'none'
+      | 'oldlace'
+      | 'olive'
+      | 'olivedrab'
+      | 'olivedrab1'
+      | 'olivedrab2'
+      | 'olivedrab3'
+      | 'olivedrab4'
+      | 'orange'
+      | 'orange1'
+      | 'orange2'
+      | 'orange3'
+      | 'orange4'
+      | 'orangered'
+      | 'orangered1'
+      | 'orangered2'
+      | 'orangered3'
+      | 'orangered4'
+      | 'orchid'
+      | 'orchid1'
+      | 'orchid2'
+      | 'orchid3'
+      | 'orchid4'
+      | 'palegoldenrod'
+      | 'palegreen'
+      | 'palegreen1'
+      | 'palegreen2'
+      | 'palegreen3'
+      | 'palegreen4'
+      | 'paleturquoise'
+      | 'paleturquoise1'
+      | 'paleturquoise2'
+      | 'paleturquoise3'
+      | 'paleturquoise4'
+      | 'palevioletred'
+      | 'palevioletred1'
+      | 'palevioletred2'
+      | 'palevioletred3'
+      | 'palevioletred4'
+      | 'papayawhip'
+      | 'peachpuff'
+      | 'peachpuff1'
+      | 'peachpuff2'
+      | 'peachpuff3'
+      | 'peachpuff4'
+      | 'peru'
+      | 'pink'
+      | 'pink1'
+      | 'pink2'
+      | 'pink3'
+      | 'pink4'
+      | 'plum'
+      | 'plum1'
+      | 'plum2'
+      | 'plum3'
+      | 'plum4'
+      | 'powderblue'
+      | 'purple'
+      | 'purple1'
+      | 'purple2'
+      | 'purple3'
+      | 'purple4'
+      | 'rebeccapurple'
+      | 'red'
+      | 'red1'
+      | 'red2'
+      | 'red3'
+      | 'red4'
+      | 'rosybrown'
+      | 'rosybrown1'
+      | 'rosybrown2'
+      | 'rosybrown3'
+      | 'rosybrown4'
+      | 'royalblue'
+      | 'royalblue1'
+      | 'royalblue2'
+      | 'royalblue3'
+      | 'royalblue4'
+      | 'saddlebrown'
+      | 'salmon'
+      | 'salmon1'
+      | 'salmon2'
+      | 'salmon3'
+      | 'salmon4'
+      | 'sandybrown'
+      | 'seagreen'
+      | 'seagreen1'
+      | 'seagreen2'
+      | 'seagreen3'
+      | 'seagreen4'
+      | 'seashell'
+      | 'seashell1'
+      | 'seashell2'
+      | 'seashell3'
+      | 'seashell4'
+      | 'sienna'
+      | 'sienna1'
+      | 'sienna2'
+      | 'sienna3'
+      | 'sienna4'
+      | 'silver'
+      | 'skyblue'
+      | 'skyblue1'
+      | 'skyblue2'
+      | 'skyblue3'
+      | 'skyblue4'
+      | 'slateblue'
+      | 'slateblue1'
+      | 'slateblue2'
+      | 'slateblue3'
+      | 'slateblue4'
+      | 'slategray'
+      | 'slategray1'
+      | 'slategray2'
+      | 'slategray3'
+      | 'slategray4'
+      | 'slategrey'
+      | 'snow'
+      | 'snow1'
+      | 'snow2'
+      | 'snow3'
+      | 'snow4'
+      | 'springgreen'
+      | 'springgreen1'
+      | 'springgreen2'
+      | 'springgreen3'
+      | 'springgreen4'
+      | 'steelblue'
+      | 'steelblue1'
+      | 'steelblue2'
+      | 'steelblue3'
+      | 'steelblue4'
+      | 'tan'
+      | 'tan1'
+      | 'tan2'
+      | 'tan3'
+      | 'tan4'
+      | 'teal'
+      | 'thistle'
+      | 'thistle1'
+      | 'thistle2'
+      | 'thistle3'
+      | 'thistle4'
+      | 'tomato'
+      | 'tomato1'
+      | 'tomato2'
+      | 'tomato3'
+      | 'tomato4'
+      | 'transparent'
+      | 'turquoise'
+      | 'turquoise1'
+      | 'turquoise2'
+      | 'turquoise3'
+      | 'turquoise4'
+      | 'violet'
+      | 'violetred'
+      | 'violetred1'
+      | 'violetred2'
+      | 'violetred3'
+      | 'violetred4'
+      | 'webgray'
+      | 'webgreen'
+      | 'webgrey'
+      | 'webmaroon'
+      | 'webpurple'
+      | 'wheat'
+      | 'wheat1'
+      | 'wheat2'
+      | 'wheat3'
+      | 'wheat4'
+      | 'white'
+      | 'whitesmoke'
+      | 'x11gray'
+      | 'x11green'
+      | 'x11grey'
+      | 'x11maroon'
+      | 'x11purple'
+      | 'yellow'
+      | 'yellow1'
+      | 'yellow2'
+      | 'yellow3'
+      | 'yellow4'
+      | 'yellowgreen'
+      | 'aliceblue'
+      | 'antiquewhite'
+      | 'aqua'
+      | 'aquamarine'
+      | 'azure'
+      | 'beige'
+      | 'bisque'
+      | 'black'
+      | 'blanchedalmond'
+      | 'blue'
+      | 'blueviolet'
+      | 'brown'
+      | 'burlywood'
+      | 'cadetblue'
+      | 'chartreuse'
+      | 'chocolate'
+      | 'coral'
+      | 'cornflowerblue'
+      | 'cornsilk'
+      | 'crimson'
+      | 'cyan'
+      | 'darkblue'
+      | 'darkcyan'
+      | 'darkgoldenrod'
+      | 'darkgray'
+      | 'darkgreen'
+      | 'darkgrey'
+      | 'darkkhaki'
+      | 'darkmagenta'
+      | 'darkolivegreen'
+      | 'darkorange'
+      | 'darkorchid'
+      | 'darkred'
+      | 'darksalmon'
+      | 'darkseagreen'
+      | 'darkslateblue'
+      | 'darkslategray'
+      | 'darkslategrey'
+      | 'darkturquoise'
+      | 'darkviolet'
+      | 'deeppink'
+      | 'deepskyblue'
+      | 'dimgray'
+      | 'dimgrey'
+      | 'dodgerblue'
+      | 'firebrick'
+      | 'floralwhite'
+      | 'forestgreen'
+      | 'fuchsia'
+      | 'gainsboro'
+      | 'ghostwhite'
+      | 'gold'
+      | 'goldenrod'
+      | 'gray'
+      | 'grey'
+      | 'green'
+      | 'greenyellow'
+      | 'honeydew'
+      | 'hotpink'
+      | 'indianred'
+      | 'indigo'
+      | 'ivory'
+      | 'khaki'
+      | 'lavender'
+      | 'lavenderblush'
+      | 'lawngreen'
+      | 'lemonchiffon'
+      | 'lightblue'
+      | 'lightcoral'
+      | 'lightcyan'
+      | 'lightgoldenrodyellow'
+      | 'lightgray'
+      | 'lightgreen'
+      | 'lightgrey'
+      | 'lightpink'
+      | 'lightsalmon'
+      | 'lightseagreen'
+      | 'lightskyblue'
+      | 'lightslategray'
+      | 'lightslategrey'
+      | 'lightsteelblue'
+      | 'lightyellow'
+      | 'lime'
+      | 'limegreen'
+      | 'linen'
+      | 'magenta'
+      | 'maroon'
+      | 'mediumaquamarine'
+      | 'mediumblue'
+      | 'mediumorchid'
+      | 'mediumpurple'
+      | 'mediumseagreen'
+      | 'mediumslateblue'
+      | 'mediumspringgreen'
+      | 'mediumturquoise'
+      | 'mediumvioletred'
+      | 'midnightblue'
+      | 'mintcream'
+      | 'mistyrose'
+      | 'moccasin'
+      | 'navajowhite'
+      | 'navy'
+      | 'oldlace'
+      | 'olive'
+      | 'olivedrab'
+      | 'orange'
+      | 'orangered'
+      | 'orchid'
+      | 'palegoldenrod'
+      | 'palegreen'
+      | 'paleturquoise'
+      | 'palevioletred'
+      | 'papayawhip'
+      | 'peachpuff'
+      | 'peru'
+      | 'pink'
+      | 'plum'
+      | 'powderblue'
+      | 'purple'
+      | 'red'
+      | 'rosybrown'
+      | 'royalblue'
+      | 'saddlebrown'
+      | 'salmon'
+      | 'sandybrown'
+      | 'seagreen'
+      | 'seashell'
+      | 'sienna'
+      | 'silver'
+      | 'skyblue'
+      | 'slateblue'
+      | 'slategray'
+      | 'slategrey'
+      | 'snow'
+      | 'springgreen'
+      | 'steelblue'
+      | 'tan'
+      | 'teal'
+      | 'thistle'
+      | 'tomato'
+      | 'turquoise'
+      | 'violet'
+      | 'wheat'
+      | 'white'
+      | 'whitesmoke'
+      | 'yellow'
+      | 'yellowgreen';
+  }
+
+  /**
+   * A colon-separated list of weighted color values: WC(:WC)* where each WC has the form C(;F)? with C a color value and the optional F a floating-point number, 0 ≤ F ≤ 1.
+   *
+   * The sum of the floating-point numbers in a colorList must sum to at most 1.
+   *
+   * @note A type that is too complicated to express in TypeScript.
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/colorList/}
+   */
+  export type ColorList = string;
+
+  /**
+   * Direction Type
+   *
+   * @see {@link https://graphviz.gitlab.io/docs/attr-types/dirType/ dirType}
+   */
+  export type DirType = 'forward' | 'back' | 'both' | 'none';
+
+  /**
+   * Page Direction
+   *
+   * @see {@link https://graphviz.org/docs/attr-types/pagedir/ pagedir}
+   */
+  export type Pagedir = `${Pagedir.TB}${Pagedir.RL}`;
+  export namespace Pagedir {
+    export type TB = 'T' | 'B';
+    export type RL = 'R' | 'L';
   }
 }
