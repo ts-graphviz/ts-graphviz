@@ -1,0 +1,35 @@
+{
+  "name": "ts-graphviz",
+  "version": "0.16.0",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "description": "Graphviz library for TypeScript.",
+  "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts-graphviz/ts-graphviz.git"
+  },
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/kamiazya"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    "import": "./lib/index.mjs",
+    "require": "./lib/index.js"
+  },
+  "unpkg": "./lib/bundle.min.js",
+  "types": "./lib/index.d.ts",
+  "typedocMain": "./src/index.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "postbuild": "prettier --write ./lib/index.*"
+  }
+}

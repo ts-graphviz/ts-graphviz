@@ -1,43 +1,23 @@
 {
-  "name": "ts-graphviz",
-  "version": "0.16.0",
-  "author": "kamiazya <yuki@kamiazya.tech>",
-  "description": "Graphviz library for TypeScript.",
-  "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ts-graphviz/ts-graphviz.git"
-  },
-  "keywords": [
-    "graphviz",
-    "dot"
-  ],
-  "bugs": {
-    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
-  },
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/kamiazya"
-  },
-  "main": "./lib/index.js",
-  "exports": {
-    "import": "./lib/index.mjs",
-    "require": "./lib/index.js"
-  },
-  "unpkg": "lib/bundle.min.js",
-  "types": "lib/index.d.ts",
+  "private": true,
   "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "build": "rollup -c && prettier --write ./lib/index.*",
+    "build": "lerna run build",
     "test": "jest",
-    "format": "eslint -c .eslintrc.json --ext ts src --fix && prettier --write './src/**/*.ts'",
-    "lint": "eslint -c .eslintrc.json --ext ts src",
-    "doc": "typedoc src/index.ts"
+    "format": "eslint -c .eslintrc.json --ext ts . --fix && prettier --write './**/*.ts'",
+    "lint": "eslint -c .eslintrc.json --ext ts .",
+    "doc": "typedoc"
+  },
+  "dependencies": {
+    "ts-graphviz": "file:packages/ts-graphviz"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
-    "@typescript-eslint/eslint-plugin": "^4.23.0",
-    "@typescript-eslint/parser": "^4.23.0",
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.21.0",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.22.1",
@@ -45,6 +25,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "jest": "^26.6.3",
     "jest-graphviz": "^0.4.0",
+    "lerna": "^4.0.0",
     "prettier": "^2.3.0",
     "rollup": "^2.47.0",
     "rollup-plugin-delete": "^2.0.0",
