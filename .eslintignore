@@ -1,4 +1,2 @@
 node_modules
 lib
-doc
-src/ast/grammar/dot.pegjs.ts

@@ -1,4 +1,8 @@
 {
+  "name": "@ts-graphviz",
   "out": "./doc",
-  "categoryOrder": ["Primary", "Base", "Attributes", "Values", "*"]
+  "entryPoints": [
+    "packages/*"
+  ],
+  "entryPointStrategy": "packages"
 }
