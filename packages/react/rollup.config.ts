@@ -1,29 +1,23 @@
+import { RollupOptions } from 'rollup';
 import typescript from 'rollup-plugin-typescript2';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
-import { terser } from 'rollup-plugin-terser';
 
-/** @type {import('rollup').RollupOptions[]} */
-const options = [
+const options: RollupOptions[] = [
   {
     input: './src/index.ts',
     plugins: [typescript()],
     output: [
       {
         format: 'cjs',
-        file: './lib/index.js',
+        file: './lib/index.cjs',
       },
       {
         format: 'esm',
-        file: './lib/index.mjs',
-      },
-      {
-        format: 'umd',
-        name: 'graphviz',
-        file: './lib/bundle.min.js',
-        plugins: [terser()],
+        file: './lib/index.js',
       },
     ],
+    external: ['react', '@hpcc-js/wasm', 'ts-graphviz', 'prop-types', 'react-reconciler', 'react-dom/server'],
   },
   {
     input: './lib/index.d.ts',

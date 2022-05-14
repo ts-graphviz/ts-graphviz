@@ -1,4 +1,4 @@
-import { toDot } from '../../render/to-dot';
+import { toDot } from '../to-dot';
 import { Attributes } from '../../../domain';
 
 describe('Attributes rendering', () => {

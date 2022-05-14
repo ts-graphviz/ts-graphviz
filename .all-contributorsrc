@@ -1,6 +1,8 @@
 {
   "files": [
-    "README.md"
+    "README.md",
+    "packages/ts-graphviz/README.md",
+    "packages/react/README.md"
   ],
   "imageSize": 100,
   "commit": false,
@@ -34,6 +36,26 @@
       "profile": "https://github.com/elasticdotventures",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "nagasawaryoya",
+      "name": "nagasawaryoya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53528726?v=4",
+      "profile": "https://github.com/nagasawaryoya",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "tokidrill",
+      "name": "YukiSasaki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42460318?v=4",
+      "profile": "https://github.com/tokidrill",
+      "contributions": [
+        "code",
+        "test"
       ]
     }
   ],

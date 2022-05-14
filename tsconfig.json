@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "importHelpers": true,
-    "target": "es5",
+    "target": "ES2015",
     "strict": true,
+    "jsx": "react",
     "lib": [
       "DOM",
       "esnext"
@@ -13,6 +14,11 @@
     "outDir": "lib",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "declaration": true
+    "declaration": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "ts-graphviz": ["./packages/ts-graphviz/src/index.ts"]
+    }
   }
 }

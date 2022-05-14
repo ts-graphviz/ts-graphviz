@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import {
   isNodeRef,
   Subgraph,
@@ -167,7 +168,8 @@ function renderAttributes(attributes: IAttributes): string {
 function renderNodeRef(node: NodeRef): string | undefined {
   if (isNode(node)) {
     return renderAttributeValue(node.id);
-  } else if (isForwardRefNode(node)) {
+  }
+  if (isForwardRefNode(node)) {
     const { id, port, compass } = node;
     return concatWordsWithColon(
       renderAttributeValue(id),
@@ -178,13 +180,15 @@ function renderNodeRef(node: NodeRef): string | undefined {
 }
 
 function renderNodeRefGroup(group: NodeRefGroup): string | undefined {
-  return '{' + concatWordsWithSpace(...group.map(renderNodeRef)) + '}';
+  return `{${concatWordsWithSpace(...group.map(renderNodeRef))}}`;
 }
 
 export type Dot = IRootCluster | ISubgraph | IEdge | INode | IAttributes | AttributesValue;
 
 export class Renderer {
   private root?: IRootCluster;
+
+  // eslint-disable-next-line class-methods-use-this
   protected renderNode(node: INode): string {
     const comment = commentOutIfExist(node.comment);
     const target = renderNodeRef(node);
@@ -235,13 +239,17 @@ export class Renderer {
   public render(object: Dot): string {
     if (isNode(object)) {
       return this.renderNode(object);
-    } else if (isEdge(object)) {
+    }
+    if (isEdge(object)) {
       return this.renderEdge(object);
-    } else if (isAttributes(object)) {
+    }
+    if (isAttributes(object)) {
       return renderAttributes(object);
-    } else if (isSubgraph(object)) {
+    }
+    if (isSubgraph(object)) {
       return this.renderSubgraph(object);
-    } else if (isRootCluster(object)) {
+    }
+    if (isRootCluster(object)) {
       this.root = object;
       return this.renderRootCluster(object);
     }

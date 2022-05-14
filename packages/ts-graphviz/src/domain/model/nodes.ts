@@ -20,7 +20,9 @@ import {
 export class Node extends DotObject implements INode {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
+
   public readonly attributes: IAttributes<NodeAttributeKey>;
+
   constructor(public readonly id: string, attributes?: NodeAttributes) {
     super();
     this.attributes = new Attributes<NodeAttributeKey>(attributes);
@@ -37,17 +39,17 @@ export class Node extends DotObject implements INode {
 
 /** @hidden */
 export function isForwardRefNode(object: unknown): object is ForwardRefNode {
-  return typeof object == 'object' && object !== null && typeof (object as ForwardRefNode).id === 'string';
-}
-
-/** @hidden */
-export function isNodeRefLike(node: unknown): node is NodeRefLike {
-  return typeof node === 'string' || isNodeRef(node);
+  return typeof object === 'object' && object !== null && typeof (object as ForwardRefNode).id === 'string';
 }
 
 /** @hidden */
 export function isNodeRef(node: unknown): node is NodeRef {
   return node instanceof Node || isForwardRefNode(node);
+}
+
+/** @hidden */
+export function isNodeRefLike(node: unknown): node is NodeRefLike {
+  return typeof node === 'string' || isNodeRef(node);
 }
 
 /** @hidden */

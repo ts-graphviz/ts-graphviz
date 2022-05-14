@@ -5,7 +5,7 @@ import { Cluster } from '../clusters';
 import { Edge } from '../edges';
 import { Node } from '../nodes';
 import { RootCluster, Digraph, Graph } from '../root-clusters';
-import { attribute } from '../../../domain';
+import { attribute } from '../..';
 import { EdgeTargetTuple } from '../types';
 
 describe('RootClusters', () => {

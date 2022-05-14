@@ -2,7 +2,7 @@
 import { DotObject, GraphvizObject } from '../abstract';
 import { Edge } from '../edges';
 import { Node } from '../nodes';
-import { attribute } from '../../../domain';
+import { attribute } from '../..';
 import { EdgeTargetTuple } from '../types';
 
 describe('class Edge', () => {

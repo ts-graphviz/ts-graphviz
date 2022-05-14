@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import 'jest-graphviz';
 import { attribute, Digraph, Graph, Subgraph, Node, Edge } from '../../domain';
 import { digraph, graph, strict } from '../builder';
@@ -11,13 +12,13 @@ describe('function digraph', () => {
 
   describe('root create function', () => {
     test.each([
-      ['id', { size: 0, id: 'id', strict: false, g: digraph('id') }],
+      ['id', { size: 0, id: 'id', strictMode: false, g: digraph('id') }],
       [
         'id with attributes',
         {
           size: 1,
           id: 'id',
-          strict: false,
+          strictMode: false,
           g: digraph('id', {
             [attribute.label]: 'Label',
           }),
@@ -28,7 +29,7 @@ describe('function digraph', () => {
         {
           size: 0,
           id: undefined,
-          strict: false,
+          strictMode: false,
           g: digraph(),
         },
       ],
@@ -37,7 +38,7 @@ describe('function digraph', () => {
         {
           size: 0,
           id: undefined,
-          strict: true,
+          strictMode: true,
           g: strict.digraph(),
         },
       ],
@@ -46,7 +47,7 @@ describe('function digraph', () => {
         {
           size: 1,
           id: undefined,
-          strict: false,
+          strictMode: false,
           g: digraph({
             [attribute.label]: 'Label',
           }),
@@ -57,7 +58,7 @@ describe('function digraph', () => {
         {
           size: 1,
           id: undefined,
-          strict: true,
+          strictMode: true,
           g: strict.digraph({
             [attribute.label]: 'Label',
           }),
@@ -68,7 +69,7 @@ describe('function digraph', () => {
         {
           size: 1,
           id: 'id',
-          strict: true,
+          strictMode: true,
           g: strict.digraph('id', {
             [attribute.label]: 'Label',
           }),
@@ -79,16 +80,16 @@ describe('function digraph', () => {
         {
           size: 1,
           id: undefined,
-          strict: true,
+          strictMode: true,
           g: strict.digraph({
             [attribute.label]: 'Label',
           }),
         },
       ],
-    ])('%s', (_, { id, size, strict, g }) => {
+    ])('%s', (_, { id, size, strictMode, g }) => {
       expect(g.id).toBe(id);
       expect(g.size).toBe(size);
-      expect(g.strict).toBe(strict);
+      expect(g.strict).toBe(strictMode);
       expect(toDot(g)).toBeValidDotAndMatchSnapshot();
     });
   });

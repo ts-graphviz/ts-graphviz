@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import 'jest-graphviz';
 import { toDot } from '../to-dot';
 import { attribute, Digraph, Graph, Node, Edge, EdgeTargetTuple } from '../../../domain';

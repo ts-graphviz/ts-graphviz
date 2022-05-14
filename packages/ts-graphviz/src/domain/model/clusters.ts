@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-use-before-define */
 /* eslint-disable @typescript-eslint/no-use-before-define,max-classes-per-file */
 import {
   AttributeKey,
@@ -116,7 +118,9 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * Create a Subgraph and add it to the cluster.
    */
   public createSubgraph(id?: string, attributes?: ClusterSubgraphAttributes): ISubgraph;
+
   public createSubgraph(attributes?: ClusterSubgraphAttributes): ISubgraph;
+
   public createSubgraph(...args: unknown[]): ISubgraph {
     const id = args.find((arg): arg is string => typeof arg === 'string');
     const attributes = args.find((arg): arg is ClusterSubgraphAttributes => typeof arg === 'object');
@@ -208,6 +212,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
   public subgraph(id: string, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+
   /**
    * Create a subgraph (or get one if it already exists) and adapt the attributes.
    *
@@ -241,6 +246,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
     attributes: ClusterSubgraphAttributes,
     callback?: (subgraph: ISubgraph) => void,
   ): ISubgraph;
+
   /**
    * Create anonymous subgraphs and and adapt the attributes.
    *
@@ -269,6 +275,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
   public subgraph(attributes: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+
   /**
    * Create anonymous subgraphs and manipulate them with callback functions.
    *
@@ -277,6 +284,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
   public subgraph(callback?: (subgraph: ISubgraph) => void): ISubgraph;
+
   public subgraph(...args: unknown[]): ISubgraph {
     const id = args.find((arg: unknown): arg is string => typeof arg === 'string');
     const attributes = args.find(
@@ -314,6 +322,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * @param callback Callbacks for manipulating created or retrieved node.
    */
   public node(id: string, callback?: (node: INode) => void): INode;
+
   /**
    * Create a node (or get one if it already exists) and adapt the attributes.
    *
@@ -342,6 +351,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * @param callback Callbacks for manipulating created or retrieved node.
    */
   public node(id: string, attributes: NodeAttributes, callback?: (node: INode) => void): INode;
+
   /**
    * Set a common attribute for the nodes in the cluster.
    *
@@ -366,6 +376,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * @param attributes Object of attributes to be adapted to the nodes.
    */
   public node(attributes: NodeAttributes): void;
+
   public node(firstArg: unknown, ...args: unknown[]): INode | void {
     if (typeof firstArg === 'string') {
       const id = firstArg;
@@ -379,7 +390,8 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
         callback(node);
       }
       return node;
-    } else if (typeof firstArg === 'object' && firstArg !== null) {
+    }
+    if (typeof firstArg === 'object' && firstArg !== null) {
       this.attributes.node.apply(firstArg);
     }
   }
@@ -404,6 +416,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
   public edge(targets: EdgeTargetLikeTuple, callback?: (edge: IEdge) => void): IEdge;
+
   /**
    * Create a edge and adapt the attributes.
    *
@@ -432,6 +445,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
   public edge(targets: EdgeTargetLikeTuple, attributes: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
+
   /**
    * Set a common attribute for the edges in the cluster.
    *
@@ -456,6 +470,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * @param attributes Object of attributes to be adapted to the edges.
    */
   public edge(attributes: EdgeAttributes): void;
+
   public edge(firstArg: EdgeTargetLikeTuple | EdgeAttributes, ...args: unknown[]): IEdge | void {
     if (Array.isArray(firstArg)) {
       const targets = firstArg;
@@ -466,7 +481,8 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
         callback(edge);
       }
       return edge;
-    } else if (typeof firstArg === 'object' && firstArg !== null) {
+    }
+    if (typeof firstArg === 'object' && firstArg !== null) {
       this.attributes.edge.apply(firstArg);
     }
   }
@@ -503,13 +519,17 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
  */
 export class Subgraph extends Cluster<SubgraphAttributeKey | ClusterSubgraphAttributeKey> implements ISubgraph {
   public readonly id?: string;
+
   public attributes = {
     graph: new Attributes<ClusterSubgraphAttributeKey>(),
     edge: new Attributes<EdgeAttributeKey>(),
     node: new Attributes<NodeAttributeKey>(),
   };
+
   constructor(id?: string, attributes?: ClusterSubgraphAttributes);
+
   constructor(attributes?: ClusterSubgraphAttributes);
+
   constructor(...args: unknown[]) {
     super();
     this.id = args.find((arg): arg is string => typeof arg === 'string');
@@ -518,6 +538,7 @@ export class Subgraph extends Cluster<SubgraphAttributeKey | ClusterSubgraphAttr
       this.apply(attributes);
     }
   }
+
   /** Determines whether the Subgraph is a SubgraphCluster. */
   public isSubgraphCluster(): boolean {
     if (typeof this.id === 'string') {

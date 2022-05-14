@@ -1,6 +1,7 @@
 {
   "name": "ts-graphviz",
   "version": "0.16.0",
+  "type": "module",
   "author": "kamiazya <yuki@kamiazya.tech>",
   "description": "Graphviz library for TypeScript.",
   "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
@@ -21,15 +22,15 @@
   },
   "main": "./lib/index.js",
   "exports": {
-    "import": "./lib/index.mjs",
-    "require": "./lib/index.js"
+    "import": "./lib/index.js",
+    "require": "./lib/index.cjs"
   },
   "unpkg": "./lib/bundle.min.js",
   "types": "./lib/index.d.ts",
   "typedocMain": "./src/index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
     "postbuild": "prettier --write ./lib/index.*"
   }
 }

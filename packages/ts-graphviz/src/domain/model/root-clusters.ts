@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import {
   ClusterSubgraphAttributeKey,
   EdgeAttributeKey,
@@ -16,6 +17,7 @@ import { IRootCluster, RootClusterAttributes } from './types';
  */
 export abstract class RootCluster extends Cluster<RootClusterAttributeKey> implements IRootCluster {
   public readonly id?: string;
+
   /**
    * Strict mode.
    *
@@ -32,10 +34,15 @@ export abstract class RootCluster extends Cluster<RootClusterAttributeKey> imple
     edge: new Attributes<EdgeAttributeKey>(),
     node: new Attributes<NodeAttributeKey>(),
   };
+
   constructor(id?: string, attributes?: RootClusterAttributes);
+
   constructor(id?: string, strict?: boolean, attributes?: RootClusterAttributes);
+
   constructor(strict?: boolean, attributes?: RootClusterAttributes);
+
   constructor(attributes?: RootClusterAttributes);
+
   constructor(...args: unknown[]) {
     super();
     this.id = args.find((arg): arg is string => typeof arg === 'string');

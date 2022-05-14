@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 export interface AttributeDict {
   /**
    * Factor damping force motions.
@@ -2732,7 +2733,7 @@ export namespace type {
     export type seed = number;
   }
 
-  /**s
+  /** s
    * @see {@link https://graphviz.gitlab.io/docs/attr-types/style/ style}
    */
   export type Style =
