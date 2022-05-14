@@ -10,9 +10,6 @@
     "useJSXTextNode": true
   },
   "settings": {
-    "react": {
-      "version": "detect"
-    },
     "import/resolver": {
       "node": {
         "extensions": [
@@ -22,12 +19,15 @@
           ".tsx"
         ]
       }
+    },
+    "react": {
+      "version": "detect"
     }
   },
   "plugins": [
     "@typescript-eslint",
-    "prettier",
-    "jest"
+    "jest",
+    "prettier"
   ],
   "extends": [
     "airbnb",
@@ -38,13 +38,14 @@
     "prettier"
   ],
   "rules": {
+    "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/no-namespace": "off",
-    "@typescript-eslint/camelcase": "off",
-    "prettier/prettier": "error",
     "import/extensions": "off",
-    "import/prefer-default-export": "off",
     "import/no-extraneous-dependencies": "off",
+    "import/no-unresolved": "off",
+    "import/prefer-default-export": "off",
+    "prettier/prettier": "error",
     "react/function-component-definition": [
       "error",
       {
