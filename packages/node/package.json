@@ -1,0 +1,42 @@
+{
+  "name": "@ts-graphviz/node",
+  "version": "0.4.0",
+  "description": "Graphviz adapter for Node.js.",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.js",
+  "exports": {
+    "import": "./lib/index.js",
+    "default": "./lib/index.cjs"
+  },
+  "types": "./lib/index.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts-graphviz/node.git"
+  },
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/node/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/kamiazya"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
+    "postbuild": "prettier --write ./lib/index.*"
+  },
+  "peerDependencies": {
+    "ts-graphviz": "^0.16.0"
+  },
+  "dependencies": {
+    "tmp-promise": "^3.0.2"
+  }
+}

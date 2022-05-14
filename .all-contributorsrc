@@ -2,7 +2,8 @@
   "files": [
     "README.md",
     "packages/ts-graphviz/README.md",
-    "packages/react/README.md"
+    "packages/react/README.md",
+    "packages/node/README.md"
   ],
   "imageSize": 100,
   "commit": false,
