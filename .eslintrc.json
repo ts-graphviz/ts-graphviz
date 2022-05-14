@@ -20,6 +20,9 @@
         ]
       }
     },
+    "jest": {
+      "version": 28
+    },
     "react": {
       "version": "detect"
     }
