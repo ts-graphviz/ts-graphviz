@@ -7,13 +7,14 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "yarn workspace ts-graphviz build && yarn workspace @ts-graphviz/react build",
+    "build": "yarn workspace ts-graphviz build && yarn workspace @ts-graphviz/react build && yarn workspace @ts-graphviz/node build",
     "test": "jest",
     "format": "eslint -c .eslintrc.json --ext ts,tsx . --fix && prettier --write './**/*.(ts|tsx)'",
     "lint": "eslint -c .eslintrc.json --ext ts,tsx .",
     "doc": "typedoc"
   },
   "dependencies": {
+    "@ts-graphviz/node": "file:packages/node",
     "@ts-graphviz/react": "file:packages/react",
     "ts-graphviz": "file:packages/ts-graphviz"
   },

@@ -1,6 +1,14 @@
 import type { InitialOptionsTsJest } from 'ts-jest';
 import { defaultsESM as tsjPreset } from 'ts-jest/presets';
 
+const projectCommonConfig: InitialOptionsTsJest = {
+  modulePathIgnorePatterns: ['<rootDir>/package.json'],
+  setupFilesAfterEnv: ['./config/jest/setup-jest.ts'],
+  transform: {
+    ...tsjPreset.transform,
+  },
+};
+
 const config: InitialOptionsTsJest = {
   preset: 'ts-jest/presets/default-esm',
   verbose: true,
@@ -11,24 +19,23 @@ const config: InitialOptionsTsJest = {
     {
       displayName: 'ts-graphviz',
       testEnvironment: 'node',
-      modulePathIgnorePatterns: ['<rootDir>/package.json'],
-
       testMatch: ['<rootDir>/packages/ts-graphviz/src/**/?(*.)+(spec|test).ts'],
-      setupFilesAfterEnv: ['./config/jest/setup-jest.ts'],
-      transform: {
-        ...tsjPreset.transform,
-      },
+      ...projectCommonConfig,
     },
     {
       displayName: '@ts-graphviz/react',
       testEnvironment: 'jsdom',
-      modulePathIgnorePatterns: ['<rootDir>/package.json'],
-
       testMatch: ['<rootDir>/packages/react/src/**/?(*.)+(spec|test).ts?(x)'],
-      setupFilesAfterEnv: ['./config/jest/setup-jest.ts'],
-      transform: {
-        ...tsjPreset.transform,
+      ...projectCommonConfig,
+      moduleNameMapper: {
+        'ts-graphviz': '<rootDir>/packages/ts-graphviz/src/index.ts',
       },
+    },
+    {
+      displayName: '@ts-graphviz/node',
+      testEnvironment: 'node',
+      testMatch: ['<rootDir>/packages/node/src/**/?(*.)+(spec|test).ts?(x)'],
+      ...projectCommonConfig,
       moduleNameMapper: {
         'ts-graphviz': '<rootDir>/packages/ts-graphviz/src/index.ts',
       },
