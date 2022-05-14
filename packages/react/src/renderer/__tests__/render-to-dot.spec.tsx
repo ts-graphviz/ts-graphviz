@@ -19,27 +19,25 @@ describe('renderToDot', () => {
   });
 
   it('render edge', () => {
-    const nodes = ['a', 'b'];
     const dot = renderToDot(
       <Digraph>
-        {nodes.map((id) => (
+        {['a', 'b'].map((id) => (
           <Node id={id} key={id} />
         ))}
-        <Edge targets={nodes} />
+        <Edge targets={['a', 'b']} />
       </Digraph>,
     );
     expect(dot).toBeValidDotAndMatchSnapshot();
   });
 
   it('render subgraph', () => {
-    const nodes = ['a', 'b'];
     const dot = renderToDot(
       <Digraph>
         <Subgraph>
-          {nodes.map((id) => (
+          {['a', 'b'].map((id) => (
             <Node id={id} key={id} />
           ))}
-          <Edge targets={nodes} />
+          <Edge targets={['a', 'b']} />
         </Subgraph>
       </Digraph>,
     );
@@ -47,6 +45,8 @@ describe('renderToDot', () => {
   });
 
   it('render to be blank string', () => {
+    // TODO
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     const dot = renderToDot(<></>);
     expect(dot).toBe('');
   });

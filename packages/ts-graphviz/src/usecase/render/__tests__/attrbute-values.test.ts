@@ -1,4 +1,4 @@
-import { toDot } from '../../render/to-dot';
+import { toDot } from '../to-dot';
 
 describe('AttributesValue rendering', () => {
   const DoubleQuotedValuePattern = /^".+"$/ms;

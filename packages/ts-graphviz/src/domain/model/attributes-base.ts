@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { Attribute, AttributeKey } from '../knowledge';
 import { DotObject } from './abstract';
 import { IAttributesBase, AttributesValue, AttributesObject, AttributesEntities, IAttributes } from './types';
@@ -24,10 +25,12 @@ export abstract class AttributesBase<T extends AttributeKey> extends DotObject i
   get size(): number {
     return this.attrs.size;
   }
+
   /** The size of the attribute. */
   public get(key: T): Attribute<T> | undefined {
     return this.attrs.get(key);
   }
+
   /** Set a value to the attribute. */
   public set(key: T, value: Attribute<T>): void {
     if (value !== null && value !== undefined) {
@@ -41,6 +44,8 @@ export abstract class AttributesBase<T extends AttributeKey> extends DotObject i
 
   public apply(attributes: AttributesObject<T> | AttributesEntities<T>): void {
     const entries = Array.isArray(attributes) ? attributes : Object.entries(attributes);
+    // TODO
+    // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of entries) {
       this.set(key, value);
     }

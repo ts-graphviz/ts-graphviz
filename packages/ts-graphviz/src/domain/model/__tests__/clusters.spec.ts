@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import 'jest-graphviz';
-import { attribute } from '../../../domain';
+import { attribute } from '../..';
 import { DotObject, GraphvizObject } from '../abstract';
 import { AttributesBase } from '../attributes-base';
 import { Cluster, Subgraph } from '../clusters';

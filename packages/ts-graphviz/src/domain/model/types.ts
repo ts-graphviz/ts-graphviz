@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import {
   Attribute,
   AttributeKey,
@@ -60,15 +61,6 @@ export interface HasAttributes<T extends AttributeKey> {
 
 export interface ForwardRefNode extends Partial<Port> {
   readonly id: string;
-}
-
-export interface INode extends HasComment, HasAttributes<NodeAttributeKey> {
-  readonly id: string;
-  port(port: string | Partial<Port>): ForwardRefNode;
-}
-
-export interface IEdge extends HasComment, HasAttributes<EdgeAttributeKey> {
-  readonly targets: EdgeTargetTuple;
 }
 
 export interface IAttributesBase<T extends AttributeKey> {

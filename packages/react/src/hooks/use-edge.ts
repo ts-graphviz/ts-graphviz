@@ -1,12 +1,12 @@
 import { useEffect, useMemo } from 'react';
-import { EdgeTargetLike, EdgeTargetsLike, IEdge, EdgeAttributes } from 'ts-graphviz';
+import { EdgeTargetLikeTuple, IEdge, EdgeAttributes } from 'ts-graphviz';
 import { useCluster } from './use-cluster';
 import { EdgeTargetLengthErrorMessage } from '../utils/errors';
 import { useHasComment } from './use-comment';
 import { useHasAttributes } from './use-has-attributes';
 
 export type EdgeProps = {
-  targets: (EdgeTargetLike | EdgeTargetsLike)[];
+  targets: EdgeTargetLikeTuple;
   comment?: string;
 } & EdgeAttributes;
 

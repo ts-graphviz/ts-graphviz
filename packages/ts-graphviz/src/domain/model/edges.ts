@@ -10,6 +10,7 @@ import { isNodeRefLike } from './nodes';
 export class Edge extends DotObject implements IEdge {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
+
   public readonly attributes: IAttributes<EdgeAttributeKey>;
 
   constructor(public readonly targets: EdgeTargetTuple, attributes?: EdgeAttributes) {

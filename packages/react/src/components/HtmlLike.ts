@@ -27,6 +27,8 @@ export type TableProps = {
   WIDTH?: AttributesValue; // "value"
 };
 
+// TODO
+// eslint-disable-next-line @typescript-eslint/ban-types
 type NoAttributes = {};
 
 export type TrProps = NoAttributes;

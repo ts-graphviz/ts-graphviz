@@ -60,11 +60,4 @@ describe('class Attributes', () => {
     attrs.delete('label');
     expect(attrs.get('label')).toBeUndefined();
   });
-
-  describe('edge with comment', () => {
-    beforeEach(() => {
-      attrs.set('label', 'test');
-      attrs.set('color', 'red');
-    });
-  });
 });

@@ -15,7 +15,7 @@ interface CreateRootFunction<R extends RootCluster> {
 }
 
 /** @hidden */
-function builder<R extends RootCluster>(cls: Type<R>, strictMode = false): CreateRootFunction<R> {
+function builder<R extends RootCluster>(Cls: Type<R>, strictMode = false): CreateRootFunction<R> {
   function createRoot(id?: string, attributes?: RootClusterAttributes, callback?: (g: R) => void): R;
   function createRoot(attributes?: RootClusterAttributes, callback?: (g: R) => void): R;
   function createRoot(id?: string, callback?: (g: R) => void): R;
@@ -24,7 +24,7 @@ function builder<R extends RootCluster>(cls: Type<R>, strictMode = false): Creat
     const id = args.find((arg): arg is string => typeof arg === 'string');
     const attributes = args.find((arg): arg is RootClusterAttributes => typeof arg === 'object');
     const callback = args.find((arg): arg is (g: R) => void => typeof arg === 'function');
-    const g = new cls(id, attributes, strictMode);
+    const g = new Cls(id, attributes, strictMode);
     if (typeof callback === 'function') {
       callback(g);
     }

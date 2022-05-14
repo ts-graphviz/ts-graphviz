@@ -1,11 +1,13 @@
-/* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable class-methods-use-this */
 import { FC } from 'react';
 import ReactReconciler from 'react-reconciler';
 
 type Type = FC;
 type Props = any;
+// eslint-disable-next-line @typescript-eslint/ban-types
 type Container = {};
 
 type Instance = any;
@@ -35,7 +37,8 @@ export class HostConfig
       ChildSet,
       TimeoutHandle,
       NoTimeout
-    > {
+    >
+{
   public now = Date.now;
 
   public setTimeout = setTimeout;

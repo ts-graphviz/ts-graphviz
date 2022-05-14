@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import React, { FC, ReactElement, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { RootCluster, NoRootCluster } from './contexts/RootCluster';

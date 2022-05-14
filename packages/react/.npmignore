@@ -1,15 +1,3 @@
-.editorconfig
-.eslintrc.json
-.github
-.gitignore
-.prettierignore
-.prettierrc.json
-.vscode
-config
-coverage
-docs
-jest.config.js
-LICENSE
-rollup.build.ts
+rollup.config.ts
 src
 tsconfig.json

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { Component, ReactElement } from 'react';
@@ -21,16 +22,21 @@ export function renderExpectToThrow(element: ReactElement, expectedError: string
 
     render() {
       if (this.state.hasError) {
-        return <></>;
+        return null;
       }
       return this.props.children;
     }
   }
 
   try {
+    // TODO
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     render(<ErrorBoundary>{element}</ErrorBoundary>, {});
   } catch (e) {
-    errors.push(e);
+    if (e instanceof Error) {
+      errors.push(e);
+    }
   }
 
   expect(errors.length).toBe(1);
