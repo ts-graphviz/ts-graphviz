@@ -40,6 +40,19 @@ const config: InitialOptionsTsJest = {
         'ts-graphviz': '<rootDir>/packages/ts-graphviz/src/index.ts',
       },
     },
+    {
+      displayName: '@ts-graphviz/parser',
+      testEnvironment: 'node',
+      testMatch: [
+        '<rootDir>/packages/parser/src/**/?(*.)+(spec|test).ts?(x)',
+        '<rootDir>/packages/parser/test/**/?(*.)+(spec|test).ts?(x)',
+      ],
+      ...projectCommonConfig,
+      moduleNameMapper: {
+        'ts-graphviz': '<rootDir>/packages/ts-graphviz/src/index.ts',
+      },
+      snapshotSerializers: ['jest-snapshot-serializer-raw'],
+    },
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   // testMatch: ['**/(__tests__|__specs__)/**/*.(spec|test).(ts|tsx)'],

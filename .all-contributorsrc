@@ -3,7 +3,8 @@
     "README.md",
     "packages/ts-graphviz/README.md",
     "packages/react/README.md",
-    "packages/node/README.md"
+    "packages/node/README.md",
+    "packages/parser/README.md"
   ],
   "imageSize": 100,
   "commit": false,
@@ -57,6 +58,17 @@
       "contributions": [
         "code",
         "test"
+      ]
+    },
+    {
+      "login": "ChristianMurphy",
+      "name": "Christian Murphy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3107513?v=4",
+      "profile": "https://github.com/ChristianMurphy",
+      "contributions": [
+        "code",
+        "ideas",
+        "doc"
       ]
     }
   ],

@@ -1,0 +1,733 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fdpclust.dot 1`] = `
+Object {
+  "body": Array [
+    Object {
+      "body": Array [
+        Object {
+          "key": Object {
+            "location": Object {
+              "end": Object {
+                "column": 9,
+                "line": 2,
+                "offset": 18,
+              },
+              "start": Object {
+                "column": 3,
+                "line": 2,
+                "offset": 12,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "layout",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 13,
+              "line": 2,
+              "offset": 22,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 2,
+              "offset": 12,
+            },
+          },
+          "type": "attribute",
+          "value": Object {
+            "location": Object {
+              "end": Object {
+                "column": 13,
+                "line": 2,
+                "offset": 22,
+              },
+              "start": Object {
+                "column": 10,
+                "line": 2,
+                "offset": 19,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "fdp",
+          },
+        },
+        Object {
+          "body": Array [],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 4,
+                "line": 3,
+                "offset": 26,
+              },
+              "start": Object {
+                "column": 3,
+                "line": 3,
+                "offset": 25,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "e",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 4,
+              "line": 3,
+              "offset": 26,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 3,
+              "offset": 25,
+            },
+          },
+          "type": "node",
+        },
+        Object {
+          "body": Array [
+            Object {
+              "body": Array [],
+              "location": Object {
+                "end": Object {
+                  "column": 12,
+                  "line": 5,
+                  "offset": 60,
+                },
+                "start": Object {
+                  "column": 5,
+                  "line": 5,
+                  "offset": 53,
+                },
+              },
+              "targets": Array [
+                Object {
+                  "id": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 6,
+                        "line": 5,
+                        "offset": 54,
+                      },
+                      "start": Object {
+                        "column": 5,
+                        "line": 5,
+                        "offset": 53,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "a",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 6,
+                      "line": 5,
+                      "offset": 54,
+                    },
+                    "start": Object {
+                      "column": 5,
+                      "line": 5,
+                      "offset": 53,
+                    },
+                  },
+                  "type": "node_ref",
+                },
+                Object {
+                  "id": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 11,
+                        "line": 5,
+                        "offset": 59,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 5,
+                        "offset": 58,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "b",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 11,
+                      "line": 5,
+                      "offset": 59,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 5,
+                      "offset": 58,
+                    },
+                  },
+                  "type": "node_ref",
+                },
+              ],
+              "type": "edge",
+            },
+            Object {
+              "body": Array [
+                Object {
+                  "body": Array [],
+                  "location": Object {
+                    "end": Object {
+                      "column": 14,
+                      "line": 7,
+                      "offset": 98,
+                    },
+                    "start": Object {
+                      "column": 7,
+                      "line": 7,
+                      "offset": 91,
+                    },
+                  },
+                  "targets": Array [
+                    Object {
+                      "id": Object {
+                        "location": Object {
+                          "end": Object {
+                            "column": 8,
+                            "line": 7,
+                            "offset": 92,
+                          },
+                          "start": Object {
+                            "column": 7,
+                            "line": 7,
+                            "offset": 91,
+                          },
+                        },
+                        "quoted": false,
+                        "type": "literal",
+                        "value": "C",
+                      },
+                      "location": Object {
+                        "end": Object {
+                          "column": 8,
+                          "line": 7,
+                          "offset": 92,
+                        },
+                        "start": Object {
+                          "column": 7,
+                          "line": 7,
+                          "offset": 91,
+                        },
+                      },
+                      "type": "node_ref",
+                    },
+                    Object {
+                      "id": Object {
+                        "location": Object {
+                          "end": Object {
+                            "column": 13,
+                            "line": 7,
+                            "offset": 97,
+                          },
+                          "start": Object {
+                            "column": 12,
+                            "line": 7,
+                            "offset": 96,
+                          },
+                        },
+                        "quoted": false,
+                        "type": "literal",
+                        "value": "D",
+                      },
+                      "location": Object {
+                        "end": Object {
+                          "column": 13,
+                          "line": 7,
+                          "offset": 97,
+                        },
+                        "start": Object {
+                          "column": 12,
+                          "line": 7,
+                          "offset": 96,
+                        },
+                      },
+                      "type": "node_ref",
+                    },
+                  ],
+                  "type": "edge",
+                },
+              ],
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 22,
+                    "line": 6,
+                    "offset": 82,
+                  },
+                  "start": Object {
+                    "column": 14,
+                    "line": 6,
+                    "offset": 74,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "clusterC",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 6,
+                  "line": 8,
+                  "offset": 104,
+                },
+                "start": Object {
+                  "column": 5,
+                  "line": 6,
+                  "offset": 65,
+                },
+              },
+              "type": "subgraph",
+            },
+          ],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 20,
+                "line": 4,
+                "offset": 46,
+              },
+              "start": Object {
+                "column": 12,
+                "line": 4,
+                "offset": 38,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "clusterA",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 4,
+              "line": 9,
+              "offset": 108,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 4,
+              "offset": 29,
+            },
+          },
+          "type": "subgraph",
+        },
+        Object {
+          "body": Array [
+            Object {
+              "body": Array [],
+              "location": Object {
+                "end": Object {
+                  "column": 3,
+                  "line": 12,
+                  "offset": 144,
+                },
+                "start": Object {
+                  "column": 5,
+                  "line": 11,
+                  "offset": 135,
+                },
+              },
+              "targets": Array [
+                Object {
+                  "id": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 6,
+                        "line": 11,
+                        "offset": 136,
+                      },
+                      "start": Object {
+                        "column": 5,
+                        "line": 11,
+                        "offset": 135,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "d",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 6,
+                      "line": 11,
+                      "offset": 136,
+                    },
+                    "start": Object {
+                      "column": 5,
+                      "line": 11,
+                      "offset": 135,
+                    },
+                  },
+                  "type": "node_ref",
+                },
+                Object {
+                  "id": Object {
+                    "location": Object {
+                      "end": Object {
+                        "column": 11,
+                        "line": 11,
+                        "offset": 141,
+                      },
+                      "start": Object {
+                        "column": 10,
+                        "line": 11,
+                        "offset": 140,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "literal",
+                    "value": "f",
+                  },
+                  "location": Object {
+                    "end": Object {
+                      "column": 11,
+                      "line": 11,
+                      "offset": 141,
+                    },
+                    "start": Object {
+                      "column": 10,
+                      "line": 11,
+                      "offset": 140,
+                    },
+                  },
+                  "type": "node_ref",
+                },
+              ],
+              "type": "edge",
+            },
+          ],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 20,
+                "line": 10,
+                "offset": 128,
+              },
+              "start": Object {
+                "column": 12,
+                "line": 10,
+                "offset": 120,
+              },
+            },
+            "quoted": false,
+            "type": "literal",
+            "value": "clusterB",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 4,
+              "line": 12,
+              "offset": 145,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 10,
+              "offset": 111,
+            },
+          },
+          "type": "subgraph",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 14,
+              "offset": 157,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 13,
+              "offset": 148,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 4,
+                    "line": 13,
+                    "offset": 149,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 13,
+                    "offset": 148,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "d",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 4,
+                  "line": 13,
+                  "offset": 149,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 13,
+                  "offset": 148,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 9,
+                    "line": 13,
+                    "offset": 154,
+                  },
+                  "start": Object {
+                    "column": 8,
+                    "line": 13,
+                    "offset": 153,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "D",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 9,
+                  "line": 13,
+                  "offset": 154,
+                },
+                "start": Object {
+                  "column": 8,
+                  "line": 13,
+                  "offset": 153,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 15,
+              "offset": 173,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 14,
+              "offset": 157,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 4,
+                    "line": 14,
+                    "offset": 158,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 14,
+                    "offset": 157,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "e",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 4,
+                  "line": 14,
+                  "offset": 158,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 14,
+                  "offset": 157,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 16,
+                    "line": 14,
+                    "offset": 170,
+                  },
+                  "start": Object {
+                    "column": 8,
+                    "line": 14,
+                    "offset": 162,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "clusterB",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 16,
+                  "line": 14,
+                  "offset": 170,
+                },
+                "start": Object {
+                  "column": 8,
+                  "line": 14,
+                  "offset": 162,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 1,
+              "line": 16,
+              "offset": 194,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 15,
+              "offset": 173,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 11,
+                    "line": 15,
+                    "offset": 181,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 15,
+                    "offset": 173,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "clusterC",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 11,
+                  "line": 15,
+                  "offset": 181,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 15,
+                  "offset": 173,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 23,
+                    "line": 15,
+                    "offset": 193,
+                  },
+                  "start": Object {
+                    "column": 15,
+                    "line": 15,
+                    "offset": 185,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "clusterB",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 23,
+                  "line": 15,
+                  "offset": 193,
+                },
+                "start": Object {
+                  "column": 15,
+                  "line": 15,
+                  "offset": 185,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+      ],
+      "directed": false,
+      "id": Object {
+        "location": Object {
+          "end": Object {
+            "column": 8,
+            "line": 1,
+            "offset": 7,
+          },
+          "start": Object {
+            "column": 7,
+            "line": 1,
+            "offset": 6,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "G",
+      },
+      "location": Object {
+        "end": Object {
+          "column": 2,
+          "line": 16,
+          "offset": 195,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "strict": false,
+      "type": "graph",
+    },
+  ],
+  "location": Object {
+    "end": Object {
+      "column": 1,
+      "line": 17,
+      "offset": 196,
+    },
+    "start": Object {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "dot",
+}
+`;

@@ -18,6 +18,9 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
+      "@ts-graphviz/node": ["./packages/node/src/index.ts"],
+      "@ts-graphviz/react": ["./packages/react/src/index.ts"],
+      "@ts-graphviz/parser": ["./packages/parser/src/index.ts"],
       "ts-graphviz": ["./packages/ts-graphviz/src/index.ts"]
     }
   }

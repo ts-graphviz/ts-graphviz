@@ -1,9 +1,9 @@
+import { digraph } from 'ts-graphviz';
+import { exportToBuffer } from '../exportToBuffer';
+
 jest.mock('../utils');
 jest.mock('../executeDot');
 jest.mock('tmp-promise');
-
-import { digraph } from 'ts-graphviz';
-import { exportToBuffer } from '../exportToBuffer';
 
 describe('exportToBuffer', () => {
   afterEach(() => {

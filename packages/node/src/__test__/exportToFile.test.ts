@@ -1,10 +1,10 @@
-jest.mock('../utils');
-jest.mock('../executeDot');
-jest.mock('tmp-promise');
-
 import { digraph } from 'ts-graphviz';
 import { executeDot } from '../executeDot';
 import { exportToFile } from '../exportToFile';
+
+jest.mock('../utils');
+jest.mock('../executeDot');
+jest.mock('tmp-promise');
 
 describe('exportToFile', () => {
   afterEach(() => {

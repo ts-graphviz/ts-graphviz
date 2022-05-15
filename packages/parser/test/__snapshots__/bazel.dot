@@ -1,0 +1,1618 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bazel.dot 1`] = `
+Object {
+  "body": Array [
+    Object {
+      "body": Array [
+        Object {
+          "body": Array [
+            Object {
+              "key": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 14,
+                    "line": 2,
+                    "offset": 31,
+                  },
+                  "start": Object {
+                    "column": 9,
+                    "line": 2,
+                    "offset": 26,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "shape",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 18,
+                  "line": 2,
+                  "offset": 35,
+                },
+                "start": Object {
+                  "column": 9,
+                  "line": 2,
+                  "offset": 26,
+                },
+              },
+              "type": "attribute",
+              "value": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 18,
+                    "line": 2,
+                    "offset": 35,
+                  },
+                  "start": Object {
+                    "column": 15,
+                    "line": 2,
+                    "offset": 32,
+                  },
+                },
+                "quoted": false,
+                "type": "literal",
+                "value": "box",
+              },
+            },
+          ],
+          "kind": "node",
+          "location": Object {
+            "end": Object {
+              "column": 20,
+              "line": 2,
+              "offset": 37,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 2,
+              "offset": 20,
+            },
+          },
+          "type": "attributes",
+        },
+        Object {
+          "body": Array [],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 25,
+                "line": 3,
+                "offset": 62,
+              },
+              "start": Object {
+                "column": 3,
+                "line": 3,
+                "offset": 40,
+              },
+            },
+            "quoted": true,
+            "type": "literal",
+            "value": "//absl/random:random",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 25,
+              "line": 3,
+              "offset": 62,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 3,
+              "offset": 40,
+            },
+          },
+          "type": "node",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 5,
+              "offset": 123,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 4,
+              "offset": 65,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 25,
+                    "line": 4,
+                    "offset": 87,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 4,
+                    "offset": 65,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random:random",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 25,
+                  "line": 4,
+                  "offset": 87,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 4,
+                  "offset": 65,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 58,
+                    "line": 4,
+                    "offset": 120,
+                  },
+                  "start": Object {
+                    "column": 29,
+                    "line": 4,
+                    "offset": 91,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random:distributions",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 58,
+                  "line": 4,
+                  "offset": 120,
+                },
+                "start": Object {
+                  "column": 29,
+                  "line": 4,
+                  "offset": 91,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 6,
+              "offset": 182,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 5,
+              "offset": 123,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 25,
+                    "line": 5,
+                    "offset": 145,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 5,
+                    "offset": 123,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random:random",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 25,
+                  "line": 5,
+                  "offset": 145,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 5,
+                  "offset": 123,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 59,
+                    "line": 5,
+                    "offset": 179,
+                  },
+                  "start": Object {
+                    "column": 29,
+                    "line": 5,
+                    "offset": 149,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random:seed_sequences",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 59,
+                  "line": 5,
+                  "offset": 179,
+                },
+                "start": Object {
+                  "column": 29,
+                  "line": 5,
+                  "offset": 149,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 7,
+              "offset": 245,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 6,
+              "offset": 182,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 25,
+                    "line": 6,
+                    "offset": 204,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 6,
+                    "offset": 182,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random:random",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 25,
+                  "line": 6,
+                  "offset": 204,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 6,
+                  "offset": 182,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 63,
+                    "line": 6,
+                    "offset": 242,
+                  },
+                  "start": Object {
+                    "column": 29,
+                    "line": 6,
+                    "offset": 208,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:pool_urbg",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 63,
+                  "line": 6,
+                  "offset": 242,
+                },
+                "start": Object {
+                  "column": 29,
+                  "line": 6,
+                  "offset": 208,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 8,
+              "offset": 313,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 7,
+              "offset": 245,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 25,
+                    "line": 7,
+                    "offset": 267,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 7,
+                    "offset": 245,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random:random",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 25,
+                  "line": 7,
+                  "offset": 267,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 7,
+                  "offset": 245,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 68,
+                    "line": 7,
+                    "offset": 310,
+                  },
+                  "start": Object {
+                    "column": 29,
+                    "line": 7,
+                    "offset": 271,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:nonsecure_base",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 68,
+                  "line": 7,
+                  "offset": 310,
+                },
+                "start": Object {
+                  "column": 29,
+                  "line": 7,
+                  "offset": 271,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 32,
+                "line": 8,
+                "offset": 342,
+              },
+              "start": Object {
+                "column": 3,
+                "line": 8,
+                "offset": 313,
+              },
+            },
+            "quoted": true,
+            "type": "literal",
+            "value": "//absl/random:distributions",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 32,
+              "line": 8,
+              "offset": 342,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 8,
+              "offset": 313,
+            },
+          },
+          "type": "node",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 10,
+              "offset": 405,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 9,
+              "offset": 345,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 32,
+                    "line": 9,
+                    "offset": 374,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 9,
+                    "offset": 345,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random:distributions",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 32,
+                  "line": 9,
+                  "offset": 374,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 9,
+                  "offset": 345,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 60,
+                    "line": 9,
+                    "offset": 402,
+                  },
+                  "start": Object {
+                    "column": 36,
+                    "line": 9,
+                    "offset": 378,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/strings:strings",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 60,
+                  "line": 9,
+                  "offset": 402,
+                },
+                "start": Object {
+                  "column": 36,
+                  "line": 9,
+                  "offset": 378,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 33,
+                "line": 10,
+                "offset": 435,
+              },
+              "start": Object {
+                "column": 3,
+                "line": 10,
+                "offset": 405,
+              },
+            },
+            "quoted": true,
+            "type": "literal",
+            "value": "//absl/random:seed_sequences",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 33,
+              "line": 10,
+              "offset": 435,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 10,
+              "offset": 405,
+            },
+          },
+          "type": "node",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 12,
+              "offset": 513,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 11,
+              "offset": 438,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 33,
+                    "line": 11,
+                    "offset": 468,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 11,
+                    "offset": 438,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random:seed_sequences",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 33,
+                  "line": 11,
+                  "offset": 468,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 11,
+                  "offset": 438,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 75,
+                    "line": 11,
+                    "offset": 510,
+                  },
+                  "start": Object {
+                    "column": 37,
+                    "line": 11,
+                    "offset": 472,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:seed_material",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 75,
+                  "line": 11,
+                  "offset": 510,
+                },
+                "start": Object {
+                  "column": 37,
+                  "line": 11,
+                  "offset": 472,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 13,
+              "offset": 590,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 12,
+              "offset": 513,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 33,
+                    "line": 12,
+                    "offset": 543,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 12,
+                    "offset": 513,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random:seed_sequences",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 33,
+                  "line": 12,
+                  "offset": 543,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 12,
+                  "offset": 513,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 77,
+                    "line": 12,
+                    "offset": 587,
+                  },
+                  "start": Object {
+                    "column": 37,
+                    "line": 12,
+                    "offset": 547,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:salted_seed_seq",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 77,
+                  "line": 12,
+                  "offset": 587,
+                },
+                "start": Object {
+                  "column": 37,
+                  "line": 12,
+                  "offset": 547,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 14,
+              "offset": 661,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 13,
+              "offset": 590,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 33,
+                    "line": 13,
+                    "offset": 620,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 13,
+                    "offset": 590,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random:seed_sequences",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 33,
+                  "line": 13,
+                  "offset": 620,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 13,
+                  "offset": 590,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 71,
+                    "line": 13,
+                    "offset": 658,
+                  },
+                  "start": Object {
+                    "column": 37,
+                    "line": 13,
+                    "offset": 624,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:pool_urbg",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 71,
+                  "line": 13,
+                  "offset": 658,
+                },
+                "start": Object {
+                  "column": 37,
+                  "line": 13,
+                  "offset": 624,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 15,
+              "offset": 737,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 14,
+              "offset": 661,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 33,
+                    "line": 14,
+                    "offset": 691,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 14,
+                    "offset": 661,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random:seed_sequences",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 33,
+                  "line": 14,
+                  "offset": 691,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 14,
+                  "offset": 661,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 76,
+                    "line": 14,
+                    "offset": 734,
+                  },
+                  "start": Object {
+                    "column": 37,
+                    "line": 14,
+                    "offset": 695,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:nonsecure_base",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 76,
+                  "line": 14,
+                  "offset": 734,
+                },
+                "start": Object {
+                  "column": 37,
+                  "line": 14,
+                  "offset": 695,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 42,
+                "line": 15,
+                "offset": 776,
+              },
+              "start": Object {
+                "column": 3,
+                "line": 15,
+                "offset": 737,
+              },
+            },
+            "quoted": true,
+            "type": "literal",
+            "value": "//absl/random/internal:nonsecure_base",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 42,
+              "line": 15,
+              "offset": 776,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 15,
+              "offset": 737,
+            },
+          },
+          "type": "node",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 17,
+              "offset": 859,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 16,
+              "offset": 779,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 42,
+                    "line": 16,
+                    "offset": 818,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 16,
+                    "offset": 779,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:nonsecure_base",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 42,
+                  "line": 16,
+                  "offset": 818,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 16,
+                  "offset": 779,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 80,
+                    "line": 16,
+                    "offset": 856,
+                  },
+                  "start": Object {
+                    "column": 46,
+                    "line": 16,
+                    "offset": 822,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:pool_urbg",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 80,
+                  "line": 16,
+                  "offset": 856,
+                },
+                "start": Object {
+                  "column": 46,
+                  "line": 16,
+                  "offset": 822,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 18,
+              "offset": 945,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 17,
+              "offset": 859,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 42,
+                    "line": 17,
+                    "offset": 898,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 17,
+                    "offset": 859,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:nonsecure_base",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 42,
+                  "line": 17,
+                  "offset": 898,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 17,
+                  "offset": 859,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 86,
+                    "line": 17,
+                    "offset": 942,
+                  },
+                  "start": Object {
+                    "column": 46,
+                    "line": 17,
+                    "offset": 902,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:salted_seed_seq",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 86,
+                  "line": 17,
+                  "offset": 942,
+                },
+                "start": Object {
+                  "column": 46,
+                  "line": 17,
+                  "offset": 902,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 19,
+              "offset": 1029,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 18,
+              "offset": 945,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 42,
+                    "line": 18,
+                    "offset": 984,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 18,
+                    "offset": 945,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:nonsecure_base",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 42,
+                  "line": 18,
+                  "offset": 984,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 18,
+                  "offset": 945,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 84,
+                    "line": 18,
+                    "offset": 1026,
+                  },
+                  "start": Object {
+                    "column": 46,
+                    "line": 18,
+                    "offset": 988,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:seed_material",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 84,
+                  "line": 18,
+                  "offset": 1026,
+                },
+                "start": Object {
+                  "column": 46,
+                  "line": 18,
+                  "offset": 988,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 37,
+                "line": 19,
+                "offset": 1063,
+              },
+              "start": Object {
+                "column": 3,
+                "line": 19,
+                "offset": 1029,
+              },
+            },
+            "quoted": true,
+            "type": "literal",
+            "value": "//absl/random/internal:pool_urbg",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 37,
+              "line": 19,
+              "offset": 1063,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 19,
+              "offset": 1029,
+            },
+          },
+          "type": "node",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 21,
+              "offset": 1145,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 20,
+              "offset": 1066,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 37,
+                    "line": 20,
+                    "offset": 1100,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 20,
+                    "offset": 1066,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:pool_urbg",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 37,
+                  "line": 20,
+                  "offset": 1100,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 20,
+                  "offset": 1066,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 79,
+                    "line": 20,
+                    "offset": 1142,
+                  },
+                  "start": Object {
+                    "column": 41,
+                    "line": 20,
+                    "offset": 1104,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:seed_material",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 79,
+                  "line": 20,
+                  "offset": 1142,
+                },
+                "start": Object {
+                  "column": 41,
+                  "line": 20,
+                  "offset": 1104,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 43,
+                "line": 21,
+                "offset": 1185,
+              },
+              "start": Object {
+                "column": 3,
+                "line": 21,
+                "offset": 1145,
+              },
+            },
+            "quoted": true,
+            "type": "literal",
+            "value": "//absl/random/internal:salted_seed_seq",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 43,
+              "line": 21,
+              "offset": 1185,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 21,
+              "offset": 1145,
+            },
+          },
+          "type": "node",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 23,
+              "offset": 1273,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 22,
+              "offset": 1188,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 43,
+                    "line": 22,
+                    "offset": 1228,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 22,
+                    "offset": 1188,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:salted_seed_seq",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 43,
+                  "line": 22,
+                  "offset": 1228,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 22,
+                  "offset": 1188,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 85,
+                    "line": 22,
+                    "offset": 1270,
+                  },
+                  "start": Object {
+                    "column": 47,
+                    "line": 22,
+                    "offset": 1232,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:seed_material",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 85,
+                  "line": 22,
+                  "offset": 1270,
+                },
+                "start": Object {
+                  "column": 47,
+                  "line": 22,
+                  "offset": 1232,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 41,
+                "line": 23,
+                "offset": 1311,
+              },
+              "start": Object {
+                "column": 3,
+                "line": 23,
+                "offset": 1273,
+              },
+            },
+            "quoted": true,
+            "type": "literal",
+            "value": "//absl/random/internal:seed_material",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 41,
+              "line": 23,
+              "offset": 1311,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 23,
+              "offset": 1273,
+            },
+          },
+          "type": "node",
+        },
+        Object {
+          "body": Array [],
+          "location": Object {
+            "end": Object {
+              "column": 3,
+              "line": 25,
+              "offset": 1383,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 24,
+              "offset": 1314,
+            },
+          },
+          "targets": Array [
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 41,
+                    "line": 24,
+                    "offset": 1352,
+                  },
+                  "start": Object {
+                    "column": 3,
+                    "line": 24,
+                    "offset": 1314,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/random/internal:seed_material",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 41,
+                  "line": 24,
+                  "offset": 1352,
+                },
+                "start": Object {
+                  "column": 3,
+                  "line": 24,
+                  "offset": 1314,
+                },
+              },
+              "type": "node_ref",
+            },
+            Object {
+              "id": Object {
+                "location": Object {
+                  "end": Object {
+                    "column": 69,
+                    "line": 24,
+                    "offset": 1380,
+                  },
+                  "start": Object {
+                    "column": 45,
+                    "line": 24,
+                    "offset": 1356,
+                  },
+                },
+                "quoted": true,
+                "type": "literal",
+                "value": "//absl/strings:strings",
+              },
+              "location": Object {
+                "end": Object {
+                  "column": 69,
+                  "line": 24,
+                  "offset": 1380,
+                },
+                "start": Object {
+                  "column": 45,
+                  "line": 24,
+                  "offset": 1356,
+                },
+              },
+              "type": "node_ref",
+            },
+          ],
+          "type": "edge",
+        },
+        Object {
+          "body": Array [],
+          "id": Object {
+            "location": Object {
+              "end": Object {
+                "column": 27,
+                "line": 25,
+                "offset": 1407,
+              },
+              "start": Object {
+                "column": 3,
+                "line": 25,
+                "offset": 1383,
+              },
+            },
+            "quoted": true,
+            "type": "literal",
+            "value": "//absl/strings:strings",
+          },
+          "location": Object {
+            "end": Object {
+              "column": 27,
+              "line": 25,
+              "offset": 1407,
+            },
+            "start": Object {
+              "column": 3,
+              "line": 25,
+              "offset": 1383,
+            },
+          },
+          "type": "node",
+        },
+      ],
+      "directed": true,
+      "id": Object {
+        "location": Object {
+          "end": Object {
+            "column": 16,
+            "line": 1,
+            "offset": 15,
+          },
+          "start": Object {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+        },
+        "quoted": false,
+        "type": "literal",
+        "value": "mygraph",
+      },
+      "location": Object {
+        "end": Object {
+          "column": 2,
+          "line": 26,
+          "offset": 1409,
+        },
+        "start": Object {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "strict": false,
+      "type": "graph",
+    },
+  ],
+  "location": Object {
+    "end": Object {
+      "column": 1,
+      "line": 27,
+      "offset": 1410,
+    },
+    "start": Object {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "dot",
+}
+`;

@@ -1,0 +1,43 @@
+{
+  "name": "@ts-graphviz/parser",
+  "version": "0.6.0",
+  "description": "Graphviz dot language parser for ts-graphviz.",
+  "main": "lib/index.js",
+  "exports": {
+    "import": "./lib/index.mjs",
+    "default": "./lib/index.js"
+  },
+  "types": "lib/index.d.ts",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts-graphviz/parser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/parser/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/kamiazya"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "graphviz",
+    "dot",
+    "parser"
+  ],
+  "scripts": {
+    "build:peggy": "peggy --plugin ts-pegjs --extra-options-file peggy.json -o src/dot.peggy.ts grammar/dot.peggy && eslint --ext ts './src/dot.peggy.ts' --fix && prettier --write './src/dot.peggy.ts'",
+    "prebuild": "yarn build:peggy",
+    "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
+    "postbuild": "prettier --write './lib/index.d.ts'",
+    "pretest": "yarn build:peggy",
+    "create-state-machine-diagram": "ts-node scripts/create-state-machine-diagram"
+  },
+  "dependencies": {
+    "ts-graphviz": "^0.16.0"
+  }
+}

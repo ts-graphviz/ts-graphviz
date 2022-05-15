@@ -1,0 +1,15 @@
+{
+  "allowedStartRules": [
+    "dot",
+    "graph",
+    "subgraph",
+    "node",
+    "edge",
+    "attributes",
+    "attribute",
+    "cluster_statements"
+  ],
+  "tspegjs": {
+    "customHeader": "/* eslint-disable prefer-template,no-else-return,lines-between-class-members,object-shorthand,@typescript-eslint/no-unused-vars,no-lonely-if,@typescript-eslint/no-empty-interface,no-use-before-define,no-plusplus,one-var,@typescript-eslint/no-explicit-any,no-underscore-dangle,prefer-const,no-proto,no-restricted-syntax,func-names,camelcase,no-param-reassign,no-case-declarations,default-case,consistent-return,no-control-regex */"
+  }
+}
