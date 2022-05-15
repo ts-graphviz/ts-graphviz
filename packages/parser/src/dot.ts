@@ -23,6 +23,5 @@ import { parse } from './parse';
  * ```
  */
 export function dot(template: TemplateStringsArray, ...substitutions: unknown[]): RootCluster {
-  const dot = String.raw(template, ...substitutions);
-  return parse(dot);
+  return parse(String.raw(template, ...substitutions));
 }

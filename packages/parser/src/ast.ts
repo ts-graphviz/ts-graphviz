@@ -1,4 +1,5 @@
-import { Compass } from 'ts-graphviz';
+/* eslint-disable no-use-before-define */
+import { type } from 'ts-graphviz';
 import { parse as _parse, IFileRange } from './dot.peggy';
 
 /**
@@ -119,7 +120,7 @@ export namespace AST {
     type: typeof Types.NodeRef;
     id: Literal;
     port?: Literal;
-    compass?: Literal<Compass>;
+    compass?: Literal<type.Compass>;
   }
 
   /** NodeRefGroup AST object. */
@@ -350,7 +351,9 @@ export namespace AST {
 
   export class Compiler {
     protected directed: boolean;
+
     protected indentSize: number;
+
     constructor({ directed = true, indentSize = 2 }: StringifyOption = {}) {
       this.directed = directed;
       this.indentSize = indentSize;
@@ -359,6 +362,8 @@ export namespace AST {
     protected indent(line: string): string {
       return ' '.repeat(this.indentSize) + line;
     }
+
+    // eslint-disable-next-line class-methods-use-this
     protected pad(pad: string): (l: string) => string {
       return (l: string) => pad + l;
     }
@@ -376,16 +381,19 @@ export namespace AST {
     protected printComment(ast: AST.Comment): string {
       switch (ast.kind) {
         case AST.Comment.Kind.Block:
-          return '/**\n' + ast.value.split('\n').map(this.pad(' * ')).join('\n') + '\n */';
-        case AST.Comment.Kind.Slash:
-          return ast.value.split('\n').map(this.pad('// ')).join('\n');
+          return `/**\n${ast.value.split('\n').map(this.pad(' * ')).join('\n')}\n */`;
         case AST.Comment.Kind.Macro:
           return ast.value.split('\n').map(this.pad('# ')).join('\n');
+        case AST.Comment.Kind.Slash:
+        default:
+          return ast.value.split('\n').map(this.pad('// ')).join('\n');
       }
     }
+
     protected printDot(ast: AST.Dot): string {
       return ast.body.map(this.stringify.bind(this)).join('\n');
     }
+
     protected printEdge(ast: AST.Edge): string {
       const targets = ast.targets.map(this.stringify.bind(this)).join(this.directed ? ' -> ' : ' -- ');
       return ast.body.length === 0
@@ -394,7 +402,7 @@ export namespace AST {
     }
 
     protected printNode(ast: AST.Node): string {
-      return ast.body.length == 0
+      return ast.body.length === 0
         ? `${this.stringify(ast.id)};`
         : `${this.stringify(ast.id)} [\n${ast.body
             .map(this.stringify.bind(this))
@@ -411,6 +419,7 @@ export namespace AST {
         .filter((v) => v !== null)
         .join(':');
     }
+
     protected printNodeRefGroup(ast: AST.NodeRefGroup): string {
       return `{${ast.body.map(this.stringify.bind(this)).join(' ')}}`;
     }
@@ -440,18 +449,22 @@ export namespace AST {
         .join(' ');
     }
 
+    // eslint-disable-next-line class-methods-use-this
     protected printLiteral(ast: AST.Literal): string {
       switch (ast.quoted) {
+        case 'html':
+          return `<${ast.value}>`;
         case true:
           return `"${ast.value}"`;
         case false:
+        default:
           return ast.value;
-        case 'html':
-          return `<${ast.value}>`;
       }
     }
 
+    // eslint-disable-next-line consistent-return
     public stringify(ast: AST.ASTNode): string {
+      // eslint-disable-next-line default-case
       switch (ast.type) {
         case AST.Types.Attribute:
           return this.printAttribute(ast);

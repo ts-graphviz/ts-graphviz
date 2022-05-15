@@ -1,3 +1,8 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-fallthrough */
+/* eslint-disable default-case */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-case-declarations */
 import {
   ICluster,
   Digraph,
@@ -6,9 +11,10 @@ import {
   Subgraph,
   Node,
   Edge,
-  IHasComment,
+  HasComment,
   EdgeTarget,
   EdgeTargetTuple,
+  AttributeKey,
 } from 'ts-graphviz';
 import { AST } from './ast';
 
@@ -23,31 +29,28 @@ class CommentHolder {
     this.comment = null;
   }
 
-  public apply(model: IHasComment, location: AST.FileRange): void {
+  public apply(model: HasComment, location: AST.FileRange): void {
     if (this.comment?.kind === AST.Comment.Kind.Block) {
       if (this.comment?.location.end.line === location.start.line - 1) {
         model.comment = this.comment.value;
       }
-    } else {
-      if (this.comment?.location.end.line === location.start.line) {
-        model.comment = this.comment.value;
-      }
+    } else if (this.comment?.location.end.line === location.start.line) {
+      model.comment = this.comment.value;
     }
     this.reset();
   }
 }
 
 function convertToEdgeTargetTuple(edge: AST.Edge): EdgeTargetTuple {
-  return edge.targets.map(
-    (t): EdgeTarget => {
-      switch (t.type) {
-        case AST.Types.NodeRef:
-          return { id: t.id.value, port: t.port?.value, compass: t.compass?.value };
-        case AST.Types.NodeRefGroup:
-          return t.body.map((t) => ({ id: t.id.value, port: t.port?.value, compass: t.compass?.value }));
-      }
-    },
-  ) as EdgeTargetTuple;
+  // eslint-disable-next-line array-callback-return, consistent-return
+  return edge.targets.map((t): EdgeTarget => {
+    switch (t.type) {
+      case AST.Types.NodeRef:
+        return { id: t.id.value, port: t.port?.value, compass: t.compass?.value };
+      case AST.Types.NodeRefGroup:
+        return t.body.map((r) => ({ id: r.id.value, port: r.port?.value, compass: r.compass?.value }));
+    }
+  }) as EdgeTargetTuple;
 }
 
 function applyStatements(cluster: ICluster, statements: AST.ClusterStatement[]): void {
@@ -60,7 +63,7 @@ function applyStatements(cluster: ICluster, statements: AST.ClusterStatement[]):
         commentHolder.apply(subgraph, stmt.location);
         break;
       case AST.Types.Attribute:
-        cluster.set(stmt.key.value, stmt.value.value);
+        cluster.set(stmt.key.value as unknown as AttributeKey, stmt.value.value);
         commentHolder.reset();
         break;
       case AST.Types.Node:

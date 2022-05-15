@@ -49,8 +49,5 @@
   "dependencies": {
     "prop-types": "^15.7.2",
     "react-reconciler": "^0.25.1"
-  },
-  "devDependencies": {
-    "@rollup/plugin-typescript": "^8.3.2"
   }
 }

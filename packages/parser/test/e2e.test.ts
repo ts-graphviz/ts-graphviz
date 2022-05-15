@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable jest/valid-title */
 import fs from 'fs';
 import path from 'path';
@@ -18,6 +19,7 @@ for (const file of files) {
       expect(AST.parse(dot)).toMatchSpecificSnapshot(snapshot);
     } catch (e) {
       if (e instanceof SyntaxError) {
+        // eslint-disable-next-line no-console
         console.log(e.location);
       }
       throw e;

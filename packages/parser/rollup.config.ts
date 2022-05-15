@@ -1,21 +1,14 @@
+import { RollupOptions } from 'rollup';
 import typescript from 'rollup-plugin-typescript2';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 import { terser } from 'rollup-plugin-terser';
 
-/** @type {import('rollup').RollupOptions[]} */
-const options = [
+const options: RollupOptions[] = [
   {
     input: './src/index.ts',
     plugins: [
-      typescript({
-        tsconfigOverride: {
-          compilerOptions: {
-            module: 'ESNext',
-            declaration: true,
-          },
-        },
-      }),
+      typescript(),
       terser({
         format: {
           comments: false,

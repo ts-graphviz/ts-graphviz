@@ -1,8 +1,8 @@
-jest.mock('../utils');
-jest.mock('tmp-promise');
-
 import { executeDot } from '../executeDot';
 import { execFile, writeFile } from '../utils';
+
+jest.mock('../utils');
+jest.mock('tmp-promise');
 
 describe('executeDot', () => {
   const dot = 'digraph g { a -> b; }';
