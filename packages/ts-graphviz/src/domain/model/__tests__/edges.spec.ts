@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DotObject, GraphvizObject } from '../abstract';
 import { Edge } from '../edges';
 import { Node } from '../nodes';
@@ -26,8 +25,8 @@ describe('class Edge', () => {
 
   it('throws an error when the EdgeTarget element is missing', () => {
     const n = new Node('id');
-    expect(() => new Edge([] as any as EdgeTargetTuple)).toThrow();
-    expect(() => new Edge([n] as any as EdgeTargetTuple)).toThrow();
+    expect(() => new Edge([] as unknown as EdgeTargetTuple)).toThrow();
+    expect(() => new Edge([n] as unknown as EdgeTargetTuple)).toThrow();
   });
 
   it('should be instance of Edge/DotObject/GraphvizObject', () => {

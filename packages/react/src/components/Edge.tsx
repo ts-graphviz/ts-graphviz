@@ -11,8 +11,6 @@ export const Edge: FC<Props> = ({ children, label, ...props }) => {
   const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined) Object.assign(props, { label: renderedLabel });
   useEdge(props);
-  // TODO
-  // eslint-disable-next-line react/jsx-no-useless-fragment
   return <>{children}</>;
 };
 

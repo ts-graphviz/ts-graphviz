@@ -1,5 +1,4 @@
-/* eslint-disable no-use-before-define */
-import { type } from 'ts-graphviz';
+import { AttributeKey, type } from 'ts-graphviz';
 import { parse as _parse, IFileRange } from './dot.peggy';
 
 /**
@@ -73,7 +72,7 @@ export namespace AST {
   }
 
   export interface KeyValue {
-    key: Literal;
+    key: Literal<AttributeKey>;
     value: Literal;
   }
 

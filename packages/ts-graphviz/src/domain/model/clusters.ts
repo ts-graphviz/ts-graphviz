@@ -1,6 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-use-before-define */
-/* eslint-disable @typescript-eslint/no-use-before-define,max-classes-per-file */
 import {
   AttributeKey,
   SubgraphAttributeKey,

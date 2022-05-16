@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { Component, ReactElement } from 'react';
 import { render } from '../../../renderer/render';
 
 export function renderExpectToThrow(element: ReactElement, expectedError: string) {
   const errors: Error[] = [];
-  class ErrorBoundary extends Component<{}, { hasError: boolean }> {
-    constructor(props: {}) {
+  class ErrorBoundary extends Component<Record<string, never>, { hasError: boolean }> {
+    constructor(props: Record<string, never>) {
       super(props);
       this.state = { hasError: false };
     }

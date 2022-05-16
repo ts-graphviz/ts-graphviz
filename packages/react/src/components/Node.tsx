@@ -15,8 +15,6 @@ export const Node: FC<Props> = ({ children, label, xlabel, ...props }) => {
   if (renderedLabel !== undefined) Object.assign(props, { label: renderedLabel });
   if (renderedXlabel !== undefined) Object.assign(props, { xlabel: renderedXlabel });
   useNode(props);
-  // TODO
-  // eslint-disable-next-line react/jsx-no-useless-fragment
   return <>{children}</>;
 };
 

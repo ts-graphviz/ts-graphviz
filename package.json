@@ -10,8 +10,8 @@
     "prebuild": "yarn workspace @ts-graphviz/parser build:peggy",
     "build": "yarn workspace ts-graphviz build && yarn workspace @ts-graphviz/react build && yarn workspace @ts-graphviz/node build",
     "test": "jest",
-    "format": "eslint -c .eslintrc.json --ext ts,tsx . --fix && prettier --plugin=./config/prettier/peggy.json --write './**/*.(ts|tsx|peggy)'",
-    "lint": "eslint -c .eslintrc.json --ext ts,tsx .",
+    "format": "eslint --ext ts,tsx . --fix && prettier --plugin=./config/prettier/peggy.json --write './**/*.(ts|tsx|peggy)'",
+    "lint": "eslint --ext ts,tsx .",
     "doc": "typedoc"
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "eslint": "^8.15.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^25.7.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",

@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable func-names,react/prop-types */
 /* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable react/jsx-props-no-spreading */
-/* react/jsx-no-constructed-context-values */
 import React, { FC, ComponentProps } from 'react';
 
 import { Digraph } from '../../../components/Digraph';

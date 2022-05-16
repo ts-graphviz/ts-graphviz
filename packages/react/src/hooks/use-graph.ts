@@ -27,10 +27,11 @@ export function useGraph({ id, comment, edge, node, graph, ...attributes }: Grap
   }, [context, id, comment, edge, node, graph, attributes]);
   useHasComment(memoGraph, comment);
   useClusterAttributes(memoGraph, attributes, { edge, node, graph });
-  useEffect(() => {
-    return (): void => {
+  useEffect(
+    () => (): void => {
       context.root = undefined;
-    };
-  }, [context]);
+    },
+    [context],
+  );
   return memoGraph;
 }

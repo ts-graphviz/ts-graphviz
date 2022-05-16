@@ -23,10 +23,11 @@ export function useEdge({ targets, comment, ...attributes }: EdgeProps): IEdge {
   }, [cluster, targets, comment, attributes]);
   useHasComment(edge, comment);
   useHasAttributes(edge, attributes);
-  useEffect(() => {
-    return (): void => {
+  useEffect(
+    () => (): void => {
       cluster.removeEdge(edge);
-    };
-  }, [cluster, edge]);
+    },
+    [cluster, edge],
+  );
   return edge;
 }
