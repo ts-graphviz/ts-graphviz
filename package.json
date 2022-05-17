@@ -7,7 +7,6 @@
     "packages/*"
   ],
   "scripts": {
-    "prebuild": "yarn workspace @ts-graphviz/parser build:peggy",
     "build": "yarn workspace ts-graphviz build && yarn workspace @ts-graphviz/parser build && yarn workspace @ts-graphviz/react build && yarn workspace @ts-graphviz/node build",
     "test": "jest",
     "format": "eslint -c .eslintrc.json --ext ts,tsx . --fix && prettier --plugin=./config/prettier/peggy.json --write './**/*.(ts|tsx|peggy)'",
