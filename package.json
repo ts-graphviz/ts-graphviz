@@ -7,18 +7,11 @@
     "packages/*"
   ],
   "scripts": {
-    "prebuild": "yarn workspace @ts-graphviz/parser build:peggy",
-    "build": "yarn workspace ts-graphviz build && yarn workspace @ts-graphviz/react build && yarn workspace @ts-graphviz/node build",
+    "build": "yarn workspace ts-graphviz build && yarn workspace @ts-graphviz/parser build && yarn workspace @ts-graphviz/react build && yarn workspace @ts-graphviz/node build",
     "test": "jest",
     "format": "eslint -c .eslintrc.json --ext ts,tsx . --fix && prettier --plugin=./config/prettier/peggy.json --write './**/*.(ts|tsx|peggy)'",
     "lint": "eslint -c .eslintrc.json --ext ts,tsx .",
     "doc": "typedoc"
-  },
-  "dependencies": {
-    "@ts-graphviz/node": "file:packages/node",
-    "@ts-graphviz/parser": "file:packages/parser",
-    "@ts-graphviz/react": "file:packages/react",
-    "ts-graphviz": "file:packages/ts-graphviz"
   },
   "devDependencies": {
     "@hpcc-js/wasm": "^1.14.1",

@@ -18,6 +18,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: setup graphviz
       uses: ts-graphviz/setup-graphviz@v1
+    - name: Set Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 10
     - name: Install dependencies
       run: yarn --frozen-lockfile --ignore-optional
       env:
@@ -30,6 +34,7 @@ jobs:
       run: yarn test
       env:
         CI: 'true'
+        NODE_OPTIONS: --max-old-space-size=4096
     - name: Build
       run: yarn build
       env:
