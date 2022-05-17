@@ -1628,22 +1628,6 @@
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
 
-"@ts-graphviz/node@file:packages/node":
-  version "0.4.0"
-  dependencies:
-    tmp-promise "^3.0.2"
-
-"@ts-graphviz/parser@file:packages/parser":
-  version "0.6.0"
-  dependencies:
-    ts-graphviz "^0.16.0"
-
-"@ts-graphviz/react@file:packages/react":
-  version "0.9.1"
-  dependencies:
-    prop-types "^15.7.2"
-    react-reconciler "^0.25.1"
-
 "@types/aria-query@^4.2.0":
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@types/aria-query/-/aria-query-4.2.2.tgz#ed4e0ad92306a704f9fb132a0cfcf77486dbe2bc"
@@ -8931,9 +8915,6 @@ ts-dedent@^2.1.1:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/ts-dedent/-/ts-dedent-2.2.0.tgz#39e4bd297cd036292ae2394eb3412be63f563bb5"
   integrity sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==
-
-"ts-graphviz@file:packages/ts-graphviz":
-  version "0.16.0"
 
 ts-jest@^28.0.2:
   version "28.0.2"
