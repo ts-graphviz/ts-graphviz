@@ -19,10 +19,11 @@ export function useNode({ id, comment, ...attributes }: NodeProps): INode {
   }, [cluster, id, attributes, comment]);
   useHasComment(node, comment);
   useHasAttributes(node, attributes);
-  useEffect(() => {
-    return (): void => {
+  useEffect(
+    () => (): void => {
       cluster.removeNode(node);
-    };
-  }, [cluster, node]);
+    },
+    [cluster, node],
+  );
   return node;
 }

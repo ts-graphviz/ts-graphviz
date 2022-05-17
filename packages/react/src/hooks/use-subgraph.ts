@@ -23,10 +23,11 @@ export function useSubgraph({ id, comment, edge, node, graph, ...attributes }: S
   }, [cluster, id, comment, edge, node, graph, attributes]);
   useHasComment(subgraph, comment);
   useClusterAttributes(subgraph, attributes, { edge, node, graph });
-  useEffect(() => {
-    return (): void => {
+  useEffect(
+    () => (): void => {
       cluster.removeSubgraph(subgraph);
-    };
-  }, [cluster, subgraph]);
+    },
+    [cluster, subgraph],
+  );
   return subgraph;
 }

@@ -45,7 +45,6 @@ describe('renderToDot', () => {
   });
 
   it('render to be blank string', () => {
-    // TODO
     // eslint-disable-next-line react/jsx-no-useless-fragment
     const dot = renderToDot(<></>);
     expect(dot).toBe('');

@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable jest/valid-title */
 import fs from 'fs';
 import path from 'path';
 import glob from 'glob';
@@ -14,6 +12,7 @@ for (const file of files) {
   const dot = fs.readFileSync(file, 'utf-8').toString();
   const snapshot = path.resolve(__dirname, '__snapshots__', title);
 
+  // eslint-disable-next-line jest/valid-title
   test(title, () => {
     try {
       expect(AST.parse(dot)).toMatchSpecificSnapshot(snapshot);

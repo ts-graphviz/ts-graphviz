@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Attribute, AttributeKey } from '../knowledge';
 import { DotObject } from './abstract';
 import { IAttributesBase, AttributesValue, AttributesObject, AttributesEntities, IAttributes } from './types';
@@ -44,8 +43,6 @@ export abstract class AttributesBase<T extends AttributeKey> extends DotObject i
 
   public apply(attributes: AttributesObject<T> | AttributesEntities<T>): void {
     const entries = Array.isArray(attributes) ? attributes : Object.entries(attributes);
-    // TODO
-    // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of entries) {
       this.set(key, value);
     }

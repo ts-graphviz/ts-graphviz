@@ -24,10 +24,11 @@ export function useDigraph({ id, comment, edge, node, graph, ...attributes }: Di
   }, [context, id, comment, edge, node, graph, attributes]);
   useHasComment(digraph, comment);
   useClusterAttributes(digraph, attributes, { edge, node, graph });
-  useEffect(() => {
-    return (): void => {
+  useEffect(
+    () => (): void => {
       context.root = undefined;
-    };
-  }, [context]);
+    },
+    [context],
+  );
   return digraph;
 }

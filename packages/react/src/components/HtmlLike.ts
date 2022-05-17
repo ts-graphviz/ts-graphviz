@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+import { PropsWithChildren } from 'react';
 import { AttributesValue } from 'ts-graphviz';
 import { ValueOf } from '../utils/value-of';
 
@@ -27,9 +27,7 @@ export type TableProps = {
   WIDTH?: AttributesValue; // "value"
 };
 
-// TODO
-// eslint-disable-next-line @typescript-eslint/ban-types
-type NoAttributes = {};
+type NoAttributes = Record<string, unknown>;
 
 export type TrProps = NoAttributes;
 
@@ -106,6 +104,7 @@ export const DOT = Object.freeze({
   VR: 'dot-vr',
 } as const);
 
+// eslint-disable-next-line no-redeclare
 export type DOT = ValueOf<typeof DOT>;
 
 declare global {
@@ -113,19 +112,19 @@ declare global {
   namespace JSX {
     interface IntrinsicElements {
       [DOT.PORT]: { children: string };
-      [DOT.TABLE]: React.PropsWithChildren<TableProps>;
-      [DOT.TR]: React.PropsWithChildren<TrProps>;
-      [DOT.TD]: React.PropsWithChildren<TdProps>;
-      [DOT.FONT]: React.PropsWithChildren<FontProps>;
+      [DOT.TABLE]: PropsWithChildren<TableProps>;
+      [DOT.TR]: PropsWithChildren<TrProps>;
+      [DOT.TD]: PropsWithChildren<TdProps>;
+      [DOT.FONT]: PropsWithChildren<FontProps>;
       [DOT.BR]: BrProps;
       [DOT.IMG]: ImgProps;
-      [DOT.I]: React.PropsWithChildren<IProps>;
-      [DOT.B]: React.PropsWithChildren<BProps>;
-      [DOT.U]: React.PropsWithChildren<UProps>;
-      [DOT.O]: React.PropsWithChildren<OProps>;
-      [DOT.SUB]: React.PropsWithChildren<SubProps>;
-      [DOT.SUP]: React.PropsWithChildren<SupProps>;
-      [DOT.S]: React.PropsWithChildren<SProps>;
+      [DOT.I]: PropsWithChildren<IProps>;
+      [DOT.B]: PropsWithChildren<BProps>;
+      [DOT.U]: PropsWithChildren<UProps>;
+      [DOT.O]: PropsWithChildren<OProps>;
+      [DOT.SUB]: PropsWithChildren<SubProps>;
+      [DOT.SUP]: PropsWithChildren<SupProps>;
+      [DOT.S]: PropsWithChildren<SProps>;
       [DOT.HR]: HrProps;
       [DOT.VR]: VrProps;
     }

@@ -1,8 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-fallthrough */
-/* eslint-disable default-case */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-case-declarations */
 import {
   ICluster,
   Digraph,
@@ -14,7 +9,6 @@ import {
   HasComment,
   EdgeTarget,
   EdgeTargetTuple,
-  AttributeKey,
 } from 'ts-graphviz';
 import { AST } from './ast';
 
@@ -57,13 +51,14 @@ function applyStatements(cluster: ICluster, statements: AST.ClusterStatement[]):
   const commentHolder = new CommentHolder();
   for (const stmt of statements) {
     switch (stmt.type) {
-      case AST.Types.Subgraph:
+      case AST.Types.Subgraph: {
         const subgraph = stmt.id ? cluster.subgraph(stmt.id.value) : cluster.subgraph();
         applyStatements(subgraph, stmt.body);
         commentHolder.apply(subgraph, stmt.location);
         break;
+      }
       case AST.Types.Attribute:
-        cluster.set(stmt.key.value as unknown as AttributeKey, stmt.value.value);
+        cluster.set(stmt.key.value, stmt.value.value);
         commentHolder.reset();
         break;
       case AST.Types.Node:
@@ -84,7 +79,7 @@ function applyStatements(cluster: ICluster, statements: AST.ClusterStatement[]):
           stmt.location,
         );
         break;
-      case AST.Types.Attributes:
+      case AST.Types.Attributes: {
         const attrs: { [key: string]: string } = stmt.body
           .filter<AST.Attribute>((v): v is AST.Attribute => v.type === AST.Types.Attribute)
           .reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {});
@@ -101,6 +96,7 @@ function applyStatements(cluster: ICluster, statements: AST.ClusterStatement[]):
         }
         commentHolder.reset();
         break;
+      }
       case AST.Types.Comment:
         commentHolder.set(stmt);
     }
@@ -126,40 +122,47 @@ export function convert(
   ast: AST.Dot | AST.Graph | AST.Subgraph | AST.Node | AST.Edge,
 ): RootCluster | Subgraph | Node | Edge {
   switch (ast.type) {
-    case AST.Types.Graph:
+    case AST.Types.Graph: {
       const Root = ast.directed ? Digraph : Graph;
       const root = new Root(ast.id?.value, ast.strict);
       applyStatements(root, ast.body);
       return root;
-    case AST.Types.Subgraph:
+    }
+    case AST.Types.Subgraph: {
       const subgraph = new Subgraph(ast.id?.value);
       applyStatements(subgraph, ast.body);
       return subgraph;
-    case AST.Types.Edge:
+    }
+    case AST.Types.Edge: {
       const edge = new Edge(
         convertToEdgeTargetTuple(ast),
         ast.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
       );
       return edge;
-    case AST.Types.Node:
+    }
+    case AST.Types.Node: {
       const node = new Node(
         ast.id.value,
         ast.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
       );
       return node;
-    case AST.Types.Dot:
+    }
+    case AST.Types.Dot: {
       const commentHolder = new CommentHolder();
       for (const stmt of ast.body) {
         switch (stmt.type) {
           case AST.Types.Comment:
             commentHolder.set(stmt);
             break;
-          case AST.Types.Graph:
+          case AST.Types.Graph: {
             const graph = convert(stmt);
             commentHolder.apply(graph, stmt.location);
             return graph;
+          }
         }
       }
+      throw Error();
+    }
     default:
       throw Error();
   }

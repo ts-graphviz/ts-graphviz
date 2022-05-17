@@ -377,7 +377,7 @@ describe('stringify', () => {
                 type: AST.Types.Attribute,
                 key: {
                   type: AST.Types.Literal,
-                  value: 'hoge',
+                  value: 'color',
                   quoted: false,
                   location,
                 },
@@ -395,7 +395,7 @@ describe('stringify', () => {
         ),
       ).toMatchInlineSnapshot(`
         node [
-          hoge = hoge;
+          color = hoge;
         ];
       `);
     });
@@ -410,42 +410,48 @@ describe('stringify', () => {
                 type: AST.Types.Attribute,
                 key: {
                   type: AST.Types.Literal,
-                  value: 'hoge',
+                  value: 'color',
                   quoted: false,
                   location,
                 },
+
                 value: {
                   type: AST.Types.Literal,
                   value: 'hoge',
                   quoted: false,
                   location,
                 },
+
                 location,
               },
+
               {
                 type: AST.Types.Attribute,
                 key: {
                   type: AST.Types.Literal,
-                  value: 'fuga',
+                  value: 'bgcolor',
                   quoted: false,
                   location,
                 },
+
                 value: {
                   type: AST.Types.Literal,
                   value: 'fuga',
                   quoted: false,
                   location,
                 },
+
                 location,
               },
             ],
+
             location,
           }),
         ),
       ).toMatchInlineSnapshot(`
         node [
-          hoge = hoge;
-          fuga = fuga;
+          color = hoge;
+          bgcolor = fuga;
         ];
       `);
     });
@@ -459,7 +465,7 @@ describe('stringify', () => {
             type: AST.Types.Attribute,
             key: {
               type: AST.Types.Literal,
-              value: 'hoge',
+              value: 'color',
               quoted: false,
               location,
             },
@@ -472,7 +478,7 @@ describe('stringify', () => {
             location,
           }),
         ),
-      ).toMatchInlineSnapshot(`hoge = hoge;`);
+      ).toMatchInlineSnapshot(`color = hoge;`);
     });
 
     test('with attribute', () => {
@@ -485,7 +491,7 @@ describe('stringify', () => {
                 type: AST.Types.Attribute,
                 key: {
                   type: AST.Types.Literal,
-                  value: 'hoge',
+                  value: 'color',
                   quoted: false,
                   location,
                 },
@@ -509,7 +515,7 @@ describe('stringify', () => {
         ),
       ).toMatchInlineSnapshot(`
         "hoge" [
-          hoge = hoge;
+          color = hoge;
         ];
       `);
     });
@@ -524,48 +530,55 @@ describe('stringify', () => {
                 type: AST.Types.Attribute,
                 key: {
                   type: AST.Types.Literal,
-                  value: 'hoge',
+                  value: 'color',
                   quoted: false,
                   location,
                 },
+
                 value: {
                   type: AST.Types.Literal,
                   value: 'hoge',
                   quoted: false,
                   location,
                 },
+
                 location,
               },
+
               {
                 type: AST.Types.Attribute,
                 key: {
                   type: AST.Types.Literal,
-                  value: 'fuga',
+                  value: 'bgcolor',
                   quoted: false,
                   location,
                 },
+
                 value: {
                   type: AST.Types.Literal,
                   value: 'fuga',
                   quoted: false,
                   location,
                 },
+
                 location,
               },
             ],
+
             id: {
               type: AST.Types.Literal,
               value: 'hoge',
               quoted: true,
               location,
             },
+
             location,
           }),
         ),
       ).toMatchInlineSnapshot(`
         "hoge" [
-          hoge = hoge;
-          fuga = fuga;
+          color = hoge;
+          bgcolor = fuga;
         ];
       `);
     });
@@ -662,7 +675,7 @@ describe('stringify', () => {
                 type: AST.Types.Attribute,
                 key: {
                   type: AST.Types.Literal,
-                  value: 'hoge',
+                  value: 'color',
                   quoted: false,
                   location,
                 },
@@ -680,7 +693,7 @@ describe('stringify', () => {
         ),
       ).toMatchInlineSnapshot(`
         "id1":"port1" -> "id2":w [
-          hoge = hoge;
+          color = hoge;
         ];
       `);
     });
@@ -699,14 +712,17 @@ describe('stringify', () => {
                   quoted: true,
                   location,
                 },
+
                 port: {
                   type: AST.Types.Literal,
                   value: 'port1',
                   quoted: true,
                   location,
                 },
+
                 location,
               },
+
               {
                 type: AST.Types.NodeRef,
                 id: {
@@ -715,56 +731,65 @@ describe('stringify', () => {
                   quoted: true,
                   location,
                 },
+
                 compass: {
                   type: AST.Types.Literal,
                   value: 'w',
                   quoted: false,
                   location,
                 },
+
                 location,
               },
             ],
+
             body: [
               {
                 type: AST.Types.Attribute,
                 key: {
                   type: AST.Types.Literal,
-                  value: 'hoge',
+                  value: 'color',
                   quoted: false,
                   location,
                 },
+
                 value: {
                   type: AST.Types.Literal,
                   value: 'hoge',
                   quoted: false,
                   location,
                 },
+
                 location,
               },
+
               {
                 type: AST.Types.Attribute,
                 key: {
                   type: AST.Types.Literal,
-                  value: 'fuga',
+                  value: 'color',
                   quoted: false,
                   location,
                 },
+
                 value: {
                   type: AST.Types.Literal,
                   value: 'fuga',
                   quoted: false,
                   location,
                 },
+
                 location,
               },
             ],
+
             location,
           }),
         ),
       ).toMatchInlineSnapshot(`
         "id1":"port1" -> "id2":w [
-          hoge = hoge;
-          fuga = fuga;
+          color = hoge;
+          color = fuga;
         ];
       `);
     });
@@ -867,25 +892,28 @@ describe('stringify', () => {
                 type: AST.Types.Attribute,
                 key: {
                   type: AST.Types.Literal,
-                  value: 'hoge',
+                  value: 'color',
                   quoted: false,
                   location,
                 },
+
                 value: {
                   type: AST.Types.Literal,
                   value: 'hoge',
                   quoted: false,
                   location,
                 },
+
                 location,
               },
             ],
+
             location,
           }),
         ),
       ).toMatchInlineSnapshot(`
         subgraph {
-          hoge = hoge;
+          color = hoge;
         }
       `);
     });
@@ -998,25 +1026,28 @@ describe('stringify', () => {
                 type: AST.Types.Attribute,
                 key: {
                   type: AST.Types.Literal,
-                  value: 'hoge',
+                  value: 'color',
                   quoted: false,
                   location,
                 },
+
                 value: {
                   type: AST.Types.Literal,
                   value: 'hoge',
                   quoted: false,
                   location,
                 },
+
                 location,
               },
             ],
+
             location,
           }),
         ),
       ).toMatchInlineSnapshot(`
         digraph {
-          hoge = hoge;
+          color = hoge;
         }
       `);
     });

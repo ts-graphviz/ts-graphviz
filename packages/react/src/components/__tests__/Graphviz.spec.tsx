@@ -6,19 +6,17 @@ import { Digraph } from '../Digraph';
 import { Node } from '../Node';
 import { Edge } from '../Edge';
 
-jest.mock('../../hooks/use-rendered', () => {
-  return {
-    useRendered: (
-      dot: string,
-      engine?: Engine,
-      format?: Format,
-      ext?: {
-        images?: Image[];
-        files?: File[];
-      },
-    ): string => JSON.stringify({ dot, engine, format, ext }),
-  };
-});
+jest.mock('../../hooks/use-rendered', () => ({
+  useRendered: (
+    dot: string,
+    engine?: Engine,
+    format?: Format,
+    ext?: {
+      images?: Image[];
+      files?: File[];
+    },
+  ): string => JSON.stringify({ dot, engine, format, ext }),
+}));
 
 describe('Graphviz component', () => {
   test('render dot element', () => {

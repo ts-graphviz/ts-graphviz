@@ -1,13 +1,9 @@
-/* eslint-disable react/no-danger */
-/* eslint-disable react/prop-types */
 import React, { FC, useMemo, ReactElement } from 'react';
 import { renderToDot } from '../renderer/render';
 import { useRendered, Engine, Image, File } from '../hooks/use-rendered';
 
 type Props = {
   children: ReactElement;
-  // TODO
-  // eslint-disable-next-line react/require-default-props
   engine?: Engine;
   images?: Image[];
   files?: File[];
@@ -27,10 +23,12 @@ export const Graphviz: FC<Props> = ({ children, engine, images, files }) => {
     }
     return undefined;
   }, [rendered]);
+  // eslint-disable-next-line react/no-danger
   return <div dangerouslySetInnerHTML={svg} />;
 };
 
 Graphviz.defaultProps = {
+  engine: undefined,
   images: [],
   files: [],
 };

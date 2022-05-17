@@ -1,3 +1,4 @@
+.eslintrc.yaml
 rollup.config.ts
 src
 tsconfig.json

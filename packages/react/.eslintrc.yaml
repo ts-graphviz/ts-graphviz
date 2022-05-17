@@ -1,0 +1,12 @@
+extends:
+  - airbnb
+  - plugin:react-hooks/recommended
+  - prettier # this to be added to last
+
+rules:
+  react/function-component-definition: [error, { namedComponents: arrow-function }]
+  react/jsx-filename-extension: [error, { extensions: [.js, .jsx, .ts, .tsx] }]
+  react/jsx-no-useless-fragment: [error, { allowExpressions: yes }]
+  import/extensions: [error, { extensions: [.js, .jsx, .json, .ts, .tsx] }]
+  import/prefer-default-export: 'off'
+  import/no-extraneous-dependencies: 'off'

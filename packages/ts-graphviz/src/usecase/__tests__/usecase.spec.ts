@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import 'jest-graphviz';
 import { attribute, Digraph, Graph, Subgraph, Node, Edge } from '../../domain';
 import { digraph, graph, strict } from '../builder';

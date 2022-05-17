@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import 'jest-graphviz';
 import { attribute } from '../..';
 import { DotObject, GraphvizObject } from '../abstract';
@@ -173,8 +172,8 @@ describe('class Subgraph', () => {
 
     it('throws an error when the EdgeTarget element is missing', () => {
       const n = subgraph.node('n');
-      expect(() => subgraph.edge([] as any as EdgeTargetTuple)).toThrow();
-      expect(() => subgraph.edge([n] as any as EdgeTargetTuple)).toThrow();
+      expect(() => subgraph.edge([] as unknown as EdgeTargetTuple)).toThrow();
+      expect(() => subgraph.edge([n] as unknown as EdgeTargetTuple)).toThrow();
     });
   });
 });

@@ -1,6 +1,6 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable class-methods-use-this */
 /* eslint-disable class-methods-use-this */
 import { FC } from 'react';
 import ReactReconciler from 'react-reconciler';
