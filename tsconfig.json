@@ -21,6 +21,10 @@
       "@ts-graphviz/node": ["./packages/node/src/index.ts"],
       "@ts-graphviz/react": ["./packages/react/src/index.ts"],
       "@ts-graphviz/parser": ["./packages/parser/src/index.ts"],
+      "@ts-graphviz/common": ["./packages/common/src/index.ts"],
+      "@ts-graphviz/common/AST": ["./packages/common/src/AST/index.ts"],
+      "@ts-graphviz/common/attribute": ["./packages/common/src/attribute/index.ts"],
+      "@ts-graphviz/common/graphviz": ["./packages/common/src/graphviz/index.ts"],
       "ts-graphviz": ["./packages/ts-graphviz/src/index.ts"]
     }
   }

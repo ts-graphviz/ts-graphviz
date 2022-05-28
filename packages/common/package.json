@@ -1,0 +1,54 @@
+{
+  "name": "@ts-graphviz/common",
+  "version": "0.0.0",
+  "type": "module",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "description": "Graphviz",
+  "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts-graphviz/ts-graphviz.git"
+  },
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/kamiazya"
+  },
+  "module": "./lib/index.js",
+  "main": "./lib/index.cjs",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    },
+    "./AST": {
+      "import": "./lib/AST/index.js",
+      "require": "./lib/AST/index.cjs",
+      "types": "./lib/AST/index.d.ts"
+    },
+    "./attribute": {
+      "import": "./lib/attribute/index.js",
+      "require": "./lib/attribute/index.cjs",
+      "types": "./lib/attribute/index.d.ts"
+    },
+    "./graphviz": {
+      "import": "./lib/graphviz/index.js",
+      "require": "./lib/graphviz/index.cjs",
+      "types": "./lib/graphviz/index.d.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "tsc",
+    "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
+    "postbuild": "prettier --write './lib/**/index.*'"
+  }
+}
