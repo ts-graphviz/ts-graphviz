@@ -1,4 +1,5 @@
-import { AttributeKey, Compass } from '../attribute';
+import type { Compass } from '@ts-graphviz/dot-type';
+import type { AttributeKey } from '@ts-graphviz/dot-attribute';
 
 export interface FilePosition {
   offset: number;
@@ -14,7 +15,7 @@ export interface FileRange {
 /**
  * AST node.
  */
- export interface ASTBaseNode {
+export interface ASTBaseNode {
   /**
    * Every leaf interface that extends ASTBaseNode
    * must specify a type property.
@@ -129,12 +130,4 @@ export type ASTNode =
   | NodeRefGroup
   | Subgraph;
 
-export type Rule =
-  | 'Dot'
-  | 'Graph'
-  | 'Node'
-  | 'Edge'
-  | 'Attributes'
-  | 'Subgraph'
-  | 'Attribute'
-  | 'ClusterStatements';
+export type Rule = 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Attributes' | 'Subgraph' | 'Attribute' | 'ClusterStatements';

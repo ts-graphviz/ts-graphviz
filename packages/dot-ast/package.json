@@ -1,0 +1,39 @@
+{
+  "name": "@ts-graphviz/dot-ast",
+  "version": "0.0.0",
+  "type": "module",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "description": "Graphviz library for TypeScript.",
+  "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts-graphviz/ts-graphviz.git"
+  },
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/kamiazya"
+  },
+  "main": "./lib/index.cjs",
+  "exports": {
+    "import": "./lib/index.js",
+    "require": "./lib/index.cjs"
+  },
+  "types": "./lib/index.d.ts",
+  "typedocMain": "./src/index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@ts-graphviz/dot-type": "^0.0.0",
+    "@ts-graphviz/dot-attribute": "^0.0.0"
+  },
+  "scripts": {
+    "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
+    "postbuild": "prettier --write ./lib/index.*"
+  }
+}

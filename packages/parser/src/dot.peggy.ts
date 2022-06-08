@@ -4,6 +4,8 @@
 //
 // https://peggyjs.org/   https://github.com/metadevpro/ts-pegjs
 
+'use strict';
+
 export interface IFilePosition {
   offset: number;
   line: number;

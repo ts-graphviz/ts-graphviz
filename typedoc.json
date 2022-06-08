@@ -1,8 +1,6 @@
 {
   "name": "@ts-graphviz",
   "out": "./doc",
-  "entryPoints": [
-    "packages/*"
-  ],
+  "entryPoints": ["packages/*"],
   "entryPointStrategy": "packages"
 }
