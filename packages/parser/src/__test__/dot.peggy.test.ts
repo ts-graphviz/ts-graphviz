@@ -1,21 +1,23 @@
 import { wrap } from 'jest-snapshot-serializer-raw';
 import _ from 'ts-dedent';
-import { AST } from '../ast';
+import * as AST from '@ts-graphviz/dot-ast';
+import { parse } from '../dot.peggy';
+import { stringify } from '../stringify';
 
 describe('parse', () => {
   describe('attribute', () => {
     test('set value', () => {
-      const result = AST.parse('style=filled;', { rule: AST.Types.Attribute });
+      const result = parse('style=filled;', { startRule: 'Attribute' });
       expect(result).toMatchSnapshot();
     });
 
     test('set quoted value', () => {
-      const result = AST.parse('label = "example #1";', { rule: AST.Types.Attribute });
+      const result = parse('label = "example #1";', { startRule: 'Attribute' });
       expect(result).toMatchSnapshot();
     });
 
     test('set HTMLLike value', () => {
-      const result = AST.parse(
+      const result = parse(
         _`
         label = <
           <table border="0">
@@ -26,7 +28,7 @@ describe('parse', () => {
             <tr><td align="text">The value of a closing<br align="left"/>&lt;br/&gt; tag<br align="center"/>refers to the preceeding text<br align="right"/></td></tr>
           </table>
         >`,
-        { rule: AST.Types.Attribute },
+        { startRule: 'Attribute' },
       );
       expect(result).toMatchSnapshot();
     });
@@ -34,7 +36,7 @@ describe('parse', () => {
 
   describe('attributes', () => {
     test('node', () => {
-      const result = AST.parse(
+      const result = parse(
         _`
         node [
           style=filled;
@@ -42,39 +44,39 @@ describe('parse', () => {
           label = "example #1";
         ]
       `,
-        { rule: AST.Types.Attributes },
+        { startRule: 'Attributes' },
       );
       expect(result).toMatchSnapshot();
     });
 
     test('edge', () => {
-      const result = AST.parse(
+      const result = parse(
         _`
         edge [
           color=red;
           label = "example example";
         ];`,
-        { rule: AST.Types.Attributes },
+        { startRule: 'Attributes' },
       );
       expect(result).toMatchSnapshot();
     });
 
     test('graph', () => {
-      const result = AST.parse('graph [ fillcolor=red, label = "example example"];', {
-        rule: AST.Types.Attributes,
+      const result = parse('graph [ fillcolor=red, label = "example example"];', {
+        startRule: 'Attributes',
       });
       expect(result).toMatchSnapshot();
     });
 
     test('with comment', () => {
-      const result = AST.parse(
+      const result = parse(
         _`
         node [
            # comment 1
           style=filled,
         ]
       `,
-        { rule: AST.Types.Attributes },
+        { startRule: 'Attributes' },
       );
       expect(result).toMatchSnapshot();
     });
@@ -82,101 +84,101 @@ describe('parse', () => {
 
   describe('edge', () => {
     test('digraph edge', () => {
-      const result = AST.parse('a -> b;', { rule: AST.Types.Edge });
+      const result = parse('a -> b;', { startRule: 'Edge' });
       expect(result).toMatchSnapshot();
     });
 
     test('graph edge', () => {
-      const result = AST.parse('a -- b;', { rule: AST.Types.Edge });
+      const result = parse('a -- b;', { startRule: 'Edge' });
       expect(result).toMatchSnapshot();
     });
 
     test('edge with port', () => {
-      const result = AST.parse('a:p1 -> b:p2 -> c:p3:w -> d:w;', { rule: AST.Types.Edge });
+      const result = parse('a:p1 -> b:p2 -> c:p3:w -> d:w;', { startRule: 'Edge' });
       expect(result).toMatchSnapshot();
     });
 
     test('edge with attributes', () => {
-      const result = AST.parse(
+      const result = parse(
         _`
           a -> b [
             color=lightgrey;
             label = "example #1";
           ];
         `,
-        { rule: AST.Types.Edge },
+        { startRule: 'Edge' },
       );
       expect(result).toMatchSnapshot();
     });
 
     test('grouped edge targets', () => {
-      const result = AST.parse('{a1, a2} -> {b1, b2};', { rule: AST.Types.Edge });
+      const result = parse('{a1, a2} -> {b1, b2};', { startRule: 'Edge' });
       expect(result).toMatchSnapshot();
     });
 
     test('grouped ported edge targets', () => {
-      const result = AST.parse('{a1:p1, a2:p2:w} -> {b1:e, b2:p3};', { rule: AST.Types.Edge });
+      const result = parse('{a1:p1, a2:p2:w} -> {b1:e, b2:p3};', { startRule: 'Edge' });
       expect(result).toMatchSnapshot();
     });
   });
 
   describe('subgraph', () => {
     test('named subgraph', () => {
-      const result = AST.parse('subgraph hoge {}', { rule: AST.Types.Subgraph });
+      const result = parse('subgraph hoge {}', { startRule: 'Subgraph' });
       expect(result).toMatchSnapshot();
     });
 
     test('anonymous subgraph', () => {
-      const result = AST.parse('subgraph {}', { rule: AST.Types.Subgraph });
+      const result = parse('subgraph {}', { startRule: 'Subgraph' });
       expect(result).toMatchSnapshot();
     });
 
     test('no keyword anonymous', () => {
-      const result = AST.parse('{}', { rule: AST.Types.Subgraph });
+      const result = parse('{}', { startRule: 'Subgraph' });
       expect(result).toMatchSnapshot();
     });
   });
 
   describe('graph', () => {
     test('digraph named test', () => {
-      const result = AST.parse('digraph test {}', { rule: AST.Types.Graph });
+      const result = parse('digraph test {}', { startRule: 'Graph' });
       expect(result).toMatchSnapshot();
     });
 
     test('strict digraph named test', () => {
-      const result = AST.parse('strict digraph test {}', { rule: AST.Types.Graph });
+      const result = parse('strict digraph test {}', { startRule: 'Graph' });
       expect(result).toMatchSnapshot();
     });
 
     test('digraph named test(quoted)', () => {
-      const result = AST.parse('digraph "test" {}', { rule: AST.Types.Graph });
+      const result = parse('digraph "test" {}', { startRule: 'Graph' });
       expect(result).toMatchSnapshot();
     });
 
     test('anonymous digraph', () => {
-      const result = AST.parse('digraph {}', { rule: AST.Types.Graph });
+      const result = parse('digraph {}', { startRule: 'Graph' });
       expect(result).toMatchSnapshot();
     });
 
     test('graph named test', () => {
-      const result = AST.parse('graph test {}', { rule: AST.Types.Graph });
+      const result = parse('graph test {}', { startRule: 'Graph' });
       expect(result).toMatchSnapshot();
     });
 
     test('strict graph named test', () => {
-      const result = AST.parse('strict graph test {}', { rule: AST.Types.Graph });
+      const result = parse('strict graph test {}', { startRule: 'Graph' });
       expect(result).toMatchSnapshot();
     });
 
     describe('invalid edge', () => {
       test('digraph have to use "->" operator in edge', () => {
         expect(() => {
-          AST.parse(
+          parse(
             _`
             digraph {
               a -- b;
             }`,
-            { rule: AST.Types.Graph },
+            { startRule: 'Graph' },
           );
         }).toThrowErrorMatchingInlineSnapshot(
           `"In digraph, it's necessary to describe with \\"->\\" operator to create edge."`,
@@ -185,12 +187,12 @@ describe('parse', () => {
 
       test('graph have to use "--" operator in edge', () => {
         expect(() => {
-          AST.parse(
+          parse(
             _`
             graph {
               a -> b;
             }`,
-            { rule: AST.Types.Graph },
+            { startRule: 'Graph' },
           );
         }).toThrowErrorMatchingInlineSnapshot(
           `"In graph, it's necessary to describe with \\"--\\" operator to create edge."`,
@@ -201,12 +203,12 @@ describe('parse', () => {
 
   describe('node', () => {
     test('simple node', () => {
-      const result = AST.parse('test;', { rule: AST.Types.Node });
+      const result = parse('test;', { startRule: 'Node' });
       expect(result).toMatchSnapshot();
     });
 
     test('node with attributes', () => {
-      const result = AST.parse(
+      const result = parse(
         _`
           test [
             style=filled;
@@ -214,7 +216,7 @@ describe('parse', () => {
             label = "example #1";
           ];
         `,
-        { rule: AST.Types.Node },
+        { startRule: 'Node' },
       );
       expect(result).toMatchSnapshot();
     });
@@ -222,13 +224,13 @@ describe('parse', () => {
 
   describe('dot', () => {
     test('with comments', () => {
-      const result = AST.parse(
+      const result = parse(
         _`
         /** comment1 */
         digraph {}
         /** comment2 */
         `,
-        { rule: AST.Types.Dot },
+        { startRule: 'Dot' },
       );
       expect(result).toMatchSnapshot();
     });
@@ -236,7 +238,7 @@ describe('parse', () => {
 
   describe('cluster_statements', () => {
     test('comments', () => {
-      const result = AST.parse(
+      const result = parse(
         _`
         // comment1
 
@@ -249,7 +251,7 @@ describe('parse', () => {
         # comment4
         /** comment 5*/
         `,
-        { rule: AST.Types.ClusterStatements },
+        { startRule: 'ClusterStatements' },
       );
       expect(result).toMatchSnapshot();
     });
@@ -274,8 +276,8 @@ describe('stringify', () => {
     test('quated', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Literal,
+          stringify({
+            type: 'Literal',
             value: 'hoge',
             quoted: true,
             location,
@@ -287,8 +289,8 @@ describe('stringify', () => {
     test('not quated', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Literal,
+          stringify({
+            type: 'Literal',
             value: 'hoge',
             quoted: false,
             location,
@@ -300,8 +302,8 @@ describe('stringify', () => {
     test('html label', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Literal,
+          stringify({
+            type: 'Literal',
             value: 'hoge',
             quoted: 'html',
             location,
@@ -315,8 +317,8 @@ describe('stringify', () => {
     test('simple', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Literal,
+          stringify({
+            type: 'Literal',
             value: 'hoge',
             quoted: 'html',
             location,
@@ -330,9 +332,9 @@ describe('stringify', () => {
     test('node', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Attributes,
-            kind: AST.Attributes.Kind.Node,
+          stringify({
+            type: 'Attributes',
+            kind: 'Node',
             body: [],
             location,
           }),
@@ -343,9 +345,9 @@ describe('stringify', () => {
     test('edge', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Attributes,
-            kind: AST.Attributes.Kind.Edge,
+          stringify({
+            type: 'Attributes',
+            kind: 'Edge',
             body: [],
             location,
           }),
@@ -356,9 +358,9 @@ describe('stringify', () => {
     test('graph', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Attributes,
-            kind: AST.Attributes.Kind.Graph,
+          stringify({
+            type: 'Attributes',
+            kind: 'Graph',
             body: [],
             location,
           }),
@@ -369,20 +371,20 @@ describe('stringify', () => {
     test('with attribute', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Attributes,
-            kind: AST.Attributes.Kind.Node,
+          stringify({
+            type: 'Attributes',
+            kind: 'Node',
             body: [
               {
-                type: AST.Types.Attribute,
+                type: 'Attribute',
                 key: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'color',
                   quoted: false,
                   location,
                 },
                 value: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'hoge',
                   quoted: false,
                   location,
@@ -402,21 +404,21 @@ describe('stringify', () => {
     test('with two attributes', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Attributes,
-            kind: AST.Attributes.Kind.Node,
+          stringify({
+            type: 'Attributes',
+            kind: 'Node',
             body: [
               {
-                type: AST.Types.Attribute,
+                type: 'Attribute',
                 key: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'color',
                   quoted: false,
                   location,
                 },
 
                 value: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'hoge',
                   quoted: false,
                   location,
@@ -426,16 +428,16 @@ describe('stringify', () => {
               },
 
               {
-                type: AST.Types.Attribute,
+                type: 'Attribute',
                 key: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'bgcolor',
                   quoted: false,
                   location,
                 },
 
                 value: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'fuga',
                   quoted: false,
                   location,
@@ -461,16 +463,16 @@ describe('stringify', () => {
     test('simple', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Attribute,
+          stringify({
+            type: 'Attribute',
             key: {
-              type: AST.Types.Literal,
+              type: 'Literal',
               value: 'color',
               quoted: false,
               location,
             },
             value: {
-              type: AST.Types.Literal,
+              type: 'Literal',
               value: 'hoge',
               quoted: false,
               location,
@@ -484,19 +486,19 @@ describe('stringify', () => {
     test('with attribute', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Node,
+          stringify({
+            type: 'Node',
             body: [
               {
-                type: AST.Types.Attribute,
+                type: 'Attribute',
                 key: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'color',
                   quoted: false,
                   location,
                 },
                 value: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'hoge',
                   quoted: false,
                   location,
@@ -505,7 +507,7 @@ describe('stringify', () => {
               },
             ],
             id: {
-              type: AST.Types.Literal,
+              type: 'Literal',
               value: 'hoge',
               quoted: true,
               location,
@@ -523,20 +525,20 @@ describe('stringify', () => {
     test('with two attributes', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Node,
+          stringify({
+            type: 'Node',
             body: [
               {
-                type: AST.Types.Attribute,
+                type: 'Attribute',
                 key: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'color',
                   quoted: false,
                   location,
                 },
 
                 value: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'hoge',
                   quoted: false,
                   location,
@@ -546,16 +548,16 @@ describe('stringify', () => {
               },
 
               {
-                type: AST.Types.Attribute,
+                type: 'Attribute',
                 key: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'bgcolor',
                   quoted: false,
                   location,
                 },
 
                 value: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'fuga',
                   quoted: false,
                   location,
@@ -566,7 +568,7 @@ describe('stringify', () => {
             ],
 
             id: {
-              type: AST.Types.Literal,
+              type: 'Literal',
               value: 'hoge',
               quoted: true,
               location,
@@ -588,19 +590,19 @@ describe('stringify', () => {
     test('simple', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Edge,
+          stringify({
+            type: 'Edge',
             targets: [
               {
-                type: AST.Types.NodeRef,
+                type: 'NodeRef',
                 id: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'id1',
                   quoted: true,
                   location,
                 },
                 port: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'port1',
                   quoted: true,
                   location,
@@ -608,15 +610,15 @@ describe('stringify', () => {
                 location,
               },
               {
-                type: AST.Types.NodeRef,
+                type: 'NodeRef',
                 id: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'id2',
                   quoted: true,
                   location,
                 },
                 compass: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'w',
                   quoted: false,
                   location,
@@ -634,19 +636,19 @@ describe('stringify', () => {
     test('with attribute', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Edge,
+          stringify({
+            type: 'Edge',
             targets: [
               {
-                type: AST.Types.NodeRef,
+                type: 'NodeRef',
                 id: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'id1',
                   quoted: true,
                   location,
                 },
                 port: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'port1',
                   quoted: true,
                   location,
@@ -654,15 +656,15 @@ describe('stringify', () => {
                 location,
               },
               {
-                type: AST.Types.NodeRef,
+                type: 'NodeRef',
                 id: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'id2',
                   quoted: true,
                   location,
                 },
                 compass: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'w',
                   quoted: false,
                   location,
@@ -672,15 +674,15 @@ describe('stringify', () => {
             ],
             body: [
               {
-                type: AST.Types.Attribute,
+                type: 'Attribute',
                 key: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'color',
                   quoted: false,
                   location,
                 },
                 value: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'hoge',
                   quoted: false,
                   location,
@@ -701,20 +703,20 @@ describe('stringify', () => {
     test('with two attributes', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Edge,
+          stringify({
+            type: 'Edge',
             targets: [
               {
-                type: AST.Types.NodeRef,
+                type: 'NodeRef',
                 id: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'id1',
                   quoted: true,
                   location,
                 },
 
                 port: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'port1',
                   quoted: true,
                   location,
@@ -724,16 +726,16 @@ describe('stringify', () => {
               },
 
               {
-                type: AST.Types.NodeRef,
+                type: 'NodeRef',
                 id: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'id2',
                   quoted: true,
                   location,
                 },
 
                 compass: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'w',
                   quoted: false,
                   location,
@@ -745,16 +747,16 @@ describe('stringify', () => {
 
             body: [
               {
-                type: AST.Types.Attribute,
+                type: 'Attribute',
                 key: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'color',
                   quoted: false,
                   location,
                 },
 
                 value: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'hoge',
                   quoted: false,
                   location,
@@ -764,16 +766,16 @@ describe('stringify', () => {
               },
 
               {
-                type: AST.Types.Attribute,
+                type: 'Attribute',
                 key: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'color',
                   quoted: false,
                   location,
                 },
 
                 value: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'fuga',
                   quoted: false,
                   location,
@@ -797,19 +799,19 @@ describe('stringify', () => {
     test('node ref group', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Edge,
+          stringify({
+            type: 'Edge',
             targets: [
               {
-                type: AST.Types.NodeRef,
+                type: 'NodeRef',
                 id: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'id1',
                   quoted: true,
                   location,
                 },
                 port: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'port1',
                   quoted: true,
                   location,
@@ -817,12 +819,12 @@ describe('stringify', () => {
                 location,
               },
               {
-                type: AST.Types.NodeRefGroup,
+                type: 'NodeRefGroup',
                 body: [
                   {
-                    type: AST.Types.NodeRef,
+                    type: 'NodeRef',
                     id: {
-                      type: AST.Types.Literal,
+                      type: 'Literal',
                       value: 'id2',
                       quoted: true,
                       location,
@@ -830,9 +832,9 @@ describe('stringify', () => {
                     location,
                   },
                   {
-                    type: AST.Types.NodeRef,
+                    type: 'NodeRef',
                     id: {
-                      type: AST.Types.Literal,
+                      type: 'Literal',
                       value: 'id3',
                       quoted: true,
                       location,
@@ -855,10 +857,10 @@ describe('stringify', () => {
     test('with id', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Subgraph,
+          stringify({
+            type: 'Subgraph',
             id: {
-              type: AST.Types.Literal,
+              type: 'Literal',
               value: 'id1',
               quoted: true,
               location,
@@ -873,8 +875,8 @@ describe('stringify', () => {
     test('no id', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Subgraph,
+          stringify({
+            type: 'Subgraph',
             body: [],
             location,
           }),
@@ -885,20 +887,20 @@ describe('stringify', () => {
     test('with body', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Subgraph,
+          stringify({
+            type: 'Subgraph',
             body: [
               {
-                type: AST.Types.Attribute,
+                type: 'Attribute',
                 key: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'color',
                   quoted: false,
                   location,
                 },
 
                 value: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'hoge',
                   quoted: false,
                   location,
@@ -923,12 +925,12 @@ describe('stringify', () => {
     test('directed', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Graph,
+          stringify({
+            type: 'Graph',
             strict: false,
             directed: true,
             id: {
-              type: AST.Types.Literal,
+              type: 'Literal',
               value: 'id1',
               quoted: true,
               location,
@@ -943,12 +945,12 @@ describe('stringify', () => {
     test('strict directed', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Graph,
+          stringify({
+            type: 'Graph',
             strict: true,
             directed: true,
             id: {
-              type: AST.Types.Literal,
+              type: 'Literal',
               value: 'id1',
               quoted: true,
               location,
@@ -963,12 +965,12 @@ describe('stringify', () => {
     test('graph', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Graph,
+          stringify({
+            type: 'Graph',
             strict: false,
             directed: false,
             id: {
-              type: AST.Types.Literal,
+              type: 'Literal',
               value: 'id1',
               quoted: true,
               location,
@@ -983,12 +985,12 @@ describe('stringify', () => {
     test('strict graph', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Graph,
+          stringify({
+            type: 'Graph',
             strict: true,
             directed: false,
             id: {
-              type: AST.Types.Literal,
+              type: 'Literal',
               value: 'id1',
               quoted: true,
               location,
@@ -1003,8 +1005,8 @@ describe('stringify', () => {
     test('no id', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Graph,
+          stringify({
+            type: 'Graph',
             strict: false,
             directed: true,
             body: [],
@@ -1017,22 +1019,22 @@ describe('stringify', () => {
     test('with body', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Graph,
+          stringify({
+            type: 'Graph',
             strict: false,
             directed: true,
             body: [
               {
-                type: AST.Types.Attribute,
+                type: 'Attribute',
                 key: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'color',
                   quoted: false,
                   location,
                 },
 
                 value: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'hoge',
                   quoted: false,
                   location,
@@ -1057,9 +1059,9 @@ describe('stringify', () => {
     test('block', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Comment,
-            kind: AST.Comment.Kind.Block,
+          stringify({
+            type: 'Comment',
+            kind: 'Block',
             value: 'test\ntest',
             location,
           }),
@@ -1075,9 +1077,9 @@ describe('stringify', () => {
     test('macro', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Comment,
-            kind: AST.Comment.Kind.Macro,
+          stringify({
+            type: 'Comment',
+            kind: 'Macro',
             value: 'foo\nbar',
             location,
           }),
@@ -1091,9 +1093,9 @@ describe('stringify', () => {
     test('slach', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Comment,
-            kind: AST.Comment.Kind.Slash,
+          stringify({
+            type: 'Comment',
+            kind: 'Slash',
             value: 'foo\nbar',
             location,
           }),
@@ -1109,21 +1111,21 @@ describe('stringify', () => {
     test('slach', () => {
       expect(
         wrap(
-          AST.stringify({
-            type: AST.Types.Dot,
+          stringify({
+            type: 'Dot',
             body: [
               {
-                type: AST.Types.Comment,
-                kind: AST.Comment.Kind.Slash,
+                type: 'Comment',
+                kind: 'Slash',
                 value: 'foo\nbar',
                 location,
               },
               {
-                type: AST.Types.Graph,
+                type: 'Graph',
                 strict: false,
                 directed: false,
                 id: {
-                  type: AST.Types.Literal,
+                  type: 'Literal',
                   value: 'id1',
                   quoted: true,
                   location,

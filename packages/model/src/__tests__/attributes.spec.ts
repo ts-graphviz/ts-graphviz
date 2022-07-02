@@ -1,4 +1,4 @@
-import { attribute } from '../../knowledge';
+import { attribute } from '@ts-graphviz/dot-attribute';
 import { DotObject, GraphvizObject } from '../abstract';
 import { Attributes, AttributesBase } from '../attributes-base';
 

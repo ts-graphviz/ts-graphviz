@@ -1,5 +1,5 @@
 import React from 'react';
-import { IRootCluster } from 'ts-graphviz';
+import { IRootCluster } from '@ts-graphviz/model';
 
 export type Context = {
   root?: IRootCluster;

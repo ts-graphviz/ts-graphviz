@@ -1,5 +1,5 @@
 import 'jest-graphviz';
-import { EdgeTargetTuple, ISubgraph, Subgraph } from '../../../domain';
+import { EdgeTargetTuple, ISubgraph, Subgraph } from '@ts-graphviz/model';
 import { toDot } from '../to-dot';
 
 describe('Subgraph rendering', () => {

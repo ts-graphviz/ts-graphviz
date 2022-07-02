@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "yarn workspace ts-graphviz build && yarn workspace @ts-graphviz/parser build && yarn workspace @ts-graphviz/react build && yarn workspace @ts-graphviz/node build",
+    "build": "yarn workspace @ts-graphviz/dot-type build && yarn workspace @ts-graphviz/dot-attribute build && yarn workspace @ts-graphviz/dot-ast build && yarn workspace @ts-graphviz/model build && yarn workspace @ts-graphviz/parser build && yarn workspace @ts-graphviz/renderer build && yarn workspace ts-graphviz build && yarn workspace @ts-graphviz/react build && yarn workspace @ts-graphviz/node build",
     "test": "jest",
     "format": "eslint --ext ts,tsx . --fix && prettier --plugin=./config/prettier/peggy.json --write './**/*.(json|yaml|ts|tsx|peggy)'",
     "lint": "eslint --ext ts,tsx .",
@@ -58,12 +58,12 @@
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^4.2.1",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.31.2",
+    "rollup-plugin-typescript2": "^0.32.1",
     "svgo": "^2.3.1",
     "ts-dedent": "^2.1.1",
     "ts-jest": "^28.0.2",
     "ts-loader": "^7.0.2",
-    "ts-node": "^9.1.1",
+    "ts-node": "^10.8.1",
     "ts-pegjs": "1.1.1",
     "tslib": "^2.3.1",
     "typedoc": "^0.22.4",

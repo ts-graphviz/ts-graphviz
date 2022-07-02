@@ -1,4 +1,4 @@
-import { Subgraph } from 'ts-graphviz';
+import { Subgraph } from '@ts-graphviz/model';
 import { renderHook } from '@testing-library/react-hooks';
 import { digraph, graph, graphInSubgraph, digraphInSubgraph } from './utils/wrapper';
 import { useSubgraph } from '../use-subgraph';

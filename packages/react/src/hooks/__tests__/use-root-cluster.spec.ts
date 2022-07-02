@@ -1,4 +1,4 @@
-import { Digraph, Graph } from 'ts-graphviz';
+import { Digraph, Graph } from '@ts-graphviz/model';
 import { renderHook } from '@testing-library/react-hooks';
 import { digraph, graph, graphInSubgraph, digraphInSubgraph } from './utils/wrapper';
 import { useRootCluster } from '../use-root-cluster';

@@ -1,4 +1,4 @@
-import { Digraph, Graph, RootCluster, RootClusterAttributes } from '../domain';
+import { Digraph, Graph, RootCluster, RootClusterAttributes } from '@ts-graphviz/model';
 
 /**
  * Type indicating that it is a constructor of T.

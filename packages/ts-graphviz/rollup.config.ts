@@ -2,7 +2,6 @@ import { RollupOptions } from 'rollup';
 import typescript from 'rollup-plugin-typescript2';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
-import { terser } from 'rollup-plugin-terser';
 
 const options: RollupOptions[] = [
   {
@@ -17,13 +16,8 @@ const options: RollupOptions[] = [
         format: 'esm',
         file: './lib/index.js',
       },
-      {
-        format: 'umd',
-        name: 'graphviz',
-        file: './lib/bundle.min.js',
-        plugins: [terser()],
-      },
     ],
+    external: ['@ts-graphviz/dot-attribute', '@ts-graphviz/model'],
   },
   {
     input: './lib/index.d.ts',

@@ -1,4 +1,4 @@
-import { Edge, EdgeTargetTuple } from 'ts-graphviz';
+import { Edge, EdgeTargetTuple } from '@ts-graphviz/model';
 import { renderHook } from '@testing-library/react-hooks';
 import { useEdge } from '../use-edge';
 import { digraph, graph } from './utils/wrapper';

@@ -34,6 +34,7 @@ const options: RollupOptions[] = [
         file: './lib/index.d.ts',
       },
     ],
+    external: ['ts-graphviz', 'child_process', 'tmp-promise', 'util', 'fs'],
   },
 ];
 

@@ -1,11 +1,5 @@
-import {
-  EdgeAttributes,
-  NodeAttributes,
-  ClusterSubgraphAttributes,
-  ICluster,
-  AttributesObject,
-  AttributeKey,
-} from 'ts-graphviz';
+import { EdgeAttributes, NodeAttributes, ClusterSubgraphAttributes, ICluster, AttributesObject } from '@ts-graphviz/model';
+import { AttributeKey } from '@ts-graphviz/dot-attribute';
 import { useEffect } from 'react';
 
 export type ClusterAttributesProps = {

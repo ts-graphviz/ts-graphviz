@@ -1,4 +1,4 @@
-import { Node } from '../../../domain';
+import { Node } from '@ts-graphviz/model';
 import { toDot } from '../to-dot';
 
 describe('Node rendering', () => {

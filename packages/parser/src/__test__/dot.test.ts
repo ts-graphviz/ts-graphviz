@@ -1,4 +1,4 @@
-import { Digraph } from 'ts-graphviz';
+import { Digraph } from '@ts-graphviz/model';
 import { dot } from '../dot';
 
 describe('dot template tag', () => {

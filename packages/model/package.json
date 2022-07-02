@@ -1,6 +1,6 @@
 {
-  "name": "ts-graphviz",
-  "version": "0.16.0",
+  "name": "@ts-graphviz/model",
+  "version": "0.0.0",
   "type": "module",
   "author": "kamiazya <yuki@kamiazya.tech>",
   "description": "Graphviz library for TypeScript.",
@@ -30,8 +30,7 @@
   "license": "MIT",
   "dependencies": {
     "@ts-graphviz/dot-attribute": "^0.0.0",
-    "@ts-graphviz/dot-type": "^0.0.0",
-    "@ts-graphviz/model": "^0.0.0"
+    "@ts-graphviz/dot-type": "^0.0.0"
   },
   "scripts": {
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",

@@ -2,28 +2,22 @@ import { RollupOptions } from 'rollup';
 import typescript from 'rollup-plugin-typescript2';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
-import { terser } from 'rollup-plugin-terser';
 
 const options: RollupOptions[] = [
   {
     input: './src/index.ts',
     plugins: [
       typescript(),
-      terser({
-        format: {
-          comments: false,
-        },
-      }),
     ],
-    external: ['ts-graphviz'],
+    external: ['@ts-graphviz/model', '@ts-graphviz/dot-ast'],
     output: [
       {
         format: 'cjs',
-        file: './lib/index.js',
+        file: './lib/index.cjs',
       },
       {
         format: 'esm',
-        file: './lib/index.mjs',
+        file: './lib/index.js',
       },
     ],
   },
@@ -36,7 +30,6 @@ const options: RollupOptions[] = [
       }),
       dts(),
     ],
-    external: ['ts-graphviz'],
     output: [
       {
         format: 'esm',

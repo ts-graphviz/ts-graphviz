@@ -1,5 +1,5 @@
 import { DotObject } from './abstract';
-import { EdgeAttributeKey } from '../knowledge';
+import { EdgeAttributeKey } from '@ts-graphviz/dot-attribute';
 import { Attributes } from './attributes-base';
 import { EdgeAttributes, EdgeTargetTuple, IAttributes, IEdge } from './types';
 import { isNodeRefLike } from './nodes';

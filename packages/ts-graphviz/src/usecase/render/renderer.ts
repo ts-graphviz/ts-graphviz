@@ -17,7 +17,7 @@ import {
   NodeRef,
   NodeRefGroup,
   isForwardRefNode,
-} from '../../domain';
+} from '@ts-graphviz/model';
 
 function escape(str: string): string {
   return str.replace(/\n/g, '\\n').replace(/"/g, '\\"');

@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from 'react';
-import { ISubgraph, ClusterSubgraphAttributes } from 'ts-graphviz';
+import { ISubgraph, ClusterSubgraphAttributes } from '@ts-graphviz/model';
 import { useCluster } from './use-cluster';
 import { useClusterAttributes, ClusterAttributesProps } from './use-cluster-attributes';
 import { useHasComment } from './use-comment';

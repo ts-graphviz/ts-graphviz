@@ -39,6 +39,7 @@
     "@hpcc-js/wasm": "^0.3.13",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
+    "@ts-graphviz/model": "^0.0.0",
     "ts-graphviz": "^0.16.0"
   },
   "peerDependenciesMeta": {

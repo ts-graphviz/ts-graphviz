@@ -2,21 +2,22 @@ import {
   ClusterSubgraphAttributeKey,
   EdgeAttributeKey,
   NodeAttributeKey,
-  RootClusterAttributeKey,
+  GraphAttributeKey,
   SubgraphAttributeKey,
-} from '../knowledge';
-import { Cluster } from './clusters';
+} from '@ts-graphviz/dot-attribute';
+import { GraphBase } from './clusters';
 import { Attributes } from './attributes-base';
-import { IRootCluster, RootClusterAttributes } from './types';
+import { IGraph, GraphAttributes } from './types';
 
 /**
  * Base class for RootCluster.
  *
  * @category Domain Model
  */
-export abstract class RootCluster extends Cluster<RootClusterAttributeKey> implements IRootCluster {
+export class Graph extends GraphBase<GraphAttributeKey> implements IGraph {
   public readonly id?: string;
 
+  public readonly directed: boolean;
   /**
    * Strict mode.
    *
@@ -28,45 +29,28 @@ export abstract class RootCluster extends Cluster<RootClusterAttributeKey> imple
    */
   public strict: boolean;
 
-  public attributes = {
+  public attributes = Object.freeze({
     graph: new Attributes<SubgraphAttributeKey | ClusterSubgraphAttributeKey>(),
     edge: new Attributes<EdgeAttributeKey>(),
     node: new Attributes<NodeAttributeKey>(),
-  };
+  });
 
-  constructor(id?: string, attributes?: RootClusterAttributes);
+  constructor(directed: boolean, id?: string, attributes?: GraphAttributes);
 
-  constructor(id?: string, strict?: boolean, attributes?: RootClusterAttributes);
+  constructor(directed: boolean, id?: string, strict?: boolean, attributes?: GraphAttributes);
 
-  constructor(strict?: boolean, attributes?: RootClusterAttributes);
+  constructor(directed: boolean, strict?: boolean, attributes?: GraphAttributes);
 
-  constructor(attributes?: RootClusterAttributes);
+  constructor(directed: boolean, attributes?: GraphAttributes);
 
-  constructor(...args: unknown[]) {
+  constructor(directed: boolean, ...args: unknown[]) {
     super();
+    this.directed = directed;
     this.id = args.find((arg): arg is string => typeof arg === 'string');
     this.strict = args.find((arg): arg is boolean => typeof arg === 'boolean') ?? false;
-    const attributes = args.find((arg): arg is RootClusterAttributes => typeof arg === 'object' && arg !== null);
+    const attributes = args.find((arg): arg is GraphAttributes => typeof arg === 'object' && arg !== null);
     if (attributes !== undefined) {
       this.apply(attributes);
     }
   }
 }
-
-/**
- * Graph object.
- *
- * @description
- * An object representing an omnidirectional graph.
- * @category Domain Model
- */
-export class Graph extends RootCluster {}
-
-/**
- * Digraph object.
- *
- * @description
- * The object representing a directional graph.
- * @category Domain Model
- */
-export class Digraph extends RootCluster {}

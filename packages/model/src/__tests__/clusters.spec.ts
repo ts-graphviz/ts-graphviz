@@ -1,8 +1,8 @@
 import 'jest-graphviz';
-import { attribute } from '../..';
+import { attribute } from '@ts-graphviz/dot-attribute';
 import { DotObject, GraphvizObject } from '../abstract';
 import { AttributesBase } from '../attributes-base';
-import { Cluster, Subgraph } from '../clusters';
+import { GraphBase, Subgraph } from '../clusters';
 import { Node } from '../nodes';
 import { EdgeTargetTuple, ISubgraph } from '../types';
 
@@ -15,7 +15,7 @@ describe('class Subgraph', () => {
 
   it('should be instance of Subgraph/Cluster/AttributesBase/DotObject/GraphvizObject', () => {
     expect(subgraph).toBeInstanceOf(Subgraph);
-    expect(subgraph).toBeInstanceOf(Cluster);
+    expect(subgraph).toBeInstanceOf(GraphBase);
     expect(subgraph).toBeInstanceOf(AttributesBase);
     expect(subgraph).toBeInstanceOf(DotObject);
     expect(subgraph).toBeInstanceOf(GraphvizObject);

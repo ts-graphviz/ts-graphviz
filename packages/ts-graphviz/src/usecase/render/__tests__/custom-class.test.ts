@@ -1,6 +1,7 @@
 import 'jest-graphviz';
+import { attribute } from '@ts-graphviz/dot-attribute';
 import { toDot } from '../to-dot';
-import { attribute, Digraph, Graph, Node, Edge, EdgeTargetTuple } from '../../../domain';
+import { Digraph, Graph, Node, Edge, EdgeTargetTuple } from '@ts-graphviz/model';
 
 describe('class base API', () => {
   test('digraph', () => {

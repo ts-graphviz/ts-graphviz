@@ -3,15 +3,17 @@ import path from 'path';
 import util from 'util';
 import { digraph, RootCluster } from 'ts-graphviz';
 import { exportToBuffer } from '@ts-graphviz/node';
-import { optimize } from 'svgo';
+import { optimize, OptimizedSvg } from 'svgo';
 
 const writeFile = util.promisify(fs.writeFile);
 
 async function injectStateMachineDiagram(G: RootCluster, filepath: string) {
   const svg = await exportToBuffer(G, { format: 'svg' }).then((buf) => buf.toString('utf-8'));
-  const { data } = optimize(svg);
-
-  await writeFile(filepath, data);
+  const result = optimize(svg);
+  if (result.error !== undefined) {
+    throw new Error(result.error);
+  }
+  await writeFile(filepath, (result as OptimizedSvg).data);
 }
 
 (async () => {

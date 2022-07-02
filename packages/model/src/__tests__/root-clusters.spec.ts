@@ -1,18 +1,17 @@
 import 'jest-graphviz';
 import { DotObject, GraphvizObject } from '../abstract';
 import { AttributesBase } from '../attributes-base';
-import { Cluster } from '../clusters';
+import { GraphBase } from '../clusters';
 import { Edge } from '../edges';
 import { Node } from '../nodes';
-import { RootCluster, Digraph, Graph } from '../root-clusters';
-import { attribute } from '../..';
+import { Graph } from '../root-clusters';
+import { attribute } from '@ts-graphviz/dot-attribute';
 import { EdgeTargetTuple } from '../types';
 
-describe('RootClusters', () => {
+describe('Graph', () => {
   describe('Constructor', () => {
-    class TestRoot extends RootCluster {}
-    test('first argument is id, and second is strict, and third is attributes object', () => {
-      const root = new TestRoot('test', false, {
+    test('first argument is directed, and second is id, and third is strict, and fourth is attributes object', () => {
+      const root = new Graph(true, 'test', false, {
         [attribute.label]: 'Label',
       });
       expect(root.id).toBe('test');
@@ -21,7 +20,7 @@ describe('RootClusters', () => {
       expect(root.get(attribute.label)).toBe('Label');
     });
     test('first argument is id, and second attributes object', () => {
-      const root = new TestRoot('test', {
+      const root = new Graph(true, 'test', {
         [attribute.label]: 'Label',
       });
       expect(root.id).toBe('test');
@@ -30,7 +29,7 @@ describe('RootClusters', () => {
       expect(root.get(attribute.label)).toBe('Label');
     });
     test('first argument is strict, and second attributes object', () => {
-      const root = new TestRoot(true, {
+      const root = new Graph(true, {
         [attribute.label]: 'Label',
       });
       expect(root.strict).toBe(true);
@@ -40,17 +39,17 @@ describe('RootClusters', () => {
   });
 
   describe.each([
-    ['Digraph', (): RootCluster => new Digraph()],
-    ['Graph', (): RootCluster => new Graph()],
+    ['Digraph', (): Graph => new Graph(true)],
+    ['Graph', (): Graph => new Graph(false)],
   ])('%s', (_, rootClusterFactory) => {
-    let g: RootCluster;
+    let g: Graph;
     beforeEach(() => {
       g = rootClusterFactory();
     });
 
     it('should be instance of RootCluster/Cluster/AttributesBase/DotObject/GraphvizObject', () => {
-      expect(g).toBeInstanceOf(RootCluster);
-      expect(g).toBeInstanceOf(Cluster);
+      expect(g).toBeInstanceOf(Graph);
+      expect(g).toBeInstanceOf(GraphBase);
       expect(g).toBeInstanceOf(AttributesBase);
       expect(g).toBeInstanceOf(DotObject);
       expect(g).toBeInstanceOf(GraphvizObject);

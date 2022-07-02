@@ -4,17 +4,17 @@ import {
   ClusterSubgraphAttributeKey,
   EdgeAttributeKey,
   NodeAttributeKey,
-} from '../knowledge';
+} from '@ts-graphviz/dot-attribute';
 import { Attributes, AttributesBase } from './attributes-base';
 import { isNodeRefGroupLike, Node, toNodeRef, toNodeRefGroup } from './nodes';
 import { Edge } from './edges';
 import {
-  ICluster,
-  IClusterCommonAttributes,
+  IGraphBase,
+  IGraphCommonAttributes,
   INode,
   IEdge,
   ISubgraph,
-  ClusterSubgraphAttributes,
+  SubgraphAttributes,
   NodeAttributes,
   EdgeTargetLikeTuple,
   EdgeAttributes,
@@ -25,7 +25,7 @@ import {
  * Base class for clusters.
  * @hidden
  */
-export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> implements ICluster<T> {
+export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T> implements IGraphBase<T> {
   /** Cluster ID */
   public readonly id?: string;
 
@@ -33,7 +33,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
   public comment?: string;
 
   /** Common attributes of objects in the cluster. */
-  public abstract readonly attributes: Readonly<IClusterCommonAttributes>;
+  public abstract readonly attributes: Readonly<IGraphCommonAttributes>;
 
   /**
    * Nodes in the cluster.
@@ -114,13 +114,13 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
   /**
    * Create a Subgraph and add it to the cluster.
    */
-  public createSubgraph(id?: string, attributes?: ClusterSubgraphAttributes): ISubgraph;
+  public createSubgraph(id?: string, attributes?: SubgraphAttributes): ISubgraph;
 
-  public createSubgraph(attributes?: ClusterSubgraphAttributes): ISubgraph;
+  public createSubgraph(attributes?: SubgraphAttributes): ISubgraph;
 
   public createSubgraph(...args: unknown[]): ISubgraph {
     const id = args.find((arg): arg is string => typeof arg === 'string');
-    const attributes = args.find((arg): arg is ClusterSubgraphAttributes => typeof arg === 'object');
+    const attributes = args.find((arg): arg is SubgraphAttributes => typeof arg === 'object');
     const graph = new Subgraph(id, attributes);
     this.objects.subgraphs.add(graph);
     return graph;
@@ -240,7 +240,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    */
   public subgraph(
     id: string,
-    attributes: ClusterSubgraphAttributes,
+    attributes: SubgraphAttributes,
     callback?: (subgraph: ISubgraph) => void,
   ): ISubgraph;
 
@@ -271,7 +271,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * @param attributes Object of attributes to be adapted to the subgraph.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  public subgraph(attributes: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  public subgraph(attributes: SubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
 
   /**
    * Create anonymous subgraphs and manipulate them with callback functions.
@@ -285,7 +285,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
   public subgraph(...args: unknown[]): ISubgraph {
     const id = args.find((arg: unknown): arg is string => typeof arg === 'string');
     const attributes = args.find(
-      (arg: unknown): arg is ClusterSubgraphAttributes => typeof arg === 'object' && arg !== null,
+      (arg: unknown): arg is SubgraphAttributes => typeof arg === 'object' && arg !== null,
     );
     const callback = args.find((arg: unknown): arg is (subgraph: ISubgraph) => void => typeof arg === 'function');
     const subgraph: ISubgraph = id ? this.getSubgraph(id) ?? this.createSubgraph(id) : this.createSubgraph();
@@ -505,7 +505,7 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
    * ```
    * @param attributes Object of attributes to be adapted to the clusters.
    */
-  public graph(attributes: ClusterSubgraphAttributes): void {
+  public graph(attributes: SubgraphAttributes): void {
     this.attributes.graph.apply(attributes);
   }
 }
@@ -514,23 +514,23 @@ export abstract class Cluster<T extends AttributeKey> extends AttributesBase<T> 
  * Subgraph object.
  * @category Domain Model
  */
-export class Subgraph extends Cluster<SubgraphAttributeKey | ClusterSubgraphAttributeKey> implements ISubgraph {
+export class Subgraph extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAttributeKey> implements ISubgraph {
   public readonly id?: string;
 
-  public attributes = {
+  public attributes = Object.freeze({
     graph: new Attributes<ClusterSubgraphAttributeKey>(),
     edge: new Attributes<EdgeAttributeKey>(),
     node: new Attributes<NodeAttributeKey>(),
-  };
+  });
 
-  constructor(id?: string, attributes?: ClusterSubgraphAttributes);
+  constructor(id?: string, attributes?: SubgraphAttributes);
 
-  constructor(attributes?: ClusterSubgraphAttributes);
+  constructor(attributes?: SubgraphAttributes);
 
   constructor(...args: unknown[]) {
     super();
     this.id = args.find((arg): arg is string => typeof arg === 'string');
-    const attributes = args.find((arg): arg is ClusterSubgraphAttributes => typeof arg === 'object' && arg !== null);
+    const attributes = args.find((arg): arg is SubgraphAttributes => typeof arg === 'object' && arg !== null);
     if (attributes !== undefined) {
       this.apply(attributes);
     }

@@ -1,5 +1,5 @@
 export { SyntaxError } from './dot.peggy';
-export { AST } from './ast';
 export { convert } from './convert';
 export { parse } from './parse';
+export { stringify } from './stringify';
 export { dot } from './dot';

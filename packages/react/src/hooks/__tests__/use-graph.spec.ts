@@ -1,4 +1,4 @@
-import { Graph } from 'ts-graphviz';
+import { Graph } from '@ts-graphviz/model';
 import { renderHook } from '@testing-library/react-hooks';
 import { context } from './utils/wrapper';
 import { useGraph } from '../use-graph';

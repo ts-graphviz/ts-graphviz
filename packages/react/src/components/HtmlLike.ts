@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { AttributesValue } from 'ts-graphviz';
+import { AttributesValue } from '@ts-graphviz/model';
 import { ValueOf } from '../utils/value-of';
 
 export type TableProps = {

@@ -1,5 +1,5 @@
 import 'jest-graphviz';
-import { IRootCluster, Digraph, Graph, Node, Edge } from '../../../domain';
+import { IRootCluster, Digraph, Graph, Node, Edge } from '@ts-graphviz/model';
 import { toDot } from '../to-dot';
 
 describe('Edge rendering', () => {

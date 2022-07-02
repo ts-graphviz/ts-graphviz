@@ -1,4 +1,4 @@
-import { RootCluster } from 'ts-graphviz';
+import { Graph } from '@ts-graphviz/model';
 import { parse } from './parse';
 
 /**
@@ -22,6 +22,6 @@ import { parse } from './parse';
  * `;
  * ```
  */
-export function dot(template: TemplateStringsArray, ...substitutions: unknown[]): RootCluster {
+export function dot(template: TemplateStringsArray, ...substitutions: unknown[]): Graph {
   return parse(String.raw(template, ...substitutions));
 }

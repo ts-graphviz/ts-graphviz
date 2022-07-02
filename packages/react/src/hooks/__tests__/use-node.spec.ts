@@ -1,4 +1,4 @@
-import { Node } from 'ts-graphviz';
+import { Node } from '@ts-graphviz/model';
 import { renderHook } from '@testing-library/react-hooks';
 
 import { useNode } from '../use-node';

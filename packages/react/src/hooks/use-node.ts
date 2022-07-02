@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { INode, NodeAttributes } from 'ts-graphviz';
+import { INode, NodeAttributes } from '@ts-graphviz/model';
 import { useCluster } from './use-cluster';
 import { useHasComment } from './use-comment';
 import { useHasAttributes } from './use-has-attributes';

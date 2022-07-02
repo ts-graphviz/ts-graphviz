@@ -1,5 +1,5 @@
 import { toDot } from '../to-dot';
-import { Attributes } from '../../../domain';
+import { Attributes } from '@ts-graphviz/model';
 
 describe('Attributes rendering', () => {
   let attrs: Attributes;

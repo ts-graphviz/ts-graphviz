@@ -13,15 +13,21 @@ export interface FileRange {
 }
 
 /**
+ * AST common propaties.
+ */
+ export interface ASTCommon {
+  location: FileRange;
+ }
+
+/**
  * AST node.
  */
-export interface ASTBaseNode {
+export interface ASTBaseNode extends ASTCommon {
   /**
    * Every leaf interface that extends ASTBaseNode
    * must specify a type property.
    */
   type: string;
-  location: FileRange;
 }
 
 export interface ASTBaseParent<STMT extends ASTBaseNode = ASTBaseNode> extends ASTBaseNode {
@@ -65,20 +71,14 @@ export interface Attribute extends ASTBaseNode, KeyValue {
  */
 export interface Comment extends ASTBaseNode {
   type: 'Comment';
-  kind: Comment.Kind;
+  kind: 'Block' | 'Slash' | 'Macro';
   value: string;
-}
-export namespace Comment {
-  export type Kind = 'Block' | 'Slash' | 'Macro';
 }
 
 /** Attributes AST object. */
 export interface Attributes extends ASTBaseParent<Attribute | Comment> {
   type: 'Attributes';
-  kind: Attributes.Kind;
-}
-export namespace Attributes {
-  export type Kind = 'Graph' | 'Edge' | 'Node';
+  kind: 'Graph' | 'Edge' | 'Node';
 }
 
 /** NodeRef AST object. */

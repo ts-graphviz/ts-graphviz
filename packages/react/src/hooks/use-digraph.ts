@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from 'react';
-import { Digraph, RootClusterAttributes } from 'ts-graphviz';
+import { Digraph, RootClusterAttributes } from '@ts-graphviz/model';
 import { useGraphvizContext } from './use-graphviz-context';
 import { useClusterAttributes, ClusterAttributesProps } from './use-cluster-attributes';
 import { useHasComment } from './use-comment';

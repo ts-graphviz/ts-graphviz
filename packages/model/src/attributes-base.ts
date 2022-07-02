@@ -1,13 +1,13 @@
-import { Attribute, AttributeKey } from '../knowledge';
+import { Attribute, AttributeKey } from '@ts-graphviz/dot-attribute';
 import { DotObject } from './abstract';
-import { IAttributesBase, AttributesValue, AttributesObject, AttributesEntities, IAttributes } from './types';
+import { IAttributesBase, AttributesObject, AttributesEntities, IAttributes } from './types';
 
 /**
  * @category Domain Model
  */
 export abstract class AttributesBase<T extends AttributeKey> extends DotObject implements IAttributesBase<T> {
   /** @hidden */
-  protected attrs: Map<T, Attribute<T>> = new Map();
+  #attrs: Map<T, Attribute<T>> = new Map();
 
   constructor(attributes?: AttributesObject<T>) {
     super();
@@ -16,29 +16,29 @@ export abstract class AttributesBase<T extends AttributeKey> extends DotObject i
     }
   }
 
-  get values(): ReadonlyArray<[T, AttributesValue]> {
-    return Array.from(this.attrs.entries());
+  get values(): ReadonlyArray<[T, Attribute<T>]> {
+    return Array.from(this.#attrs.entries());
   }
 
   /** The size of the attribute. */
   get size(): number {
-    return this.attrs.size;
+    return this.#attrs.size;
   }
 
   /** The size of the attribute. */
   public get(key: T): Attribute<T> | undefined {
-    return this.attrs.get(key);
+    return this.#attrs.get(key);
   }
 
   /** Set a value to the attribute. */
   public set(key: T, value: Attribute<T>): void {
     if (value !== null && value !== undefined) {
-      this.attrs.set(key, value);
+      this.#attrs.set(key, value);
     }
   }
 
   public delete(key: T): void {
-    this.attrs.delete(key);
+    this.#attrs.delete(key);
   }
 
   public apply(attributes: AttributesObject<T> | AttributesEntities<T>): void {
@@ -49,7 +49,7 @@ export abstract class AttributesBase<T extends AttributeKey> extends DotObject i
   }
 
   public clear(): void {
-    this.attrs.clear();
+    this.#attrs.clear();
   }
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { EdgeTargetLikeTuple, IEdge, EdgeAttributes } from 'ts-graphviz';
+import { EdgeTargetLikeTuple, IEdge, EdgeAttributes } from '@ts-graphviz/model';
 import { useCluster } from './use-cluster';
 import { EdgeTargetLengthErrorMessage } from '../utils/errors';
 import { useHasComment } from './use-comment';

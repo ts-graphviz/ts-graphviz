@@ -1,13 +1,13 @@
-import {
+import type { Compass } from '@ts-graphviz/dot-type';
+import type {
   Attribute,
   AttributeKey,
   ClusterSubgraphAttributeKey,
   EdgeAttributeKey,
   NodeAttributeKey,
-  RootClusterAttributeKey,
+  GraphAttributeKey,
   SubgraphAttributeKey,
-  type,
-} from '../knowledge';
+} from '@ts-graphviz/dot-attribute';
 
 /**
  * Objects that can be Edge destinations satisfy this interface.
@@ -29,25 +29,16 @@ export type EdgeTargetLike = NodeRefLike | NodeRefGroupLike;
 export type EdgeTargetTuple = [from: EdgeTarget, to: EdgeTarget, ...rest: EdgeTarget[]];
 export type EdgeTargetLikeTuple = [from: EdgeTargetLike, to: EdgeTargetLike, ...rest: EdgeTargetLike[]];
 
-/**
- * An AttributesValue is one of the following:
- * - Any string of alphabetic ([a-zA-Z\200-\377]) characters, underscores ('_') or digits ([0-9]), not beginning with a digit;
- * - a numeral [-]?(.[0-9]+ | [0-9]+(.[0-9]*)? );
- * - any double-quoted string ("...") possibly containing escaped quotes (\")1;
- * - an HTML Like string (<...>).
- */
-export type AttributesValue = Attribute<AttributeKey>;
-
 export type AttributesObject<T extends AttributeKey> = {
-  [key in T]?: Attribute<key>;
+  [K in T]?: Attribute<K>;
 };
 
-export type AttributesEntities<T extends AttributeKey> = readonly [T, AttributesValue][];
+export type AttributesEntities<T extends AttributeKey> = readonly [T, Attribute<T>][];
 
 export type EdgeAttributes = AttributesObject<EdgeAttributeKey>;
 export type NodeAttributes = AttributesObject<NodeAttributeKey>;
-export type RootClusterAttributes = AttributesObject<RootClusterAttributeKey>;
-export type ClusterSubgraphAttributes = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey>;
+export type GraphAttributes = AttributesObject<GraphAttributeKey>;
+export type SubgraphAttributes = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey>;
 
 export interface HasComment {
   /** Comments to include when outputting with toDot. */
@@ -64,7 +55,7 @@ export interface ForwardRefNode extends Partial<Port> {
 
 export interface IAttributesBase<T extends AttributeKey> {
   readonly size: number;
-  readonly values: ReadonlyArray<[T, AttributesValue]>;
+  readonly values: ReadonlyArray<[T, Attribute<T>]>;
   get(key: T): Attribute<T> | undefined;
   set(key: T, value: Attribute<T>): void;
   apply(attributes: AttributesObject<T> | AttributesEntities<T>): void;
@@ -72,11 +63,11 @@ export interface IAttributesBase<T extends AttributeKey> {
   clear(): void;
 }
 
-export interface IAttributes<T extends AttributeKey = AttributeKey> extends IAttributesBase<T>, HasComment {}
+export interface IAttributes<T extends AttributeKey> extends IAttributesBase<T>, HasComment {}
 
 export interface Port {
   port: string;
-  compass: type.Compass;
+  compass: Compass;
 }
 
 export interface INode extends HasComment, HasAttributes<NodeAttributeKey> {
@@ -93,7 +84,7 @@ export interface IEdge extends HasComment, HasAttributes<EdgeAttributeKey> {
  *
  * @hidden
  */
-export interface IClusterCommonAttributes {
+export interface IGraphCommonAttributes {
   /** Manage common attributes of graphs in a cluster. */
   graph: IAttributes<SubgraphAttributeKey | ClusterSubgraphAttributeKey>;
   /** Manage common attributes of edges in a cluster. */
@@ -102,61 +93,61 @@ export interface IClusterCommonAttributes {
   node: IAttributes<NodeAttributeKey>;
 }
 
-export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComment, IAttributesBase<T> {
+export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasComment, IAttributesBase<T> {
   readonly id?: string;
-  readonly attributes: Readonly<IClusterCommonAttributes>;
+  readonly attributes: Readonly<IGraphCommonAttributes>;
   readonly nodes: ReadonlyArray<INode>;
   readonly edges: ReadonlyArray<IEdge>;
   readonly subgraphs: ReadonlyArray<ISubgraph>;
   /**
-   * Add a Node to the cluster.
+   * Add a Node to the graph.
    */
   addNode(node: INode): void;
   /**
-   * Add Edge to the cluster.
+   * Add Edge to the graph.
    */
   addEdge(edge: IEdge): void;
   /**
-   * Add a Subgraph to the cluster.
+   * Add a Subgraph to the graph.
    */
   addSubgraph(subgraph: ISubgraph): void;
   /**
-   * Check if the Node exists in the cluster.
+   * Check if the Node exists in the graph.
    */
   existNode(nodeId: string): boolean;
   /**
-   * Check if the Edge exists in the cluster.
+   * Check if the Edge exists in the graph.
    */
   existEdge(edge: IEdge): boolean;
   /**
-   * Check if the Subgraph exists in the cluster.
+   * Check if the Subgraph exists in the graph.
    */
   existSubgraph(subgraph: ISubgraph): boolean;
   /**
-   * Remove Node from the cluster.
+   * Remove Node from the graph.
    */
   removeNode(node: INode | string): void;
   /**
-   * Remove Edge from the cluster.
+   * Remove Edge from the graph.
    */
   removeEdge(edge: IEdge): void;
   /**
-   * Remove Subgraph from the cluster.
+   * Remove Subgraph from the graph.
    */
   removeSubgraph(subgraph: ISubgraph): void;
   /**
-   * Create a Node in the cluster.
+   * Create a Node in the graph.
    */
   createNode(id: string, attributes?: NodeAttributes): INode;
   /**
-   * Create a Subgraph and add it to the cluster.
+   * Create a Subgraph and add it to the graph.
    */
-  createSubgraph(id?: string, attributes?: ClusterSubgraphAttributes): ISubgraph;
-  createSubgraph(attributes?: ClusterSubgraphAttributes): ISubgraph;
+  createSubgraph(id?: string, attributes?: SubgraphAttributes): ISubgraph;
+  createSubgraph(attributes?: SubgraphAttributes): ISubgraph;
   /**
    * Get Subgraph in cluster by specifying id.
    *
-   * If there is no Subgraph with the specified id in the cluster, return undefined.
+   * If there is no Subgraph with the specified id in the graph, return undefined.
    */
   getSubgraph(id: string): ISubgraph | undefined;
 
@@ -164,10 +155,10 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    * Get Node in cluster by specifying id.
    *
    * @description
-   * If there is no Node with the specified id in the cluster, return undefined.
+   * If there is no Node with the specified id in the graph, return undefined.
    */
   getNode(id: string): INode | undefined;
-  /** Create Edge and add it to the cluster. */
+  /** Create Edge and add it to the graph. */
   createEdge(targets: EdgeTargetLikeTuple, attributes?: EdgeAttributes): IEdge;
 
   /**
@@ -224,7 +215,7 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    * @param attributes Object of attributes to be adapted to the subgraph.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  subgraph(id: string, attributes: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(id: string, attributes: SubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
   /**
    * Create anonymous subgraphs and and adapt the attributes.
    *
@@ -252,7 +243,7 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    * @param attributes Object of attributes to be adapted to the subgraph.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  subgraph(attributes: ClusterSubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(attributes: SubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
   /**
    * Create anonymous subgraphs and manipulate them with callback functions.
    *
@@ -312,11 +303,11 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    */
   node(id: string, attributes: NodeAttributes, callback?: (node: INode) => void): INode;
   /**
-   * Set a common attribute for the nodes in the cluster.
+   * Set a common attribute for the nodes in the graph.
    *
    * ```ts
    * const G = digraph('G', (g) => {
-   *   // Set a common attribute for the nodes in the cluster.
+   *   // Set a common attribute for the nodes in the graph.
    *   g.node({
    *     [attribute.color]: 'red',
    *     [attribute.label]: 'my label',
@@ -383,12 +374,12 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    */
   edge(targets: EdgeTargetLikeTuple, attributes: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
   /**
-   * Set a common attribute for the edges in the cluster.
+   * Set a common attribute for the edges in the graph.
    *
    *
    * ```ts
    * const G = digraph('G', (g) => {
-   *   // Set a common attribute for the edges in the cluster.
+   *   // Set a common attribute for the edges in the graph.
    *   g.edge({
    *     [attribute.color]: 'red',
    *     [attribute.label]: 'my label',
@@ -408,7 +399,7 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
   edge(attributes: EdgeAttributes): void;
 
   /**
-   * Set a common attribute for the clusters in the cluster.
+   * Set a common attribute for the graph in the graph.
    *
    * ```ts
    * const G = digraph('G', (g) => {
@@ -426,16 +417,18 @@ export interface ICluster<T extends AttributeKey = AttributeKey> extends HasComm
    * //   ];
    * // }
    * ```
-   * @param attributes Object of attributes to be adapted to the clusters.
+   * @param attributes Object of attributes to be adapted to the graph.
    */
-  graph(attributes: ClusterSubgraphAttributes): void;
+  graph(attributes: SubgraphAttributes): void;
 }
 
-export interface ISubgraph extends ICluster<SubgraphAttributeKey | ClusterSubgraphAttributeKey> {
+export interface ISubgraph extends IGraphBase<SubgraphAttributeKey | ClusterSubgraphAttributeKey> {
   isSubgraphCluster(): boolean;
 }
 
-export interface IRootCluster extends ICluster<RootClusterAttributeKey> {
+export interface IGraph extends IGraphBase<GraphAttributeKey> {
+  directed: boolean;
+
   /**
    * Strict mode.
    *

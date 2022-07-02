@@ -30,7 +30,8 @@
     "parser"
   ],
   "scripts": {
-    "build:peggy": "peggy --plugin ts-pegjs --extra-options-file peggy.json -o src/dot.peggy.ts grammar/dot.peggy && eslint --ext ts './src/dot.peggy.ts' --fix && prettier --write './src/dot.peggy.ts'",
+    "build:peggy": "peggy --plugin ts-pegjs --extra-options-file peggy.json -o src/dot.peggy.ts grammar/dot.peggy",
+    "postbuild:peggy": "eslint --ext ts './src/dot.peggy.ts' --fix && prettier --write './src/dot.peggy.ts'",
     "prebuild": "yarn build:peggy",
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
     "postbuild": "prettier --write './lib/index.d.ts'",
@@ -38,6 +39,7 @@
     "create-state-machine-diagram": "ts-node scripts/create-state-machine-diagram"
   },
   "dependencies": {
-    "ts-graphviz": "^0.16.0"
+    "@ts-graphviz/model": "^0.0.0",
+    "@ts-graphviz/dot-ast": "^0.0.0"
   }
 }

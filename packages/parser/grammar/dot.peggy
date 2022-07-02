@@ -17,43 +17,47 @@
   }
 
   const edgeops: { operator: '--' | '->', location: IFileRange }[] = [];
+
+  const b = new Builder({
+    locationFunction: location,
+  });
 }
 
-start = dot
+start = Dot
 
-dot = __ v:_dot __ { return v; }
+Dot = __ v:_dot __ { return v; }
 
-graph = __ v:_graph __ { return v; }
+Graph = __ v:_graph __ { return v; }
 
-node = __ v:_node __ { return v; }
+Node = __ v:_node __ { return v; }
 
-attributes = __ v:_attributes __ { return v; }
+Attributes = __ v:_attributes __ { return v; }
 
-attribute = __ v:_attribute __ { return v; }
+Attribute = __ v:_attribute __ { return v; }
 
-edge = __ v:_edge __ { return v; }
+Edge = __ v:_edge __ { return v; }
 
-subgraph = __ v:_subgraph __ { return v; }
+Subgraph = __ v:_subgraph __ { return v; }
 
-node_ref = __ v:_node_ref __ { return v; }
+NodeRef = __ v:_node_ref __ { return v; }
 
-attibutes_item = __ v:_attibutes_item __ { return v; }
+AttibutesItem = __ v:_attibutes_item __ { return v; }
 
-comment = __ v:_comment __ { return v; }
+Comment = __ v:_comment __ { return v; }
 
-cluster_statements = (attribute / attributes / edge / subgraph / node / comment)*
+ClusterStatements = (Attribute / Attributes / Edge / Subgraph / Node / Comment)*
 
 _dot
-  = c1:comment* graph:graph c2:comment* {
-      return {
-        type: 'dot',
+  = c1:Comment* graph:Graph c2:Comment* {
+      return b.dot({
+        // type: 'dot',
         body: [...c1, graph, ...c2],
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 _graph
-  = _strict:"strict"i? _ _kind:("graph"i / "digraph"i) _ id:_literal? __ "{" body:cluster_statements __ "}" {
+  = _strict:"strict"i? _ _kind:("graph"i / "digraph"i) _ id:_literal? __ "{" body:ClusterStatements __ "}" {
       const strict = !!_strict;
       const kind = _kind.toLowerCase();
       const directed = kind === 'digraph';
@@ -68,71 +72,85 @@ _graph
           }
         }
       }
-      return id !== null
-        ? { type: 'graph', id, directed, strict, body, location: location() }
-        : { type: 'graph', directed, strict, body, location: location() };
+      return b.graph(id !== null
+        ? {
+          // type: 'graph',
+          id, directed, strict, body,
+          // location: location()
+          }
+        : {
+          // type: 'graph',
+          directed, strict, body,
+          // location: location()
+          });
     }
 
 _attribute
   = keyValue:_key_value _ ";"? {
-      return {
-        type: 'attribute',
+      return b.attribute({
+        // type: 'Attribute',
         ...keyValue,
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 _attributes
   = _kind:("graph"i / "node"i / "edge"i) body:_attribute_list _ ";"? {
       const kind = _kind.toLowerCase();
-      return { type: 'attributes', kind, body, location: location() };
+      return b.attributes({
+        // type: 'Attributes',
+        kind, body,
+        // location: location()
+        });
     }
 
 _edge
   = id:_edge_target rhs:_edge_rhs _body:_attribute_list? _ ";"? {
-      return {
-        type: 'edge',
+      return b.edge({
+        // type: 'edge',
         body: _body ?? [],
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         targets: [id, ...rhs],
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 _node
   = id:_literal _ _body:_attribute_list? _ ";"? {
-      return {
-        type: 'node',
+      return b.node({
+        // type: 'node',
         id,
         body: _body ?? [],
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 _key_value = key:_literal _ "=" _ value:_literal { return { key, value }; }
 
 _attibutes_item
   = keyValue:_key_value _ ("," / ";")? {
-      return {
-        type: 'attribute',
+      return b.attribute({
+        type: 'Attribute',
         ...keyValue,
         location: location(),
-      };
+      });
     }
 
-_attribute_list = _ "[" list:(attibutes_item / comment)* __ "]" { return list; }
+_attribute_list = _ "[" list:(AttibutesItem / Comment)* __ "]" { return list; }
 
 _edge_target_group
-  = "{" id:node_ref rest:(("," / ";")? v:node_ref { return v; })* ("," / ";")? __ "}" {
-      return {
-        type: 'node_ref_group',
+  = "{" id:NodeRef rest:(("," / ";")? v:NodeRef { return v; })* ("," / ";")? __ "}" {
+      return b.nodeRefGroup({
+        // type: 'node_ref_group',
         body: [id, ...rest],
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 _edge_target
   = _edge_target_group
-  / node_ref
+  / NodeRef
 
 _edge_operator = operator:("->" / "--") { return { operator, location: location() }; }
 
@@ -142,7 +160,10 @@ _edge_rhs
       return [id].concat(rest || []);
     }
 
-_node_ref = id:_literal port:_port? { return { type: 'node_ref', id, ...port, location: location() }; }
+_node_ref = id:_literal port:_port? { return b.nodeRef({
+  type: 'NodeRef', id, ...port,
+  // location: location()
+  }); }
 
 _port "port"
   = ":" port:_literal compass:(":" compass:_compass { return compass; })? {
@@ -157,11 +178,19 @@ _port "port"
 _subgraph_id = "subgraph"i _ id:_literal? _ { return id; }
 
 _subgraph
-  = id:_subgraph_id? "{" _body:cluster_statements? __ "}" {
+  = id:_subgraph_id? "{" _body:ClusterStatements? __ "}" {
       const body = _body ?? [];
-      return id
-        ? { type: 'subgraph', id, body, location: location() }
-        : { type: 'subgraph', body, location: location() };
+      return b.subgraph(id
+        ? {
+          // type: 'Subgraph',
+          id, body,
+          // location: location()
+          }
+        : {
+          // type: 'Subgraph',
+          body,
+          // location: location()
+          });
     }
 
 _compass_keyword
@@ -179,23 +208,23 @@ _compass
     value:_compass_keyword { return { value, quoted: false }; }
     / "\"" value:_compass_keyword "\"" { return { value, quoted: true }; }
   ) {
-      return {
-        type: 'literal',
+      return b.literal({
+        // type: 'literal',
         ...v,
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 _literal
   = QUOTED_STRING
   / HTML_STRING
   / value:(STRING / NUMBER_STRING / NUMBER) {
-      return {
-        type: 'literal',
+      return b.literal({
+        // type: 'literal',
         value,
         quoted: false,
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 _comment
@@ -205,34 +234,34 @@ _comment
 
 _block_comment
   = "/*" v:(!"*/" v:. { return v; })* "*/" {
-      return {
-        type: 'comment',
-        kind: 'block',
+      return b.comment({
+        // type: 'Comment',
+        kind: 'Block',
         value: dedent(v.join('').replace(/[ \t]*\*/g, '')),
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 _slash_comment
   = lines:_slash_comment_line+ {
-      return {
-        type: 'comment',
-        kind: 'slash',
+      return b.comment({
+        // type: 'Comment',
+        kind: 'Slash',
         value: dedent(lines.join('\n')),
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 _slash_comment_line = _ "//" v:(!_newline v:. { return v; })* _newline? { return v.join(''); }
 
 _macro_comment
   = lines:_macro_comment_line+ {
-      return {
-        type: 'comment',
-        kind: 'macro',
+      return b.comment({
+        // type: 'Comment',
+        kind: 'Macro',
         value: dedent(lines.join('\n')),
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 _macro_comment_line = _ "#" v:(!_newline v:. { return v; })* _newline? { return v.join(''); }
@@ -259,12 +288,12 @@ NUMBER "NUMBER" = n:("-"? ("." [0-9]+ / [0-9]+ ("." [0-9]*)?)) { return text(); 
  */
 HTML_STRING
   = v:html_raw_string {
-      return {
-        type: 'literal',
+      return b.literal({
+        // type: 'literal',
         value: v.slice(1, v.length - 1),
         quoted: 'html',
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 html_raw_string = "<" v:(html_char / html_raw_string)* ">" { return '<' + v.join('') + '>'; }
@@ -273,12 +302,12 @@ html_char = v:(!(">" / "<") v:. { return v; })+ { return v.join(''); }
 
 QUOTED_STRING
   = "\"" chars:DoubleStringCharacter* "\"" {
-      return {
-        type: 'literal',
+      return b.literal({
+        // type: 'literal',
         value: chars.join(''),
         quoted: true,
-        location: location(),
-      };
+        // location: location(),
+      });
     }
 
 DoubleStringCharacter

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ICluster } from 'ts-graphviz';
+import { ICluster } from '@ts-graphviz/model';
 import { Cluster } from '../components/contexts/Cluster';
 import { NoClusterErrorMessage } from '../utils/errors';
 

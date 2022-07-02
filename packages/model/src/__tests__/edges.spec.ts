@@ -1,7 +1,7 @@
 import { DotObject, GraphvizObject } from '../abstract';
 import { Edge } from '../edges';
 import { Node } from '../nodes';
-import { attribute } from '../..';
+import { attribute } from '@ts-graphviz/dot-attribute';
 import { EdgeTargetTuple } from '../types';
 
 describe('class Edge', () => {

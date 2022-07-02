@@ -1,4 +1,4 @@
-import { HasComment } from 'ts-graphviz';
+import { HasComment } from '@ts-graphviz/model';
 import { useEffect } from 'react';
 
 export function useHasComment(target: HasComment, comment?: string): void {

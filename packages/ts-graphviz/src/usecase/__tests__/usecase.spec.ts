@@ -1,5 +1,6 @@
 import 'jest-graphviz';
-import { attribute, Digraph, Graph, Subgraph, Node, Edge } from '../../domain';
+import { attribute } from '@ts-graphviz/dot-attribute';
+import { Digraph, Graph, Subgraph, Node, Edge } from '@ts-graphviz/model';
 import { digraph, graph, strict } from '../builder';
 import { toDot } from '../render';
 

@@ -124,9 +124,9 @@ export type NodeAttributeKey =
   | '_class';
 
 /**
- * Attribute types available for root cluster.
+ * Attribute types available for graph.
  */
-export type RootClusterAttributeKey =
+export type GraphAttributeKey =
   | 'Damping'
   | 'K'
   | 'URL'
@@ -273,6 +273,6 @@ export type ClusterSubgraphAttributeKey =
 export type AttributeKey =
   | NodeAttributeKey
   | EdgeAttributeKey
-  | RootClusterAttributeKey
+  | GraphAttributeKey
   | SubgraphAttributeKey
   | ClusterSubgraphAttributeKey;
