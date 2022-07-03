@@ -26,18 +26,34 @@ const dependencies: { [key: string]: string[]} = {
   [pkgs.react]: [pkgs.graphviz],
 };
 
+const groups: { [group: string]: string[] } = {
+  'Domain knowledge': [pkgs.type, pkgs.attribute, pkgs.ast],
+  'Domain Model': [pkgs.model, pkgs.parser, pkgs.renderer],
+  'Interface': [pkgs.graphviz],
+  'Adapter': [pkgs.node, pkgs.react],
+};
+
 
 const outputFile = resolve(process.cwd(), process.argv[2]);
 
 await writeGraph(
   strict.digraph((g) => {
-    g.set('layout', 'circo');
     g.node({
-      shape: 'ellipse',
+      shape: 'component',
     });
     g.edge({
       dir: 'back',
     });
+
+    for (const [group, packages] of Object.entries(groups)) {
+      g.subgraph(`cluster_${group}`, s => {
+        s.set('label', group);
+        for (const pkg of packages) {
+          s.node(pkg);
+        }
+      });
+    }
+
 
     for (const [src, dists] of Object.entries(dependencies)) {
       for (const dist of dists) {

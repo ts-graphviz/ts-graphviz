@@ -13,7 +13,7 @@
     "test": "jest",
     "format": "eslint --ext ts,tsx . --fix && prettier --plugin=./config/prettier/peggy.json --write './**/*.(json|yaml|ts|tsx|peggy)'",
     "lint": "eslint --ext ts,tsx .",
-    "create-packages-dependency-diagram": "ts-node-esm scripts/create-packages-dependency-diagram.ts ./img/packages-dependency.svg",
+    "create-img:packages-dependency-diagram": "ts-node-esm scripts/create-packages-dependency-diagram.ts ./img/packages-dependency.svg",
     "create-img:parser-state-machine-diagram": "ts-node-esm scripts/create-state-machine-diagram.ts ./packages/parser/img/state-machine.svg",
     "doc": "typedoc"
   },
