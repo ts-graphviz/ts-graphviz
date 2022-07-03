@@ -1,4 +1,4 @@
-import type { Compass } from './type';
+import type { Compass } from './type.js';
 
 /** @hidden */
 export function isCompass(c: string): c is Compass {

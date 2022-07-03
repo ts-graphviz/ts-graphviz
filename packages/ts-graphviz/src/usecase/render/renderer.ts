@@ -1,22 +1,19 @@
+import { Attribute, AttributeKey } from '@ts-graphviz/dot-attribute';
 import {
   isNodeRef,
   Subgraph,
   Edge,
   Node,
-  RootCluster,
   Graph,
-  Digraph,
-  Attributes,
   ISubgraph,
   IEdge,
   INode,
-  IRootCluster,
   IAttributes,
-  ICluster,
-  AttributesValue,
+  Attributes,
   NodeRef,
   NodeRefGroup,
   isForwardRefNode,
+  IGraphBase,
 } from '@ts-graphviz/model';
 
 function escape(str: string): string {
@@ -91,12 +88,6 @@ function isNode(object: unknown): object is INode {
   return object instanceof Node;
 }
 
-function isRootCluster(object: unknown): object is IRootCluster {
-  return object instanceof RootCluster;
-}
-function isDigraph(object: unknown): object is Digraph {
-  return object instanceof Digraph;
-}
 function isGraph(object: unknown): object is Graph {
   return object instanceof Graph;
 }
@@ -105,19 +96,16 @@ function isAttributes(object: unknown): object is IAttributes {
   return object instanceof Attributes;
 }
 
-function renderClusterType(cluster: ICluster): string | undefined {
-  if (isDigraph(cluster)) {
-    return 'digraph';
-  }
+function renderClusterType(cluster: IGraphBase): string | undefined {
   if (isGraph(cluster)) {
-    return 'graph';
+    return cluster.directed ? 'digraph' : 'graph';
   }
   if (isSubgraph(cluster)) {
     return 'subgraph';
   }
 }
 
-function renderAttributeValue(value: AttributesValue): string {
+function renderAttributeValue(value: Attribute<AttributeKey>): string {
   const isNotString = typeof value !== 'string';
   let isHTMLLike = false;
   let isQuoteRequired = false;
@@ -143,14 +131,16 @@ function renderAttributeValue(value: AttributesValue): string {
   return stringValue;
 }
 
-function renderAttributeBuilder<T extends string>(deciliter: string): (v: [T, AttributesValue]) => string | undefined {
+function renderAttributeBuilder<T extends AttributeKey>(
+  deciliter: string,
+): (v: [T, Attribute<T>]) => string | undefined {
   return ([key, value]): string | undefined => join(key, ' = ', renderAttributeValue(value), deciliter);
 }
 
-const renderAttributeWithSemi: <T extends string>(v: [T, AttributesValue]) => string | undefined =
+const renderAttributeWithSemi: <T extends AttributeKey>(v: [T, Attribute<T>]) => string | undefined =
   renderAttributeBuilder(';');
 
-const renderAttributeWithComma: <T extends string>(v: [T, AttributesValue]) => string | undefined =
+const renderAttributeWithComma: <T extends AttributeKey>(v: [T, Attribute<T>]) => string | undefined =
   renderAttributeBuilder(',');
 
 function renderAttributes(attributes: IAttributes): string {
@@ -182,10 +172,10 @@ function renderNodeRefGroup(group: NodeRefGroup): string | undefined {
   return `{${concatWordsWithSpace(...group.map(renderNodeRef))}}`;
 }
 
-export type Dot = IRootCluster | ISubgraph | IEdge | INode | IAttributes | AttributesValue;
+export type Dot = Graph | ISubgraph | IEdge | INode | IAttributes | Attribute<AttributeKey>;
 
 export class Renderer {
-  private root?: IRootCluster;
+  private root?: Graph;
 
   // eslint-disable-next-line class-methods-use-this
   protected renderNode(node: INode): string {
@@ -199,7 +189,7 @@ export class Renderer {
   protected renderEdge(edge: IEdge): string {
     const comment = commentOutIfExist(edge.comment);
     const targets = joinWith(
-      isGraph(this.root) ? ' -- ' : ' -> ',
+      this.root?.directed ? ' -> ' : ' -- ',
       edge.targets.map((t) => (isNodeRef(t) ? renderNodeRef(t) : renderNodeRefGroup(t))),
     );
     const attrs = edge.attributes.size > 0 ? spaceLeftPad(renderAttributes(edge.attributes)) : undefined;
@@ -207,7 +197,7 @@ export class Renderer {
     return joinLines(comment, dot);
   }
 
-  protected renderCluster(cluster: ICluster): string {
+  protected renderCluster(cluster: IGraphBase): string {
     const type = renderClusterType(cluster);
     const id = cluster.id !== undefined ? renderAttributeValue(cluster.id) : undefined;
     // attributes
@@ -223,7 +213,7 @@ export class Renderer {
     return joinLines(concatWordsWithSpace(type, id, '{'), contents.length > 0 ? indent(contents) : undefined, '}');
   }
 
-  protected renderRootCluster(rootCluster: IRootCluster): string {
+  protected renderRootCluster(rootCluster: Graph): string {
     const comment = commentOutIfExist(rootCluster.comment);
     const cluster = this.renderCluster(rootCluster);
     return joinLines(comment, concatWordsWithSpace(rootCluster.strict ? 'strict' : undefined, cluster));
@@ -248,7 +238,7 @@ export class Renderer {
     if (isSubgraph(object)) {
       return this.renderSubgraph(object);
     }
-    if (isRootCluster(object)) {
+    if (isGraph(object)) {
       this.root = object;
       return this.renderRootCluster(object);
     }

@@ -29,6 +29,7 @@
   "typedocMain": "./src/index.ts",
   "license": "MIT",
   "dependencies": {
+    "@ts-graphviz/dot-ast": "^0.0.0",
     "@ts-graphviz/dot-attribute": "^0.0.0",
     "@ts-graphviz/dot-type": "^0.0.0",
     "@ts-graphviz/model": "^0.0.0"

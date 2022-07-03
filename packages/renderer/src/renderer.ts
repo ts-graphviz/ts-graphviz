@@ -12,7 +12,7 @@ import type {
   NodeRefGroup,
   Subgraph,
 } from '@ts-graphviz/dot-ast';
-import type { StringifyOption } from './types';
+import type { StringifyOption } from './types.js';
 
 export class Renderer {
   protected directed: boolean;
@@ -34,13 +34,13 @@ export class Renderer {
   }
 
   protected printAttribute(ast: Attribute): string {
-    return `${this.stringify(ast.key)} = ${this.stringify(ast.value)};`;
+    return `${this.render(ast.key)} = ${this.render(ast.value)};`;
   }
 
   protected printAttributes(ast: Attributes): string {
     return ast.body.length === 0
       ? `${ast.kind};`
-      : `${ast.kind} [\n${ast.body.map(this.stringify.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
+      : `${ast.kind} [\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
   }
 
   protected printComment(ast: Comment): string {
@@ -56,47 +56,47 @@ export class Renderer {
   }
 
   protected printDot(ast: Dot): string {
-    return ast.body.map(this.stringify.bind(this)).join('\n');
+    return ast.body.map(this.render.bind(this)).join('\n');
   }
 
   protected printEdge(ast: Edge): string {
-    const targets = ast.targets.map(this.stringify.bind(this)).join(this.directed ? ' -> ' : ' -- ');
+    const targets = ast.targets.map(this.render.bind(this)).join(this.directed ? ' -> ' : ' -- ');
     return ast.body.length === 0
       ? `${targets};`
-      : `${targets} [\n${ast.body.map(this.stringify.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
+      : `${targets} [\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
   }
 
   protected printNode(ast: Node): string {
     return ast.body.length === 0
-      ? `${this.stringify(ast.id)};`
-      : `${this.stringify(ast.id)} [\n${ast.body
-          .map(this.stringify.bind(this))
+      ? `${this.render(ast.id)};`
+      : `${this.render(ast.id)} [\n${ast.body
+          .map(this.render.bind(this))
           .map(this.indent.bind(this))
           .join('\n')}\n];`;
   }
 
   protected printNodeRef(ast: NodeRef): string {
     return [
-      this.stringify(ast.id),
-      ast.port ? this.stringify(ast.port) : null,
-      ast.compass ? this.stringify(ast.compass) : null,
+      this.render(ast.id),
+      ast.port ? this.render(ast.port) : null,
+      ast.compass ? this.render(ast.compass) : null,
     ]
       .filter((v) => v !== null)
       .join(':');
   }
 
   protected printNodeRefGroup(ast: NodeRefGroup): string {
-    return `{${ast.body.map(this.stringify.bind(this)).join(' ')}}`;
+    return `{${ast.body.map(this.render.bind(this)).join(' ')}}`;
   }
 
   protected printGroup(ast: Graph): string {
     return [
       ast.strict ? 'strict' : null,
       ast.directed ? 'digraph' : 'graph',
-      ast.id ? this.stringify(ast.id) : null,
+      ast.id ? this.render(ast.id) : null,
       ast.body.length === 0
         ? '{}'
-        : `{\n${ast.body.map(this.stringify.bind(this)).map(this.indent.bind(this)).join('\n')}\n}`,
+        : `{\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n}`,
     ]
       .filter((v) => v !== null)
       .join(' ');
@@ -105,10 +105,10 @@ export class Renderer {
   protected printSubgraph(ast: Subgraph): string {
     return [
       'subgraph',
-      ast.id ? this.stringify(ast.id) : null,
+      ast.id ? this.render(ast.id) : null,
       ast.body.length === 0
         ? '{}'
-        : `{\n${ast.body.map(this.stringify.bind(this)).map(this.indent.bind(this)).join('\n')}\n}`,
+        : `{\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n}`,
     ]
       .filter((v) => v !== null)
       .join(' ');
@@ -128,7 +128,7 @@ export class Renderer {
   }
 
   // eslint-disable-next-line consistent-return
-  public stringify(ast: ASTNode): string {
+  public render(ast: ASTNode): string {
     // eslint-disable-next-line default-case
     switch (ast.type) {
       case 'Attribute':

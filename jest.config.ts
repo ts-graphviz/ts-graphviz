@@ -84,6 +84,6 @@ const config: InitialOptionsTsJest = {
     '@ts-graphviz/node': '<rootDir>/packages/node/src/index.ts',
     '@ts-graphviz/react': '<rootDir>/packages/react/src/index.ts',
     'ts-graphviz': '<rootDir>/packages/ts-graphviz/src/index.ts',
-  }
+  },
 };
 export default config;

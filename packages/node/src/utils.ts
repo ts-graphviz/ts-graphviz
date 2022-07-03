@@ -1,6 +1,6 @@
-import cp from 'child_process';
-import util from 'util';
-import fs from 'fs';
+import cp from 'node:child_process';
+import util from 'node:util';
+import fs from 'node:fs';
 
 export const close = util.promisify(fs.close);
 export const writeFile = util.promisify(fs.writeFile);

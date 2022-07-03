@@ -1,6 +1,6 @@
 import { Attribute, AttributeKey } from '@ts-graphviz/dot-attribute';
-import { DotObject } from './abstract';
-import { IAttributesBase, AttributesObject, AttributesEntities, IAttributes } from './types';
+import { DotObject } from './abstract.js';
+import { IAttributesBase, AttributesObject, AttributesEntities, IAttributes } from './types.js';
 
 /**
  * @category Domain Model

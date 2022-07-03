@@ -1,7 +1,7 @@
 import { NodeAttributeKey } from '@ts-graphviz/dot-attribute';
 import { isCompass } from '@ts-graphviz/dot-type';
-import { DotObject } from './abstract';
-import { Attributes } from './attributes-base';
+import { DotObject } from './abstract.js';
+import { Attributes } from './attributes-base.js';
 import {
   IAttributes,
   ForwardRefNode,
@@ -12,7 +12,7 @@ import {
   NodeRefGroup,
   NodeRefGroupLike,
   NodeRefLike,
-} from './types';
+} from './types.js';
 
 /**
  * Node object.

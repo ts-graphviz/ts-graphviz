@@ -1,4 +1,4 @@
-import type { AttributeKey } from './keys';
+import type { AttributeKey } from './keys.js';
 import type {
   AddDouble,
   AddPoint,

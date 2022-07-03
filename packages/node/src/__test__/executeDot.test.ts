@@ -1,5 +1,5 @@
-import { executeDot } from '../executeDot';
-import { execFile, writeFile } from '../utils';
+import { executeDot } from '../executeDot.js';
+import { execFile, writeFile } from '../utils.js';
 
 jest.mock('../utils');
 jest.mock('tmp-promise');

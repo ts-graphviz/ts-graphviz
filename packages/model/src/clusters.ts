@@ -5,9 +5,9 @@ import {
   EdgeAttributeKey,
   NodeAttributeKey,
 } from '@ts-graphviz/dot-attribute';
-import { Attributes, AttributesBase } from './attributes-base';
-import { isNodeRefGroupLike, Node, toNodeRef, toNodeRefGroup } from './nodes';
-import { Edge } from './edges';
+import { Attributes, AttributesBase } from './attributes-base.js';
+import { isNodeRefGroupLike, Node, toNodeRef, toNodeRefGroup } from './nodes.js';
+import { Edge } from './edges.js';
 import {
   IGraphBase,
   IGraphCommonAttributes,
@@ -19,7 +19,7 @@ import {
   EdgeTargetLikeTuple,
   EdgeAttributes,
   EdgeTargetTuple,
-} from './types';
+} from './types.js';
 
 /**
  * Base class for clusters.
@@ -238,11 +238,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * @param attributes Object of attributes to be adapted to the subgraph.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  public subgraph(
-    id: string,
-    attributes: SubgraphAttributes,
-    callback?: (subgraph: ISubgraph) => void,
-  ): ISubgraph;
+  public subgraph(id: string, attributes: SubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
 
   /**
    * Create anonymous subgraphs and and adapt the attributes.
@@ -284,9 +280,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
 
   public subgraph(...args: unknown[]): ISubgraph {
     const id = args.find((arg: unknown): arg is string => typeof arg === 'string');
-    const attributes = args.find(
-      (arg: unknown): arg is SubgraphAttributes => typeof arg === 'object' && arg !== null,
-    );
+    const attributes = args.find((arg: unknown): arg is SubgraphAttributes => typeof arg === 'object' && arg !== null);
     const callback = args.find((arg: unknown): arg is (subgraph: ISubgraph) => void => typeof arg === 'function');
     const subgraph: ISubgraph = id ? this.getSubgraph(id) ?? this.createSubgraph(id) : this.createSubgraph();
     if (attributes !== undefined) {

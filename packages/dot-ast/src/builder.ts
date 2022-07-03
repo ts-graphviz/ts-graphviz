@@ -17,7 +17,7 @@ import type {
   Graph,
   Edge,
   Subgraph,
-} from './types';
+} from './types.js';
 
 export interface BuilderConfig {
   defaultLitelalQuated: boolean | 'html';

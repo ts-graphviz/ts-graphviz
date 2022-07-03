@@ -29,8 +29,7 @@
   "typedocMain": "./src/index.ts",
   "license": "MIT",
   "dependencies": {
-    "@ts-graphviz/dot-type": "^0.0.0",
-    "@ts-graphviz/dot-attribute": "^0.0.0"
+    "@ts-graphviz/dot-ast": "^0.0.0"
   },
   "scripts": {
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",

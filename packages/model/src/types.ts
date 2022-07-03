@@ -33,6 +33,8 @@ export type AttributesObject<T extends AttributeKey> = {
   [K in T]?: Attribute<K>;
 };
 
+export type AttributeValue = Attribute<AttributeKey>;
+
 export type AttributesEntities<T extends AttributeKey> = readonly [T, Attribute<T>][];
 
 export type EdgeAttributes = AttributesObject<EdgeAttributeKey>;
@@ -63,7 +65,7 @@ export interface IAttributesBase<T extends AttributeKey> {
   clear(): void;
 }
 
-export interface IAttributes<T extends AttributeKey> extends IAttributesBase<T>, HasComment {}
+export interface IAttributes<T extends AttributeKey = AttributeKey> extends IAttributesBase<T>, HasComment {}
 
 export interface Port {
   port: string;

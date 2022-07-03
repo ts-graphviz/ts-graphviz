@@ -7,10 +7,14 @@
     "packages/*"
   ],
   "scripts": {
+    "build:parser": "ts-node-esm ./scripts/generate-parser.ts ./grammar/dot.peggy ./packages/parser/src/dot.peggy.js",
+    "prebuild": "yarn build:parser",
     "build": "yarn workspace @ts-graphviz/dot-type build && yarn workspace @ts-graphviz/dot-attribute build && yarn workspace @ts-graphviz/dot-ast build && yarn workspace @ts-graphviz/model build && yarn workspace @ts-graphviz/parser build && yarn workspace @ts-graphviz/renderer build && yarn workspace ts-graphviz build && yarn workspace @ts-graphviz/react build && yarn workspace @ts-graphviz/node build",
     "test": "jest",
     "format": "eslint --ext ts,tsx . --fix && prettier --plugin=./config/prettier/peggy.json --write './**/*.(json|yaml|ts|tsx|peggy)'",
     "lint": "eslint --ext ts,tsx .",
+    "create-packages-dependency-diagram": "ts-node-esm scripts/create-packages-dependency-diagram.ts ./img/packages-dependency.svg",
+    "create-img:parser-state-machine-diagram": "ts-node-esm scripts/create-state-machine-diagram.ts ./packages/parser/img/state-machine.svg",
     "doc": "typedoc"
   },
   "devDependencies": {
@@ -48,7 +52,7 @@
     "jest-snapshot-serializer-raw": "^1.2.0",
     "jest-specific-snapshot": "^5.0.0",
     "lerna": "^3.22.1",
-    "peggy": "^1.2.0",
+    "peggy": "^2.0.1",
     "prettier": "^2.6.2",
     "prettier-plugin-pegjs": "^0.4.0",
     "react": "^16.13.1",
@@ -64,7 +68,6 @@
     "ts-jest": "^28.0.2",
     "ts-loader": "^7.0.2",
     "ts-node": "^10.8.1",
-    "ts-pegjs": "1.1.1",
     "tslib": "^2.3.1",
     "typedoc": "^0.22.4",
     "typescript": "^4.6.4"

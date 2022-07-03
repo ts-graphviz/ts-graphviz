@@ -8,5 +8,6 @@
   "files.associations": {
     "*.peggy": "pegjs"
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "javascript.preferences.importModuleSpecifierEnding": "js"
 }

@@ -1,4 +1,4 @@
-import { Renderer, Dot } from './renderer';
+import { Renderer, Dot } from './renderer.js';
 
 export function toDot(object: Dot): string {
   const renderer = new Renderer();

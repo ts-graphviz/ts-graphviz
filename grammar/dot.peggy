@@ -5,7 +5,7 @@
  */
 
 {
-  function dedent(value: string): string {
+  function dedent(value) {
     const str = value.trim();
     const matches = str.match(/\n([\t ]+|(?!\s).)/g);
     if (matches) {
@@ -16,7 +16,7 @@
     return str;
   }
 
-  const edgeops: { operator: '--' | '->', location: IFileRange }[] = [];
+  const edgeops = [];
 
   const b = new Builder({
     locationFunction: location,
@@ -72,17 +72,24 @@ _graph
           }
         }
       }
-      return b.graph(id !== null
-        ? {
-          // type: 'graph',
-          id, directed, strict, body,
-          // location: location()
-          }
-        : {
-          // type: 'graph',
-          directed, strict, body,
-          // location: location()
-          });
+      return b.graph(
+        id !== null
+          ? {
+              // type: 'graph',
+              id,
+              directed,
+              strict,
+              body,
+              // location: location()
+            }
+          : {
+              // type: 'graph',
+              directed,
+              strict,
+              body,
+              // location: location()
+            },
+      );
     }
 
 _attribute
@@ -99,9 +106,10 @@ _attributes
       const kind = _kind.toLowerCase();
       return b.attributes({
         // type: 'Attributes',
-        kind, body,
+        kind,
+        body,
         // location: location()
-        });
+      });
     }
 
 _edge
@@ -160,10 +168,15 @@ _edge_rhs
       return [id].concat(rest || []);
     }
 
-_node_ref = id:_literal port:_port? { return b.nodeRef({
-  type: 'NodeRef', id, ...port,
-  // location: location()
-  }); }
+_node_ref
+  = id:_literal port:_port? {
+      return b.nodeRef({
+        type: 'NodeRef',
+        id,
+        ...port,
+        // location: location()
+      });
+    }
 
 _port "port"
   = ":" port:_literal compass:(":" compass:_compass { return compass; })? {
@@ -180,17 +193,20 @@ _subgraph_id = "subgraph"i _ id:_literal? _ { return id; }
 _subgraph
   = id:_subgraph_id? "{" _body:ClusterStatements? __ "}" {
       const body = _body ?? [];
-      return b.subgraph(id
-        ? {
-          // type: 'Subgraph',
-          id, body,
-          // location: location()
-          }
-        : {
-          // type: 'Subgraph',
-          body,
-          // location: location()
-          });
+      return b.subgraph(
+        id
+          ? {
+              // type: 'Subgraph',
+              id,
+              body,
+              // location: location()
+            }
+          : {
+              // type: 'Subgraph',
+              body,
+              // location: location()
+            },
+      );
     }
 
 _compass_keyword

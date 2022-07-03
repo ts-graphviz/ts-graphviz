@@ -1,13 +1,13 @@
-import { Digraph, Edge, Node, RootCluster, Subgraph } from '@ts-graphviz/model';
+import { Graph, Edge, Node, Subgraph } from '@ts-graphviz/model';
 import _ from 'ts-dedent';
 import { parse } from '../parse';
 
 describe('parse function', () => {
   test('RootCluster', () => {
     const G = parse('digraph {}');
-    expect(G).toBeInstanceOf(RootCluster);
-    expect(G).toBeInstanceOf(Digraph);
+    expect(G).toBeInstanceOf(Graph);
     expect(G.strict).toStrictEqual(false);
+    expect(G.directed).toStrictEqual(true);
   });
 
   test('Node', () => {

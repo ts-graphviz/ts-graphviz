@@ -9,11 +9,11 @@ const options: RollupOptions[] = [
     output: [
       {
         format: 'cjs',
-        file: './lib/index.js',
+        file: './lib/index.cjs',
       },
       {
         format: 'esm',
-        file: './lib/index.mjs',
+        file: './lib/index.js',
       },
     ],
     plugins: [typescript()],

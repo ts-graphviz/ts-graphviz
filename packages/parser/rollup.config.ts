@@ -6,9 +6,7 @@ import dts from 'rollup-plugin-dts';
 const options: RollupOptions[] = [
   {
     input: './src/index.ts',
-    plugins: [
-      typescript(),
-    ],
+    plugins: [typescript()],
     external: ['@ts-graphviz/model', '@ts-graphviz/dot-ast'],
     output: [
       {

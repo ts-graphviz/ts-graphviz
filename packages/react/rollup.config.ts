@@ -17,7 +17,15 @@ const options: RollupOptions[] = [
         file: './lib/index.js',
       },
     ],
-    external: ['react', '@hpcc-js/wasm', 'ts-graphviz', '@ts-graphviz/model', 'prop-types', 'react-reconciler', 'react-dom/server'],
+    external: [
+      'react',
+      '@hpcc-js/wasm',
+      'ts-graphviz',
+      '@ts-graphviz/model',
+      'prop-types',
+      'react-reconciler',
+      'react-dom/server',
+    ],
   },
   {
     input: './lib/index.d.ts',

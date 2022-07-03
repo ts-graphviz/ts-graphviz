@@ -1,30 +1,23 @@
-import { Digraph, Graph, RootCluster, RootClusterAttributes } from '@ts-graphviz/model';
+import { Graph, GraphAttributes } from '@ts-graphviz/model';
 
-/**
- * Type indicating that it is a constructor of T.
- * @hidden
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Type<T> = new (...args: any[]) => T;
-
-interface CreateRootFunction<R extends RootCluster> {
-  (id?: string, attributes?: RootClusterAttributes, callback?: (g: R) => void): R;
-  (attributes?: RootClusterAttributes, callback?: (g: R) => void): R;
-  (id?: string, callback?: (g: R) => void): R;
-  (callback?: (g: R) => void): R;
+interface CreateRootFunction {
+  (id?: string, attributes?: GraphAttributes, callback?: (g: Graph) => void): Graph;
+  (attributes?: GraphAttributes, callback?: (g: Graph) => void): Graph;
+  (id?: string, callback?: (g: Graph) => void): Graph;
+  (callback?: (g: Graph) => void): Graph;
 }
 
 /** @hidden */
-function builder<R extends RootCluster>(Cls: Type<R>, strictMode = false): CreateRootFunction<R> {
-  function createRoot(id?: string, attributes?: RootClusterAttributes, callback?: (g: R) => void): R;
-  function createRoot(attributes?: RootClusterAttributes, callback?: (g: R) => void): R;
-  function createRoot(id?: string, callback?: (g: R) => void): R;
-  function createRoot(callback?: (g: R) => void): R;
-  function createRoot(...args: unknown[]): R {
+function builder(directed: boolean, strictMode = false): CreateRootFunction {
+  function createRoot(id?: string, attributes?: GraphAttributes, callback?: (g: Graph) => void): Graph;
+  function createRoot(attributes?: GraphAttributes, callback?: (g: Graph) => void): Graph;
+  function createRoot(id?: string, callback?: (g: Graph) => void): Graph;
+  function createRoot(callback?: (g: Graph) => void): Graph;
+  function createRoot(...args: unknown[]): Graph {
     const id = args.find((arg): arg is string => typeof arg === 'string');
-    const attributes = args.find((arg): arg is RootClusterAttributes => typeof arg === 'object');
-    const callback = args.find((arg): arg is (g: R) => void => typeof arg === 'function');
-    const g = new Cls(id, attributes, strictMode);
+    const attributes = args.find((arg): arg is GraphAttributes => typeof arg === 'object');
+    const callback = args.find((arg): arg is (g: Graph) => void => typeof arg === 'function');
+    const g = new Graph(directed, id, strictMode, attributes);
     if (typeof callback === 'function') {
       callback(g);
     }
@@ -34,15 +27,15 @@ function builder<R extends RootCluster>(Cls: Type<R>, strictMode = false): Creat
 }
 
 /** API for creating directional graph objects. */
-export const digraph = builder(Digraph);
+export const digraph = builder(true);
 
 /** API for creating omnidirectional graph objects. */
-export const graph = builder(Graph);
+export const graph = builder(false);
 
 /** Provides a strict mode API. */
-export const strict = {
+export const strict = Object.freeze({
   /** API for creating directional graph objects in strict mode. */
-  digraph: builder(Digraph, true),
+  digraph: builder(true, true),
   /** API for creating omnidirectional graph objects in strict mode. */
-  graph: builder(Graph, true),
-};
+  graph: builder(false, true),
+});

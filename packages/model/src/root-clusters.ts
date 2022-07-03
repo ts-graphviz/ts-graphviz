@@ -5,9 +5,9 @@ import {
   GraphAttributeKey,
   SubgraphAttributeKey,
 } from '@ts-graphviz/dot-attribute';
-import { GraphBase } from './clusters';
-import { Attributes } from './attributes-base';
-import { IGraph, GraphAttributes } from './types';
+import { GraphBase } from './clusters.js';
+import { Attributes } from './attributes-base.js';
+import { IGraph, GraphAttributes } from './types.js';
 
 /**
  * Base class for RootCluster.

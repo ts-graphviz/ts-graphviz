@@ -1,6 +1,7 @@
-import { IRootCluster, toDot } from 'ts-graphviz';
-import { DotOption, ExecuteDotOption, OutputOption } from './types';
-import { executeDot } from './executeDot';
+import { toDot } from 'ts-graphviz';
+import { Graph } from '@ts-graphviz/model';
+import { DotOption, ExecuteDotOption, OutputOption } from './types.js';
+import { executeDot } from './executeDot.js';
 
 /**
  * Export the file by giving a dot.
@@ -38,7 +39,7 @@ import { executeDot } from './executeDot';
  * ```
  */
 export async function exportToFile(
-  dot: IRootCluster | string,
+  dot: Graph | string,
   options: Required<OutputOption> & ExecuteDotOption & DotOption,
 ): Promise<void> {
   const input = typeof dot === 'string' ? dot : toDot(dot);

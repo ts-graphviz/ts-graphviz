@@ -1,5 +1,5 @@
-export { SyntaxError } from './dot.peggy';
-export { convert } from './convert';
-export { parse } from './parse';
-export { stringify } from './stringify';
-export { dot } from './dot';
+export { SyntaxError } from './dot.peggy.js';
+export { convert } from './convert.js';
+export { parse } from './parse.js';
+export { stringify } from './stringify.js';
+export { dot } from './dot.js';

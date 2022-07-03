@@ -1,1 +1,1 @@
-export * from './to-dot';
+export * from './to-dot.js';

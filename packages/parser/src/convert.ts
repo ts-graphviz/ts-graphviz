@@ -1,14 +1,4 @@
-import {
-  IGraph,
-  Graph,
-  Subgraph,
-  Node,
-  Edge,
-  HasComment,
-  EdgeTarget,
-  EdgeTargetTuple,
-  IGraphBase,
-} from '@ts-graphviz/model';
+import { Graph, Subgraph, Node, Edge, HasComment, EdgeTarget, EdgeTargetTuple, IGraphBase } from '@ts-graphviz/model';
 import * as AST from '@ts-graphviz/dot-ast';
 
 class CommentHolder {
@@ -109,17 +99,13 @@ function applyStatements(cluster: IGraphBase, statements: AST.ClusterStatement[]
  *
  * @alpha May change the publishing method.
  */
-export function convert(ast: AST.Dot): IGraph;
-export function convert(ast: AST.Graph): IGraph;
+export function convert(ast: AST.Dot): Graph;
+export function convert(ast: AST.Graph): Graph;
 export function convert(ast: AST.Subgraph): Subgraph;
 export function convert(ast: AST.Node): Node;
 export function convert(ast: AST.Edge): Edge;
-export function convert(
-  ast: AST.Dot | AST.Graph | AST.Subgraph | AST.Node | AST.Edge,
-): IGraph | Subgraph | Node | Edge;
-export function convert(
-  ast: AST.Dot | AST.Graph | AST.Subgraph | AST.Node | AST.Edge,
-): IGraph | Subgraph | Node | Edge {
+export function convert(ast: AST.Dot | AST.Graph | AST.Subgraph | AST.Node | AST.Edge): Graph | Subgraph | Node | Edge;
+export function convert(ast: AST.Dot | AST.Graph | AST.Subgraph | AST.Node | AST.Edge): Graph | Subgraph | Node | Edge {
   switch (ast.type) {
     case 'Graph': {
       const root = new Graph(ast.directed, ast.id?.value, ast.strict);
