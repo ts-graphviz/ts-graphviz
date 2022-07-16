@@ -1,5 +1,5 @@
 import { Graph } from '@ts-graphviz/model';
-import { parse } from './parse';
+import { parse } from './parse.js';
 
 /**
  * > This is an experimental API.

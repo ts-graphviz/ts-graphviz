@@ -21,11 +21,12 @@
     "url": "https://github.com/sponsors/kamiazya"
   },
   "main": "./lib/index.cjs",
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "exports": {
     "import": "./lib/index.js",
     "require": "./lib/index.cjs"
   },
-  "types": "./lib/index.d.ts",
   "typedocMain": "./src/index.ts",
   "license": "MIT",
   "dependencies": {

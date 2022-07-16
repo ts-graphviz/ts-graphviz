@@ -129,5 +129,3 @@ export type ASTNode =
   | NodeRef
   | NodeRefGroup
   | Subgraph;
-
-export type Rule = 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Attributes' | 'Subgraph' | 'Attribute' | 'ClusterStatements';

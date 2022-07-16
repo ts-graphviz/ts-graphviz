@@ -30,6 +30,7 @@
     "default": "./lib/index.cjs"
   },
   "types": "./lib/index.d.ts",
+  "typedocMain": "./src/index.ts",
   "scripts": {
     "example": "ts-node example/example",
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",

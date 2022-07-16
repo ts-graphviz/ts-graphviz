@@ -1,13 +1,16 @@
 {
   "name": "@ts-graphviz/parser",
   "version": "0.6.0",
+  "type": "module",
   "description": "Graphviz dot language parser for ts-graphviz.",
   "main": "lib/index.js",
+  "module": "./lib/index.js",
   "exports": {
-    "import": "./lib/index.mjs",
-    "default": "./lib/index.js"
+    "import": "./lib/index.js",
+    "default": "./lib/index.cjs"
   },
   "types": "lib/index.d.ts",
+  "typedocMain": "./src/index.ts",
   "author": "kamiazya <yuki@kamiazya.tech>",
   "license": "MIT",
   "repository": {

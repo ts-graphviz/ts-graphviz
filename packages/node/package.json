@@ -11,6 +11,7 @@
     "default": "./lib/index.cjs"
   },
   "types": "./lib/index.d.ts",
+  "typedocMain": "./src/index.ts",
   "license": "MIT",
   "repository": {
     "type": "git",
