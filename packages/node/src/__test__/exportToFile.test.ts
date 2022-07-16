@@ -1,6 +1,6 @@
 import { digraph } from 'ts-graphviz';
-import { executeDot } from '../executeDot';
-import { exportToFile } from '../exportToFile';
+import { executeDot } from '../executeDot.js';
+import { exportToFile } from '../exportToFile.js';
 
 jest.mock('../utils');
 jest.mock('../executeDot');

@@ -44,35 +44,6 @@ export interface CommonParseOptions {
 
 export interface ParseOptions<T extends Rule> extends CommonParseOptions {
   startRule?: T;
-  filename?: string;
-}
-
-export interface DotParseOptions extends ParseOptions {
-  startRule: 'Dot';
-}
-
-export interface GraphParseOptions extends ParseOptions {
-  startRule: 'Graph';
-}
-
-export interface NodeParseOptions extends ParseOptions {
-  startRule: 'Node';
-}
-
-export interface EdgeParseOptions extends ParseOptions {
-  startRule: 'Edge';
-}
-
-export interface AttributesParseOptions extends ParseOptions {
-  startRule: 'Attributes';
-}
-
-export interface AttributeParseOptions extends ParseOptions {
-  startRule: 'Attribute';
-}
-
-export interface ClusterStatementsParseOptions extends ParseOptions {
-  startRule: 'ClusterStatements';
 }
 
 export function parse(input: string, options?: ParseOptions): Dot;

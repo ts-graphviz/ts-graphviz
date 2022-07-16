@@ -132,4 +132,4 @@ Temporary Items
 
 lib
 doc
-packages/parser/src/dot.peggy.js
+packages/parser/src/parse.js

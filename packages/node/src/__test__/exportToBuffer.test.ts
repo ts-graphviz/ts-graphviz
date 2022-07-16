@@ -1,5 +1,5 @@
 import { digraph } from 'ts-graphviz';
-import { exportToBuffer } from '../exportToBuffer';
+import { exportToBuffer } from '../exportToBuffer.js';
 
 jest.mock('../utils');
 jest.mock('../executeDot');

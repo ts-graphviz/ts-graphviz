@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build:parser": "ts-node-esm ./scripts/generate-parser.ts ./grammar/dot.peggy ./packages/parser/src/dot.peggy.js",
+    "build:parser": "ts-node-esm ./scripts/generate-parser.ts ./grammar/dot.peggy ./packages/parser/src/parse.js",
     "prebuild": "yarn build:parser",
     "build": "yarn workspace @ts-graphviz/dot-type build && yarn workspace @ts-graphviz/dot-attribute build && yarn workspace @ts-graphviz/dot-ast build && yarn workspace @ts-graphviz/model build && yarn workspace @ts-graphviz/parser build && yarn workspace @ts-graphviz/renderer build && yarn workspace ts-graphviz build && yarn workspace @ts-graphviz/react build && yarn workspace @ts-graphviz/node build",
     "test": "jest",

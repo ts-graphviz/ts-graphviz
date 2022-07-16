@@ -1,13 +1,15 @@
 import 'jest-graphviz';
 import { attribute } from '@ts-graphviz/dot-attribute';
-import { Digraph, Graph, Subgraph, Node, Edge } from '@ts-graphviz/model';
-import { digraph, graph, strict } from '../builder';
-import { toDot } from '../render';
+import { Graph, Subgraph, Node, Edge } from '@ts-graphviz/model';
+import { digraph, graph, strict } from '../builder.js';
+import { toDot } from '../render/index.js';
 
 describe('function digraph', () => {
-  it('should return Digraph object, when execute digraph()', () => {
+  it('should return Graph object, when execute digraph()', () => {
     const g = digraph();
-    expect(g).toBeInstanceOf(Digraph);
+    expect(g).toBeInstanceOf(Graph);
+    expect(g.strict).toBe(false);
+    expect(g.directed).toBe(false);
   });
 
   describe('root create function', () => {
@@ -120,7 +122,7 @@ describe('function digraph', () => {
   });
 
   test('class base', () => {
-    const G = new Digraph();
+    const G = new Graph(true);
     const A = new Subgraph('A');
     const node1 = new Node('A_node1', {
       [attribute.color]: 'red',
@@ -301,13 +303,14 @@ describe('function graph', () => {
 describe('strict mode', () => {
   it('should return Digraph object, when execute digraph()', () => {
     const g = strict.digraph();
+    expect(g).toBeInstanceOf(Graph);
     expect(g.strict).toBe(true);
-    expect(g).toBeInstanceOf(Digraph);
+    expect(g.directed).toBe(false);
   });
 
   it('should return Graph object, when execute graph()', () => {
     const g = strict.graph();
-    expect(g.strict).toBe(true);
     expect(g).toBeInstanceOf(Graph);
+    expect(g.strict).toBe(true);
   });
 });
