@@ -1,5 +1,7 @@
+peggy
+rollup.config.ts
+scrips
 src
 test
 tsconfig.json
-rollup.config.ts
 tsconfig.tsbuildinfo

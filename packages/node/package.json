@@ -37,5 +37,8 @@
   },
   "peerDependencies": {
     "ts-graphviz": "^0.16.0"
+  },
+  "devDependencies": {
+    "ts-graphviz": "^0.16.0"
   }
 }

@@ -4,13 +4,18 @@
   "type": "module",
   "license": "MIT",
   "workspaces": [
-    "packages/*"
+    "packages/dot-ast",
+    "packages/dot-attribute",
+    "packages/dot-type",
+    "packages/model",
+    "packages/node",
+    "packages/parser",
+    "packages/renderer",
+    "packages/ts-graphviz"
   ],
   "scripts": {
-    "build:parser": "ts-node-esm ./scripts/generate-parser.ts ./grammar/dot.peggy ./packages/parser/src/parse.js",
-    "prebuild": "yarn build:parser",
-    "build": "yarn workspace @ts-graphviz/dot-type build && yarn workspace @ts-graphviz/dot-attribute build && yarn workspace @ts-graphviz/dot-ast build && yarn workspace @ts-graphviz/model build && yarn workspace @ts-graphviz/parser build && yarn workspace @ts-graphviz/renderer build && yarn workspace ts-graphviz build && yarn workspace @ts-graphviz/react build && yarn workspace @ts-graphviz/node build",
-    "test": "jest",
+    "build": "turbo run build",
+    "test": "turbo run test",
     "format": "eslint --ext ts,tsx . --fix && prettier --plugin=./config/prettier/peggy.json --write './**/*.(json|yaml|ts|tsx|peggy)'",
     "lint": "eslint --ext ts,tsx .",
     "create-images": "ts-node-esm scripts/create-images.ts",
@@ -68,6 +73,7 @@
     "ts-loader": "^7.0.2",
     "ts-node": "^10.8.1",
     "tslib": "^2.3.1",
+    "turbo": "^1.3.1",
     "typedoc": "^0.22.4",
     "typescript": "^4.6.4"
   }

@@ -1,4 +1,4 @@
-import { ExecFileOptions } from 'child_process';
+import { ExecFileOptions } from 'node:child_process';
 
 export type Format = 'png' | 'svg' | 'json' | 'jpg' | 'pdf' | 'xdot' | 'plain' | 'dot_json';
 

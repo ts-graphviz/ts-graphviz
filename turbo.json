@@ -1,0 +1,103 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"]
+    },
+    "@ts-grapphviz/dot-type#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "packages/dot-type/src",
+        "packages/dot-type/rollup.config.ts",
+        "packages/dot-type/tsconfig.json"
+      ],
+      "outputs": [
+        "packages/dot-type/lib"
+      ]
+    },
+    "@ts-grapphviz/dot-ast#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "packages/dot-ast/src",
+        "packages/dot-ast/rollup.config.ts",
+        "packages/dot-ast/tsconfig.json"
+      ],
+      "outputs": [
+        "packages/dot-ast/lib"
+      ]
+    },
+    "@ts-grapphviz/dot-attribute#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "packages/dot-attribute/src",
+        "packages/dot-attribute/rollup.config.ts",
+        "packages/dot-attribute/tsconfig.json"
+      ],
+      "outputs": [
+        "packages/dot-attribute/lib"
+      ]
+    },
+    "@ts-grapphviz/model#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "packages/model/src",
+        "packages/model/rollup.config.ts",
+        "packages/model/tsconfig.json"
+      ],
+      "outputs": [
+        "packages/model/lib"
+      ]
+    },
+    "@ts-grapphviz/node#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "packages/node/src",
+        "packages/node/rollup.config.ts",
+        "packages/node/tsconfig.json"
+      ],
+      "outputs": [
+        "packages/node/lib"
+      ]
+    },
+    "@ts-grapphviz/renderer#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "packages/renderer/src",
+        "packages/renderer/rollup.config.ts",
+        "packages/renderer/tsconfig.json"
+      ],
+      "outputs": [
+        "packages/renderer/lib"
+      ]
+    },
+    "ts-graphviz#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "packages/ts-graphviz/src",
+        "packages/ts-graphviz/rollup.config.ts",
+        "packages/ts-graphviz/tsconfig.json"
+      ],
+      "outputs": [
+        "packages/ts-graphviz/lib"
+      ]
+    },
+    "@ts-grapphviz/parser#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "packages/parser/peggy",
+        "packages/parser/scripts",
+        "packages/parser/src"
+      ],
+      "outputs": [
+        "packages/parser/src/parse.js",
+        "packages/parser/lib"
+      ]
+    },
+    "test": {
+      "outputs": []
+    }
+  },
+  "globalDependencies": [
+    "tsconfig.json"
+  ]
+}

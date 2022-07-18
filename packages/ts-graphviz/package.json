@@ -32,7 +32,9 @@
     "@ts-graphviz/dot-ast": "^0.0.0",
     "@ts-graphviz/dot-attribute": "^0.0.0",
     "@ts-graphviz/dot-type": "^0.0.0",
-    "@ts-graphviz/model": "^0.0.0"
+    "@ts-graphviz/model": "^0.0.0",
+    "@ts-graphviz/parser": "^0.6.0",
+    "@ts-graphviz/renderer": "^0.0.0"
   },
   "scripts": {
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",

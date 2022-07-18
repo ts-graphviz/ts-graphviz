@@ -17,7 +17,7 @@ const options: RollupOptions[] = [
       },
     ],
     plugins: [typescript()],
-    external: ['ts-graphviz', 'child_process', 'tmp-promise', 'util', 'fs'],
+    external: ['ts-graphviz', 'node:child_process', 'tmp-promise', 'util', 'fs'],
   },
   {
     input: './lib/index.d.ts',
@@ -34,7 +34,7 @@ const options: RollupOptions[] = [
         file: './lib/index.d.ts',
       },
     ],
-    external: ['ts-graphviz', 'child_process', 'tmp-promise', 'util', 'fs'],
+    external: ['ts-graphviz', 'node:child_process', 'tmp-promise'],
   },
 ];
 
