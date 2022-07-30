@@ -30,6 +30,6 @@
   "license": "MIT",
   "scripts": {
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
-    "postbuild": "prettier --write ./lib/index.*"
+    "postbuild": "prettier --write ./lib/index.{js,ts,d.ts}"
   }
 }

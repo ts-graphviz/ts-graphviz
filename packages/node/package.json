@@ -34,7 +34,7 @@
   "scripts": {
     "clean": "rimraf lib .turbo tsconfig.tsbuildinfo",
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
-    "postbuild": "prettier --write ./lib/index.*"
+    "postbuild": "prettier --write ./lib/index.{js,ts,d.ts}"
   },
   "peerDependencies": {
     "ts-graphviz": "^0.16.0"

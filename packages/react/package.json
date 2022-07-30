@@ -35,7 +35,7 @@
     "clean": "rimraf lib .turbo tsconfig.tsbuildinfo",
     "example": "ts-node example/example",
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
-    "postbuild": "prettier --write ./lib/index.*"
+    "postbuild": "prettier --write ./lib/index.{js,ts,d.ts}"
   },
   "peerDependencies": {
     "@hpcc-js/wasm": "^0.3.13",
