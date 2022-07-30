@@ -32,6 +32,7 @@
   "types": "./lib/index.d.ts",
   "typedocMain": "./src/index.ts",
   "scripts": {
+    "clean": "rimraf lib .turbo tsconfig.tsbuildinfo",
     "example": "ts-node example/example",
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
     "postbuild": "prettier --write ./lib/index.*"

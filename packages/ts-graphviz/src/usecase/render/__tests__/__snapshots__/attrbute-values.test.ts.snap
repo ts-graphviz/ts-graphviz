@@ -1,18 +1,18 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`AttributesValue rendering Literal HTML Like string toDot result should not be quoted 1`] = `"<<B>hoge</B>>"`;
+exports[`AttributesValue rendering > Literal > HTML Like string > toDot result should not be quoted 1`] = `"<<B>hoge</B>>"`;
 
-exports[`AttributesValue rendering Literal HTML Like string toDot result should not be quoted 2`] = `
+exports[`AttributesValue rendering > Literal > HTML Like string > toDot result should not be quoted 2`] = `
 "<
           <U>hoge</U>
           >"
 `;
 
-exports[`AttributesValue rendering Literal HTML Like string toDot result should not be quoted 3`] = `
+exports[`AttributesValue rendering > Literal > HTML Like string > toDot result should not be quoted 3`] = `
 "<<I>hoge</I>
           >"
 `;
 
-exports[`AttributesValue rendering Literal plain string toDot result should be quoted 1`] = `"\\"te\\\\\\"st\\""`;
+exports[`AttributesValue rendering > Literal > plain string > toDot result should be quoted 1`] = `"\\"te\\\\\\"st\\""`;
 
-exports[`AttributesValue rendering Literal plain string toDot result should be quoted 2`] = `"\\"\\\\n          test\\\\n          \\""`;
+exports[`AttributesValue rendering > Literal > plain string > toDot result should be quoted 2`] = `"\\"\\\\n          test\\\\n          \\""`;

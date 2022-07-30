@@ -15,7 +15,7 @@ describe('renderToDot', () => {
         <Node id="b" />
       </Digraph>,
     );
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   it('render edge', () => {
@@ -27,7 +27,7 @@ describe('renderToDot', () => {
         <Edge targets={['a', 'b']} />
       </Digraph>,
     );
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   it('render subgraph', () => {
@@ -41,7 +41,7 @@ describe('renderToDot', () => {
         </Subgraph>
       </Digraph>,
     );
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   it('render to be blank string', () => {

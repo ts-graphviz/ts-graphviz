@@ -32,6 +32,7 @@
     "@ts-graphviz/dot-type": "^0.0.0"
   },
   "scripts": {
+    "clean": "rimraf lib .turbo tsconfig.tsbuildinfo",
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
     "postbuild": "prettier --write ./lib/index.*"
   }

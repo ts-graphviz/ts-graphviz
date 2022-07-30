@@ -60,5 +60,4 @@ export default strict.digraph((g) => {
     sub.node(PKG.model);
     sub.node(PKG.renderer);
   });
-
 });

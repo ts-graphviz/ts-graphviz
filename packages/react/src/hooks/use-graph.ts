@@ -1,5 +1,11 @@
 import { useMemo, useEffect } from 'react';
-import { Graph, RootClusterAttributes, NodeAttributes, EdgeAttributes, ClusterSubgraphAttributes } from '@ts-graphviz/model';
+import {
+  Graph,
+  RootClusterAttributes,
+  NodeAttributes,
+  EdgeAttributes,
+  ClusterSubgraphAttributes,
+} from '@ts-graphviz/model';
 import { useGraphvizContext } from './use-graphviz-context';
 import { ClusterAttributesProps, useClusterAttributes } from './use-cluster-attributes';
 import { useHasComment } from './use-comment';

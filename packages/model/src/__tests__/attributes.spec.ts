@@ -1,6 +1,7 @@
+import { describe, expect, test, it, beforeEach } from 'vitest';
 import { attribute } from '@ts-graphviz/dot-attribute';
-import { DotObject, GraphvizObject } from '../abstract';
-import { Attributes, AttributesBase } from '../attributes-base';
+import { DotObject, GraphvizObject } from '../abstract.js';
+import { Attributes, AttributesBase } from '../attributes-base.js';
 
 describe('class Attributes', () => {
   let attrs: Attributes;

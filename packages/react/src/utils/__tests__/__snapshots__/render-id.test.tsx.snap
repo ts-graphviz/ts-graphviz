@@ -1,4 +1,14 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
+
+exports[`renderId > case 1`] = `"hoge"`;
+
+exports[`renderId > case 2`] = `"<<b>bold</b>>"`;
+
+exports[`renderId > case 3`] = `"<<B>bold</B>>"`;
+
+exports[`renderId > case 4`] = `"<label<port>>"`;
+
+exports[`renderId > case 5`] = `"<<TABLE BORDER=\\"0\\" CELLBORDER=\\"1\\" CELLSPACING=\\"0\\"><TR><TD>left</TD><TD PORT=\\"m\\">middle</TD><TD PORT=\\"r\\">right</TD></TR></TABLE>>"`;
 
 exports[`renderId case 1`] = `"hoge"`;
 

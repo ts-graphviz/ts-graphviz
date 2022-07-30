@@ -13,7 +13,6 @@
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "declaration": true,
-    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   }
 }

@@ -4,9 +4,8 @@ import { Graph } from 'ts-graphviz';
 import { exportToBuffer } from '@ts-graphviz/node';
 import { optimize, OptimizedSvg } from 'svgo';
 
-
 interface Setting {
-  mod: Promise<{ default: Graph}>;
+  mod: Promise<{ default: Graph }>;
   output: string;
 }
 

@@ -4,7 +4,7 @@ enum STATE {
   DOT = 'DOT',
   AST = 'AST',
   MODEL = 'MODEL',
-};
+}
 
 const methods: { [method: string]: [input: STATE, output: STATE] } = {
   parse: [STATE.DOT, STATE.AST],

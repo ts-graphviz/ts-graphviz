@@ -12,7 +12,7 @@ describe('Node', () => {
         <Node id="aaa" />
       </Digraph>,
     );
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   test('pass label with string and render correctly', () => {
@@ -21,7 +21,7 @@ describe('Node', () => {
         <Node id="aaa" label="label test" />
       </Digraph>,
     );
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   test('pass label with HTMLLike ReactElement and render correctly', () => {
@@ -41,7 +41,7 @@ describe('Node', () => {
         />
       </Digraph>,
     );
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   test('pass xlabel with string and render correctly', () => {
@@ -50,7 +50,7 @@ describe('Node', () => {
         <Node id="aaa" xlabel="xlabel test" />
       </Digraph>,
     );
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   test('pass xlabel with HTMLLike ReactElement and render correctly', () => {
@@ -70,6 +70,6 @@ describe('Node', () => {
         />
       </Digraph>,
     );
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 });

@@ -1,21 +1,21 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`Subgraph rendering subgraph with comment addXxx existXxx removeXxx APIs Edge operation methods works 1`] = `
+exports[`Subgraph rendering > subgraph with comment > addXxx existXxx removeXxx APIs > Edge operation methods works 1`] = `
 "subgraph \\"test\\" {
   \\"node1\\";
   \\"node2\\";
-  \\"node1\\" -> \\"node2\\";
+  \\"node1\\" -- \\"node2\\";
 }"
 `;
 
-exports[`Subgraph rendering subgraph with comment addXxx existXxx removeXxx APIs Subgraph operation methods works 1`] = `
+exports[`Subgraph rendering > subgraph with comment > addXxx existXxx removeXxx APIs > Subgraph operation methods works 1`] = `
 "subgraph \\"test\\" {
   subgraph \\"sub\\" {
   }
 }"
 `;
 
-exports[`Subgraph rendering subgraph with comment label attribute behavior html like 1`] = `
+exports[`Subgraph rendering > subgraph with comment > label attribute behavior > html like 1`] = `
 "subgraph \\"test\\" {
   graph [
     label = <<B>this is test for graph label</B>>,
@@ -29,7 +29,7 @@ exports[`Subgraph rendering subgraph with comment label attribute behavior html 
 }"
 `;
 
-exports[`Subgraph rendering subgraph with comment label attribute behavior plain text label to be quoted by double quotation 1`] = `
+exports[`Subgraph rendering > subgraph with comment > label attribute behavior > plain text label to be quoted by double quotation 1`] = `
 "subgraph \\"test\\" {
   graph [
     label = \\"this is test for graph label\\",
@@ -43,14 +43,14 @@ exports[`Subgraph rendering subgraph with comment label attribute behavior plain
 }"
 `;
 
-exports[`Subgraph rendering subgraph with comment multi line comment 1`] = `
+exports[`Subgraph rendering > subgraph with comment > multi line comment 1`] = `
 "// this is comment.
 // second line.
 subgraph \\"test\\" {
 }"
 `;
 
-exports[`Subgraph rendering subgraph with comment single line comment 1`] = `
+exports[`Subgraph rendering > subgraph with comment > single line comment 1`] = `
 "// this is comment.
 subgraph \\"test\\" {
 }"

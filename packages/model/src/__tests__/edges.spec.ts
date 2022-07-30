@@ -1,8 +1,9 @@
-import { DotObject, GraphvizObject } from '../abstract';
-import { Edge } from '../edges';
-import { Node } from '../nodes';
+import { describe, expect, test, beforeEach, it } from 'vitest';
 import { attribute } from '@ts-graphviz/dot-attribute';
-import { EdgeTargetTuple } from '../types';
+import { DotObject, GraphvizObject } from '../abstract.js';
+import { Edge } from '../edges.js';
+import { Node } from '../nodes.js';
+import { EdgeTargetTuple } from '../types.js';
 
 describe('class Edge', () => {
   let edge: Edge;

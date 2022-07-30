@@ -1,10 +1,10 @@
-import 'jest-graphviz';
+import { describe, expect, test, it, beforeEach } from 'vitest';
 import { attribute } from '@ts-graphviz/dot-attribute';
-import { DotObject, GraphvizObject } from '../abstract';
-import { AttributesBase } from '../attributes-base';
-import { GraphBase, Subgraph } from '../clusters';
-import { Node } from '../nodes';
-import { EdgeTargetTuple, ISubgraph } from '../types';
+import { DotObject, GraphvizObject } from '../abstract.js';
+import { AttributesBase } from '../attributes-base.js';
+import { GraphBase, Subgraph } from '../clusters.js';
+import { Node } from '../nodes.js';
+import { EdgeTargetTuple, ISubgraph } from '../types.js';
 
 describe('class Subgraph', () => {
   let subgraph: ISubgraph;

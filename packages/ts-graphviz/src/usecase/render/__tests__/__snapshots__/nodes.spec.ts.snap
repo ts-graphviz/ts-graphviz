@@ -1,21 +1,21 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`Node rendering renders correctly by toDot method has some attributes 1`] = `
+exports[`Node rendering > renders correctly by toDot method > has some attributes 1`] = `
 "\\"test\\" [
   label = \\"this is test\\",
   color = \\"red\\",
 ];"
 `;
 
-exports[`Node rendering renders correctly by toDot method node with comment multi line comment 1`] = `
+exports[`Node rendering > renders correctly by toDot method > node with comment > multi line comment 1`] = `
 "// this is comment.
 // second line.
 \\"test\\";"
 `;
 
-exports[`Node rendering renders correctly by toDot method node with comment single line comment 1`] = `
+exports[`Node rendering > renders correctly by toDot method > node with comment > single line comment 1`] = `
 "// this is comment.
 \\"test\\";"
 `;
 
-exports[`Node rendering renders correctly by toDot method simple node 1`] = `"\\"test\\";"`;
+exports[`Node rendering > renders correctly by toDot method > simple node 1`] = `"\\"test\\";"`;

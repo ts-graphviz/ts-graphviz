@@ -1,30 +1,30 @@
-import 'jest-graphviz';
-import { RootCluster, Digraph, Graph } from '@ts-graphviz/model';
-import { toDot } from '../to-dot';
+import { describe, expect, test, it, beforeEach } from 'vitest';
+import { Graph } from '@ts-graphviz/model';
+import { toDot } from '../to-dot.js';
 
 describe('RootClusters rendering', () => {
   describe.each([
-    ['Digraph', (): RootCluster => new Digraph()],
-    ['Graph', (): RootCluster => new Graph()],
+    ['Digraph', (): Graph => new Graph(true)],
+    ['Graph', (): Graph => new Graph(false)],
   ])('%s', (_, rootClusterFactory) => {
-    let g: RootCluster;
+    let g: Graph;
     beforeEach(() => {
       g = rootClusterFactory();
     });
 
     describe('renders correctly by toDot method', () => {
       it('simple g', () => {
-        expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+        expect(toDot(g)).toMatchSnapshot();
       });
 
       it('strict graph', () => {
         g.strict = true;
-        expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+        expect(toDot(g)).toMatchSnapshot();
       });
 
       test('set attributes', () => {
         g.set('dpi', 360);
-        expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+        expect(toDot(g)).toMatchSnapshot();
       });
 
       test('set attributes by apply', () => {
@@ -32,7 +32,7 @@ describe('RootClusters rendering', () => {
           layout: 'dot',
           dpi: 360,
         });
-        expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+        expect(toDot(g)).toMatchSnapshot();
       });
 
       describe('digraph with comment', () => {
@@ -51,14 +51,14 @@ describe('RootClusters rendering', () => {
         g.attributes.edge.set('label', 'edge label');
         g.attributes.graph.set('color', 'red');
         g.attributes.node.set('xlabel', 'node xlabel');
-        expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+        expect(toDot(g)).toMatchSnapshot();
       });
 
       it('nodes and edge', () => {
         const node1 = g.createNode('node1');
         const node2 = g.createNode('node2');
         g.createEdge([node1, node2]);
-        expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+        expect(toDot(g)).toMatchSnapshot();
       });
 
       it('subgraphs', () => {
@@ -75,7 +75,7 @@ describe('RootClusters rendering', () => {
         const node1 = g.createNode('node1');
         const node2 = g.createNode('node2');
         g.createEdge([node1, node2]);
-        expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+        expect(toDot(g)).toMatchSnapshot();
       });
 
       it('subgraphs, depth 2', () => {
@@ -92,7 +92,7 @@ describe('RootClusters rendering', () => {
         const node1 = g.createNode('node1');
         const node2 = g.createNode('node2');
         g.createEdge([node1, node2]);
-        expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+        expect(toDot(g)).toMatchSnapshot();
       });
 
       describe('label attribute behavior', () => {
@@ -100,14 +100,14 @@ describe('RootClusters rendering', () => {
           g.attributes.graph.set('label', 'this is test for graph label');
           g.attributes.edge.set('label', 'this is test for edge label');
           g.attributes.node.set('label', 'this is test for node label');
-          expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+          expect(toDot(g)).toMatchSnapshot();
         });
 
         it('html like', () => {
           g.attributes.graph.set('label', '<<B>this is test for graph label</B>>');
           g.attributes.edge.set('label', '<<U>this is test for edge label</U>>');
           g.attributes.node.set('label', '<<I>this is test for node label</I>>');
-          expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+          expect(toDot(g)).toMatchSnapshot();
         });
       });
     });

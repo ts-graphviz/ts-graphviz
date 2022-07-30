@@ -1,5 +1,6 @@
-import { toDot } from '../to-dot';
+import { describe, expect, test, beforeEach, it } from 'vitest';
 import { Attributes } from '@ts-graphviz/model';
+import { toDot } from '../to-dot.js';
 
 describe('Attributes rendering', () => {
   let attrs: Attributes;

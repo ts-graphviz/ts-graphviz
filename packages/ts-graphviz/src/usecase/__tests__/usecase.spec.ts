@@ -1,4 +1,4 @@
-import 'jest-graphviz';
+import { describe, expect, test, it } from 'vitest';
 import { attribute } from '@ts-graphviz/dot-attribute';
 import { Graph, Subgraph, Node, Edge } from '@ts-graphviz/model';
 import { digraph, graph, strict } from '../builder.js';
@@ -9,7 +9,7 @@ describe('function digraph', () => {
     const g = digraph();
     expect(g).toBeInstanceOf(Graph);
     expect(g.strict).toBe(false);
-    expect(g.directed).toBe(false);
+    expect(g.directed).toBe(true);
   });
 
   describe('root create function', () => {
@@ -92,7 +92,7 @@ describe('function digraph', () => {
       expect(g.id).toBe(id);
       expect(g.size).toBe(size);
       expect(g.strict).toBe(strictMode);
-      expect(toDot(g)).toBeValidDotAndMatchSnapshot();
+      expect(toDot(g)).toMatchSnapshot();
     });
   });
 
@@ -118,7 +118,7 @@ describe('function digraph', () => {
       });
     });
     const dot = toDot(G);
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   test('class base', () => {
@@ -139,7 +139,7 @@ describe('function digraph', () => {
     A.addNode(node2);
     A.addEdge(edge);
     const dot = toDot(G);
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   test('callback style, set attributes by attributes object', () => {
@@ -165,7 +165,7 @@ describe('function digraph', () => {
       });
     });
     const dot = toDot(G);
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   test('comment', () => {
@@ -193,7 +193,7 @@ describe('function digraph', () => {
       });
     });
     const dot = toDot(G);
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 });
 
@@ -219,7 +219,7 @@ describe('function graph', () => {
     const node2 = g.createNode('node2');
     g.createEdge([node1, node2]);
     const dot = toDot(g);
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   test('callback style', () => {
@@ -248,7 +248,7 @@ describe('function graph', () => {
       });
     });
     const dot = toDot(G);
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   test('callback style, set attributes by attributes object', () => {
@@ -274,7 +274,7 @@ describe('function graph', () => {
       });
     });
     const dot = toDot(G);
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 
   test('escape characters', () => {
@@ -296,7 +296,7 @@ describe('function graph', () => {
       });
     });
     const dot = toDot(G);
-    expect(dot).toBeValidDotAndMatchSnapshot();
+    expect(dot).toMatchSnapshot();
   });
 });
 
@@ -305,7 +305,7 @@ describe('strict mode', () => {
     const g = strict.digraph();
     expect(g).toBeInstanceOf(Graph);
     expect(g.strict).toBe(true);
-    expect(g.directed).toBe(false);
+    expect(g.directed).toBe(true);
   });
 
   it('should return Graph object, when execute graph()', () => {

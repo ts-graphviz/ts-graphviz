@@ -1,0 +1,2533 @@
+// Vitest Snapshot v1
+
+exports[`parse > attribute > set HTMLLike value 1`] = `
+{
+  "key": {
+    "location": {
+      "end": {
+        "column": 6,
+        "line": 1,
+        "offset": 5,
+      },
+      "source": undefined,
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "quoted": false,
+    "type": "Literal",
+    "value": "label",
+  },
+  "location": {
+    "end": {
+      "column": 2,
+      "line": 9,
+      "offset": 528,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Attribute",
+  "value": {
+    "location": {
+      "end": {
+        "column": 2,
+        "line": 9,
+        "offset": 528,
+      },
+      "source": undefined,
+      "start": {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+    },
+    "quoted": "html",
+    "type": "Literal",
+    "value": "
+  <table border=\\"0\\">
+    <tr><td align=\\"text\\">By default, td text is center-aligned</td></tr>
+    <tr><td align=\\"text\\">This td is left aligned<br align=\\"left\\" /></td></tr>
+    <tr><td align=\\"text\\">this one centered<br align=\\"center\\" /></td></tr>
+    <tr><td align=\\"text\\">and this one right aligned<br align=\\"right\\" /><br align=\\"right\\"/></td></tr>
+    <tr><td align=\\"text\\">The value of a closing<br align=\\"left\\"/>&lt;br/&gt; tag<br align=\\"center\\"/>refers to the preceeding text<br align=\\"right\\"/></td></tr>
+  </table>
+",
+  },
+}
+`;
+
+exports[`parse > attribute > set quoted value 1`] = `
+{
+  "key": {
+    "location": {
+      "end": {
+        "column": 6,
+        "line": 1,
+        "offset": 5,
+      },
+      "source": undefined,
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "quoted": false,
+    "type": "Literal",
+    "value": "label",
+  },
+  "location": {
+    "end": {
+      "column": 22,
+      "line": 1,
+      "offset": 21,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Attribute",
+  "value": {
+    "location": {
+      "end": {
+        "column": 21,
+        "line": 1,
+        "offset": 20,
+      },
+      "source": undefined,
+      "start": {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+    },
+    "quoted": true,
+    "type": "Literal",
+    "value": "example #1",
+  },
+}
+`;
+
+exports[`parse > attribute > set value 1`] = `
+{
+  "key": {
+    "location": {
+      "end": {
+        "column": 6,
+        "line": 1,
+        "offset": 5,
+      },
+      "source": undefined,
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "quoted": false,
+    "type": "Literal",
+    "value": "style",
+  },
+  "location": {
+    "end": {
+      "column": 14,
+      "line": 1,
+      "offset": 13,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Attribute",
+  "value": {
+    "location": {
+      "end": {
+        "column": 13,
+        "line": 1,
+        "offset": 12,
+      },
+      "source": undefined,
+      "start": {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+    },
+    "quoted": false,
+    "type": "Literal",
+    "value": "filled",
+  },
+}
+`;
+
+exports[`parse > attributes > edge 1`] = `
+{
+  "body": [
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 2,
+            "offset": 14,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 2,
+            "offset": 9,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "color",
+      },
+      "location": {
+        "end": {
+          "column": 13,
+          "line": 2,
+          "offset": 19,
+        },
+        "source": undefined,
+        "start": {
+          "column": 3,
+          "line": 2,
+          "offset": 9,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 12,
+            "line": 2,
+            "offset": 18,
+          },
+          "source": undefined,
+          "start": {
+            "column": 9,
+            "line": 2,
+            "offset": 15,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "red",
+      },
+    },
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 3,
+            "offset": 27,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 3,
+            "offset": 22,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "label",
+      },
+      "location": {
+        "end": {
+          "column": 29,
+          "line": 3,
+          "offset": 48,
+        },
+        "source": undefined,
+        "start": {
+          "column": 3,
+          "line": 3,
+          "offset": 22,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 28,
+            "line": 3,
+            "offset": 47,
+          },
+          "source": undefined,
+          "start": {
+            "column": 11,
+            "line": 3,
+            "offset": 30,
+          },
+        },
+        "quoted": true,
+        "type": "Literal",
+        "value": "example example",
+      },
+    },
+  ],
+  "kind": "edge",
+  "location": {
+    "end": {
+      "column": 3,
+      "line": 4,
+      "offset": 51,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Attributes",
+}
+`;
+
+exports[`parse > attributes > graph 1`] = `
+{
+  "body": [
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 18,
+            "line": 1,
+            "offset": 17,
+          },
+          "source": undefined,
+          "start": {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "fillcolor",
+      },
+      "location": {
+        "end": {
+          "column": 23,
+          "line": 1,
+          "offset": 22,
+        },
+        "source": undefined,
+        "start": {
+          "column": 9,
+          "line": 1,
+          "offset": 8,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 22,
+            "line": 1,
+            "offset": 21,
+          },
+          "source": undefined,
+          "start": {
+            "column": 19,
+            "line": 1,
+            "offset": 18,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "red",
+      },
+    },
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 29,
+            "line": 1,
+            "offset": 28,
+          },
+          "source": undefined,
+          "start": {
+            "column": 24,
+            "line": 1,
+            "offset": 23,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "label",
+      },
+      "location": {
+        "end": {
+          "column": 49,
+          "line": 1,
+          "offset": 48,
+        },
+        "source": undefined,
+        "start": {
+          "column": 24,
+          "line": 1,
+          "offset": 23,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 49,
+            "line": 1,
+            "offset": 48,
+          },
+          "source": undefined,
+          "start": {
+            "column": 32,
+            "line": 1,
+            "offset": 31,
+          },
+        },
+        "quoted": true,
+        "type": "Literal",
+        "value": "example example",
+      },
+    },
+  ],
+  "kind": "graph",
+  "location": {
+    "end": {
+      "column": 51,
+      "line": 1,
+      "offset": 50,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Attributes",
+}
+`;
+
+exports[`parse > attributes > node 1`] = `
+{
+  "body": [
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 2,
+            "offset": 14,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 2,
+            "offset": 9,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "style",
+      },
+      "location": {
+        "end": {
+          "column": 16,
+          "line": 2,
+          "offset": 22,
+        },
+        "source": undefined,
+        "start": {
+          "column": 3,
+          "line": 2,
+          "offset": 9,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 15,
+            "line": 2,
+            "offset": 21,
+          },
+          "source": undefined,
+          "start": {
+            "column": 9,
+            "line": 2,
+            "offset": 15,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "filled",
+      },
+    },
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 3,
+            "offset": 30,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 3,
+            "offset": 25,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "color",
+      },
+      "location": {
+        "end": {
+          "column": 19,
+          "line": 3,
+          "offset": 41,
+        },
+        "source": undefined,
+        "start": {
+          "column": 3,
+          "line": 3,
+          "offset": 25,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 18,
+            "line": 3,
+            "offset": 40,
+          },
+          "source": undefined,
+          "start": {
+            "column": 9,
+            "line": 3,
+            "offset": 31,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "lightgrey",
+      },
+    },
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 4,
+            "offset": 49,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 4,
+            "offset": 44,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "label",
+      },
+      "location": {
+        "end": {
+          "column": 24,
+          "line": 4,
+          "offset": 65,
+        },
+        "source": undefined,
+        "start": {
+          "column": 3,
+          "line": 4,
+          "offset": 44,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 23,
+            "line": 4,
+            "offset": 64,
+          },
+          "source": undefined,
+          "start": {
+            "column": 11,
+            "line": 4,
+            "offset": 52,
+          },
+        },
+        "quoted": true,
+        "type": "Literal",
+        "value": "example #1",
+      },
+    },
+  ],
+  "kind": "node",
+  "location": {
+    "end": {
+      "column": 2,
+      "line": 5,
+      "offset": 67,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Attributes",
+}
+`;
+
+exports[`parse > attributes > with comment 1`] = `
+{
+  "body": [
+    {
+      "kind": "Macro",
+      "location": {
+        "end": {
+          "column": 1,
+          "line": 3,
+          "offset": 22,
+        },
+        "source": undefined,
+        "start": {
+          "column": 4,
+          "line": 2,
+          "offset": 10,
+        },
+      },
+      "type": "Comment",
+      "value": "comment 1",
+    },
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 3,
+            "offset": 29,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 3,
+            "offset": 24,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "style",
+      },
+      "location": {
+        "end": {
+          "column": 16,
+          "line": 3,
+          "offset": 37,
+        },
+        "source": undefined,
+        "start": {
+          "column": 3,
+          "line": 3,
+          "offset": 24,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 15,
+            "line": 3,
+            "offset": 36,
+          },
+          "source": undefined,
+          "start": {
+            "column": 9,
+            "line": 3,
+            "offset": 30,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "filled",
+      },
+    },
+  ],
+  "kind": "node",
+  "location": {
+    "end": {
+      "column": 2,
+      "line": 4,
+      "offset": 39,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Attributes",
+}
+`;
+
+exports[`parse > cluster_statements > comments 1`] = `
+[
+  {
+    "kind": "Slash",
+    "location": {
+      "end": {
+        "column": 1,
+        "line": 2,
+        "offset": 12,
+      },
+      "source": undefined,
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "type": "Comment",
+    "value": "comment1",
+  },
+  {
+    "kind": "Slash",
+    "location": {
+      "end": {
+        "column": 1,
+        "line": 5,
+        "offset": 37,
+      },
+      "source": undefined,
+      "start": {
+        "column": 1,
+        "line": 3,
+        "offset": 13,
+      },
+    },
+    "type": "Comment",
+    "value": "comment2
+comment2",
+  },
+  {
+    "kind": "Macro",
+    "location": {
+      "end": {
+        "column": 1,
+        "line": 7,
+        "offset": 49,
+      },
+      "source": undefined,
+      "start": {
+        "column": 1,
+        "line": 6,
+        "offset": 38,
+      },
+    },
+    "type": "Comment",
+    "value": "comment3",
+  },
+  {
+    "kind": "Macro",
+    "location": {
+      "end": {
+        "column": 1,
+        "line": 10,
+        "offset": 72,
+      },
+      "source": undefined,
+      "start": {
+        "column": 1,
+        "line": 8,
+        "offset": 50,
+      },
+    },
+    "type": "Comment",
+    "value": "comment4
+comment4",
+  },
+  {
+    "kind": "Block",
+    "location": {
+      "end": {
+        "column": 16,
+        "line": 10,
+        "offset": 87,
+      },
+      "source": undefined,
+      "start": {
+        "column": 1,
+        "line": 10,
+        "offset": 72,
+      },
+    },
+    "type": "Comment",
+    "value": "comment 5",
+  },
+]
+`;
+
+exports[`parse > dot > with comments 1`] = `
+{
+  "body": [
+    {
+      "kind": "Block",
+      "location": {
+        "end": {
+          "column": 16,
+          "line": 1,
+          "offset": 15,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "type": "Comment",
+      "value": "comment1",
+    },
+    {
+      "body": [],
+      "directed": true,
+      "id": undefined,
+      "location": {
+        "end": {
+          "column": 11,
+          "line": 2,
+          "offset": 26,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 2,
+          "offset": 16,
+        },
+      },
+      "strict": false,
+      "type": "Graph",
+    },
+    {
+      "kind": "Block",
+      "location": {
+        "end": {
+          "column": 16,
+          "line": 3,
+          "offset": 42,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 3,
+          "offset": 27,
+        },
+      },
+      "type": "Comment",
+      "value": "comment2",
+    },
+  ],
+  "location": {
+    "end": {
+      "column": 16,
+      "line": 3,
+      "offset": 42,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Dot",
+}
+`;
+
+exports[`parse > edge > digraph edge 1`] = `
+{
+  "body": [],
+  "location": {
+    "end": {
+      "column": 8,
+      "line": 1,
+      "offset": 7,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "targets": [
+    {
+      "compass": undefined,
+      "id": {
+        "location": {
+          "end": {
+            "column": 2,
+            "line": 1,
+            "offset": 1,
+          },
+          "source": undefined,
+          "start": {
+            "column": 1,
+            "line": 1,
+            "offset": 0,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "a",
+      },
+      "location": {
+        "end": {
+          "column": 2,
+          "line": 1,
+          "offset": 1,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "port": undefined,
+      "type": "NodeRef",
+    },
+    {
+      "compass": undefined,
+      "id": {
+        "location": {
+          "end": {
+            "column": 7,
+            "line": 1,
+            "offset": 6,
+          },
+          "source": undefined,
+          "start": {
+            "column": 6,
+            "line": 1,
+            "offset": 5,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "b",
+      },
+      "location": {
+        "end": {
+          "column": 7,
+          "line": 1,
+          "offset": 6,
+        },
+        "source": undefined,
+        "start": {
+          "column": 6,
+          "line": 1,
+          "offset": 5,
+        },
+      },
+      "port": undefined,
+      "type": "NodeRef",
+    },
+  ],
+  "type": "Edge",
+}
+`;
+
+exports[`parse > edge > edge with attributes 1`] = `
+{
+  "body": [
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 2,
+            "offset": 16,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 2,
+            "offset": 11,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "color",
+      },
+      "location": {
+        "end": {
+          "column": 19,
+          "line": 2,
+          "offset": 27,
+        },
+        "source": undefined,
+        "start": {
+          "column": 3,
+          "line": 2,
+          "offset": 11,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 18,
+            "line": 2,
+            "offset": 26,
+          },
+          "source": undefined,
+          "start": {
+            "column": 9,
+            "line": 2,
+            "offset": 17,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "lightgrey",
+      },
+    },
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 3,
+            "offset": 35,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 3,
+            "offset": 30,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "label",
+      },
+      "location": {
+        "end": {
+          "column": 24,
+          "line": 3,
+          "offset": 51,
+        },
+        "source": undefined,
+        "start": {
+          "column": 3,
+          "line": 3,
+          "offset": 30,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 23,
+            "line": 3,
+            "offset": 50,
+          },
+          "source": undefined,
+          "start": {
+            "column": 11,
+            "line": 3,
+            "offset": 38,
+          },
+        },
+        "quoted": true,
+        "type": "Literal",
+        "value": "example #1",
+      },
+    },
+  ],
+  "location": {
+    "end": {
+      "column": 3,
+      "line": 4,
+      "offset": 54,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "targets": [
+    {
+      "compass": undefined,
+      "id": {
+        "location": {
+          "end": {
+            "column": 2,
+            "line": 1,
+            "offset": 1,
+          },
+          "source": undefined,
+          "start": {
+            "column": 1,
+            "line": 1,
+            "offset": 0,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "a",
+      },
+      "location": {
+        "end": {
+          "column": 2,
+          "line": 1,
+          "offset": 1,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "port": undefined,
+      "type": "NodeRef",
+    },
+    {
+      "compass": undefined,
+      "id": {
+        "location": {
+          "end": {
+            "column": 7,
+            "line": 1,
+            "offset": 6,
+          },
+          "source": undefined,
+          "start": {
+            "column": 6,
+            "line": 1,
+            "offset": 5,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "b",
+      },
+      "location": {
+        "end": {
+          "column": 7,
+          "line": 1,
+          "offset": 6,
+        },
+        "source": undefined,
+        "start": {
+          "column": 6,
+          "line": 1,
+          "offset": 5,
+        },
+      },
+      "port": undefined,
+      "type": "NodeRef",
+    },
+  ],
+  "type": "Edge",
+}
+`;
+
+exports[`parse > edge > edge with port 1`] = `
+{
+  "body": [],
+  "location": {
+    "end": {
+      "column": 31,
+      "line": 1,
+      "offset": 30,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "targets": [
+    {
+      "compass": undefined,
+      "id": {
+        "location": {
+          "end": {
+            "column": 2,
+            "line": 1,
+            "offset": 1,
+          },
+          "source": undefined,
+          "start": {
+            "column": 1,
+            "line": 1,
+            "offset": 0,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "a",
+      },
+      "location": {
+        "end": {
+          "column": 5,
+          "line": 1,
+          "offset": 4,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "port": {
+        "location": {
+          "end": {
+            "column": 5,
+            "line": 1,
+            "offset": 4,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 1,
+            "offset": 2,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "p1",
+      },
+      "type": "NodeRef",
+    },
+    {
+      "compass": undefined,
+      "id": {
+        "location": {
+          "end": {
+            "column": 10,
+            "line": 1,
+            "offset": 9,
+          },
+          "source": undefined,
+          "start": {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "b",
+      },
+      "location": {
+        "end": {
+          "column": 13,
+          "line": 1,
+          "offset": 12,
+        },
+        "source": undefined,
+        "start": {
+          "column": 9,
+          "line": 1,
+          "offset": 8,
+        },
+      },
+      "port": {
+        "location": {
+          "end": {
+            "column": 13,
+            "line": 1,
+            "offset": 12,
+          },
+          "source": undefined,
+          "start": {
+            "column": 11,
+            "line": 1,
+            "offset": 10,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "p2",
+      },
+      "type": "NodeRef",
+    },
+    {
+      "compass": {
+        "location": {
+          "end": {
+            "column": 23,
+            "line": 1,
+            "offset": 22,
+          },
+          "source": undefined,
+          "start": {
+            "column": 22,
+            "line": 1,
+            "offset": 21,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "w",
+      },
+      "id": {
+        "location": {
+          "end": {
+            "column": 18,
+            "line": 1,
+            "offset": 17,
+          },
+          "source": undefined,
+          "start": {
+            "column": 17,
+            "line": 1,
+            "offset": 16,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "c",
+      },
+      "location": {
+        "end": {
+          "column": 23,
+          "line": 1,
+          "offset": 22,
+        },
+        "source": undefined,
+        "start": {
+          "column": 17,
+          "line": 1,
+          "offset": 16,
+        },
+      },
+      "port": {
+        "location": {
+          "end": {
+            "column": 21,
+            "line": 1,
+            "offset": 20,
+          },
+          "source": undefined,
+          "start": {
+            "column": 19,
+            "line": 1,
+            "offset": 18,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "p3",
+      },
+      "type": "NodeRef",
+    },
+    {
+      "compass": undefined,
+      "id": {
+        "location": {
+          "end": {
+            "column": 28,
+            "line": 1,
+            "offset": 27,
+          },
+          "source": undefined,
+          "start": {
+            "column": 27,
+            "line": 1,
+            "offset": 26,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "d",
+      },
+      "location": {
+        "end": {
+          "column": 30,
+          "line": 1,
+          "offset": 29,
+        },
+        "source": undefined,
+        "start": {
+          "column": 27,
+          "line": 1,
+          "offset": 26,
+        },
+      },
+      "port": {
+        "location": {
+          "end": {
+            "column": 30,
+            "line": 1,
+            "offset": 29,
+          },
+          "source": undefined,
+          "start": {
+            "column": 29,
+            "line": 1,
+            "offset": 28,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "w",
+      },
+      "type": "NodeRef",
+    },
+  ],
+  "type": "Edge",
+}
+`;
+
+exports[`parse > edge > graph edge 1`] = `
+{
+  "body": [],
+  "location": {
+    "end": {
+      "column": 8,
+      "line": 1,
+      "offset": 7,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "targets": [
+    {
+      "compass": undefined,
+      "id": {
+        "location": {
+          "end": {
+            "column": 2,
+            "line": 1,
+            "offset": 1,
+          },
+          "source": undefined,
+          "start": {
+            "column": 1,
+            "line": 1,
+            "offset": 0,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "a",
+      },
+      "location": {
+        "end": {
+          "column": 2,
+          "line": 1,
+          "offset": 1,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "port": undefined,
+      "type": "NodeRef",
+    },
+    {
+      "compass": undefined,
+      "id": {
+        "location": {
+          "end": {
+            "column": 7,
+            "line": 1,
+            "offset": 6,
+          },
+          "source": undefined,
+          "start": {
+            "column": 6,
+            "line": 1,
+            "offset": 5,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "b",
+      },
+      "location": {
+        "end": {
+          "column": 7,
+          "line": 1,
+          "offset": 6,
+        },
+        "source": undefined,
+        "start": {
+          "column": 6,
+          "line": 1,
+          "offset": 5,
+        },
+      },
+      "port": undefined,
+      "type": "NodeRef",
+    },
+  ],
+  "type": "Edge",
+}
+`;
+
+exports[`parse > edge > grouped edge targets 1`] = `
+{
+  "body": [],
+  "location": {
+    "end": {
+      "column": 22,
+      "line": 1,
+      "offset": 21,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "targets": [
+    {
+      "body": [
+        {
+          "compass": undefined,
+          "id": {
+            "location": {
+              "end": {
+                "column": 4,
+                "line": 1,
+                "offset": 3,
+              },
+              "source": undefined,
+              "start": {
+                "column": 2,
+                "line": 1,
+                "offset": 1,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "a1",
+          },
+          "location": {
+            "end": {
+              "column": 4,
+              "line": 1,
+              "offset": 3,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 1,
+              "offset": 1,
+            },
+          },
+          "port": undefined,
+          "type": "NodeRef",
+        },
+        {
+          "compass": undefined,
+          "id": {
+            "location": {
+              "end": {
+                "column": 8,
+                "line": 1,
+                "offset": 7,
+              },
+              "source": undefined,
+              "start": {
+                "column": 6,
+                "line": 1,
+                "offset": 5,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "a2",
+          },
+          "location": {
+            "end": {
+              "column": 8,
+              "line": 1,
+              "offset": 7,
+            },
+            "source": undefined,
+            "start": {
+              "column": 6,
+              "line": 1,
+              "offset": 5,
+            },
+          },
+          "port": undefined,
+          "type": "NodeRef",
+        },
+      ],
+      "location": {
+        "end": {
+          "column": 9,
+          "line": 1,
+          "offset": 8,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "type": "NodeRefGroup",
+    },
+    {
+      "body": [
+        {
+          "compass": undefined,
+          "id": {
+            "location": {
+              "end": {
+                "column": 16,
+                "line": 1,
+                "offset": 15,
+              },
+              "source": undefined,
+              "start": {
+                "column": 14,
+                "line": 1,
+                "offset": 13,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "b1",
+          },
+          "location": {
+            "end": {
+              "column": 16,
+              "line": 1,
+              "offset": 15,
+            },
+            "source": undefined,
+            "start": {
+              "column": 14,
+              "line": 1,
+              "offset": 13,
+            },
+          },
+          "port": undefined,
+          "type": "NodeRef",
+        },
+        {
+          "compass": undefined,
+          "id": {
+            "location": {
+              "end": {
+                "column": 20,
+                "line": 1,
+                "offset": 19,
+              },
+              "source": undefined,
+              "start": {
+                "column": 18,
+                "line": 1,
+                "offset": 17,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "b2",
+          },
+          "location": {
+            "end": {
+              "column": 20,
+              "line": 1,
+              "offset": 19,
+            },
+            "source": undefined,
+            "start": {
+              "column": 18,
+              "line": 1,
+              "offset": 17,
+            },
+          },
+          "port": undefined,
+          "type": "NodeRef",
+        },
+      ],
+      "location": {
+        "end": {
+          "column": 21,
+          "line": 1,
+          "offset": 20,
+        },
+        "source": undefined,
+        "start": {
+          "column": 13,
+          "line": 1,
+          "offset": 12,
+        },
+      },
+      "type": "NodeRefGroup",
+    },
+  ],
+  "type": "Edge",
+}
+`;
+
+exports[`parse > edge > grouped ported edge targets 1`] = `
+{
+  "body": [],
+  "location": {
+    "end": {
+      "column": 35,
+      "line": 1,
+      "offset": 34,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "targets": [
+    {
+      "body": [
+        {
+          "compass": undefined,
+          "id": {
+            "location": {
+              "end": {
+                "column": 4,
+                "line": 1,
+                "offset": 3,
+              },
+              "source": undefined,
+              "start": {
+                "column": 2,
+                "line": 1,
+                "offset": 1,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "a1",
+          },
+          "location": {
+            "end": {
+              "column": 7,
+              "line": 1,
+              "offset": 6,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 1,
+              "offset": 1,
+            },
+          },
+          "port": {
+            "location": {
+              "end": {
+                "column": 7,
+                "line": 1,
+                "offset": 6,
+              },
+              "source": undefined,
+              "start": {
+                "column": 5,
+                "line": 1,
+                "offset": 4,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "p1",
+          },
+          "type": "NodeRef",
+        },
+        {
+          "compass": {
+            "location": {
+              "end": {
+                "column": 16,
+                "line": 1,
+                "offset": 15,
+              },
+              "source": undefined,
+              "start": {
+                "column": 15,
+                "line": 1,
+                "offset": 14,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "w",
+          },
+          "id": {
+            "location": {
+              "end": {
+                "column": 11,
+                "line": 1,
+                "offset": 10,
+              },
+              "source": undefined,
+              "start": {
+                "column": 9,
+                "line": 1,
+                "offset": 8,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "a2",
+          },
+          "location": {
+            "end": {
+              "column": 16,
+              "line": 1,
+              "offset": 15,
+            },
+            "source": undefined,
+            "start": {
+              "column": 9,
+              "line": 1,
+              "offset": 8,
+            },
+          },
+          "port": {
+            "location": {
+              "end": {
+                "column": 14,
+                "line": 1,
+                "offset": 13,
+              },
+              "source": undefined,
+              "start": {
+                "column": 12,
+                "line": 1,
+                "offset": 11,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "p2",
+          },
+          "type": "NodeRef",
+        },
+      ],
+      "location": {
+        "end": {
+          "column": 17,
+          "line": 1,
+          "offset": 16,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "type": "NodeRefGroup",
+    },
+    {
+      "body": [
+        {
+          "compass": undefined,
+          "id": {
+            "location": {
+              "end": {
+                "column": 24,
+                "line": 1,
+                "offset": 23,
+              },
+              "source": undefined,
+              "start": {
+                "column": 22,
+                "line": 1,
+                "offset": 21,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "b1",
+          },
+          "location": {
+            "end": {
+              "column": 26,
+              "line": 1,
+              "offset": 25,
+            },
+            "source": undefined,
+            "start": {
+              "column": 22,
+              "line": 1,
+              "offset": 21,
+            },
+          },
+          "port": {
+            "location": {
+              "end": {
+                "column": 26,
+                "line": 1,
+                "offset": 25,
+              },
+              "source": undefined,
+              "start": {
+                "column": 25,
+                "line": 1,
+                "offset": 24,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "e",
+          },
+          "type": "NodeRef",
+        },
+        {
+          "compass": undefined,
+          "id": {
+            "location": {
+              "end": {
+                "column": 30,
+                "line": 1,
+                "offset": 29,
+              },
+              "source": undefined,
+              "start": {
+                "column": 28,
+                "line": 1,
+                "offset": 27,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "b2",
+          },
+          "location": {
+            "end": {
+              "column": 33,
+              "line": 1,
+              "offset": 32,
+            },
+            "source": undefined,
+            "start": {
+              "column": 28,
+              "line": 1,
+              "offset": 27,
+            },
+          },
+          "port": {
+            "location": {
+              "end": {
+                "column": 33,
+                "line": 1,
+                "offset": 32,
+              },
+              "source": undefined,
+              "start": {
+                "column": 31,
+                "line": 1,
+                "offset": 30,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "p3",
+          },
+          "type": "NodeRef",
+        },
+      ],
+      "location": {
+        "end": {
+          "column": 34,
+          "line": 1,
+          "offset": 33,
+        },
+        "source": undefined,
+        "start": {
+          "column": 21,
+          "line": 1,
+          "offset": 20,
+        },
+      },
+      "type": "NodeRefGroup",
+    },
+  ],
+  "type": "Edge",
+}
+`;
+
+exports[`parse > graph > anonymous digraph 1`] = `
+{
+  "body": [],
+  "directed": true,
+  "id": undefined,
+  "location": {
+    "end": {
+      "column": 11,
+      "line": 1,
+      "offset": 10,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "strict": false,
+  "type": "Graph",
+}
+`;
+
+exports[`parse > graph > digraph named test 1`] = `
+{
+  "body": [],
+  "directed": true,
+  "id": {
+    "location": {
+      "end": {
+        "column": 13,
+        "line": 1,
+        "offset": 12,
+      },
+      "source": undefined,
+      "start": {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+    },
+    "quoted": false,
+    "type": "Literal",
+    "value": "test",
+  },
+  "location": {
+    "end": {
+      "column": 16,
+      "line": 1,
+      "offset": 15,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "strict": false,
+  "type": "Graph",
+}
+`;
+
+exports[`parse > graph > digraph named test(quoted) 1`] = `
+{
+  "body": [],
+  "directed": true,
+  "id": {
+    "location": {
+      "end": {
+        "column": 15,
+        "line": 1,
+        "offset": 14,
+      },
+      "source": undefined,
+      "start": {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+    },
+    "quoted": true,
+    "type": "Literal",
+    "value": "test",
+  },
+  "location": {
+    "end": {
+      "column": 18,
+      "line": 1,
+      "offset": 17,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "strict": false,
+  "type": "Graph",
+}
+`;
+
+exports[`parse > graph > graph named test 1`] = `
+{
+  "body": [],
+  "directed": false,
+  "id": {
+    "location": {
+      "end": {
+        "column": 11,
+        "line": 1,
+        "offset": 10,
+      },
+      "source": undefined,
+      "start": {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+    },
+    "quoted": false,
+    "type": "Literal",
+    "value": "test",
+  },
+  "location": {
+    "end": {
+      "column": 14,
+      "line": 1,
+      "offset": 13,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "strict": false,
+  "type": "Graph",
+}
+`;
+
+exports[`parse > graph > strict digraph named test 1`] = `
+{
+  "body": [],
+  "directed": true,
+  "id": {
+    "location": {
+      "end": {
+        "column": 20,
+        "line": 1,
+        "offset": 19,
+      },
+      "source": undefined,
+      "start": {
+        "column": 16,
+        "line": 1,
+        "offset": 15,
+      },
+    },
+    "quoted": false,
+    "type": "Literal",
+    "value": "test",
+  },
+  "location": {
+    "end": {
+      "column": 23,
+      "line": 1,
+      "offset": 22,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "strict": true,
+  "type": "Graph",
+}
+`;
+
+exports[`parse > graph > strict graph named test 1`] = `
+{
+  "body": [],
+  "directed": false,
+  "id": {
+    "location": {
+      "end": {
+        "column": 18,
+        "line": 1,
+        "offset": 17,
+      },
+      "source": undefined,
+      "start": {
+        "column": 14,
+        "line": 1,
+        "offset": 13,
+      },
+    },
+    "quoted": false,
+    "type": "Literal",
+    "value": "test",
+  },
+  "location": {
+    "end": {
+      "column": 21,
+      "line": 1,
+      "offset": 20,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "strict": true,
+  "type": "Graph",
+}
+`;
+
+exports[`parse > node > node with attributes 1`] = `
+{
+  "body": [
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 2,
+            "offset": 14,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 2,
+            "offset": 9,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "style",
+      },
+      "location": {
+        "end": {
+          "column": 16,
+          "line": 2,
+          "offset": 22,
+        },
+        "source": undefined,
+        "start": {
+          "column": 3,
+          "line": 2,
+          "offset": 9,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 15,
+            "line": 2,
+            "offset": 21,
+          },
+          "source": undefined,
+          "start": {
+            "column": 9,
+            "line": 2,
+            "offset": 15,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "filled",
+      },
+    },
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 3,
+            "offset": 30,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 3,
+            "offset": 25,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "color",
+      },
+      "location": {
+        "end": {
+          "column": 19,
+          "line": 3,
+          "offset": 41,
+        },
+        "source": undefined,
+        "start": {
+          "column": 3,
+          "line": 3,
+          "offset": 25,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 18,
+            "line": 3,
+            "offset": 40,
+          },
+          "source": undefined,
+          "start": {
+            "column": 9,
+            "line": 3,
+            "offset": 31,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "lightgrey",
+      },
+    },
+    {
+      "key": {
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 4,
+            "offset": 49,
+          },
+          "source": undefined,
+          "start": {
+            "column": 3,
+            "line": 4,
+            "offset": 44,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "label",
+      },
+      "location": {
+        "end": {
+          "column": 24,
+          "line": 4,
+          "offset": 65,
+        },
+        "source": undefined,
+        "start": {
+          "column": 3,
+          "line": 4,
+          "offset": 44,
+        },
+      },
+      "type": "Attribute",
+      "value": {
+        "location": {
+          "end": {
+            "column": 23,
+            "line": 4,
+            "offset": 64,
+          },
+          "source": undefined,
+          "start": {
+            "column": 11,
+            "line": 4,
+            "offset": 52,
+          },
+        },
+        "quoted": true,
+        "type": "Literal",
+        "value": "example #1",
+      },
+    },
+  ],
+  "id": {
+    "location": {
+      "end": {
+        "column": 5,
+        "line": 1,
+        "offset": 4,
+      },
+      "source": undefined,
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "quoted": false,
+    "type": "Literal",
+    "value": "test",
+  },
+  "location": {
+    "end": {
+      "column": 3,
+      "line": 5,
+      "offset": 68,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Node",
+}
+`;
+
+exports[`parse > node > simple node 1`] = `
+{
+  "body": [],
+  "id": {
+    "location": {
+      "end": {
+        "column": 5,
+        "line": 1,
+        "offset": 4,
+      },
+      "source": undefined,
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "quoted": false,
+    "type": "Literal",
+    "value": "test",
+  },
+  "location": {
+    "end": {
+      "column": 6,
+      "line": 1,
+      "offset": 5,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Node",
+}
+`;
+
+exports[`parse > subgraph > anonymous subgraph 1`] = `
+{
+  "body": [],
+  "id": undefined,
+  "location": {
+    "end": {
+      "column": 12,
+      "line": 1,
+      "offset": 11,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Subgraph",
+}
+`;
+
+exports[`parse > subgraph > named subgraph 1`] = `
+{
+  "body": [],
+  "id": {
+    "location": {
+      "end": {
+        "column": 14,
+        "line": 1,
+        "offset": 13,
+      },
+      "source": undefined,
+      "start": {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+    },
+    "quoted": false,
+    "type": "Literal",
+    "value": "hoge",
+  },
+  "location": {
+    "end": {
+      "column": 17,
+      "line": 1,
+      "offset": 16,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Subgraph",
+}
+`;
+
+exports[`parse > subgraph > no keyword anonymous 1`] = `
+{
+  "body": [],
+  "id": undefined,
+  "location": {
+    "end": {
+      "column": 3,
+      "line": 1,
+      "offset": 2,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Subgraph",
+}
+`;

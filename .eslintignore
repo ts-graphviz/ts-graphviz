@@ -1,3 +1,5 @@
 node_modules
 lib
 packages/parser/src/dot.peggy.js
+packages/react
+coverage

@@ -9,5 +9,9 @@
     "*.peggy": "pegjs"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "javascript.preferences.importModuleSpecifierEnding": "js"
+  "javascript.preferences.importModuleSpecifierEnding": "js",
+  "npm.packageManager": "yarn",
+  "eslint.packageManager": "yarn",
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "prettier.configPath": ".prettierrc.json"
 }

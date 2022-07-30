@@ -9,9 +9,6 @@ parserOptions:
     jsx: true
   useJSXTextNode: true
 
-env:
-  jest/globals: true
-
 settings:
   import/parsers:
     '@typescript-eslint/parser': [.ts, .tsx]
@@ -22,20 +19,17 @@ settings:
       project: packages/*/tsconfig.json
       extensions: [.js, .jsx, .ts, .tsx]
 
-  jest:
-    version: 28
   react:
     version: detect
 
 plugins:
   - '@typescript-eslint'
   - import
-  - jest
+  - vitest
 
 extends:
   - eslint:recommended
   - plugin:@typescript-eslint/recommended
-  - plugin:jest/recommended
   - prettier # this to be added to last
 rules:
   '@typescript-eslint/no-namespace': 'off'

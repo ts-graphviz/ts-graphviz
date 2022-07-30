@@ -1,5 +1,6 @@
-import { DotObject, GraphvizObject } from '../abstract';
-import { Node } from '../nodes';
+import { describe, beforeEach, expect, test, it } from 'vitest';
+import { DotObject, GraphvizObject } from '../abstract.js';
+import { Node } from '../nodes.js';
 import { attribute } from '@ts-graphviz/dot-attribute';
 
 describe('class Node', () => {

@@ -69,18 +69,11 @@ export class Renderer {
   protected printNode(ast: Node): string {
     return ast.body.length === 0
       ? `${this.render(ast.id)};`
-      : `${this.render(ast.id)} [\n${ast.body
-          .map(this.render.bind(this))
-          .map(this.indent.bind(this))
-          .join('\n')}\n];`;
+      : `${this.render(ast.id)} [\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
   }
 
   protected printNodeRef(ast: NodeRef): string {
-    return [
-      this.render(ast.id),
-      ast.port ? this.render(ast.port) : null,
-      ast.compass ? this.render(ast.compass) : null,
-    ]
+    return [this.render(ast.id), ast.port ? this.render(ast.port) : null, ast.compass ? this.render(ast.compass) : null]
       .filter((v) => v !== null)
       .join(':');
   }

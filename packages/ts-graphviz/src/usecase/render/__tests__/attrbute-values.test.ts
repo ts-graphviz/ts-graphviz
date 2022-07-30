@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { toDot } from '../to-dot.js';
 
 describe('AttributesValue rendering', () => {

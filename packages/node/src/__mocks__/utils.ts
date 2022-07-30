@@ -1,5 +1,6 @@
-export const close = jest.fn().mockReturnValue(undefined);
-export const writeFile = jest.fn().mockReturnValue(undefined);
-export const execFile = jest.fn().mockReturnValue({
+import { vi } from 'vitest';
+export const close = vi.fn().mockReturnValue(undefined);
+export const writeFile = vi.fn().mockReturnValue(undefined);
+export const execFile = vi.fn().mockReturnValue({
   stdout: Buffer.from([]),
 });

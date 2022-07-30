@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`Attributes rendering renders correctly by toDot method edge with comment multi line comment 1`] = `
+exports[`Attributes rendering > renders correctly by toDot method > edge with comment > multi line comment 1`] = `
 "[
   // this is comment.
   // second line.
@@ -9,7 +9,7 @@ exports[`Attributes rendering renders correctly by toDot method edge with commen
 ]"
 `;
 
-exports[`Attributes rendering renders correctly by toDot method edge with comment single line comment 1`] = `
+exports[`Attributes rendering > renders correctly by toDot method > edge with comment > single line comment 1`] = `
 "[
   // this is comment.
   label = \\"test\\",
@@ -17,15 +17,15 @@ exports[`Attributes rendering renders correctly by toDot method edge with commen
 ]"
 `;
 
-exports[`Attributes rendering renders correctly by toDot method no attributes 1`] = `""`;
+exports[`Attributes rendering > renders correctly by toDot method > no attributes 1`] = `""`;
 
-exports[`Attributes rendering renders correctly by toDot method one attribute 1`] = `
+exports[`Attributes rendering > renders correctly by toDot method > one attribute 1`] = `
 "[
   label = \\"test\\",
 ]"
 `;
 
-exports[`Attributes rendering renders correctly by toDot method set some attributes by apply 1`] = `
+exports[`Attributes rendering > renders correctly by toDot method > set some attributes by apply 1`] = `
 "[
   label = \\"this is test\\",
   color = \\"red\\",
@@ -33,9 +33,9 @@ exports[`Attributes rendering renders correctly by toDot method set some attribu
 ]"
 `;
 
-exports[`Attributes rendering renders correctly by toDot method set undefined attributes by apply 1`] = `""`;
+exports[`Attributes rendering > renders correctly by toDot method > set undefined attributes by apply 1`] = `""`;
 
-exports[`Attributes rendering renders correctly by toDot method some attributes 1`] = `
+exports[`Attributes rendering > renders correctly by toDot method > some attributes 1`] = `
 "[
   label = \\"test\\",
   color = \\"red\\",

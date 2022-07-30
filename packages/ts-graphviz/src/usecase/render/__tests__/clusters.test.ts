@@ -1,6 +1,6 @@
-import 'jest-graphviz';
+import { describe, expect, test, beforeEach, it } from 'vitest';
 import { EdgeTargetTuple, ISubgraph, Subgraph } from '@ts-graphviz/model';
-import { toDot } from '../to-dot';
+import { toDot } from '../to-dot.js';
 
 describe('Subgraph rendering', () => {
   let subgraph: ISubgraph;
