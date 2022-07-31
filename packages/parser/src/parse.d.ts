@@ -10,15 +10,7 @@ import type {
   SubgraphASTNode,
 } from '@ts-graphviz/dot-ast';
 
-export type Rule =
-  | 'Dot'
-  | 'Graph'
-  | 'Node'
-  | 'Edge'
-  | 'AttributeList'
-  | 'Attribute'
-  | 'Subgraph'
-  | 'ClusterStatements';
+export type Rule = 'Dot' | 'Graph' | 'Node' | 'Edge' | 'AttributeList' | 'Attribute' | 'Subgraph' | 'ClusterStatements';
 
 export interface LiteralExpectation {
   type: 'literal';

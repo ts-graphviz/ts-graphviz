@@ -1,19 +1,25 @@
+import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
+import { vitestTypescriptAssertPlugin } from 'vite-plugin-vitest-typescript-assert';
+
+function entrypoint(packageName: string): string {
+  return resolve(process.cwd(), './packages', packageName, 'src/index.ts');
+}
 
 export default defineConfig({
-  // resolve: {
-  //   alias: {
-  //     '@ts-graphviz/dot-ast': 'packages/dot-ast/src/index.ts',
-  //     '@ts-graphviz/dot-attribute': 'packages/dot-attribute/src/index.ts',
-  //     '@ts-graphviz/dot-type': 'packages/dot-type/src/index.ts',
-  //     '@ts-graphviz/model': 'packages/model/src/index.ts',
-  //     '@ts-graphviz/node': 'packages/node/src/index.ts',
-  //     '@ts-graphviz/parser': 'packages/parser/src/index.ts',
-  //     '@ts-graphviz/react': 'packages/react/src/index.ts',
-  //     '@ts-graphviz/renderer': 'packages/renderer/src/index.ts',
-  //     'ts-graphviz': 'packages/ts-graphviz/src/index.ts',
-  //   },
-  // },
+  resolve: {
+    alias: {
+      '@ts-graphviz/dot-ast': entrypoint('dot-ast'),
+      '@ts-graphviz/dot-attribute': entrypoint('dot-attribute'),
+      '@ts-graphviz/dot-type': entrypoint('dot-type'),
+      '@ts-graphviz/model': entrypoint('model'),
+      '@ts-graphviz/node': entrypoint('node'),
+      '@ts-graphviz/parser': entrypoint('parser'),
+      '@ts-graphviz/react': entrypoint('react'),
+      '@ts-graphviz/renderer': entrypoint('renderer'),
+      'ts-graphviz': entrypoint('ts-graphviz'),
+    },
+  },
   optimizeDeps: {
     //
   },
@@ -24,4 +30,5 @@ export default defineConfig({
     },
     exclude: ['**/node_modules/**', 'packages/**/lib/**', 'packages/react'],
   },
+  plugins: [vitestTypescriptAssertPlugin()],
 });

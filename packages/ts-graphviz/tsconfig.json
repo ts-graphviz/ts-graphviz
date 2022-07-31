@@ -1,7 +1,16 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "lib"
+    "outDir": "lib",
+    "composite": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "references": [
+    { "path": "../dot-ast" },
+    { "path": "../dot-attribute" },
+    { "path": "../dot-type" },
+    { "path": "../model" },
+    { "path": "../parser" },
+    { "path": "../renderer" }
+  ]
 }

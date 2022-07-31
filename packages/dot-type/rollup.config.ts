@@ -3,7 +3,7 @@ import typescript from 'rollup-plugin-typescript2';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 
-function *createOptions(watch?: boolean): Generator<RollupOptions> {
+function* createOptions(watch?: boolean): Generator<RollupOptions> {
   yield {
     input: './src/index.ts',
     plugins: [typescript()],
@@ -36,7 +36,6 @@ function *createOptions(watch?: boolean): Generator<RollupOptions> {
       ],
     };
   }
-
 }
 
-export default (args: { watch?: boolean}) => [...createOptions(args.watch)];
+export default (args: { watch?: boolean }) => [...createOptions(args.watch)];

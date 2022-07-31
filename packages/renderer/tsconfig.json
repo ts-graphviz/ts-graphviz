@@ -3,5 +3,6 @@
   "compilerOptions": {
     "outDir": "lib"
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "references": [{ "path": "../dot-ast" }]
 }

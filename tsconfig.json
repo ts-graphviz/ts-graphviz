@@ -1,15 +1,11 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "importHelpers": true,
     "target": "ESNext",
-    "module": "ESNext",
-    "strict": true,
-    "jsx": "react",
-    "lib": ["DOM", "ESNext"],
-    "allowJs": true,
     "alwaysStrict": true,
     "strictNullChecks": true,
-    "outDir": "lib",
+    "skipLibCheck": true,
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "declaration": true,

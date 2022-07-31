@@ -19,12 +19,24 @@ function* createOptions(watch?: boolean): Generator<RollupOptions> {
       },
     ],
   };
+
+  yield {
+    input: ['src/parse.d.ts'],
+    plugins: [dts()],
+    output: [
+      {
+        format: 'esm',
+        file: './lib/src/parse.d.ts',
+      },
+    ],
+  };
+
   if (!watch) {
     yield {
-      input: './lib/index.d.ts',
+      input: './lib/src/index.d.ts',
       plugins: [
         del({
-          targets: ['lib/*.d.ts', '!lib/index.d.ts'],
+          targets: ['lib/**/*.d.ts', '!lib/index.d.ts'],
           hook: 'buildEnd',
         }),
         dts(),
