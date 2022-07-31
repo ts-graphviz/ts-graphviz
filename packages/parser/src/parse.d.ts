@@ -1,6 +1,24 @@
-import { FileRange, Dot, Graph, Node, Edge, Attribute, Attributes, ClusterStatement } from '@ts-graphviz/dot-ast';
+import type {
+  FileRange,
+  DotASTNode,
+  GraphASTNode,
+  NodeASTNode,
+  EdgeASTNode,
+  AttributeASTNode,
+  AttributeListASTNode,
+  ClusterStatementASTNode,
+  SubgraphASTNode,
+} from '@ts-graphviz/dot-ast';
 
-export type Rule = 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Attributes' | 'Attribute' | 'Subgraph' | 'ClusterStatements';
+export type Rule =
+  | 'Dot'
+  | 'Graph'
+  | 'Node'
+  | 'Edge'
+  | 'AttributeList'
+  | 'Attribute'
+  | 'Subgraph'
+  | 'ClusterStatements';
 
 export interface LiteralExpectation {
   type: 'literal';
@@ -48,12 +66,12 @@ export interface ParseOptions<T extends Rule> extends CommonParseOptions {
   startRule?: T;
 }
 
-export function parse(input: string): Dot;
-export function parse(input: string, options?: ParseOptions<'Dot'>): Dot;
-export function parse(input: string, options?: ParseOptions<'Graph'>): Graph;
-export function parse(input: string, options?: ParseOptions<'Node'>): Node;
-export function parse(input: string, options?: ParseOptions<'Edge'>): Edge;
-export function parse(input: string, options?: ParseOptions<'Attributes'>): Attributes;
-export function parse(input: string, options?: ParseOptions<'Attribute'>): Attribute;
-export function parse(input: string, options?: ParseOptions<'Subgraph'>): Attribute;
-export function parse(input: string, options?: ParseOptions<'ClusterStatements'>): ClusterStatement[];
+export function parse(input: string): DotASTNode;
+export function parse(input: string, options?: ParseOptions<'Dot'>): DotASTNode;
+export function parse(input: string, options?: ParseOptions<'Graph'>): GraphASTNode;
+export function parse(input: string, options?: ParseOptions<'Node'>): NodeASTNode;
+export function parse(input: string, options?: ParseOptions<'Edge'>): EdgeASTNode;
+export function parse(input: string, options?: ParseOptions<'AttributeList'>): AttributeListASTNode;
+export function parse(input: string, options?: ParseOptions<'Attribute'>): AttributeASTNode;
+export function parse(input: string, options?: ParseOptions<'Subgraph'>): SubgraphASTNode;
+export function parse(input: string, options?: ParseOptions<'ClusterStatements'>): ClusterStatementASTNode[];

@@ -68,7 +68,7 @@ describe('stringify', () => {
     test('node', () => {
       expect(
         stringify({
-          type: 'Attributes',
+          type: 'AttributeList',
           kind: 'Node',
           body: [],
           location,
@@ -79,7 +79,7 @@ describe('stringify', () => {
     test('edge', () => {
       expect(
         stringify({
-          type: 'Attributes',
+          type: 'AttributeList',
           kind: 'Edge',
           body: [],
           location,
@@ -90,7 +90,7 @@ describe('stringify', () => {
     test('graph', () => {
       expect(
         stringify({
-          type: 'Attributes',
+          type: 'AttributeList',
           kind: 'Graph',
           body: [],
           location,
@@ -101,7 +101,7 @@ describe('stringify', () => {
     test('with attribute', () => {
       expect(
         stringify({
-          type: 'Attributes',
+          type: 'AttributeList',
           kind: 'Node',
           body: [
             {
@@ -132,7 +132,7 @@ describe('stringify', () => {
     test('with two attributes', () => {
       expect(
         stringify({
-          type: 'Attributes',
+          type: 'AttributeList',
           kind: 'Node',
           body: [
             {

@@ -29,7 +29,9 @@
   "typedocMain": "./src/index.ts",
   "license": "MIT",
   "scripts": {
+    "clean": "rimraf lib .turbo tsconfig.tsbuildinfo",
+    "dev": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput --watch",
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
-    "postbuild": "prettier --write ./lib/index.{js,ts,d.ts}"
+    "postbuild": "prettier --write ./lib/index.{js,cjs,d.ts}"
   }
 }

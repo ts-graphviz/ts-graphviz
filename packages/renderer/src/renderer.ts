@@ -1,16 +1,16 @@
 import type {
   ASTNode,
-  Attribute,
-  Attributes,
-  Comment,
-  Dot,
-  Edge,
-  Graph,
-  Literal,
-  Node,
-  NodeRef,
-  NodeRefGroup,
-  Subgraph,
+  AttributeASTNode,
+  AttributeListASTNode,
+  CommentASTNode,
+  DotASTNode,
+  EdgeASTNode,
+  GraphASTNode,
+  LiteralASTNode,
+  NodeASTNode,
+  NodeRefASTNode,
+  NodeRefGroupASTNode,
+  SubgraphASTNode,
 } from '@ts-graphviz/dot-ast';
 import type { StringifyOption } from './types.js';
 
@@ -33,17 +33,17 @@ export class Renderer {
     return (l: string) => pad + l;
   }
 
-  protected printAttribute(ast: Attribute): string {
+  protected printAttribute(ast: AttributeASTNode): string {
     return `${this.render(ast.key)} = ${this.render(ast.value)};`;
   }
 
-  protected printAttributes(ast: Attributes): string {
+  protected printAttributeList(ast: AttributeListASTNode): string {
     return ast.body.length === 0
       ? `${ast.kind};`
       : `${ast.kind} [\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
   }
 
-  protected printComment(ast: Comment): string {
+  protected printComment(ast: CommentASTNode): string {
     switch (ast.kind) {
       case 'Block':
         return `/**\n${ast.value.split('\n').map(this.pad(' * ')).join('\n')}\n */`;
@@ -55,34 +55,34 @@ export class Renderer {
     }
   }
 
-  protected printDot(ast: Dot): string {
+  protected printDot(ast: DotASTNode): string {
     return ast.body.map(this.render.bind(this)).join('\n');
   }
 
-  protected printEdge(ast: Edge): string {
+  protected printEdge(ast: EdgeASTNode): string {
     const targets = ast.targets.map(this.render.bind(this)).join(this.directed ? ' -> ' : ' -- ');
     return ast.body.length === 0
       ? `${targets};`
       : `${targets} [\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
   }
 
-  protected printNode(ast: Node): string {
+  protected printNode(ast: NodeASTNode): string {
     return ast.body.length === 0
       ? `${this.render(ast.id)};`
       : `${this.render(ast.id)} [\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
   }
 
-  protected printNodeRef(ast: NodeRef): string {
+  protected printNodeRef(ast: NodeRefASTNode): string {
     return [this.render(ast.id), ast.port ? this.render(ast.port) : null, ast.compass ? this.render(ast.compass) : null]
       .filter((v) => v !== null)
       .join(':');
   }
 
-  protected printNodeRefGroup(ast: NodeRefGroup): string {
+  protected printNodeRefGroup(ast: NodeRefGroupASTNode): string {
     return `{${ast.body.map(this.render.bind(this)).join(' ')}}`;
   }
 
-  protected printGroup(ast: Graph): string {
+  protected printGroup(ast: GraphASTNode): string {
     return [
       ast.strict ? 'strict' : null,
       ast.directed ? 'digraph' : 'graph',
@@ -95,7 +95,7 @@ export class Renderer {
       .join(' ');
   }
 
-  protected printSubgraph(ast: Subgraph): string {
+  protected printSubgraph(ast: SubgraphASTNode): string {
     return [
       'subgraph',
       ast.id ? this.render(ast.id) : null,
@@ -108,7 +108,7 @@ export class Renderer {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  protected printLiteral(ast: Literal): string {
+  protected printLiteral(ast: LiteralASTNode): string {
     switch (ast.quoted) {
       case 'html':
         return `<${ast.value}>`;
@@ -126,8 +126,8 @@ export class Renderer {
     switch (ast.type) {
       case 'Attribute':
         return this.printAttribute(ast);
-      case 'Attributes':
-        return this.printAttributes(ast);
+      case 'AttributeList':
+        return this.printAttributeList(ast);
       case 'Comment':
         return this.printComment(ast);
       case 'Dot':

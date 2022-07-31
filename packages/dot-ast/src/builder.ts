@@ -1,22 +1,22 @@
-import { Compass } from '@ts-graphviz/dot-type';
-import { AttributeKey } from '@ts-graphviz/dot-attribute';
+import type { Compass } from '@ts-graphviz/dot-type';
+import type { AttributeKey } from '@ts-graphviz/dot-attribute';
 import type {
-  Dot,
-  DotStatement,
-  ASTCommon,
-  Literal,
+  DotASTNode,
+  StatementASTNode,
+  ASTCommonNode,
+  LiteralASTNode,
+  ClusterStatementASTNode,
+  NodeASTNode,
+  AttributeASTNode,
+  NodeRefASTNode,
+  NodeRefGroupASTNode,
+  EdgeTargetASTNode,
+  AttributeListASTNode,
+  CommentASTNode,
+  GraphASTNode,
+  EdgeASTNode,
+  SubgraphASTNode,
   FileRange,
-  ClusterStatement,
-  Node,
-  Attribute,
-  NodeRef,
-  NodeRefGroup,
-  EdgeTarget,
-  Attributes,
-  Comment,
-  Graph,
-  Edge,
-  Subgraph,
 } from './types.js';
 
 export interface BuilderConfig {
@@ -58,7 +58,7 @@ export class Builder {
 
   constructor(private config: Partial<BuilderConfig>) {}
 
-  public dot({ body, location = this.location() }: { body: DotStatement[] } & Partial<ASTCommon>): Dot {
+  public dot({ body, location = this.location() }: { body: StatementASTNode[] } & Partial<ASTCommonNode>): DotASTNode {
     return {
       type: 'Dot',
       body,
@@ -73,7 +73,7 @@ export class Builder {
   }: {
     value: T;
     quoted?: boolean | 'html';
-  } & Partial<ASTCommon>): Literal<T> {
+  } & Partial<ASTCommonNode>): LiteralASTNode<T> {
     return {
       type: 'Literal',
       value,
@@ -89,11 +89,11 @@ export class Builder {
     body,
     location = this.location(),
   }: {
-    id?: Literal;
+    id?: LiteralASTNode;
     directed: boolean;
     strict?: boolean;
-    body: ClusterStatement[];
-  } & Partial<ASTCommon>): Graph {
+    body: ClusterStatementASTNode[];
+  } & Partial<ASTCommonNode>): GraphASTNode {
     return {
       type: 'Graph',
       id,
@@ -109,9 +109,9 @@ export class Builder {
     body,
     location = this.location(),
   }: {
-    id?: Literal;
-    body: ClusterStatement[];
-  } & Partial<ASTCommon>): Subgraph {
+    id?: LiteralASTNode;
+    body: ClusterStatementASTNode[];
+  } & Partial<ASTCommonNode>): SubgraphASTNode {
     return {
       type: 'Subgraph',
       id,
@@ -125,9 +125,9 @@ export class Builder {
     body = [],
     location = this.location(),
   }: {
-    body: Attribute[];
-    id: Literal;
-  } & Partial<ASTCommon>): Node {
+    body: AttributeASTNode[];
+    id: LiteralASTNode;
+  } & Partial<ASTCommonNode>): NodeASTNode {
     return {
       type: 'Node',
       id,
@@ -142,10 +142,10 @@ export class Builder {
     port,
     compass,
   }: {
-    id: Literal;
-    port?: Literal;
-    compass?: Literal<Compass>;
-  } & Partial<ASTCommon>): NodeRef {
+    id: LiteralASTNode;
+    port?: LiteralASTNode;
+    compass?: LiteralASTNode<Compass>;
+  } & Partial<ASTCommonNode>): NodeRefASTNode {
     return {
       type: 'NodeRef',
       id,
@@ -155,7 +155,10 @@ export class Builder {
     };
   }
 
-  public nodeRefGroup({ body, location = this.location() }: { body: NodeRef[] } & Partial<ASTCommon>): NodeRefGroup {
+  public nodeRefGroup({
+    body,
+    location = this.location(),
+  }: { body: NodeRefASTNode[] } & Partial<ASTCommonNode>): NodeRefGroupASTNode {
     return {
       type: 'NodeRefGroup',
       body,
@@ -168,9 +171,9 @@ export class Builder {
     location = this.location(),
     body,
   }: {
-    targets: [from: EdgeTarget, to: EdgeTarget, ...rest: EdgeTarget[]];
-    body: Attribute[];
-  } & Partial<ASTCommon>): Edge {
+    targets: [from: EdgeTargetASTNode, to: EdgeTargetASTNode, ...rest: EdgeTargetASTNode[]];
+    body: AttributeASTNode[];
+  } & Partial<ASTCommonNode>): EdgeASTNode {
     return {
       type: 'Edge',
       targets,
@@ -184,9 +187,9 @@ export class Builder {
     value,
     location = this.location(),
   }: {
-    key: Literal<AttributeKey>;
-    value: Literal;
-  } & Partial<ASTCommon>): Attribute {
+    key: LiteralASTNode<AttributeKey>;
+    value: LiteralASTNode;
+  } & Partial<ASTCommonNode>): AttributeASTNode {
     return {
       type: 'Attribute',
       key,
@@ -201,10 +204,10 @@ export class Builder {
     location = this.location(),
   }: {
     kind: 'Graph' | 'Edge' | 'Node';
-    body: (Attribute | Comment)[];
-  } & Partial<ASTCommon>): Attributes {
+    body: (AttributeASTNode | CommentASTNode)[];
+  } & Partial<ASTCommonNode>): AttributeListASTNode {
     return {
-      type: 'Attributes',
+      type: 'AttributeList',
       location,
       kind,
       body,
@@ -218,7 +221,7 @@ export class Builder {
   }: {
     kind?: 'Block' | 'Slash' | 'Macro';
     value: string;
-  } & Partial<ASTCommon>): Comment {
+  } & Partial<ASTCommonNode>): CommentASTNode {
     return {
       type: 'Comment',
       kind,

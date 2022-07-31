@@ -34,6 +34,7 @@
   ],
   "scripts": {
     "clean": "rimraf lib .turbo tsconfig.tsbuildinfo ./src/parse.js",
+    "dev": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput --watch",
     "build:parser": "ts-node-esm ./scripts/generate-parser.ts ./peggy/grammar/dot.peggy ./src/parse.js",
     "prebuild": "yarn build:parser",
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",

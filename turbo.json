@@ -7,12 +7,12 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", "rollup.config.ts", "tsconfig.json"],
+      "inputs": ["src/**", "package.json", "rollup.config.ts", "tsconfig.json"],
       "outputs": ["lib/**"]
     },
-    "@ts-grapphviz/parser#build": {
+    "@ts-graphviz/parser#build": {
       "dependsOn": ["^build"],
-      "inputs": ["peggy/**/*", "scripts/**/*", "src/**/*.ts", "src/**/*.tsx", "rollup.config.ts", "tsconfig.json"],
+      "inputs": ["peggy/**", "scripts/**", "src/**", "package.json", "rollup.config.ts", "tsconfig.json"],
       "outputs": ["src/parse.js", "lib"]
     },
     "test": {

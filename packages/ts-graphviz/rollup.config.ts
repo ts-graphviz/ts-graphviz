@@ -3,8 +3,8 @@ import typescript from 'rollup-plugin-typescript2';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 
-const options: RollupOptions[] = [
-  {
+function* createOptions(watch?: boolean): Generator<RollupOptions> {
+  yield {
     input: './src/index.ts',
     plugins: [typescript()],
     output: [
@@ -18,23 +18,26 @@ const options: RollupOptions[] = [
       },
     ],
     external: ['@ts-graphviz/dot-attribute', '@ts-graphviz/model'],
-  },
-  {
-    input: './lib/index.d.ts',
-    plugins: [
-      del({
-        targets: ['lib/**/*.d.ts', '!lib/index.d.ts'],
-        hook: 'buildEnd',
-      }),
-      dts(),
-    ],
-    output: [
-      {
-        format: 'esm',
-        file: './lib/index.d.ts',
-      },
-    ],
-  },
-];
+  };
 
-export default options;
+  if (!watch) {
+    yield {
+      input: './lib/index.d.ts',
+      plugins: [
+        del({
+          targets: ['lib/**/*.d.ts', '!lib/index.d.ts'],
+          hook: 'buildEnd',
+        }),
+        dts(),
+      ],
+      output: [
+        {
+          format: 'esm',
+          file: './lib/index.d.ts',
+        },
+      ],
+    };
+  }
+}
+
+export default (args: { watch?: boolean }) => [...createOptions(args.watch)];

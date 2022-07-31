@@ -3,7 +3,7 @@ import { CustomHeaderPlugin } from './plugins/custom-header-plugin.js';
 
 export const options: SourceBuildOptions = {
   format: 'es',
-  allowedStartRules: ['Dot', 'Graph', 'Node', 'Edge', 'Attributes', 'Attribute', 'Subgraph', 'ClusterStatements'],
+  allowedStartRules: ['Dot', 'Graph', 'Node', 'Edge', 'AttributeList', 'Attribute', 'Subgraph', 'ClusterStatements'],
   output: 'source',
   plugins: [
     new CustomHeaderPlugin({

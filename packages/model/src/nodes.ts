@@ -1,5 +1,5 @@
-import { NodeAttributeKey } from '@ts-graphviz/dot-attribute';
-import { isCompass } from '@ts-graphviz/dot-type';
+import type { NodeAttributeKey } from '@ts-graphviz/dot-attribute';
+import type { Compass } from '@ts-graphviz/dot-type';
 import { DotObject } from './abstract.js';
 import { Attributes } from './attributes-base.js';
 import {
@@ -56,6 +56,11 @@ export function isNodeRefLike(node: unknown): node is NodeRefLike {
 /** @hidden */
 export function isNodeRefGroupLike(target: NodeRefLike | NodeRefGroupLike): target is NodeRefGroupLike {
   return Array.isArray(target) && target.every(isNodeRefLike);
+}
+
+/** @hidden */
+export function isCompass(c: string): c is Compass {
+  return ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c'].includes(c);
 }
 
 /** @hidden */

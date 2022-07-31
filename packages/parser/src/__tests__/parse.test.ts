@@ -32,7 +32,7 @@ describe('parse', () => {
     });
   });
 
-  describe('attributes', () => {
+  describe('AttributeList', () => {
     test('node', () => {
       const result = parse(
         _`
@@ -42,7 +42,7 @@ describe('parse', () => {
           label = "example #1";
         ]
       `,
-        { startRule: 'Attributes' },
+        { startRule: 'AttributeList' },
       );
       expect(result).toMatchSnapshot();
     });
@@ -54,14 +54,14 @@ describe('parse', () => {
           color=red;
           label = "example example";
         ];`,
-        { startRule: 'Attributes' },
+        { startRule: 'AttributeList' },
       );
       expect(result).toMatchSnapshot();
     });
 
     test('graph', () => {
       const result = parse('graph [ fillcolor=red, label = "example example"];', {
-        startRule: 'Attributes',
+        startRule: 'AttributeList',
       });
       expect(result).toMatchSnapshot();
     });
@@ -74,7 +74,7 @@ describe('parse', () => {
           style=filled,
         ]
       `,
-        { startRule: 'Attributes' },
+        { startRule: 'AttributeList' },
       );
       expect(result).toMatchSnapshot();
     });

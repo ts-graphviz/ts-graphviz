@@ -1,10 +1,20 @@
 import { Graph, Subgraph, Node, Edge, HasComment, EdgeTarget, EdgeTargetTuple, IGraphBase } from '@ts-graphviz/model';
-import * as AST from '@ts-graphviz/dot-ast';
+import {
+  CommentASTNode,
+  EdgeASTNode,
+  FileRange,
+  ClusterStatementASTNode,
+  AttributeASTNode,
+  DotASTNode,
+  GraphASTNode,
+  SubgraphASTNode,
+  NodeASTNode,
+} from '@ts-graphviz/dot-ast';
 
 class CommentHolder {
-  public comment: AST.Comment | null = null;
+  public comment: CommentASTNode | null = null;
 
-  public set(comment: AST.Comment): void {
+  public set(comment: CommentASTNode): void {
     this.comment = comment;
   }
 
@@ -12,7 +22,7 @@ class CommentHolder {
     this.comment = null;
   }
 
-  public apply(model: HasComment, location: AST.FileRange): void {
+  public apply(model: HasComment, location: FileRange): void {
     if (this.comment?.kind === 'Block') {
       if (this.comment?.location.end.line === location.start.line - 1) {
         model.comment = this.comment.value;
@@ -24,7 +34,7 @@ class CommentHolder {
   }
 }
 
-function convertToEdgeTargetTuple(edge: AST.Edge): EdgeTargetTuple {
+function convertToEdgeTargetTuple(edge: EdgeASTNode): EdgeTargetTuple {
   // eslint-disable-next-line array-callback-return, consistent-return
   return edge.targets.map((t): EdgeTarget => {
     switch (t.type) {
@@ -36,7 +46,7 @@ function convertToEdgeTargetTuple(edge: AST.Edge): EdgeTargetTuple {
   }) as EdgeTargetTuple;
 }
 
-function applyStatements(cluster: IGraphBase, statements: AST.ClusterStatement[]): void {
+function applyStatements(cluster: IGraphBase, statements: ClusterStatementASTNode[]): void {
   const commentHolder = new CommentHolder();
   for (const stmt of statements) {
     switch (stmt.type) {
@@ -68,9 +78,9 @@ function applyStatements(cluster: IGraphBase, statements: AST.ClusterStatement[]
           stmt.location,
         );
         break;
-      case 'Attributes': {
+      case 'AttributeList': {
         const attrs: { [key: string]: string } = stmt.body
-          .filter<AST.Attribute>((v): v is AST.Attribute => v.type === 'Attribute')
+          .filter<AttributeASTNode>((v): v is AttributeASTNode => v.type === 'Attribute')
           .reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {});
         switch (stmt.kind) {
           case 'Edge':
@@ -99,13 +109,17 @@ function applyStatements(cluster: IGraphBase, statements: AST.ClusterStatement[]
  *
  * @alpha May change the publishing method.
  */
-export function convert(ast: AST.Dot): Graph;
-export function convert(ast: AST.Graph): Graph;
-export function convert(ast: AST.Subgraph): Subgraph;
-export function convert(ast: AST.Node): Node;
-export function convert(ast: AST.Edge): Edge;
-export function convert(ast: AST.Dot | AST.Graph | AST.Subgraph | AST.Node | AST.Edge): Graph | Subgraph | Node | Edge;
-export function convert(ast: AST.Dot | AST.Graph | AST.Subgraph | AST.Node | AST.Edge): Graph | Subgraph | Node | Edge {
+export function convert(ast: DotASTNode): Graph;
+export function convert(ast: GraphASTNode): Graph;
+export function convert(ast: SubgraphASTNode): Subgraph;
+export function convert(ast: NodeASTNode): Node;
+export function convert(ast: EdgeASTNode): Edge;
+export function convert(
+  ast: DotASTNode | GraphASTNode | SubgraphASTNode | NodeASTNode | EdgeASTNode,
+): Graph | Subgraph | Node | Edge;
+export function convert(
+  ast: DotASTNode | GraphASTNode | SubgraphASTNode | NodeASTNode | EdgeASTNode,
+): Graph | Subgraph | Node | Edge {
   switch (ast.type) {
     case 'Graph': {
       const root = new Graph(ast.directed, ast.id?.value, ast.strict);

@@ -15,14 +15,14 @@ export interface FileRange {
 /**
  * AST common propaties.
  */
-export interface ASTCommon {
+export interface ASTCommonNode {
   location: FileRange;
 }
 
 /**
  * AST node.
  */
-export interface ASTBaseNode extends ASTCommon {
+export interface ASTBaseNode extends ASTCommonNode {
   /**
    * Every leaf interface that extends ASTBaseNode
    * must specify a type property.
@@ -30,102 +30,108 @@ export interface ASTBaseNode extends ASTCommon {
   type: string;
 }
 
-export interface ASTBaseParent<STMT extends ASTBaseNode = ASTBaseNode> extends ASTBaseNode {
+export interface ASTBaseParentNode<STMT extends ASTBaseNode = ASTBaseNode> extends ASTBaseNode {
   body: STMT[];
 }
 
-export interface Literal<T extends string = string> extends ASTBaseNode {
+export interface LiteralASTNode<T extends string = string> extends ASTBaseNode {
   type: 'Literal';
   value: T;
   quoted: boolean | 'html';
 }
 
-export interface Dot extends ASTBaseParent<DotStatement> {
+export interface DotASTNode extends ASTBaseParentNode<StatementASTNode> {
   type: 'Dot';
 }
 
 /**
  * Graph AST object.
  */
-export interface Graph extends ASTBaseParent<ClusterStatement> {
+export interface GraphASTNode extends ASTBaseParentNode<ClusterStatementASTNode> {
   type: 'Graph';
-  id?: Literal;
+  id?: LiteralASTNode;
   directed: boolean;
   strict: boolean;
 }
 
 export interface KeyValue {
-  key: Literal<AttributeKey>;
-  value: Literal;
+  key: LiteralASTNode<AttributeKey>;
+  value: LiteralASTNode;
 }
 
 /**
  * Attribute AST object.
  */
-export interface Attribute extends ASTBaseNode, KeyValue {
+export interface AttributeASTNode extends ASTBaseNode, KeyValue {
   type: 'Attribute';
 }
 
 /**
  * Comment AST object.
  */
-export interface Comment extends ASTBaseNode {
+export interface CommentASTNode extends ASTBaseNode {
   type: 'Comment';
   kind: 'Block' | 'Slash' | 'Macro';
   value: string;
 }
 
 /** Attributes AST object. */
-export interface Attributes extends ASTBaseParent<Attribute | Comment> {
-  type: 'Attributes';
+export interface AttributeListASTNode extends ASTBaseParentNode<AttributeASTNode | CommentASTNode> {
+  type: 'AttributeList';
   kind: 'Graph' | 'Edge' | 'Node';
 }
 
 /** NodeRef AST object. */
-export interface NodeRef extends ASTBaseNode {
+export interface NodeRefASTNode extends ASTBaseNode {
   type: 'NodeRef';
-  id: Literal;
-  port?: Literal;
-  compass?: Literal<Compass>;
+  id: LiteralASTNode;
+  port?: LiteralASTNode;
+  compass?: LiteralASTNode<Compass>;
 }
 
 /** NodeRefGroup AST object. */
-export interface NodeRefGroup extends ASTBaseParent<NodeRef> {
+export interface NodeRefGroupASTNode extends ASTBaseParentNode<NodeRefASTNode> {
   type: 'NodeRefGroup';
 }
 
-export type EdgeTarget = NodeRef | NodeRefGroup;
+export type EdgeTargetASTNode = NodeRefASTNode | NodeRefGroupASTNode;
 
 /** Edge AST object. */
-export interface Edge extends ASTBaseParent<Attribute> {
+export interface EdgeASTNode extends ASTBaseParentNode<AttributeASTNode> {
   type: 'Edge';
-  targets: [from: EdgeTarget, to: EdgeTarget, ...rest: EdgeTarget[]];
+  targets: [from: EdgeTargetASTNode, to: EdgeTargetASTNode, ...rest: EdgeTargetASTNode[]];
 }
 
 /** Node AST object. */
-export interface Node extends ASTBaseParent<Attribute> {
+export interface NodeASTNode extends ASTBaseParentNode<AttributeASTNode> {
   type: 'Node';
-  id: Literal;
+  id: LiteralASTNode;
 }
 
 /** Subgraph AST object. */
-export interface Subgraph extends ASTBaseParent<ClusterStatement> {
+export interface SubgraphASTNode extends ASTBaseParentNode<ClusterStatementASTNode> {
   type: 'Subgraph';
-  id?: Literal;
+  id?: LiteralASTNode;
 }
 
-export type DotStatement = Graph | Comment;
-export type ClusterStatement = Attribute | Attributes | Edge | Node | Subgraph | Comment;
+export type StatementASTNode = GraphASTNode | CommentASTNode;
+export type ClusterStatementASTNode =
+  | AttributeASTNode
+  | AttributeListASTNode
+  | EdgeASTNode
+  | NodeASTNode
+  | SubgraphASTNode
+  | CommentASTNode;
 
 export type ASTNode =
-  | Attribute
-  | Attributes
-  | Comment
-  | Dot
-  | Edge
-  | Graph
-  | Literal
-  | Node
-  | NodeRef
-  | NodeRefGroup
-  | Subgraph;
+  | LiteralASTNode
+  | DotASTNode
+  | GraphASTNode
+  | AttributeASTNode
+  | CommentASTNode
+  | AttributeListASTNode
+  | NodeRefASTNode
+  | NodeRefGroupASTNode
+  | EdgeASTNode
+  | NodeASTNode
+  | SubgraphASTNode;

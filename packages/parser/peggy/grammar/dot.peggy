@@ -31,7 +31,7 @@ Graph = __ v:_graph __ { return v; }
 
 Node = __ v:_node __ { return v; }
 
-Attributes = __ v:_attributes __ { return v; }
+AttributeList = __ v:_attributes __ { return v; }
 
 Attribute = __ v:_attribute __ { return v; }
 
@@ -45,7 +45,7 @@ AttibutesItem = __ v:_attibutes_item __ { return v; }
 
 Comment = __ v:_comment __ { return v; }
 
-ClusterStatements = (Attribute / Attributes / Edge / Subgraph / Node / Comment)*
+ClusterStatements = (Attribute / AttributeList / Edge / Subgraph / Node / Comment)*
 
 _dot
   = c1:Comment* graph:Graph c2:Comment* {
@@ -105,7 +105,7 @@ _attributes
   = _kind:("graph"i / "node"i / "edge"i) body:_attribute_list _ ";"? {
       const kind = _kind.toLowerCase();
       return b.attributes({
-        // type: 'Attributes',
+        // type: 'AttributeList',
         kind,
         body,
         // location: location()
