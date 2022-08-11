@@ -28,16 +28,10 @@
   "types": "./lib/index.d.ts",
   "typedocMain": "./src/index.ts",
   "license": "MIT",
-  "dependencies": {
-    "@ts-graphviz/dot-ast": "^0.0.0",
-    "@ts-graphviz/dot-attribute": "^0.0.0",
-    "@ts-graphviz/dot-type": "^0.0.0",
-    "@ts-graphviz/model": "^0.0.0",
-    "@ts-graphviz/parser": "^0.6.0",
-    "@ts-graphviz/renderer": "^0.0.0"
-  },
   "scripts": {
-    "clean": "rimraf lib .turbo tsconfig.tsbuildinfo",
+    "build:parser": "ts-node-esm -P ./scripts/tsconfig.json ./scripts/generate-parser.ts ./scripts/peggy/grammar/dot.peggy ./src/parser/parse.js",
+    "prebuild": "yarn build:parser",
+    "clean": "rimraf lib .turbo tsconfig.tsbuildinfo ./src/parser/parse.js",
     "dev": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput --watch",
     "build": "rollup -c --configPlugin rollup-plugin-typescript2 --waitForBundleInput",
     "postbuild": "prettier --write ./lib/index.{js,cjs,d.ts}"

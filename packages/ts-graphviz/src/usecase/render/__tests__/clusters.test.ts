@@ -1,5 +1,5 @@
 import { describe, expect, test, beforeEach, it } from 'vitest';
-import { EdgeTargetTuple, ISubgraph, Subgraph } from '@ts-graphviz/model';
+import { EdgeTargetTuple, ISubgraph, Subgraph } from '../../../model/index.js';
 import { toDot } from '../to-dot.js';
 
 describe('Subgraph rendering', () => {

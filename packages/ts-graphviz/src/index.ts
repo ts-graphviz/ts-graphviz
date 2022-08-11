@@ -1,3 +1,3 @@
-export { attribute } from '@ts-graphviz/dot-attribute';
-export * from '@ts-graphviz/model';
+export { attribute } from './attribute/index.js';
+export * from './model/index.js';
 export * from './usecase/index.js';

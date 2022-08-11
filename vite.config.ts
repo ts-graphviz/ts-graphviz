@@ -9,26 +9,17 @@ function entrypoint(packageName: string): string {
 export default defineConfig({
   resolve: {
     alias: {
-      '@ts-graphviz/dot-ast': entrypoint('dot-ast'),
-      '@ts-graphviz/dot-attribute': entrypoint('dot-attribute'),
-      '@ts-graphviz/dot-type': entrypoint('dot-type'),
-      '@ts-graphviz/model': entrypoint('model'),
-      '@ts-graphviz/node': entrypoint('node'),
-      '@ts-graphviz/parser': entrypoint('parser'),
-      '@ts-graphviz/react': entrypoint('react'),
-      '@ts-graphviz/renderer': entrypoint('renderer'),
       'ts-graphviz': entrypoint('ts-graphviz'),
+      '@ts-graphviz/node': entrypoint('node'),
+      '@ts-graphviz/react': entrypoint('react'),
     },
-  },
-  optimizeDeps: {
-    //
   },
   test: {
     coverage: {
       enabled: true,
       exclude: ['**/__mocks__/*', '**/__tests__/*', '**/index.{js,ts}'],
     },
-    exclude: ['**/node_modules/**', 'packages/**/lib/**', 'packages/react'],
+    exclude: ['**/node_modules/**', 'packages/**/lib/**', 'packages/react', 'packages/parser'],
   },
   plugins: [vitestTypescriptAssertPlugin()],
 });

@@ -132,5 +132,5 @@ Temporary Items
 
 lib
 doc
-packages/parser/src/parse.js
+packages/ts-graphviz/src/parser/parse.js
 .turbo

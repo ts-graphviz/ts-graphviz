@@ -4,6 +4,5 @@
     "outDir": "lib",
     "jsx": "react",
     "lib": ["DOM", "ESNext"]
-  },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  }
 }

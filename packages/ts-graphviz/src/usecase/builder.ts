@@ -1,4 +1,4 @@
-import { Graph, GraphAttributes } from '@ts-graphviz/model';
+import { Graph, GraphAttributes } from '../model/index.js';
 
 interface CreateRootFunction {
   (id?: string, attributes?: GraphAttributes, callback?: (g: Graph) => void): Graph;

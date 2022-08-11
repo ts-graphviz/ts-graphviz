@@ -4,6 +4,5 @@
     "outDir": "lib",
     "composite": true
   },
-  "include": ["src/**/*.ts"],
-  "references": [{ "path": "../ts-graphviz" }]
+  "include": ["src/**/*.ts"]
 }

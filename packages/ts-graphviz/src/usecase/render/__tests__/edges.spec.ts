@@ -1,5 +1,5 @@
 import { describe, expect, test, it, beforeEach } from 'vitest';
-import { Graph, Node, Edge } from '@ts-graphviz/model';
+import { Graph, Node, Edge } from '../../../model/index.js';
 import { toDot } from '../to-dot.js';
 
 describe('Edge rendering', () => {

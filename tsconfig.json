@@ -6,18 +6,9 @@
     "alwaysStrict": true,
     "strictNullChecks": true,
     "skipLibCheck": true,
+    "allowJs": true,
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
-    "declaration": true,
-    "forceConsistentCasingInFileNames": true
-  },
-  "references": [
-    { "path": "./packages/dot-ast" },
-    { "path": "./packages/dot-attribute" },
-    { "path": "./packages/dot-type" },
-    { "path": "./packages/model" },
-    { "path": "./packages/parser" },
-    { "path": "./packages/ts-graphviz" },
-    { "path": "./packages/node" }
-  ]
+    "declaration": true
+  }
 }

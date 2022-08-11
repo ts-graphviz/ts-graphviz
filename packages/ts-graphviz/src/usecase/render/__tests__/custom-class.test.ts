@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { attribute } from '@ts-graphviz/dot-attribute';
+import { attribute } from '../../../attribute/index.js';
 import { toDot } from '../to-dot.js';
-import { Graph, Node, Edge, EdgeTargetTuple } from '@ts-graphviz/model';
+import { Graph, Node, Edge, EdgeTargetTuple } from '../../../model/index.js';
 
 describe('class base API', () => {
   test('digraph', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, test, it } from 'vitest';
-import { attribute } from '@ts-graphviz/dot-attribute';
-import { Graph, Subgraph, Node, Edge } from '@ts-graphviz/model';
+import { attribute } from '../../attribute/index.js';
+import { Graph, Subgraph, Node, Edge } from '../../model/index.js';
 import { digraph, graph, strict } from '../builder.js';
 import { toDot } from '../render/index.js';
 

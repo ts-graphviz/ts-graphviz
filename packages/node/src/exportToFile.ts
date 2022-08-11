@@ -1,5 +1,4 @@
-import { toDot } from 'ts-graphviz';
-import { Graph } from '@ts-graphviz/model';
+import { Graph, toDot } from 'ts-graphviz';
 import { DotOption, ExecuteDotOption, OutputOption } from './types.js';
 import { executeDot } from './executeDot.js';
 

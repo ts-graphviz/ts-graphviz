@@ -1,5 +1,5 @@
 import { describe, expect, test, it, beforeEach } from 'vitest';
-import { Graph } from '@ts-graphviz/model';
+import { Graph } from '../../../model/index.js';
 import { toDot } from '../to-dot.js';
 
 describe('RootClusters rendering', () => {

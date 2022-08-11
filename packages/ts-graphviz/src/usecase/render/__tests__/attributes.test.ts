@@ -1,5 +1,5 @@
 import { describe, expect, test, beforeEach, it } from 'vitest';
-import { Attributes } from '@ts-graphviz/model';
+import { Attributes } from '../../../model/index.js';
 import { toDot } from '../to-dot.js';
 
 describe('Attributes rendering', () => {

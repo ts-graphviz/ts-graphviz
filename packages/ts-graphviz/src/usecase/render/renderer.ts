@@ -1,4 +1,4 @@
-import { Attribute, AttributeKey } from '@ts-graphviz/dot-attribute';
+import { Attribute, AttributeKey } from '../../attribute/index.js';
 import {
   isNodeRef,
   Subgraph,
@@ -14,7 +14,7 @@ import {
   NodeRefGroup,
   isForwardRefNode,
   IGraphBase,
-} from '@ts-graphviz/model';
+} from '../../model/index.js';
 
 function escape(str: string): string {
   return str.replace(/\n/g, '\\n').replace(/"/g, '\\"');

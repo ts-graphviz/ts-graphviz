@@ -1,5 +1,5 @@
 import { describe, beforeEach, expect, test, it } from 'vitest';
-import { Node } from '@ts-graphviz/model';
+import { Node } from '../../../model/index.js';
 import { toDot } from '../to-dot.js';
 
 describe('Node rendering', () => {
