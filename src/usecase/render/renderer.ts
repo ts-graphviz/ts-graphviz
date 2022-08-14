@@ -5,15 +5,15 @@ import {
   Edge,
   Node,
   Graph,
-  ISubgraph,
-  IEdge,
-  INode,
-  IAttributes,
+  SubgraphModel,
+  EdgeModel,
+  NodeModel,
+  AttributeListModel,
   Attributes,
   NodeRef,
   NodeRefGroup,
   isForwardRefNode,
-  IGraphBase,
+  GraphBaseModel,
 } from '../../model/index.js';
 
 function escape(str: string): string {
@@ -76,15 +76,15 @@ function commentOutIfExist(src: string | undefined): string | undefined {
   return typeof src === 'string' ? commentOut(src) : undefined;
 }
 
-function isSubgraph(object: unknown): object is ISubgraph {
+function isSubgraph(object: unknown): object is SubgraphModel {
   return object instanceof Subgraph;
 }
 
-function isEdge(object: unknown): object is IEdge {
+function isEdge(object: unknown): object is EdgeModel {
   return object instanceof Edge;
 }
 
-function isNode(object: unknown): object is INode {
+function isNode(object: unknown): object is NodeModel {
   return object instanceof Node;
 }
 
@@ -92,11 +92,11 @@ function isGraph(object: unknown): object is Graph {
   return object instanceof Graph;
 }
 
-function isAttributes(object: unknown): object is IAttributes {
+function isAttributes(object: unknown): object is AttributeListModel {
   return object instanceof Attributes;
 }
 
-function renderClusterType(cluster: IGraphBase): string | undefined {
+function renderClusterType(cluster: GraphBaseModel): string | undefined {
   if (isGraph(cluster)) {
     return cluster.directed ? 'digraph' : 'graph';
   }
@@ -143,7 +143,7 @@ const renderAttributeWithSemi: <T extends AttributeKey>(v: [T, Attribute<T>]) =>
 const renderAttributeWithComma: <T extends AttributeKey>(v: [T, Attribute<T>]) => string | undefined =
   renderAttributeBuilder(',');
 
-function renderAttributes(attributes: IAttributes): string {
+function renderAttributes(attributes: AttributeListModel): string {
   if (attributes.size === 0) {
     return '';
   }
@@ -172,13 +172,13 @@ function renderNodeRefGroup(group: NodeRefGroup): string | undefined {
   return `{${concatWordsWithSpace(...group.map(renderNodeRef))}}`;
 }
 
-export type Dot = Graph | ISubgraph | IEdge | INode | IAttributes | Attribute<AttributeKey>;
+export type Dot = Graph | SubgraphModel | EdgeModel | NodeModel | AttributeListModel | Attribute<AttributeKey>;
 
 export class Renderer {
   private root?: Graph;
 
   // eslint-disable-next-line class-methods-use-this
-  protected renderNode(node: INode): string {
+  protected renderNode(node: NodeModel): string {
     const comment = commentOutIfExist(node.comment);
     const target = renderNodeRef(node);
     const attrs = node.attributes.size > 0 ? spaceLeftPad(renderAttributes(node.attributes)) : undefined;
@@ -186,7 +186,7 @@ export class Renderer {
     return joinLines(comment, dot);
   }
 
-  protected renderEdge(edge: IEdge): string {
+  protected renderEdge(edge: EdgeModel): string {
     const comment = commentOutIfExist(edge.comment);
     const targets = joinWith(
       this.root?.directed ? ' -> ' : ' -- ',
@@ -197,7 +197,7 @@ export class Renderer {
     return joinLines(comment, dot);
   }
 
-  protected renderCluster(cluster: IGraphBase): string {
+  protected renderCluster(cluster: GraphBaseModel): string {
     const type = renderClusterType(cluster);
     const id = cluster.id !== undefined ? renderAttributeValue(cluster.id) : undefined;
     // attributes
@@ -219,7 +219,7 @@ export class Renderer {
     return joinLines(comment, concatWordsWithSpace(rootCluster.strict ? 'strict' : undefined, cluster));
   }
 
-  protected renderSubgraph(subgraph: ISubgraph): string {
+  protected renderSubgraph(subgraph: SubgraphModel): string {
     const comment = commentOutIfExist(subgraph.comment);
     const cluster = this.renderCluster(subgraph);
     return joinLines(comment, cluster);

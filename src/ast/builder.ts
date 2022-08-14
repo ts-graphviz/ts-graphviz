@@ -39,21 +39,8 @@ export class Builder {
     return this.config.defaultCommentKind ?? 'Block';
   }
 
-  location(): FileRange {
-    return (
-      this.config.locationFunction?.() ?? {
-        start: {
-          offset: NaN,
-          line: NaN,
-          column: NaN,
-        },
-        end: {
-          offset: NaN,
-          line: NaN,
-          column: NaN,
-        },
-      }
-    );
+  location(): FileRange | null {
+    return this.config.locationFunction?.() ?? null;
   }
 
   constructor(private config: Partial<BuilderConfig>) {}

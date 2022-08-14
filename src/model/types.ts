@@ -12,7 +12,7 @@ import type {
 /**
  * Objects that can be Edge destinations satisfy this interface.
  */
-export type NodeRef = INode | ForwardRefNode;
+export type NodeRef = NodeModel | ForwardRefNode;
 
 export type NodeRefGroup = NodeRef[];
 
@@ -37,10 +37,10 @@ export type AttributeValue = Attribute<AttributeKey>;
 
 export type AttributesEntities<T extends AttributeKey> = readonly [T, Attribute<T>][];
 
-export type EdgeAttributes = AttributesObject<EdgeAttributeKey>;
-export type NodeAttributes = AttributesObject<NodeAttributeKey>;
-export type GraphAttributes = AttributesObject<GraphAttributeKey>;
-export type SubgraphAttributes = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey>;
+export type EdgeAttributesObject = AttributesObject<EdgeAttributeKey>;
+export type NodeAttributesObject = AttributesObject<NodeAttributeKey>;
+export type GraphAttributesObject = AttributesObject<GraphAttributeKey>;
+export type SubgraphAttributesObject = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey>;
 
 export interface HasComment {
   /** Comments to include when outputting with toDot. */
@@ -48,14 +48,14 @@ export interface HasComment {
 }
 
 export interface HasAttributes<T extends AttributeKey> {
-  readonly attributes: IAttributes<T>;
+  readonly attributes: AttributeListModel<T>;
 }
 
 export interface ForwardRefNode extends Partial<Port> {
   readonly id: string;
 }
 
-export interface IAttributesBase<T extends AttributeKey> {
+export interface AttributesBaseModel<T extends AttributeKey> {
   readonly size: number;
   readonly values: ReadonlyArray<[T, Attribute<T>]>;
   get(key: T): Attribute<T> | undefined;
@@ -65,19 +65,19 @@ export interface IAttributesBase<T extends AttributeKey> {
   clear(): void;
 }
 
-export interface IAttributes<T extends AttributeKey = AttributeKey> extends IAttributesBase<T>, HasComment {}
+export interface AttributeListModel<T extends AttributeKey = AttributeKey> extends AttributesBaseModel<T>, HasComment {}
 
 export interface Port {
   port: string;
   compass: Compass;
 }
 
-export interface INode extends HasComment, HasAttributes<NodeAttributeKey> {
+export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey> {
   readonly id: string;
   port(port: string | Partial<Port>): ForwardRefNode;
 }
 
-export interface IEdge extends HasComment, HasAttributes<EdgeAttributeKey> {
+export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey> {
   readonly targets: EdgeTargetTuple;
 }
 
@@ -86,33 +86,33 @@ export interface IEdge extends HasComment, HasAttributes<EdgeAttributeKey> {
  *
  * @hidden
  */
-export interface IGraphCommonAttributes {
+export interface GraphCommonAttributeList {
   /** Manage common attributes of graphs in a cluster. */
-  graph: IAttributes<SubgraphAttributeKey | ClusterSubgraphAttributeKey>;
+  graph: AttributeListModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey>;
   /** Manage common attributes of edges in a cluster. */
-  edge: IAttributes<EdgeAttributeKey>;
+  edge: AttributeListModel<EdgeAttributeKey>;
   /** Manage common attributes of nodes in a cluster. */
-  node: IAttributes<NodeAttributeKey>;
+  node: AttributeListModel<NodeAttributeKey>;
 }
 
-export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasComment, IAttributesBase<T> {
+export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends HasComment, AttributesBaseModel<T> {
   readonly id?: string;
-  readonly attributes: Readonly<IGraphCommonAttributes>;
-  readonly nodes: ReadonlyArray<INode>;
-  readonly edges: ReadonlyArray<IEdge>;
-  readonly subgraphs: ReadonlyArray<ISubgraph>;
+  readonly attributes: Readonly<GraphCommonAttributeList>;
+  readonly nodes: ReadonlyArray<NodeModel>;
+  readonly edges: ReadonlyArray<EdgeModel>;
+  readonly subgraphs: ReadonlyArray<SubgraphModel>;
   /**
    * Add a Node to the graph.
    */
-  addNode(node: INode): void;
+  addNode(node: NodeModel): void;
   /**
    * Add Edge to the graph.
    */
-  addEdge(edge: IEdge): void;
+  addEdge(edge: EdgeModel): void;
   /**
    * Add a Subgraph to the graph.
    */
-  addSubgraph(subgraph: ISubgraph): void;
+  addSubgraph(subgraph: SubgraphModel): void;
   /**
    * Check if the Node exists in the graph.
    */
@@ -120,38 +120,38 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
   /**
    * Check if the Edge exists in the graph.
    */
-  existEdge(edge: IEdge): boolean;
+  existEdge(edge: EdgeModel): boolean;
   /**
    * Check if the Subgraph exists in the graph.
    */
-  existSubgraph(subgraph: ISubgraph): boolean;
+  existSubgraph(subgraph: SubgraphModel): boolean;
   /**
    * Remove Node from the graph.
    */
-  removeNode(node: INode | string): void;
+  removeNode(node: NodeModel | string): void;
   /**
    * Remove Edge from the graph.
    */
-  removeEdge(edge: IEdge): void;
+  removeEdge(edge: EdgeModel): void;
   /**
    * Remove Subgraph from the graph.
    */
-  removeSubgraph(subgraph: ISubgraph): void;
+  removeSubgraph(subgraph: SubgraphModel): void;
   /**
    * Create a Node in the graph.
    */
-  createNode(id: string, attributes?: NodeAttributes): INode;
+  createNode(id: string, attributes?: NodeAttributesObject): NodeModel;
   /**
    * Create a Subgraph and add it to the graph.
    */
-  createSubgraph(id?: string, attributes?: SubgraphAttributes): ISubgraph;
-  createSubgraph(attributes?: SubgraphAttributes): ISubgraph;
+  createSubgraph(id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
+  createSubgraph(attributes?: SubgraphAttributesObject): SubgraphModel;
   /**
    * Get Subgraph in cluster by specifying id.
    *
    * If there is no Subgraph with the specified id in the graph, return undefined.
    */
-  getSubgraph(id: string): ISubgraph | undefined;
+  getSubgraph(id: string): SubgraphModel | undefined;
 
   /**
    * Get Node in cluster by specifying id.
@@ -159,9 +159,9 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    * @description
    * If there is no Node with the specified id in the graph, return undefined.
    */
-  getNode(id: string): INode | undefined;
+  getNode(id: string): NodeModel | undefined;
   /** Create Edge and add it to the graph. */
-  createEdge(targets: EdgeTargetLikeTuple, attributes?: EdgeAttributes): IEdge;
+  createEdge(targets: EdgeTargetLikeTuple, attributes?: EdgeAttributesObject): EdgeModel;
 
   /**
    * Create a subgraph by specifying its id (or get it if it already exists).
@@ -188,7 +188,7 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    * @param id Subgraph ID.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  subgraph(id: string, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(id: string, callback?: (subgraph: SubgraphModel) => void): SubgraphModel;
   /**
    * Create a subgraph (or get one if it already exists) and adapt the attributes.
    *
@@ -217,7 +217,11 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    * @param attributes Object of attributes to be adapted to the subgraph.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  subgraph(id: string, attributes: SubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(
+    id: string,
+    attributes: SubgraphAttributesObject,
+    callback?: (subgraph: SubgraphModel) => void,
+  ): SubgraphModel;
   /**
    * Create anonymous subgraphs and and adapt the attributes.
    *
@@ -245,7 +249,7 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    * @param attributes Object of attributes to be adapted to the subgraph.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  subgraph(attributes: SubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(attributes: SubgraphAttributesObject, callback?: (subgraph: SubgraphModel) => void): SubgraphModel;
   /**
    * Create anonymous subgraphs and manipulate them with callback functions.
    *
@@ -253,7 +257,7 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    *
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  subgraph(callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  subgraph(callback?: (subgraph: SubgraphModel) => void): SubgraphModel;
 
   /**
    * Create a node by specifying its id (or get it if it already exists).
@@ -275,7 +279,7 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    * @param id Node ID.
    * @param callback Callbacks for manipulating created or retrieved node.
    */
-  node(id: string, callback?: (node: INode) => void): INode;
+  node(id: string, callback?: (node: NodeModel) => void): NodeModel;
   /**
    * Create a node (or get one if it already exists) and adapt the attributes.
    *
@@ -303,7 +307,7 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    * @param attributes Object of attributes to be adapted to the node.
    * @param callback Callbacks for manipulating created or retrieved node.
    */
-  node(id: string, attributes: NodeAttributes, callback?: (node: INode) => void): INode;
+  node(id: string, attributes: NodeAttributesObject, callback?: (node: NodeModel) => void): NodeModel;
   /**
    * Set a common attribute for the nodes in the graph.
    *
@@ -327,7 +331,7 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    *
    * @param attributes Object of attributes to be adapted to the nodes.
    */
-  node(attributes: NodeAttributes): void;
+  node(attributes: NodeAttributesObject): void;
   /**
    * Create a edge.
    *
@@ -347,7 +351,7 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    * @param targets Nodes.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
-  edge(targets: EdgeTargetLikeTuple, callback?: (edge: IEdge) => void): IEdge;
+  edge(targets: EdgeTargetLikeTuple, callback?: (edge: EdgeModel) => void): EdgeModel;
   /**
    * Create a edge and adapt the attributes.
    *
@@ -374,7 +378,7 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    * @param attributes Object of attributes to be adapted to the edge.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
-  edge(targets: EdgeTargetLikeTuple, attributes: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
+  edge(targets: EdgeTargetLikeTuple, attributes: EdgeAttributesObject, callback?: (edge: EdgeModel) => void): EdgeModel;
   /**
    * Set a common attribute for the edges in the graph.
    *
@@ -398,7 +402,7 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    * ```
    * @param attributes Object of attributes to be adapted to the edges.
    */
-  edge(attributes: EdgeAttributes): void;
+  edge(attributes: EdgeAttributesObject): void;
 
   /**
    * Set a common attribute for the graph in the graph.
@@ -421,14 +425,14 @@ export interface IGraphBase<T extends AttributeKey = AttributeKey> extends HasCo
    * ```
    * @param attributes Object of attributes to be adapted to the graph.
    */
-  graph(attributes: SubgraphAttributes): void;
+  graph(attributes: SubgraphAttributesObject): void;
 }
 
-export interface ISubgraph extends IGraphBase<SubgraphAttributeKey | ClusterSubgraphAttributeKey> {
+export interface SubgraphModel extends GraphBaseModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey> {
   isSubgraphCluster(): boolean;
 }
 
-export interface IGraph extends IGraphBase<GraphAttributeKey> {
+export interface GraphModel extends GraphBaseModel<GraphAttributeKey> {
   directed: boolean;
 
   /**

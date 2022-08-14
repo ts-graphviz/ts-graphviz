@@ -9,15 +9,15 @@ import { Attributes, AttributesBase } from './attributes-base.js';
 import { isNodeRefGroupLike, Node, toNodeRef, toNodeRefGroup } from './nodes.js';
 import { Edge } from './edges.js';
 import {
-  IGraphBase,
-  IGraphCommonAttributes,
-  INode,
-  IEdge,
-  ISubgraph,
-  SubgraphAttributes,
-  NodeAttributes,
+  GraphBaseModel,
+  GraphCommonAttributeList,
+  NodeModel,
+  EdgeModel,
+  SubgraphModel,
+  SubgraphAttributesObject,
+  NodeAttributesObject,
   EdgeTargetLikeTuple,
-  EdgeAttributes,
+  EdgeAttributesObject,
   EdgeTargetTuple,
 } from './types.js';
 
@@ -25,7 +25,7 @@ import {
  * Base class for clusters.
  * @hidden
  */
-export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T> implements IGraphBase<T> {
+export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T> implements GraphBaseModel<T> {
   /** Cluster ID */
   public readonly id?: string;
 
@@ -33,13 +33,13 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
   public comment?: string;
 
   /** Common attributes of objects in the cluster. */
-  public abstract readonly attributes: Readonly<IGraphCommonAttributes>;
+  public abstract readonly attributes: Readonly<GraphCommonAttributeList>;
 
   /**
    * Nodes in the cluster.
    * @hidden
    */
-  get nodes(): ReadonlyArray<INode> {
+  get nodes(): ReadonlyArray<NodeModel> {
     return Array.from(this.objects.nodes.values());
   }
 
@@ -47,7 +47,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * Edges in the cluster.
    * @hidden
    */
-  get edges(): ReadonlyArray<IEdge> {
+  get edges(): ReadonlyArray<EdgeModel> {
     return Array.from(this.objects.edges.values());
   }
 
@@ -55,14 +55,14 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * Subgraphs in the cluster.
    * @hidden
    */
-  get subgraphs(): ReadonlyArray<ISubgraph> {
+  get subgraphs(): ReadonlyArray<SubgraphModel> {
     return Array.from(this.objects.subgraphs.values());
   }
 
   private readonly objects: Readonly<{
-    nodes: Map<string, INode>;
-    edges: Set<IEdge>;
-    subgraphs: Set<ISubgraph>;
+    nodes: Map<string, NodeModel>;
+    edges: Set<EdgeModel>;
+    subgraphs: Set<SubgraphModel>;
   }> = {
     nodes: new Map(),
     edges: new Set(),
@@ -72,21 +72,21 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
   /**
    * Add a Node to the cluster.
    */
-  public addNode(node: INode): void {
+  public addNode(node: NodeModel): void {
     this.objects.nodes.set(node.id, node);
   }
 
   /**
    * Add Edge to the cluster.
    */
-  public addEdge(edge: IEdge): void {
+  public addEdge(edge: EdgeModel): void {
     this.objects.edges.add(edge);
   }
 
   /**
    * Add a Subgraph to the cluster.
    */
-  public addSubgraph(subgraph: ISubgraph): void {
+  public addSubgraph(subgraph: SubgraphModel): void {
     this.objects.subgraphs.add(subgraph);
   }
 
@@ -100,27 +100,27 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
   /**
    * Check if the Edge exists in the cluster.
    */
-  public existEdge(edge: IEdge): boolean {
+  public existEdge(edge: EdgeModel): boolean {
     return this.objects.edges.has(edge);
   }
 
   /**
    * Check if the Subgraph exists in the cluster.
    */
-  public existSubgraph(subgraph: ISubgraph): boolean {
+  public existSubgraph(subgraph: SubgraphModel): boolean {
     return this.objects.subgraphs.has(subgraph);
   }
 
   /**
    * Create a Subgraph and add it to the cluster.
    */
-  public createSubgraph(id?: string, attributes?: SubgraphAttributes): ISubgraph;
+  public createSubgraph(id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
 
-  public createSubgraph(attributes?: SubgraphAttributes): ISubgraph;
+  public createSubgraph(attributes?: SubgraphAttributesObject): SubgraphModel;
 
-  public createSubgraph(...args: unknown[]): ISubgraph {
+  public createSubgraph(...args: unknown[]): SubgraphModel {
     const id = args.find((arg): arg is string => typeof arg === 'string');
-    const attributes = args.find((arg): arg is SubgraphAttributes => typeof arg === 'object');
+    const attributes = args.find((arg): arg is SubgraphAttributesObject => typeof arg === 'object');
     const graph = new Subgraph(id, attributes);
     this.objects.subgraphs.add(graph);
     return graph;
@@ -129,28 +129,28 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
   /**
    * Remove Node from the cluster.
    */
-  public removeNode(node: INode | string): void {
+  public removeNode(node: NodeModel | string): void {
     this.objects.nodes.delete(typeof node === 'string' ? node : node.id);
   }
 
   /**
    * Remove Edge from the cluster.
    */
-  public removeEdge(edge: IEdge): void {
+  public removeEdge(edge: EdgeModel): void {
     this.objects.edges.delete(edge);
   }
 
   /**
    * Remove Subgraph from the cluster.
    */
-  public removeSubgraph(subgraph: ISubgraph): void {
+  public removeSubgraph(subgraph: SubgraphModel): void {
     this.objects.subgraphs.delete(subgraph);
   }
 
   /**
    * Create a Node in the cluster.
    */
-  public createNode(id: string, attributes?: NodeAttributes): INode {
+  public createNode(id: string, attributes?: NodeAttributesObject): NodeModel {
     const node = new Node(id, attributes);
     this.objects.nodes.set(id, node);
     return node;
@@ -161,22 +161,22 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    *
    * If there is no Subgraph with the specified id in the cluster, return undefined.
    */
-  public getSubgraph(id: string): ISubgraph | undefined {
+  public getSubgraph(id: string): SubgraphModel | undefined {
     return Array.from(this.objects.subgraphs.values()).find((subgraph) => subgraph.id === id);
   }
 
-  /**
+  /**EdgeAttributesObject
    * Get Node in cluster by specifying id.
    *
    * @description
    * If there is no Node with the specified id in the cluster, return undefined.
    */
-  public getNode(id: string): INode | undefined {
+  public getNode(id: string): NodeModel | undefined {
     return this.objects.nodes.get(id);
   }
 
   /** Create Edge and add it to the cluster. */
-  public createEdge(targets: EdgeTargetLikeTuple, attributes?: EdgeAttributes): IEdge {
+  public createEdge(targets: EdgeTargetLikeTuple, attributes?: EdgeAttributesObject): EdgeModel {
     const ts = targets.map((t) => (isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t))) as EdgeTargetTuple;
     const edge = new Edge(ts, attributes);
     this.objects.edges.add(edge);
@@ -208,7 +208,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * @param id Subgraph ID.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  public subgraph(id: string, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  public subgraph(id: string, callback?: (subgraph: SubgraphModel) => void): SubgraphModel;
 
   /**
    * Create a subgraph (or get one if it already exists) and adapt the attributes.
@@ -238,7 +238,11 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * @param attributes Object of attributes to be adapted to the subgraph.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  public subgraph(id: string, attributes: SubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  public subgraph(
+    id: string,
+    attributes: SubgraphAttributesObject,
+    callback?: (subgraph: SubgraphModel) => void,
+  ): SubgraphModel;
 
   /**
    * Create anonymous subgraphs and and adapt the attributes.
@@ -267,7 +271,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * @param attributes Object of attributes to be adapted to the subgraph.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  public subgraph(attributes: SubgraphAttributes, callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  public subgraph(attributes: SubgraphAttributesObject, callback?: (subgraph: SubgraphModel) => void): SubgraphModel;
 
   /**
    * Create anonymous subgraphs and manipulate them with callback functions.
@@ -276,13 +280,15 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    *
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  public subgraph(callback?: (subgraph: ISubgraph) => void): ISubgraph;
+  public subgraph(callback?: (subgraph: SubgraphModel) => void): SubgraphModel;
 
-  public subgraph(...args: unknown[]): ISubgraph {
+  public subgraph(...args: unknown[]): SubgraphModel {
     const id = args.find((arg: unknown): arg is string => typeof arg === 'string');
-    const attributes = args.find((arg: unknown): arg is SubgraphAttributes => typeof arg === 'object' && arg !== null);
-    const callback = args.find((arg: unknown): arg is (subgraph: ISubgraph) => void => typeof arg === 'function');
-    const subgraph: ISubgraph = id ? this.getSubgraph(id) ?? this.createSubgraph(id) : this.createSubgraph();
+    const attributes = args.find(
+      (arg: unknown): arg is SubgraphAttributesObject => typeof arg === 'object' && arg !== null,
+    );
+    const callback = args.find((arg: unknown): arg is (subgraph: SubgraphModel) => void => typeof arg === 'function');
+    const subgraph: SubgraphModel = id ? this.getSubgraph(id) ?? this.createSubgraph(id) : this.createSubgraph();
     if (attributes !== undefined) {
       subgraph.apply(attributes);
     }
@@ -312,7 +318,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * @param id Node ID.
    * @param callback Callbacks for manipulating created or retrieved node.
    */
-  public node(id: string, callback?: (node: INode) => void): INode;
+  public node(id: string, callback?: (node: NodeModel) => void): NodeModel;
 
   /**
    * Create a node (or get one if it already exists) and adapt the attributes.
@@ -341,7 +347,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * @param attributes Object of attributes to be adapted to the node.
    * @param callback Callbacks for manipulating created or retrieved node.
    */
-  public node(id: string, attributes: NodeAttributes, callback?: (node: INode) => void): INode;
+  public node(id: string, attributes: NodeAttributesObject, callback?: (node: NodeModel) => void): NodeModel;
 
   /**
    * Set a common attribute for the nodes in the cluster.
@@ -366,13 +372,15 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    *
    * @param attributes Object of attributes to be adapted to the nodes.
    */
-  public node(attributes: NodeAttributes): void;
+  public node(attributes: NodeAttributesObject): void;
 
-  public node(firstArg: unknown, ...args: unknown[]): INode | void {
+  public node(firstArg: unknown, ...args: unknown[]): NodeModel | void {
     if (typeof firstArg === 'string') {
       const id = firstArg;
-      const attributes = args.find((arg: unknown): arg is NodeAttributes => typeof arg === 'object' && arg !== null);
-      const callback = args.find((arg: unknown): arg is (node: INode) => void => typeof arg === 'function');
+      const attributes = args.find(
+        (arg: unknown): arg is NodeAttributesObject => typeof arg === 'object' && arg !== null,
+      );
+      const callback = args.find((arg: unknown): arg is (node: NodeModel) => void => typeof arg === 'function');
       const node = this.getNode(id) ?? this.createNode(id);
       if (attributes !== undefined) {
         node.attributes.apply(attributes);
@@ -406,7 +414,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * @param targets Nodes.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
-  public edge(targets: EdgeTargetLikeTuple, callback?: (edge: IEdge) => void): IEdge;
+  public edge(targets: EdgeTargetLikeTuple, callback?: (edge: EdgeModel) => void): EdgeModel;
 
   /**
    * Create a edge and adapt the attributes.
@@ -435,7 +443,11 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * @param attributes Object of attributes to be adapted to the edge.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
-  public edge(targets: EdgeTargetLikeTuple, attributes: EdgeAttributes, callback?: (edge: IEdge) => void): IEdge;
+  public edge(
+    targets: EdgeTargetLikeTuple,
+    attributes: EdgeAttributesObject,
+    callback?: (edge: EdgeModel) => void,
+  ): EdgeModel;
 
   /**
    * Set a common attribute for the edges in the cluster.
@@ -460,13 +472,13 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * ```
    * @param attributes Object of attributes to be adapted to the edges.
    */
-  public edge(attributes: EdgeAttributes): void;
+  public edge(attributes: EdgeAttributesObject): void;
 
-  public edge(firstArg: EdgeTargetLikeTuple | EdgeAttributes, ...args: unknown[]): IEdge | void {
+  public edge(firstArg: EdgeTargetLikeTuple | EdgeAttributesObject, ...args: unknown[]): EdgeModel | void {
     if (Array.isArray(firstArg)) {
       const targets = firstArg;
-      const attributes = args.find((arg: unknown): arg is EdgeAttributes => typeof arg === 'object');
-      const callback = args.find((arg: unknown): arg is (edge: IEdge) => void => typeof arg === 'function');
+      const attributes = args.find((arg: unknown): arg is EdgeAttributesObject => typeof arg === 'object');
+      const callback = args.find((arg: unknown): arg is (edge: EdgeModel) => void => typeof arg === 'function');
       const edge = this.createEdge(targets, attributes);
       if (callback !== undefined) {
         callback(edge);
@@ -499,7 +511,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * ```
    * @param attributes Object of attributes to be adapted to the clusters.
    */
-  public graph(attributes: SubgraphAttributes): void {
+  public graph(attributes: SubgraphAttributesObject): void {
     this.attributes.graph.apply(attributes);
   }
 }
@@ -508,7 +520,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
  * Subgraph object.
  * @category Domain Model
  */
-export class Subgraph extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAttributeKey> implements ISubgraph {
+export class Subgraph extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAttributeKey> implements SubgraphModel {
   public readonly id?: string;
 
   public attributes = Object.freeze({
@@ -517,14 +529,14 @@ export class Subgraph extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAt
     node: new Attributes<NodeAttributeKey>(),
   });
 
-  constructor(id?: string, attributes?: SubgraphAttributes);
+  constructor(id?: string, attributes?: SubgraphAttributesObject);
 
-  constructor(attributes?: SubgraphAttributes);
+  constructor(attributes?: SubgraphAttributesObject);
 
   constructor(...args: unknown[]) {
     super();
     this.id = args.find((arg): arg is string => typeof arg === 'string');
-    const attributes = args.find((arg): arg is SubgraphAttributes => typeof arg === 'object' && arg !== null);
+    const attributes = args.find((arg): arg is SubgraphAttributesObject => typeof arg === 'object' && arg !== null);
     if (attributes !== undefined) {
       this.apply(attributes);
     }

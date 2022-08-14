@@ -3,10 +3,10 @@ import { DotObject, GraphvizObject } from '../abstract.js';
 import { AttributesBase } from '../attributes-base.js';
 import { GraphBase, Subgraph } from '../clusters.js';
 import { Node } from '../nodes.js';
-import { EdgeTargetTuple, ISubgraph } from '../types.js';
+import { EdgeTargetTuple, SubgraphModel } from '../types.js';
 
 describe('class Subgraph', () => {
-  let subgraph: ISubgraph;
+  let subgraph: SubgraphModel;
 
   beforeEach(() => {
     subgraph = new Subgraph();

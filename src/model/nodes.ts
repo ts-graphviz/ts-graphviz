@@ -3,11 +3,11 @@ import type { Compass } from '../type/index.js';
 import { DotObject } from './abstract.js';
 import { Attributes } from './attributes-base.js';
 import {
-  IAttributes,
+  AttributeListModel,
   ForwardRefNode,
-  INode,
+  NodeModel,
   Port,
-  NodeAttributes,
+  NodeAttributesObject,
   NodeRef,
   NodeRefGroup,
   NodeRefGroupLike,
@@ -18,13 +18,13 @@ import {
  * Node object.
  * @category Domain Model
  */
-export class Node extends DotObject implements INode {
+export class Node extends DotObject implements NodeModel {
   /** Comments to include when outputting with toDot. */
   public comment?: string;
 
-  public readonly attributes: IAttributes<NodeAttributeKey>;
+  public readonly attributes: AttributeListModel<NodeAttributeKey>;
 
-  constructor(public readonly id: string, attributes?: NodeAttributes) {
+  constructor(public readonly id: string, attributes?: NodeAttributesObject) {
     super();
     this.attributes = new Attributes<NodeAttributeKey>(attributes);
   }

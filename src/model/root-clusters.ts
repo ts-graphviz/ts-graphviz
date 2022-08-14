@@ -7,14 +7,14 @@ import {
 } from '../attribute/index.js';
 import { GraphBase } from './clusters.js';
 import { Attributes } from './attributes-base.js';
-import { IGraph, GraphAttributes } from './types.js';
+import { GraphModel, GraphAttributesObject } from './types.js';
 
 /**
  * Base class for RootCluster.
  *
  * @category Domain Model
  */
-export class Graph extends GraphBase<GraphAttributeKey> implements IGraph {
+export class Graph extends GraphBase<GraphAttributeKey> implements GraphModel {
   public readonly id?: string;
 
   public readonly directed: boolean;
@@ -35,20 +35,20 @@ export class Graph extends GraphBase<GraphAttributeKey> implements IGraph {
     node: new Attributes<NodeAttributeKey>(),
   });
 
-  constructor(directed: boolean, id?: string, attributes?: GraphAttributes);
+  constructor(directed: boolean, id?: string, attributes?: GraphAttributesObject);
 
-  constructor(directed: boolean, id?: string, strict?: boolean, attributes?: GraphAttributes);
+  constructor(directed: boolean, id?: string, strict?: boolean, attributes?: GraphAttributesObject);
 
-  constructor(directed: boolean, strict?: boolean, attributes?: GraphAttributes);
+  constructor(directed: boolean, strict?: boolean, attributes?: GraphAttributesObject);
 
-  constructor(directed: boolean, attributes?: GraphAttributes);
+  constructor(directed: boolean, attributes?: GraphAttributesObject);
 
   constructor(directed: boolean, ...args: unknown[]) {
     super();
     this.directed = directed;
     this.id = args.find((arg): arg is string => typeof arg === 'string');
     this.strict = args.find((arg): arg is boolean => typeof arg === 'boolean') ?? false;
-    const attributes = args.find((arg): arg is GraphAttributes => typeof arg === 'object' && arg !== null);
+    const attributes = args.find((arg): arg is GraphAttributesObject => typeof arg === 'object' && arg !== null);
     if (attributes !== undefined) {
       this.apply(attributes);
     }

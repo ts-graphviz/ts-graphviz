@@ -1,4 +1,13 @@
-import { Graph, Subgraph, Node, Edge, HasComment, EdgeTarget, EdgeTargetTuple, IGraphBase } from '../model/index.js';
+import {
+  Graph,
+  Subgraph,
+  Node,
+  Edge,
+  HasComment,
+  EdgeTarget,
+  EdgeTargetTuple,
+  GraphBaseModel,
+} from '../model/index.js';
 import {
   CommentASTNode,
   EdgeASTNode,
@@ -24,10 +33,10 @@ class CommentHolder {
 
   public apply(model: HasComment, location: FileRange): void {
     if (this.comment?.kind === 'Block') {
-      if (this.comment?.location.end.line === location.start.line - 1) {
+      if (this.comment?.location?.end.line === location.start.line - 1) {
         model.comment = this.comment.value;
       }
-    } else if (this.comment?.location.end.line === location.start.line) {
+    } else if (this.comment?.location?.end.line === location.start.line) {
       model.comment = this.comment.value;
     }
     this.reset();
@@ -46,14 +55,16 @@ function convertToEdgeTargetTuple(edge: EdgeASTNode): EdgeTargetTuple {
   }) as EdgeTargetTuple;
 }
 
-function applyStatements(cluster: IGraphBase, statements: ClusterStatementASTNode[]): void {
+function applyStatements(cluster: GraphBaseModel, statements: ClusterStatementASTNode[]): void {
   const commentHolder = new CommentHolder();
   for (const stmt of statements) {
     switch (stmt.type) {
       case 'Subgraph': {
         const subgraph = stmt.id ? cluster.subgraph(stmt.id.value) : cluster.subgraph();
         applyStatements(subgraph, stmt.body);
-        commentHolder.apply(subgraph, stmt.location);
+        if (stmt.location) {
+          commentHolder.apply(subgraph, stmt.location);
+        }
         break;
       }
       case 'Attribute':
@@ -61,22 +72,26 @@ function applyStatements(cluster: IGraphBase, statements: ClusterStatementASTNod
         commentHolder.reset();
         break;
       case 'Node':
-        commentHolder.apply(
-          cluster.node(
-            stmt.id.value,
-            stmt.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
-          ),
-          stmt.location,
-        );
+        if (stmt.location) {
+          commentHolder.apply(
+            cluster.node(
+              stmt.id.value,
+              stmt.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+            ),
+            stmt.location,
+          );
+        }
         break;
       case 'Edge':
-        commentHolder.apply(
-          cluster.edge(
-            convertToEdgeTargetTuple(stmt),
-            stmt.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
-          ),
-          stmt.location,
-        );
+        if (stmt.location) {
+          commentHolder.apply(
+            cluster.edge(
+              convertToEdgeTargetTuple(stmt),
+              stmt.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+            ),
+            stmt.location,
+          );
+        }
         break;
       case 'AttributeList': {
         const attrs: { [key: string]: string } = stmt.body
@@ -153,9 +168,11 @@ export function convert(
             commentHolder.set(stmt);
             break;
           case 'Graph': {
-            const graph = convert(stmt);
-            commentHolder.apply(graph, stmt.location);
-            return graph;
+            if (stmt.location) {
+              const graph = convert(stmt);
+              commentHolder.apply(graph, stmt.location);
+              return graph;
+            }
           }
         }
       }

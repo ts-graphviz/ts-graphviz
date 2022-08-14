@@ -16,7 +16,7 @@ export interface FileRange {
  * AST common propaties.
  */
 export interface ASTCommonNode {
-  location: FileRange;
+  location: FileRange | null;
 }
 
 /**

@@ -1,11 +1,11 @@
 import { Attribute, AttributeKey } from '../attribute/index.js';
 import { DotObject } from './abstract.js';
-import { IAttributesBase, AttributesObject, AttributesEntities, IAttributes } from './types.js';
+import { AttributesBaseModel, AttributesObject, AttributesEntities, AttributeListModel } from './types.js';
 
 /**
  * @category Domain Model
  */
-export abstract class AttributesBase<T extends AttributeKey> extends DotObject implements IAttributesBase<T> {
+export abstract class AttributesBase<T extends AttributeKey> extends DotObject implements AttributesBaseModel<T> {
   /** @hidden */
   #attrs: Map<T, Attribute<T>> = new Map();
 
@@ -58,7 +58,10 @@ export abstract class AttributesBase<T extends AttributeKey> extends DotObject i
  *
  * @category Domain Model
  */
-export class Attributes<T extends AttributeKey = AttributeKey> extends AttributesBase<T> implements IAttributes<T> {
+export class Attributes<T extends AttributeKey = AttributeKey>
+  extends AttributesBase<T>
+  implements AttributeListModel<T>
+{
   /** Comments to include when outputting with toDot. */
   public comment?: string;
 }

@@ -1,8 +1,8 @@
-import { EdgeTargetTuple, ISubgraph, Subgraph } from '../../../model/index.js';
+import { EdgeTargetTuple, Subgraph } from '../../../model/index.js';
 import { toDot } from '../to-dot.js';
 
 describe('Subgraph rendering', () => {
-  let subgraph: ISubgraph;
+  let subgraph: Subgraph;
   beforeEach(() => {
     subgraph = new Subgraph('test');
   });
