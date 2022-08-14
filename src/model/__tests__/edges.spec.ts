@@ -1,16 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { DotObject, GraphvizObject } from '../abstract';
-import { Edge } from '../edges';
-import { Node } from '../nodes';
-import { attribute } from '../../attribute';
-import { EdgeTargetTuple } from '../../types';
+import { attribute } from '../../attribute/index.js';
+import { DotObject, GraphvizObject } from '../abstract.js';
+import { Edge } from '../edges.js';
+import { Node } from '../nodes.js';
+import { EdgeTargetTuple } from '../types.js';
 
 describe('class Edge', () => {
   let edge: Edge;
 
-  const targets = Array(2)
-    .fill(true)
-    .map((_, i) => new Node(`node${i + 1}`)) as EdgeTargetTuple;
+  const targets = [...Array(2)].map((_, i) => new Node(`node${i + 1}`)) as EdgeTargetTuple;
 
   beforeEach(() => {
     edge = new Edge(targets);
@@ -28,8 +25,8 @@ describe('class Edge', () => {
 
   it('throws an error when the EdgeTarget element is missing', () => {
     const n = new Node('id');
-    expect(() => new Edge([] as any as EdgeTargetTuple)).toThrow();
-    expect(() => new Edge([n] as any as EdgeTargetTuple)).toThrow();
+    expect(() => new Edge([] as unknown as EdgeTargetTuple)).toThrow();
+    expect(() => new Edge([n] as unknown as EdgeTargetTuple)).toThrow();
   });
 
   it('should be instance of Edge/DotObject/GraphvizObject', () => {

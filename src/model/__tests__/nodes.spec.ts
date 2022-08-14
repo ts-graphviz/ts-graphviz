@@ -1,6 +1,6 @@
-import { DotObject, GraphvizObject } from '../abstract';
-import { Node } from '../nodes';
-import { attribute } from '../../attribute';
+import { DotObject, GraphvizObject } from '../abstract.js';
+import { Node } from '../nodes.js';
+import { attribute } from '../../attribute/index.js';
 
 describe('class Node', () => {
   let node: Node;

@@ -1,6 +1,6 @@
-import { attribute } from '../../attribute';
-import { DotObject, GraphvizObject } from '../abstract';
-import { Attributes, AttributesBase } from '../attributes-base';
+import { attribute } from '../../attribute/index.js';
+import { DotObject, GraphvizObject } from '../abstract.js';
+import { Attributes, AttributesBase } from '../attributes-base.js';
 
 describe('class Attributes', () => {
   let attrs: Attributes;
@@ -59,12 +59,5 @@ describe('class Attributes', () => {
     expect(attrs.get('label')).toBe(id);
     attrs.delete('label');
     expect(attrs.get('label')).toBeUndefined();
-  });
-
-  describe('edge with comment', () => {
-    beforeEach(() => {
-      attrs.set('label', 'test');
-      attrs.set('color', 'red');
-    });
   });
 });

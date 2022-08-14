@@ -1,34 +1,63 @@
-import typescript from 'rollup-plugin-typescript2';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
-import { terser } from 'rollup-plugin-terser';
 
-/** @type {import('rollup').RollupOptions[]} */
-const options = [
-  {
-    input: './src/index.ts',
-    plugins: [typescript(), terser()],
+function* createOptions() {
+  const subPackages = ['ast', 'attribute', 'model', 'parser', 'renderer', 'type', 'usecase'];
+  yield {
+    input: './lib/index.js',
     output: [
       {
         format: 'cjs',
-        file: './lib/index.js',
+        file: './lib/index.cjs',
       },
       {
         format: 'esm',
-        file: './lib/index.mjs',
-      },
-      {
-        format: 'umd',
-        name: 'graphviz',
-        file: './lib/bundle.min.js',
+        file: './lib/index.js',
       },
     ],
-  },
-  {
+    external: subPackages.map((subPackage) => `./${subPackage}/index.js`),
+  };
+
+  for (const subPackage of subPackages) {
+    const subPackageEntrypoints = subPackages.map((subPackage) => `../${subPackage}/index.js`);
+    yield {
+      input: `./lib/${subPackage}/index.js`,
+      output: [
+        {
+          format: 'cjs',
+          file: `./lib/${subPackage}/index.cjs`,
+        },
+        {
+          format: 'esm',
+          file: `./lib/${subPackage}/index.js`,
+        },
+      ],
+      external: subPackageEntrypoints,
+    };
+    yield {
+      input: `lib/${subPackage}/index.d.ts`,
+      plugins: [
+        del({
+          targets: [`lib/${subPackage}/**/*`, `!lib/${subPackage}/**/index.*`],
+          hook: 'buildEnd',
+        }),
+        dts(),
+      ],
+      output: [
+        {
+          format: 'esm',
+          file: `lib/${subPackage}/index.d.ts`,
+        },
+      ],
+      external: subPackageEntrypoints,
+    };
+  }
+
+  yield {
     input: './lib/index.d.ts',
     plugins: [
       del({
-        targets: ['lib/**/*.d.ts', '!lib/index.d.ts'],
+        targets: ['lib/**/*.d.ts', '!lib/**/index.{js,d.ts}'],
         hook: 'buildEnd',
       }),
       dts(),
@@ -39,7 +68,8 @@ const options = [
         file: './lib/index.d.ts',
       },
     ],
-  },
-];
+    external: subPackages.map((subPackage) => `./${subPackage}/index.js`),
+  };
+}
 
-export default options;
+export default [...createOptions()];

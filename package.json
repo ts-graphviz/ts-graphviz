@@ -4,6 +4,7 @@
   "author": "kamiazya <yuki@kamiazya.tech>",
   "description": "Graphviz library for TypeScript.",
   "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/ts-graphviz/ts-graphviz.git"
@@ -19,41 +20,54 @@
     "type": "github",
     "url": "https://github.com/sponsors/kamiazya"
   },
-  "main": "./lib/index.js",
-  "exports": {
-    "import": "./lib/index.mjs",
-    "require": "./lib/index.js"
-  },
-  "unpkg": "lib/bundle.min.js",
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    },
+    "./*": {
+      "import": "./lib/*/index.js",
+      "require": "./lib/*/index.cjs",
+      "types": "./lib/*/index.d.ts"
+    }
+  },
   "license": "MIT",
+  "engines": {
+    "node": ">=14.16"
+  },
   "scripts": {
-    "build": "rollup -c && prettier --write ./lib/index.d.ts",
-    "test": "jest",
-    "format": "eslint -c .eslintrc.json --ext ts src --fix && prettier --write './src/**/*.ts'",
-    "lint": "eslint -c .eslintrc.json --ext ts src",
-    "doc": "typedoc src/index.ts"
+    "build:peggy": "peggy --plugin ts-pegjs --extra-options-file peggy/options.json -o src/parser/dot.peggy.ts peggy/grammar/dot.peggy && prettier --write './src/parser/dot.peggy.ts'",
+    "prebuild": "yarn build:peggy",
+    "build": "tsc && rollup -c",
+    "postbuild": "prettier --write ./lib/**/index.{js,cjs,d.ts}",
+    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
+    "format": "eslint --ext ts src --fix && prettier --write './**/*.{ts,js,json,yaml}' '!lib'",
+    "lint": "eslint --ext ts src",
+    "doc": "typedoc"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.23",
-    "@typescript-eslint/eslint-plugin": "^4.23.0",
-    "@typescript-eslint/parser": "^4.23.0",
-    "eslint": "^7.26.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jest": "^24.3.6",
-    "eslint-plugin-prettier": "^3.4.0",
-    "jest": "^26.6.3",
-    "jest-graphviz": "^0.4.0",
-    "prettier": "^2.3.0",
-    "rollup": "^2.47.0",
+    "@types/jest": "^28.1.6",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "eslint": "^8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.8.2",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^28.1.3",
+    "peggy": "^2.0.1",
+    "prettier": "^2.7.1",
+    "prettier-plugin-pegjs": "^0.5.0",
+    "rollup": "^2.77.3",
     "rollup-plugin-delete": "^2.0.0",
-    "rollup-plugin-dts": "^3.0.1",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "ts-jest": "^26.5.6",
-    "ts-node": "^9.1.1",
+    "rollup-plugin-dts": "^4.2.2",
+    "ts-jest": "^28.0.7",
+    "ts-pegjs": "^2.1.0",
     "typedoc": "^0.22.4",
-    "typescript": "^4.1.3"
+    "typescript": "^4.7.4"
   }
 }

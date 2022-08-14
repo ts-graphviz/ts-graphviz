@@ -1,4 +1,13 @@
 {
   "out": "./doc",
-  "categoryOrder": ["Primary", "Base", "Attributes", "Values", "*"]
+  "entryPoints": [
+    "src/index.ts",
+    "src/ast/index.ts",
+    "src/attribute/index.ts",
+    "src/model/index.ts",
+    "src/parser/index.ts",
+    "src/renderer/index.ts",
+    "src/type/index.ts",
+    "src/usecase/index.ts"
+  ]
 }

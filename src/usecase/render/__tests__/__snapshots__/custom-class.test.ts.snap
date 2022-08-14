@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`class base API custom class render custom digraph 1`] = `
+"digraph \\"G\\" {
+  label = \\"This is Custom Digraph\\";
+}"
+`;
+
+exports[`class base API custom class render custom edge 1`] = `
+"digraph {
+  \\"node1\\" [
+    label = \\"Node 1 label\\",
+  ];
+  \\"node2\\" [
+    label = \\"Node 2 label\\",
+  ];
+  \\"node1\\" -> \\"node2\\" [
+    label = \\"This is Custom Edge\\",
+  ];
+}"
+`;
+
+exports[`class base API custom class render custom graph 1`] = `
+"graph \\"G\\" {
+  label = \\"This is Custom Graph\\";
+}"
+`;
+
+exports[`class base API custom class render custom node 1`] = `
+"digraph {
+  \\"node1\\" [
+    label = \\"This is Custom Node 1\\",
+  ];
+}"
+`;
+
+exports[`class base API custom class render custom objects 1`] = `
+"digraph \\"G\\" {
+  label = \\"This is Custom Digraph\\";
+  \\"node1\\" [
+    label = \\"This is Custom Node 1\\",
+  ];
+  \\"node2\\" [
+    label = \\"This is Custom Node 2\\",
+  ];
+  \\"node1\\" -> \\"node2\\" [
+    label = \\"This is Custom Edge\\",
+  ];
+}"
+`;
+
+exports[`class base API digraph 1`] = `
+"digraph {
+  \\"node1\\" [
+    label = \\"Node 1 label\\",
+  ];
+  \\"node2\\" [
+    label = \\"Node 2 label\\",
+  ];
+  \\"node1\\" -> \\"node2\\" [
+    label = \\"Edge label\\",
+  ];
+}"
+`;
+
+exports[`class base API graph 1`] = `
+"graph {
+  \\"node1\\" [
+    label = \\"Node 1 label\\",
+  ];
+  \\"node2\\" [
+    label = \\"Node 2 label\\",
+  ];
+  \\"node1\\" -- \\"node2\\" [
+    label = \\"Edge label\\",
+  ];
+}"
+`;
