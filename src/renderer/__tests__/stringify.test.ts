@@ -1,20 +1,6 @@
-import { FileRange } from '../../ast/index.js';
 import { stringify } from '../stringify.js';
 
 describe('stringify', () => {
-  const location: FileRange = {
-    start: {
-      offset: 0,
-      line: 0,
-      column: 0,
-    },
-    end: {
-      offset: 0,
-      line: 0,
-      column: 0,
-    },
-  };
-
   describe('literal', () => {
     test('quated', () => {
       expect(
@@ -22,7 +8,7 @@ describe('stringify', () => {
           type: 'Literal',
           value: 'hoge',
           quoted: true,
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"\\"hoge\\""');
     });
@@ -33,7 +19,7 @@ describe('stringify', () => {
           type: 'Literal',
           value: 'hoge',
           quoted: false,
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"hoge"');
     });
@@ -44,7 +30,7 @@ describe('stringify', () => {
           type: 'Literal',
           value: 'hoge',
           quoted: 'html',
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"<hoge>"');
     });
@@ -57,7 +43,7 @@ describe('stringify', () => {
           type: 'Literal',
           value: 'hoge',
           quoted: 'html',
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"<hoge>"');
     });
@@ -69,8 +55,7 @@ describe('stringify', () => {
         stringify({
           type: 'AttributeList',
           kind: 'Node',
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"Node;"');
     });
@@ -80,8 +65,7 @@ describe('stringify', () => {
         stringify({
           type: 'AttributeList',
           kind: 'Edge',
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"Edge;"');
     });
@@ -91,8 +75,7 @@ describe('stringify', () => {
         stringify({
           type: 'AttributeList',
           kind: 'Graph',
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"Graph;"');
     });
@@ -102,25 +85,24 @@ describe('stringify', () => {
         stringify({
           type: 'AttributeList',
           kind: 'Node',
-          body: [
+          children: [
             {
               type: 'Attribute',
               key: {
                 type: 'Literal',
                 value: 'color',
                 quoted: false,
-                location,
+                children: [],
               },
               value: {
                 type: 'Literal',
                 value: 'hoge',
                 quoted: false,
-                location,
+                children: [],
               },
-              location,
+              children: [],
             },
           ],
-          location,
         }),
       ).toMatchInlineSnapshot(`
         "Node [
@@ -133,24 +115,23 @@ describe('stringify', () => {
         stringify({
           type: 'AttributeList',
           kind: 'Node',
-          body: [
+          children: [
             {
               type: 'Attribute',
               key: {
                 type: 'Literal',
                 value: 'color',
                 quoted: false,
-                location,
+                children: [],
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
                 quoted: false,
-                location,
+                children: [],
               },
-
-              location,
+              children: [],
             },
 
             {
@@ -159,21 +140,18 @@ describe('stringify', () => {
                 type: 'Literal',
                 value: 'bgcolor',
                 quoted: false,
-                location,
+                children: [],
               },
 
               value: {
                 type: 'Literal',
                 value: 'fuga',
                 quoted: false,
-                location,
+                children: [],
               },
-
-              location,
+              children: [],
             },
           ],
-
-          location,
         }),
       ).toMatchInlineSnapshot(`
         "Node [
@@ -193,15 +171,15 @@ describe('stringify', () => {
             type: 'Literal',
             value: 'color',
             quoted: false,
-            location,
+            children: [],
           },
           value: {
             type: 'Literal',
             value: 'hoge',
             quoted: false,
-            location,
+            children: [],
           },
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"color = hoge;"');
     });
@@ -210,31 +188,30 @@ describe('stringify', () => {
       expect(
         stringify({
           type: 'Node',
-          body: [
+          children: [
             {
               type: 'Attribute',
               key: {
                 type: 'Literal',
                 value: 'color',
                 quoted: false,
-                location,
+                children: [],
               },
               value: {
                 type: 'Literal',
                 value: 'hoge',
                 quoted: false,
-                location,
+                children: [],
               },
-              location,
+              children: [],
             },
           ],
           id: {
             type: 'Literal',
             value: 'hoge',
             quoted: true,
-            location,
+            children: [],
           },
-          location,
         }),
       ).toMatchInlineSnapshot(`
         "\\"hoge\\" [
@@ -247,24 +224,23 @@ describe('stringify', () => {
       expect(
         stringify({
           type: 'Node',
-          body: [
+          children: [
             {
               type: 'Attribute',
               key: {
                 type: 'Literal',
                 value: 'color',
                 quoted: false,
-                location,
+                children: [],
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
                 quoted: false,
-                location,
+                children: [],
               },
-
-              location,
+              children: [],
             },
 
             {
@@ -273,17 +249,16 @@ describe('stringify', () => {
                 type: 'Literal',
                 value: 'bgcolor',
                 quoted: false,
-                location,
+                children: [],
               },
 
               value: {
                 type: 'Literal',
                 value: 'fuga',
                 quoted: false,
-                location,
+                children: [],
               },
-
-              location,
+              children: [],
             },
           ],
 
@@ -291,10 +266,8 @@ describe('stringify', () => {
             type: 'Literal',
             value: 'hoge',
             quoted: true,
-            location,
+            children: [],
           },
-
-          location,
         }),
       ).toMatchInlineSnapshot(`
         "\\"hoge\\" [
@@ -317,15 +290,15 @@ describe('stringify', () => {
                 type: 'Literal',
                 value: 'id1',
                 quoted: true,
-                location,
+                children: [],
               },
               port: {
                 type: 'Literal',
                 value: 'port1',
                 quoted: true,
-                location,
+                children: [],
               },
-              location,
+              children: [],
             },
             {
               type: 'NodeRef',
@@ -333,19 +306,18 @@ describe('stringify', () => {
                 type: 'Literal',
                 value: 'id2',
                 quoted: true,
-                location,
+                children: [],
               },
               compass: {
                 type: 'Literal',
                 value: 'w',
                 quoted: false,
-                location,
+                children: [],
               },
-              location,
+              children: [],
             },
           ],
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"\\"id1\\":\\"port1\\" -> \\"id2\\":w;"');
     });
@@ -361,15 +333,15 @@ describe('stringify', () => {
                 type: 'Literal',
                 value: 'id1',
                 quoted: true,
-                location,
+                children: [],
               },
               port: {
                 type: 'Literal',
                 value: 'port1',
                 quoted: true,
-                location,
+                children: [],
               },
-              location,
+              children: [],
             },
             {
               type: 'NodeRef',
@@ -377,36 +349,35 @@ describe('stringify', () => {
                 type: 'Literal',
                 value: 'id2',
                 quoted: true,
-                location,
+                children: [],
               },
               compass: {
                 type: 'Literal',
                 value: 'w',
                 quoted: false,
-                location,
+                children: [],
               },
-              location,
+              children: [],
             },
           ],
-          body: [
+          children: [
             {
               type: 'Attribute',
               key: {
                 type: 'Literal',
                 value: 'color',
                 quoted: false,
-                location,
+                children: [],
               },
               value: {
                 type: 'Literal',
                 value: 'hoge',
                 quoted: false,
-                location,
+                children: [],
               },
-              location,
+              children: [],
             },
           ],
-          location,
         }),
       ).toMatchInlineSnapshot(`
         "\\"id1\\":\\"port1\\" -> \\"id2\\":w [
@@ -426,17 +397,16 @@ describe('stringify', () => {
                 type: 'Literal',
                 value: 'id1',
                 quoted: true,
-                location,
+                children: [],
               },
 
               port: {
                 type: 'Literal',
                 value: 'port1',
                 quoted: true,
-                location,
+                children: [],
               },
-
-              location,
+              children: [],
             },
 
             {
@@ -445,38 +415,36 @@ describe('stringify', () => {
                 type: 'Literal',
                 value: 'id2',
                 quoted: true,
-                location,
+                children: [],
               },
 
               compass: {
                 type: 'Literal',
                 value: 'w',
                 quoted: false,
-                location,
+                children: [],
               },
-
-              location,
+              children: [],
             },
           ],
 
-          body: [
+          children: [
             {
               type: 'Attribute',
               key: {
                 type: 'Literal',
                 value: 'color',
                 quoted: false,
-                location,
+                children: [],
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
                 quoted: false,
-                location,
+                children: [],
               },
-
-              location,
+              children: [],
             },
 
             {
@@ -485,21 +453,18 @@ describe('stringify', () => {
                 type: 'Literal',
                 value: 'color',
                 quoted: false,
-                location,
+                children: [],
               },
 
               value: {
                 type: 'Literal',
                 value: 'fuga',
                 quoted: false,
-                location,
+                children: [],
               },
-
-              location,
+              children: [],
             },
           ],
-
-          location,
         }),
       ).toMatchInlineSnapshot(`
         "\\"id1\\":\\"port1\\" -> \\"id2\\":w [
@@ -520,28 +485,28 @@ describe('stringify', () => {
                 type: 'Literal',
                 value: 'id1',
                 quoted: true,
-                location,
+                children: [],
               },
               port: {
                 type: 'Literal',
                 value: 'port1',
                 quoted: true,
-                location,
+                children: [],
               },
-              location,
+              children: [],
             },
             {
               type: 'NodeRefGroup',
-              body: [
+              children: [
                 {
                   type: 'NodeRef',
                   id: {
                     type: 'Literal',
                     value: 'id2',
                     quoted: true,
-                    location,
+                    children: [],
                   },
-                  location,
+                  children: [],
                 },
                 {
                   type: 'NodeRef',
@@ -549,16 +514,14 @@ describe('stringify', () => {
                     type: 'Literal',
                     value: 'id3',
                     quoted: true,
-                    location,
+                    children: [],
                   },
-                  location,
+                  children: [],
                 },
               ],
-              location,
             },
           ],
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"\\"id1\\":\\"port1\\" -> {\\"id2\\" \\"id3\\"};"');
     });
@@ -573,10 +536,9 @@ describe('stringify', () => {
             type: 'Literal',
             value: 'id1',
             quoted: true,
-            location,
+            children: [],
           },
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"subgraph \\"id1\\" {}"');
     });
@@ -585,38 +547,34 @@ describe('stringify', () => {
       expect(
         stringify({
           type: 'Subgraph',
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"subgraph {}"');
     });
 
-    test('with body', () => {
+    test('with children', () => {
       expect(
         stringify({
           type: 'Subgraph',
-          body: [
+          children: [
             {
               type: 'Attribute',
               key: {
                 type: 'Literal',
                 value: 'color',
                 quoted: false,
-                location,
+                children: [],
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
                 quoted: false,
-                location,
+                children: [],
               },
-
-              location,
+              children: [],
             },
           ],
-
-          location,
         }),
       ).toMatchInlineSnapshot(`
         "subgraph {
@@ -637,10 +595,9 @@ describe('stringify', () => {
             type: 'Literal',
             value: 'id1',
             quoted: true,
-            location,
+            children: [],
           },
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"digraph \\"id1\\" {}"');
     });
@@ -655,10 +612,9 @@ describe('stringify', () => {
             type: 'Literal',
             value: 'id1',
             quoted: true,
-            location,
+            children: [],
           },
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"strict digraph \\"id1\\" {}"');
     });
@@ -673,10 +629,9 @@ describe('stringify', () => {
             type: 'Literal',
             value: 'id1',
             quoted: true,
-            location,
+            children: [],
           },
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"graph \\"id1\\" {}"');
     });
@@ -691,10 +646,9 @@ describe('stringify', () => {
             type: 'Literal',
             value: 'id1',
             quoted: true,
-            location,
+            children: [],
           },
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"strict graph \\"id1\\" {}"');
     });
@@ -705,40 +659,36 @@ describe('stringify', () => {
           type: 'Graph',
           strict: false,
           directed: true,
-          body: [],
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot('"digraph {}"');
     });
 
-    test('with body', () => {
+    test('with children', () => {
       expect(
         stringify({
           type: 'Graph',
           strict: false,
           directed: true,
-          body: [
+          children: [
             {
               type: 'Attribute',
               key: {
                 type: 'Literal',
                 value: 'color',
                 quoted: false,
-                location,
+                children: [],
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
                 quoted: false,
-                location,
+                children: [],
               },
-
-              location,
+              children: [],
             },
           ],
-
-          location,
         }),
       ).toMatchInlineSnapshot(`
         "digraph {
@@ -755,7 +705,7 @@ describe('stringify', () => {
           type: 'Comment',
           kind: 'Block',
           value: 'test\ntest',
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot(`
         "/**
@@ -771,7 +721,7 @@ describe('stringify', () => {
           type: 'Comment',
           kind: 'Macro',
           value: 'foo\nbar',
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot(`
         "# foo
@@ -785,7 +735,7 @@ describe('stringify', () => {
           type: 'Comment',
           kind: 'Slash',
           value: 'foo\nbar',
-          location,
+          children: [],
         }),
       ).toMatchInlineSnapshot(`
         "// foo
@@ -799,12 +749,12 @@ describe('stringify', () => {
       expect(
         stringify({
           type: 'Dot',
-          body: [
+          children: [
             {
               type: 'Comment',
               kind: 'Slash',
               value: 'foo\nbar',
-              location,
+              children: [],
             },
             {
               type: 'Graph',
@@ -814,13 +764,11 @@ describe('stringify', () => {
                 type: 'Literal',
                 value: 'id1',
                 quoted: true,
-                location,
+                children: [],
               },
-              body: [],
-              location,
+              children: [],
             },
           ],
-          location,
         }),
       ).toMatchInlineSnapshot(`
         "// foo

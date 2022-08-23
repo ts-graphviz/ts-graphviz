@@ -47,15 +47,10 @@ Comment = __ v:_comment __ { return v; }
 
 ClusterStatements = (Attribute / AttributeList / Edge / Subgraph / Node / Comment)*
 
-_dot
-  = c1:Comment* graph:Graph c2:Comment* {
-      return b.dot({
-        body: [...c1, graph, ...c2],
-      });
-    }
+_dot = c1:Comment* graph:Graph c2:Comment* { return b.createElement('Dot', {}, [...c1, graph, ...c2]); }
 
 _graph
-  = _strict:"strict"i? _ _kind:("graph"i / "digraph"i) _ id:_literal? __ "{" body:ClusterStatements __ "}" {
+  = _strict:"strict"i? _ _kind:("graph"i / "digraph"i) _ id:_literal? __ "{" children:ClusterStatements __ "}" {
       const strict = !!_strict;
       const kind = _kind.toLowerCase();
       const directed = kind === 'digraph';
@@ -70,73 +65,87 @@ _graph
           }
         }
       }
-      return b.graph(
+      return b.createElement(
+        'Graph',
         id !== null
           ? {
               id,
               directed,
               strict,
-              body,
             }
           : {
               directed,
               strict,
-              body,
             },
+        children,
       );
     }
 
 _attribute
   = keyValue:_key_value _ ";"? {
-      return b.attribute({
-        ...keyValue,
-      });
+      return b.createElement(
+        'Attribute',
+        {
+          ...keyValue,
+        },
+        [],
+      );
     }
 
 _attributes
-  = _kind:("graph"i / "node"i / "edge"i) body:_attribute_list _ ";"? {
-      const kind = _kind.toLowerCase();
-      return b.attributes({
-        kind,
-        body,
-      });
+  = _kind:("graph"i / "node"i / "edge"i) children:_attribute_list _ ";"? {
+      return b.createElement(
+        'AttributeList',
+        {
+          kind: _kind.toLowerCase(),
+        },
+        children,
+      );
     }
 
 _edge
-  = id:_edge_target rhs:_edge_rhs _body:_attribute_list? _ ";"? {
-      return b.edge({
-        body: _body ?? [],
+  = id:_edge_target rhs:_edge_rhs _children:_attribute_list? _ ";"? {
+      // @ts-ignore
+      return b.createElement(
         // @ts-ignore
-        targets: [id, ...rhs],
-      });
+        'Edge',
+        {
+          targets: [id, ...rhs],
+        },
+        _children ?? [],
+      );
     }
 
 _node
-  = id:_literal _ _body:_attribute_list? _ ";"? {
-      return b.node({
-        id,
-        body: _body ?? [],
-      });
+  = id:_literal _ _children:_attribute_list? _ ";"? {
+      return b.createElement(
+        'Node',
+        {
+          id,
+        },
+        _children ?? [],
+      );
     }
 
 _key_value = key:_literal _ "=" _ value:_literal { return { key, value }; }
 
 _attibutes_item
-  = keyValue:_key_value _ ("," / ";")? {
-      return b.attribute({
-        type: 'Attribute',
-        ...keyValue,
-        location: location(),
-      });
+  = kv:_key_value _ ("," / ";")? {
+      return b.createElement(
+        'Attribute',
+        {
+          ...kv,
+          location: location(),
+        },
+        [],
+      );
     }
 
 _attribute_list = _ "[" list:(AttibutesItem / Comment)* __ "]" { return list; }
 
 _edge_target_group
   = "{" id:NodeRef rest:(("," / ";")? v:NodeRef { return v; })* ("," / ";")? __ "}" {
-      return b.nodeRefGroup({
-        body: [id, ...rest],
-      });
+      return b.createElement('NodeRefGroup', {}, [id, ...rest]);
     }
 
 _edge_target
@@ -153,11 +162,14 @@ _edge_rhs
 
 _node_ref
   = id:_literal port:_port? {
-      return b.nodeRef({
-        type: 'NodeRef',
-        id,
-        ...port,
-      });
+      return b.createElement(
+        'NodeRef',
+        {
+          id,
+          ...port,
+        },
+        [],
+      );
     }
 
 _port "port"
@@ -173,18 +185,9 @@ _port "port"
 _subgraph_id = "subgraph"i _ id:_literal? _ { return id; }
 
 _subgraph
-  = id:_subgraph_id? "{" _body:ClusterStatements? __ "}" {
-      const body = _body ?? [];
-      return b.subgraph(
-        id
-          ? {
-              id,
-              body,
-            }
-          : {
-              body,
-            },
-      );
+  = id:_subgraph_id? "{" _children:ClusterStatements? __ "}" {
+      const children = _children ?? [];
+      return b.createElement('Subgraph', id ? { id } : {}, children);
     }
 
 _compass_keyword
@@ -202,19 +205,27 @@ _compass
     value:_compass_keyword { return { value, quoted: false }; }
     / "\"" value:_compass_keyword "\"" { return { value, quoted: true }; }
   ) {
-      return b.literal({
-        ...v,
-      });
+      return b.createElement(
+        'Literal',
+        {
+          ...v,
+        },
+        [],
+      );
     }
 
 _literal
   = QUOTED_STRING
   / HTML_STRING
   / value:(STRING / NUMBER_STRING / NUMBER) {
-      return b.literal({
-        value,
-        quoted: false,
-      });
+      return b.createElement(
+        'Literal',
+        {
+          value,
+          quoted: false,
+        },
+        [],
+      );
     }
 
 _comment
@@ -224,28 +235,40 @@ _comment
 
 _block_comment
   = "/*" v:(!"*/" v:. { return v; })* "*/" {
-      return b.comment({
-        kind: 'Block',
-        value: dedent(v.join('').replace(/[ \t]*\*/g, '')),
-      });
+      return b.createElement(
+        'Comment',
+        {
+          kind: 'Block',
+          value: dedent(v.join('').replace(/[ \t]*\*/g, '')),
+        },
+        [],
+      );
     }
 
 _slash_comment
   = lines:_slash_comment_line+ {
-      return b.comment({
-        kind: 'Slash',
-        value: dedent(lines.join('\n')),
-      });
+      return b.createElement(
+        'Comment',
+        {
+          kind: 'Slash',
+          value: dedent(lines.join('\n')),
+        },
+        [],
+      );
     }
 
 _slash_comment_line = _ "//" v:(!_newline v:. { return v; })* _newline? { return v.join(''); }
 
 _macro_comment
   = lines:_macro_comment_line+ {
-      return b.comment({
-        kind: 'Macro',
-        value: dedent(lines.join('\n')),
-      });
+      return b.createElement(
+        'Comment',
+        {
+          kind: 'Macro',
+          value: dedent(lines.join('\n')),
+        },
+        [],
+      );
     }
 
 _macro_comment_line = _ "#" v:(!_newline v:. { return v; })* _newline? { return v.join(''); }
@@ -272,10 +295,14 @@ NUMBER "NUMBER" = n:("-"? ("." [0-9]+ / [0-9]+ ("." [0-9]*)?)) { return text(); 
  */
 HTML_STRING
   = v:html_raw_string {
-      return b.literal({
-        value: v.slice(1, v.length - 1),
-        quoted: 'html',
-      });
+      return b.createElement(
+        'Literal',
+        {
+          value: v.slice(1, v.length - 1),
+          quoted: 'html',
+        },
+        [],
+      );
     }
 
 html_raw_string = "<" v:(html_char / html_raw_string)* ">" { return '<' + v.join('') + '>'; }
@@ -284,10 +311,14 @@ html_char = v:(!(">" / "<") v:. { return v; })+ { return v.join(''); }
 
 QUOTED_STRING
   = "\"" chars:DoubleStringCharacter* "\"" {
-      return b.literal({
-        value: chars.join(''),
-        quoted: true,
-      });
+      return b.createElement(
+        'Literal',
+        {
+          value: chars.join(''),
+          quoted: true,
+        },
+        [],
+      );
     }
 
 DoubleStringCharacter

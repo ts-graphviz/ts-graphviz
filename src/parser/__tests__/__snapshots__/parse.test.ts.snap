@@ -2,9 +2,11 @@
 
 exports[`parse AttributeList edge 1`] = `
 Object {
-  "body": Array [
+  "children": Array [
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 16,
@@ -37,6 +39,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 20,
@@ -56,7 +59,9 @@ Object {
       },
     },
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 16,
@@ -89,6 +94,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 36,
@@ -128,9 +134,11 @@ Object {
 
 exports[`parse AttributeList graph 1`] = `
 Object {
-  "body": Array [
+  "children": Array [
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 18,
@@ -163,6 +171,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 22,
@@ -182,7 +191,9 @@ Object {
       },
     },
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 29,
@@ -215,6 +226,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 49,
@@ -254,9 +266,11 @@ Object {
 
 exports[`parse AttributeList node 1`] = `
 Object {
-  "body": Array [
+  "children": Array [
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 16,
@@ -289,6 +303,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 23,
@@ -308,7 +323,9 @@ Object {
       },
     },
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 16,
@@ -341,6 +358,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 26,
@@ -360,7 +378,9 @@ Object {
       },
     },
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 16,
@@ -393,6 +413,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 31,
@@ -432,8 +453,9 @@ Object {
 
 exports[`parse AttributeList with comment 1`] = `
 Object {
-  "body": Array [
+  "children": Array [
     Object {
+      "children": Array [],
       "kind": "Macro",
       "location": Object {
         "end": Object {
@@ -452,7 +474,9 @@ Object {
       "value": "comment 1",
     },
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 16,
@@ -485,6 +509,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 23,
@@ -524,7 +549,9 @@ Object {
 
 exports[`parse attribute set HTMLLike value 1`] = `
 Object {
+  "children": Array [],
   "key": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 14,
@@ -557,6 +584,7 @@ Object {
   },
   "type": "Attribute",
   "value": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 10,
@@ -587,7 +615,9 @@ Object {
 
 exports[`parse attribute set quoted value 1`] = `
 Object {
+  "children": Array [],
   "key": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 6,
@@ -620,6 +650,7 @@ Object {
   },
   "type": "Attribute",
   "value": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 21,
@@ -642,7 +673,9 @@ Object {
 
 exports[`parse attribute set value 1`] = `
 Object {
+  "children": Array [],
   "key": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 6,
@@ -675,6 +708,7 @@ Object {
   },
   "type": "Attribute",
   "value": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 13,
@@ -698,6 +732,7 @@ Object {
 exports[`parse cluster_statements comments 1`] = `
 Array [
   Object {
+    "children": Array [],
     "kind": "Slash",
     "location": Object {
       "end": Object {
@@ -716,6 +751,7 @@ Array [
     "value": "comment1",
   },
   Object {
+    "children": Array [],
     "kind": "Slash",
     "location": Object {
       "end": Object {
@@ -735,6 +771,7 @@ Array [
 comment2",
   },
   Object {
+    "children": Array [],
     "kind": "Macro",
     "location": Object {
       "end": Object {
@@ -753,6 +790,7 @@ comment2",
     "value": "comment3",
   },
   Object {
+    "children": Array [],
     "kind": "Macro",
     "location": Object {
       "end": Object {
@@ -772,6 +810,7 @@ comment2",
 comment4",
   },
   Object {
+    "children": Array [],
     "kind": "Block",
     "location": Object {
       "end": Object {
@@ -794,8 +833,9 @@ comment4",
 
 exports[`parse dot with comments 1`] = `
 Object {
-  "body": Array [
+  "children": Array [
     Object {
+      "children": Array [],
       "kind": "Block",
       "location": Object {
         "end": Object {
@@ -814,9 +854,8 @@ Object {
       "value": "comment1",
     },
     Object {
-      "body": Array [],
+      "children": Array [],
       "directed": true,
-      "id": undefined,
       "location": Object {
         "end": Object {
           "column": 19,
@@ -834,6 +873,7 @@ Object {
       "type": "Graph",
     },
     Object {
+      "children": Array [],
       "kind": "Block",
       "location": Object {
         "end": Object {
@@ -871,7 +911,7 @@ Object {
 
 exports[`parse edge digraph edge 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "location": Object {
     "end": Object {
       "column": 8,
@@ -887,8 +927,9 @@ Object {
   },
   "targets": Array [
     Object {
-      "compass": undefined,
+      "children": Array [],
       "id": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 2,
@@ -919,12 +960,12 @@ Object {
           "offset": 0,
         },
       },
-      "port": undefined,
       "type": "NodeRef",
     },
     Object {
-      "compass": undefined,
+      "children": Array [],
       "id": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 7,
@@ -955,7 +996,6 @@ Object {
           "offset": 5,
         },
       },
-      "port": undefined,
       "type": "NodeRef",
     },
   ],
@@ -965,9 +1005,11 @@ Object {
 
 exports[`parse edge edge with attributes 1`] = `
 Object {
-  "body": Array [
+  "children": Array [
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 18,
@@ -1000,6 +1042,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 28,
@@ -1019,7 +1062,9 @@ Object {
       },
     },
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 18,
@@ -1052,6 +1097,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 33,
@@ -1086,8 +1132,9 @@ Object {
   },
   "targets": Array [
     Object {
-      "compass": undefined,
+      "children": Array [],
       "id": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 12,
@@ -1118,12 +1165,12 @@ Object {
           "offset": 11,
         },
       },
-      "port": undefined,
       "type": "NodeRef",
     },
     Object {
-      "compass": undefined,
+      "children": Array [],
       "id": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 17,
@@ -1154,7 +1201,6 @@ Object {
           "offset": 16,
         },
       },
-      "port": undefined,
       "type": "NodeRef",
     },
   ],
@@ -1164,7 +1210,7 @@ Object {
 
 exports[`parse edge edge with port 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "location": Object {
     "end": Object {
       "column": 31,
@@ -1180,8 +1226,9 @@ Object {
   },
   "targets": Array [
     Object {
-      "compass": undefined,
+      "children": Array [],
       "id": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 2,
@@ -1213,6 +1260,7 @@ Object {
         },
       },
       "port": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 5,
@@ -1233,8 +1281,9 @@ Object {
       "type": "NodeRef",
     },
     Object {
-      "compass": undefined,
+      "children": Array [],
       "id": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 10,
@@ -1266,6 +1315,7 @@ Object {
         },
       },
       "port": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 13,
@@ -1286,7 +1336,9 @@ Object {
       "type": "NodeRef",
     },
     Object {
+      "children": Array [],
       "compass": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 23,
@@ -1305,6 +1357,7 @@ Object {
         "value": "w",
       },
       "id": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 18,
@@ -1336,6 +1389,7 @@ Object {
         },
       },
       "port": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 21,
@@ -1356,8 +1410,9 @@ Object {
       "type": "NodeRef",
     },
     Object {
-      "compass": undefined,
+      "children": Array [],
       "id": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 28,
@@ -1389,6 +1444,7 @@ Object {
         },
       },
       "port": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 30,
@@ -1415,7 +1471,7 @@ Object {
 
 exports[`parse edge graph edge 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "location": Object {
     "end": Object {
       "column": 8,
@@ -1431,8 +1487,9 @@ Object {
   },
   "targets": Array [
     Object {
-      "compass": undefined,
+      "children": Array [],
       "id": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 2,
@@ -1463,12 +1520,12 @@ Object {
           "offset": 0,
         },
       },
-      "port": undefined,
       "type": "NodeRef",
     },
     Object {
-      "compass": undefined,
+      "children": Array [],
       "id": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 7,
@@ -1499,7 +1556,6 @@ Object {
           "offset": 5,
         },
       },
-      "port": undefined,
       "type": "NodeRef",
     },
   ],
@@ -1509,7 +1565,7 @@ Object {
 
 exports[`parse edge grouped edge targets 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "location": Object {
     "end": Object {
       "column": 22,
@@ -1525,10 +1581,11 @@ Object {
   },
   "targets": Array [
     Object {
-      "body": Array [
+      "children": Array [
         Object {
-          "compass": undefined,
+          "children": Array [],
           "id": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 4,
@@ -1559,12 +1616,12 @@ Object {
               "offset": 1,
             },
           },
-          "port": undefined,
           "type": "NodeRef",
         },
         Object {
-          "compass": undefined,
+          "children": Array [],
           "id": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 8,
@@ -1595,7 +1652,6 @@ Object {
               "offset": 5,
             },
           },
-          "port": undefined,
           "type": "NodeRef",
         },
       ],
@@ -1615,10 +1671,11 @@ Object {
       "type": "NodeRefGroup",
     },
     Object {
-      "body": Array [
+      "children": Array [
         Object {
-          "compass": undefined,
+          "children": Array [],
           "id": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 16,
@@ -1649,12 +1706,12 @@ Object {
               "offset": 13,
             },
           },
-          "port": undefined,
           "type": "NodeRef",
         },
         Object {
-          "compass": undefined,
+          "children": Array [],
           "id": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 20,
@@ -1685,7 +1742,6 @@ Object {
               "offset": 17,
             },
           },
-          "port": undefined,
           "type": "NodeRef",
         },
       ],
@@ -1711,7 +1767,7 @@ Object {
 
 exports[`parse edge grouped ported edge targets 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "location": Object {
     "end": Object {
       "column": 35,
@@ -1727,10 +1783,11 @@ Object {
   },
   "targets": Array [
     Object {
-      "body": Array [
+      "children": Array [
         Object {
-          "compass": undefined,
+          "children": Array [],
           "id": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 4,
@@ -1762,6 +1819,7 @@ Object {
             },
           },
           "port": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 7,
@@ -1782,7 +1840,9 @@ Object {
           "type": "NodeRef",
         },
         Object {
+          "children": Array [],
           "compass": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 16,
@@ -1801,6 +1861,7 @@ Object {
             "value": "w",
           },
           "id": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 11,
@@ -1832,6 +1893,7 @@ Object {
             },
           },
           "port": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 14,
@@ -1868,10 +1930,11 @@ Object {
       "type": "NodeRefGroup",
     },
     Object {
-      "body": Array [
+      "children": Array [
         Object {
-          "compass": undefined,
+          "children": Array [],
           "id": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 24,
@@ -1903,6 +1966,7 @@ Object {
             },
           },
           "port": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 26,
@@ -1923,8 +1987,9 @@ Object {
           "type": "NodeRef",
         },
         Object {
-          "compass": undefined,
+          "children": Array [],
           "id": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 30,
@@ -1956,6 +2021,7 @@ Object {
             },
           },
           "port": Object {
+            "children": Array [],
             "location": Object {
               "end": Object {
                 "column": 33,
@@ -1998,9 +2064,8 @@ Object {
 
 exports[`parse graph anonymous digraph 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "directed": true,
-  "id": undefined,
   "location": Object {
     "end": Object {
       "column": 11,
@@ -2021,9 +2086,10 @@ Object {
 
 exports[`parse graph digraph named test 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "directed": true,
   "id": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 13,
@@ -2061,9 +2127,10 @@ Object {
 
 exports[`parse graph digraph named test(quoted) 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "directed": true,
   "id": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 15,
@@ -2101,9 +2168,10 @@ Object {
 
 exports[`parse graph graph named test 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "directed": false,
   "id": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 11,
@@ -2141,9 +2209,10 @@ Object {
 
 exports[`parse graph strict digraph named test 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "directed": true,
   "id": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 20,
@@ -2181,9 +2250,10 @@ Object {
 
 exports[`parse graph strict graph named test 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "directed": false,
   "id": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 18,
@@ -2221,9 +2291,11 @@ Object {
 
 exports[`parse node node with attributes 1`] = `
 Object {
-  "body": Array [
+  "children": Array [
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 18,
@@ -2256,6 +2328,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 25,
@@ -2275,7 +2348,9 @@ Object {
       },
     },
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 18,
@@ -2308,6 +2383,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 28,
@@ -2327,7 +2403,9 @@ Object {
       },
     },
     Object {
+      "children": Array [],
       "key": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 18,
@@ -2360,6 +2438,7 @@ Object {
       },
       "type": "Attribute",
       "value": Object {
+        "children": Array [],
         "location": Object {
           "end": Object {
             "column": 33,
@@ -2380,6 +2459,7 @@ Object {
     },
   ],
   "id": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 15,
@@ -2416,8 +2496,9 @@ Object {
 
 exports[`parse node simple node 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "id": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 5,
@@ -2454,8 +2535,7 @@ Object {
 
 exports[`parse subgraph anonymous subgraph 1`] = `
 Object {
-  "body": Array [],
-  "id": undefined,
+  "children": Array [],
   "location": Object {
     "end": Object {
       "column": 12,
@@ -2475,8 +2555,9 @@ Object {
 
 exports[`parse subgraph named subgraph 1`] = `
 Object {
-  "body": Array [],
+  "children": Array [],
   "id": Object {
+    "children": Array [],
     "location": Object {
       "end": Object {
         "column": 14,
@@ -2513,8 +2594,7 @@ Object {
 
 exports[`parse subgraph no keyword anonymous 1`] = `
 Object {
-  "body": Array [],
-  "id": undefined,
+  "children": Array [],
   "location": Object {
     "end": Object {
       "column": 3,

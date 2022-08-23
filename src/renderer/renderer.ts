@@ -38,9 +38,9 @@ export class Renderer {
   }
 
   protected printAttributeList(ast: AttributeListASTNode): string {
-    return ast.body.length === 0
+    return ast.children.length === 0
       ? `${ast.kind};`
-      : `${ast.kind} [\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
+      : `${ast.kind} [\n${ast.children.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
   }
 
   protected printComment(ast: CommentASTNode): string {
@@ -56,20 +56,23 @@ export class Renderer {
   }
 
   protected printDot(ast: DotASTNode): string {
-    return ast.body.map(this.render.bind(this)).join('\n');
+    return ast.children.map(this.render.bind(this)).join('\n');
   }
 
   protected printEdge(ast: EdgeASTNode): string {
     const targets = ast.targets.map(this.render.bind(this)).join(this.directed ? ' -> ' : ' -- ');
-    return ast.body.length === 0
+    return ast.children.length === 0
       ? `${targets};`
-      : `${targets} [\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
+      : `${targets} [\n${ast.children.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
   }
 
   protected printNode(ast: NodeASTNode): string {
-    return ast.body.length === 0
+    return ast.children.length === 0
       ? `${this.render(ast.id)};`
-      : `${this.render(ast.id)} [\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n];`;
+      : `${this.render(ast.id)} [\n${ast.children
+          .map(this.render.bind(this))
+          .map(this.indent.bind(this))
+          .join('\n')}\n];`;
   }
 
   protected printNodeRef(ast: NodeRefASTNode): string {
@@ -79,7 +82,7 @@ export class Renderer {
   }
 
   protected printNodeRefGroup(ast: NodeRefGroupASTNode): string {
-    return `{${ast.body.map(this.render.bind(this)).join(' ')}}`;
+    return `{${ast.children.map(this.render.bind(this)).join(' ')}}`;
   }
 
   protected printGroup(ast: GraphASTNode): string {
@@ -87,9 +90,9 @@ export class Renderer {
       ast.strict ? 'strict' : null,
       ast.directed ? 'digraph' : 'graph',
       ast.id ? this.render(ast.id) : null,
-      ast.body.length === 0
+      ast.children.length === 0
         ? '{}'
-        : `{\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n}`,
+        : `{\n${ast.children.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n}`,
     ]
       .filter((v) => v !== null)
       .join(' ');
@@ -99,9 +102,9 @@ export class Renderer {
     return [
       'subgraph',
       ast.id ? this.render(ast.id) : null,
-      ast.body.length === 0
+      ast.children.length === 0
         ? '{}'
-        : `{\n${ast.body.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n}`,
+        : `{\n${ast.children.map(this.render.bind(this)).map(this.indent.bind(this)).join('\n')}\n}`,
     ]
       .filter((v) => v !== null)
       .join(' ');

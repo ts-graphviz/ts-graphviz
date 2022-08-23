@@ -1,0 +1,166 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Builder createElement Attribute 1`] = `
+Object {
+  "children": Array [],
+  "key": Object {
+    "children": Array [],
+    "location": null,
+    "quoted": false,
+    "type": "Literal",
+    "value": "color",
+  },
+  "location": null,
+  "type": "Attribute",
+  "value": Object {
+    "children": Array [],
+    "location": null,
+    "quoted": false,
+    "type": "Literal",
+    "value": "red",
+  },
+}
+`;
+
+exports[`Builder createElement Coment 1`] = `
+Object {
+  "children": Array [],
+  "kind": "Macro",
+  "location": null,
+  "type": "Comment",
+  "value": "This is comment",
+}
+`;
+
+exports[`Builder createElement Dot 1`] = `
+Object {
+  "children": Array [],
+  "location": null,
+  "type": "Dot",
+}
+`;
+
+exports[`Builder createElement Edge 1`] = `
+Object {
+  "children": Array [],
+  "location": null,
+  "targets": Array [
+    Object {
+      "children": Array [],
+      "id": Object {
+        "children": Array [],
+        "location": null,
+        "quoted": true,
+        "type": "Literal",
+        "value": "a",
+      },
+      "location": null,
+      "type": "NodeRef",
+    },
+    Object {
+      "children": Array [],
+      "id": Object {
+        "children": Array [],
+        "location": null,
+        "quoted": true,
+        "type": "Literal",
+        "value": "b",
+      },
+      "location": null,
+      "type": "NodeRef",
+    },
+  ],
+  "type": "Edge",
+}
+`;
+
+exports[`Builder createElement Graph 1`] = `
+Object {
+  "children": Array [],
+  "directed": true,
+  "location": null,
+  "strict": false,
+  "type": "Graph",
+}
+`;
+
+exports[`Builder createElement Literal 1`] = `
+Object {
+  "children": Array [],
+  "location": null,
+  "quoted": true,
+  "type": "Literal",
+  "value": "literal value",
+}
+`;
+
+exports[`Builder createElement Node 1`] = `
+Object {
+  "children": Array [],
+  "id": Object {
+    "children": Array [],
+    "location": null,
+    "quoted": false,
+    "type": "Literal",
+    "value": "node_id",
+  },
+  "location": null,
+  "type": "Node",
+}
+`;
+
+exports[`Builder createElement NodeRef 1`] = `
+Object {
+  "children": Array [],
+  "id": Object {
+    "children": Array [],
+    "location": null,
+    "quoted": true,
+    "type": "Literal",
+    "value": "b",
+  },
+  "location": null,
+  "type": "NodeRef",
+}
+`;
+
+exports[`Builder createElement NodeRefGroup 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [],
+      "id": Object {
+        "children": Array [],
+        "location": null,
+        "quoted": true,
+        "type": "Literal",
+        "value": "a",
+      },
+      "location": null,
+      "type": "NodeRef",
+    },
+    Object {
+      "children": Array [],
+      "id": Object {
+        "children": Array [],
+        "location": null,
+        "quoted": true,
+        "type": "Literal",
+        "value": "b",
+      },
+      "location": null,
+      "type": "NodeRef",
+    },
+  ],
+  "location": null,
+  "type": "NodeRefGroup",
+}
+`;
+
+exports[`Builder createElement Subgraph 1`] = `
+Object {
+  "children": Array [],
+  "location": null,
+  "type": "Subgraph",
+}
+`;

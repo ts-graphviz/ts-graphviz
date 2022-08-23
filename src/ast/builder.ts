@@ -1,219 +1,99 @@
-import type { Compass } from '../type/index.js';
 import type { AttributeKey } from '../attribute/index.js';
 import type {
   DotASTNode,
-  StatementASTNode,
-  ASTCommonNode,
   LiteralASTNode,
-  ClusterStatementASTNode,
   NodeASTNode,
   AttributeASTNode,
   NodeRefASTNode,
   NodeRefGroupASTNode,
-  EdgeTargetASTNode,
   AttributeListASTNode,
   CommentASTNode,
   GraphASTNode,
   EdgeASTNode,
   SubgraphASTNode,
   FileRange,
+  ASTNode,
+  ASTChildNode,
+  LiteralASTPropaties,
+  DotASTPropaties,
+  GraphASTPropaties,
+  AttributeASTPropaties,
+  CommentASTPropaties,
+  AttributeListASTPropaties,
+  NodeRefASTPropaties,
+  NodeRefGroupASTPropaties,
+  EdgeASTPropaties,
+  NodeASTPropaties,
+  SubgraphASTPropaties,
 } from './types.js';
 
 export interface BuilderConfig {
-  defaultLitelalQuated: boolean | 'html';
-  defaultGraphStrict: boolean;
-  defaultCommentKind: 'Block' | 'Slash' | 'Macro';
   locationFunction: () => FileRange;
 }
 
 export class Builder {
-  get defaultLitelalQuated(): boolean | 'html' {
-    return this.config.defaultLitelalQuated ?? true;
-  }
-
-  get defaultGraphStrict(): boolean {
-    return this.config.defaultGraphStrict ?? true;
-  }
-
-  get defaultCommentKind(): 'Block' | 'Slash' | 'Macro' {
-    return this.config.defaultCommentKind ?? 'Block';
-  }
-
-  location(): FileRange | null {
+  private getLocation(): FileRange | null {
     return this.config.locationFunction?.() ?? null;
   }
 
-  constructor(private config: Partial<BuilderConfig>) {}
+  constructor(private config: Partial<BuilderConfig> = {}) {}
 
-  public dot({ body, location = this.location() }: { body: StatementASTNode[] } & Partial<ASTCommonNode>): DotASTNode {
+  public createElement(
+    type: 'Literal',
+    props: LiteralASTPropaties,
+    children: ASTChildNode<LiteralASTNode>[],
+  ): LiteralASTNode;
+  public createElement<T extends string>(
+    type: 'Literal',
+    props: LiteralASTPropaties<T>,
+    children: ASTChildNode<LiteralASTNode>[],
+  ): LiteralASTNode<T>;
+  public createElement(type: 'Dot', props: DotASTPropaties, children: ASTChildNode<DotASTNode>[]): DotASTNode;
+  public createElement(type: 'Graph', props: GraphASTPropaties, children: ASTChildNode<GraphASTNode>[]): GraphASTNode;
+  public createElement(
+    type: 'Attribute',
+    props: AttributeASTPropaties,
+    children: ASTChildNode<AttributeASTNode>[],
+  ): AttributeASTNode;
+  public createElement<T extends AttributeKey>(
+    type: 'Attribute',
+    props: AttributeASTPropaties<T>,
+    children: ASTChildNode<AttributeASTNode>[],
+  ): AttributeASTNode;
+  public createElement(
+    type: 'Comment',
+    props: CommentASTPropaties,
+    children: ASTChildNode<CommentASTNode>[],
+  ): CommentASTNode;
+  public createElement(
+    type: 'AttributeList',
+    props: AttributeListASTPropaties,
+    children: ASTChildNode<AttributeListASTNode>[],
+  ): AttributeListASTNode;
+  public createElement(
+    type: 'NodeRef',
+    props: NodeRefASTPropaties,
+    children: ASTChildNode<NodeRefASTNode>[],
+  ): NodeRefASTNode;
+  public createElement(
+    type: 'NodeRefGroup',
+    props: NodeRefGroupASTPropaties,
+    children: ASTChildNode<NodeRefGroupASTNode>[],
+  ): NodeRefGroupASTNode;
+  public createElement(type: 'Edge', props: EdgeASTPropaties, children: ASTChildNode<EdgeASTNode>[]): EdgeASTNode;
+  public createElement(type: 'Node', props: NodeASTPropaties, children: ASTChildNode<NodeASTNode>[]): NodeASTNode;
+  public createElement(
+    type: 'Subgraph',
+    props: SubgraphASTPropaties,
+    children: ASTChildNode<SubgraphASTNode>[],
+  ): SubgraphASTNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public createElement<T extends ASTNode>(type: T['type'], props: any, children: ASTChildNode<T>[]): T {
     return {
-      type: 'Dot',
-      body,
-      location,
-    };
-  }
-
-  public literal<T extends string = string>({
-    value,
-    quoted = this.defaultLitelalQuated,
-    location = this.location(),
-  }: {
-    value: T;
-    quoted?: boolean | 'html';
-  } & Partial<ASTCommonNode>): LiteralASTNode<T> {
-    return {
-      type: 'Literal',
-      value,
-      quoted,
-      location,
-    };
-  }
-
-  public graph({
-    id,
-    directed,
-    strict = this.defaultGraphStrict,
-    body,
-    location = this.location(),
-  }: {
-    id?: LiteralASTNode;
-    directed: boolean;
-    strict?: boolean;
-    body: ClusterStatementASTNode[];
-  } & Partial<ASTCommonNode>): GraphASTNode {
-    return {
-      type: 'Graph',
-      id,
-      directed,
-      strict,
-      body,
-      location,
-    };
-  }
-
-  public subgraph({
-    id,
-    body,
-    location = this.location(),
-  }: {
-    id?: LiteralASTNode;
-    body: ClusterStatementASTNode[];
-  } & Partial<ASTCommonNode>): SubgraphASTNode {
-    return {
-      type: 'Subgraph',
-      id,
-      body,
-      location,
-    };
-  }
-
-  public node({
-    id,
-    body = [],
-    location = this.location(),
-  }: {
-    body: AttributeASTNode[];
-    id: LiteralASTNode;
-  } & Partial<ASTCommonNode>): NodeASTNode {
-    return {
-      type: 'Node',
-      id,
-      body,
-      location,
-    };
-  }
-
-  public nodeRef({
-    id,
-    location = this.location(),
-    port,
-    compass,
-  }: {
-    id: LiteralASTNode;
-    port?: LiteralASTNode;
-    compass?: LiteralASTNode<Compass>;
-  } & Partial<ASTCommonNode>): NodeRefASTNode {
-    return {
-      type: 'NodeRef',
-      id,
-      port,
-      compass,
-      location,
-    };
-  }
-
-  public nodeRefGroup({
-    body,
-    location = this.location(),
-  }: { body: NodeRefASTNode[] } & Partial<ASTCommonNode>): NodeRefGroupASTNode {
-    return {
-      type: 'NodeRefGroup',
-      body,
-      location,
-    };
-  }
-
-  public edge({
-    targets,
-    location = this.location(),
-    body,
-  }: {
-    targets: [from: EdgeTargetASTNode, to: EdgeTargetASTNode, ...rest: EdgeTargetASTNode[]];
-    body: AttributeASTNode[];
-  } & Partial<ASTCommonNode>): EdgeASTNode {
-    return {
-      type: 'Edge',
-      targets,
-      location,
-      body,
-    };
-  }
-
-  public attribute({
-    key,
-    value,
-    location = this.location(),
-  }: {
-    key: LiteralASTNode<AttributeKey>;
-    value: LiteralASTNode;
-  } & Partial<ASTCommonNode>): AttributeASTNode {
-    return {
-      type: 'Attribute',
-      key,
-      value,
-      location,
-    };
-  }
-
-  public attributes({
-    kind,
-    body,
-    location = this.location(),
-  }: {
-    kind: 'Graph' | 'Edge' | 'Node';
-    body: (AttributeASTNode | CommentASTNode)[];
-  } & Partial<ASTCommonNode>): AttributeListASTNode {
-    return {
-      type: 'AttributeList',
-      location,
-      kind,
-      body,
-    };
-  }
-
-  public comment({
-    kind = this.defaultCommentKind,
-    value,
-    location = this.location(),
-  }: {
-    kind?: 'Block' | 'Slash' | 'Macro';
-    value: string;
-  } & Partial<ASTCommonNode>): CommentASTNode {
-    return {
-      type: 'Comment',
-      kind,
-      value,
-      location,
+      ...props,
+      type,
+      location: this.getLocation(),
+      children,
     };
   }
 }

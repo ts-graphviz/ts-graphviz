@@ -15,14 +15,58 @@ export interface FileRange {
 /**
  * AST common propaties.
  */
-export interface ASTCommonNode {
-  location: FileRange | null;
+export interface ASTCommonPropaties {
+  location?: FileRange;
+}
+
+export type DotASTPropaties = ASTCommonPropaties;
+export interface GraphASTPropaties extends ASTCommonPropaties {
+  id?: LiteralASTNode;
+  directed: boolean;
+  strict: boolean;
+}
+export interface LiteralASTPropaties<T extends string = string> extends ASTCommonPropaties {
+  value: T;
+  quoted?: boolean | 'html';
+}
+export interface SubgraphASTPropaties extends ASTCommonPropaties {
+  id?: LiteralASTNode;
+}
+
+export interface NodeASTPropaties extends ASTCommonPropaties {
+  id: LiteralASTNode;
+}
+
+export interface EdgeASTPropaties extends ASTCommonPropaties {
+  targets: [from: EdgeTargetASTNode, to: EdgeTargetASTNode, ...rest: EdgeTargetASTNode[]];
+}
+
+export interface NodeRefASTPropaties extends ASTCommonPropaties {
+  id: LiteralASTNode;
+  port?: LiteralASTNode;
+  compass?: LiteralASTNode<Compass>;
+}
+
+export type NodeRefGroupASTPropaties = ASTCommonPropaties;
+
+export interface AttributeASTPropaties<T extends AttributeKey = AttributeKey> extends ASTCommonPropaties {
+  key: LiteralASTNode<T>;
+  value: LiteralASTNode;
+}
+
+export interface AttributeListASTPropaties extends ASTCommonPropaties {
+  kind: 'Graph' | 'Edge' | 'Node';
+}
+
+export interface CommentASTPropaties extends ASTCommonPropaties {
+  kind: 'Block' | 'Slash' | 'Macro';
+  value: string;
 }
 
 /**
  * AST node.
  */
-export interface ASTBaseNode extends ASTCommonNode {
+export interface ASTBaseNode {
   /**
    * Every leaf interface that extends ASTBaseNode
    * must specify a type property.
@@ -31,87 +75,72 @@ export interface ASTBaseNode extends ASTCommonNode {
 }
 
 export interface ASTBaseParentNode<STMT extends ASTBaseNode = ASTBaseNode> extends ASTBaseNode {
-  body: STMT[];
+  children: STMT[];
 }
 
-export interface LiteralASTNode<T extends string = string> extends ASTBaseNode {
+export interface LiteralASTNode<T extends string = string> extends ASTBaseParentNode<never>, LiteralASTPropaties<T> {
   type: 'Literal';
-  value: T;
-  quoted: boolean | 'html';
 }
 
-export interface DotASTNode extends ASTBaseParentNode<StatementASTNode> {
+export interface DotASTNode extends ASTBaseParentNode<StatementASTNode>, DotASTPropaties {
   type: 'Dot';
 }
 
 /**
  * Graph AST object.
  */
-export interface GraphASTNode extends ASTBaseParentNode<ClusterStatementASTNode> {
+export interface GraphASTNode extends ASTBaseParentNode<ClusterStatementASTNode>, GraphASTPropaties {
   type: 'Graph';
-  id?: LiteralASTNode;
-  directed: boolean;
-  strict: boolean;
-}
-
-export interface KeyValue {
-  key: LiteralASTNode<AttributeKey>;
-  value: LiteralASTNode;
 }
 
 /**
  * Attribute AST object.
  */
-export interface AttributeASTNode extends ASTBaseNode, KeyValue {
+export interface AttributeASTNode<T extends AttributeKey = AttributeKey>
+  extends ASTBaseParentNode<never>,
+    AttributeASTPropaties<T> {
   type: 'Attribute';
 }
 
 /**
  * Comment AST object.
  */
-export interface CommentASTNode extends ASTBaseNode {
+export interface CommentASTNode extends ASTBaseParentNode<never>, CommentASTPropaties {
   type: 'Comment';
-  kind: 'Block' | 'Slash' | 'Macro';
-  value: string;
 }
 
 /** Attributes AST object. */
-export interface AttributeListASTNode extends ASTBaseParentNode<AttributeASTNode | CommentASTNode> {
+export interface AttributeListASTNode
+  extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>,
+    AttributeListASTPropaties {
   type: 'AttributeList';
-  kind: 'Graph' | 'Edge' | 'Node';
 }
 
 /** NodeRef AST object. */
-export interface NodeRefASTNode extends ASTBaseNode {
+export interface NodeRefASTNode extends ASTBaseParentNode<never>, NodeRefASTPropaties {
   type: 'NodeRef';
-  id: LiteralASTNode;
-  port?: LiteralASTNode;
-  compass?: LiteralASTNode<Compass>;
 }
 
 /** NodeRefGroup AST object. */
-export interface NodeRefGroupASTNode extends ASTBaseParentNode<NodeRefASTNode> {
+export interface NodeRefGroupASTNode extends ASTBaseParentNode<NodeRefASTNode>, NodeRefGroupASTPropaties {
   type: 'NodeRefGroup';
 }
 
 export type EdgeTargetASTNode = NodeRefASTNode | NodeRefGroupASTNode;
 
 /** Edge AST object. */
-export interface EdgeASTNode extends ASTBaseParentNode<AttributeASTNode> {
+export interface EdgeASTNode extends ASTBaseParentNode<AttributeASTNode>, EdgeASTPropaties {
   type: 'Edge';
-  targets: [from: EdgeTargetASTNode, to: EdgeTargetASTNode, ...rest: EdgeTargetASTNode[]];
 }
 
 /** Node AST object. */
-export interface NodeASTNode extends ASTBaseParentNode<AttributeASTNode> {
+export interface NodeASTNode extends ASTBaseParentNode<AttributeASTNode>, NodeASTPropaties {
   type: 'Node';
-  id: LiteralASTNode;
 }
 
 /** Subgraph AST object. */
-export interface SubgraphASTNode extends ASTBaseParentNode<ClusterStatementASTNode> {
+export interface SubgraphASTNode extends ASTBaseParentNode<ClusterStatementASTNode>, SubgraphASTPropaties {
   type: 'Subgraph';
-  id?: LiteralASTNode;
 }
 
 export type StatementASTNode = GraphASTNode | CommentASTNode;
@@ -135,3 +164,7 @@ export type ASTNode =
   | EdgeASTNode
   | NodeASTNode
   | SubgraphASTNode;
+
+export type ASTType<T extends ASTNode> = T['type'];
+
+export type ASTChildNode<T> = T extends ASTBaseParentNode<infer C> ? C : never;

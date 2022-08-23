@@ -50,7 +50,7 @@ function convertToEdgeTargetTuple(edge: EdgeASTNode): EdgeTargetTuple {
       case 'NodeRef':
         return { id: t.id.value, port: t.port?.value, compass: t.compass?.value };
       case 'NodeRefGroup':
-        return t.body.map((r) => ({ id: r.id.value, port: r.port?.value, compass: r.compass?.value }));
+        return t.children.map((r) => ({ id: r.id.value, port: r.port?.value, compass: r.compass?.value }));
     }
   }) as EdgeTargetTuple;
 }
@@ -61,7 +61,7 @@ function applyStatements(cluster: GraphBaseModel, statements: ClusterStatementAS
     switch (stmt.type) {
       case 'Subgraph': {
         const subgraph = stmt.id ? cluster.subgraph(stmt.id.value) : cluster.subgraph();
-        applyStatements(subgraph, stmt.body);
+        applyStatements(subgraph, stmt.children);
         if (stmt.location) {
           commentHolder.apply(subgraph, stmt.location);
         }
@@ -76,7 +76,7 @@ function applyStatements(cluster: GraphBaseModel, statements: ClusterStatementAS
           commentHolder.apply(
             cluster.node(
               stmt.id.value,
-              stmt.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+              stmt.children.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
             ),
             stmt.location,
           );
@@ -87,14 +87,14 @@ function applyStatements(cluster: GraphBaseModel, statements: ClusterStatementAS
           commentHolder.apply(
             cluster.edge(
               convertToEdgeTargetTuple(stmt),
-              stmt.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+              stmt.children.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
             ),
             stmt.location,
           );
         }
         break;
       case 'AttributeList': {
-        const attrs: { [key: string]: string } = stmt.body
+        const attrs: { [key: string]: string } = stmt.children
           .filter<AttributeASTNode>((v): v is AttributeASTNode => v.type === 'Attribute')
           .reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {});
         switch (stmt.kind) {
@@ -138,31 +138,31 @@ export function convert(
   switch (ast.type) {
     case 'Graph': {
       const root = new Graph(ast.directed, ast.id?.value, ast.strict);
-      applyStatements(root, ast.body);
+      applyStatements(root, ast.children);
       return root;
     }
     case 'Subgraph': {
       const subgraph = new Subgraph(ast.id?.value);
-      applyStatements(subgraph, ast.body);
+      applyStatements(subgraph, ast.children);
       return subgraph;
     }
     case 'Edge': {
       const edge = new Edge(
         convertToEdgeTargetTuple(ast),
-        ast.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+        ast.children.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
       );
       return edge;
     }
     case 'Node': {
       const node = new Node(
         ast.id.value,
-        ast.body.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+        ast.children.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
       );
       return node;
     }
     case 'Dot': {
       const commentHolder = new CommentHolder();
-      for (const stmt of ast.body) {
+      for (const stmt of ast.children) {
         switch (stmt.type) {
           case 'Comment':
             commentHolder.set(stmt);
