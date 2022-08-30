@@ -8,6 +8,14 @@ import type {
   GraphAttributeKey,
   SubgraphAttributeKey,
 } from '../attribute/index.js';
+import type {
+  ASTNode,
+  NodeASTNode,
+  GraphASTNode,
+  AttributeListASTNode,
+  SubgraphASTNode,
+  EdgeASTNode,
+} from '../ast/index.js';
 
 /**
  * Objects that can be Edge destinations satisfy this interface.
@@ -42,20 +50,24 @@ export type NodeAttributesObject = AttributesObject<NodeAttributeKey>;
 export type GraphAttributesObject = AttributesObject<GraphAttributeKey>;
 export type SubgraphAttributesObject = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey>;
 
+export interface Model<T extends ASTNode> {
+  $$type: T['type'];
+}
+
 export interface HasComment {
   /** Comments to include when outputting with toDot. */
   comment?: string;
 }
 
 export interface HasAttributes<T extends AttributeKey> {
-  readonly attributes: AttributeListModel<T>;
+  readonly attributes: AttributesGroup<T>;
 }
 
 export interface ForwardRefNode extends Partial<Port> {
   readonly id: string;
 }
 
-export interface AttributesBaseModel<T extends AttributeKey> {
+export interface Attributes<T extends AttributeKey> {
   readonly size: number;
   readonly values: ReadonlyArray<[T, Attribute<T>]>;
   get(key: T): Attribute<T> | undefined;
@@ -65,19 +77,30 @@ export interface AttributesBaseModel<T extends AttributeKey> {
   clear(): void;
 }
 
-export interface AttributeListModel<T extends AttributeKey = AttributeKey> extends AttributesBaseModel<T>, HasComment {}
+export interface AttributesGroup<T extends AttributeKey> extends Attributes<T>, HasComment {}
+
+export type AttributeListKind = 'Graph' | 'Edge' | 'Node';
+
+export interface AttributeListModel<
+  K extends AttributeListKind = AttributeListKind,
+  T extends AttributeKey = AttributeKey,
+> extends Attributes<T>,
+    HasComment,
+    Model<AttributeListASTNode> {
+  $$kind: K;
+}
 
 export interface Port {
   port: string;
   compass: Compass;
 }
 
-export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey> {
+export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey>, Model<NodeASTNode> {
   readonly id: string;
   port(port: string | Partial<Port>): ForwardRefNode;
 }
 
-export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey> {
+export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey>, Model<EdgeASTNode> {
   readonly targets: EdgeTargetTuple;
 }
 
@@ -86,18 +109,18 @@ export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey> {
  *
  * @hidden
  */
-export interface GraphCommonAttributeList {
+export interface GraphCommonAttributes {
   /** Manage common attributes of graphs in a cluster. */
-  graph: AttributeListModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey>;
+  graph: AttributeListModel<'Graph', SubgraphAttributeKey | ClusterSubgraphAttributeKey>;
   /** Manage common attributes of edges in a cluster. */
-  edge: AttributeListModel<EdgeAttributeKey>;
+  edge: AttributeListModel<'Edge', EdgeAttributeKey>;
   /** Manage common attributes of nodes in a cluster. */
-  node: AttributeListModel<NodeAttributeKey>;
+  node: AttributeListModel<'Node', NodeAttributeKey>;
 }
 
-export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends HasComment, AttributesBaseModel<T> {
+export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends HasComment, Attributes<T> {
   readonly id?: string;
-  readonly attributes: Readonly<GraphCommonAttributeList>;
+  readonly attributes: Readonly<GraphCommonAttributes>;
   readonly nodes: ReadonlyArray<NodeModel>;
   readonly edges: ReadonlyArray<EdgeModel>;
   readonly subgraphs: ReadonlyArray<SubgraphModel>;
@@ -428,11 +451,13 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
   graph(attributes: SubgraphAttributesObject): void;
 }
 
-export interface SubgraphModel extends GraphBaseModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey> {
+export interface SubgraphModel
+  extends GraphBaseModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey>,
+    Model<SubgraphASTNode> {
   isSubgraphCluster(): boolean;
 }
 
-export interface GraphModel extends GraphBaseModel<GraphAttributeKey> {
+export interface GraphModel extends GraphBaseModel<GraphAttributeKey>, Model<GraphASTNode> {
   directed: boolean;
 
   /**

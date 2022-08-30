@@ -1,25 +1,122 @@
-import {
+import type {
+  Attribute,
   AttributeKey,
-  SubgraphAttributeKey,
   ClusterSubgraphAttributeKey,
   EdgeAttributeKey,
+  GraphAttributeKey,
   NodeAttributeKey,
+  SubgraphAttributeKey,
 } from '../attribute/index.js';
-import { Attributes, AttributesBase } from './attributes-base.js';
-import { isNodeRefGroupLike, Node, toNodeRef, toNodeRefGroup } from './nodes.js';
-import { Edge } from './edges.js';
-import {
-  GraphBaseModel,
-  GraphCommonAttributeList,
-  NodeModel,
-  EdgeModel,
-  SubgraphModel,
-  SubgraphAttributesObject,
-  NodeAttributesObject,
-  EdgeTargetLikeTuple,
+import type {
+  Attributes,
+  AttributesObject,
+  AttributesEntities,
+  AttributeListModel,
   EdgeAttributesObject,
+  EdgeModel,
+  EdgeTargetLikeTuple,
   EdgeTargetTuple,
+  GraphBaseModel,
+  GraphCommonAttributes,
+  NodeAttributesObject,
+  NodeModel,
+  SubgraphAttributesObject,
+  SubgraphModel,
+  ForwardRefNode,
+  GraphAttributesObject,
+  GraphModel,
+  AttributeListKind,
+  AttributesGroup,
+  Port,
 } from './types.js';
+import { isNodeRefGroupLike, toNodeRefGroup, toNodeRef, isNodeRefLike } from './utils.js';
+
+/**
+ * Classes implemented in the 'ts-graphviz' library are designed to inherit from this class.
+ */
+export abstract class GraphvizObject {}
+
+/**
+ * Classes implemented in the 'ts-graphviz' library that implement the `toDot` method are designed to inherit from this class.
+ */
+export abstract class DotObject extends GraphvizObject {}
+
+/**
+ */
+export abstract class AttributesBase<T extends AttributeKey> extends DotObject implements Attributes<T> {
+  /** @hidden */
+  #attrs: Map<T, Attribute<T>> = new Map();
+
+  constructor(attributes?: AttributesObject<T>) {
+    super();
+    if (attributes !== undefined) {
+      this.apply(attributes);
+    }
+  }
+
+  get values(): ReadonlyArray<[T, Attribute<T>]> {
+    return Array.from(this.#attrs.entries());
+  }
+
+  /** The size of the attribute. */
+  get size(): number {
+    return this.#attrs.size;
+  }
+
+  /** The size of the attribute. */
+  public get(key: T): Attribute<T> | undefined {
+    return this.#attrs.get(key);
+  }
+
+  /** Set a value to the attribute. */
+  public set(key: T, value: Attribute<T>): void {
+    if (value !== null && value !== undefined) {
+      this.#attrs.set(key, value);
+    }
+  }
+
+  public delete(key: T): void {
+    this.#attrs.delete(key);
+  }
+
+  public apply(attributes: AttributesObject<T> | AttributesEntities<T>): void {
+    const entries = Array.isArray(attributes) ? attributes : Object.entries(attributes);
+    for (const [key, value] of entries) {
+      this.set(key, value);
+    }
+  }
+
+  public clear(): void {
+    this.#attrs.clear();
+  }
+}
+
+/**
+ * A set of attribute values for any object.
+ */
+export class AttributesGroupModel<T extends AttributeKey = AttributeKey> extends AttributesBase<T> {
+  /** Comments to include when outputting with toDot. */
+  public comment?: string;
+}
+
+/**
+ * A set of attribute values for any object.
+ */
+export class AttributeList<K extends AttributeListKind, T extends AttributeKey = AttributeKey>
+  extends AttributesBase<T>
+  implements AttributeListModel<K, T>
+{
+  public get $$type(): 'AttributeList' {
+    return 'AttributeList';
+  }
+
+  /** Comments to include when outputting with toDot. */
+  public comment?: string;
+
+  constructor(public $$kind: K, attributes?: AttributesObject<T>) {
+    super(attributes);
+  }
+}
 
 /**
  * Base class for clusters.
@@ -33,14 +130,14 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
   public comment?: string;
 
   /** Common attributes of objects in the cluster. */
-  public abstract readonly attributes: Readonly<GraphCommonAttributeList>;
+  public abstract readonly attributes: Readonly<GraphCommonAttributes>;
 
   /**
    * Nodes in the cluster.
    * @hidden
    */
   get nodes(): ReadonlyArray<NodeModel> {
-    return Array.from(this.objects.nodes.values());
+    return Array.from(this.#objects.nodes.values());
   }
 
   /**
@@ -48,7 +145,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * @hidden
    */
   get edges(): ReadonlyArray<EdgeModel> {
-    return Array.from(this.objects.edges.values());
+    return Array.from(this.#objects.edges.values());
   }
 
   /**
@@ -56,10 +153,10 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * @hidden
    */
   get subgraphs(): ReadonlyArray<SubgraphModel> {
-    return Array.from(this.objects.subgraphs.values());
+    return Array.from(this.#objects.subgraphs.values());
   }
 
-  private readonly objects: Readonly<{
+  #objects: Readonly<{
     nodes: Map<string, NodeModel>;
     edges: Set<EdgeModel>;
     subgraphs: Set<SubgraphModel>;
@@ -73,42 +170,42 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * Add a Node to the cluster.
    */
   public addNode(node: NodeModel): void {
-    this.objects.nodes.set(node.id, node);
+    this.#objects.nodes.set(node.id, node);
   }
 
   /**
    * Add Edge to the cluster.
    */
   public addEdge(edge: EdgeModel): void {
-    this.objects.edges.add(edge);
+    this.#objects.edges.add(edge);
   }
 
   /**
    * Add a Subgraph to the cluster.
    */
   public addSubgraph(subgraph: SubgraphModel): void {
-    this.objects.subgraphs.add(subgraph);
+    this.#objects.subgraphs.add(subgraph);
   }
 
   /**
    * Check if the Node exists in the cluster.
    */
   public existNode(nodeId: string): boolean {
-    return this.objects.nodes.has(nodeId);
+    return this.#objects.nodes.has(nodeId);
   }
 
   /**
    * Check if the Edge exists in the cluster.
    */
   public existEdge(edge: EdgeModel): boolean {
-    return this.objects.edges.has(edge);
+    return this.#objects.edges.has(edge);
   }
 
   /**
    * Check if the Subgraph exists in the cluster.
    */
   public existSubgraph(subgraph: SubgraphModel): boolean {
-    return this.objects.subgraphs.has(subgraph);
+    return this.#objects.subgraphs.has(subgraph);
   }
 
   /**
@@ -122,7 +219,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
     const id = args.find((arg): arg is string => typeof arg === 'string');
     const attributes = args.find((arg): arg is SubgraphAttributesObject => typeof arg === 'object');
     const graph = new Subgraph(id, attributes);
-    this.objects.subgraphs.add(graph);
+    this.#objects.subgraphs.add(graph);
     return graph;
   }
 
@@ -130,21 +227,21 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * Remove Node from the cluster.
    */
   public removeNode(node: NodeModel | string): void {
-    this.objects.nodes.delete(typeof node === 'string' ? node : node.id);
+    this.#objects.nodes.delete(typeof node === 'string' ? node : node.id);
   }
 
   /**
    * Remove Edge from the cluster.
    */
   public removeEdge(edge: EdgeModel): void {
-    this.objects.edges.delete(edge);
+    this.#objects.edges.delete(edge);
   }
 
   /**
    * Remove Subgraph from the cluster.
    */
   public removeSubgraph(subgraph: SubgraphModel): void {
-    this.objects.subgraphs.delete(subgraph);
+    this.#objects.subgraphs.delete(subgraph);
   }
 
   /**
@@ -152,7 +249,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    */
   public createNode(id: string, attributes?: NodeAttributesObject): NodeModel {
     const node = new Node(id, attributes);
-    this.objects.nodes.set(id, node);
+    this.#objects.nodes.set(id, node);
     return node;
   }
 
@@ -162,7 +259,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * If there is no Subgraph with the specified id in the cluster, return undefined.
    */
   public getSubgraph(id: string): SubgraphModel | undefined {
-    return Array.from(this.objects.subgraphs.values()).find((subgraph) => subgraph.id === id);
+    return Array.from(this.#objects.subgraphs.values()).find((subgraph) => subgraph.id === id);
   }
 
   /**EdgeAttributesObject
@@ -172,14 +269,14 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * If there is no Node with the specified id in the cluster, return undefined.
    */
   public getNode(id: string): NodeModel | undefined {
-    return this.objects.nodes.get(id);
+    return this.#objects.nodes.get(id);
   }
 
   /** Create Edge and add it to the cluster. */
   public createEdge(targets: EdgeTargetLikeTuple, attributes?: EdgeAttributesObject): EdgeModel {
     const ts = targets.map((t) => (isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t))) as EdgeTargetTuple;
     const edge = new Edge(ts, attributes);
-    this.objects.edges.add(edge);
+    this.#objects.edges.add(edge);
     return edge;
   }
 
@@ -518,15 +615,15 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
 
 /**
  * Subgraph object.
- * @category Domain Model
  */
 export class Subgraph extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAttributeKey> implements SubgraphModel {
+  public readonly $$type = 'Subgraph';
   public readonly id?: string;
 
   public attributes = Object.freeze({
-    graph: new Attributes<ClusterSubgraphAttributeKey>(),
-    edge: new Attributes<EdgeAttributeKey>(),
-    node: new Attributes<NodeAttributeKey>(),
+    graph: new AttributeList<'Graph', SubgraphAttributeKey | ClusterSubgraphAttributeKey>('Graph'),
+    edge: new AttributeList<'Edge', EdgeAttributeKey>('Edge'),
+    node: new AttributeList<'Node', NodeAttributeKey>('Node'),
   });
 
   constructor(id?: string, attributes?: SubgraphAttributesObject);
@@ -548,5 +645,97 @@ export class Subgraph extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAt
       return this.id.startsWith('cluster');
     }
     return false;
+  }
+}
+
+/**
+ * Node object.
+ */
+export class Node extends DotObject implements NodeModel {
+  public readonly $$type = 'Node';
+  /** Comments to include when outputting with toDot. */
+  public comment?: string;
+
+  public readonly attributes: AttributesGroup<NodeAttributeKey>;
+
+  constructor(public readonly id: string, attributes?: NodeAttributesObject) {
+    super();
+    this.attributes = new AttributesGroupModel(attributes);
+  }
+
+  /** Returns ForwardRefNode with port and compass specified. */
+  public port(port: string | Partial<Port>): ForwardRefNode {
+    if (typeof port === 'string') {
+      return { id: this.id, port };
+    }
+    return { id: this.id, ...port };
+  }
+}
+
+/**
+ */
+export class Edge extends DotObject implements EdgeModel {
+  public readonly $$type = 'Edge';
+
+  /** Comments to include when outputting with toDot. */
+  public comment?: string;
+
+  public readonly attributes: AttributesGroup<EdgeAttributeKey>;
+
+  constructor(public readonly targets: EdgeTargetTuple, attributes?: EdgeAttributesObject) {
+    super();
+    if (targets.length < 2 && (isNodeRefLike(targets[0]) && isNodeRefLike(targets[1])) === false) {
+      throw Error('The element of Edge target is missing or not satisfied as Edge target.');
+    }
+    this.attributes = new AttributesGroupModel(attributes);
+  }
+}
+
+/**
+ * Base class for RootCluster.
+ *
+ * @category Domain Model
+ */
+export class Graph extends GraphBase<GraphAttributeKey> implements GraphModel {
+  public get $$type(): 'Graph' {
+    return 'Graph';
+  }
+  public readonly id?: string;
+
+  public readonly directed: boolean;
+  /**
+   * Strict mode.
+   *
+   * @description
+   * A graph may also be described as strict.
+   * This forbids the creation of multi-edges, i.e., there can be at most one edge with a given tail node and head node in the directed case.
+   * For undirected graphs, there can be at most one edge connected to the same two nodes.
+   * Subsequent edge statements using the same two nodes will identify the edge with the previously defined one and apply any attributes given in the edge statement.
+   */
+  public strict: boolean;
+
+  public attributes = Object.freeze({
+    graph: new AttributeList<'Graph', SubgraphAttributeKey | ClusterSubgraphAttributeKey>('Graph'),
+    edge: new AttributeList<'Edge', EdgeAttributeKey>('Edge'),
+    node: new AttributeList<'Node', NodeAttributeKey>('Node'),
+  });
+
+  constructor(directed: boolean, id?: string, attributes?: GraphAttributesObject);
+
+  constructor(directed: boolean, id?: string, strict?: boolean, attributes?: GraphAttributesObject);
+
+  constructor(directed: boolean, strict?: boolean, attributes?: GraphAttributesObject);
+
+  constructor(directed: boolean, attributes?: GraphAttributesObject);
+
+  constructor(directed: boolean, ...args: unknown[]) {
+    super();
+    this.directed = directed;
+    this.id = args.find((arg): arg is string => typeof arg === 'string');
+    this.strict = args.find((arg): arg is boolean => typeof arg === 'boolean') ?? false;
+    const attributes = args.find((arg): arg is GraphAttributesObject => typeof arg === 'object' && arg !== null);
+    if (attributes !== undefined) {
+      this.apply(attributes);
+    }
   }
 }

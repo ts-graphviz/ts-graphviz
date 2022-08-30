@@ -27,7 +27,7 @@ export interface GraphASTPropaties extends ASTCommonPropaties {
 }
 export interface LiteralASTPropaties<T extends string = string> extends ASTCommonPropaties {
   value: T;
-  quoted?: boolean | 'html';
+  quoted: boolean | 'html';
 }
 export interface SubgraphASTPropaties extends ASTCommonPropaties {
   id?: LiteralASTNode;
@@ -164,7 +164,5 @@ export type ASTNode =
   | EdgeASTNode
   | NodeASTNode
   | SubgraphASTNode;
-
-export type ASTType<T extends ASTNode> = T['type'];
 
 export type ASTChildNode<T> = T extends ASTBaseParentNode<infer C> ? C : never;

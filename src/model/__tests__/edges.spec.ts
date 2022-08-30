@@ -1,7 +1,5 @@
 import { attribute } from '../../attribute/index.js';
-import { DotObject, GraphvizObject } from '../abstract.js';
-import { Edge } from '../edges.js';
-import { Node } from '../nodes.js';
+import { DotObject, GraphvizObject, Edge, Node } from '../models.js';
 import { EdgeTargetTuple } from '../types.js';
 
 describe('class Edge', () => {

@@ -1,8 +1,5 @@
 import { attribute } from '../../attribute/index.js';
-import { DotObject, GraphvizObject } from '../abstract.js';
-import { AttributesBase } from '../attributes-base.js';
-import { GraphBase, Subgraph } from '../clusters.js';
-import { Node } from '../nodes.js';
+import { DotObject, GraphvizObject, GraphBase, Subgraph, AttributesBase, Node } from '../models.js';
 import { EdgeTargetTuple, SubgraphModel } from '../types.js';
 
 describe('class Subgraph', () => {

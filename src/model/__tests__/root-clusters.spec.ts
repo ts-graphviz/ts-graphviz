@@ -1,9 +1,4 @@
-import { DotObject, GraphvizObject } from '../abstract.js';
-import { AttributesBase } from '../attributes-base.js';
-import { GraphBase } from '../clusters.js';
-import { Edge } from '../edges.js';
-import { Node } from '../nodes.js';
-import { Graph } from '../root-clusters.js';
+import { DotObject, GraphvizObject, AttributesBase, GraphBase, Edge, Node, Graph } from '../models.js';
 import { EdgeTargetTuple } from '../types.js';
 
 describe('Graph', () => {

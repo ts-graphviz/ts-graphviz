@@ -38,26 +38,26 @@ export class Builder {
 
   constructor(private config: Partial<BuilderConfig> = {}) {}
 
-  public createElement(
-    type: 'Literal',
-    props: LiteralASTPropaties,
-    children: ASTChildNode<LiteralASTNode>[],
-  ): LiteralASTNode;
   public createElement<T extends string>(
     type: 'Literal',
     props: LiteralASTPropaties<T>,
     children: ASTChildNode<LiteralASTNode>[],
   ): LiteralASTNode<T>;
+  public createElement(
+    type: 'Literal',
+    props: LiteralASTPropaties,
+    children: ASTChildNode<LiteralASTNode>[],
+  ): LiteralASTNode;
   public createElement(type: 'Dot', props: DotASTPropaties, children: ASTChildNode<DotASTNode>[]): DotASTNode;
   public createElement(type: 'Graph', props: GraphASTPropaties, children: ASTChildNode<GraphASTNode>[]): GraphASTNode;
-  public createElement(
-    type: 'Attribute',
-    props: AttributeASTPropaties,
-    children: ASTChildNode<AttributeASTNode>[],
-  ): AttributeASTNode;
   public createElement<T extends AttributeKey>(
     type: 'Attribute',
     props: AttributeASTPropaties<T>,
+    children: ASTChildNode<AttributeASTNode>[],
+  ): AttributeASTNode;
+  public createElement(
+    type: 'Attribute',
+    props: AttributeASTPropaties,
     children: ASTChildNode<AttributeASTNode>[],
   ): AttributeASTNode;
   public createElement(

@@ -1,15 +1,15 @@
 import { attribute } from '../../attribute/index.js';
-import { DotObject, GraphvizObject } from '../abstract.js';
-import { Attributes, AttributesBase } from '../attributes-base.js';
+import { DotObject, GraphvizObject } from '../models.js';
+import { AttributeList, AttributesBase } from '../models.js';
 
-describe('class Attributes', () => {
-  let attrs: Attributes;
+describe('class AttributeList', () => {
+  let attrs: AttributeList<'Node'>;
   beforeEach(() => {
-    attrs = new Attributes();
+    attrs = new AttributeList('Node');
   });
 
-  it('should be instance of Attributes/AttributesBase/DotObject/GraphvizObject', () => {
-    expect(attrs).toBeInstanceOf(Attributes);
+  it('should be instance of AttributeList/AttributesBase/DotObject/GraphvizObject', () => {
+    expect(attrs).toBeInstanceOf(AttributeList);
     expect(attrs).toBeInstanceOf(AttributesBase);
     expect(attrs).toBeInstanceOf(DotObject);
     expect(attrs).toBeInstanceOf(GraphvizObject);
@@ -21,7 +21,7 @@ describe('class Attributes', () => {
 
   describe('Constructor', () => {
     test('with attribute object', () => {
-      attrs = new Attributes({
+      attrs = new AttributeList('Node', {
         [attribute.label]: 'Label',
       });
       expect(attrs.size).toBe(1);
