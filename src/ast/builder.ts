@@ -27,16 +27,16 @@ import type {
   SubgraphASTPropaties,
 } from './types.js';
 
-export interface BuilderConfig {
+export interface BuilderOptions {
   locationFunction: () => FileRange;
 }
 
 export class Builder {
   private getLocation(): FileRange | null {
-    return this.config.locationFunction?.() ?? null;
+    return this.options?.locationFunction?.() ?? null;
   }
 
-  constructor(private config: Partial<BuilderConfig> = {}) {}
+  constructor(private options?: Partial<BuilderOptions>) {}
 
   public createElement<T extends string>(
     type: 'Literal',
@@ -97,3 +97,5 @@ export class Builder {
     };
   }
 }
+
+export const createElement = Builder.prototype.createElement.bind(new Builder());
