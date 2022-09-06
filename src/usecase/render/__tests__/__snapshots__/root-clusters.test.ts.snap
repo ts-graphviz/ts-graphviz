@@ -3,26 +3,24 @@
 exports[`RootClusters rendering Digraph renders correctly by toDot method digraph with comment multi line comment 1`] = `
 "// this is comment.
 // second line.
-digraph {
-}"
+digraph {}"
 `;
 
 exports[`RootClusters rendering Digraph renders correctly by toDot method digraph with comment single line comment 1`] = `
 "// this is comment.
-digraph {
-}"
+digraph {}"
 `;
 
 exports[`RootClusters rendering Digraph renders correctly by toDot method has some attributes 1`] = `
 "digraph {
   graph [
-    color = \\"red\\",
+    color = \\"red\\";
   ];
   edge [
-    label = \\"edge label\\",
+    label = \\"edge label\\";
   ];
   node [
-    xlabel = \\"node xlabel\\",
+    xlabel = \\"node xlabel\\";
   ];
 }"
 `;
@@ -30,13 +28,13 @@ exports[`RootClusters rendering Digraph renders correctly by toDot method has so
 exports[`RootClusters rendering Digraph renders correctly by toDot method label attribute behavior html like 1`] = `
 "digraph {
   graph [
-    label = <<B>this is test for graph label</B>>,
+    label = <<B>this is test for graph label</B>>;
   ];
   edge [
-    label = <<U>this is test for edge label</U>>,
+    label = <<U>this is test for edge label</U>>;
   ];
   node [
-    label = <<I>this is test for node label</I>>,
+    label = <<I>this is test for node label</I>>;
   ];
 }"
 `;
@@ -44,13 +42,13 @@ exports[`RootClusters rendering Digraph renders correctly by toDot method label 
 exports[`RootClusters rendering Digraph renders correctly by toDot method label attribute behavior plain text label to be quoted by double quotation 1`] = `
 "digraph {
   graph [
-    label = \\"this is test for graph label\\",
+    label = \\"this is test for graph label\\";
   ];
   edge [
-    label = \\"this is test for edge label\\",
+    label = \\"this is test for edge label\\";
   ];
   node [
-    label = \\"this is test for node label\\",
+    label = \\"this is test for node label\\";
   ];
 }"
 `;
@@ -76,15 +74,9 @@ exports[`RootClusters rendering Digraph renders correctly by toDot method set at
 }"
 `;
 
-exports[`RootClusters rendering Digraph renders correctly by toDot method simple g 1`] = `
-"digraph {
-}"
-`;
+exports[`RootClusters rendering Digraph renders correctly by toDot method simple g 1`] = `"digraph {}"`;
 
-exports[`RootClusters rendering Digraph renders correctly by toDot method strict graph 1`] = `
-"strict digraph {
-}"
-`;
+exports[`RootClusters rendering Digraph renders correctly by toDot method strict graph 1`] = `"strict digraph {}"`;
 
 exports[`RootClusters rendering Digraph renders correctly by toDot method subgraphs 1`] = `
 "digraph {
@@ -125,26 +117,24 @@ exports[`RootClusters rendering Digraph renders correctly by toDot method subgra
 exports[`RootClusters rendering Graph renders correctly by toDot method digraph with comment multi line comment 1`] = `
 "// this is comment.
 // second line.
-graph {
-}"
+graph {}"
 `;
 
 exports[`RootClusters rendering Graph renders correctly by toDot method digraph with comment single line comment 1`] = `
 "// this is comment.
-graph {
-}"
+graph {}"
 `;
 
 exports[`RootClusters rendering Graph renders correctly by toDot method has some attributes 1`] = `
 "graph {
   graph [
-    color = \\"red\\",
+    color = \\"red\\";
   ];
   edge [
-    label = \\"edge label\\",
+    label = \\"edge label\\";
   ];
   node [
-    xlabel = \\"node xlabel\\",
+    xlabel = \\"node xlabel\\";
   ];
 }"
 `;
@@ -152,13 +142,13 @@ exports[`RootClusters rendering Graph renders correctly by toDot method has some
 exports[`RootClusters rendering Graph renders correctly by toDot method label attribute behavior html like 1`] = `
 "graph {
   graph [
-    label = <<B>this is test for graph label</B>>,
+    label = <<B>this is test for graph label</B>>;
   ];
   edge [
-    label = <<U>this is test for edge label</U>>,
+    label = <<U>this is test for edge label</U>>;
   ];
   node [
-    label = <<I>this is test for node label</I>>,
+    label = <<I>this is test for node label</I>>;
   ];
 }"
 `;
@@ -166,13 +156,13 @@ exports[`RootClusters rendering Graph renders correctly by toDot method label at
 exports[`RootClusters rendering Graph renders correctly by toDot method label attribute behavior plain text label to be quoted by double quotation 1`] = `
 "graph {
   graph [
-    label = \\"this is test for graph label\\",
+    label = \\"this is test for graph label\\";
   ];
   edge [
-    label = \\"this is test for edge label\\",
+    label = \\"this is test for edge label\\";
   ];
   node [
-    label = \\"this is test for node label\\",
+    label = \\"this is test for node label\\";
   ];
 }"
 `;
@@ -198,15 +188,9 @@ exports[`RootClusters rendering Graph renders correctly by toDot method set attr
 }"
 `;
 
-exports[`RootClusters rendering Graph renders correctly by toDot method simple g 1`] = `
-"graph {
-}"
-`;
+exports[`RootClusters rendering Graph renders correctly by toDot method simple g 1`] = `"graph {}"`;
 
-exports[`RootClusters rendering Graph renders correctly by toDot method strict graph 1`] = `
-"strict graph {
-}"
-`;
+exports[`RootClusters rendering Graph renders correctly by toDot method strict graph 1`] = `"strict graph {}"`;
 
 exports[`RootClusters rendering Graph renders correctly by toDot method subgraphs 1`] = `
 "graph {

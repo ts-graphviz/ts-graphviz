@@ -57,7 +57,7 @@ describe('stringify', () => {
           kind: 'Node',
           children: [],
         }),
-      ).toMatchInlineSnapshot('"Node;"');
+      ).toMatchInlineSnapshot(`"node [];"`);
     });
 
     test('edge', () => {
@@ -67,7 +67,7 @@ describe('stringify', () => {
           kind: 'Edge',
           children: [],
         }),
-      ).toMatchInlineSnapshot('"Edge;"');
+      ).toMatchInlineSnapshot(`"edge [];"`);
     });
 
     test('graph', () => {
@@ -77,7 +77,7 @@ describe('stringify', () => {
           kind: 'Graph',
           children: [],
         }),
-      ).toMatchInlineSnapshot('"Graph;"');
+      ).toMatchInlineSnapshot(`"graph [];"`);
     });
 
     test('with attribute', () => {
@@ -94,18 +94,20 @@ describe('stringify', () => {
                 quoted: false,
                 children: [],
               },
+
               value: {
                 type: 'Literal',
                 value: 'hoge',
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
           ],
         }),
       ).toMatchInlineSnapshot(`
-        "Node [
+        "node [
           color = hoge;
         ];"
       `);
@@ -131,6 +133,7 @@ describe('stringify', () => {
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
 
@@ -149,12 +152,13 @@ describe('stringify', () => {
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
           ],
         }),
       ).toMatchInlineSnapshot(`
-        "Node [
+        "node [
           color = hoge;
           bgcolor = fuga;
         ];"

@@ -129,12 +129,12 @@ export interface NodeRefGroupASTNode extends ASTBaseParentNode<NodeRefASTNode>, 
 export type EdgeTargetASTNode = NodeRefASTNode | NodeRefGroupASTNode;
 
 /** Edge AST object. */
-export interface EdgeASTNode extends ASTBaseParentNode<AttributeASTNode>, EdgeASTPropaties {
+export interface EdgeASTNode extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>, EdgeASTPropaties {
   type: 'Edge';
 }
 
 /** Node AST object. */
-export interface NodeASTNode extends ASTBaseParentNode<AttributeASTNode>, NodeASTPropaties {
+export interface NodeASTNode extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>, NodeASTPropaties {
   type: 'Node';
 }
 

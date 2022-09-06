@@ -7,18 +7,18 @@ exports[`function digraph callback style 1`] = `
   \\"cc\\";
   subgraph \\"A\\" {
     \\"Aaa\\" [
-      color = \\"pink\\",
+      color = \\"pink\\";
     ];
     \\"Abb\\" [
-      color = \\"violet\\",
+      color = \\"violet\\";
     ];
     \\"Acc\\";
     \\"Aaa\\":\\"a\\" -> \\"Abb\\" -> \\"Acc\\" -> \\"E\\" [
-      color = \\"red\\",
+      color = \\"red\\";
     ];
   }
   \\"aa\\" -> \\"bb\\" -> \\"cc\\" [
-    color = \\"red\\",
+    color = \\"red\\";
   ];
 }"
 `;
@@ -30,18 +30,18 @@ exports[`function digraph callback style, set attributes by attributes object 1`
   \\"cc\\";
   subgraph \\"A\\" {
     \\"Aaa\\" [
-      color = \\"pink\\",
+      color = \\"pink\\";
     ];
     \\"Abb\\" [
-      color = \\"violet\\",
+      color = \\"violet\\";
     ];
     \\"Acc\\";
     \\"Aaa\\":\\"a\\" -> \\"Abb\\" -> \\"Acc\\" -> \\"E\\" [
-      color = \\"red\\",
+      color = \\"red\\";
     ];
   }
   \\"aa\\" -> \\"bb\\" -> \\"cc\\" [
-    color = \\"red\\",
+    color = \\"red\\";
   ];
 }"
 `;
@@ -50,14 +50,14 @@ exports[`function digraph class base 1`] = `
 "digraph {
   subgraph \\"A\\" {
     \\"A_node1\\" [
-      color = \\"red\\",
+      color = \\"red\\";
     ];
     \\"A_node2\\" [
-      color = \\"blue\\",
+      color = \\"blue\\";
     ];
     \\"A_node1\\" -> \\"A_node2\\" [
-      label = \\"Edge Label\\",
-      color = \\"pink\\",
+      label = \\"Edge Label\\";
+      color = \\"pink\\";
     ];
   }
 }"
@@ -78,22 +78,19 @@ digraph \\"G\\" {
     // This is node Aaa in subgraph A.
     \\"Aaa\\" [
       // It will be filled by pink.
-      color = \\"pink\\",
+      color = \\"pink\\";
     ];
   }
   // This is edge.
   // It connects a, b and c.
   \\"aa\\" -> \\"bb\\" -> \\"cc\\" [
     // Edge line will draw with red.
-    color = \\"red\\",
+    color = \\"red\\";
   ];
 }"
 `;
 
-exports[`function digraph root create function id 1`] = `
-"digraph \\"id\\" {
-}"
-`;
+exports[`function digraph root create function id 1`] = `"digraph \\"id\\" {}"`;
 
 exports[`function digraph root create function id with attributes 1`] = `
 "digraph \\"id\\" {
@@ -107,10 +104,7 @@ exports[`function digraph root create function no id with attributes 1`] = `
 }"
 `;
 
-exports[`function digraph root create function no parameters 1`] = `
-"digraph {
-}"
-`;
+exports[`function digraph root create function no parameters 1`] = `"digraph {}"`;
 
 exports[`function digraph root create function strict id with attributes 1`] = `
 "strict digraph \\"id\\" {
@@ -124,10 +118,7 @@ exports[`function digraph root create function strict no id with attributes 1`] 
 }"
 `;
 
-exports[`function digraph root create function strict no parameters 1`] = `
-"strict digraph {
-}"
-`;
+exports[`function digraph root create function strict no parameters 1`] = `"strict digraph {}"`;
 
 exports[`function digraph root create function strict with attributes 1`] = `
 "strict digraph {
@@ -142,22 +133,22 @@ exports[`function graph callback style 1`] = `
   \\"cc\\";
   subgraph \\"A\\" {
     \\"Aaa\\" [
-      color = \\"pink\\",
+      color = \\"pink\\";
     ];
     \\"Abb\\" [
-      color = \\"violet\\",
+      color = \\"violet\\";
     ];
     \\"Acc\\";
     \\"hoge\\";
     \\"Aaa\\" -- \\"Abb\\" -- \\"Acc\\" -- \\"hoge\\":\\"fuga\\" [
-      color = \\"red\\",
+      color = \\"red\\";
     ];
     \\"Aaa\\":\\"a\\":\\"w\\" -- \\"Abb\\":\\"w\\" -- \\"Aaa\\":\\"e\\" -- \\"Acc\\":\\"r\\":\\"e\\" [
-      color = \\"red\\",
+      color = \\"red\\";
     ];
   }
   \\"aa\\" -- \\"bb\\" -- \\"cc\\" [
-    color = \\"red\\",
+    color = \\"red\\";
   ];
 }"
 `;
@@ -169,18 +160,18 @@ exports[`function graph callback style, set attributes by attributes object 1`] 
   \\"cc\\";
   subgraph \\"A\\" {
     \\"Aaa\\" [
-      color = \\"pink\\",
+      color = \\"pink\\";
     ];
     \\"Abb\\" [
-      color = \\"violet\\",
+      color = \\"violet\\";
     ];
     \\"Acc\\";
     \\"Aaa\\":\\"a\\" -- \\"Abb\\" -- \\"Acc\\" -- \\"E\\" [
-      color = \\"red\\",
+      color = \\"red\\";
     ];
   }
   \\"aa\\" -- \\"bb\\" -- \\"cc\\" [
-    color = \\"red\\",
+    color = \\"red\\";
   ];
 }"
 `;
@@ -188,21 +179,21 @@ exports[`function graph callback style, set attributes by attributes object 1`] 
 exports[`function graph escape characters 1`] = `
 "graph \\"G\\\\n\\\\\\"\\" {
   \\"a\\\\na\\" [
-    label = \\"1\\\\n2\\\\n\\\\\\"\\\\n3\\",
+    label = \\"1\\\\n2\\\\n\\\\\\"\\\\n3\\";
   ];
   \\"b\\\\\\"b\\";
   \\"c\\\\nc\\\\\\"\\";
   subgraph \\"graph.name\\" {
     \\"node.name\\" [
-      label = \\"node\\",
+      label = \\"node\\";
     ];
     \\"another.name\\" [
-      label = \\"words with space and \\\\\\"quote\\\\\\"\\",
+      label = \\"words with space and \\\\\\"quote\\\\\\"\\";
     ];
     \\"node.name\\" -- \\"another.name\\";
   }
   \\"a\\\\na\\" -- \\"b\\\\\\"b\\" -- \\"c\\\\nc\\\\\\"\\" [
-    color = \\"red\\",
+    color = \\"red\\";
   ];
 }"
 `;
