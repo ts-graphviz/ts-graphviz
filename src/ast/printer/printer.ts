@@ -13,17 +13,17 @@ export class Printer {
   }
 
   public print(ast: ASTNode): string {
-    const plugins = this.#plugins;
+    const plugins = [...this.#plugins];
     const { indentSize = 2, indentStyle = 'space', endOfLine = 'lf' } = this.options;
     const context: PrintContext = {
       directed: true,
       indentSize,
       indentStyle,
       endOfLine,
-      print(ast: ASTNode): string {
+      print(a: ASTNode): string {
         for (const plugin of plugins) {
-          if (plugin.match(ast)) {
-            return plugin.print(context, ast);
+          if (plugin.match(a)) {
+            return plugin.print(context, a);
           }
         }
         throw Error();

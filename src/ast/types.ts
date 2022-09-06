@@ -1,4 +1,4 @@
-import type { Compass, AttributeKey, ASTType } from '../common/index.js';
+import type { Compass, AttributeKey, ASTType, ModelType } from '../common/index.js';
 
 export interface FilePosition {
   offset: number;
@@ -57,8 +57,10 @@ export interface AttributeListASTPropaties extends ASTCommonPropaties {
   kind: 'Graph' | 'Edge' | 'Node';
 }
 
+export type CommentKind = 'Block' | 'Slash' | 'Macro';
+
 export interface CommentASTPropaties extends ASTCommonPropaties {
-  kind: 'Block' | 'Slash' | 'Macro';
+  kind: CommentKind;
   value: string;
 }
 
@@ -165,3 +167,17 @@ export type ASTNode =
   | SubgraphASTNode;
 
 export type ASTChildNode<T> = T extends ASTBaseParentNode<infer C> ? C : never;
+
+export type ModelToAST<T> = T extends { $$type: infer U extends ModelType }
+  ? U extends 'Graph'
+    ? GraphASTNode | DotASTNode
+    : U extends 'AttributeList'
+    ? AttributeListASTNode
+    : U extends 'Edge'
+    ? EdgeASTNode
+    : U extends 'Node'
+    ? NodeASTNode
+    : U extends 'Subgraph'
+    ? SubgraphASTNode
+    : never
+  : never;

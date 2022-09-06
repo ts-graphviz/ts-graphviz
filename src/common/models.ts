@@ -55,7 +55,9 @@ export type NodeAttributesObject = AttributesObject<NodeAttributeKey>;
 export type GraphAttributesObject = AttributesObject<GraphAttributeKey>;
 export type SubgraphAttributesObject = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey>;
 
-export interface ASTConvartable<T extends ASTType> {
+export type ModelType = 'AttributeList' | 'Node' | 'Edge' | 'Subgraph' | 'Graph';
+
+export interface Model<T extends ModelType = ModelType> {
   $$type: T;
 }
 
@@ -91,7 +93,7 @@ export interface AttributeListModel<
   T extends AttributeKey = AttributeKey,
 > extends Attributes<T>,
     HasComment,
-    ASTConvartable<'AttributeList'> {
+    Model<'AttributeList'> {
   $$kind: K;
 }
 
@@ -100,12 +102,12 @@ export interface Port {
   compass: Compass;
 }
 
-export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey>, ASTConvartable<'Node'> {
+export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey>, Model<'Node'> {
   readonly id: string;
   port(port: string | Partial<Port>): ForwardRefNode;
 }
 
-export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey>, ASTConvartable<'Edge'> {
+export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey>, Model<'Edge'> {
   readonly targets: EdgeTargetTuple;
 }
 
@@ -458,11 +460,11 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
 
 export interface SubgraphModel
   extends GraphBaseModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey>,
-    ASTConvartable<'Subgraph'> {
+    Model<'Subgraph'> {
   isSubgraphCluster(): boolean;
 }
 
-export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey>, ASTConvartable<'Graph'> {
+export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey>, Model<'Graph'> {
   directed: boolean;
 
   /**
