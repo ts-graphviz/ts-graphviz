@@ -1,5 +1,5 @@
+import { map, pipe } from '../../../../common/index.js';
 import { EndOfLine, IndentStyle } from '../../types.js';
-import { map, pipe } from './pipe.js';
 
 const EOL = /\r?\n/;
 

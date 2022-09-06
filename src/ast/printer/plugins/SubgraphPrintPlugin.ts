@@ -1,6 +1,7 @@
+import { pipe, map } from '../../../common/index.js';
 import { SubgraphASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
-import { endOfLine, joinBy, indent, map, pipe, wrapByPair } from './utils/index.js';
+import { endOfLine, joinBy, indent, wrapByPair } from './utils/index.js';
 
 export const SubgraphPrintPlugin: PrintPlugin<SubgraphASTNode> = {
   match(ast) {

@@ -1,5 +1,5 @@
 import type { ASTNode } from './types.js';
-import type { StringifyOptions } from './printer/types.js';
+import type { PrintOptions } from './printer/types.js';
 import { Printer } from './printer/index.js';
 
 /**
@@ -8,7 +8,7 @@ import { Printer } from './printer/index.js';
  * @param ast Graphviz AST node.
  * @returns DOT language string.
  */
-export function stringify(ast: ASTNode, options?: StringifyOptions): string {
+export function stringify(ast: ASTNode, options?: PrintOptions): string {
   const result = new Printer(options).print(ast);
   if (!result) {
     throw new Error();

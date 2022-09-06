@@ -1,11 +1,11 @@
 import type { ASTNode } from '../types.js';
 import { defaultPlugins } from './plugins/index.js';
-import type { PrintContext, PrintPlugin, StringifyOptions } from './types.js';
+import type { PrintContext, PrintPlugin, PrintOptions } from './types.js';
 
 export class Printer {
   #plugins: PrintPlugin[] = [...defaultPlugins];
 
-  constructor(private options: StringifyOptions = {}) {}
+  constructor(private options: PrintOptions = {}) {}
 
   public use(plugin: PrintPlugin): this {
     this.#plugins.unshift(plugin);

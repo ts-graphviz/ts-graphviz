@@ -1,6 +1,7 @@
+import { pipe } from '../../../common/index.js';
 import { LiteralASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
-import { escape, wrapWith, wrapByPair, pipe } from './utils/index.js';
+import { escape, wrapWith, wrapByPair } from './utils/index.js';
 
 const quoteLiteralValue = pipe(escape, wrapWith('"'));
 

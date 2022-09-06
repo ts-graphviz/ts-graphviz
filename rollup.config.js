@@ -23,6 +23,7 @@ function* createOptions() {
       `../${subPackage}/index.js`,
       `../../${subPackage}/index.js`,
       `../../../${subPackage}/index.js`,
+      `../../../../${subPackage}/index.js`,
     ]);
     yield {
       input: `./lib/${subPackage}/index.js`,

@@ -1,4 +1,4 @@
-import type { Compass, AttributeKey, ASTType, ModelType } from '../common/index.js';
+import type { Compass, AttributeKey, ASTType, DotObjectType } from '../common/index.js';
 
 export interface FilePosition {
   offset: number;
@@ -168,7 +168,7 @@ export type ASTNode =
 
 export type ASTChildNode<T> = T extends ASTBaseParentNode<infer C> ? C : never;
 
-export type ModelToAST<T> = T extends { $$type: infer U extends ModelType }
+export type ModelToAST<T> = T extends { $$type: infer U extends DotObjectType }
   ? U extends 'Graph'
     ? GraphASTNode | DotASTNode
     : U extends 'AttributeList'

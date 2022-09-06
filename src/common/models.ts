@@ -55,9 +55,9 @@ export type NodeAttributesObject = AttributesObject<NodeAttributeKey>;
 export type GraphAttributesObject = AttributesObject<GraphAttributeKey>;
 export type SubgraphAttributesObject = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey>;
 
-export type ModelType = 'AttributeList' | 'Node' | 'Edge' | 'Subgraph' | 'Graph';
+export type DotObjectType = 'AttributeList' | 'Node' | 'Edge' | 'Subgraph' | 'Graph';
 
-export interface Model<T extends ModelType = ModelType> {
+export interface DotObjectModel<T extends DotObjectType = DotObjectType> {
   $$type: T;
 }
 
@@ -93,7 +93,7 @@ export interface AttributeListModel<
   T extends AttributeKey = AttributeKey,
 > extends Attributes<T>,
     HasComment,
-    Model<'AttributeList'> {
+    DotObjectModel<'AttributeList'> {
   $$kind: K;
 }
 
@@ -102,12 +102,12 @@ export interface Port {
   compass: Compass;
 }
 
-export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey>, Model<'Node'> {
+export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey>, DotObjectModel<'Node'> {
   readonly id: string;
   port(port: string | Partial<Port>): ForwardRefNode;
 }
 
-export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey>, Model<'Edge'> {
+export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey>, DotObjectModel<'Edge'> {
   readonly targets: EdgeTargetTuple;
 }
 
@@ -460,11 +460,11 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
 
 export interface SubgraphModel
   extends GraphBaseModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey>,
-    Model<'Subgraph'> {
+    DotObjectModel<'Subgraph'> {
   isSubgraphCluster(): boolean;
 }
 
-export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey>, Model<'Graph'> {
+export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey>, DotObjectModel<'Graph'> {
   directed: boolean;
 
   /**

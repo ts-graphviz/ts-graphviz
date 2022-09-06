@@ -1,6 +1,7 @@
+import { pipe, map } from '../../../common/index.js';
 import { NodeRefGroupASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
-import { joinBy, map, pipe, wrapByPair } from './utils/index.js';
+import { joinBy, wrapByPair } from './utils/index.js';
 
 export const NodeRefGroupPrintPlugin: PrintPlugin<NodeRefGroupASTNode> = {
   match(ast) {
