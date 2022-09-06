@@ -13,7 +13,7 @@ import {
 } from '../ast/index.js';
 import { AttributeKey, Attribute } from '../attribute/index.js';
 
-import { GraphBaseModel, EdgeModel, NodeModel, SubgraphModel, AttributeListModel, GraphModel } from './types.js';
+import { GraphBaseModel, EdgeModel, NodeModel, SubgraphModel, AttributeListModel, RootGraphModel } from './types.js';
 import { isForwardRefNode, isNodeModel } from './utils.js';
 
 export class ASTConverter {
@@ -125,7 +125,7 @@ export class ASTConverter {
     );
   }
 
-  protected onGraph(model: GraphModel): GraphASTNode {
+  protected onGraph(model: RootGraphModel): GraphASTNode {
     return createElement(
       'Graph',
       {
@@ -228,12 +228,12 @@ export class ASTConverter {
     }
   }
 
-  public toAST(model: GraphModel): DotASTNode {
+  public toAST(model: RootGraphModel): DotASTNode {
     return createElement('Dot', {}, [...(model.comment ? [this.comment(model.comment)] : []), this.onGraph(model)]);
   }
 }
 
-export function convertToAST(graph: GraphModel): DotASTNode {
+export function convertToAST(graph: RootGraphModel): DotASTNode {
   const converter = new ASTConverter();
   return converter.toAST(graph);
 }

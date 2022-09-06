@@ -1,39 +1,40 @@
-import { DotObject, GraphvizObject, AttributesBase, GraphBase, Edge, Node, Graph } from '../models.js';
+import { attribute } from '../../attribute/index.js';
+import { DotObject, GraphvizObject, AttributesBase, GraphBase, Edge, Node, Graph, Digraph } from '../models.js';
 import { EdgeTargetTuple } from '../types.js';
 
 describe('Graph', () => {
-  // describe('Constructor', () => {
-  //   test('first argument is directed, and second is id, and third is strict, and fourth is attributes object', () => {
-  //     const root = new Graph(true, 'test', false, {
-  //       [attribute.label]: 'Label',
-  //     });
-  //     expect(root.id).toBe('test');
-  //     expect(root.strict).toBe(false);
-  //     expect(root.size).toBe(1);
-  //     expect(root.get(attribute.label)).toBe('Label');
-  //   });
-  //   test('first argument is id, and second attributes object', () => {
-  //     const root = new Graph(true, 'test', {
-  //       [attribute.label]: 'Label',
-  //     });
-  //     expect(root.id).toBe('test');
-  //     expect(root.strict).toBe(false);
-  //     expect(root.size).toBe(1);
-  //     expect(root.get(attribute.label)).toBe('Label');
-  //   });
-  //   test('first argument is strict, and second attributes object', () => {
-  //     const root = new Graph(true, {
-  //       [attribute.label]: 'Label',
-  //     });
-  //     expect(root.strict).toBe(true);
-  //     expect(root.size).toBe(1);
-  //     expect(root.get(attribute.label)).toBe('Label');
-  //   });
-  // });
+  describe('Constructor', () => {
+    test('first argument is directed, and second is id, and third is strict, and fourth is attributes object', () => {
+      const root = new Graph('test', false, {
+        [attribute.label]: 'Label',
+      });
+      expect(root.id).toBe('test');
+      expect(root.strict).toBe(false);
+      expect(root.size).toBe(1);
+      expect(root.get(attribute.label)).toBe('Label');
+    });
+    test('first argument is id, and second attributes object', () => {
+      const root = new Graph('test', {
+        [attribute.label]: 'Label',
+      });
+      expect(root.id).toBe('test');
+      expect(root.strict).toBe(false);
+      expect(root.size).toBe(1);
+      expect(root.get(attribute.label)).toBe('Label');
+    });
+    test('first argument is strict, and second attributes object', () => {
+      const root = new Graph(true, {
+        [attribute.label]: 'Label',
+      });
+      expect(root.strict).toBe(true);
+      expect(root.size).toBe(1);
+      expect(root.get(attribute.label)).toBe('Label');
+    });
+  });
 
   describe.each([
-    ['Digraph', (): Graph => new Graph(true)],
-    ['Graph', (): Graph => new Graph(false)],
+    ['Digraph', () => new Graph()],
+    ['Graph', () => new Digraph()],
   ])('%s', (_, rootClusterFactory) => {
     let g: Graph;
     beforeEach(() => {
@@ -41,7 +42,6 @@ describe('Graph', () => {
     });
 
     it('should be instance of RootCluster/Cluster/AttributesBase/DotObject/GraphvizObject', () => {
-      expect(g).toBeInstanceOf(Graph);
       expect(g).toBeInstanceOf(GraphBase);
       expect(g).toBeInstanceOf(AttributesBase);
       expect(g).toBeInstanceOf(DotObject);

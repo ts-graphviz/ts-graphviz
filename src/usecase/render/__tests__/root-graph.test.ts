@@ -1,12 +1,12 @@
-import { Graph } from '../../../model/index.js';
+import { RootGraphModel, Digraph, Graph } from '../../../model/index.js';
 import { toDot } from '../to-dot.js';
 
 describe('RootClusters rendering', () => {
   describe.each([
-    ['Digraph', (): Graph => new Graph(true)],
-    ['Graph', (): Graph => new Graph(false)],
+    ['Digraph', () => new Digraph()],
+    ['Graph', () => new Graph()],
   ])('%s', (_, rootClusterFactory) => {
-    let g: Graph;
+    let g: RootGraphModel;
     beforeEach(() => {
       g = rootClusterFactory();
     });

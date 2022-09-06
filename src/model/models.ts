@@ -24,7 +24,7 @@ import type {
   SubgraphModel,
   ForwardRefNode,
   GraphAttributesObject,
-  GraphModel,
+  RootGraphModel,
   AttributeListKind,
   AttributesGroup,
   Port,
@@ -692,17 +692,16 @@ export class Edge extends DotObject implements EdgeModel {
 }
 
 /**
- * Base class for RootCluster.
+ * Base class for RootGraph.
  *
- * @category Domain Model
  */
-export class Graph extends GraphBase<GraphAttributeKey> implements GraphModel {
+export abstract class RootGraph extends GraphBase<GraphAttributeKey> implements RootGraphModel {
   public get $$type(): 'Graph' {
     return 'Graph';
   }
   public readonly id?: string;
 
-  public readonly directed: boolean;
+  public abstract readonly directed: boolean;
   /**
    * Strict mode.
    *
@@ -720,22 +719,33 @@ export class Graph extends GraphBase<GraphAttributeKey> implements GraphModel {
     node: new AttributeList<'Node', NodeAttributeKey>('Node'),
   });
 
-  constructor(directed: boolean, id?: string, attributes?: GraphAttributesObject);
+  constructor(id?: string, attributes?: GraphAttributesObject);
 
-  constructor(directed: boolean, id?: string, strict?: boolean, attributes?: GraphAttributesObject);
+  constructor(id?: string, strict?: boolean, attributes?: GraphAttributesObject);
 
-  constructor(directed: boolean, strict?: boolean, attributes?: GraphAttributesObject);
+  constructor(strict?: boolean, attributes?: GraphAttributesObject);
 
-  constructor(directed: boolean, attributes?: GraphAttributesObject);
+  constructor(attributes?: GraphAttributesObject);
 
-  constructor(directed: boolean, ...args: unknown[]) {
+  constructor(...args: unknown[]) {
     super();
-    this.directed = directed;
     this.id = args.find((arg): arg is string => typeof arg === 'string');
     this.strict = args.find((arg): arg is boolean => typeof arg === 'boolean') ?? false;
     const attributes = args.find((arg): arg is GraphAttributesObject => typeof arg === 'object' && arg !== null);
     if (attributes !== undefined) {
       this.apply(attributes);
     }
+  }
+}
+
+export class Graph extends RootGraph {
+  public get directed(): boolean {
+    return false;
+  }
+}
+
+export class Digraph extends RootGraph {
+  public get directed(): boolean {
+    return true;
   }
 }

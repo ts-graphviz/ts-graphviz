@@ -457,7 +457,7 @@ export interface SubgraphModel
   isSubgraphCluster(): boolean;
 }
 
-export interface GraphModel extends GraphBaseModel<GraphAttributeKey>, Model<GraphASTNode> {
+export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey>, Model<GraphASTNode> {
   directed: boolean;
 
   /**

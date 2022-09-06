@@ -1,12 +1,12 @@
 import { attribute } from '../../attribute/index.js';
-import { Graph, Subgraph, Node, Edge } from '../../model/index.js';
+import { Graph, Subgraph, Node, Edge, Digraph } from '../../model/index.js';
 import { digraph, graph, strict } from '../builder.js';
 import { toDot } from '../render/index.js';
 
 describe('function digraph', () => {
   it('should return Graph object, when execute digraph()', () => {
     const g = digraph();
-    expect(g).toBeInstanceOf(Graph);
+    expect(g).toBeInstanceOf(Digraph);
     expect(g.strict).toBe(false);
     expect(g.directed).toBe(true);
   });
@@ -121,7 +121,7 @@ describe('function digraph', () => {
   });
 
   test('class base', () => {
-    const G = new Graph(true);
+    const G = new Digraph();
     const A = new Subgraph('A');
     const node1 = new Node('A_node1', {
       [attribute.color]: 'red',
@@ -302,7 +302,7 @@ describe('function graph', () => {
 describe('strict mode', () => {
   it('should return Digraph object, when execute digraph()', () => {
     const g = strict.digraph();
-    expect(g).toBeInstanceOf(Graph);
+    expect(g).toBeInstanceOf(Digraph);
     expect(g.strict).toBe(true);
     expect(g.directed).toBe(true);
   });
