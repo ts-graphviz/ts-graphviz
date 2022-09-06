@@ -1,4 +1,5 @@
-import { RootGraphModel, Digraph, Graph } from '../model/index.js';
+import { RootGraphModel } from '../common/index.js';
+import { Digraph, Graph } from '../models.js';
 import { toDot } from '../to-dot.js';
 
 describe('toDot function', () => {

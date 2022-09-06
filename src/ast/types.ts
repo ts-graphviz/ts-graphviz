@@ -1,5 +1,4 @@
-import type { Compass } from '../type/index.js';
-import type { AttributeKey } from '../attribute/index.js';
+import type { Compass, AttributeKey, ASTType } from '../common/index.js';
 
 export interface FilePosition {
   offset: number;
@@ -71,7 +70,7 @@ export interface ASTBaseNode {
    * Every leaf interface that extends ASTBaseNode
    * must specify a type property.
    */
-  type: string;
+  type: ASTType;
 }
 
 export interface ASTBaseParentNode<STMT extends ASTBaseNode = ASTBaseNode> extends ASTBaseNode {

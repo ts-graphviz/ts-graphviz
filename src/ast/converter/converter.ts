@@ -1,7 +1,18 @@
 import {
+  AttributeKey,
+  Attribute,
+  AttributeListModel,
+  EdgeModel,
+  GraphBaseModel,
+  NodeModel,
+  RootGraphModel,
+  SubgraphModel,
+  isForwardRefNode,
+  isNodeModel,
+} from '../../common/index.js';
+import {
   ClusterStatementASTNode,
   CommentASTNode,
-  createElement,
   EdgeTargetASTNode,
   NodeASTNode,
   SubgraphASTNode,
@@ -10,13 +21,10 @@ import {
   AttributeASTNode,
   DotASTNode,
   EdgeASTNode,
-} from '../ast/index.js';
-import { AttributeKey, Attribute } from '../attribute/index.js';
+} from '../types.js';
+import { createElement } from '../create-element.js';
 
-import { GraphBaseModel, EdgeModel, NodeModel, SubgraphModel, AttributeListModel, RootGraphModel } from './types.js';
-import { isForwardRefNode, isNodeModel } from './utils.js';
-
-export class ASTConverter {
+export class Converter {
   protected onAttribute<K extends AttributeKey>(key: K, value: Attribute<K>): AttributeASTNode {
     if (typeof value === 'string') {
       const trimmed = value.trim();
@@ -234,6 +242,6 @@ export class ASTConverter {
 }
 
 export function convertToAST(graph: RootGraphModel): DotASTNode {
-  const converter = new ASTConverter();
+  const converter = new Converter();
   return converter.toAST(graph);
 }

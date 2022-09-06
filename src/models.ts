@@ -1,35 +1,36 @@
-import type {
+import {
   Attribute,
   AttributeKey,
+  AttributeListKind,
+  AttributeListModel,
+  Attributes,
+  AttributesEntities,
+  AttributesGroup,
+  AttributesObject,
   ClusterSubgraphAttributeKey,
   EdgeAttributeKey,
-  GraphAttributeKey,
-  NodeAttributeKey,
-  SubgraphAttributeKey,
-} from '../attribute/index.js';
-import type {
-  Attributes,
-  AttributesObject,
-  AttributesEntities,
-  AttributeListModel,
   EdgeAttributesObject,
   EdgeModel,
   EdgeTargetLikeTuple,
   EdgeTargetTuple,
+  ForwardRefNode,
+  GraphAttributeKey,
+  GraphAttributesObject,
   GraphBaseModel,
   GraphCommonAttributes,
+  NodeAttributeKey,
   NodeAttributesObject,
   NodeModel,
+  Port,
+  RootGraphModel,
+  SubgraphAttributeKey,
   SubgraphAttributesObject,
   SubgraphModel,
-  ForwardRefNode,
-  GraphAttributesObject,
-  RootGraphModel,
-  AttributeListKind,
-  AttributesGroup,
-  Port,
-} from './types.js';
-import { isNodeRefGroupLike, toNodeRefGroup, toNodeRef, isNodeRefLike } from './utils.js';
+  isNodeRefGroupLike,
+  toNodeRefGroup,
+  toNodeRef,
+  isNodeRefLike,
+} from './common/index.js';
 
 /**
  * Classes implemented in the 'ts-graphviz' library are designed to inherit from this class.

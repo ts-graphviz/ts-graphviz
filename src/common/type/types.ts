@@ -77,7 +77,7 @@ export namespace StartType {
   export type seed = number;
 }
 
-/** s
+/**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/style/ style}
  */
 export type Style =

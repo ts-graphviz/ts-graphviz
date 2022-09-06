@@ -1,4 +1,4 @@
-export interface AttributeKeyDict {
+interface AttributeKeyDict {
   /**
    * Factor damping force motions.
    * On each iteration, a nodes movement is limited to this factor of its potential motion.
@@ -2648,3 +2648,7 @@ export interface AttributeKeyDict {
    */
   z: 'z';
 }
+
+export const attribute: AttributeKeyDict = new Proxy(Object.freeze({}) as AttributeKeyDict, {
+  get: (_, key: string) => key,
+});

@@ -1,5 +1,5 @@
-import { attribute } from '../attribute/index.js';
-import { Graph, Subgraph, Node, Edge, Digraph } from '../model/index.js';
+import { attribute } from '../attribute.js';
+import { Graph, Subgraph, Node, Edge, Digraph } from '../models.js';
 import { digraph, graph, strict } from '../create-root-graph.js';
 import { toDot } from '../to-dot.js';
 

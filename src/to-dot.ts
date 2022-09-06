@@ -1,4 +1,5 @@
-import { convertToAST, RootGraphModel } from './model/index.js';
+import { RootGraphModel } from './common/index.js';
+import { convertToAST } from './ast/index.js';
 import { stringify } from './ast/index.js';
 
 export function toDot(object: RootGraphModel): string {

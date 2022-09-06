@@ -1,4 +1,5 @@
-import { GraphAttributesObject, RootGraphModel, Digraph, Graph } from './model/index.js';
+import { RootGraphModel, GraphAttributesObject } from './common/index.js';
+import { Digraph, Graph } from './models.js';
 
 interface CreateRootGraph {
   (id?: string, attributes?: GraphAttributesObject, callback?: (g: RootGraphModel) => void): RootGraphModel;

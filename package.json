@@ -29,10 +29,10 @@
       "require": "./lib/index.cjs",
       "types": "./lib/index.d.ts"
     },
-    "./*": {
-      "import": "./lib/*/index.js",
-      "require": "./lib/*/index.cjs",
-      "types": "./lib/*/index.d.ts"
+    "./ast": {
+      "import": "./lib/ast/index.js",
+      "require": "./lib/ast/index.cjs",
+      "types": "./lib/ast/index.d.ts"
     }
   },
   "license": "MIT",

@@ -2,7 +2,7 @@ import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 
 function* createOptions() {
-  const subPackages = ['type', 'attribute', 'ast', 'model'];
+  const subPackages = ['common', 'ast'];
   yield {
     input: './lib/index.js',
     output: [
@@ -19,7 +19,10 @@ function* createOptions() {
   };
 
   for (const subPackage of subPackages) {
-    const subPackageEntrypoints = subPackages.map((subPackage) => `../${subPackage}/index.js`);
+    const subPackageEntrypoints = subPackages.flatMap((subPackage) => [
+      `../${subPackage}/index.js`,
+      `../../${subPackage}/index.js`,
+    ]);
     yield {
       input: `./lib/${subPackage}/index.js`,
       output: [
