@@ -1,18 +1,13 @@
-import { GraphASTNode } from '../../ast/index.js';
+import { SubgraphASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { endOfLine, joinBy, indent, map, pipe, wrapByPair } from './utils/index.js';
 
-export const GraphPrintPlugin: PrintPlugin<GraphASTNode> = {
+export const SubgraphPrintPlugin: PrintPlugin<SubgraphASTNode> = {
   match(ast) {
-    return ast.type === 'Graph';
+    return ast.type === 'Subgraph';
   },
   print(context, ast): string {
-    context.directed = ast.directed;
-    const parts: string[] = [];
-    if (ast.strict) {
-      parts.push('strict');
-    }
-    parts.push(ast.directed ? 'digraph' : 'graph');
+    const parts: string[] = ['subgraph'];
     if (ast.id) {
       parts.push(context.print(ast.id));
     }

@@ -1,26 +1,23 @@
-import { SubgraphASTNode } from '../../ast/index.js';
+import { NodeASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { endOfLine, joinBy, indent, map, pipe, wrapByPair } from './utils/index.js';
 
-export const SubgraphPrintPlugin: PrintPlugin<SubgraphASTNode> = {
+export const NodePrintPlugin: PrintPlugin<NodeASTNode> = {
   match(ast) {
-    return ast.type === 'Subgraph';
+    return ast.type === 'Node';
   },
   print(context, ast): string {
-    const parts: string[] = ['subgraph'];
-    if (ast.id) {
-      parts.push(context.print(ast.id));
-    }
+    const id = context.print(ast.id);
     if (ast.children.length === 0) {
-      return `${parts.join(' ')} {}`;
+      return `${id};`;
     }
     const eol = endOfLine(context.endOfLine);
     const contents = pipe(
       map(context.print),
       joinBy(eol),
       indent(context.indentStyle, context.indentSize, eol),
-      wrapByPair(`{${eol}`, `${eol}}`),
+      wrapByPair(`[${eol}`, `${eol}];`),
     )(ast.children);
-    return `${parts.join(' ')} ${contents}`;
+    return `${id} ${contents}`;
   },
 };

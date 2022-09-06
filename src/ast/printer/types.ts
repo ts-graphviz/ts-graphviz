@@ -1,4 +1,4 @@
-import { ASTNode } from '../ast/index.js';
+import { ASTNode } from '../types.js';
 
 export type IndentStyle = 'space' | 'tab';
 export type EndOfLine = 'lf' | 'crlf';

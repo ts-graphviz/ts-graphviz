@@ -1,4 +1,4 @@
-import { ASTNode, AttributeASTNode } from '../../ast/index.js';
+import { ASTNode, AttributeASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 
 export const AttributePrintPlugin: PrintPlugin<AttributeASTNode> = {

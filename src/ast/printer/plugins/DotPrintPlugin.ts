@@ -1,4 +1,4 @@
-import { DotASTNode } from '../../ast/index.js';
+import { DotASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { endOfLine } from './utils/index.js';
 

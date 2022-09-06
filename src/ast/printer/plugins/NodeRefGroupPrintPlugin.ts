@@ -1,4 +1,4 @@
-import { NodeRefGroupASTNode } from '../../ast/index.js';
+import { NodeRefGroupASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { joinBy, map, pipe, wrapByPair } from './utils/index.js';
 

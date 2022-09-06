@@ -1,4 +1,4 @@
-import { ASTNode, AttributeListASTNode } from '../../ast/index.js';
+import { ASTNode, AttributeListASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { pipe, map, endOfLine, joinBy, indent, wrapByPair } from './utils/index.js';
 

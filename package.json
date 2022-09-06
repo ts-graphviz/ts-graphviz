@@ -40,7 +40,7 @@
     "node": ">=14.16"
   },
   "scripts": {
-    "build:peggy": "peggy --plugin ts-pegjs --extra-options-file peggy/options.json -o src/parser/dot.peggy.ts peggy/grammar/dot.peggy",
+    "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/ast/parser/peggy.options.json -o src/ast/parser/index.ts src/ast/parser/dot.peggy",
     "prebuild": "yarn build:peggy",
     "build": "tsc && rollup -c",
     "postbuild": "prettier --write ./lib/**/index.{js,cjs,d.ts}",

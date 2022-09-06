@@ -2,7 +2,7 @@ import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 
 function* createOptions() {
-  const subPackages = ['ast', 'attribute', 'model', 'parser', 'printer', 'type'];
+  const subPackages = ['type', 'attribute', 'ast', 'model'];
   yield {
     input: './lib/index.js',
     output: [

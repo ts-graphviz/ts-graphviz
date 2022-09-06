@@ -1,4 +1,4 @@
-import { NodeRefASTNode } from '../../ast/index.js';
+import { NodeRefASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 
 export const NodeRefPrintPlugin: PrintPlugin<NodeRefASTNode> = {

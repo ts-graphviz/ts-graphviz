@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Builder createElement Attribute 1`] = `
+exports[`createElement Attribute 1`] = `
 Object {
   "children": Array [],
   "key": Object {
@@ -22,7 +22,7 @@ Object {
 }
 `;
 
-exports[`Builder createElement Coment 1`] = `
+exports[`createElement Coment 1`] = `
 Object {
   "children": Array [],
   "kind": "Macro",
@@ -32,7 +32,7 @@ Object {
 }
 `;
 
-exports[`Builder createElement Dot 1`] = `
+exports[`createElement Dot 1`] = `
 Object {
   "children": Array [],
   "location": null,
@@ -40,7 +40,7 @@ Object {
 }
 `;
 
-exports[`Builder createElement Edge 1`] = `
+exports[`createElement Edge 1`] = `
 Object {
   "children": Array [],
   "location": null,
@@ -74,7 +74,7 @@ Object {
 }
 `;
 
-exports[`Builder createElement Graph 1`] = `
+exports[`createElement Graph 1`] = `
 Object {
   "children": Array [],
   "directed": true,
@@ -84,7 +84,7 @@ Object {
 }
 `;
 
-exports[`Builder createElement Literal 1`] = `
+exports[`createElement Literal 1`] = `
 Object {
   "children": Array [],
   "location": null,
@@ -94,7 +94,7 @@ Object {
 }
 `;
 
-exports[`Builder createElement Node 1`] = `
+exports[`createElement Node 1`] = `
 Object {
   "children": Array [],
   "id": Object {
@@ -109,7 +109,7 @@ Object {
 }
 `;
 
-exports[`Builder createElement NodeRef 1`] = `
+exports[`createElement NodeRef 1`] = `
 Object {
   "children": Array [],
   "id": Object {
@@ -124,7 +124,7 @@ Object {
 }
 `;
 
-exports[`Builder createElement NodeRefGroup 1`] = `
+exports[`createElement NodeRefGroup 1`] = `
 Object {
   "children": Array [
     Object {
@@ -157,7 +157,7 @@ Object {
 }
 `;
 
-exports[`Builder createElement Subgraph 1`] = `
+exports[`createElement Subgraph 1`] = `
 Object {
   "children": Array [],
   "location": null,

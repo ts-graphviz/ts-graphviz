@@ -1,15 +1,15 @@
-import { NodeASTNode } from '../../ast/index.js';
+import { EdgeASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { endOfLine, joinBy, indent, map, pipe, wrapByPair } from './utils/index.js';
 
-export const NodePrintPlugin: PrintPlugin<NodeASTNode> = {
+export const EdgePrintPlugin: PrintPlugin<EdgeASTNode> = {
   match(ast) {
-    return ast.type === 'Node';
+    return ast.type === 'Edge';
   },
   print(context, ast): string {
-    const id = context.print(ast.id);
+    const targets = pipe(map(context.print), joinBy(context.directed ? ' -> ' : ' -- '))(ast.targets);
     if (ast.children.length === 0) {
-      return `${id};`;
+      return `${targets};`;
     }
     const eol = endOfLine(context.endOfLine);
     const contents = pipe(
@@ -18,6 +18,6 @@ export const NodePrintPlugin: PrintPlugin<NodeASTNode> = {
       indent(context.indentStyle, context.indentSize, eol),
       wrapByPair(`[${eol}`, `${eol}];`),
     )(ast.children);
-    return `${id} ${contents}`;
+    return `${targets} ${contents}`;
   },
 };

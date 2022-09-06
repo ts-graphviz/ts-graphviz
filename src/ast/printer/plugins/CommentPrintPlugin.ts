@@ -1,4 +1,4 @@
-import { CommentASTNode } from '../../ast/index.js';
+import { CommentASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { map, leftPadWith, pipe, splitByLine, joinBy, wrapByPair, endOfLine } from './utils/index.js';
 

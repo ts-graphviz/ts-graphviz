@@ -8,8 +8,8 @@ import type {
   ClusterStatementASTNode,
   SubgraphASTNode,
   ASTNode,
-} from '../ast/index.js';
-import { parse as _parse, SyntaxError } from './dot.peggy.js';
+} from './index.js';
+import { parse as _parse, SyntaxError } from './parser/index.js';
 export type Rule = 'Dot' | 'Graph' | 'Node' | 'Edge' | 'AttributeList' | 'Attribute' | 'Subgraph' | 'ClusterStatements';
 
 export interface CommonParseOptions {

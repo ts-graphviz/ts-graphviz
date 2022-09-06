@@ -1,4 +1,4 @@
-import { LiteralASTNode } from '../../ast/index.js';
+import { LiteralASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { escape, wrapWith, wrapByPair, pipe } from './utils/index.js';
 

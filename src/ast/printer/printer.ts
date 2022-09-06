@@ -1,4 +1,4 @@
-import type { ASTNode } from '../ast/index.js';
+import type { ASTNode } from '../types.js';
 import { defaultPlugins } from './plugins/index.js';
 import type { PrintContext, PrintPlugin, StringifyOptions } from './types.js';
 

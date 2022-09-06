@@ -1,6 +1,6 @@
-import type { ASTNode } from '../ast/index.js';
-import type { StringifyOptions } from './types.js';
-import { Printer } from './printer.js';
+import type { ASTNode } from './types.js';
+import type { StringifyOptions } from './printer/types.js';
+import { Printer } from './printer/index.js';
 
 /**
  * Stringify Graphviz AST Node.
