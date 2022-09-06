@@ -1,4 +1,4 @@
-interface AttributeKeyDict {
+export interface AttributeKeyDict {
   /**
    * Factor damping force motions.
    * On each iteration, a nodes movement is limited to this factor of its potential motion.
