@@ -9,6 +9,7 @@ import {
   GraphASTNode,
   AttributeASTNode,
   DotASTNode,
+  EdgeASTNode,
 } from '../ast/index.js';
 import { AttributeKey, Attribute } from '../attribute/index.js';
 
@@ -59,7 +60,7 @@ export class ASTConverter {
       model.values.map(([key, value]) => this.onAttribute(key, value)),
     );
   }
-  protected onEdge(model: EdgeModel) {
+  protected onEdge(model: EdgeModel): EdgeASTNode {
     return createElement(
       'Edge',
       {

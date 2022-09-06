@@ -76,7 +76,9 @@ function applyStatements(cluster: GraphBaseModel, statements: ClusterStatementAS
           commentHolder.apply(
             cluster.node(
               stmt.id.value,
-              stmt.children.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+              stmt.children
+                .filter((child): child is AttributeASTNode => child.type === 'Attribute')
+                .reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
             ),
             stmt.location,
           );
@@ -87,7 +89,9 @@ function applyStatements(cluster: GraphBaseModel, statements: ClusterStatementAS
           commentHolder.apply(
             cluster.edge(
               convertToEdgeTargetTuple(stmt),
-              stmt.children.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+              stmt.children
+                .filter((child): child is AttributeASTNode => child.type === 'Attribute')
+                .reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
             ),
             stmt.location,
           );
@@ -149,14 +153,18 @@ export function convert(
     case 'Edge': {
       const edge = new Edge(
         convertToEdgeTargetTuple(ast),
-        ast.children.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+        ast.children
+          .filter((child): child is AttributeASTNode => child.type === 'Attribute')
+          .reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
       );
       return edge;
     }
     case 'Node': {
       const node = new Node(
         ast.id.value,
-        ast.children.reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+        ast.children
+          .filter((child): child is AttributeASTNode => child.type === 'Attribute')
+          .reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
       );
       return node;
     }
