@@ -1,7 +1,7 @@
-import { attribute } from '../../attribute/index.js';
-import { Graph, Subgraph, Node, Edge, Digraph } from '../../model/index.js';
-import { digraph, graph, strict } from '../builder.js';
-import { toDot } from '../render/index.js';
+import { attribute } from '../attribute/index.js';
+import { Graph, Subgraph, Node, Edge, Digraph } from '../model/index.js';
+import { digraph, graph, strict } from '../create-root-graph.js';
+import { toDot } from '../to-dot.js';
 
 describe('function digraph', () => {
   it('should return Graph object, when execute digraph()', () => {

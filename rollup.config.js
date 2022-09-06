@@ -2,7 +2,7 @@ import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 
 function* createOptions() {
-  const subPackages = ['ast', 'attribute', 'model', 'parser', 'printer', 'type', 'usecase'];
+  const subPackages = ['ast', 'attribute', 'model', 'parser', 'printer', 'type'];
   yield {
     input: './lib/index.js',
     output: [
@@ -57,7 +57,7 @@ function* createOptions() {
     input: './lib/index.d.ts',
     plugins: [
       del({
-        targets: ['lib/**/*.d.ts', '!lib/**/index.{js,d.ts}'],
+        targets: ['lib/*.js', 'lib/**/*.d.ts', '!lib/**/index.{js,d.ts}'],
         hook: 'buildEnd',
       }),
       dts(),

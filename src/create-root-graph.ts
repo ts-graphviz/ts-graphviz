@@ -1,4 +1,4 @@
-import { GraphAttributesObject, RootGraphModel, Digraph, Graph } from '../model/index.js';
+import { GraphAttributesObject, RootGraphModel, Digraph, Graph } from './model/index.js';
 
 interface CreateRootGraph {
   (id?: string, attributes?: GraphAttributesObject, callback?: (g: RootGraphModel) => void): RootGraphModel;
@@ -9,11 +9,11 @@ interface CreateRootGraph {
 
 /** @hidden */
 function builder(directed: boolean, strictMode: boolean): CreateRootGraph {
+  const C = directed ? Digraph : Graph;
   return (...args: unknown[]) => {
     const id = args.find((arg): arg is string => typeof arg === 'string');
     const attributes = args.find((arg): arg is GraphAttributesObject => typeof arg === 'object');
     const callback = args.find((arg): arg is (g: RootGraphModel) => void => typeof arg === 'function');
-    const C = directed ? Digraph : Graph;
     const g = new C(id, strictMode, attributes);
     if (typeof callback === 'function') {
       callback(g);

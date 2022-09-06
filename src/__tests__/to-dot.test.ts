@@ -1,7 +1,7 @@
-import { RootGraphModel, Digraph, Graph } from '../../../model/index.js';
+import { RootGraphModel, Digraph, Graph } from '../model/index.js';
 import { toDot } from '../to-dot.js';
 
-describe('RootClusters rendering', () => {
+describe('toDot function', () => {
   describe.each([
     ['Digraph', () => new Digraph()],
     ['Graph', () => new Graph()],
