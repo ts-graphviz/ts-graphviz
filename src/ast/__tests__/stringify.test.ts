@@ -1,4 +1,8 @@
-import { stringify } from '../stringify.js';
+import { wrap } from 'jest-snapshot-serializer-raw';
+import { pipe } from '../../common/index.js';
+import { stringify as _stringify } from '../stringify.js';
+
+const stringify = pipe(_stringify, wrap);
 
 describe('stringify', () => {
   describe('literal', () => {
@@ -10,7 +14,7 @@ describe('stringify', () => {
           quoted: true,
           children: [],
         }),
-      ).toMatchInlineSnapshot('"\\"hoge\\""');
+      ).toMatchInlineSnapshot(`"hoge"`);
     });
 
     test('not quated', () => {
@@ -21,7 +25,7 @@ describe('stringify', () => {
           quoted: false,
           children: [],
         }),
-      ).toMatchInlineSnapshot('"hoge"');
+      ).toMatchInlineSnapshot(`hoge`);
     });
 
     test('html label', () => {
@@ -32,7 +36,7 @@ describe('stringify', () => {
           quoted: 'html',
           children: [],
         }),
-      ).toMatchInlineSnapshot('"<hoge>"');
+      ).toMatchInlineSnapshot(`<hoge>`);
     });
   });
 
@@ -45,7 +49,7 @@ describe('stringify', () => {
           quoted: 'html',
           children: [],
         }),
-      ).toMatchInlineSnapshot('"<hoge>"');
+      ).toMatchInlineSnapshot(`<hoge>`);
     });
   });
 
@@ -57,7 +61,7 @@ describe('stringify', () => {
           kind: 'Node',
           children: [],
         }),
-      ).toMatchInlineSnapshot(`"node [];"`);
+      ).toMatchInlineSnapshot(`node [];`);
     });
 
     test('edge', () => {
@@ -67,7 +71,7 @@ describe('stringify', () => {
           kind: 'Edge',
           children: [],
         }),
-      ).toMatchInlineSnapshot(`"edge [];"`);
+      ).toMatchInlineSnapshot(`edge [];`);
     });
 
     test('graph', () => {
@@ -77,7 +81,7 @@ describe('stringify', () => {
           kind: 'Graph',
           children: [],
         }),
-      ).toMatchInlineSnapshot(`"graph [];"`);
+      ).toMatchInlineSnapshot(`graph [];`);
     });
 
     test('with attribute', () => {
@@ -107,9 +111,9 @@ describe('stringify', () => {
           ],
         }),
       ).toMatchInlineSnapshot(`
-        "node [
+        node [
           color = hoge;
-        ];"
+        ];
       `);
     });
     test('with two attributes', () => {
@@ -158,10 +162,10 @@ describe('stringify', () => {
           ],
         }),
       ).toMatchInlineSnapshot(`
-        "node [
+        node [
           color = hoge;
           bgcolor = fuga;
-        ];"
+        ];
       `);
     });
   });
@@ -177,15 +181,17 @@ describe('stringify', () => {
             quoted: false,
             children: [],
           },
+
           value: {
             type: 'Literal',
             value: 'hoge',
             quoted: false,
             children: [],
           },
+
           children: [],
         }),
-      ).toMatchInlineSnapshot('"color = hoge;"');
+      ).toMatchInlineSnapshot(`color = hoge;`);
     });
 
     test('with attribute', () => {
@@ -201,15 +207,18 @@ describe('stringify', () => {
                 quoted: false,
                 children: [],
               },
+
               value: {
                 type: 'Literal',
                 value: 'hoge',
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
           ],
+
           id: {
             type: 'Literal',
             value: 'hoge',
@@ -218,9 +227,9 @@ describe('stringify', () => {
           },
         }),
       ).toMatchInlineSnapshot(`
-        "\\"hoge\\" [
+        "hoge" [
           color = hoge;
-        ];"
+        ];
       `);
     });
 
@@ -244,6 +253,7 @@ describe('stringify', () => {
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
 
@@ -262,6 +272,7 @@ describe('stringify', () => {
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
           ],
@@ -274,10 +285,10 @@ describe('stringify', () => {
           },
         }),
       ).toMatchInlineSnapshot(`
-        "\\"hoge\\" [
+        "hoge" [
           color = hoge;
           bgcolor = fuga;
-        ];"
+        ];
       `);
     });
   });
@@ -296,14 +307,17 @@ describe('stringify', () => {
                 quoted: true,
                 children: [],
               },
+
               port: {
                 type: 'Literal',
                 value: 'port1',
                 quoted: true,
                 children: [],
               },
+
               children: [],
             },
+
             {
               type: 'NodeRef',
               id: {
@@ -312,18 +326,21 @@ describe('stringify', () => {
                 quoted: true,
                 children: [],
               },
+
               compass: {
                 type: 'Literal',
                 value: 'w',
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
           ],
+
           children: [],
         }),
-      ).toMatchInlineSnapshot('"\\"id1\\":\\"port1\\" -> \\"id2\\":w;"');
+      ).toMatchInlineSnapshot(`"id1":"port1" -> "id2":w;`);
     });
 
     test('with attribute', () => {
@@ -339,14 +356,17 @@ describe('stringify', () => {
                 quoted: true,
                 children: [],
               },
+
               port: {
                 type: 'Literal',
                 value: 'port1',
                 quoted: true,
                 children: [],
               },
+
               children: [],
             },
+
             {
               type: 'NodeRef',
               id: {
@@ -355,15 +375,18 @@ describe('stringify', () => {
                 quoted: true,
                 children: [],
               },
+
               compass: {
                 type: 'Literal',
                 value: 'w',
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
           ],
+
           children: [
             {
               type: 'Attribute',
@@ -373,20 +396,22 @@ describe('stringify', () => {
                 quoted: false,
                 children: [],
               },
+
               value: {
                 type: 'Literal',
                 value: 'hoge',
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
           ],
         }),
       ).toMatchInlineSnapshot(`
-        "\\"id1\\":\\"port1\\" -> \\"id2\\":w [
+        "id1":"port1" -> "id2":w [
           color = hoge;
-        ];"
+        ];
       `);
     });
 
@@ -410,6 +435,7 @@ describe('stringify', () => {
                 quoted: true,
                 children: [],
               },
+
               children: [],
             },
 
@@ -428,6 +454,7 @@ describe('stringify', () => {
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
           ],
@@ -448,6 +475,7 @@ describe('stringify', () => {
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
 
@@ -466,15 +494,16 @@ describe('stringify', () => {
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
           ],
         }),
       ).toMatchInlineSnapshot(`
-        "\\"id1\\":\\"port1\\" -> \\"id2\\":w [
+        "id1":"port1" -> "id2":w [
           color = hoge;
           color = fuga;
-        ];"
+        ];
       `);
     });
 
@@ -491,14 +520,17 @@ describe('stringify', () => {
                 quoted: true,
                 children: [],
               },
+
               port: {
                 type: 'Literal',
                 value: 'port1',
                 quoted: true,
                 children: [],
               },
+
               children: [],
             },
+
             {
               type: 'NodeRefGroup',
               children: [
@@ -510,8 +542,10 @@ describe('stringify', () => {
                     quoted: true,
                     children: [],
                   },
+
                   children: [],
                 },
+
                 {
                   type: 'NodeRef',
                   id: {
@@ -520,14 +554,16 @@ describe('stringify', () => {
                     quoted: true,
                     children: [],
                   },
+
                   children: [],
                 },
               ],
             },
           ],
+
           children: [],
         }),
-      ).toMatchInlineSnapshot('"\\"id1\\":\\"port1\\" -> {\\"id2\\" \\"id3\\"};"');
+      ).toMatchInlineSnapshot(`"id1":"port1" -> {"id2" "id3"};`);
     });
   });
 
@@ -544,7 +580,7 @@ describe('stringify', () => {
           },
           children: [],
         }),
-      ).toMatchInlineSnapshot('"subgraph \\"id1\\" {}"');
+      ).toMatchInlineSnapshot(`subgraph "id1" {}`);
     });
 
     test('no id', () => {
@@ -553,7 +589,7 @@ describe('stringify', () => {
           type: 'Subgraph',
           children: [],
         }),
-      ).toMatchInlineSnapshot('"subgraph {}"');
+      ).toMatchInlineSnapshot(`subgraph {}`);
     });
 
     test('with children', () => {
@@ -581,9 +617,9 @@ describe('stringify', () => {
           ],
         }),
       ).toMatchInlineSnapshot(`
-        "subgraph {
+        subgraph {
           color = hoge;
-        }"
+        }
       `);
     });
   });
@@ -603,7 +639,7 @@ describe('stringify', () => {
           },
           children: [],
         }),
-      ).toMatchInlineSnapshot('"digraph \\"id1\\" {}"');
+      ).toMatchInlineSnapshot(`digraph "id1" {}`);
     });
 
     test('strict directed', () => {
@@ -618,9 +654,10 @@ describe('stringify', () => {
             quoted: true,
             children: [],
           },
+
           children: [],
         }),
-      ).toMatchInlineSnapshot('"strict digraph \\"id1\\" {}"');
+      ).toMatchInlineSnapshot(`strict digraph "id1" {}`);
     });
 
     test('graph', () => {
@@ -635,9 +672,10 @@ describe('stringify', () => {
             quoted: true,
             children: [],
           },
+
           children: [],
         }),
-      ).toMatchInlineSnapshot('"graph \\"id1\\" {}"');
+      ).toMatchInlineSnapshot(`graph "id1" {}`);
     });
 
     test('strict graph', () => {
@@ -652,9 +690,10 @@ describe('stringify', () => {
             quoted: true,
             children: [],
           },
+
           children: [],
         }),
-      ).toMatchInlineSnapshot('"strict graph \\"id1\\" {}"');
+      ).toMatchInlineSnapshot(`strict graph "id1" {}`);
     });
 
     test('no id', () => {
@@ -665,7 +704,7 @@ describe('stringify', () => {
           directed: true,
           children: [],
         }),
-      ).toMatchInlineSnapshot('"digraph {}"');
+      ).toMatchInlineSnapshot(`digraph {}`);
     });
 
     test('with children', () => {
@@ -690,14 +729,15 @@ describe('stringify', () => {
                 quoted: false,
                 children: [],
               },
+
               children: [],
             },
           ],
         }),
       ).toMatchInlineSnapshot(`
-        "digraph {
+        digraph {
           color = hoge;
-        }"
+        }
       `);
     });
   });
@@ -712,10 +752,10 @@ describe('stringify', () => {
           children: [],
         }),
       ).toMatchInlineSnapshot(`
-        "/**
+        /**
          * test
          * test
-         */"
+         */
       `);
     });
 
@@ -728,8 +768,8 @@ describe('stringify', () => {
           children: [],
         }),
       ).toMatchInlineSnapshot(`
-        "# foo
-        # bar"
+        # foo
+        # bar
       `);
     });
 
@@ -742,8 +782,8 @@ describe('stringify', () => {
           children: [],
         }),
       ).toMatchInlineSnapshot(`
-        "// foo
-        // bar"
+        // foo
+        // bar
       `);
     });
   });
@@ -760,6 +800,7 @@ describe('stringify', () => {
               value: 'foo\nbar',
               children: [],
             },
+
             {
               type: 'Graph',
               strict: false,
@@ -770,14 +811,15 @@ describe('stringify', () => {
                 quoted: true,
                 children: [],
               },
+
               children: [],
             },
           ],
         }),
       ).toMatchInlineSnapshot(`
-        "// foo
+        // foo
         // bar
-        graph \\"id1\\" {}"
+        graph "id1" {}
       `);
     });
   });

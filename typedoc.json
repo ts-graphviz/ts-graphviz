@@ -1,7 +1,4 @@
 {
   "out": "./doc",
-  "entryPoints": [
-    "src/index.ts",
-    "src/ast/index.ts"
-  ]
+  "entryPoints": ["src/index.ts", "src/ast/index.ts"]
 }
