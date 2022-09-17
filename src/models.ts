@@ -537,7 +537,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
    * // }
    * ```
    *
-   * @param id Node ID.
+   * @param targets Edge targets.
    * @param attributes Object of attributes to be adapted to the edge.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
@@ -618,7 +618,9 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
  * Subgraph object.
  */
 export class Subgraph extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAttributeKey> implements SubgraphModel {
-  public readonly $$type = 'Subgraph';
+  public get $$type(): 'Subgraph' {
+    return 'Subgraph';
+  }
   public readonly id?: string;
 
   public attributes = Object.freeze({
@@ -653,7 +655,9 @@ export class Subgraph extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAt
  * Node object.
  */
 export class Node extends DotObject implements NodeModel {
-  public readonly $$type = 'Node';
+  public get $$type(): 'Node' {
+    return 'Node';
+  }
   /** Comments to include when outputting with toDot. */
   public comment?: string;
 
@@ -676,7 +680,9 @@ export class Node extends DotObject implements NodeModel {
 /**
  */
 export class Edge extends DotObject implements EdgeModel {
-  public readonly $$type = 'Edge';
+  public get $$type(): 'Edge' {
+    return 'Edge';
+  }
 
   /** Comments to include when outputting with toDot. */
   public comment?: string;
