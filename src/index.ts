@@ -1,8 +1,5 @@
 /**
  * @module ts-graphviz
  */
-export * from './common/index.js';
-export * from './attribute.js';
-export * from './models.js';
-export * from './create-root-graph.js';
-export * from './to-dot.js';
+export * from '#/lib/common';
+export * from '#/lib/core';

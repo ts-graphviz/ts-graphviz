@@ -1,4 +1,4 @@
-import { NodeModel } from '../../../common/index.js';
+import { NodeModel } from '#/lib/common';
 import { ConvertPlugin } from '../types.js';
 import { createElement } from '../../create-element.js';
 import { convertComment, convertAttribute } from './utils/index.js';

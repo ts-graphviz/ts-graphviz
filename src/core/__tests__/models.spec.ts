@@ -1,3 +1,4 @@
+import { EdgeTargetTuple, SubgraphModel } from '#/lib/common';
 import { attribute } from '../attribute.js';
 import {
   AttributeList,
@@ -11,7 +12,6 @@ import {
   Graph,
   Digraph,
 } from '../models.js';
-import { EdgeTargetTuple, SubgraphModel } from '../common/index.js';
 
 describe('class AttributeList', () => {
   let attrs: AttributeList<'Node'>;

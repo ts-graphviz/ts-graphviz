@@ -1,4 +1,3 @@
-// import type { AttributeKey } from '../../attribute/index.js';
 import type {
   ASTChildNode,
   AttributeASTNode,

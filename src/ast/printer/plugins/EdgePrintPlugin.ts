@@ -1,4 +1,4 @@
-import { map, pipe } from '../../../utils/index.js';
+import { map, pipe } from '#/lib/utils';
 import { EdgeASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { endOfLine, joinBy, indent, wrapByPair } from './utils/index.js';

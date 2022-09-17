@@ -10,8 +10,10 @@
     "moduleResolution": "Node16",
     "skipLibCheck": true,
     "declaration": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "#/lib/*": ["./src/*/index.js"]
+    }
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "**/__tests__/**/*"]
+  "include": ["src/**/*.ts"]
 }
