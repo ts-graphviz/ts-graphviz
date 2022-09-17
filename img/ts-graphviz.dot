@@ -1,0 +1,20 @@
+digraph state_machine {
+  rankdir = LR;
+  node [ shape = circle ]
+
+  // { rank = same; builder_fn; Model; DOT; }
+
+  builder_fn [
+    shape = record,
+    label = "{{Builder Functions | strict.digraph(...)\lstrict.graph(...)\ldigraph(...)\lgraph(...)\l}}"
+  ]
+
+  oop [
+    shape = record,
+    label = "{{Object Oriented Programing | new Digraph(...)\lnew Graph(...)\l...\l}}"
+  ]
+
+  {builder_fn, oop} -> Model;
+
+  Model -> DOT [ label = "toDot" ]
+}

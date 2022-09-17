@@ -1,0 +1,10 @@
+digraph state_machine {
+  node [ shape = circle ]
+
+  { rank = same; Model; AST; DOT; }
+
+  Model -> DOT [ label = "toDot" ]
+  AST   -> DOT [ label = "stringify" ]
+  DOT   -> AST [ label = "parse" ]
+  Model -> AST [ label = "fromModel" ]
+}

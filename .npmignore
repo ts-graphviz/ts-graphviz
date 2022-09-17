@@ -18,3 +18,4 @@ rollup.config.js
 src
 tsconfig.json
 typedoc.json
+Makefile

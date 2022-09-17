@@ -7,26 +7,26 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-> [English](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.md) | [日本語](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.ja.md)
+[English](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.md) | [日本語](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.ja.md)
 
 # ts-graphviz
 
-[Graphviz](https://graphviz.gitlab.io/) library for TypeScript.
+TypeScriptの ための [Graphviz](https://graphviz.gitlab.io/) ライブラリ
 
-## Key Features ✨
+## 主な機能 ✨
 
-`ts-graphviz` package provides models and ASTs for the Graphviz DOT language fully integrated with TypeScript.
+TypeScript に完全に統合された Graphviz DOT言語のモデルとASTを提供します。
 
-- **TypeScript-friendly API**
-  - It provides models in the DOT language. TypeScript type definitions are also provided for attributes and even attribute types.
-- **Freedom from programming paradigms**
-  - Designed to be object-oriented, it provides APIs that can be adapted to both imperative and declarative APIs. You can choose the paradigm that best fits your project.
-- **Suitable for any use cases**
-  - Both a high-layer API to provide models and a low-layer API to handle ASTs are provided to address any use cases.
+- **TypeScript フレンドリーな API**
+  - DOT言語のモデルを提供しています。また属性と属性の型まで TypeScript の型定義が用意されています。
+- **パラダイムからの開放**
+  - オブジェクト指向で設計され、命令的 API と 宣言的 API のどちらにも適合できるAPI提供しています。 プロジェクトにあったパラダイムを選択できます。
+- **あらゆるユースケースに対応**
+  - モデルを提供する高レイヤーの API と ASTを取り扱う低レイヤーの API をどちらも提供し、あらゆるユースケースに対応します。
 
-## Installation 💽
+## インストール方法 💽
 
-This package can then be installed using [npm](https://www.npmjs.com/):
+[npm](https://www.npmjs.com/) からインストールできます。
 
 ```bash
 # yarn
@@ -35,19 +35,19 @@ $ yarn add ts-graphviz
 $ npm install -S ts-graphviz
 ```
 
-## Usage 📑
+## 使い方 📑
 
-### `ts-graphviz` Module 🚩
+### `ts-graphviz` モジュール 🚩
 
-This module provides **Model**, an interface for working with the DOT language in JavaScript/TypeScript.
+DOT 言語をJavaScript/TypeScriptで扱うためのインターフェースである Model を提供します。
 
 ![ts-graphviz](./img/ts-graphviz.svg)
 
-#### Object-Oriented ❤️
+#### オブジェクト指向 ❤️
 
-**Model** is designed to be object-oriented and provides classes `Digraph`, `Graph`, `Subgraph`, `Node`, and `Edge`.
+**Model** はオブジェクト指向に設計されており、 `Digraph`, `Graph`, `Subgraph`, `Node`, `Edge` のクラスを提供しています。
 
-Provides a `toDot` function to convert **Model** to **DOT** (DOT language string).
+**Model** を **DOT** (DOT言語の文字列)に変換する`toDot` 関数を提供しています。
 
 ```typescript
 import { attribute, Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
@@ -86,9 +86,9 @@ const dot = toDot(G);
 ```
 
 <details>
-<summary>Advanced Usage</summary>
+<summary>高度な使い方</summary>
 
-You can also add your own implementation by inheriting from the class.
+クラスを継承することで独自の実装を加えることもできます。
 
 ```typescript
 import { Digraph, Node, Edge, EdgeTargetTuple, attribute, toDot } from 'ts-graphviz';
@@ -140,12 +140,12 @@ const dot = toDot(g);
 
 </details>
 
-#### Declarative API 😎
 
-When creating `Graph` or `Digraph`, you can use _Builder Function_ to provide a notation more similar to the **DOT** language.
+#### 宣言的な API 😎
 
-**Model** also has a declarative API, so you can consistently choose a declarative paradigm.
+`Graph` や `Digraph` を作成する際に、より **DOT** 言語に近い記法を提供するために _Builder Functuion_ を使うことができます。
 
+**Model** にも宣言的な API を用意しており、一貫して宣言的なパラダイムを選択することもできます。
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz';
@@ -195,7 +195,7 @@ const dot = toDot(G);
 // }
 ```
 
-> **Note** Of course, we also provide an API for creating strict mode graphs.
+> **Note** もちろん、strictモードのグラフを作るAPIも提供しています。
 >
 > ```typescript
 > import { strict, toDot } from 'ts-graphviz';
@@ -206,26 +206,25 @@ const dot = toDot(G);
 > // }
 > ```
 
-### `ts-graphviz/ast` Module 🔢
+### `ts-graphviz/ast` モジュール 🔢
 
-An API is provided to handle ASTs for advanced use.
+高度な利用のためにASTを扱うためのAPIを提供しています。
 
 ![State Machine](./img/state-machine.svg)
 
-The following functions are provided as described in the state transition diagram.
+状態遷移図で記載している通り、下記の関数を提供しています。
 
-- The `fromModel` function converts **Model** to **AST**.
-- The `stringify` function converts **AST** to **DOT**.
-- The `parse` function to convert from **DOT** to **AST**.
+- **Model** から **AST** に変換する `fromModel` 関数
+- **AST** から **DOT** に変換する `stringify` 関数
+- **DOT** から **AST** に変換する `parse` 関数
 
-> **Note** As you can see from the above figure, the `toDot` function provided by the `ts-graphviz` package is a composite function of `fromModel` and `stringify`.
+> **Note** 上記の図からわかるように、`ts-graphviz` パッケージで提供している `toDot` 関数は、 `fromModel` と `stringify` の合成関数です。
 
-Detailed usage is TODO.
-Please refer to the TypeScript type definition.
-
+詳しい利用方法は整備中です。
+TypeScriptの型定義を参考にしてください。
 
 <details>
-<summary>The parse function and AST</summary>
+<summary>parse 関数とAST</summary>
 
 
 ```typescript
@@ -319,15 +318,15 @@ const ast = parse(`
 
 </details>
 
-## Related Projects 💫
+## 関連プロジェクト 💫
 
-Related projects can be found at [**ts-graphviz** GitHub Organization](https://github.com/ts-graphviz).
+関連するプロジェクトは [**ts-graphviz** GitHub Organization](https://github.com/ts-graphviz) で確認することができます。
 
-The TypeScript/JavaScript ecosystem provides a variety of OSS with the goal of making Graphviz more connected and easier to use.
+TypeScript/JavaScript エコシステムで Graphviz との結合度を高め、より使いやすくすることを目的に様々な OSS を提供しています。
 
-## Contributors 👥
+## コントリビュータ 👥
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+この素晴らしい人たち（[emoji key](https://allcontributors.org/docs/en/emoji-key)）に感謝します。
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -348,31 +347,33 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors)
-specification. Contributions of any kind welcome!
+このプロジェクトは、[all-contributors](https://github.com/all-contributors/all-contributors) の仕様に準拠しています。
 
-## How to Contribute 💪
+どのような種類の貢献でも歓迎します。
 
-The easiest way to contribute is to use the library and star [repository](https://github.com/ts-graphviz/ts-graphviz).
+## 貢献の方法 💪
 
-### Questions 💭
+一番簡単な貢献の方法は、ライブラリを使っていただくことと、 [リポジトリ](https://github.com/ts-graphviz/ts-graphviz) にスターをつけることです。
 
-Feel free to ask questions on [GitHub Discussions](https://github.com/ts-graphviz/ts-graphviz/discussions).
+### 質問 💭
 
-### Report bugs / request additional features 💡
+[GitHub Discussions](https://github.com/ts-graphviz/ts-graphviz/discussions) で気軽に質問してください。
 
-Please register at [GitHub Issues](https://github.com/ts-graphviz/ts-graphviz/issues/new/choose).
+### バグの報告/追加機能の要望 💡
 
-### Development / Bug Fixes 🧑‍💻
+[GitHub Issues](https://github.com/ts-graphviz/ts-graphviz/issues/new/choose) から登録してください。
 
-See [CONTRIBUTING.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/CONTRIBUTING.md).
+### 機能開発/バグ修正 🧑‍💻
 
-### Financial Support 💸
+[CONTRIBUTING.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/CONTRIBUTING.md) を参照してください。
 
-Please support core member [kamiazya](https://github.com/sponsors/kamiazya).
+### 金銭的支援 💸
 
-> **Note** Even just a dollar is enough motivation for me to develop 😊
+コアメンバーの [kamiazya](https://github.com/sponsors/kamiazya) を支援してください。
 
-## License ⚖️
+> **Note** たった1ドルでも、私には十分な開発のモチベーションになります 😊
 
-This software is released under the MIT License, see [LICENSE](https://github.com/ts-graphviz/ts-graphviz/blob/main/LICENSE).
+## ライセンス ⚖️
+
+本ソフトウェアはMITライセンスのもとで公開されています。
+[LICENSE](https://github.com/ts-graphviz/ts-graphviz/blob/main/LICENSE)を参照してください。

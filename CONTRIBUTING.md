@@ -2,7 +2,7 @@
 
 First off, thanks for taking the time to contribute!
 
-1. Fork (<https://github.com/kamiazya/ts-graphviz/fork>).
+1. Fork (<https://github.com/ts-graphviz/ts-graphviz/fork>).
 2. Run `yarn install` command and install dependencies.
 3. Create a feature branch.
 4. Commit your changes.
@@ -13,6 +13,6 @@ First off, thanks for taking the time to contribute!
 
 ## Requirements
 
-- Node.js >=10.x
+- Node.js >=14.x
 - yarn >=1.17
-- Graphviz >=2.40
+- Graphviz
