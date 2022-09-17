@@ -1,10 +1,8 @@
-export * from './attribute';
-export * from './types';
-export * from './model/abstract';
-export * from './model/attributes-base';
-export * from './model/clusters';
-export * from './model/root-clusters';
-export * from './model/edges';
-export * from './model/nodes';
-export * from './usecase';
-export * from './render/to-dot';
+/**
+ * @module ts-graphviz
+ */
+export * from './common/index.js';
+export * from './attribute.js';
+export * from './models.js';
+export * from './create-root-graph.js';
+export * from './to-dot.js';

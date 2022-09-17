@@ -1,0 +1,6 @@
+{
+  "allowedStartRules": ["Dot", "Graph", "Subgraph", "Node", "Edge", "AttributeList", "Attribute", "ClusterStatements"],
+  "tspegjs": {
+    "customHeader": "/* eslint-disable */\nimport { Builder } from '../builder/index.js';"
+  }
+}

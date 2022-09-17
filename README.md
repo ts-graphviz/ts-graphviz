@@ -4,29 +4,29 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 ![npm](https://img.shields.io/npm/dm/ts-graphviz) <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+> [English](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.md) | [日本語](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.ja.md)
 
 # ts-graphviz
 
 [Graphviz](https://graphviz.gitlab.io/) library for TypeScript.
 
-## Key Feature
+## Key Features ✨
 
-- Export Dot language.
-- TypeScript Support.
-- Supports multiple runtime and module.
-  - Node.js, Browser and [Deno](https://github.com/ts-graphviz/deno).
-  - UMD, ESM, CommonJS
-- Zero dependencies.
+`ts-graphviz` package provides models and ASTs for the Graphviz DOT language fully integrated with TypeScript.
 
-## Installation
+- **TypeScript-friendly API**
+  - It provides models in the DOT language. TypeScript type definitions are also provided for attributes and even attribute types.
+- **Freedom from programming paradigms**
+  - Designed to be object-oriented, it provides APIs that can be adapted to both imperative and declarative APIs. You can choose the paradigm that best fits your project.
+- **Suitable for any use cases**
+  - Both a high-layer API to provide models and a low-layer API to handle ASTs are provided to address any use cases.
 
-The package can then be installed using [npm](https://www.npmjs.com/):
+## Installation 💽
 
-[![NPM](https://nodei.co/npm/ts-graphviz.png)](https://nodei.co/npm/ts-graphviz/)
-
-### Package manager
+This package can then be installed using [npm](https://www.npmjs.com/):
 
 ```bash
 # yarn
@@ -35,57 +35,117 @@ $ yarn add ts-graphviz
 $ npm install -S ts-graphviz
 ```
 
-### Browser
+## Usage 📑
 
-```html
-<script src="//unpkg.com/ts-graphviz/lib/bundle.min.js"></script>
-```
+### `ts-graphviz` Module 🚩
 
-## Examples
+This module provides **Model**, an interface for working with the DOT language in JavaScript/TypeScript.
 
-### Script style
+![ts-graphviz](./img/ts-graphviz.svg)
+
+#### Object-Oriented ❤️
+
+**Model** is designed to be object-oriented and provides classes `Digraph`, `Graph`, `Subgraph`, `Node`, and `Edge`.
+
+Provides a `toDot` function to convert **Model** to **DOT** (DOT language string).
 
 ```typescript
-import { digraph, toDot } from 'ts-graphviz';
+import { attribute, Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
 
-const g = digraph('G');
-
-const subgraphA = g.createSubgraph('A');
-const nodeA1 = subgraphA.createNode('A_node1');
-const nodeA2 = subgraphA.createNode('A_node2');
-subgraphA.createEdge([nodeA1, nodeA2]);
-
-const subgraphB = g.createSubgraph('B');
-const nodeB1 = subgraphB.createNode('B_node1');
-const nodeB2 = subgraphB.createNode('B_node2');
-subgraphA.createEdge([nodeB1, nodeB2]);
-
-const node1 = g.createNode('node1');
-const node2 = g.createNode('node2');
-g.createEdge([node1, node2]);
-const dot = toDot(g);
-console.log(dot);
+const G = new Digraph();
+const A = new Subgraph('A');
+const node1 = new Node('node1', {
+  [attribute.color]: 'red'
+});
+const node2 = new Node('node2', {
+  [attribute.color]: 'blue'
+});
+const edge = new Edge([node1, node2], {
+  [attribute.label]: 'Edge Label',
+  [attribute.color]: 'pink'
+});
+G.addSubgraph(A);
+A.addNode(node1);
+A.addNode(node2);
+A.addEdge(edge);
+const dot = toDot(G);
+// digraph {
+//   subgraph "A" {
+//     "node1" [
+//       color = "red",
+//     ];
+//     "node2" [
+//       color = "blue",
+//     ];
+//     "node1" -> "node2" [
+//       label = "Edge Label",
+//       color = "pink",
+//     ];
+//   }
+// }
 ```
 
-```dot
-digraph "G" {
-  "node1";
-  "node2";
-  subgraph "A" {
-    "A_node1";
-    "A_node2";
-    "A_node1" -> "A_node2";
-    "B_node1" -> "B_node2";
+<details>
+<summary>Advanced Usage</summary>
+
+You can also add your own implementation by inheriting from the class.
+
+```typescript
+import { Digraph, Node, Edge, EdgeTargetTuple, attribute, toDot } from 'ts-graphviz';
+
+class MyCustomDigraph extends Digraph {
+  constructor() {
+    super('G', {
+      [attribute.label]: 'This is Custom Digraph',
+    });
   }
-  subgraph "B" {
-    "B_node1";
-    "B_node2";
-  }
-  "node1" -> "node2";
 }
+class MyCustomNode extends Node {
+  constructor(id: number) {
+    super(`node${id}`, {
+      [attribute.label]: `This is Custom Node ${id}`
+    });
+  }
+}
+
+class MyCustomEdge extends Edge {
+  constructor(targets: EdgeTargetTuple) {
+    super(targets, {
+      [attribute.label]: 'This is Custom Edge'
+    });
+  }
+}
+
+const digraph = new MyCustomDigraph();
+const node1 = new MyCustomNode(1);
+const node2 = new MyCustomNode(2);
+const edge = new MyCustomEdge([node1, node2]);
+digraph.addNode(node1);
+digraph.addNode(node2);
+digraph.addEdge(edge);
+const dot = toDot(g);
+// digraph "G" {
+//   label = "This is Custom Digraph";
+//   "node1" [
+//     label = "This is Custom Node 1",
+//   ];
+//   "node2" [
+//     label = "This is Custom Node 2",
+//   ];
+//   "node1" -> "node2" [
+//     label = "This is Custom Edge",
+//   ];
+// }
 ```
 
-### Callback style
+</details>
+
+#### Declarative API 😎
+
+When creating `Graph` or `Digraph`, you can use _Builder Function_ to provide a notation more similar to the **DOT** language.
+
+**Model** also has a declarative API, so you can consistently choose a declarative paradigm.
+
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz';
@@ -113,140 +173,159 @@ import { digraph, toDot } from 'ts-graphviz';
 });
 
 const dot = toDot(G);
-console.log(dot);
+// digraph "G" {
+//   "aa";
+//   "bb";
+//   "cc";
+//   subgraph "A" {
+//     "Aaa" [
+//       color = "pink",
+//     ];
+//     "Abb" [
+//       color = "violet",
+//     ];
+//     "Acc";
+//     "Aaa":"a" -> "Abb" -> "Acc" -> "E" [
+//       color = "red",
+//     ];
+//   }
+//   "aa" -> "bb" -> "cc" [
+//     color = "red",
+//   ];
+// }
 ```
 
-```dot
-digraph "G" {
-  "aa";
-  "bb";
-  "cc";
-  subgraph "A" {
-    "Aaa" [
-      color = "pink",
-    ];
-    "Abb" [
-      color = "violet",
-    ];
-    "Acc";
-    "Aaa":"a" -> "Abb" -> "Acc" -> "E" [
-      color = "red",
-    ];
-  }
-  "aa" -> "bb" -> "cc" [
-    color = "red",
-  ];
-}
-```
+> **Note** Of course, we also provide an API for creating strict mode graphs.
+>
+> ```typescript
+> import { strict, toDot } from 'ts-graphviz';
+>
+> const G = strict.graph(...);
+> const dot = toDot(G);
+> // strict graph {
+> // }
+> ```
 
-### Class base API
+### `ts-graphviz/ast` Module 🔢
+
+An API is provided to handle ASTs for advanced use.
+
+![State Machine](./img/state-machine.svg)
+
+The following functions are provided as described in the state transition diagram.
+
+- The `fromModel` function converts **Model** to **AST**.
+- The `stringify` function converts **AST** to **DOT**.
+- The `parse` function to convert from **DOT** to **AST**.
+
+> **Note** As you can see from the above figure, the `toDot` function provided by the `ts-graphviz` package is a composite function of `fromModel` and `stringify`.
+
+Detailed usage is TODO.
+Please refer to the TypeScript type definition.
+
+
+<details>
+<summary>The parse function and AST</summary>
+
 
 ```typescript
-import { attribute, Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
+import { parse } from 'ts-graphviz/ast';
 
-const G = new Digraph();
-const A = new Subgraph('A');
-const node1 = new Node('node1', {
-  [attribute.color]: 'red'
-});
-const node2 = new Node('node2', {
-  [attribute.color]: 'blue'
-});
-const edge = new Edge([node1, node2], {
-  [attribute.label]: 'Edge Label',
-  [attribute.color]: 'pink'
-});
-G.addSubgraph(A);
-A.addNode(node1);
-A.addNode(node2);
-A.addEdge(edge);
-const dot = toDot(G);
-console.log(dot);
+const ast = parse(`
+  digraph example {
+    node1 [
+      label = "My Node",
+    ]
+  }
+`);
+// {
+//   type: 'Dot',
+//   location: {
+//     start: { offset: 3, line: 2, column: 3 },
+//     end: { offset: 68, line: 7, column: 1 }
+//   },
+//   children: [
+//     {
+//       id: {
+//         value: 'example',
+//         quoted: false,
+//         type: 'Literal',
+//         location: {
+//           start: { offset: 11, line: 2, column: 11 },
+//           end: { offset: 18, line: 2, column: 18 }
+//         },
+//         children: []
+//       },
+//       directed: true,
+//       strict: false,
+//       type: 'Graph',
+//       location: {
+//         start: { offset: 3, line: 2, column: 3 },
+//         end: { offset: 67, line: 6, column: 4 }
+//       },
+//       children: [
+//         {
+//           id: {
+//             value: 'node1',
+//             quoted: false,
+//             type: 'Literal',
+//             location: {
+//               start: { offset: 25, line: 3, column: 5 },
+//               end: { offset: 30, line: 3, column: 10 }
+//             },
+//             children: []
+//           },
+//           type: 'Node',
+//           location: {
+//             start: { offset: 25, line: 3, column: 5 },
+//             end: { offset: 63, line: 5, column: 6 }
+//           },
+//           children: [
+//             {
+//               key: {
+//                 value: 'label',
+//                 quoted: false,
+//                 type: 'Literal',
+//                 location: {
+//                   start: { offset: 39, line: 4, column: 7 },
+//                   end: { offset: 44, line: 4, column: 12 }
+//                 },
+//                 children: []
+//               },
+//               value: {
+//                 value: 'My Node',
+//                 quoted: true,
+//                 type: 'Literal',
+//                 location: {
+//                   start: { offset: 47, line: 4, column: 15 },
+//                   end: { offset: 56, line: 4, column: 24 }
+//                 },
+//                 children: []
+//               },
+//               location: {
+//                 start: { offset: 39, line: 4, column: 7 },
+//                 end: { offset: 57, line: 4, column: 25 }
+//               },
+//               type: 'Attribute',
+//               children: []
+//             }
+//           ]
+//         }
+//       ]
+//     }
+//   ]
+// }
 ```
 
-```dot
-digraph {
-  subgraph "A" {
-    "node1" [
-      color = "red",
-    ];
-    "node2" [
-      color = "blue",
-    ];
-    "node1" -> "node2" [
-      label = "Edge Label",
-      color = "pink",
-    ];
-  }
-}
-```
+</details>
 
-### Custom Classes
+## Related Projects 💫
 
-```typescript
-import { Digraph, Node, Edge, EdgeTarget, attribute, toDot } from 'ts-graphviz';
+Related projects can be found at [**ts-graphviz** GitHub Organization](https://github.com/ts-graphviz).
 
-class MyCustomDigraph extends Digraph {
-  constructor() {
-    super('G', {
-      [attribute.label]: 'This is Custom Digraph',
-    });
-  }
-}
-class MyCustomNode extends Node {
-  constructor(id: number) {
-    super(`node${id}`, {
-      [attribute.label]: `This is Custom Node ${id}`
-    });
-  }
-}
+The TypeScript/JavaScript ecosystem provides a variety of OSS with the goal of making Graphviz more connected and easier to use.
 
-class MyCustomEdge extends Edge {
-  constructor(targets: ReadonlyArray<EdgeTarget>) {
-    super(targets, {
-      [attribute.label]: 'This is Custom Edge'
-    });
-  }
-}
-
-const digraph = new MyCustomDigraph();
-const node1 = new MyCustomNode(1);
-const node2 = new MyCustomNode(2);
-const edge = new MyCustomEdge([node1, node2]);
-digraph.addNode(node1);
-digraph.addNode(node2);
-digraph.addEdge(edge);
-const dot = toDot(g);
-console.log(dot);
-```
-
-```dot
-digraph "G" {
-  label = "This is Custom Digraph";
-  "node1" [
-    label = "This is Custom Node 1",
-  ];
-  "node2" [
-    label = "This is Custom Node 2",
-  ];
-  "node1" -> "node2" [
-    label = "This is Custom Edge",
-  ];
-}
-```
-
-## See Also
-
-Graphviz-dot Test and Integration
-
-- [@ts-graphviz/react](https://github.com/ts-graphviz/react)
-  - Graphviz-dot Renderer for React.
-- [jest-graphviz](https://github.com/ts-graphviz/jest-graphviz)
-  - Jest matchers that supports graphviz integration.
-- [setup-graphviz](https://github.com/ts-graphviz/setup-graphviz)
-  - GitHub Action to set up Graphviz cross-platform(Linux, macOS, Windows).
-
-## Contributors
+## Contributors 👥
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
@@ -254,24 +333,46 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="http://blog.kamiazya.tech/"><img src="https://avatars0.githubusercontent.com/u/35218186?v=4" width="100px;" alt=""/><br /><sub><b>Yuki Yamazaki</b></sub></a><br /><a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=kamiazya" title="Code">💻</a> <a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=kamiazya" title="Tests">⚠️</a> <a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=kamiazya" title="Documentation">📖</a> <a href="#ideas-kamiazya" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://laysent.com"><img src="https://avatars2.githubusercontent.com/u/1191606?v=4" width="100px;" alt=""/><br /><sub><b>LaySent</b></sub></a><br /><a href="https://github.com/ts-graphviz/ts-graphviz/issues?q=author%3Alaysent" title="Bug reports">🐛</a> <a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=laysent" title="Tests">⚠️</a></td>
-    <td align="center"><a href="https://github.com/elasticdotventures"><img src="https://avatars0.githubusercontent.com/u/35611074?v=4" width="100px;" alt=""/><br /><sub><b>elasticdotventures</b></sub></a><br /><a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=elasticdotventures" title="Documentation">📖</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center"><a href="http://blog.kamiazya.tech/"><img src="https://avatars0.githubusercontent.com/u/35218186?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Yuki Yamazaki</b></sub></a><br /><a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=kamiazya" title="Code">💻</a> <a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=kamiazya" title="Tests">⚠️</a> <a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=kamiazya" title="Documentation">📖</a> <a href="#ideas-kamiazya" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center"><a href="https://laysent.com"><img src="https://avatars2.githubusercontent.com/u/1191606?v=4?s=100" width="100px;" alt=""/><br /><sub><b>LaySent</b></sub></a><br /><a href="https://github.com/ts-graphviz/ts-graphviz/issues?q=author%3Alaysent" title="Bug reports">🐛</a> <a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=laysent" title="Tests">⚠️</a></td>
+      <td align="center"><a href="https://github.com/elasticdotventures"><img src="https://avatars0.githubusercontent.com/u/35611074?v=4?s=100" width="100px;" alt=""/><br /><sub><b>elasticdotventures</b></sub></a><br /><a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=elasticdotventures" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://github.com/ChristianMurphy"><img src="https://avatars.githubusercontent.com/u/3107513?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Christian Murphy</b></sub></a><br /><a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=ChristianMurphy" title="Code">💻</a> <a href="#ideas-ChristianMurphy" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/ts-graphviz/ts-graphviz/commits?author=ChristianMurphy" title="Documentation">📖</a></td>
+    </tr>
+  </tobdy>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors)
 specification. Contributions of any kind welcome!
 
-## Contributing
+## How to Contribute 💪
 
-For more info on how to contribute to ts-graphviz, see the [docs](./CONTRIBUTING.md).
+The easiest way to contribute is to use the library and star [repository](https://github.com/ts-graphviz/ts-graphviz).
 
-## License
+### Questions 💭
 
-This software is released under the MIT License, see [LICENSE](./LICENSE).
+Feel free to ask questions on [GitHub Discussions](https://github.com/ts-graphviz/ts-graphviz/discussions).
+
+### Report bugs / request additional features 💡
+
+Please register at [GitHub Issues](https://github.com/ts-graphviz/ts-graphviz/issues/new/choose).
+
+### Development / Bug Fixes 🧑‍💻
+
+See [CONTRIBUTING.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/CONTRIBUTING.md).
+
+### Financial Support 💸
+
+Please support core member [kamiazya](https://github.com/sponsors/kamiazya).
+
+> **Note** Even just a dollar is enough motivation for me to develop 😊
+
+## License ⚖️
+
+This software is released under the MIT License, see [LICENSE](https://github.com/ts-graphviz/ts-graphviz/blob/main/LICENSE).

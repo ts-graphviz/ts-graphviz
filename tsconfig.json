@@ -1,26 +1,17 @@
 {
   "compilerOptions": {
-    "importHelpers": true,
-    "target": "es5",
+    "target": "ESNext",
+    "module": "ESNext",
     "strict": true,
-    "lib": [
-      "DOM",
-      "esnext"
-    ],
-    "allowJs": false,
     "alwaysStrict": true,
     "strictNullChecks": true,
     "outDir": "lib",
-    "rootDir": "src",
-    "moduleResolution": "node",
     "esModuleInterop": true,
-    "declaration": true
+    "moduleResolution": "Node16",
+    "skipLibCheck": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "**/__tests__/**/*"]
 }

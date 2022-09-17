@@ -1,0 +1,9 @@
+{
+  "preset": "ts-jest/presets/default-esm",
+  "testEnvironment": "node",
+  "collectCoverage": true,
+  "globals": { "ts-jest": { "useESM": true } },
+  "extensionsToTreatAsEsm": [".ts"],
+  "moduleNameMapper": { "^(\\.{1,2}/.*)\\.js$": "$1" },
+  "snapshotSerializers": ["jest-snapshot-serializer-raw"]
+}
