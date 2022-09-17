@@ -4,6 +4,9 @@
   "collectCoverage": true,
   "globals": { "ts-jest": { "useESM": true } },
   "extensionsToTreatAsEsm": [".ts"],
-  "moduleNameMapper": { "^(\\.{1,2}/.*)\\.js$": "$1" },
+  "moduleNameMapper": {
+    "^\\#\\/lib\\/(.*)$": "<rootDir>/src/$1",
+    "^(\\.{1,2}/.*)\\.js$": "$1"
+  },
   "snapshotSerializers": ["jest-snapshot-serializer-raw"]
 }

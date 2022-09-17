@@ -30,7 +30,7 @@ import {
   toNodeRefGroup,
   toNodeRef,
   isNodeRefLike,
-} from './common/index.js';
+} from '#/lib/common';
 
 /**
  * Classes implemented in the 'ts-graphviz' library are designed to inherit from this class.

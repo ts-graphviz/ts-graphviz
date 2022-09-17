@@ -41,7 +41,7 @@ $ npm install -S ts-graphviz
 
 This module provides **Model**, an interface for working with the DOT language in JavaScript/TypeScript.
 
-![ts-graphviz](./img/ts-graphviz.svg)
+![ts-graphviz](./media/ts-graphviz.svg)
 
 #### Object-Oriented ❤️
 
@@ -50,19 +50,19 @@ This module provides **Model**, an interface for working with the DOT language i
 Provides a `toDot` function to convert **Model** to **DOT** (DOT language string).
 
 ```typescript
-import { attribute, Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
+import { attribute as _, Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
 
 const G = new Digraph();
 const A = new Subgraph('A');
 const node1 = new Node('node1', {
-  [attribute.color]: 'red'
+  [_.color]: 'red'
 });
 const node2 = new Node('node2', {
-  [attribute.color]: 'blue'
+  [_.color]: 'blue'
 });
 const edge = new Edge([node1, node2], {
-  [attribute.label]: 'Edge Label',
-  [attribute.color]: 'pink'
+  [_.label]: 'Edge Label',
+  [_.color]: 'pink'
 });
 G.addSubgraph(A);
 A.addNode(node1);
@@ -91,19 +91,19 @@ const dot = toDot(G);
 You can also add your own implementation by inheriting from the class.
 
 ```typescript
-import { Digraph, Node, Edge, EdgeTargetTuple, attribute, toDot } from 'ts-graphviz';
+import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
 
 class MyCustomDigraph extends Digraph {
   constructor() {
     super('G', {
-      [attribute.label]: 'This is Custom Digraph',
+      [_.label]: 'This is Custom Digraph',
     });
   }
 }
 class MyCustomNode extends Node {
   constructor(id: number) {
     super(`node${id}`, {
-      [attribute.label]: `This is Custom Node ${id}`
+      [_.label]: `This is Custom Node ${id}`
     });
   }
 }
@@ -111,7 +111,7 @@ class MyCustomNode extends Node {
 class MyCustomEdge extends Edge {
   constructor(targets: EdgeTargetTuple) {
     super(targets, {
-      [attribute.label]: 'This is Custom Edge'
+      [_.label]: 'This is Custom Edge'
     });
   }
 }
@@ -148,26 +148,26 @@ When creating `Graph` or `Digraph`, you can use _Builder Function_ to provide a 
 
 
 ```typescript
-import { digraph, toDot } from 'ts-graphviz';
+import { attribute as _, digraph, toDot } from 'ts-graphviz';
 
  const G = digraph('G', (g) => {
   const a = g.node('aa');
   const b = g.node('bb');
   const c = g.node('cc');
   g.edge([a, b, c], {
-    [attribute.color]: 'red'
+    [_.color]: 'red'
   });
   g.subgraph('A', (A) => {
     const Aa = A.node('Aaa', {
-      [attribute.color]: 'pink'
+      [_.color]: 'pink'
     });
 
     const Ab = A.node('Abb', {
-      [attribute.color]: 'violet'
+      [_.color]: 'violet'
     });
     const Ac = A.node('Acc');
     A.edge([Aa.port('a'), Ab, Ac, 'E'], {
-      [attribute.color]: 'red'
+      [_.color]: 'red'
     });
   });
 });
@@ -210,7 +210,7 @@ const dot = toDot(G);
 
 An API is provided to handle ASTs for advanced use.
 
-![State Machine](./img/state-machine.svg)
+![State Machine](./media/state-machine.svg)
 
 The following functions are provided as described in the state transition diagram.
 

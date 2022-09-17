@@ -14,8 +14,9 @@ coverage
 doc
 jest.config.json
 LICENSE
+Makefile
+README.*.md
 rollup.config.js
 src
 tsconfig.json
 typedoc.json
-Makefile

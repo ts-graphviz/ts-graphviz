@@ -1,4 +1,4 @@
-import type { Compass, AttributeKey, ASTType, DotObjectType } from '../common/index.js';
+import type { Compass, AttributeKey, ASTType, DotObjectType } from '#/lib/common';
 
 export interface FilePosition {
   offset: number;

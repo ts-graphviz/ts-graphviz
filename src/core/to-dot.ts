@@ -1,6 +1,5 @@
-import { DotObjectModel } from './common/index.js';
-import { stringify, fromModel, PrintOptions } from './ast/index.js';
-import { ConvertOptions } from './ast/index.js';
+import { DotObjectModel } from '#/lib/common';
+import { stringify, fromModel, PrintOptions, ConvertOptions } from '#/lib/ast';
 
 export interface ToDotOptions {
   convert?: ConvertOptions;

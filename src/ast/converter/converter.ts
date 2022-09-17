@@ -1,6 +1,6 @@
+import { DotObjectModel } from '#/lib/common';
 import { ConvertContext, ConvertOptions, ConvertPlugin } from './types.js';
 import { defaultPlugins } from './plugins/index.js';
-import { DotObjectModel } from '../../common/index.js';
 import { ModelToAST } from '../types.js';
 
 export class Converter {

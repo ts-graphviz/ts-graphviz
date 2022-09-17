@@ -1,4 +1,4 @@
-import { pipe, map } from '../../../utils/index.js';
+import { pipe, map } from '#/lib/utils';
 import { SubgraphASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { endOfLine, joinBy, indent, wrapByPair } from './utils/index.js';
