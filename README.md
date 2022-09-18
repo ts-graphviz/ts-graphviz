@@ -13,6 +13,8 @@
 
 [Graphviz](https://graphviz.gitlab.io/) library for TypeScript.
 
+> [GitHub](https://github.com/ts-graphviz/ts-graphviz) | [npm](https://www.npmjs.com/package/ts-graphviz)([yarn](https://github.com/ts-graphviz/ts-graphviz)) | [document](https://ts-graphviz.github.io/ts-graphviz/)
+
 ## Key Features ✨
 
 `ts-graphviz` package provides models and ASTs for the Graphviz DOT language fully integrated with TypeScript.
@@ -26,16 +28,22 @@
 
 ## Installation 💽
 
-This package can then be installed using [npm](https://www.npmjs.com/):
+This package can then be installed using a package manager.
 
 ```bash
-# yarn
-$ yarn add ts-graphviz
-# or npm
+# npm
 $ npm install -S ts-graphviz
+# or yarn
+$ yarn add ts-graphviz
+# or pnpm
+$ pnpm add ts-graphviz
 ```
 
 ## Usage 📑
+
+This section provides an overview of the package.
+
+For more detailed API specifications, please refer to the comments in the TypeScript type definitions and the [document](https://ts-graphviz.github.io/ts-graphviz/) automatically generated based on them.
 
 ### `ts-graphviz` Module 🚩
 

@@ -15,9 +15,10 @@ doc
 jest.config.json
 LICENSE
 Makefile
-README.*.md
+media/*.dot
+README.ja.md
 rollup.config.js
 src
+tsconfig.build.json
 tsconfig.json
 typedoc.json
-tsconfig.build.json

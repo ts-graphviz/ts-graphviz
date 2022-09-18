@@ -13,6 +13,8 @@
 
 TypeScriptの ための [Graphviz](https://graphviz.gitlab.io/) ライブラリ
 
+> [GitHub](https://github.com/ts-graphviz/ts-graphviz) | [npm](https://www.npmjs.com/package/ts-graphviz)([yarn](https://github.com/ts-graphviz/ts-graphviz)) | [document](https://ts-graphviz.github.io/ts-graphviz/)
+
 ## 主な機能 ✨
 
 TypeScript に完全に統合された Graphviz DOT言語のモデルとASTを提供します。
@@ -26,16 +28,22 @@ TypeScript に完全に統合された Graphviz DOT言語のモデルとASTを�
 
 ## インストール方法 💽
 
-[npm](https://www.npmjs.com/) からインストールできます。
+このパッケージは、パッケージマネージャを使用してインストールすることができます。
 
 ```bash
-# yarn
-$ yarn add ts-graphviz
-# or npm
+# npm
 $ npm install -S ts-graphviz
+# or yarn
+$ yarn add ts-graphviz
+# or pnpm
+$ pnpm add ts-graphviz
 ```
 
 ## 使い方 📑
+
+この項では、パッケージの概要について説明します。
+
+より詳細なAPIの仕様は、 TypeScript の型定義のコメントやそれを元に自動生成された [ドキュメント](https://ts-graphviz.github.io/ts-graphviz/) を参照してください。
 
 ### `ts-graphviz` モジュール 🚩
 
