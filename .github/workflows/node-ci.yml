@@ -58,4 +58,10 @@ jobs:
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-      if: contains(github.ref, 'tags/v')
+      if: contains(github.ref, 'tags/v') && !contains(github.ref, '-')
+
+    - name: Publish to NPM for Prerelease
+      run: npm publish --tag next
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+      if: contains(github.ref, 'tags/v') && contains(github.ref, '-')
