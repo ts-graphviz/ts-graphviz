@@ -1,4 +1,4 @@
-import { DotObjectModel } from '#/lib/common';
+import { DotObjectModel } from '#lib/common';
 import { ModelToAST, CommentKind } from '../types.js';
 
 export interface ConvertOptions {

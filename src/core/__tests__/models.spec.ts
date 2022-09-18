@@ -1,4 +1,4 @@
-import { EdgeTargetTuple, SubgraphModel } from '#/lib/common';
+import { EdgeTargetTuple, SubgraphModel } from '#lib/common';
 import { attribute } from '../attribute.js';
 import {
   AttributeList,

@@ -36,7 +36,7 @@
     }
   },
   "imports": {
-    "#/lib/*": {
+    "#lib/*": {
       "import": "./lib/*/index.js",
       "require": "./lib/*/index.cjs",
       "types": "./lib/*/index.d.ts"

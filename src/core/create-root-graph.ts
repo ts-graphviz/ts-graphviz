@@ -1,4 +1,4 @@
-import { RootGraphModel, GraphAttributesObject } from '#/lib/common';
+import { RootGraphModel, GraphAttributesObject } from '#lib/common';
 import { Digraph, Graph } from './models.js';
 
 interface CreateRootGraph {

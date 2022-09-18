@@ -1,4 +1,4 @@
-import { AttributeKey, Attribute } from '#/lib/common';
+import { AttributeKey, Attribute } from '#lib/common';
 import { createElement } from '../../../create-element.js';
 import { AttributeASTNode } from '../../../types.js';
 

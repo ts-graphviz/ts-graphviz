@@ -1,5 +1,5 @@
-import { DotObjectModel } from '#/lib/common';
-import { stringify, fromModel, PrintOptions, ConvertOptions } from '#/lib/ast';
+import { DotObjectModel } from '#lib/common';
+import { stringify, fromModel, PrintOptions, ConvertOptions } from '#lib/ast';
 
 export interface ToDotOptions {
   convert?: ConvertOptions;

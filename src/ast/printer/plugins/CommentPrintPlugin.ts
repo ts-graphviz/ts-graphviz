@@ -1,4 +1,4 @@
-import { map, pipe } from '#/lib/utils';
+import { map, pipe } from '#lib/utils';
 import { CommentASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { leftPadWith, splitByLine, joinBy, wrapByPair, endOfLine } from './utils/index.js';

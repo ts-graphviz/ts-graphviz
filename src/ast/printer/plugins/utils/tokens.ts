@@ -1,4 +1,4 @@
-import { map, pipe } from '#/lib/utils';
+import { map, pipe } from '#lib/utils';
 import { EndOfLine, IndentStyle } from '../../types.js';
 
 const EOL = /\r?\n/;

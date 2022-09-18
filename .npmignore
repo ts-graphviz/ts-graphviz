@@ -20,3 +20,4 @@ rollup.config.js
 src
 tsconfig.json
 typedoc.json
+tsconfig.build.json

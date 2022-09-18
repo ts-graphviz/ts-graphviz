@@ -1,4 +1,4 @@
-import { DotObjectModel } from '#/lib/common';
+import { DotObjectModel } from '#lib/common';
 import { Converter, ConvertOptions } from './converter/index.js';
 import { ModelToAST } from './types.js';
 

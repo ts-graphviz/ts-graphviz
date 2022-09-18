@@ -12,7 +12,7 @@
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "#/lib/*": ["./src/*/index.js"]
+      "#lib/*": ["./src/*/index.js"]
     }
   },
   "include": ["src/**/*.ts"]

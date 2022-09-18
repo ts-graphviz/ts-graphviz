@@ -1,4 +1,4 @@
-import { map, pipe } from '#/lib/utils';
+import { map, pipe } from '#lib/utils';
 import { ASTNode, AttributeListASTNode } from '../../types.js';
 import { PrintPlugin } from '../types.js';
 import { endOfLine, joinBy, indent, wrapByPair } from './utils/index.js';

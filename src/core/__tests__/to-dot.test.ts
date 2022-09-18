@@ -1,4 +1,4 @@
-import { RootGraphModel } from '#/lib/common';
+import { RootGraphModel } from '#lib/common';
 import { Digraph, Graph } from '../models.js';
 import { toDot } from '../to-dot.js';
 
