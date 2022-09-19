@@ -1,5 +1,6 @@
 /**
  * Directive indicating which direction the Edge should point.
+ * @group Attribute Types
  */
 export type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_';
 
@@ -7,6 +8,7 @@ export type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | 
  * A double with an optional prefix `'+'`.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/addDouble/ addDouble}
+ * @group Attribute Types
  */
 export type AddDouble = `+${Double}`;
 
@@ -14,6 +16,7 @@ export type AddDouble = `+${Double}`;
  * Double-precision floating point number.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/double/ double}
+ * @group Attribute Types
  */
 export type Double = number;
 
@@ -21,12 +24,14 @@ export type Double = number;
  * Port Position
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/portPos/ portPos}
+ * @group Attribute Types
  */
 export type PortPos = `${string}:${Compass}` | Compass;
 /**
  * A colon-separated list of doubles: `"%f(:%f)*"` where each %f is a double.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/doubleList/ doubleList}
+ * @group Attribute Types
  */
 export type DoubleList =
   | Double
@@ -43,23 +48,28 @@ export type DoubleList =
  * Integer number.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/int/ int}
+ * @group Attribute Types
  */
 export type Int = number;
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/shape/ shape}
+ * @group Attribute Types
  */
 export type Shape = string;
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/smoothType/ smoothType}
+ * @group Attribute Types
  */
 export type SmoothType = 'none' | 'avg_dist' | 'graph_dist' | 'power_dist' | 'rng' | 'spring' | 'triangle';
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/splineType/ splineType}
+ * @group Attribute Types
  */
 export type SplineType = SplineType.spline | string;
+/** @hidden */
 export namespace SplineType {
   export type prefix = endp | startp | `${endp}${startp}` | '';
   export type spline = `${prefix}point ${triple}`;
@@ -70,8 +80,10 @@ export namespace SplineType {
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/startType/ startType}
+ * @group Attribute Types
  */
 export type StartType = `${StartType.style}${StartType.seed}`;
+/** @hidden */
 export namespace StartType {
   export type style = 'regular' | 'self' | 'random';
   export type seed = number;
@@ -79,12 +91,14 @@ export namespace StartType {
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/style/ style}
+ * @group Attribute Types
  */
 export type Style =
   | Style.styleItem
   | `${Style.styleItem},${Style.styleItem}`
   | `${Style.styleItem},${Style.styleItem},${Style.styleItem}`
   | `${Style.styleItem},${Style.styleItem},${Style.styleItem},${Style.styleItem}`;
+/** @hidden */
 export namespace Style {
   export type styleItem =
     | 'dashed'
@@ -106,6 +120,7 @@ export namespace Style {
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/viewPort/ viewPort}
+ * @group Attribute Types
  */
 export type ViewPort = `${Double},${Double},${Double},${Double},${Double}` | `${Double},${Double},${Double},${string}`;
 
@@ -114,6 +129,7 @@ export type ViewPort = `${Double},${Double},${Double},${Double},${Double}` | `${
  * defining layer names and implicitly numbered 1,2,…
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/layerList/ layerList}
+ * @group Attribute Types
  */
 export type LayerList = string;
 
@@ -121,6 +137,7 @@ export type LayerList = string;
  * specifies a list of layers defined by the layers attribute.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/layerRange/ layerRange}
+ * @group Attribute Types
  */
 export type LayerRange = string;
 
@@ -143,11 +160,13 @@ export type LayerRange = string;
  *
  * In all cases, the substring `"\L"` is replaced by the object's label attribute.
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/escString/ escString}
+ * @group Attribute Types
  */
 export type EscString = string;
 
 /**
  * @see {@link https://graphviz.org/doc/info/shapes.html#html HTML-Like Labels}
+ * @group Attribute Types
  */
 export type HTMLLikeLabel = `<${string}>`;
 
@@ -155,6 +174,7 @@ export type HTMLLikeLabel = `<${string}>`;
  * An escString or an HTML label.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/lblString/ lblString}
+ * @group Attribute Types
  */
 export type LblString = HTMLLikeLabel | EscString;
 
@@ -164,9 +184,10 @@ export type LblString = HTMLLikeLabel | EscString;
  * The optional `'!'` indicates the node position should not change (input-only).
  *
  * If dim=3, point may also have the format `"%f,%f,%f('!')?"` to represent the point (x,y,z).
+ * @group Attribute Types
  */
 export type Point = Point.position | `${Point.position}!`;
-
+/** @hidden */
 export namespace Point {
   export type position =
     | `%${Double},%${Double}`
@@ -183,11 +204,13 @@ export namespace Point {
  * A point with an optional prefix `'+'`.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/addPoint/ addPoint}
+ * @group Attribute Types
  */
 export type AddPoint = `+${Point}`;
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/pointList/ pointList}
+ * @group Attribute Types
  */
 export type PointList =
   | Point
@@ -203,11 +226,13 @@ export type PointList =
  * - On the other hand, usually for aesthetic reasons, it may be desirable that all edges appear beneath nodes, even if the resulting drawing is ambiguous. This can be achieved by choosing `"edgesfirst"`.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/outputMode/ outputMode}
+ * @group Attribute Types
  */
 export type OutputMode = 'breadthfirst' | 'nodesfirst' | 'edgesfirst';
 
 /**
  * @see {@link https://graphviz.org/docs/attr-types/packMode/ packMode}
+ * @group Attribute Types
  */
 export type PackMode = 'node' | 'clust' | 'graph' | `array${string}`;
 
@@ -216,6 +241,7 @@ export type PackMode = 'node' | 'clust' | 'graph' | `array${string}`;
  * though layout quality can suffer a little.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/quadType/ quadType}
+ * @group Attribute Types
  */
 export type QuadType = 'normal' | 'fast' | 'none';
 
@@ -226,11 +252,13 @@ export type QuadType = 'normal' | 'fast' | 'none';
  * from left to right, from bottom to top, and from right to left, respectively.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankdir/ rankdir}
+ * @group Attribute Types
  */
 export type Rankdir = 'TB' | 'LR' | 'BT' | 'RL';
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankType/ rankType}
+ * @group Attribute Types
  */
 export type RankType = 'same' | 'min' | 'source' | 'max' | 'sink';
 
@@ -241,6 +269,7 @@ export type RankType = 'same' | 'min' | 'source' | 'max' | 'sink';
  * of the lower-left corner `(llx,lly)` and the upper-right corner `(urx,ury)`.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/rect/ rect}
+ * @group Attribute Types
  */
 export type Rect = `${Double},${Double},${Double},${Double}`;
 
@@ -251,9 +280,10 @@ export type Rect = `${Double},${Double},${Double},${Double}`;
  * combinations of the 42 variations of the primitive set of 11 arrows.
  *
  * @see {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType}
+ * @group Attribute Types
  */
 export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.aname}`;
-
+/** @hidden */
 export namespace ArrowType {
   export type shape =
     | 'box'
@@ -276,13 +306,16 @@ export namespace ArrowType {
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/clusterMode/ clusterMode}
+ * @group Attribute Types
  */
 export type ClusterMode = 'local' | 'global' | 'none';
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/color/ color}
+ * @group Attribute Types
  */
 export type Color = Color.RGB_RGBA | Color.HSV | Color.ColorName | number;
+/** @hidden */
 export namespace Color {
   /**
    * `"#%2x%2x%2x"` Red-Green-Blue (RGB)
@@ -1140,6 +1173,7 @@ export namespace Color {
  * @note A type that is too complicated to express in TypeScript.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/colorList/}
+ * @group Attribute Types
  */
 export type ColorList = string;
 
@@ -1147,6 +1181,7 @@ export type ColorList = string;
  * Direction Type
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/dirType/ dirType}
+ * @group Attribute Types
  */
 export type DirType = 'forward' | 'back' | 'both' | 'none';
 
@@ -1154,8 +1189,10 @@ export type DirType = 'forward' | 'back' | 'both' | 'none';
  * Page Direction
  *
  * @see {@link https://graphviz.org/docs/attr-types/pagedir/ pagedir}
+ * @group Attribute Types
  */
 export type Pagedir = `${Pagedir.TB}${Pagedir.RL}`;
+/** @hidden */
 export namespace Pagedir {
   export type TB = 'T' | 'B';
   export type RL = 'R' | 'L';

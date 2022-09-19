@@ -47,7 +47,7 @@
     "node": ">=14.16"
   },
   "scripts": {
-    "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/ast/parser/peggy.options.json -o src/ast/parser/index.ts src/ast/parser/dot.peggy",
+    "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/ast/dot-shim/parser/peggy.options.json -o src/ast/dot-shim/parser/_parse.ts src/ast/dot-shim/parser/dot.peggy",
     "prebuild": "yarn build:peggy",
     "build": "tsc -p tsconfig.build.json && rollup -c",
     "postbuild": "prettier --write ./lib/**/index.{js,cjs,d.ts}",
@@ -80,7 +80,7 @@
     "svgo": "^2.8.0",
     "ts-jest": "^28.0.7",
     "ts-pegjs": "^2.1.0",
-    "typedoc": "^0.22.4",
+    "typedoc": "^0.23.15",
     "typescript": "^4.7.4"
   }
 }

@@ -216,6 +216,8 @@ const dot = toDot(G);
 
 ### `ts-graphviz/ast` Module 🔢
 
+> This module status is ![beta](https://img.shields.io/badge/-beta-orange).
+
 An API is provided to handle ASTs for advanced use.
 
 ![State Machine](./media/state-machine.svg)

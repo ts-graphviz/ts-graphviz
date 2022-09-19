@@ -1,7 +1,11 @@
 import type { FileRange, ASTNode, ASTChildNode } from '../types.js';
 import { ASTBuilder, BuilderOptions } from './types.js';
 
+/**
+ * @group Create AST
+ */
 export class Builder implements ASTBuilder {
+  /** @internal */
   private getLocation(): FileRange | null {
     return this.options?.locationFunction?.() ?? null;
   }

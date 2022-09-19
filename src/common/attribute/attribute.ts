@@ -207,4 +207,7 @@ interface KeyValueMapping {
   z: Double;
 }
 
+/**
+ * @group Attribute
+ */
 export type Attribute<T extends AttributeKey> = KeyValueMapping[T];

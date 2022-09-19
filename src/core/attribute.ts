@@ -1,3 +1,6 @@
+/**
+ * @group Attribute
+ */
 export interface AttributeKeyDict {
   /**
    * Factor damping force motions.
@@ -2649,6 +2652,9 @@ export interface AttributeKeyDict {
   z: 'z';
 }
 
+/**
+ * @group Attribute
+ */
 export const attribute: AttributeKeyDict = new Proxy(Object.freeze({}) as AttributeKeyDict, {
   get: (_, key: string) => key,
 });

@@ -216,6 +216,8 @@ const dot = toDot(G);
 
 ### `ts-graphviz/ast` モジュール 🔢
 
+> このパッケージのステータスは ![beta](https://img.shields.io/badge/-beta-orange) です。
+
 高度な利用のためにASTを扱うためのAPIを提供しています。
 
 ![State Machine](./media/state-machine.svg)
