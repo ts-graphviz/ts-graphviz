@@ -30,6 +30,7 @@ import {
   toNodeRefGroup,
   toNodeRef,
   isNodeRefLike,
+  RootModelsContext,
 } from '#lib/common';
 
 /**
@@ -119,6 +120,8 @@ export class AttributeList<K extends AttributeListKind, T extends AttributeKey =
  * @group Models
  */
 export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T> implements GraphBaseModel<T> {
+  public $$models = RootModelsContext;
+
   public readonly id?: string;
 
   public comment?: string;
@@ -177,11 +180,10 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
   public createSubgraph(attributes?: SubgraphAttributesObject): SubgraphModel;
 
   public createSubgraph(...args: unknown[]): SubgraphModel {
-    const id = args.find((arg): arg is string => typeof arg === 'string');
-    const attributes = args.find((arg): arg is SubgraphAttributesObject => typeof arg === 'object');
-    const graph = new Subgraph(id, attributes);
-    this.#objects.subgraphs.add(graph);
-    return graph;
+    const subgraph = new this.$$models.Subgraph(...args);
+    subgraph.$$models = Object.seal(Object.assign({}, this.$$models));
+    this.#objects.subgraphs.add(subgraph);
+    return subgraph;
   }
 
   public removeNode(node: NodeModel | string): void {
@@ -197,7 +199,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
   }
 
   public createNode(id: string, attributes?: NodeAttributesObject): NodeModel {
-    const node = new Node(id, attributes);
+    const node = new this.$$models.Node(id, attributes);
     this.#objects.nodes.set(id, node);
     return node;
   }
@@ -212,7 +214,7 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
 
   public createEdge(targets: EdgeTargetLikeTuple, attributes?: EdgeAttributesObject): EdgeModel {
     const ts = targets.map((t) => (isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t))) as EdgeTargetTuple;
-    const edge = new Edge(ts, attributes);
+    const edge = new this.$$models.Edge(ts, attributes);
     this.#objects.edges.add(edge);
     return edge;
   }
@@ -433,3 +435,11 @@ export class Digraph extends RootGraph {
     return true;
   }
 }
+
+Object.assign(RootModelsContext, {
+  Graph,
+  Digraph,
+  Subgraph,
+  Node,
+  Edge,
+});

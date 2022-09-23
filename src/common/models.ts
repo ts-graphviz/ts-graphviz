@@ -8,6 +8,7 @@ import type {
   GraphAttributeKey,
   SubgraphAttributeKey,
 } from './attribute/index.js';
+import { ModelsContext } from './models-context.js';
 
 /**
  * @group Models
@@ -249,6 +250,7 @@ export interface GraphCommonAttributes {
  * @group Models
  */
 export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends HasComment, Attributes<T> {
+  $$models: ModelsContext;
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes>;
   /** Node objects in the graph. */
