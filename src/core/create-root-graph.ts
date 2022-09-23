@@ -1,7 +1,10 @@
 import { RootGraphModel, GraphAttributesObject } from '#lib/common';
 import { Digraph, Graph } from './models.js';
 
-interface CreateRootGraph {
+/**
+ * @group Model Builder
+ */
+export interface CreateRootGraph {
   (id?: string, attributes?: GraphAttributesObject, callback?: (g: RootGraphModel) => void): RootGraphModel;
   (attributes?: GraphAttributesObject, callback?: (g: RootGraphModel) => void): RootGraphModel;
   (id?: string, callback?: (g: RootGraphModel) => void): RootGraphModel;
@@ -23,16 +26,31 @@ function builder(directed: boolean, strictMode: boolean): CreateRootGraph {
   };
 }
 
-/** API for creating directional graph objects. */
+/**
+ * API for creating directional graph objects.
+ * @group Model Builder
+ */
 export const digraph = builder(true, false);
 
-/** API for creating omnidirectional graph objects. */
+/**
+ * API for creating omnidirectional graph objects.
+ * @group Model Builder
+ */
 export const graph = builder(false, false);
 
-/** Provides a strict mode API. */
-export const strict = Object.freeze({
-  /** API for creating directional graph objects in strict mode. */
+/**
+ * Provides a strict mode API.
+ * @group Model Builder
+ */
+export const strict: { digraph: CreateRootGraph; graph: CreateRootGraph } = Object.freeze({
+  /**
+   * API for creating directional graph objects in strict mode.
+   * @group Model Builder
+   */
   digraph: builder(true, true),
-  /** API for creating omnidirectional graph objects in strict mode. */
+  /**
+   * API for creating omnidirectional graph objects in strict mode.
+   * @group Model Builder
+   */
   graph: builder(false, true),
 });

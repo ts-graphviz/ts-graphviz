@@ -1,19 +1,24 @@
 [![GitHub Action](https://github.com/kamiazya/ts-graphviz/workflows/NodeCI/badge.svg)](https://github.com/kamiazya/ts-graphviz/actions?workflow=NodeCI)
 [![npm version](https://badge.fury.io/js/ts-graphviz.svg)](https://badge.fury.io/js/ts-graphviz)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-![npm](https://img.shields.io/npm/dm/ts-graphviz) <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg)](#contributors)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
-[English](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.md) | [日本語](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.ja.md)
+[![code style: prettier](https://img.shields.io/badge/code%20style-prettier-ff69b4?logo=prettier&style=flat)](https://github.com/facebook/jest)
+[![test: jest](https://img.shields.io/badge/tested%20with-jest-99424f?logo=jest&style=flat)](https://github.com/facebook/jest)
+![node version](https://img.shields.io/node/v/ts-graphviz)
+![npm](https://img.shields.io/npm/dm/ts-graphviz)
+[![All Contributors](https://img.shields.io/github/all-contributors/ts-graphviz/ts-graphviz?color=orange)](#contributors)
 
 # ts-graphviz
 
 TypeScriptの ための [Graphviz](https://graphviz.gitlab.io/) ライブラリ
 
-> [GitHub](https://github.com/ts-graphviz/ts-graphviz) | [npm](https://www.npmjs.com/package/ts-graphviz)([yarn](https://github.com/ts-graphviz/ts-graphviz)) | [document](https://ts-graphviz.github.io/ts-graphviz/)
+[![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=GitHub&style=flat)](https://github.com/ts-graphviz/ts-graphviz)
+[![npm](https://img.shields.io/badge/-npm-CB3837?logo=npm&style=flat)](https://www.npmjs.com/package/ts-graphviz)
+[![yarn](https://img.shields.io/badge/-yarn-ffffff?logo=Yarn&style=flat)](https://github.com/ts-graphviz/ts-graphviz)
+[![Refarence](https://img.shields.io/badge/-Refarence-3178C6?logo=TypeScript&style=flat&logoColor=fff)](https://ts-graphviz.github.io/ts-graphviz/)
+[![Suponser](https://img.shields.io/badge/-Suponser-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/kamiazya)
+
+> [English](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.md) | [日本語](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.ja.md)
 
 ## 主な機能 ✨
 
@@ -215,6 +220,8 @@ const dot = toDot(G);
 > ```
 
 ### `ts-graphviz/ast` モジュール 🔢
+
+> このパッケージのステータスは ![beta](https://img.shields.io/badge/-beta-orange) です。
 
 高度な利用のためにASTを扱うためのAPIを提供しています。
 

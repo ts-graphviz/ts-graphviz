@@ -4,7 +4,6 @@ import {
   AttributeList,
   AttributesBase,
   DotObject,
-  GraphvizObject,
   GraphBase,
   Subgraph,
   Node,
@@ -19,11 +18,10 @@ describe('class AttributeList', () => {
     attrs = new AttributeList('Node');
   });
 
-  it('should be instance of AttributeList/AttributesBase/DotObject/GraphvizObject', () => {
+  it('should be instance of AttributeList/AttributesBase/DotObject', () => {
     expect(attrs).toBeInstanceOf(AttributeList);
     expect(attrs).toBeInstanceOf(AttributesBase);
     expect(attrs).toBeInstanceOf(DotObject);
-    expect(attrs).toBeInstanceOf(GraphvizObject);
   });
 
   it('size should be 0 by default', () => {
@@ -80,12 +78,11 @@ describe('class Subgraph', () => {
     subgraph = new Subgraph();
   });
 
-  it('should be instance of Subgraph/Cluster/AttributesBase/DotObject/GraphvizObject', () => {
+  it('should be instance of Subgraph/Cluster/AttributesBase/DotObject', () => {
     expect(subgraph).toBeInstanceOf(Subgraph);
     expect(subgraph).toBeInstanceOf(GraphBase);
     expect(subgraph).toBeInstanceOf(AttributesBase);
     expect(subgraph).toBeInstanceOf(DotObject);
-    expect(subgraph).toBeInstanceOf(GraphvizObject);
   });
 
   describe('Constructor', () => {
@@ -270,10 +267,9 @@ describe('class Edge', () => {
     expect(() => new Edge([n] as unknown as EdgeTargetTuple)).toThrow();
   });
 
-  it('should be instance of Edge/DotObject/GraphvizObject', () => {
+  it('should be instance of Edge/DotObject', () => {
     expect(edge).toBeInstanceOf(Edge);
     expect(edge).toBeInstanceOf(DotObject);
-    expect(edge).toBeInstanceOf(GraphvizObject);
   });
 });
 
@@ -294,10 +290,9 @@ describe('class Node', () => {
     });
   });
 
-  it('should be instance of Node/DotObject/GraphvizObject', () => {
+  it('should be instance of Node/DotObject', () => {
     expect(node).toBeInstanceOf(Node);
     expect(node).toBeInstanceOf(DotObject);
-    expect(node).toBeInstanceOf(GraphvizObject);
   });
 });
 
@@ -340,11 +335,10 @@ describe('Graph', () => {
       g = rootClusterFactory();
     });
 
-    it('should be instance of RootCluster/Cluster/AttributesBase/DotObject/GraphvizObject', () => {
+    it('should be instance of RootCluster/Cluster/AttributesBase/DotObject', () => {
       expect(g).toBeInstanceOf(GraphBase);
       expect(g).toBeInstanceOf(AttributesBase);
       expect(g).toBeInstanceOf(DotObject);
-      expect(g).toBeInstanceOf(GraphvizObject);
     });
 
     describe('addXxx existXxx removeXxx APIs', () => {

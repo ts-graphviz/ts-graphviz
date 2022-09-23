@@ -25,10 +25,18 @@ import type {
   SubgraphASTPropaties,
 } from '../types.js';
 
+/**
+ * @group Create AST
+ * @alpha
+ */
 export interface BuilderOptions {
   locationFunction: () => FileRange;
 }
 
+/**
+ * @group Create AST
+ * @alpha
+ */
 export interface CreateElement {
   <T extends string>(
     type: 'Literal',
@@ -56,6 +64,10 @@ export interface CreateElement {
   (type: 'Subgraph', props: SubgraphASTPropaties, children: ASTChildNode<SubgraphASTNode>[]): SubgraphASTNode;
 }
 
+/**
+ * @group Create AST
+ * @alpha
+ */
 export interface ASTBuilder {
   createElement: CreateElement;
 }

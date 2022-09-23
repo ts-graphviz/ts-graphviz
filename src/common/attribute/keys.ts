@@ -1,5 +1,6 @@
 /**
  * Attribute types available for edges.
+ * @group Attribute
  */
 export type EdgeAttributeKey =
   | 'URL'
@@ -71,6 +72,7 @@ export type EdgeAttributeKey =
 
 /**
  * Attribute types available for nodes.
+ * @group Attribute
  */
 export type NodeAttributeKey =
   | 'URL'
@@ -125,6 +127,7 @@ export type NodeAttributeKey =
 
 /**
  * Attribute types available for graph.
+ * @group Attribute
  */
 export type GraphAttributeKey =
   | 'Damping'
@@ -229,11 +232,13 @@ export type GraphAttributeKey =
 
 /**
  * Attribute types available for subgraph.
+ * @group Attribute
  */
 export type SubgraphAttributeKey = 'rank';
 
 /**
  * Attribute types available for cluster subgraph.
+ * @group Attribute
  */
 export type ClusterSubgraphAttributeKey =
   | 'K'
@@ -269,6 +274,7 @@ export type ClusterSubgraphAttributeKey =
 
 /**
  * Attribute types.
+ * @group Attribute
  */
 export type AttributeKey =
   | NodeAttributeKey
