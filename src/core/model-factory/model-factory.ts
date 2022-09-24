@@ -2,7 +2,7 @@ import { createModelsContext, ModelsContext } from '#lib/common';
 import { createModelFactories } from './model-factory-builder.js';
 import { ModelFactories, ModelFactoriesWithStrict } from './types.js';
 
-export const noStrict: ModelFactories = createModelFactories(false);
+const noStrict: ModelFactories = createModelFactories(false);
 
 /**
  * API for creating directional graph objects.

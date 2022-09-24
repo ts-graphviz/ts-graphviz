@@ -624,6 +624,50 @@ export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey>, DotOb
   strict: boolean;
 }
 
+/**
+ * @group Models
+ * @beta
+ */
+export interface RootGraphConstructor {
+  new (id?: string, attributes?: GraphAttributesObject): RootGraphModel;
+  new (id?: string, strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
+  new (strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
+  new (attributes?: GraphAttributesObject): RootGraphModel;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  new (...args: any[]): RootGraphModel;
+}
+
+/**
+ * @group Models
+ * @beta
+ */
+export interface SubgraphConstructor {
+  new (id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
+  new (attributes?: SubgraphAttributesObject): SubgraphModel;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  new (...args: any[]): SubgraphModel;
+}
+
+/**
+ * @group Models
+ * @beta
+ */
+export interface NodeConstructor {
+  new (id: string, attributes?: NodeAttributesObject): NodeModel;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  new (...args: any[]): NodeModel;
+}
+
+/**
+ * @group Models
+ * @beta
+ */
+export interface EdgeConstructor {
+  new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): EdgeModel;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  new (...args: any[]): EdgeModel;
+}
+
 /** @hidden */
 export function isForwardRefNode(object: unknown): object is ForwardRefNode {
   return typeof object === 'object' && object !== null && typeof (object as ForwardRefNode).id === 'string';

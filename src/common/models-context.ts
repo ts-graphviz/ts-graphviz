@@ -1,56 +1,7 @@
-import {
-  GraphAttributesObject,
-  RootGraphModel,
-  SubgraphAttributesObject,
-  SubgraphModel,
-  NodeAttributesObject,
-  NodeModel,
-  EdgeTargetTuple,
-  EdgeAttributesObject,
-  EdgeModel,
-} from './models.js';
+import { EdgeConstructor, NodeConstructor, RootGraphConstructor, SubgraphConstructor } from './models.js';
 
 /**
- * @beta
- */
-export interface RootGraphConstructor {
-  new (id?: string, attributes?: GraphAttributesObject): RootGraphModel;
-  new (id?: string, strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
-  new (strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
-  new (attributes?: GraphAttributesObject): RootGraphModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  new (...args: any[]): RootGraphModel;
-}
-
-/**
- * @beta
- */
-export interface SubgraphConstructor {
-  new (id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
-  new (attributes?: SubgraphAttributesObject): SubgraphModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  new (...args: any[]): SubgraphModel;
-}
-
-/**
- * @beta
- */
-export interface NodeConstructor {
-  new (id: string, attributes?: NodeAttributesObject): NodeModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  new (...args: any[]): NodeModel;
-}
-
-/**
- * @beta
- */
-export interface EdgeConstructor {
-  new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): EdgeModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  new (...args: any[]): EdgeModel;
-}
-
-/**
+ * @group Models Context
  * @beta
  */
 export interface ModelsContext {
@@ -62,9 +13,11 @@ export interface ModelsContext {
 }
 
 /**
+ * @group Models Context
  * @alpha
  */
 export const RootModelsContext: ModelsContext = Object.seal({
+  // NOTE: RootModelsContext is also initialized after the model class is declared in the '#lib/core' module.
   Graph: null,
   Digraph: null,
   Subgraph: null,
@@ -73,6 +26,7 @@ export const RootModelsContext: ModelsContext = Object.seal({
 } as unknown as ModelsContext);
 
 /**
+ * @group Models Context
  * @alpha
  */
 export function createModelsContext(models: Partial<ModelsContext>): ModelsContext {
