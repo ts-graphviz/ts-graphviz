@@ -1,5 +1,5 @@
 import { attribute } from '../attribute.js';
-import { Graph, Subgraph, Node, Edge, Digraph } from '../models.js';
+import { Graph, Digraph } from '../models/index.js';
 import { digraph, graph, strict } from '../create-root-graph.js';
 import { toDot } from '../to-dot.js';
 
@@ -116,27 +116,6 @@ describe('function digraph', () => {
         });
       });
     });
-    const dot = toDot(G);
-    expect(dot).toMatchSnapshot();
-  });
-
-  test('class base', () => {
-    const G = new Digraph();
-    const A = new Subgraph('A');
-    const node1 = new Node('A_node1', {
-      [attribute.color]: 'red',
-    });
-    const node2 = new Node('A_node2', {
-      [attribute.color]: 'blue',
-    });
-    const edge = new Edge([node1, node2], {
-      [attribute.label]: 'Edge Label',
-      [attribute.color]: 'pink',
-    });
-    G.addSubgraph(A);
-    A.addNode(node1);
-    A.addNode(node2);
-    A.addEdge(edge);
     const dot = toDot(G);
     expect(dot).toMatchSnapshot();
   });

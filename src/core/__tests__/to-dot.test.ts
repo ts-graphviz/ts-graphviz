@@ -1,5 +1,6 @@
 import { RootGraphModel } from '#lib/common';
-import { Digraph, Graph } from '../models.js';
+import { attribute as _ } from '../attribute.js';
+import { Digraph, Edge, Node, Graph, Subgraph } from '../models/index.js';
 import { toDot } from '../to-dot.js';
 
 describe('toDot function', () => {
@@ -111,5 +112,26 @@ describe('toDot function', () => {
         });
       });
     });
+  });
+
+  test('class base', () => {
+    const G = new Digraph();
+    const A = new Subgraph('A');
+    const node1 = new Node('A_node1', {
+      [_.color]: 'red',
+    });
+    const node2 = new Node('A_node2', {
+      [_.color]: 'blue',
+    });
+    const edge = new Edge([node1, node2], {
+      [_.label]: 'Edge Label',
+      [_.color]: 'pink',
+    });
+    G.addSubgraph(A);
+    A.addNode(node1);
+    A.addNode(node2);
+    A.addEdge(edge);
+    const dot = toDot(G);
+    expect(dot).toMatchSnapshot();
   });
 });

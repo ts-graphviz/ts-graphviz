@@ -227,3 +227,20 @@ exports[`toDot function Graph renders correctly by toDot method subgraphs, depth
   \\"node1\\" -- \\"node2\\";
 }"
 `;
+
+exports[`toDot function class base 1`] = `
+"digraph {
+  subgraph \\"A\\" {
+    \\"A_node1\\" [
+      color = \\"red\\";
+    ];
+    \\"A_node2\\" [
+      color = \\"blue\\";
+    ];
+    \\"A_node1\\" -> \\"A_node2\\" [
+      label = \\"Edge Label\\";
+      color = \\"pink\\";
+    ];
+  }
+}"
+`;

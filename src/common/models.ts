@@ -135,7 +135,7 @@ export interface HasComment {
  * @group Models
  */
 export interface HasAttributes<T extends AttributeKey> {
-  readonly attributes: AttributesGroup<T>;
+  readonly attributes: AttributesGroupModel<T>;
 }
 
 /**
@@ -180,7 +180,7 @@ export interface Attributes<T extends AttributeKey> {
 /**
  * @group Models
  */
-export interface AttributesGroup<T extends AttributeKey> extends Attributes<T>, HasComment {}
+export interface AttributesGroupModel<T extends AttributeKey> extends Attributes<T>, HasComment {}
 
 /**
  * @group Models
@@ -250,7 +250,6 @@ export interface GraphCommonAttributes {
  * @group Models
  */
 export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends HasComment, Attributes<T> {
-  $$models: ModelsContext;
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes>;
   /** Node objects in the graph. */
@@ -259,6 +258,12 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
   readonly edges: ReadonlyArray<EdgeModel>;
   /** Subgraph objects in the graph. */
   readonly subgraphs: ReadonlyArray<SubgraphModel>;
+
+  /**
+   * @beta
+   */
+  with(models: Partial<ModelsContext>): void;
+
   /**
    * Add a Node to the graph.
    */

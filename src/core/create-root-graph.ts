@@ -51,7 +51,7 @@ function builder(this: ModelsContext, directed: boolean, strictMode: boolean): C
     const attributes = args.find((arg): arg is GraphAttributesObject => typeof arg === 'object');
     const callback = args.find((arg): arg is (g: RootGraphModel) => void => typeof arg === 'function');
     const g = new G(id, strictMode, attributes);
-    g.$$models = $$models;
+    g.with($$models);
     if (typeof callback === 'function') {
       callback(g);
     }

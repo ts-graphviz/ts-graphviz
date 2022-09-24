@@ -46,23 +46,6 @@ exports[`function digraph callback style, set attributes by attributes object 1`
 }"
 `;
 
-exports[`function digraph class base 1`] = `
-"digraph {
-  subgraph \\"A\\" {
-    \\"A_node1\\" [
-      color = \\"red\\";
-    ];
-    \\"A_node2\\" [
-      color = \\"blue\\";
-    ];
-    \\"A_node1\\" -> \\"A_node2\\" [
-      label = \\"Edge Label\\";
-      color = \\"pink\\";
-    ];
-  }
-}"
-`;
-
 exports[`function digraph comment 1`] = `
 "// This is directed graph.
 digraph \\"G\\" {
