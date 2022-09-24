@@ -156,7 +156,7 @@ const dot = toDot(g);
 
 #### 宣言的な API 😎
 
-`Graph` や `Digraph` を作成する際に、より **DOT** 言語に近い記法を提供するために _Builder Functuion_ を使うことができます。
+`Graph` や `Digraph` を作成する際に、より **DOT** 言語に近い記法を提供するために _Model Factory_ を使うことができます。
 
 **Model** にも宣言的な API を用意しており、一貫して宣言的なパラダイムを選択することもできます。
 

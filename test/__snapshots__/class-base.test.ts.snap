@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`class base 1`] = `
+digraph {
+  subgraph "A" {
+    "node1" [
+      color = "red";
+    ];
+    "node2" [
+      color = "blue";
+    ];
+    "node1" -> "node2" [
+      label = "Edge Label";
+      color = "pink";
+    ];
+  }
+}
+`;

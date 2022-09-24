@@ -1,7 +1,5 @@
-import { attribute } from '../attribute.js';
-import { Graph, Subgraph, Node, Edge, Digraph } from '../models.js';
-import { digraph, graph, strict } from '../create-root-graph.js';
-import { toDot } from '../to-dot.js';
+import { digraph, graph, strict, Graph, Digraph, attribute as _ } from 'ts-graphviz';
+import { toDot } from '#test/utils';
 
 describe('function digraph', () => {
   it('should return Graph object, when execute digraph()', () => {
@@ -21,7 +19,7 @@ describe('function digraph', () => {
           id: 'id',
           strictMode: false,
           g: digraph('id', {
-            [attribute.label]: 'Label',
+            [_.label]: 'Label',
           }),
         },
       ],
@@ -50,7 +48,7 @@ describe('function digraph', () => {
           id: undefined,
           strictMode: false,
           g: digraph({
-            [attribute.label]: 'Label',
+            [_.label]: 'Label',
           }),
         },
       ],
@@ -61,7 +59,7 @@ describe('function digraph', () => {
           id: undefined,
           strictMode: true,
           g: strict.digraph({
-            [attribute.label]: 'Label',
+            [_.label]: 'Label',
           }),
         },
       ],
@@ -72,7 +70,7 @@ describe('function digraph', () => {
           id: 'id',
           strictMode: true,
           g: strict.digraph('id', {
-            [attribute.label]: 'Label',
+            [_.label]: 'Label',
           }),
         },
       ],
@@ -83,7 +81,7 @@ describe('function digraph', () => {
           id: undefined,
           strictMode: true,
           g: strict.digraph({
-            [attribute.label]: 'Label',
+            [_.label]: 'Label',
           }),
         },
       ],
@@ -120,46 +118,25 @@ describe('function digraph', () => {
     expect(dot).toMatchSnapshot();
   });
 
-  test('class base', () => {
-    const G = new Digraph();
-    const A = new Subgraph('A');
-    const node1 = new Node('A_node1', {
-      [attribute.color]: 'red',
-    });
-    const node2 = new Node('A_node2', {
-      [attribute.color]: 'blue',
-    });
-    const edge = new Edge([node1, node2], {
-      [attribute.label]: 'Edge Label',
-      [attribute.color]: 'pink',
-    });
-    G.addSubgraph(A);
-    A.addNode(node1);
-    A.addNode(node2);
-    A.addEdge(edge);
-    const dot = toDot(G);
-    expect(dot).toMatchSnapshot();
-  });
-
   test('callback style, set attributes by attributes object', () => {
     const G = digraph('G', (g) => {
       const a = g.node('aa');
       const b = g.node('bb');
       const c = g.node('cc');
       g.edge([a, b, c], {
-        [attribute.color]: 'red',
+        [_.color]: 'red',
       });
       g.subgraph('A', (A) => {
         const Aa = A.node('Aaa', {
-          [attribute.color]: 'pink',
+          [_.color]: 'pink',
         });
 
         const Ab = A.node('Abb', {
-          [attribute.color]: 'violet',
+          [_.color]: 'violet',
         });
         const Ac = A.node('Acc');
         A.edge([Aa.port('a'), Ab, Ac, 'E'], {
-          [attribute.color]: 'red',
+          [_.color]: 'red',
         });
       });
     });
@@ -256,19 +233,19 @@ describe('function graph', () => {
       const b = g.node('bb');
       const c = g.node('cc');
       g.edge([a, b, c], {
-        [attribute.color]: 'red',
+        [_.color]: 'red',
       });
       g.subgraph('A', (A) => {
         const Aa = A.node('Aaa', {
-          [attribute.color]: 'pink',
+          [_.color]: 'pink',
         });
 
         const Ab = A.node('Abb', {
-          [attribute.color]: 'violet',
+          [_.color]: 'violet',
         });
         const Ac = A.node('Acc');
         A.edge([Aa.port('a'), Ab, Ac, 'E'], {
-          [attribute.color]: 'red',
+          [_.color]: 'red',
         });
       });
     });

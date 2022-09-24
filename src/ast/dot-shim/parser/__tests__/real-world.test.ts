@@ -8,12 +8,12 @@ import { parse, SyntaxError } from '../_parse.js';
 
 const dirname = path.dirname(new URL(import.meta.url).pathname);
 
-const files = glob.sync(`${dirname}/e2e/*`).sort();
+const files = glob.sync(`${dirname}/dot/*`).sort();
 
 for (const file of files) {
   const title = path.basename(file);
   const dot = fs.readFileSync(file, 'utf-8').toString();
-  const snapshot = path.resolve(dirname, '__snapshots__', title);
+  const snapshot = path.resolve(dirname, 'ast', title);
 
   test(title, () => {
     try {

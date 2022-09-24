@@ -155,7 +155,7 @@ const dot = toDot(g);
 
 #### Declarative API 😎
 
-When creating `Graph` or `Digraph`, you can use _Builder Function_ to provide a notation more similar to the **DOT** language.
+When creating `Graph` or `Digraph`, you can use _Model Factory_ to provide a notation more similar to the **DOT** language.
 
 **Model** also has a declarative API, so you can consistently choose a declarative paradigm.
 

@@ -1,0 +1,200 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`function digraph callback style 1`] = `
+digraph "G" {
+  "aa";
+  "bb";
+  "cc";
+  subgraph "A" {
+    "Aaa" [
+      color = "pink";
+    ];
+    "Abb" [
+      color = "violet";
+    ];
+    "Acc";
+    "Aaa":"a" -> "Abb" -> "Acc" -> "E" [
+      color = "red";
+    ];
+  }
+  "aa" -> "bb" -> "cc" [
+    color = "red";
+  ];
+}
+`;
+
+exports[`function digraph callback style, set attributes by attributes object 1`] = `
+digraph "G" {
+  "aa";
+  "bb";
+  "cc";
+  subgraph "A" {
+    "Aaa" [
+      color = "pink";
+    ];
+    "Abb" [
+      color = "violet";
+    ];
+    "Acc";
+    "Aaa":"a" -> "Abb" -> "Acc" -> "E" [
+      color = "red";
+    ];
+  }
+  "aa" -> "bb" -> "cc" [
+    color = "red";
+  ];
+}
+`;
+
+exports[`function digraph comment 1`] = `
+// This is directed graph.
+digraph "G" {
+  // This is node a.
+  "aa";
+  // This is node b.
+  "bb";
+  // This is node c.
+  "cc";
+  // It is subgraph A.
+  // It is not cluster
+  subgraph "A" {
+    // This is node Aaa in subgraph A.
+    "Aaa" [
+      // It will be filled by pink.
+      color = "pink";
+    ];
+  }
+  // This is edge.
+  // It connects a, b and c.
+  "aa" -> "bb" -> "cc" [
+    // Edge line will draw with red.
+    color = "red";
+  ];
+}
+`;
+
+exports[`function digraph root create function id 1`] = `digraph "id" {}`;
+
+exports[`function digraph root create function id with attributes 1`] = `
+digraph "id" {
+  label = "Label";
+}
+`;
+
+exports[`function digraph root create function no id with attributes 1`] = `
+digraph {
+  label = "Label";
+}
+`;
+
+exports[`function digraph root create function no parameters 1`] = `digraph {}`;
+
+exports[`function digraph root create function strict id with attributes 1`] = `
+strict digraph "id" {
+  label = "Label";
+}
+`;
+
+exports[`function digraph root create function strict no id with attributes 1`] = `
+strict digraph {
+  label = "Label";
+}
+`;
+
+exports[`function digraph root create function strict no parameters 1`] = `strict digraph {}`;
+
+exports[`function digraph root create function strict with attributes 1`] = `
+strict digraph {
+  label = "Label";
+}
+`;
+
+exports[`function graph callback style 1`] = `
+graph "G" {
+  "aa";
+  "bb";
+  "cc";
+  subgraph "A" {
+    "Aaa" [
+      color = "pink";
+    ];
+    "Abb" [
+      color = "violet";
+    ];
+    "Acc";
+    "hoge";
+    "Aaa" -- "Abb" -- "Acc" -- "hoge":"fuga" [
+      color = "red";
+    ];
+    "Aaa":"a":"w" -- "Abb":"w" -- "Aaa":"e" -- "Acc":"r":"e" [
+      color = "red";
+    ];
+  }
+  "aa" -- "bb" -- "cc" [
+    color = "red";
+  ];
+}
+`;
+
+exports[`function graph callback style, set attributes by attributes object 1`] = `
+graph "G" {
+  "aa";
+  "bb";
+  "cc";
+  subgraph "A" {
+    "Aaa" [
+      color = "pink";
+    ];
+    "Abb" [
+      color = "violet";
+    ];
+    "Acc";
+    "Aaa":"a" -- "Abb" -- "Acc" -- "E" [
+      color = "red";
+    ];
+  }
+  "aa" -- "bb" -- "cc" [
+    color = "red";
+  ];
+}
+`;
+
+exports[`function graph escape characters 1`] = `
+graph "G\\n\\"" {
+  "a\\na" [
+    label = "1\\n2\\n\\"\\n3";
+  ];
+  "b\\"b";
+  "c\\nc\\"";
+  subgraph "graph.name" {
+    "node.name" [
+      label = "node";
+    ];
+    "another.name" [
+      label = "words with space and \\"quote\\"";
+    ];
+    "node.name" -- "another.name";
+  }
+  "a\\na" -- "b\\"b" -- "c\\nc\\"" [
+    color = "red";
+  ];
+}
+`;
+
+exports[`function graph script style 1`] = `
+digraph "G" {
+  "node1";
+  "node2";
+  subgraph "A" {
+    "A_node1";
+    "A_node2";
+    "A_node1" -> "A_node2";
+    "B_node1" -> "B_node2";
+  }
+  subgraph "B" {
+    "B_node1";
+    "B_node2";
+  }
+  "node1" -> "node2";
+}
+`;

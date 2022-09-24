@@ -1,0 +1,229 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Digraph renders correctly by toDot method digraph with comment multi line comment 1`] = `
+// this is comment.
+// second line.
+digraph {}
+`;
+
+exports[`Digraph renders correctly by toDot method digraph with comment single line comment 1`] = `
+// this is comment.
+digraph {}
+`;
+
+exports[`Digraph renders correctly by toDot method has some attributes 1`] = `
+digraph {
+  graph [
+    color = "red";
+  ];
+  edge [
+    label = "edge label";
+  ];
+  node [
+    xlabel = "node xlabel";
+  ];
+}
+`;
+
+exports[`Digraph renders correctly by toDot method label attribute behavior html like 1`] = `
+digraph {
+  graph [
+    label = <<B>this is test for graph label</B>>;
+  ];
+  edge [
+    label = <<U>this is test for edge label</U>>;
+  ];
+  node [
+    label = <<I>this is test for node label</I>>;
+  ];
+}
+`;
+
+exports[`Digraph renders correctly by toDot method label attribute behavior plain text label to be quoted by double quotation 1`] = `
+digraph {
+  graph [
+    label = "this is test for graph label";
+  ];
+  edge [
+    label = "this is test for edge label";
+  ];
+  node [
+    label = "this is test for node label";
+  ];
+}
+`;
+
+exports[`Digraph renders correctly by toDot method nodes and edge 1`] = `
+digraph {
+  "node1";
+  "node2";
+  "node1" -> "node2";
+}
+`;
+
+exports[`Digraph renders correctly by toDot method set attributes 1`] = `
+digraph {
+  dpi = 360;
+}
+`;
+
+exports[`Digraph renders correctly by toDot method set attributes by apply 1`] = `
+digraph {
+  layout = "dot";
+  dpi = 360;
+}
+`;
+
+exports[`Digraph renders correctly by toDot method simple g 1`] = `digraph {}`;
+
+exports[`Digraph renders correctly by toDot method strict graph 1`] = `strict digraph {}`;
+
+exports[`Digraph renders correctly by toDot method subgraphs 1`] = `
+digraph {
+  "node1";
+  "node2";
+  subgraph "A" {
+    "A_node1";
+    "A_node2";
+    "A_node1" -> "A_node2";
+    "B_node1" -> "B_node2";
+  }
+  subgraph "B" {
+    "B_node1";
+    "B_node2";
+  }
+  "node1" -> "node2";
+}
+`;
+
+exports[`Digraph renders correctly by toDot method subgraphs, depth 2 1`] = `
+digraph {
+  "node1";
+  "node2";
+  subgraph "depth1" {
+    "depth1_node1";
+    "depth1_node2";
+    subgraph "depth2" {
+      "depth2_node1";
+      "depth2_node2";
+      "depth2_node1" -> "depth2_node2";
+    }
+    "depth1_node1" -> "depth1_node2";
+  }
+  "node1" -> "node2";
+}
+`;
+
+exports[`Graph renders correctly by toDot method digraph with comment multi line comment 1`] = `
+// this is comment.
+// second line.
+graph {}
+`;
+
+exports[`Graph renders correctly by toDot method digraph with comment single line comment 1`] = `
+// this is comment.
+graph {}
+`;
+
+exports[`Graph renders correctly by toDot method has some attributes 1`] = `
+graph {
+  graph [
+    color = "red";
+  ];
+  edge [
+    label = "edge label";
+  ];
+  node [
+    xlabel = "node xlabel";
+  ];
+}
+`;
+
+exports[`Graph renders correctly by toDot method label attribute behavior html like 1`] = `
+graph {
+  graph [
+    label = <<B>this is test for graph label</B>>;
+  ];
+  edge [
+    label = <<U>this is test for edge label</U>>;
+  ];
+  node [
+    label = <<I>this is test for node label</I>>;
+  ];
+}
+`;
+
+exports[`Graph renders correctly by toDot method label attribute behavior plain text label to be quoted by double quotation 1`] = `
+graph {
+  graph [
+    label = "this is test for graph label";
+  ];
+  edge [
+    label = "this is test for edge label";
+  ];
+  node [
+    label = "this is test for node label";
+  ];
+}
+`;
+
+exports[`Graph renders correctly by toDot method nodes and edge 1`] = `
+graph {
+  "node1";
+  "node2";
+  "node1" -- "node2";
+}
+`;
+
+exports[`Graph renders correctly by toDot method set attributes 1`] = `
+graph {
+  dpi = 360;
+}
+`;
+
+exports[`Graph renders correctly by toDot method set attributes by apply 1`] = `
+graph {
+  layout = "dot";
+  dpi = 360;
+}
+`;
+
+exports[`Graph renders correctly by toDot method simple g 1`] = `graph {}`;
+
+exports[`Graph renders correctly by toDot method strict graph 1`] = `strict graph {}`;
+
+exports[`Graph renders correctly by toDot method subgraphs 1`] = `
+graph {
+  "node1";
+  "node2";
+  subgraph "A" {
+    "A_node1";
+    "A_node2";
+    "A_node1" -- "A_node2";
+    "B_node1" -- "B_node2";
+  }
+  subgraph "B" {
+    "B_node1";
+    "B_node2";
+  }
+  "node1" -- "node2";
+}
+`;
+
+exports[`Graph renders correctly by toDot method subgraphs, depth 2 1`] = `
+graph {
+  "node1";
+  "node2";
+  subgraph "depth1" {
+    "depth1_node1";
+    "depth1_node2";
+    subgraph "depth2" {
+      "depth2_node1";
+      "depth2_node2";
+      "depth2_node1" -- "depth2_node2";
+    }
+    "depth1_node1" -- "depth1_node2";
+  }
+  "node1" -- "node2";
+}
+`;

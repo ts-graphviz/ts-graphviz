@@ -6,7 +6,7 @@ digraph state_machine {
 
   builder_fn [
     shape = record,
-    label = "{{Builder Functions | strict.digraph(...)\lstrict.graph(...)\ldigraph(...)\lgraph(...)\l}}"
+    label = "{{Model Factory Functions | strict.digraph(...)\lstrict.graph(...)\ldigraph(...)\lgraph(...)\l}}"
   ]
 
   oop [

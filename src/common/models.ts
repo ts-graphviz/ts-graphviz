@@ -8,6 +8,7 @@ import type {
   GraphAttributeKey,
   SubgraphAttributeKey,
 } from './attribute/index.js';
+import { ModelsContext } from './models-context.js';
 
 /**
  * @group Models
@@ -134,7 +135,7 @@ export interface HasComment {
  * @group Models
  */
 export interface HasAttributes<T extends AttributeKey> {
-  readonly attributes: AttributesGroup<T>;
+  readonly attributes: AttributesGroupModel<T>;
 }
 
 /**
@@ -179,7 +180,7 @@ export interface Attributes<T extends AttributeKey> {
 /**
  * @group Models
  */
-export interface AttributesGroup<T extends AttributeKey> extends Attributes<T>, HasComment {}
+export interface AttributesGroupModel<T extends AttributeKey> extends Attributes<T>, HasComment {}
 
 /**
  * @group Models
@@ -257,6 +258,12 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
   readonly edges: ReadonlyArray<EdgeModel>;
   /** Subgraph objects in the graph. */
   readonly subgraphs: ReadonlyArray<SubgraphModel>;
+
+  /**
+   * @beta
+   */
+  with(models: Partial<ModelsContext>): void;
+
   /**
    * Add a Node to the graph.
    */
@@ -615,6 +622,50 @@ export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey>, DotOb
    * Subsequent edge statements using the same two nodes will identify the edge with the previously defined one and apply any attributes given in the edge statement.
    */
   strict: boolean;
+}
+
+/**
+ * @group Models
+ * @beta
+ */
+export interface RootGraphConstructor {
+  new (id?: string, attributes?: GraphAttributesObject): RootGraphModel;
+  new (id?: string, strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
+  new (strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
+  new (attributes?: GraphAttributesObject): RootGraphModel;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  new (...args: any[]): RootGraphModel;
+}
+
+/**
+ * @group Models
+ * @beta
+ */
+export interface SubgraphConstructor {
+  new (id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
+  new (attributes?: SubgraphAttributesObject): SubgraphModel;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  new (...args: any[]): SubgraphModel;
+}
+
+/**
+ * @group Models
+ * @beta
+ */
+export interface NodeConstructor {
+  new (id: string, attributes?: NodeAttributesObject): NodeModel;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  new (...args: any[]): NodeModel;
+}
+
+/**
+ * @group Models
+ * @beta
+ */
+export interface EdgeConstructor {
+  new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): EdgeModel;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  new (...args: any[]): EdgeModel;
 }
 
 /** @hidden */
