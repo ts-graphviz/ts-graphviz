@@ -4,7 +4,7 @@ import { createElement } from '../../../builder/create-element.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';
 import { convertComment } from './utils/convert-comment.js';
 
-export const GraphConvertPlugin: ConvertFromModelPlugin<RootGraphModel> = {
+export const GraphPlugin: ConvertFromModelPlugin<RootGraphModel> = {
   match(model) {
     return model.$$type === 'Graph';
   },

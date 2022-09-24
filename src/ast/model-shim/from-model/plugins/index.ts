@@ -1,13 +1,7 @@
-import { AttributeListPrintPlugin } from './AttributeListConvertPlugin.js';
-import { EdgeConvertPlugin } from './EdgeConvertPlugin.js';
-import { GraphConvertPlugin } from './GraphConvertPlugin.js';
-import { NodeConvertPlugin } from './NodeConvertPlugin.js';
-import { SubgraphConvertPlugin } from './SubraphConvertPlugin.js';
+import { AttributeListPlugin } from './AttributeListPlugin.js';
+import { EdgePlugin } from './EdgePlugin.js';
+import { GraphPlugin } from './GraphPlugin.js';
+import { NodePlugin } from './NodePlugin.js';
+import { SubgraphPlugin } from './SubraphPlugin.js';
 
-export const defaultPlugins = [
-  AttributeListPrintPlugin,
-  EdgeConvertPlugin,
-  NodeConvertPlugin,
-  GraphConvertPlugin,
-  SubgraphConvertPlugin,
-];
+export const defaultPlugins = [AttributeListPlugin, EdgePlugin, NodePlugin, GraphPlugin, SubgraphPlugin];

@@ -42,6 +42,7 @@ export function parse(input: string, options?: ParseOptions<'AttributeList'>): A
 export function parse(input: string, options?: ParseOptions<'Attribute'>): AttributeASTNode;
 export function parse(input: string, options?: ParseOptions<'Subgraph'>): SubgraphASTNode;
 export function parse(input: string, options?: ParseOptions<'ClusterStatements'>): ClusterStatementASTNode[];
+export function parse(input: string, options?: ParseOptions<Rule>): ASTNode | ClusterStatementASTNode[];
 export function parse(input: string, options?: ParseOptions<Rule>): ASTNode | ClusterStatementASTNode[] {
   return _parse(input, options);
 }

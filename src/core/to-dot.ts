@@ -15,7 +15,7 @@ export interface ToDotOptions {
  *
  * @group Convert Model to DOT
  *
- * @param model Dot Object Model, like {@link Digraph}, {@link Graph}, {@link Node}, and {@link Edge}
+ * @param model Dot Object Model, like {@link Digraph}, {@link Graph}, {@link Subgraph}, {@link Node}, and {@link Edge}
  * @param options
  * @returns DOT string
  */

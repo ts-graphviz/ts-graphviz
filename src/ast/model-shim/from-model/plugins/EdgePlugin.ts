@@ -4,7 +4,7 @@ import { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute, convertComment } from './utils/index.js';
 import { createElement } from '../../../builder/create-element.js';
 
-export const EdgeConvertPlugin: ConvertFromModelPlugin<EdgeModel> = {
+export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
   match(model) {
     return model.$$type === 'Edge';
   },

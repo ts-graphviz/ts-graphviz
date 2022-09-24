@@ -3,7 +3,7 @@ import { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute } from './utils/index.js';
 import { createElement } from '../../../builder/create-element.js';
 
-export const AttributeListPrintPlugin: ConvertFromModelPlugin<AttributeListModel> = {
+export const AttributeListPlugin: ConvertFromModelPlugin<AttributeListModel> = {
   match(model) {
     return model.$$type === 'AttributeList';
   },

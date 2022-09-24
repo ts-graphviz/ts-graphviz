@@ -3,7 +3,7 @@ import { ConvertFromModelPlugin } from '../types.js';
 import { createElement } from '../../../builder/create-element.js';
 import { convertComment, convertAttribute } from './utils/index.js';
 
-export const NodeConvertPlugin: ConvertFromModelPlugin<NodeModel> = {
+export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {
   match(model) {
     return model.$$type === 'Node';
   },
