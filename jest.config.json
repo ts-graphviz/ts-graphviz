@@ -6,6 +6,7 @@
   "extensionsToTreatAsEsm": [".ts"],
   "moduleNameMapper": {
     "^\\#lib\\/(.*)$": "<rootDir>/src/$1",
+    "^\\#test\\/(.*)$": "<rootDir>/test/$1",
     "^(\\.{1,2}/.*)\\.js$": "$1"
   },
   "snapshotSerializers": ["jest-snapshot-serializer-raw"]
