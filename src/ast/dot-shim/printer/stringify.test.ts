@@ -1,6 +1,6 @@
 import { wrap } from 'jest-snapshot-serializer-raw';
 import { pipe } from '#lib/utils';
-import { stringify as _stringify } from '../stringify.js';
+import { stringify as _stringify } from './stringify.js';
 
 const stringify = pipe(_stringify, wrap);
 

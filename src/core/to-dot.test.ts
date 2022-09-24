@@ -1,7 +1,7 @@
 import { RootGraphModel } from '#lib/common';
-import { attribute as _ } from '../attribute.js';
-import { Digraph, Edge, Node, Graph, Subgraph } from '../models/index.js';
-import { toDot } from '../to-dot.js';
+import { attribute as _ } from './attribute.js';
+import { Digraph, Edge, Node, Graph, Subgraph } from './models/index.js';
+import { toDot } from './to-dot.js';
 
 describe('toDot function', () => {
   describe.each([

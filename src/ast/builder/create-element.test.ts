@@ -1,4 +1,4 @@
-import { createElement } from '../create-element.js';
+import { createElement } from './create-element.js';
 
 describe('createElement', () => {
   test('Dot', () => {
