@@ -21,6 +21,12 @@ export type ASTToModel<T> = T extends { type: infer U } ? ModelOf<U> : never;
 
 /**
  * @group Convert AST to Model
+ * @beta
+ */
+export type ToModelConvertableASTNode = DotASTNode | GraphASTNode | SubgraphASTNode | NodeASTNode | EdgeASTNode;
+
+/**
+ * @group Convert AST to Model
  * @alpha
  */
 export interface ConvertToModelOptions {
@@ -33,16 +39,14 @@ export interface ConvertToModelOptions {
  */
 export interface ConvertToModelContext {
   models: ModelsContext;
-  convert<T extends DotASTNode | GraphASTNode | SubgraphASTNode | NodeASTNode | EdgeASTNode>(ast: T): ASTToModel<T>;
+  convert<T extends ToModelConvertableASTNode>(ast: T): ASTToModel<T>;
 }
 
 /**
  * @group Convert AST to Model
  * @alpha
  */
-export interface ConvertToModelPlugin<
-  T extends DotASTNode | GraphASTNode | SubgraphASTNode | NodeASTNode | EdgeASTNode,
-> {
+export interface ConvertToModelPlugin<T extends ToModelConvertableASTNode = ToModelConvertableASTNode> {
   match(ast: T): boolean;
   convert(context: ConvertToModelContext, ast: T): ASTToModel<T>;
 }
