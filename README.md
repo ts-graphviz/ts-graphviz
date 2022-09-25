@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6485f9858ed4b3e8ef76611a2896bc4)](https://app.codacy.com/gh/ts-graphviz/ts-graphviz?utm_source=github.com&utm_medium=referral&utm_content=ts-graphviz/ts-graphviz&utm_campaign=Badge_Grade_Settings)
 [![GitHub Action](https://github.com/kamiazya/ts-graphviz/workflows/NodeCI/badge.svg)](https://github.com/kamiazya/ts-graphviz/actions?workflow=NodeCI)
 [![npm version](https://badge.fury.io/js/ts-graphviz.svg)](https://badge.fury.io/js/ts-graphviz)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
