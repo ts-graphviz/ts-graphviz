@@ -101,6 +101,8 @@ const dot = toDot(G);
 <details>
 <summary>高度な使い方</summary>
 
+##### カスタム・クラス 🤖
+
 クラスを継承することで独自の実装を加えることもできます。
 
 ```typescript
@@ -114,9 +116,9 @@ class MyCustomDigraph extends Digraph {
   }
 }
 class MyCustomNode extends Node {
-  constructor(id: number) {
-    super(`node${id}`, {
-      [_.label]: `This is Custom Node ${id}`
+  constructor(id: string) {
+    super(`node_${id}`, {
+      [_.label]: `This is Custom Node ${id}`,
     });
   }
 }
@@ -124,30 +126,89 @@ class MyCustomNode extends Node {
 class MyCustomEdge extends Edge {
   constructor(targets: EdgeTargetTuple) {
     super(targets, {
-      [_.label]: 'This is Custom Edge'
+      [_.label]: 'This is Custom Edge',
     });
   }
 }
 
 const digraph = new MyCustomDigraph();
-const node1 = new MyCustomNode(1);
-const node2 = new MyCustomNode(2);
+const node1 = new MyCustomNode('A');
+const node2 = new MyCustomNode('B');
 const edge = new MyCustomEdge([node1, node2]);
 digraph.addNode(node1);
 digraph.addNode(node2);
 digraph.addEdge(edge);
-const dot = toDot(g);
+const dot = toDot(digraph);
 // digraph "G" {
 //   label = "This is Custom Digraph";
-//   "node1" [
-//     label = "This is Custom Node 1",
+//   "node_A" [
+//     label = "This is Custom Node A";
 //   ];
-//   "node2" [
-//     label = "This is Custom Node 2",
+//   "node_B" [
+//     label = "This is Custom Node B";
 //   ];
-//   "node1" -> "node2" [
-//     label = "This is Custom Edge",
+//   "node_A" -> "node_B" [
+//     label = "This is Custom Edge";
 //   ];
+// }
+```
+
+##### Models Context API ( `with` メソッド) 🧅
+
+あなたは _Models Context API_ をつかうことで、Graphの内部で生成されるオブジェクトもカスタムクラスにすることができます。
+
+
+`GraphBaseModel` の実装である `Digraph`, `Graph`, `Subgraph` が持つ `with` メソッドは、 カスタムモデルを事前定義するために提供されています。
+
+```typescript
+const g = new Digraph();
+g.with({
+  Node: MyCustomNode,
+  Edge: MyCustomEdge,
+});
+const a = g.createNode('A'); // MyCustomNode
+const b = g.createNode('B'); // MyCustomNode
+g.createEdge([a, b]); // MyCustomEdge
+const dot = toDot(g);
+// digraph {
+//   "node_A" [
+//     label = "This is Custom Node A";
+//   ];
+//   "node_B" [
+//     label = "This is Custom Node B";
+//   ];
+//   "node_A" -> "node_B" [
+//     label = "This is Custom Edge";
+//   ];
+// }
+```
+
+##### `fromDot` 関数 ⏪
+
+> この関数のステータスは ![beta](https://img.shields.io/badge/-beta-orange) です。
+
+このライブラリを使用するメインシナリオは `toDot` 関数を使用することにありますが、逆方向の変換もサポートしています。
+
+**DOT** を **Model** に変換により、コードの一部をDOT言語で記述することができます。
+
+
+```typescript
+const G = fromDot(
+  `digraph {
+    node_A [
+      label = "This is a Label of Node A";
+    ];
+  }`,
+);
+
+G.edge(['node_A', 'node_B']);
+
+const dot = toDot(G)
+// digraph {
+//   "node_A" [
+//     label = "This is a Label of Node A";
+//   ];
+//   "node_A" -> "node_B";
 // }
 ```
 
@@ -219,6 +280,48 @@ const dot = toDot(G);
 > // }
 > ```
 
+
+<details>
+<summary>高度な使い方</summary>
+
+##### Models Context API ( `withContext` 関数 ) 💈
+
+
+`withContext` 関数は、 _Model Factory_ 関数を返します。
+
+この _Model Factory_ は、 `Digraph` や `Graph` など、 `RootGraphModel` をカスタムクラスに置き換える手段を提供します。
+
+これのAPIにより、宣言的APIとカスタムクラスを統合する手段を提供します。
+
+```typescript
+const { digraph } = withContext({
+  Digraph: MyCustomDigraph,
+  Node: MyCustomNode,
+  Edge: MyCustomEdge,
+});
+
+const G = digraph((g) => {
+  const a = g.node('A'); // MyCustomNode
+  const b = g.node('B'); // MyCustomNode
+  g.edge([a, b]); // MyCustomEdge
+});
+const dot = toDot(g);
+// digraph "G" {
+//   label = "This is Custom Digraph";
+//   "node_A" [
+//     label = "This is Custom Node A";
+//   ];
+//   "node_B" [
+//     label = "This is Custom Node B";
+//   ];
+//   "node_A" -> "node_B" [
+//     label = "This is Custom Edge";
+//   ];
+// }
+```
+
+</details>
+
 ### `ts-graphviz/ast` モジュール 🔢
 
 > このパッケージのステータスは ![beta](https://img.shields.io/badge/-beta-orange) です。
@@ -230,10 +333,11 @@ const dot = toDot(G);
 状態遷移図で記載している通り、下記の関数を提供しています。
 
 - **Model** から **AST** に変換する `fromModel` 関数
+- **AST** から **Model** に変換する `toModel` 関数
 - **AST** から **DOT** に変換する `stringify` 関数
 - **DOT** から **AST** に変換する `parse` 関数
 
-> **Note** 上記の図からわかるように、`ts-graphviz` パッケージで提供している `toDot` 関数は、 `fromModel` と `stringify` の合成関数です。
+> **Note** 上記の図からわかるように、`ts-graphviz` パッケージで提供している `toDot` 関数は、 `fromModel` と `stringify` の合成関数です。また、`fromDot` 関数は、 `parse` と `toModel` の合成関数です。
 
 詳しい利用方法は整備中です。
 TypeScriptの型定義を参考にしてください。

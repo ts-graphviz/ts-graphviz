@@ -1,4 +1,5 @@
 import { Digraph, Edge, Node, RootGraph, Subgraph, fromDot } from 'ts-graphviz';
+import { toDot } from '#test/utils';
 
 describe('fromDot function', () => {
   test('RootGraph', () => {
@@ -33,4 +34,25 @@ describe('fromDot function', () => {
     expect(subgraph.id).toStrictEqual('sub');
     expect(subgraph.get('label')).toStrictEqual('hoge');
   });
+});
+
+test('partially described by DOT', () => {
+  const G = fromDot(
+    `digraph {
+      node_A [
+        label = "This is a Label of Node A";
+      ];
+    }`,
+  );
+
+  G.edge(['node_A', 'node_B']);
+
+  expect(toDot(G)).toMatchInlineSnapshot(`
+    digraph {
+      "node_A" [
+        label = "This is a Label of Node A";
+      ];
+      "node_A" -> "node_B";
+    }
+  `);
 });

@@ -18,6 +18,7 @@ export interface FromDotOptions<T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'S
  * @param dot DOT string
  * @param options
  * @returns Dot Object Model, like {@link Digraph}, {@link Graph}, {@link Subgraph}, {@link Node}, and {@link Edge}
+ * @beta
  */
 export function fromDot(dot: string, options?: FromDotOptions<'Dot' | 'Graph'>): RootGraphModel;
 export function fromDot(dot: string, options?: FromDotOptions<'Node'>): NodeModel;
