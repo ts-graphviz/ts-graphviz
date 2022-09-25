@@ -19,7 +19,6 @@ export class FromModelConverter {
       commentKind,
       convert<U extends DotObjectModel>(m: U): ModelToAST<U> {
         for (const plugin of plugins) {
-          /*  */
           if (plugin.match(m)) {
             return plugin.convert(context, m) as ModelToAST<U>;
           }

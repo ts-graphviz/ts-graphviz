@@ -3,7 +3,7 @@ import { ConvertFromModelPlugin } from '../types.js';
 import { createElement } from '../../../builder/create-element.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';
 
-export const SubgraphConvertPlugin: ConvertFromModelPlugin<SubgraphModel> = {
+export const SubgraphPlugin: ConvertFromModelPlugin<SubgraphModel> = {
   match(model) {
     return model.$$type === 'Subgraph';
   },

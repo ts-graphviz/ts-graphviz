@@ -1,4 +1,4 @@
-import { DotObjectModel, DotObjectType } from '#lib/common';
+import { DotObjectModel } from '#lib/common';
 import {
   AttributeListASTNode,
   CommentKind,
@@ -12,7 +12,7 @@ import {
 /**
  * @group AST
  */
-export type ModelToAST<T> = T extends { $$type: infer U extends DotObjectType }
+export type ModelToAST<T> = T extends DotObjectModel<infer U>
   ? U extends 'Graph'
     ? GraphASTNode | DotASTNode
     : U extends 'AttributeList'

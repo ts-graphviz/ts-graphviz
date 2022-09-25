@@ -102,6 +102,8 @@ const dot = toDot(G);
 <details>
 <summary>Advanced Usage</summary>
 
+##### Custom Class 🤖
+
 You can also add your own implementation by inheriting from the class.
 
 ```typescript
@@ -115,9 +117,9 @@ class MyCustomDigraph extends Digraph {
   }
 }
 class MyCustomNode extends Node {
-  constructor(id: number) {
-    super(`node${id}`, {
-      [_.label]: `This is Custom Node ${id}`
+  constructor(id: string) {
+    super(`node_${id}`, {
+      [_.label]: `This is Custom Node ${id}`,
     });
   }
 }
@@ -125,30 +127,88 @@ class MyCustomNode extends Node {
 class MyCustomEdge extends Edge {
   constructor(targets: EdgeTargetTuple) {
     super(targets, {
-      [_.label]: 'This is Custom Edge'
+      [_.label]: 'This is Custom Edge',
     });
   }
 }
 
 const digraph = new MyCustomDigraph();
-const node1 = new MyCustomNode(1);
-const node2 = new MyCustomNode(2);
+const node1 = new MyCustomNode('A');
+const node2 = new MyCustomNode('B');
 const edge = new MyCustomEdge([node1, node2]);
 digraph.addNode(node1);
 digraph.addNode(node2);
 digraph.addEdge(edge);
-const dot = toDot(g);
+const dot = toDot(digraph);
 // digraph "G" {
 //   label = "This is Custom Digraph";
-//   "node1" [
-//     label = "This is Custom Node 1",
+//   "node_A" [
+//     label = "This is Custom Node A";
 //   ];
-//   "node2" [
-//     label = "This is Custom Node 2",
+//   "node_B" [
+//     label = "This is Custom Node B";
 //   ];
-//   "node1" -> "node2" [
-//     label = "This is Custom Edge",
+//   "node_A" -> "node_B" [
+//     label = "This is Custom Edge";
 //   ];
+// }
+```
+
+##### Models Context API ( `with` method) 🧅
+
+You can also use the _Models Context API_ to create custom classes for objects generated inside of Graph.
+
+
+The `with` methods of `Digraph`, `Graph`, and `Subgraph`, which are implementations of `GraphBaseModel`, are provided to predefine custom models.
+
+```typescript
+const g = new Digraph();
+g.with({
+  Node: MyCustomNode,
+  Edge: MyCustomEdge,
+});
+const a = g.createNode('A'); // MyCustomNode
+const b = g.createNode('B'); // MyCustomNode
+g.createEdge([a, b]); // MyCustomEdge
+const dot = toDot(g);
+// digraph {
+//   "node_A" [
+//     label = "This is Custom Node A";
+//   ];
+//   "node_B" [
+//     label = "This is Custom Node B";
+//   ];
+//   "node_A" -> "node_B" [
+//     label = "This is Custom Edge";
+//   ];
+// }
+```
+
+##### `fromDot` function ⏪
+
+> The status of this function is ! [beta](https://img.shields.io/badge/-beta-orange).
+
+The main scenario for using this library is to use the `toDot` function, but it also supports conversions in the reverse direction.
+
+By converting **DOT** to **Model**, a portion of the code can be written in the DOT language.
+
+```typescript
+const G = fromDot(
+  `digraph {
+    node_A [
+      label = "This is a Label of Node A";
+    ];
+  }`,
+);
+
+G.edge(['node_A', 'node_B']);
+
+const dot = toDot(G)
+// digraph {
+//   "node_A" [
+//     label = "This is a Label of Node A";
+//   ];
+//   "node_A" -> "node_B";
 // }
 ```
 
@@ -220,6 +280,48 @@ const dot = toDot(G);
 > // }
 > ```
 
+
+<details>
+<summary>Advanced Usage</summary>
+
+##### Models Context API ( `withContext` function ) 💈
+
+
+The `withContext` function returns a _Model Factory_ function.
+
+This _Model Factory_ provides a means to replace `RootGraphModel` with a custom class, such as `Digraph` or `Graph`.
+
+This API provides a way to integrate declarative APIs and custom classes.
+
+```typescript
+const { digraph } = withContext({
+  Digraph: MyCustomDigraph,
+  Node: MyCustomNode,
+  Edge: MyCustomEdge,
+});
+
+const G = digraph((g) => {
+  const a = g.node('A'); // MyCustomNode
+  const b = g.node('B'); // MyCustomNode
+  g.edge([a, b]); // MyCustomEdge
+});
+const dot = toDot(g);
+// digraph "G" {
+//   label = "This is Custom Digraph";
+//   "node_A" [
+//     label = "This is Custom Node A";
+//   ];
+//   "node_B" [
+//     label = "This is Custom Node B";
+//   ];
+//   "node_A" -> "node_B" [
+//     label = "This is Custom Edge";
+//   ];
+// }
+```
+
+</details>
+
 ### `ts-graphviz/ast` Module 🔢
 
 > This module status is ![beta](https://img.shields.io/badge/-beta-orange).
@@ -231,10 +333,11 @@ An API is provided to handle ASTs for advanced use.
 The following functions are provided as described in the state transition diagram.
 
 - The `fromModel` function converts **Model** to **AST**.
+- The `toModel` function converts **AST** to **Model**.
 - The `stringify` function converts **AST** to **DOT**.
 - The `parse` function to convert from **DOT** to **AST**.
 
-> **Note** As you can see from the above figure, the `toDot` function provided by the `ts-graphviz` package is a composite function of `fromModel` and `stringify`.
+> **Note** As you can see from the above figure, the `toDot` function provided by the `ts-graphviz` package is a composite of `fromModel` and `stringify`. The `fromDot` function is a composite of `parse` and `toModel`.
 
 Detailed usage is TODO.
 Please refer to the TypeScript type definition.

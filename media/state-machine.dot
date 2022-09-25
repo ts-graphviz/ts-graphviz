@@ -1,10 +1,12 @@
 digraph state_machine {
+  newrank=true;
+
   node [ shape = circle ]
 
-  { rank = same; Model; AST; DOT; }
-
-  Model -> DOT [ label = "toDot" ]
-  AST   -> DOT [ label = "stringify" ]
-  DOT   -> AST [ label = "parse" ]
-  Model -> AST [ label = "fromModel" ]
+  Model -> DOT   [ label = "toDot", constraint = false ]
+  AST   -> DOT   [ label = "stringify" ]
+  DOT   -> AST   [ label = "parse" ]
+  Model -> AST   [ label = "fromModel" ]
+  AST   -> Model [ label = "toModel" ]
+  DOT   -> Model [ label = "fromDot", constraint = false ]
 }

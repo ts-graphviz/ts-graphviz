@@ -2,9 +2,9 @@ digraph state_machine {
   rankdir = LR;
   node [ shape = circle ]
 
-  // { rank = same; builder_fn; Model; DOT; }
+  // { rank = same; factory_fn; Model; DOT; }
 
-  builder_fn [
+  factory_fn [
     shape = record,
     label = "{{Model Factory Functions | strict.digraph(...)\lstrict.graph(...)\ldigraph(...)\lgraph(...)\l}}"
   ]
@@ -14,7 +14,8 @@ digraph state_machine {
     label = "{{Object Oriented Programing | new Digraph(...)\lnew Graph(...)\l...\l}}"
   ]
 
-  {builder_fn, oop} -> Model;
+  {factory_fn, oop} -> Model;
 
   Model -> DOT [ label = "toDot" ]
+  DOT -> Model [ label = "fromDot" ]
 }
