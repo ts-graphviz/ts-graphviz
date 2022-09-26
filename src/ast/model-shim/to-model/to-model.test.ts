@@ -1,3 +1,4 @@
+import '#lib/core';
 import { createElement } from '../../builder/create-element.js';
 import { toModel } from './to-model.js';
 
