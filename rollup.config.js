@@ -3,7 +3,14 @@ import dts from 'rollup-plugin-dts';
 
 function* createOptions() {
   const subPackages = ['utils', 'common', 'ast', 'core'];
-  const subPackageEntrypoints = subPackages.map((subPackage) => `#lib/${subPackage}`);
+  const subPackageEntrypoints = subPackages.flatMap((subPackage) => [
+    `../${subPackage}/index.js`,
+    `../../${subPackage}/index.js`,
+    `../../../${subPackage}/index.js`,
+    `../../../../${subPackage}/index.js`,
+    `../../../../../${subPackage}/index.js`,
+    `../../../../../../${subPackage}/index.js`,
+  ]);
   yield {
     input: './lib/index.js',
     output: [
@@ -16,7 +23,7 @@ function* createOptions() {
         file: './lib/index.js',
       },
     ],
-    external: subPackageEntrypoints,
+    external: subPackages.map((subPackage) => `./${subPackage}/index.js`),
   };
 
   for (const subPackage of subPackages) {
@@ -68,7 +75,7 @@ function* createOptions() {
         file: './lib/index.d.ts',
       },
     ],
-    external: subPackageEntrypoints,
+    external: subPackages.map((subPackage) => `./${subPackage}/index.js`),
   };
 }
 

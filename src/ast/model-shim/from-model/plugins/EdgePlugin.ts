@@ -1,4 +1,4 @@
-import { EdgeModel, isForwardRefNode, isNodeModel } from '#lib/common';
+import { EdgeModel, isForwardRefNode, isNodeModel } from '../../../../common/index.js';
 import { EdgeTargetASTNode } from '../../../types.js';
 import { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute, convertComment } from './utils/index.js';

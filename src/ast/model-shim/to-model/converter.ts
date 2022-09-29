@@ -1,4 +1,4 @@
-import { createModelsContext } from '#lib/common';
+import { createModelsContext } from '../../../common/index.js';
 import { defaultPlugins } from './plugins/index.js';
 import {
   ASTToModel,

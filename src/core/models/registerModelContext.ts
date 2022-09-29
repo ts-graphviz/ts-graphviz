@@ -1,4 +1,4 @@
-import { RootModelsContext } from '#lib/common';
+import { RootModelsContext } from '../../common/index.js';
 import { Digraph } from './Digraph.js';
 import { Graph } from './Graph.js';
 import { Subgraph } from './Subgraph.js';

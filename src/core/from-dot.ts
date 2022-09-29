@@ -1,5 +1,5 @@
-import { parse, ParseOptions, toModel, ConvertToModelOptions } from '#lib/ast';
-import { EdgeModel, NodeModel, RootGraphModel, SubgraphModel } from '#lib/common';
+import { parse, ParseOptions, toModel, ConvertToModelOptions } from '../ast/index.js';
+import { EdgeModel, NodeModel, RootGraphModel, SubgraphModel } from '../common/index.js';
 
 /**
  * @group Convert DOT to DOT

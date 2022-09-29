@@ -1,4 +1,4 @@
-import type { Compass, AttributeKey, ASTType } from '#lib/common';
+import type { Compass, AttributeKey, ASTType } from '../common/index.js';
 
 /**
  * @group AST

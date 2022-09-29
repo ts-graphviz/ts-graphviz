@@ -1,5 +1,5 @@
 /**
  * @module ts-graphviz
  */
-export * from '#lib/common';
-export * from '#lib/core';
+export * from './common/index.js';
+export * from './core/index.js';

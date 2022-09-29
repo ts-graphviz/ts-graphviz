@@ -1,4 +1,4 @@
-import { pipe } from '#lib/utils';
+import { pipe } from '../../src/utils/index.js';
 import { wrap } from 'jest-snapshot-serializer-raw';
 import { toDot as _toDot } from 'ts-graphviz';
 

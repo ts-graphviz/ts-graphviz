@@ -1,4 +1,4 @@
-import { AttributeKey, AttributesGroupModel } from '#lib/common';
+import { AttributeKey, AttributesGroupModel } from '../../common/index.js';
 import { AttributesBase } from './AttributesBase.js';
 
 /**

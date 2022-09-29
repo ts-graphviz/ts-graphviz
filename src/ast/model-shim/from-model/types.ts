@@ -1,4 +1,4 @@
-import { DotObjectModel } from '#lib/common';
+import { DotObjectModel } from '../../../common/index.js';
 import {
   AttributeListASTNode,
   CommentKind,

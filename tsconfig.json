@@ -12,7 +12,6 @@
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "#lib/*": ["./src/*/index.js"],
       "#test/*": ["./test/*/index.js"],
       "ts-graphviz": ["./src/index.js"],
       "ts-graphviz/ast": ["./src/ast/index.js"]
