@@ -1,6 +1,6 @@
 import './registerModelContext.js';
 
-import { EdgeTargetTuple } from '#lib/common';
+import { EdgeTargetTuple } from '../../common/index.js';
 import { attribute as _ } from '../attribute.js';
 import { DotObject } from './DotObject.js';
 import { Edge } from './Edge.js';

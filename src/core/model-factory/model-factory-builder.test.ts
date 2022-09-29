@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
 
 import '../models/registerModelContext.js';
-import { RootModelsContext } from '#lib/common';
+import { RootModelsContext } from '../../common/index.js';
 import { attribute as _ } from '../attribute.js';
 import { ModelFactoryBuilder } from './model-factory-builder.js';
 

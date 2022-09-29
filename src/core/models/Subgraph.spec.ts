@@ -1,6 +1,6 @@
 import './registerModelContext.js';
 
-import { SubgraphModel, EdgeTargetTuple } from '#lib/common';
+import { SubgraphModel, EdgeTargetTuple } from '../../common/index.js';
 import { attribute as _ } from '../attribute.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';

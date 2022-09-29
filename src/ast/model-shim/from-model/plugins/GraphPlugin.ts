@@ -1,4 +1,4 @@
-import { RootGraphModel } from '#lib/common';
+import { RootGraphModel } from '../../../../common/index.js';
 import { ConvertFromModelPlugin } from '../types.js';
 import { createElement } from '../../../builder/create-element.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';

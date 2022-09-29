@@ -17,7 +17,7 @@ export interface ModelsContext {
  * @alpha
  */
 export const RootModelsContext: ModelsContext = Object.seal({
-  // NOTE: RootModelsContext is also initialized after the model class is declared in the '#lib/core' module.
+  // NOTE: RootModelsContext is also initialized after the model class is declared in the 'core/index.js' module.
   Graph: null,
   Digraph: null,
   Subgraph: null,

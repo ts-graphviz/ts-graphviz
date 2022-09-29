@@ -20,7 +20,7 @@ import {
   SubgraphAttributeKey,
   ModelsContext,
   createModelsContext,
-} from '#lib/common';
+} from '../../common/index.js';
 import { AttributesBase } from './AttributesBase.js';
 import { AttributeList } from './AttributeList.js';
 
