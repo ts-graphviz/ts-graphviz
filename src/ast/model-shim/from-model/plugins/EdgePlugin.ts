@@ -63,6 +63,63 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
               },
               [],
             );
+          } else {
+            return createElement(
+              'NodeRefGroup',
+              {},
+              target.map((n) => {
+                if (isNodeModel(n)) {
+                  return createElement(
+                    'NodeRef',
+                    {
+                      id: createElement(
+                        'Literal',
+                        {
+                          value: n.id,
+                          quoted: true,
+                        },
+                        [],
+                      ),
+                    },
+                    [],
+                  );
+                }
+                return createElement(
+                  'NodeRef',
+                  {
+                    id: createElement(
+                      'Literal',
+                      {
+                        value: n.id,
+                        quoted: true,
+                      },
+                      [],
+                    ),
+                    port: n.port
+                      ? createElement(
+                          'Literal',
+                          {
+                            value: n.port,
+                            quoted: true,
+                          },
+                          [],
+                        )
+                      : undefined,
+                    compass: n.compass
+                      ? createElement(
+                          'Literal',
+                          {
+                            value: n.compass,
+                            quoted: true,
+                          },
+                          [],
+                        )
+                      : undefined,
+                  },
+                  [],
+                );
+              }),
+            );
           }
         }) as [from: EdgeTargetASTNode, to: EdgeTargetASTNode, ...rest: EdgeTargetASTNode[]],
       },
