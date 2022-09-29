@@ -1,3 +1,4 @@
+name: Prerelease
 on:
   push:
     branches:
