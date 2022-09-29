@@ -33,6 +33,11 @@
       "import": "./lib/ast/index.js",
       "require": "./lib/ast/index.cjs",
       "types": "./lib/ast/index.d.ts"
+    },
+    "./jsx-runtime": {
+      "import": "./lib/jsx-runtime/index.js",
+      "require": "./lib/jsx-runtime/index.cjs",
+      "types": "./lib/jsx-runtime/index.d.ts"
     }
   },
   "imports": {
