@@ -1,4 +1,4 @@
-import { GraphBaseModel } from '#lib/common';
+import { GraphBaseModel } from '../../../../../common/index.js';
 import { ClusterStatementASTNode, AttributeASTNode } from '../../../../types.js';
 import { CommentHolder } from './comment-holder.js';
 import { convertToEdgeTargetTuple } from './convert-to-edge-target-tuple.js';

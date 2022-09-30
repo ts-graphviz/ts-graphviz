@@ -1,4 +1,4 @@
-import { EdgeTargetTuple, EdgeTarget } from '#lib/common';
+import { EdgeTargetTuple, EdgeTarget } from '../../../../../common/index.js';
 import { EdgeASTNode } from '../../../../types.js';
 
 export function convertToEdgeTargetTuple(edge: EdgeASTNode): EdgeTargetTuple {

@@ -1,4 +1,4 @@
-import { AttributeKey, Attributes, Attribute, AttributesObject, AttributesEntities } from '#lib/common';
+import { AttributeKey, Attributes, Attribute, AttributesObject, AttributesEntities } from '../../common/index.js';
 import { DotObject } from './DotObject.js';
 
 /**

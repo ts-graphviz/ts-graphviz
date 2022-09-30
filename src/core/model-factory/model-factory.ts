@@ -1,4 +1,4 @@
-import { createModelsContext, ModelsContext } from '#lib/common';
+import { createModelsContext, ModelsContext } from '../../common/index.js';
 import { createModelFactories } from './model-factory-builder.js';
 import { ModelFactories, ModelFactoriesWithStrict } from './types.js';
 

@@ -3,7 +3,7 @@ import {
   ClusterSubgraphAttributeKey,
   SubgraphModel,
   SubgraphAttributesObject,
-} from '#lib/common';
+} from '../../common/index.js';
 import { GraphBase } from './GraphBase.js';
 
 /**

@@ -1,5 +1,5 @@
-import { DotObjectModel } from '#lib/common';
-import { stringify, fromModel, ConvertFromModelOptions, PrintOptions } from '#lib/ast';
+import { DotObjectModel } from '../common/index.js';
+import { stringify, fromModel, ConvertFromModelOptions, PrintOptions } from '../ast/index.js';
 
 /**
  * @group Convert Model to DOT

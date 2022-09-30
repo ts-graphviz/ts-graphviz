@@ -1,4 +1,4 @@
-import '#lib/core';
+import '../../../core/index.js';
 import { createElement } from '../../builder/create-element.js';
 import { toModel } from './to-model.js';
 

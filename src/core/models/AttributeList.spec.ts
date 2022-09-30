@@ -2,7 +2,7 @@ import { attribute as _ } from '../attribute.js';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
-import { AttributeListKind } from '#lib/common';
+import { AttributeListKind } from '../../common/index.js';
 
 let attrs: AttributeList<AttributeListKind>;
 beforeEach(() => {

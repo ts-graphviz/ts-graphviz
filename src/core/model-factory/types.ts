@@ -1,4 +1,4 @@
-import { RootGraphModel, GraphAttributesObject } from '#lib/common';
+import { RootGraphModel, GraphAttributesObject } from '../../common/index.js';
 
 /**
  * @group Model Factory

@@ -1,9 +1,17 @@
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
+import replace from '@rollup/plugin-replace';
 
 function* createOptions() {
   const subPackages = ['utils', 'common', 'ast', 'jsx-runtime', 'core'];
-  const subPackageEntrypoints = subPackages.map((subPackage) => `#lib/${subPackage}`);
+  const subPackageEntrypoints = subPackages.flatMap((subPackage) => [
+    `../${subPackage}/index.js`,
+    `../../${subPackage}/index.js`,
+    `../../../${subPackage}/index.js`,
+    `../../../../${subPackage}/index.js`,
+    `../../../../../${subPackage}/index.js`,
+    `../../../../../../${subPackage}/index.js`,
+  ]);
   yield {
     input: './lib/index.js',
     output: [
@@ -16,7 +24,7 @@ function* createOptions() {
         file: './lib/index.js',
       },
     ],
-    external: subPackageEntrypoints,
+    external: subPackages.map((subPackage) => `./${subPackage}/index.js`),
   };
 
   for (const subPackage of subPackages) {
@@ -51,6 +59,23 @@ function* createOptions() {
       ],
       external: subPackageEntrypoints,
     };
+    yield {
+      input: `./lib/${subPackage}/index.cjs`,
+      output: {
+        format: 'cjs',
+        file: `./lib/${subPackage}/index.cjs`,
+      },
+      external: subPackageEntrypoints,
+      plugins: [
+        replace({
+          values: subPackages.reduce(
+            (prev, subPackage) => ({ ...prev, [`${subPackage}/index.js`]: `${subPackage}/index.cjs` }),
+            {},
+          ),
+          preventAssignment: true,
+        }),
+      ],
+    };
   }
 
   yield {
@@ -68,7 +93,25 @@ function* createOptions() {
         file: './lib/index.d.ts',
       },
     ],
-    external: subPackageEntrypoints,
+    external: subPackages.map((subPackage) => `./${subPackage}/index.js`),
+  };
+
+  yield {
+    input: './lib/index.cjs',
+    output: {
+      format: 'cjs',
+      file: './lib/index.cjs',
+    },
+    external: subPackages.map((subPackage) => `./${subPackage}/index.js`),
+    plugins: [
+      replace({
+        values: subPackages.reduce(
+          (prev, subPackage) => ({ ...prev, [`${subPackage}/index.js`]: `${subPackage}/index.cjs` }),
+          {},
+        ),
+        preventAssignment: true,
+      }),
+    ],
   };
 }
 

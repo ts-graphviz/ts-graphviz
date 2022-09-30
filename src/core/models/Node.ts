@@ -1,4 +1,4 @@
-import { NodeModel, NodeAttributeKey, NodeAttributesObject, Port, ForwardRefNode } from '#lib/common';
+import { NodeModel, NodeAttributeKey, NodeAttributesObject, Port, ForwardRefNode } from '../../common/index.js';
 import { DotObject } from './DotObject.js';
 import { AttributesGroup } from './AttributesGroup.js';
 

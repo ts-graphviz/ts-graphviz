@@ -2,7 +2,7 @@ import './registerModelContext.js';
 
 import { jest } from '@jest/globals';
 
-import { EdgeTargetTuple, NodeModel } from '#lib/common';
+import { EdgeTargetTuple, NodeModel } from '../../common/index.js';
 import { attribute as _ } from '../attribute.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';

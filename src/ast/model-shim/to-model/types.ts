@@ -1,4 +1,4 @@
-import { EdgeModel, ModelsContext, NodeModel, RootGraphModel, SubgraphModel } from '#lib/common';
+import { EdgeModel, ModelsContext, NodeModel, RootGraphModel, SubgraphModel } from '../../../common/index.js';
 import { DotASTNode, EdgeASTNode, GraphASTNode, NodeASTNode, SubgraphASTNode } from '../../types.js';
 
 /**

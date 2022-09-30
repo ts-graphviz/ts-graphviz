@@ -1,4 +1,4 @@
-import { GraphAttributesObject, ModelsContext, RootGraphModel, RootModelsContext } from '#lib/common';
+import { GraphAttributesObject, ModelsContext, RootGraphModel, RootModelsContext } from '../../common/index.js';
 import { ModelFactory } from './types.js';
 
 /** @hidden */

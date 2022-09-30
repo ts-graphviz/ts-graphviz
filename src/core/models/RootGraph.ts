@@ -1,4 +1,4 @@
-import { GraphAttributeKey, GraphAttributesObject, RootGraphModel } from '#lib/common';
+import { GraphAttributeKey, GraphAttributesObject, RootGraphModel } from '../../common/index.js';
 import { GraphBase } from './GraphBase.js';
 
 /**
