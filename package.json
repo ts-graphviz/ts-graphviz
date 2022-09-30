@@ -40,13 +40,6 @@
       "types": "./lib/jsx-runtime/index.d.ts"
     }
   },
-  "imports": {
-    "#lib/*": {
-      "import": "./lib/*/index.js",
-      "require": "./lib/*/index.cjs",
-      "types": "./lib/*/index.d.ts"
-    }
-  },
   "license": "MIT",
   "engines": {
     "node": ">=14.16"

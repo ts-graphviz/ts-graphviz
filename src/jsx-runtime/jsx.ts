@@ -13,7 +13,7 @@ import {
   NodeRefGroupASTNode,
   SubgraphASTNode,
   GraphASTNode,
-} from '#lib/ast';
+} from '../ast/index.js';
 
 function tagType(tag: string): ASTNode['type'] {
   switch (tag) {
