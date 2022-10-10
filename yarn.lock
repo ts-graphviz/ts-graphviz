@@ -3371,13 +3371,13 @@ prettier-linter-helpers@^1.0.0:
     fast-diff "^1.1.2"
 
 prettier-plugin-pegjs@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.npmjs.org/prettier-plugin-pegjs/-/prettier-plugin-pegjs-0.5.0.tgz"
-  integrity sha512-AepnyF08JxiQy+XzSpS5z/m3yd9YtQchygwjG/JtZBF+1se7B49moX2gjaAzyv9Ds6IsxRV/oxwfcWJvtePmaA==
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-pegjs/-/prettier-plugin-pegjs-0.5.2.tgz#b1faf804ff67c2ed92ade439db6d140aacbb6f0d"
+  integrity sha512-C6gGQUNEo0TlZl5RphQaIBJgFq42cYJtE9TzBIEWUVCZAzvEgkl1JscEcmGOmVhZEz3y7Uv7I6j92W3EQdJe7g==
   dependencies:
-    prettier "^2.5.1"
+    prettier "^2.7.1"
 
-prettier@^2.5.1, prettier@^2.7.1:
+prettier@^2.7.1:
   version "2.7.1"
   resolved "https://registry.npmjs.org/prettier/-/prettier-2.7.1.tgz"
   integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
