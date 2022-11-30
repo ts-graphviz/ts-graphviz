@@ -1,0 +1,12 @@
+{
+  "name": "esm",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node sample.js"
+  },
+  "dependencies": {
+    "ts-graphviz": "file:../../ts-graphviz.tgz"
+  }
+}

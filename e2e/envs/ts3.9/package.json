@@ -1,0 +1,15 @@
+{
+  "name": "ts3.9",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "tsc"
+  },
+  "dependencies": {
+    "ts-graphviz": "file:../../ts-graphviz.tgz"
+  },
+  "devDependencies": {
+    "typescript": "3.9"
+  }
+}
