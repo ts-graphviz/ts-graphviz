@@ -20,26 +20,25 @@
     "type": "github",
     "url": "https://github.com/sponsors/kamiazya"
   },
-  "main": "./lib/index.cjs",
-  "module": "./lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "./lib/js/index.cjs",
+  "module": "./lib/js/index.js",
   "exports": {
     ".": {
-      "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
-      "types": "./lib/index.d.ts"
+      "import": "./lib/js/index.js",
+      "require": "./lib/js/index.cjs",
+      "types": "./lib/ts/index.d.ts"
     },
     "./ast": {
-      "import": "./lib/ast/index.js",
-      "require": "./lib/ast/index.cjs",
-      "types": "./lib/ast/index.d.ts"
+      "import": "./lib/js/ast/index.js",
+      "require": "./lib/js/ast/index.cjs",
+      "types": "./lib/ts/ast/index.d.ts"
     }
   },
-  "imports": {
-    "#lib/*": {
-      "import": "./lib/*/index.js",
-      "require": "./lib/*/index.cjs",
-      "types": "./lib/*/index.d.ts"
+  "types": "lib/ts/index.d.ts",
+  "typesVersions": {
+    "<=3.9": {
+      "lib/ts/index.d.ts": ["lib/ts3.9/index.d.ts"],
+      "lib/ts/*/index.d.ts": ["lib/ts3.9/*/index.d.ts"]
     }
   },
   "license": "MIT",
@@ -48,8 +47,11 @@
   },
   "scripts": {
     "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/ast/dot-shim/parser/peggy.options.json -o src/ast/dot-shim/parser/_parse.ts src/ast/dot-shim/parser/dot.peggy",
-    "prebuild": "yarn build:peggy",
-    "build": "tsc -p tsconfig.build.json && rollup -c",
+    "prebuild:tsc": "yarn build:peggy",
+    "build:tsc": "tsc -p tsconfig.build.json",
+    "build:rollup": "rollup -c",
+    "build:downlevel-dts:3.9": "downlevel-dts lib/ts lib/ts3.9 --to=3.9",
+    "build": "yarn build:tsc && yarn build:rollup && yarn build:downlevel-dts:3.9",
     "postbuild": "prettier --write ./lib/**/index.{js,cjs,d.ts}",
     "pretest": "yarn build:peggy",
     "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
@@ -64,6 +66,7 @@
     "@types/jest-specific-snapshot": "^0.5.6",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
+    "downlevel-dts": "^0.11.0",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",

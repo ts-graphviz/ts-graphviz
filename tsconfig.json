@@ -5,7 +5,6 @@
     "strict": true,
     "alwaysStrict": true,
     "strictNullChecks": true,
-    "outDir": "lib",
     "esModuleInterop": true,
     "moduleResolution": "Node16",
     "skipLibCheck": true,

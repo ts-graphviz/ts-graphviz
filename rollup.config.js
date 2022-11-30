@@ -13,15 +13,15 @@ function* createOptions() {
     `../../../../../../${subPackage}/index.js`,
   ]);
   yield {
-    input: './lib/index.js',
+    input: './lib/js/index.js',
     output: [
       {
         format: 'cjs',
-        file: './lib/index.cjs',
+        file: './lib/js/index.cjs',
       },
       {
         format: 'esm',
-        file: './lib/index.js',
+        file: './lib/js/index.js',
       },
     ],
     external: subPackages.map((subPackage) => `./${subPackage}/index.js`),
@@ -29,24 +29,24 @@ function* createOptions() {
 
   for (const subPackage of subPackages) {
     yield {
-      input: `./lib/${subPackage}/index.js`,
+      input: `./lib/js/${subPackage}/index.js`,
       output: [
         {
           format: 'cjs',
-          file: `./lib/${subPackage}/index.cjs`,
+          file: `./lib/js/${subPackage}/index.cjs`,
         },
         {
           format: 'esm',
-          file: `./lib/${subPackage}/index.js`,
+          file: `./lib/js/${subPackage}/index.js`,
         },
       ],
       external: subPackageEntrypoints,
     };
     yield {
-      input: `lib/${subPackage}/index.d.ts`,
+      input: `lib/js/${subPackage}/index.d.ts`,
       plugins: [
         del({
-          targets: [`lib/${subPackage}/**/*`, `!lib/${subPackage}/**/index.*`],
+          targets: [`lib/js/${subPackage}/**/*`, `!lib/js/${subPackage}/**/index.*`],
           hook: 'buildEnd',
         }),
         dts(),
@@ -54,16 +54,16 @@ function* createOptions() {
       output: [
         {
           format: 'esm',
-          file: `lib/${subPackage}/index.d.ts`,
+          file: `lib/ts/${subPackage}/index.d.ts`,
         },
       ],
       external: subPackageEntrypoints,
     };
     yield {
-      input: `./lib/${subPackage}/index.cjs`,
+      input: `./lib/js/${subPackage}/index.cjs`,
       output: {
         format: 'cjs',
-        file: `./lib/${subPackage}/index.cjs`,
+        file: `./lib/js/${subPackage}/index.cjs`,
       },
       external: subPackageEntrypoints,
       plugins: [
@@ -79,10 +79,10 @@ function* createOptions() {
   }
 
   yield {
-    input: './lib/index.d.ts',
+    input: './lib/js/index.d.ts',
     plugins: [
       del({
-        targets: ['lib/*.js', 'lib/**/*.d.ts', '!lib/**/index.{js,d.ts}'],
+        targets: ['lib/*.js', 'lib/**/*.d.ts', '!lib/ts/**/index.{js,d.ts}'],
         hook: 'buildEnd',
       }),
       dts(),
@@ -90,17 +90,17 @@ function* createOptions() {
     output: [
       {
         format: 'esm',
-        file: './lib/index.d.ts',
+        file: './lib/ts/index.d.ts',
       },
     ],
     external: subPackages.map((subPackage) => `./${subPackage}/index.js`),
   };
 
   yield {
-    input: './lib/index.cjs',
+    input: './lib/js/index.cjs',
     output: {
       format: 'cjs',
-      file: './lib/index.cjs',
+      file: './lib/js/index.cjs',
     },
     external: subPackages.map((subPackage) => `./${subPackage}/index.js`),
     plugins: [
