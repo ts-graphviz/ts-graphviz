@@ -37,8 +37,7 @@
   "types": "lib/ts/index.d.ts",
   "typesVersions": {
     "<=3.9": {
-      "lib/ts/index.d.ts": ["lib/ts3.9/index.d.ts"],
-      "lib/ts/*/index.d.ts": ["lib/ts3.9/*/index.d.ts"]
+      "lib/ts/*": ["lib/ts3.9/*"]
     }
   },
   "license": "MIT",
