@@ -30,8 +30,12 @@ jobs:
       run: yarn build
       env:
         CI: 'true'
-    - name: Test
+    - name: Unit Test
       run: yarn test
+      env:
+        CI: 'true'
+    - name: E2E Test
+      run: yarn --cwd e2e test
       env:
         CI: 'true'
 
