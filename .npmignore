@@ -12,6 +12,7 @@ CODE_OF_CONDUCT.md
 CONTRIBUTING.md
 coverage
 doc
+e2e
 jest.config.json
 LICENSE
 Makefile
@@ -19,6 +20,7 @@ media/*.dot
 README.ja.md
 rollup.config.js
 src
+test
 tsconfig.build.json
 tsconfig.json
 typedoc.json
