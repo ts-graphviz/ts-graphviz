@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { attribute: _, Digraph, Subgraph, Node, Edge, toDot } = require('ts-graphviz');
+import { attribute as _, Digraph, Subgraph, Node, Edge, toDot, toBuffer } from 'ts-graphviz';
 
 const G = new Digraph();
 const A = new Subgraph('A');
@@ -17,4 +16,5 @@ G.addSubgraph(A);
 A.addNode(node1);
 A.addNode(node2);
 A.addEdge(edge);
-toDot(G);
+const dot = toDot(G);
+toBuffer(dot);

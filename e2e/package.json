@@ -1,8 +1,19 @@
 {
   "private": true,
-  "workspaces": ["envs/*"],
+  "type": "module",
+  "workspaces": [
+    "envs/*"
+  ],
   "scripts": {
-    "pretest": "rm -f yarn.lock ts-graphviz.tgz && yarn cache clean --all ts-graphviz && yarn --cwd .. build && yarn --cwd .. pack -f ts-graphviz.tgz && yarn install --no-lockfile",
+    "build:cjs": "tsc main.ts -m commonjs --outDir envs/cjs/ --target esnext",
+    "build:esm": "tsc main.ts -m nodenext --outDir envs/esm/ --target esnext",
+    "build:deno": "cat main.ts | sed s/'ts-graphviz'/'npm:ts-graphviz'/ > envs/deno/main.ts",
+    "build": "yarn build:cjs && yarn build:esm && yarn build:deno",
+    "pretest": "rm -f yarn.lock ts-graphviz.tgz && yarn cache clean --all ts-graphviz && yarn --cwd .. build && yarn --cwd .. pack -f ts-graphviz.tgz && yarn install --no-lockfile && yarn build",
     "test": "yarn workspaces run test"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.11",
+    "typescript": "^4.9.3"
   }
 }
