@@ -3371,16 +3371,16 @@ prettier-linter-helpers@^1.0.0:
     fast-diff "^1.1.2"
 
 prettier-plugin-pegjs@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.npmjs.org/prettier-plugin-pegjs/-/prettier-plugin-pegjs-0.5.0.tgz"
-  integrity sha512-AepnyF08JxiQy+XzSpS5z/m3yd9YtQchygwjG/JtZBF+1se7B49moX2gjaAzyv9Ds6IsxRV/oxwfcWJvtePmaA==
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-pegjs/-/prettier-plugin-pegjs-0.5.3.tgz#9dbd04f7a499f47fd59bfb481220613cc687aa72"
+  integrity sha512-CRvI/1MhZLOANy2utUkAaXaTUg+Usr+V4fDAUPLJjACYXY5+JTC6IDXnXT6JpBbb0f6eWSw/NTR+qVObbiEP9Q==
   dependencies:
-    prettier "^2.5.1"
+    prettier "^2.8.1"
 
-prettier@^2.5.1, prettier@^2.7.1:
-  version "2.7.1"
-  resolved "https://registry.npmjs.org/prettier/-/prettier-2.7.1.tgz"
-  integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
+prettier@^2.7.1, prettier@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.1.tgz#4e1fd11c34e2421bc1da9aea9bd8127cd0a35efc"
+  integrity sha512-lqGoSJBQNJidqCHE80vqZJHWHRFoNYsSpP9AjFhlhi9ODCJA541svILes/+/1GM3VaL/abZi7cpFzOpdR9UPKg==
 
 pretty-format@^27.5.1:
   version "27.5.1"
