@@ -8,6 +8,9 @@ function commandBuilder({ dotCommand = 'dot', suppressWarnings = true, format = 
   return [dotCommand, args];
 }
 
+/**
+ * Execute the Graphviz dot command and make a Stream of the results.
+ */
 export async function toStream(dot, options) {
   const [command, args] = commandBuilder(options);
   const cp = new Deno.Command(command, {
@@ -20,8 +23,11 @@ export async function toStream(dot, options) {
   return cp.stdout;
 }
 
-export async function toFile(dot, filePath, options) {
-  const output = await Deno.open(filePath, { write: true });
+/**
+ * Execute the Graphviz dot command and output the results to a file.
+ */
+export async function toFile(dot, path, options) {
+  const output = await Deno.open(path, { write: true });
   const stream = await toStream(dot, options);
   await stream.pipeTo(output.writable);
 }

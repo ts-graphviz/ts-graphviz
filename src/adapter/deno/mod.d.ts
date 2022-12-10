@@ -6,6 +6,12 @@ export interface Options {
   dotCommand?: string;
 }
 
+/**
+ * Execute the Graphviz dot command and make a Stream of the results.
+ */
 export function toStream(dot: string, options?: Options): Promise<ReadableStream>;
 
-export function toFile(dot: string, filePath: string, options?: Options): Promise<void>;
+/**
+ * Execute the Graphviz dot command and output the results to a file.
+ */
+export function toFile(dot: string, path: string, options?: Options): Promise<void>;

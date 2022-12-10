@@ -3,7 +3,7 @@ import dts from 'rollup-plugin-dts';
 import replace from '@rollup/plugin-replace';
 
 function* createOptions() {
-  const subPackages = ['utils', 'common', 'ast', 'core', 'executor'];
+  const subPackages = ['utils', 'common', 'ast', 'core', 'adapter'];
   const subPackageEntrypoints = subPackages.flatMap((subPackage) => [
     `../${subPackage}/index.js`,
     `../../${subPackage}/index.js`,

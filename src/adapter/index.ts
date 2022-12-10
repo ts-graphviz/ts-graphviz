@@ -1,5 +1,5 @@
 /**
- * @module ts-graphviz/executor
+ * @module ts-graphviz/adapter
  * @beta
  */
 import { createWriteStream } from 'node:fs';
@@ -35,6 +35,9 @@ function commandBuilder({ dotCommand = 'dot', suppressWarnings = true, format = 
  */
 const pipeline = promisify(_pipeline);
 
+/**
+ * Execute the Graphviz dot command and make a Stream of the results.
+ */
 export async function toStream(dot: string, options?: Options): Promise<NodeJS.ReadableStream> {
   const [command, args] = commandBuilder(options);
   const p = spawn(command, args, { stdio: 'pipe' });
@@ -42,7 +45,10 @@ export async function toStream(dot: string, options?: Options): Promise<NodeJS.R
   return p.stdout;
 }
 
-export async function toFile(dot: string, filePath: string, options?: Options): Promise<void> {
+/**
+ * Execute the Graphviz dot command and output the results to a file.
+ */
+export async function toFile(dot: string, path: string, options?: Options): Promise<void> {
   const stream = await toStream(dot, options);
-  await pipeline(stream, createWriteStream(filePath));
+  await pipeline(stream, createWriteStream(path));
 }

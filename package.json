@@ -44,15 +44,15 @@
         "types": "./lib/ast/index.d.ts"
       }
     },
-    "./executor": {
+    "./adapter": {
       "deno": {
-        "default": "./lib/executor/deno/mod.js",
-        "types": "./lib/executor/deno/mod.d.ts"
+        "default": "./lib/adapter/deno/mod.js",
+        "types": "./lib/adapter/deno/mod.d.ts"
       },
       "node": {
-        "require": "./lib/executor/index.cjs",
-        "import": "./lib/executor/index.js",
-        "types": "./lib/executor/index.d.ts"
+        "require": "./lib/adapter/index.cjs",
+        "import": "./lib/adapter/index.js",
+        "types": "./lib/adapter/index.d.ts"
       }
     },
     "./package.json": "./package.json"
@@ -60,7 +60,7 @@
   "typesVersions": {
     "*": {
       "ast": ["lib/ast"],
-      "executor": ["lib/executor"]
+      "adapter": ["lib/adapter"]
     }
   },
   "license": "MIT",
@@ -70,7 +70,7 @@
   "scripts": {
     "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/ast/dot-shim/parser/peggy.options.json -o src/ast/dot-shim/parser/_parse.ts src/ast/dot-shim/parser/dot.peggy",
     "prebuild": "yarn build:peggy",
-    "build:deno": "cp -r src/executor/deno lib/executor/deno",
+    "build:deno": "cp -r src/adapter/deno lib/adapter/deno",
     "build:node": "tsc -p tsconfig.build.json && rollup -c",
     "build": "yarn build:node && yarn build:deno",
     "postbuild": "prettier --write ./lib/**/index.{js,cjs,d.ts}",

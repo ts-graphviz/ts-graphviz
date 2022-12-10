@@ -19,7 +19,7 @@
 [![Refarence](https://img.shields.io/badge/-Refarence-3178C6?logo=TypeScript&style=flat&logoColor=fff)](https://ts-graphviz.github.io/ts-graphviz/)
 [![Suponser](https://img.shields.io/badge/-Suponser-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/kamiazya)
 
-> [English](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.md) | [日本語](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.ja.md)
+> [English](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.md) | [日本語](https://github.com/ts-graphviz/ts-graphviz/blob/main/README_ja.md)
 
 ## Key Features ✨
 
@@ -34,6 +34,8 @@
 
 ## Installation 💽
 
+### Node.js
+
 This package can then be installed using a package manager.
 
 ```bash
@@ -43,6 +45,16 @@ $ npm install -S ts-graphviz
 $ yarn add ts-graphviz
 # or pnpm
 $ pnpm add ts-graphviz
+```
+
+### Deno
+
+[Deno v1.28 and above supports npm](https://deno.land/manual/node/npm_specifiers).
+
+You can install and use the package by specifying the following:
+
+```ts
+import { toDot } from 'npm:ts-graphviz';
 ```
 
 ## Usage 📑
@@ -321,6 +333,56 @@ const dot = toDot(g);
 ```
 
 </details>
+
+### `ts-graphviz/adapter` Module 🔌
+
+> This module status is ![beta](https://img.shields.io/badge/-beta-orange).
+
+
+Provides an interface to run Graphviz dot commands.
+
+[Graphviz](https://graphviz.gitlab.io/) must be installed so that the dot command can be executed.
+
+Execute the dot command to output a DOT language string to a stream or file.
+
+![Adapter State Machine](./media/adapter-state-machine.svg)
+
+This module provides the following functions.
+
+- The `toStream` function converts **DOT** to **Stream**.
+    ```ts
+    import { toStream } from 'ts-graphviz/adapter';
+
+    const dot = `
+      digraph example {
+        node1 [
+          label = "My Node",
+        ]
+      }
+    `;
+
+    const stream = await toStream(dot, { format: 'svg', });
+    // Node.js
+    stream.pipe(process.stdout);
+    // Deno
+    await stream.pipeTo(Deno.stdout.writable);
+    ```
+- Writes **DOT** to a file at the specified path `toFile` function
+    ```ts
+    import { toFile } from 'ts-graphviz/adapter';
+
+    const dot = `
+      digraph example {
+        node1 [
+          label = "My Node",
+        ]
+      }
+    `;
+
+    await toFile(dot, './result.svg', { format: 'svg', });
+    ```
+
+> **Note** Designed to work with Node.js and Deno, Stream is runtime native.
 
 ### `ts-graphviz/ast` Module 🔢
 
