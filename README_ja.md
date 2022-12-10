@@ -18,7 +18,7 @@ TypeScriptの ための [Graphviz](https://graphviz.gitlab.io/) ライブラリ
 [![Refarence](https://img.shields.io/badge/-Refarence-3178C6?logo=TypeScript&style=flat&logoColor=fff)](https://ts-graphviz.github.io/ts-graphviz/)
 [![Suponser](https://img.shields.io/badge/-Suponser-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/kamiazya)
 
-> [English](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.md) | [日本語](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.ja.md)
+> [English](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.md) | [日本語](https://github.com/ts-graphviz/ts-graphviz/blob/main/README_ja.md)
 
 ## 主な機能 ✨
 
@@ -33,6 +33,8 @@ TypeScript に完全に統合された Graphviz DOT言語のモデルとASTを�
 
 ## インストール方法 💽
 
+### Node.js
+
 このパッケージは、パッケージマネージャを使用してインストールすることができます。
 
 ```bash
@@ -42,6 +44,16 @@ $ npm install -S ts-graphviz
 $ yarn add ts-graphviz
 # or pnpm
 $ pnpm add ts-graphviz
+```
+
+### Deno
+
+[Deno v1.28 以上では npm をサポート](https://deno.land/manual/node/npm_specifiers)しています。
+
+下記のように指定することで、パッケージをインストールし使用することができます。
+
+```ts
+import { toDot } from 'npm:ts-graphviz';
 ```
 
 ## 使い方 📑
@@ -322,9 +334,60 @@ const dot = toDot(g);
 
 </details>
 
+### `ts-graphviz/adapter` モジュール 🔌
+
+> このモジュールのステータスは ![beta](https://img.shields.io/badge/-beta-orange) です。
+
+Graphviz の dot コマンドを実行するためのインターフェースを提供しています。
+
+[Graphviz](https://graphviz.gitlab.io/) をインストールし、 dot コマンドを実行できるようにしてください。
+
+dot コマンドを実行し、 DOT 言語の文字列を Stream やファイルに出力します。
+
+![Adapter State Machine](./media/adapter-state-machine.svg)
+
+このモジュールでは、下記の関数を提供しています。
+
+- **DOT** を **Stream** に変換する `toStream` 関数
+    ```ts
+    import { toStream } from 'ts-graphviz/adapter';
+
+    const dot = `
+      digraph example {
+        node1 [
+          label = "My Node",
+        ]
+      }
+    `;
+
+    const stream = await toStream(dot, { format: 'svg' });
+    // Node.js
+    stream.pipe(process.stdout);
+    // Deno
+    await stream.pipeTo(Deno.stdout.writable);
+    ```
+
+- **DOT** を指定したパスのファイルに書き出す `toFile` 関数
+    ```ts
+    import { toFile } from 'ts-graphviz/adapter';
+
+    const dot = `
+      digraph example {
+        node1 [
+          label = "My Node",
+        ]
+      }
+    `;
+
+    await toFile(dot, './result.svg', { format: 'svg' });
+    ```
+
+Node.js と Deno で動作するように設計されており、 Stream はランタイムネイティブです。
+
+
 ### `ts-graphviz/ast` モジュール 🔢
 
-> このパッケージのステータスは ![beta](https://img.shields.io/badge/-beta-orange) です。
+> このモジュールのステータスは ![beta](https://img.shields.io/badge/-beta-orange) です。
 
 高度な利用のためにASTを扱うためのAPIを提供しています。
 

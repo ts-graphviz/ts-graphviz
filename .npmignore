@@ -17,7 +17,7 @@ jest.config.json
 LICENSE
 Makefile
 media/*.dot
-README.ja.md
+README_ja.md
 rollup.config.js
 src
 test

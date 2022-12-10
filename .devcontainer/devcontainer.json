@@ -1,8 +1,16 @@
 {
   "name": "ts-graphviz",
-  "dockerFile": "Dockerfile",
-  "postCreateCommand": "yarn insyall --frozen-lockfile",
-  "extensions": ["EditorConfig.EditorConfig", "esbenp.prettier-vscode", "dbaeumer.vscode-eslint", "Orta.vscode-jest"],
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "postCreateCommand": "yarn install --frozen-lockfile",
+  "extensions": [
+    "EditorConfig.EditorConfig",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "Orta.vscode-jest",
+    "denoland.vscode-deno"
+  ],
   "settings": {
     "editor.formatOnSave": false,
     "editor.formatOnPaste": false,
@@ -11,5 +19,8 @@
       "source.fixAll.eslint": true
     },
     "typescript.tsdk": "node_modules/typescript/lib"
+  },
+  "remoteEnv": {
+    "PATH": "/home/node/.deno/bin:${containerEnv:PATH}"
   }
 }

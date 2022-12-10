@@ -1,0 +1,9 @@
+{
+  "name": "deno",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "pretest": "DENO_DIR=.deno deno vendor main.ts && bash patch-package.sh",
+    "test": "DENO_DIR=.deno deno run --unstable --allow-read --allow-run --allow-write main.ts"
+  }
+}

@@ -1,0 +1,8 @@
+digraph state_machine {
+  newrank=true;
+
+  node [ shape = circle ]
+
+  DOT -> Stream [ label = "toStream" ]
+  DOT -> File   [ label = "toFile" ]
+}

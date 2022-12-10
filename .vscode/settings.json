@@ -5,5 +5,10 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "deno.enable": true,
+  "deno.lint": false,
+  "deno.unstable": true,
+  "deno.enablePaths": ["./e2e/envs/deno", "src/adapter/deno", "lib/adapter/deno"],
+  "deno.cache": "./e2e/envs/deno/.deno"
 }
