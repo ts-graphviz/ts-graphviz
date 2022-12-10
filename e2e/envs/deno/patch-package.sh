@@ -1,11 +1,12 @@
 #/bin/bash
 
-VERSION=`cat ../../../package.json | jq -r .version`
+VERSION=$(jq -r .version < ../../../package.json)
+CACHE_DIR="$PWD/.deno/npm/registry.npmjs.org/ts-graphviz/$VERSION"
 
 tar xzf ../../ts-graphviz.tgz -C .
 
-rm -rf $PWD/.deno/npm/registry.npmjs.org/ts-graphviz/$VERSION/*
+rm -rf "$CACHE_DIR/*"
 
-mv ./package/* $PWD/.deno/npm/registry.npmjs.org/ts-graphviz/$VERSION
+mv "./package/*" $CACHE_DIR
 
 rm -rf ./package
