@@ -361,7 +361,7 @@ This module provides the following functions.
       }
     `;
 
-    const stream = await toStream(dot, { format: 'svg', });
+    const stream = await toStream(dot, { format: 'svg' });
     // Node.js
     stream.pipe(process.stdout);
     // Deno
@@ -379,7 +379,7 @@ This module provides the following functions.
       }
     `;
 
-    await toFile(dot, './result.svg', { format: 'svg', });
+    await toFile(dot, './result.svg', { format: 'svg' });
     ```
 
 > **Note** Designed to work with Node.js and Deno, Stream is runtime native.

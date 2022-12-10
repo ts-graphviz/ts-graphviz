@@ -360,7 +360,7 @@ dot コマンドを実行し、 DOT 言語の文字列を Stream やファイル
       }
     `;
 
-    const stream = await toStream(dot, { format: 'svg', });
+    const stream = await toStream(dot, { format: 'svg' });
     // Node.js
     stream.pipe(process.stdout);
     // Deno
@@ -379,7 +379,7 @@ dot コマンドを実行し、 DOT 言語の文字列を Stream やファイル
       }
     `;
 
-    await toFile(dot, './result.svg', { format: 'svg', });
+    await toFile(dot, './result.svg', { format: 'svg' });
     ```
 
 Node.js と Deno で動作するように設計されており、 Stream はランタイムネイティブです。
