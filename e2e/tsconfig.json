@@ -2,7 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "noEmitHelpers": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "Node16",
     "lib": ["esnext"]
   },
   "files": [

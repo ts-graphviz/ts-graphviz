@@ -8,6 +8,7 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "deno.enable": true,
   "deno.lint": false,
-  "deno.enablePaths": ["./e2e/envs/deno"],
+  "deno.unstable": true,
+  "deno.enablePaths": ["./e2e/envs/deno", "src/executor/deno", "lib/executor/deno"],
   "deno.cache": "./e2e/envs/deno/.deno"
 }

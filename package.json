@@ -25,21 +25,42 @@
   "types": "lib/index.d.ts",
   "exports": {
     ".": {
-      "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
-      "types": "./lib/index.d.ts"
+      "require": {
+        "default": "./lib/index.cjs",
+        "types": "./lib/index.d.ts"
+      },
+      "import": {
+        "default": "./lib/index.js",
+        "types": "./lib/index.d.ts"
+      }
     },
     "./ast": {
-      "import": "./lib/ast/index.js",
-      "require": "./lib/ast/index.cjs",
-      "types": "./lib/ast/index.d.ts"
-    }
+      "require": {
+        "default": "./lib/ast/index.cjs",
+        "types": "./lib/ast/index.d.ts"
+      },
+      "import": {
+        "default": "./lib/ast/index.js",
+        "types": "./lib/ast/index.d.ts"
+      }
+    },
+    "./executor": {
+      "deno": {
+        "default": "./lib/executor/deno/mod.js",
+        "types": "./lib/executor/deno/mod.d.ts"
+      },
+      "node": {
+        "require": "./lib/executor/index.cjs",
+        "import": "./lib/executor/index.js",
+        "types": "./lib/executor/index.d.ts"
+      }
+    },
+    "./package.json": "./package.json"
   },
-  "imports": {
-    "#lib/*": {
-      "import": "./lib/*/index.js",
-      "require": "./lib/*/index.cjs",
-      "types": "./lib/*/index.d.ts"
+  "typesVersions": {
+    "*": {
+      "ast": ["lib/ast"],
+      "executor": ["lib/executor"]
     }
   },
   "license": "MIT",
@@ -49,7 +70,9 @@
   "scripts": {
     "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/ast/dot-shim/parser/peggy.options.json -o src/ast/dot-shim/parser/_parse.ts src/ast/dot-shim/parser/dot.peggy",
     "prebuild": "yarn build:peggy",
-    "build": "tsc -p tsconfig.build.json && rollup -c",
+    "build:deno": "cp -r src/executor/deno lib/executor/deno",
+    "build:node": "tsc -p tsconfig.build.json && rollup -c",
+    "build": "yarn build:node && yarn build:deno",
     "postbuild": "prettier --write ./lib/**/index.{js,cjs,d.ts}",
     "pretest": "yarn build:peggy",
     "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",

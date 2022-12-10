@@ -1,4 +1,6 @@
-import { attribute as _, Digraph, Subgraph, Node, Edge, toDot, toBuffer } from 'ts-graphviz';
+import { attribute as _, Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
+import { parse } from 'ts-graphviz/ast';
+import { toFile } from 'ts-graphviz/executor';
 
 const G = new Digraph();
 const A = new Subgraph('A');
@@ -17,4 +19,5 @@ A.addNode(node1);
 A.addNode(node2);
 A.addEdge(edge);
 const dot = toDot(G);
-toBuffer(dot);
+parse(dot);
+toFile(dot, '/dev/null');

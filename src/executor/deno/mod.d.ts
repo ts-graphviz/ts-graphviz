@@ -5,3 +5,7 @@ export interface Options {
   suppressWarnings?: boolean;
   dotCommand?: string;
 }
+
+export function toStream(dot: string, options?: Options): Promise<ReadableStream>;
+
+export function toFile(dot: string, filePath: string, options?: Options): Promise<void>;
