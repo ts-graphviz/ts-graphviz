@@ -1,7 +1,7 @@
 {
   "files": [
     "README.md",
-    "README.ja.md"
+    "README_ja.md"
   ],
   "imageSize": 100,
   "commit": false,
@@ -47,6 +47,15 @@
         "code",
         "ideas",
         "doc"
+      ]
+    },
+    {
+      "login": "ArtemAdamenko",
+      "name": "Artem",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2178516?v=4",
+      "profile": "https://github.com/ArtemAdamenko",
+      "contributions": [
+        "bug"
       ]
     }
   ],
