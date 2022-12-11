@@ -501,6 +501,17 @@ const ast = parse(`
 
 </details>
 
+## Who's using `ts-graphviz` 📜
+
+- [Apollo GraphQL](https://github.com/apollographql)
+- [AWS](https://github.com/aws)
+- [IBM (StrongLoop)](https://strongloop.com)
+- [The University of Tokyo](https://github.com/csg-tokyo)
+- [Transmute](https://github.com/transmute-industries)
+
+> **Note** Let us know that you're using `ts-graphviz` on [GitHub Discussions](https://github.com/ts-graphviz/ts-graphviz/discussions/736) 🙏
+
+
 ## Related Projects 💫
 
 Related projects can be found at [**ts-graphviz** GitHub Organization](https://github.com/ts-graphviz).
