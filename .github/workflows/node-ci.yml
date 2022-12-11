@@ -39,6 +39,7 @@ jobs:
         CI: 'true'
     - name: E2E Test
       run: yarn --cwd e2e test
+      if: '!contains(github.ref, 'tags/v')'
       env:
         CI: 'true'
 
