@@ -26,28 +26,28 @@
   "exports": {
     ".": {
       "require": {
-        "default": "./lib/index.cjs",
-        "types": "./lib/index.d.ts"
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.cjs"
       },
       "import": {
-        "default": "./lib/index.js",
-        "types": "./lib/index.d.ts"
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
       }
     },
     "./ast": {
       "require": {
-        "default": "./lib/ast/index.cjs",
-        "types": "./lib/ast/index.d.ts"
+        "types": "./lib/ast/index.d.ts",
+        "default": "./lib/ast/index.cjs"
       },
       "import": {
-        "default": "./lib/ast/index.js",
-        "types": "./lib/ast/index.d.ts"
+        "types": "./lib/ast/index.d.ts",
+        "default": "./lib/ast/index.js"
       }
     },
     "./adapter": {
       "deno": {
-        "default": "./lib/adapter/deno/mod.js",
-        "types": "./lib/adapter/deno/mod.d.ts"
+        "types": "./lib/adapter/deno/mod.d.ts",
+        "default": "./lib/adapter/deno/mod.js"
       },
       "node": {
         "require": "./lib/adapter/index.cjs",
