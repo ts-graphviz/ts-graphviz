@@ -9,7 +9,7 @@
     "pretest:esm": "tsc main.ts -m nodenext --outDir envs/esm/ --target esnext",
     "pretest:deno": "cat main.ts | sed s/'ts-graphviz'/'npm:ts-graphviz'/ > envs/deno/main.ts",
     "pretest:webpack-build": "cp main.ts envs/webpack-build/src",
-    "pretest": "sh scrips/pretest.sh",
+    "pretest": "sh scripts/pretest.sh",
     "test": "yarn workspaces run test"
   },
   "devDependencies": {
