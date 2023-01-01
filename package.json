@@ -53,6 +53,14 @@
         "require": "./lib/adapter/index.cjs",
         "import": "./lib/adapter/index.js",
         "types": "./lib/adapter/index.d.ts"
+      },
+      "require": {
+        "types": "./lib/adapter/index.d.ts",
+        "default": "./lib/adapter/index.cjs"
+      },
+      "import": {
+        "types": "./lib/adapter/index.d.ts",
+        "default": "./lib/adapter/index.js"
       }
     },
     "./package.json": "./package.json"
