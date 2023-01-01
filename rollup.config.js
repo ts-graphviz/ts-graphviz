@@ -40,7 +40,7 @@ function* createOptions() {
           file: `./lib/${subPackage}/index.js`,
         },
       ],
-      external: subPackageEntrypoints,
+      external: [...subPackageEntrypoints, 'node:fs', 'node:stream', 'node:util', 'node:child_process'],
     };
     yield {
       input: `lib/${subPackage}/index.d.ts`,

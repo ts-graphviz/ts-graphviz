@@ -5,7 +5,5 @@
     "moduleResolution": "Node16",
     "lib": ["esnext"]
   },
-  "files": [
-    "main.ts"
-  ]
+  "files": ["main.ts"]
 }
