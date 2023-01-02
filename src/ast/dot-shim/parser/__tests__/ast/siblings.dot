@@ -205,7 +205,7 @@ from Japheth Cleaver",
               },
             },
           ],
-          "kind": "node",
+          "kind": "Node",
           "location": Object {
             "end": Object {
               "column": 34,
@@ -334,7 +334,7 @@ from Japheth Cleaver",
               },
             },
           ],
-          "kind": "node",
+          "kind": "Node",
           "location": Object {
             "end": Object {
               "column": 42,
@@ -628,7 +628,7 @@ from Japheth Cleaver",
               },
             },
           ],
-          "kind": "graph",
+          "kind": "Graph",
           "location": Object {
             "end": Object {
               "column": 22,
