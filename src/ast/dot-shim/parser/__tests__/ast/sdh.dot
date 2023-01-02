@@ -63,7 +63,7 @@ Object {
               },
             },
           ],
-          "kind": "graph",
+          "kind": "Graph",
           "location": Object {
             "end": Object {
               "column": 24,
@@ -156,7 +156,7 @@ Object {
               },
             },
           ],
-          "kind": "edge",
+          "kind": "Edge",
           "location": Object {
             "end": Object {
               "column": 21,
@@ -395,7 +395,7 @@ Object {
               },
             },
           ],
-          "kind": "graph",
+          "kind": "Graph",
           "location": Object {
             "end": Object {
               "column": 56,
@@ -524,7 +524,7 @@ Object {
               },
             },
           ],
-          "kind": "node",
+          "kind": "Node",
           "location": Object {
             "end": Object {
               "column": 30,
@@ -710,7 +710,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 31,
@@ -1075,7 +1075,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 37,
@@ -1368,7 +1368,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 37,
@@ -1661,7 +1661,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 34,
@@ -1990,7 +1990,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 34,
@@ -2319,7 +2319,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 31,
@@ -2684,7 +2684,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 39,
@@ -3049,7 +3049,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 37,
@@ -3414,7 +3414,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 34,
@@ -3779,7 +3779,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 34,
@@ -4089,7 +4089,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 31,
@@ -4454,7 +4454,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 37,
@@ -4819,7 +4819,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 31,
@@ -5256,7 +5256,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 37,
@@ -5693,7 +5693,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 31,
@@ -6202,7 +6202,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 37,
@@ -6711,7 +6711,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 33,
@@ -7112,7 +7112,7 @@ Object {
                   },
                 },
               ],
-              "kind": "edge",
+              "kind": "Edge",
               "location": Object {
                 "end": Object {
                   "column": 42,
@@ -9788,7 +9788,7 @@ Object {
                   },
                 },
               ],
-              "kind": "edge",
+              "kind": "Edge",
               "location": Object {
                 "end": Object {
                   "column": 31,
@@ -16034,7 +16034,7 @@ Object {
                   },
                 },
               ],
-              "kind": "edge",
+              "kind": "Edge",
               "location": Object {
                 "end": Object {
                   "column": 31,
@@ -17144,7 +17144,7 @@ Object {
                   },
                 },
               ],
-              "kind": "edge",
+              "kind": "Edge",
               "location": Object {
                 "end": Object {
                   "column": 40,

@@ -63,7 +63,7 @@ Object {
               },
             },
           ],
-          "kind": "graph",
+          "kind": "Graph",
           "location": Object {
             "end": Object {
               "column": 3,
@@ -192,7 +192,7 @@ Object {
               },
             },
           ],
-          "kind": "node",
+          "kind": "Node",
           "location": Object {
             "end": Object {
               "column": 3,
@@ -210,7 +210,7 @@ Object {
         },
         Object {
           "children": Array [],
-          "kind": "edge",
+          "kind": "Edge",
           "location": Object {
             "end": Object {
               "column": 3,

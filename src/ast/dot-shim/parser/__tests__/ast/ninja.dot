@@ -228,7 +228,7 @@ Object {
               },
             },
           ],
-          "kind": "node",
+          "kind": "Node",
           "location": Object {
             "end": Object {
               "column": 43,
@@ -302,7 +302,7 @@ Object {
               },
             },
           ],
-          "kind": "edge",
+          "kind": "Edge",
           "location": Object {
             "end": Object {
               "column": 19,

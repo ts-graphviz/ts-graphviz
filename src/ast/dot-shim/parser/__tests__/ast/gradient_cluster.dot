@@ -505,7 +505,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 66,
@@ -615,7 +615,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 32,
@@ -725,7 +725,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 31,
@@ -835,7 +835,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 32,
@@ -1310,7 +1310,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 37,
@@ -1420,7 +1420,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 35,
@@ -1530,7 +1530,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 31,
@@ -1640,7 +1640,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 31,

@@ -118,7 +118,7 @@ Object {
               },
             },
           ],
-          "kind": "node",
+          "kind": "Node",
           "location": Object {
             "end": Object {
               "column": 19,
@@ -300,7 +300,7 @@ Object {
               },
             },
           ],
-          "kind": "node",
+          "kind": "Node",
           "location": Object {
             "end": Object {
               "column": 23,
@@ -376,7 +376,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 45,
@@ -792,7 +792,7 @@ Object {
               },
             },
           ],
-          "kind": "node",
+          "kind": "Node",
           "location": Object {
             "end": Object {
               "column": 52,
