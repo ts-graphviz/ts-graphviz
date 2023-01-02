@@ -412,7 +412,7 @@ Object {
               "value": "bgcolor=\\"transparent\\",",
             },
           ],
-          "kind": "graph",
+          "kind": "Graph",
           "location": Object {
             "end": Object {
               "column": 4,
@@ -816,7 +816,7 @@ Object {
               },
             },
           ],
-          "kind": "node",
+          "kind": "Node",
           "location": Object {
             "end": Object {
               "column": 4,
@@ -1110,7 +1110,7 @@ Object {
               },
             },
           ],
-          "kind": "edge",
+          "kind": "Edge",
           "location": Object {
             "end": Object {
               "column": 4,
@@ -1186,7 +1186,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 28,
@@ -5206,7 +5206,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 26,
@@ -5280,7 +5280,7 @@ Object {
                   },
                 },
               ],
-              "kind": "edge",
+              "kind": "Edge",
               "location": Object {
                 "end": Object {
                   "column": 26,
@@ -9300,7 +9300,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 26,
@@ -9374,7 +9374,7 @@ Object {
                   },
                 },
               ],
-              "kind": "edge",
+              "kind": "Edge",
               "location": Object {
                 "end": Object {
                   "column": 26,
@@ -15724,7 +15724,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 5,
@@ -15798,7 +15798,7 @@ Object {
                   },
                 },
               ],
-              "kind": "edge",
+              "kind": "Edge",
               "location": Object {
                 "end": Object {
                   "column": 26,
@@ -19818,7 +19818,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 5,
@@ -19947,7 +19947,7 @@ Object {
                   },
                 },
               ],
-              "kind": "edge",
+              "kind": "Edge",
               "location": Object {
                 "end": Object {
                   "column": 5,
@@ -23453,7 +23453,7 @@ Object {
                   },
                 },
               ],
-              "kind": "graph",
+              "kind": "Graph",
               "location": Object {
                 "end": Object {
                   "column": 21,
@@ -23582,7 +23582,7 @@ Object {
                   },
                 },
               ],
-              "kind": "edge",
+              "kind": "Edge",
               "location": Object {
                 "end": Object {
                   "column": 5,
@@ -26259,7 +26259,7 @@ Object {
                   },
                 },
               ],
-              "kind": "graph",
+              "kind": "Graph",
               "location": Object {
                 "end": Object {
                   "column": 21,
@@ -27632,7 +27632,7 @@ Object {
                   },
                 },
               ],
-              "kind": "edge",
+              "kind": "Edge",
               "location": Object {
                 "end": Object {
                   "column": 5,
@@ -28978,7 +28978,7 @@ Object {
                   },
                 },
               ],
-              "kind": "graph",
+              "kind": "Graph",
               "location": Object {
                 "end": Object {
                   "column": 21,
@@ -29966,7 +29966,7 @@ Object {
                   },
                 },
               ],
-              "kind": "graph",
+              "kind": "Graph",
               "location": Object {
                 "end": Object {
                   "column": 21,
@@ -30716,7 +30716,7 @@ Object {
                   },
                 },
               ],
-              "kind": "graph",
+              "kind": "Graph",
               "location": Object {
                 "end": Object {
                   "column": 21,
@@ -31649,7 +31649,7 @@ Object {
                   },
                 },
               ],
-              "kind": "graph",
+              "kind": "Graph",
               "location": Object {
                 "end": Object {
                   "column": 21,
@@ -32471,7 +32471,7 @@ Object {
                   },
                 },
               ],
-              "kind": "graph",
+              "kind": "Graph",
               "location": Object {
                 "end": Object {
                   "column": 21,
@@ -33789,7 +33789,7 @@ Object {
                   },
                 },
               ],
-              "kind": "node",
+              "kind": "Node",
               "location": Object {
                 "end": Object {
                   "column": 5,
@@ -33863,7 +33863,7 @@ Object {
                   },
                 },
               ],
-              "kind": "edge",
+              "kind": "Edge",
               "location": Object {
                 "end": Object {
                   "column": 26,

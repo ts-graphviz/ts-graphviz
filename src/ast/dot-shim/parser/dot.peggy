@@ -97,7 +97,7 @@ _attributes
       return b.createElement(
         'AttributeList',
         {
-          kind: _kind.toLowerCase(),
+          kind: `${_kind.slice(0, 1).toUpperCase()}${_kind.slice(1).toLowerCase()}`,
         },
         children,
       );

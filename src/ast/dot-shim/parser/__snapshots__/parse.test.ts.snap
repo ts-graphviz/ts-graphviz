@@ -114,7 +114,7 @@ Object {
       },
     },
   ],
-  "kind": "edge",
+  "kind": "Edge",
   "location": Object {
     "end": Object {
       "column": 11,
@@ -246,7 +246,7 @@ Object {
       },
     },
   ],
-  "kind": "graph",
+  "kind": "Graph",
   "location": Object {
     "end": Object {
       "column": 51,
@@ -433,7 +433,7 @@ Object {
       },
     },
   ],
-  "kind": "node",
+  "kind": "Node",
   "location": Object {
     "end": Object {
       "column": 10,
@@ -529,7 +529,7 @@ Object {
       },
     },
   ],
-  "kind": "node",
+  "kind": "Node",
   "location": Object {
     "end": Object {
       "column": 10,

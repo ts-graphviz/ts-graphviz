@@ -376,7 +376,7 @@ Object {
               },
             },
           ],
-          "kind": "graph",
+          "kind": "Graph",
           "location": Object {
             "end": Object {
               "column": 87,
