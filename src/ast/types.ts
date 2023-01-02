@@ -94,7 +94,7 @@ export interface AttributeASTPropaties<T extends AttributeKey = AttributeKey> ex
  * @group AST
  */
 export interface AttributeListASTPropaties extends ASTCommonPropaties {
-  kind: 'Graph' | 'Edge' | 'Node';
+  kind: 'graph' | 'edge' | 'node';
 }
 
 /**

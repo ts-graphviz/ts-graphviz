@@ -58,7 +58,7 @@ describe('stringify', () => {
       expect(
         stringify({
           type: 'AttributeList',
-          kind: 'Node',
+          kind: 'node',
           children: [],
         }),
       ).toMatchInlineSnapshot(`node [];`);
@@ -68,7 +68,7 @@ describe('stringify', () => {
       expect(
         stringify({
           type: 'AttributeList',
-          kind: 'Edge',
+          kind: 'edge',
           children: [],
         }),
       ).toMatchInlineSnapshot(`edge [];`);
@@ -78,7 +78,7 @@ describe('stringify', () => {
       expect(
         stringify({
           type: 'AttributeList',
-          kind: 'Graph',
+          kind: 'graph',
           children: [],
         }),
       ).toMatchInlineSnapshot(`graph [];`);
@@ -88,7 +88,7 @@ describe('stringify', () => {
       expect(
         stringify({
           type: 'AttributeList',
-          kind: 'Node',
+          kind: 'node',
           children: [
             {
               type: 'Attribute',
@@ -120,7 +120,7 @@ describe('stringify', () => {
       expect(
         stringify({
           type: 'AttributeList',
-          kind: 'Node',
+          kind: 'node',
           children: [
             {
               type: 'Attribute',

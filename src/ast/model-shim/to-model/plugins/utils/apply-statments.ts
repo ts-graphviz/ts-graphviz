@@ -43,13 +43,13 @@ export function applyStatements(graph: GraphBaseModel, statements: ClusterStatem
           .filter<AttributeASTNode>((v): v is AttributeASTNode => v.type === 'Attribute')
           .reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {});
         switch (stmt.kind) {
-          case 'Edge':
+          case 'edge':
             graph.edge(attrs);
             break;
-          case 'Node':
+          case 'node':
             graph.node(attrs);
             break;
-          case 'Graph':
+          case 'graph':
             graph.graph(attrs);
             break;
         }

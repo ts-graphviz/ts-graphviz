@@ -37,9 +37,9 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
   public comment?: string;
 
   public readonly attributes: Readonly<GraphCommonAttributes> = Object.freeze({
-    graph: new AttributeList<'Graph', SubgraphAttributeKey | ClusterSubgraphAttributeKey>('Graph'),
-    edge: new AttributeList<'Edge', EdgeAttributeKey>('Edge'),
-    node: new AttributeList<'Node', NodeAttributeKey>('Node'),
+    graph: new AttributeList<'graph', SubgraphAttributeKey | ClusterSubgraphAttributeKey>('graph'),
+    edge: new AttributeList<'edge', EdgeAttributeKey>('edge'),
+    node: new AttributeList<'node', NodeAttributeKey>('node'),
   });
 
   get nodes(): ReadonlyArray<NodeModel> {

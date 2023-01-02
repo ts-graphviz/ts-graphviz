@@ -185,7 +185,7 @@ export interface AttributesGroupModel<T extends AttributeKey> extends Attributes
 /**
  * @group Models
  */
-export type AttributeListKind = 'Graph' | 'Edge' | 'Node';
+export type AttributeListKind = 'graph' | 'edge' | 'node';
 
 /**
  * A list object of attributes commonly specified for nodes, subgraphs, and edges
@@ -238,11 +238,11 @@ export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey>, 
  */
 export interface GraphCommonAttributes {
   /** Manage common attributes of graphs in a graph. */
-  graph: AttributeListModel<'Graph', SubgraphAttributeKey | ClusterSubgraphAttributeKey>;
+  graph: AttributeListModel<'graph', SubgraphAttributeKey | ClusterSubgraphAttributeKey>;
   /** Manage common attributes of edges in a graph. */
-  edge: AttributeListModel<'Edge', EdgeAttributeKey>;
+  edge: AttributeListModel<'edge', EdgeAttributeKey>;
   /** Manage common attributes of nodes in a graph. */
-  node: AttributeListModel<'Node', NodeAttributeKey>;
+  node: AttributeListModel<'node', NodeAttributeKey>;
 }
 
 /**

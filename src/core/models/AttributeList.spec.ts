@@ -6,7 +6,7 @@ import { AttributeListKind } from '../../common/index.js';
 
 let attrs: AttributeList<AttributeListKind>;
 beforeEach(() => {
-  attrs = new AttributeList('Node');
+  attrs = new AttributeList('node');
 });
 
 describe('object', () => {
@@ -27,14 +27,14 @@ describe('object', () => {
 
 describe('constructor', () => {
   describe('1st argument is kind of AttributeList', () => {
-    test.each(['Node', 'Edge', 'Graph'] as AttributeListKind[])('AttributeList kind is %s', (kind) => {
+    test.each(['node', 'edge', 'graph'] as AttributeListKind[])('AttributeList kind is %s', (kind) => {
       attrs = new AttributeList(kind);
       expect(attrs.$$kind).toStrictEqual(kind);
     });
   });
 
   test('2nd argument is attribute object', () => {
-    attrs = new AttributeList('Node', {
+    attrs = new AttributeList('node', {
       [_.label]: 'Label',
     });
     expect(attrs.size).toBe(1);
