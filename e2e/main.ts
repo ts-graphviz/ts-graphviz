@@ -20,4 +20,13 @@ A.addNode(node2);
 A.addEdge(edge);
 const dot = toDot(G);
 parse(dot);
-toFile(dot, '/dev/null');
+
+(async () => {
+  try {
+    await toFile(dot, '/dev/null');
+  } catch (e) {
+    if (e instanceof Error) {
+      console.log(e.message);
+    }
+  }
+})();
