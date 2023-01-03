@@ -7,6 +7,6 @@ yarn install --no-lockfile
 
 yarn run tsc main.ts -m commonjs --outDir envs/cjs/ --target esnext
 yarn run tsc main.ts -m nodenext --outDir envs/esm/ --target esnext
-cat main.ts | sed s/'ts-graphviz'/'npm:ts-graphviz'/ > envs/deno/main.ts
+sed s/'ts-graphviz'/'npm:ts-graphviz'/ < main.ts > envs/deno/main.ts
 cp main.ts envs/webpack-build-node/src
 cp main.ts envs/webpack-build-web/src
