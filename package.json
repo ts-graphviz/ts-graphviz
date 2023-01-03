@@ -59,13 +59,10 @@
         "import": "./lib/adapter/node/index.js",
         "types": "./lib/adapter/node/index.d.ts"
       },
-      "require": {
+      "default": {
         "types": "./lib/adapter/node/index.d.ts",
-        "default": "./lib/adapter/node/index.cjs"
-      },
-      "import": {
-        "types": "./lib/adapter/node/index.d.ts",
-        "default": "./lib/adapter/node/index.js"
+        "require":  "./lib/adapter/node/index.cjs",
+        "import": "./lib/adapter/node/index.js"
       }
     },
     "./package.json": "./package.json"
