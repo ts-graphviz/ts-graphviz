@@ -1,7 +1,7 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "out": "./doc",
-  "entryPoints": ["src/index.ts", "src/ast/index.ts", "src/adapter/index.ts"],
+  "entryPoints": ["src/index.ts", "src/ast/index.ts", "src/adapter/node/index.ts"],
   "media": "./media/",
   "excludePrivate": true
 }

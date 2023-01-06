@@ -45,14 +45,24 @@
       }
     },
     "./adapter": {
+      "browser": {
+        "require": "./lib/adapter/browser/index.cjs",
+        "import": "./lib/adapter/browser/index.js",
+        "types": "./lib/adapter/browser/index.d.ts"
+      },
       "deno": {
         "types": "./lib/adapter/deno/mod.d.ts",
         "default": "./lib/adapter/deno/mod.js"
       },
       "node": {
-        "require": "./lib/adapter/index.cjs",
-        "import": "./lib/adapter/index.js",
-        "types": "./lib/adapter/index.d.ts"
+        "require": "./lib/adapter/node/index.cjs",
+        "import": "./lib/adapter/node/index.js",
+        "types": "./lib/adapter/node/index.d.ts"
+      },
+      "default": {
+        "types": "./lib/adapter/node/index.d.ts",
+        "require":  "./lib/adapter/node/index.cjs",
+        "import": "./lib/adapter/node/index.js"
       }
     },
     "./package.json": "./package.json"
@@ -63,7 +73,7 @@
         "lib/ast"
       ],
       "adapter": [
-        "lib/adapter"
+        "lib/adapter/node"
       ]
     }
   },
