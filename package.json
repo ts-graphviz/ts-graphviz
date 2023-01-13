@@ -84,10 +84,10 @@
   "scripts": {
     "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/ast/dot-shim/parser/peggy.options.json -o src/ast/dot-shim/parser/_parse.ts src/ast/dot-shim/parser/dot.peggy",
     "prebuild": "yarn build:peggy",
-    "build:deno": "cp -r src/adapter/deno lib/adapter/deno",
+    "build:deno": "mkdir -p lib/adapter/deno && cp -r src/adapter/deno/* lib/adapter/deno && sed -i \"s/index.ts/index.js/g\" lib/adapter/deno/mod.js && sed -i \"s/index.ts/index.d.ts/g\" lib/adapter/deno/mod.d.ts",
     "build:node": "tsc -p tsconfig.build.json && rollup -c",
     "build": "yarn build:node && yarn build:deno",
-    "postbuild": "prettier --write ./lib/**/index.{js,cjs,d.ts}",
+    "postbuild": "prettier --write ./lib/**/*.{js,cjs,d.ts}",
     "pretest": "yarn build:peggy",
     "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
     "format": "eslint --ext ts src --fix && prettier --write './**/*.{ts,js,json,yaml}' '!lib'",

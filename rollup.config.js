@@ -3,15 +3,27 @@ import dts from 'rollup-plugin-dts';
 import replace from '@rollup/plugin-replace';
 
 function* createOptions() {
-  const subPackages = ['utils', 'common', 'ast', 'core', 'adapter/node', 'adapter/browser'];
-  const subPackageEntrypoints = subPackages.flatMap((subPackage) => [
-    `../${subPackage}/index.js`,
-    `../../${subPackage}/index.js`,
-    `../../../${subPackage}/index.js`,
-    `../../../../${subPackage}/index.js`,
-    `../../../../../${subPackage}/index.js`,
-    `../../../../../../${subPackage}/index.js`,
-  ]);
+  const subPackages = [
+    'utils',
+    'common',
+    'ast',
+    'core',
+    'adapter/types',
+    'adapter/utils',
+    'adapter/node',
+    'adapter/browser',
+  ];
+  const subPackageEntrypoints = subPackages.flatMap((subPackage) => {
+    const pkg = subPackage.startsWith('adapter/') ? subPackage.slice('adapter/'.length) : subPackage;
+    return [
+      `../${pkg}/index.js`,
+      `../../${pkg}/index.js`,
+      `../../../${pkg}/index.js`,
+      `../../../../${pkg}/index.js`,
+      `../../../../../${pkg}/index.js`,
+      `../../../../../../${pkg}/index.js`,
+    ];
+  });
   yield {
     input: './lib/index.js',
     output: [
