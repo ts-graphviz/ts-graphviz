@@ -115,7 +115,7 @@
     "rollup": "^2.77.3",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^4.2.2",
-    "svgo": "^2.8.0",
+    "svgo": "^3.0.2",
     "ts-jest": "^28.0.7",
     "ts-pegjs": "^2.1.0",
     "typedoc": "^0.23.15",
