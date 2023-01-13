@@ -1,13 +1,4 @@
-function commandBuilder({ dotCommand = 'dot', suppressWarnings = true, format = 'svg' } = {}) {
-  const args = [
-    ...(function* () {
-      if (suppressWarnings) yield '-q';
-      yield `-T${format}`;
-    })(),
-  ];
-  return [dotCommand, args];
-}
-
+import { commandBuilder } from '../utils/index.ts';
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
  */
