@@ -9,7 +9,7 @@ export interface Options {
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
  */
-export function toStream(dot: string, options?: Options): Promise<ReadableStream>;
+export function toStream(dot: string, options?: Options): Promise<ReadableStream<Uint8Array>>;
 
 /**
  * Execute the Graphviz dot command and output the results to a file.
