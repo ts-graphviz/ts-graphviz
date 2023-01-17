@@ -1,4 +1,16 @@
+import { Attribute, AttributeKey } from '../../common/index.js';
 import { Layout, Options } from '../types/index.js';
+
+function escapeValue<T extends AttributeKey>(value: Attribute<T>) {
+  if (value !== true) {
+    if (typeof value === 'string' && /\s/g.test(value)) {
+      return `="${value}"`;
+    } else {
+      return `=${value}`;
+    }
+  }
+  return '';
+}
 
 function* args<T extends Layout>(options: Options<T>): Generator<string> {
   const { suppressWarnings = true, format = 'svg', attributes = {}, library = [], y = false, scale } = options;
@@ -6,20 +18,17 @@ function* args<T extends Layout>(options: Options<T>): Generator<string> {
   yield `-T${format}`;
   if (attributes.graph) {
     for (const [key, value] of Object.entries(attributes.graph)) {
-      if (value === true) yield `-G${key}`;
-      else yield `-G${key}="${value}"`;
+      yield `-G${key}${escapeValue(value)}`;
     }
   }
   if (attributes.node) {
     for (const [key, value] of Object.entries(attributes.node)) {
-      if (value === true) yield `-N${key}`;
-      else yield `-N${key}="${value}"`;
+      yield `-N${key}${escapeValue(value)}`;
     }
   }
   if (attributes.edge) {
     for (const [key, value] of Object.entries(attributes.edge)) {
-      if (value === true) yield `-E${key}`;
-      else yield `-E${key}="${value}"`;
+      yield `-E${key}${escapeValue(value)}`;
     }
   }
   if (typeof scale === 'number' && !Number.isNaN(scale)) yield `-s${scale}`;
