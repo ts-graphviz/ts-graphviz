@@ -48,6 +48,8 @@ $ yarn add ts-graphviz
 $ pnpm add ts-graphviz
 ```
 
+> **Note** Want to try before installing? Check out [Runkit](https://npm.runkit.com/ts-graphviz) to see how it works.
+
 ### Deno 🦕
 
 [Deno v1.28 and above supports npm](https://deno.land/manual/node/npm_specifiers).
