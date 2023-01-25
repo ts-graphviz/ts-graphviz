@@ -47,6 +47,8 @@ $ yarn add ts-graphviz
 $ pnpm add ts-graphviz
 ```
 
+> **Note** インストール前に試したい? [Runkit](https://npm.runkit.com/ts-graphviz) で動作を確認しましょう。
+
 ### Deno 🦕
 
 [Deno v1.28 以上では npm をサポート](https://deno.land/manual/node/npm_specifiers)しています。
