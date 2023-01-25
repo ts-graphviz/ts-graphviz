@@ -81,7 +81,7 @@
   "engines": {
     "node": ">=14.16"
   },
-  "runkitExampleFilename": "example/main.cjs",
+  "runkitExampleFilename": "example/runkit.cjs",
   "scripts": {
     "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/ast/dot-shim/parser/peggy.options.json -o src/ast/dot-shim/parser/_parse.ts src/ast/dot-shim/parser/dot.peggy",
     "prebuild": "yarn build:peggy",
