@@ -68,7 +68,7 @@ export type EdgeAttributeKey =
   | 'weight'
   | 'xlabel'
   | 'xlp'
-  | '_class';
+  | 'class';
 
 /**
  * Attribute types available for nodes.
@@ -123,7 +123,7 @@ export type NodeAttributeKey =
   | 'xlabel'
   | 'xlp'
   | 'z'
-  | '_class';
+  | 'class';
 
 /**
  * Attribute types available for graph.
@@ -228,7 +228,7 @@ export type GraphAttributeKey =
   | 'viewport'
   | 'voro_margin'
   | 'xdotversion'
-  | '_class';
+  | 'class';
 
 /**
  * Attribute types available for subgraph.
@@ -270,7 +270,7 @@ export type ClusterSubgraphAttributeKey =
   | 'style'
   | 'target'
   | 'tooltip'
-  | '_class';
+  | 'class';
 
 /**
  * Attribute types.
