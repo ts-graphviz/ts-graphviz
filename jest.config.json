@@ -2,8 +2,10 @@
   "preset": "ts-jest/presets/default-esm",
   "testEnvironment": "node",
   "collectCoverage": true,
-  "globals": { "ts-jest": { "useESM": true } },
   "extensionsToTreatAsEsm": [".ts"],
+  "transform": {
+    "^.+\\.tsx?$": ["ts-jest", { "useESM": true }]
+  },
   "moduleNameMapper": {
     "^\\#lib\\/(.*)$": "<rootDir>/src/$1",
     "^\\#test\\/(.*)$": "<rootDir>/test/$1",

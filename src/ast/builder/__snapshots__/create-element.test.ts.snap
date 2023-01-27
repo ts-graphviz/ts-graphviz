@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`createElement Attribute 1`] = `
-Object {
-  "children": Array [],
-  "key": Object {
-    "children": Array [],
+{
+  "children": [],
+  "key": {
+    "children": [],
     "location": null,
     "quoted": false,
     "type": "Literal",
@@ -12,8 +12,8 @@ Object {
   },
   "location": null,
   "type": "Attribute",
-  "value": Object {
-    "children": Array [],
+  "value": {
+    "children": [],
     "location": null,
     "quoted": false,
     "type": "Literal",
@@ -23,8 +23,8 @@ Object {
 `;
 
 exports[`createElement Coment 1`] = `
-Object {
-  "children": Array [],
+{
+  "children": [],
   "kind": "Macro",
   "location": null,
   "type": "Comment",
@@ -33,22 +33,22 @@ Object {
 `;
 
 exports[`createElement Dot 1`] = `
-Object {
-  "children": Array [],
+{
+  "children": [],
   "location": null,
   "type": "Dot",
 }
 `;
 
 exports[`createElement Edge 1`] = `
-Object {
-  "children": Array [],
+{
+  "children": [],
   "location": null,
-  "targets": Array [
-    Object {
-      "children": Array [],
-      "id": Object {
-        "children": Array [],
+  "targets": [
+    {
+      "children": [],
+      "id": {
+        "children": [],
         "location": null,
         "quoted": true,
         "type": "Literal",
@@ -57,10 +57,10 @@ Object {
       "location": null,
       "type": "NodeRef",
     },
-    Object {
-      "children": Array [],
-      "id": Object {
-        "children": Array [],
+    {
+      "children": [],
+      "id": {
+        "children": [],
         "location": null,
         "quoted": true,
         "type": "Literal",
@@ -75,8 +75,8 @@ Object {
 `;
 
 exports[`createElement Graph 1`] = `
-Object {
-  "children": Array [],
+{
+  "children": [],
   "directed": true,
   "location": null,
   "strict": false,
@@ -85,8 +85,8 @@ Object {
 `;
 
 exports[`createElement Literal 1`] = `
-Object {
-  "children": Array [],
+{
+  "children": [],
   "location": null,
   "quoted": true,
   "type": "Literal",
@@ -95,10 +95,10 @@ Object {
 `;
 
 exports[`createElement Node 1`] = `
-Object {
-  "children": Array [],
-  "id": Object {
-    "children": Array [],
+{
+  "children": [],
+  "id": {
+    "children": [],
     "location": null,
     "quoted": false,
     "type": "Literal",
@@ -110,10 +110,10 @@ Object {
 `;
 
 exports[`createElement NodeRef 1`] = `
-Object {
-  "children": Array [],
-  "id": Object {
-    "children": Array [],
+{
+  "children": [],
+  "id": {
+    "children": [],
     "location": null,
     "quoted": true,
     "type": "Literal",
@@ -125,12 +125,12 @@ Object {
 `;
 
 exports[`createElement NodeRefGroup 1`] = `
-Object {
-  "children": Array [
-    Object {
-      "children": Array [],
-      "id": Object {
-        "children": Array [],
+{
+  "children": [
+    {
+      "children": [],
+      "id": {
+        "children": [],
         "location": null,
         "quoted": true,
         "type": "Literal",
@@ -139,10 +139,10 @@ Object {
       "location": null,
       "type": "NodeRef",
     },
-    Object {
-      "children": Array [],
-      "id": Object {
-        "children": Array [],
+    {
+      "children": [],
+      "id": {
+        "children": [],
         "location": null,
         "quoted": true,
         "type": "Literal",
@@ -158,8 +158,8 @@ Object {
 `;
 
 exports[`createElement Subgraph 1`] = `
-Object {
-  "children": Array [],
+{
+  "children": [],
   "location": null,
   "type": "Subgraph",
 }
