@@ -4,7 +4,7 @@
   "collectCoverage": true,
   "extensionsToTreatAsEsm": [".ts"],
   "transform": {
-    "^.+\\.tsx?$": { "useESM": true }
+    "^.+\\.tsx?$": ["ts-jest", { "useESM": true }]
   },
   "moduleNameMapper": {
     "^\\#lib\\/(.*)$": "<rootDir>/src/$1",
