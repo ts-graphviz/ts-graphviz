@@ -5,7 +5,7 @@ import { toModel } from './to-model.js';
 test('brank ast throw error', () => {
   const ast = createElement('Dot', {}, []);
 
-  expect(() => toModel(ast)).toThrowError();
+  expect(() => toModel(ast)).toThrow();
 });
 
 test('comment', () => {

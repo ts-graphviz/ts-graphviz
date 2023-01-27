@@ -31,7 +31,7 @@ describe.each([
     const callback = jest.fn();
     const g = factory(callback);
     expect(g.id).toBeUndefined();
-    expect(callback).toBeCalledWith(g);
+    expect(callback).toHaveBeenCalledWith(g);
 
     expect(g.directed).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
@@ -51,7 +51,7 @@ describe.each([
     const g = factory({ [_.label]: 'Test label' }, callback);
     expect(g.id).toBeUndefined();
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
-    expect(callback).toBeCalledWith(g);
+    expect(callback).toHaveBeenCalledWith(g);
 
     expect(g.directed).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
@@ -71,7 +71,7 @@ describe.each([
     const g = factory('foo', { [_.label]: 'Test label' }, callback);
     expect(g.id).toStrictEqual('foo');
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
-    expect(callback).toBeCalledWith(g);
+    expect(callback).toHaveBeenCalledWith(g);
 
     expect(g.directed).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
