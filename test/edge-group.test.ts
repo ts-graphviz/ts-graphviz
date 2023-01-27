@@ -11,19 +11,19 @@ test('edge group', () => {
       }),
     ),
   ).toMatchInlineSnapshot(`
-    Object {
-      "children": Array [
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
               "location": null,
-              "targets": Array [
-                Object {
-                  "children": Array [],
+              "targets": [
+                {
+                  "children": [],
                   "compass": undefined,
-                  "id": Object {
-                    "children": Array [],
+                  "id": {
+                    "children": [],
                     "location": null,
                     "quoted": true,
                     "type": "Literal",
@@ -33,13 +33,13 @@ test('edge group', () => {
                   "port": undefined,
                   "type": "NodeRef",
                 },
-                Object {
-                  "children": Array [
-                    Object {
-                      "children": Array [],
+                {
+                  "children": [
+                    {
+                      "children": [],
                       "compass": undefined,
-                      "id": Object {
-                        "children": Array [],
+                      "id": {
+                        "children": [],
                         "location": null,
                         "quoted": true,
                         "type": "Literal",
@@ -49,11 +49,11 @@ test('edge group', () => {
                       "port": undefined,
                       "type": "NodeRef",
                     },
-                    Object {
-                      "children": Array [],
+                    {
+                      "children": [],
                       "compass": undefined,
-                      "id": Object {
-                        "children": Array [],
+                      "id": {
+                        "children": [],
                         "location": null,
                         "quoted": true,
                         "type": "Literal",
