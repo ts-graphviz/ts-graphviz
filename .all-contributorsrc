@@ -84,6 +84,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "blake-regalia",
+      "name": "Blake Regalia",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1456400?v=4",
+      "profile": "https://blake-regalia.net",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
