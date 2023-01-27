@@ -3467,10 +3467,10 @@ ts-jest@^29.0.5:
     semver "7.x"
     yargs-parser "^21.0.1"
 
-ts-pegjs@^2.1.0:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/ts-pegjs/-/ts-pegjs-2.2.1.tgz#57ed509508d6964d66b878f6a22ef37e3c43efad"
-  integrity sha512-wZVrGqGNjmcDHQ8RyrzAh7ixjqhtX0cCgRcnl5BjsZjVUsEjzcfdRj7MUGkYMPJcF1ULI60jW7CPPbhYwTA8bQ==
+ts-pegjs@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ts-pegjs/-/ts-pegjs-3.0.0.tgz#3883d0772c56a059a55c95e09a3e5f4e076acddc"
+  integrity sha512-0yTchsO04jfYl/85sibupLSb7PfXs890jN9WqXoI6+WrFilam3+44ZdjBwIKPc9n2jdSbcxfdMvXNNwNEHSLCg==
 
 tsconfig-paths@^3.14.1:
   version "3.14.1"

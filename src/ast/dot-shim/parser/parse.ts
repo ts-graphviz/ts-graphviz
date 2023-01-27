@@ -9,7 +9,7 @@ import type {
   SubgraphASTNode,
   ASTNode,
 } from '../../types.js';
-import { parse as _parse, SyntaxError as _SyntaxError } from './_parse.js';
+import { parse as _parse, DotSyntaxError as _DotSyntaxError } from './_parse.js';
 /**
  * @group Convert DOT to AST
  */
@@ -49,4 +49,4 @@ export function parse(input: string, options?: ParseOptions<Rule>): ASTNode | Cl
 /**
  * @group Convert DOT to AST
  */
-export const SyntaxError = _SyntaxError;
+export const DotSyntaxError = _DotSyntaxError;

@@ -4,7 +4,7 @@ import path from 'node:path';
 import glob from 'glob';
 import 'jest-specific-snapshot';
 
-import { parse, SyntaxError } from '../_parse.js';
+import { parse, DotSyntaxError } from '../_parse.js';
 
 const dirname = path.dirname(new URL(import.meta.url).pathname);
 
@@ -19,7 +19,7 @@ for (const file of files) {
     try {
       expect(parse(dot)).toMatchSpecificSnapshot(snapshot);
     } catch (e) {
-      if (e instanceof SyntaxError) {
+      if (e instanceof DotSyntaxError) {
         console.log(e.location);
       }
       throw e;

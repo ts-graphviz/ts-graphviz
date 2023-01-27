@@ -16,7 +16,7 @@
     return str;
   }
 
-  const edgeops: { operator: '--' | '->', location: IFileRange }[] = [];
+  const edgeops: { operator: '--' | '->', location: FileRange }[] = [];
 
   const b = new Builder({
     locationFunction: location,
