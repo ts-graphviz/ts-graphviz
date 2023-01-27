@@ -42,7 +42,7 @@ interface KeyValueMapping {
   bgcolor: Color | ColorList;
   center: boolean;
   charset: string;
-  _class: string;
+  class: string;
   clusterrank: ClusterMode;
   color: Color | ColorList;
   colorscheme: string;

@@ -184,7 +184,7 @@ export interface AttributeKeyDict {
    * @graphvizDefault ""
    * @graphvizUsedBy ENCG
    */
-  _class: '_class';
+  class: 'class';
   /**
    * Mode used for handling clusters.
    * If clusterrank is "local", a subgraph whose name begins with "cluster" is given special treatment.
