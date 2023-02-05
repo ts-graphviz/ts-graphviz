@@ -22,7 +22,9 @@ export async function toStream<T extends Layout>(dot: string, options?: Options<
     });
 
     const stderrChunks: Uint8Array[] = [];
+    p.stdout.on('pause', () => p.stdout.resume());
     p.stderr.on('data', (chunk) => stderrChunks.push(chunk));
+    p.stderr.on('pause', () => p.stderr.resume());
 
     const dist = p.stdout.pipe(new PassThrough());
     p.on('close', async (code, signal) => {
