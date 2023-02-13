@@ -115,7 +115,7 @@
     "prettier-plugin-pegjs": "^0.5.0",
     "rollup": "^3.11.0",
     "rollup-plugin-delete": "^2.0.0",
-    "rollup-plugin-dts": "5.1.1",
+    "rollup-plugin-dts": "5.2.0",
     "svgo": "^3.0.2",
     "ts-jest": "^29.0.5",
     "ts-pegjs": "^3.0.0",
