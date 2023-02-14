@@ -5,6 +5,12 @@
 export type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_';
 
 /**
+ * A value specifying an empty string for resetting some values.
+ * @group Attribute Types
+ */
+export type Blank = '';
+
+/**
  * A double with an optional prefix `'+'`.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/addDouble/ addDouble}
