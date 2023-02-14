@@ -3,6 +3,7 @@ import type {
   AddDouble,
   AddPoint,
   ArrowType,
+  Blank,
   ClusterMode,
   Color,
   ColorList,
@@ -73,7 +74,7 @@ interface KeyValueMapping {
   fontpath: string;
   fontsize: Double;
   forcelabels: boolean;
-  gradientangle: Int;
+  gradientangle: Blank | Int;
   group: string;
   head_lp: Point;
   headclip: boolean;
@@ -83,7 +84,7 @@ interface KeyValueMapping {
   headtarget: EscString;
   headtooltip: EscString;
   headURL: EscString;
-  height: Double;
+  height: Blank | Double;
   href: EscString;
   id: EscString;
   image: string;
@@ -181,8 +182,8 @@ interface KeyValueMapping {
   smoothing: SmoothType;
   sortv: Int;
   splines: boolean | string;
-  start: StartType;
-  style: Style;
+  start: Blank | StartType;
+  style: Blank | Style;
   stylesheet: string;
   tail_lp: string;
   tailclip: Point;
@@ -197,14 +198,14 @@ interface KeyValueMapping {
   truecolor: boolean;
   URL: EscString;
   vertices: PointList;
-  viewport: ViewPort;
+  viewport: Blank | ViewPort;
   voro_margin: Double;
   weight: Int | Double;
   width: Double;
   xdotversion: string;
   xlabel: LblString;
   xlp: Point;
-  z: Double;
+  z: Blank | Double;
 }
 
 /**
