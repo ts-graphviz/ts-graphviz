@@ -16,13 +16,19 @@ import { parse as _parse, DotSyntaxError as _DotSyntaxError } from './_parse.js'
 export type Rule = 'Dot' | 'Graph' | 'Node' | 'Edge' | 'AttributeList' | 'Attribute' | 'Subgraph' | 'ClusterStatements';
 
 /**
+ * CommonParseOptions is an interface that defines the properties needed in order to parse a file.
  * @group Convert DOT to AST
  */
 export interface CommonParseOptions {
+  /**
+   * filename (optional): A string value that is used to identify the file to be parsed.
+   */
   filename?: string;
 }
 
 /**
+ * ParseOptions interface is used to provide additional information to the parser while parsing a rule.
+ * @template T The type of the rule to be parsed.
  * @group Convert DOT to AST
  */
 export interface ParseOptions<T extends Rule> extends CommonParseOptions {
@@ -30,6 +36,22 @@ export interface ParseOptions<T extends Rule> extends CommonParseOptions {
 }
 
 /**
+ * parse is a function that takes a string input and optional parse options and
+ * returns an ASTNode or an array of ClusterStatementASTNodes.
+ *
+ * Depending on the type of parse option specified, the function will return different types of ASTNodes.
+ *
+ * The types of ASTNodes that can be returned are:
+ *
+ * - {@link DotASTNode}
+ * - {@link GraphASTNode}
+ * - {@link NodeASTNode}
+ * - {@link EdgeASTNode}
+ * - {@link AttributeListASTNode}
+ * - {@link AttributeASTNode}
+ * - {@link SubgraphASTNode}
+ * - {@link ClusterStatementASTNode}
+ *
  * @throws {@link SyntaxError}
  * @group Convert DOT to AST
  */

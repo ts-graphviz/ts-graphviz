@@ -33,6 +33,9 @@ import type {
   ViewPort,
 } from '../type/index.js';
 
+/**
+ * KeyValueMapping is an interface that defines a set of attributes that can be used to configure a graph.
+ */
 interface KeyValueMapping {
   _background: string;
   area: Double;
@@ -209,6 +212,9 @@ interface KeyValueMapping {
 }
 
 /**
+ * This type represents an Attribute, which is a key-value mapping of an {@link AttributeKey} to a value.
+ *
+ * @param T The {@link AttributeKey} to be mapped to a value.
  * @group Attribute
  */
 export type Attribute<T extends AttributeKey> = KeyValueMapping[T];

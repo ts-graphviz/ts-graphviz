@@ -11,6 +11,7 @@ import type {
 import { ModelsContext } from './models-context.js';
 
 /**
+ * ASTType is an enumeration of the different types of nodes that can be found in an AST(Abstract Syntax Tree ).
  * @group Models
  */
 export type ASTType =
@@ -117,9 +118,15 @@ export type SubgraphAttributesObject = AttributesObject<ClusterSubgraphAttribute
 export type DotObjectType = 'AttributeList' | 'Node' | 'Edge' | 'Subgraph' | 'Graph';
 
 /**
+ * DotObjectModel is an interface that defines a generic type for a {@link DotObjectType}.
+ *
+ * @template T The type of the {@link DotObjectType}.
  * @group Models
  */
 export interface DotObjectModel<T extends DotObjectType = DotObjectType> {
+  /**
+   * The type of the DotObjectType.
+   */
   $$type: T;
 }
 

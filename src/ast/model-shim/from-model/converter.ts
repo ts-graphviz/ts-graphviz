@@ -4,6 +4,8 @@ import { defaultPlugins } from './plugins/index.js';
 import { ModelToAST } from './types.js';
 
 /**
+ * FromModelConverter is a class used to convert a {@link DotObjectModel} into an ASTNode.
+ *
  * @group Convert Model to AST
  */
 export class FromModelConverter {
@@ -12,6 +14,12 @@ export class FromModelConverter {
 
   constructor(private options: ConvertFromModelOptions = {}) {}
 
+  /**
+   * Converts a DotObjectModel into an AST.
+   *
+   * @param model The {@link DotObjectModel} to be converted.
+   * @returns The AST generated from the model.
+   */
   public convert<T extends DotObjectModel>(model: T): ModelToAST<T> {
     const plugins = [...this.#plugins];
     const { commentKind = 'Slash' } = this.options;

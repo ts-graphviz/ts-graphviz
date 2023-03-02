@@ -5,13 +5,13 @@ import { ModelFactories, ModelFactoriesWithStrict } from './types.js';
 const noStrict: ModelFactories = createModelFactories(false);
 
 /**
- * API for creating directional graph objects.
+ *  digraph is a factory for creating Digraph objects.
  * @group Model Factory
  */
 export const digraph = noStrict.digraph;
 
 /**
- * API for creating omnidirectional graph objects.
+ * graph is a factory for creating Graph objects.
  * @group Model Factory
  */
 export const graph = noStrict.graph;
@@ -23,7 +23,11 @@ export const graph = noStrict.graph;
 export const strict: ModelFactories = createModelFactories(true);
 
 /**
- * @group Model Factory
+ * withContext creates a {@link ModelFactoriesWithStrict} object with the given context.
+ *
+ * @param models - An object containing the models to be used in the context.
+ *
+ * @returns A ModelFactoriesWithStrict object containing the factories. * @group Model Factory
  */
 export function withContext(models: Partial<ModelsContext>): ModelFactoriesWithStrict {
   const context = createModelsContext(models);
