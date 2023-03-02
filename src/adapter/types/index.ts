@@ -9,6 +9,9 @@ export type Format = 'png' | 'svg' | 'json' | 'jpg' | 'pdf' | 'xdot' | 'dot' | '
 
 export type Layout = 'dot' | 'neato' | 'fdp' | 'sfdp' | 'circo' | 'twopi' | 'nop' | 'nop2' | 'osage' | 'patchwork';
 
+/**
+ * NeatoOptions interface provides options for the neato layout.
+ */
 export interface NeatoOptions {
   layout: 'neato';
   /**
@@ -21,6 +24,9 @@ export interface NeatoOptions {
   reduce?: boolean;
 }
 
+/**
+ * FdpOptions interface provides options for the fdp layout.
+ */
 export interface FdpOptions {
   layout: 'fdp';
   /**
@@ -54,6 +60,12 @@ export interface FdpOptions {
   temperature?: number;
 }
 
+/**
+ * @description
+ * This interface describes an optional parameter called "layout" which is used to set a layout engine.
+ * The default value for this parameter is 'dot', and it must be an option of the Layout type,
+ * excluding 'neato' and 'fdp'.
+ */
 export interface OtherOptions {
   /**
    * Set layout engine.
@@ -63,6 +75,9 @@ export interface OtherOptions {
   layout?: Exclude<Layout, 'neato' | 'fdp'>;
 }
 
+/**
+ * This interface represents the CommonOptions for setting output format.
+ */
 export interface CommonOptions {
   /**
    * Set output format.

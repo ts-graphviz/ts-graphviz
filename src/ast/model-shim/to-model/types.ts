@@ -2,6 +2,7 @@ import { EdgeModel, ModelsContext, NodeModel, RootGraphModel, SubgraphModel } fr
 import { DotASTNode, EdgeASTNode, GraphASTNode, NodeASTNode, SubgraphASTNode } from '../../types.js';
 
 /**
+ *  ModelOf is a type that determines the type of model to use depending on the value of T.
  * @group AST
  */
 export type ModelOf<T> = T extends 'Dot' | 'Graph'
@@ -15,11 +16,14 @@ export type ModelOf<T> = T extends 'Dot' | 'Graph'
   : never;
 
 /**
+ * ASTToModel is a type that determines a model type from an AST.
+ *
  * @group AST
  */
 export type ASTToModel<T> = T extends { type: infer U } ? ModelOf<U> : never;
 
 /**
+ * This type is used to define what AST nodes can be converted to a model.
  * @group Convert AST to Model
  * @beta
  */

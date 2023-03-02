@@ -1,9 +1,9 @@
-import { commandBuilder } from '../utils/index.ts';
+import { createCommandAndArgs } from '../utils/index.ts';
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
  */
 export async function toStream(dot, options) {
-  const [command, args] = commandBuilder(options);
+  const [command, args] = createCommandAndArgs(options);
   const cp = new Deno.Command(command, {
     args: args,
     stdin: 'piped',

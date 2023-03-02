@@ -3,10 +3,11 @@ import type { PrintOptions } from './types.js';
 import { Printer } from './printer.js';
 
 /**
- * Stringify Graphviz AST Node.
+ * stringify is a function that converts a Graphviz AST Node into a string in DOT language.
  *
- * @param ast Graphviz AST node.
- * @returns DOT language string.
+ * @param ast Graphviz AST node that is to be converted.
+ * @param options PrintOptions object containing formatting options.
+ * @returns A string in DOT language.
  * @group Convert AST to DOT
  */
 export function stringify(ast: ASTNode, options?: PrintOptions): string {

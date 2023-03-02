@@ -2,22 +2,30 @@ import { parse, ParseOptions, toModel, ConvertToModelOptions } from '../ast/inde
 import { EdgeModel, NodeModel, RootGraphModel, SubgraphModel } from '../common/index.js';
 
 /**
- * @group Convert DOT to DOT
+ * This interface provides options for converting DOT to a model.
+ * @group Convert DOT to Model
  * @alpha
  */
 export interface FromDotOptions<T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph'> {
+  /**
+   * Options for parsing DOT.
+   */
   parse?: ParseOptions<T>;
+  /**
+   * Options for converting the parsed DOT to a model.
+   */
   convert?: ConvertToModelOptions;
 }
 
 /**
- * Convert DOT string to Model.
+ * fromDot is a function that converts a DOT string to a model.
  *
  * @group Convert DOT to Model
  *
- * @param dot DOT string
- * @param options
- * @returns Dot Object Model, like {@link Digraph}, {@link Graph}, {@link Subgraph}, {@link Node}, and {@link Edge}
+ * @param dot The DOT string to convert.
+ * @param options Options for converting the DOT string to a model.
+ * @returns A model of type {@link RootGraphModel}, {@link NodeModel}, {@link EdgeModel}, or {@link SubgraphModel},
+ * depending on the type specified in the options.
  * @beta
  */
 export function fromDot(dot: string, options?: FromDotOptions<'Dot' | 'Graph'>): RootGraphModel;
