@@ -86,7 +86,7 @@
     "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/ast/dot-shim/parser/peggy.options.json -o src/ast/dot-shim/parser/_parse.ts src/ast/dot-shim/parser/dot.peggy",
     "prebuild": "yarn build:peggy",
     "build:deno": "mkdir -p lib/adapter/deno && cp -r src/adapter/deno/* lib/adapter/deno && sed -i \"s/index.ts/index.js/g\" lib/adapter/deno/mod.js && sed -i \"s/index.ts/index.d.ts/g\" lib/adapter/deno/mod.d.ts",
-    "build:node": "tsc -p tsconfig.build.json && rollup -c",
+    "build:node": "tsc -p tsconfig.build.json --declaration && tsc -p tsconfig.build.json --removeComments && rollup -c",
     "build": "yarn build:node && yarn build:deno",
     "postbuild": "prettier --write ./lib/**/*.{js,cjs,d.ts}",
     "pretest": "yarn build:peggy",
