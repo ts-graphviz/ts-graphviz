@@ -1,13 +1,23 @@
-import { pipe, map } from '../../../../utils/index.js';
 import { NodeRefGroupASTNode } from '../../../types.js';
 import { PrintPlugin } from '../types.js';
-import { joinBy, wrapByPair } from './utils/index.js';
 
 export const NodeRefGroupPrintPlugin: PrintPlugin<NodeRefGroupASTNode> = {
   match(ast) {
     return ast.type === 'NodeRefGroup';
   },
-  print(context, ast): string {
-    return pipe(map(context.print), joinBy(' '), wrapByPair('{', '}'))(ast.children);
+  *print(context, ast) {
+    yield '{';
+    const iter = ast.children[Symbol.iterator]();
+    let next = iter.next();
+    while (true) {
+      yield* context.print(next.value);
+      next = iter.next();
+      if (!next.done) {
+        yield ' ';
+      } else {
+        break;
+      }
+    }
+    yield '}';
   },
 };

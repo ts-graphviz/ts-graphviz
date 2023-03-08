@@ -1,4 +1,4 @@
-import { Digraph, Edge, Node, Subgraph, attribute as _, EdgeTargetTuple, withContext } from 'ts-graphviz';
+import { Digraph, Edge, Node, Subgraph, attribute as _, EdgeTargetTuple, withContext } from '../src/index.js';
 import { toDot } from '#test/utils';
 
 test('class base', () => {

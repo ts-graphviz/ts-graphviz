@@ -5,14 +5,15 @@ export const NodeRefPrintPlugin: PrintPlugin<NodeRefASTNode> = {
   match(ast) {
     return ast.type === 'NodeRef';
   },
-  print(context, ast): string {
-    const parts = [context.print(ast.id)];
+  *print(context, ast) {
+    yield* context.print(ast.id);
     if (ast.port) {
-      parts.push(context.print(ast.port));
+      yield ':';
+      yield* context.print(ast.port);
     }
     if (ast.compass) {
-      parts.push(context.print(ast.compass));
+      yield ':';
+      yield* context.print(ast.compass);
     }
-    return parts.join(':');
   },
 };

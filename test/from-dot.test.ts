@@ -1,4 +1,4 @@
-import { Digraph, Edge, Node, RootGraph, Subgraph, fromDot } from 'ts-graphviz';
+import { Digraph, Edge, Node, RootGraph, Subgraph, fromDot } from '../src/index.js';
 import { toDot } from '#test/utils';
 
 describe('fromDot function', () => {

@@ -1,25 +1,28 @@
-import { pipe } from '../../../../utils/index.js';
 import { LiteralASTNode } from '../../../types.js';
 import { PrintPlugin } from '../types.js';
-import { escape, wrapWith, wrapByPair } from './utils/index.js';
 
-const quoteLiteralValue = pipe(escape, wrapWith('"'));
-
-const quoteHTMLLikeLiteralValue = wrapByPair('<', '>');
+export const escape = (value: string): string => value.replace(/\r/g, '\\r').replace(/\n/g, '\\n').replace(/"/g, '\\"');
 
 export const LiteralPrintPlugin: PrintPlugin<LiteralASTNode> = {
   match(ast) {
     return ast.type === 'Literal';
   },
-  print(context, ast): string {
+  *print(context, ast) {
     switch (ast.quoted) {
       case 'html':
-        return quoteHTMLLikeLiteralValue(ast.value);
+        yield '<';
+        yield escape(ast.value);
+        yield '>';
+        return;
       case true:
-        return quoteLiteralValue(ast.value);
+        yield '"';
+        yield escape(ast.value);
+        yield '"';
+        return;
       case false:
       default:
-        return escape(ast.value);
+        yield escape(ast.value);
+        return;
     }
   },
 };

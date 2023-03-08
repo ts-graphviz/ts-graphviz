@@ -1,5 +1,5 @@
-import { digraph } from 'ts-graphviz';
-import { fromModel } from 'ts-graphviz/ast';
+import { digraph } from '../src/index.js';
+import { fromModel } from '../src/ast/index.js';
 
 import { toDot } from '#test/utils';
 

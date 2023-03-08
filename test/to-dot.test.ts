@@ -1,4 +1,4 @@
-import { RootGraphModel, Digraph, Graph, attribute as _ } from 'ts-graphviz';
+import { RootGraphModel, Digraph, Graph, attribute as _ } from '../src/index.js';
 import { toDot } from '#test/utils';
 
 describe.each([

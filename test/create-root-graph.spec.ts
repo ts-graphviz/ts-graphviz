@@ -1,4 +1,4 @@
-import { digraph, graph, strict, Graph, Digraph, attribute as _ } from 'ts-graphviz';
+import { digraph, graph, strict, Graph, Digraph, attribute as _ } from '../src/index.js';
 import { toDot } from '#test/utils';
 
 describe('function digraph', () => {

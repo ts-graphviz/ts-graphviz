@@ -1,12 +1,20 @@
 import { DotASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
-import { endOfLine } from './utils/index.js';
+import { EOL, PrintPlugin } from '../types.js';
 
 export const DotPrintPlugin: PrintPlugin<DotASTNode> = {
   match(ast) {
     return ast.type === 'Dot';
   },
-  print(context, ast): string {
-    return ast.children.map(context.print).join(endOfLine(context.endOfLine));
+  *print(context, ast) {
+    const tokenIter = ast.children[Symbol.iterator]();
+    let next = tokenIter.next();
+    while (true) {
+      yield* context.print(next.value);
+      next = tokenIter.next();
+      if (next.done) {
+        break;
+      }
+      yield EOL;
+    }
   },
 };

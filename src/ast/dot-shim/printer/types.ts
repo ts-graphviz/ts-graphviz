@@ -38,20 +38,25 @@ export interface PrintOptions {
   endOfLine?: EndOfLine;
 }
 
+export const EOL = Symbol();
+
+export type Doc = string | typeof EOL;
+
 /**
  * PrintContext interface provides an interface for printing an ASTNode with a set of options.
  * @group Convert AST to DOT
  * @alpha
  */
-export interface PrintContext extends Required<PrintOptions> {
+export interface PrintContext {
   /**
    * Indicates if the AST should be printed in a directed graph.
    */
   directed: boolean;
+  printChildren(children: ASTNode[]): Generator<Doc>;
   /**
    * A function to print an ASTNode, taking in an ASTNode as an argument. Returns a string.
    */
-  print(ast: ASTNode): string;
+  print(ast: ASTNode): Generator<Doc>;
 }
 
 /**
@@ -73,5 +78,5 @@ export interface PrintPlugin<T extends ASTNode = ASTNode> {
    * @returns printed string
    * @memberof PrintPlugin
    */
-  print(context: PrintContext, ast: T): string;
+  print(context: PrintContext, ast: T): Generator<Doc>;
 }

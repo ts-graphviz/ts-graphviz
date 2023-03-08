@@ -1,22 +1,40 @@
-import { map, pipe } from '../../../../utils/index.js';
-import { CommentASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
-import { leftPadWith, splitByLine, joinBy, wrapByPair, endOfLine } from './utils/index.js';
+import { CommentASTNode, CommentKind } from '../../../types.js';
+import { EOL, PrintPlugin } from '../types.js';
+
+const EOL_PTN = /\r?\n/;
+
+const splitByLine = (value: string): string[] => value.split(EOL_PTN);
+
+function getPadding(kind: CommentKind) {
+  switch (kind) {
+    case 'Block':
+      return ' * ';
+    case 'Macro':
+      return '# ';
+    case 'Slash':
+      return '// ';
+  }
+}
 
 export const CommentPrintPlugin: PrintPlugin<CommentASTNode> = {
   match(ast) {
     return ast.type === 'Comment';
   },
-  print(context, ast): string {
-    const eol = endOfLine(context.endOfLine);
-    switch (ast.kind) {
-      case 'Block':
-        return pipe(splitByLine, map(leftPadWith(' * ')), joinBy(eol), wrapByPair(`/**${eol}`, `${eol} */`))(ast.value);
-      case 'Macro':
-        return pipe(splitByLine, map(leftPadWith('# ')), joinBy(eol))(ast.value);
-      case 'Slash':
-      default:
-        return pipe(splitByLine, map(leftPadWith('// ')), joinBy(eol))(ast.value);
+  *print(context, ast) {
+    const linesIter = splitByLine(ast.value)[Symbol.iterator]();
+    const padding = getPadding(ast.kind);
+    if (ast.kind === 'Block') yield* ['/**', EOL];
+    let next = linesIter.next();
+    while (true) {
+      yield padding;
+      yield next.value;
+      next = linesIter.next();
+      if (!next.done) {
+        yield EOL;
+      } else {
+        break;
+      }
     }
+    if (ast.kind === 'Block') yield* [EOL, ' */'];
   },
 };
