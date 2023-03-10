@@ -71,10 +71,9 @@ function* createOptions() {
       external: subPackageEntrypoints,
       plugins: [
         replace({
-          values: subPackages.reduce(
-            (prev, subPackage) => ({ ...prev, [`${subPackage}/index.js`]: `${subPackage}/index.cjs` }),
-            {},
-          ),
+          values: {
+            '/index.js': '/index.cjs',
+          },
           preventAssignment: true,
         }),
       ],
@@ -108,10 +107,9 @@ function* createOptions() {
     external: subPackages.map((subPackage) => `./${subPackage}/index.js`),
     plugins: [
       replace({
-        values: subPackages.reduce(
-          (prev, subPackage) => ({ ...prev, [`${subPackage}/index.js`]: `${subPackage}/index.cjs` }),
-          {},
-        ),
+        values: {
+          '/index.js': '/index.cjs',
+        },
         preventAssignment: true,
       }),
     ],
