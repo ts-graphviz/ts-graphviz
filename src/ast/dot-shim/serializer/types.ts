@@ -1,4 +1,5 @@
-import { ASTNode } from '../../types.js';
+import { ASTType } from '../../../common/models.js';
+import { ASTNode, ASTNodeOf } from '../../types.js';
 
 /**
  * The IndentStyle type represents an indentation style for text. It can either be a `"space"` or a `"tab"`.
@@ -17,7 +18,7 @@ export type EndOfLine = 'lf' | 'crlf';
  * @group Convert AST to DOT
  * @alpha
  */
-export interface PrintOptions {
+export interface SerializeOptions {
   /**
    * The style of indentation to use when printing the AST.
    *
@@ -40,43 +41,42 @@ export interface PrintOptions {
 
 export const EOL = Symbol();
 
-export type Doc = string | typeof EOL;
+export type DocPart = string | typeof EOL;
 
 /**
  * PrintContext interface provides an interface for printing an ASTNode with a set of options.
  * @group Convert AST to DOT
  * @alpha
  */
-export interface PrintContext {
+export interface SerializerContext {
   /**
    * Indicates if the AST should be printed in a directed graph.
    */
   directed: boolean;
-  printChildren(children: ASTNode[]): Generator<Doc>;
+  serializeChildren(children: ASTNode[]): Generator<DocPart>;
   /**
    * A function to print an ASTNode, taking in an ASTNode as an argument. Returns a string.
    */
-  print(ast: ASTNode): Generator<Doc>;
+  serialize(ast: ASTNode): Generator<DocPart>;
 }
 
 /**
- * PrintPlugin is an interface for plugins used for printing an {@link ASTNode}.
+ * SerializerPlugin is an interface for plugins used for printing an {@link ASTNode}.
  * @template T T extends {@link ASTNode}
  * @group Convert AST to DOT
  * @alpha
  */
-export interface PrintPlugin<T extends ASTNode = ASTNode> {
-  /**
-   * Checks if an ASTNode matches the plugin
-   * @returns {boolean} true if the ASTNode matches the plugin
-   */
-  match(ast: ASTNode): boolean;
+export interface SerializerFunction<T extends ASTNode = ASTNode> {
   /**
    * Prints an ASTNode
-   * @param context PrintContext object
+   * @param context {@link SerializerContext} object
    * @param ast an ASTNode
    * @returns printed string
-   * @memberof PrintPlugin
+   * @memberof SerializerPlugin
    */
-  print(context: PrintContext, ast: T): Generator<Doc>;
+  (this: SerializerContext, ast: T): Generator<DocPart>;
 }
+
+export type SerializerMapping = {
+  [T in ASTType]: SerializerFunction<ASTNodeOf<T>>;
+};
