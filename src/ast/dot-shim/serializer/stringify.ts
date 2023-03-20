@@ -11,8 +11,7 @@ import { Serializer } from './serializer.js';
  * @group Convert AST to DOT
  */
 export function stringify(ast: ASTNode, options?: SerializeOptions): string {
-  let dot = '';
-  for (const parts of new Serializer(options).serialize(ast)) dot += parts;
+  const dot = [...new Serializer(ast, options)].join('');
   if (!dot) throw new Error();
   return dot;
 }

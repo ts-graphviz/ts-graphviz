@@ -344,27 +344,3 @@ export type ASTNode =
  * @group AST
  */
 export type ASTChildNode<T> = T extends ASTBaseParentNode<infer C> ? C : never;
-
-export type ASTNodeOf<T extends ASTType> = T extends 'Graph'
-  ? GraphASTNode
-  : T extends 'Edge'
-  ? EdgeASTNode
-  : T extends 'Node'
-  ? NodeASTNode
-  : T extends 'Literal'
-  ? LiteralASTNode<string>
-  : T extends 'Dot'
-  ? DotASTNode
-  : T extends 'Attribute'
-  ? AttributeASTNode<AttributeKey>
-  : T extends 'Comment'
-  ? CommentASTNode
-  : T extends 'AttributeList'
-  ? AttributeListASTNode
-  : T extends 'NodeRef'
-  ? NodeRefASTNode
-  : T extends 'NodeRefGroup'
-  ? NodeRefGroupASTNode
-  : T extends 'Subgraph'
-  ? SubgraphASTNode
-  : ASTNode;

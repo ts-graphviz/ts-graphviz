@@ -1,6 +1,3 @@
-import { ASTType } from '../../../common/models.js';
-import { ASTNode, ASTNodeOf } from '../../types.js';
-
 /**
  * The IndentStyle type represents an indentation style for text. It can either be a `"space"` or a `"tab"`.
  * @group Convert AST to DOT
@@ -38,45 +35,3 @@ export interface SerializeOptions {
    */
   endOfLine?: EndOfLine;
 }
-
-export const EOL = Symbol();
-
-export type DocPart = string | typeof EOL;
-
-/**
- * PrintContext interface provides an interface for printing an ASTNode with a set of options.
- * @group Convert AST to DOT
- * @alpha
- */
-export interface SerializerContext {
-  /**
-   * Indicates if the AST should be printed in a directed graph.
-   */
-  directed: boolean;
-  serializeChildren(children: ASTNode[]): Generator<DocPart>;
-  /**
-   * A function to print an ASTNode, taking in an ASTNode as an argument. Returns a string.
-   */
-  serialize(ast: ASTNode): Generator<DocPart>;
-}
-
-/**
- * SerializerPlugin is an interface for plugins used for printing an {@link ASTNode}.
- * @template T T extends {@link ASTNode}
- * @group Convert AST to DOT
- * @alpha
- */
-export interface SerializerFunction<T extends ASTNode = ASTNode> {
-  /**
-   * Prints an ASTNode
-   * @param context {@link SerializerContext} object
-   * @param ast an ASTNode
-   * @returns printed string
-   * @memberof SerializerPlugin
-   */
-  (this: SerializerContext, ast: T): Generator<DocPart>;
-}
-
-export type SerializerMapping = {
-  [T in ASTType]: SerializerFunction<ASTNodeOf<T>>;
-};
