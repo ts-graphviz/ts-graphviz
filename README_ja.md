@@ -503,6 +503,80 @@ const ast = parse(`
 
 </details>
 
+### 型システムの拡張 🧰
+
+> この機能のステータスは ![beta](https://img.shields.io/badge/-beta-orange) です。
+
+ts-graphvizでは、ライブラリの型システムを拡張して、特定のニーズに合わせてグラフ視覚化ソリューションをカスタマイズすることを可能にします。
+
+> **Note** カスタマイズを許容する型は `$` をつけることで命名上の工夫をしています。
+>
+> 下記に記載がないケースで型定義を拡張したいケースでは、ソースコードを確認し、 `$...` で拡張できないか確認してください。
+>
+> もしなければ、Issue か Pull Request を作成ください。
+
+#### ユースケース: 独自のグラフレイアウト、出力フォーマットを指定する
+
+```ts
+import { $keywords } from 'ts-graphviz';
+import { toFile } from 'ts-graphviz/adapter';
+
+// 1. 'ts-graphviz/adapter' モジュールを宣言します。
+declare module 'ts-graphviz/adapter' {
+  export namespace Layout {
+    // 2. Layout の名前空間の中に $values のインターフェースを定義します。
+    // 3. $keywords<...> を継承し、<...>の中に新たに定義するレイアウトエンジンの名称を指定します。
+    export interface $values extends $keywords<'my-custom-algorithm'> {}
+  }
+
+  export namespace Format {
+    // 4. Format の名前空間の中に $values のインターフェースを定義します。
+    // 5. $keywords<...> を継承し、<...>の中に新たに定義するフォーマットの名称を指定します。
+    export interface $values extends $keywords<'mp4'> {}
+  }
+}
+
+toFile('digraph { a -> b }', '/path/to/file', {
+  layout: 'my-custom-algorithm',
+  format: 'mp4',
+});
+```
+
+#### ユースケース: 独自の属性を追加する
+
+```ts
+import { digraph, toDot, attribute as _, $keywords } from 'ts-graphviz';
+
+// 1. 'ts-graphviz' モジュールを宣言します。
+declare module 'ts-graphviz' {
+  export namespace GraphAttributeKey {
+    // 2. GraphAttributeKey の名前空間の中に $values のインターフェースを定義します。
+    // 3. $keywords<...> を継承し、<...>の中に新たに定義する属性名を指定します。
+    export interface $values extends $keywords<'hoge'> {}
+  }
+
+  export namespace Attribute {
+    // 4. Attribute の名前空間の中に $key のインターフェースを定義します。
+    // 5. $keywords<...> を継承し、<...>の中に新たに定義する属性名を指定します。
+    export interface $keys extends $keywords<'hoge'> {}
+
+    // 6. Attribute の名前空間の中に $types のインターフェースを定義します。
+    // 7. キーに新たに定義する属性を指定し、値に属性に対応する値を定義します。
+    export interface $types {
+      hoge: string;
+    }
+  }
+}
+
+console.log(
+  toDot(
+    digraph((g) => {
+      g.set(_.hoge, 'fuga');
+    }),
+  ),
+);
+```
+
 ## 誰が使っているか 📜
 
 - [Apollo GraphQL](https://github.com/apollographql)

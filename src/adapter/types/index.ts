@@ -1,13 +1,25 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import {
   EdgeAttributesObject,
   GraphAttributesObject,
   NodeAttributesObject,
   SubgraphAttributesObject,
 } from '../../common/index.js';
+import { $keywords } from '../../utils/index.js';
 
-export type Format = 'png' | 'svg' | 'json' | 'jpg' | 'pdf' | 'xdot' | 'dot' | 'plain' | 'dot_json';
+export type Format = Format.values;
+export namespace Format {
+  export type values = keyof $values;
+  export interface $values
+    extends $keywords<'png' | 'svg' | 'json' | 'jpg' | 'pdf' | 'xdot' | 'dot' | 'plain' | 'dot_json'> {}
+}
 
-export type Layout = 'dot' | 'neato' | 'fdp' | 'sfdp' | 'circo' | 'twopi' | 'nop' | 'nop2' | 'osage' | 'patchwork';
+export type Layout = Layout.values;
+export namespace Layout {
+  export type values = keyof $values;
+  export interface $values
+    extends $keywords<'dot' | 'neato' | 'fdp' | 'sfdp' | 'circo' | 'twopi' | 'nop' | 'nop2' | 'osage' | 'patchwork'> {}
+}
 
 /**
  * NeatoOptions interface provides options for the neato layout.
