@@ -18,7 +18,7 @@
   },
   "funding": {
     "type": "github",
-    "url": "https://github.com/sponsors/kamiazya"
+    "url": "https://github.com/sponsors/ts-graphviz"
   },
   "main": "./lib/index.cjs",
   "module": "./lib/index.js",
