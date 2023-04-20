@@ -503,6 +503,80 @@ const ast = parse(`
 
 </details>
 
+### Extending the Type System 🧰
+
+> The status of this feature is ![beta](https://img.shields.io/badge/-beta-orange).
+
+With ts-graphviz, you can extend the library's type system to customize graph visualization solutions to meet specific needs.
+
+> **Note** To allow for customization, types are named with the `$` symbol.
+>
+> If you want to extend a type definition in cases not listed below, check the source code to see if you can extend it with `$...`.
+>
+> If not, please create an issue or pull request.
+
+#### Use Case: Specifying Custom Graph Layout and Output Formats
+
+```ts
+import { $keywords } from 'ts-graphviz';
+import { toFile } from 'ts-graphviz/adapter';
+
+// 1. Declare the 'ts-graphviz/adapter' module.
+declare module 'ts-graphviz/adapter' {
+  export namespace Layout {
+    // 2. Define the $values interface in the Layout namespace.
+    // 3. Inherit from $keywords<'my-custom-algorithm'> and specify the name of the new layout engine in <...>.
+    export interface $values extends $keywords<'my-custom-algorithm'> {}
+  }
+
+  export namespace Format {
+    // 4. Define the $values interface in the Format namespace.
+    // 5. Inherit from $keywords<'mp4'> and specify the name of the new output format in <...>.
+    export interface $values extends $keywords<'mp4'> {}
+  }
+}
+
+toFile('digraph { a -> b }', '/path/to/file', {
+  layout: 'my-custom-algorithm',
+  format: 'mp4',
+});
+```
+
+#### Use Case: Adding Custom Attributes
+
+```ts
+import { digraph, toDot, attribute as _, $keywords } from 'ts-graphviz';
+
+// 1. Declare the 'ts-graphviz' module.
+declare module 'ts-graphviz' {
+  export namespace GraphAttributeKey {
+    // 2. Define the $values interface in the GraphAttributeKey namespace.
+    // 3. Inherit from $keywords<'hoge'> and specify the name of the new attribute in <...>.
+    export interface $values extends $keywords<'hoge'> {}
+  }
+
+  export namespace Attribute {
+    // 4. Define the $keys interface in the Attribute namespace.
+    // 5. Inherit from $keywords<'hoge'> and specify the name of the new attribute in <...>.
+    export interface $keys extends $keywords<'hoge'> {}
+
+    // 6. Define the $types interface in the Attribute namespace.
+    // 7. Specify the new attribute in the key and define its corresponding value in the value.
+    export interface $types {
+      hoge: string;
+    }
+  }
+}
+
+console.log(
+  toDot(
+    digraph((g) => {
+      g.set(_.hoge, 'fuga');
+    }),
+  ),
+);
+```
+
 ## Who's using `ts-graphviz` 📜
 
 - [Apollo GraphQL](https://github.com/apollographql)
