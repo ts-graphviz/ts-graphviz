@@ -262,6 +262,7 @@ export namespace SubgraphAttributeKey {
   export type values = keyof $values;
   export interface $values extends $keywords<'rank'> {}
 }
+
 /**
  * Attribute types available for cluster subgraph.
  * @group Attribute

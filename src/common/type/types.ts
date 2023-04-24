@@ -76,7 +76,7 @@ export type Shape = string;
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/smoothType/ smoothType}
  * @group Attribute Types
  */
-export type SmoothType = SmoothType.$values;
+export type SmoothType = SmoothType.values;
 /** @hidden */
 export namespace SmoothType {
   export type values = keyof $values;
