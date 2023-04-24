@@ -11,5 +11,6 @@
     "^\\#test\\/(.*)$": "<rootDir>/test/$1",
     "^(\\.{1,2}/.*)\\.js$": "$1"
   },
-  "snapshotSerializers": ["jest-snapshot-serializer-raw"]
+  "snapshotSerializers": ["jest-snapshot-serializer-raw"],
+  "modulePathIgnorePatterns": ["<rootDir>/e2e"]
 }
