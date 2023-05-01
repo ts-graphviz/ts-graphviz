@@ -41,12 +41,17 @@ import type {
  * @param T The {@link AttributeKey} to be mapped to a value.
  * @group Attribute
  */
-export type Attribute<T extends AttributeKey> = Attribute.$types[T];
+export type Attribute<T extends AttributeKey> = Attribute.types[T];
 export namespace Attribute {
-  export type keys = $keys;
+  export type keys = Omit<$keys, keyof $exclude>;
+
+  export type types = Omit<$types, keyof $exclude>;
 
   /** @hidden */
   export interface $keys extends $keywords<AttributeKey> {}
+
+  export interface $exclude {}
+
   /**
    * @group Attribute
    */

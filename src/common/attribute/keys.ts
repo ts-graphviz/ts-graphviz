@@ -8,7 +8,7 @@ import { $keywords } from '../../utils/index.js';
 export type EdgeAttributeKey = EdgeAttributeKey.values;
 /** @hidden */
 export namespace EdgeAttributeKey {
-  export type values = keyof $values;
+  export type values = Exclude<keyof $values, keyof $exclude>;
   export interface $values
     extends $keywords<
       | 'URL'
@@ -78,6 +78,7 @@ export namespace EdgeAttributeKey {
       | 'xlp'
       | 'class'
     > {}
+  export interface $exclude {}
 }
 
 /**
@@ -87,7 +88,7 @@ export namespace EdgeAttributeKey {
 export type NodeAttributeKey = NodeAttributeKey.values;
 /** @hidden */
 export namespace NodeAttributeKey {
-  export type values = keyof $values;
+  export type values = Exclude<keyof $values, keyof $exclude>;
   export interface $values
     extends $keywords<
       | 'URL'
@@ -140,6 +141,7 @@ export namespace NodeAttributeKey {
       | 'z'
       | 'class'
     > {}
+  export interface $exclude {}
 }
 /**
  * Attribute types available for graph.
@@ -148,7 +150,7 @@ export namespace NodeAttributeKey {
 export type GraphAttributeKey = GraphAttributeKey.values;
 /** @hidden */
 export namespace GraphAttributeKey {
-  export type values = keyof $values;
+  export type values = Exclude<keyof $values, keyof $exclude>;
   export interface $values
     extends $keywords<
       | 'Damping'
@@ -251,6 +253,7 @@ export namespace GraphAttributeKey {
       | 'xdotversion'
       | 'class'
     > {}
+  export interface $exclude {}
 }
 /**
  * Attribute types available for subgraph.
@@ -259,8 +262,9 @@ export namespace GraphAttributeKey {
 export type SubgraphAttributeKey = SubgraphAttributeKey.values;
 /** @hidden */
 export namespace SubgraphAttributeKey {
-  export type values = keyof $values;
+  export type values = Exclude<keyof $values, keyof $exclude>;
   export interface $values extends $keywords<'rank'> {}
+  export interface $exclude {}
 }
 
 /**
@@ -270,7 +274,7 @@ export namespace SubgraphAttributeKey {
 export type ClusterSubgraphAttributeKey = ClusterSubgraphAttributeKey.values;
 /** @hidden */
 export namespace ClusterSubgraphAttributeKey {
-  export type values = keyof $values;
+  export type values = Exclude<keyof $values, keyof $exclude>;
   export interface $values
     extends $keywords<
       | 'K'
@@ -304,6 +308,7 @@ export namespace ClusterSubgraphAttributeKey {
       | 'tooltip'
       | 'class'
     > {}
+  export interface $exclude {}
 }
 /**
  * Attribute types.
