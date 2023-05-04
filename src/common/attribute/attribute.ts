@@ -43,9 +43,9 @@ import type {
  */
 export type Attribute<T extends AttributeKey> = Attribute.types[T];
 export namespace Attribute {
-  export type keys = Omit<$keys, keyof $exclude>;
+  export type keys = Omit<$keys, keyof $exclude | symbol | number>;
 
-  export type types = Omit<$types, keyof $exclude>;
+  export type types = Omit<$types, keyof $exclude | symbol | number>;
 
   /** @hidden */
   export interface $keys extends $keywords<AttributeKey> {}
