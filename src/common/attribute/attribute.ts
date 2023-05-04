@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { $keywords } from '../../utils/index.js';
+import { $keywords, $keywordsValidation } from '../../utils/index.js';
 import type { AttributeKey } from './keys.js';
 import type {
   AddDouble,
@@ -50,7 +50,7 @@ export namespace Attribute {
   /** @hidden */
   export interface $keys extends $keywords<AttributeKey> {}
 
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 
   /**
    * @group Attribute

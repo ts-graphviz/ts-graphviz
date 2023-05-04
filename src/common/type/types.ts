@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { $keywords } from '../../utils/index.js';
+import { $keywords, $keywordsValidation } from '../../utils/index.js';
 
 /**
  * Directive indicating which direction the Edge should point.
@@ -8,9 +8,9 @@ import { $keywords } from '../../utils/index.js';
 export type Compass = Compass.values;
 /** @hidden */
 export namespace Compass {
-  export type values = Exclude<keyof $values, keyof $exclude>;
+  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
   export interface $values extends $keywords<'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_'> {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 
 /**
@@ -80,11 +80,11 @@ export type Shape = string;
 export type SmoothType = SmoothType.values;
 /** @hidden */
 export namespace SmoothType {
-  export type values = Exclude<keyof $values, keyof $exclude>;
+  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
   export interface $values
     extends $keywords<'none' | 'avg_dist' | 'graph_dist' | 'power_dist' | 'rng' | 'spring' | 'triangle'> {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/splineType/ splineType}
@@ -110,7 +110,7 @@ export namespace StartType {
   export type style = Exclude<keyof $style, keyof $exclude>;
   export interface $style extends $keywords<'regular' | 'self' | 'random'> {}
   export type seed = number;
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 
 /**
@@ -143,7 +143,7 @@ export namespace Style {
       | 'rounded'
       | 'radial'
     > {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 
 /**
@@ -259,10 +259,10 @@ export type PointList =
 export type OutputMode = OutputMode.values;
 /** @hidden */
 export namespace OutputMode {
-  export type values = Exclude<keyof $values, keyof $exclude>;
+  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
   export interface $values extends $keywords<'breadthfirst' | 'nodesfirst' | 'edgesfirst'> {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 /**
  * @see {@link https://graphviz.org/docs/attr-types/packMode/ packMode}
@@ -271,10 +271,10 @@ export namespace OutputMode {
 export type PackMode = keyof PickMode.$values | `array${string}`;
 /** @hidden */
 export namespace PickMode {
-  export type values = Exclude<keyof $values, keyof $exclude>;
+  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
   export interface $values extends $keywords<'node' | 'clust' | 'graph'> {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 /**
  * Using `"fast"` gives about a 2-4 times overall speedup compared with `"normal"`,
@@ -286,10 +286,10 @@ export namespace PickMode {
 export type QuadType = QuadType.values;
 /** @hidden */
 export namespace QuadType {
-  export type values = Exclude<keyof $values, keyof $exclude>;
+  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
   export interface $values extends $keywords<'normal' | 'fast' | 'none'> {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 
 /**
@@ -301,14 +301,13 @@ export namespace QuadType {
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankdir/ rankdir}
  * @group Attribute Types
  */
-export type Rankdir = Rankdir.values;
+export type Rankdir = `${Rankdir.TB}${Rankdir.RL}`;
 /** @hidden */
 export namespace Rankdir {
-  export type values = Exclude<keyof $values, keyof $exclude>;
-
-  export interface $values extends $keywords<'TB' | 'LR' | 'BT' | 'RL'> {}
-  export interface $exclude {}
+  export type TB = 'T' | 'B';
+  export type RL = 'R' | 'L';
 }
+
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankType/ rankType}
  * @group Attribute Types
@@ -316,10 +315,10 @@ export namespace Rankdir {
 export type RankType = RankType.values;
 /** @hidden */
 export namespace RankType {
-  export type values = Exclude<keyof $values, keyof $exclude>;
+  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
   export interface $values extends $keywords<'same' | 'min' | 'source' | 'max' | 'sink'> {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 /**
  * `"%f,%f,%f,%f"`
@@ -363,10 +362,10 @@ export namespace ArrowType {
  */
 export type ClusterMode = ClusterMode.values;
 export namespace ClusterMode {
-  export type values = Exclude<keyof $values, keyof $exclude>;
+  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
   export interface $values extends $keywords<'local' | 'global' | 'none'> {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/color/ color}
@@ -1224,7 +1223,7 @@ export namespace Color {
       | 'yellow'
       | 'yellowgreen'
     > {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 
 /**
@@ -1248,10 +1247,10 @@ export type ColorList = string;
 export type DirType = DirType.values;
 /** @hidden */
 export namespace DirType {
-  export type values = Exclude<keyof $values, keyof $exclude>;
+  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
   export interface $values extends $keywords<'forward' | 'back' | 'both' | 'none'> {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 
 /**

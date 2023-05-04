@@ -1,13 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { $keywords } from '../../utils/index.js';
-
-interface KeyValidation
-  extends $keywords<
-    // Note
-    // Although the DOT language specification allows the use of white space characters in IDs, for example by quoting,
-    // this is eliminated as a use case for the library.
-    `${string} ${string}` | `${string}\n${string}` | `${string}\t${string}`
-  > {}
+import { $keywords, $keywordsValidation } from '../../utils/index.js';
 
 /**
  * Attribute types available for edges.
@@ -87,7 +79,7 @@ export namespace EdgeAttributeKey {
       | 'class'
     > {}
 
-  export interface $exclude extends KeyValidation {}
+  export interface $exclude extends $keywordsValidation {}
 }
 
 /**
@@ -150,7 +142,7 @@ export namespace NodeAttributeKey {
       | 'z'
       | 'class'
     > {}
-  export interface $exclude extends KeyValidation {}
+  export interface $exclude extends $keywordsValidation {}
 }
 /**
  * Attribute types available for graph.
@@ -262,7 +254,7 @@ export namespace GraphAttributeKey {
       | 'xdotversion'
       | 'class'
     > {}
-  export interface $exclude extends KeyValidation {}
+  export interface $exclude extends $keywordsValidation {}
 }
 /**
  * Attribute types available for subgraph.
@@ -273,7 +265,7 @@ export type SubgraphAttributeKey = SubgraphAttributeKey.values;
 export namespace SubgraphAttributeKey {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
   export interface $values extends $keywords<'rank'> {}
-  export interface $exclude extends KeyValidation {}
+  export interface $exclude extends $keywordsValidation {}
 }
 
 /**
@@ -317,7 +309,7 @@ export namespace ClusterSubgraphAttributeKey {
       | 'tooltip'
       | 'class'
     > {}
-  export interface $exclude extends KeyValidation {}
+  export interface $exclude extends $keywordsValidation {}
 }
 /**
  * Attribute types.

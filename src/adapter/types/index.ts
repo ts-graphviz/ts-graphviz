@@ -5,22 +5,22 @@ import {
   NodeAttributesObject,
   SubgraphAttributesObject,
 } from '../../common/index.js';
-import { $keywords } from '../../utils/index.js';
+import { $keywords, $keywordsValidation } from '../../utils/index.js';
 
 export type Format = Format.values;
 export namespace Format {
-  export type values = Exclude<keyof $values, keyof $exclude>;
+  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
   export interface $values
     extends $keywords<'png' | 'svg' | 'json' | 'jpg' | 'pdf' | 'xdot' | 'dot' | 'plain' | 'dot_json'> {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 
 export type Layout = Layout.values;
 export namespace Layout {
-  export type values = Exclude<keyof $values, keyof $exclude>;
+  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
   export interface $values
     extends $keywords<'dot' | 'neato' | 'fdp' | 'sfdp' | 'circo' | 'twopi' | 'nop' | 'nop2' | 'osage' | 'patchwork'> {}
-  export interface $exclude {}
+  export interface $exclude extends $keywordsValidation {}
 }
 
 /**
