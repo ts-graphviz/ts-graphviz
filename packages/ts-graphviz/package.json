@@ -1,0 +1,125 @@
+{
+  "name": "ts-graphviz",
+  "version": "1.7.0",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "description": "Graphviz library for TypeScript.",
+  "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts-graphviz/ts-graphviz.git"
+  },
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/ts-graphviz"
+  },
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.cjs"
+      },
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      }
+    },
+    "./ast": {
+      "require": {
+        "types": "./lib/ast/index.d.ts",
+        "default": "./lib/ast/index.cjs"
+      },
+      "import": {
+        "types": "./lib/ast/index.d.ts",
+        "default": "./lib/ast/index.js"
+      }
+    },
+    "./adapter": {
+      "browser": {
+        "require": "./lib/adapter/browser/index.cjs",
+        "import": "./lib/adapter/browser/index.js",
+        "types": "./lib/adapter/browser/index.d.ts"
+      },
+      "deno": {
+        "types": "./lib/adapter/deno/mod.d.ts",
+        "default": "./lib/adapter/deno/mod.js"
+      },
+      "node": {
+        "require": "./lib/adapter/node/index.cjs",
+        "import": "./lib/adapter/node/index.js",
+        "types": "./lib/adapter/node/index.d.ts"
+      },
+      "default": {
+        "types": "./lib/adapter/node/index.d.ts",
+        "require": "./lib/adapter/node/index.cjs",
+        "import": "./lib/adapter/node/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "ast": [
+        "lib/ast"
+      ],
+      "adapter": [
+        "lib/adapter/node"
+      ]
+    }
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.16"
+  },
+  "runkitExampleFilename": "example/runkit.cjs",
+  "scripts": {
+    "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/ast/dot-shim/parser/peggy.options.json -o src/ast/dot-shim/parser/_parse.ts src/ast/dot-shim/parser/dot.peggy",
+    "prebuild": "yarn build:peggy",
+    "build:deno": "mkdir -p lib/adapter/deno && cp -r src/adapter/deno/* lib/adapter/deno && sed -i \"s/index.ts/index.js/g\" lib/adapter/deno/mod.js && sed -i \"s/index.ts/index.d.ts/g\" lib/adapter/deno/mod.d.ts",
+    "build:node": "tsc -p tsconfig.build.json --declaration && tsc -p tsconfig.build.json --removeComments && rollup -c",
+    "build": "yarn build:node && yarn build:deno",
+    "postbuild": "prettier --write ./lib/**/*.{js,cjs,d.ts}",
+    "pretest": "yarn build:peggy",
+    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
+    "format": "eslint --ext ts src --fix && prettier --write './**/*.{ts,js,json,yaml}' '!lib'",
+    "lint": "eslint --ext ts src",
+    "predoc": "yarn build:peggy",
+    "doc": "typedoc"
+  },
+  "devDependencies": {
+    "@rollup/plugin-replace": "^5.0.2",
+    "@types/jest": "^29.4.0",
+    "@types/jest-specific-snapshot": "^0.5.6",
+    "@typescript-eslint/eslint-plugin": "^5.49.0",
+    "@typescript-eslint/parser": "^5.49.0",
+    "eslint": "^8.32.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest": "^27.2.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^29.4.1",
+    "jest-snapshot-serializer-raw": "^1.2.0",
+    "jest-specific-snapshot": "^7.0.0",
+    "peggy": "^2.0.1",
+    "prettier": "^2.8.3",
+    "prettier-plugin-pegjs": "^0.5.0",
+    "rollup": "^3.11.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-dts": "5.1.1",
+    "svgo": "^3.0.2",
+    "ts-jest": "^29.0.5",
+    "ts-pegjs": "^3.0.0",
+    "typedoc": "^0.23.15",
+    "typescript": "^4.7.4"
+  }
+}
