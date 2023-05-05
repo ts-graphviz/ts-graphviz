@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { $keywords } from '../../utils/index.js';
+import { $keywords, $keywordsValidation } from '../../utils/index.js';
 import type { AttributeKey } from './keys.js';
 import type {
   AddDouble,
@@ -41,12 +41,17 @@ import type {
  * @param T The {@link AttributeKey} to be mapped to a value.
  * @group Attribute
  */
-export type Attribute<T extends AttributeKey> = Attribute.$types[T];
+export type Attribute<T extends AttributeKey> = Attribute.types[T];
 export namespace Attribute {
-  export type keys = $keys;
+  export type keys = Omit<$keys, keyof $exclude | symbol | number>;
+
+  export type types = Omit<$types, keyof $exclude | symbol | number>;
 
   /** @hidden */
   export interface $keys extends $keywords<AttributeKey> {}
+
+  export interface $exclude extends $keywordsValidation {}
+
   /**
    * @group Attribute
    */
