@@ -15,7 +15,7 @@ const options = [
         file: './lib/index.js',
       },
     ],
-    external: ['@ts-graphviz/common', '@ts-graphviz/core']
+    external: ['@ts-graphviz/common'],
   },
   {
     input: './lib/index.d.ts',
@@ -32,7 +32,7 @@ const options = [
         file: './lib/index.d.ts',
       },
     ],
-    external: ['@ts-graphviz/common', '@ts-graphviz/core']
+    external: ['@ts-graphviz/common'],
   },
 ];
 

@@ -5,5 +5,8 @@
       "dependsOn": ["^build"],
       "outputs": ["lib/**"]
     }
-  }
+  },
+  "globalDependencies": [
+    "tsconfig.base.json"
+  ]
 }

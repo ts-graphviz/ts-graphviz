@@ -1,0 +1,41 @@
+{
+  "name": "@ts-graphviz/ast",
+  "version": "2.0.0",
+  "description": "",
+  "type": "module",
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ts-graphviz/ts-graphviz.git",
+    "directory": "packages/ast"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
+  "dependencies": {
+    "@ts-graphviz/common": "^2.0.0"
+  },
+  "devDependencies": {
+    "peggy": "^3.0.2",
+    "rollup": "^3.21.5",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-dts": "^5.3.0",
+    "ts-pegjs": "^4.1.0",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/dot-shim/parser/peggy.options.json -o src/dot-shim/parser/_parse.ts src/dot-shim/parser/dot.peggy",
+    "prebuild": "npm run build:peggy",
+    "build:dts": "tsc -p tsconfig.json --declaration",
+    "build:js": "tsc -p tsconfig.json --removeComments",
+    "build:rollup": "rollup -c rollup.config.js",
+    "build": "npm run build:dts && npm run build:js && npm run build:rollup",
+    "postbuild": "prettier --write ./lib/**/*.{js,cjs,d.ts}"
+  }
+}
