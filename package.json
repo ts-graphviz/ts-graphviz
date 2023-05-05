@@ -2,6 +2,7 @@
   "name": "ts-graphviz",
   "private": true,
   "scripts": {
+    "build": "turbo run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
   },
-  "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme"
+  "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
+  "devDependencies": {
+    "turbo": "^1.9.3"
+  }
 }
