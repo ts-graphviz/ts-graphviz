@@ -88,8 +88,6 @@
     "build:rollup": "rollup -c rollup.config.js",
     "build": "npm run build:dts && npm run build:js && npm run build:rollup",
     "postbuild": "prettier --write ./lib/**/*.{js,cjs,d.ts}",
-    "pretest": "yarn build:peggy",
-    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
     "format": "eslint --ext ts src --fix && prettier --write './**/*.{ts,js,json,yaml}' '!lib'",
     "lint": "eslint --ext ts src",
     "predoc": "yarn build:peggy",

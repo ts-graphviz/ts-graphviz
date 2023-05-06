@@ -1,4 +1,4 @@
-import '../../../core/index.js';
+import '@ts-graphviz/core';
 import { createElement } from '../../builder/create-element.js';
 import { toModel } from './to-model.js';
 

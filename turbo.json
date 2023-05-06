@@ -4,6 +4,10 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["lib/**"]
+    },
+    "test": {
+      "dependsOn": ["build", "^test"],
+      "outputs": ["lib/**"]
     }
   },
   "globalDependencies": [
