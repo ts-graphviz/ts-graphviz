@@ -1,10 +1,6 @@
 {
   "name": "ts-graphviz",
   "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "test": "turbo run test"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ts-graphviz/ts-graphviz.git"
@@ -21,6 +17,21 @@
   },
   "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
+    "eslint": "^8.40.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest": "^27.2.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.8",
+    "prettier-plugin-pegjs": "^1.0.1",
     "turbo": "^1.9.3"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "format": "eslint --ext ts . --fix && prettier --write './**/*.{ts,js,json,yaml}' '!**/lib'",
+    "lint": "eslint --ext ts ."
   }
 }

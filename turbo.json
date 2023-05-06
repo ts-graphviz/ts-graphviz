@@ -10,7 +10,5 @@
       "outputs": ["lib/**"]
     }
   },
-  "globalDependencies": [
-    "tsconfig.base.json"
-  ]
+  "globalDependencies": ["tsconfig.base.json"]
 }
