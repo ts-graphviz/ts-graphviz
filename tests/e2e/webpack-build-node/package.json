@@ -1,10 +1,13 @@
 {
-  "name": "webpack-build-node",
+  "name": "@ts-graphviz-e2e/webpack-build-node",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "test": "yarn build && node dist/main.js",
     "build": "webpack --mode=production --node-env=production"
+  },
+  "dependencies": {
+    "ts-graphviz": "*"
   },
   "devDependencies": {
     "@webpack-cli/generators": "^3.0.1",

@@ -1,5 +1,5 @@
 {
-  "name": "ts-graphviz",
+  "name": "@ts-graphviz/monorepo",
   "private": true,
   "repository": {
     "type": "git",
@@ -7,7 +7,8 @@
   },
   "workspaces": [
     "packages/ts-graphviz",
-    "packages/@ts-graphviz/*"
+    "packages/@ts-graphviz/*",
+    "tests/e2e/*"
   ],
   "keywords": [],
   "author": "",

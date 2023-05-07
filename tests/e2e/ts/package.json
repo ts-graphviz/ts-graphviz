@@ -1,5 +1,5 @@
 {
-  "name": "ts",
+  "name": "@ts-graphviz-e2e/ts",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",

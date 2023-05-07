@@ -1,11 +1,12 @@
 {
-  "name": "cjs",
+  "name": "@ts-graphviz-e2e/esm",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "test": "node main.js"
   },
   "dependencies": {
-    "ts-graphviz": "file:../../ts-graphviz.tgz"
+    "ts-graphviz": "*"
   }
 }

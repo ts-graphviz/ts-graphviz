@@ -3,6 +3,9 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/deno:1": {}
+  },
   "postCreateCommand": "npm i",
   "customizations": {
     "vscode": {
