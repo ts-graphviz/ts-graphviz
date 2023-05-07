@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { digraph, toDot, attribute as _, $keywords } from 'ts-graphviz';
-import { toFile } from 'ts-graphviz/adapter';
+import { toFile } from '@ts-graphviz/adapter';
 
 declare module 'ts-graphviz' {
   export namespace GraphAttributeKey {
@@ -24,7 +24,7 @@ console.log(
   ),
 );
 
-declare module 'ts-graphviz/adapter' {
+declare module '@ts-graphviz/adapter' {
   export namespace Layout {
     export interface $values extends $keywords<'my-custom-algorithm'> {}
   }

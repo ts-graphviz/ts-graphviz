@@ -1,6 +1,8 @@
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 
+const external = ['@ts-graphviz/ast', '@ts-graphviz/common'];
+
 /** @type {import('rollup').RollupOptions[]} */
 const options = [
   {
@@ -15,6 +17,7 @@ const options = [
         file: './lib/index.js',
       },
     ],
+    external,
   },
   {
     input: './lib/index.d.ts',
@@ -31,6 +34,7 @@ const options = [
         file: './lib/index.d.ts',
       },
     ],
+    external,
   },
 ];
 

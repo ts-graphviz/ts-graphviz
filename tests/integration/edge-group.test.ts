@@ -1,5 +1,5 @@
 import { digraph } from 'ts-graphviz';
-import { fromModel } from 'ts-graphviz/ast';
+import { fromModel } from '@ts-graphviz/ast';
 
 import { toDot } from '#test/utils';
 
