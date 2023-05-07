@@ -6,6 +6,9 @@
   "scripts": {
     "test": "tsc --noEmit"
   },
+  "dependencies": {
+    "ts-graphviz": "*"
+  },
   "devDependencies": {
     "typescript": "*"
   }

@@ -1,5 +1,6 @@
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
+import replace from '@rollup/plugin-replace';
 const external = [
   '@ts-graphviz/common',
   '../types/index.js',
@@ -17,6 +18,11 @@ function createOption(name) {
         {
           format: `cjs`,
           file: `./lib/${name}/index.cjs`,
+          plugins: [
+            replace({
+              'index.js': 'index.cjs',
+            }),
+          ],
         },
         {
           format: `esm`,

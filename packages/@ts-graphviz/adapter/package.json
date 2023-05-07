@@ -3,9 +3,9 @@
   "version": "2.0.0",
   "description": "",
   "type": "module",
-  "main": "lib/index.cjs",
-  "module": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/node/index.cjs",
+  "module": "lib/node/index.js",
+  "types": "lib/node/index.d.ts",
   "exports": {
     ".": {
       "browser": {

@@ -7,7 +7,8 @@
     "build": "webpack --mode=production --node-env=production"
   },
   "dependencies": {
-    "ts-graphviz": "*"
+    "ts-graphviz": "*",
+    "@ts-graphviz/adapter": "*"
   },
   "devDependencies": {
     "@webpack-cli/generators": "^3.0.1",

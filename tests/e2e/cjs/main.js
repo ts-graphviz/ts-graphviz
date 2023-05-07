@@ -1,7 +1,7 @@
 'use strict';
 const gv = require('ts-graphviz');
-const ast = require('ts-graphviz/ast');
-const adapter = require('ts-graphviz/adapter');
+const ast = require('@ts-graphviz/ast');
+const adapter = require('@ts-graphviz/adapter');
 const G = new gv.Digraph();
 const A = new gv.Subgraph('A');
 const node1 = new gv.Node('node1', {
