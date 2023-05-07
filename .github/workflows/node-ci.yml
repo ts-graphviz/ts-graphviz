@@ -22,54 +22,18 @@ jobs:
     - name: setup graphviz
       uses: ts-graphviz/setup-graphviz@v1
     - name: Install dependencies
-      run: yarn --frozen-lockfile --ignore-optional
+      run: npm ci
       env:
         CI: 'true'
     - name: Lint
-      run: yarn lint
+      run: npm run lint
       env:
         CI: 'true'
     - name: Build
-      run: yarn build
+      run: npm run build
       env:
         CI: 'true'
     - name: Unit Test
       run: yarn test
       env:
         CI: 'true'
-    - name: E2E Test
-      run: yarn --cwd e2e test
-      if: contains(github.ref, 'tags/v') == false
-      env:
-        CI: 'true'
-
-  publish:
-    name: Publish to NPM
-    runs-on: ubuntu-latest
-    needs:
-      - test
-    steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-node@v1
-      with:
-        node-version: 16.x
-        registry-url: https://registry.npmjs.org
-    - name: Install dependencies
-      run: yarn install --frozen-lockfile --ignore-optional
-      if: contains(github.ref, 'tags/v')
-      env:
-        CI: 'true'
-    - name: Build
-      run: yarn build
-      if: contains(github.ref, 'tags/v')
-    - name: Publish to NPM
-      run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-      if: contains(github.ref, 'tags/v') && !contains(github.ref, '-')
-
-    - name: Publish to NPM for Prerelease
-      run: npm publish --tag next
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-      if: contains(github.ref, 'tags/v') && contains(github.ref, '-')

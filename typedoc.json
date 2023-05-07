@@ -1,7 +1,10 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "out": "./doc",
-  "entryPoints": ["src/index.ts", "src/ast/index.ts", "src/adapter/node/index.ts"],
   "media": "./media/",
+  "name": "Graphviz Libraries for TypeScript",
+  "entryPointStrategy": "packages",
+  "entryPoints": ["packages/*", "packages/@ts-graphviz/*"],
+  "includeVersion": true,
   "excludePrivate": true
 }

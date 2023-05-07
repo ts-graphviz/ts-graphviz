@@ -1,0 +1,108 @@
+{
+  "name": "ts-graphviz",
+  "version": "1.7.0",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "description": "Graphviz library for TypeScript.",
+  "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts-graphviz/ts-graphviz.git"
+  },
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/ts-graphviz"
+  },
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.cjs"
+      },
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      }
+    },
+    "./ast": {
+      "require": {
+        "types": "./lib/ast/index.d.ts",
+        "default": "./lib/ast/index.cjs"
+      },
+      "import": {
+        "types": "./lib/ast/index.d.ts",
+        "default": "./lib/ast/index.js"
+      }
+    },
+    "./adapter": {
+      "browser": {
+        "require": "./lib/adapter/browser/index.cjs",
+        "import": "./lib/adapter/browser/index.js",
+        "types": "./lib/adapter/browser/index.d.ts"
+      },
+      "deno": {
+        "types": "./lib/adapter/deno/mod.d.ts",
+        "default": "./lib/adapter/deno/mod.js"
+      },
+      "node": {
+        "require": "./lib/adapter/node/index.cjs",
+        "import": "./lib/adapter/node/index.js",
+        "types": "./lib/adapter/node/index.d.ts"
+      },
+      "default": {
+        "types": "./lib/adapter/node/index.d.ts",
+        "require": "./lib/adapter/node/index.cjs",
+        "import": "./lib/adapter/node/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "ast": [
+        "lib/ast"
+      ],
+      "adapter": [
+        "lib/adapter/node"
+      ]
+    }
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.16"
+  },
+  "runkitExampleFilename": "example/runkit.cjs",
+  "scripts": {
+    "build:dts": "tsc -p tsconfig.json --declaration",
+    "build:js": "tsc -p tsconfig.json --removeComments",
+    "build:rollup": "rollup -c rollup.config.js",
+    "build": "npm run build:dts && npm run build:js && npm run build:rollup",
+    "postbuild": "prettier --write ./lib/**/*.{js,cjs,d.ts}",
+    "format": "eslint --ext ts src --fix && prettier --write './**/*.{ts,js,json,yaml}' '!lib'",
+    "lint": "eslint --ext ts src",
+    "predoc": "yarn build:peggy",
+    "doc": "typedoc"
+  },
+  "dependencies": {
+    "@ts-graphviz/ast": "^2.0.0",
+    "@ts-graphviz/adapter": "^2.0.0",
+    "@ts-graphviz/common": "^2.0.0",
+    "@ts-graphviz/core": "^2.0.0"
+  },
+  "devDependencies": {
+    "rollup": "^3.21.5",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-dts": "^5.3.0",
+    "typescript": "^5.0.4"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@ts-graphviz-e2e/ts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ts-graphviz": "*"
+  },
+  "devDependencies": {
+    "typescript": "*"
+  }
+}
