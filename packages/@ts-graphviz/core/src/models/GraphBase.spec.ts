@@ -1,6 +1,6 @@
 import './registerModelContext.js';
 
-import { jest } from '@jest/globals';
+import { vi, describe, it, expect, beforeEach, test } from 'vitest';
 
 import { EdgeTargetTuple, NodeModel } from '@ts-graphviz/common';
 import { attribute as _ } from '../attribute.js';
@@ -78,7 +78,7 @@ describe('Declarative API', () => {
   describe('node method', () => {
     describe('create node if not exists', () => {
       test('by id', () => {
-        const createNodeSpy = jest.spyOn(g, 'createNode');
+        const createNodeSpy = vi.spyOn(g, 'createNode');
 
         g.node('foo');
         expect(g.existNode('foo')).toBe(true);
@@ -87,7 +87,7 @@ describe('Declarative API', () => {
 
       test('with attributes', () => {
         expect(g.existNode('foo')).toBe(false);
-        const createNodeSpy = jest.spyOn(g, 'createNode');
+        const createNodeSpy = vi.spyOn(g, 'createNode');
 
         const node = g.node('foo', {
           [_.label]: 'Test label',
@@ -100,13 +100,13 @@ describe('Declarative API', () => {
 
       describe('callback function is given, the callback function is executed with the created node as the argument', () => {
         test('first argument is id, seccond argument is callback', () => {
-          const callback = jest.fn();
+          const callback = vi.fn();
           const node = g.node('foo', callback);
           expect(callback).toHaveBeenCalledWith(node);
         });
 
         test('first argument is id, seccond argument is attribute object, third argument is callback', () => {
-          const callback = jest.fn();
+          const callback = vi.fn();
           const node = g.node('foo', { [_.label]: 'Test label' }, callback);
           expect(callback).toHaveBeenCalledWith(node);
           expect(node.attributes.get(_.label)).toStrictEqual('Test label');
@@ -117,7 +117,7 @@ describe('Declarative API', () => {
     describe('get node if exists', () => {
       test('by id', () => {
         const createdNode = g.createNode('foo');
-        const createNodeSpy = jest.spyOn(g, 'createNode');
+        const createNodeSpy = vi.spyOn(g, 'createNode');
 
         const returnedNode = g.node('foo');
 
@@ -127,7 +127,7 @@ describe('Declarative API', () => {
 
       test('with attributes', () => {
         const createdNode = g.createNode('foo');
-        const createNodeSpy = jest.spyOn(g, 'createNode');
+        const createNodeSpy = vi.spyOn(g, 'createNode');
 
         const returnedNode = g.node('foo', { [_.label]: 'Test label' });
 
@@ -144,14 +144,14 @@ describe('Declarative API', () => {
         });
 
         test('first argument is id, seccond argument is callback', () => {
-          const callback = jest.fn();
+          const callback = vi.fn();
           const node = g.node('foo', callback);
           expect(callback).toHaveBeenCalledWith(node);
           expect(node).toBe(createdNode);
         });
 
         test('first argument is id, seccond argument is attribute object, third argument is callback', () => {
-          const callback = jest.fn();
+          const callback = vi.fn();
           const node = g.node('foo', { [_.label]: 'Test label' }, callback);
           expect(callback).toHaveBeenCalledWith(node);
           expect(node.attributes.get(_.label)).toStrictEqual('Test label');
@@ -174,13 +174,13 @@ describe('Declarative API', () => {
       });
 
       test('create edge with target nodes', () => {
-        const createEdgeSpy = jest.spyOn(g, 'createEdge');
+        const createEdgeSpy = vi.spyOn(g, 'createEdge');
         g.edge(nodes);
         expect(createEdgeSpy).toHaveBeenCalledWith(nodes, undefined);
       });
 
       test('create edge and apply attribute', () => {
-        const createEdgeSpy = jest.spyOn(g, 'createEdge');
+        const createEdgeSpy = vi.spyOn(g, 'createEdge');
         g.edge(nodes, { [_.label]: 'Test label' });
         expect(createEdgeSpy).toHaveBeenCalledWith(nodes, { [_.label]: 'Test label' });
       });
@@ -192,13 +192,13 @@ describe('Declarative API', () => {
 
       describe('callback function is given, the callback function is executed with the created edge as the argument', () => {
         test('first argument is id, seccond argument is callback', () => {
-          const callback = jest.fn();
+          const callback = vi.fn();
           const edge = g.edge(nodes, callback);
           expect(callback).toHaveBeenCalledWith(edge);
         });
 
         test('first argument is id, seccond argument is attribute object, third argument is callback', () => {
-          const callback = jest.fn();
+          const callback = vi.fn();
           const edge = g.edge(nodes, { [_.label]: 'Test label' }, callback);
           expect(callback).toHaveBeenCalledWith(edge);
           expect(edge.attributes.get(_.label)).toStrictEqual('Test label');
@@ -215,27 +215,27 @@ describe('Declarative API', () => {
   describe('subgraph method', () => {
     describe('create subgraph if not exists', () => {
       test('no id', () => {
-        const createSubgraphSpy = jest.spyOn(g, 'createSubgraph');
+        const createSubgraphSpy = vi.spyOn(g, 'createSubgraph');
         const subgraph = g.subgraph();
         expect(subgraph).toBeInstanceOf(Subgraph);
         expect(createSubgraphSpy).toHaveBeenCalled();
       });
 
       test('only attributes', () => {
-        const createSubgraphSpy = jest.spyOn(g, 'createSubgraph');
+        const createSubgraphSpy = vi.spyOn(g, 'createSubgraph');
         const subgraph = g.subgraph({ [_.label]: 'Test label' });
         expect(createSubgraphSpy).toHaveBeenCalled();
         expect(subgraph.get(_.label)).toStrictEqual('Test label');
       });
 
       test('by id', () => {
-        const createSubgraphSpy = jest.spyOn(g, 'createSubgraph');
+        const createSubgraphSpy = vi.spyOn(g, 'createSubgraph');
         g.subgraph('foo');
         expect(createSubgraphSpy).toHaveBeenCalledWith('foo');
       });
 
       test('with attributes', () => {
-        const createSubgraphSpy = jest.spyOn(g, 'createSubgraph');
+        const createSubgraphSpy = vi.spyOn(g, 'createSubgraph');
         const subgraph = g.subgraph('foo', { [_.label]: 'Test label' });
         expect(createSubgraphSpy).toHaveBeenCalledWith('foo');
         expect(subgraph.get(_.label)).toStrictEqual('Test label');
@@ -243,26 +243,26 @@ describe('Declarative API', () => {
 
       describe('callback function is given, the callback function is executed with the created subgraph as the argument', () => {
         test('first argument is callback', () => {
-          const callback = jest.fn();
+          const callback = vi.fn();
           const subgraph = g.subgraph(callback);
           expect(callback).toHaveBeenCalledWith(subgraph);
         });
 
         test('first argument is attribute, seccond argument is callback', () => {
-          const callback = jest.fn();
+          const callback = vi.fn();
           const subgraph = g.subgraph({ [_.label]: 'Test label' }, callback);
           expect(callback).toHaveBeenCalledWith(subgraph);
           expect(subgraph.get(_.label)).toStrictEqual('Test label');
         });
 
         test('first argument is id, seccond argument is callback', () => {
-          const callback = jest.fn();
+          const callback = vi.fn();
           const subgraph = g.subgraph('foo', callback);
           expect(callback).toHaveBeenCalledWith(subgraph);
         });
 
         test('first argument is id, seccond argument is attribute object, third argument is callback', () => {
-          const callback = jest.fn();
+          const callback = vi.fn();
           const subgraph = g.subgraph('foo', { [_.label]: 'Test label' }, callback);
           expect(callback).toHaveBeenCalledWith(subgraph);
           expect(subgraph.get(_.label)).toStrictEqual('Test label');
@@ -273,7 +273,7 @@ describe('Declarative API', () => {
     describe('get subgraph if exists', () => {
       test('by id', () => {
         const createdSubgraph = g.createSubgraph('foo');
-        const createSubgraphSpy = jest.spyOn(g, 'createSubgraph');
+        const createSubgraphSpy = vi.spyOn(g, 'createSubgraph');
 
         const returnedSubgraph = g.subgraph('foo');
 
@@ -283,7 +283,7 @@ describe('Declarative API', () => {
 
       test('with attributes', () => {
         const createdSubgraph = g.createSubgraph('foo');
-        const createSubgraphSpy = jest.spyOn(g, 'createSubgraph');
+        const createSubgraphSpy = vi.spyOn(g, 'createSubgraph');
 
         const returnedSubgraph = g.subgraph('foo', { [_.label]: 'Test label' });
 

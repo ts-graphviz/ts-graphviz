@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`parse AttributeList edge 1`] = `
+exports[`parse > AttributeList > edge 1`] = `
 {
   "children": [
     {
@@ -132,7 +132,7 @@ exports[`parse AttributeList edge 1`] = `
 }
 `;
 
-exports[`parse AttributeList graph 1`] = `
+exports[`parse > AttributeList > graph 1`] = `
 {
   "children": [
     {
@@ -264,7 +264,7 @@ exports[`parse AttributeList graph 1`] = `
 }
 `;
 
-exports[`parse AttributeList node 1`] = `
+exports[`parse > AttributeList > node 1`] = `
 {
   "children": [
     {
@@ -451,7 +451,7 @@ exports[`parse AttributeList node 1`] = `
 }
 `;
 
-exports[`parse AttributeList with comment 1`] = `
+exports[`parse > AttributeList > with comment 1`] = `
 {
   "children": [
     {
@@ -547,7 +547,7 @@ exports[`parse AttributeList with comment 1`] = `
 }
 `;
 
-exports[`parse attribute set HTMLLike value 1`] = `
+exports[`parse > attribute > set HTMLLike value 1`] = `
 {
   "children": [],
   "key": {
@@ -601,19 +601,19 @@ exports[`parse attribute set HTMLLike value 1`] = `
     "quoted": "html",
     "type": "Literal",
     "value": "
-          <table border="0">
-            <tr><td align="text">By default, td text is center-aligned</td></tr>
-            <tr><td align="text">This td is left aligned<br align="left" /></td></tr>
-            <tr><td align="text">this one centered<br align="center" /></td></tr>
-            <tr><td align="text">and this one right aligned<br align="right" /><br align="right"/></td></tr>
-            <tr><td align="text">The value of a closing<br align="left"/>&lt;br/&gt; tag<br align="center"/>refers to the preceeding text<br align="right"/></td></tr>
+          <table border=\\"0\\">
+            <tr><td align=\\"text\\">By default, td text is center-aligned</td></tr>
+            <tr><td align=\\"text\\">This td is left aligned<br align=\\"left\\" /></td></tr>
+            <tr><td align=\\"text\\">this one centered<br align=\\"center\\" /></td></tr>
+            <tr><td align=\\"text\\">and this one right aligned<br align=\\"right\\" /><br align=\\"right\\"/></td></tr>
+            <tr><td align=\\"text\\">The value of a closing<br align=\\"left\\"/>&lt;br/&gt; tag<br align=\\"center\\"/>refers to the preceeding text<br align=\\"right\\"/></td></tr>
           </table>
         ",
   },
 }
 `;
 
-exports[`parse attribute set quoted value 1`] = `
+exports[`parse > attribute > set quoted value 1`] = `
 {
   "children": [],
   "key": {
@@ -671,7 +671,7 @@ exports[`parse attribute set quoted value 1`] = `
 }
 `;
 
-exports[`parse attribute set value 1`] = `
+exports[`parse > attribute > set value 1`] = `
 {
   "children": [],
   "key": {
@@ -729,7 +729,7 @@ exports[`parse attribute set value 1`] = `
 }
 `;
 
-exports[`parse cluster_statements comments 1`] = `
+exports[`parse > cluster_statements > comments 1`] = `
 [
   {
     "children": [],
@@ -831,7 +831,7 @@ comment4",
 ]
 `;
 
-exports[`parse dot with comments 1`] = `
+exports[`parse > dot > with comments 1`] = `
 {
   "children": [
     {
@@ -909,7 +909,7 @@ exports[`parse dot with comments 1`] = `
 }
 `;
 
-exports[`parse edge digraph edge 1`] = `
+exports[`parse > edge > digraph edge 1`] = `
 {
   "children": [],
   "location": {
@@ -1003,7 +1003,7 @@ exports[`parse edge digraph edge 1`] = `
 }
 `;
 
-exports[`parse edge edge with attributes 1`] = `
+exports[`parse > edge > edge with attributes 1`] = `
 {
   "children": [
     {
@@ -1208,7 +1208,7 @@ exports[`parse edge edge with attributes 1`] = `
 }
 `;
 
-exports[`parse edge edge with port 1`] = `
+exports[`parse > edge > edge with port 1`] = `
 {
   "children": [],
   "location": {
@@ -1469,7 +1469,7 @@ exports[`parse edge edge with port 1`] = `
 }
 `;
 
-exports[`parse edge graph edge 1`] = `
+exports[`parse > edge > graph edge 1`] = `
 {
   "children": [],
   "location": {
@@ -1563,7 +1563,7 @@ exports[`parse edge graph edge 1`] = `
 }
 `;
 
-exports[`parse edge grouped edge targets 1`] = `
+exports[`parse > edge > grouped edge targets 1`] = `
 {
   "children": [],
   "location": {
@@ -1765,7 +1765,7 @@ exports[`parse edge grouped edge targets 1`] = `
 }
 `;
 
-exports[`parse edge grouped ported edge targets 1`] = `
+exports[`parse > edge > grouped ported edge targets 1`] = `
 {
   "children": [],
   "location": {
@@ -2062,7 +2062,7 @@ exports[`parse edge grouped ported edge targets 1`] = `
 }
 `;
 
-exports[`parse graph anonymous digraph 1`] = `
+exports[`parse > graph > anonymous digraph 1`] = `
 {
   "children": [],
   "directed": true,
@@ -2084,7 +2084,7 @@ exports[`parse graph anonymous digraph 1`] = `
 }
 `;
 
-exports[`parse graph digraph named test 1`] = `
+exports[`parse > graph > digraph named test 1`] = `
 {
   "children": [],
   "directed": true,
@@ -2125,7 +2125,7 @@ exports[`parse graph digraph named test 1`] = `
 }
 `;
 
-exports[`parse graph digraph named test(quoted) 1`] = `
+exports[`parse > graph > digraph named test(quoted) 1`] = `
 {
   "children": [],
   "directed": true,
@@ -2166,7 +2166,7 @@ exports[`parse graph digraph named test(quoted) 1`] = `
 }
 `;
 
-exports[`parse graph graph named test 1`] = `
+exports[`parse > graph > graph named test 1`] = `
 {
   "children": [],
   "directed": false,
@@ -2207,7 +2207,7 @@ exports[`parse graph graph named test 1`] = `
 }
 `;
 
-exports[`parse graph strict digraph named test 1`] = `
+exports[`parse > graph > strict digraph named test 1`] = `
 {
   "children": [],
   "directed": true,
@@ -2248,7 +2248,7 @@ exports[`parse graph strict digraph named test 1`] = `
 }
 `;
 
-exports[`parse graph strict graph named test 1`] = `
+exports[`parse > graph > strict graph named test 1`] = `
 {
   "children": [],
   "directed": false,
@@ -2289,7 +2289,7 @@ exports[`parse graph strict graph named test 1`] = `
 }
 `;
 
-exports[`parse node node with attributes 1`] = `
+exports[`parse > node > node with attributes 1`] = `
 {
   "children": [
     {
@@ -2494,7 +2494,7 @@ exports[`parse node node with attributes 1`] = `
 }
 `;
 
-exports[`parse node simple node 1`] = `
+exports[`parse > node > simple node 1`] = `
 {
   "children": [],
   "id": {
@@ -2533,7 +2533,7 @@ exports[`parse node simple node 1`] = `
 }
 `;
 
-exports[`parse subgraph anonymous subgraph 1`] = `
+exports[`parse > subgraph > anonymous subgraph 1`] = `
 {
   "children": [],
   "location": {
@@ -2553,7 +2553,7 @@ exports[`parse subgraph anonymous subgraph 1`] = `
 }
 `;
 
-exports[`parse subgraph named subgraph 1`] = `
+exports[`parse > subgraph > named subgraph 1`] = `
 {
   "children": [],
   "id": {
@@ -2592,7 +2592,7 @@ exports[`parse subgraph named subgraph 1`] = `
 }
 `;
 
-exports[`parse subgraph no keyword anonymous 1`] = `
+exports[`parse > subgraph > no keyword anonymous 1`] = `
 {
   "children": [],
   "location": {

@@ -1,3 +1,4 @@
+import { test, expect, describe } from 'vitest';
 import { strict, digraph, graph, withContext } from './model-factory.js';
 import { Digraph, Graph } from '../models/index.js';
 

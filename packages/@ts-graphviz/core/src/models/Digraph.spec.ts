@@ -1,3 +1,5 @@
+import { it, test, expect } from 'vitest';
+
 import './registerModelContext.js';
 import { Digraph } from './Digraph.js';
 import { GraphBase } from './GraphBase.js';

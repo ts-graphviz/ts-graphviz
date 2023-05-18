@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { describe, test, expect } from 'vitest';
+
 import { Builder } from './builder.js';
 
 describe('Builder', () => {

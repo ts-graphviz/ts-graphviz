@@ -1,3 +1,5 @@
+import { it, test, expect, describe, beforeEach } from 'vitest';
+
 import { attribute as _ } from '../attribute.js';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
