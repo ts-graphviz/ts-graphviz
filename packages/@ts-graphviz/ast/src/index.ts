@@ -1,6 +1,5 @@
 /**
  * @module ts-graphviz/ast
- * @beta
  */
 export * from './types.js';
 export * from './builder/index.js';

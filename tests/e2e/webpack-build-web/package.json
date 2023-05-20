@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "npm run build && node dist/main.js",
-    "build": "webpack --mode=production --node-env=production"
+    "test": "webpack --mode=production --node-env=production && node dist/main.js"
   },
   "dependencies": {
     "ts-graphviz": "*"

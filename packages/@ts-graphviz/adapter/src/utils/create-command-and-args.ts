@@ -1,4 +1,4 @@
-import { Layout, Options } from '../types/index.js';
+import { Layout, Options } from '../types.js';
 import { createCommandArgs } from './create-command-args.js';
 
 /**

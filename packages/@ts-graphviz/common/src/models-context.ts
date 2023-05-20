@@ -2,7 +2,6 @@ import { EdgeConstructor, NodeConstructor, RootGraphConstructor, SubgraphConstru
 
 /**
  * @group Models Context
- * @beta
  */
 export interface ModelsContext {
   Graph: RootGraphConstructor;
@@ -14,7 +13,6 @@ export interface ModelsContext {
 
 /**
  * @group Models Context
- * @alpha
  */
 export const RootModelsContext: ModelsContext = Object.seal({
   // NOTE: RootModelsContext is also initialized after the model class is declared in the 'core/index.js' module.
@@ -27,7 +25,6 @@ export const RootModelsContext: ModelsContext = Object.seal({
 
 /**
  * @group Models Context
- * @alpha
  */
 export function createModelsContext(models: Partial<ModelsContext>): ModelsContext {
   return Object.assign(Object.seal(Object.assign({}, RootModelsContext)), models);

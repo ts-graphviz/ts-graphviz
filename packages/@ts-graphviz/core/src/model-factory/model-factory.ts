@@ -27,7 +27,8 @@ export const strict: ModelFactories = createModelFactories(true);
  *
  * @param models - An object containing the models to be used in the context.
  *
- * @returns A ModelFactoriesWithStrict object containing the factories. * @group Model Factory
+ * @returns A ModelFactoriesWithStrict object containing the factories.
+ * @group Model Factory
  */
 export function withContext(models: Partial<ModelsContext>): ModelFactoriesWithStrict {
   const context = createModelsContext(models);

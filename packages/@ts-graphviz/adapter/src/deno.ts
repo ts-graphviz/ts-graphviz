@@ -1,9 +1,16 @@
-import { createCommandAndArgs } from '../utils/index.ts';
+import { createCommandAndArgs } from './utils/create-command-and-args.js';
+import { Layout, Options } from './types.js';
+
+declare const Deno: any;
+
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
  */
-export async function toStream(dot, options) {
-  const [command, args] = createCommandAndArgs(options);
+export async function toStream<T extends Layout>(
+  dot: string,
+  options?: Options<T>,
+): Promise<ReadableStream<Uint8Array>> {
+  const [command, args] = createCommandAndArgs(options ?? {});
   const cp = new Deno.Command(command, {
     args: args,
     stdin: 'piped',
@@ -15,7 +22,7 @@ export async function toStream(dot, options) {
   return cp.stdout;
 }
 
-function open(path) {
+function open(path: string) {
   try {
     return Deno.open(path, { write: true });
   } catch (e) {
@@ -29,7 +36,7 @@ function open(path) {
 /**
  * Execute the Graphviz dot command and output the results to a file.
  */
-export async function toFile(dot, path, options) {
+export async function toFile<T extends Layout>(dot: string, path: string, options?: Options<T>): Promise<void> {
   const output = await open(path);
   const stream = await toStream(dot, options);
   await stream.pipeTo(output.writable);

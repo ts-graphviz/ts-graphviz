@@ -1,7 +1,7 @@
+import { pipeline } from 'node:stream/promises';
 import { createWriteStream } from 'node:fs';
-import { Layout, Options } from '../types/index.js';
+import { Layout, Options } from '../types.js';
 import { toStream } from './to-stream.js';
-import { pipeline } from './utils.js';
 
 /**
  * Execute the Graphviz dot command and output the results to a file.

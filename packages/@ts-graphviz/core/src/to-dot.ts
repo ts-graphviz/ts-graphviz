@@ -4,7 +4,6 @@ import { stringify, fromModel, ConvertFromModelOptions, PrintOptions } from '@ts
 /**
  * This interface provides options for converting a model to DOT.
  * @group Convert Model to DOT
- * @alpha
  */
 export interface ToDotOptions {
   /**

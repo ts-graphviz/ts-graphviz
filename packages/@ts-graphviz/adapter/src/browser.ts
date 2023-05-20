@@ -1,6 +1,5 @@
 /**
  * @module ts-graphviz/adapter
- * @beta
  */
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 

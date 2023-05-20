@@ -40,7 +40,6 @@ export type ModelToAST<T> = T extends DotObjectModel<infer U>
 
 /**
  * @group Convert Model to AST
- * @alpha
  */
 export interface ConvertFromModelOptions {
   commentKind?: CommentKind;
@@ -48,7 +47,6 @@ export interface ConvertFromModelOptions {
 
 /**
  * @group Convert Model to AST
- * @alpha
  */
 export interface ConvertFromModelContext extends Required<ConvertFromModelOptions> {
   convert<T extends DotObjectModel>(model: T): ModelToAST<T>;
@@ -56,7 +54,6 @@ export interface ConvertFromModelContext extends Required<ConvertFromModelOption
 
 /**
  * @group Convert Model to AST
- * @alpha
  */
 export interface ConvertFromModelPlugin<T extends DotObjectModel> {
   match(model: T): boolean;
