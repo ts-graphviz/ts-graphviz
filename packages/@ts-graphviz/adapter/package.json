@@ -45,12 +45,13 @@
     "@ts-graphviz/common": "^2.0.0"
   },
   "devDependencies": {
+    "@types/node": "^20.2.1",
     "typescript": "^5.0.4",
     "vite": "^4.3.8",
     "vite-plugin-dts": "^2.3.0"
   },
   "scripts": {
-    "build": "vite build && rm ./lib/deno.cjs && rm -rf lib/node/*",
+    "build": "vite build && rm ./lib/deno.cjs ",
     "postbuild": "prettier --write ./lib/**/*.{js,cjs,d.ts}"
   }
 }

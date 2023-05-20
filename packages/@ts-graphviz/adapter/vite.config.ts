@@ -14,14 +14,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: [
-        '@ts-graphviz/common',
-        'node:stream',
-        'node:stream/promises',
-        'node:child_process',
-        'node:fs',
-        'node:util',
-      ],
+      external: ['@ts-graphviz/common', 'node:stream', 'node:stream/promises', 'node:child_process', 'node:fs'],
     },
   },
   plugins: [
