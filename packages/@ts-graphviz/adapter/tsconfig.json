@@ -1,8 +1,8 @@
 {
-  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "lib"
+    "composite": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/deno", "src/**/*.test.ts", "src/**/*.spec.ts"]
+  "files": [],
+  "include": [],
+  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.deno.json" }]
 }

@@ -6,6 +6,19 @@
   "main": "lib/index.cjs",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.cjs"
+      },
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ts-graphviz/ts-graphviz.git",
@@ -24,10 +37,7 @@
     "typescript": "^5.0.4"
   },
   "scripts": {
-    "build:dts": "tsc -p tsconfig.json --declaration",
-    "build:js": "tsc -p tsconfig.json --removeComments",
-    "build:rollup": "rollup -c rollup.config.js",
-    "build": "npm run build:dts && npm run build:js && npm run build:rollup",
+    "build": "vite build",
     "postbuild": "prettier --write ./lib/**/*.{js,cjs,d.ts}"
   }
 }

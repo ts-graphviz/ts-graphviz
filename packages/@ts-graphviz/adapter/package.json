@@ -3,29 +3,29 @@
   "version": "2.0.0",
   "description": "",
   "type": "module",
-  "main": "lib/node/index.cjs",
-  "module": "lib/node/index.js",
-  "types": "lib/node/index.d.ts",
+  "main": "./lib/node.cjs",
+  "module": "./lib/node.js",
+  "types": "./lib/node.d.ts",
   "exports": {
     ".": {
       "browser": {
-        "require": "./lib/browser/index.cjs",
-        "import": "./lib/browser/index.js",
-        "types": "./lib/browser/index.d.ts"
+        "require": "./lib/browser.cjs",
+        "import": "./lib/browser.js",
+        "types": "./lib/browser.d.ts"
       },
       "deno": {
         "types": "./lib/deno/mod.d.ts",
         "default": "./lib/deno/mod.js"
       },
       "node": {
-        "require": "./lib/node/index.cjs",
-        "import": "./lib/node/index.js",
-        "types": "./lib/node/index.d.ts"
+        "require": "./lib/node.cjs",
+        "import": "./lib/node.js",
+        "types": "./lib/node.d.ts"
       },
       "default": {
-        "types": "./lib/node/index.d.ts",
-        "require": "./lib/node/index.cjs",
-        "import": "./lib/node/index.js"
+        "types": "./lib/node.d.ts",
+        "require": "./lib/node.cjs",
+        "import": "./lib/node.js"
       }
     },
     "./package.json": "./package.json"
@@ -45,21 +45,13 @@
     "@ts-graphviz/common": "^2.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.1",
-    "jest": "^29.5.0",
-    "rollup": "^3.21.5",
-    "rollup-plugin-delete": "^2.0.0",
-    "rollup-plugin-dts": "^5.3.0",
-    "ts-jest": "^29.1.0",
-    "typescript": "^5.0.4"
+    "@types/node": "^20.2.1",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.8",
+    "vite-plugin-dts": "^2.3.0"
   },
   "scripts": {
-    "build:deno": "mkdir -p lib/deno && cp -r src/deno/* lib/deno && sed -i \"s/index.ts/index.js/g\" lib/deno/mod.js && sed -i \"s/index.ts/index.d.ts/g\" lib/deno/mod.d.ts",
-    "build:dts": "tsc -p tsconfig.json --declaration",
-    "build:js": "tsc -p tsconfig.json --removeComments",
-    "build:rollup": "rollup -c rollup.config.js",
-    "build": "npm run build:dts && npm run build:js && npm run build:deno && npm run build:rollup",
-    "postbuild": "prettier --write ./lib/**/*.{js,cjs,d.ts}",
-    "test": "jest"
+    "build": "vite build && rm ./lib/deno.cjs ",
+    "postbuild": "prettier --write ./lib/**/*.{js,cjs,d.ts}"
   }
 }

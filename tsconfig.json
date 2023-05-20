@@ -8,7 +8,7 @@
     { "path": "./packages/@ts-graphviz/common" },
     { "path": "./packages/@ts-graphviz/core" },
     { "path": "./packages/@ts-graphviz/adapter" },
-    { "path": "./packages/@ts-graphviz/astr" },
+    { "path": "./packages/@ts-graphviz/ast" },
     { "path": "./packages/ts-graphviz" }
   ]
 }

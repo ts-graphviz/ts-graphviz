@@ -6,7 +6,7 @@
   "features": {
     "ghcr.io/devcontainers-contrib/features/deno:1": {},
     "ghcr.io/devcontainers-contrib/features/act:1": {},
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
   "postCreateCommand": "npm i",
   "customizations": {
@@ -15,8 +15,8 @@
         "EditorConfig.EditorConfig",
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
-        "Orta.vscode-jest",
-        "denoland.vscode-deno"
+        "denoland.vscode-deno",
+        "ZixuanChen.vitest-explorer"
       ],
       "settings": {
         "editor.formatOnSave": false,

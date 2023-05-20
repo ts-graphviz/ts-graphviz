@@ -1,3 +1,5 @@
+import { test, expect, describe, beforeEach } from 'vitest';
+
 import { AttributesGroup } from './AttributesGroup.js';
 
 let attrs: AttributesGroup;
@@ -12,6 +14,6 @@ describe('comment', () => {
 
   test('comment can be set', () => {
     attrs.comment = 'test';
-    expect(attrs.comment).toStrictEqual('test');
+    expect(attrs.comment).toBe('test');
   });
 });

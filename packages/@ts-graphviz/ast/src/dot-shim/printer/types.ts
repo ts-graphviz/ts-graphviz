@@ -15,7 +15,6 @@ export type EndOfLine = 'lf' | 'crlf';
 /**
  * This interface provides options for converting an abstract syntax tree (AST) to a DOT representation.
  * @group Convert AST to DOT
- * @alpha
  */
 export interface PrintOptions {
   /**
@@ -41,7 +40,6 @@ export interface PrintOptions {
 /**
  * PrintContext interface provides an interface for printing an ASTNode with a set of options.
  * @group Convert AST to DOT
- * @alpha
  */
 export interface PrintContext extends Required<PrintOptions> {
   /**
@@ -58,7 +56,6 @@ export interface PrintContext extends Required<PrintOptions> {
  * PrintPlugin is an interface for plugins used for printing an {@link ASTNode}.
  * @template T T extends {@link ASTNode}
  * @group Convert AST to DOT
- * @alpha
  */
 export interface PrintPlugin<T extends ASTNode = ASTNode> {
   /**

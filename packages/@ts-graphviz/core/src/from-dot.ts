@@ -4,7 +4,6 @@ import { parse, ParseOptions, toModel, ConvertToModelOptions } from '@ts-graphvi
 /**
  * This interface provides options for converting DOT to a model.
  * @group Convert DOT to Model
- * @alpha
  */
 export interface FromDotOptions<T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph'> {
   /**
@@ -26,7 +25,6 @@ export interface FromDotOptions<T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'S
  * @param options Options for converting the DOT string to a model.
  * @returns A model of type {@link RootGraphModel}, {@link NodeModel}, {@link EdgeModel}, or {@link SubgraphModel},
  * depending on the type specified in the options.
- * @beta
  */
 export function fromDot(dot: string, options?: FromDotOptions<'Dot' | 'Graph'>): RootGraphModel;
 export function fromDot(dot: string, options?: FromDotOptions<'Node'>): NodeModel;

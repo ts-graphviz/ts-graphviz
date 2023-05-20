@@ -1,3 +1,5 @@
+import { it, test, expect, describe, beforeEach } from 'vitest';
+
 import './registerModelContext.js';
 
 import { EdgeTargetTuple } from '@ts-graphviz/common';

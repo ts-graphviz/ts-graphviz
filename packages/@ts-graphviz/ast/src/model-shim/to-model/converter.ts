@@ -10,7 +10,6 @@ import {
 
 /**
  * @group Convert AST to Model
- * @alpha
  */
 export class ToModelConverter {
   /** @hidden */
@@ -22,7 +21,6 @@ export class ToModelConverter {
    * Convert AST to Model.
    *
    * @param ast AST node.
-   * @alpha
    */
   public convert<T extends ToModelConvertableASTNode>(ast: T): ASTToModel<T> {
     const plugins = [...this.plugins];

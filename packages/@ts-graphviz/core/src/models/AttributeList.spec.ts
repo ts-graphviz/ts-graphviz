@@ -1,3 +1,5 @@
+import { it, test, expect, describe, beforeEach } from 'vitest';
+
 import { attribute as _ } from '../attribute.js';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
@@ -21,7 +23,7 @@ describe('object', () => {
   });
 
   it('$$type property should returns "AttributeList"', () => {
-    expect(attrs.$$type).toStrictEqual('AttributeList');
+    expect(attrs.$$type).toBe('AttributeList');
   });
 });
 
@@ -49,6 +51,6 @@ describe('comment', () => {
 
   test('comment can be set', () => {
     attrs.comment = 'test';
-    expect(attrs.comment).toStrictEqual('test');
+    expect(attrs.comment).toBe('test');
   });
 });

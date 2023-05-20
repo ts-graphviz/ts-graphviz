@@ -6,21 +6,21 @@ describe('fromDot function', () => {
     const G = fromDot('digraph {}');
     expect(G).toBeInstanceOf(RootGraph);
     expect(G).toBeInstanceOf(Digraph);
-    expect(G.strict).toStrictEqual(false);
+    expect(G.strict).toBe(false);
   });
 
   test('Node', () => {
     const node = fromDot('a[ label = hoge]', { parse: { startRule: 'Node' } });
     expect(node).toBeInstanceOf(Node);
-    expect(node.id).toStrictEqual('a');
-    expect(node.attributes.get('label')).toStrictEqual('hoge');
+    expect(node.id).toBe('a');
+    expect(node.attributes.get('label')).toBe('hoge');
   });
 
   test('Edge', () => {
     const edge = fromDot('a -> b [ label = hoge]', { parse: { startRule: 'Edge' } });
     expect(edge).toBeInstanceOf(Edge);
     expect(edge.targets).toMatchObject([{ id: 'a' }, { id: 'b' }]);
-    expect(edge.attributes.get('label')).toStrictEqual('hoge');
+    expect(edge.attributes.get('label')).toBe('hoge');
   });
 
   test('Subgraph', () => {
@@ -31,8 +31,8 @@ describe('fromDot function', () => {
       { parse: { startRule: 'Subgraph' } },
     );
     expect(subgraph).toBeInstanceOf(Subgraph);
-    expect(subgraph.id).toStrictEqual('sub');
-    expect(subgraph.get('label')).toStrictEqual('hoge');
+    expect(subgraph.id).toBe('sub');
+    expect(subgraph.get('label')).toBe('hoge');
   });
 });
 

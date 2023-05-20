@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { it, test, expect, describe, beforeEach } from 'vitest';
 import { Attributes } from '@ts-graphviz/common';
 import { attribute as _ } from '../attribute.js';
 import { AttributesBase } from './AttributesBase.js';

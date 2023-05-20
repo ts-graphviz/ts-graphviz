@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals';
+import { vi, describe, expect, test } from 'vitest';
 
 import '../models/registerModelContext.js';
 import { RootModelsContext } from '@ts-graphviz/common';
@@ -21,14 +21,14 @@ describe.each([
 
   test('first argument is id', () => {
     const g = factory('foo');
-    expect(g.id).toStrictEqual('foo');
+    expect(g.id).toBe('foo');
 
     expect(g.directed).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
   });
 
   test('first argument is callback', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const g = factory(callback);
     expect(g.id).toBeUndefined();
     expect(callback).toHaveBeenCalledWith(g);
@@ -47,7 +47,7 @@ describe.each([
   });
 
   test('first argument is attribute object, seccond argument is callback', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const g = factory({ [_.label]: 'Test label' }, callback);
     expect(g.id).toBeUndefined();
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
@@ -59,7 +59,7 @@ describe.each([
 
   test('first argument is id, seccond argument is attribute object', () => {
     const g = factory('foo', { [_.label]: 'Test label' });
-    expect(g.id).toStrictEqual('foo');
+    expect(g.id).toBe('foo');
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
 
     expect(g.directed).toStrictEqual(directed);
@@ -67,9 +67,9 @@ describe.each([
   });
 
   test('first argument is id, seccond argument is attribute object, third arguments is callback', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const g = factory('foo', { [_.label]: 'Test label' }, callback);
-    expect(g.id).toStrictEqual('foo');
+    expect(g.id).toBe('foo');
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
     expect(callback).toHaveBeenCalledWith(g);
 

@@ -25,13 +25,11 @@ export type ASTToModel<T> = T extends { type: infer U } ? ModelOf<U> : never;
 /**
  * This type is used to define what AST nodes can be converted to a model.
  * @group Convert AST to Model
- * @beta
  */
 export type ToModelConvertableASTNode = DotASTNode | GraphASTNode | SubgraphASTNode | NodeASTNode | EdgeASTNode;
 
 /**
  * @group Convert AST to Model
- * @alpha
  */
 export interface ConvertToModelOptions {
   models?: Partial<ModelsContext>;
@@ -39,7 +37,6 @@ export interface ConvertToModelOptions {
 
 /**
  * @group Convert AST to Model
- * @alpha
  */
 export interface ConvertToModelContext {
   models: ModelsContext;
@@ -48,7 +45,6 @@ export interface ConvertToModelContext {
 
 /**
  * @group Convert AST to Model
- * @alpha
  */
 export interface ConvertToModelPlugin<T extends ToModelConvertableASTNode = ToModelConvertableASTNode> {
   match(ast: T): boolean;

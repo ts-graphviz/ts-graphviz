@@ -267,7 +267,6 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
   readonly subgraphs: ReadonlyArray<SubgraphModel>;
 
   /**
-   * @beta
    */
   with(models: Partial<ModelsContext>): void;
 
@@ -633,7 +632,6 @@ export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey>, DotOb
 
 /**
  * @group Models
- * @beta
  */
 export interface RootGraphConstructor {
   new (id?: string, attributes?: GraphAttributesObject): RootGraphModel;
@@ -646,7 +644,6 @@ export interface RootGraphConstructor {
 
 /**
  * @group Models
- * @beta
  */
 export interface SubgraphConstructor {
   new (id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
@@ -657,7 +654,6 @@ export interface SubgraphConstructor {
 
 /**
  * @group Models
- * @beta
  */
 export interface NodeConstructor {
   new (id: string, attributes?: NodeAttributesObject): NodeModel;
@@ -667,7 +663,6 @@ export interface NodeConstructor {
 
 /**
  * @group Models
- * @beta
  */
 export interface EdgeConstructor {
   new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): EdgeModel;

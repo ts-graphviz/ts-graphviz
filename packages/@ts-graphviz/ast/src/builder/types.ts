@@ -30,7 +30,6 @@ import type {
  * This interface is used to define the options for the builder.
  *
  * @group Create AST
- * @alpha
  */
 export interface BuilderOptions {
   /**
@@ -43,7 +42,6 @@ export interface BuilderOptions {
 /**
  * This interface provides a method for creating an Abstract Syntax Tree (AST) for a given type.
  * @group Create AST
- * @alpha
  */
 export interface CreateElement {
   /**
@@ -186,7 +184,6 @@ export interface CreateElement {
 /**
  * This interface provides an ASTBuilder object with a createElement function.
  * @group Create AST
- * @alpha
  */
 export interface ASTBuilder {
   createElement: CreateElement;

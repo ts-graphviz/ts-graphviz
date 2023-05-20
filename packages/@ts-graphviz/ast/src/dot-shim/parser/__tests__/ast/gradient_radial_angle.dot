@@ -1,22 +1,19 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`gradient_radial_angle.dot 1`] = `
-Object {
-  "children": Array [
-    Object {
-      "children": Array [
-        Object {
-          "children": Array [],
-          "key": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [],
+          "key": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 20,
                 "line": 1,
                 "offset": 19,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 13,
                 "line": 1,
                 "offset": 12,
@@ -26,30 +23,30 @@ Object {
             "type": "Literal",
             "value": "bgcolor",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 35,
               "line": 1,
               "offset": 34,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 13,
               "line": 1,
               "offset": 12,
             },
           },
           "type": "Attribute",
-          "value": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "value": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 34,
                 "line": 1,
                 "offset": 33,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 21,
                 "line": 1,
                 "offset": 20,
@@ -60,18 +57,18 @@ Object {
             "value": "purple:pink",
           },
         },
-        Object {
-          "children": Array [],
-          "key": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+        {
+          "children": [],
+          "key": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 40,
                 "line": 1,
                 "offset": 39,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 35,
                 "line": 1,
                 "offset": 34,
@@ -81,30 +78,30 @@ Object {
             "type": "Literal",
             "value": "style",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 49,
               "line": 1,
               "offset": 48,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 35,
               "line": 1,
               "offset": 34,
             },
           },
           "type": "Attribute",
-          "value": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "value": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 49,
                 "line": 1,
                 "offset": 48,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 41,
                 "line": 1,
                 "offset": 40,
@@ -115,20 +112,20 @@ Object {
             "value": "filled",
           },
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 31,
                     "line": 2,
                     "offset": 79,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 22,
                     "line": 2,
                     "offset": 70,
@@ -138,30 +135,30 @@ Object {
                 "type": "Literal",
                 "value": "fillcolor",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 45,
                   "line": 2,
                   "offset": 93,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 22,
                   "line": 2,
                   "offset": 70,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 44,
                     "line": 2,
                     "offset": 92,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 32,
                     "line": 2,
                     "offset": 80,
@@ -172,18 +169,18 @@ Object {
                 "value": "blue:green",
               },
             },
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 50,
                     "line": 2,
                     "offset": 98,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 45,
                     "line": 2,
                     "offset": 93,
@@ -193,30 +190,30 @@ Object {
                 "type": "Literal",
                 "value": "style",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 59,
                   "line": 2,
                   "offset": 107,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 45,
                   "line": 2,
                   "offset": 93,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 59,
                     "line": 2,
                     "offset": 107,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 51,
                     "line": 2,
                     "offset": 99,
@@ -227,20 +224,20 @@ Object {
                 "value": "filled",
               },
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [],
-                  "key": Object {
-                    "children": Array [],
-                    "location": Object {
-                      "end": Object {
+            {
+              "children": [
+                {
+                  "children": [],
+                  "key": {
+                    "children": [],
+                    "location": {
+                      "end": {
                         "column": 14,
                         "line": 3,
                         "offset": 121,
                       },
                       "source": undefined,
-                      "start": Object {
+                      "start": {
                         "column": 9,
                         "line": 3,
                         "offset": 116,
@@ -250,30 +247,30 @@ Object {
                     "type": "Literal",
                     "value": "shape",
                   },
-                  "location": Object {
-                    "end": Object {
+                  "location": {
+                    "end": {
                       "column": 22,
                       "line": 3,
                       "offset": 129,
                     },
                     "source": undefined,
-                    "start": Object {
+                    "start": {
                       "column": 9,
                       "line": 3,
                       "offset": 116,
                     },
                   },
                   "type": "Attribute",
-                  "value": Object {
-                    "children": Array [],
-                    "location": Object {
-                      "end": Object {
+                  "value": {
+                    "children": [],
+                    "location": {
+                      "end": {
                         "column": 21,
                         "line": 3,
                         "offset": 128,
                       },
                       "source": undefined,
-                      "start": Object {
+                      "start": {
                         "column": 15,
                         "line": 3,
                         "offset": 122,
@@ -284,18 +281,18 @@ Object {
                     "value": "circle",
                   },
                 },
-                Object {
-                  "children": Array [],
-                  "key": Object {
-                    "children": Array [],
-                    "location": Object {
-                      "end": Object {
+                {
+                  "children": [],
+                  "key": {
+                    "children": [],
+                    "location": {
+                      "end": {
                         "column": 31,
                         "line": 3,
                         "offset": 138,
                       },
                       "source": undefined,
-                      "start": Object {
+                      "start": {
                         "column": 22,
                         "line": 3,
                         "offset": 129,
@@ -305,30 +302,30 @@ Object {
                     "type": "Literal",
                     "value": "fillcolor",
                   },
-                  "location": Object {
-                    "end": Object {
+                  "location": {
+                    "end": {
                       "column": 45,
                       "line": 3,
                       "offset": 152,
                     },
                     "source": undefined,
-                    "start": Object {
+                    "start": {
                       "column": 22,
                       "line": 3,
                       "offset": 129,
                     },
                   },
                   "type": "Attribute",
-                  "value": Object {
-                    "children": Array [],
-                    "location": Object {
-                      "end": Object {
+                  "value": {
+                    "children": [],
+                    "location": {
+                      "end": {
                         "column": 44,
                         "line": 3,
                         "offset": 151,
                       },
                       "source": undefined,
-                      "start": Object {
+                      "start": {
                         "column": 32,
                         "line": 3,
                         "offset": 139,
@@ -339,18 +336,18 @@ Object {
                     "value": "gold:brown",
                   },
                 },
-                Object {
-                  "children": Array [],
-                  "key": Object {
-                    "children": Array [],
-                    "location": Object {
-                      "end": Object {
+                {
+                  "children": [],
+                  "key": {
+                    "children": [],
+                    "location": {
+                      "end": {
                         "column": 50,
                         "line": 3,
                         "offset": 157,
                       },
                       "source": undefined,
-                      "start": Object {
+                      "start": {
                         "column": 45,
                         "line": 3,
                         "offset": 152,
@@ -360,30 +357,30 @@ Object {
                     "type": "Literal",
                     "value": "style",
                   },
-                  "location": Object {
-                    "end": Object {
+                  "location": {
+                    "end": {
                       "column": 60,
                       "line": 3,
                       "offset": 167,
                     },
                     "source": undefined,
-                    "start": Object {
+                    "start": {
                       "column": 45,
                       "line": 3,
                       "offset": 152,
                     },
                   },
                   "type": "Attribute",
-                  "value": Object {
-                    "children": Array [],
-                    "location": Object {
-                      "end": Object {
+                  "value": {
+                    "children": [],
+                    "location": {
+                      "end": {
                         "column": 59,
                         "line": 3,
                         "offset": 166,
                       },
                       "source": undefined,
-                      "start": Object {
+                      "start": {
                         "column": 51,
                         "line": 3,
                         "offset": 158,
@@ -394,18 +391,18 @@ Object {
                     "value": "radial",
                   },
                 },
-                Object {
-                  "children": Array [],
-                  "key": Object {
-                    "children": Array [],
-                    "location": Object {
-                      "end": Object {
+                {
+                  "children": [],
+                  "key": {
+                    "children": [],
+                    "location": {
+                      "end": {
                         "column": 73,
                         "line": 3,
                         "offset": 180,
                       },
                       "source": undefined,
-                      "start": Object {
+                      "start": {
                         "column": 60,
                         "line": 3,
                         "offset": 167,
@@ -415,30 +412,30 @@ Object {
                     "type": "Literal",
                     "value": "gradientangle",
                   },
-                  "location": Object {
-                    "end": Object {
+                  "location": {
+                    "end": {
                       "column": 77,
                       "line": 3,
                       "offset": 184,
                     },
                     "source": undefined,
-                    "start": Object {
+                    "start": {
                       "column": 60,
                       "line": 3,
                       "offset": 167,
                     },
                   },
                   "type": "Attribute",
-                  "value": Object {
-                    "children": Array [],
-                    "location": Object {
-                      "end": Object {
+                  "value": {
+                    "children": [],
+                    "location": {
+                      "end": {
                         "column": 77,
                         "line": 3,
                         "offset": 184,
                       },
                       "source": undefined,
-                      "start": Object {
+                      "start": {
                         "column": 74,
                         "line": 3,
                         "offset": 181,
@@ -451,14 +448,14 @@ Object {
                 },
               ],
               "kind": "Node",
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 78,
                   "line": 3,
                   "offset": 185,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 3,
                   "line": 3,
                   "offset": 110,
@@ -466,20 +463,20 @@ Object {
               },
               "type": "AttributeList",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [],
-                  "key": Object {
-                    "children": Array [],
-                    "location": Object {
-                      "end": Object {
+            {
+              "children": [
+                {
+                  "children": [],
+                  "key": {
+                    "children": [],
+                    "location": {
+                      "end": {
                         "column": 12,
                         "line": 4,
                         "offset": 197,
                       },
                       "source": undefined,
-                      "start": Object {
+                      "start": {
                         "column": 7,
                         "line": 4,
                         "offset": 192,
@@ -489,30 +486,30 @@ Object {
                     "type": "Literal",
                     "value": "label",
                   },
-                  "location": Object {
-                    "end": Object {
+                  "location": {
+                    "end": {
                       "column": 10,
                       "line": 96,
                       "offset": 6839,
                     },
                     "source": undefined,
-                    "start": Object {
+                    "start": {
                       "column": 7,
                       "line": 4,
                       "offset": 192,
                     },
                   },
                   "type": "Attribute",
-                  "value": Object {
-                    "children": Array [],
-                    "location": Object {
-                      "end": Object {
+                  "value": {
+                    "children": [],
+                    "location": {
+                      "end": {
                         "column": 10,
                         "line": 96,
                         "offset": 6839,
                       },
                       "source": undefined,
-                      "start": Object {
+                      "start": {
                         "column": 13,
                         "line": 4,
                         "offset": 198,
@@ -521,111 +518,111 @@ Object {
                     "quoted": "html",
                     "type": "Literal",
                     "value": "
- <TABLE border=\\"10\\" cellspacing=\\"10\\" cellpadding=\\"10\\" style=\\"rounded\\" bgcolor=\\"yellow:violet\\" gradientangle=\\"315\\">
-<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow\\"  gradientangle=\\"60\\">00</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:green\\"  gradientangle=\\"60\\">01</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"green\\"  gradientangle=\\"60\\">02</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"green:blue\\"  gradientangle=\\"60\\">03</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"blue\\"  gradientangle=\\"60\\">04</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"blue:purple\\"  gradientangle=\\"60\\">05</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"purple\\"  gradientangle=\\"60\\">06</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"purple:violet\\"  gradientangle=\\"60\\">07</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"violet\\"  gradientangle=\\"60\\">08</TD></TR>
+ <TABLE border=\"10\" cellspacing=\"10\" cellpadding=\"10\" style=\"rounded\" bgcolor=\"yellow:violet\" gradientangle=\"315\">
+<TR><TD border=\"3\" style=\"radial\" bgcolor=\"yellow\"  gradientangle=\"60\">00</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"yellow:green\"  gradientangle=\"60\">01</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"green\"  gradientangle=\"60\">02</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"green:blue\"  gradientangle=\"60\">03</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"blue\"  gradientangle=\"60\">04</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"blue:purple\"  gradientangle=\"60\">05</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"purple\"  gradientangle=\"60\">06</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"purple:violet\"  gradientangle=\"60\">07</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"violet\"  gradientangle=\"60\">08</TD></TR>
 
-<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:gold\\"  gradientangle=\\"60\\">10</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:green\\"  gradientangle=\\"60\\">11</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:green\\"  gradientangle=\\"60\\">12</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:blue\\"  gradientangle=\\"60\\">13</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:blue\\"  gradientangle=\\"60\\">14</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:purple\\"  gradientangle=\\"60\\">15</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:purple\\"  gradientangle=\\"60\\">16</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:violet\\"  gradientangle=\\"60\\">17</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"yellow:violet\\"  gradientangle=\\"60\\">18</TD></TR>
+<TR><TD border=\"3\" style=\"radial\" bgcolor=\"yellow:gold\"  gradientangle=\"60\">10</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"yellow:green\"  gradientangle=\"60\">11</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"yellow:green\"  gradientangle=\"60\">12</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"yellow:blue\"  gradientangle=\"60\">13</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"yellow:blue\"  gradientangle=\"60\">14</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"yellow:purple\"  gradientangle=\"60\">15</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"yellow:purple\"  gradientangle=\"60\">16</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"yellow:violet\"  gradientangle=\"60\">17</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"yellow:violet\"  gradientangle=\"60\">18</TD></TR>
 
-<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold\\"  gradientangle=\\"60\\">20</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:green\\"  gradientangle=\\"60\\">21</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:green\\"  gradientangle=\\"60\\">22</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:blue\\"  gradientangle=\\"60\\">23</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:blue\\"  gradientangle=\\"60\\">24</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:purple\\"  gradientangle=\\"60\\">25</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:purple\\"  gradientangle=\\"60\\">26</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:violet\\"  gradientangle=\\"60\\">27</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:violet\\"  gradientangle=\\"60\\">28</TD></TR>
+<TR><TD border=\"3\" style=\"radial\" bgcolor=\"gold\"  gradientangle=\"60\">20</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"gold:green\"  gradientangle=\"60\">21</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"gold:green\"  gradientangle=\"60\">22</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"gold:blue\"  gradientangle=\"60\">23</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"gold:blue\"  gradientangle=\"60\">24</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"gold:purple\"  gradientangle=\"60\">25</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"gold:purple\"  gradientangle=\"60\">26</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"gold:violet\"  gradientangle=\"60\">27</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"gold:violet\"  gradientangle=\"60\">28</TD></TR>
 
-<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"gold:orange\\"  gradientangle=\\"60\\">30</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:green\\"  gradientangle=\\"60\\">31</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:green\\"  gradientangle=\\"60\\">32</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:blue\\"  gradientangle=\\"60\\">33</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:blue\\"  gradientangle=\\"60\\">34</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:purple\\"  gradientangle=\\"60\\">35</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:purple\\"  gradientangle=\\"60\\">36</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:violet\\"  gradientangle=\\"60\\">37</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:violet\\"  gradientangle=\\"60\\">38</TD></TR>
+<TR><TD border=\"3\" style=\"radial\" bgcolor=\"gold:orange\"  gradientangle=\"60\">30</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:green\"  gradientangle=\"60\">31</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:green\"  gradientangle=\"60\">32</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:blue\"  gradientangle=\"60\">33</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:blue\"  gradientangle=\"60\">34</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:purple\"  gradientangle=\"60\">35</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:purple\"  gradientangle=\"60\">36</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:violet\"  gradientangle=\"60\">37</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:violet\"  gradientangle=\"60\">38</TD></TR>
 
-<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange\\"  gradientangle=\\"60\\">40</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:green\\"  gradientangle=\\"60\\">41</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:green\\"  gradientangle=\\"60\\">42</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:blue\\"  gradientangle=\\"60\\">43</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:blue\\"  gradientangle=\\"60\\">44</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:purple\\"  gradientangle=\\"60\\">45</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:purple\\"  gradientangle=\\"60\\">46</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:violet\\"  gradientangle=\\"60\\">47</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:violet\\"  gradientangle=\\"60\\">48</TD></TR>
+<TR><TD border=\"3\" style=\"radial\" bgcolor=\"orange\"  gradientangle=\"60\">40</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:green\"  gradientangle=\"60\">41</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:green\"  gradientangle=\"60\">42</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:blue\"  gradientangle=\"60\">43</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:blue\"  gradientangle=\"60\">44</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:purple\"  gradientangle=\"60\">45</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:purple\"  gradientangle=\"60\">46</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:violet\"  gradientangle=\"60\">47</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"orange:violet\"  gradientangle=\"60\">48</TD></TR>
 
-<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"orange:red\\"  gradientangle=\\"60\\">50</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:green\\"  gradientangle=\\"60\\">51</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:green\\"  gradientangle=\\"60\\">52</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:blue\\"  gradientangle=\\"60\\">53</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:blue\\"  gradientangle=\\"60\\">54</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:purple\\"  gradientangle=\\"60\\">55</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:purple\\"  gradientangle=\\"60\\">56</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:violet\\"  gradientangle=\\"60\\">57</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:violet\\"  gradientangle=\\"60\\">58</TD></TR>
+<TR><TD border=\"3\" style=\"radial\" bgcolor=\"orange:red\"  gradientangle=\"60\">50</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:green\"  gradientangle=\"60\">51</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:green\"  gradientangle=\"60\">52</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:blue\"  gradientangle=\"60\">53</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:blue\"  gradientangle=\"60\">54</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:purple\"  gradientangle=\"60\">55</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:purple\"  gradientangle=\"60\">56</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:violet\"  gradientangle=\"60\">57</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:violet\"  gradientangle=\"60\">58</TD></TR>
 
-<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red\\"  gradientangle=\\"60\\">60</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:green\\"  gradientangle=\\"60\\">61</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:green\\"  gradientangle=\\"60\\">62</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:blue\\"  gradientangle=\\"60\\">63</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:blue\\"  gradientangle=\\"60\\">64</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:purple\\"  gradientangle=\\"60\\">65</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:purple\\"  gradientangle=\\"60\\">66</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:violet\\"  gradientangle=\\"60\\">67</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:violet\\"  gradientangle=\\"60\\">68</TD></TR>
+<TR><TD border=\"3\" style=\"radial\" bgcolor=\"red\"  gradientangle=\"60\">60</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:green\"  gradientangle=\"60\">61</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:green\"  gradientangle=\"60\">62</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:blue\"  gradientangle=\"60\">63</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:blue\"  gradientangle=\"60\">64</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:purple\"  gradientangle=\"60\">65</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:purple\"  gradientangle=\"60\">66</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:violet\"  gradientangle=\"60\">67</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"red:violet\"  gradientangle=\"60\">68</TD></TR>
 
-<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"red:brown\\"  gradientangle=\\"60\\">70</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:green\\"  gradientangle=\\"60\\">71</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:green\\"  gradientangle=\\"60\\">72</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:blue\\"  gradientangle=\\"60\\">73</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:blue\\"  gradientangle=\\"60\\">74</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:purple\\"  gradientangle=\\"60\\">75</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:purple\\"  gradientangle=\\"60\\">76</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:violet\\"  gradientangle=\\"60\\">77</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:violet\\"  gradientangle=\\"60\\">78</TD></TR>
+<TR><TD border=\"3\" style=\"radial\" bgcolor=\"red:brown\"  gradientangle=\"60\">70</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:green\"  gradientangle=\"60\">71</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:green\"  gradientangle=\"60\">72</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:blue\"  gradientangle=\"60\">73</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:blue\"  gradientangle=\"60\">74</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:purple\"  gradientangle=\"60\">75</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:purple\"  gradientangle=\"60\">76</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:violet\"  gradientangle=\"60\">77</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:violet\"  gradientangle=\"60\">78</TD></TR>
 
-<TR><TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown\\"  gradientangle=\\"60\\">80</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:green\\"  gradientangle=\\"60\\">81</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:green\\"  gradientangle=\\"60\\">82</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:blue\\"  gradientangle=\\"60\\">83</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:blue\\"  gradientangle=\\"60\\">84</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:purple\\"  gradientangle=\\"60\\">85</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:purple\\"  gradientangle=\\"60\\">86</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:violet\\"  gradientangle=\\"60\\">87</TD>
-<TD border=\\"3\\" style=\\"radial\\" bgcolor=\\"brown:violet\\"  gradientangle=\\"60\\">88</TD></TR>
+<TR><TD border=\"3\" style=\"radial\" bgcolor=\"brown\"  gradientangle=\"60\">80</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:green\"  gradientangle=\"60\">81</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:green\"  gradientangle=\"60\">82</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:blue\"  gradientangle=\"60\">83</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:blue\"  gradientangle=\"60\">84</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:purple\"  gradientangle=\"60\">85</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:purple\"  gradientangle=\"60\">86</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:violet\"  gradientangle=\"60\">87</TD>
+<TD border=\"3\" style=\"radial\" bgcolor=\"brown:violet\"  gradientangle=\"60\">88</TD></TR>
 
 </TABLE>",
                   },
                 },
               ],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 5,
                     "line": 4,
                     "offset": 190,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 3,
                     "line": 4,
                     "offset": 188,
@@ -635,14 +632,14 @@ Object {
                 "type": "Literal",
                 "value": "a0",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 12,
                   "line": 96,
                   "offset": 6841,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 3,
                   "line": 4,
                   "offset": 188,
@@ -651,16 +648,16 @@ Object {
               "type": "Node",
             },
           ],
-          "id": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 20,
                 "line": 2,
                 "offset": 68,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 12,
                 "line": 2,
                 "offset": 60,
@@ -670,14 +667,14 @@ Object {
             "type": "Literal",
             "value": "cluster1",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 2,
               "line": 98,
               "offset": 6844,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 2,
               "offset": 51,
@@ -687,16 +684,16 @@ Object {
         },
       ],
       "directed": true,
-      "id": Object {
-        "children": Array [],
-        "location": Object {
-          "end": Object {
+      "id": {
+        "children": [],
+        "location": {
+          "end": {
             "column": 10,
             "line": 1,
             "offset": 9,
           },
           "source": undefined,
-          "start": Object {
+          "start": {
             "column": 9,
             "line": 1,
             "offset": 8,
@@ -706,14 +703,14 @@ Object {
         "type": "Literal",
         "value": "G",
       },
-      "location": Object {
-        "end": Object {
+      "location": {
+        "end": {
           "column": 2,
           "line": 100,
           "offset": 6847,
         },
         "source": undefined,
-        "start": Object {
+        "start": {
           "column": 1,
           "line": 1,
           "offset": 0,
@@ -723,14 +720,14 @@ Object {
       "type": "Graph",
     },
   ],
-  "location": Object {
-    "end": Object {
+  "location": {
+    "end": {
       "column": 1,
       "line": 101,
       "offset": 6848,
     },
     "source": undefined,
-    "start": Object {
+    "start": {
       "column": 1,
       "line": 1,
       "offset": 0,
@@ -738,4 +735,3 @@ Object {
   },
   "type": "Dot",
 }
-`;

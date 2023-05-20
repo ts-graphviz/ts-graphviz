@@ -1,7 +1,5 @@
 root: true
 parser: '@typescript-eslint/parser'
-env:
-  jest/globals: true
 
 settings:
   import/resolver:
@@ -10,13 +8,13 @@ settings:
 
 plugins:
   - '@typescript-eslint'
-  - jest
+  - vitest
   - prettier
 
 extends:
   - prettier
   - plugin:@typescript-eslint/recommended
-  - plugin:jest/recommended
+  - plugin:vitest/recommended
 
 rules:
   '@typescript-eslint/interface-name-prefix': 'off'
