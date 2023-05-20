@@ -31,7 +31,6 @@
   },
   "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
   "dependencies": {
-    "@ts-graphviz/ast": "^2.0.0",
     "@ts-graphviz/common": "^2.0.0"
   },
   "devDependencies": {
