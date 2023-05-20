@@ -1,6 +1,5 @@
 import { describe, beforeEach, it, test, expect } from 'vitest';
 
-import { attribute as _ } from '../attribute.js';
 import { DotObject } from './DotObject.js';
 import { Node } from './Node.js';
 
@@ -12,11 +11,11 @@ beforeEach(() => {
 describe('Constructor', () => {
   test('first argument is id, and second attributes object', () => {
     node = new Node('test', {
-      [_.label]: 'Label',
+      label: 'Label',
     });
     expect(node.id).toBe('test');
     expect(node.attributes.size).toBe(1);
-    expect(node.attributes.get(_.label)).toBe('Label');
+    expect(node.attributes.get('label')).toBe('Label');
   });
 });
 

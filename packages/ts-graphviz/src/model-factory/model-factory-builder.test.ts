@@ -1,6 +1,6 @@
 import { vi, describe, expect, test } from 'vitest';
+import '@ts-graphviz/core';
 
-import '../models/registerModelContext.js';
 import { RootModelsContext } from '@ts-graphviz/common';
 import { attribute as _ } from '../attribute.js';
 import { ModelFactoryBuilder } from './model-factory-builder.js';

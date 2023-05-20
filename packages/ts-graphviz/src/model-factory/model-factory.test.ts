@@ -1,6 +1,6 @@
 import { test, expect, describe } from 'vitest';
 import { strict, digraph, graph, withContext } from './model-factory.js';
-import { Digraph, Graph } from '../models/index.js';
+import { Digraph, Graph } from '@ts-graphviz/core';
 
 test('digraph function returns an object of Digraph, and the strict property is false', () => {
   const g = digraph();

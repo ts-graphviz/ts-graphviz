@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { it, test, expect, describe, beforeEach } from 'vitest';
 import { Attributes } from '@ts-graphviz/common';
-import { attribute as _ } from '../attribute.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
 
@@ -27,33 +26,33 @@ describe('constructor', () => {
   test('with no attribute object', () => {
     attrs = new TestAttributes();
     expect(attrs.size).toBe(0);
-    expect(attrs.get(_.label)).toBeUndefined();
+    expect(attrs.get('label')).toBeUndefined();
   });
 
   test('with attribute object', () => {
     attrs = new TestAttributes({
-      [_.label]: 'Label',
+      label: 'Label',
     });
     expect(attrs.size).toBe(1);
-    expect(attrs.get(_.label)).toBe('Label');
+    expect(attrs.get('label')).toBe('Label');
   });
 });
 
 describe('apply method', () => {
   test('with attributes object', () => {
     attrs.apply({
-      [_.label]: 'this is test',
-      [_.color]: 'red',
-      [_.fontsize]: 16,
+      label: 'this is test',
+      color: 'red',
+      fontsize: 16,
     });
     expect(attrs.size).toBe(3);
   });
 
   test('with attributes entities', () => {
     attrs.apply([
-      [_.label, 'this is test'],
-      [_.color, 'red'],
-      [_.fontsize, 16],
+      ['label', 'this is test'],
+      ['color', 'red'],
+      ['fontsize', 16],
     ]);
     expect(attrs.size).toBe(3);
   });
@@ -61,9 +60,9 @@ describe('apply method', () => {
 
 test('clear method', () => {
   attrs = new TestAttributes({
-    [_.label]: 'this is test',
-    [_.color]: 'red',
-    [_.fontsize]: 16,
+    label: 'this is test',
+    color: 'red',
+    fontsize: 16,
   });
 
   expect(attrs.size).toBe(3);

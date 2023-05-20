@@ -3,7 +3,6 @@ import { describe, beforeEach, it, test, expect } from 'vitest';
 import './registerModelContext.js';
 
 import { SubgraphModel, EdgeTargetTuple } from '@ts-graphviz/common';
-import { attribute as _ } from '../attribute.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';
@@ -27,16 +26,16 @@ describe('class Subgraph', () => {
   describe('Constructor', () => {
     test('first argument is id, and second attributes object', () => {
       subgraph = new Subgraph('test', {
-        [_.K]: 1,
+        K: 1,
       });
       expect(subgraph.id).toBe('test');
-      expect(subgraph.get(_.K)).toBe(1);
+      expect(subgraph.get('K')).toBe(1);
     });
     test('first argument is attributes object', () => {
       subgraph = new Subgraph({
-        [_.K]: 1,
+        K: 1,
       });
-      expect(subgraph.get(_.K)).toBe(1);
+      expect(subgraph.get('K')).toBe(1);
     });
   });
 
@@ -45,40 +44,40 @@ describe('class Subgraph', () => {
       subgraph.node({
         label: 'test label',
       });
-      expect(subgraph.attributes.node.get(_.label)).toBe('test label');
+      expect(subgraph.attributes.node.get('label')).toBe('test label');
     });
 
     test('edge', () => {
       subgraph.edge({
         label: 'test label',
       });
-      expect(subgraph.attributes.edge.get(_.label)).toBe('test label');
+      expect(subgraph.attributes.edge.get('label')).toBe('test label');
     });
 
     test('graph', () => {
       subgraph.graph({
         label: 'test label',
       });
-      expect(subgraph.attributes.graph.get(_.label)).toBe('test label');
+      expect(subgraph.attributes.graph.get('label')).toBe('test label');
     });
   });
 
   test('set attributes', () => {
-    subgraph.set(_.rank, 'same');
-    expect(subgraph.get(_.rank)).toBe('same');
+    subgraph.set('rank', 'same');
+    expect(subgraph.get('rank')).toBe('same');
   });
 
   describe('set attributes by apply', () => {
     test('with attributes object', () => {
       subgraph.apply({
-        [_.rank]: 'same',
+        ['rank']: 'same',
       });
-      expect(subgraph.get(_.rank)).toBe('same');
+      expect(subgraph.get('rank')).toBe('same');
     });
 
     test('with entities', () => {
-      subgraph.apply([[_.rank, 'same']]);
-      expect(subgraph.get(_.rank)).toBe('same');
+      subgraph.apply([['rank', 'same']]);
+      expect(subgraph.get('rank')).toBe('same');
     });
   });
 
@@ -88,7 +87,7 @@ describe('class Subgraph', () => {
 
   test('create node with attributes', () => {
     const node = subgraph.createNode('n', {
-      [_.label]: 'Label',
+      ['label']: 'Label',
     });
     expect(node.id).toBe('n');
     expect(node.attributes.size).toBe(1);
@@ -97,7 +96,7 @@ describe('class Subgraph', () => {
   test('create edge with attributes', () => {
     const nodes = [...Array(2)].map((_v, i) => subgraph.createNode(`node${i + 1}`)) as EdgeTargetTuple;
     const edge = subgraph.createEdge(nodes, {
-      [_.label]: 'Label',
+      ['label']: 'Label',
     });
     expect(edge.attributes.size).toBe(1);
   });
@@ -112,13 +111,13 @@ describe('class Subgraph', () => {
 
   test('create subgraph with attributes', () => {
     subgraph = subgraph.createSubgraph('test', {
-      [_.label]: 'Label',
+      ['label']: 'Label',
     });
     expect(subgraph.id).toBe('test');
     expect(subgraph.size).toBe(1);
 
     subgraph = subgraph.createSubgraph({
-      [_.label]: 'Label',
+      ['label']: 'Label',
     });
     expect(subgraph.size).toBe(1);
   });
