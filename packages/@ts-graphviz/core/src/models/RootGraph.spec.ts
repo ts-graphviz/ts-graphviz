@@ -2,7 +2,6 @@ import { describe, beforeEach, it, test, expect } from 'vitest';
 
 import './registerModelContext.js';
 
-import { attribute as _ } from '../attribute.js';
 import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';
 import { RootGraph } from './RootGraph.js';
@@ -32,16 +31,16 @@ describe('Constructor', () => {
   });
 
   test('first argument is id, seccond argument is strict, third argument is attribute object', () => {
-    g = new TestRootGraph('foo', true, { [_.label]: 'Test label' });
+    g = new TestRootGraph('foo', true, { label: 'Test label' });
     expect(g.id).toBe('foo');
-    expect(g.values).toStrictEqual([[_.label, 'Test label']]);
+    expect(g.values).toStrictEqual([['label', 'Test label']]);
     expect(g.strict).toBe(true);
   });
 
   test('first argument is attribute object', () => {
-    g = new TestRootGraph({ [_.label]: 'Test label' });
+    g = new TestRootGraph({ label: 'Test label' });
     expect(g.id).toBeUndefined();
-    expect(g.values).toStrictEqual([[_.label, 'Test label']]);
+    expect(g.values).toStrictEqual([['label', 'Test label']]);
     expect(g.strict).toBe(false);
   });
 
@@ -53,9 +52,9 @@ describe('Constructor', () => {
   });
 
   test('first argument is strict, seccond is attribute object', () => {
-    g = new TestRootGraph(true, { [_.label]: 'Test label' });
+    g = new TestRootGraph(true, { label: 'Test label' });
     expect(g.id).toBeUndefined();
-    expect(g.values).toStrictEqual([[_.label, 'Test label']]);
+    expect(g.values).toStrictEqual([['label', 'Test label']]);
     expect(g.strict).toBe(true);
   });
 });

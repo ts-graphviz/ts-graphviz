@@ -7,7 +7,7 @@ import { RootGraphModel, GraphAttributesObject } from '@ts-graphviz/common';
  * @param attributes - Optional GraphAttributesObject parameter that specifies the attributes of the {@link RootGraphModel} object.
  * @param callback - Optional callback function that takes a {@link RootGraphModel} object as a parameter.
  *
- * @returns {@link RootGraphModel} - Returns a {@link RootGraphModel} object.
+ * @returns Returns a {@link RootGraphModel} object.
  * @group Model Factory
  */
 export interface ModelFactory {

@@ -3,7 +3,6 @@ import { it, test, expect, describe, beforeEach } from 'vitest';
 import './registerModelContext.js';
 
 import { EdgeTargetTuple } from '@ts-graphviz/common';
-import { attribute as _ } from '../attribute.js';
 import { DotObject } from './DotObject.js';
 import { Edge } from './Edge.js';
 import { Node } from './Node.js';
@@ -24,10 +23,10 @@ it('should be instance of Edge/DotObject', () => {
 describe('Constructor', () => {
   test('first argument is targets, and second attributes object', () => {
     edge = new Edge(targets, {
-      [_.label]: 'Label',
+      label: 'Label',
     });
     expect(edge.attributes.size).toBe(1);
-    expect(edge.attributes.get(_.label)).toBe('Label');
+    expect(edge.attributes.get('label')).toBe('Label');
   });
 });
 
