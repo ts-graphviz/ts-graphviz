@@ -1,4 +1,4 @@
-import { createCommandAndArgs } from './utils/create-command-and-args.js';
+import { createCommandAndArgs } from './create-command-and-args.js';
 import { Layout, Options } from './types.js';
 
 declare const Deno: any;

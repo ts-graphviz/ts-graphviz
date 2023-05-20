@@ -3,6 +3,6 @@
   "compilerOptions": {
     "outDir": "lib"
   },
-  "include": ["src/deno.ts", "src/utils/*.ts", "src/types/*.ts"],
+  "include": ["src/deno.ts", "src/utils/*.ts", "src/types/*.ts", "src/create-command-and-args.test.ts", "src/create-command-args.test.ts", "src/create-command-args.ts", "src/create-command-and-args.ts"],
   "exclude": ["src/**/*.test.ts", "src/**/*.spec.ts"]
 }

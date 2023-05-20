@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect } from 'vitest';
 
-import { Options } from '../types/index.js';
+import { Options } from './types.js';
 import { createCommandAndArgs } from './create-command-and-args.js';
 
 describe('createCommandAndArgs', () => {
