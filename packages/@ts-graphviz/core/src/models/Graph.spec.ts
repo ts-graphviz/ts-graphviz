@@ -8,7 +8,7 @@ import { DotObject } from './DotObject.js';
 const g = new Graph();
 
 test('directed propaty should be false', () => {
-  expect(g.directed).toStrictEqual(false);
+  expect(g.directed).toBe(false);
 });
 
 it('should be instance of Graph/GraphBase/DotObject', () => {

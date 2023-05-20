@@ -30,5 +30,5 @@ test.skip('comment', () => {
     ),
   ]);
   const model = toModel(ast);
-  expect(model.comment).toStrictEqual('This is comment');
+  expect(model.comment).toBe('This is comment');
 });

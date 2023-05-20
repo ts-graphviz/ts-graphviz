@@ -92,10 +92,10 @@ describe('createCommandArgs', () => {
 
 describe('escapeValue', () => {
   it('should escape values correctly', () => {
-    expect(escapeValue('foo bar')).toEqual('="foo bar"');
-    expect(escapeValue('foo')).toEqual('=foo');
-    expect(escapeValue(true)).toEqual('');
-    expect(escapeValue(false)).toEqual('=false');
-    expect(escapeValue(10)).toEqual('=10');
+    expect(escapeValue('foo bar')).toBe('="foo bar"');
+    expect(escapeValue('foo')).toBe('=foo');
+    expect(escapeValue(true)).toBe('');
+    expect(escapeValue(false)).toBe('=false');
+    expect(escapeValue(10)).toBe('=10');
   });
 });

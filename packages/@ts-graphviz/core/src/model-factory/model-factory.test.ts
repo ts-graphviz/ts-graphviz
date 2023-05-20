@@ -5,25 +5,25 @@ import { Digraph, Graph } from '../models/index.js';
 test('digraph function returns an object of Digraph, and the strict property is false', () => {
   const g = digraph();
   expect(g).toBeInstanceOf(Digraph);
-  expect(g.strict).toStrictEqual(false);
+  expect(g.strict).toBe(false);
 });
 
 test('graph function returns an object of Graph, and the strict property is false', () => {
   const g = graph();
   expect(g).toBeInstanceOf(Graph);
-  expect(g.strict).toStrictEqual(false);
+  expect(g.strict).toBe(false);
 });
 
 test('strict.digraph function returns an object of Digraph', () => {
   const g = strict.digraph();
   expect(g).toBeInstanceOf(Digraph);
-  expect(g.strict).toStrictEqual(true);
+  expect(g.strict).toBe(true);
 });
 
 test('strict.graph function returns an object of Graph', () => {
   const g = strict.graph();
   expect(g).toBeInstanceOf(Graph);
-  expect(g.strict).toStrictEqual(true);
+  expect(g.strict).toBe(true);
 });
 
 describe('withContext function allows the class RootGraph to be generated with a custom class.', () => {
@@ -38,24 +38,24 @@ describe('withContext function allows the class RootGraph to be generated with a
   test('digraph function returns an object of TestDigraph, and the strict property is false', () => {
     const g = digraph();
     expect(g).toBeInstanceOf(TestDigraph);
-    expect(g.strict).toStrictEqual(false);
+    expect(g.strict).toBe(false);
   });
 
   test('graph function returns an object of TestGraph, and the strict property is false', () => {
     const g = graph();
     expect(g).toBeInstanceOf(TestGraph);
-    expect(g.strict).toStrictEqual(false);
+    expect(g.strict).toBe(false);
   });
 
   test('strict.digraph function returns an object of TestDigraph', () => {
     const g = strict.digraph();
     expect(g).toBeInstanceOf(TestDigraph);
-    expect(g.strict).toStrictEqual(true);
+    expect(g.strict).toBe(true);
   });
 
   test('strict.graph function returns an object of TestGraph', () => {
     const g = strict.graph();
     expect(g).toBeInstanceOf(TestGraph);
-    expect(g.strict).toStrictEqual(true);
+    expect(g.strict).toBe(true);
   });
 });

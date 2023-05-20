@@ -95,7 +95,7 @@ describe('Declarative API', () => {
 
         expect(g.existNode('foo')).toBe(true);
         expect(createNodeSpy).toHaveBeenCalledWith('foo');
-        expect(node.attributes.get(_.label)).toStrictEqual('Test label');
+        expect(node.attributes.get(_.label)).toBe('Test label');
       });
 
       describe('callback function is given, the callback function is executed with the created node as the argument', () => {
@@ -109,7 +109,7 @@ describe('Declarative API', () => {
           const callback = vi.fn();
           const node = g.node('foo', { [_.label]: 'Test label' }, callback);
           expect(callback).toHaveBeenCalledWith(node);
-          expect(node.attributes.get(_.label)).toStrictEqual('Test label');
+          expect(node.attributes.get(_.label)).toBe('Test label');
         });
       });
     });
@@ -134,7 +134,7 @@ describe('Declarative API', () => {
         expect(createNodeSpy).not.toHaveBeenCalled();
         expect(returnedNode).toBe(createdNode);
 
-        expect(returnedNode.attributes.get(_.label)).toStrictEqual('Test label');
+        expect(returnedNode.attributes.get(_.label)).toBe('Test label');
       });
 
       describe('callback function is given, the callback function is executed with the created node as the argument', () => {
@@ -154,7 +154,7 @@ describe('Declarative API', () => {
           const callback = vi.fn();
           const node = g.node('foo', { [_.label]: 'Test label' }, callback);
           expect(callback).toHaveBeenCalledWith(node);
-          expect(node.attributes.get(_.label)).toStrictEqual('Test label');
+          expect(node.attributes.get(_.label)).toBe('Test label');
           expect(node).toBe(createdNode);
         });
       });
@@ -162,7 +162,7 @@ describe('Declarative API', () => {
 
     test('apply atttibutes to nodes in graph', () => {
       g.node({ [_.label]: 'Test label' });
-      expect(g.attributes.node.get(_.label)).toStrictEqual('Test label');
+      expect(g.attributes.node.get(_.label)).toBe('Test label');
     });
   });
 
@@ -187,7 +187,7 @@ describe('Declarative API', () => {
 
       test('apply atttibutes to edges in graph', () => {
         g.edge({ [_.label]: 'Test label' });
-        expect(g.attributes.edge.get(_.label)).toStrictEqual('Test label');
+        expect(g.attributes.edge.get(_.label)).toBe('Test label');
       });
 
       describe('callback function is given, the callback function is executed with the created edge as the argument', () => {
@@ -201,14 +201,14 @@ describe('Declarative API', () => {
           const callback = vi.fn();
           const edge = g.edge(nodes, { [_.label]: 'Test label' }, callback);
           expect(callback).toHaveBeenCalledWith(edge);
-          expect(edge.attributes.get(_.label)).toStrictEqual('Test label');
+          expect(edge.attributes.get(_.label)).toBe('Test label');
         });
       });
     });
 
     test('apply atttibutes to edges in graph', () => {
       g.edge({ [_.label]: 'Test label' });
-      expect(g.attributes.edge.get(_.label)).toStrictEqual('Test label');
+      expect(g.attributes.edge.get(_.label)).toBe('Test label');
     });
   });
 
@@ -225,7 +225,7 @@ describe('Declarative API', () => {
         const createSubgraphSpy = vi.spyOn(g, 'createSubgraph');
         const subgraph = g.subgraph({ [_.label]: 'Test label' });
         expect(createSubgraphSpy).toHaveBeenCalled();
-        expect(subgraph.get(_.label)).toStrictEqual('Test label');
+        expect(subgraph.get(_.label)).toBe('Test label');
       });
 
       test('by id', () => {
@@ -238,7 +238,7 @@ describe('Declarative API', () => {
         const createSubgraphSpy = vi.spyOn(g, 'createSubgraph');
         const subgraph = g.subgraph('foo', { [_.label]: 'Test label' });
         expect(createSubgraphSpy).toHaveBeenCalledWith('foo');
-        expect(subgraph.get(_.label)).toStrictEqual('Test label');
+        expect(subgraph.get(_.label)).toBe('Test label');
       });
 
       describe('callback function is given, the callback function is executed with the created subgraph as the argument', () => {
@@ -252,7 +252,7 @@ describe('Declarative API', () => {
           const callback = vi.fn();
           const subgraph = g.subgraph({ [_.label]: 'Test label' }, callback);
           expect(callback).toHaveBeenCalledWith(subgraph);
-          expect(subgraph.get(_.label)).toStrictEqual('Test label');
+          expect(subgraph.get(_.label)).toBe('Test label');
         });
 
         test('first argument is id, seccond argument is callback', () => {
@@ -265,7 +265,7 @@ describe('Declarative API', () => {
           const callback = vi.fn();
           const subgraph = g.subgraph('foo', { [_.label]: 'Test label' }, callback);
           expect(callback).toHaveBeenCalledWith(subgraph);
-          expect(subgraph.get(_.label)).toStrictEqual('Test label');
+          expect(subgraph.get(_.label)).toBe('Test label');
         });
       });
     });
@@ -290,7 +290,7 @@ describe('Declarative API', () => {
         expect(createSubgraphSpy).not.toHaveBeenCalled();
         expect(returnedSubgraph).toBe(createdSubgraph);
 
-        expect(returnedSubgraph.get(_.label)).toStrictEqual('Test label');
+        expect(returnedSubgraph.get(_.label)).toBe('Test label');
       });
     });
   });
@@ -298,7 +298,7 @@ describe('Declarative API', () => {
   describe('graph method', () => {
     test('apply atttibutes to graphs in graph', () => {
       g.graph({ [_.label]: 'Test label' });
-      expect(g.attributes.graph.get(_.label)).toStrictEqual('Test label');
+      expect(g.attributes.graph.get(_.label)).toBe('Test label');
     });
   });
 });

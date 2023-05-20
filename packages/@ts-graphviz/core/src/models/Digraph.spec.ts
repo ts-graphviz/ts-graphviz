@@ -8,7 +8,7 @@ import { DotObject } from './DotObject.js';
 const g = new Digraph();
 
 test('directed propaty should be true', () => {
-  expect(g.directed).toStrictEqual(true);
+  expect(g.directed).toBe(true);
 });
 
 it('should be instance of Digraph/GraphBase/DotObject', () => {

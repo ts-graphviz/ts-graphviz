@@ -21,7 +21,7 @@ describe.each([
 
   test('first argument is id', () => {
     const g = factory('foo');
-    expect(g.id).toStrictEqual('foo');
+    expect(g.id).toBe('foo');
 
     expect(g.directed).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
@@ -59,7 +59,7 @@ describe.each([
 
   test('first argument is id, seccond argument is attribute object', () => {
     const g = factory('foo', { [_.label]: 'Test label' });
-    expect(g.id).toStrictEqual('foo');
+    expect(g.id).toBe('foo');
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
 
     expect(g.directed).toStrictEqual(directed);
@@ -69,7 +69,7 @@ describe.each([
   test('first argument is id, seccond argument is attribute object, third arguments is callback', () => {
     const callback = vi.fn();
     const g = factory('foo', { [_.label]: 'Test label' }, callback);
-    expect(g.id).toStrictEqual('foo');
+    expect(g.id).toBe('foo');
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
     expect(callback).toHaveBeenCalledWith(g);
 

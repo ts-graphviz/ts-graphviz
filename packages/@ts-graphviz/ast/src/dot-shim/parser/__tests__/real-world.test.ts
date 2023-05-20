@@ -1,4 +1,4 @@
-/* eslint-disable jest/valid-title */
+/* eslint-disable vitest/valid-title */
 import { test, expect } from 'vitest';
 
 import fs from 'node:fs';
