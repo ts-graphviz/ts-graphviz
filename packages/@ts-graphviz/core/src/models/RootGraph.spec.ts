@@ -6,53 +6,49 @@ import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';
 import { RootGraph } from './RootGraph.js';
 
-class TestRootGraph extends RootGraph {
-  public directed = true;
-}
-
 let g: RootGraph;
 beforeEach(() => {
-  g = new TestRootGraph();
+  g = new RootGraph();
 });
 
 describe('Constructor', () => {
   test('no args', () => {
-    g = new TestRootGraph();
+    g = new RootGraph();
     expect(g.id).toBeUndefined();
     expect(g.values).toStrictEqual([]);
     expect(g.strict).toBe(false);
   });
 
   test('first argument is id', () => {
-    g = new TestRootGraph('foo');
+    g = new RootGraph('foo');
     expect(g.id).toBe('foo');
     expect(g.values).toStrictEqual([]);
     expect(g.strict).toBe(false);
   });
 
   test('first argument is id, seccond argument is strict, third argument is attribute object', () => {
-    g = new TestRootGraph('foo', true, { label: 'Test label' });
+    g = new RootGraph('foo', true, { label: 'Test label' });
     expect(g.id).toBe('foo');
     expect(g.values).toStrictEqual([['label', 'Test label']]);
     expect(g.strict).toBe(true);
   });
 
   test('first argument is attribute object', () => {
-    g = new TestRootGraph({ label: 'Test label' });
+    g = new RootGraph({ label: 'Test label' });
     expect(g.id).toBeUndefined();
     expect(g.values).toStrictEqual([['label', 'Test label']]);
     expect(g.strict).toBe(false);
   });
 
   test('first argument is strict', () => {
-    g = new TestRootGraph(true);
+    g = new RootGraph(true);
     expect(g.id).toBeUndefined();
     expect(g.values).toStrictEqual([]);
     expect(g.strict).toBe(true);
   });
 
   test('first argument is strict, seccond is attribute object', () => {
-    g = new TestRootGraph(true, { label: 'Test label' });
+    g = new RootGraph(true, { label: 'Test label' });
     expect(g.id).toBeUndefined();
     expect(g.values).toStrictEqual([['label', 'Test label']]);
     expect(g.strict).toBe(true);
@@ -62,8 +58,4 @@ describe('Constructor', () => {
 it('should be instance of GraphBase/DotObject', () => {
   expect(g).toBeInstanceOf(GraphBase);
   expect(g).toBeInstanceOf(DotObject);
-});
-
-test('$$type propaty should be "Graph"', () => {
-  expect(g.$$type).toBe('Graph');
 });

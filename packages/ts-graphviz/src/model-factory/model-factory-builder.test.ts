@@ -1,7 +1,7 @@
 import { vi, describe, expect, test } from 'vitest';
 import '@ts-graphviz/core';
 
-import { RootModelsContext } from '@ts-graphviz/common';
+import { RootModelsContext, isDirected } from '@ts-graphviz/common';
 import { attribute as _ } from '../attribute.js';
 import { ModelFactoryBuilder } from './model-factory-builder.js';
 
@@ -15,7 +15,7 @@ describe.each([
 
   test('no arguments', () => {
     const g = factory();
-    expect(g.directed).toStrictEqual(directed);
+    expect(isDirected(g)).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
   });
 
@@ -23,7 +23,7 @@ describe.each([
     const g = factory('foo');
     expect(g.id).toBe('foo');
 
-    expect(g.directed).toStrictEqual(directed);
+    expect(isDirected(g)).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
   });
 
@@ -33,7 +33,7 @@ describe.each([
     expect(g.id).toBeUndefined();
     expect(callback).toHaveBeenCalledWith(g);
 
-    expect(g.directed).toStrictEqual(directed);
+    expect(isDirected(g)).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
   });
 
@@ -42,7 +42,7 @@ describe.each([
     expect(g.id).toBeUndefined();
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
 
-    expect(g.directed).toStrictEqual(directed);
+    expect(isDirected(g)).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
   });
 
@@ -53,7 +53,7 @@ describe.each([
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
     expect(callback).toHaveBeenCalledWith(g);
 
-    expect(g.directed).toStrictEqual(directed);
+    expect(isDirected(g)).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
   });
 
@@ -62,7 +62,7 @@ describe.each([
     expect(g.id).toBe('foo');
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
 
-    expect(g.directed).toStrictEqual(directed);
+    expect(isDirected(g)).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
   });
 
@@ -73,7 +73,7 @@ describe.each([
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
     expect(callback).toHaveBeenCalledWith(g);
 
-    expect(g.directed).toStrictEqual(directed);
+    expect(isDirected(g)).toStrictEqual(directed);
     expect(g.strict).toStrictEqual(strict);
   });
 });

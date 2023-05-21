@@ -4,6 +4,7 @@ import {
   EdgeAttributesObject,
   EdgeModel,
   EdgeTargetTuple,
+  define,
   isNodeRefLike,
 } from '@ts-graphviz/common';
 import { DotObject } from './DotObject.js';
@@ -13,11 +14,8 @@ import { AttributesGroup } from './AttributesGroup.js';
  * DOT object class representing a edge.
  * @group Models
  */
+@define({ type: 'Edge' })
 export class Edge extends DotObject implements EdgeModel {
-  public get $$type(): 'Edge' {
-    return 'Edge';
-  }
-
   public comment?: string;
 
   public readonly attributes: AttributesGroupModel<EdgeAttributeKey>;

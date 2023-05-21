@@ -1,13 +1,13 @@
 import { it, test, expect, describe, beforeEach } from 'vitest';
 
-import { AttributeList } from './AttributeList.js';
+import { AttributeList, NodeAttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
-import { AttributeListKind } from '@ts-graphviz/common';
+import { getASTType } from '@ts-graphviz/common';
 
-let attrs: AttributeList<AttributeListKind>;
+let attrs: NodeAttributeList;
 beforeEach(() => {
-  attrs = new AttributeList('Node');
+  attrs = new NodeAttributeList();
 });
 
 describe('object', () => {
@@ -22,20 +22,13 @@ describe('object', () => {
   });
 
   it('$$type property should returns "AttributeList"', () => {
-    expect(attrs.$$type).toBe('AttributeList');
+    expect(getASTType(attrs)).toBe('AttributeList');
   });
 });
 
 describe('constructor', () => {
-  describe('1st argument is kind of AttributeList', () => {
-    test.each(['Node', 'Edge', 'Graph'] as AttributeListKind[])('AttributeList kind is %s', (kind) => {
-      attrs = new AttributeList(kind);
-      expect(attrs.$$kind).toStrictEqual(kind);
-    });
-  });
-
-  test('2nd argument is attribute object', () => {
-    attrs = new AttributeList('Node', {
+  test('ast argument is attribute object', () => {
+    attrs = new NodeAttributeList({
       label: 'Label',
     });
     expect(attrs.size).toBe(1);

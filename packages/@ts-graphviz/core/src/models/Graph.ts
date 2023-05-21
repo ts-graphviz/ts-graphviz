@@ -1,11 +1,9 @@
+import { define } from '@ts-graphviz/common';
 import { RootGraph } from './RootGraph.js';
 
 /**
  * DOT object class representing a graph.
  * @group Models
  */
-export class Graph extends RootGraph {
-  get directed(): boolean {
-    return false;
-  }
-}
+@define({ type: 'Graph', directed: false })
+export class Graph extends RootGraph {}

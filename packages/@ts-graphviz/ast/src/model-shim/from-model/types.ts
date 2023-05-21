@@ -1,4 +1,4 @@
-import { DotObjectModel } from '@ts-graphviz/common';
+import { AttributeListModel, EdgeModel, Model, NodeModel, RootGraphModel, SubgraphModel } from '@ts-graphviz/common';
 import {
   AttributeListASTNode,
   CommentKind,
@@ -24,18 +24,16 @@ import {
  *
  * @group AST
  */
-export type ModelToAST<T> = T extends DotObjectModel<infer U>
-  ? U extends 'Graph'
-    ? GraphASTNode | DotASTNode
-    : U extends 'AttributeList'
-    ? AttributeListASTNode
-    : U extends 'Edge'
-    ? EdgeASTNode
-    : U extends 'Node'
-    ? NodeASTNode
-    : U extends 'Subgraph'
-    ? SubgraphASTNode
-    : never
+export type ModelToAST<T extends Model> = T extends RootGraphModel
+  ? GraphASTNode | DotASTNode
+  : T extends SubgraphModel
+  ? SubgraphASTNode
+  : T extends AttributeListModel
+  ? AttributeListASTNode
+  : T extends EdgeModel
+  ? EdgeASTNode
+  : T extends NodeModel
+  ? NodeASTNode
   : never;
 
 /**
@@ -49,13 +47,13 @@ export interface ConvertFromModelOptions {
  * @group Convert Model to AST
  */
 export interface ConvertFromModelContext extends Required<ConvertFromModelOptions> {
-  convert<T extends DotObjectModel>(model: T): ModelToAST<T>;
+  convert<T extends Model>(model: T): ModelToAST<T>;
 }
 
 /**
  * @group Convert Model to AST
  */
-export interface ConvertFromModelPlugin<T extends DotObjectModel> {
+export interface ConvertFromModelPlugin<T extends Model> {
   match(model: T): boolean;
   convert(context: ConvertFromModelContext, model: T): ModelToAST<T>;
 }

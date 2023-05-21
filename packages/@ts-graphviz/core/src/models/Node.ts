@@ -1,4 +1,4 @@
-import { NodeModel, NodeAttributeKey, NodeAttributesObject, Port, ForwardRefNode } from '@ts-graphviz/common';
+import { NodeModel, NodeAttributeKey, NodeAttributesObject, Port, ForwardRefNode, define } from '@ts-graphviz/common';
 import { DotObject } from './DotObject.js';
 import { AttributesGroup } from './AttributesGroup.js';
 
@@ -6,10 +6,8 @@ import { AttributesGroup } from './AttributesGroup.js';
  * DOT object class representing a node.
  * @group Models
  */
+@define({ type: 'Node' })
 export class Node extends DotObject implements NodeModel {
-  public get $$type(): 'Node' {
-    return 'Node';
-  }
   public comment?: string;
 
   public readonly attributes: AttributesGroup<NodeAttributeKey>;

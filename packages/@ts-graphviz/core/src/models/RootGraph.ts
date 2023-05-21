@@ -5,12 +5,8 @@ import { GraphBase } from './GraphBase.js';
  * Base class representing a root graph(digraph, graph).
  * @group Models
  */
-export abstract class RootGraph extends GraphBase<GraphAttributeKey> implements RootGraphModel {
-  public get $$type(): 'Graph' {
-    return 'Graph';
-  }
+export class RootGraph extends GraphBase<GraphAttributeKey> implements RootGraphModel {
   public readonly id?: string;
-  public abstract readonly directed: boolean;
   public strict: boolean;
 
   constructor(id?: string, attributes?: GraphAttributesObject);

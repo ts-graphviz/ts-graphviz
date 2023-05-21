@@ -1,4 +1,4 @@
-import { EdgeModel, isForwardRefNode, isNodeModel } from '@ts-graphviz/common';
+import { EdgeModel, getASTType, isForwardRefNode, isNodeModel } from '@ts-graphviz/common';
 import { EdgeTargetASTNode } from '../../../types.js';
 import { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute, convertComment } from './utils/index.js';
@@ -6,7 +6,7 @@ import { createElement } from '../../../builder/create-element.js';
 
 export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
   match(model) {
-    return model.$$type === 'Edge';
+    return getASTType(model) === 'Edge';
   },
   convert(context, model) {
     return createElement(

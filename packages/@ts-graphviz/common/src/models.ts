@@ -115,24 +115,6 @@ export type SubgraphAttributesObject = AttributesObject<ClusterSubgraphAttribute
 /**
  * @group Models
  */
-export type DotObjectType = 'AttributeList' | 'Node' | 'Edge' | 'Subgraph' | 'Graph';
-
-/**
- * DotObjectModel is an interface that defines a generic type for a {@link DotObjectType}.
- *
- * @template T The type of the {@link DotObjectType}.
- * @group Models
- */
-export interface DotObjectModel<T extends DotObjectType = DotObjectType> {
-  /**
-   * The type of the DotObjectType.
-   */
-  $$type: T;
-}
-
-/**
- * @group Models
- */
 export interface HasComment {
   /** Comments to include when outputting with toDot. */
   comment?: string;
@@ -202,14 +184,7 @@ export type AttributeListKind = 'Graph' | 'Edge' | 'Node';
  * @typeParam T - The attribute keys to set DOT object.
  * @group Models
  */
-export interface AttributeListModel<
-  K extends AttributeListKind = AttributeListKind,
-  T extends AttributeKey = AttributeKey,
-> extends Attributes<T>,
-    HasComment,
-    DotObjectModel<'AttributeList'> {
-  $$kind: K;
-}
+export interface AttributeListModel<T extends AttributeKey = AttributeKey> extends Attributes<T>, HasComment {}
 
 /**
  * Port on an edge node.
@@ -224,7 +199,7 @@ export interface Port {
  * Model that can be converted to Node in DOT language.
  * @group Models
  */
-export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey>, DotObjectModel<'Node'> {
+export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey> {
   /** ID of the node */
   readonly id: string;
   /** Returns ForwardRefNode with port and compass specified. */
@@ -235,7 +210,7 @@ export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey>, 
  * Model that can be converted to Edge in DOT language.
  * @group Models
  */
-export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey>, DotObjectModel<'Edge'> {
+export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey> {
   readonly targets: EdgeTargetTuple;
 }
 
@@ -245,11 +220,11 @@ export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey>, 
  */
 export interface GraphCommonAttributes {
   /** Manage common attributes of graphs in a graph. */
-  graph: AttributeListModel<'Graph', SubgraphAttributeKey | ClusterSubgraphAttributeKey>;
+  graph: AttributeListModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey>;
   /** Manage common attributes of edges in a graph. */
-  edge: AttributeListModel<'Edge', EdgeAttributeKey>;
+  edge: AttributeListModel<EdgeAttributeKey>;
   /** Manage common attributes of nodes in a graph. */
-  node: AttributeListModel<'Node', NodeAttributeKey>;
+  node: AttributeListModel<NodeAttributeKey>;
 }
 
 /**
@@ -604,9 +579,7 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
  * DOT model representing a subgraph.
  * @group Models
  */
-export interface SubgraphModel
-  extends GraphBaseModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey>,
-    DotObjectModel<'Subgraph'> {
+export interface SubgraphModel extends GraphBaseModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey> {
   /** Determines whether the Subgraph is a SubgraphCluster. */
   isSubgraphCluster(): boolean;
 }
@@ -615,9 +588,7 @@ export interface SubgraphModel
  * DOT model representing a root graphs(digraph and graph).
  * @group Models
  */
-export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey>, DotObjectModel<'Graph'> {
-  directed: boolean;
-
+export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey> {
   /**
    * Strict mode.
    *
@@ -670,6 +641,15 @@ export interface EdgeConstructor {
   new (...args: any[]): EdgeModel;
 }
 
+/**
+ * @group Models
+ */
+export interface AttributeListConstructor<T extends AttributeKey = AttributeKey> {
+  new (attributes?: AttributesObject<T>): AttributeListModel;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  new (...args: any[]): AttributeListModel;
+}
+
 /** @hidden */
 export function isForwardRefNode(object: unknown): object is ForwardRefNode {
   return typeof object === 'object' && object !== null && typeof (object as ForwardRefNode).id === 'string';
@@ -680,7 +660,7 @@ export function isNodeModel(object: unknown): object is NodeModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as NodeModel).$$type === 'Node' &&
+    getASTType(object as NodeModel) === 'Node' &&
     typeof (object as NodeModel).id === 'string'
   );
 }
@@ -723,4 +703,59 @@ export function toNodeRefGroup(targets: NodeRefGroupLike): NodeRefGroup {
     throw Error('EdgeTargets must have at least 2 elements.');
   }
   return targets.map((t) => toNodeRef(t));
+}
+
+export type Model = RootGraphModel | SubgraphModel | NodeModel | EdgeModel | AttributeListModel;
+export type ModelConstractor =
+  | RootGraphConstructor
+  | SubgraphConstructor
+  | EdgeConstructor
+  | NodeConstructor
+  | AttributeListConstructor;
+
+const modelsMapping = new WeakMap<ModelConstractor, ASTType>();
+const directedMapping = new WeakMap<RootGraphConstructor, boolean>();
+const attributeListKindMapping = new WeakMap<AttributeListConstructor, AttributeListKind>();
+
+/**
+ * @hidden
+ */
+export function setIsDirected(graph: RootGraphConstructor, directed: boolean) {
+  directedMapping.set(graph, directed);
+}
+
+/**
+ * @hidden
+ */
+export function setASTType(model: ModelConstractor, type: ASTType) {
+  modelsMapping.set(model, type);
+}
+
+/**
+ * @hidden
+ */
+export function setAttributeListKind(model: AttributeListConstructor, kind: AttributeListKind) {
+  attributeListKindMapping.set(model, kind);
+}
+
+export function isDirected(graph: RootGraphModel): boolean {
+  const d = directedMapping.get(graph.constructor as RootGraphConstructor);
+  if (d === undefined) throw Error();
+  return d;
+}
+export function getASTType(model: RootGraphModel): 'Graph';
+export function getASTType(model: SubgraphModel): 'Subgraph';
+export function getASTType(model: NodeModel): 'Node';
+export function getASTType(model: EdgeModel): 'Edge';
+export function getASTType(model: AttributeListModel): 'AttributeList';
+export function getASTType(model: Model): ASTType {
+  const type = modelsMapping.get(model.constructor as ModelConstractor);
+  if (type === undefined) throw Error();
+  return type;
+}
+
+export function getAttributeListKind(model: AttributeListModel): AttributeListKind {
+  const kind = attributeListKindMapping.get(model.constructor as AttributeListConstructor);
+  if (kind === undefined) throw Error();
+  return kind;
 }

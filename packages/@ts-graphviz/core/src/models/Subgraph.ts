@@ -3,6 +3,7 @@ import {
   ClusterSubgraphAttributeKey,
   SubgraphModel,
   SubgraphAttributesObject,
+  define,
 } from '@ts-graphviz/common';
 import { GraphBase } from './GraphBase.js';
 
@@ -10,10 +11,8 @@ import { GraphBase } from './GraphBase.js';
  * DOT object class representing a subgraph.
  * @group Models
  */
+@define({ type: 'Subgraph' })
 export class Subgraph extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAttributeKey> implements SubgraphModel {
-  public get $$type(): 'Subgraph' {
-    return 'Subgraph';
-  }
   public readonly id?: string;
 
   constructor(id?: string, attributes?: SubgraphAttributesObject);

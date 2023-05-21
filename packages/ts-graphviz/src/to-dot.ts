@@ -1,4 +1,4 @@
-import { DotObjectModel } from '@ts-graphviz/common';
+import { Model } from '@ts-graphviz/common';
 import { stringify, fromModel, ConvertFromModelOptions, PrintOptions } from '@ts-graphviz/ast';
 
 /**
@@ -25,7 +25,7 @@ export interface ToDotOptions {
  * @param options Optional options for the conversion.
  * @returns DOT string
  */
-export function toDot(model: DotObjectModel, options?: ToDotOptions): string {
+export function toDot(model: Model, options?: ToDotOptions): string {
   const ast = fromModel(model, options?.convert);
   return stringify(ast, options?.print);
 }

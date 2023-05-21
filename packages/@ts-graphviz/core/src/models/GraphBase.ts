@@ -14,15 +14,11 @@ import {
   toNodeRefGroup,
   toNodeRef,
   EdgeTargetTuple,
-  ClusterSubgraphAttributeKey,
-  EdgeAttributeKey,
-  NodeAttributeKey,
-  SubgraphAttributeKey,
   ModelsContext,
   createModelsContext,
 } from '@ts-graphviz/common';
 import { AttributesBase } from './AttributesBase.js';
-import { AttributeList } from './AttributeList.js';
+import { GraphAttributeList, EdgeAttributeList, NodeAttributeList } from './AttributeList.js';
 
 /**
  * Base class for Graph objects.
@@ -37,9 +33,9 @@ export abstract class GraphBase<T extends AttributeKey> extends AttributesBase<T
   public comment?: string;
 
   public readonly attributes: Readonly<GraphCommonAttributes> = Object.freeze({
-    graph: new AttributeList<'Graph', SubgraphAttributeKey | ClusterSubgraphAttributeKey>('Graph'),
-    edge: new AttributeList<'Edge', EdgeAttributeKey>('Edge'),
-    node: new AttributeList<'Node', NodeAttributeKey>('Node'),
+    graph: new GraphAttributeList(),
+    edge: new EdgeAttributeList(),
+    node: new NodeAttributeList(),
   });
 
   get nodes(): ReadonlyArray<NodeModel> {
