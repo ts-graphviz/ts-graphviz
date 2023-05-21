@@ -1,14 +1,14 @@
-import { EdgeConstructor, NodeConstructor, RootGraphConstructor, SubgraphConstructor } from './models.js';
+import { EdgeModel, NodeModel, RootGraphModel, SubgraphModel } from './models.js';
 
 /**
  * @group Models Context
  */
 export interface ModelsContext {
-  Graph: RootGraphConstructor;
-  Digraph: RootGraphConstructor;
-  Subgraph: SubgraphConstructor;
-  Node: NodeConstructor;
-  Edge: EdgeConstructor;
+  Graph: RootGraphModel.Constructor;
+  Digraph: RootGraphModel.Constructor;
+  Subgraph: SubgraphModel.Constructor;
+  Node: NodeModel.Constructor;
+  Edge: EdgeModel.Constructor;
 }
 
 /**

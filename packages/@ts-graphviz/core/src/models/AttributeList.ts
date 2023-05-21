@@ -2,16 +2,12 @@ import {
   AttributeKey,
   AttributeListModel,
   ClusterSubgraphAttributeKey,
-  GraphAttributesObject,
   SubgraphAttributeKey,
-  SubgraphAttributesObject,
+  define,
+  NodeAttributeKey,
+  EdgeAttributeKey,
 } from '@ts-graphviz/common';
 import { AttributesBase } from './AttributesBase.js';
-import { define } from '@ts-graphviz/common';
-import { NodeAttributeKey } from '@ts-graphviz/common';
-import { NodeAttributesObject } from '@ts-graphviz/common';
-import { EdgeAttributeKey } from '@ts-graphviz/common';
-import { EdgeAttributesObject } from '@ts-graphviz/common';
 
 /**
  * A set of attribute values for any object.
@@ -25,25 +21,10 @@ export class AttributeList<T extends AttributeKey = AttributeKey>
 }
 
 @define({ type: 'AttributeList', kind: 'Node' })
-export class NodeAttributeList extends AttributeList<NodeAttributeKey> implements AttributeListModel<NodeAttributeKey> {
-  constructor(attributes?: NodeAttributesObject) {
-    super(attributes);
-  }
-}
+export class NodeAttributeList extends AttributeList<NodeAttributeKey> {}
 
 @define({ type: 'AttributeList', kind: 'Edge' })
-export class EdgeAttributeList extends AttributeList<EdgeAttributeKey> implements AttributeListModel<EdgeAttributeKey> {
-  constructor(attributes?: EdgeAttributesObject) {
-    super(attributes);
-  }
-}
+export class EdgeAttributeList extends AttributeList<EdgeAttributeKey> {}
 
 @define({ type: 'AttributeList', kind: 'Graph' })
-export class GraphAttributeList
-  extends AttributeList<SubgraphAttributeKey | ClusterSubgraphAttributeKey>
-  implements AttributeListModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey>
-{
-  constructor(attributes?: SubgraphAttributesObject) {
-    super(attributes);
-  }
-}
+export class GraphAttributeList extends AttributeList<SubgraphAttributeKey | ClusterSubgraphAttributeKey> {}

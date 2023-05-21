@@ -185,6 +185,16 @@ export type AttributeListKind = 'Graph' | 'Edge' | 'Node';
  * @group Models
  */
 export interface AttributeListModel<T extends AttributeKey = AttributeKey> extends Attributes<T>, HasComment {}
+export namespace AttributeListModel {
+  /**
+   * @group Models
+   */
+  export interface Constructor<T extends AttributeKey = AttributeKey> {
+    new (attributes?: AttributesObject<T>): AttributeListModel;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    new (...args: any[]): AttributeListModel;
+  }
+}
 
 /**
  * Port on an edge node.
@@ -205,6 +215,16 @@ export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey> {
   /** Returns ForwardRefNode with port and compass specified. */
   port(port: string | Partial<Port>): ForwardRefNode;
 }
+export namespace NodeModel {
+  /**
+   * @group Models
+   */
+  export interface Constructor {
+    new (id: string, attributes?: NodeAttributesObject): NodeModel;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    new (...args: any[]): NodeModel;
+  }
+}
 
 /**
  * Model that can be converted to Edge in DOT language.
@@ -212,6 +232,16 @@ export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey> {
  */
 export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey> {
   readonly targets: EdgeTargetTuple;
+}
+export namespace EdgeModel {
+  /**
+   * @group Models
+   */
+  export interface Constructor {
+    new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): EdgeModel;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    new (...args: any[]): EdgeModel;
+  }
 }
 
 /**
@@ -583,6 +613,17 @@ export interface SubgraphModel extends GraphBaseModel<SubgraphAttributeKey | Clu
   /** Determines whether the Subgraph is a SubgraphCluster. */
   isSubgraphCluster(): boolean;
 }
+export namespace SubgraphModel {
+  /**
+   * @group Models
+   */
+  export interface Constructor {
+    new (id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
+    new (attributes?: SubgraphAttributesObject): SubgraphModel;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    new (...args: any[]): SubgraphModel;
+  }
+}
 
 /**
  * DOT model representing a root graphs(digraph and graph).
@@ -600,54 +641,18 @@ export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey> {
    */
   strict: boolean;
 }
-
-/**
- * @group Models
- */
-export interface RootGraphConstructor {
-  new (id?: string, attributes?: GraphAttributesObject): RootGraphModel;
-  new (id?: string, strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
-  new (strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
-  new (attributes?: GraphAttributesObject): RootGraphModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  new (...args: any[]): RootGraphModel;
-}
-
-/**
- * @group Models
- */
-export interface SubgraphConstructor {
-  new (id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
-  new (attributes?: SubgraphAttributesObject): SubgraphModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  new (...args: any[]): SubgraphModel;
-}
-
-/**
- * @group Models
- */
-export interface NodeConstructor {
-  new (id: string, attributes?: NodeAttributesObject): NodeModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  new (...args: any[]): NodeModel;
-}
-
-/**
- * @group Models
- */
-export interface EdgeConstructor {
-  new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): EdgeModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  new (...args: any[]): EdgeModel;
-}
-
-/**
- * @group Models
- */
-export interface AttributeListConstructor<T extends AttributeKey = AttributeKey> {
-  new (attributes?: AttributesObject<T>): AttributeListModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  new (...args: any[]): AttributeListModel;
+export namespace RootGraphModel {
+  /**
+   * @group Models
+   */
+  export interface Constructor {
+    new (id?: string, attributes?: GraphAttributesObject): RootGraphModel;
+    new (id?: string, strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
+    new (strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
+    new (attributes?: GraphAttributesObject): RootGraphModel;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    new (...args: any[]): RootGraphModel;
+  }
 }
 
 /** @hidden */
@@ -706,56 +711,54 @@ export function toNodeRefGroup(targets: NodeRefGroupLike): NodeRefGroup {
 }
 
 export type Model = RootGraphModel | SubgraphModel | NodeModel | EdgeModel | AttributeListModel;
-export type ModelConstractor =
-  | RootGraphConstructor
-  | SubgraphConstructor
-  | EdgeConstructor
-  | NodeConstructor
-  | AttributeListConstructor;
+export namespace Model {
+  export type Constractor =
+    | RootGraphModel.Constructor
+    | SubgraphModel.Constructor
+    | EdgeModel.Constructor
+    | NodeModel.Constructor
+    | AttributeListModel.Constructor;
+}
 
-const modelsMapping = new WeakMap<ModelConstractor, ASTType>();
-const directedMapping = new WeakMap<RootGraphConstructor, boolean>();
-const attributeListKindMapping = new WeakMap<AttributeListConstructor, AttributeListKind>();
+const modelsMapping = new WeakMap<Model.Constractor, ASTType>();
+const directedMapping = new WeakMap<RootGraphModel.Constructor, boolean>();
+const attributeListKindMapping = new WeakMap<AttributeListModel.Constructor, AttributeListKind>();
 
 /**
  * @hidden
  */
-export function setIsDirected(graph: RootGraphConstructor, directed: boolean) {
+export function setIsDirected(graph: RootGraphModel.Constructor, directed: boolean) {
   directedMapping.set(graph, directed);
 }
 
 /**
  * @hidden
  */
-export function setASTType(model: ModelConstractor, type: ASTType) {
+export function setASTType(model: Model.Constractor, type: ASTType) {
   modelsMapping.set(model, type);
 }
 
 /**
  * @hidden
  */
-export function setAttributeListKind(model: AttributeListConstructor, kind: AttributeListKind) {
+export function setAttributeListKind(model: AttributeListModel.Constructor, kind: AttributeListKind) {
   attributeListKindMapping.set(model, kind);
 }
 
 export function isDirected(graph: RootGraphModel): boolean {
-  const d = directedMapping.get(graph.constructor as RootGraphConstructor);
+  const d = directedMapping.get(graph.constructor as RootGraphModel.Constructor);
   if (d === undefined) throw Error();
   return d;
 }
-export function getASTType(model: RootGraphModel): 'Graph';
-export function getASTType(model: SubgraphModel): 'Subgraph';
-export function getASTType(model: NodeModel): 'Node';
-export function getASTType(model: EdgeModel): 'Edge';
-export function getASTType(model: AttributeListModel): 'AttributeList';
+
 export function getASTType(model: Model): ASTType {
-  const type = modelsMapping.get(model.constructor as ModelConstractor);
+  const type = modelsMapping.get(model.constructor as Model.Constractor);
   if (type === undefined) throw Error();
   return type;
 }
 
 export function getAttributeListKind(model: AttributeListModel): AttributeListKind {
-  const kind = attributeListKindMapping.get(model.constructor as AttributeListConstructor);
+  const kind = attributeListKindMapping.get(model.constructor as AttributeListModel.Constructor);
   if (kind === undefined) throw Error();
   return kind;
 }
