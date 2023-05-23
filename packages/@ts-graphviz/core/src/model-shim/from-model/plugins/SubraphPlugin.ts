@@ -1,7 +1,7 @@
 import { SubgraphModel, getASTType } from '@ts-graphviz/common';
 import { ConvertFromModelPlugin } from '../types.js';
-import { createElement } from '../../../builder/create-element.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';
+import { createElement } from '@ts-graphviz/ast';
 
 export const SubgraphPlugin: ConvertFromModelPlugin<SubgraphModel> = {
   match(model) {

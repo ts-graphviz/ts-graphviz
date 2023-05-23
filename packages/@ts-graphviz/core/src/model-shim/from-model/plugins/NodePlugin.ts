@@ -1,7 +1,7 @@
 import { NodeModel, getASTType } from '@ts-graphviz/common';
 import { ConvertFromModelPlugin } from '../types.js';
-import { createElement } from '../../../builder/create-element.js';
 import { convertComment, convertAttribute } from './utils/index.js';
+import { createElement } from '@ts-graphviz/ast';
 
 export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {
   match(model) {

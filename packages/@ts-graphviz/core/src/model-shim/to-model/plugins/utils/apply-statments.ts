@@ -1,7 +1,7 @@
 import { GraphBaseModel } from '@ts-graphviz/common';
-import { ClusterStatementASTNode, AttributeASTNode } from '../../../../types.js';
 import { CommentHolder } from './comment-holder.js';
 import { convertToEdgeTargetTuple } from './convert-to-edge-target-tuple.js';
+import { AttributeASTNode, ClusterStatementASTNode } from '@ts-graphviz/ast';
 
 export function applyStatements(graph: GraphBaseModel, statements: ClusterStatementASTNode[]): void {
   const commentHolder = new CommentHolder();

@@ -1,5 +1,5 @@
+import { EdgeASTNode } from '@ts-graphviz/ast';
 import { EdgeTargetTuple, EdgeTarget } from '@ts-graphviz/common';
-import { EdgeASTNode } from '../../../../types.js';
 
 export function convertToEdgeTargetTuple(edge: EdgeASTNode): EdgeTargetTuple {
   return edge.targets.map((t): EdgeTarget => {

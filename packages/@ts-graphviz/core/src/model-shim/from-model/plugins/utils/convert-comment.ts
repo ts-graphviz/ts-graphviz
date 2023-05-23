@@ -1,5 +1,4 @@
-import { createElement } from '../../../../builder/create-element.js';
-import { CommentASTNode, CommentKind } from '../../../../types.js';
+import { CommentKind, CommentASTNode, createElement } from '@ts-graphviz/ast';
 
 export function convertComment(value: string, kind: CommentKind): CommentASTNode {
   return createElement(

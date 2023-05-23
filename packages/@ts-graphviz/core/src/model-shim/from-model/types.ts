@@ -1,13 +1,13 @@
-import { AttributeListModel, EdgeModel, Model, NodeModel, RootGraphModel, SubgraphModel } from '@ts-graphviz/common';
 import {
-  AttributeListASTNode,
-  CommentKind,
-  DotASTNode,
-  EdgeASTNode,
   GraphASTNode,
-  NodeASTNode,
+  DotASTNode,
   SubgraphASTNode,
-} from '../../types.js';
+  AttributeListASTNode,
+  EdgeASTNode,
+  NodeASTNode,
+  CommentKind,
+} from '@ts-graphviz/ast';
+import { AttributeListModel, EdgeModel, Model, NodeModel, RootGraphModel, SubgraphModel } from '@ts-graphviz/common';
 
 /**
  * ModelToAST is a type alias used to map a generic type T to a specific AST node type.

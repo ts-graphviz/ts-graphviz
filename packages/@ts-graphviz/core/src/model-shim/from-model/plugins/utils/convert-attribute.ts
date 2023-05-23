@@ -1,6 +1,5 @@
+import { AttributeASTNode, createElement } from '@ts-graphviz/ast';
 import { AttributeKey, Attribute } from '@ts-graphviz/common';
-import { createElement } from '../../../../builder/create-element.js';
-import { AttributeASTNode } from '../../../../types.js';
 
 export function convertAttribute<K extends AttributeKey>(key: K, value: Attribute<K>): AttributeASTNode {
   if (typeof value === 'string') {

@@ -1,4 +1,4 @@
-import { AttributeASTNode, NodeASTNode } from '../../../types.js';
+import { NodeASTNode, AttributeASTNode } from '@ts-graphviz/ast';
 import { ConvertToModelPlugin } from '../types.js';
 
 export const NodePlugin: ConvertToModelPlugin<NodeASTNode> = {

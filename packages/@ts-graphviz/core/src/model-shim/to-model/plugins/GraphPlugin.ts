@@ -1,4 +1,4 @@
-import { GraphASTNode } from '../../../types.js';
+import { GraphASTNode } from '@ts-graphviz/ast';
 import { ConvertToModelPlugin } from '../types.js';
 import { applyStatements } from './utils/apply-statments.js';
 

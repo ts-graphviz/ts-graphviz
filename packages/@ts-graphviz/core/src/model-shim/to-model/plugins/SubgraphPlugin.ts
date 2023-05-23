@@ -1,4 +1,4 @@
-import { SubgraphASTNode } from '../../../types.js';
+import { SubgraphASTNode } from '@ts-graphviz/ast';
 import { ConvertToModelPlugin } from '../types.js';
 import { applyStatements } from './utils/apply-statments.js';
 

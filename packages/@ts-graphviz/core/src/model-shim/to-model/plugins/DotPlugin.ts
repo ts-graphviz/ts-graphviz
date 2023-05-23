@@ -1,6 +1,6 @@
-import { DotASTNode } from '../../../types.js';
 import { CommentHolder } from './utils/comment-holder.js';
 import { ConvertToModelPlugin } from '../types.js';
+import { DotASTNode } from '@ts-graphviz/ast';
 
 export const DotPlugin: ConvertToModelPlugin<DotASTNode> = {
   match(ast) {

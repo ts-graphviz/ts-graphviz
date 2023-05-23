@@ -1,5 +1,6 @@
 import { EdgeModel, NodeModel, RootGraphModel, SubgraphModel } from '@ts-graphviz/common';
-import { parse, ParseOptions, toModel, ConvertToModelOptions } from '@ts-graphviz/ast';
+import { parse, ParseOptions } from '@ts-graphviz/ast';
+import { toModel, ConvertToModelOptions } from '@ts-graphviz/core';
 
 /**
  * This interface provides options for converting DOT to a model.

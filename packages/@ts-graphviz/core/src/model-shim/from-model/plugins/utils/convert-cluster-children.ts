@@ -1,8 +1,8 @@
 import { GraphBaseModel } from '@ts-graphviz/common';
-import { ClusterStatementASTNode } from '../../../../types.js';
 import { ConvertFromModelContext } from '../../types.js';
 import { convertAttribute } from './convert-attribute.js';
 import { convertComment } from './convert-comment.js';
+import { ClusterStatementASTNode } from '@ts-graphviz/ast';
 
 export function convertClusterChildren(context: ConvertFromModelContext, model: GraphBaseModel) {
   return Array.from(

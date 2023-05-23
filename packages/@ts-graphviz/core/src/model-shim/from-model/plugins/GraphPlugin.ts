@@ -1,8 +1,8 @@
 import { RootGraphModel, getASTType, isDirected } from '@ts-graphviz/common';
 import { ConvertFromModelPlugin } from '../types.js';
-import { createElement } from '../../../builder/create-element.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';
 import { convertComment } from './utils/convert-comment.js';
+import { createElement } from '@ts-graphviz/ast';
 
 export const GraphPlugin: ConvertFromModelPlugin<RootGraphModel> = {
   match(model) {

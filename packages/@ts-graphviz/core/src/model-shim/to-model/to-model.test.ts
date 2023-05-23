@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest';
 import '@ts-graphviz/core';
-import { createElement } from '../../builder/create-element.js';
+import { createElement } from '@ts-graphviz/ast';
 
 import { toModel } from './to-model.js';
 

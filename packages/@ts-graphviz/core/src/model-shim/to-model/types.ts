@@ -1,5 +1,5 @@
+import { DotASTNode, GraphASTNode, SubgraphASTNode, NodeASTNode, EdgeASTNode } from '@ts-graphviz/ast';
 import { EdgeModel, ModelsContext, NodeModel, RootGraphModel, SubgraphModel } from '@ts-graphviz/common';
-import { DotASTNode, EdgeASTNode, GraphASTNode, NodeASTNode, SubgraphASTNode } from '../../types.js';
 
 /**
  *  ModelOf is a type that determines the type of model to use depending on the value of T.

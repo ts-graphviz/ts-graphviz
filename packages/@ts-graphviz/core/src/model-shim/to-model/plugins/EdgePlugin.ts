@@ -1,4 +1,4 @@
-import { AttributeASTNode, EdgeASTNode } from '../../../types.js';
+import { EdgeASTNode, AttributeASTNode } from '@ts-graphviz/ast';
 import { ConvertToModelPlugin } from '../types.js';
 import { convertToEdgeTargetTuple } from './utils/convert-to-edge-target-tuple.js';
 
