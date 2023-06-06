@@ -301,12 +301,7 @@ export namespace QuadType {
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankdir/ rankdir}
  * @group Attribute Types
  */
-export type Rankdir = `${Rankdir.TB}${Rankdir.RL}`;
-/** @hidden */
-export namespace Rankdir {
-  export type TB = 'T' | 'B';
-  export type RL = 'R' | 'L';
-}
+export type Rankdir = 'TB' | 'BT' | 'LR' | 'RL';
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankType/ rankType}
