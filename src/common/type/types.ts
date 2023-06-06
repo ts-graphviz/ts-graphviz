@@ -218,14 +218,14 @@ export type Point = Point.position | `${Point.position}!`;
 /** @hidden */
 export namespace Point {
   export type position =
-    | `%${Double},%${Double}`
-    | `%${Double},%${Double},%${Double}`
-    | `%${Double},%${Double},%${Double},%${Double},%${Double}`
-    | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
-    | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
-    | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
-    | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double}`
-    | `%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${Double},%${number}`;
+    | `${Double},${Double}`
+    | `${Double},${Double},${Double}`
+    | `${Double},${Double},${Double},${Double},${Double}`
+    | `${Double},${Double},${Double},${Double},${Double},${Double}`
+    | `${Double},${Double},${Double},${Double},${Double},${Double},${Double}`
+    | `${Double},${Double},${Double},${Double},${Double},${Double},${Double},${Double}`
+    | `${Double},${Double},${Double},${Double},${Double},${Double},${Double},${Double},${Double}`
+    | `${Double},${Double},${Double},${Double},${Double},${Double},${Double},${Double},${Double},${number}`;
 }
 
 /**
@@ -318,6 +318,28 @@ export namespace RankType {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
   export interface $values extends $keywords<'same' | 'min' | 'source' | 'max' | 'sink'> {}
+  export interface $exclude extends $keywordsValidation {}
+}
+
+/**
+ * Which rank to move floating (loose) nodes to
+ *
+ * Valid options:
+ * - "min": Move floating (loose) nodes to minimum rank.
+ * - "max": Move floating (loose) nodes to maximum rank.
+ * - Otherwise, floating nodes are placed anywhere.
+ *
+ * Despite the name TBbalance ("Top-Bottom Balance"), this also works with left-right ranks, e.g. rankdir=LR.
+ *
+ * @see {@link https://graphviz.org/docs/attrs/TBbalance/ TBbalance}
+ * @group Attribute Types
+ */
+export type TBbalanceType = TBbalanceType.values;
+/** @hidden */
+export namespace TBbalanceType {
+  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
+
+  export interface $values extends $keywords<'min' | 'max'> {}
   export interface $exclude extends $keywordsValidation {}
 }
 /**
