@@ -169,9 +169,9 @@ export interface Attributes<T extends AttributeKey> {
    *
    * If the value corresponding to the key does not exist, undefined is returned.
    */
-  get(key: T): Attribute<T> | undefined;
+  get<K extends T>(key: K): Attribute<K> | undefined;
   /** Set a value, by specifying the key of the attributes in the DOT object. */
-  set(key: T, value: Attribute<T>): void;
+  set<K extends T>(key: K, value: Attribute<K>): void;
   /**
    * Apply keys and values that can be specified for DOT objects collectively.
    *

@@ -24,11 +24,11 @@ export abstract class AttributesBase<T extends AttributeKey> extends DotObject i
     return this.#attrs.size;
   }
 
-  public get(key: T): Attribute<T> | undefined {
-    return this.#attrs.get(key);
+  public get<K extends T>(key: K): Attribute<K> | undefined {
+    return this.#attrs.get(key) as Attribute<K> | undefined;
   }
 
-  public set(key: T, value: Attribute<T>): void {
+  public set<K extends T>(key: K, value: Attribute<K>): void {
     if (value !== null && value !== undefined) {
       this.#attrs.set(key, value);
     }

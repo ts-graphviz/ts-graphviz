@@ -32,6 +32,7 @@ import type {
   SplineType,
   StartType,
   Style,
+  TBbalanceType,
   ViewPort,
 } from '../type/index.js';
 
@@ -2716,6 +2717,7 @@ export namespace Attribute {
     arrowtail: ArrowType;
     bb: Rect;
     bgcolor: Color | ColorList;
+    TBbalance: TBbalanceType;
     center: boolean;
     charset: string;
     class: string;

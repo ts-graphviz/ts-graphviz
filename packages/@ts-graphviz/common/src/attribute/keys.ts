@@ -253,6 +253,7 @@ export namespace GraphAttributeKey {
       | 'voro_margin'
       | 'xdotversion'
       | 'class'
+      | 'TBbalance'
     > {}
   export interface $exclude extends $keywordsValidation {}
 }
