@@ -138,6 +138,15 @@
       "contributions": [
         "a11y"
       ]
+    },
+    {
+      "login": "cloud-on-prem",
+      "name": "Prem Pillai",
+      "avatar_url": "https://avatars.githubusercontent.com/u/238277?v=4",
+      "profile": "https://pre.ms",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -146,5 +155,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true,
-  "commitConvention": "angular"
+  "commitConvention": "angular",
+  "commitType": "docs"
 }
