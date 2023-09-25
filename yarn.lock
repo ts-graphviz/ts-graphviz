@@ -3208,9 +3208,9 @@ rollup-plugin-dts@5.1.1:
     "@babel/code-frame" "^7.18.6"
 
 rollup@^3.11.0:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.11.0.tgz#89c487441b18b7c689a0c9aa4221e03b87535461"
-  integrity sha512-+uWPPkpWQ2H3Qi7sNBcRfhhHJyUNgBYhG4wKe5wuGRj2m55kpo+0p5jubKNBjQODyPe6tSBE3tNpdDwEisQvAQ==
+  version "3.29.3"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.29.3.tgz#97769774ccaa6a3059083d4680fcabd8ead01289"
+  integrity sha512-T7du6Hum8jOkSWetjRgbwpM6Sy0nECYrYRSmZjayFcOddtKJWU4d17AC3HNUk7HRuqy4p+G7aEZclSHytqUmEg==
   optionalDependencies:
     fsevents "~2.3.2"
 
