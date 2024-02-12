@@ -9,6 +9,7 @@
 [![deno version](https://img.shields.io/badge/deno-^1.28.0-black?logo=deno)](https://github.com/denoland/deno)
 ![npm](https://img.shields.io/npm/dm/ts-graphviz)
 [![All Contributors](https://img.shields.io/github/all-contributors/ts-graphviz/ts-graphviz?color=orange)](#contributors)
+[![Tidelift](https://tidelift.com/badges/package/npm/ts-graphviz?style=flat)](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=readme)
 
 # ts-graphviz
 
@@ -660,6 +661,15 @@ and help us continue expanding and improving the library. By achieving this goal
 for developers who need to analyze and visualize complex graph structures, while also fostering a strong and supportive community of users and sponsors.
 
 > **Note** Even just a dollar is enough motivation to develop 😊
+
+## ts-graphviz for Enterprise 🏢
+
+Available as part of the Tidelift Subscription.
+
+The maintainers of ts-graphviz and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open-source dependencies you use to build your applications.
+Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use.
+
+[Learn more](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=referral&utm_campaign=enterprise&utm_term=repo).
 
 ## License ⚖️
 
