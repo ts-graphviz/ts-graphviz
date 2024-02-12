@@ -8,6 +8,7 @@
 [![deno version](https://img.shields.io/badge/deno-^1.28.0-black?logo=deno)](https://github.com/denoland/deno)
 ![npm](https://img.shields.io/npm/dm/ts-graphviz)
 [![All Contributors](https://img.shields.io/github/all-contributors/ts-graphviz/ts-graphviz?color=orange)](#contributors)
+[![Tidefift](https://tidelift.com/badges/package/npm/ts-graphviz?style=flat)](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=readme)
 
 # ts-graphviz
 
@@ -655,12 +656,21 @@ TypeScript/JavaScript エコシステムで Graphviz との結合度を高め、
 
 [ts-graphviz](https://github.com/sponsors/ts-graphviz) を支援してください。
 
-ts-graphvizの現在の目標は、開発・保守費用を賄い、ライブラリの拡張・改良を継続的に支援していただけるスポンサーを10社(人)集めることです。
+ts-graphvizの現在の目標は、開発・保守費用を賄い、ライブラリの拡張・改良を継続的に支援していただけるスポンサーを集めることです。
 
 この目標を達成することで、ts-graphvizが複雑なグラフ構造の解析や視覚化を必要とする開発者にとって貴重なリソースであり続け、
 またユーザーやスポンサーによる強力で支持的なコミュニティを育成することができると考えています。
 
 > **Note** たった1ドルでも、十分な開発のモチベーションになります 😊
+
+## エンタープライズ向け ts-graphviz 🏢
+
+Tideliftサブスクリプションの一部として利用可能です。
+
+ts-graphvizと他の何千ものパッケージのメンテナは、Tideliftと協力して、アプリケーションを構築するために使用するオープンソースの依存関係の商用サポートとメンテナンスを提供しています。
+時間を節約し、リスクを軽減し、コードの健全性を向上させながら、あなたが使用している依存関係のメンテナに支払うことができます。
+
+[更に詳しく](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=referral&utm_campaign=enterprise&utm_term=repo).
 
 ## ライセンス ⚖️
 
