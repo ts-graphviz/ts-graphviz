@@ -8,7 +8,9 @@ import { Node } from './Node.js';
 
 let edge: Edge;
 
-const targets = [...Array(2)].map((_, i) => new Node(`node${i + 1}`)) as unknown as EdgeTargetTuple;
+const targets = [...Array(2)].map(
+  (_, i) => new Node(`node${i + 1}`),
+) as unknown as EdgeTargetTuple;
 
 beforeEach(() => {
   edge = new Edge(targets);
@@ -31,10 +33,14 @@ describe('Constructor', () => {
 
 it('throws an error when the EdgeTarget element is missing', () => {
   const n = new Node('id');
-  expect(() => new Edge([] as unknown as EdgeTargetTuple)).toThrowErrorMatchingInlineSnapshot(
+  expect(
+    () => new Edge([] as unknown as EdgeTargetTuple),
+  ).toThrowErrorMatchingInlineSnapshot(
     `"The element of Edge target is missing or not satisfied as Edge target."`,
   );
-  expect(() => new Edge([n] as unknown as EdgeTargetTuple)).toThrowErrorMatchingInlineSnapshot(
+  expect(
+    () => new Edge([n] as unknown as EdgeTargetTuple),
+  ).toThrowErrorMatchingInlineSnapshot(
     `"The element of Edge target is missing or not satisfied as Edge target."`,
   );
 });

@@ -1,7 +1,7 @@
 import { AttributeListModel } from '../../../../common/index.js';
+import { createElement } from '../../../builder/create-element.js';
 import { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute } from './utils/index.js';
-import { createElement } from '../../../builder/create-element.js';
 
 export const AttributeListPlugin: ConvertFromModelPlugin<AttributeListModel> = {
   match(model) {

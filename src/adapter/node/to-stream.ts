@@ -1,5 +1,5 @@
-import { Readable, PassThrough } from 'node:stream';
 import { spawn } from 'node:child_process';
+import { PassThrough, Readable } from 'node:stream';
 import { Layout, Options } from '../types/index.js';
 import { createCommandAndArgs } from '../utils/index.js';
 import { pipeline } from './utils.js';
@@ -7,9 +7,12 @@ import { pipeline } from './utils.js';
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
  */
-export async function toStream<T extends Layout>(dot: string, options?: Options<T>): Promise<NodeJS.ReadableStream> {
+export async function toStream<T extends Layout>(
+  dot: string,
+  options?: Options<T>,
+): Promise<NodeJS.ReadableStream> {
   const [command, args] = createCommandAndArgs(options ?? {});
-  return new Promise(async function toStreamInternal(resolve, reject) {
+  return new Promise(function toStreamInternal(resolve, reject) {
     const p = spawn(command, args, { stdio: 'pipe' });
 
     // error handling
@@ -31,11 +34,17 @@ export async function toStream<T extends Layout>(dot: string, options?: Options<
       if (code === 0) {
         resolve(dist);
       } else {
-        const message = Buffer.concat(stderrChunks as ReadonlyArray<Uint8Array>).toString();
-        reject(new Error(`Command "${command}" failed.\nCODE: ${code}\nSIGNAL: ${signal}\nMESSAGE: ${message}`));
+        const message = Buffer.concat(
+          stderrChunks as ReadonlyArray<Uint8Array>,
+        ).toString();
+        reject(
+          new Error(
+            `Command "${command}" failed.\nCODE: ${code}\nSIGNAL: ${signal}\nMESSAGE: ${message}`,
+          ),
+        );
       }
     });
 
-    await pipeline(Readable.from([dot]), p.stdin);
+    pipeline(Readable.from([dot]), p.stdin);
   });
 }

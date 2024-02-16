@@ -28,14 +28,14 @@ export type ModelToAST<T> = T extends DotObjectModel<infer U>
   ? U extends 'Graph'
     ? GraphASTNode | DotASTNode
     : U extends 'AttributeList'
-    ? AttributeListASTNode
-    : U extends 'Edge'
-    ? EdgeASTNode
-    : U extends 'Node'
-    ? NodeASTNode
-    : U extends 'Subgraph'
-    ? SubgraphASTNode
-    : never
+      ? AttributeListASTNode
+      : U extends 'Edge'
+        ? EdgeASTNode
+        : U extends 'Node'
+          ? NodeASTNode
+          : U extends 'Subgraph'
+            ? SubgraphASTNode
+            : never
   : never;
 
 /**
@@ -50,7 +50,8 @@ export interface ConvertFromModelOptions {
  * @group Convert Model to AST
  * @alpha
  */
-export interface ConvertFromModelContext extends Required<ConvertFromModelOptions> {
+export interface ConvertFromModelContext
+  extends Required<ConvertFromModelOptions> {
   convert<T extends DotObjectModel>(model: T): ModelToAST<T>;
 }
 

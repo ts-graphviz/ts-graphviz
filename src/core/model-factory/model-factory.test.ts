@@ -1,5 +1,5 @@
-import { strict, digraph, graph, withContext } from './model-factory.js';
 import { Digraph, Graph } from '../models/index.js';
+import { digraph, graph, strict, withContext } from './model-factory.js';
 
 test('digraph function returns an object of Digraph, and the strict property is false', () => {
   const g = digraph();

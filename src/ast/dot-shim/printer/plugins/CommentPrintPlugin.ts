@@ -1,7 +1,13 @@
 import { map, pipe } from '../../../../utils/index.js';
 import { CommentASTNode } from '../../../types.js';
 import { PrintPlugin } from '../types.js';
-import { leftPadWith, splitByLine, joinBy, wrapByPair, endOfLine } from './utils/index.js';
+import {
+  endOfLine,
+  joinBy,
+  leftPadWith,
+  splitByLine,
+  wrapByPair,
+} from './utils/index.js';
 
 export const CommentPrintPlugin: PrintPlugin<CommentASTNode> = {
   match(ast) {
@@ -11,12 +17,24 @@ export const CommentPrintPlugin: PrintPlugin<CommentASTNode> = {
     const eol = endOfLine(context.endOfLine);
     switch (ast.kind) {
       case 'Block':
-        return pipe(splitByLine, map(leftPadWith(' * ')), joinBy(eol), wrapByPair(`/**${eol}`, `${eol} */`))(ast.value);
+        return pipe(
+          splitByLine,
+          map(leftPadWith(' * ')),
+          joinBy(eol),
+          wrapByPair(`/**${eol}`, `${eol} */`),
+        )(ast.value);
       case 'Macro':
-        return pipe(splitByLine, map(leftPadWith('# ')), joinBy(eol))(ast.value);
-      case 'Slash':
+        return pipe(
+          splitByLine,
+          map(leftPadWith('# ')),
+          joinBy(eol),
+        )(ast.value);
       default:
-        return pipe(splitByLine, map(leftPadWith('// ')), joinBy(eol))(ast.value);
+        return pipe(
+          splitByLine,
+          map(leftPadWith('// ')),
+          joinBy(eol),
+        )(ast.value);
     }
   },
 };

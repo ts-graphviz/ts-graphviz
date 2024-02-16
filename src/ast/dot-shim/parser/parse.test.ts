@@ -58,9 +58,12 @@ describe('parse', () => {
     });
 
     test('graph', () => {
-      const result = parse('graph [ fillcolor=red, label = "example example"];', {
-        startRule: 'AttributeList',
-      });
+      const result = parse(
+        'graph [ fillcolor=red, label = "example example"];',
+        {
+          startRule: 'AttributeList',
+        },
+      );
       expect(result).toMatchSnapshot();
     });
 
@@ -90,7 +93,9 @@ describe('parse', () => {
     });
 
     test('edge with port', () => {
-      const result = parse('a:p1 -> b:p2 -> c:p3:w -> d:w;', { startRule: 'Edge' });
+      const result = parse('a:p1 -> b:p2 -> c:p3:w -> d:w;', {
+        startRule: 'Edge',
+      });
       expect(result).toMatchSnapshot();
     });
 
@@ -113,7 +118,9 @@ describe('parse', () => {
     });
 
     test('grouped ported edge targets', () => {
-      const result = parse('{a1:p1, a2:p2:w} -> {b1:e, b2:p3};', { startRule: 'Edge' });
+      const result = parse('{a1:p1, a2:p2:w} -> {b1:e, b2:p3};', {
+        startRule: 'Edge',
+      });
       expect(result).toMatchSnapshot();
     });
   });

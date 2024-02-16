@@ -1,4 +1,9 @@
-import { EdgeConstructor, NodeConstructor, RootGraphConstructor, SubgraphConstructor } from './models.js';
+import {
+  EdgeConstructor,
+  NodeConstructor,
+  RootGraphConstructor,
+  SubgraphConstructor,
+} from './models.js';
 
 /**
  * @group Models Context
@@ -29,6 +34,11 @@ export const RootModelsContext: ModelsContext = Object.seal({
  * @group Models Context
  * @alpha
  */
-export function createModelsContext(models: Partial<ModelsContext>): ModelsContext {
-  return Object.assign(Object.seal(Object.assign({}, RootModelsContext)), models);
+export function createModelsContext(
+  models: Partial<ModelsContext>,
+): ModelsContext {
+  return Object.assign(
+    Object.seal(Object.assign({}, RootModelsContext)),
+    models,
+  );
 }

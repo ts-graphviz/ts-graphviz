@@ -1,8 +1,8 @@
 import {
-  SubgraphAttributeKey,
   ClusterSubgraphAttributeKey,
-  SubgraphModel,
+  SubgraphAttributeKey,
   SubgraphAttributesObject,
+  SubgraphModel,
 } from '../../common/index.js';
 import { GraphBase } from './GraphBase.js';
 
@@ -10,7 +10,10 @@ import { GraphBase } from './GraphBase.js';
  * DOT object class representing a subgraph.
  * @group Models
  */
-export class Subgraph extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAttributeKey> implements SubgraphModel {
+export class Subgraph
+  extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAttributeKey>
+  implements SubgraphModel
+{
   public get $$type(): 'Subgraph' {
     return 'Subgraph';
   }
@@ -23,7 +26,10 @@ export class Subgraph extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAt
   constructor(...args: unknown[]) {
     super();
     this.id = args.find((arg): arg is string => typeof arg === 'string');
-    const attributes = args.find((arg): arg is SubgraphAttributesObject => typeof arg === 'object' && arg !== null);
+    const attributes = args.find(
+      (arg): arg is SubgraphAttributesObject =>
+        typeof arg === 'object' && arg !== null,
+    );
     if (attributes !== undefined) {
       this.apply(attributes);
     }

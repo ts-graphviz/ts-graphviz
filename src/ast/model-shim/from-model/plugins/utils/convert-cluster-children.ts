@@ -4,7 +4,10 @@ import { ConvertFromModelContext } from '../../types.js';
 import { convertAttribute } from './convert-attribute.js';
 import { convertComment } from './convert-comment.js';
 
-export function convertClusterChildren(context: ConvertFromModelContext, model: GraphBaseModel) {
+export function convertClusterChildren(
+  context: ConvertFromModelContext,
+  model: GraphBaseModel,
+) {
   return Array.from(
     (function* (): Generator<ClusterStatementASTNode> {
       for (const [key, value] of model.values) {

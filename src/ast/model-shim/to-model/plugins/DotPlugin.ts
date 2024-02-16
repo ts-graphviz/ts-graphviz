@@ -1,6 +1,6 @@
 import { DotASTNode } from '../../../types.js';
-import { CommentHolder } from './utils/comment-holder.js';
 import { ConvertToModelPlugin } from '../types.js';
+import { CommentHolder } from './utils/comment-holder.js';
 
 export const DotPlugin: ConvertToModelPlugin<DotASTNode> = {
   match(ast) {
@@ -13,10 +13,11 @@ export const DotPlugin: ConvertToModelPlugin<DotASTNode> = {
         case 'Comment':
           commentHolder.set(stmt);
           break;
-        case 'Graph':
+        case 'Graph': {
           const graph = context.convert(stmt);
           commentHolder.apply(graph, stmt.location);
           return graph;
+        }
       }
     }
     throw Error();

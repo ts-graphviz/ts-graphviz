@@ -12,9 +12,8 @@ export function escapeValue<T extends AttributeKey>(value: Attribute<T>) {
   if (value !== true) {
     if (typeof value === 'string' && /\s/g.test(value)) {
       return `="${value}"`;
-    } else {
-      return `=${value}`;
     }
+    return `=${value}`;
   }
   return '';
 }
@@ -26,8 +25,17 @@ export function escapeValue<T extends AttributeKey>(value: Attribute<T>) {
  * @param options The Options object used to create command arguments
  * @returns A generator that yields strings for command arguments
  */
-export function* createCommandArgs<T extends Layout>(options: Options<T>): Generator<string> {
-  const { suppressWarnings = true, format = 'svg', attributes = {}, library = [], y = false, scale } = options;
+export function* createCommandArgs<T extends Layout>(
+  options: Options<T>,
+): Generator<string> {
+  const {
+    suppressWarnings = true,
+    format = 'svg',
+    attributes = {},
+    library = [],
+    y = false,
+    scale,
+  } = options;
   if (suppressWarnings) yield '-q';
   yield `-T${format}`;
   if (attributes.graph) {
@@ -47,23 +55,34 @@ export function* createCommandArgs<T extends Layout>(options: Options<T>): Gener
   }
   if (typeof scale === 'number' && !Number.isNaN(scale)) yield `-s${scale}`;
   if (Array.isArray(library)) for (const lib of library) yield `-l${lib}`;
-  if (y === true) yield `-y`;
+  if (y === true) yield '-y';
 
   if (typeof options.layout === 'string') {
     yield `-K${options.layout}`;
     switch (options.layout) {
-      case 'neato':
+      case 'neato': {
         const { reduce, noop } = options;
         if (reduce === true) yield '-x';
         if (typeof noop === 'number') yield `-n${noop}`;
         break;
-      case 'fdp':
-        const { grid, oldAttractive, iterations, unscaledFactor, overlapExpansionFactor, temperature } = options;
+      }
+      case 'fdp': {
+        const {
+          grid,
+          oldAttractive,
+          iterations,
+          unscaledFactor,
+          overlapExpansionFactor,
+          temperature,
+        } = options;
         yield ['-L', grid ? '' : 'g', oldAttractive ? 'O' : ''].join('');
         if (typeof iterations === 'number') yield `-Ln${iterations}`;
         if (typeof unscaledFactor === 'number') yield `-LU${unscaledFactor}`;
-        if (typeof overlapExpansionFactor === 'number') yield `-LC${overlapExpansionFactor}`;
+        if (typeof overlapExpansionFactor === 'number')
+          yield `-LC${overlapExpansionFactor}`;
         if (typeof temperature === 'number') yield `-LT${temperature}`;
+        break;
+      }
       default:
         break;
     }

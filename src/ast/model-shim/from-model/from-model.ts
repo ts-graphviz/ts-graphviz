@@ -1,6 +1,6 @@
 import { DotObjectModel } from '../../../common/index.js';
 import { FromModelConverter } from './converter.js';
-import { ModelToAST, ConvertFromModelOptions } from './types.js';
+import { ConvertFromModelOptions, ModelToAST } from './types.js';
 
 /**
  * A function used to convert a DotObjectModel into an AST.
@@ -11,6 +11,9 @@ import { ModelToAST, ConvertFromModelOptions } from './types.js';
  *
  * @group Convert Model to AST
  */
-export function fromModel<T extends DotObjectModel>(model: T, options?: ConvertFromModelOptions): ModelToAST<T> {
+export function fromModel<T extends DotObjectModel>(
+  model: T,
+  options?: ConvertFromModelOptions,
+): ModelToAST<T> {
   return new FromModelConverter(options).convert(model);
 }

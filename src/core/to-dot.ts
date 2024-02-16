@@ -1,5 +1,10 @@
+import {
+  ConvertFromModelOptions,
+  PrintOptions,
+  fromModel,
+  stringify,
+} from '../ast/index.js';
 import { DotObjectModel } from '../common/index.js';
-import { stringify, fromModel, ConvertFromModelOptions, PrintOptions } from '../ast/index.js';
 
 /**
  * This interface provides options for converting a model to DOT.

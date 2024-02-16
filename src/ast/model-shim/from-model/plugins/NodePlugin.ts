@@ -1,7 +1,7 @@
 import { NodeModel } from '../../../../common/index.js';
-import { ConvertFromModelPlugin } from '../types.js';
 import { createElement } from '../../../builder/create-element.js';
-import { convertComment, convertAttribute } from './utils/index.js';
+import { ConvertFromModelPlugin } from '../types.js';
+import { convertAttribute, convertComment } from './utils/index.js';
 
 export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {
   match(model) {
@@ -21,8 +21,12 @@ export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {
         ),
       },
       [
-        ...(model.attributes.comment ? [convertComment(model.attributes.comment, context.commentKind)] : []),
-        ...model.attributes.values.map(([key, value]) => convertAttribute(key, value)),
+        ...(model.attributes.comment
+          ? [convertComment(model.attributes.comment, context.commentKind)]
+          : []),
+        ...model.attributes.values.map(([key, value]) =>
+          convertAttribute(key, value),
+        ),
       ],
     );
   },

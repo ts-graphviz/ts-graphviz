@@ -25,7 +25,7 @@ describe('stringify', () => {
           quoted: false,
           children: [],
         }),
-      ).toMatchInlineSnapshot(`hoge`);
+      ).toMatchInlineSnapshot('hoge');
     });
 
     test('html label', () => {
@@ -36,7 +36,7 @@ describe('stringify', () => {
           quoted: 'html',
           children: [],
         }),
-      ).toMatchInlineSnapshot(`<hoge>`);
+      ).toMatchInlineSnapshot('<hoge>');
     });
   });
 
@@ -49,7 +49,7 @@ describe('stringify', () => {
           quoted: 'html',
           children: [],
         }),
-      ).toMatchInlineSnapshot(`<hoge>`);
+      ).toMatchInlineSnapshot('<hoge>');
     });
   });
 
@@ -61,7 +61,7 @@ describe('stringify', () => {
           kind: 'Node',
           children: [],
         }),
-      ).toMatchInlineSnapshot(`node [];`);
+      ).toMatchInlineSnapshot('node [];');
     });
 
     test('edge', () => {
@@ -71,7 +71,7 @@ describe('stringify', () => {
           kind: 'Edge',
           children: [],
         }),
-      ).toMatchInlineSnapshot(`edge [];`);
+      ).toMatchInlineSnapshot('edge [];');
     });
 
     test('graph', () => {
@@ -81,7 +81,7 @@ describe('stringify', () => {
           kind: 'Graph',
           children: [],
         }),
-      ).toMatchInlineSnapshot(`graph [];`);
+      ).toMatchInlineSnapshot('graph [];');
     });
 
     test('with attribute', () => {
@@ -191,7 +191,7 @@ describe('stringify', () => {
 
           children: [],
         }),
-      ).toMatchInlineSnapshot(`color = hoge;`);
+      ).toMatchInlineSnapshot('color = hoge;');
     });
 
     test('with attribute', () => {
@@ -589,7 +589,7 @@ describe('stringify', () => {
           type: 'Subgraph',
           children: [],
         }),
-      ).toMatchInlineSnapshot(`subgraph {}`);
+      ).toMatchInlineSnapshot('subgraph {}');
     });
 
     test('with children', () => {
@@ -704,7 +704,7 @@ describe('stringify', () => {
           directed: true,
           children: [],
         }),
-      ).toMatchInlineSnapshot(`digraph {}`);
+      ).toMatchInlineSnapshot('digraph {}');
     });
 
     test('with children', () => {

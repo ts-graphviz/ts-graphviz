@@ -1,6 +1,6 @@
 import { RootGraphModel } from '../../../../common/index.js';
-import { ConvertFromModelPlugin } from '../types.js';
 import { createElement } from '../../../builder/create-element.js';
+import { ConvertFromModelPlugin } from '../types.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';
 import { convertComment } from './utils/convert-comment.js';
 
@@ -10,7 +10,9 @@ export const GraphPlugin: ConvertFromModelPlugin<RootGraphModel> = {
   },
   convert(context, model) {
     return createElement('Dot', {}, [
-      ...(model.comment ? [convertComment(model.comment, context.commentKind)] : []),
+      ...(model.comment
+        ? [convertComment(model.comment, context.commentKind)]
+        : []),
       createElement(
         'Graph',
         {

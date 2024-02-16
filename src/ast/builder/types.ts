@@ -67,7 +67,11 @@ export interface CreateElement {
    * @param children The children of the AST node.
    * @returns A {@link LiteralASTNode} with the given type, properties, and children.
    */
-  (type: 'Literal', props: LiteralASTPropaties, children?: ASTChildNode<LiteralASTNode>[]): LiteralASTNode;
+  (
+    type: 'Literal',
+    props: LiteralASTPropaties,
+    children?: ASTChildNode<LiteralASTNode>[],
+  ): LiteralASTNode;
 
   /**
    * Creates a {@link DotASTNode} with the given type, properties, and children.
@@ -77,7 +81,11 @@ export interface CreateElement {
    * @param children The children of the AST node.
    * @returns A {@link DotASTNode} with the given type, properties, and children.
    */
-  (type: 'Dot', props: DotASTPropaties, children?: ASTChildNode<DotASTNode>[]): DotASTNode;
+  (
+    type: 'Dot',
+    props: DotASTPropaties,
+    children?: ASTChildNode<DotASTNode>[],
+  ): DotASTNode;
 
   /**
    * Creates a {@link GraphASTNode} with the given type, properties, and children.
@@ -87,7 +95,11 @@ export interface CreateElement {
    * @param children The children of the AST node.
    * @returns A {GraphASTNode} with the given type, properties, and children.
    */
-  (type: 'Graph', props: GraphASTPropaties, children?: ASTChildNode<GraphASTNode>[]): GraphASTNode;
+  (
+    type: 'Graph',
+    props: GraphASTPropaties,
+    children?: ASTChildNode<GraphASTNode>[],
+  ): GraphASTNode;
 
   /**
    * Creates an {@link AttributeASTNode} with the given type, properties, and children.
@@ -97,12 +109,16 @@ export interface CreateElement {
    * @param children The children of the AST node.
    * @returns An {@link AttributeASTNode} with the given type, properties, and children.
    */
-  <T extends AttributeKey>(
+  <K extends AttributeKey>(
     type: 'Attribute',
-    props: AttributeASTPropaties<T>,
+    props: AttributeASTPropaties<K>,
     children?: ASTChildNode<AttributeASTNode>[],
-  ): AttributeASTNode<T>;
-  (type: 'Attribute', props: AttributeASTPropaties, children?: ASTChildNode<AttributeASTNode>[]): AttributeASTNode;
+  ): AttributeASTNode<K>;
+  (
+    type: 'Attribute',
+    props: AttributeASTPropaties,
+    children?: ASTChildNode<AttributeASTNode>[],
+  ): AttributeASTNode;
 
   /**
    * Creates a {@link CommentASTNode} with the given type, properties, and children.
@@ -112,7 +128,11 @@ export interface CreateElement {
    * @param children The children of the AST node.
    * @returns A {@link CommentASTNode} with the given type, properties, and children.
    */
-  (type: 'Comment', props: CommentASTPropaties, children?: ASTChildNode<CommentASTNode>[]): CommentASTNode;
+  (
+    type: 'Comment',
+    props: CommentASTPropaties,
+    children?: ASTChildNode<CommentASTNode>[],
+  ): CommentASTNode;
 
   /**
    * Creates an {@link AttributeListASTNode} with the given type, properties, and children.
@@ -136,7 +156,11 @@ export interface CreateElement {
    * @param children The children of the AST node.
    * @returns A {@link NodeRefASTNode} with the given type, properties, and children.
    */
-  (type: 'NodeRef', props: NodeRefASTPropaties, children?: ASTChildNode<NodeRefASTNode>[]): NodeRefASTNode;
+  (
+    type: 'NodeRef',
+    props: NodeRefASTPropaties,
+    children?: ASTChildNode<NodeRefASTNode>[],
+  ): NodeRefASTNode;
 
   /**
    * Creates a {@link NodeRefGroupASTNode} with the given type, properties, and children.
@@ -160,7 +184,11 @@ export interface CreateElement {
    * @param children The children of the AST node.
    * @returns An {@link EdgeASTNode} with the given type, properties, and children.
    */
-  (type: 'Edge', props: EdgeASTPropaties, children?: ASTChildNode<EdgeASTNode>[]): EdgeASTNode;
+  (
+    type: 'Edge',
+    props: EdgeASTPropaties,
+    children?: ASTChildNode<EdgeASTNode>[],
+  ): EdgeASTNode;
 
   /**
    * Creates a {@link NodeASTNode} with the given type, properties, and children.
@@ -170,7 +198,11 @@ export interface CreateElement {
    * @param children The children of the AST node.
    * @returns A {@link NodeASTNode} with the given type, properties, and children.
    */
-  (type: 'Node', props: NodeASTPropaties, children?: ASTChildNode<NodeASTNode>[]): NodeASTNode;
+  (
+    type: 'Node',
+    props: NodeASTPropaties,
+    children?: ASTChildNode<NodeASTNode>[],
+  ): NodeASTNode;
 
   /**
    * Creates a {@link SubgraphASTNode} with the given type, properties, and children.
@@ -180,7 +212,11 @@ export interface CreateElement {
    * @param children The children of the AST node.
    * @returns A {@link SubgraphASTNode} with the given type, properties, and children.
    */
-  (type: 'Subgraph', props: SubgraphASTPropaties, children?: ASTChildNode<SubgraphASTNode>[]): SubgraphASTNode;
+  (
+    type: 'Subgraph',
+    props: SubgraphASTPropaties,
+    children?: ASTChildNode<SubgraphASTNode>[],
+  ): SubgraphASTNode;
 }
 
 /**

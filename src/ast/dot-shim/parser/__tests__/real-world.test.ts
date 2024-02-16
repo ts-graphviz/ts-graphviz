@@ -4,7 +4,7 @@ import path from 'node:path';
 import glob from 'glob';
 import 'jest-specific-snapshot';
 
-import { parse, DotSyntaxError } from '../_parse.js';
+import { DotSyntaxError, parse } from '../_parse.js';
 
 const dirname = path.dirname(new URL(import.meta.url).pathname);
 

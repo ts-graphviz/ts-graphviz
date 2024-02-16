@@ -7,6 +7,8 @@ import { createCommandArgs } from './create-command-args.js';
  * @param options Options to create the command and args from.
  * @returns A tuple containing the command and an array of arguments.
  */
-export function createCommandAndArgs<T extends Layout>(options: Options<T>): [command: string, args: string[]] {
+export function createCommandAndArgs<T extends Layout>(
+  options: Options<T>,
+): [command: string, args: string[]] {
   return [options.dotCommand ?? 'dot', Array.from(createCommandArgs(options))];
 }

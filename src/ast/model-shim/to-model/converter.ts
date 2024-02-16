@@ -2,10 +2,10 @@ import { createModelsContext } from '../../../common/index.js';
 import { defaultPlugins } from './plugins/index.js';
 import {
   ASTToModel,
-  ToModelConvertableASTNode,
   ConvertToModelContext,
   ConvertToModelOptions,
   ConvertToModelPlugin,
+  ToModelConvertableASTNode,
 } from './types.js';
 
 /**
@@ -14,7 +14,9 @@ import {
  */
 export class ToModelConverter {
   /** @hidden */
-  protected plugins: ConvertToModelPlugin<ToModelConvertableASTNode>[] = [...defaultPlugins];
+  protected plugins: ConvertToModelPlugin<ToModelConvertableASTNode>[] = [
+    ...defaultPlugins,
+  ];
 
   constructor(private options: ConvertToModelOptions = {}) {}
 

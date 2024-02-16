@@ -1,11 +1,18 @@
-import { GraphAttributeKey, GraphAttributesObject, RootGraphModel } from '../../common/index.js';
+import {
+  GraphAttributeKey,
+  GraphAttributesObject,
+  RootGraphModel,
+} from '../../common/index.js';
 import { GraphBase } from './GraphBase.js';
 
 /**
  * Base class representing a root graph(digraph, graph).
  * @group Models
  */
-export abstract class RootGraph extends GraphBase<GraphAttributeKey> implements RootGraphModel {
+export abstract class RootGraph
+  extends GraphBase<GraphAttributeKey>
+  implements RootGraphModel
+{
   public get $$type(): 'Graph' {
     return 'Graph';
   }
@@ -15,7 +22,11 @@ export abstract class RootGraph extends GraphBase<GraphAttributeKey> implements 
 
   constructor(id?: string, attributes?: GraphAttributesObject);
 
-  constructor(id?: string, strict?: boolean, attributes?: GraphAttributesObject);
+  constructor(
+    id?: string,
+    strict?: boolean,
+    attributes?: GraphAttributesObject,
+  );
 
   constructor(strict?: boolean, attributes?: GraphAttributesObject);
 
@@ -24,8 +35,12 @@ export abstract class RootGraph extends GraphBase<GraphAttributeKey> implements 
   constructor(...args: unknown[]) {
     super();
     this.id = args.find((arg): arg is string => typeof arg === 'string');
-    this.strict = args.find((arg): arg is boolean => typeof arg === 'boolean') ?? false;
-    const attributes = args.find((arg): arg is GraphAttributesObject => typeof arg === 'object' && arg !== null);
+    this.strict =
+      args.find((arg): arg is boolean => typeof arg === 'boolean') ?? false;
+    const attributes = args.find(
+      (arg): arg is GraphAttributesObject =>
+        typeof arg === 'object' && arg !== null,
+    );
     if (attributes !== undefined) {
       this.apply(attributes);
     }

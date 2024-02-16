@@ -1,6 +1,6 @@
 import type { ASTNode } from '../../types.js';
 import { defaultPlugins } from './plugins/index.js';
-import type { PrintContext, PrintPlugin, PrintOptions } from './types.js';
+import type { PrintContext, PrintOptions, PrintPlugin } from './types.js';
 
 /**
  * Printer is a class responsible for converting an AST into a DOT string.
@@ -22,7 +22,11 @@ export class Printer {
    */
   public print(ast: ASTNode): string {
     const plugins = [...this.#plugins];
-    const { indentSize = 2, indentStyle = 'space', endOfLine = 'lf' } = this.options;
+    const {
+      indentSize = 2,
+      indentStyle = 'space',
+      endOfLine = 'lf',
+    } = this.options;
     const context: PrintContext = {
       directed: true,
       indentSize,

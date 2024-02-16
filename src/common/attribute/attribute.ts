@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { $keywords, $keywordsValidation } from '../../utils/index.js';
-import type { AttributeKey } from './keys.js';
 import type {
   AddDouble,
   AddPoint,
@@ -24,8 +23,8 @@ import type {
   PointList,
   PortPos,
   QuadType,
-  Rankdir,
   RankType,
+  Rankdir,
   Rect,
   Shape,
   SmoothType,
@@ -35,6 +34,7 @@ import type {
   TBbalanceType,
   ViewPort,
 } from '../type/index.js';
+import type { AttributeKey } from './keys.js';
 
 /**
  * This type represents an Attribute, which is a key-value mapping of an {@link AttributeKey} to a value.

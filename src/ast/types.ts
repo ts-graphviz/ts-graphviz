@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import type { Compass, AttributeKey, ASTType } from '../common/index.js';
+import type { ASTType, AttributeKey, Compass } from '../common/index.js';
 
 /**
  * The FilePosition interface represents the position of a file in terms of its offset, line number, and column number.
@@ -78,7 +78,8 @@ export interface GraphASTPropaties extends ASTCommonPropaties {
  *
  * @group AST
  */
-export interface LiteralASTPropaties<T extends string = string> extends ASTCommonPropaties {
+export interface LiteralASTPropaties<T extends string = string>
+  extends ASTCommonPropaties {
   /**
    * The value of the literal.
    */
@@ -121,7 +122,11 @@ export interface EdgeASTPropaties extends ASTCommonPropaties {
    * An array of EdgeTargetASTNodes.
    * The {@link EdgeTargetASTNode} represents a node that is the target of an edge.
    */
-  targets: [from: EdgeTargetASTNode, to: EdgeTargetASTNode, ...rest: EdgeTargetASTNode[]];
+  targets: [
+    from: EdgeTargetASTNode,
+    to: EdgeTargetASTNode,
+    ...rest: EdgeTargetASTNode[],
+  ];
 }
 
 /**
@@ -144,7 +149,8 @@ export interface NodeRefGroupASTPropaties extends ASTCommonPropaties {}
  * AttributeASTPropaties interface defines the properties of an {@link AttributeASTNode}.
  * @group AST
  */
-export interface AttributeASTPropaties<T extends AttributeKey = AttributeKey> extends ASTCommonPropaties {
+export interface AttributeASTPropaties<T extends AttributeKey = AttributeKey>
+  extends ASTCommonPropaties {
   key: LiteralASTNode<T>;
   value: LiteralASTNode;
 }
@@ -199,7 +205,8 @@ export interface ASTBaseNode {
  * @template STMT The type of {@link ASTBaseNode} to be stored in the children array.
  * @group AST
  */
-export interface ASTBaseParentNode<STMT extends ASTBaseNode = ASTBaseNode> extends ASTBaseNode {
+export interface ASTBaseParentNode<STMT extends ASTBaseNode = ASTBaseNode>
+  extends ASTBaseNode {
   children: STMT[];
 }
 
@@ -208,7 +215,9 @@ export interface ASTBaseParentNode<STMT extends ASTBaseNode = ASTBaseNode> exten
  *
  * @group AST
  */
-export interface LiteralASTNode<T extends string = string> extends ASTBaseParentNode<never>, LiteralASTPropaties<T> {
+export interface LiteralASTNode<T extends string = string>
+  extends ASTBaseParentNode<never>,
+    LiteralASTPropaties<T> {
   type: 'Literal';
 }
 
@@ -217,7 +226,9 @@ export interface LiteralASTNode<T extends string = string> extends ASTBaseParent
  *
  * @group AST
  */
-export interface DotASTNode extends ASTBaseParentNode<StatementASTNode>, DotASTPropaties {
+export interface DotASTNode
+  extends ASTBaseParentNode<StatementASTNode>,
+    DotASTPropaties {
   type: 'Dot';
 }
 
@@ -226,7 +237,9 @@ export interface DotASTNode extends ASTBaseParentNode<StatementASTNode>, DotASTP
  *
  * @group AST
  */
-export interface GraphASTNode extends ASTBaseParentNode<ClusterStatementASTNode>, GraphASTPropaties {
+export interface GraphASTNode
+  extends ASTBaseParentNode<ClusterStatementASTNode>,
+    GraphASTPropaties {
   type: 'Graph';
 }
 
@@ -244,7 +257,9 @@ export interface AttributeASTNode<T extends AttributeKey = AttributeKey>
  * CommentASTNode is a type of AST node that represents a comment.
  * @group AST
  */
-export interface CommentASTNode extends ASTBaseParentNode<never>, CommentASTPropaties {
+export interface CommentASTNode
+  extends ASTBaseParentNode<never>,
+    CommentASTPropaties {
   type: 'Comment';
 }
 
@@ -262,7 +277,9 @@ export interface AttributeListASTNode
  * NodeRefASTNode is a type of AST node that represents a reference to a node.
  * @group AST
  */
-export interface NodeRefASTNode extends ASTBaseParentNode<never>, NodeRefASTPropaties {
+export interface NodeRefASTNode
+  extends ASTBaseParentNode<never>,
+    NodeRefASTPropaties {
   type: 'NodeRef';
 }
 
@@ -270,7 +287,9 @@ export interface NodeRefASTNode extends ASTBaseParentNode<never>, NodeRefASTProp
  * NodeRefGroupASTNode is a type of AST node that represents a group of nodes referenced together.
  * @group AST
  */
-export interface NodeRefGroupASTNode extends ASTBaseParentNode<NodeRefASTNode>, NodeRefGroupASTPropaties {
+export interface NodeRefGroupASTNode
+  extends ASTBaseParentNode<NodeRefASTNode>,
+    NodeRefGroupASTPropaties {
   type: 'NodeRefGroup';
 }
 
@@ -285,7 +304,9 @@ export type EdgeTargetASTNode = NodeRefASTNode | NodeRefGroupASTNode;
  * EdgeASTNode is a type of AST node that represents an edge in a graph.
  * @group AST
  */
-export interface EdgeASTNode extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>, EdgeASTPropaties {
+export interface EdgeASTNode
+  extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>,
+    EdgeASTPropaties {
   type: 'Edge';
 }
 
@@ -293,7 +314,9 @@ export interface EdgeASTNode extends ASTBaseParentNode<AttributeASTNode | Commen
  * NodeASTNode is a type of AST node that represents a node in a graph.
  * @group AST
  */
-export interface NodeASTNode extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>, NodeASTPropaties {
+export interface NodeASTNode
+  extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>,
+    NodeASTPropaties {
   type: 'Node';
 }
 
@@ -301,7 +324,9 @@ export interface NodeASTNode extends ASTBaseParentNode<AttributeASTNode | Commen
  * SubgraphASTNode is a type of AST node that represents a subgraph.
  * @group AST
  */
-export interface SubgraphASTNode extends ASTBaseParentNode<ClusterStatementASTNode>, SubgraphASTPropaties {
+export interface SubgraphASTNode
+  extends ASTBaseParentNode<ClusterStatementASTNode>,
+    SubgraphASTPropaties {
   type: 'Subgraph';
 }
 /**

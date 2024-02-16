@@ -1,12 +1,24 @@
-import { parse, ParseOptions, toModel, ConvertToModelOptions } from '../ast/index.js';
-import { EdgeModel, NodeModel, RootGraphModel, SubgraphModel } from '../common/index.js';
+import {
+  ConvertToModelOptions,
+  ParseOptions,
+  parse,
+  toModel,
+} from '../ast/index.js';
+import {
+  EdgeModel,
+  NodeModel,
+  RootGraphModel,
+  SubgraphModel,
+} from '../common/index.js';
 
 /**
  * This interface provides options for converting DOT to a model.
  * @group Convert DOT to Model
  * @alpha
  */
-export interface FromDotOptions<T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph'> {
+export interface FromDotOptions<
+  T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph',
+> {
   /**
    * Options for parsing DOT.
    */
@@ -28,14 +40,25 @@ export interface FromDotOptions<T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'S
  * depending on the type specified in the options.
  * @beta
  */
-export function fromDot(dot: string, options?: FromDotOptions<'Dot' | 'Graph'>): RootGraphModel;
-export function fromDot(dot: string, options?: FromDotOptions<'Node'>): NodeModel;
-export function fromDot(dot: string, options?: FromDotOptions<'Edge'>): EdgeModel;
-export function fromDot(dot: string, options?: FromDotOptions<'Subgraph'>): SubgraphModel;
-export function fromDot<T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph'>(
+export function fromDot(
   dot: string,
-  options?: FromDotOptions<T>,
-) {
+  options?: FromDotOptions<'Dot' | 'Graph'>,
+): RootGraphModel;
+export function fromDot(
+  dot: string,
+  options?: FromDotOptions<'Node'>,
+): NodeModel;
+export function fromDot(
+  dot: string,
+  options?: FromDotOptions<'Edge'>,
+): EdgeModel;
+export function fromDot(
+  dot: string,
+  options?: FromDotOptions<'Subgraph'>,
+): SubgraphModel;
+export function fromDot<
+  T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph',
+>(dot: string, options?: FromDotOptions<T>) {
   const ast = parse(dot, options?.parse);
   if (
     Array.isArray(ast) ||

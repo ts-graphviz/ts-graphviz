@@ -10,8 +10,16 @@ export const EdgePlugin: ConvertToModelPlugin<EdgeASTNode> = {
     const edge = new context.models.Edge(
       convertToEdgeTargetTuple(ast),
       ast.children
-        .filter<AttributeASTNode>((v): v is AttributeASTNode => v.type === 'Attribute')
-        .reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+        .filter<AttributeASTNode>(
+          (v): v is AttributeASTNode => v.type === 'Attribute',
+        )
+        .reduce(
+          (acc, curr) => {
+            acc[curr.key.value] = curr.value.value;
+            return acc;
+          },
+          {} as { [key: string]: string },
+        ),
     );
     return edge;
   },

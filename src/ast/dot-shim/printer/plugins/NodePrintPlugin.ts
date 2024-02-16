@@ -1,7 +1,7 @@
-import { pipe, map } from '../../../../utils/index.js';
+import { map, pipe } from '../../../../utils/index.js';
 import { NodeASTNode } from '../../../types.js';
 import { PrintPlugin } from '../types.js';
-import { endOfLine, joinBy, indent, wrapByPair } from './utils/index.js';
+import { endOfLine, indent, joinBy, wrapByPair } from './utils/index.js';
 
 export const NodePrintPlugin: PrintPlugin<NodeASTNode> = {
   match(ast) {

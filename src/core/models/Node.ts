@@ -1,6 +1,12 @@
-import { NodeModel, NodeAttributeKey, NodeAttributesObject, Port, ForwardRefNode } from '../../common/index.js';
-import { DotObject } from './DotObject.js';
+import {
+  ForwardRefNode,
+  NodeAttributeKey,
+  NodeAttributesObject,
+  NodeModel,
+  Port,
+} from '../../common/index.js';
 import { AttributesGroup } from './AttributesGroup.js';
+import { DotObject } from './DotObject.js';
 
 /**
  * DOT object class representing a node.
@@ -14,7 +20,10 @@ export class Node extends DotObject implements NodeModel {
 
   public readonly attributes: AttributesGroup<NodeAttributeKey>;
 
-  constructor(public readonly id: string, attributes?: NodeAttributesObject) {
+  constructor(
+    public readonly id: string,
+    attributes?: NodeAttributesObject,
+  ) {
     super();
     this.attributes = new AttributesGroup(attributes);
   }

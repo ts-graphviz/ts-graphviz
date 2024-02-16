@@ -1,4 +1,4 @@
-import { RootGraphModel, GraphAttributesObject } from '../../common/index.js';
+import { GraphAttributesObject, RootGraphModel } from '../../common/index.js';
 
 /**
  * ModelFactory is an interface that provides a way to create a {@link RootGraphModel} object.
@@ -11,8 +11,15 @@ import { RootGraphModel, GraphAttributesObject } from '../../common/index.js';
  * @group Model Factory
  */
 export interface ModelFactory {
-  (id?: string, attributes?: GraphAttributesObject, callback?: (g: RootGraphModel) => void): RootGraphModel;
-  (attributes?: GraphAttributesObject, callback?: (g: RootGraphModel) => void): RootGraphModel;
+  (
+    id?: string,
+    attributes?: GraphAttributesObject,
+    callback?: (g: RootGraphModel) => void,
+  ): RootGraphModel;
+  (
+    attributes?: GraphAttributesObject,
+    callback?: (g: RootGraphModel) => void,
+  ): RootGraphModel;
   (id?: string, callback?: (g: RootGraphModel) => void): RootGraphModel;
   (callback?: (g: RootGraphModel) => void): RootGraphModel;
 }

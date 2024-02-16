@@ -9,8 +9,16 @@ export const NodePlugin: ConvertToModelPlugin<NodeASTNode> = {
     const node = new context.models.Node(
       ast.id.value,
       ast.children
-        .filter<AttributeASTNode>((v): v is AttributeASTNode => v.type === 'Attribute')
-        .reduce((prev, curr) => ({ ...prev, [curr.key.value]: curr.value.value }), {}),
+        .filter<AttributeASTNode>(
+          (v): v is AttributeASTNode => v.type === 'Attribute',
+        )
+        .reduce(
+          (acc, curr) => {
+            acc[curr.key.value] = curr.value.value;
+            return acc;
+          },
+          {} as { [key: string]: string },
+        ),
     );
     return node;
   },

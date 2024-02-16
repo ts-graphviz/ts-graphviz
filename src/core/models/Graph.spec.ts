@@ -1,7 +1,7 @@
-import './registerModelContext.js';
+import { DotObject } from './DotObject.js';
 import { Graph } from './Graph.js';
 import { GraphBase } from './GraphBase.js';
-import { DotObject } from './DotObject.js';
+import './registerModelContext.js';
 
 const g = new Graph();
 

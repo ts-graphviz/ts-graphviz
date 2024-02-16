@@ -1,8 +1,12 @@
-import { EdgeModel, isForwardRefNode, isNodeModel } from '../../../../common/index.js';
+import {
+  EdgeModel,
+  isForwardRefNode,
+  isNodeModel,
+} from '../../../../common/index.js';
+import { createElement } from '../../../builder/create-element.js';
 import { EdgeTargetASTNode } from '../../../types.js';
 import { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute, convertComment } from './utils/index.js';
-import { createElement } from '../../../builder/create-element.js';
 
 export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
   match(model) {
@@ -28,7 +32,8 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
               },
               [],
             );
-          } else if (isForwardRefNode(target)) {
+          }
+          if (isForwardRefNode(target)) {
             return createElement(
               'NodeRef',
               {
@@ -63,27 +68,12 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
               },
               [],
             );
-          } else {
-            return createElement(
-              'NodeRefGroup',
-              {},
-              target.map((n) => {
-                if (isNodeModel(n)) {
-                  return createElement(
-                    'NodeRef',
-                    {
-                      id: createElement(
-                        'Literal',
-                        {
-                          value: n.id,
-                          quoted: true,
-                        },
-                        [],
-                      ),
-                    },
-                    [],
-                  );
-                }
+          }
+          return createElement(
+            'NodeRefGroup',
+            {},
+            target.map((n) => {
+              if (isNodeModel(n)) {
                 return createElement(
                   'NodeRef',
                   {
@@ -95,37 +85,59 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
                       },
                       [],
                     ),
-                    port: n.port
-                      ? createElement(
-                          'Literal',
-                          {
-                            value: n.port,
-                            quoted: true,
-                          },
-                          [],
-                        )
-                      : undefined,
-                    compass: n.compass
-                      ? createElement(
-                          'Literal',
-                          {
-                            value: n.compass,
-                            quoted: true,
-                          },
-                          [],
-                        )
-                      : undefined,
                   },
                   [],
                 );
-              }),
-            );
-          }
-        }) as [from: EdgeTargetASTNode, to: EdgeTargetASTNode, ...rest: EdgeTargetASTNode[]],
+              }
+              return createElement(
+                'NodeRef',
+                {
+                  id: createElement(
+                    'Literal',
+                    {
+                      value: n.id,
+                      quoted: true,
+                    },
+                    [],
+                  ),
+                  port: n.port
+                    ? createElement(
+                        'Literal',
+                        {
+                          value: n.port,
+                          quoted: true,
+                        },
+                        [],
+                      )
+                    : undefined,
+                  compass: n.compass
+                    ? createElement(
+                        'Literal',
+                        {
+                          value: n.compass,
+                          quoted: true,
+                        },
+                        [],
+                      )
+                    : undefined,
+                },
+                [],
+              );
+            }),
+          );
+        }) as [
+          from: EdgeTargetASTNode,
+          to: EdgeTargetASTNode,
+          ...rest: EdgeTargetASTNode[],
+        ],
       },
       [
-        ...(model.attributes.comment ? [convertComment(model.attributes.comment, context.commentKind)] : []),
-        ...model.attributes.values.map(([key, value]) => convertAttribute(key, value)),
+        ...(model.attributes.comment
+          ? [convertComment(model.attributes.comment, context.commentKind)]
+          : []),
+        ...model.attributes.values.map(([key, value]) =>
+          convertAttribute(key, value),
+        ),
       ],
     );
   },

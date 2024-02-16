@@ -1,8 +1,8 @@
+import { AttributeListKind } from '../../common/index.js';
 import { attribute as _ } from '../attribute.js';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
-import { AttributeListKind } from '../../common/index.js';
 
 let attrs: AttributeList<AttributeListKind>;
 beforeEach(() => {
@@ -27,10 +27,13 @@ describe('object', () => {
 
 describe('constructor', () => {
   describe('1st argument is kind of AttributeList', () => {
-    test.each(['Node', 'Edge', 'Graph'] as AttributeListKind[])('AttributeList kind is %s', (kind) => {
-      attrs = new AttributeList(kind);
-      expect(attrs.$$kind).toStrictEqual(kind);
-    });
+    test.each(['Node', 'Edge', 'Graph'] as AttributeListKind[])(
+      'AttributeList kind is %s',
+      (kind) => {
+        attrs = new AttributeList(kind);
+        expect(attrs.$$kind).toStrictEqual(kind);
+      },
+    );
   });
 
   test('2nd argument is attribute object', () => {

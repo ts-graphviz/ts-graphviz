@@ -1,6 +1,6 @@
 import type { ASTNode } from '../../types.js';
-import type { PrintOptions } from './types.js';
 import { Printer } from './printer.js';
+import type { PrintOptions } from './types.js';
 
 /**
  * stringify is a function that converts a Graphviz AST Node into a string in DOT language.

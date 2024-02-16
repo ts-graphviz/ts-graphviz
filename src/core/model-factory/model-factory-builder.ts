@@ -1,4 +1,9 @@
-import { GraphAttributesObject, ModelsContext, RootGraphModel, RootModelsContext } from '../../common/index.js';
+import {
+  GraphAttributesObject,
+  ModelsContext,
+  RootGraphModel,
+  RootModelsContext,
+} from '../../common/index.js';
 import { ModelFactory } from './types.js';
 
 /**
@@ -9,12 +14,20 @@ import { ModelFactory } from './types.js';
  * @returns A ModelFactory that takes an array of unknowns as parameters and returns a RootGraphModel.
  * @hidden
  */
-export function ModelFactoryBuilder(this: ModelsContext, directed: boolean, strictMode: boolean): ModelFactory {
+export function ModelFactoryBuilder(
+  this: ModelsContext,
+  directed: boolean,
+  strictMode: boolean,
+): ModelFactory {
   return (...args: unknown[]) => {
     const G = directed ? this.Digraph : this.Graph;
     const id = args.find((arg): arg is string => typeof arg === 'string');
-    const attributes = args.find((arg): arg is GraphAttributesObject => typeof arg === 'object');
-    const callback = args.find((arg): arg is (g: RootGraphModel) => void => typeof arg === 'function');
+    const attributes = args.find(
+      (arg): arg is GraphAttributesObject => typeof arg === 'object',
+    );
+    const callback = args.find(
+      (arg): arg is (g: RootGraphModel) => void => typeof arg === 'function',
+    );
     const g = new G(id, strictMode, attributes);
     g.with(this);
     if (typeof callback === 'function') {
@@ -31,7 +44,10 @@ export function ModelFactoryBuilder(this: ModelsContext, directed: boolean, stri
  * @param context An optional ModelsContext parameter.
  * @returns An object containing two ModelFactories, one for directed graphs and one for undirected graphs.
  */
-export function createModelFactories(strict: boolean, context: ModelsContext = RootModelsContext) {
+export function createModelFactories(
+  strict: boolean,
+  context: ModelsContext = RootModelsContext,
+) {
   return Object.freeze({
     digraph: ModelFactoryBuilder.call(context, true, strict),
     graph: ModelFactoryBuilder.call(context, false, strict),

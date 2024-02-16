@@ -1,12 +1,12 @@
 import './registerModelContext.js';
 
-import { SubgraphModel, EdgeTargetTuple } from '../../common/index.js';
+import { EdgeTargetTuple, SubgraphModel } from '../../common/index.js';
 import { attribute as _ } from '../attribute.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';
-import { Subgraph } from './Subgraph.js';
 import { Node } from './Node.js';
+import { Subgraph } from './Subgraph.js';
 
 describe('class Subgraph', () => {
   let subgraph: SubgraphModel;
@@ -93,7 +93,9 @@ describe('class Subgraph', () => {
   });
 
   test('create edge with attributes', () => {
-    const nodes = [...Array(2)].map((_v, i) => subgraph.createNode(`node${i + 1}`)) as EdgeTargetTuple;
+    const nodes = [...Array(2)].map((_v, i) =>
+      subgraph.createNode(`node${i + 1}`),
+    ) as EdgeTargetTuple;
     const edge = subgraph.createEdge(nodes, {
       [_.label]: 'Label',
     });
@@ -126,10 +128,13 @@ describe('class Subgraph', () => {
     ['cluster_hoge', true],
     ['hoge_cluster', false],
     ['example', false],
-  ])('if cluster named "%s", isSubgraphCluster should be %p', (id, expected) => {
-    subgraph = new Subgraph(id);
-    expect(subgraph.isSubgraphCluster()).toBe(expected);
-  });
+  ])(
+    'if cluster named "%s", isSubgraphCluster should be %p',
+    (id, expected) => {
+      subgraph = new Subgraph(id);
+      expect(subgraph.isSubgraphCluster()).toBe(expected);
+    },
+  );
 
   describe('addXxx existXxx removeXxx APIs', () => {
     it('Node operation methods works', () => {
@@ -147,7 +152,9 @@ describe('class Subgraph', () => {
     });
 
     it('Edge operation methods works', () => {
-      const nodes = [...Array(2)].map((_v, i) => subgraph.createNode(`node${i + 1}`)) as EdgeTargetTuple;
+      const nodes = [...Array(2)].map((_v, i) =>
+        subgraph.createNode(`node${i + 1}`),
+      ) as EdgeTargetTuple;
       const edge = subgraph.createEdge(nodes);
       expect(subgraph.existEdge(edge)).toBe(true);
       subgraph.removeEdge(edge);
@@ -173,10 +180,14 @@ describe('class Subgraph', () => {
 
     it('throws an error when the EdgeTarget element is missing', () => {
       const n = subgraph.node('n');
-      expect(() => subgraph.edge([] as unknown as EdgeTargetTuple)).toThrowErrorMatchingInlineSnapshot(
+      expect(() =>
+        subgraph.edge([] as unknown as EdgeTargetTuple),
+      ).toThrowErrorMatchingInlineSnapshot(
         `"The element of Edge target is missing or not satisfied as Edge target."`,
       );
-      expect(() => subgraph.edge([n] as unknown as EdgeTargetTuple)).toThrowErrorMatchingInlineSnapshot(
+      expect(() =>
+        subgraph.edge([n] as unknown as EdgeTargetTuple),
+      ).toThrowErrorMatchingInlineSnapshot(
         `"The element of Edge target is missing or not satisfied as Edge target."`,
       );
     });

@@ -1,5 +1,14 @@
 {
-  "allowedStartRules": ["Dot", "Graph", "Subgraph", "Node", "Edge", "AttributeList", "Attribute", "ClusterStatements"],
+  "allowedStartRules": [
+    "Dot",
+    "Graph",
+    "Subgraph",
+    "Node",
+    "Edge",
+    "AttributeList",
+    "Attribute",
+    "ClusterStatements"
+  ],
   "tspegjs": {
     "customHeader": "/* eslint-disable */\nimport { Builder } from '../../builder/index.js';",
     "errorName": "DotSyntaxError"

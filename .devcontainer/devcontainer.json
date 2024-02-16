@@ -3,22 +3,29 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "postCreateCommand": "yarn install --frozen-lockfile",
-  "extensions": [
-    "EditorConfig.EditorConfig",
-    "esbenp.prettier-vscode",
-    "dbaeumer.vscode-eslint",
-    "Orta.vscode-jest",
-    "denoland.vscode-deno"
-  ],
-  "settings": {
-    "editor.formatOnSave": false,
-    "editor.formatOnPaste": false,
-    "editor.formatOnType": false,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
-    },
-    "typescript.tsdk": "node_modules/typescript/lib"
+  "postCreateCommand": "pnpm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "biomejs.biome",
+        "denoland.vscode-deno"
+      ],
+      "settings": {
+        "editor.formatOnSave": false,
+        "editor.formatOnPaste": false,
+        "editor.formatOnType": false,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "typescript.tsdk": "node_modules/typescript/lib",
+        "deno.enable": true,
+        "deno.lint": false,
+        "deno.unstable": true,
+        "deno.enablePaths": ["./e2e/envs/deno", "src/adapter/deno", "lib/adapter/deno"],
+        "deno.cache": "./e2e/envs/deno/.deno"
+      }
+    }
   },
   "remoteEnv": {
     "PATH": "/home/node/.deno/bin:${containerEnv:PATH}"

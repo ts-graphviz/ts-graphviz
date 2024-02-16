@@ -1,14 +1,14 @@
-import type { Compass } from './type/index.js';
 import type {
   Attribute,
   AttributeKey,
   ClusterSubgraphAttributeKey,
   EdgeAttributeKey,
-  NodeAttributeKey,
   GraphAttributeKey,
+  NodeAttributeKey,
   SubgraphAttributeKey,
 } from './attribute/index.js';
 import { ModelsContext } from './models-context.js';
+import type { Compass } from './type/index.js';
 
 /**
  * ASTType is an enumeration of the different types of nodes that can be found in an AST(Abstract Syntax Tree ).
@@ -62,12 +62,20 @@ export type EdgeTargetLike = NodeRefLike | NodeRefGroupLike;
 /**
  * @group Models
  */
-export type EdgeTargetTuple = [from: EdgeTarget, to: EdgeTarget, ...rest: EdgeTarget[]];
+export type EdgeTargetTuple = [
+  from: EdgeTarget,
+  to: EdgeTarget,
+  ...rest: EdgeTarget[],
+];
 
 /**
  * @group Models
  */
-export type EdgeTargetLikeTuple = [from: EdgeTargetLike, to: EdgeTargetLike, ...rest: EdgeTargetLike[]];
+export type EdgeTargetLikeTuple = [
+  from: EdgeTargetLike,
+  to: EdgeTargetLike,
+  ...rest: EdgeTargetLike[],
+];
 
 /**
  * An objects of attribute key/value pairs.
@@ -86,7 +94,10 @@ export type AttributeValue = Attribute<AttributeKey>;
  * An array of attribute key/value tuple.
  * @group Models
  */
-export type AttributesEntities<T extends AttributeKey> = readonly [T, Attribute<T>][];
+export type AttributesEntities<T extends AttributeKey> = readonly [
+  T,
+  Attribute<T>,
+][];
 
 /**
  * Attribute object that can be set to Edge.
@@ -110,12 +121,19 @@ export type GraphAttributesObject = AttributesObject<GraphAttributeKey>;
  * Attribute object that can be set to Subgraph.
  * @group Models
  */
-export type SubgraphAttributesObject = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey>;
+export type SubgraphAttributesObject = AttributesObject<
+  ClusterSubgraphAttributeKey | SubgraphAttributeKey
+>;
 
 /**
  * @group Models
  */
-export type DotObjectType = 'AttributeList' | 'Node' | 'Edge' | 'Subgraph' | 'Graph';
+export type DotObjectType =
+  | 'AttributeList'
+  | 'Node'
+  | 'Edge'
+  | 'Subgraph'
+  | 'Graph';
 
 /**
  * DotObjectModel is an interface that defines a generic type for a {@link DotObjectType}.
@@ -187,7 +205,9 @@ export interface Attributes<T extends AttributeKey> {
 /**
  * @group Models
  */
-export interface AttributesGroupModel<T extends AttributeKey> extends Attributes<T>, HasComment {}
+export interface AttributesGroupModel<T extends AttributeKey>
+  extends Attributes<T>,
+    HasComment {}
 
 /**
  * @group Models
@@ -224,7 +244,10 @@ export interface Port {
  * Model that can be converted to Node in DOT language.
  * @group Models
  */
-export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey>, DotObjectModel<'Node'> {
+export interface NodeModel
+  extends HasComment,
+    HasAttributes<NodeAttributeKey>,
+    DotObjectModel<'Node'> {
   /** ID of the node */
   readonly id: string;
   /** Returns ForwardRefNode with port and compass specified. */
@@ -235,7 +258,10 @@ export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey>, 
  * Model that can be converted to Edge in DOT language.
  * @group Models
  */
-export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey>, DotObjectModel<'Edge'> {
+export interface EdgeModel
+  extends HasComment,
+    HasAttributes<EdgeAttributeKey>,
+    DotObjectModel<'Edge'> {
   readonly targets: EdgeTargetTuple;
 }
 
@@ -245,7 +271,10 @@ export interface EdgeModel extends HasComment, HasAttributes<EdgeAttributeKey>, 
  */
 export interface GraphCommonAttributes {
   /** Manage common attributes of graphs in a graph. */
-  graph: AttributeListModel<'Graph', SubgraphAttributeKey | ClusterSubgraphAttributeKey>;
+  graph: AttributeListModel<
+    'Graph',
+    SubgraphAttributeKey | ClusterSubgraphAttributeKey
+  >;
   /** Manage common attributes of edges in a graph. */
   edge: AttributeListModel<'Edge', EdgeAttributeKey>;
   /** Manage common attributes of nodes in a graph. */
@@ -256,7 +285,9 @@ export interface GraphCommonAttributes {
  * DOT model representing a graph/digraph/subgraph.
  * @group Models
  */
-export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends HasComment, Attributes<T> {
+export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
+  extends HasComment,
+    Attributes<T> {
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes>;
   /** Node objects in the graph. */
@@ -317,7 +348,10 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
    * @param id - Subgraph ID
    * @param attributes - Subgraph attribute object
    */
-  createSubgraph(id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
+  createSubgraph(
+    id?: string,
+    attributes?: SubgraphAttributesObject,
+  ): SubgraphModel;
   createSubgraph(attributes?: SubgraphAttributesObject): SubgraphModel;
   /**
    * Get Subgraph in cluster by specifying id.
@@ -334,7 +368,10 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
    */
   getNode(id: string): NodeModel | undefined;
   /** Create Edge and add it to the graph. */
-  createEdge(targets: EdgeTargetLikeTuple, attributes?: EdgeAttributesObject): EdgeModel;
+  createEdge(
+    targets: EdgeTargetLikeTuple,
+    attributes?: EdgeAttributesObject,
+  ): EdgeModel;
 
   /**
    * Create a subgraph by specifying its id (or get it if it already exists).
@@ -361,7 +398,10 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
    * @param id Subgraph ID.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  subgraph(id: string, callback?: (subgraph: SubgraphModel) => void): SubgraphModel;
+  subgraph(
+    id: string,
+    callback?: (subgraph: SubgraphModel) => void,
+  ): SubgraphModel;
   /**
    * Create a subgraph (or get one if it already exists) and adapt the attributes.
    *
@@ -422,7 +462,10 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
    * @param attributes Object of attributes to be adapted to the subgraph.
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  subgraph(attributes: SubgraphAttributesObject, callback?: (subgraph: SubgraphModel) => void): SubgraphModel;
+  subgraph(
+    attributes: SubgraphAttributesObject,
+    callback?: (subgraph: SubgraphModel) => void,
+  ): SubgraphModel;
   /**
    * Create anonymous subgraphs and manipulate them with callback functions.
    *
@@ -480,7 +523,11 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
    * @param attributes Object of attributes to be adapted to the node.
    * @param callback Callbacks for manipulating created or retrieved node.
    */
-  node(id: string, attributes: NodeAttributesObject, callback?: (node: NodeModel) => void): NodeModel;
+  node(
+    id: string,
+    attributes: NodeAttributesObject,
+    callback?: (node: NodeModel) => void,
+  ): NodeModel;
   /**
    * Set a common attribute for the nodes in the graph.
    *
@@ -524,7 +571,10 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
    * @param targets Nodes.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
-  edge(targets: EdgeTargetLikeTuple, callback?: (edge: EdgeModel) => void): EdgeModel;
+  edge(
+    targets: EdgeTargetLikeTuple,
+    callback?: (edge: EdgeModel) => void,
+  ): EdgeModel;
   /**
    * Create a edge and adapt the attributes.
    *
@@ -551,7 +601,11 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey> extends H
    * @param attributes Object of attributes to be adapted to the edge.
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
-  edge(targets: EdgeTargetLikeTuple, attributes: EdgeAttributesObject, callback?: (edge: EdgeModel) => void): EdgeModel;
+  edge(
+    targets: EdgeTargetLikeTuple,
+    attributes: EdgeAttributesObject,
+    callback?: (edge: EdgeModel) => void,
+  ): EdgeModel;
   /**
    * Set a common attribute for the edges in the graph.
    *
@@ -616,7 +670,9 @@ export interface SubgraphModel
  * DOT model representing a root graphs(digraph and graph).
  * @group Models
  */
-export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey>, DotObjectModel<'Graph'> {
+export interface RootGraphModel
+  extends GraphBaseModel<GraphAttributeKey>,
+    DotObjectModel<'Graph'> {
   directed: boolean;
 
   /**
@@ -637,7 +693,11 @@ export interface RootGraphModel extends GraphBaseModel<GraphAttributeKey>, DotOb
  */
 export interface RootGraphConstructor {
   new (id?: string, attributes?: GraphAttributesObject): RootGraphModel;
-  new (id?: string, strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
+  new (
+    id?: string,
+    strict?: boolean,
+    attributes?: GraphAttributesObject,
+  ): RootGraphModel;
   new (strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
   new (attributes?: GraphAttributesObject): RootGraphModel;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -677,7 +737,11 @@ export interface EdgeConstructor {
 
 /** @hidden */
 export function isForwardRefNode(object: unknown): object is ForwardRefNode {
-  return typeof object === 'object' && object !== null && typeof (object as ForwardRefNode).id === 'string';
+  return (
+    typeof object === 'object' &&
+    object !== null &&
+    typeof (object as ForwardRefNode).id === 'string'
+  );
 }
 
 /** @hidden */
@@ -701,7 +765,9 @@ export function isNodeRefLike(node: unknown): node is NodeRefLike {
 }
 
 /** @hidden */
-export function isNodeRefGroupLike(target: NodeRefLike | NodeRefGroupLike): target is NodeRefGroupLike {
+export function isNodeRefGroupLike(
+  target: NodeRefLike | NodeRefGroupLike,
+): target is NodeRefGroupLike {
   return Array.isArray(target) && target.every(isNodeRefLike);
 }
 
@@ -724,7 +790,10 @@ export function toNodeRef(target: NodeRefLike): NodeRef {
 
 /** @hidden */
 export function toNodeRefGroup(targets: NodeRefGroupLike): NodeRefGroup {
-  if (targets.length < 2 && (isNodeRefLike(targets[0]) && isNodeRefLike(targets[1])) === false) {
+  if (
+    targets.length < 2 &&
+    (isNodeRefLike(targets[0]) && isNodeRefLike(targets[1])) === false
+  ) {
     throw Error('EdgeTargets must have at least 2 elements.');
   }
   return targets.map((t) => toNodeRef(t));

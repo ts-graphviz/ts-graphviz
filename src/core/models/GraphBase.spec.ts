@@ -6,9 +6,9 @@ import { EdgeTargetTuple, NodeModel } from '../../common/index.js';
 import { attribute as _ } from '../attribute.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
+import { Edge } from './Edge.js';
 import { GraphBase } from './GraphBase.js';
 import { Node } from './Node.js';
-import { Edge } from './Edge.js';
 import { Subgraph } from './Subgraph.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,7 +53,9 @@ describe('Imperative API(addXxx existXxx removeXxx methods)', () => {
   });
 
   test('Edge operation methods works', () => {
-    const nodes = ['foo', 'bar'].map((id) => g.createNode(id)) as EdgeTargetTuple;
+    const nodes = ['foo', 'bar'].map((id) =>
+      g.createNode(id),
+    ) as EdgeTargetTuple;
     const edge = new Edge(nodes);
     expect(g.existEdge(edge)).toBe(false);
     g.addEdge(edge);
@@ -134,7 +136,9 @@ describe('Declarative API', () => {
         expect(createNodeSpy).not.toHaveBeenCalled();
         expect(returnedNode).toBe(createdNode);
 
-        expect(returnedNode.attributes.get(_.label)).toStrictEqual('Test label');
+        expect(returnedNode.attributes.get(_.label)).toStrictEqual(
+          'Test label',
+        );
       });
 
       describe('callback function is given, the callback function is executed with the created node as the argument', () => {
@@ -182,7 +186,9 @@ describe('Declarative API', () => {
       test('create edge and apply attribute', () => {
         const createEdgeSpy = jest.spyOn(g, 'createEdge');
         g.edge(nodes, { [_.label]: 'Test label' });
-        expect(createEdgeSpy).toHaveBeenCalledWith(nodes, { [_.label]: 'Test label' });
+        expect(createEdgeSpy).toHaveBeenCalledWith(nodes, {
+          [_.label]: 'Test label',
+        });
       });
 
       test('apply atttibutes to edges in graph', () => {
@@ -263,7 +269,11 @@ describe('Declarative API', () => {
 
         test('first argument is id, seccond argument is attribute object, third argument is callback', () => {
           const callback = jest.fn();
-          const subgraph = g.subgraph('foo', { [_.label]: 'Test label' }, callback);
+          const subgraph = g.subgraph(
+            'foo',
+            { [_.label]: 'Test label' },
+            callback,
+          );
           expect(callback).toHaveBeenCalledWith(subgraph);
           expect(subgraph.get(_.label)).toStrictEqual('Test label');
         });

@@ -9,7 +9,10 @@ export type Compass = Compass.values;
 /** @hidden */
 export namespace Compass {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
-  export interface $values extends $keywords<'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_'> {}
+  export interface $values
+    extends $keywords<
+      'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_'
+    > {}
   export interface $exclude extends $keywordsValidation {}
 }
 
@@ -83,7 +86,15 @@ export namespace SmoothType {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
   export interface $values
-    extends $keywords<'none' | 'avg_dist' | 'graph_dist' | 'power_dist' | 'rng' | 'spring' | 'triangle'> {}
+    extends $keywords<
+      | 'none'
+      | 'avg_dist'
+      | 'graph_dist'
+      | 'power_dist'
+      | 'rng'
+      | 'spring'
+      | 'triangle'
+    > {}
   export interface $exclude extends $keywordsValidation {}
 }
 /**
@@ -150,7 +161,9 @@ export namespace Style {
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/viewPort/ viewPort}
  * @group Attribute Types
  */
-export type ViewPort = `${Double},${Double},${Double},${Double},${Double}` | `${Double},${Double},${Double},${string}`;
+export type ViewPort =
+  | `${Double},${Double},${Double},${Double},${Double}`
+  | `${Double},${Double},${Double},${string}`;
 
 /**
  * list of strings separated by characters from the layersep attribute (by default, colons, tabs or spaces),
@@ -261,7 +274,8 @@ export type OutputMode = OutputMode.values;
 export namespace OutputMode {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
-  export interface $values extends $keywords<'breadthfirst' | 'nodesfirst' | 'edgesfirst'> {}
+  export interface $values
+    extends $keywords<'breadthfirst' | 'nodesfirst' | 'edgesfirst'> {}
   export interface $exclude extends $keywordsValidation {}
 }
 /**
@@ -312,7 +326,8 @@ export type RankType = RankType.values;
 export namespace RankType {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
-  export interface $values extends $keywords<'same' | 'min' | 'source' | 'max' | 'sink'> {}
+  export interface $values
+    extends $keywords<'same' | 'min' | 'source' | 'max' | 'sink'> {}
   export interface $exclude extends $keywordsValidation {}
 }
 
@@ -357,14 +372,26 @@ export type Rect = `${Double},${Double},${Double},${Double}`;
  * @see {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType}
  * @group Attribute Types
  */
-export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.aname}`;
+export type ArrowType =
+  | ArrowType.aname
+  | `${ArrowType.aname}${ArrowType.aname}`;
 /** @hidden */
 export namespace ArrowType {
   export type shape = keyof $shape;
 
   export interface $shape
     extends $keywords<
-      'box' | 'crow' | 'curve' | 'icurve' | 'diamond' | 'dot' | 'inv' | 'none' | 'normal' | 'tee' | 'vee'
+      | 'box'
+      | 'crow'
+      | 'curve'
+      | 'icurve'
+      | 'diamond'
+      | 'dot'
+      | 'inv'
+      | 'none'
+      | 'normal'
+      | 'tee'
+      | 'vee'
     > {}
   export type side = 'l' | 'r';
 
@@ -1266,7 +1293,8 @@ export type DirType = DirType.values;
 export namespace DirType {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
-  export interface $values extends $keywords<'forward' | 'back' | 'both' | 'none'> {}
+  export interface $values
+    extends $keywords<'forward' | 'back' | 'both' | 'none'> {}
   export interface $exclude extends $keywordsValidation {}
 }
 

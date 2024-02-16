@@ -1,4 +1,4 @@
-import { createModelsContext, ModelsContext } from '../../common/index.js';
+import { ModelsContext, createModelsContext } from '../../common/index.js';
 import { createModelFactories } from './model-factory-builder.js';
 import { ModelFactories, ModelFactoriesWithStrict } from './types.js';
 
@@ -29,7 +29,9 @@ export const strict: ModelFactories = createModelFactories(true);
  *
  * @returns A ModelFactoriesWithStrict object containing the factories. * @group Model Factory
  */
-export function withContext(models: Partial<ModelsContext>): ModelFactoriesWithStrict {
+export function withContext(
+  models: Partial<ModelsContext>,
+): ModelFactoriesWithStrict {
   const context = createModelsContext(models);
   return Object.freeze({
     ...createModelFactories(false, context),

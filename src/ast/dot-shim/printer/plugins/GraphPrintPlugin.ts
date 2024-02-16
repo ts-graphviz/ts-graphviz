@@ -1,7 +1,7 @@
 import { map, pipe } from '../../../../utils/index.js';
 import { GraphASTNode } from '../../../types.js';
 import { PrintPlugin } from '../types.js';
-import { endOfLine, joinBy, indent, wrapByPair } from './utils/index.js';
+import { endOfLine, indent, joinBy, wrapByPair } from './utils/index.js';
 
 export const GraphPrintPlugin: PrintPlugin<GraphASTNode> = {
   match(ast) {

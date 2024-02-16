@@ -1,4 +1,4 @@
-import type { FileRange, ASTNode, ASTChildNode } from '../types.js';
+import type { ASTChildNode, ASTNode, FileRange } from '../types.js';
 import { ASTBuilder, BuilderOptions } from './types.js';
 
 /**
@@ -30,7 +30,11 @@ export class Builder implements ASTBuilder {
    * @returns An {@link ASTNode}
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public createElement<T extends ASTNode>(type: T['type'], props: any, children: ASTChildNode<T>[] = []): T {
+  public createElement<T extends ASTNode>(
+    type: T['type'],
+    props: any,
+    children: ASTChildNode<T>[] = [],
+  ): T {
     return {
       location: this.getLocation(),
       ...props,

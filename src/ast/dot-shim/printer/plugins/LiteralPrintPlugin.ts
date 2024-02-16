@@ -1,7 +1,7 @@
 import { pipe } from '../../../../utils/index.js';
 import { LiteralASTNode } from '../../../types.js';
 import { PrintPlugin } from '../types.js';
-import { escape, wrapWith, wrapByPair } from './utils/index.js';
+import { escape, wrapByPair, wrapWith } from './utils/index.js';
 
 const quoteLiteralValue = pipe(escape, wrapWith('"'));
 
@@ -17,7 +17,6 @@ export const LiteralPrintPlugin: PrintPlugin<LiteralASTNode> = {
         return quoteHTMLLikeLiteralValue(ast.value);
       case true:
         return quoteLiteralValue(ast.value);
-      case false:
       default:
         return escape(ast.value);
     }

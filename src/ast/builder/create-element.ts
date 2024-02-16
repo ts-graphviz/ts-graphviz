@@ -1,5 +1,5 @@
-import { CreateElement } from './types.js';
 import { Builder } from './builder.js';
+import { CreateElement } from './types.js';
 /**
  * Create an {@link ASTNode} of the specified type
  *
@@ -9,4 +9,5 @@ import { Builder } from './builder.js';
  * @group Create AST
  * @returns An {@link ASTNode}
  */
-export const createElement: CreateElement = Builder.prototype.createElement.bind(new Builder());
+export const createElement: CreateElement =
+  Builder.prototype.createElement.bind(new Builder());

@@ -1,11 +1,20 @@
-import { AttributeKey, Attributes, Attribute, AttributesObject, AttributesEntities } from '../../common/index.js';
+import {
+  Attribute,
+  AttributeKey,
+  Attributes,
+  AttributesEntities,
+  AttributesObject,
+} from '../../common/index.js';
 import { DotObject } from './DotObject.js';
 
 /**
  * Base class for DOT objects with attributes.
  * @group Models
  */
-export abstract class AttributesBase<T extends AttributeKey> extends DotObject implements Attributes<T> {
+export abstract class AttributesBase<T extends AttributeKey>
+  extends DotObject
+  implements Attributes<T>
+{
   /** @hidden */
   #attrs: Map<T, Attribute<T>> = new Map();
 
@@ -39,7 +48,9 @@ export abstract class AttributesBase<T extends AttributeKey> extends DotObject i
   }
 
   public apply(attributes: AttributesObject<T> | AttributesEntities<T>): void {
-    const entries = Array.isArray(attributes) ? attributes : Object.entries(attributes);
+    const entries = Array.isArray(attributes)
+      ? attributes
+      : Object.entries(attributes);
     for (const [key, value] of entries) {
       this.set(key, value);
     }

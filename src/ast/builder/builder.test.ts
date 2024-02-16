@@ -20,13 +20,17 @@ describe('Builder', () => {
     });
     const type = 'TestType' as any;
     const props = { prop1: 'test1', prop2: 'test2' };
-    const children = [{ type: 'TestType', props: { prop1: 'test1', prop2: 'test2' } }] as any[];
+    const children = [
+      { type: 'TestType', props: { prop1: 'test1', prop2: 'test2' } },
+    ] as any[];
     const expectedResult = {
       type,
       ...props,
       children,
       location,
     };
-    expect(builder.createElement(type, props, children)).toStrictEqual(expectedResult);
+    expect(builder.createElement(type, props, children)).toStrictEqual(
+      expectedResult,
+    );
   });
 });
