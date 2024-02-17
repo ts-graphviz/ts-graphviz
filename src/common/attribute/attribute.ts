@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-import { $keywords, $keywordsValidation } from '../../utils/index.js';
+import { $keywords, $keywordsValidation } from '../../utils.js';
 import type {
   AddDouble,
   AddPoint,

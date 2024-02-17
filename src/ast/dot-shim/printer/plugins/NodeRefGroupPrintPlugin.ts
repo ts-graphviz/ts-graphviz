@@ -1,4 +1,4 @@
-import { map, pipe } from '../../../../utils/index.js';
+import { map, pipe } from '../../../../utils.js';
 import { NodeRefGroupASTNode } from '../../../types.js';
 import { PrintPlugin } from '../types.js';
 import { joinBy, wrapByPair } from './utils/index.js';

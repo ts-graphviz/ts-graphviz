@@ -3,7 +3,7 @@ import {
   ModelsContext,
   RootGraphModel,
   RootModelsContext,
-} from '../../common/index.js';
+} from '../../common.js';
 import { ModelFactory } from './types.js';
 
 /**

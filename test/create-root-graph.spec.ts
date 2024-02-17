@@ -1,5 +1,5 @@
-import { digraph, graph, strict, Graph, Digraph, attribute as _ } from 'ts-graphviz';
-import { toDot } from '#test/utils';
+import { test, expect, describe, it } from 'vitest';
+import { toDot, digraph, graph, strict, Graph, Digraph, attribute as _ } from 'ts-graphviz';
 
 describe('function digraph', () => {
   it('should return Graph object, when execute digraph()', () => {

@@ -1,4 +1,4 @@
-import { AttributeKey } from '../../common/index.js';
+import { AttributeKey } from '../../common.js';
 import type {
   ASTChildNode,
   AttributeASTNode,

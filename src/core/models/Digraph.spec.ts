@@ -1,3 +1,4 @@
+import { expect, it, test } from 'vitest';
 import { Digraph } from './Digraph.js';
 import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';

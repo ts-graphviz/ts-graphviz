@@ -4,7 +4,7 @@ import {
   NodeModel,
   RootGraphModel,
   SubgraphModel,
-} from '../../../common/index.js';
+} from '../../../common.js';
 import {
   DotASTNode,
   EdgeASTNode,

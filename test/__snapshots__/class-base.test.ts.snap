@@ -1,7 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`class base 1`] = `
-digraph {
+"digraph {
   subgraph "A" {
     "node1" [
       color = "red";
@@ -14,5 +14,5 @@ digraph {
       color = "pink";
     ];
   }
-}
+}"
 `;

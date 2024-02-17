@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Attributes } from '../../common/index.js';
+import { beforeEach, describe, expect, it, test } from 'vitest';
+import { Attributes } from '../../common.js';
 import { attribute as _ } from '../attribute.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';

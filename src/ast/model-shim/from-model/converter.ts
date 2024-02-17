@@ -1,4 +1,4 @@
-import { DotObjectModel } from '../../../common/index.js';
+import { DotObjectModel } from '../../../common.js';
 import { defaultPlugins } from './plugins/index.js';
 import {
   ConvertFromModelContext,

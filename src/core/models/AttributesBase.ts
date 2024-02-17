@@ -4,7 +4,7 @@ import {
   Attributes,
   AttributesEntities,
   AttributesObject,
-} from '../../common/index.js';
+} from '../../common.js';
 import { DotObject } from './DotObject.js';
 
 /**

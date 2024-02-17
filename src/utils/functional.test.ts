@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { filter, map, pipe } from './functional.js';
 
 describe('pipe', () => {

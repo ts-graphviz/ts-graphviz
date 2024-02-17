@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-import type { ASTType, AttributeKey, Compass } from '../common/index.js';
+import type { ASTType, AttributeKey, Compass } from '../common.js';
 
 /**
  * The FilePosition interface represents the position of a file in terms of its offset, line number, and column number.

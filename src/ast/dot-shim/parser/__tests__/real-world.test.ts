@@ -1,8 +1,7 @@
-/* eslint-disable jest/valid-title */
 import fs from 'node:fs';
 import path from 'node:path';
 import glob from 'glob';
-import 'jest-specific-snapshot';
+import { expect, test } from 'vitest';
 
 import { DotSyntaxError, parse } from '../_parse.js';
 
@@ -17,7 +16,7 @@ for (const file of files) {
 
   test(title, () => {
     try {
-      expect(parse(dot)).toMatchSpecificSnapshot(snapshot);
+      expect(parse(dot)).toMatchFileSnapshot(snapshot);
     } catch (e) {
       if (e instanceof DotSyntaxError) {
         console.log(e.location);

@@ -700,7 +700,6 @@ export interface RootGraphConstructor {
   ): RootGraphModel;
   new (strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
   new (attributes?: GraphAttributesObject): RootGraphModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   new (...args: any[]): RootGraphModel;
 }
 
@@ -711,7 +710,6 @@ export interface RootGraphConstructor {
 export interface SubgraphConstructor {
   new (id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
   new (attributes?: SubgraphAttributesObject): SubgraphModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   new (...args: any[]): SubgraphModel;
 }
 
@@ -721,7 +719,6 @@ export interface SubgraphConstructor {
  */
 export interface NodeConstructor {
   new (id: string, attributes?: NodeAttributesObject): NodeModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   new (...args: any[]): NodeModel;
 }
 
@@ -731,7 +728,6 @@ export interface NodeConstructor {
  */
 export interface EdgeConstructor {
   new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): EdgeModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   new (...args: any[]): EdgeModel;
 }
 

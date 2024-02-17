@@ -1,4 +1,4 @@
-import { pipe } from '../../../../utils/index.js';
+import { pipe } from '../../../../utils.js';
 import { LiteralASTNode } from '../../../types.js';
 import { PrintPlugin } from '../types.js';
 import { escape, wrapByPair, wrapWith } from './utils/index.js';

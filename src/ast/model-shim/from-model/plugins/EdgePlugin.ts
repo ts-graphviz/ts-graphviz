@@ -2,7 +2,7 @@ import {
   EdgeModel,
   isForwardRefNode,
   isNodeModel,
-} from '../../../../common/index.js';
+} from '../../../../common.js';
 import { createElement } from '../../../builder/create-element.js';
 import { EdgeTargetASTNode } from '../../../types.js';
 import { ConvertFromModelPlugin } from '../types.js';

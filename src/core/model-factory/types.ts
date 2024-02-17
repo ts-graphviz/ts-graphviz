@@ -1,4 +1,4 @@
-import { GraphAttributesObject, RootGraphModel } from '../../common/index.js';
+import { GraphAttributesObject, RootGraphModel } from '../../common.js';
 
 /**
  * ModelFactory is an interface that provides a way to create a {@link RootGraphModel} object.

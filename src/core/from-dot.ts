@@ -1,15 +1,10 @@
-import {
-  ConvertToModelOptions,
-  ParseOptions,
-  parse,
-  toModel,
-} from '../ast/index.js';
+import { ConvertToModelOptions, ParseOptions, parse, toModel } from '../ast.js';
 import {
   EdgeModel,
   NodeModel,
   RootGraphModel,
   SubgraphModel,
-} from '../common/index.js';
+} from '../common.js';
 
 /**
  * This interface provides options for converting DOT to a model.

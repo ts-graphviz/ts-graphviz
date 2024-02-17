@@ -1,4 +1,4 @@
-import { map, pipe } from '../../../../utils/index.js';
+import { map, pipe } from '../../../../utils.js';
 import { CommentASTNode } from '../../../types.js';
 import { PrintPlugin } from '../types.js';
 import {

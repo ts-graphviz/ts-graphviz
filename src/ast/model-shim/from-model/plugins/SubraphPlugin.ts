@@ -1,4 +1,4 @@
-import { SubgraphModel } from '../../../../common/index.js';
+import { SubgraphModel } from '../../../../common.js';
 import { createElement } from '../../../builder/create-element.js';
 import { ConvertFromModelPlugin } from '../types.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';

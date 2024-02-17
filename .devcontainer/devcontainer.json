@@ -22,7 +22,7 @@
         "deno.enable": true,
         "deno.lint": false,
         "deno.unstable": true,
-        "deno.enablePaths": ["./e2e/envs/deno", "src/adapter/deno", "lib/adapter/deno"],
+        "deno.enablePaths": ["./e2e/envs/deno", "src/adapter/deno.ts", "lib/adapter/deno.js"],
         "deno.cache": "./e2e/envs/deno/.deno"
       }
     }

@@ -5,7 +5,7 @@ import {
   EdgeModel,
   EdgeTargetTuple,
   isNodeRefLike,
-} from '../../common/index.js';
+} from '../../common.js';
 import { AttributesGroup } from './AttributesGroup.js';
 import { DotObject } from './DotObject.js';
 

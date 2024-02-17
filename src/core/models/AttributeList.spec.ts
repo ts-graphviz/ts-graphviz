@@ -1,4 +1,5 @@
-import { AttributeListKind } from '../../common/index.js';
+import { beforeEach, describe, expect, it, test } from 'vitest';
+import { AttributeListKind } from '../../common.js';
 import { attribute as _ } from '../attribute.js';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';

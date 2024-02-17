@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
 import {
   EdgeAttributesObject,
   GraphAttributesObject,
   NodeAttributesObject,
   SubgraphAttributesObject,
-} from '../../common/index.js';
-import { $keywords, $keywordsValidation } from '../../utils/index.js';
+} from '../common.js';
+import { $keywords, $keywordsValidation } from '../utils.js';
 
 export type Format = Format.values;
 export namespace Format {

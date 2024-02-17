@@ -2,8 +2,6 @@
  * @module ts-graphviz/adapter
  * @beta
  */
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-
 export type Options = any;
 
 const ERROR_MESSAGE = 'This module cannot be run in a browser.';

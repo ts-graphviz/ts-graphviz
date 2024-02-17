@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, test } from 'vitest';
 import { attribute as _ } from '../attribute.js';
 import { DotObject } from './DotObject.js';
 import { Node } from './Node.js';

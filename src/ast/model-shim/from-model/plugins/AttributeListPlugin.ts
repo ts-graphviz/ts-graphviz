@@ -1,4 +1,4 @@
-import { AttributeListModel } from '../../../../common/index.js';
+import { AttributeListModel } from '../../../../common.js';
 import { createElement } from '../../../builder/create-element.js';
 import { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute } from './utils/index.js';

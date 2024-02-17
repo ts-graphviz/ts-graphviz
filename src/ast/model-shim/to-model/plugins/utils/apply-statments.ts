@@ -1,4 +1,4 @@
-import { GraphBaseModel } from '../../../../../common/index.js';
+import { GraphBaseModel } from '../../../../../common.js';
 import {
   AttributeASTNode,
   ClusterStatementASTNode,

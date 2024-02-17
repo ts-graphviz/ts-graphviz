@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { createElement } from './create-element.js';
 
 describe('createElement', () => {

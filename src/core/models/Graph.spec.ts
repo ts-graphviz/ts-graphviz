@@ -1,6 +1,8 @@
+import { expect, it, test } from 'vitest';
 import { DotObject } from './DotObject.js';
 import { Graph } from './Graph.js';
 import { GraphBase } from './GraphBase.js';
+
 import './registerModelContext.js';
 
 const g = new Graph();

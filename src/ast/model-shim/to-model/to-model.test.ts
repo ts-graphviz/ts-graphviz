@@ -1,4 +1,5 @@
-import '../../../core/index.js';
+import { expect, test } from 'vitest';
+import '../../../core.js';
 import { createElement } from '../../builder/create-element.js';
 import { toModel } from './to-model.js';
 

@@ -1,4 +1,4 @@
-import { Attribute } from '../common/index.js';
+import { Attribute } from '../common.js';
 
 /**
  * @group Attribute

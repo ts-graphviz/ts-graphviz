@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, test } from 'vitest';
 import { AttributesGroup } from './AttributesGroup.js';
 
 let attrs: AttributesGroup;

@@ -1,5 +1,5 @@
-import { RootGraphModel, Digraph, Graph, attribute as _ } from 'ts-graphviz';
-import { toDot } from '#test/utils';
+import { test, expect, describe, beforeEach, it } from 'vitest';
+import { toDot, RootGraphModel, Digraph, Graph, attribute as _ } from 'ts-graphviz';
 
 describe.each([
   ['Digraph', () => new Digraph()],

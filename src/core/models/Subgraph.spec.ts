@@ -1,6 +1,7 @@
+import { beforeEach, describe, expect, it, test } from 'vitest';
 import './registerModelContext.js';
 
-import { EdgeTargetTuple, SubgraphModel } from '../../common/index.js';
+import { EdgeTargetTuple, SubgraphModel } from '../../common.js';
 import { attribute as _ } from '../attribute.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
@@ -183,12 +184,12 @@ describe('class Subgraph', () => {
       expect(() =>
         subgraph.edge([] as unknown as EdgeTargetTuple),
       ).toThrowErrorMatchingInlineSnapshot(
-        `"The element of Edge target is missing or not satisfied as Edge target."`,
+        `[Error: The element of Edge target is missing or not satisfied as Edge target.]`,
       );
       expect(() =>
         subgraph.edge([n] as unknown as EdgeTargetTuple),
       ).toThrowErrorMatchingInlineSnapshot(
-        `"The element of Edge target is missing or not satisfied as Edge target."`,
+        `[Error: The element of Edge target is missing or not satisfied as Edge target.]`,
       );
     });
   });

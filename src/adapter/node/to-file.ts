@@ -1,5 +1,5 @@
 import { createWriteStream } from 'node:fs';
-import { Layout, Options } from '../types/index.js';
+import { Layout, Options } from '../types.js';
 import { toStream } from './to-stream.js';
 import { pipeline } from './utils.js';
 

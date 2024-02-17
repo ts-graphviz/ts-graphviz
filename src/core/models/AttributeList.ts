@@ -3,7 +3,7 @@ import {
   AttributeListKind,
   AttributeListModel,
   AttributesObject,
-} from '../../common/index.js';
+} from '../../common.js';
 import { AttributesBase } from './AttributesBase.js';
 
 /**

@@ -1,22 +1,19 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`neural-network.dot 1`] = `
-Object {
-  "children": Array [
-    Object {
-      "children": Array [
-        Object {
-          "children": Array [],
-          "key": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [],
+          "key": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 14,
                 "line": 2,
                 "offset": 25,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 2,
                 "offset": 14,
@@ -26,30 +23,30 @@ Object {
             "type": "Literal",
             "value": "concentrate",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 20,
               "line": 2,
               "offset": 31,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 2,
               "offset": 14,
             },
           },
           "type": "Attribute",
-          "value": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "value": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 19,
                 "line": 2,
                 "offset": 30,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 15,
                 "line": 2,
                 "offset": 26,
@@ -60,18 +57,18 @@ Object {
             "value": "True",
           },
         },
-        Object {
-          "children": Array [],
-          "key": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+        {
+          "children": [],
+          "key": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 10,
                 "line": 3,
                 "offset": 41,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 3,
                 "offset": 34,
@@ -81,30 +78,30 @@ Object {
             "type": "Literal",
             "value": "rankdir",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 14,
               "line": 3,
               "offset": 45,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 3,
               "offset": 34,
             },
           },
           "type": "Attribute",
-          "value": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "value": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 13,
                 "line": 3,
                 "offset": 44,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 11,
                 "line": 3,
                 "offset": 42,
@@ -115,20 +112,20 @@ Object {
             "value": "TB",
           },
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 14,
                     "line": 4,
                     "offset": 59,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 9,
                     "line": 4,
                     "offset": 54,
@@ -138,30 +135,30 @@ Object {
                 "type": "Literal",
                 "value": "shape",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 21,
                   "line": 4,
                   "offset": 66,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 9,
                   "line": 4,
                   "offset": 54,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 21,
                     "line": 4,
                     "offset": 66,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 15,
                     "line": 4,
                     "offset": 60,
@@ -174,14 +171,14 @@ Object {
             },
           ],
           "kind": "Node",
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 23,
               "line": 4,
               "offset": 68,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 4,
               "offset": 48,
@@ -189,20 +186,20 @@ Object {
           },
           "type": "AttributeList",
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 25,
                     "line": 5,
                     "offset": 93,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 20,
                     "line": 5,
                     "offset": 88,
@@ -212,30 +209,30 @@ Object {
                 "type": "Literal",
                 "value": "label",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 88,
                   "line": 5,
                   "offset": 156,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 20,
                   "line": 5,
                   "offset": 88,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 88,
                     "line": 5,
                     "offset": 156,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 5,
                     "offset": 94,
@@ -243,20 +240,20 @@ Object {
                 },
                 "quoted": true,
                 "type": "Literal",
-                "value": "title: InputLayer\\\\n|{input:|output:}|{{[(?, ?)]}|{[(?, ?)]}}",
+                "value": "title: InputLayer\n|{input:|output:}|{{[(?, ?)]}|{[(?, ?)]}}",
               },
             },
           ],
-          "id": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 18,
                 "line": 5,
                 "offset": 86,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 5,
                 "offset": 71,
@@ -266,14 +263,14 @@ Object {
             "type": "Literal",
             "value": "140087530674552",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 90,
               "line": 5,
               "offset": 158,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 5,
               "offset": 71,
@@ -281,20 +278,20 @@ Object {
           },
           "type": "Node",
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 25,
                     "line": 6,
                     "offset": 183,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 20,
                     "line": 6,
                     "offset": 178,
@@ -304,30 +301,30 @@ Object {
                 "type": "Literal",
                 "value": "label",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 87,
                   "line": 6,
                   "offset": 245,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 20,
                   "line": 6,
                   "offset": 178,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 87,
                     "line": 6,
                     "offset": 245,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 6,
                     "offset": 184,
@@ -335,20 +332,20 @@ Object {
                 },
                 "quoted": true,
                 "type": "Literal",
-                "value": "body: InputLayer\\\\n|{input:|output:}|{{[(?, ?)]}|{[(?, ?)]}}",
+                "value": "body: InputLayer\n|{input:|output:}|{{[(?, ?)]}|{[(?, ?)]}}",
               },
             },
           ],
-          "id": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 18,
                 "line": 6,
                 "offset": 176,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 6,
                 "offset": 161,
@@ -358,14 +355,14 @@ Object {
             "type": "Literal",
             "value": "140087537895856",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 89,
               "line": 6,
               "offset": 247,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 6,
               "offset": 161,
@@ -373,20 +370,20 @@ Object {
           },
           "type": "Node",
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 25,
                     "line": 7,
                     "offset": 272,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 20,
                     "line": 7,
                     "offset": 267,
@@ -396,30 +393,30 @@ Object {
                 "type": "Literal",
                 "value": "label",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 93,
                   "line": 7,
                   "offset": 340,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 20,
                   "line": 7,
                   "offset": 267,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 93,
                     "line": 7,
                     "offset": 340,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 7,
                     "offset": 273,
@@ -427,20 +424,20 @@ Object {
                 },
                 "quoted": true,
                 "type": "Literal",
-                "value": "embedding_2: Embedding\\\\n|{input:|output:}|{{(?, ?)}|{(?, ?, 64)}}",
+                "value": "embedding_2: Embedding\n|{input:|output:}|{{(?, ?)}|{(?, ?, 64)}}",
               },
             },
           ],
-          "id": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 18,
                 "line": 7,
                 "offset": 265,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 7,
                 "offset": 250,
@@ -450,14 +447,14 @@ Object {
             "type": "Literal",
             "value": "140087531105640",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 95,
               "line": 7,
               "offset": 342,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 7,
               "offset": 250,
@@ -465,20 +462,20 @@ Object {
           },
           "type": "Node",
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 25,
                     "line": 8,
                     "offset": 367,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 20,
                     "line": 8,
                     "offset": 362,
@@ -488,30 +485,30 @@ Object {
                 "type": "Literal",
                 "value": "label",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 93,
                   "line": 8,
                   "offset": 435,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 20,
                   "line": 8,
                   "offset": 362,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 93,
                     "line": 8,
                     "offset": 435,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 8,
                     "offset": 368,
@@ -519,20 +516,20 @@ Object {
                 },
                 "quoted": true,
                 "type": "Literal",
-                "value": "embedding_3: Embedding\\\\n|{input:|output:}|{{(?, ?)}|{(?, ?, 64)}}",
+                "value": "embedding_3: Embedding\n|{input:|output:}|{{(?, ?)}|{(?, ?, 64)}}",
               },
             },
           ],
-          "id": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 18,
                 "line": 8,
                 "offset": 360,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 8,
                 "offset": 345,
@@ -542,14 +539,14 @@ Object {
             "type": "Literal",
             "value": "140087530711024",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 95,
               "line": 8,
               "offset": 437,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 8,
               "offset": 345,
@@ -557,20 +554,20 @@ Object {
           },
           "type": "Node",
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 25,
                     "line": 9,
                     "offset": 462,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 20,
                     "line": 9,
                     "offset": 457,
@@ -580,30 +577,30 @@ Object {
                 "type": "Literal",
                 "value": "label",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 85,
                   "line": 9,
                   "offset": 522,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 20,
                   "line": 9,
                   "offset": 457,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 85,
                     "line": 9,
                     "offset": 522,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 9,
                     "offset": 463,
@@ -611,20 +608,20 @@ Object {
                 },
                 "quoted": true,
                 "type": "Literal",
-                "value": "lstm_2: LSTM\\\\n|{input:|output:}|{{(?, ?, 64)}|{(?, 128)}}",
+                "value": "lstm_2: LSTM\n|{input:|output:}|{{(?, ?, 64)}|{(?, 128)}}",
               },
             },
           ],
-          "id": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 18,
                 "line": 9,
                 "offset": 455,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 9,
                 "offset": 440,
@@ -634,14 +631,14 @@ Object {
             "type": "Literal",
             "value": "140087537980360",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 87,
               "line": 9,
               "offset": 524,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 9,
               "offset": 440,
@@ -649,20 +646,20 @@ Object {
           },
           "type": "Node",
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 25,
                     "line": 10,
                     "offset": 549,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 20,
                     "line": 10,
                     "offset": 544,
@@ -672,30 +669,30 @@ Object {
                 "type": "Literal",
                 "value": "label",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 84,
                   "line": 10,
                   "offset": 608,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 20,
                   "line": 10,
                   "offset": 544,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 84,
                     "line": 10,
                     "offset": 608,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 10,
                     "offset": 550,
@@ -703,20 +700,20 @@ Object {
                 },
                 "quoted": true,
                 "type": "Literal",
-                "value": "lstm_3: LSTM\\\\n|{input:|output:}|{{(?, ?, 64)}|{(?, 32)}}",
+                "value": "lstm_3: LSTM\n|{input:|output:}|{{(?, ?, 64)}|{(?, 32)}}",
               },
             },
           ],
-          "id": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 18,
                 "line": 10,
                 "offset": 542,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 10,
                 "offset": 527,
@@ -726,14 +723,14 @@ Object {
             "type": "Literal",
             "value": "140087531256464",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 86,
               "line": 10,
               "offset": 610,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 10,
               "offset": 527,
@@ -741,20 +738,20 @@ Object {
           },
           "type": "Node",
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 25,
                     "line": 11,
                     "offset": 635,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 20,
                     "line": 11,
                     "offset": 630,
@@ -764,30 +761,30 @@ Object {
                 "type": "Literal",
                 "value": "label",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 89,
                   "line": 11,
                   "offset": 699,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 20,
                   "line": 11,
                   "offset": 630,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 89,
                     "line": 11,
                     "offset": 699,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 11,
                     "offset": 636,
@@ -795,20 +792,20 @@ Object {
                 },
                 "quoted": true,
                 "type": "Literal",
-                "value": "tags: InputLayer\\\\n|{input:|output:}|{{[(?, 12)]}|{[(?, 12)]}}",
+                "value": "tags: InputLayer\n|{input:|output:}|{{[(?, 12)]}|{[(?, 12)]}}",
               },
             },
           ],
-          "id": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 18,
                 "line": 11,
                 "offset": 628,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 11,
                 "offset": 613,
@@ -818,14 +815,14 @@ Object {
             "type": "Literal",
             "value": "140087531106200",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 91,
               "line": 11,
               "offset": 701,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 11,
               "offset": 613,
@@ -833,20 +830,20 @@ Object {
           },
           "type": "Node",
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 25,
                     "line": 12,
                     "offset": 726,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 20,
                     "line": 12,
                     "offset": 721,
@@ -856,30 +853,30 @@ Object {
                 "type": "Literal",
                 "value": "label",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 117,
                   "line": 12,
                   "offset": 818,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 20,
                   "line": 12,
                   "offset": 721,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 117,
                     "line": 12,
                     "offset": 818,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 12,
                     "offset": 727,
@@ -887,20 +884,20 @@ Object {
                 },
                 "quoted": true,
                 "type": "Literal",
-                "value": "concatenate_1: Concatenate\\\\n|{input:|output:}|{{[(?, 128), (?, 32), (?, 12)]}|{(?, 172)}}",
+                "value": "concatenate_1: Concatenate\n|{input:|output:}|{{[(?, 128), (?, 32), (?, 12)]}|{(?, 172)}}",
               },
             },
           ],
-          "id": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 18,
                 "line": 12,
                 "offset": 719,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 12,
                 "offset": 704,
@@ -910,14 +907,14 @@ Object {
             "type": "Literal",
             "value": "140087530348048",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 119,
               "line": 12,
               "offset": 820,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 12,
               "offset": 704,
@@ -925,20 +922,20 @@ Object {
           },
           "type": "Node",
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 25,
                     "line": 13,
                     "offset": 845,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 20,
                     "line": 13,
                     "offset": 840,
@@ -948,30 +945,30 @@ Object {
                 "type": "Literal",
                 "value": "label",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 84,
                   "line": 13,
                   "offset": 904,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 20,
                   "line": 13,
                   "offset": 840,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 84,
                     "line": 13,
                     "offset": 904,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 13,
                     "offset": 846,
@@ -979,20 +976,20 @@ Object {
                 },
                 "quoted": true,
                 "type": "Literal",
-                "value": "priority: Dense\\\\n|{input:|output:}|{{(?, 172)}|{(?, 1)}}",
+                "value": "priority: Dense\n|{input:|output:}|{{(?, 172)}|{(?, 1)}}",
               },
             },
           ],
-          "id": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 18,
                 "line": 13,
                 "offset": 838,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 13,
                 "offset": 823,
@@ -1002,14 +999,14 @@ Object {
             "type": "Literal",
             "value": "140087530347992",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 86,
               "line": 13,
               "offset": 906,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 13,
               "offset": 823,
@@ -1017,20 +1014,20 @@ Object {
           },
           "type": "Node",
         },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [],
-              "key": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 25,
                     "line": 14,
                     "offset": 931,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 20,
                     "line": 14,
                     "offset": 926,
@@ -1040,30 +1037,30 @@ Object {
                 "type": "Literal",
                 "value": "label",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 86,
                   "line": 14,
                   "offset": 992,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 20,
                   "line": 14,
                   "offset": 926,
                 },
               },
               "type": "Attribute",
-              "value": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 86,
                     "line": 14,
                     "offset": 992,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 14,
                     "offset": 932,
@@ -1071,20 +1068,20 @@ Object {
                 },
                 "quoted": true,
                 "type": "Literal",
-                "value": "department: Dense\\\\n|{input:|output:}|{{(?, 172)}|{(?, 4)}}",
+                "value": "department: Dense\n|{input:|output:}|{{(?, 172)}|{(?, 4)}}",
               },
             },
           ],
-          "id": Object {
-            "children": Array [],
-            "location": Object {
-              "end": Object {
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
                 "column": 18,
                 "line": 14,
                 "offset": 924,
               },
               "source": undefined,
-              "start": Object {
+              "start": {
                 "column": 3,
                 "line": 14,
                 "offset": 909,
@@ -1094,14 +1091,14 @@ Object {
             "type": "Literal",
             "value": "140087530711304",
           },
-          "location": Object {
-            "end": Object {
+          "location": {
+            "end": {
               "column": 88,
               "line": 14,
               "offset": 994,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 14,
               "offset": 909,
@@ -1109,34 +1106,34 @@ Object {
           },
           "type": "Node",
         },
-        Object {
-          "children": Array [],
-          "location": Object {
-            "end": Object {
+        {
+          "children": [],
+          "location": {
+            "end": {
               "column": 38,
               "line": 15,
               "offset": 1032,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 15,
               "offset": 997,
             },
           },
-          "targets": Array [
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 18,
                     "line": 15,
                     "offset": 1012,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 3,
                     "line": 15,
                     "offset": 997,
@@ -1146,14 +1143,14 @@ Object {
                 "type": "Literal",
                 "value": "140087530674552",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 18,
                   "line": 15,
                   "offset": 1012,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 3,
                   "line": 15,
                   "offset": 997,
@@ -1161,18 +1158,18 @@ Object {
               },
               "type": "NodeRef",
             },
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 37,
                     "line": 15,
                     "offset": 1031,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 22,
                     "line": 15,
                     "offset": 1016,
@@ -1182,14 +1179,14 @@ Object {
                 "type": "Literal",
                 "value": "140087531105640",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 37,
                   "line": 15,
                   "offset": 1031,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 22,
                   "line": 15,
                   "offset": 1016,
@@ -1200,34 +1197,34 @@ Object {
           ],
           "type": "Edge",
         },
-        Object {
-          "children": Array [],
-          "location": Object {
-            "end": Object {
+        {
+          "children": [],
+          "location": {
+            "end": {
               "column": 38,
               "line": 16,
               "offset": 1070,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 16,
               "offset": 1035,
             },
           },
-          "targets": Array [
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 18,
                     "line": 16,
                     "offset": 1050,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 3,
                     "line": 16,
                     "offset": 1035,
@@ -1237,14 +1234,14 @@ Object {
                 "type": "Literal",
                 "value": "140087537895856",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 18,
                   "line": 16,
                   "offset": 1050,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 3,
                   "line": 16,
                   "offset": 1035,
@@ -1252,18 +1249,18 @@ Object {
               },
               "type": "NodeRef",
             },
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 37,
                     "line": 16,
                     "offset": 1069,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 22,
                     "line": 16,
                     "offset": 1054,
@@ -1273,14 +1270,14 @@ Object {
                 "type": "Literal",
                 "value": "140087530711024",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 37,
                   "line": 16,
                   "offset": 1069,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 22,
                   "line": 16,
                   "offset": 1054,
@@ -1291,34 +1288,34 @@ Object {
           ],
           "type": "Edge",
         },
-        Object {
-          "children": Array [],
-          "location": Object {
-            "end": Object {
+        {
+          "children": [],
+          "location": {
+            "end": {
               "column": 38,
               "line": 17,
               "offset": 1108,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 17,
               "offset": 1073,
             },
           },
-          "targets": Array [
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 18,
                     "line": 17,
                     "offset": 1088,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 3,
                     "line": 17,
                     "offset": 1073,
@@ -1328,14 +1325,14 @@ Object {
                 "type": "Literal",
                 "value": "140087531105640",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 18,
                   "line": 17,
                   "offset": 1088,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 3,
                   "line": 17,
                   "offset": 1073,
@@ -1343,18 +1340,18 @@ Object {
               },
               "type": "NodeRef",
             },
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 37,
                     "line": 17,
                     "offset": 1107,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 22,
                     "line": 17,
                     "offset": 1092,
@@ -1364,14 +1361,14 @@ Object {
                 "type": "Literal",
                 "value": "140087537980360",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 37,
                   "line": 17,
                   "offset": 1107,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 22,
                   "line": 17,
                   "offset": 1092,
@@ -1382,34 +1379,34 @@ Object {
           ],
           "type": "Edge",
         },
-        Object {
-          "children": Array [],
-          "location": Object {
-            "end": Object {
+        {
+          "children": [],
+          "location": {
+            "end": {
               "column": 38,
               "line": 18,
               "offset": 1146,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 18,
               "offset": 1111,
             },
           },
-          "targets": Array [
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 18,
                     "line": 18,
                     "offset": 1126,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 3,
                     "line": 18,
                     "offset": 1111,
@@ -1419,14 +1416,14 @@ Object {
                 "type": "Literal",
                 "value": "140087530711024",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 18,
                   "line": 18,
                   "offset": 1126,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 3,
                   "line": 18,
                   "offset": 1111,
@@ -1434,18 +1431,18 @@ Object {
               },
               "type": "NodeRef",
             },
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 37,
                     "line": 18,
                     "offset": 1145,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 22,
                     "line": 18,
                     "offset": 1130,
@@ -1455,14 +1452,14 @@ Object {
                 "type": "Literal",
                 "value": "140087531256464",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 37,
                   "line": 18,
                   "offset": 1145,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 22,
                   "line": 18,
                   "offset": 1130,
@@ -1473,34 +1470,34 @@ Object {
           ],
           "type": "Edge",
         },
-        Object {
-          "children": Array [],
-          "location": Object {
-            "end": Object {
+        {
+          "children": [],
+          "location": {
+            "end": {
               "column": 38,
               "line": 19,
               "offset": 1184,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 19,
               "offset": 1149,
             },
           },
-          "targets": Array [
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 18,
                     "line": 19,
                     "offset": 1164,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 3,
                     "line": 19,
                     "offset": 1149,
@@ -1510,14 +1507,14 @@ Object {
                 "type": "Literal",
                 "value": "140087537980360",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 18,
                   "line": 19,
                   "offset": 1164,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 3,
                   "line": 19,
                   "offset": 1149,
@@ -1525,18 +1522,18 @@ Object {
               },
               "type": "NodeRef",
             },
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 37,
                     "line": 19,
                     "offset": 1183,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 22,
                     "line": 19,
                     "offset": 1168,
@@ -1546,14 +1543,14 @@ Object {
                 "type": "Literal",
                 "value": "140087530348048",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 37,
                   "line": 19,
                   "offset": 1183,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 22,
                   "line": 19,
                   "offset": 1168,
@@ -1564,34 +1561,34 @@ Object {
           ],
           "type": "Edge",
         },
-        Object {
-          "children": Array [],
-          "location": Object {
-            "end": Object {
+        {
+          "children": [],
+          "location": {
+            "end": {
               "column": 38,
               "line": 20,
               "offset": 1222,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 20,
               "offset": 1187,
             },
           },
-          "targets": Array [
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 18,
                     "line": 20,
                     "offset": 1202,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 3,
                     "line": 20,
                     "offset": 1187,
@@ -1601,14 +1598,14 @@ Object {
                 "type": "Literal",
                 "value": "140087531256464",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 18,
                   "line": 20,
                   "offset": 1202,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 3,
                   "line": 20,
                   "offset": 1187,
@@ -1616,18 +1613,18 @@ Object {
               },
               "type": "NodeRef",
             },
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 37,
                     "line": 20,
                     "offset": 1221,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 22,
                     "line": 20,
                     "offset": 1206,
@@ -1637,14 +1634,14 @@ Object {
                 "type": "Literal",
                 "value": "140087530348048",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 37,
                   "line": 20,
                   "offset": 1221,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 22,
                   "line": 20,
                   "offset": 1206,
@@ -1655,34 +1652,34 @@ Object {
           ],
           "type": "Edge",
         },
-        Object {
-          "children": Array [],
-          "location": Object {
-            "end": Object {
+        {
+          "children": [],
+          "location": {
+            "end": {
               "column": 38,
               "line": 21,
               "offset": 1260,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 21,
               "offset": 1225,
             },
           },
-          "targets": Array [
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 18,
                     "line": 21,
                     "offset": 1240,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 3,
                     "line": 21,
                     "offset": 1225,
@@ -1692,14 +1689,14 @@ Object {
                 "type": "Literal",
                 "value": "140087531106200",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 18,
                   "line": 21,
                   "offset": 1240,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 3,
                   "line": 21,
                   "offset": 1225,
@@ -1707,18 +1704,18 @@ Object {
               },
               "type": "NodeRef",
             },
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 37,
                     "line": 21,
                     "offset": 1259,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 22,
                     "line": 21,
                     "offset": 1244,
@@ -1728,14 +1725,14 @@ Object {
                 "type": "Literal",
                 "value": "140087530348048",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 37,
                   "line": 21,
                   "offset": 1259,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 22,
                   "line": 21,
                   "offset": 1244,
@@ -1746,34 +1743,34 @@ Object {
           ],
           "type": "Edge",
         },
-        Object {
-          "children": Array [],
-          "location": Object {
-            "end": Object {
+        {
+          "children": [],
+          "location": {
+            "end": {
               "column": 38,
               "line": 22,
               "offset": 1298,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 22,
               "offset": 1263,
             },
           },
-          "targets": Array [
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 18,
                     "line": 22,
                     "offset": 1278,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 3,
                     "line": 22,
                     "offset": 1263,
@@ -1783,14 +1780,14 @@ Object {
                 "type": "Literal",
                 "value": "140087530348048",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 18,
                   "line": 22,
                   "offset": 1278,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 3,
                   "line": 22,
                   "offset": 1263,
@@ -1798,18 +1795,18 @@ Object {
               },
               "type": "NodeRef",
             },
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 37,
                     "line": 22,
                     "offset": 1297,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 22,
                     "line": 22,
                     "offset": 1282,
@@ -1819,14 +1816,14 @@ Object {
                 "type": "Literal",
                 "value": "140087530347992",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 37,
                   "line": 22,
                   "offset": 1297,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 22,
                   "line": 22,
                   "offset": 1282,
@@ -1837,34 +1834,34 @@ Object {
           ],
           "type": "Edge",
         },
-        Object {
-          "children": Array [],
-          "location": Object {
-            "end": Object {
+        {
+          "children": [],
+          "location": {
+            "end": {
               "column": 38,
               "line": 23,
               "offset": 1336,
             },
             "source": undefined,
-            "start": Object {
+            "start": {
               "column": 3,
               "line": 23,
               "offset": 1301,
             },
           },
-          "targets": Array [
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 18,
                     "line": 23,
                     "offset": 1316,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 3,
                     "line": 23,
                     "offset": 1301,
@@ -1874,14 +1871,14 @@ Object {
                 "type": "Literal",
                 "value": "140087530348048",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 18,
                   "line": 23,
                   "offset": 1316,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 3,
                   "line": 23,
                   "offset": 1301,
@@ -1889,18 +1886,18 @@ Object {
               },
               "type": "NodeRef",
             },
-            Object {
-              "children": Array [],
-              "id": Object {
-                "children": Array [],
-                "location": Object {
-                  "end": Object {
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
                     "column": 37,
                     "line": 23,
                     "offset": 1335,
                   },
                   "source": undefined,
-                  "start": Object {
+                  "start": {
                     "column": 22,
                     "line": 23,
                     "offset": 1320,
@@ -1910,14 +1907,14 @@ Object {
                 "type": "Literal",
                 "value": "140087530711304",
               },
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": 37,
                   "line": 23,
                   "offset": 1335,
                 },
                 "source": undefined,
-                "start": Object {
+                "start": {
                   "column": 22,
                   "line": 23,
                   "offset": 1320,
@@ -1930,16 +1927,16 @@ Object {
         },
       ],
       "directed": true,
-      "id": Object {
-        "children": Array [],
-        "location": Object {
-          "end": Object {
+      "id": {
+        "children": [],
+        "location": {
+          "end": {
             "column": 10,
             "line": 1,
             "offset": 9,
           },
           "source": undefined,
-          "start": Object {
+          "start": {
             "column": 9,
             "line": 1,
             "offset": 8,
@@ -1949,14 +1946,14 @@ Object {
         "type": "Literal",
         "value": "G",
       },
-      "location": Object {
-        "end": Object {
+      "location": {
+        "end": {
           "column": 2,
           "line": 24,
           "offset": 1338,
         },
         "source": undefined,
-        "start": Object {
+        "start": {
           "column": 1,
           "line": 1,
           "offset": 0,
@@ -1966,14 +1963,14 @@ Object {
       "type": "Graph",
     },
   ],
-  "location": Object {
-    "end": Object {
+  "location": {
+    "end": {
       "column": 1,
       "line": 25,
       "offset": 1339,
     },
     "source": undefined,
-    "start": Object {
+    "start": {
       "column": 1,
       "line": 1,
       "offset": 0,
@@ -1981,4 +1978,3 @@ Object {
   },
   "type": "Dot",
 }
-`;

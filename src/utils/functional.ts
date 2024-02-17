@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type F<A extends any[], O> = (...args: A) => O;
 
 export type IO<I, O> = F<[I], O>;

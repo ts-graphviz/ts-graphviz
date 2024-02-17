@@ -1,6 +1,6 @@
-import { jest } from '@jest/globals';
+import { describe, expect, test, vi } from 'vitest';
 
-import { RootModelsContext } from '../../common/index.js';
+import { RootModelsContext } from '../../common.js';
 import { attribute as _ } from '../attribute.js';
 import '../models/registerModelContext.js';
 import { ModelFactoryBuilder } from './model-factory-builder.js';
@@ -28,7 +28,7 @@ describe.each([
   });
 
   test('first argument is callback', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const g = factory(callback);
     expect(g.id).toBeUndefined();
     expect(callback).toHaveBeenCalledWith(g);
@@ -47,7 +47,7 @@ describe.each([
   });
 
   test('first argument is attribute object, seccond argument is callback', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const g = factory({ [_.label]: 'Test label' }, callback);
     expect(g.id).toBeUndefined();
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);
@@ -67,7 +67,7 @@ describe.each([
   });
 
   test('first argument is id, seccond argument is attribute object, third arguments is callback', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const g = factory('foo', { [_.label]: 'Test label' }, callback);
     expect(g.id).toStrictEqual('foo');
     expect(g.values).toStrictEqual([[_.label, 'Test label']]);

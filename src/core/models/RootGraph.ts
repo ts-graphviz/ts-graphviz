@@ -2,7 +2,7 @@ import {
   GraphAttributeKey,
   GraphAttributesObject,
   RootGraphModel,
-} from '../../common/index.js';
+} from '../../common.js';
 import { GraphBase } from './GraphBase.js';
 
 /**

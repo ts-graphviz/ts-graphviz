@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { parse } from './parse.js';
 
 describe('parse', () => {
@@ -184,7 +185,7 @@ describe('parse', () => {
             { startRule: 'Graph' },
           );
         }).toThrowErrorMatchingInlineSnapshot(
-          `"In digraph, it's necessary to describe with "->" operator to create edge."`,
+          `[DotSyntaxError: In digraph, it's necessary to describe with "->" operator to create edge.]`,
         );
       });
 
@@ -198,7 +199,7 @@ describe('parse', () => {
             { startRule: 'Graph' },
           );
         }).toThrowErrorMatchingInlineSnapshot(
-          `"In graph, it's necessary to describe with "--" operator to create edge."`,
+          `[DotSyntaxError: In graph, it's necessary to describe with "--" operator to create edge.]`,
         );
       });
     });

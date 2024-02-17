@@ -1,6 +1,8 @@
+import { beforeEach, describe, expect, it, test } from 'vitest';
+
 import './registerModelContext.js';
 
-import { EdgeTargetTuple } from '../../common/index.js';
+import { EdgeTargetTuple } from '../../common.js';
 import { attribute as _ } from '../attribute.js';
 import { DotObject } from './DotObject.js';
 import { Edge } from './Edge.js';
@@ -36,11 +38,11 @@ it('throws an error when the EdgeTarget element is missing', () => {
   expect(
     () => new Edge([] as unknown as EdgeTargetTuple),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"The element of Edge target is missing or not satisfied as Edge target."`,
+    `[Error: The element of Edge target is missing or not satisfied as Edge target.]`,
   );
   expect(
     () => new Edge([n] as unknown as EdgeTargetTuple),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"The element of Edge target is missing or not satisfied as Edge target."`,
+    `[Error: The element of Edge target is missing or not satisfied as Edge target.]`,
   );
 });

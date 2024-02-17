@@ -1,4 +1,4 @@
-import { HasComment } from '../../../../../common/index.js';
+import { HasComment } from '../../../../../common.js';
 import { CommentASTNode, FileRange } from '../../../../types.js';
 
 export class CommentHolder {

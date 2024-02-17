@@ -1,5 +1,6 @@
-import { Digraph, Edge, Node, Subgraph, attribute as _, EdgeTargetTuple, withContext } from 'ts-graphviz';
-import { toDot } from '#test/utils';
+import { test, expect, describe } from 'vitest';
+
+import { toDot, Digraph, Edge, Node, Subgraph, attribute as _, EdgeTargetTuple, withContext } from 'ts-graphviz';
 
 test('class base', () => {
   const G = new Digraph();
@@ -56,7 +57,7 @@ describe('Custom Class', () => {
     digraph.addEdge(edge);
     const dot = toDot(digraph);
     expect(dot).toMatchInlineSnapshot(`
-      digraph "G" {
+      "digraph "G" {
         label = "This is Custom Digraph";
         "node_A" [
           label = "This is Custom Node A";
@@ -67,7 +68,7 @@ describe('Custom Class', () => {
         "node_A" -> "node_B" [
           label = "This is Custom Edge";
         ];
-      }
+      }"
     `);
   });
 
@@ -84,7 +85,7 @@ describe('Custom Class', () => {
       expect(g.createEdge([a, b])).toBeInstanceOf(MyCustomEdge);
       const dot = toDot(g);
       expect(dot).toMatchInlineSnapshot(`
-        digraph {
+        "digraph {
           "node_A" [
             label = "This is Custom Node A";
           ];
@@ -94,7 +95,7 @@ describe('Custom Class', () => {
           "node_A" -> "node_B" [
             label = "This is Custom Edge";
           ];
-        }
+        }"
       `);
     });
 
@@ -113,7 +114,7 @@ describe('Custom Class', () => {
 
       const dot = toDot(G);
       expect(dot).toMatchInlineSnapshot(`
-        digraph "G" {
+        "digraph "G" {
           label = "This is Custom Digraph";
           "node_A" [
             label = "This is Custom Node A";
@@ -124,7 +125,7 @@ describe('Custom Class', () => {
           "node_A" -> "node_B" [
             label = "This is Custom Edge";
           ];
-        }
+        }"
       `);
     });
   });

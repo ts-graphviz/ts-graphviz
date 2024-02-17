@@ -1,7 +1,8 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "out": "./doc",
-  "entryPoints": ["src/index.ts", "src/ast/index.ts", "src/adapter/node/index.ts"],
+  "tsconfig": "tsconfig.build.json",
+  "entryPoints": ["src/ts-graphviz.ts", "src/ast.ts", "src/adapter/node.ts"],
   "media": "./media/",
   "excludePrivate": true
 }

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, test } from 'vitest';
 import './registerModelContext.js';
 
 import { attribute as _ } from '../attribute.js';

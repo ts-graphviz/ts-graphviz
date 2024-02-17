@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
 import { digraph, toDot, attribute as _, $keywords } from 'ts-graphviz';
 import { toFile } from 'ts-graphviz/adapter';
 

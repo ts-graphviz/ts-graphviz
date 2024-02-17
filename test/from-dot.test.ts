@@ -1,5 +1,5 @@
-import { Digraph, Edge, Node, RootGraph, Subgraph, fromDot } from 'ts-graphviz';
-import { toDot } from '#test/utils';
+import { test, expect, describe } from 'vitest';
+import {  toDot, Digraph, Edge, Node, RootGraph, Subgraph, fromDot } from 'ts-graphviz';
 
 describe('fromDot function', () => {
   test('RootGraph', () => {
@@ -48,11 +48,11 @@ test('partially described by DOT', () => {
   G.edge(['node_A', 'node_B']);
 
   expect(toDot(G)).toMatchInlineSnapshot(`
-    digraph {
+    "digraph {
       "node_A" [
         label = "This is a Label of Node A";
       ];
       "node_A" -> "node_B";
-    }
+    }"
   `);
 });

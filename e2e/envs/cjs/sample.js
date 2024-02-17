@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { attribute: _, Digraph, Subgraph, Node, Edge, toDot } = require('ts-graphviz');
 
 const G = new Digraph();

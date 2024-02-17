@@ -1,4 +1,4 @@
-import { RootModelsContext } from '../../common/index.js';
+import { RootModelsContext } from '../../common.js';
 import { Digraph } from './Digraph.js';
 import { Edge } from './Edge.js';
 import { Graph } from './Graph.js';

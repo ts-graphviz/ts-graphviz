@@ -10,7 +10,7 @@
     "ClusterStatements"
   ],
   "tspegjs": {
-    "customHeader": "/* eslint-disable */\nimport { Builder } from '../../builder/index.js';",
+    "customHeader": "import { Builder } from '../../builder/index.js';",
     "errorName": "DotSyntaxError"
   }
 }

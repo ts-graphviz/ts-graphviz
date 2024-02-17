@@ -29,7 +29,6 @@ export class Builder implements ASTBuilder {
    * @param children - Children of the {@link ASTNode}
    * @returns An {@link ASTNode}
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public createElement<T extends ASTNode>(
     type: T['type'],
     props: any,

@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import { PassThrough, Readable } from 'node:stream';
-import { Layout, Options } from '../types/index.js';
-import { createCommandAndArgs } from '../utils/index.js';
+import { Layout, Options } from '../types.js';
+import { createCommandAndArgs } from '../utils.js';
 import { pipeline } from './utils.js';
 
 /**

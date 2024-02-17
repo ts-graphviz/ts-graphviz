@@ -20,7 +20,7 @@ import {
   isNodeRefGroupLike,
   toNodeRef,
   toNodeRefGroup,
-} from '../../common/index.js';
+} from '../../common.js';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
 

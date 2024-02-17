@@ -7,8 +7,8 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "include": ["src/**/*"],
-    "ignore": ["src/ast/dot-shim/parser/_parse.ts"]
+    "include": ["src/**/*", "lib/**/*"],
+    "ignore": ["src/ast/dot-shim/parser/_parse.ts", "src/adapter/deno.ts"]
   },
   "organizeImports": {
     "enabled": true
@@ -30,6 +30,9 @@
       "suspicious": {
         "noExplicitAny": "off",
         "noShadowRestrictedNames": "off"
+      },
+      "style": {
+        "noUnusedTemplateLiteral": "off"
       }
     }
   }
