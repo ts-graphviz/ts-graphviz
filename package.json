@@ -20,9 +20,10 @@
     "type": "github",
     "url": "https://github.com/sponsors/ts-graphviz"
   },
+  "packageManager": "pnpm@8",
   "license": "MIT",
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo run build --cache-dir=.turbo",
     "test": "turbo pretest && pnpm test:unit && pnpm test:integration",
     "test:unit": "vitest run",
     "test:integration": "turbo test:integration",
