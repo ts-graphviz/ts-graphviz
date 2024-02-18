@@ -1,4 +1,11 @@
-const { attribute: _, Digraph, Subgraph, Node, Edge, toDot } = require('ts-graphviz');
+const {
+  attribute: _,
+  Digraph,
+  Subgraph,
+  Node,
+  Edge,
+  toDot,
+} = require('ts-graphviz');
 
 const G = new Digraph();
 const A = new Subgraph('A');

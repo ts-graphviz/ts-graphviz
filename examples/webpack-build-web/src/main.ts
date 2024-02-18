@@ -1,6 +1,13 @@
-import { attribute as _, Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
-import { parse } from 'ts-graphviz/ast';
+import {
+  Digraph,
+  Edge,
+  Node,
+  Subgraph,
+  attribute as _,
+  toDot,
+} from 'ts-graphviz';
 import { toFile } from 'ts-graphviz/adapter';
+import { parse } from 'ts-graphviz/ast';
 
 const G = new Digraph();
 const A = new Subgraph('A');

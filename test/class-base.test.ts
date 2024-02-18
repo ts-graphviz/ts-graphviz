@@ -1,6 +1,15 @@
-import { test, expect, describe } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
-import { toDot, Digraph, Edge, Node, Subgraph, attribute as _, EdgeTargetTuple, withContext } from 'ts-graphviz';
+import {
+  Digraph,
+  Edge,
+  EdgeTargetTuple,
+  Node,
+  Subgraph,
+  attribute as _,
+  toDot,
+  withContext,
+} from 'ts-graphviz';
 
 test('class base', () => {
   const G = new Digraph();

@@ -20,17 +20,14 @@
     "type": "github",
     "url": "https://github.com/sponsors/ts-graphviz"
   },
-  "packageManager": "pnpm@8",
+  "packageManager": "pnpm@8.15.1",
   "license": "MIT",
   "scripts": {
     "build": "turbo run build --cache-dir=.turbo",
-    "test": "turbo pretest && pnpm test:unit && pnpm test:integration",
+    "test": "turbo run test:unit test:integration --cache-dir=.turbo",
     "test:unit": "vitest run",
-    "test:integration": "turbo test:integration",
-    "coverage": "vitest --coverage",
-    "format": "biome check --no-errors-on-unmatched --apply .",
-    "format:lib": "biome format --write --no-errors-on-unmatched --vcs-use-ignore-file=false lib",
-    "doc": "pnpm build && typedoc"
+    "lint": "biome check --apply .",
+    "doc": "turbo run codegen --cache-dir=.turbo && typedoc"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",

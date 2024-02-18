@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "webpack --mode=production --node-env=production",
-    "test": "node dist/main.js"
+    "test:integration:build": "webpack --mode=production --node-env=production",
+    "test:integration": "node dist/main.js"
   },
   "dependencies": {
     "ts-graphviz": "workspace:*"

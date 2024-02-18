@@ -1,6 +1,10 @@
 import { Layout, Options } from './types.js';
 import { createCommandAndArgs } from './utils.js';
 
+declare global {
+  const Deno: any;
+}
+
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
  */

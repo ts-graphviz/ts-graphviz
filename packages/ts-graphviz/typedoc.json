@@ -1,0 +1,5 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/ts-graphviz.ts", "src/ast.ts", "src/adapter/node.ts"],
+  "excludePrivate": true
+}

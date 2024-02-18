@@ -9,10 +9,7 @@ import type {
   NodeASTNode,
   SubgraphASTNode,
 } from '../../types.js';
-import {
-  PeggySyntaxError,
-  parse as _parse,
-} from './_parse.js';
+import { PeggySyntaxError, parse as _parse } from './_parse.js';
 /**
  * @group Convert DOT to AST
  */
@@ -117,9 +114,7 @@ export function parse(
  * @group Convert DOT to AST
  */
 export class DotSyntaxError extends PeggySyntaxError {
-  constructor(
-    ...args: ConstructorParameters<typeof PeggySyntaxError>
-  ) {
+  constructor(...args: ConstructorParameters<typeof PeggySyntaxError>) {
     super(...args);
     this.name = 'DotSyntaxError';
   }

@@ -90,10 +90,8 @@
   },
   "runkitExampleFilename": "example/runkit.cjs",
   "scripts": {
-    "pretest": "pnpm build:peggy",
-    "build": "pnpm build:peggy && pnpm build:js",
-    "build:peggy": "peggy --plugin ts-pegjs --extra-options-file src/ast/dot-shim/parser/peggy.options.json -o src/ast/dot-shim/parser/_parse.ts src/ast/dot-shim/parser/dot.peggy",
-    "build:js": "vite build"
+    "codegen": "peggy --plugin ts-pegjs --extra-options-file src/ast/dot-shim/parser/peggy.options.json -o src/ast/dot-shim/parser/_parse.ts src/ast/dot-shim/parser/dot.peggy",
+    "build": "vite build"
   },
   "devDependencies": {
     "peggy": "^3.0.2",

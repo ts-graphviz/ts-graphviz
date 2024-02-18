@@ -1,4 +1,4 @@
-import { digraph, toDot, attribute as _, $keywords } from 'ts-graphviz';
+import { $keywords, attribute as _, digraph, toDot } from 'ts-graphviz';
 import { toFile } from 'ts-graphviz/adapter';
 
 declare module 'ts-graphviz' {

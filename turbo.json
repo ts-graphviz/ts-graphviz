@@ -1,11 +1,27 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "tsconfig.json"
-  ],
+  "globalDependencies": ["package.json", "pnpm-lock.yaml", "tsconfig.json"],
   "pipeline": {
+    "codegen": {},
+    "tsgraphviz#codegen": {
+      "dependsOn": ["^codegen"],
+      "inputs": [
+        "package.json",
+        "src/ast/dot-shim/parser/dot.peggy",
+        "src/ast/dot-shim/parser/peggy.options.json"
+      ],
+      "outputs": ["src/ast/dot-shim/parser/_parse.ts"]
+    },
+    "//#test:unit": {
+      "dependsOn": ["ts-graphviz#codegen"],
+      "inputs": ["packages", "test", "vitest.config.ts"],
+      "outputs": ["coverage/**"]
+    },
+    "test:unit": {
+      "dependsOn": ["^test:unit"]
+    },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["codegen"],
       "inputs": [
         "src/**",
         "tsconfig.json",
@@ -13,12 +29,16 @@
         "!**/*.test.ts",
         "!**/*.spec.ts"
       ],
-      "outputs": ["lib/**", "dist/**"]
+      "outputs": ["lib/**"]
     },
-    "pretest": {
+    "test:integration:build": {
+      "dependsOn": ["build"],
+      "inputs": ["**/*.js", "**/*/ts"],
+      "outputs": ["dist/**"]
     },
     "test:integration": {
-      "dependsOn": ["build", "^build"]
+      "inputs": ["**/*.js", "**/*/ts"],
+      "dependsOn": ["test:integration:build"]
     }
   }
 }
