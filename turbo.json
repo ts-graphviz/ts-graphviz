@@ -4,16 +4,21 @@
     "tsconfig.json"
   ],
   "pipeline": {
-
     "build": {
       "dependsOn": ["^build"],
       "inputs": [
         "src/**",
         "tsconfig.json",
+        "vite.config.ts",
         "!**/*.test.ts",
         "!**/*.spec.ts"
       ],
       "outputs": ["lib/**"]
+    },
+    "pretest": {
+    },
+    "test:integration": {
+      "dependsOn": ["build", "^build"]
     }
   }
 }

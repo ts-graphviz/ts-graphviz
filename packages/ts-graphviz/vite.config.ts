@@ -19,7 +19,7 @@ export default defineConfig({
         'adapter/node': 'src/adapter/node.ts',
         'adapter/deno': 'src/adapter/deno.ts',
       },
-      formats: ["es"],
+      formats: ["es", "cjs"],
     },
     outDir: "lib",
   },

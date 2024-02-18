@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "ts-graphviz": "./node_modules/ts-graphviz/lib/ts-graphviz.js"
+  }
+}

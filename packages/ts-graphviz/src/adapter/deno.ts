@@ -8,7 +8,7 @@ export async function toStream<T extends Layout>(
   dot: string,
   options?: Options<T>,
 ): Promise<ReadableStream<Uint8Array>> {
-  const [command, args] = createCommandAndArgs(options);
+  const [command, args] = createCommandAndArgs(options ?? {});
   const cp = new Deno.Command(command, {
     args: args,
     stdin: 'piped',

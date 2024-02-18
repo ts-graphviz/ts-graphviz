@@ -10,7 +10,6 @@
     "ClusterStatements"
   ],
   "tspegjs": {
-    "customHeader": "import { Builder } from '../../builder/index.js';",
-    "errorName": "DotSyntaxError"
+    "customHeader": "import { Builder } from '../../builder/index.js';"
   }
 }

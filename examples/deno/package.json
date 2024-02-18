@@ -1,0 +1,12 @@
+{
+  "name": "@ts-graphviz-examples/deno",
+  "private": true,
+  "type": "module",
+  "version": "0.0.0",
+  "scripts": {
+    "test:integration": "deno run sample.ts"
+  },
+  "dependencies": {
+    "ts-graphviz": "workspace:*"
+  }
+}

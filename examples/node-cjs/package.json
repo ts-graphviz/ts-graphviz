@@ -1,0 +1,11 @@
+{
+  "name": "@ts-graphviz-examples/cjs",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "test:integration": "node sample.js"
+  },
+  "dependencies": {
+    "ts-graphviz": "workspace:*"
+  }
+}

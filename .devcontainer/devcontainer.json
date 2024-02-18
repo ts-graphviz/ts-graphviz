@@ -22,7 +22,11 @@
         "deno.enable": true,
         "deno.lint": false,
         "deno.unstable": true,
-        "deno.enablePaths": ["./e2e/envs/deno", "src/adapter/deno.ts", "lib/adapter/deno.js"],
+        "deno.enablePaths": [
+          "./examples/deno",
+          "packages/ts-grahviz/src/adapter/deno.ts",
+          "packages/ts-grahviz/lib/adapter/deno.js"
+        ],
         "deno.cache": "./e2e/envs/deno/.deno"
       }
     }

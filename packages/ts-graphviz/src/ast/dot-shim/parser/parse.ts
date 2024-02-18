@@ -10,7 +10,7 @@ import type {
   SubgraphASTNode,
 } from '../../types.js';
 import {
-  DotSyntaxError as _DotSyntaxError,
+  PeggySyntaxError,
   parse as _parse,
 } from './_parse.js';
 /**
@@ -104,9 +104,23 @@ export function parse(
   input: string,
   options?: ParseOptions<Rule>,
 ): ASTNode | ClusterStatementASTNode[] {
-  return _parse(input, options);
+  try {
+    return _parse(input, options);
+  } catch (e) {
+    if (e instanceof PeggySyntaxError) {
+      throw new DotSyntaxError(e.message, e.expected, e.found, e.location);
+    }
+    throw e;
+  }
 }
 /**
  * @group Convert DOT to AST
  */
-export const DotSyntaxError = _DotSyntaxError;
+export class DotSyntaxError extends PeggySyntaxError {
+  constructor(
+    ...args: ConstructorParameters<typeof PeggySyntaxError>
+  ) {
+    super(...args);
+    this.name = 'DotSyntaxError';
+  }
+}

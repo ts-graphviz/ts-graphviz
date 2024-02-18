@@ -26,22 +26,24 @@
   },
   "scripts": {
     "build": "turbo build",
-    "test": "vitest",
+    "test": "turbo pretest && pnpm test:unit && pnpm test:integration",
+    "test:unit": "vitest run",
+    "test:integration": "turbo test:integration",
+    "coverage": "vitest --coverage",
     "format": "biome check --no-errors-on-unmatched --apply .",
     "format:lib": "biome format --write --no-errors-on-unmatched --vcs-use-ignore-file=false lib",
     "doc": "pnpm build && typedoc"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
-    "peggy": "^2.0.1",
-    "svgo": "^3.0.2",
-    "ts-pegjs": "^3.0.0",
+    "@vitest/coverage-istanbul": "^1.3.0",
+    "svgo": "^3.2.0",
     "turbo": "^1.12.4",
     "typedoc": "^0.25.8",
     "typescript": "^5.3.3",
     "vite": "^5.1.3",
     "vite-plugin-dts": "^3.7.2",
     "vite-tsconfig-paths": "^4.3.1",
-    "vitest": "^1.2.2"
+    "vitest": "^1.3.0"
   }
 }
