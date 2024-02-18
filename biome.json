@@ -7,8 +7,11 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "include": ["src/**/*", "lib/**/*"],
-    "ignore": ["src/ast/dot-shim/parser/_parse.ts", "src/adapter/deno.ts"]
+    "include": ["packages/**/src/**/*", "packages/**/lib/**/*"],
+    "ignore": [
+      "packages/ts-graphviz/src/ast/dot-shim/parser/_parse.ts",
+      "packages/ts-graphviz/src/adapter/deno.ts"
+    ]
   },
   "organizeImports": {
     "enabled": true

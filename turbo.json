@@ -1,0 +1,19 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "tsconfig.json"
+  ],
+  "pipeline": {
+
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**",
+        "tsconfig.json",
+        "!**/*.test.ts",
+        "!**/*.spec.ts"
+      ],
+      "outputs": ["lib/**"]
+    }
+  }
+}

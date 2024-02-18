@@ -2,7 +2,6 @@ import dts from "vite-plugin-dts";
 import { defineConfig } from "vitest/config";
 import tsconfigPaths from 'vite-tsconfig-paths'
 
-
 export default defineConfig({
   build: {
     target: "esnext",
@@ -28,20 +27,7 @@ export default defineConfig({
     tsconfigPaths(),
     dts({
       outDir: "lib",
-      tsconfigPath: "tsconfig.build.json",
       copyDtsFiles: true,
     }),
   ],
-  test: {
-    coverage: {
-      provider: "istanbul", // use istanbul for browser coverage
-      include: ["src/**/*.ts"],
-    },
-    // alias: {
-    //   'ts-graphviz': './src/tsgraphviz.ts',
-    //   "#test/*": "./test/*/index.ts",
-    //   "ts-graphviz/ast": "./src/ast.ts",
-    //   "ts-graphviz/adapter": "./src/adapter.ts"
-    // }
-  },
 });

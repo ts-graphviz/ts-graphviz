@@ -11,9 +11,9 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "ts-graphviz": ["./src/ts-graphviz.js"],
-      "ts-graphviz/ast": ["./src/ast.js"],
-      "ts-graphviz/adapter": ["./src/adapter.js"]
+      "ts-graphviz": ["./packages/ts-graphviz/src/ts-graphviz.js"],
+      "ts-graphviz/ast": ["./packages/ts-graphviz/src/ast.js"],
+      "ts-graphviz/adapter": ["./packages/ts-graphviz/src/adapter.js"]
     }
   },
   "exclude": ["e2e"]

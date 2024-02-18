@@ -1,8 +1,15 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "out": "./doc",
-  "tsconfig": "tsconfig.build.json",
-  "entryPoints": ["src/ts-graphviz.ts", "src/ast.ts", "src/adapter/node.ts"],
-  "media": "./media/",
+  "entryPointStrategy": "packages",
+  "entryPoints": ["packages/ts-graphviz"],
+  "exclude": [
+    "**/node_modules/**/*",
+    "**/lib/**/*",
+    "**/test/**/*",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+  ],
+  "media": "./packages/ts-graphviz/media/",
   "excludePrivate": true
 }
