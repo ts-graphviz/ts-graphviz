@@ -13,7 +13,6 @@ export default defineConfig({
         'common': "src/common.ts",
         'core': "src/core.ts",
         'utils': "src/utils.ts",
-        'adapter/types': 'src/adapter/types.ts',
         'adapter/utils': 'src/adapter/utils.ts',
         'adapter/browser': 'src/adapter/browser.ts',
         'adapter/node': 'src/adapter/node.ts',
