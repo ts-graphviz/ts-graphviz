@@ -30,6 +30,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: pnpm
+    - uses: denoland/setup-deno@041b854f97b325bd60e53e9dc2de9cb9f9ac0cba # v1.1.4
+      with:
+        deno-version: v1.x
     - run: pnpm install --frozen-lockfile
     - uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
     - run: pnpm test
