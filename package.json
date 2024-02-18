@@ -21,9 +21,6 @@
     "url": "https://github.com/sponsors/ts-graphviz"
   },
   "license": "MIT",
-  "engines": {
-    "node": ">=14.16"
-  },
   "scripts": {
     "build": "turbo build",
     "test": "turbo pretest && pnpm test:unit && pnpm test:integration",

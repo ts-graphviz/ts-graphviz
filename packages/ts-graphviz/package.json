@@ -58,8 +58,8 @@
         "types": "./lib/adapter/browser.d.ts"
       },
       "deno": {
-        "types": "./lib/adapter/deno/mod.d.ts",
-        "default": "./lib/adapter/deno/mod.js"
+        "types": "./lib/adapter/deno.d.ts",
+        "default": "./lib/adapter/deno.js"
       },
       "node": {
         "require": "./lib/adapter/node.cjs",
@@ -86,7 +86,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=14.16"
+    "node": ">=18"
   },
   "runkitExampleFilename": "example/runkit.cjs",
   "scripts": {

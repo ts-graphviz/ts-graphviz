@@ -1,8 +1,8 @@
 import { spawn } from 'node:child_process';
 import { PassThrough, Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import { Layout, Options } from '../types.js';
 import { createCommandAndArgs } from '../utils.js';
-import { pipeline } from './utils.js';
 
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
