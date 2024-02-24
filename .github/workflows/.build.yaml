@@ -10,13 +10,9 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      - name: Cache turbo build setup
-        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
+      - uses: dtinth/setup-github-actions-caching-for-turbo@a0e976d970c2a94366a26984efcef3030e2c0115 # v1.2.0
         with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
+          cache-prefix: turbo-
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@d5b2b6b67007094b256f3fd2fa6cf0ac41ceef25 # v2.0.0
       - uses: pnpm/action-setup@d882d12c64e032187b2edb46d3a0d003b7a43598 # v2.4.0

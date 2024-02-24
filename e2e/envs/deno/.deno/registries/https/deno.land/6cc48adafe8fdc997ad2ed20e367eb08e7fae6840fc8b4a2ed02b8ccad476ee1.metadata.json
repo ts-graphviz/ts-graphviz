@@ -1,0 +1,22 @@
+{
+  "headers": {
+    "via": "http/2 edgeproxy-h",
+    "x-content-type-options": "nosniff",
+    "date": "Sat, 24 Feb 2024 03:20:11 GMT",
+    "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+    "cross-origin-resource-policy": "same-origin",
+    "cache-control": "max-age=86400",
+    "server": "deno/gcp-asia-northeast1",
+    "content-type": "application/vnd.deno.reg.v2+json",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "x-frame-options": "DENY",
+    "cross-origin-embedder-policy": "same-origin",
+    "cross-origin-opener-policy": "same-origin",
+    "vary": "Accept-Encoding"
+  },
+  "url": "https://deno.land/.well-known/deno-import-intellisense.json",
+  "now": {
+    "secs_since_epoch": 1708744811,
+    "nanos_since_epoch": 595742148
+  }
+}
