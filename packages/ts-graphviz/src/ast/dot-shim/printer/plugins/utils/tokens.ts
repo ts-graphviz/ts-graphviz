@@ -24,8 +24,11 @@ export function rightPadWith(right: string): (value: string) => string {
 }
 
 export const escape = (value: string): string =>
-  value.replace(/\r/g, '\\r').replace(/\n/g, '\\n').replace(/"/g, '\\"');
-
+  value
+    .replace(/\\/g, '\\\\')
+    .replace(/\r/g, '\\r')
+    .replace(/\n/g, '\\n')
+    .replace(/"/g, '\\"');
 export const splitByLine = (value: string): string[] => value.split(EOL);
 
 export const align = (padding: string, eol: string) =>
