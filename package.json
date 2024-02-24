@@ -23,7 +23,6 @@
   "packageManager": "pnpm@8.15.1",
   "license": "MIT",
   "scripts": {
-    "postinstall": "lefthook",
     "build": "turbo run build",
     "test": "turbo run test:unit test:integration",
     "test:unit": "vitest run",
