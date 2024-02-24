@@ -1,7 +1,7 @@
 ///<reference types="vite/client" />
 import path from 'node:path';
-import { expect, test } from 'vitest';
 import { DotSyntaxError, parse } from 'ts-graphviz/ast';
+import { expect, test } from 'vitest';
 
 for (const [file, getContents] of Object.entries(
   import.meta.glob<string>('./dot/*.dot', {
