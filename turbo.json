@@ -3,7 +3,10 @@
   "globalDependencies": ["package.json", "pnpm-lock.yaml", "tsconfig.json"],
   "pipeline": {
     "codegen": {},
-    "tsgraphviz#codegen": {
+    "//#codegen": {
+      "dependsOn": ["ts-graphviz#codegen"]
+    },
+    "ts-graphviz#codegen": {
       "dependsOn": ["^codegen"],
       "inputs": [
         "package.json",
@@ -13,7 +16,7 @@
       "outputs": ["src/ast/dot-shim/parser/_parse.ts"]
     },
     "//#test:unit": {
-      "dependsOn": ["ts-graphviz#codegen"],
+      "dependsOn": ["codegen"],
       "inputs": ["packages", "test", "vitest.config.ts"],
       "outputs": ["coverage/**"]
     },
