@@ -15,6 +15,5 @@
       "ts-graphviz/ast": ["./packages/ts-graphviz/src/ast.js"],
       "ts-graphviz/adapter": ["./packages/ts-graphviz/src/adapter/node.js"]
     }
-  },
-  "exclude": ["e2e"]
+  }
 }
