@@ -23,16 +23,17 @@
   "packageManager": "pnpm@8.15.1",
   "license": "MIT",
   "scripts": {
-    "build": "turbo run build --cache-dir=.turbo",
-    "test": "turbo run test:unit test:integration --cache-dir=.turbo",
+    "build": "turbo run build",
+    "test": "turbo run test:unit test:integration",
     "test:unit": "vitest run",
     "lint": "biome check --apply .",
-    "doc": "turbo run codegen --cache-dir=.turbo && typedoc"
+    "doc": "turbo run codegen && typedoc"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
+    "@types/node": "^20.11.20",
     "@vitest/coverage-istanbul": "^1.3.0",
     "svgo": "^3.2.0",
     "turbo": "^1.12.4",
