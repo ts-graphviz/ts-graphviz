@@ -9,10 +9,6 @@ for (const [file, getContents] of Object.entries(
     import: 'default',
   }),
 )) {
-  testAstSnapshot(file, getContents);
-}
-
-function testAstSnapshot(file: string, getContents: () => Promise<string>) {
   test.concurrent(file, async ({ expect }) => {
     try {
       const dot = await getContents();
