@@ -1,7 +1,7 @@
 ///<reference types="vite/client" />
 import path from 'node:path';
 import { DotSyntaxError, parse } from 'ts-graphviz/ast';
-import { expect, test } from 'vitest';
+import { test } from 'vitest';
 
 for (const [file, getContents] of Object.entries(
   import.meta.glob<string>('./dot/*.dot', {
@@ -13,7 +13,7 @@ for (const [file, getContents] of Object.entries(
 }
 
 function testAstSnapshot(file: string, getContents: () => Promise<string>) {
-  test.concurrent(file, async () => {
+  test.concurrent(file, async ({ expect }) => {
     try {
       const dot = await getContents();
       const snapshot = path.format({
