@@ -1,3 +1,4 @@
+export * from './register-default.js';
 export * from './AttributeList.js';
 export * from './AttributesBase.js';
 export * from './AttributesGroup.js';

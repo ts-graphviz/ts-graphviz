@@ -27,6 +27,7 @@
   ],
   "license": "MIT",
   "author": "kamiazya <yuki@kamiazya.tech>",
+  "sideEffects": true,
   "type": "module",
   "exports": {
     ".": {
@@ -54,13 +55,6 @@
   "main": "./lib/ts-graphviz.cjs",
   "module": "./lib/ts-graphviz.js",
   "types": "lib/ts-graphviz.d.ts",
-  "files": [
-    "lib",
-    "media",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE"
-  ],
   "scripts": {
     "build": "vite build"
   },

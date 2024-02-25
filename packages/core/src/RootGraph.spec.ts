@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, test } from 'vitest';
-import './register-default.js';
-
+import { registerDefault } from './register-default.js';
+registerDefault();
 import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';
 import { RootGraph } from './RootGraph.js';

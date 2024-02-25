@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, test, vi } from 'vitest';
-import './register-default.js';
+import { registerDefault } from './register-default.js';
+registerDefault();
 
 import { EdgeTargetTuple, NodeModel } from '@ts-graphviz/common';
 import { AttributesBase } from './AttributesBase.js';

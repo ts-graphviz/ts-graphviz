@@ -44,12 +44,6 @@
   "main": "lib/common.cjs",
   "module": "lib/common.js",
   "types": "lib/common.d.ts",
-  "files": [
-    "lib",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE"
-  ],
   "scripts": {
     "build": "vite build"
   },

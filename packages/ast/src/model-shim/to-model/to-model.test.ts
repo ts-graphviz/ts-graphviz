@@ -1,4 +1,5 @@
-import '@ts-graphviz/core/register-default';
+import { registerDefault } from '@ts-graphviz/core';
+registerDefault();
 import { expect, test } from 'vitest';
 import { createElement } from '../../builder/create-element.js';
 import { toModel } from './to-model.js';

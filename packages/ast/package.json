@@ -41,12 +41,6 @@
   "main": "lib/ast.cjs",
   "module": "lib/ast.js",
   "types": "lib/ast.d.ts",
-  "files": [
-    "lib",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE"
-  ],
   "scripts": {
     "build": "vite build",
     "codegen": "peggy --plugin ts-pegjs --extra-options-file src/dot-shim/parser/peggy.options.json -o src/dot-shim/parser/_parse.ts src/dot-shim/parser/dot.peggy"

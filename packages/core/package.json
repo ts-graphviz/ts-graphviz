@@ -27,9 +27,6 @@
   ],
   "license": "MIT",
   "author": "Yuki Yamazaki <yuki@kamiazya.tech>",
-  "sideEffects": [
-    "./lib/register-default.*"
-  ],
   "type": "module",
   "exports": {
     ".": {
