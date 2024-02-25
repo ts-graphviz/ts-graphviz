@@ -10,4 +10,4 @@ gen: image $(SVG)
 image: $(SVG)
 
 %.svg: %.dot
-	dot -Tsvg $< | yarn --silent run svgo - > $@
+	dot -Tsvg $< | pnpm --silent exec svgo - > $@
