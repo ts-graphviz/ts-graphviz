@@ -21,7 +21,7 @@
       "outputs": ["coverage/**"]
     },
     "test:unit": {
-      "dependsOn": ["^test:unit"]
+      "dependsOn": ["codegen", "^test:unit"]
     },
     "build": {
       "dependsOn": ["codegen", "^build"],
