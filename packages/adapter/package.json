@@ -50,12 +50,6 @@
   "main": "./lib/node.cjs",
   "module": "./lib/node.js",
   "types": "./lib/node.d.ts",
-  "files": [
-    "lib",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE"
-  ],
   "scripts": {
     "build": "vite build && rm ./lib/deno.cjs "
   },
