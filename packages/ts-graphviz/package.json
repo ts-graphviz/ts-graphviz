@@ -21,14 +21,21 @@
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
   },
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/ts-graphviz"
-  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/ts-graphviz"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/ts-graphviz"
+    }
+  ],
   "files": [
     "lib",
     "media",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "main": "./lib/ts-graphviz.cjs",

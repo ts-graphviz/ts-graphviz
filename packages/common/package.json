@@ -24,6 +24,26 @@
     "url": "git+https://github.com/ts-graphviz/ts-graphviz.git",
     "directory": "packages/common"
   },
+  "files": [
+    "lib",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/ts-graphviz"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/ts-graphviz"
+    }
+  ],
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
   "publishConfig": {
     "access": "public",
     "provenance": true

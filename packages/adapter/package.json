@@ -36,6 +36,26 @@
   },
   "author": "Yuki Yamazaki <yuki@kamiazya.tech>",
   "license": "MIT",
+  "files": [
+    "lib",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/ts-graphviz"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/ts-graphviz"
+    }
+  ],
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
   },

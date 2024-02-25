@@ -15,11 +15,31 @@
     "access": "public",
     "provenance": true
   },
+  "files": [
+    "lib",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/ts-graphviz"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/ts-graphviz"
+    }
+  ],
   "author": "Yuki Yamazaki <yuki@kamiazya.tech>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
   },
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
   "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
   "sideEffects": true,
   "dependencies": {
