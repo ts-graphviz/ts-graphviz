@@ -3,7 +3,7 @@ import { DotObject } from './DotObject.js';
 import { Graph } from './Graph.js';
 import { GraphBase } from './GraphBase.js';
 
-import './registerModelContext.js';
+import './register-default.js';
 
 const g = new Graph();
 

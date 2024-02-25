@@ -27,8 +27,27 @@
   ],
   "license": "MIT",
   "author": "Yuki Yamazaki <yuki@kamiazya.tech>",
-  "sideEffects": true,
+  "sideEffects": [
+    "./lib/register-default.*"
+  ],
   "type": "module",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./lib/core.d.ts",
+        "default": "./lib/core.cjs"
+      },
+      "import": {
+        "types": "./lib/core.d.ts",
+        "default": "./lib/core.js"
+      }
+    },
+    "./register-default": {
+      "require": "./lib/register-default.cjs",
+      "default": "./lib/register-default.js"
+    },
+    "./package.json": "./package.json"
+  },
   "main": "lib/core.cjs",
   "module": "lib/core.js",
   "types": "lib/core.d.ts",

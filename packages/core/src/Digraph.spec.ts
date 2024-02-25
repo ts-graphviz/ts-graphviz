@@ -2,7 +2,7 @@ import { expect, it, test } from 'vitest';
 import { Digraph } from './Digraph.js';
 import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';
-import './registerModelContext.js';
+import './register-default.js';
 
 const g = new Digraph();
 

@@ -3,6 +3,6 @@
   "compilerOptions": {
     "outDir": "lib"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/register-default.ts"],
   "exclude": ["**/*.test.ts", "**/*.spec.ts"]
 }

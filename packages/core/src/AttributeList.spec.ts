@@ -1,6 +1,5 @@
 import { AttributeListKind } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
-import { attribute as _ } from '../attribute.js';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
@@ -39,10 +38,10 @@ describe('constructor', () => {
 
   test('2nd argument is attribute object', () => {
     attrs = new AttributeList('Node', {
-      [_.label]: 'Label',
+      label: 'Label',
     });
     expect(attrs.size).toBe(1);
-    expect(attrs.get(_.label)).toBe('Label');
+    expect(attrs.get('label')).toBe('Label');
   });
 });
 

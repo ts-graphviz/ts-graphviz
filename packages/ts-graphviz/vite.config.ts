@@ -3,9 +3,8 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   build: {
-    target: 'esnext',
+    target: 'ES2022',
     outDir: 'lib',
-    ssr: true,
     lib: {
       entry: {
         'ts-graphviz': 'src/ts-graphviz.ts',

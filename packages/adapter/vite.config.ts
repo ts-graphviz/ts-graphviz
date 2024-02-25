@@ -3,7 +3,7 @@ import dts from 'vite-plugin-dts';
 
 export default defineConfig({
   build: {
-    target: 'esnext',
+    target: 'ES2022',
     outDir: './lib',
     minify: false,
     lib: {

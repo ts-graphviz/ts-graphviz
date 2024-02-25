@@ -2,8 +2,11 @@ import { createCommandAndArgs } from './create-command-and-args.js';
 /**
  * @module @ts-graphviz/adapter
  */
-/// <reference types="../types/deno.d.ts" />
+/// <reference lib="lib.dom" />
 import { Layout, Options } from './types.js';
+
+// biome-ignore lint/style/noVar: <explanation>
+declare var Deno: any;
 
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
@@ -18,7 +21,7 @@ export async function toStream<T extends Layout>(
     stdin: 'piped',
     stdout: 'piped',
   }).spawn();
-  const stdin = cp.stdin.getWriter();
+  const stdin = cp.stdin?.getWriter();
   await stdin.write(new TextEncoder().encode(dot));
   await stdin.close();
   return cp.stdout;
