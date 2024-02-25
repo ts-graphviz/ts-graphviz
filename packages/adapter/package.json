@@ -30,6 +30,10 @@
     "url": "git+https://github.com/ts-graphviz/ts-graphviz.git",
     "directory": "packages/adapter"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "author": "Yuki Yamazaki <yuki@kamiazya.tech>",
   "license": "MIT",
   "bugs": {
