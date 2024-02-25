@@ -1,0 +1,172 @@
+name: PullRequest Snapshot Release
+
+on:
+  issue_comment:
+    types:
+      - created
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    if: github.event.sender.type == 'User' && github.event.issue.pull_request && startsWith(github.event.comment.body, '/snapshot-release')
+    steps:
+      - name: Enforce permission requirement
+        uses: prince-chrismc/check-actor-permissions-action@d07d79a16495e5003e58112b596294d1a7c80f56 # v3.0.0
+        with:
+          permission: write
+
+      - name: Add initial reaction
+        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4.0.0
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: eyes
+
+  # Build the package and upload it as an artifact
+  build:
+    name: Build
+    uses: ./.github/workflows/.build.yaml
+    needs: check
+  snapshot:
+    name: Snapshot Release
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Validate pull request
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        id: pr_data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            try {
+              const pullRequest = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+              })
+
+              // Pull request from fork
+              if (context.payload.repository.full_name !== pullRequest.data.head.repo.full_name) {
+                const errorMessage = '`/snapshot-release` is not supported on pull requests from forked repositories.'
+
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: errorMessage,
+                })
+
+                core.setFailed(errorMessage)
+              }
+            } catch (err) {
+              core.setFailed(`Request failed with error ${err}`)
+            }
+
+      - name: Checkout default branch
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Checkout pull request branch
+        run: gh pr checkout ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Reset changeset entries on changeset-release/main branch
+        run: |
+          if [[ $(git branch --show-current) == 'changeset-release/main' ]]; then
+            git checkout origin/main -- .changeset
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: 20
+      - uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3.0.0
+        with:
+          version: 8
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@eaceaf801fd36c7dee90939fad912460b18a1ffe # v4.1.2
+      - name: Create an .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //registry.npmjs.org/:_authToken=$NPM_TOKEN
+          EOF
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Create and publish snapshot release
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        id: snapshot-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            await exec.exec('pnpm', ['exec', 'changeset', 'version', '--snapshot', 'pr' + context.issue.number])
+
+            let stdout = '';
+            await exec.exec('pnpm', ['exec', 'changeset', 'publish', '--snapshot', 'pr' + context.issue.number, '--no-git-tag', '--tag', 'develop'], {
+              listeners: {
+                stdout: (data) => {
+                  stdout += data.toString();
+                },
+              }
+            });
+
+            const tags = Array.from(stdout.matchAll(/\S+@(\S+)/g)).map(([package]) => package)
+
+            if (tags.length) {
+              const multiple = tags.length > 1
+
+              const body = (
+                `🫰✨ **Thanks @${context.actor}! ` +
+                `Your snapshot${multiple ? 's have' : ' has'} been published to npm.**\n\n` +
+                `Test the snapshot${multiple ? 's' : ''} by updating your \`package.json\` ` +
+                `with the newly published version${multiple ? 's' : ''}:\n` +
+                tags.flatMap(tag => (
+                  '```sh\n' +
+                  `# Use npm\n` +
+                  `npm install ${tag}\n` +
+                  `# Use yarn\n` +
+                  `yarn add ${tag}\n` +
+                  `# Use pnpm\n` +
+                  `pnpm add ${tag}\n` +
+                  '```'
+                )).join('\n')
+              )
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body,
+              })
+              core.setOutput('succeeded', 'true')
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `💥 **Snapshot release unsuccessful!** No tags have been found.\n\n` +
+                      'Try running the command below and committing your changes.\n\n' +
+                      '```sh\n' +
+                      'yarn changeset\n' +
+                      '```',
+              })
+              core.setOutput('succeeded', 'false')
+            }
+
+      - name: Add reaction
+        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4.0.0
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: ${{ steps.snapshot-release.outputs.succeeded == 'true' && 'rocket' || 'confused'}}
