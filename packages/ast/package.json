@@ -2,10 +2,29 @@
   "name": "@ts-graphviz/ast",
   "version": "1.8.2",
   "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ts-graphviz/ts-graphviz.git",
+    "directory": "packages/ast"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/ts-graphviz"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/ts-graphviz"
+    }
+  ],
+  "license": "NIT",
+  "author": "",
   "type": "module",
-  "main": "lib/ast.cjs",
-  "module": "lib/ast.js",
-  "types": "lib/ast.d.ts",
   "exports": {
     ".": {
       "require": {
@@ -19,41 +38,19 @@
     },
     "./package.json": "./package.json"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ts-graphviz/ts-graphviz.git",
-    "directory": "packages/ast"
-  },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
-  "keywords": [],
-  "author": "",
-  "license": "NIT",
+  "main": "lib/ast.cjs",
+  "module": "lib/ast.js",
+  "types": "lib/ast.d.ts",
   "files": [
     "lib",
     "README.md",
     "CHANGELOG.md",
     "LICENSE"
   ],
-  "funding": [
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/ts-graphviz"
-    },
-    {
-      "type": "opencollective",
-      "url": "https://opencollective.com/ts-graphviz"
-    }
-  ],
-  "engines": {
-    "node": ">=18"
+  "scripts": {
+    "build": "vite build",
+    "codegen": "peggy --plugin ts-pegjs --extra-options-file src/dot-shim/parser/peggy.options.json -o src/dot-shim/parser/_parse.ts src/dot-shim/parser/dot.peggy"
   },
-  "bugs": {
-    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
-  },
-  "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
   "dependencies": {
     "@ts-graphviz/common": "workspace:^"
   },
@@ -64,8 +61,11 @@
     "vite": "^5.1.3",
     "vite-plugin-dts": "^3.7.2"
   },
-  "scripts": {
-    "codegen": "peggy --plugin ts-pegjs --extra-options-file src/dot-shim/parser/peggy.options.json -o src/dot-shim/parser/_parse.ts src/dot-shim/parser/dot.peggy",
-    "build": "vite build"
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }

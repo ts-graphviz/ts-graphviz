@@ -1,14 +1,14 @@
 {
   "name": "@ts-graphviz-examples/typescript",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "test:integration": "tsc --noEmit"
   },
   "dependencies": {
-    "ts-graphviz": "workspace:*",
-    "@ts-graphviz/adapter": "workspace:*"
+    "@ts-graphviz/adapter": "workspace:*",
+    "ts-graphviz": "workspace:*"
   },
   "devDependencies": {
     "typescript": "*"

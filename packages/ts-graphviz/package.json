@@ -1,25 +1,19 @@
 {
   "name": "ts-graphviz",
   "version": "1.8.2",
-  "author": "kamiazya <yuki@kamiazya.tech>",
   "description": "Graphviz library for TypeScript.",
-  "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
-  "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ts-graphviz/ts-graphviz.git",
-    "directory": "packages/ts-graphviz"
-  },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
   "keywords": [
     "graphviz",
     "dot"
   ],
+  "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts-graphviz/ts-graphviz.git",
+    "directory": "packages/ts-graphviz"
   },
   "funding": [
     {
@@ -31,16 +25,9 @@
       "url": "https://opencollective.com/ts-graphviz"
     }
   ],
-  "files": [
-    "lib",
-    "media",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE"
-  ],
-  "main": "./lib/ts-graphviz.cjs",
-  "module": "./lib/ts-graphviz.js",
-  "types": "lib/ts-graphviz.d.ts",
+  "license": "MIT",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "type": "module",
   "exports": {
     ".": {
       "require": {
@@ -57,26 +44,31 @@
       "require": "./lib/ast.cjs",
       "default": "./lib/ast.js"
     },
-    "./adapter":{
+    "./adapter": {
       "types": "./lib/adapter.d.ts",
       "require": "./lib/adapter.cjs",
       "default": "./lib/adapter.js"
     },
     "./package.json": "./package.json"
   },
-  "license": "MIT",
-  "engines": {
-    "node": ">=18"
-  },
-  "runkitExampleFilename": "example/runkit.cjs",
+  "main": "./lib/ts-graphviz.cjs",
+  "module": "./lib/ts-graphviz.js",
+  "types": "lib/ts-graphviz.d.ts",
+  "files": [
+    "lib",
+    "media",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "vite build"
   },
   "dependencies": {
     "@ts-graphviz/adapter": "workspace:^",
     "@ts-graphviz/ast": "workspace:^",
-    "@ts-graphviz/core": "workspace:^",
-    "@ts-graphviz/common": "workspace:^"
+    "@ts-graphviz/common": "workspace:^",
+    "@ts-graphviz/core": "workspace:^"
   },
   "devDependencies": {
     "peggy": "^3.0.2",
@@ -84,5 +76,13 @@
     "typescript": "^5.3.3",
     "vite": "^5.1.3",
     "vite-plugin-dts": "^3.7.2"
-  }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "runkitExampleFilename": "example/runkit.cjs"
 }

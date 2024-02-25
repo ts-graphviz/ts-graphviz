@@ -1,16 +1,16 @@
 {
   "name": "@ts-graphviz-examples/deno",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
-  "version": "0.0.0",
   "scripts": {
     "test:integration": "deno run --allow-run --allow-write sample.ts"
   },
   "dependencies": {
-    "ts-graphviz": "workspace:*",
-    "@ts-graphviz/core": "workspace:*",
-    "@ts-graphviz/common": "workspace:*",
     "@ts-graphviz/adapter": "workspace:*",
-    "@ts-graphviz/ast": "workspace:*"
+    "@ts-graphviz/ast": "workspace:*",
+    "@ts-graphviz/common": "workspace:*",
+    "@ts-graphviz/core": "workspace:*",
+    "ts-graphviz": "workspace:*"
   }
 }

@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test:integration:build": "webpack --mode=production --node-env=production",
-    "test:integration": "node dist/main.js"
+    "test:integration": "node dist/main.js",
+    "test:integration:build": "webpack --mode=production --node-env=production"
   },
   "dependencies": {
-    "ts-graphviz": "workspace:*",
     "@ts-graphviz/adapter": "workspace:*",
-    "@ts-graphviz/ast": "workspace:*"
+    "@ts-graphviz/ast": "workspace:*",
+    "ts-graphviz": "workspace:*"
   },
   "devDependencies": {
     "@webpack-cli/generators": "^3.0.1",
