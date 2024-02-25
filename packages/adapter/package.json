@@ -56,6 +56,9 @@
     "graphviz",
     "dot"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
   },

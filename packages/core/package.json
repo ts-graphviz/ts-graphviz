@@ -40,6 +40,9 @@
     "graphviz",
     "dot"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
   "sideEffects": true,
   "dependencies": {

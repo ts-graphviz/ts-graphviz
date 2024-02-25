@@ -44,6 +44,9 @@
     "graphviz",
     "dot"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "publishConfig": {
     "access": "public",
     "provenance": true
