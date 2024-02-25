@@ -2,18 +2,17 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["package.json", "pnpm-lock.yaml", "tsconfig.json"],
   "pipeline": {
-    "codegen": {},
-    "//#codegen": {
-      "dependsOn": ["@ts-graphviz/adapter#codegen"]
-    },
-    "@ts-graphviz/adapter#codegen": {
+    "codegen": {
       "dependsOn": ["^codegen"],
       "inputs": [
         "package.json",
-        "src/dot-shim/parser/dot.peggy",
-        "src/dot-shim/parser/peggy.options.json"
+        "src/**/*.peggy",
+        "src/**/*.peggy.options.json"
       ],
-      "outputs": ["src/dot-shim/parser/_parse.ts"]
+      "outputs": ["src/**/_*"]
+    },
+    "//#codegen": {
+      "dependsOn": ["@ts-graphviz/adapter#codegen"]
     },
     "//#test:unit": {
       "dependsOn": ["codegen"],
