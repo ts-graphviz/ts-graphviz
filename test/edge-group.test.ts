@@ -1,5 +1,5 @@
+import { fromModel } from '@ts-graphviz/ast';
 import { digraph, toDot } from 'ts-graphviz';
-import { fromModel } from 'ts-graphviz/ast';
 import { expect, test } from 'vitest';
 
 test('edge group', () => {

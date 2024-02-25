@@ -1,6 +1,5 @@
 /**
  * @module ts-graphviz
  */
-export type { $keywords } from './utils.js';
-export * from './common.js';
-export * from './core.js';
+export * from '@ts-graphviz/common';
+export * from '@ts-graphviz/core';

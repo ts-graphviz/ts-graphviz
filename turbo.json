@@ -4,16 +4,16 @@
   "pipeline": {
     "codegen": {},
     "//#codegen": {
-      "dependsOn": ["ts-graphviz#codegen"]
+      "dependsOn": ["@ts-graphviz/adapter#codegen"]
     },
-    "ts-graphviz#codegen": {
+    "@ts-graphviz/adapter#codegen": {
       "dependsOn": ["^codegen"],
       "inputs": [
         "package.json",
-        "src/ast/dot-shim/parser/dot.peggy",
-        "src/ast/dot-shim/parser/peggy.options.json"
+        "src/dot-shim/parser/dot.peggy",
+        "src/dot-shim/parser/peggy.options.json"
       ],
-      "outputs": ["src/ast/dot-shim/parser/_parse.ts"]
+      "outputs": ["src/dot-shim/parser/_parse.ts"]
     },
     "//#test:unit": {
       "dependsOn": ["codegen"],
@@ -24,7 +24,7 @@
       "dependsOn": ["^test:unit"]
     },
     "build": {
-      "dependsOn": ["codegen"],
+      "dependsOn": ["codegen", "^build"],
       "inputs": [
         "src/**",
         "tsconfig.json",

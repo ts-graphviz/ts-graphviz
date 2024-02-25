@@ -53,6 +53,18 @@ importers:
 
   examples/deno:
     dependencies:
+      '@ts-graphviz/adapter':
+        specifier: workspace:*
+        version: link:../../packages/adapter
+      '@ts-graphviz/ast':
+        specifier: workspace:*
+        version: link:../../packages/ast
+      '@ts-graphviz/common':
+        specifier: workspace:*
+        version: link:../../packages/common
+      '@ts-graphviz/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       ts-graphviz:
         specifier: workspace:*
         version: link:../../packages/ts-graphviz
@@ -71,6 +83,9 @@ importers:
 
   examples/typescript:
     dependencies:
+      '@ts-graphviz/adapter':
+        specifier: workspace:*
+        version: link:../../packages/adapter
       ts-graphviz:
         specifier: workspace:*
         version: link:../../packages/ts-graphviz
@@ -81,6 +96,12 @@ importers:
 
   examples/webpack-build-node:
     dependencies:
+      '@ts-graphviz/adapter':
+        specifier: workspace:*
+        version: link:../../packages/adapter
+      '@ts-graphviz/ast':
+        specifier: workspace:*
+        version: link:../../packages/ast
       ts-graphviz:
         specifier: workspace:*
         version: link:../../packages/ts-graphviz
@@ -103,6 +124,12 @@ importers:
 
   examples/webpack-build-web:
     dependencies:
+      '@ts-graphviz/adapter':
+        specifier: workspace:*
+        version: link:../../packages/adapter
+      '@ts-graphviz/ast':
+        specifier: workspace:*
+        version: link:../../packages/ast
       ts-graphviz:
         specifier: workspace:*
         version: link:../../packages/ts-graphviz
@@ -123,7 +150,33 @@ importers:
         specifier: ^5.0.1
         version: 5.1.4(@webpack-cli/generators@3.0.7)(webpack@5.90.2)
 
-  packages/ts-graphviz:
+  packages/adapter:
+    dependencies:
+      '@ts-graphviz/common':
+        specifier: workspace:^
+        version: link:../common
+    devDependencies:
+      '@deno/shim-deno':
+        specifier: ^0.19.1
+        version: 0.19.1
+      '@types/node':
+        specifier: ^20.2.1
+        version: 20.11.20
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+      vite:
+        specifier: ^5.1.3
+        version: 5.1.3(@types/node@20.11.20)
+      vite-plugin-dts:
+        specifier: ^3.7.2
+        version: 3.7.2(@types/node@20.11.20)(typescript@5.3.3)(vite@5.1.3)
+
+  packages/ast:
+    dependencies:
+      '@ts-graphviz/common':
+        specifier: workspace:^
+        version: link:../common
     devDependencies:
       peggy:
         specifier: ^3.0.2
@@ -140,9 +193,68 @@ importers:
       vite-plugin-dts:
         specifier: ^3.7.2
         version: 3.7.2(@types/node@20.11.20)(typescript@5.3.3)(vite@5.1.3)
-      vite-tsconfig-paths:
-        specifier: ^4.3.1
-        version: 4.3.1(typescript@5.3.3)(vite@5.1.3)
+
+  packages/common:
+    devDependencies:
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+      vite:
+        specifier: ^5.1.3
+        version: 5.1.3(@types/node@20.11.20)
+      vite-plugin-dts:
+        specifier: ^3.7.2
+        version: 3.7.2(@types/node@20.11.20)(typescript@5.3.3)(vite@5.1.3)
+
+  packages/core:
+    dependencies:
+      '@ts-graphviz/ast':
+        specifier: workspace:^
+        version: link:../ast
+      '@ts-graphviz/common':
+        specifier: workspace:^
+        version: link:../common
+    devDependencies:
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+      vite:
+        specifier: ^5.1.3
+        version: 5.1.3(@types/node@20.11.20)
+      vite-plugin-dts:
+        specifier: ^3.7.2
+        version: 3.7.2(@types/node@20.11.20)(typescript@5.3.3)(vite@5.1.3)
+
+  packages/ts-graphviz:
+    dependencies:
+      '@ts-graphviz/adapter':
+        specifier: workspace:^
+        version: link:../adapter
+      '@ts-graphviz/ast':
+        specifier: workspace:^
+        version: link:../ast
+      '@ts-graphviz/common':
+        specifier: workspace:^
+        version: link:../common
+      '@ts-graphviz/core':
+        specifier: workspace:^
+        version: link:../core
+    devDependencies:
+      peggy:
+        specifier: ^3.0.2
+        version: 3.0.2
+      ts-pegjs:
+        specifier: ^4.2.1
+        version: 4.2.1(peggy@3.0.2)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+      vite:
+        specifier: ^5.1.3
+        version: 5.1.3(@types/node@20.11.20)
+      vite-plugin-dts:
+        specifier: ^3.7.2
+        version: 3.7.2(@types/node@20.11.20)(typescript@5.3.3)(vite@5.1.3)
 
 packages:
 
@@ -266,11 +378,6 @@ packages:
       '@babel/types': 7.23.9
     dev: true
 
-  /@babel/helper-string-parser@7.22.5:
-    resolution: {integrity: sha512-mM4COjgZox8U+JcXQwPijIZLElkgEpO5rsERVDJTc2qfCDfERyob6k5WegS14SX18IIjv+XD+GrqNumY5JRCDw==}
-    engines: {node: '>=6.9.0'}
-    dev: true
-
   /@babel/helper-string-parser@7.23.4:
     resolution: {integrity: sha512-803gmbQdqwdf4olxrX4AJyFBV/RTr3rSmOj0rKwesmzlfhYNDEs+/iOcznzpNWlJlIlTJC2QfPFcHB6DlzdVLQ==}
     engines: {node: '>=6.9.0'}
@@ -311,7 +418,7 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
-      '@babel/types': 7.23.0
+      '@babel/types': 7.23.9
     dev: true
 
   /@babel/runtime@7.23.9:
@@ -346,15 +453,6 @@ packages:
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
-
-  /@babel/types@7.23.0:
-    resolution: {integrity: sha512-0oIyUfKoI3mSqMvsxBdclDwxXKXAUA8v/apZbc+iSyARYou1o8ZGDxbUYyLFoW2arqS2jDGqJuZvv1d/io1axg==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@babel/helper-string-parser': 7.22.5
-      '@babel/helper-validator-identifier': 7.22.20
-      to-fast-properties: 2.0.0
     dev: true
 
   /@babel/types@7.23.9:
@@ -654,6 +752,17 @@ packages:
       fs-extra: 7.0.1
       human-id: 1.0.2
       prettier: 2.8.8
+    dev: true
+
+  /@deno/shim-deno-test@0.5.0:
+    resolution: {integrity: sha512-4nMhecpGlPi0cSzT67L+Tm+GOJqvuk8gqHBziqcUQOarnuIax1z96/gJHCSIz2Z0zhxE6Rzwb3IZXPtFh51j+w==}
+    dev: true
+
+  /@deno/shim-deno@0.19.1:
+    resolution: {integrity: sha512-8hYIpmDqpG76sn+UY1853RCi+CI7ZWz9tt37nfyDL8rwr6xbW0+GHUwCLcsGbh1uMIKURuJy6xtrIcnW+a0duA==}
+    dependencies:
+      '@deno/shim-deno-test': 0.5.0
+      which: 4.0.0
     dev: true
 
   /@discoveryjs/json-ext@0.5.7:
@@ -1619,12 +1728,6 @@ packages:
     resolution: {integrity: sha512-qjd88DrCxupx/kJD5yQgZdcYKZKSIGBVDIBE1/LTGcNm3d2Np/jxojkdePDdfnBHJc5W7vSMpbJ1aB7p/Py69A==}
     dev: true
 
-  /@types/node@20.11.19:
-    resolution: {integrity: sha512-7xMnVEcZFu0DikYjWOlRq7NTPETrm7teqUT2WkQjrTIkEgUyyGdWsj/Zg8bEJt5TNklzbPD1X3fqfsHw3SpapQ==}
-    dependencies:
-      undici-types: 5.26.5
-    dev: true
-
   /@types/node@20.11.20:
     resolution: {integrity: sha512-7/rR21OS+fq8IyHTgtLkDK949uzsa6n8BkziAKtPVpugIkO6D+/ooXMvzXxDnZrmtXVfjb1bKQafYpb8s89LOg==}
     dependencies:
@@ -1643,7 +1746,7 @@ packages:
     resolution: {integrity: sha512-vPXzCLmRp74e9LsP8oltnWKTH+jBwt86WgRUb4Pc9Lf3pkMVGyvIo2gm9bODeGfCay2DBB/hAWDuvf07JcK4rw==}
     dependencies:
       '@types/expect': 1.20.4
-      '@types/node': 20.11.19
+      '@types/node': 20.11.20
     dev: true
 
   /@vitest/coverage-istanbul@1.3.0(vitest@1.3.0):
@@ -3978,6 +4081,11 @@ packages:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
 
+  /isexe@3.1.1:
+    resolution: {integrity: sha512-LpB/54B+/2J5hqQ7imZHfdU31OlgQqx7ZicVlkm9kzg9/w8GKLEcFfJl/t7DCEDueOyBAD6zCCwTO6Fzs0NoEQ==}
+    engines: {node: '>=16'}
+    dev: true
+
   /isobject@3.0.1:
     resolution: {integrity: sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==}
     engines: {node: '>=0.10.0'}
@@ -4053,7 +4161,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.11.19
+      '@types/node': 20.11.20
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
@@ -7061,6 +7169,14 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
+    dev: true
+
+  /which@4.0.0:
+    resolution: {integrity: sha512-GlaYyEb07DPxYCKhKzplCWBJtvxZcZMrL+4UkrTSJHHPyZU4mYYTv3qaOe77H7EODLSSopAUFAc6W8U4yqvscg==}
+    engines: {node: ^16.13.0 || >=18.0.0}
+    hasBin: true
+    dependencies:
+      isexe: 3.1.1
     dev: true
 
   /why-is-node-running@2.2.2:

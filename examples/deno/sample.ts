@@ -1,3 +1,4 @@
+import { toFile } from '@ts-graphviz/adapter';
 import {
   Digraph,
   Edge,
@@ -23,4 +24,6 @@ G.addSubgraph(A);
 A.addNode(node1);
 A.addNode(node2);
 A.addEdge(edge);
-toDot(G);
+const dot = toDot(G);
+
+await toFile(dot, '/dev/null');

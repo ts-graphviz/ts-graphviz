@@ -1,6 +1,6 @@
 ///<reference types="vite/client" />
 import path from 'node:path';
-import { DotSyntaxError, parse } from 'ts-graphviz/ast';
+import { DotSyntaxError, parse } from '@ts-graphviz/ast';
 import { test } from 'vitest';
 
 for (const [file, getContents] of Object.entries(

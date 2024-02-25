@@ -42,47 +42,16 @@
       }
     },
     "./ast": {
-      "require": {
-        "types": "./lib/ast.d.ts",
-        "default": "./lib/ast.cjs"
-      },
-      "import": {
-        "types": "./lib/ast.d.ts",
-        "default": "./lib/ast.js"
-      }
+      "types": "./lib/ast.d.ts",
+      "require": "./lib/ast.cjs",
+      "default": "./lib/ast.js"
     },
-    "./adapter": {
-      "browser": {
-        "require": "./lib/adapter/browser.cjs",
-        "import": "./lib/adapter/browser.js",
-        "types": "./lib/adapter/browser.d.ts"
-      },
-      "deno": {
-        "types": "./lib/adapter/deno.d.ts",
-        "default": "./lib/adapter/deno.js"
-      },
-      "node": {
-        "require": "./lib/adapter/node.cjs",
-        "import": "./lib/adapter/node.js",
-        "types": "./lib/adapter/node.d.ts"
-      },
-      "default": {
-        "types": "./lib/adapter/node.d.ts",
-        "require": "./lib/adapter/node.cjs",
-        "import": "./lib/adapter/node.js"
-      }
+    "./adapter":{
+      "types": "./lib/adapter.d.ts",
+      "require": "./lib/adapter.cjs",
+      "default": "./lib/adapter.js"
     },
     "./package.json": "./package.json"
-  },
-  "typesVersions": {
-    "*": {
-      "ast": [
-        "lib/ast"
-      ],
-      "adapter": [
-        "lib/adapter/node"
-      ]
-    }
   },
   "license": "MIT",
   "engines": {
@@ -90,15 +59,19 @@
   },
   "runkitExampleFilename": "example/runkit.cjs",
   "scripts": {
-    "codegen": "peggy --plugin ts-pegjs --extra-options-file src/ast/dot-shim/parser/peggy.options.json -o src/ast/dot-shim/parser/_parse.ts src/ast/dot-shim/parser/dot.peggy",
     "build": "vite build"
+  },
+  "dependencies": {
+    "@ts-graphviz/adapter": "workspace:^",
+    "@ts-graphviz/ast": "workspace:^",
+    "@ts-graphviz/core": "workspace:^",
+    "@ts-graphviz/common": "workspace:^"
   },
   "devDependencies": {
     "peggy": "^3.0.2",
     "ts-pegjs": "^4.2.1",
     "typescript": "^5.3.3",
     "vite": "^5.1.3",
-    "vite-plugin-dts": "^3.7.2",
-    "vite-tsconfig-paths": "^4.3.1"
+    "vite-plugin-dts": "^3.7.2"
   }
 }

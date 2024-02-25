@@ -1,0 +1,48 @@
+{
+  "name": "@ts-graphviz/ast",
+  "version": "1.8.2",
+  "description": "",
+  "type": "module",
+  "main": "lib/ast.cjs",
+  "module": "lib/ast.js",
+  "types": "lib/ast.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./lib/ast.d.ts",
+        "default": "./lib/ast.cjs"
+      },
+      "import": {
+        "types": "./lib/ast.d.ts",
+        "default": "./lib/ast.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ts-graphviz/ts-graphviz.git",
+    "directory": "packages/ast"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "NIT",
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
+  "dependencies": {
+    "@ts-graphviz/common": "workspace:^"
+  },
+  "devDependencies": {
+    "peggy": "^3.0.2",
+    "ts-pegjs": "^4.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.3",
+    "vite-plugin-dts": "^3.7.2"
+  },
+  "scripts": {
+    "codegen": "peggy --plugin ts-pegjs --extra-options-file src/dot-shim/parser/peggy.options.json -o src/dot-shim/parser/_parse.ts src/dot-shim/parser/dot.peggy",
+    "build": "vite build"
+  }
+}

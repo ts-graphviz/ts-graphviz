@@ -1,5 +1,5 @@
+import { toFile } from '@ts-graphviz/adapter';
 import { $keywords, attribute as _, digraph, toDot } from 'ts-graphviz';
-import { toFile } from 'ts-graphviz/adapter';
 
 declare module 'ts-graphviz' {
   export namespace GraphAttributeKey {
@@ -23,7 +23,7 @@ console.log(
   ),
 );
 
-declare module 'ts-graphviz/adapter' {
+declare module '@ts-graphviz/adapter' {
   export namespace Layout {
     export interface $values extends $keywords<'my-custom-algorithm'> {}
   }

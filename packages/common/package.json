@@ -1,0 +1,41 @@
+{
+  "name": "@ts-graphviz/common",
+  "version": "1.8.2",
+  "description": "",
+  "type": "module",
+  "main": "lib/common.cjs",
+  "module": "lib/common.js",
+  "types": "lib/common.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./lib/common.d.ts",
+        "default": "./lib/common.cjs"
+      },
+      "import": {
+        "types": "./lib/common.d.ts",
+        "default": "./lib/common.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ts-graphviz/ts-graphviz.git",
+    "directory": "packages/common"
+  },
+  "author": "Yuki Yamazaki <yuki@kamiazya.tech>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vite": "^5.1.3",
+    "vite-plugin-dts": "^3.7.2"
+  },
+  "scripts": {
+    "build": "vite build"
+  }
+}

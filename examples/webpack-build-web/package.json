@@ -7,7 +7,9 @@
     "test:integration": "node dist/main.js"
   },
   "dependencies": {
-    "ts-graphviz": "workspace:*"
+    "ts-graphviz": "workspace:*",
+    "@ts-graphviz/adapter": "workspace:*",
+    "@ts-graphviz/ast": "workspace:*"
   },
   "devDependencies": {
     "@webpack-cli/generators": "^3.0.1",
