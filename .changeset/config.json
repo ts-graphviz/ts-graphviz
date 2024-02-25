@@ -6,6 +6,10 @@
       "repo": "ts-graphviz/ts-graphviz"
     }
   ],
+  "privatePackages": {
+    "tag": false,
+    "version": false
+  },
   "commit": false,
   "fixed": [],
   "linked": [],
