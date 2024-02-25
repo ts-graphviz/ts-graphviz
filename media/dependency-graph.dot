@@ -1,0 +1,17 @@
+digraph G {
+  "ts-graphviz";
+  "@ts-graphviz/adapter";
+  "@ts-graphviz/ast";
+  "@ts-graphviz/common";
+  "@ts-graphviz/core";
+
+  "@ts-graphviz/ast" -> "ts-graphviz";
+  "@ts-graphviz/adapter" -> "ts-graphviz";
+  "@ts-graphviz/common" -> "ts-graphviz";
+  "@ts-graphviz/core" -> "ts-graphviz";
+  "@ts-graphviz/common" -> "@ts-graphviz/adapter";
+  "@ts-graphviz/common" -> "@ts-graphviz/ast";
+  "@ts-graphviz/ast" -> "@ts-graphviz/core";
+  "@ts-graphviz/common" -> "@ts-graphviz/core";
+}
+

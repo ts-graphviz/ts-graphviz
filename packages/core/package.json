@@ -1,7 +1,7 @@
 {
   "name": "@ts-graphviz/core",
   "version": "1.8.2",
-  "description": "",
+  "description": "Graphviz Models for Object-Oriented Programming",
   "keywords": [
     "graphviz",
     "dot"

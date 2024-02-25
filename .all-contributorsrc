@@ -1,7 +1,7 @@
 {
   "files": [
     "README.md",
-    "README_ja.md"
+    "packages/ts-graphviz/README.md"
   ],
   "imageSize": 100,
   "commit": false,

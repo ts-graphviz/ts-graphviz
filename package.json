@@ -1,7 +1,7 @@
 {
   "name": "ts-graphviz-monorepo",
   "private": true,
-  "description": "Graphviz library for TypeScript.",
+  "description": "Graphviz libraries for TypeScript",
   "keywords": [
     "graphviz",
     "dot"

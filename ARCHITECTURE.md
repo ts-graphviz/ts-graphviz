@@ -38,16 +38,13 @@ Our goal is to provide a stable and secure library for our users while keeping u
 
 ## Packages Architecture
 
-The packages to be split are as follows:
+| Package | Version | Summary | Description |
+| --- | --- | --- | --- |
+| [ts-graphviz](https://www.npmjs.com/package/ts-graphviz) | [![npm](https://img.shields.io/npm/v/ts-graphviz)](https://www.npmjs.com/package/ts-graphviz) | Graphviz library for TypeScript | The main package that serves as the entry point for users. It provides a high-level API for creating, manipulating, and rendering Graphviz DOT language graphs. |
+| [@ts-graphviz/common](https://www.npmjs.com/package/@ts-graphviz/common) | [![npm](https://img.shields.io/npm/v/@ts-graphviz/common)](https://www.npmjs.com/package/@ts-graphviz/common) | Graphviz Types and Utilities | Contains type information related to DOT language attributes, attribute values, and models. |
+| [@ts-graphviz/ast](https://www.npmjs.com/package/@ts-graphviz/ast) | [![npm](https://img.shields.io/npm/v/@ts-graphviz/ast)](https://www.npmjs.com/package/@ts-graphviz/ast) | Graphviz AST(Abstract Syntax Tree) Utilities | Includes the module for processing DOT language at the AST (Abstract Syntax Tree) level. |
+| [@ts-graphviz/core](https://www.npmjs.com/package/@ts-graphviz/core) | [![npm](https://img.shields.io/npm/v/@ts-graphviz/core)](https://www.npmjs.com/package/@ts-graphviz/core) | Graphviz Models for Object-Oriented Programming | Comprises the implementation of models and functions provided to users. |
+| [@ts-graphviz/adapter](https://www.npmjs.com/package/@ts-graphviz/adapter) | [![npm](https://img.shields.io/npm/v/@ts-graphviz/adapter)](https://www.npmjs.com/package/@ts-graphviz/adapter) | Graphviz Runtime adapters for Cross Platform | Handles runtime-dependent processing, such as input/output processing and Renderer implementations for different environments. |
 
-![Dependency graph](https://user-images.githubusercontent.com/35218186/236679412-ccef1f5d-14e8-46d1-808d-28bfe810ffda.svg)
 
-1. **ts-graphviz**: The main package that serves as the entry point for users. It provides a high-level API for creating, manipulating, and rendering Graphviz DOT language graphs. This package depends on the other packages to provide its functionality.
-
-2. **@ts-graphviz/common**: Contains type information related to DOT language attributes, attribute values, and models.
-
-3. **@ts-graphviz/ast**: Includes the module for processing DOT language at the AST (Abstract Syntax Tree) level.
-
-4. **@ts-graphviz/core**: Comprises the implementation of models and functions provided to users.
-
-5. **@ts-graphviz/adapter**: Handles runtime-dependent processing, such as input/output processing and Renderer implementations for different environments.
+![Dependency graph](./media/dependency-graph.svg)
