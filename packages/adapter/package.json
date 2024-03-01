@@ -1,6 +1,6 @@
 {
   "name": "@ts-graphviz/adapter",
-  "version": "1.8.2",
+  "version": "2.0.0",
   "description": "Graphviz Runtime adapters for Cross Platform",
   "keywords": [
     "graphviz",
