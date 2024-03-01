@@ -1,10 +1,11 @@
+<div align="center">
+
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6485f9858ed4b3e8ef76611a2896bc4)](https://app.codacy.com/gh/ts-graphviz/ts-graphviz?utm_source=github.com&utm_medium=referral&utm_content=ts-graphviz/ts-graphviz&utm_campaign=Badge_Grade_Settings)
 [![GitHub Action](https://github.com/kamiazya/ts-graphviz/workflows/NodeCI/badge.svg)](https://github.com/kamiazya/ts-graphviz/actions?workflow=NodeCI)
 [![npm version](https://badge.fury.io/js/ts-graphviz.svg)](https://badge.fury.io/js/ts-graphviz)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-[![code style: prettier](https://img.shields.io/badge/code%20style-prettier-ff69b4?logo=prettier&style=flat)](https://github.com/facebook/jest)
-[![test: jest](https://img.shields.io/badge/tested%20with-jest-99424f?logo=jest&style=flat)](https://github.com/facebook/jest)
+
 ![node version](https://img.shields.io/node/v/ts-graphviz)
 [![deno version](https://img.shields.io/badge/deno-^1.28.0-black?logo=deno)](https://github.com/denoland/deno)
 ![npm](https://img.shields.io/npm/dm/ts-graphviz)
@@ -15,13 +16,21 @@
 
 [Graphviz](https://graphviz.gitlab.io/) library for TypeScript.
 
+🔗
+
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=GitHub&style=flat)](https://github.com/ts-graphviz/ts-graphviz)
 [![npm](https://img.shields.io/badge/-npm-CB3837?logo=npm&style=flat)](https://www.npmjs.com/package/ts-graphviz)
 [![yarn](https://img.shields.io/badge/-yarn-ffffff?logo=Yarn&style=flat)](https://yarnpkg.com/package/ts-graphviz)
 [![Refarence](https://img.shields.io/badge/-Refarence-3178C6?logo=TypeScript&style=flat&logoColor=fff)](https://ts-graphviz.github.io/ts-graphviz/)
-[![Suponser](https://img.shields.io/badge/-Suponser-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/kamiazya)
+[![Suponser](https://img.shields.io/badge/-GitHub%20Suponser-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/kamiazya)
 
-> [English](https://github.com/ts-graphviz/ts-graphviz/blob/main/README.md) | [日本語](https://github.com/ts-graphviz/ts-graphviz/blob/main/README_ja.md)
+[![format: Biome](https://img.shields.io/badge/format%20with-Biome-F7B911?logo=biome&style=flat)](https://biomejs.dev/)
+[![test: Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest&style=flat)](https://vitest.dev/)
+[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://rollupjs.org/)
+
+</div>
+
+---
 
 ## Key Features ✨
 
@@ -33,6 +42,12 @@
   - Designed to be object-oriented, it provides APIs that can be adapted to both imperative and declarative APIs. You can choose the paradigm that best fits your project.
 - **Suitable for any use cases**
   - Both a high-layer API to provide models and a low-layer API to handle ASTs are provided to address any use cases.
+- **Modular and Extensible**
+  - The library is split into multiple packages, each serving a specific purpose. This modular design allows users to pick and choose the functionality they need, resulting in improved maintainability and flexibility.
+- **Cross Platform**
+  - It supports both Node.js and Deno and Browser.
+- **Customizable**
+  - It provides a way to extend the library's type system to customize graph visualization solutions to meet specific needs.
 
 ## Installation 💽
 
@@ -338,7 +353,7 @@ const dot = toDot(g);
 
 </details>
 
-### `ts-graphviz/adapter` Module 🔌
+### `@ts-graphviz/adapter` Module 🔌
 
 > This module status is ![beta](https://img.shields.io/badge/-beta-orange).
 
@@ -388,7 +403,7 @@ This module provides the following functions.
 
 > **Note** Designed to work with Node.js and Deno, Stream is runtime native.
 
-### `ts-graphviz/ast` Module 🔢
+### `@ts-graphviz/ast` Module 🔢
 
 > This module status is ![beta](https://img.shields.io/badge/-beta-orange).
 
@@ -414,7 +429,7 @@ Please refer to the TypeScript type definition.
 
 
 ```typescript
-import { parse } from 'ts-graphviz/ast';
+import { parse } from '@ts-graphviz/ast';
 
 const ast = parse(`
   digraph example {
@@ -519,11 +534,11 @@ With ts-graphviz, you can extend the library's type system to customize graph vi
 #### Use Case: Specifying Custom Graph Layout and Output Formats
 
 ```ts
-import { $keywords } from 'ts-graphviz';
-import { toFile } from 'ts-graphviz/adapter';
+import { $keywords } from '@ts-graphviz/common';
+import { toFile } from '@ts-graphviz/adapter';
 
-// 1. Declare the 'ts-graphviz/adapter' module.
-declare module 'ts-graphviz/adapter' {
+// 1. Declare the '@ts-graphviz/adapter' module.
+declare module '@ts-graphviz/adapter' {
   export namespace Layout {
     // 2. Define the $values interface in the Layout namespace.
     // 3. Inherit from $keywords<'my-custom-algorithm'> and specify the name of the new layout engine in <...>.
@@ -546,10 +561,11 @@ toFile('digraph { a -> b }', '/path/to/file', {
 #### Use Case: Adding Custom Attributes
 
 ```ts
-import { digraph, toDot, attribute as _, $keywords } from 'ts-graphviz';
+import { $keywords } from '@ts-graphviz/common';
+import { digraph, toDot, attribute as _ } from 'ts-graphviz';
 
-// 1. Declare the 'ts-graphviz' module.
-declare module 'ts-graphviz' {
+// 1. Declare the '@ts-graphviz/common' module.
+declare module '@ts-graphviz/common' {
   export namespace GraphAttributeKey {
     // 2. Define the $values interface in the GraphAttributeKey namespace.
     // 3. Inherit from $keywords<'hoge'> and specify the name of the new attribute in <...>.
@@ -577,6 +593,17 @@ console.log(
   ),
 );
 ```
+
+## Deep dive 🏊‍♂️
+
+### Architecture 🏛
+
+See [ARCHITECTURE.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/ARCHITECTURE.md) for more details.
+
+### Security 🛡️
+
+See [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md) for more details.
+
 
 ## Who's using `ts-graphviz` 📜
 

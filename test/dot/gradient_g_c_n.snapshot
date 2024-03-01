@@ -1,0 +1,809 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [],
+          "key": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 20,
+                "line": 1,
+                "offset": 19,
+              },
+              "source": undefined,
+              "start": {
+                "column": 13,
+                "line": 1,
+                "offset": 12,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "bgcolor",
+          },
+          "location": {
+            "end": {
+              "column": 35,
+              "line": 1,
+              "offset": 34,
+            },
+            "source": undefined,
+            "start": {
+              "column": 13,
+              "line": 1,
+              "offset": 12,
+            },
+          },
+          "type": "Attribute",
+          "value": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 34,
+                "line": 1,
+                "offset": 33,
+              },
+              "source": undefined,
+              "start": {
+                "column": 21,
+                "line": 1,
+                "offset": 20,
+              },
+            },
+            "quoted": true,
+            "type": "Literal",
+            "value": "purple:pink",
+          },
+        },
+        {
+          "children": [],
+          "key": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 40,
+                "line": 1,
+                "offset": 39,
+              },
+              "source": undefined,
+              "start": {
+                "column": 35,
+                "line": 1,
+                "offset": 34,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "label",
+          },
+          "location": {
+            "end": {
+              "column": 50,
+              "line": 1,
+              "offset": 49,
+            },
+            "source": undefined,
+            "start": {
+              "column": 35,
+              "line": 1,
+              "offset": 34,
+            },
+          },
+          "type": "Attribute",
+          "value": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 49,
+                "line": 1,
+                "offset": 48,
+              },
+              "source": undefined,
+              "start": {
+                "column": 41,
+                "line": 1,
+                "offset": 40,
+              },
+            },
+            "quoted": true,
+            "type": "Literal",
+            "value": "agraph",
+          },
+        },
+        {
+          "children": [],
+          "key": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 59,
+                "line": 1,
+                "offset": 58,
+              },
+              "source": undefined,
+              "start": {
+                "column": 50,
+                "line": 1,
+                "offset": 49,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "fontcolor",
+          },
+          "location": {
+            "end": {
+              "column": 67,
+              "line": 1,
+              "offset": 66,
+            },
+            "source": undefined,
+            "start": {
+              "column": 50,
+              "line": 1,
+              "offset": 49,
+            },
+          },
+          "type": "Attribute",
+          "value": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 67,
+                "line": 1,
+                "offset": 66,
+              },
+              "source": undefined,
+              "start": {
+                "column": 60,
+                "line": 1,
+                "offset": 59,
+              },
+            },
+            "quoted": true,
+            "type": "Literal",
+            "value": "white",
+          },
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 31,
+                    "line": 2,
+                    "offset": 97,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 22,
+                    "line": 2,
+                    "offset": 88,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "fillcolor",
+              },
+              "location": {
+                "end": {
+                  "column": 44,
+                  "line": 2,
+                  "offset": 110,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 22,
+                  "line": 2,
+                  "offset": 88,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 43,
+                    "line": 2,
+                    "offset": 109,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 32,
+                    "line": 2,
+                    "offset": 98,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "blue:cyan",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 49,
+                    "line": 2,
+                    "offset": 115,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 44,
+                    "line": 2,
+                    "offset": 110,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "label",
+              },
+              "location": {
+                "end": {
+                  "column": 61,
+                  "line": 2,
+                  "offset": 127,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 44,
+                  "line": 2,
+                  "offset": 110,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 60,
+                    "line": 2,
+                    "offset": 126,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 50,
+                    "line": 2,
+                    "offset": 116,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "acluster",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 70,
+                    "line": 2,
+                    "offset": 136,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 61,
+                    "line": 2,
+                    "offset": 127,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "fontcolor",
+              },
+              "location": {
+                "end": {
+                  "column": 79,
+                  "line": 2,
+                  "offset": 145,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 61,
+                  "line": 2,
+                  "offset": 127,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 78,
+                    "line": 2,
+                    "offset": 144,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 71,
+                    "line": 2,
+                    "offset": 137,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "white",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 84,
+                    "line": 2,
+                    "offset": 150,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 79,
+                    "line": 2,
+                    "offset": 145,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "style",
+              },
+              "location": {
+                "end": {
+                  "column": 94,
+                  "line": 2,
+                  "offset": 160,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 79,
+                  "line": 2,
+                  "offset": 145,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 93,
+                    "line": 2,
+                    "offset": 159,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 85,
+                    "line": 2,
+                    "offset": 151,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "filled",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 107,
+                    "line": 2,
+                    "offset": 173,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 94,
+                    "line": 2,
+                    "offset": 160,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "gradientangle",
+              },
+              "location": {
+                "end": {
+                  "column": 113,
+                  "line": 2,
+                  "offset": 179,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 94,
+                  "line": 2,
+                  "offset": 160,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 113,
+                    "line": 2,
+                    "offset": 179,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 108,
+                    "line": 2,
+                    "offset": 174,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "270",
+              },
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "key": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 14,
+                        "line": 3,
+                        "offset": 193,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 9,
+                        "line": 3,
+                        "offset": 188,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "Literal",
+                    "value": "shape",
+                  },
+                  "location": {
+                    "end": {
+                      "column": 19,
+                      "line": 3,
+                      "offset": 198,
+                    },
+                    "source": undefined,
+                    "start": {
+                      "column": 9,
+                      "line": 3,
+                      "offset": 188,
+                    },
+                  },
+                  "type": "Attribute",
+                  "value": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 18,
+                        "line": 3,
+                        "offset": 197,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 15,
+                        "line": 3,
+                        "offset": 194,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "Literal",
+                    "value": "box",
+                  },
+                },
+                {
+                  "children": [],
+                  "key": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 28,
+                        "line": 3,
+                        "offset": 207,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 19,
+                        "line": 3,
+                        "offset": 198,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "Literal",
+                    "value": "fillcolor",
+                  },
+                  "location": {
+                    "end": {
+                      "column": 42,
+                      "line": 3,
+                      "offset": 221,
+                    },
+                    "source": undefined,
+                    "start": {
+                      "column": 19,
+                      "line": 3,
+                      "offset": 198,
+                    },
+                  },
+                  "type": "Attribute",
+                  "value": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 41,
+                        "line": 3,
+                        "offset": 220,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 29,
+                        "line": 3,
+                        "offset": 208,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "Literal",
+                    "value": "red:yellow",
+                  },
+                },
+                {
+                  "children": [],
+                  "key": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 47,
+                        "line": 3,
+                        "offset": 226,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 42,
+                        "line": 3,
+                        "offset": 221,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "Literal",
+                    "value": "style",
+                  },
+                  "location": {
+                    "end": {
+                      "column": 57,
+                      "line": 3,
+                      "offset": 236,
+                    },
+                    "source": undefined,
+                    "start": {
+                      "column": 42,
+                      "line": 3,
+                      "offset": 221,
+                    },
+                  },
+                  "type": "Attribute",
+                  "value": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 56,
+                        "line": 3,
+                        "offset": 235,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 48,
+                        "line": 3,
+                        "offset": 227,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "Literal",
+                    "value": "filled",
+                  },
+                },
+                {
+                  "children": [],
+                  "key": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 70,
+                        "line": 3,
+                        "offset": 249,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 57,
+                        "line": 3,
+                        "offset": 236,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "Literal",
+                    "value": "gradientangle",
+                  },
+                  "location": {
+                    "end": {
+                      "column": 73,
+                      "line": 3,
+                      "offset": 252,
+                    },
+                    "source": undefined,
+                    "start": {
+                      "column": 57,
+                      "line": 3,
+                      "offset": 236,
+                    },
+                  },
+                  "type": "Attribute",
+                  "value": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 73,
+                        "line": 3,
+                        "offset": 252,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 71,
+                        "line": 3,
+                        "offset": 250,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "Literal",
+                    "value": "90",
+                  },
+                },
+              ],
+              "kind": "Node",
+              "location": {
+                "end": {
+                  "column": 74,
+                  "line": 3,
+                  "offset": 253,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 3,
+                  "line": 3,
+                  "offset": 182,
+                },
+              },
+              "type": "AttributeList",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 8,
+                    "line": 4,
+                    "offset": 261,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 3,
+                    "line": 4,
+                    "offset": 256,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "anode",
+              },
+              "location": {
+                "end": {
+                  "column": 9,
+                  "line": 4,
+                  "offset": 262,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 3,
+                  "line": 4,
+                  "offset": 256,
+                },
+              },
+              "type": "Node",
+            },
+          ],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 20,
+                "line": 2,
+                "offset": 86,
+              },
+              "source": undefined,
+              "start": {
+                "column": 12,
+                "line": 2,
+                "offset": 78,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "cluster1",
+          },
+          "location": {
+            "end": {
+              "column": 3,
+              "line": 5,
+              "offset": 265,
+            },
+            "source": undefined,
+            "start": {
+              "column": 3,
+              "line": 2,
+              "offset": 69,
+            },
+          },
+          "type": "Subgraph",
+        },
+      ],
+      "directed": true,
+      "id": {
+        "children": [],
+        "location": {
+          "end": {
+            "column": 10,
+            "line": 1,
+            "offset": 9,
+          },
+          "source": undefined,
+          "start": {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "G",
+      },
+      "location": {
+        "end": {
+          "column": 2,
+          "line": 7,
+          "offset": 268,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "strict": false,
+      "type": "Graph",
+    },
+  ],
+  "location": {
+    "end": {
+      "column": 1,
+      "line": 8,
+      "offset": 269,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Dot",
+}

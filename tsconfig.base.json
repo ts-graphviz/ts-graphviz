@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "lib": ["ES2022"],
+    "strict": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "outDir": "lib",
+    "esModuleInterop": true,
+    "moduleResolution": "Node16",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}

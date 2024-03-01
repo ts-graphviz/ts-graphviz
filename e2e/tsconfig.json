@@ -1,9 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "noEmitHelpers": true,
-    "moduleResolution": "Node16",
-    "lib": ["esnext"]
-  },
-  "files": ["main.ts"]
-}

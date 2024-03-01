@@ -1,7 +1,6 @@
-import { digraph } from 'ts-graphviz';
-import { fromModel } from 'ts-graphviz/ast';
-
-import { toDot } from '#test/utils';
+import { fromModel } from '@ts-graphviz/ast';
+import { digraph, toDot } from 'ts-graphviz';
+import { expect, test } from 'vitest';
 
 test('edge group', () => {
   expect(
@@ -89,8 +88,8 @@ test('edge group', () => {
       }),
     ),
   ).toMatchInlineSnapshot(`
-    digraph {
+    "digraph {
       "a" -> {"b" "c"};
-    }
+    }"
   `);
 });

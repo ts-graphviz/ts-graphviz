@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "lib",
+    "lib": ["DOM"]
+  },
+  "include": ["src/deno.ts", "src/*.ts"],
+  "exclude": [
+    "src/browser.ts",
+    "src/node.ts",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts"
+  ]
+}

@@ -1,21 +1,12 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "strict": true,
-    "alwaysStrict": true,
-    "strictNullChecks": true,
-    "outDir": "lib",
-    "esModuleInterop": true,
-    "moduleResolution": "Node16",
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
     "paths": {
-      "#test/*": ["./test/*/index.js"],
-      "ts-graphviz": ["./src/index.js"],
-      "ts-graphviz/ast": ["./src/ast/index.js"],
-      "ts-graphviz/adapter": ["./src/adapter/index.js"]
+      "ts-graphviz": ["./packages/ts-graphviz/src/ts-graphviz.js"],
+      "@ts-graphviz/core": ["./packages/core/src/core.js"],
+      "@ts-graphviz/common": ["./packages/common/src/common.js"],
+      "@ts-graphviz/ast": ["./packages/ast/src/ast.js"],
+      "@ts-graphviz/adapter": ["./packages/adapter/src/node.js"]
     }
-  },
-  "exclude": ["e2e"]
+  }
 }

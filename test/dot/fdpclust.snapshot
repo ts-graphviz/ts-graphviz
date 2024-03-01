@@ -1,0 +1,805 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [],
+          "key": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 9,
+                "line": 2,
+                "offset": 18,
+              },
+              "source": undefined,
+              "start": {
+                "column": 3,
+                "line": 2,
+                "offset": 12,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "layout",
+          },
+          "location": {
+            "end": {
+              "column": 13,
+              "line": 2,
+              "offset": 22,
+            },
+            "source": undefined,
+            "start": {
+              "column": 3,
+              "line": 2,
+              "offset": 12,
+            },
+          },
+          "type": "Attribute",
+          "value": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 13,
+                "line": 2,
+                "offset": 22,
+              },
+              "source": undefined,
+              "start": {
+                "column": 10,
+                "line": 2,
+                "offset": 19,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "fdp",
+          },
+        },
+        {
+          "children": [],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 4,
+                "line": 3,
+                "offset": 26,
+              },
+              "source": undefined,
+              "start": {
+                "column": 3,
+                "line": 3,
+                "offset": 25,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "e",
+          },
+          "location": {
+            "end": {
+              "column": 4,
+              "line": 3,
+              "offset": 26,
+            },
+            "source": undefined,
+            "start": {
+              "column": 3,
+              "line": 3,
+              "offset": 25,
+            },
+          },
+          "type": "Node",
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "location": {
+                "end": {
+                  "column": 12,
+                  "line": 5,
+                  "offset": 60,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 5,
+                  "line": 5,
+                  "offset": 53,
+                },
+              },
+              "targets": [
+                {
+                  "children": [],
+                  "id": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 6,
+                        "line": 5,
+                        "offset": 54,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 5,
+                        "line": 5,
+                        "offset": 53,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "Literal",
+                    "value": "a",
+                  },
+                  "location": {
+                    "end": {
+                      "column": 6,
+                      "line": 5,
+                      "offset": 54,
+                    },
+                    "source": undefined,
+                    "start": {
+                      "column": 5,
+                      "line": 5,
+                      "offset": 53,
+                    },
+                  },
+                  "type": "NodeRef",
+                },
+                {
+                  "children": [],
+                  "id": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 11,
+                        "line": 5,
+                        "offset": 59,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 10,
+                        "line": 5,
+                        "offset": 58,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "Literal",
+                    "value": "b",
+                  },
+                  "location": {
+                    "end": {
+                      "column": 11,
+                      "line": 5,
+                      "offset": 59,
+                    },
+                    "source": undefined,
+                    "start": {
+                      "column": 10,
+                      "line": 5,
+                      "offset": 58,
+                    },
+                  },
+                  "type": "NodeRef",
+                },
+              ],
+              "type": "Edge",
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "location": {
+                    "end": {
+                      "column": 14,
+                      "line": 7,
+                      "offset": 98,
+                    },
+                    "source": undefined,
+                    "start": {
+                      "column": 7,
+                      "line": 7,
+                      "offset": 91,
+                    },
+                  },
+                  "targets": [
+                    {
+                      "children": [],
+                      "id": {
+                        "children": [],
+                        "location": {
+                          "end": {
+                            "column": 8,
+                            "line": 7,
+                            "offset": 92,
+                          },
+                          "source": undefined,
+                          "start": {
+                            "column": 7,
+                            "line": 7,
+                            "offset": 91,
+                          },
+                        },
+                        "quoted": false,
+                        "type": "Literal",
+                        "value": "C",
+                      },
+                      "location": {
+                        "end": {
+                          "column": 8,
+                          "line": 7,
+                          "offset": 92,
+                        },
+                        "source": undefined,
+                        "start": {
+                          "column": 7,
+                          "line": 7,
+                          "offset": 91,
+                        },
+                      },
+                      "type": "NodeRef",
+                    },
+                    {
+                      "children": [],
+                      "id": {
+                        "children": [],
+                        "location": {
+                          "end": {
+                            "column": 13,
+                            "line": 7,
+                            "offset": 97,
+                          },
+                          "source": undefined,
+                          "start": {
+                            "column": 12,
+                            "line": 7,
+                            "offset": 96,
+                          },
+                        },
+                        "quoted": false,
+                        "type": "Literal",
+                        "value": "D",
+                      },
+                      "location": {
+                        "end": {
+                          "column": 13,
+                          "line": 7,
+                          "offset": 97,
+                        },
+                        "source": undefined,
+                        "start": {
+                          "column": 12,
+                          "line": 7,
+                          "offset": 96,
+                        },
+                      },
+                      "type": "NodeRef",
+                    },
+                  ],
+                  "type": "Edge",
+                },
+              ],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 22,
+                    "line": 6,
+                    "offset": 82,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 14,
+                    "line": 6,
+                    "offset": 74,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "clusterC",
+              },
+              "location": {
+                "end": {
+                  "column": 6,
+                  "line": 8,
+                  "offset": 104,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 5,
+                  "line": 6,
+                  "offset": 65,
+                },
+              },
+              "type": "Subgraph",
+            },
+          ],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 20,
+                "line": 4,
+                "offset": 46,
+              },
+              "source": undefined,
+              "start": {
+                "column": 12,
+                "line": 4,
+                "offset": 38,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "clusterA",
+          },
+          "location": {
+            "end": {
+              "column": 4,
+              "line": 9,
+              "offset": 108,
+            },
+            "source": undefined,
+            "start": {
+              "column": 3,
+              "line": 4,
+              "offset": 29,
+            },
+          },
+          "type": "Subgraph",
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "location": {
+                "end": {
+                  "column": 3,
+                  "line": 12,
+                  "offset": 144,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 5,
+                  "line": 11,
+                  "offset": 135,
+                },
+              },
+              "targets": [
+                {
+                  "children": [],
+                  "id": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 6,
+                        "line": 11,
+                        "offset": 136,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 5,
+                        "line": 11,
+                        "offset": 135,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "Literal",
+                    "value": "d",
+                  },
+                  "location": {
+                    "end": {
+                      "column": 6,
+                      "line": 11,
+                      "offset": 136,
+                    },
+                    "source": undefined,
+                    "start": {
+                      "column": 5,
+                      "line": 11,
+                      "offset": 135,
+                    },
+                  },
+                  "type": "NodeRef",
+                },
+                {
+                  "children": [],
+                  "id": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 11,
+                        "line": 11,
+                        "offset": 141,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 10,
+                        "line": 11,
+                        "offset": 140,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "Literal",
+                    "value": "f",
+                  },
+                  "location": {
+                    "end": {
+                      "column": 11,
+                      "line": 11,
+                      "offset": 141,
+                    },
+                    "source": undefined,
+                    "start": {
+                      "column": 10,
+                      "line": 11,
+                      "offset": 140,
+                    },
+                  },
+                  "type": "NodeRef",
+                },
+              ],
+              "type": "Edge",
+            },
+          ],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 20,
+                "line": 10,
+                "offset": 128,
+              },
+              "source": undefined,
+              "start": {
+                "column": 12,
+                "line": 10,
+                "offset": 120,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "clusterB",
+          },
+          "location": {
+            "end": {
+              "column": 4,
+              "line": 12,
+              "offset": 145,
+            },
+            "source": undefined,
+            "start": {
+              "column": 3,
+              "line": 10,
+              "offset": 111,
+            },
+          },
+          "type": "Subgraph",
+        },
+        {
+          "children": [],
+          "location": {
+            "end": {
+              "column": 3,
+              "line": 14,
+              "offset": 157,
+            },
+            "source": undefined,
+            "start": {
+              "column": 3,
+              "line": 13,
+              "offset": 148,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 4,
+                    "line": 13,
+                    "offset": 149,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 3,
+                    "line": 13,
+                    "offset": 148,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "d",
+              },
+              "location": {
+                "end": {
+                  "column": 4,
+                  "line": 13,
+                  "offset": 149,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 3,
+                  "line": 13,
+                  "offset": 148,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 9,
+                    "line": 13,
+                    "offset": 154,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 8,
+                    "line": 13,
+                    "offset": 153,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "D",
+              },
+              "location": {
+                "end": {
+                  "column": 9,
+                  "line": 13,
+                  "offset": 154,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 8,
+                  "line": 13,
+                  "offset": 153,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [],
+          "location": {
+            "end": {
+              "column": 3,
+              "line": 15,
+              "offset": 173,
+            },
+            "source": undefined,
+            "start": {
+              "column": 3,
+              "line": 14,
+              "offset": 157,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 4,
+                    "line": 14,
+                    "offset": 158,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 3,
+                    "line": 14,
+                    "offset": 157,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "e",
+              },
+              "location": {
+                "end": {
+                  "column": 4,
+                  "line": 14,
+                  "offset": 158,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 3,
+                  "line": 14,
+                  "offset": 157,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 16,
+                    "line": 14,
+                    "offset": 170,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 8,
+                    "line": 14,
+                    "offset": 162,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "clusterB",
+              },
+              "location": {
+                "end": {
+                  "column": 16,
+                  "line": 14,
+                  "offset": 170,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 8,
+                  "line": 14,
+                  "offset": 162,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [],
+          "location": {
+            "end": {
+              "column": 1,
+              "line": 16,
+              "offset": 194,
+            },
+            "source": undefined,
+            "start": {
+              "column": 3,
+              "line": 15,
+              "offset": 173,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 11,
+                    "line": 15,
+                    "offset": 181,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 3,
+                    "line": 15,
+                    "offset": 173,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "clusterC",
+              },
+              "location": {
+                "end": {
+                  "column": 11,
+                  "line": 15,
+                  "offset": 181,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 3,
+                  "line": 15,
+                  "offset": 173,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 23,
+                    "line": 15,
+                    "offset": 193,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 15,
+                    "line": 15,
+                    "offset": 185,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "clusterB",
+              },
+              "location": {
+                "end": {
+                  "column": 23,
+                  "line": 15,
+                  "offset": 193,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 15,
+                  "line": 15,
+                  "offset": 185,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+      ],
+      "directed": false,
+      "id": {
+        "children": [],
+        "location": {
+          "end": {
+            "column": 8,
+            "line": 1,
+            "offset": 7,
+          },
+          "source": undefined,
+          "start": {
+            "column": 7,
+            "line": 1,
+            "offset": 6,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "G",
+      },
+      "location": {
+        "end": {
+          "column": 2,
+          "line": 16,
+          "offset": 195,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "strict": false,
+      "type": "Graph",
+    },
+  ],
+  "location": {
+    "end": {
+      "column": 1,
+      "line": 17,
+      "offset": 196,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Dot",
+}

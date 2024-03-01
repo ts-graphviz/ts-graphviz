@@ -1,0 +1,46 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["package.json", "pnpm-lock.yaml", "tsconfig.json"],
+  "pipeline": {
+    "codegen": {
+      "dependsOn": ["^codegen"],
+      "inputs": [
+        "package.json",
+        "src/**/*.peggy",
+        "src/**/*.peggy.options.json"
+      ],
+      "outputs": ["src/**/_*"]
+    },
+    "//#codegen": {
+      "dependsOn": ["@ts-graphviz/adapter#codegen"]
+    },
+    "//#test:unit": {
+      "dependsOn": ["codegen"],
+      "inputs": ["packages", "test", "vitest.config.ts"],
+      "outputs": ["coverage/**"]
+    },
+    "test:unit": {
+      "dependsOn": ["codegen", "^test:unit"]
+    },
+    "build": {
+      "dependsOn": ["codegen", "^build"],
+      "inputs": [
+        "src/**",
+        "tsconfig.json",
+        "vite.config.ts",
+        "!**/*.test.ts",
+        "!**/*.spec.ts"
+      ],
+      "outputs": ["lib/**"]
+    },
+    "test:integration:build": {
+      "dependsOn": ["build"],
+      "inputs": ["**/*.js", "**/*/ts"],
+      "outputs": ["dist/**"]
+    },
+    "test:integration": {
+      "inputs": ["**/*.js", "**/*/ts"],
+      "dependsOn": ["test:integration:build"]
+    }
+  }
+}

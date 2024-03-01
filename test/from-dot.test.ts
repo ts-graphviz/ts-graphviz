@@ -1,5 +1,13 @@
-import { Digraph, Edge, Node, RootGraph, Subgraph, fromDot } from 'ts-graphviz';
-import { toDot } from '#test/utils';
+import {
+  Digraph,
+  Edge,
+  Node,
+  RootGraph,
+  Subgraph,
+  fromDot,
+  toDot,
+} from 'ts-graphviz';
+import { describe, expect, test } from 'vitest';
 
 describe('fromDot function', () => {
   test('RootGraph', () => {
@@ -17,7 +25,9 @@ describe('fromDot function', () => {
   });
 
   test('Edge', () => {
-    const edge = fromDot('a -> b [ label = hoge]', { parse: { startRule: 'Edge' } });
+    const edge = fromDot('a -> b [ label = hoge]', {
+      parse: { startRule: 'Edge' },
+    });
     expect(edge).toBeInstanceOf(Edge);
     expect(edge.targets).toMatchObject([{ id: 'a' }, { id: 'b' }]);
     expect(edge.attributes.get('label')).toStrictEqual('hoge');
@@ -48,11 +58,11 @@ test('partially described by DOT', () => {
   G.edge(['node_A', 'node_B']);
 
   expect(toDot(G)).toMatchInlineSnapshot(`
-    digraph {
+    "digraph {
       "node_A" [
         label = "This is a Label of Node A";
       ];
       "node_A" -> "node_B";
-    }
+    }"
   `);
 });

@@ -1,0 +1,17 @@
+{
+  "name": "@ts-graphviz-examples/typescript",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test:integration": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ts-graphviz/adapter": "workspace:*",
+    "ts-graphviz": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "*"
+  }
+}

@@ -1,0 +1,2836 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [],
+          "key": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 8,
+                "line": 2,
+                "offset": 18,
+              },
+              "source": undefined,
+              "start": {
+                "column": 2,
+                "line": 2,
+                "offset": 12,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "layout",
+          },
+          "location": {
+            "end": {
+              "column": 14,
+              "line": 2,
+              "offset": 24,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 2,
+              "offset": 12,
+            },
+          },
+          "type": "Attribute",
+          "value": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 14,
+                "line": 2,
+                "offset": 24,
+              },
+              "source": undefined,
+              "start": {
+                "column": 9,
+                "line": 2,
+                "offset": 19,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "neato",
+          },
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 13,
+                    "line": 3,
+                    "offset": 37,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 8,
+                    "line": 3,
+                    "offset": 32,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "shape",
+              },
+              "location": {
+                "end": {
+                  "column": 17,
+                  "line": 3,
+                  "offset": 41,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 8,
+                  "line": 3,
+                  "offset": 32,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 17,
+                    "line": 3,
+                    "offset": 41,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 14,
+                    "line": 3,
+                    "offset": 38,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "box",
+              },
+            },
+          ],
+          "kind": "Node",
+          "location": {
+            "end": {
+              "column": 19,
+              "line": 3,
+              "offset": 43,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 3,
+              "offset": 26,
+            },
+          },
+          "type": "AttributeList",
+        },
+        {
+          "children": [],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 26,
+                "line": 3,
+                "offset": 50,
+              },
+              "source": undefined,
+              "start": {
+                "column": 20,
+                "line": 3,
+                "offset": 44,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "course",
+          },
+          "location": {
+            "end": {
+              "column": 27,
+              "line": 3,
+              "offset": 51,
+            },
+            "source": undefined,
+            "start": {
+              "column": 20,
+              "line": 3,
+              "offset": 44,
+            },
+          },
+          "type": "Node",
+        },
+        {
+          "children": [],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 37,
+                "line": 3,
+                "offset": 61,
+              },
+              "source": undefined,
+              "start": {
+                "column": 28,
+                "line": 3,
+                "offset": 52,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "institute",
+          },
+          "location": {
+            "end": {
+              "column": 38,
+              "line": 3,
+              "offset": 62,
+            },
+            "source": undefined,
+            "start": {
+              "column": 28,
+              "line": 3,
+              "offset": 52,
+            },
+          },
+          "type": "Node",
+        },
+        {
+          "children": [],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 46,
+                "line": 3,
+                "offset": 70,
+              },
+              "source": undefined,
+              "start": {
+                "column": 39,
+                "line": 3,
+                "offset": 63,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "student",
+          },
+          "location": {
+            "end": {
+              "column": 47,
+              "line": 3,
+              "offset": 71,
+            },
+            "source": undefined,
+            "start": {
+              "column": 39,
+              "line": 3,
+              "offset": 63,
+            },
+          },
+          "type": "Node",
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 13,
+                    "line": 4,
+                    "offset": 84,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 8,
+                    "line": 4,
+                    "offset": 79,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "shape",
+              },
+              "location": {
+                "end": {
+                  "column": 21,
+                  "line": 4,
+                  "offset": 92,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 8,
+                  "line": 4,
+                  "offset": 79,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 21,
+                    "line": 4,
+                    "offset": 92,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 14,
+                    "line": 4,
+                    "offset": 85,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "ellipse",
+              },
+            },
+          ],
+          "kind": "Node",
+          "location": {
+            "end": {
+              "column": 23,
+              "line": 4,
+              "offset": 94,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 4,
+              "offset": 73,
+            },
+          },
+          "type": "AttributeList",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [],
+                  "key": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 36,
+                        "line": 4,
+                        "offset": 107,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 31,
+                        "line": 4,
+                        "offset": 102,
+                      },
+                    },
+                    "quoted": false,
+                    "type": "Literal",
+                    "value": "label",
+                  },
+                  "location": {
+                    "end": {
+                      "column": 43,
+                      "line": 4,
+                      "offset": 114,
+                    },
+                    "source": undefined,
+                    "start": {
+                      "column": 31,
+                      "line": 4,
+                      "offset": 102,
+                    },
+                  },
+                  "type": "Attribute",
+                  "value": {
+                    "children": [],
+                    "location": {
+                      "end": {
+                        "column": 43,
+                        "line": 4,
+                        "offset": 114,
+                      },
+                      "source": undefined,
+                      "start": {
+                        "column": 37,
+                        "line": 4,
+                        "offset": 108,
+                      },
+                    },
+                    "quoted": true,
+                    "type": "Literal",
+                    "value": "name",
+                  },
+                },
+              ],
+              "kind": "Node",
+              "location": {
+                "end": {
+                  "column": 45,
+                  "line": 4,
+                  "offset": 116,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 25,
+                  "line": 4,
+                  "offset": 96,
+                },
+              },
+              "type": "AttributeList",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 50,
+                    "line": 4,
+                    "offset": 121,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 45,
+                    "line": 4,
+                    "offset": 116,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "name0",
+              },
+              "location": {
+                "end": {
+                  "column": 51,
+                  "line": 4,
+                  "offset": 122,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 45,
+                  "line": 4,
+                  "offset": 116,
+                },
+              },
+              "type": "Node",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 57,
+                    "line": 4,
+                    "offset": 128,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 52,
+                    "line": 4,
+                    "offset": 123,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "name1",
+              },
+              "location": {
+                "end": {
+                  "column": 58,
+                  "line": 4,
+                  "offset": 129,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 52,
+                  "line": 4,
+                  "offset": 123,
+                },
+              },
+              "type": "Node",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 64,
+                    "line": 4,
+                    "offset": 135,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 59,
+                    "line": 4,
+                    "offset": 130,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "name2",
+              },
+              "location": {
+                "end": {
+                  "column": 65,
+                  "line": 4,
+                  "offset": 136,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 59,
+                  "line": 4,
+                  "offset": 130,
+                },
+              },
+              "type": "Node",
+            },
+          ],
+          "location": {
+            "end": {
+              "column": 66,
+              "line": 4,
+              "offset": 137,
+            },
+            "source": undefined,
+            "start": {
+              "column": 24,
+              "line": 4,
+              "offset": 95,
+            },
+          },
+          "type": "Subgraph",
+        },
+        {
+          "children": [],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 7,
+                "line": 5,
+                "offset": 144,
+              },
+              "source": undefined,
+              "start": {
+                "column": 3,
+                "line": 5,
+                "offset": 140,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "code",
+          },
+          "location": {
+            "end": {
+              "column": 8,
+              "line": 5,
+              "offset": 145,
+            },
+            "source": undefined,
+            "start": {
+              "column": 3,
+              "line": 5,
+              "offset": 140,
+            },
+          },
+          "type": "Node",
+        },
+        {
+          "children": [],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 14,
+                "line": 5,
+                "offset": 151,
+              },
+              "source": undefined,
+              "start": {
+                "column": 9,
+                "line": 5,
+                "offset": 146,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "grade",
+          },
+          "location": {
+            "end": {
+              "column": 15,
+              "line": 5,
+              "offset": 152,
+            },
+            "source": undefined,
+            "start": {
+              "column": 9,
+              "line": 5,
+              "offset": 146,
+            },
+          },
+          "type": "Node",
+        },
+        {
+          "children": [],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 22,
+                "line": 5,
+                "offset": 159,
+              },
+              "source": undefined,
+              "start": {
+                "column": 16,
+                "line": 5,
+                "offset": 153,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "number",
+          },
+          "location": {
+            "end": {
+              "column": 23,
+              "line": 5,
+              "offset": 160,
+            },
+            "source": undefined,
+            "start": {
+              "column": 16,
+              "line": 5,
+              "offset": 153,
+            },
+          },
+          "type": "Node",
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 13,
+                    "line": 6,
+                    "offset": 173,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 8,
+                    "line": 6,
+                    "offset": 168,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "shape",
+              },
+              "location": {
+                "end": {
+                  "column": 22,
+                  "line": 6,
+                  "offset": 182,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 8,
+                  "line": 6,
+                  "offset": 168,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 21,
+                    "line": 6,
+                    "offset": 181,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 14,
+                    "line": 6,
+                    "offset": 174,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "diamond",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 27,
+                    "line": 6,
+                    "offset": 187,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 22,
+                    "line": 6,
+                    "offset": 182,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "style",
+              },
+              "location": {
+                "end": {
+                  "column": 35,
+                  "line": 6,
+                  "offset": 195,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 22,
+                  "line": 6,
+                  "offset": 182,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 34,
+                    "line": 6,
+                    "offset": 194,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 28,
+                    "line": 6,
+                    "offset": 188,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "filled",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 40,
+                    "line": 6,
+                    "offset": 200,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 35,
+                    "line": 6,
+                    "offset": 195,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "color",
+              },
+              "location": {
+                "end": {
+                  "column": 50,
+                  "line": 6,
+                  "offset": 210,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 35,
+                  "line": 6,
+                  "offset": 195,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 50,
+                    "line": 6,
+                    "offset": 210,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 41,
+                    "line": 6,
+                    "offset": 201,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "lightgrey",
+              },
+            },
+          ],
+          "kind": "Node",
+          "location": {
+            "end": {
+              "column": 52,
+              "line": 6,
+              "offset": 212,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 6,
+              "offset": 162,
+            },
+          },
+          "type": "AttributeList",
+        },
+        {
+          "children": [],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 58,
+                "line": 6,
+                "offset": 218,
+              },
+              "source": undefined,
+              "start": {
+                "column": 53,
+                "line": 6,
+                "offset": 213,
+              },
+            },
+            "quoted": true,
+            "type": "Literal",
+            "value": "C-I",
+          },
+          "location": {
+            "end": {
+              "column": 59,
+              "line": 6,
+              "offset": 219,
+            },
+            "source": undefined,
+            "start": {
+              "column": 53,
+              "line": 6,
+              "offset": 213,
+            },
+          },
+          "type": "Node",
+        },
+        {
+          "children": [],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 65,
+                "line": 6,
+                "offset": 225,
+              },
+              "source": undefined,
+              "start": {
+                "column": 60,
+                "line": 6,
+                "offset": 220,
+              },
+            },
+            "quoted": true,
+            "type": "Literal",
+            "value": "S-C",
+          },
+          "location": {
+            "end": {
+              "column": 66,
+              "line": 6,
+              "offset": 226,
+            },
+            "source": undefined,
+            "start": {
+              "column": 60,
+              "line": 6,
+              "offset": 220,
+            },
+          },
+          "type": "Node",
+        },
+        {
+          "children": [],
+          "id": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 72,
+                "line": 6,
+                "offset": 232,
+              },
+              "source": undefined,
+              "start": {
+                "column": 67,
+                "line": 6,
+                "offset": 227,
+              },
+            },
+            "quoted": true,
+            "type": "Literal",
+            "value": "S-I",
+          },
+          "location": {
+            "end": {
+              "column": 73,
+              "line": 6,
+              "offset": 233,
+            },
+            "source": undefined,
+            "start": {
+              "column": 67,
+              "line": 6,
+              "offset": 227,
+            },
+          },
+          "type": "Node",
+        },
+        {
+          "children": [],
+          "location": {
+            "end": {
+              "column": 18,
+              "line": 8,
+              "offset": 252,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 8,
+              "offset": 236,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 7,
+                    "line": 8,
+                    "offset": 241,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 8,
+                    "offset": 236,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "name0",
+              },
+              "location": {
+                "end": {
+                  "column": 7,
+                  "line": 8,
+                  "offset": 241,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 8,
+                  "offset": 236,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 17,
+                    "line": 8,
+                    "offset": 251,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 11,
+                    "line": 8,
+                    "offset": 245,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "course",
+              },
+              "location": {
+                "end": {
+                  "column": 17,
+                  "line": 8,
+                  "offset": 251,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 11,
+                  "line": 8,
+                  "offset": 245,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [],
+          "location": {
+            "end": {
+              "column": 17,
+              "line": 9,
+              "offset": 269,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 9,
+              "offset": 254,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 6,
+                    "line": 9,
+                    "offset": 258,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 9,
+                    "offset": 254,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "code",
+              },
+              "location": {
+                "end": {
+                  "column": 6,
+                  "line": 9,
+                  "offset": 258,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 9,
+                  "offset": 254,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 16,
+                    "line": 9,
+                    "offset": 268,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 10,
+                    "line": 9,
+                    "offset": 262,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "course",
+              },
+              "location": {
+                "end": {
+                  "column": 16,
+                  "line": 9,
+                  "offset": 268,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 10,
+                  "line": 9,
+                  "offset": 262,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 24,
+                    "line": 10,
+                    "offset": 293,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 19,
+                    "line": 10,
+                    "offset": 288,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "label",
+              },
+              "location": {
+                "end": {
+                  "column": 29,
+                  "line": 10,
+                  "offset": 298,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 19,
+                  "line": 10,
+                  "offset": 288,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 28,
+                    "line": 10,
+                    "offset": 297,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 25,
+                    "line": 10,
+                    "offset": 294,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "n",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 32,
+                    "line": 10,
+                    "offset": 301,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 29,
+                    "line": 10,
+                    "offset": 298,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "len",
+              },
+              "location": {
+                "end": {
+                  "column": 37,
+                  "line": 10,
+                  "offset": 306,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 29,
+                  "line": 10,
+                  "offset": 298,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 37,
+                    "line": 10,
+                    "offset": 306,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 33,
+                    "line": 10,
+                    "offset": 302,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "1.00",
+              },
+            },
+          ],
+          "location": {
+            "end": {
+              "column": 39,
+              "line": 10,
+              "offset": 308,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 10,
+              "offset": 271,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 8,
+                    "line": 10,
+                    "offset": 277,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 10,
+                    "offset": 271,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "course",
+              },
+              "location": {
+                "end": {
+                  "column": 8,
+                  "line": 10,
+                  "offset": 277,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 10,
+                  "offset": 271,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 17,
+                    "line": 10,
+                    "offset": 286,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 12,
+                    "line": 10,
+                    "offset": 281,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "C-I",
+              },
+              "location": {
+                "end": {
+                  "column": 17,
+                  "line": 10,
+                  "offset": 286,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 12,
+                  "line": 10,
+                  "offset": 281,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 27,
+                    "line": 11,
+                    "offset": 335,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 22,
+                    "line": 11,
+                    "offset": 330,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "label",
+              },
+              "location": {
+                "end": {
+                  "column": 32,
+                  "line": 11,
+                  "offset": 340,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 22,
+                  "line": 11,
+                  "offset": 330,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 31,
+                    "line": 11,
+                    "offset": 339,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 28,
+                    "line": 11,
+                    "offset": 336,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "1",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 35,
+                    "line": 11,
+                    "offset": 343,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 32,
+                    "line": 11,
+                    "offset": 340,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "len",
+              },
+              "location": {
+                "end": {
+                  "column": 40,
+                  "line": 11,
+                  "offset": 348,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 32,
+                  "line": 11,
+                  "offset": 340,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 40,
+                    "line": 11,
+                    "offset": 348,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 36,
+                    "line": 11,
+                    "offset": 344,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "1.00",
+              },
+            },
+          ],
+          "location": {
+            "end": {
+              "column": 42,
+              "line": 11,
+              "offset": 350,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 11,
+              "offset": 310,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 7,
+                    "line": 11,
+                    "offset": 315,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 11,
+                    "offset": 310,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "C-I",
+              },
+              "location": {
+                "end": {
+                  "column": 7,
+                  "line": 11,
+                  "offset": 315,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 11,
+                  "offset": 310,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 20,
+                    "line": 11,
+                    "offset": 328,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 11,
+                    "line": 11,
+                    "offset": 319,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "institute",
+              },
+              "location": {
+                "end": {
+                  "column": 20,
+                  "line": 11,
+                  "offset": 328,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 11,
+                  "line": 11,
+                  "offset": 319,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [],
+          "location": {
+            "end": {
+              "column": 21,
+              "line": 12,
+              "offset": 371,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 12,
+              "offset": 352,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 11,
+                    "line": 12,
+                    "offset": 361,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 12,
+                    "offset": 352,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "institute",
+              },
+              "location": {
+                "end": {
+                  "column": 11,
+                  "line": 12,
+                  "offset": 361,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 12,
+                  "offset": 352,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 20,
+                    "line": 12,
+                    "offset": 370,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 15,
+                    "line": 12,
+                    "offset": 365,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "name1",
+              },
+              "location": {
+                "end": {
+                  "column": 20,
+                  "line": 12,
+                  "offset": 370,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 15,
+                  "line": 12,
+                  "offset": 365,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 27,
+                    "line": 13,
+                    "offset": 398,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 22,
+                    "line": 13,
+                    "offset": 393,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "label",
+              },
+              "location": {
+                "end": {
+                  "column": 32,
+                  "line": 13,
+                  "offset": 403,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 22,
+                  "line": 13,
+                  "offset": 393,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 31,
+                    "line": 13,
+                    "offset": 402,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 28,
+                    "line": 13,
+                    "offset": 399,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "1",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 35,
+                    "line": 13,
+                    "offset": 406,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 32,
+                    "line": 13,
+                    "offset": 403,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "len",
+              },
+              "location": {
+                "end": {
+                  "column": 40,
+                  "line": 13,
+                  "offset": 411,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 32,
+                  "line": 13,
+                  "offset": 403,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 40,
+                    "line": 13,
+                    "offset": 411,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 36,
+                    "line": 13,
+                    "offset": 407,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "1.00",
+              },
+            },
+          ],
+          "location": {
+            "end": {
+              "column": 42,
+              "line": 13,
+              "offset": 413,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 13,
+              "offset": 373,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 11,
+                    "line": 13,
+                    "offset": 382,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 13,
+                    "offset": 373,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "institute",
+              },
+              "location": {
+                "end": {
+                  "column": 11,
+                  "line": 13,
+                  "offset": 382,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 13,
+                  "offset": 373,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 20,
+                    "line": 13,
+                    "offset": 391,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 15,
+                    "line": 13,
+                    "offset": 386,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "S-I",
+              },
+              "location": {
+                "end": {
+                  "column": 20,
+                  "line": 13,
+                  "offset": 391,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 15,
+                  "line": 13,
+                  "offset": 386,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 25,
+                    "line": 14,
+                    "offset": 438,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 20,
+                    "line": 14,
+                    "offset": 433,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "label",
+              },
+              "location": {
+                "end": {
+                  "column": 30,
+                  "line": 14,
+                  "offset": 443,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 20,
+                  "line": 14,
+                  "offset": 433,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 29,
+                    "line": 14,
+                    "offset": 442,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 26,
+                    "line": 14,
+                    "offset": 439,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "n",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 33,
+                    "line": 14,
+                    "offset": 446,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 30,
+                    "line": 14,
+                    "offset": 443,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "len",
+              },
+              "location": {
+                "end": {
+                  "column": 38,
+                  "line": 14,
+                  "offset": 451,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 30,
+                  "line": 14,
+                  "offset": 443,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 38,
+                    "line": 14,
+                    "offset": 451,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 34,
+                    "line": 14,
+                    "offset": 447,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "1.00",
+              },
+            },
+          ],
+          "location": {
+            "end": {
+              "column": 40,
+              "line": 14,
+              "offset": 453,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 14,
+              "offset": 415,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 7,
+                    "line": 14,
+                    "offset": 420,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 14,
+                    "offset": 415,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "S-I",
+              },
+              "location": {
+                "end": {
+                  "column": 7,
+                  "line": 14,
+                  "offset": 420,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 14,
+                  "offset": 415,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 18,
+                    "line": 14,
+                    "offset": 431,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 11,
+                    "line": 14,
+                    "offset": 424,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "student",
+              },
+              "location": {
+                "end": {
+                  "column": 18,
+                  "line": 14,
+                  "offset": 431,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 11,
+                  "line": 14,
+                  "offset": 424,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [],
+          "location": {
+            "end": {
+              "column": 19,
+              "line": 15,
+              "offset": 472,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 15,
+              "offset": 455,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 9,
+                    "line": 15,
+                    "offset": 462,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 15,
+                    "offset": 455,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "student",
+              },
+              "location": {
+                "end": {
+                  "column": 9,
+                  "line": 15,
+                  "offset": 462,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 15,
+                  "offset": 455,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 18,
+                    "line": 15,
+                    "offset": 471,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 13,
+                    "line": 15,
+                    "offset": 466,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "grade",
+              },
+              "location": {
+                "end": {
+                  "column": 18,
+                  "line": 15,
+                  "offset": 471,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 13,
+                  "line": 15,
+                  "offset": 466,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [],
+          "location": {
+            "end": {
+              "column": 19,
+              "line": 16,
+              "offset": 491,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 16,
+              "offset": 474,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 9,
+                    "line": 16,
+                    "offset": 481,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 16,
+                    "offset": 474,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "student",
+              },
+              "location": {
+                "end": {
+                  "column": 9,
+                  "line": 16,
+                  "offset": 481,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 16,
+                  "offset": 474,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 18,
+                    "line": 16,
+                    "offset": 490,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 13,
+                    "line": 16,
+                    "offset": 485,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "name2",
+              },
+              "location": {
+                "end": {
+                  "column": 18,
+                  "line": 16,
+                  "offset": 490,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 13,
+                  "line": 16,
+                  "offset": 485,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [],
+          "location": {
+            "end": {
+              "column": 20,
+              "line": 17,
+              "offset": 511,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 17,
+              "offset": 493,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 9,
+                    "line": 17,
+                    "offset": 500,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 17,
+                    "offset": 493,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "student",
+              },
+              "location": {
+                "end": {
+                  "column": 9,
+                  "line": 17,
+                  "offset": 500,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 17,
+                  "offset": 493,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 19,
+                    "line": 17,
+                    "offset": 510,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 13,
+                    "line": 17,
+                    "offset": 504,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "number",
+              },
+              "location": {
+                "end": {
+                  "column": 19,
+                  "line": 17,
+                  "offset": 510,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 13,
+                  "line": 17,
+                  "offset": 504,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 25,
+                    "line": 18,
+                    "offset": 536,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 20,
+                    "line": 18,
+                    "offset": 531,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "label",
+              },
+              "location": {
+                "end": {
+                  "column": 30,
+                  "line": 18,
+                  "offset": 541,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 20,
+                  "line": 18,
+                  "offset": 531,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 29,
+                    "line": 18,
+                    "offset": 540,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 26,
+                    "line": 18,
+                    "offset": 537,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "m",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 33,
+                    "line": 18,
+                    "offset": 544,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 30,
+                    "line": 18,
+                    "offset": 541,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "len",
+              },
+              "location": {
+                "end": {
+                  "column": 38,
+                  "line": 18,
+                  "offset": 549,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 30,
+                  "line": 18,
+                  "offset": 541,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 38,
+                    "line": 18,
+                    "offset": 549,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 34,
+                    "line": 18,
+                    "offset": 545,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "1.00",
+              },
+            },
+          ],
+          "location": {
+            "end": {
+              "column": 40,
+              "line": 18,
+              "offset": 551,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 18,
+              "offset": 513,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 9,
+                    "line": 18,
+                    "offset": 520,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 18,
+                    "offset": 513,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "student",
+              },
+              "location": {
+                "end": {
+                  "column": 9,
+                  "line": 18,
+                  "offset": 520,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 18,
+                  "offset": 513,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 18,
+                    "line": 18,
+                    "offset": 529,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 13,
+                    "line": 18,
+                    "offset": 524,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "S-C",
+              },
+              "location": {
+                "end": {
+                  "column": 18,
+                  "line": 18,
+                  "offset": 529,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 13,
+                  "line": 18,
+                  "offset": 524,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 24,
+                    "line": 19,
+                    "offset": 575,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 19,
+                    "line": 19,
+                    "offset": 570,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "label",
+              },
+              "location": {
+                "end": {
+                  "column": 29,
+                  "line": 19,
+                  "offset": 580,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 19,
+                  "line": 19,
+                  "offset": 570,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 28,
+                    "line": 19,
+                    "offset": 579,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 25,
+                    "line": 19,
+                    "offset": 576,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "n",
+              },
+            },
+            {
+              "children": [],
+              "key": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 32,
+                    "line": 19,
+                    "offset": 583,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 29,
+                    "line": 19,
+                    "offset": 580,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "len",
+              },
+              "location": {
+                "end": {
+                  "column": 37,
+                  "line": 19,
+                  "offset": 588,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 29,
+                  "line": 19,
+                  "offset": 580,
+                },
+              },
+              "type": "Attribute",
+              "value": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 37,
+                    "line": 19,
+                    "offset": 588,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 33,
+                    "line": 19,
+                    "offset": 584,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "1.00",
+              },
+            },
+          ],
+          "location": {
+            "end": {
+              "column": 39,
+              "line": 19,
+              "offset": 590,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 19,
+              "offset": 553,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 7,
+                    "line": 19,
+                    "offset": 558,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 2,
+                    "line": 19,
+                    "offset": 553,
+                  },
+                },
+                "quoted": true,
+                "type": "Literal",
+                "value": "S-C",
+              },
+              "location": {
+                "end": {
+                  "column": 7,
+                  "line": 19,
+                  "offset": 558,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 19,
+                  "offset": 553,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 17,
+                    "line": 19,
+                    "offset": 568,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 11,
+                    "line": 19,
+                    "offset": 562,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "course",
+              },
+              "location": {
+                "end": {
+                  "column": 17,
+                  "line": 19,
+                  "offset": 568,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 11,
+                  "line": 19,
+                  "offset": 562,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+        {
+          "children": [],
+          "key": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 7,
+                "line": 21,
+                "offset": 598,
+              },
+              "source": undefined,
+              "start": {
+                "column": 2,
+                "line": 21,
+                "offset": 593,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "label",
+          },
+          "location": {
+            "end": {
+              "column": 56,
+              "line": 21,
+              "offset": 647,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 21,
+              "offset": 593,
+            },
+          },
+          "type": "Attribute",
+          "value": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 55,
+                "line": 21,
+                "offset": 646,
+              },
+              "source": undefined,
+              "start": {
+                "column": 10,
+                "line": 21,
+                "offset": 601,
+              },
+            },
+            "quoted": true,
+            "type": "Literal",
+            "value": "\n\nEntity Relation Diagram\ndrawn by NEATO",
+          },
+        },
+        {
+          "children": [],
+          "key": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 10,
+                "line": 22,
+                "offset": 657,
+              },
+              "source": undefined,
+              "start": {
+                "column": 2,
+                "line": 22,
+                "offset": 649,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "fontsize",
+          },
+          "location": {
+            "end": {
+              "column": 14,
+              "line": 22,
+              "offset": 661,
+            },
+            "source": undefined,
+            "start": {
+              "column": 2,
+              "line": 22,
+              "offset": 649,
+            },
+          },
+          "type": "Attribute",
+          "value": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 13,
+                "line": 22,
+                "offset": 660,
+              },
+              "source": undefined,
+              "start": {
+                "column": 11,
+                "line": 22,
+                "offset": 658,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "20",
+          },
+        },
+      ],
+      "directed": false,
+      "id": {
+        "children": [],
+        "location": {
+          "end": {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+          "source": undefined,
+          "start": {
+            "column": 7,
+            "line": 1,
+            "offset": 6,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "ER",
+      },
+      "location": {
+        "end": {
+          "column": 2,
+          "line": 23,
+          "offset": 663,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "strict": false,
+      "type": "Graph",
+    },
+  ],
+  "location": {
+    "end": {
+      "column": 1,
+      "line": 24,
+      "offset": 664,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Dot",
+}

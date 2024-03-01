@@ -1,5 +1,13 @@
-import { digraph, graph, strict, Graph, Digraph, attribute as _ } from 'ts-graphviz';
-import { toDot } from '#test/utils';
+import {
+  Digraph,
+  Graph,
+  attribute as _,
+  digraph,
+  graph,
+  strict,
+  toDot,
+} from 'ts-graphviz';
+import { describe, expect, it, test } from 'vitest';
 
 describe('function digraph', () => {
   it('should return Graph object, when execute digraph()', () => {
@@ -218,9 +226,17 @@ describe('function graph', () => {
           e.attributes.set('color', 'red');
         });
 
-        A.edge([Aa.port({ port: 'a', compass: 'w' }), Ab.port({ compass: 'w' }), 'Aaa:e', 'Acc:r:e'], (e) => {
-          e.attributes.set('color', 'red');
-        });
+        A.edge(
+          [
+            Aa.port({ port: 'a', compass: 'w' }),
+            Ab.port({ compass: 'w' }),
+            'Aaa:e',
+            'Acc:r:e',
+          ],
+          (e) => {
+            e.attributes.set('color', 'red');
+          },
+        );
       });
     });
     const dot = toDot(G);

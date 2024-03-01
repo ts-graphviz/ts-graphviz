@@ -1,5 +1,11 @@
-import { RootGraphModel, Digraph, Graph, attribute as _ } from 'ts-graphviz';
-import { toDot } from '#test/utils';
+import {
+  Digraph,
+  Graph,
+  RootGraphModel,
+  attribute as _,
+  toDot,
+} from 'ts-graphviz';
+import { beforeEach, describe, expect, it, test } from 'vitest';
 
 describe.each([
   ['Digraph', () => new Digraph()],
@@ -102,7 +108,10 @@ describe.each([
       });
 
       it('html like', () => {
-        g.attributes.graph.set(_.label, '<<B>this is test for graph label</B>>');
+        g.attributes.graph.set(
+          _.label,
+          '<<B>this is test for graph label</B>>',
+        );
         g.attributes.edge.set(_.label, '<<U>this is test for edge label</U>>');
         g.attributes.node.set(_.label, '<<I>this is test for node label</I>>');
         expect(toDot(g)).toMatchSnapshot();

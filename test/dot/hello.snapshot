@@ -1,0 +1,148 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [],
+          "location": {
+            "end": {
+              "column": 24,
+              "line": 1,
+              "offset": 23,
+            },
+            "source": undefined,
+            "start": {
+              "column": 12,
+              "line": 1,
+              "offset": 11,
+            },
+          },
+          "targets": [
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 17,
+                    "line": 1,
+                    "offset": 16,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 12,
+                    "line": 1,
+                    "offset": 11,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "Hello",
+              },
+              "location": {
+                "end": {
+                  "column": 17,
+                  "line": 1,
+                  "offset": 16,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 12,
+                  "line": 1,
+                  "offset": 11,
+                },
+              },
+              "type": "NodeRef",
+            },
+            {
+              "children": [],
+              "id": {
+                "children": [],
+                "location": {
+                  "end": {
+                    "column": 24,
+                    "line": 1,
+                    "offset": 23,
+                  },
+                  "source": undefined,
+                  "start": {
+                    "column": 19,
+                    "line": 1,
+                    "offset": 18,
+                  },
+                },
+                "quoted": false,
+                "type": "Literal",
+                "value": "World",
+              },
+              "location": {
+                "end": {
+                  "column": 24,
+                  "line": 1,
+                  "offset": 23,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 19,
+                  "line": 1,
+                  "offset": 18,
+                },
+              },
+              "type": "NodeRef",
+            },
+          ],
+          "type": "Edge",
+        },
+      ],
+      "directed": true,
+      "id": {
+        "children": [],
+        "location": {
+          "end": {
+            "column": 10,
+            "line": 1,
+            "offset": 9,
+          },
+          "source": undefined,
+          "start": {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "G",
+      },
+      "location": {
+        "end": {
+          "column": 25,
+          "line": 1,
+          "offset": 24,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "strict": false,
+      "type": "Graph",
+    },
+  ],
+  "location": {
+    "end": {
+      "column": 1,
+      "line": 2,
+      "offset": 25,
+    },
+    "source": undefined,
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "type": "Dot",
+}
