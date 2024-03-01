@@ -16,5 +16,12 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": []
+  "ignore": [
+    "@ts-graphviz-examples/deno",
+    "@ts-graphviz-examples/cjs",
+    "@ts-graphviz-examples/esm",
+    "@ts-graphviz-examples/typescript",
+    "@ts-graphviz-examples/webpack-build-node",
+    "@ts-graphviz-examples/webpack-build-web"
+  ]
 }
