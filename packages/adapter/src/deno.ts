@@ -1,8 +1,8 @@
+/// <reference lib="dom" />
 import { createCommandAndArgs } from './create-command-and-args.js';
 /**
  * @module @ts-graphviz/adapter
  */
-/// <reference lib="lib.dom" />
 import { Layout, Options } from './types.js';
 
 // biome-ignore lint/style/noVar: <explanation>

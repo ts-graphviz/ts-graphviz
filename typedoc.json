@@ -1,15 +1,10 @@
 {
+  "name": "@ts-graphviz",
   "$schema": "https://typedoc.org/schema.json",
   "out": "./doc",
   "entryPointStrategy": "packages",
   "entryPoints": ["packages/*"],
-  "exclude": [
-    "**/node_modules/**/*",
-    "**/lib/**/*",
-    "**/test/**/*",
-    "**/*.test.ts",
-    "**/*.spec.ts"
-  ],
+  "tsconfig": "./tsconfig.doc.json",
   "media": "./packages/ts-graphviz/media/",
   "excludePrivate": true
 }

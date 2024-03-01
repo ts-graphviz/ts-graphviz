@@ -6,6 +6,7 @@
     "test:integration": "node dist/main.js",
     "test:integration:build": "webpack --mode=production --node-env=production"
   },
+  "type": "module",
   "dependencies": {
     "@ts-graphviz/adapter": "workspace:*",
     "@ts-graphviz/ast": "workspace:*",

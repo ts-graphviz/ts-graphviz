@@ -1,5 +1,5 @@
 /**
- * @module ts-graphviz/ast
+ * @module @ts-graphviz/ast
  * @beta
  */
 export * from './types.js';
