@@ -65,7 +65,7 @@
     "@ts-graphviz/core": "workspace:^"
   },
   "devDependencies": {
-    "peggy": "^3.0.2",
+    "peggy": "^4.0.2",
     "ts-pegjs": "^4.2.1",
     "typescript": "^5.3.3",
     "vite": "^5.1.3",
