@@ -7,5 +7,5 @@
     "allowJs": true,
     "moduleResolution": "node"
   },
-  "files": ["src/main.ts"]
+  "files": ["src/main.mts"]
 }

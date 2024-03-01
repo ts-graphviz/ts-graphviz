@@ -3,7 +3,7 @@ const path = require('path');
 const isProduction = process.env.NODE_ENV === 'production';
 
 const config = {
-  entry: './src/main.ts',
+  entry: './src/main.mts',
   target: 'node',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -12,14 +12,14 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/i,
+        test: /\.(mts|tsx)$/i,
         loader: 'ts-loader',
         exclude: ['/node_modules/'],
       },
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.jsx', '.js'],
+    extensions: ['.tsx', '.mts', '.jsx', '.js'],
   },
 };
 
