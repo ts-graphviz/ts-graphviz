@@ -6,11 +6,21 @@ on:
       - '.github/workflows/*'
       - 'pnpm-lock.yaml'
       - 'package.json'
+permissions:
+  contents: read
+
 jobs:
   generate-changeset:
+    permissions:
+      contents: write  # for Git to git push
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        with:
+          egress-policy: audit
+
       - name: Checkout Repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:

@@ -12,3 +12,63 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+
+  - package-ecosystem: docker
+    directory: /.devcontainer
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/deno
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/node-cjs
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/node-esm
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/typescript
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/webpack-build-node
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/webpack-build-web
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/adapter
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/ast
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/common
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/core
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/ts-graphviz
+    schedule:
+      interval: daily
