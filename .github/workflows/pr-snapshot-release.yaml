@@ -17,6 +17,11 @@ jobs:
       pull-requests: write
     if: github.event.sender.type == 'User' && github.event.issue.pull_request && startsWith(github.event.comment.body, '/snapshot-release')
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        with:
+          egress-policy: audit
+
       - name: Enforce permission requirement
         uses: prince-chrismc/check-actor-permissions-action@d07d79a16495e5003e58112b596294d1a7c80f56 # v3.0.0
         with:
@@ -43,6 +48,11 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        with:
+          egress-policy: audit
+
       - name: Validate pull request
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         id: pr_data
