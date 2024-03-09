@@ -26,8 +26,7 @@
           "./examples/deno",
           "packages/ts-grahviz/src/adapter/deno.ts",
           "packages/ts-grahviz/lib/adapter/deno.js"
-        ],
-        "deno.cache": "./e2e/envs/deno/.deno"
+        ]
       }
     }
   },
