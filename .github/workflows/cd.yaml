@@ -12,6 +12,9 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  contents: read
+
 jobs:
   # Build the package and upload it as an artifact
   build:
