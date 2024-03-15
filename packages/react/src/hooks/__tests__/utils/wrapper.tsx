@@ -1,4 +1,4 @@
-import { ComponentProps, FC } from 'react';
+import { ComponentProps, FC, ReactNode } from 'react';
 
 import { Digraph } from '../../../components/Digraph.js';
 import { Graph } from '../../../components/Graph.js';
@@ -6,7 +6,7 @@ import { Subgraph } from '../../../components/Subgraph.js';
 import { GraphvizContext } from '../../../contexts/GraphvizContext.js';
 
 export const context =
-  (): FC =>
+  (): FC<{ children: ReactNode }> =>
   ({ children }) => {
     return (
       <GraphvizContext.Provider value={{}}>{children}</GraphvizContext.Provider>
@@ -14,7 +14,7 @@ export const context =
   };
 
 export const digraph =
-  (props: ComponentProps<typeof Digraph> = {}): FC =>
+  (props: ComponentProps<typeof Digraph> = {}): FC<{ children: ReactNode }> =>
   ({ children }) => {
     return (
       <GraphvizContext.Provider value={{}}>
@@ -24,7 +24,7 @@ export const digraph =
   };
 
 export const digraphInSubgraph =
-  (props: ComponentProps<typeof Subgraph> = {}): FC =>
+  (props: ComponentProps<typeof Subgraph> = {}): FC<{ children: ReactNode }> =>
   ({ children }) => {
     return (
       <GraphvizContext.Provider value={{}}>
@@ -36,7 +36,7 @@ export const digraphInSubgraph =
   };
 
 export const graph =
-  (props: ComponentProps<typeof Graph> = {}): FC =>
+  (props: ComponentProps<typeof Graph> = {}): FC<{ children: ReactNode }> =>
   ({ children }) => {
     return (
       <GraphvizContext.Provider value={{}}>
@@ -46,7 +46,7 @@ export const graph =
   };
 
 export const graphInSubgraph =
-  (props: ComponentProps<typeof Subgraph> = {}): FC =>
+  (props: ComponentProps<typeof Subgraph> = {}): FC<{ children: ReactNode }> =>
   ({ children }) => {
     return (
       <GraphvizContext.Provider value={{}}>
