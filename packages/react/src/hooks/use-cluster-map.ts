@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { ICluster } from 'ts-graphviz';
-import { ClusterMap } from '../contexts/ClusterMap';
+import { GraphBaseModel } from 'ts-graphviz';
+import { ClusterMap } from '../contexts/ClusterMap.js';
 
-export function useClusterMap(): Map<string, ICluster> {
+export function useClusterMap(): Map<string, GraphBaseModel> {
   return useContext(ClusterMap);
 }

@@ -1,51 +1,57 @@
-import { ReactElement } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import {
-  EdgeAttributes,
-  NodeAttributes,
-  ClusterSubgraphAttributes,
-  RootClusterAttributes,
-  IHasComment,
-  attribute,
+  EdgeAttributesObject,
   EdgeTargetLikeTuple,
+  GraphAttributesObject,
+  HasComment,
+  NodeAttributesObject,
+  SubgraphAttributesObject,
+  attribute,
 } from 'ts-graphviz';
 
 /** Common attribute values of objects under cluster */
 export interface ClusterCommonAttributesProps {
   /** Attribute value for Edges */
-  edge?: EdgeAttributes;
+  edge?: EdgeAttributesObject;
   /** Attribute value for Nodes */
-  node?: NodeAttributes;
+  node?: NodeAttributesObject;
   /** Attribute value for Graphs */
-  graph?: ClusterSubgraphAttributes;
+  graph?: SubgraphAttributesObject;
 }
 
 /** Options for RootCluster */
 export interface RootClusterOptions
-  extends Omit<RootClusterAttributes, typeof attribute.comment>,
+  extends Omit<GraphAttributesObject, typeof attribute.comment>,
     ClusterCommonAttributesProps,
-    IHasComment {
+    HasComment {
   /** Cluster id */
   id?: string;
 }
 
 /** Options for Subgraph */
 export interface SubgraphOptions
-  extends Omit<ClusterSubgraphAttributes, typeof attribute.comment>,
+  extends Omit<SubgraphAttributesObject, typeof attribute.comment>,
     ClusterCommonAttributesProps,
-    IHasComment {
+    HasComment {
   /** Cluster id */
   id?: string;
 }
 
 /** Options for Edge */
-export interface EdgeOptions extends Omit<EdgeAttributes, typeof attribute.comment>, IHasComment {}
+export interface EdgeOptions
+  extends Omit<EdgeAttributesObject, typeof attribute.comment>,
+    HasComment {}
 
 /** Options for Node */
-export interface NodeOptions extends Omit<NodeAttributes, typeof attribute.comment>, IHasComment {}
+export interface NodeOptions
+  extends Omit<NodeAttributesObject, typeof attribute.comment>,
+    HasComment {}
 
 /** Props for RootCluster component */
-export interface RootClusterProps extends Omit<RootClusterOptions, typeof attribute.label> {
+export interface RootClusterProps
+  extends Omit<RootClusterOptions, typeof attribute.label> {
   label?: ReactElement | string;
+  children?: ReactNode;
 }
 
 /** Props for Edge component */
@@ -57,7 +63,8 @@ export interface EdgeProps extends Omit<EdgeOptions, typeof attribute.label> {
 }
 
 /** Props for Node component */
-export interface NodeProps extends Omit<NodeOptions, typeof attribute.label | typeof attribute.xlabel> {
+export interface NodeProps
+  extends Omit<NodeOptions, typeof attribute.label | typeof attribute.xlabel> {
   /** Node id */
   id: string;
   /** Node label */
@@ -67,9 +74,11 @@ export interface NodeProps extends Omit<NodeOptions, typeof attribute.label | ty
 }
 
 /** Props for Subgraph component */
-export interface SubgraphProps extends Omit<SubgraphOptions, typeof attribute.label> {
+export interface SubgraphProps
+  extends Omit<SubgraphOptions, typeof attribute.label> {
   /** Subgraph label */
   label?: ReactElement | string;
+  children?: ReactNode;
 }
 
 /** Props for ClusterPortal component */
@@ -79,4 +88,5 @@ export interface ClusterPortalProps {
    * If not specified, target the cluster that is the container to the portal.
    */
   id?: string;
+  children?: ReactNode;
 }

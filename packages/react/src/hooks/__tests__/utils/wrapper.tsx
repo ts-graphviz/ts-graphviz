@@ -1,16 +1,16 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { FC, ComponentProps } from 'react';
+import { ComponentProps, FC } from 'react';
 
-import { Digraph } from '../../../components/Digraph';
-import { Graph } from '../../../components/Graph';
-import { GraphvizContext } from '../../../contexts/GraphvizContext';
-import { Subgraph } from '../../../components/Subgraph';
+import { Digraph } from '../../../components/Digraph.js';
+import { Graph } from '../../../components/Graph.js';
+import { Subgraph } from '../../../components/Subgraph.js';
+import { GraphvizContext } from '../../../contexts/GraphvizContext.js';
 
 export const context =
   (): FC =>
   ({ children }) => {
-    return <GraphvizContext.Provider value={{}}>{children}</GraphvizContext.Provider>;
+    return (
+      <GraphvizContext.Provider value={{}}>{children}</GraphvizContext.Provider>
+    );
   };
 
 export const digraph =

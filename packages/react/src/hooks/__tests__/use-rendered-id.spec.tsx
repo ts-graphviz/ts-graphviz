@@ -1,8 +1,8 @@
-import React from 'react';
 import { renderHook } from '@testing-library/react-hooks';
-import { context } from './utils/wrapper';
-import { useRenderedID } from '../use-rendered-id';
-import { DOT } from '../../labels';
+import { describe, expect, test } from 'vitest';
+import { DOT } from '../../labels.js';
+import { useRenderedID } from '../use-rendered-id.js';
+import { context } from './utils/wrapper.js';
 
 describe('useRenderedID', () => {
   test.each([

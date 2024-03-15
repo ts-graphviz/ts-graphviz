@@ -1,5 +1,5 @@
-import React from 'react';
-import { ICluster } from 'ts-graphviz';
+import { createContext } from 'react';
+import { GraphBaseModel } from 'ts-graphviz';
 
-export const ContainerCluster = React.createContext<ICluster | null>(null);
+export const ContainerCluster = createContext<GraphBaseModel | null>(null);
 ContainerCluster.displayName = 'ContainerCluster';

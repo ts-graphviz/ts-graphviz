@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable class-methods-use-this */
 import { FC } from 'react';
 import ReactReconciler from 'react-reconciler';
 
@@ -107,7 +103,9 @@ export class HostConfig
     return parentHostContext;
   }
 
-  public prepareForCommit(containerInfo: Container): Record<string, any> | null {
+  public prepareForCommit(
+    containerInfo: Container,
+  ): Record<string, any> | null {
     return null;
   }
 
@@ -129,7 +127,10 @@ export class HostConfig
     return type(props);
   }
 
-  public appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
+  public appendInitialChild(
+    parentInstance: Instance,
+    child: Instance | TextInstance,
+  ): void {
     parentInstance.appendChild(child);
   }
 
@@ -171,7 +172,10 @@ export class HostConfig
     return text;
   }
 
-  public scheduleDeferredCallback(callback: () => any, options?: { timeout: number }): any {
+  public scheduleDeferredCallback(
+    callback: () => any,
+    options?: { timeout: number },
+  ): any {
     // NoOp
   }
 
@@ -183,24 +187,39 @@ export class HostConfig
   //      Mutation
   //     (optional)
   // -------------------
-  public appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
+  public appendChild(
+    parentInstance: Instance,
+    child: Instance | TextInstance,
+  ): void {
     // NoOp
     if (parentInstance.appendChild) {
       parentInstance.appendChild(child);
     }
   }
 
-  public appendChildToContainer(container: Container, child: Instance | TextInstance): void {
+  public appendChildToContainer(
+    container: Container,
+    child: Instance | TextInstance,
+  ): void {
     // if (container.appendChild) {
     //   container.appendChild(child);
     // }
   }
 
-  public commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
+  public commitTextUpdate(
+    textInstance: TextInstance,
+    oldText: string,
+    newText: string,
+  ): void {
     // NoOp
   }
 
-  public commitMount(instance: Instance, type: Type, newProps: Props, internalInstanceHandle: OpaqueHandle): void {
+  public commitMount(
+    instance: Instance,
+    type: Type,
+    newProps: Props,
+    internalInstanceHandle: OpaqueHandle,
+  ): void {
     // NoOp
   }
 
@@ -231,11 +250,17 @@ export class HostConfig
     // NoOp
   }
 
-  public removeChild(parentInstance: Instance, child: Instance | TextInstance): void {
+  public removeChild(
+    parentInstance: Instance,
+    child: Instance | TextInstance,
+  ): void {
     // NoOp
   }
 
-  public removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
+  public removeChildFromContainer(
+    container: Container,
+    child: Instance | TextInstance,
+  ): void {
     // NoOp
   }
 

@@ -1,9 +1,7 @@
-/* eslint-disable no-undef */
-import { AttributesValue } from 'ts-graphviz';
+type AttributesValue = string | number | boolean;
 
 type ValueOf<T> = T[keyof T];
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace labels {
   export type TableProps = {
     ALIGN?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
@@ -111,7 +109,6 @@ export const DOT = Object.freeze({
 export type DOT = ValueOf<typeof DOT>;
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       [DOT.PORT]: { children: string };

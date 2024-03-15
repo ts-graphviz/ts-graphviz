@@ -1,10 +1,10 @@
 import { useContext } from 'react';
-import { ICluster } from 'ts-graphviz';
+import { GraphBaseModel } from 'ts-graphviz';
 import { ContainerCluster } from '../contexts/ContainerCluster';
 
 /**
  * Return the cluster of container.
  */
-export function useContainerCluster(): ICluster | null {
+export function useContainerCluster(): GraphBaseModel | null {
   return useContext(ContainerCluster);
 }

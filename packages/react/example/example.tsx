@@ -1,5 +1,12 @@
 import React, { FC } from 'react';
-import { Digraph, Node, Subgraph, renderToDot, Edge, DOT } from '../src';
+import {
+  DOT,
+  Digraph,
+  Edge,
+  Node,
+  Subgraph,
+  renderToDot,
+} from '../src/react.js';
 
 const Example: FC = () => (
   <Digraph
@@ -29,11 +36,14 @@ const Example: FC = () => (
     <Subgraph id="cluster" label="Cluster" labeljust="l">
       <Node id="nodeB" label="This is label for nodeB." />
     </Subgraph>
-    <Edge targets={['nodeB', 'nodeA:m']} comment="Edge from node A to B" label={<DOT.B>A to B</DOT.B>} />
+    <Edge
+      targets={['nodeB', 'nodeA:m']}
+      comment="Edge from node A to B"
+      label={<DOT.B>A to B</DOT.B>}
+    />
   </Digraph>
 );
 
 const dot = renderToDot(<Example />);
 
-// eslint-disable-next-line no-console
 console.log(dot);

@@ -1,16 +1,21 @@
-import React, { FC, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { CurrentCluster } from '../contexts/CurrentCluster';
-import { useSubgraph } from '../hooks/use-subgraph';
-import { useRenderedID } from '../hooks/use-rendered-id';
-import { useClusterMap } from '../hooks/use-cluster-map';
-import { SubgraphProps } from '../types';
+import { FC, useEffect } from 'react';
+import { CurrentCluster } from '../contexts/CurrentCluster.js';
+import { useClusterMap } from '../hooks/use-cluster-map.js';
+import { useRenderedID } from '../hooks/use-rendered-id.js';
+import { useSubgraph } from '../hooks/use-subgraph.js';
+import { SubgraphProps } from '../types.js';
 /**
  * `Subgraph` component.
  */
-export const Subgraph: FC<SubgraphProps> = ({ children, label, ...options }) => {
+export const Subgraph: FC<SubgraphProps> = ({
+  children,
+  label,
+  ...options
+}) => {
   const renderedLabel = useRenderedID(label);
-  if (renderedLabel !== undefined) Object.assign(options, { label: renderedLabel });
+  if (renderedLabel !== undefined)
+    Object.assign(options, { label: renderedLabel });
   const subgraph = useSubgraph(options);
   const clusters = useClusterMap();
   useEffect(() => {
@@ -18,7 +23,11 @@ export const Subgraph: FC<SubgraphProps> = ({ children, label, ...options }) => 
       clusters.set(subgraph.id, subgraph);
     }
   }, [subgraph, clusters]);
-  return <CurrentCluster.Provider value={subgraph}>{children}</CurrentCluster.Provider>;
+  return (
+    <CurrentCluster.Provider value={subgraph}>
+      {children}
+    </CurrentCluster.Provider>
+  );
 };
 
 Subgraph.displayName = 'Subgraph';

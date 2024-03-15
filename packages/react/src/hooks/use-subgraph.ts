@@ -1,16 +1,16 @@
-import { useMemo, useEffect } from 'react';
-import { Subgraph, ISubgraph } from 'ts-graphviz';
-import { SubgraphOptions } from '../types';
-import { useCurrentCluster } from './use-current-cluster';
-import { useClusterAttributes } from './use-cluster-attributes';
-import { useHasComment } from './use-comment';
-import { useGraphvizContext } from './use-graphviz-context';
+import { useEffect, useMemo } from 'react';
+import { Subgraph, SubgraphModel } from 'ts-graphviz';
+import { SubgraphOptions } from '../types.js';
+import { useClusterAttributes } from './use-cluster-attributes.js';
+import { useHasComment } from './use-comment.js';
+import { useCurrentCluster } from './use-current-cluster.js';
+import { useGraphvizContext } from './use-graphviz-context.js';
 
 /**
  * `useSubgraph` is a hook that creates an instance of Subgraph
  * according to the object given by props.
  */
-export function useSubgraph(props: SubgraphOptions = {}): ISubgraph {
+export function useSubgraph(props: SubgraphOptions = {}): SubgraphModel {
   const { id, comment, edge, node, graph, ...attributes } = props;
   const context = useGraphvizContext();
   const cluster = useCurrentCluster();

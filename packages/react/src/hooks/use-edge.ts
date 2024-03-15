@@ -1,16 +1,19 @@
 import { useEffect, useMemo } from 'react';
-import { EdgeTargetLikeTuple, IEdge } from 'ts-graphviz';
-import { useCurrentCluster } from './use-current-cluster';
-import { EdgeTargetLengthErrorMessage } from '../errors';
-import { useHasComment } from './use-comment';
-import { useHasAttributes } from './use-has-attributes';
-import { EdgeOptions } from '../types';
+import { EdgeModel, EdgeTargetLikeTuple } from 'ts-graphviz';
+import { EdgeTargetLengthErrorMessage } from '../errors.js';
+import { EdgeOptions } from '../types.js';
+import { useHasComment } from './use-comment.js';
+import { useCurrentCluster } from './use-current-cluster.js';
+import { useHasAttributes } from './use-has-attributes.js';
 
 /**
  * `useEdge` is a hook that creates an instance of Edge
  * according to the object given by props.
  */
-export function useEdge(targets: EdgeTargetLikeTuple, props: EdgeOptions = {}): IEdge {
+export function useEdge(
+  targets: EdgeTargetLikeTuple,
+  props: EdgeOptions = {},
+): EdgeModel {
   const { comment, ...attributes } = props;
   const cluster = useCurrentCluster();
   if (targets.length < 2) {

@@ -1,21 +1,26 @@
 import { ReactElement, createElement } from 'react';
-import { toDot, ICluster } from 'ts-graphviz';
+import { GraphBaseModel, toDot } from 'ts-graphviz';
 
-import { reconciler } from './reconciler';
-import { IContext, GraphvizContext } from './contexts/GraphvizContext';
-import { ClusterMap } from './contexts/ClusterMap';
-import { ContainerCluster } from './contexts/ContainerCluster';
-import { CurrentCluster } from './contexts/CurrentCluster';
-import { NoContainerErrorMessage } from './errors';
+import { ClusterMap } from './contexts/ClusterMap.js';
+import { ContainerCluster } from './contexts/ContainerCluster.js';
+import { CurrentCluster } from './contexts/CurrentCluster.js';
+import { GraphvizContext, IContext } from './contexts/GraphvizContext.js';
+import { NoContainerErrorMessage } from './errors.js';
+import { reconciler } from './reconciler.js';
 
 const noop = (): void => undefined;
 
-function clusterMap(cluster?: ICluster, map: Map<string, ICluster> = new Map()): Map<string, ICluster> {
+function clusterMap(
+  cluster?: GraphBaseModel,
+  map: Map<string, GraphBaseModel> = new Map(),
+): Map<string, GraphBaseModel> {
   if (cluster) {
     if (cluster.id) {
       map.set(cluster.id, cluster);
     }
-    cluster.subgraphs.forEach((s) => clusterMap(s, map));
+    for (const s of cluster.subgraphs) {
+      clusterMap(s, map);
+    }
   }
   return map;
 }
@@ -52,7 +57,10 @@ function clusterMap(cluster?: ICluster, map: Map<string, ICluster> = new Map()):
  * // }
  * ```
  */
-export function render(element: ReactElement, container?: ICluster): ICluster {
+export function render(
+  element: ReactElement,
+  container?: GraphBaseModel,
+): GraphBaseModel {
   const context: IContext = { container };
   reconciler.updateContainer(
     createElement(
@@ -63,9 +71,14 @@ export function render(element: ReactElement, container?: ICluster): ICluster {
         { value: clusterMap(container) },
         createElement(
           ContainerCluster.Provider,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          { value: container ?? null! },
-          container ? createElement(CurrentCluster.Provider, { value: container }, element) : element,
+          { value: container ?? null },
+          container
+            ? createElement(
+                CurrentCluster.Provider,
+                { value: container },
+                element,
+              )
+            : element,
         ),
       ),
     ),
@@ -111,6 +124,9 @@ export function render(element: ReactElement, container?: ICluster): ICluster {
  *
  * @returns Rendered dot string
  */
-export function renderToDot(element: ReactElement, container?: ICluster): string {
+export function renderToDot(
+  element: ReactElement,
+  container?: GraphBaseModel,
+): string {
   return toDot(render(element, container));
 }

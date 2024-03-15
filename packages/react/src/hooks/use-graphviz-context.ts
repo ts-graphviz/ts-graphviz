@@ -1,10 +1,10 @@
 import { useContext } from 'react';
-import { ICluster } from 'ts-graphviz';
-import { GraphvizContext } from '../contexts/GraphvizContext';
-import { NoGraphvizContextErrorMessage } from '../errors';
+import { GraphBaseModel } from 'ts-graphviz';
+import { GraphvizContext } from '../contexts/GraphvizContext.js';
+import { NoGraphvizContextErrorMessage } from '../errors.js';
 
 export interface IContext {
-  container?: ICluster;
+  container?: GraphBaseModel;
 }
 
 export function useGraphvizContext(): IContext {

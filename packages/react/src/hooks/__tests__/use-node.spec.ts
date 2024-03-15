@@ -1,8 +1,9 @@
-import { Node } from 'ts-graphviz';
 import { renderHook } from '@testing-library/react-hooks';
+import { Node } from 'ts-graphviz';
+import { describe, expect, it } from 'vitest';
 
-import { useNode } from '../use-node';
-import { digraph } from './utils/wrapper';
+import { useNode } from '../use-node.js';
+import { digraph } from './utils/wrapper.js';
 
 describe('useNode', () => {
   it('returns Node instance', () => {

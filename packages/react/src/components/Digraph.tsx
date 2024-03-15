@@ -1,24 +1,29 @@
-import React, { FC, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ContainerCluster } from '../contexts/ContainerCluster';
-import { CurrentCluster } from '../contexts/CurrentCluster';
-import { useDigraph } from '../hooks/use-digraph';
-import { useRenderedID } from '../hooks/use-rendered-id';
-import { useContainerCluster } from '../hooks/use-container-cluster';
-import { DuplicatedRootClusterErrorMessage } from '../errors';
-import { useClusterMap } from '../hooks/use-cluster-map';
-import { RootClusterProps } from '../types';
+import { FC, useEffect } from 'react';
+import { ContainerCluster } from '../contexts/ContainerCluster.js';
+import { CurrentCluster } from '../contexts/CurrentCluster.js';
+import { DuplicatedRootClusterErrorMessage } from '../errors.js';
+import { useClusterMap } from '../hooks/use-cluster-map.js';
+import { useContainerCluster } from '../hooks/use-container-cluster.js';
+import { useDigraph } from '../hooks/use-digraph.js';
+import { useRenderedID } from '../hooks/use-rendered-id.js';
+import { RootClusterProps } from '../types.js';
 
 /**
  * `Digraph` component.
  */
-export const Digraph: FC<RootClusterProps> = ({ children, label, ...options }) => {
+export const Digraph: FC<RootClusterProps> = ({
+  children,
+  label,
+  ...options
+}) => {
   const container = useContainerCluster();
   if (container !== null) {
     throw Error(DuplicatedRootClusterErrorMessage);
   }
   const renderedLabel = useRenderedID(label);
-  if (renderedLabel !== undefined) Object.assign(options, { label: renderedLabel });
+  if (renderedLabel !== undefined)
+    Object.assign(options, { label: renderedLabel });
   const digraph = useDigraph(options);
   const clusters = useClusterMap();
   useEffect(() => {
@@ -28,7 +33,9 @@ export const Digraph: FC<RootClusterProps> = ({ children, label, ...options }) =
   }, [clusters, digraph]);
   return (
     <ContainerCluster.Provider value={digraph}>
-      <CurrentCluster.Provider value={digraph}>{children}</CurrentCluster.Provider>
+      <CurrentCluster.Provider value={digraph}>
+        {children}
+      </CurrentCluster.Provider>
     </ContainerCluster.Provider>
   );
 };

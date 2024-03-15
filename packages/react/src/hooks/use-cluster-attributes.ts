@@ -1,9 +1,9 @@
-import { ICluster, AttributesObject } from 'ts-graphviz';
 import { useEffect } from 'react';
-import { ClusterCommonAttributesProps } from '../types';
+import { AttributeKey, AttributesObject, GraphBaseModel } from 'ts-graphviz';
+import { ClusterCommonAttributesProps } from '../types.js';
 
-export function useClusterAttributes<T extends string>(
-  cluster: ICluster<T>,
+export function useClusterAttributes<T extends AttributeKey>(
+  cluster: GraphBaseModel<T>,
   attributes: AttributesObject<T>,
   { edge, node, graph }: ClusterCommonAttributesProps,
 ): void {

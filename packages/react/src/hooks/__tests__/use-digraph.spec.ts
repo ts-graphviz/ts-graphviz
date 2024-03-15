@@ -1,7 +1,8 @@
-import { Digraph } from 'ts-graphviz';
 import { renderHook } from '@testing-library/react-hooks';
-import { context } from './utils/wrapper';
-import { useDigraph } from '../use-digraph';
+import { Digraph } from 'ts-graphviz';
+import { describe, expect, it } from 'vitest';
+import { useDigraph } from '../use-digraph.js';
+import { context } from './utils/wrapper.js';
 
 describe('useDigraph', () => {
   it('returns Digraph instance', () => {

@@ -1,10 +1,11 @@
-import React from 'react';
-import { ICluster } from 'ts-graphviz';
+import { createContext } from 'react';
+import { GraphBaseModel } from 'ts-graphviz';
 
 export interface IContext {
-  container?: ICluster;
+  container?: GraphBaseModel;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-export const GraphvizContext = React.createContext<IContext>(null!);
+export const GraphvizContext = createContext<IContext>(
+  null as unknown as IContext,
+);
 GraphvizContext.displayName = 'GraphvizContext';

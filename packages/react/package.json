@@ -1,81 +1,72 @@
 {
   "name": "@ts-graphviz/react",
   "version": "0.9.1",
-  "license": "MIT",
-  "author": "kamiazya <yuki@kamiazya.tech>",
   "description": "Graphviz-dot Renderer for React.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ts-graphviz/react.git"
-  },
-  "bugs": {
-    "url": "https://github.com/ts-graphviz/react/issues"
-  },
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/kamiazya"
-  },
   "keywords": [
     "graphviz",
     "dot",
     "react"
   ],
-  "publishConfig": {
-    "access": "public"
+  "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
   },
-  "main": "./lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts-graphviz/ts-graphviz.git",
+    "directory": "packages/react"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/ts-graphviz"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/ts-graphviz"
+    }
+  ],
+  "license": "MIT",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "type": "module",
   "exports": {
-    "import": "./lib/index.mjs",
-    "default": "./lib/index.js"
+    ".": {
+      "types": "./lib/react.d.ts",
+      "require": "./lib/react.cjs",
+      "default": "./lib/react.js"
+    },
+    "./package.json": "./package.json"
   },
-  "types": "./lib/index.d.ts",
+  "main": "./lib/react.js",
+  "types": "./lib/react.d.ts",
   "scripts": {
-    "example": "ts-node example/example",
-    "build": "rollup -c && prettier --write './lib/index.d.ts'",
-    "test": "jest",
-    "lint": "eslint -c .eslintrc.json --ext ts,tsx src",
-    "format": "eslint -c .eslintrc.json --ext ts,tsx src --fix && prettier --write './src/**/*.(ts|tsx)'"
-  },
-  "peerDependencies": {
-    "react": ">=16.8.0 || >=17"
+    "build": "vite build",
+    "example": "ts-node example/example"
   },
   "dependencies": {
-    "prop-types": "^15.7.2",
-    "react-dom": "^17.0.2",
-    "react-reconciler": "^0.26.2",
-    "ts-graphviz": "^0.16.0"
+    "prop-types": "^15.8.1",
+    "react-dom": "^18.2.0",
+    "react-reconciler": "^0.29.0",
+    "ts-graphviz": "workspace:^"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^11.2.7",
-    "@testing-library/react-hooks": "^5.1.2",
-    "@types/prop-types": "^15.7.3",
-    "@types/react": "^17.0.5",
-    "@types/react-dom": "^17.0.5",
-    "@types/react-reconciler": "^0.26.1",
-    "@typescript-eslint/eslint-plugin": "^4.23.0",
-    "@typescript-eslint/parser": "^4.23.0",
-    "eslint": "^7.26.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.23.1",
-    "eslint-plugin-jest": "^24.3.6",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react": "^7.23.2",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "jest": "^26.6.3",
-    "jest-graphviz": "^0.4.0",
-    "prettier": "^2.3.0",
-    "react": "^17.0.2",
-    "react-test-renderer": "^17.0.2",
-    "rollup": "^2.48.0",
-    "rollup-plugin-delete": "^2.0.0",
-    "rollup-plugin-dts": "^3.0.1",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "ts-jest": "^26.5.6",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.4"
+    "@testing-library/react-hooks": "^5.1.3",
+    "@types/prop-types": "^15.7.11",
+    "@types/react": "^18.2.65",
+    "@types/react-dom": "^18.2.22",
+    "@types/react-reconciler": "^0.26.7",
+    "react": "^18.2.0",
+    "react-test-renderer": "^18.2.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.3",
+    "vite-plugin-dts": "^3.7.3"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

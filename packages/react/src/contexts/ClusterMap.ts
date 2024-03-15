@@ -1,5 +1,5 @@
-import React from 'react';
-import { ICluster } from 'ts-graphviz';
+import { createContext } from 'react';
+import { GraphBaseModel } from 'ts-graphviz';
 
-export const ClusterMap = React.createContext<Map<string, ICluster>>(new Map());
+export const ClusterMap = createContext<Map<string, GraphBaseModel>>(new Map());
 ClusterMap.displayName = 'ClusterMap';

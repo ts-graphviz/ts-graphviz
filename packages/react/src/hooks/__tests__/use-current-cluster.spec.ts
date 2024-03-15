@@ -1,8 +1,14 @@
-import { Digraph, Graph, Subgraph } from 'ts-graphviz';
 import { renderHook } from '@testing-library/react-hooks';
-import { useCurrentCluster } from '../use-current-cluster';
-import { digraph, graph, graphInSubgraph, digraphInSubgraph } from './utils/wrapper';
-import { NoClusterErrorMessage } from '../../errors';
+import { Digraph, Graph, Subgraph } from 'ts-graphviz';
+import { describe, expect, test } from 'vitest';
+import { NoClusterErrorMessage } from '../../errors.js';
+import { useCurrentCluster } from '../use-current-cluster.js';
+import {
+  digraph,
+  digraphInSubgraph,
+  graph,
+  graphInSubgraph,
+} from './utils/wrapper.js';
 
 describe('useCurrentCluster', () => {
   describe('get parent cluster', () => {

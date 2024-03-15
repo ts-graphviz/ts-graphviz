@@ -1,8 +1,9 @@
-import { Edge, EdgeTargetLikeTuple } from 'ts-graphviz';
 import { renderHook } from '@testing-library/react-hooks';
-import { useEdge } from '../use-edge';
-import { digraph, graph } from './utils/wrapper';
-import { EdgeTargetLengthErrorMessage } from '../../errors';
+import { Edge, EdgeTargetLikeTuple } from 'ts-graphviz';
+import { describe, expect, it, test } from 'vitest';
+import { EdgeTargetLengthErrorMessage } from '../../errors.js';
+import { useEdge } from '../use-edge.js';
+import { digraph, graph } from './utils/wrapper.js';
 
 describe('useEdge', () => {
   it('returns Edge instance in digraph wrapper', () => {
@@ -34,9 +35,12 @@ describe('useEdge', () => {
   });
 
   test('throw error if the target is less than 2', () => {
-    const { result } = renderHook(() => useEdge(['a'] as any as EdgeTargetLikeTuple), {
-      wrapper: graph(),
-    });
+    const { result } = renderHook(
+      () => useEdge(['a'] as any as EdgeTargetLikeTuple),
+      {
+        wrapper: graph(),
+      },
+    );
     expect(result.error).toStrictEqual(Error(EdgeTargetLengthErrorMessage));
   });
 });

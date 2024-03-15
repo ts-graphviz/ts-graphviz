@@ -1,9 +1,8 @@
-import { IHasComment } from 'ts-graphviz';
 import { useEffect } from 'react';
+import { HasComment } from 'ts-graphviz';
 
-export function useHasComment(target: IHasComment, comment?: string): void {
+export function useHasComment(target: HasComment, comment?: string): void {
   useEffect(() => {
-    // eslint-disable-next-line no-param-reassign
     target.comment = comment;
   }, [target, comment]);
 }
