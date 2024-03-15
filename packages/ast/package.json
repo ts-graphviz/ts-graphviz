@@ -22,8 +22,8 @@
       "url": "https://opencollective.com/ts-graphviz"
     }
   ],
-  "license": "NIT",
-  "author": "",
+  "license": "MIT",
+  "author": "kamiazya <yuki@kamiazya.tech>",
   "type": "module",
   "exports": {
     ".": {
