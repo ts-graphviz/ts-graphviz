@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "ignore": ["packages/ts-graphviz/src/ast/dot-shim/parser/_parse.ts"]
+    "ignore": ["./packages/ast/src/dot-shim/parser/_parse.ts"]
   },
   "organizeImports": {
     "enabled": true
