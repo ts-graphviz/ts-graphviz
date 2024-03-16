@@ -1,9 +1,8 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { Edge, EdgeTargetLikeTuple } from 'ts-graphviz';
 import { describe, expect, it, test } from 'vitest';
-import { EdgeTargetLengthErrorMessage } from '../../errors.js';
-import { useEdge } from '../use-edge.js';
-import { digraph, graph } from './utils/wrapper.js';
+import { digraph, graph } from './__tests__/wrapper.js';
+import { useEdge } from './use-edge.js';
 
 describe('useEdge', () => {
   it('returns Edge instance in digraph wrapper', () => {
@@ -41,6 +40,8 @@ describe('useEdge', () => {
         wrapper: graph(),
       },
     );
-    expect(result.error).toStrictEqual(Error(EdgeTargetLengthErrorMessage));
+    expect(result.error).toMatchInlineSnapshot(
+      `[Error: Edges must have at least 2 targets.]`,
+    );
   });
 });

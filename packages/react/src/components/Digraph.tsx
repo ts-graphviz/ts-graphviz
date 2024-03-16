@@ -1,7 +1,6 @@
 import { FC, useEffect } from 'react';
 import { ContainerCluster } from '../contexts/ContainerCluster.js';
 import { CurrentCluster } from '../contexts/CurrentCluster.js';
-import { DuplicatedRootClusterErrorMessage } from '../errors.js';
 import { useClusterMap } from '../hooks/use-cluster-map.js';
 import { useContainerCluster } from '../hooks/use-container-cluster.js';
 import { useDigraph } from '../hooks/use-digraph.js';

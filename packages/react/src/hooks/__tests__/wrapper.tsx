@@ -1,9 +1,9 @@
 import { ComponentProps, FC, ReactNode } from 'react';
 
-import { Digraph } from '../../../components/Digraph.js';
-import { Graph } from '../../../components/Graph.js';
-import { Subgraph } from '../../../components/Subgraph.js';
-import { GraphvizContext } from '../../../contexts/GraphvizContext.js';
+import { Digraph } from '../../components/Digraph.js';
+import { Graph } from '../../components/Graph.js';
+import { Subgraph } from '../../components/Subgraph.js';
+import { GraphvizContext } from '../../contexts/GraphvizContext.js';
 
 export const context =
   (): FC<{ children: ReactNode }> =>

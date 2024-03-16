@@ -1,9 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`useRenderedID > case 1`] = `"hoge"`;
-
-exports[`useRenderedID > case 2`] = `"<<b>bold</b>>"`;
-
-exports[`useRenderedID > case 3`] = `"<<B>bold</B>>"`;
-
-exports[`useRenderedID > case 4`] = `"<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"><TR><TD>left</TD><TD PORT="m">middle</TD><TD PORT="r">right</TD></TR></TABLE>>"`;

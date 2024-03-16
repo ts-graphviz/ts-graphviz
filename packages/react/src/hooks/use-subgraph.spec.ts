@@ -1,13 +1,13 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { Subgraph } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
-import { useSubgraph } from '../use-subgraph.js';
 import {
   digraph,
   digraphInSubgraph,
   graph,
   graphInSubgraph,
-} from './utils/wrapper.js';
+} from './__tests__/wrapper.js';
+import { useSubgraph } from './use-subgraph.js';
 
 describe('useSubgraph', () => {
   it('returns Subgraph instance in digraph warper', () => {

@@ -1,16 +1,15 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { GraphBaseModel } from 'ts-graphviz';
-import { GraphvizContext } from '../contexts/GraphvizContext.js';
-import { NoGraphvizContextErrorMessage } from '../errors.js';
+import { Context, GraphvizContext } from '../contexts/GraphvizContext.js';
 
-export interface IContext {
-  container?: GraphBaseModel;
-}
-
-export function useGraphvizContext(): IContext {
-  const context = useContext(GraphvizContext);
+export function useGraphvizContext<T extends GraphBaseModel>(): Context<T> {
+  const context = useContext(
+    GraphvizContext as unknown as React.Context<Context<T>>,
+  );
   if (context === null) {
-    throw Error(NoGraphvizContextErrorMessage);
+    throw Error(
+      'Cannot call useGraphvizContext outside GraphvizContext.\nBasically, you need to use the render function provided by @ts-graphviz/react.',
+    );
   }
   return context;
 }

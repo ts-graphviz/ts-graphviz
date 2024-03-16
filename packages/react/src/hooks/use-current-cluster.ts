@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { GraphBaseModel } from 'ts-graphviz';
-import { CurrentCluster } from '../contexts/CurrentCluster';
-import { NoClusterErrorMessage } from '../errors';
+import { CurrentCluster } from '../contexts/CurrentCluster.js';
 
 /**
  * Hook to get the current cluster(Digraph, Graph or Subgraph).
@@ -11,7 +10,9 @@ import { NoClusterErrorMessage } from '../errors';
 export function useCurrentCluster(): GraphBaseModel {
   const cluster = useContext(CurrentCluster);
   if (cluster === null) {
-    throw Error(NoClusterErrorMessage);
+    throw Error(
+      'useCluster must be called within a cluster such as Digraph, Graph, Subgraph.',
+    );
   }
   return cluster;
 }

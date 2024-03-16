@@ -1,13 +1,13 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { Digraph, Graph } from 'ts-graphviz';
 import { describe, expect, test } from 'vitest';
-import { useContainerCluster } from '../use-container-cluster.js';
 import {
   digraph,
   digraphInSubgraph,
   graph,
   graphInSubgraph,
-} from './utils/wrapper.js';
+} from './__tests__/wrapper.js';
+import { useContainerCluster } from './use-container-cluster.js';
 
 describe('useContainerCluster', () => {
   describe('get root cluster', () => {

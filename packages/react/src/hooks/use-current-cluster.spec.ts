@@ -1,14 +1,13 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { Digraph, Graph, Subgraph } from 'ts-graphviz';
 import { describe, expect, test } from 'vitest';
-import { NoClusterErrorMessage } from '../../errors.js';
-import { useCurrentCluster } from '../use-current-cluster.js';
 import {
   digraph,
   digraphInSubgraph,
   graph,
   graphInSubgraph,
-} from './utils/wrapper.js';
+} from './__tests__/wrapper.js';
+import { useCurrentCluster } from './use-current-cluster.js';
 
 describe('useCurrentCluster', () => {
   describe('get parent cluster', () => {
@@ -43,6 +42,8 @@ describe('useCurrentCluster', () => {
 
   test('An error occurs when called outside the cluster', () => {
     const { result } = renderHook(() => useCurrentCluster());
-    expect(result.error).toStrictEqual(Error(NoClusterErrorMessage));
+    expect(result.error).toMatchInlineSnapshot(
+      `[Error: useCluster must be called within a cluster such as Digraph, Graph, Subgraph.]`,
+    );
   });
 });

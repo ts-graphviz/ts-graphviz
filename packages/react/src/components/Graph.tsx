@@ -1,7 +1,6 @@
 import { FC, useEffect } from 'react';
 import { ContainerCluster } from '../contexts/ContainerCluster.js';
 import { CurrentCluster } from '../contexts/CurrentCluster.js';
-import { DuplicatedRootClusterErrorMessage } from '../errors.js';
 import { useClusterMap } from '../hooks/use-cluster-map.js';
 import { useContainerCluster } from '../hooks/use-container-cluster.js';
 import { useGraph } from '../hooks/use-graph.js';
@@ -13,7 +12,9 @@ import { RootGraphProps } from '../types.js';
 export const Graph: FC<RootGraphProps> = ({ children, label, ...options }) => {
   const container = useContainerCluster();
   if (container !== null) {
-    throw Error(DuplicatedRootClusterErrorMessage);
+    throw Error(
+      'RootCluster is duplicated.\nUse only one of Digraph and Graph.',
+    );
   }
   const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined)

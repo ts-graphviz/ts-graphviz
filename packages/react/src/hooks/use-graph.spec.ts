@@ -1,8 +1,8 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { Graph } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
-import { useGraph } from '../use-graph.js';
-import { context } from './utils/wrapper.js';
+import { context } from './__tests__/wrapper.js';
+import { useGraph } from './use-graph.js';
 
 describe('useGraph', () => {
   it('returns Graph instance', () => {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Subgraph, SubgraphModel } from 'ts-graphviz';
+import { GraphBaseModel, Subgraph, SubgraphModel } from 'ts-graphviz';
 import { SubgraphOptions } from '../types.js';
 import { useClusterAttributes } from './use-cluster-attributes.js';
 import { useHasComment } from './use-comment.js';
@@ -19,7 +19,7 @@ export function useSubgraph(props: SubgraphOptions = {}): SubgraphModel {
     if (cluster !== null) {
       cluster.addSubgraph(g);
     } else if (!context.container) {
-      context.container = g;
+      context.container = g as GraphBaseModel;
     }
     g.comment = comment;
     g.apply(attributes);

@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react';
 import { EdgeModel, EdgeTargetLikeTuple } from 'ts-graphviz';
-import { EdgeTargetLengthErrorMessage } from '../errors.js';
 import { EdgeOptions } from '../types.js';
 import { useHasComment } from './use-comment.js';
 import { useCurrentCluster } from './use-current-cluster.js';
@@ -17,7 +16,7 @@ export function useEdge(
   const { comment, ...attributes } = props;
   const cluster = useCurrentCluster();
   if (targets.length < 2) {
-    throw Error(EdgeTargetLengthErrorMessage);
+    throw Error('Edges must have at least 2 targets.');
   }
   const edge = useMemo(() => {
     const e = cluster.createEdge(targets);
