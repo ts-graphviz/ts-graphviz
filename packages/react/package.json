@@ -1,0 +1,72 @@
+{
+  "name": "@ts-graphviz/react",
+  "version": "0.9.1",
+  "description": "Graphviz-dot Renderer for React.",
+  "keywords": [
+    "graphviz",
+    "dot",
+    "react"
+  ],
+  "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts-graphviz/ts-graphviz.git",
+    "directory": "packages/react"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/ts-graphviz"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/ts-graphviz"
+    }
+  ],
+  "license": "MIT",
+  "author": "kamiazya <yuki@kamiazya.tech>",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/react.d.ts",
+      "require": "./lib/react.cjs",
+      "default": "./lib/react.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./lib/react.js",
+  "types": "./lib/react.d.ts",
+  "scripts": {
+    "build": "vite build",
+    "example": "ts-node example/example"
+  },
+  "dependencies": {
+    "prop-types": "^15.8.1",
+    "react-dom": "^18.2.0",
+    "react-reconciler": "^0.29.0",
+    "ts-graphviz": "workspace:^"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/react-hooks": "^5.1.3",
+    "@types/prop-types": "^15.7.11",
+    "@types/react": "^18.2.65",
+    "@types/react-dom": "^18.2.22",
+    "@types/react-reconciler": "^0.26.7",
+    "react": "^18.2.0",
+    "react-test-renderer": "^18.2.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.3",
+    "vite-plugin-dts": "^3.7.3"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
