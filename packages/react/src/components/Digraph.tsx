@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { FC, useEffect } from 'react';
 import { ContainerCluster } from '../contexts/ContainerCluster.js';
 import { CurrentCluster } from '../contexts/CurrentCluster.js';
@@ -41,15 +40,3 @@ export const Digraph: FC<RootClusterProps> = ({
 };
 
 Digraph.displayName = 'Digraph';
-
-Digraph.defaultProps = {
-  id: undefined,
-  comment: undefined,
-  label: undefined,
-};
-
-Digraph.propTypes = {
-  id: PropTypes.string,
-  comment: PropTypes.string,
-  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-};

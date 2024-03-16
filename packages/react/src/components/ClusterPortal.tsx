@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { FC, useContext, useMemo } from 'react';
 import { ClusterMap } from '../contexts/ClusterMap.js';
 import { CurrentCluster } from '../contexts/CurrentCluster.js';
@@ -23,10 +22,3 @@ export const ClusterPortal: FC<ClusterPortalProps> = ({ children, id }) => {
 };
 
 ClusterPortal.displayName = 'ClusterPortal';
-ClusterPortal.defaultProps = {
-  id: undefined,
-};
-
-ClusterPortal.propTypes = {
-  id: PropTypes.string,
-};

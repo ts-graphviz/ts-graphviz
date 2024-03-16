@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { FC, useEffect } from 'react';
 import { CurrentCluster } from '../contexts/CurrentCluster.js';
 import { useClusterMap } from '../hooks/use-cluster-map.js';
@@ -31,15 +30,3 @@ export const Subgraph: FC<SubgraphProps> = ({
 };
 
 Subgraph.displayName = 'Subgraph';
-
-Subgraph.propTypes = {
-  id: PropTypes.string,
-  comment: PropTypes.string,
-  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-};
-
-Subgraph.defaultProps = {
-  id: undefined,
-  comment: undefined,
-  label: undefined,
-};

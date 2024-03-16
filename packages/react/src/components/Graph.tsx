@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { FC, useEffect } from 'react';
 import { ContainerCluster } from '../contexts/ContainerCluster.js';
 import { CurrentCluster } from '../contexts/CurrentCluster.js';
@@ -40,15 +39,3 @@ export const Graph: FC<RootClusterProps> = ({
 };
 
 Graph.displayName = 'Graph';
-
-Graph.defaultProps = {
-  id: undefined,
-  comment: undefined,
-  label: undefined,
-};
-
-Graph.propTypes = {
-  id: PropTypes.string,
-  comment: PropTypes.string,
-  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-};

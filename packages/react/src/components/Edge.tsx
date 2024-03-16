@@ -16,15 +16,3 @@ export const Edge: FC<EdgeProps> = ({ targets, label, ...options }) => {
 };
 
 Edge.displayName = 'Edge';
-
-Edge.propTypes = {
-  // @ts-ignore
-  targets: PropTypes.array.isRequired,
-  comment: PropTypes.string,
-  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-};
-
-Edge.defaultProps = {
-  comment: undefined,
-  label: undefined,
-};
