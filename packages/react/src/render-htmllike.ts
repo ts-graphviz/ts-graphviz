@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-export function renderHTMLLike(label?: ReactElement): string | undefined {
+export function renderHTMLLike(label?: ReactElement): string {
   const htmlLike = renderToStaticMarkup(label)
     .replace(/<dot-port>(.+?)<\/dot-port>/gi, '<$1>')
     .replace(
