@@ -6,7 +6,8 @@
       "@ts-graphviz/core": ["./packages/core/src/core.js"],
       "@ts-graphviz/common": ["./packages/common/src/common.js"],
       "@ts-graphviz/ast": ["./packages/ast/src/ast.js"],
-      "@ts-graphviz/adapter": ["./packages/adapter/src/node.js"]
+      "@ts-graphviz/adapter": ["./packages/adapter/src/node.js"],
+      "@ts-graphviz/react": ["./packages/react/src/react.js"]
     }
   }
 }

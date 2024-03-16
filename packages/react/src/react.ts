@@ -13,4 +13,5 @@ export * from './components/Subgraph.js';
 export * from './components/Node.js';
 export * from './components/Edge.js';
 export * from './components/ClusterPortal.js';
+export * from './render-htmllike.js';
 export * from './render.js';

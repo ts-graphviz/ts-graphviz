@@ -1,17 +1,43 @@
-digraph G {
-  "ts-graphviz";
-  "@ts-graphviz/adapter";
-  "@ts-graphviz/ast";
-  "@ts-graphviz/common";
-  "@ts-graphviz/core";
-
-  "@ts-graphviz/ast" -> "ts-graphviz";
-  "@ts-graphviz/adapter" -> "ts-graphviz";
-  "@ts-graphviz/common" -> "ts-graphviz";
-  "@ts-graphviz/core" -> "ts-graphviz";
+digraph "dependency_graph" {
+  newrank = true;
+  rankdir = "LR";
+  edge [
+    dir = "back";
+  ];
+  node [
+    shape = "none";
+  ];
+  "@ts-graphviz/adapter" [
+    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">@ts-graphviz/adapter</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz Runtime adapters for Cross Platform</TD></TR></TABLE>>;
+    URL = "https://www.npmjs.com/package/@ts-graphviz/adapter";
+  ];
+  "@ts-graphviz/ast" [
+    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">@ts-graphviz/ast</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz AST(Abstract Syntax Tree) Utilities</TD></TR></TABLE>>;
+    URL = "https://www.npmjs.com/package/@ts-graphviz/ast";
+  ];
+  "@ts-graphviz/common" [
+    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">@ts-graphviz/common</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz Types and Utilities</TD></TR></TABLE>>;
+    URL = "https://www.npmjs.com/package/@ts-graphviz/common";
+  ];
+  "@ts-graphviz/core" [
+    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">@ts-graphviz/core</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz Models for Object-Oriented Programming</TD></TR></TABLE>>;
+    URL = "https://www.npmjs.com/package/@ts-graphviz/core";
+  ];
+  "@ts-graphviz/react" [
+    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">@ts-graphviz/react</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz-dot Renderer for React.</TD></TR></TABLE>>;
+    URL = "https://www.npmjs.com/package/@ts-graphviz/react";
+  ];
+  "ts-graphviz" [
+    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">ts-graphviz</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz library for TypeScript</TD></TR></TABLE>>;
+    URL = "https://www.npmjs.com/package/ts-graphviz";
+  ];
   "@ts-graphviz/common" -> "@ts-graphviz/adapter";
   "@ts-graphviz/common" -> "@ts-graphviz/ast";
   "@ts-graphviz/ast" -> "@ts-graphviz/core";
   "@ts-graphviz/common" -> "@ts-graphviz/core";
+  "ts-graphviz" -> "@ts-graphviz/react";
+  "@ts-graphviz/adapter" -> "ts-graphviz";
+  "@ts-graphviz/ast" -> "ts-graphviz";
+  "@ts-graphviz/common" -> "ts-graphviz";
+  "@ts-graphviz/core" -> "ts-graphviz";
 }
-
