@@ -6,19 +6,21 @@ import { useClusterMap } from '../hooks/use-cluster-map.js';
 import { useContainerCluster } from '../hooks/use-container-cluster.js';
 import { useDigraph } from '../hooks/use-digraph.js';
 import { useRenderedID } from '../hooks/use-rendered-id.js';
-import { RootClusterProps } from '../types.js';
+import { RootGraphProps } from '../types.js';
 
 /**
  * `Digraph` component.
  */
-export const Digraph: FC<RootClusterProps> = ({
+export const Digraph: FC<RootGraphProps> = ({
   children,
   label,
   ...options
 }) => {
   const container = useContainerCluster();
   if (container !== null) {
-    throw Error(DuplicatedRootClusterErrorMessage);
+    throw Error(
+      'RootCluster is duplicated.\nUse only one of Digraph and Graph.',
+    );
   }
   const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined)

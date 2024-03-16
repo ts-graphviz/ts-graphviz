@@ -47,8 +47,8 @@ export interface NodeOptions
   extends Omit<NodeAttributesObject, typeof attribute.comment>,
     HasComment {}
 
-/** Props for RootCluster component */
-export interface RootClusterProps
+/** Props for RootGraph component */
+export interface RootGraphProps
   extends Omit<RootClusterOptions, typeof attribute.label> {
   label?: ReactElement | string;
   children?: ReactNode;
