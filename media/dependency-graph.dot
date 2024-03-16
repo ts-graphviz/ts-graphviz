@@ -35,6 +35,7 @@ digraph "dependency_graph" {
   "@ts-graphviz/common" -> "@ts-graphviz/ast";
   "@ts-graphviz/ast" -> "@ts-graphviz/core";
   "@ts-graphviz/common" -> "@ts-graphviz/core";
+  "@ts-graphviz/common" -> "@ts-graphviz/react";
   "ts-graphviz" -> "@ts-graphviz/react";
   "@ts-graphviz/adapter" -> "ts-graphviz";
   "@ts-graphviz/ast" -> "ts-graphviz";

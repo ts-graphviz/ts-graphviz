@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "react-reconciler": "^0.29.0",
+    "@ts-graphviz/common": "workspace:^",
     "ts-graphviz": "workspace:^"
   },
   "devDependencies": {

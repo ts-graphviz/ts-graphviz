@@ -1,49 +1,49 @@
-import { DOT, renderHTMLLike } from '@ts-graphviz/react';
+import { renderHTMLLike } from '@ts-graphviz/react';
 import { digraph } from '../packages/ts-graphviz/src/model-factory.js';
 
 function FactoryFnLabel() {
   return (
-    <DOT.TABLE>
-      <DOT.TR>
-        <DOT.TD BGCOLOR="#f0f0f0" ALIGN="CENTER">
+    <dot:table>
+      <dot:tr>
+        <dot:td BGCOLOR="#f0f0f0" ALIGN="CENTER">
           Model Factory Functions
-        </DOT.TD>
-      </DOT.TR>
-      <DOT.TR>
-        <DOT.TD PORT="description" ALIGN="LEFT">
+        </dot:td>
+      </dot:tr>
+      <dot:tr>
+        <dot:td PORT="description" ALIGN="LEFT">
           strict.digraph(...)
-          <DOT.BR ALIGN="LEFT" />
+          <dot:br ALIGN="LEFT" />
           strict.graph(...)
-          <DOT.BR ALIGN="LEFT" />
+          <dot:br ALIGN="LEFT" />
           digraph(...)
-          <DOT.BR ALIGN="LEFT" />
+          <dot:br ALIGN="LEFT" />
           graph(...)
-          <DOT.BR ALIGN="LEFT" />
-        </DOT.TD>
-      </DOT.TR>
-    </DOT.TABLE>
+          <dot:br ALIGN="LEFT" />
+        </dot:td>
+      </dot:tr>
+    </dot:table>
   );
 }
 
 function OOPLabel() {
   return (
-    <DOT.TABLE>
-      <DOT.TR>
-        <DOT.TD BGCOLOR="#f0f0f0" ALIGN="CENTER">
+    <dot:table>
+      <dot:tr>
+        <dot:td BGCOLOR="#f0f0f0" ALIGN="CENTER">
           Object-Oriented Programming
-        </DOT.TD>
-      </DOT.TR>
-      <DOT.TR>
-        <DOT.TD PORT="description" ALIGN="LEFT">
+        </dot:td>
+      </dot:tr>
+      <dot:tr>
+        <dot:td PORT="description" ALIGN="LEFT">
           new Digraph(...)
-          <DOT.BR ALIGN="LEFT" />
+          <dot:br ALIGN="LEFT" />
           new Graph(...)
-          <DOT.BR ALIGN="LEFT" />
+          <dot:br ALIGN="LEFT" />
           ...
-          <DOT.BR ALIGN="LEFT" />
-        </DOT.TD>
-      </DOT.TR>
-    </DOT.TABLE>
+          <dot:br ALIGN="LEFT" />
+        </dot:td>
+      </dot:tr>
+    </dot:table>
   );
 }
 

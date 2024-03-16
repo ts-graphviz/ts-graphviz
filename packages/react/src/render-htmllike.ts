@@ -1,11 +1,12 @@
 import { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { DOT } from './labels.js';
 
-export function renderHTMLLike(label?: ReactElement): string {
+export function renderHTMLLike(label?: ReactElement<any, DOT>): string {
   const htmlLike = renderToStaticMarkup(label)
-    .replace(/<dot-port>(.+?)<\/dot-port>/gi, '<$1>')
+    .replace(/<dot:port>(.+?)<\/dot:port>/gi, '<$1>')
     .replace(
-      /<(\/?)dot-([a-z-]+)/gi,
+      /<(\/?)dot:([a-z-]+)/gi,
       (_, $1, $2) => `<${$1}${$2.toUpperCase()}`,
     );
   return `<${htmlLike}>`;

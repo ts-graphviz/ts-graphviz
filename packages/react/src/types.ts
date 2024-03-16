@@ -8,6 +8,7 @@ import {
   SubgraphAttributesObject,
   attribute,
 } from 'ts-graphviz';
+import { DOT } from './labels.js';
 
 /** Common attribute values of objects under cluster */
 export interface ClusterCommonAttributesProps {
@@ -19,8 +20,8 @@ export interface ClusterCommonAttributesProps {
   graph?: SubgraphAttributesObject;
 }
 
-/** Options for RootCluster */
-export interface RootClusterOptions
+/** Options for RootGraph */
+export interface RootGraphOptions
   extends Omit<GraphAttributesObject, typeof attribute.comment>,
     ClusterCommonAttributesProps,
     HasComment {
@@ -49,7 +50,7 @@ export interface NodeOptions
 
 /** Props for RootGraph component */
 export interface RootGraphProps
-  extends Omit<RootClusterOptions, typeof attribute.label> {
+  extends Omit<RootGraphOptions, typeof attribute.label> {
   label?: ReactElement | string;
   children?: ReactNode;
 }
@@ -59,7 +60,7 @@ export interface EdgeProps extends Omit<EdgeOptions, typeof attribute.label> {
   /** Edge targets */
   targets: EdgeTargetLikeTuple;
   /** Edge label */
-  label?: ReactElement | string;
+  label?: ReactElement<DOT> | string;
 }
 
 /** Props for Node component */
@@ -68,16 +69,16 @@ export interface NodeProps
   /** Node id */
   id: string;
   /** Node label */
-  label?: ReactElement | string;
+  label?: ReactElement<any, DOT> | string;
   /** Node xlabel */
-  xlabel?: ReactElement | string;
+  xlabel?: ReactElement<any, DOT> | string;
 }
 
 /** Props for Subgraph component */
 export interface SubgraphProps
   extends Omit<SubgraphOptions, typeof attribute.label> {
   /** Subgraph label */
-  label?: ReactElement | string;
+  label?: ReactElement<any, DOT> | string;
   children?: ReactNode;
 }
 

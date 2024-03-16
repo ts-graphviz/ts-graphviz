@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { Graph, RootGraphModel } from 'ts-graphviz';
-import { RootClusterOptions } from '../types.js';
+import { RootGraphOptions } from '../types.js';
 import { useClusterAttributes } from './use-cluster-attributes.js';
 import { useHasComment } from './use-comment.js';
 import { useGraphvizContext } from './use-graphviz-context.js';
@@ -9,7 +9,7 @@ import { useGraphvizContext } from './use-graphviz-context.js';
  * `useGraph` is a hook that creates an instance of Graph
  * according to the object given by props.
  */
-export function useGraph(options: RootClusterOptions = {}): RootGraphModel {
+export function useGraph(options: RootGraphOptions = {}): RootGraphModel {
   const { id, comment, edge, node, graph, ...attributes } = options;
   const context = useGraphvizContext();
   const memoGraph = useMemo(() => {

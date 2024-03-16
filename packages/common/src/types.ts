@@ -225,6 +225,91 @@ export type EscString = string;
  * @group Attribute Types
  */
 export type HTMLLikeLabel = `<${string}>`;
+/** @hidden */
+export namespace HTMLLikeLabel {
+  export type TableAttributes = {
+    ALIGN?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
+    BGCOLOR?: Color | ColorList; // "color"
+    BORDER?: number; // "value"
+    CELLBORDER?: number; // "value"
+    CELLPADDING?: number; // "value"
+    CELLSPACING?: number; // "value"
+    COLOR?: Color | ColorList; // "color"
+    COLUMNS?: number; // "value"
+    FIXEDSIZE?: true; // "FALSE|TRUE"
+    GRADIENTANGLE?: number; // "value"
+    HEIGHT?: number; // "value"
+    HREF?: string; // "value"
+    ID?: string; // "value"
+    PORT?: Compass | string; // "portName"
+    ROWS?: number; // "value"
+    SIDES?: Side.Combinations; // "value"
+    STYLE?: Style; // "value"
+    TARGET?: string; // "value"
+    TITLE?: string; // "value"
+    TOOLTIP?: string; // "value"
+    VALIGN?: 'MIDDLE' | 'BOTTOM' | 'TOP'; // "MIDDLE|BOTTOM|TOP"
+    WIDTH?: number; // "value"
+  };
+
+  type NoAttributes = Record<string, unknown>;
+
+  export type TrAttributes = NoAttributes;
+
+  export type TdAttributes = {
+    ALIGN?: 'CENTER' | 'LEFT' | 'RIGHT' | 'TEXT'; // "CENTER|LEFT|RIGHT|TEXT"
+    BALIGN?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
+    BGCOLOR?: Color | ColorList; // "color"
+    BORDER?: number; // "value"
+    CELLPADDING?: number; // "value"
+    CELLSPACING?: number; // "value"
+    COLOR?: Color | ColorList; // "color"
+    COLSPAN?: number; // "value"
+    FIXEDSIZE?: boolean; // "FALSE|TRUE"
+    GRADIENTANGLE?: number; // "value"
+    HEIGHT?: number; // "value"
+    HREF?: string; // "value"
+    ID?: string; // "value"
+    PORT?: Compass | string; // "portName"
+    ROWSPAN?: number; // "value"
+    SIDES?: Side.Combinations; // "value"
+    STYLE?: Style; // "value"
+    TARGET?: string; // "value"
+    TITLE?: string; // "value"
+    TOOLTIP?: string; // "value"
+    VALIGN?: 'MIDDLE' | 'BOTTOM' | 'TOP'; // "MIDDLE|BOTTOM|TOP"
+    WIDTH?: number; // "value"
+  };
+
+  export type FontAttributes = {
+    COLOR?: Color | ColorList; // "color"
+    FACE?: string; // "fontname"
+    'POINT-SIZE'?: number; // "value"
+  };
+
+  export type BrAttributes = {
+    ALIGN?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
+  };
+
+  export type ImgAttributes = {
+    SCALE?: boolean | 'WIDTH' | 'HEIGHT' | 'BOTH'; // "FALSE|TRUE|WIDTH|HEIGHT|BOTH"
+    SRC?: string; // "value"
+  };
+
+  export type IAttributes = NoAttributes;
+
+  export type BAttributes = NoAttributes;
+
+  export type UAttributes = NoAttributes;
+
+  export type OAttributes = NoAttributes;
+  export type SubAttributes = NoAttributes;
+
+  export type SupAttributes = NoAttributes;
+  export type SAttributes = NoAttributes;
+  export type HrAttributes = NoAttributes;
+  export type VrAttributes = NoAttributes;
+}
 
 /**
  * An escString or an HTML label.
@@ -1313,6 +1398,29 @@ export namespace DirType {
   export interface $exclude extends $keywordsValidation {}
 }
 
+export namespace Side {
+  export type T = 'T';
+  export type B = 'B';
+  export type R = 'R';
+  export type L = 'L';
+  export type Combinations =
+    | T
+    | B
+    | R
+    | L
+    | `${T}${B}`
+    | `${T}${R}`
+    | `${T}${L}`
+    | `${B}${R}`
+    | `${B}${L}`
+    | `${R}${L}`
+    | `${T}${B}${R}`
+    | `${T}${B}${L}`
+    | `${T}${R}${L}`
+    | `${B}${R}${L}`
+    | `${T}${B}${R}${L}`;
+}
+
 /**
  * Page Direction
  *
@@ -1322,6 +1430,6 @@ export namespace DirType {
 export type Pagedir = `${Pagedir.TB}${Pagedir.RL}`;
 /** @hidden */
 export namespace Pagedir {
-  export type TB = 'T' | 'B';
-  export type RL = 'R' | 'L';
+  export type TB = Side.T | Side.B;
+  export type RL = Side.R | Side.L;
 }

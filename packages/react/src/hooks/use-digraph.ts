@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { Digraph, RootGraphModel } from 'ts-graphviz';
-import { RootClusterOptions } from '../types.js';
+import { RootGraphOptions } from '../types.js';
 import { useClusterAttributes } from './use-cluster-attributes.js';
 import { useHasComment } from './use-comment.js';
 import { useGraphvizContext } from './use-graphviz-context.js';
@@ -9,7 +9,7 @@ import { useGraphvizContext } from './use-graphviz-context.js';
  * `useDigraph` is a hook that creates an instance of Digraph
  * according to the object given by props.
  */
-export function useDigraph(options: RootClusterOptions = {}): RootGraphModel {
+export function useDigraph(options: RootGraphOptions = {}): RootGraphModel {
   const { id, comment, edge, node, graph, ...attributes } = options;
   const context = useGraphvizContext();
   const digraph = useMemo(() => {
