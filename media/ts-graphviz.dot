@@ -1,21 +1,21 @@
-digraph state_machine {
-  rankdir = LR;
-  node [ shape = circle ]
-
-  // { rank = same; factory_fn; Model; DOT; }
-
-  factory_fn [
-    shape = record,
-    label = "{{Model Factory Functions | strict.digraph(...)\lstrict.graph(...)\ldigraph(...)\lgraph(...)\l}}"
-  ]
-
-  oop [
-    shape = record,
-    label = "{{Object Oriented Programing | new Digraph(...)\lnew Graph(...)\l...\l}}"
-  ]
-
-  {factory_fn, oop} -> Model;
-
-  Model -> DOT [ label = "toDot" ]
-  DOT -> Model [ label = "fromDot" ]
+digraph {
+  rankdir = "LR";
+  node [
+    shape = "circle";
+  ];
+  "factory_fn" [
+    shape = "plain";
+    label = <<TABLE><TR><TD BGCOLOR="#f0f0f0" ALIGN="CENTER">Model Factory Functions</TD></TR><TR><TD PORT="description" ALIGN="LEFT">strict.digraph(...)<BR ALIGN="LEFT"></BR>strict.graph(...)<BR ALIGN="LEFT"></BR>digraph(...)<BR ALIGN="LEFT"></BR>graph(...)<BR ALIGN="LEFT"></BR></TD></TR></TABLE>>;
+  ];
+  "oop" [
+    shape = "plain";
+    label = <<TABLE><TR><TD BGCOLOR="#f0f0f0" ALIGN="CENTER">Object-Oriented Programming</TD></TR><TR><TD PORT="description" ALIGN="LEFT">new Digraph(...)<BR ALIGN="LEFT"></BR>new Graph(...)<BR ALIGN="LEFT"></BR>...<BR ALIGN="LEFT"></BR></TD></TR></TABLE>>;
+  ];
+  {"factory_fn" "oop"} -> "Model";
+  "Model" -> "DOT" [
+    label = "toDot";
+  ];
+  "DOT" -> "Model" [
+    label = "fromDot";
+  ];
 }
