@@ -1,4 +1,5 @@
-import { renderHook } from '@testing-library/react-hooks';
+// @vitest-environment jsdom
+import { renderHook } from '@testing-library/react';
 import { Subgraph } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import {
@@ -7,7 +8,7 @@ import {
   graph,
   graphInSubgraph,
 } from './__tests__/wrapper.js';
-import { useSubgraph } from './use-subgraph.js';
+import { useSubgraph } from './useSubgraph.js';
 
 describe('useSubgraph', () => {
   it('returns Subgraph instance in digraph warper', () => {

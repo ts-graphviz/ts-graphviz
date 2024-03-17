@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import {
   DOT,
   Digraph,
@@ -23,7 +23,7 @@ const Example: FC = () => (
       id="nodeA"
       shape="none"
       label={
-        <DOT.TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <DOT.TABLE BORDER={0} CELLBORDER={1} CELLSPACING={0}>
           <DOT.TR>
             <DOT.TD>left</DOT.TD>
             <DOT.TD PORT="m">middle</DOT.TD>

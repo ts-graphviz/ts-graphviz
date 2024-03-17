@@ -1,7 +1,8 @@
-import { renderHook } from '@testing-library/react-hooks';
+// @vitest-environment jsdom
+import { renderHook } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { context } from './__tests__/wrapper.js';
-import { useGraphvizContext } from './use-graphviz-context.js';
+import { useGraphvizContext } from './useGraphvizContext.js';
 
 describe('useGraphvizContext', () => {
   test('returns {}', () => {
@@ -12,8 +13,12 @@ describe('useGraphvizContext', () => {
   });
 
   test('An error occurs when called outside the GraphvizContext', () => {
-    const { result } = renderHook(() => useGraphvizContext());
-    expect(result.error).toMatchInlineSnapshot(`
+    expect(() => {
+      renderHook(() => useGraphvizContext(), {
+        // Don't use context() here
+        // wrapper: context(),
+      });
+    }).toThrowErrorMatchingInlineSnapshot(`
       [Error: Cannot call useGraphvizContext outside GraphvizContext.
       Basically, you need to use the render function provided by @ts-graphviz/react.]
     `);

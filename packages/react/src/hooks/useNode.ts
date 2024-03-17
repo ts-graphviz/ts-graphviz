@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from 'react';
 import { NodeModel } from 'ts-graphviz';
 import { NodeOptions } from '../types.js';
-import { useHasComment } from './use-comment.js';
-import { useCurrentCluster } from './use-current-cluster.js';
-import { useHasAttributes } from './use-has-attributes.js';
+import { useCurrentGraph } from './useCurrentGraph.js';
+import { useHasAttributes } from './useHasAttributes.js';
+import { useHasComment } from './useHasComment.js';
 
 /**
  * `useNode` is a hook that creates an instance of Node
@@ -11,7 +11,7 @@ import { useHasAttributes } from './use-has-attributes.js';
  */
 export function useNode(id: string, options: NodeOptions = {}): NodeModel {
   const { comment, ...attributes } = options;
-  const cluster = useCurrentCluster();
+  const cluster = useCurrentGraph();
   const node = useMemo(() => {
     const n = cluster.createNode(id);
     n.attributes.apply(attributes);

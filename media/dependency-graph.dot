@@ -8,27 +8,27 @@ digraph "dependency_graph" {
     shape = "none";
   ];
   "@ts-graphviz/adapter" [
-    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">@ts-graphviz/adapter</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz Runtime adapters for Cross Platform</TD></TR></TABLE>>;
+    label = <<table><tr><td port="name" bgcolor="#f0f0f0" align="CENTER">@ts-graphviz/adapter</td></tr><tr><td port="description" align="CENTER">Graphviz Runtime adapters for Cross Platform</td></tr></table>>;
     URL = "https://www.npmjs.com/package/@ts-graphviz/adapter";
   ];
   "@ts-graphviz/ast" [
-    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">@ts-graphviz/ast</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz AST(Abstract Syntax Tree) Utilities</TD></TR></TABLE>>;
+    label = <<table><tr><td port="name" bgcolor="#f0f0f0" align="CENTER">@ts-graphviz/ast</td></tr><tr><td port="description" align="CENTER">Graphviz AST(Abstract Syntax Tree) Utilities</td></tr></table>>;
     URL = "https://www.npmjs.com/package/@ts-graphviz/ast";
   ];
   "@ts-graphviz/common" [
-    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">@ts-graphviz/common</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz Types and Utilities</TD></TR></TABLE>>;
+    label = <<table><tr><td port="name" bgcolor="#f0f0f0" align="CENTER">@ts-graphviz/common</td></tr><tr><td port="description" align="CENTER">Graphviz Types and Utilities</td></tr></table>>;
     URL = "https://www.npmjs.com/package/@ts-graphviz/common";
   ];
   "@ts-graphviz/core" [
-    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">@ts-graphviz/core</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz Models for Object-Oriented Programming</TD></TR></TABLE>>;
+    label = <<table><tr><td port="name" bgcolor="#f0f0f0" align="CENTER">@ts-graphviz/core</td></tr><tr><td port="description" align="CENTER">Graphviz Models for Object-Oriented Programming</td></tr></table>>;
     URL = "https://www.npmjs.com/package/@ts-graphviz/core";
   ];
   "@ts-graphviz/react" [
-    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">@ts-graphviz/react</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz-dot Renderer for React.</TD></TR></TABLE>>;
+    label = <<table><tr><td port="name" bgcolor="#f0f0f0" align="CENTER">@ts-graphviz/react</td></tr><tr><td port="description" align="CENTER">Graphviz-dot Renderer for React.</td></tr></table>>;
     URL = "https://www.npmjs.com/package/@ts-graphviz/react";
   ];
   "ts-graphviz" [
-    label = <<TABLE><TR><TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">ts-graphviz</TD></TR><TR><TD PORT="description" ALIGN="CENTER">Graphviz library for TypeScript</TD></TR></TABLE>>;
+    label = <<table><tr><td port="name" bgcolor="#f0f0f0" align="CENTER">ts-graphviz</td></tr><tr><td port="description" align="CENTER">Graphviz library for TypeScript</td></tr></table>>;
     URL = "https://www.npmjs.com/package/ts-graphviz";
   ];
   "@ts-graphviz/common" -> "@ts-graphviz/adapter";

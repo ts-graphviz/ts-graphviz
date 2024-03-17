@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from 'react';
 import { GraphBaseModel, Subgraph, SubgraphModel } from 'ts-graphviz';
 import { SubgraphOptions } from '../types.js';
-import { useClusterAttributes } from './use-cluster-attributes.js';
-import { useHasComment } from './use-comment.js';
-import { useCurrentCluster } from './use-current-cluster.js';
-import { useGraphvizContext } from './use-graphviz-context.js';
+import { useCurrentGraph } from './useCurrentGraph.js';
+import { useGraphAttributes } from './useGraphAttributes.js';
+import { useGraphvizContext } from './useGraphvizContext.js';
+import { useHasComment } from './useHasComment.js';
 
 /**
  * `useSubgraph` is a hook that creates an instance of Subgraph
@@ -13,7 +13,7 @@ import { useGraphvizContext } from './use-graphviz-context.js';
 export function useSubgraph(props: SubgraphOptions = {}): SubgraphModel {
   const { id, comment, edge, node, graph, ...attributes } = props;
   const context = useGraphvizContext();
-  const cluster = useCurrentCluster();
+  const cluster = useCurrentGraph();
   const subgraph = useMemo(() => {
     const g = new Subgraph(id);
     if (cluster !== null) {
@@ -29,7 +29,7 @@ export function useSubgraph(props: SubgraphOptions = {}): SubgraphModel {
     return g;
   }, [context, cluster, id, comment, edge, node, graph, attributes]);
   useHasComment(subgraph, comment);
-  useClusterAttributes(subgraph, attributes, { edge, node, graph });
+  useGraphAttributes(subgraph, attributes, { edge, node, graph });
   useEffect(() => {
     return (): void => {
       cluster.removeSubgraph(subgraph);

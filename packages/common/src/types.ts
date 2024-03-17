@@ -5,6 +5,18 @@ export type $keywords<T extends string> = {
   [key in T]: key;
 };
 
+export type Insensitive<T> = T &
+  Insensitive.LowercaseKeys<T> &
+  Insensitive.UppercaseKeys<T>;
+export namespace Insensitive {
+  export type LowercaseKeys<T> = {
+    [key in keyof T as Lowercase<string & key>]: T[key];
+  };
+  export type UppercaseKeys<T> = {
+    [key in keyof T as Uppercase<string & key>]: T[key];
+  };
+}
+
 /**
  * @hidden
  */
@@ -227,74 +239,74 @@ export type EscString = string;
 export type HTMLLikeLabel = `<${string}>`;
 /** @hidden */
 export namespace HTMLLikeLabel {
-  export type TableAttributes = {
-    ALIGN?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
-    BGCOLOR?: Color | ColorList; // "color"
-    BORDER?: number; // "value"
-    CELLBORDER?: number; // "value"
-    CELLPADDING?: number; // "value"
-    CELLSPACING?: number; // "value"
-    COLOR?: Color | ColorList; // "color"
-    COLUMNS?: number; // "value"
-    FIXEDSIZE?: true; // "FALSE|TRUE"
-    GRADIENTANGLE?: number; // "value"
-    HEIGHT?: number; // "value"
-    HREF?: string; // "value"
-    ID?: string; // "value"
-    PORT?: Compass | string; // "portName"
-    ROWS?: number; // "value"
-    SIDES?: Side.Combinations; // "value"
-    STYLE?: Style; // "value"
-    TARGET?: string; // "value"
-    TITLE?: string; // "value"
-    TOOLTIP?: string; // "value"
-    VALIGN?: 'MIDDLE' | 'BOTTOM' | 'TOP'; // "MIDDLE|BOTTOM|TOP"
-    WIDTH?: number; // "value"
-  };
+  export type TableAttributes = Insensitive<{
+    align?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
+    bgcolor?: Color | ColorList; // "color"
+    border?: number; // "value"
+    cellborder?: number; // "value"
+    cellPadding?: number; // "value"
+    cellSpacing?: number; // "value"
+    color?: Color | ColorList; // "color"
+    columns?: number; // "value"
+    fixedSize?: true; // "FALSE|TRUE"
+    gradientAngle?: number; // "value"
+    height?: number; // "value"
+    href?: string; // "value"
+    id?: string; // "value"
+    port?: Compass | string; // "portName"
+    rows?: number; // "value"
+    sides?: Side.Combinations; // "value"
+    style?: Style; // "value"
+    target?: string; // "value"
+    title?: string; // "value"
+    tooltip?: string; // "value"
+    valign?: 'MIDDLE' | 'BOTTOM' | 'TOP'; // "MIDDLE|BOTTOM|TOP"
+    width?: number; // "value"
+  }>;
 
   type NoAttributes = Record<string, unknown>;
 
   export type TrAttributes = NoAttributes;
 
-  export type TdAttributes = {
-    ALIGN?: 'CENTER' | 'LEFT' | 'RIGHT' | 'TEXT'; // "CENTER|LEFT|RIGHT|TEXT"
-    BALIGN?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
-    BGCOLOR?: Color | ColorList; // "color"
-    BORDER?: number; // "value"
-    CELLPADDING?: number; // "value"
-    CELLSPACING?: number; // "value"
-    COLOR?: Color | ColorList; // "color"
-    COLSPAN?: number; // "value"
-    FIXEDSIZE?: boolean; // "FALSE|TRUE"
-    GRADIENTANGLE?: number; // "value"
-    HEIGHT?: number; // "value"
-    HREF?: string; // "value"
-    ID?: string; // "value"
-    PORT?: Compass | string; // "portName"
-    ROWSPAN?: number; // "value"
-    SIDES?: Side.Combinations; // "value"
-    STYLE?: Style; // "value"
-    TARGET?: string; // "value"
-    TITLE?: string; // "value"
-    TOOLTIP?: string; // "value"
-    VALIGN?: 'MIDDLE' | 'BOTTOM' | 'TOP'; // "MIDDLE|BOTTOM|TOP"
-    WIDTH?: number; // "value"
-  };
+  export type TdAttributes = Insensitive<{
+    align?: 'CENTER' | 'LEFT' | 'RIGHT' | 'TEXT'; // "CENTER|LEFT|RIGHT|TEXT"
+    balign?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
+    bgcolor?: Color | ColorList; // "color"
+    border?: number; // "value"
+    cellPadding?: number; // "value"
+    cellSpacing?: number; // "value"
+    color?: Color | ColorList; // "color"
+    colspan?: number; // "value"
+    fixedSize?: boolean; // "FALSE|TRUE"
+    gradientAngle?: number; // "value"
+    height?: number; // "value"
+    href?: string; // "value"
+    id?: string; // "value"
+    port?: Compass | string; // "portName"
+    rowSpan?: number; // "value"
+    sides?: Side.Combinations; // "value"
+    style?: Style; // "value"
+    target?: string; // "value"
+    title?: string; // "value"
+    tooltip?: string; // "value"
+    valign?: 'MIDDLE' | 'BOTTOM' | 'TOP'; // "MIDDLE|BOTTOM|TOP"
+    width?: number; // "value"
+  }>;
 
-  export type FontAttributes = {
-    COLOR?: Color | ColorList; // "color"
-    FACE?: string; // "fontname"
-    'POINT-SIZE'?: number; // "value"
-  };
+  export type FontAttributes = Insensitive<{
+    color?: Color | ColorList; // "color"
+    face?: string; // "fontname"
+    'point-size'?: number; // "value"
+  }>;
 
-  export type BrAttributes = {
-    ALIGN?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
-  };
+  export type BrAttributes = Insensitive<{
+    align?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
+  }>;
 
-  export type ImgAttributes = {
-    SCALE?: boolean | 'WIDTH' | 'HEIGHT' | 'BOTH'; // "FALSE|TRUE|WIDTH|HEIGHT|BOTH"
-    SRC?: string; // "value"
-  };
+  export type ImgAttributes = Insensitive<{
+    scale?: boolean | 'WIDTH' | 'HEIGHT' | 'BOTH'; // "FALSE|TRUE|WIDTH|HEIGHT|BOTH"
+    src?: string; // "value"
+  }>;
 
   export type IAttributes = NoAttributes;
 

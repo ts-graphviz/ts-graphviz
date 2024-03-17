@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from 'react';
 import { Graph, RootGraphModel } from 'ts-graphviz';
 import { RootGraphOptions } from '../types.js';
-import { useClusterAttributes } from './use-cluster-attributes.js';
-import { useHasComment } from './use-comment.js';
-import { useGraphvizContext } from './use-graphviz-context.js';
+import { useGraphAttributes } from './useGraphAttributes.js';
+import { useGraphvizContext } from './useGraphvizContext.js';
+import { useHasComment } from './useHasComment.js';
 
 /**
  * `useGraph` is a hook that creates an instance of Graph
@@ -11,7 +11,7 @@ import { useGraphvizContext } from './use-graphviz-context.js';
  */
 export function useGraph(options: RootGraphOptions = {}): RootGraphModel {
   const { id, comment, edge, node, graph, ...attributes } = options;
-  const context = useGraphvizContext();
+  const context = useGraphvizContext<RootGraphModel>();
   const memoGraph = useMemo(() => {
     const g = new Graph(id);
     context.container = g;
@@ -23,7 +23,7 @@ export function useGraph(options: RootGraphOptions = {}): RootGraphModel {
     return g;
   }, [context, id, comment, edge, node, graph, attributes]);
   useHasComment(memoGraph, comment);
-  useClusterAttributes(memoGraph, attributes, { edge, node, graph });
+  useGraphAttributes(memoGraph, attributes, { edge, node, graph });
   useEffect(() => {
     return (): void => {
       context.container = undefined;

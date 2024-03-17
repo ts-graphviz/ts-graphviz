@@ -1,8 +1,8 @@
 import { FC, useEffect } from 'react';
-import { CurrentCluster } from '../contexts/CurrentCluster.js';
-import { useClusterMap } from '../hooks/use-cluster-map.js';
-import { useRenderedID } from '../hooks/use-rendered-id.js';
-import { useSubgraph } from '../hooks/use-subgraph.js';
+import { CurrentGraph } from '../contexts/CurrentGraph.js';
+import { useGraphMap } from '../hooks/useGraphMap.js';
+import { useRenderedID } from '../hooks/useRenderedID.js';
+import { useSubgraph } from '../hooks/useSubgraph.js';
 import { SubgraphProps } from '../types.js';
 /**
  * `Subgraph` component.
@@ -16,16 +16,14 @@ export const Subgraph: FC<SubgraphProps> = ({
   if (renderedLabel !== undefined)
     Object.assign(options, { label: renderedLabel });
   const subgraph = useSubgraph(options);
-  const clusters = useClusterMap();
+  const clusters = useGraphMap();
   useEffect(() => {
     if (subgraph.id !== undefined) {
       clusters.set(subgraph.id, subgraph);
     }
   }, [subgraph, clusters]);
   return (
-    <CurrentCluster.Provider value={subgraph}>
-      {children}
-    </CurrentCluster.Provider>
+    <CurrentGraph.Provider value={subgraph}>{children}</CurrentGraph.Provider>
   );
 };
 

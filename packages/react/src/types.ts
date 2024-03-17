@@ -1,4 +1,3 @@
-import { ReactElement, ReactNode } from 'react';
 import {
   EdgeAttributesObject,
   EdgeTargetLikeTuple,
@@ -6,12 +5,12 @@ import {
   HasComment,
   NodeAttributesObject,
   SubgraphAttributesObject,
-  attribute,
-} from 'ts-graphviz';
+} from '@ts-graphviz/common';
+import { ReactElement, ReactNode } from 'react';
 import { DOT } from './labels.js';
 
 /** Common attribute values of objects under cluster */
-export interface ClusterCommonAttributesProps {
+export interface GraphBaseAttributesProps {
   /** Attribute value for Edges */
   edge?: EdgeAttributesObject;
   /** Attribute value for Nodes */
@@ -22,41 +21,35 @@ export interface ClusterCommonAttributesProps {
 
 /** Options for RootGraph */
 export interface RootGraphOptions
-  extends Omit<GraphAttributesObject, typeof attribute.comment>,
-    ClusterCommonAttributesProps,
-    HasComment {
+  extends GraphAttributesObject,
+    GraphBaseAttributesProps {
   /** Cluster id */
   id?: string;
 }
 
 /** Options for Subgraph */
 export interface SubgraphOptions
-  extends Omit<SubgraphAttributesObject, typeof attribute.comment>,
-    ClusterCommonAttributesProps,
+  extends SubgraphAttributesObject,
+    GraphBaseAttributesProps,
     HasComment {
   /** Cluster id */
   id?: string;
 }
 
 /** Options for Edge */
-export interface EdgeOptions
-  extends Omit<EdgeAttributesObject, typeof attribute.comment>,
-    HasComment {}
+export interface EdgeOptions extends EdgeAttributesObject {}
 
 /** Options for Node */
-export interface NodeOptions
-  extends Omit<NodeAttributesObject, typeof attribute.comment>,
-    HasComment {}
+export interface NodeOptions extends NodeAttributesObject {}
 
 /** Props for RootGraph component */
-export interface RootGraphProps
-  extends Omit<RootGraphOptions, typeof attribute.label> {
+export interface RootGraphProps extends Omit<RootGraphOptions, 'label'> {
   label?: ReactElement | string;
   children?: ReactNode;
 }
 
 /** Props for Edge component */
-export interface EdgeProps extends Omit<EdgeOptions, typeof attribute.label> {
+export interface EdgeProps extends Omit<EdgeOptions, 'label'> {
   /** Edge targets */
   targets: EdgeTargetLikeTuple;
   /** Edge label */
@@ -64,8 +57,7 @@ export interface EdgeProps extends Omit<EdgeOptions, typeof attribute.label> {
 }
 
 /** Props for Node component */
-export interface NodeProps
-  extends Omit<NodeOptions, typeof attribute.label | typeof attribute.xlabel> {
+export interface NodeProps extends Omit<NodeOptions, 'label' | 'xlabel'> {
   /** Node id */
   id: string;
   /** Node label */
@@ -75,15 +67,14 @@ export interface NodeProps
 }
 
 /** Props for Subgraph component */
-export interface SubgraphProps
-  extends Omit<SubgraphOptions, typeof attribute.label> {
+export interface SubgraphProps extends Omit<SubgraphOptions, 'label'> {
   /** Subgraph label */
   label?: ReactElement<any, DOT> | string;
   children?: ReactNode;
 }
 
-/** Props for ClusterPortal component */
-export interface ClusterPortalProps {
+/** Props for GraphPortal component */
+export interface GraphPortalProps {
   /**
    * id of the cluster you want to target for the portal.
    * If not specified, target the cluster that is the container to the portal.

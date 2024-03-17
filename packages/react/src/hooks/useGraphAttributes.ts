@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { AttributeKey, AttributesObject, GraphBaseModel } from 'ts-graphviz';
-import { ClusterCommonAttributesProps } from '../types.js';
+import { GraphBaseAttributesProps } from '../types.js';
 
-export function useClusterAttributes<T extends AttributeKey>(
+export function useGraphAttributes<T extends AttributeKey>(
   cluster: GraphBaseModel<T>,
   attributes: AttributesObject<T>,
-  { edge, node, graph }: ClusterCommonAttributesProps,
+  { edge, node, graph }: GraphBaseAttributesProps,
 ): void {
   useEffect(() => {
     cluster.clear();

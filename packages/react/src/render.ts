@@ -1,9 +1,9 @@
 import { ReactElement, createElement } from 'react';
 import { GraphBaseModel, RootGraphModel, toDot } from 'ts-graphviz';
 
-import { ClusterMap } from './contexts/ClusterMap.js';
-import { ContainerCluster } from './contexts/ContainerCluster.js';
-import { CurrentCluster } from './contexts/CurrentCluster.js';
+import { CurrentGraph } from './contexts/CurrentGraph.js';
+import { GraphContainer } from './contexts/GraphContainer.js';
+import { GraphMap } from './contexts/GraphMap.js';
 import { Context, GraphvizContext } from './contexts/GraphvizContext.js';
 import { reconciler } from './reconciler.js';
 
@@ -66,14 +66,14 @@ export function render<T extends GraphBaseModel>(
       GraphvizContext.Provider,
       { value: context },
       createElement(
-        ClusterMap.Provider,
+        GraphMap.Provider,
         { value: clusterMap(container) },
         createElement(
-          ContainerCluster.Provider,
+          GraphContainer.Provider,
           { value: container ?? null },
           container
             ? createElement(
-                CurrentCluster.Provider,
+                CurrentGraph.Provider,
                 { value: container },
                 element,
               )

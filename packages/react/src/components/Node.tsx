@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { useNode } from '../hooks/use-node.js';
-import { useRenderedID } from '../hooks/use-rendered-id.js';
+import { useNode } from '../hooks/useNode.js';
+import { useRenderedID } from '../hooks/useRenderedID.js';
 import { NodeProps } from '../types.js';
 
 /**

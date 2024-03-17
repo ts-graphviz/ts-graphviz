@@ -1,8 +1,9 @@
-import { renderHook } from '@testing-library/react-hooks';
+// @vitest-environment jsdom
+import { renderHook } from '@testing-library/react';
 import { Edge, EdgeTargetLikeTuple } from 'ts-graphviz';
 import { describe, expect, it, test } from 'vitest';
 import { digraph, graph } from './__tests__/wrapper.js';
-import { useEdge } from './use-edge.js';
+import { useEdge } from './useEdge.js';
 
 describe('useEdge', () => {
   it('returns Edge instance in digraph wrapper', () => {
@@ -34,13 +35,11 @@ describe('useEdge', () => {
   });
 
   test('throw error if the target is less than 2', () => {
-    const { result } = renderHook(
-      () => useEdge(['a'] as any as EdgeTargetLikeTuple),
-      {
+    expect(() => {
+      renderHook(() => useEdge(['a'] as any as EdgeTargetLikeTuple), {
         wrapper: graph(),
-      },
-    );
-    expect(result.error).toMatchInlineSnapshot(
+      });
+    }).toThrowErrorMatchingInlineSnapshot(
       `[Error: Edges must have at least 2 targets.]`,
     );
   });

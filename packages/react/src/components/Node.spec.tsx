@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { DOT } from '../labels.js';
 import { renderToDot } from '../render.js';
 import { Digraph } from './Digraph.js';
 import { Node } from './Node.js';
@@ -39,13 +38,13 @@ describe('Node', () => {
         <Node
           id="foo"
           label={
-            <DOT.TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-              <DOT.TR>
-                <DOT.TD>left</DOT.TD>
-                <DOT.TD PORT="m">middle</DOT.TD>
-                <DOT.TD PORT="r">right</DOT.TD>
-              </DOT.TR>
-            </DOT.TABLE>
+            <dot:table border={0} cellborder={1} cellSpacing={0}>
+              <dot:tr>
+                <dot:td>left</dot:td>
+                <dot:td port="m">middle</dot:td>
+                <dot:td port="r">right</dot:td>
+              </dot:tr>
+            </dot:table>
           }
         />
       </Digraph>,
@@ -53,7 +52,7 @@ describe('Node', () => {
     expect(dot).toMatchInlineSnapshot(`
       "digraph {
         "foo" [
-          label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"><TR><TD>left</TD><TD PORT="m">middle</TD><TD PORT="r">right</TD></TR></TABLE>>;
+          label = <<table border="0" cellborder="1" cellSpacing="0"><tr><td>left</td><td port="m">middle</td><td port="r">right</td></tr></table>>;
         ];
       }"
     `);
@@ -80,13 +79,13 @@ describe('Node', () => {
         <Node
           id="foo"
           xlabel={
-            <DOT.TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-              <DOT.TR>
-                <DOT.TD>left</DOT.TD>
-                <DOT.TD PORT="m">middle</DOT.TD>
-                <DOT.TD PORT="r">right</DOT.TD>
-              </DOT.TR>
-            </DOT.TABLE>
+            <dot:table border={0} cellborder={1} cellSpacing={0}>
+              <dot:tr>
+                <dot:td>left</dot:td>
+                <dot:td port="m">middle</dot:td>
+                <dot:td port="r">right</dot:td>
+              </dot:tr>
+            </dot:table>
           }
         />
       </Digraph>,
@@ -94,7 +93,7 @@ describe('Node', () => {
     expect(dot).toMatchInlineSnapshot(`
       "digraph {
         "foo" [
-          xlabel = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0"><TR><TD>left</TD><TD PORT="m">middle</TD><TD PORT="r">right</TD></TR></TABLE>>;
+          xlabel = <<table border="0" cellborder="1" cellSpacing="0"><tr><td>left</td><td port="m">middle</td><td port="r">right</td></tr></table>>;
         ];
       }"
     `);

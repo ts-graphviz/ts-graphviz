@@ -4,6 +4,5 @@
     "outDir": "lib",
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
