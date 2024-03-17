@@ -4,7 +4,7 @@
 
 ### Initial release
 
-> Module split in ts-graphviz v2.0.0.
+> It is part of the ts-graphviz library, which is split into modular packages to improve maintainability, flexibility, and ease of use.
 
 Provides an interface to run Graphviz dot commands.
 
