@@ -1,4 +1,5 @@
 ---
+"ts-graphviz": minor
 "@ts-graphviz/common": minor
 ---
 
