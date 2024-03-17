@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { Digraph, RootGraphModel } from 'ts-graphviz';
-import { RootGraphOptions } from '../types.js';
+import { Digraph, type RootGraphModel } from 'ts-graphviz';
+import type { RootGraphOptions } from '../types.js';
 import { useGraphAttributes } from './useGraphAttributes.js';
 import { useGraphvizContext } from './useGraphvizContext.js';
 import { useHasComment } from './useHasComment.js';

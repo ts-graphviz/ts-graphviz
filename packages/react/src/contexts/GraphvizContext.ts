@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { GraphBaseModel } from 'ts-graphviz';
+import type { GraphBaseModel } from 'ts-graphviz';
 
 export interface Context<T extends GraphBaseModel = GraphBaseModel> {
   container?: T;

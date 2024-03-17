@@ -1,6 +1,6 @@
 import { map, pipe } from '@ts-graphviz/common';
-import { NodeASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
+import type { NodeASTNode } from '../../../types.js';
+import type { PrintPlugin } from '../types.js';
 import { endOfLine, indent, joinBy, wrapByPair } from './utils/index.js';
 
 export const NodePrintPlugin: PrintPlugin<NodeASTNode> = {

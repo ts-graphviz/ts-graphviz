@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
-import { GraphBaseModel } from 'ts-graphviz';
-import { Context, GraphvizContext } from '../contexts/GraphvizContext.js';
+import type React from 'react';
+import { useContext } from 'react';
+import type { GraphBaseModel } from 'ts-graphviz';
+import { type Context, GraphvizContext } from '../contexts/GraphvizContext.js';
 
 export function useGraphvizContext<T extends GraphBaseModel>(): Context<T> {
   const context = useContext(

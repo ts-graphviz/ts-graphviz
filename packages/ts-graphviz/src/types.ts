@@ -1,4 +1,7 @@
-import { GraphAttributesObject, RootGraphModel } from '@ts-graphviz/common';
+import type {
+  GraphAttributesObject,
+  RootGraphModel,
+} from '@ts-graphviz/common';
 
 /**
  * ModelFactory is an interface that provides a way to create a {@link RootGraphModel} object.

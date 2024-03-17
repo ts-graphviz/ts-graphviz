@@ -1,4 +1,4 @@
-import { AttributeKey } from '@ts-graphviz/common';
+import type { AttributeKey } from '@ts-graphviz/common';
 import type {
   ASTChildNode,
   AttributeASTNode,

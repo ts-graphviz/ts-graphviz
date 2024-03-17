@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { GraphBaseModel } from 'ts-graphviz';
+import type { GraphBaseModel } from 'ts-graphviz';
 import { GraphContainer } from '../contexts/GraphContainer.js';
 
 /**

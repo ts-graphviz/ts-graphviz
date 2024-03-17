@@ -1,7 +1,7 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { useNode } from '../hooks/useNode.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
-import { NodeProps } from '../types.js';
+import type { NodeProps } from '../types.js';
 
 /**
  * `Node` component.

@@ -1,6 +1,6 @@
-import { AttributeListModel } from '@ts-graphviz/common';
+import type { AttributeListModel } from '@ts-graphviz/common';
 import { createElement } from '../../../builder/create-element.js';
-import { ConvertFromModelPlugin } from '../types.js';
+import type { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute } from './utils/index.js';
 
 export const AttributeListPlugin: ConvertFromModelPlugin<AttributeListModel> = {

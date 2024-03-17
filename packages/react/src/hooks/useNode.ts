@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { NodeModel } from 'ts-graphviz';
-import { NodeOptions } from '../types.js';
+import type { NodeModel } from 'ts-graphviz';
+import type { NodeOptions } from '../types.js';
 import { useCurrentGraph } from './useCurrentGraph.js';
 import { useHasAttributes } from './useHasAttributes.js';
 import { useHasComment } from './useHasComment.js';

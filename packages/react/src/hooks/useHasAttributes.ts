@@ -1,5 +1,9 @@
 import { useEffect } from 'react';
-import { AttributeKey, AttributesObject, HasAttributes } from 'ts-graphviz';
+import type {
+  AttributeKey,
+  AttributesObject,
+  HasAttributes,
+} from 'ts-graphviz';
 
 export function useHasAttributes<T extends AttributeKey>(
   target: HasAttributes<T>,

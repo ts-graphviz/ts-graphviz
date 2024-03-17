@@ -3,7 +3,7 @@ import { createCommandAndArgs } from './create-command-and-args.js';
 /**
  * @module @ts-graphviz/adapter
  */
-import { Layout, Options } from './types.js';
+import type { Layout, Options } from './types.js';
 
 // biome-ignore lint/style/noVar: <explanation>
 declare var Deno: any;

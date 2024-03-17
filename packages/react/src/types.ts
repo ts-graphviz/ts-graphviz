@@ -1,4 +1,4 @@
-import {
+import type {
   EdgeAttributesObject,
   EdgeTargetLikeTuple,
   GraphAttributesObject,
@@ -6,8 +6,8 @@ import {
   NodeAttributesObject,
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';
-import { ReactElement, ReactNode } from 'react';
-import { DOT } from './labels.js';
+import type { ReactElement, ReactNode } from 'react';
+import type { DOT } from './labels.js';
 
 /** Common attribute values of objects under cluster */
 export interface GraphBaseAttributesProps {

@@ -2,10 +2,7 @@
   "name": "ts-graphviz",
   "version": "2.0.0",
   "description": "Graphviz library for TypeScript",
-  "keywords": [
-    "graphviz",
-    "dot"
-  ],
+  "keywords": ["graphviz", "dot"],
   "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"

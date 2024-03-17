@@ -1,5 +1,5 @@
-import { NodeRefASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
+import type { NodeRefASTNode } from '../../../types.js';
+import type { PrintPlugin } from '../types.js';
 
 export const NodeRefPrintPlugin: PrintPlugin<NodeRefASTNode> = {
   match(ast) {

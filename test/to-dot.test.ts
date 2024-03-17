@@ -1,7 +1,7 @@
 import {
   Digraph,
   Graph,
-  RootGraphModel,
+  type RootGraphModel,
   attribute as _,
   toDot,
 } from 'ts-graphviz';

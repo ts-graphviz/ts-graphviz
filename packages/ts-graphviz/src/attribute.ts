@@ -1,4 +1,4 @@
-import { Attribute } from '@ts-graphviz/common';
+import type { Attribute } from '@ts-graphviz/common';
 
 /**
  * @group Attribute

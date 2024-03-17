@@ -1,5 +1,5 @@
-import { AttributeASTNode, NodeASTNode } from '../../../types.js';
-import { ConvertToModelPlugin } from '../types.js';
+import type { AttributeASTNode, NodeASTNode } from '../../../types.js';
+import type { ConvertToModelPlugin } from '../types.js';
 
 export const NodePlugin: ConvertToModelPlugin<NodeASTNode> = {
   match(ast) {

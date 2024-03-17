@@ -1,11 +1,11 @@
-import { DotObjectModel } from '@ts-graphviz/common';
+import type { DotObjectModel } from '@ts-graphviz/common';
 import { defaultPlugins } from './plugins/index.js';
-import {
+import type {
   ConvertFromModelContext,
   ConvertFromModelOptions,
   ConvertFromModelPlugin,
 } from './types.js';
-import { ModelToAST } from './types.js';
+import type { ModelToAST } from './types.js';
 
 /**
  * FromModelConverter is a class used to convert a {@link DotObjectModel} into an ASTNode.

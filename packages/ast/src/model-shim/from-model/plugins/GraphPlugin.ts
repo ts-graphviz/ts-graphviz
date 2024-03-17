@@ -1,6 +1,6 @@
-import { RootGraphModel } from '@ts-graphviz/common';
+import type { RootGraphModel } from '@ts-graphviz/common';
 import { createElement } from '../../../builder/create-element.js';
-import { ConvertFromModelPlugin } from '../types.js';
+import type { ConvertFromModelPlugin } from '../types.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';
 import { convertComment } from './utils/convert-comment.js';
 

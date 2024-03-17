@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { EdgeModel, EdgeTargetLikeTuple } from 'ts-graphviz';
-import { EdgeOptions } from '../types.js';
+import type { EdgeModel, EdgeTargetLikeTuple } from 'ts-graphviz';
+import type { EdgeOptions } from '../types.js';
 import { useCurrentGraph } from './useCurrentGraph.js';
 import { useHasAttributes } from './useHasAttributes.js';
 import { useHasComment } from './useHasComment.js';

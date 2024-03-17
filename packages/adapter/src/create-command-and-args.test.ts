@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createCommandAndArgs } from './create-command-and-args.js';
-import { Options } from './types.js';
+import type { Options } from './types.js';
 
 describe('createCommandAndArgs', () => {
   it('should return the correct command and args', () => {

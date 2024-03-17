@@ -1,9 +1,9 @@
-import { FC, useEffect } from 'react';
+import { type FC, useEffect } from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { useGraphMap } from '../hooks/useGraphMap.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
 import { useSubgraph } from '../hooks/useSubgraph.js';
-import { SubgraphProps } from '../types.js';
+import type { SubgraphProps } from '../types.js';
 /**
  * `Subgraph` component.
  */

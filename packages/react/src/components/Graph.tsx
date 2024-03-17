@@ -1,11 +1,11 @@
-import { FC, useEffect } from 'react';
+import { type FC, useEffect } from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphContainer } from '../contexts/GraphContainer.js';
 import { useGraph } from '../hooks/useGraph.js';
 import { useGraphContainer } from '../hooks/useGraphContainer.js';
 import { useGraphMap } from '../hooks/useGraphMap.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
-import { RootGraphProps } from '../types.js';
+import type { RootGraphProps } from '../types.js';
 /**
  * `Graph` component.
  */

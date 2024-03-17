@@ -1,4 +1,4 @@
-import { ASTNode } from '../../types.js';
+import type { ASTNode } from '../../types.js';
 
 /**
  * The IndentStyle type represents an indentation style for text. It can either be a `"space"` or a `"tab"`.

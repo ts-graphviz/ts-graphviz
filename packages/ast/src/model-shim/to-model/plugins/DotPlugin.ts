@@ -1,5 +1,5 @@
-import { DotASTNode } from '../../../types.js';
-import { ConvertToModelPlugin } from '../types.js';
+import type { DotASTNode } from '../../../types.js';
+import type { ConvertToModelPlugin } from '../types.js';
 import { CommentHolder } from './utils/comment-holder.js';
 
 export const DotPlugin: ConvertToModelPlugin<DotASTNode> = {

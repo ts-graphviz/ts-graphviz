@@ -1,10 +1,10 @@
-import { ReactElement, createElement } from 'react';
-import { GraphBaseModel, RootGraphModel, toDot } from 'ts-graphviz';
+import { type ReactElement, createElement } from 'react';
+import { type GraphBaseModel, type RootGraphModel, toDot } from 'ts-graphviz';
 
 import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
 import { GraphMap } from './contexts/GraphMap.js';
-import { Context, GraphvizContext } from './contexts/GraphvizContext.js';
+import { type Context, GraphvizContext } from './contexts/GraphvizContext.js';
 import { reconciler } from './reconciler.js';
 
 const noop = (): void => undefined;

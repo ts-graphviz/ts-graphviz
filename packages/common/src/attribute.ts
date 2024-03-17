@@ -1,4 +1,4 @@
-import { $keywords, $keywordsValidation } from './types.js';
+import type { $keywords, $keywordsValidation } from './types.js';
 import type {
   AddDouble,
   AddPoint,

@@ -1,5 +1,5 @@
 import { toFile } from '@ts-graphviz/adapter';
-import { $keywords, attribute as _, digraph, toDot } from 'ts-graphviz';
+import { type $keywords, attribute as _, digraph, toDot } from 'ts-graphviz';
 
 declare module 'ts-graphviz' {
   export namespace GraphAttributeKey {

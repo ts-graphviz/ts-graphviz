@@ -1,6 +1,6 @@
-import { NodeModel } from '@ts-graphviz/common';
+import type { NodeModel } from '@ts-graphviz/common';
 import { createElement } from '../../../builder/create-element.js';
-import { ConvertFromModelPlugin } from '../types.js';
+import type { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute, convertComment } from './utils/index.js';
 
 export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {

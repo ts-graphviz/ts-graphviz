@@ -1,4 +1,4 @@
-import {
+import type {
   AttributeKey,
   AttributeListKind,
   AttributeListModel,

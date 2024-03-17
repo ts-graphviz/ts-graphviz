@@ -1,5 +1,5 @@
 import { createElement } from '../../../../builder/create-element.js';
-import { CommentASTNode, CommentKind } from '../../../../types.js';
+import type { CommentASTNode, CommentKind } from '../../../../types.js';
 
 export function convertComment(
   value: string,

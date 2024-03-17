@@ -1,5 +1,5 @@
-import { AttributeASTNode, EdgeASTNode } from '../../../types.js';
-import { ConvertToModelPlugin } from '../types.js';
+import type { AttributeASTNode, EdgeASTNode } from '../../../types.js';
+import type { ConvertToModelPlugin } from '../types.js';
 import { convertToEdgeTargetTuple } from './utils/convert-to-edge-target-tuple.js';
 
 export const EdgePlugin: ConvertToModelPlugin<EdgeASTNode> = {

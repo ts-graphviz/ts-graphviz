@@ -1,5 +1,5 @@
-import { GraphASTNode } from '../../../types.js';
-import { ConvertToModelPlugin } from '../types.js';
+import type { GraphASTNode } from '../../../types.js';
+import type { ConvertToModelPlugin } from '../types.js';
 import { applyStatements } from './utils/apply-statments.js';
 
 export const GraphPlugin: ConvertToModelPlugin<GraphASTNode> = {

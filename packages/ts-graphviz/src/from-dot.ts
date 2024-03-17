@@ -1,10 +1,10 @@
 import {
-  ConvertToModelOptions,
-  ParseOptions,
+  type ConvertToModelOptions,
+  type ParseOptions,
   parse,
   toModel,
 } from '@ts-graphviz/ast';
-import {
+import type {
   EdgeModel,
   NodeModel,
   RootGraphModel,

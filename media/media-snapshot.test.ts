@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import { toStream } from '@ts-graphviz/adapter';
-import { RootGraphModel } from '@ts-graphviz/common';
+import type { RootGraphModel } from '@ts-graphviz/common';
 import { optimize } from 'svgo';
 import { toDot } from 'ts-graphviz';
 import { test } from 'vitest';

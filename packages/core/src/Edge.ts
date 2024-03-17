@@ -1,9 +1,9 @@
 import {
-  AttributesGroupModel,
-  EdgeAttributeKey,
-  EdgeAttributesObject,
-  EdgeModel,
-  EdgeTargetTuple,
+  type AttributesGroupModel,
+  type EdgeAttributeKey,
+  type EdgeAttributesObject,
+  type EdgeModel,
+  type EdgeTargetTuple,
   isNodeRefLike,
 } from '@ts-graphviz/common';
 import { AttributesGroup } from './AttributesGroup.js';

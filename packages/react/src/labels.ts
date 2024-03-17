@@ -1,4 +1,4 @@
-import { type HTMLLikeLabel } from '@ts-graphviz/common';
+import type { HTMLLikeLabel } from '@ts-graphviz/common';
 
 type ValueOf<T> = T[keyof T];
 

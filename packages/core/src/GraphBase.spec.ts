@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, test, vi } from 'vitest';
 import { registerDefault } from './register-default.js';
 registerDefault();
 
-import { EdgeTargetTuple, NodeModel } from '@ts-graphviz/common';
+import type { EdgeTargetTuple, NodeModel } from '@ts-graphviz/common';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
 import { Edge } from './Edge.js';

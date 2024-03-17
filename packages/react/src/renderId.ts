@@ -1,4 +1,4 @@
-import { ReactElement, isValidElement } from 'react';
+import { type ReactElement, isValidElement } from 'react';
 import { renderHTMLLike } from './renderHTMLLike.js';
 
 export function renderId<T>(id?: ReactElement<T> | string): string | undefined {

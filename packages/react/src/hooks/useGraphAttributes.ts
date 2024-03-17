@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
-import { AttributeKey, AttributesObject, GraphBaseModel } from 'ts-graphviz';
-import { GraphBaseAttributesProps } from '../types.js';
+import type {
+  AttributeKey,
+  AttributesObject,
+  GraphBaseModel,
+} from 'ts-graphviz';
+import type { GraphBaseAttributesProps } from '../types.js';
 
 export function useGraphAttributes<T extends AttributeKey>(
   cluster: GraphBaseModel<T>,

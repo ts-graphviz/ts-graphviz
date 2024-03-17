@@ -1,5 +1,5 @@
-import { SubgraphASTNode } from '../../../types.js';
-import { ConvertToModelPlugin } from '../types.js';
+import type { SubgraphASTNode } from '../../../types.js';
+import type { ConvertToModelPlugin } from '../types.js';
 import { applyStatements } from './utils/apply-statments.js';
 
 export const SubgraphPlugin: ConvertToModelPlugin<SubgraphASTNode> = {

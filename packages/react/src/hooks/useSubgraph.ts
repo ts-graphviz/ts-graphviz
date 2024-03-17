@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { GraphBaseModel, Subgraph, SubgraphModel } from 'ts-graphviz';
-import { SubgraphOptions } from '../types.js';
+import { type GraphBaseModel, Subgraph, type SubgraphModel } from 'ts-graphviz';
+import type { SubgraphOptions } from '../types.js';
 import { useCurrentGraph } from './useCurrentGraph.js';
 import { useGraphAttributes } from './useGraphAttributes.js';
 import { useGraphvizContext } from './useGraphvizContext.js';

@@ -1,5 +1,5 @@
-import { DotObjectModel } from '@ts-graphviz/common';
-import {
+import type { DotObjectModel } from '@ts-graphviz/common';
+import type {
   AttributeListASTNode,
   CommentKind,
   DotASTNode,

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { renderHook } from '@testing-library/react';
-import { Edge, EdgeTargetLikeTuple } from 'ts-graphviz';
+import { Edge, type EdgeTargetLikeTuple } from 'ts-graphviz';
 import { describe, expect, it, test } from 'vitest';
 import { digraph, graph } from './__tests__/wrapper.js';
 import { useEdge } from './useEdge.js';

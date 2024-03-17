@@ -1,6 +1,6 @@
 import { map, pipe } from '@ts-graphviz/common';
-import { NodeRefGroupASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
+import type { NodeRefGroupASTNode } from '../../../types.js';
+import type { PrintPlugin } from '../types.js';
 import { joinBy, wrapByPair } from './utils/index.js';
 
 export const NodeRefGroupPrintPlugin: PrintPlugin<NodeRefGroupASTNode> = {

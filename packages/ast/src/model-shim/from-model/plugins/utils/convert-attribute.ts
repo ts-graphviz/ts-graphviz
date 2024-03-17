@@ -1,6 +1,6 @@
-import { Attribute, AttributeKey } from '@ts-graphviz/common';
+import type { Attribute, AttributeKey } from '@ts-graphviz/common';
 import { createElement } from '../../../../builder/create-element.js';
-import { AttributeASTNode } from '../../../../types.js';
+import type { AttributeASTNode } from '../../../../types.js';
 
 export function convertAttribute<K extends AttributeKey>(
   key: K,

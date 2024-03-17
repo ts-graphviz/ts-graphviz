@@ -1,4 +1,4 @@
-import { PrintPlugin } from '../types.js';
+import type { PrintPlugin } from '../types.js';
 import { AttributeListPrintPlugin } from './AttributeListPrintPlugin.js';
 import { AttributePrintPlugin } from './AttributePrintPlugin.js';
 import { CommentPrintPlugin } from './CommentPrintPlugin.js';

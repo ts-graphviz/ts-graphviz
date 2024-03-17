@@ -1,8 +1,8 @@
-import { FC, useContext, useMemo } from 'react';
+import { type FC, useContext, useMemo } from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphMap } from '../contexts/GraphMap.js';
 import { useGraphContainer } from '../hooks/useGraphContainer.js';
-import { GraphPortalProps } from '../types.js';
+import type { GraphPortalProps } from '../types.js';
 
 /**
  * GraphPortal component.

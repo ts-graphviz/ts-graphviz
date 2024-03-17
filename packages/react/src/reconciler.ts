@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import ReactReconciler from 'react-reconciler';
 
 type Type = FC;
