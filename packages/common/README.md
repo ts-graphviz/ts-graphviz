@@ -1,8 +1,8 @@
 # @ts-graphviz/common
 
-This package contains type information, constants, and utility functions related to the DOT language attributes, attribute values, and models for ts-graphviz.
+> It is part of the ts-graphviz library, which is split into modular packages to improve maintainability, flexibility, and ease of use.
 
-It is part of the ts-graphviz library, which is split into modular packages to improve maintainability, flexibility, and ease of use.
+This package contains type information, constants, and utility functions related to the DOT language attributes, attribute values, and models for ts-graphviz.
 
 ## Features
 

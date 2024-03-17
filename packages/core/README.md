@@ -1,8 +1,8 @@
 # @ts-graphviz/core
 
-This package contains the core implementation of models and functions provided to users for the ts-graphviz library.
+> It is part of the ts-graphviz library, which is split into modular packages to improve maintainability, flexibility, and ease of use.
 
-It is part of the ts-graphviz library, which is split into modular packages to improve maintainability, flexibility, and ease of use.
+This package contains the core implementation of models and functions provided to users for the ts-graphviz library.
 
 ## Features
 
