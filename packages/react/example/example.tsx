@@ -15,7 +15,7 @@ const Example = () => (
       id="nodeA"
       shape="none"
       label={
-        <dot:table border="0" cellborder="1" cellSpacing="0">
+        <dot:table border={0} cellborder={1} cellSpacing={0}>
           <dot:tr>
             <dot:td>left</dot:td>
             <dot:td port="m">middle</dot:td>
