@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { GraphBaseModel } from 'ts-graphviz';
+import type { GraphBaseModel } from 'ts-graphviz';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 
 /**
@@ -11,7 +11,7 @@ export function useCurrentGraph(): GraphBaseModel {
   const cluster = useContext(CurrentGraph);
   if (cluster === null) {
     throw Error(
-      'useCluster must be called within a cluster such as Digraph, Graph, Subgraph.',
+      'useCurrentGraph must be called within a cluster such as Digraph, Graph, Subgraph.',
     );
   }
   return cluster;

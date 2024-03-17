@@ -47,7 +47,7 @@ describe('useCurrentGraph', () => {
       expect(() => {
         renderHook(() => useCurrentGraph());
       }).toThrowErrorMatchingInlineSnapshot(
-        `[Error: useCluster must be called within a cluster such as Digraph, Graph, Subgraph.]`,
+        `[Error: useCurrentGraph must be called within a cluster such as Digraph, Graph, Subgraph.]`,
       );
     } catch (e) {
       console.error(e);
