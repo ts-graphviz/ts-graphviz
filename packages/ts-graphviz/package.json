@@ -28,14 +28,9 @@
   "type": "module",
   "exports": {
     ".": {
-      "require": {
-        "types": "./lib/ts-graphviz.d.ts",
-        "default": "./lib/ts-graphviz.cjs"
-      },
-      "import": {
-        "types": "./lib/ts-graphviz.d.ts",
-        "default": "./lib/ts-graphviz.js"
-      }
+      "types": "./lib/ts-graphviz.d.ts",
+      "require": "./lib/ts-graphviz.cjs",
+      "default": "./lib/ts-graphviz.js"
     },
     "./ast": {
       "types": "./lib/ast.d.ts",

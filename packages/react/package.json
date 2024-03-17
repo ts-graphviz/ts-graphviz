@@ -40,8 +40,8 @@
     "example": "ts-node example/example"
   },
   "dependencies": {
-    "react-reconciler": "^0.29.0",
     "@ts-graphviz/common": "workspace:^",
+    "react-reconciler": "^0.29.0",
     "ts-graphviz": "workspace:^"
   },
   "devDependencies": {

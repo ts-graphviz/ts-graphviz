@@ -27,14 +27,9 @@
   "type": "module",
   "exports": {
     ".": {
-      "require": {
-        "types": "./lib/ast.d.ts",
-        "default": "./lib/ast.cjs"
-      },
-      "import": {
-        "types": "./lib/ast.d.ts",
-        "default": "./lib/ast.js"
-      }
+      "types": "./lib/ast.d.ts",
+      "require": "./lib/ast.cjs",
+      "default": "./lib/ast.js"
     },
     "./package.json": "./package.json"
   },
