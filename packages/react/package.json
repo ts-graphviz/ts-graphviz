@@ -1,8 +1,12 @@
 {
   "name": "@ts-graphviz/react",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "Graphviz-dot Renderer for React.",
-  "keywords": ["graphviz", "dot", "react"],
+  "keywords": [
+    "graphviz",
+    "dot",
+    "react"
+  ],
   "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
