@@ -2,12 +2,12 @@ import type {
   EdgeAttributesObject,
   EdgeTargetLikeTuple,
   GraphAttributesObject,
+  HTMLLikeLabel,
   HasComment,
   NodeAttributesObject,
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';
 import type { ReactElement, ReactNode } from 'react';
-import type { DOT } from './labels.js';
 
 /** Common attribute values of objects under cluster */
 export interface GraphBaseAttributesProps {
@@ -53,7 +53,7 @@ export interface EdgeProps extends Omit<EdgeOptions, 'label'> {
   /** Edge targets */
   targets: EdgeTargetLikeTuple;
   /** Edge label */
-  label?: ReactElement<DOT> | string;
+  label?: ReactElement | string;
 }
 
 /** Props for Node component */
@@ -61,15 +61,15 @@ export interface NodeProps extends Omit<NodeOptions, 'label' | 'xlabel'> {
   /** Node id */
   id: string;
   /** Node label */
-  label?: ReactElement<any, DOT> | string;
+  label?: ReactElement | string;
   /** Node xlabel */
-  xlabel?: ReactElement<any, DOT> | string;
+  xlabel?: ReactElement | string;
 }
 
 /** Props for Subgraph component */
 export interface SubgraphProps extends Omit<SubgraphOptions, 'label'> {
   /** Subgraph label */
-  label?: ReactElement<any, DOT> | string;
+  label?: ReactElement | string;
   children?: ReactNode;
 }
 
@@ -81,4 +81,27 @@ export interface GraphPortalProps {
    */
   id?: string;
   children?: ReactNode;
+}
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'dot:port': { children: string };
+      'dot:table': HTMLLikeLabel.TableAttributes & { children?: ReactNode };
+      'dot:tr': HTMLLikeLabel.TrAttributes & { children?: ReactNode };
+      'dot:td': HTMLLikeLabel.TdAttributes & { children?: ReactNode };
+      'dot:font': HTMLLikeLabel.FontAttributes & { children?: ReactNode };
+      'dot:br': HTMLLikeLabel.BrAttributes;
+      'dot:img': HTMLLikeLabel.ImgAttributes;
+      'dot:i': HTMLLikeLabel.IAttributes & { children?: ReactNode };
+      'dot:b': HTMLLikeLabel.BAttributes & { children?: ReactNode };
+      'dot:u': HTMLLikeLabel.UAttributes & { children?: ReactNode };
+      'dot:o': HTMLLikeLabel.OAttributes & { children?: ReactNode };
+      'dot:sub': HTMLLikeLabel.SubAttributes & { children?: ReactNode };
+      'dot:sup': HTMLLikeLabel.SupAttributes & { children?: ReactNode };
+      'dot:s': HTMLLikeLabel.SAttributes & { children?: ReactNode };
+      'dot:hr': HTMLLikeLabel.HrAttributes;
+      'dot:vr': HTMLLikeLabel.VrAttributes;
+    }
+  }
 }

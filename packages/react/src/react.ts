@@ -1,5 +1,4 @@
 export * from './types.js';
-export * from './labels.js';
 export * from './hooks/useGraphContainer.js';
 export * from './hooks/useCurrentGraph.js';
 export * from './hooks/useDigraph.js';

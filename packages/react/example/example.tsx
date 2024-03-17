@@ -1,14 +1,6 @@
-import type { FC } from 'react';
-import {
-  DOT,
-  Digraph,
-  Edge,
-  Node,
-  Subgraph,
-  renderToDot,
-} from '../src/react.js';
+import { Digraph, Edge, Node, Subgraph, renderToDot } from '@ts-graphviz/react';
 
-const Example: FC = () => (
+const Example = () => (
   <Digraph
     rankdir="TB"
     edge={{
@@ -23,13 +15,13 @@ const Example: FC = () => (
       id="nodeA"
       shape="none"
       label={
-        <DOT.TABLE BORDER={0} CELLBORDER={1} CELLSPACING={0}>
-          <DOT.TR>
-            <DOT.TD>left</DOT.TD>
-            <DOT.TD PORT="m">middle</DOT.TD>
-            <DOT.TD PORT="r">right</DOT.TD>
-          </DOT.TR>
-        </DOT.TABLE>
+        <dot:table border="0" cellborder="1" cellSpacing="0">
+          <dot:tr>
+            <dot:td>left</dot:td>
+            <dot:td port="m">middle</dot:td>
+            <dot:td port="r">right</dot:td>
+          </dot:tr>
+        </dot:table>
       }
     />
 
@@ -39,7 +31,7 @@ const Example: FC = () => (
     <Edge
       targets={['nodeB', 'nodeA:m']}
       comment="Edge from node A to B"
-      label={<DOT.B>A to B</DOT.B>}
+      label={<dot:b>A to B</dot:b>}
     />
   </Digraph>
 );
