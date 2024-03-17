@@ -1,8 +1,8 @@
 # @ts-graphviz/ast
 
-This package contains the module for processing the DOT language at the **A**bstract **S**yntax **T**ree (AST) level for the ts-graphviz library.
+> It is part of the ts-graphviz library, which is split into modular packages to improve maintainability, flexibility, and ease of use.
 
-It is part of the ts-graphviz library, which is split into modular packages to improve maintainability, flexibility, and ease of use.
+This package contains the module for processing the DOT language at the **A**bstract **S**yntax **T**ree (AST) level for the ts-graphviz library.
 
 ## Features
 

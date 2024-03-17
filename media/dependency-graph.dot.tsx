@@ -1,7 +1,7 @@
 import { findWorkspacePackages } from '@pnpm/workspace.find-packages';
 import { createPkgGraph } from '@pnpm/workspace.pkgs-graph';
 
-import { DOT, renderHTMLLike } from '@ts-graphviz/react';
+import { renderHTMLLike } from '@ts-graphviz/react';
 import { digraph } from 'ts-graphviz';
 
 const workspacePackages = await findWorkspacePackages(process.cwd());

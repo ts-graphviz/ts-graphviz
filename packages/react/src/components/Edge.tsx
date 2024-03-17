@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import type { FC } from 'react';
 import { useEdge } from '../hooks/useEdge.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';

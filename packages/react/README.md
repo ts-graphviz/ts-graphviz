@@ -1,5 +1,7 @@
 # @ts-graphviz/react
 
+> It is part of the ts-graphviz library, which is split into modular packages to improve maintainability, flexibility, and ease of use.
+
 Graphviz-dot Renderer using React.
 
 ## Installation
@@ -15,7 +17,7 @@ $ yarn add @ts-graphviz/react react react-dom
 $ npm install -S @ts-graphviz/react react react-dom
 ```
 
-> Install [React](https://github.com/facebook/react/) as peerDependencies at the same time.
+> Install [React and React DOM](https://github.com/facebook/react/) as peerDependencies at the same time.
 
 ## Example
 

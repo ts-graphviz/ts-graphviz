@@ -255,9 +255,6 @@ importers:
       '@testing-library/react':
         specifier: ^14.2.1
         version: 14.2.1(react-dom@18.2.0)(react@18.2.0)
-      '@types/prop-types':
-        specifier: ^15.7.11
-        version: 15.7.11
       '@types/react':
         specifier: ^18.2.65
         version: 18.2.66
@@ -301,12 +298,6 @@ importers:
         specifier: workspace:^
         version: link:../core
     devDependencies:
-      peggy:
-        specifier: ^3.0.2
-        version: 3.0.2
-      ts-pegjs:
-        specifier: ^4.2.1
-        version: 4.2.1(peggy@3.0.2)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -5527,7 +5518,7 @@ packages:
   /jsonfile@4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
     optionalDependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
     dev: true
 
   /jsonfile@6.1.0:
@@ -6261,7 +6252,7 @@ packages:
     dependencies:
       env-paths: 2.2.1
       glob: 7.2.3
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       make-fetch-happen: 9.1.0
       nopt: 5.0.0
       npmlog: 6.0.2

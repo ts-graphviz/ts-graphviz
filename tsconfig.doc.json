@@ -9,5 +9,10 @@
       "@ts-graphviz/adapter": ["./packages/adapter/src/node.js"]
     }
   },
-  "include": ["packages/*/src/**/*.ts"]
+  "include": ["packages/*/src/**/*.ts"],
+  "exclude": [
+    "packages/**/vite.config.ts",
+    "media/*.dot.ts",
+    "node_modules/**/*"
+  ]
 }
