@@ -1,6 +1,6 @@
-import { DotObjectModel } from '@ts-graphviz/common';
+import type { DotObjectModel } from '@ts-graphviz/common';
 import { FromModelConverter } from './converter.js';
-import { ConvertFromModelOptions, ModelToAST } from './types.js';
+import type { ConvertFromModelOptions, ModelToAST } from './types.js';
 
 /**
  * A function used to convert a DotObjectModel into an AST.

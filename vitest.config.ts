@@ -10,5 +10,8 @@ export default defineConfig({
       provider: 'istanbul',
       include: ['packages/**/src/**/*.ts'],
     },
+    typecheck: {
+      enabled: true,
+    },
   },
 });

@@ -1,6 +1,6 @@
 import { map, pipe } from '@ts-graphviz/common';
-import { SubgraphASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
+import type { SubgraphASTNode } from '../../../types.js';
+import type { PrintPlugin } from '../types.js';
 import { endOfLine, indent, joinBy, wrapByPair } from './utils/index.js';
 
 export const SubgraphPrintPlugin: PrintPlugin<SubgraphASTNode> = {

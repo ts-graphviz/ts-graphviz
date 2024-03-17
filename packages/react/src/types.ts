@@ -1,16 +1,16 @@
-import { ReactElement, ReactNode } from 'react';
-import {
+import type {
   EdgeAttributesObject,
   EdgeTargetLikeTuple,
   GraphAttributesObject,
+  HTMLLikeLabel,
   HasComment,
   NodeAttributesObject,
   SubgraphAttributesObject,
-  attribute,
-} from 'ts-graphviz';
+} from '@ts-graphviz/common';
+import type { ReactElement, ReactNode } from 'react';
 
 /** Common attribute values of objects under cluster */
-export interface ClusterCommonAttributesProps {
+export interface GraphBaseAttributesProps {
   /** Attribute value for Edges */
   edge?: EdgeAttributesObject;
   /** Attribute value for Nodes */
@@ -19,43 +19,37 @@ export interface ClusterCommonAttributesProps {
   graph?: SubgraphAttributesObject;
 }
 
-/** Options for RootCluster */
-export interface RootClusterOptions
-  extends Omit<GraphAttributesObject, typeof attribute.comment>,
-    ClusterCommonAttributesProps,
-    HasComment {
+/** Options for RootGraph */
+export interface RootGraphOptions
+  extends GraphAttributesObject,
+    GraphBaseAttributesProps {
   /** Cluster id */
   id?: string;
 }
 
 /** Options for Subgraph */
 export interface SubgraphOptions
-  extends Omit<SubgraphAttributesObject, typeof attribute.comment>,
-    ClusterCommonAttributesProps,
+  extends SubgraphAttributesObject,
+    GraphBaseAttributesProps,
     HasComment {
   /** Cluster id */
   id?: string;
 }
 
 /** Options for Edge */
-export interface EdgeOptions
-  extends Omit<EdgeAttributesObject, typeof attribute.comment>,
-    HasComment {}
+export interface EdgeOptions extends EdgeAttributesObject {}
 
 /** Options for Node */
-export interface NodeOptions
-  extends Omit<NodeAttributesObject, typeof attribute.comment>,
-    HasComment {}
+export interface NodeOptions extends NodeAttributesObject {}
 
-/** Props for RootCluster component */
-export interface RootClusterProps
-  extends Omit<RootClusterOptions, typeof attribute.label> {
+/** Props for RootGraph component */
+export interface RootGraphProps extends Omit<RootGraphOptions, 'label'> {
   label?: ReactElement | string;
   children?: ReactNode;
 }
 
 /** Props for Edge component */
-export interface EdgeProps extends Omit<EdgeOptions, typeof attribute.label> {
+export interface EdgeProps extends Omit<EdgeOptions, 'label'> {
   /** Edge targets */
   targets: EdgeTargetLikeTuple;
   /** Edge label */
@@ -63,8 +57,7 @@ export interface EdgeProps extends Omit<EdgeOptions, typeof attribute.label> {
 }
 
 /** Props for Node component */
-export interface NodeProps
-  extends Omit<NodeOptions, typeof attribute.label | typeof attribute.xlabel> {
+export interface NodeProps extends Omit<NodeOptions, 'label' | 'xlabel'> {
   /** Node id */
   id: string;
   /** Node label */
@@ -74,19 +67,41 @@ export interface NodeProps
 }
 
 /** Props for Subgraph component */
-export interface SubgraphProps
-  extends Omit<SubgraphOptions, typeof attribute.label> {
+export interface SubgraphProps extends Omit<SubgraphOptions, 'label'> {
   /** Subgraph label */
   label?: ReactElement | string;
   children?: ReactNode;
 }
 
-/** Props for ClusterPortal component */
-export interface ClusterPortalProps {
+/** Props for GraphPortal component */
+export interface GraphPortalProps {
   /**
    * id of the cluster you want to target for the portal.
    * If not specified, target the cluster that is the container to the portal.
    */
   id?: string;
   children?: ReactNode;
+}
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'dot:port': { children: string };
+      'dot:table': HTMLLikeLabel.TableAttributes & { children?: ReactNode };
+      'dot:tr': HTMLLikeLabel.TrAttributes & { children?: ReactNode };
+      'dot:td': HTMLLikeLabel.TdAttributes & { children?: ReactNode };
+      'dot:font': HTMLLikeLabel.FontAttributes & { children?: ReactNode };
+      'dot:br': HTMLLikeLabel.BrAttributes;
+      'dot:img': HTMLLikeLabel.ImgAttributes;
+      'dot:i': HTMLLikeLabel.IAttributes & { children?: ReactNode };
+      'dot:b': HTMLLikeLabel.BAttributes & { children?: ReactNode };
+      'dot:u': HTMLLikeLabel.UAttributes & { children?: ReactNode };
+      'dot:o': HTMLLikeLabel.OAttributes & { children?: ReactNode };
+      'dot:sub': HTMLLikeLabel.SubAttributes & { children?: ReactNode };
+      'dot:sup': HTMLLikeLabel.SupAttributes & { children?: ReactNode };
+      'dot:s': HTMLLikeLabel.SAttributes & { children?: ReactNode };
+      'dot:hr': HTMLLikeLabel.HrAttributes;
+      'dot:vr': HTMLLikeLabel.VrAttributes;
+    }
+  }
 }

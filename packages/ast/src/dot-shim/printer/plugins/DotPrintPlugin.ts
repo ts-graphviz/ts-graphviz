@@ -1,5 +1,5 @@
-import { DotASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
+import type { DotASTNode } from '../../../types.js';
+import type { PrintPlugin } from '../types.js';
 import { endOfLine } from './utils/index.js';
 
 export const DotPrintPlugin: PrintPlugin<DotASTNode> = {

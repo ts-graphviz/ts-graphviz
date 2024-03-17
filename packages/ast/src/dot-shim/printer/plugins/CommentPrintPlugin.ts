@@ -1,6 +1,6 @@
 import { map, pipe } from '@ts-graphviz/common';
-import { CommentASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
+import type { CommentASTNode } from '../../../types.js';
+import type { PrintPlugin } from '../types.js';
 import {
   endOfLine,
   joinBy,

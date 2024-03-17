@@ -1,54 +1,36 @@
-import PropTypes from 'prop-types';
-import { FC, useEffect } from 'react';
-import { ContainerCluster } from '../contexts/ContainerCluster.js';
-import { CurrentCluster } from '../contexts/CurrentCluster.js';
-import { DuplicatedRootClusterErrorMessage } from '../errors.js';
-import { useClusterMap } from '../hooks/use-cluster-map.js';
-import { useContainerCluster } from '../hooks/use-container-cluster.js';
-import { useGraph } from '../hooks/use-graph.js';
-import { useRenderedID } from '../hooks/use-rendered-id.js';
-import { RootClusterProps } from '../types.js';
+import { type FC, useEffect } from 'react';
+import { CurrentGraph } from '../contexts/CurrentGraph.js';
+import { GraphContainer } from '../contexts/GraphContainer.js';
+import { useGraph } from '../hooks/useGraph.js';
+import { useGraphContainer } from '../hooks/useGraphContainer.js';
+import { useGraphMap } from '../hooks/useGraphMap.js';
+import { useRenderedID } from '../hooks/useRenderedID.js';
+import type { RootGraphProps } from '../types.js';
 /**
  * `Graph` component.
  */
-export const Graph: FC<RootClusterProps> = ({
-  children,
-  label,
-  ...options
-}) => {
-  const container = useContainerCluster();
+export const Graph: FC<RootGraphProps> = ({ children, label, ...options }) => {
+  const container = useGraphContainer();
   if (container !== null) {
-    throw Error(DuplicatedRootClusterErrorMessage);
+    throw Error(
+      'RootCluster is duplicated.\nUse only one of Digraph and Graph.',
+    );
   }
   const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined)
     Object.assign(options, { label: renderedLabel });
   const graph = useGraph(options);
-  const clusters = useClusterMap();
+  const clusters = useGraphMap();
   useEffect(() => {
     if (graph.id !== undefined) {
       clusters.set(graph.id, graph);
     }
   }, [clusters, graph]);
   return (
-    <ContainerCluster.Provider value={graph}>
-      <CurrentCluster.Provider value={graph}>
-        {children}
-      </CurrentCluster.Provider>
-    </ContainerCluster.Provider>
+    <GraphContainer.Provider value={graph}>
+      <CurrentGraph.Provider value={graph}>{children}</CurrentGraph.Provider>
+    </GraphContainer.Provider>
   );
 };
 
 Graph.displayName = 'Graph';
-
-Graph.defaultProps = {
-  id: undefined,
-  comment: undefined,
-  label: undefined,
-};
-
-Graph.propTypes = {
-  id: PropTypes.string,
-  comment: PropTypes.string,
-  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-};

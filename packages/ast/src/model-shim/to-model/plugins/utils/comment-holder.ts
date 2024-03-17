@@ -1,5 +1,5 @@
 import type { HasComment } from '@ts-graphviz/common';
-import { CommentASTNode, FileRange } from '../../../../types.js';
+import type { CommentASTNode, FileRange } from '../../../../types.js';
 
 export class CommentHolder {
   public comment: CommentASTNode | null = null;

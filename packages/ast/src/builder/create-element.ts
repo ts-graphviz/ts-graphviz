@@ -1,5 +1,5 @@
 import { Builder } from './builder.js';
-import { CreateElement } from './types.js';
+import type { CreateElement } from './types.js';
 /**
  * Create an {@link ASTNode} of the specified type
  *

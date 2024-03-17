@@ -20,7 +20,6 @@ export default defineConfig({
         'react-dom/server',
         'react-reconciler',
         'ts-graphviz',
-        'prop-types',
       ],
     },
   },

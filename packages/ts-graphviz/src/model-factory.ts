@@ -1,6 +1,6 @@
-import { ModelsContext, createModelsContext } from '@ts-graphviz/common';
+import { type ModelsContext, createModelsContext } from '@ts-graphviz/common';
 import { createModelFactories } from './model-factory-builder.js';
-import { ModelFactories, ModelFactoriesWithStrict } from './types.js';
+import type { ModelFactories, ModelFactoriesWithStrict } from './types.js';
 
 const noStrict: ModelFactories = createModelFactories(false);
 

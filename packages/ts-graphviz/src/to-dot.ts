@@ -1,10 +1,10 @@
 import {
-  ConvertFromModelOptions,
-  PrintOptions,
+  type ConvertFromModelOptions,
+  type PrintOptions,
   fromModel,
   stringify,
 } from '@ts-graphviz/ast';
-import { DotObjectModel } from '@ts-graphviz/common';
+import type { DotObjectModel } from '@ts-graphviz/common';
 
 /**
  * This interface provides options for converting a model to DOT.

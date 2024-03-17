@@ -1,55 +1,41 @@
-import PropTypes from 'prop-types';
-import { FC, useEffect } from 'react';
-import { ContainerCluster } from '../contexts/ContainerCluster.js';
-import { CurrentCluster } from '../contexts/CurrentCluster.js';
-import { DuplicatedRootClusterErrorMessage } from '../errors.js';
-import { useClusterMap } from '../hooks/use-cluster-map.js';
-import { useContainerCluster } from '../hooks/use-container-cluster.js';
-import { useDigraph } from '../hooks/use-digraph.js';
-import { useRenderedID } from '../hooks/use-rendered-id.js';
-import { RootClusterProps } from '../types.js';
+import { type FC, useEffect } from 'react';
+import { CurrentGraph } from '../contexts/CurrentGraph.js';
+import { GraphContainer } from '../contexts/GraphContainer.js';
+import { useDigraph } from '../hooks/useDigraph.js';
+import { useGraphContainer } from '../hooks/useGraphContainer.js';
+import { useGraphMap } from '../hooks/useGraphMap.js';
+import { useRenderedID } from '../hooks/useRenderedID.js';
+import type { RootGraphProps } from '../types.js';
 
 /**
  * `Digraph` component.
  */
-export const Digraph: FC<RootClusterProps> = ({
+export const Digraph: FC<RootGraphProps> = ({
   children,
   label,
   ...options
 }) => {
-  const container = useContainerCluster();
+  const container = useGraphContainer();
   if (container !== null) {
-    throw Error(DuplicatedRootClusterErrorMessage);
+    throw Error(
+      'RootCluster is duplicated.\nUse only one of Digraph and Graph.',
+    );
   }
   const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined)
     Object.assign(options, { label: renderedLabel });
   const digraph = useDigraph(options);
-  const clusters = useClusterMap();
+  const clusters = useGraphMap();
   useEffect(() => {
     if (digraph.id !== undefined) {
       clusters.set(digraph.id, digraph);
     }
   }, [clusters, digraph]);
   return (
-    <ContainerCluster.Provider value={digraph}>
-      <CurrentCluster.Provider value={digraph}>
-        {children}
-      </CurrentCluster.Provider>
-    </ContainerCluster.Provider>
+    <GraphContainer.Provider value={digraph}>
+      <CurrentGraph.Provider value={digraph}>{children}</CurrentGraph.Provider>
+    </GraphContainer.Provider>
   );
 };
 
 Digraph.displayName = 'Digraph';
-
-Digraph.defaultProps = {
-  id: undefined,
-  comment: undefined,
-  label: undefined,
-};
-
-Digraph.propTypes = {
-  id: PropTypes.string,
-  comment: PropTypes.string,
-  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-};

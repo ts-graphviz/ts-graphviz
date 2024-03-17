@@ -1,6 +1,6 @@
 import { pipe } from '@ts-graphviz/common';
-import { LiteralASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
+import type { LiteralASTNode } from '../../../types.js';
+import type { PrintPlugin } from '../types.js';
 import { escape, wrapByPair, wrapWith } from './utils/index.js';
 
 const quoteLiteralValue = pipe(escape, wrapWith('"'));

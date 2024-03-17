@@ -1,7 +1,11 @@
-import { EdgeModel, isForwardRefNode, isNodeModel } from '@ts-graphviz/common';
+import {
+  type EdgeModel,
+  isForwardRefNode,
+  isNodeModel,
+} from '@ts-graphviz/common';
 import { createElement } from '../../../builder/create-element.js';
-import { EdgeTargetASTNode } from '../../../types.js';
-import { ConvertFromModelPlugin } from '../types.js';
+import type { EdgeTargetASTNode } from '../../../types.js';
+import type { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute, convertComment } from './utils/index.js';
 
 export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {

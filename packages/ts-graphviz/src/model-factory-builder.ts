@@ -1,10 +1,10 @@
 import {
-  GraphAttributesObject,
-  ModelsContext,
-  RootGraphModel,
+  type GraphAttributesObject,
+  type ModelsContext,
+  type RootGraphModel,
   RootModelsContext,
 } from '@ts-graphviz/common';
-import { ModelFactory } from './types.js';
+import type { ModelFactory } from './types.js';
 
 /**
  * ModelFactoryBuilder is a function that takes two parameters, directed and strictMode, and returns a ModelFactory.

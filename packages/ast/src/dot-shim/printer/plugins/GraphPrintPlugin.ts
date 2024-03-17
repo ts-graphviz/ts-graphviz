@@ -1,6 +1,6 @@
 import { map, pipe } from '@ts-graphviz/common';
-import { GraphASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
+import type { GraphASTNode } from '../../../types.js';
+import type { PrintPlugin } from '../types.js';
 import { endOfLine, indent, joinBy, wrapByPair } from './utils/index.js';
 
 export const GraphPrintPlugin: PrintPlugin<GraphASTNode> = {

@@ -1,6 +1,6 @@
 import { map, pipe } from '@ts-graphviz/common';
-import { ASTNode, AttributeListASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
+import type { ASTNode, AttributeListASTNode } from '../../../types.js';
+import type { PrintPlugin } from '../types.js';
 import { endOfLine, indent, joinBy, wrapByPair } from './utils/index.js';
 
 export const AttributeListPrintPlugin: PrintPlugin<AttributeListASTNode> = {

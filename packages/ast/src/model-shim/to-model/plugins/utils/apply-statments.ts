@@ -1,5 +1,5 @@
-import { GraphBaseModel } from '@ts-graphviz/common';
-import {
+import type { GraphBaseModel } from '@ts-graphviz/common';
+import type {
   AttributeASTNode,
   ClusterStatementASTNode,
 } from '../../../../types.js';

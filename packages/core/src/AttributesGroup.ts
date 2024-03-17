@@ -1,4 +1,4 @@
-import { AttributeKey, AttributesGroupModel } from '@ts-graphviz/common';
+import type { AttributeKey, AttributesGroupModel } from '@ts-graphviz/common';
 import { AttributesBase } from './AttributesBase.js';
 
 /**

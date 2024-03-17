@@ -1,11 +1,11 @@
-import {
+import type {
   EdgeModel,
   ModelsContext,
   NodeModel,
   RootGraphModel,
   SubgraphModel,
 } from '@ts-graphviz/common';
-import {
+import type {
   DotASTNode,
   EdgeASTNode,
   GraphASTNode,

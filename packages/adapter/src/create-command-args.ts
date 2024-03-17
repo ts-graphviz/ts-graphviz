@@ -1,5 +1,5 @@
-import { Attribute, AttributeKey } from '@ts-graphviz/common';
-import { Layout, Options } from './types.js';
+import type { Attribute, AttributeKey } from '@ts-graphviz/common';
+import type { Layout, Options } from './types.js';
 
 /**
  * escapeValue is a function that escapes a given Attribute value of a given AttributeKey.

@@ -7,7 +7,7 @@ import type {
   NodeAttributeKey,
   SubgraphAttributeKey,
 } from './attribute.js';
-import { ModelsContext } from './models-context.js';
+import type { ModelsContext } from './models-context.js';
 import type { Compass } from './types.js';
 
 /**

@@ -1,5 +1,5 @@
 import { map, pipe } from '@ts-graphviz/common';
-import { EndOfLine, IndentStyle } from '../../types.js';
+import type { EndOfLine, IndentStyle } from '../../types.js';
 
 const EOL = /\r?\n/;
 

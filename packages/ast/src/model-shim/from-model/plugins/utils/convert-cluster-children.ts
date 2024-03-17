@@ -1,6 +1,6 @@
-import { GraphBaseModel } from '@ts-graphviz/common';
-import { ClusterStatementASTNode } from '../../../../types.js';
-import { ConvertFromModelContext } from '../../types.js';
+import type { GraphBaseModel } from '@ts-graphviz/common';
+import type { ClusterStatementASTNode } from '../../../../types.js';
+import type { ConvertFromModelContext } from '../../types.js';
 import { convertAttribute } from './convert-attribute.js';
 import { convertComment } from './convert-comment.js';
 

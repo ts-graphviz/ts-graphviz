@@ -1,5 +1,5 @@
 import { createCommandArgs } from './create-command-args.js';
-import { Layout, Options } from './types.js';
+import type { Layout, Options } from './types.js';
 
 /**
  * createCommandAndArgs creates a command and an array of arguments, based on the given {@link Options}.

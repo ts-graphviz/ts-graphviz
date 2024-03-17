@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createCommandArgs, escapeValue } from './create-command-args.js';
-import { Options } from './types.js';
+import type { Options } from './types.js';
 
 describe('createCommandArgs', () => {
   it('should generate correct args for neato layout', () => {

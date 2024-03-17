@@ -1,5 +1,5 @@
 import { ToModelConverter } from './converter.js';
-import {
+import type {
   ASTToModel,
   ConvertToModelOptions,
   ToModelConvertableASTNode,

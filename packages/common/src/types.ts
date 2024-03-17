@@ -5,6 +5,18 @@ export type $keywords<T extends string> = {
   [key in T]: key;
 };
 
+export type Insensitive<T> = T &
+  Insensitive.LowercaseKeys<T> &
+  Insensitive.UppercaseKeys<T>;
+export namespace Insensitive {
+  export type LowercaseKeys<T> = {
+    [key in keyof T as Lowercase<string & key>]: T[key];
+  };
+  export type UppercaseKeys<T> = {
+    [key in keyof T as Uppercase<string & key>]: T[key];
+  };
+}
+
 /**
  * @hidden
  */
@@ -225,6 +237,91 @@ export type EscString = string;
  * @group Attribute Types
  */
 export type HTMLLikeLabel = `<${string}>`;
+/** @hidden */
+export namespace HTMLLikeLabel {
+  export type TableAttributes = Insensitive<{
+    align?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
+    bgcolor?: Color | ColorList; // "color"
+    border?: number; // "value"
+    cellborder?: number; // "value"
+    cellPadding?: number; // "value"
+    cellSpacing?: number; // "value"
+    color?: Color | ColorList; // "color"
+    columns?: number; // "value"
+    fixedSize?: true; // "FALSE|TRUE"
+    gradientAngle?: number; // "value"
+    height?: number; // "value"
+    href?: string; // "value"
+    id?: string; // "value"
+    port?: Compass | string; // "portName"
+    rows?: number; // "value"
+    sides?: Side.Combinations; // "value"
+    style?: Style; // "value"
+    target?: string; // "value"
+    title?: string; // "value"
+    tooltip?: string; // "value"
+    valign?: 'MIDDLE' | 'BOTTOM' | 'TOP'; // "MIDDLE|BOTTOM|TOP"
+    width?: number; // "value"
+  }>;
+
+  type NoAttributes = Record<string, unknown>;
+
+  export type TrAttributes = NoAttributes;
+
+  export type TdAttributes = Insensitive<{
+    align?: 'CENTER' | 'LEFT' | 'RIGHT' | 'TEXT'; // "CENTER|LEFT|RIGHT|TEXT"
+    balign?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
+    bgcolor?: Color | ColorList; // "color"
+    border?: number; // "value"
+    cellPadding?: number; // "value"
+    cellSpacing?: number; // "value"
+    color?: Color | ColorList; // "color"
+    colspan?: number; // "value"
+    fixedSize?: boolean; // "FALSE|TRUE"
+    gradientAngle?: number; // "value"
+    height?: number; // "value"
+    href?: string; // "value"
+    id?: string; // "value"
+    port?: Compass | string; // "portName"
+    rowSpan?: number; // "value"
+    sides?: Side.Combinations; // "value"
+    style?: Style; // "value"
+    target?: string; // "value"
+    title?: string; // "value"
+    tooltip?: string; // "value"
+    valign?: 'MIDDLE' | 'BOTTOM' | 'TOP'; // "MIDDLE|BOTTOM|TOP"
+    width?: number; // "value"
+  }>;
+
+  export type FontAttributes = Insensitive<{
+    color?: Color | ColorList; // "color"
+    face?: string; // "fontname"
+    'point-size'?: number; // "value"
+  }>;
+
+  export type BrAttributes = Insensitive<{
+    align?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
+  }>;
+
+  export type ImgAttributes = Insensitive<{
+    scale?: boolean | 'WIDTH' | 'HEIGHT' | 'BOTH'; // "FALSE|TRUE|WIDTH|HEIGHT|BOTH"
+    src?: string; // "value"
+  }>;
+
+  export type IAttributes = NoAttributes;
+
+  export type BAttributes = NoAttributes;
+
+  export type UAttributes = NoAttributes;
+
+  export type OAttributes = NoAttributes;
+  export type SubAttributes = NoAttributes;
+
+  export type SupAttributes = NoAttributes;
+  export type SAttributes = NoAttributes;
+  export type HrAttributes = NoAttributes;
+  export type VrAttributes = NoAttributes;
+}
 
 /**
  * An escString or an HTML label.
@@ -1313,6 +1410,29 @@ export namespace DirType {
   export interface $exclude extends $keywordsValidation {}
 }
 
+export namespace Side {
+  export type T = 'T';
+  export type B = 'B';
+  export type R = 'R';
+  export type L = 'L';
+  export type Combinations =
+    | T
+    | B
+    | R
+    | L
+    | `${T}${B}`
+    | `${T}${R}`
+    | `${T}${L}`
+    | `${B}${R}`
+    | `${B}${L}`
+    | `${R}${L}`
+    | `${T}${B}${R}`
+    | `${T}${B}${L}`
+    | `${T}${R}${L}`
+    | `${B}${R}${L}`
+    | `${T}${B}${R}${L}`;
+}
+
 /**
  * Page Direction
  *
@@ -1322,6 +1442,6 @@ export namespace DirType {
 export type Pagedir = `${Pagedir.TB}${Pagedir.RL}`;
 /** @hidden */
 export namespace Pagedir {
-  export type TB = 'T' | 'B';
-  export type RL = 'R' | 'L';
+  export type TB = Side.T | Side.B;
+  export type RL = Side.R | Side.L;
 }

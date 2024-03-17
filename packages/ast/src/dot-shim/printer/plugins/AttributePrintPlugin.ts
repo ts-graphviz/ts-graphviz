@@ -1,5 +1,5 @@
-import { ASTNode, AttributeASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
+import type { ASTNode, AttributeASTNode } from '../../../types.js';
+import type { PrintPlugin } from '../types.js';
 
 export const AttributePrintPlugin: PrintPlugin<AttributeASTNode> = {
   match(ast: ASTNode) {

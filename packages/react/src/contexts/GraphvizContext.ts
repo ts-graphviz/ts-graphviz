@@ -1,11 +1,11 @@
 import { createContext } from 'react';
-import { GraphBaseModel } from 'ts-graphviz';
+import type { GraphBaseModel } from 'ts-graphviz';
 
-export interface IContext {
-  container?: GraphBaseModel;
+export interface Context<T extends GraphBaseModel = GraphBaseModel> {
+  container?: T;
 }
 
-export const GraphvizContext = createContext<IContext>(
-  null as unknown as IContext,
+export const GraphvizContext = createContext<Context>(
+  null as unknown as Context,
 );
 GraphvizContext.displayName = 'GraphvizContext';

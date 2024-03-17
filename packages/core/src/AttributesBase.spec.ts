@@ -1,4 +1,4 @@
-import { Attributes } from '@ts-graphviz/common';
+import type { Attributes } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';

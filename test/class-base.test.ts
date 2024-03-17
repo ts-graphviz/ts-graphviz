@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import {
   Digraph,
   Edge,
-  EdgeTargetTuple,
+  type EdgeTargetTuple,
   Node,
   Subgraph,
   attribute as _,

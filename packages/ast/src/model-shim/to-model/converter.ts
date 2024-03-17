@@ -1,6 +1,6 @@
 import { createModelsContext } from '@ts-graphviz/common';
 import { defaultPlugins } from './plugins/index.js';
-import {
+import type {
   ASTToModel,
   ConvertToModelContext,
   ConvertToModelOptions,

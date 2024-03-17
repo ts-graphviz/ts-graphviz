@@ -1,4 +1,4 @@
-import { AttributeListKind } from '@ts-graphviz/common';
+import type { AttributeListKind } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';

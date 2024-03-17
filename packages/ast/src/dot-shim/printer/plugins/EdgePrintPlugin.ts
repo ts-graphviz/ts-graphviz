@@ -1,6 +1,6 @@
 import { map, pipe } from '@ts-graphviz/common';
-import { EdgeASTNode } from '../../../types.js';
-import { PrintPlugin } from '../types.js';
+import type { EdgeASTNode } from '../../../types.js';
+import type { PrintPlugin } from '../types.js';
 import { endOfLine, indent, joinBy, wrapByPair } from './utils/index.js';
 
 export const EdgePrintPlugin: PrintPlugin<EdgeASTNode> = {

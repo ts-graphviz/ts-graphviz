@@ -1,5 +1,5 @@
 import type { ASTChildNode, ASTNode, FileRange } from '../types.js';
-import { ASTBuilder, BuilderOptions } from './types.js';
+import type { ASTBuilder, BuilderOptions } from './types.js';
 
 /**
  * Builder is an ASTBuilder that provides a method to create an ASTNode.

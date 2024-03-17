@@ -2,10 +2,7 @@
   "name": "@ts-graphviz/core",
   "version": "2.0.0",
   "description": "Graphviz Models for Object-Oriented Programming",
-  "keywords": [
-    "graphviz",
-    "dot"
-  ],
+  "keywords": ["graphviz", "dot"],
   "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
@@ -48,12 +45,7 @@
   "main": "lib/core.cjs",
   "module": "lib/core.js",
   "types": "lib/core.d.ts",
-  "files": [
-    "lib",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE"
-  ],
+  "files": ["lib", "README.md", "CHANGELOG.md", "LICENSE"],
   "scripts": {
     "build": "vite build"
   },

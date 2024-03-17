@@ -21,18 +21,18 @@ function PackageLabel({
   description,
 }: { name?: string; description?: string }) {
   return (
-    <DOT.TABLE>
-      <DOT.TR>
-        <DOT.TD PORT="name" BGCOLOR="#f0f0f0" ALIGN="CENTER">
+    <dot:table>
+      <dot:tr>
+        <dot:td port="name" bgcolor="#f0f0f0" align="CENTER">
           {name}
-        </DOT.TD>
-      </DOT.TR>
-      <DOT.TR>
-        <DOT.TD PORT="description" ALIGN="CENTER">
+        </dot:td>
+      </dot:tr>
+      <dot:tr>
+        <dot:td port="description" align="CENTER">
           {description}
-        </DOT.TD>
-      </DOT.TR>
-    </DOT.TABLE>
+        </dot:td>
+      </dot:tr>
+    </dot:table>
   );
 }
 

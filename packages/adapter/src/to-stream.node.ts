@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process';
 import { PassThrough, Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { createCommandAndArgs } from './create-command-and-args.js';
-import { Layout, Options } from './types.js';
+import type { Layout, Options } from './types.js';
 
 /**
  * Execute the Graphviz dot command and make a Stream of the results.

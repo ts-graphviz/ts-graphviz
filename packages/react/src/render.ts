@@ -1,24 +1,23 @@
-import { ReactElement, createElement } from 'react';
-import { GraphBaseModel, toDot } from 'ts-graphviz';
+import { type ReactElement, createElement } from 'react';
+import { type GraphBaseModel, type RootGraphModel, toDot } from 'ts-graphviz';
 
-import { ClusterMap } from './contexts/ClusterMap.js';
-import { ContainerCluster } from './contexts/ContainerCluster.js';
-import { CurrentCluster } from './contexts/CurrentCluster.js';
-import { GraphvizContext, IContext } from './contexts/GraphvizContext.js';
-import { NoContainerErrorMessage } from './errors.js';
+import { CurrentGraph } from './contexts/CurrentGraph.js';
+import { GraphContainer } from './contexts/GraphContainer.js';
+import { GraphMap } from './contexts/GraphMap.js';
+import { type Context, GraphvizContext } from './contexts/GraphvizContext.js';
 import { reconciler } from './reconciler.js';
 
 const noop = (): void => undefined;
 
 function clusterMap(
-  cluster?: GraphBaseModel,
+  graph?: GraphBaseModel,
   map: Map<string, GraphBaseModel> = new Map(),
 ): Map<string, GraphBaseModel> {
-  if (cluster) {
-    if (cluster.id) {
-      map.set(cluster.id, cluster);
+  if (graph) {
+    if (graph.id) {
+      map.set(graph.id, graph);
     }
-    for (const s of cluster.subgraphs) {
+    for (const s of graph.subgraphs) {
       clusterMap(s, map);
     }
   }
@@ -57,24 +56,24 @@ function clusterMap(
  * // }
  * ```
  */
-export function render(
+export function render<T extends GraphBaseModel>(
   element: ReactElement,
-  container?: GraphBaseModel,
-): GraphBaseModel {
-  const context: IContext = { container };
+  container?: T,
+): T {
+  const context: Context<T> = { container };
   reconciler.updateContainer(
     createElement(
       GraphvizContext.Provider,
       { value: context },
       createElement(
-        ClusterMap.Provider,
+        GraphMap.Provider,
         { value: clusterMap(container) },
         createElement(
-          ContainerCluster.Provider,
+          GraphContainer.Provider,
           { value: container ?? null },
           container
             ? createElement(
-                CurrentCluster.Provider,
+                CurrentGraph.Provider,
                 { value: container },
                 element,
               )
@@ -82,12 +81,23 @@ export function render(
         ),
       ),
     ),
-    reconciler.createContainer({}, 0, false, null),
+    reconciler.createContainer(
+      {},
+      0,
+      null,
+      true,
+      null,
+      '@ts-graphviz/react',
+      noop,
+      null,
+    ),
     null,
     noop,
   );
   if (!context.container) {
-    throw Error(NoContainerErrorMessage);
+    throw Error(
+      'There are no clusters of container(Subgraph, Digraph, Graph).',
+    );
   }
   return context.container;
 }
@@ -126,7 +136,7 @@ export function render(
  */
 export function renderToDot(
   element: ReactElement,
-  container?: GraphBaseModel,
+  container?: RootGraphModel,
 ): string {
   return toDot(render(element, container));
 }

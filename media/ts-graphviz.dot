@@ -5,11 +5,11 @@ digraph {
   ];
   "factory_fn" [
     shape = "plain";
-    label = <<TABLE><TR><TD BGCOLOR="#f0f0f0" ALIGN="CENTER">Model Factory Functions</TD></TR><TR><TD PORT="description" ALIGN="LEFT">strict.digraph(...)<BR ALIGN="LEFT"></BR>strict.graph(...)<BR ALIGN="LEFT"></BR>digraph(...)<BR ALIGN="LEFT"></BR>graph(...)<BR ALIGN="LEFT"></BR></TD></TR></TABLE>>;
+    label = <<table><tr><td bgcolor="#f0f0f0" align="CENTER">Model Factory Functions</td></tr><tr><td port="description" align="LEFT">strict.digraph(...)<br align="LEFT"></br>strict.graph(...)<br align="LEFT"></br>digraph(...)<br align="LEFT"></br>graph(...)<br align="LEFT"></br></td></tr></table>>;
   ];
   "oop" [
     shape = "plain";
-    label = <<TABLE><TR><TD BGCOLOR="#f0f0f0" ALIGN="CENTER">Object-Oriented Programming</TD></TR><TR><TD PORT="description" ALIGN="LEFT">new Digraph(...)<BR ALIGN="LEFT"></BR>new Graph(...)<BR ALIGN="LEFT"></BR>...<BR ALIGN="LEFT"></BR></TD></TR></TABLE>>;
+    label = <<table><tr><td bgcolor="#f0f0f0" align="CENTER">Object-Oriented Programming</td></tr><tr><td port="description" align="LEFT">new Digraph(...)<br align="LEFT"></br>new Graph(...)<br align="LEFT"></br>...<br align="LEFT"></br></td></tr></table>>;
   ];
   {"factory_fn" "oop"} -> "Model";
   "Model" -> "DOT" [

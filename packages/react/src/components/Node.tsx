@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types';
-import { FC } from 'react';
-import { useNode } from '../hooks/use-node.js';
-import { useRenderedID } from '../hooks/use-rendered-id.js';
-import { NodeProps } from '../types.js';
+import type { FC } from 'react';
+import { useNode } from '../hooks/useNode.js';
+import { useRenderedID } from '../hooks/useRenderedID.js';
+import type { NodeProps } from '../types.js';
 
 /**
  * `Node` component.
@@ -20,16 +19,3 @@ export const Node: FC<NodeProps> = ({ id, label, xlabel, ...options }) => {
 };
 
 Node.displayName = 'Node';
-
-Node.propTypes = {
-  id: PropTypes.string.isRequired,
-  comment: PropTypes.string,
-  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  xlabel: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-};
-
-Node.defaultProps = {
-  comment: undefined,
-  label: undefined,
-  xlabel: undefined,
-};
