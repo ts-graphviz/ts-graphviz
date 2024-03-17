@@ -17,7 +17,6 @@
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": [
-    "@ts-graphviz/react",
     "@ts-graphviz-examples/deno",
     "@ts-graphviz-examples/cjs",
     "@ts-graphviz-examples/esm",
