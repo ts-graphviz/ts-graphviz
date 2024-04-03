@@ -264,7 +264,7 @@ export namespace HTMLLikeLabel {
     width?: number; // "value"
   }>;
 
-  type NoAttributes = Record<string, unknown>;
+  export type NoAttributes = Record<string, unknown>;
 
   export type TrAttributes = NoAttributes;
 

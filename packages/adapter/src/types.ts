@@ -46,6 +46,7 @@ export namespace Layout {
 
 /**
  * NeatoOptions interface provides options for the neato layout.
+ * @public
  */
 export interface NeatoOptions {
   layout: 'neato';
@@ -61,6 +62,7 @@ export interface NeatoOptions {
 
 /**
  * FdpOptions interface provides options for the fdp layout.
+ * @public
  */
 export interface FdpOptions {
   layout: 'fdp';
@@ -96,10 +98,10 @@ export interface FdpOptions {
 }
 
 /**
- * @description
  * This interface describes an optional parameter called "layout" which is used to set a layout engine.
  * The default value for this parameter is 'dot', and it must be an option of the Layout type,
  * excluding 'neato' and 'fdp'.
+ * @public
  */
 export interface OtherOptions {
   /**
@@ -112,6 +114,7 @@ export interface OtherOptions {
 
 /**
  * This interface represents the CommonOptions for setting output format.
+ * @public
  */
 export interface CommonOptions {
   /**

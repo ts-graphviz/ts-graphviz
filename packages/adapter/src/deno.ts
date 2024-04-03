@@ -1,4 +1,5 @@
 /// <reference lib="dom" />
+export type * from './types.js';
 import { createCommandAndArgs } from './create-command-and-args.js';
 /**
  * @module @ts-graphviz/adapter

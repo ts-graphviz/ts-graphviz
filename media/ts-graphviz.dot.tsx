@@ -1,5 +1,5 @@
 import { renderHTMLLike } from '@ts-graphviz/react';
-import { digraph } from '../packages/ts-graphviz/src/model-factory.js';
+import { digraph } from 'ts-graphviz';
 
 function FactoryFnLabel() {
   return (
