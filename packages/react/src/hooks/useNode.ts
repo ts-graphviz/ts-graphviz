@@ -6,8 +6,12 @@ import { useHasAttributes } from './useHasAttributes.js';
 import { useHasComment } from './useHasComment.js';
 
 /**
- * `useNode` is a hook that creates an instance of Node
- * according to the object given by props.
+ * Creates a node with the specified ID and options.
+ *
+ * @param id - The ID of the node.
+ * @param options - The options for the node.
+ * @returns The created node.
+ * @public
  */
 export function useNode(id: string, options: NodeOptions = {}): NodeModel {
   const { comment, ...attributes } = options;

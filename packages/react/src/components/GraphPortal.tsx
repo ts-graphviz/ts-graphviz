@@ -6,6 +6,7 @@ import type { GraphPortalProps } from '../types.js';
 
 /**
  * GraphPortal component.
+ * @public
  */
 export const GraphPortal: FC<GraphPortalProps> = ({ children, id }) => {
   const container = useGraphContainer();

@@ -11,7 +11,7 @@ import { DotObject } from './DotObject.js';
 
 /**
  * DOT object class representing a edge.
- * @group Models
+ * @public
  */
 export class Edge extends DotObject implements EdgeModel {
   public get $$type(): 'Edge' {

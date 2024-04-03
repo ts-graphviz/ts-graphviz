@@ -7,9 +7,23 @@ import type {
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';
 
+/**
+ * Export file format of a graph visualization.
+ * @public
+ */
 export type Format = Format.values;
+/**
+ * @public
+ */
 export namespace Format {
+  /**
+   * @public
+   */
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
+  /**
+   * Type that contains all possible values for the Format type.
+   * @public
+   */
   export interface $values
     extends $keywords<
       | 'png'
@@ -25,9 +39,22 @@ export namespace Format {
   export interface $exclude extends $keywordsValidation {}
 }
 
+/**
+ * Layout engine for a graph visualization.
+ * @public
+ */
 export type Layout = Layout.values;
+/**
+ * @public
+ */
 export namespace Layout {
+  /**
+   * @public
+   */
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
+  /**
+   * @public
+   */
   export interface $values
     extends $keywords<
       | 'dot'
@@ -46,6 +73,7 @@ export namespace Layout {
 
 /**
  * NeatoOptions interface provides options for the neato layout.
+ * @beta
  */
 export interface NeatoOptions {
   layout: 'neato';
@@ -61,19 +89,20 @@ export interface NeatoOptions {
 
 /**
  * FdpOptions interface provides options for the fdp layout.
+ * @beta
  */
 export interface FdpOptions {
   layout: 'fdp';
   /**
    * Use grid.
    *
-   * @default true
+   * @defaultValue true
    */
   grid?: boolean;
   /**
    * Use old attractive force
    *
-   * @default true
+   * @defaultValue true
    */
   oldAttractive?: boolean;
 
@@ -96,34 +125,35 @@ export interface FdpOptions {
 }
 
 /**
- * @description
  * This interface describes an optional parameter called "layout" which is used to set a layout engine.
- * The default value for this parameter is 'dot', and it must be an option of the Layout type,
+ * The defaultValue value for this parameter is 'dot', and it must be an option of the Layout type,
  * excluding 'neato' and 'fdp'.
+ * @beta
  */
 export interface OtherOptions {
   /**
    * Set layout engine.
    *
-   * @default 'dot'
+   * @defaultValue 'dot'
    */
   layout?: Exclude<Layout, 'neato' | 'fdp'>;
 }
 
 /**
  * This interface represents the CommonOptions for setting output format.
+ * @beta
  */
 export interface CommonOptions {
   /**
    * Set output format.
    *
-   * @default 'svg'
+   * @defaultValue 'svg'
    */
   format?: Format;
   /**
    * If true, set level of message suppression (=1).
    *
-   * @default true
+   * @defaultValue true
    */
   suppressWarnings?: boolean;
   /**
@@ -158,6 +188,10 @@ export interface CommonOptions {
   y?: boolean;
 }
 
+/**
+ * Options for setting layout engine and output format.
+ * @beta
+ */
 export type Options<T extends Layout = Layout> = CommonOptions &
   (T extends 'neato'
     ? NeatoOptions

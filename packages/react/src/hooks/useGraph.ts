@@ -6,8 +6,11 @@ import { useGraphvizContext } from './useGraphvizContext.js';
 import { useHasComment } from './useHasComment.js';
 
 /**
- * `useGraph` is a hook that creates an instance of Graph
- * according to the object given by props.
+ * Hook that creates and manages a Graphviz graph.
+ *
+ * @param options - The options for the graph.
+ * @returns The created graph.
+ * @public
  */
 export function useGraph(options: RootGraphOptions = {}): RootGraphModel {
   const { id, comment, edge, node, graph, ...attributes } = options;

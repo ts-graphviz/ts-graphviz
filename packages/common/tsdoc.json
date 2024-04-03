@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+  "tagDefinitions": [
+    {
+      "tagName": "@graphvizType",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@graphvizUsedBy",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@graphvizDefault",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@graphvizNotes",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@graphvizMinimum",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@graphvizDefaultValue",
+      "syntaxKind": "modifier"
+    }
+  ]
+}

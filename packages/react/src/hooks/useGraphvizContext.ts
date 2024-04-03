@@ -3,6 +3,13 @@ import { useContext } from 'react';
 import type { GraphBaseModel } from 'ts-graphviz';
 import { type Context, GraphvizContext } from '../contexts/GraphvizContext.js';
 
+/**
+ * Hook that provides access to the Graphviz context.
+ * @typeParam T - The type of the GraphBaseModel.
+ * @returns The Graphviz context.
+ * @throws If called outside the GraphvizContext.
+ * @public
+ */
 export function useGraphvizContext<T extends GraphBaseModel>(): Context<T> {
   const context = useContext(
     GraphvizContext as unknown as React.Context<Context<T>>,

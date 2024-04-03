@@ -2,7 +2,7 @@ import { RootGraph } from './RootGraph.js';
 
 /**
  * DOT object class representing a graph.
- * @group Models
+ * @public
  */
 export class Graph extends RootGraph {
   get directed(): boolean {

@@ -21,8 +21,7 @@ import type {
  * If U is 'Subgraph', the type is mapped to a {@link SubgraphASTNode}.
  *
  * If T is not a DotObjectModel, the type is mapped to never.
- *
- * @group AST
+ * @public
  */
 export type ModelToAST<T> = T extends DotObjectModel<infer U>
   ? U extends 'Graph'
@@ -39,24 +38,61 @@ export type ModelToAST<T> = T extends DotObjectModel<infer U>
   : never;
 
 /**
- * @group Convert Model to AST
+ * Represents options for converting from a model.
+ * @public
  */
 export interface ConvertFromModelOptions {
   commentKind?: CommentKind;
 }
 
 /**
- * @group Convert Model to AST
+ * Represents the context for converting a model to an Abstract Syntax Tree (AST).
+ * @beta
  */
 export interface ConvertFromModelContext
   extends Required<ConvertFromModelOptions> {
+  /**
+   * Converts the given model to an AST.
+   * @param model - The model to convert.
+   * @typeParam T - The type of the model.
+   * @returns The AST representation of the model.
+   */
   convert<T extends DotObjectModel>(model: T): ModelToAST<T>;
 }
 
 /**
- * @group Convert Model to AST
+ * Represents the context for converting a model to an Abstract Syntax Tree (AST).
+ * @beta
+ */
+export interface ConvertFromModelContext
+  extends Required<ConvertFromModelOptions> {
+  /**
+   * Converts the given model to an AST.
+   * @param model - The model to convert.
+   * @typeParam T - The type of the model.
+   * @returns The AST representation of the model.
+   */
+  convert<T extends DotObjectModel>(model: T): ModelToAST<T>;
+}
+
+/**
+ * Represents a plugin that converts a DotObjectModel to an Abstract Syntax Tree (AST).
+ * @typeParam T - The type of the DotObjectModel.
+ * @beta
  */
 export interface ConvertFromModelPlugin<T extends DotObjectModel> {
+  /**
+   * Determines if the plugin can handle the given DotObjectModel.
+   * @param model - The DotObjectModel to match.
+   * @returns A boolean indicating if the plugin can handle the model.
+   */
   match(model: T): boolean;
+
+  /**
+   * Converts the given DotObjectModel to an AST using the provided context.
+   * @param context - The context for the conversion.
+   * @param model - The DotObjectModel to convert.
+   * @returns The converted AST.
+   */
   convert(context: ConvertFromModelContext, model: T): ModelToAST<T>;
 }

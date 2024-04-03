@@ -7,7 +7,7 @@ import { GraphBase } from './GraphBase.js';
 
 /**
  * Base class representing a root graph(digraph, graph).
- * @group Models
+ * @public
  */
 export abstract class RootGraph
   extends GraphBase<GraphAttributeKey>

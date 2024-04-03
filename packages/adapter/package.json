@@ -48,12 +48,14 @@
   "module": "./lib/node.js",
   "types": "./lib/node.d.ts",
   "scripts": {
-    "build": "vite build && rm ./lib/deno.cjs "
+    "build": "vite build && rm ./lib/deno.cjs ",
+    "api-extractor": "api-extractor run --local --verbose"
   },
   "dependencies": {
     "@ts-graphviz/common": "workspace:^"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.43.0",
     "@types/node": "^20.11.24",
     "typescript": "^5.3.3",
     "vite": "^5.1.3",

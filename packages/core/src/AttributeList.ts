@@ -8,7 +8,7 @@ import { AttributesBase } from './AttributesBase.js';
 
 /**
  * A set of attribute values for any object.
- * @group Models
+ * @public
  */
 export class AttributeList<
     K extends AttributeListKind,

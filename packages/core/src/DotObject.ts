@@ -1,5 +1,5 @@
 /**
  * Base class for DOT objects.
- * @group Models
+ * @public
  */
 export abstract class DotObject {}

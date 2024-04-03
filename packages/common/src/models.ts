@@ -12,7 +12,7 @@ import type { Compass } from './types.js';
 
 /**
  * ASTType is an enumeration of the different types of nodes that can be found in an AST(Abstract Syntax Tree ).
- * @group Models
+ * @public
  */
 export type ASTType =
   | 'Literal'
@@ -29,38 +29,38 @@ export type ASTType =
 
 /**
  * Objects that can be Edge destinations satisfy this interface.
- * @group Models
+ * @public
  */
 export type NodeRef = NodeModel | ForwardRefNode;
 
 /**
- * @group Models
+ * @public
  */
 export type NodeRefGroup = NodeRef[];
 
 /**
  * string or an object implementing EdgeTarget.
- * @group Models
+ * @public
  */
 export type NodeRefLike = NodeRef | string;
 
 /**
- * @group Models
+ * @public
  */
 export type NodeRefGroupLike = NodeRefLike[];
 
 /**
- * @group Models
+ * @public
  */
 export type EdgeTarget = NodeRef | NodeRefGroup;
 
 /**
- * @group Models
+ * @public
  */
 export type EdgeTargetLike = NodeRefLike | NodeRefGroupLike;
 
 /**
- * @group Models
+ * @public
  */
 export type EdgeTargetTuple = [
   from: EdgeTarget,
@@ -69,7 +69,7 @@ export type EdgeTargetTuple = [
 ];
 
 /**
- * @group Models
+ * @public
  */
 export type EdgeTargetLikeTuple = [
   from: EdgeTargetLike,
@@ -79,20 +79,20 @@ export type EdgeTargetLikeTuple = [
 
 /**
  * An objects of attribute key/value pairs.
- * @group Models
+ * @public
  */
 export type AttributesObject<T extends AttributeKey> = {
   [K in T]?: Attribute<K>;
 };
 
 /**
- * @group Models
+ * @public
  */
 export type AttributeValue = Attribute<AttributeKey>;
 
 /**
  * An array of attribute key/value tuple.
- * @group Models
+ * @public
  */
 export type AttributesEntities<T extends AttributeKey> = readonly [
   T,
@@ -101,32 +101,32 @@ export type AttributesEntities<T extends AttributeKey> = readonly [
 
 /**
  * Attribute object that can be set to Edge.
- * @group Models
+ * @public
  */
 export type EdgeAttributesObject = AttributesObject<EdgeAttributeKey>;
 
 /**
  * Attribute object that can be set to Node.
- * @group Models
+ * @public
  */
 export type NodeAttributesObject = AttributesObject<NodeAttributeKey>;
 
 /**
  * Attribute object that can be set to Graph.
- * @group Models
+ * @public
  */
 export type GraphAttributesObject = AttributesObject<GraphAttributeKey>;
 
 /**
  * Attribute object that can be set to Subgraph.
- * @group Models
+ * @public
  */
 export type SubgraphAttributesObject = AttributesObject<
   ClusterSubgraphAttributeKey | SubgraphAttributeKey
 >;
 
 /**
- * @group Models
+ * @public
  */
 export type DotObjectType =
   | 'AttributeList'
@@ -138,8 +138,8 @@ export type DotObjectType =
 /**
  * DotObjectModel is an interface that defines a generic type for a {@link DotObjectType}.
  *
- * @template T The type of the {@link DotObjectType}.
- * @group Models
+ * @typeParam T - The type of the {@link DotObjectType}.
+ * @public
  */
 export interface DotObjectModel<T extends DotObjectType = DotObjectType> {
   /**
@@ -149,7 +149,7 @@ export interface DotObjectModel<T extends DotObjectType = DotObjectType> {
 }
 
 /**
- * @group Models
+ * @public
  */
 export interface HasComment {
   /** Comments to include when outputting with toDot. */
@@ -157,14 +157,14 @@ export interface HasComment {
 }
 
 /**
- * @group Models
+ * @public
  */
 export interface HasAttributes<T extends AttributeKey> {
   readonly attributes: AttributesGroupModel<T>;
 }
 
 /**
- * @group Models
+ * @public
  */
 export interface ForwardRefNode extends Partial<Port> {
   readonly id: string;
@@ -175,7 +175,7 @@ export interface ForwardRefNode extends Partial<Port> {
  * that attributes can be held as a set of keys and values.
  *
  * @typeParam T - The attribute keys to set DOT object.
- * @group Models
+ * @public
  */
 export interface Attributes<T extends AttributeKey> {
   /** Size of the set of keys and values held by the DOT object. */
@@ -203,14 +203,14 @@ export interface Attributes<T extends AttributeKey> {
 }
 
 /**
- * @group Models
+ * @public
  */
 export interface AttributesGroupModel<T extends AttributeKey>
   extends Attributes<T>,
     HasComment {}
 
 /**
- * @group Models
+ * @public
  */
 export type AttributeListKind = 'Graph' | 'Edge' | 'Node';
 
@@ -220,7 +220,7 @@ export type AttributeListKind = 'Graph' | 'Edge' | 'Node';
  *
  * @typeParam K - The type of object is being specified.
  * @typeParam T - The attribute keys to set DOT object.
- * @group Models
+ * @public
  */
 export interface AttributeListModel<
   K extends AttributeListKind = AttributeListKind,
@@ -233,7 +233,7 @@ export interface AttributeListModel<
 
 /**
  * Port on an edge node.
- * @group Models
+ * @public
  */
 export interface Port {
   port: string;
@@ -242,7 +242,7 @@ export interface Port {
 
 /**
  * Model that can be converted to Node in DOT language.
- * @group Models
+ * @public
  */
 export interface NodeModel
   extends HasComment,
@@ -256,7 +256,7 @@ export interface NodeModel
 
 /**
  * Model that can be converted to Edge in DOT language.
- * @group Models
+ * @public
  */
 export interface EdgeModel
   extends HasComment,
@@ -267,7 +267,7 @@ export interface EdgeModel
 
 /**
  * Cluster common attribute interface.
- * @group Models
+ * @public
  */
 export interface GraphCommonAttributes {
   /** Manage common attributes of graphs in a graph. */
@@ -283,7 +283,7 @@ export interface GraphCommonAttributes {
 
 /**
  * DOT model representing a graph/digraph/subgraph.
- * @group Models
+ * @public
  */
 export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
   extends HasComment,
@@ -360,7 +360,7 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
   /**
    * Get Node in cluster by specifying id.
    *
-   * @description
+   * @remarks
    * If there is no Node with the specified id in the graph, return undefined.
    */
   getNode(id: string): NodeModel | undefined;
@@ -392,8 +392,8 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
    * // }
    * ```
    *
-   * @param id Subgraph ID.
-   * @param callback Callbacks for manipulating created or retrieved subgraph.
+   * @param id - Subgraph ID.
+   * @param callback - Callbacks for manipulating created or retrieved subgraph.
    */
   subgraph(
     id: string,
@@ -423,9 +423,9 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
    * // }
    * ```
    *
-   * @param id  Subgraph ID.
-   * @param attributes Object of attributes to be adapted to the subgraph.
-   * @param callback Callbacks for manipulating created or retrieved subgraph.
+   * @param id - Subgraph ID.
+   * @param attributes - Object of attributes to be adapted to the subgraph.
+   * @param callback - Callbacks for manipulating created or retrieved subgraph.
    */
   subgraph(
     id: string,
@@ -456,8 +456,8 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
    * // }
    * ```
    *
-   * @param attributes Object of attributes to be adapted to the subgraph.
-   * @param callback Callbacks for manipulating created or retrieved subgraph.
+   * @param attributes - Object of attributes to be adapted to the subgraph.
+   * @param callback - Callbacks for manipulating created or retrieved subgraph.
    */
   subgraph(
     attributes: SubgraphAttributesObject,
@@ -468,7 +468,7 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
    *
    * By specifying a callback function, the target subgraph can be received and manipulated as an argument.
    *
-   * @param callback Callbacks for manipulating created or retrieved subgraph.
+   * @param callback - Callbacks for manipulating created or retrieved subgraph.
    */
   subgraph(callback?: (subgraph: SubgraphModel) => void): SubgraphModel;
 
@@ -489,8 +489,8 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
    * // }
    * ```
    *
-   * @param id Node ID.
-   * @param callback Callbacks for manipulating created or retrieved node.
+   * @param id - Node ID.
+   * @param callback - Callbacks for manipulating created or retrieved node.
    */
   node(id: string, callback?: (node: NodeModel) => void): NodeModel;
   /**
@@ -516,9 +516,9 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
    * // }
    * ```
    *
-   * @param id Node ID.
-   * @param attributes Object of attributes to be adapted to the node.
-   * @param callback Callbacks for manipulating created or retrieved node.
+   * @param id - Node ID.
+   * @param attributes - Object of attributes to be adapted to the node.
+   * @param callback - Callbacks for manipulating created or retrieved node.
    */
   node(
     id: string,
@@ -546,7 +546,7 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
    * // }
    * ```
    *
-   * @param attributes Object of attributes to be adapted to the nodes.
+   * @param attributes - Object of attributes to be adapted to the nodes.
    */
   node(attributes: NodeAttributesObject): void;
   /**
@@ -565,8 +565,8 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
    * //   "a" -> "b";
    * // }
    * ```
-   * @param targets Nodes.
-   * @param callback Callbacks for manipulating created or retrieved edge.
+   * @param targets - Nodes.
+   * @param callback - Callbacks for manipulating created or retrieved edge.
    */
   edge(
     targets: EdgeTargetLikeTuple,
@@ -595,8 +595,8 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
    * // }
    * ```
    *
-   * @param attributes Object of attributes to be adapted to the edge.
-   * @param callback Callbacks for manipulating created or retrieved edge.
+   * @param attributes - Object of attributes to be adapted to the edge.
+   * @param callback - Callbacks for manipulating created or retrieved edge.
    */
   edge(
     targets: EdgeTargetLikeTuple,
@@ -624,7 +624,7 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
    * //   ];
    * // }
    * ```
-   * @param attributes Object of attributes to be adapted to the edges.
+   * @param attributes - Object of attributes to be adapted to the edges.
    */
   edge(attributes: EdgeAttributesObject): void;
 
@@ -647,14 +647,14 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
    * //   ];
    * // }
    * ```
-   * @param attributes Object of attributes to be adapted to the graph.
+   * @param attributes - Object of attributes to be adapted to the graph.
    */
   graph(attributes: SubgraphAttributesObject): void;
 }
 
 /**
  * DOT model representing a subgraph.
- * @group Models
+ * @public
  */
 export interface SubgraphModel
   extends GraphBaseModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey>,
@@ -665,7 +665,7 @@ export interface SubgraphModel
 
 /**
  * DOT model representing a root graphs(digraph and graph).
- * @group Models
+ * @public
  */
 export interface RootGraphModel
   extends GraphBaseModel<GraphAttributeKey>,
@@ -675,7 +675,7 @@ export interface RootGraphModel
   /**
    * Strict mode.
    *
-   * @description
+   * @remarks
    * A graph may also be described as strict.
    * This forbids the creation of multi-edges, i.e., there can be at most one edge with a given tail node and head node in the directed case.
    * For undirected graphs, there can be at most one edge connected to the same two nodes.
@@ -685,7 +685,7 @@ export interface RootGraphModel
 }
 
 /**
- * @group Models
+ * @public
  */
 export interface RootGraphConstructor {
   new (id?: string, attributes?: GraphAttributesObject): RootGraphModel;
@@ -700,7 +700,7 @@ export interface RootGraphConstructor {
 }
 
 /**
- * @group Models
+ * @public
  */
 export interface SubgraphConstructor {
   new (id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
@@ -709,7 +709,7 @@ export interface SubgraphConstructor {
 }
 
 /**
- * @group Models
+ * @public
  */
 export interface NodeConstructor {
   new (id: string, attributes?: NodeAttributesObject): NodeModel;
@@ -717,14 +717,14 @@ export interface NodeConstructor {
 }
 
 /**
- * @group Models
+ * @public
  */
 export interface EdgeConstructor {
   new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): EdgeModel;
   new (...args: any[]): EdgeModel;
 }
 
-/** @hidden */
+/** @internal */
 export function isForwardRefNode(object: unknown): object is ForwardRefNode {
   return (
     typeof object === 'object' &&
@@ -733,7 +733,7 @@ export function isForwardRefNode(object: unknown): object is ForwardRefNode {
   );
 }
 
-/** @hidden */
+/** @internal */
 export function isNodeModel(object: unknown): object is NodeModel {
   return (
     typeof object === 'object' &&
@@ -743,29 +743,29 @@ export function isNodeModel(object: unknown): object is NodeModel {
   );
 }
 
-/** @hidden */
+/** @internal */
 export function isNodeRef(node: unknown): node is NodeRef {
   return isNodeModel(node) || isForwardRefNode(node);
 }
 
-/** @hidden */
+/** @internal */
 export function isNodeRefLike(node: unknown): node is NodeRefLike {
   return typeof node === 'string' || isNodeRef(node);
 }
 
-/** @hidden */
+/** @internal */
 export function isNodeRefGroupLike(
   target: NodeRefLike | NodeRefGroupLike,
 ): target is NodeRefGroupLike {
   return Array.isArray(target) && target.every(isNodeRefLike);
 }
 
-/** @hidden */
+/** @internal */
 export function isCompass(c: string): c is Compass {
   return ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c'].includes(c);
 }
 
-/** @hidden */
+/** @internal */
 export function toNodeRef(target: NodeRefLike): NodeRef {
   if (isNodeRef(target)) {
     return target;
@@ -777,7 +777,7 @@ export function toNodeRef(target: NodeRefLike): NodeRef {
   return { id, port };
 }
 
-/** @hidden */
+/** @internal */
 export function toNodeRefGroup(targets: NodeRefGroupLike): NodeRefGroup {
   if (
     targets.length < 2 &&

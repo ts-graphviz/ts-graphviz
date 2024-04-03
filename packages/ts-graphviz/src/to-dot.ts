@@ -8,7 +8,7 @@ import type { DotObjectModel } from '@ts-graphviz/common';
 
 /**
  * This interface provides options for converting a model to DOT.
- * @group Convert Model to DOT
+ * @public
  */
 export interface ToDotOptions {
   /**
@@ -24,11 +24,11 @@ export interface ToDotOptions {
 /**
  * Convert Model to DOT string.
  *
- * @group Convert Model to DOT
  *
- * @param model Dot Object Model, like {@link Digraph}, {@link Graph}, {@link Subgraph}, {@link Node}, and {@link Edge}
- * @param options Optional options for the conversion.
+ * @param model - Dot Object Model, like {@link @ts-graphviz/core#Digraph}, {@link @ts-graphviz/core#Graph}, {@link @ts-graphviz/core#Subgraph}, {@link @ts-graphviz/core#Node}, and {@link @ts-graphviz/core#Edge}
+ * @param options - Optional options for the conversion.
  * @returns DOT string
+ * @public
  */
 export function toDot(model: DotObjectModel, options?: ToDotOptions): string {
   const ast = fromModel(model, options?.convert);

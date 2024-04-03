@@ -1,13 +1,15 @@
 /**
- * @hidden
+ * @public
  */
 export type $keywords<T extends string> = {
   [key in T]: key;
 };
 
+/** @public */
 export type Insensitive<T> = T &
   Insensitive.LowercaseKeys<T> &
   Insensitive.UppercaseKeys<T>;
+/** @public */
 export namespace Insensitive {
   export type LowercaseKeys<T> = {
     [key in keyof T as Lowercase<string & key>]: T[key];
@@ -18,7 +20,7 @@ export namespace Insensitive {
 }
 
 /**
- * @hidden
+ * @public
  */
 export interface $keywordsValidation
   extends $keywords<
@@ -30,10 +32,10 @@ export interface $keywordsValidation
 
 /**
  * Directive indicating which direction the Edge should point.
- * @group Attribute Types
+ * @public
  */
 export type Compass = Compass.values;
-/** @hidden */
+/** @public */
 export namespace Compass {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
   export interface $values
@@ -45,38 +47,38 @@ export namespace Compass {
 
 /**
  * A value specifying an empty string for resetting some values.
- * @group Attribute Types
+ * @public
  */
 export type Blank = '';
 
 /**
  * A double with an optional prefix `'+'`.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/addDouble/ addDouble}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/addDouble/ | addDouble}
+ * @public
  */
 export type AddDouble = `+${Double}`;
 
 /**
  * Double-precision floating point number.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/double/ double}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/double/ | double}
+ * @public
  */
 export type Double = number;
 
 /**
  * Port Position
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/portPos/ portPos}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/portPos/ | portPos}
+ * @public
  */
 export type PortPos = `${string}:${Compass}` | Compass;
 /**
  * A colon-separated list of doubles: `"%f(:%f)*"` where each %f is a double.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/doubleList/ doubleList}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/doubleList/ | doubleList}
+ * @public
  */
 export type DoubleList =
   | Double
@@ -92,23 +94,23 @@ export type DoubleList =
 /**
  * Integer number.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/int/ int}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/int/ | int}
+ * @public
  */
 export type Int = number;
 
 /**
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/shape/ shape}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/shape/ | shape}
+ * @public
  */
 export type Shape = string;
 
 /**
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/smoothType/ smoothType}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/smoothType/ | smoothType}
+ * @public
  */
 export type SmoothType = SmoothType.values;
-/** @hidden */
+/** @public */
 export namespace SmoothType {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
@@ -125,11 +127,11 @@ export namespace SmoothType {
   export interface $exclude extends $keywordsValidation {}
 }
 /**
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/splineType/ splineType}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/splineType/ | splineType}
+ * @public
  */
 export type SplineType = SplineType.spline | string;
-/** @hidden */
+/** @public */
 export namespace SplineType {
   export type prefix = endp | startp | `${endp}${startp}` | '';
   export type spline = `${prefix}point ${triple}`;
@@ -139,11 +141,11 @@ export namespace SplineType {
 }
 
 /**
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/startType/ startType}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/startType/ | startType}
+ * @public
  */
 export type StartType = `${StartType.style}${StartType.seed}`;
-/** @hidden */
+/** @public */
 export namespace StartType {
   export type style = Exclude<keyof $style, keyof $exclude>;
   export interface $style extends $keywords<'regular' | 'self' | 'random'> {}
@@ -152,15 +154,15 @@ export namespace StartType {
 }
 
 /**
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/style/ style}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/style/ | style}
+ * @public
  */
 export type Style =
   | Style.styleItem
   | `${Style.styleItem},${Style.styleItem}`
   | `${Style.styleItem},${Style.styleItem},${Style.styleItem}`
   | `${Style.styleItem},${Style.styleItem},${Style.styleItem},${Style.styleItem}`;
-/** @hidden */
+/** @public */
 export namespace Style {
   export type styleItem = Exclude<keyof $styleItem, keyof $exclude>;
   export interface $styleItem
@@ -185,8 +187,8 @@ export namespace Style {
 }
 
 /**
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/viewPort/ viewPort}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/viewPort/ | viewPort}
+ * @public
  */
 export type ViewPort =
   | `${Double},${Double},${Double},${Double},${Double}`
@@ -196,16 +198,16 @@ export type ViewPort =
  * list of strings separated by characters from the layersep attribute (by default, colons, tabs or spaces),
  * defining layer names and implicitly numbered 1,2,…
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/layerList/ layerList}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/layerList/ | layerList}
+ * @public
  */
 export type LayerList = string;
 
 /**
  * specifies a list of layers defined by the layers attribute.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/layerRange/ layerRange}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/layerRange/ | layerRange}
+ * @public
  */
 export type LayerRange = string;
 
@@ -227,17 +229,17 @@ export type LayerRange = string;
  * the appropriate edge operator (`"--"` or `"->"`) and the name of the head node.
  *
  * In all cases, the substring `"\L"` is replaced by the object's label attribute.
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/escString/ escString}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/escString/ | escString}
+ * @public
  */
 export type EscString = string;
 
 /**
- * @see {@link https://graphviz.org/doc/info/shapes.html#html HTML-Like Labels}
- * @group Attribute Types
+ * @see {@link https://graphviz.org/doc/info/shapes.html#html | HTML-Like Labels}
+ * @public
  */
 export type HTMLLikeLabel = `<${string}>`;
-/** @hidden */
+/** @public */
 export namespace HTMLLikeLabel {
   export type TableAttributes = Insensitive<{
     align?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
@@ -264,7 +266,7 @@ export namespace HTMLLikeLabel {
     width?: number; // "value"
   }>;
 
-  type NoAttributes = Record<string, unknown>;
+  export type NoAttributes = Record<string, unknown>;
 
   export type TrAttributes = NoAttributes;
 
@@ -326,8 +328,8 @@ export namespace HTMLLikeLabel {
 /**
  * An escString or an HTML label.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/lblString/ lblString}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/lblString/ | lblString}
+ * @public
  */
 export type LblString = HTMLLikeLabel | EscString;
 
@@ -337,10 +339,10 @@ export type LblString = HTMLLikeLabel | EscString;
  * The optional `'!'` indicates the node position should not change (input-only).
  *
  * If dim=3, point may also have the format `"%f,%f,%f('!')?"` to represent the point (x,y,z).
- * @group Attribute Types
+ * @public
  */
 export type Point = Point.position | `${Point.position}!`;
-/** @hidden */
+/** @public */
 export namespace Point {
   export type position =
     | `${Double},${Double}`
@@ -356,14 +358,14 @@ export namespace Point {
 /**
  * A point with an optional prefix `'+'`.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/addPoint/ addPoint}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/addPoint/ | addPoint}
+ * @public
  */
 export type AddPoint = `+${Point}`;
 
 /**
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/pointList/ pointList}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/pointList/ | pointList}
+ * @public
  */
 export type PointList =
   | Point
@@ -378,11 +380,11 @@ export type PointList =
  * - If the mode `"nodesfirst"` is chosen, all nodes are drawn first, followed by the edges. This guarantees an edge-node overlap will not be mistaken for an edge ending at a node.
  * - On the other hand, usually for aesthetic reasons, it may be desirable that all edges appear beneath nodes, even if the resulting drawing is ambiguous. This can be achieved by choosing `"edgesfirst"`.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/outputMode/ outputMode}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/outputMode/ | outputMode}
+ * @public
  */
 export type OutputMode = OutputMode.values;
-/** @hidden */
+/** @public */
 export namespace OutputMode {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
@@ -391,11 +393,11 @@ export namespace OutputMode {
   export interface $exclude extends $keywordsValidation {}
 }
 /**
- * @see {@link https://graphviz.org/docs/attr-types/packMode/ packMode}
- * @group Attribute Types
+ * @see {@link https://graphviz.org/docs/attr-types/packMode/ | packMode}
+ * @public
  */
 export type PackMode = keyof PickMode.$values | `array${string}`;
-/** @hidden */
+/** @public */
 export namespace PickMode {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
@@ -406,11 +408,11 @@ export namespace PickMode {
  * Using `"fast"` gives about a 2-4 times overall speedup compared with `"normal"`,
  * though layout quality can suffer a little.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/quadType/ quadType}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/quadType/ | quadType}
+ * @public
  */
 export type QuadType = QuadType.values;
-/** @hidden */
+/** @public */
 export namespace QuadType {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
@@ -424,17 +426,17 @@ export namespace QuadType {
  * Corresponding to directed graphs drawn from top to bottom,
  * from left to right, from bottom to top, and from right to left, respectively.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankdir/ rankdir}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankdir/ | rankdir}
+ * @public
  */
 export type Rankdir = 'TB' | 'BT' | 'LR' | 'RL';
 
 /**
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankType/ rankType}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/rankType/ | rankType}
+ * @public
  */
 export type RankType = RankType.values;
-/** @hidden */
+/** @public */
 export namespace RankType {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
@@ -453,11 +455,11 @@ export namespace RankType {
  *
  * Despite the name TBbalance ("Top-Bottom Balance"), this also works with left-right ranks, e.g. rankdir=LR.
  *
- * @see {@link https://graphviz.org/docs/attrs/TBbalance/ TBbalance}
- * @group Attribute Types
+ * @see {@link https://graphviz.org/docs/attrs/TBbalance/ | TBbalance}
+ * @public
  */
 export type TBbalanceType = TBbalanceType.values;
-/** @hidden */
+/** @public */
 export namespace TBbalanceType {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
@@ -470,8 +472,8 @@ export namespace TBbalanceType {
  * The rectangle `llx,lly,urx,ury` gives the coordinates, in points,
  * of the lower-left corner `(llx,lly)` and the upper-right corner `(urx,ury)`.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/rect/ rect}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/rect/ | rect}
+ * @public
  */
 export type Rect = `${Double},${Double},${Double},${Double}`;
 
@@ -481,13 +483,13 @@ export type Rect = `${Double},${Double},${Double},${Double}`;
  * There is a grammar of arrow shapes which can be used to describe a collection of 3,111,696 arrow
  * combinations of the 42 variations of the primitive set of 11 arrows.
  *
- * @see {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType}
- * @group Attribute Types
+ * @see {@link https://graphviz.org/docs/attr-types/arrowType/ | arrowType}
+ * @public
  */
 export type ArrowType =
   | ArrowType.aname
   | `${ArrowType.aname}${ArrowType.aname}`;
-/** @hidden */
+/** @public */
 export namespace ArrowType {
   export type shape = keyof $shape;
 
@@ -513,10 +515,11 @@ export namespace ArrowType {
 }
 
 /**
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/clusterMode/ clusterMode}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/clusterMode/ | clusterMode}
+ * @public
  */
 export type ClusterMode = ClusterMode.values;
+/** @public */
 export namespace ClusterMode {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
@@ -524,22 +527,22 @@ export namespace ClusterMode {
   export interface $exclude extends $keywordsValidation {}
 }
 /**
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/color/ color}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/color/ | color}
+ * @public
  */
 export type Color = Color.RGB_RGBA | Color.HSV | Color.ColorName | number;
-/** @hidden */
+/** @public */
 export namespace Color {
   /**
    * `"#%2x%2x%2x"` Red-Green-Blue (RGB)
    *
    * `"#%2x%2x%2x%2x"` Red-Green-Blue-Alpha (RGBA)
-   * @note A type that is too complicated to express in TypeScript.
+   * @privateRemarks A type that is too complicated to express in TypeScript.
    */
   export type RGB_RGBA = `#${string}`;
 
   /**
-   * Hue-Saturation-Value (HSV) 0.0 <= H,S,V <= 1.0
+   * Hue-Saturation-Value (HSV) 0.0 &lt;= H,S,V &lt;= 1.0
    */
   export type HSV = `${number}+${number}+${number}`;
 
@@ -547,7 +550,7 @@ export namespace Color {
    * Color names are resolved in the context of a color scheme.
    *
    * Graphviz currently supports the X11 scheme, the SVG scheme, and the Brewer schemes, with X11 being the default.
-   * @see {@link https://graphviz.org/doc/info/colors.html Color Names}
+   * @see {@link https://graphviz.org/doc/info/colors.html | Color Names}
    */
   export type ColorName = Exclude<keyof $colors, keyof $exclude>;
   export interface $colors
@@ -1387,21 +1390,21 @@ export namespace Color {
  *
  * The sum of the floating-point numbers in a colorList must sum to at most 1.
  *
- * @note A type that is too complicated to express in TypeScript.
+ * @privateRemarks A type that is too complicated to express in TypeScript.
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/colorList/}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/colorList/ | colorList}
+ * @public
  */
 export type ColorList = string;
 
 /**
  * Direction Type
  *
- * @see {@link https://graphviz.gitlab.io/docs/attr-types/dirType/ dirType}
- * @group Attribute Types
+ * @see {@link https://graphviz.gitlab.io/docs/attr-types/dirType/ | dirType}
+ * @public
  */
 export type DirType = DirType.values;
-/** @hidden */
+/** @public */
 export namespace DirType {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
 
@@ -1410,6 +1413,9 @@ export namespace DirType {
   export interface $exclude extends $keywordsValidation {}
 }
 
+/**
+ * @public
+ */
 export namespace Side {
   export type T = 'T';
   export type B = 'B';
@@ -1436,11 +1442,11 @@ export namespace Side {
 /**
  * Page Direction
  *
- * @see {@link https://graphviz.org/docs/attr-types/pagedir/ pagedir}
- * @group Attribute Types
+ * @see {@link https://graphviz.org/docs/attr-types/pagedir/ | pagedir}
+ * @public
  */
 export type Pagedir = `${Pagedir.TB}${Pagedir.RL}`;
-/** @hidden */
+/** @public */
 export namespace Pagedir {
   export type TB = Side.T | Side.B;
   export type RL = Side.R | Side.L;

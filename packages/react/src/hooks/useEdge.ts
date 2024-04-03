@@ -6,8 +6,13 @@ import { useHasAttributes } from './useHasAttributes.js';
 import { useHasComment } from './useHasComment.js';
 
 /**
- * `useEdge` is a hook that creates an instance of Edge
- * according to the object given by props.
+ * Creates and manages an edge in the graph.
+ *
+ * @param targets - The targets of the edge.
+ * @param props - The optional edge options.
+ * @returns The created edge model.
+ * @throws Error if the number of targets is less than 2.
+ * @public
  */
 export function useEdge(
   targets: EdgeTargetLikeTuple,

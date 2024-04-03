@@ -1,8 +1,6 @@
 /// <reference lib="dom" />
 import { createCommandAndArgs } from './create-command-and-args.js';
-/**
- * @module @ts-graphviz/adapter
- */
+
 import type { Layout, Options } from './types.js';
 
 // biome-ignore lint/style/noVar: <explanation>
@@ -10,6 +8,7 @@ declare var Deno: any;
 
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
+ * @beta
  */
 export async function toStream<T extends Layout>(
   dot: string,
@@ -40,6 +39,7 @@ function open(path: string) {
 
 /**
  * Execute the Graphviz dot command and output the results to a file.
+ * @beta
  */
 export async function toFile<T extends Layout>(
   dot: string,

@@ -6,7 +6,8 @@ import type {
 } from './types.js';
 
 /**
- * @group Convert AST to Model
+ * A function used to convert an AST into a {@link @ts-graphviz/common#DotObjectModel}.
+ * @public
  */
 export function toModel<T extends ToModelConvertableASTNode>(
   ast: T,

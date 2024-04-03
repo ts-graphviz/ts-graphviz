@@ -12,7 +12,7 @@ import type { ModelFactory } from './types.js';
  * @param directed A boolean value indicating whether the graph should be directed or not.
  * @param strictMode A boolean value indicating whether the graph should be in strict mode or not.
  * @returns A ModelFactory that takes an array of unknowns as parameters and returns a RootGraphModel.
- * @hidden
+ * @internal
  */
 export function ModelFactoryBuilder(
   this: ModelsContext,

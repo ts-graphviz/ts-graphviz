@@ -5,20 +5,20 @@ import type { ModelFactories, ModelFactoriesWithStrict } from './types.js';
 const noStrict: ModelFactories = createModelFactories(false);
 
 /**
- *  digraph is a factory for creating Digraph objects.
- * @group Model Factory
+ * digraph is a factory for creating Digraph objects.
+ * @public
  */
 export const digraph = noStrict.digraph;
 
 /**
  * graph is a factory for creating Graph objects.
- * @group Model Factory
+ * @public
  */
 export const graph = noStrict.graph;
 
 /**
  * Provides a strict mode API.
- * @group Model Factory
+ * @public
  */
 export const strict: ModelFactories = createModelFactories(true);
 
@@ -27,7 +27,8 @@ export const strict: ModelFactories = createModelFactories(true);
  *
  * @param models - An object containing the models to be used in the context.
  *
- * @returns A ModelFactoriesWithStrict object containing the factories. * @group Model Factory
+ * @returns A ModelFactoriesWithStrict object containing the factories.
+ * @public
  */
 export function withContext(
   models: Partial<ModelsContext>,

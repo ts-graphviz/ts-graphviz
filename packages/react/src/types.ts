@@ -9,7 +9,10 @@ import type {
 } from '@ts-graphviz/common';
 import type { ReactElement, ReactNode } from 'react';
 
-/** Common attribute values of objects under cluster */
+/**
+ * Common attribute values of objects under cluster
+ * @public
+ */
 export interface GraphBaseAttributesProps {
   /** Attribute value for Edges */
   edge?: EdgeAttributesObject;
@@ -19,7 +22,10 @@ export interface GraphBaseAttributesProps {
   graph?: SubgraphAttributesObject;
 }
 
-/** Options for RootGraph */
+/**
+ * Options for RootGraph
+ * @public
+ */
 export interface RootGraphOptions
   extends GraphAttributesObject,
     GraphBaseAttributesProps {
@@ -27,7 +33,10 @@ export interface RootGraphOptions
   id?: string;
 }
 
-/** Options for Subgraph */
+/**
+ * Options for Subgraph
+ * @public
+ */
 export interface SubgraphOptions
   extends SubgraphAttributesObject,
     GraphBaseAttributesProps,
@@ -36,19 +45,31 @@ export interface SubgraphOptions
   id?: string;
 }
 
-/** Options for Edge */
+/**
+ * Options for Edge
+ * @public
+ */
 export interface EdgeOptions extends EdgeAttributesObject {}
 
-/** Options for Node */
+/**
+ * Options for Node
+ * @public
+ */
 export interface NodeOptions extends NodeAttributesObject {}
 
-/** Props for RootGraph component */
+/**
+ * Props for RootGraph component
+ * @public
+ */
 export interface RootGraphProps extends Omit<RootGraphOptions, 'label'> {
   label?: ReactElement | string;
   children?: ReactNode;
 }
 
-/** Props for Edge component */
+/**
+ * Props for Edge component
+ * @public
+ */
 export interface EdgeProps extends Omit<EdgeOptions, 'label'> {
   /** Edge targets */
   targets: EdgeTargetLikeTuple;
@@ -56,7 +77,10 @@ export interface EdgeProps extends Omit<EdgeOptions, 'label'> {
   label?: ReactElement | string;
 }
 
-/** Props for Node component */
+/**
+ * Props for Node component
+ * @public
+ */
 export interface NodeProps extends Omit<NodeOptions, 'label' | 'xlabel'> {
   /** Node id */
   id: string;
@@ -66,14 +90,20 @@ export interface NodeProps extends Omit<NodeOptions, 'label' | 'xlabel'> {
   xlabel?: ReactElement | string;
 }
 
-/** Props for Subgraph component */
+/**
+ * Props for Subgraph component
+ * @public
+ */
 export interface SubgraphProps extends Omit<SubgraphOptions, 'label'> {
   /** Subgraph label */
   label?: ReactElement | string;
   children?: ReactNode;
 }
 
-/** Props for GraphPortal component */
+/**
+ * Props for GraphPortal component
+ * @public
+ */
 export interface GraphPortalProps {
   /**
    * id of the cluster you want to target for the portal.

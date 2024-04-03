@@ -6,8 +6,11 @@ import { useGraphvizContext } from './useGraphvizContext.js';
 import { useHasComment } from './useHasComment.js';
 
 /**
- * `useDigraph` is a hook that creates an instance of Digraph
- * according to the object given by props.
+ * Hook that creates and manages a Digraph instance.
+ *
+ * @param options - The options for configuring the Digraph.
+ * @returns The created Digraph instance.
+ * @public
  */
 export function useDigraph(options: RootGraphOptions = {}): RootGraphModel {
   const { id, comment, edge, node, graph, ...attributes } = options;

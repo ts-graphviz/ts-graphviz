@@ -9,13 +9,13 @@ import { DotObject } from './DotObject.js';
 
 /**
  * Base class for DOT objects with attributes.
- * @group Models
+ * @public
  */
 export abstract class AttributesBase<T extends AttributeKey>
   extends DotObject
   implements Attributes<T>
 {
-  /** @hidden */
+  /** @internal */
   #attrs: Map<T, Attribute<T>> = new Map();
 
   constructor(attributes?: AttributesObject<T>) {

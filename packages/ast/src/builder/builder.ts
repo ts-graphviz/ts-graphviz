@@ -3,8 +3,7 @@ import type { ASTBuilder, BuilderOptions } from './types.js';
 
 /**
  * Builder is an ASTBuilder that provides a method to create an ASTNode.
- *
- * @group Create AST
+ * @public
  */
 export class Builder implements ASTBuilder {
   /**

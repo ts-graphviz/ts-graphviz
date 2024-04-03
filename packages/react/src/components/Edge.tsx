@@ -5,6 +5,7 @@ import type { EdgeProps } from '../types.js';
 
 /**
  * `Edge` component.
+ * @public
  */
 export const Edge: FC<EdgeProps> = ({ targets, label, ...options }) => {
   const renderedLabel = useRenderedID(label);

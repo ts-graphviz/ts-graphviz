@@ -6,6 +6,7 @@ import { useSubgraph } from '../hooks/useSubgraph.js';
 import type { SubgraphProps } from '../types.js';
 /**
  * `Subgraph` component.
+ * @public
  */
 export const Subgraph: FC<SubgraphProps> = ({
   children,

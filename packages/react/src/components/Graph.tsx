@@ -8,6 +8,7 @@ import { useRenderedID } from '../hooks/useRenderedID.js';
 import type { RootGraphProps } from '../types.js';
 /**
  * `Graph` component.
+ * @public
  */
 export const Graph: FC<RootGraphProps> = ({ children, label, ...options }) => {
   const container = useGraphContainer();

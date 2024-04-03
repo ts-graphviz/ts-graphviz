@@ -8,7 +8,7 @@ import { GraphBase } from './GraphBase.js';
 
 /**
  * DOT object class representing a subgraph.
- * @group Models
+ * @public
  */
 export class Subgraph
   extends GraphBase<SubgraphAttributeKey | ClusterSubgraphAttributeKey>

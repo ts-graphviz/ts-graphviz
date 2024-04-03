@@ -8,12 +8,11 @@ import type {
 import type { ModelToAST } from './types.js';
 
 /**
- * FromModelConverter is a class used to convert a {@link DotObjectModel} into an ASTNode.
- *
- * @group Convert Model to AST
+ * FromModelConverter is a class used to convert a {@link @ts-graphviz/common#DotObjectModel} into an ASTNode.
+ * @beta
  */
 export class FromModelConverter {
-  /** @hidden */
+  /** @internal */
   #plugins: ConvertFromModelPlugin<DotObjectModel>[] = [...defaultPlugins];
 
   constructor(private options: ConvertFromModelOptions = {}) {}
@@ -21,7 +20,7 @@ export class FromModelConverter {
   /**
    * Converts a DotObjectModel into an AST.
    *
-   * @param model The {@link DotObjectModel} to be converted.
+   * @param model - The {@link @ts-graphviz/common#DotObjectModel} to be converted.
    * @returns The AST generated from the model.
    */
   public convert<T extends DotObjectModel>(model: T): ModelToAST<T> {

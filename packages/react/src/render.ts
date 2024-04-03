@@ -55,6 +55,7 @@ function clusterMap(
  * //   "b" -> "a";
  * // }
  * ```
+ * @public
  */
 export function render<T extends GraphBaseModel>(
   element: ReactElement,
@@ -133,6 +134,7 @@ export function render<T extends GraphBaseModel>(
  * ```
  *
  * @returns Rendered dot string
+ * @public
  */
 export function renderToDot(
   element: ReactElement,

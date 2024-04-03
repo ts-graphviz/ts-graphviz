@@ -6,6 +6,11 @@ import type { Layout, Options } from './types.js';
 
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
+ * @typeParam T - Layout engine.
+ * @param dot - Source of the graph written in the DOT language.
+ * @param options - Options for setting layout engine and output format.
+ * @returns A promise that resolves with a Stream of the results.
+ * @beta
  */
 export async function toStream<T extends Layout>(
   dot: string,

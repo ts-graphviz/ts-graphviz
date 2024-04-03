@@ -2,8 +2,7 @@ import type { ASTType, AttributeKey, Compass } from '@ts-graphviz/common';
 
 /**
  * The FilePosition interface represents the position of a file in terms of its offset, line number, and column number.
- *
- * @group AST
+ * @public
  */
 export interface FilePosition {
   /**
@@ -22,7 +21,7 @@ export interface FilePosition {
 
 /**
  * FileRange interface represents a range of positions within a file.
- * @group AST
+ * @public
  */
 export interface FileRange {
   /**
@@ -37,8 +36,7 @@ export interface FileRange {
 
 /**
  * This interface provides common properties to be used across all abstract syntax tree (AST) objects.
- *
- * @group AST
+ * @public
  */
 export interface ASTCommonPropaties {
   /**
@@ -49,13 +47,13 @@ export interface ASTCommonPropaties {
 
 /**
  * This interface represents the properties of a dot AST node.
- * @group AST
+ * @public
  */
 export interface DotASTPropaties extends ASTCommonPropaties {}
 
 /**
  * This interface defines the properties of a Graph AST Node.
- * @group AST
+ * @public
  */
 export interface GraphASTPropaties extends ASTCommonPropaties {
   /**
@@ -74,8 +72,7 @@ export interface GraphASTPropaties extends ASTCommonPropaties {
 
 /**
  * LiteralASTPropaties defines interface for literal AST nodes.
- *
- * @group AST
+ * @public
  */
 export interface LiteralASTPropaties<T extends string = string>
   extends ASTCommonPropaties {
@@ -92,7 +89,7 @@ export interface LiteralASTPropaties<T extends string = string>
 
 /**
  * SubgraphASTPropaties describes the properties of an AST node representing a subgraph.
- * @group AST
+ * @public
  */
 export interface SubgraphASTPropaties extends ASTCommonPropaties {
   /**
@@ -103,7 +100,7 @@ export interface SubgraphASTPropaties extends ASTCommonPropaties {
 
 /**
  * SubgraphASTPropaties describes the properties of an AST node representing a node.
- * @group AST
+ * @public
  */
 export interface NodeASTPropaties extends ASTCommonPropaties {
   /**
@@ -114,7 +111,7 @@ export interface NodeASTPropaties extends ASTCommonPropaties {
 
 /**
  * EdgeASTPropaties is an interface that defines the properties of an {@link EdgeASTNode}.
- * @group AST
+ * @public
  */
 export interface EdgeASTPropaties extends ASTCommonPropaties {
   /**
@@ -130,7 +127,7 @@ export interface EdgeASTPropaties extends ASTCommonPropaties {
 
 /**
  * NodeRefASTPropaties is an interface that defines the properties of a {@link NodeRefASTNode}.
- * @group AST
+ * @public
  */
 export interface NodeRefASTPropaties extends ASTCommonPropaties {
   id: LiteralASTNode;
@@ -140,13 +137,13 @@ export interface NodeRefASTPropaties extends ASTCommonPropaties {
 
 /**
  * NodeRefGroupASTPropaties is an interface that defines the properties of a {@link NodeRefGroupASTNode}.
- * @group AST
+ * @public
  */
 export interface NodeRefGroupASTPropaties extends ASTCommonPropaties {}
 
 /**
  * AttributeASTPropaties interface defines the properties of an {@link AttributeASTNode}.
- * @group AST
+ * @public
  */
 export interface AttributeASTPropaties<T extends AttributeKey = AttributeKey>
   extends ASTCommonPropaties {
@@ -156,7 +153,7 @@ export interface AttributeASTPropaties<T extends AttributeKey = AttributeKey>
 
 /**
  * AttributeListASTPropaties interface defines the properties of an {@link AttributeListASTNode}.
- * @group AST
+ * @public
  */
 export interface AttributeListASTPropaties extends ASTCommonPropaties {
   kind: 'Graph' | 'Edge' | 'Node';
@@ -164,13 +161,12 @@ export interface AttributeListASTPropaties extends ASTCommonPropaties {
 
 /**
  * CommentKind is an enum type that describes a type of comment.
- *
- * @group AST
+ * @public
  */
 export type CommentKind = 'Block' | 'Slash' | 'Macro';
 
 /**
- * @group AST
+ * @public
  */
 export interface CommentASTPropaties extends ASTCommonPropaties {
   /**
@@ -186,9 +182,8 @@ export interface CommentASTPropaties extends ASTCommonPropaties {
 /**
  * ASTBaseNode is an interface that serves as the base for all AST nodes.
  * It requires all leaf interfaces to specify a type property,
- * which is of type {@link ASTType}.
- *
- * @group AST
+ * which is of type {@link @ts-graphviz/common#ASTType}.
+ * @public
  */
 export interface ASTBaseNode {
   /**
@@ -201,8 +196,8 @@ export interface ASTBaseNode {
 /**
  * ASTBaseParentNode represents a parent node that has some child nodes.
  *
- * @template STMT The type of {@link ASTBaseNode} to be stored in the children array.
- * @group AST
+ * @typeParam STMT - The type of {@link ASTBaseNode} to be stored in the children array.
+ * @public
  */
 export interface ASTBaseParentNode<STMT extends ASTBaseNode = ASTBaseNode>
   extends ASTBaseNode {
@@ -211,8 +206,7 @@ export interface ASTBaseParentNode<STMT extends ASTBaseNode = ASTBaseNode>
 
 /**
  * LiteralASTNode is a type of AST node that represents a literal value.
- *
- * @group AST
+ * @public
  */
 export interface LiteralASTNode<T extends string = string>
   extends ASTBaseParentNode<never>,
@@ -222,8 +216,7 @@ export interface LiteralASTNode<T extends string = string>
 
 /**
  * DotASTNode is a type of AST node that represents a dot in a graph.
- *
- * @group AST
+ * @public
  */
 export interface DotASTNode
   extends ASTBaseParentNode<StatementASTNode>,
@@ -233,8 +226,7 @@ export interface DotASTNode
 
 /**
  * GraphASTNode is a type of AST node that represents a graph.
- *
- * @group AST
+ * @public
  */
 export interface GraphASTNode
   extends ASTBaseParentNode<ClusterStatementASTNode>,
@@ -244,7 +236,7 @@ export interface GraphASTNode
 
 /**
  * AttributeASTNode is a type of AST node that represents an attribute.
- * @group AST
+ * @public
  */
 export interface AttributeASTNode<T extends AttributeKey = AttributeKey>
   extends ASTBaseParentNode<never>,
@@ -254,7 +246,7 @@ export interface AttributeASTNode<T extends AttributeKey = AttributeKey>
 
 /**
  * CommentASTNode is a type of AST node that represents a comment.
- * @group AST
+ * @public
  */
 export interface CommentASTNode
   extends ASTBaseParentNode<never>,
@@ -264,7 +256,7 @@ export interface CommentASTNode
 
 /**
  * AttributeListASTNode is a type of AST node that represents a list of attributes.
- * @group AST
+ * @public
  */
 export interface AttributeListASTNode
   extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>,
@@ -274,7 +266,7 @@ export interface AttributeListASTNode
 
 /**
  * NodeRefASTNode is a type of AST node that represents a reference to a node.
- * @group AST
+ * @public
  */
 export interface NodeRefASTNode
   extends ASTBaseParentNode<never>,
@@ -284,7 +276,7 @@ export interface NodeRefASTNode
 
 /**
  * NodeRefGroupASTNode is a type of AST node that represents a group of nodes referenced together.
- * @group AST
+ * @public
  */
 export interface NodeRefGroupASTNode
   extends ASTBaseParentNode<NodeRefASTNode>,
@@ -294,14 +286,13 @@ export interface NodeRefGroupASTNode
 
 /**
  * This type is used to represent a target of an edge in an AST (Abstract Syntax Tree).
- *
- * @group AST
+ * @public
  */
 export type EdgeTargetASTNode = NodeRefASTNode | NodeRefGroupASTNode;
 
 /**
  * EdgeASTNode is a type of AST node that represents an edge in a graph.
- * @group AST
+ * @public
  */
 export interface EdgeASTNode
   extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>,
@@ -311,7 +302,7 @@ export interface EdgeASTNode
 
 /**
  * NodeASTNode is a type of AST node that represents a node in a graph.
- * @group AST
+ * @public
  */
 export interface NodeASTNode
   extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>,
@@ -321,7 +312,7 @@ export interface NodeASTNode
 
 /**
  * SubgraphASTNode is a type of AST node that represents a subgraph.
- * @group AST
+ * @public
  */
 export interface SubgraphASTNode
   extends ASTBaseParentNode<ClusterStatementASTNode>,
@@ -329,13 +320,13 @@ export interface SubgraphASTNode
   type: 'Subgraph';
 }
 /**
- * @group AST
+ * @public
  */
 export type StatementASTNode = GraphASTNode | CommentASTNode;
 
 /**
  * ClusterStatementASTNode is a type used to represent a statement in a cluster graph.
- * @group AST
+ * @public
  */
 export type ClusterStatementASTNode =
   | AttributeASTNode
@@ -347,8 +338,7 @@ export type ClusterStatementASTNode =
 
 /**
  * ASTNode is a type used to define a set of different types of AST nodes that can be used in a graph.
- *
- * @group AST
+ * @public
  */
 export type ASTNode =
   | LiteralASTNode
@@ -365,6 +355,6 @@ export type ASTNode =
 
 /**
  * ASTChildNode is a type alias used to represent the child nodes of a given {@link ASTBaseParentNode}.
- * @group AST
+ * @public
  */
 export type ASTChildNode<T> = T extends ASTBaseParentNode<infer C> ? C : never;

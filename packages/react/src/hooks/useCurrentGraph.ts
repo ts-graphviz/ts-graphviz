@@ -6,6 +6,7 @@ import { CurrentGraph } from '../contexts/CurrentGraph.js';
  * Hook to get the current cluster(Digraph, Graph or Subgraph).
  *
  * @throws If it is out of the context of Cluster, it throws an exception.
+ * @public
  */
 export function useCurrentGraph(): GraphBaseModel {
   const cluster = useContext(CurrentGraph);

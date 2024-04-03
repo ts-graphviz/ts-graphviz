@@ -9,6 +9,7 @@ import type { RootGraphProps } from '../types.js';
 
 /**
  * `Digraph` component.
+ * @public
  */
 export const Digraph: FC<RootGraphProps> = ({
   children,

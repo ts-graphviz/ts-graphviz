@@ -13,7 +13,7 @@ import type {
 
 /**
  * This interface provides options for converting DOT to a model.
- * @group Convert DOT to Model
+ * @public
  */
 export interface FromDotOptions<
   T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph',
@@ -31,25 +31,28 @@ export interface FromDotOptions<
 /**
  * fromDot is a function that converts a DOT string to a model.
  *
- * @group Convert DOT to Model
  *
- * @param dot The DOT string to convert.
- * @param options Options for converting the DOT string to a model.
- * @returns A model of type {@link RootGraphModel}, {@link NodeModel}, {@link EdgeModel}, or {@link SubgraphModel},
+ * @param dot - The DOT string to convert.
+ * @param options - Options for converting the DOT string to a model.
+ * @returns A model of type {@link @ts-graphviz/common#RootGraphModel}, {@link @ts-graphviz/common#NodeModel}, {@link @ts-graphviz/common#EdgeModel}, or {@link @ts-graphviz/common#SubgraphModel},
  * depending on the type specified in the options.
+ * @public
  */
 export function fromDot(
   dot: string,
   options?: FromDotOptions<'Dot' | 'Graph'>,
 ): RootGraphModel;
+/** @public */
 export function fromDot(
   dot: string,
   options?: FromDotOptions<'Node'>,
 ): NodeModel;
+/** @public */
 export function fromDot(
   dot: string,
   options?: FromDotOptions<'Edge'>,
 ): EdgeModel;
+/** @public */
 export function fromDot(
   dot: string,
   options?: FromDotOptions<'Subgraph'>,

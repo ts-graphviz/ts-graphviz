@@ -4,14 +4,14 @@ import type {
 } from '@ts-graphviz/common';
 
 /**
- * ModelFactory is an interface that provides a way to create a {@link RootGraphModel} object.
+ * ModelFactory is an interface that provides a way to create a {@link @ts-graphviz/common#RootGraphModel} object.
  *
- * @param id - Optional string parameter that specifies the id of the {@link RootGraphModel} object.
- * @param attributes - Optional GraphAttributesObject parameter that specifies the attributes of the {@link RootGraphModel} object.
- * @param callback - Optional callback function that takes a {@link RootGraphModel} object as a parameter.
+ * @param id - Optional string parameter that specifies the id of the {@link @ts-graphviz/common#RootGraphModel} object.
+ * @param attributes - Optional GraphAttributesObject parameter that specifies the attributes of the {@link @ts-graphviz/common#RootGraphModel} object.
+ * @param callback - Optional callback function that takes a {@link @ts-graphviz/common#RootGraphModel} object as a parameter.
  *
- * @returns {@link RootGraphModel} - Returns a {@link RootGraphModel} object.
- * @group Model Factory
+ * @returns Returns a {@link @ts-graphviz/common#RootGraphModel} object.
+ * @public
  */
 export interface ModelFactory {
   (
@@ -28,13 +28,15 @@ export interface ModelFactory {
 }
 
 /**
- * @group Model Factory
+ * Collection of model factories for creating graph objects.
+ * @public
  */
 export interface ModelFactories {
   /**
    * API for creating directional graph objects.
    */
   digraph: ModelFactory;
+
   /**
    * API for creating omnidirectional graph objects.
    */
@@ -42,7 +44,8 @@ export interface ModelFactories {
 }
 
 /**
- * @group Model Factory
+ * Collection of model factories for creating graph objects with strict mode.
+ * @public
  */
 export interface ModelFactoriesWithStrict extends ModelFactories {
   strict: ModelFactories;

@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "lib",
-    "lib": ["DOM"]
+    "lib": ["DOM", "ESNext"]
   },
   "include": ["src/deno.ts", "src/*.ts"],
   "exclude": [

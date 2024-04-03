@@ -1,4 +1,6 @@
+api-extractor.json
+etc
 src
+tmp
 tsconfig.json
-typedoc.json
 vite.config.ts

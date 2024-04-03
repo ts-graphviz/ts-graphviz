@@ -1,5 +1,7 @@
+/** @internal */
 export type F<A extends any[], O> = (...args: A) => O;
 
+/** @internal */
 export type IO<I, O> = F<[I], O>;
 
 function _pipe<T extends any[], R>(
@@ -9,22 +11,27 @@ function _pipe<T extends any[], R>(
   return (...t: T) => operations.reduce((acc, f) => f(acc), o1(...t));
 }
 
+/** @internal */
 export function pipe<I extends any[], O>(f0: F<I, O>): F<I, O>;
+/** @internal */
 export function pipe<I extends any[], T1, O>(
   f0: F<I, T1>,
   f1: IO<T1, O>,
 ): F<I, O>;
+/** @internal */
 export function pipe<I extends any[], T1, T2, O>(
   f0: F<I, T1>,
   f1: IO<T1, T2>,
   f2: IO<T2, O>,
 ): F<I, O>;
+/** @internal */
 export function pipe<I extends any[], T1, T2, T3, O>(
   f0: F<I, T1>,
   f1: IO<T1, T2>,
   f2: IO<T2, T3>,
   f3: IO<T3, O>,
 ): F<I, O>;
+/** @internal */
 export function pipe<I extends any[], T1, T2, T3, T4, O>(
   f0: F<I, T1>,
   f1: IO<T1, T2>,
@@ -32,6 +39,7 @@ export function pipe<I extends any[], T1, T2, T3, T4, O>(
   f3: IO<T3, T4>,
   f4: IO<T4, O>,
 ): F<I, O>;
+/** @internal */
 export function pipe<I extends any[], O>(
   o1: F<I, any>,
   ...operations: IO<any, any>[]
@@ -49,6 +57,7 @@ const toIterable = <T, TF extends () => IterableIterator<T>>(f: TF) => ({
   [Symbol.iterator]: f,
 });
 
+/** @internal */
 export const map = defer(
   <T, O>(src: Iterable<T>, selector: (item: T) => O): O[] =>
     Array.from(
@@ -60,6 +69,7 @@ export const map = defer(
     ),
 );
 
+/** @internal */
 export const filter = defer(
   <T>(src: Iterable<T>, pred: (item: T) => boolean): T[] =>
     Array.from(

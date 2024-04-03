@@ -7,6 +7,7 @@ import type { Layout, Options } from './types.js';
  *
  * @param value The value of an Attribute of type T that extends AttributeKey
  * @returns The escaped Attribute value
+ * @internal
  */
 export function escapeValue<T extends AttributeKey>(value: Attribute<T>) {
   if (value !== true) {
@@ -24,6 +25,7 @@ export function escapeValue<T extends AttributeKey>(value: Attribute<T>) {
  *
  * @param options The Options object used to create command arguments
  * @returns A generator that yields strings for command arguments
+ * @internal
  */
 export function* createCommandArgs<T extends Layout>(
   options: Options<T>,

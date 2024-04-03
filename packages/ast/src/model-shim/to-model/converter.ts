@@ -1,4 +1,4 @@
-import { createModelsContext } from '@ts-graphviz/common';
+import { type DotObjectModel, createModelsContext } from '@ts-graphviz/common';
 import { defaultPlugins } from './plugins/index.js';
 import type {
   ASTToModel,
@@ -7,12 +7,12 @@ import type {
   ConvertToModelPlugin,
   ToModelConvertableASTNode,
 } from './types.js';
-
 /**
- * @group Convert AST to Model
+ * ToModelConverter is a class used to convert an AST into a {@link @ts-graphviz/common#DotObjectModel}.
+ * @beta
  */
 export class ToModelConverter {
-  /** @hidden */
+  /** @internal */
   protected plugins: ConvertToModelPlugin<ToModelConvertableASTNode>[] = [
     ...defaultPlugins,
   ];
@@ -22,7 +22,7 @@ export class ToModelConverter {
   /**
    * Convert AST to Model.
    *
-   * @param ast AST node.
+   * @param ast - AST node.
    */
   public convert<T extends ToModelConvertableASTNode>(ast: T): ASTToModel<T> {
     const plugins = [...this.plugins];

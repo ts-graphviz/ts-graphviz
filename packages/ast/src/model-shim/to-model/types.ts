@@ -14,8 +14,9 @@ import type {
 } from '../../types.js';
 
 /**
- *  ModelOf is a type that determines the type of model to use depending on the value of T.
- * @group AST
+ * ModelOf is a type that determines the type of model to use depending on the value of T.
+ * @typeParam T - The type of model to determine.
+ * @public
  */
 export type ModelOf<T> = T extends 'Dot' | 'Graph'
   ? RootGraphModel
@@ -29,14 +30,14 @@ export type ModelOf<T> = T extends 'Dot' | 'Graph'
 
 /**
  * ASTToModel is a type that determines a model type from an AST.
- *
- * @group AST
+ * @typeParam T - The AST node type.
+ * @public
  */
 export type ASTToModel<T> = T extends { type: infer U } ? ModelOf<U> : never;
 
 /**
  * This type is used to define what AST nodes can be converted to a model.
- * @group Convert AST to Model
+ * @public
  */
 export type ToModelConvertableASTNode =
   | DotASTNode
@@ -46,26 +47,49 @@ export type ToModelConvertableASTNode =
   | EdgeASTNode;
 
 /**
- * @group Convert AST to Model
+ * Options for converting to a model.
+ * @public
  */
 export interface ConvertToModelOptions {
   models?: Partial<ModelsContext>;
 }
 
 /**
- * @group Convert AST to Model
+ * Represents the context for converting AST nodes to models.
+ * @public
  */
 export interface ConvertToModelContext {
   models: ModelsContext;
+
+  /**
+   * Converts the given AST node to its corresponding model representation.
+   * @param ast - The AST node to convert.
+   * @typeParam T - The type of the AST node.
+   * @returns The model representation of the AST node.
+   */
   convert<T extends ToModelConvertableASTNode>(ast: T): ASTToModel<T>;
 }
 
 /**
- * @group Convert AST to Model
+ * Represents a plugin that converts a specific type of AST node to a model.
+ * @typeParam T - The type of AST node that this plugin can convert.
+ * @beta
  */
 export interface ConvertToModelPlugin<
   T extends ToModelConvertableASTNode = ToModelConvertableASTNode,
 > {
+  /**
+   * Determines if this plugin can convert the given AST node.
+   * @param ast - The AST node to check.
+   * @returns A boolean indicating if this plugin can convert the AST node.
+   */
   match(ast: T): boolean;
+
+  /**
+   * Converts the given AST node to a model.
+   * @param context - The context for the conversion.
+   * @param ast - The AST node to convert.
+   * @returns The converted model.
+   */
   convert(context: ConvertToModelContext, ast: T): ASTToModel<T>;
 }

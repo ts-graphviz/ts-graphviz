@@ -25,14 +25,15 @@ import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
 
 /**
- * Base class for Graph objects.
- * @group Models
+ * Represents the base class for a graph in the Graphviz library.
+ * @typeParam T - The type of attribute keys for the graph.
+ * @public
  */
 export abstract class GraphBase<T extends AttributeKey>
   extends AttributesBase<T>
   implements GraphBaseModel<T>
 {
-  /** @hidden */
+  /** @internal */
   #models = RootModelsContext;
 
   public readonly id?: string;
@@ -60,7 +61,7 @@ export abstract class GraphBase<T extends AttributeKey>
     return Array.from(this.#objects.subgraphs.values());
   }
 
-  /** @hidden */
+  /** @internal */
   #objects: Readonly<{
     nodes: Map<string, NodeModel>;
     edges: Set<EdgeModel>;

@@ -10,7 +10,7 @@ import { DotObject } from './DotObject.js';
 
 /**
  * DOT object class representing a node.
- * @group Models
+ * @public
  */
 export class Node extends DotObject implements NodeModel {
   public get $$type(): 'Node' {

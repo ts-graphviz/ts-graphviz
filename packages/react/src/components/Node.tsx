@@ -5,6 +5,7 @@ import type { NodeProps } from '../types.js';
 
 /**
  * `Node` component.
+ * @public
  */
 export const Node: FC<NodeProps> = ({ id, label, xlabel, ...options }) => {
   const renderedLabel = useRenderedID(label);

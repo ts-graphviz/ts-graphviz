@@ -5,6 +5,7 @@ export default defineConfig({
   build: {
     target: 'ES2022',
     outDir: 'lib',
+    minify: false,
     lib: {
       entry: {
         'ts-graphviz': 'src/ts-graphviz.ts',
@@ -24,8 +25,7 @@ export default defineConfig({
   },
   plugins: [
     dts({
-      outDir: 'lib',
-      copyDtsFiles: true,
+      rollupTypes: true,
     }),
   ],
 });

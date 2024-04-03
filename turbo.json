@@ -33,6 +33,11 @@
       ],
       "outputs": ["lib/**"]
     },
+    "api-extractor": {
+      "dependsOn": ["^build", "^api-extractor"],
+      "inputs": ["api-extractor.json", "src/**/*.ts"],
+      "outputs": ["etc/*", "tmp/*"]
+    },
     "test:integration:build": {
       "dependsOn": ["build"],
       "inputs": ["**/*.js", "**/*/ts"],

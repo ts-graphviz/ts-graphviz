@@ -4,20 +4,20 @@ import type { PrintContext, PrintOptions, PrintPlugin } from './types.js';
 
 /**
  * Printer is a class responsible for converting an AST into a DOT string.
- * @group Convert AST to DOT
+ * @beta
  */
 export class Printer {
   /** @internal */
   #plugins: PrintPlugin[] = [...defaultPlugins];
 
   /**
-   * @param options Options to be used when generating the DOT string.
+   * @param options - Options to be used when generating the DOT string.
    */
   constructor(private options: PrintOptions = {}) {}
 
   /**
    * Generates a DOT string from an ASTNode.
-   * @param ast The ASTNode to be converted into a DOT string.
+   * @param ast - The ASTNode to be converted into a DOT string.
    * @returns The DOT string generated from the ASTNode.
    */
   public print(ast: ASTNode): string {

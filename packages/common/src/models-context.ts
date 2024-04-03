@@ -6,7 +6,7 @@ import type {
 } from './models.js';
 
 /**
- * @group Models Context
+ * @public
  */
 export interface ModelsContext {
   Graph: RootGraphConstructor;
@@ -17,7 +17,7 @@ export interface ModelsContext {
 }
 
 /**
- * @group Models Context
+ * @public
  */
 export const RootModelsContext: ModelsContext = Object.seal({
   // NOTE: RootModelsContext is also initialized after the model class is declared in the '@ts-graphviz/core/register-default' module.
@@ -29,7 +29,7 @@ export const RootModelsContext: ModelsContext = Object.seal({
 } as unknown as ModelsContext);
 
 /**
- * @group Models Context
+ * @public
  */
 export function createModelsContext(
   models: Partial<ModelsContext>,

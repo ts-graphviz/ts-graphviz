@@ -1,7 +1,8 @@
 import type { Attribute } from '@ts-graphviz/common';
 
 /**
- * @group Attribute
+ * Attribute constant.
+ * @public
  */
 export const attribute: Attribute.keys = new Proxy(
   Object.freeze({}) as Attribute.keys,

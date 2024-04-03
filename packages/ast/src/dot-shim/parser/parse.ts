@@ -11,7 +11,8 @@ import type {
 } from '../../types.js';
 import { PeggySyntaxError, parse as _parse } from './_parse.js';
 /**
- * @group Convert DOT to AST
+ * Rule is a type that represents the different types of rules that can be parsed.
+ * @public
  */
 export type Rule =
   | 'Dot'
@@ -25,7 +26,7 @@ export type Rule =
 
 /**
  * CommonParseOptions is an interface that defines the properties needed in order to parse a file.
- * @group Convert DOT to AST
+ * @public
  */
 export interface CommonParseOptions {
   /**
@@ -36,8 +37,8 @@ export interface CommonParseOptions {
 
 /**
  * ParseOptions interface is used to provide additional information to the parser while parsing a rule.
- * @template T The type of the rule to be parsed.
- * @group Convert DOT to AST
+ * @typeParam T - The type of the rule to be parsed.
+ * @public
  */
 export interface ParseOptions<T extends Rule> extends CommonParseOptions {
   startRule?: T;
@@ -60,43 +61,53 @@ export interface ParseOptions<T extends Rule> extends CommonParseOptions {
  * - {@link SubgraphASTNode}
  * - {@link ClusterStatementASTNode}
  *
- * @throws {@link SyntaxError}
- * @group Convert DOT to AST
+ * @throws {@link DotSyntaxError}
+ * @public
  */
 export function parse(input: string): DotASTNode;
+/** @public */
 export function parse(input: string, options?: ParseOptions<'Dot'>): DotASTNode;
+/** @public */
 export function parse(
   input: string,
   options?: ParseOptions<'Graph'>,
 ): GraphASTNode;
+/** @public */
 export function parse(
   input: string,
   options?: ParseOptions<'Node'>,
 ): NodeASTNode;
+/** @public */
 export function parse(
   input: string,
   options?: ParseOptions<'Edge'>,
 ): EdgeASTNode;
+/** @public */
 export function parse(
   input: string,
   options?: ParseOptions<'AttributeList'>,
 ): AttributeListASTNode;
+/** @public */
 export function parse(
   input: string,
   options?: ParseOptions<'Attribute'>,
 ): AttributeASTNode;
+/** @public */
 export function parse(
   input: string,
   options?: ParseOptions<'Subgraph'>,
 ): SubgraphASTNode;
+/** @public */
 export function parse(
   input: string,
   options?: ParseOptions<'ClusterStatements'>,
 ): ClusterStatementASTNode[];
+/** @public */
 export function parse(
   input: string,
   options?: ParseOptions<Rule>,
 ): ASTNode | ClusterStatementASTNode[];
+/** @public */
 export function parse(
   input: string,
   options?: ParseOptions<Rule>,
@@ -111,7 +122,8 @@ export function parse(
   }
 }
 /**
- * @group Convert DOT to AST
+ * DotSyntaxError is a class that extends the PeggySyntaxError class and is used to represent syntax errors in the dot language.
+ * @public
  */
 export class DotSyntaxError extends PeggySyntaxError {
   constructor(...args: ConstructorParameters<typeof PeggySyntaxError>) {

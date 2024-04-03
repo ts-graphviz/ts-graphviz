@@ -28,8 +28,7 @@ import type {
 
 /**
  * This interface is used to define the options for the builder.
- *
- * @group Create AST
+ * @public
  */
 export interface BuilderOptions {
   /**
@@ -41,15 +40,15 @@ export interface BuilderOptions {
 
 /**
  * This interface provides a method for creating an Abstract Syntax Tree (AST) for a given type.
- * @group Create AST
+ * @public
  */
 export interface CreateElement {
   /**
    * Creates a LiteralASTNode with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
    * @returns A {@link LiteralASTNode} with the given type, properties, and children.
    */
   <T extends string>(
@@ -60,9 +59,9 @@ export interface CreateElement {
   /**
    * Creates a LiteralASTNode with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
    * @returns A {@link LiteralASTNode} with the given type, properties, and children.
    */
   (
@@ -74,9 +73,9 @@ export interface CreateElement {
   /**
    * Creates a {@link DotASTNode} with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
    * @returns A {@link DotASTNode} with the given type, properties, and children.
    */
   (
@@ -88,10 +87,10 @@ export interface CreateElement {
   /**
    * Creates a {@link GraphASTNode} with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
-   * @returns A {GraphASTNode} with the given type, properties, and children.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
+   * @returns A {@link GraphASTNode} with the given type, properties, and children.
    */
   (
     type: 'Graph',
@@ -102,9 +101,9 @@ export interface CreateElement {
   /**
    * Creates an {@link AttributeASTNode} with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
    * @returns An {@link AttributeASTNode} with the given type, properties, and children.
    */
   <K extends AttributeKey>(
@@ -121,9 +120,9 @@ export interface CreateElement {
   /**
    * Creates a {@link CommentASTNode} with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
    * @returns A {@link CommentASTNode} with the given type, properties, and children.
    */
   (
@@ -135,9 +134,9 @@ export interface CreateElement {
   /**
    * Creates an {@link AttributeListASTNode} with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
    * @returns An {@link AttributeListASTNode} with the given type, properties, and children.
    */
   (
@@ -149,9 +148,9 @@ export interface CreateElement {
   /**
    * Creates a {@link NodeRefASTNode} with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
    * @returns A {@link NodeRefASTNode} with the given type, properties, and children.
    */
   (
@@ -163,9 +162,9 @@ export interface CreateElement {
   /**
    * Creates a {@link NodeRefGroupASTNode} with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
    * @returns A {@link NodeRefGroupASTNode} with the given type, properties, and children.
    */
   (
@@ -177,9 +176,9 @@ export interface CreateElement {
   /**
    * Creates an {@link EdgeASTNode} with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
    * @returns An {@link EdgeASTNode} with the given type, properties, and children.
    */
   (
@@ -191,9 +190,9 @@ export interface CreateElement {
   /**
    * Creates a {@link NodeASTNode} with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
    * @returns A {@link NodeASTNode} with the given type, properties, and children.
    */
   (
@@ -205,9 +204,9 @@ export interface CreateElement {
   /**
    * Creates a {@link SubgraphASTNode} with the given type, properties, and children.
    *
-   * @param type The type of the AST node.
-   * @param props The properties of the AST node.
-   * @param children The children of the AST node.
+   * @param type - The type of the AST node.
+   * @param props - The properties of the AST node.
+   * @param children - The children of the AST node.
    * @returns A {@link SubgraphASTNode} with the given type, properties, and children.
    */
   (
@@ -219,7 +218,7 @@ export interface CreateElement {
 
 /**
  * This interface provides an ASTBuilder object with a createElement function.
- * @group Create AST
+ * @public
  */
 export interface ASTBuilder {
   createElement: CreateElement;
