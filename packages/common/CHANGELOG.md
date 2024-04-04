@@ -1,5 +1,13 @@
 # @ts-graphviz/common
 
+## 2.1.1
+
+### Patch Changes
+
+- [#1003](https://github.com/ts-graphviz/ts-graphviz/pull/1003) [`24f4174`](https://github.com/ts-graphviz/ts-graphviz/commit/24f4174a76eaef50fc7d30ae3401c1b23b00789b) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump vite from 5.1.3 to 5.2.8
+
+- [#1004](https://github.com/ts-graphviz/ts-graphviz/pull/1004) [`fabb8c8`](https://github.com/ts-graphviz/ts-graphviz/commit/fabb8c8b9f3ded57d41d7d4f1d669084ab4e91c9) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix documentation build failed
+
 ## 2.1.0
 
 ### Minor Changes
