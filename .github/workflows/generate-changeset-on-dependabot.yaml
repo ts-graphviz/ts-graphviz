@@ -3,7 +3,6 @@ name: Generate Dependency Updates Changeset
 on:
   pull_request_target:
     paths:
-      - '.github/workflows/*'
       - 'pnpm-lock.yaml'
       - 'package.json'
 permissions:
