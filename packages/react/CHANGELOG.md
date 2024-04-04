@@ -1,5 +1,15 @@
 # @ts-graphviz/react
 
+## 0.10.1
+
+### Patch Changes
+
+- [#1004](https://github.com/ts-graphviz/ts-graphviz/pull/1004) [`fabb8c8`](https://github.com/ts-graphviz/ts-graphviz/commit/fabb8c8b9f3ded57d41d7d4f1d669084ab4e91c9) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix documentation build failed
+
+- Updated dependencies [[`24f4174`](https://github.com/ts-graphviz/ts-graphviz/commit/24f4174a76eaef50fc7d30ae3401c1b23b00789b), [`fabb8c8`](https://github.com/ts-graphviz/ts-graphviz/commit/fabb8c8b9f3ded57d41d7d4f1d669084ab4e91c9)]:
+  - ts-graphviz@2.1.1
+  - @ts-graphviz/common@2.1.1
+
 ## 0.10.0
 
 ### Minor Changes
