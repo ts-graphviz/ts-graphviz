@@ -1,3 +1,4 @@
 packages:
+  - 'experimentals/*'
   - 'packages/*'
   - 'examples/*'

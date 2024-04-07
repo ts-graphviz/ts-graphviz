@@ -1,0 +1,64 @@
+{
+  "name": "@ts-graphviz/jsoncanvas",
+  "version": "0.0.0",
+  "description": "JSONCanvas Graphviz implementation",
+  "keywords": [
+    "graphviz",
+    "dot",
+    "jsoncanvas"
+  ],
+  "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",
+  "bugs": {
+    "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ts-graphviz/ts-graphviz.git",
+    "directory": "experimentals/jsoncanvas"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/ts-graphviz"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/ts-graphviz"
+    }
+  ],
+  "license": "MIT",
+  "author": "Yuki Yamazaki <yuki@kamiazya.tech>",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/jsoncanvas.d.ts",
+      "require": "./lib/jsoncanvas.cjs",
+      "default": "./lib/jsoncanvas.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "lib/jsoncanvas.cjs",
+  "module": "lib/jsoncanvas.js",
+  "types": "lib/jsoncanvas.d.ts",
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@ts-graphviz/adapter": "workspace:^",
+    "@ts-graphviz/common": "workspace:^",
+    "@ts-graphviz/react": "workspace:^",
+    "ts-graphviz": "workspace:^"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vite": "^5.2.8",
+    "vite-plugin-dts": "^3.7.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

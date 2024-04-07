@@ -1,3 +1,4 @@
+import { appendFile, readFile } from 'node:fs/promises';
 import dts from 'vite-plugin-dts';
 import { defineConfig } from 'vitest/config';
 
@@ -27,6 +28,16 @@ export default defineConfig({
     // @ts-ignore
     dts({
       rollupTypes: true,
+      async afterBuild() {
+        const contents = await readFile(
+          new URL(import.meta.resolve('./src/global.d.ts')).pathname,
+          'utf-8',
+        );
+        await appendFile(
+          new URL(import.meta.resolve('./lib/react.d.ts')).pathname,
+          contents,
+        );
+      },
     }),
   ],
 });

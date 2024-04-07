@@ -165,6 +165,31 @@ importers:
         specifier: ^5.0.1
         version: 5.1.4(@webpack-cli/generators@3.0.7)(webpack@5.90.3)
 
+  experimentals/jsoncanvas:
+    dependencies:
+      '@ts-graphviz/adapter':
+        specifier: workspace:^
+        version: link:../../packages/adapter
+      '@ts-graphviz/common':
+        specifier: workspace:^
+        version: link:../../packages/common
+      '@ts-graphviz/react':
+        specifier: workspace:^
+        version: link:../../packages/react
+      ts-graphviz:
+        specifier: workspace:^
+        version: link:../../packages/ts-graphviz
+    devDependencies:
+      typescript:
+        specifier: ^5.3.3
+        version: 5.4.2
+      vite:
+        specifier: ^5.2.8
+        version: 5.2.8(@types/node@20.11.28)
+      vite-plugin-dts:
+        specifier: ^3.7.3
+        version: 3.7.3(@types/node@20.11.28)(typescript@5.4.2)(vite@5.2.8)
+
   packages/adapter:
     dependencies:
       '@ts-graphviz/common':
@@ -2510,6 +2535,26 @@ packages:
       muggle-string: 0.3.1
       path-browserify: 1.0.1
       typescript: 5.3.3
+      vue-template-compiler: 2.7.16
+    dev: true
+
+  /@vue/language-core@1.8.27(typescript@5.4.2):
+    resolution: {integrity: sha512-L8Kc27VdQserNaCUNiSFdDl9LWT24ly8Hpwf1ECy3aFb9m6bDhBGQYOujDm21N7EW3moKIOKEanQwe1q5BK+mA==}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@volar/language-core': 1.11.1
+      '@volar/source-map': 1.11.1
+      '@vue/compiler-dom': 3.4.19
+      '@vue/shared': 3.4.19
+      computeds: 0.0.1
+      minimatch: 9.0.3
+      muggle-string: 0.3.1
+      path-browserify: 1.0.1
+      typescript: 5.4.2
       vue-template-compiler: 2.7.16
     dev: true
 
@@ -8477,6 +8522,30 @@ packages:
       - supports-color
     dev: true
 
+  /vite-plugin-dts@3.7.3(@types/node@20.11.28)(typescript@5.4.2)(vite@5.2.8):
+    resolution: {integrity: sha512-26eTlBYdpjRLWCsTJebM8vkCieE+p9gP3raf+ecDnzzK5E3FG6VE1wcy55OkRpfWWVlVvKkYFe6uvRHYWx7Nog==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      typescript: '*'
+      vite: '*'
+    peerDependenciesMeta:
+      vite:
+        optional: true
+    dependencies:
+      '@microsoft/api-extractor': 7.39.0(@types/node@20.11.28)
+      '@rollup/pluginutils': 5.1.0
+      '@vue/language-core': 1.8.27(typescript@5.4.2)
+      debug: 4.3.4
+      kolorist: 1.8.0
+      typescript: 5.4.2
+      vite: 5.2.8(@types/node@20.11.28)
+      vue-tsc: 1.8.27(typescript@5.4.2)
+    transitivePeerDependencies:
+      - '@types/node'
+      - rollup
+      - supports-color
+    dev: true
+
   /vite-tsconfig-paths@4.3.2(typescript@5.4.2)(vite@5.2.8):
     resolution: {integrity: sha512-0Vd/a6po6Q+86rPlntHye7F31zA2URZMbH8M3saAZ/xR9QoGN/L21bxEGfXdWmFdNkqPpRdxFT7nmNe12e9/uA==}
     peerDependencies:
@@ -8648,6 +8717,18 @@ packages:
       '@vue/language-core': 1.8.27(typescript@5.3.3)
       semver: 7.6.0
       typescript: 5.3.3
+    dev: true
+
+  /vue-tsc@1.8.27(typescript@5.4.2):
+    resolution: {integrity: sha512-WesKCAZCRAbmmhuGl3+VrdWItEvfoFIPXOvUJkjULi+x+6G/Dy69yO3TBRJDr9eUlmsNAwVmxsNZxvHKzbkKdg==}
+    hasBin: true
+    peerDependencies:
+      typescript: '*'
+    dependencies:
+      '@volar/typescript': 1.11.1
+      '@vue/language-core': 1.8.27(typescript@5.4.2)
+      semver: 7.6.0
+      typescript: 5.4.2
     dev: true
 
   /w3c-xmlserializer@5.0.0:

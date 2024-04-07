@@ -1,0 +1,70 @@
+digraph {
+  dpi = 300;
+  layout = "neato";
+  notranslate = true;
+  fontsize = 5;
+  splines = "curved";
+  labeljust = "l";
+  labelloc = "t";
+  graph [
+    bgcolor = "#55555555";
+    labeljust = "l";
+    fontsize = 5;
+  ];
+  edge [
+    weight = 0;
+    fontsize = 5;
+  ];
+  node [
+    style = "filled,bold,rounded";
+    shape = "box";
+    label = "";
+    labelloc = "t";
+    penwidth = 0.5;
+    fontcolor = "white";
+    fillcolor = "#00000011";
+    fontsize = 5;
+  ];
+  "b0d48722a6742a2e" [
+    pos = "1.41,0!";
+    fixedsize = true;
+    width = 0.8333333333333334;
+    height = 0.43;
+    color = "gray";
+    label = <<table WIDTH="0.8333333333333334" HEIGHT="0.43"><tr><td ALIGN="LEFT">aaaaaa<br ALIGN="LEFT"></br></td></tr></table>>;
+  ];
+  "6654bf961c7bda5a" [
+    xlp = "0,-441";
+    xlabel = "Untitled.md";
+    pos = "0,-1.47!";
+    fixedsize = true;
+    width = 1.0033333333333334;
+    height = 0.6866666666666666;
+    color = "gray";
+  ];
+  "d1464ebd7972207f" [
+    pos = "2.52,-0.98!";
+    fixedsize = true;
+    width = 0.8333333333333334;
+    height = 0.8333333333333334;
+    color = "yellow";
+    label = <<table WIDTH="0.8333333333333334" HEIGHT="0.8333333333333334"><tr><td ALIGN="LEFT"># aaaaa<br ALIGN="LEFT"></br>aaaa<br ALIGN="LEFT"></br></td></tr></table>>;
+  ];
+  "b0d48722a6742a2e" -> "d1464ebd7972207f" [
+    label = "aaaa";
+    fontcolor = "white";
+    headport = "w";
+    tailport = "e";
+    arrowsize = 0.5;
+    penwidth = 0.8;
+    color = "gray";
+  ];
+  "b0d48722a6742a2e" -> "6654bf961c7bda5a" [
+    fontcolor = "white";
+    headport = "n";
+    tailport = "s";
+    arrowsize = 0.5;
+    penwidth = 0.8;
+    color = "gray";
+  ];
+}

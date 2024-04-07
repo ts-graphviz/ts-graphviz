@@ -1,0 +1,11 @@
+{
+	"nodes":[
+		{"id":"b0d48722a6742a2e","x":-333,"y":-195,"width":250,"height":129,"type":"text","text":"aaaaaa"},
+		{"id":"6654bf961c7bda5a","x":-756,"y":246,"width":301,"height":206,"type":"file","file":"test canvas/Untitled.md"},
+		{"id":"d1464ebd7972207f","x":0,"y":99,"width":250,"height":250,"color":"3","type":"text","text":"# aaaaa\naaaa"}
+	],
+	"edges":[
+		{"id":"f5811a40955f8d96","fromNode":"b0d48722a6742a2e","fromSide":"right","toNode":"d1464ebd7972207f","toSide":"left","label":"aaaa"},
+		{"id":"251eff5093ab9290","fromNode":"b0d48722a6742a2e","fromSide":"bottom","toNode":"6654bf961c7bda5a","toSide":"top"}
+	]
+}
