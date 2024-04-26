@@ -2,5 +2,5 @@ FROM mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye@sha256:76fea4
 
 RUN apt-get update && apt-get install -y graphviz && \
     curl -fsSL https://deno.land/x/install/install.sh | sh && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* \
     curl -fsSL https://deno.land/x/install/install.sh | sh
