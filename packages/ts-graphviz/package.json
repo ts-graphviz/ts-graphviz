@@ -1,6 +1,6 @@
 {
   "name": "ts-graphviz",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Graphviz library for TypeScript",
   "keywords": [
     "graphviz",
