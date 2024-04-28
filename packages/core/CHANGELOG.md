@@ -1,5 +1,23 @@
 # @ts-graphviz/core
 
+## 2.0.3
+
+### Patch Changes
+
+- [#1018](https://github.com/ts-graphviz/ts-graphviz/pull/1018) [`4b3c7d4`](https://github.com/ts-graphviz/ts-graphviz/commit/4b3c7d46e49a18ca05d6ecacbfa13d550039419f) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump lefthook from 1.6.7 to 1.6.10
+
+- [#1022](https://github.com/ts-graphviz/ts-graphviz/pull/1022) [`70bbd56`](https://github.com/ts-graphviz/ts-graphviz/commit/70bbd5673da3b83c3655e5f0d23454af6a8dc1d1) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump @types/node from 20.11.24 to 20.12.7
+
+- [#1023](https://github.com/ts-graphviz/ts-graphviz/pull/1023) [`fb6789b`](https://github.com/ts-graphviz/ts-graphviz/commit/fb6789b82ce3bc890fa93a59b7d3fb3dc6417b5e) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump typescript from 5.3.3 to 5.4.5
+
+- [#1020](https://github.com/ts-graphviz/ts-graphviz/pull/1020) [`7035af8`](https://github.com/ts-graphviz/ts-graphviz/commit/7035af80c275f8e3dd7e94fa2bfd22de45a96d67) Thanks [@kamiazya](https://github.com/kamiazya)! - Support Node.js v22
+
+- [#1025](https://github.com/ts-graphviz/ts-graphviz/pull/1025) [`54f6569`](https://github.com/ts-graphviz/ts-graphviz/commit/54f6569c58a91410da97177a6735a1e414467ddd) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump vitest and @vitest/coverage-istanbul
+
+- Updated dependencies [[`4b3c7d4`](https://github.com/ts-graphviz/ts-graphviz/commit/4b3c7d46e49a18ca05d6ecacbfa13d550039419f), [`70bbd56`](https://github.com/ts-graphviz/ts-graphviz/commit/70bbd5673da3b83c3655e5f0d23454af6a8dc1d1), [`fb6789b`](https://github.com/ts-graphviz/ts-graphviz/commit/fb6789b82ce3bc890fa93a59b7d3fb3dc6417b5e), [`7035af8`](https://github.com/ts-graphviz/ts-graphviz/commit/7035af80c275f8e3dd7e94fa2bfd22de45a96d67), [`54f6569`](https://github.com/ts-graphviz/ts-graphviz/commit/54f6569c58a91410da97177a6735a1e414467ddd)]:
+  - @ts-graphviz/common@2.1.2
+  - @ts-graphviz/ast@2.0.3
+
 ## 2.0.2
 
 ### Patch Changes
