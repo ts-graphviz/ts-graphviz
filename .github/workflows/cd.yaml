@@ -51,7 +51,7 @@ jobs:
           node-version-file: ./.node-version
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-      - uses: actions/download-artifact@9c19ed7fe5d278cd354c7dfd5d3b88589c7e2395 # v4.1.6
+      - uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@aba318e9165b45b7948c60273e0b72fce0a64eb9 # v1.4.7
@@ -93,7 +93,7 @@ jobs:
           node-version-file: ./.node-version
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-      - uses: actions/download-artifact@9c19ed7fe5d278cd354c7dfd5d3b88589c7e2395 # v4.1.6
+      - uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
       - name: Creating .npmrc
         if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
@@ -134,7 +134,7 @@ jobs:
           egress-policy: audit
 
       - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
-      - uses: actions/download-artifact@9c19ed7fe5d278cd354c7dfd5d3b88589c7e2395 # v4.1.6
+      - uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
       - name: Configure GitHub Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
       - name: Upload GitHub Pages artifact
