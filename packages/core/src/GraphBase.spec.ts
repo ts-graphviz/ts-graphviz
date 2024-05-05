@@ -4,7 +4,6 @@ registerDefault();
 
 import type { EdgeTargetTuple, NodeModel } from '@ts-graphviz/common';
 import { AttributesBase } from './AttributesBase.js';
-import { DotObject } from './DotObject.js';
 import { Edge } from './Edge.js';
 import { GraphBase } from './GraphBase.js';
 import { Node } from './Node.js';
@@ -20,10 +19,9 @@ beforeEach(() => {
   g = new TestGraph();
 });
 
-it('should be instance of GraphBase/AttributesBase/DotObject', () => {
+it('should be instance of GraphBase/AttributesBase', () => {
   expect(g).toBeInstanceOf(GraphBase);
   expect(g).toBeInstanceOf(AttributesBase);
-  expect(g).toBeInstanceOf(DotObject);
 });
 
 describe('Constructor', () => {

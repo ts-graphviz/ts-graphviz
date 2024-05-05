@@ -1,12 +1,11 @@
+import type { EdgeTargetTuple, SubgraphModel } from '@ts-graphviz/common';
 import { registerDefault } from '@ts-graphviz/core';
 import { beforeEach, describe, expect, it, test } from 'vitest';
-registerDefault();
-import type { EdgeTargetTuple, SubgraphModel } from '@ts-graphviz/common';
 import { AttributesBase } from './AttributesBase.js';
-import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
+registerDefault();
 
 describe('class Subgraph', () => {
   let subgraph: SubgraphModel;
@@ -15,11 +14,10 @@ describe('class Subgraph', () => {
     subgraph = new Subgraph();
   });
 
-  it('should be instance of Subgraph/Cluster/AttributesBase/DotObject', () => {
+  it('should be instance of Subgraph/Cluster/AttributesBase', () => {
     expect(subgraph).toBeInstanceOf(Subgraph);
     expect(subgraph).toBeInstanceOf(GraphBase);
     expect(subgraph).toBeInstanceOf(AttributesBase);
-    expect(subgraph).toBeInstanceOf(DotObject);
   });
 
   describe('Constructor', () => {

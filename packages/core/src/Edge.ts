@@ -7,13 +7,12 @@ import {
   isNodeRefLike,
 } from '@ts-graphviz/common';
 import { AttributesGroup } from './AttributesGroup.js';
-import { DotObject } from './DotObject.js';
 
 /**
  * DOT object class representing a edge.
  * @group Models
  */
-export class Edge extends DotObject implements EdgeModel {
+export class Edge implements EdgeModel {
   public get $$type(): 'Edge' {
     return 'Edge';
   }
@@ -26,7 +25,6 @@ export class Edge extends DotObject implements EdgeModel {
     public readonly targets: EdgeTargetTuple,
     attributes?: EdgeAttributesObject,
   ) {
-    super();
     if (
       targets.length < 2 &&
       (isNodeRefLike(targets[0]) && isNodeRefLike(targets[1])) === false

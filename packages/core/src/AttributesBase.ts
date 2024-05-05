@@ -5,21 +5,18 @@ import type {
   AttributesEntities,
   AttributesObject,
 } from '@ts-graphviz/common';
-import { DotObject } from './DotObject.js';
 
 /**
  * Base class for DOT objects with attributes.
  * @group Models
  */
 export abstract class AttributesBase<T extends AttributeKey>
-  extends DotObject
   implements Attributes<T>
 {
   /** @hidden */
   #attrs: Map<T, Attribute<T>> = new Map();
 
   constructor(attributes?: AttributesObject<T>) {
-    super();
     if (attributes !== undefined) {
       this.apply(attributes);
     }

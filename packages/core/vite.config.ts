@@ -8,7 +8,6 @@ export default defineConfig({
     minify: false,
     lib: {
       entry: {
-        DotObject: './src/DotObject.ts',
         AttributesBase: './src/AttributesBase.ts',
         AttributeList: './src/AttributeList.ts',
         AttributesGroup: './src/AttributesGroup.ts',

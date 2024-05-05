@@ -2,7 +2,6 @@ import type { AttributeListKind } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
-import { DotObject } from './DotObject.js';
 
 let attrs: AttributeList<AttributeListKind>;
 beforeEach(() => {
@@ -10,10 +9,9 @@ beforeEach(() => {
 });
 
 describe('object', () => {
-  it('should be instance of AttributeList/AttributesBase/DotObject', () => {
+  it('should be instance of AttributeList/AttributesBase', () => {
     expect(attrs).toBeInstanceOf(AttributeList);
     expect(attrs).toBeInstanceOf(AttributesBase);
-    expect(attrs).toBeInstanceOf(DotObject);
   });
 
   it('size should be 0 by default', () => {

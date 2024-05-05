@@ -4,7 +4,6 @@ import { registerDefault } from './register-default.js';
 registerDefault();
 
 import type { EdgeTargetTuple } from '@ts-graphviz/common';
-import { DotObject } from './DotObject.js';
 import { Edge } from './Edge.js';
 import { Node } from './Node.js';
 
@@ -20,7 +19,6 @@ beforeEach(() => {
 
 it('should be instance of Edge/DotObject', () => {
   expect(edge).toBeInstanceOf(Edge);
-  expect(edge).toBeInstanceOf(DotObject);
 });
 
 describe('Constructor', () => {

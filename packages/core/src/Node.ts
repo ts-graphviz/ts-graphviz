@@ -6,13 +6,12 @@ import type {
   Port,
 } from '@ts-graphviz/common';
 import { AttributesGroup } from './AttributesGroup.js';
-import { DotObject } from './DotObject.js';
 
 /**
  * DOT object class representing a node.
  * @group Models
  */
-export class Node extends DotObject implements NodeModel {
+export class Node implements NodeModel {
   public get $$type(): 'Node' {
     return 'Node';
   }
@@ -24,7 +23,6 @@ export class Node extends DotObject implements NodeModel {
     public readonly id: string,
     attributes?: NodeAttributesObject,
   ) {
-    super();
     this.attributes = new AttributesGroup(attributes);
   }
 

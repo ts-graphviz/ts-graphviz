@@ -1,7 +1,6 @@
 import type { Attributes } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import { AttributesBase } from './AttributesBase.js';
-import { DotObject } from './DotObject.js';
 
 class TestAttributes extends AttributesBase<any> {}
 
@@ -11,8 +10,7 @@ beforeEach(() => {
 });
 
 describe('object', () => {
-  it('should be instance of AttributesBase/DotObject', () => {
-    expect(attrs).toBeInstanceOf(DotObject);
+  it('should be instance of AttributesBase', () => {
     expect(attrs).toBeInstanceOf(AttributesBase);
   });
 
