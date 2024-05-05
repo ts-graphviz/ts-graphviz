@@ -38,7 +38,7 @@
   "types": "dist/ast.d.ts",
   "scripts": {
     "build": "vite build",
-    "codegen": "peggy --plugin ts-pegjs --extra-options-file src/dot-shim/parser/peggy.options.json -o src/dot-shim/parser/_parse.ts src/dot-shim/parser/dot.peggy"
+    "codegen": "peggy --plugin ts-pegjs --extra-options-file src/lib/dot-shim/parser/peggy.options.json -o src/lib/dot-shim/parser/_parse.ts src/lib/dot-shim/parser/dot.peggy"
   },
   "dependencies": {
     "@ts-graphviz/common": "workspace:^"

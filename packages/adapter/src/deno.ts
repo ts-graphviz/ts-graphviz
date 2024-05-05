@@ -1,10 +1,10 @@
 /// <reference lib="dom" />
-export type * from './types.js';
-import { createCommandAndArgs } from './create-command-and-args.js';
+export type * from './lib/types.js';
+import { createCommandAndArgs } from './lib/create-command-and-args.js';
 /**
  * @module @ts-graphviz/adapter
  */
-import type { Layout, Options } from './types.js';
+import type { Layout, Options } from './lib/types.js';
 
 // biome-ignore lint/style/noVar: <explanation>
 declare var Deno: any;

@@ -7,7 +7,7 @@ export default defineConfig({
     minify: false,
     lib: {
       entry: {
-        'create-command-and-args': './src/create-command-and-args.ts',
+        'lib/create-command-and-args': './src/lib/create-command-and-args.ts',
         deno: './src/deno.ts',
         browser: './src/browser.ts',
         node: './src/node.ts',

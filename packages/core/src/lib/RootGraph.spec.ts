@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, test } from 'vitest';
+import { registerDefault } from '../register-default.js';
 import { GraphBase } from './GraphBase.js';
 import { RootGraph } from './RootGraph.js';
-import { registerDefault } from './register-default.js';
 registerDefault();
 
 class TestRootGraph extends RootGraph {
