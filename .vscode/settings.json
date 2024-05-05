@@ -12,6 +12,6 @@
   "deno.enablePaths": [
     "./examples/deno",
     "packages/ts-grahviz/src/adapter/deno.ts",
-    "packages/ts-grahviz/lib/adapter/deno.js"
+    "packages/ts-grahviz/dist/adapter/deno.js"
   ]
 }

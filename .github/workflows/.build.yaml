@@ -34,7 +34,7 @@ jobs:
       - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           path: |
-            packages/**/lib
+            packages/**/dist
             !**/node_modules
           name: packages
       - name: Documentation Build

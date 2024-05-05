@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "lib",
+    "outDir": "dist",
     "lib": ["DOM"]
   },
   "include": ["src/deno.ts", "src/*.ts"],

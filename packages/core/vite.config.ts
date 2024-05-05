@@ -4,7 +4,6 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   build: {
     target: 'ES2022',
-    outDir: './lib',
     minify: false,
     lib: {
       entry: {
@@ -30,7 +29,6 @@ export default defineConfig({
   plugins: [
     // @ts-ignore
     dts({
-      outDir: './lib',
       rollupTypes: true,
     }),
   ],

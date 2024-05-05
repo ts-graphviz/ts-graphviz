@@ -2,7 +2,6 @@ export * from './AttributeList.js';
 export * from './AttributesBase.js';
 export * from './AttributesGroup.js';
 export * from './Digraph.js';
-export * from './Dot.js';
 export * from './Edge.js';
 export * from './Graph.js';
 export * from './GraphBase.js';

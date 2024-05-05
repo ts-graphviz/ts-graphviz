@@ -31,14 +31,14 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./lib/react.d.ts",
-      "require": "./lib/react.cjs",
-      "default": "./lib/react.js"
+      "types": "./dist/react.d.ts",
+      "require": "./dist/react.cjs",
+      "default": "./dist/react.js"
     },
     "./package.json": "./package.json"
   },
-  "main": "./lib/react.js",
-  "types": "./lib/react.d.ts",
+  "main": "./dist/react.js",
+  "types": "./dist/react.d.ts",
   "scripts": {
     "build": "vite build",
     "example": "ts-node example/example"

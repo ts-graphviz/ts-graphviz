@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "lib"
+    "outDir": "dist"
   },
   "include": ["src/browser.ts", "src/*.ts"],
   "exclude": [

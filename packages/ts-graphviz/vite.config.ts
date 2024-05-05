@@ -4,7 +4,6 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   build: {
     target: 'ES2022',
-    outDir: 'lib',
     lib: {
       entry: {
         'ts-graphviz': 'src/ts-graphviz.ts',
@@ -25,7 +24,6 @@ export default defineConfig({
   plugins: [
     // @ts-ignore
     dts({
-      outDir: 'lib',
       copyDtsFiles: true,
     }),
   ],

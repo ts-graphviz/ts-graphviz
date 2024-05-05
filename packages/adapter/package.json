@@ -31,27 +31,27 @@
   "exports": {
     ".": {
       "browser": {
-        "types": "./lib/browser.d.ts",
-        "require": "./lib/browser.cjs",
-        "default": "./lib/browser.js"
+        "types": "./dist/browser.d.ts",
+        "require": "./dist/browser.cjs",
+        "default": "./dist/browser.js"
       },
       "deno": {
-        "types": "./lib/deno.d.ts",
-        "default": "./lib/deno.js"
+        "types": "./dist/deno.d.ts",
+        "default": "./dist/deno.js"
       },
       "default": {
-        "types": "./lib/node.d.ts",
-        "require": "./lib/node.cjs",
-        "default": "./lib/node.js"
+        "types": "./dist/node.d.ts",
+        "require": "./dist/node.cjs",
+        "default": "./dist/node.js"
       }
     },
     "./package.json": "./package.json"
   },
-  "main": "./lib/node.cjs",
-  "module": "./lib/node.js",
-  "types": "./lib/node.d.ts",
+  "main": "./dist/node.cjs",
+  "module": "./dist/node.js",
+  "types": "./dist/node.d.ts",
   "scripts": {
-    "build": "vite build && rm ./lib/deno.cjs "
+    "build": "vite build && rm ./dist/deno.cjs "
   },
   "dependencies": {
     "@ts-graphviz/common": "workspace:^"

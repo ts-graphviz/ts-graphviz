@@ -27,15 +27,15 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./lib/ast.d.ts",
-      "require": "./lib/ast.cjs",
-      "default": "./lib/ast.js"
+      "types": "./dist/ast.d.ts",
+      "require": "./dist/ast.cjs",
+      "default": "./dist/ast.js"
     },
     "./package.json": "./package.json"
   },
-  "main": "lib/ast.cjs",
-  "module": "lib/ast.js",
-  "types": "lib/ast.d.ts",
+  "main": "dist/ast.cjs",
+  "module": "dist/ast.js",
+  "types": "dist/ast.d.ts",
   "scripts": {
     "build": "vite build",
     "codegen": "peggy --plugin ts-pegjs --extra-options-file src/dot-shim/parser/peggy.options.json -o src/dot-shim/parser/_parse.ts src/dot-shim/parser/dot.peggy"

@@ -31,25 +31,25 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./lib/ts-graphviz.d.ts",
-      "require": "./lib/ts-graphviz.cjs",
-      "default": "./lib/ts-graphviz.js"
+      "types": "./dist/ts-graphviz.d.ts",
+      "require": "./dist/ts-graphviz.cjs",
+      "default": "./dist/ts-graphviz.js"
     },
     "./ast": {
-      "types": "./lib/ast.d.ts",
-      "require": "./lib/ast.cjs",
-      "default": "./lib/ast.js"
+      "types": "./dist/ast.d.ts",
+      "require": "./dist/ast.cjs",
+      "default": "./dist/ast.js"
     },
     "./adapter": {
-      "types": "./lib/adapter.d.ts",
-      "require": "./lib/adapter.cjs",
-      "default": "./lib/adapter.js"
+      "types": "./dist/adapter.d.ts",
+      "require": "./dist/adapter.cjs",
+      "default": "./dist/adapter.js"
     },
     "./package.json": "./package.json"
   },
-  "main": "./lib/ts-graphviz.cjs",
-  "module": "./lib/ts-graphviz.js",
-  "types": "lib/ts-graphviz.d.ts",
+  "main": "./dist/ts-graphviz.cjs",
+  "module": "./dist/ts-graphviz.js",
+  "types": "dist/ts-graphviz.d.ts",
   "scripts": {
     "build": "vite build"
   },

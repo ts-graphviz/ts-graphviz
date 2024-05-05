@@ -30,19 +30,19 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./lib/core.d.ts",
-      "require": "./lib/core.cjs",
-      "default": "./lib/core.js"
+      "types": "./dist/core.d.ts",
+      "require": "./dist/core.cjs",
+      "default": "./dist/core.js"
     },
     "./register-default": {
-      "require": "./lib/register-default.cjs",
-      "default": "./lib/register-default.js"
+      "require": "./dist/register-default.cjs",
+      "default": "./dist/register-default.js"
     },
     "./package.json": "./package.json"
   },
-  "main": "lib/core.cjs",
-  "module": "lib/core.js",
-  "types": "lib/core.d.ts",
+  "main": "dist/core.cjs",
+  "module": "dist/core.js",
+  "types": "dist/core.d.ts",
   "scripts": {
     "build": "vite build"
   },

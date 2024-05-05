@@ -130,7 +130,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-lib
 doc
 .turbo
 tmp
