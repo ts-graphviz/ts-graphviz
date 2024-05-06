@@ -16,7 +16,8 @@
         "editor.formatOnPaste": false,
         "editor.formatOnType": false,
         "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": "explicit"
+          "source.fixAll": "explicit",
+          "source.organizeImports": "explicit"
         },
         "typescript.tsdk": "node_modules/typescript/lib",
         "deno.enable": true,
