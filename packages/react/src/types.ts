@@ -8,6 +8,7 @@ import type {
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';
 import type { ReactElement, ReactNode } from 'react';
+export type { ReactNode } from 'react';
 
 /** Common attribute values of objects under cluster */
 export interface GraphBaseAttributesProps {
@@ -83,7 +84,12 @@ export interface GraphPortalProps {
   children?: ReactNode;
 }
 
-declare global {
+/**
+ * Namespaced JSX elements for React.
+ *
+ * See details for <https://react.dev/blog/2024/04/25/react-19-upgrade-guide#the-jsx-namespace-in-typescript>
+ */
+declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
       'dot:port': { children: string };
