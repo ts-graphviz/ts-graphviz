@@ -38,37 +38,3 @@ export function pipe<I extends any[], O>(
 ): F<I, O> {
   return _pipe(o1, ...operations);
 }
-
-const defer =
-  <P, A extends any[], R>(fn: (src: P, ...args: A) => R) =>
-  (...args: A) =>
-  (src: P): R =>
-    fn(src, ...args);
-
-const toIterable = <T, TF extends () => IterableIterator<T>>(f: TF) => ({
-  [Symbol.iterator]: f,
-});
-
-export const map = defer(
-  <T, O>(src: Iterable<T>, selector: (item: T) => O): O[] =>
-    Array.from(
-      toIterable(function* () {
-        for (const v of src) {
-          yield selector(v);
-        }
-      }),
-    ),
-);
-
-export const filter = defer(
-  <T>(src: Iterable<T>, pred: (item: T) => boolean): T[] =>
-    Array.from(
-      toIterable(function* () {
-        for (const x of src) {
-          if (pred(x)) {
-            yield x;
-          }
-        }
-      }),
-    ),
-);

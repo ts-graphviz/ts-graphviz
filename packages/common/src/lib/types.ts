@@ -1,32 +1,6 @@
-/**
- * @hidden
- */
-export type $keywords<T extends string> = {
-  [key in T]: key;
-};
-
-export type Insensitive<T> = T &
-  Insensitive.LowercaseKeys<T> &
-  Insensitive.UppercaseKeys<T>;
-export namespace Insensitive {
-  export type LowercaseKeys<T> = {
-    [key in keyof T as Lowercase<string & key>]: T[key];
-  };
-  export type UppercaseKeys<T> = {
-    [key in keyof T as Uppercase<string & key>]: T[key];
-  };
-}
-
-/**
- * @hidden
- */
-export interface $keywordsValidation
-  extends $keywords<
-    // Note
-    // Although the DOT language specification allows the use of white space characters in IDs, for example by quoting,
-    // this is eliminated as a use case for the library.
-    `${string} ${string}` | `${string}\n${string}` | `${string}\t${string}`
-  > {}
+import type { $keywords } from './utils/types/$keywords.js';
+import type { $keywordsValidation } from './utils/types/$keywordsValidation.js';
+import type { Insensitive } from './utils/types/Insensitive.js';
 
 /**
  * Directive indicating which direction the Edge should point.

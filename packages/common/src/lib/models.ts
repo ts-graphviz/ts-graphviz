@@ -1,12 +1,10 @@
-import type {
-  Attribute,
-  AttributeKey,
-  ClusterSubgraphAttributeKey,
-  EdgeAttributeKey,
-  GraphAttributeKey,
-  NodeAttributeKey,
-  SubgraphAttributeKey,
-} from './attribute.js';
+import type { Attribute } from './Attribute.js';
+import type { AttributeKey } from './attribute-keys/AttributeKey.js';
+import type { ClusterSubgraphAttributeKey } from './attribute-keys/ClusterSubgraphAttributeKey.js';
+import type { EdgeAttributeKey } from './attribute-keys/EdgeAttributeKey.js';
+import type { GraphAttributeKey } from './attribute-keys/GraphAttributeKey.js';
+import type { NodeAttributeKey } from './attribute-keys/NodeAttributeKey.js';
+import type { SubgraphAttributeKey } from './attribute-keys/SubgraphAttributeKey.js';
 import type { ModelsContext } from './models-context.js';
 import type { Compass } from './types.js';
 
