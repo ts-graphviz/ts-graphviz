@@ -26,7 +26,13 @@ export default defineConfig({
   plugins: [
     // @ts-ignore
     dts({
-      rollupTypes: true,
+      /**
+       * Note: This option is not working properly.
+       * API Extractor cannot export "declare module ..." types.
+       *
+       * See detail for https://github.com/microsoft/rushstack/issues/2090
+       */
+      // rollupTypes: true,
     }),
   ],
 });
