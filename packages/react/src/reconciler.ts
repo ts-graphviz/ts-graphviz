@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import ReactReconciler from 'react-reconciler';
-
+// @ts-ignore
+import { DefaultEventPriority } from 'react-reconciler/constants';
 type Type = FC;
 type Props = any;
 type Container = Record<string, never>;
@@ -36,6 +37,34 @@ export class HostConfig
       NoTimeout
     >
 {
+  getCurrentEventPriority(): number {
+    return DefaultEventPriority;
+  }
+
+  getInstanceFromNode(node: any): ReactReconciler.Fiber | null | undefined {
+    return null;
+  }
+
+  beforeActiveInstanceBlur(): void {
+    // NoOp
+  }
+
+  afterActiveInstanceBlur(): void {
+    // NoOp
+  }
+
+  prepareScopeUpdate(scopeInstance: any, instance: any): void {
+    // NoOp
+  }
+
+  getInstanceFromScope(scopeInstance: any) {
+    // NoOp
+  }
+
+  detachDeletedInstance(node: any): void {
+    // NoOp
+  }
+
   preparePortalMount(containerInfo: Container): void {
     // NoOp
   }
