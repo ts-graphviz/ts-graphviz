@@ -1,21 +1,24 @@
 <div align="center">
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6485f9858ed4b3e8ef76611a2896bc4)](https://app.codacy.com/gh/ts-graphviz/ts-graphviz?utm_source=github.com&utm_medium=referral&utm_content=ts-graphviz/ts-graphviz&utm_campaign=Badge_Grade_Settings)
-[![GitHub Action](https://github.com/ts-graphviz/ts-graphviz/workflows/CI/badge.svg)](https://github.com/ts-graphviz/ts-graphviz/actions?workflow=CI)
-[![npm version](https://badge.fury.io/js/ts-graphviz.svg)](https://badge.fury.io/js/ts-graphviz)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![GitHub Action](https://github.com/ts-graphviz/ts-graphviz/workflows/CI/badge.svg)](https://github.com/ts-graphviz/ts-graphviz/actions?workflow=CI)
+[![All Contributors](https://img.shields.io/github/all-contributors/ts-graphviz/ts-graphviz?color=orange)](#contributors)
 
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8396/badge)](https://www.bestpractices.dev/projects/8396)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ts-graphviz/ts-graphviz/badge)](https://scorecard.dev/viewer/?uri=github.com/ts-graphviz/ts-graphviz)
+[![Tidelift](https://tidelift.com/badges/package/npm/ts-graphviz?style=flat)](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=readme)
+
+[![npm version](https://badge.fury.io/js/ts-graphviz.svg)](https://badge.fury.io/js/ts-graphviz)
 ![node version](https://img.shields.io/node/v/ts-graphviz)
 [![deno version](https://img.shields.io/badge/deno-^1.28.0-black?logo=deno)](https://github.com/denoland/deno)
 ![npm](https://img.shields.io/npm/dm/ts-graphviz)
-[![All Contributors](https://img.shields.io/github/all-contributors/ts-graphviz/ts-graphviz?color=orange)](#contributors)
 
 # ts-graphviz
 
 [Graphviz](https://graphviz.gitlab.io/) library for TypeScript.
 
-🌐 _Links_ 🔗
+🔗
 
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=GitHub&style=flat)](https://github.com/ts-graphviz/ts-graphviz)
 [![npm](https://img.shields.io/badge/-npm-CB3837?logo=npm&style=flat)](https://www.npmjs.com/package/ts-graphviz)
@@ -24,14 +27,6 @@
 
 [![Suponser](https://img.shields.io/badge/-GitHub%20Suponser-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/ts-graphviz)
 [![OpenCollective](https://img.shields.io/badge/-OpenCollective-7FADF2?logo=opencollective&style=flat&logoColor=white)](https://opencollective.com/ts-graphviz)
-
-🔒 _Security_ 🛡️
-
-[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8396/badge)](https://www.bestpractices.dev/projects/8396)
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ts-graphviz/ts-graphviz/badge)](https://scorecard.dev/viewer/?uri=github.com/ts-graphviz/ts-graphviz)
-[![Tidelift](https://tidelift.com/badges/package/npm/ts-graphviz?style=flat)](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=readme)
-
-🧰 _Mede with..._ 🛠️
 
 [![format: Biome](https://img.shields.io/badge/format%20with-Biome-F7B911?logo=biome&style=flat)](https://biomejs.dev/)
 [![test: Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest&style=flat)](https://vitest.dev/)
