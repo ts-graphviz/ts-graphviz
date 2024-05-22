@@ -25,7 +25,7 @@
 [![yarn](https://img.shields.io/badge/-yarn-ffffff?logo=Yarn&style=flat)](https://yarnpkg.com/package/ts-graphviz)
 [![Refarence](https://img.shields.io/badge/-Refarence-3178C6?logo=TypeScript&style=flat&logoColor=fff)](https://ts-graphviz.github.io/ts-graphviz/)
 
-[![Suponser](https://img.shields.io/badge/-GitHub%20Suponser-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/ts-graphviz)
+[![Sponsor](https://img.shields.io/badge/-GitHub%20Sponsor-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/ts-graphviz)
 [![OpenCollective](https://img.shields.io/badge/-OpenCollective-7FADF2?logo=opencollective&style=flat&logoColor=white)](https://opencollective.com/ts-graphviz)
 
 [![format: Biome](https://img.shields.io/badge/format%20with-Biome-F7B911?logo=biome&style=flat)](https://biomejs.dev/)
