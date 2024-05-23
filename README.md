@@ -685,11 +685,15 @@ See [CONTRIBUTING.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/CONTR
 
 ### Financial Support 💸
 
-Please support [ts-graphviz](https://github.com/sponsors/ts-graphviz).
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [Become a sponsor](https://opencollective.com/ts-graphviz)
 
-Our goal for ts-graphviz is to attract 10 sponsors who can provide ongoing support to help cover development and maintenance costs,
-and help us continue expanding and improving the library. By achieving this goal, we can ensure that ts-graphviz remains a valuable resource
-for developers who need to analyze and visualize complex graph structures, while also fostering a strong and supportive community of users and sponsors.
+![OpenCollective Sponsors](https://opencollective.com/ts-graphviz/sponsors.svg)
+
+Thank you to all our backers! 🙏 [Become a backer](https://opencollective.com/ts-graphviz)
+
+![OpenCollective Backers](https://opencollective.com/ts-graphviz/backer.svg)
+
+Please support ts-graphviz on [Open Collective](https://opencollective.com/ts-graphviz) or [GitHub Sponsors](https://github.com/sponsors/ts-graphviz).
 
 > **Note** Even just a dollar is enough motivation to develop 😊
 
