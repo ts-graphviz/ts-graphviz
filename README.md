@@ -1,16 +1,18 @@
 <div align="center">
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6485f9858ed4b3e8ef76611a2896bc4)](https://app.codacy.com/gh/ts-graphviz/ts-graphviz?utm_source=github.com&utm_medium=referral&utm_content=ts-graphviz/ts-graphviz&utm_campaign=Badge_Grade_Settings)
-[![GitHub Action](https://github.com/kamiazya/ts-graphviz/workflows/NodeCI/badge.svg)](https://github.com/kamiazya/ts-graphviz/actions?workflow=NodeCI)
-[![npm version](https://badge.fury.io/js/ts-graphviz.svg)](https://badge.fury.io/js/ts-graphviz)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![GitHub Action](https://github.com/ts-graphviz/ts-graphviz/workflows/CI/badge.svg)](https://github.com/ts-graphviz/ts-graphviz/actions?workflow=CI)
+[![All Contributors](https://img.shields.io/github/all-contributors/ts-graphviz/ts-graphviz?color=orange)](#contributors-)
 
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8396/badge)](https://www.bestpractices.dev/projects/8396)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ts-graphviz/ts-graphviz/badge)](https://scorecard.dev/viewer/?uri=github.com/ts-graphviz/ts-graphviz)
+[![Tidelift](https://tidelift.com/badges/package/npm/ts-graphviz?style=flat)](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=readme)
+
+[![npm version](https://badge.fury.io/js/ts-graphviz.svg)](https://badge.fury.io/js/ts-graphviz)
 ![node version](https://img.shields.io/node/v/ts-graphviz)
 [![deno version](https://img.shields.io/badge/deno-^1.28.0-black?logo=deno)](https://github.com/denoland/deno)
 ![npm](https://img.shields.io/npm/dm/ts-graphviz)
-[![All Contributors](https://img.shields.io/github/all-contributors/ts-graphviz/ts-graphviz?color=orange)](#contributors)
-[![Tidelift](https://tidelift.com/badges/package/npm/ts-graphviz?style=flat)](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=readme)
 
 # ts-graphviz
 
@@ -22,7 +24,9 @@
 [![npm](https://img.shields.io/badge/-npm-CB3837?logo=npm&style=flat)](https://www.npmjs.com/package/ts-graphviz)
 [![yarn](https://img.shields.io/badge/-yarn-ffffff?logo=Yarn&style=flat)](https://yarnpkg.com/package/ts-graphviz)
 [![Refarence](https://img.shields.io/badge/-Refarence-3178C6?logo=TypeScript&style=flat&logoColor=fff)](https://ts-graphviz.github.io/ts-graphviz/)
-[![Suponser](https://img.shields.io/badge/-GitHub%20Suponser-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/kamiazya)
+
+[![Sponsor](https://img.shields.io/badge/-GitHub%20Sponsor-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/ts-graphviz)
+[![OpenCollective](https://img.shields.io/badge/-OpenCollective-7FADF2?logo=opencollective&style=flat&logoColor=white)](https://opencollective.com/ts-graphviz)
 
 [![format: Biome](https://img.shields.io/badge/format%20with-Biome-F7B911?logo=biome&style=flat)](https://biomejs.dev/)
 [![test: Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest&style=flat)](https://vitest.dev/)
@@ -681,11 +685,15 @@ See [CONTRIBUTING.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/CONTR
 
 ### Financial Support 💸
 
-Please support [ts-graphviz](https://github.com/sponsors/ts-graphviz).
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [Become a sponsor](https://opencollective.com/ts-graphviz)
 
-Our goal for ts-graphviz is to attract 10 sponsors who can provide ongoing support to help cover development and maintenance costs,
-and help us continue expanding and improving the library. By achieving this goal, we can ensure that ts-graphviz remains a valuable resource
-for developers who need to analyze and visualize complex graph structures, while also fostering a strong and supportive community of users and sponsors.
+![OpenCollective Sponsors](https://opencollective.com/ts-graphviz/sponsors.svg)
+
+Thank you to all our backers! 🙏 [Become a backer](https://opencollective.com/ts-graphviz)
+
+![OpenCollective Backers](https://opencollective.com/ts-graphviz/backer.svg)
+
+Please support ts-graphviz on [Open Collective](https://opencollective.com/ts-graphviz) or [GitHub Sponsors](https://github.com/sponsors/ts-graphviz).
 
 > **Note** Even just a dollar is enough motivation to develop 😊
 
