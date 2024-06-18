@@ -1,5 +1,11 @@
 # ts-graphviz
 
+## 2.1.3
+
+### Patch Changes
+
+- [#1057](https://github.com/ts-graphviz/ts-graphviz/pull/1057) [`7705b1d`](https://github.com/ts-graphviz/ts-graphviz/commit/7705b1d08612aef83e1c35bc3ee4ffc922247a27) Thanks [@kamiazya](https://github.com/kamiazya)! - Update README
+
 ## 2.1.2
 
 ### Patch Changes
