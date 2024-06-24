@@ -37,7 +37,7 @@
     "@changesets/cli": "^2.27.1",
     "@pnpm/workspace.find-packages": "^1.1.12",
     "@pnpm/workspace.pkgs-graph": "^2.0.15",
-    "@types/node": "^20.12.7",
+    "@types/node": "^20.14.8",
     "@types/react": "^18.2.66",
     "@vitest/coverage-istanbul": "^1.5.2",
     "jsdom": "^24.0.0",
