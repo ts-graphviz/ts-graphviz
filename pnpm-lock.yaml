@@ -23,6 +23,21 @@ importers:
       '@pnpm/workspace.pkgs-graph':
         specifier: ^2.0.15
         version: 2.0.15(@pnpm/logger@5.0.0)
+      '@ts-graphviz/adapter':
+        specifier: workspace:^
+        version: link:packages/adapter
+      '@ts-graphviz/ast':
+        specifier: workspace:^
+        version: link:packages/ast
+      '@ts-graphviz/common':
+        specifier: workspace:^
+        version: link:packages/common
+      '@ts-graphviz/core':
+        specifier: workspace:^
+        version: link:packages/core
+      '@ts-graphviz/react':
+        specifier: workspace:^
+        version: link:packages/react
       '@types/node':
         specifier: ^20.12.7
         version: 20.12.7
@@ -47,6 +62,9 @@ importers:
       svgo:
         specifier: ^3.2.0
         version: 3.2.0
+      ts-graphviz:
+        specifier: workspace:^
+        version: link:packages/ts-graphviz
       turbo:
         specifier: ^1.13.3
         version: 1.13.3

@@ -28,28 +28,27 @@
   "license": "MIT",
   "author": "Yuki Yamazaki <yuki@kamiazya.tech>",
   "type": "module",
+  "main": "src/node.ts",
+  "module": "src/node.ts",
+  "types": "src/node.ts",
   "exports": {
     ".": {
-      "browser": {
-        "types": "./lib/browser.d.ts",
-        "require": "./lib/browser.cjs",
-        "default": "./lib/browser.js"
+      "node": {
+        "import": "./src/node.ts",
+        "require": "./src/node.ts",
+        "types": "./src/node.ts"
       },
       "deno": {
-        "types": "./lib/deno.d.ts",
-        "default": "./lib/deno.js"
+        "import": "./src/deno.ts",
+        "types": "./src/deno.ts"
       },
       "default": {
-        "types": "./lib/node.d.ts",
-        "require": "./lib/node.cjs",
-        "default": "./lib/node.js"
+        "import": "./src/browser.ts",
+        "types": "./src/browser.ts"
       }
     },
     "./package.json": "./package.json"
   },
-  "main": "./lib/node.cjs",
-  "module": "./lib/node.js",
-  "types": "./lib/node.d.ts",
   "scripts": {
     "build": "vite build && rm ./lib/deno.cjs "
   },
@@ -67,6 +66,28 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": true,
+    "exports": {
+      ".": {
+        "browser": {
+          "types": "./lib/browser.d.ts",
+          "require": "./lib/browser.cjs",
+          "default": "./lib/browser.js"
+        },
+        "deno": {
+          "types": "./lib/deno.d.ts",
+          "default": "./lib/deno.js"
+        },
+        "default": {
+          "types": "./lib/node.d.ts",
+          "require": "./lib/node.cjs",
+          "default": "./lib/node.js"
+        }
+      },
+      "./package.json": "./package.json"
+    },
+    "main": "./lib/node.cjs",
+    "module": "./lib/node.js",
+    "types": "./lib/node.d.ts"
   }
 }

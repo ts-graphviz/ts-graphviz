@@ -2,7 +2,10 @@
   "name": "ts-graphviz-monorepo",
   "private": true,
   "description": "Graphviz libraries for TypeScript",
-  "keywords": ["graphviz", "dot"],
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
   "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
@@ -37,6 +40,11 @@
     "@changesets/cli": "^2.27.1",
     "@pnpm/workspace.find-packages": "^1.1.12",
     "@pnpm/workspace.pkgs-graph": "^2.0.15",
+    "@ts-graphviz/adapter": "workspace:^",
+    "@ts-graphviz/ast": "workspace:^",
+    "@ts-graphviz/common": "workspace:^",
+    "@ts-graphviz/core": "workspace:^",
+    "@ts-graphviz/react": "workspace:^",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",
     "@vitest/coverage-istanbul": "^1.5.2",
@@ -45,6 +53,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "svgo": "^3.2.0",
+    "ts-graphviz": "workspace:^",
     "turbo": "^1.13.3",
     "typedoc": "^0.25.12",
     "typescript": "^5.4.5",

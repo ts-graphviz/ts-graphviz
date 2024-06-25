@@ -30,15 +30,15 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./lib/common.d.ts",
-      "require": "./lib/common.cjs",
-      "default": "./lib/common.js"
+      "types": "./src/common.ts",
+      "require": "./src/common.ts",
+      "default": "./src/common.ts"
     },
     "./package.json": "./package.json"
   },
-  "main": "lib/common.cjs",
-  "module": "lib/common.js",
-  "types": "lib/common.d.ts",
+  "main": "src/common.ts",
+  "module": "src/common.ts",
+  "types": "src/common.ts",
   "scripts": {
     "build": "vite build"
   },
@@ -52,6 +52,17 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": true,
+    "exports": {
+      ".": {
+        "types": "./lib/common.d.ts",
+        "require": "./lib/common.cjs",
+        "default": "./lib/common.js"
+      },
+      "./package.json": "./package.json"
+    },
+    "main": "lib/common.cjs",
+    "module": "lib/common.js",
+    "types": "lib/common.d.ts"
   }
 }
