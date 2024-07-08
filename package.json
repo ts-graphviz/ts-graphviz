@@ -35,7 +35,7 @@
     "@biomejs/biome": "^1.7.3",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
-    "@pnpm/workspace.find-packages": "^1.1.12",
+    "@pnpm/workspace.find-packages": "^4.0.1",
     "@pnpm/workspace.pkgs-graph": "^2.0.15",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",
