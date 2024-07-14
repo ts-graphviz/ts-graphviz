@@ -1,0 +1,63 @@
+name: Setup Action
+description: |-
+  Setup for Project
+
+  - Harden Runner
+  - Turbo Caching
+  - pnpm
+  - Node.js
+  - Graphviz
+  - Deno
+  - npm Dependencies with caching
+
+inputs:
+  node-version:
+    description: Node.js version, if not specified, will use .node-version file
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
+      with:
+        egress-policy: audit
+    - name: Use Graphviz
+      uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
+    - name: Setup Turbo Caching
+      uses: dtinth/setup-github-actions-caching-for-turbo@cc723b4600e40a6b8815b65701d8614b91e2669e # v1.3.0
+      with:
+        cache-prefix: turbo-
+    - name: Setup pnpm
+      uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+    - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+    - name: Setup Node.js ${{ inputs.node-version }}
+      if: ${{ inputs.node-version != '' }}
+      uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: pnpm
+    - name: Setup Node.js
+      if: ${{ inputs.node-version == '' }}
+      uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      with:
+        cache: pnpm
+        node-version-file: ./.node-version
+    - name: Setup Deno
+      uses: denoland/setup-deno@041b854f97b325bd60e53e9dc2de9cb9f9ac0cba # v1.1.4
+      with:
+        deno-version: v1.x
+    - name: Install Dependencies
+      run: pnpm install --frozen-lockfile
+      shell: bash
