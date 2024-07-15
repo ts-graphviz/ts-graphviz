@@ -26,7 +26,8 @@ export default defineConfig({
   plugins: [
     // @ts-ignore
     dts({
-      rollupTypes: true,
+      // NOTE: This is a workaround for global types exports.
+      rollupTypes: false,
     }),
   ],
 });
