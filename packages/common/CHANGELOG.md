@@ -1,5 +1,11 @@
 # @ts-graphviz/common
 
+## 2.1.3
+
+### Patch Changes
+
+- [#1088](https://github.com/ts-graphviz/ts-graphviz/pull/1088) [`7d7352b`](https://github.com/ts-graphviz/ts-graphviz/commit/7d7352bb3819522ba16763503aa6bc923f550408) Thanks [@kamiazya](https://github.com/kamiazya)! - Update Snapshot release configuration
+
 ## 2.1.2
 
 ### Patch Changes
