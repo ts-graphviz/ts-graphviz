@@ -15,6 +15,10 @@
   "linked": [],
   "access": "public",
   "baseBranch": "main",
+  "snapshot": {
+    "prereleaseTemplate": "{tag}-{commit}",
+    "useCalculatedVersion": true
+  },
   "updateInternalDependencies": "patch",
   "ignore": [
     "@ts-graphviz-examples/deno",
