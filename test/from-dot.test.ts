@@ -66,3 +66,19 @@ test('partially described by DOT', () => {
     }"
   `);
 });
+
+test('edge to a group what contains only one target', () => {
+  const G = fromDot(
+    `digraph {
+      node_A -> { node_B };
+    }`,
+  );
+
+  expect(toDot(G)).toMatchInlineSnapshot(
+    `
+    "digraph {
+      "node_A" -> {"node_B"};
+    }"
+  `,
+  );
+});
