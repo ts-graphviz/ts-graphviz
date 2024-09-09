@@ -779,11 +779,13 @@ export function toNodeRef(target: NodeRefLike): NodeRef {
 
 /** @hidden */
 export function toNodeRefGroup(targets: NodeRefGroupLike): NodeRefGroup {
-  if (
-    targets.length < 2 &&
-    (isNodeRefLike(targets[0]) && isNodeRefLike(targets[1])) === false
-  ) {
-    throw Error('EdgeTargets must have at least 2 elements.');
+  if (targets.length < 1) {
+    throw Error('EdgeTargets must have at least 1 elements.');
+  }
+  if (!targets.every((target) => isNodeRefLike(target))) {
+    throw Error(
+      'The element of Edge target is missing or not satisfied as Edge target.',
+    );
   }
   return targets.map((t) => toNodeRef(t));
 }
