@@ -167,6 +167,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "Madd0g",
+      "name": "Madd0g",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1171003?v=4",
+      "profile": "https://github.com/Madd0g",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
