@@ -1,5 +1,17 @@
 # @ts-graphviz/react
 
+## 0.10.3
+
+### Patch Changes
+
+- [#1087](https://github.com/ts-graphviz/ts-graphviz/pull/1087) [`f808a2e`](https://github.com/ts-graphviz/ts-graphviz/commit/f808a2e93f52a97e3466afc37d5353b2d7d8c54c) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix global JSX type
+
+- [#1088](https://github.com/ts-graphviz/ts-graphviz/pull/1088) [`7d7352b`](https://github.com/ts-graphviz/ts-graphviz/commit/7d7352bb3819522ba16763503aa6bc923f550408) Thanks [@kamiazya](https://github.com/kamiazya)! - Update Snapshot release configuration
+
+- Updated dependencies [[`883f7b3`](https://github.com/ts-graphviz/ts-graphviz/commit/883f7b3c65794b3ab2b01c422b6231079bb6c28d), [`7705b1d`](https://github.com/ts-graphviz/ts-graphviz/commit/7705b1d08612aef83e1c35bc3ee4ffc922247a27), [`7d7352b`](https://github.com/ts-graphviz/ts-graphviz/commit/7d7352bb3819522ba16763503aa6bc923f550408)]:
+  - @ts-graphviz/common@2.1.3
+  - ts-graphviz@2.1.3
+
 ## 0.10.2
 
 ### Patch Changes
