@@ -26,7 +26,7 @@ jobs:
           egress-policy: audit
 
       - name: Enforce permission requirement
-        uses: prince-chrismc/check-actor-permissions-action@d07d79a16495e5003e58112b596294d1a7c80f56 # v3.0.0
+        uses: prince-chrismc/check-actor-permissions-action@ce04efab4f468664a0ae6d9cc0c14e4a4e6cd70a # v3.0.1
         with:
           permission: write
 
