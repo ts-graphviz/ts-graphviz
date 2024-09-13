@@ -24,7 +24,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    // @ts-ignore
     dts({
       rollupTypes: true,
     }),

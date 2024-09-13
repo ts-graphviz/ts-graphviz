@@ -23,7 +23,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    // @ts-ignore
     dts({
       outDir: 'lib',
       copyDtsFiles: true,
