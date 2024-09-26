@@ -23,12 +23,30 @@ export function rightPadWith(right: string): (value: string) => string {
   return (value: string) => value + right;
 }
 
+/**
+ * Escape a string for literal value in DOT language.
+ *
+ * The following characters are escaped:
+ * - `\r` -> `\r`
+ * - `\n` -> `\n`
+ * - `"` -> `\"`
+ *
+ * @param value - The string to escape
+ * @returns The escaped string
+ */
 export const escape = (value: string): string =>
-  value
-    .replace(/\\/g, '\\\\')
-    .replace(/\r/g, '\\r')
-    .replace(/\n/g, '\\n')
-    .replace(/"/g, '\\"');
+  value.replace(/[\r\n"]/g, escapeReplacer);
+function escapeReplacer(match: string) {
+  switch (match) {
+    case '\r':
+      return '\\r';
+    case '\n':
+      return '\\n';
+    default: // case '"':
+      return '\\"';
+  }
+}
+
 export const splitByLine = (value: string): string[] => value.split(EOL);
 
 export const align = (padding: string, eol: string) =>
