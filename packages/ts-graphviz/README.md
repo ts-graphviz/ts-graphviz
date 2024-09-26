@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-[![GitHub Action](https://github.com/ts-graphviz/ts-graphviz/workflows/CI/badge.svg)](https://github.com/ts-graphviz/ts-graphviz/actions?workflow=CI)
+[![CI](https://github.com/ts-graphviz/ts-graphviz/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/ts-graphviz/ts-graphviz/actions/workflows/ci.yaml)
 [![All Contributors](https://img.shields.io/github/all-contributors/ts-graphviz/ts-graphviz?color=orange)](#contributors-)
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8396/badge)](https://www.bestpractices.dev/projects/8396)
