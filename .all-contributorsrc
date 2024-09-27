@@ -1,6 +1,5 @@
 {
   "files": [
-    "README.md",
     "packages/ts-graphviz/README.md"
   ],
   "imageSize": 100,
