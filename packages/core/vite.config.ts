@@ -29,7 +29,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    // @ts-ignore
     dts({
       outDir: './lib',
       rollupTypes: true,
