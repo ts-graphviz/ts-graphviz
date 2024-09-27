@@ -12,7 +12,7 @@ const publishedPackages = workspacePackages.filter(
 
 const map = new Map<string, string>();
 for (const pkg of publishedPackages) {
-  map.set(pkg.dir, pkg.manifest.name as string);
+  map.set(pkg.rootDir, pkg.manifest.name as string);
 }
 const pkgGraph = createPkgGraph(publishedPackages);
 
