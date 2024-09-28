@@ -41,15 +41,18 @@ export interface PrintOptions {
  * PrintContext interface provides an interface for printing an ASTNode with a set of options.
  * @group Convert AST to DOT
  */
-export interface PrintContext extends Required<PrintOptions> {
+export interface PrintContext {
   /**
    * Indicates if the AST should be printed in a directed graph.
    */
   directed: boolean;
+  readonly EOL: string;
   /**
    * A function to print an ASTNode, taking in an ASTNode as an argument. Returns a string.
    */
-  print(ast: ASTNode): string;
+  print(ast: ASTNode): Iterable<string>;
+  printChildren(children: ASTNode[]): Iterable<string>;
+  join(children: ASTNode[], sepalator: string): Iterable<string>;
 }
 
 /**
@@ -70,5 +73,5 @@ export interface PrintPlugin<T extends ASTNode = ASTNode> {
    * @returns printed string
    * @memberof PrintPlugin
    */
-  print(context: PrintContext, ast: T): string;
+  print(context: PrintContext, ast: T): Generator<string>;
 }
