@@ -181,8 +181,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.2.3
+        version: 4.2.3(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
   packages/ast:
     dependencies:
@@ -203,8 +203,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.2.3
+        version: 4.2.3(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
   packages/common:
     devDependencies:
@@ -215,8 +215,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.2.3
+        version: 4.2.3(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
   packages/core:
     dependencies:
@@ -234,8 +234,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.2.3
+        version: 4.2.3(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
   packages/react:
     dependencies:
@@ -277,8 +277,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.2.3
+        version: 4.2.3(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
   packages/ts-graphviz:
     dependencies:
@@ -302,8 +302,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.2.3
+        version: 4.2.3(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
 packages:
 
@@ -507,7 +507,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.23.5
-      '@babel/parser': 7.24.0
+      '@babel/parser': 7.25.6
       '@babel/types': 7.24.0
     dev: true
 
@@ -521,7 +521,7 @@ packages:
       '@babel/helper-function-name': 7.23.0
       '@babel/helper-hoist-variables': 7.22.5
       '@babel/helper-split-export-declaration': 7.22.6
-      '@babel/parser': 7.24.0
+      '@babel/parser': 7.25.6
       '@babel/types': 7.24.0
       debug: 4.3.7
       globals: 11.12.0
@@ -2337,7 +2337,7 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       '@tufjs/canonical-json': 1.0.0
-      minimatch: 9.0.3
+      minimatch: 9.0.5
     dev: true
 
   /@types/argparse@1.0.38:
@@ -2534,7 +2534,7 @@ packages:
   /@vue/compiler-core@3.4.19:
     resolution: {integrity: sha512-gj81785z0JNzRcU0Mq98E56e4ltO1yf8k5PQ+tV/7YHnbZkrM0fyFyuttnN8ngJZjbpofWE/m4qjKBiLl8Ju4w==}
     dependencies:
-      '@babel/parser': 7.24.0
+      '@babel/parser': 7.25.6
       '@vue/shared': 3.4.19
       entities: 4.5.0
       estree-walker: 2.0.2
@@ -2568,7 +2568,7 @@ packages:
       '@vue/compiler-vue2': 2.7.16
       '@vue/shared': 3.4.19
       computeds: 0.0.1
-      minimatch: 9.0.3
+      minimatch: 9.0.5
       muggle-string: 0.4.1
       path-browserify: 1.0.1
       typescript: 5.4.5
@@ -4581,7 +4581,7 @@ packages:
       function-bind: 1.1.2
       has-proto: 1.0.1
       has-symbols: 1.0.3
-      hasown: 2.0.1
+      hasown: 2.0.2
     dev: true
 
   /get-source@2.0.12:
@@ -4632,7 +4632,7 @@ packages:
     dependencies:
       foreground-child: 3.1.1
       jackspeak: 2.3.6
-      minimatch: 9.0.3
+      minimatch: 9.0.5
       minipass: 7.0.4
       path-scurry: 1.10.1
     dev: true
@@ -4773,13 +4773,6 @@ packages:
 
   /has-unicode@2.0.1:
     resolution: {integrity: sha512-8Rf9Y83NBReMnx0gFzA8JImQACstCYWUplepDa9xprwwtmgEZUF0h/i5xSA625zB/I37EtrswSST6OXxwaaIJQ==}
-    dev: true
-
-  /hasown@2.0.1:
-    resolution: {integrity: sha512-1/th4MHjnwncwXsIW6QMzlvYL9kG5e/CpVvLRZe4XPa8TOUNbCELqmvhDmnkNsAjwaG4+I8gJJL0JBvTTLO9qA==}
-    engines: {node: '>= 0.4'}
-    dependencies:
-      function-bind: 1.1.2
     dev: true
 
   /hasown@2.0.2:
@@ -4924,7 +4917,7 @@ packages:
     resolution: {integrity: sha512-t7sv42WkwFkyKbivUCglsQW5YWMskWtbEf4MNKX5u/CCWHKSPzN4FtBQGsQZgCLbxOzpVlcbWVK5KB3auIOjSw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minimatch: 9.0.3
+      minimatch: 9.0.5
     dev: true
 
   /ignore@5.3.1:
@@ -5010,7 +5003,7 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       es-errors: 1.3.0
-      hasown: 2.0.1
+      hasown: 2.0.2
       side-channel: 1.0.5
     dev: true
 
@@ -5074,7 +5067,7 @@ packages:
   /is-core-module@2.13.1:
     resolution: {integrity: sha512-hHrIjvZsftOsvKSn2TRYl63zvxsgE0K+0mYMoH6gD4omR5IWB2KynivBQczo3+wF1cCkjzvptnI9Q0sPU66ilw==}
     dependencies:
-      hasown: 2.0.1
+      hasown: 2.0.2
     dev: true
 
   /is-data-view@1.0.1:
@@ -8504,8 +8497,8 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-dts@4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8):
-    resolution: {integrity: sha512-/QlYvgUMiv8+ZTEerhNCYnYaZMM07cdlX6hQCR/w/g/nTh0tUXPoYwbT6SitizLJ9BybT1lnrcZgqheI6wromQ==}
+  /vite-plugin-dts@4.2.3(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8):
+    resolution: {integrity: sha512-O5NalzHANQRwVw1xj8KQun3Bv8OSDAlNJXrnqoAz10BOuW8FVvY5g4ygj+DlJZL5mtSPuMu9vd3OfrdW5d4k6w==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       typescript: '*'
@@ -9086,7 +9079,7 @@ packages:
       preferred-pm: 3.1.2
       pretty-bytes: 5.6.0
       readable-stream: 4.5.2
-      semver: 7.6.0
+      semver: 7.6.3
       slash: 3.0.0
       strip-ansi: 6.0.1
       text-table: 0.2.0
@@ -9117,7 +9110,7 @@ packages:
       pacote: 15.2.0
       read-pkg-up: 7.0.1
       run-async: 2.4.1
-      semver: 7.6.0
+      semver: 7.6.3
       shelljs: 0.8.5
       sort-keys: 4.2.0
       text-table: 0.2.0
