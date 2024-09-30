@@ -2,4 +2,4 @@
 "@ts-graphviz/ast": patch
 ---
 
-Fix AST pringing not to be destroyed during stringify even in HTML-Like format
+Fix AST printing not to be destroyed during stringify even in HTML-Like format
