@@ -50,7 +50,9 @@ export class Printer {
             return;
           }
         }
-        throw Error();
+        throw new Error(
+          `No matching plugin found for AST node: ${JSON.stringify(a)}`,
+        );
       },
       *join(array: ASTNode[], separator: string) {
         const childrenLength = array.length;
