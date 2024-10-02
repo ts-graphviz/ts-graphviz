@@ -2,7 +2,10 @@
   "name": "ts-graphviz-monorepo",
   "private": true,
   "description": "Graphviz libraries for TypeScript",
-  "keywords": ["graphviz", "dot"],
+  "keywords": [
+    "graphviz",
+    "dot"
+  ],
   "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
@@ -25,11 +28,12 @@
   "author": "kamiazya <yuki@kamiazya.tech>",
   "type": "module",
   "scripts": {
-    "build": "turbo run build",
-    "doc": "turbo run build && typedoc",
+    "codegen": "pnpm -r codegen",
+    "build": "pnpm -r build",
+    "doc": "typedoc",
     "lint": "biome check --apply .",
-    "test": "turbo run test:unit test:integration",
-    "test:unit": "vitest run"
+    "test": "vitest",
+    "test:integration": "echo 'No integration tests' && exit 1"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.7.3",
@@ -37,6 +41,11 @@
     "@changesets/cli": "^2.27.1",
     "@pnpm/workspace.find-packages": "^4.0.10",
     "@pnpm/workspace.pkgs-graph": "^4.0.5",
+    "@ts-graphviz/adapter": "workspace:*",
+    "@ts-graphviz/common": "workspace:*",
+    "@ts-graphviz/core": "workspace:*",
+    "@ts-graphviz/react": "workspace:*",
+    "@ts-graphviz/ast": "workspace:*",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",
     "@vitest/coverage-istanbul": "^2.1.1",
@@ -45,7 +54,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "svgo": "^3.2.0",
-    "turbo": "^1.13.3",
+    "ts-graphviz": "workspace:*",
     "typedoc": "^0.25.12",
     "typescript": "^5.4.5",
     "vite": "^5.4.8",

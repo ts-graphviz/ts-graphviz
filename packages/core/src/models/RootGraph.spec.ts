@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, test } from 'vitest';
-import { registerDefault } from './register-default.js';
-registerDefault();
+import { registerDefault } from '../register-default.js';
 import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';
 import { RootGraph } from './RootGraph.js';
+registerDefault();
 
 class TestRootGraph extends RootGraph {
   public directed = true;

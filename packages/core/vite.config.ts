@@ -8,17 +8,7 @@ export default defineConfig({
     minify: false,
     lib: {
       entry: {
-        DotObject: './src/DotObject.ts',
-        AttributesBase: './src/AttributesBase.ts',
-        AttributeList: './src/AttributeList.ts',
-        AttributesGroup: './src/AttributesGroup.ts',
-        Digraph: './src/Digraph.ts',
-        Edge: './src/Edge.ts',
-        Graph: './src/Graph.ts',
-        GraphBase: './src/GraphBase.ts',
-        Node: './src/Node.ts',
-        RootGraph: './src/RootGraph.ts',
-        Subgraph: './src/Subgraph.ts',
+        models: './src/models.ts',
         core: './src/core.ts',
         'register-default': './src/register-default.ts',
       },

@@ -30,7 +30,7 @@ export default defineConfig({
       tsconfigPath: './tsconfig.browser.json',
     }),
     dts({
-      tsconfigPath: './tsconfig.node.json',
+      tsconfigPath: './tsconfig.json',
     }),
     dts({
       tsconfigPath: './tsconfig.deno.json',
