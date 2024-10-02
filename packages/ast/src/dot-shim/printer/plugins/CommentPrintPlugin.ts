@@ -3,23 +3,18 @@ import type { PrintPlugin } from '../types.js';
 
 const EOL_PATTERN = /\r?\n/;
 
-function getPadding(kind: CommentKind) {
-  switch (kind) {
-    case 'Block':
-      return ' * ';
-    case 'Macro':
-      return '# ';
-    case 'Slash':
-      return '// ';
-  }
-}
+const paddingMap: Record<CommentKind, string> = {
+  Block: ' * ',
+  Macro: '# ',
+  Slash: '// ',
+};
 
 export const CommentPrintPlugin: PrintPlugin<CommentASTNode> = {
   match(ast) {
     return ast.type === 'Comment';
   },
   *print(context, ast) {
-    const padding = getPadding(ast.kind);
+    const padding = paddingMap[ast.kind];
     if (ast.kind === 'Block') {
       yield* ['/**', context.EOL];
     }
