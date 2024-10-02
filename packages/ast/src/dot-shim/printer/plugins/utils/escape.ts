@@ -17,13 +17,12 @@ export const escape = (value: string): string =>
 // NOTE: The regular expression used to escape the string is `/(?<!\\)"|[\r\n]/g`.
 // - `(?<!\\)"`: This part of the regular expression matches a double quote (`"`) **only if** it is **not preceded by a backslash**, effectively ignoring already-escaped quotes like `\"`.
 // - `[\r\n]`: This part matches every carriage return (`\r`) or newline (`\n`) character in the input, regardless of whether they are escaped.
+
+const escapeMap: Record<string, string> = {
+  '\r': String.raw`\r`,
+  '\n': String.raw`\n`,
+  '"': String.raw`\"`,
+};
 function escapeReplacer(match: string) {
-  switch (match) {
-    case '\r':
-      return '\\r';
-    case '\n':
-      return '\\n';
-    default: // case '"':
-      return '\\"';
-  }
+  return escapeMap[match];
 }
