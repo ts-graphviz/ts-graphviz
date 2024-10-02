@@ -7,9 +7,6 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
-permissions:
-  contents: read
-
 jobs:
   build:
     name: Build
@@ -21,6 +18,8 @@ jobs:
   test_nodejs:
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: read
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
@@ -48,6 +47,8 @@ jobs:
   test_integration:
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: read
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
