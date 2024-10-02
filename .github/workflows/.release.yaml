@@ -10,7 +10,7 @@ on:
 jobs:
   # Release the package to npm
   release:
-    name: Release
+    name: Publish to npm or Create Release Pull Request
     runs-on: ubuntu-latest
     permissions:
       contents: write # Used to commit to "Version Packages" PR
@@ -52,7 +52,7 @@ jobs:
 
   # If the release job not published, run this job to publish a prerelease
   prerelease:
-    name: Prerelease
+    name: Prerelease to npm with @next tag
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -96,6 +96,7 @@ jobs:
 
   # This job is used to deploy the documentation to GitHub Pages
   doc:
+    name: Deploy Documentation to GitHub Pages
     runs-on: ubuntu-latest
     # if the release job was successful, run this job
     needs:
