@@ -52,7 +52,7 @@ export interface PrintContext {
    */
   print(ast: ASTNode): Iterable<string>;
   printChildren(children: ASTNode[]): Iterable<string>;
-  join(children: ASTNode[], sepalator: string): Iterable<string>;
+  join(children: ASTNode[], separator: string): Iterable<string>;
 }
 
 /**
