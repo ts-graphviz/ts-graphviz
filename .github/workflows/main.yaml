@@ -1,4 +1,4 @@
-name: CI
+name: Main Workflow
 on:
   push:
     branches:
@@ -61,13 +61,25 @@ jobs:
     - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
     - name: Use Graphviz
       uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js
       uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
       with:
-        node-version: ${{ matrix.node-version }}
         cache: pnpm
     - uses: denoland/setup-deno@5e01c016a857a4dbb5afe9d0f9733cd472cba985 # v1.5.1
       with:
         deno-version: v1.x
     - run: pnpm install --frozen-lockfile
     - run: pnpm turbo test:integration
+
+  # Release the package to npm
+  release:
+    name: Release
+    needs:
+      - check
+      - build
+      - test_nodejs
+      - test_integration
+    if: ${{ github.repository == 'ts-graphviz/ts-graphviz' && github.ref == 'refs/heads/main' && success() }}
+    uses: ./.github/workflows/.release.yaml
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
