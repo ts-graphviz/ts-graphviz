@@ -1,4 +1,4 @@
-name: Check Format and Lint
+name: Check
 on:
   workflow_call:
 
@@ -6,8 +6,8 @@ permissions:
   contents: read
 
 jobs:
-  biome:
-    name: Check with Biome
+  format:
+    name: Check Code Format with Biome
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
@@ -30,3 +30,27 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Check
         run: npx biome ci .
+
+  # Dependency Review
+  #
+  # This Action will scan dependency manifest files that change as part of a Pull Request,
+  # surfacing known-vulnerable versions of the packages declared or updated in the PR.
+  # Once installed, if the workflow run is marked as required,
+  # PRs introducing known-vulnerable packages will be blocked from merging.
+  #
+  # Source repository: https://github.com/actions/dependency-review-action
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    # Only run on pull requests
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+        with:
+          egress-policy: audit
+
+      - name: 'Checkout Repository'
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+      - name: 'Dependency Review'
+        uses: actions/dependency-review-action@5a2ce3f5b92ee19cbb1541a4984c76d921601d7c # v4.3.4
