@@ -29,13 +29,20 @@
   "author": "Yuki Yamazaki <yuki@kamiazya.tech>",
   "type": "module",
   "exports": {
-    ".": "./src/core.ts",
-    "./register-default": "./src/register-default.ts",
+    ".": {
+      "types": "./lib/core.d.ts",
+      "require": "./lib/core.cjs",
+      "default": "./lib/core.js"
+    },
+    "./register-default": {
+      "require": "./lib/register-default.cjs",
+      "default": "./lib/register-default.js"
+    },
     "./package.json": "./package.json"
   },
-  "main": "./src/core.ts",
-  "module": "./src/core.ts",
-  "types": "./src/core.ts",
+  "main": "./lib/core.cjs",
+  "module": "./lib/core.js",
+  "types": "./lib/core.d.ts",
   "scripts": {
     "build": "vite build"
   },
@@ -53,21 +60,6 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true,
-    "exports": {
-      ".": {
-        "types": "./lib/core.d.ts",
-        "require": "./lib/core.cjs",
-        "default": "./lib/core.js"
-      },
-      "./register-default": {
-        "require": "./lib/register-default.cjs",
-        "default": "./lib/register-default.js"
-      },
-      "./package.json": "./package.json"
-    },
-    "main": "./lib/core.cjs",
-    "module": "./lib/core.js",
-    "types": "./lib/core.d.ts"
+    "provenance": true
   }
 }
