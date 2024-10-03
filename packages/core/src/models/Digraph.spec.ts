@@ -1,8 +1,8 @@
 import { expect, it, test } from 'vitest';
+import { registerDefault } from '../register-default.js';
 import { Digraph } from './Digraph.js';
 import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';
-import { registerDefault } from './register-default.js';
 registerDefault();
 
 const g = new Digraph();

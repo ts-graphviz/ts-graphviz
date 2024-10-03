@@ -1,0 +1,40 @@
+name: Main Workflow
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  check:
+    name: Check
+    uses: ./.github/workflows/.check.yaml
+
+  build:
+    name: Build
+    uses: ./.github/workflows/.build.yaml
+    needs: check
+
+  doc:
+    name: Documentation
+    needs: build
+    uses: ./.github/workflows/.doc.yaml
+
+  test:
+    name: Tests
+    needs: check
+    uses: ./.github/workflows/.test.yaml
+
+  release:
+    name: Release
+    needs:
+      - check
+      - doc
+      - build
+      - test
+    if: ${{ github.repository == 'ts-graphviz/ts-graphviz' && success() }}
+    uses: ./.github/workflows/.release.yaml
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

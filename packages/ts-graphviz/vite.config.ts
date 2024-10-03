@@ -7,6 +7,7 @@ export default defineConfig({
     outDir: 'lib',
     lib: {
       entry: {
+        types: 'src/types.ts',
         'ts-graphviz': 'src/ts-graphviz.ts',
         ast: 'src/ast.ts',
         adapter: 'src/adapter.ts',
@@ -25,7 +26,7 @@ export default defineConfig({
   plugins: [
     dts({
       outDir: 'lib',
-      copyDtsFiles: true,
+      rollupTypes: true,
     }),
   ],
 });
