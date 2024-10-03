@@ -19,7 +19,7 @@ jobs:
 
   doc:
     name: Documentation
-    needs: check
+    needs: build
     uses: ./.github/workflows/.doc.yaml
 
   test:
