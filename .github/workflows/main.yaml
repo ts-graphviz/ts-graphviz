@@ -30,7 +30,7 @@ jobs:
       - check
       - build
       - test
-    if: ${{ github.repository == 'ts-graphviz/ts-graphviz' && github.ref == 'refs/heads/main' && success() }}
+    if: ${{ github.repository == 'ts-graphviz/ts-graphviz' && success() }}
     uses: ./.github/workflows/.release.yaml
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
