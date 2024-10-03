@@ -28,8 +28,7 @@
   "author": "kamiazya <yuki@kamiazya.tech>",
   "type": "module",
   "scripts": {
-    "codegen": "pnpm -r codegen",
-    "build": "pnpm -r build",
+    "build": "pnpm -r codegen && pnpm -r build",
     "doc": "typedoc",
     "lint": "biome check --apply .",
     "test": "vitest",
