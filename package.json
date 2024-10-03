@@ -28,10 +28,10 @@
   "author": "kamiazya <yuki@kamiazya.tech>",
   "type": "module",
   "scripts": {
-    "lint": "biome check --apply .",
     "build": "pnpm -r codegen && pnpm -r build",
-    "doc": "pnpm -r codegen && typedoc",
-    "test": "pnpm -r codegen && vitest",
+    "doc": "typedoc",
+    "lint": "biome check --apply .",
+    "test": "vitest",
     "test:integration": "echo 'No integration tests' && exit 1"
   },
   "devDependencies": {

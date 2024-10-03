@@ -30,26 +30,15 @@
   "type": "module",
   "exports": {
     ".": {
-      "browser": {
-        "types": "./lib/browser.d.ts",
-        "require": "./lib/browser.cjs",
-        "default": "./lib/browser.js"
-      },
-      "deno": {
-        "types": "./lib/deno.d.ts",
-        "default": "./lib/deno.js"
-      },
-      "default": {
-        "types": "./lib/node.d.ts",
-        "require": "./lib/node.cjs",
-        "default": "./lib/node.js"
-      }
+      "browser": "./src/browser.ts",
+      "deno": "./src/deno.ts",
+      "default": "./src/node.ts"
     },
     "./package.json": "./package.json"
   },
-  "main": "./lib/node.cjs",
-  "module": "./lib/node.js",
-  "types": "./lib/node.d.ts",
+  "main": "./src/node.ts",
+  "module": "./src/node.ts",
+  "types": "./src/node.ts",
   "scripts": {
     "build": "vite build && rm ./lib/deno.cjs "
   },
@@ -67,6 +56,28 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": true,
+    "exports": {
+      ".": {
+        "browser": {
+          "types": "./lib/browser.d.ts",
+          "require": "./lib/browser.cjs",
+          "default": "./lib/browser.js"
+        },
+        "deno": {
+          "types": "./lib/deno.d.ts",
+          "default": "./lib/deno.js"
+        },
+        "default": {
+          "types": "./lib/node.d.ts",
+          "require": "./lib/node.cjs",
+          "default": "./lib/node.js"
+        }
+      },
+      "./package.json": "./package.json"
+    },
+    "main": "./lib/node.cjs",
+    "module": "./lib/node.js",
+    "types": "./lib/node.d.ts"
   }
 }
