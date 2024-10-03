@@ -9,6 +9,7 @@ on:
 
 jobs:
   publish_to_pkgprnew:
+    name: Publish to pkg.pr.new
     if: github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
     steps:
@@ -29,11 +30,10 @@ jobs:
       - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       - name: Publish to pkg.pr.new
         run: |
-          pnpm dlx pkg-pr-new \
-            --compact \
-            ./packages/* \
-            --template './examples/*'
-        shell: bash
+          pnpm dlx pkg-pr-new publish \
+                                --compact \
+                                './packages/*' \
+                                --template './examples/*'
 
   # Release the package to npm
   publish_to_npm_or_create_release_pr:
