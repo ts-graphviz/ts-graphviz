@@ -8,26 +8,30 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  build:
-    name: Build
-    uses: ./.github/workflows/.build.yaml
-    needs:
-      - check
   check:
     name: Check
     uses: ./.github/workflows/.check.yaml
+
+  build:
+    name: Build
+    uses: ./.github/workflows/.build.yaml
+    needs: check
+
+  doc:
+    name: Documentation
+    needs: check
+    uses: ./.github/workflows/.doc.yaml
+
   test:
     name: Tests
-    needs:
-      - check
-      - build
+    needs: check
     uses: ./.github/workflows/.test.yaml
 
-  # Release the package to npm
   release:
     name: Release
     needs:
       - check
+      - doc
       - build
       - test
     if: ${{ github.repository == 'ts-graphviz/ts-graphviz' && success() }}
