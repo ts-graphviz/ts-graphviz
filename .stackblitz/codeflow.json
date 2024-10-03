@@ -1,0 +1,12 @@
+{
+  "pnpm": {
+    "overrides": {
+      "@ts-graphviz/adapter": "./packages/adapter",
+      "@ts-graphviz/ast": "./packages/ast",
+      "@ts-graphviz/common": "./packages/common",
+      "@ts-graphviz/core": "./packages/core",
+      "@ts-graphviz/react": "./packages/react",
+      "ts-graphviz": "./packages/ts-graphviz"
+    }
+  }
+}
