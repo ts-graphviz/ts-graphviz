@@ -5,7 +5,10 @@ export const AttributePrintPlugin: PrintPlugin<AttributeASTNode> = {
   match(ast: ASTNode) {
     return ast.type === 'Attribute';
   },
-  print(context, ast): string {
-    return `${context.print(ast.key)} = ${context.print(ast.value)};`;
+  *print(context, ast) {
+    yield* context.print(ast.key);
+    yield ' = ';
+    yield* context.print(ast.value);
+    yield ';';
   },
 };

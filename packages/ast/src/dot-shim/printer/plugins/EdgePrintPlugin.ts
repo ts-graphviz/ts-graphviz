@@ -1,27 +1,18 @@
-import { map, pipe } from '@ts-graphviz/common';
 import type { EdgeASTNode } from '../../../types.js';
 import type { PrintPlugin } from '../types.js';
-import { endOfLine, indent, joinBy, wrapByPair } from './utils/index.js';
 
 export const EdgePrintPlugin: PrintPlugin<EdgeASTNode> = {
   match(ast) {
     return ast.type === 'Edge';
   },
-  print(context, ast): string {
-    const targets = pipe(
-      map(context.print),
-      joinBy(context.directed ? ' -> ' : ' -- '),
-    )(ast.targets);
+  *print(context, ast) {
+    yield* context.join(ast.targets, context.directed ? ' -> ' : ' -- ');
     if (ast.children.length === 0) {
-      return `${targets};`;
+      yield ';';
+    } else {
+      yield ' [';
+      yield* context.printChildren(ast.children);
+      yield '];';
     }
-    const eol = endOfLine(context.endOfLine);
-    const contents = pipe(
-      map(context.print),
-      joinBy(eol),
-      indent(context.indentStyle, context.indentSize, eol),
-      wrapByPair(`[${eol}`, `${eol}];`),
-    )(ast.children);
-    return `${targets} ${contents}`;
   },
 };
