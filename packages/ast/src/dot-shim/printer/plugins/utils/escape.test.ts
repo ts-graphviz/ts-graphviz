@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { escape } from './tokens.js';
+import { escape } from './escape.js';
 
 describe('escape', () => {
   test.each([
