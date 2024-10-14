@@ -1,5 +1,4 @@
 {
-  "installCommand": "npm install -g pnpm && pnpm install",
   "buildCommand": "build",
   "packages": [
     "packages/adapter",
