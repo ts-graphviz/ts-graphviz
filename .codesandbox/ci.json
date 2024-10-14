@@ -1,5 +1,5 @@
 {
-  "installCommand": "pnpm install",
+  "installCommand": "corepack enable pnpm && pnpm install",
   "buildCommand": "build",
   "packages": [
     "packages/adapter",
