@@ -1,0 +1,14 @@
+{
+  "installCommand": "pnpm install",
+  "buildCommand": "build",
+  "packages": [
+    "packages/adapter",
+    "packages/ast",
+    "packages/common",
+    "packages/core",
+    "packages/react",
+    "packages/ts-graphviz"
+  ],
+  "sandboxes": ["new", "vanilla"],
+  "node": "18"
+}
