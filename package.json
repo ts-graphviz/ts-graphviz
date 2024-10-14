@@ -61,5 +61,14 @@
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^2.1.1"
   },
-  "packageManager": "pnpm@8.15.1"
+  "packageManager": "pnpm@8.15.1",
+  "pnpm": {
+    "overrides": {
+      "tar@<6.2.1": ">=6.2.1",
+      "braces@<3.0.3": ">=3.0.3",
+      "ejs@<3.1.10": ">=3.1.10",
+      "ws@>=8.0.0 <8.17.1": ">=8.17.1",
+      "micromatch@<4.0.8": ">=4.0.8"
+    }
+  }
 }

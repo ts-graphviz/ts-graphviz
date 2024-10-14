@@ -1,24 +1,26 @@
-import { pipe } from '@ts-graphviz/common';
 import type { LiteralASTNode } from '../../../types.js';
 import type { PrintPlugin } from '../types.js';
-import { escape, wrapByPair, wrapWith } from './utils/index.js';
-
-const quoteLiteralValue = pipe(escape, wrapWith('"'));
-
-const quoteHTMLLikeLiteralValue = wrapByPair('<', '>');
+import { escape } from './utils/escape.js';
 
 export const LiteralPrintPlugin: PrintPlugin<LiteralASTNode> = {
   match(ast) {
     return ast.type === 'Literal';
   },
-  print(context, ast): string {
+  *print(context, ast) {
     switch (ast.quoted) {
       case 'html':
-        return quoteHTMLLikeLiteralValue(ast.value);
+        yield '<';
+        yield ast.value;
+        yield '>';
+        return;
       case true:
-        return quoteLiteralValue(ast.value);
-      default:
-        return escape(ast.value);
+        yield '"';
+        yield escape(ast.value);
+        yield '"';
+        return;
+      default: // case false:
+        yield ast.value;
+        return;
     }
   },
 };
