@@ -8,6 +8,15 @@
     "packages/react",
     "packages/ts-graphviz"
   ],
-  "sandboxes": ["new", "vanilla"],
+  "sandboxes": [
+    "new",
+    "vanilla",
+    "/examples/deno",
+    "/examples/node-cjs",
+    "/examples/node-esm",
+    "/examples/typescript",
+    "/examples/webpack-build-node",
+    "/examples/webpack-build-web"
+  ],
   "node": "18"
 }
