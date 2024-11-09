@@ -19,11 +19,11 @@ export interface ModelFactory {
     attributes?: GraphAttributesObject,
     callback?: (g: RootGraphModel) => void,
   ): RootGraphModel;
+  (id?: string, callback?: (g: RootGraphModel) => void): RootGraphModel;
   (
     attributes?: GraphAttributesObject,
     callback?: (g: RootGraphModel) => void,
   ): RootGraphModel;
-  (id?: string, callback?: (g: RootGraphModel) => void): RootGraphModel;
   (callback?: (g: RootGraphModel) => void): RootGraphModel;
 }
 
