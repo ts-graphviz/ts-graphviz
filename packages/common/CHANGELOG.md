@@ -1,5 +1,11 @@
 # @ts-graphviz/common
 
+## 2.1.5
+
+### Patch Changes
+
+- [#1218](https://github.com/ts-graphviz/ts-graphviz/pull/1218) [`d7ff421`](https://github.com/ts-graphviz/ts-graphviz/commit/d7ff421ec861ca8fdede1a6bdf256f3455fb9797) Thanks [@kamiazya](https://github.com/kamiazya)! - Remove unnecessary internal utility functions
+
 ## 2.1.4
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @ts-graphviz/adapter
 
+## 2.0.6
+
+### Patch Changes
+
+- Updated dependencies [[`d7ff421`](https://github.com/ts-graphviz/ts-graphviz/commit/d7ff421ec861ca8fdede1a6bdf256f3455fb9797)]:
+  - @ts-graphviz/common@2.1.5
+
 ## 2.0.5
 
 ### Patch Changes
