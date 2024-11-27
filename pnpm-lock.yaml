@@ -188,8 +188,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.3.0
+        version: 4.3.0(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
   packages/ast:
     dependencies:
@@ -210,8 +210,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.3.0
+        version: 4.3.0(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
   packages/common:
     devDependencies:
@@ -222,8 +222,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.3.0
+        version: 4.3.0(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
   packages/core:
     dependencies:
@@ -241,8 +241,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.3.0
+        version: 4.3.0(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
   packages/react:
     dependencies:
@@ -284,8 +284,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.3.0
+        version: 4.3.0(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
   packages/ts-graphviz:
     dependencies:
@@ -309,8 +309,8 @@ importers:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@20.12.7)
       vite-plugin-dts:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
+        specifier: ^4.3.0
+        version: 4.3.0(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8)
 
 packages:
 
@@ -514,7 +514,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.23.5
-      '@babel/parser': 7.24.0
+      '@babel/parser': 7.25.6
       '@babel/types': 7.24.0
     dev: true
 
@@ -528,7 +528,7 @@ packages:
       '@babel/helper-function-name': 7.23.0
       '@babel/helper-hoist-variables': 7.22.5
       '@babel/helper-split-export-declaration': 7.22.6
-      '@babel/parser': 7.24.0
+      '@babel/parser': 7.25.6
       '@babel/types': 7.24.0
       debug: 4.3.7
       globals: 11.12.0
@@ -1150,27 +1150,27 @@ packages:
       read-yaml-file: 1.1.0
     dev: true
 
-  /@microsoft/api-extractor-model@7.29.6(@types/node@20.12.7):
-    resolution: {integrity: sha512-gC0KGtrZvxzf/Rt9oMYD2dHvtN/1KPEYsrQPyMKhLHnlVuO/f4AFN3E4toqZzD2pt4LhkKoYmL2H9tX3yCOyRw==}
+  /@microsoft/api-extractor-model@7.30.0(@types/node@20.12.7):
+    resolution: {integrity: sha512-26/LJZBrsWDKAkOWRiQbdVgcfd1F3nyJnAiJzsAgpouPk7LtOIj7PK9aJtBaw/pUXrkotEg27RrT+Jm/q0bbug==}
     dependencies:
-      '@microsoft/tsdoc': 0.15.0
-      '@microsoft/tsdoc-config': 0.17.0
-      '@rushstack/node-core-library': 5.7.0(@types/node@20.12.7)
+      '@microsoft/tsdoc': 0.15.1
+      '@microsoft/tsdoc-config': 0.17.1
+      '@rushstack/node-core-library': 5.10.0(@types/node@20.12.7)
     transitivePeerDependencies:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor@7.47.7(@types/node@20.12.7):
-    resolution: {integrity: sha512-fNiD3G55ZJGhPOBPMKD/enozj8yxJSYyVJWxRWdcUtw842rvthDHJgUWq9gXQTensFlMHv2wGuCjjivPv53j0A==}
+  /@microsoft/api-extractor@7.48.0(@types/node@20.12.7):
+    resolution: {integrity: sha512-FMFgPjoilMUWeZXqYRlJ3gCVRhB7WU/HN88n8OLqEsmsG4zBdX/KQdtJfhq95LQTQ++zfu0Em1LLb73NqRCLYQ==}
     hasBin: true
     dependencies:
-      '@microsoft/api-extractor-model': 7.29.6(@types/node@20.12.7)
-      '@microsoft/tsdoc': 0.15.0
-      '@microsoft/tsdoc-config': 0.17.0
-      '@rushstack/node-core-library': 5.7.0(@types/node@20.12.7)
+      '@microsoft/api-extractor-model': 7.30.0(@types/node@20.12.7)
+      '@microsoft/tsdoc': 0.15.1
+      '@microsoft/tsdoc-config': 0.17.1
+      '@rushstack/node-core-library': 5.10.0(@types/node@20.12.7)
       '@rushstack/rig-package': 0.5.3
-      '@rushstack/terminal': 0.14.0(@types/node@20.12.7)
-      '@rushstack/ts-command-line': 4.22.6(@types/node@20.12.7)
+      '@rushstack/terminal': 0.14.3(@types/node@20.12.7)
+      '@rushstack/ts-command-line': 4.23.1(@types/node@20.12.7)
       lodash: 4.17.21
       minimatch: 3.0.8
       resolve: 1.22.8
@@ -1181,17 +1181,17 @@ packages:
       - '@types/node'
     dev: true
 
-  /@microsoft/tsdoc-config@0.17.0:
-    resolution: {integrity: sha512-v/EYRXnCAIHxOHW+Plb6OWuUoMotxTN0GLatnpOb1xq0KuTNw/WI3pamJx/UbsoJP5k9MCw1QxvvhPcF9pH3Zg==}
+  /@microsoft/tsdoc-config@0.17.1:
+    resolution: {integrity: sha512-UtjIFe0C6oYgTnad4q1QP4qXwLhe6tIpNTRStJ2RZEPIkqQPREAwE5spzVxsdn9UaEMUqhh0AqSx3X4nWAKXWw==}
     dependencies:
-      '@microsoft/tsdoc': 0.15.0
+      '@microsoft/tsdoc': 0.15.1
       ajv: 8.12.0
       jju: 1.4.0
       resolve: 1.22.8
     dev: true
 
-  /@microsoft/tsdoc@0.15.0:
-    resolution: {integrity: sha512-HZpPoABogPvjeJOdzCOSJsXeL/SMCBgBZMVC3X3d7YYp2gf31MfxhUoYUNwf1ERPJOnQc0wkFn9trqI6ZEdZuA==}
+  /@microsoft/tsdoc@0.15.1:
+    resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
     dev: true
 
   /@nodelib/fs.scandir@2.1.5:
@@ -2206,8 +2206,8 @@ packages:
     dev: true
     optional: true
 
-  /@rushstack/node-core-library@5.7.0(@types/node@20.12.7):
-    resolution: {integrity: sha512-Ff9Cz/YlWu9ce4dmqNBZpA45AEya04XaBFIjV7xTVeEf+y/kTjEasmozqFELXlNG4ROdevss75JrrZ5WgufDkQ==}
+  /@rushstack/node-core-library@5.10.0(@types/node@20.12.7):
+    resolution: {integrity: sha512-2pPLCuS/3x7DCd7liZkqOewGM0OzLyCacdvOe8j6Yrx9LkETGnxul1t7603bIaB8nUAooORcct9fFDOQMbWAgw==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
@@ -2232,23 +2232,23 @@ packages:
       strip-json-comments: 3.1.1
     dev: true
 
-  /@rushstack/terminal@0.14.0(@types/node@20.12.7):
-    resolution: {integrity: sha512-juTKMAMpTIJKudeFkG5slD8Z/LHwNwGZLtU441l/u82XdTBfsP+LbGKJLCNwP5se+DMCT55GB8x9p6+C4UL7jw==}
+  /@rushstack/terminal@0.14.3(@types/node@20.12.7):
+    resolution: {integrity: sha512-csXbZsAdab/v8DbU1sz7WC2aNaKArcdS/FPmXMOXEj/JBBZMvDK0+1b4Qao0kkG0ciB1Qe86/Mb68GjH6/TnMw==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
       '@types/node':
         optional: true
     dependencies:
-      '@rushstack/node-core-library': 5.7.0(@types/node@20.12.7)
+      '@rushstack/node-core-library': 5.10.0(@types/node@20.12.7)
       '@types/node': 20.12.7
       supports-color: 8.1.1
     dev: true
 
-  /@rushstack/ts-command-line@4.22.6(@types/node@20.12.7):
-    resolution: {integrity: sha512-QSRqHT/IfoC5nk9zn6+fgyqOPXHME0BfchII9EUPR19pocsNp/xSbeBCbD3PIR2Lg+Q5qk7OFqk1VhWPMdKHJg==}
+  /@rushstack/ts-command-line@4.23.1(@types/node@20.12.7):
+    resolution: {integrity: sha512-40jTmYoiu/xlIpkkRsVfENtBq4CW3R4azbL0Vmda+fMwHWqss6wwf/Cy/UJmMqIzpfYc2OTnjYP1ZLD3CmyeCA==}
     dependencies:
-      '@rushstack/terminal': 0.14.0(@types/node@20.12.7)
+      '@rushstack/terminal': 0.14.3(@types/node@20.12.7)
       '@types/argparse': 1.0.38
       argparse: 1.0.10
       string-argv: 0.3.2
@@ -2351,7 +2351,7 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       '@tufjs/canonical-json': 1.0.0
-      minimatch: 9.0.3
+      minimatch: 9.0.5
     dev: true
 
   /@types/argparse@1.0.38:
@@ -2548,7 +2548,7 @@ packages:
   /@vue/compiler-core@3.4.19:
     resolution: {integrity: sha512-gj81785z0JNzRcU0Mq98E56e4ltO1yf8k5PQ+tV/7YHnbZkrM0fyFyuttnN8ngJZjbpofWE/m4qjKBiLl8Ju4w==}
     dependencies:
-      '@babel/parser': 7.24.0
+      '@babel/parser': 7.25.6
       '@vue/shared': 3.4.19
       entities: 4.5.0
       estree-walker: 2.0.2
@@ -2582,7 +2582,7 @@ packages:
       '@vue/compiler-vue2': 2.7.16
       '@vue/shared': 3.4.19
       computeds: 0.0.1
-      minimatch: 9.0.3
+      minimatch: 9.0.5
       muggle-string: 0.4.1
       path-browserify: 1.0.1
       typescript: 5.4.5
@@ -4600,7 +4600,7 @@ packages:
       function-bind: 1.1.2
       has-proto: 1.0.1
       has-symbols: 1.0.3
-      hasown: 2.0.1
+      hasown: 2.0.2
     dev: true
 
   /get-source@2.0.12:
@@ -4651,7 +4651,7 @@ packages:
     dependencies:
       foreground-child: 3.1.1
       jackspeak: 2.3.6
-      minimatch: 9.0.3
+      minimatch: 9.0.5
       minipass: 7.0.4
       path-scurry: 1.10.1
     dev: true
@@ -4792,13 +4792,6 @@ packages:
 
   /has-unicode@2.0.1:
     resolution: {integrity: sha512-8Rf9Y83NBReMnx0gFzA8JImQACstCYWUplepDa9xprwwtmgEZUF0h/i5xSA625zB/I37EtrswSST6OXxwaaIJQ==}
-    dev: true
-
-  /hasown@2.0.1:
-    resolution: {integrity: sha512-1/th4MHjnwncwXsIW6QMzlvYL9kG5e/CpVvLRZe4XPa8TOUNbCELqmvhDmnkNsAjwaG4+I8gJJL0JBvTTLO9qA==}
-    engines: {node: '>= 0.4'}
-    dependencies:
-      function-bind: 1.1.2
     dev: true
 
   /hasown@2.0.2:
@@ -4943,7 +4936,7 @@ packages:
     resolution: {integrity: sha512-t7sv42WkwFkyKbivUCglsQW5YWMskWtbEf4MNKX5u/CCWHKSPzN4FtBQGsQZgCLbxOzpVlcbWVK5KB3auIOjSw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minimatch: 9.0.3
+      minimatch: 9.0.5
     dev: true
 
   /ignore@5.3.1:
@@ -5029,7 +5022,7 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       es-errors: 1.3.0
-      hasown: 2.0.1
+      hasown: 2.0.2
       side-channel: 1.0.5
     dev: true
 
@@ -5093,7 +5086,7 @@ packages:
   /is-core-module@2.13.1:
     resolution: {integrity: sha512-hHrIjvZsftOsvKSn2TRYl63zvxsgE0K+0mYMoH6gD4omR5IWB2KynivBQczo3+wF1cCkjzvptnI9Q0sPU66ilw==}
     dependencies:
-      hasown: 2.0.1
+      hasown: 2.0.2
     dev: true
 
   /is-data-view@1.0.1:
@@ -8544,8 +8537,8 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-dts@4.2.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8):
-    resolution: {integrity: sha512-/QlYvgUMiv8+ZTEerhNCYnYaZMM07cdlX6hQCR/w/g/nTh0tUXPoYwbT6SitizLJ9BybT1lnrcZgqheI6wromQ==}
+  /vite-plugin-dts@4.3.0(@types/node@20.12.7)(typescript@5.4.5)(vite@5.4.8):
+    resolution: {integrity: sha512-LkBJh9IbLwL6/rxh0C1/bOurDrIEmRE7joC+jFdOEEciAFPbpEKOLSAr5nNh5R7CJ45cMbksTrFfy52szzC5eA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       typescript: '*'
@@ -8554,7 +8547,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      '@microsoft/api-extractor': 7.47.7(@types/node@20.12.7)
+      '@microsoft/api-extractor': 7.48.0(@types/node@20.12.7)
       '@rollup/pluginutils': 5.1.0
       '@volar/typescript': 2.4.4
       '@vue/language-core': 2.1.6(typescript@5.4.5)
