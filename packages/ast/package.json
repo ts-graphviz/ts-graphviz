@@ -47,7 +47,7 @@
     "peggy": "^4.0.3",
     "ts-pegjs": "^4.2.1",
     "typescript": "^5.4.5",
-    "vite": "^5.4.8",
+    "vite": "^6.0.5",
     "vite-plugin-dts": "^4.2.1"
   },
   "engines": {
