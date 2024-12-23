@@ -58,7 +58,7 @@
     "react-test-renderer": "^18.3.1",
     "typescript": "^5.4.5",
     "vite": "^5.4.8",
-    "vite-plugin-dts": "^4.2.1"
+    "vite-plugin-dts": "^4.4.0"
   },
   "peerDependencies": {
     "react": ">=18",
