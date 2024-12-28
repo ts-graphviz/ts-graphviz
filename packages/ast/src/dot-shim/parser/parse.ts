@@ -120,10 +120,6 @@ export function parse(
  *
  * @group Convert DOT to AST
  *
- * @property {Expectation[]} expected - An array of expectations that the parser was expecting.
- * @property {string} found - The token that was found.
- * @property {FileRange} location - The location of the syntax error.
- *
  * @remarks
  * This error is thrown when a parsing error occurs.
  * The error provides additional information about the syntax error.
