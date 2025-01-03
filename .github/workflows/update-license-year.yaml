@@ -1,7 +1,7 @@
 name: Update copyright year(s) in license file
 
 permissions:
-  contents: write
+  contents: read
 
 on:
   schedule:
@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
