@@ -202,6 +202,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "hao2013",
+      "name": "hao2013",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67059492?v=4",
+      "profile": "https://github.com/hao2013",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
