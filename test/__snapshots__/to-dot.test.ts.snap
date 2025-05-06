@@ -28,13 +28,13 @@ exports[`Digraph > renders correctly by toDot method > has some attributes 1`] =
 exports[`Digraph > renders correctly by toDot method > label attribute behavior > html like 1`] = `
 "digraph {
   graph [
-    label = <<B>this is test for graph label</B>>;
+    label = <<<B>this is test for graph label</B>>>;
   ];
   edge [
-    label = <<U>this is test for edge label</U>>;
+    label = <<<U>this is test for edge label</U>>>;
   ];
   node [
-    label = <<I>this is test for node label</I>>;
+    label = <<<I>this is test for node label</I>>>;
   ];
 }"
 `;
@@ -142,13 +142,13 @@ exports[`Graph > renders correctly by toDot method > has some attributes 1`] = `
 exports[`Graph > renders correctly by toDot method > label attribute behavior > html like 1`] = `
 "graph {
   graph [
-    label = <<B>this is test for graph label</B>>;
+    label = <<<B>this is test for graph label</B>>>;
   ];
   edge [
-    label = <<U>this is test for edge label</U>>;
+    label = <<<U>this is test for edge label</U>>>;
   ];
   node [
-    label = <<I>this is test for node label</I>>;
+    label = <<<I>this is test for node label</I>>>;
   ];
 }"
 `;
