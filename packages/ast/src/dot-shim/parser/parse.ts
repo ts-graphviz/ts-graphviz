@@ -60,7 +60,7 @@ export interface ParseOptions<T extends Rule> extends CommonParseOptions {
  * - {@link SubgraphASTNode}
  * - {@link ClusterStatementASTNode}
  *
- * @throws {@link SyntaxError}
+ * @throws {@link DotSyntaxError}
  * @group Convert DOT to AST
  */
 export function parse(input: string): DotASTNode;
@@ -105,16 +105,30 @@ export function parse(
     return _parse(input, options);
   } catch (e) {
     if (e instanceof PeggySyntaxError) {
-      throw new DotSyntaxError(e.message, e.expected, e.found, e.location);
+      throw new DotSyntaxError(e.message, {
+        cause: e,
+      });
     }
-    throw e;
+    throw new Error('Unexpected parse error', {
+      cause: e,
+    });
   }
 }
+
 /**
+ * DotSyntaxError is a class that extends the SyntaxError class and provides additional information about the syntax error.
+ *
  * @group Convert DOT to AST
+ *
+ * @remarks
+ * This error is thrown when a parsing error occurs.
+ * The error provides additional information about the syntax error.
+ *
+ * This is in reference to the specification
+ * that the error thrown when a parse error occurs in the {@link !JSON.parse} function is {@link !SyntaxError}.
  */
-export class DotSyntaxError extends PeggySyntaxError {
-  constructor(...args: ConstructorParameters<typeof PeggySyntaxError>) {
+export class DotSyntaxError extends SyntaxError {
+  constructor(...args: ConstructorParameters<typeof SyntaxError>) {
     super(...args);
     this.name = 'DotSyntaxError';
   }

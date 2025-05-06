@@ -3,12 +3,7 @@
 import path from 'node:path';
 import { describe, test } from 'vitest';
 
-import {
-  type ASTNode,
-  DotSyntaxError,
-  parse,
-  stringify,
-} from '@ts-graphviz/ast';
+import { type ASTNode, parse, stringify } from '@ts-graphviz/ast';
 
 function forEachDotFile(
   callback: (file: string, getContents: () => Promise<string>) => void,
@@ -35,9 +30,7 @@ describe('Ability to parse real-world DOT files and the structure of the output 
         });
         expect(parse(dot)).toMatchFileSnapshot(snapshot);
       } catch (e) {
-        if (e instanceof DotSyntaxError) {
-          console.log(e.location);
-        }
+        console.log(e);
         throw e;
       }
     });
