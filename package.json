@@ -28,14 +28,14 @@
   "author": "kamiazya <yuki@kamiazya.tech>",
   "type": "module",
   "scripts": {
-    "build": "turbo run build",
-    "doc": "turbo run build && typedoc",
+    "build": "pnpm -r codegen && pnpm -r build",
+    "doc": "pnpm build && typedoc",
     "lint": "biome check --apply .",
-    "test": "turbo run test:unit test:integration",
-    "test:unit": "vitest run"
+    "test": "vitest",
+    "test:integration": "pnpm -r test:integration"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.7.3",
+    "@biomejs/biome": "1.7.3",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
     "@pnpm/workspace.find-packages": "^4.0.10",
@@ -48,7 +48,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "svgo": "^3.2.0",
-    "turbo": "^1.13.3",
     "typedoc": "^0.25.12",
     "typescript": "^5.4.5",
     "vite": "^5.4.8",

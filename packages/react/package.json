@@ -30,15 +30,9 @@
   "author": "kamiazya <yuki@kamiazya.tech>",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./lib/react.d.ts",
-      "require": "./lib/react.cjs",
-      "default": "./lib/react.js"
-    },
+    ".": "./src/react.ts",
     "./package.json": "./package.json"
   },
-  "main": "./lib/react.js",
-  "types": "./lib/react.d.ts",
   "scripts": {
     "build": "vite build",
     "example": "ts-node example/example"
@@ -66,6 +60,16 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": true,
+    "exports": {
+      ".": {
+        "types": "./lib/react.d.ts",
+        "require": "./lib/react.cjs",
+        "default": "./lib/react.js"
+      },
+      "./package.json": "./package.json"
+    },
+    "main": "./lib/react.js",
+    "types": "./lib/react.d.ts"
   }
 }

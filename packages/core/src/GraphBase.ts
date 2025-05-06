@@ -180,7 +180,7 @@ export abstract class GraphBase<T extends AttributeKey>
         typeof arg === 'function',
     );
     const subgraph: SubgraphModel = id
-      ? this.getSubgraph(id) ?? this.createSubgraph(id)
+      ? (this.getSubgraph(id) ?? this.createSubgraph(id))
       : this.createSubgraph();
     if (attributes !== undefined) {
       subgraph.apply(attributes);
