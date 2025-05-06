@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "typescript": "^5.4.5",
-    "vite": "^5.4.8",
+    "vite": "^6.3.5",
     "vite-plugin-dts": "^4.2.1"
   },
   "engines": {
