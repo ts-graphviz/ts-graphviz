@@ -34,12 +34,7 @@ jobs:
     - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
         name: packages
-    - name: Print Folder Tree
-      uses: jaywcjlove/github-action-folder-tree@main
-      with:
-        exclude: "node_modules"
-        path: .
-        depth: 10
+        path: packages
     - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
     - name: Use Graphviz
       uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
@@ -64,6 +59,7 @@ jobs:
     - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
         name: packages
+        path: packages
     - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
     - name: Use Graphviz
       uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
