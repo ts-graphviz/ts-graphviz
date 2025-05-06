@@ -7,4 +7,6 @@
 "@ts-graphviz/ast": patch
 ---
 
-Drop turbo
+Update Develop Environment
+- Drop turbo
+- Upgrade biome to 1.9.4
