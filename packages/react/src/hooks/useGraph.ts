@@ -21,6 +21,7 @@ export function useGraph(options: RootGraphOptions = {}): RootGraphModel {
     g.attributes.edge.apply(edge ?? {});
     g.attributes.graph.apply(graph ?? {});
     return g;
+    // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME attributes changes on every re-render and should not be used as a hook dependency.
   }, [context, id, comment, edge, node, graph, attributes]);
   useHasComment(memoGraph, comment);
   useGraphAttributes(memoGraph, attributes, { edge, node, graph });

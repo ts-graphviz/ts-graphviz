@@ -26,4 +26,4 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
       - name: Check
-        run: npx biome ci .
+        run: pnpm biome ci .
