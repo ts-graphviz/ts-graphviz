@@ -193,6 +193,34 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "septatrix",
+      "name": "Nils K",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24257556?v=4",
+      "profile": "https://github.com/septatrix",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "hao2013",
+      "name": "hao2013",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67059492?v=4",
+      "profile": "https://github.com/hao2013",
+      "contributions": [
+        "maintenance",
+        "review"
+      ]
+    },
+    {
+      "login": "walterra",
+      "name": "Walter Rafelsberger",
+      "avatar_url": "https://avatars.githubusercontent.com/u/230104?v=4",
+      "profile": "http://www.walterra.dev",
+      "contributions": [
+        "question"
+      ]
     }
   ],
   "contributorsPerLine": 7,

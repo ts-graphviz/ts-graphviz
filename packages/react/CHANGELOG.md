@@ -1,5 +1,20 @@
 # @ts-graphviz/react
 
+## 0.10.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - ts-graphviz@2.1.6
+
+## 0.10.5
+
+### Patch Changes
+
+- Updated dependencies [[`d7ff421`](https://github.com/ts-graphviz/ts-graphviz/commit/d7ff421ec861ca8fdede1a6bdf256f3455fb9797)]:
+  - @ts-graphviz/common@2.1.5
+  - ts-graphviz@2.1.5
+
 ## 0.10.4
 
 ### Patch Changes

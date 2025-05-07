@@ -1,5 +1,22 @@
 # @ts-graphviz/ast
 
+## 2.0.7
+
+### Patch Changes
+
+- [#1318](https://github.com/ts-graphviz/ts-graphviz/pull/1318) [`c043ba9`](https://github.com/ts-graphviz/ts-graphviz/commit/c043ba9bcc5194a89b976df1609c4e9875300f1e) Thanks [@kamiazya](https://github.com/kamiazya)! - Improve error handling and documentation in the @ts-graphviz/ast package.
+
+  The most important changes include fixing an unexpected parsing error, updating the error class used in the parse function, and enhancing the documentation for the `DotSyntaxError` class.
+
+## 2.0.6
+
+### Patch Changes
+
+- [#1218](https://github.com/ts-graphviz/ts-graphviz/pull/1218) [`d7ff421`](https://github.com/ts-graphviz/ts-graphviz/commit/d7ff421ec861ca8fdede1a6bdf256f3455fb9797) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix AST printing not to be destroyed during stringify even in HTML-Like format
+
+- Updated dependencies [[`d7ff421`](https://github.com/ts-graphviz/ts-graphviz/commit/d7ff421ec861ca8fdede1a6bdf256f3455fb9797)]:
+  - @ts-graphviz/common@2.1.5
+
 ## 2.0.5
 
 ### Patch Changes

@@ -1,5 +1,20 @@
 # @ts-graphviz/core
 
+## 2.0.7
+
+### Patch Changes
+
+- Updated dependencies [[`c043ba9`](https://github.com/ts-graphviz/ts-graphviz/commit/c043ba9bcc5194a89b976df1609c4e9875300f1e)]:
+  - @ts-graphviz/ast@2.0.7
+
+## 2.0.6
+
+### Patch Changes
+
+- Updated dependencies [[`d7ff421`](https://github.com/ts-graphviz/ts-graphviz/commit/d7ff421ec861ca8fdede1a6bdf256f3455fb9797), [`d7ff421`](https://github.com/ts-graphviz/ts-graphviz/commit/d7ff421ec861ca8fdede1a6bdf256f3455fb9797)]:
+  - @ts-graphviz/ast@2.0.6
+  - @ts-graphviz/common@2.1.5
+
 ## 2.0.5
 
 ### Patch Changes
