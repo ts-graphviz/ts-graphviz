@@ -66,7 +66,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: pnpm
-    - uses: denoland/setup-deno@5e01c016a857a4dbb5afe9d0f9733cd472cba985 # v1.5.1
+    - uses: denoland/setup-deno@909cc5acb0fdd60627fb858598759246509fa755 # v2.0.2
       with:
         deno-version: v1.x
     - run: pnpm install --frozen-lockfile
