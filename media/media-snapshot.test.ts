@@ -36,7 +36,7 @@ for (const [file, getModule] of Object.entries({
         exportTo: module.meta?.exportTo,
       };
     });
-    expect(dot).toMatchFileSnapshot(name);
+    await expect(dot).toMatchFileSnapshot(name);
 
     const svg = await toStream(dot, {
       format: 'svg',
