@@ -21,7 +21,7 @@ $ npm install -S @ts-graphviz/react react react-dom
 
 ## Example
 
-```jsx
+```ts
 import { Digraph, Node, Subgraph, Edge, renderToDot } from '@ts-graphviz/react';
 
 const Example = () => (
