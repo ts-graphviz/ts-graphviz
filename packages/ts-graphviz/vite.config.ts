@@ -26,6 +26,6 @@ export default defineConfig({
     dts({
       outDir: 'lib',
       copyDtsFiles: true,
-    }),
+    }) as any,
   ],
 });
