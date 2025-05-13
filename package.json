@@ -31,8 +31,7 @@
     "build": "pnpm -r codegen && pnpm -r build",
     "doc": "pnpm -r codegen && typedoc",
     "lint": "biome check --write .",
-    "test": "vitest",
-    "test:integration": "pnpm -r test:integration"
+    "test": "vitest"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
