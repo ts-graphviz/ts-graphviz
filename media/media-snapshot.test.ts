@@ -45,7 +45,7 @@ for (const [file, getModule] of Object.entries({
       .then((svg) => optimize(svg))
       .then((result) => result.data);
 
-    expect(svg).toMatchFileSnapshot(`${name.slice(0, -4)}.svg`);
+    await expect(svg).toMatchFileSnapshot(`${name.slice(0, -4)}.svg`);
 
     if (exportTo) {
       for (const to of exportTo) {
