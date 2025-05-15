@@ -14,4 +14,4 @@ Update Develop Environment
 - Upgrade Vite to 6.3.5
 - Upgrade Vitest to 3.1.3
 - Upgrade pnpm to 10.11.0
-
+- Audit fixes
