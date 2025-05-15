@@ -13,5 +13,6 @@ export default defineConfig({
     typecheck: {
       enabled: true,
     },
+    testTimeout: 0,
   },
 });

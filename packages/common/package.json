@@ -29,29 +29,33 @@
   "author": "Yuki Yamazaki <yuki@kamiazya.tech>",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./lib/common.d.ts",
-      "require": "./lib/common.cjs",
-      "default": "./lib/common.js"
-    },
+    ".": "./src/common.ts",
     "./package.json": "./package.json"
   },
-  "main": "lib/common.cjs",
-  "module": "lib/common.js",
-  "types": "lib/common.d.ts",
   "scripts": {
     "build": "vite build"
   },
   "devDependencies": {
-    "typescript": "^5.4.5",
-    "vite": "^5.4.8",
-    "vite-plugin-dts": "^4.2.1"
+    "typescript": "^5.8.2",
+    "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.3"
   },
   "engines": {
     "node": ">=18"
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": true,
+    "exports": {
+      ".": {
+        "types": "./lib/common.d.ts",
+        "require": "./lib/common.cjs",
+        "default": "./lib/common.js"
+      },
+      "./package.json": "./package.json"
+    },
+    "main": "lib/common.cjs",
+    "module": "lib/common.js",
+    "types": "lib/common.d.ts"
   }
 }

@@ -534,7 +534,7 @@ export namespace Color {
    * `"#%2x%2x%2x"` Red-Green-Blue (RGB)
    *
    * `"#%2x%2x%2x%2x"` Red-Green-Blue-Alpha (RGBA)
-   * @note A type that is too complicated to express in TypeScript.
+   * @privateRemarks A type that is too complicated to express in TypeScript.
    */
   export type RGB_RGBA = `#${string}`;
 
@@ -1387,7 +1387,7 @@ export namespace Color {
  *
  * The sum of the floating-point numbers in a colorList must sum to at most 1.
  *
- * @note A type that is too complicated to express in TypeScript.
+ * @privateRemarks A type that is too complicated to express in TypeScript.
  *
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/colorList/}
  * @group Attribute Types

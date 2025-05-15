@@ -32,6 +32,6 @@ export default defineConfig({
     dts({
       outDir: './lib',
       rollupTypes: true,
-    }),
+    }) as any,
   ],
 });

@@ -11,7 +11,7 @@ export const GraphPortal: FC<GraphPortalProps> = ({ children, id }) => {
   const container = useGraphContainer();
   const map = useContext(GraphMap);
   const cluster = useMemo(
-    () => (id ? map.get(id) ?? container : container),
+    () => (id ? (map.get(id) ?? container) : container),
     [container, map, id],
   );
   return (

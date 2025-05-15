@@ -17,6 +17,7 @@ export function useNode(id: string, options: NodeOptions = {}): NodeModel {
     n.attributes.apply(attributes);
     n.comment = comment;
     return n;
+    // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME attributes changes on every re-render and should not be used as a hook dependency.
   }, [cluster, id, attributes, comment]);
   useHasComment(node, comment);
   useHasAttributes(node, attributes);

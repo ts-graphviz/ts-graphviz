@@ -1,5 +1,6 @@
-import type { $keywords, $keywordsValidation } from './types.js';
 import type {
+  $keywords,
+  $keywordsValidation,
   AddDouble,
   AddPoint,
   ArrowType,
@@ -382,12 +383,18 @@ export namespace Attribute {
      * On each iteration, a nodes movement is limited to this factor of its potential motion.
      * By being less than 1.0, the system tends to ``cool'', thereby preventing cycling.
      *
-     * @see {@link https://graphviz.org/docs/attrs/Damping/ Node, Edge and Graph Attributes#Damping}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 0.99
-     * @graphvizMinimum 0
-     * @graphvizNotes neato only
-     * @graphvizUsedBy G
+     * @see {@link https://graphviz.org/docs/attrs/Damping/ Node, Edge and Graph Attributes#Damping}     * | Key | Value |
+     * | --- | --- |
+
+    *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 0.99 |
+     * | minimum | 0 |
+     * | notes | neato only |
+     * | used by | G |
+     *
      * @category Attribute
      */
     Damping: 'Damping';
@@ -397,12 +404,18 @@ export namespace Attribute {
      * It roughly corresponds to an ideal edge length (in inches), in that increasing K tends to increase the distance between nodes.
      * Note that the edge attribute {@link len} can be used to override this value for adjacent nodes.
      *
-     * @see {@link https://graphviz.org/docs/attrs/K/ Node, Edge and Graph Attributes#K}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 0.3
-     * @graphvizMinimum 0
-     * @graphvizNotes sfdp, fdp only
-     * @graphvizUsedBy GC
+     * @see {@link https://graphviz.org/docs/attrs/K/ Node, Edge and Graph Attributes#K}     * | Key | Value |
+     * | --- | --- |
+
+    *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 0.3 |
+     * | minimum | 0 |
+     * | used by | GC |
+     * | notes | sfdp, fdp only |
+     *
      * @category Attribute
      */
     K: 'K';
@@ -426,11 +439,17 @@ export namespace Attribute {
      * Note that, for edges, the attributes {@link headURL}, {@link tailURL}, {@link labelURL} and {@link edgeURL} allow control of various parts of an edge.
      * Also note that, if active areas of two edges overlap, it is unspecified which area dominates.
      *
-     * @see {@link https://graphviz.org/docs/attrs/URL/ Node, Edge and Graph Attributes#URL}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault <none>
-     * @graphvizNotes svg, postscript, map only
-     * @graphvizUsedBy ENGC
+     * @see {@link https://graphviz.org/docs/attrs/URL/ Node, Edge and Graph Attributes#URL}     * | Key | Value |
+     * | --- | --- |
+
+    *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | <none> |
+     * | used by | ENGC |
+     * | notes | svg, postscript, map only |
+     *
      * @category Attribute
      */
     URL: 'URL';
@@ -440,10 +459,17 @@ export namespace Attribute {
      * During rendering, the canvas is first filled as described in the {@link bgcolor} attribute.
      * Then, if _background is defined, the graphics operations described in the string are performed on the canvas.
      *
-     * @see {@link https://graphviz.org/docs/attrs/_background/ Node, Edge and Graph Attributes#_background}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault <none>
-     * @graphvizUsedBy G
+     * @see {@link https://graphviz.org/docs/attrs/_background/ Node, Edge and Graph Attributes#_background}     * | Key | Value |
+     * | --- | --- |
+
+    *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | <none> |
+     * | used by | G |
+     * | notes | xdot only |
+     *
      * @category Attribute
      */
     _background: '_background';
@@ -451,12 +477,18 @@ export namespace Attribute {
     /**
      * Indicates the preferred area for a node or empty cluster when laid out by patchwork.
      *
-     * @see {@link https://graphviz.org/docs/attrs/area/ Node, Edge and Graph Attributes#area}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 1
-     * @graphvizMinimum >0
-     * @graphvizNotes patchwork only
-     * @graphvizUsedBy NC
+     * @see {@link https://graphviz.org/docs/attrs/area/ Node, Edge and Graph Attributes#area}     * | Key | Value |
+     * | --- | --- |
+
+    *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 1 |
+     * | minimum | >0 |
+     * | used by | NC |
+     * | notes | patchwork only |
+     *
      * @category Attribute
      */
     area: 'area';
@@ -467,10 +499,16 @@ export namespace Attribute {
      *
      * See the {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
-     * @see {@link https://graphviz.org/docs/attrs/arrowhead/ Node, Edge and Graph Attributes#arrowhead}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType}
-     * @graphvizDefault normal
-     * @graphvizUsedBy E
+     * @see {@link https://graphviz.org/docs/attrs/arrowhead/ Node, Edge and Graph Attributes#arrowhead}     * | Key | Value |
+     * | --- | --- |
+
+    *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType} |
+     * | default | normal |
+     * | used by | E |
+     *
      * @category Attribute
      */
     arrowhead: 'arrowhead';
@@ -478,11 +516,17 @@ export namespace Attribute {
     /**
      * Multiplicative scale factor for arrowheads.
      *
-     * @see {@link https://graphviz.org/docs/attrs/arrowsize/ Node, Edge and Graph Attributes#arrowsize}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 1
-     * @graphvizMinimum 0
-     * @graphvizUsedBy E
+     * @see {@link https://graphviz.org/docs/attrs/arrowsize/ Node, Edge and Graph Attributes#arrowsize}     * | Key | Value |
+     * | --- | --- |
+
+    *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 1 |
+     * | minimum | 0 |
+     * | used by | E |
+     *
      * @category Attribute
      */
     arrowsize: 'arrowsize';
@@ -494,9 +538,13 @@ export namespace Attribute {
      * See the {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/arrowtail/ Node, Edge and Graph Attributes#arrowtail}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType}
-     * @graphvizDefault normal
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType} |
+     * | default | normal |
+     * | used by | E |
+     *
      * @category Attribute
      */
     arrowtail: 'arrowtail';
@@ -504,9 +552,12 @@ export namespace Attribute {
     /**
      * Bounding box of drawing in points.
      *
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/rect/ rect}
-     * @graphvizNotes write only
-     * @graphvizUsedBy G
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/rect/ rect} |
+     * | used by | G |
+     * | notes | write only |
+     *
      * @category Attribute
      */
     bb: 'bb';
@@ -517,9 +568,13 @@ export namespace Attribute {
      * If a cluster has a filled {@link style}, the cluster's {@link fillcolor} will overlay the background color.
      *
      * @see {@link https://graphviz.org/docs/attrs/bgcolor/ Node, Edge and Graph Attributes#bgcolor}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/color/ color}/{@link https://graphviz.org/docs/attr-types/color/List colorList}
-     * @graphvizDefault <none>
-     * @graphvizUsedBy GC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/color/ color}/{@link https://graphviz.org/docs/attr-types/color/List colorList} |
+     * | default | <none> |
+     * | used by | G |
+     *
      * @category Attribute
      */
     bgcolor: 'bgcolor';
@@ -528,9 +583,13 @@ export namespace Attribute {
      * If true, the drawing is centered in the output canvas.
      *
      * @see {@link https://graphviz.org/docs/attrs/center/ Node, Edge and Graph Attributes#center}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | G |
+     *
      * @category Attribute
      */
     center: 'center';
@@ -542,9 +601,12 @@ export namespace Attribute {
      * Note that if the character encoding used in the input does not match the charset value, the resulting output may be very strange.
      *
      * @see {@link https://graphviz.org/docs/attrs/charset/ Node, Edge and Graph Attributes#charset}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault "UTF-8"
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "UTF-8" |
+     * | used by | G |
      *
      * @category Attribute
      */
@@ -555,9 +617,14 @@ export namespace Attribute {
      * Combine with stylesheet for styling SVG output using CSS classnames.
      *
      * @see {@link https://graphviz.org/docs/attrs/class/ class}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizUsedBy ENCG
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | ENCG |
+     *
+     * @category Attribute
      */
     class: 'class';
     /**
@@ -569,10 +636,14 @@ export namespace Attribute {
      * At present, the modes "global" and "none" appear to be identical, both turning off the special cluster processing.
      *
      * @see {@link https://graphviz.org/docs/attrs/clusterrank/ Node, Edge and Graph Attributes#clusterrank}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:clusterMode clusterMode}
-     * @graphvizDefault local
-     * @graphvizNotes dot only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/clusterMode/ clusterMode} |
+     * | default | local |
+     * | used by | G |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     clusterrank: 'clusterrank';
@@ -600,9 +671,13 @@ export namespace Attribute {
      * ![colorlist](https://graphviz.org/_pages/doc/info/colorlist.gif)
      *
      * @see {@link https://graphviz.org/docs/attrs/color/ Node, Edge and Graph Attributes#color}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/color/ color}/{@link https://graphviz.org/docs/attr-types/color/List colorList}
-     * @graphvizDefault black
-     * @graphvizUsedBy ENC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/color/ color}/{@link https://graphviz.org/docs/attr-types/color/List colorList} |
+     * | default | black |
+     * | used by | ENC |
+     *
      * @category Attribute
      */
     color: 'color';
@@ -615,9 +690,13 @@ export namespace Attribute {
      * For example, if colorscheme=bugn9, then color=7 is interpreted as "/bugn9/7".
      *
      * @see {@link https://graphviz.org/docs/attrs/colorscheme/ Node, Edge and Graph Attributes#colorscheme}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizUsedBy ENCG
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | ENCG |
+     *
      * @category Attribute
      */
     colorscheme: 'colorscheme';
@@ -627,9 +706,13 @@ export namespace Attribute {
      * Device-dependent
      *
      * @see {@link https://graphviz.org/docs/attrs/comment/ Node, Edge and Graph Attributes#comment}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizUsedBy ENG
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | ENCG |
+     *
      * @category Attribute
      */
     comment: 'comment';
@@ -638,10 +721,14 @@ export namespace Attribute {
      * If true, allow edges between clusters. (See {@link lhead} and {@link ltail} below.)
      *
      * @see {@link https://graphviz.org/docs/attrs/compound/ Node, Edge and Graph Attributes#compound}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizNotes dot only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | G |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     compound: 'compound';
@@ -652,9 +739,13 @@ export namespace Attribute {
      * The latter feature is not yet available outside of dot.
      *
      * @see {@link https://graphviz.org/docs/attrs/concentrate/ Node, Edge and Graph Attributes#concentrate}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | G |
+     *
      * @category Attribute
      */
     concentrate: 'concentrate';
@@ -676,10 +767,14 @@ export namespace Attribute {
      * ![constraint](https://graphviz.org/_pages/doc/info/constraint.gif)
      *
      * @see {@link https://graphviz.org/docs/attrs/constraint/ Node, Edge and Graph Attributes#constraint}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault TRUE
-     * @graphvizNotes dot only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | TRUE |
+     * | used by | E |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     constraint: 'constraint';
@@ -688,9 +783,13 @@ export namespace Attribute {
      * If true, attach edge label to edge by a 2-segment polyline, underlining the label, then going to the closest point of spline.
      *
      * @see {@link https://graphviz.org/docs/attrs/decorate/ Node, Edge and Graph Attributes#decorate}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | E |
+     *
      * @category Attribute
      */
     decorate: 'decorate';
@@ -700,11 +799,15 @@ export namespace Attribute {
      * If set too small, connected components may overlap. Only applicable if {@link pack}=false.
      *
      * @see {@link https://graphviz.org/docs/attrs/defaultdist/ Node, Edge and Graph Attributes#defaultdist}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 1+(avg. len)*sqrt(|V|)
-     * @graphvizMinimum epsilon
-     * @graphvizNotes neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 1+(avg. len)*sqrt(|V|) |
+     * | minimum | epsilon |
+     * | notes | neato only |
+     * | used by | G |
+     *
      * @category Attribute
      */
     defaultdist: 'defaultdist';
@@ -714,11 +817,15 @@ export namespace Attribute {
      * The maximum value allowed is 10.
      *
      * @see {@link https://graphviz.org/docs/attrs/dim/ Node, Edge and Graph Attributes#dim}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault 2
-     * @graphvizMinimum 2
-     * @graphvizNotes sfdp, fdp, neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | 2 |
+     * | minimum | 2 |
+     * | notes | sfdp, fdp, neato only |
+     * | used by | G |
+     *
      * @category Attribute
      */
     dim: 'dim';
@@ -735,11 +842,15 @@ export namespace Attribute {
      * All other coordinates will be 2D and, at best, will reflect a projection of a higher-dimensional point onto the plane.
      *
      * @see {@link https://graphviz.org/docs/attrs/dimen/ Node, Edge and Graph Attributes#dimen}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault 2
-     * @graphvizMinimum 2
-     * @graphvizNotes sfdp, fdp, neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | 2 |
+     * | minimum | 2 |
+     * | used by | G |
+     * | notes | sfdp, fdp, neato only |
+     *
      * @category Attribute
      */
     dimen: 'dimen';
@@ -751,9 +862,13 @@ export namespace Attribute {
      * See {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/dir/ Node, Edge and Graph Attributes#dir}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/dirType/ dirType}
-     * @graphvizDefault "forward(directed) none(undirected)"
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/dirType/ dirType} |
+     * | default | forward(directed) none(undirected) |
+     * | used by | E |
+     *
      * @category Attribute
      */
     dir: 'dir';
@@ -765,10 +880,14 @@ export namespace Attribute {
      * The main difference is that, in the latter case, only these constraints are involved, so a faster solver can be used.
      *
      * @see {@link https://graphviz.org/docs/attrs/diredgeconstraints/ Node, Edge and Graph Attributes#diredgeconstraints}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}/{@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizNotes neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string}/{@link https://graphviz.org/docs/attr-types/bool bool} |
+     * | default | FALSE |
+     * | used by | G |
+     * | notes | neato only |
+     *
      * @category Attribute
      */
     diredgeconstraints: 'diredgeconstraints';
@@ -778,9 +897,13 @@ export namespace Attribute {
      * Positive values cause top part to be larger than bottom; negative values do the opposite.
      *
      * @see {@link https://graphviz.org/docs/attrs/distortion/ Node, Edge and Graph Attributes#distortion}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault -100
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | -100 |
+     * | used by | N |
+     *
      * @category Attribute
      */
     distortion: 'distortion';
@@ -791,10 +914,14 @@ export namespace Attribute {
      * For SVG output, it is used to guarantee that the dimensions in the output correspond to the correct number of points or inches.
      *
      * @see {@link https://graphviz.org/docs/attrs/dpi/ Node, Edge and Graph Attributes#dpi}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault "96.0 0.0"
-     * @graphvizNotes svg, bitmap output only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 96.0 0.0 |
+     * | used by | G |
+     * | notes | svg, bitmap output only |
+     *
      * @category Attribute
      */
     dpi: 'dpi';
@@ -806,10 +933,14 @@ export namespace Attribute {
      * See {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/edgeURL/ Node, Edge and Graph Attributes#edgeURL}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     edgeURL: 'edgeURL';
@@ -818,10 +949,14 @@ export namespace Attribute {
      * Synonym for {@link edgeURL}.
      *
      * @see {@link https://graphviz.org/docs/attrs/edgehref/ Node, Edge and Graph Attributes#edgehref}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     edgehref: 'edgehref';
@@ -832,10 +967,14 @@ export namespace Attribute {
      * If undefined, the value of the {@link target} is used.
      *
      * @see {@link https://graphviz.org/docs/attrs/edgetarget/ Node, Edge and Graph Attributes#edgetarget}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault <none>
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | <none> |
+     * | used by | E |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     edgetarget: 'edgetarget';
@@ -845,10 +984,14 @@ export namespace Attribute {
      * This is used only if the edge has a {@link URL} or {@link edgeURL} attribute.
      *
      * @see {@link https://graphviz.org/docs/attrs/edgetooltip/ Node, Edge and Graph Attributes#edgetooltip}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, cmap only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, cmap only |
+     *
      * @category Attribute
      */
     edgetooltip: 'edgetooltip';
@@ -857,10 +1000,15 @@ export namespace Attribute {
      * Terminating condition. If the length squared of all energy gradients are < **epsilon**, the algorithm stops.
      *
      * @see {@link https://graphviz.org/docs/attrs/epsilon/ Node, Edge and Graph Attributes#epsilon}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault .0001 * # nodes(mode == KK) .0001(mode == major)
-     * @graphvizNotes neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | .0001 |
+     * | minimum | 0 |
+     * | used by | G |
+     * | notes | neato only |
+     *
      * @category Attribute
      */
     epsilon: 'epsilon';
@@ -871,10 +1019,14 @@ export namespace Attribute {
      * This should normally be strictly less than {@link sep}.
      *
      * @see {@link https://graphviz.org/docs/attrs/esep/ Node, Edge and Graph Attributes#esep}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/addDouble/ addDouble}/{@link https://graphviz.org/_pages/doc/info/attrs.html#k:addPoint addPoint}
-     * @graphvizDefault 3
-     * @graphvizNotes not dot
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |\
+     * | type | {@link https://graphviz.org/docs/attr-types/addDouble/ addDouble}/{@link https://graphviz.org/_pages/doc/info/attrs.html#k:addPoint addPoint} |
+     * | default | 3 |
+     * | used by | G |
+     * | notes | not dot |
+     *
      * @category Attribute
      */
     esep: 'esep';
@@ -893,9 +1045,13 @@ export namespace Attribute {
      * Thus, if the root graph has defined a **fillcolor**, this will override a **color** or **bgcolor** attribute set for the cluster.
      *
      * @see {@link https://graphviz.org/docs/attrs/fillcolor/ Node, Edge and Graph Attributes#fillcolor}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/color/ color}/{@link https://graphviz.org/docs/attr-types/color/List colorList}
-     * @graphvizDefault "lightgrey(nodes) black(clusters)"
-     * @graphvizUsedBy NEC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/color/ color}/{@link https://graphviz.org/docs/attr-types/color/List colorList} |
+     * | default | lightgrey(nodes) black(clusters) |
+     * | used by | NEC |
+     *
      * @category Attribute
      */
     fillcolor: 'fillcolor';
@@ -914,9 +1070,13 @@ export namespace Attribute {
      * but all edges to the node ignore the label and only contact the node shape. No warning is given if the label is too large.
      *
      * @see {@link https://graphviz.org/docs/attrs/fixedsize/ Node, Edge and Graph Attributes#fixedsize}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}/string
-     * @graphvizDefault FALSE
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | N |
+     *
      * @category Attribute
      */
     fixedsize: 'fixedsize';
@@ -925,9 +1085,13 @@ export namespace Attribute {
      * Color used for text.
      *
      * @see {@link https://graphviz.org/docs/attrs/fontcolor/ Node, Edge and Graph Attributes#fontcolor}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/color/ color}
-     * @graphvizDefault black
-     * @graphvizUsedBy ENGC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/color/ color} |
+     * | default | black |
+     * | used by | ENGC |
+     *
      * @category Attribute
      */
     fontcolor: 'fontcolor';
@@ -954,9 +1118,12 @@ export namespace Attribute {
      * The lookup does support various aliases for the common fonts.
      *
      * @see {@link https://graphviz.org/docs/attrs/fontname/ Node, Edge and Graph Attributes#fontname}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault "Times-Roman"
-     * @graphvizUsedBy ENGC
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "Times-Roman" |
+     * | used by | ENGC |
+     *
      * @category Attribute
      */
     fontname: 'fontname';
@@ -970,10 +1137,13 @@ export namespace Attribute {
      * These last two options are useful with SVG viewers that support these richer fontname spaces.
      *
      * @see {@link https://graphviz.org/docs/attrs/fontnames/ Node, Edge and Graph Attributes#fontnames}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizNotes svg only
-     * @graphvizUsedBy G
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | G |
+     * | notes | svg only |
+     *
      * @category Attribute
      */
     fontnames: 'fontnames';
@@ -986,9 +1156,13 @@ export namespace Attribute {
      * Note that fontpath is an attribute of the root graph.
      *
      * @see {@link https://graphviz.org/docs/attrs/fontpath/ Node, Edge and Graph Attributes#fontpath}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault system-dependent
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | system-dependent |
+     * | used by | G |
+     *
      * @category Attribute
      */
     fontpath: 'fontpath';
@@ -997,10 +1171,14 @@ export namespace Attribute {
      * Font size, {@link https://graphviz.org/doc/info/attrs.html in points}, used for text.
      *
      * @see {@link https://graphviz.org/docs/attrs/fontsize/ Node, Edge and Graph Attributes#fontsize}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 14
-     * @graphvizMinimum 1
-     * @graphvizUsedBy ENGC
+     *
+     * | Key | Value |
+     * | --- | --- |\
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 14 |
+     * | minimum | 1 |
+     * | used by | ENGC |
+     *
      * @category Attribute
      */
     fontsize: 'fontsize';
@@ -1010,9 +1188,13 @@ export namespace Attribute {
      * even if there is some overlap with nodes or other labels.
      *
      * @see {@link https://graphviz.org/docs/attrs/forcelabels/ Node, Edge and Graph Attributes#forcelabels}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault TRUE
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | TRUE |
+     * | used by | G |
+     *
      * @category Attribute
      */
     forcelabels: 'forcelabels';
@@ -1026,9 +1208,12 @@ export namespace Attribute {
      * If unset, the default angle is 0.
      *
      * @see {@link https://graphviz.org/docs/attrs/gradientangle/ Node, Edge and Graph Attributes#gradientangle}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault ""
-     * @graphvizUsedBy NCG
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | "" |
+     * | used by | NCG |
+     *
      * @category Attribute
      */
     gradientangle: 'gradientangle';
@@ -1038,10 +1223,14 @@ export namespace Attribute {
      * have the same group attribute, parameters are set to avoid crossings and keep the edges straight.
      *
      * @see {@link https://graphviz.org/docs/attrs/group/ Node, Edge and Graph Attributes#group}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizNotes dot only
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | N |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     group: 'group';
@@ -1052,10 +1241,14 @@ export namespace Attribute {
      * See {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/headURL/ Node, Edge and Graph Attributes#headURL}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     headURL: 'headURL';
@@ -1064,10 +1257,14 @@ export namespace Attribute {
      * Position of an edge's head label, {@link https://graphviz.org/doc/info/attrs.html in points}.
      * The position indicates the center of the label.
      *
-     * @see {@link https://graphviz.org/docs/attrs/head_lp/ Node, Edge and Graph Attributes#head_lp}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/point/ point}
-     * @graphvizNotes write only
-     * @graphvizUsedBy E
+     * @see {@link https://graphviz.org/docs/attrs/head_lp/ Node, Edge and Graph Attributes#head_lp}\
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/point/ point} |
+     * | used by | E |
+     * | notes | write only |
+     *
      * @category Attribute
      */
     head_lp: 'head_lp';
@@ -1077,9 +1274,13 @@ export namespace Attribute {
      * the end of the edge goes to the center of the node, or the center of a port, if applicable.
      *
      * @see {@link https://graphviz.org/docs/attrs/headclip/ Node, Edge and Graph Attributes#headclip}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault TRUE
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | TRUE |
+     * | used by | E |
+     *
      * @category Attribute
      */
     headclip: 'headclip';
@@ -1088,10 +1289,14 @@ export namespace Attribute {
      * Synonym for {@link headURL}.
      *
      * @see {@link https://graphviz.org/docs/attrs/headhref/ Node, Edge and Graph Attributes#headhref}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     headhref: 'headhref';
@@ -1101,9 +1306,13 @@ export namespace Attribute {
      * See {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/headlabel/ Node, Edge and Graph Attributes#headlabel}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/lblString/ lblString}
-     * @graphvizDefault center
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/lblString/ lblString} |
+     * | default | center |
+     * | used by | E |
+     *
      * @category Attribute
      */
     headlabel: 'headlabel';
@@ -1114,10 +1323,14 @@ export namespace Attribute {
      * See {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/headport/ Node, Edge and Graph Attributes#headport}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/portPos/ portPos}
-     * @graphvizDefault <none>
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/portPos/ portPos} |
+     * | default | <none> |
+     * | used by | E |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     headport: 'headport';
@@ -1128,10 +1341,14 @@ export namespace Attribute {
      * If undefined, the value of the {@link target} is used.
      *
      * @see {@link https://graphviz.org/docs/attrs/headtarget/ Node, Edge and Graph Attributes#headtarget}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, cmap only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, cmap only |
+     *
      * @category Attribute
      */
     headtarget: 'headtarget';
@@ -1141,10 +1358,14 @@ export namespace Attribute {
      * This is used only if the edge has a {@link headURL} attribute.
      *
      * @see {@link https://graphviz.org/docs/attrs/headtooltip/ Node, Edge and Graph Attributes#headtooltip}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault 0.5
-     * @graphvizMinimum 0.02
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | 0.5 |
+     * | minimum | 0.02 |
+     * | used by | N |
+     *
      * @category Attribute
      */
     headtooltip: 'headtooltip';
@@ -1162,10 +1383,15 @@ export namespace Attribute {
      * If neither is set explicitly, the minimum of the two default values is used.
      *
      * @see {@link https://graphviz.org/docs/attrs/height/ Node, Edge and Graph Attributes#height}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, postscript, map only
-     * @graphvizUsedBy GCNE
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 0.5 |
+     * | minimum | 0.02 |
+     * | used by | N |
+     * | notes | svg, postscript, map only |
+     *
      * @category Attribute
      */
     height: 'height';
@@ -1174,10 +1400,14 @@ export namespace Attribute {
      * Synonym for {@link URL}.
      *
      * @see {@link https://graphviz.org/docs/attrs/href/ Node, Edge and Graph Attributes#href}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, postscript, map only
-     * @graphvizUsedBy GCNE
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | GCNE |
+     * | notes | svg, postscript, map only |
+     *
      * @category Attribute
      */
     href: 'href';
@@ -1195,9 +1425,14 @@ export namespace Attribute {
      * By making these distinct, the user can include multiple image maps in the same document.
      *
      * @see {@link https://graphviz.org/docs/attrs/id/ Node, Edge and Graph Attributes#id}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | GCNE |
+     * | notes | svg, postscript, map only |
+     *
      * @category Attribute
      */
     id: 'id';
@@ -1218,9 +1453,13 @@ export namespace Attribute {
      * Unlike with the {@link shapefile} attribute, the image is treated as node content rather than the entire node. In particular, an image can be contained in a node of any shape, not just a rectangle.
      *
      * @see {@link https://graphviz.org/docs/attrs/image/ Node, Edge and Graph Attributes#image}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | N |
+     *
      * @category Attribute
      */
     image: 'image';
@@ -1232,9 +1471,13 @@ export namespace Attribute {
      * If imagepath is not set, relative pathnames for the image file will be interpreted with respect to the current working directory.
      *
      * @see {@link https://graphviz.org/docs/attrs/imagepath/ Node, Edge and Graph Attributes#imagepath}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | G |
+     *
      * @category Attribute
      */
     imagepath: 'imagepath';
@@ -1258,9 +1501,13 @@ export namespace Attribute {
      * | br | Bottom Right                  |
      *
      * @see {@link https://graphviz.org/docs/attrs/imagepos/ Node, Edge and Graph Attributes#imagepos}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault "mc"
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | mc |
+     * | used by | N |
+     *
      * @category Attribute
      */
     imagepos: 'imagepos';
@@ -1278,9 +1525,13 @@ export namespace Attribute {
      * As with the case of expansion, if imagescale=true, width and height are scaled uniformly.
      *
      * @see {@link https://graphviz.org/docs/attrs/imagescale/ Node, Edge and Graph Attributes#imagescale}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}/string
-     * @graphvizDefault FALSE
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool}/ {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | FALSE |
+     * | used by | N |
+     *
      * @category Attribute
      */
     imagescale: 'imagescale';
@@ -1297,10 +1548,14 @@ export namespace Attribute {
      * A value of 0 is equivalent to inputscale=72.
      *
      * @see {@link https://graphviz.org/docs/attrs/inputscale/ Node, Edge and Graph Attributes#inputscale}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault <none>
-     * @graphvizNotes fdp, neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | <none> |
+     * | used by | G |
+     * | notes | fdp, neato only |
+     *
      * @category Attribute
      */
     inputscale: 'inputscale';
@@ -1315,11 +1570,13 @@ export namespace Attribute {
      * To get an HTML-like label, the label attribute value itself must be an HTML string.
      *
      * @see {@link https://graphviz.org/docs/attrs/label/ Node, Edge and Graph Attributes#label}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/lblString/ lblString}
-     * @graphvizDefaultValu
-     * "\N" (nodes)
-     * "" (otherwise)
-     * @graphvizUsedBy ENGC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/lblString/ lblString} |
+     * | default | "\N" (nodes) "" (otherwise) |
+     * | used by | ENGC |
+     *
      * @category Attribute
      */
     label: 'label';
@@ -1329,10 +1586,14 @@ export namespace Attribute {
      * This value overrides any {@link URL} defined for the edge.
      *
      * @see {@link https://graphviz.org/docs/attrs/labelURL/ Node, Edge and Graph Attributes#labelURL}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     labelURL: 'labelURL';
@@ -1345,11 +1606,15 @@ export namespace Attribute {
      * Finally, a value of 3 invokes a two-step process of overlap removal and straightening.
      *
      * @see {@link https://graphviz.org/docs/attrs/label_scheme/ Node, Edge and Graph Attributes#label_scheme}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault 0
-     * @graphvizMinimum 0
-     * @graphvizNotes sfdp only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | 0 |
+     * | minimum | 0 |
+     * | used by | G |
+     * | notes | sfdp only |
+     *
      * @category Attribute
      */
     label_scheme: 'label_scheme';
@@ -1362,10 +1627,14 @@ export namespace Attribute {
      * The angle, in degrees, specifies the rotation from the 0 degree ray, with positive angles moving counterclockwise and negative angles moving clockwise.
      *
      * @see {@link https://graphviz.org/docs/attrs/labelangle/ Node, Edge and Graph Attributes#labelangle}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault -25
-     * @graphvizMinimum -180
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | -25 |
+     * | minimum | -180 |
+     * | used by | E |
+     *
      * @category Attribute
      */
     labelangle: 'labelangle';
@@ -1376,10 +1645,14 @@ export namespace Attribute {
      * See {@link labelangle} for more details.
      *
      * @see {@link https://graphviz.org/docs/attrs/labeldistance/ Node, Edge and Graph Attributes#labeldistance}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 1
-     * @graphvizMinimum 0
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 1 |
+     * | minimum | 0 |
+     * | used by | E |
+     *
      * @category Attribute
      */
     labeldistance: 'labeldistance';
@@ -1389,9 +1662,13 @@ export namespace Attribute {
      * In particular, it may appear on top of other edges.
      *
      * @see {@link https://graphviz.org/docs/attrs/labelfloat/ Node, Edge and Graph Attributes#labelfloat}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | E |
+     *
      * @category Attribute
      */
     labelfloat: 'labelfloat';
@@ -1401,9 +1678,13 @@ export namespace Attribute {
      * If not set, defaults to edge's fontcolor.
      *
      * @see {@link https://graphviz.org/docs/attrs/labelfontcolor/ Node, Edge and Graph Attributes#labelfontcolor}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/color/ color}
-     * @graphvizDefault black
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/color/ color} |
+     * | default | black |
+     * | used by | E |
+     *
      * @category Attribute
      */
     labelfontcolor: 'labelfontcolor';
@@ -1413,9 +1694,13 @@ export namespace Attribute {
      * If not set, defaults to edge's fontname.
      *
      * @see {@link https://graphviz.org/docs/attrs/labelfontname/ Node, Edge and Graph Attributes#labelfontname}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault "Times-Roman"
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "Times-Roman" |
+     * | used by | E |
+     *
      * @category Attribute
      */
     labelfontname: 'labelfontname';
@@ -1425,10 +1710,14 @@ export namespace Attribute {
      * If not set, defaults to edge's fontsize.
      *
      * @see {@link https://graphviz.org/docs/attrs/labelfontsize/ Node, Edge and Graph Attributes#labelfontsize}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 14
-     * @graphvizMinimum 1
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 14 |
+     * | minimum | 1 |
+     * | used by | E |
+     *
      * @category Attribute
      */
     labelfontsize: 'labelfontsize';
@@ -1437,10 +1726,14 @@ export namespace Attribute {
      * Synonym for {@link labelURL}.
      *
      * @see {@link https://graphviz.org/docs/attrs/labelhref/ Node, Edge and Graph Attributes#labelhref}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     labelhref: 'labelhref';
@@ -1452,9 +1745,13 @@ export namespace Attribute {
      * Thus, if the root graph sets **labeljust** to "l", the subgraph inherits this value.
      *
      * @see {@link https://graphviz.org/docs/attrs/labeljust/ Node, Edge and Graph Attributes#labeljust}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault "c"
-     * @graphvizUsedBy GC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "c" |
+     * | used by | GC |
+     *
      * @category Attribute
      */
     labeljust: 'labeljust';
@@ -1472,12 +1769,13 @@ export namespace Attribute {
      * In the default case, the label is vertically centered.
      *
      * @see {@link https://graphviz.org/docs/attrs/labelloc/ Node, Edge and Graph Attributes#labelloc}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault
-     * "t"(clusters)
-     * "b"(root graphs)
-     * "c"(nodes)
-     * @graphvizUsedBy NGC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "t" (clusters) "b" (root graphs) "c" (nodes) |
+     * | used by | NGC |
+     *
      * @category Attribute
      */
     labelloc: 'labelloc';
@@ -1488,10 +1786,14 @@ export namespace Attribute {
      * If undefined, the value of the {@link target} is used.
      *
      * @see {@link https://graphviz.org/docs/attrs/labeltarget/ Node, Edge and Graph Attributes#labeltarget}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault <none>
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | <none> |
+     * | used by | E |
+     * | notes | svg, cmap only |
+     *
      * @category Attribute
      */
     labeltarget: 'labeltarget';
@@ -1501,10 +1803,14 @@ export namespace Attribute {
      * This is used only if the edge has a {@link URL} or {@link labelURL} attribute.
      *
      * @see {@link https://graphviz.org/docs/attrs/labeltooltip/ Node, Edge and Graph Attributes#labeltooltip}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, cmap only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, cmap only |
+     *
      * @category Attribute
      */
     labeltooltip: 'labeltooltip';
@@ -1514,9 +1820,13 @@ export namespace Attribute {
      * Synonymous with {@link rotate rotate=90} or {@link orientation orientation=landscape}.
      *
      * @see {@link https://graphviz.org/docs/attrs/landscape/ Node, Edge and Graph Attributes#landscape}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | G |
+     *
      * @category Attribute
      */
     landscape: 'landscape';
@@ -1525,9 +1835,13 @@ export namespace Attribute {
      * Specifies layers in which the node, edge or cluster is present.
      *
      * @see {@link https://graphviz.org/docs/attrs/layer/ Node, Edge and Graph Attributes#layer}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:layerRange layerRange}
-     * @graphvizDefault ""
-     * @graphvizUsedBy ENC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/_pages/doc/info/attrs.html#k:layerRange layerRange} |
+     * | default | "" |
+     * | used by | ENC |
+     *
      * @category Attribute
      */
     layer: 'layer';
@@ -1536,9 +1850,13 @@ export namespace Attribute {
      * Specifies the separator characters used to split an attribute of type {@link layerRange} into a list of ranges.
      *
      * @see {@link https://graphviz.org/docs/attrs/layerlistsep/ Node, Edge and Graph Attributes#layerlistsep}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | G |
+     *
      * @category Attribute
      */
     layerlistsep: 'layerlistsep';
@@ -1549,9 +1867,13 @@ export namespace Attribute {
      * For more information, see the page {@link https://graphviz.org/faq/#FaqOverlays How to use drawing layers (overlays)}.
      *
      * @see {@link https://graphviz.org/docs/attrs/layers/ Node, Edge and Graph Attributes#layers}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:layerList layerList}
-     * @graphvizDefault ""
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/_pages/doc/info/attrs.html#k:layerList layerList} |
+     * | default | "" |
+     * | used by | G |
+     *
      * @category Attribute
      */
     layers: 'layers';
@@ -1560,9 +1882,13 @@ export namespace Attribute {
      * Selects a list of layers to be emitted.
      *
      * @see {@link https://graphviz.org/docs/attrs/layerselect/ Node, Edge and Graph Attributes#layerselect}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:layerRange layerRange}
-     * @graphvizDefault ""
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/_pages/doc/info/attrs.html#k:layerRange layerRange} |
+     * | default | "" |
+     * | used by | G |
+     *
      * @category Attribute
      */
     layerselect: 'layerselect';
@@ -1571,9 +1897,13 @@ export namespace Attribute {
      * Specifies the separator characters used to split the {@link layers} attribute into a list of layer names.
      *
      * @see {@link https://graphviz.org/docs/attrs/layersep/ Node, Edge and Graph Attributes#layersep}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault " :\t"
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | " :\t" |
+     * | used by | G |
+     *
      * @category Attribute
      */
     layersep: 'layersep';
@@ -1585,9 +1915,13 @@ export namespace Attribute {
      * For example, a graph containing position information from a layout might want to record what the associated layout algorithm was.
      *
      * @see {@link https://graphviz.org/docs/attrs/layout/ Node, Edge and Graph Attributes#layout}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | G |
+     *
      * @category Attribute
      */
     layout: 'layout';
@@ -1596,12 +1930,15 @@ export namespace Attribute {
      * Preferred edge length, in inches.
      *
      * @see {@link https://graphviz.org/docs/attrs/len/ Node, Edge and Graph Attributes#len}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault
-     * 1.0(neato)
-     * 0.3(fdp)
-     * @graphvizNotes fdp, neato only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 1.0 (neato) 0.3 (fdp) |
+     * | minimum | 0.0 |
+     * | used by | E |
+     * | notes | fdp, neato only |
+     *
      * @category Attribute
      */
     len: 'len';
@@ -1610,11 +1947,15 @@ export namespace Attribute {
      * Number of levels allowed in the multilevel scheme.
      *
      * @see {@link https://graphviz.org/docs/attrs/levels/ Node, Edge and Graph Attributes#levels}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault MAXINT
-     * @graphvizMinimum 0
-     * @graphvizNotes sfdp only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | MAXINT |
+     * | minimum | 0 |
+     * | used by | G |
+     * | notes | sfdp only |
+     *
      * @category Attribute
      */
     levels: 'levels';
@@ -1625,10 +1966,14 @@ export namespace Attribute {
      * On the other hand, negative values will relax the constraints by allowing some overlap between the levels.
      *
      * @see {@link https://graphviz.org/docs/attrs/levelsgap/ Node, Edge and Graph Attributes#levelsgap}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 0
-     * @graphvizNotes neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 0 |
+     * | used by | G |
+     * | notes | neato only |
+     *
      * @category Attribute
      */
     levelsgap: 'levelsgap';
@@ -1640,10 +1985,14 @@ export namespace Attribute {
      * See the {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/lhead/ Node, Edge and Graph Attributes#lhead}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizNotes dot only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     lhead: 'lhead';
@@ -1652,9 +2001,13 @@ export namespace Attribute {
      * Height of graph or cluster label, in inches.
      *
      * @see {@link https://graphviz.org/docs/attrs/lheight/ Node, Edge and Graph Attributes#lheight}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizNotes write only
-     * @graphvizUsedBy GC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | used by | GC |
+     * | notes | write only |
+     *
      * @category Attribute
      */
     lheight: 'lheight';
@@ -1664,9 +2017,13 @@ export namespace Attribute {
      * The position indicates the center of the label.
      *
      * @see {@link https://graphviz.org/docs/attrs/lp/ Node, Edge and Graph Attributes#lp}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/point/ point}
-     * @graphvizNotes write only
-     * @graphvizUsedBy EGC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/point/ point} |
+     * | used by | EGC |
+     * | notes | write only |
+     *
      * @category Attribute
      */
     lp: 'lp';
@@ -1677,10 +2034,14 @@ export namespace Attribute {
      * See the {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/ltail/ Node, Edge and Graph Attributes#ltail}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizNotes dot only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     ltail: 'ltail';
@@ -1689,9 +2050,13 @@ export namespace Attribute {
      * Width of graph or cluster label, in inches.
      *
      * @see {@link https://graphviz.org/docs/attrs/lwidth/ Node, Edge and Graph Attributes#lwidth}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizNotes write only
-     * @graphvizUsedBy GC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | used by | GC |
+     * | notes | write only |
+     *
      * @category Attribute
      */
     lwidth: 'lwidth';
@@ -1712,9 +2077,13 @@ export namespace Attribute {
      * By default, the value is 0.11,0.055.
      *
      * @see {@link https://graphviz.org/docs/attrs/margin/ Node, Edge and Graph Attributes#margin}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/point/ point}
-     * @graphvizDefault <device-dependent>
-     * @graphvizUsedBy NCG
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/point/ point} |
+     * | default | <device-dependent> |
+     * | used by | NCG |
+     *
      * @category Attribute
      */
     margin: 'margin';
@@ -1723,13 +2092,14 @@ export namespace Attribute {
      * Sets the number of iterations used.
      *
      * @see {@link https://graphviz.org/docs/attrs/maxiter/ Node, Edge and Graph Attributes#maxiter}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault
-     * 100 * # nodes(mode == KK)
-     * 200(mode == major)
-     * 600(fdp)
-     * @graphvizNotes fdp, neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | 100 * # nodes(mode == KK) 200(mode == major) 600(fdp) |
+     * | used by | G |
+     * | notes | fdp, neato only |
+     *
      * @category Attribute
      */
     maxiter: 'maxiter';
@@ -1739,10 +2109,14 @@ export namespace Attribute {
      * These correspond to the number of tries without improvement before quitting and the maximum number of iterations in each pass.
      *
      * @see {@link https://graphviz.org/docs/attrs/mclimit/ Node, Edge and Graph Attributes#mclimit}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 1
-     * @graphvizNotes dot only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 1 |
+     * | used by | G |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     mclimit: 'mclimit';
@@ -1751,11 +2125,15 @@ export namespace Attribute {
      * Specifies the minimum separation between all nodes.
      *
      * @see {@link https://graphviz.org/docs/attrs/mindist/ Node, Edge and Graph Attributes#mindist}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 1
-     * @graphvizMinimum 0
-     * @graphvizNotes circo only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 1 |
+     * | minimum | 0 |
+     * | used by | G |
+     * | notes | circo only |
+     *
      * @category Attribute
      */
     mindist: 'mindist';
@@ -1764,11 +2142,15 @@ export namespace Attribute {
      * Minimum edge length (rank difference between head and tail).
      *
      * @see {@link https://graphviz.org/docs/attrs/minlen/ Node, Edge and Graph Attributes#minlen}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault 1
-     * @graphvizMinimum 0
-     * @graphvizNotes dot only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | 1 |
+     * | minimum | 0 |
+     * | used by | E |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     minlen: 'minlen';
@@ -1787,10 +2169,14 @@ export namespace Attribute {
      * Setting **mode** to "maxent" causes a similar model to be run but one that also takes into account edge lengths specified by the "len" attribute.
      *
      * @see {@link https://graphviz.org/docs/attrs/mode/ Node, Edge and Graph Attributes#mode}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault major
-     * @graphvizNotes neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | major |
+     * | used by | G |
+     * | notes | neato only |
+     *
      * @category Attribute
      */
     mode: 'mode';
@@ -1812,10 +2198,14 @@ export namespace Attribute {
      * Thus, by supplying a complete graph, the input can specify all of the relevant distances.
      *
      * @see {@link https://graphviz.org/docs/attrs/model/ Node, Edge and Graph Attributes#model}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault shortpath
-     * @graphvizNotes neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | shortpath |
+     * | used by | G |
+     * | notes | neato only |
+     *
      * @category Attribute
      */
     model: 'model';
@@ -1824,10 +2214,14 @@ export namespace Attribute {
      * If Graphviz is built with MOSEK defined, mode=ipsep and mosek=true, the Mosek software (<www.mosek.com>) is use to solve the ipsep constraints.
      *
      * @see {@link https://graphviz.org/docs/attrs/mosek/ Node, Edge and Graph Attributes#mosek}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizNotes neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | G |
+     * | notes | neato only |
+     *
      * @category Attribute
      */
     mosek: 'mosek';
@@ -1843,10 +2237,14 @@ export namespace Attribute {
      * Rank constraints will usually take precedence over edge constraints.
      *
      * @see {@link https://graphviz.org/docs/attrs/newrank/ Node, Edge and Graph Attributes#newrank}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizNotes dot only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | G |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     newrank: 'newrank';
@@ -1857,10 +2255,14 @@ export namespace Attribute {
      * For other layouts, this affects the spacing between loops on a single node, or multiedges between a pair of nodes.
      *
      * @see {@link https://graphviz.org/docs/attrs/nodesep/ Node, Edge and Graph Attributes#nodesep}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 0.25
-     * @graphvizMinimum 0.02
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 0.25 |
+     * | minimum | 0.02 |
+     * | used by | G |
+     *
      * @category Attribute
      */
     nodesep: 'nodesep';
@@ -1873,9 +2275,13 @@ export namespace Attribute {
      * For example, if the attribute is set, the first label line is long, and the second is shorter and left-justified, the second will align with the left-most character in the first line, regardless of how large the node might be.
      *
      * @see {@link https://graphviz.org/docs/attrs/nojustify/ Node, Edge and Graph Attributes#nojustify}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizUsedBy GCNE
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | GCNE |
+     *
      * @category Attribute
      */
     nojustify: 'nojustify';
@@ -1886,10 +2292,14 @@ export namespace Attribute {
      * **NOTE**: Since the attribute is evaluated first as a number, 0 and 1 cannot be used for false and true.
      *
      * @see {@link https://graphviz.org/docs/attrs/normalize/ Node, Edge and Graph Attributes#normalize}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizNotes not dot
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | G |
+     * | notes | not dot |
+     *
      * @category Attribute
      */
     normalize: 'normalize';
@@ -1900,10 +2310,14 @@ export namespace Attribute {
      * To avoid this translation, set notranslate to true.
      *
      * @see {@link https://graphviz.org/docs/attrs/notranslate/ Node, Edge and Graph Attributes#notranslate}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizNotes neato only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | G |
+     * | notes | neato only |
+     *
      * @category Attribute
      */
     notranslate: 'notranslate';
@@ -1914,9 +2328,13 @@ export namespace Attribute {
      * If defined, # iterations = **nslimit(1)** * # nodes; otherwise, # iterations = MAXINT.
      *
      * @see {@link https://graphviz.org/docs/attrs/nslimit/ Node, Edge and Graph Attributes#nslimit}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizNotes dot only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | used by | G |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     nslimit: 'nslimit';
@@ -1927,9 +2345,13 @@ export namespace Attribute {
      * If defined, # iterations = **nslimit(1)** * # nodes; otherwise, # iterations = MAXINT.
      *
      * @see {@link https://graphviz.org/docs/attrs/nslimit1/ Node, Edge and Graph Attributes#nslimit1}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizNotes dot only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | used by | G |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     nslimit1: 'nslimit1';
@@ -1938,10 +2360,14 @@ export namespace Attribute {
      * Angle, in degrees, used to rotate polygon node shapes. For any number of polygon sides, 0 degrees rotation results in a flat base.
      *
      * @see {@link https://graphviz.org/docs/attrs/ordering/ Node, Edge and Graph Attributes#ordering}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizNotes dot only
-     * @graphvizUsedBy GN
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | GN |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     ordering: 'ordering';
@@ -1950,9 +2376,13 @@ export namespace Attribute {
      * If "[lL]*", set graph orientation to landscape Used only if {@link rotate} is not defined.
      *
      * @see {@link https://graphviz.org/docs/attrs/orientation/ Node, Edge and Graph Attributes#orientation}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | G |
+     *
      * @category Attribute
      */
     orientation: 'orientation';
@@ -1961,9 +2391,13 @@ export namespace Attribute {
      * Specify order in which nodes and edges are drawn.
      *
      * @see {@link https://graphviz.org/docs/attrs/outputorder/ Node, Edge and Graph Attributes#outputorder}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:outputMode outputMode}
-     * @graphvizDefault breadthfirst
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/_pages/doc/info/attrs.html#k:outputMode outputMode} |
+     * | default | breadthfirst |
+     * | used by | G |
+     *
      * @category Attribute
      */
     outputorder: 'outputorder';
@@ -2019,10 +2453,14 @@ export namespace Attribute {
      * For these, orthogonal ordering is only preserved among nodes related by an edge.
      *
      * @see {@link https://graphviz.org/docs/attrs/overlap/ Node, Edge and Graph Attributes#overlap}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}/{@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault TRUE
-     * @graphvizNotes not dot
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string}/{@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | TRUE |
+     * | used by | G |
+     * | notes | not dot |
+     *
      * @category Attribute
      */
     overlap: 'overlap';
@@ -2036,11 +2474,15 @@ export namespace Attribute {
      * If overlap_scaling is zero, no scaling is done.
      *
      * @see {@link https://graphviz.org/docs/attrs/overlap_scaling/ Node, Edge and Graph Attributes#overlap_scaling}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault -4
-     * @graphvizMinimum -1.00E+10
-     * @graphvizNotes prism only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | -4 |
+     * | minimum | -1.00E+10 |
+     * | used by | G |
+     * | notes | prism only |
+     *
      * @category Attribute
      */
     overlap_scaling: 'overlap_scaling';
@@ -2049,10 +2491,14 @@ export namespace Attribute {
      * If true, the overlap removal algorithm will perform a compression pass to reduce the size of the layout.
      *
      * @see {@link https://graphviz.org/docs/attrs/overlap_shrink/ Node, Edge and Graph Attributes#overlap_shrink}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault TRUE
-     * @graphvizNotes prism only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | TRUE |
+     * | used by | G |
+     * | notes | prism only |
+     *
      * @category Attribute
      */
     overlap_shrink: 'overlap_shrink';
@@ -2067,9 +2513,13 @@ export namespace Attribute {
      * For layouts which always do packing, such a twopi, the **pack** attribute is just used to set the margin.
      *
      * @see {@link https://graphviz.org/docs/attrs/pack/ Node, Edge and Graph Attributes#pack}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}/int
-     * @graphvizDefault FALSE
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool}/{@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | FALSE |
+     * | used by | G |
+     *
      * @category Attribute
      */
     pack: 'pack';
@@ -2079,9 +2529,13 @@ export namespace Attribute {
      * Note that defining {@link packmode} will automatically turn on packing as though one had set `pack=true`.
      *
      * @see {@link https://graphviz.org/docs/attrs/packmode/ Node, Edge and Graph Attributes#packmode}
-     * @graphvizType {@link https://graphviz.org/docs/attrs/packmode/ packMode}
-     * @graphvizDefault node
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attrs/packmode/ packMode} |
+     * | default | node |
+     * | used by | G |
+     *
      * @category Attribute
      */
     packmode: 'packmode';
@@ -2095,9 +2549,13 @@ export namespace Attribute {
      * to avoid having nodes and edges abutting the boundary of the drawn region.
      *
      * @see {@link https://graphviz.org/docs/attrs/pad/ Node, Edge and Graph Attributes#pad}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/point/ point}
-     * @graphvizDefault 0.0555 (4 points)
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/point/ point} |
+     * | default | 0.0555(4 points) |
+     * | used by | G |
+     *
      * @category Attribute
      */
     pad: 'pad';
@@ -2116,8 +2574,12 @@ export namespace Attribute {
      * Or use the {@link viewport} to generate multiple files.
      *
      * @see {@link https://graphviz.org/docs/attrs/page/ Node, Edge and Graph Attributes#page}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/point/ point}
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/point/ point} |
+     * | used by | G |
+     *
      * @category Attribute
      */
     page: 'page';
@@ -2126,9 +2588,13 @@ export namespace Attribute {
      * If the page attribute is set and applicable, this attribute specifies the order in which the pages are emitted. This is limited to one of the 8 row or column major orders.
      *
      * @see {@link https://graphviz.org/docs/attrs/pagedir/ Node, Edge and Graph Attributes#pagedir}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:pagedir pagedir}
-     * @graphvizDefault BL
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/_pages/doc/info/attrs.html#k:pagedir pagedir} |
+     * | default | BL |
+     * | used by | G |
+     *
      * @category Attribute
      */
     pagedir: 'pagedir';
@@ -2143,9 +2609,13 @@ export namespace Attribute {
      * Thus, if the root graph has defined a **pencolor**, this will override a **color** or **bgcolor** attribute set for the cluster.
      *
      * @see {@link https://graphviz.org/docs/attrs/pagedir/ Node, Edge and Graph Attributes#pagedir}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/color/ color}
-     * @graphvizDefault black
-     * @graphvizUsedBy C
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/color/ color} |
+     * | default | black |
+     * | used by | C |
+     *
      * @category Attribute
      */
     pencolor: 'pencolor';
@@ -2159,10 +2629,14 @@ export namespace Attribute {
      * If both are used, penwidth will be used.
      *
      * @see {@link https://graphviz.org/docs/attrs/penwidth/ Node, Edge and Graph Attributes#penwidth}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 1
-     * @graphvizMinimum 0
-     * @graphvizUsedBy CNE
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 1 |
+     * | minimum | 0 |
+     * | used by | CNE |
+     *
      * @category Attribute
      */
     penwidth: 'penwidth';
@@ -2174,12 +2648,14 @@ export namespace Attribute {
      * Also, 1 is the maximum peripheries value for clusters.
      *
      * @see {@link https://graphviz.org/docs/attrs/peripheries/ Node, Edge and Graph Attributes#peripheries}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault
-     * shape default(nodes)
-     * 1(clusters)
-     * @graphvizMinimum 0
-     * @graphvizUsedBy NC
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | shape default(nodes) 1(clusters) |
+     * | minimum | 0 |
+     * | used by | NC |
+     *
      * @category Attribute
      */
     peripheries: 'peripheries';
@@ -2197,10 +2673,14 @@ export namespace Attribute {
      * However, if the graph specifies {@link overlap node overlap removal} or a change in {@link ratio aspect ratio}, node coordinates may still change.
      *
      * @see {@link https://graphviz.org/docs/attrs/pin/ Node, Edge and Graph Attributes#pin}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizNotes fdp, neato only
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | N |
+     * | notes | neato, fdp only |
+     *
      * @category Attribute
      */
     pin: 'pin';
@@ -2220,8 +2700,12 @@ export namespace Attribute {
      * Thus, neato -n can accept input correctly without requiring a -s flag and, in fact, ignores any such flag.
      *
      * @see {@link https://graphviz.org/docs/attrs/pos/ Node, Edge and Graph Attributes#pos}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/point/ point}/{@link https://graphviz.org/_pages/doc/info/attrs.html#k:smoothType splineType}
-     * @graphvizUsedBy EN
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/point/ point}/{@link https://graphviz.org/_pages/doc/info/attrs.html#k:smoothType splineType} |
+     * | used by | EN |
+     *
      * @category Attribute
      */
     pos: 'pos';
@@ -2233,10 +2717,14 @@ export namespace Attribute {
      * As a slight exception to the normal interpretation of bool, a value of "2" corresponds to "fast".
      *
      * @see {@link https://graphviz.org/docs/attrs/quadtree/ Node, Edge and Graph Attributes#quadtree}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:quadType quadType}/{@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault normal
-     * @graphvizNotes sfdp only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool}/{@link https://graphviz.org/_pages/doc/info/attrs.html#k:quadType quadType} |
+     * | default | normal |
+     * | used by | G |
+     * | notes | sfdp only |
+     *
      * @category Attribute
      */
     quadtree: 'quadtree';
@@ -2245,10 +2733,14 @@ export namespace Attribute {
      * If **quantum** > 0.0, node label dimensions will be rounded to integral multiples of the quantum.
      *
      * @see {@link https://graphviz.org/docs/attrs/quantum/ Node, Edge and Graph Attributes#quantum}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 0
-     * @graphvizMinimum 0
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 0 |
+     * | minimum | 0 |
+     * | used by | G |
+     *
      * @category Attribute
      */
     quantum: 'quantum';
@@ -2262,9 +2754,13 @@ export namespace Attribute {
      * (Note: the minimum rank is topmost or leftmost, and the maximum rank is bottommost or rightmost.)
      *
      * @see {@link https://graphviz.org/docs/attrs/rank/ Node, Edge and Graph Attributes#rank}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:rankType rankType}
-     * @graphvizNotes dot only
-     * @graphvizUsedBy S
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/_pages/doc/info/attrs.html#k:rankType rankType} |
+     * | used by | S |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     rank: 'rank';
@@ -2278,10 +2774,14 @@ export namespace Attribute {
      * See {@link https://graphviz.org/doc/info/shapes.html record shapes}.
      *
      * @see {@link https://graphviz.org/docs/attrs/rankdir/ Node, Edge and Graph Attributes#rankdir}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:rankdir rankdir}
-     * @graphvizDefault TB
-     * @graphvizNotes dot only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/_pages/doc/info/attrs.html#k:rankdir rankdir} |
+     * | default | TB |
+     * | used by | G |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     rankdir: 'rankdir';
@@ -2298,13 +2798,15 @@ export namespace Attribute {
      * If there are more circles than numbers, the last number is used as the increment for the remainder.
      *
      * @see {@link https://graphviz.org/docs/attrs/ranksep/ Node, Edge and Graph Attributes#ranksep}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/_pages/doc/info/attrs.html#k:doubleList doubleList}
-     * @graphvizDefault
-     * 0.5(dot)
-     * 1.0(twopi)
-     * @graphvizMinimum 0.02
-     * @graphvizNotes twopi, dot only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/_pages/doc/info/attrs.html#k:doubleList doubleList} |
+     * | default | 0.5(dot) 1.0(twopi) |
+     * | minimum | 0.02 |
+     * | used by | G |
+     * | notes | twopi, dot only |
+     *
      * @category Attribute
      */
     ranksep: 'ranksep';
@@ -2338,8 +2840,12 @@ export namespace Attribute {
      * This feature only works in dot.
      *
      * @see {@link https://graphviz.org/docs/attrs/ratio/ Node, Edge and Graph Attributes#ratio}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}/string
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | used by | G |
+     *
      * @category Attribute
      */
     ratio: 'ratio';
@@ -2349,9 +2855,13 @@ export namespace Attribute {
      * {@link https://graphviz.org/doc/info/attrs.html in points}.
      *
      * @see {@link https://graphviz.org/docs/attrs/rects/ Node, Edge and Graph Attributes#rects}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/rect/ rect}
-     * @graphvizNotes write only
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/rect/ rect} |
+     * | used by | N |
+     * | notes | write only |
+     *
      * @category Attribute
      */
     rects: 'rects';
@@ -2361,9 +2871,13 @@ export namespace Attribute {
      * the vertices of the polygon will lie on a circle whose center is the center of the node.
      *
      * @see {@link https://graphviz.org/docs/attrs/regular/ Node, Edge and Graph Attributes#regular}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault FALSE
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | FALSE |
+     * | used by | N |
+     *
      * @category Attribute
      */
     regular: 'regular';
@@ -2372,10 +2886,14 @@ export namespace Attribute {
      * If true and there are multiple clusters, run crossing minimization a second time.
      *
      * @see {@link https://graphviz.org/docs/attrs/remincross/ Node, Edge and Graph Attributes#remincross}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault TRUE
-     * @graphvizNotes dot only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | TRUE |
+     * | used by | G |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     remincross: 'remincross';
@@ -2385,11 +2903,15 @@ export namespace Attribute {
      * Values larger than 1 tend to reduce the warping effect at the expense of less clustering.
      *
      * @see {@link https://graphviz.org/docs/attrs/repulsiveforce/ Node, Edge and Graph Attributes#repulsiveforce}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 1
-     * @graphvizMinimum 0
-     * @graphvizNotes sfdp only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 1 |
+     * | minimum | 0 |
+     * | used by | G |
+     * | notes | sfdp only |
+     *
      * @category Attribute
      */
     repulsiveforce: 'repulsiveforce';
@@ -2398,12 +2920,14 @@ export namespace Attribute {
      * This is a synonym for the {@link dpi} attribute.
      *
      * @see {@link https://graphviz.org/docs/attrs/resolution/ Node, Edge and Graph Attributes#resolution}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault
-     * 96.0
-     * 0.0"
-     * @graphvizNotes svg, bitmap output only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 96.0 0.0 |
+     * | used by | G |
+     * | notes | svg, bitmap output only |
+     *
      * @category Attribute
      */
     resolution: 'resolution';
@@ -2422,13 +2946,14 @@ export namespace Attribute {
      * If more than one node in a component is marked as the root, twopi will pick one.
      *
      * @see {@link https://graphviz.org/docs/attrs/root/ Node, Edge and Graph Attributes#root}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}/{@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault
-     * <none>(graphs)
-     * false(nodes)
-     * @graphvizMinimum
-     * @graphvizNotes circo, twopi only
-     * @graphvizUsedBy GN
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string}/{@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | <none>(graphs) false(nodes) |
+     * | used by | GN |
+     * | notes | circo, twopi only |
+     *
      * @category Attribute
      */
     root: 'root';
@@ -2437,9 +2962,13 @@ export namespace Attribute {
      * If 90, set drawing orientation to landscape.
      *
      * @see {@link https://graphviz.org/docs/attrs/rotate/ Node, Edge and Graph Attributes#rotate}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault 0
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | 0 |
+     * | used by | G |
+     *
      * @category Attribute
      */
     rotate: 'rotate';
@@ -2448,10 +2977,14 @@ export namespace Attribute {
      * Causes the final layout to be rotated counter-clockwise by the specified number of degrees.
      *
      * @see {@link https://graphviz.org/docs/attrs/rotation/ Node, Edge and Graph Attributes#rotation}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 0
-     * @graphvizNotes sfdp only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 0 |
+     * | used by | G |
+     * | notes | sfdp only |
+     *
      * @category Attribute
      */
     rotation: 'rotation';
@@ -2463,10 +2996,14 @@ export namespace Attribute {
      * See {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/samehead/ Node, Edge and Graph Attributes#samehead}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizNotes dot only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     samehead: 'samehead';
@@ -2478,10 +3015,14 @@ export namespace Attribute {
      * See {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/sametail/ Node, Edge and Graph Attributes#sametail}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizNotes dot only
-     * @graphvizUsedBy E
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     sametail: 'sametail';
@@ -2491,11 +3032,13 @@ export namespace Attribute {
      * It plays the same role in neato, when adjusting the layout to avoid overlapping nodes, and in image maps.
      *
      * @see {@link https://graphviz.org/docs/attrs/samplepoints/ Node, Edge and Graph Attributes#samplepoints}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault
-     * 8(output)
-     * 20(overlap and image maps)
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | 8(output) 20(overlap and image maps) |
+     * | used by | N |
+     *
      * @category Attribute
      */
     samplepoints: 'samplepoints';
@@ -2505,9 +3048,12 @@ export namespace Attribute {
      * If only a single number is given, this is used for both factors.
      *
      * @see {@link https://graphviz.org/docs/attrs/scale/ Node, Edge and Graph Attributes#scale}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/point/ point}
-     * @graphvizNotes not dot
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/point/ point} |
+     * | used by | G |
+     *
      * @category Attribute
      */
     scale: 'scale';
@@ -2516,10 +3062,14 @@ export namespace Attribute {
      * During network simplex, maximum number of edges with negative cut values to search when looking for one with minimum cut value.
      *
      * @see {@link https://graphviz.org/docs/attrs/searchsize/ Node, Edge and Graph Attributes#searchsize}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault 30
-     * @graphvizNotes dot only
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | 30 |
+     * | used by | G |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     searchsize: 'searchsize';
@@ -2537,10 +3087,14 @@ export namespace Attribute {
      * If unset but {@link esep} is defined, the sep values will be set to the esep values divided by 0.8. If esep is unset, the default value is used.
      *
      * @see {@link https://graphviz.org/docs/attrs/sep/ Node, Edge and Graph Attributes#sep}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/addDouble/ addDouble}/{@link https://graphviz.org/_pages/doc/info/attrs.html#k:addPoint addPoint}
-     * @graphvizDefault 4
-     * @graphvizNotes not dot
-     * @graphvizUsedBy G
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/addDouble/ addDouble}/{@link https://graphviz.org/_pages/doc/info/attrs.html#k:addPoint addPoint} |
+     * | default | +4 |
+     * | used by | G |
+     * | notes | fdp, neato, sfdp, osage, circo, twopi only. |
+     *
      * @category Attribute
      */
     sep: 'sep';
@@ -2549,9 +3103,13 @@ export namespace Attribute {
      * Set the shape of a node.
      *
      * @see {@link https://graphviz.org/docs/attrs/shape/ Node, Edge and Graph Attributes#shape}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:shape shape}
-     * @graphvizDefault ellipse
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/_pages/doc/info/attrs.html#k:shape shape} |
+     * | default | ellipse |
+     * | used by | N |
+     *
      * @category Attribute
      */
     shape: 'shape';
@@ -2564,9 +3122,13 @@ export namespace Attribute {
      * For further details, see {@link https://graphviz.org/docs/outputs/ Image Formats} and {@link https://graphviz.org/faq/#ext_image External PostScript files}.
      *
      * @see {@link https://graphviz.org/docs/attrs/shapefile/ Node, Edge and Graph Attributes#shapefile}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizUsedBy N
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | N |
+     *
      * @deprecated
      * @category Attribute
      */
@@ -2576,11 +3138,15 @@ export namespace Attribute {
      * Print guide boxes in PostScript at the beginning of routesplines if 1, or at the end if 2. (Debugging)
      *
      * @see {@link https://graphviz.org/docs/attrs/showboxes/ Node, Edge and Graph Attributes#showboxes}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault 0
-     * @graphvizMinimum 0
-     * @graphvizNotes dot only
-     * @graphvizUsedBy ENG
+     *
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | 0 |
+     * | minimum | 0 |
+     * | used by | ENG |
+     * | notes | dot only |
+     *
      * @category Attribute
      */
     showboxes: 'showboxes';
@@ -2589,10 +3155,13 @@ export namespace Attribute {
      * Number of sides if {@link shape}=polygon.
      *
      * @see {@link https://graphviz.org/docs/attrs/sides/ Node, Edge and Graph Attributes#sides}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault 4
-     * @graphvizMinimum 0
-     * @graphvizUsedBy N
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | 4 |
+     * | minimum | 0 |
+     * | used by | N |
+     *
      * @category Attribute
      */
     sides: 'sides';
@@ -2608,8 +3177,11 @@ export namespace Attribute {
      * Note that there is some interaction between the **size** and {@link ratio} attributes.
      *
      * @see {@link https://graphviz.org/docs/attrs/size/ Node, Edge and Graph Attributes#size}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/point/ point}
-     * @graphvizUsedBy G
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double}/{@link https://graphviz.org/docs/attr-types/point/ point} |
+     * | used by | G |
+     *
      * @category Attribute
      */
     size: 'size';
@@ -2618,10 +3190,13 @@ export namespace Attribute {
      * Skew factor for {@link shape}=polygon. Positive values skew top of polygon to right; negative to left.
      *
      * @see {@link https://graphviz.org/docs/attrs/skew/ Node, Edge and Graph Attributes#skew}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 0
-     * @graphvizMinimum -100
-     * @graphvizUsedBy N
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 0 |
+     * | minimum | -100 |
+     * | used by | N |
+     *
      * @category Attribute
      */
     skew: 'skew';
@@ -2630,10 +3205,13 @@ export namespace Attribute {
      * Specifies a post-processing step used to smooth out an uneven distribution of nodes.
      *
      * @see {@link https://graphviz.org/docs/attrs/smoothing/ Node, Edge and Graph Attributes#smoothing}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:smoothType smoothType}
-     * @graphvizDefault "none"
-     * @graphvizNotes sfdp only
-     * @graphvizUsedBy G
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/_pages/doc/info/attrs.html#k:smoothType smoothType} |
+     * | default | none |
+     * | used by | G |
+     * | notes | sfdp only |
+     *
      * @category Attribute
      */
     smoothing: 'smoothing';
@@ -2643,10 +3221,13 @@ export namespace Attribute {
      * with smaller values inserted first.
      *
      * @see {@link https://graphviz.org/docs/attrs/sortv/ Node, Edge and Graph Attributes#sortv}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}
-     * @graphvizDefault 0
-     * @graphvizMinimum 0
-     * @graphvizUsedBy GCN
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int} |
+     * | default | 0 |
+     * | minimum | 0 |
+     * | used by | GCN |
+     *
      * @category Attribute
      */
     sortv: 'sortv';
@@ -2680,8 +3261,11 @@ export namespace Attribute {
      * then the edges are drawn to avoid clusters as well as nodes.
      *
      * @see {@link https://graphviz.org/docs/attrs/splines/ Node, Edge and Graph Attributes#splines}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}/string
-     * @graphvizUsedBy G
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | used by | G |
+     *
      * @category Attribute
      */
     splines: 'splines';
@@ -2691,10 +3275,13 @@ export namespace Attribute {
      * If unset, the nodes are randomly placed in a unit square with the same seed is always used for the random number generator, so the initial placement is repeatable.
      *
      * @see {@link https://graphviz.org/docs/attrs/start/ Node, Edge and Graph Attributes#start}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:startType startType}
-     * @graphvizDefault ""
-     * @graphvizNotes fdp, neato only
-     * @graphvizUsedBy G
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/_pages/doc/info/attrs.html#k:startType startType} |
+     * | default | "" |
+     * | used by | G |
+     * | notes | fdp, neato only |
+     *
      * @category Attribute
      */
     start: 'start';
@@ -2719,9 +3306,12 @@ export namespace Attribute {
      * Of course, the component can also explicitly set its style attribute to the desired value.
      *
      * @see {@link https://graphviz.org/docs/attrs/style/ Node, Edge and Graph Attributes#style}
-     * @graphvizType {@link https://graphviz.org/_pages/doc/info/attrs.html#k:style style}
-     * @graphvizDefault ""
-     * @graphvizUsedBy ENCG
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/_pages/doc/info/attrs.html#k:style style} |
+     * | default | "" |
+     * | used by | ENCG |
+     *
      * @category Attribute
      */
     style: 'style';
@@ -2730,10 +3320,13 @@ export namespace Attribute {
      * A URL or pathname specifying an XML style sheet, used in SVG output.
      *
      * @see {@link https://graphviz.org/docs/attrs/stylesheet/ Node, Edge and Graph Attributes#stylesheet}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizDefault ""
-     * @graphvizNotes svg only
-     * @graphvizUsedBy G
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | "" |
+     * | used by | G |
+     * | notes | svg only |
+     *
      * @category Attribute
      */
     stylesheet: 'stylesheet';
@@ -2744,10 +3337,13 @@ export namespace Attribute {
      * See {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/tailURL/ Node, Edge and Graph Attributes#tailURL}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     tailURL: 'tailURL';
@@ -2757,9 +3353,12 @@ export namespace Attribute {
      * The position indicates the center of the label.
      *
      * @see {@link https://graphviz.org/docs/attrs/tail_lp/ Node, Edge and Graph Attributes#tail_lp}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/point/ point}
-     * @graphvizNotes write only
-     * @graphvizUsedBy E
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/point/ point} |
+     * | used by | E |
+     * | notes | write only |
+     *
      * @category Attribute
      */
     tail_lp: 'tail_lp';
@@ -2769,9 +3368,12 @@ export namespace Attribute {
      * the end of the edge goes to the center of the node, or the center of a port, if applicable.
      *
      * @see {@link https://graphviz.org/docs/attrs/tailclip/ Node, Edge and Graph Attributes#tailclip}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizDefault TRUE
-     * @graphvizUsedBy E
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | default | TRUE |
+     * | used by | E |
+     *
      * @category Attribute
      */
     tailclip: 'tailclip';
@@ -2780,10 +3382,13 @@ export namespace Attribute {
      * Synonym for {@link tailURL}.
      *
      * @see {@link https://graphviz.org/docs/attrs/tailhref/ Node, Edge and Graph Attributes#tailhref}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     tailhref: 'tailhref';
@@ -2793,9 +3398,12 @@ export namespace Attribute {
      * See {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/taillabel/ Node, Edge and Graph Attributes#taillabel}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/lblString/ lblString}
-     * @graphvizDefault ""
-     * @graphvizUsedBy E
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/lblString/ lblString} |
+     * | default | "" |
+     * | used by | E |
+     *
      * @category Attribute
      */
     taillabel: 'taillabel';
@@ -2805,9 +3413,12 @@ export namespace Attribute {
      * See {@link https://graphviz.org/doc/info/attrs.html#undir_note limitation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/tailport/ Node, Edge and Graph Attributes#tailport}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/portPos/ portPos}
-     * @graphvizDefault center
-     * @graphvizUsedBy E
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/portPos/ portPos} |
+     * | default | center |
+     * | used by | E |
+     *
      * @category Attribute
      */
     tailport: 'tailport';
@@ -2818,10 +3429,13 @@ export namespace Attribute {
      * If undefined, the value of the {@link target} is used.
      *
      * @see {@link https://graphviz.org/docs/attrs/tailtarget/ Node, Edge and Graph Attributes#tailtarget}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault <none>
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy E
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | <none> |
+     * | used by | E |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     tailtarget: 'tailtarget';
@@ -2831,10 +3445,13 @@ export namespace Attribute {
      * This is used only if the edge has a {@link tailURL} attribute.
      *
      * @see {@link https://graphviz.org/docs/attrs/tailtooltip/ Node, Edge and Graph Attributes#tailtooltip}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, cmap only
-     * @graphvizUsedBy E
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | E |
+     * | notes | svg, cmap only |
+     *
      * @category Attribute
      */
     tailtooltip: 'tailtooltip';
@@ -2844,10 +3461,13 @@ export namespace Attribute {
      * See {@link http://www.w3.org/TR/html401/present/frames.html#adef-target W3C documentation}.
      *
      * @see {@link https://graphviz.org/docs/attrs/target/ Node, Edge and Graph Attributes#target}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}/string
-     * @graphvizDefault <none>
-     * @graphvizNotes svg, map only
-     * @graphvizUsedBy ENGC
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString}/{@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | default | <none> |
+     * | used by | ENGC |
+     * | notes | svg, map only |
+     *
      * @category Attribute
      */
     target: 'target';
@@ -2859,10 +3479,13 @@ export namespace Attribute {
      * In this case, if tooltips will be generated, the user should set a tooltip attribute explicitly.
      *
      * @see {@link https://graphviz.org/docs/attrs/tooltip/ Node, Edge and Graph Attributes#tooltip}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/escString/ escString}
-     * @graphvizDefault ""
-     * @graphvizNotes svg, cmap only
-     * @graphvizUsedBy NEC
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/escString/ escString} |
+     * | default | "" |
+     * | used by | NEC |
+     * | notes | svg, cmap only |
+     *
      * @category Attribute
      */
     tooltip: 'tooltip';
@@ -2879,9 +3502,12 @@ export namespace Attribute {
      * Using **truecolor**=true avoids this problem.
      *
      * @see {@link https://graphviz.org/docs/attrs/truecolor/ Node, Edge and Graph Attributes#truecolor}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/bool bool}
-     * @graphvizNotes bitmap output only
-     * @graphvizUsedBy G
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/bool/ bool} |
+     * | used by | G |
+     * | notes | bitmap output only |
+     *
      * @category Attribute
      */
     truecolor: 'truecolor';
@@ -2891,9 +3517,12 @@ export namespace Attribute {
      * If the node is an ellipse or circle, the {@link samplepoints} attribute affects the output.
      *
      * @see {@link https://graphviz.org/docs/attrs/vertices/ Node, Edge and Graph Attributes#vertices}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/pointList pointList}
-     * @graphvizNotes write only
-     * @graphvizUsedBy N
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/pointList/ pointList} |
+     * | used by | N |
+     * | notes | write only |
+     *
      * @category Attribute
      */
     vertices: 'vertices';
@@ -2904,9 +3533,12 @@ export namespace Attribute {
      * The width and height of the viewport specify precisely the final size of the output.
      *
      * @see {@link https://graphviz.org/docs/attrs/viewport/ Node, Edge and Graph Attributes#viewport}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/viewPort/ viewPort}
-     * @graphvizDefault ""
-     * @graphvizUsedBy G
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/viewPort/ viewPort} |
+     * | default | "" |
+     * | used by | G |
+     *
      * @category Attribute
      */
     viewport: 'viewport';
@@ -2916,11 +3548,14 @@ export namespace Attribute {
      * dim' = (1+2*margin)*dim.
      *
      * @see {@link https://graphviz.org/docs/attrs/voro_margin/ Node, Edge and Graph Attributes#voro_margin}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 0.05
-     * @graphvizMinimum 0
-     * @graphvizNotes not dot
-     * @graphvizUsedBy G
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 0.05 |
+     * | minimum | 0 |
+     * | used by | G |
+     * | notes | not dot |
+     *
      * @category Attribute
      */
     voro_margin: 'voro_margin';
@@ -2932,12 +3567,13 @@ export namespace Attribute {
      * For other layouts, a larger weight encourages the layout to make the edge length closer to that specified by the len attribute.
      *
      * @see {@link https://graphviz.org/docs/attrs/weight/ Node, Edge and Graph Attributes#weight}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/int/ int}/{@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 1
-     * @graphvizMinimum
-     * 0(dot,twopi)
-     * 1(neato,fdp)
-     * @graphvizUsedBy E
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/int/ int}/{@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 1 |
+     * | minimum | 0(dot,twopi) 1(neato,fdp) |
+     * | used by | E |
+     *
      * @category Attribute
      */
     weight: 'weight';
@@ -2950,10 +3586,13 @@ export namespace Attribute {
      * Note also that, if the output format is dot, the value given to width will be the final value.
      *
      * @see {@link https://graphviz.org/docs/attrs/width/ Node, Edge and Graph Attributes#width}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 0.75
-     * @graphvizMinimum 0.01
-     * @graphvizUsedBy N
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 0.75 |
+     * | minimum | 0.01 |
+     * | used by | N |
+     *
      * @category Attribute
      */
     width: 'width';
@@ -2963,9 +3602,12 @@ export namespace Attribute {
      * If not set, the attribute will be set to the xdot version used for output.
      *
      * @see {@link https://graphviz.org/docs/attrs/xdotversion/ Node, Edge and Graph Attributes#xdotversion}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/string/ string}
-     * @graphvizNotes xdot only
-     * @graphvizUsedBy G
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/string/ string} |
+     * | used by | G |
+     * | notes | xdot only |
+     *
      * @category Attribute
      */
     xdotversion: 'xdotversion';
@@ -2983,9 +3625,12 @@ export namespace Attribute {
      * To force placing all of them, use the {@link forcelabels} attribute.
      *
      * @see {@link https://graphviz.org/docs/attrs/xlabel/ Node, Edge and Graph Attributes#xlabel}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/lblString/ lblString}
-     * @graphvizDefault ""
-     * @graphvizUsedBy EN
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/lblString/ lblString} |
+     * | default | "" |
+     * | used by | EN |
+     *
      * @category Attribute
      */
     xlabel: 'xlabel';
@@ -2995,9 +3640,12 @@ export namespace Attribute {
      * The position indicates the center of the label.
      *
      * @see {@link https://graphviz.org/docs/attrs/xlp/ Node, Edge and Graph Attributes#xlp}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/point/ point}
-     * @graphvizNotes write only
-     * @graphvizUsedBy NE
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/point/ point} |
+     * | used by | NE |
+     * | notes | write only |
+     *
      * @category Attribute
      */
     xlp: 'xlp';
@@ -3015,12 +3663,13 @@ export namespace Attribute {
      *
      *
      * @see {@link https://graphviz.org/docs/attrs/z/ Node, Edge and Graph Attributes#z}
-     * @graphvizType {@link https://graphviz.org/docs/attr-types/double/ double}
-     * @graphvizDefault 0
-     * @graphvizMinimum
-     * -MAXFLOAT
-     * -1000
-     * @graphvizUsedBy N
+     * | Key | Value |
+     * | --- | --- |
+     * | type | {@link https://graphviz.org/docs/attr-types/double/ double} |
+     * | default | 0 |
+     * | minimum | -MAXFLOAT, -1000 |
+     * | used by | N |
+     *
      * @deprecated
      * @category Attribute
      */
