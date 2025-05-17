@@ -1,0 +1,41 @@
+name: Main Workflow
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Build the package and upload it as an artifact
+  build:
+    name: Build
+    uses: ./.github/workflows/.build.yaml
+
+  check:
+    name: Check
+    uses: ./.github/workflows/.check.yaml
+
+  tests:
+    name: Tests
+    uses: ./.github/workflows/.tests.yaml
+    needs:
+      - build
+      - check
+
+  release:
+    name: Release
+    uses: ./.github/workflows/.release.yaml
+    needs:
+      - check
+      - build
+      - tests
+    if: ${{ github.repository == 'ts-graphviz/ts-graphviz' && github.ref == 'refs/heads/main' && success() }}
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

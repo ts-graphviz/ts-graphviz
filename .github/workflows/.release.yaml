@@ -1,30 +1,17 @@
-name: CD
+name: Release
 
 on:
-  # Run this workflow when a workflow_run event is triggered
-  # from the "Node.js CI" workflows
-  # and the workflow_run's status is "completed"
-  # and the workflow_run's base branch is "main".
-  workflow_run:
-    workflows: [CI]
-    branches: [main]
-    types: [completed]
-
-concurrency: ${{ github.workflow }}-${{ github.ref }}
-
-permissions:
-  contents: read
+  workflow_call:
+    secrets:
+      NPM_TOKEN:
+        required: true
+        description: The token to publish to npm
 
 jobs:
-  # Build the package and upload it as an artifact
-  build:
-    name: Build
-    uses: ./.github/workflows/.build.yaml
   # Release the package to npm
   release:
     name: Release
     runs-on: ubuntu-latest
-    needs: build
     # Only run this job if the workflow_run's conclusion was "success"
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
@@ -115,7 +102,6 @@ jobs:
     runs-on: ubuntu-latest
     # if the release job was successful, run this job
     needs:
-      - build
       - release
     if: needs.release.outputs.published == 'true'
     concurrency:

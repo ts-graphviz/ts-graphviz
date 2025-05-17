@@ -1,9 +1,0 @@
-{
-  "imports": {
-    "ts-graphviz": "../../packages/ts-graphviz/lib/ts-graphviz.js",
-    "@ts-graphviz/core": "../../packages/core/lib/core.js",
-    "@ts-graphviz/common": "../../packages/common/lib/common.js",
-    "@ts-graphviz/ast": "../../packages/ast/lib/ast.js",
-    "@ts-graphviz/adapter": "../../packages/adapter/lib/deno.js"
-  }
-}
