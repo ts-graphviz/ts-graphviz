@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "ts-graphviz": "npm:ts-graphviz",
+    "@ts-graphviz/core": "npm:@ts-graphviz/core",
+    "@ts-graphviz/common": "npm:@ts-graphviz/common",
+    "@ts-graphviz/ast": "npm:@ts-graphviz/ast",
+    "@ts-graphviz/adapter": "npm:@ts-graphviz/adapters"
+  }
+}
