@@ -24,11 +24,17 @@ jobs:
     needs:
       - codegen
 
-  tests:
-    name: Tests
-    uses: ./.github/workflows/.tests.yaml
+  unit_test:
+    name: Unit Test
+    uses: ./.github/workflows/.unit-test.yaml
     needs:
       - codegen
+
+  e2e_test:
+    name: E2E Test
+    uses: ./.github/workflows/.e2e-test.yaml
+    needs:
+      - build
 
   release:
     name: Release
@@ -36,7 +42,8 @@ jobs:
     needs:
       - check
       - build
-      - tests
+      - unit_test
+      - e2e_test
     if: ${{ github.repository == 'ts-graphviz/ts-graphviz' && github.ref == 'refs/heads/main' && success() }}
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
