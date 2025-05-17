@@ -27,5 +27,5 @@ jobs:
         run: pnpm codegen
       - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
         with:
-          path: packages/ast/src/dot-shim/parser/_parse.ts
+          path: packages/ast/src/dot-shim/parser
           name: generated-code
