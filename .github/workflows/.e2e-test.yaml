@@ -57,7 +57,7 @@ jobs:
         ---
         [E2E] canary bump for tests
         EOF
-        pnpm changeset version --snapshot
+        pnpm changeset version --snapshot --tag canary
         pnpm publish -r --no-git-checks --registry http://localhost:4873
     - name: Run Deno
       working-directory: example
