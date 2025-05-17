@@ -10,21 +10,25 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Build the package and upload it as an artifact
-  build:
-    name: Build
-    uses: ./.github/workflows/.build.yaml
+  codegen:
+    name: Code Generation
+    uses: ./.github/workflows/.codegen.yaml
 
   check:
     name: Check
     uses: ./.github/workflows/.check.yaml
 
+  build:
+    name: Build
+    uses: ./.github/workflows/.build.yaml
+    needs:
+      - codegen
+
   tests:
     name: Tests
     uses: ./.github/workflows/.tests.yaml
     needs:
-      - build
-      - check
+      - codegen
 
   release:
     name: Release
