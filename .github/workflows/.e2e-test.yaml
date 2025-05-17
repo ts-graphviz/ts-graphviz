@@ -16,6 +16,7 @@ jobs:
           - 4873:4873
     permissions:
       contents: write
+      pull-requests: read
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
@@ -59,7 +60,7 @@ jobs:
         ---
         [E2E] canary bump for tests
         EOF
-        pnpm changeset version --snapshot canary
+        pnpm changeset version --snapshot canary --no-git-tag
         pnpm publish -r --no-git-checks --registry http://localhost:4873
     - name: Run Deno
       working-directory: example
