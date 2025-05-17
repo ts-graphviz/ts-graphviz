@@ -40,13 +40,23 @@ jobs:
     - name: Creating .npmrc
       run: |
         cat << EOF > "$HOME/.npmrc"
-          registry=http://localhost:4873
+        registry=http://localhost:4873
         EOF
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
     - name: Publish to Verdaccio
       run: |
-        echo -e "patch\n\n[E2E] canary bump for tests" > .changeset/e2e-canary.md
+        cat << EOF > .changeset/e2e-canary.md
+        ---
+        "ts-graphviz": patch
+        "@ts-graphviz/adapter": patch
+        "@ts-graphviz/common": patch
+        "@ts-graphviz/react": patch
+        "@ts-graphviz/core": patch
+        "@ts-graphviz/ast": patch
+        ---
+        [E2E] canary bump for tests
+        EOF
         pnpm changeset version --snapshot
         pnpm publish -r --no-git-checks --registry http://localhost:4873
     - name: Run Deno
