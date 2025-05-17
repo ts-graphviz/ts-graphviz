@@ -43,5 +43,6 @@ jobs:
       run: pnpm publish -r --no-git-checks --registry http://localhost:4873
     - name: Run Deno
       run: |
+        deno info
         deno install
         deno run --allow-run --allow-write examples/sample.ts
