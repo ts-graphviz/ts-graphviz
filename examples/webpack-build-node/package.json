@@ -15,7 +15,7 @@
     "@webpack-cli/generators": "^3.0.1",
     "ts-loader": "^9.4.2",
     "typescript": "*",
-    "webpack": "^5.94.0",
+    "webpack": "^5.99.8",
     "webpack-cli": "^5.0.1"
   }
 }
