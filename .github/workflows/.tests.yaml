@@ -67,12 +67,6 @@ jobs:
         image: verdaccio/verdaccio:6
         ports:
           - 4873:4873
-        options: >-
-          --health-cmd "curl -sf http://localhost:4873/-/ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
