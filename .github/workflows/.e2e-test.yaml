@@ -14,6 +14,8 @@ jobs:
         image: verdaccio/verdaccio:6
         ports:
           - 4873:4873
+    permissions:
+      contents: write
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
