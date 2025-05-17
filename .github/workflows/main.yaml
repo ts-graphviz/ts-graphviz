@@ -36,9 +36,9 @@ jobs:
     needs:
       - build
 
-  release:
-    name: Release
-    uses: ./.github/workflows/.release.yaml
+  deploy:
+    name: Deploy
+    uses: ./.github/workflows/.deploy.yaml
     needs:
       - check
       - build
