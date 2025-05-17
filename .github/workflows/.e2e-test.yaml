@@ -7,7 +7,7 @@ permissions:
 
 jobs:
   active_support_deno_lts:
-    name: Active Support / Deno
+    name: Active Support / Deno LTS
     runs-on: ubuntu-latest
     services:
       verdaccio:
@@ -40,6 +40,6 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
     - name: Publish to Verdaccio
-      run: pnpm publish -r
+      run: pnpm publish -r --no-git-checks --registry http://localhost:4873
     - name: Run Deno
       run: deno run --allow-run --allow-write examples/sample.ts
