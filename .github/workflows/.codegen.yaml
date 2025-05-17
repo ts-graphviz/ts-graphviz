@@ -7,6 +7,7 @@ permissions:
 
 jobs:
   codegen:
+    name: Code Generation
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
