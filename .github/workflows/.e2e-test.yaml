@@ -42,4 +42,6 @@ jobs:
     - name: Publish to Verdaccio
       run: pnpm publish -r --no-git-checks --registry http://localhost:4873
     - name: Run Deno
-      run: deno run --allow-run --allow-write examples/sample.ts
+      run: |
+        deno install
+        deno run --allow-run --allow-write examples/sample.ts
