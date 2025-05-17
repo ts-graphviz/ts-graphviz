@@ -45,9 +45,13 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
     - name: Publish to Verdaccio
-      run: pnpm publish -r --no-git-checks --registry http://localhost:4873
+      run: |
+        echo -e "patch\n\n[E2E] canary bump for tests" > .changeset/e2e-canary.md
+        pnpm changeset version --snapshot
+        pnpm publish -r --no-git-checks --registry http://localhost:4873
     - name: Run Deno
+      working-directory: example
       run: |
         deno info
-        deno install
+        deno install --no-lock
         deno run --allow-run --allow-write examples/sample.ts
