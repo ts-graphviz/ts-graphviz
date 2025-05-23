@@ -49,11 +49,14 @@ jobs:
       run: pnpm install --frozen-lockfile
     - name: Publish to Verdaccio
       run: |
-        pnpm --filter "./packages/*" version "0.0.0-e2e-${{ github.sha }}" --no-git-tag
+        for workspace in $(pnpm ls -r --filter "./packages/*" --depth -1 --parseable); do
+          cd $workspace
+          pnpm version "0.0.0-e2e-${{ github.sha }}" --no-git-tag
+        done
         pnpm publish -r --no-git-checks --registry http://localhost:4873
     - name: Run Deno
-      working-directory: example
+      working-directory: examples
       run: |
         deno info
         deno install --no-lock
-        deno run --allow-run --allow-write examples/sample.ts
+        deno run --no-lock --allow-run --allow-write sample.ts
