@@ -49,18 +49,9 @@ jobs:
       run: pnpm install --frozen-lockfile
     - name: Publish to Verdaccio
       run: |
-        cat << EOF > .changeset/e2e-canary.md
-        ---
-        "ts-graphviz": patch
-        "@ts-graphviz/adapter": patch
-        "@ts-graphviz/common": patch
-        "@ts-graphviz/react": patch
-        "@ts-graphviz/core": patch
-        "@ts-graphviz/ast": patch
-        ---
-        [E2E] canary bump for tests
-        EOF
-        pnpm changeset version --snapshot canary --no-git-tag
+        for workspace in $(pnpm ls -r --depth -1 --json | jq '.[]|select(.private|not)|.name' -r); do
+          pnpm version "0.0.0-e2e-${{ github.sha }}" --no-git-tag --workspace $workspace
+        done
         pnpm publish -r --no-git-checks --registry http://localhost:4873
     - name: Run Deno
       working-directory: example
