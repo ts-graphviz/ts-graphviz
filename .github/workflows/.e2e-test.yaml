@@ -49,9 +49,7 @@ jobs:
       run: pnpm install --frozen-lockfile
     - name: Publish to Verdaccio
       run: |
-        for workspace in $(pnpm ls -r --depth -1 --json | jq '.[]|select(.private|not)|.name' -r); do
-          pnpm version "0.0.0-e2e-${{ github.sha }}" --no-git-tag --workspace $workspace
-        done
+        pnpm --filter "./packages/*" version "0.0.0-e2e-${{ github.sha }}" --no-git-tag
         pnpm publish -r --no-git-checks --registry http://localhost:4873
     - name: Run Deno
       working-directory: example
