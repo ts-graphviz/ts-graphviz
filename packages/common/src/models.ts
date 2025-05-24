@@ -360,7 +360,6 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
   /**
    * Get Node in cluster by specifying id.
    *
-   * @description
    * If there is no Node with the specified id in the graph, return undefined.
    */
   getNode(id: string): NodeModel | undefined;
@@ -675,7 +674,6 @@ export interface RootGraphModel
   /**
    * Strict mode.
    *
-   * @description
    * A graph may also be described as strict.
    * This forbids the creation of multi-edges, i.e., there can be at most one edge with a given tail node and head node in the directed case.
    * For undirected graphs, there can be at most one edge connected to the same two nodes.

@@ -71,7 +71,6 @@ export interface PrintPlugin<T extends ASTNode = ASTNode> {
    * @param context PrintContext object
    * @param ast an ASTNode
    * @returns printed string
-   * @memberof PrintPlugin
    */
   print(context: PrintContext, ast: T): Generator<string>;
 }

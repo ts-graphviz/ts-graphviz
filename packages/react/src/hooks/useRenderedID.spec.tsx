@@ -23,6 +23,6 @@ describe('useRenderedID', () => {
     const { result } = renderHook(() => useRenderedID(<dot:b>bold</dot:b>), {
       wrapper: context(),
     });
-    expect(result.current).toBe('<<b>bold</b>>');
+    expect(result.current).toBe('<b>bold</b>');
   });
 });

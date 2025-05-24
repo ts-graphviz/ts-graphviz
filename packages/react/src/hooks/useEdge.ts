@@ -23,6 +23,7 @@ export function useEdge(
     e.comment = comment;
     e.attributes.apply(attributes);
     return e;
+    // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME attributes changes on every re-render and should not be used as a hook dependency.
   }, [cluster, targets, comment, attributes]);
   useHasComment(edge, comment);
   useHasAttributes(edge, attributes);

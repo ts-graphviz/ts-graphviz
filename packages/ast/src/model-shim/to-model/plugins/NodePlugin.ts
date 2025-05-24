@@ -14,7 +14,11 @@ export const NodePlugin: ConvertToModelPlugin<NodeASTNode> = {
         )
         .reduce(
           (acc, curr) => {
-            acc[curr.key.value] = curr.value.value;
+            if (curr.value.quoted === 'html') {
+              acc[curr.key.value] = `<${curr.value.value}>`;
+            } else {
+              acc[curr.key.value] = curr.value.value;
+            }
             return acc;
           },
           {} as { [key: string]: string },

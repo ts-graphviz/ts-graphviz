@@ -1,0 +1,49 @@
+name: Main
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  codegen:
+    name: Code Generation
+    uses: ./.github/workflows/.codegen.yaml
+
+  check:
+    name: Check
+    uses: ./.github/workflows/.check.yaml
+
+  build:
+    name: Build
+    uses: ./.github/workflows/.build.yaml
+    needs:
+      - codegen
+
+  unit_test:
+    name: Unit Test
+    uses: ./.github/workflows/.unit-test.yaml
+    needs:
+      - codegen
+
+  e2e_test:
+    name: E2E Test
+    uses: ./.github/workflows/.e2e-test.yaml
+    needs:
+      - build
+
+  deploy:
+    name: Deploy
+    uses: ./.github/workflows/.deploy.yaml
+    needs:
+      - check
+      - build
+      - unit_test
+      - e2e_test
+    if: ${{ github.repository == 'ts-graphviz/ts-graphviz' && github.ref == 'refs/heads/main' && success() }}
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -29,20 +29,10 @@
   "author": "Yuki Yamazaki <yuki@kamiazya.tech>",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./lib/core.d.ts",
-      "require": "./lib/core.cjs",
-      "default": "./lib/core.js"
-    },
-    "./register-default": {
-      "require": "./lib/register-default.cjs",
-      "default": "./lib/register-default.js"
-    },
+    ".": "./src/core.ts",
+    "./register-default": "./src/register-default.ts",
     "./package.json": "./package.json"
   },
-  "main": "lib/core.cjs",
-  "module": "lib/core.js",
-  "types": "lib/core.d.ts",
   "scripts": {
     "build": "vite build"
   },
@@ -51,15 +41,30 @@
     "@ts-graphviz/common": "workspace:^"
   },
   "devDependencies": {
-    "typescript": "^5.4.5",
-    "vite": "^5.4.8",
-    "vite-plugin-dts": "^4.2.1"
+    "typescript": "^5.8.2",
+    "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.3"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": true,
+    "exports": {
+      ".": {
+        "types": "./lib/core.d.ts",
+        "require": "./lib/core.cjs",
+        "default": "./lib/core.js"
+      },
+      "./register-default": {
+        "require": "./lib/register-default.cjs",
+        "default": "./lib/register-default.js"
+      },
+      "./package.json": "./package.json"
+    },
+    "main": "lib/core.cjs",
+    "module": "lib/core.js",
+    "types": "lib/core.d.ts"
   }
 }

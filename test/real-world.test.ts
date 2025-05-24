@@ -28,7 +28,7 @@ describe('Ability to parse real-world DOT files and the structure of the output 
           base: '',
           ext: '.snapshot',
         });
-        expect(parse(dot)).toMatchFileSnapshot(snapshot);
+        await expect(parse(dot)).toMatchFileSnapshot(snapshot);
       } catch (e) {
         console.log(e);
         throw e;
