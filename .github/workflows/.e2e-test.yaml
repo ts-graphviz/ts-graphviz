@@ -44,7 +44,6 @@ jobs:
       run: |
         cat << EOF > "$HOME/.npmrc"
         registry=http://localhost:4873
-        //localhost:4873/:_authToken=not-needed
         EOF
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
@@ -52,6 +51,10 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y moreutils
     - name: Publish to Verdaccio
       run: |
+        npm adduser --registry http://localhost:4873 <<EOF
+        test
+        test
+        EOF
         for workspace in $(pnpm ls -r --filter "./packages/*" --depth -1 --parseable); do
           cd $workspace
           jq 'del(.publishConfig.provenance)' package.json | sponge package.json
