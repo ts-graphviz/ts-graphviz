@@ -42,7 +42,7 @@ jobs:
         EOF
 
         pnpm verdaccio --config ./etc/verdaccio/config.yaml &
-        pnpm npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
+        pnpm exec npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
     - name: Install moreutils
