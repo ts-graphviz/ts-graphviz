@@ -30,22 +30,22 @@ jobs:
       with:
         node-version: lts/*
         cache: pnpm
-        registry-url: http://localhost:4873
     - name: Use Deno
       uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
       with:
         deno-version: lts
+    - name: Install moreutils
+      run: sudo apt-get update && sudo apt-get install -y moreutils
+    - name: Install Dependencies
+      run: pnpm install --frozen-lockfile
     - name: Set up Verdaccio
       run: |
-        pnpm install --frozen-lockfile
-
         cat << EOF > "$HOME/.npmrc"
         registry=http://localhost:4873
         EOF
-        pnpm verdaccio --config ./etc/verdaccio/config.yaml &
+        nohup pnpm verdaccio --config ./etc/verdaccio/config.yaml &
         pnpm exec npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
-    - name: Install moreutils
-      run: sudo apt-get update && sudo apt-get install -y moreutils
+
     - name: Publish to Verdaccio
       run: |
         for workspace in $(pnpm ls -r --filter "./packages/*" --depth -1 --parseable); do
