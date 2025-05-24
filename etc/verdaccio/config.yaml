@@ -1,7 +1,0 @@
-packages:
-  '@ts-graphviz/*':
-    access: $all
-    publish: $all
-  'ts-graphviz':
-    access: $all
-    publish: $all
