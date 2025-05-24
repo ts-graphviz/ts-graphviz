@@ -37,14 +37,13 @@ jobs:
         deno-version: lts
     - name: Set up Verdaccio
       run: |
+        pnpm install --frozen-lockfile
+
         cat << EOF > "$HOME/.npmrc"
         registry=http://localhost:4873
         EOF
-
         pnpm verdaccio --config ./etc/verdaccio/config.yaml &
         pnpm exec npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
     - name: Install moreutils
       run: sudo apt-get update && sudo apt-get install -y moreutils
     - name: Publish to Verdaccio
