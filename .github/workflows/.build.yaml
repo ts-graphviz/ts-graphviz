@@ -7,6 +7,7 @@ permissions:
 
 jobs:
   lib:
+    name: Library
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
@@ -28,7 +29,7 @@ jobs:
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           name: generated-code
-          path: packages/ast/src/dot-shim/parser/_parse.ts
+          path: packages/ast/src/dot-shim/parser
       - name: Build
         run: pnpm build
       - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
@@ -39,6 +40,7 @@ jobs:
           name: lib
 
   doc:
+    name: Documentation
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
@@ -60,7 +62,7 @@ jobs:
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           name: generated-code
-          path: packages/ast/src/dot-shim/parser/_parse.ts
+          path: packages/ast/src/dot-shim/parser
       - name: Documentation Build
         run: pnpm doc
       - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2

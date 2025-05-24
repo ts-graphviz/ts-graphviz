@@ -7,6 +7,7 @@ permissions:
 
 jobs:
   codegen:
+    name: Code Generation
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
@@ -24,8 +25,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
       - name: Build
-        run: pnpm build
+        run: pnpm codegen
       - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
         with:
-          path: packages/ast/src/dot-shim/parser/_parse.ts
+          path: packages/ast/src/dot-shim/parser
           name: generated-code
