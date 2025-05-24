@@ -47,11 +47,14 @@ jobs:
         EOF
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+    - name: Install moreutils
+      run: sudo apt-get update && sudo apt-get install -y moreutils
     - name: Publish to Verdaccio
       run: |
         for workspace in $(pnpm ls -r --filter "./packages/*" --depth -1 --parseable); do
           cd $workspace
-          pnpm version "0.0.0-e2e-${{ github.sha }}" --no-git-tag
+          jq 'del(.publishConfig.provenance)' package.json | sponge package.json
+          jq '.version = "0.0.0-e2e-${{ github.sha }}" package.json | sponge package.json
         done
         pnpm publish -r --no-git-checks --registry http://localhost:4873
     - name: Run Deno
