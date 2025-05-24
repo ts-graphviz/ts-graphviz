@@ -15,7 +15,7 @@ jobs:
         ports:
           - 4873:4873
         volumes:
-          - ./etc/verdaccio:/verdaccio/conf
+          - ${{github.workspace}}/etc/verdaccio:/verdaccio/conf
     permissions:
       contents: write
       pull-requests: read
