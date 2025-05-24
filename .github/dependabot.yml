@@ -62,3 +62,8 @@ updates:
     directory: /packages/ts-graphviz
     schedule:
       interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/react
+    schedule:
+      interval: daily
