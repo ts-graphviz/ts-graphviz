@@ -9,11 +9,6 @@ jobs:
   active_support_deno_lts:
     name: Active Support / Deno LTS
     runs-on: ubuntu-latest
-    services:
-      verdaccio:
-        image: verdaccio/verdaccio:6
-        ports:
-          - 4873:4873
     permissions:
       contents: write
       pull-requests: read
@@ -40,18 +35,20 @@ jobs:
       uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
       with:
         deno-version: lts
-    - name: Creating .npmrc
+    - name: Set up Verdaccio
       run: |
         cat << EOF > "$HOME/.npmrc"
         registry=http://localhost:4873
         EOF
+
+        pnpm verdaccio --config ./etc/verdaccio/config.yaml &
+        pnpm npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
     - name: Install moreutils
       run: sudo apt-get update && sudo apt-get install -y moreutils
     - name: Publish to Verdaccio
       run: |
-        npx npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
         for workspace in $(pnpm ls -r --filter "./packages/*" --depth -1 --parseable); do
           cd $workspace
           jq 'del(.publishConfig.provenance)' package.json | sponge package.json
