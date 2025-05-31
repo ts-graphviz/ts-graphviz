@@ -24,9 +24,9 @@ By combining these key concepts, ts-graphviz aims to provide a powerful and user
 
 ### Policies
 
-#### Node.js Version Support Policy
+#### Version Support Policy
 
-Our goal is to provide a stable and secure library for our users while keeping up with improvements in the JavaScript ecosystem. To achieve this, we have established the following Node.js version support policy for ts-graphviz:
+To provide a stable and secure library for our users while keeping up with improvements in the JavaScript ecosystem. To achieve this, we have established the following Node.js version support policy for ts-graphviz:
 
 1. **Minimum Guaranteed Version**: We guarantee support for the latest Node.js version that has entered Long Term Support (LTS) at the time of a major release of our library. This ensures that our library benefits from the stability and long-term support provided by LTS versions.
 
@@ -48,3 +48,50 @@ Our goal is to provide a stable and secure library for our users while keeping u
 
 
 ![Dependency graph](./media/dependency-graph.svg)
+
+## Environments Support Levels
+
+To provide clarity on the environments in which ts-graphviz operates, we have categorized support levels:
+
+### Tier 1: Full Support
+
+- **Definition**: Environments that are fully supported, with comprehensive automated testing and maintenance.
+- **Environments**:
+  - **Node.js LTS versions**: All active Long-Term Support (LTS) versions.
+    - If a Node.js LTS version is released, we will ensure compatibility with it.
+    - If a Node.js LTS version is deprecated, we will drop support for it in the next major release.
+- **Details**:
+  - We run automated tests on all LTS versions of Node.js.
+  - Full compatibility and performance are ensured.
+  - Critical issues are prioritized for fixes.
+
+### Tier 2: Active Support
+
+- **Definition**: Environments that receive active support with limited automated testing.
+- **Environments**:
+  - **Deno Latest LTS version**: The latest Long-Term Support (LTS) version of Deno.
+    - If a new Deno LTS version is released, we will ensure compatibility with it.
+    - If a Deno LTS version is deprecated, we will drop support for it in the next minor release.
+  - **Node.js Current Release**: The latest Node.js release outside the LTS schedule.
+    - If a new Node.js current release is available, we will ensure compatibility with it.
+    - If a Node.js current release is deprecated, we will drop support for it in the next minor release.
+- **Details**:
+  - Compatibility is maintained, and issues are addressed.
+
+### Tier 3: Community Support
+
+- **Definition**: Environments that are not officially tested but are supported on a best-effort basis.
+- **Environments**:
+  - **Modern Browsers**: Latest versions of major browsers, including:
+    - Google Chrome
+    - Mozilla Firefox
+    - Microsoft Edge
+    - Apple Safari
+  - **Deno Current Release**: The latest Deno release outside the LTS schedule.
+- **Details**:
+  - Installation methods are provided.
+  - No automated testing is performed.
+  - Issues reported by users will be addressed.
+  - Targeting the latest versions ensures compatibility with modern web standards.
+  - We will not actively test or maintain compatibility with older versions of browsers.
+
