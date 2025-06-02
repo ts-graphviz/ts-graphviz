@@ -22,7 +22,7 @@
 
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=GitHub&style=flat)](https://github.com/ts-graphviz/ts-graphviz)
 [![npm](https://img.shields.io/badge/-npm-CB3837?logo=npm&style=flat)](https://www.npmjs.com/package/ts-graphviz)
-[![Reference](https://img.shields.io/badge/-Reference-3178C6?logo=TypeScript&style=flat&logoColor=fff)](https://ts-graphviz.github.io/ts-graphviz/)
+[![Reference](https://img.shields.io/badge/-API_Reference-3178C6?logo=TypeScript&style=flat&logoColor=fff)](https://ts-graphviz.github.io/ts-graphviz/)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ts-graphviz/ts-graphviz)
 
 [![Sponsor](https://img.shields.io/badge/-GitHub%20Sponsor-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/ts-graphviz)
@@ -36,7 +36,7 @@
 
 ---
 
-## What is ts-graphviz?
+## What is ts-graphviz? 🎯
 
 **ts-graphviz** is a comprehensive TypeScript library that provides tools for creating, manipulating, and rendering Graphviz graph descriptions.
 It offers a type-safe, object-oriented approach to working with the DOT language, which is used by Graphviz for defining graph visualizations.
@@ -58,7 +58,12 @@ It offers a type-safe, object-oriented approach to working with the DOT language
 - **Extensible**
   - Allows extending the type system for custom graph visualization solutions.
 
-## Getting Started
+## Why ts-graphviz? 🤔
+
+**ts-graphviz** is designed to make it easier for TypeScript and JavaScript developers to work with Graphviz by providing a type-safe, object-oriented API that abstracts away the complexities of the DOT language. It allows developers to create and manipulate graphs programmatically, making it suitable for both small-scale projects and large applications.
+It is particularly useful for applications that require dynamic graph generation, such as data visualization tools, network analysis, and more.
+
+## Getting Started 🚀
 
 ### Installation 💽
 
@@ -87,7 +92,7 @@ You can install and use the package by specifying the following:
 import { toDot } from 'npm:ts-graphviz';
 ```
 
-### Basic Usage
+### Basic Usage 📖
 
 ts-graphviz provides two main approaches to create graph visualizations:
 
@@ -171,7 +176,30 @@ const dot = toDot(graph);
 // }
 ```
 
-## Package Structure
+## Useful Links 🔗
+
+### Documentation 📖
+
+More detailed documentation and examples can be found in the following resources:
+
+- [API Reference](https://ts-graphviz.github.io/ts-graphviz/)
+  - See the **API Reference** for detailed documentation on how to use the library.
+- [DeepWiki](https://deepwiki.com/ts-graphviz/ts-graphviz)
+  - See the AI generated documentation for more information.
+- [Website](https://ts-graphviz.github.io/)
+  - The official website for **ts-graphviz**.
+
+
+### Architecture 🏛
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for more details.
+
+### Security 🛡️
+
+See [SECURITY.md](./SECURITY.md) for more details.
+
+
+## Package Structure 📦
 
 The **ts-graphviz** repository is structured as a monorepo containing several packages, each with a specific responsibility:
 
@@ -188,7 +216,7 @@ The **ts-graphviz** repository is structured as a monorepo containing several pa
 > ![Dependency graph](./media/dependency-graph.svg)
 > _Packages' Dependency graph_
 
-## Data Flow and Processing Pipeline
+## Data Flow and Processing Pipeline 🔄
 
 The following diagram illustrates how data flows through the ts-graphviz system, from graph creation to final rendering:
 
@@ -212,26 +240,17 @@ The following diagram illustrates how data flows through the ts-graphviz system,
 
 The `toDot()` function from the **ts-graphviz** package is a composite of `fromModel()` and `stringify()`, while the `fromDot()` function is a composite of `parse()` and `toModel()`.
 
-## Deep dive 🏊‍♂️
-
-### Architecture 🏛
-
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for more details.
-
-### Security 🛡️
-
-See [SECURITY.md](./SECURITY.md) for more details.
-
-
 ## Who's using `ts-graphviz` 📜
 
 - [Apollo GraphQL](https://github.com/apollographql)
+- [Apple](https://github.com/apple/ml-mycelium)
 - [AWS](https://github.com/aws)
 - [IBM (StrongLoop)](https://strongloop.com)
 - [The University of Tokyo](https://github.com/csg-tokyo)
 - [Transmute](https://github.com/transmute-industries)
 
-> **Note** Let us know that you're using `ts-graphviz` on [GitHub Discussions](https://github.com/ts-graphviz/ts-graphviz/discussions/736) 🙏
+> [!NOTE]
+> Let us know that you're using `ts-graphviz` on [GitHub Discussions](https://github.com/ts-graphviz/ts-graphviz/discussions/736) 🙏
 
 
 ## Related Projects 💫
