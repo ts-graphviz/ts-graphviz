@@ -11,7 +11,7 @@
 
 [![npm version](https://badge.fury.io/js/ts-graphviz.svg)](https://badge.fury.io/js/ts-graphviz)
 ![node version](https://img.shields.io/node/v/ts-graphviz)
-[![deno version](https://img.shields.io/badge/deno-^1.28.0-black?logo=deno)](https://github.com/denoland/deno)
+[![deno version](https://img.shields.io/badge/deno-lts-black?logo=deno)](https://github.com/denoland/deno)
 [![npm](https://img.shields.io/npm/dm/ts-graphviz)](https://npmtrends.com/ts-graphviz)
 
 # @ts-graphviz/react
