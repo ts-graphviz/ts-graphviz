@@ -24,12 +24,12 @@ digraph {
       "dot_input" [
         label = "DOT\nString";
       ];
-      "parded_ast" [
+      "parsed_ast" [
         label = "AST";
       ];
     }
     {"oop" "react" "declarative"} -> "model";
-    "dot_input" -> "parded_ast" -> "model";
+    "dot_input" -> "parsed_ast" -> "model";
   }
   subgraph "cluster_core_processing" {
     label = "Core Processing";

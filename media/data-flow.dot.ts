@@ -12,7 +12,7 @@ export default digraph((g) => {
         label: 'DOT\\nString',
       });
 
-      parsing.node('parded_ast', {
+      parsing.node('parsed_ast', {
         label: 'AST',
       });
     });
@@ -37,7 +37,7 @@ export default digraph((g) => {
 
     sg.edge([['oop', 'react', 'declarative'], 'model']);
 
-    sg.edge(['dot_input', 'parded_ast', 'model']);
+    sg.edge(['dot_input', 'parsed_ast', 'model']);
   });
 
   g.subgraph('cluster_core_processing', { label: 'Core Processing' }, (sg) => {
@@ -68,12 +68,4 @@ export default digraph((g) => {
   });
   g.edge(['model', 'dot_output', ['node_adapter', 'deno_adapter']]);
   g.edge(['model', 'ast', 'dot_output']);
-
-  // g.edge(['dot_output', 'ast', 'model'], {
-  //   constraint: false,
-  //   style: 'dashed',
-  // })
-  // g.edge(['dot_output', 'model'], {
-  //   constraint: false,
-  // });
 });

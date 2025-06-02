@@ -38,7 +38,7 @@ Cross-platform interfaces for executing Graphviz DOT commands in various JavaScr
 
 > It is part of the ts-graphviz library, which is split into modular packages to improve maintainability, flexibility, and ease of use.
 
-This libary enables rendering DOT language strings into different output formats through platform-specific implementations for Node.js, and Deno.
+This library enables rendering DOT language strings into different output formats through platform-specific implementations for Node.js, and Deno.
 
 [Graphviz](https://graphviz.gitlab.io/) must be installed so that the dot command can be executed.
 
