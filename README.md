@@ -186,6 +186,7 @@ More detailed documentation and examples can be found in the following resources
   - See the **API Reference** for detailed documentation on how to use the library.
 - [DeepWiki](https://deepwiki.com/ts-graphviz/ts-graphviz)
   - See the AI generated documentation for more information.
+  - And ask questions about the library.
 - [Website](https://ts-graphviz.github.io/)
   - The official website for **ts-graphviz**.
 
