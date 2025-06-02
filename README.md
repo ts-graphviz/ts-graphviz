@@ -104,7 +104,7 @@ Create graphs using object-oriented programming with classes:
 import { attribute as _, Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
 
 // Create a directed graph
-const G = new Digraph();
+const graph = new Digraph();
 
 // Create nodes
 const node1 = new Node('node1', { color: 'red' });
