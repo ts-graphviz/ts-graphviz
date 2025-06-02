@@ -40,7 +40,7 @@ We continuously advance our security measures.
   - Scans JavaScript/TypeScript code for security vulnerabilities. This runs on pushes to main, pull requests, and weekly, with results uploaded to GitHub's code scanning dashboard.
 - **Continuous Testing and Static Analysis in CI**: [![Main](https://github.com/ts-graphviz/ts-graphviz/actions/workflows/main.yaml/badge.svg)](https://github.com/ts-graphviz/ts-graphviz/actions/workflows/main.yaml)
   - Measures include testing and static analysis in CI. This ensures that the code is tested and other issues before it is merged into the main branch.
-- **Provenance**: [![Provenance](https://img.shields.io/badge/npm_package-provenanced-grean)](https://www.npmjs.com/package/ts-graphviz)
+- **Provenance**: [![Provenance](https://img.shields.io/badge/npm_package-provenanced-green)](https://www.npmjs.com/package/ts-graphviz)
   - [npm provenance](https://docs.npmjs.com/generating-provenance-statements) is a feature that allows users to verify the integrity and authenticity of npm packages. It helps ensure that the package is trustworthy and has not been tampered with.
 - **OpenSSF Scorecard**: [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ts-graphviz/ts-graphviz/badge)](https://scorecard.dev/viewer/?uri=github.com/ts-graphviz/ts-graphviz)
   - Evaluates supply chain security. It checks branch protection, maintenance status, and other security practices. The Scorecard is a CLI tool that automatically checks and evaluates security risks and can be integrated with CI tools like GitHub Actions for continuous evaluation. It publishes results to OpenSSF API and creates a security badge, and the score is published as a report.
