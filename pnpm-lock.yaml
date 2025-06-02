@@ -33,7 +33,7 @@ importers:
         version: 2.29.4
       '@pnpm/workspace.find-packages':
         specifier: ^1000.0.24
-        version: 1000.0.24(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0)
+        version: 1000.0.24(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0)
       '@pnpm/workspace.pkgs-graph':
         specifier: ^1000.0.1
         version: 1000.0.14(@pnpm/logger@1001.0.0)
@@ -112,11 +112,11 @@ importers:
         version: link:../common
     devDependencies:
       peggy:
-        specifier: ^4.0.3
-        version: 4.0.3
+        specifier: ^5.0.3
+        version: 5.0.3
       ts-pegjs:
         specifier: ^4.2.1
-        version: 4.2.1(peggy@4.0.3)
+        version: 4.2.1(peggy@5.0.3)
       typescript:
         specifier: ^5.8.2
         version: 5.8.2
@@ -1229,11 +1229,11 @@ packages:
       semver: 7.7.2
     dev: true
 
-  /@peggyjs/from-mem@1.3.0:
-    resolution: {integrity: sha512-kzGoIRJjkg3KuGI4bopz9UvF3KguzfxalHRDEIdqEZUe45xezsQ6cx30e0RKuxPUexojQRBfu89Okn7f4/QXsw==}
-    engines: {node: '>=18'}
+  /@peggyjs/from-mem@2.0.0:
+    resolution: {integrity: sha512-f+pL/s2DiT+2dxwheSoJT0P/KJy/s0klzE+ZqRdXHlkeyFk/DpKtyjLZIiA79kx56g3oEPA8Zu9EzEKzAwuvhw==}
+    engines: {node: '>=20'}
     dependencies:
-      semver: 7.6.0
+      semver: 7.7.1
     dev: true
 
   /@pkgjs/parseargs@0.11.0:
@@ -1273,7 +1273,7 @@ packages:
       load-json-file: 6.2.0
     dev: true
 
-  /@pnpm/cli-utils@1000.1.4(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0):
+  /@pnpm/cli-utils@1000.1.4(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0):
     resolution: {integrity: sha512-azfuLQXwutahZ5rDLh9OYfTMRhRRGKJA4ClV/onCOAFqTX7fqTvPX9WIiGQ4+4qRoRTCE5ZTxJnxEHrEy/fkSQ==}
     engines: {node: '>=18.12'}
     peerDependencies:
@@ -1281,7 +1281,7 @@ packages:
     dependencies:
       '@pnpm/cli-meta': 1000.0.8
       '@pnpm/config': 1003.1.0(@pnpm/logger@1001.0.0)
-      '@pnpm/config.deps-installer': 1000.0.4(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)
+      '@pnpm/config.deps-installer': 1000.0.4(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)
       '@pnpm/default-reporter': 1002.0.0(@pnpm/logger@1001.0.0)
       '@pnpm/error': 1000.0.2
       '@pnpm/logger': 1001.0.0
@@ -1289,7 +1289,7 @@ packages:
       '@pnpm/package-is-installable': 1000.0.10(@pnpm/logger@1001.0.0)
       '@pnpm/pnpmfile': 1001.2.1(@pnpm/logger@1001.0.0)
       '@pnpm/read-project-manifest': 1000.0.11
-      '@pnpm/store-connection-manager': 1002.0.2(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0)
+      '@pnpm/store-connection-manager': 1002.0.2(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0)
       '@pnpm/types': 1000.6.0
       chalk: 4.1.2
       load-json-file: 6.2.0
@@ -1300,7 +1300,7 @@ packages:
       - typanion
     dev: true
 
-  /@pnpm/client@1000.0.18(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0):
+  /@pnpm/client@1000.0.18(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0):
     resolution: {integrity: sha512-O+ixnTEX4pTnqC2zXZNklEYz9R02ipPNwZz/s5u1GDVv/xatFIDK64+MAiiHl7bcbXPfUZP5MnzfIR3681N+QQ==}
     engines: {node: '>=18.12'}
     dependencies:
@@ -1308,10 +1308,10 @@ packages:
       '@pnpm/directory-fetcher': 1000.1.7(@pnpm/logger@1001.0.0)
       '@pnpm/fetch': 1000.2.2(@pnpm/logger@1001.0.0)
       '@pnpm/fetching-types': 1000.1.0
-      '@pnpm/git-fetcher': 1001.0.7(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0)
+      '@pnpm/git-fetcher': 1001.0.7(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0)
       '@pnpm/network.auth-header': 1000.0.3
       '@pnpm/resolver-base': 1003.0.1
-      '@pnpm/tarball-fetcher': 1001.0.7(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0)
+      '@pnpm/tarball-fetcher': 1001.0.7(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0)
       '@pnpm/types': 1000.6.0
       ramda: /@pnpm/ramda@0.28.1
     transitivePeerDependencies:
@@ -1332,7 +1332,7 @@ packages:
       ramda: /@pnpm/ramda@0.28.1
     dev: true
 
-  /@pnpm/config.deps-installer@1000.0.4(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6):
+  /@pnpm/config.deps-installer@1000.0.4(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7):
     resolution: {integrity: sha512-ZUcKFjq17HzTlCa6Y+lPcjCZWrQDUUmZh5U5q5V/+Gjoz5znGP2C2uGHm1M0Mq+MesCP89sQu0soWx/Y3+Yvtg==}
     engines: {node: '>=18.12'}
     peerDependencies:
@@ -1345,7 +1345,7 @@ packages:
       '@pnpm/logger': 1001.0.0
       '@pnpm/network.auth-header': 1000.0.3
       '@pnpm/npm-resolver': 1004.0.1(@pnpm/logger@1001.0.0)
-      '@pnpm/package-store': 1002.0.3(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)
+      '@pnpm/package-store': 1002.0.3(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)
       '@pnpm/parse-wanted-dependency': 1001.0.0
       '@pnpm/pick-registry-for-package': 1000.0.8
       '@pnpm/read-modules-dir': 1000.0.0
@@ -1436,6 +1436,23 @@ packages:
       '@pnpm/logger': 1001.0.0
       '@pnpm/store-controller-types': 1003.0.1
       '@pnpm/store.cafs': 1000.0.12
+      mem: 8.1.1
+      path-temp: 2.1.0
+      ramda: /@pnpm/ramda@0.28.1
+    dev: true
+
+  /@pnpm/create-cafs-store@1000.0.14(@pnpm/logger@1001.0.0):
+    resolution: {integrity: sha512-95OczT9/zsJea3Nm6x9ovUD04GoLKYHnSCKUhe5VFx7ckUxW8DUrFJynl94Tx+kdf7u7zXBIlwhhHJEplDaNTg==}
+    engines: {node: '>=18.12'}
+    peerDependencies:
+      '@pnpm/logger': '>=1001.0.0 <1002.0.0'
+    dependencies:
+      '@pnpm/exec.pkg-requires-build': 1000.0.8
+      '@pnpm/fetcher-base': 1000.0.11
+      '@pnpm/fs.indexed-pkg-importer': 1000.1.8(@pnpm/logger@1001.0.0)
+      '@pnpm/logger': 1001.0.0
+      '@pnpm/store-controller-types': 1003.0.2
+      '@pnpm/store.cafs': 1000.0.13
       mem: 8.1.1
       path-temp: 2.1.0
       ramda: /@pnpm/ramda@0.28.1
@@ -1640,6 +1657,26 @@ packages:
       sanitize-filename: 1.6.3
     dev: true
 
+  /@pnpm/fs.indexed-pkg-importer@1000.1.8(@pnpm/logger@1001.0.0):
+    resolution: {integrity: sha512-VwsjBhAyW+5TQO6Ndon1y8kyvSLQJyyWzwNRENQN+UkbrybsjNXHX1vcMV4Li/+pQ0VBYFVxYl/cx+EkU8H9hQ==}
+    engines: {node: '>=18.12'}
+    peerDependencies:
+      '@pnpm/logger': '>=1001.0.0 <1002.0.0'
+    dependencies:
+      '@pnpm/core-loggers': 1001.0.1(@pnpm/logger@1001.0.0)
+      '@pnpm/graceful-fs': 1000.0.0
+      '@pnpm/logger': 1001.0.0
+      '@pnpm/store-controller-types': 1003.0.2
+      '@reflink/reflink': 0.1.19
+      '@zkochan/rimraf': 3.0.2
+      fs-extra: 11.3.0
+      make-empty-dir: 3.0.2
+      p-limit: 3.1.0
+      path-temp: 2.1.0
+      rename-overwrite: 6.0.3
+      sanitize-filename: 1.6.3
+    dev: true
+
   /@pnpm/fs.packlist@1000.0.0:
     resolution: {integrity: sha512-2WXDfqKVIfLskyDUmqKP+n8RzlEqPk8jpsiPXRA5Zx0La5IAadlo94Yttlu0f152t/ogmuOtHFReOgCT2uUzQg==}
     engines: {node: '>=18.12'}
@@ -1654,7 +1691,7 @@ packages:
       npm-packlist: 5.1.3
     dev: true
 
-  /@pnpm/git-fetcher@1001.0.7(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0):
+  /@pnpm/git-fetcher@1001.0.7(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0):
     resolution: {integrity: sha512-JDfwlvCvvupxTlqJs+R8M2uu0uABI0REeo9py2SePiJ77a/3tbclaYtqhmxGLFoLEpAdga5y/ZeIAuhUUItYgg==}
     engines: {node: '>=18.12'}
     peerDependencies:
@@ -1665,7 +1702,7 @@ packages:
       '@pnpm/fs.packlist': 2.0.0
       '@pnpm/logger': 1001.0.0
       '@pnpm/prepare-package': 1000.0.15(@pnpm/logger@1001.0.0)(typanion@3.14.0)
-      '@pnpm/worker': 1000.1.6(@pnpm/logger@1001.0.0)(@types/node@20.17.46)
+      '@pnpm/worker': 1000.1.7(@pnpm/logger@1001.0.0)(@types/node@20.17.46)
       '@zkochan/rimraf': 3.0.2
       execa: /safe-execa@0.1.2
     transitivePeerDependencies:
@@ -1983,7 +2020,7 @@ packages:
       semver: 7.7.2
     dev: true
 
-  /@pnpm/package-requester@1004.0.1(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6):
+  /@pnpm/package-requester@1004.0.1(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7):
     resolution: {integrity: sha512-nnOps7eUZiJLszET8lbr3QiGhcntLra9j6JMD7JuuSXWMky4VH2S8XFvxeMdN/u/0OZpf4m6W2tEdg+WgSCM/w==}
     engines: {node: '>=18.12'}
     peerDependencies:
@@ -2003,7 +2040,7 @@ packages:
       '@pnpm/store-controller-types': 1003.0.1
       '@pnpm/store.cafs': 1000.0.12
       '@pnpm/types': 1000.6.0
-      '@pnpm/worker': 1000.1.6(@pnpm/logger@1001.0.0)(@types/node@20.17.46)
+      '@pnpm/worker': 1000.1.7(@pnpm/logger@1001.0.0)(@types/node@20.17.46)
       p-defer: 3.0.0
       p-limit: 3.1.0
       p-queue: 6.6.2
@@ -2013,7 +2050,7 @@ packages:
       ssri: 10.0.5
     dev: true
 
-  /@pnpm/package-store@1002.0.3(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6):
+  /@pnpm/package-store@1002.0.3(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7):
     resolution: {integrity: sha512-Qk1Ojkt+BOgGefuBz6DLJuOzCtC4lXeyny5yQl9SqvH80oCvAtX+AP9nZF1ZwKbFfMlVdmmgg8q4lpOJgXWQWg==}
     engines: {node: '>=18.12'}
     peerDependencies:
@@ -2023,12 +2060,12 @@ packages:
       '@pnpm/create-cafs-store': 1000.0.13(@pnpm/logger@1001.0.0)
       '@pnpm/fetcher-base': 1000.0.11
       '@pnpm/logger': 1001.0.0
-      '@pnpm/package-requester': 1004.0.1(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)
+      '@pnpm/package-requester': 1004.0.1(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)
       '@pnpm/resolver-base': 1003.0.1
       '@pnpm/store-controller-types': 1003.0.1
       '@pnpm/store.cafs': 1000.0.12
       '@pnpm/types': 1000.6.0
-      '@pnpm/worker': 1000.1.6(@pnpm/logger@1001.0.0)(@types/node@20.17.46)
+      '@pnpm/worker': 1000.1.7(@pnpm/logger@1001.0.0)(@types/node@20.17.46)
       '@zkochan/rimraf': 3.0.2
       load-json-file: 6.2.0
       ramda: /@pnpm/ramda@0.28.1
@@ -2184,18 +2221,18 @@ packages:
       - supports-color
     dev: true
 
-  /@pnpm/store-connection-manager@1002.0.2(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0):
+  /@pnpm/store-connection-manager@1002.0.2(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0):
     resolution: {integrity: sha512-L331v4O8nZ1q5twU26UYPE13HpWj+CrPKvICaTm/fHzwD0yuQ95Gr22rZ4BLDmifnkjpR1FwjQM/Wm3pCP9qXg==}
     engines: {node: '>=18.12'}
     peerDependencies:
       '@pnpm/logger': '>=1001.0.0 <1002.0.0'
     dependencies:
       '@pnpm/cli-meta': 1000.0.8
-      '@pnpm/client': 1000.0.18(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0)
+      '@pnpm/client': 1000.0.18(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0)
       '@pnpm/config': 1003.1.0(@pnpm/logger@1001.0.0)
       '@pnpm/error': 1000.0.2
       '@pnpm/logger': 1001.0.0
-      '@pnpm/package-store': 1002.0.3(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)
+      '@pnpm/package-store': 1002.0.3(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)
       '@pnpm/server': 1001.0.3(@pnpm/logger@1001.0.0)
       '@pnpm/store-path': 1000.0.2
       '@zkochan/diable': 1.0.2
@@ -2210,6 +2247,15 @@ packages:
 
   /@pnpm/store-controller-types@1003.0.1:
     resolution: {integrity: sha512-NEvwCU8Sz6K2cu8/v93MIjqkr/92AqZSb2O/q11lSiLjo8kSlXmh2gP6/vptTrP5UsJih0JOKwUtc2Fm+dbDvA==}
+    engines: {node: '>=18.12'}
+    dependencies:
+      '@pnpm/fetcher-base': 1000.0.11
+      '@pnpm/resolver-base': 1003.0.1
+      '@pnpm/types': 1000.6.0
+    dev: true
+
+  /@pnpm/store-controller-types@1003.0.2:
+    resolution: {integrity: sha512-YT9o5KBagNBzzKLX2GtLoamFPl6I6beg/pencHMzAR6yDCE4hicvymvK1ahtl/ntCaWdxaj5+DtTED0UaqimGA==}
     engines: {node: '>=18.12'}
     dependencies:
       '@pnpm/fetcher-base': 1000.0.11
@@ -2246,6 +2292,21 @@ packages:
       strip-bom: 4.0.0
     dev: true
 
+  /@pnpm/store.cafs@1000.0.13:
+    resolution: {integrity: sha512-WhYfU77DdOIrIXHJ3uNPs39J87CLDaV6WV7SgqoZAkhWSIja6qTgOirDlhqj6FSRuKSKNwbYEMitd4BX0ZA8BA==}
+    engines: {node: '>=18.12'}
+    dependencies:
+      '@pnpm/fetcher-base': 1000.0.11
+      '@pnpm/graceful-fs': 1000.0.0
+      '@pnpm/store-controller-types': 1003.0.2
+      '@zkochan/rimraf': 3.0.2
+      is-gzip: 2.0.0
+      p-limit: 3.1.0
+      rename-overwrite: 6.0.3
+      ssri: 10.0.5
+      strip-bom: 4.0.0
+    dev: true
+
   /@pnpm/symlink-dependency@1000.0.9(@pnpm/logger@1001.0.0):
     resolution: {integrity: sha512-yI4nFQuI6lBzP/hUJ6L0te1TT+LVwr8LzA4E5acyrjQy/LOoRlIMykVP1nPagS/h4E2lDXo1LlARvSt1Ibe1LA==}
     engines: {node: '>=18.12'}
@@ -2258,7 +2319,7 @@ packages:
       symlink-dir: 6.0.5
     dev: true
 
-  /@pnpm/tarball-fetcher@1001.0.7(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0):
+  /@pnpm/tarball-fetcher@1001.0.7(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0):
     resolution: {integrity: sha512-/SBSK+Ho7y1C4GWrD65Wz1/WKBCDwgQ00XsY0xvhJ8+Q9fzE0pznX3xmfWfbD4jogWJ7c2pdDs8USWKMgR2Z/w==}
     engines: {node: '>=18.12'}
     peerDependencies:
@@ -2273,7 +2334,7 @@ packages:
       '@pnpm/graceful-fs': 1000.0.0
       '@pnpm/logger': 1001.0.0
       '@pnpm/prepare-package': 1000.0.15(@pnpm/logger@1001.0.0)(typanion@3.14.0)
-      '@pnpm/worker': 1000.1.6(@pnpm/logger@1001.0.0)(@types/node@20.17.46)
+      '@pnpm/worker': 1000.1.7(@pnpm/logger@1001.0.0)(@types/node@20.17.46)
       '@zkochan/retry': 0.2.0
       lodash.throttle: 4.1.1
       p-map-values: 1.0.0
@@ -2321,38 +2382,38 @@ packages:
       isexe: 2.0.0
     dev: true
 
-  /@pnpm/worker@1000.1.6(@pnpm/logger@1001.0.0)(@types/node@20.17.46):
-    resolution: {integrity: sha512-9t2uOaKdfEW6snEHi209cUle9FdLpVRhI1Exk49KipblYSBGDwpRPS0gY7MSbyhWwI8xq+4mzczjyIC0LDrtlQ==}
+  /@pnpm/worker@1000.1.7(@pnpm/logger@1001.0.0)(@types/node@20.17.46):
+    resolution: {integrity: sha512-iOIP1MeJbyf2X3kJ2p3qfqIcUGc0uvfyGPR9dTCQooLNgKSQCCHC+4UhS2Xfrq/SQEhD2bzIHJRTieshm2Qfzw==}
     engines: {node: '>=18.12'}
     peerDependencies:
       '@pnpm/logger': '>=1001.0.0 <1002.0.0'
     dependencies:
       '@pnpm/cafs-types': 1000.0.0
-      '@pnpm/create-cafs-store': 1000.0.13(@pnpm/logger@1001.0.0)
+      '@pnpm/create-cafs-store': 1000.0.14(@pnpm/logger@1001.0.0)
       '@pnpm/crypto.polyfill': 1000.1.0
       '@pnpm/error': 1000.0.2
       '@pnpm/exec.pkg-requires-build': 1000.0.8
       '@pnpm/fs.hard-link-dir': 1000.0.1(@pnpm/logger@1001.0.0)
       '@pnpm/graceful-fs': 1000.0.0
       '@pnpm/logger': 1001.0.0
-      '@pnpm/store.cafs': 1000.0.12
+      '@pnpm/store.cafs': 1000.0.13
       '@pnpm/symlink-dependency': 1000.0.9(@pnpm/logger@1001.0.0)
       '@rushstack/worker-pool': 0.4.9(@types/node@20.17.46)
       is-windows: 1.0.2
       load-json-file: 6.2.0
       p-limit: 3.1.0
-      shell-quote: 1.8.2
+      shell-quote: 1.8.3
     transitivePeerDependencies:
       - '@types/node'
     dev: true
 
-  /@pnpm/workspace.find-packages@1000.0.24(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0):
+  /@pnpm/workspace.find-packages@1000.0.24(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0):
     resolution: {integrity: sha512-5TCy5VvqS/zB8SpmpWoLxpIlQ4mkBsNg0tUbVVwG3obbm2Z8kIviecDCEnb1wk+Do6GQ9dibCwUyOmmjfwqmvg==}
     engines: {node: '>=18.12'}
     peerDependencies:
       '@pnpm/logger': '>=1001.0.0 <1002.0.0'
     dependencies:
-      '@pnpm/cli-utils': 1000.1.4(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.6)(typanion@3.14.0)
+      '@pnpm/cli-utils': 1000.1.4(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.7)(typanion@3.14.0)
       '@pnpm/constants': 1001.1.0
       '@pnpm/fs.find-packages': 1000.0.11
       '@pnpm/logger': 1001.0.0
@@ -4109,9 +4170,9 @@ packages:
       delayed-stream: 1.0.0
     dev: true
 
-  /commander@12.1.0:
-    resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
-    engines: {node: '>=18'}
+  /commander@14.0.0:
+    resolution: {integrity: sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA==}
+    engines: {node: '>=20'}
     dev: true
 
   /commander@7.2.0:
@@ -7153,14 +7214,14 @@ packages:
       through2: 2.0.5
     dev: true
 
-  /peggy@4.0.3:
-    resolution: {integrity: sha512-v7/Pt6kGYsfXsCrfb52q7/yg5jaAwiVaUMAPLPvy4DJJU6Wwr72t6nDIqIDkGfzd1B4zeVuTnQT0RGeOhe/uSA==}
-    engines: {node: '>=18'}
+  /peggy@5.0.3:
+    resolution: {integrity: sha512-QErYmLjj/ehiNNJRqx2qb36hzkanuascpMqREs2RQqaXhU3cflIRScP/u2BoobIfu/FaeI3GGxNB/vFX/Ar9lg==}
+    engines: {node: '>=20'}
     hasBin: true
     dependencies:
-      '@peggyjs/from-mem': 1.3.0
-      commander: 12.1.0
-      source-map-generator: 0.8.0
+      '@peggyjs/from-mem': 2.0.0
+      commander: 14.0.0
+      source-map-generator: 2.0.0
     dev: true
 
   /performance-now@2.1.0:
@@ -7596,6 +7657,14 @@ packages:
       fs-extra: 11.3.0
     dev: true
 
+  /rename-overwrite@6.0.3:
+    resolution: {integrity: sha512-Daqe51STnrCUq/t4dbzCtfNBLElrqVpCtuWK0MuPrzUi6K/13E98y3E8/kzuMZt6IEmghMnF41J0AidrFqjZUA==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@zkochan/rimraf': 3.0.2
+      fs-extra: 11.3.0
+    dev: true
+
   /request@2.88.2:
     resolution: {integrity: sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==}
     engines: {node: '>= 6'}
@@ -7818,14 +7887,6 @@ packages:
       lru-cache: 6.0.0
     dev: true
 
-  /semver@7.6.0:
-    resolution: {integrity: sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
-    dev: true
-
   /semver@7.6.3:
     resolution: {integrity: sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==}
     engines: {node: '>=10'}
@@ -7929,6 +7990,11 @@ packages:
 
   /shell-quote@1.8.2:
     resolution: {integrity: sha512-AzqKpGKjrj7EM6rKVQEPpB288oCfnrEIuyoT9cyF4nmGa7V8Zk6f7RRqYisX8X9m+Q7bd632aZW4ky7EhbQztA==}
+    engines: {node: '>= 0.4'}
+    dev: true
+
+  /shell-quote@1.8.3:
+    resolution: {integrity: sha512-ObmnIF4hXNg1BqhnHmgbDETF8dLPCggZWBjkQfhZpbszZnYur5DUljTcCHii5LC3J5E0yeO/1LIMyH+UvHQgyw==}
     engines: {node: '>= 0.4'}
     dev: true
 
@@ -8066,9 +8132,9 @@ packages:
       is-plain-obj: 2.1.0
     dev: true
 
-  /source-map-generator@0.8.0:
-    resolution: {integrity: sha512-psgxdGMwl5MZM9S3FWee4EgsEaIjahYV5AzGnwUvPhWeITz/j6rKpysQHlQ4USdxvINlb8lKfWGIXwfkrgtqkA==}
-    engines: {node: '>= 10'}
+  /source-map-generator@2.0.0:
+    resolution: {integrity: sha512-4KomB7QsJti7dFBAVF6SXHzuCNQauk4gE2CummcqPzl+eJqXz1CkkiBdVXXW3g8VGh23bxcdEVACOzrxpIqnUg==}
+    engines: {node: '>=20'}
     dev: true
 
   /source-map-js@1.2.1:
@@ -8532,13 +8598,13 @@ packages:
       code-block-writer: 12.0.0
     dev: true
 
-  /ts-pegjs@4.2.1(peggy@4.0.3):
+  /ts-pegjs@4.2.1(peggy@5.0.3):
     resolution: {integrity: sha512-mK/O2pu6lzWUeKpEMA/wsa0GdYblfjJI1y0s0GqH6xCTvugQDOWPJbm5rY6AHivpZICuXIriCb+a7Cflbdtc2w==}
     hasBin: true
     peerDependencies:
       peggy: ^3.0.2
     dependencies:
-      peggy: 4.0.3
+      peggy: 5.0.3
       prettier: 2.8.8
       ts-morph: 18.0.0
     dev: true
