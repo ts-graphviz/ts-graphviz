@@ -707,6 +707,10 @@ Please support ts-graphviz on [Open Collective](https://opencollective.com/ts-gr
 
 > **Note** Even just a dollar is enough motivation to develop 😊
 
+## Changelog 📜
+
+See [CHANGELOG.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/ts-graphviz/CHANGELOG.md) for more details.
+
 ## ts-graphviz for Enterprise 🏢
 
 Available as part of the Tidelift Subscription.

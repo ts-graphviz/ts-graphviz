@@ -186,45 +186,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors)
 specification. Contributions of any kind welcome!
 
-## How to Contribute 💪
-
-The easiest way to contribute is to use the library and star [repository](https://github.com/ts-graphviz/ts-graphviz).
-
-### Questions 💭
-
-Feel free to ask questions on [GitHub Discussions](https://github.com/ts-graphviz/ts-graphviz/discussions).
-
-### Report bugs / request additional features 💡
-
-Please register at [GitHub Issues](https://github.com/ts-graphviz/ts-graphviz/issues/new/choose).
-
-### Development / Bug Fixes 🧑‍💻
-
-See [CONTRIBUTING.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/CONTRIBUTING.md).
-
-### Financial Support 💸
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [Become a sponsor](https://opencollective.com/ts-graphviz)
-
-![OpenCollective Sponsors](https://opencollective.com/ts-graphviz/sponsors.svg)
-
-Thank you to all our backers! 🙏 [Become a backer](https://opencollective.com/ts-graphviz)
-
-![OpenCollective Backers](https://opencollective.com/ts-graphviz/backer.svg)
-
-Please support ts-graphviz on [Open Collective](https://opencollective.com/ts-graphviz) or [GitHub Sponsors](https://github.com/sponsors/ts-graphviz).
-
-> **Note** Even just a dollar is enough motivation to develop 😊
-
-## ts-graphviz for Enterprise 🏢
-
-Available as part of the Tidelift Subscription.
-
-The maintainers of ts-graphviz and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open-source dependencies you use to build your applications.
-Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use.
-
-[Learn more](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=referral&utm_campaign=enterprise&utm_term=repo).
-
 ## License ⚖️
 
 This software is released under the MIT License, see [LICENSE](https://github.com/ts-graphviz/ts-graphviz/blob/main/LICENSE).

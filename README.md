@@ -216,11 +216,11 @@ The `toDot()` function from the **ts-graphviz** package is a composite of `fromM
 
 ### Architecture 🏛
 
-See [ARCHITECTURE.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/ARCHITECTURE.md) for more details.
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for more details.
 
 ### Security 🛡️
 
-See [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md) for more details.
+See [SECURITY.md](./SECURITY.md) for more details.
 
 
 ## Who's using `ts-graphviz` 📜
@@ -305,7 +305,7 @@ Please register at [GitHub Issues](https://github.com/ts-graphviz/ts-graphviz/is
 
 ### Development / Bug Fixes 🧑‍💻
 
-See [CONTRIBUTING.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/CONTRIBUTING.md).
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ### Financial Support 💸
 
