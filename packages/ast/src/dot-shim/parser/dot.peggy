@@ -5,7 +5,7 @@
  */
 
 {
-  function dedent(value: string): string {
+  function dedent(value) {
     const str = value.trim();
     const matches = str.match(/\n([\t ]+|(?!\s).)/g);
     if (matches) {
@@ -16,7 +16,7 @@
     return str;
   }
 
-  const edgeops: { operator: '--' | '->', location: FileRange }[] = [];
+  const edgeops = [];
 
   const b = new Builder({
     locationFunction: location,

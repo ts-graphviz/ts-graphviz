@@ -9,19 +9,16 @@ import type {
   NodeASTNode,
   SubgraphASTNode,
 } from '../../types.js';
-import { PeggySyntaxError, parse as _parse } from './_parse.js';
+import {
+  SyntaxError as PeggySyntaxError,
+  type StartRuleNames,
+  parse as _parse,
+} from './_parse.js';
+
 /**
  * @group Convert DOT to AST
  */
-export type Rule =
-  | 'Dot'
-  | 'Graph'
-  | 'Node'
-  | 'Edge'
-  | 'AttributeList'
-  | 'Attribute'
-  | 'Subgraph'
-  | 'ClusterStatements';
+export type Rule = StartRuleNames;
 
 /**
  * CommonParseOptions is an interface that defines the properties needed in order to parse a file.
@@ -101,8 +98,9 @@ export function parse(
   input: string,
   options?: ParseOptions<Rule>,
 ): ASTNode | ClusterStatementASTNode[] {
+  const { startRule, filename } = options ?? {};
   try {
-    return _parse(input, options);
+    return _parse(input, { startRule, filename });
   } catch (e) {
     if (e instanceof PeggySyntaxError) {
       throw new DotSyntaxError(e.message, {
