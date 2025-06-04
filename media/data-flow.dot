@@ -1,0 +1,60 @@
+digraph {
+  rankdir = "LR";
+  node [
+    shape = "circle";
+  ];
+  subgraph "cluster_creation" {
+    label = "Graph Creation";
+    "oop" [
+      label = "Object-Oriented API";
+      shape = "box";
+    ];
+    "declarative" [
+      label = "Declarative API";
+      shape = "box";
+    ];
+    "react" [
+      label = "React\nComponent";
+    ];
+    "model" [
+      label = "Graph\nModel";
+    ];
+    subgraph "cluster_parsing" {
+      label = "Parsing";
+      "dot_input" [
+        label = "DOT\nString";
+      ];
+      "parsed_ast" [
+        label = "AST";
+      ];
+    }
+    {"oop" "react" "declarative"} -> "model";
+    "dot_input" -> "parsed_ast" -> "model";
+  }
+  subgraph "cluster_core_processing" {
+    label = "Core Processing";
+    "ast" [
+      label = "AST";
+    ];
+    "dot_output" [
+      label = "DOT\nString";
+    ];
+  }
+  subgraph "cluster_rendering" {
+    label = "Rendering";
+    "node_adapter" [
+      label = "Node\nAdapter";
+      shape = "box";
+    ];
+    "deno_adapter" [
+      label = "Deno\nAdapter";
+      shape = "box";
+    ];
+    "image" [
+      label = "Visual\nOutput";
+    ];
+    {"deno_adapter" "node_adapter"} -> "image";
+  }
+  "model" -> "dot_output" -> {"node_adapter" "deno_adapter"};
+  "model" -> "ast" -> "dot_output";
+}
