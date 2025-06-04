@@ -7,7 +7,10 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "ignore": ["./packages/ast/src/dot-shim/parser/_parse.ts"]
+    "ignore": [
+      "./packages/ast/src/dot-shim/parser/_parse.js",
+      "./packages/ast/src/dot-shim/parser/_parse.d.ts"
+    ]
   },
   "organizeImports": {
     "enabled": true
