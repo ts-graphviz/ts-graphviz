@@ -36,7 +36,6 @@ jobs:
         with:
           path: |
             packages/**/lib
-            !**/node_modules
           name: lib
 
   doc:
