@@ -41,7 +41,17 @@ jobs:
         registry=http://localhost:4873
         EOF
         nohup pnpm verdaccio --config ./etc/verdaccio/config.yaml &
-        pnpm exec npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
+        for i in $(seq 1 30); do
+          if curl -s http://localhost:4873/-/ping; then
+            echo "✅ Verdaccio is up!"
+            pnpm exec npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
+            exit 0
+          fi
+          echo "⏳ Waiting for Verdaccio… ($i/30)"
+          sleep 2
+        done
+        echo "❌ Verdaccio did not start in time" >&2
+        exit 1
 
     - name: Publish to Verdaccio
       run: |
