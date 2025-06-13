@@ -3,10 +3,13 @@
   "compilerOptions": {
     "paths": {
       "ts-graphviz": ["./packages/ts-graphviz/src/ts-graphviz.js"],
+      "ts-graphviz/adapter": ["./packages/ts-graphviz/src/adapter.js"],
+      "ts-graphviz/ast": ["./packages/ts-graphviz/src/ast.js"],
       "@ts-graphviz/core": ["./packages/core/src/core.js"],
       "@ts-graphviz/common": ["./packages/common/src/common.js"],
       "@ts-graphviz/ast": ["./packages/ast/src/ast.js"],
-      "@ts-graphviz/adapter": ["./packages/adapter/src/node.js"]
+      "@ts-graphviz/adapter": ["./packages/adapter/src/node.js"],
+      "@ts-graphviz/react": ["./packages/react/src/react.js"]
     }
   },
   "include": ["packages/*/src/**/*.ts"],
