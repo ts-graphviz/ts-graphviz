@@ -60,6 +60,7 @@ jobs:
 
   active_support_deno_lts:
     name: Active Support / Deno LTS
+    needs: prepare
     runs-on: ubuntu-latest
     steps:
     - name: Harden Runner
