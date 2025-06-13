@@ -1,0 +1,7 @@
+{
+  "name": "@ts-graphviz/examples",
+  "private": true,
+  "dependencies": {
+    "ts-graphviz": "latest"
+  }
+}
