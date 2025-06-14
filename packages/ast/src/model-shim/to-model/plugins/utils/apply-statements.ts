@@ -7,6 +7,13 @@ import type { ConvertToModelContext } from '../../types.js';
 import { collectAttributes } from './collect-attributes.js';
 import { CommentHolder } from './comment-holder.js';
 
+/**
+ * Applies an array of graph statement AST nodes to a graph model within a conversion context.
+ *
+ * Iterates over each statement and updates the graph model accordingly, handling subgraphs, attributes, nodes, edges, attribute lists, and comments. Comments are managed and associated with relevant graph elements as statements are processed.
+ *
+ * @param statements - The array of AST nodes representing graph statements to apply.
+ */
 export function applyStatements(
   context: ConvertToModelContext,
   graph: GraphBaseModel,
