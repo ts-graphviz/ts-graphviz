@@ -78,6 +78,30 @@ describe('convertAttribute', () => {
           }
         `);
       });
+      test('nested html-like', () => {
+        const result = convertAttribute('label', '<<b>Hi</b>>');
+        expect(result).toMatchInlineSnapshot(`
+          {
+            "children": [],
+            "key": {
+              "children": [],
+              "location": null,
+              "quoted": false,
+              "type": "Literal",
+              "value": "label",
+            },
+            "location": null,
+            "type": "Attribute",
+            "value": {
+              "children": [],
+              "location": null,
+              "quoted": "html",
+              "type": "Literal",
+              "value": "<b>Hi</b>",
+            },
+          }
+        `);
+      });
     });
   });
 });
