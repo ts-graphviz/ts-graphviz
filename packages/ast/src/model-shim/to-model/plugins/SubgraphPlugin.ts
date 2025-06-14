@@ -1,6 +1,6 @@
 import type { SubgraphASTNode } from '../../../types.js';
 import type { ConvertToModelPlugin } from '../types.js';
-import { applyStatements } from './utils/apply-statments.js';
+import { applyStatements } from './utils/apply-statements.js';
 
 export const SubgraphPlugin: ConvertToModelPlugin<SubgraphASTNode> = {
   match(ast) {
@@ -8,7 +8,7 @@ export const SubgraphPlugin: ConvertToModelPlugin<SubgraphASTNode> = {
   },
   convert(context, ast) {
     const subgraph = new context.models.Subgraph(ast.id?.value);
-    applyStatements(subgraph, ast.children);
+    applyStatements(context, subgraph, ast.children);
     return subgraph;
   },
 };

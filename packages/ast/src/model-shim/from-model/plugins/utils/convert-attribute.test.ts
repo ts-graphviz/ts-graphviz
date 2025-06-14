@@ -28,7 +28,7 @@ describe('convertAttribute', () => {
   });
 
   describe('string', () => {
-    test('quated', () => {
+    test('quoted string literal', () => {
       const result = convertAttribute('label', 'A');
       expect(result).toMatchInlineSnapshot(`
         {
@@ -54,7 +54,7 @@ describe('convertAttribute', () => {
     });
 
     describe('html-like', () => {
-      test('html', () => {
+      test('simple HTML-like label', () => {
         const result = convertAttribute('label', '<A>');
         expect(result).toMatchInlineSnapshot(`
           {
@@ -73,7 +73,107 @@ describe('convertAttribute', () => {
               "location": null,
               "quoted": "html",
               "type": "Literal",
-              "value": "<A>",
+              "value": "A",
+            },
+          }
+        `);
+      });
+      test('nested HTML-like label', () => {
+        const result = convertAttribute('label', '<<b>Hi</b>>');
+        expect(result).toMatchInlineSnapshot(`
+          {
+            "children": [],
+            "key": {
+              "children": [],
+              "location": null,
+              "quoted": false,
+              "type": "Literal",
+              "value": "label",
+            },
+            "location": null,
+            "type": "Attribute",
+            "value": {
+              "children": [],
+              "location": null,
+              "quoted": "html",
+              "type": "Literal",
+              "value": "<b>Hi</b>",
+            },
+          }
+        `);
+      });
+
+      // Additional edge-case tests for whitespace and malformed HTML-like values
+      test('HTML-like label with surrounding whitespace', () => {
+        const result = convertAttribute('label', '  <A>  ');
+        expect(result).toMatchInlineSnapshot(`
+          {
+            "children": [],
+            "key": {
+              "children": [],
+              "location": null,
+              "quoted": false,
+              "type": "Literal",
+              "value": "label",
+            },
+            "location": null,
+            "type": "Attribute",
+            "value": {
+              "children": [],
+              "location": null,
+              "quoted": "html",
+              "type": "Literal",
+              "value": "A",
+            },
+          }
+        `);
+      });
+
+      test('malformed HTML-like missing closing bracket', () => {
+        const result = convertAttribute('label', '<A');
+        expect(result).toMatchInlineSnapshot(`
+          {
+            "children": [],
+            "key": {
+              "children": [],
+              "location": null,
+              "quoted": false,
+              "type": "Literal",
+              "value": "label",
+            },
+            "location": null,
+            "type": "Attribute",
+            "value": {
+              "children": [],
+              "location": null,
+              "quoted": true,
+              "type": "Literal",
+              "value": "<A",
+            },
+          }
+        `);
+      });
+
+      test('malformed HTML-like missing opening bracket', () => {
+        const result = convertAttribute('label', 'A>');
+        expect(result).toMatchInlineSnapshot(`
+          {
+            "children": [],
+            "key": {
+              "children": [],
+              "location": null,
+              "quoted": false,
+              "type": "Literal",
+              "value": "label",
+            },
+            "location": null,
+            "type": "Attribute",
+            "value": {
+              "children": [],
+              "location": null,
+              "quoted": true,
+              "type": "Literal",
+              "value": "A>",
             },
           }
         `);

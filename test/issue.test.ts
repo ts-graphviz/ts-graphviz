@@ -371,7 +371,7 @@ describe('issue #1335', () => {
           label = <<b>NOK<b>>;
         ];
         "c" [
-          label = "OK";
+          label = <OK>;
         ];
       }"
     `);
