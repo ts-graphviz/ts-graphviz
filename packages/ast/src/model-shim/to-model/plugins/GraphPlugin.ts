@@ -1,6 +1,6 @@
 import type { GraphASTNode } from '../../../types.js';
 import type { ConvertToModelPlugin } from '../types.js';
-import { applyStatements } from './utils/apply-statments.js';
+import { applyStatements } from './utils/apply-statements.js';
 
 export const GraphPlugin: ConvertToModelPlugin<GraphASTNode> = {
   match(ast) {

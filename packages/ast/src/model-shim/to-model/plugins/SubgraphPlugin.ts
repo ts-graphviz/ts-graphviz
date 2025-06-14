@@ -1,6 +1,6 @@
 import type { SubgraphASTNode } from '../../../types.js';
 import type { ConvertToModelPlugin } from '../types.js';
-import { applyStatements } from './utils/apply-statments.js';
+import { applyStatements } from './utils/apply-statements.js';
 
 export const SubgraphPlugin: ConvertToModelPlugin<SubgraphASTNode> = {
   match(ast) {
