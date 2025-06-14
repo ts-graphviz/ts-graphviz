@@ -4,6 +4,7 @@ import type {
   ClusterStatementASTNode,
 } from '../../../../types.js';
 import type { ConvertToModelContext } from '../../types.js';
+import { collectAttributes } from './collect-attributes.js';
 import { CommentHolder } from './comment-holder.js';
 
 export function applyStatements(
@@ -44,18 +45,11 @@ export function applyStatements(
         break;
       }
       case 'AttributeList': {
-        const attrs = stmt.children
-          .filter<AttributeASTNode>(
+        const attrs = collectAttributes(
+          stmt.children.filter<AttributeASTNode>(
             (v): v is AttributeASTNode => v.type === 'Attribute',
-          )
-          .reduce<Record<string, string | number | boolean>>((acc, curr) => {
-            if (curr.value.quoted === 'html') {
-              acc[curr.key.value] = `<${curr.value.value}>`;
-            } else {
-              acc[curr.key.value] = curr.value.value;
-            }
-            return acc;
-          }, {});
+          ),
+        );
         switch (stmt.kind) {
           case 'Edge':
             graph.edge(attrs);
