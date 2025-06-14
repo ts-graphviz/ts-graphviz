@@ -1,31 +1,17 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Digraph > renders correctly by toDot method > digraph with comment > multi line comment 1`] = `
+exports[`toDot serialization for Digraph > Basic graph rendering > Comment support > includes multi-line graph comments in output 1`] = `
 "// this is comment.
 // second line.
 digraph {}"
 `;
 
-exports[`Digraph > renders correctly by toDot method > digraph with comment > single line comment 1`] = `
+exports[`toDot serialization for Digraph > Basic graph rendering > Comment support > includes single-line graph comments in output 1`] = `
 "// this is comment.
 digraph {}"
 `;
 
-exports[`Digraph > renders correctly by toDot method > has some attributes 1`] = `
-"digraph {
-  graph [
-    color = "red";
-  ];
-  edge [
-    label = "edge label";
-  ];
-  node [
-    xlabel = "node xlabel";
-  ];
-}"
-`;
-
-exports[`Digraph > renders correctly by toDot method > label attribute behavior > html like 1`] = `
+exports[`toDot serialization for Digraph > Basic graph rendering > Label attribute quoting > preserves html-like label quotes without additional quoting 1`] = `
 "digraph {
   graph [
     label = <<B>this is test for graph label</B>>;
@@ -39,7 +25,7 @@ exports[`Digraph > renders correctly by toDot method > label attribute behavior 
 }"
 `;
 
-exports[`Digraph > renders correctly by toDot method > label attribute behavior > plain text label to be quoted by double quotation 1`] = `
+exports[`toDot serialization for Digraph > Basic graph rendering > Label attribute quoting > quotes plain-text labels with double quotes 1`] = `
 "digraph {
   graph [
     label = "this is test for graph label";
@@ -53,50 +39,38 @@ exports[`Digraph > renders correctly by toDot method > label attribute behavior 
 }"
 `;
 
-exports[`Digraph > renders correctly by toDot method > nodes and edge 1`] = `
-"digraph {
-  "node1";
-  "node2";
-  "node1" -> "node2";
-}"
-`;
+exports[`toDot serialization for Digraph > Basic graph rendering > renders a strict graph when strict=true 1`] = `"strict digraph {}"`;
 
-exports[`Digraph > renders correctly by toDot method > set attributes 1`] = `
-"digraph {
-  dpi = 360;
-}"
-`;
+exports[`toDot serialization for Digraph > Basic graph rendering > renders an empty graph with default settings 1`] = `"digraph {}"`;
 
-exports[`Digraph > renders correctly by toDot method > set attributes by apply 1`] = `
+exports[`toDot serialization for Digraph > Basic graph rendering > renders graph with attributes via apply() 1`] = `
 "digraph {
   layout = "dot";
   dpi = 360;
 }"
 `;
 
-exports[`Digraph > renders correctly by toDot method > simple g 1`] = `"digraph {}"`;
-
-exports[`Digraph > renders correctly by toDot method > strict graph 1`] = `"strict digraph {}"`;
-
-exports[`Digraph > renders correctly by toDot method > subgraphs 1`] = `
+exports[`toDot serialization for Digraph > Basic graph rendering > renders graph with custom attributes via set() 1`] = `
 "digraph {
-  "node1";
-  "node2";
-  subgraph "A" {
-    "A_node1";
-    "A_node2";
-    "A_node1" -> "A_node2";
-    "B_node1" -> "B_node2";
-  }
-  subgraph "B" {
-    "B_node1";
-    "B_node2";
-  }
-  "node1" -> "node2";
+  dpi = 360;
 }"
 `;
 
-exports[`Digraph > renders correctly by toDot method > subgraphs, depth 2 1`] = `
+exports[`toDot serialization for Digraph > Basic graph rendering > renders graph, edge, and node attributes grouped by category 1`] = `
+"digraph {
+  graph [
+    color = "red";
+  ];
+  edge [
+    label = "edge label";
+  ];
+  node [
+    xlabel = "node xlabel";
+  ];
+}"
+`;
+
+exports[`toDot serialization for Digraph > Basic graph rendering > renders nested subgraphs to arbitrary depth 1`] = `
 "digraph {
   "node1";
   "node2";
@@ -114,32 +88,44 @@ exports[`Digraph > renders correctly by toDot method > subgraphs, depth 2 1`] = 
 }"
 `;
 
-exports[`Graph > renders correctly by toDot method > digraph with comment > multi line comment 1`] = `
+exports[`toDot serialization for Digraph > Basic graph rendering > renders simple nodes and an edge 1`] = `
+"digraph {
+  "node1";
+  "node2";
+  "node1" -> "node2";
+}"
+`;
+
+exports[`toDot serialization for Digraph > Basic graph rendering > renders single-level subgraphs with nodes and edges 1`] = `
+"digraph {
+  "node1";
+  "node2";
+  subgraph "A" {
+    "A_node1";
+    "A_node2";
+    "A_node1" -> "A_node2";
+    "B_node1" -> "B_node2";
+  }
+  subgraph "B" {
+    "B_node1";
+    "B_node2";
+  }
+  "node1" -> "node2";
+}"
+`;
+
+exports[`toDot serialization for Graph > Basic graph rendering > Comment support > includes multi-line graph comments in output 1`] = `
 "// this is comment.
 // second line.
 graph {}"
 `;
 
-exports[`Graph > renders correctly by toDot method > digraph with comment > single line comment 1`] = `
+exports[`toDot serialization for Graph > Basic graph rendering > Comment support > includes single-line graph comments in output 1`] = `
 "// this is comment.
 graph {}"
 `;
 
-exports[`Graph > renders correctly by toDot method > has some attributes 1`] = `
-"graph {
-  graph [
-    color = "red";
-  ];
-  edge [
-    label = "edge label";
-  ];
-  node [
-    xlabel = "node xlabel";
-  ];
-}"
-`;
-
-exports[`Graph > renders correctly by toDot method > label attribute behavior > html like 1`] = `
+exports[`toDot serialization for Graph > Basic graph rendering > Label attribute quoting > preserves html-like label quotes without additional quoting 1`] = `
 "graph {
   graph [
     label = <<B>this is test for graph label</B>>;
@@ -153,7 +139,7 @@ exports[`Graph > renders correctly by toDot method > label attribute behavior > 
 }"
 `;
 
-exports[`Graph > renders correctly by toDot method > label attribute behavior > plain text label to be quoted by double quotation 1`] = `
+exports[`toDot serialization for Graph > Basic graph rendering > Label attribute quoting > quotes plain-text labels with double quotes 1`] = `
 "graph {
   graph [
     label = "this is test for graph label";
@@ -167,50 +153,38 @@ exports[`Graph > renders correctly by toDot method > label attribute behavior > 
 }"
 `;
 
-exports[`Graph > renders correctly by toDot method > nodes and edge 1`] = `
-"graph {
-  "node1";
-  "node2";
-  "node1" -- "node2";
-}"
-`;
+exports[`toDot serialization for Graph > Basic graph rendering > renders a strict graph when strict=true 1`] = `"strict graph {}"`;
 
-exports[`Graph > renders correctly by toDot method > set attributes 1`] = `
-"graph {
-  dpi = 360;
-}"
-`;
+exports[`toDot serialization for Graph > Basic graph rendering > renders an empty graph with default settings 1`] = `"graph {}"`;
 
-exports[`Graph > renders correctly by toDot method > set attributes by apply 1`] = `
+exports[`toDot serialization for Graph > Basic graph rendering > renders graph with attributes via apply() 1`] = `
 "graph {
   layout = "dot";
   dpi = 360;
 }"
 `;
 
-exports[`Graph > renders correctly by toDot method > simple g 1`] = `"graph {}"`;
-
-exports[`Graph > renders correctly by toDot method > strict graph 1`] = `"strict graph {}"`;
-
-exports[`Graph > renders correctly by toDot method > subgraphs 1`] = `
+exports[`toDot serialization for Graph > Basic graph rendering > renders graph with custom attributes via set() 1`] = `
 "graph {
-  "node1";
-  "node2";
-  subgraph "A" {
-    "A_node1";
-    "A_node2";
-    "A_node1" -- "A_node2";
-    "B_node1" -- "B_node2";
-  }
-  subgraph "B" {
-    "B_node1";
-    "B_node2";
-  }
-  "node1" -- "node2";
+  dpi = 360;
 }"
 `;
 
-exports[`Graph > renders correctly by toDot method > subgraphs, depth 2 1`] = `
+exports[`toDot serialization for Graph > Basic graph rendering > renders graph, edge, and node attributes grouped by category 1`] = `
+"graph {
+  graph [
+    color = "red";
+  ];
+  edge [
+    label = "edge label";
+  ];
+  node [
+    xlabel = "node xlabel";
+  ];
+}"
+`;
+
+exports[`toDot serialization for Graph > Basic graph rendering > renders nested subgraphs to arbitrary depth 1`] = `
 "graph {
   "node1";
   "node2";
@@ -223,6 +197,32 @@ exports[`Graph > renders correctly by toDot method > subgraphs, depth 2 1`] = `
       "depth2_node1" -- "depth2_node2";
     }
     "depth1_node1" -- "depth1_node2";
+  }
+  "node1" -- "node2";
+}"
+`;
+
+exports[`toDot serialization for Graph > Basic graph rendering > renders simple nodes and an edge 1`] = `
+"graph {
+  "node1";
+  "node2";
+  "node1" -- "node2";
+}"
+`;
+
+exports[`toDot serialization for Graph > Basic graph rendering > renders single-level subgraphs with nodes and edges 1`] = `
+"graph {
+  "node1";
+  "node2";
+  subgraph "A" {
+    "A_node1";
+    "A_node2";
+    "A_node1" -- "A_node2";
+    "B_node1" -- "B_node2";
+  }
+  subgraph "B" {
+    "B_node1";
+    "B_node2";
   }
   "node1" -- "node2";
 }"

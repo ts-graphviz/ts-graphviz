@@ -1,9 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import type { Options } from './types.js';
 
 describe('createCommandAndArgs', () => {
-  it('should return the correct command and args', () => {
+  it('returns custom dotCommand and full argument list when options fully specified', () => {
     const options: Options = {
       dotCommand: 'mydot',
       suppressWarnings: true,
@@ -53,11 +53,26 @@ describe('createCommandAndArgs', () => {
     `);
   });
 
-  it('should return user customized command', () => {
-    const options: Options = {
-      dotCommand: 'mydot',
-    };
-    const [command] = createCommandAndArgs(options);
-    expect(command).toBe('mydot');
+  it('uses default dot command and default arguments when no options provided', () => {
+    // Only layout is required for type compatibility
+    const opts = { layout: 'dot' } as Options<'dot'>;
+    const [command, args] = createCommandAndArgs(opts);
+    expect(command).toBe('dot');
+    // default suppressWarnings=true and format='svg'
+    expect(args).toEqual(['-q', '-Tsvg', '-Kdot']);
+  });
+
+  it('honors custom dotCommand when only dotCommand provided', () => {
+    const opts = { dotCommand: 'graphviz', layout: 'dot' } as Options<'dot'>;
+    const [command] = createCommandAndArgs(opts);
+    expect(command).toBe('graphviz');
+  });
+});
+
+describe('createCommandAndArgs type', () => {
+  it('returns tuple [string, string[]]', () => {
+    expectTypeOf<typeof createCommandAndArgs>().returns.toEqualTypeOf<
+      [string, string[]]
+    >();
   });
 });
