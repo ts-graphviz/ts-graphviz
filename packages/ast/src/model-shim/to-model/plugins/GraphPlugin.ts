@@ -9,7 +9,7 @@ export const GraphPlugin: ConvertToModelPlugin<GraphASTNode> = {
   convert(context, ast) {
     const G = ast.directed ? context.models.Digraph : context.models.Graph;
     const graph = new G(ast.id?.value, ast.strict);
-    applyStatements(graph, ast.children);
+    applyStatements(context, graph, ast.children);
     return graph;
   },
 };

@@ -16,7 +16,7 @@ export function convertAttribute<K extends AttributeKey>(
           key: createElement('Literal', { value: key, quoted: false }, []),
           value: createElement(
             'Literal',
-            { value: trimmed, quoted: 'html' },
+            { value: trimmed.slice(1, -1), quoted: 'html' },
             [],
           ),
         },

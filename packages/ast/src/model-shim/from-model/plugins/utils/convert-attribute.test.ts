@@ -73,7 +73,7 @@ describe('convertAttribute', () => {
               "location": null,
               "quoted": "html",
               "type": "Literal",
-              "value": "<A>",
+              "value": "A",
             },
           }
         `);

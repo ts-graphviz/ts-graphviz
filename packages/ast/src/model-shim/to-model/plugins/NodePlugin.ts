@@ -12,17 +12,14 @@ export const NodePlugin: ConvertToModelPlugin<NodeASTNode> = {
         .filter<AttributeASTNode>(
           (v): v is AttributeASTNode => v.type === 'Attribute',
         )
-        .reduce(
-          (acc, curr) => {
-            if (curr.value.quoted === 'html') {
-              acc[curr.key.value] = `<${curr.value.value}>`;
-            } else {
-              acc[curr.key.value] = curr.value.value;
-            }
-            return acc;
-          },
-          {} as { [key: string]: string },
-        ),
+        .reduce<Record<string, string | number | boolean>>((acc, curr) => {
+          if (curr.value.quoted === 'html') {
+            acc[curr.key.value] = `<${curr.value.value}>`;
+          } else {
+            acc[curr.key.value] = curr.value.value;
+          }
+          return acc;
+        }, {}),
     );
     return node;
   },

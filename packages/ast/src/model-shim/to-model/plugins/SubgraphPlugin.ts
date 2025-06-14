@@ -8,7 +8,7 @@ export const SubgraphPlugin: ConvertToModelPlugin<SubgraphASTNode> = {
   },
   convert(context, ast) {
     const subgraph = new context.models.Subgraph(ast.id?.value);
-    applyStatements(subgraph, ast.children);
+    applyStatements(context, subgraph, ast.children);
     return subgraph;
   },
 };
