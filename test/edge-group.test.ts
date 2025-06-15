@@ -1,3 +1,4 @@
+import type { EdgeASTNode, NodeRefGroupASTNode } from '@ts-graphviz/ast';
 import { fromModel } from '@ts-graphviz/ast';
 import { digraph, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
@@ -20,10 +21,13 @@ describe('Edge grouping feature', () => {
           g.edge(['x', ['y']]);
         }),
       );
-      const edge: any = (ast as any).children[0].children[0];
-      const group = edge.targets[1];
-      expect(group.children).toHaveLength(1);
-      expect(group.children[0].id.value).toBe('y');
+      const graphNode = ast.children[0];
+      expect(graphNode.type).toBe('Graph');
+      const edgeNode = graphNode.children[0] as EdgeASTNode;
+      const groupNode = edgeNode.targets[1] as NodeRefGroupASTNode;
+      expect(groupNode.type).toBe('NodeRefGroup');
+      expect(groupNode.children).toHaveLength(1);
+      expect(groupNode.children[0].id.value).toBe('y');
     });
   });
 
