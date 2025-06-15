@@ -189,7 +189,7 @@ describe('Root Graph Creation Functions', () => {
     });
 
     it('supports script-style subgraph and edge creation', () => {
-      const g = digraph('G');
+      const g = graph('G');
       const subgraphA = g.createSubgraph('A');
       const nodeA1 = subgraphA.createNode('A_node1');
       const nodeA2 = subgraphA.createNode('A_node2');
