@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`function digraph > callback style 1`] = `
+exports[`Root Graph Creation Functions > digraph() > builds graph using callback-style builder pattern 1`] = `
 "digraph "G" {
   "aa";
   "bb";
@@ -23,7 +23,7 @@ exports[`function digraph > callback style 1`] = `
 }"
 `;
 
-exports[`function digraph > callback style, set attributes by attributes object 1`] = `
+exports[`Root Graph Creation Functions > digraph() > builds graph with attributes object in callback-style builder 1`] = `
 "digraph "G" {
   "aa";
   "bb";
@@ -46,7 +46,7 @@ exports[`function digraph > callback style, set attributes by attributes object 
 }"
 `;
 
-exports[`function digraph > comment 1`] = `
+exports[`Root Graph Creation Functions > digraph() > includes comments on graph, nodes, edges, and subgraphs 1`] = `
 "// This is directed graph.
 digraph "G" {
   // This is node a.
@@ -73,43 +73,43 @@ digraph "G" {
 }"
 `;
 
-exports[`function digraph > root create function > id 1`] = `"digraph "id" {}"`;
+exports[`Root Graph Creation Functions > digraph() > parameterized creation scenarios > id 1`] = `"digraph "id" {}"`;
 
-exports[`function digraph > root create function > id with attributes 1`] = `
+exports[`Root Graph Creation Functions > digraph() > parameterized creation scenarios > id with attributes 1`] = `
 "digraph "id" {
   label = "Label";
 }"
 `;
 
-exports[`function digraph > root create function > no id with attributes 1`] = `
+exports[`Root Graph Creation Functions > digraph() > parameterized creation scenarios > no id with attributes 1`] = `
 "digraph {
   label = "Label";
 }"
 `;
 
-exports[`function digraph > root create function > no parameters 1`] = `"digraph {}"`;
+exports[`Root Graph Creation Functions > digraph() > parameterized creation scenarios > no parameters 1`] = `"digraph {}"`;
 
-exports[`function digraph > root create function > strict id with attributes 1`] = `
+exports[`Root Graph Creation Functions > digraph() > parameterized creation scenarios > strict id with attributes 1`] = `
 "strict digraph "id" {
   label = "Label";
 }"
 `;
 
-exports[`function digraph > root create function > strict no id with attributes 1`] = `
+exports[`Root Graph Creation Functions > digraph() > parameterized creation scenarios > strict no id with attributes 1`] = `
 "strict digraph {
   label = "Label";
 }"
 `;
 
-exports[`function digraph > root create function > strict no parameters 1`] = `"strict digraph {}"`;
+exports[`Root Graph Creation Functions > digraph() > parameterized creation scenarios > strict no parameters 1`] = `"strict digraph {}"`;
 
-exports[`function digraph > root create function > strict with attributes 1`] = `
+exports[`Root Graph Creation Functions > digraph() > parameterized creation scenarios > strict with attributes 1`] = `
 "strict digraph {
   label = "Label";
 }"
 `;
 
-exports[`function graph > callback style 1`] = `
+exports[`Root Graph Creation Functions > graph() > builds graph using callback-style builder pattern 1`] = `
 "graph "G" {
   "aa";
   "bb";
@@ -136,7 +136,7 @@ exports[`function graph > callback style 1`] = `
 }"
 `;
 
-exports[`function graph > callback style, set attributes by attributes object 1`] = `
+exports[`Root Graph Creation Functions > graph() > builds graph with attributes object in callback-style builder 1`] = `
 "graph "G" {
   "aa";
   "bb";
@@ -159,7 +159,7 @@ exports[`function graph > callback style, set attributes by attributes object 1`
 }"
 `;
 
-exports[`function graph > escape characters 1`] = `
+exports[`Root Graph Creation Functions > graph() > escapes special characters in names and labels 1`] = `
 "graph "G\\n\\"" {
   "a\\na" [
     label = "1\\n2\\n\\"\\n3";
@@ -181,20 +181,20 @@ exports[`function graph > escape characters 1`] = `
 }"
 `;
 
-exports[`function graph > script style 1`] = `
-"digraph "G" {
+exports[`Root Graph Creation Functions > graph() > supports script-style subgraph and edge creation 1`] = `
+"graph "G" {
   "node1";
   "node2";
   subgraph "A" {
     "A_node1";
     "A_node2";
-    "A_node1" -> "A_node2";
-    "B_node1" -> "B_node2";
+    "A_node1" -- "A_node2";
+    "B_node1" -- "B_node2";
   }
   subgraph "B" {
     "B_node1";
     "B_node2";
   }
-  "node1" -> "node2";
+  "node1" -- "node2";
 }"
 `;

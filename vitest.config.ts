@@ -7,7 +7,6 @@ export default defineConfig({
   test: {
     coverage: {
       enabled: true,
-      provider: 'istanbul',
       include: ['packages/**/src/**/*.ts'],
     },
     typecheck: {

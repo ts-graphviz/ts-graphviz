@@ -1,9 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 import { createCommandArgs, escapeValue } from './create-command-args.js';
 import type { Options } from './types.js';
 
 describe('createCommandArgs', () => {
-  it('should generate correct args for neato layout', () => {
+  it('generates expected Graphviz arguments for neato layout with all options', () => {
     const options: Options = {
       suppressWarnings: true,
       format: 'svg',
@@ -44,7 +44,7 @@ describe('createCommandArgs', () => {
     `);
   });
 
-  it('should generate correct args for fdp layout', () => {
+  it('generates expected Graphviz arguments for fdp layout with all options', () => {
     const options: Options = {
       suppressWarnings: false,
       format: 'png',
@@ -90,11 +90,19 @@ describe('createCommandArgs', () => {
 });
 
 describe('escapeValue', () => {
-  it('should escape values correctly', () => {
+  it('properly escapes various attribute values', () => {
     expect(escapeValue('foo bar')).toEqual('="foo bar"');
     expect(escapeValue('foo')).toEqual('=foo');
     expect(escapeValue(true)).toEqual('');
     expect(escapeValue(false)).toEqual('=false');
     expect(escapeValue(10)).toEqual('=10');
+  });
+});
+
+describe('createCommandArgs type', () => {
+  it('return type is Generator<string>', () => {
+    expectTypeOf<typeof createCommandArgs>().returns.toEqualTypeOf<
+      Generator<string>
+    >();
   });
 });
