@@ -182,19 +182,19 @@ exports[`Root Graph Creation Functions > graph() > escapes special characters in
 `;
 
 exports[`Root Graph Creation Functions > graph() > supports script-style subgraph and edge creation 1`] = `
-"digraph "G" {
+"graph "G" {
   "node1";
   "node2";
   subgraph "A" {
     "A_node1";
     "A_node2";
-    "A_node1" -> "A_node2";
-    "B_node1" -> "B_node2";
+    "A_node1" -- "A_node2";
+    "B_node1" -- "B_node2";
   }
   subgraph "B" {
     "B_node1";
     "B_node2";
   }
-  "node1" -> "node2";
+  "node1" -- "node2";
 }"
 `;
