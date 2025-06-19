@@ -9,7 +9,7 @@
 
 Update Develop Environment
 - Drop turbo
-- Upgrade biome to 1.9
+- Upgrade biome to 2.0
 - Upgrade TypeScript to 5.8
 - Upgrade Vite to 6.3
 - Upgrade Vitest to 3.2
