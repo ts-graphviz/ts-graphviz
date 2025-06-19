@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, test } from 'vitest';
 
 import { registerDefault } from './register-default.js';
+
 registerDefault();
 
 import type { EdgeTargetTuple } from '@ts-graphviz/common';

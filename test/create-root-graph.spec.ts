@@ -1,8 +1,8 @@
 import {
-  Digraph,
-  Graph,
   attribute as _,
+  Digraph,
   digraph,
+  Graph,
   graph,
   strict,
   toDot,

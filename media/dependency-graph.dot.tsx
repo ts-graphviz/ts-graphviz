@@ -19,7 +19,10 @@ const pkgGraph = createPkgGraph(publishedPackages);
 function PackageLabel({
   name,
   description,
-}: { name?: string; description?: string }) {
+}: {
+  name?: string;
+  description?: string;
+}) {
   return (
     <dot:table>
       <dot:tr>

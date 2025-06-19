@@ -1,4 +1,4 @@
-import { type ReactElement, createElement } from 'react';
+import { createElement, type ReactElement } from 'react';
 import { type GraphBaseModel, type RootGraphModel, toDot } from 'ts-graphviz';
 
 import { CurrentGraph } from './contexts/CurrentGraph.js';

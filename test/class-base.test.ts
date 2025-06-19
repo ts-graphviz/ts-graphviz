@@ -1,15 +1,14 @@
-import { describe, expect, it } from 'vitest';
-
 import {
+  attribute as _,
   Digraph,
   Edge,
   type EdgeTargetTuple,
   Node,
   Subgraph,
-  attribute as _,
   toDot,
   withContext,
 } from 'ts-graphviz';
+import { describe, expect, it } from 'vitest';
 
 describe('Digraph and Subgraph Base Functionality', () => {
   it('should render a subgraph with colored nodes and custom edge attributes', () => {
