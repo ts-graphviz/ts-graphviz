@@ -1,10 +1,10 @@
 import {
   Digraph,
   Edge,
+  fromDot,
   Node,
   RootGraph,
   Subgraph,
-  fromDot,
   toDot,
 } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';

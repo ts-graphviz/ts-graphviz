@@ -4,8 +4,8 @@ import type {
   ConvertFromModelContext,
   ConvertFromModelOptions,
   ConvertFromModelPlugin,
+  ModelToAST,
 } from './types.js';
-import type { ModelToAST } from './types.js';
 
 /**
  * FromModelConverter is a class used to convert a {@link DotObjectModel} into an ASTNode.

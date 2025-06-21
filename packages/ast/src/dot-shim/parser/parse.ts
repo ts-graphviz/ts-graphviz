@@ -10,9 +10,9 @@ import type {
   SubgraphASTNode,
 } from '../../types.js';
 import {
+  parse as _parse,
   SyntaxError as PeggySyntaxError,
   type StartRuleNames,
-  parse as _parse,
 } from './_parse.js';
 
 /**

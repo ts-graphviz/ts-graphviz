@@ -1,9 +1,8 @@
 ///<reference types="vite/client" />
 
 import path from 'node:path';
-import { describe, it } from 'vitest';
-
 import { type ASTNode, parse, stringify } from '@ts-graphviz/ast';
+import { describe, it } from 'vitest';
 
 function forEachDotFile(
   callback: (file: string, getContents: () => Promise<string>) => void,

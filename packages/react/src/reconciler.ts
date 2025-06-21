@@ -36,19 +36,19 @@ export class HostConfig
       NoTimeout
     >
 {
-  preparePortalMount(containerInfo: Container): void {
+  preparePortalMount(_containerInfo: Container): void {
     // NoOp
   }
 
-  scheduleTimeout(fn: (...args: unknown[]) => unknown, delay?: number) {
+  scheduleTimeout(_fn: (...args: unknown[]) => unknown, _delay?: number) {
     // NoOp
   }
 
-  cancelTimeout(id: any): void {
+  cancelTimeout(_id: any): void {
     // NoOp
   }
 
-  queueMicrotask(fn: () => void): void {
+  queueMicrotask(_fn: () => void): void {
     // NoOp
   }
 
@@ -91,25 +91,25 @@ export class HostConfig
     return instance;
   }
 
-  public getRootHostContext(rootContainerInstance: Container): HostContext {
+  public getRootHostContext(_rootContainerInstance: Container): HostContext {
     return {};
   }
 
   public getChildHostContext(
     parentHostContext: HostContext,
-    type: Type,
-    rootContainerInstance: Container,
+    _type: Type,
+    _rootContainerInstance: Container,
   ): HostContext {
     return parentHostContext;
   }
 
   public prepareForCommit(
-    containerInfo: Container,
+    _containerInfo: Container,
   ): Record<string, any> | null {
     return null;
   }
 
-  public resetAfterCommit(containerInfo: Container): void {
+  public resetAfterCommit(_containerInfo: Container): void {
     // containerInfo.setRoot
   }
 
@@ -119,9 +119,9 @@ export class HostConfig
   public createInstance(
     type: Type,
     props: Props,
-    rootContainerInstance: Container,
-    hostContext: HostContext,
-    internalInstanceHandle: OpaqueHandle,
+    _rootContainerInstance: Container,
+    _hostContext: HostContext,
+    _internalInstanceHandle: OpaqueHandle,
   ): Instance {
     // NoOp
     return type(props);
@@ -135,51 +135,51 @@ export class HostConfig
   }
 
   public finalizeInitialChildren(
-    parentInstance: Instance,
-    type: Type,
-    props: Props,
-    rootContainerInstance: Container,
-    hostContext: HostContext,
+    _parentInstance: Instance,
+    _type: Type,
+    _props: Props,
+    _rootContainerInstance: Container,
+    _hostContext: HostContext,
   ): boolean {
     return false;
   }
 
   public prepareUpdate(
-    instance: Instance,
-    type: Type,
-    oldProps: Props,
-    newProps: Props,
-    rootContainerInstance: Container,
-    hostContext: HostContext,
+    _instance: Instance,
+    _type: Type,
+    _oldProps: Props,
+    _newProps: Props,
+    _rootContainerInstance: Container,
+    _hostContext: HostContext,
   ): null | UpdatePayload {
     return {};
   }
 
-  public shouldSetTextContent(type: Type, props: Props): boolean {
+  public shouldSetTextContent(_type: Type, _props: Props): boolean {
     return false;
   }
 
-  public shouldDeprioritizeSubtree(type: Type, props: Props): boolean {
+  public shouldDeprioritizeSubtree(_type: Type, _props: Props): boolean {
     return false;
   }
 
   public createTextInstance(
     text: string,
-    rootContainerInstance: Container,
-    hostContext: HostContext,
-    internalInstanceHandle: OpaqueHandle,
+    _rootContainerInstance: Container,
+    _hostContext: HostContext,
+    _internalInstanceHandle: OpaqueHandle,
   ): TextInstance {
     return text;
   }
 
   public scheduleDeferredCallback(
-    callback: () => any,
-    options?: { timeout: number },
+    _callback: () => any,
+    _options?: { timeout: number },
   ): any {
     // NoOp
   }
 
-  public cancelDeferredCallback(callbackID: any): void {
+  public cancelDeferredCallback(_callbackID: any): void {
     // NoOp
   }
 
@@ -198,8 +198,8 @@ export class HostConfig
   }
 
   public appendChildToContainer(
-    container: Container,
-    child: Instance | TextInstance,
+    _container: Container,
+    _child: Instance | TextInstance,
   ): void {
     // if (container.appendChild) {
     //   container.appendChild(child);
@@ -207,64 +207,64 @@ export class HostConfig
   }
 
   public commitTextUpdate(
-    textInstance: TextInstance,
-    oldText: string,
-    newText: string,
+    _textInstance: TextInstance,
+    _oldText: string,
+    _newText: string,
   ): void {
     // NoOp
   }
 
   public commitMount(
-    instance: Instance,
-    type: Type,
-    newProps: Props,
-    internalInstanceHandle: OpaqueHandle,
+    _instance: Instance,
+    _type: Type,
+    _newProps: Props,
+    _internalInstanceHandle: OpaqueHandle,
   ): void {
     // NoOp
   }
 
   public commitUpdate(
-    instance: Instance,
-    updatePayload: UpdatePayload,
-    type: Type,
-    oldProps: Props,
-    newProps: Props,
-    internalInstanceHandle: OpaqueHandle,
+    _instance: Instance,
+    _updatePayload: UpdatePayload,
+    _type: Type,
+    _oldProps: Props,
+    _newProps: Props,
+    _internalInstanceHandle: OpaqueHandle,
   ): void {
     // NoOp
   }
 
   public insertBefore(
-    parentInstance: Instance,
-    child: Instance | TextInstance,
-    beforeChild: Instance | TextInstance,
+    _parentInstance: Instance,
+    _child: Instance | TextInstance,
+    _beforeChild: Instance | TextInstance,
   ): void {
     // NoOp
   }
 
   public insertInContainerBefore(
-    container: Container,
-    child: Instance | TextInstance,
-    beforeChild: Instance | TextInstance,
+    _container: Container,
+    _child: Instance | TextInstance,
+    _beforeChild: Instance | TextInstance,
   ): void {
     // NoOp
   }
 
   public removeChild(
-    parentInstance: Instance,
-    child: Instance | TextInstance,
+    _parentInstance: Instance,
+    _child: Instance | TextInstance,
   ): void {
     // NoOp
   }
 
   public removeChildFromContainer(
-    container: Container,
-    child: Instance | TextInstance,
+    _container: Container,
+    _child: Instance | TextInstance,
   ): void {
     // NoOp
   }
 
-  public resetTextContent(instance: Instance): void {
+  public resetTextContent(_instance: Instance): void {
     // NoOp
   }
 }

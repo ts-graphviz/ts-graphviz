@@ -7,7 +7,7 @@ export const AttributeListPlugin: ConvertFromModelPlugin<AttributeListModel> = {
   match(model) {
     return model.$$type === 'AttributeList';
   },
-  convert(context, model) {
+  convert(_context, model) {
     return createElement(
       'AttributeList',
       {

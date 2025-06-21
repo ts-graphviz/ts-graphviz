@@ -2,8 +2,8 @@ import type {
   EdgeAttributesObject,
   EdgeTargetLikeTuple,
   GraphAttributesObject,
-  HTMLLikeLabel,
   HasComment,
+  HTMLLikeLabel,
   NodeAttributesObject,
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';

@@ -1,6 +1,8 @@
 import { registerDefault } from '@ts-graphviz/core';
 import { beforeEach, describe, expect, it, test } from 'vitest';
+
 registerDefault();
+
 import type { EdgeTargetTuple, SubgraphModel } from '@ts-graphviz/common';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
