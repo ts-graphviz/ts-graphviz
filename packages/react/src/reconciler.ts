@@ -1,21 +1,86 @@
-import type { FC } from 'react';
+import type { FC, ComponentProps } from 'react';
 import ReactReconciler from 'react-reconciler';
+import type { GraphBaseModel } from 'ts-graphviz';
 
-type Type = FC;
-type Props = any;
+/**
+ * React component type for Graphviz elements
+ */
+type Type = FC<any>;
+
+/**
+ * Props for Graphviz components
+ */
+type Props = ComponentProps<any>;
+
+/**
+ * Container represents the graph context
+ */
 type Container = Record<string, never>;
 
-type Instance = any;
-type TextInstance = any;
-type SuspenseInstance = any;
-type HydratableInstance = any;
-type PublicInstance = any;
-type HostContext = any;
-type UpdatePayload = any;
-type ChildSet = any;
-type TimeoutHandle = any;
-type NoTimeout = any;
+/**
+ * Instance represents a rendered Graphviz element (Node, Edge, Subgraph, etc.)
+ */
+type Instance = {
+  type: string;
+  props: Props;
+  children: (Instance | TextInstance)[];
+  appendChild?: (child: Instance | TextInstance) => void;
+};
 
+/**
+ * Text instance for string content
+ */
+type TextInstance = string;
+
+/**
+ * Suspense instance (not used in Graphviz rendering)
+ */
+type SuspenseInstance = never;
+
+/**
+ * Hydratable instance (not used in Graphviz rendering)
+ */
+type HydratableInstance = never;
+
+/**
+ * Public instance exposed to user code
+ */
+type PublicInstance = Instance | TextInstance;
+
+/**
+ * Host context for rendering
+ */
+type HostContext = {
+  graph?: GraphBaseModel;
+};
+
+/**
+ * Update payload for element updates
+ */
+type UpdatePayload = {
+  type: 'UPDATE';
+  oldProps: Props;
+  newProps: Props;
+} | null;
+
+/**
+ * Child set (not used in current implementation)
+ */
+type ChildSet = never;
+
+/**
+ * Timeout handle for scheduling
+ */
+type TimeoutHandle = ReturnType<typeof setTimeout>;
+
+/**
+ * No timeout constant
+ */
+type NoTimeout = -1;
+
+/**
+ * React Reconciler Fiber type
+ */
 type OpaqueHandle = ReactReconciler.Fiber;
 
 export class HostConfig
@@ -40,12 +105,15 @@ export class HostConfig
     // NoOp
   }
 
-  scheduleTimeout(_fn: (...args: unknown[]) => unknown, _delay?: number) {
-    // NoOp
+  scheduleTimeout(
+    fn: (...args: unknown[]) => unknown,
+    delay?: number,
+  ): TimeoutHandle {
+    return setTimeout(fn, delay || 0);
   }
 
-  cancelTimeout(_id: any): void {
-    // NoOp
+  cancelTimeout(id: TimeoutHandle): void {
+    clearTimeout(id);
   }
 
   queueMicrotask(_fn: () => void): void {
@@ -92,7 +160,9 @@ export class HostConfig
   }
 
   public getRootHostContext(_rootContainerInstance: Container): HostContext {
-    return {};
+    return {
+      graph: undefined,
+    };
   }
 
   public getChildHostContext(
@@ -100,7 +170,11 @@ export class HostConfig
     _type: Type,
     _rootContainerInstance: Container,
   ): HostContext {
-    return parentHostContext;
+    // Preserve parent context for nested components
+    return {
+      ...parentHostContext,
+      // You could extend context based on component type if needed
+    };
   }
 
   public prepareForCommit(
@@ -114,7 +188,7 @@ export class HostConfig
   }
 
   /**
-   * Create component instance
+   * Create component instance for Graphviz elements
    */
   public createInstance(
     type: Type,
@@ -123,15 +197,28 @@ export class HostConfig
     _hostContext: HostContext,
     _internalInstanceHandle: OpaqueHandle,
   ): Instance {
-    // NoOp
-    return type(props);
+    const instance: Instance = {
+      type: type.displayName || type.name || 'Unknown',
+      props,
+      children: [],
+      appendChild: (child: Instance | TextInstance) => {
+        instance.children.push(child);
+      },
+    };
+    
+    // Execute the component function to trigger hooks and side effects
+    type(props);
+    
+    return instance;
   }
 
   public appendInitialChild(
     parentInstance: Instance,
     child: Instance | TextInstance,
   ): void {
-    parentInstance.appendChild(child);
+    if (parentInstance.appendChild) {
+      parentInstance.appendChild(child);
+    }
   }
 
   public finalizeInitialChildren(
@@ -147,12 +234,20 @@ export class HostConfig
   public prepareUpdate(
     _instance: Instance,
     _type: Type,
-    _oldProps: Props,
-    _newProps: Props,
+    oldProps: Props,
+    newProps: Props,
     _rootContainerInstance: Container,
     _hostContext: HostContext,
   ): null | UpdatePayload {
-    return {};
+    // Check if props have actually changed
+    if (JSON.stringify(oldProps) !== JSON.stringify(newProps)) {
+      return {
+        type: 'UPDATE',
+        oldProps,
+        newProps,
+      };
+    }
+    return null;
   }
 
   public shouldSetTextContent(_type: Type, _props: Props): boolean {
@@ -169,7 +264,7 @@ export class HostConfig
     _hostContext: HostContext,
     _internalInstanceHandle: OpaqueHandle,
   ): TextInstance {
-    return text;
+    return text.trim();
   }
 
   public scheduleDeferredCallback(
@@ -191,7 +286,6 @@ export class HostConfig
     parentInstance: Instance,
     child: Instance | TextInstance,
   ): void {
-    // NoOp
     if (parentInstance.appendChild) {
       parentInstance.appendChild(child);
     }
@@ -224,14 +318,20 @@ export class HostConfig
   }
 
   public commitUpdate(
-    _instance: Instance,
-    _updatePayload: UpdatePayload,
-    _type: Type,
+    instance: Instance,
+    updatePayload: UpdatePayload,
+    type: Type,
     _oldProps: Props,
-    _newProps: Props,
+    newProps: Props,
     _internalInstanceHandle: OpaqueHandle,
   ): void {
-    // NoOp
+    if (updatePayload && updatePayload.type === 'UPDATE') {
+      // Update instance props
+      instance.props = newProps;
+      
+      // Re-execute component function to trigger hooks with new props
+      type(newProps);
+    }
   }
 
   public insertBefore(
