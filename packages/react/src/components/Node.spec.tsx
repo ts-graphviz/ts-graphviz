@@ -4,7 +4,7 @@ import { Digraph } from './Digraph.js';
 import { Node } from './Node.js';
 
 describe('Node', () => {
-  test('pass without optional props and render correctly', () => {
+  test('should render Node with only required id prop', () => {
     const dot = renderToDot(
       <Digraph>
         <Node id="foo" />
@@ -17,7 +17,7 @@ describe('Node', () => {
     `);
   });
 
-  test('pass label with string and render correctly', () => {
+  test('should render Node with string label attribute', () => {
     const dot = renderToDot(
       <Digraph>
         <Node id="foo" label="label test" />
@@ -32,7 +32,7 @@ describe('Node', () => {
     `);
   });
 
-  test('pass label with HTMLLike ReactElement and render correctly', () => {
+  test('should render Node with HTML-like table label element', () => {
     const dot = renderToDot(
       <Digraph>
         <Node
@@ -58,7 +58,7 @@ describe('Node', () => {
     `);
   });
 
-  test('pass xlabel with string and render correctly', () => {
+  test('should render Node with string xlabel attribute', () => {
     const dot = renderToDot(
       <Digraph>
         <Node id="foo" xlabel="xlabel test" />
@@ -73,7 +73,7 @@ describe('Node', () => {
     `);
   });
 
-  test('pass xlabel with HTMLLike ReactElement and render correctly', () => {
+  test('should render Node with HTML-like table xlabel element', () => {
     const dot = renderToDot(
       <Digraph>
         <Node

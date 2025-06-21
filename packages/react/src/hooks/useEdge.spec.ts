@@ -6,35 +6,35 @@ import { digraph, graph } from './__tests__/wrapper.js';
 import { useEdge } from './useEdge.js';
 
 describe('useEdge', () => {
-  it('returns Edge instance in digraph wrapper', () => {
+  it('should create Edge instance with simple targets in digraph', () => {
     const { result } = renderHook(() => useEdge(['a', 'b']), {
       wrapper: digraph(),
     });
     expect(result.current).toBeInstanceOf(Edge);
   });
 
-  it('returns an Edge instance in a digraph wrapper for grouped edge targets', () => {
+  it('should create Edge instance with grouped targets in digraph', () => {
     const { result } = renderHook(() => useEdge(['a', ['b1', 'b2'], 'c']), {
       wrapper: digraph(),
     });
     expect(result.current).toBeInstanceOf(Edge);
   });
 
-  it('returns Edge instance in graph wrapper', () => {
+  it('should create Edge instance with simple targets in graph', () => {
     const { result } = renderHook(() => useEdge(['a', 'b']), {
       wrapper: graph(),
     });
     expect(result.current).toBeInstanceOf(Edge);
   });
 
-  it('returns an Edge instance in a graph wrapper for grouped edge targets', () => {
+  it('should create Edge instance with grouped targets in graph', () => {
     const { result } = renderHook(() => useEdge(['a', ['b1', 'b2'], 'c']), {
       wrapper: graph(),
     });
     expect(result.current).toBeInstanceOf(Edge);
   });
 
-  test('throw error if the target is less than 2', () => {
+  test('should throw error when edge has fewer than 2 targets', () => {
     expect(() => {
       renderHook(() => useEdge(['a'] as any as EdgeTargetLikeTuple), {
         wrapper: graph(),

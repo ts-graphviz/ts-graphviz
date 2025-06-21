@@ -7,7 +7,7 @@ import { Subgraph } from './components/Subgraph.js';
 import { renderToDot } from './render.js';
 
 describe('renderToDot', () => {
-  it('should render a digraph', () => {
+  it('should render complete digraph with nodes, edges, and subgraph', () => {
     expect(
       renderToDot(
         <Digraph>
@@ -38,7 +38,7 @@ describe('renderToDot', () => {
     `);
   });
 
-  it('should render a graph', () => {
+  it('should render complete undirected graph with nodes, edges, and subgraph', () => {
     expect(
       renderToDot(
         <Graph>
