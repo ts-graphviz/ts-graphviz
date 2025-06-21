@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import type {
   AttributeKey,
   AttributesObject,
@@ -11,21 +11,21 @@ export function useGraphAttributes<T extends AttributeKey>(
   attributes: AttributesObject<T>,
   { edge, node, graph }: GraphBaseAttributesProps,
 ): void {
-  useEffect(() => {
+  useLayoutEffect(() => {
     cluster.clear();
     cluster.apply(attributes);
   }, [cluster, attributes]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     cluster.attributes.node.clear();
     cluster.attributes.node.apply(node ?? {});
   }, [cluster, node]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     cluster.attributes.edge.clear();
     cluster.attributes.edge.apply(edge ?? {});
   }, [cluster, edge]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     cluster.attributes.graph.clear();
     cluster.attributes.graph.apply(graph ?? {});
   }, [cluster, graph]);

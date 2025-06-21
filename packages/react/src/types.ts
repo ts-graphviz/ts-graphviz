@@ -52,7 +52,6 @@ export interface NodeOptions extends NodeAttributesObject {}
 export interface RootGraphProps extends Omit<RootGraphOptions, 'label'> {
   label?: ReactElement | string;
   children?: ReactNode;
-  /** React 19 ref as prop pattern */
   ref?: Ref<GraphBaseModel>;
 }
 
@@ -62,7 +61,6 @@ export interface EdgeProps extends Omit<EdgeOptions, 'label'> {
   targets: EdgeTargetLikeTuple;
   /** Edge label */
   label?: ReactElement | string;
-  /** React 19 ref as prop pattern */
   ref?: Ref<EdgeModel>;
 }
 
@@ -74,7 +72,6 @@ export interface NodeProps extends Omit<NodeOptions, 'label' | 'xlabel'> {
   label?: ReactElement | string;
   /** Node xlabel */
   xlabel?: ReactElement | string;
-  /** React 19 ref as prop pattern */
   ref?: Ref<NodeModel>;
 }
 
@@ -83,7 +80,6 @@ export interface SubgraphProps extends Omit<SubgraphOptions, 'label'> {
   /** Subgraph label */
   label?: ReactElement | string;
   children?: ReactNode;
-  /** React 19 ref as prop pattern */
   ref?: Ref<GraphBaseModel>;
 }
 

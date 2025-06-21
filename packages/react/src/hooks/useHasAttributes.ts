@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import type {
   AttributeKey,
   AttributesObject,
@@ -9,7 +9,7 @@ export function useHasAttributes<T extends AttributeKey>(
   target: HasAttributes<T>,
   attributes: AttributesObject<T>,
 ): void {
-  useEffect(() => {
+  useLayoutEffect(() => {
     target.attributes.clear();
     target.attributes.apply(attributes);
   }, [target, attributes]);

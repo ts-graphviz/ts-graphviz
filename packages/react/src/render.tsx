@@ -1,4 +1,4 @@
-import { createElement, type ReactElement, startTransition } from 'react';
+import { type ReactElement, startTransition } from 'react';
 import { type GraphBaseModel, toDot } from 'ts-graphviz';
 
 import { CurrentGraph } from './contexts/CurrentGraph.js';

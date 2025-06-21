@@ -39,7 +39,7 @@ function manuallyRenderElement(element: ReactElement): string {
       }
     });
 
-    const attrsString = attributes.length > 0 ? ' ' + attributes.join(' ') : '';
+    const attrsString = attributes.length > 0 ? ` ${attributes.join(' ')}` : '';
     const childrenString = renderChildrenToString(propsWithChildren?.children);
 
     if (childrenString) {

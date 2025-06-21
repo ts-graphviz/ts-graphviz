@@ -1,5 +1,7 @@
+import { useRef } from 'react';
+import type { NodeModel } from 'ts-graphviz';
 import { describe, expect, test } from 'vitest';
-import { renderToDot } from '../render.js';
+import { render, renderToDot } from '../render.js';
 import { Digraph } from './Digraph.js';
 import { Node } from './Node.js';
 import '../types.js';
@@ -98,5 +100,88 @@ describe('Node', () => {
         ];
       }"
     `);
+  });
+
+  describe('ref support', () => {
+    test('should provide access to NodeModel via ref', async () => {
+      let nodeRef: NodeModel | null = null;
+
+      const TestComponent = () => {
+        const ref = useRef<NodeModel>(null);
+
+        return (
+          <Digraph>
+            <Node
+              id="testnode"
+              ref={(node) => {
+                ref.current = node;
+                nodeRef = node;
+              }}
+              label="Test Node"
+            />
+          </Digraph>
+        );
+      };
+
+      await render(<TestComponent />);
+
+      expect(nodeRef).not.toBeNull();
+      expect(nodeRef?.id).toBe('testnode');
+    });
+
+    test('should work with function refs', async () => {
+      let capturedNode: NodeModel | null = null;
+
+      const TestComponent = () => (
+        <Digraph>
+          <Node
+            id="functionref"
+            ref={(node) => {
+              capturedNode = node;
+            }}
+            label="Function Ref Node"
+          />
+        </Digraph>
+      );
+
+      await render(<TestComponent />);
+
+      expect(capturedNode).not.toBeNull();
+      expect(capturedNode?.id).toBe('functionref');
+    });
+
+    test('should allow model manipulation via ref', async () => {
+      let nodeRef: NodeModel | null = null;
+
+      const TestComponent = () => (
+        <Digraph>
+          <Node
+            id="manipulatable"
+            ref={(node) => {
+              nodeRef = node;
+            }}
+          />
+        </Digraph>
+      );
+
+      const result = await render(<TestComponent />);
+
+      expect(nodeRef).not.toBeNull();
+
+      // Manipulate the node via ref
+      nodeRef?.attributes.set('color', 'red');
+      nodeRef?.attributes.set('shape', 'box');
+      if (nodeRef) {
+        nodeRef.comment = 'Modified via ref';
+      }
+
+      // Verify changes were applied
+      const targetNode = result.graph.nodes.find(
+        (n) => n.id === 'manipulatable',
+      );
+      expect(targetNode?.attributes.get('color')).toBe('red');
+      expect(targetNode?.attributes.get('shape')).toBe('box');
+      expect(targetNode?.comment).toBe('Modified via ref');
+    });
   });
 });

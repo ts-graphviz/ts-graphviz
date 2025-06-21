@@ -14,6 +14,7 @@ export function useSubgraph(props: SubgraphOptions = {}): SubgraphModel {
   const { id, comment, edge, node, graph, ...attributes } = props;
   const context = useGraphvizContext();
   const cluster = useCurrentGraph();
+
   const subgraph = useMemo(() => {
     const g = new Subgraph(id);
     if (cluster !== null) {
@@ -21,14 +22,9 @@ export function useSubgraph(props: SubgraphOptions = {}): SubgraphModel {
     } else if (!context.container) {
       context.container = g as GraphBaseModel;
     }
-    g.comment = comment;
-    g.apply(attributes);
-    g.attributes.node.apply(node ?? {});
-    g.attributes.edge.apply(edge ?? {});
-    g.attributes.graph.apply(graph ?? {});
     return g;
-    // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME attributes changes on every re-render and should not be used as a hook dependency.
-  }, [context, cluster, id, comment, edge, node, graph, attributes]);
+  }, [context, cluster, id]);
+
   useHasComment(subgraph, comment);
   useGraphAttributes(subgraph, attributes, { edge, node, graph });
   useEffect(() => {
