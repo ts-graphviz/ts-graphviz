@@ -203,13 +203,13 @@ const DatabaseDiagram = () => (
   <Digraph>
     <Node
       id="user-table"
-      label={<DataRecord 
-        title="Users" 
-        fields={[['id', '1001'], ['name', 'John Doe'], ['email', 'john@example.com']]} 
+      label={<DataRecord
+        title="Users"
+        fields={[['id', '1001'], ['name', 'John Doe'], ['email', 'john@example.com']]}
       />}
       shape="record"
     />
-    
+
     <Node
       id="server-status"
       label={<StatusIndicator status="active" message="All systems operational" />}
@@ -217,7 +217,7 @@ const DatabaseDiagram = () => (
       style="rounded,filled"
       fillcolor="lightyellow"
     />
-    
+
     <Edge targets={["user-table", "server-status"]} label="monitors" />
   </Digraph>
 );
@@ -297,7 +297,7 @@ const WorkflowDiagram = () => (
     <ProcessNode id="process" label="Process Data" />
     <ProcessNode id="validate" label="Validate" />
     <ProcessNode id="end" label="End" color="lightcoral" />
-    
+
     <Edge targets={["start", "process"]} />
     <Edge targets={["process", "validate"]} />
     <Edge targets={["validate", "end"]} />
@@ -343,17 +343,17 @@ const InfoCard = ({ id, title, items }) => (
 // Usage in graph
 const ProjectDiagram = () => (
   <Digraph>
-    <InfoCard 
-      id="requirements" 
-      title="Requirements" 
-      items={["User login", "Data processing", "Reporting"]} 
+    <InfoCard
+      id="requirements"
+      title="Requirements"
+      items={["User login", "Data processing", "Reporting"]}
     />
-    <InfoCard 
-      id="implementation" 
-      title="Implementation" 
-      items={["React frontend", "Node.js API", "PostgreSQL DB"]} 
+    <InfoCard
+      id="implementation"
+      title="Implementation"
+      items={["React frontend", "Node.js API", "PostgreSQL DB"]}
     />
-    
+
     <Edge targets={["requirements", "implementation"]} label="leads to" />
   </Digraph>
 );
@@ -427,7 +427,7 @@ const syncResult = await render(
 
 ### Error Handling
 
-React 19 provides enhanced error handling capabilities with detailed error information and component stack traces:
+The package provides robust error handling capabilities for rendering errors:
 
 ```ts
 import { render, renderToDot } from "@ts-graphviz/react";
@@ -459,7 +459,7 @@ const dotString = await renderToDot(<ComplexGraph />, undefined, {
 
 ### Ref as Prop Support
 
-React 19's ref as prop pattern is fully supported for accessing graph model objects directly:
+The package supports using `ref` to access and manipulate graph models directly, allowing for dynamic updates and interactions:
 
 ```ts
 import { useRef } from 'react';

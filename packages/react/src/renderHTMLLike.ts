@@ -1,7 +1,7 @@
 import type { ReactElement, ReactNode } from 'react';
 
 /**
- * Manually traverse and render React element tree for React 19 compatibility
+ * Manually traverse and render React element tree.
  */
 function manuallyRenderElement(element: ReactElement): string {
   const { type, props } = element;
@@ -52,7 +52,7 @@ function manuallyRenderElement(element: ReactElement): string {
 }
 
 /**
- * Safely renders React children to string, handling React 19 compatibility
+ * Safely renders React children to string.
  */
 function renderChildrenToString(children: ReactNode): string {
   if (children == null || typeof children === 'boolean') {
@@ -85,7 +85,7 @@ export function renderHTMLLike(label?: ReactElement): string {
   }
 
   try {
-    // Use manual rendering for React 19 compatibility
+    // Use manual rendering
     const markup = manuallyRenderElement(label);
 
     if (!markup) {

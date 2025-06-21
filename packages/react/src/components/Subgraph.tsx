@@ -19,7 +19,7 @@ export const Subgraph: FC<SubgraphProps> = ({
   const subgraph = useSubgraph(options);
   const clusters = useGraphMap();
 
-  // Handle ref as prop (React 19 pattern)
+  // Handle ref as prop
   useImperativeHandle(ref, () => subgraph, [subgraph]);
   useEffect(() => {
     if (subgraph.id !== undefined) {

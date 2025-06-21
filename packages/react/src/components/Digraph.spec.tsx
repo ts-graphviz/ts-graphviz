@@ -6,7 +6,7 @@ import { Node } from './Node.js';
 
 describe('Digraph', () => {
   test('An error occurs when duplicate <Digraph />', async () => {
-    // React 19: Duplicate Digraph components should result in empty graph
+    // Duplicate Digraph components should result in empty graph
     // because the second Digraph throws an error during component execution
     const result = await render(
       <Digraph>

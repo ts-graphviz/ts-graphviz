@@ -18,7 +18,7 @@ export const Node: FC<NodeProps> = ({ id, label, xlabel, ref, ...options }) => {
 
   const node = useNode(id, options);
 
-  // Handle ref as prop (React 19 pattern)
+  // Handle ref as prop
   useImperativeHandle(ref, () => node, [node]);
 
   return null;

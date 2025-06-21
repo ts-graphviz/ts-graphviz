@@ -27,7 +27,7 @@ export const Graph: FC<RootGraphProps> = ({
   const graph = useGraph(options);
   const clusters = useGraphMap();
 
-  // Handle ref as prop (React 19 pattern)
+  // Handle ref as prop
   useImperativeHandle(ref, () => graph, [graph]);
 
   useEffect(() => {

@@ -84,7 +84,7 @@ type NoTimeout = -1;
 type OpaqueHandle = ReactReconciler.Fiber;
 
 /**
- * Update priority types for React 19 reconciler
+ * Update priority types
  */
 type UpdatePriority = number;
 
@@ -133,14 +133,14 @@ export class HostConfig
   }
 
   queueMicrotask(fn: () => void): void {
-    // For React 19 compatibility, execute immediately to ensure synchronous behavior
+    // Execute immediately to ensure synchronous behavior
     fn();
   }
 
-  // React 19 reconciler methods for update priority management
+  // For update priority management
   resolveUpdatePriority(): UpdatePriority {
     // Return SyncLane priority for immediate execution
-    // In React 19, this is typically 1 for synchronous updates
+    // This is typically 1 for synchronous updates
     return 1;
   }
 
@@ -153,15 +153,15 @@ export class HostConfig
     return 1;
   }
 
-  // React 19 form-related methods
+  // form-related methods
   resetFormInstance(_form: FormInstance): void {
     // NoOp - not applicable for Graphviz rendering
   }
 
-  // React 19 transition-related properties
+  // transition-related properties
   NotPendingTransition: TransitionStatus = null;
 
-  // React 19 suspense and commit methods
+  // suspense and commit methods
   maySuspendCommit(_type: Type, _props: Props): boolean {
     return false;
   }
@@ -184,7 +184,7 @@ export class HostConfig
     return null;
   }
 
-  // React 19 additional required methods
+  // additional required methods
   getInstanceFromNode(_node: any): OpaqueHandle | null {
     return null;
   }
@@ -217,12 +217,12 @@ export class HostConfig
     // NoOp
   }
 
-  // React 19 container clearing method
+  // container clearing method
   clearContainer(_container: Container): void {
     // NoOp - our containers don't need special clearing
   }
 
-  // React 19 transition context and scheduling methods
+  // transition context and scheduling methods
   HostTransitionContext: any = null;
 
   shouldAttemptEagerTransition(): boolean {
@@ -276,7 +276,7 @@ export class HostConfig
 
   public supportsHydration = false;
 
-  // React 19 specific configurations for synchronous rendering
+  // specific configurations for synchronous rendering
   public supportsMicrotasks = false;
 
   public getPublicInstance(instance: Instance | TextInstance): PublicInstance {
@@ -450,7 +450,7 @@ export class HostConfig
     instance.props = nextProps;
 
     // Don't re-execute component function here - let React handle updates
-    // This avoids issues with React 19's changed execution timing
+    // This avoids issues with React's changed execution timing
   }
 
   public insertBefore(

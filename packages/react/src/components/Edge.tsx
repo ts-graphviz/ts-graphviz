@@ -14,7 +14,7 @@ export const Edge: FC<EdgeProps> = ({ targets, label, ref, ...options }) => {
 
   const edge = useEdge(targets, options);
 
-  // Handle ref as prop (React 19 pattern)
+  // Handle ref as prop
   useImperativeHandle(ref, () => edge, [edge]);
 
   return null;

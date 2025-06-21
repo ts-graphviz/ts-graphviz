@@ -28,7 +28,7 @@ export const Digraph: FC<RootGraphProps> = ({
   const digraph = useDigraph(options);
   const clusters = useGraphMap();
 
-  // Handle ref as prop (React 19 pattern)
+  // Handle ref as prop
   useImperativeHandle(ref, () => digraph, [digraph]);
 
   useEffect(() => {

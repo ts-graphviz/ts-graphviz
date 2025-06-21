@@ -36,7 +36,6 @@ export interface RenderOptions<T extends GraphBaseModel = GraphBaseModel> {
   timeout?: number;
   /**
    * Called when an error is not caught by any error boundary
-   * React 19 error handling pattern
    */
   onUncaughtError?: (
     error: Error,
@@ -44,7 +43,6 @@ export interface RenderOptions<T extends GraphBaseModel = GraphBaseModel> {
   ) => void;
   /**
    * Called when an error is caught by an error boundary
-   * React 19 error handling pattern
    */
   onCaughtError?: (
     error: Error,
@@ -93,7 +91,7 @@ function createWrappedElement<T extends GraphBaseModel>(
 }
 
 /**
- * Creates a fiber root for rendering with React 19 error handling
+ * Creates a fiber root for rendering.
  */
 function createFiberRoot(containerInfo: any = {}, options: RenderOptions = {}) {
   const { onUncaughtError = noop } = options;

@@ -6,7 +6,7 @@ import { Node } from './Node.js';
 
 describe('Graph', () => {
   test('An error occurs when duplicate <Graph />', async () => {
-    // React 19: Duplicate Graph components should result in empty graph
+    // Duplicate Graph components should result in empty graph
     // because the second Graph throws an error during component execution
     const result = await render(
       <Graph>
