@@ -1,4 +1,4 @@
-import type { EdgeModel } from 'ts-graphviz';
+import type { EdgeModel, RootGraphModel } from 'ts-graphviz';
 import { describe, expect, test } from 'vitest';
 import { render } from '../render.js';
 import { Digraph } from './Digraph.js';
@@ -24,7 +24,7 @@ describe('Edge', () => {
         </Digraph>
       );
 
-      await render(<TestComponent />);
+      await render<RootGraphModel>(<TestComponent />);
 
       expect(edgeRef).not.toBeNull();
       // EdgeModel.targets contains NodeRef objects, not just strings

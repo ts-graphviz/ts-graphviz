@@ -285,9 +285,13 @@ export interface GraphCommonAttributes {
  * DOT model representing a graph/digraph/subgraph.
  * @group Models
  */
-export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
+export interface GraphBaseModel<
+  T extends DotObjectType = DotObjectType,
+  K extends AttributeKey = AttributeKey
+>
   extends HasComment,
-    Attributes<T> {
+    Attributes<K>,
+    DotObjectModel<T> {
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes>;
   /** Node objects in the graph. */
@@ -656,8 +660,7 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
  * @group Models
  */
 export interface SubgraphModel
-  extends GraphBaseModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey>,
-    DotObjectModel<'Subgraph'> {
+  extends GraphBaseModel<'Subgraph', SubgraphAttributeKey | ClusterSubgraphAttributeKey> {
   /** Determines whether the Subgraph is a SubgraphCluster. */
   isSubgraphCluster(): boolean;
 }
@@ -667,8 +670,7 @@ export interface SubgraphModel
  * @group Models
  */
 export interface RootGraphModel
-  extends GraphBaseModel<GraphAttributeKey>,
-    DotObjectModel<'Graph'> {
+  extends GraphBaseModel<'Graph', GraphAttributeKey> {
   directed: boolean;
 
   /**

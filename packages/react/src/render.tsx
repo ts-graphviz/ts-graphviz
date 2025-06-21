@@ -1,5 +1,5 @@
 import { type ReactElement, startTransition } from 'react';
-import { type GraphBaseModel, toDot } from 'ts-graphviz';
+import { type GraphBaseModel, RootGraphModel, toDot } from 'ts-graphviz';
 
 import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
@@ -11,7 +11,7 @@ import { reconciler } from './reconciler.js';
  * Rendering result containing the graph and any metadata
  */
 export interface RenderResult<T extends GraphBaseModel> {
-  graph: T;
+  model: T;
   cleanup?: () => void;
 }
 
@@ -103,8 +103,12 @@ function createFiberRoot(containerInfo: any = {}, options: RenderOptions = {}) {
     false, // isStrictMode
     null, // concurrentUpdatesByDefaultOverride
     '@ts-graphviz/react', // identifierPrefix
-    onUncaughtError ? (error: Error) => onUncaughtError(error, {}) : () => {}, // onRecoverableError - simplified for React reconciler compatibility
-    null, // transitionCallbacks
+    // Enhance onRecoverableError to forward componentStack for better diagnostics
+    onUncaughtError
+      ? (error: Error, errorInfo: { componentStack?: string } = {}) =>
+          onUncaughtError(error, errorInfo)
+      : () => {}, // onRecoverableError
+    null, // transitZionCallbacks
   );
 }
 
@@ -172,7 +176,7 @@ async function renderInternal<T extends GraphBaseModel>(
 
         if (finalContainer) {
           resolve({
-            graph: finalContainer,
+            model: finalContainer,
             cleanup: () => {
               // Cleanup resources if needed
               reconciler.updateContainer(null, fiberRoot, null, noop);
@@ -197,7 +201,7 @@ async function renderInternal<T extends GraphBaseModel>(
  * Renders a React element asynchronously.
  * This is the primary rendering method with optional concurrent features.
  */
-export async function render<T extends GraphBaseModel>(
+export async function render<T extends GraphBaseModel = RootGraphModel>(
   element: ReactElement,
   options: RenderOptions<T> = {},
 ): Promise<RenderResult<T>> {
@@ -236,13 +240,13 @@ export async function render<T extends GraphBaseModel>(
  * console.log(dot);
  * ```
  */
-export async function renderToDot(
+export async function renderToDot<T extends GraphBaseModel = RootGraphModel>(
   element: ReactElement,
-  options: RenderOptions = {},
+  options: RenderOptions<T> = {},
 ): Promise<string> {
-  const result = await render(element, options);
+  const result = await render<T>(element, options);
   try {
-    return toDot(result.graph as any);
+    return toDot(result.model);
   } finally {
     // Cleanup resources
     result.cleanup?.();

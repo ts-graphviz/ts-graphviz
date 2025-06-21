@@ -1,4 +1,4 @@
-import type { GraphBaseModel } from 'ts-graphviz';
+import { type GraphBaseModel } from 'ts-graphviz';
 import { describe, expect, test } from 'vitest';
 import { render } from '../render.js';
 import { Graph } from './Graph.js';
@@ -15,10 +15,10 @@ describe('Graph', () => {
     );
 
     // The outer Graph should be created, but inner one fails
-    expect(result.graph).toBeDefined();
-    expect(result.graph.nodes.length).toBe(0);
-    expect(result.graph.edges.length).toBe(0);
-    expect(result.graph.subgraphs.length).toBe(0);
+    expect(result.model).toBeDefined();
+    expect(result.model.nodes.length).toBe(0);
+    expect(result.model.edges.length).toBe(0);
+    expect(result.model.subgraphs.length).toBe(0);
   });
 
   describe('ref support', () => {
