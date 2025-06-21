@@ -10,7 +10,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 describe.each([
   ['Digraph', () => new Digraph()],
   ['Graph', () => new Graph()],
-])('toDot serialization for %s', (graphType, rootClusterFactory) => {
+])('toDot serialization for %s', (_graphType, rootClusterFactory) => {
   let g: RootGraphModel;
   beforeEach(() => {
     g = rootClusterFactory();
