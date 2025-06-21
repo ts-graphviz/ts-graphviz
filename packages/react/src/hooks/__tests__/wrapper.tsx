@@ -1,4 +1,4 @@
-import type { ComponentProps, FC, ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { Digraph } from '../../components/Digraph.js';
 import { Graph } from '../../components/Graph.js';
@@ -6,16 +6,16 @@ import { Subgraph } from '../../components/Subgraph.js';
 import { GraphvizContext } from '../../contexts/GraphvizContext.js';
 
 export const context =
-  (): FC<{ children: ReactNode }> =>
-  ({ children }) => {
+  () =>
+  ({ children }: { children: ReactNode }) => {
     return (
       <GraphvizContext.Provider value={{}}>{children}</GraphvizContext.Provider>
     );
   };
 
 export const digraph =
-  (props: ComponentProps<typeof Digraph> = {}): FC<{ children: ReactNode }> =>
-  ({ children }) => {
+  (props: ComponentProps<typeof Digraph> = {}) =>
+  ({ children }: { children: ReactNode }) => {
     return (
       <GraphvizContext.Provider value={{}}>
         <Digraph {...props}>{children}</Digraph>
@@ -24,8 +24,8 @@ export const digraph =
   };
 
 export const digraphInSubgraph =
-  (props: ComponentProps<typeof Subgraph> = {}): FC<{ children: ReactNode }> =>
-  ({ children }) => {
+  (props: ComponentProps<typeof Subgraph> = {}) =>
+  ({ children }: { children: ReactNode }) => {
     return (
       <GraphvizContext.Provider value={{}}>
         <Digraph>
@@ -36,8 +36,8 @@ export const digraphInSubgraph =
   };
 
 export const graph =
-  (props: ComponentProps<typeof Graph> = {}): FC<{ children: ReactNode }> =>
-  ({ children }) => {
+  (props: ComponentProps<typeof Graph> = {}) =>
+  ({ children }: { children: ReactNode }) => {
     return (
       <GraphvizContext.Provider value={{}}>
         <Graph {...props}>{children}</Graph>
@@ -46,8 +46,8 @@ export const graph =
   };
 
 export const graphInSubgraph =
-  (props: ComponentProps<typeof Subgraph> = {}): FC<{ children: ReactNode }> =>
-  ({ children }) => {
+  (props: ComponentProps<typeof Subgraph> = {}) =>
+  ({ children }: { children: ReactNode }) => {
     return (
       <GraphvizContext.Provider value={{}}>
         <Graph>

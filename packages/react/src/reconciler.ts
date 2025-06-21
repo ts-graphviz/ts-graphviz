@@ -1,4 +1,4 @@
-import type { FC, ComponentProps } from 'react';
+import type { ComponentProps, FC } from 'react';
 import ReactReconciler from 'react-reconciler';
 import type { GraphBaseModel } from 'ts-graphviz';
 
@@ -13,9 +13,9 @@ type Type = FC<any>;
 type Props = ComponentProps<any>;
 
 /**
- * Container represents the graph context
+ * Container represents the graph context - now holds the actual context
  */
-type Container = Record<string, never>;
+type Container = Record<string, any>;
 
 /**
  * Instance represents a rendered Graphviz element (Node, Edge, Subgraph, etc.)
@@ -83,24 +83,39 @@ type NoTimeout = -1;
  */
 type OpaqueHandle = ReactReconciler.Fiber;
 
+/**
+ * Update priority types for React 19 reconciler
+ */
+type UpdatePriority = number;
+
+/**
+ * Form instance type (not used in Graphviz rendering)
+ */
+type FormInstance = never;
+
+/**
+ * Transition status type (not used in Graphviz rendering)
+ */
+type TransitionStatus = null;
+
 export class HostConfig
   implements
-    ReactReconciler.HostConfig<
-      Type,
-      Props,
-      Container,
-      Instance,
-      TextInstance,
-      SuspenseInstance,
-      HydratableInstance,
-      PublicInstance,
-      HostContext,
-      UpdatePayload,
-      ChildSet, // TODO Placeholder for undocumented API
-      TimeoutHandle,
-      NoTimeout
-    >
-{
+  ReactReconciler.HostConfig<
+    Type,
+    Props,
+    Container,
+    Instance,
+    TextInstance,
+    SuspenseInstance,
+    HydratableInstance,
+    FormInstance,
+    PublicInstance,
+    HostContext,
+    ChildSet,
+    TimeoutHandle,
+    NoTimeout,
+    TransitionStatus
+  > {
   preparePortalMount(_containerInfo: Container): void {
     // NoOp
   }
@@ -116,8 +131,113 @@ export class HostConfig
     clearTimeout(id);
   }
 
-  queueMicrotask(_fn: () => void): void {
+  queueMicrotask(fn: () => void): void {
+    // For React 19 compatibility, execute immediately to ensure synchronous behavior
+    fn();
+  }
+
+  // React 19 reconciler methods for update priority management
+  resolveUpdatePriority(): UpdatePriority {
+    // Return SyncLane priority for immediate execution
+    // In React 19, this is typically 1 for synchronous updates
+    return 1;
+  }
+
+  setCurrentUpdatePriority(_priority: UpdatePriority): void {
+    // NoOp - we force synchronous rendering by design
+  }
+
+  getCurrentUpdatePriority(): UpdatePriority {
+    // Always return sync priority to ensure immediate execution
+    return 1;
+  }
+
+  // React 19 form-related methods
+  resetFormInstance(_form: FormInstance): void {
+    // NoOp - not applicable for Graphviz rendering
+  }
+
+  // React 19 transition-related properties
+  NotPendingTransition: TransitionStatus = null;
+
+  // React 19 suspense and commit methods
+  maySuspendCommit(_type: Type, _props: Props): boolean {
+    return false;
+  }
+
+  preloadInstance(_type: Type, _props: Props): boolean {
+    return false;
+  }
+
+  startSuspendingCommit(): void {
     // NoOp
+  }
+
+  suspendInstance(_type: Type, _props: Props): void {
+    // NoOp
+  }
+
+  waitForCommitToBeReady():
+    | ((initiateCommit: () => void) => () => void)
+    | null {
+    return null;
+  }
+
+  // React 19 additional required methods
+  getInstanceFromNode(_node: any): OpaqueHandle | null {
+    return null;
+  }
+
+  beforeActiveInstanceBlur(): void {
+    // NoOp
+  }
+
+  afterActiveInstanceBlur(): void {
+    // NoOp
+  }
+
+  prepareScopeUpdate(_scopeInstance: any, _instance: Instance): void {
+    // NoOp
+  }
+
+  getInstanceFromScope(_scopeInstance: any): Instance | null {
+    return null;
+  }
+
+  detachDeletedInstance(_instance: Instance): void {
+    // NoOp
+  }
+
+  logRecoverableError(_error: any): void {
+    // NoOp - errors are handled elsewhere
+  }
+
+  requestPostPaintCallback(_callback: (time: number) => void): void {
+    // NoOp
+  }
+
+  // React 19 container clearing method
+  clearContainer(_container: Container): void {
+    // NoOp - our containers don't need special clearing
+  }
+
+  // React 19 transition context and scheduling methods
+  HostTransitionContext: any = null;
+
+  shouldAttemptEagerTransition(): boolean {
+    return false;
+  }
+
+  trackSchedulerEvent(): void {
+    // NoOp
+  }
+
+  resolveEventType(): string | null {
+    return null;
+  }
+
+  resolveEventTimeStamp(): number {
+    return Date.now();
   }
 
   cloneInstance?: any;
@@ -147,13 +267,16 @@ export class HostConfig
   // Temporary workaround for scenario where multiple renderers concurrently
   // render using the same context objects. E.g. React DOM and React ART on the
   // same page. DOM is the primary renderer; ART is the secondary renderer.
-  public isPrimaryRenderer = false;
+  public isPrimaryRenderer = true;
 
-  public supportsMutation = false;
+  public supportsMutation = true;
 
   public supportsPersistence = false;
 
   public supportsHydration = false;
+
+  // React 19 specific configurations for synchronous rendering
+  public supportsMicrotasks = false;
 
   public getPublicInstance(instance: Instance | TextInstance): PublicInstance {
     return instance;
@@ -205,10 +328,7 @@ export class HostConfig
         instance.children.push(child);
       },
     };
-    
-    // Execute the component function to trigger hooks and side effects
-    type(props);
-    
+
     return instance;
   }
 
@@ -222,7 +342,7 @@ export class HostConfig
   }
 
   public finalizeInitialChildren(
-    _parentInstance: Instance,
+    _instance: Instance,
     _type: Type,
     _props: Props,
     _rootContainerInstance: Container,
@@ -292,12 +412,13 @@ export class HostConfig
   }
 
   public appendChildToContainer(
-    _container: Container,
-    _child: Instance | TextInstance,
+    container: Container,
+    child: Instance | TextInstance,
   ): void {
-    // if (container.appendChild) {
-    //   container.appendChild(child);
-    // }
+    // Store the root element info in container for later use
+    if (typeof child === 'object' && 'type' in child) {
+      container.__rootInstance = child;
+    }
   }
 
   public commitTextUpdate(
@@ -311,27 +432,24 @@ export class HostConfig
   public commitMount(
     _instance: Instance,
     _type: Type,
-    _newProps: Props,
+    _props: Props,
     _internalInstanceHandle: OpaqueHandle,
   ): void {
-    // NoOp
+    // Ref handling is done via useImperativeHandle in components
   }
 
-  public commitUpdate(
+  public commitUpdate?(
     instance: Instance,
-    updatePayload: UpdatePayload,
-    type: Type,
-    _oldProps: Props,
-    newProps: Props,
-    _internalInstanceHandle: OpaqueHandle,
+    _type: Type,
+    _prevProps: Props,
+    nextProps: Props,
+    _internalHandle: OpaqueHandle,
   ): void {
-    if (updatePayload && updatePayload.type === 'UPDATE') {
-      // Update instance props
-      instance.props = newProps;
-      
-      // Re-execute component function to trigger hooks with new props
-      type(newProps);
-    }
+    // Update instance props
+    instance.props = nextProps;
+
+    // Don't re-execute component function here - let React handle updates
+    // This avoids issues with React 19's changed execution timing
   }
 
   public insertBefore(

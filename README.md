@@ -136,9 +136,11 @@ const dot = toDot(G);
 // }
 ```
 
-#### Declarative API
+#### Declarative API (Factory Function)
 
-Create graphs using a declarative approach:
+Create graphs using a declarative approach with a factory function:
+
+```typescript
 
 ```ts
 import { attribute as _, digraph, toDot } from 'ts-graphviz';
@@ -175,6 +177,72 @@ const dot = toDot(graph);
 //   }
 // }
 ```
+
+### Declarative API (React Component)
+
+The `@ts-graphviz/react` package provides React components for creating Graphviz graphs declaratively with JSX:
+
+```tsx
+import { Digraph, Node, Edge, renderToDot } from '@ts-graphviz/react';
+
+// Define reusable components
+const UserCard = ({ id, name, role }) => (
+  <Node
+    id={id}
+    shape="record"
+    label={
+      <dot:table border="0" cellborder="1" cellspacing="0">
+        <dot:tr>
+          <dot:td bgcolor="lightblue">
+            <dot:b>{name}</dot:b>
+          </dot:td>
+        </dot:tr>
+        <dot:tr>
+          <dot:td>{role}</dot:td>
+        </dot:tr>
+      </dot:table>
+    }
+  />
+);
+
+const StatusBadge = ({ status }) => (
+  <dot:font color={status === 'active' ? 'green' : 'red'}>
+    <dot:b>{status.toUpperCase()}</dot:b>
+  </dot:font>
+);
+
+// Compose the graph
+const TeamStructure = () => (
+  <Digraph rankdir="TB">
+    <UserCard id="alice" name="Alice Smith" role="Team Lead" />
+    <UserCard id="bob" name="Bob Johnson" role="Developer" />
+    <UserCard id="carol" name="Carol Davis" role="Designer" />
+
+    <Node
+      id="project"
+      label={
+        <>
+          <dot:b>Project Alpha</dot:b><dot:br/>
+          Status: <StatusBadge status="active" />
+        </>
+      }
+      shape="box"
+      style="rounded,filled"
+      fillcolor="lightyellow"
+    />
+
+    <Edge targets={["alice", "bob"]} label="manages" />
+    <Edge targets={["alice", "carol"]} label="manages" />
+    <Edge targets={["project", "alice"]} label="assigned to" style="dashed" />
+  </Digraph>
+);
+
+// Render to DOT
+const dot = await renderToDot(<TeamStructure />);
+```
+
+> [!TIP]
+> See the [@ts-graphviz/react documentation](./packages/react/README.md) for comprehensive examples and API reference.
 
 ## Useful Links 🔗
 

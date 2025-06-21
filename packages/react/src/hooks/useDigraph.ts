@@ -22,7 +22,7 @@ export function useDigraph(options: RootGraphOptions = {}): RootGraphModel {
     g.attributes.graph.apply(graph ?? {});
     return g;
     // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME attributes changes on every re-render and should not be used as a hook dependency.
-  }, [context, id, comment, edge, node, graph, attributes]);
+  }, [context, id, comment, edge, node, graph]);
   useHasComment(digraph, comment);
   useGraphAttributes(digraph, attributes, { edge, node, graph });
   useEffect(() => {

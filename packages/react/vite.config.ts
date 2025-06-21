@@ -16,8 +16,6 @@ export default defineConfig({
       external: [
         'react',
         'react/jsx-runtime',
-        'react-dom',
-        'react-dom/server',
         'react-reconciler',
         'ts-graphviz',
       ],

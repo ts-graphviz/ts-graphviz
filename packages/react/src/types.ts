@@ -1,13 +1,19 @@
 import type {
   EdgeAttributesObject,
+  EdgeModel,
   EdgeTargetLikeTuple,
   GraphAttributesObject,
+  GraphBaseModel,
   HasComment,
   HTMLLikeLabel,
   NodeAttributesObject,
+  NodeModel,
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, Ref } from 'react';
+
+// Re-export ReactNode to ensure it's available for JSX declarations
+export type { ReactNode };
 
 /** Common attribute values of objects under cluster */
 export interface GraphBaseAttributesProps {
@@ -46,6 +52,8 @@ export interface NodeOptions extends NodeAttributesObject {}
 export interface RootGraphProps extends Omit<RootGraphOptions, 'label'> {
   label?: ReactElement | string;
   children?: ReactNode;
+  /** React 19 ref as prop pattern */
+  ref?: Ref<GraphBaseModel>;
 }
 
 /** Props for Edge component */
@@ -54,6 +62,8 @@ export interface EdgeProps extends Omit<EdgeOptions, 'label'> {
   targets: EdgeTargetLikeTuple;
   /** Edge label */
   label?: ReactElement | string;
+  /** React 19 ref as prop pattern */
+  ref?: Ref<EdgeModel>;
 }
 
 /** Props for Node component */
@@ -64,6 +74,8 @@ export interface NodeProps extends Omit<NodeOptions, 'label' | 'xlabel'> {
   label?: ReactElement | string;
   /** Node xlabel */
   xlabel?: ReactElement | string;
+  /** React 19 ref as prop pattern */
+  ref?: Ref<NodeModel>;
 }
 
 /** Props for Subgraph component */
@@ -71,6 +83,8 @@ export interface SubgraphProps extends Omit<SubgraphOptions, 'label'> {
   /** Subgraph label */
   label?: ReactElement | string;
   children?: ReactNode;
+  /** React 19 ref as prop pattern */
+  ref?: Ref<GraphBaseModel>;
 }
 
 /** Props for GraphPortal component */
@@ -83,25 +97,34 @@ export interface GraphPortalProps {
   children?: ReactNode;
 }
 
-declare global {
+interface JSXIntrinsicElements {
+  'dot:port': { children: string };
+  'dot:table': HTMLLikeLabel.TableAttributes & { children?: React.ReactNode };
+  'dot:tr': HTMLLikeLabel.TrAttributes & { children?: React.ReactNode };
+  'dot:td': HTMLLikeLabel.TdAttributes & { children?: React.ReactNode };
+  'dot:font': HTMLLikeLabel.FontAttributes & { children?: React.ReactNode };
+  'dot:br': HTMLLikeLabel.BrAttributes;
+  'dot:img': HTMLLikeLabel.ImgAttributes;
+  'dot:i': HTMLLikeLabel.IAttributes & { children?: React.ReactNode };
+  'dot:b': HTMLLikeLabel.BAttributes & { children?: React.ReactNode };
+  'dot:u': HTMLLikeLabel.UAttributes & { children?: React.ReactNode };
+  'dot:o': HTMLLikeLabel.OAttributes & { children?: React.ReactNode };
+  'dot:sub': HTMLLikeLabel.SubAttributes & { children?: React.ReactNode };
+  'dot:sup': HTMLLikeLabel.SupAttributes & { children?: React.ReactNode };
+  'dot:s': HTMLLikeLabel.SAttributes & { children?: React.ReactNode };
+  'dot:hr': HTMLLikeLabel.HrAttributes;
+  'dot:vr': HTMLLikeLabel.VrAttributes;
+}
+
+
+declare module "react" {
   namespace JSX {
-    interface IntrinsicElements {
-      'dot:port': { children: string };
-      'dot:table': HTMLLikeLabel.TableAttributes & { children?: ReactNode };
-      'dot:tr': HTMLLikeLabel.TrAttributes & { children?: ReactNode };
-      'dot:td': HTMLLikeLabel.TdAttributes & { children?: ReactNode };
-      'dot:font': HTMLLikeLabel.FontAttributes & { children?: ReactNode };
-      'dot:br': HTMLLikeLabel.BrAttributes;
-      'dot:img': HTMLLikeLabel.ImgAttributes;
-      'dot:i': HTMLLikeLabel.IAttributes & { children?: ReactNode };
-      'dot:b': HTMLLikeLabel.BAttributes & { children?: ReactNode };
-      'dot:u': HTMLLikeLabel.UAttributes & { children?: ReactNode };
-      'dot:o': HTMLLikeLabel.OAttributes & { children?: ReactNode };
-      'dot:sub': HTMLLikeLabel.SubAttributes & { children?: ReactNode };
-      'dot:sup': HTMLLikeLabel.SupAttributes & { children?: ReactNode };
-      'dot:s': HTMLLikeLabel.SAttributes & { children?: ReactNode };
-      'dot:hr': HTMLLikeLabel.HrAttributes;
-      'dot:vr': HTMLLikeLabel.VrAttributes;
-    }
+    interface IntrinsicElements extends JSXIntrinsicElements {}
+  }
+}
+
+declare module "react/jsx-runtime" {
+  namespace JSX {
+    interface IntrinsicElements extends JSXIntrinsicElements {}
   }
 }

@@ -39,24 +39,21 @@
   },
   "dependencies": {
     "@ts-graphviz/common": "workspace:^",
-    "react-reconciler": "^0.29.0",
+    "react-reconciler": "^0.32.0",
     "ts-graphviz": "workspace:^"
   },
   "devDependencies": {
-    "@testing-library/react": "^14.2.1",
-    "@types/react": "^18.2.65",
-    "@types/react-dom": "^18.2.22",
-    "@types/react-reconciler": "^0.26.7",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-test-renderer": "^18.3.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.0.0",
+    "@types/react-reconciler": "^0.32.0",
+    "react": "^19.0.0",
+    "react-test-renderer": "^19.0.0",
     "typescript": "^5.8.2",
     "vite": "^6.3.5",
     "vite-plugin-dts": "^4.5.3"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": ">=19"
   },
   "publishConfig": {
     "access": "public",

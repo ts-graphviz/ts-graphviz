@@ -1,4 +1,4 @@
-import { type FC, useEffect } from 'react';
+import { type FC, useEffect, useImperativeHandle } from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphContainer } from '../contexts/GraphContainer.js';
 import { useDigraph } from '../hooks/useDigraph.js';
@@ -13,6 +13,7 @@ import type { RootGraphProps } from '../types.js';
 export const Digraph: FC<RootGraphProps> = ({
   children,
   label,
+  ref,
   ...options
 }) => {
   const container = useGraphContainer();
@@ -26,6 +27,10 @@ export const Digraph: FC<RootGraphProps> = ({
     Object.assign(options, { label: renderedLabel });
   const digraph = useDigraph(options);
   const clusters = useGraphMap();
+  
+  // Handle ref as prop (React 19 pattern)
+  useImperativeHandle(ref, () => digraph, [digraph]);
+  
   useEffect(() => {
     if (digraph.id !== undefined) {
       clusters.set(digraph.id, digraph);

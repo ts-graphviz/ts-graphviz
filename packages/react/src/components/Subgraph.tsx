@@ -1,4 +1,4 @@
-import { type FC, useEffect } from 'react';
+import { type FC, useEffect, useImperativeHandle } from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { useGraphMap } from '../hooks/useGraphMap.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
@@ -10,6 +10,7 @@ import type { SubgraphProps } from '../types.js';
 export const Subgraph: FC<SubgraphProps> = ({
   children,
   label,
+  ref,
   ...options
 }) => {
   const renderedLabel = useRenderedID(label);
@@ -17,6 +18,9 @@ export const Subgraph: FC<SubgraphProps> = ({
     Object.assign(options, { label: renderedLabel });
   const subgraph = useSubgraph(options);
   const clusters = useGraphMap();
+  
+  // Handle ref as prop (React 19 pattern)
+  useImperativeHandle(ref, () => subgraph, [subgraph]);
   useEffect(() => {
     if (subgraph.id !== undefined) {
       clusters.set(subgraph.id, subgraph);

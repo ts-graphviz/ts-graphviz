@@ -46,77 +46,319 @@ The module can then be installed using [npm](https://www.npmjs.com/):
 
 ```bash
 # yarn
-$ yarn add @ts-graphviz/react react react-dom
+$ yarn add @ts-graphviz/react react@^19
 # or npm
-$ npm install -S @ts-graphviz/react react react-dom
+$ npm install -S @ts-graphviz/react react@^19
+# or pnpm
+$ pnpm add @ts-graphviz/react react@^19
 ```
 
-> Install [React and React DOM](https://github.com/facebook/react/) as peerDependencies at the same time.
+> **Important**: Install React 19+ as a peerDependency. React 18 and earlier versions are not supported. Note that `react-dom` is no longer required as this package now uses a custom HTML rendering implementation.
 
 ## Key Features
 
-### React Component API
+## React Component
 
-The package exports several React components that correspond to Graphviz graph models:
+### Core Components
 
-- `Digraph` - Creates a directed graph
-- `Graph` - Creates an undirected graph
-- `Node` - Creates a node within a graph
-- `Edge` - Creates an edge connecting nodes
-- `Subgraph` - Creates a subgraph for grouping nodes
+The package provides React components that map directly to Graphviz DOT language constructs:
 
-These components accept attributes as props, matching the attribute specifications from the Graphviz DOT language.
+#### Graph Containers
+- **`<Digraph>`** - Creates a directed graph (arrows point from source to target)
+- **`<Graph>`** - Creates an undirected graph (no arrow direction)
+- **`<Subgraph>`** - Creates a subgraph cluster for grouping related nodes
 
-### HTML-Like Label Support
+#### Graph Elements
+- **`<Node>`** - Creates a node/vertex with customizable attributes
+- **`<Edge>`** - Creates an edge/connection between nodes with optional styling
 
-One of the standout features is the ability to use JSX syntax to create HTML-like labels, which are a special formatting feature in Graphviz.
+### Component Props & Attributes
+
+All components accept Graphviz DOT attributes as props with full TypeScript support:
+
+```tsx
+// Node with styling attributes
+<Node
+  id="server1"
+  label="Web Server"
+  shape="box"
+  color="blue"
+  style="filled"
+  fillcolor="lightblue"
+/>
+
+// Edge with custom styling
+<Edge
+  targets={["server1", "database1"]}
+  label="API calls"
+  color="red"
+  style="dashed"
+  weight={2}
+/>
+
+// Digraph with global attributes
+<Digraph
+  rankdir="LR"
+  bgcolor="white"
+  node={{ shape: "ellipse", color: "gray" }}
+  edge={{ color: "black", arrowhead: "vee" }}
+>
+  {/* nodes and edges */}
+</Digraph>
+```
+
+### Nested Structure & Composition
+
+Components can be freely nested to create complex graph structures:
+
+```tsx
+// Define reusable components
+const ServerNode = ({ id, name, type }) => (
+  <Node
+    id={id}
+    label={
+      <dot:table border="1" cellborder="0" cellspacing="0">
+        <dot:tr>
+          <dot:td bgcolor="lightgray">
+            <dot:b>{name}</dot:b>
+          </dot:td>
+        </dot:tr>
+        <dot:tr>
+          <dot:td>{type}</dot:td>
+        </dot:tr>
+      </dot:table>
+    }
+    shape="record"
+  />
+);
+
+const ServiceCluster = ({ id, label, children }) => (
+  <Subgraph id={id} label={label} style="filled" fillcolor="lightblue">
+    {children}
+  </Subgraph>
+);
+
+// Compose the architecture
+const SystemArchitecture = () => (
+  <Digraph rankdir="TB">
+    <ServiceCluster id="cluster_frontend" label="Frontend Layer">
+      <ServerNode id="web1" name="Web Server" type="Nginx" />
+      <ServerNode id="app1" name="App Server" type="React" />
+    </ServiceCluster>
+
+    <ServiceCluster id="cluster_backend" label="Backend Layer">
+      <ServerNode id="api1" name="API Gateway" type="REST" />
+      <ServerNode id="auth1" name="Auth Service" type="OAuth" />
+    </ServiceCluster>
+
+    <ServiceCluster id="cluster_data" label="Data Layer">
+      <ServerNode id="db1" name="Database" type="PostgreSQL" />
+      <ServerNode id="cache1" name="Cache" type="Redis" />
+    </ServiceCluster>
+
+    <Edge targets={["web1", "app1"]} label="serves" />
+    <Edge targets={["app1", "api1"]} label="API calls" />
+    <Edge targets={["api1", "auth1"]} label="validates" />
+    <Edge targets={["api1", "db1"]} label="queries" />
+    <Edge targets={["api1", "cache1"]} label="caches" />
+  </Digraph>
+);
+```
+
+### HTML-Like Labels with JSX
+
+Create rich, formatted labels using Graphviz's HTML-like label syntax with natural JSX:
+
+```tsx
+// Reusable table component for data records
+const DataRecord = ({ title, fields }) => (
+  <dot:table border="1" cellborder="0" cellspacing="0">
+    <dot:tr>
+      <dot:td bgcolor="lightblue" colspan="2">
+        <dot:b>{title}</dot:b>
+      </dot:td>
+    </dot:tr>
+    {fields.map(([key, value]) => (
+      <dot:tr key={key}>
+        <dot:td port={key}>{key}</dot:td>
+        <dot:td>{value}</dot:td>
+      </dot:tr>
+    ))}
+  </dot:table>
+);
+
+// Status indicator component
+const StatusIndicator = ({ status, message }) => (
+  <>
+    <dot:b>Status:</dot:b><dot:br/>
+    <dot:font color={status === 'active' ? 'green' : 'red'}>
+      <dot:b>{status.toUpperCase()}</dot:b>
+    </dot:font><dot:br/>
+    <dot:i>{message}</dot:i>
+  </>
+);
+
+// Usage in graph
+const DatabaseDiagram = () => (
+  <Digraph>
+    <Node
+      id="user-table"
+      label={<DataRecord 
+        title="Users" 
+        fields={[['id', '1001'], ['name', 'John Doe'], ['email', 'john@example.com']]} 
+      />}
+      shape="record"
+    />
+    
+    <Node
+      id="server-status"
+      label={<StatusIndicator status="active" message="All systems operational" />}
+      shape="box"
+      style="rounded,filled"
+      fillcolor="lightyellow"
+    />
+    
+    <Edge targets={["user-table", "server-status"]} label="monitors" />
+  </Digraph>
+);
+```
+
+### Available HTML-Like Elements
+
+- `<dot:table>`, `<dot:tr>`, `<dot:td>` - Table structures
+- `<dot:b>`, `<dot:i>`, `<dot:u>` - Text formatting (bold, italic, underline)
+- `<dot:font>` - Font styling with color, face, point-size
+- `<dot:br>` - Line breaks
+- `<dot:hr>`, `<dot:vr>` - Horizontal/vertical rules
+- `<dot:img>` - Images
+- `<dot:s>`, `<dot:sub>`, `<dot:sup>`, `<dot:o>` - Advanced text formatting
+
+### TypeScript Integration
+
+Full type safety with IntelliSense support for all Graphviz attributes:
+
+```tsx
+import type { NodeProps, EdgeProps, DigraphProps } from '@ts-graphviz/react';
+
+// Typed component props
+const MyNode: React.FC<NodeProps> = (props) => (
+  <Node
+    shape="box"      // ✅ TypeScript knows valid shapes
+    color="blue"     // ✅ String colors supported
+    style="filled"   // ✅ Valid style options
+    {...props}
+  />
+);
+
+// Edge with typed targets
+<Edge
+  targets={["node1", "node2"]}  // ✅ Tuple type enforced
+  arrowhead="diamond"           // ✅ Valid arrowhead styles
+/>
+```
 
 ## Core Functions
-The package provides two main rendering functions:
+The package provides clean async rendering APIs:
 
-- `render()` - Converts React components to a DOT language string
+- `render()` - Primary async rendering function for converting React components to ts-graphviz graph models
+- `renderToDot()` - Primary async function for converting React components to DOT language strings
 - `renderHTMLLike()` - Renders HTML-like label structures for use in node or edge labels
 
-These functions bridge the gap between React's component tree and the DOT language representation that Graphviz understands.
+All rendering functions are **async-only** and provide a clean, consistent API surface. Both `render()` and `renderToDot()` support concurrent rendering through the `concurrent` option (enabled by default).
 
 ## Usage Examples
 
 ### Creating a Simple Graph
 
-```ts
-import { Digraph, Node, Edge, render } from "@ts-graphviz/react";
+```tsx
+import { Digraph, Node, Edge, render, renderToDot } from "@ts-graphviz/react";
 
-const dot = render(
-  <Digraph>
-    <Node id="A" />
-    <Node id="B" />
-    <Edge targets={["A", "B"]} />
+// Define a reusable process component
+const ProcessNode = ({ id, label, color = "lightblue" }) => (
+  <Node
+    id={id}
+    label={
+      <dot:table border="0" cellborder="1" cellspacing="0">
+        <dot:tr>
+          <dot:td bgcolor={color}>
+            <dot:b>{label}</dot:b>
+          </dot:td>
+        </dot:tr>
+      </dot:table>
+    }
+    shape="record"
+  />
+);
+
+// Create a workflow diagram
+const WorkflowDiagram = () => (
+  <Digraph rankdir="LR">
+    <ProcessNode id="start" label="Start" color="lightgreen" />
+    <ProcessNode id="process" label="Process Data" />
+    <ProcessNode id="validate" label="Validate" />
+    <ProcessNode id="end" label="End" color="lightcoral" />
+    
+    <Edge targets={["start", "process"]} />
+    <Edge targets={["process", "validate"]} />
+    <Edge targets={["validate", "end"]} />
   </Digraph>
 );
+
+// Render to graph model
+const result = await render(<WorkflowDiagram />);
+
+// Convert to DOT string
+const dotString = await renderToDot(<WorkflowDiagram />);
 ```
 
 ### Using HTML-Like Labels
 
-```ts
-import { Digraph, Node, Edge, render } from "@ts-graphviz/react";
+```tsx
+import { Digraph, Node, Edge, renderToDot } from "@ts-graphviz/react";
 
-const dot = render(
-  <Digraph>
-    <Node
-      id="A"
-      label={
-        <dot:table>
-          <dot:tr>
-            <dot:td>left</dot:td>
-            <dot:td>right</dot:td>
+// Reusable card component with HTML-like labels
+const InfoCard = ({ id, title, items }) => (
+  <Node
+    id={id}
+    label={
+      <dot:table border="1" cellborder="0" cellspacing="0">
+        <dot:tr>
+          <dot:td bgcolor="navy">
+            <dot:font color="white">
+              <dot:b>{title}</dot:b>
+            </dot:font>
+          </dot:td>
+        </dot:tr>
+        {items.map((item, index) => (
+          <dot:tr key={index}>
+            <dot:td align="left">• {item}</dot:td>
           </dot:tr>
-        </dot:table>
-      }
+        ))}
+      </dot:table>
+    }
+    shape="record"
+  />
+);
+
+// Usage in graph
+const ProjectDiagram = () => (
+  <Digraph>
+    <InfoCard 
+      id="requirements" 
+      title="Requirements" 
+      items={["User login", "Data processing", "Reporting"]} 
     />
-    <Node id="B" />
-    <Edge targets={["A", "B"]} />
+    <InfoCard 
+      id="implementation" 
+      title="Implementation" 
+      items={["React frontend", "Node.js API", "PostgreSQL DB"]} 
+    />
+    
+    <Edge targets={["requirements", "implementation"]} label="leads to" />
   </Digraph>
 );
+
+const dotString = await renderToDot(<ProjectDiagram />);
 ```
 
 ### Using the renderHTMLLike Function
@@ -134,6 +376,144 @@ const htmlLabel = renderHTMLLike(
 );
 ```
 
+### Concurrent Rendering Options
+
+```ts
+import { Digraph, Node, Edge, render } from "@ts-graphviz/react";
+
+// Concurrent rendering is enabled by default
+const result = await render(
+  <Digraph>
+    <Node id="A" />
+    <Node id="B" />
+    <Edge targets={["A", "B"]} />
+  </Digraph>
+);
+
+// Explicitly enable concurrent rendering with options
+const resultWithOptions = await render(
+  <Digraph>
+    <Node id="A" />
+    <Node id="B" />
+    <Edge targets={["A", "B"]} />
+  </Digraph>,
+  {
+    concurrent: true, // default: true
+    timeout: 5000,
+    onUncaughtError: (error, errorInfo) => {
+      console.error('Rendering error:', error);
+      console.log('Component stack:', errorInfo.componentStack);
+    },
+    onCaughtError: (error, errorInfo) => {
+      console.error('Caught error:', error);
+    }
+  }
+);
+
+// Disable concurrent rendering for synchronous behavior
+const syncResult = await render(
+  <Digraph>
+    <Node id="A" />
+    <Node id="B" />
+    <Edge targets={["A", "B"]} />
+  </Digraph>,
+  {
+    concurrent: false
+  }
+);
+```
+
+## Advanced Features
+
+### Error Handling
+
+React 19 provides enhanced error handling capabilities with detailed error information and component stack traces:
+
+```ts
+import { render, renderToDot } from "@ts-graphviz/react";
+
+// Basic error handling
+const result = await render(<MyGraph />, {
+  onUncaughtError: (error, errorInfo) => {
+    console.error('Uncaught rendering error:', error.message);
+    console.log('Component stack:', errorInfo.componentStack);
+    // Send to error tracking service
+    errorTracker.captureException(error, { extra: errorInfo });
+  },
+  onCaughtError: (error, errorInfo) => {
+    console.error('Caught by error boundary:', error.message);
+    // Handle recoverable errors
+  }
+});
+
+// Error handling with timeout
+const dotString = await renderToDot(<ComplexGraph />, undefined, {
+  timeout: 10000, // 10 seconds
+  onUncaughtError: (error) => {
+    if (error.message.includes('timeout')) {
+      console.error('Graph rendering timed out');
+    }
+  }
+});
+```
+
+### Ref as Prop Support
+
+React 19's ref as prop pattern is fully supported for accessing graph model objects directly:
+
+```ts
+import { useRef } from 'react';
+import { Digraph, Graph, Node, Edge, render } from "@ts-graphviz/react";
+import type { NodeModel, EdgeModel, GraphBaseModel } from 'ts-graphviz';
+
+function MyGraphComponent() {
+  const nodeRef = useRef<NodeModel>(null);
+  const edgeRef = useRef<EdgeModel>(null);
+  const digraphRef = useRef<GraphBaseModel>(null);
+  const graphRef = useRef<GraphBaseModel>(null);
+
+  const handleRender = async () => {
+    // Example with Digraph component
+    const digraphResult = await render(
+      <Digraph id="mygraph" ref={digraphRef}>
+        <Node id="A" ref={nodeRef} label="Node A" />
+        <Node id="B" label="Node B" />
+        <Edge targets={['A', 'B']} ref={edgeRef} label="A to B" />
+      </Digraph>
+    );
+
+    // Example with Graph component (undirected)
+    const graphResult = await render(
+      <Graph id="undirected-graph" ref={graphRef}>
+        <Node id="X" label="Node X" />
+        <Node id="Y" label="Node Y" />
+        <Edge targets={['X', 'Y']} label="X -- Y" />
+      </Graph>
+    );
+
+    // Access and manipulate the models directly
+    if (nodeRef.current) {
+      nodeRef.current.attributes.set('color', 'red');
+      nodeRef.current.comment = 'Modified via ref';
+    }
+
+    if (edgeRef.current) {
+      edgeRef.current.attributes.set('style', 'dashed');
+    }
+
+    console.log('Digraph nodes:', digraphRef.current?.nodes.length);
+    console.log('Digraph edges:', digraphRef.current?.edges.length);
+    console.log('Graph nodes:', graphRef.current?.nodes.length);
+    console.log('Graph edges:', graphRef.current?.edges.length);
+  };
+
+  return (
+    <button onClick={handleRender}>
+      Render Graph
+    </button>
+  );
+}
+```
 
 ## Contributors 👥
 

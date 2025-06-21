@@ -27,12 +27,12 @@ function PackageLabel({
     <dot:table>
       <dot:tr>
         <dot:td port="name" bgcolor="#f0f0f0" align="CENTER">
-          {name}
+          {String(name || '')}
         </dot:td>
       </dot:tr>
       <dot:tr>
         <dot:td port="description" align="CENTER">
-          {description}
+          {String(description || '')}
         </dot:td>
       </dot:tr>
     </dot:table>

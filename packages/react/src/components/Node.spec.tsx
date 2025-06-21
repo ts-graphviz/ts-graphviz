@@ -2,10 +2,11 @@ import { describe, expect, test } from 'vitest';
 import { renderToDot } from '../render.js';
 import { Digraph } from './Digraph.js';
 import { Node } from './Node.js';
+import '../types.js';
 
 describe('Node', () => {
-  test('should render Node with only required id prop', () => {
-    const dot = renderToDot(
+  test('should render Node with only required id prop', async () => {
+    const dot = await renderToDot(
       <Digraph>
         <Node id="foo" />
       </Digraph>,
@@ -17,8 +18,8 @@ describe('Node', () => {
     `);
   });
 
-  test('should render Node with string label attribute', () => {
-    const dot = renderToDot(
+  test('should render Node with string label attribute', async () => {
+    const dot = await renderToDot(
       <Digraph>
         <Node id="foo" label="label test" />
       </Digraph>,
@@ -32,8 +33,8 @@ describe('Node', () => {
     `);
   });
 
-  test('should render Node with HTML-like table label element', () => {
-    const dot = renderToDot(
+  test('should render Node with HTML-like table label element', async () => {
+    const dot = await renderToDot(
       <Digraph>
         <Node
           id="foo"
@@ -58,8 +59,8 @@ describe('Node', () => {
     `);
   });
 
-  test('should render Node with string xlabel attribute', () => {
-    const dot = renderToDot(
+  test('should render Node with string xlabel attribute', async () => {
+    const dot = await renderToDot(
       <Digraph>
         <Node id="foo" xlabel="xlabel test" />
       </Digraph>,
@@ -73,8 +74,8 @@ describe('Node', () => {
     `);
   });
 
-  test('should render Node with HTML-like table xlabel element', () => {
-    const dot = renderToDot(
+  test('should render Node with HTML-like table xlabel element', async () => {
+    const dot = await renderToDot(
       <Digraph>
         <Node
           id="foo"
