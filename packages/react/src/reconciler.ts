@@ -100,22 +100,23 @@ type TransitionStatus = null;
 
 export class HostConfig
   implements
-  ReactReconciler.HostConfig<
-    Type,
-    Props,
-    Container,
-    Instance,
-    TextInstance,
-    SuspenseInstance,
-    HydratableInstance,
-    FormInstance,
-    PublicInstance,
-    HostContext,
-    ChildSet,
-    TimeoutHandle,
-    NoTimeout,
-    TransitionStatus
-  > {
+    ReactReconciler.HostConfig<
+      Type,
+      Props,
+      Container,
+      Instance,
+      TextInstance,
+      SuspenseInstance,
+      HydratableInstance,
+      FormInstance,
+      PublicInstance,
+      HostContext,
+      ChildSet,
+      TimeoutHandle,
+      NoTimeout,
+      TransitionStatus
+    >
+{
   preparePortalMount(_containerInfo: Container): void {
     // NoOp
   }

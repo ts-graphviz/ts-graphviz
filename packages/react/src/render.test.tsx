@@ -4,11 +4,7 @@ import { Edge } from './components/Edge.js';
 import { Graph } from './components/Graph.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
-import {
-  type RenderOptions,
-  render,
-  renderToDot,
-} from './render.js';
+import { type RenderOptions, render, renderToDot } from './render.js';
 import './types.js';
 
 // Common test examples
@@ -58,10 +54,7 @@ describe('Rendering API', () => {
       it('should respect timeout option', async () => {
         const options: RenderOptions = { timeout: 100 };
         // This should complete normally within 100ms
-        const result = await render(
-          <CompleteDigraphExample />,
-          options,
-        );
+        const result = await render(<CompleteDigraphExample />, options);
         expect(result.graph).toBeDefined();
       });
     });
@@ -95,7 +88,7 @@ describe('Rendering API', () => {
             }
             "a" -> "b";
           }"
-        `)
+        `);
       });
 
       it('should render complete undirected graph with nodes, edges, and subgraph', async () => {
@@ -121,10 +114,7 @@ describe('Rendering API', () => {
 
       it('should respect timeout option', async () => {
         const options: RenderOptions = { timeout: 1000 };
-        const dot = await renderToDot(
-          <CompleteDigraphExample />,
-          options,
-        );
+        const dot = await renderToDot(<CompleteDigraphExample />, options);
         expect(dot).toContain('digraph');
       });
     });
@@ -149,7 +139,9 @@ describe('Rendering API', () => {
       });
 
       it('should render with explicit concurrent=true', async () => {
-        const result = await render(<CompleteDigraphExample />, { concurrent: true });
+        const result = await render(<CompleteDigraphExample />, {
+          concurrent: true,
+        });
         expect(result.graph).toBeDefined();
         expect(result.graph.nodes.length).toBe(2);
         expect(result.graph.edges.length).toBe(1);
@@ -162,8 +154,12 @@ describe('Rendering API', () => {
 
         const options: RenderOptions = {
           concurrent: true,
-          onUncaughtError: (error) => { uncaughtError = error; },
-          onCaughtError: (error) => { caughtError = error; },
+          onUncaughtError: (error) => {
+            uncaughtError = error;
+          },
+          onCaughtError: (error) => {
+            caughtError = error;
+          },
         };
 
         const result = await render(<CompleteDigraphExample />, options);
@@ -176,7 +172,9 @@ describe('Rendering API', () => {
 
     describe('non-concurrent mode', () => {
       it('should render with concurrent=false', async () => {
-        const result = await render(<CompleteDigraphExample />, { concurrent: false });
+        const result = await render(<CompleteDigraphExample />, {
+          concurrent: false,
+        });
         expect(result.graph).toBeDefined();
         expect(result.graph.nodes.length).toBe(2);
         expect(result.graph.edges.length).toBe(1);
@@ -184,7 +182,9 @@ describe('Rendering API', () => {
       });
 
       it('should generate DOT string with concurrent=false', async () => {
-        const dot = await renderToDot(<CompleteDigraphExample />, { concurrent: false });
+        const dot = await renderToDot(<CompleteDigraphExample />, {
+          concurrent: false,
+        });
         expect(dot).toContain('digraph');
         expect(dot).toContain('"a"');
         expect(dot).toContain('"b"');
@@ -193,7 +193,9 @@ describe('Rendering API', () => {
       });
 
       it('should reject promise for invalid structure with concurrent=false', async () => {
-        await expect(render(<Node id="orphan" />, { concurrent: false })).rejects.toThrow(
+        await expect(
+          render(<Node id="orphan" />, { concurrent: false }),
+        ).rejects.toThrow(
           'There are no clusters of container(Subgraph, Digraph, Graph).',
         );
       });

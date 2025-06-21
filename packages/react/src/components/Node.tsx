@@ -15,12 +15,12 @@ export const Node: FC<NodeProps> = ({ id, label, xlabel, ref, ...options }) => {
     Object.assign(options, { label: renderedLabel });
   if (renderedXlabel !== undefined)
     Object.assign(options, { xlabel: renderedXlabel });
-  
+
   const node = useNode(id, options);
-  
+
   // Handle ref as prop (React 19 pattern)
   useImperativeHandle(ref, () => node, [node]);
-  
+
   return null;
 };
 

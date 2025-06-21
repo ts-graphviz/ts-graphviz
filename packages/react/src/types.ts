@@ -116,14 +116,13 @@ interface JSXIntrinsicElements {
   'dot:vr': HTMLLikeLabel.VrAttributes;
 }
 
-
-declare module "react" {
+declare module 'react' {
   namespace JSX {
     interface IntrinsicElements extends JSXIntrinsicElements {}
   }
 }
 
-declare module "react/jsx-runtime" {
+declare module 'react/jsx-runtime' {
   namespace JSX {
     interface IntrinsicElements extends JSXIntrinsicElements {}
   }

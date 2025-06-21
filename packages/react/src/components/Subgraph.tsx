@@ -18,7 +18,7 @@ export const Subgraph: FC<SubgraphProps> = ({
     Object.assign(options, { label: renderedLabel });
   const subgraph = useSubgraph(options);
   const clusters = useGraphMap();
-  
+
   // Handle ref as prop (React 19 pattern)
   useImperativeHandle(ref, () => subgraph, [subgraph]);
   useEffect(() => {

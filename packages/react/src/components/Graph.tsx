@@ -9,7 +9,12 @@ import type { RootGraphProps } from '../types.js';
 /**
  * `Graph` component.
  */
-export const Graph: FC<RootGraphProps> = ({ children, label, ref, ...options }) => {
+export const Graph: FC<RootGraphProps> = ({
+  children,
+  label,
+  ref,
+  ...options
+}) => {
   const container = useGraphContainer();
   if (container !== null) {
     throw Error(
@@ -21,10 +26,10 @@ export const Graph: FC<RootGraphProps> = ({ children, label, ref, ...options }) 
     Object.assign(options, { label: renderedLabel });
   const graph = useGraph(options);
   const clusters = useGraphMap();
-  
+
   // Handle ref as prop (React 19 pattern)
   useImperativeHandle(ref, () => graph, [graph]);
-  
+
   useEffect(() => {
     if (graph.id !== undefined) {
       clusters.set(graph.id, graph);

@@ -5,14 +5,15 @@ import type { ReactElement, ReactNode } from 'react';
  */
 function manuallyRenderElement(element: ReactElement): string {
   const { type, props } = element;
-  
+
   // For function components, try to execute them first
   if (typeof type === 'function') {
     try {
       // Handle both function components and class components
-      const result = typeof type === 'function' && type.prototype?.render 
-        ? new (type as any)(props).render() 
-        : (type as any)(props);
+      const result =
+        typeof type === 'function' && type.prototype?.render
+          ? new (type as any)(props).render()
+          : (type as any)(props);
       if (result && typeof result === 'object' && result.type) {
         return manuallyRenderElement(result as ReactElement);
       }
@@ -21,11 +22,11 @@ function manuallyRenderElement(element: ReactElement): string {
     }
     return '';
   }
-  
+
   if (typeof type === 'string') {
     const tagName = type;
     const attributes: string[] = [];
-    
+
     // Build attributes string - props is typed as any for function components
     const propsWithChildren = props as any;
     Object.entries(propsWithChildren || {}).forEach(([key, value]) => {
@@ -37,17 +38,16 @@ function manuallyRenderElement(element: ReactElement): string {
         }
       }
     });
-    
+
     const attrsString = attributes.length > 0 ? ' ' + attributes.join(' ') : '';
     const childrenString = renderChildrenToString(propsWithChildren?.children);
-    
+
     if (childrenString) {
       return `<${tagName}${attrsString}>${childrenString}</${tagName}>`;
-    } else {
-      return `<${tagName}${attrsString}></${tagName}>`;
     }
+    return `<${tagName}${attrsString}></${tagName}>`;
   }
-  
+
   return '';
 }
 
@@ -87,17 +87,20 @@ export function renderHTMLLike(label?: ReactElement): string {
   try {
     // Use manual rendering for React 19 compatibility
     const markup = manuallyRenderElement(label);
-    
+
     if (!markup) {
       return '<>';
     }
-    
+
     return `<${markup
       .replace(/<dot:port>(.+?)<\/dot:port>/gi, '<$1>')
       .replace(/<(\/?)dot:([a-z-]+)/gi, (_, $1, $2) => `<${$1}${$2}`)}>`;
   } catch (error) {
     // Fallback for any rendering issues
-    console.warn('renderHTMLLike fallback:', error instanceof Error ? error.message : error);
+    console.warn(
+      'renderHTMLLike fallback:',
+      error instanceof Error ? error.message : error,
+    );
     return '<>';
   }
 }

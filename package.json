@@ -31,7 +31,7 @@
     "codegen": "pnpm -r codegen",
     "build": "pnpm -r build",
     "doc": "typedoc",
-    "lint": "biome check --write .",
+    "lint": "biome check --write **",
     "test": "vitest"
   },
   "devDependencies": {

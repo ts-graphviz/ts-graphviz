@@ -10,6 +10,10 @@
     "ignoreUnknown": true,
     "includes": [
       "**",
+      "!**/node_modules/**",
+      "!**/doc/**",
+      "!**/lib/**",
+      "!**/coverage/**",
       "!packages/ast/src/dot-shim/parser/_parse.js",
       "!packages/ast/src/dot-shim/parser/_parse.d.ts"
     ]

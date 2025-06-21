@@ -1,12 +1,12 @@
-import { describe, expect, it } from 'vitest';
 import { useRef } from 'react';
 import type { EdgeModel, GraphBaseModel, NodeModel } from 'ts-graphviz';
+import { describe, expect, it } from 'vitest';
+import { render } from '../render.js';
 import { Digraph } from './Digraph.js';
 import { Edge } from './Edge.js';
 import { Graph } from './Graph.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
-import { render } from '../render.js';
 
 describe('React 19 Ref as Prop Support', () => {
   describe('Node ref support', () => {
@@ -15,7 +15,7 @@ describe('React 19 Ref as Prop Support', () => {
 
       const TestComponent = () => {
         const ref = useRef<NodeModel>(null);
-        
+
         // Capture ref for testing
         setTimeout(() => {
           nodeRef = ref.current;
@@ -29,10 +29,10 @@ describe('React 19 Ref as Prop Support', () => {
       };
 
       await render(<TestComponent />);
-      
+
       // Wait for ref to be set
-      await new Promise(resolve => setTimeout(resolve, 10));
-      
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
       expect(nodeRef).not.toBeNull();
       expect(nodeRef!.id).toBe('testnode');
     });
@@ -42,16 +42,18 @@ describe('React 19 Ref as Prop Support', () => {
 
       const TestComponent = () => (
         <Digraph>
-          <Node 
-            id="functionref" 
-            ref={(node) => { capturedNode = node; }}
-            label="Function Ref Node" 
+          <Node
+            id="functionref"
+            ref={(node) => {
+              capturedNode = node;
+            }}
+            label="Function Ref Node"
           />
         </Digraph>
       );
 
       await render(<TestComponent />);
-      
+
       expect(capturedNode).not.toBeNull();
       expect(capturedNode!.id).toBe('functionref');
     });
@@ -63,7 +65,7 @@ describe('React 19 Ref as Prop Support', () => {
 
       const TestComponent = () => {
         const ref = useRef<EdgeModel>(null);
-        
+
         // Capture ref for testing
         setTimeout(() => {
           edgeRef = ref.current;
@@ -79,10 +81,10 @@ describe('React 19 Ref as Prop Support', () => {
       };
 
       await render(<TestComponent />);
-      
+
       // Wait for ref to be set
-      await new Promise(resolve => setTimeout(resolve, 10));
-      
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
       expect(edgeRef).not.toBeNull();
       // EdgeModel.targets contains NodeRef objects, not just strings
       expect(edgeRef!.targets).toHaveLength(2);
@@ -97,7 +99,7 @@ describe('React 19 Ref as Prop Support', () => {
 
       const TestComponent = () => {
         const ref = useRef<GraphBaseModel>(null);
-        
+
         // Capture ref for testing
         setTimeout(() => {
           graphRef = ref.current;
@@ -111,10 +113,10 @@ describe('React 19 Ref as Prop Support', () => {
       };
 
       await render(<TestComponent />);
-      
+
       // Wait for ref to be set
-      await new Promise(resolve => setTimeout(resolve, 10));
-      
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
       expect(graphRef).not.toBeNull();
       // Digraph component creates a Graph model with directed=true
       expect(graphRef!.id).toBe('testgraph');
@@ -125,7 +127,7 @@ describe('React 19 Ref as Prop Support', () => {
 
       const TestComponent = () => {
         const ref = useRef<GraphBaseModel>(null);
-        
+
         // Capture ref for testing
         setTimeout(() => {
           subgraphRef = ref.current;
@@ -141,10 +143,10 @@ describe('React 19 Ref as Prop Support', () => {
       };
 
       await render(<TestComponent />);
-      
+
       // Wait for ref to be set
-      await new Promise(resolve => setTimeout(resolve, 10));
-      
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
       expect(subgraphRef).not.toBeNull();
       expect(subgraphRef!.id).toBe('testsubgraph');
     });
@@ -154,7 +156,7 @@ describe('React 19 Ref as Prop Support', () => {
 
       const TestComponent = () => {
         const ref = useRef<GraphBaseModel>(null);
-        
+
         // Capture ref for testing
         setTimeout(() => {
           graphRef = ref.current;
@@ -168,10 +170,10 @@ describe('React 19 Ref as Prop Support', () => {
       };
 
       await render(<TestComponent />);
-      
+
       // Wait for ref to be set
-      await new Promise(resolve => setTimeout(resolve, 10));
-      
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
       expect(graphRef).not.toBeNull();
       // Graph component creates a Graph model with directed=false (undirected)
       expect(graphRef!.id).toBe('testgraph');
@@ -190,7 +192,7 @@ describe('React 19 Ref as Prop Support', () => {
         const nodeBRef = useRef<NodeModel>(null);
         const edgeABRef = useRef<EdgeModel>(null);
         const digraphRef = useRef<GraphBaseModel>(null);
-        
+
         // Capture refs for testing
         setTimeout(() => {
           nodeRefA = nodeARef.current;
@@ -209,23 +211,23 @@ describe('React 19 Ref as Prop Support', () => {
       };
 
       await render(<TestComponent />);
-      
+
       // Wait for refs to be set
-      await new Promise(resolve => setTimeout(resolve, 10));
-      
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
       // Verify all refs are set correctly
       expect(nodeRefA).not.toBeNull();
       expect(nodeRefA!.id).toBe('A');
-      
+
       expect(nodeRefB).not.toBeNull();
       expect(nodeRefB!.id).toBe('B');
-      
+
       expect(edgeRef).not.toBeNull();
       // EdgeModel.targets contains NodeRef objects, not just strings
       expect(edgeRef!.targets).toHaveLength(2);
       expect(edgeRef!.targets[0]).toMatchObject({ id: 'A' });
       expect(edgeRef!.targets[1]).toMatchObject({ id: 'B' });
-      
+
       expect(graphRef).not.toBeNull();
       expect(graphRef!.id).toBe('complexgraph');
     });
@@ -237,7 +239,7 @@ describe('React 19 Ref as Prop Support', () => {
 
       const TestComponent = () => {
         const ref = useRef<NodeModel>(null);
-        
+
         // Capture ref for testing
         setTimeout(() => {
           nodeRef = ref.current;
@@ -251,21 +253,23 @@ describe('React 19 Ref as Prop Support', () => {
       };
 
       const result = await render(<TestComponent />);
-      
+
       // Wait for ref to be set
-      await new Promise(resolve => setTimeout(resolve, 10));
-      
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
       expect(nodeRef).not.toBeNull();
-      
+
       // Manipulate the node via ref
       if (nodeRef) {
         (nodeRef as unknown as NodeModel).attributes.set('color', 'red');
         (nodeRef as unknown as NodeModel).attributes.set('shape', 'box');
         (nodeRef as unknown as NodeModel).comment = 'Modified via ref';
       }
-      
+
       // Verify changes were applied
-      const targetNode = result.graph.nodes.find(n => n.id === 'manipulatable');
+      const targetNode = result.graph.nodes.find(
+        (n) => n.id === 'manipulatable',
+      );
       expect(targetNode?.attributes.get('color')).toBe('red');
       expect(targetNode?.attributes.get('shape')).toBe('box');
       expect(targetNode?.comment).toBe('Modified via ref');

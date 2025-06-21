@@ -38,12 +38,18 @@ export interface RenderOptions<T extends GraphBaseModel = GraphBaseModel> {
    * Called when an error is not caught by any error boundary
    * React 19 error handling pattern
    */
-  onUncaughtError?: (error: Error, errorInfo: { componentStack?: string }) => void;
+  onUncaughtError?: (
+    error: Error,
+    errorInfo: { componentStack?: string },
+  ) => void;
   /**
    * Called when an error is caught by an error boundary
    * React 19 error handling pattern
    */
-  onCaughtError?: (error: Error, errorInfo: { componentStack?: string }) => void;
+  onCaughtError?: (
+    error: Error,
+    errorInfo: { componentStack?: string },
+  ) => void;
 }
 
 const noop = (): void => undefined;
@@ -91,7 +97,7 @@ function createWrappedElement<T extends GraphBaseModel>(
  */
 function createFiberRoot(containerInfo: any = {}, options: RenderOptions = {}) {
   const { onUncaughtError = noop } = options;
-  
+
   return reconciler.createContainer(
     containerInfo,
     1, // tag - ConcurrentRoot = 1 for concurrent mode (React 19 default)
@@ -202,16 +208,12 @@ export async function render<T extends GraphBaseModel>(
   if (concurrent) {
     return new Promise<RenderResult<T>>((resolve, reject) => {
       startTransition(() => {
-        renderInternal(element, options)
-          .then(resolve)
-          .catch(reject);
+        renderInternal(element, options).then(resolve).catch(reject);
       });
     });
-  } else {
-    return renderInternal(element, options);
   }
+  return renderInternal(element, options);
 }
-
 
 /**
  * Converts the given element to DOT language asynchronously.

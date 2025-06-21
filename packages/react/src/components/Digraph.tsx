@@ -27,10 +27,10 @@ export const Digraph: FC<RootGraphProps> = ({
     Object.assign(options, { label: renderedLabel });
   const digraph = useDigraph(options);
   const clusters = useGraphMap();
-  
+
   // Handle ref as prop (React 19 pattern)
   useImperativeHandle(ref, () => digraph, [digraph]);
-  
+
   useEffect(() => {
     if (digraph.id !== undefined) {
       clusters.set(digraph.id, digraph);
