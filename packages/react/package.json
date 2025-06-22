@@ -35,8 +35,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "example": "ts-node example/example",
-    "typecheck": "tsc --noEmit --strict --skipLibCheck"
+    "example": "ts-node example/example"
   },
   "dependencies": {
     "@ts-graphviz/common": "workspace:^",

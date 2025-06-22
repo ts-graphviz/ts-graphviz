@@ -32,7 +32,8 @@
     "build": "pnpm -r build",
     "doc": "typedoc",
     "lint": "biome check --write **",
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc --noEmit --strict --skipLibCheck"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.0",

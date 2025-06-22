@@ -10,7 +10,7 @@ import { GraphBase } from './GraphBase.js';
  * @group Models
  */
 export abstract class RootGraph
-  extends GraphBase<GraphAttributeKey>
+  extends GraphBase<'Graph', GraphAttributeKey>
   implements RootGraphModel
 {
   public get $$type(): 'Graph' {

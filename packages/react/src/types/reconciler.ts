@@ -1,5 +1,5 @@
 import type { ComponentProps as ReactComponentProps, FC } from 'react';
-import type { DotObjectModel } from 'ts-graphviz';
+import type { DotObjectModel, GraphBaseModel } from 'ts-graphviz';
 import type { AnyGraphContainer } from './container.js';
 import type { Context } from '../contexts/GraphvizContext.js';
 
