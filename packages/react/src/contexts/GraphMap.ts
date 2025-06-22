@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { GraphBaseModel } from 'ts-graphviz';
+import type { AnyGraphContainer } from '../types/container.js';
 
-export const GraphMap = createContext<Map<string, GraphBaseModel>>(new Map());
+export const GraphMap = createContext<Map<string, AnyGraphContainer>>(new Map());
 GraphMap.displayName = 'GraphMap';

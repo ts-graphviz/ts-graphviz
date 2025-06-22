@@ -26,7 +26,7 @@ export function useSubgraph(props: SubgraphOptions = {}): SubgraphModel {
   }, [context, cluster, id]);
 
   useHasComment(subgraph, comment);
-  useGraphAttributes(subgraph, attributes, { edge, node, graph });
+  useGraphAttributes(subgraph as any, attributes, { edge, node, graph });
   useEffect(() => {
     return (): void => {
       cluster.removeSubgraph(subgraph);

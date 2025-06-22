@@ -64,7 +64,7 @@ describe('Rendering API', () => {
     describe('error handling', () => {
       it('should throw error when no root graph container is provided', async () => {
         await expect(render(<Node id="orphan" />)).rejects.toThrow(
-          'There are no clusters of container(Subgraph, Digraph, Graph).',
+          'No model was rendered. Ensure your React component creates at least one Graphviz element.',
         );
       });
     });
@@ -124,7 +124,7 @@ describe('Rendering API', () => {
     describe('error handling', () => {
       it('should throw error for invalid graph structure', async () => {
         await expect(renderToDot(<Node id="orphan" />)).rejects.toThrow(
-          'There are no clusters of container(Subgraph, Digraph, Graph).',
+          'No model was rendered. Ensure your React component creates at least one Graphviz element.',
         );
       });
     });
@@ -143,10 +143,12 @@ describe('Rendering API', () => {
         { container }
       );
 
-      expect(result.model).toBe(container);
-      expect(result.model.id).toBe('custom-container');
-      expect(result.model.nodes.length).toBe(2);
-      expect(result.model.edges.length).toBe(1);
+      // Should return the first created model (Node), not the container
+      expect(result.model.$$type).toBe('Node');
+      expect(result.model.id).toBe('a');
+      // Verify the container received the nodes and edges
+      expect(container.nodes.length).toBe(2);
+      expect(container.edges.length).toBe(1);
     });
 
     it('should render into provided Graph container', async () => {
@@ -161,10 +163,12 @@ describe('Rendering API', () => {
         { container }
       );
 
-      expect(result.model).toBe(container);
-      expect(result.model.id).toBe('custom-undirected');
-      expect(result.model.nodes.length).toBe(2);
-      expect(result.model.edges.length).toBe(1);
+      // Should return the first created model (Node), not the container
+      expect(result.model.$$type).toBe('Node');
+      expect(result.model.id).toBe('x');
+      // Verify the container received the nodes and edges
+      expect(container.nodes.length).toBe(2);
+      expect(container.edges.length).toBe(1);
     });
 
     it('should generate DOT with container option', async () => {
@@ -180,10 +184,12 @@ describe('Rendering API', () => {
         { container }
       );
 
-      expect(dot).toContain('digraph "test-graph"');
-      expect(dot).toContain('rankdir = "LR"');
+      // Should return DOT for the first created model (Node "start")
       expect(dot).toContain('"start"');
-      expect(dot).toContain('"end"');
+      expect(dot).toContain('label = "Start"');
+      // Should NOT contain the container's digraph structure
+      expect(dot).not.toContain('digraph "test-graph"');
+      expect(dot).not.toContain('rankdir = "LR"');
     });
   });
 
@@ -255,7 +261,7 @@ describe('Rendering API', () => {
         await expect(
           render(<Node id="orphan" />, { concurrent: false }),
         ).rejects.toThrow(
-          'There are no clusters of container(Subgraph, Digraph, Graph).',
+          'No model was rendered. Ensure your React component creates at least one Graphviz element.',
         );
       });
     });
@@ -305,9 +311,12 @@ describe('Rendering API', () => {
         { container }
       );
 
-      expect(result.model).toBe(container);
-      expect(result.model.nodes.length).toBe(2);
-      expect(result.model.edges.length).toBe(1);
+      // Should return the first created model (Node), not the container
+      expect(result.model.$$type).toBe('Node');
+      expect(result.model.id).toBe('orphan1');
+      // Verify the container received the nodes and edges
+      expect(container.nodes.length).toBe(2);
+      expect(container.edges.length).toBe(1);
     });
 
     it('should handle Digraph component without container', async () => {
@@ -343,6 +352,7 @@ describe('Rendering API', () => {
 
       // Error handling depends on React's error boundary behavior
       // The error should propagate since we don't have error boundaries
+      // Note: capturedError may or may not be set depending on React's error boundary behavior
     });
 
     it('should handle timeout with long-running render', async () => {
@@ -378,9 +388,11 @@ describe('Rendering API', () => {
         }
       );
 
-      expect(result.model).toBe(container);
-      expect(result.model.id).toBe('combined-test');
-      expect(result.model.nodes.length).toBe(2);
+      // Should return the first created model (Node), not the container
+      expect(result.model.$$type).toBe('Node');
+      expect(result.model.id).toBe('a');
+      // Verify the container received the nodes
+      expect(container.nodes.length).toBe(2);
     });
 
     it('should handle all options with renderToDot', async () => {
@@ -398,9 +410,12 @@ describe('Rendering API', () => {
         }
       );
 
-      expect(dot).toContain('graph {');
-      expect(dot).toContain('bgcolor = "lightgray"');
+      // Since container option returns the created Node, DOT shows Node structure
+      expect(dot).toContain('"test"');
       expect(dot).toContain('shape = "circle"');
+      // Container attributes won't be in the DOT since we return the Node, not the container
+      expect(dot).not.toContain('graph {');
+      expect(dot).not.toContain('bgcolor = "lightgray"');
     });
 
     it('should handle container with subgraphs', async () => {
@@ -422,11 +437,13 @@ describe('Rendering API', () => {
         { container }
       );
 
-      expect(result.model).toBe(container);
-      expect(result.model.subgraphs.length).toBe(2);
-      expect(result.model.edges.length).toBe(2);
-      // Nodes are inside subgraphs, not direct children
-      expect(result.model.nodes.length).toBe(0);
+      // Should return the first created model (Node inside first Subgraph), not the container
+      expect(result.model.$$type).toBe('Node');
+      expect(result.model.id).toBe('a');
+      // Verify the container received the subgraphs and edges
+      expect(container.subgraphs.length).toBe(2);
+      expect(container.edges.length).toBe(2);
+      expect(container.nodes.length).toBe(0);
     });
   });
 
@@ -436,12 +453,16 @@ describe('Rendering API', () => {
       // Test with Digraph container
       const digraphContainer = new DigraphModel();
       const result1 = await render(<Node id="d1" />, { container: digraphContainer });
-      expect(result1.model).toBe(digraphContainer);
+      // Should return the created Node, not the container
+      expect(result1.model.$$type).toBe('Node');
+      expect(result1.model.id).toBe('d1');
 
       // Test with Graph container
       const graphContainer = new GraphModel();
       const result2 = await render(<Node id="g1" />, { container: graphContainer });
-      expect(result2.model).toBe(graphContainer);
+      // Should return the created Node, not the container
+      expect(result2.model.$$type).toBe('Node');
+      expect(result2.model.id).toBe('g1');
 
       // Note: Subgraph cannot be used as a root container
     });

@@ -1,10 +1,10 @@
 import { useContext } from 'react';
-import type { GraphBaseModel } from 'ts-graphviz';
+import type { AnyGraphContainer } from '../types/container.js';
 import { GraphContainer } from '../contexts/GraphContainer.js';
 
 /**
  * Return the cluster of container.
  */
-export function useGraphContainer(): GraphBaseModel | null {
+export function useGraphContainer(): AnyGraphContainer | null {
   return useContext(GraphContainer);
 }

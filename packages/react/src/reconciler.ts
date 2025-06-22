@@ -1,36 +1,21 @@
-import type { ComponentProps, FC } from 'react';
 import ReactReconciler from 'react-reconciler';
 import type { GraphBaseModel } from 'ts-graphviz';
+import type { 
+  ComponentType, 
+  ComponentProps as Props, 
+  RenderContainer, 
+  ReconcilerInstance as Instance, 
+  TextInstance,
+  PublicInstance,
+  HostContext,
+  UpdatePayload
+} from './types/reconciler.js';
 
 /**
- * React component type for Graphviz elements
+ * Type aliases for reconciler compatibility
  */
-type Type = FC<any>;
-
-/**
- * Props for Graphviz components
- */
-type Props = ComponentProps<any>;
-
-/**
- * Container represents the graph context - now holds the actual context
- */
-type Container = Record<string, any>;
-
-/**
- * Instance represents a rendered Graphviz element (Node, Edge, Subgraph, etc.)
- */
-type Instance = {
-  type: string;
-  props: Props;
-  children: (Instance | TextInstance)[];
-  appendChild?: (child: Instance | TextInstance) => void;
-};
-
-/**
- * Text instance for string content
- */
-type TextInstance = string;
+type Type = ComponentType;
+type Container = RenderContainer;
 
 /**
  * Suspense instance (not used in Graphviz rendering)
@@ -41,27 +26,6 @@ type SuspenseInstance = never;
  * Hydratable instance (not used in Graphviz rendering)
  */
 type HydratableInstance = never;
-
-/**
- * Public instance exposed to user code
- */
-type PublicInstance = Instance | TextInstance;
-
-/**
- * Host context for rendering
- */
-type HostContext = {
-  graph?: GraphBaseModel;
-};
-
-/**
- * Update payload for element updates
- */
-type UpdatePayload = {
-  type: 'UPDATE';
-  oldProps: Props;
-  newProps: Props;
-} | null;
 
 /**
  * Child set (not used in current implementation)
@@ -416,7 +380,7 @@ export class HostConfig
     container: Container,
     child: Instance | TextInstance,
   ): void {
-    // Store the root element info in container for later use
+    // Store the root instance for debugging
     if (typeof child === 'object' && 'type' in child) {
       container.__rootInstance = child;
     }

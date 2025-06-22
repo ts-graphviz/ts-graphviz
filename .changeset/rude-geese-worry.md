@@ -23,6 +23,25 @@ const graph = await render(<Digraph>...</Digraph>, { container, ...options });
 const dotString = await renderToDot(<Digraph>...</Digraph>, { container, ...options });
 ```
 
+### Container Option Return Value Changes
+
+**🚨 BREAKING CHANGE:** Container option now returns created model instead of container
+
+**Migration Required:**
+```typescript
+// Before - result.model was the container itself
+const container = new DigraphModel('parent');
+const result = await render(<Node id="test" />, { container });
+expect(result.model).toBe(container); // ❌ No longer works
+
+// After - result.model is the first created model
+const container = new DigraphModel('parent');
+const result = await render(<Node id="test" />, { container });
+expect(result.model.$$type).toBe('Node'); // ✅ New behavior
+expect(result.model.id).toBe('test');
+// Access container directly: container.nodes.length === 1
+```
+
 ## ✨ NEW FEATURES
 
 ### Unified Concurrent Rendering
@@ -72,6 +91,18 @@ const graph = await render(<Digraph>...</Digraph>, { concurrent: false });
 - Fixed React 19 type compatibility issues
 - Enhanced type safety for error handlers
 
+### Type System Modernization
+- 🆕 **Eliminated all `any` types** from render and reconciler systems
+- 🆕 **Shared type definitions** between render and reconciler for consistency
+- 🆕 **Type-safe model collection** with proper `DotObjectModel` constraints
+- Enhanced debugging capabilities with strongly-typed error handling
+
+### Model Collection Algorithm Improvements
+- 🆕 **Container-aware collection** replaces priority-based system
+- Fixed unpredictable behavior in nested component structures
+- Consistent model return behavior regardless of component hierarchy depth
+- Better handling of complex Subgraph and Edge combinations
+
 ### Test Infrastructure
 - 100% test coverage maintained
 - React 19 compatibility validated
@@ -114,7 +145,20 @@ const graph = await render(<Digraph>...</Digraph>, { concurrent: false });
    + const dot = await renderToDot(<MyGraph />, { container });
    ```
 
-3. **Add Error Handling (Optional)**
+3. **Update Container Option Usage**
+   ```typescript
+   // Old behavior - result.model was the container
+   - const result = await render(<Node id="test" />, { container });
+   - expect(result.model).toBe(container);
+
+   // New behavior - result.model is the created model
+   + const result = await render(<Node id="test" />, { container });
+   + expect(result.model.$$type).toBe('Node');
+   + expect(result.model.id).toBe('test');
+   + // Access container elements: container.nodes.length === 1
+   ```
+
+4. **Add Error Handling (Optional)**
    ```typescript
    const graph = await render(<MyGraph />, {
      onUncaughtError: (error, errorInfo) => {
@@ -123,7 +167,7 @@ const graph = await render(<Digraph>...</Digraph>, { concurrent: false });
    });
    ```
 
-4. **Configure Concurrent Rendering (Optional)**
+5. **Configure Concurrent Rendering (Optional)**
    ```typescript
    // Concurrent rendering is enabled by default
    const graph = await render(<ComplexGraph />);

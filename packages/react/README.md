@@ -16,8 +16,7 @@
 
 # @ts-graphviz/react
 
-React Components and Renderer for ts-graphviz.
-
+React Components and Renderer for ts-graphviz
 🔗
 
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=GitHub&style=flat)](https://github.com/ts-graphviz/ts-graphviz)
