@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { renderHook } from '@testing-library/react';
 import { Edge, type EdgeTargetLikeTuple } from 'ts-graphviz';
-import { describe, expect, it, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { digraph, graph } from './__tests__/wrapper.js';
 import { useEdge } from './useEdge.js';
 
@@ -34,7 +34,7 @@ describe('useEdge', () => {
     expect(result.current).toBeInstanceOf(Edge);
   });
 
-  test('should throw error when edge has fewer than 2 targets', () => {
+  it('should throw error when edge has fewer than 2 targets', () => {
     expect(() => {
       renderHook(() => useEdge(['a'] as any as EdgeTargetLikeTuple), {
         wrapper: graph(),
