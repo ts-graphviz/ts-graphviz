@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import type { EdgeModel, RootGraphModel } from 'ts-graphviz';
 import { describe, expect, test } from 'vitest';
 import { render } from '../render.js';
@@ -8,31 +9,20 @@ import { Node } from './Node.js';
 describe('Edge', () => {
   describe('ref support', () => {
     test('should provide access to EdgeModel via ref', async () => {
-      let edgeRef: EdgeModel | null = null;
+      const edgeRef = createRef<EdgeModel>();
 
-      const TestComponent = () => (
+      await render<RootGraphModel>(
         <Digraph>
           <Node id="A" />
           <Node id="B" />
-          <Edge
-            targets={['A', 'B']}
-            ref={(edge) => {
-              edgeRef = edge;
-            }}
-            label="Test Edge"
-          />
-        </Digraph>
+          <Edge targets={['A', 'B']} ref={edgeRef} label="Test Edge" />
+        </Digraph>,
       );
 
-      await render<RootGraphModel>(<TestComponent />);
-
-      expect(edgeRef).not.toBeNull();
-      // EdgeModel.targets contains NodeRef objects, not just strings
-      if (edgeRef) {
-        expect((edgeRef as EdgeModel).targets).toHaveLength(2);
-        expect((edgeRef as EdgeModel).targets[0]).toMatchObject({ id: 'A' });
-        expect((edgeRef as EdgeModel).targets[1]).toMatchObject({ id: 'B' });
-      }
+      expect(edgeRef.current).not.toBeNull();
+      expect(edgeRef.current?.targets).toHaveLength(2);
+      expect(edgeRef.current?.targets[0]).toMatchObject({ id: 'A' });
+      expect(edgeRef.current?.targets[1]).toMatchObject({ id: 'B' });
     });
   });
 });

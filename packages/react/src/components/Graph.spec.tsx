@@ -1,4 +1,5 @@
-import { type GraphBaseModel } from 'ts-graphviz';
+import { createRef } from 'react';
+import type { GraphBaseModel } from 'ts-graphviz';
 import { describe, expect, test } from 'vitest';
 import { render } from '../render.js';
 import { Graph } from './Graph.js';
@@ -23,26 +24,16 @@ describe('Graph', () => {
 
   describe('ref support', () => {
     test('should provide access to GraphBaseModel via ref', async () => {
-      let graphRef: GraphBaseModel | null = null;
+      const graphRef = createRef<GraphBaseModel>();
 
-      const TestComponent = () => (
-        <Graph
-          id="testgraph"
-          ref={(graph) => {
-            graphRef = graph;
-          }}
-        >
+      await render(
+        <Graph id="testgraph" ref={graphRef}>
           <Node id="A" />
-        </Graph>
+        </Graph>,
       );
 
-      await render(<TestComponent />);
-
-      expect(graphRef).not.toBeNull();
-      // Graph component creates a Graph model with directed=false (undirected)
-      if (graphRef) {
-        expect((graphRef as GraphBaseModel).id).toBe('testgraph');
-      }
+      expect(graphRef.current).not.toBeNull();
+      expect(graphRef.current?.id).toBe('testgraph');
     });
   });
 });

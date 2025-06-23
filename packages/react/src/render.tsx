@@ -1,5 +1,5 @@
 import { type ReactElement, startTransition } from 'react';
-import { DotObjectModel, RootGraphModel, toDot } from 'ts-graphviz';
+import { type DotObjectModel, type RootGraphModel, toDot } from 'ts-graphviz';
 
 import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
@@ -20,7 +20,9 @@ export interface RenderResult<Model extends DotObjectModel> {
 /**
  * Rendering options for controlling the rendering behavior
  */
-export interface RenderOptions<Container extends AnyGraphContainer = AnyGraphContainer> {
+export interface RenderOptions<
+  Container extends AnyGraphContainer = AnyGraphContainer,
+> {
   /**
    * Container graph to render into. When provided, the element will be rendered
    * as children of this container.
@@ -95,9 +97,11 @@ function createWrappedElement<Container extends AnyGraphContainer>(
 /**
  * Creates a fiber root for rendering.
  */
-function createFiberRoot<Container extends AnyGraphContainer = AnyGraphContainer>(
+function createFiberRoot<
+  Container extends AnyGraphContainer = AnyGraphContainer,
+>(
   containerInfo: RenderContainer<Container> = { renderedModel: null },
-  options: RenderOptions = {}
+  options: RenderOptions = {},
 ) {
   const { onUncaughtError = noop } = options;
 
@@ -158,16 +162,16 @@ function createFiberRoot<Container extends AnyGraphContainer = AnyGraphContainer
  */
 async function renderInternal<
   Model extends DotObjectModel = RootGraphModel,
-  Container extends AnyGraphContainer = AnyGraphContainer
+  Container extends AnyGraphContainer = AnyGraphContainer,
 >(
   element: ReactElement,
   options: RenderOptions<Container> = {},
 ): Promise<RenderResult<Model>> {
   const { container, timeout = 5000 } = options;
-  const containerInfo: RenderContainer<Container> = { 
-    renderedModel: null 
+  const containerInfo: RenderContainer<Container> = {
+    renderedModel: null,
   };
-  
+
   // Type guard for root graph models (Graph/Digraph)
   const isRootGraphModel = (model: DotObjectModel): boolean => {
     return model.$$type === 'Graph';
@@ -187,8 +191,11 @@ async function renderInternal<
       }
     }
   };
-  
-  const context: Context<Container> = { container, __collectModel: collectModel };
+
+  const context: Context<Container> = {
+    container,
+    __collectModel: collectModel,
+  };
   containerInfo.context = context;
   const fiberRoot = createFiberRoot(containerInfo, options);
   const wrappedElement = createWrappedElement(element, context, container);
@@ -203,8 +210,7 @@ async function renderInternal<
         clearTimeout(timeoutId);
 
         // Return the rendered model, fallback to container if no model was rendered
-        const model = containerInfo.renderedModel || 
-          context.container;
+        const model = containerInfo.renderedModel || context.container;
 
         if (model) {
           resolve({
@@ -235,7 +241,7 @@ async function renderInternal<
  */
 export async function render<
   Model extends DotObjectModel = RootGraphModel,
-  Container extends AnyGraphContainer = AnyGraphContainer
+  Container extends AnyGraphContainer = AnyGraphContainer,
 >(
   element: ReactElement,
   options: RenderOptions<Container> = {},
@@ -245,7 +251,9 @@ export async function render<
   if (concurrent) {
     return new Promise<RenderResult<Model>>((resolve, reject) => {
       startTransition(() => {
-        renderInternal<Model, Container>(element, options).then(resolve).catch(reject);
+        renderInternal<Model, Container>(element, options)
+          .then(resolve)
+          .catch(reject);
       });
     });
   }
@@ -277,7 +285,7 @@ export async function render<
  */
 export async function renderToDot<
   Model extends DotObjectModel = RootGraphModel,
-  Container extends AnyGraphContainer = AnyGraphContainer
+  Container extends AnyGraphContainer = AnyGraphContainer,
 >(
   element: ReactElement,
   options: RenderOptions<Container> = {},

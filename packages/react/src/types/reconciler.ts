@@ -1,7 +1,7 @@
-import type { ComponentProps as ReactComponentProps, FC } from 'react';
+import type { FC, ComponentProps as ReactComponentProps } from 'react';
 import type { DotObjectModel, GraphBaseModel } from 'ts-graphviz';
-import type { AnyGraphContainer } from './container.js';
 import type { Context } from '../contexts/GraphvizContext.js';
+import type { AnyGraphContainer } from './container.js';
 
 /**
  * React component type for Graphviz elements
@@ -16,7 +16,9 @@ export type ComponentProps = ReactComponentProps<any>;
 /**
  * Container represents the rendering container info with typed model collection
  */
-export interface RenderContainer<Container extends AnyGraphContainer = AnyGraphContainer> {
+export interface RenderContainer<
+  Container extends AnyGraphContainer = AnyGraphContainer,
+> {
   renderedModel: DotObjectModel | null;
   context?: Context<Container>;
   __rootInstance?: ReconcilerInstance | TextInstance;

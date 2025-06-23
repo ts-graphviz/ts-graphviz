@@ -140,7 +140,7 @@ describe('Rendering API', () => {
           <Node id="b" label="Node B" />
           <Edge targets={['a', 'b']} />
         </>,
-        { container }
+        { container },
       );
 
       // Should return the first created model (Node), not the container
@@ -160,7 +160,7 @@ describe('Rendering API', () => {
           <Node id="y" label="Node Y" />
           <Edge targets={['x', 'y']} />
         </>,
-        { container }
+        { container },
       );
 
       // Should return the first created model (Node), not the container
@@ -181,7 +181,7 @@ describe('Rendering API', () => {
           <Node id="end" label="End" />
           <Edge targets={['start', 'end']} />
         </>,
-        { container }
+        { container },
       );
 
       // Should return DOT for the first created model (Node "start")
@@ -272,7 +272,7 @@ describe('Rendering API', () => {
       const { Digraph: DigraphModel } = await import('ts-graphviz');
       const container = new DigraphModel('empty-test');
 
-      const result = await render(<></>, { container });
+      const result = await render(<div />, { container });
 
       expect(result.model).toBe(container);
       expect(result.model.nodes.length).toBe(0);
@@ -288,9 +288,13 @@ describe('Rendering API', () => {
           <Node id="b" />
         </Digraph>,
         {
-          onUncaughtError: () => { errorCount++; },
-          onCaughtError: () => { errorCount++; }
-        }
+          onUncaughtError: () => {
+            errorCount++;
+          },
+          onCaughtError: () => {
+            errorCount++;
+          },
+        },
       );
 
       // Valid rendering should not trigger error callbacks
@@ -308,7 +312,7 @@ describe('Rendering API', () => {
           <Node id="orphan2" />
           <Edge targets={['orphan1', 'orphan2']} />
         </>,
-        { container }
+        { container },
       );
 
       // Should return the first created model (Node), not the container
@@ -326,7 +330,7 @@ describe('Rendering API', () => {
           <Node id="a" />
           <Node id="b" />
           <Edge targets={['a', 'b']} />
-        </Digraph>
+        </Digraph>,
       );
 
       expect(result.model.id).toBe('test-digraph');
@@ -336,23 +340,34 @@ describe('Rendering API', () => {
     });
 
     it('should handle error callback with invalid component', async () => {
-      let capturedError: Error | null = null;
-
       const ThrowingComponent = (): ReactElement => {
         throw new Error('Component error');
       };
 
-      await expect(
-        render(<ThrowingComponent />, {
-          onUncaughtError: (error: Error | null) => {
-            capturedError = error;
-          },
-        })
-      ).rejects.toThrow();
+      function rejectOnUncaughtError(element: ReactElement) {
+        return new Promise((resolve, reject) => {
+          render(element, {
+            onUncaughtError: (error: Error | null) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(null);
+              }
+            },
+          });
+        });
+      }
 
-      // Error handling depends on React's error boundary behavior
-      // The error should propagate since we don't have error boundaries
-      // Note: capturedError may or may not be set depending on React's error boundary behavior
+      await expect(
+        rejectOnUncaughtError(
+          <Digraph>
+            <Node id="a" />
+            <Node id="b" />
+            {/* This will throw an error */}
+            <ThrowingComponent />
+          </Digraph>,
+        ),
+      ).rejects.toThrow('Component error');
     });
 
     it('should handle timeout with long-running render', async () => {
@@ -384,8 +399,8 @@ describe('Rendering API', () => {
         {
           container,
           concurrent: true,
-          timeout: 1000
-        }
+          timeout: 1000,
+        },
       );
 
       // Should return the first created model (Node), not the container
@@ -396,23 +411,20 @@ describe('Rendering API', () => {
     });
 
     it('should handle all options with renderToDot', async () => {
-      const container = new GraphModel();
-      container.apply({ bgcolor: 'lightgray' });
+      const container = new GraphModel({ bgcolor: 'lightgray' });
 
-      const dot = await renderToDot(
-        <>
-          <Node id="test" shape="circle" />
-        </>,
-        {
-          container,
-          concurrent: false,
-          timeout: 2000
-        }
-      );
+      const dot = await renderToDot(<Node id="test" shape="circle" />, {
+        container,
+        concurrent: false,
+        timeout: 2000,
+      });
 
       // Since container option returns the created Node, DOT shows Node structure
-      expect(dot).toContain('"test"');
-      expect(dot).toContain('shape = "circle"');
+      expect(dot).toMatchInlineSnapshot(`
+        ""test" [
+          shape = "circle";
+        ];"
+      `)
       // Container attributes won't be in the DOT since we return the Node, not the container
       expect(dot).not.toContain('graph {');
       expect(dot).not.toContain('bgcolor = "lightgray"');
@@ -434,7 +446,7 @@ describe('Rendering API', () => {
           <Edge targets={['a', 'c']} />
           <Edge targets={['b', 'd']} />
         </>,
-        { container }
+        { container },
       );
 
       // Should return the first created model (Node inside first Subgraph), not the container
@@ -449,22 +461,23 @@ describe('Rendering API', () => {
 
   describe('Type Safety and API Compatibility', () => {
     it('should accept container of different GraphBaseModel types', async () => {
-
       // Test with Digraph container
       const digraphContainer = new DigraphModel();
-      const result1 = await render(<Node id="d1" />, { container: digraphContainer });
+      const result1 = await render(<Node id="d1" />, {
+        container: digraphContainer,
+      });
       // Should return the created Node, not the container
       expect(result1.model.$$type).toBe('Node');
       expect(result1.model.id).toBe('d1');
 
       // Test with Graph container
       const graphContainer = new GraphModel();
-      const result2 = await render(<Node id="g1" />, { container: graphContainer });
+      const result2 = await render(<Node id="g1" />, {
+        container: graphContainer,
+      });
       // Should return the created Node, not the container
       expect(result2.model.$$type).toBe('Node');
       expect(result2.model.id).toBe('g1');
-
-      // Note: Subgraph cannot be used as a root container
     });
 
     it('should maintain all options when using renderToDot', async () => {
@@ -476,8 +489,10 @@ describe('Rendering API', () => {
         {
           concurrent: true,
           timeout: 2000,
-          onUncaughtError: () => { errorCalled = true; }
-        }
+          onUncaughtError: () => {
+            errorCalled = true;
+          },
+        },
       );
 
       expect(dot).toContain('digraph');

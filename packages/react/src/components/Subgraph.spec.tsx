@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import type { GraphBaseModel } from 'ts-graphviz';
 import { describe, expect, test } from 'vitest';
 import { render } from '../render.js';
@@ -8,27 +9,18 @@ import { Subgraph } from './Subgraph.js';
 describe('Subgraph', () => {
   describe('ref support', () => {
     test('should provide access to GraphBaseModel via ref', async () => {
-      let subgraphRef: GraphBaseModel | null = null;
+      const subgraphRef = createRef<GraphBaseModel>();
 
-      const TestComponent = () => (
+      await render(
         <Digraph>
-          <Subgraph
-            id="testsubgraph"
-            ref={(subgraph) => {
-              subgraphRef = subgraph;
-            }}
-          >
+          <Subgraph id="testsubgraph" ref={subgraphRef}>
             <Node id="A" />
           </Subgraph>
-        </Digraph>
+        </Digraph>,
       );
 
-      await render(<TestComponent />);
-
-      expect(subgraphRef).not.toBeNull();
-      if (subgraphRef) {
-        expect((subgraphRef as GraphBaseModel).id).toBe('testsubgraph');
-      }
+      expect(subgraphRef.current).not.toBeNull();
+      expect(subgraphRef.current?.id).toBe('testsubgraph');
     });
   });
 });

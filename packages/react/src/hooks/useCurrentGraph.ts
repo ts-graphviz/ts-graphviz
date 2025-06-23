@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import type { AnyGraphContainer } from '../types/container.js';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
+import type { AnyGraphContainer } from '../types/container.js';
 
 /**
  * Hook to get the current cluster(Digraph, Graph or Subgraph).

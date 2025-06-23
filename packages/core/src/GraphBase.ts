@@ -30,9 +30,9 @@ import { AttributesBase } from './AttributesBase.js';
  * @group Models
  */
 export abstract class GraphBase<
-  T extends DotObjectType,
-  K extends AttributeKey = AttributeKey
->
+    T extends DotObjectType,
+    K extends AttributeKey = AttributeKey,
+  >
   extends AttributesBase<K>
   implements GraphBaseModel<T, K>
 {

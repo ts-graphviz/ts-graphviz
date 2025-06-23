@@ -1,14 +1,13 @@
 import ReactReconciler from 'react-reconciler';
-import type { GraphBaseModel } from 'ts-graphviz';
-import type { 
-  ComponentType, 
-  ComponentProps as Props, 
-  RenderContainer, 
-  ReconcilerInstance as Instance, 
-  TextInstance,
-  PublicInstance,
+import type {
+  ComponentType,
   HostContext,
-  UpdatePayload
+  ReconcilerInstance as Instance,
+  ComponentProps as Props,
+  PublicInstance,
+  RenderContainer,
+  TextInstance,
+  UpdatePayload,
 } from './types/reconciler.js';
 
 /**

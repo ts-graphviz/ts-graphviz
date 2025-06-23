@@ -287,9 +287,8 @@ export interface GraphCommonAttributes {
  */
 export interface GraphBaseModel<
   T extends DotObjectType = DotObjectType,
-  K extends AttributeKey = AttributeKey
->
-  extends HasComment,
+  K extends AttributeKey = AttributeKey,
+> extends HasComment,
     Attributes<K>,
     DotObjectModel<T> {
   readonly id?: string;
@@ -660,7 +659,10 @@ export interface GraphBaseModel<
  * @group Models
  */
 export interface SubgraphModel
-  extends GraphBaseModel<'Subgraph', SubgraphAttributeKey | ClusterSubgraphAttributeKey> {
+  extends GraphBaseModel<
+    'Subgraph',
+    SubgraphAttributeKey | ClusterSubgraphAttributeKey
+  > {
   /** Determines whether the Subgraph is a SubgraphCluster. */
   isSubgraphCluster(): boolean;
 }

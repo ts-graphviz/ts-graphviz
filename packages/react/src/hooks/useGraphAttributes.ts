@@ -7,7 +7,10 @@ import type {
 } from 'ts-graphviz';
 import type { GraphBaseAttributesProps } from '../types.js';
 
-export function useGraphAttributes<T extends DotObjectType, K extends AttributeKey>(
+export function useGraphAttributes<
+  T extends DotObjectType,
+  K extends AttributeKey,
+>(
   cluster: GraphBaseModel<T, K>,
   attributes: AttributesObject<K>,
   { edge, node, graph }: GraphBaseAttributesProps,

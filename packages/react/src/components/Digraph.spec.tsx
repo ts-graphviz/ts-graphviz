@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import type { GraphBaseModel } from 'ts-graphviz';
 import { describe, expect, test } from 'vitest';
 import { render } from '../render.js';
@@ -23,26 +24,16 @@ describe('Digraph', () => {
 
   describe('ref support', () => {
     test('should provide access to GraphBaseModel via ref', async () => {
-      let graphRef: GraphBaseModel | null = null;
+      const graphRef = createRef<GraphBaseModel>();
 
-      const TestComponent = () => (
-        <Digraph
-          id="testgraph"
-          ref={(graph) => {
-            graphRef = graph;
-          }}
-        >
+      await render(
+        <Digraph id="testgraph" ref={graphRef}>
           <Node id="A" />
-        </Digraph>
+        </Digraph>,
       );
 
-      await render(<TestComponent />);
-
-      expect(graphRef).not.toBeNull();
-      // Digraph component creates a Graph model with directed=true
-      if (graphRef) {
-        expect((graphRef as GraphBaseModel).id).toBe('testgraph');
-      }
+      expect(graphRef.current).not.toBeNull();
+      expect(graphRef.current?.id).toBe('testgraph');
     });
   });
 });

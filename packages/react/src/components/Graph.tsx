@@ -1,4 +1,9 @@
-import { type FC, useEffect, useImperativeHandle, useLayoutEffect } from 'react';
+import {
+  type FC,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+} from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphContainer } from '../contexts/GraphContainer.js';
 import { useGraph } from '../hooks/useGraph.js';

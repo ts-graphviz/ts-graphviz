@@ -11,7 +11,10 @@ import { GraphBase } from './GraphBase.js';
  * @group Models
  */
 export class Subgraph
-  extends GraphBase<'Subgraph', SubgraphAttributeKey | ClusterSubgraphAttributeKey>
+  extends GraphBase<
+    'Subgraph',
+    SubgraphAttributeKey | ClusterSubgraphAttributeKey
+  >
   implements SubgraphModel
 {
   public get $$type(): 'Subgraph' {

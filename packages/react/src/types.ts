@@ -124,6 +124,6 @@ declare module 'react/jsx-runtime' {
   }
 }
 
+export type { AnyGraphContainer } from './types/container.js';
 // Re-export types for external use
 export type { ComponentProps, ComponentType } from './types/reconciler.js';
-export type { AnyGraphContainer } from './types/container.js';

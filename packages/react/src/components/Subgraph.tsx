@@ -1,4 +1,9 @@
-import { type FC, useEffect, useImperativeHandle, useLayoutEffect } from 'react';
+import {
+  type FC,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+} from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { useGraphMap } from '../hooks/useGraphMap.js';
 import { useGraphvizContext } from '../hooks/useGraphvizContext.js';

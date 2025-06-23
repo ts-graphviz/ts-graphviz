@@ -1,5 +1,5 @@
-import { useLayoutEffect, useRef } from 'react';
-import { type NodeModel } from 'ts-graphviz';
+import { createRef } from 'react';
+import type { NodeModel } from 'ts-graphviz';
 import { describe, expect, test } from 'vitest';
 import { render, renderToDot } from '../render.js';
 import { Digraph } from './Digraph.js';
@@ -103,28 +103,16 @@ describe('Node', () => {
 
   describe('ref support', () => {
     test('should provide access to NodeModel via ref', async () => {
-      let nodeRef: any;
+      const nodeRef = createRef<NodeModel>();
 
-      const TestComponent = () => {
-        const ref = useRef<NodeModel>(null);
-        useLayoutEffect(() => {
-          nodeRef = ref.current;
-        }, [ref]);
-        return (
-          <Digraph>
-            <Node
-              id="testnode"
-              ref={ref}
-              label="Test Node"
-            />
-          </Digraph>
-        );
-      };
+      await render(
+        <Digraph>
+          <Node id="testnode" ref={nodeRef} label="Test Node" />
+        </Digraph>,
+      );
 
-      await render(<TestComponent />);
-
-      expect(nodeRef).not.toBeNull();
-      expect(nodeRef.id).toBe('testnode');
+      expect(nodeRef.current).not.toBeNull();
+      expect(nodeRef.current?.id).toBe('testnode');
     });
   });
 });
