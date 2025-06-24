@@ -40,7 +40,7 @@
     "@changesets/cli": "^2.29.4",
     "@pnpm/workspace.find-packages": "^1000.0.24",
     "@pnpm/workspace.pkgs-graph": "^1000.0.1",
-    "@types/node": "^20.17.46",
+    "@types/node": "^24.0.3",
     "@types/react": "^18.3.21",
     "@vitest/coverage-v8": "^3.2.3",
     "jsdom": "^26.1.0",
