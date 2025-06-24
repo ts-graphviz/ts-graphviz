@@ -37,27 +37,27 @@ describe('Rendering API', () => {
     describe('graph structure validation', () => {
       it('should render complete digraph with proper structure', async () => {
         const result = await render(<CompleteDigraphExample />);
-        expect(result.model).toBeDefined();
-        expect(result.model.nodes.length).toBe(2); // nodes a, b (direct children only)
-        expect(result.model.edges.length).toBe(1); // edge a -> b
-        expect(result.model.subgraphs.length).toBe(1); // cluster_x
-        expect(result.model.subgraphs[0].nodes.length).toBe(1); // node c inside subgraph
+        expect(result.models[0]).toBeDefined();
+        expect(result.models[0].nodes.length).toBe(2); // nodes a, b (direct children only)
+        expect(result.models[0].edges.length).toBe(1); // edge a -> b
+        expect(result.models[0].subgraphs.length).toBe(1); // cluster_x
+        expect(result.models[0].subgraphs[0].nodes.length).toBe(1); // node c inside subgraph
       });
 
       it('should render complete undirected graph with proper structure', async () => {
         const result = await render(<CompleteUndirectedGraphExample />);
-        expect(result.model).toBeDefined();
-        expect(result.model.nodes.length).toBe(2); // nodes a, b (direct children only)
-        expect(result.model.edges.length).toBe(1); // edge a -- b
-        expect(result.model.subgraphs.length).toBe(1); // cluster_x
-        expect(result.model.subgraphs[0].nodes.length).toBe(1); // node c inside subgraph
+        expect(result.models[0]).toBeDefined();
+        expect(result.models[0].nodes.length).toBe(2); // nodes a, b (direct children only)
+        expect(result.models[0].edges.length).toBe(1); // edge a -- b
+        expect(result.models[0].subgraphs.length).toBe(1); // cluster_x
+        expect(result.models[0].subgraphs[0].nodes.length).toBe(1); // node c inside subgraph
       });
 
       it('should respect timeout option', async () => {
         const options: RenderOptions = { timeout: 100 };
         // This should complete normally within 100ms
         const result = await render(<CompleteDigraphExample />, options);
-        expect(result.model).toBeDefined();
+        expect(result.models[0]).toBeDefined();
       });
     });
 
@@ -144,8 +144,8 @@ describe('Rendering API', () => {
       );
 
       // Should return the first created model (Node), not the container
-      expect(result.model.$$type).toBe('Node');
-      expect(result.model.id).toBe('a');
+      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models[0].id).toBe('a');
       // Verify the container received the nodes and edges
       expect(container.nodes.length).toBe(2);
       expect(container.edges.length).toBe(1);
@@ -164,8 +164,8 @@ describe('Rendering API', () => {
       );
 
       // Should return the first created model (Node), not the container
-      expect(result.model.$$type).toBe('Node');
-      expect(result.model.id).toBe('x');
+      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models[0].id).toBe('x');
       // Verify the container received the nodes and edges
       expect(container.nodes.length).toBe(2);
       expect(container.edges.length).toBe(1);
@@ -197,20 +197,20 @@ describe('Rendering API', () => {
     describe('concurrent mode (default)', () => {
       it('should render digraph with concurrent mode enabled by default', async () => {
         const result = await render(<CompleteDigraphExample />);
-        expect(result.model).toBeDefined();
-        expect(result.model.nodes.length).toBe(2);
-        expect(result.model.edges.length).toBe(1);
-        expect(result.model.subgraphs.length).toBe(1);
+        expect(result.models[0]).toBeDefined();
+        expect(result.models[0].nodes.length).toBe(2);
+        expect(result.models[0].edges.length).toBe(1);
+        expect(result.models[0].subgraphs.length).toBe(1);
       });
 
       it('should render with explicit concurrent=true', async () => {
         const result = await render(<CompleteDigraphExample />, {
           concurrent: true,
         });
-        expect(result.model).toBeDefined();
-        expect(result.model.nodes.length).toBe(2);
-        expect(result.model.edges.length).toBe(1);
-        expect(result.model.subgraphs.length).toBe(1);
+        expect(result.models[0]).toBeDefined();
+        expect(result.models[0].nodes.length).toBe(2);
+        expect(result.models[0].edges.length).toBe(1);
+        expect(result.models[0].subgraphs.length).toBe(1);
       });
 
       it('should handle error callbacks with concurrent mode', async () => {
@@ -228,7 +228,7 @@ describe('Rendering API', () => {
         };
 
         const result = await render(<CompleteDigraphExample />, options);
-        expect(result.model).toBeDefined();
+        expect(result.models[0]).toBeDefined();
         // No errors should occur for valid rendering
         expect(uncaughtError).toBeNull();
         expect(caughtError).toBeNull();
@@ -240,10 +240,10 @@ describe('Rendering API', () => {
         const result = await render(<CompleteDigraphExample />, {
           concurrent: false,
         });
-        expect(result.model).toBeDefined();
-        expect(result.model.nodes.length).toBe(2);
-        expect(result.model.edges.length).toBe(1);
-        expect(result.model.subgraphs.length).toBe(1);
+        expect(result.models[0]).toBeDefined();
+        expect(result.models[0].nodes.length).toBe(2);
+        expect(result.models[0].edges.length).toBe(1);
+        expect(result.models[0].subgraphs.length).toBe(1);
       });
 
       it('should generate DOT string with concurrent=false', async () => {
@@ -274,9 +274,9 @@ describe('Rendering API', () => {
 
       const result = await render(<div />, { container });
 
-      expect(result.model).toBe(container);
-      expect(result.model.nodes.length).toBe(0);
-      expect(result.model.edges.length).toBe(0);
+      expect(result.models).toHaveLength(0);
+      expect(container.nodes.length).toBe(0);
+      expect(container.edges.length).toBe(0);
     });
 
     it('should handle error callbacks properly', async () => {
@@ -298,7 +298,7 @@ describe('Rendering API', () => {
       );
 
       // Valid rendering should not trigger error callbacks
-      expect(result.model.nodes.length).toBe(2);
+      expect(result.models[0].nodes.length).toBe(2);
       expect(errorCount).toBe(0);
     });
 
@@ -316,8 +316,8 @@ describe('Rendering API', () => {
       );
 
       // Should return the first created model (Node), not the container
-      expect(result.model.$$type).toBe('Node');
-      expect(result.model.id).toBe('orphan1');
+      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models[0].id).toBe('orphan1');
       // Verify the container received the nodes and edges
       expect(container.nodes.length).toBe(2);
       expect(container.edges.length).toBe(1);
@@ -333,10 +333,10 @@ describe('Rendering API', () => {
         </Digraph>,
       );
 
-      expect(result.model.id).toBe('test-digraph');
-      expect((result.model as any).directed).toBe(true);
-      expect(result.model.nodes.length).toBe(2);
-      expect(result.model.edges.length).toBe(1);
+      expect(result.models[0].id).toBe('test-digraph');
+      expect((result.models[0] as any).directed).toBe(true);
+      expect(result.models[0].nodes.length).toBe(2);
+      expect(result.models[0].edges.length).toBe(1);
     });
 
     it('should handle error callback with invalid component', async () => {
@@ -382,7 +382,7 @@ describe('Rendering API', () => {
 
       // With a reasonable timeout, it should complete
       const result = await render(<SlowComponent />, { timeout: 5000 });
-      expect(result.model.nodes.length).toBe(100);
+      expect(result.models[0].nodes.length).toBe(100);
     });
   });
 
@@ -404,8 +404,8 @@ describe('Rendering API', () => {
       );
 
       // Should return the first created model (Node), not the container
-      expect(result.model.$$type).toBe('Node');
-      expect(result.model.id).toBe('a');
+      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models[0].id).toBe('a');
       // Verify the container received the nodes
       expect(container.nodes.length).toBe(2);
     });
@@ -424,7 +424,7 @@ describe('Rendering API', () => {
         ""test" [
           shape = "circle";
         ];"
-      `)
+      `);
       // Container attributes won't be in the DOT since we return the Node, not the container
       expect(dot).not.toContain('graph {');
       expect(dot).not.toContain('bgcolor = "lightgray"');
@@ -450,8 +450,8 @@ describe('Rendering API', () => {
       );
 
       // Should return the first created model (Node inside first Subgraph), not the container
-      expect(result.model.$$type).toBe('Node');
-      expect(result.model.id).toBe('a');
+      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models[0].id).toBe('a');
       // Verify the container received the subgraphs and edges
       expect(container.subgraphs.length).toBe(2);
       expect(container.edges.length).toBe(2);
@@ -467,8 +467,8 @@ describe('Rendering API', () => {
         container: digraphContainer,
       });
       // Should return the created Node, not the container
-      expect(result1.model.$$type).toBe('Node');
-      expect(result1.model.id).toBe('d1');
+      expect(result1.models[0].$$type).toBe('Node');
+      expect(result1.models[0].id).toBe('d1');
 
       // Test with Graph container
       const graphContainer = new GraphModel();
@@ -476,8 +476,8 @@ describe('Rendering API', () => {
         container: graphContainer,
       });
       // Should return the created Node, not the container
-      expect(result2.model.$$type).toBe('Node');
-      expect(result2.model.id).toBe('g1');
+      expect(result2.models[0].$$type).toBe('Node');
+      expect(result2.models[0].id).toBe('g1');
     });
 
     it('should maintain all options when using renderToDot', async () => {
@@ -497,6 +497,228 @@ describe('Rendering API', () => {
 
       expect(dot).toContain('digraph');
       expect(errorCalled).toBe(false);
+    });
+  });
+
+  describe('Model Collection Integration', () => {
+    it('should collect all top-level models when using fragments', async () => {
+      const result = await render(
+        <>
+          <Digraph id="graph1">
+            <Node id="a" />
+          </Digraph>
+          <Digraph id="graph2">
+            <Node id="b" />
+          </Digraph>
+        </>,
+      );
+
+      // Should return first model
+      expect(result.models[0].$$type).toBe('Graph');
+      expect(result.models[0].id).toBe('graph1');
+
+      // Should collect all models
+      expect(result.models).toHaveLength(2);
+      expect(result.models[0].id).toBe('graph1');
+      expect(result.models[1].id).toBe('graph2');
+    });
+
+    it('should collect multiple top-level models with container', async () => {
+      const container = new DigraphModel('container');
+
+      const result = await render(
+        <>
+          <Node id="node1" />
+          <Node id="node2" />
+          <Edge targets={['node1', 'node2']} />
+        </>,
+        { container },
+      );
+
+      // Should return first model
+      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models[0].id).toBe('node1');
+
+      // Should collect all top-level models (nodes and edge)
+      expect(result.models).toHaveLength(3);
+      expect(result.models[0].id).toBe('node1');
+      expect(result.models[1].id).toBe('node2');
+      expect(result.models[2].$$type).toBe('Edge');
+    });
+
+    it('should collect the first root graph model (Digraph) when no container', async () => {
+      const result = await render(
+        <Digraph id="test">
+          <Node id="a" />
+          <Node id="b" />
+        </Digraph>,
+      );
+
+      expect(result.models[0].$$type).toBe('Graph');
+      expect(result.models[0].id).toBe('test');
+      expect(result.models[0].directed).toBe(true);
+    });
+
+    it('should collect the first root graph model (Graph) when no container', async () => {
+      const result = await render(
+        <Graph id="test">
+          <Node id="a" />
+          <Node id="b" />
+        </Graph>,
+      );
+
+      expect(result.models[0].$$type).toBe('Graph');
+      expect(result.models[0].id).toBe('test');
+      expect(result.models[0].directed).toBe(false);
+    });
+
+    it('should collect first non-container model when container is provided', async () => {
+      const container = new DigraphModel('container');
+
+      const result = await render(
+        <>
+          <Node id="first" />
+          <Node id="second" />
+          <Edge targets={['first', 'second']} />
+        </>,
+        { container },
+      );
+
+      // Should return the first created Node, not the container
+      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models[0].id).toBe('first');
+      expect(container.nodes.length).toBe(2);
+      expect(container.edges.length).toBe(1);
+    });
+
+    it('should handle mixed models and collect first non-container model', async () => {
+      const container = new DigraphModel('container');
+
+      const result = await render(
+        <>
+          <Subgraph id="cluster">
+            <Node id="inner" />
+          </Subgraph>
+          <Node id="outer" />
+          <Edge targets={['inner', 'outer']} />
+        </>,
+        { container },
+      );
+
+      // Should return the first created model (Node inside Subgraph)
+      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models[0].id).toBe('inner');
+      expect(container.subgraphs.length).toBe(1);
+      expect(container.nodes.length).toBe(1);
+      expect(container.edges.length).toBe(1);
+    });
+
+    it('should ignore container model itself when collecting', async () => {
+      const container = new DigraphModel('container');
+
+      const result = await render(
+        // biome-ignore lint/complexity/noUselessFragments: This is a valid test case
+        <>
+          <Node id="test" />
+        </>,
+        { container },
+      );
+
+      // Should return the Node, not the container even if container is processed
+      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models[0].id).toBe('test');
+      expect(result.models[0]).not.toBe(container);
+    });
+
+    it('should fall back to container if no models are rendered', async () => {
+      const container = new DigraphModel('container');
+
+      const result = await render(
+        // biome-ignore lint/complexity/noUselessFragments: This is a valid test case
+        <></>, // Empty fragment
+        { container },
+      );
+
+      // Should return empty models array since no models were rendered
+      expect(result.models).toHaveLength(0);
+      expect(container.id).toBe('container');
+    });
+
+    it('should handle complex nested structure and collect correctly', async () => {
+      const container = new DigraphModel('root');
+
+      const result = await render(
+        <>
+          <Subgraph id="cluster1">
+            <Subgraph id="cluster2">
+              <Node id="deep_node" />
+            </Subgraph>
+            <Node id="shallow_node" />
+          </Subgraph>
+          <Node id="root_node" />
+          <Edge targets={['deep_node', 'shallow_node']} />
+          <Edge targets={['shallow_node', 'root_node']} />
+        </>,
+        { container },
+      );
+
+      // Should return the first created model (deep_node)
+      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models[0].id).toBe('deep_node');
+
+      // Should collect all non-container models (including nested ones)
+      expect(result.models).toHaveLength(7); // all nodes, subgraphs, and edges
+      expect(result.models[0].$$type).toBe('Node'); // deep_node
+      expect(result.models[1].$$type).toBe('Subgraph'); // cluster2
+      expect(result.models[2].$$type).toBe('Node'); // shallow_node
+      expect(result.models[3].$$type).toBe('Subgraph'); // cluster1
+      expect(result.models[4].$$type).toBe('Node'); // root_node
+      expect(result.models[5].$$type).toBe('Edge'); // first edge
+      expect(result.models[6].$$type).toBe('Edge'); // second edge
+
+      // Verify container structure
+      expect(container.subgraphs.length).toBe(1);
+      expect(container.subgraphs[0].subgraphs.length).toBe(1);
+      expect(container.nodes.length).toBe(1);
+      expect(container.edges.length).toBe(2);
+    });
+
+    it('should handle empty fragments with container and return empty models array', async () => {
+      const container = new DigraphModel('container');
+      // biome-ignore lint/complexity/noUselessFragments: This is a valid test case
+      const result = await render(<></>, { container });
+
+      expect(result.models).toHaveLength(0); // empty models array
+      expect(container.id).toBe('container'); // container still exists
+    });
+
+    it('should collect mixed model types in fragments', async () => {
+      const container = new DigraphModel('container');
+
+      const result = await render(
+        <>
+          <Subgraph id="cluster1">
+            <Node id="inner1" />
+          </Subgraph>
+          <Node id="outer1" />
+          <Subgraph id="cluster2">
+            <Node id="inner2" />
+          </Subgraph>
+          <Node id="outer2" />
+          <Edge targets={['outer1', 'outer2']} />
+        </>,
+        { container },
+      );
+
+      // Should have collected all non-container models
+      expect(result.models).toHaveLength(7); // all models including nested
+
+      // Check some key models are included
+      expect(result.models.map((m) => m.id)).toContain('inner1');
+      expect(result.models.map((m) => m.id)).toContain('cluster1');
+      expect(result.models.map((m) => m.id)).toContain('outer1');
+      expect(result.models.map((m) => m.id)).toContain('outer2');
+      expect(result.models.some((m) => m.$$type === 'Edge')).toBe(true);
     });
   });
 });

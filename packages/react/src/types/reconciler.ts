@@ -19,7 +19,7 @@ export type ComponentProps = ReactComponentProps<any>;
 export interface RenderContainer<
   Container extends AnyGraphContainer = AnyGraphContainer,
 > {
-  renderedModel: DotObjectModel | null;
+  renderedModels: DotObjectModel[];
   context?: Context<Container>;
   __rootInstance?: ReconcilerInstance | TextInstance;
 }

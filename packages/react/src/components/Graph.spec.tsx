@@ -7,19 +7,14 @@ import { Node } from './Node.js';
 
 describe('Graph', () => {
   test('An error occurs when duplicate <Graph />', async () => {
-    // Duplicate Graph components should result in empty graph
-    // because the second Graph throws an error during component execution
-    const result = await render(
-      <Graph>
-        <Graph />
-      </Graph>,
-    );
-
-    // The outer Graph should be created, but inner one fails
-    expect(result.model).toBeDefined();
-    expect(result.model.nodes.length).toBe(0);
-    expect(result.model.edges.length).toBe(0);
-    expect(result.model.subgraphs.length).toBe(0);
+    // Duplicate Graph components should throw an error
+    await expect(
+      render(
+        <Graph>
+          <Graph />
+        </Graph>,
+      ),
+    ).rejects.toThrow('No model was rendered');
   });
 
   describe('ref support', () => {

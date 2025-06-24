@@ -5,6 +5,7 @@ import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
 import { GraphMap } from './contexts/GraphMap.js';
 import { type Context, GraphvizContext } from './contexts/GraphvizContext.js';
+import { ModelCollectorContext } from './contexts/ModelCollector.js';
 import { reconciler } from './reconciler.js';
 import type { AnyGraphContainer } from './types/container.js';
 import type { RenderContainer } from './types/reconciler.js';
@@ -13,7 +14,7 @@ import type { RenderContainer } from './types/reconciler.js';
  * Rendering result containing the graph and any metadata
  */
 export interface RenderResult<Model extends DotObjectModel> {
-  model: Model;
+  models: Model[];
   cleanup?: () => void;
 }
 
@@ -77,19 +78,22 @@ function clusterMap(
 function createWrappedElement<Container extends AnyGraphContainer>(
   element: ReactElement,
   context: Context<Container>,
+  collectModel: (model: DotObjectModel) => void,
   container?: Container,
 ): ReactElement {
   return (
     <GraphvizContext value={context}>
-      <GraphMap value={clusterMap(container)}>
-        <GraphContainer value={container ?? null}>
-          {container ? (
-            <CurrentGraph value={container}>{element}</CurrentGraph>
-          ) : (
-            element
-          )}
-        </GraphContainer>
-      </GraphMap>
+      <ModelCollectorContext value={{ collectModel }}>
+        <GraphMap value={clusterMap(container)}>
+          <GraphContainer value={container ?? null}>
+            {container ? (
+              <CurrentGraph value={container}>{element}</CurrentGraph>
+            ) : (
+              element
+            )}
+          </GraphContainer>
+        </GraphMap>
+      </ModelCollectorContext>
     </GraphvizContext>
   );
 }
@@ -100,7 +104,7 @@ function createWrappedElement<Container extends AnyGraphContainer>(
 function createFiberRoot<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(
-  containerInfo: RenderContainer<Container> = { renderedModel: null },
+  containerInfo: RenderContainer<Container> = { renderedModels: [] },
   options: RenderOptions = {},
 ) {
   const { onUncaughtError = noop } = options;
@@ -169,7 +173,7 @@ async function renderInternal<
 ): Promise<RenderResult<Model>> {
   const { container, timeout = 5000 } = options;
   const containerInfo: RenderContainer<Container> = {
-    renderedModel: null,
+    renderedModels: [],
   };
 
   // Type guard for root graph models (Graph/Digraph)
@@ -177,28 +181,32 @@ async function renderInternal<
     return model.$$type === 'Graph';
   };
 
-  // Model collector function - different behavior based on container option
+  // Model collector function - collect all models
   const collectModel = (model: DotObjectModel) => {
     if (container) {
-      // With container: collect first non-container model (Node, Edge, Subgraph created in container)
-      if (!containerInfo.renderedModel && model !== container) {
-        containerInfo.renderedModel = model;
+      // With container: collect all non-container models
+      if (model !== container) {
+        containerInfo.renderedModels.push(model);
       }
     } else {
-      // Without container: collect first root graph model (Graph/Digraph)
-      if (!containerInfo.renderedModel && isRootGraphModel(model)) {
-        containerInfo.renderedModel = model;
+      // Without container: collect all root graph models (Graph/Digraph)
+      if (isRootGraphModel(model)) {
+        containerInfo.renderedModels.push(model);
       }
     }
   };
 
   const context: Context<Container> = {
     container,
-    __collectModel: collectModel,
   };
   containerInfo.context = context;
   const fiberRoot = createFiberRoot(containerInfo, options);
-  const wrappedElement = createWrappedElement(element, context, container);
+  const wrappedElement = createWrappedElement(
+    element,
+    context,
+    collectModel,
+    container,
+  );
 
   return new Promise<RenderResult<Model>>((resolve, reject) => {
     const timeoutId = setTimeout(() => {
@@ -209,12 +217,9 @@ async function renderInternal<
       reconciler.updateContainer(wrappedElement, fiberRoot, null, () => {
         clearTimeout(timeoutId);
 
-        // Return the rendered model, fallback to container if no model was rendered
-        const model = containerInfo.renderedModel || context.container;
-
-        if (model) {
+        if (containerInfo.renderedModels.length > 0 || container) {
           resolve({
-            model: model as Model,
+            models: containerInfo.renderedModels as Model[],
             cleanup: () => {
               // Cleanup resources if needed
               reconciler.updateContainer(null, fiberRoot, null, noop);
@@ -292,7 +297,12 @@ export async function renderToDot<
 ): Promise<string> {
   const result = await render<Model, Container>(element, options);
   try {
-    return toDot(result.model);
+    // Convert the first model or container to DOT
+    const modelToRender = result.models[0] || options.container;
+    if (!modelToRender) {
+      throw new Error('No model to render');
+    }
+    return toDot(modelToRender);
   } finally {
     // Cleanup resources
     result.cleanup?.();

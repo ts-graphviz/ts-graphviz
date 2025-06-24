@@ -7,19 +7,14 @@ import { Node } from './Node.js';
 
 describe('Digraph', () => {
   test('An error occurs when duplicate <Digraph />', async () => {
-    // Duplicate Digraph components should result in empty graph
-    // because the second Digraph throws an error during component execution
-    const result = await render(
-      <Digraph>
-        <Digraph />
-      </Digraph>,
-    );
-
-    // The outer Digraph should be created, but inner one fails
-    expect(result.model).toBeDefined();
-    expect(result.model.nodes.length).toBe(0);
-    expect(result.model.edges.length).toBe(0);
-    expect(result.model.subgraphs.length).toBe(0);
+    // Duplicate Digraph components should throw an error
+    await expect(
+      render(
+        <Digraph>
+          <Digraph />
+        </Digraph>,
+      ),
+    ).rejects.toThrow('No model was rendered');
   });
 
   describe('ref support', () => {

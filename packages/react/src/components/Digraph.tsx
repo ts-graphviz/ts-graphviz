@@ -9,7 +9,7 @@ import { GraphContainer } from '../contexts/GraphContainer.js';
 import { useDigraph } from '../hooks/useDigraph.js';
 import { useGraphContainer } from '../hooks/useGraphContainer.js';
 import { useGraphMap } from '../hooks/useGraphMap.js';
-import { useGraphvizContext } from '../hooks/useGraphvizContext.js';
+import { useModelCollector } from '../hooks/useModelCollector.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
 import type { RootGraphProps } from '../types.js';
 
@@ -33,15 +33,15 @@ export const Digraph: FC<RootGraphProps> = ({
     Object.assign(options, { label: renderedLabel });
   const digraph = useDigraph(options);
   const clusters = useGraphMap();
-  const context = useGraphvizContext();
+  const modelCollector = useModelCollector();
 
   // Handle ref as prop
   useImperativeHandle(ref, () => digraph, [digraph]);
 
   // Collect model for render result
   useLayoutEffect(() => {
-    context.__collectModel?.(digraph);
-  }, [context, digraph]);
+    modelCollector?.collectModel(digraph);
+  }, [modelCollector, digraph]);
 
   useEffect(() => {
     if (digraph.id !== undefined) {

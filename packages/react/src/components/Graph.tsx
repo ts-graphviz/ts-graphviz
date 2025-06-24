@@ -9,7 +9,7 @@ import { GraphContainer } from '../contexts/GraphContainer.js';
 import { useGraph } from '../hooks/useGraph.js';
 import { useGraphContainer } from '../hooks/useGraphContainer.js';
 import { useGraphMap } from '../hooks/useGraphMap.js';
-import { useGraphvizContext } from '../hooks/useGraphvizContext.js';
+import { useModelCollector } from '../hooks/useModelCollector.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
 import type { RootGraphProps } from '../types.js';
 /**
@@ -32,15 +32,15 @@ export const Graph: FC<RootGraphProps> = ({
     Object.assign(options, { label: renderedLabel });
   const graph = useGraph(options);
   const clusters = useGraphMap();
-  const context = useGraphvizContext();
+  const modelCollector = useModelCollector();
 
   // Handle ref as prop
   useImperativeHandle(ref, () => graph, [graph]);
 
   // Collect model for render result
   useLayoutEffect(() => {
-    context.__collectModel?.(graph);
-  }, [context, graph]);
+    modelCollector?.collectModel(graph);
+  }, [modelCollector, graph]);
 
   useEffect(() => {
     if (graph.id !== undefined) {
