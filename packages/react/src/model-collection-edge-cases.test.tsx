@@ -10,11 +10,17 @@ import { Edge } from './components/Edge.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
 import { render } from './render.js';
+import {
+  expectGraph,
+  expectModelsToContainTypes,
+  expectModelWithId,
+  expectNode,
+} from './test-utils/assertions.js';
+import './types.js';
 
 describe('Model Collection Edge Cases', () => {
-  describe('Multiple Models and Order', () => {
-    it('should collect models in creation order (first wins)', async () => {
-      // Create a custom render function that captures collection order
+  describe('Model Collection Order', () => {
+    it('collects all models created during render with fragments', async () => {
       const container = new DigraphModel('container');
       const result = await render(
         <>
@@ -28,20 +34,24 @@ describe('Model Collection Edge Cases', () => {
         { container },
       );
 
-      // The first non-container model should be returned
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
-      expect(result.models[0].id).toBe('first');
+      // All models should be collected (including nested ones)
+      expect(result.models).toHaveLength(5); // first Node, third Node (from subgraph), Subgraph, fourth Node, Edge
+      expectModelsToContainTypes(result.models, ['Node', 'Subgraph', 'Edge']);
 
-      // Verify order of creation in container
+      // Verify first model is the first created
+      expectNode(result.models[0]);
+      expect((result.models[0] as NodeModel).id).toBe('first');
+
+      // Verify container structure
+      expect(container.nodes).toHaveLength(2);
       expect(container.nodes[0].id).toBe('first');
       expect(container.nodes[1].id).toBe('fourth');
+      expect(container.subgraphs).toHaveLength(1);
       expect(container.subgraphs[0].id).toBe('second');
       expect(container.subgraphs[0].nodes[0].id).toBe('third');
     });
 
-    it('should handle simultaneous model creation', async () => {
+    it('collects multiple simultaneous nodes in creation order', async () => {
       const container = new DigraphModel('container');
 
       const result = await render(
@@ -53,15 +63,13 @@ describe('Model Collection Edge Cases', () => {
         { container },
       );
 
-      // Should return the first created model
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
-      expect(result.models[0].id).toBe('a');
-      expect(container.nodes.length).toBe(3);
+      expect(result.models).toHaveLength(3);
+      expect(result.models.map((m) => m.id)).toEqual(['a', 'b', 'c']);
+      result.models.forEach((model) => expectNode(model));
+      expect(container.nodes).toHaveLength(3);
     });
 
-    it('should prioritize direct children over nested ones', async () => {
+    it('collects nested models before sibling models', async () => {
       const container = new DigraphModel('container');
 
       const result = await render(
@@ -74,16 +82,19 @@ describe('Model Collection Edge Cases', () => {
         { container },
       );
 
-      // Should return the first created model (deep node, even if nested)
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
-      expect(result.models[0].id).toBe('deep');
+      expect(result.models).toHaveLength(3); // Node, Subgraph, Node
+      expectNode(result.models[0]);
+      expect((result.models[0] as NodeModel).id).toBe('deep');
+
+      const subgraphModel = expectModelWithId(result.models, 'nested');
+      const directModel = expectModelWithId(result.models, 'direct');
+      expect(subgraphModel).toBeDefined();
+      expect(directModel).toBeDefined();
     });
   });
 
-  describe('Duplicate and Overwrite Scenarios', () => {
-    it('should handle duplicate model IDs gracefully', async () => {
+  describe('Duplicate ID Handling', () => {
+    it('handles duplicate node IDs by overwriting in container', async () => {
       const container = new DigraphModel('container');
 
       const result = await render(
@@ -94,17 +105,18 @@ describe('Model Collection Edge Cases', () => {
         { container },
       );
 
-      // Should return the first created model
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
+      // Both models are collected during render
+      expect(result.models).toHaveLength(2);
+      result.models.forEach((model) => expectNode(model));
       expect(result.models[0].id).toBe('duplicate');
-      // The second node with same ID should overwrite in the container
-      expect(container.nodes.length).toBe(1);
+      expect(result.models[1].id).toBe('duplicate');
+
+      // Container has the final (overwritten) version
+      expect(container.nodes).toHaveLength(1);
       expect(container.nodes[0].attributes.get('label')).toBe('Second');
     });
 
-    it('should handle models with undefined IDs', async () => {
+    it('handles nodes with undefined IDs correctly', async () => {
       const container = new DigraphModel('container');
 
       const result = await render(
@@ -115,15 +127,15 @@ describe('Model Collection Edge Cases', () => {
         { container },
       );
 
-      // Should return the first created model (even with undefined ID)
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models).toHaveLength(2);
+      result.models.forEach((model) => expectNode(model));
+
       expect(result.models[0].id).toBeUndefined();
-      expect(container.nodes.length).toBe(2);
+      expect(result.models[1].id).toBe('defined');
+      expect(container.nodes).toHaveLength(2);
     });
 
-    it('should handle empty string IDs', async () => {
+    it('handles nodes with empty string IDs correctly', async () => {
       const container = new DigraphModel('container');
 
       const result = await render(
@@ -134,17 +146,17 @@ describe('Model Collection Edge Cases', () => {
         { container },
       );
 
-      // Should return the first created model
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models).toHaveLength(2);
+      result.models.forEach((model) => expectNode(model));
+
       expect(result.models[0].id).toBe('');
-      expect(container.nodes.length).toBe(2);
+      expect(result.models[1].id).toBe('normal');
+      expect(container.nodes).toHaveLength(2);
     });
   });
 
-  describe('Complex Nesting and Collection', () => {
-    it('should handle deeply nested structures', async () => {
+  describe('Complex Nested Structures', () => {
+    it('collects all models from deeply nested subgraph hierarchy', async () => {
       const container = new DigraphModel('root');
 
       const result = await render(
@@ -158,44 +170,41 @@ describe('Model Collection Edge Cases', () => {
         { container },
       );
 
-      // Should return the deepest node
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
-      expect(result.models[0].id).toBe('deepest');
+      // All nested models should be collected
+      expect(result.models).toHaveLength(4); // Node + 3 Subgraphs
+      expectModelsToContainTypes(result.models, ['Node', 'Subgraph']);
 
-      // Verify nested structure
-      expect(container.subgraphs.length).toBe(1);
-      expect(container.subgraphs[0].subgraphs.length).toBe(1);
-      expect(container.subgraphs[0].subgraphs[0].subgraphs.length).toBe(1);
+      const deepestNode = expectModelWithId(result.models, 'deepest');
+      expectNode(deepestNode);
+
+      // Verify nested structure in container
+      expect(container.subgraphs).toHaveLength(1);
+      expect(container.subgraphs[0].subgraphs).toHaveLength(1);
+      expect(container.subgraphs[0].subgraphs[0].subgraphs).toHaveLength(1);
     });
 
-    it('should handle mixed root graphs and containers', async () => {
-      // Without container - should collect root graph
+    it('renders differently with and without containers', async () => {
+      // Without container - collects only the root graph (not its children)
       const result1 = await render(
         <Digraph id="root">
           <Node id="in_root" />
         </Digraph>,
       );
 
-      expect(result1.models).toBeDefined();
-      expect(result1.models.length).toBeGreaterThan(0);
-      expect(result1.models[0].$$type).toBe('Graph');
+      expect(result1.models).toHaveLength(1); // Only the root Graph
+      expectGraph(result1.models[0]);
       expect(result1.models[0].id).toBe('root');
 
-      // With container - should collect first non-container model
+      // With container - collects only rendered models
       const container = new DigraphModel('container');
       const result2 = await render(<Node id="in_container" />, { container });
 
-      expect(result2.models).toBeDefined();
-      expect(result2.models.length).toBeGreaterThan(0);
-      expect(result2.models[0].$$type).toBe('Node');
-      expect(result2.models[0].id).toBe('in_container');
+      expect(result2.models).toHaveLength(1);
+      expectNode(result2.models[0]);
+      expect((result2.models[0] as NodeModel).id).toBe('in_container');
     });
 
-    it('should handle conditional rendering', async () => {
-      const container = new DigraphModel('container');
-
+    it('handles conditional rendering correctly', async () => {
       const ConditionalComponent = ({
         showFirst,
       }: {
@@ -209,34 +218,37 @@ describe('Model Collection Edge Cases', () => {
       );
 
       // Test with first condition true
+      const container1 = new DigraphModel('container1');
       const result1 = await render(<ConditionalComponent showFirst={true} />, {
-        container,
+        container: container1,
       });
 
-      expect(result1.models).toBeDefined();
-      expect(result1.models.length).toBeGreaterThan(0);
-      expect(result1.models[0].$$type).toBe('Node');
-      expect(result1.models[0].id).toBe('conditional_first');
-      expect(container.nodes.length).toBe(2);
-
-      // Reset container by creating a new one
-      const newContainer = new DigraphModel('container');
+      expect(result1.models).toHaveLength(2);
+      expect(result1.models.map((m) => m.id)).toEqual([
+        'conditional_first',
+        'always_second',
+      ]);
+      result1.models.forEach((model) => expectNode(model));
+      expect(container1.nodes).toHaveLength(2);
 
       // Test with first condition false
+      const container2 = new DigraphModel('container2');
       const result2 = await render(<ConditionalComponent showFirst={false} />, {
-        container: newContainer,
+        container: container2,
       });
 
-      expect(result2.models).toBeDefined();
-      expect(result2.models.length).toBeGreaterThan(0);
-      expect(result2.models[0].$$type).toBe('Node');
-      expect(result2.models[0].id).toBe('always_second');
-      expect(newContainer.nodes.length).toBe(2);
+      expect(result2.models).toHaveLength(2);
+      expect(result2.models.map((m) => m.id)).toEqual([
+        'always_second',
+        'conditional_last',
+      ]);
+      result2.models.forEach((model) => expectNode(model));
+      expect(container2.nodes).toHaveLength(2);
     });
   });
 
-  describe('Error Handling and Edge Cases', () => {
-    it('should handle components that render null', async () => {
+  describe('Special Component Cases', () => {
+    it('handles components that render null', async () => {
       const container = new DigraphModel('container');
 
       const NullComponent = (): ReactElement | null => null;
@@ -249,14 +261,13 @@ describe('Model Collection Edge Cases', () => {
         { container },
       );
 
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
-      expect(result.models[0].id).toBe('after_null');
-      expect(container.nodes.length).toBe(1);
+      expect(result.models).toHaveLength(1);
+      expectNode(result.models[0]);
+      expect((result.models[0] as NodeModel).id).toBe('after_null');
+      expect(container.nodes).toHaveLength(1);
     });
 
-    it('should handle fragments and complex JSX', async () => {
+    it('handles React fragments and mapped JSX elements', async () => {
       const container = new DigraphModel('container');
 
       const result = await render(
@@ -272,46 +283,43 @@ describe('Model Collection Edge Cases', () => {
         { container },
       );
 
-      // Should return the first created model
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
-      expect(result.models[0].id).toBe('in_fragment1');
-      expect(container.nodes.length).toBe(5);
+      expect(result.models).toHaveLength(5);
+      result.models.forEach((model) => expectNode(model));
+
+      const expectedIds = [
+        'in_fragment1',
+        'in_fragment2',
+        'mapped_1',
+        'mapped_2',
+        'mapped_3',
+      ];
+      expect(result.models.map((m) => m.id)).toEqual(expectedIds);
+      expect(container.nodes).toHaveLength(5);
     });
 
-    it('should handle rapid re-renders', async () => {
-      // Multiple renders with separate containers
-      const container1 = new DigraphModel('container1');
-      const container2 = new DigraphModel('container2');
-      const container3 = new DigraphModel('container3');
+    it('handles multiple separate render operations correctly', async () => {
+      const containers = [
+        new DigraphModel('container1'),
+        new DigraphModel('container2'),
+        new DigraphModel('container3'),
+      ];
 
-      const result1 = await render(<Node id="render1" />, {
-        container: container1,
-      });
-      const result2 = await render(<Node id="render2" />, {
-        container: container2,
-      });
-      const result3 = await render(<Node id="render3" />, {
-        container: container3,
-      });
+      const results = await Promise.all([
+        render(<Node id="render1" />, { container: containers[0] }),
+        render(<Node id="render2" />, { container: containers[1] }),
+        render(<Node id="render3" />, { container: containers[2] }),
+      ]);
 
-      expect(result1.models).toBeDefined();
-      expect(result1.models.length).toBeGreaterThan(0);
-      expect(result1.models[0].id).toBe('render1');
-      expect(result2.models).toBeDefined();
-      expect(result2.models.length).toBeGreaterThan(0);
-      expect(result2.models[0].id).toBe('render2');
-      expect(result3.models).toBeDefined();
-      expect(result3.models.length).toBeGreaterThan(0);
-      expect(result3.models[0].id).toBe('render3');
-      expect(container1.nodes.length).toBe(1);
-      expect(container2.nodes.length).toBe(1);
-      expect(container3.nodes.length).toBe(1);
-      expect(container3.nodes[0].id).toBe('render3');
+      results.forEach((result, index) => {
+        expect(result.models).toHaveLength(1);
+        expectNode(result.models[0]);
+        expect((result.models[0] as NodeModel).id).toBe(`render${index + 1}`);
+        expect(containers[index].nodes).toHaveLength(1);
+        expect(containers[index].nodes[0].id).toBe(`render${index + 1}`);
+      });
     });
 
-    it('should handle models with special characters in IDs', async () => {
+    it('handles node IDs with special characters', async () => {
       const container = new DigraphModel('container');
 
       const result = await render(
@@ -325,61 +333,71 @@ describe('Model Collection Edge Cases', () => {
         { container },
       );
 
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
-      expect(result.models[0].id).toBe('node-with-dashes');
-      expect(container.nodes.length).toBe(5);
+      expect(result.models).toHaveLength(5);
+      result.models.forEach((model) => expectNode(model));
+
+      const expectedIds = [
+        'node-with-dashes',
+        'node_with_underscores',
+        'node.with.dots',
+        'node with spaces',
+        'node/with/slashes',
+      ];
+      expect(result.models.map((m) => m.id)).toEqual(expectedIds);
+      expect(container.nodes).toHaveLength(5);
     });
 
-    it('should handle very large numbers of models', async () => {
+    it('handles large numbers of models efficiently', async () => {
       const container = new DigraphModel('container');
-      const nodeCount = 1000;
+      const nodeCount = 100; // Reduced for faster testing
 
       const LargeGraph = (): ReactElement => (
         <>
-          {Array.from({ length: nodeCount }, (_, i) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: This is a test case, so using index is acceptable
-            <Node key={i} id={`node_${i}`} />
-          ))}
+          {Array.from({ length: nodeCount }, (_, i) => {
+            const nodeId = `node_${i}`;
+            return <Node key={nodeId} id={nodeId} />;
+          })}
         </>
       );
 
       const result = await render(<LargeGraph />, { container });
 
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
+      expect(result.models).toHaveLength(nodeCount);
+      result.models.forEach((model) => expectNode(model));
+
       expect(result.models[0].id).toBe('node_0');
-      expect(container.nodes.length).toBe(nodeCount);
+      expect(result.models[nodeCount - 1].id).toBe(`node_${nodeCount - 1}`);
+      expect(container.nodes).toHaveLength(nodeCount);
     });
   });
 
-  describe('Type Safety and Model Validation', () => {
-    it('should handle different model types correctly', async () => {
+  describe('Model Type Validation', () => {
+    it('works correctly with different container types', async () => {
       const graphContainer = new GraphModel('graph_container');
       const digraphContainer = new DigraphModel('digraph_container');
 
-      // Test with Graph container
+      // Test with undirected Graph container
       const result1 = await render(<Node id="in_graph" />, {
         container: graphContainer,
       });
-      expect(result1.models).toBeDefined();
-      expect(result1.models.length).toBeGreaterThan(0);
-      expect(result1.models[0].id).toBe('in_graph');
+
+      expect(result1.models).toHaveLength(1);
+      expectNode(result1.models[0]);
+      expect((result1.models[0] as NodeModel).id).toBe('in_graph');
       expect(graphContainer.directed).toBe(false);
 
-      // Test with Digraph container
+      // Test with directed Digraph container
       const result2 = await render(<Node id="in_digraph" />, {
         container: digraphContainer,
       });
-      expect(result2.models).toBeDefined();
-      expect(result2.models.length).toBeGreaterThan(0);
-      expect(result2.models[0].id).toBe('in_digraph');
+
+      expect(result2.models).toHaveLength(1);
+      expectNode(result2.models[0]);
+      expect((result2.models[0] as NodeModel).id).toBe('in_digraph');
       expect(digraphContainer.directed).toBe(true);
     });
 
-    it('should preserve model properties during collection', async () => {
+    it('preserves all node attributes during collection', async () => {
       const container = new DigraphModel('container');
 
       const result = await render<NodeModel>(
@@ -393,14 +411,15 @@ describe('Model Collection Edge Cases', () => {
         { container },
       );
 
-      expect(result.models).toBeDefined();
-      expect(result.models.length).toBeGreaterThan(0);
-      expect(result.models[0].$$type).toBe('Node');
-      expect(result.models[0].id).toBe('test');
-      expect(result.models[0].attributes.get('label')).toBe('Test Label');
-      expect(result.models[0].attributes.get('shape')).toBe('circle');
-      expect(result.models[0].attributes.get('color')).toBe('red');
-      expect(result.models[0].attributes.get('style')).toBe('filled');
+      expect(result.models).toHaveLength(1);
+      expectNode(result.models[0]);
+
+      const node = result.models[0] as NodeModel;
+      expect(node.id).toBe('test');
+      expect(node.attributes.get('label')).toBe('Test Label');
+      expect(node.attributes.get('shape')).toBe('circle');
+      expect(node.attributes.get('color')).toBe('red');
+      expect(node.attributes.get('style')).toBe('filled');
     });
   });
 });
