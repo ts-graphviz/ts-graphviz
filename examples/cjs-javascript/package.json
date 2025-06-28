@@ -1,0 +1,11 @@
+{
+  "name": "@ts-graphviz/example-cjs-javascript",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node test-import.js"
+  },
+  "dependencies": {
+    "ts-graphviz": "latest"
+  }
+}

@@ -15,4 +15,4 @@ packages:
   '**':
     access: $all
     publish: $all
-log: { type: stdout, format: pretty, level: http }
+log: { type: stdout, format: pretty, level: error }

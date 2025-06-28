@@ -1,0 +1,23 @@
+{
+  "name": "@ts-graphviz/e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "tsx src/index.ts",
+    "test:dev": "tsx --watch src/index.ts"
+  },
+  "dependencies": {
+    "verdaccio": "^6.1.3",
+    "execa": "^9.5.1",
+    "p-limit": "^6.1.0",
+    "chalk": "^5.4.1",
+    "ora": "^8.1.1",
+    "tmp": "^0.2.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/tmp": "^0.2.6",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.2"
+  }
+}

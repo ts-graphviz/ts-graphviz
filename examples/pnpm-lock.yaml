@@ -1,0 +1,163 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .: {}
+
+  cjs-javascript:
+    dependencies:
+      ts-graphviz:
+        specifier: latest
+        version: 2.1.6
+
+  cjs-typescript:
+    dependencies:
+      ts-graphviz:
+        specifier: ^0.0.0-e2e-1751094352791
+        version: 0.0.0-e2e-1751094717872
+
+  esm-javascript:
+    dependencies:
+      ts-graphviz:
+        specifier: latest
+        version: 2.1.6
+
+  esm-typescript:
+    dependencies:
+      ts-graphviz:
+        specifier: ^0.0.0-e2e-1750953388
+        version: 0.0.0-pr956-20240225163634
+
+packages:
+
+  '@ts-graphviz/adapter@0.0.0-e2e-1751094717872':
+    resolution: {integrity: sha512-6I0VVjk61Qrisl6xipa/e3BM5ugp9MJhOkR7ftVBepOdKdwoEtMVH72uJZUyemW6RLr+/dHRBEkImpypB8UfdA==}
+    engines: {node: '>=20'}
+
+  '@ts-graphviz/adapter@0.0.0-pr956-20240225163634':
+    resolution: {integrity: sha512-ePcaq69OTv1qAQ3y9OKNJdY//d11wpf7jIhGKF4lBV2OcAKEk1KeCEh9hyeUO9AVdLLzXVRjS5Q8XvBdzI802w==}
+    engines: {node: '>=18'}
+
+  '@ts-graphviz/adapter@2.0.6':
+    resolution: {integrity: sha512-kJ10lIMSWMJkLkkCG5gt927SnGZcBuG0s0HHswGzcHTgvtUe7yk5/3zTEr0bafzsodsOq5Gi6FhQeV775nC35Q==}
+    engines: {node: '>=18'}
+
+  '@ts-graphviz/ast@0.0.0-e2e-1751094717872':
+    resolution: {integrity: sha512-S1UNdga7kOLTqep4Q3Eez/8UmiGl+oW11s8gxAuHrGOSM79H/uthyduKgvq1flZqZT0yx9+6Y5Glz060PgPRUw==}
+    engines: {node: '>=20'}
+
+  '@ts-graphviz/ast@0.0.0-pr956-20240225163634':
+    resolution: {integrity: sha512-LkwqUvDD9pPq1gMelE5AdFd23BPQgD5AvVeY1OqkWJnw9H0H7lkGdfBu6RaTkAWWfzEKXSnmiyOXt8KNuZ04fg==}
+    engines: {node: '>=18'}
+
+  '@ts-graphviz/ast@2.0.7':
+    resolution: {integrity: sha512-e6+2qtNV99UT6DJSoLbHfkzfyqY84aIuoV8Xlb9+hZAjgpum8iVHprGeAMQ4rF6sKUAxrmY8rfF/vgAwoPc3gw==}
+    engines: {node: '>=18'}
+
+  '@ts-graphviz/common@0.0.0-e2e-1751094717872':
+    resolution: {integrity: sha512-dCqsAJVsGrnd036vWa9MzplgCOfKStxtmQeoVN5L5vZPKy1zOPmeOwm4guhRCKQjzZMCVQJJqBET9lx3wwxIPQ==}
+    engines: {node: '>=20'}
+
+  '@ts-graphviz/common@0.0.0-pr956-20240225163634':
+    resolution: {integrity: sha512-0DuR05Mq4lpprHAuK46nmoxtlBjnDJKSOiIV68bYxQKH6a0Ru7cHRX8yVc7rxDSXjNQsM+V9xitYH3zyFZcK2Q==}
+    engines: {node: '>=18'}
+
+  '@ts-graphviz/common@2.1.5':
+    resolution: {integrity: sha512-S6/9+T6x8j6cr/gNhp+U2olwo1n0jKj/682QVqsh7yXWV6ednHYqxFw0ZsY3LyzT0N8jaZ6jQY9YD99le3cmvg==}
+    engines: {node: '>=18'}
+
+  '@ts-graphviz/core@0.0.0-e2e-1751094717872':
+    resolution: {integrity: sha512-hl+j8U8yAK4IwHCXjfTEILOiDjWOMhtzR9PLvU9LyuJcx62o+8025kUQ20x8yK59dYzRDrugbq0nTOSBI4Qjfg==}
+    engines: {node: '>=20'}
+
+  '@ts-graphviz/core@0.0.0-pr956-20240225163634':
+    resolution: {integrity: sha512-/kXrTGX7ZaZeBsAjjtdmDtTtpzZzVjkjgdfH+j/ul+MhEKvSaNBaj7RFdzt9pM1hLa6pltFbGGw3ZYlf/il1lQ==}
+    engines: {node: '>=18'}
+
+  '@ts-graphviz/core@2.0.7':
+    resolution: {integrity: sha512-w071DSzP94YfN6XiWhOxnLpYT3uqtxJBDYdh6Jdjzt+Ce6DNspJsPQgpC7rbts/B8tEkq0LHoYuIF/O5Jh5rPg==}
+    engines: {node: '>=18'}
+
+  ts-graphviz@0.0.0-e2e-1751094717872:
+    resolution: {integrity: sha512-Wv2jA8Cwi+qC0Innp6nfxOOAJPzzi6d5KCAMnpWgvGXY4DGSnG5PaU+jdmx9RY71KbMuTTE4DbmNCIfMgN7ybQ==}
+    engines: {node: '>=20'}
+
+  ts-graphviz@0.0.0-pr956-20240225163634:
+    resolution: {integrity: sha512-X6ogHHhy0+mISZpiBqfc+HYH+apuasxe2X91+WiXGwO82ywl4rq8x5+dn+9B0f71okRy+sKKUok/esjcXr6MBA==}
+    engines: {node: '>=18'}
+
+  ts-graphviz@2.1.6:
+    resolution: {integrity: sha512-XyLVuhBVvdJTJr2FJJV2L1pc4MwSjMhcunRVgDE9k4wbb2ee7ORYnPewxMWUav12vxyfUM686MSGsqnVRIInuw==}
+    engines: {node: '>=18'}
+
+snapshots:
+
+  '@ts-graphviz/adapter@0.0.0-e2e-1751094717872':
+    dependencies:
+      '@ts-graphviz/common': 0.0.0-e2e-1751094717872
+
+  '@ts-graphviz/adapter@0.0.0-pr956-20240225163634':
+    dependencies:
+      '@ts-graphviz/common': 0.0.0-pr956-20240225163634
+
+  '@ts-graphviz/adapter@2.0.6':
+    dependencies:
+      '@ts-graphviz/common': 2.1.5
+
+  '@ts-graphviz/ast@0.0.0-e2e-1751094717872':
+    dependencies:
+      '@ts-graphviz/common': 0.0.0-e2e-1751094717872
+
+  '@ts-graphviz/ast@0.0.0-pr956-20240225163634':
+    dependencies:
+      '@ts-graphviz/common': 0.0.0-pr956-20240225163634
+
+  '@ts-graphviz/ast@2.0.7':
+    dependencies:
+      '@ts-graphviz/common': 2.1.5
+
+  '@ts-graphviz/common@0.0.0-e2e-1751094717872': {}
+
+  '@ts-graphviz/common@0.0.0-pr956-20240225163634': {}
+
+  '@ts-graphviz/common@2.1.5': {}
+
+  '@ts-graphviz/core@0.0.0-e2e-1751094717872':
+    dependencies:
+      '@ts-graphviz/ast': 0.0.0-e2e-1751094717872
+      '@ts-graphviz/common': 0.0.0-e2e-1751094717872
+
+  '@ts-graphviz/core@0.0.0-pr956-20240225163634':
+    dependencies:
+      '@ts-graphviz/ast': 0.0.0-pr956-20240225163634
+      '@ts-graphviz/common': 0.0.0-pr956-20240225163634
+
+  '@ts-graphviz/core@2.0.7':
+    dependencies:
+      '@ts-graphviz/ast': 2.0.7
+      '@ts-graphviz/common': 2.1.5
+
+  ts-graphviz@0.0.0-e2e-1751094717872:
+    dependencies:
+      '@ts-graphviz/adapter': 0.0.0-e2e-1751094717872
+      '@ts-graphviz/ast': 0.0.0-e2e-1751094717872
+      '@ts-graphviz/common': 0.0.0-e2e-1751094717872
+      '@ts-graphviz/core': 0.0.0-e2e-1751094717872
+
+  ts-graphviz@0.0.0-pr956-20240225163634:
+    dependencies:
+      '@ts-graphviz/adapter': 0.0.0-pr956-20240225163634
+      '@ts-graphviz/ast': 0.0.0-pr956-20240225163634
+      '@ts-graphviz/common': 0.0.0-pr956-20240225163634
+      '@ts-graphviz/core': 0.0.0-pr956-20240225163634
+
+  ts-graphviz@2.1.6:
+    dependencies:
+      '@ts-graphviz/adapter': 2.0.6
+      '@ts-graphviz/ast': 2.0.7
+      '@ts-graphviz/common': 2.1.5
+      '@ts-graphviz/core': 2.0.7

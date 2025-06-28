@@ -49,12 +49,10 @@
     "exports": {
       ".": {
         "types": "./lib/common.d.ts",
-        "require": "./lib/common.cjs",
         "default": "./lib/common.js"
       },
       "./package.json": "./package.json"
     },
-    "main": "lib/common.cjs",
     "module": "lib/common.js",
     "types": "lib/common.d.ts"
   }
