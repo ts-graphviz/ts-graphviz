@@ -6,6 +6,6 @@
     "test": "node sample.js"
   },
   "dependencies": {
-    "ts-graphviz": "latest"
+    "ts-graphviz": "workspace:*"
   }
 }

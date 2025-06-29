@@ -1,22 +1,58 @@
 export interface TestPackage {
   name: string;
   path: string;
-  type:
-    | 'esm-javascript'
-    | 'cjs-javascript'
-    | 'esm-typescript'
-    | 'cjs-typescript';
   testCommand: string;
+  // Optional metadata for custom handling
+  metadata?: Record<string, any>;
 }
 
-export interface E2EConfig {
-  verdaccioPort: number;
-  verdaccioConfig: string;
-  testVersion: string;
-  registryUrl: string;
-  packagesDir: string;
-  examplesDir: string;
+export interface RegistryConfig {
+  port?: number;
+  host?: string;
+  auth?: {
+    username: string;
+    password: string;
+    email: string;
+  };
 }
+
+export interface PackageDiscoveryConfig {
+  // Auto-discovery from pnpm workspace
+  workspace?: {
+    enabled: boolean;
+    // Patterns to include/exclude from workspace packages
+    include?: string[];
+    exclude?: string[];
+  };
+  
+  // Manual package specification (fallback when workspace discovery fails)
+  manual?: {
+    // Explicit list of package directories or patterns
+    packages: string[];
+  };
+}
+
+export interface E2ERunnerConfig {
+  // Package configuration
+  packages: {
+    sourceDir: string;
+    testVersion?: string;
+    // Package discovery configuration
+    discovery?: PackageDiscoveryConfig;
+  };
+  
+  // Registry configuration
+  registry: RegistryConfig;
+  
+  // Runtime options
+  options?: {
+    parallel?: boolean;
+    timeout?: number;
+    maxRetries?: number;
+    cleanup?: boolean;
+  };
+}
+
 
 export interface TestResult {
   package: TestPackage;

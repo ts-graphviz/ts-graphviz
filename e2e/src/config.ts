@@ -1,84 +1,117 @@
 import { access } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { E2EConfig, TestPackage } from './types.js';
+import type { E2ERunnerConfig, TestPackage } from './types.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, '../..');
 
-export function createE2EConfig(): E2EConfig {
+/**
+ * Creates a default configuration
+ */
+export function createDefaultConfig(): E2ERunnerConfig {
   const testVersion = `0.0.0-e2e-${Date.now()}`;
-  const verdaccioPort = 4873;
-
+  
   return {
-    verdaccioPort,
-    verdaccioConfig: resolve(projectRoot, 'etc/verdaccio/config.yaml'),
-    testVersion,
-    registryUrl: `http://localhost:${verdaccioPort}`,
-    packagesDir: resolve(projectRoot, 'packages'),
-    examplesDir: resolve(projectRoot, 'examples'),
+    packages: {
+      sourceDir: resolve(projectRoot, 'packages'),
+      testVersion,
+      // Auto-discovery configuration
+      discovery: {
+        workspace: {
+          enabled: true,
+          // Default patterns to include common package naming conventions
+          include: ['*', '@*/*'],
+          // Exclude common non-publishable packages
+          exclude: ['*-dev', '*-test', '*-example*', '*e2e*'],
+        },
+      },
+    },
+    registry: {
+      port: 4873,
+      host: 'localhost',
+      // Note: auth credentials are generated dynamically by VerdaccioManager for security
+      auth: {
+        username: '', // Will be overridden with secure random values
+        password: '',
+        email: '',
+      },
+    },
+    options: {
+      parallel: false,
+      timeout: 60000,
+      maxRetries: 0,
+      cleanup: true,
+    },
   };
 }
 
-export function getTestPackages(examplesDir: string): TestPackage[] {
-  return [
-    {
-      name: 'ESM JavaScript',
-      path: resolve(examplesDir, 'esm-javascript'),
-      type: 'esm-javascript',
-      testCommand: 'npm test',
+/**
+ * Creates a configuration from provided options
+ */
+export function createConfig(options: Partial<E2ERunnerConfig> = {}): E2ERunnerConfig {
+  const defaultConfig = createDefaultConfig();
+  
+  return {
+    packages: {
+      ...defaultConfig.packages,
+      ...options.packages,
     },
-    {
-      name: 'CommonJS JavaScript',
-      path: resolve(examplesDir, 'cjs-javascript'),
-      type: 'cjs-javascript',
-      testCommand: 'npm test',
+    registry: {
+      ...defaultConfig.registry,
+      ...options.registry,
     },
-    {
-      name: 'TypeScript ESM',
-      path: resolve(examplesDir, 'esm-typescript'),
-      type: 'esm-typescript',
-      testCommand: 'npm test',
+    options: {
+      ...defaultConfig.options,
+      ...options.options,
     },
-    {
-      name: 'TypeScript CommonJS',
-      path: resolve(examplesDir, 'cjs-typescript'),
-      type: 'cjs-typescript',
-      testCommand: 'npm test',
-    },
-  ];
+  };
 }
 
+
 /**
- * Validates the E2E configuration
+ * Validates the E2E runner configuration
  */
-export async function validateConfig(config: E2EConfig): Promise<void> {
+export async function validateConfig(config: E2ERunnerConfig, testPackages: TestPackage[]): Promise<void> {
   const errors: string[] = [];
 
-  // Check if packages directory exists
-  try {
-    await access(config.packagesDir);
-  } catch {
-    errors.push(`Packages directory not found: ${config.packagesDir}`);
+  // Validate packages configuration
+  if (!config.packages.sourceDir) {
+    errors.push('packages.sourceDir is required');
+  } else {
+    try {
+      await access(config.packages.sourceDir);
+    } catch {
+      errors.push(`Source directory not found: ${config.packages.sourceDir}`);
+    }
   }
 
-  // Check if examples directory exists
-  try {
-    await access(config.examplesDir);
-  } catch {
-    errors.push(`Examples directory not found: ${config.examplesDir}`);
+  if (!testPackages || testPackages.length === 0) {
+    errors.push('At least one test package is required');
+  } else {
+    // Validate each test package
+    for (const pkg of testPackages) {
+      if (!pkg.name || !pkg.path || !pkg.testCommand) {
+        errors.push(`Invalid test package: ${JSON.stringify(pkg)}`);
+      } else {
+        try {
+          await access(pkg.path);
+        } catch {
+          errors.push(`Test package directory not found: ${pkg.path}`);
+        }
+      }
+    }
   }
 
-  // Validate port range
-  if (config.verdaccioPort < 1024 || config.verdaccioPort > 65535) {
-    errors.push(
-      `Invalid port: ${config.verdaccioPort}. Must be between 1024-65535`,
-    );
+  // Validate registry configuration
+  const port = config.registry.port || 4873;
+  if (port < 1024 || port > 65535) {
+    errors.push(`Invalid port: ${port}. Must be between 1024-65535`);
   }
 
-  // Validate test version format
-  if (!config.testVersion.match(/^\d+\.\d+\.\d+/)) {
-    errors.push(`Invalid test version format: ${config.testVersion}`);
+  // Validate test version format if provided
+  if (config.packages.testVersion && !config.packages.testVersion.match(/^\d+\.\d+\.\d+/)) {
+    errors.push(`Invalid test version format: ${config.packages.testVersion}`);
   }
 
   if (errors.length > 0) {
@@ -86,4 +119,13 @@ export async function validateConfig(config: E2EConfig): Promise<void> {
       `Configuration validation failed:\n${errors.map((e) => `- ${e}`).join('\n')}`,
     );
   }
+}
+
+/**
+ * Utility function to get registry URL from config
+ */
+export function getRegistryUrl(config: E2ERunnerConfig): string {
+  const host = config.registry.host || 'localhost';
+  const port = config.registry.port || 4873;
+  return `http://${host}:${port}`;
 }

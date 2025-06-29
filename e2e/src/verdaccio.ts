@@ -1,14 +1,32 @@
-import { type ChildProcess, spawn } from 'node:child_process';
+import { randomUUID, randomBytes } from 'node:crypto';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { createServer, Server } from 'node:http';
+import { devNull, tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { runServer } from 'verdaccio';
 import { VerdaccioError } from './error-handler.js';
 import { logger } from './logger.js';
-import type { E2EConfig, VerdaccioInstance } from './types.js';
+import type { E2ERunnerConfig, VerdaccioInstance } from './types.js';
 
-export class VerdaccioManager implements VerdaccioInstance {
-  private process: ChildProcess | null = null;
-  private config: E2EConfig;
+export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
+  private config: E2ERunnerConfig;
+  private server: Server | null = null;
+  private actualPort: number | null = null;
+  private tempDir: string | null = null;
+  private secureUsername: string;
+  private securePassword: string;
 
-  constructor(config: E2EConfig) {
+  constructor(config: E2ERunnerConfig) {
     this.config = config;
+    // Generate secure random credentials for this session
+    this.secureUsername = `e2e-${randomUUID()}`;
+    this.securePassword = randomBytes(32).toString('hex');
+  }
+
+  async [Symbol.asyncDispose](): Promise<void> {
+    // Async cleanup for using statement
+    logger.debug('VerdaccioManager: Running async dispose cleanup');
+    await this.stop();
   }
 
   async start(): Promise<void> {
@@ -18,200 +36,296 @@ export class VerdaccioManager implements VerdaccioInstance {
 
     logger.debug('Starting Verdaccio registry...');
 
-    // Kill any existing Verdaccio processes on this port
-    await this.killExistingProcesses();
+    // Find an available port starting from the default port
+    const defaultPort = this.config.registry.port || 4873;
+    this.actualPort = await this.findAvailablePort(defaultPort);
 
-    return new Promise((resolve, reject) => {
-      // Start Verdaccio with minimal logging
-      this.process = spawn(
-        'pnpm',
-        ['verdaccio', '--config', this.config.verdaccioConfig],
-        {
-          stdio: ['ignore', 'pipe', 'pipe'],
-          detached: false,
-          env: {
-            ...process.env,
-            // Suppress Verdaccio logs
-            NODE_ENV: 'production',
-          },
-        },
-      );
+    // Create temporary directory for Verdaccio storage
+    this.tempDir = await mkdtemp(join(tmpdir(), 'verdaccio-e2e-'));
 
-      let resolved = false;
+    try {
+      // Create in-memory Verdaccio configuration
+      const verdaccioConfig = this.createInMemoryConfig();
+      logger.debug(`Starting Verdaccio on port ${this.actualPort} with temp storage: ${this.tempDir}`);
 
-      // Set up timeout
-      const timeout = setTimeout(() => {
-        if (!resolved) {
-          resolved = true;
-          this.stop();
-          reject(
-            new VerdaccioError('Verdaccio failed to start within 30 seconds'),
-          );
-        }
-      }, 30000);
+      // Suppress console output during Verdaccio initialization
+      const originalConsoleLog = console.log;
+      const originalConsoleInfo = console.info;
+      const originalConsoleWarn = console.warn;
+      const originalConsoleError = console.error;
 
-      // Also try pinging the server periodically
-      const healthCheck = async () => {
-        if (resolved) return;
+      console.log = () => {};
+      console.info = () => {};
+      console.warn = () => {};
+      console.error = () => {};
 
-        try {
-          const response = await fetch(`${this.config.registryUrl}/-/ping`);
-          if (response.ok && !resolved) {
+      // Use Verdaccio Node.js API with in-memory config
+      const app = await runServer(verdaccioConfig);
+
+      // Restore console methods
+      console.log = originalConsoleLog;
+      console.info = originalConsoleInfo;
+      console.warn = originalConsoleWarn;
+      console.error = originalConsoleError;
+
+      return new Promise((resolve, reject) => {
+        let resolved = false;
+
+        // Set up timeout
+        const timeout = setTimeout(() => {
+          if (!resolved) {
             resolved = true;
-            clearTimeout(timeout);
-            logger.debug('Verdaccio health check passed');
-            resolve();
+            this.stop();
+            reject(
+              new VerdaccioError('Verdaccio failed to start within 30 seconds'),
+            );
           }
-        } catch {
-          // Ignore ping errors during startup
-        }
-      };
+        }, 30000);
 
-      // Start health checking after a brief delay
-      setTimeout(() => {
-        const interval = setInterval(async () => {
-          if (resolved) {
-            clearInterval(interval);
+        // Start the HTTP server on the available port
+        this.server = app.listen(this.actualPort, (error?: Error) => {
+          if (error) {
+            if (!resolved) {
+              resolved = true;
+              clearTimeout(timeout);
+              reject(new VerdaccioError(`Failed to start Verdaccio server: ${error.message}`, error));
+            }
             return;
           }
-          await healthCheck();
-        }, 2000);
-      }, 3000);
 
-      // Monitor stdout for startup confirmation
-      this.process.stdout?.on('data', (data: Buffer) => {
-        const output = data.toString();
-        logger.debug('Verdaccio stdout:', output.trim());
+          logger.debug(`Verdaccio started on port ${this.actualPort}`);
 
-        // Verdaccio is ready when it shows the http address or starts listening
-        if (
-          (output.includes('http address') ||
-            output.includes('http://') ||
-            output.includes(`${this.config.verdaccioPort}`) ||
-            output.includes('listen')) &&
-          !resolved
-        ) {
-          resolved = true;
-          clearTimeout(timeout);
-          logger.debug('Verdaccio started successfully');
+          // Wait a moment for the server to be fully ready
+          setTimeout(async () => {
+            if (resolved) return;
+
+            // Health check to ensure the server is responding
+            try {
+              const registryUrl = `http://localhost:${this.actualPort}`;
+              const response = await fetch(`${registryUrl}/-/ping`);
+              if (response.ok && !resolved) {
+                resolved = true;
+                clearTimeout(timeout);
+                logger.debug('Verdaccio health check passed');
+                resolve();
+              }
+            } catch (healthError) {
+              // If health check fails, still consider it started if the server is listening
+              if (!resolved) {
+                resolved = true;
+                clearTimeout(timeout);
+                logger.debug('Verdaccio started (health check failed but server is listening)');
+                resolve();
+              }
+            }
+          }, 1000);
+        });
+
+        // Handle server errors
+        this.server?.on('error', (error: Error) => {
+          if (!resolved) {
+            resolved = true;
+            clearTimeout(timeout);
+            reject(new VerdaccioError(`Verdaccio server error: ${error.message}`, error));
+          }
+        });
+      });
+    } catch (error) {
+      throw new VerdaccioError(
+        `Failed to initialize Verdaccio: ${error instanceof Error ? error.message : String(error)}`,
+        error instanceof Error ? error : new Error(String(error))
+      );
+    }
+
+  }
+
+  async stop(): Promise<void> {
+    if (this.server) {
+      logger.debug('Stopping Verdaccio server...');
+
+      await new Promise<void>((resolve) => {
+        const cleanup = () => {
+          this.server = null;
           resolve();
-        }
+        };
+
+        // Set a timeout for graceful shutdown
+        const timeout = setTimeout(() => {
+          logger.debug('Force closing Verdaccio server');
+          this.server?.close();
+          cleanup();
+        }, 5000);
+
+        this.server?.close((error) => {
+          clearTimeout(timeout);
+          if (error) {
+            logger.debug(`Error closing Verdaccio server: ${error.message}`);
+          } else {
+            logger.debug('Verdaccio server stopped gracefully');
+          }
+          cleanup();
+        });
+      });
+    }
+
+
+    // Cleanup temporary directory
+    if (this.tempDir) {
+      try {
+        logger.debug(`Cleaning up temporary directory: ${this.tempDir}`);
+        await rm(this.tempDir, { recursive: true, force: true });
+        logger.debug('Temporary directory cleaned up successfully');
+        this.tempDir = null;
+      } catch (error) {
+        logger.debug(`Failed to cleanup temporary directory: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
+  }
+
+  isRunning(): boolean {
+    return this.server !== null && this.server.listening;
+  }
+
+  getRegistryUrl(): string {
+    if (this.actualPort === null) {
+      throw new VerdaccioError('Verdaccio server not started yet');
+    }
+    return `http://localhost:${this.actualPort}`;
+  }
+
+  private async findAvailablePort(startPort: number): Promise<number> {
+    let port = startPort;
+    const maxAttempts = 10;
+
+    for (let attempts = 0; attempts < maxAttempts; attempts++) {
+      if (!(await this.isPortInUse(port))) {
+        logger.debug(`Found available port: ${port}`);
+        return port;
+      }
+      logger.debug(`Port ${port} is in use, trying ${port + 1}`);
+      port++;
+    }
+
+    throw new VerdaccioError(`Could not find available port after ${maxAttempts} attempts starting from ${startPort}`);
+  }
+
+  private async isPortInUse(port: number): Promise<boolean> {
+    return new Promise((resolve) => {
+      const server = createServer();
+
+      server.listen(port, () => {
+        server.close(() => {
+          resolve(false); // Port is available
+        });
       });
 
-      // Monitor stderr for errors - but don't log everything
-      this.process.stderr?.on('data', (data: Buffer) => {
-        const error = data.toString().trim();
-        // Only log actual errors, not info messages
-        if (
-          error &&
-          (error.includes('error') ||
-            error.includes('Error') ||
-            error.includes('ERROR'))
-        ) {
-          logger.error('Verdaccio stderr:', error);
+      server.on('error', (error: any) => {
+        if (error.code === 'EADDRINUSE') {
+          resolve(true); // Port is in use
         } else {
-          logger.debug('Verdaccio stderr:', error);
-        }
-      });
-
-      this.process.on('error', (error) => {
-        if (!resolved) {
-          resolved = true;
-          clearTimeout(timeout);
-          reject(
-            new VerdaccioError(
-              `Verdaccio process error: ${error.message}`,
-              error,
-            ),
-          );
-        }
-      });
-
-      this.process.on('exit', (code) => {
-        if (!resolved && code !== 0) {
-          resolved = true;
-          clearTimeout(timeout);
-          reject(new VerdaccioError(`Verdaccio exited with code ${code}`));
+          resolve(false); // Other error, assume available
         }
       });
     });
   }
 
-  async stop(): Promise<void> {
-    if (this.process) {
-      logger.debug('Stopping Verdaccio process...');
-
-      // Send SIGTERM first for graceful shutdown
-      this.process.kill('SIGTERM');
-
-      // Wait for process to exit
-      await new Promise<void>((resolve) => {
-        if (!this.process) {
-          resolve();
-          return;
-        }
-
-        const cleanup = () => {
-          this.process = null;
-          resolve();
-        };
-
-        this.process.on('exit', cleanup);
-
-        // Force kill after 5 seconds
-        setTimeout(() => {
-          if (this.process && !this.process.killed) {
-            logger.debug('Force killing Verdaccio process');
-            this.process.kill('SIGKILL');
-          }
-          cleanup();
-        }, 5000);
-      });
+  private createInMemoryConfig(): any {
+    if (!this.tempDir) {
+      throw new VerdaccioError('Temporary directory not created');
     }
 
-    // Cleanup any remaining processes
-    await this.killExistingProcesses();
+    return {
+      self_path: this.tempDir,
+      storage: join(this.tempDir, 'storage'),
+      
+      // Secure authentication configuration
+      auth: {
+        'verdaccio-auth-memory': {
+          users: {
+            [this.secureUsername]: {
+              name: this.secureUsername,
+              password: this.securePassword, // Will be hashed by the auth plugin
+            },
+          },
+        },
+      },
+      
+      // Secure uplinks configuration
+      uplinks: {
+        npmjs: {
+          url: 'https://registry.npmjs.org/',
+          timeout: '10s',
+          maxage: '2m',
+          fail_timeout: '5m',
+          max_fails: 2,
+        },
+      },
+      
+      // Strict package access control
+      packages: {
+        '@ts-graphviz/*': {
+          access: `$authenticated`,
+          publish: `$authenticated`,
+          unpublish: false,
+        },
+        'ts-graphviz': {
+          access: `$authenticated`,
+          publish: `$authenticated`,
+          unpublish: false,
+        },
+        '**': {
+          access: `$authenticated`,
+          publish: `$authenticated`,
+          unpublish: false,
+          proxy: 'npmjs',
+        },
+      },
+      
+      // Security settings
+      security: {
+        api: {
+          migrateToSecureLegacySignature: true,
+          legacy: false,
+        },
+        web: {
+          enable: false, // Disable web UI for security
+        },
+      },
+      
+      // Disable metrics and audit for E2E testing
+      middlewares: {},
+      
+      // Secure server configuration
+      server: {
+        keepAliveTimeout: 60,
+        // Bind only to localhost
+        host: '127.0.0.1',
+      },
+      
+      // Silent logging
+      log: {
+        type: 'rotating-file',
+        path: devNull,
+        level: 'silent',
+      },
+      logs: {
+        format: 'json',
+        level: 'silent',
+      },
+    };
   }
 
-  isRunning(): boolean {
-    return this.process !== null && !this.process.killed;
+  /**
+   * Get secure credentials for authentication
+   */
+  getSecureCredentials(): { username: string; password: string; email: string } {
+    return {
+      username: this.secureUsername,
+      password: this.securePassword,
+      email: `${this.secureUsername}@e2e-test.local`,
+    };
   }
 
-  getRegistryUrl(): string {
-    return this.config.registryUrl;
-  }
-
-  private async killExistingProcesses(): Promise<void> {
-    try {
-      // Try to kill processes by name
-      await new Promise<void>((resolve) => {
-        const killProcess = spawn('pkill', ['-f', 'verdaccio'], {
-          stdio: 'ignore',
-        });
-        killProcess.on('exit', () => resolve());
-        killProcess.on('error', () => resolve()); // Ignore errors if no process found
-      });
-
-      // Also try to kill by port
-      await new Promise<void>((resolve) => {
-        const killProcess = spawn(
-          'bash',
-          [
-            '-c',
-            `lsof -ti:${this.config.verdaccioPort} | xargs kill -9 2>/dev/null || true`,
-          ],
-          { stdio: 'ignore' },
-        );
-        killProcess.on('exit', () => resolve());
-        killProcess.on('error', () => resolve());
-      });
-
-      // Wait a bit for cleanup
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } catch {
-      // Ignore errors - processes might not exist
-    }
-  }
 
   async waitForReady(): Promise<void> {
     const maxAttempts = 30;
@@ -221,7 +335,8 @@ export class VerdaccioManager implements VerdaccioInstance {
 
     while (attempts < maxAttempts) {
       try {
-        const response = await fetch(`${this.config.registryUrl}/-/ping`);
+        const registryUrl = this.getRegistryUrl();
+        const response = await fetch(`${registryUrl}/-/ping`);
         if (response.ok) {
           logger.debug('Verdaccio is ready');
           return;

@@ -23,8 +23,8 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
       with:
-        cache: pnpm
         node-version-file: ./.node-version
+        # Remove cache to ensure fresh environment for each run
     - name: Install Dependencies
       run: pnpm install --frozen-lockfile
     - name: Verify build artifacts
@@ -38,36 +38,102 @@ jobs:
         done
         echo "✅ All build artifacts verified"
 
-  full_support_nodejs_lts:
-    name: Full Support / Node.js LTS
+  e2e_test_matrix:
+    name: E2E Test
     needs: prepare
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false # Continue running other matrix jobs even if one fails
       matrix:
+        # Test across multiple Node.js versions and operating systems
         node-version: [20.x, 22.x, 24.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # Include specific test environments
+        include:
+          - test-env: "CJS JavaScript"
+            test-pattern: "examples/cjs-javascript"
+          - test-env: "CJS TypeScript"
+            test-pattern: "examples/cjs-typescript"
+          - test-env: "ESM JavaScript"
+            test-pattern: "examples/esm-javascript"
+          - test-env: "ESM TypeScript"
+            test-pattern: "examples/esm-typescript"
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
         egress-policy: audit
-    - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
-    - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+    - name: Checkout Repository
+      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
         name: lib
         path: packages
-    - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
-    - name: Use Graphviz
-      uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
-    - name: Use Node.js
+    - name: Setup pnpm
+      uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+    - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: pnpm
     - name: Install Dependencies
       run: pnpm install --frozen-lockfile
-    - name: Run E2E Tests (TypeScript)
-      run: pnpm test:e2e:ts
+
+    # Test individual environments to identify specific failures
+    - name: Test CJS JavaScript Environment
+      id: test-cjs-js
+      run: |
+        echo "::group::Testing CJS JavaScript (Node.js ${{ matrix.node-version }} on ${{ matrix.os }})"
+        pnpm test:e2e examples/cjs-javascript
+        echo "::endgroup::"
+      continue-on-error: true
+
+    - name: Test CJS TypeScript Environment
+      id: test-cjs-ts
+      run: |
+        echo "::group::Testing CJS TypeScript (Node.js ${{ matrix.node-version }} on ${{ matrix.os }})"
+        pnpm test:e2e examples/cjs-typescript
+        echo "::endgroup::"
+      continue-on-error: true
+
+    - name: Test ESM JavaScript Environment
+      id: test-esm-js
+      run: |
+        echo "::group::Testing ESM JavaScript (Node.js ${{ matrix.node-version }} on ${{ matrix.os }})"
+        pnpm test:e2e examples/esm-javascript
+        echo "::endgroup::"
+      continue-on-error: true
+
+    - name: Test ESM TypeScript Environment
+      id: test-esm-ts
+      run: |
+        echo "::group::Testing ESM TypeScript (Node.js ${{ matrix.node-version }} on ${{ matrix.os }})"
+        pnpm test:e2e examples/esm-typescript
+        echo "::endgroup::"
+      continue-on-error: true
+
+    # Report results for easier debugging
+    - name: Report Test Results
+      if: always()
+      run: |
+        echo "## E2E Test Results for Node.js ${{ matrix.node-version }} on ${{ matrix.os }}"
+        echo "| Environment | Status |"
+        echo "|-------------|--------|"
+        echo "| CJS JavaScript | ${{ steps.test-cjs-js.outcome == 'success' && '✅ PASS' || '❌ FAIL' }} |"
+        echo "| CJS TypeScript | ${{ steps.test-cjs-ts.outcome == 'success' && '✅ PASS' || '❌ FAIL' }} |"
+        echo "| ESM JavaScript | ${{ steps.test-esm-js.outcome == 'success' && '✅ PASS' || '❌ FAIL' }} |"
+        echo "| ESM TypeScript | ${{ steps.test-esm-ts.outcome == 'success' && '✅ PASS' || '❌ FAIL' }} |"
+
+        # Set overall job status
+        if [[ "${{ steps.test-cjs-js.outcome }}" != "success" ]] || \
+           [[ "${{ steps.test-cjs-ts.outcome }}" != "success" ]] || \
+           [[ "${{ steps.test-esm-js.outcome }}" != "success" ]] || \
+           [[ "${{ steps.test-esm-ts.outcome }}" != "success" ]]; then
+          echo "❌ One or more E2E tests failed on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
+          exit 1
+        else
+          echo "✅ All E2E tests passed on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
+        fi
 
   active_support_nodejs_latest:
     name: Active Support / Node.js Latest
@@ -78,23 +144,28 @@ jobs:
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
         egress-policy: audit
-    - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
-    - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+    - name: Checkout Repository
+      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
         name: lib
         path: packages
-    - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+    - name: Setup pnpm
+      uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
     - name: Use Graphviz
       uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
-    - name: Use Node.js latest
+    - name: Setup Node.js latest
       uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
       with:
         node-version: latest
-        cache: pnpm
     - name: Install Dependencies
       run: pnpm install --frozen-lockfile
-    - name: Run E2E Tests (TypeScript)
-      run: pnpm test:e2e:ts
+    - name: Run E2E Tests (TypeScript Environment)
+      run: |
+        echo "::group::Testing TypeScript environments with Node.js latest"
+        pnpm test:e2e 'examples/*typescript'
+        echo "::endgroup::"
 
 
   active_support_deno_lts:
@@ -106,33 +177,41 @@ jobs:
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
         egress-policy: audit
-    - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
-    - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+    - name: Checkout Repository
+      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
         name: lib
         path: packages
-    - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+    - name: Setup pnpm
+      uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
     - name: Use Graphviz
       uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
-    - name: Use Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
       with:
         node-version-file: ./.node-version
-        cache: pnpm
-    - name: Use Deno
+    - name: Setup Deno
       uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
       with:
         deno-version: lts
     - name: Install Dependencies
       run: pnpm install --frozen-lockfile
-    - name: Run E2E Tests (TypeScript)
-      run: pnpm test:e2e:ts
-    - name: Run Deno Test
+    - name: Run E2E Tests (TypeScript Environment)
+      run: |
+        echo "::group::Testing TypeScript environments with Deno"
+        pnpm test:e2e 'examples/*typescript'
+        echo "::endgroup::"
+    - name: Test Deno ESM JavaScript
       working-directory: examples/esm-javascript
       run: |
+        echo "::group::Testing Deno with ESM JavaScript project"
         deno info
-        echo "=== Testing Deno with ESM JavaScript project ==="
+        echo "=== Installing ts-graphviz from npm registry ==="
         # Note: Deno test runs against npm registry packages, not local ones
         # This is intentional as Deno uses different package resolution
         npm install ts-graphviz
+        echo "=== Running Deno test ==="
         deno run --no-lock --allow-run --allow-write sample.js
+        echo "::endgroup::"

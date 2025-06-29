@@ -1,9 +1,0 @@
-{
-  "name": "@ts-graphviz/examples",
-  "private": true,
-  "scripts": {
-    "test": "pnpm -r test",
-    "test:parallel": "pnpm -r --parallel test",
-    "clean": "pnpm -r exec rm -rf node_modules package-lock.json"
-  }
-}

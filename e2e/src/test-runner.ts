@@ -1,17 +1,126 @@
-import { unlink, writeFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { rm, unlink, writeFile, readFile, stat } from 'node:fs/promises';
+import { resolve, dirname } from 'node:path';
 import { execa } from 'execa';
 import pLimit from 'p-limit';
 import { TestExecutionError } from './error-handler.js';
 import { logger } from './logger.js';
-import type { E2EConfig, TestPackage, TestResult } from './types.js';
+import type { E2ERunnerConfig, TestPackage, TestResult } from './types.js';
 
-export class TestRunner {
-  private config: E2EConfig;
+/**
+ * Manages test package state and cleanup
+ */
+class TestPackageState implements AsyncDisposable {
+  private pkg: TestPackage;
+  private originalPackageJson: string | null = null;
+  private existingArtifacts: Set<string> = new Set();
+
+  constructor(pkg: TestPackage) {
+    this.pkg = pkg;
+  }
+
+  async recordExistingArtifacts(): Promise<void> {
+    const artifacts = [
+      'node_modules',
+      'package-lock.json',
+      'yarn.lock',
+      'pnpm-lock.yaml'
+    ];
+
+    for (const artifact of artifacts) {
+      const artifactPath = resolve(this.pkg.path, artifact);
+      try {
+        await stat(artifactPath);
+        this.existingArtifacts.add(artifact);
+      } catch {
+        // Artifact doesn't exist
+      }
+    }
+  }
+
+  async backupPackageJson(): Promise<void> {
+    const packageJsonPath = resolve(this.pkg.path, 'package.json');
+    this.originalPackageJson = await readFile(packageJsonPath, 'utf8');
+  }
+
+  async updatePackageJson(testVersion: string): Promise<void> {
+    const packageJsonPath = resolve(this.pkg.path, 'package.json');
+    const packageJson = JSON.parse(this.originalPackageJson!);
+
+    // Convert workspace: dependencies to test versions
+    let modified = false;
+    for (const depType of ['dependencies', 'devDependencies', 'peerDependencies']) {
+      if (packageJson[depType]) {
+        for (const [depName, depVersion] of Object.entries(packageJson[depType])) {
+          if (typeof depVersion === 'string' && depVersion.startsWith('workspace:')) {
+            if (depName.startsWith('@ts-graphviz/') || depName === 'ts-graphviz') {
+              packageJson[depType][depName] = testVersion;
+              modified = true;
+            }
+          }
+        }
+      }
+    }
+
+    if (modified) {
+      await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
+    }
+  }
+
+  async [Symbol.asyncDispose](): Promise<void> {
+    // Restore package.json
+    if (this.originalPackageJson) {
+      const packageJsonPath = resolve(this.pkg.path, 'package.json');
+      await writeFile(packageJsonPath, this.originalPackageJson);
+    }
+
+    // Clean up artifacts that didn't exist before
+    const artifactsToClean = [
+      { name: 'node_modules', isDir: true },
+      { name: 'package-lock.json', isDir: false },
+      { name: 'yarn.lock', isDir: false },
+      { name: 'pnpm-lock.yaml', isDir: false }
+    ];
+
+    for (const artifact of artifactsToClean) {
+      if (!this.existingArtifacts.has(artifact.name)) {
+        const artifactPath = resolve(this.pkg.path, artifact.name);
+        try {
+          if (artifact.isDir) {
+            await rm(artifactPath, { recursive: true, force: true });
+          } else {
+            await unlink(artifactPath);
+          }
+        } catch {
+          // Ignore cleanup errors
+        }
+      }
+    }
+  }
+}
+
+export class TestRunner implements AsyncDisposable {
+  private config: E2ERunnerConfig;
   private limit = pLimit(4); // Run 4 tests in parallel
+  private npmrcManager: any | null = null;
 
-  constructor(config: E2EConfig) {
+  constructor(config: E2ERunnerConfig) {
     this.config = config;
+  }
+
+  setNpmrcManager(npmrcManager: any): void {
+    this.npmrcManager = npmrcManager;
+  }
+
+  private getRegistryUrl(): string {
+    const host = this.config.registry.host || 'localhost';
+    const port = this.config.registry.port || 4873;
+    return `http://${host}:${port}`;
+  }
+
+  async [Symbol.asyncDispose](): Promise<void> {
+    // Async cleanup for using statement
+    logger.debug('TestRunner: Running async dispose cleanup');
+    await this.cleanup();
   }
 
   async runAllTests(testPackages: TestPackage[]): Promise<TestResult[]> {
@@ -42,35 +151,25 @@ export class TestRunner {
     return results;
   }
 
-  private async setupExamplesWorkspace(): Promise<void> {
-    console.log('🔧 Setting up examples workspace...');
-
-    // Create .npmrc for examples workspace
-    const npmrcPath = resolve(this.config.examplesDir, '.npmrc');
-    const npmrcContent = `registry=${this.config.registryUrl}\n`;
-    await writeFile(npmrcPath, npmrcContent);
-
-    try {
-      // Install dependencies for all example packages
-      await execa('pnpm', ['install'], {
-        cwd: this.config.examplesDir,
-        stdio: 'pipe',
-      });
-      console.log('✅ Examples workspace setup complete');
-    } catch (error) {
-      console.error('❌ Failed to setup examples workspace:', error);
-      throw error;
-    }
-  }
 
   private async runSingleTest(pkg: TestPackage): Promise<TestResult> {
     const startTime = Date.now();
 
+    await using state = new TestPackageState(pkg);
+    
     try {
       logger.running(`Running ${pkg.name}...`);
 
-      // Clean and reinstall dependencies for this specific package
+      // Record existing artifacts before any modifications
+      await state.recordExistingArtifacts();
+      
+      // Clean package first
       await this.cleanPackage(pkg);
+      
+      // Backup and update package.json for workspace dependencies
+      await state.backupPackageJson();
+      await state.updatePackageJson(this.config.packages.testVersion!);
+      
       await this.installPackageDependencies(pkg);
 
       // Run the test
@@ -101,79 +200,50 @@ export class TestRunner {
         output: error instanceof Error ? error.message : String(error),
       };
     }
+    // The 'using' statement will automatically call state[Symbol.asyncDispose]()
+    // to restore package.json and clean up artifacts
   }
 
   private async cleanPackage(pkg: TestPackage): Promise<void> {
     try {
       // Remove node_modules and package-lock.json
-      await execa('rm', ['-rf', 'node_modules', 'package-lock.json'], {
-        cwd: pkg.path,
-        stdio: 'pipe',
-      });
+      const nodeModulesPath = resolve(pkg.path, 'node_modules');
+      const packageLockPath = resolve(pkg.path, 'package-lock.json');
+      
+      await Promise.allSettled([
+        rm(nodeModulesPath, { recursive: true, force: true }),
+        rm(packageLockPath, { force: true })
+      ]);
     } catch {
       // Ignore errors if files don't exist
     }
   }
 
-  private async installPackageDependencies(pkg: TestPackage): Promise<void> {
-    if (pkg.type.includes('typescript')) {
-      // For TypeScript projects, install system dependencies from npm registry first
-      await execa(
-        'npm',
-        [
-          'install',
-          '@types/node',
-          'tsx',
-          'typescript',
-          '--registry',
-          'https://registry.npmjs.org/',
-        ],
-        {
-          cwd: pkg.path,
-          stdio: 'pipe',
-        },
-      );
 
-      // Then install ts-graphviz from local registry
-      await execa(
-        'npm',
-        ['install', 'ts-graphviz', '--registry', this.config.registryUrl],
-        {
-          cwd: pkg.path,
-          stdio: 'pipe',
-        },
-      );
-    } else {
-      // For JavaScript projects, install everything from local registry
-      await execa('npm', ['install', '--registry', this.config.registryUrl], {
-        cwd: pkg.path,
-        stdio: 'pipe',
-      });
+  private async installPackageDependencies(pkg: TestPackage): Promise<void> {
+    // Install all dependencies from configured registry with npmjs.org as fallback
+    const installArgs = ['install', '--registry', this.getRegistryUrl()];
+    
+    const installEnv: NodeJS.ProcessEnv = {
+      ...process.env,
+      NPM_CONFIG_REGISTRY: this.getRegistryUrl(),
+    };
+
+    // Use temporary npmrc via environment variable if available
+    if (this.npmrcManager?.getTempNpmrcPath) {
+      installEnv.NPM_CONFIG_USERCONFIG = this.npmrcManager.getTempNpmrcPath();
     }
+
+    await execa('npm', installArgs, {
+      cwd: pkg.path,
+      stdio: 'pipe',
+      env: installEnv,
+    });
   }
 
   async cleanup(): Promise<void> {
     logger.cleanup('Cleaning up test artifacts...');
-
-    // Clean all test packages
-    const testPackages = [
-      'esm-javascript',
-      'cjs-javascript',
-      'esm-typescript',
-      'cjs-typescript',
-    ];
-
-    for (const packageName of testPackages) {
-      try {
-        const packagePath = resolve(this.config.examplesDir, packageName);
-        await execa('rm', ['-rf', 'node_modules', 'package-lock.json'], {
-          cwd: packagePath,
-          stdio: 'pipe',
-        });
-      } catch {
-        // Ignore errors
-      }
-    }
+    // Cleanup is handled per-test in runSingleTest method
   }
 
   printResults(results: TestResult[]): void {

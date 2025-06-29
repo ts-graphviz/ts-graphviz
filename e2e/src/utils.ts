@@ -1,59 +1,56 @@
-import { copyFile, readFile, writeFile } from 'node:fs/promises';
-import { homedir } from 'node:os';
+import { readFile, writeFile, unlink } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { logger } from './logger.js';
 
-export class NpmConfigManager {
-  private backupPath: string;
-  private originalPath: string;
+export class NpmConfigManager implements AsyncDisposable {
+  private tempNpmrcPath: string;
+  private registryUrl: string | null = null;
 
-  constructor() {
-    this.originalPath = resolve(homedir(), '.npmrc');
-    this.backupPath = resolve(homedir(), '.npmrc.backup');
+  constructor(workingDir: string = process.cwd()) {
+    // Create temporary .npmrc in working directory (not global)
+    this.tempNpmrcPath = resolve(workingDir, '.npmrc.e2e-temp');
+  }
+
+  async [Symbol.asyncDispose](): Promise<void> {
+    // Clean up temporary .npmrc file
+    try {
+      await unlink(this.tempNpmrcPath);
+      logger.debug('Temporary .npmrc file removed');
+    } catch {
+      // File might not exist, ignore error
+    }
   }
 
   async backup(): Promise<void> {
-    try {
-      await copyFile(this.originalPath, this.backupPath);
-      logger.debug('Npm config backed up');
-    } catch {
-      // Original .npmrc might not exist
-      logger.debug('No existing .npmrc to backup');
-    }
+    // No global backup needed
+    logger.debug('Using project-local .npmrc (no global backup needed)');
   }
 
   async setRegistry(registryUrl: string): Promise<void> {
-    const content = `registry=${registryUrl}\n`;
-    await writeFile(this.originalPath, content);
-    logger.debug(`Npm registry set to: ${registryUrl}`);
+    this.registryUrl = registryUrl;
+    logger.debug(`Registry URL stored: ${registryUrl}`);
   }
 
   async restore(): Promise<void> {
-    try {
-      await copyFile(this.backupPath, this.originalPath);
-      // Clean up backup
-      await this.cleanup();
-    } catch {
-      // If backup doesn't exist, remove the temporary .npmrc
-      try {
-        const content = await readFile(this.originalPath, 'utf8');
-        if (content.includes('http://localhost:')) {
-          // This looks like our temporary registry config
-          await this.cleanup();
-        }
-      } catch {
-        // Ignore errors
-      }
-    }
+    // Cleanup happens in asyncDispose
+    logger.debug('Project-local .npmrc cleanup handled by dispose');
   }
 
-  private async cleanup(): Promise<void> {
-    try {
-      const { unlink } = await import('node:fs/promises');
-      await unlink(this.backupPath);
-    } catch {
-      // Ignore errors
-    }
+  async writeAuthConfig(registryUrl: string, token: string): Promise<void> {
+    // npm login will handle the authentication configuration
+    // We just set the registry URL
+    const npmrcContent = `registry=${registryUrl}\n`;
+
+    await writeFile(this.tempNpmrcPath, npmrcContent);
+    logger.debug(`Temporary .npmrc written to: ${this.tempNpmrcPath}`);
+  }
+
+  getTempNpmrcPath(): string {
+    return this.tempNpmrcPath;
+  }
+
+  getRegistryUrl(): string | null {
+    return this.registryUrl;
   }
 }
 
