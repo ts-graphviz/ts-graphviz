@@ -1,6 +1,6 @@
-import { randomUUID, randomBytes } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 import { mkdtemp, rm } from 'node:fs/promises';
-import { createServer, Server } from 'node:http';
+import { createServer, type Server } from 'node:http';
 import { devNull, tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { runServer } from 'verdaccio';
@@ -46,7 +46,9 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
     try {
       // Create in-memory Verdaccio configuration
       const verdaccioConfig = this.createInMemoryConfig();
-      logger.debug(`Starting Verdaccio on port ${this.actualPort} with temp storage: ${this.tempDir}`);
+      logger.debug(
+        `Starting Verdaccio on port ${this.actualPort} with temp storage: ${this.tempDir}`,
+      );
 
       // Suppress console output during Verdaccio initialization
       const originalConsoleLog = console.log;
@@ -88,7 +90,12 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
             if (!resolved) {
               resolved = true;
               clearTimeout(timeout);
-              reject(new VerdaccioError(`Failed to start Verdaccio server: ${error.message}`, error));
+              reject(
+                new VerdaccioError(
+                  `Failed to start Verdaccio server: ${error.message}`,
+                  error,
+                ),
+              );
             }
             return;
           }
@@ -114,7 +121,9 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
               if (!resolved) {
                 resolved = true;
                 clearTimeout(timeout);
-                logger.debug('Verdaccio started (health check failed but server is listening)');
+                logger.debug(
+                  'Verdaccio started (health check failed but server is listening)',
+                );
                 resolve();
               }
             }
@@ -126,17 +135,21 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
           if (!resolved) {
             resolved = true;
             clearTimeout(timeout);
-            reject(new VerdaccioError(`Verdaccio server error: ${error.message}`, error));
+            reject(
+              new VerdaccioError(
+                `Verdaccio server error: ${error.message}`,
+                error,
+              ),
+            );
           }
         });
       });
     } catch (error) {
       throw new VerdaccioError(
         `Failed to initialize Verdaccio: ${error instanceof Error ? error.message : String(error)}`,
-        error instanceof Error ? error : new Error(String(error))
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
-
   }
 
   async stop(): Promise<void> {
@@ -168,7 +181,6 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
       });
     }
 
-
     // Cleanup temporary directory
     if (this.tempDir) {
       try {
@@ -177,7 +189,9 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
         logger.debug('Temporary directory cleaned up successfully');
         this.tempDir = null;
       } catch (error) {
-        logger.debug(`Failed to cleanup temporary directory: ${error instanceof Error ? error.message : String(error)}`);
+        logger.debug(
+          `Failed to cleanup temporary directory: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
     }
   }
@@ -206,7 +220,9 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
       port++;
     }
 
-    throw new VerdaccioError(`Could not find available port after ${maxAttempts} attempts starting from ${startPort}`);
+    throw new VerdaccioError(
+      `Could not find available port after ${maxAttempts} attempts starting from ${startPort}`,
+    );
   }
 
   private async isPortInUse(port: number): Promise<boolean> {
@@ -237,7 +253,7 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
     return {
       self_path: this.tempDir,
       storage: join(this.tempDir, 'storage'),
-      
+
       // Secure authentication configuration
       auth: {
         'verdaccio-auth-memory': {
@@ -249,7 +265,7 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
           },
         },
       },
-      
+
       // Secure uplinks configuration
       uplinks: {
         npmjs: {
@@ -260,7 +276,7 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
           max_fails: 2,
         },
       },
-      
+
       // Strict package access control
       packages: {
         '@ts-graphviz/*': {
@@ -280,7 +296,7 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
           proxy: 'npmjs',
         },
       },
-      
+
       // Security settings
       security: {
         api: {
@@ -291,17 +307,17 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
           enable: false, // Disable web UI for security
         },
       },
-      
+
       // Disable metrics and audit for E2E testing
       middlewares: {},
-      
+
       // Secure server configuration
       server: {
         keepAliveTimeout: 60,
         // Bind only to localhost
         host: '127.0.0.1',
       },
-      
+
       // Silent logging
       log: {
         type: 'rotating-file',
@@ -318,14 +334,17 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
   /**
    * Get secure credentials for authentication
    */
-  getSecureCredentials(): { username: string; password: string; email: string } {
+  getSecureCredentials(): {
+    username: string;
+    password: string;
+    email: string;
+  } {
     return {
       username: this.secureUsername,
       password: this.securePassword,
       email: `${this.secureUsername}@e2e-test.local`,
     };
   }
-
 
   async waitForReady(): Promise<void> {
     const maxAttempts = 30;

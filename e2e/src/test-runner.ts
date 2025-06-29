@@ -1,5 +1,5 @@
-import { rm, unlink, writeFile, readFile, stat } from 'node:fs/promises';
-import { resolve, dirname } from 'node:path';
+import { readFile, rm, stat, unlink, writeFile } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
 import { execa } from 'execa';
 import pLimit from 'p-limit';
 import { TestExecutionError } from './error-handler.js';
@@ -23,7 +23,7 @@ class TestPackageState implements AsyncDisposable {
       'node_modules',
       'package-lock.json',
       'yarn.lock',
-      'pnpm-lock.yaml'
+      'pnpm-lock.yaml',
     ];
 
     for (const artifact of artifacts) {
@@ -48,11 +48,23 @@ class TestPackageState implements AsyncDisposable {
 
     // Convert workspace: dependencies to test versions
     let modified = false;
-    for (const depType of ['dependencies', 'devDependencies', 'peerDependencies']) {
+    for (const depType of [
+      'dependencies',
+      'devDependencies',
+      'peerDependencies',
+    ]) {
       if (packageJson[depType]) {
-        for (const [depName, depVersion] of Object.entries(packageJson[depType])) {
-          if (typeof depVersion === 'string' && depVersion.startsWith('workspace:')) {
-            if (depName.startsWith('@ts-graphviz/') || depName === 'ts-graphviz') {
+        for (const [depName, depVersion] of Object.entries(
+          packageJson[depType],
+        )) {
+          if (
+            typeof depVersion === 'string' &&
+            depVersion.startsWith('workspace:')
+          ) {
+            if (
+              depName.startsWith('@ts-graphviz/') ||
+              depName === 'ts-graphviz'
+            ) {
               packageJson[depType][depName] = testVersion;
               modified = true;
             }
@@ -78,7 +90,7 @@ class TestPackageState implements AsyncDisposable {
       { name: 'node_modules', isDir: true },
       { name: 'package-lock.json', isDir: false },
       { name: 'yarn.lock', isDir: false },
-      { name: 'pnpm-lock.yaml', isDir: false }
+      { name: 'pnpm-lock.yaml', isDir: false },
     ];
 
     for (const artifact of artifactsToClean) {
@@ -151,25 +163,24 @@ export class TestRunner implements AsyncDisposable {
     return results;
   }
 
-
   private async runSingleTest(pkg: TestPackage): Promise<TestResult> {
     const startTime = Date.now();
 
     await using state = new TestPackageState(pkg);
-    
+
     try {
       logger.running(`Running ${pkg.name}...`);
 
       // Record existing artifacts before any modifications
       await state.recordExistingArtifacts();
-      
+
       // Clean package first
       await this.cleanPackage(pkg);
-      
+
       // Backup and update package.json for workspace dependencies
       await state.backupPackageJson();
       await state.updatePackageJson(this.config.packages.testVersion!);
-      
+
       await this.installPackageDependencies(pkg);
 
       // Run the test
@@ -209,21 +220,20 @@ export class TestRunner implements AsyncDisposable {
       // Remove node_modules and package-lock.json
       const nodeModulesPath = resolve(pkg.path, 'node_modules');
       const packageLockPath = resolve(pkg.path, 'package-lock.json');
-      
+
       await Promise.allSettled([
         rm(nodeModulesPath, { recursive: true, force: true }),
-        rm(packageLockPath, { force: true })
+        rm(packageLockPath, { force: true }),
       ]);
     } catch {
       // Ignore errors if files don't exist
     }
   }
 
-
   private async installPackageDependencies(pkg: TestPackage): Promise<void> {
     // Install all dependencies from configured registry with npmjs.org as fallback
     const installArgs = ['install', '--registry', this.getRegistryUrl()];
-    
+
     const installEnv: NodeJS.ProcessEnv = {
       ...process.env,
       NPM_CONFIG_REGISTRY: this.getRegistryUrl(),

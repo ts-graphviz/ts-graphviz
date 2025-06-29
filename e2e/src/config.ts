@@ -11,7 +11,7 @@ const projectRoot = resolve(__dirname, '../..');
  */
 export function createDefaultConfig(): E2ERunnerConfig {
   const testVersion = `0.0.0-e2e-${Date.now()}`;
-  
+
   return {
     packages: {
       sourceDir: resolve(projectRoot, 'packages'),
@@ -49,9 +49,11 @@ export function createDefaultConfig(): E2ERunnerConfig {
 /**
  * Creates a configuration from provided options
  */
-export function createConfig(options: Partial<E2ERunnerConfig> = {}): E2ERunnerConfig {
+export function createConfig(
+  options: Partial<E2ERunnerConfig> = {},
+): E2ERunnerConfig {
   const defaultConfig = createDefaultConfig();
-  
+
   return {
     packages: {
       ...defaultConfig.packages,
@@ -68,11 +70,13 @@ export function createConfig(options: Partial<E2ERunnerConfig> = {}): E2ERunnerC
   };
 }
 
-
 /**
  * Validates the E2E runner configuration
  */
-export async function validateConfig(config: E2ERunnerConfig, testPackages: TestPackage[]): Promise<void> {
+export async function validateConfig(
+  config: E2ERunnerConfig,
+  testPackages: TestPackage[],
+): Promise<void> {
   const errors: string[] = [];
 
   // Validate packages configuration
@@ -110,7 +114,10 @@ export async function validateConfig(config: E2ERunnerConfig, testPackages: Test
   }
 
   // Validate test version format if provided
-  if (config.packages.testVersion && !config.packages.testVersion.match(/^\d+\.\d+\.\d+/)) {
+  if (
+    config.packages.testVersion &&
+    !config.packages.testVersion.match(/^\d+\.\d+\.\d+/)
+  ) {
     errors.push(`Invalid test version format: ${config.packages.testVersion}`);
   }
 

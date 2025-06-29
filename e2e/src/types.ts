@@ -24,7 +24,7 @@ export interface PackageDiscoveryConfig {
     include?: string[];
     exclude?: string[];
   };
-  
+
   // Manual package specification (fallback when workspace discovery fails)
   manual?: {
     // Explicit list of package directories or patterns
@@ -40,10 +40,10 @@ export interface E2ERunnerConfig {
     // Package discovery configuration
     discovery?: PackageDiscoveryConfig;
   };
-  
+
   // Registry configuration
   registry: RegistryConfig;
-  
+
   // Runtime options
   options?: {
     parallel?: boolean;
@@ -52,7 +52,6 @@ export interface E2ERunnerConfig {
     cleanup?: boolean;
   };
 }
-
 
 export interface TestResult {
   package: TestPackage;

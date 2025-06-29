@@ -1,7 +1,16 @@
 #!/usr/bin/env node
 
-import { createDefaultConfig, createConfig, validateConfig, getRegistryUrl } from './config.js';
-import { createProgram, loadConfigFromFile, expandTestPackageGlobs } from './cli.js';
+import {
+  createProgram,
+  expandTestPackageGlobs,
+  loadConfigFromFile,
+} from './cli.js';
+import {
+  createConfig,
+  createDefaultConfig,
+  getRegistryUrl,
+  validateConfig,
+} from './config.js';
 import { handleError } from './error-handler.js';
 import { logger } from './logger.js';
 import { PackageManager } from './package-manager.js';
@@ -11,29 +20,29 @@ import { VerdaccioManager } from './verdaccio.js';
 
 async function main() {
   const startTime = Date.now();
-  
+
   // Create and parse CLI
   const program = createProgram();
   program.parse();
-  
+
   const options = program.opts();
   const testPackagePatterns = program.args;
-  
+
   // Load configuration
   let config = createDefaultConfig();
-  
+
   try {
     const fileConfig = await loadConfigFromFile(options.config);
     config = createConfig(fileConfig);
   } catch {
     // Use default config if file not found
   }
-  
+
   // Override config with CLI options
   if (options.parallel) {
     config.options = { ...config.options, parallel: true };
   }
-  
+
   // Expand test package patterns to actual packages
   const testPackages = await expandTestPackageGlobs(testPackagePatterns);
 
@@ -60,7 +69,7 @@ async function main() {
     await using npmConfig = new NpmConfigManager();
     await using verdaccio = new VerdaccioManager(config);
     await using testRunner = new TestRunner(config);
-    
+
     const packageManager = new PackageManager(config);
     packageManager.setNpmrcManager(npmConfig);
     testRunner.setNpmrcManager(npmConfig);
@@ -78,7 +87,10 @@ async function main() {
     // Step 5: Setup npm authentication
     logger.step('Setting up npm authentication...');
     const secureCredentials = verdaccio.getSecureCredentials();
-    await packageManager.setupNpmRegistry(verdaccio.getRegistryUrl(), secureCredentials);
+    await packageManager.setupNpmRegistry(
+      verdaccio.getRegistryUrl(),
+      secureCredentials,
+    );
     logger.success('npm authentication configured');
 
     // Step 6: Publish packages
@@ -108,16 +120,14 @@ async function main() {
       logger.success('🎉 All E2E tests passed successfully!');
       // Note: using statement will automatically clean up resources
       return; // Let using statement handle cleanup
-    } else {
-      logger.error('❌ Some E2E tests failed!');
-      // Note: using statement will automatically clean up resources
-      throw new Error('Some E2E tests failed');
     }
+    logger.error('❌ Some E2E tests failed!');
+    // Note: using statement will automatically clean up resources
+    throw new Error('Some E2E tests failed');
   } catch (error) {
     handleError(error);
   }
 }
-
 
 // Run the main function with proper cleanup and exit handling
 async function runWithCleanup() {

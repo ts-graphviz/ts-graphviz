@@ -1,11 +1,7 @@
-import { execa } from 'execa';
-import {
-  readdir,
-  readFile,
-  writeFile,
-} from 'node:fs/promises';
-import { basename, resolve, dirname } from 'node:path';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execa } from 'execa';
 import { PackagePublishError } from './error-handler.js';
 import { logger } from './logger.js';
 import { PackageDiscovery } from './package-discovery.js';
@@ -20,7 +16,10 @@ export class PackageManager {
   constructor(config: E2ERunnerConfig) {
     this.config = config;
     // Set package discovery to use project root directory
-    const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+    const projectRoot = resolve(
+      dirname(fileURLToPath(import.meta.url)),
+      '../..',
+    );
     this.packageDiscovery = new PackageDiscovery(projectRoot);
   }
 
@@ -36,16 +35,22 @@ export class PackageManager {
 
   async publishPackages(): Promise<void> {
     // Discover packages to publish
-    const discoveredPackages = await this.packageDiscovery.discoverPackages(this.config.packages.discovery);
-    
+    const discoveredPackages = await this.packageDiscovery.discoverPackages(
+      this.config.packages.discovery,
+    );
+
     if (discoveredPackages.length === 0) {
       throw new Error('No publishable packages found');
     }
 
-    logger.info(`Publishing ${discoveredPackages.length} packages: ${discoveredPackages.map(p => p.name).join(', ')}`);
+    logger.info(
+      `Publishing ${discoveredPackages.length} packages: ${discoveredPackages.map((p) => p.name).join(', ')}`,
+    );
 
     // Create workspace package names set for dependency updates
-    const workspacePackageNames = new Set(discoveredPackages.map(pkg => pkg.name));
+    const workspacePackageNames = new Set(
+      discoveredPackages.map((pkg) => pkg.name),
+    );
 
     // Create backup of original package.json files
     const backups = new Map<string, string>();
@@ -76,7 +81,6 @@ export class PackageManager {
     }
   }
 
-
   private async publishSinglePackage(packageDir: string): Promise<void> {
     const packageName = basename(packageDir);
     const actualRegistryUrl = this.registryUrl || this.getRegistryUrl();
@@ -84,8 +88,9 @@ export class PackageManager {
     try {
       const publishArgs = [
         'publish',
-        '--registry', actualRegistryUrl,
-        '--no-git-checks'
+        '--registry',
+        actualRegistryUrl,
+        '--no-git-checks',
       ];
 
       const publishEnv: NodeJS.ProcessEnv = {
@@ -130,8 +135,10 @@ export class PackageManager {
     }
   }
 
-
-  private async updatePackageJson(packageJsonPath: string, workspacePackageNames: Set<string>): Promise<void> {
+  private async updatePackageJson(
+    packageJsonPath: string,
+    workspacePackageNames: Set<string>,
+  ): Promise<void> {
     const content = await readFile(packageJsonPath, 'utf8');
     const packageJson = JSON.parse(content);
 
@@ -139,9 +146,21 @@ export class PackageManager {
     packageJson.version = this.config.packages.testVersion;
 
     // Convert workspace: dependencies to actual test versions
-    await this.updateWorkspaceDependencies(packageJson, 'dependencies', workspacePackageNames);
-    await this.updateWorkspaceDependencies(packageJson, 'devDependencies', workspacePackageNames);
-    await this.updateWorkspaceDependencies(packageJson, 'peerDependencies', workspacePackageNames);
+    await this.updateWorkspaceDependencies(
+      packageJson,
+      'dependencies',
+      workspacePackageNames,
+    );
+    await this.updateWorkspaceDependencies(
+      packageJson,
+      'devDependencies',
+      workspacePackageNames,
+    );
+    await this.updateWorkspaceDependencies(
+      packageJson,
+      'peerDependencies',
+      workspacePackageNames,
+    );
 
     // Remove provenance from publishConfig to avoid npm registry issues in test environment
     if (packageJson.publishConfig?.provenance) {
@@ -151,11 +170,18 @@ export class PackageManager {
     await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
   }
 
-  private async updateWorkspaceDependencies(packageJson: any, depType: string, workspacePackageNames: Set<string>): Promise<void> {
+  private async updateWorkspaceDependencies(
+    packageJson: any,
+    depType: string,
+    workspacePackageNames: Set<string>,
+  ): Promise<void> {
     if (!packageJson[depType]) return;
 
     for (const [depName, depVersion] of Object.entries(packageJson[depType])) {
-      if (typeof depVersion === 'string' && depVersion.startsWith('workspace:')) {
+      if (
+        typeof depVersion === 'string' &&
+        depVersion.startsWith('workspace:')
+      ) {
         // Convert workspace dependencies to test versions if they are known workspace packages
         if (workspacePackageNames.has(depName)) {
           packageJson[depType][depName] = this.config.packages.testVersion;
@@ -164,20 +190,22 @@ export class PackageManager {
     }
   }
 
-
-
-  async setupNpmRegistry(registryUrl?: string, secureCredentials?: { username: string; password: string; email: string }): Promise<void> {
+  async setupNpmRegistry(
+    registryUrl?: string,
+    secureCredentials?: { username: string; password: string; email: string },
+  ): Promise<void> {
     const actualRegistryUrl = registryUrl || this.getRegistryUrl();
     this.registryUrl = actualRegistryUrl; // Store for later use
 
     try {
       // Use secure credentials if provided, fallback to config (though config should be empty for security)
-      const auth = secureCredentials || this.config.registry.auth || {
-        username: 'fallback-user',
-        password: 'fallback-pass',
-        email: 'fallback@example.com',
-      };
-      
+      const auth = secureCredentials ||
+        this.config.registry.auth || {
+          username: 'fallback-user',
+          password: 'fallback-pass',
+          email: 'fallback@example.com',
+        };
+
       await this.npmLogin({
         ...auth,
         registry: actualRegistryUrl,
@@ -186,20 +214,26 @@ export class PackageManager {
       // Verify authentication works
       try {
         const whoamiArgs = ['whoami', '--registry', actualRegistryUrl];
-        
+
         const whoamiEnv: NodeJS.ProcessEnv = {
           ...process.env,
           NPM_CONFIG_REGISTRY: actualRegistryUrl,
         };
 
-        // Use temporary npmrc via environment variable if available  
+        // Use temporary npmrc via environment variable if available
         if (this.npmrcManager?.getTempNpmrcPath) {
-          whoamiEnv.NPM_CONFIG_USERCONFIG = this.npmrcManager.getTempNpmrcPath();
-          
+          whoamiEnv.NPM_CONFIG_USERCONFIG =
+            this.npmrcManager.getTempNpmrcPath();
+
           // Debug: Check if .npmrc file exists and has content
           try {
-            const npmrcContent = await readFile(this.npmrcManager.getTempNpmrcPath(), 'utf8');
-            logger.debug(`Temp .npmrc content for verification: ${npmrcContent.trim()}`);
+            const npmrcContent = await readFile(
+              this.npmrcManager.getTempNpmrcPath(),
+              'utf8',
+            );
+            logger.debug(
+              `Temp .npmrc content for verification: ${npmrcContent.trim()}`,
+            );
           } catch (e) {
             logger.debug('Failed to read temp .npmrc for verification:', e);
           }
@@ -212,7 +246,9 @@ export class PackageManager {
         logger.debug(`npm whoami result: ${result.stdout}`);
       } catch (error) {
         // Don't fail setup if whoami fails - authentication token was successfully obtained
-        logger.debug('npm whoami verification failed (but authentication token obtained successfully)');
+        logger.debug(
+          'npm whoami verification failed (but authentication token obtained successfully)',
+        );
         // Skip the detailed error since it clutters the output and doesn't indicate real failure
       }
     } catch (error) {
@@ -229,7 +265,9 @@ export class PackageManager {
   }): Promise<void> {
     const { username, password, email, registry } = credentials;
 
-    logger.debug(`Attempting npm login to ${registry} with username: ${username}`);
+    logger.debug(
+      `Attempting npm login to ${registry} with username: ${username}`,
+    );
 
     try {
       // Create user object for npm registry
@@ -253,9 +291,9 @@ export class PackageManager {
       const response = await fetch(apiUrl, {
         method: 'PUT',
         headers: {
-          'Authorization': `Basic ${auth}`,
+          Authorization: `Basic ${auth}`,
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Accept-Encoding': 'gzip',
           'User-Agent': 'ts-graphviz-e2e/0.0.0',
         },
@@ -264,20 +302,26 @@ export class PackageManager {
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Registry authentication failed: ${response.status} ${errorText}`);
+        throw new Error(
+          `Registry authentication failed: ${response.status} ${errorText}`,
+        );
       }
 
       const result = await response.json();
       logger.debug('Authentication response:', JSON.stringify(result, null, 2));
 
       if (!result.ok || !result.token) {
-        throw new Error(`Registry authentication failed: No token received. Response: ${JSON.stringify(result)}`);
+        throw new Error(
+          `Registry authentication failed: No token received. Response: ${JSON.stringify(result)}`,
+        );
       }
 
       // Manually write auth token to the npmrc file
       await this.writeAuthToken(registry, result.token);
 
-      logger.debug(`npm registry authentication successful, token: ${result.token.substring(0, 10)}...`);
+      logger.debug(
+        `npm registry authentication successful, token: ${result.token.substring(0, 10)}...`,
+      );
     } catch (error) {
       const execaError = error as any;
       let errorDetails = '';
@@ -289,24 +333,34 @@ export class PackageManager {
         errorDetails += `\nStderr: ${execaError.stderr}`;
       }
 
-      throw new Error(`Failed to authenticate with npm registry: ${execaError.message || String(error)}${errorDetails}`);
+      throw new Error(
+        `Failed to authenticate with npm registry: ${execaError.message || String(error)}${errorDetails}`,
+      );
     }
   }
 
-  private async writeAuthToken(registryUrl: string, token: string): Promise<void> {
+  private async writeAuthToken(
+    registryUrl: string,
+    token: string,
+  ): Promise<void> {
     if (!this.npmrcManager?.getTempNpmrcPath) {
       throw new Error('npmrcManager not configured');
     }
 
     const registryHost = new URL(registryUrl);
-    const hostWithPort = registryHost.port ? `${registryHost.hostname}:${registryHost.port}` : registryHost.hostname;
-    
-    const npmrcContent = [
-      `registry=${registryUrl}`,
-      `//${hostWithPort}/:_authToken=${token}`,
-    ].join('\n') + '\n';
+    const hostWithPort = registryHost.port
+      ? `${registryHost.hostname}:${registryHost.port}`
+      : registryHost.hostname;
+
+    const npmrcContent =
+      [
+        `registry=${registryUrl}`,
+        `//${hostWithPort}/:_authToken=${token}`,
+      ].join('\n') + '\n';
 
     await writeFile(this.npmrcManager.getTempNpmrcPath(), npmrcContent);
-    logger.debug(`Auth token written to temporary .npmrc: ${this.npmrcManager.getTempNpmrcPath()}`);
+    logger.debug(
+      `Auth token written to temporary .npmrc: ${this.npmrcManager.getTempNpmrcPath()}`,
+    );
   }
 }

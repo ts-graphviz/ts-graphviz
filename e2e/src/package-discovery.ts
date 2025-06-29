@@ -1,8 +1,8 @@
 import { readFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { glob } from 'glob';
-import { execa } from 'execa';
 import { findWorkspacePackages } from '@pnpm/workspace.find-packages';
+import { execa } from 'execa';
+import { glob } from 'glob';
 import { logger } from './logger.js';
 import type { PackageDiscoveryConfig } from './types.js';
 
@@ -26,7 +26,9 @@ export class PackageDiscovery {
   /**
    * Discover packages to publish based on configuration
    */
-  async discoverPackages(config?: PackageDiscoveryConfig): Promise<DiscoveredPackage[]> {
+  async discoverPackages(
+    config?: PackageDiscoveryConfig,
+  ): Promise<DiscoveredPackage[]> {
     const packages: DiscoveredPackage[] = [];
 
     // Try workspace discovery first (if enabled)
@@ -34,7 +36,9 @@ export class PackageDiscovery {
       try {
         const workspacePackages = await this.discoverWorkspacePackages();
         packages.push(...workspacePackages);
-        logger.debug(`Discovered ${workspacePackages.length} packages from pnpm workspace`);
+        logger.debug(
+          `Discovered ${workspacePackages.length} packages from pnpm workspace`,
+        );
       } catch (error) {
         logger.debug('Workspace discovery failed:', error);
       }
@@ -42,9 +46,13 @@ export class PackageDiscovery {
 
     // Add manual packages if specified
     if (config?.manual?.packages) {
-      const manualPackages = await this.discoverManualPackages(config.manual.packages);
+      const manualPackages = await this.discoverManualPackages(
+        config.manual.packages,
+      );
       packages.push(...manualPackages);
-      logger.debug(`Added ${manualPackages.length} packages from manual configuration`);
+      logger.debug(
+        `Added ${manualPackages.length} packages from manual configuration`,
+      );
     }
 
     // Filter packages based on configuration
@@ -55,13 +63,12 @@ export class PackageDiscovery {
       filteredPackages = this.filterPackagesByPatterns(
         filteredPackages,
         config.workspace.include,
-        config.workspace.exclude
+        config.workspace.exclude,
       );
     }
 
-
     // Remove private packages unless explicitly configured
-    filteredPackages = filteredPackages.filter(pkg => !pkg.private);
+    filteredPackages = filteredPackages.filter((pkg) => !pkg.private);
 
     return this.deduplicatePackages(filteredPackages);
   }
@@ -73,23 +80,30 @@ export class PackageDiscovery {
     try {
       // Use official pnpm workspace package discovery
       const workspacePackages = await findWorkspacePackages(this.rootDir);
-      logger.debug(`findWorkspacePackages returned ${workspacePackages.length} packages`);
+      logger.debug(
+        `findWorkspacePackages returned ${workspacePackages.length} packages`,
+      );
       workspacePackages.forEach((pkg, index) => {
-        logger.debug(`Package ${index}: name=${pkg.manifest?.name}, rootDir=${pkg.rootDir}, keys=${Object.keys(pkg).join(',')}`);
+        logger.debug(
+          `Package ${index}: name=${pkg.manifest?.name}, rootDir=${pkg.rootDir}, keys=${Object.keys(pkg).join(',')}`,
+        );
       });
-      
+
       const packages: DiscoveredPackage[] = [];
-      
+
       for (const pkg of workspacePackages) {
         try {
           // The package object contains rootDir and manifest
           // For workspace packages, rootDir is the package directory
           const packageDir = pkg.rootDir;
           if (!packageDir) {
-            logger.debug('Package directory not found in workspace package:', pkg);
+            logger.debug(
+              'Package directory not found in workspace package:',
+              pkg,
+            );
             continue;
           }
-          
+
           // Create DiscoveredPackage from the workspace package info
           const discoveredPkg: DiscoveredPackage = {
             name: pkg.manifest.name,
@@ -97,7 +111,7 @@ export class PackageDiscovery {
             private: pkg.manifest.private === true,
             publishConfig: pkg.manifest.publishConfig,
           };
-          
+
           if (discoveredPkg.name) {
             packages.push(discoveredPkg);
           }
@@ -108,15 +122,18 @@ export class PackageDiscovery {
 
       return packages;
     } catch (error) {
-      throw new Error(`Failed to discover workspace packages: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Failed to discover workspace packages: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   }
-
 
   /**
    * Discover packages from manual configuration
    */
-  private async discoverManualPackages(patterns: string[]): Promise<DiscoveredPackage[]> {
+  private async discoverManualPackages(
+    patterns: string[],
+  ): Promise<DiscoveredPackage[]> {
     const packages: DiscoveredPackage[] = [];
 
     for (const pattern of patterns) {
@@ -174,9 +191,11 @@ export class PackageDiscovery {
   /**
    * Load package information from a directory
    */
-  private async loadPackageInfo(packagePath: string): Promise<DiscoveredPackage | null> {
+  private async loadPackageInfo(
+    packagePath: string,
+  ): Promise<DiscoveredPackage | null> {
     const packageJsonPath = resolve(packagePath, 'package.json');
-    
+
     try {
       const packageJsonContent = await readFile(packageJsonPath, 'utf8');
       const packageJson = JSON.parse(packageJsonContent);
@@ -204,37 +223,35 @@ export class PackageDiscovery {
   private filterPackagesByPatterns(
     packages: DiscoveredPackage[],
     include?: string[],
-    exclude?: string[]
+    exclude?: string[],
   ): DiscoveredPackage[] {
     let filtered = packages;
 
     // Apply include patterns
     if (include && include.length > 0) {
-      filtered = filtered.filter(pkg => 
-        include.some(pattern => this.matchesPattern(pkg.name, pattern))
+      filtered = filtered.filter((pkg) =>
+        include.some((pattern) => this.matchesPattern(pkg.name, pattern)),
       );
     }
 
     // Apply exclude patterns
     if (exclude && exclude.length > 0) {
-      filtered = filtered.filter(pkg => 
-        !exclude.some(pattern => this.matchesPattern(pkg.name, pattern))
+      filtered = filtered.filter(
+        (pkg) =>
+          !exclude.some((pattern) => this.matchesPattern(pkg.name, pattern)),
       );
     }
 
     return filtered;
   }
 
-
   /**
    * Check if a package name matches a pattern
    */
   private matchesPattern(name: string, pattern: string): boolean {
     // Convert simple wildcard patterns to regex
-    const regexPattern = pattern
-      .replace(/\*/g, '.*')
-      .replace(/\?/g, '.');
-    
+    const regexPattern = pattern.replace(/\*/g, '.*').replace(/\?/g, '.');
+
     const regex = new RegExp(`^${regexPattern}$`);
     return regex.test(name);
   }
@@ -242,9 +259,11 @@ export class PackageDiscovery {
   /**
    * Remove duplicate packages (by name)
    */
-  private deduplicatePackages(packages: DiscoveredPackage[]): DiscoveredPackage[] {
+  private deduplicatePackages(
+    packages: DiscoveredPackage[],
+  ): DiscoveredPackage[] {
     const seen = new Map<string, DiscoveredPackage>();
-    
+
     for (const pkg of packages) {
       if (!seen.has(pkg.name)) {
         seen.set(pkg.name, pkg);
