@@ -50,28 +50,8 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
         `Starting Verdaccio on port ${this.actualPort} with temp storage: ${this.tempDir}`,
       );
 
-      // Suppress console output during Verdaccio initialization
-      // const originalConsoleLog = console.log;
-      // const originalConsoleInfo = console.info;
-      // const originalConsoleWarn = console.warn;
-      // const originalConsoleError = console.error;
-
-      let app;
-      try {
-        // console.log = () => {};
-        // console.info = () => {};
-        // console.warn = () => {};
-        // console.error = () => {};
-
-        // Use Verdaccio Node.js API with in-memory config
-        app = await runServer(verdaccioConfig);
-      } finally {
-        // Always restore console methods, even if runServer throws
-        // console.log = originalConsoleLog;
-        // console.info = originalConsoleInfo;
-        // console.warn = originalConsoleWarn;
-        // console.error = originalConsoleError;
-      }
+      // Use Verdaccio Node.js API with in-memory config
+      const app = await runServer(verdaccioConfig);
 
       return new Promise((resolve, reject) => {
         let resolved = false;
