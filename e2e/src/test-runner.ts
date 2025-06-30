@@ -247,10 +247,24 @@ export class TestRunner implements AsyncDisposable {
 
     if (runtime === 'deno') {
       // Deno needs to install dependencies for Node.js-style imports
-      logger.debug(`Installing dependencies for Deno package: ${pkg.name}`);
-      await execa('deno', ['install'], {
+      // Use npm install with registry configuration instead of deno install
+      logger.debug(`Installing dependencies for Deno package using npm: ${pkg.name}`);
+      const installArgs = ['install', '--registry', this.getRegistryUrl()];
+      
+      const installEnv: NodeJS.ProcessEnv = {
+        ...process.env,
+        NPM_CONFIG_REGISTRY: this.getRegistryUrl(),
+      };
+
+      // Use temporary npmrc via environment variable if available
+      if (this.npmrcManager?.getTempNpmrcPath) {
+        installEnv.NPM_CONFIG_USERCONFIG = this.npmrcManager.getTempNpmrcPath();
+      }
+
+      await execa('npm', installArgs, {
         cwd: pkg.path,
         stdio: 'pipe',
+        env: installEnv,
       });
       return;
     }
