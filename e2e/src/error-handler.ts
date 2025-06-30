@@ -74,14 +74,12 @@ export function handleError(
       .finally(() => {
         process.exit(1);
       });
-    // This will never be reached due to process.exit() above
-    // But we need to satisfy TypeScript's never return type
-    while (true) {
-      // Infinite loop to ensure never return
-    }
   } else {
     process.exit(1);
   }
+
+  // TypeScript requires a never return, but process.exit() already terminates
+  throw new Error('Process should have exited');
 }
 
 /**

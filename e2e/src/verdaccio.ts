@@ -51,24 +51,27 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
       );
 
       // Suppress console output during Verdaccio initialization
-      const originalConsoleLog = console.log;
-      const originalConsoleInfo = console.info;
-      const originalConsoleWarn = console.warn;
-      const originalConsoleError = console.error;
+      // const originalConsoleLog = console.log;
+      // const originalConsoleInfo = console.info;
+      // const originalConsoleWarn = console.warn;
+      // const originalConsoleError = console.error;
 
-      console.log = () => {};
-      console.info = () => {};
-      console.warn = () => {};
-      console.error = () => {};
+      let app;
+      try {
+        // console.log = () => {};
+        // console.info = () => {};
+        // console.warn = () => {};
+        // console.error = () => {};
 
-      // Use Verdaccio Node.js API with in-memory config
-      const app = await runServer(verdaccioConfig);
-
-      // Restore console methods
-      console.log = originalConsoleLog;
-      console.info = originalConsoleInfo;
-      console.warn = originalConsoleWarn;
-      console.error = originalConsoleError;
+        // Use Verdaccio Node.js API with in-memory config
+        app = await runServer(verdaccioConfig);
+      } finally {
+        // Always restore console methods, even if runServer throws
+        // console.log = originalConsoleLog;
+        // console.info = originalConsoleInfo;
+        // console.warn = originalConsoleWarn;
+        // console.error = originalConsoleError;
+      }
 
       return new Promise((resolve, reject) => {
         let resolved = false;
@@ -254,13 +257,16 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
       self_path: this.tempDir,
       storage: join(this.tempDir, 'storage'),
 
-      // Secure authentication configuration
+      // Authentication configuration
       auth: {
-        'verdaccio-auth-memory': {
+        'auth-memory': {
           users: {
             [this.secureUsername]: {
               name: this.secureUsername,
-              password: this.securePassword, // Will be hashed by the auth plugin
+              // WARNING: verdaccio-auth-memory stores passwords in PLAIN TEXT
+              // This is only suitable for testing/development environments
+              // For production, use verdaccio-htpasswd which properly hashes passwords
+              password: this.securePassword,
             },
           },
         },

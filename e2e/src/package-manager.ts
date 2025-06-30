@@ -1,4 +1,4 @@
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execa } from 'execa';
@@ -263,65 +263,21 @@ export class PackageManager {
     email: string;
     registry: string;
   }): Promise<void> {
-    const { username, password, email, registry } = credentials;
+    const { username, password, registry } = credentials;
 
     logger.debug(
       `Attempting npm login to ${registry} with username: ${username}`,
     );
 
     try {
-      // Create user object for npm registry
-      const userObject = {
-        _id: `org.couchdb.user:${username}`,
-        name: username,
-        password,
-        email,
-        type: 'user',
-        roles: [],
-        date: new Date().toISOString(),
-      };
+      // For verdaccio-auth-memory, create basic auth token directly
+      // The auth-memory plugin uses simple username:password authentication
+      logger.debug('Creating basic auth token for verdaccio-auth-memory');
 
-      // Prepare authentication header
-      const auth = Buffer.from(`${username}:${password}`).toString('base64');
-      const apiUrl = `${registry}/-/user/org.couchdb.user:${encodeURIComponent(username)}`;
+      // Write basic auth configuration to npmrc
+      await this.writeBasicAuth(registry, username, password);
 
-      logger.debug(`Making fetch request to: ${apiUrl}`);
-
-      // Attempt to create/login user via direct API call
-      const response = await fetch(apiUrl, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Basic ${auth}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          'Accept-Encoding': 'gzip',
-          'User-Agent': 'ts-graphviz-e2e/0.0.0',
-        },
-        body: JSON.stringify(userObject),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(
-          `Registry authentication failed: ${response.status} ${errorText}`,
-        );
-      }
-
-      const result = await response.json();
-      logger.debug('Authentication response:', JSON.stringify(result, null, 2));
-
-      if (!result.ok || !result.token) {
-        throw new Error(
-          `Registry authentication failed: No token received. Response: ${JSON.stringify(result)}`,
-        );
-      }
-
-      // Manually write auth token to the npmrc file
-      await this.writeAuthToken(registry, result.token);
-
-      logger.debug(
-        `npm registry authentication successful, token: ${result.token.substring(0, 10)}...`,
-      );
+      logger.debug('Basic auth configuration written to npmrc');
     } catch (error) {
       const execaError = error as any;
       let errorDetails = '';
@@ -339,9 +295,10 @@ export class PackageManager {
     }
   }
 
-  private async writeAuthToken(
+  private async writeBasicAuth(
     registryUrl: string,
-    token: string,
+    username: string,
+    password: string,
   ): Promise<void> {
     if (!this.npmrcManager?.getTempNpmrcPath) {
       throw new Error('npmrcManager not configured');
@@ -352,15 +309,18 @@ export class PackageManager {
       ? `${registryHost.hostname}:${registryHost.port}`
       : registryHost.hostname;
 
-    const npmrcContent =
-      [
-        `registry=${registryUrl}`,
-        `//${hostWithPort}/:_authToken=${token}`,
-      ].join('\n') + '\n';
+    // Create base64 encoded auth string
+    const authString = Buffer.from(`${username}:${password}`).toString(
+      'base64',
+    );
+
+    // Only include the minimum required settings for npm authentication
+    // registry= is not needed since we pass --registry in CLI
+    const npmrcContent = `//${hostWithPort}/:_auth=${authString}\n`;
 
     await writeFile(this.npmrcManager.getTempNpmrcPath(), npmrcContent);
     logger.debug(
-      `Auth token written to temporary .npmrc: ${this.npmrcManager.getTempNpmrcPath()}`,
+      `Basic auth written to temporary .npmrc: ${this.npmrcManager.getTempNpmrcPath()}`,
     );
   }
 }

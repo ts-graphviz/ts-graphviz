@@ -115,24 +115,48 @@ jobs:
     # Report results for easier debugging
     - name: Report Test Results
       if: always()
+      shell: bash
       run: |
-        echo "## E2E Test Results for Node.js ${{ matrix.node-version }} on ${{ matrix.os }}"
-        echo "| Environment | Status |"
-        echo "|-------------|--------|"
-        echo "| CJS JavaScript | ${{ steps.test-cjs-js.outcome == 'success' && '✅ PASS' || '❌ FAIL' }} |"
-        echo "| CJS TypeScript | ${{ steps.test-cjs-ts.outcome == 'success' && '✅ PASS' || '❌ FAIL' }} |"
-        echo "| ESM JavaScript | ${{ steps.test-esm-js.outcome == 'success' && '✅ PASS' || '❌ FAIL' }} |"
-        echo "| ESM TypeScript | ${{ steps.test-esm-ts.outcome == 'success' && '✅ PASS' || '❌ FAIL' }} |"
+        # Define reusable variables
+        TITLE="## E2E Test Results for Node.js ${{ matrix.node-version }} on ${{ matrix.os }}"
+        CJS_JS_STATUS="${{ steps.test-cjs-js.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
+        CJS_TS_STATUS="${{ steps.test-cjs-ts.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
+        ESM_JS_STATUS="${{ steps.test-esm-js.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
+        ESM_TS_STATUS="${{ steps.test-esm-ts.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
+        
+        # Create test results table content
+        TABLE_CONTENT=$(cat << EOF
+        $TITLE
+
+        | Environment | Status |
+        |-------------|--------|
+        | CJS JavaScript | $CJS_JS_STATUS |
+        | CJS TypeScript | $CJS_TS_STATUS |
+        | ESM JavaScript | $ESM_JS_STATUS |
+        | ESM TypeScript | $ESM_TS_STATUS |
+        EOF
+        )
+        
+        # Output to job summary
+        echo "$TABLE_CONTENT" >> "$GITHUB_STEP_SUMMARY"
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+        
+        # Also output to console for logs
+        echo "$TABLE_CONTENT"
 
         # Set overall job status
-        if [[ "${{ steps.test-cjs-js.outcome }}" != "success" ]] || \
-           [[ "${{ steps.test-cjs-ts.outcome }}" != "success" ]] || \
-           [[ "${{ steps.test-esm-js.outcome }}" != "success" ]] || \
-           [[ "${{ steps.test-esm-ts.outcome }}" != "success" ]]; then
-          echo "❌ One or more E2E tests failed on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
+        if [ "${{ steps.test-cjs-js.outcome }}" != "success" ] || \
+           [ "${{ steps.test-cjs-ts.outcome }}" != "success" ] || \
+           [ "${{ steps.test-esm-js.outcome }}" != "success" ] || \
+           [ "${{ steps.test-esm-ts.outcome }}" != "success" ]; then
+          RESULT_MESSAGE="❌ One or more E2E tests failed on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
+          echo "$RESULT_MESSAGE"
+          echo "**$RESULT_MESSAGE**" >> "$GITHUB_STEP_SUMMARY"
           exit 1
         else
-          echo "✅ All E2E tests passed on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
+          RESULT_MESSAGE="✅ All E2E tests passed on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
+          echo "$RESULT_MESSAGE"
+          echo "**$RESULT_MESSAGE**" >> "$GITHUB_STEP_SUMMARY"
         fi
 
   active_support_nodejs_latest:
