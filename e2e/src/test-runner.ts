@@ -5,6 +5,7 @@ import pLimit from 'p-limit';
 
 import { logger } from './logger.js';
 import type { E2ERunnerConfig, TestPackage, TestResult } from './types.js';
+import type { NpmConfigManager } from './utils.js';
 
 /**
  * Manages test package state and cleanup
@@ -44,7 +45,14 @@ class TestPackageState implements AsyncDisposable {
 
   async updatePackageJson(testVersion: string): Promise<void> {
     const packageJsonPath = resolve(this.pkg.path, 'package.json');
-    const packageJson = JSON.parse(this.originalPackageJson!);
+
+    if (!this.originalPackageJson) {
+      throw new Error(
+        'Original package.json not backed up. Call backupPackageJson() first.',
+      );
+    }
+
+    const packageJson = JSON.parse(this.originalPackageJson);
 
     // Convert workspace: dependencies to test versions
     let modified = false;
@@ -113,13 +121,13 @@ class TestPackageState implements AsyncDisposable {
 export class TestRunner implements AsyncDisposable {
   private config: E2ERunnerConfig;
   private limit = pLimit(4); // Run 4 tests in parallel
-  private npmrcManager: any | null = null;
+  private npmrcManager: NpmConfigManager | null = null;
 
   constructor(config: E2ERunnerConfig) {
     this.config = config;
   }
 
-  setNpmrcManager(npmrcManager: any): void {
+  setNpmrcManager(npmrcManager: NpmConfigManager): void {
     this.npmrcManager = npmrcManager;
   }
 
@@ -179,7 +187,15 @@ export class TestRunner implements AsyncDisposable {
 
       // Backup and update package.json for workspace dependencies
       await state.backupPackageJson();
-      await state.updatePackageJson(this.config.packages.testVersion!);
+
+      const testVersion = this.config.packages.testVersion;
+      if (!testVersion) {
+        throw new Error(
+          'Test version not configured. Set config.packages.testVersion.',
+        );
+      }
+
+      await state.updatePackageJson(testVersion);
 
       await this.installPackageDependencies(pkg);
 
@@ -291,10 +307,15 @@ export class TestRunner implements AsyncDisposable {
   }
 
   private async executeDenoTest(pkg: TestPackage): Promise<any> {
-    // Parse the test command to extract Deno arguments
-    // Default to running sample.js if no specific command
-    const testScript =
-      pkg.testCommand.replace('npm test', '').trim() || 'sample.js';
+    // Parse the test command to extract the script file
+    // Expected format: "node script.js" -> "script.js"
+    let testScript = 'sample.js'; // default fallback
+
+    if (pkg.testCommand.startsWith('node ')) {
+      testScript = pkg.testCommand.replace('node ', '').trim();
+    } else if (pkg.testCommand !== 'npm test') {
+      testScript = pkg.testCommand;
+    }
 
     // Run Deno with appropriate permissions
     return await execa(

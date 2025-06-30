@@ -1,4 +1,6 @@
 // TypeScript ESM project testing ts-graphviz imports
+
+import { devNull } from 'node:os';
 import {
   attribute as _,
   Digraph,
@@ -64,7 +66,7 @@ console.log('✅ Parsed AST type:', ast.type);
 // Test 3: Adapter functionality with async/await
 console.log('\nTest 3: Testing adapter with TypeScript');
 try {
-  await toFile(dot, '/dev/null');
+  await toFile(dot, devNull);
   console.log('✅ Successfully wrote to file using adapter');
 } catch (error) {
   console.error('❌ Error writing file:', error);

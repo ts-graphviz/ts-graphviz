@@ -6,7 +6,7 @@ permissions:
   contents: read
 
 jobs:
-  full_support_test_matrix:
+  full_support_nodejs_matrix:
     name: E2E Test
     runs-on: ${{ matrix.os }}
     strategy:
@@ -15,16 +15,6 @@ jobs:
         # Test across multiple Node.js versions and operating systems
         node-version: [20.x, 22.x, 24.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
-        # Include specific test environments
-        include:
-          - test-env: "CJS JavaScript"
-            test-pattern: "examples/cjs-javascript"
-          - test-env: "CJS TypeScript"
-            test-pattern: "examples/cjs-typescript"
-          - test-env: "ESM JavaScript"
-            test-pattern: "examples/esm-javascript"
-          - test-env: "ESM TypeScript"
-            test-pattern: "examples/esm-typescript"
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1

@@ -59,7 +59,8 @@ async function testEsmFromCjsTypescript() {
     const adapter: AdapterModule = await import('ts-graphviz/adapter');
     const { toFile } = adapter;
 
-    await toFile(dot, '/dev/null');
+    const { devNull } = await import('node:os');
+    await toFile(dot, devNull);
     console.log('✅ Successfully used adapter module');
 
     // Test 4: Import and use AST module

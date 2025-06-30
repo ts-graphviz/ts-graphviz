@@ -43,9 +43,10 @@ async function testEsmImport() {
     console.log('✅ Successfully parsed DOT string');
 
     // Test 5: Test adapter functionality
-    console.log('\nTest 5: Testing adapter (write to /dev/null)');
+    console.log('\nTest 5: Testing adapter (write to devNull)');
     const { toFile } = adapter;
-    await toFile(dot, '/dev/null');
+    const { devNull } = await import('node:os');
+    await toFile(dot, devNull);
     console.log('✅ Successfully wrote to file');
 
     console.log(
@@ -60,7 +61,7 @@ async function testEsmImport() {
 // Test what happens with require() - should fail for ESM-only package
 console.log('Test 0: Attempting require() (expected to fail)');
 try {
-  const result = require('ts-graphviz');
+  require('ts-graphviz');
   // If we get here, require worked, which means the package isn't fully ESM-only yet
   console.log(
     '⚠️  Warning: require() succeeded, package may still have CJS compatibility',
