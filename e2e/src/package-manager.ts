@@ -90,6 +90,10 @@ export class PackageManager {
         'publish',
         '--registry',
         actualRegistryUrl,
+        '--tag',
+        'e2e-test',
+        '--access',
+        'public',
         '--no-git-checks',
       ];
 
@@ -97,6 +101,12 @@ export class PackageManager {
         ...process.env,
         // Ensure pnpm uses the correct registry
         NPM_CONFIG_REGISTRY: actualRegistryUrl,
+        // Disable git checks via environment variables
+        NPM_CONFIG_GIT_TAG_VERSION: 'false',
+        NPM_CONFIG_COMMIT_HOOKS: 'false',
+        NPM_CONFIG_FUND: 'false',
+        // PNPM specific git check disable
+        PNPM_CONFIG_GIT_CHECKS: 'false',
       };
 
       // Use temporary npmrc via environment variable if available
@@ -244,7 +254,7 @@ export class PackageManager {
           env: whoamiEnv,
         });
         logger.debug(`npm whoami result: ${result.stdout}`);
-      } catch (error) {
+      } catch {
         // Don't fail setup if whoami fails - authentication token was successfully obtained
         logger.debug(
           'npm whoami verification failed (but authentication token obtained successfully)',
