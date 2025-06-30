@@ -246,10 +246,12 @@ export class TestRunner implements AsyncDisposable {
     const runtime = this.detectRuntime(pkg);
 
     if (runtime === 'deno') {
-      // Deno doesn't need separate installation - it resolves dependencies at runtime
-      logger.debug(
-        `Skipping dependency installation for Deno package: ${pkg.name}`,
-      );
+      // Deno needs to install dependencies for Node.js-style imports
+      logger.debug(`Installing dependencies for Deno package: ${pkg.name}`);
+      await execa('deno', ['install'], {
+        cwd: pkg.path,
+        stdio: 'pipe',
+      });
       return;
     }
 
