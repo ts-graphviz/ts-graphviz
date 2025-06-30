@@ -1,8 +1,8 @@
 import { readFile, rm, stat, unlink, writeFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { execa } from 'execa';
 import pLimit from 'p-limit';
-import { TestExecutionError } from './error-handler.js';
+
 import { logger } from './logger.js';
 import type { E2ERunnerConfig, TestPackage, TestResult } from './types.js';
 
@@ -183,12 +183,8 @@ export class TestRunner implements AsyncDisposable {
 
       await this.installPackageDependencies(pkg);
 
-      // Run the test
-      const result = await execa('npm', ['test'], {
-        cwd: pkg.path,
-        stdio: 'pipe',
-        timeout: 60000, // 60 second timeout
-      });
+      // Run the test with appropriate runtime
+      const result = await this.executeTest(pkg);
 
       const duration = Date.now() - startTime;
       logger.success(`${pkg.name} passed (${duration}ms)`);
@@ -231,6 +227,16 @@ export class TestRunner implements AsyncDisposable {
   }
 
   private async installPackageDependencies(pkg: TestPackage): Promise<void> {
+    const runtime = this.detectRuntime(pkg);
+
+    if (runtime === 'deno') {
+      // Deno doesn't need separate installation - it resolves dependencies at runtime
+      logger.debug(
+        `Skipping dependency installation for Deno package: ${pkg.name}`,
+      );
+      return;
+    }
+
     // Install all dependencies from configured registry with npmjs.org as fallback
     const installArgs = ['install', '--registry', this.getRegistryUrl()];
 
@@ -249,6 +255,57 @@ export class TestRunner implements AsyncDisposable {
       stdio: 'pipe',
       env: installEnv,
     });
+  }
+
+  private detectRuntime(pkg: TestPackage): 'node' | 'deno' {
+    // Check environment variable first (for CI/CD control)
+    if (process.env.E2E_RUNTIME === 'deno') return 'deno';
+    if (process.env.E2E_RUNTIME === 'node') return 'node';
+
+    // Check explicit runtime setting
+    if (pkg.runtime === 'deno') return 'deno';
+    if (pkg.runtime === 'node') return 'node';
+
+    // Auto-detect based on package.json or test command
+    if (pkg.testCommand.includes('deno ')) return 'deno';
+
+    // Default to Node.js
+    return 'node';
+  }
+
+  private async executeTest(pkg: TestPackage): Promise<any> {
+    const runtime = this.detectRuntime(pkg);
+
+    if (runtime === 'deno') {
+      return await this.executeDenoTest(pkg);
+    }
+    return await this.executeNodeTest(pkg);
+  }
+
+  private async executeNodeTest(pkg: TestPackage): Promise<any> {
+    return await execa('npm', ['test'], {
+      cwd: pkg.path,
+      stdio: 'pipe',
+      timeout: 60000, // 60 second timeout
+    });
+  }
+
+  private async executeDenoTest(pkg: TestPackage): Promise<any> {
+    // Parse the test command to extract Deno arguments
+    // Default to running sample.js if no specific command
+    const testScript =
+      pkg.testCommand.replace('npm test', '').trim() || 'sample.js';
+
+    // Run Deno with appropriate permissions
+    return await execa(
+      'deno',
+      ['run', '--no-lock', '--allow-run', '--allow-write', testScript],
+      {
+        cwd: pkg.path,
+        stdio: 'pipe',
+        timeout: 60000, // 60 second timeout
+      },
+    );
   }
 
   async cleanup(): Promise<void> {

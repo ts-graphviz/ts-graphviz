@@ -4,6 +4,8 @@ export interface TestPackage {
   testCommand: string;
   // Optional metadata for custom handling
   metadata?: Record<string, any>;
+  // Runtime detection for Deno/Node.js compatibility
+  runtime?: 'node' | 'deno' | 'auto';
 }
 
 export interface RegistryConfig {
