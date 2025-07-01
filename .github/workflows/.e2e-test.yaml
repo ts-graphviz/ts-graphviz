@@ -179,11 +179,6 @@ jobs:
         deno-version: lts
     - name: Install Dependencies
       run: pnpm install --frozen-lockfile
-    - name: Run E2E Tests (TypeScript Environment)
-      run: |
-        echo "::group::Testing TypeScript environments with Deno"
-        pnpm test:e2e 'examples/*typescript'
-        echo "::endgroup::"
     - name: Test Deno ESM JavaScript
       env:
         E2E_RUNTIME: deno

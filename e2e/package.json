@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "tsx src/index.ts"
+    "test": "tsx src/main.ts"
   },
   "dependencies": {
     "@pnpm/workspace.find-packages": "^1000.0.24",

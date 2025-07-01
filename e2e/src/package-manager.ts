@@ -11,7 +11,7 @@ import type { NpmConfigManager } from './utils.js';
 export class PackageManager {
   private config: E2ERunnerConfig;
   private registryUrl: string | null = null;
-  private npmrcManager: any | null = null;
+  private npmrcManager: NpmConfigManager | null = null;
   private packageDiscovery: PackageDiscovery;
 
   constructor(config: E2ERunnerConfig) {
