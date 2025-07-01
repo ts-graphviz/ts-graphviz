@@ -1,8 +1,0 @@
-{
-  "name": "@ts-graphviz/examples",
-  "private": true,
-  "type": "module",
-  "dependencies": {
-    "ts-graphviz": "latest"
-  }
-}

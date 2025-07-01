@@ -1,0 +1,14 @@
+{
+  "name": "@ts-graphviz/example-esm-typescript",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "tsc --noEmit && tsx test-import.ts"
+  },
+  "dependencies": {
+    "@types/node": "^24.0.7",
+    "ts-graphviz": "workspace:*",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}

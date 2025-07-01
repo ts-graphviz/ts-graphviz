@@ -6,210 +6,184 @@ permissions:
   contents: read
 
 jobs:
-  prepare:
-    name: Prepare
-    runs-on: ubuntu-latest
+  full_support_nodejs_matrix:
+    name: E2E Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false # Continue running other matrix jobs even if one fails
+      matrix:
+        # Test across multiple Node.js versions and operating systems
+        node-version: [20.x, 22.x, 24.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
         egress-policy: audit
-    - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
-    - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+    - name: Checkout Repository
+      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
         name: lib
         path: packages
-    - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
-    - name: Setup Node.js
-      uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
-      with:
-        cache: pnpm
-        node-version-file: ./.node-version
-    - name: Install moreutils
-      run: sudo apt-get update && sudo apt-get install -y moreutils
-    - name: Install Dependencies
-      run: pnpm install --frozen-lockfile
-    - name: Set up Verdaccio
-      run: |
-        cat << EOF > "$HOME/.npmrc"
-        registry=http://localhost:4873
-        EOF
-        nohup pnpm verdaccio --config ./etc/verdaccio/config.yaml &
-        for i in $(seq 1 30); do
-          if curl -s http://localhost:4873/-/ping; then
-            echo "✅ Verdaccio is up!"
-            pnpm exec npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
-            exit 0
-          fi
-          echo "⏳ Waiting for Verdaccio… ($i/30)"
-          sleep 2
-        done
-        echo "❌ Verdaccio did not start in time" >&2
-        exit 1
-
-    - name: Publish to Verdaccio
-      run: |
-        for workspace in $(pnpm ls -r --filter "./packages/*" --depth -1 --parseable); do
-          cd $workspace
-          jq 'del(.publishConfig.provenance)' package.json | sponge package.json
-          jq '.version = "0.0.0-e2e-${{ github.sha }}"' package.json | sponge package.json
-        done
-        pnpm publish -r --no-git-checks --registry http://localhost:4873
-    - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
-      with:
-        path: ./etc/verdaccio/storage
-        name: verdaccio
-
-  full_support_nodejs_lts:
-    name: Full Support / Node.js LTS
-    needs: prepare
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x, 22.x, 24.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    steps:
-    - name: Harden Runner
-      uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
-      with:
-        egress-policy: audit
-    - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
-    - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
-      with:
-        name: verdaccio
-        path: ./etc/verdaccio/storage
-    - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+    - name: Setup pnpm
+      uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
     - name: Use Graphviz
       uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
-    - name: Use Node.js
+    - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: pnpm
     - name: Install Dependencies
       run: pnpm install --frozen-lockfile
-    - name: Set up Verdaccio
-      run: |
-        cat << EOF > "$HOME/.npmrc"
-        registry=http://localhost:4873
-        EOF
-        nohup pnpm verdaccio --config ./etc/verdaccio/config.yaml &
-        for i in $(seq 1 30); do
-          if curl -s http://localhost:4873/-/ping; then
-            echo "✅ Verdaccio is up!"
-            pnpm exec npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
-            exit 0
-          fi
-          echo "⏳ Waiting for Verdaccio… ($i/30)"
-          sleep 2
-        done
-        echo "❌ Verdaccio did not start in time" >&2
-        exit 1
 
-    - name: Run Node.js
-      working-directory: examples
+    # Test individual environments to identify specific failures
+    - name: Test CJS JavaScript Environment
+      id: test-cjs-js
       run: |
-        npm install
-        node sample.js
+        echo "::group::Testing CJS JavaScript (Node.js ${{ matrix.node-version }} on ${{ matrix.os }})"
+        pnpm test:e2e examples/cjs-javascript
+        echo "::endgroup::"
+      continue-on-error: true
+
+    - name: Test CJS TypeScript Environment
+      id: test-cjs-ts
+      run: |
+        echo "::group::Testing CJS TypeScript (Node.js ${{ matrix.node-version }} on ${{ matrix.os }})"
+        pnpm test:e2e examples/cjs-typescript
+        echo "::endgroup::"
+      continue-on-error: true
+
+    - name: Test ESM JavaScript Environment
+      id: test-esm-js
+      run: |
+        echo "::group::Testing ESM JavaScript (Node.js ${{ matrix.node-version }} on ${{ matrix.os }})"
+        pnpm test:e2e examples/esm-javascript
+        echo "::endgroup::"
+      continue-on-error: true
+
+    - name: Test ESM TypeScript Environment
+      id: test-esm-ts
+      run: |
+        echo "::group::Testing ESM TypeScript (Node.js ${{ matrix.node-version }} on ${{ matrix.os }})"
+        pnpm test:e2e examples/esm-typescript
+        echo "::endgroup::"
+      continue-on-error: true
+
+    # Report results for easier debugging
+    - name: Report Test Results
+      if: always()
+      shell: bash
+      run: |
+        # Define reusable variables
+        TITLE="## E2E Test Results for Node.js ${{ matrix.node-version }} on ${{ matrix.os }}"
+        CJS_JS_STATUS="${{ steps.test-cjs-js.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
+        CJS_TS_STATUS="${{ steps.test-cjs-ts.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
+        ESM_JS_STATUS="${{ steps.test-esm-js.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
+        ESM_TS_STATUS="${{ steps.test-esm-ts.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
+
+        # Create test results table content
+        TABLE_CONTENT=$(cat << EOF
+        $TITLE
+
+        | Environment | Status |
+        |-------------|--------|
+        | CJS JavaScript | $CJS_JS_STATUS |
+        | CJS TypeScript | $CJS_TS_STATUS |
+        | ESM JavaScript | $ESM_JS_STATUS |
+        | ESM TypeScript | $ESM_TS_STATUS |
+        EOF
+        )
+
+        # Output to job summary
+        echo "$TABLE_CONTENT" >> "$GITHUB_STEP_SUMMARY"
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+
+        # Also output to console for logs
+        echo "$TABLE_CONTENT"
+
+        # Set overall job status
+        if [ "${{ steps.test-cjs-js.outcome }}" != "success" ] || \
+           [ "${{ steps.test-cjs-ts.outcome }}" != "success" ] || \
+           [ "${{ steps.test-esm-js.outcome }}" != "success" ] || \
+           [ "${{ steps.test-esm-ts.outcome }}" != "success" ]; then
+          RESULT_MESSAGE="❌ One or more E2E tests failed on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
+          echo "$RESULT_MESSAGE"
+          echo "**$RESULT_MESSAGE**" >> "$GITHUB_STEP_SUMMARY"
+          exit 1
+        else
+          RESULT_MESSAGE="✅ All E2E tests passed on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
+          echo "$RESULT_MESSAGE"
+          echo "**$RESULT_MESSAGE**" >> "$GITHUB_STEP_SUMMARY"
+        fi
 
   active_support_nodejs_latest:
     name: Active Support / Node.js Latest
-    needs: prepare
     runs-on: ubuntu-latest
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
         egress-policy: audit
-    - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
-    - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+    - name: Checkout Repository
+      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
-        name: verdaccio
-        path: ./etc/verdaccio/storage
-    - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+        name: lib
+        path: packages
+    - name: Setup pnpm
+      uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
     - name: Use Graphviz
       uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
-    - name: Use Node.js latest
+    - name: Setup Node.js latest
       uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
       with:
         node-version: latest
-        cache: pnpm
     - name: Install Dependencies
       run: pnpm install --frozen-lockfile
-    - name: Set up Verdaccio
+    - name: Run E2E Tests (TypeScript Environment)
       run: |
-        cat << EOF > "$HOME/.npmrc"
-        registry=http://localhost:4873
-        EOF
-        nohup pnpm verdaccio --config ./etc/verdaccio/config.yaml &
-        for i in $(seq 1 30); do
-          if curl -s http://localhost:4873/-/ping; then
-            echo "✅ Verdaccio is up!"
-            pnpm exec npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
-            exit 0
-          fi
-          echo "⏳ Waiting for Verdaccio… ($i/30)"
-          sleep 2
-        done
-        echo "❌ Verdaccio did not start in time" >&2
-        exit 1
-
-    - name: Run Node.js
-      working-directory: examples
-      run: |
-        npm install
-        node sample.js
+        echo "::group::Testing TypeScript environments with Node.js latest"
+        pnpm test:e2e 'examples/*typescript'
+        echo "::endgroup::"
 
 
   active_support_deno_lts:
     name: Active Support / Deno LTS
-    needs: prepare
     runs-on: ubuntu-latest
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
         egress-policy: audit
-    - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
-    - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+    - name: Checkout Repository
+      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
-        name: verdaccio
-        path: ./etc/verdaccio/storage
-    - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+        name: lib
+        path: packages
+    - name: Setup pnpm
+      uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
     - name: Use Graphviz
       uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
-    - name: Use Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
       with:
         node-version-file: ./.node-version
-        cache: pnpm
-    - name: Use Deno
+    - name: Setup Deno
       uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
       with:
         deno-version: lts
     - name: Install Dependencies
       run: pnpm install --frozen-lockfile
-    - name: Set up Verdaccio
+    - name: Test Deno ESM JavaScript
+      env:
+        E2E_RUNTIME: deno
       run: |
-        cat << EOF > "$HOME/.npmrc"
-        registry=http://localhost:4873
-        EOF
-        nohup pnpm verdaccio --config ./etc/verdaccio/config.yaml &
-        for i in $(seq 1 30); do
-          if curl -s http://localhost:4873/-/ping; then
-            echo "✅ Verdaccio is up!"
-            pnpm exec npm-cli-login -u test -p test -e test@example.com -r http://localhost:4873
-            exit 0
-          fi
-          echo "⏳ Waiting for Verdaccio… ($i/30)"
-          sleep 2
-        done
-        echo "❌ Verdaccio did not start in time" >&2
-        exit 1
-
-    - name: Run Deno
-      working-directory: examples
-      run: |
-        deno info
-        deno install --no-lock
-        deno run --no-lock --allow-run --allow-write sample.js
+        echo "::group::Testing Deno with ESM JavaScript project"
+        # Use E2E test framework with Deno runtime (handles workspace dependencies automatically)
+        pnpm test:e2e examples/esm-javascript
+        echo "::endgroup::"

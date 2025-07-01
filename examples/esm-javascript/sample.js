@@ -1,3 +1,4 @@
+import { devNull } from 'node:os';
 import {
   attribute as _,
   Digraph,
@@ -29,4 +30,4 @@ const dot = toDot(G);
 
 parse(dot);
 
-await toFile(dot, '/dev/null');
+await toFile(dot, devNull);
