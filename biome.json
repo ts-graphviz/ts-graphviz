@@ -4,15 +4,21 @@
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true
+    "useIgnoreFile": false
   },
   "files": {
     "ignoreUnknown": true,
     "includes": [
-      "**",
-      "!**/node_modules/**",
-      "!**/doc/**",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.mjs",
+      "**/*.json",
+      "**/*.jsonc",
       "!**/lib/**",
+      "!**/doc/**",
+      "!**/node_modules/**",
       "!**/coverage/**",
       "!packages/ast/src/dot-shim/parser/_parse.js",
       "!packages/ast/src/dot-shim/parser/_parse.d.ts"

@@ -22,7 +22,7 @@ export default defineConfig({
         core: './src/core.ts',
         'register-default': './src/register-default.ts',
       },
-      formats: ['es', 'cjs'],
+      formats: ['es'],
     },
     rollupOptions: {
       external: ['@ts-graphviz/common', '@ts-graphviz/ast'],

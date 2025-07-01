@@ -1,0 +1,41 @@
+# E2E Test Configuration for ts-graphviz
+# This file contains default configuration for E2E testing
+
+# Package configuration
+packages:
+  # Directory containing source packages to publish
+  sourceDir: packages
+  # Version pattern for test packages (defaults to timestamp-based)
+  # testVersion: "0.0.0-e2e-${timestamp}"
+  
+  # Package discovery configuration
+  discovery:
+    # Auto-discovery from pnpm workspace
+    workspace:
+      enabled: true
+      # Patterns to include from workspace packages
+      include: ["*", "@*/*"]
+      # Patterns to exclude from workspace packages
+      exclude: ["*-dev", "*-test", "*-example*", "*e2e*"]
+    
+    # Manual package specification (fallback when workspace discovery fails)
+    # manual:
+    #   packages: ["packages/core", "packages/adapter"]
+
+# Registry configuration
+registry:
+  port: 4873
+  host: localhost
+  # Note: Authentication credentials are generated securely at runtime using crypto.randomUUID()
+  # and crypto.randomBytes() for enhanced security. Static credentials are not recommended.
+  auth:
+    username: "" # Dynamically generated secure username
+    password: "" # Dynamically generated secure password (64 chars hex)
+    email: ""    # Dynamically generated email
+
+# Runtime options
+options:
+  parallel: false
+  timeout: 60000
+  maxRetries: 0
+  cleanup: true

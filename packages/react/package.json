@@ -61,12 +61,10 @@
     "exports": {
       ".": {
         "types": "./lib/react.d.ts",
-        "require": "./lib/react.cjs",
         "default": "./lib/react.js"
       },
       "./package.json": "./package.json"
     },
-    "main": "./lib/react.js",
     "types": "./lib/react.d.ts"
   }
 }

@@ -10,7 +10,7 @@ export default defineConfig({
       entry: {
         react: './src/react.ts',
       },
-      formats: ['es', 'cjs'],
+      formats: ['es'],
     },
     rollupOptions: {
       external: [

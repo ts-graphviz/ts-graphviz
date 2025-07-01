@@ -14,3 +14,4 @@ Update Develop Environment
 - Upgrade Vite to 6.3
 - Upgrade Vitest to 3.2
 - Upgrade Peggy to 5.0 and drop ts-pegjs
+- Implement new E2E test workflow

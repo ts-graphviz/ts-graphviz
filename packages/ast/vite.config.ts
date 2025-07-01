@@ -8,7 +8,7 @@ export default defineConfig({
     minify: false,
     lib: {
       entry: './src/ast.ts',
-      formats: ['es', 'cjs'],
+      formats: ['es'],
       fileName: 'ast',
     },
     rollupOptions: {
