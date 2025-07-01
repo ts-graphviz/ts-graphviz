@@ -99,7 +99,7 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
                 logger.debug('Verdaccio health check passed');
                 resolve();
               }
-            } catch (healthError) {
+            } catch {
               // If health check fails, still consider it started if the server is listening
               if (!resolved) {
                 resolved = true;
@@ -180,7 +180,7 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
   }
 
   isRunning(): boolean {
-    return this.server !== null && this.server.listening;
+    return this.server?.listening;
   }
 
   getRegistryUrl(): string {
@@ -346,7 +346,7 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
           logger.debug('Verdaccio is ready');
           return;
         }
-      } catch (error) {
+      } catch (_error) {
         // Ignore fetch errors during startup
         logger.debug(
           `Verdaccio not ready yet (attempt ${attempts + 1}/${maxAttempts})`,

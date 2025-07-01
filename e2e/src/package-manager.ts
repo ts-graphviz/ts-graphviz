@@ -6,6 +6,7 @@ import { PackagePublishError } from './error-handler.js';
 import { logger } from './logger.js';
 import { PackageDiscovery } from './package-discovery.js';
 import type { E2ERunnerConfig } from './types.js';
+import type { NpmConfigManager } from './utils.js';
 
 export class PackageManager {
   private config: E2ERunnerConfig;
@@ -23,14 +24,8 @@ export class PackageManager {
     this.packageDiscovery = new PackageDiscovery(projectRoot);
   }
 
-  setNpmrcManager(npmrcManager: any): void {
+  setNpmrcManager(npmrcManager: NpmConfigManager): void {
     this.npmrcManager = npmrcManager;
-  }
-
-  private getRegistryUrl(): string {
-    const host = this.config.registry.host || 'localhost';
-    const port = this.config.registry.port || 4873;
-    return `http://${host}:${port}`;
   }
 
   async publishPackages(): Promise<void> {
@@ -83,13 +78,17 @@ export class PackageManager {
 
   private async publishSinglePackage(packageDir: string): Promise<void> {
     const packageName = basename(packageDir);
-    const actualRegistryUrl = this.registryUrl || this.getRegistryUrl();
+    if (this.registryUrl === null) {
+      throw new Error(
+        'Registry URL is not set. Please call setupNpmRegistry first.',
+      );
+    }
 
     try {
       const publishArgs = [
         'publish',
         '--registry',
-        actualRegistryUrl,
+        this.registryUrl,
         '--tag',
         'e2e-test',
         '--access',
@@ -100,7 +99,7 @@ export class PackageManager {
       const publishEnv: NodeJS.ProcessEnv = {
         ...process.env,
         // Ensure pnpm uses the correct registry
-        NPM_CONFIG_REGISTRY: actualRegistryUrl,
+        NPM_CONFIG_REGISTRY: this.registryUrl,
         // Disable git checks via environment variables
         NPM_CONFIG_GIT_TAG_VERSION: 'false',
         NPM_CONFIG_COMMIT_HOOKS: 'false',
@@ -201,33 +200,27 @@ export class PackageManager {
   }
 
   async setupNpmRegistry(
-    registryUrl?: string,
-    secureCredentials?: { username: string; password: string; email: string },
+    registryUrl: string,
+    secureCredentials: { username: string; password: string; email: string },
   ): Promise<void> {
-    const actualRegistryUrl = registryUrl || this.getRegistryUrl();
-    this.registryUrl = actualRegistryUrl; // Store for later use
+    this.registryUrl = registryUrl; // Store for later use
 
     try {
       // Use secure credentials if provided, fallback to config (though config should be empty for security)
-      const auth = secureCredentials ||
-        this.config.registry.auth || {
-          username: 'fallback-user',
-          password: 'fallback-pass',
-          email: 'fallback@example.com',
-        };
+      const auth = secureCredentials;
 
       await this.npmLogin({
         ...auth,
-        registry: actualRegistryUrl,
+        registry: registryUrl,
       });
 
       // Verify authentication works
       try {
-        const whoamiArgs = ['whoami', '--registry', actualRegistryUrl];
+        const whoamiArgs = ['whoami', '--registry', registryUrl];
 
         const whoamiEnv: NodeJS.ProcessEnv = {
           ...process.env,
-          NPM_CONFIG_REGISTRY: actualRegistryUrl,
+          NPM_CONFIG_REGISTRY: registryUrl,
         };
 
         // Use temporary npmrc via environment variable if available

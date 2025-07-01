@@ -33,8 +33,7 @@
     "doc": "typedoc",
     "lint": "biome check --write .",
     "test": "vitest",
-    "test:e2e": "pnpm --filter @ts-graphviz/e2e test",
-    "test:e2e:parallel": "pnpm --filter @ts-graphviz/e2e test -- --parallel"
+    "test:e2e": "pnpm --filter @ts-graphviz/e2e test examples/*"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.0",

@@ -39,7 +39,7 @@ async function testEsmImport() {
     // Test 4: Parse DOT string
     console.log('\nTest 4: Parsing DOT string');
     const { parse } = ast;
-    const parsed = parse(dot);
+    const _parsed = parse(dot);
     console.log('✅ Successfully parsed DOT string');
 
     // Test 5: Test adapter functionality

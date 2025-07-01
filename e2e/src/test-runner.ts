@@ -1,6 +1,6 @@
-import { execa } from 'execa';
 import { readFile, rm, stat, unlink, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { execa } from 'execa';
 import pLimit from 'p-limit';
 
 import { logger } from './logger.js';
@@ -248,7 +248,9 @@ export class TestRunner implements AsyncDisposable {
     if (runtime === 'deno') {
       // Deno needs to install dependencies for Node.js-style imports
       // Use npm install with registry configuration instead of deno install
-      logger.debug(`Installing dependencies for Deno package using npm: ${pkg.name}`);
+      logger.debug(
+        `Installing dependencies for Deno package using npm: ${pkg.name}`,
+      );
       const installArgs = ['install', '--registry', this.getRegistryUrl()];
 
       const installEnv: NodeJS.ProcessEnv = {

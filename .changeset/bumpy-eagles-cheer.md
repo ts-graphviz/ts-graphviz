@@ -40,9 +40,9 @@ If you are using CommonJS (CJS) and need to migrate to ESM, you will need to upd
 ```javascript
 // JavaScript (CommonJS)
 function createGraph() {
+  // Dynamic import is required because the packages no longer provide CommonJS builds.
   const { Digraph, Node, Edge, toDot } = require('ts-graphviz');
   const graph = new Digraph();
-  // Create your graph...
   return toDot(graph);
 }
 ```

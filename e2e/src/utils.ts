@@ -1,4 +1,4 @@
-import { readFile, unlink, writeFile } from 'node:fs/promises';
+import { unlink } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { logger } from './logger.js';
 
@@ -29,20 +29,6 @@ export class NpmConfigManager implements AsyncDisposable {
   async setRegistry(registryUrl: string): Promise<void> {
     this.registryUrl = registryUrl;
     logger.debug(`Registry URL stored: ${registryUrl}`);
-  }
-
-  async restore(): Promise<void> {
-    // Cleanup happens in asyncDispose
-    logger.debug('Project-local .npmrc cleanup handled by dispose');
-  }
-
-  async writeAuthConfig(registryUrl: string, token: string): Promise<void> {
-    // npm login will handle the authentication configuration
-    // We just set the registry URL
-    const npmrcContent = `registry=${registryUrl}\n`;
-
-    await writeFile(this.tempNpmrcPath, npmrcContent);
-    logger.debug(`Temporary .npmrc written to: ${this.tempNpmrcPath}`);
   }
 
   getTempNpmrcPath(): string {
