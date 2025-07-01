@@ -1,5 +1,5 @@
 ---
-"@ts-graphviz/react": major
+"@ts-graphviz/react": minor
 ---
 
 ## React 19 Support with Breaking Changes
