@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { findWorkspacePackages } from '@pnpm/workspace.find-packages';
 import { execa } from 'execa';
 import { glob } from 'glob';
+import micromatch from 'micromatch';
 import { logger } from './logger.js';
 import type { PackageDiscoveryConfig } from './types.js';
 
@@ -246,14 +247,10 @@ export class PackageDiscovery {
   }
 
   /**
-   * Check if a package name matches a pattern
+   * Check if a package name matches a pattern using micromatch for full glob support
    */
   private matchesPattern(name: string, pattern: string): boolean {
-    // Convert simple wildcard patterns to regex
-    const regexPattern = pattern.replace(/\*/g, '.*').replace(/\?/g, '.');
-
-    const regex = new RegExp(`^${regexPattern}$`);
-    return regex.test(name);
+    return micromatch.isMatch(name, pattern);
   }
 
   /**
