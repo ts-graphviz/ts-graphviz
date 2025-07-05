@@ -318,7 +318,7 @@ import { digraph } from 'ts-graphviz';
 import { isNodeModel, isEdgeModel, isSubgraphModel } from '@ts-graphviz/react';
 
 const container = digraph('myContainer');
-const root = createRoot(container);
+const root = createRoot({ container });
 
 await root.render(
   <>
@@ -491,7 +491,7 @@ await root.render(
 // Container mode - render into existing graph
 import { digraph } from 'ts-graphviz';
 const container = digraph('MyGraph');
-const containerRoot = createRoot(container);
+const containerRoot = createRoot({ container });
 await containerRoot.render(
   <>
     <Node id="A" />
@@ -501,7 +501,7 @@ await containerRoot.render(
 );
 
 // Error handling options
-const rootWithErrorHandling = createRoot(undefined, {
+const rootWithErrorHandling = createRoot({
   onUncaughtError: (error, errorInfo) => {
     console.error('Rendering error:', error);
     console.log('Component stack:', errorInfo.componentStack);
@@ -524,7 +524,7 @@ The package provides robust error handling capabilities for rendering errors:
 import { createRoot, renderToDot } from "@ts-graphviz/react";
 
 // Error handling with createRoot
-const root = createRoot(undefined, {
+const root = createRoot({
   onUncaughtError: (error, errorInfo) => {
     console.error('Uncaught rendering error:', error.message);
     console.log('Component stack:', errorInfo.componentStack);

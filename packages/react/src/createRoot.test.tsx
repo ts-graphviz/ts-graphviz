@@ -185,7 +185,7 @@ describe('createRoot()', () => {
   describe('Container mode', () => {
     it('collects top-level models when using container', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>
@@ -217,7 +217,7 @@ describe('createRoot()', () => {
 
     it('does not collect nested models from subgraphs', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>
@@ -252,7 +252,7 @@ describe('createRoot()', () => {
 
     it('handles empty container rendering', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(<React.Fragment />);
 
@@ -267,7 +267,7 @@ describe('createRoot()', () => {
   describe('Error handling options', () => {
     it('calls onRenderComplete when rendering succeeds', async () => {
       const onRenderComplete = vi.fn();
-      const root = createRoot(undefined, { onRenderComplete });
+      const root = createRoot({ onRenderComplete });
 
       await root.render(
         <Digraph id="test">
@@ -285,7 +285,7 @@ describe('createRoot()', () => {
 
     it('calls onCaughtError when an error occurs', async () => {
       const onCaughtError = vi.fn();
-      const root = createRoot(undefined, { onCaughtError });
+      const root = createRoot({ onCaughtError });
 
       await expect(
         root.render(
@@ -308,7 +308,7 @@ describe('createRoot()', () => {
   describe('getTopLevelModels with generic type casting', () => {
     it('supports direct generic type casting without type guard', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>
@@ -348,7 +348,7 @@ describe('createRoot()', () => {
 
     it('supports type guard filtering for runtime validation', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>

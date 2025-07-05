@@ -72,7 +72,7 @@ export async function renderToDot<
 
   if (container) {
     // Container mode: render elements into container and return container's DOT
-    const root = createRoot(container, rootOptions);
+    const root = createRoot({ container, ...rootOptions });
 
     try {
       await root.render(element);
@@ -82,7 +82,7 @@ export async function renderToDot<
     }
   } else {
     // Non-container mode: render single top-level graph and return its DOT
-    const root = createRoot(undefined, rootOptions);
+    const root = createRoot(rootOptions);
 
     try {
       await root.render(element);

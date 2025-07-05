@@ -24,7 +24,14 @@ export type TopLevelModel = FilterableModel;
 /**
  * Options for creating a Graphviz root
  */
-export interface CreateRootOptions {
+export interface CreateRootOptions<
+  Container extends AnyGraphContainer = AnyGraphContainer,
+> {
+  /**
+   * Container graph for rendering components.
+   * When provided, components will be rendered into this existing graph model.
+   */
+  container?: Container;
   /**
    * Called when an error is not caught by any error boundary
    */
@@ -243,10 +250,13 @@ async function renderInternal<
 
 /**
  * Create a Graphviz root for rendering React elements to Graphviz models
+ * @param options - Options for creating the root, including optional container
  */
 export function createRoot<
   Container extends AnyGraphContainer = AnyGraphContainer,
->(container?: Container, options: CreateRootOptions = {}): GraphvizRoot {
+>(options: CreateRootOptions<Container> = {}): GraphvizRoot {
+  const { container, ...otherOptions } = options;
+
   const containerInfo: RenderContainer<Container> = {
     renderedModels: [],
   };
@@ -273,7 +283,7 @@ export function createRoot<
   };
   containerInfo.context = context;
 
-  const fiberRoot = createFiberRoot(containerInfo, options);
+  const fiberRoot = createFiberRoot(containerInfo, otherOptions);
   let isUnmounted = false;
 
   return {
@@ -297,7 +307,7 @@ export function createRoot<
         fiberRoot,
         wrappedElement,
         container,
-        options,
+        otherOptions,
       );
     },
 

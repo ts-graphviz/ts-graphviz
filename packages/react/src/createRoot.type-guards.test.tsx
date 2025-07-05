@@ -47,7 +47,7 @@ describe('createRoot type guards', () => {
 
   it('should work with container mode', async () => {
     const container = digraph('container');
-    const root = createRoot(container);
+    const root = createRoot({ container });
 
     await root.render(
       <>

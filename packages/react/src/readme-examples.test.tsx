@@ -41,7 +41,7 @@ describe('README examples', () => {
 
   it('should work with container mode example from README', async () => {
     const container = digraph('myContainer');
-    const root = createRoot(container);
+    const root = createRoot({ container });
 
     await root.render(
       <>

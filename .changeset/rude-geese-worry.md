@@ -19,7 +19,7 @@ const graph = render(<Digraph>...</Digraph>, container);
 const dotString = renderToDot(<Digraph>...</Digraph>, container);
 
 // After - New createRoot API following React 19 patterns
-const root = createRoot(container);
+const root = createRoot({ container });
 await root.render(<Digraph>...</Digraph>);
 const models = root.getTopLevelModels();
 const dotString = await renderToDot(<Digraph>...</Digraph>, { container });
@@ -38,7 +38,7 @@ expect(result.model.$$type).toBe('Node'); // ❌ Old API
 
 // After - Use root.getTopLevelModels() to access models
 const container = new DigraphModel('parent');
-const root = createRoot(container);
+const root = createRoot({ container });
 await root.render(<Node id="test" />);
 const models = root.getTopLevelModels();
 expect(models[0].$$type).toBe('Node'); // ✅ New API
@@ -50,6 +50,8 @@ expect(models[0].id).toBe('test');
 
 ### Modern createRoot API
 - 🆕 `createRoot()` function following React 19's modern patterns
+- 🆕 **Simplified API**: `createRoot(options)` - single options parameter for all configuration
+- 🆕 **Container in options**: `createRoot({ container, onRenderComplete })` for cleaner code
 - Better performance and memory management
 - Cleaner API separation between rendering and model access
 - Enhanced error handling with root-level configuration
@@ -61,7 +63,7 @@ expect(models[0].id).toBe('test');
 
 ```typescript
 // Create root with error handling
-const root = createRoot(undefined, {
+const root = createRoot({
   onUncaughtError: (error, errorInfo) => {
     console.error('Rendering error:', error);
     console.log('Component stack:', errorInfo.componentStack);
@@ -165,7 +167,7 @@ const models = root.getTopLevelModels();
    - const dot = await renderToDot(<MyGraph />, container);
 
    // New API
-   + const root = createRoot(container);
+   + const root = createRoot({ container });
    + await root.render(<MyGraph />);
    + const models = root.getTopLevelModels();
    + const dot = await renderToDot(<MyGraph />, { container });
@@ -211,7 +213,8 @@ const models = root.getTopLevelModels();
 
 **createRoot Options:**
 ```typescript
-interface CreateRootOptions {
+interface CreateRootOptions<Container extends AnyGraphContainer = AnyGraphContainer> {
+  container?: Container;      // Container graph for rendering components
   onUncaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
   onCaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
   onRecoverableError?: (error: Error, errorInfo: ErrorInfo) => void;

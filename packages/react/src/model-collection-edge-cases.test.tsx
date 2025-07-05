@@ -22,7 +22,7 @@ describe('Model Collection Edge Cases', () => {
   describe('Model Collection Order', () => {
     it('collects all models created during render with fragments', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>
@@ -55,7 +55,7 @@ describe('Model Collection Edge Cases', () => {
 
     it('collects multiple simultaneous nodes in creation order', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>
@@ -74,7 +74,7 @@ describe('Model Collection Edge Cases', () => {
 
     it('collects nested models before sibling models', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>
@@ -100,7 +100,7 @@ describe('Model Collection Edge Cases', () => {
   describe('Duplicate ID Handling', () => {
     it('handles duplicate node IDs by overwriting in container', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>
@@ -123,7 +123,7 @@ describe('Model Collection Edge Cases', () => {
 
     it('handles nodes with undefined IDs correctly', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>
@@ -143,7 +143,7 @@ describe('Model Collection Edge Cases', () => {
 
     it('handles nodes with empty string IDs correctly', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>
@@ -165,7 +165,7 @@ describe('Model Collection Edge Cases', () => {
   describe('Complex Nested Structures', () => {
     it('collects all models from deeply nested subgraph hierarchy', async () => {
       const container = new DigraphModel('root');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <Subgraph id="level1">
@@ -207,7 +207,7 @@ describe('Model Collection Edge Cases', () => {
 
       // With container - collects only rendered models
       const container = new DigraphModel('container');
-      const root2 = createRoot(container);
+      const root2 = createRoot({ container });
       await root2.render(<Node id="in_container" />);
 
       const models2 = root2.getTopLevelModels();
@@ -231,7 +231,7 @@ describe('Model Collection Edge Cases', () => {
 
       // Test with first condition true
       const container1 = new DigraphModel('container1');
-      const root1 = createRoot(container1);
+      const root1 = createRoot({ container: container1 });
       await root1.render(<ConditionalComponent showFirst={true} />);
 
       const models1 = root1.getTopLevelModels();
@@ -245,7 +245,7 @@ describe('Model Collection Edge Cases', () => {
 
       // Test with first condition false
       const container2 = new DigraphModel('container2');
-      const root2 = createRoot(container2);
+      const root2 = createRoot({ container: container2 });
       await root2.render(<ConditionalComponent showFirst={false} />);
 
       const models2 = root2.getTopLevelModels();
@@ -262,7 +262,7 @@ describe('Model Collection Edge Cases', () => {
   describe('Special Component Cases', () => {
     it('handles components that render null', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       const NullComponent = (): ReactElement | null => null;
 
@@ -282,7 +282,7 @@ describe('Model Collection Edge Cases', () => {
 
     it('handles React fragments and mapped JSX elements', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>
@@ -318,7 +318,7 @@ describe('Model Collection Edge Cases', () => {
         new DigraphModel('container3'),
       ];
 
-      const roots = containers.map((container) => createRoot(container));
+      const roots = containers.map((container) => createRoot({ container }));
 
       await Promise.all([
         roots[0].render(<Node id="render1" />),
@@ -338,7 +338,7 @@ describe('Model Collection Edge Cases', () => {
 
     it('handles node IDs with special characters', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <>
@@ -367,7 +367,7 @@ describe('Model Collection Edge Cases', () => {
 
     it('handles large numbers of models efficiently', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
       const nodeCount = 100; // Reduced for faster testing
 
       const LargeGraph = (): ReactElement => (
@@ -397,7 +397,7 @@ describe('Model Collection Edge Cases', () => {
       const digraphContainer = new DigraphModel('digraph_container');
 
       // Test with undirected Graph container
-      const root1 = createRoot(graphContainer);
+      const root1 = createRoot({ container: graphContainer });
       await root1.render(<Node id="in_graph" />);
 
       const models1 = root1.getTopLevelModels();
@@ -407,7 +407,7 @@ describe('Model Collection Edge Cases', () => {
       expect(graphContainer.directed).toBe(false);
 
       // Test with directed Digraph container
-      const root2 = createRoot(digraphContainer);
+      const root2 = createRoot({ container: digraphContainer });
       await root2.render(<Node id="in_digraph" />);
 
       const models2 = root2.getTopLevelModels();
@@ -419,7 +419,7 @@ describe('Model Collection Edge Cases', () => {
 
     it('preserves all node attributes during collection', async () => {
       const container = new DigraphModel('container');
-      const root = createRoot(container);
+      const root = createRoot({ container });
 
       await root.render(
         <Node
