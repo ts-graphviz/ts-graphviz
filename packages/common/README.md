@@ -40,21 +40,33 @@ Type information, constants, and utility functions related to the DOT language a
 
 ## Features
 
-- Type definitions for DOT language elements, such as attributes and attribute values
-- Constants representing common attribute names and values
-- Utility functions for working with DOT language elements
-- Type guards and utilities for node references and graph models
-- Node reference parsing and conversion utilities
+- **Type definitions** for DOT language elements, including attributes and attribute values
+- **Constants** representing common attribute names and values
+- **Comprehensive type guards** for runtime type checking and TypeScript type narrowing
+- **Node reference utilities** for parsing and converting complex node references
+- **Performance-optimized utilities** for working with large model collections
+- **Seamless integration** with @ts-graphviz/react for type-safe model filtering
+- **Dual-mode type handling** - runtime validation or trusted user assertions
 
 ## Usage
+
+### Basic Type Definitions
 
 Import the necessary types, constants, or utility functions from the `@ts-graphviz/common` package:
 
 ```ts
-import { NodeAttributesObject, EdgeAttributesObject } from '@ts-graphviz/common';
+import {
+  NodeAttributesObject,
+  EdgeAttributesObject,
+  isNodeModel,
+  isEdgeModel,
+  toNodeRef
+} from '@ts-graphviz/common';
 ```
 
-Use the imported items in your project to work with the DOT language elements:
+### Type-Safe Model Operations
+
+The package excels at providing type safety for graph model operations:
 
 
 ```ts
@@ -71,7 +83,7 @@ const edgeAttr: EdgeAttributesObject = {
 
 ### Type Guards and Model Utilities
 
-The package provides powerful type guards for working with graph models:
+The package provides powerful type guards for working with graph models with full TypeScript integration:
 
 ```ts
 import {
@@ -130,10 +142,15 @@ if (isCompass('ne')) {
 
 ### Advanced Type Checking
 
+The package provides additional utilities for complex type checking scenarios:
+
 ```ts
 import {
   isForwardRefNode,
-  isNodeRefGroupLike
+  isNodeRefGroupLike,
+  isNodeRef,
+  isNodeRefLike,
+  FilterableModel
 } from '@ts-graphviz/common';
 
 // Check for forward reference nodes
