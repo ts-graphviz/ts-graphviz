@@ -3,10 +3,33 @@ import type {
   AttributeKey,
   AttributesObject,
   DotObjectType,
+  GraphAttributesObject,
   GraphBaseModel,
+  RootGraphModel,
+  SubgraphAttributesObject,
+  SubgraphModel,
 } from 'ts-graphviz';
 import type { GraphBaseAttributesProps } from '../types.js';
 
+// Function overloads for specific graph types to avoid type assertions
+export function useGraphAttributes(
+  cluster: RootGraphModel,
+  attributes: GraphAttributesObject,
+  props: GraphBaseAttributesProps,
+): void;
+export function useGraphAttributes(
+  cluster: SubgraphModel,
+  attributes: SubgraphAttributesObject,
+  props: GraphBaseAttributesProps,
+): void;
+export function useGraphAttributes<
+  T extends DotObjectType,
+  K extends AttributeKey,
+>(
+  cluster: GraphBaseModel<T, K>,
+  attributes: AttributesObject<K>,
+  props: GraphBaseAttributesProps,
+): void;
 export function useGraphAttributes<
   T extends DotObjectType,
   K extends AttributeKey,

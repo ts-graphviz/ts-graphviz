@@ -7,7 +7,5 @@ export interface Context<
   container?: Container;
 }
 
-export const GraphvizContext = createContext<Context>(
-  null as unknown as Context,
-);
+export const GraphvizContext = createContext<Context | null>(null);
 GraphvizContext.displayName = 'GraphvizContext';

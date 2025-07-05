@@ -1,6 +1,6 @@
 import type { EdgeModel, GraphBaseModel, NodeModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
-import { render } from '../render.js';
+import { createRoot } from '../createRoot.js';
 import {
   expectEdge,
   expectGraph,
@@ -81,7 +81,8 @@ describe('React Refs Integration', () => {
         </Digraph>
       );
 
-      await render(<ComplexGraphWithRefs />);
+      const root = createRoot();
+      await root.render(<ComplexGraphWithRefs />);
 
       // Verify and validate all refs with type safety
       const nodeA = assertNodeRef(refs.nodeA);
@@ -130,7 +131,8 @@ describe('React Refs Integration', () => {
         </Digraph>
       );
 
-      await render(<FunctionComponentWithRefs />);
+      const root = createRoot();
+      await root.render(<FunctionComponentWithRefs />);
 
       // Validate refs with improved type safety
       const node = assertNodeRef(refs.node);
@@ -166,7 +168,8 @@ describe('React Refs Integration', () => {
       );
 
       // Test with ref enabled
-      await render(<ConditionalRefComponent shouldSetRef={true} />);
+      const root1 = createRoot();
+      await root1.render(<ConditionalRefComponent shouldSetRef={true} />);
 
       const node = assertNodeRef(nodeRef);
       expect(node.id).toBe('conditional_node');
@@ -175,7 +178,8 @@ describe('React Refs Integration', () => {
       // Test with ref disabled
       nodeRef = null;
       refCallCount = 0;
-      await render(<ConditionalRefComponent shouldSetRef={false} />);
+      const root2 = createRoot();
+      await root2.render(<ConditionalRefComponent shouldSetRef={false} />);
 
       expect(nodeRef).toBeNull();
       expect(refCallCount).toBe(0);
@@ -203,7 +207,8 @@ describe('React Refs Integration', () => {
       const testCases = ['first', 'second', 'third'];
 
       for (const suffix of testCases) {
-        await render(<MultipleRenderComponent suffix={suffix} />);
+        const root = createRoot();
+        await root.render(<MultipleRenderComponent suffix={suffix} />);
       }
 
       expect(refHistory).toHaveLength(testCases.length);
@@ -236,7 +241,8 @@ describe('React Refs Integration', () => {
       );
 
       // Render first component
-      await render(<RefUpdateComponent nodeId="test1" />);
+      const root1 = createRoot();
+      await root1.render(<RefUpdateComponent nodeId="test1" />);
 
       const node1 = assertNodeRef(currentRef);
       expect(node1.id).toBe('test1');
@@ -246,7 +252,8 @@ describe('React Refs Integration', () => {
       const firstNodeRef = node1;
 
       // Render second component (should update ref)
-      await render(<RefUpdateComponent nodeId="test2" />);
+      const root2 = createRoot();
+      await root2.render(<RefUpdateComponent nodeId="test2" />);
 
       const node2 = assertNodeRef(currentRef);
       expect(node2.id).toBe('test2');

@@ -256,21 +256,117 @@ const MyNode: React.FC<NodeProps> = (props) => (
 />
 ```
 
+#### Enhanced Type Safety
+
+The package provides sophisticated TypeScript support with automatic type inference and runtime type filtering:
+
+```tsx
+// ✅ Automatic type inference - no casting needed
+const root = createRoot();
+await root.render(
+  <Digraph id="myGraph" rankdir="LR">
+    <Node id="A" shape="box" />
+    <Node id="B" shape="circle" />
+    <Edge targets={["A", "B"]} />
+  </Digraph>
+);
+
+// ✅ Type-safe model access
+const models = root.getTopLevelModels();
+// models is automatically typed as DotObjectModel[]
+
+// ✅ Runtime type filtering with built-in type guards
+import { isNodeModel, isEdgeModel, isRootGraphModel } from '@ts-graphviz/common';
+
+// Filter by model type with automatic type narrowing
+const nodes = root.getTopLevelModels(isNodeModel);
+nodes.forEach(node => console.log(node.id)); // TypeScript knows this is NodeModel
+
+const edges = root.getTopLevelModels(isEdgeModel);
+edges.forEach(edge => console.log(edge.targets)); // TypeScript knows this is EdgeModel
+
+const graphs = root.getTopLevelModels(isRootGraphModel);
+graphs.forEach(graph => console.log(graph.directed)); // TypeScript knows this is RootGraphModel
+
+// ✅ Direct type casting (trusted user assertion)
+// When you know the exact types, you can cast directly without runtime validation
+const trustedNodes = root.getTopLevelModels<NodeModel>();
+trustedNodes.forEach(node => console.log(node.id)); // TypeScript trusts your assertion
+
+const trustedEdges = root.getTopLevelModels<EdgeModel>();
+trustedEdges.forEach(edge => console.log(edge.targets)); // No runtime type checking
+
+// ✅ Advanced model type checking
+const allModels = root.getTopLevelModels();
+for (const model of allModels) {
+  if (isNodeModel(model)) {
+    console.log(`Node: ${model.id}`);
+  } else if (isEdgeModel(model)) {
+    console.log(`Edge: ${model.targets.map(t => t.id).join(' -> ')}`);
+  } else if (isRootGraphModel(model)) {
+    console.log(`Graph: ${model.id} (directed: ${model.directed})`);
+  }
+}
+```
+
+#### Container Mode Type Safety
+
+When using container mode, you get access to all rendered models with full type safety:
+
+```tsx
+import { digraph } from 'ts-graphviz';
+import { isNodeModel, isEdgeModel, isSubgraphModel } from '@ts-graphviz/react';
+
+const container = digraph('myContainer');
+const root = createRoot(container);
+
+await root.render(
+  <>
+    <Node id="node1" />
+    <Node id="node2" />
+    <Edge targets={['node1', 'node2']} />
+    <Subgraph id="cluster1">
+      <Node id="node3" />
+    </Subgraph>
+  </>
+);
+
+// Container mode: access all non-container models with type safety
+
+// Runtime type filtering (safe, validates at runtime)
+const allNodes = root.getTopLevelModels(isNodeModel); // NodeModel[]
+const allEdges = root.getTopLevelModels(isEdgeModel); // EdgeModel[]
+const subgraphs = root.getTopLevelModels(isSubgraphModel); // SubgraphModel[]
+
+// Direct type casting (user knows the types, no runtime validation)
+const trustedNodes = root.getTopLevelModels<NodeModel>(); // All models cast as NodeModel[]
+const trustedEdges = root.getTopLevelModels<EdgeModel>(); // All models cast as EdgeModel[]
+
+// Type-safe operations
+allNodes.forEach(node => {
+  node.attributes.set('color', 'blue'); // TypeScript knows node attributes
+});
+
+allEdges.forEach(edge => {
+  console.log(`Edge from ${edge.targets[0]} to ${edge.targets[1]}`);
+});
+```
+
 ## Core Functions
 The package provides clean async rendering APIs:
 
-- `render()` - Primary async rendering function for converting React components to ts-graphviz graph models
+- `createRoot()` - Creates a rendering root following React 19's createRoot pattern
 - `renderToDot()` - Primary async function for converting React components to DOT language strings
 - `renderHTMLLike()` - Renders HTML-like label structures for use in node or edge labels
 
-All rendering functions are **async-only** and provide a clean, consistent API surface. Both `render()` and `renderToDot()` support concurrent rendering through the `concurrent` option (enabled by default).
+All rendering functions are **async-only** and provide a clean, consistent API surface. The new `createRoot()` API follows React 19's modern patterns for better performance and error handling.
 
 ## Usage Examples
 
 ### Creating a Simple Graph
 
 ```tsx
-import { Digraph, Node, Edge, render, renderToDot } from "@ts-graphviz/react";
+import { Digraph, Node, Edge, createRoot, renderToDot } from "@ts-graphviz/react";
 
 // Define a reusable process component
 const ProcessNode = ({ id, label, color = "lightblue" }) => (
@@ -303,8 +399,10 @@ const WorkflowDiagram = () => (
   </Digraph>
 );
 
-// Render to graph model
-const result = await render(<WorkflowDiagram />);
+// Create root and render to graph models
+const root = createRoot();
+await root.render(<WorkflowDiagram />);
+const models = root.getTopLevelModels();
 
 // Convert to DOT string
 const dotString = await renderToDot(<WorkflowDiagram />);
@@ -375,13 +473,14 @@ const htmlLabel = renderHTMLLike(
 );
 ```
 
-### Concurrent Rendering Options
+### Advanced Root Options
 
 ```ts
-import { Digraph, Node, Edge, render } from "@ts-graphviz/react";
+import { Digraph, Node, Edge, createRoot } from "@ts-graphviz/react";
 
-// Concurrent rendering is enabled by default
-const result = await render(
+// Basic usage
+const root = createRoot();
+await root.render(
   <Digraph>
     <Node id="A" />
     <Node id="B" />
@@ -389,37 +488,30 @@ const result = await render(
   </Digraph>
 );
 
-// Explicitly enable concurrent rendering with options
-const resultWithOptions = await render(
-  <Digraph>
+// Container mode - render into existing graph
+import { digraph } from 'ts-graphviz';
+const container = digraph('MyGraph');
+const containerRoot = createRoot(container);
+await containerRoot.render(
+  <>
     <Node id="A" />
     <Node id="B" />
     <Edge targets={["A", "B"]} />
-  </Digraph>,
-  {
-    concurrent: true, // default: true
-    timeout: 5000,
-    onUncaughtError: (error, errorInfo) => {
-      console.error('Rendering error:', error);
-      console.log('Component stack:', errorInfo.componentStack);
-    },
-    onCaughtError: (error, errorInfo) => {
-      console.error('Caught error:', error);
-    }
-  }
+  </>
 );
 
-// Disable concurrent rendering for synchronous behavior
-const syncResult = await render(
-  <Digraph>
-    <Node id="A" />
-    <Node id="B" />
-    <Edge targets={["A", "B"]} />
-  </Digraph>,
-  {
-    concurrent: false
+// Error handling options
+const rootWithErrorHandling = createRoot(undefined, {
+  onUncaughtError: (error, errorInfo) => {
+    console.error('Rendering error:', error);
+    console.log('Component stack:', errorInfo.componentStack);
+  },
+  onCaughtError: (error, errorInfo) => {
+    console.error('Caught error:', error);
   }
-);
+});
+
+await rootWithErrorHandling.render(<MyComplexGraph />);
 ```
 
 ## Advanced Features
@@ -429,10 +521,10 @@ const syncResult = await render(
 The package provides robust error handling capabilities for rendering errors:
 
 ```ts
-import { render, renderToDot } from "@ts-graphviz/react";
+import { createRoot, renderToDot } from "@ts-graphviz/react";
 
-// Basic error handling
-const result = await render(<MyGraph />, {
+// Error handling with createRoot
+const root = createRoot(undefined, {
   onUncaughtError: (error, errorInfo) => {
     console.error('Uncaught rendering error:', error.message);
     console.log('Component stack:', errorInfo.componentStack);
@@ -445,15 +537,16 @@ const result = await render(<MyGraph />, {
   }
 });
 
-// Error handling with timeout
-const dotString = await renderToDot(<ComplexGraph />, undefined, {
-  timeout: 10000, // 10 seconds
-  onUncaughtError: (error) => {
-    if (error.message.includes('timeout')) {
-      console.error('Graph rendering timed out');
-    }
+await root.render(<MyGraph />);
+
+// renderToDot also supports error handling
+try {
+  const dotString = await renderToDot(<ComplexGraph />);
+} catch (error) {
+  if (error.message.includes('Multiple top-level graphs')) {
+    console.error('Invalid graph structure');
   }
-});
+}
 ```
 
 ### Ref as Prop Support
@@ -462,7 +555,7 @@ The package supports using `ref` to access and manipulate graph models directly,
 
 ```ts
 import { useRef } from 'react';
-import { Digraph, Graph, Node, Edge, render } from "@ts-graphviz/react";
+import { Digraph, Graph, Node, Edge, createRoot } from "@ts-graphviz/react";
 import type { NodeModel, EdgeModel, GraphBaseModel } from 'ts-graphviz';
 
 function MyGraphComponent() {
@@ -473,7 +566,8 @@ function MyGraphComponent() {
 
   const handleRender = async () => {
     // Example with Digraph component
-    const digraphResult = await render(
+    const digraphRoot = createRoot();
+    await digraphRoot.render(
       <Digraph id="mygraph" ref={digraphRef}>
         <Node id="A" ref={nodeRef} label="Node A" />
         <Node id="B" label="Node B" />
@@ -482,7 +576,8 @@ function MyGraphComponent() {
     );
 
     // Example with Graph component (undirected)
-    const graphResult = await render(
+    const graphRoot = createRoot();
+    await graphRoot.render(
       <Graph id="undirected-graph" ref={graphRef}>
         <Node id="X" label="Node X" />
         <Node id="Y" label="Node Y" />

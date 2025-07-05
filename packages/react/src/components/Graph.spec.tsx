@@ -1,7 +1,8 @@
 import { createRef } from 'react';
 import type { GraphBaseModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
-import { render, renderToDot } from '../render.js';
+import { createRoot } from '../createRoot.js';
+import { renderToDot } from '../renderToDot.js';
 import { expectGraph, expectGraphStructure } from '../test-utils/assertions.js';
 import { Edge } from './Edge.js';
 import { Graph } from './Graph.js';
@@ -117,25 +118,23 @@ describe('Graph Component', () => {
   describe('Error Handling', () => {
     it('throws error when duplicate Graph components are nested', async () => {
       await expect(
-        render(
+        renderToDot(
           <Graph>
             <Graph />
           </Graph>,
         ),
-      ).rejects.toThrow('No model was rendered');
+      ).rejects.toThrow('No top-level graph found');
     });
 
-    it('renders multiple root Graphs as separate models', async () => {
-      const result = await render(
-        <>
-          <Graph id="first" />
-          <Graph id="second" />
-        </>,
-      );
-
-      expect(result.models).toHaveLength(2);
-      expect(result.models[0].id).toBe('first');
-      expect(result.models[1].id).toBe('second');
+    it('throws error when multiple root Graphs are provided', async () => {
+      await expect(
+        renderToDot(
+          <>
+            <Graph id="first" />
+            <Graph id="second" />
+          </>,
+        ),
+      ).rejects.toThrow('Multiple top-level graphs detected');
     });
   });
 
@@ -143,7 +142,8 @@ describe('Graph Component', () => {
     it('provides access to GraphBaseModel via createRef', async () => {
       const graphRef = createRef<GraphBaseModel>();
 
-      await render(
+      const root = createRoot();
+      await root.render(
         <Graph id="testgraph" ref={graphRef}>
           <Node id="A" />
           <Node id="B" />
@@ -166,7 +166,8 @@ describe('Graph Component', () => {
     it('provides access to GraphBaseModel via function ref', async () => {
       let graphModel: GraphBaseModel | null = null;
 
-      await render(
+      const root = createRoot();
+      await root.render(
         <Graph
           id="funcref"
           ref={(graph) => {

@@ -20,7 +20,7 @@ export function useGraph(options: RootGraphOptions = {}): RootGraphModel {
   }, [context, id]);
 
   useHasComment(memoGraph, comment);
-  useGraphAttributes(memoGraph as any, attributes, { edge, node, graph });
+  useGraphAttributes(memoGraph, attributes, { edge, node, graph });
   useEffect(() => {
     return (): void => {
       context.container = undefined;

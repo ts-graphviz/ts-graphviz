@@ -20,7 +20,7 @@ export function useDigraph(options: RootGraphOptions = {}): RootGraphModel {
   }, [context, id]);
 
   useHasComment(digraph, comment);
-  useGraphAttributes(digraph as any, attributes, { edge, node, graph });
+  useGraphAttributes(digraph, attributes, { edge, node, graph });
   useEffect(() => {
     return (): void => {
       context.container = undefined;

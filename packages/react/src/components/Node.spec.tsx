@@ -1,7 +1,8 @@
 import { createRef } from 'react';
 import type { NodeModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
-import { render, renderToDot } from '../render.js';
+import { createRoot } from '../createRoot.js';
+import { renderToDot } from '../renderToDot.js';
 import { expectNode } from '../test-utils/assertions.js';
 import { Digraph } from './Digraph.js';
 import { Node } from './Node.js';
@@ -202,8 +203,9 @@ describe('Node Component', () => {
   describe('React Integration', () => {
     it('provides access to NodeModel via createRef', async () => {
       const nodeRef = createRef<NodeModel>();
+      const root = createRoot();
 
-      await render(
+      await root.render(
         <Digraph>
           <Node id="testnode" ref={nodeRef} label="Test Node" />
         </Digraph>,
@@ -219,8 +221,9 @@ describe('Node Component', () => {
 
     it('provides access to NodeModel via function ref', async () => {
       let nodeModel: NodeModel | null = null;
+      const root = createRoot();
 
-      await render(
+      await root.render(
         <Digraph>
           <Node
             id="funcref"
@@ -260,11 +263,12 @@ describe('Node Component', () => {
         </Digraph>
       );
 
-      await render(<TestComponent nodeId="first" />);
+      const root = createRoot();
+      await root.render(<TestComponent nodeId="first" />);
       expect(refCallCount).toBe(1);
       expect(currentNode?.id).toBe('first');
 
-      await render(<TestComponent nodeId="second" />);
+      await root.render(<TestComponent nodeId="second" />);
       expect(refCallCount).toBe(2);
       expect(currentNode?.id).toBe('second');
     });

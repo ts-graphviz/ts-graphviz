@@ -8,6 +8,28 @@ import type {
 import { expect } from 'vitest';
 
 /**
+ * Type guard utilities for ts-graphviz models
+ */
+
+/**
+ * Type guard for models with id property
+ */
+export function hasId(
+  model: DotObjectModel,
+): model is DotObjectModel & { id: string } {
+  return 'id' in model && typeof (model as any).id === 'string';
+}
+
+/**
+ * Type guard for graph models with directed property
+ */
+export function isDirectedGraph(
+  model: GraphBaseModel,
+): model is GraphBaseModel & { directed: boolean } {
+  return 'directed' in model && typeof (model as any).directed === 'boolean';
+}
+
+/**
  * Custom assertions for ts-graphviz models
  */
 
@@ -41,16 +63,20 @@ export function expectModelsToContainTypes(
   }
 }
 
-export function expectModelWithId(
-  models: DotObjectModel[],
+export function expectModelWithId<T extends DotObjectModel>(
+  models: T[],
   id: string,
-): DotObjectModel {
-  const model = models.find((m) => (m as any).id === id);
+): T & { id: string } {
+  const model = models.find((m) => {
+    // Type-safe access to id property using type guard
+    return hasId(m) && m.id === id;
+  });
   expect(model).toBeDefined();
   if (!model) {
     throw new Error(`Model with id '${id}' not found`);
   }
-  return model;
+  // Type assertion is safe here because we found the model with hasId type guard
+  return model as T & { id: string };
 }
 
 export function expectGraphStructure(
@@ -72,6 +98,11 @@ export function expectGraphStructure(
     expect(graph.subgraphs.length).toBe(expected.subgraphCount);
   }
   if (expected.directed !== undefined) {
-    expect((graph as any).directed).toBe(expected.directed);
+    // Use type guard for directed property access
+    if (isDirectedGraph(graph)) {
+      expect(graph.directed).toBe(expected.directed);
+    } else {
+      throw new Error('Graph does not have directed property');
+    }
   }
 }

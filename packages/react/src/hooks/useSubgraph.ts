@@ -20,13 +20,14 @@ export function useSubgraph(props: SubgraphOptions = {}): SubgraphModel {
     if (cluster !== null) {
       cluster.addSubgraph(g);
     } else if (!context.container) {
+      // Type assertion: SubgraphModel extends GraphBaseModel
       context.container = g as GraphBaseModel;
     }
     return g;
   }, [context, cluster, id]);
 
   useHasComment(subgraph, comment);
-  useGraphAttributes(subgraph as any, attributes, { edge, node, graph });
+  useGraphAttributes(subgraph, attributes, { edge, node, graph });
   useEffect(() => {
     return (): void => {
       cluster.removeSubgraph(subgraph);

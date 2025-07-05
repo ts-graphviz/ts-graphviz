@@ -1,7 +1,8 @@
 import { createRef } from 'react';
 import type { GraphBaseModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
-import { render, renderToDot } from '../render.js';
+import { createRoot } from '../createRoot.js';
+import { renderToDot } from '../renderToDot.js';
 import {
   expectGraphStructure,
   expectSubgraph,
@@ -164,8 +165,9 @@ describe('Subgraph Component', () => {
   describe('React Integration', () => {
     it('provides access to GraphBaseModel via createRef', async () => {
       const subgraphRef = createRef<GraphBaseModel>();
+      const root = createRoot();
 
-      await render(
+      await root.render(
         <Digraph>
           <Subgraph id="testsubgraph" ref={subgraphRef}>
             <Node id="A" />
@@ -188,8 +190,9 @@ describe('Subgraph Component', () => {
 
     it('provides access to GraphBaseModel via function ref', async () => {
       let subgraphModel: GraphBaseModel | null = null;
+      const root = createRoot();
 
-      await render(
+      await root.render(
         <Digraph>
           <Subgraph
             id="funcref"

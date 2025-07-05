@@ -1,7 +1,8 @@
 import { createRef } from 'react';
 import type { GraphBaseModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
-import { render, renderToDot } from '../render.js';
+import { createRoot } from '../createRoot.js';
+import { renderToDot } from '../renderToDot.js';
 import { expectGraph, expectGraphStructure } from '../test-utils/assertions.js';
 import { Digraph } from './Digraph.js';
 import { Edge } from './Edge.js';
@@ -115,25 +116,23 @@ describe('Digraph Component', () => {
   describe('Error Handling', () => {
     it('throws error when duplicate Digraph components are nested', async () => {
       await expect(
-        render(
+        renderToDot(
           <Digraph>
             <Digraph />
           </Digraph>,
         ),
-      ).rejects.toThrow('No model was rendered');
+      ).rejects.toThrow('No top-level graph found');
     });
 
-    it('renders multiple root Digraphs as separate models', async () => {
-      const result = await render(
-        <>
-          <Digraph id="first" />
-          <Digraph id="second" />
-        </>,
-      );
-
-      expect(result.models).toHaveLength(2);
-      expect(result.models[0].id).toBe('first');
-      expect(result.models[1].id).toBe('second');
+    it('throws error when multiple root Digraphs are provided', async () => {
+      await expect(
+        renderToDot(
+          <>
+            <Digraph id="first" />
+            <Digraph id="second" />
+          </>,
+        ),
+      ).rejects.toThrow('Multiple top-level graphs detected');
     });
   });
 
@@ -141,7 +140,8 @@ describe('Digraph Component', () => {
     it('provides access to GraphBaseModel via createRef', async () => {
       const graphRef = createRef<GraphBaseModel>();
 
-      await render(
+      const root = createRoot();
+      await root.render(
         <Digraph id="testgraph" ref={graphRef}>
           <Node id="A" />
           <Node id="B" />
@@ -164,7 +164,8 @@ describe('Digraph Component', () => {
     it('provides access to GraphBaseModel via function ref', async () => {
       let graphModel: GraphBaseModel | null = null;
 
-      await render(
+      const root = createRoot();
+      await root.render(
         <Digraph
           id="funcref"
           ref={(graph) => {

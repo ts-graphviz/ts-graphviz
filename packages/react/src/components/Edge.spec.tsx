@@ -1,12 +1,13 @@
 import { createRef } from 'react';
-import type { EdgeModel, RootGraphModel } from 'ts-graphviz';
+import type { EdgeModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
-import { render, renderToDot } from '../render.js';
+import { createRoot } from '../createRoot.js';
+import { renderToDot } from '../renderToDot.js';
 import { expectEdge } from '../test-utils/assertions.js';
+import '../types.js';
 import { Digraph } from './Digraph.js';
 import { Edge } from './Edge.js';
 import { Node } from './Node.js';
-import '../types.js';
 
 describe('Edge Component', () => {
   describe('Basic Rendering', () => {
@@ -119,8 +120,9 @@ describe('Edge Component', () => {
   describe('React Integration', () => {
     it('provides access to EdgeModel via createRef', async () => {
       const edgeRef = createRef<EdgeModel>();
+      const root = createRoot();
 
-      await render<RootGraphModel>(
+      await root.render(
         <Digraph>
           <Node id="A" />
           <Node id="B" />
@@ -140,8 +142,9 @@ describe('Edge Component', () => {
 
     it('provides access to EdgeModel via function ref', async () => {
       let edgeModel: EdgeModel | null = null;
+      const root = createRoot();
 
-      await render<RootGraphModel>(
+      await root.render(
         <Digraph>
           <Node id="X" />
           <Node id="Y" />
@@ -158,8 +161,10 @@ describe('Edge Component', () => {
       expect(edgeModel).not.toBeNull();
       if (edgeModel) {
         expectEdge(edgeModel);
-        expect(edgeModel.targets).toHaveLength(2);
-        expect(edgeModel.attributes.get('color')).toBe('blue');
+        // After expectEdge, we know edgeModel is EdgeModel type
+        const typedEdgeModel = edgeModel as EdgeModel;
+        expect(typedEdgeModel.targets).toHaveLength(2);
+        expect(typedEdgeModel.attributes.get('color')).toBe('blue');
       }
     });
   });
