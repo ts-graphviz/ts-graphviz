@@ -1,4 +1,3 @@
-import type React from 'react';
 import { describe, expect, it } from 'vitest';
 import { renderHTMLLike } from './renderHTMLLike.js';
 
