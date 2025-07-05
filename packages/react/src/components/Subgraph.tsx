@@ -1,6 +1,12 @@
-import { type FC, useEffect } from 'react';
+import {
+  type FC,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+} from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { useGraphMap } from '../hooks/useGraphMap.js';
+import { useModelCollector } from '../hooks/useModelCollector.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
 import { useSubgraph } from '../hooks/useSubgraph.js';
 import type { SubgraphProps } from '../types.js';
@@ -10,6 +16,7 @@ import type { SubgraphProps } from '../types.js';
 export const Subgraph: FC<SubgraphProps> = ({
   children,
   label,
+  ref,
   ...options
 }) => {
   const renderedLabel = useRenderedID(label);
@@ -17,6 +24,16 @@ export const Subgraph: FC<SubgraphProps> = ({
     Object.assign(options, { label: renderedLabel });
   const subgraph = useSubgraph(options);
   const clusters = useGraphMap();
+  const modelCollector = useModelCollector();
+
+  // Handle ref as prop
+  useImperativeHandle(ref, () => subgraph, [subgraph]);
+
+  // Collect model for render result
+  useLayoutEffect(() => {
+    modelCollector?.collectModel(subgraph);
+  }, [modelCollector, subgraph]);
+
   useEffect(() => {
     if (subgraph.id !== undefined) {
       clusters.set(subgraph.id, subgraph);

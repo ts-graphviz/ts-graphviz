@@ -2,6 +2,7 @@ import {
   type AttributeKey,
   type ClusterSubgraphAttributeKey,
   createModelsContext,
+  type DotObjectType,
   type EdgeAttributeKey,
   type EdgeAttributesObject,
   type EdgeModel,
@@ -28,10 +29,14 @@ import { AttributesBase } from './AttributesBase.js';
  * Base class for Graph objects.
  * @group Models
  */
-export abstract class GraphBase<T extends AttributeKey>
-  extends AttributesBase<T>
-  implements GraphBaseModel<T>
+export abstract class GraphBase<
+    T extends DotObjectType,
+    K extends AttributeKey = AttributeKey,
+  >
+  extends AttributesBase<K>
+  implements GraphBaseModel<T, K>
 {
+  public abstract get $$type(): T;
   /** @hidden */
   #models = RootModelsContext;
 

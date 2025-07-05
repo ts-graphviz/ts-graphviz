@@ -18,13 +18,11 @@ export function useEdge(
   if (targets.length < 2) {
     throw Error('Edges must have at least 2 targets.');
   }
+
   const edge = useMemo(() => {
     const e = cluster.createEdge(targets);
-    e.comment = comment;
-    e.attributes.apply(attributes);
     return e;
-    // biome-ignore lint/correctness/useExhaustiveDependencies: FIXME attributes changes on every re-render and should not be used as a hook dependency.
-  }, [cluster, targets, comment, attributes]);
+  }, [cluster, targets]);
   useHasComment(edge, comment);
   useHasAttributes(edge, attributes);
   useEffect(() => {

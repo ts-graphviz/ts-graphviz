@@ -13,28 +13,28 @@ import { useCurrentGraph } from './useCurrentGraph.js';
 
 describe('useCurrentGraph', () => {
   describe('get parent cluster', () => {
-    test('returns Diagram instance in digraph wrapper', () => {
+    test('should return Digraph instance when inside digraph wrapper', () => {
       const { result } = renderHook(() => useCurrentGraph(), {
         wrapper: digraph(),
       });
       expect(result.current).toBeInstanceOf(Digraph);
     });
 
-    test('returns Graph instance in graph wrapper', () => {
+    test('should return Graph instance when inside graph wrapper', () => {
       const { result } = renderHook(() => useCurrentGraph(), {
         wrapper: graph(),
       });
       expect(result.current).toBeInstanceOf(Graph);
     });
 
-    test('returns Subgraph instance in graphInSubgraph wrapper', () => {
+    test('should return Subgraph instance when inside nested graph subgraph', () => {
       const { result } = renderHook(() => useCurrentGraph(), {
         wrapper: graphInSubgraph(),
       });
       expect(result.current).toBeInstanceOf(Subgraph);
     });
 
-    test('returns Subgraph instance in digraphInSubgraph wrapper', () => {
+    test('should return Subgraph instance when inside nested digraph subgraph', () => {
       const { result } = renderHook(() => useCurrentGraph(), {
         wrapper: digraphInSubgraph(),
       });
@@ -42,7 +42,7 @@ describe('useCurrentGraph', () => {
     });
   });
 
-  test('An error occurs when called outside the cluster', () => {
+  test('should throw error when called outside any graph context', () => {
     try {
       expect(() => {
         renderHook(() => useCurrentGraph());

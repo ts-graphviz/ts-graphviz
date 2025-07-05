@@ -2,4 +2,3 @@ src
 tsconfig.json
 typedoc.json
 vite.config.ts
-biome.json

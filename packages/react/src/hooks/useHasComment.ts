@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import type { HasComment } from 'ts-graphviz';
 
 export function useHasComment(target: HasComment, comment?: string): void {
-  useEffect(() => {
+  useLayoutEffect(() => {
     target.comment = comment;
   }, [target, comment]);
 }

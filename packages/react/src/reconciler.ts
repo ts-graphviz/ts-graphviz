@@ -1,22 +1,65 @@
-import type { FC } from 'react';
 import ReactReconciler from 'react-reconciler';
+import type {
+  ComponentType,
+  HostContext,
+  ReconcilerInstance as Instance,
+  ComponentProps as Props,
+  PublicInstance,
+  RenderContainer,
+  TextInstance,
+  UpdatePayload,
+} from './types/reconciler.js';
 
-type Type = FC;
-type Props = any;
-type Container = Record<string, never>;
+/**
+ * Type aliases for reconciler compatibility
+ */
+type Type = ComponentType;
+type Container = RenderContainer;
 
-type Instance = any;
-type TextInstance = any;
-type SuspenseInstance = any;
-type HydratableInstance = any;
-type PublicInstance = any;
-type HostContext = any;
-type UpdatePayload = any;
-type ChildSet = any;
-type TimeoutHandle = any;
-type NoTimeout = any;
+/**
+ * Suspense instance (not used in Graphviz rendering)
+ */
+type SuspenseInstance = never;
 
+/**
+ * Hydratable instance (not used in Graphviz rendering)
+ */
+type HydratableInstance = never;
+
+/**
+ * Child set (not used in current implementation)
+ */
+type ChildSet = never;
+
+/**
+ * Timeout handle for scheduling
+ */
+type TimeoutHandle = ReturnType<typeof setTimeout>;
+
+/**
+ * No timeout constant
+ */
+type NoTimeout = -1;
+
+/**
+ * React Reconciler Fiber type
+ */
 type OpaqueHandle = ReactReconciler.Fiber;
+
+/**
+ * Update priority types
+ */
+type UpdatePriority = number;
+
+/**
+ * Form instance type (not used in Graphviz rendering)
+ */
+type FormInstance = never;
+
+/**
+ * Transition status type (not used in Graphviz rendering)
+ */
+type TransitionStatus = null;
 
 export class HostConfig
   implements
@@ -28,28 +71,137 @@ export class HostConfig
       TextInstance,
       SuspenseInstance,
       HydratableInstance,
+      FormInstance,
       PublicInstance,
       HostContext,
-      UpdatePayload,
-      ChildSet, // TODO Placeholder for undocumented API
+      ChildSet,
       TimeoutHandle,
-      NoTimeout
+      NoTimeout,
+      TransitionStatus
     >
 {
   preparePortalMount(_containerInfo: Container): void {
     // NoOp
   }
 
-  scheduleTimeout(_fn: (...args: unknown[]) => unknown, _delay?: number) {
+  scheduleTimeout(
+    fn: (...args: unknown[]) => unknown,
+    delay?: number,
+  ): TimeoutHandle {
+    return setTimeout(fn, delay || 0);
+  }
+
+  cancelTimeout(id: TimeoutHandle): void {
+    clearTimeout(id);
+  }
+
+  queueMicrotask(fn: () => void): void {
+    // Execute immediately to ensure synchronous behavior
+    fn();
+  }
+
+  // For update priority management
+  resolveUpdatePriority(): UpdatePriority {
+    // Return SyncLane priority for immediate execution
+    // This is typically 1 for synchronous updates
+    return 1;
+  }
+
+  setCurrentUpdatePriority(_priority: UpdatePriority): void {
+    // NoOp - we force synchronous rendering by design
+  }
+
+  getCurrentUpdatePriority(): UpdatePriority {
+    // Always return sync priority to ensure immediate execution
+    return 1;
+  }
+
+  // form-related methods
+  resetFormInstance(_form: FormInstance): void {
+    // NoOp - not applicable for Graphviz rendering
+  }
+
+  // transition-related properties
+  NotPendingTransition: TransitionStatus = null;
+
+  // suspense and commit methods
+  maySuspendCommit(_type: Type, _props: Props): boolean {
+    return false;
+  }
+
+  preloadInstance(_type: Type, _props: Props): boolean {
+    return false;
+  }
+
+  startSuspendingCommit(): void {
     // NoOp
   }
 
-  cancelTimeout(_id: any): void {
+  suspendInstance(_type: Type, _props: Props): void {
     // NoOp
   }
 
-  queueMicrotask(_fn: () => void): void {
+  waitForCommitToBeReady():
+    | ((initiateCommit: () => void) => () => void)
+    | null {
+    return null;
+  }
+
+  // additional required methods
+  getInstanceFromNode(_node: any): OpaqueHandle | null {
+    return null;
+  }
+
+  beforeActiveInstanceBlur(): void {
     // NoOp
+  }
+
+  afterActiveInstanceBlur(): void {
+    // NoOp
+  }
+
+  prepareScopeUpdate(_scopeInstance: any, _instance: Instance): void {
+    // NoOp
+  }
+
+  getInstanceFromScope(_scopeInstance: any): Instance | null {
+    return null;
+  }
+
+  detachDeletedInstance(_instance: Instance): void {
+    // NoOp
+  }
+
+  logRecoverableError(_error: any): void {
+    // NoOp - errors are handled elsewhere
+  }
+
+  requestPostPaintCallback(_callback: (time: number) => void): void {
+    // NoOp
+  }
+
+  // container clearing method
+  clearContainer(_container: Container): void {
+    // NoOp - our containers don't need special clearing
+  }
+
+  // transition context and scheduling methods
+  HostTransitionContext: any = null;
+
+  shouldAttemptEagerTransition(): boolean {
+    return false;
+  }
+
+  trackSchedulerEvent(): void {
+    // NoOp
+  }
+
+  resolveEventType(): string | null {
+    return null;
+  }
+
+  resolveEventTimeStamp(): number {
+    return Date.now();
   }
 
   cloneInstance?: any;
@@ -79,20 +231,25 @@ export class HostConfig
   // Temporary workaround for scenario where multiple renderers concurrently
   // render using the same context objects. E.g. React DOM and React ART on the
   // same page. DOM is the primary renderer; ART is the secondary renderer.
-  public isPrimaryRenderer = false;
+  public isPrimaryRenderer = true;
 
-  public supportsMutation = false;
+  public supportsMutation = true;
 
   public supportsPersistence = false;
 
   public supportsHydration = false;
+
+  // specific configurations for synchronous rendering
+  public supportsMicrotasks = false;
 
   public getPublicInstance(instance: Instance | TextInstance): PublicInstance {
     return instance;
   }
 
   public getRootHostContext(_rootContainerInstance: Container): HostContext {
-    return {};
+    return {
+      graph: undefined,
+    };
   }
 
   public getChildHostContext(
@@ -100,7 +257,11 @@ export class HostConfig
     _type: Type,
     _rootContainerInstance: Container,
   ): HostContext {
-    return parentHostContext;
+    // Preserve parent context for nested components
+    return {
+      ...parentHostContext,
+      // You could extend context based on component type if needed
+    };
   }
 
   public prepareForCommit(
@@ -114,7 +275,7 @@ export class HostConfig
   }
 
   /**
-   * Create component instance
+   * Create component instance for Graphviz elements
    */
   public createInstance(
     type: Type,
@@ -123,19 +284,29 @@ export class HostConfig
     _hostContext: HostContext,
     _internalInstanceHandle: OpaqueHandle,
   ): Instance {
-    // NoOp
-    return type(props);
+    const instance: Instance = {
+      type: type.displayName || type.name || 'Unknown',
+      props,
+      children: [],
+      appendChild: (child: Instance | TextInstance) => {
+        instance.children.push(child);
+      },
+    };
+
+    return instance;
   }
 
   public appendInitialChild(
     parentInstance: Instance,
     child: Instance | TextInstance,
   ): void {
-    parentInstance.appendChild(child);
+    if (parentInstance.appendChild) {
+      parentInstance.appendChild(child);
+    }
   }
 
   public finalizeInitialChildren(
-    _parentInstance: Instance,
+    _instance: Instance,
     _type: Type,
     _props: Props,
     _rootContainerInstance: Container,
@@ -147,12 +318,20 @@ export class HostConfig
   public prepareUpdate(
     _instance: Instance,
     _type: Type,
-    _oldProps: Props,
-    _newProps: Props,
+    oldProps: Props,
+    newProps: Props,
     _rootContainerInstance: Container,
     _hostContext: HostContext,
   ): null | UpdatePayload {
-    return {};
+    // Check if props have actually changed
+    if (JSON.stringify(oldProps) !== JSON.stringify(newProps)) {
+      return {
+        type: 'UPDATE',
+        oldProps,
+        newProps,
+      };
+    }
+    return null;
   }
 
   public shouldSetTextContent(_type: Type, _props: Props): boolean {
@@ -169,7 +348,7 @@ export class HostConfig
     _hostContext: HostContext,
     _internalInstanceHandle: OpaqueHandle,
   ): TextInstance {
-    return text;
+    return text.trim();
   }
 
   public scheduleDeferredCallback(
@@ -191,19 +370,19 @@ export class HostConfig
     parentInstance: Instance,
     child: Instance | TextInstance,
   ): void {
-    // NoOp
     if (parentInstance.appendChild) {
       parentInstance.appendChild(child);
     }
   }
 
   public appendChildToContainer(
-    _container: Container,
-    _child: Instance | TextInstance,
+    container: Container,
+    child: Instance | TextInstance,
   ): void {
-    // if (container.appendChild) {
-    //   container.appendChild(child);
-    // }
+    // Store the root instance for debugging
+    if (typeof child === 'object' && 'type' in child) {
+      container.__rootInstance = child;
+    }
   }
 
   public commitTextUpdate(
@@ -217,21 +396,24 @@ export class HostConfig
   public commitMount(
     _instance: Instance,
     _type: Type,
-    _newProps: Props,
+    _props: Props,
     _internalInstanceHandle: OpaqueHandle,
   ): void {
-    // NoOp
+    // Ref handling is done via useImperativeHandle in components
   }
 
-  public commitUpdate(
-    _instance: Instance,
-    _updatePayload: UpdatePayload,
+  public commitUpdate?(
+    instance: Instance,
     _type: Type,
-    _oldProps: Props,
-    _newProps: Props,
-    _internalInstanceHandle: OpaqueHandle,
+    _prevProps: Props,
+    nextProps: Props,
+    _internalHandle: OpaqueHandle,
   ): void {
-    // NoOp
+    // Update instance props
+    instance.props = nextProps;
+
+    // Don't re-execute component function here - let React handle updates
+    // This avoids issues with React's changed execution timing
   }
 
   public insertBefore(

@@ -12,9 +12,15 @@
       "@ts-graphviz/react": ["./packages/react/src/react.js"]
     }
   },
-  "include": ["packages/*/src/**/*.ts"],
+  "include": ["packages/*/src/**/*.ts", "packages/*/src/**/*.tsx"],
   "exclude": [
     "packages/**/vite.config.ts",
+    "packages/**/*.test.ts",
+    "packages/**/*.test.tsx",
+    "packages/**/*.spec.ts",
+    "packages/**/*.spec.tsx",
+    "packages/**/__tests__/**/*",
+    "packages/**/__mocks__/**/*",
     "media/*.dot.ts",
     "node_modules/**/*"
   ]

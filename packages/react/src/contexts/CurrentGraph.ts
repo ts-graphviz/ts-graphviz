@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { GraphBaseModel } from 'ts-graphviz';
+import type { AnyGraphContainer } from '../types/container.js';
 
-export const CurrentGraph = createContext<GraphBaseModel | null>(null);
+export const CurrentGraph = createContext<AnyGraphContainer | null>(null);
 CurrentGraph.displayName = 'CurrentGraph';
