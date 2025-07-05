@@ -87,7 +87,7 @@ const models = root.getTopLevelModels();
 ### React Reconciler Modernization
 - Updated reconciler to use React 19's new `createContainer` API (8 arguments vs 10)
 - Improved memory management and performance
-- Better integration with React's concurrent features
+- Simplified rendering by removing library-level concurrent control (users can wrap with startTransition if needed)
 
 ### TypeScript Improvements
 - Updated JSX namespace declaration from global to module scope
@@ -217,7 +217,6 @@ interface CreateRootOptions {
   onRecoverableError?: (error: Error, errorInfo: ErrorInfo) => void;
   onRenderComplete?: (models: DotObjectModel[]) => void;
   timeout?: number;           // Rendering timeout (default: 5000ms)
-  concurrent?: boolean;       // Enable concurrent rendering (default: true)
 }
 
 interface GraphvizRoot {
@@ -281,7 +280,6 @@ interface RenderToDotOptions<T extends AnyGraphContainer = AnyGraphContainer> {
   onUncaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
   onCaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
   timeout?: number;           // Rendering timeout in milliseconds
-  concurrent?: boolean;       // Enable concurrent rendering
 }
 ```
 

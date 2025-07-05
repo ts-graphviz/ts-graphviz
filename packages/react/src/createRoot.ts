@@ -1,4 +1,4 @@
-import { createElement, type ReactElement, startTransition } from 'react';
+import { createElement, type ReactElement } from 'react';
 import type { DotObjectModel, FilterableModel } from 'ts-graphviz';
 import { isRootGraphModel } from 'ts-graphviz';
 
@@ -46,11 +46,6 @@ export interface CreateRootOptions {
    * @default 5000
    */
   timeout?: number;
-  /**
-   * Enable concurrent rendering with startTransition for improved performance
-   * @default true
-   */
-  concurrent?: boolean;
 }
 
 /**
@@ -209,7 +204,6 @@ async function renderInternal<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(
   containerInfo: RenderContainer<Container>,
-  _context: Context<Container>,
   fiberRoot: any,
   wrappedElement: ReactElement,
   originalContainer: Container | undefined,
@@ -298,28 +292,8 @@ export function createRoot<
         container,
       );
 
-      const { concurrent = true } = options;
-
-      if (concurrent) {
-        return new Promise<void>((resolve, reject) => {
-          startTransition(() => {
-            renderInternal(
-              containerInfo,
-              context,
-              fiberRoot,
-              wrappedElement,
-              container,
-              options,
-            )
-              .then(resolve)
-              .catch(reject);
-          });
-        });
-      }
-
       return renderInternal(
         containerInfo,
-        context,
         fiberRoot,
         wrappedElement,
         container,
@@ -339,7 +313,7 @@ export function createRoot<
 
     getTopLevelModels<T extends DotObjectModel>(
       typeGuard?: (model: DotObjectModel) => model is T,
-    ): any {
+    ) {
       const models = [...containerInfo.renderedModels];
       if (typeGuard) {
         return models.filter(typeGuard);
