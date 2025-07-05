@@ -43,6 +43,8 @@ Type information, constants, and utility functions related to the DOT language a
 - Type definitions for DOT language elements, such as attributes and attribute values
 - Constants representing common attribute names and values
 - Utility functions for working with DOT language elements
+- Type guards and utilities for node references and graph models
+- Node reference parsing and conversion utilities
 
 ## Usage
 
@@ -65,6 +67,87 @@ const edgeAttr: EdgeAttributesObject = {
   label: 'Edge label',
   color: 'red',
 };
+```
+
+### Type Guards and Model Utilities
+
+The package provides powerful type guards for working with graph models:
+
+```ts
+import {
+  isNodeModel,
+  isEdgeModel,
+  isRootGraphModel,
+  isSubgraphModel,
+  isAttributeListModel
+} from '@ts-graphviz/common';
+
+// Type-safe model checking
+if (isNodeModel(someModel)) {
+  // TypeScript knows someModel is NodeModel
+  console.log(someModel.id);
+}
+
+if (isEdgeModel(someModel)) {
+  // TypeScript knows someModel is EdgeModel
+  console.log(someModel.targets);
+}
+```
+
+### Node Reference Utilities
+
+Utilities for working with node references and compass directions:
+
+```ts
+import {
+  isNodeRef,
+  isNodeRefLike,
+  isCompass,
+  toNodeRef,
+  toNodeRefGroup
+} from '@ts-graphviz/common';
+
+// Check if a value is a valid node reference
+if (isNodeRefLike('node1:port:n')) {
+  const nodeRef = toNodeRef('node1:port:n');
+  console.log(nodeRef); // { id: 'node1', port: 'port', compass: 'n' }
+}
+
+// Convert multiple node references
+const targets = toNodeRefGroup(['node1', 'node2:port', 'node3::s']);
+console.log(targets);
+// [
+//   { id: 'node1' },
+//   { id: 'node2', port: 'port' },
+//   { id: 'node3', port: '', compass: 's' }
+// ]
+
+// Validate compass directions
+if (isCompass('ne')) {
+  console.log('Valid compass direction');
+}
+```
+
+### Advanced Type Checking
+
+```ts
+import {
+  isForwardRefNode,
+  isNodeRefGroupLike
+} from '@ts-graphviz/common';
+
+// Check for forward reference nodes
+const forwardRef = { id: 'futureNode' };
+if (isForwardRefNode(forwardRef)) {
+  console.log('Valid forward reference');
+}
+
+// Validate arrays of node references
+const targets = ['node1', 'node2:port'];
+if (isNodeRefGroupLike(targets)) {
+  const nodeRefs = toNodeRefGroup(targets);
+  // Process validated node references
+}
 ```
 
 For more examples and usage details, please refer to the ts-graphviz documentation.
