@@ -11,7 +11,7 @@ Update Develop Environment
 - Drop turbo
 - Upgrade biome to 2.0
 - Upgrade TypeScript to 5.8
-- Upgrade Vite to 6.3
+- Upgrade Vite to 7.0
 - Upgrade Vitest to 3.2
 - Upgrade Peggy to 5.0 and drop ts-pegjs
 - Implement new E2E test workflow
