@@ -1,6 +1,27 @@
 import type { ReactElement, ReactNode } from 'react';
 
 /**
+ * Map of known dot: prefixed elements to their HTML equivalents.
+ */
+const DOT_ELEMENT_MAP = {
+  'dot:table': 'table',
+  'dot:tr': 'tr',
+  'dot:td': 'td',
+  'dot:font': 'font',
+  'dot:br': 'br',
+  'dot:img': 'img',
+  'dot:i': 'i',
+  'dot:b': 'b',
+  'dot:u': 'u',
+  'dot:o': 'o',
+  'dot:sub': 'sub',
+  'dot:sup': 'sup',
+  'dot:s': 's',
+  'dot:hr': 'hr',
+  'dot:vr': 'vr',
+} as const;
+
+/**
  * Manually traverse and render React element tree.
  */
 function manuallyRenderElement(element: ReactElement): string {
@@ -24,7 +45,26 @@ function manuallyRenderElement(element: ReactElement): string {
   }
 
   if (typeof type === 'string') {
-    const tagName = type;
+    let tagName = type;
+
+    // Handle dot:port special case: render as <content> instead of <dot:port>content</dot:port>
+    if (tagName === 'dot:port') {
+      const propsWithChildren = props as any;
+      const childrenString = renderChildrenToString(
+        propsWithChildren?.children,
+      );
+      return `<${childrenString}>`;
+    }
+
+    // Transform dot: prefixed elements to HTML equivalents
+    if (tagName.startsWith('dot:')) {
+      const htmlElement =
+        DOT_ELEMENT_MAP[tagName as keyof typeof DOT_ELEMENT_MAP];
+      if (htmlElement) {
+        tagName = htmlElement;
+      }
+    }
+
     const attributes: string[] = [];
 
     // Build attributes string - props is typed as any for function components
@@ -85,16 +125,14 @@ export function renderHTMLLike(label?: ReactElement): string {
   }
 
   try {
-    // Use manual rendering
+    // Use manual rendering with built-in dot: element transformation
     const markup = manuallyRenderElement(label);
 
     if (!markup) {
       return '<>';
     }
 
-    return `<${markup
-      .replace(/<dot:port>(.+?)<\/dot:port>/gi, '<$1>')
-      .replace(/<(\/?)dot:([a-z-]+)/gi, (_, $1, $2) => `<${$1}${$2}`)}>`;
+    return `<${markup}>`;
   } catch (error) {
     // Fallback for any rendering issues
     console.warn(
