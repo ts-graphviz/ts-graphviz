@@ -1,6 +1,12 @@
 {
   "files": [
-    "packages/ts-graphviz/README.md"
+    "README.md",
+    "packages/ts-graphviz/README.md",
+    "packages/core/README.md",
+    "packages/common/README.md",
+    "packages/adapter/README.md",
+    "packages/ast/README.md",
+    "packages/react/README.md"
   ],
   "imageSize": 100,
   "commit": false,
@@ -220,6 +226,24 @@
       "profile": "http://www.walterra.dev",
       "contributions": [
         "question"
+      ]
+    },
+    {
+      "login": "grsjst",
+      "name": "grsjst",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4739018?v=4",
+      "profile": "https://github.com/grsjst",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "stephenirven",
+      "name": "Steve",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4293560?v=4",
+      "profile": "https://github.com/stephenirven",
+      "contributions": [
+        "bug"
       ]
     }
   ],

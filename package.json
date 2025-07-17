@@ -28,41 +28,56 @@
   "author": "kamiazya <yuki@kamiazya.tech>",
   "type": "module",
   "scripts": {
-    "build": "turbo run build",
-    "doc": "turbo run build && typedoc",
-    "lint": "biome check --apply .",
-    "test": "turbo run test:unit test:integration",
-    "test:unit": "vitest run"
+    "codegen": "pnpm -r codegen",
+    "build": "pnpm -r build",
+    "doc": "typedoc",
+    "lint": "biome check --write ./**",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit --strict --skipLibCheck",
+    "test:e2e": "pnpm --filter @ts-graphviz/e2e test"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.7.3",
-    "@changesets/changelog-github": "^0.5.0",
-    "@changesets/cli": "^2.27.1",
-    "@pnpm/workspace.find-packages": "^4.0.10",
-    "@pnpm/workspace.pkgs-graph": "^4.0.5",
-    "@types/node": "^20.12.7",
-    "@types/react": "^18.2.66",
-    "@vitest/coverage-istanbul": "^2.1.1",
-    "jsdom": "^24.0.0",
-    "lefthook": "^1.6.10",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "svgo": "^3.2.0",
-    "turbo": "^1.13.3",
-    "typedoc": "^0.25.12",
-    "typescript": "^5.4.5",
-    "vite": "^5.4.8",
-    "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^2.1.1"
+    "@biomejs/biome": "2.0.0",
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.4",
+    "@pnpm/workspace.find-packages": "^1000.0.24",
+    "@pnpm/workspace.pkgs-graph": "^1000.0.1",
+    "@types/node": "^20.17.46",
+    "@types/react": "^19.0.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "jsdom": "^26.1.0",
+    "lefthook": "^1.11.12",
+    "react": "^19.0.0",
+    "svgo": "^3.3.2",
+    "typedoc": "^0.28.4",
+    "typedoc-plugin-mdn-links": "^5.0.2",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.4"
   },
-  "packageManager": "pnpm@8.15.1",
+  "packageManager": "pnpm@10.12.1",
   "pnpm": {
     "overrides": {
       "tar@<6.2.1": ">=6.2.1",
       "braces@<3.0.3": ">=3.0.3",
       "ejs@<3.1.10": ">=3.1.10",
       "ws@>=8.0.0 <8.17.1": ">=8.17.1",
-      "micromatch@<4.0.8": ">=4.0.8"
-    }
+      "micromatch@<4.0.8": ">=4.0.8",
+      "ssri@>=5.2.2 <6.0.2": ">=6.0.2",
+      "tough-cookie@<4.1.3": ">=4.1.3",
+      "@octokit/request-error@>=1.0.0 <5.1.1": ">=5.1.1",
+      "@octokit/request@>=1.0.0 <8.4.1": ">=8.4.1",
+      "@octokit/plugin-paginate-rest@>=1.0.0 <9.2.2": ">=9.2.2",
+      "@babel/runtime@<7.26.10": ">=7.26.10",
+      "cross-spawn@>=7.0.0 <7.0.5": ">=7.0.5"
+    },
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "core-js",
+      "esbuild",
+      "lefthook",
+      "snyk"
+    ]
   }
 }

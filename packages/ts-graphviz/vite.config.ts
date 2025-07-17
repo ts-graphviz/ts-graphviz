@@ -11,7 +11,7 @@ export default defineConfig({
         ast: 'src/ast.ts',
         adapter: 'src/adapter.ts',
       },
-      formats: ['es', 'cjs'],
+      formats: ['es'],
     },
     rollupOptions: {
       external: [
@@ -26,6 +26,6 @@ export default defineConfig({
     dts({
       outDir: 'lib',
       copyDtsFiles: true,
-    }),
+    }) as any,
   ],
 });

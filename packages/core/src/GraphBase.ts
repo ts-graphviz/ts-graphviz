@@ -1,6 +1,8 @@
 import {
   type AttributeKey,
   type ClusterSubgraphAttributeKey,
+  createModelsContext,
+  type DotObjectType,
   type EdgeAttributeKey,
   type EdgeAttributesObject,
   type EdgeModel,
@@ -8,6 +10,7 @@ import {
   type EdgeTargetTuple,
   type GraphBaseModel,
   type GraphCommonAttributes,
+  isNodeRefGroupLike,
   type ModelsContext,
   type NodeAttributeKey,
   type NodeAttributesObject,
@@ -16,8 +19,6 @@ import {
   type SubgraphAttributeKey,
   type SubgraphAttributesObject,
   type SubgraphModel,
-  createModelsContext,
-  isNodeRefGroupLike,
   toNodeRef,
   toNodeRefGroup,
 } from '@ts-graphviz/common';
@@ -28,10 +29,14 @@ import { AttributesBase } from './AttributesBase.js';
  * Base class for Graph objects.
  * @group Models
  */
-export abstract class GraphBase<T extends AttributeKey>
-  extends AttributesBase<T>
-  implements GraphBaseModel<T>
+export abstract class GraphBase<
+    T extends DotObjectType,
+    K extends AttributeKey = AttributeKey,
+  >
+  extends AttributesBase<K>
+  implements GraphBaseModel<T, K>
 {
+  public abstract get $$type(): T;
   /** @hidden */
   #models = RootModelsContext;
 
@@ -180,7 +185,7 @@ export abstract class GraphBase<T extends AttributeKey>
         typeof arg === 'function',
     );
     const subgraph: SubgraphModel = id
-      ? this.getSubgraph(id) ?? this.createSubgraph(id)
+      ? (this.getSubgraph(id) ?? this.createSubgraph(id))
       : this.createSubgraph();
     if (attributes !== undefined) {
       subgraph.apply(attributes);

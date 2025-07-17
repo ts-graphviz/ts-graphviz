@@ -14,20 +14,18 @@ export function useSubgraph(props: SubgraphOptions = {}): SubgraphModel {
   const { id, comment, edge, node, graph, ...attributes } = props;
   const context = useGraphvizContext();
   const cluster = useCurrentGraph();
+
   const subgraph = useMemo(() => {
     const g = new Subgraph(id);
     if (cluster !== null) {
       cluster.addSubgraph(g);
     } else if (!context.container) {
+      // Type assertion: SubgraphModel extends GraphBaseModel
       context.container = g as GraphBaseModel;
     }
-    g.comment = comment;
-    g.apply(attributes);
-    g.attributes.node.apply(node ?? {});
-    g.attributes.edge.apply(edge ?? {});
-    g.attributes.graph.apply(graph ?? {});
     return g;
-  }, [context, cluster, id, comment, edge, node, graph, attributes]);
+  }, [context, cluster, id]);
+
   useHasComment(subgraph, comment);
   useGraphAttributes(subgraph, attributes, { edge, node, graph });
   useEffect(() => {

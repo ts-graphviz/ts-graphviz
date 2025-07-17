@@ -285,9 +285,12 @@ export interface GraphCommonAttributes {
  * DOT model representing a graph/digraph/subgraph.
  * @group Models
  */
-export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
-  extends HasComment,
-    Attributes<T> {
+export interface GraphBaseModel<
+  T extends DotObjectType = DotObjectType,
+  K extends AttributeKey = AttributeKey,
+> extends HasComment,
+    Attributes<K>,
+    DotObjectModel<T> {
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes>;
   /** Node objects in the graph. */
@@ -360,7 +363,6 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
   /**
    * Get Node in cluster by specifying id.
    *
-   * @description
    * If there is no Node with the specified id in the graph, return undefined.
    */
   getNode(id: string): NodeModel | undefined;
@@ -657,8 +659,10 @@ export interface GraphBaseModel<T extends AttributeKey = AttributeKey>
  * @group Models
  */
 export interface SubgraphModel
-  extends GraphBaseModel<SubgraphAttributeKey | ClusterSubgraphAttributeKey>,
-    DotObjectModel<'Subgraph'> {
+  extends GraphBaseModel<
+    'Subgraph',
+    SubgraphAttributeKey | ClusterSubgraphAttributeKey
+  > {
   /** Determines whether the Subgraph is a SubgraphCluster. */
   isSubgraphCluster(): boolean;
 }
@@ -668,14 +672,12 @@ export interface SubgraphModel
  * @group Models
  */
 export interface RootGraphModel
-  extends GraphBaseModel<GraphAttributeKey>,
-    DotObjectModel<'Graph'> {
+  extends GraphBaseModel<'Graph', GraphAttributeKey> {
   directed: boolean;
 
   /**
    * Strict mode.
    *
-   * @description
    * A graph may also be described as strict.
    * This forbids the creation of multi-edges, i.e., there can be at most one edge with a given tail node and head node in the directed case.
    * For undirected graphs, there can be at most one edge connected to the same two nodes.
@@ -724,7 +726,11 @@ export interface EdgeConstructor {
   new (...args: any[]): EdgeModel;
 }
 
-/** @hidden */
+/**
+ * Type guard to check if an object is a ForwardRefNode
+ * @param object - Object to check
+ * @returns True if the object is a ForwardRefNode
+ */
 export function isForwardRefNode(object: unknown): object is ForwardRefNode {
   return (
     typeof object === 'object' &&
@@ -733,7 +739,13 @@ export function isForwardRefNode(object: unknown): object is ForwardRefNode {
   );
 }
 
-/** @hidden */
+/**
+ * Type guard to check if an object is a NodeModel
+ * @param object - Object to check (can be unknown or DotObjectModel)
+ * @returns True if the object is a NodeModel
+ */
+export function isNodeModel(object: unknown): object is NodeModel;
+export function isNodeModel(model: DotObjectModel): model is NodeModel;
 export function isNodeModel(object: unknown): object is NodeModel {
   return (
     typeof object === 'object' &&
@@ -743,29 +755,61 @@ export function isNodeModel(object: unknown): object is NodeModel {
   );
 }
 
-/** @hidden */
+/**
+ * Type guard to check if an object is a NodeRef (either NodeModel or ForwardRefNode)
+ * @param node - Object to check
+ * @returns True if the object is a NodeRef
+ */
 export function isNodeRef(node: unknown): node is NodeRef {
   return isNodeModel(node) || isForwardRefNode(node);
 }
 
-/** @hidden */
+/**
+ * Type guard to check if an object is NodeRefLike (string or NodeRef)
+ * @param node - Object to check
+ * @returns True if the object is NodeRefLike
+ */
 export function isNodeRefLike(node: unknown): node is NodeRefLike {
   return typeof node === 'string' || isNodeRef(node);
 }
 
-/** @hidden */
+/**
+ * Type guard to check if an object is NodeRefGroupLike (array of NodeRefLike)
+ * @param target - Object to check
+ * @returns True if the object is NodeRefGroupLike
+ */
 export function isNodeRefGroupLike(
   target: NodeRefLike | NodeRefGroupLike,
 ): target is NodeRefGroupLike {
   return Array.isArray(target) && target.every(isNodeRefLike);
 }
 
-/** @hidden */
+/**
+ * Type guard to check if a string is a valid Compass direction
+ * @param c - String to check
+ * @returns True if the string is a valid Compass direction
+ * @example
+ * ```typescript
+ * isCompass('n') // true
+ * isCompass('northeast') // false
+ * isCompass('invalid') // false
+ * ```
+ */
 export function isCompass(c: string): c is Compass {
   return ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c'].includes(c);
 }
 
-/** @hidden */
+/**
+ * Converts a NodeRefLike object to a NodeRef
+ * @param target - NodeRefLike to convert (string or NodeRef)
+ * @returns Converted NodeRef object
+ * @example
+ * ```typescript
+ * toNodeRef('node1') // { id: 'node1' }
+ * toNodeRef('node1:port1') // { id: 'node1', port: 'port1' }
+ * toNodeRef('node1:port1:n') // { id: 'node1', port: 'port1', compass: 'n' }
+ * ```
+ */
 export function toNodeRef(target: NodeRefLike): NodeRef {
   if (isNodeRef(target)) {
     return target;
@@ -777,7 +821,17 @@ export function toNodeRef(target: NodeRefLike): NodeRef {
   return { id, port };
 }
 
-/** @hidden */
+/**
+ * Converts a NodeRefGroupLike array to a NodeRefGroup
+ * @param targets - Array of NodeRefLike objects to convert
+ * @returns Array of NodeRef objects
+ * @throws Error if targets array is empty or contains invalid elements
+ * @example
+ * ```typescript
+ * toNodeRefGroup(['node1', 'node2:port'])
+ * // [{ id: 'node1' }, { id: 'node2', port: 'port' }]
+ * ```
+ */
 export function toNodeRefGroup(targets: NodeRefGroupLike): NodeRefGroup {
   if (targets.length < 1) {
     throw Error('EdgeTargets must have at least 1 elements.');
@@ -789,3 +843,83 @@ export function toNodeRefGroup(targets: NodeRefGroupLike): NodeRefGroup {
   }
   return targets.map((t) => toNodeRef(t));
 }
+
+/**
+ * Type guard to check if an object is an EdgeModel
+ * @param object - Object to check (can be unknown or DotObjectModel)
+ * @returns True if the object is an EdgeModel
+ */
+export function isEdgeModel(object: unknown): object is EdgeModel;
+export function isEdgeModel(model: DotObjectModel): model is EdgeModel;
+export function isEdgeModel(object: unknown): object is EdgeModel {
+  return (
+    typeof object === 'object' &&
+    object !== null &&
+    (object as EdgeModel).$$type === 'Edge' &&
+    Array.isArray((object as EdgeModel).targets)
+  );
+}
+
+/**
+ * Type guard to check if an object is a SubgraphModel
+ * @param object - Object to check (can be unknown or DotObjectModel)
+ * @returns True if the object is a SubgraphModel
+ */
+export function isSubgraphModel(object: unknown): object is SubgraphModel;
+export function isSubgraphModel(model: DotObjectModel): model is SubgraphModel;
+export function isSubgraphModel(object: unknown): object is SubgraphModel {
+  return (
+    typeof object === 'object' &&
+    object !== null &&
+    (object as SubgraphModel).$$type === 'Subgraph'
+  );
+}
+
+/**
+ * Type guard to check if an object is a RootGraphModel
+ * @param object - Object to check (can be unknown or DotObjectModel)
+ * @returns True if the object is a RootGraphModel
+ */
+export function isRootGraphModel(object: unknown): object is RootGraphModel;
+export function isRootGraphModel(
+  model: DotObjectModel,
+): model is RootGraphModel;
+export function isRootGraphModel(object: unknown): object is RootGraphModel {
+  return (
+    typeof object === 'object' &&
+    object !== null &&
+    (object as RootGraphModel).$$type === 'Graph' &&
+    typeof (object as RootGraphModel).directed === 'boolean'
+  );
+}
+
+/**
+ * Type guard to check if an object is an AttributeListModel
+ * @param object - Object to check (can be unknown or DotObjectModel)
+ * @returns True if the object is an AttributeListModel
+ */
+export function isAttributeListModel(
+  object: unknown,
+): object is AttributeListModel;
+export function isAttributeListModel(
+  model: DotObjectModel,
+): model is AttributeListModel;
+export function isAttributeListModel(
+  object: unknown,
+): object is AttributeListModel {
+  return (
+    typeof object === 'object' &&
+    object !== null &&
+    (object as AttributeListModel).$$type === 'AttributeList'
+  );
+}
+
+/**
+ * Union type of all possible model types that can be filtered using type guards
+ */
+export type FilterableModel =
+  | NodeModel
+  | EdgeModel
+  | SubgraphModel
+  | RootGraphModel
+  | AttributeListModel;

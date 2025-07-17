@@ -12,12 +12,12 @@ import { useHasComment } from './useHasComment.js';
 export function useNode(id: string, options: NodeOptions = {}): NodeModel {
   const { comment, ...attributes } = options;
   const cluster = useCurrentGraph();
+
   const node = useMemo(() => {
     const n = cluster.createNode(id);
-    n.attributes.apply(attributes);
-    n.comment = comment;
     return n;
-  }, [cluster, id, attributes, comment]);
+  }, [cluster, id]);
+
   useHasComment(node, comment);
   useHasAttributes(node, attributes);
   useEffect(() => {

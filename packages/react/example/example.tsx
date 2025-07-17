@@ -1,4 +1,4 @@
-import { Digraph, Edge, Node, Subgraph, renderToDot } from '@ts-graphviz/react';
+import { Digraph, Edge, Node, renderToDot, Subgraph } from '@ts-graphviz/react';
 
 const Example = () => (
   <Digraph

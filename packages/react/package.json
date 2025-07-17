@@ -30,42 +30,41 @@
   "author": "kamiazya <yuki@kamiazya.tech>",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./lib/react.d.ts",
-      "require": "./lib/react.cjs",
-      "default": "./lib/react.js"
-    },
+    ".": "./src/react.ts",
     "./package.json": "./package.json"
   },
-  "main": "./lib/react.js",
-  "types": "./lib/react.d.ts",
   "scripts": {
     "build": "vite build",
     "example": "ts-node example/example"
   },
   "dependencies": {
     "@ts-graphviz/common": "workspace:^",
-    "react-reconciler": "^0.29.0",
+    "react-reconciler": "^0.32.0",
     "ts-graphviz": "workspace:^"
   },
   "devDependencies": {
-    "@testing-library/react": "^14.2.1",
-    "@types/react": "^18.2.65",
-    "@types/react-dom": "^18.2.22",
-    "@types/react-reconciler": "^0.26.7",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-test-renderer": "^18.3.1",
-    "typescript": "^5.4.5",
-    "vite": "^5.4.8",
-    "vite-plugin-dts": "^4.2.1"
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.0.0",
+    "@types/react-reconciler": "^0.32.0",
+    "react": "^19.0.0",
+    "react-test-renderer": "^19.0.0",
+    "typescript": "^5.8.2",
+    "vite": "^7.0.2",
+    "vite-plugin-dts": "^4.5.3"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": ">=19"
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": true,
+    "exports": {
+      ".": {
+        "types": "./lib/react.d.ts",
+        "default": "./lib/react.js"
+      },
+      "./package.json": "./package.json"
+    },
+    "types": "./lib/react.d.ts"
   }
 }

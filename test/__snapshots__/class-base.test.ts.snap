@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`class base 1`] = `
+exports[`Digraph and Subgraph Base Functionality > should render a subgraph with colored nodes and custom edge attributes 1`] = `
 "digraph {
   subgraph "A" {
     "node1" [

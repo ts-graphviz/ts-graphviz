@@ -1,6 +1,6 @@
 import type { GraphASTNode } from '../../../types.js';
 import type { ConvertToModelPlugin } from '../types.js';
-import { applyStatements } from './utils/apply-statments.js';
+import { applyStatements } from './utils/apply-statements.js';
 
 export const GraphPlugin: ConvertToModelPlugin<GraphASTNode> = {
   match(ast) {
@@ -9,7 +9,7 @@ export const GraphPlugin: ConvertToModelPlugin<GraphASTNode> = {
   convert(context, ast) {
     const G = ast.directed ? context.models.Digraph : context.models.Graph;
     const graph = new G(ast.id?.value, ast.strict);
-    applyStatements(graph, ast.children);
+    applyStatements(context, graph, ast.children);
     return graph;
   },
 };

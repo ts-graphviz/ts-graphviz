@@ -10,13 +10,13 @@ export default defineConfig({
       entry: {
         common: './src/common.ts',
       },
-      formats: ['es', 'cjs'],
+      formats: ['es'],
     },
     rollupOptions: {},
   },
   plugins: [
     dts({
       rollupTypes: true,
-    }),
+    }) as any,
   ],
 });

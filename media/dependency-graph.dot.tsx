@@ -19,17 +19,20 @@ const pkgGraph = createPkgGraph(publishedPackages);
 function PackageLabel({
   name,
   description,
-}: { name?: string; description?: string }) {
+}: {
+  name?: string;
+  description?: string;
+}) {
   return (
     <dot:table>
       <dot:tr>
         <dot:td port="name" bgcolor="#f0f0f0" align="CENTER">
-          {name}
+          {String(name || 'Unknown')}
         </dot:td>
       </dot:tr>
       <dot:tr>
         <dot:td port="description" align="CENTER">
-          {description}
+          {String(description || 'No description')}
         </dot:td>
       </dot:tr>
     </dot:table>

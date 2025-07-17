@@ -13,7 +13,7 @@ export default defineConfig({
         browser: './src/browser.ts',
         node: './src/node.ts',
       },
-      formats: ['es', 'cjs'],
+      formats: ['es'],
     },
     rollupOptions: {
       external: [
@@ -27,10 +27,10 @@ export default defineConfig({
   },
   plugins: [
     dts({
-      tsconfigPath: './tsconfig.browser.json',
+      tsconfigPath: './tsconfig.json',
     }),
     dts({
-      tsconfigPath: './tsconfig.node.json',
+      tsconfigPath: './tsconfig.browser.json',
     }),
     dts({
       tsconfigPath: './tsconfig.deno.json',

@@ -1,4 +1,5 @@
 src
+tests
 tsconfig.json
 typedoc.json
 vite.config.ts

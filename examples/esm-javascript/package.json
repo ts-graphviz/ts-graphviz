@@ -1,0 +1,11 @@
+{
+  "name": "@ts-graphviz/example-esm-javascript",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node sample.js"
+  },
+  "dependencies": {
+    "ts-graphviz": "workspace:*"
+  }
+}

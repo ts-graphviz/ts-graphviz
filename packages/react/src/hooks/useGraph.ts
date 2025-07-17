@@ -12,16 +12,13 @@ import { useHasComment } from './useHasComment.js';
 export function useGraph(options: RootGraphOptions = {}): RootGraphModel {
   const { id, comment, edge, node, graph, ...attributes } = options;
   const context = useGraphvizContext<RootGraphModel>();
+
   const memoGraph = useMemo(() => {
     const g = new Graph(id);
     context.container = g;
-    g.comment = comment;
-    g.apply(attributes);
-    g.attributes.node.apply(node ?? {});
-    g.attributes.edge.apply(edge ?? {});
-    g.attributes.graph.apply(graph ?? {});
     return g;
-  }, [context, id, comment, edge, node, graph, attributes]);
+  }, [context, id]);
+
   useHasComment(memoGraph, comment);
   useGraphAttributes(memoGraph, attributes, { edge, node, graph });
   useEffect(() => {

@@ -18,12 +18,11 @@ export function useEdge(
   if (targets.length < 2) {
     throw Error('Edges must have at least 2 targets.');
   }
+
   const edge = useMemo(() => {
     const e = cluster.createEdge(targets);
-    e.comment = comment;
-    e.attributes.apply(attributes);
     return e;
-  }, [cluster, targets, comment, attributes]);
+  }, [cluster, targets]);
   useHasComment(edge, comment);
   useHasAttributes(edge, attributes);
   useEffect(() => {

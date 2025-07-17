@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, test, vi } from 'vitest';
 import { registerDefault } from './register-default.js';
+
 registerDefault();
 
 import type { EdgeTargetTuple, NodeModel } from '@ts-graphviz/common';
@@ -10,7 +11,10 @@ import { GraphBase } from './GraphBase.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
 
-class TestGraph extends GraphBase<any> {
+class TestGraph extends GraphBase<'Graph', any> {
+  public get $$type(): 'Graph' {
+    return 'Graph';
+  }
   public readonly directed = false;
   public strict = true;
 }

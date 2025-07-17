@@ -19,13 +19,5 @@
     "prereleaseTemplate": "{tag}-{commit}",
     "useCalculatedVersion": true
   },
-  "updateInternalDependencies": "patch",
-  "ignore": [
-    "@ts-graphviz-examples/deno",
-    "@ts-graphviz-examples/cjs",
-    "@ts-graphviz-examples/esm",
-    "@ts-graphviz-examples/typescript",
-    "@ts-graphviz-examples/webpack-build-node",
-    "@ts-graphviz-examples/webpack-build-web"
-  ]
+  "updateInternalDependencies": "patch"
 }

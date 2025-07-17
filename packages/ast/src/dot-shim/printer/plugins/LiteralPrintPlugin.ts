@@ -6,7 +6,7 @@ export const LiteralPrintPlugin: PrintPlugin<LiteralASTNode> = {
   match(ast) {
     return ast.type === 'Literal';
   },
-  *print(context, ast) {
+  *print(_context, ast) {
     switch (ast.quoted) {
       case 'html':
         yield '<';

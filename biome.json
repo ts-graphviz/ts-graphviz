@@ -1,16 +1,35 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+  "root": true,
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true
+    "useIgnoreFile": false
   },
   "files": {
     "ignoreUnknown": true,
-    "ignore": ["./packages/ast/src/dot-shim/parser/_parse.ts"]
+    "includes": [
+      "**/*.ts",
+      "**/*.tsx", 
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.mjs",
+      "**/*.json",
+      "**/*.jsonc",
+      "!**/lib/**",
+      "!**/doc/**", 
+      "!**/node_modules/**",
+      "!**/coverage/**",
+      "!packages/ast/src/dot-shim/parser/_parse.js",
+      "!packages/ast/src/dot-shim/parser/_parse.d.ts"
+    ]
   },
-  "organizeImports": {
-    "enabled": true
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "formatter": {
     "enabled": true,
@@ -36,7 +55,19 @@
         "noShadowRestrictedNames": "off"
       },
       "style": {
-        "noUnusedTemplateLiteral": "off"
+        "noUnusedTemplateLiteral": "off",
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error"
+      },
+      "nursery": {
+        "useUniqueElementIds": "off"
       }
     }
   }

@@ -3,6 +3,7 @@ import { renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { context } from './__tests__/wrapper.js';
 import { useRenderedID } from './useRenderedID.js';
+import '../types.js';
 
 describe('useRenderedID', () => {
   it('should return the same value as the input, when input is string', () => {

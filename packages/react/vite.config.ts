@@ -10,14 +10,12 @@ export default defineConfig({
       entry: {
         react: './src/react.ts',
       },
-      formats: ['es', 'cjs'],
+      formats: ['es'],
     },
     rollupOptions: {
       external: [
         'react',
         'react/jsx-runtime',
-        'react-dom',
-        'react-dom/server',
         'react-reconciler',
         'ts-graphviz',
       ],
@@ -26,6 +24,6 @@ export default defineConfig({
   plugins: [
     dts({
       rollupTypes: true,
-    }),
+    }) as any,
   ],
 });

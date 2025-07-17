@@ -1,31 +1,58 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import type {
   AttributeKey,
   AttributesObject,
+  DotObjectType,
+  GraphAttributesObject,
   GraphBaseModel,
+  RootGraphModel,
+  SubgraphAttributesObject,
+  SubgraphModel,
 } from 'ts-graphviz';
 import type { GraphBaseAttributesProps } from '../types.js';
 
-export function useGraphAttributes<T extends AttributeKey>(
-  cluster: GraphBaseModel<T>,
-  attributes: AttributesObject<T>,
+// Function overloads for specific graph types to avoid type assertions
+export function useGraphAttributes(
+  cluster: RootGraphModel,
+  attributes: GraphAttributesObject,
+  props: GraphBaseAttributesProps,
+): void;
+export function useGraphAttributes(
+  cluster: SubgraphModel,
+  attributes: SubgraphAttributesObject,
+  props: GraphBaseAttributesProps,
+): void;
+export function useGraphAttributes<
+  T extends DotObjectType,
+  K extends AttributeKey,
+>(
+  cluster: GraphBaseModel<T, K>,
+  attributes: AttributesObject<K>,
+  props: GraphBaseAttributesProps,
+): void;
+export function useGraphAttributes<
+  T extends DotObjectType,
+  K extends AttributeKey,
+>(
+  cluster: GraphBaseModel<T, K>,
+  attributes: AttributesObject<K>,
   { edge, node, graph }: GraphBaseAttributesProps,
 ): void {
-  useEffect(() => {
+  useLayoutEffect(() => {
     cluster.clear();
     cluster.apply(attributes);
   }, [cluster, attributes]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     cluster.attributes.node.clear();
     cluster.attributes.node.apply(node ?? {});
   }, [cluster, node]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     cluster.attributes.edge.clear();
     cluster.attributes.edge.apply(edge ?? {});
   }, [cluster, edge]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     cluster.attributes.graph.clear();
     cluster.attributes.graph.apply(graph ?? {});
   }, [cluster, graph]);
