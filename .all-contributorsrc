@@ -227,6 +227,15 @@
       "contributions": [
         "question"
       ]
+    },
+    {
+      "login": "grsjst",
+      "name": "grsjst",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4739018?v=4",
+      "profile": "https://github.com/grsjst",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
