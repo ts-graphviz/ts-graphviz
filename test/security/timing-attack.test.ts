@@ -1,5 +1,7 @@
 import * as fc from 'fast-check';
 import { describe, it, expect } from 'vitest';
+import { parse, stringify } from '@ts-graphviz/ast';
+import { Digraph, Node, Edge, Subgraph } from 'ts-graphviz';
 import {
   SecurityArbitraries,
   SecurityTestPatterns,
@@ -7,75 +9,76 @@ import {
 } from './utils/security-test-helpers.js';
 
 /**
- * Tests for timing attack prevention
+ * Tests for timing attack prevention in ts-graphviz
  * These tests verify that the library handles sensitive operations in constant time
  */
-describe('Timing Attack Prevention', () => {
-  describe('Constant Time Comparisons', () => {
-    it('should perform attribute comparisons in constant time', () => {
-      const measureComparison = (str1: string, str2: string): number => {
+describe('Timing Attack Prevention in ts-graphviz', () => {
+  describe('DOT Parser Timing Safety', () => {
+    it('should parse DOT strings with consistent timing regardless of content', () => {
+      const measureParsing = (dotString: string): number => {
         const start = performance.now();
-        // Simulate attribute comparison
-        const result = str1 === str2;
+        try {
+          parse(dotString);
+        } catch {
+          // Ignore parse errors, we're measuring timing
+        }
         const end = performance.now();
         return end - start;
       };
 
-      fc.assert(
-        fc.property(
-          fc.string({ minLength: 10, maxLength: 100 }),
-          fc.string({ minLength: 10, maxLength: 100 }),
-          (str1, str2) => {
-            const times: number[] = [];
-            
-            // Measure multiple times to reduce noise
-            for (let i = 0; i < 10; i++) {
-              times.push(measureComparison(str1, str2));
-            }
-            
-            const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
-            const variance = times.reduce((sum, time) => sum + Math.pow(time - avgTime, 2), 0) / times.length;
-            
-            // Variance should be low for constant-time operations
-            expect(variance).toBeLessThan(0.01);
-            
-            return true;
-          }
-        ),
-        { numRuns: 20 }
-      );
+      // Test various DOT strings with different complexity
+      const testStrings = [
+        'digraph { }',
+        'digraph { a -> b }',
+        'digraph { a -> b [label="test"] }',
+        'digraph { subgraph { a -> b -> c -> d -> e } }',
+        'digraph { ' + 'a -> b; '.repeat(100) + '}',
+      ];
+
+      const times = testStrings.map(str => {
+        const measurements = Array.from({ length: 50 }, () => 
+          measureParsing(str)
+        );
+        return measurements.reduce((a, b) => a + b) / measurements.length;
+      });
+
+      // Check that timing scales linearly with input size
+      const maxTime = Math.max(...times);
+      const minTime = Math.min(...times);
+      const variance = maxTime - minTime;
+      
+      // Timing should scale predictably, not exponentially
+      expect(variance).toBeLessThan(maxTime * 0.5); // Variance less than 50% of max
     });
 
-    it('should not leak information through error timing', () => {
-      const measureErrorTiming = (input: string): number => {
+    it('should not leak information through parser error timing', () => {
+      const measureParserTiming = (input: string): number => {
         const start = performance.now();
         try {
-          // Simulate parsing with potential error
-          if (input.includes('<script>')) {
-            throw new Error('Invalid input');
-          }
-          return performance.now() - start;
+          parse(input);
         } catch (error) {
-          return performance.now() - start;
+          // Error path
         }
+        return performance.now() - start;
       };
 
       fc.assert(
         fc.property(
           fc.oneof(
-            fc.string(),
+            fc.constant('digraph { a -> b }'), // Valid
+            fc.constant('digraph { a ->'), // Invalid
             SecurityArbitraries.maliciousString('script_injection')
           ),
           (input) => {
             const times: number[] = [];
             
-            for (let i = 0; i < 5; i++) {
-              times.push(measureErrorTiming(input));
+            for (let i = 0; i < 10; i++) {
+              times.push(measureParserTiming(input));
             }
             
             // Error handling should not reveal timing information
             const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
-            expect(avgTime).toBeLessThan(5); // Should be reasonably fast
+            expect(avgTime).toBeLessThan(10); // Should be reasonably fast
             
             return true;
           }
@@ -85,93 +88,171 @@ describe('Timing Attack Prevention', () => {
     });
   });
 
-  describe('Cache Timing Attacks', () => {
-    it('should prevent cache-based timing attacks', () => {
-      const cache = new Map<string, string>();
-      
-      const accessWithTiming = (key: string): { found: boolean; time: number } => {
+  describe('Graph Construction Timing Safety', () => {
+    it('should construct graphs with consistent timing for similar operations', () => {
+      const measureGraphConstruction = (nodeCount: number): number => {
         const start = performance.now();
-        const found = cache.has(key);
-        const value = cache.get(key);
-        const time = performance.now() - start;
-        return { found, time };
+        const g = new Digraph();
+        
+        for (let i = 0; i < nodeCount; i++) {
+          g.node(`node${i}`, { label: `Node ${i}` });
+        }
+        
+        for (let i = 0; i < nodeCount - 1; i++) {
+          g.edge([`node${i}`, `node${i + 1}`]);
+        }
+        
+        const end = performance.now();
+        return end - start;
       };
 
-      // Pre-populate cache
-      for (let i = 0; i < 100; i++) {
-        cache.set(`key${i}`, `value${i}`);
-      }
+      // Test different graph sizes
+      const sizes = [10, 20, 50, 100];
+      const times = sizes.map(size => {
+        const measurements = Array.from({ length: 20 }, () => 
+          measureGraphConstruction(size)
+        );
+        return measurements.reduce((a, b) => a + b) / measurements.length;
+      });
 
+      // Check that timing scales linearly with size
+      for (let i = 1; i < times.length; i++) {
+        const ratio = times[i] / times[i - 1];
+        const sizeRatio = sizes[i] / sizes[i - 1];
+        
+        // Timing should scale roughly linearly
+        expect(ratio).toBeGreaterThan(sizeRatio * 0.5);
+        expect(ratio).toBeLessThan(sizeRatio * 3);
+      }
+    });
+  });
+
+  describe('Attribute Access Timing Safety', () => {
+    it('should access node attributes with consistent timing', () => {
+      const measureAttributeAccess = (g: Digraph, nodeId: string): number => {
+        const start = performance.now();
+        try {
+          const node = g.getNode(nodeId);
+          if (node) {
+            // Access various attributes
+            const label = node.attributes.label;
+            const color = node.attributes.color;
+            const shape = node.attributes.shape;
+          }
+        } catch {
+          // Ignore errors
+        }
+        const end = performance.now();
+        return end - start;
+      };
+
+      // Create a graph with some nodes
+      const g = new Digraph();
+      for (let i = 0; i < 100; i++) {
+        g.node(`node${i}`, { 
+          label: `Node ${i}`,
+          color: i % 2 === 0 ? 'red' : 'blue',
+          shape: i % 3 === 0 ? 'box' : 'circle'
+        });
+      }
+      
+      // Test accessing existing vs non-existing nodes
+      const existingTimes = Array.from({ length: 50 }, () => 
+        measureAttributeAccess(g, 'node50')
+      );
+      const nonExistingTimes = Array.from({ length: 50 }, () => 
+        measureAttributeAccess(g, 'nonexistent')
+      );
+
+      const avgExistingTime = existingTimes.reduce((a, b) => a + b) / existingTimes.length;
+      const avgNonExistingTime = nonExistingTimes.reduce((a, b) => a + b) / nonExistingTimes.length;
+      
+      // Access times should be similar regardless of node existence
+      expect(Math.abs(avgExistingTime - avgNonExistingTime)).toBeLessThan(5);
+    });
+  });
+
+  describe('Property-based DOT Generation Timing', () => {
+    it('should generate DOT strings with predictable timing', () => {
+      const isCI = process.env.CI === 'true';
+      
       fc.assert(
         fc.property(
-          fc.string(),
-          (key) => {
-            const timings = [];
+          fc.array(fc.record({
+            id: fc.string({ minLength: 1, maxLength: 20 }),
+            label: fc.string({ minLength: 0, maxLength: 50 }),
+            attrs: fc.dictionary(
+              fc.string({ minLength: 1, maxLength: 10 }),
+              fc.string({ minLength: 0, maxLength: 20 }),
+              { maxKeys: 5 }
+            )
+          }), { minLength: 5, maxLength: 20 }),
+          (nodes) => {
+            const times = nodes.map(nodeData => {
+              const start = performance.now();
+              const g = new Digraph();
+              
+              // Add node with attributes
+              g.node(nodeData.id, {
+                label: nodeData.label,
+                ...nodeData.attrs
+              });
+              
+              // Convert to DOT string
+              const dot = g.toDot();
+              const end = performance.now();
+              return end - start;
+            });
             
-            // Access multiple times
-            for (let i = 0; i < 10; i++) {
-              const { time } = accessWithTiming(key);
-              timings.push(time);
-            }
+            const avgTime = times.reduce((a, b) => a + b) / times.length;
+            const maxDeviation = Math.max(...times.map(t => Math.abs(t - avgTime)));
             
-            // Cache access times should be consistent
-            const avgTime = timings.reduce((a, b) => a + b, 0) / timings.length;
-            const maxDeviation = Math.max(...timings.map(t => Math.abs(t - avgTime)));
-            
-            expect(maxDeviation).toBeLessThan(0.1);
-            
-            return true;
+            // Timing should be predictable
+            return maxDeviation < avgTime * 3;
           }
         ),
-        { numRuns: 30 }
+        { numRuns: isCI ? 10 : 50 }
       );
     });
   });
 
-  describe('Resource Access Timing', () => {
-    it('should not reveal file existence through timing', () => {
-      const checkFileAccess = (path: string): number => {
+  describe('String Escaping Timing', () => {
+    it('should escape strings with consistent timing', () => {
+      const measureStringEscaping = (input: string): number => {
         const start = performance.now();
-        
-        // Simulate file access check
-        const allowed = !path.includes('..') && !path.startsWith('/etc');
-        
-        // Add artificial delay to prevent timing leaks
-        const minDelay = 0.1;
-        const elapsed = performance.now() - start;
-        if (elapsed < minDelay) {
-          // Busy wait to ensure minimum time
-          const waitUntil = start + minDelay;
-          while (performance.now() < waitUntil) {
-            // Busy wait
-          }
-        }
-        
-        return performance.now() - start;
+        const g = new Digraph();
+        g.node('test', { label: input });
+        const dot = g.toDot();
+        const end = performance.now();
+        return end - start;
       };
 
       fc.assert(
         fc.property(
           fc.oneof(
-            fc.constantFrom('/etc/passwd', '../../../secret', '/dev/null'),
-            fc.string()
+            fc.string(),
+            SecurityArbitraries.maliciousString('script_injection'),
+            fc.string().map(s => s + '"' + s), // Strings with quotes
+            fc.string().map(s => s + '\n' + s), // Strings with newlines
+            fc.string().map(s => s + '\\' + s)  // Strings with backslashes
           ),
-          (path) => {
+          (input) => {
             const times: number[] = [];
             
-            for (let i = 0; i < 5; i++) {
-              times.push(checkFileAccess(path));
+            for (let i = 0; i < 10; i++) {
+              times.push(measureStringEscaping(input));
             }
             
-            // All paths should take similar time
             const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
-            expect(avgTime).toBeGreaterThanOrEqual(0.05);
-            expect(avgTime).toBeLessThan(5); // Allow more time for busy wait
+            const variance = times.reduce((sum, time) => sum + Math.pow(time - avgTime, 2), 0) / times.length;
+            
+            // Escaping should have consistent timing
+            expect(variance).toBeLessThan(avgTime * 0.5);
             
             return true;
           }
         ),
-        { numRuns: 20 }
+        { numRuns: 30 }
       );
     });
   });

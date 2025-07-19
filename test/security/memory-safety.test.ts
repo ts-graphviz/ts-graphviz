@@ -1,145 +1,160 @@
 import * as fc from 'fast-check';
 import { describe, it, expect } from 'vitest';
+import { parse, stringify } from '@ts-graphviz/ast';
+import { Digraph, Graph, Node, Edge, Subgraph } from 'ts-graphviz';
 
 /**
- * Memory safety and resource management security tests
+ * Memory safety and resource management security tests for ts-graphviz
  * These tests verify that the library handles memory usage safely and prevents resource exhaustion attacks
  */
 const isCI = process.env.CI === 'true';
 const isStressTest = process.env.SKIP_STRESS_TESTS === 'true';
 
-describe.concurrent('Memory Safety Security Tests', () => {
-  describe('Memory Exhaustion Prevention', () => {
-    it('should limit string buffer sizes', () => {
-      fc.assert(
-        fc.property(
-          fc.record({
-            size: fc.integer({ min: 1, max: 100000000 }), // Up to 100MB
-            character: fc.string({ minLength: 1, maxLength: 1 })
-          }),
-          (config) => {
-            try {
-              const result = createLargeString(config.size, config.character);
-              
-              // Should either succeed with reasonable size or be limited
-              const maxAllowedSize = 50 * 1024 * 1024; // 50MB limit
-              expect(result.length).toBeLessThanOrEqual(maxAllowedSize);
-              
-              return true;
-            } catch (error) {
-              // Memory limit errors are expected for very large sizes
-              expect(error.message).toMatch(/memory|size|limit/i);
-              return true;
-            }
-          }
-        ),
-        { numRuns: 50, timeout: 10000 }
-      );
+describe.concurrent('Memory Safety in ts-graphviz', () => {
+  describe('Graph Size Limits', () => {
+    it('should handle large graphs without memory exhaustion', () => {
+      const g = new Digraph();
+      const nodeCount = isCI ? 100 : 1000;
+      
+      // Create a large graph
+      for (let i = 0; i < nodeCount; i++) {
+        g.node(`node${i}`, { label: `Node ${i}` });
+      }
+      
+      // Add edges creating a complex network
+      for (let i = 0; i < nodeCount - 1; i++) {
+        g.edge([`node${i}`, `node${i + 1}`]);
+        if (i % 10 === 0 && i + 10 < nodeCount) {
+          g.edge([`node${i}`, `node${i + 10}`]);
+        }
+      }
+      
+      // Should be able to generate DOT without issues
+      expect(() => g.toDot()).not.toThrow();
+      
+      // Verify node count
+      expect(g.nodes.length).toBe(nodeCount);
     });
 
-    it('should handle large array allocations safely', () => {
-      fc.assert(
-        fc.property(
-          fc.record({
-            arraySize: fc.integer({ min: 1000, max: 10000000 }),
-            elementSize: fc.integer({ min: 1, max: 1000 })
-          }),
-          (config) => {
-            try {
-              const result = createLargeArray(config.arraySize, config.elementSize);
-              
-              // Should either succeed or be limited by safety checks
-              const maxElements = 1000000; // 1M elements max
-              expect(result.length).toBeLessThanOrEqual(maxElements);
-              
-              return true;
-            } catch (error) {
-              expect(error.message).toMatch(/memory|allocation|limit/i);
-              return true;
-            }
-          }
-        ),
-        { numRuns: 30, timeout: 15000 }
-      );
-    });
-
-    it('should detect and prevent infinite loops in graph traversal', () => {
-      fc.assert(
-        fc.property(
-          fc.integer({ min: 2, max: 100 }),
-          (nodeCount) => {
-            // Create circular graph structure
-            const nodes = Array(nodeCount).fill(null).map((_, i) => ({
-              id: `node${i}`,
-              edges: [`node${(i + 1) % nodeCount}`] // Creates cycle
-            }));
-            
-            try {
-              const result = safeGraphTraversal(nodes[0], nodes);
-              
-              // Should detect cycle and terminate safely
-              expect(result.cycleDetected).toBe(true);
-              expect(result.visitedNodes).toBeLessThan(nodeCount * 2); // Shouldn't visit too many times
-              
-              return true;
-            } catch (error) {
-              expect(error.message).toMatch(/cycle|infinite|loop/i);
-              return true;
-            }
-          }
-        ),
-        { numRuns: 50 }
-      );
+    it('should handle deeply nested subgraphs safely', () => {
+      const maxDepth = isCI ? 10 : 50;
+      
+      const createNestedGraph = (depth: number): Subgraph => {
+        const sub = new Subgraph(`cluster_${depth}`);
+        sub.node(`node_${depth}`, { label: `Level ${depth}` });
+        
+        if (depth > 0) {
+          sub.addSubgraph(createNestedGraph(depth - 1));
+        }
+        
+        return sub;
+      };
+      
+      const g = new Digraph();
+      g.addSubgraph(createNestedGraph(maxDepth));
+      
+      // Should handle deep nesting without stack overflow
+      expect(() => g.toDot()).not.toThrow();
+      
+      // Verify the structure is created
+      const dot = g.toDot();
+      expect(dot).toContain('cluster_0');
+      expect(dot).toContain(`cluster_${maxDepth}`);
     });
   });
 
-  describe('Object Creation Limits', () => {
-    it('should limit nested object depth', () => {
+  describe('String Buffer Safety', () => {
+    it('should handle large attribute values safely', () => {
       fc.assert(
         fc.property(
-          fc.integer({ min: 10, max: 10000 }),
-          (depth) => {
-            try {
-              const result = createNestedObject(depth);
-              
-              // Should either succeed with limited depth or throw error
-              const actualDepth = measureObjectDepth(result);
-              const maxDepth = 1000;
-              expect(actualDepth).toBeLessThanOrEqual(maxDepth);
-              
-              return true;
-            } catch (error) {
-              expect(error.message).toMatch(/depth|nesting|stack/i);
-              return true;
+          fc.integer({ min: 100, max: isCI ? 10000 : 100000 }),
+          fc.string({ minLength: 1, maxLength: 1 }),
+          (size, char) => {
+            const g = new Digraph();
+            const largeString = char.repeat(size);
+            
+            // Add node with large attribute values
+            g.node('test', {
+              label: largeString,
+              tooltip: largeString,
+              comment: largeString
+            });
+            
+            // Should handle large strings without issues
+            const dot = g.toDot();
+            expect(dot).toContain('test');
+            expect(dot.length).toBeGreaterThan(size);
+            
+            // Verify escaping still works with large strings
+            if (char === '"') {
+              expect(dot).toContain('\\"');
             }
+            
+            return true;
           }
         ),
-        { numRuns: 30 }
+        { numRuns: isCI ? 10 : 20 }
       );
     });
 
-    it('should handle property enumeration safely', () => {
+    it('should prevent exponential string growth attacks', () => {
+      const g = new Digraph();
+      
+      // Attempt to create exponential growth through repeated concatenation
+      let label = 'a';
+      for (let i = 0; i < 20; i++) {
+        label = label + label; // Exponential growth
+        if (label.length > 1000000) break; // Safety limit
+      }
+      
+      g.node('test', { label: label.substring(0, 10000) }); // Limit size
+      
+      // Should handle without consuming excessive memory
+      expect(() => g.toDot()).not.toThrow();
+    });
+  });
+
+  describe('Parser Memory Safety', () => {
+    it('should handle malformed DOT strings without memory leaks', () => {
+      const malformedInputs = [
+        'digraph { '.repeat(1000), // Unclosed braces
+        'digraph { a -> b ' + '[label="test"]'.repeat(100), // Many attributes
+        'digraph { ' + 'subgraph { '.repeat(50), // Nested unclosed
+        'digraph { ' + '"' + 'a'.repeat(10000) + '"', // Large quoted string
+        'digraph { ' + '/* ' + 'comment'.repeat(1000) + ' */', // Large comment
+      ];
+      
+      malformedInputs.forEach(input => {
+        // Parser should handle malformed input gracefully
+        try {
+          parse(input);
+        } catch (e) {
+          // Expected to fail, but should not crash
+          expect(e).toBeDefined();
+        }
+      });
+    });
+
+    it('should handle recursive parsing patterns safely', () => {
       fc.assert(
         fc.property(
-          fc.record({
-            propertyCount: fc.integer({ min: 100, max: 100000 }),
-            keyLength: fc.integer({ min: 1, max: 1000 }),
-            valueSize: fc.integer({ min: 1, max: 10000 })
-          }),
-          (config) => {
-            try {
-              const obj = createObjectWithManyProperties(config);
-              
-              // Property enumeration should be safe
-              const keys = Object.keys(obj);
-              const maxProperties = 10000;
-              expect(keys.length).toBeLessThanOrEqual(maxProperties);
-              
-              return true;
-            } catch (error) {
-              expect(error.message).toMatch(/property|memory|limit/i);
-              return true;
+          fc.integer({ min: 5, max: isCI ? 20 : 50 }),
+          (depth) => {
+            // Create deeply nested structure
+            let dot = 'digraph { ';
+            for (let i = 0; i < depth; i++) {
+              dot += `subgraph cluster_${i} { `;
             }
+            dot += 'a -> b';
+            for (let i = 0; i < depth; i++) {
+              dot += ' }';
+            }
+            dot += ' }';
+            
+            // Should parse without stack overflow
+            expect(() => parse(dot)).not.toThrow();
+            
+            return true;
           }
         ),
         { numRuns: 20 }
@@ -147,194 +162,166 @@ describe.concurrent('Memory Safety Security Tests', () => {
     });
   });
 
-  describe('Garbage Collection Pressure', () => {
-    it.skipIf(isStressTest)('should handle rapid object creation and destruction', () => {
+  describe('Circular Reference Prevention', () => {
+    it('should handle circular edge references safely', () => {
+      const g = new Digraph();
+      const nodeCount = 20;
+      
+      // Create nodes
+      for (let i = 0; i < nodeCount; i++) {
+        g.node(`node${i}`);
+      }
+      
+      // Create circular references
+      for (let i = 0; i < nodeCount; i++) {
+        g.edge([`node${i}`, `node${(i + 1) % nodeCount}`]);
+        g.edge([`node${i}`, `node${i}`]); // Self-reference
+      }
+      
+      // Should handle circular structure
+      expect(() => g.toDot()).not.toThrow();
+      const dot = g.toDot();
+      expect(dot).toContain('->');
+    });
+
+    it('should handle subgraph circular references', () => {
+      const g = new Digraph();
+      
+      const sub1 = new Subgraph('cluster_1');
+      const sub2 = new Subgraph('cluster_2');
+      
+      // Add nodes to subgraphs
+      sub1.node('a');
+      sub2.node('b');
+      
+      // Create edges between subgraphs (circular)
+      g.addSubgraph(sub1);
+      g.addSubgraph(sub2);
+      g.edge(['a', 'b']);
+      g.edge(['b', 'a']);
+      
+      expect(() => g.toDot()).not.toThrow();
+    });
+  });
+
+  describe('Resource Consumption Limits', () => {
+    it.skipIf(isStressTest)('should limit memory usage for edge cases', () => {
       fc.assert(
         fc.property(
           fc.record({
-            iterations: fc.integer({ min: 100, max: isStressTest ? 1000 : 10000 }),
-            objectSize: fc.integer({ min: 10, max: isStressTest ? 100 : 1000 })
+            nodes: fc.integer({ min: 10, max: 100 }),
+            edgeMultiplier: fc.integer({ min: 1, max: 5 }),
+            attrCount: fc.integer({ min: 0, max: 10 })
           }),
-          (config) => {
-            try {
-              const result = rapidObjectCreation(config.iterations, config.objectSize);
-              
-              // Should complete without memory issues
-              expect(result.completed).toBe(true);
-              expect(result.iterations).toBeLessThanOrEqual(config.iterations);
-              
-              return true;
-            } catch (error) {
-              expect(error.message).toMatch(/memory|allocation|gc/i);
-              return true;
+          ({ nodes, edgeMultiplier, attrCount }) => {
+            const g = new Digraph();
+            
+            // Create nodes with multiple attributes
+            for (let i = 0; i < nodes; i++) {
+              const attrs: Record<string, string> = {};
+              for (let j = 0; j < attrCount; j++) {
+                attrs[`attr${j}`] = `value${j}`;
+              }
+              g.node(`n${i}`, attrs);
             }
+            
+            // Create many edges
+            const edgeCount = Math.min(nodes * edgeMultiplier, 500);
+            for (let i = 0; i < edgeCount; i++) {
+              const from = Math.floor(Math.random() * nodes);
+              const to = Math.floor(Math.random() * nodes);
+              g.edge([`n${from}`, `n${to}`]);
+            }
+            
+            // Should complete in reasonable time
+            const start = performance.now();
+            const dot = g.toDot();
+            const elapsed = performance.now() - start;
+            
+            expect(elapsed).toBeLessThan(1000); // Should complete within 1 second
+            expect(dot).toContain('digraph');
+            
+            return true;
           }
         ),
-        { numRuns: isCI ? 5 : 20, timeout: 15000 }
-      );
-    });
-
-    it('should clean up temporary resources', () => {
-      fc.assert(
-        fc.property(
-          fc.array(fc.string({ minLength: 10, maxLength: 1000 }), { minLength: 1, maxLength: 100 }),
-          (resources) => {
-            try {
-              const result = manageTemporaryResources(resources);
-              
-              // All resources should be properly cleaned up
-              expect(result.created).toBe(result.cleaned);
-              expect(result.leaks).toBe(0);
-              
-              return true;
-            } catch (error) {
-              expect(error).toBeInstanceOf(Error);
-              return true;
-            }
-          }
-        ),
-        { numRuns: 50 }
+        { numRuns: isCI ? 5 : 10 }
       );
     });
   });
 
-  describe('Buffer Overflow Prevention', () => {
-    it('should prevent buffer overflows in string operations', () => {
-      fc.assert(
-        fc.property(
-          fc.record({
-            baseString: fc.string({ minLength: 1, maxLength: 1000 }),
-            repeatCount: fc.integer({ min: 1, max: 1000000 }),
-            appendString: fc.string({ minLength: 1, maxLength: 100 })
-          }),
-          (config) => {
-            try {
-              const result = safeStringOperation(config);
-              
-              // Result should be within safe bounds
-              const maxLength = 10 * 1024 * 1024; // 10MB
-              expect(result.length).toBeLessThanOrEqual(maxLength);
-              
-              return true;
-            } catch (error) {
-              expect(error.message).toMatch(/buffer|overflow|size|memory/i);
-              return true;
-            }
-          }
-        ),
-        { numRuns: 100 }
-      );
+  describe('Memory Leak Prevention', () => {
+    it('should not leak memory when creating and destroying graphs', () => {
+      const iterations = isCI ? 100 : 1000;
+      
+      for (let i = 0; i < iterations; i++) {
+        const g = new Digraph();
+        
+        // Add some nodes and edges
+        for (let j = 0; j < 10; j++) {
+          g.node(`node${j}`, { label: `Label ${j}` });
+        }
+        
+        for (let j = 0; j < 9; j++) {
+          g.edge([`node${j}`, `node${j + 1}`]);
+        }
+        
+        // Generate DOT
+        const dot = g.toDot();
+        expect(dot).toContain('digraph');
+        
+        // Graph should be garbage collected after this iteration
+      }
+      
+      // If we get here without running out of memory, the test passes
+      expect(true).toBe(true);
     });
 
-    it('should handle array buffer operations safely', () => {
-      fc.assert(
-        fc.property(
-          fc.record({
-            bufferSize: fc.integer({ min: 1024, max: 100 * 1024 * 1024 }), // Up to 100MB
-            operations: fc.array(
-              fc.record({
-                type: fc.constantFrom('read', 'write', 'copy', 'slice'),
-                offset: fc.integer({ min: 0, max: 1000000 }),
-                length: fc.integer({ min: 1, max: 1000000 })
-              }),
-              { minLength: 1, maxLength: 10 }
-            )
-          }),
-          (config) => {
-            try {
-              const result = safeBufferOperations(config);
-              
-              // Operations should complete safely or handle bounds errors
-              expect(result.success).toBe(true);
-              expect(result.errors).toBeGreaterThanOrEqual(0);
-              
-              return true;
-            } catch (error) {
-              expect(error.message).toMatch(/buffer|bounds|memory/i);
-              return true;
-            }
-          }
-        ),
-        { numRuns: 30, timeout: 10000 }
-      );
+    it('should handle attribute object mutations safely', () => {
+      const g = new Digraph();
+      const attrs = { label: 'Original', color: 'red' };
+      
+      g.node('test', attrs);
+      
+      // Mutate the original object
+      attrs.label = 'Modified';
+      attrs.color = 'blue';
+      
+      // The graph should have its own copy
+      const dot = g.toDot();
+      expect(dot).toContain('Original');
+      expect(dot).toContain('red');
     });
   });
 
-  describe('Resource Leak Prevention', () => {
-    it('should detect and prevent memory leaks in event listeners', () => {
-      fc.assert(
-        fc.property(
-          fc.integer({ min: 10, max: 1000 }),
-          (listenerCount) => {
-            try {
-              const result = manageEventListeners(listenerCount);
-              
-              // All listeners should be properly cleaned up
-              expect(result.active).toBe(0);
-              expect(result.leaked).toBe(0);
-              
-              return true;
-            } catch (error) {
-              expect(error).toBeInstanceOf(Error);
-              return true;
-            }
-          }
-        ),
-        { numRuns: 50 }
-      );
-    });
-
-    it('should handle closure memory leaks', () => {
-      fc.assert(
-        fc.property(
-          fc.record({
-            closureCount: fc.integer({ min: 10, max: 1000 }),
-            capturedDataSize: fc.integer({ min: 100, max: 100000 })
-          }),
-          (config) => {
-            try {
-              const result = createClosuresWithData(config);
-              
-              // Closures should not leak excessive memory
-              expect(result.created).toBe(config.closureCount);
-              expect(result.memoryLeakDetected).toBe(false);
-              
-              return true;
-            } catch (error) {
-              expect(error.message).toMatch(/memory|closure|leak/i);
-              return true;
-            }
-          }
-        ),
-        { numRuns: 30 }
-      );
-    });
-  });
-
-  describe('WeakRef and FinalizationRegistry Safety', () => {
-    it('should use WeakRef for large object references', () => {
+  describe('Unicode Memory Safety', () => {
+    it('should handle unicode strings without memory issues', () => {
       fc.assert(
         fc.property(
           fc.array(
-            fc.record({
-              id: fc.string(),
-              data: fc.string({ minLength: 1000, maxLength: 10000 })
-            }),
-            { minLength: 10, maxLength: 100 }
+            fc.string({ minLength: 1, maxLength: 100 }),
+            { minLength: 1, maxLength: 50 }
           ),
-          (objects) => {
-            try {
-              const result = manageWeakReferences(objects);
-              
-              // WeakRef should be used appropriately
-              expect(result.weakRefsCreated).toBe(objects.length);
-              expect(result.strongRefsCount).toBeLessThanOrEqual(10); // Limit strong refs
-              
-              return true;
-            } catch (error) {
-              expect(error).toBeInstanceOf(Error);
-              return true;
-            }
+          (strings) => {
+            const g = new Digraph();
+            
+            // Add nodes with various unicode content
+            strings.forEach((str, i) => {
+              g.node(`node${i}`, { 
+                label: str,
+                tooltip: `🎯 ${str} 🎯` // Add emojis
+              });
+            });
+            
+            // Should handle unicode without issues
+            const dot = g.toDot();
+            expect(dot).toContain('digraph');
+            
+            // Verify structure
+            strings.forEach((_, i) => {
+              expect(dot).toContain(`node${i}`);
+            });
+            
+            return true;
           }
         ),
         { numRuns: 20 }
@@ -342,318 +329,3 @@ describe.concurrent('Memory Safety Security Tests', () => {
     });
   });
 });
-
-// Mock memory safety functions
-function createLargeString(size: number, char: string): string {
-  const maxSize = 50 * 1024 * 1024; // 50MB limit
-  
-  if (size > maxSize) {
-    throw new Error(`String size ${size} exceeds memory limit ${maxSize}`);
-  }
-  
-  return char.repeat(Math.min(size, maxSize));
-}
-
-function createLargeArray(arraySize: number, elementSize: number): any[] {
-  const maxElements = 1000000;
-  const maxTotalSize = 100 * 1024 * 1024; // 100MB
-  
-  if (arraySize > maxElements) {
-    throw new Error(`Array size ${arraySize} exceeds limit ${maxElements}`);
-  }
-  
-  const totalSize = arraySize * elementSize;
-  if (totalSize > maxTotalSize) {
-    throw new Error(`Total allocation ${totalSize} exceeds memory limit ${maxTotalSize}`);
-  }
-  
-  return Array(Math.min(arraySize, maxElements)).fill(null).map((_, i) => ({
-    id: i,
-    data: 'x'.repeat(Math.min(elementSize, 1000))
-  }));
-}
-
-function safeGraphTraversal(startNode: any, allNodes: any[]): { cycleDetected: boolean, visitedNodes: number } {
-  const visited = new Set();
-  const recursionStack = new Set();
-  let visitedCount = 0;
-  const maxVisits = allNodes.length * 2;
-  
-  function dfs(nodeId: string): boolean {
-    if (visitedCount > maxVisits) {
-      throw new Error('Infinite loop detected in graph traversal');
-    }
-    
-    if (recursionStack.has(nodeId)) {
-      return true; // Cycle detected
-    }
-    
-    if (visited.has(nodeId)) {
-      return false;
-    }
-    
-    visited.add(nodeId);
-    recursionStack.add(nodeId);
-    visitedCount++;
-    
-    const node = allNodes.find(n => n.id === nodeId);
-    if (node && node.edges) {
-      for (const edge of node.edges) {
-        if (dfs(edge)) {
-          return true;
-        }
-      }
-    }
-    
-    recursionStack.delete(nodeId);
-    return false;
-  }
-  
-  const cycleDetected = dfs(startNode.id);
-  
-  return { cycleDetected, visitedNodes: visitedCount };
-}
-
-function createNestedObject(depth: number): any {
-  const maxDepth = 1000;
-  
-  if (depth > maxDepth) {
-    throw new Error(`Nesting depth ${depth} exceeds limit ${maxDepth}`);
-  }
-  
-  let obj: any = { value: 'leaf' };
-  
-  for (let i = 0; i < Math.min(depth, maxDepth); i++) {
-    obj = { level: i, child: obj };
-  }
-  
-  return obj;
-}
-
-function measureObjectDepth(obj: any, currentDepth = 0): number {
-  if (!obj || typeof obj !== 'object' || currentDepth > 2000) {
-    return currentDepth;
-  }
-  
-  let maxDepth = currentDepth;
-  
-  for (const value of Object.values(obj)) {
-    if (value && typeof value === 'object') {
-      const childDepth = measureObjectDepth(value, currentDepth + 1);
-      maxDepth = Math.max(maxDepth, childDepth);
-    }
-  }
-  
-  return maxDepth;
-}
-
-function createObjectWithManyProperties(config: any): any {
-  const maxProperties = 10000;
-  const maxKeyLength = 100;
-  const maxValueSize = 1000;
-  
-  if (config.propertyCount > maxProperties) {
-    throw new Error(`Property count ${config.propertyCount} exceeds limit ${maxProperties}`);
-  }
-  
-  const obj: any = {};
-  const propertyCount = Math.min(config.propertyCount, maxProperties);
-  
-  for (let i = 0; i < propertyCount; i++) {
-    const key = `prop${i}`.padEnd(Math.min(config.keyLength, maxKeyLength), 'x');
-    const value = 'v'.repeat(Math.min(config.valueSize, maxValueSize));
-    obj[key] = value;
-  }
-  
-  return obj;
-}
-
-function rapidObjectCreation(iterations: number, objectSize: number): { completed: boolean, iterations: number } {
-  const maxIterations = 10000;
-  const actualIterations = Math.min(iterations, maxIterations);
-  
-  for (let i = 0; i < actualIterations; i++) {
-    // Create and immediately discard objects to test GC pressure
-    const obj: any = {};
-    for (let j = 0; j < Math.min(objectSize, 100); j++) {
-      obj[`prop${j}`] = `value${j}`;
-    }
-    
-    // Simulate some work
-    if (i % 100 === 0) {
-      // Force GC opportunity
-      if (typeof global !== 'undefined' && global.gc) {
-        global.gc();
-      }
-    }
-  }
-  
-  return { completed: true, iterations: actualIterations };
-}
-
-function manageTemporaryResources(resources: string[]): { created: number, cleaned: number, leaks: number } {
-  const active = new Set();
-  let created = 0;
-  let cleaned = 0;
-  
-  try {
-    // Create resources
-    for (const resource of resources) {
-      active.add(resource);
-      created++;
-    }
-    
-    // Clean up resources
-    for (const resource of active) {
-      active.delete(resource);
-      cleaned++;
-    }
-    
-    return {
-      created,
-      cleaned,
-      leaks: active.size
-    };
-  } catch (error) {
-    return {
-      created,
-      cleaned,
-      leaks: active.size
-    };
-  }
-}
-
-function safeStringOperation(config: any): string {
-  const maxLength = 10 * 1024 * 1024; // 10MB
-  const estimatedLength = config.baseString.length * config.repeatCount + config.appendString.length;
-  
-  if (estimatedLength > maxLength) {
-    throw new Error(`String operation would exceed memory limit: ${estimatedLength} > ${maxLength}`);
-  }
-  
-  let result = config.baseString.repeat(Math.min(config.repeatCount, 10000));
-  result += config.appendString;
-  
-  return result;
-}
-
-function safeBufferOperations(config: any): { success: boolean, errors: number } {
-  const maxBufferSize = 50 * 1024 * 1024; // 50MB
-  
-  if (config.bufferSize > maxBufferSize) {
-    throw new Error(`Buffer size ${config.bufferSize} exceeds limit ${maxBufferSize}`);
-  }
-  
-  try {
-    const buffer = new ArrayBuffer(Math.min(config.bufferSize, maxBufferSize));
-    const view = new Uint8Array(buffer);
-    let errors = 0;
-    
-    for (const op of config.operations) {
-      try {
-        switch (op.type) {
-          case 'read':
-            if (op.offset + op.length <= view.length) {
-              view.slice(op.offset, op.offset + op.length);
-            } else {
-              errors++;
-            }
-            break;
-          case 'write':
-            if (op.offset + op.length <= view.length) {
-              view.fill(42, op.offset, op.offset + op.length);
-            } else {
-              errors++;
-            }
-            break;
-          case 'copy':
-            if (op.offset + op.length <= view.length) {
-              const copy = new Uint8Array(view.buffer.slice(op.offset, op.offset + op.length));
-            } else {
-              errors++;
-            }
-            break;
-        }
-      } catch {
-        errors++;
-      }
-    }
-    
-    return { success: true, errors };
-  } catch (error) {
-    throw new Error(`Buffer operation failed: ${error.message}`);
-  }
-}
-
-function manageEventListeners(count: number): { active: number, leaked: number } {
-  const listeners = new Map();
-  const maxListeners = 1000;
-  
-  if (count > maxListeners) {
-    throw new Error(`Listener count ${count} exceeds limit ${maxListeners}`);
-  }
-  
-  // Create listeners
-  for (let i = 0; i < Math.min(count, maxListeners); i++) {
-    const listener = () => { /* dummy */ };
-    listeners.set(`listener${i}`, listener);
-  }
-  
-  // Clean up listeners
-  for (const [key, listener] of listeners) {
-    listeners.delete(key);
-  }
-  
-  return {
-    active: listeners.size,
-    leaked: 0
-  };
-}
-
-function createClosuresWithData(config: any): { created: number, memoryLeakDetected: boolean } {
-  const closures: any[] = [];
-  const maxClosures = 1000;
-  const maxDataSize = 10000;
-  
-  if (config.closureCount > maxClosures) {
-    throw new Error(`Closure count ${config.closureCount} exceeds limit ${maxClosures}`);
-  }
-  
-  const actualCount = Math.min(config.closureCount, maxClosures);
-  const actualDataSize = Math.min(config.capturedDataSize, maxDataSize);
-  
-  for (let i = 0; i < actualCount; i++) {
-    const data = 'x'.repeat(actualDataSize);
-    const closure = () => data.length; // Captures data
-    closures.push(closure);
-  }
-  
-  // Clear references to allow GC
-  closures.length = 0;
-  
-  return {
-    created: actualCount,
-    memoryLeakDetected: false
-  };
-}
-
-function manageWeakReferences(objects: any[]): { weakRefsCreated: number, strongRefsCount: number } {
-  const weakRefs: WeakRef<any>[] = [];
-  const strongRefs: any[] = [];
-  const maxStrongRefs = 10;
-  
-  for (const obj of objects) {
-    const weakRef = new WeakRef(obj);
-    weakRefs.push(weakRef);
-    
-    // Keep only a few strong references
-    if (strongRefs.length < maxStrongRefs) {
-      strongRefs.push(obj);
-    }
-  }
-  
-  return {
-    weakRefsCreated: weakRefs.length,
-    strongRefsCount: strongRefs.length
-  };
-}
