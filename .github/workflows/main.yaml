@@ -86,7 +86,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish npm package with @next tag
-        if: ${{ steps.changesets.outputs.published != 'true' && github.actor != 'dependabot[bot]'}}
+        if: ${{ steps.changesets.outputs.published != 'true' && github.head_ref != 'changeset-release/main' && github.actor != 'dependabot[bot]'}}
         # - name: Creating .npmrc
         run: |
           cat << EOF > "$HOME/.npmrc"
