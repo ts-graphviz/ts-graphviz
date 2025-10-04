@@ -1,6 +1,5 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
-  "root": true,
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -10,14 +9,14 @@
     "ignoreUnknown": true,
     "includes": [
       "**/*.ts",
-      "**/*.tsx", 
+      "**/*.tsx",
       "**/*.js",
       "**/*.jsx",
       "**/*.mjs",
       "**/*.json",
       "**/*.jsonc",
       "!**/lib/**",
-      "!**/doc/**", 
+      "!**/doc/**",
       "!**/node_modules/**",
       "!**/coverage/**",
       "!packages/ast/src/dot-shim/parser/_parse.js",
@@ -50,6 +49,12 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "complexity": {
+        "noForEach": "off"
+      },
+      "nursery": {
+        "useUniqueElementIds": "off"
+      },
       "suspicious": {
         "noExplicitAny": "off",
         "noShadowRestrictedNames": "off"
@@ -65,9 +70,6 @@
         "useNumberNamespace": "error",
         "noInferrableTypes": "error",
         "noUselessElse": "error"
-      },
-      "nursery": {
-        "useUniqueElementIds": "off"
       }
     }
   }

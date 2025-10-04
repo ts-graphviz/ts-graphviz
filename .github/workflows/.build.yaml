@@ -32,6 +32,8 @@ jobs:
           path: packages/ast/src/dot-shim/parser
       - name: Build
         run: pnpm build
+      - name: Type Check (Strict)
+        run: pnpm typecheck:strict
       - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
         with:
           path: |

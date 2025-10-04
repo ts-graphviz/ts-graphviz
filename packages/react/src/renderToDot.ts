@@ -90,8 +90,7 @@ export async function renderToDot<
 
       if (models.length !== 1) {
         throw new Error(
-          `Expected exactly one top-level graph, but got ${models.length}. ` +
-            'Use a container or ensure only one Graph/Digraph component is at the top level.',
+          `Expected exactly one top-level graph, but got ${models.length}. Use a container or ensure only one Graph/Digraph component is at the top level.`,
         );
       }
 

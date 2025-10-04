@@ -197,9 +197,7 @@ function validateModels(
 
   if (topLevelGraphs.length > 1) {
     throw new Error(
-      `Multiple top-level graphs detected (${topLevelGraphs.length}). ` +
-        'DOT language only supports one graph per file. ' +
-        'Consider using a container or rendering graphs separately.',
+      `Multiple top-level graphs detected (${topLevelGraphs.length}). DOT language only supports one graph per file. Consider using a container or rendering graphs separately.`,
     );
   }
 }

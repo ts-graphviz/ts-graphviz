@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "skipLibCheck": false
+  },
+  "include": [
+    "packages/common/src/**/*.ts",
+    "packages/ast/src/**/*.ts",
+    "packages/core/src/**/*.ts",
+    "packages/adapter/src/**/*.ts",
+    "packages/ts-graphviz/src/**/*.ts"
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/test-utils/**",
+    "**/node_modules",
+    "**/lib",
+    "**/dist"
+  ]
+}
