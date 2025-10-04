@@ -1,8 +1,8 @@
 import {
-  attribute as _,
   Digraph,
   Graph,
   type RootGraphModel,
+  attribute as _,
   toDot,
 } from 'ts-graphviz';
 import { beforeEach, describe, expect, it } from 'vitest';

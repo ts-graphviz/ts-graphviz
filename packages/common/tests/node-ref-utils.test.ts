@@ -1,12 +1,12 @@
 import {
   type Compass,
   type ForwardRefNode,
+  type NodeModel,
   isCompass,
   isForwardRefNode,
   isNodeRef,
   isNodeRefGroupLike,
   isNodeRefLike,
-  type NodeModel,
   toNodeRef,
   toNodeRefGroup,
 } from '@ts-graphviz/common';

@@ -1,7 +1,7 @@
 import {
   type ConvertFromModelOptions,
-  fromModel,
   type PrintOptions,
+  fromModel,
   stringify,
 } from '@ts-graphviz/ast';
 import type { DotObjectModel } from '@ts-graphviz/common';

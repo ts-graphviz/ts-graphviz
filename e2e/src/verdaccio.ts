@@ -1,6 +1,6 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { mkdtemp, rm } from 'node:fs/promises';
-import { createServer, type Server } from 'node:http';
+import { type Server, createServer } from 'node:http';
 import { devNull, tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { runServer } from 'verdaccio';

@@ -1,10 +1,10 @@
 import { devNull } from 'node:os';
 import {
-  attribute as _,
   Digraph,
   Edge,
   Node,
   Subgraph,
+  attribute as _,
   toDot,
 } from 'ts-graphviz';
 import { toFile } from 'ts-graphviz/adapter';

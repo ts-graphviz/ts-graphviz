@@ -173,7 +173,7 @@ export class PackageManager {
 
     // Remove provenance from publishConfig to avoid npm registry issues in test environment
     if (packageJson.publishConfig?.provenance) {
-      delete packageJson.publishConfig.provenance;
+      packageJson.publishConfig.provenance = undefined;
     }
 
     await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));

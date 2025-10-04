@@ -2,13 +2,13 @@
 
 import { devNull } from 'node:os';
 import {
-  attribute as _,
   Digraph,
   Edge,
   type EdgeAttributesObject,
   Node,
   type NodeAttributesObject,
   Subgraph,
+  attribute as _,
   toDot,
 } from 'ts-graphviz';
 import { toFile } from 'ts-graphviz/adapter';

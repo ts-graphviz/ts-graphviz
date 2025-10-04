@@ -12,8 +12,8 @@ import { Subgraph } from './components/Subgraph.js';
 import { createRoot } from './createRoot.js';
 import {
   expectGraph,
-  expectModelsToContainTypes,
   expectModelWithId,
+  expectModelsToContainTypes,
   expectNode,
 } from './test-utils/assertions.js';
 import './types.js';

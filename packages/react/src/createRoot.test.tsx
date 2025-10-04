@@ -2,12 +2,12 @@ import React from 'react';
 import {
   Digraph as DigraphModel,
   type EdgeModel,
-  isEdgeModel,
-  isNodeModel,
-  isRootGraphModel,
   type NodeModel,
   type RootGraphModel,
   type SubgraphModel,
+  isEdgeModel,
+  isNodeModel,
+  isRootGraphModel,
 } from 'ts-graphviz';
 import { describe, expect, it, vi } from 'vitest';
 import { Digraph } from './components/Digraph.js';
