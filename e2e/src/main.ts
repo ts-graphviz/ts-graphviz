@@ -20,7 +20,7 @@ import { E2EError } from './error-handler.js';
 import { logger } from './logger.js';
 import { PackageManager } from './package-manager.js';
 import { TestRunner } from './test-runner.js';
-import { NpmConfigManager, formatDuration } from './utils.js';
+import { formatDuration, NpmConfigManager } from './utils.js';
 import { VerdaccioManager } from './verdaccio.js';
 
 async function main(): Promise<boolean> {

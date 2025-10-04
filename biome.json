@@ -7,26 +7,28 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "include": [
+    "includes": [
       "**/*.ts",
       "**/*.tsx",
       "**/*.js",
       "**/*.jsx",
       "**/*.mjs",
       "**/*.json",
-      "**/*.jsonc"
-    ],
-    "ignore": [
-      "**/lib/**",
-      "**/doc/**",
-      "**/node_modules/**",
-      "**/coverage/**",
-      "packages/ast/src/dot-shim/parser/_parse.js",
-      "packages/ast/src/dot-shim/parser/_parse.d.ts"
+      "**/*.jsonc",
+      "!**/lib/**",
+      "!**/doc/**",
+      "!**/node_modules/**",
+      "!**/coverage/**",
+      "!packages/ast/src/dot-shim/parser/_parse.js",
+      "!packages/ast/src/dot-shim/parser/_parse.d.ts"
     ]
   },
-  "organizeImports": {
-    "enabled": true
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "formatter": {
     "enabled": true,
@@ -49,6 +51,9 @@
       "recommended": true,
       "complexity": {
         "noForEach": "off"
+      },
+      "nursery": {
+        "useUniqueElementIds": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",

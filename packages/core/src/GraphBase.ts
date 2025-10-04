@@ -1,6 +1,7 @@
 import {
   type AttributeKey,
   type ClusterSubgraphAttributeKey,
+  createModelsContext,
   type DotObjectType,
   type EdgeAttributeKey,
   type EdgeAttributesObject,
@@ -9,6 +10,7 @@ import {
   type EdgeTargetTuple,
   type GraphBaseModel,
   type GraphCommonAttributes,
+  isNodeRefGroupLike,
   type ModelsContext,
   type NodeAttributeKey,
   type NodeAttributesObject,
@@ -17,8 +19,6 @@ import {
   type SubgraphAttributeKey,
   type SubgraphAttributesObject,
   type SubgraphModel,
-  createModelsContext,
-  isNodeRefGroupLike,
   toNodeRef,
   toNodeRefGroup,
 } from '@ts-graphviz/common';

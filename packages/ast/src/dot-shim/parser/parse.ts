@@ -9,7 +9,7 @@ import type {
   NodeASTNode,
   SubgraphASTNode,
 } from '../../types.js';
-import { SyntaxError as PeggySyntaxError, parse as _parse } from './_parse.js';
+import { parse as _parse, SyntaxError as PeggySyntaxError } from './_parse.js';
 
 /**
  * @group Convert DOT to AST

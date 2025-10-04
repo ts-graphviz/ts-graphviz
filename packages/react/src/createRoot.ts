@@ -1,4 +1,4 @@
-import { type ReactElement, createElement } from 'react';
+import { createElement, type ReactElement } from 'react';
 import type { DotObjectModel, FilterableModel } from 'ts-graphviz';
 import { isRootGraphModel } from 'ts-graphviz';
 

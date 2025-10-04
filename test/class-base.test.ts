@@ -1,10 +1,10 @@
 import {
+  attribute as _,
   Digraph,
   Edge,
   type EdgeTargetTuple,
   Node,
   Subgraph,
-  attribute as _,
   toDot,
   withContext,
 } from 'ts-graphviz';
