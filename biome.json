@@ -1,6 +1,5 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
-  "root": true,
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -8,28 +7,26 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": [
+    "include": [
       "**/*.ts",
-      "**/*.tsx", 
+      "**/*.tsx",
       "**/*.js",
       "**/*.jsx",
       "**/*.mjs",
       "**/*.json",
-      "**/*.jsonc",
-      "!**/lib/**",
-      "!**/doc/**", 
-      "!**/node_modules/**",
-      "!**/coverage/**",
-      "!packages/ast/src/dot-shim/parser/_parse.js",
-      "!packages/ast/src/dot-shim/parser/_parse.d.ts"
+      "**/*.jsonc"
+    ],
+    "ignore": [
+      "**/lib/**",
+      "**/doc/**",
+      "**/node_modules/**",
+      "**/coverage/**",
+      "packages/ast/src/dot-shim/parser/_parse.js",
+      "packages/ast/src/dot-shim/parser/_parse.d.ts"
     ]
   },
-  "assist": {
-    "actions": {
-      "source": {
-        "organizeImports": "on"
-      }
-    }
+  "organizeImports": {
+    "enabled": true
   },
   "formatter": {
     "enabled": true,
@@ -65,9 +62,6 @@
         "useNumberNamespace": "error",
         "noInferrableTypes": "error",
         "noUselessElse": "error"
-      },
-      "nursery": {
-        "useUniqueElementIds": "off"
       }
     }
   }

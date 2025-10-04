@@ -34,6 +34,7 @@
     "lint": "biome check --write ./**",
     "test": "vitest",
     "typecheck": "tsc --noEmit --strict --skipLibCheck",
+    "typecheck:strict": "tsc --project tsconfig.packages.json --noEmit --skipLibCheck false",
     "test:e2e": "pnpm --filter @ts-graphviz/e2e test"
   },
   "devDependencies": {
