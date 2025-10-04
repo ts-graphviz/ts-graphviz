@@ -1,6 +1,6 @@
 {
   "name": "@ts-graphviz/core",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Graphviz Models for Object-Oriented Programming",
   "keywords": [
     "graphviz",
