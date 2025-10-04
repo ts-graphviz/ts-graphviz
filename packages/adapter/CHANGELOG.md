@@ -1,5 +1,14 @@
 # @ts-graphviz/adapter
 
+## 3.0.2
+
+### Patch Changes
+
+- [#1483](https://github.com/ts-graphviz/ts-graphviz/pull/1483) [`a07d3b7`](https://github.com/ts-graphviz/ts-graphviz/commit/a07d3b7037d08bcb99679562468e16e5af0968ba) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix CI workflow to prevent @next tag publishing after Version Packages PR merge
+
+- Updated dependencies [[`a07d3b7`](https://github.com/ts-graphviz/ts-graphviz/commit/a07d3b7037d08bcb99679562468e16e5af0968ba)]:
+  - @ts-graphviz/common@3.0.2
+
 ## 3.0.1
 
 ### Patch Changes
