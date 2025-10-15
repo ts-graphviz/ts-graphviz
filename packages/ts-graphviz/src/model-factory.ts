@@ -27,7 +27,7 @@ export const strict: ModelFactories = createModelFactories(true);
  *
  * @param models - An object containing the models to be used in the context.
  *
- * @returns A ModelFactoriesWithStrict object containing the factories.
+ * @returns An object with model factories ('digraph', 'graph', and 'strict') that operate within the given context.
  * @group Model Factory
  */
 export function withContext(
