@@ -191,8 +191,8 @@ importers:
         version: link:../common
     devDependencies:
       peggy:
-        specifier: ^5.0.3
-        version: 5.0.3
+        specifier: ^5.0.6
+        version: 5.0.6
       typescript:
         specifier: ^5.8.2
         version: 5.8.3
@@ -718,9 +718,9 @@ packages:
     resolution: {integrity: sha512-/xGlezI6xfGO9NwuJlnwz/K14qD1kCSAGtacBHnGzeAIuJGazcp45KP5NuyARXoKb7cwulAGWVsbeSxdG/cb0Q==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
-  '@peggyjs/from-mem@2.0.0':
-    resolution: {integrity: sha512-f+pL/s2DiT+2dxwheSoJT0P/KJy/s0klzE+ZqRdXHlkeyFk/DpKtyjLZIiA79kx56g3oEPA8Zu9EzEKzAwuvhw==}
-    engines: {node: '>=20'}
+  '@peggyjs/from-mem@3.1.1':
+    resolution: {integrity: sha512-m5OEjgJaePWpyNtQCvRZkpLoV+z44eh6QIO9yEwQuOThdUdkECO3wcKLT3tFA3H8WM5bxU/K/dpmo7r/X16UEw==}
+    engines: {node: '>=20.8'}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -2031,6 +2031,10 @@ packages:
 
   commander@14.0.0:
     resolution: {integrity: sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA==}
+    engines: {node: '>=20'}
+
+  commander@14.0.1:
+    resolution: {integrity: sha512-2JkV3gUZUVrbNA+1sjBOYLsMZ5cEEl8GTFP2a4AVz5hvasAMCQ1D2l2le/cX+pV4N6ZU17zjUahLpIXRrnWL8A==}
     engines: {node: '>=20'}
 
   commander@7.2.0:
@@ -3659,8 +3663,8 @@ packages:
   peek-stream@1.1.3:
     resolution: {integrity: sha512-FhJ+YbOSBb9/rIl2ZeE/QHEsWn7PqNYt8ARAY3kIgNGOk13g9FGyIY6JIl/xB/3TFRVoTv5as0l11weORrTekA==}
 
-  peggy@5.0.3:
-    resolution: {integrity: sha512-QErYmLjj/ehiNNJRqx2qb36hzkanuascpMqREs2RQqaXhU3cflIRScP/u2BoobIfu/FaeI3GGxNB/vFX/Ar9lg==}
+  peggy@5.0.6:
+    resolution: {integrity: sha512-Sud8Zus0JAgE+U4zwkJv29OOaXhviFI7J90/6cGfy3OoqR8dpnieeF9a46dj0bTtqiFnrFatldA6ltQyOJvNmg==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -4008,6 +4012,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  semver@7.7.3:
+    resolution: {integrity: sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   send@0.19.0:
     resolution: {integrity: sha512-dW41u5VfLXu8SJh5bwRmyYUbAoSB3c9uQh6L8h/KtsFREPWpbX1lrljJo186Jc4nmci/sGUZ9a0a0J2zgfq2hw==}
     engines: {node: '>= 0.8.0'}
@@ -4098,8 +4107,8 @@ packages:
     resolution: {integrity: sha512-aUYIEU/UviqPgc8mHR6IW1EGxkAXpeRETYcrzg8cLAvUPZcpAlleSXHV2mY7G12GphSH6Gzv+4MMVSSkbdteHg==}
     engines: {node: '>=8'}
 
-  source-map-generator@2.0.0:
-    resolution: {integrity: sha512-4KomB7QsJti7dFBAVF6SXHzuCNQauk4gE2CummcqPzl+eJqXz1CkkiBdVXXW3g8VGh23bxcdEVACOzrxpIqnUg==}
+  source-map-generator@2.0.2:
+    resolution: {integrity: sha512-unCl5BQhF/us51DiT7SvlSY3QUPhyfAdHJxd8l7FXdwzqxli0UDMV2dEuei2SeGp3Z4rB/AJ9zKi1mGOp2K2ww==}
     engines: {node: '>=20'}
 
   source-map-js@1.2.1:
@@ -5259,11 +5268,11 @@ snapshots:
 
   '@npmcli/fs@4.0.0':
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
-  '@peggyjs/from-mem@2.0.0':
+  '@peggyjs/from-mem@3.1.1':
     dependencies:
-      semver: 7.7.1
+      semver: 7.7.2
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -5531,7 +5540,7 @@ snapshots:
     dependencies:
       '@pnpm/crypto.hash': 1000.1.1
       '@pnpm/types': 1000.6.0
-      semver: 7.7.2
+      semver: 7.7.3
 
   '@pnpm/directory-fetcher@1000.1.8(@pnpm/logger@1001.0.0)':
     dependencies:
@@ -5650,7 +5659,7 @@ snapshots:
       '@pnpm/resolver-base': 1004.0.0
       graceful-git: 4.0.0
       hosted-git-info: '@pnpm/hosted-git-info@1.0.0'
-      semver: 7.7.2
+      semver: 7.7.3
     transitivePeerDependencies:
       - '@pnpm/logger'
       - domexception
@@ -5710,7 +5719,7 @@ snapshots:
       normalize-path: 3.0.0
       p-settle: 4.1.1
       ramda: '@pnpm/ramda@0.28.1'
-      semver: 7.7.2
+      semver: 7.7.3
       symlink-dir: 6.0.5
 
   '@pnpm/local-resolver@1002.0.0(@pnpm/logger@1001.0.0)':
@@ -5890,7 +5899,7 @@ snapshots:
       p-queue: 6.6.2
       promise-share: 1.0.0
       ramda: '@pnpm/ramda@0.28.1'
-      semver: 7.7.2
+      semver: 7.7.3
       ssri: 10.0.5
 
   '@pnpm/package-requester@1004.0.3(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.8(@pnpm/logger@1001.0.0)(@types/node@24.0.7))':
@@ -5914,7 +5923,7 @@ snapshots:
       p-queue: 6.6.2
       promise-share: 1.0.0
       ramda: '@pnpm/ramda@0.28.1'
-      semver: 7.7.2
+      semver: 7.7.3
       ssri: 10.0.5
 
   '@pnpm/package-store@1002.0.5(@pnpm/logger@1001.0.0)(@pnpm/worker@1000.1.8(@pnpm/logger@1001.0.0)(@types/node@20.19.0))':
@@ -7151,7 +7160,7 @@ snapshots:
 
   builtins@5.1.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   bytes@3.1.2: {}
 
@@ -7272,6 +7281,8 @@ snapshots:
       delayed-stream: 1.0.0
 
   commander@14.0.0: {}
+
+  commander@14.0.1: {}
 
   commander@7.2.0: {}
 
@@ -8458,7 +8469,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   make-empty-dir@3.0.2:
     dependencies:
@@ -8667,7 +8678,7 @@ snapshots:
       make-fetch-happen: 14.0.3
       nopt: 8.1.0
       proc-log: 5.0.0
-      semver: 7.7.2
+      semver: 7.7.3
       tar: 7.4.3
       tinyglobby: 0.2.14
       which: 5.0.0
@@ -8686,7 +8697,7 @@ snapshots:
     dependencies:
       hosted-git-info: 6.1.3
       is-core-module: 2.16.1
-      semver: 7.7.2
+      semver: 7.7.3
       validate-npm-package-license: 3.0.4
 
   normalize-path@3.0.0: {}
@@ -8897,11 +8908,11 @@ snapshots:
       duplexify: 3.7.1
       through2: 2.0.5
 
-  peggy@5.0.3:
+  peggy@5.0.6:
     dependencies:
-      '@peggyjs/from-mem': 2.0.0
-      commander: 14.0.0
-      source-map-generator: 2.0.0
+      '@peggyjs/from-mem': 3.1.1
+      commander: 14.0.1
+      source-map-generator: 2.0.2
 
   performance-now@2.1.0: {}
 
@@ -9258,6 +9269,8 @@ snapshots:
 
   semver@7.7.2: {}
 
+  semver@7.7.3: {}
+
   send@0.19.0:
     dependencies:
       debug: 2.6.9
@@ -9382,7 +9395,7 @@ snapshots:
     dependencies:
       is-plain-obj: 2.1.0
 
-  source-map-generator@2.0.0: {}
+  source-map-generator@2.0.2: {}
 
   source-map-js@1.2.1: {}
 
@@ -9832,7 +9845,7 @@ snapshots:
 
   version-selector-type@3.0.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   vite-node@3.2.4(@types/node@20.19.0)(tsx@4.20.3)(yaml@2.8.0):
     dependencies:
