@@ -1,6 +1,6 @@
 {
   "name": "@ts-graphviz/ast",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Graphviz AST(Abstract Syntax Tree) Utilities",
   "keywords": [],
   "homepage": "https://github.com/ts-graphviz/ts-graphviz#readme",

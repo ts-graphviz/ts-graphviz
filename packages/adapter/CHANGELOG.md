@@ -1,5 +1,62 @@
 # @ts-graphviz/adapter
 
+## 3.0.3
+
+### Patch Changes
+
+- [#1513](https://github.com/ts-graphviz/ts-graphviz/pull/1513) [`9d52d28`](https://github.com/ts-graphviz/ts-graphviz/commit/9d52d282031ed173a75ef0fb77ddea9677f78520) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix @next tag publishing pipeline to prevent incorrect releases
+
+  This fix addresses issues with the @next tag publishing workflow where stable versions were incorrectly published with @next tag, and subsequently, @next versions stopped being published entirely.
+
+  **Problem 1 (PR #1513):**
+  Stable package versions were being incorrectly published with the @next tag instead of the latest tag. The Changesets action switches to `changeset-release/main` and updates package.json versions, but the @next publish step would run on this branch where no unreleased changesets remain, causing stable versions to be published with @next tag.
+
+  **Solution 1:**
+  Added a branch check step to verify the current working directory is on the main branch before executing @next publish.
+
+  **Problem 2 (This PR):**
+  The branch check from PR #1513 prevented ALL @next publishes because the changesets action never switches back to main, causing the branch check to always fail.
+
+  **Solution 2:**
+  Added a step to switch back to the main branch after the changesets action completes. This ensures the working directory is in the correct state for snapshot versioning while maintaining the safety check.
+
+  **Changes:**
+
+  - Added branch check to verify current branch before @next publish
+  - Added `git checkout main` step after changesets action
+  - Updated @next publish condition to include branch verification
+  - Removed redundant commit message check that was ineffective
+
+- [#1514](https://github.com/ts-graphviz/ts-graphviz/pull/1514) [`d74172a`](https://github.com/ts-graphviz/ts-graphviz/commit/d74172a594531f071b7e06c079b6555d867bf683) Thanks [@kamiazya](https://github.com/kamiazya)! - Migrate npm publishing to OIDC trusted publishing
+
+  This change migrates the npm publishing workflow from using long-lived NPM_TOKEN secrets to OIDC (OpenID Connect) trusted publishing, following GitHub's security recommendations announced in September 2025.
+
+  **Benefits:**
+
+  - Enhanced security: No more long-lived tokens to manage, rotate, or accidentally expose
+  - Automatic provenance: Provenance attestations are generated automatically without the --provenance flag
+  - Compliance: Aligns with npm's new authentication requirements (token expiration limits)
+  - Short-lived credentials: Each publish uses workflow-specific, ephemeral credentials
+
+  **Changes:**
+
+  - Added `environment: npm` to the release job to match trusted publisher configuration
+  - Upgraded npm CLI to latest version (≥11.5.1) for OIDC support
+  - Removed NPM_TOKEN from changesets action and snapshot publish steps
+  - Removed manual .npmrc creation as authentication now uses OIDC tokens
+  - Updated id-token permission comment to reflect OIDC usage
+
+  **Requirements:**
+
+  - npm CLI v11.5.1 or later (automatically installed in workflow)
+  - Trusted publisher configured for each package on npmjs.com
+  - GitHub Actions environment named "npm" configured for the repository
+
+- [#1512](https://github.com/ts-graphviz/ts-graphviz/pull/1512) [`de566db`](https://github.com/ts-graphviz/ts-graphviz/commit/de566db993e1f62325f3a4afdbde178b86a96509) Thanks [@anubhav-goel](https://github.com/anubhav-goel)! - Updated broken monorepo package links to valid URLs
+
+- Updated dependencies [[`9d52d28`](https://github.com/ts-graphviz/ts-graphviz/commit/9d52d282031ed173a75ef0fb77ddea9677f78520), [`d74172a`](https://github.com/ts-graphviz/ts-graphviz/commit/d74172a594531f071b7e06c079b6555d867bf683), [`de566db`](https://github.com/ts-graphviz/ts-graphviz/commit/de566db993e1f62325f3a4afdbde178b86a96509)]:
+  - @ts-graphviz/common@3.0.3
+
 ## 3.0.2
 
 ### Patch Changes
