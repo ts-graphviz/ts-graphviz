@@ -9,16 +9,20 @@ import type {
   NodeASTNode,
   SubgraphASTNode,
 } from '../../types.js';
-import {
-  parse as _parse,
-  SyntaxError as PeggySyntaxError,
-  type StartRuleNames,
-} from './_parse.js';
+import { parse as _parse, SyntaxError as PeggySyntaxError } from './_parse.js';
 
 /**
  * @group Convert DOT to AST
  */
-export type Rule = StartRuleNames;
+export type Rule =
+  | 'Dot'
+  | 'Graph'
+  | 'Subgraph'
+  | 'Node'
+  | 'Edge'
+  | 'AttributeList'
+  | 'Attribute'
+  | 'ClusterStatements';
 
 /**
  * CommonParseOptions is an interface that defines the properties needed in order to parse a file.

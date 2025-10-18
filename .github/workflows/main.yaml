@@ -42,6 +42,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    environment: npm
     needs:
       - check
       - build
@@ -51,7 +52,7 @@ jobs:
     permissions:
       contents: write # Used to commit to "Version Packages" PR
       pull-requests: write # Used to create "Version Packages" PR
-      id-token: write # Used to publish to npm with provenance statements
+      id-token: write # Used to publish to npm with OIDC trusted publishing
       # Other permissions are defaulted to none
     steps:
       - name: Harden Runner
@@ -69,12 +70,14 @@ jobs:
           path: packages
       - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
       - name: Setup Node.js 20
-        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           cache: pnpm
           node-version-file: ./.node-version
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+      - name: Upgrade npm CLI for OIDC support
+        run: npm install -g npm@latest
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@3de3850952bec538fde60aac71731376e57b9b57 # v1.4.8
@@ -84,19 +87,18 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Switch back to main branch
+        run: git checkout main
+      - name: Check current branch
+        id: branch_check
+        run: echo "current_branch=$(git branch --show-current)" >> $GITHUB_OUTPUT
       - name: Publish npm package with @next tag
-        if: ${{ steps.changesets.outputs.published == 'false' && github.actor != 'dependabot[bot]'}}
-        # - name: Creating .npmrc
+        if: ${{ steps.changesets.outputs.published != 'true' && steps.branch_check.outputs.current_branch == 'main' && github.actor != 'dependabot[bot]'}}
         run: |
-          cat << EOF > "$HOME/.npmrc"
-            //registry.npmjs.org/:_authToken=$NPM_TOKEN
-          EOF
           pnpm exec changeset version --snapshot next
           pnpm exec changeset publish --no-git-tag --snapshot --tag next
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     outputs:
       published: ${{ steps.changesets.outputs.published }}
 

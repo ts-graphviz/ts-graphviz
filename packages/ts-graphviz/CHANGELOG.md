@@ -1,5 +1,186 @@
 # ts-graphviz
 
+## 3.0.2
+
+### Patch Changes
+
+- [#1483](https://github.com/ts-graphviz/ts-graphviz/pull/1483) [`a07d3b7`](https://github.com/ts-graphviz/ts-graphviz/commit/a07d3b7037d08bcb99679562468e16e5af0968ba) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix CI workflow to prevent @next tag publishing after Version Packages PR merge
+
+- Updated dependencies [[`a07d3b7`](https://github.com/ts-graphviz/ts-graphviz/commit/a07d3b7037d08bcb99679562468e16e5af0968ba)]:
+  - @ts-graphviz/adapter@3.0.2
+  - @ts-graphviz/ast@3.0.2
+  - @ts-graphviz/common@3.0.2
+  - @ts-graphviz/core@3.0.2
+
+## 3.0.1
+
+### Patch Changes
+
+- [#1480](https://github.com/ts-graphviz/ts-graphviz/pull/1480) [`ab5d0c7`](https://github.com/ts-graphviz/ts-graphviz/commit/ab5d0c75620a0fd1bf36373716b26c2d433a0bc6) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix CI workflow to prevent publishing stable releases with @next tag
+
+- Updated dependencies [[`c9653aa`](https://github.com/ts-graphviz/ts-graphviz/commit/c9653aa75cb13a91d6a6bcbd8b64161cfd0273b5), [`ab5d0c7`](https://github.com/ts-graphviz/ts-graphviz/commit/ab5d0c75620a0fd1bf36373716b26c2d433a0bc6)]:
+  - @ts-graphviz/ast@3.0.1
+  - @ts-graphviz/adapter@3.0.1
+  - @ts-graphviz/common@3.0.1
+  - @ts-graphviz/core@3.0.1
+
+## 3.0.0
+
+### Major Changes
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - 🚨 Breaking Changes: Drop Node.js 18 support
+
+  Minimum required version is now Node.js 20+
+
+  ### ESM-Only Distribution
+
+  - **Remove CommonJS builds**: All packages now distribute only ESM (ECMAScript Modules)
+  - **Package exports**: Removed `require` fields from `package.json` exports
+  - **Module type**: All packages are now `"type": "module"`
+
+  ## 🔄 Migration Guide
+
+  ### For ESM Projects (Recommended)
+
+  ```json
+  {
+    "type": "module"
+  }
+  ```
+
+  ```typescript
+  // Import syntax remains unchanged
+  import { Digraph, Node, Edge, toDot } from "ts-graphviz";
+  import { toFile } from "ts-graphviz/adapter";
+  import { parse } from "ts-graphviz/ast";
+  ```
+
+  ### For CommonJS Projects
+
+  If you are using CommonJS (CJS) and need to migrate to ESM, you will need to update your project to support dynamic imports. This is necessary because the packages no longer provide CommonJS builds.
+
+  ### Before (CJS)
+
+  ```javascript
+  // JavaScript (CommonJS)
+  function createGraph() {
+    // Dynamic import is required because the packages no longer provide CommonJS builds.
+    const { Digraph, Node, Edge, toDot } = require("ts-graphviz");
+    const graph = new Digraph();
+    return toDot(graph);
+  }
+  ```
+
+  ### After (ESM)
+
+  ```javascript
+  async function createGraph() {
+    const { Digraph, Node, Edge, toDot } = await import("ts-graphviz");
+
+    const graph = new Digraph();
+    // Create your graph...
+    return toDot(graph);
+  }
+  ```
+
+  ```typescript
+  // TypeScript (CommonJS)
+  // Update tsconfig.json
+  {
+    "compilerOptions": {
+      "module": "Node16",
+      "moduleResolution": "Node16"
+    }
+  }
+
+  // Use dynamic imports
+  async function createGraph() {
+    const tsGraphviz = await import('ts-graphviz');
+    const { Digraph, Node, Edge, toDot } = tsGraphviz;
+
+    const graph = new Digraph();
+    // Create your graph...
+    return toDot(graph);
+  }
+  ```
+
+  ## 🎯 Benefits
+
+  - **Modern JavaScript**: Leveraging native ES modules for better performance
+  - **Smaller bundle sizes**: ESM enables better tree-shaking
+  - **Future-proof**: Aligning with the JavaScript ecosystem direction
+  - **Better TypeScript support**: Enhanced module resolution
+
+### Minor Changes
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - Define Supported environment and Support levels
+
+  To provide clarity on the environments in which ts-graphviz operates, we have categorized support levels:
+
+  ## Support Levels
+
+  ### Tier 1: Full Support
+
+  - **Definition**: Environments that are fully supported, with comprehensive automated testing and maintenance.
+  - **Environments**:
+    - **Node.js LTS versions**: All active Long-Term Support (LTS) versions.
+      - If a Node.js LTS version is released, we will ensure compatibility with it.
+      - If a Node.js LTS version is deprecated, we will drop support for it in the next major release.
+  - **Details**:
+    - We run automated tests on all LTS versions of Node.js.
+    - Full compatibility and performance are ensured.
+    - Critical issues are prioritized for fixes.
+
+  ### Tier 2: Active Support
+
+  - **Definition**: Environments that receive active support with limited automated testing.
+  - **Environments**:
+    - **Deno Latest LTS version**: The latest Long-Term Support (LTS) version of Deno.
+      - If a new Deno LTS version is released, we will ensure compatibility with it.
+      - If a Deno LTS version is deprecated, we will drop support for it in the next minor release.
+    - **Node.js Current Release**: The latest Node.js release outside the LTS schedule.
+      - If a new Node.js current release is available, we will ensure compatibility with it.
+      - If a Node.js current release is deprecated, we will drop support for it in the next minor release.
+  - **Details**:
+    - Compatibility is maintained, and issues are addressed.
+
+  ### Tier 3: Community Support
+
+  - **Definition**: Environments that are not officially tested but are supported on a best-effort basis.
+  - **Environments**:
+    - **Modern Browsers**: Latest versions of major browsers, including:
+      - Google Chrome
+      - Mozilla Firefox
+      - Microsoft Edge
+      - Apple Safari
+    - **Deno Current Release**: The latest Deno release outside the LTS schedule.
+  - **Details**:
+    - Installation methods are provided.
+    - No automated testing is performed.
+    - Issues reported by users will be addressed.
+    - Targeting the latest versions ensures compatibility with modern web standards.
+    - We will not actively test or maintain compatibility with older versions of browsers.
+
+### Patch Changes
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - Update Develop Environment
+
+  - Drop turbo
+  - Upgrade biome to 2.0
+  - Upgrade TypeScript to 5.8
+  - Upgrade Vite to 7.0
+  - Upgrade Vitest to 3.2
+  - Upgrade Peggy to 5.0 and drop ts-pegjs
+  - Implement new E2E test workflow
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - New GitHub Action main workflow and tests
+
+- Updated dependencies [[`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c), [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c), [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c), [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c), [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c), [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c), [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c)]:
+  - @ts-graphviz/adapter@3.0.0
+  - @ts-graphviz/common@3.0.0
+  - @ts-graphviz/core@3.0.0
+  - @ts-graphviz/ast@3.0.0
+
 ## 2.1.6
 
 ### Patch Changes

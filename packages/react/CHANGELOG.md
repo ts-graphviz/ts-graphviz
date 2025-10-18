@@ -1,5 +1,512 @@
 # @ts-graphviz/react
 
+## 0.11.2
+
+### Patch Changes
+
+- [#1483](https://github.com/ts-graphviz/ts-graphviz/pull/1483) [`a07d3b7`](https://github.com/ts-graphviz/ts-graphviz/commit/a07d3b7037d08bcb99679562468e16e5af0968ba) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix CI workflow to prevent @next tag publishing after Version Packages PR merge
+
+- Updated dependencies [[`a07d3b7`](https://github.com/ts-graphviz/ts-graphviz/commit/a07d3b7037d08bcb99679562468e16e5af0968ba)]:
+  - @ts-graphviz/common@3.0.2
+  - ts-graphviz@3.0.2
+
+## 0.11.1
+
+### Patch Changes
+
+- [#1480](https://github.com/ts-graphviz/ts-graphviz/pull/1480) [`ab5d0c7`](https://github.com/ts-graphviz/ts-graphviz/commit/ab5d0c75620a0fd1bf36373716b26c2d433a0bc6) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix CI workflow to prevent publishing stable releases with @next tag
+
+- Updated dependencies [[`ab5d0c7`](https://github.com/ts-graphviz/ts-graphviz/commit/ab5d0c75620a0fd1bf36373716b26c2d433a0bc6)]:
+  - @ts-graphviz/common@3.0.1
+  - ts-graphviz@3.0.1
+
+## 0.11.0
+
+### Minor Changes
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - 🚨 Breaking Changes: Drop Node.js 18 support
+
+  Minimum required version is now Node.js 20+
+
+  ### ESM-Only Distribution
+
+  - **Remove CommonJS builds**: All packages now distribute only ESM (ECMAScript Modules)
+  - **Package exports**: Removed `require` fields from `package.json` exports
+  - **Module type**: All packages are now `"type": "module"`
+
+  ## 🔄 Migration Guide
+
+  ### For ESM Projects (Recommended)
+
+  ```json
+  {
+    "type": "module"
+  }
+  ```
+
+  ```typescript
+  // Import syntax remains unchanged
+  import { Digraph, Node, Edge, toDot } from "ts-graphviz";
+  import { toFile } from "ts-graphviz/adapter";
+  import { parse } from "ts-graphviz/ast";
+  ```
+
+  ### For CommonJS Projects
+
+  If you are using CommonJS (CJS) and need to migrate to ESM, you will need to update your project to support dynamic imports. This is necessary because the packages no longer provide CommonJS builds.
+
+  ### Before (CJS)
+
+  ```javascript
+  // JavaScript (CommonJS)
+  function createGraph() {
+    // Dynamic import is required because the packages no longer provide CommonJS builds.
+    const { Digraph, Node, Edge, toDot } = require("ts-graphviz");
+    const graph = new Digraph();
+    return toDot(graph);
+  }
+  ```
+
+  ### After (ESM)
+
+  ```javascript
+  async function createGraph() {
+    const { Digraph, Node, Edge, toDot } = await import("ts-graphviz");
+
+    const graph = new Digraph();
+    // Create your graph...
+    return toDot(graph);
+  }
+  ```
+
+  ```typescript
+  // TypeScript (CommonJS)
+  // Update tsconfig.json
+  {
+    "compilerOptions": {
+      "module": "Node16",
+      "moduleResolution": "Node16"
+    }
+  }
+
+  // Use dynamic imports
+  async function createGraph() {
+    const tsGraphviz = await import('ts-graphviz');
+    const { Digraph, Node, Edge, toDot } = tsGraphviz;
+
+    const graph = new Digraph();
+    // Create your graph...
+    return toDot(graph);
+  }
+  ```
+
+  ## 🎯 Benefits
+
+  - **Modern JavaScript**: Leveraging native ES modules for better performance
+  - **Smaller bundle sizes**: ESM enables better tree-shaking
+  - **Future-proof**: Aligning with the JavaScript ecosystem direction
+  - **Better TypeScript support**: Enhanced module resolution
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - Define Supported environment and Support levels
+
+  To provide clarity on the environments in which ts-graphviz operates, we have categorized support levels:
+
+  ## Support Levels
+
+  ### Tier 1: Full Support
+
+  - **Definition**: Environments that are fully supported, with comprehensive automated testing and maintenance.
+  - **Environments**:
+    - **Node.js LTS versions**: All active Long-Term Support (LTS) versions.
+      - If a Node.js LTS version is released, we will ensure compatibility with it.
+      - If a Node.js LTS version is deprecated, we will drop support for it in the next major release.
+  - **Details**:
+    - We run automated tests on all LTS versions of Node.js.
+    - Full compatibility and performance are ensured.
+    - Critical issues are prioritized for fixes.
+
+  ### Tier 2: Active Support
+
+  - **Definition**: Environments that receive active support with limited automated testing.
+  - **Environments**:
+    - **Deno Latest LTS version**: The latest Long-Term Support (LTS) version of Deno.
+      - If a new Deno LTS version is released, we will ensure compatibility with it.
+      - If a Deno LTS version is deprecated, we will drop support for it in the next minor release.
+    - **Node.js Current Release**: The latest Node.js release outside the LTS schedule.
+      - If a new Node.js current release is available, we will ensure compatibility with it.
+      - If a Node.js current release is deprecated, we will drop support for it in the next minor release.
+  - **Details**:
+    - Compatibility is maintained, and issues are addressed.
+
+  ### Tier 3: Community Support
+
+  - **Definition**: Environments that are not officially tested but are supported on a best-effort basis.
+  - **Environments**:
+    - **Modern Browsers**: Latest versions of major browsers, including:
+      - Google Chrome
+      - Mozilla Firefox
+      - Microsoft Edge
+      - Apple Safari
+    - **Deno Current Release**: The latest Deno release outside the LTS schedule.
+  - **Details**:
+    - Installation methods are provided.
+    - No automated testing is performed.
+    - Issues reported by users will be addressed.
+    - Targeting the latest versions ensures compatibility with modern web standards.
+    - We will not actively test or maintain compatibility with older versions of browsers.
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - ## React 19 Support with Breaking Changes
+
+  ## 🚨 BREAKING CHANGES
+
+  ### React 18 Support Discontinued
+
+  - **React 19+ is now required** - React 18 and earlier versions are no longer supported
+  - Updated `peerDependencies` to require `react@>=19` (removed `react-dom` dependency)
+
+  ### API Changes
+
+  **Migration Required:**
+
+  ```typescript
+  // Before
+  const graph = render(<Digraph>...</Digraph>, container);
+  const dotString = renderToDot(<Digraph>...</Digraph>, container);
+
+  // After - New createRoot API following React 19 patterns
+  const root = createRoot({ container });
+  await root.render(<Digraph>...</Digraph>);
+  const models = root.getTopLevelModels();
+  const dotString = await renderToDot(<Digraph>...</Digraph>, { container });
+  ```
+
+  ### Container Model Access Changes
+
+  **🚨 BREAKING CHANGE:** New createRoot API changes how you access rendered models
+
+  **Migration Required:**
+
+  ```typescript
+  // Before - result.model was the first rendered model
+  const container = new DigraphModel("parent");
+  const result = await render(<Node id="test" />, { container });
+  expect(result.model.$type).toBe("Node"); // ❌ Old API
+
+  // After - Use root.getTopLevelModels() to access models
+  const container = new DigraphModel("parent");
+  const root = createRoot({ container });
+  await root.render(<Node id="test" />);
+  const models = root.getTopLevelModels();
+  expect(models[0].$type).toBe("Node"); // ✅ New API
+  expect(models[0].id).toBe("test");
+  // Access container directly: container.nodes.length === 1
+  ```
+
+  ## ✨ NEW FEATURES
+
+  ### Modern createRoot API
+
+  - 🆕 `createRoot()` function following React 19's modern patterns
+  - 🆕 **Simplified API**: `createRoot(options)` - single options parameter for all configuration
+  - 🆕 **Container in options**: `createRoot({ container, onRenderComplete })` for cleaner code
+  - Better performance and memory management
+  - Cleaner API separation between rendering and model access
+  - Enhanced error handling with root-level configuration
+
+  ### Advanced Error Handling
+
+  - 🆕 `onUncaughtError` callback with component stack traces
+  - 🆕 `onCaughtError` callback for error boundary integration
+  - Better debugging capabilities for rendering failures
+
+  ```typescript
+  // Create root with error handling
+  const root = createRoot({
+    onUncaughtError: (error, errorInfo) => {
+      console.error("Rendering error:", error);
+      console.log("Component stack:", errorInfo.componentStack);
+    },
+  });
+
+  await root.render(<Digraph>...</Digraph>);
+  const models = root.getTopLevelModels();
+  ```
+
+  ### Ref as Prop Support
+
+  - All components now support React 19's ref as prop pattern
+  - Direct access to graph models (`NodeModel`, `EdgeModel`, `RootGraphModel`) via refs
+  - Enhanced TypeScript support with proper model typing
+
+  ### Reduced Dependencies
+
+  - 🆕 Removed `react-dom` dependency - now uses custom HTML rendering implementation
+  - Smaller bundle size and fewer peer dependencies required
+  - No longer dependent on React's server-side rendering APIs
+
+  ## 🔧 TECHNICAL UPDATES
+
+  ### React Reconciler Modernization
+
+  - Updated reconciler to use React 19's new `createContainer` API (8 arguments vs 10)
+  - Improved memory management and performance
+  - Simplified rendering by removing library-level concurrent control (users can wrap with startTransition if needed)
+
+  ### TypeScript Improvements
+
+  - Updated JSX namespace declaration from global to module scope
+  - Fixed React 19 type compatibility issues
+  - Enhanced type safety for error handlers
+
+  ### Type System Modernization
+
+  - 🆕 **Eliminated manual type assertions** with function overloads and type guards
+  - 🆕 **Runtime type filtering** using built-in type guards from `@ts-graphviz/common`
+  - 🆕 **Direct type casting** for performance when user knows exact types
+  - 🆕 **Type-safe model access** with automatic type narrowing
+  - 🆕 **Enhanced TypeScript developer experience** with precise type inference
+  - 🆕 **Flexible type handling** - choose between runtime validation or trusted assertions
+  - Enhanced debugging capabilities with strongly-typed error handling
+
+  **Two approaches for type-safe model access:**
+
+  1. **Runtime Type Filtering** (safe, validated):
+
+     ```typescript
+     const nodes = root.getTopLevelModels(isNodeModel); // Filters only NodeModel objects
+     ```
+
+     - Uses type guard functions for runtime validation
+     - Guarantees type safety at runtime
+     - Filters out non-matching models
+
+  2. **Direct Type Casting** (fast, trusted):
+     ```typescript
+     const nodes = root.getTopLevelModels<NodeModel>(); // Casts all models as NodeModel
+     ```
+     - No runtime validation - trusts user assertion
+     - Higher performance for known scenarios
+     - User responsible for type correctness
+
+  ### Model Collection Algorithm Improvements
+
+  - 🆕 **Container-aware collection** replaces priority-based system
+  - Fixed unpredictable behavior in nested component structures
+  - Consistent model return behavior regardless of component hierarchy depth
+  - Better handling of complex Subgraph and Edge combinations
+
+  ### Test Infrastructure
+
+  - 100% test coverage maintained
+  - React 19 compatibility validated
+
+  ## 📚 MIGRATION GUIDE
+
+  ### Prerequisites
+
+  - **Upgrade to React 19+**: Install `react@^19.0.0` (required)
+  - **Note**: `react-dom` is no longer required as this package now uses a custom HTML rendering implementation
+
+  ### Step-by-Step Migration
+
+  1. **Update React Dependency**
+
+     ```bash
+     npm install react@^19.0.0
+     # or
+     pnpm add react@^19.0.0
+     # or
+     yarn add react@^19.0.0
+     ```
+
+     **Note**: You can now remove `react-dom` from your dependencies if it was only needed for @ts-graphviz/react:
+
+     ```bash
+     npm uninstall react-dom
+     # or
+     pnpm remove react-dom
+     # or
+     yarn remove react-dom
+     ```
+
+  2. **Update to createRoot API**
+     Replace render function calls with createRoot pattern:
+
+     ```typescript
+     // Old API
+     - const result = await render(<MyGraph />, container);
+     - const dot = await renderToDot(<MyGraph />, container);
+
+     // New API
+     + const root = createRoot({ container });
+     + await root.render(<MyGraph />);
+     + const models = root.getTopLevelModels();
+     + const dot = await renderToDot(<MyGraph />, { container });
+     ```
+
+  3. **Update Model Access Patterns**
+
+     ```typescript
+     // Old behavior - result.model was the first rendered model
+     - const result = await render(<Node id="test" />, { container });
+     - expect(result.model.$type).toBe('Node');
+
+     // New behavior - use root.getTopLevelModels()
+     + const root = createRoot(container);
+     + await root.render(<Node id="test" />);
+     + const models = root.getTopLevelModels();
+     + expect(models[0].$type).toBe('Node');
+     + expect(models[0].id).toBe('test');
+     ```
+
+  4. **Add Error Handling (Optional)**
+
+     ```typescript
+     const root = createRoot(undefined, {
+       onUncaughtError: (error, errorInfo) => {
+         console.error("Graph rendering failed:", error);
+       },
+     });
+     await root.render(<MyGraph />);
+     ```
+
+  5. **Multiple Renders with Same Root**
+     ```typescript
+     // Create root once, use multiple times
+     const root = createRoot();
+     await root.render(<GraphA />);
+     await root.render(<GraphB />); // Replaces previous render
+     ```
+
+  ### API Reference
+
+  **Core Functions:**
+
+  - `createRoot(container?, options?)` - Creates a rendering root following React 19 patterns
+  - `renderToDot(element, options?)` - Primary DOT string generation
+
+  **createRoot Options:**
+
+  ```typescript
+  interface CreateRootOptions<
+    Container extends AnyGraphContainer = AnyGraphContainer
+  > {
+    container?: Container; // Container graph for rendering components
+    onUncaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
+    onCaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
+    onRecoverableError?: (error: Error, errorInfo: ErrorInfo) => void;
+    onRenderComplete?: (models: DotObjectModel[]) => void;
+    timeout?: number; // Rendering timeout (default: 5000ms)
+  }
+
+  interface GraphvizRoot {
+    render(element: ReactElement): Promise<void>;
+    unmount(): void;
+    // Overloaded for type-safe filtering and direct type casting
+    getTopLevelModels(): DotObjectModel[];
+    getTopLevelModels<T extends DotObjectModel>(
+      typeGuard: (model: DotObjectModel) => model is T
+    ): T[]; // Runtime type filtering with validation
+    getTopLevelModels<T extends DotObjectModel>(): T[]; // Direct type casting (trusted assertion)
+  }
+  ```
+
+  **Type-Safe Model Access Examples:**
+
+  ```typescript
+  // Import type guards for runtime type filtering
+  import {
+    isNodeModel,
+    isEdgeModel,
+    isRootGraphModel,
+  } from "@ts-graphviz/common";
+
+  const root = createRoot();
+  await root.render(<MyGraph />);
+
+  // === APPROACH 1: Runtime Type Filtering (Safe) ===
+  // Uses type guard functions - validates types at runtime
+  const validatedNodes = root.getTopLevelModels(isNodeModel); // Only actual NodeModel objects
+  const validatedEdges = root.getTopLevelModels(isEdgeModel); // Only actual EdgeModel objects
+  const validatedGraphs = root.getTopLevelModels(isRootGraphModel); // Only actual RootGraphModel objects
+
+  // Guaranteed type safety - filters out non-matching models
+  console.log(`Found ${validatedNodes.length} nodes`); // Could be 0 if no nodes exist
+  validatedNodes.forEach((node) => console.log(node.id)); // All items are definitely NodeModel
+
+  // === APPROACH 2: Direct Type Casting (Fast) ===
+  // User assertion - no runtime validation, trusts the user
+  const allAsNodes = root.getTopLevelModels<NodeModel>(); // ALL models cast as NodeModel[]
+  const allAsEdges = root.getTopLevelModels<EdgeModel>(); // ALL models cast as EdgeModel[]
+
+  // Higher performance but requires user knowledge
+  console.log(`Treating ${allAsNodes.length} models as nodes`); // Returns all models
+  // Warning: If models aren't actually NodeModel, runtime errors may occur
+
+  // === MIXED USAGE PATTERNS ===
+  // Get all models first, then decide approach
+  const allModels = root.getTopLevelModels();
+  if (allModels.every(isNodeModel)) {
+    // Safe to use direct casting since we validated
+    const nodes = root.getTopLevelModels<NodeModel>();
+    nodes.forEach((node) => console.log(`Node: ${node.id}`));
+  } else {
+    // Use filtering for mixed model types
+    const nodes = root.getTopLevelModels(isNodeModel);
+    const edges = root.getTopLevelModels(isEdgeModel);
+    console.log(`Found ${nodes.length} nodes and ${edges.length} edges`);
+  }
+  ```
+
+  **renderToDot Options:**
+
+  ```typescript
+  interface RenderToDotOptions<
+    T extends AnyGraphContainer = AnyGraphContainer
+  > {
+    container?: T; // Container graph for nested rendering
+    onUncaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
+    onCaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
+    timeout?: number; // Rendering timeout in milliseconds
+  }
+  ```
+
+  ## 📦 INSTALLATION
+
+  ```bash
+  # Install React 19 (required)
+  npm install react@^19
+
+  # Update to latest @ts-graphviz/react
+  npm install @ts-graphviz/react@latest
+
+  # Note: react-dom is no longer required
+  ```
+
+  This release represents a strategic modernization to ensure long-term compatibility with React's ecosystem while providing improved performance and developer experience.
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - Adjust HTML label AST handling for consistent behavior #1335
+
+  Improves the handling of HTML-like labels in the `fromDot` and `toDot` functions to ensure valid Dot output.
+
+### Patch Changes
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - Update Develop Environment
+
+  - Drop turbo
+  - Upgrade biome to 2.0
+  - Upgrade TypeScript to 5.8
+  - Upgrade Vite to 7.0
+  - Upgrade Vitest to 3.2
+  - Upgrade Peggy to 5.0 and drop ts-pegjs
+  - Implement new E2E test workflow
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - New GitHub Action main workflow and tests
+
+- Updated dependencies [[`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c), [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c), [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c), [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c), [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c)]:
+  - ts-graphviz@3.0.0
+  - @ts-graphviz/common@3.0.0
+
 ## 0.10.6
 
 ### Patch Changes

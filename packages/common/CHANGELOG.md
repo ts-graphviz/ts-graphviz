@@ -1,5 +1,204 @@
 # @ts-graphviz/common
 
+## 3.0.2
+
+### Patch Changes
+
+- [#1483](https://github.com/ts-graphviz/ts-graphviz/pull/1483) [`a07d3b7`](https://github.com/ts-graphviz/ts-graphviz/commit/a07d3b7037d08bcb99679562468e16e5af0968ba) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix CI workflow to prevent @next tag publishing after Version Packages PR merge
+
+## 3.0.1
+
+### Patch Changes
+
+- [#1480](https://github.com/ts-graphviz/ts-graphviz/pull/1480) [`ab5d0c7`](https://github.com/ts-graphviz/ts-graphviz/commit/ab5d0c75620a0fd1bf36373716b26c2d433a0bc6) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix CI workflow to prevent publishing stable releases with @next tag
+
+## 3.0.0
+
+### Major Changes
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - 🚨 Breaking Changes: Drop Node.js 18 support
+
+  Minimum required version is now Node.js 20+
+
+  ### ESM-Only Distribution
+
+  - **Remove CommonJS builds**: All packages now distribute only ESM (ECMAScript Modules)
+  - **Package exports**: Removed `require` fields from `package.json` exports
+  - **Module type**: All packages are now `"type": "module"`
+
+  ## 🔄 Migration Guide
+
+  ### For ESM Projects (Recommended)
+
+  ```json
+  {
+    "type": "module"
+  }
+  ```
+
+  ```typescript
+  // Import syntax remains unchanged
+  import { Digraph, Node, Edge, toDot } from "ts-graphviz";
+  import { toFile } from "ts-graphviz/adapter";
+  import { parse } from "ts-graphviz/ast";
+  ```
+
+  ### For CommonJS Projects
+
+  If you are using CommonJS (CJS) and need to migrate to ESM, you will need to update your project to support dynamic imports. This is necessary because the packages no longer provide CommonJS builds.
+
+  ### Before (CJS)
+
+  ```javascript
+  // JavaScript (CommonJS)
+  function createGraph() {
+    // Dynamic import is required because the packages no longer provide CommonJS builds.
+    const { Digraph, Node, Edge, toDot } = require("ts-graphviz");
+    const graph = new Digraph();
+    return toDot(graph);
+  }
+  ```
+
+  ### After (ESM)
+
+  ```javascript
+  async function createGraph() {
+    const { Digraph, Node, Edge, toDot } = await import("ts-graphviz");
+
+    const graph = new Digraph();
+    // Create your graph...
+    return toDot(graph);
+  }
+  ```
+
+  ```typescript
+  // TypeScript (CommonJS)
+  // Update tsconfig.json
+  {
+    "compilerOptions": {
+      "module": "Node16",
+      "moduleResolution": "Node16"
+    }
+  }
+
+  // Use dynamic imports
+  async function createGraph() {
+    const tsGraphviz = await import('ts-graphviz');
+    const { Digraph, Node, Edge, toDot } = tsGraphviz;
+
+    const graph = new Digraph();
+    // Create your graph...
+    return toDot(graph);
+  }
+  ```
+
+  ## 🎯 Benefits
+
+  - **Modern JavaScript**: Leveraging native ES modules for better performance
+  - **Smaller bundle sizes**: ESM enables better tree-shaking
+  - **Future-proof**: Aligning with the JavaScript ecosystem direction
+  - **Better TypeScript support**: Enhanced module resolution
+
+### Minor Changes
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - Define Supported environment and Support levels
+
+  To provide clarity on the environments in which ts-graphviz operates, we have categorized support levels:
+
+  ## Support Levels
+
+  ### Tier 1: Full Support
+
+  - **Definition**: Environments that are fully supported, with comprehensive automated testing and maintenance.
+  - **Environments**:
+    - **Node.js LTS versions**: All active Long-Term Support (LTS) versions.
+      - If a Node.js LTS version is released, we will ensure compatibility with it.
+      - If a Node.js LTS version is deprecated, we will drop support for it in the next major release.
+  - **Details**:
+    - We run automated tests on all LTS versions of Node.js.
+    - Full compatibility and performance are ensured.
+    - Critical issues are prioritized for fixes.
+
+  ### Tier 2: Active Support
+
+  - **Definition**: Environments that receive active support with limited automated testing.
+  - **Environments**:
+    - **Deno Latest LTS version**: The latest Long-Term Support (LTS) version of Deno.
+      - If a new Deno LTS version is released, we will ensure compatibility with it.
+      - If a Deno LTS version is deprecated, we will drop support for it in the next minor release.
+    - **Node.js Current Release**: The latest Node.js release outside the LTS schedule.
+      - If a new Node.js current release is available, we will ensure compatibility with it.
+      - If a Node.js current release is deprecated, we will drop support for it in the next minor release.
+  - **Details**:
+    - Compatibility is maintained, and issues are addressed.
+
+  ### Tier 3: Community Support
+
+  - **Definition**: Environments that are not officially tested but are supported on a best-effort basis.
+  - **Environments**:
+    - **Modern Browsers**: Latest versions of major browsers, including:
+      - Google Chrome
+      - Mozilla Firefox
+      - Microsoft Edge
+      - Apple Safari
+    - **Deno Current Release**: The latest Deno release outside the LTS schedule.
+  - **Details**:
+    - Installation methods are provided.
+    - No automated testing is performed.
+    - Issues reported by users will be addressed.
+    - Targeting the latest versions ensures compatibility with modern web standards.
+    - We will not actively test or maintain compatibility with older versions of browsers.
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - Export type guard and node reference utility APIs
+
+  ## New Public APIs
+
+  ### Type Guard Functions
+
+  - **`isNodeModel(object: unknown): object is NodeModel`** - Type guard for NodeModel objects
+  - **`isEdgeModel(object: unknown): object is EdgeModel`** - Type guard for EdgeModel objects
+  - **`isSubgraphModel(object: unknown): object is SubgraphModel`** - Type guard for SubgraphModel objects
+  - **`isRootGraphModel(object: unknown): object is RootGraphModel`** - Type guard for RootGraphModel objects
+  - **`isAttributeListModel(object: unknown): object is AttributeListModel`** - Type guard for AttributeListModel objects
+
+  ### Node Reference Utilities
+
+  - **`isForwardRefNode(object: unknown): object is ForwardRefNode`** - Type guard for ForwardRefNode objects
+  - **`isNodeRef(node: unknown): node is NodeRef`** - Type guard for NodeRef objects (NodeModel or ForwardRefNode)
+  - **`isNodeRefLike(node: unknown): node is NodeRefLike`** - Type guard for NodeRefLike objects (string or NodeRef)
+  - **`isNodeRefGroupLike(target: NodeRefLike | NodeRefGroupLike): target is NodeRefGroupLike`** - Type guard for arrays of NodeRefLike
+  - **`isCompass(c: string): c is Compass`** - Type guard for valid compass directions ('n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c')
+
+  ### Conversion Utilities
+
+  - **`toNodeRef(target: NodeRefLike): NodeRef`** - Converts NodeRefLike to structured NodeRef object
+  - **`toNodeRefGroup(targets: NodeRefGroupLike): NodeRefGroup`** - Converts array of NodeRefLike to array of NodeRef objects
+
+  ### New Types
+
+  - **`FilterableModel`** - Union type of all model types that can be filtered using type guards
+
+  ## Features
+
+  - **Enhanced Type Safety**: All functions provide strict runtime type checking with TypeScript type narrowing
+  - **Comprehensive Documentation**: Full JSDoc comments with usage examples for all public APIs
+  - **Node Reference Parsing**: Parse complex node reference strings like `"node1:port:n"` into structured objects
+  - **Compass Direction Validation**: Validate and work with Graphviz compass directions
+
+### Patch Changes
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - Update Develop Environment
+
+  - Drop turbo
+  - Upgrade biome to 2.0
+  - Upgrade TypeScript to 5.8
+  - Upgrade Vite to 7.0
+  - Upgrade Vitest to 3.2
+  - Upgrade Peggy to 5.0 and drop ts-pegjs
+  - Implement new E2E test workflow
+
+- [#1363](https://github.com/ts-graphviz/ts-graphviz/pull/1363) [`9328563`](https://github.com/ts-graphviz/ts-graphviz/commit/932856396ed0dede1dfc6737344a628f9667d07c) Thanks [@kamiazya](https://github.com/kamiazya)! - New GitHub Action main workflow and tests
+
 ## 2.1.5
 
 ### Patch Changes

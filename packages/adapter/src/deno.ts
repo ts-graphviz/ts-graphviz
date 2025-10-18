@@ -7,7 +7,7 @@ import { createCommandAndArgs } from './create-command-and-args.js';
  */
 import type { Layout, Options } from './types.js';
 
-declare var Deno: any;
+declare let Deno: any;
 
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
