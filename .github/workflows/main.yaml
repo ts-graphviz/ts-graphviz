@@ -85,8 +85,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Check current branch
+        id: branch_check
+        run: echo "current_branch=$(git branch --show-current)" >> $GITHUB_OUTPUT
       - name: Publish npm package with @next tag
-        if: ${{ steps.changesets.outputs.published != 'true' && !contains(github.event.head_commit.message, 'Version Packages') && github.actor != 'dependabot[bot]'}}
+        if: ${{ steps.changesets.outputs.published != 'true' && steps.branch_check.outputs.current_branch == 'main' && github.actor != 'dependabot[bot]'}}
         # - name: Creating .npmrc
         run: |
           cat << EOF > "$HOME/.npmrc"
