@@ -87,6 +87,8 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Switch back to main branch
+        run: git checkout main
       - name: Check current branch
         id: branch_check
         run: echo "current_branch=$(git branch --show-current)" >> $GITHUB_OUTPUT
