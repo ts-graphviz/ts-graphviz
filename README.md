@@ -275,11 +275,11 @@ The **ts-graphviz** repository is structured as a monorepo containing several pa
 | Package | Purpose |
 | --- | --- |
 | [ts-graphviz](./packages/ts-graphviz/README.md) | Main entry point providing a high-level API for most users |
-| [@ts-graphviz/core](./packages/@ts-graphviz/core/README.md) | Core object models for graph manipulation |
-| [@ts-graphviz/ast](./packages/@ts-graphviz/ast/README.md) | Parser and AST (Abstract Syntax Tree) handling for DOT language |
-| [@ts-graphviz/adapter](./packages/@ts-graphviz/adapter/README.md) | Platform-specific implementations for rendering graphs |
-| [@ts-graphviz/common](./packages/@ts-graphviz/common/README.md) | Shared types and utilities used across packages |
-| [@ts-graphviz/react](./packages/@ts-graphviz/react/README.md) | React components for creating and rendering Graphviz graphs |
+| [@ts-graphviz/core](./packages/core/README.md) | Core object models for graph manipulation |
+| [@ts-graphviz/ast](./packages/ast/README.md) | Parser and AST (Abstract Syntax Tree) handling for DOT language |
+| [@ts-graphviz/adapter](./packages/adapter/README.md) | Platform-specific implementations for rendering graphs |
+| [@ts-graphviz/common](./packages/common/README.md) | Shared types and utilities used across packages |
+| [@ts-graphviz/react](./packages/react/README.md) | React components for creating and rendering Graphviz graphs |
 
 > [!TIP]
 > ![Dependency graph](./media/dependency-graph.svg)
