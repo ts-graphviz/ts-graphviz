@@ -131,6 +131,8 @@ export interface CommonOptions {
   suppressWarnings?: boolean;
   /**
    * Path of graphviz dot command.
+   *
+   * **This should be a trusted, hardcoded path in your application configuration. Do not derive this value from end-user input.**
    */
   dotCommand?: string;
   attributes?: {
@@ -153,6 +155,8 @@ export interface CommonOptions {
   scale?: number;
   /**
    * Use external library.
+   *
+   * **These should be trusted library names defined in your application code. Do not derive these values from end-user input.**
    */
   library?: string[];
   /**

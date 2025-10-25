@@ -93,6 +93,23 @@ await toFile(dot, './result.svg', { format: 'svg' });
 
 Both functions accept configuration options to customize the rendering process.
 
+## Configuration Options
+
+### Security Considerations
+
+The `dotCommand` and `library` options are intended to be configured by application developers, not derived from end-user input:
+
+- **`dotCommand`**: Specifies the path to the Graphviz executable. This should be a trusted, hardcoded path in your application configuration.
+- **`library`**: Specifies external libraries to load. These should be trusted library names defined in your application code.
+
+**Important**: This library executes external commands using `spawn` (Node.js) or `Deno.Command` (Deno), which do not invoke a shell interpreter. This prevents shell injection attacks through metacharacters (`;`, `` ` ``, `|`, `$`, etc.). However, these options should not be exposed to end-user input.
+
+**Best Practices**:
+- Use the default `dot` command when possible
+- If you need to customize `dotCommand`, use a hardcoded path or environment variable controlled by the deployment environment
+- Do not allow end-user input to control these configuration options
+- Be aware of potential vulnerabilities in Graphviz itself when processing untrusted DOT language strings
+
 ## Contributors 👥
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
