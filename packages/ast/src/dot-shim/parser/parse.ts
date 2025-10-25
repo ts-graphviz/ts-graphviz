@@ -33,6 +33,12 @@ export interface CommonParseOptions {
    * filename (optional): A string value that is used to identify the file to be parsed.
    */
   filename?: string;
+  /**
+   * maxHtmlNestingDepth (optional): Maximum allowed nesting depth for HTML-like strings.
+   * Default is 100. This limit prevents stack overflow attacks from deeply nested HTML structures.
+   * @default 100
+   */
+  maxHtmlNestingDepth?: number;
 }
 
 /**
@@ -102,9 +108,9 @@ export function parse(
   input: string,
   options?: ParseOptions<Rule>,
 ): ASTNode | ClusterStatementASTNode[] {
-  const { startRule, filename } = options ?? {};
+  const { startRule, filename, maxHtmlNestingDepth } = options ?? {};
   try {
-    return _parse(input, { startRule, filename });
+    return _parse(input, { startRule, filename, maxHtmlNestingDepth });
   } catch (e) {
     if (e instanceof PeggySyntaxError) {
       throw new DotSyntaxError(e.message, {

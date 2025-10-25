@@ -18,6 +18,12 @@
 
   const edgeops = [];
 
+  const MAX_HTML_NESTING_DEPTH = options.maxHtmlNestingDepth ?? 100;
+
+  // Initialize depth counter for each parse invocation
+  // This ensures state doesn't leak between parser calls, even on parse failures
+  let htmlNestingDepth = 0;
+
   const b = new Builder({
     locationFunction: location,
   });
@@ -305,7 +311,33 @@ HTML_STRING
       );
     }
 
-html_raw_string = "<" v:(html_char / html_raw_string)* ">" { return '<' + v.join('') + '>'; }
+html_raw_string
+  = "<" &{
+      // Track nesting depth to prevent stack overflow from deeply nested HTML
+      //
+      // Check depth BEFORE incrementing to prevent exceeding the limit
+      // This uses >= instead of > because depth is 0-indexed
+      //
+      // KNOWN LIMITATION: This uses mutable state which can be corrupted by backtracking.
+      // Peggy doesn't support parameterized rules (e.g., rule[depth]) which would be
+      // the ideal stateless solution. The per-parse initializer resets state between
+      // parse() calls to prevent state leakage.
+      //
+      // In practice, the backtracking issue is rare because:
+      // 1. HTML strings typically have balanced < > pairs
+      // 2. The depth counter is reset at the start of each parse() call
+      // 3. Most malformed input fails quickly without deep backtracking
+      if (htmlNestingDepth >= MAX_HTML_NESTING_DEPTH) {
+        error(`HTML nesting depth exceeds maximum allowed depth of ${MAX_HTML_NESTING_DEPTH}`);
+      }
+      htmlNestingDepth++;
+      return true;
+    }
+    v:(html_char / html_raw_string)*
+    ">" {
+      htmlNestingDepth--;
+      return '<' + v.join('') + '>';
+    }
 
 html_char = v:(!(">" / "<") v:. { return v; })+ { return v.join(''); }
 
