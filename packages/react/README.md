@@ -460,9 +460,12 @@ const dotString = await renderToDot(<ProjectDiagram />);
 
 ### Using the renderHTMLLike Function
 
+The `renderHTMLLike` function converts React elements with HTML-like labels into Graphviz-compatible markup. It includes built-in security protections against deeply nested structures and circular references.
+
 ```ts
 import { renderHTMLLike } from "@ts-graphviz/react";
 
+// Basic usage
 const htmlLabel = renderHTMLLike(
   <dot:table>
     <dot:tr>
@@ -471,6 +474,42 @@ const htmlLabel = renderHTMLLike(
     </dot:tr>
   </dot:table>
 );
+
+// With custom security options
+const deeplyNestedLabel = renderHTMLLike(
+  <dot:table>
+    {/* ... deeply nested structure ... */}
+  </dot:table>,
+  { maxDepth: 2000 } // Increase limit for complex structures
+);
+
+// Stricter validation for user-generated content
+const userContent = renderHTMLLike(
+  userProvidedElement,
+  { maxDepth: 100 } // Lower limit for untrusted input
+);
+```
+
+#### Security Options
+
+The `renderHTMLLike` function provides security protections against stack overflow attacks:
+
+- **`maxDepth`** (default: `1000`): Maximum recursion depth for nested elements
+  - Prevents stack overflow from deeply nested or circular structures
+  - Adjust based on your use case:
+    - **Increase** for complex, trusted structures (e.g., `maxDepth: 5000`)
+    - **Decrease** for user-generated content (e.g., `maxDepth: 100`)
+  - When the limit is exceeded, the function returns a safe fallback value (`'<>'`)
+
+```ts
+import { renderHTMLLike, type RenderHTMLLikeOptions } from "@ts-graphviz/react";
+
+// Type-safe options
+const options: RenderHTMLLikeOptions = {
+  maxDepth: 1500
+};
+
+const result = renderHTMLLike(<dot:table>...</dot:table>, options);
 ```
 
 ### Advanced Root Options
