@@ -127,6 +127,76 @@ digraph G {
 
 While Graphviz will handle file access errors gracefully, processing untrusted DOT files without validation may expose information about your file system or cause unexpected behavior.
 
+**Example: Validating and Sanitizing User-Provided DOT Files**
+
+Here's an example of how to use the `@ts-graphviz/ast` package to parse, validate, and sanitize DOT files:
+
+```typescript
+import { parse, stringify } from '@ts-graphviz/ast';
+
+// Potentially dangerous attributes that can access file system
+const DANGEROUS_ATTRIBUTES = new Set([
+  'image',
+  'shapefile',
+  'fontpath',
+  'fontname',
+  'imagepath',
+]);
+
+/**
+ * Validates and sanitizes a DOT file by removing dangerous attributes
+ */
+function validateAndSanitizeDOT(dotString: string): string {
+  try {
+    // Parse the DOT string into an AST
+    const ast = parse(dotString);
+
+    // Remove dangerous attributes from the AST
+    sanitizeAST(ast);
+
+    // Convert back to DOT string
+    return stringify(ast);
+  } catch (error) {
+    throw new Error(`Invalid DOT syntax: ${error.message}`);
+  }
+}
+
+/**
+ * Recursively sanitize AST nodes by removing dangerous attributes
+ */
+function sanitizeAST(node: any): void {
+  if (!node || typeof node !== 'object') return;
+
+  // Handle nodes with children
+  if (Array.isArray(node.children)) {
+    node.children = node.children.filter((child: any) => {
+      // Filter out dangerous attribute nodes
+      if (child.type === 'Attribute') {
+        const attributeName = child.key?.value;
+        if (DANGEROUS_ATTRIBUTES.has(attributeName)) {
+          console.warn(`Removed dangerous attribute: ${attributeName}`);
+          return false;
+        }
+      }
+      // Recursively sanitize child nodes
+      sanitizeAST(child);
+      return true;
+    });
+  }
+}
+
+// Usage example
+const userUploadedDOT = `
+  digraph G {
+    node [image="/etc/passwd"];
+    node1 [label="Safe label"];
+  }
+`;
+
+const sanitizedDOT = validateAndSanitizeDOT(userUploadedDOT);
+// Result: digraph G { node1 [label="Safe label"]; }
+```
+
 **Best Practices**:
 - Use the default `dot` command when possible
 - If you need to customize `dotCommand`, use a hardcoded path or environment variable controlled by the deployment environment
