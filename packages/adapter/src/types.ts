@@ -133,6 +133,8 @@ export interface CommonOptions {
    * Path of graphviz dot command.
    *
    * **This should be a trusted, hardcoded path in your application configuration. Do not derive this value from end-user input.**
+   *
+   * @defaultValue 'dot'
    */
   dotCommand?: string;
   attributes?: {

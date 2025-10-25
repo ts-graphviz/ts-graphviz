@@ -118,14 +118,17 @@ When rendering DOT files uploaded by users or generated from user input, impleme
 4. **Sandboxing**: Run Graphviz in a sandboxed environment with restricted file system access when processing untrusted input
 
 **Example Risk Scenario**:
+
+⚠️ **Warning**: The following is an example of **unsafe** DOT content that should be rejected by validation:
+
 ```dot
 digraph G {
-  node [image="/etc/passwd"];  // Attempts to access sensitive file
+  node [image="/etc/passwd"];  // ⚠️ DANGEROUS: Attempts to access sensitive file
   node1;
 }
 ```
 
-While Graphviz will handle file access errors gracefully, processing untrusted DOT files without validation may expose information about your file system or cause unexpected behavior.
+While Graphviz will handle file access errors gracefully, processing untrusted DOT files without validation may expose information about your file system or cause unexpected behavior. **Always validate and sanitize user-provided DOT files before processing.**
 
 **Example: Validating and Sanitizing User-Provided DOT Files**
 
