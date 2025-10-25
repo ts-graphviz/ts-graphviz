@@ -1,5 +1,51 @@
 # @ts-graphviz/react
 
+## 0.11.5
+
+### Patch Changes
+
+- [#1529](https://github.com/ts-graphviz/ts-graphviz/pull/1529) [`2175a0b`](https://github.com/ts-graphviz/ts-graphviz/commit/2175a0b15ee57f675a1fda902b74d8359a5c05cb) Thanks [@kamiazya](https://github.com/kamiazya)! - Security enhancement: Add stack overflow protection to `renderHTMLLike` function
+
+  This patch addresses a security vulnerability where deeply nested or circular React element structures could cause stack overflow, leading to application crashes and potential DoS attacks.
+
+  **Changes:**
+
+  - Added maximum recursion depth limit (default: 1000 levels) to prevent stack overflow attacks
+  - Implemented circular reference detection to prevent infinite loops
+  - Introduced `RenderHTMLLikeOptions` interface with configurable `maxDepth` option
+  - Enhanced error handling with descriptive error messages and console warnings
+
+  **Security Impact:**
+
+  - Prevents stack overflow from deeply nested React element structures
+  - Prevents infinite loops from circular element references
+  - Normal use cases are unaffected by the default 1000-level depth limit
+  - Configurable limit allows complex rendering when needed
+
+  **Usage:**
+
+  ```ts
+  // Default behavior (max depth: 1000)
+  renderHTMLLike(
+    <div>
+      <span>Hello</span>
+    </div>
+  );
+
+  // Custom max depth for complex structures
+  renderHTMLLike(<div>...</div>, { maxDepth: 5000 });
+
+  // Stricter validation for user-generated content
+  renderHTMLLike(userElement, { maxDepth: 100 });
+  ```
+
+- [#1530](https://github.com/ts-graphviz/ts-graphviz/pull/1530) [`52e3f1f`](https://github.com/ts-graphviz/ts-graphviz/commit/52e3f1ff58a77bf9bd9a0d0b6e29edb20e3700e5) Thanks [@kamiazya](https://github.com/kamiazya)! - Clarify security model: GraphViz HTML-like labels vs browser HTML
+
+  Add documentation clarifying that HTML-like labels are part of the GraphViz DOT language specification and are not browser HTML. This helps prevent confusion about XSS risks, which occur when rendering GraphViz output in browsers, not when generating DOT strings.
+
+- Updated dependencies []:
+  - ts-graphviz@3.0.5
+
 ## 0.11.4
 
 ### Patch Changes
