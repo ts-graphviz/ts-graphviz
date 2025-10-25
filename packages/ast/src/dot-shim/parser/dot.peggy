@@ -178,11 +178,19 @@ _edge_rhs
       // 1. Edge chains typically have a clear structure (node op node op ...)
       // 2. The depth counter is reset at the start of each parse() call
       // 3. Most malformed input fails quickly without deep backtracking
+      //
+      // If backtracking becomes problematic, consider alternative parsing libraries
+      // with better support for parameterized rules or stateless parsing.
 
-      if (edgeChainDepth >= MAX_EDGE_CHAIN_DEPTH) {
-        error(`Edge chain depth exceeds maximum allowed depth of ${MAX_EDGE_CHAIN_DEPTH}`);
-      }
       edgeChainDepth++;
+      if (edgeChainDepth > MAX_EDGE_CHAIN_DEPTH) {
+        const loc = location();
+        error(
+          `Edge chain depth exceeds maximum allowed depth of ${MAX_EDGE_CHAIN_DEPTH} ` +
+          `at line ${loc.start.line}, column ${loc.start.column}. ` +
+          `Consider breaking up long edge chains or increasing the 'maxEdgeChainDepth' option.`
+        );
+      }
 
       edgeops.push(edgeop);
       return [id].concat(rest || []);
