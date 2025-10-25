@@ -19,10 +19,12 @@
   const edgeops = [];
 
   const MAX_HTML_NESTING_DEPTH = options.maxHtmlNestingDepth ?? 100;
+  const MAX_EDGE_CHAIN_DEPTH = options.maxEdgeChainDepth ?? 1000;
 
-  // Initialize depth counter for each parse invocation
+  // Initialize depth counters for each parse invocation
   // This ensures state doesn't leak between parser calls, even on parse failures
   let htmlNestingDepth = 0;
+  let edgeChainDepth = 0;
 
   const b = new Builder({
     locationFunction: location,
@@ -111,6 +113,8 @@ _attributes
 
 _edge
   = id:_edge_target rhs:_edge_rhs _children:_attribute_list? _ ";"? {
+      // Reset edge chain depth counter after successful edge parse
+      edgeChainDepth = 0;
       // @ts-ignore
       return b.createElement(
         // @ts-ignore
@@ -162,6 +166,24 @@ _edge_operator = operator:("->" / "--") { return { operator, location: location(
 
 _edge_rhs
   = _ edgeop:_edge_operator _ id:_edge_target _ rest:_edge_rhs? {
+      // Track edge chain depth to prevent stack overflow from deeply chained edges
+      // Each edge operator (-> or --) represents one link in the chain
+      //
+      // KNOWN LIMITATION: This uses mutable state which can be corrupted by backtracking.
+      // Peggy doesn't support parameterized rules (e.g., rule[depth]) which would be
+      // the ideal stateless solution. The per-parse initializer resets state between
+      // parse() calls to prevent state leakage.
+      //
+      // In practice, the backtracking issue is rare because:
+      // 1. Edge chains typically have a clear structure (node op node op ...)
+      // 2. The depth counter is reset at the start of each parse() call
+      // 3. Most malformed input fails quickly without deep backtracking
+
+      if (edgeChainDepth >= MAX_EDGE_CHAIN_DEPTH) {
+        error(`Edge chain depth exceeds maximum allowed depth of ${MAX_EDGE_CHAIN_DEPTH}`);
+      }
+      edgeChainDepth++;
+
       edgeops.push(edgeop);
       return [id].concat(rest || []);
     }

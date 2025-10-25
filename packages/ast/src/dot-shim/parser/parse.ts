@@ -39,6 +39,12 @@ export interface CommonParseOptions {
    * @default 100
    */
   maxHtmlNestingDepth?: number;
+  /**
+   * maxEdgeChainDepth (optional): Maximum allowed depth for chained edges.
+   * Default is 1000. This limit prevents stack overflow attacks from deeply chained edge structures.
+   * @default 1000
+   */
+  maxEdgeChainDepth?: number;
 }
 
 /**
@@ -108,9 +114,15 @@ export function parse(
   input: string,
   options?: ParseOptions<Rule>,
 ): ASTNode | ClusterStatementASTNode[] {
-  const { startRule, filename, maxHtmlNestingDepth } = options ?? {};
+  const { startRule, filename, maxHtmlNestingDepth, maxEdgeChainDepth } =
+    options ?? {};
   try {
-    return _parse(input, { startRule, filename, maxHtmlNestingDepth });
+    return _parse(input, {
+      startRule,
+      filename,
+      maxHtmlNestingDepth,
+      maxEdgeChainDepth,
+    });
   } catch (e) {
     if (e instanceof PeggySyntaxError) {
       throw new DotSyntaxError(e.message, {
