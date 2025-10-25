@@ -245,6 +245,28 @@ describe('renderHTMLLike()', () => {
 
   // Security tests: Circular reference prevention
   describe('security: circular reference prevention', () => {
+    it('allows reusing the same ReactElement instance multiple times', () => {
+      // Create a reusable element
+      const sharedElement = <span>Shared Text</span>;
+
+      // Use the same element twice as children
+      const parent = (
+        <div>
+          {sharedElement}
+          {sharedElement}
+        </div>
+      );
+
+      const result = renderHTMLLike(parent);
+
+      // Should NOT be treated as circular reference
+      expect(result).not.toBe('<>');
+      expect(result).toContain('Shared Text');
+      // The shared text should appear twice
+      const matches = result.match(/Shared Text/g);
+      expect(matches).toHaveLength(2);
+    });
+
     it('detects circular element references', () => {
       // Create circular reference by making element reference itself
       const element: any = { type: 'div', props: {} };
