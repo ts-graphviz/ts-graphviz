@@ -349,4 +349,95 @@ describe('parse', () => {
       );
     });
   });
+
+  describe('Edge chain depth limit', () => {
+    test('normal edge chain should work', () => {
+      const result = parse('a -> b -> c -> d;', { startRule: 'Edge' });
+      expect(result).toBeDefined();
+      expect(result.targets).toHaveLength(4);
+    });
+
+    test('moderate edge chain (100 nodes) should work', () => {
+      const nodes = Array.from({ length: 100 }, (_, i) => `n${i}`);
+      const chain = nodes.join(' -> ');
+      const result = parse(`${chain};`, { startRule: 'Edge' });
+      expect(result).toBeDefined();
+      expect(result.targets).toHaveLength(100);
+    });
+
+    test('maximum allowed edge chain (1000 edges) should work', () => {
+      // 1000 edges = 1001 nodes (first node + 1000 additional nodes connected by 1000 edges)
+      const nodes = Array.from({ length: 1001 }, (_, i) => `n${i}`);
+      const chain = nodes.join(' -> ');
+      const result = parse(`${chain};`, { startRule: 'Edge' });
+      expect(result).toBeDefined();
+      expect(result.targets).toHaveLength(1001);
+    });
+
+    test('excessive edge chain (1001 edges) should throw error', () => {
+      // 1001 edges = 1002 nodes, which exceeds the limit
+      const nodes = Array.from({ length: 1002 }, (_, i) => `n${i}`);
+      const chain = nodes.join(' -> ');
+      expect(() => {
+        parse(`${chain};`, { startRule: 'Edge' });
+      }).toThrowError(
+        /Edge chain depth exceeds maximum allowed depth of 1000 at line \d+, column \d+/,
+      );
+    });
+
+    test('deeply chained edge structure (2000 edges) should throw error', () => {
+      const nodes = Array.from({ length: 2001 }, (_, i) => `n${i}`);
+      const chain = nodes.join(' -> ');
+      expect(() => {
+        parse(`${chain};`, { startRule: 'Edge' });
+      }).toThrowError(
+        /Edge chain depth exceeds maximum allowed depth of 1000 at line \d+, column \d+/,
+      );
+    });
+
+    test('custom maxEdgeChainDepth (100) should allow 100 edges', () => {
+      const nodes = Array.from({ length: 101 }, (_, i) => `n${i}`);
+      const chain = nodes.join(' -> ');
+      const result = parse(`${chain};`, {
+        startRule: 'Edge',
+        maxEdgeChainDepth: 100,
+      });
+      expect(result).toBeDefined();
+      expect(result.targets).toHaveLength(101);
+    });
+
+    test('custom maxEdgeChainDepth (100) should reject 101 edges', () => {
+      const nodes = Array.from({ length: 102 }, (_, i) => `n${i}`);
+      const chain = nodes.join(' -> ');
+      expect(() => {
+        parse(`${chain};`, {
+          startRule: 'Edge',
+          maxEdgeChainDepth: 100,
+        });
+      }).toThrowError(
+        /Edge chain depth exceeds maximum allowed depth of 100 at line \d+, column \d+/,
+      );
+    });
+
+    test('edge chain in full graph context should respect limit', () => {
+      const nodes = Array.from({ length: 1002 }, (_, i) => `n${i}`);
+      const chain = nodes.join(' -> ');
+      expect(() => {
+        parse(`digraph { ${chain}; }`, { startRule: 'Graph' });
+      }).toThrowError(
+        /Edge chain depth exceeds maximum allowed depth of 1000 at line \d+, column \d+/,
+      );
+    });
+
+    test('multiple separate edge chains should not accumulate depth', () => {
+      const nodes1 = Array.from({ length: 500 }, (_, i) => `a${i}`);
+      const nodes2 = Array.from({ length: 500 }, (_, i) => `b${i}`);
+      const chain1 = nodes1.join(' -> ');
+      const chain2 = nodes2.join(' -> ');
+      const result = parse(`digraph { ${chain1}; ${chain2}; }`, {
+        startRule: 'Graph',
+      });
+      expect(result).toBeDefined();
+    });
+  });
 });
