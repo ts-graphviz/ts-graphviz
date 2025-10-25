@@ -33,7 +33,43 @@ Security is maintained through several automated workflows within the CI/CD pipe
 
 ### Known Security Protections
 
-- **HTML Nesting Depth Limit**: The DOT parser includes protection against stack overflow attacks from deeply nested HTML-like structures. A configurable depth limit (default: 100 levels) prevents malicious DOT files from causing application crashes. For more details, see the [@ts-graphviz/ast documentation](./packages/ast/README.md#parser-options).
+#### DOT Parser Security (@ts-graphviz/ast)
+
+The DOT parser includes multiple layers of protection against denial-of-service attacks:
+
+- **HTML Nesting Depth Limit**: Protection against stack overflow attacks from deeply nested HTML-like structures. A configurable depth limit (default: 100 levels) prevents malicious DOT files from causing application crashes.
+
+- **Edge Chain Depth Limit**: Protection against stack overflow from deeply chained edge structures. A configurable depth limit (default: 1000 edges) prevents malicious edge chains from exhausting stack space.
+
+- **Input Size Limit**: Protection against memory exhaustion from extremely large inputs. A configurable size limit (default: 10MB) prevents processing of unreasonably large DOT files that could exhaust available memory.
+
+- **AST Node Count Limit**: Protection against memory exhaustion from inputs with excessive elements. A configurable node limit (default: 100,000 nodes) prevents creation of massive ASTs that could consume all available memory.
+
+All limits are configurable and can be adjusted or disabled based on your security requirements and use case. For more details, see the [@ts-graphviz/ast documentation](./packages/ast/README.md#parser-options).
+
+**Important**: When processing untrusted inputs (e.g., user-uploaded DOT files in a web application), it is strongly recommended to keep these limits enabled with conservative values appropriate for your environment.
+
+#### React Rendering Security (@ts-graphviz/react)
+
+The `renderHTMLLike` function provides security protections against stack overflow attacks:
+
+- **Recursion Depth Limit**: Protection against stack overflow from deeply nested React element structures. A configurable depth limit (default: 1000 levels) prevents crashes from deeply nested or circular structures.
+
+- **Circular Reference Detection**: Prevents infinite loops from circular references in React element trees using stack-based tracking.
+
+For more details and usage examples, see the [@ts-graphviz/react documentation](./packages/react/README.md#security-options).
+
+#### Graphviz Adapter Security (@ts-graphviz/adapter)
+
+When using the adapter to execute Graphviz commands:
+
+- **Command Injection Protection**: The library uses `spawn` (Node.js) or `Deno.Command` (Deno) which do not invoke shell interpreters, preventing shell injection attacks.
+
+- **Configuration Security**: The `dotCommand` and `library` options should be hardcoded by application developers, not derived from end-user input.
+
+- **User-Provided DOT Files**: When processing DOT files from untrusted sources, implement validation to check for potentially dangerous attributes that reference file system resources (e.g., `image`, `shapefile`, `fontpath`).
+
+For detailed security guidelines and validation examples, see the [@ts-graphviz/adapter documentation](./packages/adapter/README.md#security-considerations).
 
 **Specific measures include:**
 

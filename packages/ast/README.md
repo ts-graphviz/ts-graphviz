@@ -73,18 +73,47 @@ The `parse` function accepts an optional second argument for configuration:
 ```ts
 import { parse } from "@ts-graphviz/ast";
 
-// Parse with custom HTML nesting depth limit
+// Parse with custom security limits
 const ast = parse(dotString, {
-  startRule: 'Dot',  // Specify the starting rule (default: 'Dot')
-  maxHtmlNestingDepth: 200  // Set maximum HTML nesting depth (default: 100)
+  startRule: 'Dot',              // Specify the starting rule (default: 'Dot')
+  maxHtmlNestingDepth: 200,      // Maximum HTML nesting depth (default: 100)
+  maxEdgeChainDepth: 2000,       // Maximum edge chain depth (default: 1000)
+  maxInputSize: 20971520,        // Maximum input size in bytes (default: 10MB)
+  maxASTNodes: 200000            // Maximum AST nodes (default: 100,000)
 });
 ```
 
+**Available Options**:
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `startRule` | `'Dot'` | Starting grammar rule for parsing |
+| `maxHtmlNestingDepth` | `100` | Maximum depth of nested HTML-like structures |
+| `maxEdgeChainDepth` | `1000` | Maximum depth of chained edges (e.g., `a -> b -> c -> ...`) |
+| `maxInputSize` | `10485760` (10MB) | Maximum input size in bytes |
+| `maxASTNodes` | `100000` | Maximum number of AST nodes to create |
+
 **Security Note**:
-- The `maxHtmlNestingDepth` option limits the depth of nested HTML-like structures in DOT files to prevent stack overflow attacks
-- The default limit of 100 is sufficient for normal use cases (typically <10 levels)
-- HTML-like labels are GraphViz DOT syntax, not browser HTML
-- For processing untrusted DOT files, see the validation guide in `@ts-graphviz/adapter` documentation
+
+These limits protect against denial-of-service attacks:
+
+- **`maxHtmlNestingDepth`**: Prevents stack overflow from deeply nested HTML-like structures
+  - Normal use cases: typically <10 levels
+  - HTML-like labels are GraphViz DOT syntax, not browser HTML
+
+- **`maxEdgeChainDepth`**: Prevents stack overflow from deeply chained edges
+  - Example dangerous input: `a -> b -> c -> ... -> z (1000+ nodes)`
+
+- **`maxInputSize`**: Prevents memory exhaustion from extremely large files
+  - Default 10MB is sufficient for most legitimate graphs
+  - Can be increased for known large graphs or disabled with `0` (not recommended for untrusted input)
+
+- **`maxASTNodes`**: Prevents memory exhaustion from inputs with excessive elements
+  - Each DOT element creates multiple AST nodes
+  - Example: A single node statement (`node1;`) creates ~2-3 AST nodes
+  - Can be disabled with `0` (not recommended for untrusted input)
+
+**Important**: When processing untrusted DOT files (e.g., user uploads), keep these limits enabled with conservative values appropriate for your environment. For additional validation of untrusted content, see the validation guide in [@ts-graphviz/adapter documentation](../adapter/README.md#security-considerations).
 
 ### Generating DOT Language
 
