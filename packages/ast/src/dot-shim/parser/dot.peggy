@@ -28,6 +28,7 @@
 
   const b = new Builder({
     locationFunction: location,
+    maxASTNodes: options.maxASTNodes,
   });
 }
 

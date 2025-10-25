@@ -350,6 +350,77 @@ describe('parse', () => {
     });
   });
 
+  describe('Input size limit', () => {
+    test('normal input size should work', () => {
+      const input = 'digraph { a -> b; }';
+      const result = parse(input, { startRule: 'Graph' });
+      expect(result).toBeDefined();
+    });
+
+    test('moderate input size (1MB) should work', () => {
+      // Create a ~1MB input with many simple statements
+      const nodes = Array.from({ length: 10000 }, (_, i) => `n${i};`).join(
+        '\n',
+      );
+      const input = `digraph { ${nodes} }`;
+      const result = parse(input, { startRule: 'Graph' });
+      expect(result).toBeDefined();
+    });
+
+    test('input size within limit (9MB) should work', () => {
+      // Create a ~9MB input
+      const largeString = 'x'.repeat(9 * 1024 * 1024);
+      const input = `graph { label="${largeString}"; }`;
+      const result = parse(input, { startRule: 'Graph' });
+      expect(result).toBeDefined();
+    });
+
+    test('input size exceeding default limit (11MB) should throw error', () => {
+      // Create an ~11MB input
+      const largeString = 'x'.repeat(11 * 1024 * 1024);
+      const input = `graph { label="${largeString}"; }`;
+      expect(() => {
+        parse(input, { startRule: 'Graph' });
+      }).toThrowError(
+        /Input size \(\d+ bytes\) exceeds maximum allowed size \(10485760 bytes\)/,
+      );
+    });
+
+    test('custom maxInputSize (1MB) should allow input within limit', () => {
+      const largeString = 'x'.repeat(900 * 1024);
+      const input = `graph { label="${largeString}"; }`;
+      const result = parse(input, {
+        startRule: 'Graph',
+        maxInputSize: 1024 * 1024,
+      });
+      expect(result).toBeDefined();
+    });
+
+    test('custom maxInputSize (1MB) should reject input exceeding limit', () => {
+      const largeString = 'x'.repeat(1100 * 1024);
+      const input = `graph { label="${largeString}"; }`;
+      expect(() => {
+        parse(input, {
+          startRule: 'Graph',
+          maxInputSize: 1024 * 1024,
+        });
+      }).toThrowError(
+        /Input size \(\d+ bytes\) exceeds maximum allowed size \(1048576 bytes\)/,
+      );
+    });
+
+    test('maxInputSize set to 0 should disable limit', () => {
+      // Create a large input that would exceed default limit
+      const largeString = 'x'.repeat(15 * 1024 * 1024);
+      const input = `graph { label="${largeString}"; }`;
+      const result = parse(input, {
+        startRule: 'Graph',
+        maxInputSize: 0,
+      });
+      expect(result).toBeDefined();
+    });
+  });
+
   describe('Edge chain depth limit', () => {
     test('normal edge chain should work', () => {
       const result = parse('a -> b -> c -> d;', { startRule: 'Edge' });
@@ -438,6 +509,90 @@ describe('parse', () => {
         startRule: 'Graph',
       });
       expect(result).toBeDefined();
+    });
+  });
+
+  describe('AST node count limit', () => {
+    test('normal node count should work', () => {
+      const result = parse('digraph { a -> b; c -> d; }', {
+        startRule: 'Graph',
+      });
+      expect(result).toBeDefined();
+    });
+
+    test('moderate node count (1000 nodes) should work', () => {
+      const nodes = Array.from({ length: 1000 }, (_, i) => `n${i};`).join('\n');
+      const result = parse(`digraph { ${nodes} }`, { startRule: 'Graph' });
+      expect(result).toBeDefined();
+    });
+
+    test('large node count within limit (15000 nodes) should work', () => {
+      const nodes = Array.from({ length: 15000 }, (_, i) => `n${i};`).join(
+        '\n',
+      );
+      const result = parse(`digraph { ${nodes} }`, { startRule: 'Graph' });
+      expect(result).toBeDefined();
+    });
+
+    test('excessive node count (50000 nodes) should throw error', () => {
+      // This will create more than 100000 AST nodes (each node statement creates multiple AST nodes)
+      const nodes = Array.from({ length: 50000 }, (_, i) => `n${i};`).join(
+        '\n',
+      );
+      expect(() => {
+        parse(`digraph { ${nodes} }`, { startRule: 'Graph' });
+      }).toThrowError(
+        /AST node count \(\d+\) exceeds maximum allowed \(100000\)/,
+      );
+    });
+
+    test('custom maxASTNodes (15000) should allow nodes within limit', () => {
+      const nodes = Array.from({ length: 2500 }, (_, i) => `n${i};`).join('\n');
+      const result = parse(`digraph { ${nodes} }`, {
+        startRule: 'Graph',
+        maxASTNodes: 15000,
+      });
+      expect(result).toBeDefined();
+    });
+
+    test('custom maxASTNodes (10000) should reject nodes exceeding limit', () => {
+      const nodes = Array.from({ length: 3100 }, (_, i) => `n${i};`).join('\n');
+      expect(() => {
+        parse(`digraph { ${nodes} }`, {
+          startRule: 'Graph',
+          maxASTNodes: 10000,
+        });
+      }).toThrowError(
+        /AST node count \(\d+\) exceeds maximum allowed \(10000\)/,
+      );
+    });
+
+    test('maxASTNodes set to 0 should disable limit', () => {
+      // Create many nodes that would exceed default limit
+      const nodes = Array.from({ length: 150000 }, (_, i) => `n${i};`).join(
+        '\n',
+      );
+      const result = parse(`digraph { ${nodes} }`, {
+        startRule: 'Graph',
+        maxASTNodes: 0,
+      });
+      expect(result).toBeDefined();
+    });
+
+    test('complex graph with edges should respect node limit', () => {
+      // Each edge creates multiple AST nodes
+      const edges = Array.from(
+        { length: 30000 },
+        (_, i) => `n${i} -> n${i + 1};`,
+      ).join('\n');
+      expect(() => {
+        parse(`digraph { ${edges} }`, {
+          startRule: 'Graph',
+          maxASTNodes: 100000,
+        });
+      }).toThrowError(
+        /AST node count \(\d+\) exceeds maximum allowed \(100000\)/,
+      );
     });
   });
 });
