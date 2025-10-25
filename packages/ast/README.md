@@ -80,7 +80,11 @@ const ast = parse(dotString, {
 });
 ```
 
-**Security Note**: The `maxHtmlNestingDepth` option limits the depth of nested HTML-like structures in DOT files to prevent stack overflow attacks. The default limit of 100 is sufficient for normal use cases (typically <10 levels). Increase this value only if you have legitimate deeply nested HTML structures.
+**Security Note**:
+- The `maxHtmlNestingDepth` option limits the depth of nested HTML-like structures in DOT files to prevent stack overflow attacks
+- The default limit of 100 is sufficient for normal use cases (typically <10 levels)
+- HTML-like labels are GraphViz DOT syntax, not browser HTML
+- For processing untrusted DOT files, see the validation guide in `@ts-graphviz/adapter` documentation
 
 ### Generating DOT Language
 
