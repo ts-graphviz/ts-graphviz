@@ -18,6 +18,13 @@
 
   const edgeops = [];
 
+  let htmlNestingDepth = 0;
+  const MAX_HTML_NESTING_DEPTH = options.maxHtmlNestingDepth ?? 100;
+
+  function resetHtmlDepth() {
+    htmlNestingDepth = 0;
+  }
+
   const b = new Builder({
     locationFunction: location,
   });
@@ -25,7 +32,7 @@
 
 start = Dot
 
-Dot = __ v:_dot __ { return v; }
+Dot = __ v:_dot __ { resetHtmlDepth(); return v; }
 
 Graph = __ v:_graph __ { return v; }
 
@@ -305,7 +312,18 @@ HTML_STRING
       );
     }
 
-html_raw_string = "<" v:(html_char / html_raw_string)* ">" { return '<' + v.join('') + '>'; }
+html_raw_string
+  = "<" &{
+      if (++htmlNestingDepth > MAX_HTML_NESTING_DEPTH) {
+        error(`HTML nesting depth exceeds maximum allowed depth of ${MAX_HTML_NESTING_DEPTH}`);
+      }
+      return true;
+    }
+    v:(html_char / html_raw_string)*
+    ">" {
+      htmlNestingDepth--;
+      return '<' + v.join('') + '>';
+    }
 
 html_char = v:(!(">" / "<") v:. { return v; })+ { return v.join(''); }
 

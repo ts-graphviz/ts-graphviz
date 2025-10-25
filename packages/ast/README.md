@@ -66,6 +66,22 @@ console.log(ast);
 // Output: A DotASTNode representing the DOT structure
 ```
 
+#### Parser Options
+
+The `parse` function accepts an optional second argument for configuration:
+
+```ts
+import { parse } from "@ts-graphviz/ast";
+
+// Parse with custom HTML nesting depth limit
+const ast = parse(dotString, {
+  startRule: 'Dot',  // Specify the starting rule (default: 'Dot')
+  maxHtmlNestingDepth: 200  // Set maximum HTML nesting depth (default: 100)
+});
+```
+
+**Security Note**: The `maxHtmlNestingDepth` option limits the depth of nested HTML-like structures in DOT files to prevent stack overflow attacks. The default limit of 100 is sufficient for normal use cases (typically <10 levels). Increase this value only if you have legitimate deeply nested HTML structures.
+
 ### Generating DOT Language
 
 ```ts

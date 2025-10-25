@@ -260,4 +260,93 @@ describe('parse', () => {
       expect(result).toMatchSnapshot();
     });
   });
+
+  describe('HTML string nesting depth limit', () => {
+    test('normal nesting should work', () => {
+      const result = parse(
+        'label = <<table><tr><td><b>text</b></td></tr></table>>',
+        { startRule: 'Attribute' },
+      );
+      expect(result).toBeDefined();
+    });
+
+    test('moderate nesting (50 levels) should work', () => {
+      const nested = `${'<'.repeat(50)}content${'>'.repeat(50)}`;
+      const result = parse(`label = <${nested}>`, { startRule: 'Attribute' });
+      expect(result).toBeDefined();
+    });
+
+    test('maximum allowed nesting (99 levels inside outer tag) should work', () => {
+      // The outer < > from the HTML string itself counts as level 1,
+      // so 99 additional levels inside = 100 total depth
+      const nested = `${'<'.repeat(99)}content${'>'.repeat(99)}`;
+      const result = parse(`label = <${nested}>`, { startRule: 'Attribute' });
+      expect(result).toBeDefined();
+    });
+
+    test('excessive nesting (100 levels inside outer tag) should throw error', () => {
+      // 100 levels inside + 1 outer = 101 total depth, which exceeds the limit
+      const nested = `${'<'.repeat(100)}content${'>'.repeat(100)}`;
+      expect(() => {
+        parse(`label = <${nested}>`, { startRule: 'Attribute' });
+      }).toThrowError(
+        /HTML nesting depth exceeds maximum allowed depth of 100/,
+      );
+    });
+
+    test('deeply nested structure (200 levels) should throw error', () => {
+      const nested = `${'<'.repeat(200)}content${'>'.repeat(200)}`;
+      expect(() => {
+        parse(`label = <${nested}>`, { startRule: 'Attribute' });
+      }).toThrowError(
+        /HTML nesting depth exceeds maximum allowed depth of 100/,
+      );
+    });
+
+    test('mixed content with deep nesting should handle correctly', () => {
+      const nested = '<<<aaa<<<<bbbb>>>>ccc>>>';
+      const result = parse(`label = <${nested}>`, { startRule: 'Attribute' });
+      expect(result).toBeDefined();
+    });
+
+    test('custom maxHtmlNestingDepth (50) should allow 49 levels', () => {
+      const nested = `${'<'.repeat(49)}content${'>'.repeat(49)}`;
+      const result = parse(`label = <${nested}>`, {
+        startRule: 'Attribute',
+        maxHtmlNestingDepth: 50,
+      });
+      expect(result).toBeDefined();
+    });
+
+    test('custom maxHtmlNestingDepth (50) should reject 50 levels', () => {
+      const nested = `${'<'.repeat(50)}content${'>'.repeat(50)}`;
+      expect(() => {
+        parse(`label = <${nested}>`, {
+          startRule: 'Attribute',
+          maxHtmlNestingDepth: 50,
+        });
+      }).toThrowError(/HTML nesting depth exceeds maximum allowed depth of 50/);
+    });
+
+    test('custom maxHtmlNestingDepth (200) should allow 199 levels', () => {
+      const nested = `${'<'.repeat(199)}content${'>'.repeat(199)}`;
+      const result = parse(`label = <${nested}>`, {
+        startRule: 'Attribute',
+        maxHtmlNestingDepth: 200,
+      });
+      expect(result).toBeDefined();
+    });
+
+    test('custom maxHtmlNestingDepth (200) should reject 200 levels', () => {
+      const nested = `${'<'.repeat(200)}content${'>'.repeat(200)}`;
+      expect(() => {
+        parse(`label = <${nested}>`, {
+          startRule: 'Attribute',
+          maxHtmlNestingDepth: 200,
+        });
+      }).toThrowError(
+        /HTML nesting depth exceeds maximum allowed depth of 200/,
+      );
+    });
+  });
 });

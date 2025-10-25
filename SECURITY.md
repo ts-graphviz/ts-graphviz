@@ -31,6 +31,10 @@ Security updates will be released as needed.
 
 Security is maintained through several automated workflows within the CI/CD pipeline. We continuously improve our security measures.
 
+### Known Security Protections
+
+- **HTML Nesting Depth Limit**: The DOT parser includes protection against stack overflow attacks from deeply nested HTML-like structures. A configurable depth limit (default: 100 levels) prevents malicious DOT files from causing application crashes. For more details, see the [@ts-graphviz/ast documentation](./packages/ast/README.md#parser-options).
+
 **Specific measures include:**
 
 - **CodeQL Analysis**: [![CodeQL](https://github.com/ts-graphviz/ts-graphviz/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ts-graphviz/ts-graphviz/actions/workflows/codeql-analysis.yml)
