@@ -104,11 +104,36 @@ The `dotCommand` and `library` options are intended to be configured by applicat
 
 **Important**: This library executes external commands using `spawn` (Node.js) or `Deno.Command` (Deno), which do not invoke a shell interpreter. This prevents shell injection attacks through metacharacters (`;`, `` ` ``, `|`, `$`, etc.). However, these options should not be exposed to end-user input.
 
+#### Processing User-Provided DOT Files
+
+When rendering DOT files uploaded by users or generated from user input, implement validation before passing them to this library:
+
+**Validation Steps**:
+1. **Syntax validation**: Verify the DOT file is well-formed and parseable
+2. **Attribute filtering**: Check for potentially dangerous attributes that reference file system resources:
+   - `image`, `shapefile` - Can reference arbitrary image files
+   - `fontpath`, `fontname` - Can reference font files
+   - `imagepath` - Defines search path for images
+3. **Content sanitization**: Consider using a DOT parser to rebuild the graph with only allowed attributes
+4. **Sandboxing**: Run Graphviz in a sandboxed environment with restricted file system access when processing untrusted input
+
+**Example Risk Scenario**:
+```dot
+digraph G {
+  node [image="/etc/passwd"];  // Attempts to access sensitive file
+  node1;
+}
+```
+
+While Graphviz will handle file access errors gracefully, processing untrusted DOT files without validation may expose information about your file system or cause unexpected behavior.
+
 **Best Practices**:
 - Use the default `dot` command when possible
 - If you need to customize `dotCommand`, use a hardcoded path or environment variable controlled by the deployment environment
-- Do not allow end-user input to control these configuration options
-- Be aware of potential vulnerabilities in Graphviz itself when processing untrusted DOT language strings
+- Do not allow end-user input to control the configuration options
+- Validate and sanitize DOT strings from untrusted sources before rendering
+- Consider using a whitelist approach for allowed attributes when processing user-provided DOT files
+- Run Graphviz in a restricted environment when handling untrusted input
 
 ## Contributors 👥
 
