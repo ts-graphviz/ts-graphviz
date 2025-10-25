@@ -211,6 +211,31 @@ describe('renderHTMLLike()', () => {
       expect(renderHTMLLike(element, { maxDepth: 100 })).toBe('<>');
     });
 
+    it('sanitizes invalid maxDepth values', () => {
+      let element: any = <div>content</div>;
+      for (let i = 0; i < 50; i++) {
+        element = <div>{element}</div>;
+      }
+
+      // Infinity should fall back to default (1000)
+      expect(
+        renderHTMLLike(element, { maxDepth: Number.POSITIVE_INFINITY }),
+      ).not.toBe('<>');
+
+      // NaN should fall back to default (1000)
+      expect(renderHTMLLike(element, { maxDepth: Number.NaN })).not.toBe('<>');
+
+      // Negative values should fall back to default (1000)
+      expect(renderHTMLLike(element, { maxDepth: -100 })).not.toBe('<>');
+
+      // Zero should fall back to default (1000)
+      expect(renderHTMLLike(element, { maxDepth: 0 })).not.toBe('<>');
+
+      // Decimal values should be floored
+      expect(renderHTMLLike(element, { maxDepth: 75.9 })).not.toBe('<>');
+      expect(renderHTMLLike(element, { maxDepth: 49.9 })).toBe('<>');
+    });
+
     it('handles structures just under the limit (1000 levels)', () => {
       // Create structure at exactly the limit
       let element: any = <div>content</div>;

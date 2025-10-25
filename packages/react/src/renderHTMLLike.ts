@@ -217,7 +217,16 @@ export function renderHTMLLike(
     return '<>';
   }
 
-  const maxDepth = options?.maxDepth ?? DEFAULT_MAX_RECURSION_DEPTH;
+  // Sanitize and validate maxDepth option
+  let maxDepth = DEFAULT_MAX_RECURSION_DEPTH;
+  if (
+    options?.maxDepth != null &&
+    Number.isFinite(options.maxDepth) &&
+    options.maxDepth > 0
+  ) {
+    // Use Math.floor to ensure integer
+    maxDepth = Math.floor(options.maxDepth);
+  }
 
   try {
     // Use manual rendering with built-in dot: element transformation
