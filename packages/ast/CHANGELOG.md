@@ -1,5 +1,53 @@
 # @ts-graphviz/ast
 
+## 3.0.4
+
+### Patch Changes
+
+- [#1531](https://github.com/ts-graphviz/ts-graphviz/pull/1531) [`c4a08b9`](https://github.com/ts-graphviz/ts-graphviz/commit/c4a08b9f6bbe9104a461d5dc599ca307f6940f7c) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix stack overflow vulnerability in edge chain parser
+
+  This patch addresses a security vulnerability where deeply chained edges in DOT files could cause stack overflow, leading to application crashes and potential DoS attacks.
+
+  **Changes:**
+
+  - Added depth limit (default: 1000) to edge chain parsing in PEG grammar
+  - Introduced `maxEdgeChainDepth` option to `parse()` function for custom depth limits
+  - Improved parser to track and limit edge chain depth during parsing
+  - Reset edge chain depth counter after successful edge parse
+
+  **Security Impact:**
+
+  - Prevents stack overflow attacks from maliciously crafted DOT files with deep edge chains (e.g., `a -> b -> c -> ... -> z`)
+  - Prevents memory exhaustion from unbounded `edgeops` array growth
+  - Normal use cases (typically <100 edges per chain) are unaffected
+  - Configurable limit allows complex graphs when needed
+
+  **Breaking Changes:**
+  None. This is a backward-compatible security fix with sensible defaults.
+
+- [#1526](https://github.com/ts-graphviz/ts-graphviz/pull/1526) [`00aaf2f`](https://github.com/ts-graphviz/ts-graphviz/commit/00aaf2ff6ef6fa8b6611ec2a477bc46b76fdebaf) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix critical stack overflow vulnerability in HTML string parser
+
+  This patch addresses a critical security vulnerability where deeply nested HTML-like structures in DOT files could cause stack overflow, leading to application crashes and potential DoS attacks.
+
+  **Changes:**
+
+  - Added depth limit (default: 100) to HTML string parsing in PEG grammar
+  - Introduced `maxHtmlNestingDepth` option to `parse()` function for custom depth limits
+  - Improved parser to track and limit HTML nesting depth during parsing
+
+  **Security Impact:**
+
+  - Prevents stack overflow attacks from maliciously crafted DOT files with deep HTML nesting
+  - Normal use cases (typically <10 levels) are unaffected
+  - Configurable limit allows complex parsing when needed
+
+  **Breaking Changes:**
+  None. This is a backward-compatible security fix with sensible defaults.
+
+- [#1530](https://github.com/ts-graphviz/ts-graphviz/pull/1530) [`52e3f1f`](https://github.com/ts-graphviz/ts-graphviz/commit/52e3f1ff58a77bf9bd9a0d0b6e29edb20e3700e5) Thanks [@kamiazya](https://github.com/kamiazya)! - Clarify security model: GraphViz HTML-like labels vs browser HTML
+
+  Add documentation clarifying that HTML-like labels are part of the GraphViz DOT language specification and are not browser HTML. This helps prevent confusion about XSS risks, which occur when rendering GraphViz output in browsers, not when generating DOT strings.
+
 ## 3.0.3
 
 ### Patch Changes
