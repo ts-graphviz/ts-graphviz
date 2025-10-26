@@ -1,3 +1,4 @@
+import { ASTNodeCountExceededError } from '../../builder/errors.js';
 import type {
   ASTNode,
   AttributeASTNode,
@@ -10,6 +11,12 @@ import type {
   SubgraphASTNode,
 } from '../../types.js';
 import { parse as _parse, SyntaxError as PeggySyntaxError } from './_parse.js';
+
+/**
+ * Default maximum input size in bytes (10MB).
+ * This limit prevents memory exhaustion from extremely large DOT files.
+ */
+const DEFAULT_MAX_INPUT_SIZE = 10 * 1024 * 1024;
 
 /**
  * @group Convert DOT to AST
@@ -45,6 +52,20 @@ export interface CommonParseOptions {
    * @default 1000
    */
   maxEdgeChainDepth?: number;
+  /**
+   * maxInputSize (optional): Maximum allowed input size in bytes.
+   * Default is 10MB (10485760 bytes). This limit prevents memory exhaustion from extremely large inputs.
+   * Set to 0 to disable this limit (not recommended for untrusted inputs).
+   * @default 10485760
+   */
+  maxInputSize?: number;
+  /**
+   * maxASTNodes (optional): Maximum allowed number of AST nodes to create during parsing.
+   * Default is 100000. This limit prevents memory exhaustion from inputs with excessive elements.
+   * Set to 0 to disable this limit (not recommended for untrusted inputs).
+   * @default 100000
+   */
+  maxASTNodes?: number;
 }
 
 /**
@@ -114,17 +135,42 @@ export function parse(
   input: string,
   options?: ParseOptions<Rule>,
 ): ASTNode | ClusterStatementASTNode[] {
-  const { startRule, filename, maxHtmlNestingDepth, maxEdgeChainDepth } =
-    options ?? {};
+  const {
+    startRule,
+    filename,
+    maxHtmlNestingDepth,
+    maxEdgeChainDepth,
+    maxInputSize,
+    maxASTNodes,
+  } = options ?? {};
+
+  // Input size validation
+  const inputSizeLimit = maxInputSize ?? DEFAULT_MAX_INPUT_SIZE;
+  if (inputSizeLimit > 0) {
+    const inputBytes = new TextEncoder().encode(input).length;
+    if (inputBytes > inputSizeLimit) {
+      throw new DotSyntaxError(
+        `Input size (${inputBytes} bytes) exceeds maximum allowed size (${inputSizeLimit} bytes). ` +
+          `Consider increasing 'maxInputSize' option or reducing the input size.`,
+      );
+    }
+  }
+
   try {
     return _parse(input, {
       startRule,
       filename,
       maxHtmlNestingDepth,
       maxEdgeChainDepth,
+      maxASTNodes,
     });
   } catch (e) {
     if (e instanceof PeggySyntaxError) {
+      throw new DotSyntaxError(e.message, {
+        cause: e,
+      });
+    }
+    if (e instanceof ASTNodeCountExceededError) {
       throw new DotSyntaxError(e.message, {
         cause: e,
       });

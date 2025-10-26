@@ -37,6 +37,12 @@ export interface BuilderOptions {
    * It is used to specify the location of the builder.
    */
   locationFunction: () => FileRange;
+  /**
+   * Maximum allowed number of AST nodes to create.
+   * Default is 100000. Set to 0 to disable this limit.
+   * @default 100000
+   */
+  maxASTNodes?: number;
 }
 
 /**

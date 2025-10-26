@@ -28,7 +28,27 @@
 
   const b = new Builder({
     locationFunction: location,
+    maxASTNodes: options.maxASTNodes,
   });
+
+  /**
+   * Reset parser state at the beginning of each exported rule.
+   * This ensures that state doesn't accumulate across multiple parse() calls.
+   *
+   * Critical for:
+   * - Builder node count (prevents false positives on subsequent parses)
+   * - HTML nesting depth (prevents state leakage)
+   * - Edge chain depth (prevents state leakage)
+   */
+  function resetState() {
+    b.resetNodeCount();
+    htmlNestingDepth = 0;
+    edgeChainDepth = 0;
+    edgeops.length = 0; // Clear edge operators array
+  }
+
+  // Reset state at the beginning of each parse
+  resetState();
 }
 
 start = Dot
