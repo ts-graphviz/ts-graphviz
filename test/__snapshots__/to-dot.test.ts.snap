@@ -39,17 +39,17 @@ exports[`toDot serialization for Digraph > Basic graph rendering > Label attribu
 }"
 `;
 
+exports[`toDot serialization for Digraph > Basic graph rendering > Security: DOT injection prevention > prevents graph termination injection via quotes and newlines 1`] = `
+"digraph {
+  "node1\\"\\n} malicious { node";
+}"
+`;
+
 exports[`toDot serialization for Digraph > Basic graph rendering > Security: DOT injection prevention > prevents injection via attribute values 1`] = `
 "digraph {
   "safe_node" [
     label = "label\\"; injected_attr=\\"malicious";
   ];
-}"
-`;
-
-exports[`toDot serialization for Digraph > Basic graph rendering > Security: DOT injection prevention > prevents injection via brackets and newlines in node IDs 1`] = `
-"digraph {
-  "node1\\"\\n} malicious { node";
 }"
 `;
 
@@ -219,17 +219,17 @@ exports[`toDot serialization for Graph > Basic graph rendering > Label attribute
 }"
 `;
 
+exports[`toDot serialization for Graph > Basic graph rendering > Security: DOT injection prevention > prevents graph termination injection via quotes and newlines 1`] = `
+"graph {
+  "node1\\"\\n} malicious { node";
+}"
+`;
+
 exports[`toDot serialization for Graph > Basic graph rendering > Security: DOT injection prevention > prevents injection via attribute values 1`] = `
 "graph {
   "safe_node" [
     label = "label\\"; injected_attr=\\"malicious";
   ];
-}"
-`;
-
-exports[`toDot serialization for Graph > Basic graph rendering > Security: DOT injection prevention > prevents injection via brackets and newlines in node IDs 1`] = `
-"graph {
-  "node1\\"\\n} malicious { node";
 }"
 `;
 

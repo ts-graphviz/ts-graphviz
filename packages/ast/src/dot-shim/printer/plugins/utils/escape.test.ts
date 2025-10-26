@@ -43,9 +43,11 @@ describe('escape', () => {
       expect(escaped).toBe('node1\\" -> \\"malicious');
     });
 
-    test('should handle bracket injection with newlines', () => {
+    test('should escape quotes and newlines to prevent graph termination injection', () => {
       const malicious = 'node1"\n} malicious { node';
       const escaped = escape(malicious);
+      // Without escaping, this could break out of the string, close the graph with },
+      // and inject a new malicious graph structure
       expect(escaped).toBe('node1\\"\\n} malicious { node');
     });
 

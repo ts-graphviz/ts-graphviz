@@ -129,7 +129,7 @@ describe.each([
         expect(toDot(g)).toMatchSnapshot();
       });
 
-      it('prevents injection via brackets and newlines in node IDs', () => {
+      it('prevents graph termination injection via quotes and newlines', () => {
         g.createNode('node1"\n} malicious { node');
         expect(toDot(g)).toMatchSnapshot();
       });
