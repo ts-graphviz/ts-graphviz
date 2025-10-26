@@ -117,5 +117,62 @@ describe.each([
         expect(toDot(g)).toMatchSnapshot();
       });
     });
+
+    describe('Security: DOT injection prevention', () => {
+      it('prevents injection via semicolon in node IDs', () => {
+        g.createNode('node1"; injected_node [label="owned"]; dummy="');
+        expect(toDot(g)).toMatchSnapshot();
+      });
+
+      it('prevents injection via edge operator in node IDs', () => {
+        g.createNode('node1" -> "malicious');
+        expect(toDot(g)).toMatchSnapshot();
+      });
+
+      it('prevents injection via brackets and newlines in node IDs', () => {
+        g.createNode('node1"\n} malicious { node');
+        expect(toDot(g)).toMatchSnapshot();
+      });
+
+      it('prevents injection via semicolon in graph IDs', () => {
+        const sg = g.createSubgraph('graph1"; malicious_node [label="injected');
+        sg.createNode('test');
+        expect(toDot(g)).toMatchSnapshot();
+      });
+
+      it('prevents injection via attribute values', () => {
+        const node = g.createNode('safe_node');
+        node.attributes.set(_.label, 'label"; injected_attr="malicious');
+        expect(toDot(g)).toMatchSnapshot();
+      });
+
+      it('prevents injection via edge IDs', () => {
+        const n1 = g.createNode('n1');
+        const n2 = g.createNode('n2" } malicious { "n3');
+        g.createEdge([n1, n2]);
+        expect(toDot(g)).toMatchSnapshot();
+      });
+
+      it('prevents injection with multiple quotes in node ID', () => {
+        g.createNode('""""""');
+        expect(toDot(g)).toMatchSnapshot();
+      });
+
+      it('prevents injection via port specification', () => {
+        g.createNode('node":port1" -> "evil');
+        expect(toDot(g)).toMatchSnapshot();
+      });
+
+      it('prevents injection via graph comment', () => {
+        g.comment = 'comment"; digraph evil { "node"';
+        expect(toDot(g)).toMatchSnapshot();
+      });
+
+      it('prevents injection via node comment', () => {
+        const node = g.createNode('test');
+        node.comment = 'comment"; injected_node [label="owned"';
+        expect(toDot(g)).toMatchSnapshot();
+      });
+    });
   });
 });
