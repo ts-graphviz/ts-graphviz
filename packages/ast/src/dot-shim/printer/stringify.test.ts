@@ -783,6 +783,36 @@ describe('stringify', () => {
         // bar"
       `);
     });
+
+    test('block comment with */ injection attempt', () => {
+      expect(
+        stringify({
+          type: 'Comment',
+          kind: 'Block',
+          value: 'malicious */ digraph { a -> b; } /*',
+          children: [],
+        }),
+      ).toMatchInlineSnapshot(`
+        "/**
+         * malicious *​/ digraph { a -> b; } /*
+         */"
+      `);
+    });
+
+    test('block comment with null bytes', () => {
+      expect(
+        stringify({
+          type: 'Comment',
+          kind: 'Block',
+          value: 'test\0null\0byte',
+          children: [],
+        }),
+      ).toMatchInlineSnapshot(`
+        "/**
+         * testnullbyte
+         */"
+      `);
+    });
   });
 
   describe('dot', () => {
