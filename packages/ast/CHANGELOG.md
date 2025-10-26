@@ -1,5 +1,187 @@
 # @ts-graphviz/ast
 
+## 3.0.5
+
+### Patch Changes
+
+- [#1536](https://github.com/ts-graphviz/ts-graphviz/pull/1536) [`4296b4e`](https://github.com/ts-graphviz/ts-graphviz/commit/4296b4e0cf17f36cc385c2ce93ec7ec89bd4a73a) Thanks [@kamiazya](https://github.com/kamiazya)! - Add null byte sanitization and comprehensive security tests for DOT injection prevention
+
+  ## Security Fix
+
+  ### Null Byte Handling
+
+  Added null byte removal to the `escape()` function to prevent Graphviz parsing errors. Graphviz treats null bytes (`\0`) as string terminators, causing syntax errors when encountered in quoted strings. This is now consistent with the `escapeComment()` function which already strips null bytes.
+
+  **Why this matters:**
+
+  - Prevents "syntax error in line X scanning a quoted string" errors in Graphviz
+  - Removes potential attack vector for causing parser failures
+  - Aligns with existing comment sanitization behavior
+
+  ## Test Coverage Additions
+
+  ### Unit Tests (escape.test.ts)
+
+  Added 16 new test cases covering various DOT injection attack vectors:
+
+  - Semicolon-based statement injection
+  - Edge operator injection attempts
+  - Graph termination injection via quotes and newlines
+  - Closing brace injection
+  - Attribute injection with equals sign
+  - Multiple quote injection attempts
+  - Mixed newlines and quotes
+  - Subgraph injection attempts
+  - Edge chain injection
+  - HTML-like label injection with quotes
+  - Port injection
+  - Already-escaped string handling
+  - Null byte removal (2 tests)
+  - Unicode strings with quotes
+  - Strict keyword injection
+
+  ### Integration Tests (to-dot.test.ts)
+
+  Added 10 new end-to-end test cases:
+
+  - Statement injection in node IDs (semicolon)
+  - Edge operator injection in node IDs
+  - Graph termination injection via quotes and newlines
+  - Statement injection in subgraph IDs
+  - Attribute value injection prevention
+  - Edge ID injection prevention
+  - Multiple quotes in node ID
+  - Port specification injection
+  - Graph comment injection
+  - Node comment injection
+
+  ## Validation
+
+  All tests confirm that the existing escape implementation correctly prevents DOT language injection by:
+
+  - Escaping double quotes (`"` → `\"`)
+  - Escaping newlines (`\n` → `\n`)
+  - Escaping carriage returns (`\r` → `\r`)
+  - Ensuring malicious strings are treated as literal identifiers, not DOT syntax
+
+  Verified with actual Graphviz parser (version 13.1.1) that escaped output renders safely without executing injected DOT code.
+
+- [#1533](https://github.com/ts-graphviz/ts-graphviz/pull/1533) [`ed770be`](https://github.com/ts-graphviz/ts-graphviz/commit/ed770be7fffc93b9171198c9a84270df7477185d) Thanks [@kamiazya](https://github.com/kamiazya)! - Add memory exhaustion protection with input size and AST node count limits
+
+  Addresses security vulnerability where extremely large inputs or inputs with excessive elements could cause memory exhaustion, leading to application crashes and potential DoS attacks.
+
+  ## Security Enhancements
+
+  ### Input Size Limit
+
+  - Added `maxInputSize` option to `parse()` function (default: 10MB)
+  - Validates input size before parsing to prevent memory exhaustion from extremely large DOT files
+  - Configurable limit allows flexibility for legitimate large graphs
+  - Can be disabled by setting to 0 (not recommended for untrusted inputs)
+
+  ### AST Node Count Limit
+
+  - Added `maxASTNodes` option to `parse()` function (default: 100,000 nodes)
+  - Tracks and limits the number of AST nodes created during parsing
+  - Prevents memory exhaustion from inputs with excessive elements
+  - Configurable limit for complex graphs when needed
+  - Can be disabled by setting to 0 (not recommended for untrusted inputs)
+
+  ## Changes
+
+  ### API Updates
+
+  - `CommonParseOptions` interface extended with `maxInputSize` and `maxASTNodes` options
+  - `Builder` class enhanced with node counting and validation
+  - `parse()` function validates input size before parsing
+  - Parser grammar updated to pass limits to Builder
+
+  ### Error Handling
+
+  - Input size violations throw `DotSyntaxError` with descriptive messages
+  - AST node count violations throw `DotSyntaxError` with actionable guidance
+  - Error messages include current values and suggestions for resolution
+
+  ### Testing
+
+  - Comprehensive test coverage for both limits
+  - Tests for normal usage, boundary conditions, and limit violations
+  - Tests for custom limit values and disabling limits
+  - All 62 parser tests passing
+
+  ### Documentation
+
+  - Updated `SECURITY.md` with detailed security protection information
+  - Added usage examples and best practices
+  - Documented recommendations for untrusted input handling
+
+  ## Security Impact
+
+  - Prevents DoS attacks via extremely large DOT files (hundreds of MB)
+  - Prevents memory exhaustion from inputs with tens of thousands of elements
+  - Default limits protect normal use cases while allowing customization
+  - Complements existing protections (HTML nesting depth, edge chain depth)
+  - Provides defense-in-depth security strategy
+
+- [#1532](https://github.com/ts-graphviz/ts-graphviz/pull/1532) [`dc3ef34`](https://github.com/ts-graphviz/ts-graphviz/commit/dc3ef34316f5642c416711cb6a50704dbef7bb64) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump vite from 7.0.2 to 7.0.8 in the npm_and_yarn group across 1 directory
+
+- [#1535](https://github.com/ts-graphviz/ts-graphviz/pull/1535) [`11f7126`](https://github.com/ts-graphviz/ts-graphviz/commit/11f7126347816f64f7892c8608b5e3bf1a826670) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix comment injection vulnerability in block comments
+
+  Addresses security vulnerability where malicious `*/` sequences in comment content could break out of block comment context and inject arbitrary DOT syntax.
+
+  ## Security Enhancement
+
+  ### Comment Content Escaping
+
+  - Added `escapeComment()` utility function to sanitize comment content
+  - Block comments: Breaks up `*/` sequences using zero-width space (U+200B) to prevent early comment termination
+  - All comment types: Removes null bytes that could cause parsing issues
+  - Follows C/C++ and DOT language specifications where block comments cannot be nested
+
+  ## Changes
+
+  ### New Utility Function
+
+  - `escapeComment()` in `packages/ast/src/dot-shim/printer/plugins/utils/escape-comment.ts`
+  - Prevents comment injection by inserting zero-width space between `*` and `/`
+  - Maintains visual appearance while preventing syntax injection
+  - Verified to work with Graphviz 13.1.1
+
+  ### Updated Components
+
+  - `CommentPrintPlugin` now applies escaping before outputting comment content
+  - All comment values are sanitized at print time, not at creation time
+  - Maintains backward compatibility with existing AST structures
+
+  ### Testing
+
+  - 11 unit tests for `escapeComment()` function covering:
+    - Block comment injection prevention
+    - Multiple `*/` sequence handling
+    - Null byte removal
+    - Normal content preservation
+  - Integration tests in `stringify.test.ts` for end-to-end verification
+  - All existing tests continue to pass
+
+  ## Security Impact
+
+  - Prevents DOT syntax injection via malicious comment content
+  - Blocks attempts to escape comment context and inject arbitrary graph definitions
+  - Protects against parser manipulation through crafted comment values
+  - Zero-width space approach is standards-compliant and validated with official Graphviz parser
+
+  ## Technical Details
+
+  According to C/C++ and DOT language specifications, block comments (`/* */`) cannot be nested and there is no escape sequence for the closing delimiter within comments. The standard workaround is to insert a zero-width space (U+200B) between `*` and `/`, which:
+
+  - Prevents early comment termination
+  - Preserves visual appearance (zero-width character is invisible)
+  - Is correctly handled by Graphviz parser (tested with version 13.1.1)
+  - Follows industry best practices for comment sanitization
+
+- Updated dependencies [[`dc3ef34`](https://github.com/ts-graphviz/ts-graphviz/commit/dc3ef34316f5642c416711cb6a50704dbef7bb64)]:
+  - @ts-graphviz/common@3.0.4
+
 ## 3.0.4
 
 ### Patch Changes
