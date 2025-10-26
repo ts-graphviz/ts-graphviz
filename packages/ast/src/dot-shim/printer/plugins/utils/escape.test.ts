@@ -111,11 +111,17 @@ describe('escape', () => {
       expect(escaped).toBe('node1\\" already escaped');
     });
 
-    test('should handle null byte injection attempts', () => {
+    test('should remove null bytes to prevent parsing errors', () => {
       const malicious = 'node1"\x00injected';
       const escaped = escape(malicious);
-      // Null bytes should pass through (escape only handles quotes and newlines)
-      expect(escaped).toBe('node1\\"\x00injected');
+      // Null bytes are removed because Graphviz treats them as string terminators
+      expect(escaped).toBe('node1\\"injected');
+    });
+
+    test('should remove multiple null bytes', () => {
+      const malicious = 'node\x00with\x00\x00nulls';
+      const escaped = escape(malicious);
+      expect(escaped).toBe('nodewithnulls');
     });
 
     test('should handle unicode with quotes', () => {

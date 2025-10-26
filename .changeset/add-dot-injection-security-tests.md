@@ -3,7 +3,17 @@
 "ts-graphviz": patch
 ---
 
-Add comprehensive security tests for DOT injection prevention
+Add null byte sanitization and comprehensive security tests for DOT injection prevention
+
+## Security Fix
+
+### Null Byte Handling
+Added null byte removal to the `escape()` function to prevent Graphviz parsing errors. Graphviz treats null bytes (`\0`) as string terminators, causing syntax errors when encountered in quoted strings. This is now consistent with the `escapeComment()` function which already strips null bytes.
+
+**Why this matters:**
+- Prevents "syntax error in line X scanning a quoted string" errors in Graphviz
+- Removes potential attack vector for causing parser failures
+- Aligns with existing comment sanitization behavior
 
 ## Test Coverage Additions
 
