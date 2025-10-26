@@ -1,5 +1,6 @@
 import type { CommentASTNode, CommentKind } from '../../../types.js';
 import type { PrintPlugin } from '../types.js';
+import { escapeComment } from './utils/escape-comment.js';
 
 const EOL_PATTERN = /\r?\n/;
 
@@ -18,7 +19,8 @@ export const CommentPrintPlugin: PrintPlugin<CommentASTNode> = {
     if (ast.kind === 'Block') {
       yield* ['/**', context.EOL];
     }
-    const lines = ast.value.split(EOL_PATTERN);
+    const escapedValue = escapeComment(ast.value, ast.kind);
+    const lines = escapedValue.split(EOL_PATTERN);
     const lineLength = lines.length;
     for (let i = 0; i < lineLength; i++) {
       yield padding;
