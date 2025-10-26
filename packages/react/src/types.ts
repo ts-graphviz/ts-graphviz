@@ -92,8 +92,8 @@ export interface GraphPortalProps {
   children?: ReactNode;
 }
 
-// JSX type augmentations for dot:* elements
-import './jsx.js';
+// JSX type augmentations for dot:* elements are in jsx.d.ts
+// Module augmentation happens at type-checking time, no runtime import needed
 
 export type { AnyGraphContainer } from './types/container.js';
 // Re-export types for external use

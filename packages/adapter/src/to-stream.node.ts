@@ -18,9 +18,8 @@ export async function toStream<T extends Layout>(
     // error handling
     p.on('error', (e) => {
       const error = new Error(
-        `Command "${command}" failed.\nMESSAGE:${e.message}`,
+        `Command "${command}" failed.\nMESSAGE:${e.message}\nCAUSE:${e.stack || e}`,
       );
-      error.cause = e;
       reject(error);
     });
 
