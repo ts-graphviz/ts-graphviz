@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
 import { escapeComment } from './escape-comment.js';
 
-// Zero-width space character used to break up */ sequences in block comments
-const ZWS = '\u200B';
+// Zero-width space character (U+200B) used to break up */ sequences in block comments
+const ZERO_WIDTH_SPACE = '\u200B';
 
 describe('escapeComment', () => {
   describe('Block comments', () => {
@@ -10,14 +10,16 @@ describe('escapeComment', () => {
       const malicious = 'test */ digraph { a -> b; } /*';
       const escaped = escapeComment(malicious, 'Block');
       // Zero-width space (U+200B) is inserted between * and /
-      expect(escaped).toBe(`test *${ZWS}/ digraph { a -> b; } /*`);
+      expect(escaped).toBe(`test *${ZERO_WIDTH_SPACE}/ digraph { a -> b; } /*`);
       expect(escaped).not.toContain('*/');
     });
 
     test('should escape multiple */ sequences', () => {
       const malicious = 'first */ second */ third */';
       const escaped = escapeComment(malicious, 'Block');
-      expect(escaped).toBe(`first *${ZWS}/ second *${ZWS}/ third *${ZWS}/`);
+      expect(escaped).toBe(
+        `first *${ZERO_WIDTH_SPACE}/ second *${ZERO_WIDTH_SPACE}/ third *${ZERO_WIDTH_SPACE}/`,
+      );
     });
 
     test('should not modify normal block comment content', () => {
@@ -75,14 +77,14 @@ describe('escapeComment', () => {
 
       // The escaped version should not contain */ which would close the comment early
       expect(escaped).not.toContain('*/');
-      expect(escaped).toContain(`*${ZWS}/`);
+      expect(escaped).toContain(`*${ZERO_WIDTH_SPACE}/`);
     });
 
     test('should handle complex nested patterns', () => {
       const complex = '/* nested */ */ more /* nesting */';
       const escaped = escapeComment(complex, 'Block');
       expect(escaped).toBe(
-        `/* nested *${ZWS}/ *${ZWS}/ more /* nesting *${ZWS}/`,
+        `/* nested *${ZERO_WIDTH_SPACE}/ *${ZERO_WIDTH_SPACE}/ more /* nesting *${ZERO_WIDTH_SPACE}/`,
       );
     });
   });

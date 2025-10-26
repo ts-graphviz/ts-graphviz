@@ -1,6 +1,13 @@
 import type { CommentKind } from '../../../../types.js';
 
 /**
+ * Zero-width space character (U+200B) used to break up comment-ending sequences.
+ * This invisible character prevents `* /` from being interpreted as a comment delimiter
+ * while maintaining visual appearance.
+ */
+const ZERO_WIDTH_SPACE = '\u200B';
+
+/**
  * Escape comment content to prevent comment injection attacks.
  *
  * @remarks
@@ -22,9 +29,9 @@ export function escapeComment(value: string, kind: CommentKind): string {
 
   // For block comments, break up asterisk-slash sequences to prevent comment injection
   if (kind === 'Block') {
-    // Replace asterisk-slash with asterisk + zero-width space + slash (U+200B)
+    // Replace asterisk-slash with asterisk + zero-width space + slash
     // This prevents early comment termination while preserving visual appearance
-    escaped = escaped.replace(/\*\//g, '*\u200B/');
+    escaped = escaped.replace(/\*\//g, `*${ZERO_WIDTH_SPACE}/`);
   }
 
   return escaped;
