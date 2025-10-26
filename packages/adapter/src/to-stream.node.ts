@@ -17,11 +17,11 @@ export async function toStream<T extends Layout>(
 
     // error handling
     p.on('error', (e) => {
-      reject(
-        new Error(`Command "${command}" failed.\nMESSAGE:${e.message}`, {
-          cause: e,
-        }),
+      const error = new Error(
+        `Command "${command}" failed.\nMESSAGE:${e.message}`,
       );
+      error.cause = e;
+      reject(error);
     });
 
     const stderrChunks: Uint8Array[] = [];

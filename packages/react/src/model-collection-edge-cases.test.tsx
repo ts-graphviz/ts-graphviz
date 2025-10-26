@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import {
   Digraph as DigraphModel,
   Graph as GraphModel,
@@ -287,9 +287,7 @@ describe('Model Collection Edge Cases', () => {
       await root.render(
         <>
           <Node id="in_fragment1" />
-          <React.Fragment>
-            <Node id="in_fragment2" />
-          </React.Fragment>
+          <Node id="in_fragment2" />
           {[1, 2, 3].map((n) => (
             <Node key={`node-${n}`} id={`mapped_${n}`} />
           ))}

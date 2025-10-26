@@ -106,16 +106,20 @@ export class PackageDiscovery {
           }
 
           // Create DiscoveredPackage from the workspace package info
+          const pkgName = pkg.manifest.name;
+          if (!pkgName) {
+            logger.debug('Package name not found in manifest');
+            continue;
+          }
+
           const discoveredPkg: DiscoveredPackage = {
-            name: pkg.manifest.name,
+            name: pkgName,
             path: packageDir,
             private: pkg.manifest.private === true,
             publishConfig: pkg.manifest.publishConfig,
           };
 
-          if (discoveredPkg.name) {
-            packages.push(discoveredPkg);
-          }
+          packages.push(discoveredPkg);
         } catch (error) {
           logger.debug(`Failed to process workspace package:`, error);
         }

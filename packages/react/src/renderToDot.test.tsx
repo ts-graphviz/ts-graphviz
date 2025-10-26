@@ -167,7 +167,7 @@ describe('renderToDot()', () => {
           <Node
             id="table"
             label={
-              <dot:table border="0" cellborder="1" cellspacing="0">
+              <dot:table border={0} cellborder={1} cellspacing={0}>
                 <dot:tr>
                   <dot:td>Cell 1</dot:td>
                   <dot:td>Cell 2</dot:td>

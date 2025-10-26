@@ -28,9 +28,17 @@ for (const [file, getModule] of Object.entries({
   ...import.meta.glob<TSGraphvizModule>('./*.dot.ts'),
   ...import.meta.glob<TSGraphvizModule>('./*.dot.tsx'),
 })) {
-  test.concurrent(file, async ({ expect }) => {
+  test.concurrent(file, async ({ expect, skip }) => {
+    // Skip snapshot tests on non-Linux platforms due to Graphviz rendering differences
+    if (process.platform !== 'linux') {
+      skip();
+      return;
+    }
+
     const { name } = path.parse(file);
-    const { dot, exportTo } = await getModule().then((module) => {
+    const { dot, exportTo } = await (
+      getModule as () => Promise<TSGraphvizModule>
+    )().then((module: TSGraphvizModule) => {
       return {
         dot: `${toDot(module.default)}\n`,
         exportTo: module.meta?.exportTo,

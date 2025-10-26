@@ -1,5 +1,6 @@
 {
   "extends": "./tsconfig.base.json",
+  "include": ["global.d.ts", "media/**/*", "packages/**/*", "e2e/**/*"],
   "compilerOptions": {
     "paths": {
       "ts-graphviz": [
@@ -25,6 +26,9 @@
       ],
       "@ts-graphviz/react": [
         "./packages/react/src/react.js"
+      ],
+      "@ts-graphviz/react/jsx": [
+        "./packages/react/src/jsx.d.ts"
       ]
     }
   }

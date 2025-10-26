@@ -45,7 +45,7 @@ describe('AST stringify round-trip consistency', () => {
       if (key === 'location') {
         delete node[key];
       } else if (Array.isArray(value)) {
-        // @ts-ignore
+        // @ts-expect-error
         node[key] = value.filter((item) => {
           if (item.type === 'Comment') {
             return false;
