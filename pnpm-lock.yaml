@@ -5,17 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  tar@<6.2.1: '>=6.2.1'
-  braces@<3.0.3: '>=3.0.3'
-  ejs@<3.1.10: '>=3.1.10'
-  ws@>=8.0.0 <8.17.1: '>=8.17.1'
-  micromatch@<4.0.8: '>=4.0.8'
-  ssri@>=5.2.2 <6.0.2: '>=6.0.2'
-  tough-cookie@<4.1.3: '>=4.1.3'
-  '@octokit/request-error@>=1.0.0 <5.1.1': '>=5.1.1'
-  '@octokit/request@>=1.0.0 <8.4.1': '>=8.4.1'
-  '@octokit/plugin-paginate-rest@>=1.0.0 <9.2.2': '>=9.2.2'
-  '@babel/runtime@<7.26.10': '>=7.26.10'
+  form-data@>=4.0.0 <4.0.4: '>=4.0.4'
+  validator@<=13.15.15: '>=13.15.16'
+  on-headers@<1.1.0: '>=1.1.0'
   cross-spawn@>=7.0.0 <7.0.5: '>=7.0.5'
 
 importers:
@@ -3026,8 +3018,8 @@ packages:
   forever-agent@0.6.1:
     resolution: {integrity: sha512-j0KLYPhm6zeac4lz3oJ3o65qvgQCcPubiyotZrXqEaG4hNagNYO8qdlUrX5vwqv9ohqeT/Z3j6+yW067yWWdUw==}
 
-  form-data@4.0.3:
-    resolution: {integrity: sha512-qsITQPfmvMOSAdeyZ+12I1c+CKSstAFAwu+97zrnWAbIr5u8wfsExUzCesVLC8NgHuRUqNN4Zy6UPWUTRGslcA==}
+  form-data@4.0.4:
+    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
     engines: {node: '>= 6'}
 
   forwarded@0.2.0:
@@ -4036,8 +4028,8 @@ packages:
     resolution: {integrity: sha512-oVlzkg3ENAhCk2zdv7IJwd/QUD4z2RxRwpkcGY8psCVcCYZNq4wYnVWALHM+brtuJjePWiYF/ClmuDr8Ch5+kg==}
     engines: {node: '>= 0.8'}
 
-  on-headers@1.0.2:
-    resolution: {integrity: sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==}
+  on-headers@1.1.0:
+    resolution: {integrity: sha512-737ZY3yNnXy37FHkQxPzt4UZ2UWPWiCZWLvFZ4fu5cueciegX0zGPnrlY6bwRg4FdQOe9YU8MkmJwGhoMybl8A==}
     engines: {node: '>= 0.8'}
 
   once@1.4.0:
@@ -5084,8 +5076,8 @@ packages:
     resolution: {integrity: sha512-YuKoXDAhBYxY7SfOKxHBDoSyENFeW5VvIIQp2TGQuit8gpK6MnWaQelBKxso72DoxTZfZdcP3W90LqpSkgPzLQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  validator@13.12.0:
-    resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
+  validator@13.15.20:
+    resolution: {integrity: sha512-KxPOq3V2LmfQPP4eqf3Mq/zrT0Dqp2Vmx2Bn285LwVahLc+CsxOM0crBHczm8ijlcjZ0Q5Xd6LW3z3odTPnlrw==}
     engines: {node: '>= 0.10'}
 
   vary@1.1.2:
@@ -5665,7 +5657,7 @@ snapshots:
       combined-stream: 1.0.8
       extend: 3.0.2
       forever-agent: 0.6.1
-      form-data: 4.0.3
+      form-data: 4.0.4
       http-signature: 1.4.0
       is-typedarray: 1.0.0
       isstream: 0.1.2
@@ -8109,7 +8101,7 @@ snapshots:
       '@verdaccio/core': 8.0.0-next-8.16
       debug: 4.4.0
       lodash: 4.17.21
-      validator: 13.12.0
+      validator: 13.15.20
     transitivePeerDependencies:
       - supports-color
 
@@ -8640,7 +8632,7 @@ snapshots:
       compressible: 2.0.18
       debug: 2.6.9
       negotiator: 0.6.4
-      on-headers: 1.0.2
+      on-headers: 1.1.0
       safe-buffer: 5.2.1
       vary: 1.1.2
     transitivePeerDependencies:
@@ -9174,7 +9166,7 @@ snapshots:
 
   forever-agent@0.6.1: {}
 
-  form-data@4.0.3:
+  form-data@4.0.4:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
@@ -10175,7 +10167,7 @@ snapshots:
     dependencies:
       ee-first: 1.1.1
 
-  on-headers@1.0.2: {}
+  on-headers@1.1.0: {}
 
   once@1.4.0:
     dependencies:
@@ -11198,7 +11190,7 @@ snapshots:
     dependencies:
       builtins: 5.1.0
 
-  validator@13.12.0: {}
+  validator@13.15.20: {}
 
   vary@1.1.2: {}
 
