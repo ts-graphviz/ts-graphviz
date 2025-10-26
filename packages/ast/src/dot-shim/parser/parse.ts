@@ -1,3 +1,4 @@
+import { ASTNodeCountExceededError } from '../../builder/errors.js';
 import type {
   ASTNode,
   AttributeASTNode,
@@ -10,6 +11,12 @@ import type {
   SubgraphASTNode,
 } from '../../types.js';
 import { parse as _parse, SyntaxError as PeggySyntaxError } from './_parse.js';
+
+/**
+ * Default maximum input size in bytes (10MB).
+ * This limit prevents memory exhaustion from extremely large DOT files.
+ */
+const DEFAULT_MAX_INPUT_SIZE = 10 * 1024 * 1024;
 
 /**
  * @group Convert DOT to AST
@@ -138,7 +145,7 @@ export function parse(
   } = options ?? {};
 
   // Input size validation
-  const inputSizeLimit = maxInputSize ?? 10485760; // 10MB default
+  const inputSizeLimit = maxInputSize ?? DEFAULT_MAX_INPUT_SIZE;
   if (inputSizeLimit > 0) {
     const inputBytes = new TextEncoder().encode(input).length;
     if (inputBytes > inputSizeLimit) {
@@ -163,7 +170,7 @@ export function parse(
         cause: e,
       });
     }
-    if (e instanceof Error && e.message.includes('AST node count')) {
+    if (e instanceof ASTNodeCountExceededError) {
       throw new DotSyntaxError(e.message, {
         cause: e,
       });

@@ -520,6 +520,16 @@ describe('parse', () => {
       expect(result).toBeDefined();
     });
 
+    test('node count validation is working', () => {
+      // Test with very low limit to ensure counting works
+      expect(() => {
+        parse('digraph { a; b; c; d; e; f; g; h; i; j; }', {
+          startRule: 'Graph',
+          maxASTNodes: 5,
+        });
+      }).toThrowError(/AST node count \(\d+\) exceeds maximum allowed \(5\)/);
+    });
+
     test('moderate node count (1000 nodes) should work', () => {
       const nodes = Array.from({ length: 1000 }, (_, i) => `n${i};`).join('\n');
       const result = parse(`digraph { ${nodes} }`, { startRule: 'Graph' });
@@ -534,9 +544,9 @@ describe('parse', () => {
       expect(result).toBeDefined();
     });
 
-    test('excessive node count (50000 nodes) should throw error', () => {
-      // This will create more than 100000 AST nodes (each node statement creates multiple AST nodes)
-      const nodes = Array.from({ length: 50000 }, (_, i) => `n${i};`).join(
+    test('excessive node count (75000 nodes) should throw error', () => {
+      // Each node statement creates ~1.5 AST nodes (Node + Literal for id)
+      const nodes = Array.from({ length: 75000 }, (_, i) => `n${i};`).join(
         '\n',
       );
       expect(() => {
@@ -546,17 +556,22 @@ describe('parse', () => {
       );
     });
 
-    test('custom maxASTNodes (15000) should allow nodes within limit', () => {
-      const nodes = Array.from({ length: 2500 }, (_, i) => `n${i};`).join('\n');
+    test('custom maxASTNodes (30000) should allow nodes within limit', () => {
+      // Use fixed-width node IDs to ensure consistent AST node count
+      // Each node statement creates: Graph + Node + Literal = ~3 AST nodes
+      const nodes = Array.from(
+        { length: 5000 },
+        (_, i) => `n${String(i).padStart(5, '0')};`,
+      ).join('\n');
       const result = parse(`digraph { ${nodes} }`, {
         startRule: 'Graph',
-        maxASTNodes: 15000,
+        maxASTNodes: 30000,
       });
       expect(result).toBeDefined();
     });
 
     test('custom maxASTNodes (10000) should reject nodes exceeding limit', () => {
-      const nodes = Array.from({ length: 3100 }, (_, i) => `n${i};`).join('\n');
+      const nodes = Array.from({ length: 7000 }, (_, i) => `n${i};`).join('\n');
       expect(() => {
         parse(`digraph { ${nodes} }`, {
           startRule: 'Graph',
@@ -580,9 +595,9 @@ describe('parse', () => {
     });
 
     test('complex graph with edges should respect node limit', () => {
-      // Each edge creates multiple AST nodes
+      // Each edge creates ~5 AST nodes (Edge + 2xNodeRef + 2xLiteral for node ids)
       const edges = Array.from(
-        { length: 30000 },
+        { length: 25000 },
         (_, i) => `n${i} -> n${i + 1};`,
       ).join('\n');
       expect(() => {
@@ -593,6 +608,81 @@ describe('parse', () => {
       }).toThrowError(
         /AST node count \(\d+\) exceeds maximum allowed \(100000\)/,
       );
+    });
+  });
+
+  describe('State reset between parse calls', () => {
+    test('should reset node count between parse calls', () => {
+      // First parse
+      const firstParse = parse('digraph { a -> b; c -> d; }', {
+        startRule: 'Graph',
+      });
+      expect(firstParse).toBeDefined();
+
+      // Second parse
+      const secondParse = parse('digraph { e -> f; g -> h; }', {
+        startRule: 'Graph',
+      });
+      expect(secondParse).toBeDefined();
+
+      // Third parse with limit - should not fail because state was reset
+      const thirdParse = parse('digraph { i -> j; }', {
+        startRule: 'Graph',
+        maxASTNodes: 20,
+      });
+      expect(thirdParse).toBeDefined();
+    });
+
+    test('should not accumulate node count across multiple parses with same limit', () => {
+      const input = 'digraph { a; b; c; d; e; }';
+      const options = { startRule: 'Graph' as const, maxASTNodes: 50 };
+
+      // Parse multiple times - should succeed each time
+      for (let i = 0; i < 5; i++) {
+        const result = parse(input, options);
+        expect(result).toBeDefined();
+      }
+    });
+
+    test('should reset HTML nesting depth between parses', () => {
+      const deepHtml = `<TABLE>${'<TR>'.repeat(50)}${'</TR>'.repeat(50)}</TABLE>`;
+
+      // First parse with deep nesting
+      const firstParse = parse(`digraph { a[label=<${deepHtml}>]; }`, {
+        startRule: 'Graph',
+      });
+      expect(firstParse).toBeDefined();
+
+      // Second parse should also work (nesting depth should be reset)
+      const secondParse = parse(`digraph { b[label=<${deepHtml}>]; }`, {
+        startRule: 'Graph',
+      });
+      expect(secondParse).toBeDefined();
+    });
+
+    test('should reset edge chain depth between parses', () => {
+      const longChain = Array.from({ length: 500 }, (_, i) => `n${i}`).join(
+        ' -> ',
+      );
+
+      // First parse with long chain
+      const firstParse = parse(`${longChain};`, { startRule: 'Edge' });
+      expect(firstParse).toBeDefined();
+
+      // Second parse should also work (chain depth should be reset)
+      const secondParse = parse(`${longChain};`, { startRule: 'Edge' });
+      expect(secondParse).toBeDefined();
+    });
+
+    test('should handle parse failures without affecting subsequent parses', () => {
+      // First parse that will fail
+      expect(() => {
+        parse('invalid syntax here!', { startRule: 'Graph' });
+      }).toThrowError();
+
+      // Second parse should work normally (state should be reset)
+      const validParse = parse('digraph { a -> b; }', { startRule: 'Graph' });
+      expect(validParse).toBeDefined();
     });
   });
 });

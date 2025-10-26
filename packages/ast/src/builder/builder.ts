@@ -1,5 +1,12 @@
 import type { ASTChildNode, ASTNode, FileRange } from '../types.js';
+import { ASTNodeCountExceededError } from './errors.js';
 import type { ASTBuilder, BuilderOptions } from './types.js';
+
+/**
+ * Default maximum number of AST nodes that can be created during parsing.
+ * This limit prevents memory exhaustion from inputs with excessive elements.
+ */
+const DEFAULT_MAX_AST_NODES = 100_000;
 
 /**
  * Builder is an ASTBuilder that provides a method to create an ASTNode.
@@ -23,7 +30,7 @@ export class Builder implements ASTBuilder {
    * @param options - Options to initialize Builder
    */
   constructor(private options?: Partial<BuilderOptions>) {
-    this.maxNodes = options?.maxASTNodes ?? 100000;
+    this.maxNodes = options?.maxASTNodes ?? DEFAULT_MAX_AST_NODES;
   }
 
   /**
@@ -33,21 +40,17 @@ export class Builder implements ASTBuilder {
    * @param props - Properties of the {@link ASTNode}
    * @param children - Children of the {@link ASTNode}
    * @returns An {@link ASTNode}
-   * @throws Error if the maximum number of AST nodes is exceeded
+   * @throws {ASTNodeCountExceededError} if the maximum number of AST nodes is exceeded
    */
   public createElement<T extends ASTNode>(
     type: T['type'],
     props: any,
     children: ASTChildNode<T>[] = [],
   ): T {
-    if (this.maxNodes > 0) {
-      this.nodeCount++;
-      if (this.nodeCount > this.maxNodes) {
-        throw new Error(
-          `AST node count (${this.nodeCount}) exceeds maximum allowed (${this.maxNodes}). ` +
-            `Consider increasing 'maxASTNodes' option or simplifying the input.`,
-        );
-      }
+    // Always increment node count
+    this.nodeCount++;
+    if (this.maxNodes > 0 && this.nodeCount > this.maxNodes) {
+      throw new ASTNodeCountExceededError(this.nodeCount, this.maxNodes);
     }
     return {
       location: this.getLocation(),
