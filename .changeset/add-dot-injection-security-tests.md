@@ -18,23 +18,29 @@ Added null byte removal to the `escape()` function to prevent Graphviz parsing e
 ## Test Coverage Additions
 
 ### Unit Tests (escape.test.ts)
-Added 15 new test cases covering various DOT injection attack vectors:
+Added 16 new test cases covering various DOT injection attack vectors:
 - Semicolon-based statement injection
 - Edge operator injection attempts
-- Bracket and newline injection
-- Multiple quote injection
-- Attribute injection with special characters
+- Graph termination injection via quotes and newlines
+- Closing brace injection
+- Attribute injection with equals sign
+- Multiple quote injection attempts
+- Mixed newlines and quotes
 - Subgraph injection attempts
 - Edge chain injection
-- HTML-like label injection
-- Port specification injection
+- HTML-like label injection with quotes
+- Port injection
 - Already-escaped string handling
-- Null byte injection attempts
-- Unicode string with quotes
+- Null byte removal (2 tests)
+- Unicode strings with quotes
 - Strict keyword injection
 
 ### Integration Tests (to-dot.test.ts)
-Added 6 new end-to-end test cases:
+Added 10 new end-to-end test cases:
+- Statement injection in node IDs (semicolon)
+- Edge operator injection in node IDs
+- Graph termination injection via quotes and newlines
+- Statement injection in subgraph IDs
 - Attribute value injection prevention
 - Edge ID injection prevention
 - Multiple quotes in node ID
