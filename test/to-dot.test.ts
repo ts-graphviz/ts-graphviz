@@ -134,7 +134,7 @@ describe.each([
         expect(toDot(g)).toMatchSnapshot();
       });
 
-      it('prevents injection via semicolon in graph IDs', () => {
+      it('prevents statement injection in subgraph IDs', () => {
         const sg = g.createSubgraph('graph1"; malicious_node [label="injected');
         sg.createNode('test');
         expect(toDot(g)).toMatchSnapshot();

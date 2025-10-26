@@ -85,14 +85,6 @@ exports[`toDot serialization for Digraph > Basic graph rendering > Security: DOT
 }"
 `;
 
-exports[`toDot serialization for Digraph > Basic graph rendering > Security: DOT injection prevention > prevents injection via semicolon in graph IDs 1`] = `
-"digraph {
-  subgraph "graph1\\"; malicious_node [label=\\"injected" {
-    "test";
-  }
-}"
-`;
-
 exports[`toDot serialization for Digraph > Basic graph rendering > Security: DOT injection prevention > prevents injection via semicolon in node IDs 1`] = `
 "digraph {
   "node1\\"; injected_node [label=\\"owned\\"]; dummy=\\"";
@@ -102,6 +94,14 @@ exports[`toDot serialization for Digraph > Basic graph rendering > Security: DOT
 exports[`toDot serialization for Digraph > Basic graph rendering > Security: DOT injection prevention > prevents injection with multiple quotes in node ID 1`] = `
 "digraph {
   "\\"\\"\\"\\"\\"\\"";
+}"
+`;
+
+exports[`toDot serialization for Digraph > Basic graph rendering > Security: DOT injection prevention > prevents statement injection in subgraph IDs 1`] = `
+"digraph {
+  subgraph "graph1\\"; malicious_node [label=\\"injected" {
+    "test";
+  }
 }"
 `;
 
@@ -265,14 +265,6 @@ exports[`toDot serialization for Graph > Basic graph rendering > Security: DOT i
 }"
 `;
 
-exports[`toDot serialization for Graph > Basic graph rendering > Security: DOT injection prevention > prevents injection via semicolon in graph IDs 1`] = `
-"graph {
-  subgraph "graph1\\"; malicious_node [label=\\"injected" {
-    "test";
-  }
-}"
-`;
-
 exports[`toDot serialization for Graph > Basic graph rendering > Security: DOT injection prevention > prevents injection via semicolon in node IDs 1`] = `
 "graph {
   "node1\\"; injected_node [label=\\"owned\\"]; dummy=\\"";
@@ -282,6 +274,14 @@ exports[`toDot serialization for Graph > Basic graph rendering > Security: DOT i
 exports[`toDot serialization for Graph > Basic graph rendering > Security: DOT injection prevention > prevents injection with multiple quotes in node ID 1`] = `
 "graph {
   "\\"\\"\\"\\"\\"\\"";
+}"
+`;
+
+exports[`toDot serialization for Graph > Basic graph rendering > Security: DOT injection prevention > prevents statement injection in subgraph IDs 1`] = `
+"graph {
+  subgraph "graph1\\"; malicious_node [label=\\"injected" {
+    "test";
+  }
 }"
 `;
 
