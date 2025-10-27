@@ -37,7 +37,12 @@ jobs:
       - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
         with:
           path: |
-            packages/**/lib
+            packages/adapter/lib
+            packages/ast/lib
+            packages/common/lib
+            packages/core/lib
+            packages/react/lib
+            packages/ts-graphviz/lib
           name: lib
 
   doc:
