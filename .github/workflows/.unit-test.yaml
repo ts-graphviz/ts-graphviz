@@ -27,15 +27,12 @@ jobs:
     - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
         name: lib
-        path: packages
-    - name: Debug artifact structure
+        path: artifact-lib
+    - name: Move lib files to packages
       run: |
-        echo "=== Packages directory structure ==="
-        ls -la packages/ || true
-        echo "=== Looking for lib directories ==="
-        find packages -name lib -type d || true
-        echo "=== Contents of first few lib directories ==="
-        ls -la packages/adapter/lib/ 2>/dev/null || ls -la packages/*/lib/ 2>/dev/null | head -20 || true
+        cp -r artifact-lib/* packages/
+        ls -la packages/adapter/lib || echo "adapter/lib not found"
+        ls -la packages/ast/lib || echo "ast/lib not found"
     - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
     - name: Use Graphviz
       uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
@@ -63,15 +60,12 @@ jobs:
     - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
         name: lib
-        path: packages
-    - name: Debug artifact structure
+        path: artifact-lib
+    - name: Move lib files to packages
       run: |
-        echo "=== Packages directory structure ==="
-        ls -la packages/ || true
-        echo "=== Looking for lib directories ==="
-        find packages -name lib -type d || true
-        echo "=== Contents of first few lib directories ==="
-        ls -la packages/adapter/lib/ 2>/dev/null || ls -la packages/*/lib/ 2>/dev/null | head -20 || true
+        cp -r artifact-lib/* packages/
+        ls -la packages/adapter/lib || echo "adapter/lib not found"
+        ls -la packages/ast/lib || echo "ast/lib not found"
     - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
     - name: Use Graphviz
       uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
