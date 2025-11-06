@@ -2,6 +2,13 @@ import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Color, digraph, toDot } from 'ts-graphviz';
 
+interface Field {
+  name: string;
+  type: string;
+  isPK?: boolean;
+  isFK?: boolean;
+}
+
 const COLORS = {
   entity: '#E8EAF6',
   junction: '#FFF3E0',
@@ -15,11 +22,14 @@ const COLORS = {
   oneToMany: '#0288D1',
   manyToMany: '#F57C00',
   selfRef: '#7B1FA2',
+  pkfkBg: '#FFF9C4',
+  pkBg: '#E3F2FD',
+  fkBg: '#FFE0B2',
 };
 
 function createTableNode(
   name: string,
-  fields: Array<{ name: string; type: string; isPK?: boolean; isFK?: boolean }>,
+  fields: Field[],
   bgColor: string,
   headerColor: string,
 ): string {
@@ -30,13 +40,13 @@ function createTableNode(
 
       if (field.isPK && field.isFK) {
         icon = '𝙁𝙆 𝙋𝙆';
-        style = ' BGCOLOR="#FFF9C4"';
+        style = ` BGCOLOR="${COLORS.pkfkBg}"`;
       } else if (field.isPK) {
         icon = '𝙋𝙆';
-        style = ' BGCOLOR="#E3F2FD"';
+        style = ` BGCOLOR="${COLORS.pkBg}"`;
       } else if (field.isFK) {
         icon = '𝙁𝙆';
-        style = ' BGCOLOR="#FFE0B2"';
+        style = ` BGCOLOR="${COLORS.fkBg}"`;
       }
 
       const fieldName = icon ? `${icon} ${field.name}` : field.name;
@@ -46,9 +56,9 @@ function createTableNode(
     .join('');
 
   return `<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" BGCOLOR="${bgColor}" STYLE="ROUNDED">
-    <TR><TD COLSPAN="2" BGCOLOR="${headerColor}"><FONT COLOR="white" POINT-SIZE="13"><B>${name.toUpperCase()}</B></FONT></TD></TR>
-    ${fieldRows}
-  </TABLE>>`;
+  <TR><TD COLSPAN="2" BGCOLOR="${headerColor}"><FONT COLOR="white" POINT-SIZE="13"><B>${name.toUpperCase()}</B></FONT></TD></TR>
+  ${fieldRows}
+</TABLE>>`;
 }
 
 const tables = {
@@ -166,7 +176,6 @@ const g = digraph('BlogPlatformERD', (g) => {
   g.set('fontname', 'Helvetica');
   g.set('fontsize', 14);
   g.set('pad', 0.8);
-  // g.set('dpi', 150); //You can un-comment it to increase the svg size (in px)
   g.set('concentrate', false);
 
   // Default edge settings
@@ -348,7 +357,7 @@ const g = digraph('BlogPlatformERD', (g) => {
 
   // One-to-Many: users -> posts
   g.edge(['users:id:e', 'posts:author_id:w'], {
-    label: '1:N \n(author)',
+    label: '1:N\\n(author)',
     color: COLORS.oneToMany,
     penwidth: 2,
     arrowhead: 'crow',
@@ -376,7 +385,7 @@ const g = digraph('BlogPlatformERD', (g) => {
 
   // One-to-Many: users -> comments
   g.edge(['users:id:ne', 'comments:user_id:nw'], {
-    label: '1:N \n(author)',
+    label: '1:N\\n(author)',
     color: COLORS.oneToMany,
     penwidth: 2,
     arrowhead: 'crow',
@@ -388,17 +397,30 @@ const g = digraph('BlogPlatformERD', (g) => {
     tailport: 'ne',
   });
 
-  // Many-to-Many: posts <-> categories
-  g.edge(['posts:id:s', 'post_categories:post_id:n'], {
-    color: COLORS.manyToMany,
-    penwidth: 1.8,
+  // Self-referential: comments -> parent comments (nested replies)
+  g.edge(['comments:parent_id:e', 'comments:id:e'], {
+    label: 'parent\\n(self-ref)',
+    color: COLORS.selfRef,
+    penwidth: 2,
     arrowhead: 'crow',
-    style: 'dashed',
-    constraint: true,
-    weight: 8,
-    headport: 'n',
-    tailport: 's',
+    arrowtail: 'odot',
+    fontcolor: COLORS.selfRef as Color,
+    constraint: false,
+    weight: 1,
   });
+  +(
+    // Many-to-Many: posts <-> categories
+    g.edge(['posts:id:s', 'post_categories:post_id:n'], {
+      color: COLORS.manyToMany,
+      penwidth: 1.8,
+      arrowhead: 'crow',
+      style: 'dashed',
+      constraint: true,
+      weight: 8,
+      headport: 'n',
+      tailport: 's',
+    })
+  );
   g.edge(['post_categories:category_id:s', 'categories:id:n'], {
     label: 'M:N',
     color: COLORS.manyToMany,
