@@ -1,0 +1,27 @@
+{
+  "name": "erd-blog-platform-example",
+  "version": "1.0.0",
+  "description": "Entity Relationship Diagram example using ts-graphviz",
+  "main": "index.js",
+  "scripts": {
+    "generate": "ts-node index.ts && dot -T svg blog-platform-erd.dot -o blog-platform-erd.svg"
+  },
+  "keywords": [
+    "erd",
+    "database",
+    "diagram",
+    "graphviz",
+    "visualization"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "ts-graphviz": "^3.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
