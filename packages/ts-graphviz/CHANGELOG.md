@@ -1,5 +1,79 @@
 # ts-graphviz
 
+## 3.0.6
+
+### Patch Changes
+
+- [#1536](https://github.com/ts-graphviz/ts-graphviz/pull/1536) [`4296b4e`](https://github.com/ts-graphviz/ts-graphviz/commit/4296b4e0cf17f36cc385c2ce93ec7ec89bd4a73a) Thanks [@kamiazya](https://github.com/kamiazya)! - Add null byte sanitization and comprehensive security tests for DOT injection prevention
+
+  ## Security Fix
+
+  ### Null Byte Handling
+
+  Added null byte removal to the `escape()` function to prevent Graphviz parsing errors. Graphviz treats null bytes (`\0`) as string terminators, causing syntax errors when encountered in quoted strings. This is now consistent with the `escapeComment()` function which already strips null bytes.
+
+  **Why this matters:**
+
+  - Prevents "syntax error in line X scanning a quoted string" errors in Graphviz
+  - Removes potential attack vector for causing parser failures
+  - Aligns with existing comment sanitization behavior
+
+  ## Test Coverage Additions
+
+  ### Unit Tests (escape.test.ts)
+
+  Added 16 new test cases covering various DOT injection attack vectors:
+
+  - Semicolon-based statement injection
+  - Edge operator injection attempts
+  - Graph termination injection via quotes and newlines
+  - Closing brace injection
+  - Attribute injection with equals sign
+  - Multiple quote injection attempts
+  - Mixed newlines and quotes
+  - Subgraph injection attempts
+  - Edge chain injection
+  - HTML-like label injection with quotes
+  - Port injection
+  - Already-escaped string handling
+  - Null byte removal (2 tests)
+  - Unicode strings with quotes
+  - Strict keyword injection
+
+  ### Integration Tests (to-dot.test.ts)
+
+  Added 10 new end-to-end test cases:
+
+  - Statement injection in node IDs (semicolon)
+  - Edge operator injection in node IDs
+  - Graph termination injection via quotes and newlines
+  - Statement injection in subgraph IDs
+  - Attribute value injection prevention
+  - Edge ID injection prevention
+  - Multiple quotes in node ID
+  - Port specification injection
+  - Graph comment injection
+  - Node comment injection
+
+  ## Validation
+
+  All tests confirm that the existing escape implementation correctly prevents DOT language injection by:
+
+  - Escaping double quotes (`"` → `\"`)
+  - Escaping newlines (`\n` → `\n`)
+  - Escaping carriage returns (`\r` → `\r`)
+  - Ensuring malicious strings are treated as literal identifiers, not DOT syntax
+
+  Verified with actual Graphviz parser (version 13.1.1) that escaped output renders safely without executing injected DOT code.
+
+- [#1532](https://github.com/ts-graphviz/ts-graphviz/pull/1532) [`dc3ef34`](https://github.com/ts-graphviz/ts-graphviz/commit/dc3ef34316f5642c416711cb6a50704dbef7bb64) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump vite from 7.0.2 to 7.0.8 in the npm_and_yarn group across 1 directory
+
+- Updated dependencies [[`4296b4e`](https://github.com/ts-graphviz/ts-graphviz/commit/4296b4e0cf17f36cc385c2ce93ec7ec89bd4a73a), [`ed770be`](https://github.com/ts-graphviz/ts-graphviz/commit/ed770be7fffc93b9171198c9a84270df7477185d), [`dc3ef34`](https://github.com/ts-graphviz/ts-graphviz/commit/dc3ef34316f5642c416711cb6a50704dbef7bb64), [`11f7126`](https://github.com/ts-graphviz/ts-graphviz/commit/11f7126347816f64f7892c8608b5e3bf1a826670)]:
+  - @ts-graphviz/ast@3.0.5
+  - @ts-graphviz/adapter@3.0.5
+  - @ts-graphviz/common@3.0.4
+  - @ts-graphviz/core@3.0.6
+
 ## 3.0.5
 
 ### Patch Changes
