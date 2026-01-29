@@ -3,7 +3,16 @@
  */
 export type Options = any;
 
-const ERROR_MESSAGE = 'This module cannot be run in a browser.';
+const ERROR_MESSAGE = `@ts-graphviz/adapter cannot be used in browser environments.
+
+This package requires Graphviz executables which are not available in browsers.
+
+For browser-based Graphviz rendering, consider these alternatives:
+- @hpcc-js/wasm-graphviz - WebAssembly-based Graphviz for browsers
+- viz.js - JavaScript port of Graphviz
+
+Learn more: https://github.com/ts-graphviz/ts-graphviz#rendering-in-browsers`;
+
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
  */
