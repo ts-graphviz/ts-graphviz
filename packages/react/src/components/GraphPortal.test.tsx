@@ -133,6 +133,8 @@ describe('GraphPortal', () => {
       expect(models).toHaveLength(1);
 
       const graph = models[0];
+      expect(graph.$$type).toBe('Graph');
+
       if (graph.$$type === 'Graph') {
         const nodes = Array.from(graph.nodes.values());
         expect(nodes).toHaveLength(2);
@@ -190,7 +192,9 @@ describe('GraphPortal', () => {
   describe('Context Provider Behavior', () => {
     it('provides CurrentGraph context to children', async () => {
       const root = createRoot();
-      let contextValue: any;
+      let contextValue:
+        | import('../types/container.js').AnyGraphContainer
+        | null;
 
       const ContextReader = () => {
         const context = React.useContext(CurrentGraph);
@@ -214,7 +218,9 @@ describe('GraphPortal', () => {
 
     it('provides context for portal children', async () => {
       const root = createRoot();
-      let portalContextValue: any;
+      let portalContextValue:
+        | import('../types/container.js').AnyGraphContainer
+        | null;
 
       const PortalContextReader = () => {
         const context = React.useContext(CurrentGraph);
@@ -279,6 +285,8 @@ describe('GraphPortal', () => {
       expect(models).toHaveLength(1);
 
       const graph = models[0];
+      expect(graph.$$type).toBe('Graph');
+
       if (graph.$$type === 'Graph') {
         const nodes = Array.from(graph.nodes.values());
         expect(nodes.some((node) => node.id === 'from_container')).toBe(true);
@@ -306,14 +314,14 @@ describe('GraphPortal', () => {
   });
 
   describe('Edge Cases', () => {
-    it('handles portal with only text children', async () => {
+    it('ignores text children', async () => {
       const root = createRoot();
 
       await root.render(
         <Digraph id="test">
           <GraphPortal>
             <Node id="before_text" />
-            {/* Text children should be ignored */}
+            {'This text should be ignored'}
             <Node id="after_text" />
           </GraphPortal>
         </Digraph>,
@@ -321,6 +329,16 @@ describe('GraphPortal', () => {
 
       const models = root.getTopLevelModels();
       expect(models).toHaveLength(1);
+
+      const graph = models[0];
+      expect(graph.$$type).toBe('Graph');
+
+      if (graph.$$type === 'Graph') {
+        const nodes = Array.from(graph.nodes.values());
+        expect(nodes).toHaveLength(2);
+        expect(nodes.some((node) => node.id === 'before_text')).toBe(true);
+        expect(nodes.some((node) => node.id === 'after_text')).toBe(true);
+      }
 
       root.unmount();
     });
@@ -339,6 +357,8 @@ describe('GraphPortal', () => {
       expect(models).toHaveLength(1);
 
       const graph = models[0];
+      expect(graph.$$type).toBe('Graph');
+
       if (graph.$$type === 'Graph') {
         const nodes = Array.from(graph.nodes.values());
         expect(nodes.some((node) => node.id === 'conditional')).toBe(true);
@@ -365,6 +385,8 @@ describe('GraphPortal', () => {
       expect(models).toHaveLength(1);
 
       const graph = models[0];
+      expect(graph.$$type).toBe('Graph');
+
       if (graph.$$type === 'Graph') {
         const nodes = Array.from(graph.nodes.values());
         expect(nodes).toHaveLength(3);
