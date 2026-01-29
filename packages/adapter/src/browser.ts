@@ -3,7 +3,7 @@
  */
 export type Options = any;
 
-const ERROR_MESSAGE = `@ts-graphviz/adapter cannot be used in browser environments.
+export const ERROR_MESSAGE = `@ts-graphviz/adapter cannot be used in browser environments.
 
 This package requires Graphviz executables which are not available in browsers.
 
