@@ -256,6 +256,30 @@ const MyNode: React.FC<NodeProps> = (props) => (
 />
 ```
 
+#### JSX Type Definitions for HTML-Like Elements
+
+TypeScript type definitions for all `dot:*` HTML-like elements are **automatically available** when you import `@ts-graphviz/react`. No additional configuration or setup is required.
+
+```tsx
+import { Digraph, Node, Edge } from '@ts-graphviz/react';
+
+// Full IntelliSense and type checking for dot:* elements works out of the box
+<Node
+  id="user"
+  label={
+    <dot:table border={1}>
+      <dot:tr>
+        <dot:td>Name</dot:td>
+        <dot:td>John Doe</dot:td>
+      </dot:tr>
+    </dot:table>
+  }
+  shape="box"
+/>
+```
+
+The `DotJSXElements` type is also exported for advanced use cases where you need to reference the type definitions directly.
+
 #### Enhanced Type Safety
 
 The package provides sophisticated TypeScript support with automatic type inference and runtime type filtering:

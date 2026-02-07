@@ -93,34 +93,38 @@ export interface GraphPortalProps {
   children?: ReactNode;
 }
 
-interface JSXIntrinsicElements {
+/**
+ * JSX intrinsic elements for dot:* HTML-like elements.
+ * These type definitions are automatically available when importing @ts-graphviz/react.
+ */
+export interface DotJSXElements {
   'dot:port': { children: string };
-  'dot:table': HTMLLikeLabel.TableAttributes & { children?: React.ReactNode };
-  'dot:tr': HTMLLikeLabel.TrAttributes & { children?: React.ReactNode };
-  'dot:td': HTMLLikeLabel.TdAttributes & { children?: React.ReactNode };
-  'dot:font': HTMLLikeLabel.FontAttributes & { children?: React.ReactNode };
+  'dot:table': HTMLLikeLabel.TableAttributes & { children?: ReactNode };
+  'dot:tr': HTMLLikeLabel.TrAttributes & { children?: ReactNode };
+  'dot:td': HTMLLikeLabel.TdAttributes & { children?: ReactNode };
+  'dot:font': HTMLLikeLabel.FontAttributes & { children?: ReactNode };
   'dot:br': HTMLLikeLabel.BrAttributes;
   'dot:img': HTMLLikeLabel.ImgAttributes;
-  'dot:i': HTMLLikeLabel.IAttributes & { children?: React.ReactNode };
-  'dot:b': HTMLLikeLabel.BAttributes & { children?: React.ReactNode };
-  'dot:u': HTMLLikeLabel.UAttributes & { children?: React.ReactNode };
-  'dot:o': HTMLLikeLabel.OAttributes & { children?: React.ReactNode };
-  'dot:sub': HTMLLikeLabel.SubAttributes & { children?: React.ReactNode };
-  'dot:sup': HTMLLikeLabel.SupAttributes & { children?: React.ReactNode };
-  'dot:s': HTMLLikeLabel.SAttributes & { children?: React.ReactNode };
+  'dot:i': HTMLLikeLabel.IAttributes & { children?: ReactNode };
+  'dot:b': HTMLLikeLabel.BAttributes & { children?: ReactNode };
+  'dot:u': HTMLLikeLabel.UAttributes & { children?: ReactNode };
+  'dot:o': HTMLLikeLabel.OAttributes & { children?: ReactNode };
+  'dot:sub': HTMLLikeLabel.SubAttributes & { children?: ReactNode };
+  'dot:sup': HTMLLikeLabel.SupAttributes & { children?: ReactNode };
+  'dot:s': HTMLLikeLabel.SAttributes & { children?: ReactNode };
   'dot:hr': HTMLLikeLabel.HrAttributes;
   'dot:vr': HTMLLikeLabel.VrAttributes;
 }
 
 declare module 'react' {
   namespace JSX {
-    interface IntrinsicElements extends JSXIntrinsicElements {}
+    interface IntrinsicElements extends DotJSXElements {}
   }
 }
 
 declare module 'react/jsx-runtime' {
   namespace JSX {
-    interface IntrinsicElements extends JSXIntrinsicElements {}
+    interface IntrinsicElements extends DotJSXElements {}
   }
 }
 
