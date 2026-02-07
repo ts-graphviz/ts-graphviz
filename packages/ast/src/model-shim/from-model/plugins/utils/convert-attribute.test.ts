@@ -1,9 +1,10 @@
 import { describe, expect, test } from 'vitest';
+import { createElement } from '../../../../builder/create-element.js';
 import { convertAttribute } from './convert-attribute.js';
 
 describe('convertAttribute', () => {
   test('number', () => {
-    const result = convertAttribute('size', 1);
+    const result = convertAttribute(createElement, 'size', 1);
     expect(result).toMatchInlineSnapshot(`
       {
         "children": [],
@@ -29,7 +30,7 @@ describe('convertAttribute', () => {
 
   describe('string', () => {
     test('quoted string literal', () => {
-      const result = convertAttribute('label', 'A');
+      const result = convertAttribute(createElement, 'label', 'A');
       expect(result).toMatchInlineSnapshot(`
         {
           "children": [],
@@ -55,7 +56,7 @@ describe('convertAttribute', () => {
 
     describe('html-like', () => {
       test('simple HTML-like label', () => {
-        const result = convertAttribute('label', '<A>');
+        const result = convertAttribute(createElement, 'label', '<A>');
         expect(result).toMatchInlineSnapshot(`
           {
             "children": [],
@@ -79,7 +80,7 @@ describe('convertAttribute', () => {
         `);
       });
       test('nested HTML-like label', () => {
-        const result = convertAttribute('label', '<<b>Hi</b>>');
+        const result = convertAttribute(createElement, 'label', '<<b>Hi</b>>');
         expect(result).toMatchInlineSnapshot(`
           {
             "children": [],
@@ -105,7 +106,7 @@ describe('convertAttribute', () => {
 
       // Additional edge-case tests for whitespace and malformed HTML-like values
       test('HTML-like label with surrounding whitespace', () => {
-        const result = convertAttribute('label', '  <A>  ');
+        const result = convertAttribute(createElement, 'label', '  <A>  ');
         expect(result).toMatchInlineSnapshot(`
           {
             "children": [],
@@ -130,7 +131,7 @@ describe('convertAttribute', () => {
       });
 
       test('malformed HTML-like missing closing bracket', () => {
-        const result = convertAttribute('label', '<A');
+        const result = convertAttribute(createElement, 'label', '<A');
         expect(result).toMatchInlineSnapshot(`
           {
             "children": [],
@@ -155,7 +156,7 @@ describe('convertAttribute', () => {
       });
 
       test('malformed HTML-like missing opening bracket', () => {
-        const result = convertAttribute('label', 'A>');
+        const result = convertAttribute(createElement, 'label', 'A>');
         expect(result).toMatchInlineSnapshot(`
           {
             "children": [],

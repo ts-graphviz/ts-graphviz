@@ -1,5 +1,4 @@
 import type { SubgraphModel } from '@ts-graphviz/common';
-import { createElement } from '../../../builder/create-element.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';
 
@@ -8,6 +7,7 @@ export const SubgraphPlugin: ConvertFromModelPlugin<SubgraphModel> = {
     return model.$$type === 'Subgraph';
   },
   convert(context, model) {
+    const { createElement } = context;
     return createElement(
       'Subgraph',
       {

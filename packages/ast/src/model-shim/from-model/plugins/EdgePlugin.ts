@@ -3,7 +3,6 @@ import {
   isForwardRefNode,
   isNodeModel,
 } from '@ts-graphviz/common';
-import { createElement } from '../../../builder/create-element.js';
 import type { EdgeTargetASTNode } from '../../../types.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute, convertComment } from './utils/index.js';
@@ -13,6 +12,7 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
     return model.$$type === 'Edge';
   },
   convert(context, model) {
+    const { createElement } = context;
     return createElement(
       'Edge',
       {
@@ -133,10 +133,16 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
       },
       [
         ...(model.attributes.comment
-          ? [convertComment(model.attributes.comment, context.commentKind)]
+          ? [
+              convertComment(
+                createElement,
+                model.attributes.comment,
+                context.commentKind,
+              ),
+            ]
           : []),
         ...model.attributes.values.map(([key, value]) =>
-          convertAttribute(key, value),
+          convertAttribute(createElement, key, value),
         ),
       ],
     );
