@@ -1,5 +1,11 @@
 # @ts-graphviz/common
 
+## 3.0.5
+
+### Patch Changes
+
+- [#1539](https://github.com/ts-graphviz/ts-graphviz/pull/1539) [`6d9cfc8`](https://github.com/ts-graphviz/ts-graphviz/commit/6d9cfc8b78a4fab6d8bffff79802c144084e75c8) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump vite from 7.0.8 to 7.1.12
+
 ## 3.0.4
 
 ### Patch Changes
