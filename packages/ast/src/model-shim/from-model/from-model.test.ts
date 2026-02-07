@@ -1,5 +1,5 @@
 import { registerDefault } from '@ts-graphviz/core';
-import { describe, beforeAll, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { ASTNodeCountExceededError } from '../../builder/errors.js';
 import { fromModel } from './from-model.js';
 

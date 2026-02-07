@@ -17,26 +17,42 @@ export function convertClusterChildren(
       for (const attrs of Object.values(model.attributes)) {
         if (attrs.size > 0) {
           if (attrs.comment) {
-            yield convertComment(createElement, attrs.comment, context.commentKind);
+            yield convertComment(
+              createElement,
+              attrs.comment,
+              context.commentKind,
+            );
           }
           yield context.convert(attrs);
         }
       }
       for (const node of model.nodes) {
         if (node.comment) {
-          yield convertComment(createElement, node.comment, context.commentKind);
+          yield convertComment(
+            createElement,
+            node.comment,
+            context.commentKind,
+          );
         }
         yield context.convert(node);
       }
       for (const subgraph of model.subgraphs) {
         if (subgraph.comment) {
-          yield convertComment(createElement, subgraph.comment, context.commentKind);
+          yield convertComment(
+            createElement,
+            subgraph.comment,
+            context.commentKind,
+          );
         }
         yield context.convert(subgraph);
       }
       for (const edge of model.edges) {
         if (edge.comment) {
-          yield convertComment(createElement, edge.comment, context.commentKind);
+          yield convertComment(
+            createElement,
+            edge.comment,
+            context.commentKind,
+          );
         }
         yield context.convert(edge);
       }

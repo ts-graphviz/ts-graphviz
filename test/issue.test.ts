@@ -1,5 +1,4 @@
-import { parse } from '@ts-graphviz/ast';
-import { ASTNodeCountExceededError } from '@ts-graphviz/ast';
+import { ASTNodeCountExceededError, parse } from '@ts-graphviz/ast';
 import { Digraph, fromDot, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 

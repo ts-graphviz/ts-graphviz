@@ -22,7 +22,13 @@ export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {
       },
       [
         ...(model.attributes.comment
-          ? [convertComment(createElement, model.attributes.comment, context.commentKind)]
+          ? [
+              convertComment(
+                createElement,
+                model.attributes.comment,
+                context.commentKind,
+              ),
+            ]
           : []),
         ...model.attributes.values.map(([key, value]) =>
           convertAttribute(createElement, key, value),

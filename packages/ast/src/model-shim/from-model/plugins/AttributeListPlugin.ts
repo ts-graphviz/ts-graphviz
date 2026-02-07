@@ -13,7 +13,9 @@ export const AttributeListPlugin: ConvertFromModelPlugin<AttributeListModel> = {
       {
         kind: model.$$kind,
       },
-      model.values.map(([key, value]) => convertAttribute(createElement, key, value)),
+      model.values.map(([key, value]) =>
+        convertAttribute(createElement, key, value),
+      ),
     );
   },
 };
