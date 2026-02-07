@@ -1,5 +1,4 @@
 import type { RootGraphModel } from '@ts-graphviz/common';
-import { createElement } from '../../../builder/create-element.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';
 import { convertComment } from './utils/convert-comment.js';
@@ -9,9 +8,10 @@ export const GraphPlugin: ConvertFromModelPlugin<RootGraphModel> = {
     return model.$$type === 'Graph';
   },
   convert(context, model) {
+    const { createElement } = context;
     return createElement('Dot', {}, [
       ...(model.comment
-        ? [convertComment(model.comment, context.commentKind)]
+        ? [convertComment(createElement, model.comment, context.commentKind)]
         : []),
       createElement(
         'Graph',

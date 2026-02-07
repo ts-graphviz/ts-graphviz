@@ -1,4 +1,5 @@
 import type { DotObjectModel } from '@ts-graphviz/common';
+import type { CreateElement } from '../../builder/types.js';
 import type {
   AttributeListASTNode,
   CommentKind,
@@ -43,13 +44,20 @@ export type ModelToAST<T> = T extends DotObjectModel<infer U>
  */
 export interface ConvertFromModelOptions {
   commentKind?: CommentKind;
+  /**
+   * Maximum allowed number of AST nodes to create per conversion.
+   * Default is 100000. Set to 0 to disable this limit.
+   * @default 100000
+   */
+  maxASTNodes?: number;
 }
 
 /**
  * @group Convert Model to AST
  */
 export interface ConvertFromModelContext
-  extends Required<ConvertFromModelOptions> {
+  extends Required<Pick<ConvertFromModelOptions, 'commentKind'>> {
+  createElement: CreateElement;
   convert<T extends DotObjectModel>(model: T): ModelToAST<T>;
 }
 

@@ -1,5 +1,4 @@
 import type { NodeModel } from '@ts-graphviz/common';
-import { createElement } from '../../../builder/create-element.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute, convertComment } from './utils/index.js';
 
@@ -8,6 +7,7 @@ export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {
     return model.$$type === 'Node';
   },
   convert(context, model) {
+    const { createElement } = context;
     return createElement(
       'Node',
       {
@@ -22,10 +22,10 @@ export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {
       },
       [
         ...(model.attributes.comment
-          ? [convertComment(model.attributes.comment, context.commentKind)]
+          ? [convertComment(createElement, model.attributes.comment, context.commentKind)]
           : []),
         ...model.attributes.values.map(([key, value]) =>
-          convertAttribute(key, value),
+          convertAttribute(createElement, key, value),
         ),
       ],
     );

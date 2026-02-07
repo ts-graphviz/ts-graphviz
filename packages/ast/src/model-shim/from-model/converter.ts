@@ -1,4 +1,5 @@
 import type { DotObjectModel } from '@ts-graphviz/common';
+import { createElementFactory } from '../../builder/create-element.js';
 import { defaultPlugins } from './plugins/index.js';
 import type {
   ConvertFromModelContext,
@@ -26,9 +27,11 @@ export class FromModelConverter {
    */
   public convert<T extends DotObjectModel>(model: T): ModelToAST<T> {
     const plugins = [...this.#plugins];
-    const { commentKind = 'Slash' } = this.options;
+    const { commentKind = 'Slash', maxASTNodes } = this.options;
+    const createElement = createElementFactory({ maxASTNodes });
     const context: ConvertFromModelContext = {
       commentKind,
+      createElement,
       convert<U extends DotObjectModel>(m: U): ModelToAST<U> {
         for (const plugin of plugins) {
           if (plugin.match(m)) {

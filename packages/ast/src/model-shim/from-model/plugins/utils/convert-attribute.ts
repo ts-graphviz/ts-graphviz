@@ -1,5 +1,5 @@
 import type { Attribute, AttributeKey } from '@ts-graphviz/common';
-import { createElement } from '../../../../builder/create-element.js';
+import type { CreateElement } from '../../../../builder/types.js';
 import type { AttributeASTNode } from '../../../../types.js';
 
 /**
@@ -7,11 +7,13 @@ import type { AttributeASTNode } from '../../../../types.js';
  *
  * If the value is a string that appears to be HTML-like (enclosed in angle brackets), the inner content is extracted and marked as HTML in the resulting AST node. Otherwise, the value is treated as a regular string or converted to a string if not already one.
  *
+ * @param createElement - The createElement function to use.
  * @param key - The attribute key.
  * @param value - The attribute value associated with {@link key}.
  * @returns An {@link AttributeASTNode} representing the attribute.
  */
 export function convertAttribute<K extends AttributeKey>(
+  createElement: CreateElement,
   key: K,
   value: Attribute<K>,
 ): AttributeASTNode {
