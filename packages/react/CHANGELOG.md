@@ -1,5 +1,25 @@
 # @ts-graphviz/react
 
+## 0.12.0
+
+### Minor Changes
+
+- [#1567](https://github.com/ts-graphviz/ts-graphviz/pull/1567) [`8edec59`](https://github.com/ts-graphviz/ts-graphviz/commit/8edec5962ac368d759a4903f69e8db2cd0496c97) Thanks [@kamiazya](https://github.com/kamiazya)! - Auto-augment JSX type definitions for dot:\* elements
+
+  TypeScript type definitions for HTML-like JSX elements (dot:table, dot:tr, dot:td, dot:br, etc.) are now automatically available when importing `@ts-graphviz/react`. No additional setup such as creating a `jsx.d.ts` file or importing `@ts-graphviz/react/jsx` is required.
+
+  This follows the auto-augmentation pattern (similar to react-three-fiber) where importing the package automatically extends React's JSX namespace with the `dot:*` intrinsic elements.
+
+  BREAKING CHANGE: The `@ts-graphviz/react/jsx` export has been removed. Users who previously imported from `@ts-graphviz/react/jsx` should remove those imports — the types are now available automatically.
+
+### Patch Changes
+
+- [#1539](https://github.com/ts-graphviz/ts-graphviz/pull/1539) [`6d9cfc8`](https://github.com/ts-graphviz/ts-graphviz/commit/6d9cfc8b78a4fab6d8bffff79802c144084e75c8) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump vite from 7.0.8 to 7.1.12
+
+- Updated dependencies [[`6d9cfc8`](https://github.com/ts-graphviz/ts-graphviz/commit/6d9cfc8b78a4fab6d8bffff79802c144084e75c8), [`0bbfc4b`](https://github.com/ts-graphviz/ts-graphviz/commit/0bbfc4b9b75a148a7befa38de56e708c6b50e534)]:
+  - @ts-graphviz/common@3.0.5
+  - ts-graphviz@3.0.7
+
 ## 0.11.6
 
 ### Patch Changes
