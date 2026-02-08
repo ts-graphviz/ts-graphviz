@@ -11,7 +11,7 @@ For browser-based Graphviz rendering, consider these alternatives:
 - @hpcc-js/wasm-graphviz - WebAssembly-based Graphviz for browsers
 - viz.js - JavaScript port of Graphviz
 
-Learn more: https://github.com/ts-graphviz/ts-graphviz#rendering-in-browsers`;
+Learn more: https://github.com/ts-graphviz/ts-graphviz`;
 
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
