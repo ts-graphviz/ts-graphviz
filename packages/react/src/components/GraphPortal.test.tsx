@@ -97,24 +97,32 @@ describe('GraphPortal', () => {
   });
 
   describe('Prop Handling with id', () => {
-    it('targets specific subgraph when id prop is provided and portal is inside that subgraph', async () => {
+    it('targets specific subgraph when id prop is provided', async () => {
       const dot = await renderToDot(
         <Digraph id="test">
           <Node id="outside" />
           <Subgraph id="cluster_target">
             <Node id="original" />
-            <GraphPortal id="cluster_target">
-              <Node id="portaled" />
-            </GraphPortal>
           </Subgraph>
+          <GraphPortal id="cluster_target">
+            <Node id="portaled" />
+          </GraphPortal>
         </Digraph>,
       );
 
-      // Verify both nodes are in the cluster
+      // Verify both nodes are in the cluster, portal worked from outside
       expect(dot).toContain('subgraph "cluster_target"');
       expect(dot).toContain('"original"');
       expect(dot).toContain('"portaled"');
       expect(dot).toContain('"outside"');
+      // Verify 'outside' is not in the cluster
+      const clusterMatch = dot.match(/subgraph "cluster_target" \{[^}]+\}/);
+      expect(clusterMatch).toBeTruthy();
+      if (clusterMatch) {
+        expect(clusterMatch[0]).toContain('"original"');
+        expect(clusterMatch[0]).toContain('"portaled"');
+        expect(clusterMatch[0]).not.toContain('"outside"');
+      }
     });
 
     it('falls back to container when id does not exist in map', async () => {
@@ -150,13 +158,13 @@ describe('GraphPortal', () => {
         <Digraph id="test">
           <Subgraph id="cluster_shared">
             <Node id="original" />
-            <GraphPortal id="cluster_shared">
-              <Node id="portal1" />
-            </GraphPortal>
-            <GraphPortal id="cluster_shared">
-              <Node id="portal2" />
-            </GraphPortal>
           </Subgraph>
+          <GraphPortal id="cluster_shared">
+            <Node id="portal1" />
+          </GraphPortal>
+          <GraphPortal id="cluster_shared">
+            <Node id="portal2" />
+          </GraphPortal>
         </Digraph>,
       );
 
@@ -164,6 +172,14 @@ describe('GraphPortal', () => {
       expect(dot).toContain('"original"');
       expect(dot).toContain('"portal1"');
       expect(dot).toContain('"portal2"');
+      // Verify all nodes are in the cluster
+      const clusterMatch = dot.match(/subgraph "cluster_shared" \{[^}]+\}/);
+      expect(clusterMatch).toBeTruthy();
+      if (clusterMatch) {
+        expect(clusterMatch[0]).toContain('"original"');
+        expect(clusterMatch[0]).toContain('"portal1"');
+        expect(clusterMatch[0]).toContain('"portal2"');
+      }
     });
 
     it('allows nodes to be added to nested subgraphs via portal', async () => {
@@ -173,11 +189,11 @@ describe('GraphPortal', () => {
             <Node id="outer_node" />
             <Subgraph id="cluster_inner">
               <Node id="inner_node" />
-              <GraphPortal id="cluster_inner">
-                <Node id="portaled_inner" />
-              </GraphPortal>
             </Subgraph>
           </Subgraph>
+          <GraphPortal id="cluster_inner">
+            <Node id="portaled_inner" />
+          </GraphPortal>
         </Digraph>,
       );
 
@@ -186,6 +202,13 @@ describe('GraphPortal', () => {
       expect(dot).toContain('"outer_node"');
       expect(dot).toContain('"inner_node"');
       expect(dot).toContain('"portaled_inner"');
+      // Verify portal node ended up in inner cluster, not outer
+      const innerMatch = dot.match(/subgraph "cluster_inner" \{[^}]+\}/);
+      expect(innerMatch).toBeTruthy();
+      if (innerMatch) {
+        expect(innerMatch[0]).toContain('"inner_node"');
+        expect(innerMatch[0]).toContain('"portaled_inner"');
+      }
     });
   });
 
@@ -232,10 +255,10 @@ describe('GraphPortal', () => {
         <Digraph id="test">
           <Subgraph id="cluster_a">
             <Node id="cluster_node" />
-            <GraphPortal id="cluster_a">
-              <PortalContextReader />
-            </GraphPortal>
           </Subgraph>
+          <GraphPortal id="cluster_a">
+            <PortalContextReader />
+          </GraphPortal>
         </Digraph>,
       );
 
@@ -300,16 +323,23 @@ describe('GraphPortal', () => {
         <Digraph id="test">
           <Subgraph id="cluster_mapped">
             <Node id="original_mapped" />
-            <GraphPortal id="cluster_mapped">
-              <Node id="via_map" />
-            </GraphPortal>
           </Subgraph>
+          <GraphPortal id="cluster_mapped">
+            <Node id="via_map" />
+          </GraphPortal>
         </Digraph>,
       );
 
       expect(dot).toContain('subgraph "cluster_mapped"');
       expect(dot).toContain('"original_mapped"');
       expect(dot).toContain('"via_map"');
+      // Verify the portaled node ended up in the cluster
+      const clusterMatch = dot.match(/subgraph "cluster_mapped" \{[^}]+\}/);
+      expect(clusterMatch).toBeTruthy();
+      if (clusterMatch) {
+        expect(clusterMatch[0]).toContain('"original_mapped"');
+        expect(clusterMatch[0]).toContain('"via_map"');
+      }
     });
   });
 
@@ -405,18 +435,25 @@ describe('GraphPortal', () => {
             <Subgraph id="cluster_level2">
               <Subgraph id="cluster_level3">
                 <Node id="deep_node" />
-                <GraphPortal id="cluster_level3">
-                  <Node id="portal_node" />
-                </GraphPortal>
               </Subgraph>
             </Subgraph>
           </Subgraph>
+          <GraphPortal id="cluster_level3">
+            <Node id="portal_node" />
+          </GraphPortal>
         </Digraph>,
       );
 
       expect(dot).toContain('subgraph "cluster_level3"');
       expect(dot).toContain('"deep_node"');
       expect(dot).toContain('"portal_node"');
+      // Verify portal node ended up in the deeply nested cluster
+      const level3Match = dot.match(/subgraph "cluster_level3" \{[^}]+\}/);
+      expect(level3Match).toBeTruthy();
+      if (level3Match) {
+        expect(level3Match[0]).toContain('"deep_node"');
+        expect(level3Match[0]).toContain('"portal_node"');
+      }
     });
   });
 
@@ -426,16 +463,16 @@ describe('GraphPortal', () => {
         <Digraph id="architecture">
           <Subgraph id="cluster_frontend">
             <Node id="ui" label="UI" />
-            <GraphPortal id="cluster_frontend">
-              <Node id="components" label="Components" />
-            </GraphPortal>
           </Subgraph>
           <Subgraph id="cluster_backend">
             <Node id="api" label="API" />
-            <GraphPortal id="cluster_backend">
-              <Node id="database" label="Database" />
-            </GraphPortal>
           </Subgraph>
+          <GraphPortal id="cluster_frontend">
+            <Node id="components" label="Components" />
+          </GraphPortal>
+          <GraphPortal id="cluster_backend">
+            <Node id="database" label="Database" />
+          </GraphPortal>
           <Edge targets={['ui', 'api']} />
         </Digraph>,
       );
@@ -447,6 +484,19 @@ describe('GraphPortal', () => {
       expect(dot).toContain('"api"');
       expect(dot).toContain('"database"');
       expect(dot).toContain('"ui" -> "api"');
+      // Verify nodes are in their respective clusters via portals
+      const frontendMatch = dot.match(/subgraph "cluster_frontend" \{[^}]+\}/);
+      const backendMatch = dot.match(/subgraph "cluster_backend" \{[^}]+\}/);
+      expect(frontendMatch).toBeTruthy();
+      expect(backendMatch).toBeTruthy();
+      if (frontendMatch) {
+        expect(frontendMatch[0]).toContain('"ui"');
+        expect(frontendMatch[0]).toContain('"components"');
+      }
+      if (backendMatch) {
+        expect(backendMatch[0]).toContain('"api"');
+        expect(backendMatch[0]).toContain('"database"');
+      }
     });
   });
 });
