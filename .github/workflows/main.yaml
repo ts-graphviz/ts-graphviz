@@ -80,7 +80,7 @@ jobs:
         run: npm install -g npm@latest
       - name: Create Release Pull Request or Publish to npm
         id: changesets
-        uses: changesets/action@3de3850952bec538fde60aac71731376e57b9b57 # v1.4.8
+        uses: changesets/action@e0145edc7d9d8679003495b11f87bd8ef63c0cba # v1.5.3
         with:
           publish: pnpm exec changeset publish
           version: pnpm exec changeset version
