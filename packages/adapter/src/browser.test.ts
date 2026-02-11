@@ -1,16 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { toFile, toStream } from './browser.js';
+import { ERROR_MESSAGE, toFile, toStream } from './browser.js';
 
 describe('browser adapter', () => {
   it('toStream throws error with correct message', () => {
-    expect(() => toStream('dot', {})).toThrowErrorMatchingInlineSnapshot(
-      `[Error: This module cannot be run in a browser.]`,
-    );
+    expect(() => toStream('dot', {})).toThrow(ERROR_MESSAGE);
   });
 
   it('toFile throws error with correct message', () => {
-    expect(() => toFile('dot', 'path', {})).toThrowErrorMatchingInlineSnapshot(
-      `[Error: This module cannot be run in a browser.]`,
-    );
+    expect(() => toFile('dot', 'path', {})).toThrow(ERROR_MESSAGE);
   });
 });
