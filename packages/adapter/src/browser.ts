@@ -8,8 +8,8 @@ export const ERROR_MESSAGE = `@ts-graphviz/adapter cannot be used in browser env
 This package requires Graphviz executables which are not available in browsers.
 
 For browser-based Graphviz rendering, consider these alternatives:
-- `@hpcc-js/wasm-graphviz` - WebAssembly-based Graphviz for browsers
-- `@viz-js/viz` - JavaScript port of Graphviz
+- @hpcc-js/wasm-graphviz - WebAssembly-based Graphviz for browsers
+- @viz-js/viz - JavaScript port of Graphviz
 
 Learn more: https://github.com/ts-graphviz/ts-graphviz`;
 
