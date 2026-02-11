@@ -1,5 +1,11 @@
 # @ts-graphviz/adapter
 
+## 3.0.7
+
+### Patch Changes
+
+- [#1565](https://github.com/ts-graphviz/ts-graphviz/pull/1565) [`a6af926`](https://github.com/ts-graphviz/ts-graphviz/commit/a6af926d6ff3bf03a3396e98d6239e16b7412dc5) Thanks [@tibisabau](https://github.com/tibisabau)! - Enhance error messages in browser environment adapter package
+
 ## 3.0.6
 
 ### Patch Changes
