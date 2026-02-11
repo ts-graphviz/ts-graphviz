@@ -1,9 +1,4 @@
-import {
-  type FC,
-  useEffect,
-  useImperativeHandle,
-  useLayoutEffect,
-} from 'react';
+import { type FC, useImperativeHandle, useLayoutEffect } from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphContainer } from '../contexts/GraphContainer.js';
 import { useGraph } from '../hooks/useGraph.js';
@@ -34,6 +29,11 @@ export const Graph: FC<RootGraphProps> = ({
   const clusters = useGraphMap();
   const modelCollector = useModelCollector();
 
+  // Register in GraphMap during render phase (before GraphPortal lookup)
+  if (graph.id !== undefined) {
+    clusters.set(graph.id, graph);
+  }
+
   // Handle ref as prop
   useImperativeHandle(ref, () => graph, [graph]);
 
@@ -41,12 +41,6 @@ export const Graph: FC<RootGraphProps> = ({
   useLayoutEffect(() => {
     modelCollector?.collectModel(graph);
   }, [modelCollector, graph]);
-
-  useEffect(() => {
-    if (graph.id !== undefined) {
-      clusters.set(graph.id, graph);
-    }
-  }, [clusters, graph]);
   return (
     <GraphContainer.Provider value={graph}>
       <CurrentGraph.Provider value={graph}>{children}</CurrentGraph.Provider>

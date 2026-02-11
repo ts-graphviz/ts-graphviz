@@ -110,19 +110,15 @@ describe('GraphPortal', () => {
         </Digraph>,
       );
 
-      // Verify both nodes are in the cluster, portal worked from outside
-      expect(dot).toContain('subgraph "cluster_target"');
-      expect(dot).toContain('"original"');
-      expect(dot).toContain('"portaled"');
-      expect(dot).toContain('"outside"');
-      // Verify 'outside' is not in the cluster
-      const clusterMatch = dot.match(/subgraph "cluster_target" \{[^}]+\}/);
-      expect(clusterMatch).toBeTruthy();
-      if (clusterMatch) {
-        expect(clusterMatch[0]).toContain('"original"');
-        expect(clusterMatch[0]).toContain('"portaled"');
-        expect(clusterMatch[0]).not.toContain('"outside"');
-      }
+      expect(dot).toMatchInlineSnapshot(`
+        "digraph "test" {
+          "outside";
+          subgraph "cluster_target" {
+            "original";
+            "portaled";
+          }
+        }"
+      `);
     });
 
     it('falls back to container when id does not exist in map', async () => {
@@ -168,18 +164,15 @@ describe('GraphPortal', () => {
         </Digraph>,
       );
 
-      expect(dot).toContain('subgraph "cluster_shared"');
-      expect(dot).toContain('"original"');
-      expect(dot).toContain('"portal1"');
-      expect(dot).toContain('"portal2"');
-      // Verify all nodes are in the cluster
-      const clusterMatch = dot.match(/subgraph "cluster_shared" \{[^}]+\}/);
-      expect(clusterMatch).toBeTruthy();
-      if (clusterMatch) {
-        expect(clusterMatch[0]).toContain('"original"');
-        expect(clusterMatch[0]).toContain('"portal1"');
-        expect(clusterMatch[0]).toContain('"portal2"');
-      }
+      expect(dot).toMatchInlineSnapshot(`
+        "digraph "test" {
+          subgraph "cluster_shared" {
+            "original";
+            "portal1";
+            "portal2";
+          }
+        }"
+      `);
     });
 
     it('allows nodes to be added to nested subgraphs via portal', async () => {
@@ -197,18 +190,17 @@ describe('GraphPortal', () => {
         </Digraph>,
       );
 
-      expect(dot).toContain('subgraph "cluster_outer"');
-      expect(dot).toContain('subgraph "cluster_inner"');
-      expect(dot).toContain('"outer_node"');
-      expect(dot).toContain('"inner_node"');
-      expect(dot).toContain('"portaled_inner"');
-      // Verify portal node ended up in inner cluster, not outer
-      const innerMatch = dot.match(/subgraph "cluster_inner" \{[^}]+\}/);
-      expect(innerMatch).toBeTruthy();
-      if (innerMatch) {
-        expect(innerMatch[0]).toContain('"inner_node"');
-        expect(innerMatch[0]).toContain('"portaled_inner"');
-      }
+      expect(dot).toMatchInlineSnapshot(`
+        "digraph "test" {
+          subgraph "cluster_outer" {
+            "outer_node";
+            subgraph "cluster_inner" {
+              "inner_node";
+              "portaled_inner";
+            }
+          }
+        }"
+      `);
     });
   });
 
@@ -286,9 +278,17 @@ describe('GraphPortal', () => {
         </Digraph>,
       );
 
-      expect(dot).toContain('"a1"');
-      expect(dot).toContain('"b1"');
-      expect(dot).toContain('"a1" -> "b1"');
+      expect(dot).toMatchInlineSnapshot(`
+        "digraph "test" {
+          subgraph "cluster_a" {
+            "a1";
+            "a1" -> "b1";
+          }
+          subgraph "cluster_b" {
+            "b1";
+          }
+        }"
+      `);
     });
   });
 
@@ -330,16 +330,14 @@ describe('GraphPortal', () => {
         </Digraph>,
       );
 
-      expect(dot).toContain('subgraph "cluster_mapped"');
-      expect(dot).toContain('"original_mapped"');
-      expect(dot).toContain('"via_map"');
-      // Verify the portaled node ended up in the cluster
-      const clusterMatch = dot.match(/subgraph "cluster_mapped" \{[^}]+\}/);
-      expect(clusterMatch).toBeTruthy();
-      if (clusterMatch) {
-        expect(clusterMatch[0]).toContain('"original_mapped"');
-        expect(clusterMatch[0]).toContain('"via_map"');
-      }
+      expect(dot).toMatchInlineSnapshot(`
+        "digraph "test" {
+          subgraph "cluster_mapped" {
+            "original_mapped";
+            "via_map";
+          }
+        }"
+      `);
     });
   });
 
@@ -444,16 +442,18 @@ describe('GraphPortal', () => {
         </Digraph>,
       );
 
-      expect(dot).toContain('subgraph "cluster_level3"');
-      expect(dot).toContain('"deep_node"');
-      expect(dot).toContain('"portal_node"');
-      // Verify portal node ended up in the deeply nested cluster
-      const level3Match = dot.match(/subgraph "cluster_level3" \{[^}]+\}/);
-      expect(level3Match).toBeTruthy();
-      if (level3Match) {
-        expect(level3Match[0]).toContain('"deep_node"');
-        expect(level3Match[0]).toContain('"portal_node"');
-      }
+      expect(dot).toMatchInlineSnapshot(`
+        "digraph "test" {
+          subgraph "cluster_level1" {
+            subgraph "cluster_level2" {
+              subgraph "cluster_level3" {
+                "deep_node";
+                "portal_node";
+              }
+            }
+          }
+        }"
+      `);
     });
   });
 
@@ -477,26 +477,27 @@ describe('GraphPortal', () => {
         </Digraph>,
       );
 
-      expect(dot).toContain('subgraph "cluster_frontend"');
-      expect(dot).toContain('subgraph "cluster_backend"');
-      expect(dot).toContain('"ui"');
-      expect(dot).toContain('"components"');
-      expect(dot).toContain('"api"');
-      expect(dot).toContain('"database"');
-      expect(dot).toContain('"ui" -> "api"');
-      // Verify nodes are in their respective clusters via portals
-      const frontendMatch = dot.match(/subgraph "cluster_frontend" \{[^}]+\}/);
-      const backendMatch = dot.match(/subgraph "cluster_backend" \{[^}]+\}/);
-      expect(frontendMatch).toBeTruthy();
-      expect(backendMatch).toBeTruthy();
-      if (frontendMatch) {
-        expect(frontendMatch[0]).toContain('"ui"');
-        expect(frontendMatch[0]).toContain('"components"');
-      }
-      if (backendMatch) {
-        expect(backendMatch[0]).toContain('"api"');
-        expect(backendMatch[0]).toContain('"database"');
-      }
+      expect(dot).toMatchInlineSnapshot(`
+        "digraph "architecture" {
+          subgraph "cluster_frontend" {
+            "ui" [
+              label = "UI";
+            ];
+            "components" [
+              label = "Components";
+            ];
+          }
+          subgraph "cluster_backend" {
+            "api" [
+              label = "API";
+            ];
+            "database" [
+              label = "Database";
+            ];
+          }
+          "ui" -> "api";
+        }"
+      `);
     });
   });
 });
