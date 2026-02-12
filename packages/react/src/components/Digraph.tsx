@@ -35,6 +35,16 @@ export const Digraph: FC<RootGraphProps> = ({
     clusters.set(digraph.id, digraph);
   }
 
+  // Clean up stale GraphMap entry on unmount or id change
+  useLayoutEffect(() => {
+    const id = digraph.id;
+    return () => {
+      if (id !== undefined) {
+        clusters.delete(id);
+      }
+    };
+  }, [digraph.id, clusters.delete]);
+
   // Handle ref as prop
   useImperativeHandle(ref, () => digraph, [digraph]);
 

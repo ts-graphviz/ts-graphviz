@@ -34,6 +34,16 @@ export const Graph: FC<RootGraphProps> = ({
     clusters.set(graph.id, graph);
   }
 
+  // Clean up stale GraphMap entry on unmount or id change
+  useLayoutEffect(() => {
+    const id = graph.id;
+    return () => {
+      if (id !== undefined) {
+        clusters.delete(id);
+      }
+    };
+  }, [graph.id, clusters.delete]);
+
   // Handle ref as prop
   useImperativeHandle(ref, () => graph, [graph]);
 

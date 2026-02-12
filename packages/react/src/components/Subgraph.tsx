@@ -26,6 +26,16 @@ export const Subgraph: FC<SubgraphProps> = ({
     clusters.set(subgraph.id, subgraph);
   }
 
+  // Clean up stale GraphMap entry on unmount or id change
+  useLayoutEffect(() => {
+    const id = subgraph.id;
+    return () => {
+      if (id !== undefined) {
+        clusters.delete(id);
+      }
+    };
+  }, [subgraph.id, clusters.delete]);
+
   // Handle ref as prop
   useImperativeHandle(ref, () => subgraph, [subgraph]);
 

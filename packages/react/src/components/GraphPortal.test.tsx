@@ -258,7 +258,7 @@ describe('GraphPortal', () => {
       expect(portalContextValue).toBeDefined();
       expect(portalContextValue).not.toBeNull();
       // The context should have an id
-      expect(portalContextValue.id).toBeDefined();
+      expect(portalContextValue?.id).toBeDefined();
 
       root.unmount();
     });
