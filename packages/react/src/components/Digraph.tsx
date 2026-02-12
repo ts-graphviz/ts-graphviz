@@ -1,9 +1,4 @@
-import {
-  type FC,
-  useEffect,
-  useImperativeHandle,
-  useLayoutEffect,
-} from 'react';
+import { type FC, useImperativeHandle, useLayoutEffect } from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphContainer } from '../contexts/GraphContainer.js';
 import { useDigraph } from '../hooks/useDigraph.js';
@@ -35,6 +30,21 @@ export const Digraph: FC<RootGraphProps> = ({
   const clusters = useGraphMap();
   const modelCollector = useModelCollector();
 
+  // Register in GraphMap during render phase (before GraphPortal lookup)
+  if (digraph.id !== undefined) {
+    clusters.set(digraph.id, digraph);
+  }
+
+  // Clean up stale GraphMap entry on unmount or id change
+  useLayoutEffect(() => {
+    const id = digraph.id;
+    return () => {
+      if (id !== undefined) {
+        clusters.delete(id);
+      }
+    };
+  }, [digraph.id, clusters.delete]);
+
   // Handle ref as prop
   useImperativeHandle(ref, () => digraph, [digraph]);
 
@@ -42,12 +52,6 @@ export const Digraph: FC<RootGraphProps> = ({
   useLayoutEffect(() => {
     modelCollector?.collectModel(digraph);
   }, [modelCollector, digraph]);
-
-  useEffect(() => {
-    if (digraph.id !== undefined) {
-      clusters.set(digraph.id, digraph);
-    }
-  }, [clusters, digraph]);
   return (
     <GraphContainer.Provider value={digraph}>
       <CurrentGraph.Provider value={digraph}>{children}</CurrentGraph.Provider>

@@ -1,9 +1,4 @@
-import {
-  type FC,
-  useEffect,
-  useImperativeHandle,
-  useLayoutEffect,
-} from 'react';
+import { type FC, useImperativeHandle, useLayoutEffect } from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { useGraphMap } from '../hooks/useGraphMap.js';
 import { useModelCollector } from '../hooks/useModelCollector.js';
@@ -26,6 +21,21 @@ export const Subgraph: FC<SubgraphProps> = ({
   const clusters = useGraphMap();
   const modelCollector = useModelCollector();
 
+  // Register in GraphMap during render phase (before GraphPortal lookup)
+  if (subgraph.id !== undefined) {
+    clusters.set(subgraph.id, subgraph);
+  }
+
+  // Clean up stale GraphMap entry on unmount or id change
+  useLayoutEffect(() => {
+    const id = subgraph.id;
+    return () => {
+      if (id !== undefined) {
+        clusters.delete(id);
+      }
+    };
+  }, [subgraph.id, clusters.delete]);
+
   // Handle ref as prop
   useImperativeHandle(ref, () => subgraph, [subgraph]);
 
@@ -34,11 +44,6 @@ export const Subgraph: FC<SubgraphProps> = ({
     modelCollector?.collectModel(subgraph);
   }, [modelCollector, subgraph]);
 
-  useEffect(() => {
-    if (subgraph.id !== undefined) {
-      clusters.set(subgraph.id, subgraph);
-    }
-  }, [subgraph, clusters]);
   return (
     <CurrentGraph.Provider value={subgraph}>{children}</CurrentGraph.Provider>
   );
