@@ -1,11 +1,17 @@
 import fc from 'fast-check';
+import type { ASTNode } from 'ts-graphviz/ast';
 import { describe, expect, it } from 'vitest';
 import {
+  type DefaultsSpec,
   dotString,
+  edgeRefs,
   type GraphSpec,
   graphSpec,
   looksHtmlLikeToPrinter,
+  type SubgraphSpec,
+  type TargetSpec,
 } from './arbitraries.js';
+import { dot } from './ast-arbitraries.js';
 
 // Guards the *distribution* of generated data. A property is only as good as
 // the cases its generator actually produces, so each input class that matters
@@ -76,6 +82,26 @@ function classifyString(s: string): string[] {
   return labels;
 }
 
+function classifyDefaults(defaults: DefaultsSpec): boolean {
+  return (
+    defaults.graph.length + defaults.node.length + defaults.edge.length > 0
+  );
+}
+
+function classifySubgraphs(subgraphs: SubgraphSpec[], depth: number): string[] {
+  const labels: string[] = [];
+  for (const sub of subgraphs) {
+    if (sub.nodes.length > 0) labels.push('subgraph with nodes');
+    if (sub.id !== undefined) labels.push('subgraph id');
+    if (sub.attributes.length > 0) labels.push('subgraph attributes');
+    if (classifyDefaults(sub.defaults)) labels.push('subgraph defaults');
+    if (sub.subgraphs.length > 0)
+      labels.push(`nested subgraph (depth ${depth + 1})`);
+    labels.push(...classifySubgraphs(sub.subgraphs, depth + 1));
+  }
+  return labels;
+}
+
 function classifySpec(spec: GraphSpec): string[] {
   const labels: string[] = [];
   labels.push(spec.directed ? 'directed' : 'undirected');
@@ -83,6 +109,7 @@ function classifySpec(spec: GraphSpec): string[] {
   if (spec.id !== undefined) labels.push('graph id');
   if (spec.comment !== undefined) labels.push('graph comment');
   if (spec.attributes.length > 0) labels.push('graph attributes');
+  if (classifyDefaults(spec.defaults)) labels.push('graph defaults');
   labels.push(
     spec.nodes.length === 1
       ? 'nodes: 1'
@@ -100,20 +127,46 @@ function classifySpec(spec: GraphSpec): string[] {
         ? 'edges: 1-2'
         : 'edges: 3-5',
   );
-  if (spec.edges.some((e) => e.from === e.to)) labels.push('self loop');
+  const refs = spec.edges.flatMap(edgeRefs);
+  if (refs.some((r) => r.port !== undefined)) labels.push('edge with port');
+  if (refs.some((r) => r.compass !== undefined)) {
+    labels.push('edge with compass');
+  }
+  if (spec.edges.some((e) => e.targets.some((t) => 'group' in t))) {
+    labels.push('edge with group target');
+  }
+  if (spec.edges.some((e) => e.targets.length > 2)) {
+    labels.push('edge with 3+ targets');
+  }
+  // Two edges with the same nodes in the same positions (ports and compass
+  // points aside) exercise edge de-duplication in strict graphs.
+  const targetKey = (t: TargetSpec) =>
+    'group' in t ? `{${t.group.map((r) => r.node).join(' ')}}` : `${t.node}`;
+  const edgeKey = (e: GraphSpec['edges'][number]) =>
+    e.targets.map(targetKey).join('>');
+  if (
+    spec.edges.some(
+      (e) =>
+        !('group' in e.targets[0]) &&
+        !('group' in e.targets[1]) &&
+        e.targets[0].node === e.targets[1].node,
+    )
+  ) {
+    labels.push('self loop');
+  }
   if (spec.edges.some((e) => e.attributes.length > 0)) {
     labels.push('edge attributes');
   }
   const seen = new Set<string>();
   if (
     spec.edges.some((e) => {
-      const key = `${e.from}>${e.to}`;
+      const key = edgeKey(e);
       if (seen.has(key)) return true;
       seen.add(key);
       return false;
     })
   ) {
-    labels.push('duplicate edge');
+    labels.push('duplicate endpoints');
   }
   labels.push(
     spec.subgraphs.length === 0
@@ -122,12 +175,71 @@ function classifySpec(spec: GraphSpec): string[] {
         ? 'subgraphs: 1'
         : 'subgraphs: 2',
   );
-  if (spec.subgraphs.some((s) => s.nodes.length > 0)) {
-    labels.push('subgraph with nodes');
-  }
-  if (spec.subgraphs.some((s) => s.id !== undefined))
-    labels.push('subgraph id');
+  labels.push(...new Set(classifySubgraphs(spec.subgraphs, 0)));
   return labels;
+}
+
+/** Labels for the shapes an AST generator produces, found by walking the tree. */
+function classifyAST(root: ASTNode): string[] {
+  const labels = new Set<string>();
+  const visit = (node: ASTNode, depth: number) => {
+    switch (node.type) {
+      case 'Literal':
+        labels.add(
+          node.quoted === 'html'
+            ? 'html literal'
+            : node.quoted
+              ? 'quoted literal'
+              : /^-?[.\d]/.test(node.value)
+                ? 'numeral literal'
+                : 'bare literal',
+        );
+        if (node.quoted === true && node.value.includes('\\')) {
+          labels.add('quoted literal with escape');
+        }
+        break;
+      case 'Comment':
+        labels.add(`comment: ${node.kind}`);
+        if (node.value.includes('\n')) labels.add('multi-line comment');
+        break;
+      case 'NodeRef':
+        if (node.port) labels.add('port');
+        if (node.compass) labels.add('compass');
+        break;
+      case 'NodeRefGroup':
+        labels.add('edge group target');
+        break;
+      case 'Edge':
+        if (node.targets.length > 2) labels.add('edge with 3+ targets');
+        if (node.children.length > 0) labels.add('edge attributes');
+        break;
+      case 'AttributeList':
+        labels.add(`attribute list: ${node.kind}`);
+        break;
+      case 'Subgraph':
+        labels.add(depth > 2 ? 'nested subgraph' : 'subgraph');
+        break;
+      case 'Graph':
+        labels.add(node.strict ? 'strict' : 'not strict');
+        labels.add(node.directed ? 'directed' : 'undirected');
+        if (node.id) labels.add('graph id');
+        break;
+      case 'Dot':
+        if (node.children.filter((c) => c.type === 'Graph').length > 1) {
+          labels.add('two graphs');
+        }
+        break;
+    }
+    for (const value of Object.values(node)) {
+      for (const child of Array.isArray(value) ? value : [value]) {
+        if (child && typeof child === 'object' && 'type' in child) {
+          visit(child as ASTNode, depth + 1);
+        }
+      }
+    }
+  };
+  visit(root, 0);
+  return [...labels];
 }
 
 describe('generator density', () => {
@@ -176,11 +288,48 @@ describe('generator density', () => {
       'edges: 3-5': 0.2,
       'self loop': 0.1,
       'edge attributes': 0.2,
-      'duplicate edge': 0.05,
+      'duplicate endpoints': 0.05,
       'subgraphs: 1': 0.2,
       'subgraphs: 2': 0.1,
       'subgraph with nodes': 0.2,
       'subgraph id': 0.2,
+      'subgraph attributes': 0.1,
+      'subgraph defaults': 0.1,
+      'nested subgraph (depth 1)': 0.08,
+      'graph defaults': 0.3,
+      'edge with port': 0.2,
+      'edge with compass': 0.15,
+      'edge with group target': 0.2,
+      'edge with 3+ targets': 0.25,
+    });
+  });
+
+  it('the AST generator covers every node kind and literal form', () => {
+    const shares = distribution(dot, classifyAST);
+    expectMinimumShares(shares, {
+      'two graphs': 0.3,
+      strict: 0.3,
+      undirected: 0.3,
+      'graph id': 0.3,
+      'comment: Block': 0.1,
+      'comment: Slash': 0.1,
+      'comment: Macro': 0.1,
+      'multi-line comment': 0.1,
+      'bare literal': 0.6,
+      'numeral literal': 0.3,
+      'quoted literal': 0.6,
+      'quoted literal with escape': 0.3,
+      'html literal': 0.2,
+      port: 0.3,
+      compass: 0.2,
+      'edge group target': 0.3,
+      'edge with 3+ targets': 0.3,
+      'edge attributes': 0.3,
+      'attribute list: Graph': 0.15,
+      'attribute list: Node': 0.15,
+      'attribute list: Edge': 0.15,
+      subgraph: 0.2,
+      'nested subgraph': 0.05,
     });
   });
 });

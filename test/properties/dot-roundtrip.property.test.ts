@@ -1,10 +1,4 @@
-import {
-  ASTNodeCountExceededError,
-  DotSyntaxError,
-  parse,
-  stringify,
-  toModel,
-} from '@ts-graphviz/ast';
+import { parse, stringify, toModel } from '@ts-graphviz/ast';
 import fc from 'fast-check';
 import {
   defaultModelsContext,
@@ -12,8 +6,10 @@ import {
   escString,
   fromDot,
   htmlLike,
+  isTsGraphvizError,
   toDot,
 } from 'ts-graphviz';
+
 import { describe, expect, it } from 'vitest';
 import {
   buildGraph,
@@ -61,6 +57,7 @@ describe('DOT round trip', () => {
       const { dot } = roundTrip({
         directed: true,
         strict: false,
+        defaults: { graph: [], node: [], edge: [] },
         attributes: [],
         nodes: [{ id: 'a', attributes: [['label', '\\\\"a']] }],
         edges: [],
@@ -74,6 +71,7 @@ describe('DOT round trip', () => {
       const { model, reparsed } = roundTrip({
         directed: true,
         strict: false,
+        defaults: { graph: [], node: [], edge: [] },
         attributes: [['label', '<>>']],
         nodes: [{ id: 'a', attributes: [] }],
         edges: [],
@@ -87,6 +85,7 @@ describe('DOT round trip', () => {
       const { model, reparsed } = roundTrip({
         directed: true,
         strict: false,
+        defaults: { graph: [], node: [], edge: [] },
         attributes: [['label', '<a>\na']],
         nodes: [{ id: 'a', attributes: [] }],
         edges: [],
@@ -99,6 +98,7 @@ describe('DOT round trip', () => {
       const { model, reparsed } = roundTrip({
         directed: true,
         strict: false,
+        defaults: { graph: [], node: [], edge: [] },
         attributes: [['label', '\\"']],
         nodes: [{ id: 'a', attributes: [] }],
         edges: [],
@@ -141,6 +141,7 @@ describe('DOT round trip', () => {
         const { reparsed } = roundTrip({
           directed: true,
           strict: false,
+          defaults: { graph: [], node: [], edge: [] },
           attributes: [['label', value]],
           nodes: [{ id: 'a', attributes: [] }],
           edges: [],
@@ -262,7 +263,9 @@ describe('explicit value kinds', () => {
       fc.property(
         dotString().filter((s) => s.includes('>')),
         (s) => {
-          expect(() => htmlLike(`${s}<`)).toThrow(RangeError);
+          expect(() => htmlLike(`${s}<`)).toThrow(
+            expect.objectContaining({ code: 'TSG_ERR_INVALID_HTML_LIKE' }),
+          );
         },
       ),
     );
@@ -270,9 +273,9 @@ describe('explicit value kinds', () => {
 });
 
 describe('parser robustness', () => {
-  const allowed = (error: unknown) =>
-    error instanceof DotSyntaxError ||
-    error instanceof ASTNodeCountExceededError;
+  // Every error the library raises carries a TSG_ERR_* code (#776, #1627);
+  // anything else is a crash.
+  const allowed = (error: unknown) => isTsGraphvizError(error);
 
   const tokenSoup = fc
     .array(
@@ -347,6 +350,59 @@ describe('parser robustness', () => {
         ).not.toThrow();
       }),
       { numRuns: 500 },
+    );
+  });
+});
+
+describe('attribute values of every kind', () => {
+  // The value kinds the model accepts, including the ones DOT writes bare.
+  const anyValue = fc.oneof(
+    dotString({ newlines: true }),
+    fc.double({ noNaN: true, noDefaultInfinity: true }),
+    fc.integer(),
+    fc.boolean(),
+    dotString({ newlines: true }).map(escString),
+    dotString()
+      .filter((s) => !/[<>]/.test(s))
+      .map((s) => htmlLike(`<b>${s}</b>`)),
+  );
+
+  it('toDot never throws and its output always parses', () => {
+    fc.assert(
+      fc.property(anyValue, anyValue, (label, tooltip) => {
+        const g = digraph((g) => {
+          g.set('label', label);
+          g.node('a', { tooltip });
+        });
+        const dot = toDot(g);
+        expect(() => fromDot(dot)).not.toThrow();
+      }),
+    );
+  });
+
+  it('fromDot(toDot(g)) preserves strict and directed for every graph', () => {
+    fc.assert(
+      fc.property(graphSpec, (spec) => {
+        const again = fromDot(toDot(buildGraph(spec)));
+        expect([again.strict, again.directed]).toStrictEqual([
+          spec.strict,
+          spec.directed,
+        ]);
+      }),
+    );
+  });
+
+  it('numbers and booleans come back with their type (#1629)', () => {
+    // DOT writes them bare, and a bare numeral or boolean reads back typed.
+    fc.assert(
+      fc.property(fc.oneof(fc.integer(), fc.boolean()), (value) => {
+        const g = digraph((g) => {
+          g.node('a', { fontsize: value as number });
+        });
+        expect(fromDot(toDot(g)).nodes[0].attributes.get('fontsize')).toBe(
+          value,
+        );
+      }),
     );
   });
 });
