@@ -6,7 +6,7 @@ import {
   toModel,
 } from '@ts-graphviz/ast';
 import fc from 'fast-check';
-import { fromDot, toDot } from 'ts-graphviz';
+import { digraph, escString, fromDot, htmlLike, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import {
   buildGraph,
@@ -31,7 +31,7 @@ describe('DOT round trip', () => {
   // printer passes them through, so `\\"` breaks out of the string and `\"`
   // comes back as `"`. These properties are expected to fail until #1587
   // lands; vitest then reports them as unexpectedly passing.
-  it.fails('no DOT injection: any string survives toDot -> fromDot unchanged (#1587)', () => {
+  it('no DOT injection: any string survives toDot -> fromDot unchanged (#1587)', () => {
     fc.assert(
       fc.property(graphSpec, (spec) => {
         const { model, reparsed } = roundTrip(spec);
@@ -40,7 +40,7 @@ describe('DOT round trip', () => {
     );
   });
 
-  it.fails('printing is idempotent: toDot(fromDot(dot)) === dot (#1587)', () => {
+  it('printing is idempotent: toDot(fromDot(dot)) === dot (#1587)', () => {
     fc.assert(
       fc.property(graphSpec, (spec) => {
         const { dot } = roundTrip(spec);
@@ -49,8 +49,8 @@ describe('DOT round trip', () => {
     );
   });
 
-  describe('minimal counterexamples found by the properties (#1587)', () => {
-    it.fails('a value ending in backslashes breaks out of the string', () => {
+  describe('minimal counterexamples once found by the properties (#1587)', () => {
+    it('a value ending in backslashes breaks out of the string', () => {
       const { dot } = roundTrip({
         directed: true,
         strict: false,
@@ -62,7 +62,7 @@ describe('DOT round trip', () => {
       expect(() => fromDot(dot)).not.toThrow();
     });
 
-    it.fails('a string that looks like an HTML-like label is emitted unquoted', () => {
+    it('a string that looks like an HTML-like label is emitted unquoted', () => {
       // `/^<.+>$/` decides that `<>>` is HTML-like, so it is printed as `<<>>>`
       const { model, reparsed } = roundTrip({
         directed: true,
@@ -75,7 +75,7 @@ describe('DOT round trip', () => {
       expect(reparsed.get('label')).toBe(model.get('label'));
     });
 
-    it.fails('a multi-line value whose first line looks like a tag is emitted unquoted', () => {
+    it('a multi-line value whose first line looks like a tag is emitted unquoted', () => {
       // the heuristic's `m` flag anchors per line, so `<a>\na` counts as HTML-like
       const { model, reparsed } = roundTrip({
         directed: true,
@@ -88,7 +88,7 @@ describe('DOT round trip', () => {
       expect(reparsed.get('label')).toBe(model.get('label'));
     });
 
-    it.fails('an escaped quote is not preserved', () => {
+    it('an escaped quote is not preserved', () => {
       const { model, reparsed } = roundTrip({
         directed: true,
         strict: false,
@@ -127,26 +127,135 @@ describe('DOT round trip', () => {
     );
   });
 
-  it('raw newlines in values are normalised to escape sequences (#1578)', () => {
-    // Documented behaviour until #1578 / #1587 decide otherwise: a JS newline
-    // in a value is printed as `\n`, which parses back as the characters `\` `n`.
+  it('raw newlines in values survive toDot -> fromDot (#1578)', () => {
+    // A JS newline is written as the `\n` escape and read back as a newline.
+    fc.assert(
+      fc.property(dotString({ newlines: true }), (value) => {
+        const { reparsed } = roundTrip({
+          directed: true,
+          strict: false,
+          attributes: [['label', value]],
+          nodes: [{ id: 'a', attributes: [] }],
+          edges: [],
+          subgraphs: [],
+        });
+        expect(reparsed.get('label')).toBe(value);
+      }),
+    );
+  });
+});
+
+describe('explicit value kinds', () => {
+  // DOT text carries no kind marker, so an escString without Graphviz escapes
+  // reads back as plain text; what must hold is that printing is idempotent
+  // and that no value can break out of its string.
+  const escStringValue = dotString({ newlines: true }).map(escString);
+  const htmlLikeValue = fc
+    .tuple(
+      fc.constantFrom('b', 'i', 'table', 'font color="red"'),
+      dotString({ newlines: true }).filter((s) => !/[<>]/.test(s)),
+    )
+    .map(([tag, text]) => htmlLike(`<${tag}>${text}</${tag.split(' ')[0]}>`));
+
+  it('escString values print idempotently and never break out of the string', () => {
+    fc.assert(
+      fc.property(escStringValue, (value) => {
+        const g = digraph((g) => {
+          g.node('a', { label: value });
+        });
+        const dot = toDot(g);
+        const again = fromDot(dot);
+        expect(again.nodes).toHaveLength(1);
+        expect(toDot(again)).toBe(dot);
+      }),
+    );
+  });
+
+  it('htmlLike values round-trip exactly', () => {
+    fc.assert(
+      fc.property(htmlLikeValue, (value) => {
+        const g = digraph((g) => {
+          g.node('a', { label: value });
+        });
+        const again = fromDot(toDot(g));
+        expect(again.nodes[0].attributes.get('label')).toStrictEqual(value);
+      }),
+    );
+  });
+
+  it('any JS number produces DOT that parses back to the same number', () => {
     fc.assert(
       fc.property(
-        dotString({ newlines: true }).filter(
-          (s) => !/[\\"]/.test(s) && !looksHtmlLikeToPrinter(s),
+        fc.oneof(
+          fc.double(),
+          fc.integer(),
+          fc.constantFrom(1e21, 1e-7, 5e-324),
         ),
-        (value) => {
-          const { reparsed } = roundTrip({
-            directed: true,
-            strict: false,
-            attributes: [['label', value]],
-            nodes: [{ id: 'a', attributes: [] }],
-            edges: [],
-            subgraphs: [],
+        (n) => {
+          const g = digraph((g) => {
+            g.node('a', { fontsize: n });
           });
-          expect(reparsed.get('label')).toBe(
-            value.replace(/\r/g, '\\r').replace(/\n/g, '\\n'),
+          const again = fromDot(toDot(g));
+          const raw = again.nodes[0].attributes.get('fontsize');
+          expect(raw).toBeDefined();
+          const back = Number(raw);
+          // DOT has no signed zero, so -0 reads back as 0
+          expect(back === n || (Number.isNaN(back) && Number.isNaN(n))).toBe(
+            true,
           );
+        },
+      ),
+    );
+  });
+
+  it('writes non-numeral numbers as strings and keeps a __proto__ key', () => {
+    // deterministic cases the properties above cannot distinguish by coercion
+    const g = digraph((g) => {
+      g.node('a', { fontsize: Number.NaN, width: Number.POSITIVE_INFINITY });
+      // computed key: a literal `__proto__:` would set the prototype instead
+      g.node('b', { ['__proto__']: 'v' } as { label: string });
+    });
+    const dot = toDot(g);
+    expect(dot).toContain('fontsize = "NaN";');
+    expect(dot).toContain('width = "Infinity";');
+    // `__proto__` is an ordinary identifier in DOT; it only needs care when parsed
+    expect(dot).toContain('__proto__ = "v";');
+    const again = fromDot(dot);
+    expect(again.nodes[1].attributes.get('__proto__' as 'label')).toBe('v');
+    expect(Object.getPrototypeOf(again.nodes[1].attributes)).not.toBe('v');
+  });
+
+  it('attribute keys that are DOT keywords or not identifiers are quoted', () => {
+    fc.assert(
+      fc.property(
+        fc.oneof(
+          fc.constantFrom(
+            'node',
+            'Edge',
+            'GRAPH',
+            'subgraph',
+            'strict',
+            'digraph',
+          ),
+          dotString().filter((s) => s !== ''),
+        ),
+        (key) => {
+          const g = digraph((g) => {
+            g.node('a', { [key]: 'v' } as { label: string });
+          });
+          const again = fromDot(toDot(g));
+          expect(again.nodes[0].attributes.get(key as 'label')).toBe('v');
+        },
+      ),
+    );
+  });
+
+  it('unbalanced HTML-like markup is rejected rather than written', () => {
+    fc.assert(
+      fc.property(
+        dotString().filter((s) => s.includes('>')),
+        (s) => {
+          expect(() => htmlLike(`${s}<`)).toThrow(RangeError);
         },
       ),
     );

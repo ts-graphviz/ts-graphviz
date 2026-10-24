@@ -1,3 +1,4 @@
+import { htmlLike } from '@ts-graphviz/common';
 import { registerDefault } from '@ts-graphviz/core';
 import { describe, expect, test } from 'vitest';
 import { createElement } from '../../builder/create-element.js';
@@ -75,7 +76,7 @@ describe('HTML Lavel', () => {
 
     const model = toModel(ast);
     expect(model.id).toStrictEqual('A');
-    expect(model.attributes.get('label')).toStrictEqual('<A>');
+    expect(model.attributes.get('label')).toStrictEqual(htmlLike('A'));
   });
 
   test('edge label', () => {
@@ -100,6 +101,6 @@ describe('HTML Lavel', () => {
     );
 
     const model = toModel(ast);
-    expect(model.attributes.get('label')).toStrictEqual('<A>');
+    expect(model.attributes.get('label')).toStrictEqual(htmlLike('A'));
   });
 });

@@ -9,7 +9,7 @@ export default digraph((g) => {
   g.subgraph('cluster_creation', { label: 'Graph Creation' }, (sg) => {
     sg.subgraph('cluster_parsing', { label: 'Parsing' }, (parsing) => {
       parsing.node('dot_input', {
-        label: 'DOT\\nString',
+        label: 'DOT\nString',
       });
 
       parsing.node('parsed_ast', {
@@ -28,11 +28,11 @@ export default digraph((g) => {
     });
 
     sg.node('react', {
-      label: 'React\\nComponent',
+      label: 'React\nComponent',
     });
 
     sg.node('model', {
-      label: 'Graph\\nModel',
+      label: 'Graph\nModel',
     });
 
     sg.edge([['oop', 'react', 'declarative'], 'model']);
@@ -46,22 +46,22 @@ export default digraph((g) => {
     });
 
     sg.node('dot_output', {
-      label: 'DOT\\nString',
+      label: 'DOT\nString',
     });
   });
 
   g.subgraph('cluster_rendering', { label: 'Rendering' }, (sg) => {
     sg.node('node_adapter', {
-      label: 'Node\\nAdapter',
+      label: 'Node\nAdapter',
       shape: 'box',
     });
     sg.node('deno_adapter', {
-      label: 'Deno\\nAdapter',
+      label: 'Deno\nAdapter',
       shape: 'box',
     });
 
     sg.node('image', {
-      label: 'Visual\\nOutput',
+      label: 'Visual\nOutput',
     });
 
     sg.edge([['deno_adapter', 'node_adapter'], 'image']);

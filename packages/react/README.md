@@ -484,7 +484,7 @@ const dotString = await renderToDot(<ProjectDiagram />);
 
 ### Using the renderHTMLLike Function
 
-The `renderHTMLLike` function converts React elements with HTML-like labels into Graphviz-compatible markup. It includes built-in security protections against deeply nested structures and circular references.
+The `renderHTMLLike` function converts React elements with HTML-like labels into an HTML-like label value (`HTMLLikeValue` from `@ts-graphviz/common`) that can be assigned to any label attribute; `.value` holds the markup without the outer `<` `>`. It includes built-in security protections against deeply nested structures and circular references.
 
 ```ts
 import { renderHTMLLike } from "@ts-graphviz/react";

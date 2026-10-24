@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { renderHook } from '@testing-library/react';
+import { htmlLike } from '@ts-graphviz/common';
 import { describe, expect, it } from 'vitest';
 import { context } from './__tests__/wrapper.js';
 import { useRenderedID } from './useRenderedID.js';
@@ -20,10 +21,10 @@ describe('useRenderedID', () => {
     expect(result.current).toBe('<<b>bold</b>>');
   });
 
-  it('should return the HTMLLike string, when input is JSX', () => {
+  it('should return an HTML-like value, when input is JSX', () => {
     const { result } = renderHook(() => useRenderedID(<dot:b>bold</dot:b>), {
       wrapper: context(),
     });
-    expect(result.current).toBe('<<b>bold</b>>');
+    expect(result.current).toStrictEqual(htmlLike('<b>bold</b>'));
   });
 });

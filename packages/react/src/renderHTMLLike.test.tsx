@@ -1,18 +1,22 @@
 import { describe, expect, it, vi } from 'vitest';
 import { renderHTMLLike } from './renderHTMLLike.js';
 
+// Tests compare the markup form; renderHTMLLike itself returns an HTMLLikeValue.
+const html = (...args: Parameters<typeof renderHTMLLike>) =>
+  `<${renderHTMLLike(...args).value}>`;
+
 describe('renderHTMLLike()', () => {
   it('returns "<>" for undefined label', () => {
-    expect(renderHTMLLike()).toBe('<>');
+    expect(html()).toBe('<>');
   });
 
   it('returns "<>" for null label', () => {
-    expect(renderHTMLLike(null as any)).toBe('<>');
+    expect(html(null as any)).toBe('<>');
   });
 
   it('handles simple dot:port transformation', () => {
     const element = <dot:port>portname</dot:port>;
-    const result = renderHTMLLike(element);
+    const result = html(element);
     expect(result).toBe('<<portname>>');
   });
 
@@ -25,7 +29,7 @@ describe('renderHTMLLike()', () => {
         </dot:tr>
       </dot:table>
     );
-    const result = renderHTMLLike(element);
+    const result = html(element);
     expect(result).toContain('<table border="0" cellborder="1">');
     expect(result).toContain('<tr>');
     expect(result).toContain('<td>');
@@ -43,7 +47,7 @@ describe('renderHTMLLike()', () => {
         </dot:table>
       </div>
     );
-    const result = renderHTMLLike(element);
+    const result = html(element);
     expect(result).toContain('<div>');
     expect(result).toContain('<table>');
     expect(result).toContain('<tr>');
@@ -60,7 +64,7 @@ describe('renderHTMLLike()', () => {
         </dot:tr>
       </dot:table>
     );
-    const result = renderHTMLLike(element);
+    const result = html(element);
     expect(result).toContain('<table>');
     expect(result).toContain('<port1>');
   });
@@ -71,7 +75,7 @@ describe('renderHTMLLike()', () => {
         <dot:b>Bold text</dot:b>
       </dot:font>
     );
-    const result = renderHTMLLike(element);
+    const result = html(element);
     expect(result).toContain('<font color="red">');
     expect(result).toContain('</font>');
     expect(result).toContain('<b>');
@@ -81,7 +85,7 @@ describe('renderHTMLLike()', () => {
   it('handles malformed HTML gracefully', () => {
     // This tests edge cases where tags might be incomplete
     const element = <div>Content with &lt; and &gt;</div>;
-    const result = renderHTMLLike(element);
+    const result = html(element);
     expect(result).toContain('Content with < and >');
   });
 
@@ -98,14 +102,14 @@ describe('renderHTMLLike()', () => {
         </dot:tr>
       </dot:table>
     );
-    const result = renderHTMLLike(element);
+    const result = html(element);
     expect(result).toContain('<port1>');
     expect(result).toContain('<port2>');
   });
 
   it('handles empty elements', () => {
     const element = <dot:br />;
-    const result = renderHTMLLike(element);
+    const result = html(element);
     expect(result).toContain('<br');
   });
 
@@ -115,7 +119,7 @@ describe('renderHTMLLike()', () => {
         Content
       </dot:table>
     );
-    const result = renderHTMLLike(element);
+    const result = html(element);
     expect(result).toContain('border="1"');
     expect(result).toContain('cellspacing="0"');
     expect(result).toContain('cellpadding="4"');
@@ -139,7 +143,7 @@ describe('renderHTMLLike()', () => {
         </dot:tr>
       </dot:table>
     );
-    const result = renderHTMLLike(element);
+    const result = html(element);
     expect(result).toContain('<table>');
     expect(result).toContain('<font color="blue">');
     expect(result).toContain('<b>Header</b>');
@@ -159,7 +163,7 @@ describe('renderHTMLLike()', () => {
     );
 
     const start = Date.now();
-    const result = renderHTMLLike(element);
+    const result = html(element);
     const duration = Date.now() - start;
 
     // Should complete in reasonable time (< 100ms)
@@ -177,7 +181,7 @@ describe('renderHTMLLike()', () => {
       }
 
       // Should return fallback '<>' due to error being caught
-      const result = renderHTMLLike(element);
+      const result = html(element);
       expect(result).toBe('<>');
     });
 
@@ -189,10 +193,10 @@ describe('renderHTMLLike()', () => {
       }
 
       // With default depth (1000), should fail
-      expect(renderHTMLLike(element)).toBe('<>');
+      expect(html(element)).toBe('<>');
 
       // With custom maxDepth (2000), should succeed
-      const result = renderHTMLLike(element, { maxDepth: 2000 });
+      const result = html(element, { maxDepth: 2000 });
       expect(result).not.toBe('<>');
       expect(result).toContain('<div>');
     });
@@ -205,10 +209,10 @@ describe('renderHTMLLike()', () => {
       }
 
       // With default depth (1000), should succeed
-      expect(renderHTMLLike(element)).not.toBe('<>');
+      expect(html(element)).not.toBe('<>');
 
       // With custom maxDepth (100), should fail
-      expect(renderHTMLLike(element, { maxDepth: 100 })).toBe('<>');
+      expect(html(element, { maxDepth: 100 })).toBe('<>');
     });
 
     it('sanitizes invalid maxDepth values', () => {
@@ -218,22 +222,22 @@ describe('renderHTMLLike()', () => {
       }
 
       // Infinity should fall back to default (1000)
-      expect(
-        renderHTMLLike(element, { maxDepth: Number.POSITIVE_INFINITY }),
-      ).not.toBe('<>');
+      expect(html(element, { maxDepth: Number.POSITIVE_INFINITY })).not.toBe(
+        '<>',
+      );
 
       // NaN should fall back to default (1000)
-      expect(renderHTMLLike(element, { maxDepth: Number.NaN })).not.toBe('<>');
+      expect(html(element, { maxDepth: Number.NaN })).not.toBe('<>');
 
       // Negative values should fall back to default (1000)
-      expect(renderHTMLLike(element, { maxDepth: -100 })).not.toBe('<>');
+      expect(html(element, { maxDepth: -100 })).not.toBe('<>');
 
       // Zero should fall back to default (1000)
-      expect(renderHTMLLike(element, { maxDepth: 0 })).not.toBe('<>');
+      expect(html(element, { maxDepth: 0 })).not.toBe('<>');
 
       // Decimal values should be floored
-      expect(renderHTMLLike(element, { maxDepth: 75.9 })).not.toBe('<>');
-      expect(renderHTMLLike(element, { maxDepth: 49.9 })).toBe('<>');
+      expect(html(element, { maxDepth: 75.9 })).not.toBe('<>');
+      expect(html(element, { maxDepth: 49.9 })).toBe('<>');
     });
 
     it('handles structures just under the limit (1000 levels)', () => {
@@ -244,7 +248,7 @@ describe('renderHTMLLike()', () => {
       }
 
       // Should complete without error
-      const result = renderHTMLLike(element);
+      const result = html(element);
       expect(result).not.toBe('<>');
       expect(result).toContain('<div>');
     });
@@ -257,7 +261,7 @@ describe('renderHTMLLike()', () => {
         element = <div>{element}</div>;
       }
 
-      renderHTMLLike(element);
+      html(element);
 
       expect(consoleSpy).toHaveBeenCalledWith(
         'renderHTMLLike fallback:',
@@ -282,7 +286,7 @@ describe('renderHTMLLike()', () => {
         </div>
       );
 
-      const result = renderHTMLLike(parent);
+      const result = html(parent);
 
       // Should NOT be treated as circular reference
       expect(result).not.toBe('<>');
@@ -298,7 +302,7 @@ describe('renderHTMLLike()', () => {
       element.props.children = element;
 
       // Should return fallback '<>' due to circular reference error
-      const result = renderHTMLLike(element as any);
+      const result = html(element as any);
       expect(result).toBe('<>');
     });
 
@@ -308,7 +312,7 @@ describe('renderHTMLLike()', () => {
       const element: any = { type: 'div', props: {} };
       element.props.children = element;
 
-      renderHTMLLike(element as any);
+      html(element as any);
 
       expect(consoleSpy).toHaveBeenCalledWith(
         'renderHTMLLike fallback:',
@@ -333,7 +337,7 @@ describe('renderHTMLLike()', () => {
         </div>
       );
 
-      const result = renderHTMLLike(element);
+      const result = html(element);
       expect(result).not.toBe('<>');
       expect(result).toContain('Item');
     });
@@ -353,7 +357,7 @@ describe('renderHTMLLike()', () => {
     }
 
     const start = Date.now();
-    renderHTMLLike(element);
+    html(element);
     const duration = Date.now() - start;
 
     // Should complete reasonably fast (< 1000ms for 500 levels)

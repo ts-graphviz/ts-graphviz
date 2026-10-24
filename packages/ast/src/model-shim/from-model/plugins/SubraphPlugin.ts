@@ -1,4 +1,5 @@
 import type { SubgraphModel } from '@ts-graphviz/common';
+import { idToRaw } from '../../literal.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';
 
@@ -17,7 +18,7 @@ export const SubgraphPlugin: ConvertFromModelPlugin<SubgraphModel> = {
             ? createElement(
                 'Literal',
                 {
-                  value: model.id,
+                  value: idToRaw(model.id),
                   quoted: true,
                 },
                 [],

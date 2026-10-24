@@ -4,6 +4,7 @@ import {
   isNodeModel,
 } from '@ts-graphviz/common';
 import type { EdgeTargetASTNode } from '../../../types.js';
+import { idToRaw } from '../../literal.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute, convertComment } from './utils/index.js';
 
@@ -24,7 +25,7 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
                 id: createElement(
                   'Literal',
                   {
-                    value: target.id,
+                    value: idToRaw(target.id),
                     quoted: true,
                   },
                   [],
@@ -40,7 +41,7 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
                 id: createElement(
                   'Literal',
                   {
-                    value: target.id,
+                    value: idToRaw(target.id),
                     quoted: true,
                   },
                   [],
@@ -49,7 +50,7 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
                   ? createElement(
                       'Literal',
                       {
-                        value: target.port,
+                        value: idToRaw(target.port),
                         quoted: true,
                       },
                       [],

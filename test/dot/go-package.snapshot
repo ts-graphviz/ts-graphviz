@@ -2590,7 +2590,7 @@
                 },
                 "quoted": true,
                 "type": "Literal",
-                "value": "Package reflectlite implements lightweight version of reflect, not using any package except for "runtime" and "unsafe".",
+                "value": "Package reflectlite implements lightweight version of reflect, not using any package except for \"runtime\" and \"unsafe\".",
               },
             },
           ],

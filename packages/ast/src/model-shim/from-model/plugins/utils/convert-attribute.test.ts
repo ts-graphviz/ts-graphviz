@@ -1,3 +1,4 @@
+import { htmlLike } from '@ts-graphviz/common';
 import { describe, expect, test } from 'vitest';
 import { createElement } from '../../../../builder/create-element.js';
 import { convertAttribute } from './convert-attribute.js';
@@ -56,7 +57,7 @@ describe('convertAttribute', () => {
 
     describe('html-like', () => {
       test('simple HTML-like label', () => {
-        const result = convertAttribute(createElement, 'label', '<A>');
+        const result = convertAttribute(createElement, 'label', htmlLike('A'));
         expect(result).toMatchInlineSnapshot(`
           {
             "children": [],
@@ -80,7 +81,11 @@ describe('convertAttribute', () => {
         `);
       });
       test('nested HTML-like label', () => {
-        const result = convertAttribute(createElement, 'label', '<<b>Hi</b>>');
+        const result = convertAttribute(
+          createElement,
+          'label',
+          htmlLike('<b>Hi</b>'),
+        );
         expect(result).toMatchInlineSnapshot(`
           {
             "children": [],
@@ -122,9 +127,9 @@ describe('convertAttribute', () => {
             "value": {
               "children": [],
               "location": null,
-              "quoted": "html",
+              "quoted": true,
               "type": "Literal",
-              "value": "A",
+              "value": "  <A>  ",
             },
           }
         `);

@@ -1,3 +1,5 @@
+import type { EscStringValue, HTMLLikeValue } from './values.js';
+
 /**
  * @hidden
  */
@@ -230,13 +232,16 @@ export type LayerRange = string;
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/escString/ escString}
  * @group Attribute Types
  */
-export type EscString = string;
+export type EscString = string | EscStringValue;
 
 /**
+ * An HTML-like label, created with {@link htmlLike} (or `renderHTMLLike` in
+ * `@ts-graphviz/react`).
+ *
  * @see {@link https://graphviz.org/doc/info/shapes.html#html HTML-Like Labels}
  * @group Attribute Types
  */
-export type HTMLLikeLabel = `<${string}>`;
+export type HTMLLikeLabel = HTMLLikeValue;
 /** @hidden */
 export namespace HTMLLikeLabel {
   export type TableAttributes = Insensitive<{
