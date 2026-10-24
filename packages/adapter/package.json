@@ -43,10 +43,11 @@
     "@ts-graphviz/common": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^22.20.5",
-    "typescript": "^5.9.3",
-    "vite": "^7.3.7",
-    "vite-plugin-dts": "^4.5.4"
+    "@microsoft/api-extractor": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:"
   },
   "engines": {
     "node": ">=22"

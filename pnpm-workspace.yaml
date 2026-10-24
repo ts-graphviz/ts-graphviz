@@ -8,3 +8,9 @@ allowBuilds:
   esbuild: true
   lefthook: true
 
+catalog:
+  '@microsoft/api-extractor': ^7.59.4
+  '@types/node': ^22.20.5
+  typescript: ^6.0.3
+  vite: ^8.3.5
+  vite-plugin-dts: ^5.1.2

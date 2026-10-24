@@ -36,9 +36,10 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "typescript": "^5.9.3",
-    "vite": "^7.3.7",
-    "vite-plugin-dts": "^4.5.4"
+    "@microsoft/api-extractor": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:"
   },
   "engines": {
     "node": ">=22"
