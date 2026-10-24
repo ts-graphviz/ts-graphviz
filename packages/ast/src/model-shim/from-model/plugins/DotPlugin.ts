@@ -10,14 +10,14 @@ export const DotPlugin: ConvertFromModelPlugin<DotModel> = {
   convert(context, model) {
     const { createElement } = context;
     const children: DotASTNode['children'] = [];
-    if (model.comment) {
+    if (model.comment !== undefined) {
       children.push(
         convertComment(createElement, model.comment, context.commentKind),
       );
     }
     for (const graph of model.graphs) {
       // A root graph's comment is written right before the graph statement.
-      if (graph.comment) {
+      if (graph.comment !== undefined) {
         children.push(
           convertComment(createElement, graph.comment, context.commentKind),
         );

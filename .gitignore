@@ -133,3 +133,9 @@ dist
 lib
 doc
 tmp
+
+# Fuzzing (fuzz/README.md): build output, the growing corpus and findings
+fuzz/dist/
+fuzz/corpus/
+fuzz/findings/
+crash-*

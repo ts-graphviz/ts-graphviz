@@ -16,7 +16,7 @@ export function convertClusterChildren(
       }
       for (const attrs of Object.values(model.attributes)) {
         if (attrs.size > 0) {
-          if (attrs.comment) {
+          if (attrs.comment !== undefined) {
             yield convertComment(
               createElement,
               attrs.comment,
@@ -27,7 +27,7 @@ export function convertClusterChildren(
         }
       }
       for (const node of model.nodes) {
-        if (node.comment) {
+        if (node.comment !== undefined) {
           yield convertComment(
             createElement,
             node.comment,
@@ -37,7 +37,7 @@ export function convertClusterChildren(
         yield context.convert(node);
       }
       for (const subgraph of model.subgraphs) {
-        if (subgraph.comment) {
+        if (subgraph.comment !== undefined) {
           yield convertComment(
             createElement,
             subgraph.comment,
@@ -47,7 +47,7 @@ export function convertClusterChildren(
         yield context.convert(subgraph);
       }
       for (const edge of model.edges) {
-        if (edge.comment) {
+        if (edge.comment !== undefined) {
           yield convertComment(
             createElement,
             edge.comment,

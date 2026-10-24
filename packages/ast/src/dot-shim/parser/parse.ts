@@ -157,6 +157,19 @@ export function parse(
     }
   }
 
+  // Graphviz stops reading at a NUL character (whatever follows is ignored,
+  // even inside a comment), so a source containing one cannot mean the same
+  // thing to Graphviz and to this parser. Reject it.
+  const nul = input.indexOf('\0');
+  if (nul !== -1) {
+    const before = input.slice(0, nul);
+    const line = before.split('\n').length;
+    const column = nul - before.lastIndexOf('\n');
+    throw new DotSyntaxError(
+      `A DOT source must not contain a NUL character (line ${line}, column ${column}).`,
+    );
+  }
+
   try {
     return _parse(input, {
       startRule,
