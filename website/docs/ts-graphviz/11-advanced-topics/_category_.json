@@ -1,0 +1,7 @@
+{
+  "label": "Advanced Topics",
+  "link": {
+    "type": "generated-index",
+    "description": "Advanced topics to help you understand the inner workings of ts-graphviz."
+  }
+}

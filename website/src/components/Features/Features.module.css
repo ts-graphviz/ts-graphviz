@@ -1,0 +1,36 @@
+.features {
+  padding: 60px 16px;
+  background: var(--ifm-color-emphasis-200);
+  text-align: center;
+}
+
+.features h2 {
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.featureList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.featureItem {
+  width: 300px;
+  margin: 16px;
+  text-align: left;
+}
+
+.featureItem h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.featureItem p {
+  font-size: 16px;
+}
+
+.featureSvg {
+  height: 200px;
+  width: 200px;
+}

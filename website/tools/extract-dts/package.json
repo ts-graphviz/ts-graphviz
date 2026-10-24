@@ -1,0 +1,16 @@
+{
+  "name": "extract-dts",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node ./extract-dts.js --output ../../static/dts.json"
+  },
+  "dependencies": {
+    "@ts-graphviz/adapter": "^2.0.5",
+    "@ts-graphviz/ast": "^2.0.5",
+    "@ts-graphviz/common": "^2.1.4",
+    "@ts-graphviz/core": "^2.0.5",
+    "ts-graphviz": "^2.1.4"
+  },
+  "license": "MIT"
+}

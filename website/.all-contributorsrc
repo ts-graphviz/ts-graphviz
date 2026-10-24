@@ -1,0 +1,39 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "kamiazya",
+      "name": "Yuki Yamazaki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35218186?v=4",
+      "profile": "https://github.com/kamiazya",
+      "contributions": [
+        "content",
+        "doc",
+        "blog",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "hao2013",
+      "name": "hao2013",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67059492?v=4",
+      "profile": "https://github.com/hao2013",
+      "contributions": [
+        "translation",
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "ts-graphviz.github.io",
+  "projectOwner": "ts-graphviz"
+}
