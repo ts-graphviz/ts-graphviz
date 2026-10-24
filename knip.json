@@ -11,8 +11,7 @@
         "@arethetypeswrong/cli"
       ],
       "ignoreBinaries": [
-        "dot",
-        "gvpr"
+        "dot"
       ]
     },
     "packages/ts-graphviz": {
