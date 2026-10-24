@@ -1,12 +1,41 @@
-import {
-  type EdgeModel,
-  isForwardRefNode,
-  isNodeModel,
-} from '@ts-graphviz/common';
-import type { EdgeTargetASTNode } from '../../../types.js';
+import { type EdgeModel, isNodeModel, type NodeRef } from '@ts-graphviz/common';
+import type { CreateElement } from '../../../builder/types.js';
+import type { EdgeTargetASTNode, NodeRefASTNode } from '../../../types.js';
 import { idToRaw } from '../../literal.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute } from './utils/index.js';
+
+const nodeRef = (
+  createElement: CreateElement,
+  target: NodeRef,
+): NodeRefASTNode => {
+  const id = createElement(
+    'Literal',
+    { value: idToRaw(target.id), quoted: true },
+    [],
+  );
+  if (isNodeModel(target)) {
+    return createElement('NodeRef', { id }, []);
+  }
+  // Ports are ids and are escaped like one; a compass point is a keyword.
+  return createElement(
+    'NodeRef',
+    {
+      id,
+      port: target.port
+        ? createElement(
+            'Literal',
+            { value: idToRaw(target.port), quoted: true },
+            [],
+          )
+        : undefined,
+      compass: target.compass
+        ? createElement('Literal', { value: target.compass, quoted: true }, [])
+        : undefined,
+    },
+    [],
+  );
+};
 
 export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
   match(model) {
@@ -17,116 +46,16 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
     return createElement(
       'Edge',
       {
-        targets: model.targets.map((target) => {
-          if (isNodeModel(target)) {
-            return createElement(
-              'NodeRef',
-              {
-                id: createElement(
-                  'Literal',
-                  {
-                    value: idToRaw(target.id),
-                    quoted: true,
-                  },
-                  [],
-                ),
-              },
-              [],
-            );
-          }
-          if (isForwardRefNode(target)) {
-            return createElement(
-              'NodeRef',
-              {
-                id: createElement(
-                  'Literal',
-                  {
-                    value: idToRaw(target.id),
-                    quoted: true,
-                  },
-                  [],
-                ),
-                port: target.port
-                  ? createElement(
-                      'Literal',
-                      {
-                        value: idToRaw(target.port),
-                        quoted: true,
-                      },
-                      [],
-                    )
-                  : undefined,
-                compass: target.compass
-                  ? createElement(
-                      'Literal',
-                      {
-                        value: target.compass,
-                        quoted: true,
-                      },
-                      [],
-                    )
-                  : undefined,
-              },
-              [],
-            );
-          }
-          return createElement(
-            'NodeRefGroup',
-            {},
-            target.map((n) => {
-              if (isNodeModel(n)) {
-                return createElement(
-                  'NodeRef',
-                  {
-                    id: createElement(
-                      'Literal',
-                      {
-                        value: n.id,
-                        quoted: true,
-                      },
-                      [],
-                    ),
-                  },
-                  [],
-                );
-              }
-              return createElement(
-                'NodeRef',
-                {
-                  id: createElement(
-                    'Literal',
-                    {
-                      value: n.id,
-                      quoted: true,
-                    },
-                    [],
-                  ),
-                  port: n.port
-                    ? createElement(
-                        'Literal',
-                        {
-                          value: n.port,
-                          quoted: true,
-                        },
-                        [],
-                      )
-                    : undefined,
-                  compass: n.compass
-                    ? createElement(
-                        'Literal',
-                        {
-                          value: n.compass,
-                          quoted: true,
-                        },
-                        [],
-                      )
-                    : undefined,
-                },
-                [],
-              );
-            }),
-          );
-        }) as [
+        targets: model.targets.map(
+          (target): EdgeTargetASTNode =>
+            Array.isArray(target)
+              ? createElement(
+                  'NodeRefGroup',
+                  {},
+                  target.map((n) => nodeRef(createElement, n)),
+                )
+              : nodeRef(createElement, target),
+        ) as [
           from: EdgeTargetASTNode,
           to: EdgeTargetASTNode,
           ...rest: EdgeTargetASTNode[],

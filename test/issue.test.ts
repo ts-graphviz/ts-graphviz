@@ -59,3 +59,23 @@ describe('Builder nodeCount accumulation across repeated toDot calls', () => {
     expect(() => toDot(g, { convert: { maxASTNodes: 10000 } })).not.toThrow();
   });
 });
+
+// issue #1620
+describe('escaping of NodeRefGroup members', () => {
+  it('writes ids and ports of grouped edge targets with the same escaping as direct targets', () => {
+    const g = new Digraph();
+    g.edge(['a"', [{ id: 'b"', port: 'p\\q' }, 'c']]);
+    const dot = toDot(g);
+    expect(dot).toMatchInlineSnapshot(`
+      "digraph {
+        "a\\"" -> {"b\\"":"p\\\\q" "c"};
+      }"
+    `);
+    const again = fromDot(dot);
+    expect(again.edges[0].targets[1]).toMatchObject([
+      { id: 'b"', port: 'p\\q' },
+      { id: 'c' },
+    ]);
+    expect(toDot(again)).toBe(dot);
+  });
+});
