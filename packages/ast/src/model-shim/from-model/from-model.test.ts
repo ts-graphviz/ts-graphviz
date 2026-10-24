@@ -1,11 +1,6 @@
-import { registerDefault } from '@ts-graphviz/core';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { ASTNodeCountExceededError } from '../../builder/errors.js';
 import { fromModel } from './from-model.js';
-
-beforeAll(() => {
-  registerDefault();
-});
 
 describe('fromModel', () => {
   it('should not accumulate node count across repeated calls', async () => {

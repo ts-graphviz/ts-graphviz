@@ -1,4 +1,5 @@
-import { createModelsContext, type ModelsContext } from '@ts-graphviz/common';
+import type { ModelsContext } from '@ts-graphviz/common';
+import { createModelsContext } from '@ts-graphviz/core';
 import { createModelFactories } from './model-factory-builder.js';
 import type { ModelFactories, ModelFactoriesWithStrict } from './types.js';
 

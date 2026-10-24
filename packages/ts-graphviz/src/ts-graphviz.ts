@@ -1,10 +1,6 @@
 /**
  * @module ts-graphviz
  */
-import { registerDefault } from '@ts-graphviz/core';
-
-registerDefault();
-
 export * from '@ts-graphviz/common';
 export * from '@ts-graphviz/core';
 export * from './attribute.js';

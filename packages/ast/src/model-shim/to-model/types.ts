@@ -52,7 +52,11 @@ export type ToModelConvertableASTNode =
  * @group Convert AST to Model
  */
 export interface ConvertToModelOptions {
-  models?: Partial<ModelsContext>;
+  /**
+   * The classes to create the models from, e.g. `defaultModelsContext()`
+   * or `createModelsContext({ Node: MyNode })` of `@ts-graphviz/core`.
+   */
+  models: ModelsContext;
 }
 
 /**

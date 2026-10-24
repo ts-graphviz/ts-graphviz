@@ -1,6 +1,4 @@
-import { Digraph, Graph, registerDefault } from '@ts-graphviz/core';
-
-registerDefault();
+import { Digraph, Graph } from '@ts-graphviz/core';
 
 import { describe, expect, test } from 'vitest';
 import { digraph, graph, strict, withContext } from './model-factory.js';

@@ -1,8 +1,5 @@
-import { RootModelsContext } from '@ts-graphviz/common';
-import { registerDefault } from '@ts-graphviz/core';
+import { defaultModelsContext } from '@ts-graphviz/core';
 import { describe, expect, test, vi } from 'vitest';
-
-registerDefault();
 
 import { attribute as _ } from './attribute.js';
 import { ModelFactoryBuilder } from './model-factory-builder.js';
@@ -13,7 +10,11 @@ describe.each([
   { directed: false, strict: false },
   { directed: true, strict: false },
 ])('strict: %s, directed: %s', ({ strict, directed }) => {
-  const factory = ModelFactoryBuilder.call(RootModelsContext, directed, strict);
+  const factory = ModelFactoryBuilder.call(
+    defaultModelsContext(),
+    directed,
+    strict,
+  );
 
   test('no arguments', () => {
     const g = factory();

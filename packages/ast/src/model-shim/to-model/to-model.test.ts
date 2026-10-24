@@ -1,15 +1,13 @@
 import { htmlLike } from '@ts-graphviz/common';
-import { registerDefault } from '@ts-graphviz/core';
+import { defaultModelsContext } from '@ts-graphviz/core';
 import { describe, expect, test } from 'vitest';
 import { createElement } from '../../builder/create-element.js';
 import { toModel } from './to-model.js';
 
-registerDefault();
-
 test('empty Dot converts to a Dot model without graphs', () => {
   const ast = createElement('Dot', {}, []);
 
-  const model = toModel(ast);
+  const model = toModel(ast, { models: defaultModelsContext() });
   expect(model.$$type).toBe('Dot');
   expect(model.graphs).toHaveLength(0);
   expect(model.comment).toBeUndefined();
@@ -34,7 +32,7 @@ test('comment before a graph is attached to the graph', () => {
       [],
     ),
   ]);
-  const model = toModel(ast);
+  const model = toModel(ast, { models: defaultModelsContext() });
   expect(model.comment).toBeUndefined();
   expect(model.graphs).toHaveLength(1);
   expect(model.graphs[0].comment).toStrictEqual('This is comment');
@@ -52,7 +50,7 @@ test('multiple graphs and dangling comments', () => {
     graph(false),
     comment('trailing'),
   ]);
-  const model = toModel(ast);
+  const model = toModel(ast, { models: defaultModelsContext() });
   expect(model.graphs.map((g) => g.directed)).toStrictEqual([true, false]);
   expect(model.graphs[0].comment).toBe('first');
   expect(model.graphs[1].comment).toBeUndefined();
@@ -74,7 +72,7 @@ describe('HTML Lavel', () => {
       ],
     );
 
-    const model = toModel(ast);
+    const model = toModel(ast, { models: defaultModelsContext() });
     expect(model.id).toStrictEqual('A');
     expect(model.attributes.get('label')).toStrictEqual(htmlLike('A'));
   });
@@ -100,7 +98,7 @@ describe('HTML Lavel', () => {
       ],
     );
 
-    const model = toModel(ast);
+    const model = toModel(ast, { models: defaultModelsContext() });
     expect(model.attributes.get('label')).toStrictEqual(htmlLike('A'));
   });
 });

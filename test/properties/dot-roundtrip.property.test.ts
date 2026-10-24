@@ -7,6 +7,7 @@ import {
 } from '@ts-graphviz/ast';
 import fc from 'fast-check';
 import {
+  defaultModelsContext,
   digraph,
   escString,
   fromDot,
@@ -342,7 +343,9 @@ describe('parser robustness', () => {
         }
         // AST -> DOT -> AST, and AST -> model -> DOT -> AST
         expect(() => parse(stringify(ast))).not.toThrow();
-        expect(() => parse(toDot(toModel(ast)))).not.toThrow();
+        expect(() =>
+          parse(toDot(toModel(ast, { models: defaultModelsContext() }))),
+        ).not.toThrow();
       }),
       { numRuns: 500 },
     );

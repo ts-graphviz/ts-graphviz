@@ -717,7 +717,6 @@ export interface DotModel extends HasComment, DotObjectModel<'Dot'> {
  */
 export interface DotConstructor {
   new (graphs?: RootGraphModel[], comment?: string): DotModel;
-  new (...args: any[]): DotModel;
 }
 
 /**
@@ -732,7 +731,6 @@ export interface RootGraphConstructor {
   ): RootGraphModel;
   new (strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
   new (attributes?: GraphAttributesObject): RootGraphModel;
-  new (...args: any[]): RootGraphModel;
 }
 
 /**
@@ -741,7 +739,6 @@ export interface RootGraphConstructor {
 export interface SubgraphConstructor {
   new (id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
   new (attributes?: SubgraphAttributesObject): SubgraphModel;
-  new (...args: any[]): SubgraphModel;
 }
 
 /**
@@ -749,7 +746,6 @@ export interface SubgraphConstructor {
  */
 export interface NodeConstructor {
   new (id: string, attributes?: NodeAttributesObject): NodeModel;
-  new (...args: any[]): NodeModel;
 }
 
 /**
@@ -757,7 +753,6 @@ export interface NodeConstructor {
  */
 export interface EdgeConstructor {
   new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): EdgeModel;
-  new (...args: any[]): EdgeModel;
 }
 
 /**

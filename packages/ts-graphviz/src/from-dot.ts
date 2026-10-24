@@ -8,10 +8,12 @@ import {
   ConversionError,
   type EdgeModel,
   isDotModel,
+  type ModelsContext,
   type NodeModel,
   type RootGraphModel,
   type SubgraphModel,
 } from '@ts-graphviz/common';
+import { createModelsContext } from '@ts-graphviz/core';
 
 /**
  * This interface provides options for converting DOT to a model.
@@ -27,7 +29,13 @@ export interface FromDotOptions<
   /**
    * Options for converting the parsed DOT to a model.
    */
-  convert?: ConvertToModelOptions;
+  convert?: Omit<ConvertToModelOptions, 'models'> & {
+    /**
+     * Classes to create the models from; the ones left out default to the
+     * classes of `@ts-graphviz/core`.
+     */
+    models?: Partial<ModelsContext>;
+  };
 }
 
 /**
@@ -73,7 +81,10 @@ export function fromDot<
       `fromDot cannot convert a "${Array.isArray(ast) ? 'ClusterStatements' : ast.type}" node to a model`,
     );
   }
-  const model = toModel(ast, options?.convert);
+  const model = toModel(ast, {
+    ...options?.convert,
+    models: createModelsContext(options?.convert?.models),
+  });
   if (isDotModel(model)) {
     // A whole DOT source converts to a Dot model; return its first graph.
     const [graph] = model.graphs;
