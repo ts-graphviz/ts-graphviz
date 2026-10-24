@@ -33,7 +33,9 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "codegen": "node scripts/generate-attributes.ts && biome format --write src/attribute.ts",
+    "fetch:graphviz-docs": "node scripts/fetch-graphviz-docs.ts"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "catalog:",
