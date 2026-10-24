@@ -94,7 +94,8 @@ jobs:
         id: branch_check
         run: echo "current_branch=$(git branch --show-current)" >> $GITHUB_OUTPUT
       - name: Publish npm package with @next tag
-        if: ${{ steps.changesets.outputs.published != 'true' && steps.branch_check.outputs.current_branch == 'main' && github.actor != 'dependabot[bot]'}}
+        # `changeset version` fails when there are no unreleased changesets (Changesets v3)
+        if: ${{ steps.changesets.outputs.published != 'true' && steps.changesets.outputs.hasChangesets == 'true' && steps.branch_check.outputs.current_branch == 'main' && github.actor != 'dependabot[bot]'}}
         run: |
           pnpm exec changeset version --snapshot next
           pnpm exec changeset publish --no-git-tag --snapshot --tag next
