@@ -6,7 +6,7 @@ import {
 import type { EdgeTargetASTNode } from '../../../types.js';
 import { idToRaw } from '../../literal.js';
 import type { ConvertFromModelPlugin } from '../types.js';
-import { convertAttribute, convertComment } from './utils/index.js';
+import { convertAttribute } from './utils/index.js';
 
 export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
   match(model) {
@@ -132,20 +132,9 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
           ...rest: EdgeTargetASTNode[],
         ],
       },
-      [
-        ...(model.attributes.comment
-          ? [
-              convertComment(
-                createElement,
-                model.attributes.comment,
-                context.commentKind,
-              ),
-            ]
-          : []),
-        ...model.attributes.values.map(([key, value]) =>
-          convertAttribute(createElement, key, value),
-        ),
-      ],
+      model.attributes.values.map(([key, value]) =>
+        convertAttribute(createElement, key, value),
+      ),
     );
   },
 };

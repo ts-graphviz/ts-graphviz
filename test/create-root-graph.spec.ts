@@ -166,13 +166,11 @@ describe('Root Graph Creation Functions', () => {
           e.comment = 'This is edge.\nIt connects a, b and c.';
 
           e.attributes.set('color', 'red');
-          e.attributes.comment = 'Edge line will draw with red.';
         });
         g.subgraph('A', (A) => {
           A.comment = 'It is subgraph A.\nIt is not cluster';
           A.node('Aaa', (n) => {
             n.comment = 'This is node Aaa in subgraph A.';
-            n.attributes.comment = 'It will be filled by pink.';
             n.attributes.set('color', 'pink');
           });
         });

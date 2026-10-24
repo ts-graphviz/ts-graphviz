@@ -207,8 +207,7 @@ export interface Attributes<T extends AttributeKey> {
  * @group Models
  */
 export interface AttributesGroupModel<T extends AttributeKey>
-  extends Attributes<T>,
-    HasComment {}
+  extends Attributes<T> {}
 
 /**
  * @group Models

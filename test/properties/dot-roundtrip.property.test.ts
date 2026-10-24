@@ -213,7 +213,7 @@ describe('explicit value kinds', () => {
     const g = digraph((g) => {
       g.node('a', { fontsize: Number.NaN, width: Number.POSITIVE_INFINITY });
       // computed key: a literal `__proto__:` would set the prototype instead
-      g.node('b', { ['__proto__']: 'v' } as { label: string });
+      g.node('b', { ['__proto__']: 'v' } as unknown as { label: string });
     });
     const dot = toDot(g);
     expect(dot).toContain('fontsize = "NaN";');
