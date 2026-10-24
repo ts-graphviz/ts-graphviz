@@ -490,6 +490,26 @@ describe('parse', () => {
     });
   });
 
+  describe('[SM-1] NUL characters (found by fuzzing)', () => {
+    // Graphviz stops reading at a NUL, so a source with one cannot mean the
+    // same thing to Graphviz and to this parser.
+    test.each([['#\0'], ['graph{#\0\n7}'], ['graph { "a\0b" }'], ['/* \0 */']])(
+      '%j is rejected with DotSyntaxError',
+      (source) => {
+        expect(() => parse(source)).toThrow(
+          expect.objectContaining({
+            name: 'DotSyntaxError',
+            code: 'TSG_ERR_DOT_SYNTAX',
+          }),
+        );
+      },
+    );
+
+    test('the error points at the NUL', () => {
+      expect(() => parse('graph {\n  a\0 }')).toThrow(/line 2, column 4/);
+    });
+  });
+
   describe('[SM-1] Input size limit', () => {
     test('normal input size should work', () => {
       const input = 'digraph { a -> b; }';

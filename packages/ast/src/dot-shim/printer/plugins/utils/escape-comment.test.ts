@@ -34,10 +34,10 @@ describe('escapeComment', () => {
       expect(escaped).toBe(content);
     });
 
-    test('should remove null bytes', () => {
-      const malicious = 'test\0null\0byte';
-      const escaped = escapeComment(malicious, 'Block');
-      expect(escaped).toBe('testnullbyte');
+    test('rejects null bytes instead of dropping them', () => {
+      expect(() => escapeComment('test\0null\0byte', 'Block')).toThrow(
+        expect.objectContaining({ code: 'TSG_ERR_NUL_CHARACTER' }),
+      );
     });
   });
 
@@ -48,10 +48,10 @@ describe('escapeComment', () => {
       expect(escaped).toBe(content);
     });
 
-    test('should remove null bytes', () => {
-      const malicious = 'test\0null';
-      const escaped = escapeComment(malicious, 'Slash');
-      expect(escaped).toBe('testnull');
+    test('rejects null bytes instead of dropping them', () => {
+      expect(() => escapeComment('test\0null', 'Slash')).toThrow(
+        expect.objectContaining({ code: 'TSG_ERR_NUL_CHARACTER' }),
+      );
     });
   });
 
@@ -62,10 +62,10 @@ describe('escapeComment', () => {
       expect(escaped).toBe(content);
     });
 
-    test('should remove null bytes', () => {
-      const malicious = 'test\0null';
-      const escaped = escapeComment(malicious, 'Macro');
-      expect(escaped).toBe('testnull');
+    test('rejects null bytes instead of dropping them', () => {
+      expect(() => escapeComment('test\0null', 'Macro')).toThrow(
+        expect.objectContaining({ code: 'TSG_ERR_NUL_CHARACTER' }),
+      );
     });
   });
 

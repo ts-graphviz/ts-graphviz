@@ -37,6 +37,7 @@ The parser is the component most exposed to attacker-controlled data: a web serv
   | AST node count | `maxASTNodes` | 100 000 |
 
   The input size is checked (on the UTF-8 encoding) before parsing starts; the other limits stop the parse as soon as they are crossed, so no structure larger than the limit is built. `maxInputSize` and `maxASTNodes` can be disabled with `0`; do not do that for untrusted input. The two depth limits cannot be disabled.
+- **No NUL characters.** Graphviz stops reading at a NUL, so a source containing one is rejected with `DotSyntaxError` instead of being read differently from Graphviz.
 - **Typed, coded errors only.** For any string, `parse` either returns or throws `DotSyntaxError` (a `SyntaxError`, code `TSG_ERR_DOT_SYNTAX`) or another error carrying a `code` from `ERROR_CODES` (`isTsGraphvizError(e)` is true), so a caller can catch and classify every failure. (Passing a non-string is a type error on the caller's side.)
 - **No code execution, no I/O.** Parsing produces plain objects. Attribute values are stored as text; nothing in the input is evaluated, resolved or fetched.
 - **Faithful text.** A quoted string keeps its raw characters (including raw newlines and Graphviz escape sequences), and an HTML-like label is kept as markup. The parser does not interpret or sanitise them (see boundary 3 for what that means for consumers).
@@ -46,7 +47,7 @@ The parser is the component most exposed to attacker-controlled data: a web serv
 - Semantic validity for Graphviz: the parser accepts the DOT grammar; whether Graphviz will render the result, or how long it takes, is outside the library.
 - Protection against Graphviz-side issues in the file (e.g. an `image` attribute pointing at a local path) when the output is later rendered; see section 4.
 
-**Evidence**: tests tagged `SM-1` — properties that arbitrary input either parses or throws a typed error and that whatever parses prints and parses again; the limit tests for input size, nesting depth, edge-chain depth and node count (including that the node count is per parse).
+**Evidence**: tests tagged `SM-1` — the `parse` and `model` fuzz targets (coverage-guided, nightly; `fuzz/README.md`), properties that arbitrary input either parses or throws a typed error and that whatever parses prints and parses again; the limit tests for input size, nesting depth, edge-chain depth and node count (including that the node count is per parse).
 
 ## SM-2. Application data → models → `toDot` (no DOT injection)
 
@@ -103,7 +104,7 @@ Two value kinds deliberately bypass the literal-text rule because their content 
 - **Graphviz reads local files named in the DOT and can copy them into its output.** Verified with Graphviz 2.43: an EPS file named by `shapefile` (with `shape=epsf`) or by `image` is embedded in `-Tps` output; `image` and HTML-like `<IMG SRC>` embed images in raster output and reveal paths and sizes in SVG. `stylesheet` and URL attributes (`URL`, `href`, …, and `HREF` in HTML-like labels) are written into SVG, so a `javascript:` URL becomes script when the SVG is served inline. Graphviz has no sandbox (the old `GV_FILE_PATH` restriction was removed in Graphviz 6). ts-graphviz passes DOT through unchanged: when the DOT comes from an untrusted source, remove those attributes before rendering (a supported way to do this is tracked in #1681), run Graphviz as an unprivileged user in an isolated file system, and set `signal` and `maxOutputSize`.
 - Without `signal`, layout time is not bounded: the DOT chooses the layout engine (`layout` attribute) and its cost.
 
-**Evidence**: tests tagged `SM-4` — the argv construction, the stream and file entry points with their failure paths, the output limit, abort and file replacement against the real `dot`, and the browser stubs.
+**Evidence**: tests tagged `SM-4` and the `adapter-args` fuzz target — the argv construction, the stream and file entry points with their failure paths, the output limit, abort and file replacement against the real `dot`, and the browser stubs.
 
 ## SM-5. Trusted code: models, plugins and contexts
 

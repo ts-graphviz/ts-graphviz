@@ -1,5 +1,5 @@
 import { withCode } from '@ts-graphviz/common';
-import type { ASTNode } from '../../types.js';
+import type { ASTNode, CommentASTNode } from '../../types.js';
 import { defaultPlugins } from './plugins/index.js';
 import type { PrintContext, PrintOptions, PrintPlugin } from './types.js';
 
@@ -64,6 +64,19 @@ export class Printer {
           yield* context.print(array[i]);
           if (i < childrenLength - 1) {
             yield separator;
+            // Consecutive `//` or `#` lines read as one comment, so two
+            // separate line comments of the same kind need a blank line
+            // between them to stay two comments.
+            const current = array[i];
+            const next = array[i + 1];
+            if (
+              separator === EOL &&
+              isLineComment(current) &&
+              isLineComment(next) &&
+              current.kind === next.kind
+            ) {
+              yield EOL;
+            }
           }
         }
       },
@@ -76,12 +89,27 @@ export class Printer {
     function* indent(
       tokens: () => IterableIterator<string>,
     ): IterableIterator<string> {
+      // Indent a line when its first token comes, so a blank line stays
+      // empty (no trailing whitespace).
+      let lineStart = false;
       for (const token of tokens()) {
-        yield token;
-        if (token === EOL) {
+        if (lineStart && token !== EOL) {
           yield PADDING;
         }
+        yield token;
+        lineStart = token === EOL;
+      }
+      if (lineStart) {
+        yield PADDING;
       }
     }
   }
+}
+
+function isLineComment(
+  node: ASTNode,
+): node is CommentASTNode & { kind: 'Slash' | 'Macro' } {
+  return (
+    node.type === 'Comment' && (node.kind === 'Slash' || node.kind === 'Macro')
+  );
 }
