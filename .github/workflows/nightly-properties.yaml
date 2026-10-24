@@ -1,5 +1,6 @@
 name: Nightly Property Tests
-# A long run of the property-based tests in test/properties: many more cases
+# A long run of the property-based tests in test/properties and the
+# differential tests in test/differential (#1642): many more cases
 # than a pull request run, to catch inputs the default 200 cases miss. The
 # seed of a failing property is in the log; reproduce with FC_SEED=<seed>.
 on:
@@ -44,7 +45,10 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Generate code
         run: pnpm codegen
-      - name: Run the property tests
+      # the differential tests compare against the Graphviz binaries
+      - name: Use Graphviz
+        uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
+      - name: Run the property and differential tests
         env:
           FC_NUM_RUNS: ${{ inputs.num_runs || '5000' }}
-        run: pnpm vitest run test/properties --coverage.enabled=false
+        run: pnpm vitest run test/properties test/differential --coverage.enabled=false
