@@ -2,3 +2,9 @@ packages:
   - 'packages/*'
   - 'e2e'
   - 'examples/*'
+
+allowBuilds:
+  '@biomejs/biome': true
+  esbuild: true
+  lefthook: true
+
