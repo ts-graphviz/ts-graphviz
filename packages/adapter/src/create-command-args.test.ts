@@ -2,7 +2,7 @@ import { describe, expect, expectTypeOf, it } from 'vitest';
 import { createCommandArgs, escapeValue } from './create-command-args.js';
 import type { Options } from './types.js';
 
-describe('createCommandArgs', () => {
+describe('[SM-4] createCommandArgs', () => {
   it('generates expected Graphviz arguments for neato layout with all options', () => {
     const options: Options = {
       suppressWarnings: true,

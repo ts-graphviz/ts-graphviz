@@ -11,7 +11,7 @@ import {
   valueFromLiteral,
 } from './literal.js';
 
-describe('literal text', () => {
+describe('[SM-2] literal text', () => {
   it.each([
     ['plain', 'plain'],
     ['a"b', 'a\\"b'],
@@ -65,7 +65,7 @@ describe('literal text', () => {
   });
 });
 
-describe('escString', () => {
+describe('[SM-3] escString', () => {
   it('is written as is, with only quotes escaped', () => {
     expect(literalFromValue(escString('\\N\\lleft'))).toStrictEqual({
       value: '\\N\\lleft',
@@ -116,7 +116,7 @@ describe('escString', () => {
   });
 });
 
-describe('HTML-like', () => {
+describe('[SM-3] HTML-like', () => {
   it('maps to and from an html literal', () => {
     expect(literalFromValue(htmlLike('<b>x</b>'))).toStrictEqual({
       value: '<b>x</b>',
@@ -146,7 +146,7 @@ describe('HTML-like', () => {
   });
 });
 
-describe('numbers and booleans', () => {
+describe('[SM-2] numbers and booleans', () => {
   it('writes numbers that are not DOT numerals as strings', () => {
     // DOT numerals have no exponent, and NaN / Infinity would be identifiers
     expect(literalFromValue(1e21)).toStrictEqual({

@@ -30,7 +30,7 @@ import { summarize } from './summarize.js';
 
 const models = defaultModelsContext();
 
-describe('printer and parser', () => {
+describe('[SM-1] printer and parser', () => {
   it('parse(stringify(ast)) rebuilds the same tree', () => {
     fc.assert(
       fc.property(dot, (ast) => {

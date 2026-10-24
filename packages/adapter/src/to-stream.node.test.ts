@@ -19,7 +19,7 @@ const pipelineMock = pipeline as unknown as ReturnType<typeof vi.fn>;
 
 type Callback = (...args: any) => any;
 
-describe('toStream (Node adapter)', () => {
+describe('[SM-4] toStream (Node adapter)', () => {
   beforeEach(() => {
     spawnMock.mockReset();
     pipelineMock.mockReset();
@@ -146,6 +146,28 @@ describe('toStream (Node adapter)', () => {
       await expect(toStream('dot', { layout: 'dot' })).rejects.toThrow(
         'spawn crash',
       );
+    });
+  });
+
+  describe('when writing to stdin fails', () => {
+    it('rejects with CommandExecutionError instead of an unhandled rejection', async () => {
+      const p: any = {
+        stdout: new PassThrough(),
+        stderr: new PassThrough(),
+        stdin: new PassThrough(),
+        on: () => {},
+      };
+      spawnMock.mockReturnValue(p);
+      const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
+      pipelineMock.mockRejectedValue(epipe);
+
+      const promise = toStream('dot', { layout: 'dot' });
+      await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
+      await expect(promise).rejects.toMatchObject({
+        command: 'dot',
+        code: 'TSG_ERR_COMMAND_FAILED',
+        cause: epipe,
+      });
     });
   });
 });

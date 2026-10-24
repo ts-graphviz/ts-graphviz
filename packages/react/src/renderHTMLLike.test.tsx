@@ -5,7 +5,7 @@ import { renderHTMLLike } from './renderHTMLLike.js';
 const html = (...args: Parameters<typeof renderHTMLLike>) =>
   `<${renderHTMLLike(...args).value}>`;
 
-describe('renderHTMLLike()', () => {
+describe('[SM-3] renderHTMLLike()', () => {
   it('returns "<>" for undefined label', () => {
     expect(html()).toBe('<>');
   });
