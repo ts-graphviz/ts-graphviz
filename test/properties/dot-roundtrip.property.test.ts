@@ -13,6 +13,7 @@ import {
   dotString,
   type GraphSpec,
   graphSpec,
+  looksHtmlLikeToPrinter,
 } from './arbitraries.js';
 import { summarize } from './summarize.js';
 
@@ -74,6 +75,19 @@ describe('DOT round trip', () => {
       expect(reparsed.get('label')).toBe(model.get('label'));
     });
 
+    it.fails('a multi-line value whose first line looks like a tag is emitted unquoted', () => {
+      // the heuristic's `m` flag anchors per line, so `<a>\na` counts as HTML-like
+      const { model, reparsed } = roundTrip({
+        directed: true,
+        strict: false,
+        attributes: [['label', '<a>\na']],
+        nodes: [{ id: 'a', attributes: [] }],
+        edges: [],
+        subgraphs: [],
+      });
+      expect(reparsed.get('label')).toBe(model.get('label'));
+    });
+
     it.fails('an escaped quote is not preserved', () => {
       const { model, reparsed } = roundTrip({
         directed: true,
@@ -89,10 +103,8 @@ describe('DOT round trip', () => {
 
   it('strings without backslashes or HTML-like shape survive toDot -> fromDot unchanged', () => {
     // Backslashes and `<...>` strings are the two cases #1587 settles.
-    const htmlLike = /^<[\s\S]+>$/;
-    // (the HTML heuristic runs on the trimmed value)
     const settledBy1587 = (s: string) =>
-      s.includes('\\') || htmlLike.test(s.trim());
+      s.includes('\\') || looksHtmlLikeToPrinter(s);
     const values = (spec: GraphSpec) => [
       spec.id,
       spec.comment,
@@ -121,7 +133,7 @@ describe('DOT round trip', () => {
     fc.assert(
       fc.property(
         dotString({ newlines: true }).filter(
-          (s) => !/[\\"]/.test(s) && !/^<[\s\S]+>$/.test(s.trim()),
+          (s) => !/[\\"]/.test(s) && !looksHtmlLikeToPrinter(s),
         ),
         (value) => {
           const { reparsed } = roundTrip({
