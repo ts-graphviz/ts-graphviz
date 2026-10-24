@@ -20,7 +20,10 @@
       "!**/node_modules/**",
       "!**/coverage/**",
       "!packages/ast/src/dot-shim/parser/_parse.js",
-      "!packages/ast/src/dot-shim/parser/_parse.d.ts"
+      "!packages/ast/src/dot-shim/parser/_parse.d.ts",
+      "!website/build",
+      "!website/.docusaurus",
+      "!website/static/dts.json"
     ]
   },
   "assist": {
@@ -72,5 +75,20 @@
         "noUselessElse": "error"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "website/src/**"
+      ],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "useExhaustiveDependencies": "warn",
+            "useHookAtTopLevel": "warn"
+          }
+        }
+      }
+    }
+  ]
 }

@@ -1,0 +1,57 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.container > * {
+  flex: 1 1 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.editorContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 6px;
+}
+
+.editor {
+  flex: 1 1 0;
+}
+
+.actionMenu {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.result {
+  height: 100%;
+}
+
+.tabs {
+  height: 100%;
+}
+
+.graphvizHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.graphviz {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.dot {
+  overflow-y: scroll;
+}

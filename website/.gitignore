@@ -1,0 +1,5 @@
+/build
+/.docusaurus
+/.cache-loader
+# generated from the workspace packages by `pnpm --filter @ts-graphviz/website extract-dts`
+/static/dts.json

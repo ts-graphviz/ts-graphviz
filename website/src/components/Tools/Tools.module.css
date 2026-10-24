@@ -1,0 +1,60 @@
+.tools {
+  padding: 60px 16px;
+  background: #f5f6f7;
+  text-align: center;
+}
+
+[data-theme="dark"] .tools {
+  background: #1c1e21;
+}
+
+.tools h2 {
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.toolList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.toolItem {
+  width: 320px;
+  margin: 16px;
+  padding: 16px;
+  background: var(--ifm-card-background-color);
+  text-align: left;
+  border-radius: 8px;
+  box-shadow: var(--ifm-global-shadow-lw);
+}
+
+.toolItem h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.toolItem p {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.toolItem a {
+  color: #007acc;
+  text-decoration: none;
+}
+
+.toolItem a:hover {
+  text-decoration: underline;
+}
+
+.toolItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toolSvg {
+  display: inline-block;
+  width: 30px;
+}

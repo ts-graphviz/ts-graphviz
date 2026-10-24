@@ -27,5 +27,11 @@
         "./packages/react/src/react.js"
       ]
     }
-  }
+  },
+  "exclude": [
+    "website",
+    "**/node_modules",
+    "**/lib",
+    "**/doc"
+  ]
 }

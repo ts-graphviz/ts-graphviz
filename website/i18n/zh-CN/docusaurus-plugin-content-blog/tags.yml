@@ -1,0 +1,17 @@
+security:
+  label: 安全
+  permalink: /security
+  description: |
+    开源安全是一项社区合作的工作。了解我们为确保 ts-graphviz 库的安全性所做的努力。
+
+release:
+  label: 发布
+  permalink: /release
+  description: |
+    随时了解 ts-graphviz 库的最新版本。
+
+website:
+  label: Website
+  permalink: /website
+  description: |
+    ts-graphviz 网站的更新动态。

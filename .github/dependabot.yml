@@ -8,6 +8,15 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+  # The documentation site: Docusaurus and the playground move as one group
+  - package-ecosystem: npm
+    directory: /website
+    schedule:
+      interval: weekly
+    groups:
+      website:
+        patterns:
+          - "*"
   - package-ecosystem: npm
     directory: /examples/deno
     schedule:
