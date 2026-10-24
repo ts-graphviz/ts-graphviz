@@ -176,7 +176,7 @@ describe('fromModel and toModel', () => {
           c.type === 'Attribute',
       );
     // Keys are bare identifiers so that they match themselves after the
-    // round trip (quoted keys are re-escaped, integer-like keys reorder, #1626).
+    // round trip (quoted keys are re-escaped).
     const identifierKeyed = attribute.filter(
       (a) => a.key.quoted === false && /^[A-Za-z_]/.test(a.key.value),
     );
