@@ -27,6 +27,10 @@ Security updates will be released as needed.
 - If you are using an older version, please upgrade to the latest version.
 - If you are using the latest version, please check the [GitHub Security Advisories](https://github.com/ts-graphviz/ts-graphviz/security/advisories) for any security advisories.
 
+## Security Model
+
+[docs/security-model.md](./docs/security-model.md) states the trust boundaries of the library (untrusted DOT text, strings written into DOT, the explicit `escString`/`htmlLike` value kinds, the Graphviz adapter, trusted code, the supply chain), what is guaranteed at each boundary, what is deliberately not promised, which tests enforce each guarantee, and what is in scope for a security report. Read it before reporting, and when deciding how to handle untrusted input in your application.
+
 ## Security Measures Implemented
 
 Security is maintained through several automated workflows within the CI/CD pipeline. We continuously improve our security measures.
