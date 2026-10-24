@@ -63,6 +63,17 @@ describe('Dot model', () => {
     });
   });
 
+  describe('parser', () => {
+    it('validates edge operators per root graph', () => {
+      // edge operator checks must not leak from one root graph into the next
+      const model = toModel(parse('digraph { a -> b } graph { c -- d }'));
+      expect(model.graphs.map((g) => g.directed)).toStrictEqual([true, false]);
+      expect(() => parse('digraph { a -> b } graph { c -> d }')).toThrow(
+        /"--" operator/,
+      );
+    });
+  });
+
   describe('toDot', () => {
     it('still writes the comment of a root graph before the graph statement', () => {
       const g = digraph('g', (g) => {

@@ -95,6 +95,8 @@ _graph
           }
         }
       }
+      // Each root graph is validated on its own; a source may contain several.
+      edgeops.length = 0;
       return b.createElement(
         'Graph',
         id !== null
