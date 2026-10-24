@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { stringify } from '../printer/stringify.js';
 import { parse } from './parse.js';
 
 describe('parse', () => {
@@ -37,11 +38,46 @@ describe('parse', () => {
         expect(result.value.value).toBe('one\\\rtwo');
       });
 
+      test('keeps backslash + CRLF, like Graphviz', () => {
+        const result = parse('label = "one\\\r\ntwo";', {
+          startRule: 'Attribute',
+        });
+        expect(result.value.value).toBe('one\\\r\ntwo');
+      });
+
       test('keeps other escape sequences intact', () => {
         const result = parse('label = "one\\ntwo \\"three\\"";', {
           startRule: 'Attribute',
         });
         expect(result.value.value).toBe('one\\ntwo "three"');
+      });
+    });
+
+    describe('quoted value with raw newlines', () => {
+      // Graphviz keeps unescaped newlines in quoted strings (`<qstring>[\n]`)
+      test.each([
+        ['LF', 'label = "one\ntwo";', 'one\ntwo'],
+        ['CRLF', 'label = "one\r\ntwo";', 'one\r\ntwo'],
+        ['CR', 'label = "one\rtwo";', 'one\rtwo'],
+      ])('keeps a raw %s in the value', (_, dot, expected) => {
+        const result = parse(dot, { startRule: 'Attribute' });
+        expect(result.value.value).toBe(expected);
+      });
+
+      test('stringify emits the newline as an escape sequence', () => {
+        const ast = parse('digraph { a [label="one\ntwo"]; }');
+        expect(stringify(ast)).toMatchInlineSnapshot(`
+          "digraph {
+            a [
+              label = "one\\ntwo";
+            ];
+          }"
+        `);
+      });
+
+      test('spans multiple lines in a node id', () => {
+        const result = parse('"no\nde";', { startRule: 'Node' });
+        expect(result.id.value).toBe('no\nde');
       });
     });
 
