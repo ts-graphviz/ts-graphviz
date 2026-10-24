@@ -3,9 +3,7 @@
     {
       "children": [
         {
-          "children": [],
           "key": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -38,7 +36,6 @@
           },
           "type": "Attribute",
           "value": {
-            "children": [],
             "location": {
               "end": {
                 "column": 14,
@@ -60,9 +57,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 13,
@@ -95,7 +90,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -134,7 +128,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 26,
@@ -170,7 +163,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 37,
@@ -206,7 +198,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 46,
@@ -242,9 +233,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 13,
@@ -277,7 +266,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 21,
@@ -318,9 +306,7 @@
             {
               "children": [
                 {
-                  "children": [],
                   "key": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 36,
@@ -353,7 +339,6 @@
                   },
                   "type": "Attribute",
                   "value": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 43,
@@ -392,7 +377,6 @@
             {
               "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 50,
@@ -428,7 +412,6 @@
             {
               "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 57,
@@ -464,7 +447,6 @@
             {
               "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 64,
@@ -516,7 +498,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 7,
@@ -552,7 +533,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 14,
@@ -588,7 +568,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 22,
@@ -624,9 +603,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 13,
@@ -659,7 +636,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 21,
@@ -679,9 +655,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 27,
@@ -714,7 +688,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 34,
@@ -734,9 +707,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 40,
@@ -769,7 +740,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 50,
@@ -808,7 +778,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 58,
@@ -844,7 +813,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 65,
@@ -880,7 +848,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 72,
@@ -930,9 +897,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -966,9 +931,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -1021,9 +984,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1057,9 +1018,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 16,
@@ -1098,9 +1057,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -1133,7 +1090,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 28,
@@ -1153,9 +1109,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 32,
@@ -1188,7 +1142,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -1223,9 +1176,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -1259,9 +1210,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -1300,9 +1249,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 27,
@@ -1335,7 +1282,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 31,
@@ -1355,9 +1301,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 35,
@@ -1390,7 +1334,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 40,
@@ -1425,9 +1368,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -1461,9 +1402,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 20,
@@ -1516,9 +1455,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -1552,9 +1489,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 20,
@@ -1593,9 +1528,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 27,
@@ -1628,7 +1561,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 31,
@@ -1648,9 +1580,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 35,
@@ -1683,7 +1613,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 40,
@@ -1718,9 +1647,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -1754,9 +1681,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 20,
@@ -1795,9 +1720,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -1830,7 +1753,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -1850,9 +1772,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 33,
@@ -1885,7 +1805,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 38,
@@ -1920,9 +1839,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -1956,9 +1873,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -2011,9 +1926,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 9,
@@ -2047,9 +1960,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -2102,9 +2013,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 9,
@@ -2138,9 +2047,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -2193,9 +2100,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 9,
@@ -2229,9 +2134,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -2270,9 +2173,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -2305,7 +2206,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -2325,9 +2225,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 33,
@@ -2360,7 +2258,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 38,
@@ -2395,9 +2292,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 9,
@@ -2431,9 +2326,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -2472,9 +2365,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -2507,7 +2398,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 28,
@@ -2527,9 +2417,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 32,
@@ -2562,7 +2450,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -2597,9 +2484,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -2633,9 +2518,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -2672,9 +2555,7 @@
           "type": "Edge",
         },
         {
-          "children": [],
           "key": {
-            "children": [],
             "location": {
               "end": {
                 "column": 7,
@@ -2707,7 +2588,6 @@
           },
           "type": "Attribute",
           "value": {
-            "children": [],
             "location": {
               "end": {
                 "column": 55,
@@ -2727,9 +2607,7 @@
           },
         },
         {
-          "children": [],
           "key": {
-            "children": [],
             "location": {
               "end": {
                 "column": 10,
@@ -2762,7 +2640,6 @@
           },
           "type": "Attribute",
           "value": {
-            "children": [],
             "location": {
               "end": {
                 "column": 13,
@@ -2784,7 +2661,6 @@
       ],
       "directed": false,
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 9,

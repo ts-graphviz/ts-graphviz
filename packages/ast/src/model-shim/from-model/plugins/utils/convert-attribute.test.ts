@@ -8,19 +8,13 @@ describe('convertAttribute', () => {
     const result = convertAttribute(createElement, 'size', 1);
     expect(result).toMatchInlineSnapshot(`
       {
-        "children": [],
         "key": {
-          "children": [],
-          "location": null,
           "quoted": false,
           "type": "Literal",
           "value": "size",
         },
-        "location": null,
         "type": "Attribute",
         "value": {
-          "children": [],
-          "location": null,
           "quoted": false,
           "type": "Literal",
           "value": "1",
@@ -34,19 +28,13 @@ describe('convertAttribute', () => {
       const result = convertAttribute(createElement, 'label', 'A');
       expect(result).toMatchInlineSnapshot(`
         {
-          "children": [],
           "key": {
-            "children": [],
-            "location": null,
             "quoted": false,
             "type": "Literal",
             "value": "label",
           },
-          "location": null,
           "type": "Attribute",
           "value": {
-            "children": [],
-            "location": null,
             "quoted": true,
             "type": "Literal",
             "value": "A",
@@ -60,19 +48,13 @@ describe('convertAttribute', () => {
         const result = convertAttribute(createElement, 'label', htmlLike('A'));
         expect(result).toMatchInlineSnapshot(`
           {
-            "children": [],
             "key": {
-              "children": [],
-              "location": null,
               "quoted": false,
               "type": "Literal",
               "value": "label",
             },
-            "location": null,
             "type": "Attribute",
             "value": {
-              "children": [],
-              "location": null,
               "quoted": "html",
               "type": "Literal",
               "value": "A",
@@ -88,19 +70,13 @@ describe('convertAttribute', () => {
         );
         expect(result).toMatchInlineSnapshot(`
           {
-            "children": [],
             "key": {
-              "children": [],
-              "location": null,
               "quoted": false,
               "type": "Literal",
               "value": "label",
             },
-            "location": null,
             "type": "Attribute",
             "value": {
-              "children": [],
-              "location": null,
               "quoted": "html",
               "type": "Literal",
               "value": "<b>Hi</b>",
@@ -114,19 +90,13 @@ describe('convertAttribute', () => {
         const result = convertAttribute(createElement, 'label', '  <A>  ');
         expect(result).toMatchInlineSnapshot(`
           {
-            "children": [],
             "key": {
-              "children": [],
-              "location": null,
               "quoted": false,
               "type": "Literal",
               "value": "label",
             },
-            "location": null,
             "type": "Attribute",
             "value": {
-              "children": [],
-              "location": null,
               "quoted": true,
               "type": "Literal",
               "value": "  <A>  ",
@@ -139,19 +109,13 @@ describe('convertAttribute', () => {
         const result = convertAttribute(createElement, 'label', '<A');
         expect(result).toMatchInlineSnapshot(`
           {
-            "children": [],
             "key": {
-              "children": [],
-              "location": null,
               "quoted": false,
               "type": "Literal",
               "value": "label",
             },
-            "location": null,
             "type": "Attribute",
             "value": {
-              "children": [],
-              "location": null,
               "quoted": true,
               "type": "Literal",
               "value": "<A",
@@ -164,19 +128,13 @@ describe('convertAttribute', () => {
         const result = convertAttribute(createElement, 'label', 'A>');
         expect(result).toMatchInlineSnapshot(`
           {
-            "children": [],
             "key": {
-              "children": [],
-              "location": null,
               "quoted": false,
               "type": "Literal",
               "value": "label",
             },
-            "location": null,
             "type": "Attribute",
             "value": {
-              "children": [],
-              "location": null,
               "quoted": true,
               "type": "Literal",
               "value": "A>",

@@ -7,7 +7,7 @@ export const NodeRefGroupPrintPlugin: PrintPlugin<NodeRefGroupASTNode> = {
   },
   *print(context, ast) {
     yield '{';
-    yield* context.join(ast.children, ' ');
+    yield* context.join(ast.refs, ' ');
     yield '}';
   },
 };

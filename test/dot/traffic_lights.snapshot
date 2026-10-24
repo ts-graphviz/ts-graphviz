@@ -1,7 +1,6 @@
 {
   "children": [
     {
-      "children": [],
       "kind": "Macro",
       "location": {
         "end": {
@@ -20,7 +19,6 @@
       "value": "#"I played some days with making an interface between our ConceptBase system (essentially a database system to store models) and graphviz. One example graph is attached. It is a so-called petri net for Dutch traffic lights. The example is actually taken from a book by Wil van der Aalst." Contributed by Manfred Jeusfeld.",
     },
     {
-      "children": [],
       "kind": "Macro",
       "location": {
         "end": {
@@ -43,9 +41,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -78,7 +74,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 16,
@@ -117,7 +112,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 23,
@@ -153,7 +147,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 28,
@@ -189,7 +182,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 33,
@@ -225,7 +217,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 38,
@@ -261,7 +252,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 43,
@@ -297,7 +287,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 48,
@@ -333,9 +322,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -368,7 +355,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -388,9 +374,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -423,7 +407,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 34,
@@ -443,9 +426,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 40,
@@ -478,7 +459,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 44,
@@ -517,7 +497,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 54,
@@ -553,7 +532,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 63,
@@ -589,7 +567,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 69,
@@ -625,7 +602,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 76,
@@ -661,7 +637,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 83,
@@ -697,7 +672,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 91,
@@ -733,7 +707,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 100,
@@ -769,7 +742,6 @@
         {
           "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 106,
@@ -819,9 +791,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -855,9 +825,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 13,
@@ -910,9 +878,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -946,9 +912,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -1001,9 +965,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -1037,9 +999,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -1092,9 +1052,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -1128,9 +1086,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -1183,9 +1139,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1219,9 +1173,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -1274,9 +1226,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -1310,9 +1260,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -1365,9 +1313,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -1401,9 +1347,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 13,
@@ -1456,9 +1400,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 5,
@@ -1492,9 +1434,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -1547,9 +1487,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -1583,9 +1521,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 13,
@@ -1638,9 +1574,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -1674,9 +1608,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -1729,9 +1661,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -1765,9 +1695,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -1820,9 +1748,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -1856,9 +1782,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -1911,9 +1835,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1947,9 +1869,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -2002,9 +1922,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -2038,9 +1956,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -2093,9 +2009,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -2129,9 +2043,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 13,
@@ -2184,9 +2096,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 5,
@@ -2220,9 +2130,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -2259,9 +2167,7 @@
           "type": "Edge",
         },
         {
-          "children": [],
           "key": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -2294,7 +2200,6 @@
           },
           "type": "Attribute",
           "value": {
-            "children": [],
             "location": {
               "end": {
                 "column": 14,
@@ -2314,9 +2219,7 @@
           },
         },
         {
-          "children": [],
           "key": {
-            "children": [],
             "location": {
               "end": {
                 "column": 6,
@@ -2349,7 +2252,6 @@
           },
           "type": "Attribute",
           "value": {
-            "children": [],
             "location": {
               "end": {
                 "column": 91,
@@ -2369,9 +2271,7 @@
           },
         },
         {
-          "children": [],
           "key": {
-            "children": [],
             "location": {
               "end": {
                 "column": 9,
@@ -2404,7 +2304,6 @@
           },
           "type": "Attribute",
           "value": {
-            "children": [],
             "location": {
               "end": {
                 "column": 12,
@@ -2426,7 +2325,6 @@
       ],
       "directed": true,
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 22,

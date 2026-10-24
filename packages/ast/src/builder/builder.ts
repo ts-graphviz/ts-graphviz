@@ -8,6 +8,14 @@ import type { ASTBuilder, BuilderOptions } from './types.js';
  */
 const DEFAULT_MAX_AST_NODES = 100_000;
 
+/** Node types without a `children` list. */
+const LEAF_TYPES: ReadonlySet<ASTNode['type']> = new Set([
+  'Literal',
+  'Attribute',
+  'Comment',
+  'NodeRef',
+]);
+
 /**
  * Builder is an ASTBuilder that provides a method to create an ASTNode.
  *
@@ -18,11 +26,11 @@ export class Builder implements ASTBuilder {
   private maxNodes: number;
 
   /**
-   * Get the current file range or null
+   * Get the current file range, or undefined outside the parser
    * @internal
    */
-  private getLocation(): FileRange | null {
-    return this.options?.locationFunction?.() ?? null;
+  private getLocation(): FileRange | undefined {
+    return this.options?.locationFunction?.();
   }
 
   /**
@@ -38,7 +46,8 @@ export class Builder implements ASTBuilder {
    *
    * @param type - Type of the {@link ASTNode}
    * @param props - Properties of the {@link ASTNode}
-   * @param children - Children of the {@link ASTNode}
+   * @param children - The nodes the new node contains: the `children` of a
+   * statement container, the `refs` of a `NodeRefGroup`; ignored for leaves.
    * @returns An {@link ASTNode}
    * @throws {ASTNodeCountExceededError} if the maximum number of AST nodes is exceeded
    */
@@ -52,12 +61,17 @@ export class Builder implements ASTBuilder {
     if (this.maxNodes > 0 && this.nodeCount > this.maxNodes) {
       throw new ASTNodeCountExceededError(this.nodeCount, this.maxNodes);
     }
-    return {
-      location: this.getLocation(),
-      ...props,
-      type,
-      children,
-    };
+    const location = this.getLocation();
+    // The contained nodes come from the third argument only, never from props.
+    const { children: _children, refs: _refs, ...rest } = props ?? {};
+    const node = { ...(location && { location }), ...rest, type };
+    if (type === 'NodeRefGroup') {
+      return { ...node, refs: children };
+    }
+    if (LEAF_TYPES.has(type)) {
+      return node;
+    }
+    return { ...node, children };
   }
 
   /**

@@ -3,9 +3,7 @@
     {
       "children": [
         {
-          "children": [],
           "key": {
-            "children": [],
             "location": {
               "end": {
                 "column": 14,
@@ -38,7 +36,6 @@
           },
           "type": "Attribute",
           "value": {
-            "children": [],
             "location": {
               "end": {
                 "column": 19,
@@ -58,9 +55,7 @@
           },
         },
         {
-          "children": [],
           "key": {
-            "children": [],
             "location": {
               "end": {
                 "column": 10,
@@ -93,7 +88,6 @@
           },
           "type": "Attribute",
           "value": {
-            "children": [],
             "location": {
               "end": {
                 "column": 13,
@@ -115,9 +109,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 14,
@@ -150,7 +142,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 21,
@@ -189,9 +180,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -224,7 +213,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 88,
@@ -245,7 +233,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 18,
@@ -281,9 +268,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -316,7 +301,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 87,
@@ -337,7 +321,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 18,
@@ -373,9 +356,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -408,7 +389,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 93,
@@ -429,7 +409,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 18,
@@ -465,9 +444,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -500,7 +477,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 93,
@@ -521,7 +497,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 18,
@@ -557,9 +532,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -592,7 +565,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 85,
@@ -613,7 +585,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 18,
@@ -649,9 +620,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -684,7 +653,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 84,
@@ -705,7 +673,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 18,
@@ -741,9 +708,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -776,7 +741,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 89,
@@ -797,7 +761,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 18,
@@ -833,9 +796,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -868,7 +829,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 117,
@@ -889,7 +849,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 18,
@@ -925,9 +884,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -960,7 +917,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 84,
@@ -981,7 +937,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 18,
@@ -1017,9 +972,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -1052,7 +1005,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 86,
@@ -1073,7 +1025,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 18,
@@ -1123,9 +1074,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -1159,9 +1108,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -1214,9 +1161,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -1250,9 +1195,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -1305,9 +1248,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -1341,9 +1282,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -1396,9 +1335,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -1432,9 +1369,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -1487,9 +1422,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -1523,9 +1456,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -1578,9 +1509,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -1614,9 +1543,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -1669,9 +1596,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -1705,9 +1630,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -1760,9 +1683,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -1796,9 +1717,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -1851,9 +1770,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -1887,9 +1804,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -1928,7 +1843,6 @@
       ],
       "directed": true,
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 10,

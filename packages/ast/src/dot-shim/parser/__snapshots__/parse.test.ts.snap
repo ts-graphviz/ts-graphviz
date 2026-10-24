@@ -4,9 +4,7 @@ exports[`parse > AttributeList > edge 1`] = `
 {
   "children": [
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 16,
@@ -39,7 +37,6 @@ exports[`parse > AttributeList > edge 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 20,
@@ -59,9 +56,7 @@ exports[`parse > AttributeList > edge 1`] = `
       },
     },
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 16,
@@ -94,7 +89,6 @@ exports[`parse > AttributeList > edge 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 36,
@@ -136,9 +130,7 @@ exports[`parse > AttributeList > graph 1`] = `
 {
   "children": [
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 18,
@@ -171,7 +163,6 @@ exports[`parse > AttributeList > graph 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 22,
@@ -191,9 +182,7 @@ exports[`parse > AttributeList > graph 1`] = `
       },
     },
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 29,
@@ -226,7 +215,6 @@ exports[`parse > AttributeList > graph 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 49,
@@ -268,9 +256,7 @@ exports[`parse > AttributeList > node 1`] = `
 {
   "children": [
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 16,
@@ -303,7 +289,6 @@ exports[`parse > AttributeList > node 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 23,
@@ -323,9 +308,7 @@ exports[`parse > AttributeList > node 1`] = `
       },
     },
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 16,
@@ -358,7 +341,6 @@ exports[`parse > AttributeList > node 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 26,
@@ -378,9 +360,7 @@ exports[`parse > AttributeList > node 1`] = `
       },
     },
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 16,
@@ -413,7 +393,6 @@ exports[`parse > AttributeList > node 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 31,
@@ -455,7 +434,6 @@ exports[`parse > AttributeList > with comment 1`] = `
 {
   "children": [
     {
-      "children": [],
       "kind": "Macro",
       "location": {
         "end": {
@@ -474,9 +452,7 @@ exports[`parse > AttributeList > with comment 1`] = `
       "value": "comment 1",
     },
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 16,
@@ -509,7 +485,6 @@ exports[`parse > AttributeList > with comment 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 23,
@@ -549,9 +524,7 @@ exports[`parse > AttributeList > with comment 1`] = `
 
 exports[`parse > attribute > set HTMLLike value 1`] = `
 {
-  "children": [],
   "key": {
-    "children": [],
     "location": {
       "end": {
         "column": 14,
@@ -584,7 +557,6 @@ exports[`parse > attribute > set HTMLLike value 1`] = `
   },
   "type": "Attribute",
   "value": {
-    "children": [],
     "location": {
       "end": {
         "column": 10,
@@ -615,9 +587,7 @@ exports[`parse > attribute > set HTMLLike value 1`] = `
 
 exports[`parse > attribute > set quoted value 1`] = `
 {
-  "children": [],
   "key": {
-    "children": [],
     "location": {
       "end": {
         "column": 6,
@@ -650,7 +620,6 @@ exports[`parse > attribute > set quoted value 1`] = `
   },
   "type": "Attribute",
   "value": {
-    "children": [],
     "location": {
       "end": {
         "column": 21,
@@ -673,9 +642,7 @@ exports[`parse > attribute > set quoted value 1`] = `
 
 exports[`parse > attribute > set value 1`] = `
 {
-  "children": [],
   "key": {
-    "children": [],
     "location": {
       "end": {
         "column": 6,
@@ -708,7 +675,6 @@ exports[`parse > attribute > set value 1`] = `
   },
   "type": "Attribute",
   "value": {
-    "children": [],
     "location": {
       "end": {
         "column": 13,
@@ -732,7 +698,6 @@ exports[`parse > attribute > set value 1`] = `
 exports[`parse > cluster_statements > comments 1`] = `
 [
   {
-    "children": [],
     "kind": "Slash",
     "location": {
       "end": {
@@ -751,7 +716,6 @@ exports[`parse > cluster_statements > comments 1`] = `
     "value": "comment1",
   },
   {
-    "children": [],
     "kind": "Slash",
     "location": {
       "end": {
@@ -771,7 +735,6 @@ exports[`parse > cluster_statements > comments 1`] = `
 comment2",
   },
   {
-    "children": [],
     "kind": "Macro",
     "location": {
       "end": {
@@ -790,7 +753,6 @@ comment2",
     "value": "comment3",
   },
   {
-    "children": [],
     "kind": "Macro",
     "location": {
       "end": {
@@ -810,7 +772,6 @@ comment2",
 comment4",
   },
   {
-    "children": [],
     "kind": "Block",
     "location": {
       "end": {
@@ -835,7 +796,6 @@ exports[`parse > dot > with comments 1`] = `
 {
   "children": [
     {
-      "children": [],
       "kind": "Block",
       "location": {
         "end": {
@@ -873,7 +833,6 @@ exports[`parse > dot > with comments 1`] = `
       "type": "Graph",
     },
     {
-      "children": [],
       "kind": "Block",
       "location": {
         "end": {
@@ -927,9 +886,7 @@ exports[`parse > edge > digraph edge 1`] = `
   },
   "targets": [
     {
-      "children": [],
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 2,
@@ -963,9 +920,7 @@ exports[`parse > edge > digraph edge 1`] = `
       "type": "NodeRef",
     },
     {
-      "children": [],
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 7,
@@ -1007,9 +962,7 @@ exports[`parse > edge > edge with attributes 1`] = `
 {
   "children": [
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 18,
@@ -1042,7 +995,6 @@ exports[`parse > edge > edge with attributes 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 28,
@@ -1062,9 +1014,7 @@ exports[`parse > edge > edge with attributes 1`] = `
       },
     },
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 18,
@@ -1097,7 +1047,6 @@ exports[`parse > edge > edge with attributes 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 33,
@@ -1132,9 +1081,7 @@ exports[`parse > edge > edge with attributes 1`] = `
   },
   "targets": [
     {
-      "children": [],
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 12,
@@ -1168,9 +1115,7 @@ exports[`parse > edge > edge with attributes 1`] = `
       "type": "NodeRef",
     },
     {
-      "children": [],
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 17,
@@ -1226,9 +1171,7 @@ exports[`parse > edge > edge with port 1`] = `
   },
   "targets": [
     {
-      "children": [],
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 2,
@@ -1260,7 +1203,6 @@ exports[`parse > edge > edge with port 1`] = `
         },
       },
       "port": {
-        "children": [],
         "location": {
           "end": {
             "column": 5,
@@ -1281,9 +1223,7 @@ exports[`parse > edge > edge with port 1`] = `
       "type": "NodeRef",
     },
     {
-      "children": [],
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 10,
@@ -1315,7 +1255,6 @@ exports[`parse > edge > edge with port 1`] = `
         },
       },
       "port": {
-        "children": [],
         "location": {
           "end": {
             "column": 13,
@@ -1336,9 +1275,7 @@ exports[`parse > edge > edge with port 1`] = `
       "type": "NodeRef",
     },
     {
-      "children": [],
       "compass": {
-        "children": [],
         "location": {
           "end": {
             "column": 23,
@@ -1357,7 +1294,6 @@ exports[`parse > edge > edge with port 1`] = `
         "value": "w",
       },
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 18,
@@ -1389,7 +1325,6 @@ exports[`parse > edge > edge with port 1`] = `
         },
       },
       "port": {
-        "children": [],
         "location": {
           "end": {
             "column": 21,
@@ -1410,9 +1345,7 @@ exports[`parse > edge > edge with port 1`] = `
       "type": "NodeRef",
     },
     {
-      "children": [],
       "compass": {
-        "children": [],
         "location": {
           "end": {
             "column": 30,
@@ -1431,7 +1364,6 @@ exports[`parse > edge > edge with port 1`] = `
         "value": "w",
       },
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 28,
@@ -1487,9 +1419,7 @@ exports[`parse > edge > graph edge 1`] = `
   },
   "targets": [
     {
-      "children": [],
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 2,
@@ -1523,9 +1453,7 @@ exports[`parse > edge > graph edge 1`] = `
       "type": "NodeRef",
     },
     {
-      "children": [],
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 7,
@@ -1581,11 +1509,22 @@ exports[`parse > edge > grouped edge targets 1`] = `
   },
   "targets": [
     {
-      "children": [
+      "location": {
+        "end": {
+          "column": 9,
+          "line": 1,
+          "offset": 8,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "refs": [
         {
-          "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 4,
@@ -1619,9 +1558,7 @@ exports[`parse > edge > grouped edge targets 1`] = `
           "type": "NodeRef",
         },
         {
-          "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -1655,27 +1592,25 @@ exports[`parse > edge > grouped edge targets 1`] = `
           "type": "NodeRef",
         },
       ],
-      "location": {
-        "end": {
-          "column": 9,
-          "line": 1,
-          "offset": 8,
-        },
-        "source": undefined,
-        "start": {
-          "column": 1,
-          "line": 1,
-          "offset": 0,
-        },
-      },
       "type": "NodeRefGroup",
     },
     {
-      "children": [
+      "location": {
+        "end": {
+          "column": 21,
+          "line": 1,
+          "offset": 20,
+        },
+        "source": undefined,
+        "start": {
+          "column": 13,
+          "line": 1,
+          "offset": 12,
+        },
+      },
+      "refs": [
         {
-          "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 16,
@@ -1709,9 +1644,7 @@ exports[`parse > edge > grouped edge targets 1`] = `
           "type": "NodeRef",
         },
         {
-          "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 20,
@@ -1745,19 +1678,6 @@ exports[`parse > edge > grouped edge targets 1`] = `
           "type": "NodeRef",
         },
       ],
-      "location": {
-        "end": {
-          "column": 21,
-          "line": 1,
-          "offset": 20,
-        },
-        "source": undefined,
-        "start": {
-          "column": 13,
-          "line": 1,
-          "offset": 12,
-        },
-      },
       "type": "NodeRefGroup",
     },
   ],
@@ -1783,11 +1703,22 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
   },
   "targets": [
     {
-      "children": [
+      "location": {
+        "end": {
+          "column": 17,
+          "line": 1,
+          "offset": 16,
+        },
+        "source": undefined,
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
+      "refs": [
         {
-          "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 4,
@@ -1819,7 +1750,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
             },
           },
           "port": {
-            "children": [],
             "location": {
               "end": {
                 "column": 7,
@@ -1840,9 +1770,7 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
           "type": "NodeRef",
         },
         {
-          "children": [],
           "compass": {
-            "children": [],
             "location": {
               "end": {
                 "column": 16,
@@ -1861,7 +1789,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
             "value": "w",
           },
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 11,
@@ -1893,7 +1820,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
             },
           },
           "port": {
-            "children": [],
             "location": {
               "end": {
                 "column": 14,
@@ -1914,27 +1840,25 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
           "type": "NodeRef",
         },
       ],
-      "location": {
-        "end": {
-          "column": 17,
-          "line": 1,
-          "offset": 16,
-        },
-        "source": undefined,
-        "start": {
-          "column": 1,
-          "line": 1,
-          "offset": 0,
-        },
-      },
       "type": "NodeRefGroup",
     },
     {
-      "children": [
+      "location": {
+        "end": {
+          "column": 34,
+          "line": 1,
+          "offset": 33,
+        },
+        "source": undefined,
+        "start": {
+          "column": 21,
+          "line": 1,
+          "offset": 20,
+        },
+      },
+      "refs": [
         {
-          "children": [],
           "compass": {
-            "children": [],
             "location": {
               "end": {
                 "column": 26,
@@ -1953,7 +1877,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
             "value": "e",
           },
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 24,
@@ -1987,9 +1910,7 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
           "type": "NodeRef",
         },
         {
-          "children": [],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 30,
@@ -2021,7 +1942,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
             },
           },
           "port": {
-            "children": [],
             "location": {
               "end": {
                 "column": 33,
@@ -2042,19 +1962,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
           "type": "NodeRef",
         },
       ],
-      "location": {
-        "end": {
-          "column": 34,
-          "line": 1,
-          "offset": 33,
-        },
-        "source": undefined,
-        "start": {
-          "column": 21,
-          "line": 1,
-          "offset": 20,
-        },
-      },
       "type": "NodeRefGroup",
     },
   ],
@@ -2089,7 +1996,6 @@ exports[`parse > graph > digraph named test 1`] = `
   "children": [],
   "directed": true,
   "id": {
-    "children": [],
     "location": {
       "end": {
         "column": 13,
@@ -2130,7 +2036,6 @@ exports[`parse > graph > digraph named test(quoted) 1`] = `
   "children": [],
   "directed": true,
   "id": {
-    "children": [],
     "location": {
       "end": {
         "column": 15,
@@ -2171,7 +2076,6 @@ exports[`parse > graph > graph named test 1`] = `
   "children": [],
   "directed": false,
   "id": {
-    "children": [],
     "location": {
       "end": {
         "column": 11,
@@ -2212,7 +2116,6 @@ exports[`parse > graph > strict digraph named test 1`] = `
   "children": [],
   "directed": true,
   "id": {
-    "children": [],
     "location": {
       "end": {
         "column": 20,
@@ -2253,7 +2156,6 @@ exports[`parse > graph > strict graph named test 1`] = `
   "children": [],
   "directed": false,
   "id": {
-    "children": [],
     "location": {
       "end": {
         "column": 18,
@@ -2293,9 +2195,7 @@ exports[`parse > node > node with attributes 1`] = `
 {
   "children": [
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 18,
@@ -2328,7 +2228,6 @@ exports[`parse > node > node with attributes 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 25,
@@ -2348,9 +2247,7 @@ exports[`parse > node > node with attributes 1`] = `
       },
     },
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 18,
@@ -2383,7 +2280,6 @@ exports[`parse > node > node with attributes 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 28,
@@ -2403,9 +2299,7 @@ exports[`parse > node > node with attributes 1`] = `
       },
     },
     {
-      "children": [],
       "key": {
-        "children": [],
         "location": {
           "end": {
             "column": 18,
@@ -2438,7 +2332,6 @@ exports[`parse > node > node with attributes 1`] = `
       },
       "type": "Attribute",
       "value": {
-        "children": [],
         "location": {
           "end": {
             "column": 33,
@@ -2459,7 +2352,6 @@ exports[`parse > node > node with attributes 1`] = `
     },
   ],
   "id": {
-    "children": [],
     "location": {
       "end": {
         "column": 15,
@@ -2498,7 +2390,6 @@ exports[`parse > node > simple node 1`] = `
 {
   "children": [],
   "id": {
-    "children": [],
     "location": {
       "end": {
         "column": 5,
@@ -2557,7 +2448,6 @@ exports[`parse > subgraph > named subgraph 1`] = `
 {
   "children": [],
   "id": {
-    "children": [],
     "location": {
       "end": {
         "column": 14,

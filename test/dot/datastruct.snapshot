@@ -5,9 +5,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -40,7 +38,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 15,
@@ -79,9 +76,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 9,
@@ -114,7 +109,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 16,
@@ -134,9 +128,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -169,7 +161,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -226,9 +217,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -261,7 +250,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -281,9 +269,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -316,7 +302,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -337,7 +322,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -373,9 +357,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -408,7 +390,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 43,
@@ -428,9 +409,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -463,7 +442,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -484,7 +462,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -520,9 +497,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -555,7 +530,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 32,
@@ -575,9 +549,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -610,7 +582,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -631,7 +602,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -667,9 +637,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -702,7 +670,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 59,
@@ -722,9 +689,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -757,7 +722,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -778,7 +742,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -814,9 +777,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -849,7 +810,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 42,
@@ -869,9 +829,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -904,7 +862,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -925,7 +882,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -961,9 +917,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -996,7 +950,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 28,
@@ -1016,9 +969,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1051,7 +1002,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -1072,7 +1022,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -1108,9 +1057,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1143,7 +1090,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 42,
@@ -1163,9 +1109,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1198,7 +1142,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -1219,7 +1162,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -1255,9 +1197,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1290,7 +1230,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 42,
@@ -1310,9 +1249,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1345,7 +1282,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -1366,7 +1302,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -1402,9 +1337,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1437,7 +1370,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 28,
@@ -1457,9 +1389,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1492,7 +1422,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -1513,7 +1442,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -1549,9 +1477,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1584,7 +1510,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 28,
@@ -1604,9 +1529,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1639,7 +1562,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -1660,7 +1582,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 8,
@@ -1696,9 +1617,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1731,7 +1650,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 38,
@@ -1751,9 +1669,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1786,7 +1702,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -1807,7 +1722,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 9,
@@ -1843,9 +1757,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1878,7 +1790,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 38,
@@ -1898,9 +1809,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -1933,7 +1842,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -1954,7 +1862,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 9,
@@ -1990,9 +1897,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -2025,7 +1930,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 32,
@@ -2045,9 +1949,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 6,
@@ -2080,7 +1982,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -2101,7 +2002,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 9,
@@ -2137,9 +2037,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -2172,7 +2070,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -2207,9 +2104,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -2241,7 +2136,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -2262,9 +2156,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -2296,7 +2188,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -2322,9 +2213,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -2357,7 +2246,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -2392,9 +2280,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -2426,7 +2312,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -2447,9 +2332,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -2481,7 +2364,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -2507,9 +2389,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -2542,7 +2422,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -2577,9 +2456,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -2611,7 +2488,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -2632,9 +2508,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -2666,7 +2540,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -2692,9 +2565,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -2727,7 +2598,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -2762,9 +2632,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -2796,7 +2664,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -2817,9 +2684,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -2851,7 +2716,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -2877,9 +2741,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -2912,7 +2774,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -2947,9 +2808,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -2981,7 +2840,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -3002,9 +2860,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -3036,7 +2892,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -3062,9 +2917,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -3097,7 +2950,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -3132,9 +2984,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -3166,7 +3016,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -3187,9 +3036,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -3221,7 +3068,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -3247,9 +3093,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -3282,7 +3126,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -3317,9 +3160,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -3351,7 +3192,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -3372,9 +3212,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -3406,7 +3244,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -3432,9 +3269,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -3467,7 +3302,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -3502,9 +3336,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -3536,7 +3368,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -3557,9 +3388,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -3591,7 +3420,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 26,
@@ -3617,9 +3445,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -3652,7 +3478,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -3687,9 +3512,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -3721,7 +3544,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -3742,9 +3564,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -3776,7 +3596,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -3802,9 +3621,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -3837,7 +3654,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 7,
@@ -3872,9 +3688,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -3906,7 +3720,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -3927,9 +3740,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -3961,7 +3772,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -3987,9 +3797,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -4022,7 +3830,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -4057,9 +3864,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -4091,7 +3896,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -4112,9 +3916,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -4146,7 +3948,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -4172,9 +3973,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -4207,7 +4006,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -4242,9 +4040,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -4276,7 +4072,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -4297,9 +4092,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -4331,7 +4124,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -4357,9 +4149,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -4392,7 +4182,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -4427,9 +4216,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -4461,7 +4248,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -4482,9 +4268,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -4516,7 +4300,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -4542,9 +4325,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -4577,7 +4358,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -4612,9 +4392,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -4646,7 +4424,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -4667,9 +4444,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 22,
@@ -4701,7 +4476,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -4727,9 +4501,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -4762,7 +4534,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -4797,9 +4568,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 9,
@@ -4831,7 +4600,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -4852,9 +4620,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -4886,7 +4652,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 27,
@@ -4912,9 +4677,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -4947,7 +4710,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -4982,9 +4744,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 9,
@@ -5016,7 +4776,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -5037,9 +4796,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -5071,7 +4828,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 27,
@@ -5097,9 +4853,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 3,
@@ -5132,7 +4886,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 8,
@@ -5167,9 +4920,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 9,
@@ -5201,7 +4952,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -5222,9 +4972,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -5256,7 +5004,6 @@
                 },
               },
               "port": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 26,
@@ -5282,7 +5029,6 @@
       ],
       "directed": true,
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 10,

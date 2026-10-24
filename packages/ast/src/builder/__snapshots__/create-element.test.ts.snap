@@ -2,19 +2,13 @@
 
 exports[`createElement > Attribute 1`] = `
 {
-  "children": [],
   "key": {
-    "children": [],
-    "location": null,
     "quoted": false,
     "type": "Literal",
     "value": "color",
   },
-  "location": null,
   "type": "Attribute",
   "value": {
-    "children": [],
-    "location": null,
     "quoted": false,
     "type": "Literal",
     "value": "red",
@@ -24,9 +18,7 @@ exports[`createElement > Attribute 1`] = `
 
 exports[`createElement > Coment 1`] = `
 {
-  "children": [],
   "kind": "Macro",
-  "location": null,
   "type": "Comment",
   "value": "This is comment",
 }
@@ -35,7 +27,6 @@ exports[`createElement > Coment 1`] = `
 exports[`createElement > Dot 1`] = `
 {
   "children": [],
-  "location": null,
   "type": "Dot",
 }
 `;
@@ -43,30 +34,21 @@ exports[`createElement > Dot 1`] = `
 exports[`createElement > Edge 1`] = `
 {
   "children": [],
-  "location": null,
   "targets": [
     {
-      "children": [],
       "id": {
-        "children": [],
-        "location": null,
         "quoted": true,
         "type": "Literal",
         "value": "a",
       },
-      "location": null,
       "type": "NodeRef",
     },
     {
-      "children": [],
       "id": {
-        "children": [],
-        "location": null,
         "quoted": true,
         "type": "Literal",
         "value": "b",
       },
-      "location": null,
       "type": "NodeRef",
     },
   ],
@@ -78,7 +60,6 @@ exports[`createElement > Graph 1`] = `
 {
   "children": [],
   "directed": true,
-  "location": null,
   "strict": false,
   "type": "Graph",
 }
@@ -86,8 +67,6 @@ exports[`createElement > Graph 1`] = `
 
 exports[`createElement > Literal 1`] = `
 {
-  "children": [],
-  "location": null,
   "quoted": true,
   "type": "Literal",
   "value": "literal value",
@@ -98,61 +77,45 @@ exports[`createElement > Node 1`] = `
 {
   "children": [],
   "id": {
-    "children": [],
-    "location": null,
     "quoted": false,
     "type": "Literal",
     "value": "node_id",
   },
-  "location": null,
   "type": "Node",
 }
 `;
 
 exports[`createElement > NodeRef 1`] = `
 {
-  "children": [],
   "id": {
-    "children": [],
-    "location": null,
     "quoted": true,
     "type": "Literal",
     "value": "b",
   },
-  "location": null,
   "type": "NodeRef",
 }
 `;
 
 exports[`createElement > NodeRefGroup 1`] = `
 {
-  "children": [
+  "refs": [
     {
-      "children": [],
       "id": {
-        "children": [],
-        "location": null,
         "quoted": true,
         "type": "Literal",
         "value": "a",
       },
-      "location": null,
       "type": "NodeRef",
     },
     {
-      "children": [],
       "id": {
-        "children": [],
-        "location": null,
         "quoted": true,
         "type": "Literal",
         "value": "b",
       },
-      "location": null,
       "type": "NodeRef",
     },
   ],
-  "location": null,
   "type": "NodeRefGroup",
 }
 `;
@@ -160,7 +123,6 @@ exports[`createElement > NodeRefGroup 1`] = `
 exports[`createElement > Subgraph 1`] = `
 {
   "children": [],
-  "location": null,
   "type": "Subgraph",
 }
 `;

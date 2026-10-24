@@ -8,9 +8,7 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -43,7 +41,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 51,
@@ -64,7 +61,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 5,
@@ -100,9 +96,7 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -135,7 +129,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -156,7 +149,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 5,
@@ -192,9 +184,7 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -227,7 +217,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -248,7 +237,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 5,
@@ -284,7 +272,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
       ],
       "directed": true,
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 10,

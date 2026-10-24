@@ -5,54 +5,40 @@ exports[`Edge grouping feature > AST conversion > should include a NodeRefGroup 
   "children": [
     {
       "children": [],
-      "location": null,
       "targets": [
         {
-          "children": [],
           "compass": undefined,
           "id": {
-            "children": [],
-            "location": null,
             "quoted": true,
             "type": "Literal",
             "value": "a",
           },
-          "location": null,
           "port": undefined,
           "type": "NodeRef",
         },
         {
-          "children": [
+          "refs": [
             {
-              "children": [],
               "compass": undefined,
               "id": {
-                "children": [],
-                "location": null,
                 "quoted": true,
                 "type": "Literal",
                 "value": "b",
               },
-              "location": null,
               "port": undefined,
               "type": "NodeRef",
             },
             {
-              "children": [],
               "compass": undefined,
               "id": {
-                "children": [],
-                "location": null,
                 "quoted": true,
                 "type": "Literal",
                 "value": "c",
               },
-              "location": null,
               "port": undefined,
               "type": "NodeRef",
             },
           ],
-          "location": null,
           "type": "NodeRefGroup",
         },
       ],
@@ -61,7 +47,6 @@ exports[`Edge grouping feature > AST conversion > should include a NodeRefGroup 
   ],
   "directed": true,
   "id": undefined,
-  "location": null,
   "strict": false,
   "type": "Graph",
 }
