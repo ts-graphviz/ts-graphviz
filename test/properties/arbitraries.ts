@@ -192,10 +192,15 @@ const compass = fc.constantFrom<Compass>(...COMPASS_POINTS);
 
 /**
  * A port name. Compass points are excluded because `a:n` means a compass
- * point; the empty string is excluded because the model treats it as "no port".
+ * point; the empty string is excluded because the model treats it as "no port";
+ * ':' is excluded because toDot rejects it (Graphviz reads `p:q` as
+ * port:compass, #1641).
  */
 const port = dotString().filter(
-  (s) => s !== '' && !(COMPASS_POINTS as readonly string[]).includes(s),
+  (s) =>
+    s !== '' &&
+    !s.includes(':') &&
+    !(COMPASS_POINTS as readonly string[]).includes(s),
 );
 
 const nodeRefSpec = (nodeCount: number): fc.Arbitrary<NodeRefSpec> =>

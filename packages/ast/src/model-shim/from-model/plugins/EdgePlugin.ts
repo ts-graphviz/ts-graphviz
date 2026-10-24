@@ -1,4 +1,9 @@
-import { type EdgeModel, isNodeModel, type NodeRef } from '@ts-graphviz/common';
+import {
+  type EdgeModel,
+  isNodeModel,
+  type NodeRef,
+  withCode,
+} from '@ts-graphviz/common';
 import type { CreateElement } from '../../../builder/types.js';
 import type { EdgeTargetASTNode, NodeRefASTNode } from '../../../types.js';
 import { idToRaw } from '../../literal.js';
@@ -16,6 +21,16 @@ const nodeRef = (
   );
   if (isNodeModel(target)) {
     return createElement('NodeRef', { id }, []);
+  }
+  // Graphviz splits a port on ':' even inside quotes (`b:"p:q"` is port p,
+  // compass q), so such a port cannot be written faithfully.
+  if (target.port?.includes(':')) {
+    throw withCode(
+      new TypeError(
+        `A port must not contain ':' (Graphviz reads it as "port:compass"): ${JSON.stringify(target.port)}`,
+      ),
+      'TSG_ERR_INVALID_PORT',
+    );
   }
   // Ports are ids and are escaped like one; a compass point is a keyword.
   return createElement(

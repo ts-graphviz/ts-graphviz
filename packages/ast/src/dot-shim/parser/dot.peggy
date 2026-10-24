@@ -262,6 +262,9 @@ _subgraph
 _compass_keyword
   = k:("ne" / "nw" / "se" / "sw" / "n" / "e" / "s" / "w" / "c" / "_") ![A-Za-z0-9_\u0080-￿] { return k; }
 
+// After a port, Graphviz accepts any ID as the compass point and ignores
+// (with a warning) one that is not a keyword; `dot -Tcanon` even prints
+// `b:"":""`. The keyword is tried first so `a:p:ne` keeps its meaning.
 _compass
   = v:(
     value:_compass_keyword { return { value, quoted: false }; }
@@ -275,6 +278,7 @@ _compass
         [],
       );
     }
+  / _literal
 
 _literal
   = QUOTED_STRING

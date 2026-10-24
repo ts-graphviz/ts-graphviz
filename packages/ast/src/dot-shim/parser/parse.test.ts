@@ -227,8 +227,18 @@ describe('parse', () => {
         expect(ref('a:north').compass).toBeUndefined();
       });
 
-      test('a:p:nx is not split into a compass point and a statement', () => {
-        expect(() => parse('a:p:nx -- b;', { startRule: 'Edge' })).toThrow();
+      test('a:p:nx keeps nx as an (unknown) compass point, not a new statement', () => {
+        expect(ref('a:p:nx')).toMatchObject({
+          port: { value: 'p' },
+          compass: { value: 'nx' },
+        });
+      });
+
+      test('an empty quoted compass point printed by dot -Tcanon parses (#1641)', () => {
+        expect(ref('a:"":""')).toMatchObject({
+          port: { value: '', quoted: true },
+          compass: { value: '', quoted: true },
+        });
       });
     });
 

@@ -35,6 +35,8 @@ export const ERROR_CODES = [
   'TSG_ERR_INVALID_HTML_LIKE',
   /** An edge was given fewer than two targets or a target of the wrong shape (`TypeError`). */
   'TSG_ERR_INVALID_EDGE_TARGETS',
+  /** A port name contains ':', which Graphviz always reads as a port/compass separator (`TypeError`). */
+  'TSG_ERR_INVALID_PORT',
   /** No converter or printer plugin handles a node or model (`Error`). */
   'TSG_ERR_NO_PLUGIN',
   /** `fromDot` was given an AST node that has no model (`TypeError`). */
