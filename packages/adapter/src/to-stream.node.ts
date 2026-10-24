@@ -1,55 +1,110 @@
 import { spawn } from 'node:child_process';
-import { PassThrough, Readable } from 'node:stream';
+import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
+import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
 import type { Layout, Options } from './types.js';
 
 /**
  * Execute the Graphviz dot command and make a Web `ReadableStream` of the
  * results, as on every other runtime.
  *
+ * The output is collected while the command runs (at most `maxOutputSize`
+ * bytes) and the stream is returned once the command has succeeded, so a
+ * failure is always reported by the returned promise.
+ *
  * @param dot - The DOT source.
- * @param options - Layout, output format and the other options of the command.
+ * @param options - Layout, output format, limits and the other options of the command.
  * @returns The output of the command as a stream of bytes.
- * @throws {CommandExecutionError} when the command cannot be started or exits
- * with a non-zero code.
+ * @throws {CommandExecutionError} when the command cannot be started, fails
+ * while reading its input, or exits with a non-zero code.
+ * @throws `RangeError` with `code` `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` when the
+ * output exceeds `maxOutputSize`.
+ * @throws `signal.reason` when `signal` aborts.
  */
 export async function toStream<T extends Layout>(
   dot: string,
   options?: Options<T>,
 ): Promise<ReadableStream<Uint8Array>> {
-  const [command, args] = createCommandAndArgs(options ?? {});
-  return new Promise(function toStreamInternal(resolve, reject) {
-    const p = spawn(command, args, { stdio: 'pipe' });
+  const opts: Options<T> = options ?? ({} as Options<T>);
+  const [command, args] = createCommandAndArgs(opts);
+  const limit = outputLimit(opts);
+  const { signal } = opts;
+  signal?.throwIfAborted();
 
-    // error handling
+  return new Promise(function toStreamInternal(resolve, reject) {
+    let settled = false;
+    const settle = (action: () => void) => {
+      if (settled) return;
+      settled = true;
+      signal?.removeEventListener('abort', onAbort);
+      action();
+    };
+    const fail = (error: unknown) => settle(() => reject(error));
+
+    let p: ReturnType<typeof spawn>;
+    try {
+      p = spawn(command, args, { stdio: 'pipe' });
+    } catch (e) {
+      // e.g. an argument containing a NUL character
+      const message = e instanceof Error ? e.message : String(e);
+      fail(
+        new CommandExecutionError(command, `MESSAGE:${message}`, undefined, {
+          cause: e,
+        }),
+      );
+      return;
+    }
+    const { stdin, stdout, stderr } = p as typeof p & {
+      stdin: NonNullable<typeof p.stdin>;
+      stdout: NonNullable<typeof p.stdout>;
+      stderr: NonNullable<typeof p.stderr>;
+    };
+
+    function onAbort() {
+      p.kill('SIGKILL');
+      fail(signal?.reason);
+    }
+    signal?.addEventListener('abort', onAbort, { once: true });
+
     p.on('error', (e) => {
-      reject(
+      fail(
         new CommandExecutionError(command, `MESSAGE:${e.message}`, undefined, {
           cause: e,
         }),
       );
     });
 
-    const stderrChunks: Uint8Array[] = [];
-    p.stdout.on('pause', () => p.stdout.resume());
-    p.stderr.on('data', (chunk) => stderrChunks.push(chunk));
-    p.stderr.on('pause', () => p.stderr.resume());
+    const chunks: Buffer[] = [];
+    let size = 0;
+    stdout.on('data', (chunk: Buffer) => {
+      if (settled) return;
+      size += chunk.byteLength;
+      if (limit > 0 && size > limit) {
+        p.kill('SIGKILL');
+        fail(outputLimitExceeded(command, limit));
+        return;
+      }
+      chunks.push(chunk);
+    });
+    const errors = new TailBuffer();
+    stderr.on('data', (chunk: Buffer) => errors.push(chunk));
 
-    const dist = p.stdout.pipe(new PassThrough());
-    p.on('close', async (code, signal) => {
+    p.on('close', (code, exitSignal) => {
       if (code === 0) {
-        resolve(Readable.toWeb(dist) as ReadableStream<Uint8Array>);
+        settle(() =>
+          resolve(
+            Readable.toWeb(Readable.from(chunks)) as ReadableStream<Uint8Array>,
+          ),
+        );
       } else {
-        const stderr = Buffer.concat(
-          stderrChunks as ReadonlyArray<Uint8Array>,
-        ).toString();
-        reject(
+        const message = errors.toString();
+        fail(
           new CommandExecutionError(
             command,
-            `CODE: ${code}\nSIGNAL: ${signal}\nMESSAGE: ${stderr}`,
-            { code, signal, stderr },
+            `CODE: ${code}\nSIGNAL: ${exitSignal}\nMESSAGE: ${message}`,
+            { code, signal: exitSignal, stderr: message },
           ),
         );
       }
@@ -58,9 +113,9 @@ export async function toStream<T extends Layout>(
     // Feeding stdin can fail on its own (e.g. EPIPE when the command exits
     // before reading); report it like any other command failure instead of
     // leaving an unhandled rejection.
-    pipeline(Readable.from([dot]), p.stdin).catch((e: unknown) => {
+    pipeline(Readable.from([dot]), stdin).catch((e: unknown) => {
       const message = e instanceof Error ? e.message : String(e);
-      reject(
+      fail(
         new CommandExecutionError(command, `MESSAGE:${message}`, undefined, {
           cause: e,
         }),

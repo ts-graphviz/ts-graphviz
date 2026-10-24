@@ -165,6 +165,23 @@ export interface CommonOptions {
    * Invert y coordinate in output.
    */
   y?: boolean;
+  /**
+   * Stop the command: when the signal aborts, the process is killed and the
+   * call rejects with `signal.reason` (an `AbortError`, or a `TimeoutError`
+   * for `AbortSignal.timeout(ms)`).
+   *
+   * Layout cost depends on the DOT source, so set a time limit when the
+   * source is not your own, e.g. `signal: AbortSignal.timeout(10_000)`.
+   */
+  signal?: AbortSignal;
+  /**
+   * Maximum size of the output in bytes. When the command writes more, it is
+   * killed and the call rejects with a `RangeError` whose `code` is
+   * `TSG_ERR_OUTPUT_LIMIT_EXCEEDED`. `0` disables the limit.
+   *
+   * @default 134217728 (128 MiB)
+   */
+  maxOutputSize?: number;
 }
 
 export type Options<T extends Layout = Layout> = CommonOptions &

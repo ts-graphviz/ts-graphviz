@@ -93,14 +93,17 @@ Two value kinds deliberately bypass the literal-text rule because their content 
 - **No shell.** The command is started with `child_process.spawn` (Node.js) or `Deno.Command` with an argument array; nothing is interpolated into a shell string, so option values and DOT text cannot inject commands.
 - **Typed failures.** A command that cannot start, cannot be written to, or exits non-zero rejects with `CommandExecutionError` (code `TSG_ERR_COMMAND_FAILED`, with `command`, the underlying `cause`, and `exit.code` / `exit.signal` / `exit.stderr` when the process did start); in a browser the functions throw `TSG_ERR_UNSUPPORTED_ENVIRONMENT`.
 - **Web streams on every runtime**, so the output is consumed the same way on Node.js and Deno.
+- **Bounded output.** The output kept in memory is limited by `maxOutputSize` (default 128 MiB; the command is killed and the call rejects with a `RangeError`, code `TSG_ERR_OUTPUT_LIMIT_EXCEEDED`); the command's stderr is kept to its last 64 KiB.
+- **Stoppable.** With `signal`, the command is killed when the signal aborts and the call rejects with `signal.reason`; `AbortSignal.timeout(ms)` gives a time limit.
+- **Files are replaced, not patched.** `toFile` writes only after the command succeeded and truncates an existing file.
 
 **Not promised, and what the application must do**
 
 - `dotCommand`, `library` and the other options are configuration: never derive them from end-user input.
-- Graphviz reads attributes such as `image`, `shapefile`, `imagepath`, `fontpath` and `fontname` as file-system references and may read local files while rendering. ts-graphviz passes DOT through unchanged. When rendering DOT from untrusted sources, validate or strip those attributes first (`packages/adapter/README.md` has an example), run Graphviz with restricted permissions, and bound its running time.
-- Rendering time and memory of Graphviz itself are not bounded by this library.
+- **Graphviz reads local files named in the DOT and can copy them into its output.** Verified with Graphviz 2.43: an EPS file named by `shapefile` (with `shape=epsf`) or by `image` is embedded in `-Tps` output; `image` and HTML-like `<IMG SRC>` embed images in raster output and reveal paths and sizes in SVG. `stylesheet` and URL attributes (`URL`, `href`, …, and `HREF` in HTML-like labels) are written into SVG, so a `javascript:` URL becomes script when the SVG is served inline. Graphviz has no sandbox (the old `GV_FILE_PATH` restriction was removed in Graphviz 6). ts-graphviz passes DOT through unchanged: when the DOT comes from an untrusted source, remove those attributes before rendering (a supported way to do this is tracked in #1681), run Graphviz as an unprivileged user in an isolated file system, and set `signal` and `maxOutputSize`.
+- Without `signal`, layout time is not bounded: the DOT chooses the layout engine (`layout` attribute) and its cost.
 
-**Evidence**: tests tagged `SM-4` — the argv construction, the stream and file entry points with their failure paths, and the browser stubs.
+**Evidence**: tests tagged `SM-4` — the argv construction, the stream and file entry points with their failure paths, the output limit, abort and file replacement against the real `dot`, and the browser stubs.
 
 ## SM-5. Trusted code: models, plugins and contexts
 
