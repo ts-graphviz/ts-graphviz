@@ -11,9 +11,7 @@ import type { PrintOptions } from './types.js';
  * @group Convert AST to DOT
  */
 export function stringify(ast: ASTNode, options?: PrintOptions): string {
-  const result = new Printer(options).print(ast);
-  if (!result) {
-    throw new Error();
-  }
-  return result;
+  // An empty Dot node prints as the empty string; Printer throws itself when
+  // no plugin matches a node.
+  return new Printer(options).print(ast);
 }

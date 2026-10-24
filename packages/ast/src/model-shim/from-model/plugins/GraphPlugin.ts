@@ -14,16 +14,18 @@ export const GraphPlugin: ConvertFromModelPlugin<RootGraphModel> = {
       {
         directed: model.directed,
         strict: model.strict,
-        id: model.id
-          ? createElement(
-              'Literal',
-              {
-                value: model.id,
-                quoted: true,
-              },
-              [],
-            )
-          : undefined,
+        // `""` is a valid (empty) id, so test for presence, not truthiness
+        id:
+          model.id !== undefined
+            ? createElement(
+                'Literal',
+                {
+                  value: model.id,
+                  quoted: true,
+                },
+                [],
+              )
+            : undefined,
       },
       convertClusterChildren(context, model),
     );
