@@ -1,7 +1,7 @@
+import { translate } from '@docusaurus/Translate';
 import TSGraphvizPreviewEditor from '@site/src/components/TSGraphvizPreviewEditor';
 import Layout from '@theme/Layout';
-
-import { translate } from '@docusaurus/Translate';
+import type { ReactElement } from 'react';
 import styles from './styles.module.css';
 
 const script = `import { digraph, attribute as _ } from 'ts-graphviz';
@@ -18,7 +18,7 @@ digraph('state_machine', { [_.newrank]: true }, (g) => {
 });
 `;
 
-export default function Editor(): JSX.Element {
+export default function Editor(): ReactElement {
   return (
     <Layout
       title={translate({

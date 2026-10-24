@@ -1,72 +1,31 @@
 # Website
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+The documentation site at https://ts-graphviz.github.io/, built with [Docusaurus](https://docusaurus.io/). It lives in this monorepo so that docs and code change in the same pull request; the repository `ts-graphviz/ts-graphviz.github.io` is only the deployment target (`gh-pages` branch), pushed by the `Website` workflow on every push to `main`.
 
-### Installation
+## Development
 
-```bash
-$ pnpm install
-```
-
-### Local Development
+Install from the repository root, then build the packages once: the playground's type definitions (`static/dts.json`) are generated from them by `start` and `build`.
 
 ```bash
-# en
-$ pnpm start
-# ja
-$ pnpm start:ja
-# zh-CN
-$ pnpm start:zh
+pnpm install
+pnpm build
+pnpm --filter @ts-graphviz/website start       # en
+pnpm --filter @ts-graphviz/website start:ja    # ja
+pnpm --filter @ts-graphviz/website start:zh    # zh-CN
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+`pnpm build:website` at the root builds the packages, the API reference (typedoc) and the site, and copies the API reference to `build/api/` (`copy-api`), exactly as the deploy workflow does.
 
-### Build
+## Layout
 
-```bash
-$ pnpm build
-```
+- `docs/` — guides (English source); translations in `i18n/<locale>/docusaurus-plugin-content-docs/current/`
+- `blog/` — release notes and announcements; translations in `i18n/<locale>/docusaurus-plugin-content-blog/`
+- `src/` — the landing page, the playground (WebContainer + Graphviz WASM) and the live editor used in code blocks
+- `plugins/remark-plugin-tsgraphviz.ts` — turns ` ```ts tsgraphviz ` code blocks into live editors
+- `scripts/extract-dts.mts` — collects the packages' `.d.ts` files for the editor
+- `scripts/copy-api-reference.mts` — puts the typedoc output under `build/api/`
+- `scripts/check-links.mts` — crawls the built site and fails on broken internal links (`pnpm check-links`; runs in CI)
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+## Translations
 
-### Lint and Format
-
-```bash
-$ pnpm lint
-$ pnpm format
-```
-
-### Write translate
-
-```bash
-# ja
-$ pnpm write-translations:ja
-# zh-CN
-$ pnpm write-translations:zh
-```
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kamiazya"><img src="https://avatars.githubusercontent.com/u/35218186?v=4?s=100" width="100px;" alt="Yuki Yamazaki"/><br /><sub><b>Yuki Yamazaki</b></sub></a><br /><a href="#content-kamiazya" title="Content">🖋</a> <a href="https://github.com/ts-graphviz/ts-graphviz.github.io/commits?author=kamiazya" title="Documentation">📖</a> <a href="#blog-kamiazya" title="Blogposts">📝</a> <a href="#maintenance-kamiazya" title="Maintenance">🚧</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/hao2013"><img src="https://avatars.githubusercontent.com/u/67059492?v=4?s=100" width="100px;" alt="hao2013"/><br /><sub><b>hao2013</b></sub></a><br /><a href="#translation-hao2013" title="Translation">🌍</a> <a href="https://github.com/ts-graphviz/ts-graphviz.github.io/pulls?q=is%3Apr+reviewed-by%3Ahao2013" title="Reviewed Pull Requests">👀</a></td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+After changing English docs, update the locale files with `pnpm --filter @ts-graphviz/website write-translations:ja` (or `:zh`) and translate the new strings; keep the `i18n/` trees in sync with `docs/` and `blog/`.

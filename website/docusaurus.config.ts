@@ -16,7 +16,11 @@ const config: Config = {
   organizationName: 'ts-graphviz',
   projectName: 'ts-graphviz',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
 
   i18n: {
     defaultLocale: 'en',
@@ -29,7 +33,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           editUrl:
-            'https://pr.new/github.com//ts-graphviz/ts-graphviz.github.io/edit/main/',
+            'https://github.com/ts-graphviz/ts-graphviz/edit/main/website/',
           remarkPlugins: [
             [npm2yarn, { sync: true, converters: ['yarn', 'pnpm'] }],
             [tsgraphviz, {}],
@@ -38,7 +42,7 @@ const config: Config = {
         blog: {
           showReadingTime: true,
           editUrl:
-            'https://pr.new/github.com//ts-graphviz/ts-graphviz.github.io/edit/main/',
+            'https://github.com/ts-graphviz/ts-graphviz/edit/main/website/',
           remarkPlugins: [
             [npm2yarn, { sync: true, converters: ['yarn', 'pnpm'] }],
             [tsgraphviz, {}],
@@ -79,7 +83,11 @@ const config: Config = {
         },
         { to: '/playground', label: 'Playground', position: 'left' },
         {
-          href: 'https://ts-graphviz.github.io/ts-graphviz/',
+          // typedoc output, copied into build/api/ by the deploy workflow.
+          // An absolute URL: a path would be prefixed with the locale in the
+          // ja / zh-CN builds. `_self` keeps it in the same tab.
+          href: 'https://ts-graphviz.github.io/api/',
+          target: '_self',
           label: 'API Reference',
           position: 'left',
         },
@@ -129,7 +137,7 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/ts-graphviz/ts-graphviz',
             },
           ],
         },

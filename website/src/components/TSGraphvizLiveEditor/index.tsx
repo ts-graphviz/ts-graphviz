@@ -8,7 +8,7 @@ import {
 } from '@monaco-editor/react';
 import clsx from 'clsx';
 import type { editor } from 'monaco-editor';
-import { memo, useCallback, useEffect, useMemo } from 'react';
+import { type JSX, memo, useCallback, useEffect, useMemo } from 'react';
 
 import styles from './styles.module.css';
 

@@ -1,18 +1,23 @@
+import Translate, { translate } from '@docusaurus/Translate';
 import type { Engine } from '@hpcc-js/wasm-graphviz';
+import { Graphviz } from '@site/src/components/Graphviz';
+import TSGraphvizLiveEditor from '@site/src/components/TSGraphvizLiveEditor';
+import { useGraphviz } from '@site/src/contexts/Graphviz';
+import { useContainer } from '@site/src/contexts/WebContainer';
 // import { monaco as monaco_editor } from 'monaco-editor';
 import CodeBlock from '@theme/CodeBlock';
 import TabItem from '@theme/TabItem';
 import Tabs from '@theme/Tabs';
 import { clsx } from 'clsx';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  type JSX,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { OrbitProgress, Riple } from 'react-loading-indicators';
-
-import { Graphviz } from '@site/src/components/Graphviz';
-import { useContainer } from '@site/src/contexts/WebContainer';
-
-import Translate, { translate } from '@docusaurus/Translate';
-import TSGraphvizLiveEditor from '@site/src/components/TSGraphvizLiveEditor';
-import { useGraphviz } from '@site/src/contexts/Graphviz';
 import styles from './styles.module.css';
 
 interface Props {

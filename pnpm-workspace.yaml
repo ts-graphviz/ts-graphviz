@@ -2,3 +2,4 @@ packages:
   - 'packages/*'
   - 'e2e'
   - 'examples/*'
+  - 'website'

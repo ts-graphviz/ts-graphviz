@@ -8,3 +8,11 @@ kamiazya:
     x: kamiazya
     linkedin: kamiazya
   page: true
+
+hao:
+  name: Zeng Hao
+  title: Contributor
+  image_url: https://github.com/hao2013.png
+  socials:
+    github: hao2013
+  page: true

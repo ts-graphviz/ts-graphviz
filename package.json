@@ -29,13 +29,14 @@
   "type": "module",
   "scripts": {
     "codegen": "pnpm -r codegen",
-    "build": "pnpm -r build",
+    "build": "pnpm -r --filter './packages/*' build",
     "doc": "typedoc",
     "lint": "biome check --write ./**",
     "test": "vitest",
     "typecheck": "tsc --noEmit --strict --skipLibCheck",
     "typecheck:strict": "tsc --project tsconfig.packages.json --noEmit --skipLibCheck false",
-    "test:e2e": "pnpm --filter @ts-graphviz/e2e test"
+    "test:e2e": "pnpm --filter @ts-graphviz/e2e test",
+    "build:website": "pnpm build && pnpm doc && pnpm --filter @ts-graphviz/website build && pnpm --filter @ts-graphviz/website copy-api && pnpm --filter @ts-graphviz/website check-links"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.0",
@@ -71,7 +72,9 @@
       "@octokit/request@>=1.0.0 <8.4.1": ">=8.4.1",
       "@octokit/plugin-paginate-rest@>=1.0.0 <9.2.2": ">=9.2.2",
       "@babel/runtime@<7.26.10": ">=7.26.10",
-      "cross-spawn@>=7.0.0 <7.0.5": ">=7.0.5"
+      "cross-spawn@>=7.0.0 <7.0.5": ">=7.0.5",
+      "serialize-javascript@<7.1.3": ">=7.1.3",
+      "postcss-selector-parser@<7.1.6": ">=7.1.6"
     },
     "onlyBuiltDependencies": [
       "@biomejs/biome",

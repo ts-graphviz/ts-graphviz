@@ -1,8 +1,7 @@
 import { translate } from '@docusaurus/Translate';
 import type { Engine } from '@hpcc-js/wasm-graphviz';
-import { useEffect, useState } from 'react';
-
 import { useGraphviz } from '@site/src/contexts/Graphviz';
+import { useEffect, useState } from 'react';
 
 interface GraphvizProps {
   /**

@@ -83,7 +83,7 @@ function createImportNode() {
   };
 }
 
-const plugin: Plugin<[PluginOptions?]> = (options = {}): Transformer => {
+const plugin: Plugin<[PluginOptions?]> = (_options = {}): Transformer => {
   return async (root) => {
     const { visit } = await import('unist-util-visit');
 

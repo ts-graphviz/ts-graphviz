@@ -2,10 +2,10 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 import { WebContainer } from '@webcontainer/api';
 
 import {
-  type FC,
-  type ReactNode,
   createContext,
+  type FC,
   memo,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,

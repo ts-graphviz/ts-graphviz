@@ -1,9 +1,9 @@
-import Layout from '@theme/Layout';
-
 import { translate } from '@docusaurus/Translate';
 import Features from '@site/src/components/Features/Features';
 import HeroSection from '@site/src/components/HeroSection';
 import Tools from '@site/src/components/Tools/Tools';
+import Layout from '@theme/Layout';
+import type { JSX } from 'react';
 
 export default function LandingPage(): JSX.Element {
   return (

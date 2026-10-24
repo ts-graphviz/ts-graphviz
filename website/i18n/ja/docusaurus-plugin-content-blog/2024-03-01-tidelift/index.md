@@ -1,5 +1,4 @@
 ---
-slug: tidelift
 authors: kamiazya
 tags: [security]
 description: |-

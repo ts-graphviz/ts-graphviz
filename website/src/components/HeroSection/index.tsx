@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
-
 import Link from '@docusaurus/Link';
 import Translate from '@docusaurus/Translate';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import Heading from '@theme/Heading';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
+import { useEffect, useState } from 'react';
 
 import styles from './styles.module.css';
 
