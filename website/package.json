@@ -45,7 +45,7 @@
     "@docusaurus/tsconfig": "3.10.2",
     "@docusaurus/types": "3.10.2",
     "@types/mdast": "^4.0.4",
-    "@types/node": "^20.17.46",
+    "@types/node": "^26.6.5",
     "@types/react": "^19.1.8",
     "@types/unist": "^3.0.3",
     "linkinator": "^8.1.0",
