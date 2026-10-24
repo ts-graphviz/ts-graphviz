@@ -156,24 +156,34 @@ describe('fromModel and toModel', () => {
     );
   });
 
-  it.fails('attribute literals keep their quoting through the model (#1589)', () => {
-    // Expected to fail until #1589 lands: bare numerals and booleans survive
-    // as numbers and booleans (#1629), but a bare identifier is a string in
-    // the model and comes back quoted. One node with unique keys, so each
-    // attribute can be compared to its original.
-    const quoting = (n: { children: ASTNode[] }) =>
-      n.children
-        .filter(
-          (c): c is ASTNode & { key: LiteralASTNode; value: LiteralASTNode } =>
-            c.type === 'Attribute',
-        )
-        .map((c) => [c.key.value, c.value.quoted] as const)
-        // by key: integer-like keys move to the front through the model (#1626)
-        .sort(([a], [b]) => a.localeCompare(b));
+  it('attribute values come back in their normalized quoting (#1589, #1629)', () => {
+    // The model keeps the value, not the source text: a bare numeral that is
+    // the exact text of its number, and `true`/`false`, come back bare;
+    // every other string is literal text and is written quoted; HTML strings
+    // stay HTML strings. One node with unique keys, so each attribute can be
+    // compared to its original.
+    const expectedQuoting = (value: LiteralASTNode): boolean | 'html' => {
+      if (value.quoted === 'html') return 'html';
+      if (value.quoted === false) {
+        if (value.value === 'true' || value.value === 'false') return false;
+        if (String(Number(value.value)) === value.value) return false;
+      }
+      return true;
+    };
+    const attributesOf = (n: { children: ASTNode[] }) =>
+      n.children.filter(
+        (c): c is ASTNode & { key: LiteralASTNode; value: LiteralASTNode } =>
+          c.type === 'Attribute',
+      );
+    // Keys are bare identifiers so that they match themselves after the
+    // round trip (quoted keys are re-escaped, integer-like keys reorder, #1626).
+    const identifierKeyed = attribute.filter(
+      (a) => a.key.quoted === false && /^[A-Za-z_]/.test(a.key.value),
+    );
     const nodeWithUniqueKeys = fc
       .tuple(
         node,
-        fc.uniqueArray(attribute, {
+        fc.uniqueArray(identifierKeyed, {
           minLength: 1,
           maxLength: 4,
           selector: (a) => a.key.value,
@@ -183,7 +193,11 @@ describe('fromModel and toModel', () => {
     fc.assert(
       fc.property(nodeWithUniqueKeys, (ast) => {
         const back = fromModel(toModel(ast, { models }));
-        expect(quoting(back)).toStrictEqual(quoting(ast));
+        expect(
+          attributesOf(back).map((a) => [a.key.value, a.value.quoted]),
+        ).toStrictEqual(
+          attributesOf(ast).map((a) => [a.key.value, expectedQuoting(a.value)]),
+        );
       }),
     );
   });
