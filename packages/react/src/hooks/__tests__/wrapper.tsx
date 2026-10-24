@@ -1,4 +1,5 @@
 import type { ComponentProps, ReactNode } from 'react';
+import { createModelsContext, type ModelsContext } from 'ts-graphviz';
 
 import { Digraph } from '../../components/Digraph.js';
 import { Graph } from '../../components/Graph.js';
@@ -9,10 +10,10 @@ import { GraphvizContext } from '../../contexts/GraphvizContext.js';
 import { ModelCollectorContext } from '../../contexts/ModelCollector.js';
 
 export const context =
-  () =>
+  ({ models = {} }: { models?: Partial<ModelsContext> } = {}) =>
   ({ children }: { children: ReactNode }) => {
     return (
-      <GraphvizContext.Provider value={{}}>
+      <GraphvizContext.Provider value={{ models: createModelsContext(models) }}>
         <ModelCollectorContext.Provider value={{ collectModel: () => {} }}>
           <GraphMap.Provider value={new Map()}>
             <GraphContainer.Provider value={null}>
@@ -28,7 +29,7 @@ export const digraph =
   (props: ComponentProps<typeof Digraph> = {}) =>
   ({ children }: { children: ReactNode }) => {
     return (
-      <GraphvizContext.Provider value={{}}>
+      <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
         <ModelCollectorContext.Provider value={{ collectModel: () => {} }}>
           <GraphMap.Provider value={new Map()}>
             <GraphContainer.Provider value={null}>
@@ -44,7 +45,7 @@ export const digraphInSubgraph =
   (props: ComponentProps<typeof Subgraph> = {}) =>
   ({ children }: { children: ReactNode }) => {
     return (
-      <GraphvizContext.Provider value={{}}>
+      <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
         <ModelCollectorContext.Provider value={{ collectModel: () => {} }}>
           <GraphMap.Provider value={new Map()}>
             <GraphContainer.Provider value={null}>
@@ -62,7 +63,7 @@ export const graph =
   (props: ComponentProps<typeof Graph> = {}) =>
   ({ children }: { children: ReactNode }) => {
     return (
-      <GraphvizContext.Provider value={{}}>
+      <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
         <ModelCollectorContext.Provider value={{ collectModel: () => {} }}>
           <GraphMap.Provider value={new Map()}>
             <GraphContainer.Provider value={null}>
@@ -78,7 +79,7 @@ export const graphInSubgraph =
   (props: ComponentProps<typeof Subgraph> = {}) =>
   ({ children }: { children: ReactNode }) => {
     return (
-      <GraphvizContext.Provider value={{}}>
+      <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
         <ModelCollectorContext.Provider value={{ collectModel: () => {} }}>
           <GraphMap.Provider value={new Map()}>
             <GraphContainer.Provider value={null}>

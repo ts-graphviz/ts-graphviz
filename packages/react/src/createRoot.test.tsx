@@ -5,8 +5,10 @@ import {
   isEdgeModel,
   isNodeModel,
   isRootGraphModel,
+  Node as NodeClass,
   type NodeModel,
   type RootGraphModel,
+  Subgraph as SubgraphClass,
   type SubgraphModel,
 } from 'ts-graphviz';
 import { describe, expect, it, vi } from 'vitest';
@@ -122,6 +124,36 @@ describe('createRoot()', () => {
       expect(models).toHaveLength(1);
       expectGraph(models[0]);
       expectGraphStructure(models[0], { nodeCount: 2, edgeCount: 1 });
+
+      root.unmount();
+    });
+  });
+
+  describe('models option', () => {
+    it('creates root graphs, subgraphs and nodes with the given classes', async () => {
+      class MyDigraph extends DigraphModel {}
+      class MySubgraph extends SubgraphClass {}
+      class MyNode extends NodeClass {}
+      const root = createRoot({
+        models: { Digraph: MyDigraph, Subgraph: MySubgraph, Node: MyNode },
+      });
+
+      await root.render(
+        <Digraph id="test" strict>
+          <Node id="a" />
+          <Subgraph id="cluster_0">
+            <Node id="b" />
+          </Subgraph>
+        </Digraph>,
+      );
+
+      const [model] = root.getTopLevelModels();
+      expect(model).toBeInstanceOf(MyDigraph);
+      expect(model.strict).toBe(true);
+      expect(model.getNode('a')).toBeInstanceOf(MyNode);
+      const sub = model.getSubgraph('cluster_0');
+      expect(sub).toBeInstanceOf(MySubgraph);
+      expect(sub?.getNode('b')).toBeInstanceOf(MyNode);
 
       root.unmount();
     });
