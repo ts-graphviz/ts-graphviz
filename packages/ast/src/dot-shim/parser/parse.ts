@@ -1,4 +1,4 @@
-import { ConversionError } from '@ts-graphviz/common';
+import { withCode } from '@ts-graphviz/common';
 import { ASTNodeCountExceededError } from '../../builder/errors.js';
 import type {
   ASTNode,
@@ -176,9 +176,10 @@ export function parse(
         cause: e,
       });
     }
-    throw new ConversionError('Unexpected parse error', {
-      cause: e,
-    });
+    throw withCode(
+      new Error('Unexpected parse error', { cause: e }),
+      'TSG_ERR_PARSE_FAILED',
+    );
   }
 }
 
@@ -195,8 +196,7 @@ export function parse(
  * that the error thrown when a parse error occurs in the {@link !JSON.parse} function is {@link !SyntaxError}.
  */
 export class DotSyntaxError extends SyntaxError {
-  constructor(...args: ConstructorParameters<typeof SyntaxError>) {
-    super(...args);
-    this.name = 'DotSyntaxError';
-  }
+  override readonly name = 'DotSyntaxError';
+  /** Stable identifier of this error kind. */
+  readonly code = 'TSG_ERR_DOT_SYNTAX';
 }

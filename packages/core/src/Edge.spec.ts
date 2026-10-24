@@ -34,11 +34,11 @@ it('throws an error when the EdgeTarget element is missing', () => {
   expect(
     () => new Edge([] as unknown as EdgeTargetTuple),
   ).toThrowErrorMatchingInlineSnapshot(
-    `[InvalidModelError: The element of Edge target is missing or not satisfied as Edge target.]`,
+    `[TypeError: The element of Edge target is missing or not satisfied as Edge target.]`,
   );
   expect(
     () => new Edge([n] as unknown as EdgeTargetTuple),
   ).toThrowErrorMatchingInlineSnapshot(
-    `[InvalidModelError: The element of Edge target is missing or not satisfied as Edge target.]`,
+    `[TypeError: The element of Edge target is missing or not satisfied as Edge target.]`,
   );
 });

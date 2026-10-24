@@ -7,7 +7,7 @@ import type {
   NodeAttributeKey,
   SubgraphAttributeKey,
 } from './attribute.js';
-import { InvalidModelError } from './errors.js';
+import { withCode } from './errors.js';
 import type { ModelsContext } from './models-context.js';
 import type { Compass } from './types.js';
 
@@ -863,11 +863,17 @@ export function toNodeRef(target: NodeRefLike): NodeRef {
  */
 export function toNodeRefGroup(targets: NodeRefGroupLike): NodeRefGroup {
   if (targets.length < 1) {
-    throw new InvalidModelError('EdgeTargets must have at least 1 elements.');
+    throw withCode(
+      new TypeError('EdgeTargets must have at least 1 elements.'),
+      'TSG_ERR_INVALID_EDGE_TARGETS',
+    );
   }
   if (!targets.every((target) => isNodeRefLike(target))) {
-    throw new InvalidModelError(
-      'The element of Edge target is missing or not satisfied as Edge target.',
+    throw withCode(
+      new TypeError(
+        'The element of Edge target is missing or not satisfied as Edge target.',
+      ),
+      'TSG_ERR_INVALID_EDGE_TARGETS',
     );
   }
   return targets.map((t) => toNodeRef(t));

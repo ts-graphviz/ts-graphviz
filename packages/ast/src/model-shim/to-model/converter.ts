@@ -1,4 +1,4 @@
-import { ConversionError } from '@ts-graphviz/common';
+import { withCode } from '@ts-graphviz/common';
 import { defaultPlugins } from './plugins/index.js';
 import type {
   ASTToModel,
@@ -34,8 +34,11 @@ export class ToModelConverter {
             return plugin.convert(context, m) as ASTToModel<U>;
           }
         }
-        throw new ConversionError(
-          `No plugin can convert the "${m.type}" AST node to a model`,
+        throw withCode(
+          new Error(
+            `No plugin can convert the "${m.type}" AST node to a model`,
+          ),
+          'TSG_ERR_NO_PLUGIN',
         );
       },
     };

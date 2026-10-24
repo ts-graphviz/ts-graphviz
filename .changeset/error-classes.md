@@ -6,14 +6,23 @@
 "ts-graphviz": major
 ---
 
-Systematize the error classes
+Report errors with standard types and stable `code`s
 
-Every error the library raises on purpose is now a `TsGraphvizError` (exported from `@ts-graphviz/common`) with a subclass naming the situation:
+Every error ts-graphviz raises on purpose is now the standard error type that fits the situation, tagged with a `code` from `ERROR_CODES` (exported by `@ts-graphviz/common`, prefix `TSG_ERR_`). The code is the stable contract; messages may change in any release. There is no shared custom base class: `instanceof` a library class breaks across realms and duplicated package copies, and class names are rewritten by minifiers.
 
-- `InvalidModelError` — a model cannot be represented in DOT (e.g. an edge with fewer than two targets; previously a bare `Error`).
-- `InvalidValueError` — a value cannot be written to DOT (null character, unbalanced HTML-like markup; previously `RangeError`).
-- `ConversionError` — DOT ⇄ AST ⇄ model conversion failed: no plugin for a node, a DOT source without a graph in `fromDot`, an unexpected parser failure (previously bare `Error`s, some without a message).
-- `ResourceLimitError` — a configured limit was hit; `ASTNodeCountExceededError` now extends it.
-- `UnsupportedEnvironmentError` — the runtime cannot provide a feature (the adapter in a browser).
+| Situation | Thrown | `code` |
+|---|---|---|
+| DOT does not parse | `DotSyntaxError` (a `SyntaxError`) | `TSG_ERR_DOT_SYNTAX` |
+| parser failed otherwise (see `cause`) | `Error` | `TSG_ERR_PARSE_FAILED` |
+| AST exceeds `maxASTNodes` | `ASTNodeCountExceededError` (now a `RangeError`) | `TSG_ERR_AST_NODE_COUNT_EXCEEDED` |
+| null character in text | `RangeError` | `TSG_ERR_NUL_CHARACTER` |
+| unbalanced HTML-like markup | `RangeError` | `TSG_ERR_INVALID_HTML_LIKE` |
+| edge with fewer than two or malformed targets | `TypeError` | `TSG_ERR_INVALID_EDGE_TARGETS` |
+| no converter/printer plugin for a node | `Error` | `TSG_ERR_NO_PLUGIN` |
+| `fromDot` on an AST node without a model | `TypeError` | `TSG_ERR_UNCONVERTIBLE_AST` |
+| `fromDot` on a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` |
+| `GraphBase` subclass without a models context | `Error` | `TSG_ERR_NO_MODELS_CONTEXT` |
+| adapter used in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
+| Graphviz command failed | `CommandExecutionError` (an `Error`) | `TSG_ERR_COMMAND_FAILED` |
 
-`DotSyntaxError` keeps extending the built-in `SyntaxError`, as `JSON.parse` does. Code that caught `RangeError` from `htmlLike()` or the printer should catch `InvalidValueError` (or `TsGraphvizError`).
+Use `isTsGraphvizError(e)` (shape-based, works across realms) or compare `e.code`; `withCode()` tags your own errors the same way. The classes that remain set `name` to a literal string. Compared with 3.x: edge-target errors were a bare `Error` and are now `TypeError`; the browser adapter and the converters threw bare `Error`s without a code.

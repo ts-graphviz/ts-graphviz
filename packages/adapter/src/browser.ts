@@ -1,7 +1,7 @@
 /**
  * @module @ts-graphviz/adapter
  */
-import { UnsupportedEnvironmentError } from '@ts-graphviz/common';
+import { withCode } from '@ts-graphviz/common';
 import type { Layout, Options } from './types.js';
 
 export type * from './types.js';
@@ -19,24 +19,26 @@ Learn more: https://github.com/ts-graphviz/ts-graphviz`;
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
  *
- * Not available in browsers: always throws {@link UnsupportedEnvironmentError}.
+ * Not available in browsers: always throws an `Error` with
+ * `code: 'TSG_ERR_UNSUPPORTED_ENVIRONMENT'`.
  */
 export function toStream<T extends Layout>(
   _dot: string,
   _options?: Options<T>,
 ): Promise<ReadableStream<Uint8Array>> {
-  throw new UnsupportedEnvironmentError(ERROR_MESSAGE);
+  throw withCode(new Error(ERROR_MESSAGE), 'TSG_ERR_UNSUPPORTED_ENVIRONMENT');
 }
 
 /**
  * Execute the Graphviz dot command and output the results to a file.
  *
- * Not available in browsers: always throws {@link UnsupportedEnvironmentError}.
+ * Not available in browsers: always throws an `Error` with
+ * `code: 'TSG_ERR_UNSUPPORTED_ENVIRONMENT'`.
  */
 export function toFile<T extends Layout>(
   _dot: string,
   _path: string,
   _options?: Options<T>,
 ): Promise<void> {
-  throw new UnsupportedEnvironmentError(ERROR_MESSAGE);
+  throw withCode(new Error(ERROR_MESSAGE), 'TSG_ERR_UNSUPPORTED_ENVIRONMENT');
 }
