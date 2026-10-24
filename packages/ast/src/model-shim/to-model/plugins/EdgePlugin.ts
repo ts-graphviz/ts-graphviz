@@ -8,8 +8,8 @@ export const EdgePlugin: ConvertToModelPlugin<EdgeASTNode> = {
     return ast.type === 'Edge';
   },
   convert(context, ast) {
-    const edge = new context.models.Edge(
-      convertToEdgeTargetTuple(ast),
+    const edge = new context.models.Edge(convertToEdgeTargetTuple(ast));
+    edge.attributes.apply(
       collectAttributes(
         ast.children.filter<AttributeASTNode>(
           (v): v is AttributeASTNode => v.type === 'Attribute',

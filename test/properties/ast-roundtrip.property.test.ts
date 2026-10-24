@@ -18,7 +18,6 @@ import {
   dot,
   edge,
   graph,
-  hasIntegerLikeAttributeKey,
   node,
   normalize,
 } from './ast-arbitraries.js';
@@ -113,8 +112,9 @@ describe('[SM-1] printer and parser', () => {
 });
 
 describe('fromModel and toModel', () => {
-  // Integer-like attribute keys change position through the model (#1626).
-  const convertible = dot.filter((ast) => !hasIntegerLikeAttributeKey(ast));
+  // Integer-like attribute keys keep their position through the model since
+  // #1626, so every generated document is convertible.
+  const convertible = dot;
 
   it('toModel(fromModel(dot)) describes the same graphs', () => {
     // Through a Dot model, so that the root graph's comment is covered too:

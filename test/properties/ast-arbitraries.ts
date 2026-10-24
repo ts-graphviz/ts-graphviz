@@ -346,20 +346,6 @@ function* walk(ast: ASTNode): Generator<ASTNode> {
 }
 
 /**
- * Whether an attribute key is integer-like (`0`, `"12"`). The model passes
- * attributes through plain objects, which enumerate such keys first, so their
- * position is not preserved by a model round trip (#1626).
- */
-export function hasIntegerLikeAttributeKey(ast: ASTNode): boolean {
-  for (const n of walk(ast)) {
-    if (n.type === 'Attribute' && /^(0|[1-9]\d*)$/.test(n.key.value)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
  * A plain copy of an AST without `location` and without `undefined`-valued
  * properties, for structural comparison between built and parsed trees.
  */
