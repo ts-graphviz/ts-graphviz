@@ -60,7 +60,7 @@ Applications build graphs from their own data: node ids from database keys, labe
 
 - The meaning Graphviz gives to a value. A plain string `\N` is written so that Graphviz shows the two characters `\N`; an application that wants the node-name substitution uses `escString('\\N')` on purpose (section 3). What text is appropriate to show is the application's decision.
 
-**Evidence**: tests tagged `SM-2` — properties that any string survives `toDot → fromDot` unchanged, that printing is idempotent, that numbers and keys round-trip, and the unit tests of the escaping rules and the NUL rejection.
+**Evidence**: tests tagged `SM-2` — properties that any string survives `toDot → fromDot` unchanged, that printing is idempotent, that numbers and keys round-trip, the unit tests of the escaping rules and the NUL rejection, and the differential test that feeds generated graphs to the Graphviz binaries and checks that `dot` accepts them and that the graph Graphviz builds (dumped with `gvpr`) is the one the model means.
 
 ## SM-3. `escString()` and `htmlLike()` (caller opts out of escaping)
 
