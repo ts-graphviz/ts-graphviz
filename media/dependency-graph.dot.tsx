@@ -1,20 +1,52 @@
-import { findWorkspacePackages } from '@pnpm/workspace.find-packages';
-import { createPkgGraph } from '@pnpm/workspace.pkgs-graph';
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import { renderHTMLLike } from '@ts-graphviz/react';
 import { digraph } from 'ts-graphviz';
 
-const workspacePackages = await findWorkspacePackages(process.cwd());
+interface Manifest {
+  name: string;
+  description?: string;
+  private?: boolean;
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+  optionalDependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+}
 
-const publishedPackages = workspacePackages.filter(
-  (pkg) => pkg.manifest.private !== true,
+const workspaceDirs: { path: string }[] = JSON.parse(
+  execFileSync('pnpm', ['list', '--recursive', '--json', '--depth=-1'], {
+    cwd: process.cwd(),
+    encoding: 'utf8',
+  }),
 );
 
-const map = new Map<string, string>();
-for (const pkg of publishedPackages) {
-  map.set(pkg.rootDir, pkg.manifest.name as string);
+const publishedPackages = workspaceDirs
+  .map(
+    ({ path }) =>
+      JSON.parse(readFileSync(join(path, 'package.json'), 'utf8')) as Manifest,
+  )
+  .filter((manifest) => manifest.private !== true)
+  .map((manifest) => ({ manifest }));
+
+const publishedNames = new Set(
+  publishedPackages.map(({ manifest }) => manifest.name),
+);
+
+/** Names of published workspace packages that `manifest` depends on */
+function workspaceDependencies(manifest: Manifest): string[] {
+  return [
+    ...new Set(
+      [
+        manifest.dependencies,
+        manifest.devDependencies,
+        manifest.optionalDependencies,
+        manifest.peerDependencies,
+      ].flatMap((deps) => Object.keys(deps ?? {})),
+    ),
+  ].filter((name) => publishedNames.has(name));
 }
-const pkgGraph = createPkgGraph(publishedPackages);
 
 function PackageLabel({
   name,
@@ -47,7 +79,7 @@ export default digraph('dependency_graph', (g) => {
   g.edge({ dir: 'back' });
 
   for (const pkg of publishedPackages) {
-    g.node(pkg.manifest.name as string, {
+    g.node(pkg.manifest.name, {
       label: renderHTMLLike(
         <PackageLabel
           name={pkg.manifest.name}
@@ -58,11 +90,9 @@ export default digraph('dependency_graph', (g) => {
     });
   }
 
-  for (const [pkgDir, pkg] of Object.entries(pkgGraph.graph)) {
-    for (const depDir of pkg.dependencies) {
-      const pkgName = map.get(pkgDir) as string;
-      const depName = map.get(depDir) as string;
-      g.edge([depName, pkgName]);
+  for (const { manifest } of publishedPackages) {
+    for (const depName of workspaceDependencies(manifest)) {
+      g.edge([depName, manifest.name]);
     }
   }
 });
