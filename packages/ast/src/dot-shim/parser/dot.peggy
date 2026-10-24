@@ -75,7 +75,9 @@ Comment = __ v:_comment __ { return v; }
 
 ClusterStatements = (Attribute / AttributeList / Edge / Subgraph / Node / Comment)*
 
-_dot = c1:Comment* graph:Graph c2:Comment* { return b.createElement('Dot', {}, [...c1, graph, ...c2]); }
+// A DOT source may hold any number of root graphs (dot processes them in
+// order), interleaved with comments.
+_dot = c1:Comment* graphs:(graph:Graph c2:Comment* { return [graph, ...c2]; })* { return b.createElement('Dot', {}, [...c1, ...graphs.flat()]); }
 
 _graph
   = _strict:"strict"i? _ _kind:("graph"i / "digraph"i) _ id:_literal? __ "{" children:ClusterStatements __ "}" {

@@ -4,7 +4,8 @@ import {
   type PrintOptions,
   stringify,
 } from '@ts-graphviz/ast';
-import type { DotObjectModel } from '@ts-graphviz/common';
+import { type DotObjectModel, isRootGraphModel } from '@ts-graphviz/common';
+import { Dot } from '@ts-graphviz/core';
 
 /**
  * This interface provides options for converting a model to DOT.
@@ -24,6 +25,9 @@ export interface ToDotOptions {
 /**
  * Convert Model to DOT string.
  *
+ * A root graph is written as a whole DOT source (its `comment` precedes the
+ * graph statement), the same as a {@link Dot} model holding just that graph.
+ *
  * @group Convert Model to DOT
  *
  * @param model Dot Object Model, like {@link Digraph}, {@link Graph}, {@link Subgraph}, {@link Node}, and {@link Edge}
@@ -31,6 +35,9 @@ export interface ToDotOptions {
  * @returns DOT string
  */
 export function toDot(model: DotObjectModel, options?: ToDotOptions): string {
-  const ast = fromModel(model, options?.convert);
+  const ast = fromModel(
+    isRootGraphModel(model) ? new Dot([model]) : model,
+    options?.convert,
+  );
   return stringify(ast, options?.print);
 }

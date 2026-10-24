@@ -133,7 +133,8 @@ export type DotObjectType =
   | 'Node'
   | 'Edge'
   | 'Subgraph'
-  | 'Graph';
+  | 'Graph'
+  | 'Dot';
 
 /**
  * DotObjectModel is an interface that defines a generic type for a {@link DotObjectType}.
@@ -687,6 +688,39 @@ export interface RootGraphModel
 }
 
 /**
+ * DOT model representing a whole DOT source: its root graphs and the comments
+ * that are not attached to a graph.
+ *
+ * This is the model counterpart of the `Dot` AST node, so `fromModel` and
+ * `toModel` map the two to each other.
+ * @group Models
+ */
+export interface DotModel extends HasComment, DotObjectModel<'Dot'> {
+  /** Root graphs in the order they appear in the source. */
+  readonly graphs: ReadonlyArray<RootGraphModel>;
+  /**
+   * Add a root graph.
+   */
+  addGraph(graph: RootGraphModel): void;
+  /**
+   * Check if the root graph exists.
+   */
+  existGraph(graph: RootGraphModel): boolean;
+  /**
+   * Remove a root graph.
+   */
+  removeGraph(graph: RootGraphModel): void;
+}
+
+/**
+ * @group Models
+ */
+export interface DotConstructor {
+  new (graphs?: RootGraphModel[], comment?: string): DotModel;
+  new (...args: any[]): DotModel;
+}
+
+/**
  * @group Models
  */
 export interface RootGraphConstructor {
@@ -890,6 +924,22 @@ export function isRootGraphModel(object: unknown): object is RootGraphModel {
     object !== null &&
     (object as RootGraphModel).$$type === 'Graph' &&
     typeof (object as RootGraphModel).directed === 'boolean'
+  );
+}
+
+/**
+ * Type guard to check if an object is a DotModel
+ * @param object - Object to check (can be unknown or DotObjectModel)
+ * @returns True if the object is a DotModel
+ */
+export function isDotModel(object: unknown): object is DotModel;
+export function isDotModel(model: DotObjectModel): model is DotModel;
+export function isDotModel(object: unknown): object is DotModel {
+  return (
+    typeof object === 'object' &&
+    object !== null &&
+    (object as DotModel).$$type === 'Dot' &&
+    Array.isArray((object as DotModel).graphs)
   );
 }
 

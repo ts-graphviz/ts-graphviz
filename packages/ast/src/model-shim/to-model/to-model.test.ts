@@ -5,13 +5,16 @@ import { toModel } from './to-model.js';
 
 registerDefault();
 
-test('brank ast throw error', () => {
+test('empty Dot converts to a Dot model without graphs', () => {
   const ast = createElement('Dot', {}, []);
 
-  expect(() => toModel(ast)).toThrow();
+  const model = toModel(ast);
+  expect(model.$$type).toBe('Dot');
+  expect(model.graphs).toHaveLength(0);
+  expect(model.comment).toBeUndefined();
 });
 
-test('comment', () => {
+test('comment before a graph is attached to the graph', () => {
   const ast = createElement('Dot', {}, [
     createElement(
       'Comment',
@@ -31,7 +34,28 @@ test('comment', () => {
     ),
   ]);
   const model = toModel(ast);
-  expect(model.comment).toStrictEqual('This is comment');
+  expect(model.comment).toBeUndefined();
+  expect(model.graphs).toHaveLength(1);
+  expect(model.graphs[0].comment).toStrictEqual('This is comment');
+});
+
+test('multiple graphs and dangling comments', () => {
+  const comment = (value: string) =>
+    createElement('Comment', { kind: 'Slash', value }, []);
+  const graph = (directed: boolean) =>
+    createElement('Graph', { strict: false, directed }, []);
+  const ast = createElement('Dot', {}, [
+    comment('header'),
+    comment('first'),
+    graph(true),
+    graph(false),
+    comment('trailing'),
+  ]);
+  const model = toModel(ast);
+  expect(model.graphs.map((g) => g.directed)).toStrictEqual([true, false]);
+  expect(model.graphs[0].comment).toBe('first');
+  expect(model.graphs[1].comment).toBeUndefined();
+  expect(model.comment).toBe('header\ntrailing');
 });
 
 describe('HTML Lavel', () => {

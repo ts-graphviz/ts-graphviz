@@ -4,11 +4,12 @@ import {
   parse,
   toModel,
 } from '@ts-graphviz/ast';
-import type {
-  EdgeModel,
-  NodeModel,
-  RootGraphModel,
-  SubgraphModel,
+import {
+  type EdgeModel,
+  isDotModel,
+  type NodeModel,
+  type RootGraphModel,
+  type SubgraphModel,
 } from '@ts-graphviz/common';
 
 /**
@@ -67,7 +68,18 @@ export function fromDot<
     ast.type === 'NodeRefGroup' ||
     ast.type === 'Literal'
   ) {
-    throw new Error();
+    throw new Error(
+      `fromDot cannot convert a "${Array.isArray(ast) ? 'ClusterStatements' : ast.type}" node to a model`,
+    );
   }
-  return toModel(ast, options?.convert);
+  const model = toModel(ast, options?.convert);
+  if (isDotModel(model)) {
+    // A whole DOT source converts to a Dot model; return its first graph.
+    const [graph] = model.graphs;
+    if (!graph) {
+      throw new Error('fromDot: the DOT source contains no graph');
+    }
+    return graph;
+  }
+  return model;
 }

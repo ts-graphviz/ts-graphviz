@@ -4,11 +4,25 @@ exports[`Edge grouping feature > AST conversion > should include a NodeRefGroup 
 {
   "children": [
     {
-      "children": [
+      "children": [],
+      "location": null,
+      "targets": [
         {
           "children": [],
+          "compass": undefined,
+          "id": {
+            "children": [],
+            "location": null,
+            "quoted": true,
+            "type": "Literal",
+            "value": "a",
+          },
           "location": null,
-          "targets": [
+          "port": undefined,
+          "type": "NodeRef",
+        },
+        {
+          "children": [
             {
               "children": [],
               "compass": undefined,
@@ -17,58 +31,38 @@ exports[`Edge grouping feature > AST conversion > should include a NodeRefGroup 
                 "location": null,
                 "quoted": true,
                 "type": "Literal",
-                "value": "a",
+                "value": "b",
               },
               "location": null,
               "port": undefined,
               "type": "NodeRef",
             },
             {
-              "children": [
-                {
-                  "children": [],
-                  "compass": undefined,
-                  "id": {
-                    "children": [],
-                    "location": null,
-                    "quoted": true,
-                    "type": "Literal",
-                    "value": "b",
-                  },
-                  "location": null,
-                  "port": undefined,
-                  "type": "NodeRef",
-                },
-                {
-                  "children": [],
-                  "compass": undefined,
-                  "id": {
-                    "children": [],
-                    "location": null,
-                    "quoted": true,
-                    "type": "Literal",
-                    "value": "c",
-                  },
-                  "location": null,
-                  "port": undefined,
-                  "type": "NodeRef",
-                },
-              ],
+              "children": [],
+              "compass": undefined,
+              "id": {
+                "children": [],
+                "location": null,
+                "quoted": true,
+                "type": "Literal",
+                "value": "c",
+              },
               "location": null,
-              "type": "NodeRefGroup",
+              "port": undefined,
+              "type": "NodeRef",
             },
           ],
-          "type": "Edge",
+          "location": null,
+          "type": "NodeRefGroup",
         },
       ],
-      "directed": true,
-      "id": undefined,
-      "location": null,
-      "strict": false,
-      "type": "Graph",
+      "type": "Edge",
     },
   ],
+  "directed": true,
+  "id": undefined,
   "location": null,
-  "type": "Dot",
+  "strict": false,
+  "type": "Graph",
 }
 `;
