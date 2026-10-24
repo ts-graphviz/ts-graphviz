@@ -96,6 +96,25 @@ describe.skipIf(!hasDot)(
       );
     });
 
+    it('settles when the command exits with a status while a child holds its pipes', async () => {
+      // Closes stdin, leaves a background child holding stdout/stderr and
+      // exits with status 3 right away.
+      const script = join(dir, 'exit3.sh');
+      writeFileSync(script, '#!/bin/sh\nexec 0<&-\nsleep 30 &\nexit 3\n', {
+        mode: 0o755,
+      });
+      const started = Date.now();
+      await expect(
+        toStream(`digraph { ${'a -> b; '.repeat(50_000)} }`, {
+          dotCommand: script,
+        }),
+      ).rejects.toMatchObject({
+        name: 'CommandExecutionError',
+        exit: { code: 3 },
+      });
+      expect(Date.now() - started).toBeLessThan(10_000);
+    });
+
     it('toFile replaces an existing longer file', async () => {
       const path = join(dir, 'out.dot');
       writeFileSync(path, 'X'.repeat(5000));

@@ -35,13 +35,20 @@ export async function toStream<T extends Layout>(
 
   return new Promise(function toStreamInternal(resolve, reject) {
     let settled = false;
+    let release = () => {};
     const settle = (action: () => void) => {
       if (settled) return;
       settled = true;
       signal?.removeEventListener('abort', onAbort);
       action();
     };
-    const fail = (error: unknown) => settle(() => reject(error));
+    // Every failure kills the process and lets go of its pipes: a leftover
+    // child of the command could otherwise keep them (and this call's
+    // resources) alive.
+    const fail = (error: unknown) => {
+      settle(() => reject(error));
+      release();
+    };
 
     let p: ReturnType<typeof spawn>;
     try {
@@ -61,9 +68,14 @@ export async function toStream<T extends Layout>(
       stdout: NonNullable<typeof p.stdout>;
       stderr: NonNullable<typeof p.stderr>;
     };
+    release = () => {
+      p.kill('SIGKILL');
+      stdin.destroy();
+      stdout.destroy();
+      stderr.destroy();
+    };
 
     function onAbort() {
-      p.kill('SIGKILL');
       fail(signal?.reason);
     }
     signal?.addEventListener('abort', onAbort, { once: true });
@@ -82,7 +94,6 @@ export async function toStream<T extends Layout>(
       if (settled) return;
       size += chunk.byteLength;
       if (limit > 0 && size > limit) {
-        p.kill('SIGKILL');
         fail(outputLimitExceeded(command, limit));
         return;
       }
@@ -91,12 +102,19 @@ export async function toStream<T extends Layout>(
     const errors = new TailBuffer();
     stderr.on('data', (chunk: Buffer) => errors.push(chunk));
 
-    // Set when writing the DOT source fails; the process is then killed and
-    // the outcome is decided when it has exited.
+    // Set when writing the DOT source fails.
     let inputError: unknown;
+    // Set on 'exit': the process is gone, its pipes may still be open.
+    let exited:
+      | { code: number | null; signal: NodeJS.Signals | null }
+      | undefined;
 
-    p.on('close', (code, exitSignal) => {
+    /** Settle from the exit status, once the process is gone. */
+    function report(code: number | null, exitSignal: NodeJS.Signals | null) {
       const message = errors.toString();
+      const exit = { code, signal: exitSignal, stderr: message };
+      const cause =
+        inputError === undefined ? undefined : { cause: inputError };
       if (code === 0 && inputError === undefined) {
         settle(() =>
           resolve(
@@ -110,8 +128,8 @@ export async function toStream<T extends Layout>(
           new CommandExecutionError(
             command,
             `CODE: ${code}\nSIGNAL: ${exitSignal}\nMESSAGE: ${message}`,
-            { code, signal: exitSignal, stderr: message },
-            inputError === undefined ? undefined : { cause: inputError },
+            exit,
+            cause,
           ),
         );
       } else {
@@ -124,41 +142,28 @@ export async function toStream<T extends Layout>(
               ? `killed by ${exitSignal}`
               : String(inputError);
         fail(
-          new CommandExecutionError(
-            command,
-            `MESSAGE:${reason}`,
-            { code, signal: exitSignal, stderr: message },
-            inputError === undefined ? undefined : { cause: inputError },
-          ),
+          new CommandExecutionError(command, `MESSAGE:${reason}`, exit, cause),
         );
       }
+    }
+
+    // Normally the outcome is decided on 'close', after all output is read.
+    p.on('close', (code, exitSignal) => report(code, exitSignal));
+    // After an input failure, decide on 'exit' instead: the output is not
+    // needed, and 'close' waits for pipes a leftover child may hold.
+    p.on('exit', (code, exitSignal) => {
+      exited = { code, signal: exitSignal };
+      if (inputError !== undefined) report(code, exitSignal);
     });
 
     // Feeding stdin can fail on its own (e.g. EPIPE when the command exits
-    // before reading). Never leave the process running: kill it and report
-    // once it has exited, instead of an unhandled rejection.
+    // before reading). Never leave the process running and never leave the
+    // call pending: kill it, and report as soon as it has exited (it may
+    // already have).
     pipeline(Readable.from([dot]), stdin).catch((e: unknown) => {
       inputError ??= e;
       p.kill('SIGKILL');
-    });
-
-    // After we killed the process for an input failure, settle on 'exit':
-    // 'close' also waits for the output pipes, which a leftover child of
-    // the command could keep open indefinitely.
-    p.on('exit', (code, exitSignal) => {
-      if (inputError === undefined || code !== null) return;
-      stdout.destroy();
-      stderr.destroy();
-      const reason =
-        inputError instanceof Error ? inputError.message : String(inputError);
-      fail(
-        new CommandExecutionError(
-          command,
-          `MESSAGE:${reason}`,
-          { code, signal: exitSignal, stderr: errors.toString() },
-          { cause: inputError },
-        ),
-      );
+      if (exited) report(exited.code, exited.signal);
     });
   });
 }

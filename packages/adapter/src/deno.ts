@@ -83,15 +83,20 @@ export async function toStream<T extends Layout>(
   let limitError: RangeError | undefined;
   let ioError: unknown;
   const readers = new Set<ReadableStreamDefaultReader<Uint8Array>>();
+  let writer: WritableStreamDefaultWriter<Uint8Array> | undefined;
+  let killed = false;
   const kill = () => {
+    killed = true;
     try {
       child.kill('SIGKILL');
     } catch {
       // already exited
     }
-    // Stop reading: a leftover child of the command could keep the output
-    // pipes open after the command itself is gone.
+    // Stop reading and writing: a leftover child of the command could keep
+    // the pipes open after the command itself is gone, and a pending write
+    // or read would then never settle.
     for (const reader of readers) reader.cancel().catch(() => {});
+    writer?.abort().catch(() => {});
   };
   const onIoError = (e: unknown) => {
     ioError ??= e;
@@ -104,10 +109,17 @@ export async function toStream<T extends Layout>(
     let size = 0;
     const errors = new TailBuffer();
     const writing = (async () => {
-      const writer = child.stdin.getWriter();
+      const input: WritableStreamDefaultWriter<Uint8Array> =
+        child.stdin.getWriter();
+      writer = input;
+      if (killed) {
+        // aborted before we got here
+        input.abort().catch(() => {});
+        return;
+      }
       try {
-        await writer.write(new TextEncoder().encode(dot));
-        await writer.close();
+        await input.write(new TextEncoder().encode(dot));
+        await input.close();
       } catch (e) {
         onIoError(e);
       }

@@ -36,6 +36,7 @@ describe('[SM-4] toStream (Node adapter)', () => {
         stdout,
         stderr,
         stdin,
+        kill: vi.fn(() => true),
         on: (event: string, handler: Callback) => {
           if (!events[event]) events[event] = [];
           events[event].push(handler);
@@ -75,6 +76,7 @@ describe('[SM-4] toStream (Node adapter)', () => {
         stdout,
         stderr,
         stdin,
+        kill: vi.fn(() => true),
         on: (event: string, handler: Callback) => {
           if (!events[event]) events[event] = [];
           events[event].push(handler);
@@ -115,6 +117,7 @@ describe('[SM-4] toStream (Node adapter)', () => {
         stdout,
         stderr,
         stdin,
+        kill: vi.fn(() => true),
         on: (event: string, handler: Callback) => {
           if (!events[event]) events[event] = [];
           events[event].push(handler);
