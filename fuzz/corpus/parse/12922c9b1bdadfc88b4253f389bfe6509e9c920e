@@ -1,0 +1,460 @@
+/* contributed by  Sancho Lerena, http://pandorafms.org
+
+About the graph: this is an automated network map generated with Pandora
+FMS, this map is a visual representation of the network discovery done by
+the recon server, which sweeps the network, and identify hosts in a network
+and the full chain of hosts in the route to discovered networks.
+
+command:
+
+twopi -Tcmapx -onetworkmap_twopi_1.map -Tpng -onetworkmap_twopi.png networkmap_twopi.gv.txt
+
+*/
+
+graph networkmap {
+	layout=twopi
+	labeljust=l; margin=0; ratio=fill;root=0;size="8,5.4";300 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/1.png"/></TD></TR>
+		 <TR><TD>109.217.106.212.</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=300",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=300"];
+		619 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>192.36.144.230</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=619",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=619"];
+		686 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.0.255</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=686",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=686"];
+		620 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.0.53</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=620",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=620"];
+		692 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.1</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=692",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=692"];
+		699 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.10</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=699",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=699"];
+		700 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.12</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=700",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=700"];
+		701 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.13</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=701",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=701"];
+		702 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.14</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=702",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=702"];
+		703 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.15</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=703",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=703"];
+		704 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.16</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=704",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=704"];
+		705 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.17</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=705",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=705"];
+		706 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.18</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=706",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=706"];
+		707 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.19</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=707",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=707"];
+		694 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.
+.2</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=694",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=694"];
+		708 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.20</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=708",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=708"];
+		709 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.21</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=709",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=709"];
+		710 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.22</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=710",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=710"];
+		711 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.23</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=711",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=711"];
+		712 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.24</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=712",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=712"];
+		791 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.240</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=791",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=791"];
+		792 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.253</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=792",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=792"];
+		713 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.26</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=713",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=713"];
+		714 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.27</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=714",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=714"];
+		715 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.28</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=715",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=715"];
+		716 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.29</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=716",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=716"];
+		695 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.3</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=695",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=695"];
+		717 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.30</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=717",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=717"];
+		718 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.31</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=718",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=718"];
+		719 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.36</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=719",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=719"];
+		696 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.4</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=696",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=696"];
+		697 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.7</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=697",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=697"];
+		698 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.1.9</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=698",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=698"];
+		793 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.1</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=793",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=793"];
+		798 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.10</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=798",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=798"];
+		799 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.12</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=799",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=799"];
+		800 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.13</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=800",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=800"];
+		801 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.14</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=801",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=801"];
+		802 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.15</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=802",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=802"];
+		803 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.16</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=803",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=803"];
+		804 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.17</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=804",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=804"];
+		805 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.18</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=805",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=805"];
+		806 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.19</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=806",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=806"];
+		794 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.2</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=794",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=794"];
+		807 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.20</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=807",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=807"];
+		795 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.5</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=795",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=795"];
+		796 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.6</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=796",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=796"];
+		797 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.2.7</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=797",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=797"];
+		813 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>194.0.3.1</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=813",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=813"];
+		690 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>195.187.255.152</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=690",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=690"];
+		689 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>195.187.255.156</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=689",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=689"];
+		691 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>195.187.255.161</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=691",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=691"];
+	</TD></TR>
+		 <TR><TD>209.85.229.84</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=521",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=521"];
+		523 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.85</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=523",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=523"];
+		525 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.86</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=525",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=525"];
+		527 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.87</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=527",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=527"];
+		529 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.88</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=529",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=529"];
+		531 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.89</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=531",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=531"];
+		542 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.91</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=542",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=542"];
+		544 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.93</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=544",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=544"];
+		547 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.95</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=547",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=547"];
+		549 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.96</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=549",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=549"];
+		551 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.97</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=551",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=551"];
+		553 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.98</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=553",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=553"];
+		555 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>209.85.229.99</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=555",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=555"];
+		421 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/1.png"/></TD></TR>
+		 <TR><TD>209.85.243.73</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=421",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=421"];
+		418 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/1.png"/></TD></TR>
+		 <TR><TD>209.85.243.77</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=418",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=418"];
+		429 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/1.png"/></TD></TR>
+		 <TR><TD>209.85.243.81</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=429",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=429"];
+		424 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/1.png"/></TD></TR>
+		 <TR><TD>209.85.243.85</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=424",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=424"];
+		415 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/1.png"/></TD></TR>
+		 <TR><TD>209.85.251.200</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=415",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=415"];
+		420 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/1.png"/></TD></TR>
+		 <TR><TD>209.85.252.83</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=420",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=420"];
+		416 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE Cdigraph G { bgcolor="purple:pink" label="agraph" fontcolor="white"
+  subgrapprototypeh cELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/1.png"/></TD></TR>
+		 <TR><TD>216.239.43.233</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=416",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=416"];
+		414 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/1.png"/></TD></TR>
+		 <TR><TD>216.239.49.196</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=414",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=414"];
+		417 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/1.png"/></TD></TR>
+		 <TR><TD>216.239.49.45</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=417",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=417"];
+		808 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>62.40.112.122</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=808",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=808"];
+		809 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>62.40.112.206</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=809",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=809"];
+		810 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>62.40.125.158</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=810",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=810"];
+		534 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>64.125.27.149</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=534",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=534"];
+		539 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>64.125.27.149</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=539",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=539"];
+		536 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>64.125.29.17</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=536",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=536"];
+		541 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>64.125.29.17</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=541",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=541"];
+		535 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>64.125.31.186</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=535",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=535"];
+		540 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>64.125.31.186</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=540",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=540"];
+		573 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.1</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=573",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=573"];
+		580 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.11</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=580",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=580"];
+		583 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.13</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=583",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=583"];
+		585 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.14</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=585",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=585"];
+		587 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.15</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=587",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=587"];
+		612 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.150</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=612",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=612"];
+		613 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.151</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=613",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=613"];
+		614 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.152</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=614",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=614"];
+		615 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.153</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=615",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=615"];
+		588 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.17</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=588",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=588"];
+		590 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.18</TD></Tluster1 {fillcolor="blueæcyan" label="acluster" fontcolor="white" style="filledR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=590",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=590"];
+		592 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.19</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=592",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=592"];
+		574 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.2</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=574",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=574"];
+		593 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.21</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=593",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=593"];
+		594 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.22</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=594",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=594"];
+		595 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.23</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=595",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=595"];
+		621 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.231</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=621",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=621"];
+		622 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.232</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=622",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=622"];
+		623 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.233</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=623",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=623"];
+		624 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.234</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=624",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=624"];
+		625 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD" gradientangle="270"
+		node [shape=b>66.2ox fillcolor="20.153.244</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=625",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=625"];
+		626 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.245</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=626",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=626"];
+		627 [reç:yellow" style="filled" gradientangle=90]
+		 color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.246</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=627",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=627"];
+		628 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.247</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=628",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=628"];
+		629 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=anode;
+	0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.248</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operation/agentes/ver_agente&id_agente=629",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=629"];
+		630 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, height=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><TR><TD><IMG SRC="images/11.png"/></TD></TR>
+		 <TR><TD>66.220.153.249</TD></TR></TABLE>>,
+		 shape="doublecircle", URL="index.php?sec=estado&sec2=operat}
+
+}ion/agentes/ver_agente&id_agente=630",
+		 tooltip="ajax.php?page=operation/agentes/ver_agente&get_agent_status_tooltip=1&id_agent=630"];
+		596 [ color="#8DFF1D", fontsize=12, style="filled", fixedsize=true, width=0.40, heig
+ht=0.40, label=<<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0"><T

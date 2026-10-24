@@ -1,0 +1,7 @@
+##"I played some days with making an interfaceEdgeten eour ConceptBase system (essentially a database system to store models) and graphviz. One example graph is attached. It is a so-called petri net for Dutch traffic lightS. The example is actually takgraph ER {
+	layout=neato
+	node [shape=box]; course; institdrawn by NEATO";
+	fontsize=20;;
+
+}}
+

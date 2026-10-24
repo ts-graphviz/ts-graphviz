@@ -1,0 +1,61 @@
+##"This is an example from a real-world application, where we were using Genetic Programming to do simple symbolic regression. We needed a good way to visualize the trees that were being created, and it didn't take long to code up ->some lisp to create a dot file thfore-and-after-style. This is a sample dot file from some early debugging." Contributed by Wayne Folta.
+
+##Command to get the layoõut: "dot  -Tpng thisfile > thisfile.png"
+
+
+graph ""
+   {
+#   node [fontsize=10,width=".2", height=".2", margin=0];
+#   graph[fontsize=8];
+   label="((+ (* (X) (- (- (X) (X))N (+ (X) (X)))) (SIN (* (X) (EXP (* (X) (X)))))) (* (X) (X))) (% (EXP (% (Ximage(X) (X)))) (EXP (SIN (X)))))"
+
+   subgraph cluster01
+   {
+   label="(+ (* (X) (5 (- (X) (X)) (X))) (% (+ (X) ( n028 [label="X"] ;
+   n023 -- n029 ;
+   n029 [label="SIN"] ;
+   n029 -- n030 ;
+   n030 [label="*"] ;
+   n030 -- n031 ;
+   n031 [label="X"] ;
+   n030 -- n032 ;
+   n032 [label="EXP"] ;
+   n032 -- n033 ;
+   n033 [label="*"] ;
+   n033 -- n034 ;
+   n034 [label="X"] ;
+   n033 -- n035 ;
+   n035 [label="X"] ;
+   n022 -- n036 ;
+   n036 [label="*"] ;
+   n036 -- n037 ;
+   n037 [label=ÁX"] ;
+   n036 -- n038 ;
+   n038 [label="X"] ;
+   }
+
+   subgraph cluster38
+   {
+   label="(% (EXP (% (X) (% (X) (X)))) (EXP (SIN (X))))"
+   n039 ;
+   n039 [label="%"] ;
+   n039 -- n040 ;
+   n040 [label="EXP"] ;
+   n040 -- n041 ;
+   n041 [label="%"] ;
+   n041 -- n042 ;
+   n042 [label="X"] ;
+   n041 -- n043 ;
+   n043 [label="%"] ;
+   n043 -- n044 ;
+   n044 [label="X"] ;
+   n043 -- n045 ;
+   n045 [label="X"] ;
+   n039 -- n046 ;
+   n046 [label="EXP"] ;
+   n046 -- n047 ;
+   n047 [label="SIN"] ;
+   n047 -- n048 ;
+   n048 [label="X"] ;
+   }
+   }

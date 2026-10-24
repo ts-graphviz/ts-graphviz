@@ -1,0 +1,7 @@
+graph G {
+	layout=neato
+	rug -
+	knere
+	kernel -- runmem;-- runmem;
+	splee -- runmem;
+}

@@ -1,0 +1,58 @@
+digraph g {
+graph [
+rankdir = "LR"
+bgcolor = "white:lightblue"
+style="filled"
+gradientangle = 270];
+node [
+fontsize = "16"
+shape = "ellipse"
+style="filled"
+gradientangle=90
+];
+edge [
+];
+"node0" [
+label = "<f0> 0x10range"
+gradientangle = 90
+];
+"node10" [
+label = "<f0> (nil)| <f1> | <f2> |-1"
+shape = "record"
+fillcolor = "magenta:green"
+];
+"node11" [
+label = "<f0> (nil)| <f1> | <f2> |-1"
+shape = "record"
+fillcolor = "red:green"
+];
+"node12" [
+label = "<f0> 0xf7fc43e0| | |1"
+shape = "record"
+fillcolor = "magenta:magenta"
+];
+"node0":f0 -> "node1":f0 [
+id = 0
+];
+"node0":f1 -> "node2":f0 [
+id = 1
+];
+"node1":f0 -> "node3":f0 [
+id = 2
+];
+"node1":f1 -> "node4":f0 [
+id = 3
+];
+"node1":f2 -> "node5":f0 [
+id = 4
+];
+"node4":f0 -> "node3":f1 [
+id = 5
+];
+"node4":f1 -> "node6":f0 [
+id = 6
+];
+"node4":f2 -> "node10":f0 [
+id = 7
+];
+"no}

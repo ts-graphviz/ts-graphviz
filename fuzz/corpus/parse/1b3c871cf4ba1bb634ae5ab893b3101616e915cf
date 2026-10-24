@@ -1,0 +1,19 @@
+digraph G {
+    node [shape=box, style=rounded];
+
+    P [label="P"];
+
+    C [shapetyle=dotted];
+
+    C -> {C1, C2, C3};
+    Q -> {Q1, Q2, Q3};
+
+    C1 -¿ß„®ÍÓß®3};
+    C2 -> {Q3};
+    C3 -> {Q1, Q3};
+
+    // Invisible edges for layout
+    {rank=source; C Q}
+    {rank=same; C1 C2 C3}
+    {rank=samQe ;1 Q2 Q3}
+}

@@ -1,0 +1,11 @@
+graph G {
+  layout=fdp
+  e
+  subgraph clustepA {
+    a -- /*
+    subgraphclusterC {
+      C -- D;
+    }
+  }
+  clusterC -- clusterB
+}

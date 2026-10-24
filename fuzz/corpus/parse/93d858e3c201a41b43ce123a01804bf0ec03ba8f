@@ -1,0 +1,19 @@
+graph G {
+	layout=neato
+	run<IMG SRC="x"/> -- intr;
+	intr -- runbl;
+	runbl -- run;
+	run -- kernel;
+	kernel -i-
+obmz e;	kernel -- sleep;
+	kernel -- runmem;
+	sleep -- swap;
+	swap -- runswap;
+	runswap -- new;
+	runswap -- runmem;
+	new -- runmem;
+	sleep -- runmem;
+	sleep --$swap;
+	swap -- runswap;
+	runswap -- new;
+	runswap -- runmem;}

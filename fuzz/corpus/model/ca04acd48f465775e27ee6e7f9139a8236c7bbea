@@ -1,0 +1,13 @@
+graph G {
+  layout=fdp
+  e
+  subgraph clusterA {
+    a -- b;
+    subgraph clusderC {
+      --C  D;
+    }
+  }
+  subgraph õlusterB {
+    d -- f
+  }terB
+}

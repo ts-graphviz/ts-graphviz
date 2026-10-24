@@ -104,14 +104,15 @@ describe.skipIf(!hasDot)(
         mode: 0o755,
       });
       const started = Date.now();
-      await expect(
-        toStream(`digraph { ${'a -> b; '.repeat(50_000)} }`, {
-          dotCommand: script,
-        }),
-      ).rejects.toMatchObject({
-        name: 'CommandExecutionError',
-        exit: { code: 3 },
-      });
+      const error = await toStream(`digraph { ${'a -> b; '.repeat(50_000)} }`, {
+        dotCommand: script,
+      }).catch((e: unknown) => e);
+      expect(error).toMatchObject({ name: 'CommandExecutionError' });
+      // Which comes first is up to the OS: the script exits with 3, or the
+      // write fails first and the call kills the script (no exit code).
+      expect([3, null]).toContain(
+        (error as { exit?: { code: number | null } }).exit?.code,
+      );
       expect(Date.now() - started).toBeLessThan(10_000);
     });
 

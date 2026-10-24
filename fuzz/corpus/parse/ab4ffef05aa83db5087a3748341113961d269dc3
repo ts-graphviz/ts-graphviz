@@ -1,0 +1,12 @@
+graph ER {
+	layout=n2eato
+	node [shape=box]; course; instit for Dutch traffic lights. The exam.00];
+	"C-(" -- institute [label="1",len=1.00];
+	i`stitute -- name1;
+	institute -- "S-I" [label="1",len=1.00];
+	"S-I-s"  -tudent [label="n",len=1.00];
+	0];
+
+	label = "\n\kEntity Relation Diagram\ndrawn by NEATO";
+	fontsize=20;
+}

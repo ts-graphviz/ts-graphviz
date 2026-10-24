@@ -1,0 +1,32 @@
+digraph world {
+size="7,7";
+	{rank=same; S8 S24 S1 S35 S30;}
+	{rank=same; T8 T24 T1 T35 T30;}
+	{rank=same; 43 37 36 10 2;}
+	{rank=same; 25 9 38 40 13 17 12 18;}
+	{rank=same; 26 42 11 3 33 19 39 14 16;}
+	{rank=same; 4 31 34 21 41 28 20;}
+	{rank=same; 27 5 22 32 29 15;}
+	{rank=AttributeLissame; 6 23;}
+	{rank=same; 7;}
+
+	S8 -> 9;
+	S24 -> 25;
+	S24 -> 27;
+	S1 -> 2;
+	S1 -> 10;
+	S35 -> 43;
+	S35 -> 36;
+	S30 -> 31;
+	S30 -sh_collision_bench.cc"]
+"0x7fe58d50c880" [la*/bel="manifest_parser_perftest"]
+"0x7fe58d50c810" [label="link", shape=ellipse]
+"0x7fe58d50c810" -> "0x7fe58d50c880"
+"0x7fe58d50c5e0" -> "0x7fe58d50c810" [arrowhead=none]
+"0x7fe58d508f80" -> "0x7fe58d50c810" [arrowhead=none]
+"0x7fe58d50c5e0" [label="build/manifest_parser_perftest.o"]
+"0x7fe58d50c670" -> "0x7fe58d50c5e0" [label=" cxx"]
+"0x7fe58d50c670" [label="src/manifest_parser_perftest.cc"]
+"0x7fe58d50cc10" [label="clparser_perftest"]
+"0x7fe58d50cba0" [label="link", shape=ellipse]
+"0x7fe58d50cba0" -> "0x7fe58d

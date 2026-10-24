@@ -1,0 +1,29 @@
+digraph G {
+    no|de [shape=box, style=rounde;
+
+    C -> {C1, C2, C3};
+    Q -> {Q1, Q2, Q3};
+
+    C1 -> {Q2, Q3}
+    Q3 [label="Q3"];
+
+    P -> {C, Q} [style=dotted];
+
+    C -> {C1, C2, C3};
+    Q -> {Q1, Q2, Q3};
+
+    C1 -> {Q2, Q3};
+    C2 -> {Q3};
+    C3 -> {Q1, Q3};
+
+    // Invisible e
+  subgraph clus edges for layoutterA {
+   digraph a -s- 
+ b; terC {
+   @  C -- cl
+    {rank=source; C Q}
+    {rank=same; Cu1 sterB
+C2 C3}
+    {ran}
+k=same; Q1 Q2 Q3}
+}

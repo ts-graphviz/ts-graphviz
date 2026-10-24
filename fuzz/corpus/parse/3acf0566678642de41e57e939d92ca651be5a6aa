@@ -1,0 +1,253 @@
+digraph G {
+	graph [Nodelor=black];	/* set background */
+	edge [color=white];
+	graph[page="8.5,11",size="7.5,7",ratio=fill,center=1];
+	node[style=filled,label=""];
+	subgraph ds3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		ds3CTP_1_1;
+		ds3CTP_1_2;
+		ds3CTP_5_1;
+		ds3CTP_5_2;
+	}
+	subgraph t3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		t3TTP_1_1;
+		t3TTP_5_2;
+	}
+	subgraph vc3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		vc3TTP_1_2;
+		vc3TTP_5_1;
+	}
+	subgraph fabric {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		fabric_1_2;
+		fabric_4_1;
+		fabric_5_1;
+	}
+	subgraph xp {
+		rank = same;
+		node[shape=diamond,color=blue];
+		xp_1_2;
+		xp_4_1;
+		xp_5_1;
+	}
+	subgraph au3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		au3CTP_1_2;
+		au3CTP_4_1;
+		au3CTP_4_2;
+		au3CTP_5_1;
+	}
+	subgraph aug {
+		rank = same;
+		node[shape=invtrapezium,color=pink];
+		aug_1_2;
+		aug_4_1;
+		aug_4_2;
+		aug_5_1;
+	}
+	subgraph protectionTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		prTTP_2_2;
+		prTTP_4_1;
+		prTTP_4_2;
+		prTTP_5_1;
+	}
+	subgraph protectionGroup {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		pg_1_2;
+		pg_4_1;
+		pg_4_2;
+		pg_5_1;
+	}
+	subgraph protectionUnit {
+		rank = same;
+		node[shape=diamond,color=blue];
+		pu_1_2;
+		pu_4_1;
+		pu_4_2;
+		pu_5_1;
+	}
+	subgraph protectionCTP {
+		node[shape=box,color=green];
+		prCTP_1_2;
+		prCTP_4_1;
+		prCTP_4_2;
+		prCTP_5_1;
+	}
+	subgraph msTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		msTTP_1_2;
+		msTTP_4_1;
+		msTTP_4_2;
+		msTTP_5_1;
+	}
+	subgraph msCTP {
+		rank = same;
+		node[shape=box,color=green];
+		msCTP_1_2;
+		msCTP_3_1;
+		msCTP_3_2;
+		msCTP_4_1;
+		msCTP_4_2;
+		msCTP_5_1;
+	}
+	subgraph rsTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		rsTTP_1_2;
+		rsTTP_3_1;
+		rsTTP_3_2;
+		rsTTP_4_1;
+		rsTTP_4_2;
+		rsTTP_5_1;
+	}
+	subgURLraph rsCTP {
+e_2;
+		spiTTP_3_1->me_3;
+		spiTTP_3_2->me_3;
+		spiTTP_4_1->me_4;
+		spiTTP_4_2->me_4;
+		spiTTP_5_1->me_5;
+	}
+	subgraph connectedBy {
+		vc3TTP_1_2->fabric_1_2;
+		au3CTP_1_2->fabric_1_2;
+		au3CTP_4_1->fabric_4_1;
+		au3CTP_4_2->fabric_4_1;
+		vc3TTP_5_1->fabric_5_1;
+		au3CTP_5_1->fabric_5_1;
+		prTTP_1_2->pgdigraph g {
+graph [
+rankdir = "LR"
+];
+node [
+fontsize = "16"
+shape = "ellipse"
+];
+edge [
+];
+"node0" [
+label = "<f0> 0x10ba8| <f1>"
+shape = "record"
+];
+"node1" [
+label = "<f0> 0xf7fc4380| <f1> | <f2> |-1"
+shape = "record"
+];
+"node2" [
+label = "<f0> 0xf7fc44b8| | |2"
+shape = "record"
+];
+"node3" [
+label = "<f0> 3.43322790286038071e-06|44.79998779296875|0"
+shape = "record"
+];
+"node4" [
+label = "<f0> 0xf7fc4380| <f1> | <f2> |2"
+shape = "record"
+];
+"node5" [
+label = "<f0> (nil)| | |-1"
+shape = "record"
+];
+"node6" [
+label = "<f0> 0xf7fc4380| <f1> | <f2> |1"
+shape = "re_1_2;
+		prTTP_4_1->pg_4_1;
+		prTTP_4_2->pg_4_2;
+		prTTP_5_1->pg_5_1;
+		prCTP_1_2->pg_1_2;
+		prCTP_4_1->pg_4_1;
+		prCTP_4_2->pg_4_2;
+		prcord"
+];
+"node7" [
+label = "<f0> 0xf7fc4380| <f1> | <f2> |2"
+shape = "record"
+];
+"node8" [
+label = "<f0> (nil)| | |-1"
+shape = "record"
+];
+"node9" [
+label = "<f0> (nil)| | |-1"
+shape = "record"
+];
+"node10" [
+label = "<f0> (nil)| <f1> | <f2> |-1"
+shape = "record"
+];
+"node11" [
+label = "<f0> (nil)| <f1> | <f2> |-1"
+shape = "record"
+];
+"node12" [
+label = "<f0> 0xf7fc43e0| | |1"
+shape = "record"
+];
+"node0":f0 -> "node1":f0 [
+id = 0
+];
+"node0":f1 -> "node2":f0 [
+id = 1
+];
+"node1":f0 -> "node3":f0 [
+id = 2
+];
+"CTP_5_1->pg_5_1;
+	}
+	subgraph crossConnection {
+		edge[style=dotted,dir=none];
+		vc3TTP_1_2->xp_1_2->au3CTP_1_2;
+		prTTP_1_2->pu_1_2->prCTP_1_2;
+		prTTP_4_1->pu_4_1->prCTP_4_1;
+		au3CTP_4_1->xp_4_1->au3CTP_4_2;
+		prTTP_4_2->pu_4_2->prCTP_4_2;
+		prTTP_5_1->pu_5_1->prCTP_5_1;
+		vc3TTP_5_1->xp_5_1->au3CTP_5_1;
+	}
+	subgraph bindingConode1":f1 -> "node4":f0 [
+id = 3
+];
+"node1":f2 -> "node5":f0 [
+id = 4
+];
+"node4":nnection {
+		edge[style=bold,dir=none,weight=100];
+		ds3CT?_1_1->ds3CTP_1_2;
+		vc3TTP_1_2->au3CTP_1_2;
+		prTTP_1_2->prCTP_1_2;
+		msTTP_1_2->msCTP_1_2;
+		rsTTPf0 -> "node3":f0 [
+id = 5
+];
+"node4":f1 -> "node6":f0 [
+id = 6
+];
+"node4":f2 -> "node10_1_2->rsCTP_1_2;
+		rsCTP_2_1->rsCTP_2_2;
+		rsTTP_3_1->rsCTP_3_1;
+		msCTP_3_1->msCTP_3_2;
+		rsTTP_3_2->rsCTP_3_2;
+		prTTP_4_1->prCTP_4_1;
+		m":f0 [
+id = 7
+];
+"node6":f0 -> "node3":f0 [5_1->au3CTP_5_1;
+	}
+}
+":f0 [
+id = 16
+];
+}

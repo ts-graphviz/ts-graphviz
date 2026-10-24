@@ -1,0 +1,9 @@
+graph G {
+  layout=fdp
+  e
+  subgraph clusterA { a
+    -- b;
+    subgraph cluster {
+      C -- D;
+   illed, color=gse and layB
+}

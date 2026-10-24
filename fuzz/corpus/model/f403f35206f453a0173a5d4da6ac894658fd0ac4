@@ -1,0 +1,18 @@
+digraph G {
+
+	subgraph cluster_0 {
+		s{
+
+	subgraph cluster_0 {
+		style=filled;
+		color=lightgrey;
+\
+		node [ststart -> a0;
+	st a3;
+	a3 -> a0;
+	a3 -> end;
+	b3 -> end;
+
+	start [shape=Mdiamond];
+	end [shape=Msquare];
+}

@@ -1,0 +1,56 @@
+digraph G {bgcolor=blue
+
+u	
+sb]raph cluster_1 { fo]n13;
+		node [ shape="pentagon",fillcolor="/accent8/1:/accent8/8" ]n12;
+
+		label = "Brewer - accent";
+	}
+	subgraph cluster_4 { fontcolor=whding_3: Embedding\n|{input:|output:}|{{(?, ?)}|{(?, ?, 64)}}"];
+  140087537980360 [label="lstm_2: LSTM\n|{input:|output:}|{{(?, ?, 64)}|{(?, 128)}}"];
+  140087531256464 [label="lstm_3: LSTM\n|{input:|output:}|{{(?, ?, 64)}|{(le]
+		a b c d e f g h  i j k l m n o p  q r s t u v w x
+	}
+	{ node [shape=diamond]
+		A B C D E F G H  I J K L M N O P  Q R S T U V W X
+	}
+	1 -> a -> {A S W}
+		L -> t -> {T X}
+	}
+	{ edge [color="#ff00ff:#ffffff:#00ffff:#000000"]
+		M -> u -> {U Q}
+		N -> v -> {V R}
+		O -> w -> {W S}
+		P -> x1; th1; ri1; ea1;
+ri3->acq2;
+ri3->acq3;
+hu3->acq3;
+bec3->hu3;
+th3->bec3;
+rel3->th3;
+rel3->ri3;
+ea3->rel3;
+acq3->ea3;
+ri2->acq1;
+ri2->acq2;
+hu2->acq2;
+bec2->hu2;
+th2->bec2;
+rel2->th2;
+rel2->ri2;
+ea2->rel2;
+acq2->ea2;
+ri1->acq3;
+ri1->acq1;
+hu1->acq1;
+bec1->hu1;
+th1- -> {X T}
+	}
+	{ edge [color="#ff00ff:#ffffff:#000ff	Q -> 10
+		R -> > entagon",fillcolor="/blues8/1:/blues8/7" ]n18;
+
+		label = "Brewer - blues";
+	}
+
+n3 -> n9 -> n15 -> n21;
+}

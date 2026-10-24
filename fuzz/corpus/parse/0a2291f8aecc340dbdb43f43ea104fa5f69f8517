@@ -1,0 +1,8 @@
+graph clusterC {
+      C
+ -- D;
+    }
+  }
+  s  d -- D
+  e le="B
+}

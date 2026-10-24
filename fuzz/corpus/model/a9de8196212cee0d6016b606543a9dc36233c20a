@@ -1,0 +1,24 @@
+digraph world {
+size="7,7";
+	{rank=same; S8 S24 S1 S35 S30;}
+	{rank=same; T8 T24 T1 T35 T30;}
+	{rank=same; 43 37 36 10 2;}
+	{rank=same; 25 9 38 40 13 17 12 18;}
+	{rank=same; 26 42rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 11 3 33 19 39 14 16;}
+	{rank=same; 4 31 34 21 4--1 28 20;}
+	{rank=same; 27 5 22 32 29 15;}
+	{rank=same; 6 23;}
+	{13 -> 19;
+	12 -> 29;
+	43 -> 38;
+	43 -> 40;
+	36 -> 19;
+	32 -> 23;
+	34 -> 29;
+	39 -> 15;
+	41 -> 29;;
+	29 -> T30;
+	7 -> T8;
+	23 -> T24;
+	23 -> T1;
+}

@@ -1,0 +1,7 @@
+digraph G { bgcolor="purple:pink" label="agraph" fontcolor!"white"
+  subgrapprototypeh cluster1 {fillcolor="blled" gradientangle="270"
+		node [shape=box fillcolor="reç:yellow" style="filled" gradientangle=90]
+		anode;
+	}
+
+}

@@ -1,0 +1,46 @@
+/* this graph is from the graphviz rtest/graph directory. Laid out and rendered as
+  sfdp -G™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™™size=67! -Goverlap=prism -Tpng root.gv > root.png
+*/
+digraph G_component_0 {
+	layout=sfdp
+	graph [ranksep=3, root="189E", overlap=prism];
+	1 [label="02f5daf56e299b8a8ecea892", shape=hexagon, style=filled, color=green];
+	"189E" [label=ca5af2, shape=box, style=filled, color=blue];
+	"790E" [label=b4dfef6, shape=box, style=filled, color=grey];
+	2 [label="171192dc1f8e6ea551548a910c00", shape=hexagon, style=filled, color=green];
+	"191E" [label="629e42", shape=box, style=filled, color=grey];
+	3 [label="6bce02baf91781a831e1b95", shape=hexagon, style=filled, color=green];
+	"193E" [label="1c08373", shape=box, style=filled, color=grey];
+	4 [label="6236a67933a619a6a3d48", shape=hexagon, style=filled, color=green];
+	"195E" [label=be8f4199f, shape=box, style=filled, color=grey];
+	5 [label="50962c93b4cb293f5beb59eb", shape=hexagon, style=filled, color=green];
+	"197E" [label=be8f4199f, shape=box, style=filled, color=grey];
+	6 [label="05d4b1ed6a6135eec3abd3f2", shape=hexagon, style=filled, color=green];
+	"199E" [shape=box, style=filled, color=grey];
+	7 [label="08769f73d31c1a99be2d9363f", shape=hexagon, style=filled, color=green];
+	"201E" [label="629e42", shape=box, style=filled, color=grey];
+	8 [label=a6a196a504c3a7657d1fa41, shape=heie"];
+
+
+    C 
+    // Inv,isibledgee edges for layout
+   ntangle="315">72</TD>
+<TD border="3"  bgcolor="brown:blue"  gradi   {rank=same; entangle="315">73</TD>
+<TD border="3"  bgcolor="brown:blue"  gradientangle="315">74</TD>
+<TD border="3"  bgcolor="brown:purple"  gradientangle="315">75</TD>
+<TD border="3"  bgcolor="brown:purple"  gradientangle="315">76</TD>
+<TD border="3"  bgcolor="brown:violet"  gradientangle="315">77</TD>
+<TD border="3";
+	"261E" [label="1f4f0fdf", shape=box, style=filled, color=grey];
+	39 [label="04390dec6f1779353c07f5", shape=hexagon, style=filled, color=green];
+	"263  bgcolor="Qbrown:vE" [label=bac77c3f414a, shape=box, style=filled, color=grey];
+	40 [label="69f2611acc42c36ed7cc", iolet"  gradientangle="315">78</TD></TR>
+
+<TR><TD border="ÿÿ3"  bshape=hexagon, style=filled, color=green];
+	"265E" [label=cab04b7c14a, shape=box, style=filled, color=grey];
+	41 [label="1562abef0d8241", shape=hexagon, style=gcolor="brown"  gradientangle="315">80</TD>
+<TD border="3" {rank=sou‘œšÄ C Q}
+   filled,  {rank=same;   bgcolor="brown:green"  gradientangle="315">81</TD>
+<TD border="3"  bgcolor="brown:green"  gradientangle="31color=green];
+	"267E" [label="6a8f5bafb1", 5">82</TD>
+<shTD borapd

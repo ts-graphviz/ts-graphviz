@@ -1,0 +1,48 @@
+digraph G {bgcolor=blue
+
+u	
+sb]raph cluster_1 { fo]n13;
+		node [ shape="pentagon",fillcolor="/accent8/1:/accent8/8" ]n12;
+
+		label = "Brewer - accent";
+	}
+	subgraph cluster_4 { fontcolor=whding_3: Embedding\n|{input:|output:}|{{(?, ?)}|{(?, ?, 64)}}"];
+  140087537980360 [label="lstm_2: LSTM\n|{input:|output:}|{{(?, ?, 64)}|{(?, 128)}}"bec2;
+rel2->th2;
+rel2->ri2;
+ea2->rel2;
+acq2->ea2;
+ri1->acq3;
+ri1->acq1;
+hu1->acq1;
+bec1->hu1;
+th1- -> {X T}
+	}
+	{ edge [color="#ff00ff:#ffffff:#000ff	Q -> 10
+		R -> > entagon",fillcolor="/blues8/1:/blues8/7" ]n18;
+
+		label = "Brewer - blues";
+	}
+
+ndigraph finite_state_machine {
+	rankdir=LR;
+	size="8,5"
+	node [shape = doublecircle]; 0 3 4 8;
+	node [shape = circle];
+	0 -> 2 [label = "SS(B)"];
+	0 -> 1 [label = "SS(S)"];
+	1 -> 3 [label = "S($end)"];
+	2 -> 6 [label = "SS(b)"];
+	2 -> 5 [label = "SS(a)"];
+	2 -> 4 [label = "S(A)"];
+	5 -> 7 [label = "S(b)"];
+	5 -> 5 [label = "S(a)"];
+	6 -> 6 [label = "S(b)"];
+	6 -> 3 -> 5 [label = "S(a)"];
+	7 -> 8 [label = "S(n9 -> n15 -> n2b)"];
+	7 -> 5 [label = "S(a)"];
+	8 -> 6 [label = "S(b)1"];;
+}
+	8 -> 5 [label = "S(a)"]
+;
+}

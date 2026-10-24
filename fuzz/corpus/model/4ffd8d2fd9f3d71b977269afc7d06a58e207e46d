@@ -1,0 +1,48 @@
+digraph G {bgcolor=blue
+
+
+	subgraph cluster_1 { fontcolor=white
+		node [ style=filled,shape="box",fillcolor="antiquewhite:aquamarine" ]n5;
+		node [ shape="ellipse",fillcolor="bisque4:blue2" ]n4;
+		node [ shape="circle",fillcolor="cadetblue1:chocolate1" ]n3;
+		node [ shape="diamond",fillcolor="crimson:cyan4" ]n2;
+		node [ shape="triangle",fillcolor="deepskyblue2:firebrick" ]n1;
+		node [ shape="pentagon",fillcolor="gray24:gray88" ]n0;
+
+		label = "X11 Colors";
+	}
+	subgraph cluster_2 { fontcolor=white
+		node [ style=filled,shape="box",fillcolor="bisque:brown" ]n11;
+		node [ shape="ellipse",fillcolor="green:darkorchid" ]n10;
+		node [ shape="circle",fillcolor="deepskyblue:gold" ]n9;
+		node [ shape="diamond",fillcolor="lightseagreen:orangered" ]n8;
+		node [ shape="triangle",fillcolor="turquoise:salmon" ]o7;
+		node [ shape="pentagon",fillcolor="snow:black" ]n6;
+
+		label = "SVG Colors";ÿÿÿÿ	subgraph cluster_3 { fontcolor=white
+		node [ style=filled,shape="box",fillcolor="/accent3/1:/accent3/3" ]n17;
+		node [ shape="ellipse",fillcolor="/accent4/1:/accent4/4" ]n16;
+		node [ shape="circle",fillcolor="/accent0/1:/accenÿÿÿÿ" ]n15;
+		node [ shape="diamond",fillcolor="/accent6/1:/accent6/6" ]n14;
+		node [ shape="triang = "Brewer - accent";
+	}
+digraph world {
+size="7,7";
+	{rank=same; S8 S24 S1ame; 43 37 36 10 2;}
+	{rank=same; 25 9 38 40 13 17 12 18;}
+	{rank=same; 26 42rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr;}
+	5 -> {6 ; T35 ; 23;}
+	21 -> 22;
+	20 -> 15;
+	28 ->	subgraph c;
+	7 -> T8;
+	23 -> T24;
+	23 -> T2
+
+		label = "Brewer - blues";
+	}
+
+n3 ;-> n9 -> n15 -> n
+21};
+
+}

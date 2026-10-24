@@ -1,0 +1,16 @@
+graph G {
+	layout=neato
+	run -- intr;
+	intr -- runbl;
+	runblff"]
+		I -> q -> {Q U}
+		J -> r -> {R V}
+		K ÿÿÿÿÿÿÿ"{S W}
+		L -> t -> {T}} X		
+
+{ edge [color="#ff00ff:#ffunswap;
+	runswap -- new;
+	runswap -- runmem;
+	new{S W}
+		L -> sleep -- runmem;
+}
