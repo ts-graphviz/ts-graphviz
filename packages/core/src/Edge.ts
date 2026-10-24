@@ -4,6 +4,7 @@ import {
   type EdgeAttributesObject,
   type EdgeModel,
   type EdgeTargetTuple,
+  InvalidModelError,
   isNodeRefLike,
 } from '@ts-graphviz/common';
 import { AttributesGroup } from './AttributesGroup.js';
@@ -31,7 +32,7 @@ export class Edge extends DotObject implements EdgeModel {
       targets.length < 2 &&
       (isNodeRefLike(targets[0]) && isNodeRefLike(targets[1])) === false
     ) {
-      throw Error(
+      throw new InvalidModelError(
         'The element of Edge target is missing or not satisfied as Edge target.',
       );
     }

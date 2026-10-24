@@ -8,6 +8,7 @@
  *
  * @module
  */
+import { InvalidValueError } from './errors.js';
 
 /**
  * A Graphviz escString: the text is written into the DOT output as is, so
@@ -70,7 +71,7 @@ export function htmlLike(markup: string): HTMLLikeValue {
     else if (ch === '>' && --depth < 0) break;
   }
   if (depth !== 0 || markup.includes('\0')) {
-    throw new RangeError(
+    throw new InvalidValueError(
       'An HTML-like label must have balanced "<" and ">" characters and no null character',
     );
   }

@@ -6,7 +6,14 @@ import {
   toModel,
 } from '@ts-graphviz/ast';
 import fc from 'fast-check';
-import { digraph, escString, fromDot, htmlLike, toDot } from 'ts-graphviz';
+import {
+  digraph,
+  escString,
+  fromDot,
+  htmlLike,
+  InvalidValueError,
+  toDot,
+} from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import {
   buildGraph,
@@ -255,7 +262,7 @@ describe('explicit value kinds', () => {
       fc.property(
         dotString().filter((s) => s.includes('>')),
         (s) => {
-          expect(() => htmlLike(`${s}<`)).toThrow(RangeError);
+          expect(() => htmlLike(`${s}<`)).toThrow(InvalidValueError);
         },
       ),
     );

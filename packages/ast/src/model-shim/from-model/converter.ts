@@ -1,4 +1,4 @@
-import type { DotObjectModel } from '@ts-graphviz/common';
+import { ConversionError, type DotObjectModel } from '@ts-graphviz/common';
 import { createElementFactory } from '../../builder/create-element.js';
 import { defaultPlugins } from './plugins/index.js';
 import type {
@@ -38,7 +38,9 @@ export class FromModelConverter {
             return plugin.convert(context, m) as ModelToAST<U>;
           }
         }
-        throw Error();
+        throw new ConversionError(
+          `No plugin can convert the "${m.$$type}" model to an AST node`,
+        );
       },
     };
     return context.convert(model);
