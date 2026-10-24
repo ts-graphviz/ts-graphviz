@@ -40,7 +40,7 @@ describe('Edge grouping feature', () => {
       );
       expect(dot).toMatchInlineSnapshot(`
         "digraph {
-          \"a\" -> {\"b\" \"c\"};
+          "a" -> {"b" "c"};
         }"
       `);
     });
@@ -53,7 +53,7 @@ describe('Edge grouping feature', () => {
       );
       expect(dot).toMatchInlineSnapshot(`
         "digraph {
-          \"x\" -> {\"y\"};
+          "x" -> {"y"};
         }"
       `);
     });

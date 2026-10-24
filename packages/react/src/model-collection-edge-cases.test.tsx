@@ -68,7 +68,9 @@ describe('Model Collection Edge Cases', () => {
       const models = root.getTopLevelModels();
       expect(models).toHaveLength(3);
       expect(models.map((m) => m.id)).toEqual(['a', 'b', 'c']);
-      models.forEach((model) => expectNode(model));
+      models.forEach((model) => {
+        expectNode(model);
+      });
       expect(container.nodes).toHaveLength(3);
     });
 
@@ -112,7 +114,9 @@ describe('Model Collection Edge Cases', () => {
       const models = root.getTopLevelModels();
       // Both models are collected during render
       expect(models).toHaveLength(2);
-      models.forEach((model) => expectNode(model));
+      models.forEach((model) => {
+        expectNode(model);
+      });
       expect(models[0].id).toBe('duplicate');
       expect(models[1].id).toBe('duplicate');
 
@@ -134,7 +138,9 @@ describe('Model Collection Edge Cases', () => {
 
       const models = root.getTopLevelModels();
       expect(models).toHaveLength(2);
-      models.forEach((model) => expectNode(model));
+      models.forEach((model) => {
+        expectNode(model);
+      });
 
       expect(models[0].id).toBeUndefined();
       expect(models[1].id).toBe('defined');
@@ -154,7 +160,9 @@ describe('Model Collection Edge Cases', () => {
 
       const models = root.getTopLevelModels();
       expect(models).toHaveLength(2);
-      models.forEach((model) => expectNode(model));
+      models.forEach((model) => {
+        expectNode(model);
+      });
 
       expect(models[0].id).toBe('');
       expect(models[1].id).toBe('normal');
@@ -240,7 +248,9 @@ describe('Model Collection Edge Cases', () => {
         'conditional_first',
         'always_second',
       ]);
-      models1.forEach((model) => expectNode(model));
+      models1.forEach((model) => {
+        expectNode(model);
+      });
       expect(container1.nodes).toHaveLength(2);
 
       // Test with first condition false
@@ -254,7 +264,9 @@ describe('Model Collection Edge Cases', () => {
         'always_second',
         'conditional_last',
       ]);
-      models2.forEach((model) => expectNode(model));
+      models2.forEach((model) => {
+        expectNode(model);
+      });
       expect(container2.nodes).toHaveLength(2);
     });
   });
@@ -298,7 +310,9 @@ describe('Model Collection Edge Cases', () => {
 
       const models = root.getTopLevelModels();
       expect(models).toHaveLength(5);
-      models.forEach((model) => expectNode(model));
+      models.forEach((model) => {
+        expectNode(model);
+      });
 
       const expectedIds = [
         'in_fragment1',
@@ -352,7 +366,9 @@ describe('Model Collection Edge Cases', () => {
 
       const models = root.getTopLevelModels();
       expect(models).toHaveLength(5);
-      models.forEach((model) => expectNode(model));
+      models.forEach((model) => {
+        expectNode(model);
+      });
 
       const expectedIds = [
         'node-with-dashes',
@@ -383,7 +399,9 @@ describe('Model Collection Edge Cases', () => {
 
       const models = root.getTopLevelModels();
       expect(models).toHaveLength(nodeCount);
-      models.forEach((model) => expectNode(model));
+      models.forEach((model) => {
+        expectNode(model);
+      });
 
       expect(models[0].id).toBe('node_0');
       expect(models[nodeCount - 1].id).toBe(`node_${nodeCount - 1}`);

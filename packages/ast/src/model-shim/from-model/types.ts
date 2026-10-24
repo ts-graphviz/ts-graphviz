@@ -25,19 +25,20 @@ import type {
  *
  * @group AST
  */
-export type ModelToAST<T> = T extends DotObjectModel<infer U>
-  ? U extends 'Graph'
-    ? GraphASTNode | DotASTNode
-    : U extends 'AttributeList'
-      ? AttributeListASTNode
-      : U extends 'Edge'
-        ? EdgeASTNode
-        : U extends 'Node'
-          ? NodeASTNode
-          : U extends 'Subgraph'
-            ? SubgraphASTNode
-            : never
-  : never;
+export type ModelToAST<T> =
+  T extends DotObjectModel<infer U>
+    ? U extends 'Graph'
+      ? GraphASTNode | DotASTNode
+      : U extends 'AttributeList'
+        ? AttributeListASTNode
+        : U extends 'Edge'
+          ? EdgeASTNode
+          : U extends 'Node'
+            ? NodeASTNode
+            : U extends 'Subgraph'
+              ? SubgraphASTNode
+              : never
+    : never;
 
 /**
  * @group Convert Model to AST
