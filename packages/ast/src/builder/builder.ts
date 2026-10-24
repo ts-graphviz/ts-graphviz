@@ -62,7 +62,9 @@ export class Builder implements ASTBuilder {
       throw new ASTNodeCountExceededError(this.nodeCount, this.maxNodes);
     }
     const location = this.getLocation();
-    const node = { ...(location && { location }), ...props, type };
+    // The contained nodes come from the third argument only, never from props.
+    const { children: _children, refs: _refs, ...rest } = props ?? {};
+    const node = { ...(location && { location }), ...rest, type };
     if (type === 'NodeRefGroup') {
       return { ...node, refs: children };
     }

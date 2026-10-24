@@ -3,6 +3,42 @@ import { createElement, createElementFactory } from './create-element.js';
 import { ASTNodeCountExceededError } from './errors.js';
 
 describe('createElement', () => {
+  test('node shapes: leaves have no children, groups have refs, no null location', () => {
+    const literal = createElement('Literal', { value: 'a', quoted: false }, []);
+    expect(literal).toStrictEqual({
+      type: 'Literal',
+      value: 'a',
+      quoted: false,
+    });
+    expect('location' in literal).toBe(false);
+
+    const ref = createElement('NodeRef', { id: literal }, []);
+    expect('children' in ref).toBe(false);
+
+    const group = createElement('NodeRefGroup', {}, [ref]);
+    expect(group).toStrictEqual({ type: 'NodeRefGroup', refs: [ref] });
+
+    const node = createElement('Node', { id: literal }, []);
+    expect(node).toStrictEqual({ type: 'Node', id: literal, children: [] });
+  });
+
+  test('children and refs in props are ignored; the third argument wins', () => {
+    const literal = createElement('Literal', { value: 'a', quoted: false });
+    const ref = createElement('NodeRef', { id: literal });
+    const leaf = createElement('Literal', {
+      value: 'a',
+      quoted: false,
+      children: [ref],
+    } as never);
+    expect('children' in leaf).toBe(false);
+    const group = createElement(
+      'NodeRefGroup',
+      { children: [ref], refs: [] } as never,
+      [ref],
+    );
+    expect(group).toStrictEqual({ type: 'NodeRefGroup', refs: [ref] });
+  });
+
   test('Dot', () => {
     const ast = createElement('Dot', {}, []);
     expect(ast).toMatchSnapshot();
