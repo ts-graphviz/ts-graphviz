@@ -385,7 +385,6 @@ export type Attribute<T extends AttributeKey> = Attribute.types[T];
 export namespace Attribute {
   export type keys = Omit<$keys, keyof $exclude | symbol | number>;
   export type types = Omit<$types, keyof $exclude | symbol | number>;
-  /** @hidden */
   export interface $keys extends $keywords<AttributeKey> {}
   export interface $exclude extends $keywordsValidation {}
   /**
@@ -597,7 +596,7 @@ export namespace Attribute {
      * Note that if the character encoding used in the input does not match the
      * `charset` value, the resulting output may be very strange.
      *
-     * It is not possible to use [HTML-like labels](/doc/info/shapes.html#html) in
+     * It is not possible to use [HTML-like labels](https://graphviz.org/doc/info/shapes.html#html) in
      * combination with Big-5 encoding.
      *
      * @see {@link https://graphviz.org/docs/attrs/charset/ Node, Edge and Graph Attributes#charset}
@@ -712,11 +711,11 @@ export namespace Attribute {
      *
      * yields:
      *
-     * ![](/doc/info/colorlist.svg)
+     * ![](https://graphviz.org/doc/info/colorlist.svg)
      *
      * yields:
      *
-     * ![](/doc/info/subgraph_node_color.svg)
+     * ![](https://graphviz.org/doc/info/subgraph_node_color.svg)
      *
      * See also:
      *
@@ -858,7 +857,7 @@ export namespace Attribute {
      * assignment, so the only constraints are that `a` be above `b` and `c`,
      * yielding the graph:
      *
-     * ![](/doc/info/constraint.gif)
+     * ![](https://graphviz.org/doc/info/constraint.gif)
      *
      * @see {@link https://graphviz.org/docs/attrs/constraint/ Node, Edge and Graph Attributes#constraint}
      *
@@ -2278,7 +2277,7 @@ export namespace Attribute {
      * The graph is then output in separate layers. Only those components belonging to
      * the current output layer appear.
      *
-     * See [How to use drawing layers (overlays)](../../../faq/#FaqOverlays).
+     * See [How to use drawing layers (overlays)](https://graphviz.org/faq/#FaqOverlays).
      *
      * @see {@link https://graphviz.org/docs/attrs/layers/ Node, Edge and Graph Attributes#layers}
      *
@@ -2643,7 +2642,7 @@ export namespace Attribute {
      * * `mode="ipsep"`, which allows the graph to specify minimum vertical and horizontal distances between nodes.
      * (See the {@link sep} attribute.)
      *
-     * [^1]: [Gansner, E.R., Koren, Y., North, S. (2005). Graph Drawing by Stress Majorization. In: Pach, J. (eds) Graph Drawing. GD 2004. Lecture Notes in Computer Science, vol 3383. Springer, Berlin, Heidelberg.](/documentation/GKN04.pdf)
+     * [^1]: [Gansner, E.R., Koren, Y., North, S. (2005). Graph Drawing by Stress Majorization. In: Pach, J. (eds) Graph Drawing. GD 2004. Lecture Notes in Computer Science, vol 3383. Springer, Berlin, Heidelberg.](https://graphviz.org/documentation/GKN04.pdf)
      * [^2]: [Tomihisa Kamada, Satoru Kawai, An algorithm for drawing general undirected graphs, Information Processing Letters, Volume 31, Issue 1, 1989, Pages 7-15.](https://doi.org/10.1016%2F0020-0190%2889%2990102-6)
      * [^3]: [J. X. Zheng, S. Pawar and D. F. M. Goodman, "Graph Drawing by Stochastic Gradient Descent," in IEEE Transactions on Visualization and Computer Graphics, vol. 25, no. 9, pp. 2738-2748, 1 Sept. 2019, doi: 10.1109/TVCG.2018.2859997.](https://ieeexplore.ieee.org/document/8419285)
      *
@@ -3782,17 +3781,17 @@ export namespace Attribute {
      *
      * *(Deprecated)*.
      *
-     * Sets the node's <code>{@link shape}="[box](/doc/info/shapes.html#polygon)"</code>. The image in the shapefile must be
+     * Sets the node's <code>{@link shape}="[box](https://graphviz.org/doc/info/shapes.html#polygon)"</code>. The image in the shapefile must be
      * rectangular. The image formats supported as well as the precise semantics of
      * how the file is used depends on the [output format](https://graphviz.org/docs/outputs/). For further
      * details, see [Image Formats](https://graphviz.org/docs/outputs/#image-formats) and [External
-     * PostScript files](../../../faq/#ext_image).
+     * PostScript files](https://graphviz.org/faq/#ext_image).
      *
      * There is one exception to this usage: If <code>{@link shape}="epsf"</code>,
      * `shapefile` gives a filename containing a definition of the node in
      * PostScript. The graphics defined must be contain all of the node content,
      * including any desired boundaries. For further details, see [External
-     * PostScript files](../../../faq/#ext_ps_file).
+     * PostScript files](https://graphviz.org/faq/#ext_ps_file).
      *
      * Only paths to local resources are supported. If you want to use a URL to a
      * remote resource, see the

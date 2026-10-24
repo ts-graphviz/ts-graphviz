@@ -140,7 +140,11 @@ function bodyToTsdoc(body: string): string {
           ? `{@link ${target.replace(/\.md$/, '')}}`
           : `[${label}](${resolveRelref(target)})`,
     )
-    .replace(/\]\((\/docs\/[^)]+)\)/g, `](https://graphviz.org$1)`)
+    // plain relative / root-relative Markdown links are relative to the attrs page
+    .replace(
+      /\]\(((?:\.{1,2}\/|\/)[^)]+)\)/g,
+      (_, target) => `](${new URL(target, `${DOCS_URL}/attrs/`).href})`,
+    )
     // any remaining shortcode
     .replace(/\{\{<[^>]*>\}\}/g, '')
     // comment terminator and TSDoc tag characters
@@ -376,22 +380,21 @@ statements.push(
       undefined,
       omit('$types'),
     ),
-    withDoc(
-      f.createInterfaceDeclaration(
-        [exportMod()],
-        '$keys',
-        undefined,
-        [
-          f.createHeritageClause(ts.SyntaxKind.ExtendsKeyword, [
-            f.createExpressionWithTypeArguments(
-              f.createIdentifier('$keywords'),
-              [ref('AttributeKey')],
-            ),
+    // No TSDoc on this declaration: `@hidden` on one declaration of a merged
+    // interface hides the whole interface from typedoc, including the
+    // documented keys below.
+    f.createInterfaceDeclaration(
+      [exportMod()],
+      '$keys',
+      undefined,
+      [
+        f.createHeritageClause(ts.SyntaxKind.ExtendsKeyword, [
+          f.createExpressionWithTypeArguments(f.createIdentifier('$keywords'), [
+            ref('AttributeKey'),
           ]),
-        ],
-        [],
-      ),
-      '* @hidden ',
+        ]),
+      ],
+      [],
     ),
     excludeInterface(),
     withDoc(
