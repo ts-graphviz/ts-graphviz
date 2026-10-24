@@ -1,6 +1,14 @@
 import { fromModel, parse, toModel } from '@ts-graphviz/ast';
 import { isDotModel, isRootGraphModel } from '@ts-graphviz/common';
-import { Digraph, Dot, digraph, fromDot, Graph, toDot } from 'ts-graphviz';
+import {
+  Digraph,
+  Dot,
+  defaultModelsContext,
+  digraph,
+  fromDot,
+  Graph,
+  toDot,
+} from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
 describe('Dot model', () => {
@@ -42,7 +50,7 @@ describe('Dot model', () => {
         '// trailing',
         '',
       ].join('\n');
-      const model = toModel(parse(source));
+      const model = toModel(parse(source), { models: defaultModelsContext() });
       expect(model.$$type).toBe('Dot');
       expect(model.graphs.map((g) => g.id)).toStrictEqual(['a', 'b']);
       expect(model.graphs[0].comment).toBe('first graph');
@@ -66,7 +74,9 @@ describe('Dot model', () => {
   describe('parser', () => {
     it('validates edge operators per root graph', () => {
       // edge operator checks must not leak from one root graph into the next
-      const model = toModel(parse('digraph { a -> b } graph { c -- d }'));
+      const model = toModel(parse('digraph { a -> b } graph { c -- d }'), {
+        models: defaultModelsContext(),
+      });
       expect(model.graphs.map((g) => g.directed)).toStrictEqual([true, false]);
       expect(() => parse('digraph { a -> b } graph { c -> d }')).toThrow(
         /"--" operator/,

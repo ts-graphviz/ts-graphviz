@@ -1,7 +1,6 @@
 import {
   type AttributeKey,
   type ClusterSubgraphAttributeKey,
-  createModelsContext,
   type DotObjectType,
   type EdgeAttributeKey,
   type EdgeAttributesObject,
@@ -15,15 +14,24 @@ import {
   type NodeAttributeKey,
   type NodeAttributesObject,
   type NodeModel,
-  RootModelsContext,
   type SubgraphAttributeKey,
   type SubgraphAttributesObject,
   type SubgraphModel,
+  TsGraphvizError,
   toNodeRef,
   toNodeRefGroup,
 } from '@ts-graphviz/common';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
+
+const MODEL_KEYS = [
+  'Dot',
+  'Graph',
+  'Digraph',
+  'Subgraph',
+  'Node',
+  'Edge',
+] as const satisfies readonly (keyof ModelsContext)[];
 
 /**
  * Base class for Graph objects.
@@ -37,8 +45,31 @@ export abstract class GraphBase<
   implements GraphBaseModel<T, K>
 {
   public abstract get $$type(): T;
-  /** @hidden */
-  #models = RootModelsContext;
+  #models?: ModelsContext;
+
+  /**
+   * The classes used by `createNode`, `createEdge` and `createSubgraph`: the
+   * ones given to {@link with}, otherwise {@link defaultModels}.
+   */
+  protected get models(): ModelsContext {
+    this.#models ??= this.defaultModels();
+    return this.#models;
+  }
+
+  /**
+   * The context used when none was given to {@link with}.
+   *
+   * The core classes return `defaultModelsContext()`. A direct subclass of
+   * `GraphBase` must override this or call `with()` before creating models.
+   * (GraphBase cannot import the default context itself: the context holds
+   * the subclasses, and ES modules in that cycle would be evaluated before
+   * their base class.)
+   */
+  protected defaultModels(): ModelsContext {
+    throw new TsGraphvizError(
+      `${this.constructor.name} has no models context: call with(models) or override defaultModels()`,
+    );
+  }
 
   public readonly id?: string;
 
@@ -76,8 +107,24 @@ export abstract class GraphBase<
     subgraphs: new Set(),
   };
 
+  /**
+   * Use the given classes for the models this graph creates; the classes
+   * left out stay as they are.
+   */
   public with(models: Partial<ModelsContext>): void {
-    this.#models = createModelsContext(models);
+    const next: Partial<ModelsContext> = { ...this.#models };
+    for (const key of MODEL_KEYS) {
+      const model = models[key];
+      if (model !== undefined) {
+        (next as Record<keyof ModelsContext, unknown>)[key] = model;
+      }
+    }
+    // Only a complete context can stand on its own; otherwise the slots
+    // left out come from the current (or default) context.
+    const complete = MODEL_KEYS.every((key) => next[key] !== undefined);
+    this.#models = Object.freeze(
+      complete ? (next as ModelsContext) : { ...this.models, ...next },
+    );
   }
 
   public addNode(node: NodeModel): void {
@@ -112,8 +159,17 @@ export abstract class GraphBase<
   public createSubgraph(attributes?: SubgraphAttributesObject): SubgraphModel;
 
   public createSubgraph(...args: unknown[]): SubgraphModel {
-    const subgraph = new this.#models.Subgraph(...args);
-    subgraph.with(this.#models);
+    const id = args.find((arg): arg is string => typeof arg === 'string');
+    const attributes = args.find(
+      (arg): arg is SubgraphAttributesObject => typeof arg === 'object',
+    );
+    // Keep the argument shape the caller used, so a custom class that
+    // treats the overloads differently sees the same call as before.
+    const subgraph =
+      id === undefined && attributes !== undefined
+        ? new this.models.Subgraph(attributes)
+        : new this.models.Subgraph(id, attributes);
+    subgraph.with(this.models);
     this.addSubgraph(subgraph);
     return subgraph;
   }
@@ -131,7 +187,7 @@ export abstract class GraphBase<
   }
 
   public createNode(id: string, attributes?: NodeAttributesObject): NodeModel {
-    const node = new this.#models.Node(id, attributes);
+    const node = new this.models.Node(id, attributes);
     this.addNode(node);
     return node;
   }
@@ -153,7 +209,7 @@ export abstract class GraphBase<
     const ts = targets.map((t) =>
       isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t),
     ) as EdgeTargetTuple;
-    const edge = new this.#models.Edge(ts, attributes);
+    const edge = new this.models.Edge(ts, attributes);
     this.addEdge(edge);
     return edge;
   }

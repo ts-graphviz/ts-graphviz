@@ -7,7 +7,7 @@ export * from './DotObject.js';
 export * from './Edge.js';
 export * from './Graph.js';
 export * from './GraphBase.js';
+export * from './models-context.js';
 export * from './Node.js';
 export * from './RootGraph.js';
-export * from './register-default.js';
 export * from './Subgraph.js';

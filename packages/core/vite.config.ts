@@ -20,7 +20,6 @@ export default defineConfig({
         RootGraph: './src/RootGraph.ts',
         Subgraph: './src/Subgraph.ts',
         core: './src/core.ts',
-        'register-default': './src/register-default.ts',
       },
       formats: ['es'],
     },

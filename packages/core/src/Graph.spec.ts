@@ -3,10 +3,6 @@ import { DotObject } from './DotObject.js';
 import { Graph } from './Graph.js';
 import { GraphBase } from './GraphBase.js';
 
-import { registerDefault } from './register-default.js';
-
-registerDefault();
-
 const g = new Graph();
 
 test('directed propaty should be false', () => {

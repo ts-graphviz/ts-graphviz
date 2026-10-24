@@ -1,9 +1,9 @@
-import {
-  type GraphAttributesObject,
-  type ModelsContext,
-  type RootGraphModel,
-  RootModelsContext,
+import type {
+  GraphAttributesObject,
+  ModelsContext,
+  RootGraphModel,
 } from '@ts-graphviz/common';
+import { defaultModelsContext } from '@ts-graphviz/core';
 import type { ModelFactory } from './types.js';
 
 /**
@@ -46,7 +46,7 @@ export function ModelFactoryBuilder(
  */
 export function createModelFactories(
   strict: boolean,
-  context: ModelsContext = RootModelsContext,
+  context: ModelsContext = defaultModelsContext(),
 ) {
   return Object.freeze({
     digraph: ModelFactoryBuilder.call(context, true, strict),

@@ -7,6 +7,13 @@ import type {
 } from './models.js';
 
 /**
+ * The classes used to create models: a graph creates its nodes, edges and
+ * subgraphs from the context it was given, and `toModel`/`fromDot` create
+ * every model from the context in their options.
+ *
+ * `@ts-graphviz/core` provides the default context (`defaultModelsContext()`)
+ * and `createModelsContext()` to override part of it.
+ *
  * @group Models Context
  */
 export interface ModelsContext {
@@ -16,29 +23,4 @@ export interface ModelsContext {
   Subgraph: SubgraphConstructor;
   Node: NodeConstructor;
   Edge: EdgeConstructor;
-}
-
-/**
- * @group Models Context
- */
-export const RootModelsContext: ModelsContext = Object.seal({
-  // NOTE: RootModelsContext is also initialized after the model class is declared in the '@ts-graphviz/core/register-default' module.
-  Dot: null,
-  Graph: null,
-  Digraph: null,
-  Subgraph: null,
-  Node: null,
-  Edge: null,
-} as unknown as ModelsContext);
-
-/**
- * @group Models Context
- */
-export function createModelsContext(
-  models: Partial<ModelsContext>,
-): ModelsContext {
-  return Object.assign(
-    Object.seal(Object.assign({}, RootModelsContext)),
-    models,
-  );
 }

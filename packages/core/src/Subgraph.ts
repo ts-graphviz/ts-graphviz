@@ -1,10 +1,12 @@
 import type {
   ClusterSubgraphAttributeKey,
+  ModelsContext,
   SubgraphAttributeKey,
   SubgraphAttributesObject,
   SubgraphModel,
 } from '@ts-graphviz/common';
 import { GraphBase } from './GraphBase.js';
+import { defaultModelsContext } from './models-context.js';
 
 /**
  * DOT object class representing a subgraph.
@@ -43,5 +45,10 @@ export class Subgraph
       return this.id.startsWith('cluster');
     }
     return false;
+  }
+
+  /** @hidden */
+  protected override defaultModels(): ModelsContext {
+    return defaultModelsContext();
   }
 }

@@ -1,17 +1,17 @@
-import { beforeEach, describe, expect, it, test, vi } from 'vitest';
-import { registerDefault } from './register-default.js';
-
-registerDefault();
-
 import type { EdgeTargetTuple, NodeModel } from '@ts-graphviz/common';
+import { beforeEach, describe, expect, it, test, vi } from 'vitest';
 import { AttributesBase } from './AttributesBase.js';
 import { DotObject } from './DotObject.js';
 import { Edge } from './Edge.js';
 import { GraphBase } from './GraphBase.js';
+import { defaultModelsContext } from './models-context.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
 
 class TestGraph extends GraphBase<'Graph', any> {
+  protected override defaultModels() {
+    return defaultModelsContext();
+  }
   public get $$type(): 'Graph' {
     return 'Graph';
   }

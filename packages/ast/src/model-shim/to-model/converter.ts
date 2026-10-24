@@ -1,4 +1,4 @@
-import { ConversionError, createModelsContext } from '@ts-graphviz/common';
+import { ConversionError } from '@ts-graphviz/common';
 import { defaultPlugins } from './plugins/index.js';
 import type {
   ASTToModel,
@@ -17,7 +17,7 @@ export class ToModelConverter {
     ...defaultPlugins,
   ];
 
-  constructor(private options: ConvertToModelOptions = {}) {}
+  constructor(private options: ConvertToModelOptions) {}
 
   /**
    * Convert AST to Model.
@@ -27,7 +27,7 @@ export class ToModelConverter {
   public convert<T extends ToModelConvertableASTNode>(ast: T): ASTToModel<T> {
     const plugins = [...this.plugins];
     const context: ConvertToModelContext = {
-      models: createModelsContext(this.options.models ?? {}),
+      models: this.options.models,
       convert<U extends ToModelConvertableASTNode>(m: U): ASTToModel<U> {
         for (const plugin of plugins) {
           if (plugin.match(m)) {
