@@ -1,0 +1,134 @@
+[
+  {
+    "name": "addDouble",
+    "description": "A [`double`](/docs/attr-types/double/) with an optional prefix `'+'`."
+  },
+  {
+    "name": "addPoint",
+    "description": "A [`point`](/docs/attr-types/point/) with an optional prefix `+`."
+  },
+  {
+    "name": "arrowType",
+    "description": "Edge arrowhead shape"
+  },
+  {
+    "name": "bool",
+    "description": "Boolean; true or false."
+  },
+  {
+    "name": "clusterMode",
+    "description": ""
+  },
+  {
+    "name": "color",
+    "description": ""
+  },
+  {
+    "name": "colorList",
+    "description": "List of (optionally weighted) color values, forming a linear gradient"
+  },
+  {
+    "name": "dirType",
+    "description": "Edge arrow direction type"
+  },
+  {
+    "name": "double",
+    "description": "Double-precision floating point number"
+  },
+  {
+    "name": "doubleList",
+    "description": "List of [`doubles`](/docs/attr-types/double/)"
+  },
+  {
+    "name": "escString",
+    "description": "String with backslashed escape sequences"
+  },
+  {
+    "name": "int",
+    "description": "Integer number"
+  },
+  {
+    "name": "layerList",
+    "description": ""
+  },
+  {
+    "name": "layerRange",
+    "description": "A list of layers defined by the [`layers`]({{< relref \"/docs/attrs/layers\" >}}) attribute"
+  },
+  {
+    "name": "lblString",
+    "description": "Label string"
+  },
+  {
+    "name": "outputMode",
+    "description": "The order in which nodes and edges are drawn in output."
+  },
+  {
+    "name": "packMode",
+    "description": "How closely to pack together graph components"
+  },
+  {
+    "name": "pagedir",
+    "description": "Page Direction"
+  },
+  {
+    "name": "point",
+    "description": "2-dimensional (or 3-dimensional) geometrical point in space"
+  },
+  {
+    "name": "pointList",
+    "description": "A list of [`points`](/docs/attr-types/point/)"
+  },
+  {
+    "name": "portPos",
+    "description": "Port Position: where on a node an edge should be aimed"
+  },
+  {
+    "name": "quadType",
+    "description": "Quadtree scheme"
+  },
+  {
+    "name": "rankdir",
+    "description": "Direction to draw directed graphs (one rank at a time)"
+  },
+  {
+    "name": "rankType",
+    "description": "Rank constraints on the nodes in a subgraph"
+  },
+  {
+    "name": "rect",
+    "description": "A geometric rectangle in space, defined by two [`points`](/docs/attr-types/point/)"
+  },
+  {
+    "name": "shape",
+    "description": "the [shape](/doc/info/shapes.html) of a node"
+  },
+  {
+    "name": "smoothType",
+    "description": ""
+  },
+  {
+    "name": "splineType",
+    "description": ""
+  },
+  {
+    "name": "startType",
+    "description": "How to initially layout nodes"
+  },
+  {
+    "name": "string",
+    "description": "Text; a sequence of characters."
+  },
+  {
+    "name": "style",
+    "description": ""
+  },
+  {
+    "name": "viewPort",
+    "description": "Clipping window on final drawing"
+  },
+  {
+    "name": "xdot",
+    "description": "List of graphical operations in Graphviz's `xdot` language."
+  }
+]

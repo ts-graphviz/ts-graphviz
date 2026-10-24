@@ -32,7 +32,8 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 
 | Command | Description |
 |---------|-------------|
-| `pnpm codegen` | Generate code from the Graphviz DOT language grammar. |
+| `pnpm codegen` | Generate code: the DOT parser from the grammar, and the attribute types from the Graphviz documentation snapshot. |
+| `pnpm --filter @ts-graphviz/common fetch:graphviz-docs` | Update the Graphviz documentation snapshot (`packages/common/graphviz-docs/`) that the attribute types are generated from. Pass `--ref <sha>` to pin a different commit of [graphviz.gitlab.io](https://gitlab.com/graphviz/graphviz.gitlab.io). |
 | `pnpm build` | Build all packages in the monorepo. |
 | `pnpm test` | Run all tests across the monorepo. |
 | `pnpm lint` | Run linting checks on the codebase. |
@@ -40,6 +41,8 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 
 > [!WARNING]
 > Ensure you have to run `pnpm codegen` before developing. This step is crucial as it generates the necessary code from the Graphviz DOT language grammar.
+>
+> `packages/common/src/attribute.ts` is generated too, but it is committed; edit `packages/common/scripts/generate-attributes.ts` (or update the snapshot) and run `pnpm codegen` instead of editing it by hand. CI fails if the committed file is out of date.
 
 #### Creating a Changeset
 

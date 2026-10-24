@@ -1,0 +1,3614 @@
+[
+  {
+    "name": "_background",
+    "description": "A string in the [`xdot` format](/docs/attr-types/xdot/) specifying an arbitrary background",
+    "body": "During rendering, the canvas is first filled as described in the\n[`bgcolor` attribute]({{< relref \"bgcolor.md\" >}}).\n\nThen, if `_background` is defined, the graphics\noperations described in the string are performed on the canvas.\n\nSee [`xdot` format](/docs/attr-types/xdot/) page for more information.\n\n{{< dot_card header=\"Render a red square in the background\">}}\ndigraph G {\n  _background=\"c 7 -#ff0000 p 4 4 4 36 4 36 36 4 36\";\n  a -> b\n}\n{{</ dot_card >}}",
+    "types": [
+      "xdot"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "<none>"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "area",
+    "description": "Indicates the preferred area for a node or empty cluster",
+    "body": "{{< dot_card header=\"Example: Australian Coins, area proportional to value\">}}\ngraph {\n  layout=\"patchwork\"\n  node [style=filled]\n  \"5c\"  [area=  5 fillcolor=silver]\n  \"10c\" [area= 10 fillcolor=silver]\n  \"20c\" [area= 20 fillcolor=silver]\n  \"50c\" [area= 50 fillcolor=silver]\n  \"$1\"  [area=100 fillcolor=gold]\n  \"$2\"  [area=200 fillcolor=gold]\n}\n{{< /dot_card >}}",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "N",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "1.0"
+      }
+    ],
+    "minimums": [
+      ">0"
+    ],
+    "flags": [
+      "patchwork"
+    ]
+  },
+  {
+    "name": "arrowhead",
+    "description": "Style of arrowhead on the head node of an edge",
+    "body": "This will only appear if the [`dir` attribute]({{< relref \"dir.md\" >}})\nis `forward` or `both`.\n\nSee the [limitation]({{< relref \"_index.md#undir_note\" >}}).\n\nSee also:\n\n- [`arrowtail`]({{< relref \"arrowtail.md\" >}})",
+    "types": [
+      "arrowType"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "normal"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "arrowsize",
+    "description": "Multiplicative scale factor for arrowheads",
+    "body": "{{< dot_card header=\"Example\">}}\ndigraph {\n  quiver -> \"0.5\" [arrowsize=0.5]\n  quiver -> \"1\"\n  quiver -> \"2\" [arrowsize=2]\n  quiver -> \"3\" [arrowsize=3]\n}\n{{< /dot_card >}}",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "1.0"
+      }
+    ],
+    "minimums": [
+      "0.0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "arrowtail",
+    "description": "Style of arrowhead on the tail node of an edge",
+    "body": "This will only appear if the [`dir` attribute]({{< relref \"dir.md\" >}})\nis `back` or `both`.\n\nSee the [limitation]({{< relref \"_index.md#undir_note\" >}}).\n\n\nSee also:\n\n- [`arrowhead`]({{< relref \"arrowhead.md\" >}})",
+    "types": [
+      "arrowType"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "normal"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "bb",
+    "description": "Bounding box of drawing in points",
+    "body": "",
+    "types": [
+      "rect"
+    ],
+    "usedBy": [
+      "C",
+      "G"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "write"
+    ]
+  },
+  {
+    "name": "beautify",
+    "description": "Whether to draw leaf nodes uniformly in a circle around the root node in sfdp.",
+    "body": "Whether to try to draw leaf nodes uniformly on a circle\naround the root node.\n\nPrior to Graphviz 8.0.1, this is affected by\n[Issue 2283](https://gitlab.com/graphviz/graphviz/-/issues/2283): rendering one\nfewer sector than necessary, overlapping the first and last nodes.\n\nExamples:\n\n{{< dot_card header=\"Beautify\">}}\ndigraph G {\n    layout=\"sfdp\"\n    beautify=true\n\n    N0 -> {N1; N2; N3; N4; N5; N6}\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"No beautify\">}}\ndigraph G {\n    layout=\"sfdp\"\n    beautify=false\n\n    N0 -> {N1; N2; N3; N4; N5; N6}\n}\n{{< /dot_card >}}",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "sfdp"
+    ]
+  },
+  {
+    "name": "bgcolor",
+    "description": "Canvas background color",
+    "body": "When attached to the root graph, this color is used as the background for\nentire canvas.\n\nWhen a cluster attribute, it is used as the initial background\nfor the cluster. If a cluster has a filled [`style`]({{< relref \"style.md\" >}}), the cluster's\n[`fillcolor`]({{< relref \"fillcolor.md\" >}}) will overlay the background color.\n\nIf the value is a [`colorList`](/docs/attr-types/colorList/), a gradient fill is used. By\ndefault, this is a linear fill; setting <code>[style]({{< relref \"style.md\" >}})=radial</code> will\ncause a radial fill. Only two colors are used. If the second color (after a\ncolon) is missing, the default color is used for it. See also the\n[`gradientangle`]({{< relref \"gradientangle.md\" >}}) attribute for setting the gradient angle.\n\nFor certain output formats, such as PostScript, no fill is done for the root\ngraph unless `bgcolor` is explicitly set.\n\nFor bitmap formats, however, the bits need to be initialized to something, so\nthe canvas is filled with white by default. This means that if the bitmap\noutput is included in some other document, all of the bits within the\nbitmap's bounding box will be set, overwriting whatever color or graphics\nwere already on the page. If this effect is not desired, and you only want to\nset bits explicitly assigned in drawing the graph, set\n`bgcolor=\"transparent\"`.\n\n{{< dot_card header=\"Example\">}}\ngraph {\n  bgcolor=\"lightblue\"\n  label=\"Home\"\n  subgraph cluster_ground_floor {\n    bgcolor=\"lightgreen\"\n    label=\"Ground Floor\"\n    Lounge\n    Kitchen\n  }\n  subgraph cluster_top_floor {\n    bgcolor=\"lightyellow\"\n    label=\"Top Floor\"\n    Bedroom\n    Bathroom\n  }\n}\n{{< /dot_card >}}",
+    "types": [
+      "color",
+      "colorList"
+    ],
+    "usedBy": [
+      "G",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "<none>"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "center",
+    "description": "Whether to center the drawing in the output canvas",
+    "body": "Can be `true` or `false`.",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "charset",
+    "description": "Character encoding used when interpreting string input as a text label.",
+    "body": "The default value is `\"UTF-8\"`. The other legal values are:\n\n- `\"utf-8\"` / `\"utf8\"` (default value)\n- `\"iso-8859-1\"` / `\"ISO_8859-1\"` / `\"ISO8859-1\"` / `\"ISO-IR-100\"` / `\"Latin1\"` / `\"l1\"` / `\"latin-1\"`\n- `\"big-5\"` / `\"big5\"`: the [Big-5 Chinese encoding](https://en.wikipedia.org/wiki/Big5)\n\nThe `charset` attribute is case-insensitive.\n\nNote that if the character encoding used in the input does not match the\n`charset` value, the resulting output may be very strange.\n\nIt is not possible to use [HTML-like labels](/doc/info/shapes.html#html) in\ncombination with Big-5 encoding.\n\n{{< dot_card header=\"Example\" >}}\ndigraph G {\n  charset=\"UTF-8\"\n  \"🍔\" -> \"💩\"\n}\n{{< /dot_card >}}",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"UTF-8\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "class",
+    "description": "Classnames to attach to the node, edge, graph, or cluster's SVG element",
+    "body": "Combine with [`stylesheet`]({{< relref \"stylesheet.md\" >}}) for styling SVG output\nusing CSS classnames.\n\nMultiple space-separated classes are supported.\n\nSee also:\n\n- [`stylesheet`]({{< relref \"stylesheet.md\" >}})\n- [`id`]({{< relref \"id.md\" >}})\n\nExample:\n\n{{< dot_card >}}\ndigraph G {\n  graph [class=\"cats\"];\n\n  subgraph cluster_big {\n    graph [class=\"big_cats\"];\n\n    \"Lion\" [class=\"yellow social\"];\n    \"Snow Leopard\" [class=\"white solitary\"];\n  }\n}\n{{< /dot_card >}}",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "C",
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "svg"
+    ]
+  },
+  {
+    "name": "cluster",
+    "description": "Whether the subgraph is a cluster",
+    "body": "Subgraph clusters are rendered differently, e.g. [`dot`](/docs/layouts/dot/) renders a box around subgraph clusters, but doesn't draw a box around non-subgraph clusters.\n\nExample:\n\n{{< dot_card >}}\ndigraph cats {\n  subgraph cluster_big_cats {\n    // This subgraph is a cluster, because the name begins with \"cluster\"\n    \n    \"Lion\";\n    \"Snow Leopard\";\n  }\n\n  subgraph domestic_cats {\n    // This subgraph is also a cluster, because cluster=true.\n    cluster=true;\n\n    \"Siamese\";\n    \"Persian\";\n  }\n\n  subgraph not_a_cluster {\n    // This subgraph is not a cluster, because it doesn't start with \"cluster\",\n    // nor sets cluster=true.\n    \n    \"Wildcat\";\n  }\n}\n{{< /dot_card >}}\n\nThe `cluster` attribute is also used by the `cluster` binary to pass information\nit has computed to `gvmap` later consuming its generated graph.",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "C",
+      "S"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "clusterrank",
+    "description": "Mode used for handling clusters",
+    "body": "If `clusterrank=local`, a\nsubgraph whose name begins with `cluster` is given special treatment.\n\nThe subgraph is laid out separately, and then integrated as a unit into\nits parent graph, with a bounding rectangle drawn about it.\nIf the cluster has a [`label`]({{< relref \"label.md\" >}}) parameter, this label\nis displayed within the rectangle.\n\nNote also that there can be clusters within clusters.\n\nThe modes `clusterrank=global` and `clusterrank=none` appear to\nbe identical, both turning off the special cluster processing.",
+    "types": [
+      "clusterMode"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "local"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "color",
+    "description": "Basic drawing color for graphics, not text",
+    "body": "For the latter, use the\n[`fontcolor`]({{< relref \"fontcolor.md\" >}}) attribute.\n\nFor edges, the value can either be a single color or a\n[`colorList`](/docs/attr-types/colorList/).\n\nIn the latter case, if `colorList` has no fractions,\nthe edge is drawn using parallel splines or lines,\none for each color in the list, in the order given.\n\nThe head arrow, if any, is drawn using the first color in the list,\nand the tail arrow, if any, the second color. This supports the common\ncase of drawing opposing edges, but using parallel splines instead of\nseparately routed multiedges. \n\nIf any fraction is used, the colors are drawn in series, with each color\nbeing given roughly its specified fraction of the edge.\n\nFor example, the graph:\n\n{{< dot_card header=\"Edge Color Example\" >}}\ndigraph G {\n  a -> b [dir=both color=\"red:blue\"]\n  c -> d [dir=none color=\"green:red;0.25:blue\"]\n}\n{{< /dot_card >}}\n\nyields:\n\n![](/doc/info/colorlist.svg)\n\n{{< dot_card header=\"Subgraph & Node Color Example\" >}}\ndigraph G {\n  subgraph cluster_yellow {\n    color=\"yellow\"\n    a [color=\"red\"]\n    b [color=\"green\"]\n  }\n}\n{{< /dot_card >}}\n\nyields:\n\n![](/doc/info/subgraph_node_color.svg)\n\nSee also:\n\n- [`colorscheme`]({{< relref \"colorscheme.md\" >}})",
+    "types": [
+      "color",
+      "colorList"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "black"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "colorscheme",
+    "description": "A color scheme namespace: the context for interpreting color names",
+    "body": "In particular, if a [`color`](/docs/attr-types/color/) value has form `\"xxx\"` or `\"//xxx\"`,\nthen the color `xxx` will be evaluated according to the current color scheme.\nIf no color scheme is set, the standard [X11 naming]({{< relref \"../colors.md#x11\" >}}) is used.\n\nFor example, if `colorscheme=oranges9` (from [Brewer color schemes]({{< relref \"../colors.md#brewer\" >}})), then `color=7` is interpreted as\n`color=\"/oranges9/7\"`, the 7th color in the `oranges9` colorscheme.\n\n{{< dot_card header=\"Orange Colorscheme\">}}\ngraph {\n  node [colorscheme=oranges9] # Apply colorscheme to all nodes\n  1 [color=1]\n  2 [color=2]\n  3 [color=3]\n  4 [color=4]\n  5 [color=5]\n  6 [color=6]\n  7 [color=7]\n  8 [color=8]\n  9 [color=9]\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Green Colorscheme\">}}\ngraph {\n  node [colorscheme=greens9] # Apply colorscheme to all nodes\n  1 [color=1]\n  2 [color=2]\n  3 [color=3]\n  4 [color=4]\n  5 [color=5]\n  6 [color=6]\n  7 [color=7]\n  8 [color=8]\n  9 [color=9]\n}\n{{< /dot_card >}}\n\nSee also:\n\n- [`color`]({{< relref \"color.md\" >}})",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "C",
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "comment",
+    "description": "Comments are inserted into output",
+    "body": "Device-dependent.\n\n\n{{< dot_card header=\"Example\">}}\ndigraph {\n  comment=\"I am a graph\"\n  A [comment=\"I am node A\"]\n  B [comment=\"I am node B\"]\n  A->B [comment=\"I am an edge\"]\n}\n{{< /dot_card >}}\n\nOutputs SVG with comments:\n\n```xml\n<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<!-- Generated by graphviz version 2.47.1 (20210417.1919)\n -->\n<!-- This is a graph -->\n<!-- Pages: 1 -->\n<svg width=\"62pt\" height=\"116pt\"\n viewBox=\"0.00 0.00 62.00 116.00\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"graph0\" class=\"graph\" transform=\"scale(1 1) rotate(0) translate(4 112)\">\n<polygon fill=\"white\" stroke=\"transparent\" points=\"-4,4 -4,-112 58,-112 58,4 -4,4\"/>\n<!-- A -->\n<!-- I am node A -->\n<g id=\"node1\" class=\"node\">\n<title>A</title>\n<ellipse fill=\"none\" stroke=\"black\" cx=\"27\" cy=\"-90\" rx=\"27\" ry=\"18\"/>\n<text text-anchor=\"middle\" x=\"27\" y=\"-86.3\" font-family=\"Times,serif\" font-size=\"14.00\">A</text>\n</g>\n<!-- B -->\n<!-- I am node B -->\n<g id=\"node2\" class=\"node\">\n<title>B</title>\n<ellipse fill=\"none\" stroke=\"black\" cx=\"27\" cy=\"-18\" rx=\"27\" ry=\"18\"/>\n<text text-anchor=\"middle\" x=\"27\" y=\"-14.3\" font-family=\"Times,serif\" font-size=\"14.00\">B</text>\n</g>\n<!-- A&#45;&gt;B -->\n<!-- I am an edge -->\n<g id=\"edge1\" class=\"edge\">\n<title>A&#45;&gt;B</title>\n<path fill=\"none\" stroke=\"black\" d=\"M27,-71.7C27,-63.98 27,-54.71 27,-46.11\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"30.5,-46.1 27,-36.1 23.5,-46.1 30.5,-46.1\"/>\n</g>\n</g>\n</svg>\n```",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "compound",
+    "description": "If true, allow edges between clusters",
+    "body": "See [`lhead`]({{< relref \"lhead.md\" >}}) and [`ltail`]({{< relref \"ltail.md\" >}}).\n\n{{< dot_card >}}\ndigraph {\n  compound=true;\n\n  subgraph cluster_a {\n    label=\"Cluster A\";\n    node1; node3; node5; node7;\n  }\n  subgraph cluster_b {\n    label=\"Cluster B\";\n    node2; node4; node6; node8;\n  }\n\n  node1 -> node2 [label=\"1\"];\n  node3 -> node4 [label=\"2\" ltail=\"cluster_a\"];\n  \n  node5 -> node6 [label=\"3\" lhead=\"cluster_b\"];\n  node7 -> node8 [label=\"4\" ltail=\"cluster_a\" lhead=\"cluster_b\"];\n}\n{{< /dot_card >}}",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "concentrate",
+    "description": "If true, use edge concentrators",
+    "body": "This merges multiedges into a single edge and causes partially parallel\nedges to share part of their paths. The latter feature is not yet available\noutside of `dot`.  \nOnly works for non-contiguous nodes.\n\n{{< dot_card header=\"Example\">}}\ndigraph {\n    concentrate=true\n    a -> b [label=\"1\"]\n    c -> b\n    d -> b\n}\n{{< /dot_card >}}",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "constraint",
+    "description": "If false, the edge is not used in ranking the nodes",
+    "body": "For example in the graph:\n\n{{< dot_card >}}\ndigraph G {\n  a -> c;\n  a -> b;\n  b -> c [constraint=false];\n}\n{{< /dot_card >}}\n\nthe edge `b -> c` does not add a constraint during rank\nassignment, so the only constraints are that `a` be above `b` and `c`,\nyielding the graph:\n\n![](/doc/info/constraint.gif)",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "true"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "Damping",
+    "description": "Factor damping force motions.",
+    "body": "On each iteration, a node's movement\nis limited to this factor of its potential motion. By being less than\n`1.0`, the system tends to \"cool\", thereby preventing cycling.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0.99"
+      }
+    ],
+    "minimums": [
+      "0.0"
+    ],
+    "flags": [
+      "neato"
+    ]
+  },
+  {
+    "name": "decorate",
+    "description": "Whether to connect the edge label to the edge with a line",
+    "body": "If true, attach edge label to edge by a 2-segment polyline,\nunderlining the label, then going to the closest point of spline.\n\n{{< dot_card header=\"Example\">}}\ndigraph {\n  a -> a [label=\"AA\" decorate=true]\n  a -> b [label=\"AB\" decorate=true]\n  b -> b [label=\"BB\" decorate=false]\n}\n{{< /dot_card >}}",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "defaultdist",
+    "description": "The distance between nodes in separate connected components",
+    "body": "If set too small, connected components may overlap.\n\nOnly applicable if <code>[pack]({{< relref \"pack.md\" >}})=false</code>.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "1+(avg. len)*sqrt(|V|)"
+      }
+    ],
+    "minimums": [
+      "epsilon"
+    ],
+    "flags": [
+      "neato"
+    ]
+  },
+  {
+    "name": "dim",
+    "description": "Set the number of dimensions used for the layout",
+    "body": "The maximum value allowed is `10`.",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "2"
+      }
+    ],
+    "minimums": [
+      "2"
+    ],
+    "flags": [
+      "neato",
+      "fdp",
+      "sfdp"
+    ]
+  },
+  {
+    "name": "dimen",
+    "description": "Set the number of dimensions used for rendering",
+    "body": "The maximum value allowed is `10`.\n\nIf both `dimen` and `dim` are set, the latter specifies\nthe dimension used for layout, and the former for rendering.\nIf only `dimen` is set, this is used for both layout and rendering\ndimensions.\n\nNote that, at present, all aspects of rendering are 2D. This includes\nthe shape and size of nodes, overlap removal, and edge routing. Thus,\nfor `dimen > 2`, the only valid information is the `pos`\nattribute of the nodes.\n\nAll other coordinates will be 2D and, at best, will reflect a projection\nof a higher-dimensional point onto the plane.",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "2"
+      }
+    ],
+    "minimums": [
+      "2"
+    ],
+    "flags": [
+      "neato",
+      "fdp",
+      "sfdp"
+    ]
+  },
+  {
+    "name": "dir",
+    "description": "Edge type for drawing arrowheads",
+    "body": "Indicates which ends of the edge should be decorated with an arrowhead.\n\nThe actual style of the arrowhead can be specified using the\n[`arrowhead`]({{< relref \"arrowhead.md\" >}}) and [`arrowtail`]({{< relref \"arrowtail.md\" >}}) attributes.\n\nSee [limitation]({{< relref \"_index.md#undir_note\" >}}).\n\n{{< dot_card header=\"Example\">}}\ndigraph {\n  A->B [dir=forward]\n  C->D [dir=back]\n  E->F [dir=both]\n  G->H [dir=none]\n}\n{{< /dot_card >}}",
+    "types": [
+      "dirType"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "forward",
+        "for": "(directed)"
+      },
+      {
+        "default": "none",
+        "for": "(undirected)"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "diredgeconstraints",
+    "description": "Whether to constrain most edges to point downwards",
+    "body": "If true, constraints are generated for each edge in the largest (heuristic)\ndirected acyclic subgraph such that the edge must point downwards.\n\nOnly valid when <code>[mode]({{< relref \"mode.md\" >}})=\"ipsep\"</code>.\n\nIf `hier`, generates level constraints similar to those used with\n<code>[mode]({{< relref \"mode.md\" >}})=\"hier\"</code>. The main difference is that, in the latter\ncase, only these constraints are involved, so a faster solver can be used.",
+    "types": [
+      "string",
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato"
+    ]
+  },
+  {
+    "name": "distortion",
+    "description": "Distortion factor for <code>[shape](/docs/attrs/shape)=[polygon](/doc/info/shapes.html#polygon)</code>",
+    "body": "Positive values cause top part to be larger than bottom; negative values do\nthe opposite.\n\nSee also [`skew`]({{< relref \"skew.md\" >}}).\n\n{{< dot_card header=\"Example\">}}\ngraph {\n  LargeBottom [shape=polygon sides=4 distortion=-.5]\n  LargeTop    [shape=polygon sides=4 distortion=.5]\n}\n{{< /dot_card >}}",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "0.0"
+      }
+    ],
+    "minimums": [
+      "-100.0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "dpi",
+    "description": "Specifies the expected number of pixels per inch on a display device",
+    "body": "For `bitmap` output, `dpi` guarantees that text rendering will be done more\naccurately, both in size and in placement.\n\nFor SVG output, `dpi` guarantees the dimensions in the output correspond to\nthe correct number of points or inches.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "96.0"
+      }
+    ],
+    "minimums": [
+      "0.0"
+    ],
+    "flags": [
+      "bitmap output",
+      "svg"
+    ]
+  },
+  {
+    "name": "edgehref",
+    "description": "Synonym for [`edgeURL`](/docs/attrs/edgeURL)",
+    "body": "See also:\n\n- [`edgehref`]({{< relref \"edgehref.md\" >}}), [`edgeURL`]({{< relref \"edgeURL.md\" >}})\n- [`headhref`]({{< relref \"headhref.md\" >}}), [`headURL`]({{< relref \"headURL.md\" >}})\n- [`labelhref`]({{< relref \"labelhref.md\" >}}), [`labelURL`]({{< relref \"labelURL.md\" >}})\n- [`tailhref`]({{< relref \"tailhref.md\" >}}), [`tailURL`]({{< relref \"tailURL.md\" >}})\n- [`href`]({{< relref \"href.md\" >}}), [`URL`]({{< relref \"URL.md\" >}})",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "edgetarget",
+    "description": "Browser window to use for the [`edgeURL`](/docs/attrs/edgeURL/) link",
+    "body": "If the edge has a [`URL`]({{< relref \"URL.md\" >}}) or [`edgeURL`]({{< relref \"edgeURL.md\" >}})\nattribute, `edgetarget` determines which window of the\nbrowser is used\nfor the URL attached to the non-label part of the edge.\n\nSetting `edgetarget=_graphviz` will open a new window if it\ndoesn't already exist, or reuse it if it does.\n\nIf undefined, the value of the [`target`]({{< relref \"target.md\" >}}) is used instead.",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "<none>"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "edgetooltip",
+    "description": "Tooltip annotation attached to the non-label part of an edge",
+    "body": "- [`headtooltip`]({{< relref \"headtooltip.md\" >}}).\n- [`labeltooltip`]({{< relref \"labeltooltip.md\" >}}).\n- [`tailtooltip`]({{< relref \"tailtooltip.md\" >}}).\n- [`tooltip`]({{< relref \"tooltip.md\" >}}).",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "cmap",
+      "svg"
+    ]
+  },
+  {
+    "name": "edgeURL",
+    "description": "The link for the non-label parts of an edge",
+    "body": "`edgeURL` overrides any [`URL`]({{< relref \"URL.md\" >}}) defined for the edge.\n\nAlso, `edgeURL` is used near the head or tail node unless overridden\nby [`headURL`]({{< relref \"headURL.md\" >}}) or [`tailURL`]({{< relref \"tailURL.md\" >}}), respectively.\n\nSee [limitation]({{< relref \"_index.md#undir_note\" >}}).\n\nSee also:\n\n- [`edgehref`]({{< relref \"edgehref.md\" >}}), [`edgeURL`]({{< relref \"edgeURL.md\" >}})\n- [`headhref`]({{< relref \"headhref.md\" >}}), [`headURL`]({{< relref \"headURL.md\" >}})\n- [`labelhref`]({{< relref \"labelhref.md\" >}}), [`labelURL`]({{< relref \"labelURL.md\" >}})\n- [`tailhref`]({{< relref \"tailhref.md\" >}}), [`tailURL`]({{< relref \"tailURL.md\" >}})\n- [`href`]({{< relref \"href.md\" >}}), [`URL`]({{< relref \"URL.md\" >}})",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "epsilon",
+    "description": "Terminating condition",
+    "body": "If the length squared of all energy gradients are\nless than `epsilon`, the algorithm stops.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": ".0001 * # nodes",
+        "for": "(mode == KK)"
+      },
+      {
+        "default": ".0001",
+        "for": "(mode == major)"
+      },
+      {
+        "default": ".01",
+        "for": "(mode == sgd)"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato"
+    ]
+  },
+  {
+    "name": "esep",
+    "description": "Margin used around polygons for purposes of spline edge routing",
+    "body": "The interpretation is the same as given for [`sep`]({{< relref \"sep.md\" >}}). `esep` should\nnormally be strictly less than [`sep`]({{< relref \"sep.md\" >}}).",
+    "types": [
+      "addDouble",
+      "addPoint"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "+3"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato",
+      "fdp",
+      "sfdp",
+      "osage",
+      "circo",
+      "twopi"
+    ]
+  },
+  {
+    "name": "fillcolor",
+    "description": "Color used to fill the background of a node or cluster",
+    "body": "Assuming <code>[style]({{< relref \"style.md\" >}})=filled</code>, or a filled [`arrowhead`]({{< relref \"arrowhead.md\" >}}).\n\nIf `fillcolor` is not defined, [`color`]({{< relref \"color.md\" >}}) is\nused. (For clusters, if `color` is not defined,\n[`bgcolor`]({{< relref \"bgcolor.md\" >}}) is used.) If this is not defined,\nthe default is used, except for\n<code>[shape]({{< relref \"shape.md\" >}})=point</code> or when the output\nformat is `MIF`,\nwhich use black by default.\n\nIf the value is a [`colorList`](/docs/attr-types/colorList/), a gradient fill is\nused. By default, this is a linear fill; setting <code>[style]({{< relref \"style.md\" >}})=radial</code> will\ncause a radial fill. At present, only two colors are used. If the second\ncolor (after a colon) is missing, the default color is used for it.\n\nSee also the [`gradientangle`]({{< relref \"gradientangle.md\" >}}) attribute\nfor setting the gradient angle. \n\nNote that a cluster inherits the root graph's attributes if defined.\nThus, if the root graph has defined a `fillcolor`, this will override a\n[`color`]({{< relref \"color.md\" >}}) or [`bgcolor`]({{< relref \"bgcolor.md\" >}}) attribute set for the cluster.",
+    "types": [
+      "color",
+      "colorList"
+    ],
+    "usedBy": [
+      "N",
+      "E",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "lightgrey",
+        "for": "(nodes)"
+      },
+      {
+        "default": "black",
+        "for": "(clusters)"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "fixedsize",
+    "description": "Whether to use the specified width and height attributes to choose node size (rather than sizing to fit the node contents)",
+    "body": "If `false`, the size of a node is determined by smallest width and height\nneeded to contain its label and image, if any, with a margin specified by\nthe [`margin`]({{< relref \"margin.md\" >}}) attribute.\n\nThe width and height must also be at least as large as the sizes specified by\nthe [`width`]({{< relref \"width.md\" >}}) and [`height`]({{< relref \"height.md\" >}}) attributes, which specify\nthe minimum values for these parameters.\n\nIf `true`, the node size is specified by the values of the [`width`]({{< relref \"width.md\" >}})\nand [`height`]({{< relref \"height.md\" >}}) attributes only and is not expanded to contain the\ntext label. There will be a warning if the label (with margin) cannot fit\nwithin these limits.\n\nIf the [`fixedsize`]({{< relref \"fixedsize.md\" >}}) attribute is set to `shape`, the\n[`width`]({{< relref \"width.md\" >}}) and [`height`]({{< relref \"height.md\" >}}) attributes also determine the size\nof the node shape, but the label can be much larger. Both the label and shape\nsizes are used when avoiding node overlap, but all edges to the node ignore\nthe label and only contact the node shape. No warning is given if the label\nis too large.",
+    "types": [
+      "bool",
+      "string"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "fontcolor",
+    "description": "Color used for text",
+    "body": "",
+    "types": [
+      "color"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "G",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "black"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "fontname",
+    "description": "Font used for text",
+    "body": "This very much depends on the output format and, for\nnon-bitmap output such as PostScript or SVG, the availability of the font\nwhen the graph is displayed or printed. As such, it is best to rely on font\nfaces that are generally available, such as Times-Roman, Helvetica or\nCourier.\n\nHow font names are resolved also depends on the underlying library that\nhandles font name resolution. If Graphviz was built using the [fontconfig\nlibrary](https://www.freedesktop.org/wiki/Software/fontconfig/), fontconfig\nwill be used to search for the font. See the commands\n`fc-list`, `fc-match` and the other fontconfig commands for how names are\nresolved and which fonts are available. Other systems may provide their own\nfont package, such as Quartz for OS X.\n\nNote that various font attributes, such as weight and slant, can be built\ninto the font name. Unfortunately, the syntax varies depending on which font\nsystem is dominant. Thus, using `fontname=\"times bold italic\"` will produce a\nbold, slanted Times font using Pango, the usual main font library.\nAlternatively, `fontname=\"times:italic\"` will produce a slanted Times font from\nfontconfig, while `fontname=\"times-bold\"` will resolve to a bold Times using\nQuartz. You will need to ascertain which package is used by your Graphviz\nsystem and refer to the relevant documentation.\n\nIf Graphviz is not built with a high-level font library, fontname will be\nconsidered the name of a Type 1 or True Type font file. If you specify\n`fontname=schlbk`, the tool will look for a file named `schlbk.ttf` or `schlbk.pfa`\nor `schlbk.pfb` in one of the directories specified by the\n[`fontpath`]({{< relref \"fontpath.md\" >}}) attribute. The lookup does support various aliases\nfor the common fonts.\n\n{{< dot_card >}}\ndigraph {\n    label=\"Comic Sans MS\"\n    fontname=\"Comic Sans MS\"\n    subgraph cluster_a {\n      label=\"Courier New\"\n      fontname=\"Courier New\"\n      Arial [fontname=\"Arial\"];\n      Arial -> Arial [label=\"Impact\" fontname=\"Impact\"]\n    }\n}\n{{< /dot_card >}}",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "G",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "\"Times-Roman\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "fontnames",
+    "description": "Allows user control of how basic fontnames are represented in SVG output",
+    "body": "If `fontnames` is undefined or `hd`, fontconfig font conventions are used.\nThe default `Times-Roman` font will be mapped to an equivalent available\nsystem font, such as `Times New Roman` (Windows) or `Times` (some Linux).\n\nIf `fontnames` is set to `svg`, the output will use known SVG fontnames.\nIf `fontnames` is set to `ps`, PostScript font names like `Times-Roman` are\nused directly.\n\nIn all cases, the basic SVG font `serif` is used as a fallback for the\nnamed font. (So, a diagram containing text in `Times-Roman` might have\nthat text represented in the SVG output by a `<text>` tag with the\nattribute `font-family=\"Times-Roman,serif\"`.)",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "svg"
+    ]
+  },
+  {
+    "name": "fontpath",
+    "description": "Directory list used by [libgd](https://libgd.github.io/) to search for bitmap fonts",
+    "body": "Used if Graphviz was not built with the [fontconfig\nlibrary](https://www.freedesktop.org/wiki/Software/fontconfig/).\n\nIf `fontpath` is not set, the environment\nvariable `DOTFONTPATH` is checked.\n\nIf `DOTFONTPATH` is not set, `GDFONTPATH` is checked.\n\nIf `GDFONTPATH` not set, libgd uses its compiled-in font path.\n\nNote that `fontpath` is an attribute of the root graph.",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "<system-dependent>"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "fontsize",
+    "description": "Font size, [in points](/doc/info/attrs.html#points), used for text",
+    "body": "{{< dot_card >}}\ndigraph {\n    label=\"40pt Graph Label\"\n    fontsize=\"40\"\n    subgraph cluster_a {\n      label=\"30pt Cluster Label\"\n      fontsize=\"30pt\"\n      \"20pt Node\" [fontsize=\"20pt\"];\n      \"20pt Node\"-> \"20pt Node\" [label=\"10pt Edge\" fontsize=\"10\"]\n    }\n}\n{{< /dot_card >}}",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "G",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "14.0"
+      }
+    ],
+    "minimums": [
+      "1.0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "forcelabels",
+    "description": "Whether to force placement of all [`xlabels`](/docs/attrs/xlabel/), even if overlapping",
+    "body": "If true, all [`xlabel`]({{< relref \"xlabel.md\" >}}) attributes are placed, even if there is some overlap with nodes or other labels.",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "true"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "gradientangle",
+    "description": "If a gradient fill is being used, this determines the angle of the fill",
+    "body": "For linear fills, the colors transform along a line specified by the angle\nand the center of the object. For radial fills, a value of zero causes the\ncolors to transform radially from the center; for non-zero values, the colors\ntransform from a point near the object's periphery as specified by the value.\n\nIf unset, the default angle is 0.",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "N",
+      "C",
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0"
+      }
+    ],
+    "minimums": [
+      "0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "group",
+    "description": "Name for a group of nodes, for bundling edges avoiding crossings.",
+    "body": "If the end points of an edge belong to the same group, i.e., have the\nsame `group` attribute, parameters are set to avoid crossings and keep\nthe edges straight.",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "head_lp",
+    "description": "Center position of an edge's head label",
+    "body": "[In points]({{< relref \"_index.md#points\" >}}).",
+    "types": [
+      "point"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "write"
+    ]
+  },
+  {
+    "name": "headclip",
+    "description": "If true, the head of an edge is clipped to the boundary of the head node",
+    "body": "Otherwise, the end of the edge goes to the center of the node, or the\ncenter of a port, if applicable.",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "true"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "headhref",
+    "description": "Synonym for [`headURL`](/docs/attrs/headURL)",
+    "body": "See also:\n\n- [`edgehref`]({{< relref \"edgehref.md\" >}}), [`edgeURL`]({{< relref \"edgeURL.md\" >}})\n- [`headhref`]({{< relref \"headhref.md\" >}}), [`headURL`]({{< relref \"headURL.md\" >}})\n- [`labelhref`]({{< relref \"labelhref.md\" >}}), [`labelURL`]({{< relref \"labelURL.md\" >}})\n- [`tailhref`]({{< relref \"tailhref.md\" >}}), [`tailURL`]({{< relref \"tailURL.md\" >}})\n- [`href`]({{< relref \"href.md\" >}}), [`URL`]({{< relref \"URL.md\" >}})",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "headlabel",
+    "description": "Text label to be placed near head of edge",
+    "body": "See [limitation]({{< relref \"_index.md#undir_note\" >}}).",
+    "types": [
+      "lblString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "headport",
+    "description": "Indicates where on the head node to attach the head of the edge",
+    "body": "In the default case, the edge is aimed towards the center of the node,\nand then clipped at the node boundary.\n\nSee [limitation]({{< relref \"_index.md#undir_note\" >}}).",
+    "types": [
+      "portPos"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "center"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "headtarget",
+    "description": "Browser window to use for the [`headURL`](/docs/attrs/headURL) link",
+    "body": "If the edge has a [`headURL`]({{< relref \"headURL.md\" >}}),\n`headtarget` determines which window of the\nbrowser is used\nfor the URL. Setting `headURL=_graphviz` will open a new window if the window\ndoesn't already exist, or reuse the window if it does.\n\nIf undefined, the value of the [`target`]({{< relref \"target.md\" >}}) is used.",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "<none>"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "headtooltip",
+    "description": "Tooltip annotation attached to the head of an edge",
+    "body": "Used only if the edge has a [`headURL`]({{< relref \"headURL.md\" >}}) attribute.\n\nSee also:\n\n- [`edgetooltip`]({{< relref \"edgetooltip.md\" >}}).\n- [`labeltooltip`]({{< relref \"labeltooltip.md\" >}}).\n- [`tailtooltip`]({{< relref \"tailtooltip.md\" >}}).\n- [`tooltip`]({{< relref \"tooltip.md\" >}}).",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "cmap",
+      "svg"
+    ]
+  },
+  {
+    "name": "headURL",
+    "description": "If defined, `headURL` is output as part of the head label of the edge",
+    "body": "Also, this value is used near the head node, overriding any [`URL`]({{< relref \"URL.md\" >}}) value.\n\nSee [limitation]({{< relref \"_index.md#undir_note\" >}}).\n\nSee also:\n\n- [`edgehref`]({{< relref \"edgehref.md\" >}}), [`edgeURL`]({{< relref \"edgeURL.md\" >}})\n- [`headhref`]({{< relref \"headhref.md\" >}}), [`headURL`]({{< relref \"headURL.md\" >}})\n- [`labelhref`]({{< relref \"labelhref.md\" >}}), [`labelURL`]({{< relref \"labelURL.md\" >}})\n- [`tailhref`]({{< relref \"tailhref.md\" >}}), [`tailURL`]({{< relref \"tailURL.md\" >}})\n- [`href`]({{< relref \"href.md\" >}}), [`URL`]({{< relref \"URL.md\" >}})",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "height",
+    "description": "Height of node, in inches",
+    "body": "This is taken as the initial, minimum height of the node. If\n[`fixedsize`]({{< relref \"fixedsize.md\" >}}) is true, this will be the final height of the\nnode. Otherwise, if the node label requires more height to fit, the node's height\nwill be increased to contain the label.\n\nIf the output format is `dot`, the value given to `height` will be the final\nvalue.\n\nIf the node shape is regular, the width and height are made identical:\n\n* If both the `width` and the `height` are set explicitly, the maximum of the\n  two values is used.\n* If one of `width` or `height` is set explicitly, that value is\n  used for both `width` and `height`.\n* If neither is set explicitly, the minimum of the two default values\n  is used.\n\nIf a value below the minimum value (0.02) is set, it will be rounded up to this\nminimum.\n\n{{< dot_card header=\"Height Example\" >}}\ndigraph G {\n  \"default\"\n  \"1in\" [height=1]\n  \"2in\" [height=2]\n}\n{{< /dot_card >}}\n\nSee also:\n\n- [`width`]({{< relref \"width.md\" >}})",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "0.5"
+      }
+    ],
+    "minimums": [
+      "0.02"
+    ],
+    "flags": []
+  },
+  {
+    "name": "href",
+    "description": "Synonym for [`URL`](/docs/attrs/URL)",
+    "body": "See also:\n\n- [`edgehref`]({{< relref \"edgehref.md\" >}}), [`edgeURL`]({{< relref \"edgeURL.md\" >}})\n- [`headhref`]({{< relref \"headhref.md\" >}}), [`headURL`]({{< relref \"headURL.md\" >}})\n- [`labelhref`]({{< relref \"labelhref.md\" >}}), [`labelURL`]({{< relref \"labelURL.md\" >}})\n- [`tailhref`]({{< relref \"tailhref.md\" >}}), [`tailURL`]({{< relref \"tailURL.md\" >}})\n- [`href`]({{< relref \"href.md\" >}}), [`URL`]({{< relref \"URL.md\" >}})",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "G",
+      "C",
+      "N",
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "postscript",
+      "svg"
+    ]
+  },
+  {
+    "name": "id",
+    "description": "Identifier for graph objects",
+    "body": "Allows the graph author to provide an identifier for graph objects which is\nto be included in the output.\n\nNormal `\\N`, `\\E`, `\\G` substitutions are applied.\n\nIf provided, it is the responsibility of the provider to keep\n`id` values unique for its intended downstream use.\n\nNote, in particular, that `\\E` does not provide a unique id for multi-edges.\n\nIf no `id` attribute is provided, then a unique internal id is used. However, \nthis value is unpredictable by the graph writer.\n\nIf the graph provides an `id` attribute, this will be used as a prefix for\ninternally generated attributes. By making internally-used attributes\ndistinct, the user can include multiple image maps in the same document.",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "G",
+      "C",
+      "N",
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "postscript",
+      "svg"
+    ]
+  },
+  {
+    "name": "image",
+    "description": "Gives the name of a file containing an image to be displayed inside a node",
+    "body": "The image file must be in one of the recognized\n[formats]({{< relref \"../outputs/_index.md#image-formats\" >}}), typically JPEG, PNG, GIF, BMP, SVG, or\nPostscript, and be able to be converted into the desired output format.\n\nThe file must contain the image size information:\n\n* Bitmap formats usually already contain image size.\n* PostScript files must contain a line starting with `%%BoundingBox:` followed\n  by four integers specifying the lower left x and y coordinates and the upper\n  right x and y coordinates of the bounding box for the image, the coordinates\n  being in points.\n* An SVG image file must contain width and height attributes, typically as part\n  of the svg element. The values for these should have the form of a floating\n  point number, followed by optional units, e.g., `width=\"76pt\"`. Recognized\n  units are in, px, pc, pt, cm and mm for inches, pixels, picas, points,\n  centimeters and millimeters, respectively. The default unit is points.\n\nUnlike with the [`shapefile`]({{< relref \"shapefile.md\" >}}) attribute, the image is treated\nas node content rather than the entire node. In particular, an image can be\ncontained in a node of any shape, not just a rectangle.\n\nOnly paths to local resources are supported. If you want to use a URL to a\nremote resource, see the\n[`dot_url_resolve.py`](https://gitlab.com/graphviz/graphviz/-/blob/main/contrib/dot_url_resolve.py)\nscript.",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "imagepath",
+    "description": "A list of directories in which to look for image files",
+    "body": "When specified\nby the [`image`]({{< relref \"image.md\" >}}) attribute or using the `IMG` element in [HTML-like\nlabels]({{< relref \"../shapes.md#html\" >}}).\n\n`imagepath` should be a list of (absolute or\nrelative) pathnames, each separated by a semicolon `;` (for Windows) or a colon `:`\n(all other OS).\n\nThe first directory in which a file of the given name is\nfound will be used to load the image.\n\nIf `imagepath` is not set, relative pathnames for the image file will be\ninterpreted with respect to the current working directory.",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "imagepos",
+    "description": "Controls how an image is positioned within its containing node",
+    "body": "`imagepos` only has an effect when the image is smaller than the containing node.\n\nThe default is to be centered both horizontally and vertically.\n\nValid values:\n\n* `tl` - Top Left\n* `tc` - Top Centered\n* `tr` - Top Right\n* `ml` - Middle Left\n* `mc` - Middle Centered *(the default)*\n* `mr` - Middle Right\n* `bl` - Bottom Left\n* `bc` - Bottom Centered\n* `br` - Bottom Right",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "\"mc\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "imagescale",
+    "description": "Controls how an image fills its containing node",
+    "body": "In general, the image is given its natural size,\n(cf. [`dpi`]({{< relref \"dpi.md\" >}})),\nand the node size is made large enough to contain its image, its\nlabel, its margin, and its peripheries.\n\nIts width and height will also be at least as large as its\nminimum [`width`]({{< relref \"width.md\" >}}) and [`height`]({{< relref \"height.md\" >}}).\nIf, however, `fixedsize=true`,\nthe width and height attributes specify the exact size of the node.\n\n* During rendering, in the default case (`imagescale=false`),\nthe image retains its natural size.\n* If `imagescale=true`,\nthe image is uniformly scaled (i.e., its aspect ratio is\npreserved) to fit inside the node.\nAt least one dimension of the image will be as large as possible\ngiven the size of the node.\n* When `imagescale=width`,\nthe width of the image is scaled to fill the node width.\n* The corresponding property holds when `imagescale=height`.\n* When `imagescale=both`,\nboth the height and the width are scaled separately to fill the node.\n\nIn all cases, if a dimension of the image is larger than the\ncorresponding dimension of the node, that dimension of the\nimage is scaled down to fit the node.\n\nAs with the case of expansion, if `imagescale=true`, width and height are\nscaled uniformly.",
+    "types": [
+      "bool",
+      "string"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "inputscale",
+    "description": "Scales the input [positions](/docs/attrs/pos/) to convert between length units",
+    "body": "For layout algorithms that support initial input positions (specified by the [`pos`]({{< relref \"pos.md\" >}}) attribute),\nthis attribute can be used to appropriately scale the values.\n\nBy default, [`fdp`](/docs/layouts/fdp/) and [`neato`](/docs/layouts/neato/) interpret\nthe x and y values of [`pos`](/docs/attrs/pos/) as being in inches. (**NOTE:** `neato -n(2)` treats the coordinates as\nbeing in points, being the unit used by the layout algorithms for the pos attribute.) Thus, if\nthe graph has pos attributes in points, one should set `inputscale=72`.\nThis can also be set on the command line using the [`-s` flag]({{< relref \"/docs/cli/_index.md#-s\" >}}).\n\nIf unset, no scaling is done and the units on input are treated as inches.\n\n`inputscale=0` is equivalent to `inputscale=72`.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "<none>"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato",
+      "fdp"
+    ]
+  },
+  {
+    "name": "K",
+    "description": "Spring constant used in virtual physical model",
+    "body": "It roughly corresponds to an ideal edge length (in inches), in that increasing `K` tends to\nincrease the distance between nodes.\n\nNote that the edge attribute [`len`]({{< relref \"len.md\" >}}) can be used to\noverride this value for adjacent nodes.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "0.3"
+      }
+    ],
+    "minimums": [
+      "0"
+    ],
+    "flags": [
+      "fdp",
+      "sfdp"
+    ]
+  },
+  {
+    "name": "label",
+    "description": "Text label attached to objects",
+    "body": "If a node's [`shape`]({{< relref \"shape.md\" >}}) is record, then the label can\nhave a [special format]({{< relref \"../shapes.md#record\" >}})\nwhich describes the record layout.\n\nNote that a node's default label is `\"\\N\"`, so the node's name or ID becomes\nits label.\n\nTechnically, a node's name can be an HTML string but this will not mean that\nthe node's label will be interpreted as an [HTML-like\nlabel]({{< relref \"../shapes.md#html\" >}}). This is because the node's actual label is an\nordinary string, which will be replaced by the raw bytes stored in the node's\nname.\n\nTo get an HTML-like label, the label attribute value itself must be an HTML\nstring.\n\n{{< dot_card header=\"Example: Van Gogh Paintings\">}}\ngraph {\n  label=\"Vincent van Gogh Paintings\"\n\n  subgraph cluster_self_portraits {\n    label=\"Self-portraits\"\n\n    spwgfh [label=\"Self-Portrait with Grey Felt Hat\"]\n    spaap [label=\"Self-Portrait as a Painter\"]\n  }\n  \n  subgraph cluster_flowers {\n    label=\"Flowers\"\n\n    sf [label=\"Sunflowers\"]\n    ab [label=\"Almond Blossom\"]\n  }\n}\n{{< /dot_card >}}",
+    "types": [
+      "lblString"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "G",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "\"\\N\"",
+        "for": "(nodes)"
+      },
+      {
+        "default": "\"\"",
+        "for": "(otherwise)"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "label_scheme",
+    "description": "Whether to treat a node whose name has the form `|edgelabel|*` as a special node representing an edge label.",
+    "body": "* The default, `label_scheme=0`, produces no effect.\n* If `label_scheme=1`, `sfdp` uses a penalty-based method to make that kind of node close to the \n  center of its neighbor.\n* With `label_scheme=2`, `sfdp` uses a penalty-based method to make that kind of node \n  close to the old center of its neighbor.\n*  Finally, `label_scheme=3` invokes a two-step process of overlap\nremoval and straightening.",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0"
+      }
+    ],
+    "minimums": [
+      "0"
+    ],
+    "flags": [
+      "sfdp"
+    ]
+  },
+  {
+    "name": "labelangle",
+    "description": "The angle (in degrees) in polar coordinates of the head & tail edge labels.",
+    "body": "Determines, along with [`labeldistance`]({{< relref \"labeldistance.md\" >}}),\nwhere the [`headlabel`]({{< relref \"headlabel.md\" >}}) / [`taillabel`]({{< relref \"taillabel.md\" >}}) are\nplaced with respect to the head / tail in polar coordinates.\n\nThe origin in the coordinate system is the point where the edge touches the\nnode. The ray of 0 degrees goes from the origin back along the edge, parallel\nto the edge at the origin.\n\nThe angle, in degrees, specifies the rotation from the 0 degree ray,\nwith positive angles moving counterclockwise and negative angles\nmoving clockwise.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "-25.0"
+      }
+    ],
+    "minimums": [
+      "-180.0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "labeldistance",
+    "description": "Scaling factor for the distance of [`headlabel`](/docs/attrs/headlabel/) / [`taillabel`](/docs/attrs/taillabel/) from the head / tail nodes.",
+    "body": "The default distance is 10 points.\n\n`labeldistance` multiplies that default.\n\nSee [`labelangle`]({{< relref \"labelangle.md\" >}}) for more details.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "1.0"
+      }
+    ],
+    "minimums": [
+      "0.0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "labelfloat",
+    "description": "If true, allows edge labels to be less constrained in position",
+    "body": "In particular, it may appear on top of other edges.",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "labelfontcolor",
+    "description": "Color used for [`headlabel`](/docs/attrs/headlabel/) and [`taillabel`](/docs/attrs/taillabel/).",
+    "body": "If not set, defaults to edge's [`fontcolor`]({{< relref \"fontcolor.md\" >}}).",
+    "types": [
+      "color"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "black"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "labelfontname",
+    "description": "Font for `headlabel` and `taillabel`",
+    "body": "Font used for [`headlabel`]({{< relref \"headlabel.md\" >}}) and [`taillabel`]({{< relref \"taillabel.md\" >}}).\n\nIf not set, defaults to edge's [`fontname`]({{< relref \"fontname.md\" >}}).",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"Times-Roman\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "labelfontsize",
+    "description": "Font size of `headlabel` and `taillabel`",
+    "body": "Font size, [in points]({{< relref \"_index.md#points\" >}}), used for [`headlabel`]({{< relref \"headlabel.md\" >}}) and\n[`taillabel`]({{< relref \"taillabel.md\" >}}).\n\nIf not set, defaults to edge's [`fontsize`]({{< relref \"fontsize.md\" >}}).",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "14.0"
+      }
+    ],
+    "minimums": [
+      "1.0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "labelhref",
+    "description": "Synonym for [`labelURL`](/docs/attrs/labelURL/)",
+    "body": "See also:\n\n- [`edgehref`]({{< relref \"edgehref.md\" >}}), [`edgeURL`]({{< relref \"edgeURL.md\" >}})\n- [`headhref`]({{< relref \"headhref.md\" >}}), [`headURL`]({{< relref \"headURL.md\" >}})\n- [`labelhref`]({{< relref \"labelhref.md\" >}}), [`labelURL`]({{< relref \"labelURL.md\" >}})\n- [`tailhref`]({{< relref \"tailhref.md\" >}}), [`tailURL`]({{< relref \"tailURL.md\" >}})\n- [`href`]({{< relref \"href.md\" >}}), [`URL`]({{< relref \"URL.md\" >}})",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "labeljust",
+    "description": "Justification for graph & cluster labels",
+    "body": "* If `labeljust=r`, the label is right-justified within bounding rectangle\n* If `labeljust=l`, left-justified\n* Else the label is centered.\n\nNote that a subgraph inherits attributes from its parent. Thus, if\nthe root graph sets `labeljust=l`, the subgraph inherits\nthis value.\n\n{{< dot_card header=\"Graph label justifications\" >}}\ndigraph {\n  label=\"l\"\n  labeljust=l\n  a\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Graph label justifications\" >}}\ndigraph {\n  label=\"r\"\n  labeljust=r\n  b\n}\n{{< /dot_card >}}\n\n\n{{< dot_card header=\"Cluster label justifications\" >}}\ndigraph {\n  subgraph cluster_l {\n    label=\"l\"\n    labeljust=l\n    a\n  }\n  subgraph cluster_c {\n    label=\"c\"\n    labeljust=c\n    b\n  }\n  subgraph cluster_r {\n    label=\"r\"\n    labeljust=r\n    c\n  }\n}\n{{< /dot_card >}}",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "\"c\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "labelloc",
+    "description": "Vertical placement of labels for nodes, root graphs and clusters",
+    "body": "For graphs and clusters, only `labelloc=t` and `labelloc=b` are allowed, corresponding\nto placement at the top and bottom, respectively.\n\nBy default, root graph labels go on the bottom and cluster labels go on the\ntop.\n\nNote that a subgraph inherits attributes from its parent. Thus, if\nthe root graph sets `labelloc=b`, the subgraph inherits\nthis value.\n\nFor nodes, this attribute is used only when the height of the node\nis larger than the height of its label. \n\nIf `labelloc=t`, `labelloc=c`, `labelloc=b`, the label is aligned\nwith the top, centered, or aligned with the bottom of the node, respectively.\n\nBy default, the label is vertically centered.\n\n{{< dot_card header=\"Label at top of graph\" >}}\ndigraph {\n  labelloc=\"t\"\n  label=\"Title\"\n  a -> b\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Label at bottom of graph\" >}}\ndigraph {\n  labelloc=\"b\"\n  label=\"Title\"\n  a -> b\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Cluster Label Locations\" >}}\ndigraph {\n  label=\"Graph Title\"\n  subgraph cluster_t {\n    labelloc=\"t\"\n    label=\"Cluster Top\"\n    a -> b\n  }\n  subgraph cluster_b {\n    labelloc=\"b\"\n    label=\"Cluster Bottom\"\n    c -> d\n  }\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Node label positions\" >}}\ndigraph {\n  t [labelloc=t]\n  c [labelloc=c]\n  b [labelloc=b]\n}\n{{< /dot_card >}}",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "N",
+      "G",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "\"t\"",
+        "for": "(clusters)"
+      },
+      {
+        "default": "\"b\"",
+        "for": "(root graphs)"
+      },
+      {
+        "default": "\"c\"",
+        "for": "(nodes)"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "labeltarget",
+    "description": "Browser window to open [`labelURL`](/docs/attrs/labelURL/) links in",
+    "body": "If the edge has a [`URL`]({{< relref \"URL.md\" >}}) or [`labelURL`]({{< relref \"labelURL.md\" >}}) attribute, this\nattribute determines which window of the browser is used for the URL attached\nto the label.\n\nSetting `labeltarget=_graphviz` will open a new window if it doesn't\nalready exist, or reuse it if it does.\n\nIf undefined, the value of the [`target`]({{< relref \"target.md\" >}}) is used.",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "<none>"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "labeltooltip",
+    "description": "Tooltip annotation attached to label of an edge",
+    "body": "- [`edgetooltip`]({{< relref \"edgetooltip.md\" >}}).\n- [`headtooltip`]({{< relref \"headtooltip.md\" >}}).\n- [`tailtooltip`]({{< relref \"tailtooltip.md\" >}}).\n- [`tooltip`]({{< relref \"tooltip.md\" >}}).",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "cmap",
+      "svg"
+    ]
+  },
+  {
+    "name": "labelURL",
+    "description": "If defined, `labelURL` is the link used for the label of an edge",
+    "body": "`labelURL` overrides any [`URL`]({{< relref \"URL.md\" >}}) defined for the edge.\n\nSee also:\n\n- [`edgehref`]({{< relref \"edgehref.md\" >}}), [`edgeURL`]({{< relref \"edgeURL.md\" >}})\n- [`headhref`]({{< relref \"headhref.md\" >}}), [`headURL`]({{< relref \"headURL.md\" >}})\n- [`labelhref`]({{< relref \"labelhref.md\" >}}), [`labelURL`]({{< relref \"labelURL.md\" >}})\n- [`tailhref`]({{< relref \"tailhref.md\" >}}), [`tailURL`]({{< relref \"tailURL.md\" >}})\n- [`href`]({{< relref \"href.md\" >}}), [`URL`]({{< relref \"URL.md\" >}})",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "landscape",
+    "description": "If true, the graph is rendered in landscape mode",
+    "body": "Synonymous with\n<code>[rotate]({{< relref \"rotate.md\" >}})=90</code> or <code>[orientation]({{< relref \"orientation.md\" >}})=landscape</code>.\n\n{{< dot_card header=\"Rotations\">}}\ndigraph {\n  landscape=true\n  a -> b\n}\n{{< /dot_card >}}\n\nSee also:\n\n- [`rotate`]({{< relref \"rotate.md\" >}})\n- [`orientation`]({{< relref \"orientation.md\" >}})",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "layer",
+    "description": "Specifies layers in which the node, edge or cluster is present",
+    "body": "",
+    "types": [
+      "layerRange"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "layerlistsep",
+    "description": "The separator characters used to split attributes of type [`layerRange`](/docs/attr-types/layerRange/) into a list of ranges.",
+    "body": "",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\",\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "layers",
+    "description": "A linearly ordered list of layer names attached to the graph",
+    "body": "The graph is then output in separate layers. Only those components belonging to\nthe current output layer appear.\n\nSee [How to use drawing layers (overlays)](../../../faq/#FaqOverlays).",
+    "types": [
+      "layerList"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "layerselect",
+    "description": "Selects a list of layers to be emitted",
+    "body": "",
+    "types": [
+      "layerRange"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "layersep",
+    "description": "The separator characters for splitting the [`layers`](/docs/attrs/layers/) attribute into a list of layer names.",
+    "body": "",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\":\\t \""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "layout",
+    "description": "Which [layout engine](/docs/layouts/) to use",
+    "body": "Specifies the name of the [layout engine]({{< relref \"/docs/layouts/_index.md\" >}}) to\nuse, such as `dot` or `neato`.\n\nNormally, graphs should be kept independent of a type of layout. In some\ncases, however, it can be convenient to embed the type of layout desired\nwithin the graph.\n\nFor example, a graph containing position information from a layout might want\nto record what the associated layout engine was.\n\nThis attribute takes precedence over the [`-K` flag]({{< relref \"/docs/cli/_index.md#-K\" >}}) or\nthe actual command name used.",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "len",
+    "description": "Preferred edge length, in inches",
+    "body": "See also:\n\n- [`minlen`]({{< relref \"minlen.md\" >}})",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "1.0",
+        "for": "(neato)"
+      },
+      {
+        "default": "0.3",
+        "for": "(fdp)"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato",
+      "fdp"
+    ]
+  },
+  {
+    "name": "levels",
+    "description": "Number of levels allowed in the multilevel scheme",
+    "body": "",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "INT_MAX"
+      }
+    ],
+    "minimums": [
+      "0.0"
+    ],
+    "flags": [
+      "sfdp"
+    ]
+  },
+  {
+    "name": "levelsgap",
+    "description": "strictness of neato level constraints",
+    "body": "Specifies strictness of level constraints in [`neato`](/docs/layouts/neato/) when\n<code>[mode]({{< relref \"mode.md\" >}})=\"ipsep\"</code> or <code>[mode]({{< relref \"mode.md\" >}})=hier</code>.\n\nLarger positive values mean stricter constraints, which demand more\nseparation between levels. On the other hand, negative values will relax the\nconstraints by allowing some overlap between the levels.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0.0"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato"
+    ]
+  },
+  {
+    "name": "lhead",
+    "description": "Logical head of an edge",
+    "body": "When [`compound`]({{< relref \"compound.md\" >}}) is true, if `lhead` is defined and is the name\nof a cluster containing the real head, the edge is clipped to the boundary of\nthe cluster.\n\n{{< dot_card >}}\ndigraph {\n  compound=true;\n\n  subgraph cluster_a {\n    label=\"Cluster A\";\n    node1; node3; node5; node7;\n  }\n  subgraph cluster_b {\n    label=\"Cluster B\";\n    node2; node4; node6; node8;\n  }\n\n  node1 -> node2 [label=\"1\"];\n  node3 -> node4 [label=\"2\" ltail=\"cluster_a\"];\n  \n  node5 -> node6 [label=\"3\" lhead=\"cluster_b\"];\n  node7 -> node8 [label=\"4\" ltail=\"cluster_a\" lhead=\"cluster_b\"];\n}\n{{< /dot_card >}}\n\nSee [limitation]({{< relref \"_index.md#undir_note\" >}}).",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "lheight",
+    "description": "Height of graph or cluster label, in inches",
+    "body": "",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G",
+      "C"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "write"
+    ]
+  },
+  {
+    "name": "linelength",
+    "description": "How long strings should get before overflowing to next line, for text output.",
+    "body": "Example, where an 80-character long string (`\"a \" * 40`) is broken up onto two\nlines, when printed as [canonical output](/docs/outputs/canon/):\n\n```\n$ echo 'digraph G { linelength=60; N0 [label=\"a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a \"]; }' | dot -Tcanon\ndigraph G {\n        graph [linelength=60];\n        node [label=\"\\N\"];\n        N0      [label=\"a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a \\\na a a a a a a a a a \"];\n}\n```\n\nThe text overflows when the *label* reaches the given size.\n\nDespite the `linelength` name, this is the length of the attribute string, *not* the length of the overall line (which includes the node ID and attribute key).",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "128"
+      }
+    ],
+    "minimums": [
+      "60"
+    ],
+    "flags": []
+  },
+  {
+    "name": "lp",
+    "description": "Label center position",
+    "body": "Label center position, [in points]({{< relref \"_index.md#points\" >}}).",
+    "types": [
+      "point"
+    ],
+    "usedBy": [
+      "E",
+      "G",
+      "C"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "write"
+    ]
+  },
+  {
+    "name": "ltail",
+    "description": "Logical tail of an edge",
+    "body": "When <code>[compound]({{< relref \"compound.md\" >}})=true</code>, if `ltail` is defined and is the name\nof a cluster containing the real tail, the edge is clipped to the boundary of\nthe cluster.\n\n{{< dot_card >}}\ndigraph {\n  compound=true;\n\n  subgraph cluster_a {\n    label=\"Cluster A\";\n    node1; node3; node5; node7;\n  }\n  subgraph cluster_b {\n    label=\"Cluster B\";\n    node2; node4; node6; node8;\n  }\n\n  node1 -> node2 [label=\"1\"];\n  node3 -> node4 [label=\"2\" ltail=\"cluster_a\"];\n  \n  node5 -> node6 [label=\"3\" lhead=\"cluster_b\"];\n  node7 -> node8 [label=\"4\" ltail=\"cluster_a\" lhead=\"cluster_b\"];\n}\n{{< /dot_card >}}\n\nSee [limitation]({{< relref \"_index.md#undir_note\" >}}).",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "lwidth",
+    "description": "Width of graph or cluster label, in inches",
+    "body": "",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G",
+      "C"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "write"
+    ]
+  },
+  {
+    "name": "margin",
+    "description": "For graphs, this sets x and y margins of canvas, in inches",
+    "body": "If the margin is a single double, both margins are set equal to the given\nvalue.\n\nNote that the margin is not part of the drawing but just empty space left\naround the drawing. The margin basically corresponds to a translation of\ndrawing, as would be necessary to center a drawing on a page. Nothing is\nactually drawn in the margin. To actually extend the background of a drawing,\nsee the [`pad`]({{< relref \"pad.md\" >}}) attribute.\n\nFor clusters, `margin` specifies the space between the nodes in the cluster\nand the cluster bounding box. By default, this is 8 points.\n\nFor nodes, this attribute specifies space left around the node's label. By\ndefault, the value is `0.11,0.055`.\n\n{{< dot_card header=\"Nodes Example: Wide Margins, Tall Margins, and Equal Margins\">}}\ngraph {\n  \"1.5x0.5\" [shape=rect margin=\"1.5,0.5\"] # in inches\n  \"0.5x1.5\" [shape=rect margin=\"0.5,1.5\"] # in inches\n  \"1.5x1.5\" [shape=rect margin=\"1.5\"]     # in inches\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Example: Cluster and Graph Margins\">}}\ngraph {\n    bgcolor=lightgray\n    margin=0 # in inches\n    \n    subgraph cluster_one {\n      margin=8 # in points\n      a\n      b\n    }\n    subgraph cluster_two {\n      margin=16 # in points\n      c\n      d\n    }\n}\n{{< /dot_card >}}",
+    "types": [
+      "double",
+      "point"
+    ],
+    "usedBy": [
+      "N",
+      "C",
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "<device-dependent>"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "maxiter",
+    "description": "Sets the number of iterations used",
+    "body": "",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "100 * # nodes",
+        "for": "(mode == KK)"
+      },
+      {
+        "default": "200",
+        "for": "(mode == major)"
+      },
+      {
+        "default": "30",
+        "for": "(mode == sgd)"
+      },
+      {
+        "default": "600",
+        "for": "(fdp)"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato",
+      "fdp"
+    ]
+  },
+  {
+    "name": "mclimit",
+    "description": "Scale factor for mincross (mc) edge crossing minimizer parameters",
+    "body": "Multiplicative scale factor used to alter the `MinQuit` (default = 8)\nand `MaxIter` (default = 24) parameters used during crossing\nminimization.\n\nThese correspond to the number of tries without improvement before quitting\nand the maximum number of iterations in each pass.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "1.0"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "mindist",
+    "description": "Specifies the minimum separation between all nodes",
+    "body": "",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "1.0"
+      }
+    ],
+    "minimums": [
+      "0.0"
+    ],
+    "flags": [
+      "circo"
+    ]
+  },
+  {
+    "name": "minlen",
+    "description": "Minimum edge length (rank difference between head and tail)",
+    "body": "See also:\n\n- [`len`]({{< relref \"len.md\" >}})",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "1"
+      }
+    ],
+    "minimums": [
+      "0"
+    ],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "mode",
+    "description": "Technique for optimizing the layout",
+    "body": "[`neato`](/docs/layouts/neato/) supports modes:\n\n* `mode=\"major\"`: `neato` uses stress majorization[^1].\n* `mode=\"KK\"`: `neato` uses the Kamada-Kawai[^2] version of the gradient descent method.\n  `KK` is sometimes appreciably faster for small (number of nodes < 100) graphs.\n  A significant disadvantage is that `KK` may cycle.\n* `mode=\"sgd\"`: `neato` uses a version of the Stochastic Gradient Descent[^3] method.\n  `sgd`'s advantage is faster and more reliable convergence than both the previous methods,\n  while `sgd`'s disadvantage is that it runs in a fixed number of iterations and\n  may require larger values of [`maxiter`]({{< relref \"maxiter.md\" >}}) in some graphs.\n\nThere are two experimental modes in `neato`:\n\n* `mode=\"hier\"`, which adds a top-down directionality similar to the layout used in `dot`, and\n* `mode=\"ipsep\"`, which allows the graph to specify minimum vertical and horizontal distances between nodes.\n(See the [`sep`]({{< relref \"sep.md\" >}}) attribute.)\n\n[^1]: [Gansner, E.R., Koren, Y., North, S. (2005). Graph Drawing by Stress Majorization. In: Pach, J. (eds) Graph Drawing. GD 2004. Lecture Notes in Computer Science, vol 3383. Springer, Berlin, Heidelberg.](/documentation/GKN04.pdf)\n[^2]: [Tomihisa Kamada, Satoru Kawai, An algorithm for drawing general undirected graphs, Information Processing Letters, Volume 31, Issue 1, 1989, Pages 7-15.](https://doi.org/10.1016%2F0020-0190%2889%2990102-6)\n[^3]: [J. X. Zheng, S. Pawar and D. F. M. Goodman, \"Graph Drawing by Stochastic Gradient Descent,\" in IEEE Transactions on Visualization and Computer Graphics, vol. 25, no. 9, pp. 2738-2748, 1 Sept. 2019, doi: 10.1109/TVCG.2018.2859997.](https://ieeexplore.ieee.org/document/8419285)",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "major"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato"
+    ]
+  },
+  {
+    "name": "model",
+    "description": "Specifies how the distance matrix is computed for the input graph",
+    "body": "The distance matrix specifies the ideal distance between every pair of nodes.\n`neato` attempts to find a layout which best achieves these distances. By\ndefault, it uses the length of the shortest path, where the length of each\nedge is given by its [`len`]({{< relref \"len.md\" >}}) attribute.\n\n* If `model=\"circuit\"`, neato uses the circuit resistance model to compute the\n  distances. This tends to emphasize clusters.\n* If `model=\"subset\"`, neato uses the subset model. This sets the edge length\n  to be the number of nodes that are neighbors of exactly one of the end\n  points, and then calculates the shortest paths. This helps to separate\n  nodes with high degree.\n\nFor more control of distances, one can use `model=mds`. In this case, the\n[`len`]({{< relref \"len.md\" >}}) of an edge is used as the ideal distance between its vertices.\n\nA shortest path calculation is only used for pairs of nodes not connected by\nan edge. Thus, by supplying a complete graph, the input can specify all of\nthe relevant distances.",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "shortpath"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato"
+    ]
+  },
+  {
+    "name": "newrank",
+    "description": "Whether to use a single global ranking, ignoring clusters",
+    "body": "The original ranking algorithm in `dot` is recursive on clusters. This can\nproduce fewer ranks and a more compact layout, but sometimes at the cost of a\nhead node being place on a higher rank than the tail node. It also assumes\nthat a node is not constrained in separate, incompatible subgraphs. For\nexample, a node cannot be in a cluster and also be constrained by `rank=same`\nwith a node not in the cluster.\n\nThis allows nodes to be subject to multiple constraints. Rank\nconstraints will usually take precedence over edge constraints.",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "nodesep",
+    "description": "In `dot`, `nodesep` specifies the minimum space between two adjacent nodes in the same rank, in inches",
+    "body": "For other layouts, `nodesep` affects the spacing between loops on a single node, or multiedges between\na pair of nodes.\n\n{{< dot_card header=\"Small node separation\">}}\ndigraph {\n    nodesep=0.1;\n    node1; node2; node3;\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Large node separation\">}}\ndigraph {\n    nodesep=0.5;\n    node1; node2; node3;\n}\n{{< /dot_card >}}",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0.25"
+      }
+    ],
+    "minimums": [
+      "0.02"
+    ],
+    "flags": []
+  },
+  {
+    "name": "nojustify",
+    "description": "Whether to justify multiline text vs the previous text line (rather than the side of the container).",
+    "body": "By default, the justification of multi-line labels is done within the largest\ncontext that makes sense. Thus, in the label of a polygonal node, a\nleft-justified line will align with the left side of the node (shifted by the\nprescribed [`margin`]({{< relref \"margin.md\" >}})). In record nodes, left-justified line will\nline up with the left side of the enclosing column of fields. If\n`nojustify=true`, multi-line labels will be justified in the context\nof itself.\n\nFor example, if `nojustify` is set, the first label line is long, and the\nsecond is shorter and left-justified, the second will align with the\nleft-most character in the first line, regardless of how large the node might\nbe.\n\nSee this example containing the `\\l` (left-justify) escape-string:\n\n{{< dot_card header=\"Nojustify causes text to align with previous text line, not left side of box\" >}}\ndigraph G {\n  node [width=3 shape=box]\n  a [nojustify=false label=\"The first line is longer\\nnojustify=false\\l\"]\n  b [nojustify=true label=\"The first line is longer\\nnojustify=true\\l\"]\n  a -> b\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Nojustify causes text to align with previous text line, not record column\" >}}\ndigraph G{\n  c [nojustify=false shape=record label=\"{Records Example - Long Line\\n | Title - Shorter Line\\nnojustify=false\\l}\"]\n  d [nojustify=true shape=record label=\"{Records Example - Long Line\\n | Title - Shorter Line\\nnojustify=true\\l}\"]\n  c -> d\n}\n{{< /dot_card >}}",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G",
+      "C",
+      "N",
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "normalize",
+    "description": "normalizes coordinates of final layout",
+    "body": "So that the first point is at the\norigin, and then rotates the layout so that the angle of the first edge is\nspecified by the value of `normalize` in degrees.\n\nIf `normalize` is not a number, it is evaluated as a bool, with `true`\ncorresponding to `0` degrees.\n\n**NOTE:** Since the attribute is evaluated first as a number, `0` and `1`\ncannot be used for `false` and `true`.",
+    "types": [
+      "double",
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato",
+      "fdp",
+      "sfdp",
+      "twopi",
+      "circo"
+    ]
+  },
+  {
+    "name": "notranslate",
+    "description": "Whether to avoid translating layout to the origin point",
+    "body": "By default, the final layout is translated so that the lower-left corner of\nthe bounding box is at the origin.\n\nThis can be annoying if some nodes are pinned or if the user runs `neato -n`.\n\nTo avoid this translation, set `notranslate=true`.",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato"
+    ]
+  },
+  {
+    "name": "nslimit",
+    "description": "Sets number of iterations in network simplex applications",
+    "body": "`nslimit` is used in computing `node x coordinates`.\n\nIf defined, `# iterations = nslimit * # nodes`; otherwise, `# iterations = INT_MAX`.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "nslimit1",
+    "description": "Sets number of iterations in network simplex applications",
+    "body": "`nslimit1` is used for ranking nodes.\n\nIf defined, `# iterations = nslimit * # nodes`; otherwise, `# iterations = INT_MAX`.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "oneblock",
+    "description": "Whether to draw circo graphs around one circle.",
+    "body": "Observe two examples of rendering the same graph:\n\n{{< dot_card header=\"Example: Multiple Blocks\" >}}\ndigraph G {\n    layout=\"circo\"\n    oneblock=false\n\n    N0 -> N1\n    N1 -> N2\n    N2 -> N3\n    N3 -> N4\n    N4 -> N0\n    \n    N4 -> N5\n    N5 -> N6\n    N6 -> N7\n    N7 -> N8\n    N8 -> N5\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Example: One Block\" >}}\ndigraph G {\n    layout=\"circo\"\n    oneblock=true\n\n    N0 -> N1\n    N1 -> N2\n    N2 -> N3\n    N3 -> N4\n    N4 -> N0\n    \n    N4 -> N5\n    N5 -> N6\n    N6 -> N7\n    N7 -> N8\n    N8 -> N5\n}\n{{< /dot_card >}}",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "circo"
+    ]
+  },
+  {
+    "name": "ordering",
+    "description": "Constrains the left-to-right ordering of node edges.",
+    "body": "If `ordering=\"out\"`, then the outedges of a node, that is, edges with the\nnode as its tail node, must appear left-to-right in the same order in which\nthey are defined in the input.\n\nIf `ordering=\"in\"`, then the inedges of a node must appear\nleft-to-right in the same order in which they are defined in the input.\n\nIf defined as a graph or subgraph attribute, the value is applied to all\nnodes in the graph or subgraph.\n\nNote that the graph attribute takes precedence over the node attribute.",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G",
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "orientation",
+    "description": "node shape rotation angle, or graph orientation",
+    "body": "When used on nodes: Angle, in degrees, to rotate polygon node shapes. For any number of polygon sides, 0 degrees rotation results in a flat base.\n\nWhen used on graphs: If `\"[lL]*\"`, sets graph orientation to landscape. Used only if [`rotate`]({{< relref \"rotate.md\" >}}) is not defined.\n\n{{< dot_card header=\"Node Orientations\">}}\ndigraph {\n  layout=neato       # Render in a circular layout\n  node [shape=house] # Make all nodes have 'house' shape\n\n    0 [orientation=0]\n   45 [orientation=45]\n   90 [orientation=90]\n  135 [orientation=135]\n  180 [orientation=180]\n  225 [orientation=225]\n  270 [orientation=270]\n  315 [orientation=315]\n  0 -> 45 -> 90 -> 135 -> 180 -> 225 -> 270 -> 315 -> 0\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Landscape Graph Orientation\">}}\ndigraph {\n  orientation=L\n  a -> b\n}\n{{< /dot_card >}}\n\nSee also:\n\n- [`landscape`]({{< relref \"landscape.md\" >}})\n- [`rotate`]({{< relref \"rotate.md\" >}})",
+    "types": [
+      "double",
+      "string"
+    ],
+    "usedBy": [
+      "N",
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0.0"
+      },
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [
+      "-360.0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "outputorder",
+    "description": "Specify order in which nodes and edges are drawn",
+    "body": "",
+    "types": [
+      "outputMode"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "breadthfirst"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "overlap",
+    "description": "Determines if and how node overlaps should be removed",
+    "body": "Nodes are first\nenlarged using the [`sep`]({{< relref \"sep.md\" >}}) attribute. If `true` , overlaps are\nretained. If the value is `\"scale\"`, overlaps are removed by uniformly scaling\nin x and y. If the value converts to `\"false\"`, and it is available, Prism, a\nproximity graph-based algorithm, is used to remove node overlaps. This can\nalso be invoked explicitly with `overlap=prism`. This technique starts with a\nsmall scaling up, controlled by the [`overlap_scaling`]({{< relref \"overlap_scaling.md\" >}})\nattribute, which can remove a significant portion of the overlap. The prism\noption also accepts an optional non-negative integer suffix. This can be used\nto control the number of attempts made at overlap removal. By default,\n`overlap=\"prism\"` is equivalent to `overlap=\"prism1000\"`. Setting\n`overlap=\"prism0\"` causes only the scaling phase to be run.\n\nIf Prism is not available, or the version of Graphviz is earlier than 2.28,\n`\"overlap=false\"` uses a Voronoi-based technique. This can always be invoked\nexplicitly with `\"overlap=voronoi\"`.\n\nIf `overlap=\"scalexy\"`, x and y are separately scaled to remove overlaps.\n\nIf `overlap=\"compress\"`, the layout will be scaled down as much as\npossible without introducing any overlaps, obviously assuming there are none\nto begin with.\n\n**N.B.** The remaining allowed values of `overlap` correspond to algorithms which, at present, can produce bad aspect ratios. In addition, we deprecate the use of the `\"ortho*\"` and `\"portho*\"`.\n\nIf the value is `\"vpsc\"`, overlap removal is done as a quadratic optimization\nto minimize node displacement while removing node overlaps.\n\nIf the value is `\"orthoxy\"` or `\"orthoyx\"`, overlaps are moved by optimizing two\nconstraint problems, one for the x axis and one for the y. The suffix\nindicates which axis is processed first. If the value is \"ortho\", the\ntechnique is similar to \"orthoxy\" except a heuristic is used to reduce the\nbias between the two passes. If the value is `\"ortho_yx\"`, the technique is\nthe same as `\"ortho\"`, except the roles of x and y are reversed. The values\n`\"portho\"`, `\"porthoxy\"`, `\"porthoxy\"`, and `\"portho_yx\"` are similar to the\nprevious four, except only pseudo-orthogonal ordering is enforced.\n\nIf the layout is done by neato with <code>[mode]({{< relref \"mode.md\" >}})=\"ipsep\"</code>, then one can use\n`overlap=ipsep`. In this case, the overlap removal constraints are\nincorporated into the layout algorithm itself. N.B. At present, this only\nsupports one level of clustering.\n\nExcept for `fdp` and `sfdp`, the layouts assume `overlap=\"true\"` as the default.\nFdp first uses a number of passes using a built-in, force-directed technique\nto try to remove overlaps. Thus, `fdp` accepts `overlap` with an integer\nprefix followed by a colon, specifying the number of tries. If there is no\nprefix, no initial tries will be performed. If there is nothing following a\ncolon, none of the above methods will be attempted. By default, `fdp` uses\n`overlap=\"9:prism\"`. Note that `overlap=\"true\"`, `overlap=\"0:true\"` and\n`overlap=\"0:\"` all turn off all overlap removal.\n\nBy default, `sfdp` uses `overlap=\"prism0\"`.\n\nExcept for the Voronoi and prism methods, all of these transforms preserve\nthe orthogonal ordering of the original layout. That is, if the x coordinates\nof two nodes are originally the same, they will remain the same, and if the x\ncoordinate of one node is originally less than the x coordinate of another,\nthis relation will still hold in the transformed layout. The similar\nproperties hold for the y coordinates. This is not quite true for the\n`\"porth*\"` cases. For these, orthogonal ordering is only preserved among nodes\nrelated by an edge.",
+    "types": [
+      "string",
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "true"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "fdp",
+      "neato",
+      "sfdp",
+      "circo",
+      "twopi"
+    ]
+  },
+  {
+    "name": "overlap_scaling",
+    "description": "Scale layout by factor, to reduce node overlap.",
+    "body": "When <code>[overlap](/docs/attrs/overlap/)=prism</code>, the layout is scaled by this factor, thereby\nremoving a fair amount of node overlap, and making node overlap removal\nfaster and better able to retain the graph's shape.\n\n* If `overlap_scaling` is negative, the layout is scaled by\n`-1*overlap_scaling` times the average label size.\n\n* If `overlap_scaling` is positive, the layout is scaled by\n`overlap_scaling`.\n\n* If `overlap_scaling` is zero, no scaling is done.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "-4"
+      }
+    ],
+    "minimums": [
+      "-1.0e10"
+    ],
+    "flags": [
+      "prism",
+      "neato",
+      "sfdp",
+      "fdp",
+      "circo",
+      "twopi"
+    ]
+  },
+  {
+    "name": "overlap_shrink",
+    "description": "Whether the overlap removal algorithm should perform a compression pass to reduce the size of the layout",
+    "body": "",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "true"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "prism"
+    ]
+  },
+  {
+    "name": "pack",
+    "description": "Whether each connected component of the graph should be laid out separately, and then the graphs packed together.",
+    "body": "If `pack` has an integral value, this is used as the size,\nin [points]({{< relref \"_index.md#points\" >}}),of a margin around each part; otherwise, a default\nmargin of `8` is used.\n\nIf pack is interpreted as `false`, the entire graph is laid out together.\nThe granularity and method of packing is influenced by the\n[`packmode`]({{< relref \"packmode.md\" >}}) attribute.\n\nFor layouts which always do packing, such as `twopi`, the `pack`\nattribute is just used to set the margin.\n\n`pack` is treated as true if the value of pack is `true` (case-insensitive)\nor a non-negative integer.",
+    "types": [
+      "bool",
+      "int"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "packmode",
+    "description": "How connected components should be packed",
+    "body": "(cf [`packMode`](/docs/attr-types/packMode/)). Note that defining `packmode` will automatically\nturn on packing as though one had set `pack=true`.",
+    "types": [
+      "packMode"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "node"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "pad",
+    "description": "Inches to extend the drawing area around the minimal area needed to draw the graph",
+    "body": "If `pad` is a single double, both the x and y pad values are set\nequal to the given value. This area is part of the\ndrawing and will be filled with the background color, if appropriate.\n\nNormally, a small `pad` is used for aesthetic reasons, especially when\na background color is used, to avoid having nodes and edges abutting\nthe boundary of the drawn region.",
+    "types": [
+      "double",
+      "point"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0.0555"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "page",
+    "description": "Width and height of output pages, in inches",
+    "body": "If only a single value is given, this is used for both the width and height.\n\nIf `page` is set and is smaller than the size of the layout, a rectangular\narray of pages of the specified page size is overlaid on the layout, with\norigins aligned in the lower-left corner, thereby partitioning the layout\ninto pages. The pages are then produced one at a time, in\n[`pagedir`]({{< relref \"pagedir.md\" >}}) order.\n\nAt present, `page` only works for PostScript output. For other types of output,\nuse another tool to split the output into multiple output files,\nor use [`viewport`]({{< relref \"viewport.md\" >}}) to generate multiple files.",
+    "types": [
+      "double",
+      "point"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "pagedir",
+    "description": "The order in which pages are emitted",
+    "body": "Used only if [`page`]({{< relref \"page.md\" >}}) is set and applicable.\n\nLimited to one of the 8 row or column major orders.",
+    "types": [
+      "pagedir"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "BL"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "pencolor",
+    "description": "Color used to draw the bounding box around a cluster",
+    "body": "If `pencolor` is not defined, [`color`]({{< relref \"color.md\" >}}) is used.\n \n If [`color`]({{< relref \"color.md\" >}}) is not defined, [`bgcolor`]({{< relref \"bgcolor.md\" >}}) is used.\n \n If [`bgcolor`]({{< relref \"bgcolor.md\" >}}) is not defined, the default is used.\n\nNote that a cluster inherits the root graph's attributes if defined. Thus, if\nthe root graph has defined a `pencolor`, this will override a [`color`]({{< relref \"color.md\" >}}) or\n[`bgcolor`]({{< relref \"bgcolor.md\" >}}) attribute set for the cluster.",
+    "types": [
+      "color"
+    ],
+    "usedBy": [
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "black"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "penwidth",
+    "description": "Specifies the width of the pen, in points, used to draw lines and curves",
+    "body": "including the boundaries of edges and clusters.\n\n`penwidth` value is inherited by subclusters, and has no effect on text.\n\nPrevious to 31 January 2008, the effect of `penwidth=W` was achieved by\nincluding `setlinewidth(W)` as part of a [`style`]({{< relref \"style.md\" >}}) specification.\n\nIf both attributes are set, `penwidth` will be used.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "C",
+      "N",
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "1.0"
+      }
+    ],
+    "minimums": [
+      "0.0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "peripheries",
+    "description": "Set number of peripheries used in polygonal shapes and cluster boundaries",
+    "body": "Note that [user-defined shapes]({{< relref \"../shapes.md#epsf\" >}}) are treated as a form of\nbox shape, so the default peripheries value is 1 and the user-defined shape\nwill be drawn in a bounding rectangle. Setting `peripheries=0` will turn this\noff.\n\n`peripheries=1` is the maximum value for clusters.",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "N",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "<shape default>",
+        "for": "(nodes)"
+      },
+      {
+        "default": "1",
+        "for": "(clusters)"
+      }
+    ],
+    "minimums": [
+      "0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "pin",
+    "description": "Keeps the node at the node's given input position",
+    "body": "If true and the node has a [`pos`]({{< relref \"pos.md\" >}}) attribute on input, `neato` or\n`fdp` prevents the node from moving from the input position. This property\ncan also be specified in the [`pos`]({{< relref \"pos.md\" >}}) attribute itself (cf. the [point](/docs/attr-types/point/)\ntype).\n\n**Note:** Due to an artifact of the implementation, previous to 27 Feb 2014,\nfinal coordinates are translated to the origin. Thus, if you look at the\noutput coordinates given in the (x)dot or plain format, pinned nodes will not\nhave the same output coordinates as were given on input. If this is\nimportant, a simple workaround is to maintain the coordinates of a pinned\nnode. The vector difference between the old and new coordinates will give the\ntranslation, which can then be subtracted from all of the appropriate\ncoordinates.\n\nAfter 27 Feb 2014, this translation can be avoided in `neato` by setting\n<code>[notranslate]({{< relref \"notranslate.md\" >}})=true</code>. However, if the graph specifies [node\noverlap removal]({{< relref \"overlap.md\" >}}) or a change in aspect [`ratio`]({{< relref \"ratio.md\" >}}), node\ncoordinates may still change.",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato",
+      "fdp"
+    ]
+  },
+  {
+    "name": "pos",
+    "description": "Position of node, or spline control points",
+    "body": "For nodes, the position indicates the center of the node. On output, the\ncoordinates are in [points]({{< relref \"_index.md#points\" >}}).\n\nIn `neato` and `fdp`, `pos` can be used to set the initial position of a\nnode. By default, the coordinates are assumed to be in inches. However, the\n[`-s`]({{< relref \"/docs/cli/_index.md#-s\" >}}) command line flag can be used to specify different\nunits. As the output coordinates are in points, feeding the output of a graph\nlaid out by a Graphviz program into `neato` or `fdp` will almost always\nrequire the [`-s`]({{< relref \"/docs/cli/_index.md#-s\" >}}) flag.\n\nWhen the [`-n`]({{< relref \"/docs/cli/_index.md#-n\" >}}) command line flag is used with `neato`, it\nis assumed the positions have been set by one of the layout programs, and are\ntherefore in points. Thus, `neato -n` can accept input correctly without\nrequiring a [`-s`]({{< relref \"/docs/cli/_index.md#-s\" >}}) flag and, in fact, ignores any such flag.",
+    "types": [
+      "point",
+      "splineType"
+    ],
+    "usedBy": [
+      "E",
+      "N"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "neato",
+      "fdp"
+    ]
+  },
+  {
+    "name": "quadtree",
+    "description": "Quadtree scheme to use",
+    "body": "* `quadtree=true` aliases `quadtree=normal`\n* `quadtree=false` aliases `quadtree=none`\n* `quadtree=2` aliases `quadtree=fast`",
+    "types": [
+      "quadType",
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "normal"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "sfdp"
+    ]
+  },
+  {
+    "name": "quantum",
+    "description": "If `quantum > 0.0`, node label dimensions will be rounded to integral multiples of the quantum",
+    "body": "",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0.0"
+      }
+    ],
+    "minimums": [
+      "0.0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "radius",
+    "description": "Radius of rounded corners on orthogonal edges",
+    "body": "Controls the radius of rounded corners on orthogonal edges. This attribute only has an effect when [`splines=ortho`]({{< relref \"splines.md\" >}}) is set in the graph. When set to a value greater than 0, edge corners are rendered as smooth circular arcs instead of sharp 90-degree angles. The value specifies the radius of the arc in points. A value of 0 (default) produces square corners.\n\nAvailable from Graphviz version ≥ 14.1.0.\n\n{{< dot_card header=\"Orthogonal Edges with Rounded Corners\">}}\ndigraph RoundedEdges {\n  splines = ortho;\n  nodesep = 1.0;\n  ranksep = 1.0;\n\n  // Default: square corners\n  A -> X [xlabel=\"radius=0 (default)\"];\n\n  // Small rounded corners\n  B -> X [radius=8, xlabel=\"radius=8\", color=blue];\n\n  // Medium rounded corners\n  C -> X [radius=12, xlabel=\"radius=12\", color=green];\n\n  // Large rounded corners\n  D -> X [radius=20, xlabel=\"radius=20\", color=red];\n}\n{{< /dot_card >}}\n\nSee also:\n\n- [`splines`]({{< relref \"splines.md\" >}})",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "0"
+      }
+    ],
+    "minimums": [
+      "0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "rank",
+    "description": "Rank constraints on the nodes in a subgraph",
+    "body": "* If `rank=\"same\"`, all nodes are placed on the same rank.\n* If `rank=\"min\"`, all nodes are placed on the minimum rank.\n* If `rank=\"source\"`, all nodes are placed on the minimum rank, and\n  the only nodes on the minimum rank belong to some subgraph with\n  `rank=\"source\"` or `rank=\"min\"`.\n\nAnalogous criteria hold for `rank=\"max\"` and `rank=\"sink\"`.\n\n(Note: the minimum rank is topmost or leftmost, and the maximum rank is\nbottommost or rightmost.)\n\nFor more information check [this answer in Stack Overflow](https://stackoverflow.com/a/6155783/3416774)",
+    "types": [
+      "rankType"
+    ],
+    "usedBy": [
+      "S"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "rankdir",
+    "description": "Sets direction of graph layout",
+    "body": "For example, if `rankdir=\"LR\"`, and barring cycles, an edge `T -> H;` will go\nfrom left to right. By default, graphs are laid out from top to bottom.\n\nThis attribute also has a side-effect in determining how record nodes are\ninterpreted. See [record shapes]({{< relref \"../shapes.md#record\" >}}).\n\n{{< dot_card header=\"Top to bottom (default)\">}}\ndigraph {\n    rankdir=\"TB\"\n    a -> b -> c;\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Bottom to top\">}}\ndigraph {\n    rankdir=\"BT\"\n    a -> b -> c;\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Left to right\">}}\ndigraph {\n    rankdir=\"LR\"\n    a -> b -> c;\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Right to left\">}}\ndigraph {\n    rankdir=\"RL\"\n    a -> b -> c;\n}\n{{< /dot_card >}}",
+    "types": [
+      "rankdir"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "TB"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "ranksep",
+    "description": "Specifies separation between ranks",
+    "body": "In `dot`, sets the desired rank separation, in inches.\n\nThis is the minimum vertical distance between the bottom of the nodes in one\nrank and the tops of nodes in the next. If the value contains `equally`, the\ncenters of all ranks are spaced equally apart. Note that both\nsettings are possible, e.g., `ranksep=\"1.2 equally\"`.\n\nIn `twopi`, this attribute specifies the radial separation of concentric circles.\nFor `twopi`, `ranksep` can also be a list of doubles. The first double specifies\nthe radius of the inner circle; the second double specifies the increase in\nradius from the first circle to the second; etc. If there are more circles than\nnumbers, the last number is used as the increment for the remainder.",
+    "types": [
+      "double",
+      "doubleList"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0.5",
+        "for": "(dot)"
+      },
+      {
+        "default": "1.0",
+        "for": "(twopi)"
+      }
+    ],
+    "minimums": [
+      "0.02"
+    ],
+    "flags": [
+      "dot",
+      "twopi"
+    ]
+  },
+  {
+    "name": "ratio",
+    "description": "Sets the aspect ratio (drawing height/drawing width) for the drawing",
+    "body": "Note that this is adjusted before the [`size`]({{< relref \"size.md\" >}}) attribute constraints\nare enforced.\n\nIn addition, the calculations usually ignore the node sizes, so the\nfinal drawing size may only approximate what is desired.\n\nIf `ratio` is numeric, `ratio` is taken as the desired aspect ratio.\nThen, if the actual aspect ratio is less than the desired ratio,\nthe drawing height is scaled up to achieve the\ndesired ratio; if the actual ratio is greater than that desired ratio,\nthe drawing width is scaled up.\n\nIf `ratio=\"fill\"` and the [`size`]({{< relref \"size.md\" >}})\nattribute is set, node positions are scaled, separately in both x\nand y, so that the final drawing exactly fills the specified size.\nIf both [`size`]({{< relref \"size.md\" >}}) values exceed the width\nand height of the drawing, then both coordinate values of each\nnode are scaled up accordingly. However, if either size dimension\nis smaller than the corresponding dimension in the drawing, one\ndimension is scaled up so that the final drawing has the same aspect\nratio as specified by [`size`]({{< relref \"size.md\" >}}).\nThen, when rendered, the layout will be\nscaled down uniformly in both dimensions to fit the given\n[`size`]({{< relref \"size.md\" >}}), which may cause nodes and text\nto shrink as well. This may not be what the user\nwants, but it avoids the hard problem of how to reposition the\nnodes in an acceptable fashion to reduce the drawing size.\n\nIf `ratio=\"compress\"` and the [`size`]({{< relref \"size.md\" >}})\nattribute is set, dot attempts to compress the initial layout to fit\nin the given size. This achieves a tighter packing of nodes but\nreduces the balance and symmetry. This feature only works in dot.\n\nIf `ratio=\"expand\"`, the [`size`]({{< relref \"size.md\" >}}) attribute is set, and both the\nwidth and the height of the graph are less than the value in\n[`size`]({{< relref \"size.md\" >}}), node positions are scaled uniformly until at least one\ndimension fits [`size`]({{< relref \"size.md\" >}}) exactly. Note that this is distinct from\nusing [`size`]({{< relref \"size.md\" >}}) as the desired size, as here the drawing is expanded\nbefore edges are generated and all node and text sizes remain unchanged.\n\nIf `ratio=\"auto\"`, the [`page`]({{< relref \"page.md\" >}}) attribute is set and the graph\ncannot be drawn on a single page, then [`size`]({{< relref \"size.md\" >}}) is set to an\n\"ideal\" value.\n\nIn particular, the size in a given dimension will be the smallest integral\nmultiple of the page size in that dimension which is at least half the\ncurrent size. The two dimensions are then scaled independently to the\nnew size. This feature only works in `dot`.",
+    "types": [
+      "double",
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "rects",
+    "description": "Rectangles for fields of records, [in points](/doc/info/attrs.html#points)",
+    "body": "",
+    "types": [
+      "rect"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "write"
+    ]
+  },
+  {
+    "name": "regular",
+    "description": "If true, force polygon to be regular.",
+    "body": "If true, the vertices of the polygon will lie on a circle whose center is the\ncenter of the node.\n\n{{< dot_card >}}\ndigraph {\n    \"pentagon1\" [shape=\"pentagon\"];\n    \"pentagon2\" [shape=\"pentagon\" regular=true]\n    \"hexagon1\" [shape=\"hexagon\"];\n    \"hexagon2\" [shape=\"hexagon\" regular=true];\n}\n{{< /dot_card >}}",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "false"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "remincross",
+    "description": "If there are multiple clusters, whether to run edge crossing minimization a second time.",
+    "body": "",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "true"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "repulsiveforce",
+    "description": "The power of the repulsive force used in an extended Fruchterman-Reingold",
+    "body": "force directed model. Values larger than `1` tend to reduce \nthe warping effect at the expense of less clustering.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "1.0"
+      }
+    ],
+    "minimums": [
+      "0.0"
+    ],
+    "flags": [
+      "sfdp"
+    ]
+  },
+  {
+    "name": "resolution",
+    "description": "Synonym for [`dpi`](/docs/attrs/dpi/).",
+    "body": "",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "96.0"
+      }
+    ],
+    "minimums": [
+      "0.0"
+    ],
+    "flags": [
+      "bitmap output",
+      "svg"
+    ]
+  },
+  {
+    "name": "root",
+    "description": "Specifies nodes to be used as the center of the layout",
+    "body": "The center of the layout will be the root of the generated spanning tree.\n\n* As a graph attribute, this gives the name of the node.\n* As a node attribute, it specifies that the node should be used as a\ncentral node.\n\nIn `twopi`, `root` will actually be the central node. In `circo`, the\nblock containing the node will be central in the drawing of its connected\ncomponent. If not defined, `twopi` will pick a most central node, and `circo`\nwill pick a random node.\n\nIf the root attribute is defined as the empty string, `twopi` will reset it to\nname of the node picked as the root node.\n\nFor `twopi`, it is possible to have multiple roots, presumably one for each\ncomponent. If more than one node in a component is marked as the `root`,\n`twopi` will pick one.",
+    "types": [
+      "string",
+      "bool"
+    ],
+    "usedBy": [
+      "G",
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "<none>",
+        "for": "(graphs)"
+      },
+      {
+        "default": "false",
+        "for": "(nodes)"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "twopi",
+      "circo"
+    ]
+  },
+  {
+    "name": "rotate",
+    "description": "If `rotate=90`, sets drawing orientation to landscape",
+    "body": "{{< dot_card header=\"Rotations\">}}\ndigraph {\n  rotate=90\n  a -> b\n}\n{{< /dot_card >}}\n\nSee also:\n\n- [`landscape`]({{< relref \"landscape.md\" >}})\n- [`orientation`]({{< relref \"orientation.md\" >}})",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "rotation",
+    "description": "Rotates the final layout counter-clockwise by the specified number of degrees",
+    "body": "",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "sfdp"
+    ]
+  },
+  {
+    "name": "samehead",
+    "description": "Edges with the same head and the same `samehead` value are aimed at the same point on the head",
+    "body": "This has no effect on loops.\n\nPrior to Graphviz 8.0.1, each node can have at most 5 unique `samehead` values.\n\nSee [limitation]({{< relref \"_index.md#undir_note\" >}}).\n\nSee also [`sametail`]({{< relref \"sametail.md\" >}}).",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "sametail",
+    "description": "Edges with the same tail and the same `sametail` value are aimed at the same point on the tail.",
+    "body": "This has no effect on loops.\n\nPrior to Graphviz 8.0.1, each node can have at most 5 unique `sametail` values.\n\nSee [limitation]({{< relref \"_index.md#undir_note\" >}}).\n\nSee also [`samehead`]({{< relref \"samehead.md\" >}}).",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "samplepoints",
+    "description": "Gives the number of points used for a circle/ellipse node",
+    "body": "Used if the input graph defines the [`vertices`]({{< relref \"vertices.md\" >}}) attribute, and\noutput is `dot` or `xdot`.\n\nIt plays the same role in `neato`, when adjusting the layout to avoid\noverlapping nodes, and in image maps.",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "8",
+        "for": "(output)"
+      },
+      {
+        "default": "20",
+        "for": "(overlap and image maps)"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "scale",
+    "description": "Scales layout by the given factor after the initial layout",
+    "body": "If only a single number is given, that number scales both width and height.",
+    "types": [
+      "double",
+      "point"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "neato",
+      "twopi"
+    ]
+  },
+  {
+    "name": "searchsize",
+    "description": "During network simplex, the maximum number of edges with negative cut values to search when looking for an edge with minimum cut value.",
+    "body": "",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "30"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "sep",
+    "description": "Margin to leave around nodes when removing node overlap",
+    "body": "This guarantees a minimal non-zero distance between nodes.\n\nIf the attribute begins with a plus sign `'+'`, an additive margin is\nspecified. That is, `\"+w,h\"` causes the node's bounding box to be increased by\n`w` points on the left and right sides, and by `h` points on the top and bottom.\n\nWithout a plus sign, the node is scaled by `1 + w` in the x coordinate and\n`1 + h` in the y coordinate.\n\nIf only a single number is given, this is used for both dimensions.\n\nIf unset but [`esep`]({{< relref \"esep.md\" >}}) is defined, the `sep` values will be set to the\n[`esep`]({{< relref \"esep.md\" >}}) values divided by `0.8`. If [`esep`]({{< relref \"esep.md\" >}}) is unset, the\ndefault value is used.\n\n{{< dot_card header=\"Example: No separation\">}}\ngraph {\n    layout=\"fdp\"\n    sep=\"0\"\n    A -- B\n    B -- C\n    C -- D\n    D -- A\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Example: separation of 3\">}}\ngraph {\n    layout=\"fdp\"\n    sep=\"3\"\n    A -- B\n    B -- C\n    C -- D\n    D -- A\n}\n{{< /dot_card >}}",
+    "types": [
+      "addDouble",
+      "addPoint"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "+4"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "fdp",
+      "neato",
+      "sfdp",
+      "osage",
+      "circo",
+      "twopi"
+    ]
+  },
+  {
+    "name": "shape",
+    "description": "Sets the [shape](/doc/info/shapes.html) of a node",
+    "body": "{{< dot_card >}}\ndigraph {\n    \"pentagon\" [shape=\"pentagon\"];\n    \"hexagon\" [shape=\"hexagon\"];\n}\n{{< /dot_card >}}",
+    "types": [
+      "shape"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "ellipse"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "shapefile",
+    "description": "A file containing user-supplied node content",
+    "body": "*(Deprecated)*.\n\nSets the node's <code>[shape]({{< relref \"shape.md\" >}})=\"[box](/doc/info/shapes.html#polygon)\"</code>. The image in the shapefile must be\nrectangular. The image formats supported as well as the precise semantics of\nhow the file is used depends on the [output format]({{< relref \"../outputs/_index.md\" >}}). For further\ndetails, see [Image Formats]({{< relref \"../outputs/_index.md#image-formats\" >}}) and [External\nPostScript files](../../../faq/#ext_image).\n\nThere is one exception to this usage: If <code>[shape]({{< relref \"shape.md\" >}})=\"epsf\"</code>,\n`shapefile` gives a filename containing a definition of the node in\nPostScript. The graphics defined must be contain all of the node content,\nincluding any desired boundaries. For further details, see [External\nPostScript files](../../../faq/#ext_ps_file).\n\nOnly paths to local resources are supported. If you want to use a URL to a\nremote resource, see the\n[`dot_url_resolve.py`](https://gitlab.com/graphviz/graphviz/-/blob/main/contrib/dot_url_resolve.py)\nscript.",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "showboxes",
+    "description": "Print guide boxes for debugging",
+    "body": "Print guide boxes in PostScript at the beginning of\nroutesplines if `showboxes=1`, or at the end if `showboxes=2`. (Debugging, TB mode only!)",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0"
+      }
+    ],
+    "minimums": [
+      "0"
+    ],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "sides",
+    "description": "Number of sides when <code>[shape](/docs/attrs/shape)=polygon</code>",
+    "body": "{{< dot_card header=\"Example: Polygons with 3-6 sides\">}}\ngraph {\n  Triangle  [shape=polygon sides=3]\n  Rectangle [shape=polygon sides=4]\n  Pentagon  [shape=polygon sides=5]\n  Hexagon   [shape=polygon sides=6]\n}\n{{< /dot_card >}}",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "4"
+      }
+    ],
+    "minimums": [
+      "0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "size",
+    "description": "Maximum width and height of drawing, in inches",
+    "body": "If only a single number is given, this is used for both the width\nand the height.\n\nIf defined and the drawing is larger than the given size, \nthe drawing is uniformly scaled down so that it fits within the given size.\n\nIf `size` ends in an exclamation point `\"!\"`, then `size` is taken to be the\ndesired minimum size. In this case, if both dimensions of the drawing are\nless than `size`, the drawing is scaled up uniformly until at least one\ndimension equals its dimension in `size`.\n\nThere is some interaction between the `size` and [`ratio`]({{< relref \"ratio.md\" >}})\nattributes.",
+    "types": [
+      "double",
+      "point"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "skew",
+    "description": "Skew factor for <code>[shape](/docs/attrs/shape)=polygon</code>",
+    "body": "Positive values skew top of polygon to right; negative to left.\n\nSee also [`distortion`]({{< relref \"distortion.md\" >}}).\n\n{{< dot_card header=\"Example\">}}\ngraph {\n  SkewLeft  [shape=polygon sides=4 skew=-.5]\n  SkewRight [shape=polygon sides=4 skew=.5]\n}\n{{< /dot_card >}}",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "0.0"
+      }
+    ],
+    "minimums": [
+      "-100.0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "smoothing",
+    "description": "Specifies a post-processing step used to smooth out an uneven distribution of nodes.",
+    "body": "",
+    "types": [
+      "smoothType"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"none\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "sfdp"
+    ]
+  },
+  {
+    "name": "sortv",
+    "description": "Sort order of graph components for ordering [`packmode`](/docs/attrs/packmode/) packing.",
+    "body": "If [`packmode`]({{< relref \"packmode.md\" >}}) indicates an array packing, `sortv` specifies an\ninsertion order among the components, with smaller values inserted first.",
+    "types": [
+      "int"
+    ],
+    "usedBy": [
+      "G",
+      "C",
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "0"
+      }
+    ],
+    "minimums": [
+      "0"
+    ],
+    "flags": []
+  },
+  {
+    "name": "splines",
+    "description": "Controls how, and if, edges are represented",
+    "body": "If `splines=true`, edges are drawn as splines routed around nodes; if\n`splines=false`, edges are drawn as line segments. If `splines=none` or\n`splines=\"\"`, no edges are drawn at all.\n\n(1 March 2007) `splines=line` and `splines=spline` can be\nused as synonyms for `splines=false` and `splines=true`, respectively.\n\nIn addition, `splines=polyline` specifies that edges should be drawn as\npolylines.\n\n(28 Sep 2010) `splines=ortho` specifies edges should be\nrouted as polylines of axis-aligned segments. Currently, the routing\ndoes not handle ports or, in dot, edge labels.\n\n(25 Sep 2012) `splines=curved` specifies edges should be drawn as curved\narcs.\n\n<TABLE STYLE=\"border-spacing: 20px;\">\n<TR>\n    <TD><IMG WIDTH=\"200\" SRC=\"/doc/info/spline_none.png\"></TD>\n    <TD><IMG WIDTH=\"200\" SRC=\"/doc/info/spline_line.png\"></TD>\n</TR>\n<TR>\n    <TD STYLE=\"text-align: center;\">splines=none<BR>splines=\"\"</TD>\n    <TD STYLE=\"text-align: center;\">splines=line<BR>splines=false</TD>\n</TR>\n<TR>\n    <TD><IMG WIDTH=\"200\" SRC=\"/doc/info/spline_polyline.png\"></TD>\n    <TD><IMG WIDTH=\"200\" SRC=\"/doc/info/spline_curved.png\"></TD>\n</TR>\n<TR>\n    <TD STYLE=\"text-align: center;\">splines=polyline</TD>\n    <TD STYLE=\"text-align: center;\">splines=curved</TD>\n</TR>\n<TR>\n    <TD><IMG WIDTH=\"200\" SRC=\"/doc/info/spline_ortho.png\"></TD>\n    <TD><IMG WIDTH=\"200\" SRC=\"/doc/info/spline_spline.png\"></TD>\n</TR>\n<TR>\n    <TD STYLE=\"text-align: center;\">splines=ortho</TD>\n    <TD STYLE=\"text-align: center;\">splines=spline<BR>splines=true</TD>\n</TR>\n</TABLE>\n\nBy default, `splines` is unset. How this is interpreted depends on\nthe layout engine. For `dot`, the default is to draw edges as splines. For all\nother layouts, the default is to draw edges as line segments.\n\nNote that for these latter layouts, if `splines=\"true\"`, this\nrequires non-overlapping nodes (cf. [`overlap`]({{< relref \"overlap.md\" >}})).\nIf `fdp` is used for layout and `splines=\"compound\"`, then the edges are\ndrawn to avoid clusters as well as nodes.",
+    "types": [
+      "bool",
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "start",
+    "description": "Parameter used to determine the initial layout of nodes",
+    "body": "If unset, the nodes are randomly placed in a unit square with the same seed\nis always used for the random number generator, so the initial placement is\nrepeatable.\n\nThe following examples have the same graph, but render differently due to their `start` values:\n\n{{< dot_card header=\"Set random seed to 1\">}}\ngraph {\n    layout=\"fdp\"\n    start=1\n    A -- B; B -- C; C -- D; D -- A\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Set random seed to 2, graph looks different\">}}\ngraph {\n    layout=\"fdp\"\n    start=2\n    A -- B; B -- C; C -- D; D -- A\n}\n{{< /dot_card >}}",
+    "types": [
+      "startType"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "neato",
+      "fdp",
+      "sfdp"
+    ]
+  },
+  {
+    "name": "style",
+    "description": "Set style information for components of the graph",
+    "body": "For cluster subgraphs, if `style=\"filled\"`, the cluster box's background is\nfilled.\n\nIf the default style attribute has been set for a component, an individual\ncomponent can use `style=\"\"` to revert to the normal default. For example, if\nthe graph has\n\n{{< dot_card >}}\ndigraph {\n  edge [style=\"invis\"]\n  a -> b\n}\n{{< /dot_card >}}\n\nmaking all edges invisible, the `b->c` edge can override this via:\n\n{{< dot_card >}}\ndigraph {\n  edge [style=\"invis\"]\n  a -> b\n  b -> c [style=\"\"]\n}\n{{< /dot_card >}}\n\nOf course, the component can also explicitly set its `style` attribute to the desired value.",
+    "types": [
+      "style"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "C",
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "stylesheet",
+    "description": "A URL or pathname specifying an XML style sheet, used in SVG output",
+    "body": "Combine with [`class`]({{< relref \"class.md\" >}}) to style elements using CSS selectors.\n\nSee also:\n\n- [`class`]({{< relref \"class.md\" >}})\n- [`id`]({{< relref \"id.md\" >}})",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "svg"
+    ]
+  },
+  {
+    "name": "tail_lp",
+    "description": "Position of an edge's tail label, [in points](/doc/info/attrs.html#points).",
+    "body": "The position indicates the center of the label.",
+    "types": [
+      "point"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "write"
+    ]
+  },
+  {
+    "name": "tailclip",
+    "description": "If true, the tail of an edge is clipped to the boundary of the tail node",
+    "body": "otherwise, the end of the edge goes to the center of the node, or the\ncenter of a port, if applicable.",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "true"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "tailhref",
+    "description": "Synonym for [`tailURL`](/docs/attrs/tailURL/).",
+    "body": "See also:\n\n- [`edgehref`]({{< relref \"edgehref.md\" >}}), [`edgeURL`]({{< relref \"edgeURL.md\" >}})\n- [`headhref`]({{< relref \"headhref.md\" >}}), [`headURL`]({{< relref \"headURL.md\" >}})\n- [`labelhref`]({{< relref \"labelhref.md\" >}}), [`labelURL`]({{< relref \"labelURL.md\" >}})\n- [`tailhref`]({{< relref \"tailhref.md\" >}}), [`tailURL`]({{< relref \"tailURL.md\" >}})\n- [`href`]({{< relref \"href.md\" >}}), [`URL`]({{< relref \"URL.md\" >}})",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "taillabel",
+    "description": "Text label to be placed near tail of edge",
+    "body": "See [limitation]({{< relref \"_index.md#undir_note\" >}}).",
+    "types": [
+      "lblString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "tailport",
+    "description": "Indicates where on the tail node to attach the tail of the edge",
+    "body": "See [limitation]({{< relref \"_index.md#undir_note\" >}}).",
+    "types": [
+      "portPos"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "center"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "tailtarget",
+    "description": "Browser window to use for the [`tailURL`](/docs/attrs/tailURL) link",
+    "body": "If the edge has a [`tailURL`]({{< relref \"tailURL.md\" >}}), `tailtarget` determines which\nwindow of the browser is used for the URL.\n\nSetting `tailtarget=_graphviz` will open a new window if it doesn't already\nexist, or reuse it if it does.\n\nIf undefined, the value of the [`target`]({{< relref \"target.md\" >}}) is used.",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "<none>"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "tailtooltip",
+    "description": "Tooltip annotation attached to the tail of an edge",
+    "body": "Used only if the edge has a [`tailURL`]({{< relref \"tailURL.md\" >}}) attribute.\n\n- [`edgetooltip`]({{< relref \"edgetooltip.md\" >}}).\n- [`headtooltip`]({{< relref \"headtooltip.md\" >}}).\n- [`labeltooltip`]({{< relref \"labeltooltip.md\" >}}).\n- [`tooltip`]({{< relref \"tooltip.md\" >}}).",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "cmap",
+      "svg"
+    ]
+  },
+  {
+    "name": "tailURL",
+    "description": "If defined, `tailURL` is output as part of the tail label of the edge",
+    "body": "Also, this value is used near the tail node, overriding any\n[`URL`]({{< relref \"URL.md\" >}}) value.\n\nSee [limitation]({{< relref \"_index.md#undir_note\" >}}).\n\nSee also:\n\n- [`edgehref`]({{< relref \"edgehref.md\" >}}), [`edgeURL`]({{< relref \"edgeURL.md\" >}})\n- [`headhref`]({{< relref \"headhref.md\" >}}), [`headURL`]({{< relref \"headURL.md\" >}})\n- [`labelhref`]({{< relref \"labelhref.md\" >}}), [`labelURL`]({{< relref \"labelURL.md\" >}})\n- [`tailhref`]({{< relref \"tailhref.md\" >}}), [`tailURL`]({{< relref \"tailURL.md\" >}})\n- [`href`]({{< relref \"href.md\" >}}), [`URL`]({{< relref \"URL.md\" >}})",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "target",
+    "description": "If the object has a [`URL`](/docs/attrs/URL/), this attribute determines which window of the browser is used for the URL.",
+    "body": "See [W3C documentation](http://www.w3.org/TR/html401/present/frames.html#adef-target).",
+    "types": [
+      "escString",
+      "string"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "G",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "<none>"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "svg"
+    ]
+  },
+  {
+    "name": "TBbalance",
+    "description": "Which [rank](/docs/attrs/rank/) to move floating (loose) nodes to",
+    "body": "Valid options:\n\n- `\"min\"`: Move floating (loose) nodes to minimum [`rank`](/docs/attrs/rank/).\n- `\"max\"`: Move floating (loose) nodes to maximum [`rank`](/docs/attrs/rank/).\n- Otherwise, floating nodes are placed anywhere.\n\nDespite the name `TBbalance` (\"Top-Bottom Balance\"), this also works with\nleft-right ranks, e.g. [`rankdir=LR`](/docs/attrs/rankdir/).\n\nExamples:\n\n{{< dot_card header=\"Default Behaviour\">}}\ndigraph {\n    layout=\"dot\"\n\n    { rank=\"min\"; \"min\" }\n    { rank=\"max\"; \"max\" }\n    \"min\" -> \"middle\" -> \"max\"\n    \n    \"Floater 1\"\n    \"Floater 2\"\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Floating nodes moved to min rank\">}}\ndigraph {\n    layout=\"dot\"\n    TBbalance=\"min\"\n\n    { rank=\"min\"; \"min\" }\n    { rank=\"max\"; \"max\" }\n    \"min\" -> \"middle\" -> \"max\"\n    \n    \"Floater 1\"\n    \"Floater 2\"\n}\n{{< /dot_card >}}\n\n{{< dot_card header=\"Floating nodes moved to max rank\">}}\ndigraph {\n    layout=\"dot\"\n    TBbalance=\"max\"\n\n    { rank=\"min\"; \"min\" }\n    { rank=\"max\"; \"max\" }\n    \"min\" -> \"middle\" -> \"max\"\n    \n    \"Floater 1\"\n    \"Floater 2\"\n}\n{{< /dot_card >}}",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "'"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "dot"
+    ]
+  },
+  {
+    "name": "tooltip",
+    "description": "Tooltip (mouse hover text) attached to the node, edge, cluster, or graph",
+    "body": "If `tooltip` is unset, Graphviz will use the object's [`label`]({{< relref \"label.md\" >}}) if defined.\n\nNote\nthat if the `label` is a record specification or an HTML-like label, the\nresulting tooltip may be unhelpful. In this case, if tooltips will be\ngenerated, the user should set a `tooltip` attribute explicitly.\n\n{{< dot_card header=\"Tooltips\" >}}\ndigraph {\n  label=\"Graph Label\"\n  tooltip=\"Graph Tooltip\"\n  subgraph cluster_a {\n    label=\"Cluster Label\"\n    tooltip=\"Cluster Tooltip\"\n    Node1 [tooltip=\"Node1 Tooltip\"]\n    Node1 -> Node2 [label=\"Edge\" tooltip=\"Edge Tooltip\"]\n  }\n}\n{{< /dot_card >}}\n\nSee also:\n\n- [`edgetooltip`]({{< relref \"edgetooltip.md\" >}}).\n- [`headtooltip`]({{< relref \"headtooltip.md\" >}}).\n- [`labeltooltip`]({{< relref \"labeltooltip.md\" >}}).\n- [`tailtooltip`]({{< relref \"tailtooltip.md\" >}}).",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "N",
+      "E",
+      "C",
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "cmap",
+      "svg"
+    ]
+  },
+  {
+    "name": "truecolor",
+    "description": "Whether internal bitmap rendering relies on a truecolor color model or uses",
+    "body": "color palette.\n\nIf `truecolor` is unset, `truecolor` is not used\nunless there is a [`shapefile`]({{< relref \"shapefile.md\" >}}) property\nfor some node in the graph.\nThe output model will use the input model when possible.\n\nUse of color palettes results in less memory usage during creation of the\nbitmaps and smaller output files.\n\nUsually, the only time it is necessary to specify the `truecolor` model\nis if the graph uses more than 256 colors.\nHowever, if one uses <code>[bgcolor]({{< relref \"bgcolor.md\" >}})=transparent</code> with\na color palette, font\nantialiasing can show up as a fuzzy white area around characters.\nUsing `truecolor=true` avoids this problem.",
+    "types": [
+      "bool"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "bitmap output"
+    ]
+  },
+  {
+    "name": "URL",
+    "description": "Hyperlinks incorporated into device-dependent output",
+    "body": "At present, used in `ps2`, `cmap`, `i*map` and `svg` formats.\nFor all these formats, URLs can be attached to nodes, edges and\nclusters. URL attributes can also be attached to the root graph in `ps2`,\n`cmap` and `i*map` formats. This serves as the base URL for relative URLs in the\nformer, and as the default image map file in the latter.\n\nFor `svg`, `cmapx` and `imap` output, the active area for a node is its\nvisible image.\nFor example, an unfilled\nnode with no drawn boundary will only be active on its label.\nFor other output, the active area is its bounding box.\nThe active area for a cluster is its bounding box.\nFor edges, the active areas are small circles where the edge contacts its head\nand tail nodes. In addition, for `svg`, `cmapx` and `imap`, the active area\nincludes a thin polygon approximating the edge. The circles may\noverlap the related node, and the edge URL dominates.\nIf the edge has a label, this will also be active.\nFinally, if the edge has a head or tail label, this will also be active.\n\nFor edges, the attributes [`headURL`]({{< relref \"headURL.md\" >}}),\n[`tailURL`]({{< relref \"tailURL.md\" >}}), [`labelURL`]({{< relref \"labelURL.md\" >}}) and\n[`edgeURL`]({{< relref \"edgeURL.md\" >}}) allow control of various parts of an\nedge.\n\nif active areas of two edges overlap, it is unspecified which area dominates.\n\nSee also:\n\n- [`edgehref`]({{< relref \"edgehref.md\" >}}), [`edgeURL`]({{< relref \"edgeURL.md\" >}})\n- [`headhref`]({{< relref \"headhref.md\" >}}), [`headURL`]({{< relref \"headURL.md\" >}})\n- [`labelhref`]({{< relref \"labelhref.md\" >}}), [`labelURL`]({{< relref \"labelURL.md\" >}})\n- [`tailhref`]({{< relref \"tailhref.md\" >}}), [`tailURL`]({{< relref \"tailURL.md\" >}})\n- [`href`]({{< relref \"href.md\" >}}), [`URL`]({{< relref \"URL.md\" >}})\n\n{{< dot_card header=\"Example: Van Gogh Paintings with Links\">}}\ngraph {\n  label=\"Vincent van Gogh Paintings\"\n  URL=\"https://en.wikipedia.org/wiki/Vincent_van_Gogh\"\n\n  subgraph cluster_self_portraits {\n    URL=\"https://en.wikipedia.org/wiki/Portraits_of_Vincent_van_Gogh\"\n    label=\"Self-portraits\"\n\n    \"Self-Portrait with Grey Felt Hat\" [URL=\"https://www.vangoghmuseum.nl/en/collection/s0016V1962\"]\n    \"Self-Portrait as a Painter\" [URL=\"https://www.vangoghmuseum.nl/en/collection/s0022V1962\"]\n  }\n  \n  subgraph cluster_flowers {\n    URL=\"https://en.wikipedia.org/wiki/Sunflowers_(Van_Gogh_series)\"\n    label=\"Flowers\"\n\n    \"Sunflowers\" [URL=\"https://www.nationalgallery.org.uk/paintings/vincent-van-gogh-sunflowers\"]\n    \"Almond Blossom\" [URL=\"https://www.vangoghmuseum.nl/en/collection/s0176V1962\"]\n  }\n}\n{{< /dot_card >}}",
+    "types": [
+      "escString"
+    ],
+    "usedBy": [
+      "E",
+      "N",
+      "G",
+      "C"
+    ],
+    "defaults": [
+      {
+        "default": "<none>"
+      }
+    ],
+    "minimums": [],
+    "flags": [
+      "map",
+      "postscript",
+      "svg"
+    ]
+  },
+  {
+    "name": "vertices",
+    "description": "Sets the coordinates of the vertices of the node's polygon, in inches",
+    "body": "Used if the node is polygonal, and output is `dot` or `xdot`.\n\nIf the node is an ellipse or circle, the [`samplepoints`]({{< relref \"samplepoints.md\" >}})\nattribute affects the output.",
+    "types": [
+      "pointList"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "write"
+    ]
+  },
+  {
+    "name": "viewport",
+    "description": "Clipping window on final drawing",
+    "body": "`viewport` supersedes any [`size`]({{< relref \"size.md\" >}}) attribute. The width and height\nof the viewport specify precisely the final size of the output.",
+    "types": [
+      "viewPort"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "voro_margin",
+    "description": "Tuning margin of Voronoi technique",
+    "body": "Factor to scale up drawing to allow margin for expansion in\n[Voronoi technique](https://en.wikipedia.org/wiki/Voronoi_diagram).\n`dim' = (1+2*margin)*dim`.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [
+      {
+        "default": "0.05"
+      }
+    ],
+    "minimums": [
+      "0.0"
+    ],
+    "flags": [
+      "neato",
+      "fdp",
+      "sfdp",
+      "twopi",
+      "circo"
+    ]
+  },
+  {
+    "name": "weight",
+    "description": "Weight of edge",
+    "body": "In `dot`, the heavier the weight, the shorter, straighter and more vertical the edge is.\n\nFor `twopi`, `weight=0` indicates the edge should not be used in\nconstructing a spanning tree from the root.\n\nFor other layouts, a larger weight encourages the layout to make the edge\nlength closer to that specified by the [`len`]({{< relref \"len.md\" >}}) attribute.\n\nWeights in `dot` must be integers.\n\n{{< dot_card header=\"Edge Weights\" >}}\ndigraph {\n  root -> a\n  root -> b [weight=2]\n  root -> c [weight=3]\n}\n{{< /dot_card >}}",
+    "types": [
+      "int",
+      "double"
+    ],
+    "usedBy": [
+      "E"
+    ],
+    "defaults": [
+      {
+        "default": "1"
+      }
+    ],
+    "minimums": [
+      "0(dot,twopi)",
+      "1(neato,fdp)"
+    ],
+    "flags": []
+  },
+  {
+    "name": "width",
+    "description": "Width of node, in inches",
+    "body": "This is taken as the initial, minimum width of the node. If\n[`fixedsize`]({{< relref \"fixedsize.md\" >}}) is true, this will be the final width of the\nnode. Otherwise, if the node label requires more width to fit, the node's\nwidth will be increased to contain the label.\n\nIf the output format is `dot`, the value given to `width` will be the final\nvalue.\n\nIf the node shape is regular, the width and height are made identical:\n\n* If either the width or the height is set explicitly, that value is used.\n* If both the width or the height are set explicitly, the maximum of the two values is used.\n* If neither is set explicitly, the minimum of the two default values is used.\n\nIf a value below the minimum value (0.01) is set, it will be rounded up to this\nminimum.\n\n{{< dot_card header=\"Width Example\" >}}\ndigraph {\n  \"d\" # default\n  \"1in\" [width=1]\n  \"2in\" [width=2]\n}\n{{< /dot_card >}}",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "0.75"
+      }
+    ],
+    "minimums": [
+      "0.01"
+    ],
+    "flags": []
+  },
+  {
+    "name": "xdotversion",
+    "description": "Determines the version of `xdot` used in output",
+    "body": "Only used for `xdot` output.\n\nIf unset, graphviz will set this attribute to the `xdot` version used for output.",
+    "types": [
+      "string"
+    ],
+    "usedBy": [
+      "G"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "xdot"
+    ]
+  },
+  {
+    "name": "xlabel",
+    "description": "External label for a node or edge",
+    "body": "* For nodes, the label will be placed outside of the node but near it.\n* For edges, the label will be placed near the center of the edge. This can be\nuseful in dot to avoid the occasional problem when the use of edge labels\ndistorts the layout.\n* For other layouts, the\nxlabel attribute can be viewed as a synonym for the [`label`]({{< relref \"label.md\" >}})\nattribute.\n\nThese labels are added after all nodes and edges have been placed.\n\nThe labels will be placed so that they do not overlap any node or label. This\nmeans it may not be possible to place all of them. To force placing all of\nthem, set <code>[forcelabels]({{< relref \"forcelabels.md\" >}})=true</code>.\n\n{{< dot_card header=\"External Labels on Nodes and Edges\" >}}\ndigraph {\n  \"⚡\" [xlabel=\"Sparks\"]\n  \"🔥\" [xlabel=\"Fires\"]\n  \"⚡\"->\"🔥\" [xlabel=\"Sometimes\" label=\"Cause\"]\n}\n{{< /dot_card >}}",
+    "types": [
+      "lblString"
+    ],
+    "usedBy": [
+      "E",
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "\"\""
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  },
+  {
+    "name": "xlp",
+    "description": "Position of an exterior label, [in points](/doc/info/attrs.html#points)",
+    "body": "The position indicates the center of the label.",
+    "types": [
+      "point"
+    ],
+    "usedBy": [
+      "N",
+      "E"
+    ],
+    "defaults": [],
+    "minimums": [],
+    "flags": [
+      "write"
+    ]
+  },
+  {
+    "name": "z",
+    "description": "Z-coordinate value for 3D layouts and displays",
+    "body": "**Deprecated:** Use [`pos`]({{< relref \"pos.md\" >}}) attribute, along with\n[`dimen`]({{< relref \"dimen.md\" >}}) and/or [`dim`]({{< relref \"dim.md\" >}}) to specify dimensions.\n\nIf the graph has\n[`dim`]({{< relref \"dim.md\" >}}) set to 3 (or more), neato will use a node's `z` value for\nthe z coordinate of its initial position if its [`pos`]({{< relref \"pos.md\" >}}) attribute\nis also defined.\n\nEven if no `z` values are specified in the input, it is necessary to\ndeclare a `z` attribute for nodes, e.g, using `node[z=\"\"]` in order to get\nz values on output. Thus, setting <code>[dim]({{< relref \"dim.md\" >}})=3</code> but not declaring `z` will cause\n`neato -Tvrml` to layout the graph in 3D but project the layout onto the\nxy-plane for the rendering. If the `z` attribute is declared, the final\nrendering will be in 3D.",
+    "types": [
+      "double"
+    ],
+    "usedBy": [
+      "N"
+    ],
+    "defaults": [
+      {
+        "default": "0.0"
+      }
+    ],
+    "minimums": [],
+    "flags": []
+  }
+]
