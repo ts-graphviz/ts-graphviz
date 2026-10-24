@@ -2,20 +2,14 @@ import type { Attribute, AttributeKey } from '@ts-graphviz/common';
 import type { Layout, Options } from './types.js';
 
 /**
- * escapeValue is a function that escapes a given Attribute value of a given AttributeKey.
- * It quotes string values containing whitespace, quotes, or backslashes and escapes embedded quotes and backslashes.
+ * Serializes an attribute value for a Graphviz argv option.
+ * spawn passes arguments directly, so shell-style quoting would become part of the value.
  *
  * @param value The value of an Attribute of type T that extends AttributeKey
- * @returns The escaped Attribute value
+ * @returns The attribute value prefixed by =, or an empty string for true
  */
 export function escapeValue<T extends AttributeKey>(value: Attribute<T>) {
-  if (value !== true) {
-    if (typeof value === 'string' && /[\s"\\]/.test(value)) {
-      return `="${value.replace(/["\\]/g, '\\$&')}"`;
-    }
-    return `=${value}`;
-  }
-  return '';
+  return value === true ? '' : `=${value}`;
 }
 
 /**

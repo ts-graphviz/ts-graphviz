@@ -44,7 +44,7 @@ describe('createCommandArgs', () => {
     `);
   });
 
-  it('escapes graph, node and edge attribute arguments', () => {
+  it('preserves graph, node and edge attribute values in argv', () => {
     const options: Options = {
       attributes: {
         graph: <any>{ label: 'say "hi"' },
@@ -56,9 +56,9 @@ describe('createCommandArgs', () => {
     expect(Array.from(createCommandArgs(options))).toEqual([
       '-q',
       '-Tsvg',
-      '-Glabel="say \\"hi\\""',
-      '-Nlabel="C:\\\\graph\\\\label"',
-      '-Elabel="a\\"b\\\\c"',
+      '-Glabel=say "hi"',
+      '-Nlabel=C:\\graph\\label',
+      '-Elabel=a"b\\c',
     ]);
   });
 
@@ -109,17 +109,17 @@ describe('createCommandArgs', () => {
 
 describe('escapeValue', () => {
   it('properly escapes various attribute values', () => {
-    expect(escapeValue('foo bar')).toEqual('="foo bar"');
+    expect(escapeValue('foo bar')).toEqual('=foo bar');
     expect(escapeValue('foo')).toEqual('=foo');
     expect(escapeValue(true)).toEqual('');
     expect(escapeValue(false)).toEqual('=false');
     expect(escapeValue(10)).toEqual('=10');
   });
 
-  it('quotes and escapes embedded quotes and backslashes in string attributes', () => {
-    expect(escapeValue('say "hi"')).toEqual('="say \\"hi\\""');
-    expect(escapeValue('C:\\graph\\label')).toEqual('="C:\\\\graph\\\\label"');
-    expect(escapeValue('a"b\\c')).toEqual('="a\\"b\\\\c"');
+  it('preserves embedded quotes and backslashes in string attributes', () => {
+    expect(escapeValue('say "hi"')).toEqual('=say "hi"');
+    expect(escapeValue('C:\\graph\\label')).toEqual('=C:\\graph\\label');
+    expect(escapeValue('a"b\\c')).toEqual('=a"b\\c');
   });
 });
 
