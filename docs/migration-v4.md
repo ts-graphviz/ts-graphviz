@@ -2,7 +2,7 @@
 
 v4 is the release where the API review of the 3.x line landed: attribute values became explicit about what they mean, errors became identifiable, the model classes stopped depending on import order, and the AST was tidied. Most programs that build a graph with the factory API and call `toDot` keep working unchanged. This guide lists every change that can affect existing code, by area, with what to do about it.
 
-Requirements: **Node.js 22 or later** (Node.js 20 reached end of life). Deno and browsers are supported as before.
+Requirements: **Node.js 22 or later** (Node.js 20 reached end of life).
 
 ## 1. Strings are literal text; DOT syntax is opt-in
 
@@ -25,7 +25,7 @@ Numbers and booleans are typed in both directions: `width=1.5` parses to the num
 
 ## 2. Errors: standard types with a stable `code`
 
-There is no `TsGraphvizError` base class. Every error the library raises is the standard type that fits (`SyntaxError`, `RangeError`, `TypeError`, `Error`) tagged with a `code` from `ERROR_CODES` (prefix `TSG_ERR_`), exported by `@ts-graphviz/common`. The code is the stable contract; messages may change in any release.
+There is no `TsGraphvizError` base class. Every error the library raises on purpose is the standard type that fits (`SyntaxError`, `RangeError`, `TypeError`, `Error`) tagged with a `code` from `ERROR_CODES` (prefix `TSG_ERR_`), exported by `@ts-graphviz/common`. The code is the stable contract; messages may change in any release.
 
 ```ts
 import { isTsGraphvizError } from 'ts-graphviz';
@@ -39,16 +39,20 @@ try {
 }
 ```
 
-| Situation | v4 throws | `code` | 3.x threw |
-| --- | --- | --- | --- |
-| DOT does not parse | `DotSyntaxError` (`SyntaxError`) | `TSG_ERR_DOT_SYNTAX` | same |
-| AST exceeds `maxASTNodes` | `ASTNodeCountExceededError` (`RangeError`) | `TSG_ERR_AST_NODE_COUNT_EXCEEDED` | `Error` subclass |
-| null character / unbalanced HTML-like | `RangeError` | `TSG_ERR_NUL_CHARACTER` / `TSG_ERR_INVALID_HTML_LIKE` | not detected |
-| edge with fewer than two targets | `TypeError` | `TSG_ERR_INVALID_EDGE_TARGETS` | bare `Error` |
-| no plugin for a node / model | `Error` | `TSG_ERR_NO_PLUGIN` | bare `Error()` |
-| `fromDot` of a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` | bare `Error` |
-| adapter in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` | bare `Error` |
-| Graphviz command failed | `CommandExecutionError` (`Error`) | `TSG_ERR_COMMAND_FAILED` | bare `Error` |
+| Situation | v4 throws | `code` |
+| --- | --- | --- |
+| DOT does not parse | `DotSyntaxError` (`SyntaxError`) | `TSG_ERR_DOT_SYNTAX` |
+| the parser failed for another reason (see `cause`) | `Error` | `TSG_ERR_PARSE_FAILED` |
+| AST exceeds `maxASTNodes` | `ASTNodeCountExceededError` (now a `RangeError`) | `TSG_ERR_AST_NODE_COUNT_EXCEEDED` |
+| null character in text | `RangeError` | `TSG_ERR_NUL_CHARACTER` |
+| unbalanced HTML-like markup | `RangeError` | `TSG_ERR_INVALID_HTML_LIKE` |
+| edge with fewer than two targets or a malformed target | `TypeError` (was a bare `Error`) | `TSG_ERR_INVALID_EDGE_TARGETS` |
+| no converter / printer plugin for a node or model | `Error` | `TSG_ERR_NO_PLUGIN` |
+| `fromDot` given an AST node that has no model | `TypeError` | `TSG_ERR_UNCONVERTIBLE_AST` |
+| `fromDot` of a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` |
+| a `GraphBase` subclass without a models context | `Error` | `TSG_ERR_NO_MODELS_CONTEXT` |
+| adapter in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
+| Graphviz command failed | `CommandExecutionError` (`Error`) | `TSG_ERR_COMMAND_FAILED` |
 
 Code that matched on `error.message` should match on `error.code`.
 
@@ -56,7 +60,8 @@ Code that matched on `error.message` should match on `error.code`.
 
 3.x filled a shared `RootModelsContext` object when `ts-graphviz` was imported, which made `@ts-graphviz/core` and `@ts-graphviz/ast` depend on import order. In v4:
 
-- `@ts-graphviz/core` exports `defaultModelsContext()` and `createModelsContext(partial)`. `registerDefault()` and `RootModelsContext` are gone; nothing mutates shared state on import.
+- `@ts-graphviz/core` exports `defaultModelsContext()` and `createModelsContext(partial)`. `registerDefault()` and `RootModelsContext` are gone; nothing mutates shared state on import. `createModelsContext` moved: import it from `@ts-graphviz/core` (or `ts-graphviz`), not `@ts-graphviz/common`.
+- `ModelsContext` has a `Dot` constructor (see section 4); a context written out by hand must supply it, or be built with `createModelsContext`.
 - `withContext({ Node: MyNode })` in `ts-graphviz` is unchanged.
 - `toModel(ast, { models })` in `@ts-graphviz/ast` now **requires** `models` (the package has no classes of its own): pass `defaultModelsContext()` or `createModelsContext({...})`. `fromDot(source, { convert: { models } })` still takes a partial context.
 - The constructor types in `ModelsContext` use the real signatures; a custom class whose constructor is incompatible is now a type error instead of a runtime surprise.
@@ -88,7 +93,7 @@ The augmentation points (`Attribute.$keys`, `Attribute.$types`, `EdgeAttributeKe
 
 ## 7. `@ts-graphviz/ast`
 
-- Leaf nodes (`Literal`, `Attribute`, `Comment`, `NodeRef`) have no `children`; `NodeRefGroup` keeps its references in `refs`; `location` is absent (not `null`) outside the parser. `createElement` keeps its three-argument form.
+- Leaf nodes (`Literal`, `Attribute`, `Comment`, `NodeRef`) have no `children` and extend `ASTBaseNode` directly; `ASTBaseParentNode` is only for statement containers. `NodeRefGroup` keeps its references in `refs`, and `ASTChildNode<T>` resolves to `NodeRefASTNode` for it and to `never` for leaves. `location` is absent (not `null`) outside the parser. `createElement` keeps its three-argument form.
 - The `*ASTPropaties` types are spelled `*ASTProperties`.
 - A quoted `Literal` holds the raw source text (escape sequences intact) and `stringify` writes it back verbatim; escaping and unescaping happen in the model ⇄ AST conversion.
 - The shared `createElement` no longer counts nodes across calls; use `createElementFactory({ maxASTNodes })` for a limit.
