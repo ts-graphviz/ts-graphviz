@@ -57,8 +57,8 @@ describe('createCommandArgs', () => {
       '-q',
       '-Tsvg',
       '-Glabel=say "hi"',
-      '-Nlabel=C:\\graph\\label',
-      '-Elabel=a"b\\c',
+      '-Nlabel=C:\\\\graph\\\\label',
+      '-Elabel=a"b\\\\c',
     ]);
   });
 
@@ -116,10 +116,11 @@ describe('escapeValue', () => {
     expect(escapeValue(10)).toEqual('=10');
   });
 
-  it('preserves embedded quotes and backslashes in string attributes', () => {
+  it('preserves quotes and escapes backslashes for Graphviz labels', () => {
     expect(escapeValue('say "hi"')).toEqual('=say "hi"');
-    expect(escapeValue('C:\\graph\\label')).toEqual('=C:\\graph\\label');
-    expect(escapeValue('a"b\\c')).toEqual('=a"b\\c');
+    expect(escapeValue('C:\\graph\\label')).toEqual('=C:\\\\graph\\\\label');
+    expect(escapeValue('a"b\\c')).toEqual('=a"b\\\\c');
+    expect(escapeValue('say\\nmore')).toEqual('=say\\\\nmore');
   });
 });
 

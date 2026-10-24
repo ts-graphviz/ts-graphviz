@@ -2,4 +2,4 @@
 '@ts-graphviz/adapter': patch
 ---
 
-Preserve attribute values passed directly to Graphviz, including spaces, quotes, and backslashes, without adding literal shell quotes.
+Preserve spaces and quotes without shell quoting; escape backslashes so Graphviz labels render them literally.
