@@ -72,7 +72,13 @@
       "./package.json": "./package.json"
     },
     "module": "./lib/ts-graphviz.js",
-    "types": "lib/ts-graphviz.d.ts"
+    "types": "lib/ts-graphviz.d.ts",
+    "typesVersions": {
+      "*": {
+        "ast": ["./lib/ast.d.ts"],
+        "adapter": ["./lib/adapter.d.ts"]
+      }
+    }
   },
   "runkitExampleFilename": "example/runkit.cjs"
 }
