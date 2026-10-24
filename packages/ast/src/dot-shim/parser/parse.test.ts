@@ -13,6 +13,38 @@ describe('parse', () => {
       expect(result).toMatchSnapshot();
     });
 
+    describe('quoted value with backslash-newline line continuation', () => {
+      // Graphviz joins the lines and drops the continuation marker
+      // https://graphviz.org/doc/info/lang.html#ids
+      test('drops the marker before LF', () => {
+        const result = parse('label = "one\\\ntwo";', {
+          startRule: 'Attribute',
+        });
+        expect(result.value.value).toBe('onetwo');
+      });
+
+      test('keeps surrounding whitespace', () => {
+        const result = parse('label = "one \\\n  two";', {
+          startRule: 'Attribute',
+        });
+        expect(result.value.value).toBe('one   two');
+      });
+
+      test('keeps backslash + CR, like Graphviz (lib/cgraph/scan.l)', () => {
+        const result = parse('label = "one\\\rtwo";', {
+          startRule: 'Attribute',
+        });
+        expect(result.value.value).toBe('one\\\rtwo');
+      });
+
+      test('keeps other escape sequences intact', () => {
+        const result = parse('label = "one\\ntwo \\"three\\"";', {
+          startRule: 'Attribute',
+        });
+        expect(result.value.value).toBe('one\\ntwo "three"');
+      });
+    });
+
     test('set HTMLLike value', () => {
       const result = parse(
         `

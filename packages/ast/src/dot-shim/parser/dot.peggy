@@ -403,14 +403,19 @@ QUOTED_STRING
       );
     }
 
+// LineContinuation must be tried before QuoteEscape: QuoteEscape matches
+// "\\" followed by any character, which would otherwise consume the
+// backslash-newline pair and keep the continuation marker in the value.
 DoubleStringCharacter
-  = QuoteEscape
+  = LineContinuation
+  / QuoteEscape
   / !("\"" / LineTerminator) SourceCharacter { return text(); }
-  / LineContinuation
 
 QuoteEscape = v:("\\" .) { return v[1] === '"' ? '"' : v[0] + v[1]; }
 
-LineContinuation = "\\" LineTerminatorSequence { return ''; }
+// Graphviz only treats backslash + LF as a continuation (lib/cgraph/scan.l);
+// backslash + CR stays in the value, so CRLF files behave the same as in dot.
+LineContinuation = "\\" "\n" { return ''; }
 
 LineTerminator = [\n\r\u2028\u2029]
 
