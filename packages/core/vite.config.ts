@@ -24,7 +24,7 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      external: ['@ts-graphviz/common', '@ts-graphviz/ast'],
+      external: ['@ts-graphviz/common'],
     },
   },
   plugins: [

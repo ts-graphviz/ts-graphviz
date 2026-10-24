@@ -9,6 +9,7 @@
     "strictNullChecks": true,
     "outDir": "lib",
     "jsx": "react-jsx",
+    "jsxImportSource": "react",
     "esModuleInterop": true,
     "moduleResolution": "Node16",
     "skipLibCheck": true,

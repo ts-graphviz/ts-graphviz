@@ -61,7 +61,7 @@ type FormInstance = never;
  */
 type TransitionStatus = null;
 
-export class HostConfig
+class HostConfig
   implements
     ReactReconciler.HostConfig<
       Type,

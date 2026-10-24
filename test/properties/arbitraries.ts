@@ -110,7 +110,7 @@ export const dotString = (options: { newlines?: boolean } = {}) =>
 export const looksHtmlLikeToPrinter = (s: string) => /^<.+>$/ms.test(s.trim());
 
 /** Attribute keys whose values are plain strings on every object kind. */
-export const stringAttributeKey = fc.constantFrom(
+const stringAttributeKey = fc.constantFrom(
   'label',
   'tooltip',
   'fontname',

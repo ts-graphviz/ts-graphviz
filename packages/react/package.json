@@ -34,8 +34,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "vite build",
-    "example": "ts-node example/example"
+    "build": "vite build"
   },
   "dependencies": {
     "@ts-graphviz/common": "workspace:^",
@@ -50,7 +49,6 @@
     "@types/react-reconciler": "0.32.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "react-test-renderer": "^19.3.1",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:"

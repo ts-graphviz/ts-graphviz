@@ -12,7 +12,7 @@ import { isNodeModel } from '@ts-graphviz/common';
  * checks across conversions (the model classes themselves hold cyclic
  * references and context objects).
  */
-export interface GraphSummary {
+interface GraphSummary {
   id?: string;
   comment?: string;
   attributes: [string, unknown][];
@@ -56,9 +56,7 @@ function summarizeEdge(edge: EdgeModel): GraphSummary['edges'][number] {
   };
 }
 
-export function summarizeGraph(
-  model: GraphBaseModel | SubgraphModel,
-): GraphSummary {
+function summarizeGraph(model: GraphBaseModel | SubgraphModel): GraphSummary {
   return {
     id: model.id,
     comment: model.comment,
