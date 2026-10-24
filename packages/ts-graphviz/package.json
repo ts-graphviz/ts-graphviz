@@ -45,12 +45,13 @@
     "@ts-graphviz/core": "workspace:^"
   },
   "devDependencies": {
-    "typescript": "^5.8.2",
-    "vite": "^7.2.2",
-    "vite-plugin-dts": "^4.5.3"
+    "@microsoft/api-extractor": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "publishConfig": {
     "access": "public",

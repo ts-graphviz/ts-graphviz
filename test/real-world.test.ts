@@ -19,23 +19,22 @@ function forEachDotFile(
 
 describe('Real-world DOT file AST snapshots', () => {
   forEachDotFile((file, getContents) => {
-    it.concurrent(
-      `parses AST and matches snapshot for ${file}`,
-      async ({ expect }) => {
-        try {
-          const dot = await getContents();
-          const snapshot = path.format({
-            ...path.parse(file),
-            base: '',
-            ext: '.snapshot',
-          });
-          await expect(parse(dot)).toMatchFileSnapshot(snapshot);
-        } catch (e) {
-          console.log(e);
-          throw e;
-        }
-      },
-    );
+    it.concurrent(`parses AST and matches snapshot for ${file}`, async ({
+      expect,
+    }) => {
+      try {
+        const dot = await getContents();
+        const snapshot = path.format({
+          ...path.parse(file),
+          base: '',
+          ext: '.snapshot',
+        });
+        await expect(parse(dot)).toMatchFileSnapshot(snapshot);
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+    });
   });
 });
 
@@ -45,7 +44,7 @@ describe('AST stringify round-trip consistency', () => {
       if (key === 'location') {
         delete node[key];
       } else if (Array.isArray(value)) {
-        // @ts-ignore
+        // @ts-expect-error
         node[key] = value.filter((item) => {
           if (item.type === 'Comment') {
             return false;
@@ -60,17 +59,16 @@ describe('AST stringify round-trip consistency', () => {
   }
 
   forEachDotFile((file, getContents) => {
-    it.concurrent(
-      `retains AST structure after stringify for ${file}`,
-      async ({ expect }) => {
-        const dot = await getContents();
-        const parsed = parse(dot);
-        const serialized = stringify(parsed);
-        const reparsed = parse(serialized);
-        removeNoise(parsed);
-        removeNoise(reparsed);
-        expect(parsed).toEqual(reparsed);
-      },
-    );
+    it.concurrent(`retains AST structure after stringify for ${file}`, async ({
+      expect,
+    }) => {
+      const dot = await getContents();
+      const parsed = parse(dot);
+      const serialized = stringify(parsed);
+      const reparsed = parse(serialized);
+      removeNoise(parsed);
+      removeNoise(reparsed);
+      expect(parsed).toEqual(reparsed);
+    });
   });
 });

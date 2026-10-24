@@ -43,14 +43,17 @@
     "ts-graphviz": "workspace:^"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.3.0",
-    "@types/react": "^19.0.0",
-    "@types/react-reconciler": "^0.32.0",
-    "react": "^19.0.0",
-    "react-test-renderer": "^19.0.0",
-    "typescript": "^5.8.2",
-    "vite": "^7.2.2",
-    "vite-plugin-dts": "^4.5.3"
+    "@microsoft/api-extractor": "catalog:",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-reconciler": "0.32.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-test-renderer": "^19.3.1",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:"
   },
   "peerDependencies": {
     "react": ">=19"

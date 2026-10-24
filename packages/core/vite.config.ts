@@ -30,8 +30,7 @@ export default defineConfig({
   },
   plugins: [
     dts({
-      outDir: './lib',
-      rollupTypes: true,
-    }) as any,
+      bundleTypes: true,
+    }),
   ],
 });

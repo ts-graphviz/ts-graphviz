@@ -1,6 +1,5 @@
 import { readFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { findWorkspacePackages } from '@pnpm/workspace.find-packages';
 import { execa } from 'execa';
 import { glob } from 'glob';
 import micromatch from 'micromatch';
@@ -75,49 +74,29 @@ export class PackageDiscovery {
   }
 
   /**
-   * Discover packages from pnpm workspace using official pnpm API
+   * Discover packages from pnpm workspace using `pnpm list --recursive`
    */
   private async discoverWorkspacePackages(): Promise<DiscoveredPackage[]> {
     try {
-      // Use official pnpm workspace package discovery
-      const workspacePackages = await findWorkspacePackages(this.rootDir);
-      logger.debug(
-        `findWorkspacePackages returned ${workspacePackages.length} packages`,
+      const result = await execa(
+        'pnpm',
+        ['list', '--recursive', '--json', '--depth=-1'],
+        { cwd: this.rootDir, stdio: 'pipe' },
       );
-      workspacePackages.forEach((pkg, index) => {
-        logger.debug(
-          `Package ${index}: name=${pkg.manifest?.name}, rootDir=${pkg.rootDir}, keys=${Object.keys(pkg).join(',')}`,
-        );
-      });
+      const workspacePackages: { name?: string; path: string }[] = JSON.parse(
+        result.stdout,
+      );
+      logger.debug(
+        `pnpm list returned ${workspacePackages.length} workspace packages`,
+      );
 
       const packages: DiscoveredPackage[] = [];
 
-      for (const pkg of workspacePackages) {
-        try {
-          // The package object contains rootDir and manifest
-          // For workspace packages, rootDir is the package directory
-          const packageDir = pkg.rootDir;
-          if (!packageDir) {
-            logger.debug(
-              'Package directory not found in workspace package:',
-              pkg,
-            );
-            continue;
-          }
-
-          // Create DiscoveredPackage from the workspace package info
-          const discoveredPkg: DiscoveredPackage = {
-            name: pkg.manifest.name,
-            path: packageDir,
-            private: pkg.manifest.private === true,
-            publishConfig: pkg.manifest.publishConfig,
-          };
-
-          if (discoveredPkg.name) {
-            packages.push(discoveredPkg);
-          }
-        } catch (error) {
-          logger.debug(`Failed to process workspace package:`, error);
+      for (const { path } of workspacePackages) {
+        // Read the manifest for fields `pnpm list` does not report (publishConfig)
+        const pkg = await this.loadPackageInfo(path);
+        if (pkg) {
+          packages.push(pkg);
         }
       }
 

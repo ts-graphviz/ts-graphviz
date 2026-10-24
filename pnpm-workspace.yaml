@@ -2,3 +2,25 @@ packages:
   - 'packages/*'
   - 'e2e'
   - 'examples/*'
+
+allowBuilds:
+  '@biomejs/biome': true
+  esbuild: true
+  lefthook: true
+
+catalog:
+  '@microsoft/api-extractor': ^7.59.4
+  '@types/node': ^22.20.5
+  typescript: ^6.0.3
+  vite: ^8.3.5
+  vite-plugin-dts: ^5.1.2
+
+# Refuse versions whose publishing trust (e.g. provenance) is lower than earlier releases
+trustPolicy: no-downgrade
+# Versions published more than 30 days ago have been vetted by the ecosystem; only enforce trust on recent ones
+trustPolicyIgnoreAfter: 43200
+trustPolicyExclude:
+  # Published by verdaccio's GitHub Actions via npm OIDC trusted publishing, but
+  # without a provenance attestation since 6.10.5. 6.10.4 pulls in vulnerable
+  # handlebars/compression/js-yaml. Re-check when upgrading.
+  - verdaccio@6.10.7

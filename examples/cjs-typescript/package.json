@@ -6,9 +6,9 @@
     "test": "tsc --noEmit && tsx test-import.ts"
   },
   "dependencies": {
-    "@types/node": "^24.0.7",
+    "@types/node": "^24.19.2",
     "ts-graphviz": "workspace:*",
-    "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }

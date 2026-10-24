@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.2/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -15,10 +15,10 @@
       "**/*.mjs",
       "**/*.json",
       "**/*.jsonc",
-      "!**/lib/**",
-      "!**/doc/**",
-      "!**/node_modules/**",
-      "!**/coverage/**",
+      "!**/lib",
+      "!**/doc",
+      "!**/node_modules",
+      "!**/coverage",
       "!packages/ast/src/dot-shim/parser/_parse.js",
       "!packages/ast/src/dot-shim/parser/_parse.d.ts"
     ]
@@ -48,12 +48,9 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "complexity": {
         "noForEach": "off"
-      },
-      "nursery": {
-        "useUniqueElementIds": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",
@@ -70,7 +67,26 @@
         "useNumberNamespace": "error",
         "noInferrableTypes": "error",
         "noUselessElse": "error"
+      },
+      "correctness": {
+        "useUniqueElementIds": "off",
+        "noJsxNamespace": "off"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "**/*.test.tsx",
+        "**/*.spec.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noComponentHookFactories": "off"
+          }
+        }
+      }
+    }
+  ]
 }
