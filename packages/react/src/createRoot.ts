@@ -1,6 +1,10 @@
 import { createElement, type ReactElement } from 'react';
-import type { DotObjectModel, FilterableModel } from 'ts-graphviz';
-import { isRootGraphModel } from 'ts-graphviz';
+import type {
+  DotObjectModel,
+  FilterableModel,
+  ModelsContext,
+} from 'ts-graphviz';
+import { createModelsContext, isRootGraphModel } from 'ts-graphviz';
 
 import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
@@ -32,6 +36,11 @@ export interface CreateRootOptions<
    * When provided, components will be rendered into this existing graph model.
    */
   container?: Container;
+  /**
+   * Model classes used to create graphs, nodes and edges.
+   * Defaults to the classes registered in `RootModelsContext`.
+   */
+  models?: Partial<ModelsContext>;
   /**
    * Called when an error is not caught by any error boundary
    */
@@ -253,7 +262,7 @@ async function renderInternal<
 export function createRoot<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(options: CreateRootOptions<Container> = {}): GraphvizRoot {
-  const { container, ...otherOptions } = options;
+  const { container, models, ...otherOptions } = options;
 
   const containerInfo: RenderContainer<Container> = {
     renderedModels: [],
@@ -278,6 +287,7 @@ export function createRoot<
 
   const context: Context<Container> = {
     container,
+    models: createModelsContext(models ?? {}),
   };
   containerInfo.context = context;
 

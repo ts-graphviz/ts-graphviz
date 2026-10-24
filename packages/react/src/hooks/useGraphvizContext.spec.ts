@@ -5,11 +5,14 @@ import { context } from './__tests__/wrapper.js';
 import { useGraphvizContext } from './useGraphvizContext.js';
 
 describe('useGraphvizContext', () => {
-  test('returns {}', () => {
+  test('returns the context with its models and no container', () => {
     const { result } = renderHook(() => useGraphvizContext(), {
       wrapper: context(),
     });
-    expect(result.current).toStrictEqual({});
+    expect(result.current.container).toBeUndefined();
+    expect(result.current.models).toMatchObject({
+      Digraph: expect.any(Function),
+    });
   });
 
   test('An error occurs when called outside the GraphvizContext', () => {

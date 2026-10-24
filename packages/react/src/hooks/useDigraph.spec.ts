@@ -11,5 +11,22 @@ describe('useDigraph', () => {
       wrapper: context(),
     });
     expect(result.current).toBeInstanceOf(Digraph);
+    expect(result.current.strict).toBe(false);
+  });
+
+  it('passes id and strict to the model', () => {
+    const { result } = renderHook(() => useDigraph({ id: 'G', strict: true }), {
+      wrapper: context(),
+    });
+    expect(result.current.id).toBe('G');
+    expect(result.current.strict).toBe(true);
+  });
+
+  it('creates the graph with the Digraph class of the GraphvizContext', () => {
+    class MyDigraph extends Digraph {}
+    const { result } = renderHook(() => useDigraph(), {
+      wrapper: context({ models: { Digraph: MyDigraph } }),
+    });
+    expect(result.current).toBeInstanceOf(MyDigraph);
   });
 });

@@ -31,6 +31,8 @@ export interface RootGraphOptions
     GraphBaseAttributesProps {
   /** Cluster id */
   id?: string;
+  /** Strict graph: at most one edge between a pair of nodes. */
+  strict?: boolean;
 }
 
 /** Options for Subgraph */
