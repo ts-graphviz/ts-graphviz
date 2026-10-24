@@ -14,7 +14,7 @@ import { expect } from 'vitest';
 /**
  * Type guard for models with id property
  */
-export function hasId(
+function hasId(
   model: DotObjectModel,
 ): model is DotObjectModel & { id: string } {
   return 'id' in model && typeof (model as any).id === 'string';
@@ -23,7 +23,7 @@ export function hasId(
 /**
  * Type guard for graph models with directed property
  */
-export function isDirectedGraph(
+function isDirectedGraph(
   model: GraphBaseModel,
 ): model is GraphBaseModel & { directed: boolean } {
   return 'directed' in model && typeof (model as any).directed === 'boolean';

@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "catalog:",
+    "@ts-graphviz/core": "workspace:^",
     "peggy": "^5.1.1",
     "typescript": "catalog:",
     "vite": "catalog:",

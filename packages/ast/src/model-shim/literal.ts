@@ -7,7 +7,6 @@ import {
   isEscString,
   isHTMLLike,
 } from '@ts-graphviz/common';
-import type { CreateElement } from '../builder/types.js';
 import type { LiteralASTNode } from '../types.js';
 
 /**
@@ -105,7 +104,7 @@ export function sanitizeEscString(raw: string): string {
  * An HTML string must keep `<` and `>` balanced: Graphviz reads it by
  * counting nesting, so an unbalanced `>` would end the string early.
  */
-export function assertHTMLLikeMarkup(markup: string): void {
+function assertHTMLLikeMarkup(markup: string): void {
   rejectNul(markup, 'An HTML-like label');
   let depth = 0;
   for (const ch of markup) {
@@ -173,15 +172,6 @@ export function idFromLiteral(
     ? unescapeLiteral(literal.value)
     : literal.value;
 }
-
-/** `createElement('Literal', ...)` for an id. */
-export function createIdLiteral(
-  createElement: CreateElement,
-  id: string,
-): LiteralASTNode {
-  return createElement('Literal', { value: idToRaw(id), quoted: true }, []);
-}
-
 /**
  * Identifiers written without quotes. DOT also allows non-ASCII letters bare,
  * but which code points count as letters differs between Graphviz and this

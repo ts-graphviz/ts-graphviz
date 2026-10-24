@@ -8,7 +8,7 @@ export interface TestPackage {
   runtime?: 'node' | 'deno' | 'auto';
 }
 
-export interface RegistryConfig {
+interface RegistryConfig {
   port?: number;
   host?: string;
   auth?: {

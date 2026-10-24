@@ -57,20 +57,3 @@ export function formatDuration(ms: number): string {
 
   return `${minutes}m ${remainingSeconds}s`;
 }
-
-export function createProgressLogger(total: number) {
-  let completed = 0;
-
-  return {
-    increment() {
-      completed++;
-      console.log(
-        `Progress: ${completed}/${total} (${Math.round((completed / total) * 100)}%)`,
-      );
-    },
-
-    complete() {
-      console.log(`✅ All ${total} tasks completed`);
-    },
-  };
-}

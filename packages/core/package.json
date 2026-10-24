@@ -37,7 +37,6 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@ts-graphviz/ast": "workspace:^",
     "@ts-graphviz/common": "workspace:^"
   },
   "devDependencies": {

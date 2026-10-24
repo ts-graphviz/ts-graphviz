@@ -1,8 +1,8 @@
 import chalk from 'chalk';
 
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
-export class Logger {
+class Logger {
   private level: LogLevel;
 
   constructor(level: LogLevel = 'info') {

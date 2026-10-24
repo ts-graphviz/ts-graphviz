@@ -34,13 +34,15 @@ const publishedNames = new Set(
   publishedPackages.map(({ manifest }) => manifest.name),
 );
 
-/** Names of published workspace packages that `manifest` depends on */
+/**
+ * Names of published workspace packages that `manifest` depends on at runtime.
+ * devDependencies are left out: they only serve the package's own tests.
+ */
 function workspaceDependencies(manifest: Manifest): string[] {
   return [
     ...new Set(
       [
         manifest.dependencies,
-        manifest.devDependencies,
         manifest.optionalDependencies,
         manifest.peerDependencies,
       ].flatMap((deps) => Object.keys(deps ?? {})),
