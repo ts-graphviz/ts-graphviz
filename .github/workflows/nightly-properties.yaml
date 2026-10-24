@@ -1,0 +1,50 @@
+name: Nightly Property Tests
+# A long run of the property-based tests in test/properties: many more cases
+# than a pull request run, to catch inputs the default 200 cases miss. The
+# seed of a failing property is in the log; reproduce with FC_SEED=<seed>.
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+    inputs:
+      num_runs:
+        description: Number of cases per property (FC_NUM_RUNS)
+        default: '5000'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  properties:
+    name: Properties (${{ matrix.ref }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # `main` joins the list once the property tests are released with v4
+        ref: [next]
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        with:
+          egress-policy: audit
+      - name: Checkout Repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ matrix.ref }}
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          cache: pnpm
+          node-version-file: ./.node-version
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Generate code
+        run: pnpm codegen
+      - name: Run the property tests
+        env:
+          FC_NUM_RUNS: ${{ inputs.num_runs || '5000' }}
+        run: pnpm vitest run test/properties --coverage.enabled=false

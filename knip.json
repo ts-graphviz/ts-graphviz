@@ -2,16 +2,29 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "workspaces": {
     ".": {
-      "entry": ["media/*.tsx"]
+      "entry": [
+        "media/*.tsx",
+        "scripts/*.ts"
+      ],
+      "ignoreDependencies": [
+        "publint",
+        "@arethetypeswrong/cli"
+      ]
     },
     "packages/ts-graphviz": {
-      "entry": ["example/runkit.cjs"]
+      "entry": [
+        "example/runkit.cjs"
+      ]
     },
     "packages/react": {
-      "entry": ["example/example.tsx"]
+      "entry": [
+        "example/example.tsx"
+      ]
     },
     "e2e": {
-      "ignoreDependencies": ["verdaccio-auth-memory"]
+      "ignoreDependencies": [
+        "verdaccio-auth-memory"
+      ]
     }
   }
 }
