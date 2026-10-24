@@ -4,10 +4,9 @@
  * tarballs. Run with `pnpm check:packages` after `pnpm build`.
  *
  * - publint: package.json consistency (exports, files, types next to code).
- * - attw: whether each entry point resolves with types under node16 and
- *   bundler resolution. The packages are ESM-only on purpose, so
- *   `cjs-resolves-to-esm` is ignored; `node10` resolution is not checked
- *   until #1632 is decided.
+ * - attw: whether each entry point resolves with types under every module
+ *   resolution mode (node10, node16, bundler). The packages are ESM-only on
+ *   purpose, so `cjs-resolves-to-esm` is ignored.
  */
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
@@ -50,8 +49,6 @@ try {
       'exec',
       'attw',
       tarball,
-      '--profile',
-      'node16',
       '--ignore-rules',
       'cjs-resolves-to-esm',
     ]);
