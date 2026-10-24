@@ -1,4 +1,5 @@
 import type {
+  DotConstructor,
   EdgeConstructor,
   NodeConstructor,
   RootGraphConstructor,
@@ -9,6 +10,7 @@ import type {
  * @group Models Context
  */
 export interface ModelsContext {
+  Dot: DotConstructor;
   Graph: RootGraphConstructor;
   Digraph: RootGraphConstructor;
   Subgraph: SubgraphConstructor;
@@ -21,6 +23,7 @@ export interface ModelsContext {
  */
 export const RootModelsContext: ModelsContext = Object.seal({
   // NOTE: RootModelsContext is also initialized after the model class is declared in the '@ts-graphviz/core/register-default' module.
+  Dot: null,
   Graph: null,
   Digraph: null,
   Subgraph: null,

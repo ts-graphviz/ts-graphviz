@@ -21,9 +21,9 @@ describe('Edge grouping feature', () => {
           g.edge(['x', ['y']]);
         }),
       );
-      const graphNode = ast.children[0];
-      expect(graphNode.type).toBe('Graph');
-      const edgeNode = graphNode.children[0] as EdgeASTNode;
+      // fromModel of a root graph yields the Graph node itself
+      expect(ast.type).toBe('Graph');
+      const edgeNode = ast.children[0] as EdgeASTNode;
       const groupNode = edgeNode.targets[1] as NodeRefGroupASTNode;
       expect(groupNode.type).toBe('NodeRefGroup');
       expect(groupNode.children).toHaveLength(1);

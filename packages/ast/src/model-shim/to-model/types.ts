@@ -1,4 +1,5 @@
 import type {
+  DotModel,
   EdgeModel,
   ModelsContext,
   NodeModel,
@@ -17,15 +18,17 @@ import type {
  *  ModelOf is a type that determines the type of model to use depending on the value of T.
  * @group AST
  */
-export type ModelOf<T> = T extends 'Dot' | 'Graph'
-  ? RootGraphModel
-  : T extends 'Edge'
-    ? EdgeModel
-    : T extends 'Node'
-      ? NodeModel
-      : T extends 'Subgraph'
-        ? SubgraphModel
-        : never;
+export type ModelOf<T> = T extends 'Dot'
+  ? DotModel
+  : T extends 'Graph'
+    ? RootGraphModel
+    : T extends 'Edge'
+      ? EdgeModel
+      : T extends 'Node'
+        ? NodeModel
+        : T extends 'Subgraph'
+          ? SubgraphModel
+          : never;
 
 /**
  * ASTToModel is a type that determines a model type from an AST.

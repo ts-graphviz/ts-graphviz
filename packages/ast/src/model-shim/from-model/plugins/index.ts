@@ -1,4 +1,5 @@
 import { AttributeListPlugin } from './AttributeListPlugin.js';
+import { DotPlugin } from './DotPlugin.js';
 import { EdgePlugin } from './EdgePlugin.js';
 import { GraphPlugin } from './GraphPlugin.js';
 import { NodePlugin } from './NodePlugin.js';
@@ -10,4 +11,5 @@ export const defaultPlugins = [
   NodePlugin,
   GraphPlugin,
   SubgraphPlugin,
+  DotPlugin,
 ];

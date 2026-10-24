@@ -15,7 +15,8 @@ import type {
  *
  * If T is a DotObjectModel, the type U is inferred and used to determine which AST node type to map to.
  *
- * If U is 'Graph', the type is mapped to either a {@link GraphASTNode} or a {@link DotASTNode}.
+ * If U is 'Dot', the type is mapped to a {@link DotASTNode}.
+ * If U is 'Graph', the type is mapped to a {@link GraphASTNode}.
  * If U is 'AttributeList', the type is mapped to an {@link AttributeListASTNode}.
  * If U is 'Edge', the type is mapped to an {@link EdgeASTNode}.
  * If U is 'Node', the type is mapped to a {@link NodeASTNode}.
@@ -27,17 +28,19 @@ import type {
  */
 export type ModelToAST<T> =
   T extends DotObjectModel<infer U>
-    ? U extends 'Graph'
-      ? GraphASTNode | DotASTNode
-      : U extends 'AttributeList'
-        ? AttributeListASTNode
-        : U extends 'Edge'
-          ? EdgeASTNode
-          : U extends 'Node'
-            ? NodeASTNode
-            : U extends 'Subgraph'
-              ? SubgraphASTNode
-              : never
+    ? U extends 'Dot'
+      ? DotASTNode
+      : U extends 'Graph'
+        ? GraphASTNode
+        : U extends 'AttributeList'
+          ? AttributeListASTNode
+          : U extends 'Edge'
+            ? EdgeASTNode
+            : U extends 'Node'
+              ? NodeASTNode
+              : U extends 'Subgraph'
+                ? SubgraphASTNode
+                : never
     : never;
 
 /**
