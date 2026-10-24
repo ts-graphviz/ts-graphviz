@@ -3,15 +3,15 @@ import type { Layout, Options } from './types.js';
 
 /**
  * escapeValue is a function that escapes a given Attribute value of a given AttributeKey.
- * It checks the type of the value and adds quotes if the value is of type string and contains whitespace.
+ * It quotes string values containing whitespace, quotes, or backslashes and escapes embedded quotes and backslashes.
  *
  * @param value The value of an Attribute of type T that extends AttributeKey
  * @returns The escaped Attribute value
  */
 export function escapeValue<T extends AttributeKey>(value: Attribute<T>) {
   if (value !== true) {
-    if (typeof value === 'string' && /\s/g.test(value)) {
-      return `="${value}"`;
+    if (typeof value === 'string' && /[\s"\\]/.test(value)) {
+      return `="${value.replace(/["\\]/g, '\\$&')}"`;
     }
     return `=${value}`;
   }
