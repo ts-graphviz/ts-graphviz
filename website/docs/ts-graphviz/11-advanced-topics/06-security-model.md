@@ -1,6 +1,10 @@
+---
+description: |-
+  The security model of ts-graphviz: trust boundaries, the guarantees at each one, what is not promised, and the tests that enforce each guarantee.
+---
 # Security model
 
-This document states what ts-graphviz trusts, what it guarantees at each boundary, what it does not promise, and which tests enforce each guarantee. It is the reference for deciding whether a report is a vulnerability (see [SECURITY.md](../SECURITY.md) for how to report one). The format follows the OpenSSF Best Practices "security assurance case": trust boundaries, guarantees, secure-design decisions and their evidence.
+This document states what ts-graphviz trusts, what it guarantees at each boundary, what it does not promise, and which tests enforce each guarantee. It is the reference for deciding whether a report is a vulnerability (see [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md) for how to report one). The format follows the OpenSSF Best Practices "security assurance case": trust boundaries, guarantees, secure-design decisions and their evidence.
 
 ## Summary
 
@@ -113,7 +117,7 @@ How the packages reach you is part of the model: the strongest parser is useless
 
 ## What is in scope for a security report
 
-In scope, please report privately (see [SECURITY.md](../SECURITY.md)):
+In scope, please report privately (see [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md)):
 
 - any input to `parse` / `fromDot` that crashes the process, hangs, or exceeds the documented limits without throwing;
 - any string that, as a plain `string` in a model, changes the DOT structure after `toDot` (injection);

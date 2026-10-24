@@ -267,7 +267,7 @@ See [ARCHITECTURE.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/ARCHI
 
 ### Security 🛡️
 
-See [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md) for how to report a vulnerability and the measures in place, and [docs/security-model.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/docs/security-model.md) for the trust boundaries and guarantees of the library: what you may pass it from untrusted sources (DOT text, strings in models) and what remains your responsibility (`htmlLike()` content, the adapter's command options, attributes Graphviz resolves as files).
+See [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md) for how to report a vulnerability and the measures in place, and the [security model](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-model/) for the trust boundaries and guarantees of the library: what you may pass it from untrusted sources (DOT text, strings in models) and what remains your responsibility (`htmlLike()` content, the adapter's command options, attributes Graphviz resolves as files).
 
 
 ## Package Structure 📦
