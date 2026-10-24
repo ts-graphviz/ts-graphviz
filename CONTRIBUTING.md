@@ -44,7 +44,7 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 > [!WARNING]
 > Ensure you have to run `pnpm codegen` before developing. This step is crucial as it generates the necessary code from the Graphviz DOT language grammar.
 >
-> `packages/common/src/attribute.ts` is generated too, but it is committed; edit `packages/common/scripts/generate-attributes.ts` (or update the snapshot) and run `pnpm codegen` instead of editing it by hand. CI fails if the committed file is out of date.
+> `packages/common/src/attributes/attribute.ts` is generated too, but it is committed; edit `packages/common/scripts/generate-attributes.ts` (or update the snapshot) and run `pnpm codegen` instead of editing it by hand. CI fails if the committed file is out of date.
 
 #### Creating a Changeset
 

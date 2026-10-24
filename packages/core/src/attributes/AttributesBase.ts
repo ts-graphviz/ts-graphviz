@@ -5,7 +5,7 @@ import type {
   AttributesEntities,
   AttributesObject,
 } from '@ts-graphviz/common';
-import { DotObject } from './DotObject.js';
+import { DotObject } from '../models/DotObject.js';
 
 /**
  * Base class for DOT objects with attributes.

@@ -1,8 +1,8 @@
 import type { AttributeListKind } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
+import { DotObject } from '../models/DotObject.js';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
-import { DotObject } from './DotObject.js';
 
 let attrs: AttributeList<AttributeListKind>;
 beforeEach(() => {

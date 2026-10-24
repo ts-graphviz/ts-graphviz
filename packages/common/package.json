@@ -34,7 +34,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "codegen": "node scripts/generate-attributes.ts && biome format --write src/attribute.ts",
+    "codegen": "node scripts/generate-attributes.ts && biome format --write src/attributes/attribute.ts",
     "fetch:graphviz-docs": "node scripts/fetch-graphviz-docs.ts"
   },
   "devDependencies": {
