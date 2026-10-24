@@ -22,7 +22,7 @@ export function convertToEdgeTargetTuple(edge: EdgeASTNode): EdgeTargetTuple {
       case 'NodeRef':
         return toNodeRef(t);
       case 'NodeRefGroup':
-        return t.children.map(toNodeRef);
+        return t.refs.map(toNodeRef);
     }
   }) as EdgeTargetTuple;
 }

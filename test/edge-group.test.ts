@@ -26,8 +26,8 @@ describe('Edge grouping feature', () => {
       const edgeNode = ast.children[0] as EdgeASTNode;
       const groupNode = edgeNode.targets[1] as NodeRefGroupASTNode;
       expect(groupNode.type).toBe('NodeRefGroup');
-      expect(groupNode.children).toHaveLength(1);
-      expect(groupNode.children[0].id.value).toBe('y');
+      expect(groupNode.refs).toHaveLength(1);
+      expect(groupNode.refs[0].id.value).toBe('y');
     });
   });
 

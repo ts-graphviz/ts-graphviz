@@ -1,7 +1,6 @@
 {
   "children": [
     {
-      "children": [],
       "kind": "Block",
       "location": {
         "end": {
@@ -61,7 +60,6 @@ Colors and forms symbolize following
  Violet line - Ancestors (other) spouse",
     },
     {
-      "children": [],
       "kind": "Block",
       "location": {
         "end": {
@@ -84,9 +82,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -119,7 +115,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -139,9 +134,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -174,7 +167,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 28,
@@ -194,9 +186,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 34,
@@ -229,7 +219,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 39,
@@ -249,9 +238,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 45,
@@ -284,7 +271,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 96,
@@ -304,9 +290,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 102,
@@ -339,7 +323,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 138,
@@ -359,9 +342,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 147,
@@ -394,7 +375,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 149,
@@ -415,7 +395,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 3,
@@ -451,9 +430,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -486,7 +463,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 14,
@@ -506,9 +482,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 20,
@@ -541,7 +515,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -561,9 +534,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 31,
@@ -596,7 +567,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -616,9 +586,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 42,
@@ -651,7 +619,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 114,
@@ -671,9 +638,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 120,
@@ -706,7 +671,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 145,
@@ -726,9 +690,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 154,
@@ -761,7 +723,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 156,
@@ -782,7 +743,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 3,
@@ -818,9 +778,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -853,7 +811,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 14,
@@ -873,9 +830,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 20,
@@ -908,7 +863,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -928,9 +882,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 31,
@@ -963,7 +915,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -983,9 +934,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 42,
@@ -1018,7 +967,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 156,
@@ -1038,9 +986,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 162,
@@ -1073,7 +1019,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 188,
@@ -1093,9 +1038,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 197,
@@ -1128,7 +1071,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 199,
@@ -1149,7 +1091,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 3,
@@ -1185,9 +1126,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -1220,7 +1159,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 14,
@@ -1240,9 +1178,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 20,
@@ -1275,7 +1211,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -1295,9 +1230,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 31,
@@ -1330,7 +1263,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -1350,9 +1282,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 42,
@@ -1385,7 +1315,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 94,
@@ -1406,7 +1335,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 3,
@@ -1442,9 +1370,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -1477,7 +1403,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -1497,9 +1422,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -1532,7 +1455,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 28,
@@ -1552,9 +1474,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 34,
@@ -1587,7 +1507,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 39,
@@ -1607,9 +1526,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 45,
@@ -1642,7 +1559,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 123,
@@ -1662,9 +1578,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 129,
@@ -1697,7 +1611,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 169,
@@ -1717,9 +1630,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 178,
@@ -1752,7 +1663,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 180,
@@ -1773,7 +1683,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 3,
@@ -1809,9 +1718,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -1844,7 +1751,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 14,
@@ -1864,9 +1770,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 20,
@@ -1899,7 +1803,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -1919,9 +1822,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 31,
@@ -1954,7 +1855,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -1974,9 +1874,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 42,
@@ -2009,7 +1907,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 120,
@@ -2029,9 +1926,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 126,
@@ -2064,7 +1959,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 150,
@@ -2084,9 +1978,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 159,
@@ -2119,7 +2011,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 161,
@@ -2140,7 +2031,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 3,
@@ -2176,9 +2066,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -2211,7 +2099,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 15,
@@ -2231,9 +2118,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 21,
@@ -2266,7 +2151,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 26,
@@ -2286,9 +2170,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 32,
@@ -2321,7 +2203,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -2341,9 +2222,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 43,
@@ -2376,7 +2255,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 89,
@@ -2397,7 +2275,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 4,
@@ -2433,9 +2310,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -2468,7 +2343,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -2488,9 +2362,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -2523,7 +2395,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -2543,9 +2414,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 35,
@@ -2578,7 +2447,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 40,
@@ -2598,9 +2466,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 46,
@@ -2633,7 +2499,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 92,
@@ -2653,9 +2518,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 98,
@@ -2688,7 +2551,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 120,
@@ -2708,9 +2570,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 129,
@@ -2743,7 +2603,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 131,
@@ -2764,7 +2623,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 4,
@@ -2800,9 +2658,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -2835,7 +2691,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -2855,9 +2710,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -2890,7 +2743,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -2910,9 +2762,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 35,
@@ -2945,7 +2795,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 40,
@@ -2965,9 +2814,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 46,
@@ -3000,7 +2847,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 83,
@@ -3021,7 +2867,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 4,
@@ -3057,9 +2902,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -3092,7 +2935,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -3112,9 +2954,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -3147,7 +2987,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -3167,9 +3006,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 35,
@@ -3202,7 +3039,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 40,
@@ -3222,9 +3058,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 46,
@@ -3257,7 +3091,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 92,
@@ -3278,7 +3111,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 4,
@@ -3314,9 +3146,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -3349,7 +3179,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -3369,9 +3198,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -3404,7 +3231,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 28,
@@ -3424,9 +3250,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 34,
@@ -3459,7 +3283,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 39,
@@ -3479,9 +3302,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 45,
@@ -3514,7 +3335,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 121,
@@ -3534,9 +3354,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 127,
@@ -3569,7 +3387,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 153,
@@ -3589,9 +3406,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 162,
@@ -3624,7 +3439,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 164,
@@ -3645,7 +3459,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 3,
@@ -3681,9 +3494,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -3716,7 +3527,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 15,
@@ -3736,9 +3546,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 21,
@@ -3771,7 +3579,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 26,
@@ -3791,9 +3598,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 32,
@@ -3826,7 +3631,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -3846,9 +3650,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 43,
@@ -3881,7 +3683,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 63,
@@ -3902,7 +3703,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 4,
@@ -3938,9 +3738,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -3973,7 +3771,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 14,
@@ -3993,9 +3790,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 20,
@@ -4028,7 +3823,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -4048,9 +3842,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 31,
@@ -4083,7 +3875,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -4103,9 +3894,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 42,
@@ -4138,7 +3927,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 86,
@@ -4158,9 +3946,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 92,
@@ -4193,7 +3979,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 114,
@@ -4213,9 +3998,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 123,
@@ -4248,7 +4031,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 125,
@@ -4269,7 +4051,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 3,
@@ -4305,9 +4086,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -4340,7 +4119,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -4360,9 +4138,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -4395,7 +4171,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 28,
@@ -4415,9 +4190,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 34,
@@ -4450,7 +4223,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 39,
@@ -4470,9 +4242,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 45,
@@ -4505,7 +4275,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 91,
@@ -4525,9 +4294,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 97,
@@ -4560,7 +4327,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 136,
@@ -4580,9 +4346,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 145,
@@ -4615,7 +4379,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 147,
@@ -4636,7 +4399,6 @@ Colors and forms symbolize following
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 3,
@@ -4672,9 +4434,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -4707,7 +4467,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -4727,9 +4486,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -4762,7 +4519,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 34,
@@ -4797,9 +4553,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -4833,9 +4587,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -4874,9 +4626,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -4909,7 +4659,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -4929,9 +4678,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -4964,7 +4711,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -4999,9 +4745,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -5035,9 +4779,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -5076,9 +4818,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -5111,7 +4851,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -5131,9 +4870,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -5166,7 +4903,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -5201,9 +4937,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -5237,9 +4971,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -5278,9 +5010,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -5313,7 +5043,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -5333,9 +5062,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -5368,7 +5095,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -5403,9 +5129,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -5439,9 +5163,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -5480,9 +5202,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -5515,7 +5235,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -5535,9 +5254,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -5570,7 +5287,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -5605,9 +5321,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -5641,9 +5355,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -5682,9 +5394,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -5717,7 +5427,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -5737,9 +5446,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -5772,7 +5479,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -5807,9 +5513,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -5843,9 +5547,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -5884,9 +5586,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -5919,7 +5619,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -5939,9 +5638,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -5974,7 +5671,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 34,
@@ -6009,9 +5705,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -6045,9 +5739,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -6086,9 +5778,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -6121,7 +5811,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -6141,9 +5830,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 30,
@@ -6176,7 +5863,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -6211,9 +5897,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -6247,9 +5931,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -6288,9 +5970,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -6323,7 +6003,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -6343,9 +6022,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 30,
@@ -6378,7 +6055,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -6413,9 +6089,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -6449,9 +6123,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -6490,9 +6162,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -6525,7 +6195,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -6545,9 +6214,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 30,
@@ -6580,7 +6247,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -6615,9 +6281,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -6651,9 +6315,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -6692,9 +6354,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -6727,7 +6387,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -6747,9 +6406,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 30,
@@ -6782,7 +6439,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -6817,9 +6473,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -6853,9 +6507,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -6894,9 +6546,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -6929,7 +6579,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -6949,9 +6598,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 30,
@@ -6984,7 +6631,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -7019,9 +6665,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -7055,9 +6699,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -7096,9 +6738,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -7131,7 +6771,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -7151,9 +6790,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 30,
@@ -7186,7 +6823,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -7221,9 +6857,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -7257,9 +6891,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -7298,9 +6930,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -7333,7 +6963,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -7353,9 +6982,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 30,
@@ -7388,7 +7015,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -7423,9 +7049,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -7459,9 +7083,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -7500,9 +7122,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -7535,7 +7155,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -7555,9 +7174,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 30,
@@ -7590,7 +7207,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -7625,9 +7241,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -7661,9 +7275,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -7702,9 +7314,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -7737,7 +7347,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -7757,9 +7366,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -7792,7 +7399,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -7827,9 +7433,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -7863,9 +7467,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -7904,9 +7506,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -7939,7 +7539,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -7959,9 +7558,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -7994,7 +7591,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 33,
@@ -8029,9 +7625,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -8065,9 +7659,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -8106,9 +7698,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -8141,7 +7731,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -8161,9 +7750,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -8196,7 +7783,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 33,
@@ -8231,9 +7817,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -8267,9 +7851,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -8308,9 +7890,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -8343,7 +7923,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 24,
@@ -8363,9 +7942,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 30,
@@ -8398,7 +7975,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 37,
@@ -8433,9 +8009,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -8469,9 +8043,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -8510,9 +8082,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -8545,7 +8115,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -8565,9 +8134,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -8600,7 +8167,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 34,
@@ -8635,9 +8201,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -8671,9 +8235,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -8712,9 +8274,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -8747,7 +8307,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -8767,9 +8326,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -8802,7 +8359,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 36,
@@ -8837,9 +8393,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -8873,9 +8427,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -8914,9 +8466,7 @@ Colors and forms symbolize following
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -8949,7 +8499,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 23,
@@ -8969,9 +8518,7 @@ Colors and forms symbolize following
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 29,
@@ -9004,7 +8551,6 @@ Colors and forms symbolize following
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 33,
@@ -9039,9 +8585,7 @@ Colors and forms symbolize following
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -9075,9 +8619,7 @@ Colors and forms symbolize following
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -9116,7 +8658,6 @@ Colors and forms symbolize following
       ],
       "directed": false,
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 8,

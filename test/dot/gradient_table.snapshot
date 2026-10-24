@@ -3,9 +3,7 @@
     {
       "children": [
         {
-          "children": [],
           "key": {
-            "children": [],
             "location": {
               "end": {
                 "column": 20,
@@ -38,7 +36,6 @@
           },
           "type": "Attribute",
           "value": {
-            "children": [],
             "location": {
               "end": {
                 "column": 33,
@@ -60,9 +57,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 31,
@@ -95,7 +90,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 44,
@@ -115,9 +109,7 @@
               },
             },
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 50,
@@ -150,7 +142,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 59,
@@ -172,9 +163,7 @@
             {
               "children": [
                 {
-                  "children": [],
                   "key": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 14,
@@ -207,7 +196,6 @@
                   },
                   "type": "Attribute",
                   "value": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 22,
@@ -227,9 +215,7 @@
                   },
                 },
                 {
-                  "children": [],
                   "key": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 32,
@@ -262,7 +248,6 @@
                   },
                   "type": "Attribute",
                   "value": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 45,
@@ -282,9 +267,7 @@
                   },
                 },
                 {
-                  "children": [],
                   "key": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 51,
@@ -317,7 +300,6 @@
                   },
                   "type": "Attribute",
                   "value": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 60,
@@ -337,9 +319,7 @@
                   },
                 },
                 {
-                  "children": [],
                   "key": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 74,
@@ -372,7 +352,6 @@
                   },
                   "type": "Attribute",
                   "value": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 78,
@@ -411,9 +390,7 @@
             {
               "children": [
                 {
-                  "children": [],
                   "key": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 12,
@@ -446,7 +423,6 @@
                   },
                   "type": "Attribute",
                   "value": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 10,
@@ -491,7 +467,6 @@
                 },
               ],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 5,
@@ -526,7 +501,6 @@
             },
           ],
           "id": {
-            "children": [],
             "location": {
               "end": {
                 "column": 20,
@@ -562,7 +536,6 @@
       ],
       "directed": true,
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 10,

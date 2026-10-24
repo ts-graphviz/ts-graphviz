@@ -199,7 +199,11 @@ export interface ASTBaseNode {
 }
 
 /**
- * ASTBaseParentNode represents a parent node that has some child nodes.
+ * ASTBaseParentNode represents a node that contains a list of statements:
+ * `Dot`, `Graph`, `Subgraph` (statements), `Node`, `Edge` and `AttributeList`
+ * (attributes and comments). Leaf nodes (`Literal`, `Attribute`, `Comment`,
+ * `NodeRef`) and `NodeRefGroup` (which holds `refs`) extend
+ * {@link ASTBaseNode} directly and have no `children`.
  *
  * @template STMT The type of {@link ASTBaseNode} to be stored in the children array.
  * @group AST
@@ -215,7 +219,7 @@ export interface ASTBaseParentNode<STMT extends ASTBaseNode = ASTBaseNode>
  * @group AST
  */
 export interface LiteralASTNode<T extends string = string>
-  extends ASTBaseParentNode<never>,
+  extends ASTBaseNode,
     LiteralASTProperties<T> {
   type: 'Literal';
 }
@@ -247,7 +251,7 @@ export interface GraphASTNode
  * @group AST
  */
 export interface AttributeASTNode<T extends AttributeKey = AttributeKey>
-  extends ASTBaseParentNode<never>,
+  extends ASTBaseNode,
     AttributeASTProperties<T> {
   type: 'Attribute';
 }
@@ -256,9 +260,7 @@ export interface AttributeASTNode<T extends AttributeKey = AttributeKey>
  * CommentASTNode is a type of AST node that represents a comment.
  * @group AST
  */
-export interface CommentASTNode
-  extends ASTBaseParentNode<never>,
-    CommentASTProperties {
+export interface CommentASTNode extends ASTBaseNode, CommentASTProperties {
   type: 'Comment';
 }
 
@@ -276,20 +278,21 @@ export interface AttributeListASTNode
  * NodeRefASTNode is a type of AST node that represents a reference to a node.
  * @group AST
  */
-export interface NodeRefASTNode
-  extends ASTBaseParentNode<never>,
-    NodeRefASTProperties {
+export interface NodeRefASTNode extends ASTBaseNode, NodeRefASTProperties {
   type: 'NodeRef';
 }
 
 /**
- * NodeRefGroupASTNode is a type of AST node that represents a group of nodes referenced together.
+ * NodeRefGroupASTNode is a type of AST node that represents a group of nodes
+ * referenced together (`{a b c}` as an edge target). The group holds its
+ * node references in `refs`; it is not a statement container.
  * @group AST
  */
 export interface NodeRefGroupASTNode
-  extends ASTBaseParentNode<NodeRefASTNode>,
+  extends ASTBaseNode,
     NodeRefGroupASTProperties {
   type: 'NodeRefGroup';
+  refs: NodeRefASTNode[];
 }
 
 /**
@@ -364,7 +367,14 @@ export type ASTNode =
   | SubgraphASTNode;
 
 /**
- * ASTChildNode is a type alias used to represent the child nodes of a given {@link ASTBaseParentNode}.
+ * ASTChildNode is the type of the nodes a given node contains: the
+ * `children` of an {@link ASTBaseParentNode}, the `refs` of a
+ * {@link NodeRefGroupASTNode}, and `never` for a leaf node.
  * @group AST
  */
-export type ASTChildNode<T> = T extends ASTBaseParentNode<infer C> ? C : never;
+export type ASTChildNode<T> =
+  T extends ASTBaseParentNode<infer C>
+    ? C
+    : T extends NodeRefGroupASTNode
+      ? NodeRefASTNode
+      : never;

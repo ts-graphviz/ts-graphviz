@@ -19,9 +19,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -55,11 +53,22 @@
               "type": "NodeRef",
             },
             {
-              "children": [
+              "location": {
+                "end": {
+                  "column": 31,
+                  "line": 2,
+                  "offset": 52,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 8,
+                  "line": 2,
+                  "offset": 29,
+                },
+              },
+              "refs": [
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 13,
@@ -93,9 +102,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 17,
@@ -129,9 +136,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 21,
@@ -165,9 +170,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 25,
@@ -201,9 +204,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 29,
@@ -237,19 +238,6 @@
                   "type": "NodeRef",
                 },
               ],
-              "location": {
-                "end": {
-                  "column": 31,
-                  "line": 2,
-                  "offset": 52,
-                },
-                "source": undefined,
-                "start": {
-                  "column": 8,
-                  "line": 2,
-                  "offset": 29,
-                },
-              },
               "type": "NodeRefGroup",
             },
           ],
@@ -272,9 +260,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 5,
@@ -308,9 +294,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -344,9 +328,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -399,9 +381,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -435,9 +415,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -471,9 +449,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -526,9 +502,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 5,
@@ -562,9 +536,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -617,9 +589,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -653,9 +623,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -689,9 +657,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 16,
@@ -744,9 +710,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -780,9 +744,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -835,9 +797,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -871,9 +831,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -926,9 +884,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 5,
@@ -962,9 +918,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -1017,9 +971,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 4,
@@ -1053,9 +1005,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 10,
@@ -1108,9 +1058,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 5,
@@ -1144,9 +1092,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -1180,9 +1126,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 18,
@@ -1216,9 +1160,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 25,
@@ -1271,9 +1213,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 5,
@@ -1307,9 +1247,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 11,
@@ -1362,11 +1300,22 @@
           },
           "targets": [
             {
-              "children": [
+              "location": {
+                "end": {
+                  "column": 23,
+                  "line": 13,
+                  "offset": 225,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 13,
+                  "offset": 204,
+                },
+              },
+              "refs": [
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 6,
@@ -1400,9 +1349,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 9,
@@ -1436,9 +1383,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 13,
@@ -1472,9 +1417,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 17,
@@ -1508,9 +1451,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 21,
@@ -1544,27 +1485,25 @@
                   "type": "NodeRef",
                 },
               ],
-              "location": {
-                "end": {
-                  "column": 23,
-                  "line": 13,
-                  "offset": 225,
-                },
-                "source": undefined,
-                "start": {
-                  "column": 2,
-                  "line": 13,
-                  "offset": 204,
-                },
-              },
               "type": "NodeRefGroup",
             },
             {
-              "children": [
+              "location": {
+                "end": {
+                  "column": 48,
+                  "line": 13,
+                  "offset": 250,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 27,
+                  "line": 13,
+                  "offset": 229,
+                },
+              },
+              "refs": [
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 31,
@@ -1598,9 +1537,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 34,
@@ -1634,9 +1571,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 38,
@@ -1670,9 +1605,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 42,
@@ -1706,9 +1639,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 46,
@@ -1742,19 +1673,6 @@
                   "type": "NodeRef",
                 },
               ],
-              "location": {
-                "end": {
-                  "column": 48,
-                  "line": 13,
-                  "offset": 250,
-                },
-                "source": undefined,
-                "start": {
-                  "column": 27,
-                  "line": 13,
-                  "offset": 229,
-                },
-              },
               "type": "NodeRefGroup",
             },
           ],
@@ -1777,11 +1695,22 @@
           },
           "targets": [
             {
-              "children": [
+              "location": {
+                "end": {
+                  "column": 11,
+                  "line": 14,
+                  "offset": 262,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 2,
+                  "line": 14,
+                  "offset": 253,
+                },
+              },
+              "refs": [
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 6,
@@ -1815,9 +1744,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 10,
@@ -1851,27 +1778,25 @@
                   "type": "NodeRef",
                 },
               ],
-              "location": {
-                "end": {
-                  "column": 11,
-                  "line": 14,
-                  "offset": 262,
-                },
-                "source": undefined,
-                "start": {
-                  "column": 2,
-                  "line": 14,
-                  "offset": 253,
-                },
-              },
               "type": "NodeRefGroup",
             },
             {
-              "children": [
+              "location": {
+                "end": {
+                  "column": 23,
+                  "line": 14,
+                  "offset": 274,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 15,
+                  "line": 14,
+                  "offset": 266,
+                },
+              },
+              "refs": [
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 19,
@@ -1905,9 +1830,7 @@
                   "type": "NodeRef",
                 },
                 {
-                  "children": [],
                   "id": {
-                    "children": [],
                     "location": {
                       "end": {
                         "column": 22,
@@ -1941,19 +1864,6 @@
                   "type": "NodeRef",
                 },
               ],
-              "location": {
-                "end": {
-                  "column": 23,
-                  "line": 14,
-                  "offset": 274,
-                },
-                "source": undefined,
-                "start": {
-                  "column": 15,
-                  "line": 14,
-                  "offset": 266,
-                },
-              },
               "type": "NodeRefGroup",
             },
           ],
@@ -1976,9 +1886,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 5,
@@ -2012,9 +1920,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -2067,9 +1973,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 5,
@@ -2103,9 +2007,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -2144,9 +2046,7 @@
         {
           "children": [
             {
-              "children": [],
               "key": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 17,
@@ -2179,7 +2079,6 @@
               },
               "type": "Attribute",
               "value": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 19,
@@ -2214,9 +2113,7 @@
           },
           "targets": [
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 5,
@@ -2250,9 +2147,7 @@
               "type": "NodeRef",
             },
             {
-              "children": [],
               "id": {
-                "children": [],
                 "location": {
                   "end": {
                     "column": 12,
@@ -2289,7 +2184,6 @@
           "type": "Edge",
         },
         {
-          "children": [],
           "kind": "Slash",
           "location": {
             "end": {
@@ -2310,7 +2204,6 @@
       ],
       "directed": false,
       "id": {
-        "children": [],
         "location": {
           "end": {
             "column": 20,
