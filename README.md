@@ -244,7 +244,7 @@ const dot = await renderToDot(<TeamStructure />);
 ```
 
 > [!TIP]
-> See the [@ts-graphviz/react documentation](./packages/react/README.md) for comprehensive examples and API reference.
+> See the [@ts-graphviz/react documentation](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/react/README.md) for comprehensive examples and API reference.
 
 ## Useful Links 🔗
 
@@ -263,11 +263,11 @@ More detailed documentation and examples can be found in the following resources
 
 ### Architecture 🏛
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for more details.
+See [ARCHITECTURE.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/ARCHITECTURE.md) for more details.
 
 ### Security 🛡️
 
-See [SECURITY.md](./SECURITY.md) for how to report a vulnerability and the measures in place, and [docs/security-model.md](./docs/security-model.md) for the trust boundaries and guarantees of the library: what you may pass it from untrusted sources (DOT text, strings in models) and what remains your responsibility (`htmlLike()` content, the adapter's command options, attributes Graphviz resolves as files).
+See [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md) for how to report a vulnerability and the measures in place, and [docs/security-model.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/docs/security-model.md) for the trust boundaries and guarantees of the library: what you may pass it from untrusted sources (DOT text, strings in models) and what remains your responsibility (`htmlLike()` content, the adapter's command options, attributes Graphviz resolves as files).
 
 
 ## Package Structure 📦
@@ -276,22 +276,22 @@ The **ts-graphviz** repository is structured as a monorepo containing several pa
 
 | Package | Purpose |
 | --- | --- |
-| [ts-graphviz](./packages/ts-graphviz/README.md) | Main entry point providing a high-level API for most users |
-| [@ts-graphviz/core](./packages/core/README.md) | Core object models for graph manipulation |
-| [@ts-graphviz/ast](./packages/ast/README.md) | Parser and AST (Abstract Syntax Tree) handling for DOT language |
-| [@ts-graphviz/adapter](./packages/adapter/README.md) | Platform-specific implementations for rendering graphs |
-| [@ts-graphviz/common](./packages/common/README.md) | Shared types and utilities used across packages |
-| [@ts-graphviz/react](./packages/react/README.md) | React components for creating and rendering Graphviz graphs |
+| [ts-graphviz](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/ts-graphviz/README.md) | Main entry point providing a high-level API for most users |
+| [@ts-graphviz/core](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/core/README.md) | Core object models for graph manipulation |
+| [@ts-graphviz/ast](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/ast/README.md) | Parser and AST (Abstract Syntax Tree) handling for DOT language |
+| [@ts-graphviz/adapter](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/adapter/README.md) | Platform-specific implementations for rendering graphs |
+| [@ts-graphviz/common](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/common/README.md) | Shared types and utilities used across packages |
+| [@ts-graphviz/react](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/react/README.md) | React components for creating and rendering Graphviz graphs |
 
 > [!TIP]
-> ![Dependency graph](./media/dependency-graph.svg)
+> ![Dependency graph](https://raw.githubusercontent.com/ts-graphviz/ts-graphviz/main/media/dependency-graph.svg)
 > _Packages' Dependency graph_
 
 ## Data Flow and Processing Pipeline 🔄
 
 The following diagram illustrates how data flows through the ts-graphviz system, from graph creation to final rendering:
 
-![Data flow](./media/data-flow.svg)
+![Data flow](https://raw.githubusercontent.com/ts-graphviz/ts-graphviz/main/media/data-flow.svg)
 
 1. **Creation Phase**: Users create graph models through object-oriented API, React components, or parsing DOT strings
 2. **Processing Phase**: Models are converted to AST and then to DOT language strings
@@ -398,7 +398,7 @@ Please register at [GitHub Issues](https://github.com/ts-graphviz/ts-graphviz/is
 
 ### Development / Bug Fixes 🧑‍💻
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/CONTRIBUTING.md).
 
 ### Financial Support 💸
 

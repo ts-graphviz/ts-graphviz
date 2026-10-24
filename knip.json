@@ -28,6 +28,16 @@
       "ignoreDependencies": [
         "verdaccio-auth-memory"
       ]
+    },
+    "website": {
+      "entry": [
+        "src/theme/**/*.{ts,tsx}"
+      ],
+      "ignoreDependencies": [
+        "@docusaurus/theme-classic",
+        "@docusaurus/plugin-content-docs"
+      ],
+      "ignoreExportsUsedInFile": true
     }
   }
 }

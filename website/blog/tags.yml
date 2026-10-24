@@ -1,0 +1,17 @@
+security:
+  label: Security
+  permalink: /security
+  description: |
+    Open source security is a community effort. Learn what we're doing to keep secue to keep ts-graphviz libraries.
+
+release:
+  label: Release
+  permalink: /release
+  description: |
+    Stay up to date with the latest releases of ts-graphviz libraries.
+
+website:
+  label: Website
+  permalink: /website
+  description: |
+    Updates and news about the ts-graphviz website.

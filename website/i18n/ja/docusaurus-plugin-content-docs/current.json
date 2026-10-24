@@ -1,0 +1,70 @@
+{
+  "version.label": {
+    "message": "次",
+    "description": "現在のバージョンのラベル"
+  },
+  "sidebar.tutorialSidebar.category.ts-graphviz Library": {
+    "message": "ts-graphviz ライブラリ",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「ts-graphviz ライブラリ」のラベル"
+  },
+  "sidebar.tutorialSidebar.category.ts-graphviz Library.link.generated-index.description": {
+    "message": "ts-graphviz ライブラリの概要と使い方。",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「ts-graphviz ライブラリ」の generated-index ページの説明"
+  },
+  "sidebar.tutorialSidebar.category.Getting Started": {
+    "message": "クイックスタート",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「クイックスタート」のラベル"
+  },
+  "sidebar.tutorialSidebar.category.Getting Started.link.generated-index.description": {
+    "message": "ts-graphviz の最も重要なコンセプトを5分で学びましょう。",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「クイックスタート」の generated-index ページの説明"
+  },
+  "sidebar.tutorialSidebar.category.Practical Tutorials": {
+    "message": "実践的なチュートリアル",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「実践的なチュートリアル」のラベル"
+  },
+  "sidebar.tutorialSidebar.category.Practical Tutorials.link.generated-index.description": {
+    "message": "ts-graphviz を実際のシナリオで適用するためのステップバイステップのチュートリアル。",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「実践的なチュートリアル」の generated-index ページの説明"
+  },
+  "sidebar.tutorialSidebar.category.Intermediate Topics": {
+    "message": "中級トピック",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「中級トピック」のラベル"
+  },
+  "sidebar.tutorialSidebar.category.Intermediate Topics.link.generated-index.description": {
+    "message": "ts-graphviz の内部動作を理解するための中級トピック。",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「中級トピック」の generated-index ページの説明"
+  },
+  "sidebar.tutorialSidebar.category.Advanced Usage": {
+    "message": "高度な使い方",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「高度な使い方」のラベル"
+  },
+  "sidebar.tutorialSidebar.category.Advanced Usage.link.generated-index.description": {
+    "message": "ts-graphviz の内部動作を理解するための高度なトピック。",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「高度な使い方」の generated-index ページの説明"
+  },
+  "sidebar.tutorialSidebar.category.Migration Guides": {
+    "message": "マイグレーションガイド",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「マイグレーションガイド」のラベル"
+  },
+  "sidebar.tutorialSidebar.category.Migration Guides.link.generated-index.description": {
+    "message": "このマイグレーション・ガイドは、ts-graphvizのバージョンをマイグレーションする際に役立ちます。 変更点の概要、その理由、コードを更新するためのステップ・バイ・ステップの手順が記載されています。",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「マイグレーションガイド」の generated-index ページの説明"
+  },
+  "sidebar.tutorialSidebar.category.Guides": {
+    "message": "ガイド",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「ガイド」のラベル"
+  },
+  "sidebar.tutorialSidebar.category.Guides.link.generated-index.description": {
+    "message": "ts-graphvizを理解するためのガイドです。",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「ガイド」の generated-index ページの説明"
+  },
+  "sidebar.tutorialSidebar.category.Advanced Topics": {
+    "message": "高度なトピック",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「高度なトピック」のラベル"
+  },
+  "sidebar.tutorialSidebar.category.Advanced Topics.link.generated-index.description": {
+    "message": "ts-graphvizの内部動作を理解するための高度なトピック。",
+    "description": "サイドバー tutorialSidebar 内のカテゴリ「高度なトピック」の generated-index ページの説明"
+  }
+}

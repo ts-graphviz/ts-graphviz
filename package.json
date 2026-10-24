@@ -29,7 +29,7 @@
   "type": "module",
   "scripts": {
     "codegen": "pnpm -r codegen",
-    "build": "pnpm -r build",
+    "build": "pnpm -r --filter './packages/*' build",
     "doc": "typedoc",
     "lint": "biome check --write ./**",
     "test": "vitest",
@@ -37,7 +37,8 @@
     "typecheck:strict": "tsc --project tsconfig.packages.json --noEmit --skipLibCheck false",
     "test:e2e": "pnpm --filter @ts-graphviz/e2e test",
     "knip": "knip",
-    "check:packages": "node scripts/check-packages.ts"
+    "check:packages": "node scripts/check-packages.ts",
+    "build:website": "pnpm build && pnpm doc && pnpm --filter @ts-graphviz/website build && pnpm --filter @ts-graphviz/website copy-api && pnpm --filter @ts-graphviz/website check-links"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
