@@ -150,12 +150,23 @@ describe('[SM-4] toStream (Node adapter)', () => {
   });
 
   describe('when writing to stdin fails', () => {
-    it('rejects with CommandExecutionError instead of an unhandled rejection', async () => {
+    it('kills the process and rejects with CommandExecutionError once it has exited', async () => {
+      const handlers: Record<string, Callback[]> = {};
       const p: any = {
         stdout: new PassThrough(),
         stderr: new PassThrough(),
         stdin: new PassThrough(),
-        on: () => {},
+        on: (event: string, handler: Callback) => {
+          handlers[event] ??= [];
+          handlers[event].push(handler);
+        },
+        // Like a real process: killing it leads to a 'close' event.
+        kill: vi.fn((signal: string) => {
+          setImmediate(() => {
+            for (const handler of handlers.close ?? []) handler(null, signal);
+          });
+          return true;
+        }),
       };
       spawnMock.mockReturnValue(p);
       const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
@@ -166,6 +177,36 @@ describe('[SM-4] toStream (Node adapter)', () => {
       await expect(promise).rejects.toMatchObject({
         command: 'dot',
         code: 'TSG_ERR_COMMAND_FAILED',
+        cause: epipe,
+        exit: { code: null, signal: 'SIGKILL' },
+      });
+      expect(p.kill).toHaveBeenCalledWith('SIGKILL');
+    });
+
+    it('reports the exit status when the command failed on its own', async () => {
+      const handlers: Record<string, Callback[]> = {};
+      const stderr = new PassThrough();
+      const p: any = {
+        stdout: new PassThrough(),
+        stderr,
+        stdin: new PassThrough(),
+        on: (event: string, handler: Callback) => {
+          handlers[event] ??= [];
+          handlers[event].push(handler);
+        },
+        kill: vi.fn(() => true),
+      };
+      spawnMock.mockReturnValue(p);
+      const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
+      pipelineMock.mockRejectedValue(epipe);
+
+      const promise = toStream('dot', { layout: 'dot' });
+      stderr.write('syntax error in line 1');
+      await new Promise((r) => setImmediate(r));
+      for (const handler of handlers.close ?? []) handler(1, null);
+      await expect(promise).rejects.toMatchObject({
+        code: 'TSG_ERR_COMMAND_FAILED',
+        exit: { code: 1, stderr: 'syntax error in line 1' },
         cause: epipe,
       });
     });

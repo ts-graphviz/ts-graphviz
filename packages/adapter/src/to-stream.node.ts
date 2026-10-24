@@ -91,34 +91,73 @@ export async function toStream<T extends Layout>(
     const errors = new TailBuffer();
     stderr.on('data', (chunk: Buffer) => errors.push(chunk));
 
+    // Set when writing the DOT source fails; the process is then killed and
+    // the outcome is decided when it has exited.
+    let inputError: unknown;
+
     p.on('close', (code, exitSignal) => {
-      if (code === 0) {
+      const message = errors.toString();
+      if (code === 0 && inputError === undefined) {
         settle(() =>
           resolve(
             Readable.toWeb(Readable.from(chunks)) as ReadableStream<Uint8Array>,
           ),
         );
-      } else {
-        const message = errors.toString();
+      } else if (code !== 0 && code !== null) {
+        // The command failed on its own (e.g. a syntax error closes stdin
+        // early); its exit status and stderr explain why.
         fail(
           new CommandExecutionError(
             command,
             `CODE: ${code}\nSIGNAL: ${exitSignal}\nMESSAGE: ${message}`,
             { code, signal: exitSignal, stderr: message },
+            inputError === undefined ? undefined : { cause: inputError },
+          ),
+        );
+      } else {
+        // Killed (by us after an input failure, or from outside), or the
+        // input failed although the command exited cleanly.
+        const reason =
+          inputError instanceof Error
+            ? inputError.message
+            : inputError === undefined
+              ? `killed by ${exitSignal}`
+              : String(inputError);
+        fail(
+          new CommandExecutionError(
+            command,
+            `MESSAGE:${reason}`,
+            { code, signal: exitSignal, stderr: message },
+            inputError === undefined ? undefined : { cause: inputError },
           ),
         );
       }
     });
 
     // Feeding stdin can fail on its own (e.g. EPIPE when the command exits
-    // before reading); report it like any other command failure instead of
-    // leaving an unhandled rejection.
+    // before reading). Never leave the process running: kill it and report
+    // once it has exited, instead of an unhandled rejection.
     pipeline(Readable.from([dot]), stdin).catch((e: unknown) => {
-      const message = e instanceof Error ? e.message : String(e);
+      inputError ??= e;
+      p.kill('SIGKILL');
+    });
+
+    // After we killed the process for an input failure, settle on 'exit':
+    // 'close' also waits for the output pipes, which a leftover child of
+    // the command could keep open indefinitely.
+    p.on('exit', (code, exitSignal) => {
+      if (inputError === undefined || code !== null) return;
+      stdout.destroy();
+      stderr.destroy();
+      const reason =
+        inputError instanceof Error ? inputError.message : String(inputError);
       fail(
-        new CommandExecutionError(command, `MESSAGE:${message}`, undefined, {
-          cause: e,
-        }),
+        new CommandExecutionError(
+          command,
+          `MESSAGE:${reason}`,
+          { code, signal: exitSignal, stderr: errors.toString() },
+          { cause: inputError },
+        ),
       );
     });
   });

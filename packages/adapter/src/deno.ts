@@ -17,8 +17,10 @@ declare let Deno: any;
 async function readAll(
   stream: ReadableStream<Uint8Array>,
   onChunk: (chunk: Uint8Array) => boolean,
+  readers: Set<ReadableStreamDefaultReader<Uint8Array>>,
 ): Promise<void> {
   const reader = stream.getReader();
+  readers.add(reader);
   try {
     for (;;) {
       const { done, value } = await reader.read();
@@ -29,6 +31,7 @@ async function readAll(
       }
     }
   } finally {
+    readers.delete(reader);
     reader.releaseLock();
   }
 }
@@ -73,17 +76,28 @@ export async function toStream<T extends Layout>(
     });
   }
 
-  let failure: unknown;
-  const kill = (reason: unknown) => {
-    if (failure === undefined) failure = reason;
+  // Every failure kills the process and is remembered; the outcome is decided
+  // only after the process has exited and all of its I/O has settled, with
+  // this precedence: abort, output limit, the command's own exit status,
+  // then an input/output error.
+  let limitError: RangeError | undefined;
+  let ioError: unknown;
+  const readers = new Set<ReadableStreamDefaultReader<Uint8Array>>();
+  const kill = () => {
     try {
       child.kill('SIGKILL');
     } catch {
       // already exited
     }
+    // Stop reading: a leftover child of the command could keep the output
+    // pipes open after the command itself is gone.
+    for (const reader of readers) reader.cancel().catch(() => {});
   };
-  const onAbort = () => kill(signal?.reason);
-  signal?.addEventListener('abort', onAbort, { once: true });
+  const onIoError = (e: unknown) => {
+    ioError ??= e;
+    kill();
+  };
+  signal?.addEventListener('abort', kill, { once: true });
 
   try {
     const chunks: Uint8Array[] = [];
@@ -95,51 +109,60 @@ export async function toStream<T extends Layout>(
         await writer.write(new TextEncoder().encode(dot));
         await writer.close();
       } catch (e) {
-        // The command may exit before reading all of its input; the exit
-        // status below reports what went wrong in that case.
-        if (failure === undefined) failure = e;
+        onIoError(e);
       }
     })();
-    const reading = readAll(child.stdout, (chunk) => {
-      size += chunk.byteLength;
-      if (limit > 0 && size > limit) {
-        kill(outputLimitExceeded(command, limit));
-        return false;
-      }
-      chunks.push(chunk);
-      return true;
-    });
-    const readingErrors = readAll(child.stderr, (chunk) => {
-      errors.push(chunk);
-      return true;
-    });
-    const [status] = await Promise.all([
-      child.status,
-      writing,
-      reading,
-      readingErrors,
-    ]);
+    const reading = readAll(
+      child.stdout,
+      (chunk) => {
+        size += chunk.byteLength;
+        if (limit > 0 && size > limit) {
+          limitError ??= outputLimitExceeded(command, limit);
+          kill();
+          return false;
+        }
+        chunks.push(chunk);
+        return true;
+      },
+      readers,
+    ).catch(onIoError);
+    const readingErrors = readAll(
+      child.stderr,
+      (chunk) => {
+        errors.push(chunk);
+        return true;
+      },
+      readers,
+    ).catch(onIoError);
+    // None of these reject; the process always exits (SIGKILL on failure).
+    await Promise.all([writing, reading, readingErrors]);
+    const status = await child.status;
 
     if (signal?.aborted) throw signal.reason;
-    if (failure instanceof RangeError) throw failure;
+    if (limitError) throw limitError;
+    const message = errors.toString();
+    const exit = {
+      code: status.code,
+      signal: status.signal ?? null,
+      stderr: message,
+    };
+    const cause = ioError === undefined ? undefined : { cause: ioError };
     if (!status.success) {
-      const message = errors.toString();
       throw new CommandExecutionError(
         command,
         `CODE: ${status.code}\nSIGNAL: ${status.signal}\nMESSAGE: ${message}`,
-        { code: status.code, signal: status.signal ?? null, stderr: message },
+        exit,
+        cause,
       );
     }
-    if (failure !== undefined) {
-      const message =
-        failure instanceof Error ? failure.message : String(failure);
+    if (ioError !== undefined) {
+      const reason =
+        ioError instanceof Error ? ioError.message : String(ioError);
       throw new CommandExecutionError(
         command,
-        `MESSAGE:${message}`,
-        undefined,
-        {
-          cause: failure,
-        },
+        `MESSAGE:${reason}`,
+        exit,
+        cause,
       );
     }
     return new ReadableStream<Uint8Array>({
@@ -148,8 +171,13 @@ export async function toStream<T extends Layout>(
         controller.close();
       },
     });
+  } catch (e) {
+    // An unexpected error above: make sure the process does not outlive us.
+    kill();
+    await child.status.catch(() => {});
+    throw e;
   } finally {
-    signal?.removeEventListener('abort', onAbort);
+    signal?.removeEventListener('abort', kill);
   }
 }
 

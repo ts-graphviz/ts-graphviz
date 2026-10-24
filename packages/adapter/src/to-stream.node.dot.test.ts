@@ -69,6 +69,33 @@ describe.skipIf(!hasDot)(
       });
     });
 
+    it('kills a command that stops reading its input and keeps running', async () => {
+      // A stand-in for dot that closes stdin, records its pid and hangs; the
+      // sleep is a child of the script and keeps the output pipes open.
+      const script = join(dir, 'hang.sh');
+      const pidFile = join(dir, 'hang.pid');
+      writeFileSync(
+        script,
+        `#!/bin/sh\necho $$ > '${pidFile}'\nexec 0<&-\nsleep 60\n`,
+        { mode: 0o755 },
+      );
+      const started = Date.now();
+      // More than a pipe buffer, so writing the input fails (EPIPE).
+      await expect(
+        toStream(`digraph { ${'a -> b; '.repeat(50_000)} }`, {
+          dotCommand: script,
+        }),
+      ).rejects.toMatchObject({
+        name: 'CommandExecutionError',
+        code: 'TSG_ERR_COMMAND_FAILED',
+      });
+      expect(Date.now() - started).toBeLessThan(10_000);
+      const pid = Number(readFileSync(pidFile, 'utf8'));
+      expect(() => process.kill(pid, 0)).toThrow(
+        expect.objectContaining({ code: 'ESRCH' }),
+      );
+    });
+
     it('toFile replaces an existing longer file', async () => {
       const path = join(dir, 'out.dot');
       writeFileSync(path, 'X'.repeat(5000));
