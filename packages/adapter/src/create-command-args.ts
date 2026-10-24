@@ -79,9 +79,10 @@ export function* createCommandArgs<T extends Layout>(
           temperature,
         } = options;
         // Graphviz defaults: grid on (`-Lg` turns it off), old attractive
-        // force off (`-LO` turns it on). Only emit the flag when it differs.
-        const flags = `${grid === false ? 'g' : ''}${oldAttractive === true ? 'O' : ''}`;
-        if (flags) yield `-L${flags}`;
+        // force off (`-LO` turns it on). Only emit a flag when the option
+        // differs, one `-L` argument per flag (Graphviz reads one per `-L`).
+        if (grid === false) yield '-Lg';
+        if (oldAttractive === true) yield '-LO';
         if (typeof iterations === 'number') yield `-Ln${iterations}`;
         if (typeof unscaledFactor === 'number') yield `-LU${unscaledFactor}`;
         if (typeof overlapExpansionFactor === 'number')

@@ -40,9 +40,11 @@ describe('fdp -L flags (#1591)', () => {
     expect([
       ...createCommandArgs({ layout: 'fdp', oldAttractive: true }),
     ]).toContain('-LO');
-    expect([
+    const both = [
       ...createCommandArgs({ layout: 'fdp', grid: false, oldAttractive: true }),
-    ]).toContain('-LgO');
+    ];
+    expect(both).toContain('-Lg');
+    expect(both).toContain('-LO');
     expect([
       ...createCommandArgs({ layout: 'fdp', grid: true, oldAttractive: false }),
     ]).not.toContainEqual(expect.stringMatching(/^-L[gO]*$/));
