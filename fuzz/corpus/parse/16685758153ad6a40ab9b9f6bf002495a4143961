@@ -1,0 +1,16 @@
+graph G {
+  layout=f
+  e
+  sеееееееееееееееееееееееееееееееееееееееееееееubgraph clustA 
+{r    a -- b;
+    subgraph clusterC {
+      C -- D;
+    
+}
+ }   subgraph cluKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKJKKKKKKKKKKKKKKKKKKKKKKKKKKKKKsterB {
+    d -- f
+  }
+  d -- D
+  e -- clus:neterB
+  clusterC -- clusterB
+}

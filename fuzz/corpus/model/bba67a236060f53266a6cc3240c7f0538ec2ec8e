@@ -1,0 +1,22 @@
+digraph G {φω	subgraph cluster_0 {
+		style=filolbjectcodp
+  e
+  subgraph G {
+  layout=fdp
+  e
+  subgraph clusterA {
+   grapaph G {
+  layout=fdp
+  e
+  subgraph clusterA {
+   graph G {
+  layout=fdp
+  e
+  subgraph clusterA {
+    a -- b;
+    subgraph clusterC {,      C - a -- b;
+    subgraph clusterg;
+		nodC {,      C - ;- crlue];st
+er}B
+}
+

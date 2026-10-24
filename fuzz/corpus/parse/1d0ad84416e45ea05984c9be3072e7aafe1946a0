@@ -1,0 +1,6 @@
+graph ER {
+	layout=neato
+	node [shape=box]; course;finsti{ute; studme3;}
+		code; grade; number;
+	nodehhhhhhh [shape=diamond,stylet=nontsize=09;
+}

@@ -1,0 +1,102 @@
+graph G {
+  layout=fdp
+  e
+  subgraph clusterA {
+    a -- 1;
+    subgraph clusterC {
+      C -- D;
+    }
+  }
+  subgraph clusterB {
+    digraph G {
+	graph ae1dcd7",shape="hexagon" ];
+"148E" [ label="5256925081c812",shape="box",style="filled",color="grey" ];
+"357" [ label="1f5df34ad75a55a76ef4afa0a47",shape="hexagon" ];
+"149E" [ label="26a185dde9a93dd",shape="box",style="filled",color="grey" ];
+"358" [ label="45ba4d4c61c9601a26d59e47e0260",shape="hexagon" ];
+"167E" [ label="99bd3e7feeb710",shape="box",style="filled",color="grey" ];
+"359" [ label="f95344b0ae31693f3a2746597d4",shape="hexagon" ];
+"169E" [ label="4e8259973f1f",shape="box",style="filled",color="grey" ];
+"360" [ label="b79798b186d6b82288e8be4017d",shape="hexagon" ];
+"171E" [ label="63b079bd5847",shape="box",style="filled",color="grey" ];
+"361" [ label="47e0067f4d853afd2012f04daa8",shape="hexagon" ];
+"172E" [ label="92fb5d4a0805",shape="box",style="filled",color="grey" ];
+"362" [ label="f2b6201774de40a29b504b1f716",shape="hexagon" ];
+"173E" [ label="d7203571944b",shape="box",style="filled",color="grey" ];
+"363" [ label="800422ab81d804eef3e7b91dfba91",shape="hexagon" ];
+"174E" [ label="952316a1a5a785",shape="box",style="filled",color="grey" ];
+"364" [ label="35b941379e1af658078cffb83a2",shape="hexagon" ];
+"101E" [ label="331675c046693f",shape="box",style="filled",color="grey" ];
+"365" [ label="d4f7b7fba7afcf7a72397353ec",shape="hexagon" ];
+"102E" [ label="32c4684b55361",shape="box",style="filled",color="grey" ];
+"367" [ label="e4b45b7a2f884d3734bfd5985656",shape="hexagon" ];
+"104E" [ label="1333074979f2d0b",shape="box",style="filled",color="grey" ];
+"368" [ label="02c2ba83680ab57f236a33d702",shape="hexagon" ];
+"105E" [ label="084d4bfa5853e",shape="box",style="filled",color="grey" ];
+"369" [ label="9ccd974150a18260b207b6584caa",shape="hexagon" ];
+"106E" [ label="28f7bfc40c88e6a",shape="box",style="filled",color="grey" ]P {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		msTTP_1_2;
+		msTTP_4_1;
+		msTTP_4_2;
+		msTTP_5_1;
+	}
+	subgraph msCTP {
+		rank = same;
+		node[shape=box,color=green];
+		msCTP_1Comm		mubgraph xp {
+		rank = same;
+		node[shape=diamond,color=blue];
+		xp_1_2;
+		xp_4_1;
+		xp_5_1;
+	}
+	subgraph au3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		au3CTP_1_2;
+		au3CTP_4_1;
+		au3CTP_4_2;
+		au3CTP_5_1;
+	}
+	subgraph aug {
+		rank = same;
+		node[shape=invtrapezium,color=pink];
+		rank = same;
+		node[shape=diamond,color=blue];
+		pu_1_2;
+		pu_4_1;
+		pu_4_2;
+		pu_5_1;
+	}
+	subgraph protectionCTP {
+		node[shape=box,color=green].;
+		prCTP_1_2;
+		prCTP_4_1;
+		prCTP_4_2;
+		prCTP_5_1;
+	}
+	subgraph msTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		msTTP_1_2;
+		msTTP_4_1;
+		msTTP_4_2;e[style=bold,dir=none,weight=100];
+		ds3CTP_1_1->ds3CTP_1_2;
+		vc3TTP_1_2->au3CTP_1_2;
+		prTTP_1_2->prCTP_1_2;
+		msTTP_1_2->msCTP_1_2;
+		rsTTP_1_2->rsCTP_1_2;
+		rsCTP_2_1->rsCP_4_1->au3CTP_4_2;
+		prTTP_4_2->prCTP_4_2
+;
+		msTTP_4_2->msCTP_4_2;
+		rsTTP_4_2->rsCTP_4_2;
+		prTTP_5_1->prCTP_5_1;
+		msTTP_5_1->msCTP_5_1;
+		rsTTP_5_1->rsCTP_5_1;
+		ds3CTP_5_1->ds3CTP_5_2;
+		vc3TTP_5_1->au3CTP_5_1;
+	}
+}

@@ -1,0 +1,4 @@
+strict graph0 ip_map {
+	MH -+ { ERC ALC WH1 3 -- WIW IH1 IH2 IH4 } -- {IHP I-- IH1;
+	IH2 -- IH4 [le {IHP IW IH1k
+}

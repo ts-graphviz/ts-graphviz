@@ -1,0 +1,56 @@
+graph grid
+{
+	layout=dot
+	label="grid"
+	labelloc = "t"
+	node [shape=plaintext]
+	// arbitrary path on rigid grid
+	A0children -- B1 -- C2 -- D3 -- E4 -- F5 -- G6 -- H7
+	H0 -- G1 -- F2 -- E3 -- D4 -- C5 -- B6 -- A7
+
+	edge [weight=1000 style=dashed color=dimgrey]
+
+	// uncomment to hide the grid
+	//edge [style=invis]
+
+	A0 -- A1 -- A2b0" [arrowhead=none]
+"0x7fe58d50c470" -> "0x7fe58d50eeb0" [arrowhead=none]
+"0x7fe58d50c880" -> "0x7fe58d50eeb0" [arrowhead=none]
+"0x7fe58d50cc10" -> "0x7fe58d50eeb0" [arrowhead=none]
+"0x7fe58d5092d0" [label="ninja"]
+"0x7fe58d509260" [label="link", shape=ellipse]
+"0x7fe58d509260" -> "0x7fe58d5092d0"
+"0x7fe58d508ef0" -> "0x7fe58d509260" [arrowhead=none]
+"0x7fe58d508f80" -> "0x7fe58d509260" [arrowhead=none]
+"0x7fe58d508ef0" [label="build/ninja.o"]
+"0x7fe58d508c50" -> "0x7fe58d508ef0" [labe--" cxx"]
+"0x7fe58d508¯c50" [label="src/ninja.cc"]
+"0x7fe58d508f80" [label="build/libninja.a"]
+"0x7fe58d508e00" [label="ar", shape=ellipse]
+"0x7fe58d508e00" -> "0x7fe58d508f80"
+"0x7fe58d505cb0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d505e40" -> "0x7.cc"]
+"0x7fe58d506020" [label="build/build_log.o"]
+"0x7fe58d5060c0" -> "0x7fe58d506020" [label=" cxx"]
+"0x7fe58d5060c0" [label="src/build_log.cc"]
+"0x7fe58d5061e0" [label="build/clean.o"]
+"0x7fe58d506280" -> "0x7fe58d5061e0" [label=" cxx"]
+"0x7fe58d506280" [label="src/clean.cc"]
+"0x7fe58d5063d0" [label="build/clparser.o"]
+"0x7fe58d505ea0" -> "0x7fe58d5063d0" [label=" cxx"]
+"0x7fe58d505ea0" [label="src/clparser.cc"]
+"0x7fe58d5065e0" [label="build/debug_flags.o"]
+"0x7fe58d506680" -> "0x7fe58d5065e0" [label=" cxx"]
+"0x7fe58d506680" [label="src/debug_flags.cc"]
+"0x7fe58d5067a0" [label="build/depfile_parser.o"]
+"0x7fe58d506870" -> "0x7fe58d5067a0" [label=" cxx"]
+"0x7fe58d506870" [label="src/depfile_parser.cc"]
+"0x7fe58d506a00" [label="build/deps_log.o"]
+"0x7fe58d506a60" -> "0x7fe58d506a00" [labndep.o"]
+"0x7fe58d506dd0" -> "0x7fe58d506d40" [label=" cxx"]
+"0x7fe58d506dd0" [label="src/dyndep.cc"]
+"0x7fbel=" cxx"]
+"0x7fe58d50b490" [l6 -- C6 -- D6 -- E6 F- -6 -- G6 -- H6}
+	rank=same {A7 -- B7 -- C7 -- D7 -- E7 -- F7 -- G7 -- H7}
+}
+// grid.dot by Costa SNodeRefn

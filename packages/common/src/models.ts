@@ -825,7 +825,7 @@ export function isNodeRefGroupLike(
  * ```
  */
 export function isCompass(c: string): c is Compass {
-  return ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c'].includes(c);
+  return ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c', '_'].includes(c);
 }
 
 /**
@@ -837,6 +837,8 @@ export function isCompass(c: string): c is Compass {
  * toNodeRef('node1') // { id: 'node1' }
  * toNodeRef('node1:port1') // { id: 'node1', port: 'port1' }
  * toNodeRef('node1:port1:n') // { id: 'node1', port: 'port1', compass: 'n' }
+ * // As in DOT, a lone compass point after the id is the compass point:
+ * toNodeRef('node1:n') // { id: 'node1', compass: 'n' }
  * ```
  */
 export function toNodeRef(target: NodeRefLike): NodeRef {
@@ -844,8 +846,12 @@ export function toNodeRef(target: NodeRefLike): NodeRef {
     return target;
   }
   const [id, port, compass] = target.split(':');
-  if (isCompass(compass)) {
+  if (compass !== undefined && isCompass(compass)) {
     return { id, port, compass };
+  }
+  // `node:n` means compass point n in DOT (and to Graphviz), not a port.
+  if (compass === undefined && port !== undefined && isCompass(port)) {
+    return { id, compass: port };
   }
   return { id, port };
 }

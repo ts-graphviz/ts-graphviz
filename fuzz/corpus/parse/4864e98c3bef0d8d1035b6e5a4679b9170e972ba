@@ -1,0 +1,10 @@
+graph G {
+	 kernel;
+	kernel -- zombie;
+	kernel -- slee run;
+	eep;
+	kernel -- rup;
+	kernel -- runmem;
+	sleep --mem;
+	sleep -- runmem;
+}

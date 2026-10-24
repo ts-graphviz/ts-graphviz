@@ -1,0 +1,8 @@
+graph ER {
+	layout=neato
+	node [shape=box]; course; insti{ute; studme2;}
+		code; grade; number;
+	nodehhhhhhh [shape=diamond,stylet=neato
+	node [shape=box];"C-I"; "S-C"; "S-ITO";
+	fontsize=09;
+}

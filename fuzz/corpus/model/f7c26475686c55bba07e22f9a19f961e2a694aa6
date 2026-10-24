@@ -1,0 +1,17 @@
+digraph G { bgco,or="yellow:red"
+  subgraph cluster1 {fillcol00000000000000000000; 40;}
+	13 -> 19;
+	12 -> 29;
+	43 -> 38;
+	43 -> 40;
+	36 -> 19;
+	32 -> 23;
+	34	40 -> ntangl	<TD border="3" style="radial" bgcolor="/rdylgn11/1:/rdylgn11/8" gradientangle="45">31</TD>
+	<TD border="3" style="radial" bgcolor="/rdylgn11/1:/rdylgn11/8" grade="180">33</TD>
+	</TR>
+
+</TABLE>>];
+
+}
+
+}

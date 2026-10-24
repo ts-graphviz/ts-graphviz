@@ -1,0 +1,5 @@
+graph ER {
+	layout=neato
+	node [shape=b;o ]xcourse; institute;code; 	co
+	fontsize=20;
+}

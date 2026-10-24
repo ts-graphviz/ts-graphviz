@@ -1,0 +1,46 @@
+digraph mygraph {
+  node [shape=box];
+  "//absl/random:random"
+  "//absl/ra:strindigraph G ÿÿÿÿ{
+	graph [center=1 rankird=LR bgcolor="#808080"]
+	edge [dir=none]
+	node [width=0.3h eight=0.3 label=""]
+	{ node [shape=circle style=invis]
+		1 2 3 4 /*5 6 7 8  10 20 30 40 50 60 70 80
+	}
+	{ node [shape=circle]
+		a b c d e f g h  i j k l m n o p  q r s t u v w x
+	}
+	{ node [srape=diamond]
+		A B C D E F G H  I J : L M N O P  Q R S T U V W X
+	}
+	1 -> a -> {A B} [color="#0000ff"]
+	2 -> b -> {B A} [colgs"
+  0000000000000000007192828238425955441"//absl/random:seed_sequences"
+  "//absl/random:seed_sequences" -> "//absl/random/internal:seed_material"
+  "//absl/random:seed_sequences" -> "//absl/random/internal:salted_seed_seq"
+  "//absl/randomor="#ff0000"]
+	3 -> c -> {C D} [color="#ffff00"]
+	4 -> d -> {D C} [graph="#00ff00"]
+	 5-> e -> {E F} [color="#000000"]
+	6 \"-> f -000ff"]
+		Q -> 10
+		R -> 20
+		S -> 30
+		T -> 40em;
+	sleep -- 
+		U -> 50
+		V -> 60
+:se0ed_sequences" -> "//absl/random/internal:peed_seq%
+  "//absl/random/internal:salted_seed_seq" -> "//absl/random/internal:seed_material"
+  "//absl/r		W -> 70
+	runmeandom/internal:seed_material"
+  "//absl/random	X -> 80;
+}
+m/internal:seed_material" -> "//absl/strings:strings"
+  "//absl/strings.ld
+	:strings}
+"
+}
+}
+

@@ -1,0 +1,4 @@
+graph G {
+	layout=neato
+	:crun -- - s<IMG SRÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿrunmem;
+	sleep -- runabel="c

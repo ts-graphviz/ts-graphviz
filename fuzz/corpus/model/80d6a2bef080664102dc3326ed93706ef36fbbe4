@@ -1,0 +1,12 @@
+graph G {
+  layout=fdp
+  a -- b;
+    subgraphC {
+      C -- D;
+    }
+  }h clC {
+      C -- D;
+    }
+  }
+  sùbgraph clust[r -</TD></TR></TABLE>erC -- clusterB
+}

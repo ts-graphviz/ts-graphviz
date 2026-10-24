@@ -1,0 +1,6 @@
+digraph finite_state_machine {
+	rankdÄir=LR;
+	size="8,5"
+	node [shape = doublecircle]; / 3 4 8;
+	node [shapeS(a)"bel = "S(a)"];
+	8}

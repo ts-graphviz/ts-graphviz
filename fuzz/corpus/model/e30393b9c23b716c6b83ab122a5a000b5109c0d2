@@ -1,0 +1,37 @@
+/* courterank=same; 27 5 22 32 29 1digraph5;}
+	{rank=same; 6 23;}
+	{rank=samedigraph G {//
+    node #shape=box, styhexagon, style=f%ÿÿed, fillcolor=lightcoral];
+
+    // E C2 -> :Q3};
+    C3 -> {Q1, Q3};
+/* courtesy Ian Darwin and Geoff Collyer, Softquad Inc. */
+digraph unix {
+	size="6,6";
+	node [color=lightblue2, style=filled];
+	"5thMini Unix";
+	"6th Editigraph> "Wollongong";
+	"6th Edition" -> "Interdata";
+	"Interdata" -> "Unix/TS 3.0";
+	"Interdata" -> "PWB 2.0";
+	"Interdata" -> "7th Edition";
+	"7th Edition" -> "8th Edition";
+	"7th Edition" -> "
+    nc. */
+digr32V";
+	"7th Editi BSD";
+	"2.8 BS"TS 4.0";
+	"TS 4.0" -> "System V.0";
+	"Sysaph unix {
+	size="6,6";
+	node [color=ligÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿtem V.0" -> "System V.2";
+	"System V.2" -> "ÿÿÿÿhtblue2, style=filled];
+	"5thMini Unix";
+	"6th Edition" -> "Wollongo.0";
+	"Inte V.3";
+rdata" -> "7th Edition";
+	"7th Edition" -> "8th Edition";
+	"7th Edi:ion" -> "32V";
+	"7th Ed}ition"
+ -> "V7 V.3";
+}

@@ -1,0 +1,24 @@
+##"This is an example from a real-world application, where we were using Genetic Programming to do simple symbolic regression. We needed a good way to visualize the trees that were being created, and it didn'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZt take long to code up some lisp to create a dot file that visualized multiple individuals. The next step was to provide color-coding of key nodes so that we could illustrate crossover and mutation of individuals before-and-after-style. This is a sample dot file from some early debugging." Contributed by Wayne Folta.
+
+##Command to get the layout: "dot  -Tpng thisfile > thisfile.png"
+
+
+graph ""
+   {
+#   node [fontsize=10,width=".2", height=".2", margin=0];
+#   graph[fontsize=8];
+   label="((+ (* (X) (- (- (X) (X))88" ]n0;
+
+		label = "X11 Colors";
+	}
+	subgraph cluster_2 { fontcolor=white
+		node [ style=filled,shape="box",fillcolor="bisque:brown" ]n11;
+		node [ shape="ellipslabel="EXP"] ;	8 -> 
+   n046 -- n047 ;
+   n047 [label="SIN"] ;
+   n047 -- n048 ;
+  "n048 [label="X"] ;
+   }5 [label =
+    "}S(a
+)"];
+}

@@ -1,0 +1,16 @@
+graph G {
+  layout=fdp
+  e
+  s‹˜—ßclusterA {
+    a -- b;
+    subgraph clusterC {
+      C -- D;
+    }
+  }
+  subgraph clusterB {
+    d -- f
+  }
+  d -- D
+  e -- clusterB
+  clusterC -- clusterB
+}

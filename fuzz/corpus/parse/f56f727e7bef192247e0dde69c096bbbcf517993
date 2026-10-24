@@ -1,0 +1,248 @@
+digraph ninja {
+rankdir="LR"
+node [fontsize=10, shape=box, height=0.25]
+edge [fontsize=10]
+"0x7fe58d50f070" [label="all"]
+"0x7fe58d50eeb0" [label="phony", shape=ellipse]
+"0x7fe58d50eeb0" -> "0x7fe58d50f070"
+"0x7fe58d5092d0" -> "0x7fe58d50eeb0" [arrowhead=none]
+"0x7fe58d50b640" -> "0x7fe58d50eeb0" [arrowhead=none]
+"0x7fe58d50bc10" -> "0x7fe58d50eeb0" [arrowhead=none]
+"0x7fe58d508820" -> "0x7fe58d50eeb0" [arrowhead=none]
+"0x7fe58d50c0a0" -> "0x7fe58d50eeb0" [arrowhead=none]
+"0x7fe58d50c470" -> "0x7fe58d50eeb0" [arrowhead=none]
+"0x7fe58d50c880" -> "0x7fe58d50eeb0" [arrowhead=none]
+"0x7fe58d50cc10" -> "0x7fe58d50eeb0" [arrowhead=none]
+"0x7fe58d5092d0" [label="ninja"]
+"0x7fe58d509260" [label="link", shape=ellipse]
+"0x7fe58d509260" -> "0x7fe58d5092d0"
+"0x7fe58d508ef0" -> "0x7fe58d509260" [arrowhead=none]
+"0x7fe58d508f80" -> "0x7fe58d509260" [arrowhead=none]
+"0x7fe58d508ef0" [label="build/ninja.o"]
+"0x7fe58d508c50" -> "0x7fe58d508ef0" [label=" cxx"]
+"0x7fe58d508c50" [label="src/ninja.cc"]
+"0x7fe58d508f80" [label="build/libninja.a"]
+"0x7fe58d508e00" [label="ar", shape=ellipse]
+"0x7fe58d508e00" -> "0x7fe58d508f80"
+"0x7fe58d505cb0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d505e40" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d506020" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d5061e0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d5063d0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d5065e0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d5067a0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d506a00" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d506b60" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d506d40" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d506ee0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d507160" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d507320" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d5074e0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d5076a0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d507950" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d507ad0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d507ce0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d507ea0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d508000" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d5081c0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d508400" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d5085a0" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d507080" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d508b10" -> "0x7fe58d508e00" [arrowhead=none]
+"0x7fe58d505cb0" [label="build/browse.o"]
+"0x7fe58d505910" [label="cxx", shape=ellipse]
+"0x7fe58d505910" -> "0x7fe58d505cb0"
+"0x7fe58d505d10" -> "0x7fe58d505910" [arrowhead=none]
+"0x7fe58d505a40" -> "0x7fe58d505910" [arrowhead=none style=dotted]
+"0x7fe58d505d10" [label="src/browse.cc"]
+"0x7fe58d505a40" [label="build/browse_py.h"]
+"0x7fe58d5059d0" [label="inline", shape=ellipse]
+"0x7fe58d5059d0" -> "0x7fe58d505a40"
+"0x7fe58d505aa0" -> "0x7fe58d5059d0" [arrowhead=none]
+"0x7fe58d505b40" -> "0x7fe58d5059d0" [arrowhead=none]
+"0x7fe58d505aa0" [label="src/browse.py"]
+"0x7fe58d505b40" [label="src/inline.sh"]
+"0x7fe58d505e40" [label="build/build.o"]
+"0x7fe58d505f00" -> "0x7fe58d505e40" [label=" cxx"]
+"0x7fe58d505f00" [label="src/build.cc"]
+"0x7fe58d506020" [label="build/build_log.o"]
+"0x7fe58d5060c0" -> "0x7fe58d506020" [label=" cxx"]
+"0x7fe58d5060c0" [label="src/build_log.cc"]
+"0x7fe58d5061e0" [label="build/clean.o"]
+"0x7fe58d506280" -> "0x7fe58d5061e0" [label=" cxx"]
+"0x7fe58d506280" [label="src/clean.cc"]
+"0x7fe58d5063d0" [label="build/clparser.o"]
+"0x7fe58d505ea0" -> "0x7fe58d5063d0" [label=" cxx"]
+"0x7fe58d505ea0" [label="src/clparser.cc"]
+"0x7fe58d5065e0" [label="build/debug_flags.o"]
+"0x7fe58d506680" -> "0x7fe58d5065e0" [label=" cxx"]
+"0x7fe58d506680" [label="src/debug_flags.cc"]
+"0x7fe58d5067a0" [label="build/depfile_parser.o"]
+"0x7fe58d506870" -> "0x7fe58d5067a0" [label=" cxx"]
+"0x7fe58d506870" [label="src/depfile_parser.cc"]
+"0x7fe58d506a00" [label="build/deps_log.o"]
+"0x7fe58d506a60" -> "0x7fe58d506a00" [label=" cxx"]
+"0x7fe58d506a60" [label="src/deps_log.cc"]
+"0x7fe58d506b60" [label="build/disk_interface.o"]
+"0x7fe58d506c30" -> "0x7fe58d506b60" [label=" cxx"]
+"0x7fe58d506c30" [label="src/disk_interface.cc"]
+"0x7fe58d506d40" [label="build/dyndep.o"]
+"0x7fe58d506dd0" -> "0x7fe58d506d40" [label=" cxx"]
+"0x7fe58d506dd0" [label="src/dyndep.cc"]
+"0x7fe58d506ee0" [label="build/dyndep_parser.o"]
+"0x7fe58d5070f0" -> "0x7fe58d506ee0" [label=" cxx"]
+"0x7fe58d5070f0" [label="src/dyndep_parser.cc"]
+"0x7fe58d507160" [label="build/edit_distance.o"]
+"0x7fe58d507200" -> "0x7fe58d507160" [label=" cxx"]
+"0x7fe58d507200" [label="src/edit_distance.cc"]
+"0x7fe58d507320" [label="build/eval_env.o"]
+"0x7fe58d5073c0" -> "0x7fe58d507320" [label=" cxx"]
+"0x7fe58d5073c0" [label="src/eval_env.cc"]
+"0x7fe58d5074e0" [label="build/graph.o"]
+"0x7fe58d507580" -> "0x7fe58d5074e0" [label=" cxx"]
+"0x7fe58d507580" [label="src/graph.cc"]
+"0x7fe58d5076a0" [label="build/graphviz.o"]
+"0x7fe58d507740" -> "0x7fe58d5076a0" [label=" cxx"]
+"0x7fe58d507740" [label="src/graphviz.cc"]
+"0x7fe58d507950" [label="build/lexer.o"]
+"0x7fe58d5079c0" -> "0x7fe58d507950" [label=" cxx"]
+"0x7fe58d5079c0" [label="src/lexer.cc"]
+"0x7fe58d507ad0" [label="build/line_printer.o"]
+"0x7fe58d507b40" -> "0x7fe58d507ad0" [label=" cxx"]
+"0x7fe58d507b40" [label="src/line_printer.cc"]
+"0x7fe58d507ce0" [label="build/manifest_parser.o"]
+"0x7fe58d507d60" -> "0x7fe58d507ce0" [label=" cxx"]
+"0x7fe58d507d60" [label="src/manifest_parser.cc"]
+"0x7fe58d507ea0" [label="build/metrics.o"]
+"0x7fe58d507f00" -> "0x7fe58d507ea0" [label=" cxx"]
+"0x7fe58d507f00" [label="src/metrics.cc"]
+"0x7fe58d508000" [label="build/parser.o"]
+"0x7fe58d5080a0" -> "0x7fe58d508000" [label=" cxx"]
+"0x7fe58d5080a0" [label="src/parser.cc"]
+"0x7fe58d5081c0" [label="build/state.o"]
+"0x7fe58d508260" -> "0x7fe58d5081c0" [label=" cxx"]
+"0x7fe58d508260" [label="src/state.cc"]
+"0x7fe58d508400" [label="build/string_piece_util.o"]
+"0x7fe58d508480" -> "0x7fe58d508400" [label=" cxx"]
+"0x7fe58d508480" [label="src/string_piece_util.cc"]
+"0x7fe58d5085a0" [label="build/util.o"]
+"0x7fe58d506f70" -> "0x7fe58d5085a0" [label=" cxx"]
+"0x7fe58d506f70" [label="src/util.cc"]
+"0x7fe58d507080" [label="build/version.o"]
+"0x7fe58d508970" -> "0x7fe58d507080" [label=" cxx"]
+"0x7fe58d508970" [label="src/version.cc"]
+"0x7fe58d508b10" [label="build/subprocess-posix.o"]
+"0x7fe58d508b90" -> "0x7fe58d508b10" [label=" cxx"]
+"0x7fe58d508b90" [label="src/subprocess-posix.cc"]
+"0x7fe58d50b640" [label="ninja_test"]
+"0x7fe58d50b5c0" [label="link", shape=ellipse]
+"0x7fe58d50b5c0" -> "0x7fe58d50b640"
+"0x7fe58d5093e0" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d509570" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d509710" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d507850" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d509c10" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d509df0" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d509fe0" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d50a1b0" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d50a3b0" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d50a5b0" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d50a710" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d50a970" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d50ab10" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d50ac90" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d50aef0" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d50b0d0" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d50b290" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d50b3f0" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d508f80" -> "0x7fe58d50b5c0" [arrowhead=none]
+"0x7fe58d5093e0" [label="build/build_log_test.o"]
+"0x7fe58d509470" -> "0x7fe58d5093e0" [label=" cxx"]
+"0x7fe58d509470" [label="src/build_log_test.cc"]
+"0x7fe58d509570" [label="build/build_test.o"]
+"0x7fe58d509600" -> "0x7fe58d509570" [label=" cxx"]
+"0x7fe58d509600" [label="src/build_test.cc"]
+"0x7fe58d509710" [label="build/clean_test.o"]
+"0x7fe5[sides=9, distortion="0.936354", orientation=28, skew="-0.126818", color=salmon2];
+	"6th Edition" [sides=5, distortion="0.238792", orientation=11, skew="0.995935", color=deepskyblue];
+	"PWB 1.0" [sides=8, distortion="0.019636", orientation=79, skew="-0.440424", color=goldenrod2];
+	LSX [sides=9, distortion="-0.698271", orientation=22, skew="-0.195492", color=burlywood2];
+	"1 BSD" [sides=7, distortion="0.265084", orientation=26, skew="0.403659", color=gold1];
+	"Mini Unix" [distortion="0.039386", orientation=2, skew="-0.461120", color=greenyellow];
+	Wollongong [sides=5, distortion="0.228564", orientation=63, skew="-0.062846", color=darkseagreen];
+	Interdata [distortion="0.624013", orientation=56, skew="0.101396", color=dodgerblue1];
+	"Unix/TS 3.0" [sides=8, distortion="0.731383", orientation=43, skew="-0.824612", color=thistle2];
+	"PWB 2.0" [sides=6, distortion="0.592100", orientation=34, skew="-0.719269", color=darkolivegreen3];
+	"7th Edition" [sides=10, distortion="0.298417", orientation=65, skew="0.310367", color=chocolate];
+	"8th Edition" [distortion="-0.997093", orientation=50, skew="-0.061117", color=turquoise3];
+	"32V" [sides=7, distortion="0.878516", orientation=19, skew="0.592905", color=steelblue3];
+	V7M [sides=10, distortion="-0.960249", orientation=32, skew="0.460424", color=navy];
+	"Ultrix-11" [sides=10, distortion="-0.633186", orientation=10, skew="0.333125", color=darkseagreen4];
+	Xenix [sides=8, distortion="-0.337997", orientation=52, skew="-0.760726", color=coral];
+	"UniPlus+" [sides=7, distortion="0.788483", orientation=39, skew="-0.526284", color=darkolivegreen3];
+	"9th Edition" [sides=7, distortion="0.138690", orientation=55, skew="0.554049", color=coral3];
+	"2 BSD" [sides=7, distortion="-0.010661", orientation=84, skew="0.179249", color=blanchedalmond];
+	"2.8 BSD" [distortion="-0.239422", orientation=44, skew="0.053841", color=lightskyblue1];
+	"2.9 BSD" [distortion="-0.843381", orientation=70, skew="-0.601395", color=aquamarine2];
+	"3 BSD" [sides=10, distortion="0.251820", orientation=18, skew="-0.530618", color=lemonchiffon];
+	"4 BSD" [sides=5, distortion="-0.772300", orientation=24, skew="-0.028475", color=darkorange1];
+	"4.1 BSD" [distortion="-0.226170", orientation=38, skew="0.504053", color=lightyellow1];
+	"4.2 BSD" [sides=10, distortion="-0.807349", orientation=50, skew="-0.908842", color=darkorchid4];
+	"4.3 BSD" [sides=10, distortion="-0.030619", orientation=76, skew="0.985021", color=lemonchiffon2];
+	"Ultrix-32" [distortion="-0.644209", orientation=21, skew="0.307836", color=goldenrod3];
+	"PWB 1.2" [sides=7, distortion="0.640971", orientation=84, skew="-0.768455", color=cyan];
+	"USG 1.0" [distortion="0.758942", orientation=42, skew="0.039886", color=blue];
+	"CB Unix 1" [sides=9, distortion="-0.348692", orientation=42, skew="0.767058", color=firebrick];
+	"USG 2.0" [distortion="0.748625", orientation=74, skew="-0.647656", color=chartreuse4];
+	"CB Unix 2" [sides=10, distortion="0.851818", orientation=32, skew="-0.020120", color=greenyellow];
+	"CB Unix 3" [sides=10, distortion="0.992237", orientation=29, skew="0.256102", color=bisque4];
+	"Unix/TS++" [sides=6, distortion="0.545461", orientation=16, skew="0.313589", color=mistyrose2];
+	"PDP-11 Sys V" [sides=9, distortion="-0.267769", orientation=40, skew="0.271226", color=cadetblue1];
+	"USG 3.0s=8, distortion="0.019636", orientation=79, skew="-0.440424", color=goldenrod2];
+	LSX [sides=9, distortion="-0.698271", orientation=22, skew="-0.195492", color=burlywood2];
+	"1 BSD" [sides=7, distortion="0.265084", orientation=26, skew="0.403659", color=gold1];
+	"Mini Unix" [distortion="0.039386", orientation=2, skew="-0.461120", color=greenyellow];
+	Wollongong [sides=5, distortion="0.228564", orientation=63, skew="-0.062846", color=darkseagreen];
+	Interdata [distortion="0.624013", orientation=56, skew="0.101396", color=dodgerblue1];
+	"Unix/TS 3.0" [sides=8, distortion="0.731383", orientation=43, skew="-0.824612", color=thistle2];
+	"PWB 2.0" [sides=6, distortion="0.592100", orientation=34, skew="-0.719269", color=darkolivegreen3];
+	"7th Edition" [sides=10, distortion="0.298417", orientation=65, skew="0.310367", color=chocolate];
+	"8th Edition" [distortion="-0.997093", orientation=50, skew="-0.061117", color=turquoise3];
+	"32V" [sides=7, distortion="0.878516", orientation=19, skew="0.592905", color=steelblue3];
+	V7M [sides=10, distortion="-0.960249", orientation=32, skew="0.460424", color=navy];
+	"Ultrix-11" [sides=10, distortion="-0.633186", orientation=10, skew="0.333125", color=darkseagreen4];
+	Xenix [sides=8, distortion="-0.337997", orientation=52, skew="-0.760726", color=coral];
+	"UniPlus+" [sides=7, distortion="0.788483", orientation=39, skew="-0.526284", color=darkolivegreen3];
+	"9th Edition" [sides=7, distortion="0.138690", orientation=55, skew="0.554049", color=coral3];
+	"2 BSD" [sides=7, distortion="-0.010661", orientation=84, skew="0.179249", color=blanchedalmond];
+	"2.8 BSD" [distortion="-0.239422", orientation=44, skew="0.053841", color=lightskyblue1];
+	"2.9 BSD" [distortion="-0.843381", orientation=70, skew="-0.601395", color=aquamarine2];
+	"3 BSD" [sides=10, distortion="0.251820", orientation=18, skew="-0.530618", color=lemonchiffon];
+	"4 BSD" [sides=5, distortion="-0.772300", orientation=24, skew="-0.028475", color=darkorange1];
+	"4.1 BSD" [distortion="-0.226170", orientation=38, skew="0.504053", color=lightyellow1];
+	"4.2 BSD" [sides=10, distortion="-0.807349", orientation=50, skew="-0.908842", color=darkorchid4];
+	"4.3 BSD" [sides=10, distortion="-0.030619", orientation=76, skew="0.985021", color=lemonchiffon2];
+	"Ultrix-32" [distortion="-0.644209", orientation=21, skew="0.307836", color=goldenrod3];
+	"PWB 1.2" [sides=7, distortion="0.640971", orientation=84, skew="-0.768455", color=cyan];
+	"USG 1.0" [distortion="0.758942", orientation=42, skew="0.039886", color=blue];
+	"CB Unix 1" [sides=9, distortion="-0.348692", orientation=42, skew="0.767058", color=firebrick];
+	"USG 2.0" [distortion="0.748625", orientation=74, skew="-0.647656", color=chartreuse4];
+	"CB Unix 2" [sides=10, distortion="0.851818", orientation=32, skew="-0.020120", color=greenyellow];
+	"CB Unix 3" [siench.cc"]
+"0x7fe58d50c880" [label="manifest_parser_perftest"]
+"0x7fe58d50c810" [label="link", shape=ellipse]
+"0x7fe58d50c810" -> "0x7fe58d50c880"
+"0x7fe58d50c5e0" -> "0x7fe58d50c810" [arrowhead=none]
+"0x7fe58d508f80" -> "0x7fe58d50c810" [arrowhead=none]
+"0x7fe58d50c5e0" [label="build/manifest_parser_perftest.o"]
+"0x7fe58d50c670" -> "0x7fe58d50c5e0" [label=" cxx"]
+"0x7fe58d50c670" [label="src/manifest_parser_perftest.cc"]
+"0x7fe58d50cc10" [label="clparser_perftest"]
+"0x7fe58d50cba0" [label="link", shape=ellipse]
+"0x7fe58d50cba0" -> "0x7fe58d50cc10"
+"0x7fe58d50c9c0" -> "0x7fe58d50cba0" [arrowhead=none]
+"0x7fe58d508f80" -> "0x7fe58d50cba0" [arrowhead=none]
+"0x7fe58d50c9c0" [label="build/clparser_perftest.o"]
+"0x7fe58d50ca20" -> "0x7fe58d50c9c0" [label=" cxx"]
+"0x7fe58d50ca20" [label="src/clparser_perftest.cc"]
+}

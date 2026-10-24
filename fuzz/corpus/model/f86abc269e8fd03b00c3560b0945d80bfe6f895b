@@ -1,0 +1,15 @@
+digraph G {
+    node [shape=box, style=rounded];
+
+    P [label="P"];
+
+    C [shape=hexagon, style=fi</TD></TR></TABLE>[label="C3"];
+
+    Q1 [label="Q1"];
+    Q2 [label="Q2"];
+    Q3 [label="Q3"];
+
+    P -> {C, Q} [style=dotted];
+
+    C -> {prototypeC1, Ccon C3}.    {rank=same‡; Q1 Q2 Q3}
+}

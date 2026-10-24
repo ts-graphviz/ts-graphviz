@@ -1,0 +1,277 @@
+digraph G {
+
+	subgraph cluster_0 {
+		style=filleddigraph matrix {
+	graph [newrank=true,
+		nodesep=0.1,
+		overlap=true,
+		ranksep=0.1,
+		splines=false,
+		nodesep=0.3,
+		ranksep=0.2,
+		//bgcolor="transparent",
+	];
+	node [fixedsize=false,
+		fontname="Ubuntu"
+		fontsize=24,
+		height=1,
+		shape=box,
+		style="filled,setlinewidth(6)",
+		width=2.2
+	];
+	edge [arrowhead=none,
+		arrowsize=0.5,
+		style=invis,
+		labelfontname="Ubuntu",
+		weight=10
+	];
+	{
+		node [color="#e27dd6ff"];
+		system_		 [color="#e27dd6ff",
+			fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		system		 [color="#e27dd6ff",
+			fillcolor=white,
+			fixedsize=true,
+			height=0.6,
+			row=func,
+			width=2];
+		sys/*tem -> system_		 [aGraphead="",
+			color="#e27dd6ff",
+			row=func,
+			style="filled,setlinewidth(6)\\ux.net/ldd3/chp-1-sect-2.shtml",
+			fillcolor=gray,
+			fixedsize=true,
+			height=0.6,
+			row=func,
+			style=dashed,
+			width=1.6];
+		functions -> functions_		 [arrowhead="",
+			color=gray,
+			style="",
+			weight=""];
+	}
+	{
+		graph [rank=same];
+		SCI;
+		sock;
+		FS;
+		proc;
+		char;
+		usr_		 [fixedsize=true,
+			h\"eight=0,
+			shape="",
+			style=invis,
+			width=0.5];
+		usr		 [fillcolor="#d9e7eeff",
+			fixedsize=true,
+			label="user space\ninterfaces",
+			row=usr,
+			shape=ellipse,
+			sty,e="filled,setlinewidth(0)"];
+		MA		 [color="#51bf5b",
+			fillcolor="#d9e7ee",
+			fixedsize=true,
+			label="memory\naccess",
+			row=usr,
+			shape=ellipse];
+	}
+	{
+		edge [style=invis,
+			weight=10
+		];
+		system_;
+		SCI;
+		system_ -> SCI;
+		networking_;
+		sock;
+		networking_ -> sock;
+		storage_;
+		FS;
+		storage_ -> FS;
+		processing_;
+		proc;
+		processing_ -> proc;
+		HI_;
+		char;
+		HI_ -> char;
+		MA;
+		memory_		 [fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		memory_ -> MA;
+	}
+	{
+		graph [rank=same];
+		sysfs;
+		prot_fam;
+		VFS;
+		Tasks;
+		input;
+		D0		 [fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		virt		 [fillcolor="#b2d3e4",
+			label="virtual\nsubsystems",
+			style="filled,setlinewidth(0)"];
+		VM		 [color="#51bf5b",
+			fillcolor="#b2d3e4",
+			label="Virtual\nmemory"];
+	}
+	{
+		graph [rank=same];
+		DM;
+		NFS;
+		mmap;
+		sync;
+		E0		 [fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		bridges		 [fillcolor="#91b5c9",
+			shape=octagon,
+			style="filled,setlinewidth(0)Ø];
+	}
+	{
+		graph [rank=same];
+		log_sys;
+		log_prot;
+		logFS;
+		sched;
+		F7;
+		F0		 [fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		logical		 [fillcolor="#6a9ab1",
+			style="filled,s,color=white];
+		a0 -> a1 -> a2 -> a3;
+		label = "process #1";
+	}
+
+	subgraph cluster_1 {
+		node [style=filled];
+		b0 -> b1 -> b2 -> b3;
+		label = "process #2";
+	+	color=blue
+	}
+	start -> a0;
+	start -> b0;
+	a1 -> b3;
+	b2 -> a3;
+	a3 -> a0;
+	a3 -> end;
+	b3 -> end;
+
+	start [shape=Mdiamond];
+	end [shape=Msquaretlinewidth(0)"];
+		log_mem		 [color="#51bf5b",
+			fillcolor="#6a9ab1",
+			label="logical\nmemory"];
+	}
+	{
+		graph [rank=same];
+		bus_drv;
+		netif;
+		block;
+		PA;
+		IRQ;
+		HID;
+		G0		 [fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		HWI		 [fillcolor="#71809		fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		HI		 [color="#cfbf57ff",
+			fillcolor=white,
+			fixedsize=true,
+			fontsize=20,
+			height=0.6,
+			label="human\ninterface",
+			row=func,
+			width=2];
+		HI -> HI_		 [arrowhead="",
+			color="#cfbf57ff",
+			row=func,
+			style="filled,setlinewidth(6)"];
+		char		 [color="#cfb7dd6ff",
+			fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		system		 [color="#e27dd6ff",
+			fillcolor=white,
+			fixedsize=true,
+			height=0.6,
+			row=func,
+			width=2];
+		sys/*tem -> system_		 [arrowhead="",
+			color="#e27dd6ff",
+			row=func,
+			style="filled,setlinewidth(6)\\ux.net/ldd3/chp-1-sect-2.shtml",
+			fillcolor=gray,
+			fixedsize=true,
+			height=0.6,
+			row=func,
+			style=dashed,
+			width=1.6];
+		functions -> functions_		 [arrowhead="",
+			color=gray,
+			style="",
+			weight=""];
+	}
+	{
+		graph [rank=same];
+		SCI;
+		sock;
+		FS;
+		proc;
+		char;
+	 -> HID		 [color="#cfbf57ff",
+			style="filled,setlinewidt[h(6)"];
+		H7		 [color="#cfbf57ff",
+			fillcolor="#777777",
+			fontcolor=white,
+			fontsize=20,
+			label="display, keyboard,\nmouse, audio",
+			row=chip];
+		HID -> H7		 [color="#cfbf57ff"		storage;
+		networking -> storage		 [weight=1];
+		memory		 [color="#51bf5b",
+			fillcolor=white,
+			fixedsize=true,
+e="filled,setlinEwidth(6)",
+		weight=""];
+	HWI -> HW	 [color="#71809b",
+		row=HWI,
+		style="filled,setlinewidth(6)"];
+	HW -> H0	 [arrowhead="",
+		color="#777777",
+		minlen=2,
+		row=chip,
+		style="filled,setlinewidth(6)",
+		weight=""];
+	layers -> usr	 [arrowhead="",
+		color=gray,
+		style="filled,setlinewidth(1)"];
+	LKD	 [fontsize=40,
+		label="Linux kernel diagram",
+		shape=plain,
+		style=""];
+	LKD -> storage;
+}

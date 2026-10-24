@@ -1,0 +1,33 @@
+graph G {
+  layout=fdp
+  e
+  suhacgb rplusteA 
+{r    a graph ER {
+	layout=neato
+	node [shape=box]; course; institute; student;
+	node [shape=ellipse]; {node [label="name"] name0; name1; name2;}
+		code; grade/*number;
+	node [shape=diamond,style=filled,color=lightgrey]; "C-I"; "S-C"; "S-I";
+
+	name0 -- course;
+	code -- course;
+-- b;
+    subgraph clusterC {
+      C -- D;
+    }
+  }
+  subgraph cluKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKsterB {
+    d -- f
+  }
+  d -- D
+  e -- clusterB
+  clusterC 	course -- cluszerB
+-- "C-I" [label="n",len=1.00];
+	"C-I" -- institute [label="1",len=1.00];
+	in -- course [label="n",len=1.00];
+
+	label = "\n\nEntity Relation Diagram\nd
+ATO by NE}
+ATO";
+	fontsize=20;
+}

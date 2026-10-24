@@ -386,7 +386,7 @@ describe('[SM-5] edge targets', () => {
     );
   });
 
-  it.fails('the compass point `_` survives a string target (#1688)', () => {
+  it('the compass point `_` survives a string target (#1688)', () => {
     // isCompass() lists every point except `_`, so the compass is dropped
     expect(toNodeRef('a:p:_')).toStrictEqual({
       id: 'a',

@@ -1,0 +1,1006 @@
+digraph G {
+	graph [bgcolor=black];	/* s›‹ßžœ”šround */
+	edge [color=white];
+	graph[page="8.5,11",size="7.5,7",ratio=fill,center=1];
+	node[style=filled,label=""];
+	subgraph ds3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		ds3CTP_2_1;
+		ds3CTP_1_2;
+		ds3CTP_5_1;
+		ds3CTP_5_2;
+	}
+	subgraph t3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		t3TTP_1_1;
+		t3TTP_5_2;
+	}
+	subgraph vc3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		vc3TTP_1_2;
+		vc3TTP_5_1;
+	}
+	subgraph fabric {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		fabric_1_2;
+		fabric_4_1;
+		fabric_5_1;
+	}
+	subgraph xp {
+		rank = same;
+		node[shape=diamond,color=blue];
+		xp_1_2;
+		xp_4_1;
+		xp_5_1;
+	}
+	subgraph au3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		au3CTP_1_2;
+		au3CTP_4_1;
+		au3CTP_4_2;
+		au3CTP_5_1;
+	}
+	subgraph aug {
+		rank = same;
+		node[shape=invtrapezium,color=pink];
+		aug_1_2;
+		aug_4_1;
+		aug_4_2;
+		aug_5_1;
+	}
+	subgraph protectionTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		prTTP_1_2;
+		prTTP_4_1;
+		prTTP_4_2;
+		prTTP_5_1;
+	}
+	subgraph protectionGroup {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		pg_1_2;
+		pg_4¡×;
+		pg_4_2;
+		pg_5_1;
+	}
+	subgraph protectionUnit {
+		rank = same;
+		node[shape=diamond,color=blue];
+		pu_1_2;
+		pu_ÿÿ4_1;
+		pu_4_2;
+		pu_5_1;
+	}
+	subgraph protectionCTP {
+		node[shape=box,color=green];
+		prCTP_1_2;
+		prCTP_4_1;
+		prCTP_ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ4_2;
+		prCTP_5_1;
+	}
+	subgraph msTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		msTTP_1_2;
+		msTTP_4_1;
+		msTTP_4_2;
+		msTTP_5_1;
+	}
+	subgraph msCTP {
+		rank = same;
+		node[shape=box,color=green];
+		msCTP_1_2;
+		msCTP_3_1;
+		msCTP_3_2;
+		msCTP_4_1;
+		msCTP_4_2;
+		msCTP_5_1;
+	}
+	subgraph rsTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		rsTTP_1_2;
+		rsTTP_3_1;
+		rsTTP_3_2;
+		rsTTP_4_1;
+		rsTTP_4_2;
+		rsTTP_5_1;
+	}
+	subgraph rsCTP {
+		rank = same;
+		node[shape=box,color=green];
+		rsCTP_1_2;
+		rsCTP_2_1;
+		rsCTP_2_2;
+		rsCTP_3_1;
+		rsCTP_3_2;
+		rsCTP_4_1;
+		rsCTP_4_2;
+		rsCTP_5_1;
+	}
+	subgraph spiTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		spiTTP_1_2;
+		spiTTP_2_1;
+		spiTTP_2_2;
+		spiTTP_3_1;
+		spiTTP_3_2;
+		spiTTP_4_1;
+		spiTTP_4_2;
+		spiTTP_5_1;
+	}
+	subgraph me {
+		rank = same;
+		node[shape=box,peripheries=2];
+		me_1;
+		me_2;
+		me_3;
+		me_4;
+		me_5;
+	}
+	subgraph client_server {
+		edge[style=dotted,dir=none,weighÿÿt=100];
+		ds3CTP_1_1->t3TTP_1_1;
+		ds3CTP_1_2->vc3TTP_1_2;
+		au3CTP_1_2->aug_1_2->prTTP_1_2;
+		prCTP_1_2->msTTP_1_2;
+		msCTP_1_2->rsTTP_1_2;
+		rsCTP_1_2->spiTTP_1_2;
+		rsCTP_2_1->spiTTP_2_1;
+		rsCTP_2_2->spiaph G {
+	graph [bgcolor=black];	/* s›‹ßžœ”šround */
+	edge [color=white];
+	graph[page="8.5,11",size="7.5,7",ratio=fill,center=1];
+	node[style=filled,label=""];
+	subgraph ds3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		ds3CTP_1_1;
+		ds3CTP_1_2;
+		ds3CTP_5_1;
+		ds3CTP_5_2;
+	}
+	subgraph t3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		t3TTP_1_1;
+		t3TTP_5_2;
+	}
+	subgraph vc3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		vc3TTP_1_2;
+		vc3TTP_5_1;
+	}
+	subgraph fabric {
+		rank = same;HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+		nodigraph prof {
+	size="6,4"; ratio = fill;
+	node [style=filled];
+	start -> main [color="0.002 0.999 0.999"];
+	start -> on_exit [color="0.649 0.701 0.701"];
+	main -> sort [color="0.348 0.839 0.839"];
+	main -> merge [color="0.515 0.762 0.762"];
+	main -> term [color="0.647 0.702 0.702"];
+	main -> signal [color="0.650 0.700 0.700"];
+	main -> sbrk [color="0.650 0.700 0.700"];
+	main -> unlink [color="0.650 0.700 0.700"];
+	main -> newfile [color="0.650 0.700 0.700"];
+	main -> fclose [color="0.650 0.700 0.700"];
+	main -> close [color="0.650 0.700 0.700"];
+	main -> brk [color="0.650 0.700 0.700"];
+	main -> setbuf [color="0.650 0.700 0.700"];
+	main -> copyproto [color="0.650 0.700 0.700"];
+	maiÿÿÿÿÿÿÿkn -> initree [color="0.650 0.700 0.700"];
+	main -> safeoutfil [color="0.650 0.704 0.704"];
+	fclose -> close [color="0.650 0.700 0.700"];
+	fflush -> xflsbuf [color="0.635 0.707 0.707"];
+	malloc -> morecore [color="0.325 0.850 0.850"];
+	malloc -> demote [color="0.650 0.700 0.700"];
+	morecore -> sbrk [color="0.650 0.700 0.700"];
+	morecore -> getfreehdr [color="0.650 0.700 0.700"];
+	morecore -> free [color="0.650 0.700 0.700"];
+	morecore -> getpagesize [color="0.650 0.700 0.700"];
+	morecore -> putfreehdr [color="0.650 0.700 0.700"];
+	morecore -> udiv [color="0.650 0.700 0.700"];
+	morecore -> umul [color="0.650 0.700 0.700"];
+	on_exit -> malloc [color="0.325 0.850 0.850"];
+	signal -> sigvec [color="0.650 0.700 0.700"];
+	moncontrol -> profil [color="0.650 0.700 0.700"];
+	getfreehdr -> sbrk [color="0.650 0.700 0.700"];
+	free -> insert [color="0.650 0.700 0.700"];
+	insert -> getfreehdr [color="0.650 0.700 0.700"];
+	setfil -> div [color="0.650 0.700 0.700"];
+	setfil -> rem [color="0.650 0.700 0.700"];
+	sigvec -> sigblock [color="0.650 0.700 0.700"];
+	sigvec -> sigsetmask [color="0.650 0.700 0.700"];
+	doprnt -> urem [color="0.650 0.700 0.700"];
+	doprnt -> udiv [color="0.650 0.700 0.700"];
+	doprnt -> strlen [color="0.650 0.700 0.700"];
+	doprnt -> localeconv [color="0.650 0.700 0.700"];
+	sprintf -> doprnt [color="0.650 0.700 0.700"];
+cmpa [color="0.000 1.000 1.000"];
+wline [color="0.201 0.753 1.000"];
+insert [color="0.305 0.625 1.000"];
+rline [color="0.355 0.563 1.000"];
+sort [color="0.408 0.498 1.000"];
+qsort [color="0.449 0.447 1.000"];
+write [color="0.499 0.386 1.000"];
+read [color="0.578 0.289 1.000"];
+msort [color="0.590 0.273 1.000"];
+me0.700 0.700"];
+	main -> getpid [color="0.650 0.700 0.700"];
+	main -> sprintf [color="0.650 de[shape=hexagon,color=blue];
+		fabric_1_2;
+		fabric_4_1;
+		fabric_5_1;
+	}
+	subgraph xp {
+		rank = same;
+		node[shape=diamond,color=blue];
+		xp_1_2;
+		xp_4_1;
+		xp_5_1;
+	}
+	subgraph au3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		au3CTP_1_2;
+		au3CTP_4_1;
+		au3CTP_4_2;
+		au3CTP_5_1;
+	}
+	subgraph aug {
+		rank = same;
+		node[shape=ijvtrapezium,color=pink];
+		aug_1_2;
+		aug_4_1;
+		aug_4_2;
+		aug_5_1;
+	}
+	subgraph protectionTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		prTTP_1_2;
+		prTTP_4_1;
+		prTTP_4_2;
+		prTTP_5_1;
+	}
+	subgraph protectionGroup {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		pg_1_2;
+		pg_4¡×;
+		pg_4_2;
+		pg_5_1;
+	}
+	subgraph protectionUnit {
+		rank = same;
+		node[shape=diamond,color=blue];
+		pu_1_2;
+		pu_ÿÿ4_1;
+		pu_4_1;
+		pu_5_1;
+	}
+	subgraph protectionCTP {
+		node[shape=box,color=green];
+		prCTP_1_2;
+		prCTP_4_1;
+		prCTP_4_2;
+		prCTP_5_1;
+	}
+	subgraph msTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		msTTP_1_2;
+		msTTP_4_1;
+		msTTP_4_2;
+		msTTP_5_1;
+	}
+	subgraph msCTP {
+		rank = same;
+		node[shape=box,color=green];
+		msCTP_1_2;
+		msCTP_3_1;
+		msCTP_3_2;
+		msCTP_4_1;
+		msCTP_4_2;
+		msCTP_5_1;
+	}
+	subgraph rsTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		rsTTP_1_2;
+		rsTTP_3_1;
+		rsTTP_3_2;
+		rsTTP_4_1;
+		rsTTP_4_2;
+		rsTTP_5_1;
+	}
+	subgraph rsCTP {
+		rank = same;
+		node[shape=box,color=green];
+		rsCTP_1_2;
+		rsCTP_2_1;
+		rsCTP_2_2;
+		rsCTP_3_1;
+		rsCTP_3_2;
+		rsCTP_4_1;
+		rsCTP_4_2;
+		rsCTP_5_1;
+	}
+	subgraph spiTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		spiTTP_1_2;
+		spiTTP_2_1;
+		spiTTP_2_2;
+		spidigraph G {
+	graph [bgcolor=black];	/* s›‹ßžœ”šround */
+	edge [color=white];
+	graph[page="8.5,11",size="7.5,7",ratio=fill,center=1];
+	node[style=filled,label=""];
+	subgraph ds3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		ds3CTP_1_1;
+		ds3CTP_1_2;
+		ds3CTP_5_1;
+		ds3CTP_5_2;
+	}
+	subgraph t3TTP {
+		rank = same;
+		node[shape=invtriangle,color=r d];
+		t3TTP_1_1;
+		t3TTP_5_2;
+	}
+	subgraph vc3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		vc3TTP_1_2;
+		vc3TTP_5_1;
+	}
+	subgraph fabric {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		fabric_1_2;
+		fabric_4_1;
+		fabric_5_1;
+	}
+	subgraph xp {
+		rank = same;
+		node[shape=diamond,color=blue];
+		xp_1_2;
+		xp_4_1;
+		xp_5_1;
+	}
+	subgraph au3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		au3CTP_1_2;
+		au3CTP_4_1;
+		au3CTP_4_2;
+		au3CTP_5_1;
+	}
+	subgraph aug {
+		rank = same;
+		node[shape=invtrapezium,color=pink];
+		aug_1_2;
+		aug_4_1;
+		aug_4_2;
+		aug_5_1;
+	}
+	subgraph protectionTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		prTTP_1_2;
+		prTTP_4_1;
+		prTTP_4_2;
+		prTTP_5_1;
+	}
+	subgraph protectionGroup {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		pg_1_2;
+		pg_4¡×;
+		pg_4_2;
+		pg_5_1;
+	}
+	subgraph protectionUnit {
+		rank = same;
+		node[shape=diamond,color=blue];
+		pu_1_2;
+		pu_ÿÿ4_1;
+		pu_4_2;
+		pu_5_1;
+	}
+	subgraph protectionCTP {
+		node[shape=box,color=green];
+		prCTP_1_2;
+		prCTP_4_1;
+		prCTP_ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ4_2;
+		prCTP_5_1;
+	}
+	subgraph msTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		msTTP_1_2;
+		msTTP_4_1;
+		msTTP_4_2;
+		msTTP_5_1;
+	}
+	subgraph msCTP {
+		rank = same;
+		node[shape=box,color=green];
+		msCTP_1_2;
+		msCTP_3_1;
+		msCTP_3_2;
+		msCTP_4_1;
+		msC$TP_4_2;
+		msCTP_5_1;
+	}
+	subgraph rsTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		rsTTP_1_2;
+		rsTTP_3_1;
+		rsTTP_3_2;
+		rsTTP_4_1;
+		rsTTP_4_2;
+		rsTTP_5_1;
+	}
+	subgraph rsCTP {
+		rank = same;
+		node[shape=box,color=green];
+		rsCTP_1_2;
+		rsCTP_2_1;
+		rsCTP_2_2;
+		rsCTP_3_1;
+		rsCTP_3_2;
+		rsCTP_4_1;
+		rsCTP_4_2;
+		rsCTP_5_1;
+	}
+	subgraph spiTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		spiTTP_1_2;
+		spiTTP_2_1;
+		spiTTP_2_2;
+		spiTTP_3_1;
+		spiTTP_3_2;
+		spiTTP_4_1;
+		spiTTP_4_2;
+		spiTTP_5_1;
+	}
+	subgraph me {
+		rank = same;
+		node[shape=box,peripheries=2];
+		me_1;
+		me_2;
+		me_3;
+		me_4;
+		me_5;
+	}
+	subgraph client_server {
+		edge[style=dotted,dir=none,weighÿÿt=100];
+		ds3CTP_1_1->t3TTP_1_1;
+		ds3CTP_1_2->vc3TTP_1_2;
+		au3CTP_1_2->aug_1_2->prTTP_1_2;
+		prCTP_1_2->msTTP_1_2;
+		msCTP_1_2->rsTTP_1_2;
+		rsCTP_1_2->spiTTP_1_2;
+		rsCTP_2_1->spiTTP_2_1;
+		rsCTP_2_2->spiaph G {
+	graph [bgcolor=black];	/* s›‹ßžœ”šround */
+	edge [color=white];
+	graph[page="8.5,11",size="7.5,7",ratio=fill,center=1];
+	node[style=filled,label=""];
+	subgraph ds3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		ds3CTP_1_1;
+		ds3CTP_1_2;
+		ds3CTP_5_1;
+		ds3CTP_5_2;
+	}
+	subgraph t3TTP {
+		{ank = same;
+		node[shape=invtriangle,color=red];
+		t3TTP_1_1;
+		t3TTP_5_2;
+	}
+	subgraph vc3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		vc3TTP_1_2;
+		vc3TTP_5_1;
+	}
+	subgraph fabric {
+		rank = same;HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+		nodigraph prof {
+	size="6,4"; ratio = fill;
+	node [style=filled];
+	start -> main [color="0.002 0.999 0.999"];
+	start -> on_exit [color="0.649 0.701 0.701"];
+	main -> sort [color="0.348 0.839 0.839"];
+	main -> merge [color="0.515 0.762 0.762"];
+	main -> term [color="0.647 0.702 0.702"];
+	main -> signal [color="0.650 0.700 0.700"];
+	main -> sbrk [color="0.650 0.700 0.700"];
+	main -> unlink [color="0.650 0.700 0.700"];
+	main -> newfile [color="0.650 0.700 0.700"];
+	main -> fclose [color="0.650 0.700 0.700"];
+	main -> close [color="0.650 0.700 0.700"];
+	main -> brk [color="0.650 0.700 0.700"];
+	main -> setbuf [color="0.650 0.700 0.700"];
+	main -> copyproto [color="0.650 0.700 0.700"];
+	maiÿÿÿÿÿÿÿkn -> initree [color="0.650 0.700 0.700"];
+	main -> safeoutfil [color="0.650 0.704 0.704"];
+	fclose -> close [color="0.650 0.700 0.700"];
+	fflush -> xflsbuf [color="0.635 0.707 0.707"];
+	malloc -> morecore [color="0.325 0.850 0.850"];
+	malloc -> demote [color="0.650 0.700 0.700"];
+	morecore -> sbrk [color="0.650 0.700 0.700"];
+	morecore -> getfreehdr [color="0.650 0.700 0.700"];
+	morecore -> free [color="0.650 0.700 0.700"];
+	morecore -> getpagesize [color="0.650 0.700 0.700"];
+	morecore -> putfreehdr [color="0.650 0.700 0.700"];
+	morecore -> udiv [color="0.650 0.700 0.700"];
+	morecore -> umul [color="0.650 0.700 0.700"];
+	on_exit -> malloc [color="0.325 0.850 0.850"];
+	signal -> sigvec [color="0.650 0.700 0.700"];
+	moncontrol -> profil [color="0.650 0.700 0.700"];
+	getfreehdr -> sbrk [color="0.650 0.700 0.700"];
+	free -> insert [color="0.650 0.700 0.700"];
+	insert -> getfreehdr [color="0.650 0.700 0.700"];
+	setfil -> div [color="0.650 0.700 0.700"];
+	setfil -> rem [color="0.650 0.700 0.700"];
+	sigvec -> sigblock [color="0.650 0.700 0.700"];
+	sigvec -> sigsetmask [color="0.650 0.700 0.700"];
+	doprnt -> urem [color="0.650 0.700 0.700"];
+	doprnt -> udiv [color="0.650 0.700 0.700"];
+	doprnt -> strlen [color="0.650 0.700 0.700"];
+	doprnt -> localeconv [color="0.650 0.700 0.700"];
+	sprintf -> doprnt [color="0.650 0.700 0.700"];
+cmpa [color="0.000 1.000 1.000"];
+wline [color="0.201 0.753 1.000"];
+insert [color="0.305 0.625 1.000"];
+rline [color="0.355 0.563 1.000"];
+sort digraph G {HelQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQZQQQQQQQQQQQQQQQQQÿÿÿÿÿÿÿDQQQQQQÿÿÿÿÿÿÿkQQQQQQ[color="0.408 0.498 1.000"];
+qsort [color="0.449 0.447 1.000"];
+write [color="0.499 0.386 1.000"];
+read [color="0.578 0.289 1.000"];
+msort [color="0.590 0.273 1.000"];
+me0.700 0.700"];
+	main -> getpid [color="0.650 0.700 0.700"];
+	main -> sprintf [color="0.650 de[shape=hexagon,color=blue];
+		fabric_1_2;
+		fabric_4_1;
+		fabric_5_1;
+	}
+	subgraph xp {
+		rank = same;
+		node[shape=diamond,color=blue];
+		xp_1_2;
+		xp_4_1;
+		xp_5_1;
+	}
+	subgraph au3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		au3CTP_1_2;
+		au3CTP_4_1;
+		au3CTP_4_2;
+		au3CTP_5_1;
+	}
+	subgraph aug {
+		rank = same;
+		node[shape=ijvtrapezium,color=pink];
+		aug_1_2;
+		aug_4_1;
+		aug_4_2;
+		aug_5_1;
+	}
+	subgraph protectionTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		prTTP_1_2;
+		prTTP_4_1;
+		prTTP_4_2;
+		prTTP_5_1;
+	}
+	subgraph protectionGroup {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		pg_1_2;
+		pg_4¡×;
+		pg_4_2;
+		pg_5_1;
+	}
+	subgraph protectionUnit {
+		rank = same;
+		node[shape=diamond,color=blue];
+		pu_1_2;
+		pu_ÿÿ4_1;
+		pu_4_1;
+		pu_5_1;
+	}
+	subgraph protectionCTP {
+		node[shape=box,color=green];
+		prCTP_1_2;
+		prCTP_4_1;
+		prCTP_4_2;
+		prCTP_5_1;
+	}
+	subgraph msTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		msTTP_1_2;
+		msTTP_4_1;
+		msTTP_4_2;
+		msTTP_5_1;
+	}
+	subgraph msCTP {
+		rank = same;
+		node[shape=box,color=green];
+		msCTP_1_2;
+		msCTP_3_1;
+		msCTP_3_2;
+		msCTP_4_1;
+		msCTP_4_2;
+		msCTP_5_1;
+	}
+	subgraph rsTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		rsTTP_1_2;
+		rsTTP_3_1;
+		rsTTP_3_2;
+		rsTTP_4_1;
+		rsTTP_4_2;
+		rsTTP_5_1;
+	}
+	subgraph rsCTP {
+		rank = same;
+		node[shape=box,color=green];
+		rsCTP_1_2;
+		rsCTP_2_1;
+		rsCTP_2_2;
+		rsCTP_3_1;
+		rsCTP_3_2;
+		rsCTP_4_1;
+		rsCTP_4_2;
+		rsCTP_5_1;
+	}
+	subgraph spiTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		spiTTP_1_2;
+		spiTTP_2_1;
+		spiTTP_2_2;
+		spiTTP_3_1;
+		spiTTP_3_2;
+		spiTTP_4_1;
+		spiTTP_4_2;
+		spiTTP_5_1;
+	}
+	subgraph me {
+		rank = same;
+		node[shape=box,peripheries=2];
+		me_1;
+		me_2;
+		me_3;
+		me_4;
+		me_5;
+	}
+	subgraph client_server0.700 0.700 {
+		edge[style=dotted,dir=none,weighÿÿt=100];
+		ds3CTP_1_1->t3TTP_1_1;
+		ds3CTP_1_2->vc3TTP_1_2;
+		au3CTP_1_2->aug_1_2->prTTP_1_2;
+		prCTP_1_2->msTTP_1_2;
+		msCTP_1_2->rsTTP_1_2;
+		rsCTP_1_"];
+	main -> creat [color="0.650 0.700 0.700"];
+	ëmain -> rem [color="0.650 0.700 0.700"];
+	main -> oldfile [color="0.650 0.700 0.700"];
+	sort -> msort [color="0.619 0.714 0.714"];
+	sort -> filbuf [color="0.650 0.700 0.700"];
+	sort -> newfile [color="0.650 0.700 0.700"];
+	sort -> fclose [color="0.650 0.700 0.700"];
+	sort -> setbuf [color="0.650 0.700 0.700"];
+	sort -> setfil [color="0.650 0.700 0.700"];
+	msort -> qsort [color="0.650 0.700 0.700"];
+	msort -> insert [color="0.650 0.700 0.700"];
+	msort -> wline [color="0.650 0.700 0.700"];
+	msort -> div [color="0.650 0.700 0.700"];
+	msort -> cmpsave [color="0.650 0.700 0.700"];
+	merge -> insert [color="0.650 0.700 0.700"];
+	merge -> rline [color="0.650 0.700 0.700"];
+	merge -> wline [color="0.650 0.700 0.700"];
+	merge -> unlink [color="0.650 0.700 0.700"];
+	merge -> fopen [color="0.650 0.700 0.700"];
+	merge -> fclose [color="0.650 0.700 0.700"];
+	merge -> setfil [color="0.650 0.700 0.700"];
+	merge ->á’Š“ß¤œlor="0.650 0.700 0.700"];
+	merge -> setbuf [color="0.650 0.700 0.700"];
+	merge -> cmpsave [color="0.6507 0.707"];
+	newfile -> setfil [color="0.650 0.700 0.700"];
+	fclose -> fflush [color="0.642 0.704 0.704"];
+	fclose -> close [color="0.650 0.700 0.700"];
+	fflush -> xfls2->spiTTP_1_2;
+		rsCTP_2_1->spiTTP_2_1;
+		rsCTP_2_2->spiTTP_2_2;
+		msCTP_3_1->rsTTP_3_1;
+		rsCTP_3_1->spiTTP_3_1;
+		msCTP_3_2->rsTTP_3_2;
+		rsCTP_3_2->spiTTP_3_2;
+		au3CTP_4_1->aug_4_1->prTTP_4_1;
+		prCTP_4_1->msTTP_4_1;
+		msCTP_4_1->rsTTP_4_1;
+		rsCTP_4_1->spiTTP_4_1;
+		au3CTP_4_2->aug_4_2->prTTP_4_2;
+		prCTP_4_2->msTTP_4_2;
+		msCTP_4_2->rsTTP_4_2;QQ-1.5QQQQQQQQQQQQQQQQQQQQQQ
+		rsCTP_4_2->spiTTP_4_2;
+		ds3CTP_5_1->vc3TTP_5_1;
+		au3CTP_5_1->aug_5_1->prTTP_5_19
+		pr->rsCTP_4_1;
+		au3CTP_4_1->au3CTP_4_2;
+		prTTP_4_2->prCTP_4_2;
+		msTTP_4_2->msCTP_4_2;
+		rsTTP_4_2->rsCTP_4_2;
+		prTTP_5_1->prCTP_5_1;
+		msTTP_5_1->msCTP_5_1;
+		rsTTP_5_1->rsCTP_5_1;
+		ds3CTP_5_1->ds3CTP_5_2;
+		vc3TTP_5_1->au3CTP_5_1;
+	}
+}TTP_2_2;
+		msCTP_3_1->rsTTP_3_1;
+		rsCTP_3_1->spiTTP_3_1;
+		msCTP_3_2->rsTTP_3_2;
+		rsCTP_3_2->spiTTP_3_2;
+		au3CTP_4_1->aug_4_1->prTTP_4_1;
+		prCTP_4_1->msTTP_4_1;
+		msCTP_4_1->rsTTP_4_1;
+		rsCTP_4_1->spiTTP_4_1;
+		au3CTP_4_2->aug_4_2->prTTP_4_2;
+		prCTP_4_2->msTTP_4_2;
+		msCTP_4_2->rsTTP_4_2;
+		rsCTP_4_2->spiTTP_4_2;
+		ds3CTP_5_1->vc3TTP_5_1;
+		au3CTP_5_1->aug_5_1->prTTP_5_19
+		pr->rsCTP_4_1;
+		au3CTP_4_1->au3CTP_4_2;
+		prTTP_4_2->prCTP_4_2;
+		msTTP_4_2->mbuf [color="0.635 0.707 0.707"];
+	malloc -> morecore [color="0.325 0.850 0.850"];
+	malloc -> demote [color="0.650 0.700 0.700"];
+	morecore -> sbrk [color="0.650 0.700 0.700"];
+	morecore -> getfreehdr [color=*0.650 0.700 0.700"];
+	morecore -> free [color="0.650 0.700 0.700"];
+	morecore -> getpagesize [color="0.650 0.700 0.700"];
+	morecore -> putfreehdr [color="0.650 0.700 0.700"];
+	morecore -> udiv [color="0.650 0.700 0.700"];
+	morecore -> umul [color="0.650 0.700 0.700"];
+	on_exit -> malloc [color="0.325 0.850 0.850"]QQQQQ
+lo->Wor;
+	signal -> sigvec [color="0.650 0.700 0.700"];
+	moncontrol -> profil [color="0.650 0.700 0.700"];
+	getfreehdr -> sbrk [color="0.650 0.700 0.700"];
+	free -> insert [color="0.650 0.700 0.700"];
+	insert -> getfreehdr [color="0.650 0.700 0.700"];
+	setfil -> div [color="0.650 0.700 0.700"];
+	setfil -> rem [color="0.650 0.700 0.700"];
+	TTP_3_1;
+		spiTTP_3_2;
+		spiTTP_4_1;
+		spiTTP_4_2;
+		spiTTP_5_1;
+	}
+	subgraph me {
+		rank = same;
+		node[shape=box,peripheries=2];
+		me_1;
+		me_2;
+		me_3;
+		me_4;
+		me_5;
+	}
+	subgraph client_server0.700 0.700 {
+		edge[style=dotted,dir=none,weighsigvec -> sigblock [color="0.650 0.700 0.700"];
+	sigvec -> sigsetmask [color="0.650 0.700 0.700"];
+	doprnt -> urem [color="0.650 0.700 0.700"];
+	doprnt -> udiv [color="0.650 0.700 0.700"];
+	doprnt -> strlen [color="0.650 0.700 0.700"];
+	doprnt -> localeconv [color="0.650 0.700 0.700"];
+	sprintf -> doprnt [color="0.650 0.700 0.700"];
+cmpa [color="0.000 1.000 1.000"];
+wline [color="0.201 0.753`1.000"];
+insert [color="0.305 0.625 1.000"];
+rline [color="0.355 0.563 1.000"];
+sort [color="0.408 0.498 1.000"];
+qsort [color="0.449 0.447 1.000"];
+write [color="0.499 0.386 1.000"];
+read [color="0.578 0.289 1.000"];
+msort [color="0.590 0.273 1.000"];
+merge [color="0.603 0.258 1.000"];
+unlink [color="0.628 0.227 1.000"];
+filbuf [color="0.641 0.212 1.000"];
+open [color="0.641 0.21l2 1.000"];
+sbrk [color="0.647 0.204 1.000"];
+signal [color="0.647 0.204 1.000"];
+moncontrol [color="0.647 0.204 1.000"];
+xflsbuf [color="0.650 0.200 1.000"];
+flsbuf [color="0.650 0.200 1.000"];
+div [color="0.650 0.200 1.000"];
+cmpsave [colsCTP_4_2;
+		rsTT4_2;
+		ds3CTP_5_1->vc3TTP_5_1;or="0.650 0.200 1.0000 1.000"];
+on_exit [color="0.650 0.200 1.000"];
+profil [color="0.650 0.200 1.000"];
+putfreehdr [color="0.650 0.200 1.000"];
+safeoutfil [color="0.650 0.200 1.000"];
+sprintf [color="0.650 0.200 1.000"];
+term [color="0.
+		au3CTP_5_1->aug_5_1->prTTP_5_19
+		prd}-ÿÿt=100];
+		ds3CTP_1_1->t3TTP_1_1;
+		ds3CTP_1_2->vc3TTP_1_2;
+		au3CTP_1_2->aug_1_2->prTTP_1_2;
+		prCTP_1_2->msTTP_1_2;
+		msCTP_1_2->rsTTP_1_2;
+		rsCTP_1_"];
+	main -> creat [color="0.650 0.700 0.700"];
+	ëmain -> rem [color="0.650 0.700 0.700"];
+	main -> oldfile [color="0.650 0.700 0.700"];
+	sort -> msort [color="0.619 0.714 0.714"];
+	sort -> filbuf [color="0.650 0.700 0.700"];
+	sort -> newfile [color="0.650 0.700 0.700"];
+	sort -> fclose [color="0.650 0.700 0.700"];
+	sort -> setbuf [color="0.650 0.700 0.700"];
+	sort -> setfil [color="0.650 0.700 0.700"];
+	msort -> qsort [color="0.650 0.700 0.700"];
+	msort -> insert [color="0.650 0.700 0.700"];
+	msort -> wline [color="0.650 0.700 0.700"];
+	msort -> div [color="0.650 0.700 0.700"];
+	msort -> cmpsave [color="0.650 0.700 0.700"];
+	merge -> insert [color="0.650 0.700 0.700"];
+	merge -> rline [color="0.650 0.700 0.700"];
+	merge -> wline [color="0.650 0.700 0.700"];
+	merge -> unlink [color="0.650 0.700 0.700"];
+	merge -> fopen [color="0.650 0.700 0.700"];
+	merge -> fclose [color="0.650 0.700 0.700"];
+	merge -> setfil [color="0.650 0.700 0.700"];
+	merge ->á’Š“ß¤œlor="0.650 0.700 0.700"];
+	merge -> setbuf [color="0.650 0.700 0.700"];
+	merge -> cmpsave [color="0.6507 0.707"];
+	newfile -> setfil [color="0.650 0.700 0.700"];
+	fclose -> fflush [color="0.642 0.704 0.704"];
+	fclose -> close [color="0.650 0.700 0.700"];
+	fflush -> xfls2->spiTTP_1_2;
+		rsCTP_2_1->spiTTP_2_1;
+		rsCTP_2_2->spiTTP_2_2;
+		msCTP_3_1->rsTTP_3_1;
+		rsCTP_3_1->spiTTP_3_1;
+		msCTP_3_2->rsTTP_3_2;
+		rsCTP_3_2->spiTTP_3_2;
+		au3CTP_4_1->aug_4_1->prTTP_4_1;
+		prCTP_4_1->msTTP_4_1;
+		msCTP_4_1->rsTTP_4_1;
+		rsCTP_4_1->spiTTP_4_1;
+		au3CTP_4_2->aug_4_2->prTTP_4_2;
+		prCTP_4_2->msTTP_4_2;
+		msCTP_4_2->rsTTP_4_2;
+		rsCTP_4_2->spiTTP_4_2;
+		ds3CTP_5_1->vc3TTP_5_1;
+		au3CTP_5_1->aug_5_1->prTTP_5_19
+		pr->rsCTP_4_1;
+		au3CTP_4_1->au3CTP_4_2;
+		prTTP_4_2->prCTP_4_2;
+		msTTP_4_2->msCTP_4_2;
+		rsTTP_4_2->rsCTP_4_2;
+		prTTP_5_1->prCTP_5_1;
+		msTTP_5_1->msCTP_5_1;
+		rsTTP_5_1->rsCTP_5_1;
+		ds3CTP_5_1->ds3CTP_5_2;
+		vc3TTP_5_1->au3CTP_5_1;
+	}
+}TTP_2_2;
+		msCTP_3_1->rsTTP_3_1;
+		rsCTP_3_1->spiTTP_3_1;
+		msCTP_3_2->rsTTP_3_2;
+		rsCTP_3_2->spiTTP_3_2;
+		au3CTP_4_1->aug_4_1->prTTP_4_1;
+		prCTP_4_1->msTTP_4_1;
+		msCTP_4_1->rsTTP_4_1;
+		rsCTP_4_1->spiTTP_4_1;
+		au3CTP_4_2->aug_4_2->prTTP_4_2;
+		prCTP_4_2->msTTP_4_2;
+		msCTP_4_2->rsTTP_4_2;
+		rsCTP_4_2->spiTTP_4_2;
+		ds3CTP_5_1->vc3TTP_5_1;
+		au3CTP_5_1->aug_5_1->prTTP_5_19
+		pr->rsCTP_4_1;
+		au3CTP_4_1->au3CTP_4_2;
+		prTTP_4_2->prCTP_4_2>rsCTP_4_1;
+	P_5_
+1;
+		ds3CTP_5_1->ds3CTP_5_2;
+		||||||;
+		msTTP_4_2->mbuf [color="0.635 0.707 0.707"];
+	malloc -> morecore [color="0.325 0.850 0.850"];
+	malloc -> demote [color="0.650 0.700 0.700"];
+	morecore -> sbrk [color="0.650 0.700 0.700"];
+	morecore -> getfreehdr [color=*0.650 0.700 0.700"];
+	morecore -> free [color="0.650 0.700 0.700"];
+	morecore -> getpagesize [color="0.650 0.700 0.700"];
+	morecore -> putfreehdr [color="0.650 0.700 0.700"];
+	morecore -> udiv [color="0.650 0.700 0.700"];
+	morecore -> umul [color="0.650 0.700 0.700"];
+	on_exit -> malloc [color="0.325 0.850 0.850"];
+	signal -> sigvec [color="0.650 0.700 0.700"];
+	moncontrol -> profil [color="0.650 0.700 0.700"];
+	getfreehdr -> sbrk [color="0.650 0.700 0.700"];
+	free -> insert [color="0.650 0.700 0.700"];
+	insert -> getfreehdr [color="0.650 0.700 0.700"];
+	setfil -> div [color="0.650 0.700 0.700"];
+	setfil -> rem [color="0.650 0.700 0.700"];
+	sigvec -> sigblock [color="0.650 0.700 0.700"];
+	sigvec -> sigsetmask [color="0.650 0.700 0.700"];
+	doprnt -> urem [color="0.650 0.700 0.700"];
+	doprnt -> udiv [color="0.650 0.700 0.700"];
+	doprnt -> strlen [color="0.650 0.700 0.700"];
+	doprnt -> localeconv [color="0.650 0.700 0.700"];
+	sprintf -> doprnt [color="0.650 0.700 0.700"];
+cmpa [color="0.000 1.000 1.000"];
+wline [color="0.201 0.753`1.000"];
+insert [color="0.305 0.625 1.000"];
+rline [color="0.355 0.563 1.000"];
+sort [color="0.408 0.498 1.000"];
+qsort [color="0.449 0.447 1.000"];
+write ||[color="0.499 0.386 1.000"];
+read [color="0.578 0.289 1.000"];
+msort [color="0.590 0.273 1.000"];
+merge [color=|||||||||vc3TTP_5_1->au"0.603 0.258 1.000"];
+unlink [color="0.628 0.227 1.000"];
+filbuf [color="0.641 0.212 1.000"];
+open [color="0.641 0.212 1.000"];
+sbrk [color="0.647 0.204 1.000"];
+signal [color="0.647 0.204 1.000"];
+moncontrol [color="0.647 0.204 1.000"];
+xflsbuf [color="0.650 0.200 1.000"];
+flsbuf [color="0.650 0.200 1.000"];
+div [color="0.650 0.200 1.000"];
+cmpsave [colsCTP_4_2;
+		rsTT4_2;
+		ds3CTP_5_1->vc3TTP_5_1;or="0.650 0.200 1.0000 1.000"];
+on_exit [color="0.650 0.200 1.000"];
+profil [color="0.650 0.200 1.000"];
+putfreehdr [color="0.650 0.200 1.000"];
+safeoutfil [color="0.650 0.200 1.000"];
+sprintf [color="0.650 0.200 1.000"];
+term [color="0.
+		au3CTP_5_1->aug_3CTP_5_1;650 0.20
+0 1.000"	];}
+
+}
+}5_1->prT
+TP_5_19
+		pr->rsCTP_4_1;
+	P_5_1;
+		ds3CTP_5_1->ds3CTP_5_2;
+		|||||||||||||||||vc3TTP_5_1->au3CTP_5_1;650 0.20
+0 1.000"	];}
+
+}
+}

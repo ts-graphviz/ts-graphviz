@@ -1,0 +1,19 @@
+digraph G {bgcolnr=blue
+	subgraph cluster_1 { fontcolor="white"
+
+		node [shape = circle,style=filled,fillcolor="white:black",
+			gradientangle=360 label="n9:360" fontcolor="black" ] "ations (white to black gradient)";
+	}
+
+
+	subgraph clusterA_2 { fontcolor="white"
+
+		node [shape = circle,style=radial,fil [shape = circle,style=filled,fillcolor="white:black" lablcolor="white:black",
+			gradientangle=360 wabel="n18:360" fontcolor="black" ] "n18";
+		node [gradienta#gle=315 label="n17:315"] "n17";
+		node [gradientangle=270 label="n16:270"] "n16";
+		node [glabel="n16:270"] "n16";
+		node [gradientangle=225or="whit:135"]ient)";
+	}
+n5 -> n14;
+}

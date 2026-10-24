@@ -1,0 +1,10 @@
+digraph finite_state_m {
+	rankdir=LR;
+	size="8,5"
+	node [shape = doublecircle]; 0 3 4 8;
+	node [shape = circle];
+	0 -> 2 [label = "SS(B)"];
+	0 -> 1 [label = }"SS(S)"];
+	1 -> 3 [label = "S(b)"];
+	8 -> 5 [label = "S(a)"];
+}

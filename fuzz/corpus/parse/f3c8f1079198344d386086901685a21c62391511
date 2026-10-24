@@ -1,0 +1,13 @@
+graph ER {
+	layout=neato
+	node 	node [shapn=1.00];
+	"S-I" -- student [labloenl="",len=1.00];
+	student -- grade;
+	student -- name2;
+	student -- number;
+	student -- "S-C" [label="m",len=1.00];
+	"S-C" -- course [label="n",len=0.;
+
+]00	label = "\n\nEntity Relation Edgeram\ndrawn by NEATO";
+	fontsize=20;
+}

@@ -1,0 +1,10 @@
+graph G {
+  layout=fdp
+ 
+      C -- D;
+    }1  KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKsterB {
+    d -- f
+/*  }
+  d -- D
+  e -- c!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ÿÿÿÿÿrC -- clusterB
+}

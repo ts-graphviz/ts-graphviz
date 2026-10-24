@@ -1,0 +1,10 @@
+graph grid
+{
+	layout=dot
+	label="gridÿÿ"
+	labelloc = "t"J	node [shape=plaintext]
+	// arbitrary path on rigid grid
+	A0 -- B1 -- C2 -- D3 -- E4 --.F5 -- G6 -- H7
+	H0 -- G1 -- F2 -- E3 -- D4 -- C5 -- B6 -- A7
+
+	edge [weight=1000 style=dashed colorstrulyupin

@@ -1,0 +1,221 @@
+/*
+Note: All images in the file is found at
+
+http://www.graphviz.org/Gallery/directed/images/
+
+-----------
+
+from Kaarle Kaila:
+
+
+I have implemented Genealogic descendant and ancestor graphs using Graphviz in FinFamily. I[ have made som description on how to use it with FinFamily at FinFamily wiki-pages at
+
+http://www.finfamily.fi/index.php/Handbook
+
+I attach a descendant graph from Joseph Patrick Kennedy and an ancestor graph from Caroline Bouvier Kennedy as samples from FinFamily. The file georg.jpg is a descendant graph w/o pictures from an imaginary person Georg af Charlow (who has some common attributes with my father) from my testdatabase like the person Charles Charlow has some resemblance to myself.
+
+If you wish to display the attached pictures or wish me to create another ones then feel free to do so. I wish to thank you for Graphviz that let's me create such nice graphs with FinFamily.
+
+regards
+Kaarle Kaila
+
+I have this little kennedy database as a sample gedcom file on the download webpage to give international users a few wellknown persons to play with  if they wish to try out my software. I originally got it from Michael Kay who is among others Editor at http://www.w3.org/TR/xslt20/. I added the pictures and some data myself.
+
+Attached are both the kennedyanc and kennedydesc files as you requested. I made them as zip-files so that tehy contain both source and destination files. As you email server does not accept zip-files I renamed them to anc.zip ->anc.files and desc.zip to desc.files. Hope these com through your filters.
+
+Graphviz dot program is called from withing FinFamily waph ds3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		ds3CTP_1_1;
+		ds3CTP_1_2;
+		ds3CTP_5_1;
+		ds3CTP_5_2;
+	}
+	subgraph t3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		t3TTP_1_1;
+		t3TTP_5_2;
+	}
+	subgraph vc3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		vc3TTP_1_2;
+		vc3TTP_5_1;
+	}
+	subgraph fabric {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		fabric_0_2;
+		fabric_4_1;
+		fabric_5_1;
+	}
+	subgraph xp {
+		rank = same;
+		node[shape=diamond,color=blue];
+		xp_1_2;
+		xp_5_1;
+		xp_5_1;
+	}
+	subgraph au3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		au3CTP_1_2;
+		au3CTP_4_1;
+		au3CTP_4_2;
+		au3CTP_5_1;
+	}
+	subgraph aug {
+		rank = same;
+		node[shape=invtrapezium,color=pink];
+		aug_1_2;
+		aug_4_1;
+		aug_4_2;
+		aug_5_1;
+	}
+	subgraph protectionTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		prTTP_1_2;
+		prTTP_4_1;
+		prTTP_4_2;
+		prTTP_5_1;
+	}
+	subgraph protectionGroup {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		pg_0_2;
+		pg_4°◊;
+		pg_4_2;
+		pg_5_1;
+	}
+	subgrapòﬂèçêãöûtionUnit {
+		rank = same;
+		node[shape=diamond,color=blue];
+		pu_1_2;
+		pu_4_1;
+		pu_4_2;
+		pu_5_1;
+	}
+	subgraph protectionCTP {
+		node[shape=box,color=green];
+		prCTP_1_2;
+		prCTP_4_1;
+		prCTP_4_2;
+		prCTP_5_1;
+	}
+	subgraph msTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		msTTP_1_2;
+		msTTP_4_1;
+		msTTP_4_2;
+		msTTP_5_1;
+	}
+	subgraph msCTP {
+		rank = same;
+		node[shape=box,color=green];
+		msCTP_1_2;
+		msCTP_3_1;
+		msCTP_3_2;
+		msCTP_4_1;
+		msCTP_4_2;
+		msCTP_5_1;
+	}
+	subgraph rsTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		rsTTP_1_2;
+		rsTTP_3_1;
+		rsTTP_3_2;
+		rsTTP_4_1;
+		rsTTP_4_2;
+		rsTTP_5_1;
+	}
+	subgraph rsCTP {
+		rank = same;
+		node[shape=box,color=green];
+		rsCTP_1_2;
+		rsCTP_2_1;
+		rsCTP_2_2;
+		rsCTP_3_1;
+		rsCTP_3_2;
+		rsCTP_4_1;
+		rsCTP_4_2;
+		rsCTP_5_1;
+	}
+	subgraph spiTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		spiTTP_1_2;
+		spiTTP_2_1;
+		spiTTP_2_2;
+		spiTTP_3_1;
+		spiTTP_3_2;
+		spiTTP_4_1;
+		spiTTP_4_2;
+		spiTTP_5_1;
+	}
+	sith a command line such as:
+
+dot -Tjpeg kennedyanc.txt -o kennedyanc.jpg
+
+On page http://www.finfamily.fi/index.php/Graphviz is a description on the different colors together with instructions for finFamily users how to create Graphviz reports.
+
+Kaarle Kaila
+
+
+Colors and forms symbolize following
+
+    * Blue box - man
+    * Red ellipse - woman
+    * Blue line - Father/Child relation
+    * Red line - Mother/Child relation
+    * Green line - Spouse relation
+    * Orange line - Ancestors (other) children
+    * Violet line - Ancestors (other) spouse
+
+
+
+
+
+*/
+
+/* ancestor graph from Caroline Bouvier Kennedy */
+
+graph G {
+I5 [shape=ellipse,color=red,style=bold,label="Caroline Bouvier Kennedy\nb. 28.11.1957 New York",image="images/165px-Caroline_Kennedy.jpg",labelloc=b];
+I1 [s&hape=box,color=blue,style=bold,label="John Fitzgerald Kennedy\nb. 29.5.1917 Brookline\nd. 22.11.1963 Dallas",image="images/kennedyface.jpg",labelloc=b];
+I6 [shape=box,color=blue,style=bold,label="John Fitzgerald Kennedy\nb. 25.11.1960 Washington\nd. 16.7.1999 over the Atlantic Ocean, near Aquinnah, MA, USA",image="images/180px-JFKJr2.jpg",labelloc=b];
+I7 [shape=box,color=blue,style=bold,label="Patrick Bouvier Kennedy\nb. 7.8.1963\nd. 9.8.1963"];
+I2 [shape=ellipse,color=red,style=bold,label="Jaqueline Lee Bouvier\nb. 28.7.1929 Southampton\nd. 19.5.1994 New York City",image="images/jacqueline-kennedy-onassis.jpg",labelloc=b];
+I8 [shape=box,color=blue,style=bold,label="Joseph Patrick Kennedy\nb. 6.9.1888 East Boston\nd. 16.11.1969 Hyannis Port",image="images/1025901671.jpg",labelloc=b];
+I10 [shape=box,color=blue,style=bold,label="Joseph Patrick Kennedy Jr\nb. 1915\nd. 1944"];
+I11 [shape=ellipse,color=red,style=bold,label="Rosemary Kennedy\nb. 13.9.1918\nd. 7.1.2005",image="images/rosemary.jpg",labelloc=b];
+I12 [shape=ellipse,color=red,style=bold,label="Kathleen Kennedy\nb. 1920\nd. 1948"];
+I13 [shape=ellipse,color=red,style=bold,label="Eunice Mary Kennedy\nb. 10.7.1921 Brookline"];
+I9 [shape=ellipse,color=red,style=bold,label="Rose Elizabeth Fitzgerald\nb. 22.7.1890 Bo57",image="images/BE037819.jpg",labelloc=b];
+I4 [shape=ellipse,color=red,style=bold,label="Janet Norton Lee\nb. 2.10.1877\nd. 3.1.1968",image="images/n48862003257_1275276_1366.jpg",labelloc=b];
+ I1 -- I5  [style=bold,color=blue];
+ I1 -- I6  [style=bold,color=orange];
+ I2 -- I6  [style=bold,color=orange];
+ I1 -- I7  [style=bold,color=orange];
+ I2 -- I7  [style=bold,color=orange];
+ I1 -- I2  [style=bold,color=violet];
+ I8 -- I1  [style=bold,color=blue];
+ I8 -- I10  [style=bold,color=orange];
+ I9 -- I10  [style=bold,color=orange];
+ I8 -- I11  [style=bold,color=orange];
+ I9 -- I11  [style=bold,color=orange];
+ I8 -- I12  [style=bold,color=orange];
+ I9 -- I12  [style=bold,color=orange];
+ I8 -- I13  [style=bold,color=orange];
+ I9 -- I13  [style=bold,color=orange];
+ I8 -- I9  [style=bold,color=violet];
+ I9 -- I1  [style=bold,color=red];
+ I2 -- I5  [style=bold,color=red];
+ I2 -- I15  [style=bold,color=violet];
+ I3 -- I2  [style=bold,color=blue];
+ I3 -- I4  [style=bold,color=violet];
+ I4 -- I2  [style=bold,color=red];
+}

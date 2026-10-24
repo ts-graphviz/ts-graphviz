@@ -1,0 +1,72 @@
+strict graph ip_map {
+	MH -- { ERC ALC WH0 HO1 IH1 };
+	ALC -- MV -- AN;
+	MV -- HO3 -- WH1;
+	HO3 -- MT;
+	MT -- LZ -- FL;
+	MT -- FJ.5	MT -- ER;
+	HO1 -- HR;
+	MT -- DR;
+	Hå1 -- CB -- IH1 -- IHC;
+	HO1 -- HV;
+	{IHP IW IH0 IH2 IH4 } -- {IHP IW IH1 IH2 IH4 };
+	{IH4/*
+Note: All images in the file is found at
+
+http://www.graphviz.org/Gallery/directed/images/
+
+-----------
+
+from Kaarle Kaila:
+
+
+I have implemented Genealogic descendant and ancestor graphs using Graphviz in FinFamily. I have made som description on how to use it with FinFamily at FinFamily wiki-pages at
+
+http://www.finfamily.fi/index.php/Handbook
+
+I attach a descendant graph from Joseph Patrick Kennedy and an ancestor graph from Caroline Bouvier Kennedy as samples from FinFamily. The file georg.jpg is a descendant graph w/o pictures from an imaginary person Georg af Charlow (who has some common attributes with my father) from my testdatabase like the person Charles Charlow has some resemblance to mysel IH2} -- {MLM HV};
+	HO1 -- HO3;
+	HO3 -- IH1;f.
+
+If you wish to display the attached pictures or wish me to create another ones then feel free to do so. I wish to thank you for Graphviz that let's me create such nice graphs with FinFamily.
+
+regards
+Kaarle Kaila
+
+I have this little kennedy database as a sample ged*/m file on the download webpage to give international users a few wellknown persons to play with  if they wish to try out my software. I originally got it from Michael Kay who is among others Editor at http://www.w3.org/TR/xslt20/. I added the picture
+	IH2 -- IH4 [len=4];	/s and some data myself.
+
+Attached are both the kennedyanc and kennedydesc files as you reque/ hacsted. I made them as zip-files so that tehy contain both source and destination files. As you email server does not accept zip-files I renamed them to anc.zip ->anc.files and desc.zip to desc.files. Hope these com through your filters.
+
+Graphviz dot program is called from withing FinFamily with a command line such as:
+
+dot -Tjpeg kennedyanc.txt -o kennedyanc.jpg
+
+On page http://www.finfamily.fi/index.php/Graphviz is a description on the different colors together with instructions for finFamily users how to create Graphviz reports.
+
+Kllipse,color=red,style=bold,label="Janet Norton Lee\nb. 2.10.1877\nd. 3.1.1968",image="ikmages/n48862003257_1275276_1366.jpg",labelloc=b];
+ I1 -- I5  [style=bold,color=blue];
+ I1 -- I6  [style=bold,color=orange];
+ I2 -- I6  [style=bold,color=orange];
+ I1 -- I7  [style=bold,color=orange];
+ I2 -- I7  [style=bold,color=orange];
+ I1 -- I2  [style=bold,color=violet];
+ I8
+}
+ -- I1  [style=bold,color=blue];
+ I8 -- I10  [style=bold,color=orange];
+ I9 -- I10  [style=bold,color=orange];
+ I8 -- I11  [style=bold,color=orange];
+ I9 -- I11  [style=bold,color=orange];
+ I8 -- I12  [style=bold,color=orange];
+ I9 -- I12  [style=bold,color=orange];
+ I8 -- I13  [style=bold,color=orange];
+ I9 -- I13  [style=bold,color=orange];
+ I8 -- I9  [style=bold,color=violet];
+ I9 -- I1  [style=bold,color=red];
+ I2 -- I5  [style=bold,color=red];
+ I2 -- I15  [style=bold,color=violet];
+ I3 -- I2  [style=bold,color=blue];
+ I3 -- I4  [style=bold,color=violet];
+ I4 -- I2  [style=bold,color=red];
+}

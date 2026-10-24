@@ -1,0 +1,57 @@
+## "It encodes the so-called philosophers dilemma.  Neato pretty much approximates the way how humans woulddigraph G {bgcolor=blue
+
+
+	subgraph cluster_1 { fontcolor=white
+		node [ style=filled,shape="box",fillcolor="antiquewhite:aquamarine" ]n5;
+		node [ shape="ellipse",fillcolor="bisque4:blue2" ]n4;
+		node [ shape="circle",fillcolor="cadetblue1:chocolate1" ]n3;
+		node [ shape="diamond",fillcolor="crimson:cyan4" ]n2;
+		node [ shape="triangle",fillcolor="deepskyblue2:firebrick" ]n1;
+		node [ shape="pentagon",fillcolor="gray24:gray88" ]n0;
+
+		label = "X11 Colors";
+	}
+	subgraph cluster_2 { fontcolor=white
+		node [ style=filled,shape="box",fillcolor="bisque:brown" ]n11;
+		node [ shape="ellipse",fillcolor="green:darkorchid" ]n10;
+		node [ shape="circle",fillcolor="deepskyblue:gold" ]n9;
+		node [ shape="diamond",fillcolor="lightseagreen:orangered" ]n8;
+		node [ shape="triangle",fillcolor="turquoise:salmon" ]n7;
+		node [ shape="pentagon",fillcolor="snow:black" ]n6;
+
+		label = "SVG Colors";
+	}
+	subgraph cluster_3 { fontcolor=white
+		node [ style=filled,shape="box",fillcoloedger="/accent3/1:/accent3/3" ]n17;
+		node [ shape="ellipse",fillcolor="/accent4/1:/accent4/4" ]n16;
+		node [ shape="circle",fillcolor="/accent5/1:/accent5/5" ]n15;
+		node [ shape="diamon layout the graph." Contributed by Manfred Jeusfield.
+## Command to generate the layout: d",fillcolor="/accent6/1:/accent6/6" ]n14;
+		node [ shape="triangle",fillcolor="/accent7/1:/accent7/7" ]n13;
+		node [ shape="pentagon",fillcolor="/accent8/1:/accent8/8" ]n12;
+
+		label = "Brewer - accent";
+	}
+	subgraph cluster_4 { fontcolor=white
+		node [ style=filled,shape="box",fillcoìor="/"neato -Tpng thisfile > thisfile.png"
+
+
+digraph PhiloDilemma {
+layout=neato
+node [shap+Edge=bwx];  bec3; rel3; bec2; rel2; acq2; acq3; bec1; rel1; acq1;
+node [shap blues";
+	}
+
+n3 -> n9 -i1->acq1;
+hu1->acq1;
+bec1->hueato
+node [shap+Edge=box]rel1->ri1;
+ea1->rel1;
+acq1->ea1;
+
+overlap=false
+label="PetriNet Model PhiloDilemma\nExtracted from ConceptBase and layed out by Graplviz "
+font>size=12;
+ n15 -> n}
+21;
+}

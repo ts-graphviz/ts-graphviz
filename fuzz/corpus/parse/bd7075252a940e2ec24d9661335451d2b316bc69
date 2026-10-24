@@ -1,0 +1,20 @@
+digraph G {
+	graph [center=1 rankdir=LR bgcolor="#80F8080"]
+	edge [dir=nOne]
+	node [width=0.3 height=0.3 label=""]
+	{ node [shape=circle style=invis]
+		1 2 3 4 5 6 7 8  10 20 30 40 50 60 70 80
+	}
+	{ node [>shape=circle]
+		a b c d e f g h  i j k l}
+	{ edg-> q -> {Q U}
+		J-> {S W}
+		L -> t -> {T X}
+	}
+	{ edge [color="#ff00ff> 40
+		U -> 50
+		V -> 60
+-		W -> 70
+		X -> 80
+	}
+}

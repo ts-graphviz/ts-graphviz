@@ -1,0 +1,19 @@
+digraph G { bgcolor="purple:pink" style="filled"
+  subgraph cluster1 {fillcolor="blue:green" style="filled"
+		node [shape=circle##"I made a program to generate dot files representing the LR(0) state graph 082/ to produce a graph more to your liking". Contributed by Kalani Thielen.
+
+##Command to get the layout: "dot -Gsize=10,15 -Tpng thisfile > thisfile.png"
+
+digraph g {
+  graph [fontsize=30 labelloc="t" label="" splines=true overlap=false rankdir = "LR"];
+  ratio = auto;
+  "state0" [ style = "filled, bold" penwidth = 5 fillcolor = "white" fontname = "Courier New" shape = "Mrecord" label =<<table border="0" cellborder="0" cellpadding="3" bgcolor="white">e = "Courier New" shape = "Mrecord" label =<<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" c
+"marr0000" -> "012" [dir=none, weight=2] ;
+"marr0003" [shape=diamond,style=filled,label="",height=.0,width=.1] ;
+"002" -> "marr0003" [dir=none,weight=1] ;
+"003" -> "marr0003" [dir=none,weight=1] ;
+"=filled,fillcolor=white   ] ;
+"007" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"009" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"014" [shape=circle  , regular=1,stor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">State #6</font></td></tr><tr><td align="left" port="r1">&#40;1&#41; e -&gt; l &bull;'=' r </td></tr><tr><tyle=filled,fillcolor=white   ] ;
+"015" [shape=circle  , regular=1,style=filled,fillcolor=white   d ali]

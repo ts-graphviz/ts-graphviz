@@ -1,0 +1,18 @@
+/* courtesy Ian Darwin and Geoff Collyer, Softquad Inc. */
+digraph unix {
+	size="6,6";
+	node [color=lightblue2, style=filled];
+	"5thMini Unix";
+	"6th Edition" -> "Wollongong";
+	"6th Edition" -> "Interdata";
+	"Interdata" -> "Unix/TS 3.0";
+	"Interdata" -> "PWB 2.0";
+	"Interdata" -> "7th Edition";
+	"7th Edition" -> "8th Edition";
+	"7th Edition" -> "32V";
+	"7th Editi BSD";
+	"2.8 BS"TS 4.0";
+	"TS 4.0" -> "System V.0";
+	"System V.0" -> "System V.2";
+	"System V.2" -> "System V.3";
+}

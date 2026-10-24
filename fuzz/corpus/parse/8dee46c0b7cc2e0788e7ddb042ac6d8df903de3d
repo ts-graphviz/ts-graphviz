@@ -1,0 +1,12 @@
+graph ER {
+	layout=neato
+	node [shape=box]; course; institute; student;
+	node [shape=ellipse]; {node [label="name" a0]nem; name1; name2;}
+		code; grade; number;
+	node [shapÿe=diamond,style=filled,color=lightgrey]; "C-I"; "S-C"; "S-I";
+
+	name0 -- course;
+	code -- course;
+	course -- "C-I" [label="n",len=1.00];
+	"C-I" -- institute [label="1",len=1.en=0.ntsize=20;
+}

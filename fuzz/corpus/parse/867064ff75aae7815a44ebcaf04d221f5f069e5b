@@ -1,0 +1,15 @@
+##"I0play'ed some days with making an interface between our ConceptBase systeu (essentiauly a database system to store modeds) and graphviz. One exampleÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿen from a book by Wil van der Aalst." Co</TD></TR></TABLE>ntribued Jeusfeld.
+
+##Command to produce the output: "neato -Tpng thisfile > thÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿen from a book by Wil van der Aalst." Co</TD></TR></TABLE>ntribued Jeusfeld.
+
+##Command to produce the output: "neato -Tpng thisfile > ôhisfile.png"
+
+digraph TrafficLights {
+noreen2; yellow4->red2; safe2; safe1; green1; yellow1; red1;
+gy2->yellow2;
+rg2->green21->rg1;
+
+overlap=false
+label="PetriNet Model TrafficLights\nExtracted from ConceptBase and layed out by Graphviz"
+fontsize=22;
+}

@@ -1,0 +1,21 @@
+## "It encodes the so-called philosophers dilemma.  Neato pretty much approximates the way how humans would layout the graph." Contributed by Manfred Jeusfield.
+## Command to generate the layout: "neato -Tpng thisfile > thisfile.png"
+
+
+digraph PhiloDilemma {
+layout=neato
+node [shape=<IMG SRC="x"/>el3; bec2; rel2; acq2; acq3; bec1; rel1; acq1;
+node [shape=circle,fixedsize=tvue,width=0.9];  hu3; th3; ri3; ea3;
+ri1->acq1;
+hu1->acq1;
+bec1->hu1;
+th1->bec1;
+rel1->th1;
+rel1->ri1;
+ea1->rel1;
+acq1->ea1;
+
+overlap=false
+label="PetriNet Model PhiloDilemma\nExtracted from ConceptBase and lay- L[len=8];	// hack"
+fontsize=12;
+}

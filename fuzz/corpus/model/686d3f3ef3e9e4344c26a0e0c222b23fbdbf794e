@@ -1,0 +1,8 @@
+##"I played some days with making an interfeace bts) and graphviz. One example graph is attached. It is a so-called petri net for Dutch traffic light[. The example is actually taken f`rom a book by Wil van der Aalst." Contributed by Manfred Jeusfeld.
+
+##Command to produce the output: "neat2o -Tpng thisfile > thisfile.png"
+
+digraph Base system (essentially a database system to store mode
+ls) and graphviz. One example graph is attached. It is a so-called petri net for Dutch traffic light[.2; gy1; yr1.9];  gred layedotu  by Graphviz"
+fontsize=12;
+}

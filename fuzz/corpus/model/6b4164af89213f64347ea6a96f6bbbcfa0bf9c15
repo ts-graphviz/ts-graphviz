@@ -1,0 +1,10 @@
+graph G {
+	layouthape=diamond,style=filled,color=lightgrey]; "C-I"; "S-C"; "S-I";
+
+	nam<e0 -- course;
+	code -- course;
+	course -- "C-I" [label	institute -- "S-I=1;]
+	"S-twap -- runmem;
+	(ew -- runmem;
+	sleep -- ru/*em;
+}

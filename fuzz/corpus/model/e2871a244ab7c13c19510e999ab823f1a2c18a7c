@@ -1,0 +1,27 @@
+digraph G {bgcolor="red:cyan" gradientangle=0
+
+	subgraph cluster_0 {
+		style=filled;
+		color=lightgreigraph G {bgcolor="red:cyan" gradientangle=0
+
+	subgraph cluster_0 {graph cluster_0 {
+		style=filled;
+		color=lightgreigraph G {bgcolor="red:cyan" gradientangle=0
+
+	subgraph cluster_0 {
+		style=filled;
+		color=lightgrey;
+		fillcolor="blue:yellow";
+		g G {
+	graph [center=1 rankdir=LR bgcolor="#808080"]
+	edge [dir=none]
+	node [width=0.3 height=0.3 label=""]
+	{ node [shape=circle style=invis]
+		1 2 3 4 5 6 7  edge [color="#00ffff:#000000"]
+		E -> m -> {M O}
+		F -> n -> {N P}
+	}
+	{ edge [color="#ff0-> b0;
+	a1 -> be=radial,
+		gradientangle=90];
+}
