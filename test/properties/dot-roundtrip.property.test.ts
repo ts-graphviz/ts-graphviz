@@ -183,6 +183,54 @@ describe('explicit value kinds', () => {
     );
   });
 
+  it('any JS number produces DOT that parses back to the same number', () => {
+    fc.assert(
+      fc.property(
+        fc.oneof(
+          fc.double(),
+          fc.integer(),
+          fc.constantFrom(1e21, 1e-7, 5e-324),
+        ),
+        (n) => {
+          const g = digraph((g) => {
+            g.node('a', { fontsize: n });
+          });
+          const again = fromDot(toDot(g));
+          const back = Number(again.nodes[0].attributes.get('fontsize'));
+          // DOT has no signed zero, so -0 reads back as 0
+          expect(back === n || (Number.isNaN(back) && Number.isNaN(n))).toBe(
+            true,
+          );
+        },
+      ),
+    );
+  });
+
+  it('attribute keys that are DOT keywords or not identifiers are quoted', () => {
+    fc.assert(
+      fc.property(
+        fc.oneof(
+          fc.constantFrom(
+            'node',
+            'Edge',
+            'GRAPH',
+            'subgraph',
+            'strict',
+            'digraph',
+          ),
+          dotString().filter((s) => s !== ''),
+        ),
+        (key) => {
+          const g = digraph((g) => {
+            g.node('a', { [key]: 'v' } as { label: string });
+          });
+          const again = fromDot(toDot(g));
+          expect(again.nodes[0].attributes.get(key as 'label')).toBe('v');
+        },
+      ),
+    );
+  });
+
   it('unbalanced HTML-like markup is rejected rather than written', () => {
     fc.assert(
       fc.property(

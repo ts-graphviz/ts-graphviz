@@ -41,6 +41,15 @@ describe('literal text', () => {
       quoted: true,
     });
     expect(literalFromKey('1st')).toStrictEqual({ value: '1st', quoted: true });
+    // DOT keywords cannot appear bare, even as attribute names
+    expect(literalFromKey('node')).toStrictEqual({
+      value: 'node',
+      quoted: true,
+    });
+    expect(literalFromKey('Graph')).toStrictEqual({
+      value: 'Graph',
+      quoted: true,
+    });
   });
 
   it('round-trips through literalFromValue / valueFromLiteral', () => {
@@ -138,6 +147,30 @@ describe('HTML-like', () => {
 });
 
 describe('numbers and booleans', () => {
+  it('writes numbers that are not DOT numerals as strings', () => {
+    // DOT numerals have no exponent, and NaN / Infinity would be identifiers
+    expect(literalFromValue(1e21)).toStrictEqual({
+      value: '1e+21',
+      quoted: true,
+    });
+    expect(literalFromValue(1e-7)).toStrictEqual({
+      value: '1e-7',
+      quoted: true,
+    });
+    expect(literalFromValue(Number.NaN)).toStrictEqual({
+      value: 'NaN',
+      quoted: true,
+    });
+    expect(literalFromValue(Number.NEGATIVE_INFINITY)).toStrictEqual({
+      value: '-Infinity',
+      quoted: true,
+    });
+    expect(literalFromValue(-0.5)).toStrictEqual({
+      value: '-0.5',
+      quoted: false,
+    });
+  });
+
   it('are written unquoted', () => {
     expect(literalFromValue(1.5)).toStrictEqual({
       value: '1.5',

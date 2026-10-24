@@ -132,8 +132,16 @@ export function literalFromValue(
   if (isEscString(value)) {
     return { value: sanitizeEscString(value.value), quoted: true };
   }
-  return { value: String(value), quoted: false };
+  const text = String(value);
+  // Booleans and numbers in DOT's own numeral form are written bare; anything
+  // else JavaScript can produce (1e+21, NaN, Infinity) is written as a string.
+  return typeof value === 'boolean' || DOT_NUMERAL.test(text)
+    ? { value: text, quoted: false }
+    : { value: text, quoted: true };
 }
+
+/** DOT numerals: `[-]?(.[0-9]+ | [0-9]+(.[0-9]*)?)`, no exponent. */
+const DOT_NUMERAL = /^-?(\.\d+|\d+(\.\d*)?)$/;
 
 /** The model value for a `Literal` AST node. */
 export function valueFromLiteral(
@@ -173,14 +181,20 @@ export function createIdLiteral(
   return createElement('Literal', { value: idToRaw(id), quoted: true }, []);
 }
 
-/** DOT identifiers that can be written without quotes. */
-const BARE_ID = /^[A-Za-z_\u0080-￿][A-Za-z_0-9\u0080-￿]*$/;
+/**
+ * Identifiers written without quotes. DOT also allows non-ASCII letters bare,
+ * but which code points count as letters differs between Graphviz and this
+ * parser (e.g. U+00A0), so anything beyond ASCII is quoted instead.
+ */
+const BARE_ID = /^[A-Za-z_][A-Za-z0-9_]*$/;
+/** Keywords of the DOT language (case-insensitive); they must be quoted to be used as ids. */
+const KEYWORD = /^(graph|digraph|subgraph|node|edge|strict)$/i;
 
-/** The raw text and quoting for an attribute key: bare when it is an identifier. */
+/** The raw text and quoting for an attribute key: bare when it is a plain identifier. */
 export function literalFromKey(
   key: string,
 ): Pick<LiteralASTNode, 'value' | 'quoted'> {
-  return BARE_ID.test(key)
+  return BARE_ID.test(key) && !KEYWORD.test(key)
     ? { value: key, quoted: false }
     : { value: idToRaw(key), quoted: true };
 }

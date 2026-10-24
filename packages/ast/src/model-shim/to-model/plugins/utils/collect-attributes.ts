@@ -12,10 +12,15 @@ import { idFromLiteral, valueFromLiteral } from '../../../literal.js';
 export function collectAttributes(
   attrs: AttributeASTNode[],
 ): Record<string, AttributeValue> {
-  return attrs.reduce<Record<string, AttributeValue>>((acc, curr) => {
-    acc[idFromLiteral(curr.key)] = valueFromLiteral(
-      curr.value,
-    ) as AttributeValue;
-    return acc;
-  }, {});
+  // A null-prototype record, so that a key such as `__proto__` in the DOT
+  // source becomes an ordinary property instead of changing the prototype.
+  return attrs.reduce<Record<string, AttributeValue>>(
+    (acc, curr) => {
+      acc[idFromLiteral(curr.key)] = valueFromLiteral(
+        curr.value,
+      ) as AttributeValue;
+      return acc;
+    },
+    Object.create(null) as Record<string, AttributeValue>,
+  );
 }
