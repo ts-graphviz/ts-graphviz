@@ -1,5 +1,14 @@
 # ts-graphviz
 
+## 3.0.8
+
+### Patch Changes
+
+- Updated dependencies [[`337f395`](https://github.com/ts-graphviz/ts-graphviz/commit/337f3954c2f9b1ecb14cd70a3343510822f3ea0d), [`a6af926`](https://github.com/ts-graphviz/ts-graphviz/commit/a6af926d6ff3bf03a3396e98d6239e16b7412dc5), [`fdc8c03`](https://github.com/ts-graphviz/ts-graphviz/commit/fdc8c03f64f072e63eaa2b7594c7ff9a327de438)]:
+  - @ts-graphviz/ast@3.0.7
+  - @ts-graphviz/adapter@3.0.7
+  - @ts-graphviz/core@3.0.8
+
 ## 3.0.7
 
 ### Patch Changes

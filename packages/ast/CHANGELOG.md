@@ -1,5 +1,17 @@
 # @ts-graphviz/ast
 
+## 3.0.7
+
+### Patch Changes
+
+- [#1575](https://github.com/ts-graphviz/ts-graphviz/pull/1575) [`337f395`](https://github.com/ts-graphviz/ts-graphviz/commit/337f3954c2f9b1ecb14cd70a3343510822f3ea0d) Thanks [@kamiazya](https://github.com/kamiazya)! - Accept raw newlines inside quoted strings
+
+  Graphviz accepts an unescaped newline inside a double-quoted string and keeps it in the value. `parse` now does the same instead of throwing a `SyntaxError`; `stringify` emits the newline as the `\n` escape, which Graphviz renders identically.
+
+- [#1572](https://github.com/ts-graphviz/ts-graphviz/pull/1572) [`fdc8c03`](https://github.com/ts-graphviz/ts-graphviz/commit/fdc8c03f64f072e63eaa2b7594c7ff9a327de438) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix parsing of backslash-newline line continuations in quoted strings
+
+  A quoted string containing a backslash followed by a newline kept the continuation marker in the parsed value. The lines are now joined as Graphviz does, so `"one\<newline>two"` parses as `onetwo`. As in Graphviz, only backslash + LF is a continuation.
+
 ## 3.0.6
 
 ### Patch Changes
