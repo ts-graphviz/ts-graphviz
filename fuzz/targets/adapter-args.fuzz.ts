@@ -62,14 +62,47 @@ export function fuzz(data: Buffer): void {
       throw new Finding(`argv element is not a flag: ${JSON.stringify(arg)}`);
     }
   }
-  const attributeCount =
-    Object.keys(options.attributes.graph).length +
-    Object.keys(options.attributes.node).length +
-    Object.keys(options.attributes.edge).length;
-  const flagged = args.filter((a) => /^-[GNE]/.test(a)).length;
-  if (flagged !== attributeCount) {
+
+  // The exact argv the options mean, built independently: one flag per
+  // option, values verbatim inside their flag, nothing dropped or repeated.
+  const value = (v: string | number | boolean) => (v === true ? '' : `=${v}`);
+  const expected: string[] = [
+    ...(options.suppressWarnings ? ['-q'] : []),
+    `-T${options.format}`,
+    ...Object.entries(options.attributes.graph).map(
+      ([k, v]) => `-G${k}${value(v)}`,
+    ),
+    ...Object.entries(options.attributes.node).map(
+      ([k, v]) => `-N${k}${value(v)}`,
+    ),
+    ...Object.entries(options.attributes.edge).map(
+      ([k, v]) => `-E${k}${value(v)}`,
+    ),
+    ...(typeof options.scale === 'number' && !Number.isNaN(options.scale)
+      ? [`-s${options.scale}`]
+      : []),
+    ...options.library.map((lib) => `-l${lib}`),
+    ...(options.y ? ['-y'] : []),
+    `-K${layout}`,
+  ];
+  if (layout === 'neato') {
+    const o = options as typeof options & { reduce: boolean; noop: number };
+    if (o.reduce) expected.push('-x');
+    expected.push(`-n${o.noop}`);
+  }
+  if (layout === 'fdp') {
+    const o = options as typeof options & {
+      grid: boolean;
+      oldAttractive: boolean;
+      iterations: number;
+    };
+    if (o.grid === false) expected.push('-Lg');
+    if (o.oldAttractive === true) expected.push('-LO');
+    expected.push(`-Ln${o.iterations}`);
+  }
+  if (JSON.stringify(args) !== JSON.stringify(expected)) {
     throw new Finding(
-      `${attributeCount} attributes produced ${flagged} -G/-N/-E arguments: ${JSON.stringify(args)}`,
+      `argv differs from the options:\n${JSON.stringify(args)}\n${JSON.stringify(expected)}`,
     );
   }
 }

@@ -323,7 +323,9 @@ _slash_comment
       );
     }
 
-_slash_comment_line = _ "//" v:(!_newline v:. { return v; })* _newline? { return v.join(''); }
+// Like Graphviz, a line comment ends only at "\n" (a lone "\r" is part of
+// the text); the "\r" of a CRLF line ending is not.
+_slash_comment_line = _ "//" v:(!_line_end v:. { return v; })* _line_end? { return v.join(''); }
 
 _macro_comment
   = lines:_macro_comment_line+ {
@@ -337,7 +339,7 @@ _macro_comment
       );
     }
 
-_macro_comment_line = _ "#" v:(!_newline v:. { return v; })* _newline? { return v.join(''); }
+_macro_comment_line = _ "#" v:(!_line_end v:. { return v; })* _line_end? { return v.join(''); }
 
 STRING "UNICODE_STRING" = first:StringStart rest:StringPart* { return first + rest.join(''); }
 
@@ -449,6 +451,9 @@ _ "whitespace" = _whitespace*
 __ "WHITESPACE" = (_whitespace / _newline)*
 
 _newline = [\n\r]
+
+// The end of a line comment: "\n", with the "\r" of a CRLF ending.
+_line_end = "\r"? "\n"
 
 _whitespace = [ \t]
 
