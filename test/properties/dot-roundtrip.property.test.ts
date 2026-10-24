@@ -29,7 +29,7 @@ const roundTrip = (spec: Parameters<typeof buildGraph>[0]) => {
   return { model, dot, reparsed: fromDot(dot) };
 };
 
-describe('DOT round trip', () => {
+describe('[SM-2] DOT round trip', () => {
   // Backslashes have no defined meaning in model strings today (#1587): the
   // printer passes them through, so `\\"` breaks out of the string and `\"`
   // comes back as `"`. These properties are expected to fail until #1587
@@ -153,7 +153,7 @@ describe('DOT round trip', () => {
   });
 });
 
-describe('explicit value kinds', () => {
+describe('[SM-3] explicit value kinds', () => {
   // DOT text carries no kind marker, so an escString without Graphviz escapes
   // reads back as plain text; what must hold is that printing is idempotent
   // and that no value can break out of its string.
@@ -272,7 +272,7 @@ describe('explicit value kinds', () => {
   });
 });
 
-describe('parser robustness', () => {
+describe('[SM-1] parser robustness', () => {
   // Every error the library raises carries a TSG_ERR_* code (#776, #1627);
   // anything else is a crash.
   const allowed = (error: unknown) => isTsGraphvizError(error);
@@ -354,7 +354,7 @@ describe('parser robustness', () => {
   });
 });
 
-describe('attribute values of every kind', () => {
+describe('[SM-2] attribute values of every kind', () => {
   // The value kinds the model accepts, including the ones DOT writes bare.
   const anyValue = fc.oneof(
     dotString({ newlines: true }),

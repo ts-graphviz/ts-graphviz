@@ -147,7 +147,7 @@ describe('createElement', () => {
 });
 
 // issue #1624
-describe('the shared createElement', () => {
+describe('[SM-1] the shared createElement', () => {
   test('does not stop after 100,000 nodes in one process', () => {
     expect(() => {
       for (let i = 0; i < 100_001; i++) {

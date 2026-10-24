@@ -4,6 +4,8 @@ This document states what ts-graphviz trusts, what it guarantees at each boundar
 
 ## Summary
 
+Each boundary below has an identifier (`SM-1` … `SM-6`). Where a guarantee is enforced by tests, the tests carry the identifier in their title (for example `describe('[SM-2] …')`), and `test/security-model.test.ts` fails if an identifier claimed here has no test or a test names an identifier that is not here. The document therefore does not list test files; search the repository for the identifier.
+
 ts-graphviz converts between three representations of a Graphviz graph: DOT text, an AST, and object models. The library itself performs no I/O: it does not touch the network or the file system and runs no code from its input. The only package that leaves the process is `@ts-graphviz/adapter`, which spawns the Graphviz `dot` executable.
 
 | Boundary | Trusted? | Guarantee |
@@ -15,7 +17,7 @@ ts-graphviz converts between three representations of a Graphviz graph: DOT text
 | `@ts-graphviz/adapter` | spawns `dot` with argv, no shell | no shell injection; the DOT it renders is still interpreted by Graphviz |
 | the npm packages themselves | supply chain | SHA-pinned actions, provenance, scorecard, dependency cooldown |
 
-## 1. DOT text → `parse` / `fromDot` (untrusted input)
+## SM-1. DOT text → `parse` / `fromDot` (untrusted input)
 
 The parser is the component most exposed to attacker-controlled data: a web service that renders user-uploaded DOT files passes them straight to it.
 
@@ -40,14 +42,9 @@ The parser is the component most exposed to attacker-controlled data: a web serv
 - Semantic validity for Graphviz: the parser accepts the DOT grammar; whether Graphviz will render the result, or how long it takes, is outside the library.
 - Protection against Graphviz-side issues in the file (e.g. an `image` attribute pointing at a local path) when the output is later rendered; see section 4.
 
-**Evidence**
+**Evidence**: tests tagged `SM-1` — properties that arbitrary input either parses or throws a typed error and that whatever parses prints and parses again; the limit tests for input size, nesting depth, edge-chain depth and node count (including that the node count is per parse).
 
-- `test/properties/dot-roundtrip.property.test.ts` → "parser robustness": arbitrary input either parses or throws a typed error; whatever parses prints and parses again.
-- `test/properties/ast-roundtrip.property.test.ts` → "printer and parser": `parse(stringify(ast))` rebuilds the same tree; printing is stable.
-- `packages/ast/src/dot-shim/parser/parse.test.ts` → the limit tests (input size, nesting depth, edge chain depth, node count) and the `DotSyntaxError` cases.
-- `packages/ast/src/builder/create-element.test.ts` → the node-count limit is per parse, not per process.
-
-## 2. Application data → models → `toDot` (no DOT injection)
+## SM-2. Application data → models → `toDot` (no DOT injection)
 
 Applications build graphs from their own data: node ids from database keys, labels from user names. That data flows into DOT text, which Graphviz, other tools, or another ts-graphviz instance will parse.
 
@@ -63,12 +60,9 @@ Applications build graphs from their own data: node ids from database keys, labe
 
 - The meaning Graphviz gives to a value. A plain string `\N` is written so that Graphviz shows the two characters `\N`; an application that wants the node-name substitution uses `escString('\\N')` on purpose (section 3). What text is appropriate to show is the application's decision.
 
-**Evidence**
+**Evidence**: tests tagged `SM-2` — properties that any string survives `toDot → fromDot` unchanged, that printing is idempotent, that numbers and keys round-trip, and the unit tests of the escaping rules and the NUL rejection.
 
-- `test/properties/dot-roundtrip.property.test.ts` → "no DOT injection: any string survives toDot → fromDot unchanged", "printing is idempotent", "raw newlines in values survive", "any JS number produces DOT that parses back to the same number", "attribute keys that are DOT keywords or not identifiers are quoted", "writes non-numeral numbers as strings and keeps a `__proto__` key", and the regression cases for #1587.
-- `packages/ast/src/model-shim/literal.test.ts` → the escaping rules and the NUL rejection.
-
-## 3. `escString()` and `htmlLike()` (caller opts out of escaping)
+## SM-3. `escString()` and `htmlLike()` (caller opts out of escaping)
 
 Two value kinds deliberately bypass the literal-text rule because their content *is* DOT syntax:
 
@@ -84,12 +78,9 @@ Two value kinds deliberately bypass the literal-text rule because their content 
 
 - **The content of an HTML-like label is not sanitised.** Graphviz interprets it (tables, fonts, `IMG SRC`, `HREF`). Passing untrusted text through `htmlLike()` is the application's responsibility; use a plain string (escaped as text) unless the markup is yours. The React package builds HTML-like labels from JSX, so text nodes in JSX are escaped, but attributes such as `href` and `src` are passed through.
 
-**Evidence**
+**Evidence**: tests tagged `SM-3` — properties that escString values print idempotently and never break out of the string and that htmlLike values round-trip exactly or are rejected; the unit tests of the sanitising and validation rules and of the React HTML-like renderer.
 
-- `test/properties/dot-roundtrip.property.test.ts` → "explicit value kinds": escString values print idempotently and never break out of the string; htmlLike values round-trip exactly; unbalanced markup is rejected.
-- `packages/ast/src/model-shim/literal.test.ts` (escString sanitising, htmlLike validation), `packages/react/src/renderHTMLLike.test.tsx`.
-
-## 4. `@ts-graphviz/adapter` (running Graphviz)
+## SM-4. `@ts-graphviz/adapter` (running Graphviz)
 
 `toStream` / `toFile` spawn the Graphviz executable. This is the one place where ts-graphviz has side effects and where the *rendered* DOT matters.
 
@@ -105,15 +96,13 @@ Two value kinds deliberately bypass the literal-text rule because their content 
 - Graphviz reads attributes such as `image`, `shapefile`, `imagepath`, `fontpath` and `fontname` as file-system references and may read local files while rendering. ts-graphviz passes DOT through unchanged. When rendering DOT from untrusted sources, validate or strip those attributes first (`packages/adapter/README.md` has an example), run Graphviz with restricted permissions, and bound its running time.
 - Rendering time and memory of Graphviz itself are not bounded by this library.
 
-**Evidence**
+**Evidence**: tests tagged `SM-4` — the argv construction, the stream and file entry points with their failure paths, and the browser stubs.
 
-- `packages/adapter/src/to-stream.node.test.ts`, `to-file.node.test.ts`, `create-command-args.test.ts`, `browser.test.ts`.
-
-## 5. Trusted code: models, plugins and contexts
+## SM-5. Trusted code: models, plugins and contexts
 
 Model classes, `ModelsContext` (`createModelsContext`), converter and printer plugins, and `react` components run with the application's privileges. Supplying a class or plugin that misbehaves, or calling an API in a way the types forbid, is a bug in the application, not a vulnerability in ts-graphviz. The library still fails safely where it can: an invalid edge target is a `TypeError` (`TSG_ERR_INVALID_EDGE_TARGETS`), a missing plugin is an `Error` (`TSG_ERR_NO_PLUGIN`), and `renderHTMLLike` in React limits recursion depth (default 1000) and detects cycles.
 
-## 6. Supply chain
+## SM-6. Supply chain
 
 How the packages reach you is part of the model: the strongest parser is useless if the tarball is not the one built from this repository.
 

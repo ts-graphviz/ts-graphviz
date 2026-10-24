@@ -19,7 +19,7 @@ const pipelineMock = pipeline as unknown as ReturnType<typeof vi.fn>;
 
 type Callback = (...args: any) => any;
 
-describe('toStream (Node adapter)', () => {
+describe('[SM-4] toStream (Node adapter)', () => {
   beforeEach(() => {
     spawnMock.mockReset();
     pipelineMock.mockReset();

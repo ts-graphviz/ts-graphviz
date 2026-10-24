@@ -27,7 +27,7 @@ describe('defaultModelsContext', () => {
   });
 });
 
-describe('createModelsContext', () => {
+describe('[SM-5] createModelsContext', () => {
   it('overrides only the given classes', () => {
     class MyNode extends Node {}
     const models = createModelsContext({ Node: MyNode, Edge: undefined });

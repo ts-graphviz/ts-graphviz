@@ -380,7 +380,7 @@ describe('parse', () => {
     });
   });
 
-  describe('HTML string nesting depth limit', () => {
+  describe('[SM-1] HTML string nesting depth limit', () => {
     test('normal nesting should work', () => {
       const result = parse(
         'label = <<table><tr><td><b>text</b></td></tr></table>>',
@@ -469,7 +469,7 @@ describe('parse', () => {
     });
   });
 
-  describe('Input size limit', () => {
+  describe('[SM-1] Input size limit', () => {
     test('normal input size should work', () => {
       const input = 'digraph { a -> b; }';
       const result = parse(input, { startRule: 'Graph' });
@@ -540,7 +540,7 @@ describe('parse', () => {
     });
   });
 
-  describe('Edge chain depth limit', () => {
+  describe('[SM-1] Edge chain depth limit', () => {
     test('normal edge chain should work', () => {
       const result = parse('a -> b -> c -> d;', { startRule: 'Edge' });
       expect(result).toBeDefined();

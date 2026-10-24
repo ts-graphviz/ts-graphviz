@@ -22,7 +22,7 @@ import { pipeline } from 'node:stream/promises';
 import { toFile } from './to-file.node.js';
 import { toStream } from './to-stream.node.js';
 
-describe('toFile (Node adapter)', () => {
+describe('[SM-4] toFile (Node adapter)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
