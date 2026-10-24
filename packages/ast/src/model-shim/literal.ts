@@ -146,11 +146,14 @@ const DOT_NUMERAL = /^-?(\.\d+|\d+(\.\d*)?)$/;
 /**
  * The model value for a `Literal` AST node.
  *
- * A bare (unquoted) literal that is a DOT numeral becomes a `number` and a
- * bare `true` / `false` becomes a `boolean`, so `width=1.5` and
+ * A bare (unquoted) literal becomes a `number` when it is a DOT numeral whose
+ * text is exactly how JavaScript prints that number (`1.5`, `-7`, `0.25`),
+ * and a `boolean` when it is `true` / `false`; so `width=1.5` and
  * `fixedsize=true` come back with the type their attributes declare and are
- * written bare again by {@link literalFromValue}. Any other bare id is a
- * string. Note the normalization: `1.0` reads as `1` and is written as `1`.
+ * written bare again by {@link literalFromValue}. Every other bare id stays
+ * a string, including numerals the conversion could not reproduce exactly
+ * (`001`, `1.`, `.5`, `1.0`, integers beyond 2^53, numbers JavaScript would
+ * print in exponent form), so no DOT text is changed by the round trip.
  */
 export function valueFromLiteral(
   literal: Pick<LiteralASTNode, 'value' | 'quoted'>,
@@ -165,9 +168,11 @@ export function valueFromLiteral(
     default:
       if (literal.value === 'true') return true;
       if (literal.value === 'false') return false;
-      return DOT_NUMERAL.test(literal.value)
-        ? Number(literal.value)
-        : literal.value;
+      if (DOT_NUMERAL.test(literal.value)) {
+        const n = Number(literal.value);
+        if (String(n) === literal.value) return n;
+      }
+      return literal.value;
   }
 }
 
