@@ -1,0 +1,37 @@
+// Dumps the graph Graphviz actually built: one record per object, fields
+// separated by \x1f (unit separator), records by \x1e (record separator),
+// so values may contain newlines. Attribute values are the effective ones
+// (defaults applied by Graphviz itself).
+BEGIN {
+  string sep = "\x1f";
+  string rec = "\x1e";
+  string a;
+  string s;
+}
+BEG_G {
+  s = "G" + sep + $G.name + sep + ($G.directed ? "directed" : "undirected") + sep + ($G.strict ? "strict" : "loose");
+  a = fstAttr($G, "G");
+  while (a != "") {
+    s = s + sep + a + sep + aget($G, a);
+    a = nxtAttr($G, "G", a);
+  }
+  printf("%s%s", s, rec);
+}
+N {
+  s = "N" + sep + $.name;
+  a = fstAttr($G, "N");
+  while (a != "") {
+    s = s + sep + a + sep + aget($, a);
+    a = nxtAttr($G, "N", a);
+  }
+  printf("%s%s", s, rec);
+}
+E {
+  s = "E" + sep + $.tail.name + sep + $.head.name;
+  a = fstAttr($G, "E");
+  while (a != "") {
+    s = s + sep + a + sep + aget($, a);
+    a = nxtAttr($G, "E", a);
+  }
+  printf("%s%s", s, rec);
+}

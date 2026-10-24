@@ -9,6 +9,9 @@
       "ignoreDependencies": [
         "publint",
         "@arethetypeswrong/cli"
+      ],
+      "ignoreBinaries": [
+        "dot"
       ]
     },
     "packages/ts-graphviz": {

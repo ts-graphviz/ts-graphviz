@@ -187,6 +187,17 @@ describe('parse', () => {
       expect(result).toMatchSnapshot();
     });
 
+    describe('non-ASCII bare ids', () => {
+      // Graphviz treats every byte >= 0x80 as an id character and `dot
+      // -Tcanon` prints such values bare.
+      test.each(['￠', '😀', 'kéy', 'ñ1'])('%s parses bare', (id) => {
+        const result = parse(`${id} -- b;`, { startRule: 'Edge' });
+        expect(result.targets[0]).toMatchObject({
+          id: { value: id, quoted: false },
+        });
+      });
+    });
+
     describe('compass points', () => {
       const ref = (source: string) =>
         parse(`${source} -- b;`, { startRule: 'Edge' }).targets[0];

@@ -339,10 +339,14 @@ STRING "UNICODE_STRING" = first:StringStart rest:StringPart* { return first + re
 
 NUMBER_STRING = first:NUMBER rest:STRING { return first + rest; }
 
+// Graphviz treats every byte >= 0x80 as an identifier character, so any
+// non-ASCII code unit (symbols, emoji via surrogate pairs) may appear bare,
+// as `dot -Tcanon` prints them.
 StringStart
   = UnicodeLetter
   / "$"
   / "_"
+  / [\u0080-￿]
 
 StringPart
   = StringStart
