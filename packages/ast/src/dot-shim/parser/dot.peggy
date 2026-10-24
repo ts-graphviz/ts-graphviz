@@ -403,10 +403,13 @@ QUOTED_STRING
       );
     }
 
+// LineContinuation must be tried before QuoteEscape: QuoteEscape matches
+// "\\" followed by any character, which would otherwise consume the
+// backslash-newline pair and keep the continuation marker in the value.
 DoubleStringCharacter
-  = QuoteEscape
+  = LineContinuation
+  / QuoteEscape
   / !("\"" / LineTerminator) SourceCharacter { return text(); }
-  / LineContinuation
 
 QuoteEscape = v:("\\" .) { return v[1] === '"' ? '"' : v[0] + v[1]; }
 
