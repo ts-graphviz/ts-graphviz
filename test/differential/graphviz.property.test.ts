@@ -26,10 +26,6 @@ import { join } from 'node:path';
 import fc from 'fast-check';
 import { toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
-import {
-  idToRaw,
-  literalFromValue,
-} from '../../packages/ast/src/model-shim/literal.js';
 import { buildGraph, graphSpec } from '../properties/arbitraries.js';
 import { type RootGraphSummary, summarize } from '../properties/summarize.js';
 
@@ -109,31 +105,25 @@ function parseDump(text: string): Dump {
 // ---------------------------------------------------------------------------
 // What the model means, under Graphviz's rules.
 
-/** The text Graphviz stores for a value or id written by toDot. */
+/**
+ * The text Graphviz stores for literal text (a plain string id or value)
+ * written by toDot. Spelled out here on purpose, independently of the
+ * library's escaping helpers, so that a regression in those helpers shows
+ * up as a difference: Graphviz keeps a backslash sequence as written and
+ * resolves only `\"`, so a backslash must reach it doubled, a quote may
+ * reach it as `\"` (stored as `"`), and a raw line break is written as the
+ * `\n` / `\r` sequence (stored as those two characters).
+ */
 function gvText(value: unknown): string {
-  const raw =
-    typeof value === 'string' ||
-    typeof value === 'number' ||
-    typeof value === 'boolean' ||
-    (typeof value === 'object' && value !== null && '$$kind' in value)
-      ? literalFromValue(value as Parameters<typeof literalFromValue>[0]).value
-      : String(value);
-  return resolveQuotes(raw);
-}
-const gvId = (id: string) => resolveQuotes(idToRaw(id));
-/** Graphviz resolves `\"` to `"` and keeps every other escape as written. */
-function resolveQuotes(raw: string): string {
-  let out = '';
-  for (let i = 0; i < raw.length; i++) {
-    if (raw[i] === '\\' && i + 1 < raw.length) {
-      out += raw[i + 1] === '"' ? '"' : raw[i] + raw[i + 1];
-      i++;
-    } else {
-      out += raw[i];
-    }
+  if (typeof value !== 'string') {
+    throw new Error(`the generator only produces string values: ${value}`);
   }
-  return out;
+  return value
+    .replace(/\\/g, '\\\\')
+    .replace(/\r/g, '\\r')
+    .replace(/\n/g, '\\n');
 }
+const gvId = gvText;
 
 type Graph = RootGraphSummary | RootGraphSummary['subgraphs'][number];
 type Entries = [string, unknown][];
