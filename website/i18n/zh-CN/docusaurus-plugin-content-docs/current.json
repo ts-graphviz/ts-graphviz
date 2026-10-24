@@ -1,0 +1,54 @@
+{
+  "version.label": {
+    "message": "下一个",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.ts-graphviz Library": {
+    "message": "ts-graphviz 库",
+    "description": "The label for category ts-graphviz Library in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.ts-graphviz Library.link.generated-index.description": {
+    "message": "ts-graphviz 库的概述和使用方法。",
+    "description": "The generated-index page description for category ts-graphviz Library in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Getting Started": {
+    "message": "入门指南",
+    "description": "The label for category Getting Started in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Getting Started.link.generated-index.description": {
+    "message": "5分钟内学习ts-graphviz的最重要概念。",
+    "description": "The generated-index page description for category Getting Started in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Practical Tutorials": {
+    "message": "实用教程",
+    "description": "The label for category Practical Tutorials in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Practical Tutorials.link.generated-index.description": {
+    "message": "一步一步的教程，帮助您在实际场景中应用ts-graphviz。",
+    "description": "The generated-index page description for category Practical Tutorials in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Guides": {
+    "message": "指南",
+    "description": "The label for category Guides in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Guides.link.generated-index.description": {
+    "message": "指南帮助您理解ts-graphviz。",
+    "description": "The generated-index page description for category Guides in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Advanced Topics": {
+    "message": "高级主题",
+    "description": "The label for category Advanced Topics in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Advanced Topics.link.generated-index.description": {
+    "message": "高级主题，帮助您理解ts-graphviz的内部工作原理。",
+    "description": "The generated-index page description for category Advanced Topics in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Migration Guides": {
+    "message": "迁移指南",
+    "description": "The label for category Migration Guides in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Migration Guides.link.generated-index.description": {
+    "message": "本迁移指南将帮助您迁移ts-graphviz的版本。它提供了更改的概述、背后的原因以及更新代码的逐步说明。",
+    "description": "The generated-index page description for category Migration Guides in sidebar tutorialSidebar"
+  }
+}

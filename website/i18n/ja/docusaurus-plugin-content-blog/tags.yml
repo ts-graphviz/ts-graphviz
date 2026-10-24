@@ -1,0 +1,17 @@
+security:
+  label: セキュリティ
+  permalink: /security
+  description: |
+    オープンソースのセキュリティはコミュニティの努力によって成り立ちます。ts-graphviz ライブラリを安全に保つために私たちが行っていることを学んでください。
+
+release:
+  label: リリース
+  permalink: /release
+  description: |
+    ts-graphviz ライブラリの最新リリース情報をお届けします。
+
+website:
+  label: Website
+  permalink: /website
+  description: |
+    ts-graphviz ウェブサイトの更新情報やニュースをお届けします。

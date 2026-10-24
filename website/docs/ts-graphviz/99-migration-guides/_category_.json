@@ -1,0 +1,8 @@
+{
+  "label": "Migration Guides",
+  "link": {
+    "type": "generated-index",
+    "description": "This migration guide will help you migrating versions of ts-graphviz. It provides an overview of the changes, reasons behind them, and step-by-step instructions to update your code."
+  }
+}
+
