@@ -1,10 +1,10 @@
 import { withCode } from '@ts-graphviz/common';
 
 /** Default for `maxOutputSize`: 128 MiB. */
-export const DEFAULT_MAX_OUTPUT_SIZE = 128 * 1024 * 1024;
+const DEFAULT_MAX_OUTPUT_SIZE = 128 * 1024 * 1024;
 
 /** How much of the command's stderr is kept for error messages. */
-export const MAX_STDERR_SIZE = 64 * 1024;
+const MAX_STDERR_SIZE = 64 * 1024;
 
 /** The effective output limit for the options; `0` means no limit. */
 export function outputLimit(options: { maxOutputSize?: number }): number {
