@@ -222,15 +222,22 @@ for (const entry of readTar(tar)) {
     throw new Error(`${rel}: ${(e as Error).message}`, { cause: e });
   }
   const { meta, body } = parsed;
-  const name = String(meta.title);
   if (process.env.DEBUG_FETCH) console.log(rel, JSON.stringify(meta));
+  const required = (key: string): string => {
+    const value = meta[key];
+    if (typeof value !== 'string' || value === '') {
+      throw new Error(`${rel}: front matter is missing "${key}"`);
+    }
+    return value;
+  };
+  const name = required('title');
   if (isAttr) {
     attrs.push({
       name,
       description: String(meta.description ?? ''),
       body,
       types: (meta.types ?? []) as string[],
-      usedBy: [...String(meta.used_by)],
+      usedBy: [...required('used_by')],
       // some pages (e.g. rank) omit keys that are empty
       defaults: (
         (meta.defaults ?? []) as (Scalar | Record<string, Scalar>)[]

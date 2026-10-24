@@ -1863,7 +1863,7 @@ export namespace Attribute {
      * the x and y values of [`pos`](https://graphviz.org/docs/attrs/pos/) as being in inches. (**NOTE:** `neato -n(2)` treats the coordinates as
      * being in points, being the unit used by the layout algorithms for the pos attribute.) Thus, if
      * the graph has pos attributes in points, one should set `inputscale=72`.
-     * This can also be set on the command line using the [`-s` flag](https://graphviz.org/docs/attrs/docs/cli/#-s).
+     * This can also be set on the command line using the [`-s` flag](https://graphviz.org/docs/cli/#-s).
      *
      * If unset, no scaling is done and the units on input are treated as inches.
      *
@@ -2321,7 +2321,7 @@ export namespace Attribute {
     /**
      * Which [layout engine](/docs/layouts/) to use.
      *
-     * Specifies the name of the [layout engine](https://graphviz.org/docs/attrs/docs/layouts/) to
+     * Specifies the name of the [layout engine](https://graphviz.org/docs/layouts/) to
      * use, such as `dot` or `neato`.
      *
      * Normally, graphs should be kept independent of a type of layout. In some
@@ -2331,7 +2331,7 @@ export namespace Attribute {
      * For example, a graph containing position information from a layout might want
      * to record what the associated layout engine was.
      *
-     * This attribute takes precedence over the [`-K` flag](https://graphviz.org/docs/attrs/docs/cli/#-K) or
+     * This attribute takes precedence over the [`-K` flag](https://graphviz.org/docs/cli/#-K) or
      * the actual command name used.
      *
      * @see {@link https://graphviz.org/docs/attrs/layout/ Node, Edge and Graph Attributes#layout}
@@ -3270,15 +3270,15 @@ export namespace Attribute {
      *
      * In `neato` and `fdp`, `pos` can be used to set the initial position of a
      * node. By default, the coordinates are assumed to be in inches. However, the
-     * [`-s`](https://graphviz.org/docs/attrs/docs/cli/#-s) command line flag can be used to specify different
+     * [`-s`](https://graphviz.org/docs/cli/#-s) command line flag can be used to specify different
      * units. As the output coordinates are in points, feeding the output of a graph
      * laid out by a Graphviz program into `neato` or `fdp` will almost always
-     * require the [`-s`](https://graphviz.org/docs/attrs/docs/cli/#-s) flag.
+     * require the [`-s`](https://graphviz.org/docs/cli/#-s) flag.
      *
-     * When the [`-n`](https://graphviz.org/docs/attrs/docs/cli/#-n) command line flag is used with `neato`, it
+     * When the [`-n`](https://graphviz.org/docs/cli/#-n) command line flag is used with `neato`, it
      * is assumed the positions have been set by one of the layout programs, and are
      * therefore in points. Thus, `neato -n` can accept input correctly without
-     * requiring a [`-s`](https://graphviz.org/docs/attrs/docs/cli/#-s) flag and, in fact, ignores any such flag.
+     * requiring a [`-s`](https://graphviz.org/docs/cli/#-s) flag and, in fact, ignores any such flag.
      *
      * @see {@link https://graphviz.org/docs/attrs/pos/ Node, Edge and Graph Attributes#pos}
      *

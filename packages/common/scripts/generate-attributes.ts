@@ -111,19 +111,21 @@ const byName = (a: string, b: string) =>
 
 // --- TSDoc -------------------------------------------------------------------
 
-const DOCS_URL = 'https://graphviz.org/docs';
+const SITE_URL = 'https://graphviz.org';
+const DOCS_URL = `${SITE_URL}/docs`;
 
 function resolveRelref(target: string): string {
   // relref paths are relative to content/en/docs/attrs/
   const [path, hash] = target.split('#');
-  const segments = ['attrs'];
+  // a leading "/" is relative to the site root (content/en/), otherwise to docs/attrs/
+  const segments = path.startsWith('/') ? [] : ['docs', 'attrs'];
   for (const part of path.split('/')) {
     if (part === '..') segments.pop();
     else if (part !== '.' && part !== '') segments.push(part);
   }
   const last = segments.pop() as string;
   const page = last === '_index.md' ? '' : last.replace(/\.md$/, '');
-  const url = `${DOCS_URL}/${[...segments, page].filter(Boolean).join('/')}/`;
+  const url = `${SITE_URL}/${[...segments, page].filter(Boolean).join('/')}/`;
   return hash ? `${url}#${hash}` : url;
 }
 
@@ -274,6 +276,16 @@ const namespace = (name: string, body: ts.Statement[]) =>
     f.createModuleBlock(body),
     ts.NodeFlags.Namespace,
   );
+
+// Fail with a useful message before an unmapped type reaches the TypeScript factory.
+for (const attr of docs) {
+  for (const t of attr.types) {
+    if (!(t in TYPE_MAP))
+      throw new Error(
+        `no TypeScript type for Graphviz type "${t}" (${attr.name})`,
+      );
+  }
+}
 
 const statements: ts.Statement[] = [];
 
@@ -450,15 +462,6 @@ statements.push(
     ),
   ]),
 );
-
-for (const attr of docs) {
-  for (const t of attr.types) {
-    if (!(t in TYPE_MAP))
-      throw new Error(
-        `no TypeScript type for Graphviz type "${t}" (${attr.name})`,
-      );
-  }
-}
 
 const source = ts.createSourceFile(
   'attribute.ts',
