@@ -143,10 +143,18 @@ export function literalFromValue(
 /** DOT numerals: `[-]?(.[0-9]+ | [0-9]+(.[0-9]*)?)`, no exponent. */
 const DOT_NUMERAL = /^-?(\.\d+|\d+(\.\d*)?)$/;
 
-/** The model value for a `Literal` AST node. */
+/**
+ * The model value for a `Literal` AST node.
+ *
+ * A bare (unquoted) literal that is a DOT numeral becomes a `number` and a
+ * bare `true` / `false` becomes a `boolean`, so `width=1.5` and
+ * `fixedsize=true` come back with the type their attributes declare and are
+ * written bare again by {@link literalFromValue}. Any other bare id is a
+ * string. Note the normalization: `1.0` reads as `1` and is written as `1`.
+ */
 export function valueFromLiteral(
   literal: Pick<LiteralASTNode, 'value' | 'quoted'>,
-): string | EscStringValue | HTMLLikeValue {
+): string | number | boolean | EscStringValue | HTMLLikeValue {
   switch (literal.quoted) {
     case 'html':
       return htmlLike(literal.value);
@@ -155,7 +163,11 @@ export function valueFromLiteral(
         ? escString(literal.value)
         : unescapeLiteral(literal.value);
     default:
-      return literal.value;
+      if (literal.value === 'true') return true;
+      if (literal.value === 'false') return false;
+      return DOT_NUMERAL.test(literal.value)
+        ? Number(literal.value)
+        : literal.value;
   }
 }
 

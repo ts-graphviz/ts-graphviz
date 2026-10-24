@@ -186,4 +186,26 @@ describe('numbers and booleans', () => {
       quoted: false,
     });
   });
+
+  it('are read back typed from bare literals', () => {
+    expect(valueFromLiteral({ value: '1.5', quoted: false })).toBe(1.5);
+    expect(valueFromLiteral({ value: '-.5', quoted: false })).toBe(-0.5);
+    expect(valueFromLiteral({ value: '7', quoted: false })).toBe(7);
+    expect(valueFromLiteral({ value: 'true', quoted: false })).toBe(true);
+    expect(valueFromLiteral({ value: 'false', quoted: false })).toBe(false);
+  });
+
+  it('round-trip through literalFromValue / valueFromLiteral', () => {
+    for (const value of [0, 7, -1, 1.5, -0.5, 100.25, true, false]) {
+      expect(valueFromLiteral(literalFromValue(value))).toBe(value);
+    }
+  });
+
+  it('do not apply to quoted strings or other bare ids', () => {
+    expect(valueFromLiteral({ value: '1.5', quoted: true })).toBe('1.5');
+    expect(valueFromLiteral({ value: 'true', quoted: true })).toBe('true');
+    expect(valueFromLiteral({ value: 'True', quoted: false })).toBe('True');
+    expect(valueFromLiteral({ value: 'foo', quoted: false })).toBe('foo');
+    expect(valueFromLiteral({ value: '1e5', quoted: false })).toBe('1e5');
+  });
 });
