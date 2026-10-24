@@ -6,6 +6,10 @@ import { renderHTMLLike } from './renderHTMLLike.js';
 import { renderToDot } from './renderToDot.js';
 import type { DotJSXElements } from './types.js';
 
+// Tests compare the markup form; renderHTMLLike itself returns an HTMLLikeValue.
+const html = (...args: Parameters<typeof renderHTMLLike>) =>
+  `<${renderHTMLLike(...args).value}>`;
+
 /**
  * Tests for auto-augmentation of JSX type definitions.
  *
@@ -71,7 +75,7 @@ describe('dot:* JSX auto-augmentation', () => {
 
   it('dot:port element accepts string children', () => {
     const port = <dot:port>port_name</dot:port>;
-    const result = renderHTMLLike(port);
+    const result = html(port);
     expect(result).toBe('<<port_name>>');
   });
 
@@ -89,7 +93,7 @@ describe('dot:* JSX auto-augmentation', () => {
       </dot:table>
     );
 
-    const result = renderHTMLLike(label);
+    const result = html(label);
     expect(result).toContain('<table border="1">');
     expect(result).toContain('<td bgcolor="lightblue">');
     expect(result).toContain('<b>Title</b>');

@@ -31,7 +31,7 @@ describe('DOT round trip', () => {
   // printer passes them through, so `\\"` breaks out of the string and `\"`
   // comes back as `"`. These properties are expected to fail until #1587
   // lands; vitest then reports them as unexpectedly passing.
-  it.fails('no DOT injection: any string survives toDot -> fromDot unchanged (#1587)', () => {
+  it('no DOT injection: any string survives toDot -> fromDot unchanged (#1587)', () => {
     fc.assert(
       fc.property(graphSpec, (spec) => {
         const { model, reparsed } = roundTrip(spec);
@@ -40,7 +40,7 @@ describe('DOT round trip', () => {
     );
   });
 
-  it.fails('printing is idempotent: toDot(fromDot(dot)) === dot (#1587)', () => {
+  it('printing is idempotent: toDot(fromDot(dot)) === dot (#1587)', () => {
     fc.assert(
       fc.property(graphSpec, (spec) => {
         const { dot } = roundTrip(spec);
@@ -49,8 +49,8 @@ describe('DOT round trip', () => {
     );
   });
 
-  describe('minimal counterexamples found by the properties (#1587)', () => {
-    it.fails('a value ending in backslashes breaks out of the string', () => {
+  describe('minimal counterexamples once found by the properties (#1587)', () => {
+    it('a value ending in backslashes breaks out of the string', () => {
       const { dot } = roundTrip({
         directed: true,
         strict: false,
@@ -62,7 +62,7 @@ describe('DOT round trip', () => {
       expect(() => fromDot(dot)).not.toThrow();
     });
 
-    it.fails('a string that looks like an HTML-like label is emitted unquoted', () => {
+    it('a string that looks like an HTML-like label is emitted unquoted', () => {
       // `/^<.+>$/` decides that `<>>` is HTML-like, so it is printed as `<<>>>`
       const { model, reparsed } = roundTrip({
         directed: true,
@@ -75,7 +75,7 @@ describe('DOT round trip', () => {
       expect(reparsed.get('label')).toBe(model.get('label'));
     });
 
-    it.fails('a multi-line value whose first line looks like a tag is emitted unquoted', () => {
+    it('a multi-line value whose first line looks like a tag is emitted unquoted', () => {
       // the heuristic's `m` flag anchors per line, so `<a>\na` counts as HTML-like
       const { model, reparsed } = roundTrip({
         directed: true,
@@ -88,7 +88,7 @@ describe('DOT round trip', () => {
       expect(reparsed.get('label')).toBe(model.get('label'));
     });
 
-    it.fails('an escaped quote is not preserved', () => {
+    it('an escaped quote is not preserved', () => {
       const { model, reparsed } = roundTrip({
         directed: true,
         strict: false,
@@ -127,28 +127,20 @@ describe('DOT round trip', () => {
     );
   });
 
-  it('raw newlines in values are normalised to escape sequences (#1578)', () => {
-    // Documented behaviour until #1578 / #1587 decide otherwise: a JS newline
-    // in a value is printed as `\n`, which parses back as the characters `\` `n`.
+  it('raw newlines in values survive toDot -> fromDot (#1578)', () => {
+    // A JS newline is written as the `\n` escape and read back as a newline.
     fc.assert(
-      fc.property(
-        dotString({ newlines: true }).filter(
-          (s) => !/[\\"]/.test(s) && !looksHtmlLikeToPrinter(s),
-        ),
-        (value) => {
-          const { reparsed } = roundTrip({
-            directed: true,
-            strict: false,
-            attributes: [['label', value]],
-            nodes: [{ id: 'a', attributes: [] }],
-            edges: [],
-            subgraphs: [],
-          });
-          expect(reparsed.get('label')).toBe(
-            value.replace(/\r/g, '\\r').replace(/\n/g, '\\n'),
-          );
-        },
-      ),
+      fc.property(dotString({ newlines: true }), (value) => {
+        const { reparsed } = roundTrip({
+          directed: true,
+          strict: false,
+          attributes: [['label', value]],
+          nodes: [{ id: 'a', attributes: [] }],
+          edges: [],
+          subgraphs: [],
+        });
+        expect(reparsed.get('label')).toBe(value);
+      }),
     );
   });
 });

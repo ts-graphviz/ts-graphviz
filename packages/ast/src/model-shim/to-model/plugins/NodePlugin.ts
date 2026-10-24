@@ -1,4 +1,5 @@
 import type { AttributeASTNode, NodeASTNode } from '../../../types.js';
+import { idFromLiteral } from '../../literal.js';
 import type { ConvertToModelPlugin } from '../types.js';
 import { collectAttributes } from './utils/collect-attributes.js';
 
@@ -8,7 +9,7 @@ export const NodePlugin: ConvertToModelPlugin<NodeASTNode> = {
   },
   convert(context, ast) {
     const node = new context.models.Node(
-      ast.id.value,
+      idFromLiteral(ast.id),
       collectAttributes(
         ast.children.filter<AttributeASTNode>(
           (v): v is AttributeASTNode => v.type === 'Attribute',

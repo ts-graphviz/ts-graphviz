@@ -2,6 +2,7 @@ import {
   attribute as _,
   Digraph,
   Graph,
+  htmlLike,
   type RootGraphModel,
   toDot,
 } from 'ts-graphviz';
@@ -110,10 +111,16 @@ describe.each([
       it('preserves html-like label quotes without additional quoting', () => {
         g.attributes.graph.set(
           _.label,
-          '<<B>this is test for graph label</B>>',
+          htmlLike('<B>this is test for graph label</B>'),
         );
-        g.attributes.edge.set(_.label, '<<U>this is test for edge label</U>>');
-        g.attributes.node.set(_.label, '<<I>this is test for node label</I>>');
+        g.attributes.edge.set(
+          _.label,
+          htmlLike('<U>this is test for edge label</U>'),
+        );
+        g.attributes.node.set(
+          _.label,
+          htmlLike('<I>this is test for node label</I>'),
+        );
         expect(toDot(g)).toMatchSnapshot();
       });
     });

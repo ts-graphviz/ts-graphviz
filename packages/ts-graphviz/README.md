@@ -523,6 +523,25 @@ const ast = parse(`
 
 </details>
 
+### Attribute Values: Literal Text, escStrings and HTML-Like Labels 🔤
+
+A plain `string` in a model is **literal text**. `toDot` escapes it completely, so any text — quotes, backslashes, newlines, user input — is written safely into the DOT output, and `fromDot` gives the same text back. For values that carry DOT syntax of their own, say so explicitly:
+
+```ts
+import { digraph, escString, htmlLike, toDot } from 'ts-graphviz';
+
+const g = digraph('G', (g) => {
+  // literal text: a JS newline becomes a line break, `"` and `\` are escaped
+  g.node('a', { label: 'line 1\nline 2 with "quotes"' });
+  // Graphviz escString: \N, \G, \l, ... keep their meaning (only `"` is escaped)
+  g.node('b', { label: escString('\\N\\lleft-justified') });
+  // HTML-like label: the markup between the outer < and >
+  g.node('c', { label: htmlLike('<b>bold</b>') });
+});
+```
+
+`fromDot` maps the other way: `\\` and `\"` in a quoted string become literal characters, any other backslash sequence yields an `escString`, and `<…>` yields an `htmlLike` value. The `isEscString` and `isHTMLLike` guards tell the kinds apart.
+
 ### Extending the Type System 🧰
 
 > The status of this feature is ![beta](https://img.shields.io/badge/-beta-orange).

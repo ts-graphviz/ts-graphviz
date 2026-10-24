@@ -1,8 +1,9 @@
-import type { GraphBaseModel } from '@ts-graphviz/common';
+import type { AttributeValue, GraphBaseModel } from '@ts-graphviz/common';
 import type {
   AttributeASTNode,
   ClusterStatementASTNode,
 } from '../../../../types.js';
+import { idFromLiteral, valueFromLiteral } from '../../../literal.js';
 import type { ConvertToModelContext } from '../../types.js';
 import { collectAttributes } from './collect-attributes.js';
 import { CommentHolder } from './comment-holder.js';
@@ -24,7 +25,7 @@ export function applyStatements(
     switch (stmt.type) {
       case 'Subgraph': {
         const subgraph = stmt.id
-          ? graph.subgraph(stmt.id.value)
+          ? graph.subgraph(idFromLiteral(stmt.id))
           : graph.subgraph();
         applyStatements(context, subgraph, stmt.children);
         commentHolder.apply(subgraph, stmt.location);
@@ -33,9 +34,7 @@ export function applyStatements(
       case 'Attribute':
         graph.set(
           stmt.key.value,
-          stmt.value.quoted === 'html'
-            ? `<${stmt.value.value}>`
-            : stmt.value.value,
+          valueFromLiteral(stmt.value) as AttributeValue,
         );
         commentHolder.reset();
         break;

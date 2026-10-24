@@ -416,7 +416,9 @@ DoubleStringCharacter
   / QuoteEscape
   / !"\"" SourceCharacter { return text(); }
 
-QuoteEscape = v:("\\" .) { return v[1] === '"' ? '"' : v[0] + v[1]; }
+// Escape sequences are kept as written: a quoted Literal holds the raw source
+// text, and the model conversion decides what it means.
+QuoteEscape = v:("\\" .) { return v[0] + v[1]; }
 
 // Graphviz only treats backslash + LF as a continuation (lib/cgraph/scan.l);
 // backslash + CR stays in the value, so CRLF files behave the same as in dot.

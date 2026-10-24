@@ -45,11 +45,11 @@ describe('parse', () => {
         expect(result.value.value).toBe('one\\\r\ntwo');
       });
 
-      test('keeps other escape sequences intact', () => {
+      test('keeps escape sequences as written (the model layer interprets them)', () => {
         const result = parse('label = "one\\ntwo \\"three\\"";', {
           startRule: 'Attribute',
         });
-        expect(result.value.value).toBe('one\\ntwo "three"');
+        expect(result.value.value).toBe('one\\ntwo \\"three\\"');
       });
     });
 
@@ -64,12 +64,13 @@ describe('parse', () => {
         expect(result.value.value).toBe(expected);
       });
 
-      test('stringify emits the newline as an escape sequence', () => {
+      test('stringify writes the quoted text back as it was', () => {
         const ast = parse('digraph { a [label="one\ntwo"]; }');
         expect(stringify(ast)).toMatchInlineSnapshot(`
           "digraph {
             a [
-              label = "one\\ntwo";
+              label = "one
+          two";
             ];
           }"
         `);

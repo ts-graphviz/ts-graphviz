@@ -1,11 +1,14 @@
 import type { Attribute, AttributeKey } from '@ts-graphviz/common';
 import type { CreateElement } from '../../../../builder/types.js';
 import type { AttributeASTNode } from '../../../../types.js';
+import { literalFromValue } from '../../../literal.js';
 
 /**
  * Converts an attribute key-value pair into an {@link AttributeASTNode}.
  *
- * If the value is a string that appears to be HTML-like (enclosed in angle brackets), the inner content is extracted and marked as HTML in the resulting AST node. Otherwise, the value is treated as a regular string or converted to a string if not already one.
+ * A `string` value is literal text and is escaped completely; an
+ * {@link EscStringValue} is written as is; an {@link HTMLLikeValue} becomes
+ * an HTML string; numbers and booleans are written unquoted.
  *
  * @param createElement - The createElement function to use.
  * @param key - The attribute key.
@@ -17,41 +20,11 @@ export function convertAttribute<K extends AttributeKey>(
   key: K,
   value: Attribute<K>,
 ): AttributeASTNode {
-  if (typeof value === 'string') {
-    const trimmed = value.trim();
-    const isHTMLLike = /^<.+>$/ms.test(trimmed);
-    if (isHTMLLike) {
-      return createElement(
-        'Attribute',
-        {
-          key: createElement('Literal', { value: key, quoted: false }, []),
-          value: createElement(
-            'Literal',
-            { value: trimmed.slice(1, -1), quoted: 'html' },
-            [],
-          ),
-        },
-        [],
-      );
-    }
-    return createElement(
-      'Attribute',
-      {
-        key: createElement('Literal', { value: key, quoted: false }, []),
-        value: createElement('Literal', { value: value, quoted: true }, []),
-      },
-      [],
-    );
-  }
   return createElement(
     'Attribute',
     {
       key: createElement('Literal', { value: key, quoted: false }, []),
-      value: createElement(
-        'Literal',
-        { value: String(value), quoted: false },
-        [],
-      ),
+      value: createElement('Literal', literalFromValue(value), []),
     },
     [],
   );

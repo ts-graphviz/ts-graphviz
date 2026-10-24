@@ -1,3 +1,4 @@
+import { type HTMLLikeValue, htmlLike } from '@ts-graphviz/common';
 import type { ReactElement, ReactNode } from 'react';
 
 /**
@@ -212,9 +213,9 @@ function renderChildrenToString(
 export function renderHTMLLike(
   label?: ReactElement,
   options?: RenderHTMLLikeOptions,
-): string {
+): HTMLLikeValue {
   if (!label) {
-    return '<>';
+    return htmlLike('');
   }
 
   // Sanitize and validate maxDepth option
@@ -233,16 +234,16 @@ export function renderHTMLLike(
     const markup = manuallyRenderElement(label, 0, new WeakSet(), maxDepth);
 
     if (!markup) {
-      return '<>';
+      return htmlLike('');
     }
 
-    return `<${markup}>`;
+    return htmlLike(markup);
   } catch (error) {
     // Fallback for any rendering issues
     console.warn(
       'renderHTMLLike fallback:',
       error instanceof Error ? error.message : error,
     );
-    return '<>';
+    return htmlLike('');
   }
 }
