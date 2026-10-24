@@ -14,6 +14,10 @@
  * Graphviz escape sequences such as `\N`, `\G`, `\l` and `\n` keep their
  * meaning. Only `"` is escaped.
  *
+ * DOT does not record which kind a quoted string is, so when a DOT source is
+ * parsed an escString is recognised by its escape sequences: a text without
+ * any (e.g. `escString('plain')`) reads back as the plain string.
+ *
  * @see {@link https://graphviz.org/docs/attr-types/escString/ escString}
  * @group Attribute Types
  */
@@ -58,6 +62,18 @@ export function escString(value: string): EscStringValue {
  * @group Attribute Types
  */
 export function htmlLike(markup: string): HTMLLikeValue {
+  // Graphviz reads an HTML string by counting `<` / `>` nesting, so the
+  // markup must be balanced or it would end the string early.
+  let depth = 0;
+  for (const ch of markup) {
+    if (ch === '<') depth++;
+    else if (ch === '>' && --depth < 0) break;
+  }
+  if (depth !== 0 || markup.includes('\0')) {
+    throw new RangeError(
+      'An HTML-like label must have balanced "<" and ">" characters and no null character',
+    );
+  }
   return Object.freeze({ $$kind: 'html', value: markup });
 }
 

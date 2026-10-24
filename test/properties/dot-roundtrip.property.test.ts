@@ -6,7 +6,7 @@ import {
   toModel,
 } from '@ts-graphviz/ast';
 import fc from 'fast-check';
-import { fromDot, toDot } from 'ts-graphviz';
+import { digraph, escString, fromDot, htmlLike, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import {
   buildGraph,
@@ -141,6 +141,56 @@ describe('DOT round trip', () => {
         });
         expect(reparsed.get('label')).toBe(value);
       }),
+    );
+  });
+});
+
+describe('explicit value kinds', () => {
+  // DOT text carries no kind marker, so an escString without Graphviz escapes
+  // reads back as plain text; what must hold is that printing is idempotent
+  // and that no value can break out of its string.
+  const escStringValue = dotString({ newlines: true }).map(escString);
+  const htmlLikeValue = fc
+    .tuple(
+      fc.constantFrom('b', 'i', 'table', 'font color="red"'),
+      dotString({ newlines: true }).filter((s) => !/[<>]/.test(s)),
+    )
+    .map(([tag, text]) => htmlLike(`<${tag}>${text}</${tag.split(' ')[0]}>`));
+
+  it('escString values print idempotently and never break out of the string', () => {
+    fc.assert(
+      fc.property(escStringValue, (value) => {
+        const g = digraph((g) => {
+          g.node('a', { label: value });
+        });
+        const dot = toDot(g);
+        const again = fromDot(dot);
+        expect(again.nodes).toHaveLength(1);
+        expect(toDot(again)).toBe(dot);
+      }),
+    );
+  });
+
+  it('htmlLike values round-trip exactly', () => {
+    fc.assert(
+      fc.property(htmlLikeValue, (value) => {
+        const g = digraph((g) => {
+          g.node('a', { label: value });
+        });
+        const again = fromDot(toDot(g));
+        expect(again.nodes[0].attributes.get('label')).toStrictEqual(value);
+      }),
+    );
+  });
+
+  it('unbalanced HTML-like markup is rejected rather than written', () => {
+    fc.assert(
+      fc.property(
+        dotString().filter((s) => s.includes('>')),
+        (s) => {
+          expect(() => htmlLike(`${s}<`)).toThrow(RangeError);
+        },
+      ),
     );
   });
 });

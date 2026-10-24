@@ -1,4 +1,8 @@
-import type { AttributeValue, GraphBaseModel } from '@ts-graphviz/common';
+import type {
+  AttributeKey,
+  AttributeValue,
+  GraphBaseModel,
+} from '@ts-graphviz/common';
 import type {
   AttributeASTNode,
   ClusterStatementASTNode,
@@ -33,7 +37,7 @@ export function applyStatements(
       }
       case 'Attribute':
         graph.set(
-          stmt.key.value,
+          idFromLiteral(stmt.key) as AttributeKey,
           valueFromLiteral(stmt.value) as AttributeValue,
         );
         commentHolder.reset();

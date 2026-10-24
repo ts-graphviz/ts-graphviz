@@ -1,6 +1,6 @@
 import type { AttributeValue } from '@ts-graphviz/common';
 import type { AttributeASTNode } from '../../../../types.js';
-import { valueFromLiteral } from '../../../literal.js';
+import { idFromLiteral, valueFromLiteral } from '../../../literal.js';
 
 /**
  * Converts an array of attribute AST nodes into a record mapping attribute
@@ -13,7 +13,9 @@ export function collectAttributes(
   attrs: AttributeASTNode[],
 ): Record<string, AttributeValue> {
   return attrs.reduce<Record<string, AttributeValue>>((acc, curr) => {
-    acc[curr.key.value] = valueFromLiteral(curr.value) as AttributeValue;
+    acc[idFromLiteral(curr.key)] = valueFromLiteral(
+      curr.value,
+    ) as AttributeValue;
     return acc;
   }, {});
 }

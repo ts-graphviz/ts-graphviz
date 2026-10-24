@@ -21,27 +21,37 @@ import type { LiteralASTNode } from '../types.js';
  *   Graphviz escape sequences keep their meaning;
  * - an {@link HTMLLikeValue} becomes an HTML string.
  *
+ * DOT has no way to mark which kind a quoted string is, so parsing infers it
+ * from the text: a string whose only backslash sequences are `\\` `\"` `\n`
+ * `\r` is literal text, anything else is an escString. `escString('plain')`
+ * therefore reads back as the plain string `'plain'`; the two mean the same
+ * thing to Graphviz, and printing is idempotent either way.
+ *
  * @module
  */
 
+/** Graphviz treats a null byte as the end of a string, so it cannot be written. */
+function rejectNul(text: string, what: string): void {
+  if (text.includes('\0')) {
+    throw new RangeError(`${what} must not contain a null character`);
+  }
+}
+
 /** Escape literal text so it can be written between double quotes. */
 export function escapeLiteral(text: string): string {
-  return (
-    text
-      // Graphviz treats a null byte as the end of the string
-      .replace(/\0/g, '')
-      .replace(/\\/g, '\\\\')
-      .replace(/"/g, '\\"')
-      .replace(/\r/g, '\\r')
-      .replace(/\n/g, '\\n')
-  );
+  rejectNul(text, 'A DOT string');
+  return text
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\r/g, '\\r')
+    .replace(/\n/g, '\\n');
 }
 
 /**
  * Unescape the raw text of a quoted string into literal text.
  *
- * Only `\\` and `\"` are undone; any other backslash sequence is a Graphviz
- * escape and makes the text an escString (see {@link valueFromRaw}).
+ * Only `\\` `\"` `\n` `\r` are undone; any other backslash sequence is a
+ * Graphviz escape and makes the text an escString (see {@link valueFromLiteral}).
  */
 export function unescapeLiteral(raw: string): string {
   return raw.replace(/\\([\\"rn])/g, (_, c: string) =>
@@ -56,26 +66,56 @@ function hasGraphvizEscape(raw: string): boolean {
 
 /**
  * Make an escString safe to write between double quotes without changing
- * its escape sequences: a `"` that is not already escaped gets a backslash,
- * and a trailing unpaired backslash is doubled so it cannot eat the closing
- * quote.
+ * the meaning of its escape sequences:
+ *
+ * - a `"` that is not already escaped gets a backslash;
+ * - a backslash that would otherwise escape a raw line break (which the
+ *   parser reads as a line continuation) or the closing quote is doubled.
  */
 export function sanitizeEscString(raw: string): string {
+  rejectNul(raw, 'An escString');
   let out = '';
   let backslashes = 0;
-  for (const ch of raw.replace(/\0/g, '')) {
+  for (const ch of raw) {
     if (ch === '\\') {
       backslashes++;
       out += ch;
       continue;
     }
-    if (ch === '"' && backslashes % 2 === 0) {
+    if (ch === '\n' || ch === '\r') {
+      // Write a raw line break as its escape sequence (the same line break to
+      // Graphviz), after closing an odd backslash run that would otherwise
+      // turn it into a line continuation.
+      if (backslashes % 2 === 1) out += '\\';
+      out += ch === '\n' ? '\\n' : '\\r';
+      backslashes = 0;
+      continue;
+    }
+    if (backslashes % 2 === 0 && ch === '"') {
       out += '\\';
     }
     backslashes = 0;
     out += ch;
   }
   return backslashes % 2 === 1 ? `${out}\\` : out;
+}
+
+/**
+ * An HTML string must keep `<` and `>` balanced: Graphviz reads it by
+ * counting nesting, so an unbalanced `>` would end the string early.
+ */
+export function assertHTMLLikeMarkup(markup: string): void {
+  rejectNul(markup, 'An HTML-like label');
+  let depth = 0;
+  for (const ch of markup) {
+    if (ch === '<') depth++;
+    else if (ch === '>' && --depth < 0) break;
+  }
+  if (depth !== 0) {
+    throw new RangeError(
+      'An HTML-like label must have balanced "<" and ">" characters',
+    );
+  }
 }
 
 /** The raw text and quoting for an attribute value. */
@@ -86,6 +126,7 @@ export function literalFromValue(
     return { value: escapeLiteral(value), quoted: true };
   }
   if (isHTMLLike(value)) {
+    assertHTMLLikeMarkup(value.value);
     return { value: value.value, quoted: 'html' };
   }
   if (isEscString(value)) {
@@ -110,7 +151,7 @@ export function valueFromLiteral(
   }
 }
 
-/** Raw text of an id (node, graph, subgraph, port, compass). Ids are literal text. */
+/** Raw text of an id (node, graph, subgraph, port, attribute key). Ids are literal text. */
 export function idToRaw(id: string): string {
   return escapeLiteral(id);
 }
@@ -130,4 +171,16 @@ export function createIdLiteral(
   id: string,
 ): LiteralASTNode {
   return createElement('Literal', { value: idToRaw(id), quoted: true }, []);
+}
+
+/** DOT identifiers that can be written without quotes. */
+const BARE_ID = /^[A-Za-z_\u0080-￿][A-Za-z_0-9\u0080-￿]*$/;
+
+/** The raw text and quoting for an attribute key: bare when it is an identifier. */
+export function literalFromKey(
+  key: string,
+): Pick<LiteralASTNode, 'value' | 'quoted'> {
+  return BARE_ID.test(key)
+    ? { value: key, quoted: false }
+    : { value: idToRaw(key), quoted: true };
 }
