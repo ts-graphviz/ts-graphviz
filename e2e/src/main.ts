@@ -1,10 +1,5 @@
 #!/usr/bin/env node
 
-// Polyfill for Symbol.asyncDispose on Node.js 20
-if (!Symbol.asyncDispose) {
-  (Symbol as any).asyncDispose = Symbol.for('Symbol.asyncDispose');
-}
-
 import {
   createProgram,
   expandTestPackageGlobs,

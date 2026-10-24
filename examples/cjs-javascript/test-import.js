@@ -1,7 +1,7 @@
 // CommonJS project testing ESM package import
 console.log('Testing ts-graphviz import from CommonJS project...\n');
 
-// In Node.js 20+, CJS can import ESM using dynamic import()
+// In Node.js 22+, CJS can import ESM using dynamic import()
 async function testEsmImport() {
   try {
     // Test 1: Dynamic import of main package

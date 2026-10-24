@@ -13,7 +13,7 @@ jobs:
       fail-fast: false # Continue running other matrix jobs even if one fails
       matrix:
         # Test across multiple Node.js versions and operating systems
-        node-version: [20.x, 22.x, 24.x]
+        node-version: [22.x, 24.x, 26.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
     - name: Harden Runner
