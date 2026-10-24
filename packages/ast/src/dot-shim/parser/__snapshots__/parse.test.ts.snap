@@ -1411,6 +1411,25 @@ exports[`parse > edge > edge with port 1`] = `
     },
     {
       "children": [],
+      "compass": {
+        "children": [],
+        "location": {
+          "end": {
+            "column": 30,
+            "line": 1,
+            "offset": 29,
+          },
+          "source": undefined,
+          "start": {
+            "column": 29,
+            "line": 1,
+            "offset": 28,
+          },
+        },
+        "quoted": false,
+        "type": "Literal",
+        "value": "w",
+      },
       "id": {
         "children": [],
         "location": {
@@ -1442,25 +1461,6 @@ exports[`parse > edge > edge with port 1`] = `
           "line": 1,
           "offset": 26,
         },
-      },
-      "port": {
-        "children": [],
-        "location": {
-          "end": {
-            "column": 30,
-            "line": 1,
-            "offset": 29,
-          },
-          "source": undefined,
-          "start": {
-            "column": 29,
-            "line": 1,
-            "offset": 28,
-          },
-        },
-        "quoted": false,
-        "type": "Literal",
-        "value": "w",
       },
       "type": "NodeRef",
     },
@@ -1933,6 +1933,25 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
       "children": [
         {
           "children": [],
+          "compass": {
+            "children": [],
+            "location": {
+              "end": {
+                "column": 26,
+                "line": 1,
+                "offset": 25,
+              },
+              "source": undefined,
+              "start": {
+                "column": 25,
+                "line": 1,
+                "offset": 24,
+              },
+            },
+            "quoted": false,
+            "type": "Literal",
+            "value": "e",
+          },
           "id": {
             "children": [],
             "location": {
@@ -1964,25 +1983,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
               "line": 1,
               "offset": 21,
             },
-          },
-          "port": {
-            "children": [],
-            "location": {
-              "end": {
-                "column": 26,
-                "line": 1,
-                "offset": 25,
-              },
-              "source": undefined,
-              "start": {
-                "column": 25,
-                "line": 1,
-                "offset": 24,
-              },
-            },
-            "quoted": false,
-            "type": "Literal",
-            "value": "e",
           },
           "type": "NodeRef",
         },
