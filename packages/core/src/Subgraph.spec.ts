@@ -185,12 +185,12 @@ describe('class Subgraph', () => {
       expect(() =>
         subgraph.edge([] as unknown as EdgeTargetTuple),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: The element of Edge target is missing or not satisfied as Edge target.]`,
+        `[InvalidModelError: The element of Edge target is missing or not satisfied as Edge target.]`,
       );
       expect(() =>
         subgraph.edge([n] as unknown as EdgeTargetTuple),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: The element of Edge target is missing or not satisfied as Edge target.]`,
+        `[InvalidModelError: The element of Edge target is missing or not satisfied as Edge target.]`,
       );
     });
   });

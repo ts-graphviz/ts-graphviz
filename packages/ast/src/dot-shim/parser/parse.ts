@@ -1,3 +1,4 @@
+import { ConversionError } from '@ts-graphviz/common';
 import { ASTNodeCountExceededError } from '../../builder/errors.js';
 import type {
   ASTNode,
@@ -175,7 +176,7 @@ export function parse(
         cause: e,
       });
     }
-    throw new Error('Unexpected parse error', {
+    throw new ConversionError('Unexpected parse error', {
       cause: e,
     });
   }

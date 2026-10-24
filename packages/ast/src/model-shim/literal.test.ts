@@ -1,4 +1,9 @@
-import { escString, type HTMLLikeValue, htmlLike } from '@ts-graphviz/common';
+import {
+  escString,
+  type HTMLLikeValue,
+  htmlLike,
+  InvalidValueError,
+} from '@ts-graphviz/common';
 import { describe, expect, it } from 'vitest';
 import {
   escapeLiteral,
@@ -27,8 +32,8 @@ describe('literal text', () => {
 
   it('rejects a null character instead of silently dropping it', () => {
     // dropping it would make the ids `a\0b` and `ab` collide
-    expect(() => escapeLiteral('a\0b')).toThrow(RangeError);
-    expect(() => idToRaw('a\0b')).toThrow(RangeError);
+    expect(() => escapeLiteral('a\0b')).toThrow(InvalidValueError);
+    expect(() => idToRaw('a\0b')).toThrow(InvalidValueError);
   });
 
   it('writes attribute keys bare when they are identifiers, quoted otherwise', () => {
@@ -129,13 +134,13 @@ describe('HTML-like', () => {
 
   it('rejects markup whose angle brackets are not balanced', () => {
     // `<x>]; evil [label=<y>` would end the HTML string early
-    expect(() => htmlLike('x>]; evil [label=<y')).toThrow(RangeError);
-    expect(() => htmlLike('<b>a</b><')).toThrow(RangeError);
+    expect(() => htmlLike('x>]; evil [label=<y')).toThrow(InvalidValueError);
+    expect(() => htmlLike('<b>a</b><')).toThrow(InvalidValueError);
     // unbalanced *tags* are Graphviz's business; only the bracket count matters here
     expect(() => htmlLike('<b>unclosed')).not.toThrow();
     expect(() =>
       literalFromValue({ $$kind: 'html', value: 'x>' } as HTMLLikeValue),
-    ).toThrow(RangeError);
+    ).toThrow(InvalidValueError);
   });
 
   it('no longer guesses from the shape of a string', () => {

@@ -1,3 +1,4 @@
+import { ConversionError } from '@ts-graphviz/common';
 import type { ASTNode } from '../../types.js';
 import { defaultPlugins } from './plugins/index.js';
 import type { PrintContext, PrintOptions, PrintPlugin } from './types.js';
@@ -50,7 +51,7 @@ export class Printer {
             return;
           }
         }
-        throw new Error(
+        throw new ConversionError(
           `No matching plugin found for AST node: ${JSON.stringify(a)}`,
         );
       },
