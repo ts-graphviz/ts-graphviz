@@ -2,28 +2,28 @@ import type { AttributeKey } from '@ts-graphviz/common';
 import type {
   ASTChildNode,
   AttributeASTNode,
-  AttributeASTPropaties,
+  AttributeASTProperties,
   AttributeListASTNode,
-  AttributeListASTPropaties,
+  AttributeListASTProperties,
   CommentASTNode,
-  CommentASTPropaties,
+  CommentASTProperties,
   DotASTNode,
-  DotASTPropaties,
+  DotASTProperties,
   EdgeASTNode,
-  EdgeASTPropaties,
+  EdgeASTProperties,
   FileRange,
   GraphASTNode,
-  GraphASTPropaties,
+  GraphASTProperties,
   LiteralASTNode,
-  LiteralASTPropaties,
+  LiteralASTProperties,
   NodeASTNode,
-  NodeASTPropaties,
+  NodeASTProperties,
   NodeRefASTNode,
-  NodeRefASTPropaties,
+  NodeRefASTProperties,
   NodeRefGroupASTNode,
-  NodeRefGroupASTPropaties,
+  NodeRefGroupASTProperties,
   SubgraphASTNode,
-  SubgraphASTPropaties,
+  SubgraphASTProperties,
 } from '../types.js';
 
 /**
@@ -60,7 +60,7 @@ export interface CreateElement {
    */
   <T extends string>(
     type: 'Literal',
-    props: LiteralASTPropaties<T>,
+    props: LiteralASTProperties<T>,
     children?: ASTChildNode<LiteralASTNode>[],
   ): LiteralASTNode<T>;
   /**
@@ -73,7 +73,7 @@ export interface CreateElement {
    */
   (
     type: 'Literal',
-    props: LiteralASTPropaties,
+    props: LiteralASTProperties,
     children?: ASTChildNode<LiteralASTNode>[],
   ): LiteralASTNode;
 
@@ -87,7 +87,7 @@ export interface CreateElement {
    */
   (
     type: 'Dot',
-    props: DotASTPropaties,
+    props: DotASTProperties,
     children?: ASTChildNode<DotASTNode>[],
   ): DotASTNode;
 
@@ -101,7 +101,7 @@ export interface CreateElement {
    */
   (
     type: 'Graph',
-    props: GraphASTPropaties,
+    props: GraphASTProperties,
     children?: ASTChildNode<GraphASTNode>[],
   ): GraphASTNode;
 
@@ -115,12 +115,12 @@ export interface CreateElement {
    */
   <K extends AttributeKey>(
     type: 'Attribute',
-    props: AttributeASTPropaties<K>,
+    props: AttributeASTProperties<K>,
     children?: ASTChildNode<AttributeASTNode>[],
   ): AttributeASTNode<K>;
   (
     type: 'Attribute',
-    props: AttributeASTPropaties,
+    props: AttributeASTProperties,
     children?: ASTChildNode<AttributeASTNode>[],
   ): AttributeASTNode;
 
@@ -134,7 +134,7 @@ export interface CreateElement {
    */
   (
     type: 'Comment',
-    props: CommentASTPropaties,
+    props: CommentASTProperties,
     children?: ASTChildNode<CommentASTNode>[],
   ): CommentASTNode;
 
@@ -148,7 +148,7 @@ export interface CreateElement {
    */
   (
     type: 'AttributeList',
-    props: AttributeListASTPropaties,
+    props: AttributeListASTProperties,
     children?: ASTChildNode<AttributeListASTNode>[],
   ): AttributeListASTNode;
 
@@ -162,7 +162,7 @@ export interface CreateElement {
    */
   (
     type: 'NodeRef',
-    props: NodeRefASTPropaties,
+    props: NodeRefASTProperties,
     children?: ASTChildNode<NodeRefASTNode>[],
   ): NodeRefASTNode;
 
@@ -176,7 +176,7 @@ export interface CreateElement {
    */
   (
     type: 'NodeRefGroup',
-    props: NodeRefGroupASTPropaties,
+    props: NodeRefGroupASTProperties,
     children?: ASTChildNode<NodeRefGroupASTNode>[],
   ): NodeRefGroupASTNode;
 
@@ -190,7 +190,7 @@ export interface CreateElement {
    */
   (
     type: 'Edge',
-    props: EdgeASTPropaties,
+    props: EdgeASTProperties,
     children?: ASTChildNode<EdgeASTNode>[],
   ): EdgeASTNode;
 
@@ -204,7 +204,7 @@ export interface CreateElement {
    */
   (
     type: 'Node',
-    props: NodeASTPropaties,
+    props: NodeASTProperties,
     children?: ASTChildNode<NodeASTNode>[],
   ): NodeASTNode;
 
@@ -218,7 +218,7 @@ export interface CreateElement {
    */
   (
     type: 'Subgraph',
-    props: SubgraphASTPropaties,
+    props: SubgraphASTProperties,
     children?: ASTChildNode<SubgraphASTNode>[],
   ): SubgraphASTNode;
 }
