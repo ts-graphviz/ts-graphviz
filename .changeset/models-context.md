@@ -12,3 +12,5 @@ Replace the mutable `RootModelsContext` singleton with an explicit default conte
 - The constructor types in `ModelsContext` no longer carry a `new (...args: any[])` overload; the real signatures are used, so a class with an incompatible constructor is now a type error.
 - `@ts-graphviz/ast`: `toModel(ast, options)` requires `options.models: ModelsContext`, since the AST package has no model classes of its own. Pass `defaultModelsContext()` or `createModelsContext({...})` from `@ts-graphviz/core`.
 - `ts-graphviz`: `fromDot(dot, { convert: { models } })` still takes a partial context and fills in the defaults; `withContext()` is unchanged.
+- `graph.with(models)` merges the given classes over the graph's current context instead of replacing the whole context.
+- A direct subclass of `GraphBase` resolves its default context through the protected `defaultModels()` method; override it or call `with()` before creating models (otherwise an `Error` with `code: 'TSG_ERR_NO_MODELS_CONTEXT'` is thrown). `Graph`, `Digraph` and `Subgraph` do this already.
