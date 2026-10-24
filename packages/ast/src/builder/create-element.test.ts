@@ -110,6 +110,17 @@ describe('createElement', () => {
   });
 });
 
+// issue #1624
+describe('the shared createElement', () => {
+  test('does not stop after 100,000 nodes in one process', () => {
+    expect(() => {
+      for (let i = 0; i < 100_001; i++) {
+        createElement('Literal', { value: 'a', quoted: false }, []);
+      }
+    }).not.toThrow();
+  });
+});
+
 describe('createElementFactory', () => {
   test('returns an independent createElement function', () => {
     const createElement1 = createElementFactory();
