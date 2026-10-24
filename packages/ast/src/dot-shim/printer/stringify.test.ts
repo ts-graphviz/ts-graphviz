@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { parse } from '../parser/parse.js';
 import { stringify } from './stringify.js';
 
 describe('stringify', () => {
@@ -34,6 +35,16 @@ describe('stringify', () => {
           children: [],
         }),
       ).toMatchInlineSnapshot(`"<hoge>"`);
+    });
+  });
+
+  describe('raw newlines inside literals', () => {
+    test('are written verbatim, without the indentation', () => {
+      const source = 'graph {\n  a:"\n" -- "x\ny" [label = <a\nb>];\n}';
+      const printed = stringify(parse(source));
+      expect(printed).toContain('  a:"\n" -- "x\ny" [');
+      expect(printed).toContain('label = <a\nb>');
+      expect(stringify(parse(printed))).toBe(printed);
     });
   });
 

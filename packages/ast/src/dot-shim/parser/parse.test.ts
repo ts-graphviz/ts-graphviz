@@ -187,6 +187,40 @@ describe('parse', () => {
       expect(result).toMatchSnapshot();
     });
 
+    describe('compass points', () => {
+      const ref = (source: string) =>
+        parse(`${source} -- b;`, { startRule: 'Edge' }).targets[0];
+
+      test.each(['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c', '_'])(
+        'a:p:%s is a port with a compass point',
+        (compass) => {
+          expect(ref(`a:p:${compass}`)).toMatchObject({
+            id: { value: 'a' },
+            port: { value: 'p' },
+            compass: { value: compass },
+          });
+        },
+      );
+
+      test.each(['ne', 'sw', 'c', '"n"'])(
+        'a:%s is a compass point, not a port',
+        (compass) => {
+          const node = ref(`a:${compass}`);
+          expect(node.port).toBeUndefined();
+          expect(node.compass?.value).toBe(compass.replaceAll('"', ''));
+        },
+      );
+
+      test('a:north is a port', () => {
+        expect(ref('a:north')).toMatchObject({ port: { value: 'north' } });
+        expect(ref('a:north').compass).toBeUndefined();
+      });
+
+      test('a:p:nx is not split into a compass point and a statement', () => {
+        expect(() => parse('a:p:nx -- b;', { startRule: 'Edge' })).toThrow();
+      });
+    });
+
     test('grouped ported edge targets', () => {
       const result = parse('{a1:p1, a2:p2:w} -> {b1:e, b2:p3};', {
         startRule: 'Edge',

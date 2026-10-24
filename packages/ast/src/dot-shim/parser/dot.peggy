@@ -234,7 +234,13 @@ _node_ref
 
 _port "port"
   = ":" port:_literal compass:(":" compass:_compass { return compass; })? {
-      if (['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].includes(port)) {
+      // `node_id : compass_pt`: a lone port whose text is a compass point is
+      // the compass point, as Graphviz reads it (quoted or not).
+      if (
+        !compass &&
+        port.quoted !== 'html' &&
+        ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c', '_'].includes(port.value)
+      ) {
         return { compass: port };
       } else if (compass) {
         return { port, compass };
@@ -250,15 +256,11 @@ _subgraph
       return b.createElement('Subgraph', id ? { id } : {}, children);
     }
 
+// Longer alternatives first: PEG ordered choice would otherwise read "ne"
+// as "n" followed by a new statement "e". The lookahead keeps "nx" from
+// matching "n".
 _compass_keyword
-  = "n"
-  / "ne"
-  / "e"
-  / "se"
-  / "s"
-  / "sw"
-  / "w"
-  / "nw"
+  = k:("ne" / "nw" / "se" / "sw" / "n" / "e" / "s" / "w" / "c" / "_") ![A-Za-z0-9_\u0080-￿] { return k; }
 
 _compass
   = v:(
