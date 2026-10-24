@@ -55,20 +55,20 @@ export function applyStatements(
         break;
       }
       case 'AttributeList': {
-        const attrs = collectAttributes(
-          stmt.children.filter<AttributeASTNode>(
-            (v): v is AttributeASTNode => v.type === 'Attribute',
-          ),
+        const attributes = stmt.children.filter<AttributeASTNode>(
+          (v): v is AttributeASTNode => v.type === 'Attribute',
         );
+        // `attributes.<kind>.apply` takes the entries as is; `graph.edge()`
+        // would read an array as edge targets.
         switch (stmt.kind) {
           case 'Edge':
-            graph.edge(attrs);
+            graph.attributes.edge.apply(collectAttributes(attributes));
             break;
           case 'Node':
-            graph.node(attrs);
+            graph.attributes.node.apply(collectAttributes(attributes));
             break;
           case 'Graph':
-            graph.graph(attrs);
+            graph.attributes.graph.apply(collectAttributes(attributes));
             break;
         }
         commentHolder.reset();

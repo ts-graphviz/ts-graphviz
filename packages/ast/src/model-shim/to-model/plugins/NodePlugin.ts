@@ -8,8 +8,8 @@ export const NodePlugin: ConvertToModelPlugin<NodeASTNode> = {
     return ast.type === 'Node';
   },
   convert(context, ast) {
-    const node = new context.models.Node(
-      idFromLiteral(ast.id),
+    const node = new context.models.Node(idFromLiteral(ast.id));
+    node.attributes.apply(
       collectAttributes(
         ast.children.filter<AttributeASTNode>(
           (v): v is AttributeASTNode => v.type === 'Attribute',

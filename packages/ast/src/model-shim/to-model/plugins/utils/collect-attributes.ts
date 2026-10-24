@@ -1,26 +1,30 @@
-import type { AttributeValue } from '@ts-graphviz/common';
+import type { AttributeKey, AttributesEntities } from '@ts-graphviz/common';
 import type { AttributeASTNode } from '../../../../types.js';
 import { idFromLiteral, valueFromLiteral } from '../../../literal.js';
 
 /**
- * Converts an array of attribute AST nodes into a record mapping attribute
- * keys to their model values (see {@link valueFromLiteral}).
+ * Converts attribute AST nodes into `[key, value]` entries in source order
+ * (see {@link valueFromLiteral} for the values).
  *
- * @param attrs - The array of attribute AST nodes to process.
- * @returns An object mapping attribute keys to their corresponding values.
+ * Entries rather than a plain object: JavaScript enumerates integer-like
+ * keys (`0`, `"12"`) before other keys whatever the insertion order, and a
+ * `__proto__` key would need special care; a list keeps the DOT source's
+ * order and treats every key as data.
+ *
+ * A DOT source may use any key, so the key type is the caller's (the model
+ * stores whatever was written, as Graphviz does).
+ *
+ * @param attrs - The attribute AST nodes to process.
+ * @returns The attributes as entries, in the order they were written.
  */
-export function collectAttributes(
+export function collectAttributes<K extends AttributeKey>(
   attrs: AttributeASTNode[],
-): Record<string, AttributeValue> {
-  // A null-prototype record, so that a key such as `__proto__` in the DOT
-  // source becomes an ordinary property instead of changing the prototype.
-  return attrs.reduce<Record<string, AttributeValue>>(
-    (acc, curr) => {
-      acc[idFromLiteral(curr.key)] = valueFromLiteral(
-        curr.value,
-      ) as AttributeValue;
-      return acc;
-    },
-    Object.create(null) as Record<string, AttributeValue>,
+): AttributesEntities<K> {
+  return attrs.map(
+    (attr) =>
+      [idFromLiteral(attr.key), valueFromLiteral(attr.value)] as unknown as [
+        K,
+        AttributesEntities<K>[number][1],
+      ],
   );
 }
