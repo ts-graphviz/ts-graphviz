@@ -1,0 +1,5 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+reviews:
+  # v4 is developed on `next`; review PRs targeting it as well as `main`
+  base_branches:
+    - next
