@@ -5,6 +5,7 @@ export default defineConfig({
   assetsInclude: ['**/*.dot'],
   plugins: [tsconfigPaths()],
   test: {
+    setupFiles: ['./test/properties/setup.ts'],
     coverage: {
       enabled: true,
       include: ['packages/**/src/**/*.ts'],

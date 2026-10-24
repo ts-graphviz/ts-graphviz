@@ -11,16 +11,18 @@ export const SubgraphPlugin: ConvertFromModelPlugin<SubgraphModel> = {
     return createElement(
       'Subgraph',
       {
-        id: model.id
-          ? createElement(
-              'Literal',
-              {
-                value: model.id,
-                quoted: true,
-              },
-              [],
-            )
-          : undefined,
+        // `""` is a valid (empty) id, so test for presence, not truthiness
+        id:
+          model.id !== undefined
+            ? createElement(
+                'Literal',
+                {
+                  value: model.id,
+                  quoted: true,
+                },
+                [],
+              )
+            : undefined,
       },
       convertClusterChildren(context, model),
     );
