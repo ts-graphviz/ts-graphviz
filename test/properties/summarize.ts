@@ -16,9 +16,15 @@ interface GraphSummary {
   id?: string;
   comment?: string;
   attributes: [string, unknown][];
+  /** `graph [...]`, `node [...]` and `edge [...]` default statements. */
+  defaults: {
+    graph: [string, unknown][];
+    node: [string, unknown][];
+    edge: [string, unknown][];
+  };
   nodes: { id: string; comment?: string; attributes: [string, unknown][] }[];
   edges: {
-    targets: string[];
+    targets: TargetSummary[];
     comment?: string;
     attributes: [string, unknown][];
   }[];
@@ -33,11 +39,25 @@ export interface RootGraphSummary extends GraphSummary {
 const sorted = (values: ReadonlyArray<[string, unknown]>) =>
   [...values].sort(([a], [b]) => a.localeCompare(b));
 
-function targetId(target: EdgeModel['targets'][number]): string {
+/** A node reference as a plain object; a group as an array of them. */
+type TargetSummary =
+  | { id: string; port?: string; compass?: string }
+  | { id: string; port?: string; compass?: string }[];
+
+function summarizeTarget(target: EdgeModel['targets'][number]): TargetSummary {
   if (Array.isArray(target)) {
-    return `{${target.map(targetId).join(' ')}}`;
+    return target.map(
+      (t) => summarizeTarget(t) as Exclude<TargetSummary, unknown[]>,
+    );
   }
-  return isNodeModel(target) ? target.id : target.id;
+  if (isNodeModel(target)) {
+    return { id: target.id };
+  }
+  return {
+    id: target.id,
+    ...(target.port !== undefined ? { port: target.port } : {}),
+    ...(target.compass !== undefined ? { compass: target.compass } : {}),
+  };
 }
 
 function summarizeNode(node: NodeModel): GraphSummary['nodes'][number] {
@@ -50,7 +70,7 @@ function summarizeNode(node: NodeModel): GraphSummary['nodes'][number] {
 
 function summarizeEdge(edge: EdgeModel): GraphSummary['edges'][number] {
   return {
-    targets: edge.targets.map(targetId),
+    targets: edge.targets.map(summarizeTarget),
     comment: edge.comment,
     attributes: sorted(edge.attributes.values),
   };
@@ -61,6 +81,11 @@ function summarizeGraph(model: GraphBaseModel | SubgraphModel): GraphSummary {
     id: model.id,
     comment: model.comment,
     attributes: sorted(model.values),
+    defaults: {
+      graph: sorted(model.attributes.graph.values),
+      node: sorted(model.attributes.node.values),
+      edge: sorted(model.attributes.edge.values),
+    },
     nodes: model.nodes.map(summarizeNode),
     edges: model.edges.map(summarizeEdge),
     subgraphs: model.subgraphs.map(summarizeGraph),
