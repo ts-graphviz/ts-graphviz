@@ -244,22 +244,13 @@ describe.skipIf(!dotVersion)(
       () => {
         fc.assert(
           fc.property(graphSpec, (spec) => {
-            // Graphviz splits a port on ':' even when quoted (#1641), and the
-            // dump format uses two control characters as separators.
+            // The dump format uses two control characters as separators.
+            // (Ports never contain ':' — toDot rejects them, #1641.)
             const text = JSON.stringify(spec);
             fc.pre(!text.includes('\\u001e') && !text.includes('\\u001f'));
             // cgraph reserves names starting with '%' for anonymous objects
             // and renames a graph or node called that (`"%"` becomes `%1`).
             fc.pre(!/"id":"%/.test(text));
-            fc.pre(
-              !spec.edges.some((e) =>
-                e.targets.some((t) =>
-                  ('group' in t ? t.group : [t]).some((r) =>
-                    r.port?.includes(':'),
-                  ),
-                ),
-              ),
-            );
 
             const model = buildGraph(spec);
             const source = toDot(model);

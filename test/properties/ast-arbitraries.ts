@@ -172,10 +172,14 @@ const compassLiteral: fc.Arbitrary<LiteralASTNode<Compass>> = fc
 
 /**
  * A port name. Compass points are excluded: `a:n` is a compass point in DOT,
- * not a port, and the parser cannot tell the two apart afterwards.
+ * not a port, and the parser cannot tell the two apart afterwards. ':' is
+ * excluded because Graphviz reads `"p:q"` as port:compass, so a model port
+ * cannot hold it and toDot rejects it (#1641).
  */
 const portLiteral = idLiteral.filter(
-  (l) => !(COMPASS_POINTS as readonly string[]).includes(l.value),
+  (l) =>
+    !l.value.includes(':') &&
+    !(COMPASS_POINTS as readonly string[]).includes(l.value),
 );
 
 const nodeRef: fc.Arbitrary<NodeRefASTNode> = fc
