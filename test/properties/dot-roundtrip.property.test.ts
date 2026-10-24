@@ -212,7 +212,8 @@ describe('explicit value kinds', () => {
     // deterministic cases the properties above cannot distinguish by coercion
     const g = digraph((g) => {
       g.node('a', { fontsize: Number.NaN, width: Number.POSITIVE_INFINITY });
-      g.node('b', { __proto__: 'v' } as { label: string });
+      // computed key: a literal `__proto__:` would set the prototype instead
+      g.node('b', { ['__proto__']: 'v' } as { label: string });
     });
     const dot = toDot(g);
     expect(dot).toContain('fontsize = "NaN";');
