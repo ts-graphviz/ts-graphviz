@@ -73,9 +73,9 @@ export interface FdpOptions {
    */
   grid?: boolean;
   /**
-   * Use old attractive force
+   * Use old attractive force (`-LO`).
    *
-   * @default true
+   * @default false
    */
   oldAttractive?: boolean;
 
