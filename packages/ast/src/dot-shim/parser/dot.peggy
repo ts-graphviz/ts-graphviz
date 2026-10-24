@@ -301,7 +301,7 @@ _block_comment
         'Comment',
         {
           kind: 'Block',
-          value: dedent(v.join('').replace(/[ \t]*\*/g, '')),
+          value: dedent(v.join('').replace(/^[ \t]*\*/gm, '')),
         },
         [],
       );

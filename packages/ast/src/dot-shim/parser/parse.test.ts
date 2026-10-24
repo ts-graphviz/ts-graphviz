@@ -362,6 +362,22 @@ describe('parse', () => {
       );
       expect(result).toMatchSnapshot();
     });
+
+    // issue #1625
+    test('block comments keep asterisks inside their text', () => {
+      const [comment] = parse(
+        `/**
+          * a*b, 2 * 3
+          * **bold**
+          */`,
+        { startRule: 'ClusterStatements' },
+      );
+      expect(comment).toMatchObject({
+        type: 'Comment',
+        kind: 'Block',
+        value: 'a*b, 2 * 3\n**bold**',
+      });
+    });
   });
 
   describe('HTML string nesting depth limit', () => {
