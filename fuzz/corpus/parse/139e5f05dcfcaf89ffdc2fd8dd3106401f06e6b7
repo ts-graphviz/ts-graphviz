@@ -1,0 +1,8 @@
+digraph finite_state_machine {
+	rankdir=LR;
+	size="8,5"
+	ÿÿÿÿÿen from a book by Wil van der Aalst." Contributed byûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûûû Manfred Jeusfeld.ö÷##Command to produce the output: "neato -Tpng thisfile > thisfile.png"
+
+digraph TrafficLiÿÿÿÿÿÿÿÿÿ)"];
+	8 -> 5 [label = "S(a)"];
+}

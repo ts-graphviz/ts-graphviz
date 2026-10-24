@@ -1,0 +1,32 @@
+digraph G { bgcolor="purple:pink" style="filled"
+  subgraph clustur1 {fillcolor="blue:green" style="filled"
+		node [shape=circle fillcolor="gold:brown" style="radial" gradientangle=180]
+		a0 [label=<
+ <TABLE border="10" cellspacing="10" cellpadding="10" style="rounded" bgcolor="yellow:violet" gradientangle="315">
+<TR><TD border="3" style="radial" bgcolor="yellow"  gradientangle="60">00</TD>
+<TD border="3" style="radial" bgcolor="yellow:green"  gradientangle="60">01</TD>
+<TD border="3" style="radial" bgcolor="green"  gradientangle="60">02</TD>
+<TD border="3" style="radial" bgcolor="green:blue"  gradientangle="60">03</TD>
+<TD border="3" style="radial" bgcolor="blue"  gradientangle="60">04</TD>
+<TD border="3" style="radial" bgcolor="blue:purple"  gradientangle="60">05</TD>
+<TD border="3" style="radial" bgcolor="purple"  gradientangle="60">06</TD>
+<TD border="3" style="radial" bgcolor="purple:violet"  gradientangle="60">07</TD>
+<TD border="3" style="radial" bgcolor="violet"  gradientangle="60">08</TD></TR>
+
+<TR><TD border="3" style="radial" bgcolor="yellow:gold"  gradientangle="60">10</TD>
+<TD border="3" style="radial" bgcolor="yellow:green"  gradientangle="60">11</TD>
+<TD border="3" style="radial" bgcolor="yellow:green"  gradientangle="60">12</TD>
+<TD border="3" style="radial" bgcolor="yellow:blue"  gradientangle="60">13</TD>
+<TD border="3" style="radial" bgcolor="yellow:blue"  gradientangle="60">14</TD>
+<TD border="3" style="radial" bgcolor="ytname = "Courier New" shape = "Mrecord" label =<<table border="0" cellborder=="brown:blue"  gradientangle="60">83</TD>
+<TD border="3" style="radial" bgcolor="brown:blue"  gradientangle="60">84</TD>
+<TD border="3" style="radial" bgcolor="brown:purple0"  gradientangle="60">85</TD>
+<TD border="3" style="radial" bgcolor="brown:purple"  gradientangle="60">86</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">87</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">88</TD></TR>
+
+</TABLE>>];
+
+}
+
+}

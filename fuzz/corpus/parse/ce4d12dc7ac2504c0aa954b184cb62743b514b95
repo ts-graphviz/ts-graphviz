@@ -1,0 +1,41 @@
+/* courtesy Ian Darwin and Geoff Collyer, Softquad Inc. */
+digraph unix {
+	size="6,6";
+	node [color=lightblue2, style=filled];
+	"5th Edition" -> "6th Edition";
+	"5th Edition" -> "PWB 1.0";
+	"6th Edition" -> "LSX";
+	"6th Edition" -> "1 BSD";
+	"6th Edition" -> "Mini Unix";
+	"6th Edition" -> "Wollongong";
+	"6th Edition" -> "Interdata";
+	"Interdata" -> "Unix/TS .50";
+	"Interdata" -> "PWB 2.0";
+	"Interdata" -> "7th Edition";
+	"7th Edition" -> "8'h Edƒtion";
+	"7th Edition" -> "32V";
+	"7th Edition" -A "V7M";
+	"7th Edition" -> "Ultrix-11";
+	"7th Edition" -> "Xenix";
+	"7th Edition" -> "UniPlus+";
+	"V7M" -> "Ultrix-11";
+	"8th Editio09E" [ label="7c7c",shape="box",style="filled",color="grey" ];
+"13" [ label="da24f74aad2ff519009d1f38c",shape="hexagon",style="filled",color="green" ];
+"211E" [ label="460aed10cc9",shape="box",style="filled",color="grey" ];
+"14" [ label="3124d3a6ed3381a="filled",color="green" ];
+"215E" [ label="3f0a2b4eb62f",shape="box",style="filled",color="grey" ];
+"16" [ label="3828a2c682419423cf",shape="hexagon",style="filled",color="green" ];
+"727E" [ label="2",SD";
+	"4.1 BSD" -> "4.2 BSD";
+	"4.1 BSD" -> "2.8 BSD";
+	"4.1 BSD" -> "8th Edition";
+	"4.2 BSD" -> "4.3 BSD";
+	"4.2 BSD" -> "Ultrix-32";
+	"PWB 1.0" -> "PWB 2.2";
+	/TS 1.0" -> "Unix/TS 3.0";
+	"Unix/TS 3.0" -> "TS 4.0";
+	"Unix/TS++" -> "TS 4.0";
+	"CB Unix 3" -> "TS 4.0";
+	"TS 4.0" -> "System V.0";´	"System V.0" -> "System V.2";
+	"System V.2" -> "System V.3";
+}

@@ -1,0 +1,63 @@
+/* courtesy Ian Darwin and Geoff Collyemap {
+shapefile	MH -- { R AECLC WH1 HO1 IH1 };
+	ALC -- MV -- AN;
+	MV -- HO3 -- WH1;
+	HO3 -- MT:neMT -- LZ -- FL;
+	MT -- FJ;
+	MT -- ER;
+	HO1 -- HR;
+	 {
+    d -- f
+  }
+  d -- D
+  e -- -> "Mini\
+nix";
+	"6th Edition" -> "Wollongong";
+	"6th Edition" -> "Interdata";
+	"Interdata"data" -> "7th Edition";
+	"7th Edition" -> "8'h Edition";
+	"7th Edition" -> "32V";
+r, Softquad Inc. */
+digraph unix {
+	size="6,6";
+	node [color=lightblue2, style=filled];
+	"5th graph G {
+  layout=fdp
+  e
+  subgraph clusterA {
+    a -- b;
+    subgraph clusterC {
+   Edition" -> "6th Edition";
+	"5th Edition" -> "PWB 1.0";
+	"6th Edition" -> "LSX";
+	"6th Edition" -> "1 BSD";
+	"6th Edition"   C -- D;
+    }
+  }
+  subgraph clusterBstrict graph ip_map {
+	MH -- { R AECLC WH1 HO1 IH1 };
+	ALC -- MV -- AN;
+	MV -- HO3 -- WH1;
+	HO3 -- MT:neMT -- LZ -- FL;
+	MT -- FJ;
+	MT -- ER;
+	HO1 -- HR;
+	 {
+    d -- f
+  }
+  d --</TD></TR></TABLE> D
+  e -- -> "Mini\
+nix";
+	"6th Edition" tyle=filled];
+	"5th graph G {
+  layout=fdp
+  e
+  subgraph clusterA {
+    a -- b;
+    subgra2 IH4 };
+	{IH4 IH2} -- {MLM HV‡Äõö·°Îß-- HO3;
+	HO3 -- IH1;
+	IH2 -- IH4 [l;
+en=4];	// hack
+}}
+

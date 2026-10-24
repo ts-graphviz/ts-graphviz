@@ -1,0 +1,28 @@
+digraph G { bgcolor="purple:pink" style="filled"
+  subgraph cluster1 {fillcolor="blue:green" style="filled\
+		node [shape=circle fillcoolr="gold:brown" style="radial" gradientangle=180]
+		a0 [label=<
+ <TABLE border="10" cellspacing="10" cellpadding="10lue"  gradientangle="60">74</TD>
+<TD border="3" style="radial" bgcolor="brown:purple"  gradientangle="60">75</TD>
+<TD border="3" style="radial" bgcolor="brown:purplлллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллллл>"  gradientangle="60">76</TD>
+<TD border="3" style="radial" bgcolor="brown:vio,et"  gradientangle="60">77</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">78</TD></TR>
+
+<TR><TD border="3" style="radial" bgcolor="brown"  gradientangle="60">80</TD>
+<TD border="3" style="radin:violet"  gradientangle="60">78</TD></TR>
+
+<TR><TD border="3" style="radial" bgcolor="brown"  gradientangle="60">80</TD>
+<TD border="3" style="radial" bgcolor="brown:green"  gradientangle="60">81</TD>
+<TD border="3" style="radial" bgcolor="brown:green"  gradientangle="60">82</TD>
+<TD border="3" style="radial" bgcolor="brown:blue"  gradientangle="60">83</TD>
+<TD border="3" style="radi÷⌠щыbgcolor="brown:blue"  gradientangle="60">84</TD>
+<TD border="3" style="radial" bgcolor="brown:purple"  gradientangl6=e"0">85</TD>
+<TD border="3" style="radial" bgcolor="brown:purple"  gradientangle="60">86</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">87</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">88</TD></TR>
+
+</TABLE>>];
+
+}
+
+}

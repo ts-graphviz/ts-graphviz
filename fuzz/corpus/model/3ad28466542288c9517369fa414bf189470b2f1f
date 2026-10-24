@@ -1,0 +1,9 @@
+digraph G {
+	graph [center=1 rankdir=LR bgcolo="#00ffff"]
+	7 -> g -> {G H} [color="#ffffff"]
+	8 -> h -> {H G} [color="#ff00ff"]
+	{ edge [color="#ff0000:#0000ff"]
+		A -> i -> {I K}
+		B -> j -> {J L}
+	}
+	{ edge [color="#00ff00:#ffff0

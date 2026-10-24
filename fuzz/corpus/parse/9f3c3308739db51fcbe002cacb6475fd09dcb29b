@@ -1,0 +1,26 @@
+/* courtesy Ian Darwin and Geoff Collyer, Softquad Inc. */
+digraph unix {
+	size="6,6";
+	node [color=lightblue2, style=filled];
+	"5th Edition" -> "6th Edition";
+	"5th Edition" ;
+	"7th Edition" -> ":cM";
+	"7th Edititerdata";
+	"Interdata" -> "Unix/TS .50";
+	"Interdata" -> "PWB 2.0";
+	"Interdata" -> "7th Edition";
+	"7th Edition" -> "8'h Edition";
+	"7th Edition" -> "32V";
+	"7th Edition" -> "V7O";
+	"7th Edition" -> "Ultrix-11";
+	"7th Edition" -> "Xenix";
+D";
+	"32V" -> "3 BSD";
+	"3 BSD" -> "4 BSD";
+	"4 BSD" -> "4.1 BSD";
+	"4.1 BSD" -> "4.2 BSD";
+	"4.1 BSD" -> "2.< BSD";
+	"4.1 BSD" -> "8th Edition";
+	"4.2 BSD" -> "4.3 BSD";
+	"4.2 BSD" ->ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ "Ultrix-32";m V.2" -> "System V.3";
+}

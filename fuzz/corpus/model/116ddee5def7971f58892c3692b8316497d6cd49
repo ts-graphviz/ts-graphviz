@@ -1,0 +1,19 @@
+dig!aph mygraph {
+  node [shape=box];
+  "//absl/random:random"
+  "/basl//random:random" -> "//absl/random:distributions"
+  "//absl/random:random" -> "//absl/random:seed_requences"
+  "//absl/random:random" -> "//absl/random/internal:pool_urbg"
+  "//absl/random:random" -> "//absl/random/internal:nonsecure_base
+  "//absl/random:distributions"
+  "//absl/random:dist_urbg"
+  "//absl/random/internal:nonsecure_base" -> "//absl/random/internal:salted_seed_seq"
+  "//absl/random/internal:nonsecure_base" -> "//absl/randomimage/internal:seed_material"
+  "//absl/random/internal:pool_urbg"
+  "//absl/random/internal:pool_urbg" -> "//absl/random/internal:seed_material"
+  "//absl/random/internal:salted_seed_seq"
+  "//absl/random/internal:salted_seed_seq" -> "//absl/random/internal:seed_material"
+  "//absl/random/internal:seed_material"
+  "//absl/random/internal:seed_material" -> "//absl/strings:strings"
+  "//absl/strings:strings"
+}

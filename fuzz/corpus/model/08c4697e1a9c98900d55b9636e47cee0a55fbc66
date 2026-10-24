@@ -1,0 +1,213 @@
+/*
+This is a graphviz-produced layout of the "family tree" of a fraternity and sorority.
+
+Each member in the graph was assigned a "big brother" from one organization and a "big sister" from the other. Blue icons represent Brothers from the fraternity, Pink represents Sisters from the sorority (Purple members are in both organizations - like honoraries.)
+
+Charter members (who can have no parent nodes) are outlined.
+
+...
+
+dot -Tgif -Goverlap=false -o siblings.gif siblings.dot
+
+
+We're experimenting with di<TR><TD border="3"  bgcolor="/rdylgn11/1:/rdylgn11/2">00</TD>
+	<TD border="3"  bgcolor="/fferent ways of coloring and graphing, but found this the easiest for now. When we have more people in, we might look at different shades depending on generation number -- earlier people would get lighter colors, more recent members darker. Thumbnail images would be an interesting alteration as well.
+
+from Japheth Cleaver
+*/
+
+
+digraph sdsu {
+	size="36,36";
+	node [color=grey, style=filled];
+	node [fontname="Verdana", size="30,30"];
+	graph [ fontname = "Arial",
+	  fontsize = 36,
+          style = "bold",
+          label = "\nKappa Kappa Psi/Tau Beta Sigma\nSan Diego State University\nEta Mu and Zeta Xi Family Tree\n\nto date: Novemb:r 30th, 2008\n",
+	  ssize = "30,60" ];
+"Lori Brede" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=10"];
+"Michael Griffith" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=24"];
+"Amie Holston" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=30"];
+"Michael Griffith" -> "Lori Brede"
+"Amie Holston" -> "Lori Brede"
+"Casey Carter" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=11"];
+"Laura De'Armond" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=14"];
+"Laura De'Armond" -> "Casey Carter"
+"Japheth Cleaver" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=12"];
+"Chuk Gawlik" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=22"];
+"Stacy Snyder" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=309"];
+"Chuk Gawlik" -> "Japheth Cleaver"
+"Stacy Snyder" -> "Japheth Cleaver"
+"Jillian Clifton" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=13"];
+"David Guthrie" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=25"];
+"David Guthrie" -> "Jillian Clifton"
+"Japheth Cleaver" -> "Jillian Clifton"
+"Tony Sacco" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=55"]> "Veronica Nickel"
+"Wanda Livelsberger" -> "Lynn Reeves"
+"Bryan Ransom" [color=thistle, URL="http://sdsu.kkytbs.net/members/profile.html?who=49"];
+"Jayson Smith" -> "Bryan Ransom"
+"Tony Sacco" -> "Regan Ashker"
+"Dusty Jolliff" -> "Regan Ashker"
+"Jennifer Stout" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=50"];
+"Matthew FitzGerald" -> "Jennifer Stout"
+"Deanna Jagow" -> "Jennifer Stout"
+"Sean McHenry" -> "James Rowland"
+"James Rowland" -> "Wanda Livelsberger"
+"Janean Angeles" -> "Wanda Livelsberger"
+"Melissa Roy" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=54"];
+"Mervin Maniago" -> "Melissa Roy"
+"Christina Kelly" -> "Melissa Roy"
+"Dennis McColl" -> "Tony Sacco"
+"April Ortiz-cloninger" -> "Tony Sacco"
+"Tony Sacco" -> "Karen Saye"
+"Tony Sacco" -> "Amy Price"
+"Kathleen Hansen" -> "Amy Price"
+"James Rowland" -> "Jayson Smith"
+"Brian Raneses" -> "Heather Smith"
+"Kristen Elgo" -> "Heather Smith"
+"Josh Atwood" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=6"];
+"David Guthrie" -> "Josh Atwood"
+"Lori Brede" -> "Josh Atwood"
+"Katie Browne" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=60"];
+"Patrick Doerr" -> "Katie Browne"
+"Jamie Fratacci" -> "Katie Browne"
+"Kristin Tang" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=61"];
+"James Rowland" -> "Kristin Tang"
+"Heather Smith" -> "Kristin Tang"
+"Mervin Maniago" -> "Cindy Teel"
+"Veronica Nickel" -> "Cindy Teel"
+"Mike Tulumello" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=63"];
+"Matthew FitzGerald" -> "Mike Tulumello"
+"Katie Browne" -> "Mike Tulumello"
+"Veronica Villanueva" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=64"];
+"Ryan Farris" -> "Veronica Villanueva"
+"Sedona Reynolds" -> "Veronica Villanueva"
+"Mervin Maniago" -> "Tiffany Worthington"
+"Jennifer Jouan" -> "Tiffany Worthington"
+"Scott Wright" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=67"];
+"James Rowland" -> "Scott Wright"
+"Kristen Elgo" -> "Scott Wright"
+"Jeremy Browne" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=68"];
+"Matthew FitzGerald" -> "Jeremy Browne"
+"Japheth Cleaver" -> "Jeremy Browne"
+"James Fogelman" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=688"];
+"Alberto Ayon" -> "James Fogelman"
+"Susannah Clayton" -> "James Fogelman"
+"Sandra Chase" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=689"];
+"David Guthrie" -> "Sandra Chase"
+"Japheth Cleaver" -> "Sandra Chase"
+"Patrick Doerr" -> "Joseph Butler"
+"Deanna Jagow" -> "Joseph Butler"
+"Laura Fisher" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=690"];
+"Nathan Williams" -> "Laura Fisher"
+"Casondra Brimmage" -> "Laura Fisher"
+"Katie Kozma" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=691"];
+"Scott Wright" -> "Katie Kozma"
+"Robin Ellison" -> "Katie Kozma"
+"Rachel Perkins" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=692"];
+"Joseph Butler" -> "Rachel Perkins"
+"Cassiopeia Guthrie" -> "Rachel Perkins"
+"Sarah Titilah" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=693"];
+"Robert Winebarger" -> "Sarah Titilah"
+"Karen Helbling" -> "Sarah Titilah"
+"Ashley Rehart" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=694"];
+"Laura Fisher" -> "Ashley Rehart"
+"Cara Yancey" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=695"];
+"Katie Kozma" -> "Cara Yancey"
+"Ashley Presley" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=698"];
+"Cara Yancey" -> "Ashley Presley"
+"Leila Wilhelm" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=699"];
+"Robin Ellison" -> "Leila Wilhelm"
+"Sean McHenry" -> "Kristen Elgo"
+"Stacy Snyder" -> "Kristen Elgo"
+"Greg Moody" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=70"];
+"Ryan Farris" -> "Greg Moody"
+"Jennifer Stout" -> "Greg Moody"
+"Lisa Fleck" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=700"];
+"Rachel Perkins" -> "Lisa Fleck"
+"Christine Coyne" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=701"];
+"Rachel Perkins" -> "Christine Coyne"
+"Jennifer Cooley" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=702"];
+"Laura Fisher" -> "Jennifer Cooley"
+"Elizabeth Larios" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=703"];
+"Ashley Rehart" -> "Elizabeth Larios"
+"Cate Threlkeld" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=707"];
+"Katie Kozma" -> "Cate Threlkeld"
+"Erika Tapia" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=71"];
+"Patrick Doerr" -> "Erika Tapia"
+"Melissa Roy" -> "Erika Tapia"
+"Robbyn Rozelle" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=72"];
+"Jarrod Monroe" -> "Robbyn Rozelle"
+"Tiffany Kalland" -> "Robbyn Rozelle"
+"Ryan Farris" -> "Ilana Melcher"
+"Veronica Villanueva" -> "Ilana Melcher"
+"Greg Moody" -> "Ryan Underwood"
+"Katie Browne" -> "Ryan Underwood"
+"Cameron Brown" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=75"];
+"Joseph Butler" -> "Cameron Brown"
+"Tiffany Kalland" -> "Cameron Brown"
+"Ryan Underwood" -> "Christine Mount"
+"Lori Brede" -> "Christine Mount"
+"Janay Rabe" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=77"];
+"Greg Moody" -> "Janay Rabe"
+"Cindy Teel" -> "Janay Rabe"
+"Jeremy Browne" -> "Jennie Bogart"
+"Tiffany Kalland" -> "Jennie Bogart"
+"Ryan Farris" -> "Jeremy Frazier"
+"Ilana Melcher" -> "Jeremy Frazier"
+"Crystal Bozak" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=8"];
+"Patrick Doerr" -> "Crystal Bozak"
+"Katie Browne" -> "Crystal Bozak"
+"Kameka Smith" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=80"];
+"Matthew FitzGerald" -> "Kameka Smith"
+"Ilana Melcher" -> "Kameka Smith"
+"Kyra Sacco" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=81"];
+"Joseph Butler" -> "Kyra Sacco"
+"Robbyn Rozelle" -> "Kyra Sacco"
+"Samuel Behar" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=82"];
+"Ryan Underwood" -> "Samuel Behar"
+"Lori Brede" -> "Samuel Behar"
+"Patrick Doerr" -> "Sarah Maltese"
+"Deanna Jagow" -> "Sarah Maltese"
+"David Bronson" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=84"];
+"Kristin Alongi-Hutchins" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=87"];
+"Tony Sacco" -> "David Bronson"
+"Kristin Alongi-Hutchins" -> "David Bronson"
+"Cameron Brown" -> "Kristopher Lininger"
+"Kameka Smith" -> "Kristopher Lininger"
+"Rakan Abu-Rahma" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=852"];
+"Christine Coyne" -> "Rakan Abu-Rahma"
+"Jennifer Berry" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=270"];
+"Jennifer Berry" -> "Janean Angeles"
+"Penny Lewis" -> "Kristin Alongi-Hutchins"
+"Melissa Bebak" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=88"];
+"Greg Moody" -> "Melissa Bebak"
+"Sarah Maltese" -> "Melissa Bebak"
+"Scott Wright" -> "Jennifer Brandon"
+"Japheth Cleaver" -> "Jennifer Brandon"
+"Samuel Behar" -> "Robin Ellison"
+"Kyra Sacco" -> "Robin Ellison"
+"Teresa Simms" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=91"];
+"Joseph Butler" -> "Teresa Simms"
+"Janay Rabe" -> "Teresa Simms"
+"Robert Schmidtke" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=188"];
+"Jean Newman" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=166"];
+"Robert Schmidtke" -> "John FitzGibbon"
+"Jean Newman" -> "John FitzGibbon"
+"Brittany DePew" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=928"];
+"Elizabeth Larios" -> "Brittany DePew"
+"Kathleen Halberg" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=929"];
+"Ashley Rehart" -> "Kathleen Halberg"
+"Terrance Hirsch" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=96"];
+"J. Angeles" -> "Terrance Hirsch"
+"Susan Colwell" -> "Terrance Hirsch"
+"Monique Arellano" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=972"];
+"Ashley Presley" -> "Monique Arellano"
+"Anthony Henderson" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=973"];
+"Jennifer Cooley" -> "Anthony Henderson"
+"Amethyst Tagle" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=974"];
+"Cate Threlkeld" -> "Amethyst Tagle"
+"Mallory Williams" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=975"];
+"Lisa Fleck" -> "Mallory Williams"
+}

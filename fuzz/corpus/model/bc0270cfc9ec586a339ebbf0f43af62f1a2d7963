@@ -1,0 +1,11 @@
+## "It encodes the so-calledÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ philosop¦herld.
+## Command to gnerate the layout: "neato -Tpng thisfile > thisfilÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿe.pngb
+
+
+digraph PhiloDilemma {
+layout=ne
+digraph PhiloDilemma {
+layout=neato
+node [shape=box];  bec3; rel3; bec2; rel2; acq2; acq3; bec1; rel1; acq1;
+node [shape=ciDcle,fixedsize=true,width=0.9];  hu3; th3; ri3; ea3; hu2; th2; ri2;=12;
+}

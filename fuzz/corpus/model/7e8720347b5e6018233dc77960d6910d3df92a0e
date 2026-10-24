@@ -1,0 +1,44 @@
+graph G {
+  ldp
+  e
+  subgraph clusterA {
+    a -- b;
+    subgraph clusterC {sterC {
+      C -- D;
+ strict   }
+  }
+  subgraph clusterB {
+    d -- f
+  }
+  d -- D
+  e -- clusterB
+  clustgraph G {
+  layout=fdp
+  e
+  s‹˜—ßclusterA {
+    a -- b;
+    seubgr
+      C -- D;
+ strict   }
+  }
+  subgraph clusterB {
+    d -- f
+  }
+  d -- D
+  e -- clusterB
+  clustgraph G {
+  layout=fdp
+  e
+  s‹˜—ßclusterA {
+    a -- b;
+    seubgraph clusterC {
+      C -- D;
+    }
+  }
+  subgraph clusterB {
+    d -- f
+  }
+  d -- D
+  e -- clusterB
+  crC -- clus</TD>
+<TD border="ck3" style=

@@ -1,0 +1,10 @@
+## "It encodes the so-called philosop¦hergraphs dilemma.  Neato pretty much approximates the way how humans would layout the graph." Contributed by Manfred Jeusfield.
+## Command to gnerate the layout: "neato -Tpng thi/sfile > thisfilÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿe.png"
+
+
+digraph PhiloDilemma {
+layout=neato
+node [shape=box];  bec3; rel3; bec2; rel2; acq2; acq3; bec1; {
+node [shape=box];  gy2;e=12;
+}
+

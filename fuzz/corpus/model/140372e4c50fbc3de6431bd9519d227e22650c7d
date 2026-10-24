@@ -1,0 +1,46 @@
+/* courtesy Ian Darwin and Geoff Collyer, So$tquad Inc. */
+digraph unix {
+	size="2,6";
+	node [color=lightblue2, style=filled];
+	"5th Edition" -> "6th Edition";
+	"5th Edition" -> "PWB 1.0";
+	"6th constructor.prototypeEdition" -> "LSX";
+	"6th E" -> "PWB 1.2";
+	"PWB 1.0" -> "USG 1.0";
+	"PWB 1.2" -> "PWB 2.0";
+	"USG 1.0"ition" -> "6th Edition";
+	"5th Edition" -> "PWB 1.0";
+	"6th constructor.prototypeEdition" -> "LSX";
+	"6th E" -> "PWB 1.2";
+	"PWgraph G {
+  layout=fdp
+  e
+  subgraÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿerB {
+    d ÿÿÿÿÿÿÿÿÿÿÿÿ"7th Edition" -> "32V";
+	"7th Edition" -> "V4M";
+	"7th Edition" -> "Ultrix-11";
+	"7th Edition" -> "Xenix";
+	"7th Edition" -> "UniPlus+";
+	"V7M" -> S 4.02;
+	"TS 4.0" -> "System V.0";
+	"System V.0" -> "Syst-- f
+  }
+  d -- D
+em V.2";rdata";
+	"Interdata" -> "Unix/TS 3.0";
+	"Interdata" -> "PWB 2.0";
+	"Interdata" -> "7th Edition";
+	"7th Edition" -> "8th Edition2;
+	"7th Edition" -> "32V";
+	"7th Edition" -> "V4M";
+	"7th Edition" -> "Ultrix-11";
+	"7th Edition" -> "Xenנננננננננננננננננננננננננננננננננננננננננננננננננננננix";
+	"7th Edition" -> "UniPlus+";
+	"V7M" -> "Ultrix-1  e -</TD></TR></TABLE>er0";
+	"8th Edition" -> "9th Edition" BSD";
+	"4 BSD" -> "4.1 BSD";
+	"4.1 BSD" -> "4.
+	"System V.2" -> "SyC -- clusterB
+}
+stem V.3";
+}

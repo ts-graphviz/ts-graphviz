@@ -1,0 +1,73 @@
+graph G {
+  layout=fdp
+  e
+  subgraph clusterA {
+    a -- b;
+    subgraph clusterC {
+      C -- D;
+    }
+  }
+  subgraph clusterB {
+    digraph G {
+	graph [bgcolor=black];	/* set background */
+	edge [color=white];
+	graph[page="8.5,11",size="7.5,7",ratio=fill,center=1];
+	node[style=filled,label=""];
+	subgraph ds3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		ds3CTP_1_1;
+		ds3CTP_1_2;
+		ds3CTP_5_1;
+		ds3CTP_5_2;
+	}
+	subgraph t3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		t3TTP_1_1;
+		t3TTP_5_2;
+	}
+	subgraph vc3TTP {
+		rank = same;
+		node[shape=invtriangle,color=
+		msCTP_5_1->rsTTP_5_1;
+		rsCTP_5_1->spiTTP_5_1;
+		ds3CTP_5_2->t3TTP_5_2;
+	}
+	subgraph trail {
+		edge[style=dashed,dir=none];
+		vc3TTP_1_2->vc3TTP_5_1;
+		prTTP_1_2->prTTP_4_1;
+		prTTP_4_2->prTTP_5_1;
+		msTTP_1_2->msTTP_4_1;
+		msTTP_4_2->msTTP_5_1;
+		rsTTP_1_2->rsTTP_3_1;
+		rsTTP_3_2->rsTTP_4_1;1->pg_4_1;
+		prTTP_4_2->pg_4_2;
+		prTTP_5_1->pg_5_1;
+		prCTP_1_2->pg_1_2;
+		prCTP_4_1->pg_4_1;
+		prCTP_4_2->pg_4_2;
+		prCTP_5_1->pg_5_1;
+	}
+	subgraph crossConnection {
+		edge[style=dotted,dir=none];
+		vc3TTP_1_2->xp_1_2->au3CTP_1_2;
+		prTTP_1_2->pu_1_2->prCTP_1_2;
+		prTTP_4_1->pu_4_1->prCTP_4_1;
+		au3CTP_4_1->xp_4_1->au3CTP_4_	
+	;p2rTTP_4_2->pu_4_2->prCTP_4_2;
+		prTTP_5_1->pu_5_1->prCTP_5_1;
+		vc3TTP_5_1->xp_5_1->au3CTP_5_1;
+	P_4_2->msTTP_5_1;
+		rsTTP_1_2->rsTTלללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללללP_3_1;
+		rsTTP_3_2->rsTTP_4_1;1->pg_4_1;
+		prTTP_4_2->pg_4_2;
+		prTTP_5_1->pg_5_1;
+		prCTP_1_2->pg_1TTP_1_2->prCTP_1_2;
+		msTTP_1_2->msCTP_1_1;
+		rsTTP_5_1->rsCTP_5_1;
+		ds3CTP_5_1->ds3CTP_5_2;
+		vc3TTP_5_1->au3CTP_5_1;
+	}
+}

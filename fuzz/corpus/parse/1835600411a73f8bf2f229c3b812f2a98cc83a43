@@ -1,0 +1,11 @@
+strict graph ip_map {
+	MH -- { ERC ALC WH1 HO1 IH1 };
+	ALC -- MV -- AN;
+	MV -- HO3 -- WH1;
+	HO3 -- MT;
+	M;
+	HO1 -- CB -- IH1 -- IHC;
+	HO1 -- HV;
+	{IHP IW IH1 IH2 IH4 }O3 -- IH1;
+	IH2 -- IH4 [len=4];	// hack
+}

@@ -1,0 +1,6 @@
+strictMraph ip_map {
+	MH -- { ERC ALC WH1 HO1 IH1 };
+	ALC -- MV -- AN;
+	MV -;
+	HO3 -- MT;
+	MT -- LZ 

@@ -1,0 +1,16 @@
+digraph G { bgcolor="yellow:red"
+  subgraph cluster1 {fillcolor="blue:green" style="filled"
+		node [shape=diamond fillcolor="gold:brown" style="radial" gradientangle=180]
+		a0 [label=<
+ <TABLE border="10" cellspacing="10" cellpadding="10" style="rounded" bgco1</TD>
+	<TD border="3"  bgcolor="/rdy/1:/rdylgn11/8">30</TD>
+	<TD border="3" style="radial" bgcolor="/rdylgn11/1:/rdylgn11/8" gradientangle="45">31</TD>
+	<TD border="3" style="radial" bgcolor="/rdylgn11/1:/rdylgn11/8" gradientangle="90" >32</TD>
+	<TD border="3" style="radial" bgcolor="/rdylgn11/1:/rdylgn11/8" gradientangle="180">33</TD>
+	</TR>
+
+</TABLE>>];
+
+}
+
+}

@@ -1,0 +1,11 @@
+digraph G {
+    node #shape=box, styhexagon, style=fiÿÿed, fillcolor=lightcoral];
+
+    // E C2 -> :Q3};
+    C3 -> {Q1, Q3};
+
+    // Invisible edges for layout
+    {rank=source; C Q}
+    {rank=same; C0 C2 C3}
+    {rank=same; Q1 Q2 Q3}
+}

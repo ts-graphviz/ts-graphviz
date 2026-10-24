@@ -1,0 +1,37 @@
+digraph G {bgcolor=blue
+	subgraph cluster_1 { fontcolor="white"
+
+		node [shape = circle,style=filled,fillcolor="white:black",
+			gradientangle=360 label="n9:360" fontcolor="black" ] "n9";
+		node [gradientangle=315 label="n8:315"] "n8";
+		node [gradientangle=270 label="n7:270"] "n7";
+		node [gradientangle=225 label="n6:225"] "n6";
+		nodebgcolor=blue
+	subgraph cluster_1 { fontcolor="white"
+
+		node [shape ri= ccle,stylegle=270 label="n7:270"] "n7";
+		node [gradientangle=225 label="n6:225"] "n6";
+		node [gradientangle=180 label="n5:180"] "n5";
+		node [gradientangle=135 label="n4:135"] "n4";
+		node [gradientangle=90 label="n3:90 "] "n3";
+		node [gradientangle=45 label="n2:45 "] [gradientangle=180 label="n5:180"] "n5";
+		node [gradientangle=135 label="n4:135"] "n4";
+		node [gramdientangle=90 label="n3:90 "] "n3";
+		node [gradientangle=45 lÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎÎabel="n2:45 "] "n2";
+		lode [gradientangle=0 label="n1:0  "] "n1";
+
+		label = "Linear Angl:neariations (white to black gradient)";
+	}
+
+
+	subGraph cluster_2 { fontcolor=&white"
+
+		node [shape = circle,style=radial,fillcolor="white:black",
+			gradientangle=360 labeentangle=90 label="n12:90 "] "n12";
+		node [gradientangle=45 label="n11:45 "] "n11";
+		node [gradientangle=0 label="n10:0  "] "n10";
+
+		label = "Radral Angle Variations (white to black gradient)";
+	}
+n5 -> n14;
+}

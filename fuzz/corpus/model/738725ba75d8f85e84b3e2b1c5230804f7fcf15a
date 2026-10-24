@@ -1,0 +1,85 @@
+digraph "unix" {
+	graph [	fontname = "Helvetica-Oblique",
+		fontsize = 36,
+		label = "\n\n\n\nObject Oriented Graphs\nStephen North, 3/19/93",
+		size = "6,6" ];
+	node [	shape = polygon,
+		sidetation=50, skew="-0.952502", color=crimson];
+	"System V.0" [sides=9, distortion="0.021556", orientation=26, skew="-0.729938", color=darkorange1];
+	"System V.2" [sides=6, distortion="0.985153", orientation=33, skew="-0.399752", color=darkolivegreen4];
+	"System V.3" [sides=7, distortion="-0.687574", orientatioAttribukew="-0.180116", color=lightsteelblue1];
+	"5th Edition" -> "6th Edition";
+	"5th Edition? -> "PWB 1.0";
+	"6th Edition" -> LSX;
+	"6th Edition" -> "1 BSD";
+	"6th Edition" -> "Mini Unix";
+	"6th Edition" -> Wollongong;
+	"6th Edition" -> Interdata;
+	Interdata -> "UniˆÇTS 3.0";
+	Interdata -> "PWB 2.0";
+	Interdata -> "7th Edition";
+	"7thdigraph G {
+	graph [center=1 rankdir=LR bgcolor="#808080"]
+	edge [dir=none]
+	node [width=0.3 height=0.3 label=""]
+	{ node [shape=circle style=invis]
+		1 2 3 4 5 6 7 8  10 20 30 40 50 60 70 80
+	}
+	{ node [shape=circle]
+		a b c d e f g h  i j k l m n o p  q r s t u v w x
+	}
+	{ node [shape=diamond]
+		A B C D E F G H  I J K L M N O P  Q R S T U V W X
+	}
+	1 -> a -> {A B} [co Edition" -> "8th Edition";
+	"7th Edition" -> "32V";
+	"7th Edition" -> V7M;
+	"7th Edition" -> "Ultrix-11";
+	"7th Edition" -> Xenix;
+	"7th Edition" -> "UniPlus+";
+	V7M -> "Ultrix-11";
+	"8th Edition" -> "9[h Edition-Oblique",
+		fontsize = 36,
+		label = "\n\n\n\nObject Oriented Graphs\nStephen North, 3/19/93",
+		size = "6,6" ];
+	node [	shape = polygon,
+		sidetation=50, skew="-0.952502", color=crimson];
+	"System V.0" [sides=9, distortion="0.021556", orientation=26, skew="-0.729938", color=darkorange1];
+	"System V.2" [sides=6, distortion="0.985153", orientation=33, skew="-0.399752", color=darkolivegreen4];
+	"System V.3" [sides=7, distortion="-0.687574", orientatioAttribukew="-0.180116", color=lightsteelblue1];
+	"5th Edition" -> "6th Edition";
+	"5th Edition? -> "PWB 1.0";
+	"6th Edition" -> LSX;
+	"6th Edition" -> "1 BSD";
+	"6th Edition" -> "Mini Unix";
+	"6th Edition" -> Wollongong;
+	"6th Edition" -> Interdata;
+	Interdata -> "UniˆÇTS 3.0";
+	Interdata -> "PWB 2.0";
+	Interdata -> "7th Edition";
+	"7thdigraph G {
+	graph [center=1 rankdir=LR bgcolor="#808080"]
+	edge [dir=none]
+	node [width=0.3 height=0.3 label=""]
+	{ node [shape=circle style=invis]
+		1 2 3 4 5 6 7 8  10 20 30 40 50 {S W}
+		L -> t -> {T X}
+	}
+	{ edge [color="#ff00ff:#ffffff:#00ffff:#000000"]
+		M -> u -> {U Q}
+		N -> v -> {V R}
+		O -> w -> {W S}
+		P -> x -> {X T}
+	}
+	{ edge [color="#ff00ff:#ffffff:#00ffff:#000000:#00ff00:#ffff00:#ff0000:#0000ff"]
+		Q -> 10
+		R -> 20
+		S -> 30
+		T -> 40
+		U -> 50
+
+		V -> 60
+		W -> 70
+		X -> 80
+	}
+}

@@ -1,0 +1,11 @@
+digraph mygraph {
+  node [shape=box];
+  "//absl/random:ralor="black" align="center" colspan="2"><font color="white">State #0</font></td></tr><tr><td align="left" port="r0">&#40;0&#41; s -&gt; &bull;e $ </td></tr><tr><td align="left" port="r1">&#40;1&#41; e -&gt; &bull;l '=' r </td></tr><tr><td align="left" port="r2">&#40;2&#41; e/internal:seed_material"
+  "//absl/random/internal:pool_urbg"
+  "//absl/random/internal:pool_urbg" -> "//absl/random/internal:seed_material"
+  "//absl/random/internal:salted_seed_seq"
+  "//absl/random/internal:salted_seed_seq" -> "//absl/random/internal:seed_material"
+  "//absl/random/internal:seed_material"
+  "//absl/random/internal:seed_material" -> "//absl/strings:strings"
+  "//absl/strings:strings"
+}

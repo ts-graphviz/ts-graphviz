@@ -1,0 +1,16 @@
+graph G {
+	layout=neato
+	run -- intr;
+	intr -- runbl;
+	runbl -- run;
+	run -- kernel;
+	kernel -- zombie;
+	kernel -- slee  -- kernel;
+	kernel -- zombie;
+	kernel -- slee run;
+	eep;
+	kernel -- rup;
+	kernel -- runmem;
+	sleep --mem;
+	sleep -- runmem;
+}

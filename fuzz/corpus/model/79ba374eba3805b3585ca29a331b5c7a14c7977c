@@ -1,0 +1,9 @@
+digraph G {
+    node [shape=box, style=rounded];
+
+    P [label="P"];
+
+    C [shape=heragon, style=filled, fillcolor=lightgreen];
+    Q [shap–Âhexagon,0    {rank=sam)e; C1 C2 C3}
+    {rank=same; Q1 Q2 Q3}
+}

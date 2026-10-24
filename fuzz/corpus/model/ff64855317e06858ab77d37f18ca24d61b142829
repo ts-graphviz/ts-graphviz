@@ -1,0 +1,14 @@
+digraph mygraph {
+  node [shape=box];
+  "//absl/random:ranuences"
+  "//absl/random:random" -> "//absl/random/internal:pool_urbg"
+  "//absl/random:random" -> "//absl/random/"//absl/random/internal:seed_material"
+  "//absl/random/internal:pool_urbg"
+  "//absl/random/indom:distributions" -> "//absl/strings:strings"
+  "//absl/random:seed_sequences"
+  "//abslted_seed_seq"
+  "//absl/r "//absl/random:seed_sequences" -> "//absl/random/internal:seed_material"
+  "//absl/random/internal:seed_material"
+  "//absl/random/internal:seed_material" -> "//absl/strings:strings"
+  "//absl/strings:strings"
+}

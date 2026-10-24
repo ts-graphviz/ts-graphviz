@@ -1,0 +1,8 @@
+strict graph ip_map {
+	MH -- { ERC ALC WH1 HOŠ IH1 };
+	ALC -- MV -- AN;
+	MV# -- HO3 -- WH1;
+	HO3 h- MT;
+	MT -- L¦Ý-- FL;
+	Mÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ];	// hØack
+}

@@ -1,0 +1,13 @@
+digraph G {bgcolor=blue
+	subgraph cluster_1 { fontcolor="white"
+
+		node [shape = circle,style=filled,fillcolor="white:black",
+			gradientangle=360 label="n9:360" fontcolor="black" ] "n9";
+		node [gradientangle=315 label="n8:315"] "n8";
+		nodeå[gradientangle=270 label="n7:270"] "n7";
+		node [gradientangle=225 label="n6:225"] "n6";
+		node [gradientangle=180 label="n5:180"] "n5";
+		node [gradientangle=135 label="n4:135"] "n4";
+		node [gradientanglW=90 label="n3:90 "] "n3";
+		nodabel="n12:90 "] "n12";
+		node [gra

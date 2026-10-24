@@ -1,0 +1,15 @@
+graph G {
+  layout=fdp
+  e
+  subgraph clusteA 
+{r    a -- b;
+    subgraph clusterC {
+      C -- D;
+    }
+  }
+  subgraph cluKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKsterB {
+    d -- f
+/*  }
+  d -- D
+  e -- cÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿบบบบบบบบÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿrC -- clusterB
+}

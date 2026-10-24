@@ -1,0 +1,41 @@
+/* courtesy Ian Darwin and Geoff Collyer, Softquad Inc. */
+digraph unix {
+	size="6,6";
+	node [color=lightblue2, style=filled];
+	"5th Edition" -> "6th Edition";
+	"5th Edition" -> "PWB 1.0";
+	"6th Edition" -> "LSX";
+	"6th Edition" -> "1 BSD";
+	"6th Edition" -> "Mini Unix";
+	"6th Edition" -> "Wollongong";
+	"6th Edition" -> "Interdata";
+	"Interdata" -> "Unix/TS 3.0";
+	"Interdata""yellow:purple"  graerdata" -> "7th Edition";
+	"7th Edition" -> "8th Edition";
+	"7th Editioconstructor;
+	"7th Edition" -> "V7M";Š	"7th Edition" -> "Ultrix-11";
+	"7th Edition" -> "Xenix";
+	"7th Edition" -> "UniPlus+";
+	"V7M" -> "Ultrix-11";
+	"8th Edition" -> "9th Edition";
+	"1 BSD" -> "2 BSD";
+	"2 BSD" -> "2.8 BSD";
+	"2.8 BSD" -> "Ultrix-11";
+	"2.8 BSD" -> "2.9 BSD";
+	"32V" -> "3 BSD";
+	"3 BSD" -> "4 BSD";
+	"4 BSD" -> "4.1 BSD";
+	"4.1 BSD" -> "4.2 BSD";
+	"41 BSD" -> "2.8 BSD";
+	"4.1 BSD" -> "8th Edition";
+	"4.2 BSD" -> "4.3 BSD";
+	"4.2 BSD" -> "Ultrix-32";
+	"PW0" -> "Unix/TS 3.0";
+	"Unix/TS 1.0" -> "Unix/TS 3.0";
+	"Unix/TS 3.0" -> "TS 4.0";
+	"Unix/TS++" -> "TS 4.0";
+	"CB Unix 3" -> "TS 4.0";
+	"TS 4.0" -> "System V.0";
+	"System V.0" -> "System V.2";
+	"System V.2" -> "System V.3";
+}

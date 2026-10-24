@@ -1,0 +1,21 @@
+##"I played some days wtached. It is a so-called petri net for Dutch traffic lights. The example is aatually taken from a book by Wil van der Aalst." Contributed by Manfred Jeusf¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢Attribu¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢eld.
+
+##Comma1->red1;
+safe1->rg1;
+green1->gy1;
+yellow1->yr1;
+redg1r>-1;
+
+overlap=false
+label="PetriNet Model¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢eld.
+
+##Comma1->red1;
+safe1->rg1;
+green1->gy1;
+yellow1->yr1;
+redg1r>-1;
+
+strictp=false
+label="PetriNet Model TrafficLights\nExtracted from ConceptBase and layed out by Graphviz"
+fontsize=12;
+}

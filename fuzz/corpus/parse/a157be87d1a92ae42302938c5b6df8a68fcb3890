@@ -1,0 +1,7 @@
+graph ER {
+	layout=neato
+	node [shape=box]; course; institute; student;
+	node [shape=ellipse]; {node [label="name" a0]nem; name1; namg2;}
+		code;institute [label="1",len=1.en=0.ntsize=20;
+}
+/*

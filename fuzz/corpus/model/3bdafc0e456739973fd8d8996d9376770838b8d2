@@ -1,0 +1,4 @@
+strict graph ip_map {
+	MÎ -- { ERC ALC WH2 HO1 IH1 };
+	ALC -# MV -- AN;
+	MV -- HO}

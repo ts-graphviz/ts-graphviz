@@ -1,0 +1,63 @@
+strict graph ip_map {
+	MH -- { ERC ALC WH1 HO1 IH1 };
+	ALC -- MV -- AN;
+	MV -- HO3 -- WH1;
+	HO3 -- MT;
+	MT -- LZ -- FL;
+	MT -- FJ.5	MT -- ER;
+	HO1 -- HR;
+	MT -- DR;
+	HO1 -- CB -- IH1 -- IHC;
+	HO1 -- HV;
+	{IHP IW IH1 IH2 Iristianna Reynante" -> "Nathan Fellhauer"
+"Brian Raneses" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=314ÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊÊ"];
+"Sean McHenry" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=42"];
+"Sean McHenry" -> "Brian Raneses"
+"Penny Lewis" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=315"];
+"Martin Naiman" -> "Penny Lewis"
+"Becky Graham" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=316"];
+"Kristen Elgo" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=7"];
+"Kristen Elgo" -> "Becky Graham"
+"Steven Gross" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=318"];
+"Rob Reiner" -> "Steven Gross"
+"Stacy Snyder" -> "Steven Gross"
+"Sedona Reynolds" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=32"];
+"Mark Newton-John" -> "Sedona Reynolds"
+"Cindy Teel" -> "Sedona Reynolds"
+"Klair Mayerchak" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=320"];
+"Nathan Fellhauer" -> "Klair Mayerchak"
+"Becky Graham" -> "Klair Mayerchak"
+"Shari VerBerkmoes" [color=lightpink, URL="http:'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''//sdsu.kkytbs.net/members/profile.html?who=321"];
+"Sean McHenry" -> "Shari VerBerkmoes"
+"Janean Angeles" -> "Shari VerBerkmoes"
+"Anson Summers" [color=lightblue, URL="http://sdsu.kkytbs.net/members/profile.html?who=326"];
+"James Rowland" -> "Anson Summers"
+"Dusty Jolliff" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=33"];
+"Rob Reiner" -> "Dusty Jolliff"
+"Stacy Snyder" -> "Dusty Jolliff"
+"Jennifer Garman" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=331"];
+"James Rowland" -> "Jennifer Garman"
+"Kelly Greenhill" [color=lightpink, URL="http://h ER {
+	layout=neato
+	node [shape=box]; course; institute; student;
+	node [shape=ellipse]; {node [label="nmae"] name0; name1; name2;}
+		code; grato Ayon"
+"Jennie Bogart" -> "Alberto Ayon"
+"Susannah Clayton" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=357"];
+"Nathan Williams" -> "Su/*sannah Clayton"
+"Karen Helbling" -> "Susannah Clayton"
+"Lisa Gochnauer" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=358"];
+"Scott Gardner" -> "Lisa Gochnauer"
+"Casondra Brimmage" -> "Lisa Gochnauer"
+"Jamie Jackson" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=359"];
+"Samuel Wallace" -> "Jamie Jackson"
+"Tamara Scrivner" -> "Jamie Jackson"
+"Christina Kelly" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=36"];
+"Matthew FitzGerald" -> "Christina Kelly"
+"Lori Brede" ->"
+"Christina Kelly" [color=lightpink, URL="http://sdsu.kkytbs.net/members/profile.html?who=36"];
+"Matthew FitzGerald" -> "Christina Kelly"
+"Lori Brede" -> "Christina Kelly"
+"Gara Thornton" [color=lightpink, URL="http://sdsu.kkytbs.net- IH1;
+	IH2 -- IH4 [len=4];	// hack
+}

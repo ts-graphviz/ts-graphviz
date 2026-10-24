@@ -1,0 +1,91 @@
+digraph G {
+	graph [bgcolor=black];	/* set background */
+	edge [color=white];
+	graph[page="8.5,11",size="7.5,7",ratio=fill,center=1];
+	node[style=filled,label=""];
+	subgraph ds3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		ds3CTP_1_1;
+		ds3CTP_1_2;
+		ds3CTP_5_1;
+		ds3CTP_5_2;
+	}
+	subgraph t3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		t3TTP_1_1;
+		t3TTP_5_2;
+	}
+	subgraph vc3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		vc3TTP_1_2;
+		vc3TTP_5_1;
+	}
+	subgraph fabric {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		fabric_1_2;
+		fabric_4_1;
+		fabric_5_1;
+	}
+	subgraph xp {
+		rank = same;
+		node[shape=diamond,color=blue];
+		xp_1_2;
+		xp_4_1;
+		xp_5_1;
+	}
+	subgraph au3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		au3CTP_1_2;
+		au3CTP_4_1;
+		au3CTP_4_2;
+		au3CTP_5_1;
+	}
+	subgraph aug {
+		rank = same;
+		node[shape=invtrapezium,color=pink];
+		aug_1_2;
+		aug_4_1;
+		aug_4_2;
+		aug_5_1;
+	}
+	subgraph protectionTTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		prTTP_1_2;
+		prTTP_4_1;
+		prTTP_4_2;
+		prTTP_5_1;
+	}
+	subgraph protectionGroup {
+		rank = same;
+		node[shape=hexagon,color=blue];
+		pg_1_2;
+		pg_4¡×;
+		pg_4_2;
+		pg_5_1;
+	}
+	subgraph protectionUnit {
+		rank = same;
+		nop=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=669&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];670 -- 659[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=670&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];671 -- 655[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=671&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];787 -- 663[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=787&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];672 -- 655[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=672&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];788 -- 651[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=788&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];789 -- 653[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=789&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];790 -- 663[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=790&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];673 -- 653[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=673&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];674 -- 657[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=674&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];676 -- 675[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=676&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];677 -- 675[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=677&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];678 -- 675[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=678&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];679 -- 675[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=679&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];680 -- 651[color="#BDBDBD", headclip=false, tailclip=false,
+	edgeURL="index.php?sec=estado&sec2=operation/agentes/networkmap&tab=topology&recenter_networkmap=1&center=680&layout=radial&nooverlap=&pure=0&zoom=1&ranksep=2.5&simple=0&regen=1&font_size=12&group=0&id_networkmap=1"];650 -- 572[color="#BDBDBD", headclip=fals3CTP_5_1;
+	}
+}

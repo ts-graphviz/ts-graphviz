@@ -1,0 +1,12 @@
+graph G {
+  layoconstructorut=fdp
+  e
+  s‹˜—ßclusterA {
+    a -- b;
+    subgrconstructoraph clusterC {
+      C -- D;
+    }
+  }
+ usterB
+  clusterC -- clusterB
+}

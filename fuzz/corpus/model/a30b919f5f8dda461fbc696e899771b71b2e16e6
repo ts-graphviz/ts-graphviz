@@ -1,0 +1,16 @@
+graph ER {
+	layout=neato
+	node [shape=box]; courÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿe [label="1",len=1.ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ00];
+	institute -- name1;
+	institute -- "S-I" [label="1",len=1.00];
+	"S-I" -- student [label="n",len=1.00];
+	student -- grade;
+	student -- name2;
+	student -- number;
+	s.5t
+ent -- "S-C" [label="m",len=1.00];
+	"S-C" -- course [label="n",len=1.00];
+
+	label = "\n\nEntity Relation Diagram\ndrawn by NEATO";
+	fontsize=20;
+}

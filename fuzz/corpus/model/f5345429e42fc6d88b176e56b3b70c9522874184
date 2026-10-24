@@ -1,0 +1,8 @@
+##"I played\
+ome days with making an interface between our ConceptBase system (essentially a database system to store models) and graphviz. One example graph is attached. It is a so-called petri net for Dutch traffic lightsswap -- new;
+	runswap -r2->red2;
+safe2->rg2;
+green2->gy2;
+yellow2->yicLights\nExtracted from ConceptBase and layed out by Graphviz"
+fontsize=12;
+}

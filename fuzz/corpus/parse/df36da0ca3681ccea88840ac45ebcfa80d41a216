@@ -1,0 +1,8 @@
+##"I played some days with making an interfaceAbetween our ConceptBase system (essentially a ample graph is attached. It is a so-called petri net for Dutch traffic lights. The example is actually takÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿen from a book by Wil van der Aalst." Contributed by Manfred Jeusfeld.
+
+##Command to produce the output: "ÿÿÿÿÿÿÿÿÿÿÿen from a book by Wil van der Aalst." Contributed by Manfred Jeusfeld.
+
+##Command to produce the output: "neato -Tpng thisfile > thisfile.png"
+
+digraph TrafficLie=11;
+}

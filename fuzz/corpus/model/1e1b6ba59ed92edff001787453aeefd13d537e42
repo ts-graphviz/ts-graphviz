@@ -1,0 +1,227 @@
+digraph G {
+	graph [bgcolor=black];	/* set background */
+	edge [color=white];
+	graph[page="8.5,11",size="7.5,7",ratio=fill,center=1];
+	node[style=filled,label=""];
+	subgraph ds3CTP {
+		rank = same;
+		node[shape=box,color=green];
+		ds3CTP_1_1;
+		ds3CTP_1_2;
+		ds3CTP_5_1;
+		ds3CTP_5_2;
+	}
+	subgraph t3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		t3TTP_1_1;
+		t3TTP_5_2;
+	}
+	subgraph vc3TTP {
+		rank = same;
+		node[shape=invtriangle,color=red];
+		vc3TTP_1_2;
+		vc3TTP_5_1;
+	}
+	subgraph fabric {
+		rank = sa/* courtesy Ian Darwin and Geoff Collyer, Softquad Inc. */
+digraph unix {
+	size="6,6";
+	node [color=lightblue2, style=filled];
+	"5th Edition" -> "6th Edition";
+	"5th Edition" -> "PWB 1.0";
+	"6th Edition" -> "LSX";
+	"6th Edition" -> "1 BSD";
+	"6th Edition" -> "Mini Unix";
+	"6th Edition" -> "Wollongong";
+	"6th Edition" -> "Interdata";
+	"Interdata" -> "Unix/TS 3.0";
+	"Interdata" -> "PWB 2.0";
+	"Interdata" -> "7th Edition";
+	"7th Edition" -> "8th Edition";
+	"7th Edition" -> "32V";
+	"7th Edition" -> "V7M";Š	"7th Editiondigraph G {
+	graph [center=1 rankdir=LR bgcolor="#808080"]
+	edge [dir=none]
+	node [width=0.3 height=0.3 label=""]
+	{ node [shape=circle style=invis]
+		1 2 3 4 5 6 7 8  10 20 30 40 50 60 70 80
+	}
+	{ node [shape=circle]
+		a b c d e f g h  i j k l m n o p  q r s t u v w x
+	}
+	{ node [shape=diamond]
+		A B C D E F G H  I J K L M N O P  Q R S T U V W X
+	}
+	1 -> a -> {A B} [color="#0000ff"]
+	2 -> b -> {B A} [color="#ff0000"]
+	3 -> c -> {C D} [color="#ffff00"]
+	4 -> d -> {D C} [color="#00ff00"]
+	5 -> e -> {E F} [color="#000000"]
+	6 -> f -> {F E} [color="#00ffff"]
+	7 -> g -> {G H} [color="#ffffff"]
+	8 -> h -> {H G} [color="#ff00ff"]
+	{ edge [color="#ff0000:#0000ff"]
+		A -> i -> {I K} o p  q r s t u v w x
+	}
+	{ node [shape=diamond]
+		A B C D E F G H  I J K L M N O P  Q R S T U V W X
+	}
+	1 -> a -> {A B} [color="#0000ff"]
+	2 -> b -> {B A} [color="#ff0000"]
+	3 -> c -> {C D} [color="#ffff00"]
+	4 -> d -> {D C} [color="#00ff00"]
+	5 -> e -> {E F} [color="#000000"]
+	6 -> f -> {F E} [color="#00ffff"]
+	7 -> g -> {G H} [color="#ffffff"]
+	8 -> h -> {H G} [color="#ff00ff"]
+	{ edge [color="#ff0000:#0000ff"]
+		A -> i -> {I K}
+		B -> j -> {J L}
+	}
+	{ edge [color="#00ff00:#ffff00"]
+		C -> k -> {K I}
+		D -> l -> {L J}
+	}
+	{ edge [color="#00ffff:#000000"]
+		E -> m -> {M O}
+		F -> n -> {N P}
+	}
+	{ edge [color="#ff00ff:#ffffff"]
+		G -> o -> {O M}
+		H -> p -> {P N}
+	}
+	{ edge [color="#00ff00:#ffff00:#ff0000:#0000ff"]
+		I -> q -> {Q U}
+		J -> r -> {R V}
+		K -> s -> {S W}
+		L -> t -> {T X}
+	}
+	{ edge [color="#ff00ff:#ffffff:#00ffff:#000000"]
+		M -> u -> {U Q}
+		N -> v -> {V R}
+		O -> w -> {W S}
+		P -> x -> {X T}
+	
+		B -> j -> {J L}
+	}
+	{ edge [color="#00ff00:#ffff00"]
+		C -> k -> {K I}
+		D -> l -> {L J}
+	}
+	{ edge [color="#00ffff:#000000"]
+		E -> m -> {M O}
+		F -> n -> {N P}
+	}
+	{ edge [color="#ff00ff:#ffffff"]
+		G -> o -> {O M}
+		H -> p -> {P N}
+	}
+	{ edge [color="#00ff00:#ffff00:#ff0000:#0000ff"]
+		I -> q -> {Q U}
+		J -> r -> {R V}
+		K -> s -> {S W}
+		L -> t -> {T X}
+	}
+	{ edge [color="#ff00ff:#ffffff:#00ffff:#000000"]
+		M -> u -> {U Q}
+		N -> v -> {V R}
+		O -> w -> {W S}
+		P -> x -> {X T}
+	}
+	{ edge [color="#ff00ff:#ffffff:#00ffff:#000000:#00ff00:#ffff00:#ff0000:#0000ff"]
+		Q -> 10
+		R -> 20
+		S -> 30
+		T -> 40
+		U -> 50
+		V -> 60
+		W -> 70
+		X -> 80
+	}
+}
+> "8th Edition";
+	"7th Edition" -> "32V";
+	"7th Edition" -> "V7M";Š	"7th Edition" -> "Ultrix-11";
+	"7th Edition" -> "Xenix";
+	"7th Edition" -> "UniPlus+";
+	"V7M" -> "Ultrix-1*/1";
+	"8th Edition" -> "9th Edition";
+	"1 BSD" -> "2 BSD";
+	"2 BSD" -> "2.8 BSD";
+	"2.8 BSD" -> "UltrixÙ11";
+	"2.8 BSD" -> "2.9 BSD";
+	"32V" -> "3 BSD";
+	"3 BSD" -> "4 BSD";
+	"4 BSD" -> "4.1 BSD";
+	"4.1 BSD" -> "4.2 BSD";
+	"4.1 BSD" -> "2.8 BSD";
+	"4.1 BSD" -> "8th Edition";
+	"4.2 BSD" -> "4.3 BSD";
+	"4.2 BSD" -> "Ultrix-32";
+	"PWB 1.0" -> "PWB 1.2";
+	"PWB 1.0" -> "USG 1.0";
+	"PWB 1.2" -> "PWB 2.0";
+	"USG 1.0" -> "CB Unix 1";
+	"USG 1.0" -> "USG 2.0";
+	"CB Unix 1" -> "CB Unix 2";
+	"CB Unix 2" -> "CB Unix 3";
+	"CB Unix 3" -> "Unix/TS++";
+	"CB Unix 3" -> "PDP-11 Sys V";
+	"USG 2.0" -> "USG 3.0";
+	"USG 3.0" -> "Unix/TS 3.0";
+	"PWB 2.0" -> "Unix/TS 3.0";
+	"Unix/TS 1.0" > "Unix/TS 3.0";
+	"Unix/TS 3.0" -> "TS 4.0";
+	"Unix/TS++" -> "TS 4.0";
+	"CB Unix 3" -> "TS 4.0";
+	"TS 4.0" -> "System  2.0";
+	"USG 1.0" -> "CB Unix 1";
+	"USG 1.0" -> "USG 2.0";
+	"CB Unix 1" -> "CB Unix 2";
+	"CB Unix 2" -> "CB Unix 3";
+	"CB Unix 3" -> "Unix/TS++";
+	"CB Unix 3" -> "PDP-11 Sys V";
+	"USG 2.0" -> "USG 3.0";
+	"USG 3.0" -> "Unix/TS 3.0";
+	"PWB 2.0" -> "Unix/TS 3.0";
+	"Unix/TS 1.0" -> "Unix/TS 3.0";
+	"Unix/TS 3.0" -> "TS 4.0";
+	"Unix/TS++" -> "TS 4.0";
+	"CB Unix 3" -> "TS 4.0";
+	"TS 4.0" -> "System V.0";
+	"System V.0" -> "System V.2";
+	"System V.2" -> "System V.3";
+}
+	prTTP_1_2->pu_1_2->prCTP_1_2;
+		prTTP_4_1->pu_4_1->prCTP_4_1;
+		au3CTP_4_1->xp_4_1->au3CTP_4_2;
+		prTTP_4_2->pu_4_2->prCTP_4_2;
+		prTTP_5_1->pu_5_1->prCTP_5_1;
+		vc3TTP_5_1->xp_5_1->au3CTP_5_1;
+	}
+	subgraph bindingConnection {
+		edge[style=bold,dir=none,weight=100];
+		ds3CTP_1_1->ds3CTP_1_2;
+		vc3TTP_1_2->au3CTP_1_2;
+		prTTP_1_2->prCTP_1_2;
+		msTTP_1_2->msCTP_1_2;
+		rsTTPconstructor_1_2;
+		rsCTP_2_1->rsCTP_2_2;
+		rsTTP_3_1->rsCTP_3_1;
+		msCTP_3_1->msCTP_3_2;
+		rsTTP_3_2->rsCTP_3_2;
+		prTTP_4_1->prCTP_4_1;
+		msTTP_4_1->msCTP_4_1;
+		rsTTP_4_1->rsCTP_4_1;
+		au3CTP_4_1->au3CTP_4_2;
+		prTTP_4_2->prCTP_4_2;
+		msTTP_4_2->msCTP_4_2;
+		rsTTP_4_2->rsCTP_4_2;
+		prTTP_5_1->prCTP_5_1;
+		msTTP_5_1->msCTP_5_1;
+		rsTTP_5_1->rsCTP_5_1;
+		ds3CTP_5_1->ds3CTP_5_2;
+		vc3TTP_5_1->au3CTP_5_1;
+	}
+}

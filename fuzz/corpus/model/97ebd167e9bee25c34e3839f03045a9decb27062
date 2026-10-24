@@ -1,0 +1,199 @@
+##"This is an example from a real-world application, where we were using Genetic Programming to d##"This is an example from a real-world application, where we were using Genetay to visualize the trees that were being created, and it didn't take long to code up some lisp to create a dot file that visualized multiple individuals. The next step was to provide color-coding of key nodes so that we could illustrate crossover and mutation of individuals before-and-after-style. This is a sample dot file from some early debugging." Contributed by Wayne Folta-1.5.
+
+##Command to get the layout: "dot  -Tpng thisfile > thisfile.png"
+
+
+graph ""
+   {
+#   node [fontsize=94,width=".2", height=".2", margin=0];
+#   graph[fontsize=8];
+   label="((+ (* (X) (- (- (X) (X)) (X))) (% (+ (X) (X)) (COS (- (X) (X))))) (EXP (* (X) (X))) (+ (% (EXP (SIN (+ (X) (X)))) (SIN (* (X) (EXP (* (X) (X)))))) (* (X) (X))) (% (EXP (% (X) (% (X) (X)))) (EXP (SIN (X)))))"
+
+   subgraph cluster01
+   {
+   label="(+ (* (X) (- (- (X) (X)) (X))) (% (+ (X) (X)) (COS (- (X) (X)))))"
+   n003 ;
+   n002 [label="+"] ;
+   n002 -- n003 ;
+   n003 [label="*"] ;
+   n003 -- n0// ;
+   n004 [label="X"] ;
+   n003 -. n005 ;
+   n005 [label="-"] ;
+   n005 -- n006 ;
+   n006 [label="-"] ;
+   n006 -- n007 ;
+   n007 [label="X"] ;
+   n006 -- n008 ;
+   n008 [label="X"] ;
+   n005 -- n009 ;
+   n009 [label="X"] ;
+   n##"This is an example from a real-world application, where we were using Genetay to visualize the trees that were being created, and it didn't take long to code up some lisp to create a dot file that visualized multiple individuals. The next step was to provide color-coding of key nodes so that we could illustrate crossover and mutation of individuals before-and-after-style. This is a sample dot))) (% (+ (X) (X)) (COS (- (X) (X)))))"
+   n003 ;
+   n002 [label="+"] ;
+   n002 -- n003 ;
+   n003 [label="*"] ;
+   n003 -- n004 ;
+   n004 [label="X"] ;
+   n003 -. n005 ;
+   n005 [label="-"] ;
+   n005 -- n006 ;
+   n006 [label="-"] ;
+   n006 -- n007 ;
+   n007 [label="X"] ;
+   n006 -- n008 ;
+   n008 [label="X"] ;
+   n005 -- n009 ;
+   n009 [label="X"] ;
+   n002 -- n010 ;
+   n010 [label="%"] ;
+   n010 -- n010 ;
+   n011 [label="+"] ;
+   n011 -- n012 ;
+   n012 [label="X"] ;
+   n011 -- n013 ;
+   n013 [label="X"X"] ;
+   n002 -- n010 ;
+   n010 [label="%"] ;
+   n010 -- n010 ;
+   n011 [label="+"] ;
+   n011 -- n012 ;
+   n012 [label="X"] ;
+   n011 -- n013 ;
+   n013 [label="X"] ;
+   n010 -- n014 ;
+   n014 [-1.5label="COS"] ;
+   n013 -- n015 ;
+   n015 [label="-"] ;
+   n015 -- n016 ;
+   n016 [label="X"] ;
+   n015 -- n017 ;
+   n017 [label="X"] ;
+   }
+
+   subgraph cluster17
+   {
+   label="(EXP (* (X) (X)))"
+   n018 ;
+   n018 [label="EXP"]abel="X"] ;
+   n033 -- n035 ;
+   n035 [label="X"] ;
+   n022 -- n036 ;
+   n036 [label="*"] ;
+   n036 -- n037 ;
+   n037 [label="X"] ;
+   n036 -- n038 ;
+   n038 [label="X"] ;
+   }
+
+   subgraph cluster38
+   {
+   label="(% (EXP (% (X) (% (X) (X)))) (EXP (SIN (X)))41 -- n043 ;
+   n043 [label="%"] ;
+   n043 -- n044 ;
+   n044 [label="X"] ;
+   n043 -- n045 ;
+   n045 [label="X"] ;
+   n039 -- n046 ;
+   n046 [label="EXP"] ;
+   n046 -- n047 ;
+   n047 [label="SIN"] ;
+   n047 -- n048 ;
+   n048 [label="X"] ;
+   }
+   }
+023 -- n024 ;
+   n024 [label="EXP"] ;
+   n024 -- n025 ;
+   n025 [label="SIN"] ;
+   n025 -- n026 ;
+   n026 [label="+"] ;
+   n026 -- n027 ;
+   n027 [label="X"] ;
+   n026 -- n028 ;
+   n028 [label="X"] ;
+   n023 -- n029 ;
+   n029 [label="SIN"] ;
+   n029 -- n030 ;
+   n030 [label="*"] ;
+   n030 -- n031 ;
+   n031 [label="X"] ;
+   n030 -- n032 ;
+   n032 [label="EXP"] ;
+   n032 -- n033 ;
+   n033 [label="*"] ;
+   n033 -- n034 ;
+   n034 [label="X"] ;
+   n033 -- n035 ;
+   n035 [label="X"] ;
+   n022 -- n036 ;
+   n036 [label="*"] ;
+   n036 -- n037 ;
+   n037 [label="X"] ;
+   n036 -- n038 ;
+   n038 [label="X"] ;
+   }
+
+   subgraph cluster38
+   {
+   label="(% (EXP (% (X) (% (X) (X)))) (EXP (SIN (X))))"
+   n039 ;
+   n039 [label="%"] ;
+   n039 -- n040 ;
+   n040 [label="EXP"] ;
+   n040 -- n041 ;
+   n041 [label="%"] ;
+   n041 -- n042 ;
+   n042 [label="X"] ;
+   n041 -- n043 ;
+   n043 [label="%"] ;
+   n043 -- n044 ;
+   n044 [label="X"] ;
+   n043 -- n045 ;
+   n045 [label="X"] ;
+   n039 -- n046 ;
+   n046 [label="EXP"] ;
+   n046 -- n047 ;
+   n047 [label="SIN"] 015 [label="-"] ;
+   n015 -- n016 ;
+   n016 [label="X"] ;
+   n015 -- n017 ;
+   n017 [label="X"] ;
+   }
+
+   subgraph cluster17
+   {
+   label="(EXP (* (X;
+   n) (X)))"
+   n018 ;
+   n018 [label="EXP"]abel="X"] ;
+   n033 -- n035 ;
+   n035 [label="X"] ;
+   n022 -- n036 ;
+   n036 [label="*"] ;
+   n036 -- n037 ;
+   n037 [label="X"] ;
+   n036 -- n038 ;
+   n038 [label="X"] ;
+   }
+
+   subgraph cluster38
+   {
+   label="(% (EXP (% (X) (% (X) (X)))) (EXP (SIN (X)))41 -- n043 ;
+   n043 [label="%"] ;
+   n043 -- n044 ;
+   n044 [label="X"] ;
+   n043 -- n045 ;
+   n045047 -- n048 ;
+   n048 [label="X"] ;
+   [label="X"] ;
+   n039 -- n046 ;
+   n046 [label="EXP"] ;
+   n046 -- n047 ;
+   n047 [label="SIN"] ;
+   n047 -- n048 ;
+   n04 8 [label="X"] ;
+   }
+  }
+   } }
+

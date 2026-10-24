@@ -1,0 +1,125 @@
+/*
+Note: All images in the file is found at
+
+http://www.graphviz.org/Gallery/directed/images/
+
+-----------
+
+from Kaarle Kaila:
+
+
+I have implemented Genealogic descendant and ancestor graphs using Graphviz in FinFamily. I have made som description on how to use it with FinFamily at FinFamily wiki-pages at
+
+http://www.finfamily.fi/index.php/Handbook
+
+I attach a descendant graph from Joseph Patrick Kennedy and an ancestor graph from Caroline Bouvier Kennedy as samples from FinFamily. The file georg.jpg is a descendant graph w/o pictures from an imaginary person Georg af Charlow (who has some common attributes with my father) from my testdatabase like the person Charles Charlow has some resemblance to myself.
+
+If you wish to display the attached pictures or wish me to create another ones then feel free to do so. I wish to thank you for Graphviz that let's me create such nice graphs with FinFamily.
+
+regards
+Kaarle Kaila
+
+I have this little kennedy database as a sample gedcom file on the download webpage to give international users a few wellknown persons to play with  if they wish to try out my software. I originally got it from Michael Kay who is among others Ed##"I played some days with making an interface between our ConceptBase system (essentially a database system to store models) and graphviz. One example graph is attached. It is a so-called petri net for Dutch traffic lights. The example is actually taken from a book by Wil van der Aalst." Contributed by Manfred Jeusfeld.ÿ
+
+##Command to produce the output: "neato -Tpng thisfile > thisfile.png"
+
+digraph TrafficLights {##"I played some days with making an interface between our ConceptBase system (essentially a database system to store models) and graphviz. One example graph is attached. It is a so-called petri net for Dutch traffic lights. The example is actually taken from a book by Wil van der Aalst." Contributed by Manfred Jeusfeld.
+
+##Command to produce the output: "neato -Tpng thisfile > thisfile.png"
+
+digraph TrafficLights {
+node [shape=box];  gy1; yr2; rg2; gy1; yr1; rg1;
+node [shape=circle,fixedsize=true,width=0.9];  green2;: yellow2; red2; safe2; safe1; green1; yellow1; red1;
+gy2->yellow2;
+rg2->green2;
+yr2->safe1;
+yr2->red2;
+safe2->rg2;
+green2->gy2;
+yellow2->yr2;
+red2->rg2;
+gy1->yellow1;
+rg1->green1;
+yr1->safe2;
+yr1->red1;
+safe1->rg1;
+green1->gy1;
+yellow1->yr1;
+red1->rg1;
+
+overlap=false
+label="PetriNet Model TrafficLights\nExtracted z is a description on the different colors together with instructions for finFamily users how to create Graphviz reports.
+
+Kaarle Kaila
+
+
+Colors and forms symbolize following
+
+    * Blue box - man
+    * Red ellipse - woman
+    * Blue line - Father/Child relation
+    * Red line - Mother/Child relation
+    * Green line - Spouse relation
+    * Orange line - Ancestors (other) children
+    * Violet line - Ancestors (other) spouse
+
+
+
+
+
+*/
+
+/* ancestor graph from Caroline Bouvier Kennedy */
+
+graph G {
+I5 [shape=ellipse,color=red,style=bold,label="Caroline Bouvier Kennedy\nb. 27.11.1957 New York",image="images/165px-Caroline_Kennedy.jpg",labelloc=b];
+I1 [shape=box,color=blue,style=bold,label="John Fitzgerald Kennerald\nb. 22.7.1890 Boston\nd. 22.1.1995 Hyannis Port",image="images/Rose_kennedy.JPG",labelloc=b];
+I15 [shape=box,color=blue,style=bold,label="Aristotle Onassis"];
+I3 [shape=box,color=blue,style=bold,label=box];  gy1; yr2; rg2; gy1; yr1; rg1;
+node [shape=circle,fixedsize=true,width=0.9];  green2;: yellow2; red2; safe2; safe1; green1; yellow1; red1;
+gy2->yellow2;
+rg2->green2;
+yr2-="John Vernou Bouvier III\nb. 1891\nd. 1957",image="images/BE037819.jpg",labelloc=b];
+I4 [shape=ellipse,color=red,style=bold,label="Janet Norton Lee\nb. 2.10.1877\nd. 3.1.1968",image="images/n48862003257_1275276_1366.jpg",labelloc=b];
+ I1 -- I5  [style=bold,color=blue];
+ I1 -- I6  [style=bold,color=orange];
+ I2 -- I6  [style=bold,color=orange];
+ I1 -- I7  [style=bold,color=orange];
+ I2 -- I7  [style=bold,color=orange];
+ I1 -- I2  [style=bold,color=violet];
+ I8 -- I1  [style=bold,color=blue];
+ I8 -- I10  [style=bold,color=orange];
+ I9 -- I10  [style=bold,color=orange];
+ I8 -- I11  [style=bold,color=orange];
+ I9 -- I11  [style=bold,color=orange];
+ I8 -- I12  [style=bold,color=orange];
+ I9 -- I12  [style=bold,color=orange];
+ I8 -- I13  [style=bold,color=orange];
+ I9 -- I13  [style=bold,color=orange];
+ I8 -- I9  [style=bold,color=violet];
+ I9 -- I1  [style=bold,color=red>safe1;
+yr2->red2;
+safe2->rg2;
+green2->gy2;
+yellow2->yr2;
+red2->rg2;
+gy1->yellow1;
+rg1->green1;
+yr1->safe2;
+yr1->red1;
+safe1->rg1;
+green1->gy1;
+yellow1->yr];
+ I2 -- I5  [style=bold,color=red];
+ I2 -- I15  [style=bold,color=violet];
+ I3 -- I2  [style=bold,color=1;
+red1->rg1;
+
+overlap=false
+label="PetriNetblue];
+ I3 -- I4  [style=bold,color=violet];
+ I Model TrafficLights\nExtracted from ConceptBase and layed out by Graphviz"
+fon4 tsi-- I2  [stz;
+yle}=bold,color=red]
+;
+}

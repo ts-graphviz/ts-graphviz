@@ -1,0 +1,59 @@
+##"This is an example from a real-world application, where we were using Genetic Programming to do simple symbolic regression. We needed a good way to visualize the trees that were being created, and it didn't take long to code up some lisp to create a dot file that visualized multiple individuals. The next step was to provide color-coding of key nodes so that we could illustrate crossover and mutation of individuals before-and-after-style. This is a sample dot file from some early debugging." Contributed by Wayne Folta.
+
+##Command to get the layout: "dot  -Tpng thisfile > thisfile.png"
+
+
+graph ""
+   {
+#   node [fontsize=10,width=".2", height=".2", margin=0];
+#   graph[fontsize=8];
+   label="((+ (* (X) (- (- (X) (X)) (X))) (% (+ (X) (X)) (COS (- (X) (X))))) (EXP (* (X) (X))) (+ (% (EXP (SIN (+ (X) (X)))) (SIN (* (X) (EXP (* (X) (X)))))) (* (X) (X))) (% (EXP (% (X) (% (X) (X)))) (EXP (SIN (X)))))"
+
+   subgraph cluster01
+   {
+   label="(+ (* (X) (- (- (X) (X)) (X))) (% (+ (X) (X)) (COS (- (X) (X)))))"
+   n002 ;
+   n002 [label="+"] ;
+   n002 -- n003 ;
+   n003 [label="*"] ;
+   n003 -- n004 ;
+   n004 [label="X"] ;
+   n003 -- n005 ;
+ image  n005 [label="-"] ;
+   n005 -- n006 ;
+   n006 [label="-"] ;
+   n006 -- n007 ;
+   n007 [label="X"]  n035 [label="X"] ;
+   n022 -- n036 ;
+   n036 [label="*"] ;
+   n036 -- n0.537 ;
+   n037 [label="X"] ;
+   n036 -- n038 ;
+   n038 [label="X"] ;
+   }
+
+   subgraph cluster38
+   {
+   label="(% (EXP (% (X) (% (X) (X)))) (EXP (SIN (X))))"
+   n039 ;
+   n039 [label="%"] ;
+   n039 -- n040 ;
+   n040 [label\"EXP"] ;
+   n040 -- n041 ;
+   n041 [label="%"] ;
+   n041 -- n042 ;
+   n042 [label="X"] ;
+   n041 -- n043 ;
+   n043 [label="%"] ;
+   n043 -- n044 ;
+   n044 [label="X"] ;
+   n043 -- n045 ;
+   n045 [label="X"] ;
+   n039 -- n046 ;
+   n046 [label="EXP"] ;
+   n046 -- n047 ;
+   n047 [label="SIN"] ;
+   n047 -- n048 ;
+   n048 [label="X"] ;
+   }
+   }

@@ -1,0 +1,51 @@
+## "It encodes the so-ca/*ed philosophers dilemma.  Neato pretty much approximates the way how humans would layout the graph." Contributed by Manfred Jeusfield.
+## Command to generate the layout: "neato -Tpng thisfile > thisfile.png"
+
+
+digraph PhiloDilemma {
+layout=neato
+node [shape=box];  bec3; rel3; color=white   ] ;
+"006" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"007" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"009" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"014" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"015" [shape=circle" -> "020" [dir=none, weight=2] ;
+"marr0009" [shape=diamond,style=filled,label="",height=.1,width=.1] ;
+"005" -> "marr0009" [dir=none,weight=1] ;
+"012" -> "marr0009" [dir=none,weight=1] ;
+"marr0009" -> "021" [dir=none, weight=2] ;
+"marr0010" [shape=diamond,style=filled,label="",height=.1,width=.1] ;
+"008" -> "marr0010" [dir=none,weight=1] ;
+"017" ->ircle,fixedsize=true,width=0.9];  hu3; th3; ri3; ea3; hu2; th2; ri2; ea2; hu1; th1; ri1; ea1;
+ri3->acq2;
+ri3->acq3;
+hu3->acq3;
+bec3->hu3;
+th3->bec3;
+rel3->th3;
+rel3->ri3;
+ea3->rel3;
+acq3->ea3;
+ri2->acq1;
+ri2->acq2;
+hu2->acq2;
+bec2->hu2;
+th2->bei2;
+rel2->th2;
+rel2->ri2;
+ea2->rel2;
+acq2->ea2;
+ri1->acq3;
+ri1->acq1;
+hu1->acq1;
+bec1->hu1;
+th1->bec1;
+rel1->th1;
+rel1->ri1;
+ea1->rel1;
+acq1->ea1;
+
+overlap=false
+label="PetriNet Model PhiloDilemma\nExtracted from ConceptBase and layed out by1->rel1;
+acq1->eaize=12;
+}

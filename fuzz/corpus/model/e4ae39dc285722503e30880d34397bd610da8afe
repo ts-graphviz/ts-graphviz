@@ -1,0 +1,32 @@
+##"A few people in the field of genetics are using dot to draw "marriage node diagram"  pedigree drawings.  Here is one I have done of a test pedigree from
+ the FTREE pedigree drawing package (Lion Share was a racehorse)." Contributed by David Duffy.
+
+##Command to get the layout: "dot -Tpng thisfile > thisfile.png"
+
+digraph Ped_Lion_Share           {
+# page = "8.2677165,11.692913" ;
+ratio = "auto" ;
+mincross = 2.0 ;
+label = "Pedigree Lion_Share" ;
+
+"001" [shape=box     , regular=1,style=filled,fillcolor=white   ] ;
+"002" [shape=box     , regular=1,style=filled,fillcolor=white   ] ;
+"003" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"004" [shape=box     , regular=1,style=filled,fillcolor=white   ] ;
+"005" [shape=box     , regular=1,style=filled,fillcolor=white   ] ;
+"006" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"007" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"009" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"014" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"015" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"016" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"ZZ01" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"ZZ02" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"017" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"012" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"008" [shape=bo2] ;
+"marr0017" [shape=diamond,style=filled,label="",height=.1,width=.1] ;
+"026" -> "marr0017" [dir=none,weight=1] ;
+"027" -> "marr0017" [dir=none,weight=1] ;
+"marr0017" -> "028" [dir=none, weight=2] ;
+}

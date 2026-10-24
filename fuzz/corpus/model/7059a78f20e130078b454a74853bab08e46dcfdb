@@ -1,0 +1,214 @@
+/* This is a co-authorship graph. Each node is an author and an edge exist between two authors if their name appears in a paper on one of the International Symposium on Graph Drawing bwteeen 1994-2007. The top 8 connected components is taken, and the graph is laidout using sfdp, and a map showing the clustering relationship is generated using gvmap with command:
+
+gvmap  -e gd_1994_2007.gv | neato -Ecolor="#55555522" -n2 -Tpng > gd_1994_2007.png
+
+This graph already has coordinates assigned and overlap removed. For a graph not yet laidout, use a layout engine with a suitable overlap removal algorithm, e.g.,
+
+sfdp -Goverlap=prism
+
+first before feeding the output to gvmap.
+
+*/
+
+graph {
+	graph [overlap_scaling=3, pack=90, label="Co-authorship graph for the International Symposiums on Graph Drawing, 1994-2007"];
+	node [label="\N", width="0.001", height="0.001", margin="0.001"];
+	graph [bb="0,0,1537.4,1200.5"];
+	127 [label=Lee, width="0.22222", height="0.15278", group=11, fontsize=7, pos="570.02,1089.4"];
+	131 [label=Robertson, width="0.52778", height="0.13889", group=11, fontsize=6, pos="616.67,1076.4"];
+	509 [label=Bederson, width="0.47222", height="0.13889", group=11, fontsize=6, pos="537.18,1070.5"];
+	410 [label=Nachmanson, width="0.66667", height="0.13889", group=11, fontsize=6, pos="610.55,1105.5"];
+	32 [label=Tóth, width="0.30556", height="0.18056", group=12, fontsize=8, pos="1025.2,394.21"];
+	391 [label=Kyncl, width="0.36111", height="0.15278", group=12, fontsize=7, pos="1162.2,354.41"];
+	99 [label=Pinchasi, width="0.44444", height="0.13889", group=12, fontsize=6, pos="1101,372.82"];
+	272 [label=Cerný, width="0.33333", height="0.15278", group=12, fontsize=7, pos="1178.6,378.07"];
+	87 [label=Keszegh, width="0.44444", height="0.13889", group=12, fontsize=6, pos="1060.5,374.88"];
+	498 [label=Pálvölgyi, width="0.47222", height="0.13889", group=12, fontsize=6, pos="1077.7,354.65"];
+	687 [label=Pach, width="0.36111", height="0.19444", group=12, fontsize=9, pos="1035.5,354.35"];
+	36 [label=Tardos, width="0.41667", height="0.15278", group=12, fontsize=7, pos="1122.3,354.19"];
+	454 [label=Thiele, width="0.36111", height="0.15278", group=12, fontsize=7, pos="956.8,410.02"];
+	90 [label=Finocchi, width="0.5", height="0.15278", group=22, fontsize=7, pos="584.56,703.73"];
+	427 [label=Pizzonia, width="0.55556", height="0.18056", group=22, fontsize=8, pos="632.76,702.8"];
+	261 [label="Di Battista", width="0.80556", height="0.19444", group=22, fontsize=9, pos="730.22,666.57"];
+	385 [label=Patrignani, width="0.77778", height="0.19444", group=22, fontsize=9, pos="577.66,606.48"];
+	102 [label=Liotta, width="0.47222", height="0.23611", group=22, fontsize=10, pos="657.21,601.24"];
+	276 [label=Thome, width="0.33333", height="0.13889", group=2, fontsize=6, pos="328.35,655.91"];
+	521 [label=Pouchkarev, width="0.61111", height="0.13889", group=2, fontsize=6, pos="285.66,660.24"];
+	294 [label=Mutzel, width="0.52778", height="0.19444", group=2, fontsize=9, pos="463.05,540.27"];
+	279 [label=Hundack, width="0.47222", height="0.13889", group=2, fontsize=6, pos="315.11,638"];
+	206 [label=Ahmed, width="0.38889", height="0.13889", group=10, fontsize=6, pos="390.78,326.1"];
+	659 [label=Forster, width="0.47222", height="0.18056", group=10, fontsize=8, pos="449.75,348.09"];
+	319 [label=Hong, width="0.41667", height="0.19444", group=10, fontsize=9, pos="369.57,355.33"];
+	567 [label=Murray, width="0.44444", height="0.15278", group=10, fontsize=7, pos="470.graph ER {
+	layout=neato
+	node [55,305.58"];
+	352 [label=Dwyer, width="0.47222", height="0.18056", group=10, fontsize=8, pos="434.1,326.59"];
+	648 [label=Taib, width="0.22222", height="0.13889", group=10, fontsize=6, pos="351.33,299.36"];
+	372 [label=Nikolov, width="0.47222", height="0.15278", group=10, fontsize=7, pos="360.79,262.65"];
+	550 [label=Fu, width="0.13889", height="0.13889", group=10, fontsize=6, pos="360.86,335.3"];
+	584 [label=Ho, width="0.19444", height="0.15278", group=10, fontsize=7, pos="405.61,306.07"];
+	698 [label=Koschutzki, width="0.58333", height="0.13889", group=10, fontsize=6, pos="429.21,286.93"];
+	504 [label=Tarassov, width="0.44444", height="0.13889", group=10, fontsize=6, pos="383.56,281.27"];
+	443 [label=McAllister, width="0.55556", height="0.13889", group=22, fontsize=6, pos="923.62,726.81"];
+	579 [label=Bose, width="0.33333", height="0.18056", group=22, fontsize=8, pos="894.64,661.79"];
+	71 [label=Purchase, width="0.52778", height="0.15278", group=10, fontsize=7, pos="410.08,131.11"];
+	155 [label=Cohen, width="0.36111", height="0.15278", group=10, fontsize=7, pos="465.04,216.62"];
+	326 [label=Görg, width="0.27778", height="0.15278", group=10, fontsize=7, pos="362.41,56.794"];
+	235 [label=Hoggan, width="0.41667", height="0.13889", group=10, fontsize=6, pos="373.78,75.433"];
+	520 [label=Allder, width="0.33333", height="0.13889", group=10, fontsize=6, pos="409.56,91.859"];
+	195 [label=James, width="0.30556", height="0.13889", group=10, fontsize=6, pos="434.61,163.02"];
+	118 [label=Felsner, width="0.5", height="0.18056", group=15, fontsize=8, pos="700.56,810.86"];
+	656 [label=Dangelmayr, width="0.61111", height="0.13889", group=15, fontsize=6, pos="756.02,816.52"];
+	374 [label=Zickfeld, width="0.41667", height="0.13889", group=15, fontsize=6, pos="807.57,831.21"];
+	175 [label=Massow, width="0.41667", height="0.13889", group=15, fontsize=6, pos="655.65,823.15"];
+	573 [label=Bonichon, width="0.5", height="0.13889", group=15, fontsize=6, pos="701.05,834.46"];
+	671 [label=Mosbah, width="0.41667", height="0.13889", group=15, fontsize=6, pos="758.04,846.03"];
+	680 [label=Vargiu, width="0.41667", height="0.15278", group=22, fontsize=7, pos="576.43,627.22"];
+	139 [label="Di Giacomo", width="0.88889", height="0.19444", group=22, fontsize=9, pos="704.19,625.07"];
+	600 [label=Goodrich, width="0.66667", height="0.19444", group=22, fontsize=9, pos="477.52,601.42"];
+	358 [label=Didimo, width="0.55556", height="0.19444", group=22, fontsize=9, pos="672.68,666.3"];
+	315 [label=Meijer, width="0.44444", height="0.18056", group=22, fontsize=8, pos="794.96,623.02"];
+	200 [label=Wood, width="0.47222", height="0.19444", group=22, fontsize=9, pos="876.25,525.58"];
+	380 [label=Rosamond, width="0.55556", height="0.13889", group=22, fontsize=6, pos="794.61,557.03"];
+	667 [label=Garg, width="0.36111", height="0.19444", group=22, fontsize=9, pos="528.46,773.08"];
+	440 [label="van Kreveld", width="0.69444", height="0.15278", group=22, fontsize=7, pos="550.24,563.55"];
+	120 [label=ElGindy, width="0.41667", height="0.13889", group=22, fontsize=6, pos="698.48,598.32"];
+	339 [label=Lubiw, width="0.41667", height="0.18056", group=22, fontsize=8, pos="799.19,601.79"];
+	310 [label=Fellows, width="0.41667", height="0.13889", group=2
+2, fontsdigraphpos="705.43,561.16"];
+	614 [label=Ragde, width="0.33333", height="0.13889", group=22, fontsize=6, pos="729.78,580.4"];
+	601 [label=Kobourov, width="0.75", height="0.19444", group=20, fontsize=9, pos="492.63,487.56"];
+	163 [label=Tassinari, width="0.52778", height="0.15278", group=22, fontsize=7, pos="618.41,645.69"];
+	215 [label=Parise, width="0.33333", height="0.13889", group=22, fontsize=6, pos="536.69,636.65"];
+	613 [label=Binucci, width="0.44444", height="0.15278", group=22, fontsize=7, pos="727.19,707.67"];
+	225 [label=Giordano, width="0.55556", height="0.15278", group=22, fontsize=7, pos="682.67,711.06"];
+	307 [label=Nonato, width="0.41667", height="0.15278", group=22, fontsize=7, pos="744.4,687.31"];
+	269 [label=Everett, width="0.41667", height="0.15278", group=22, fontsize=7, pos="783.52,701.57"];
+	644 [label=Dujmovic, width="0.66667", height="0.18056", group=22, fontsize=8, pos="769.35,523.83"];
+	422 [label=Tamassia, width="0.66667", height="0.19444", group=22, fontsize=9, pos="606.74,584.32"];
+	369 [label=Lazard, width="0.41667", height="0.15278", group=22, fontsize=7, pos="790.17,675.73"];
+	185 [label=Eppstein, width="0.55556", height="0.18056", group=14, fontsize=8, pos="489.83,576.96"];
+	160 [label=Brandenburg, width="0.94444", height="0.19444", group=14, fontsize=9, pos="554.01,454.66"];
+	555 [label=Nishimura, width="0.55556", height="0.13889", group=22, fontsize=6, pos="731.72,543.16"];
+	472 [label=Speckmann, width="0.66667", height="0.15278", group=22, fontsize=7, pos="468.91,720.54"];
+	409 [label=Lenhart, width="0.52778", height="0.18056", group=22, fontsize=8, pos="825.51,647.48"];
+	691 [label=McCartin, width="0.47222", height="0.13889", group=22, fontsize=6, pos="767.58,582.31"];
+	284 [label=Whitesides, width="0.80556", height="0.19444", group=22, fontsize=9, pos="702.37,523.07"];
+	171 [label=Buti, width="0.22222", height="0.13889", group=22, fontsize=6, pos="635.66,679.3"];
+	485 [label=Bridgeman, width="0.75", height="0.18056", group=22, fontsize=8, pos="547.47,662.96"];
+	331 [label=Snoeyink, width="0.47222", height="0.13889", group=22, fontsize=6, pos="901.21,752.93"];
+	706 [label=Carmignani, width="0.66667", height="0.15278", group=22, fontsize=7, pos="648.7,755.91"];
+	395 [label=Barbagallo, width="0.55556", height="0.13889", group=22, fontsize=6, pos="687.33,729.69"];
+	560 [label=Vyskocil, width="0.47222", height="0.13889", group=12, fontsize=6, pos="1156.5,457.82"];
+	668 [label=Kára, width="0.30556", height="0.15278", group=12, fontsize=7, pos="1160.2,414.8"];
+	16 [label=Tanenbaum, width="0.58333", height="0.13889", group=22, fontsize=6, pos="342.13,675"];
+	466 [label=Scheinerman, width="0.63889", height="0.13889", group=22, fontsize=6, pos="356.79,695.95"];
+	512 [label=Madden, width="0.55556", height="0.18056", group=6, fontsize]=8, pos="815.23,265.91"];
+	595 [label=Madden, width="0.47222", height="0.15278", group=6, fontsize=7, pos="803.64,242.37"];
+	688 [label=Powers, width="0.38889", height="0.13889", group=6, fontsize=6, pos="734.03,271.39"];
+	533 [label=Grigorescu, width="0.55556", height="0.13889", group=6, fontsize=6, pos="757.93,253.49"];
+	594 [label=Himsolt, width="0.52778", height="0.18056", group=6, fontsize=8, pos="699.88,316.06"];
+	194 [label=Laison, width="0.33333", height="0.13889", group=7, fontsize=6, pos="946.69,790.16"];
+	397 [label=Safari, width="0.27778", height="0.13889", group=7, fontsize=6, pos="954.66,813.89"];
+	290 [label=Trotter, width="0.33333", height="0.13889", group=7, fontsize=6, pos="923.04,808.07"];
+	222 [label=Evans, width="0.33333", height="0.13889", group=7, fontsize=6, pos="979.45,794.64"];
+	404 [label=Dean, width="0.36111", height="0.18056", group=22, fontsize=8, pos="973.52,753.81"];
+	57 [label=Marriott, width="0.55556", height="0.18056", group=10, fontsize=8, pos="290.58,271.6"];
+	360 [label=Stuckey, width="0.44444", height="0.15278", group=10, fontsize=7, pos="367.96,224"];
+	619 [label=Wybrow, width="0.52778", height="0.15278", group=10, fontsize=7, pos="338.45,243.32"];
+	117 [label=He, width="0.16667", height="0.13889", group=10, fontsize=6, pos="267.7,248.6"];
+	616 [label=Koren, width="0.41667", height="0.18056", group=10, fontsize=8, pos="296.98,357.86"];
+	517 [label=Newton, width="0.47222", height="0.15278", group=13, fontsize=7, pos="709.79,152.31"];
+	603 [label=Sýkora, width="0.47222", height="0.18056", group=13, fontsize=8, pos="739.82,174.36"];
+	674 [label=Uzovic, width="0.38889", height="0.13889", group=13, fontsize=6, pos="699.4,189.8"];
+	458 [label=Wagner, width="0.58333", height="0.19444", group=18, fontsize=9, pos="701.84,466.04"];
+	596 [label=Benkert, width="0.47222", height="0.15278", group=18, fontsize=7, pos="901.77,468.12"];
+	677 [label=Kaufmann, width="0.77778", height="0.19444", group=22, fontsize=9, pos="757.31,386.96"];
+	481 [label=Lerner, width="0.33333", height="0.13889", group=18, fontsize=6, pos="754.16,406.99"];
+	510 [label=Baur, width="0.27778", height="0.15278", group=18, fontsize=7, pos="722,444.95"];
+	488 [label=Gaertler, width="0.47222", height="0.15278", group=18, fontsize=7, pos="778.8,427.53"];
+	703 [label=Kenis, width="0.30556", height="0.13889", group=18, fontsize=6, shape=b;o ]xce; institute;code; 	co
+	fontsize=20;pos="704.9,409.1"];
+	490 [label=Görke, width="0.30556", height="0.13889", group=18, fontsize=6, pos="838.07,442.01"];
+	316 [label="de Berg", width="0.38889", height="0.13889", group=22, fontsize=6, pos="435.13,790.36"];
+	89 [label=Plaisant, width="0.41667", height="0.13889", group=11, fontsize=6, pos="520.25,1090.7"];
+	103 [label="Sims Parr", width="0.47222", height="0.13889", group=11, fontsize=6, pos="538.05,1109"];
+	31 [label=Bubeck, width="0.41667", height="0.13889", group=6, fontsize=6, pos="869.65,350.27"];
+	192 [label=Rosenstiel, width="0.52778", height="0.13889", group=6, fontsize=6, pos="827.67,336.3"];
+	518 [label=Ritt, width="0.22222", height="0.13889", group=6, fontsize=6, pos="882.66,368.18"];
+	318 [label=Fößmeier, width="0.63889", height="0.18056", group=6, fontsize=8, pos="786.31,305.16"];
+	111 [label=Steckelbach, width="0.61111", height="0.13889", group=6, fontsize=6, pos="843.34,369.33"];
+	35 [label=Vondrák, width="0.44444", height="0.13889", group=12, fontsize=6, pos="1275.9,342.94"];
+	631 [label=Nyklová, width="0.5", height="0.15278", group=12, fontsize=7, pos="1238.2,362.67"];
+	411 [label=Babilon, width="0.47222", height="0.15278", group=12, fontsize=7, pos="1264.4,323.98"];
+	11 [label=Krug, width="0.27778", height="0.13889", group=18, fontsize=6, pos="826.84,411.15"];
+	492 [label=Andalman, width="0.52778", height="0.13889", group=5, fontsize=6, pos="615.8,462.65"];
+	661 [label=Ryall, width="0.33333", height="0.15278", group=22, fontsize=7, pos="654.18,484.19"];
+	208 [label=Dickerson, width="0.52778", height="0.13889", group=14, fontsize=6, pos="427.05,646.91"];
+	364 [label=Meng, width="0.33333", height="0.15278", group=14, fontsize=7, pos="421.29,624.78"];
+	511 [label=Rosi, width="0.25", height="0.13889", group=10, fontsize=6, pos="563.35,164.99"];
+	546 [label="de Mendonça Neto", width="1.0556", height="0.15278", group=10, fontsize=7, pos="569.49,196.34"];
+	434 [label=Harel, width="0.33333", height="0.15278", group=10, fontsize=7, pos="224.92,351.52"];
+	93 [label=Agarwal, width="0.44444", height="0.13889", group=12, fontsize=6, pos="1107.3,294.13"];
+	445 [label=Sharir, width="0.30556", height="0.13889", group=12, fontsize=6, pos="1081.8,276.21"];
+	292 [label=Kaplan, width="0.36111", height="0.13889", group=20, fontsize=6, pos="46.923,582.61"];
+	382 [label=Vasiliu, width="0.41667", height="0.15278", group=20, fontsize=7, pos="46.214,560"];
+	582 [label=Diguglielmo, width="0.63889", height="0.13889", group=20, fontsize=6, pos="93.132,559.49"];
+	323 [label=Sander, width="0.44444", height="0.18056", group=20, fontsize=8, pos="115.18,532.89"];
+	29 [label=Ellson, width="0.33333", height="0.13889", group=10, fontsize=6, pos="335.92,387.6"];
+	64 [label=Koutsofios, width="0.55556", height="0.13889", group=10, fontsize=6, pos="394.37,404.99"];
+	666 [label=Woodhull, width="0.58333", height="0.15278", group=10, fontsize=7, pos="377.16,381.72"];
+	497 [label=North, width="0.38889", height="0.18056", group=10, fontsize=8, pos="511.55,404.49"];
+	649 [label=Gansner, width="0.55556", height="0.18056", group=10, fontsize=8, pos="417.89,439.09"];
+	325 [label=Ju, width="0image.11111", height="0.13889", group=8, fontsize=6, pos="1466.6,253.89"];
+	548 [label=Park, width="0.25", height="0.13889", group=8, fontsize=6, pos="1466.3,230.63"];
+	378 [label=Gudmundsson, width="0.80556", height="0.15278", group=10, fontsize=7, pos="548.08,526.31"];
+	291 [label=Matera, width="0.36111", height="0.13889", group=22, fontsize=6, pos="598.84,766.62"];
+	442 [label=Chrobak, width="0.41667", height="0.13889", group=16, fontsize=6, pos="1174.4,581.98"];
+	531 [label=Nakano, width="0.52778", height="0.18056", group=16, fontsize=8, pos="1131.8,581.65"];
+	540 [label=Joevenazzo, width="0.55556", height="0.13889", group=22, fontsize=6, pos="829.83,752.94"];
+	647 [label=Wilsdon, width="0.44444", height="0.13889", group=22, fontsize=6, pos="870.98,735.03"];
+	199 [label=Wampler, width="0.55556", height="0.15278", group=20, fontsize=7, pos="327.77,454.71"];
+	701 [label=Harding, width="0.41667", height="0.13889", group=20, fontsize=6, pos="441.91,458.42"];
+	373 [label=Erten, width="0.36111", height="0.18056", group=20, fontsize=8, pos="391.48,464.08"];
+	641 [label=Navabi, width="0.41667", height="0.15278", group=20, fontsize=7, pos="320.27,435.38"];
+	642 [label=Forrester, width="0.47222", height="0.13889", group=20, fontsize=6, pos="372.65,443.23"];
+	622 [label=Yee, width="0.25", height="0.15278", group=20, fontsize=7, pos="357.14,474.14"];
+	226 [label=Alzohairi, width="0.47222", height="0.13889", group=3, fontsize=6, pos="1248.7,902.49"];
+	553 [label=Rival, width="0.33333", height="0.15278", group=3, fontsize=7, pos="1241.4,935.94"];
+	15 [label=Suchý, width="0.30556", height="0.13889", group=12, fontsize=6, pos="1128.7,415.31"];
+	496 [label=Jelínková, width="0.47222", height="0.13889", group=12, fontsize=6, pos="1156.3,433.42"];
+	187 [label=Pergel, width="0.38889", height="0.15278", group=12, fontsize=7, pos="1117.1,437.92"];
+	121 [label=Kratochvíl, width="0.66667", height="0.18056", group=4, fontsize=8, pos="1090.6,465.19"];
+	153 [label=Nöllenburg, width="0.63889", height="0.15278", group=4, fontsize=7, pos="958.13,505.36"];
+	221 [label=Atienza, width="0.41667", height="0.13889", group=4, fontsize=6, pos="964.63,548.67"];
+	280 [label=Garrido, width="0.44444", height="0.15278", group=4, fontsize=7, pos="981.32,528.56"];
+	618 [label=Moreno, width="0.41667", height="0.13889", group=4, fontsize=6, pos="1023,491.38"];
+	282 [label=Hernández, width="0.61111", height="0.15278", group=4, fontsize=7, pos="1020.2,601.07"];
+	558 [label=Grima, width="0.30556", height="0.13889", group=4, fontsize=6, pos="1000.8,509.44"];
+	420 [label=Kroll, width="0.27778", height="0.13889", group=18, fontsize=6, pos="937.8,464.84"];
+	396 [label=Valenzuela, width="0.55556", height="0.13889", group=4, fontsize=6, pos="1049,545.26"];
+	464 [label=Portillo, width="0.38889", height="0.13889", group=4, fontsize=
+}
+6, pos="1001.7,547.53"];
+	308 [label=Haverkort, width="0.52778", height="0.13889", group=18, fontsize=6, pos="926.6,486.74"];
+	664 [label=Villar, width="0.30556", height="0.13889", group=4, fontsize=6, pos="1028.5,527.35"];
+	453 [label=Cortés, width="0.33333", height="0.13889", group=4, fontsize=6, pos="1065.7,502.55"];
+	657 [label=Reyes, width="0.33333", height="0.13889", group=4, fontsize=6, pos="1059.8,524.93"];
+	257 [label=Wolff, width="0.41667", height="0.18056", group=4, fontsize=8, pos="977.17,474.95"];
+	431 [label=Gassner, width="0.41667", height="0.13889", group=2, fontsize=6, pos="131.08,577.45"];
+	501 [label=Schaefer, width="0.55556", height="0.18056", group=2, fontsize=8, pos="78.298,623.21"];
+	577 [label=Schulz, width="0.33333", height="0.13889", group=2, fontsize=6, pos="180.33,611.34"];
+	712 [label="Estrella-Balderrama", width="1.1389", height="0.15278", group=2, fontsize=7, pos="192.5,558.37"];
+	527 [label=Eades, width="0.44444", height="0.19444", group=10, fontsize=9, pos="560.04,336.96"];
+	559 [label=Lee, width="0.22222", height="0.13889", group=10, fontsize=6, pos="506.66,302.14"];
+	610 [label=Huang, width="0.38889", height="0.15278", group=10, fontsize=7, pos="569.89,235.72"];
+	704 [label=Lin, width="0.22222", height="0.15278", group=10, fontsize=7, pos="529.1,243.93"];
+	663 [label="do Nascimento", width="0.83333", height="0.15278", group=10, fontsize=7, pos="468.4,368.15"];
+	651 [label=Feng, width="0.30556", height="0.15278", group=10, fontsize=7, pos="579.99,257.37"];
+	653 [label=Huang, width="0.33333", height="0.13889", group=10, fontsize=6, pos="498.11,284.07"];
+	337 [label=Trümbach, width="0.5", height="0.13889", group=2, fontsize=6, pos="424.79,387.07"];
+	478 [label=Schreiber, width="0.61111", height="0.18056", group=2, fontsize=8, pos="505.33,425.22"];
+	101 [label="de Castro", width="0.55556", height="0.15278", group=4, fontsize=7, pos="1029,566.47"];
+	124 [label=Márquez, width="0.52778", height="056.18 754.69,549.34 761.34,537.77 765.53,530.48"];
+	20 -- 310 [weight="1.0", pos="729.44,561.51 726.49,561.47 723.47,561.43 720.
