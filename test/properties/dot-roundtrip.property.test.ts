@@ -196,7 +196,9 @@ describe('explicit value kinds', () => {
             g.node('a', { fontsize: n });
           });
           const again = fromDot(toDot(g));
-          const back = Number(again.nodes[0].attributes.get('fontsize'));
+          const raw = again.nodes[0].attributes.get('fontsize');
+          expect(raw).toBeDefined();
+          const back = Number(raw);
           // DOT has no signed zero, so -0 reads back as 0
           expect(back === n || (Number.isNaN(back) && Number.isNaN(n))).toBe(
             true,
@@ -204,6 +206,22 @@ describe('explicit value kinds', () => {
         },
       ),
     );
+  });
+
+  it('writes non-numeral numbers as strings and keeps a __proto__ key', () => {
+    // deterministic cases the properties above cannot distinguish by coercion
+    const g = digraph((g) => {
+      g.node('a', { fontsize: Number.NaN, width: Number.POSITIVE_INFINITY });
+      g.node('b', { __proto__: 'v' } as { label: string });
+    });
+    const dot = toDot(g);
+    expect(dot).toContain('fontsize = "NaN";');
+    expect(dot).toContain('width = "Infinity";');
+    // `__proto__` is an ordinary identifier in DOT; it only needs care when parsed
+    expect(dot).toContain('__proto__ = "v";');
+    const again = fromDot(dot);
+    expect(again.nodes[1].attributes.get('__proto__' as 'label')).toBe('v');
+    expect(Object.getPrototypeOf(again.nodes[1].attributes)).not.toBe('v');
   });
 
   it('attribute keys that are DOT keywords or not identifiers are quoted', () => {
