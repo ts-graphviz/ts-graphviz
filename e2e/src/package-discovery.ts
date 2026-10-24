@@ -104,10 +104,15 @@ export class PackageDiscovery {
             );
             continue;
           }
+          const name = pkg.manifest.name;
+          if (!name) {
+            logger.debug('Package name not found in workspace package:', pkg);
+            continue;
+          }
 
           // Create DiscoveredPackage from the workspace package info
           const discoveredPkg: DiscoveredPackage = {
-            name: pkg.manifest.name,
+            name,
             path: packageDir,
             private: pkg.manifest.private === true,
             publishConfig: pkg.manifest.publishConfig,

@@ -180,7 +180,7 @@ export class VerdaccioManager implements VerdaccioInstance, AsyncDisposable {
   }
 
   isRunning(): boolean {
-    return this.server?.listening;
+    return this.server?.listening ?? false;
   }
 
   getRegistryUrl(): string {

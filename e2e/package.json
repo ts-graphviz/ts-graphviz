@@ -7,20 +7,21 @@
   },
   "dependencies": {
     "@pnpm/workspace.find-packages": "^1000.0.65",
-    "chalk": "^5.6.2",
-    "commander": "^14.0.3",
-    "execa": "^9.6.1",
-    "glob": "^11.1.0",
+    "chalk": "^6.0.1",
+    "commander": "^15.0.0",
+    "execa": "^10.2.0",
+    "glob": "^13.0.6",
     "micromatch": "^4.0.8",
-    "p-limit": "^6.2.0",
+    "p-limit": "^7.3.3",
     "verdaccio": "^6.10.7",
-    "verdaccio-auth-memory": "^10.3.3",
+    "verdaccio-auth-memory": "^13.1.6",
     "yaml": "^2.9.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/micromatch": "^4.0.10",
+    "@types/node": "catalog:",
     "tsx": "^4.23.15",
-    "typescript": "^5.9.3"
+    "typescript": "catalog:"
   }
 }
