@@ -1,4 +1,8 @@
-# Migrating to ts-graphviz v4
+---
+description: |-
+  Upgrade your ts-graphviz project from v3 to v4. Learn how attribute values became explicit (literal text, escString, htmlLike), how errors are reported with stable codes, how the models context and the Dot model changed, and what changed in the AST, adapter and React packages.
+---
+# Migration from v3 to v4
 
 v4 is the release where the API review of the 3.x line landed: attribute values became explicit about what they mean, errors became identifiable, the model classes stopped depending on import order, and the AST was tidied. Most programs that build a graph with the factory API and call `toDot` keep working unchanged. This guide lists every change that can affect existing code, by area, with what to do about it.
 
@@ -120,4 +124,4 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 - `fromModel` keeps a graph or subgraph id that is the empty string; `stringify` of an empty `Dot` returns `''`.
 - `ts-graphviz/ast` and `ts-graphviz/adapter` resolve under `moduleResolution: node10` (`typesVersions`).
 
-See [docs/security-model.md](./security-model.md) for what the library guarantees at each trust boundary in v4.
+See the [Security model](../../11-advanced-topics/06-security-model.md) for what the library guarantees at each trust boundary in v4.

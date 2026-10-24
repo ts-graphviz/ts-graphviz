@@ -1,5 +1,5 @@
 /**
- * Keeps docs/security-model.md and the tests in sync without the document
+ * Keeps the security model page of the website and the tests in sync without the document
  * naming test files: every guarantee the document says is enforced by tests
  * ("tests tagged `SM-n`") must have at least one test whose title carries
  * `[SM-n]`, and every `[SM-n]` used in a test must be a section of the
@@ -10,7 +10,13 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const root = join(import.meta.dirname, '..');
-const document = readFileSync(join(root, 'docs/security-model.md'), 'utf8');
+const document = readFileSync(
+  join(
+    root,
+    'website/docs/ts-graphviz/11-advanced-topics/06-security-model.md',
+  ),
+  'utf8',
+);
 
 const sectionIds = new Set(
   [...document.matchAll(/^## (SM-\d+)\./gm)].map((m) => m[1]),
