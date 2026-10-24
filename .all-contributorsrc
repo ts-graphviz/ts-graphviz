@@ -245,6 +245,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "btomaj",
+      "name": "poetry by",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2638986?v=4",
+      "profile": "https://github.com/btomaj",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
