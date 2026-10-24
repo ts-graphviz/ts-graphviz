@@ -40,7 +40,7 @@ export interface FileRange {
  *
  * @group AST
  */
-export interface ASTCommonPropaties {
+export interface ASTCommonProperties {
   /**
    * The start and end location of the AST object.
    */
@@ -51,13 +51,13 @@ export interface ASTCommonPropaties {
  * This interface represents the properties of a dot AST node.
  * @group AST
  */
-export interface DotASTPropaties extends ASTCommonPropaties {}
+export interface DotASTProperties extends ASTCommonProperties {}
 
 /**
  * This interface defines the properties of a Graph AST Node.
  * @group AST
  */
-export interface GraphASTPropaties extends ASTCommonPropaties {
+export interface GraphASTProperties extends ASTCommonProperties {
   /**
    * An optional identifier for the Graph AST Node.
    */
@@ -73,12 +73,12 @@ export interface GraphASTPropaties extends ASTCommonPropaties {
 }
 
 /**
- * LiteralASTPropaties defines interface for literal AST nodes.
+ * LiteralASTProperties defines interface for literal AST nodes.
  *
  * @group AST
  */
-export interface LiteralASTPropaties<T extends string = string>
-  extends ASTCommonPropaties {
+export interface LiteralASTProperties<T extends string = string>
+  extends ASTCommonProperties {
   /**
    * The value of the literal.
    */
@@ -91,10 +91,10 @@ export interface LiteralASTPropaties<T extends string = string>
 }
 
 /**
- * SubgraphASTPropaties describes the properties of an AST node representing a subgraph.
+ * SubgraphASTProperties describes the properties of an AST node representing a subgraph.
  * @group AST
  */
-export interface SubgraphASTPropaties extends ASTCommonPropaties {
+export interface SubgraphASTProperties extends ASTCommonProperties {
   /**
    * id is an optional {@link LiteralASTNode} that represents the identifier of the subgraph.
    */
@@ -102,10 +102,10 @@ export interface SubgraphASTPropaties extends ASTCommonPropaties {
 }
 
 /**
- * SubgraphASTPropaties describes the properties of an AST node representing a node.
+ * SubgraphASTProperties describes the properties of an AST node representing a node.
  * @group AST
  */
-export interface NodeASTPropaties extends ASTCommonPropaties {
+export interface NodeASTProperties extends ASTCommonProperties {
   /**
    * The unique identifier of the node.
    */
@@ -113,10 +113,10 @@ export interface NodeASTPropaties extends ASTCommonPropaties {
 }
 
 /**
- * EdgeASTPropaties is an interface that defines the properties of an {@link EdgeASTNode}.
+ * EdgeASTProperties is an interface that defines the properties of an {@link EdgeASTNode}.
  * @group AST
  */
-export interface EdgeASTPropaties extends ASTCommonPropaties {
+export interface EdgeASTProperties extends ASTCommonProperties {
   /**
    * An array of EdgeTargetASTNodes.
    * The {@link EdgeTargetASTNode} represents a node that is the target of an edge.
@@ -129,36 +129,36 @@ export interface EdgeASTPropaties extends ASTCommonPropaties {
 }
 
 /**
- * NodeRefASTPropaties is an interface that defines the properties of a {@link NodeRefASTNode}.
+ * NodeRefASTProperties is an interface that defines the properties of a {@link NodeRefASTNode}.
  * @group AST
  */
-export interface NodeRefASTPropaties extends ASTCommonPropaties {
+export interface NodeRefASTProperties extends ASTCommonProperties {
   id: LiteralASTNode;
   port?: LiteralASTNode;
   compass?: LiteralASTNode<Compass>;
 }
 
 /**
- * NodeRefGroupASTPropaties is an interface that defines the properties of a {@link NodeRefGroupASTNode}.
+ * NodeRefGroupASTProperties is an interface that defines the properties of a {@link NodeRefGroupASTNode}.
  * @group AST
  */
-export interface NodeRefGroupASTPropaties extends ASTCommonPropaties {}
+export interface NodeRefGroupASTProperties extends ASTCommonProperties {}
 
 /**
- * AttributeASTPropaties interface defines the properties of an {@link AttributeASTNode}.
+ * AttributeASTProperties interface defines the properties of an {@link AttributeASTNode}.
  * @group AST
  */
-export interface AttributeASTPropaties<T extends AttributeKey = AttributeKey>
-  extends ASTCommonPropaties {
+export interface AttributeASTProperties<T extends AttributeKey = AttributeKey>
+  extends ASTCommonProperties {
   key: LiteralASTNode<T>;
   value: LiteralASTNode;
 }
 
 /**
- * AttributeListASTPropaties interface defines the properties of an {@link AttributeListASTNode}.
+ * AttributeListASTProperties interface defines the properties of an {@link AttributeListASTNode}.
  * @group AST
  */
-export interface AttributeListASTPropaties extends ASTCommonPropaties {
+export interface AttributeListASTProperties extends ASTCommonProperties {
   kind: 'Graph' | 'Edge' | 'Node';
 }
 
@@ -172,7 +172,7 @@ export type CommentKind = 'Block' | 'Slash' | 'Macro';
 /**
  * @group AST
  */
-export interface CommentASTPropaties extends ASTCommonPropaties {
+export interface CommentASTProperties extends ASTCommonProperties {
   /**
    * A string that specifies the kind of comment.
    */
@@ -216,7 +216,7 @@ export interface ASTBaseParentNode<STMT extends ASTBaseNode = ASTBaseNode>
  */
 export interface LiteralASTNode<T extends string = string>
   extends ASTBaseParentNode<never>,
-    LiteralASTPropaties<T> {
+    LiteralASTProperties<T> {
   type: 'Literal';
 }
 
@@ -227,7 +227,7 @@ export interface LiteralASTNode<T extends string = string>
  */
 export interface DotASTNode
   extends ASTBaseParentNode<StatementASTNode>,
-    DotASTPropaties {
+    DotASTProperties {
   type: 'Dot';
 }
 
@@ -238,7 +238,7 @@ export interface DotASTNode
  */
 export interface GraphASTNode
   extends ASTBaseParentNode<ClusterStatementASTNode>,
-    GraphASTPropaties {
+    GraphASTProperties {
   type: 'Graph';
 }
 
@@ -248,7 +248,7 @@ export interface GraphASTNode
  */
 export interface AttributeASTNode<T extends AttributeKey = AttributeKey>
   extends ASTBaseParentNode<never>,
-    AttributeASTPropaties<T> {
+    AttributeASTProperties<T> {
   type: 'Attribute';
 }
 
@@ -258,7 +258,7 @@ export interface AttributeASTNode<T extends AttributeKey = AttributeKey>
  */
 export interface CommentASTNode
   extends ASTBaseParentNode<never>,
-    CommentASTPropaties {
+    CommentASTProperties {
   type: 'Comment';
 }
 
@@ -268,7 +268,7 @@ export interface CommentASTNode
  */
 export interface AttributeListASTNode
   extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>,
-    AttributeListASTPropaties {
+    AttributeListASTProperties {
   type: 'AttributeList';
 }
 
@@ -278,7 +278,7 @@ export interface AttributeListASTNode
  */
 export interface NodeRefASTNode
   extends ASTBaseParentNode<never>,
-    NodeRefASTPropaties {
+    NodeRefASTProperties {
   type: 'NodeRef';
 }
 
@@ -288,7 +288,7 @@ export interface NodeRefASTNode
  */
 export interface NodeRefGroupASTNode
   extends ASTBaseParentNode<NodeRefASTNode>,
-    NodeRefGroupASTPropaties {
+    NodeRefGroupASTProperties {
   type: 'NodeRefGroup';
 }
 
@@ -305,7 +305,7 @@ export type EdgeTargetASTNode = NodeRefASTNode | NodeRefGroupASTNode;
  */
 export interface EdgeASTNode
   extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>,
-    EdgeASTPropaties {
+    EdgeASTProperties {
   type: 'Edge';
 }
 
@@ -315,7 +315,7 @@ export interface EdgeASTNode
  */
 export interface NodeASTNode
   extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>,
-    NodeASTPropaties {
+    NodeASTProperties {
   type: 'Node';
 }
 
@@ -325,7 +325,7 @@ export interface NodeASTNode
  */
 export interface SubgraphASTNode
   extends ASTBaseParentNode<ClusterStatementASTNode>,
-    SubgraphASTPropaties {
+    SubgraphASTProperties {
   type: 'Subgraph';
 }
 /**
