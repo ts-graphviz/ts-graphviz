@@ -19,10 +19,18 @@ export function createElementFactory(
 /**
  * Create an {@link ASTNode} of the specified type
  *
+ * This shared function does not limit the number of nodes it creates: the
+ * limit guards against untrusted *input*, which the parser and `fromModel`
+ * enforce with a builder of their own per call. A shared counter here would
+ * otherwise throw once a process had built 100,000 nodes in total (#1624).
+ * Use {@link createElementFactory} to build with a limit.
+ *
  * @param type - Type of the {@link ASTNode}
  * @param props - Properties of the {@link ASTNode}
  * @param children - Children of the {@link ASTNode}
  * @group Create AST
  * @returns An {@link ASTNode}
  */
-export const createElement: CreateElement = createElementFactory();
+export const createElement: CreateElement = createElementFactory({
+  maxASTNodes: 0,
+});
