@@ -243,9 +243,10 @@ export abstract class GraphBase<
       (arg: unknown): arg is (subgraph: SubgraphModel) => void =>
         typeof arg === 'function',
     );
-    const subgraph: SubgraphModel = id
-      ? (this.getSubgraph(id) ?? this.createSubgraph(id))
-      : this.createSubgraph();
+    const subgraph: SubgraphModel =
+      id !== undefined
+        ? (this.getSubgraph(id) ?? this.createSubgraph(id))
+        : this.createSubgraph();
     if (attributes !== undefined) {
       subgraph.apply(attributes);
     }
@@ -304,7 +305,8 @@ export abstract class GraphBase<
     if (Array.isArray(firstArg)) {
       const targets = firstArg;
       const attributes = args.find(
-        (arg: unknown): arg is EdgeAttributesObject => typeof arg === 'object',
+        (arg: unknown): arg is EdgeAttributesObject =>
+          typeof arg === 'object' && arg !== null,
       );
       const callback = args.find(
         (arg: unknown): arg is (edge: EdgeModel) => void =>

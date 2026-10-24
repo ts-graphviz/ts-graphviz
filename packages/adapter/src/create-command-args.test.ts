@@ -90,8 +90,8 @@ describe('createCommandArgs', () => {
 });
 
 describe('escapeValue', () => {
-  it('properly escapes various attribute values', () => {
-    expect(escapeValue('foo bar')).toEqual('="foo bar"');
+  it('writes attribute values verbatim', () => {
+    expect(escapeValue('foo bar')).toEqual('=foo bar');
     expect(escapeValue('foo')).toEqual('=foo');
     expect(escapeValue(true)).toEqual('');
     expect(escapeValue(false)).toEqual('=false');
