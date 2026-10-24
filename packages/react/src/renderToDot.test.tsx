@@ -67,6 +67,24 @@ describe('renderToDot()', () => {
     });
   });
 
+  describe('models option', () => {
+    it('forwards models to createRoot and renders strict graphs', async () => {
+      class MyDigraph extends DigraphModel {
+        override createNode(id: string) {
+          return super.createNode(`${id}_custom`);
+        }
+      }
+      const dot = await renderToDot(
+        <Digraph id="G" strict>
+          <Node id="a" />
+        </Digraph>,
+        { models: { Digraph: MyDigraph } },
+      );
+      expect(dot).toMatch(/^strict digraph "G" \{/);
+      expect(dot).toContain('"a_custom";');
+    });
+  });
+
   describe('With container', () => {
     it('renders container with added elements to DOT', async () => {
       const container = new DigraphModel('container');
