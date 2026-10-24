@@ -9,57 +9,105 @@ import { digraph, graph, strict } from 'ts-graphviz';
  * Null bytes are excluded: Graphviz treats them as string terminators, so the
  * printer removes them on purpose.
  */
+const specialStrings = fc.constantFrom(
+  '',
+  ' ',
+  '"',
+  '\\',
+  '\\\\',
+  '\\"',
+  'a\\',
+  'a"b',
+  '<b>',
+  '<',
+  '>',
+  '<<x>>',
+  'graph',
+  'digraph',
+  'strict',
+  'node',
+  'edge',
+  'subgraph',
+  '->',
+  '--',
+  '-1.5',
+  '007',
+  '.5',
+  '\t',
+  '日本語',
+  '😀',
+  '/* c */',
+  '// c',
+  '#',
+  '[',
+  ']',
+  '{',
+  '}',
+  ';',
+  '=',
+  ':',
+  ':n',
+);
+
+/** Short mixes of the characters that matter to quoting and escaping. */
+const tokenMix = (extra: string[] = []) =>
+  fc
+    .array(
+      fc.constantFrom('a', 'b', '"', '\\', ' ', '<', '>', '\\"', 'n', ...extra),
+      { minLength: 1, maxLength: 8 },
+    )
+    .map((parts) => parts.join(''));
+
+/** Strings that contain raw line endings: LF, CR, CRLF, leading/trailing, repeated. */
+const newlineStrings = fc
+  .tuple(
+    fc.constantFrom('', 'a', ' ', '"', '\\'),
+    fc.constantFrom('\n', '\r', '\r\n', '\n\n', '\\\n'),
+    fc.constantFrom('', 'b', ' ', '>', '\n'),
+  )
+  .map((parts) => parts.join(''));
+
+/** Things the printer must quote: numerals (which DOT accepts bare), keywords, HTML-like shapes. */
+const quotingEdgeCases = fc.oneof(
+  fc
+    .tuple(
+      fc.constantFrom('', '-'),
+      fc.constantFrom('0', '1', '007', '12'),
+      fc.constantFrom('', '.', '.5', '.50'),
+    )
+    .map((parts) => parts.join('')),
+  fc.constantFrom('graph', 'digraph', 'strict', 'node', 'edge', 'subgraph'),
+  fc
+    .tuple(
+      fc.constantFrom('', ' '),
+      fc.constantFrom('<b>', '<<x>>', '<>', '<a', '<>>', '<<', '< x >'),
+      fc.constantFrom('', ' ', '>'),
+    )
+    .map((parts) => parts.join('')),
+);
+
 export const dotString = (options: { newlines?: boolean } = {}) =>
   fc
     .oneof(
       { arbitrary: fc.string({ unit: 'grapheme', maxLength: 12 }), weight: 3 },
-      fc.constantFrom(
-        '',
-        ' ',
-        '"',
-        '\\',
-        '\\\\',
-        '\\"',
-        'a\\',
-        'a"b',
-        '<b>',
-        '<',
-        '>',
-        '<<x>>',
-        'graph',
-        'digraph',
-        'strict',
-        'node',
-        'edge',
-        'subgraph',
-        '->',
-        '--',
-        '-1.5',
-        '007',
-        '.5',
-        '\t',
-        '日本語',
-        '😀',
-        '/* c */',
-        '// c',
-        '#',
-        '[',
-        ']',
-        '{',
-        '}',
-        ';',
-        '=',
-        ':',
-        ':n',
-      ),
-      fc
-        .array(
-          fc.constantFrom('a', 'b', '"', '\\', ' ', '<', '>', '\\"', 'n'),
-          { minLength: 1, maxLength: 8 },
-        )
-        .map((parts) => parts.join('')),
+      { arbitrary: specialStrings, weight: 2 },
+      { arbitrary: tokenMix(), weight: 2 },
+      { arbitrary: quotingEdgeCases, weight: 1 },
+      ...(options.newlines
+        ? [
+            { arbitrary: newlineStrings, weight: 3 },
+            { arbitrary: tokenMix(['\n', '\r\n']), weight: 1 },
+          ]
+        : []),
     )
     .filter((s) => options.newlines === true || !/[\r\n]/.test(s));
+
+/**
+ * Mirrors the printer's HTML-like detection (`convert-attribute.ts`): note the
+ * `m` flag, which makes any value with a line starting in `<` and a later line
+ * ending in `>` count as HTML-like. Settled by #1587.
+ */
+export const looksHtmlLikeToPrinter = (s: string) => /^<.+>$/ms.test(s.trim());
 
 /** Attribute keys whose values are plain strings on every object kind. */
 export const stringAttributeKey = fc.constantFrom(
