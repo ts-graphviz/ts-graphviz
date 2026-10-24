@@ -77,7 +77,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
       - name: Upgrade npm CLI for OIDC support
-        run: npm install -g npm@latest
+        # npm 12 requires Node.js >=22; npm 11 supports OIDC trusted publishing on Node.js 20
+        run: npm install -g npm@11
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@3de3850952bec538fde60aac71731376e57b9b57 # v1.4.8
