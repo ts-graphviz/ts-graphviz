@@ -1,4 +1,4 @@
-import { TsGraphvizError } from '@ts-graphviz/common';
+import { isTsGraphvizError } from '@ts-graphviz/common';
 import { describe, expect, it } from 'vitest';
 import { Digraph } from './Digraph.js';
 import { Dot } from './Dot.js';
@@ -8,6 +8,15 @@ import { GraphBase } from './GraphBase.js';
 import { createModelsContext, defaultModelsContext } from './models-context.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
+
+function getError(fn: () => unknown): unknown {
+  try {
+    fn();
+  } catch (e) {
+    return e;
+  }
+  return undefined;
+}
 
 describe('defaultModelsContext', () => {
   it('holds the core classes and is frozen', () => {
@@ -58,7 +67,12 @@ describe('createModelsContext', () => {
         return 'Graph' as const;
       }
     }
-    expect(() => new Bare().createNode('a')).toThrow(TsGraphvizError);
+    expect(() => new Bare().createNode('a')).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_NO_MODELS_CONTEXT' }),
+    );
+    expect(isTsGraphvizError(getError(() => new Bare().createNode('a')))).toBe(
+      true,
+    );
     const g = new Bare();
     g.with(defaultModelsContext());
     expect(g.createNode('a')).toBeInstanceOf(Node);

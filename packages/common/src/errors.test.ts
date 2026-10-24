@@ -1,33 +1,47 @@
 import { describe, expect, it } from 'vitest';
-import {
-  ConversionError,
-  InvalidModelError,
-  InvalidValueError,
-  ResourceLimitError,
-  TsGraphvizError,
-  UnsupportedEnvironmentError,
-} from './errors.js';
+import { ERROR_CODES, isTsGraphvizError, withCode } from './errors.js';
 
-describe('error classes', () => {
-  it.each([
-    InvalidModelError,
-    InvalidValueError,
-    ConversionError,
-    ResourceLimitError,
-    UnsupportedEnvironmentError,
-  ])('%o is a TsGraphvizError and an Error with its own name', (Cls) => {
-    const error = new Cls('why', { cause: 'root' });
-    expect(error).toBeInstanceOf(Error);
-    expect(error).toBeInstanceOf(TsGraphvizError);
-    expect(error).toBeInstanceOf(Cls);
-    expect(error.name).toBe(Cls.name);
+describe('withCode', () => {
+  it('tags the error in place and keeps its type, name and cause', () => {
+    const error = withCode(
+      new RangeError('why', { cause: 'root' }),
+      'TSG_ERR_NUL_CHARACTER',
+    );
+    expect(error).toBeInstanceOf(RangeError);
+    expect(error.name).toBe('RangeError');
     expect(error.message).toBe('why');
     expect(error.cause).toBe('root');
+    expect(error.code).toBe('TSG_ERR_NUL_CHARACTER');
+    expect(Object.keys(error)).toContain('code');
+  });
+});
+
+describe('isTsGraphvizError', () => {
+  it('accepts an error with a known code, whatever its prototype', () => {
+    expect(
+      isTsGraphvizError(withCode(new Error('x'), 'TSG_ERR_NO_GRAPH')),
+    ).toBe(true);
+    // Cross-realm or duplicated-package errors are plain objects to `instanceof`.
+    expect(
+      isTsGraphvizError({
+        name: 'Error',
+        message: 'x',
+        code: 'TSG_ERR_NO_GRAPH',
+      }),
+    ).toBe(true);
   });
 
-  it('keeps the name on subclasses defined by users', () => {
-    class MyError extends ConversionError {}
-    expect(new MyError().name).toBe('MyError');
-    expect(new MyError()).toBeInstanceOf(ConversionError);
+  it('rejects other errors and values', () => {
+    expect(isTsGraphvizError(new Error('x'))).toBe(false);
+    expect(
+      isTsGraphvizError(Object.assign(new Error('x'), { code: 'ENOENT' })),
+    ).toBe(false);
+    expect(isTsGraphvizError(null)).toBe(false);
+    expect(isTsGraphvizError('TSG_ERR_NO_GRAPH')).toBe(false);
+  });
+
+  it('codes are unique and prefixed', () => {
+    expect(new Set(ERROR_CODES).size).toBe(ERROR_CODES.length);
+    for (const code of ERROR_CODES) expect(code).toMatch(/^TSG_ERR_[A-Z_]+$/);
   });
 });

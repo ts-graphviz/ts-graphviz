@@ -17,9 +17,9 @@ import {
   type SubgraphAttributeKey,
   type SubgraphAttributesObject,
   type SubgraphModel,
-  TsGraphvizError,
   toNodeRef,
   toNodeRefGroup,
+  withCode,
 } from '@ts-graphviz/common';
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
@@ -66,8 +66,11 @@ export abstract class GraphBase<
    * their base class.)
    */
   protected defaultModels(): ModelsContext {
-    throw new TsGraphvizError(
-      `${this.constructor.name} has no models context: call with(models) or override defaultModels()`,
+    throw withCode(
+      new Error(
+        'This graph has no models context: call with(models) or override defaultModels()',
+      ),
+      'TSG_ERR_NO_MODELS_CONTEXT',
     );
   }
 

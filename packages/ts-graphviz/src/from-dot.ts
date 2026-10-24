@@ -5,13 +5,13 @@ import {
   toModel,
 } from '@ts-graphviz/ast';
 import {
-  ConversionError,
   type EdgeModel,
   isDotModel,
   type ModelsContext,
   type NodeModel,
   type RootGraphModel,
   type SubgraphModel,
+  withCode,
 } from '@ts-graphviz/common';
 import { createModelsContext } from '@ts-graphviz/core';
 
@@ -77,8 +77,11 @@ export function fromDot<
     ast.type === 'NodeRefGroup' ||
     ast.type === 'Literal'
   ) {
-    throw new ConversionError(
-      `fromDot cannot convert a "${Array.isArray(ast) ? 'ClusterStatements' : ast.type}" node to a model`,
+    throw withCode(
+      new TypeError(
+        `fromDot cannot convert a "${Array.isArray(ast) ? 'ClusterStatements' : ast.type}" node to a model`,
+      ),
+      'TSG_ERR_UNCONVERTIBLE_AST',
     );
   }
   const model = toModel(ast, {
@@ -89,7 +92,10 @@ export function fromDot<
     // A whole DOT source converts to a Dot model; return its first graph.
     const [graph] = model.graphs;
     if (!graph) {
-      throw new ConversionError('fromDot: the DOT source contains no graph');
+      throw withCode(
+        new Error('fromDot: the DOT source contains no graph'),
+        'TSG_ERR_NO_GRAPH',
+      );
     }
     return graph;
   }

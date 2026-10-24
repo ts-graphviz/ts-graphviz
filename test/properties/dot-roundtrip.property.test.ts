@@ -12,7 +12,6 @@ import {
   escString,
   fromDot,
   htmlLike,
-  InvalidValueError,
   toDot,
 } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
@@ -263,7 +262,7 @@ describe('explicit value kinds', () => {
       fc.property(
         dotString().filter((s) => s.includes('>')),
         (s) => {
-          expect(() => htmlLike(`${s}<`)).toThrow(InvalidValueError);
+          expect(() => htmlLike(`${s}<`)).toThrow(RangeError);
         },
       ),
     );

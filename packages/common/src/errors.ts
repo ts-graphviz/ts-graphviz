@@ -1,57 +1,97 @@
 /**
- * Error classes shared by the ts-graphviz packages.
+ * How ts-graphviz reports errors.
  *
- * Every error the library raises on purpose is a {@link TsGraphvizError}, so
- * callers can tell library errors from programming errors with one
- * `instanceof` check, and each subclass names the situation. The one
- * exception is `DotSyntaxError` in `@ts-graphviz/ast`, which extends the
- * built-in `SyntaxError` like `JSON.parse` does.
+ * The packages throw the standard error type that matches the situation
+ * (`SyntaxError` for DOT that does not parse, `RangeError` for a value that
+ * cannot be written, `TypeError` for an argument of the wrong shape, `Error`
+ * otherwise) and tag it with a `code` from {@link ERROR_CODES}. The code is
+ * the stable contract: messages may change in any release, codes only in a
+ * major one. Check errors with {@link isTsGraphvizError} or by comparing
+ * `error.code`; neither depends on `instanceof`, which fails across realms or
+ * when a dependency tree holds two copies of a package, nor on class names,
+ * which minifiers rewrite.
+ *
+ * The few error classes that carry extra fields (`DotSyntaxError`,
+ * `ASTNodeCountExceededError`, `CommandExecutionError`) extend the matching
+ * standard type and set `name` to a literal string for the same reason.
  *
  * @module
  */
 
 /**
- * Base class of every error raised by ts-graphviz.
+ * Every error code raised by the ts-graphviz packages.
  * @group Errors
  */
-export class TsGraphvizError extends Error {
-  constructor(message?: string, options?: ErrorOptions) {
-    super(message, options);
-    this.name = new.target.name;
-  }
+export const ERROR_CODES = [
+  /** The DOT source does not parse (`DotSyntaxError`, a `SyntaxError`). */
+  'TSG_ERR_DOT_SYNTAX',
+  /** The parser failed for a reason other than a syntax error (`Error`, see `cause`). */
+  'TSG_ERR_PARSE_FAILED',
+  /** The AST grew past `maxASTNodes` (`ASTNodeCountExceededError`, a `RangeError`). */
+  'TSG_ERR_AST_NODE_COUNT_EXCEEDED',
+  /** A string written to DOT contains a null character (`RangeError`). */
+  'TSG_ERR_NUL_CHARACTER',
+  /** HTML-like markup has unbalanced `<`/`>` or a null character (`RangeError`). */
+  'TSG_ERR_INVALID_HTML_LIKE',
+  /** An edge was given fewer than two targets or a target of the wrong shape (`TypeError`). */
+  'TSG_ERR_INVALID_EDGE_TARGETS',
+  /** No converter or printer plugin handles a node or model (`Error`). */
+  'TSG_ERR_NO_PLUGIN',
+  /** `fromDot` was given an AST node that has no model (`TypeError`). */
+  'TSG_ERR_UNCONVERTIBLE_AST',
+  /** `fromDot` was given a DOT source without a graph (`Error`). */
+  'TSG_ERR_NO_GRAPH',
+  /** A `GraphBase` subclass created a model without a models context (`Error`). */
+  'TSG_ERR_NO_MODELS_CONTEXT',
+  /** The feature is not available on the current runtime, e.g. the adapter in a browser (`Error`). */
+  'TSG_ERR_UNSUPPORTED_ENVIRONMENT',
+  /** The Graphviz command could not be run or exited with an error (`CommandExecutionError`, an `Error`). */
+  'TSG_ERR_COMMAND_FAILED',
+] as const;
+
+/**
+ * One of {@link ERROR_CODES}.
+ * @group Errors
+ */
+export type ErrorCode = (typeof ERROR_CODES)[number];
+
+/**
+ * An error tagged with a ts-graphviz {@link ErrorCode}.
+ * @group Errors
+ */
+export interface CodedError<C extends ErrorCode = ErrorCode> extends Error {
+  readonly code: C;
 }
 
 /**
- * A model is being built or changed in a way DOT cannot represent, e.g. an
- * edge with fewer than two targets.
+ * Tag an error with a code, in place, and return it.
+ *
+ * @example
+ * throw withCode(new RangeError('value out of range'), 'TSG_ERR_NUL_CHARACTER');
  * @group Errors
  */
-export class InvalidModelError extends TsGraphvizError {}
+export function withCode<E extends Error, C extends ErrorCode>(
+  error: E,
+  code: C,
+): E & CodedError<C> {
+  return Object.assign(error, { code });
+}
 
 /**
- * An attribute value or id cannot be written to DOT, e.g. it contains a null
- * character or an HTML-like label with unbalanced angle brackets.
+ * Whether the value is an error raised by ts-graphviz: an `Error` (judged by
+ * shape, so it works across realms) whose `code` is one of
+ * {@link ERROR_CODES}. Narrow further on `error.code`.
+ *
  * @group Errors
  */
-export class InvalidValueError extends TsGraphvizError {}
-
-/**
- * A conversion between DOT text, AST and models could not be carried out,
- * e.g. no plugin handles a node, or a DOT source holds no graph.
- * @group Errors
- */
-export class ConversionError extends TsGraphvizError {}
-
-/**
- * A configured limit (input size, nesting depth, AST node count, …) was hit
- * while processing untrusted input.
- * @group Errors
- */
-export class ResourceLimitError extends TsGraphvizError {}
-
-/**
- * The current runtime cannot provide the requested feature, e.g. running the
- * `dot` command in a browser.
- * @group Errors
- */
-export class UnsupportedEnvironmentError extends TsGraphvizError {}
+export function isTsGraphvizError(value: unknown): value is CodedError {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as { message?: unknown }).message === 'string' &&
+    typeof (value as { name?: unknown }).name === 'string' &&
+    (ERROR_CODES as readonly unknown[]).includes(
+      (value as { code?: unknown }).code,
+    )
+  );
+}

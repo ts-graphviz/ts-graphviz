@@ -3,9 +3,9 @@ import {
   escString,
   type HTMLLikeValue,
   htmlLike,
-  InvalidValueError,
   isEscString,
   isHTMLLike,
+  withCode,
 } from '@ts-graphviz/common';
 import type { LiteralASTNode } from '../types.js';
 
@@ -33,7 +33,10 @@ import type { LiteralASTNode } from '../types.js';
 /** Graphviz treats a null byte as the end of a string, so it cannot be written. */
 function rejectNul(text: string, what: string): void {
   if (text.includes('\0')) {
-    throw new InvalidValueError(`${what} must not contain a null character`);
+    throw withCode(
+      new RangeError(`${what} must not contain a null character`),
+      'TSG_ERR_NUL_CHARACTER',
+    );
   }
 }
 
@@ -112,8 +115,11 @@ function assertHTMLLikeMarkup(markup: string): void {
     else if (ch === '>' && --depth < 0) break;
   }
   if (depth !== 0) {
-    throw new InvalidValueError(
-      'An HTML-like label must have balanced "<" and ">" characters',
+    throw withCode(
+      new RangeError(
+        'An HTML-like label must have balanced "<" and ">" characters',
+      ),
+      'TSG_ERR_INVALID_HTML_LIKE',
     );
   }
 }

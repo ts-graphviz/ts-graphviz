@@ -1,10 +1,13 @@
-import { TsGraphvizError } from '@ts-graphviz/common';
-
 /**
  * The Graphviz command could not be started or exited with an error.
+ *
+ * An `Error` with `code` `TSG_ERR_COMMAND_FAILED`.
  * @group Errors
  */
-export class CommandExecutionError extends TsGraphvizError {
+export class CommandExecutionError extends Error {
+  override readonly name = 'CommandExecutionError';
+  readonly code = 'TSG_ERR_COMMAND_FAILED';
+
   /**
    * @param command - The command that was run.
    * @param detail - Why it failed.
