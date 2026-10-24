@@ -85,8 +85,15 @@ export async function toStream<T extends Layout>(
   const readers = new Set<ReadableStreamDefaultReader<Uint8Array>>();
   let writer: WritableStreamDefaultWriter<Uint8Array> | undefined;
   let killed = false;
+  let onKilled = () => {};
+  // Resolves when kill() runs; lets the call stop waiting for I/O that
+  // cannot be interrupted (Deno's pipe sink does not observe abort()).
+  const whenKilled = new Promise<void>((resolve) => {
+    onKilled = resolve;
+  });
   const kill = () => {
     killed = true;
+    onKilled();
     try {
       child.kill('SIGKILL');
     } catch {
@@ -146,8 +153,14 @@ export async function toStream<T extends Layout>(
       },
       readers,
     ).catch(onIoError);
-    // None of these reject; the process always exits (SIGKILL on failure).
-    await Promise.all([writing, reading, readingErrors]);
+    // None of these reject. After a kill, do not wait for a write that a
+    // leftover child of the command could keep pending forever; the process
+    // itself always exits (SIGKILL).
+    await Promise.all([
+      Promise.race([writing, whenKilled]),
+      reading,
+      readingErrors,
+    ]);
     const status = await child.status;
 
     if (signal?.aborted) throw signal.reason;
