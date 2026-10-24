@@ -384,9 +384,10 @@ This module provides the following functions.
       }
     `;
 
+    // A Web ReadableStream<Uint8Array> on every runtime.
     const stream = await toStream(dot, { format: 'svg' });
     // Node.js
-    stream.pipe(process.stdout);
+    await stream.pipeTo(Writable.toWeb(process.stdout));
     // Deno
     await stream.pipeTo(Deno.stdout.writable);
     ```
@@ -405,7 +406,7 @@ This module provides the following functions.
     await toFile(dot, './result.svg', { format: 'svg' });
     ```
 
-> **Note** Designed to work with Node.js and Deno, Stream is runtime native.
+> **Note** Designed to work with Node.js and Deno; the stream is a Web `ReadableStream` on both. From `ts-graphviz/adapter`, `toStream` and `toFile` also accept a model instead of a DOT string.
 
 ### `@ts-graphviz/ast` Module 🔢
 
