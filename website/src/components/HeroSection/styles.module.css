@@ -23,15 +23,32 @@
   z-index: 100;
 }
 
-.particles {
+.graph {
   position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  padding: 0;
-  margin: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: -1;
+  color: #ffffff;
+  opacity: 0.45;
+  /* thinner behind the heading and the buttons */
+  -webkit-mask-image: radial-gradient(
+    ellipse 60% 55% at 50% 50%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    #000 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 60% 55% at 50% 50%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    #000 100%
+  );
+  pointer-events: none;
+}
+
+[data-theme="dark"] .graph {
+  opacity: 0.3;
 }
 
 .hero h1 {

@@ -5,6 +5,6 @@
     "baseUrl": "."
   },
   "exclude": [
-    "tools"
+    "scripts"
   ]
 }
