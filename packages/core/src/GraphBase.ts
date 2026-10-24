@@ -163,7 +163,12 @@ export abstract class GraphBase<
     const attributes = args.find(
       (arg): arg is SubgraphAttributesObject => typeof arg === 'object',
     );
-    const subgraph = new this.models.Subgraph(id, attributes);
+    // Keep the argument shape the caller used, so a custom class that
+    // treats the overloads differently sees the same call as before.
+    const subgraph =
+      id === undefined && attributes !== undefined
+        ? new this.models.Subgraph(attributes)
+        : new this.models.Subgraph(id, attributes);
     subgraph.with(this.models);
     this.addSubgraph(subgraph);
     return subgraph;
