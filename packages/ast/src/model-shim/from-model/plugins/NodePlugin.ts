@@ -1,7 +1,7 @@
 import type { NodeModel } from '@ts-graphviz/common';
 import { idToRaw } from '../../literal.js';
 import type { ConvertFromModelPlugin } from '../types.js';
-import { convertAttribute, convertComment } from './utils/index.js';
+import { convertAttribute } from './utils/index.js';
 
 export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {
   match(model) {
@@ -21,20 +21,9 @@ export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {
           [],
         ),
       },
-      [
-        ...(model.attributes.comment
-          ? [
-              convertComment(
-                createElement,
-                model.attributes.comment,
-                context.commentKind,
-              ),
-            ]
-          : []),
-        ...model.attributes.values.map(([key, value]) =>
-          convertAttribute(createElement, key, value),
-        ),
-      ],
+      model.attributes.values.map(([key, value]) =>
+        convertAttribute(createElement, key, value),
+      ),
     );
   },
 };
