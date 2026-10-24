@@ -55,6 +55,16 @@ export async function toStream<T extends Layout>(
       }
     });
 
-    pipeline(Readable.from([dot]), p.stdin);
+    // Feeding stdin can fail on its own (e.g. EPIPE when the command exits
+    // before reading); report it like any other command failure instead of
+    // leaving an unhandled rejection.
+    pipeline(Readable.from([dot]), p.stdin).catch((e: unknown) => {
+      const message = e instanceof Error ? e.message : String(e);
+      reject(
+        new CommandExecutionError(command, `MESSAGE:${message}`, undefined, {
+          cause: e,
+        }),
+      );
+    });
   });
 }

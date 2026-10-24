@@ -148,4 +148,26 @@ describe('toStream (Node adapter)', () => {
       );
     });
   });
+
+  describe('when writing to stdin fails', () => {
+    it('rejects with CommandExecutionError instead of an unhandled rejection', async () => {
+      const p: any = {
+        stdout: new PassThrough(),
+        stderr: new PassThrough(),
+        stdin: new PassThrough(),
+        on: () => {},
+      };
+      spawnMock.mockReturnValue(p);
+      const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
+      pipelineMock.mockRejectedValue(epipe);
+
+      const promise = toStream('dot', { layout: 'dot' });
+      await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
+      await expect(promise).rejects.toMatchObject({
+        command: 'dot',
+        code: 'TSG_ERR_COMMAND_FAILED',
+        cause: epipe,
+      });
+    });
+  });
 });

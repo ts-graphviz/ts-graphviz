@@ -10,7 +10,7 @@ ts-graphviz converts between three representations of a Graphviz graph: DOT text
 | --- | --- | --- |
 | DOT text given to `parse` / `fromDot` | **untrusted** | terminates, bounded memory and stack, fails only with a typed, coded error |
 | strings placed in models and written by `toDot` / `fromModel` | **untrusted** (as data) | written as literal text: cannot terminate the string, add statements or change the graph structure |
-| `escString()` / `htmlLike()` values | **trusted** (caller opts in) | written verbatim; validated only for shape (balanced `<` `>`, no NUL) |
+| `escString()` / `htmlLike()` values | **trusted** (caller opts in) | escape sequences / markup kept; only sanitised so they cannot end the string or label early (NUL rejected) |
 | model classes, plugins, `ModelsContext`, `dotCommand` and other options | **trusted code and configuration** | none; misuse by the application is not a library vulnerability |
 | `@ts-graphviz/adapter` | spawns `dot` with argv, no shell | no shell injection; the DOT it renders is still interpreted by Graphviz |
 | the npm packages themselves | supply chain | SHA-pinned actions, provenance, scorecard, dependency cooldown |
@@ -30,8 +30,8 @@ The parser is the component most exposed to attacker-controlled data: a web serv
   | edge chain length (`a -> b -> c …`) | `maxEdgeChainDepth` | 1000 |
   | AST node count | `maxASTNodes` | 100 000 |
 
-  Exceeding a limit throws before the structure is built. Setting a limit to `0` disables it; do not do that for untrusted input.
-- **Typed, coded errors only.** A DOT source either parses or throws `DotSyntaxError` (a `SyntaxError`, code `TSG_ERR_DOT_SYNTAX`) or another error carrying a `code` from `ERROR_CODES` (`isTsGraphvizError(e)` is true). No other exception escapes, so a caller can catch and classify every failure.
+  The input size is checked (on the UTF-8 encoding) before parsing starts; the other limits stop the parse as soon as they are crossed, so no structure larger than the limit is built. `maxInputSize` and `maxASTNodes` can be disabled with `0`; do not do that for untrusted input. The two depth limits cannot be disabled.
+- **Typed, coded errors only.** For any string, `parse` either returns or throws `DotSyntaxError` (a `SyntaxError`, code `TSG_ERR_DOT_SYNTAX`) or another error carrying a `code` from `ERROR_CODES` (`isTsGraphvizError(e)` is true), so a caller can catch and classify every failure. (Passing a non-string is a type error on the caller's side.)
 - **No code execution, no I/O.** Parsing produces plain objects. Attribute values are stored as text; nothing in the input is evaluated, resolved or fetched.
 - **Faithful text.** A quoted string keeps its raw characters (including raw newlines and Graphviz escape sequences), and an HTML-like label is kept as markup. The parser does not interpret or sanitise them (see boundary 3 for what that means for consumers).
 
@@ -55,7 +55,8 @@ Applications build graphs from their own data: node ids from database keys, labe
 
 - **A plain string is literal text.** Any `string` used as an id, port, attribute key or attribute value is escaped completely when written, so it cannot terminate the quoted string, add statements, or be read as an HTML-like label. `fromDot(toDot(g))` gives the same string back.
 - **Values that must not be written are rejected.** A null character (`RangeError`, code `TSG_ERR_NUL_CHARACTER`) cannot be represented in DOT and is refused instead of dropped.
-- **Numbers and booleans are written bare only in DOT's own numeral form.** Anything JavaScript could print differently (`1e21`, `NaN`, `Infinity`) is written as a string.
+- **Booleans are written bare as `true`/`false`; numbers are written bare only in DOT's own numeral form.** Anything JavaScript could print differently (`1e21`, `NaN`, `Infinity`) is written as a quoted string.
+- **Edge-target shorthand is the one place a string is parsed.** `g.edge(['a:p:n', 'b'])` splits the string on `:` into id, port and compass (as in DOT). An id that itself contains `:` must be given as `{ id: 'a:b' }`; then it is literal text like any other id.
 - **Keys cannot smuggle syntax.** Attribute keys that are DOT keywords or not plain identifiers are quoted; a `__proto__` key from parsed input lands on a null-prototype record and does not change the object's prototype.
 
 **Not promised**
@@ -71,13 +72,13 @@ Applications build graphs from their own data: node ids from database keys, labe
 
 Two value kinds deliberately bypass the literal-text rule because their content *is* DOT syntax:
 
-- `escString(text)` keeps Graphviz escape sequences (`\N`, `\G`, `\l`, …) meaningful. Only `"` is escaped, and the text is sanitised so it cannot end the string early.
+- `escString(text)` keeps Graphviz escape sequences (`\N`, `\G`, `\l`, …) meaningful. When written, the text is sanitised just enough that it cannot end the string early: `"` is escaped, a raw line break becomes `\n`/`\r`, a backslash run that would escape the closing quote is completed, and NUL is rejected. Everything else is written as is.
 - `htmlLike(markup)` writes an HTML-like label `<…>` verbatim.
 
 **Guarantees**
 
 - An `escString` value cannot terminate the quoted string or add statements.
-- An `htmlLike` value must have balanced `<`/`>` and no NUL (`RangeError`, code `TSG_ERR_INVALID_HTML_LIKE`); otherwise Graphviz would end the label early and read the rest as DOT.
+- An `htmlLike` value must have balanced `<`/`>` and no NUL; otherwise Graphviz would end the label early and read the rest as DOT. `htmlLike()` rejects such markup when the value is created (`RangeError`, code `TSG_ERR_INVALID_HTML_LIKE`); a structurally equal value built by hand is checked again when written (`TSG_ERR_INVALID_HTML_LIKE`, or `TSG_ERR_NUL_CHARACTER` for a NUL).
 
 **Not promised**
 
@@ -95,7 +96,7 @@ Two value kinds deliberately bypass the literal-text rule because their content 
 **Guarantees**
 
 - **No shell.** The command is started with `child_process.spawn` (Node.js) or `Deno.Command` with an argument array; nothing is interpolated into a shell string, so option values and DOT text cannot inject commands.
-- **Typed failures.** A command that cannot start or exits non-zero rejects with `CommandExecutionError` (code `TSG_ERR_COMMAND_FAILED`, with `command`, `exit.code`, `exit.signal`, `exit.stderr`); in a browser the functions throw `TSG_ERR_UNSUPPORTED_ENVIRONMENT`.
+- **Typed failures.** A command that cannot start, cannot be written to, or exits non-zero rejects with `CommandExecutionError` (code `TSG_ERR_COMMAND_FAILED`, with `command`, the underlying `cause`, and `exit.code` / `exit.signal` / `exit.stderr` when the process did start); in a browser the functions throw `TSG_ERR_UNSUPPORTED_ENVIRONMENT`.
 - **Web streams on every runtime**, so the output is consumed the same way on Node.js and Deno.
 
 **Not promised, and what the application must do**
