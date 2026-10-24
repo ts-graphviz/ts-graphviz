@@ -38,6 +38,7 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 | `pnpm test` | Run all tests across the monorepo. |
 | `pnpm lint` | Run linting checks on the codebase. |
 | `pnpm knip` | Report unused files, exports and dependencies. |
+| `pnpm check:packages` | Pack every package as `pnpm publish` would and run publint and arethetypeswrong on the tarballs (run `pnpm build` first). |
 | `pnpm changeset` | Create a changeset for version management. |
 
 > [!WARNING]
