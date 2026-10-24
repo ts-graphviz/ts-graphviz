@@ -2,6 +2,7 @@ import { spawn } from 'node:child_process';
 import { PassThrough, Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { CommandExecutionError } from './errors.js';
 import { toStream } from './to-stream.node.js';
 
 // Mock child_process.spawn and pipeline inline to avoid hoisting
@@ -53,11 +54,13 @@ describe('toStream (Node adapter)', () => {
       expect(stdinArg).toBe(stdin);
 
       // Trigger close event
+      stdout.end('<svg/>');
       for (const handler of events.close) handler(0, null);
       const result = await resultPromise;
 
-      // Assert
-      expect(result).toBeInstanceOf(PassThrough);
+      // Assert: a Web ReadableStream carrying stdout
+      expect(result).toBeInstanceOf(ReadableStream);
+      expect(await new Response(result).text()).toBe('<svg/>');
     });
   });
 
@@ -90,6 +93,11 @@ describe('toStream (Node adapter)', () => {
 
       // Assert
       await expect(promise).rejects.toThrow('Command "dot" failed.');
+      await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
+      await expect(promise).rejects.toMatchObject({
+        command: 'dot',
+        exit: { code: 1, signal: 'SIGTERM', stderr: 'error occurred' },
+      });
       await expect(promise).rejects.toThrow('CODE: 1');
       await expect(promise).rejects.toThrow('SIGNAL: SIGTERM');
       await expect(promise).rejects.toThrow('MESSAGE: error occurred');
@@ -122,6 +130,8 @@ describe('toStream (Node adapter)', () => {
 
       // Assert
       await expect(promise).rejects.toThrow('spawn failed');
+      await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
+      await expect(promise).rejects.toMatchObject({ cause: error });
     });
   });
 

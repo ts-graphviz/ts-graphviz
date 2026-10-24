@@ -8,11 +8,15 @@ vi.mock('./to-stream.node.js', () => ({
 vi.mock('node:fs', () => ({
   createWriteStream: vi.fn().mockReturnValue('writeStream'),
 }));
+vi.mock('node:stream', () => ({
+  Readable: { fromWeb: vi.fn().mockReturnValue('readable') },
+}));
 vi.mock('node:stream/promises', () => ({
   pipeline: vi.fn().mockResolvedValue(undefined),
 }));
 
 import { createWriteStream } from 'node:fs';
+import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 // Import after mocking
 import { toFile } from './to-file.node.js';
@@ -27,14 +31,15 @@ describe('toFile (Node adapter)', () => {
     await toFile('dot input', '/path/output', { layout: 'dot' });
     expect(toStream).toHaveBeenCalledWith('dot input', { layout: 'dot' });
     expect(createWriteStream).toHaveBeenCalledWith('/path/output');
-    expect(pipeline).toHaveBeenCalledWith('stream', 'writeStream');
+    expect(Readable.fromWeb).toHaveBeenCalledWith('stream');
+    expect(pipeline).toHaveBeenCalledWith('readable', 'writeStream');
   });
 
   it('should use default options when options not provided', async () => {
     await toFile('dot input', '/path/output');
     expect(toStream).toHaveBeenCalledWith('dot input', undefined);
     expect(createWriteStream).toHaveBeenCalledWith('/path/output');
-    expect(pipeline).toHaveBeenCalledWith('stream', 'writeStream');
+    expect(pipeline).toHaveBeenCalledWith('readable', 'writeStream');
   });
 
   it('should propagate error when toStream rejects', async () => {

@@ -2,15 +2,23 @@ import { spawn } from 'node:child_process';
 import { PassThrough, Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { createCommandAndArgs } from './create-command-and-args.js';
+import { CommandExecutionError } from './errors.js';
 import type { Layout, Options } from './types.js';
 
 /**
- * Execute the Graphviz dot command and make a Stream of the results.
+ * Execute the Graphviz dot command and make a Web `ReadableStream` of the
+ * results, as on every other runtime.
+ *
+ * @param dot - The DOT source.
+ * @param options - Layout, output format and the other options of the command.
+ * @returns The output of the command as a stream of bytes.
+ * @throws {CommandExecutionError} when the command cannot be started or exits
+ * with a non-zero code.
  */
 export async function toStream<T extends Layout>(
   dot: string,
   options?: Options<T>,
-): Promise<NodeJS.ReadableStream> {
+): Promise<ReadableStream<Uint8Array>> {
   const [command, args] = createCommandAndArgs(options ?? {});
   return new Promise(function toStreamInternal(resolve, reject) {
     const p = spawn(command, args, { stdio: 'pipe' });
@@ -18,7 +26,7 @@ export async function toStream<T extends Layout>(
     // error handling
     p.on('error', (e) => {
       reject(
-        new Error(`Command "${command}" failed.\nMESSAGE:${e.message}`, {
+        new CommandExecutionError(command, `MESSAGE:${e.message}`, undefined, {
           cause: e,
         }),
       );
@@ -32,14 +40,16 @@ export async function toStream<T extends Layout>(
     const dist = p.stdout.pipe(new PassThrough());
     p.on('close', async (code, signal) => {
       if (code === 0) {
-        resolve(dist);
+        resolve(Readable.toWeb(dist) as ReadableStream<Uint8Array>);
       } else {
-        const message = Buffer.concat(
+        const stderr = Buffer.concat(
           stderrChunks as ReadonlyArray<Uint8Array>,
         ).toString();
         reject(
-          new Error(
-            `Command "${command}" failed.\nCODE: ${code}\nSIGNAL: ${signal}\nMESSAGE: ${message}`,
+          new CommandExecutionError(
+            command,
+            `CODE: ${code}\nSIGNAL: ${signal}\nMESSAGE: ${stderr}`,
+            { code, signal, stderr },
           ),
         );
       }

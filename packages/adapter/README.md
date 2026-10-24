@@ -52,7 +52,7 @@ The adapter provides two main functions for working with DOT language strings:
 
 ### `toStream`
 
-The `toStream` function converts a DOT language string to a readable stream of the specified output format.
+The `toStream` function converts a DOT language string to a Web `ReadableStream<Uint8Array>` of the specified output format, on Node.js and Deno alike.
 
 
 ```ts
@@ -66,9 +66,10 @@ const dot = `
   }
 `;
 
+// A Web ReadableStream<Uint8Array> on every runtime.
 const stream = await toStream(dot, { format: 'svg' });
 // Node.js
-stream.pipe(process.stdout);
+await stream.pipeTo(Writable.toWeb(process.stdout));
 // Deno
 await stream.pipeTo(Deno.stdout.writable);
 ```

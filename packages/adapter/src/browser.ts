@@ -2,7 +2,9 @@
  * @module @ts-graphviz/adapter
  */
 import { UnsupportedEnvironmentError } from '@ts-graphviz/common';
-export type Options = any;
+import type { Layout, Options } from './types.js';
+
+export type * from './types.js';
 
 export const ERROR_MESSAGE = `@ts-graphviz/adapter cannot be used in browser environments.
 
@@ -16,14 +18,25 @@ Learn more: https://github.com/ts-graphviz/ts-graphviz`;
 
 /**
  * Execute the Graphviz dot command and make a Stream of the results.
+ *
+ * Not available in browsers: always throws {@link UnsupportedEnvironmentError}.
  */
-export function toStream(_dot: string, _options?: Options): never {
+export function toStream<T extends Layout>(
+  _dot: string,
+  _options?: Options<T>,
+): Promise<ReadableStream<Uint8Array>> {
   throw new UnsupportedEnvironmentError(ERROR_MESSAGE);
 }
 
 /**
  * Execute the Graphviz dot command and output the results to a file.
+ *
+ * Not available in browsers: always throws {@link UnsupportedEnvironmentError}.
  */
-export function toFile(_dot: string, _path: string, _options?: Options): never {
+export function toFile<T extends Layout>(
+  _dot: string,
+  _path: string,
+  _options?: Options<T>,
+): Promise<void> {
   throw new UnsupportedEnvironmentError(ERROR_MESSAGE);
 }
