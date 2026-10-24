@@ -1,0 +1,121 @@
+/* courtesy Ian Darwin and Geoff Collyer, Softquad Inc. */
+digraph unix {
+	size="6,6";
+	node [color=lightblue2, style=filled];
+	"5th Edition" -> "6th Edition";
+	"5th Edition" -> "PWB 1.0";
+	"6th Edition" -> "LSX";
+	"6th Edition" -> "1 BSD";
+	"6th Edition" -> "Mini Unix";
+	"6th Edition" -> "Wollongong";
+	"6th Edition" -> "Interdata";
+	"Interdata" -> "Unix/TS 3.0";
+	"Interdata" -> "PWB 2.0";
+	"Interdata" -> "7th Edition";
+	"7th Edition" -> "8th Edition";
+	"7th Edition" -> "32V";
+	"7th Edition" -> "V7M";
+	"7th Edition" -> "Ultrix-11";
+	"7th Edition" -> "Xenix";
+	"7th Edition" -> "UniPlus+";
+	"V7M" -> "Ultrix-11";
+	"8th Edition" -> "9th Edition";
+	"1 BSD" -> "2 BSD";
+	"2 BSD" -> "2.8 BSD";
+	"2.8 BSD" -> "Ultrix-11";
+	"2.8 BSD" -> "2.9 BSD";
+	"32V" -> "3 BSD";
+	"3 BSD" -> "4 BSD";
+	"4 BSD" -> "4.1 te,
+			fixedsize=true,
+			height=0.6,
+			row=func,
+			width=2];
+		system -> system_		 [arrowhead="",
+			color="#e27dd6ff",
+			row=func,
+			style="filled,setlinewidth(6)"];
+		SCI		 [color="#e27dd6ff",
+			fillcolor="			fillcolor="#777777",
+			fontcolor=white,
+			fontsize=20,
+			label="network:\locationEthernet, WiFi ...",
+			row=chip];
+		netif -> net_hw		 [color="#61c2c5",
+			style="filled,setlinewidth(6)"];
+		NFS		 [color="#8383cc",
+			fillcolor="#91b5c9",
+			fixedsize=true,
+			height=0.8,
+			label=NFS,
+			shape=octagon,
+			width=1.2];
+		NFS -> log_prot		 [color="#61c2c5",
+			style="filled,setlinewidth(6)",
+			weight=0];
+	}
+	{
+		node [color="#8383cc"];
+		edge [color="#8383cc"];
+		NFS;
+		storage_		 [color="#8383cc",
+			fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		storage		 [color="#8383cc",
+			fillcolor=white,
+			fixedsize=true,
+			height=0.6,
+			row=func,
+			width=2];
+		storage -> storage_		 [arrowhead="",
+			color="#8383cc",
+			row=func,
+			style="filled,setlinewidth(6)"];
+		FS		 [color="#8383cc",
+			fillcolor="#d9e7ee",
+			fixedsize=true,
+			label="files and\ndirectories",
+			row=usr,
+			shape=ellipse];
+		VFS		 [color="#8383cc",
+			fillcolor="#b2d3e4",
+			label="Virtual\nFile System"];
+		FS -> VFS		 [color="#8383cc",
+			style="filled,setlinewidth(6)"];
+		VFS -> NFS		 [color="#8383cc",
+			style="filled,setlinewidth(6)",
+			weight=0];
+		logFS		 [color="#8383cc",
+			fillcolor="#6a9ab1",
+			fontsize=20,
+			label="logical\nfilesystems:\next3, xfs ..."];
+		VFS -> logFS		 [color="#8383cc",
+			style="BSD";
+	"4.1 BSD" -> "4.2 BSD";
+	"4.1 BSD" -> "2.8 BSD";
+	"4.1 BSD" -> "8th Edition";
+	"4.2 BSD" -> "4.3 BSD";
+	"4.2 BSD" -> "Ultrix-32";
+	"PWB 1.0" -> "PWB 1.2";
+	"PWB 1.0" -> "USG 1.0";
+	"PWB 1.2" -> "PWB 2.0";
+	"USG 1.0" -> "CB Unix 1";
+	"USG 1.0" -> "USG 2.0";
+	"CB Unix 1" -> "CB Unix 2";
+	"CB Unix 2" -> "CB Unix 3";
+	"CB Unix 3" -> "Unix/TS++";
+	"CB Unix 3" -> "PDP-11 Sys V";
+	"USG 2.0" -> "USG 3.0";
+	"USG 3.0" -> "Unix/TS 3.0";
+	"PWB 2.0" -> "Unix/TS 3.0";
+	"Unix/TS 1.0" -> "Unix/TS 3.0";
+	"Unix/TS 3.0" -> "TS 4.0";
+	"Unix/TS++" -> "TS 4.0";
+	"CB Unix 3" -> "TS 4.0";
+	"TS 4.0" -> "System V.0";
+	"System V.0" -> "System V.2";
+	"System V.2" -> "System V.3";
+}

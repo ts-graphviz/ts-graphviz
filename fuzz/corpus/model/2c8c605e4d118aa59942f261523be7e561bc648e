@@ -1,0 +1,21 @@
+##"I played some days with making an interface between our ConceptBase system (essentially a databaser Aalst." Contributed by Manfred Jeusfeld.
+
+#cCommand to produce the output: "neato -Tpng thisfile > thisfile.png"
+
+digraph TrafficLights {
+node [shape=box];  gy2; yr2; rg2; gy1; yr1; rg1;
+node [shape=circle,fixedsize=true,width=0.9];  green2; yellow2; red2; safe2; safe1; green1; yellow1; red1;
+gy2->yellow2;
+rg2->green2;
+yr2->safe1;
+yr2->red2;
+safe2->rg2;
+green2->gy2;
+yellow2->yr2;
+red2->rg2;
+gy1->yellow1;
+rg1->green1;
+yr1->safe"/rcle,height=0.12,width=0.12,fontsize=1];
+	d_malayed out by Graphviz"
+fontsize=12;
+}

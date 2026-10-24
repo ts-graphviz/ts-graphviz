@@ -1,0 +1,21 @@
+## "It encodes the so-called philosophers dilemma.  Neato pretty much approximates the way how humans would layout the graph." Contributed by Mng thisfile > thisfile.png"
+
+
+digraph PhiloDilemma {
+layout=neato
+node [shape=box];  bec1; rel3; bec2; rel2; acq2; acq3; bec1; rel1; acq1;
+node lemma {
+layout=neato
+node [shape=box];  bec3; rel3; bec2; rel2; acq2; acq3; bec1; rel1; acq1;
+1; ea1;
+ri3->acq2;
+ri3->acq3;
+hu3->acq3;
+bec3->hu3;
+th3->bec3;
+rel3->th3;
+rel3->ri3;
+ea3->rel3;
+acq3racted from ConceptBase and layed out by Graphviz "
+fontsize=12;
+}

@@ -1,0 +1,7 @@
+graph G {
+  layout=fdp
+  e
+  subgraph clustepA {
+    a -- b;
+    subgraphclusterC {
+     

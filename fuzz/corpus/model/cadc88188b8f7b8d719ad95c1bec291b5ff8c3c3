@@ -1,0 +1,8 @@
+digraph world {
+size="7,7";
+	{rank=same; 30;}
+T24;
+	2 -> strict6 ; 17 ; T1 ; 18}
+	10 -> { 11 ; 14 ; T1 ; 13; 12;}
+	31
+}

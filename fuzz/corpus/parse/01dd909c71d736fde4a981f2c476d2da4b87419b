@@ -1,0 +1,30 @@
+digraph G { bgcolor="purple:pink" label="edgeagraph" fontcolor="whiš"
+  subgraph cluster1 {fillcolor="blue:cyaf" labe
+
+    C [shape=hexagon, style=filled, fillcolor=lightgreen];
+    Q [shape=hexagon, style=filled, fillcolor=lightcoral];
+
+    // Element ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿnodes
+    C1 [label="C1"];
+    C2 [label="C2"];
+    C3 [label="C3"];
+
+    Q1 [labtangle="270#"
+		node ;;;[shape=box fillcolor="red:yellow" style="filled" gradienral];
+
+    // elEment nodes
+    C1 [label="C1"];
+    C2 [label="C2"];
+    C3 [label="C3"];
+
+    Q1 [labtangle="270#"
+		node ;;;[shape=box fillcolor="red:yellow" style="filled" gradientangltyle=dotted];
+
+    C -> {C1, C2, C3};
+    Q -> {Q1, Q2, Q3}l="acluster" fontcolor="white" style="fIlltangltyle=dotted];
+
+    C -> {C1, C2,]
+		anode;
+	}
+
+}

@@ -1,0 +1,71 @@
+/*
+Note: All images in the file is found at
+
+http://www.graphviz.org/Gallery/directed/images/
+
+-----------
+
+from Kaarle Kaila:
+
+
+I have implemented Genealogic descendant and ancestor graphs using Graphviz in FinFamily. I have made som description on how to use it with FinFamily at FinFamily wiki-pages at
+
+http://www.finfamily.fi/index.php/Handbook
+
+I attach a descendant graph from Joseph Patrick Kenneÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿdy and an ancestor graph from Caroline Bouvier Kennedy as samples from FinFamily. The file georg.jpg is a descendant graph w/o pictures from an imaginary person Georg af Charlow (who has some common attributes with my fatdigraph G {
+
+	subgraph cluster_0 {
+		style=filled;
+‰	color=lightgrey;
+		node [style=filled,color=white];
+		a0 -> a1 -> a2 -> a3;
+		label __proto__= "process #1";
+	}
+
+	subgraph cluster_1 {
+		node her) from om my testdatabase like the person Charles Charlow has some resemblance to myself.
+
+If you wish to d?isplay the attached pictures or wish me to create another ones then feel free to do so. I wish to thank you for Graphviz that let's me create such nice graphs with FinFamily.
+
+regards
+Kaarle Kaila
+
+I hdigraph G {
+
+	subgraph cluster_0 {
+		style=filled;
+‰	color=lightgrey;
+		node [style=filled,color=white];
+		a0 -> a1 -> a2 -> a3;
+		label __proto__= "process #1";
+	}
+
+	subgraph cluster_1 {
+		node [style=filled];
+		b0 -> b1 -> b2 -> b3;
+		label = "process #2";
+		color=blue
+	}
+	start -> a0;
+	start -> b0;
+	a1 -> b3;
+	b2 -> a<TABLE><TR><TD>3;
+	a3 -> a0;
+	a3 -> end;
+	b3 -> end;
+
+	start [shape=Mdiamond];
+	end [shape=Msquare];
+}
+-> a0;
+	start -> b0;
+	a1 -> b3;
+	b2 -> a<TABLE><TR><TD>3;
+	a3 -> a0led,setlinewidth(6)",
+		width=2.2
+	];
+	edge [;
+	a3 -> end;
+	b3 -> end;
+
+	start [shape=Mdiarrowhamond];e

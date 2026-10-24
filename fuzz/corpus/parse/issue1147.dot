@@ -1,0 +1,31 @@
+digraph G {
+    node [shape=box, style=rounded];
+
+    P [label="P"];
+
+    C [shape=hexagon, style=filled, fillcolor=lightgreen];
+    Q [shape=hexagon, style=filled, fillcolor=lightcoral];
+
+    // Element nodes
+    C1 [label="C1"];
+    C2 [label="C2"];
+    C3 [label="C3"];
+
+    Q1 [label="Q1"];
+    Q2 [label="Q2"];
+    Q3 [label="Q3"];
+
+    P -> {C, Q} [style=dotted];
+
+    C -> {C1, C2, C3};
+    Q -> {Q1, Q2, Q3};
+
+    C1 -> {Q2, Q3};
+    C2 -> {Q3};
+    C3 -> {Q1, Q3};
+
+    // Invisible edges for layout
+    {rank=source; C Q}
+    {rank=same; C1 C2 C3}
+    {rank=same; Q1 Q2 Q3}
+}

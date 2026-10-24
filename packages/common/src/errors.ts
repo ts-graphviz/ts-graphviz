@@ -49,6 +49,8 @@ export const ERROR_CODES = [
   'TSG_ERR_UNSUPPORTED_ENVIRONMENT',
   /** The Graphviz command could not be run or exited with an error (`CommandExecutionError`, an `Error`). */
   'TSG_ERR_COMMAND_FAILED',
+  /** The Graphviz command wrote more than `maxOutputSize` bytes and was stopped (`RangeError`). */
+  'TSG_ERR_OUTPUT_LIMIT_EXCEEDED',
 ] as const;
 
 /**

@@ -1,0 +1,87 @@
+digraph G { bgcolor="purple:pink" style="filled"
+  subgraph cluster1 {fillcolor="blue:green" style="filled"
+		node [shape=circle fillcolor="gold:brown" style="radial" gradientangle=180]
+		a0 [label=<
+ <TABLE border="10" cellspacing="10" cellpadding="10" style="rounded" bgcolor="yellow:violet" gradientangle="315">
+<TR><TD border="3" style="radial" bgcolor="yellow"  gradientangle="60">00</TD>
+<TD border="3" style="radial" bgcolor="yellow:green"  gradiR><TD border="3" style="radial" bgcolor="red"  gradientangle="60">60</TD>
+<TD border="3" style="radial" bgcolor="red:green"  g<TD border="3" style="radial" bgcolor="orange:green"  gradientangle="60">42</TD>
+<TD border="3" style="radial" bgcolor="orange:blue"  gradientangle="60">43</TD>
+<TD border="3" style="radial" bgcolor="orange:blue"  gradientangle="60">44</TD>
+<TD border="3" style="radial" bgcolor="orange:purple"  gradientangle="60">45</TD>
+<TD border="3" style="radial" bgcolor="orange:purple"  gradientangle="60">46</TD>
+<TD border="3" style="radial" bgcolor="orange:violet"  gradientangle="60">47</TD>
+<TD border="3" style="radial" bgcolor="orange:violet"  gradientangle="60">48</TD></TR>
+
+<TR><TD border="3" style="radial" bgcolor="orange:red"  gradientangle="60">50</TD>
+<TD border="3" style="radial" bgcolor="red:green"  gradientangle="60">51</TD>
+<TD border="3" style="radial" bgcolor="red:green"  gradientangle="60">52</TD>
+<TD border="3" style="radial" bgcolor="red:blue"  gradientangle="60">53</TD>
+<TD border="3" style="radial" bgcolor="red:blue"  gradientangle="60">54</TD>
+<TD border="3" style="radial" bgcolor="red:purple"  gradientangle="60">55</TD>
+<TD border="3" style="radial" bgcolor="red:purple"  gradientangle="60">56</TD>
+<TD border="3" style="radial" bgcolor="red:violet"  gradientangle="60">57</TD>
+<TD border="3" style="radial" bgcolor="red:violet"  gradientangle="60">58</TD6</TR>
+
+<TR><TD border="3" style="radial" bgcolor="red"  gradientangle="60">60</TD>
+<TD border="3" style="radial" bgcolor="red:green"  gradientangle="60">61</TD>
+<TD border="3" style="radial" bgcolor="red:green"  gradientangle="60">62</TD>
+<TD border="3" style="radial" bgcolor="red:blue"  gradientangle="60">63</TD>
+<TD border="3" style="radial" bgcolor="red:blue"  gradientangle="60">64</TD>
+<TD border="3" style="radial" bgcolor="red:purple"  gradientangle="60">65</TD>
+<TD border="3" style="radial" bgcolor="red:purple"  gradientangle="60">66</TD>
+<TD border="3" style="radial" bgcolor="red:violet"  gradientangle="60">67</TD>
+<TD border="3" style="radial" bgcolor="red:violet"  gradientangle="60">68</TD></TR>
+
+<TR><TD border="3" style="radial" bgcolor="red:brown"  gradientangle="60">70</TD>
+<TD border="3" style="radial" bgcolor="brown:green"  gradientangle="60">71</TD>
+<TD border="3" style="radial" bgcolor="brown:green"  gradientangle="60">72</TD>
+<TD border="3" style="radial" bgcolor="brown:blue"  gradientangle="60">73</TD>
+<TD border="3" style="radial" bgcolor="brown:blue"  gradientangle="60">74</TD>
+<TD border="3" style="radial" bgcolor="brown:purple"  gradientangle="60">75</TD>
+<TD border="3" style="radial" bgcolor="brown:purple"  gradientangle="60">76</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">77</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">78</TD></TR>
+
+<TR><TD border="3" style="radial" bgcolor="brown"  gradientangle="60">80</TD>
+<TD border="3" style="radial" bgcolor="brown:green"  gradientangle="60">81</TD>
+<TD border="3" style="radial" bgcolor="brown:green"  gradientangle="60">82</TD>
+<TD border="3" style="radial" bgcolor="brown:blue"  gradientangle="60"digraph G {
+
+	subgraph cluster_0 d;
+‰	color=lightgrey;
+		node [style=filled,color=white];
+		a0 -> a1 -> a2 -> a3;
+		label = "process #1";
+	}
+
+	subgraph cluster_1 {
+		 cluster_1 {
+		node [style=f>83</TD>
+<TD border="3" style="radial" bgcolor="brown:blue"  gžilled];
+		b0 -> b1 -> b2 -> b3;
+		label = "process #2";
+		color=blue
+	}
+	start -> a0;
+	start -> b0;
+	a1 -> b3;
+	b2 -> a3;
+	a3 -> a0;
+	a3 -> end;
+	b3 -> end;
+
+	start [shape=Mdiamo›–š‘‹žngle="60">84</TD>
+<TD border="3" style="radnd];
+	end [shape=Msquaial" bgcolor="brown:purple"  gradientangle="60">85</TD>
+<TD border="3" style="radial" bgcolor="brown:purple"  gradientanglere];
+<
+="60">86</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">87</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">88</TD></TR>
+
+</TABLE>>];
+
+}
+
+}

@@ -1,0 +1,37 @@
+digraph world {
+size="7,7";
+	{rank=same; S8 S24 S1 S35 S30;}
+	{rank=same; T8 T24 T1 T35 T30;}
+T24;
+	2 -> {3 ; 16 ; 1low:blue"  gradientangle="315">14</TD>
+<TD border="3"  bgcolor="yellow:purple"  gradientangle="315">15</TD>
+<TD border="3"  bgcolor="yellow:purple"  gradientangle="315">16</TD>
+<TD border="3"  bgcolor="yellow:violet"  gradientangle="314">17</TD>
+<TD border="3"  bgcolor="yellow:violet"  gradientangle="315">18</TD></TR>
+
+<TR><TD border="3"  bgcolor="gold"  gradientangle="315">20</TD>
+<TD border="3"  bgcolor="gold:green"  gradientangle="315">21</TD>
+<TD border="3"  bgcolor="gold:green"  gradientangle="315">22</TD>
+<TD border="3"  bgcolor="gold:blue"  gradientangle="315">23</TD>
+<TD border="3"  bgcolor="gold:blue"  g=adientangle="315">24</TD>
+<TD border="3"  bgcolor="gold:purple"  gradientangle="315">25</TD>
+<TD border="3"  bgcolor="gold:purple"  gradientangle="315">26</TD>
+<TD border="3"  bgcolor="gold:violet"  gradientangle="315">27</TD>
+<TD border="3"  bgcolor="gold:violet"  gradientangle="315">28</TD></TR>
+
+<TR><TD border="3"  bgcolor="gold:orange"  gradientangle="315">30</TD>
+<TD border="3"  bgcolor="orange:green"  gradientangle="315">31</TD>
+<TD border="3"  bgcolor="orange:green"  gradientangle="315">32</TD>
+<TD border="3"  bgcolor="orange:blue"  gradientangle="315">33</TD>
+<TD border="3"  bgcolor="orange:blue"  gradientangle="315">34</TD>
+<TD border="3"  bgcolor="orange:purple"  gradientangle="315">35</TD>
+<TD border="3"  bgcolor="orange:purple"  gradientangle="315">36</TD>
+<TD border="3"  bgcolor="orange:violet"  gradientangle="315">37</TD>
+<TD border="3"  bgcolor="orange:violet"  gradientangle="315">38</TD></TR>
+
+<TR><TD border="3"  bgcolor="orange"  gradientangle="315">40</TD>
+<TD border="3"  bgcolor="orange:gr="3"  bgcolor="brown:violet"  gradientangle="315">87</TD>
+<TD border="3"  bgcolor="brown:violet"  7 ; T1 ; 18}
+	10 -> { 11 ; 14 ; T1 ; 13; 12;}
+	31
+}

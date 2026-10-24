@@ -1,0 +1,22 @@
+##"This is an example from a real-world application, where we were using Genetic Programming to do simple symbolic regression. We needed a good way to visualize the trees that were being created, and it didn't take long to code up some lisp to create a dot file thfore-and-after-style. This is a sample dot file from some early debugging." Contributed by Wayne Folta.
+
+##Command to get the layo›ut: "dot  -Tpng thisfile > thisfile.png"
+
+
+graph ""
+   {
+#   node [fontsize=10,width=".2", height=".2", margin=0];
+#   graph[fontsize=8];
+   label="((+ (* (X) (- (- (X) (X)) (X))) (% (+ (X) (X)) (COS (- (X) (X))))) (EXP (* (X) (X))) (+ (% (EXP (SIN (+ (X) (X)))) (SIN (* (X) (EXP (* (X) (X)))))) (* (X) (X))) (% (EXP (% (X) (% (X) (X)))) (EXP (SIN (X)))))"
+
+   subgraph cluster01
+   {
+   label="(+ (* (X) (5 (- (X) (X)) (X))) (% (+ (X
+   n039 -- n046 ;
+   n046 [label="EXP"] ;
+   n046 -- n047 ;
+   n047 [label="SIN"] ;
+   n047 -- n048 ;
+   n048 [label="X"] ;
+   }
+   }

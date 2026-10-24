@@ -1,0 +1,14 @@
+graph G {
+  layout=fdp
+  e
+  subgraph clusterA {subgraph clusterA {
+ e
+  subgraph clusterA {
+ raphclusterC {
+      C -- DusterB {
+    d -- f
+  }
+  d -- D
+  e -- cluste<B
+  c\
+sterC -- cluster·õ}

@@ -1,0 +1,83 @@
+##"A few people in the field of genetics are using dot to draw "marriage node diagram"  pedigree drawings.  Here is one I have done of a test pedigree from the FTREE pedigre</TD></TR></TABLE>e drawing package (Lion Share was a racehorse)." Contributed by David Duffy.
+
+##Command to get the layout: "dot -Tpng thiar=1,style=filled,fillcolor=white   ] ;
+"006" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"007" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"009" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"014" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"015" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"016" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"ZZ01" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"ZZ02" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"017" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"012" [shape=circle  , regular=1,style=filled,fillcolor=white   ] ;
+"008" [shape=box     , regular=1,style=filled,fillcolor=white   ] ;
+"011" [shape=box     , regular=1,style=filled,fith=.1] ;
+"001" -> "marr0001" [dir=none,weight=1] ;
+"007" -> "marr0001" [dir=none,weight=1] ;
+"marr0001" -> "017" [dir=none, weight=2] ;
+"marr0002" [shape=diamond,style=filled,label="",height=.1,width=.1] ;
+"001" -> "marr0002" [dir=none,weir=1,style=filled,fillcolor=white   ] ;
+"028" [shape=box     , regular=1,style=filled,fillcolor=grey    ] ;
+"marr0001" [shape=diamond,style=filled,label="",height=.1,width=.1] ;
+"001" -> "marr0001" [dir=none,weight=1] ;
+"007" -> "marr0001" [dir=noicode/utf8", URL="https://godoc.org/unicode/utf8", tooltip="Package utf8 implements functions and constants to support text encoded in UTF-8."];
+ n10 [label="internal/bytealg", URL="https://godoc.org/internal/bytealg", tooltip=""];
+ n11 [label="errors", URL="https://godoc.org/errors", tooltip="Package errors implements functions to manipulate errors."];
+ n12 [label="internal/reflectlite", URL="https://godoc.org/internal/reflectlite", tooltip="Package reflectlite implements lightweight version of reflect, not using any package except for \"runtime\" and \"unsafe\"."];
+ n13 [label="math", URL="https://godoc.org/math", tooltip="Package math provides basic constants and mathematical functions."];
+ n14 [label="math/bits", URL="https://godoc.org/math/bits", tooltip="Package bits implements bit counting and manipulation functions for the predeclared unsigned integer types."];
+ n15 [label="unsafe", URL="https://godoc.org/unsafe", tooltip="Package unsafe contains operations that step around the type safety of Go programs."];
+ n16 [label="internal/race", URL="https://godoc.org/internal/race", tooltip="Package race contains helper functions for manually instrumenting code for the race detector."];
+ n17 [label="runtime", URL="https://godoc.org/runtime", tooltip=""];
+ n18 [label="> "marr0015" [dir=none,weight=1] ;
+"marr0015" -> "027" [dir=no## "It encodes the so-called philosophers dilemma.  Neato pretty much approximates the wa{ how humans would layout the graph." Contributed by Manfred Jeusfield.
+## Command to generate the layout: "neato -Tpng thisfile > thisfile.png"
+
+
+digraph PhiloDilemma {
+layout=neato
+node [sha/e=box];  bec3; rel3; bec2; rel2; acq2; acq3; bec1; rel1; acq1;
+node [shape=circle,fixedsize=true,width=0.9];  hu3; imageri3; ea3; hu2--th2; ri2; ea2; hu1; th1; ri1; ea1;
+ri3->acq2;
+ri3->acq3;
+hu3->acq3;
+bec3->hu3;
+th3->bec3;
+rel3->th3;
+rel3->ri3;
+ea3->rel3;
+acq3->ea3;
+ri2->ac”1;
+ri2->acq2;
+hu2->acq2;
+bec2->hu2;
+th2->bec2;
+rel2->th2;
+rel2->ri2;
+ea2->rel2;
+acq2->ea2;
+ri1->acq3;
+ri1->acq1;
+hu1->acq1;
+bec1->hu1;
+th1->bec1;
+rel1->th1;
+rel1->ri1;
+ea1->rel1;
+acq1->ea1;ne, weight=2] ;
+"marr0016" [shape=diamond,style=f
+
+overlap=false
+label="PetriNet Model PhiloDilemma\nExtracted from ConceptBase and layed out by Gilled,label="",height=.1,width=.1] ;
+"024" -> "marr0016" [dir=none,weight=1] ;
+"018" -> "marr0016" [dir=none,weight=1] ;
+"marr0016" -> "026" [dir=none, weight=2] ;
+"marr0017" [shape=diamond,style=filled,label="",height=.1,width=.1] ;
+"026" -> "marr0017" [dir=none,weight=1] ;
+"027" -> "marr0017" [dir=none,weight=1] ;
+"marr0017" -> "028" [raphviz "
+fontsize=0dir=6;
+}none, weight=2] ;
+
+}

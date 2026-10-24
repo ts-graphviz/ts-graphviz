@@ -26,7 +26,11 @@ import { join } from 'node:path';
 import fc from 'fast-check';
 import { toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
-import { buildGraph, graphSpec } from '../properties/arbitraries.js';
+import {
+  buildGraph,
+  type GraphSpec,
+  graphSpec,
+} from '../properties/arbitraries.js';
 import { type RootGraphSummary, summarize } from '../properties/summarize.js';
 
 const dotVersion = (() => {
@@ -236,6 +240,21 @@ const sortedMap = (m: Attrs) =>
 const edgeKey = (e: { tail: string; head: string; attributes: Attrs }) =>
   JSON.stringify([e.tail, e.head, sortedMap(e.attributes)]);
 
+/** Every graph, subgraph and node name in a spec (subgraph nodes are bare ids). */
+function names(spec: GraphSpec): string[] {
+  type Sub = GraphSpec['subgraphs'][number];
+  const fromSub = (s: Sub): string[] => [
+    ...(s.id !== undefined ? [s.id] : []),
+    ...s.nodes,
+    ...s.subgraphs.flatMap(fromSub),
+  ];
+  return [
+    ...(spec.id !== undefined ? [spec.id] : []),
+    ...spec.nodes.map((n) => n.id),
+    ...spec.subgraphs.flatMap(fromSub),
+  ];
+}
+
 describe.skipIf(!dotVersion)(
   `[SM-2] differential against ${dotVersion}`,
   () => {
@@ -250,7 +269,7 @@ describe.skipIf(!dotVersion)(
             fc.pre(!text.includes('\\u001e') && !text.includes('\\u001f'));
             // cgraph reserves names starting with '%' for anonymous objects
             // and renames a graph or node called that (`"%"` becomes `%1`).
-            fc.pre(!/"id":"%/.test(text));
+            fc.pre(!names(spec).some((name) => name.startsWith('%')));
 
             const model = buildGraph(spec);
             const source = toDot(model);

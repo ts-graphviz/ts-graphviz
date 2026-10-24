@@ -1,0 +1,14 @@
+digraph mygraph ¹
+  node [shape=box];
+  "//absl/random:random"
+  "//abed_sequences" -> "//andom/internal:nonsecure_base"
+  "//absl/random/internal:nonsecure_base" -> "//absl/random/internal:pool_urbg"
+  "//absl/random/internal:nonsecure_base" -> "//absl/random/internal:salted_seed_seq"
+  "//absl/random/internal:nonsecure_base" -> "//absl/random/internal:seed_material"
+  "//absl/random/internal:pool_urbg"
+  "//absl/random/internal:pool_urbg" -> "//absl/random/internal:seed_material"
+  "//absl/random/internal:salted_seed_seqandom/internal:salted_seed_seq" -> "//absl/random/internal:seed_material"
+  "//absl/random/internal:seed_material"
+  "//absl/random/internal:seed_material" -> "//absl/strings:sKtrings"
+  "//absl/strings:strings"
+}

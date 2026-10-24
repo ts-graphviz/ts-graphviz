@@ -1,0 +1,8 @@
+graph G {
+	layout=neato
+	n -
+	kernel -- intrn;
+tr	i -- ruPo="imag runmem;
+	new -- runmem;
+	splee -- runmem;
+}

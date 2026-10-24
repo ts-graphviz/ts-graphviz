@@ -105,17 +105,38 @@ The `dotCommand` and `library` options are intended to be configured by applicat
 
 **Important**: This library executes external commands using `spawn` (Node.js) or `Deno.Command` (Deno), which do not invoke a shell interpreter. This prevents shell injection attacks through metacharacters (`;`, `` ` ``, `|`, `$`, etc.). However, these options should not be exposed to end-user input.
 
+#### Limiting the Graphviz process
+
+Layout time and output size depend on the DOT source. Bound both when the DOT is not your own:
+
+```ts
+const stream = await toStream(dot, {
+  format: 'svg',
+  // Kill dot after 10 seconds; the call rejects with a TimeoutError.
+  signal: AbortSignal.timeout(10_000),
+  // Kill dot when it writes more than 10 MiB; the call rejects with a
+  // RangeError whose code is TSG_ERR_OUTPUT_LIMIT_EXCEEDED. Default 128 MiB, 0 disables.
+  maxOutputSize: 10 * 1024 * 1024,
+});
+```
+
 #### Processing User-Provided DOT Files
+
+Graphviz has no sandbox. It reads files named in the DOT and can copy them into its output: an EPS file named by `shapefile` or `image` ends up inside `-Tps` output, images named by `image` or `<IMG SRC>` are embedded in raster output, and their paths appear in SVG. URL attributes are written into SVG links, so a `javascript:` URL becomes script when the SVG is served inline.
 
 When rendering DOT files uploaded by users or generated from user input, implement validation before passing them to this library:
 
 **Validation Steps**:
 1. **Syntax validation**: Verify the DOT file is well-formed and parseable
 2. **Attribute filtering**: Check for potentially dangerous attributes that reference file system resources:
-   - `image`, `shapefile` - Can reference arbitrary image files
+   - `image`, `shapefile` - Read arbitrary files; EPS contents are copied into PostScript output
+   - `IMG SRC` inside HTML-like labels - Same as `image`
    - `fontpath`, `fontname` - Can reference font files
    - `imagepath` - Defines search path for images
-3. **Content sanitization**: Consider using a DOT parser to rebuild the graph with only allowed attributes
+   - `stylesheet` - Written into SVG output as a stylesheet reference
+   - `URL`, `href`, `labelURL`, `headURL`, `tailURL`, `edgeURL` and their `*href` forms, and `HREF` in HTML-like labels - Written into SVG links; reject schemes other than `http`/`https`
+   - `layout` - Lets the DOT choose the layout engine
+3. **Content sanitization**: Consider using a DOT parser to rebuild the graph with only allowed attributes, and render the rebuilt text rather than the original (a supported way to do this is planned in [#1681](https://github.com/ts-graphviz/ts-graphviz/issues/1681))
 4. **Sandboxing**: Run Graphviz in a sandboxed environment with restricted file system access when processing untrusted input
 
 **Example Risk Scenario**:

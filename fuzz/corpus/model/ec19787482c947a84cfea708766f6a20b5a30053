@@ -1,0 +1,8 @@
+graph G {
+  layout=QQQQQQQQQQQQfdp
+  e
+  subgraph clustepA {
+    a --true /*
+    s}
+  clusterC -- clusterB
+}

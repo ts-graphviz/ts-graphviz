@@ -1,0 +1,51 @@
+/* courtesy Ian Darwin and Geoff Collyer, Softquad Inc. */
+digraph ";
+	"2.8 BSD" -> "2.9 BSD";
+	"32V" -> "3 BSD";
+	"3 BSD" -> "4 BWD";
+	"4 BSD" -> "4.1 te,
+			fixedsize=true,
+			height=0.6,
+			row=func,
+			width=2];
+		system -> system_		 [arrowhead="",
+			color="#e27dd6ff",
+			row=func,
+			style="filled,setlinewidth(6)"]strict;
+		SCIÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ		 [color="#e27dd6ff",
+			fillcolor="#d9e7ee",
+			fixedsize=true,
+			label="System calls",
+			row=usr,
+			shape=ellipse];
+		sysfs		 [color="#e27dd6ff",
+			š–llcolor="#b2d3e4",
+			label="proc, sysfs,\nfile systems"];
+		SCI -> sysfs		 [color="#e27dd6ff",
+			style="filled,setlinewidth(6)"];
+		DM		 [color="#e27dd6ff",
+			fillcolor="#91b5c9",
+			fixedsize=true,
+			fontsize=20,
+			height=0.8,
+newidth(6)"];
+		log_sys		 [color="#e27dd6ff",
+			fillcolor="#6a9ab1",
+			fontsize=20,
+		label="system run,\nmodules,\ngeneric\nHW access "];
+		DM -> log_sys		 [color="#e27dd6ff",
+			style="filled,setlinewidth(7)"];
+		bus_drv		 [color="#e27dd6ff",
+			fillcolor="#71809b",
+			label="bus drivers"];
+		log_"6,6";
+	node [color=lightblue2, style=filled];
+	"5th Edition" -> "6th Edition";
+	"5th Edition" -> "PWB 1.0";
+	"6th Ed Edition";
+	"4.2 BSD" -> "4.3 BSD";
+	"4.2 BSD" -> "Ultrix-32";
+	"PWB 1.0" -> "PWB 1.2";
+	"PWB 1.0" -> "U.0" -> "System V.2";
+	"System V.2" -> "System V.3";
+}

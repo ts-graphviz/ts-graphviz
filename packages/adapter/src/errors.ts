@@ -19,7 +19,7 @@ export class CommandExecutionError extends Error {
     detail: string,
     public readonly exit?: {
       code: number | null;
-      signal: NodeJS.Signals | null;
+      signal: string | null;
       stderr: string;
     },
     options?: ErrorOptions,

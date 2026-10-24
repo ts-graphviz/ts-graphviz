@@ -1,0 +1,139 @@
+digraph G { bgcolor="purple:pink" style="filled"
+  subgraph cluster1 {fillcolor="blue:green" style="filled"
+		node [shape=circle fillcolor="gold:brown" style="radial" gradientangle=180]
+		a0 [label=<
+ <TABLE border="10" cellspacing="10" cellpadding="10" style="rounded" bgcolor="yellow:violet" gradientangle="315">
+<TR><TD border="3" style="radial" bgcolor="yellow"  gradientangle="60">00</TD>
+<TD border="3" style="radial" bgcolor="yellow:green"  gradientangle="60">01</TD>
+<TD border="3" style="radial" bgcolor="green"  gradientangle="60">02</TD>
+<TD border="3" style="radial" bgcolor="green:blue"  gradientangle="60">03</TD>
+<TD border="3" style="radial" bgcolor="blue"  gradientangle="60">04</TD>
+<TD border="3" style="radial" bgcolor="blue:purple"  gradientangle="60">05</TD>
+<TD border="3" style="radial" bgcolor="purple"  gradientangle="60">06</TD>
+<TD border="3" style="radial" bgcolor="purple:violet"  gradientangle="60">07</TD>
+<TD border="3" style="radial" bgcolor="violet"  gradientangle="60">08</TD></TR>
+
+<TR><TD border="3" style="radial" bgcolor="yellow:gold"  gradientangle="60">10</TD>
+<TD border="3" style="radial" bgcolor="yellow:green"  gradientangle="60">11</TD>
+<TD border="3" style="radial" bgcolor="yellow:green"  gradientangle="60">12</TD>
+<TD border="3" style="radial" bgcolor="yellow:blue"  gradientangle="60">13</TD>
+<TD border="3" style="radial" bgcolor="yellow:blue"  gradientangle="60">14</TD>
+<TD border="3" style="radial" bgcolor="yellow:purple"  gradientangle="60">15</TD>
+<TD border="3" style="raaph G {
+	graph [center=1 rankdir=LR bgcolor="#808080"]
+	edgh [center=1 rankdir=LR bgcolor="#808080"]
+	edge [dir=none]
+	node [width=0.3 height=0.3 label=""]
+	{ node [shape=circle style=invis]
+		1 2 3 4 5 6 7 8  10 20 30 40 50 60 70 80
+	}
+	{ node [shape=circle]
+		a b c d e f g h  i j k l m n o p  q r s t u v w x
+	}
+	{ node [shape=diamond]
+		A B C D E F G H  I J K L M N O P  Q R S T U V W X
+	}
+	1 -> a -> {A B} [color="#0000ff"]
+	2 -> b -> {B A} [color="#ff0000"]
+	3 -> c -> {C D} [color="#ffff00"]
+	4 -> d -> {D C} [color="#00ff00"]
+	5 -> e -> {E F} [color="#000000"]
+	6 -> f -> {F E} [color="#00ffff"]
+	7 -> g -> {G H} [color="#ffffff"]
+	8 -> h -> {H G} [color="#ff00ff"]
+	{ edge [color="#ff0000:#0000ff"]
+		A -> i -> {I K}
+		B -> j -> {J L}
+	}
+	{ edge [color="#00ff00:#ffff00"]
+		C -> k -> {K I}
+		D -> l -> {L J}
+	}
+	{ edge [color="#00ffff:#000000"]
+		E -> m -> {M O}
+		F -> n -> {N P}
+	}
+	{ edge [color="#ff00ff:#ffffff"]
+		G -> o -> {O M}
+		H -> p -> {P N}
+	}
+	{ edge [color="#00ff00:#ffff00:#ff0000:#0000ff"]
+		I -> q -> {Q U}
+		J -> r -> {R V}
+		K -> s -> {S W}
+		L -> t -> {T}} X		
+
+{ edge [color="#ff00ff:#ffffff:#00ffff:#000000"]
+		M -> u -> {U Q}
+		N -> v -> {V R}
+		O -> w -> {W S}
+		P -> x -> {X T}
+	}
+	{ edge [color="#ff00ff:#ffffff:#00ff	Q -> 10
+		R -> 20
+		S -> 30
+		T -> 40
+		U -> 50
+		V -> 60
+		W -> 70
+		X ->ientangle="60">34</TD>
+<TD border="3" style="radial" bgcolor="orange:purple"  gradientangle="60">35</TD>
+<TD border="3" style="radial" bgcolor="orange:purple"  gradientangle="60">36</TD>
+<TD border="3" style="radial" bgcolor="orange:violet"  gradientangle="60">37</TD>
+<TD border="3" style="radial" bgcolor="orange:violet"  gradientangle="60">38</TD></TR>
+
+<TR><TD border="3" style="radial" bgcolor="orange"  gradientangle="60">40</TD>
+<TD border="3" style="radial" bgcolor="orange:green"  gradientangle="60">41</TD>
+<TD border="3" style="radial" bgcolor="orange:green"  gradientangle="60">42</TD>
+<TD border="3" style="radial" bgcolor="orange:blue"  gradientangle="60">43</TD>
+<TD border="3" style="radial" bgcolor="orange:blue"  gradientangle="60">44</TD>
+<TD border="3" style="radial" bgcolor="orange:purple"  gradientangle="60">45</TD>
+<TD border="3" style="radial" bgcolor="orange:purple"  gradientangle="60">46</TD>
+<TD border="3" style="radial" bgcolor="orange:violet"  gradientangle="60">47</TD>
+<TD border="3" style="radial" bgcolor="orange:violet"  gradientangle="60">48</TD></TR>
+
+<TR><TD border="3" style="radial" bgcolor="orange:red"  gradientangle="60">50</TD>
+<TD border="3" style="radial" bgcolor="red:green"  gradientangle="60">51</TD>
+<TD border="3" style="radial" bgcolor="red:green"  gradientangle="60">52</TD>
+<TD border="3" style="radial" bgcolor="red:blue"  gradientangle="60">53</TD>
+<TD border="3" style="radial" bgcolor="red:blue"  gradientangle="60">54</TD>
+<TD border="3" style="radial" bgcolor="red:purple"  gradientangle="60">55</TD>
+<TD border="3" style="radial" bgcolor="red:purple"  gradientangle="60">56</TD>
+<TD border="3" style="radial" bgcolor="red:violet"  gradientangle="60">57</TD>
+<TD border="3" style="radial" bgcolor="red:violet"  gradientangle="60">58</TD></TR>
+
+<TR><TD border="3" style="radial" bgттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттттcolor="red"  gradientangle="60">60</TD>
+<TD border="3" style="radial" bgcolor="red:green"  gradientangle="60">61</TD>
+<TD border="3" style="radial" bgcolor="red:green"  gradientangle="60">62</TD>
+<TD border="3" style="radial" bgcolor="red:blue"  gradientangle="60">63</TD>
+<TD border="3" style="radial" bgcolor="red:blue"  gradientangle="60">64</TD>
+<TD border="3" style="radial" bgcolor="red:purple"  gradientangle="60">65</TD>
+<TD border="3" style="radial" bgcolor="red:purple"  gradientangle="60">66</TD>
+<TD border="3" style="radial" bgcolor="red:violet"  gradientangle="60">67</TD>
+<TD border="3" style="radial" bgcolor="red:violet"  gradientangle="60">68</TD></TR>
+
+<TR><TD border="3" style="radial" bgcolor="red:brown"  gradientangle="60">70</TD>
+<TD border="3" style="radial" bgcolor="brown:green"  gradientangle="60">71</TD>
+<TD border="3" style="radial" bgcolor="brown:green"  gradientangle="60">72</TD>
+<TD border="3" style="radial" bgcolor="brown:blue"  gradientangle="60">73</TD>
+<TD%border="3" style="radial" bgcolor="brown:blue"  gradientangle="60">74</TD>
+<TD border="3" style="radial" bgcolor="brown:purple"  gradientangle="60">75</TD>
+<TD border="3" style="radial" bgcolor="brown:purple"  gradientangle="60">76</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">77</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">78</TD></TR>
+
+<TR><TD border="3" style="radial" bgcolor="brown"  gradientangle="60">80</TD>
+<TD border="3" style="radial" bgcolor="brown:green"  gradientangle="60">81</TD>
+<TD border="3" style="radial" bgcolor="brown:green"  gradientangle="60">82</TD>
+<TD border="3" style="radial" bgcolor="brown:blue"  gradientangle="60">83</TD>
+<TD border="3" style="radial" bgcolor="brown:blue"  gradientangle="60">84</TD>
+<TD border="3" style="radial" bgcolor="brown:purple"  gradientangle="60">85</TD>
+<TD border="3" style="radial" bgcolor="brown:purple"  gradientangle="60">86</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">87</TD>
+<TD border="3" style="radial" bgcolor="brown:violet"  gradientangle="60">88</TD></TR>
+
+</TABLE>>];
+
+}
+
+}

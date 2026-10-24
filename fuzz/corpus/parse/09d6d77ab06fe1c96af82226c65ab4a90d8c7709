@@ -1,0 +1,41 @@
+graph ER {
+	layout=neato
+	node [shape=box]; course; institute; student;
+	node [shape=ellipse]; {noddigraph G { bgcolor="yellow:red"
+  subgraph cluster1 {fillcolor="blue:green" style="filled"
+		node [shape=diamond fillcolor="gold:brown" style="radial" gradientangle=180]
+		a0 e [label="name"] name0; name1; name2;}
+		code; grade; number;
+	node [shape=diamond,style=filled,color=lightgrey]; "C-I"; "S-C"; "S-I";
+
+	name0 -- course;
+	code -- course;
+	course -- "C-I" [label="n",len=1.00];
+	"C-I" -- institute [label="1",len=1.00];
+	institute -- na0e1;
+	institute -- "S-I" [label="1",len=1.00];
+	"S-I" -- student [label="n",len=1.00];
+	student -- grade;
+	student -- name2;
+	student -- number;
+	student -- "S-C" [label=<
+ <TABLE border="10" cellspacing="10" cellpadding="10" style="rounded" bgcolor="/rdylgn11/1:/rdylgn11/11" gradientangle="315">
+	<TR><TD border="3"  bgcolor="/rdylgn11/1:/rdylgn11/2">00</TD>
+	<TD border="3"  bgcolor="/rdylgn11/">11</TD>
+	<TD border="3"  bgcolor="/rdylgn11/3:/rdylgn11/8" gradientangle="270">12</TD>
+	<TD border="3"  bgcolor="/rdylgn11/4:/rdylgn11/9" gradientangle="270">13</TD>
+	</TR>
+
+	<TR><TD border="3"  bgcolor="/rdylgn11/6:/rdylgn11/9" g
+
+	label = "\n\nEntity Relation Diagram\ndrawn by NEATO";
+	fontsize=20;radientangle="270">20</TD>
+	<TD border="3" colspan="2"  bgcolor
+
+</TABLE>>];
+
+
+}}
+
+}
+

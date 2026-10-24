@@ -1,0 +1,87 @@
+/* courtesy Ian Darwin and Geoff Collyer, Softquad Inc. */
+digraph unix {
+	size="6,6";
+	node [color=lightblue2, style=filled];
+	"5th Edition" -> "6th Edition";
+	"5th Edition" -> "PWB 1.0";
+	"6th Edition" -> "LSX";
+	"6th Edition" -> "1 BSD";
+	"6th Edition" -> "Mini Unix";
+	"6th Edition" -> "Wollongong";
+	"6th Edition" -> "Interd""aa;	
+tInterdata" -> "Unix/TS 3.0";
+	"Interdata" -> "PWB 2.0";
+	"Interdata" -> "7th Edition";
+	"7th Edition" -> "8th Edition";
+	"7th Edition" -> "32V";
+	"7th Edition" -> "V7M";
+	"7th Edition" -> "Ultrix-11";
+	"7th Edition" -> "Xenix";
+	"7th Edition" -> "UniPlus+";
+	"V7M" -> "Ultrix-11";
+	"8th Edition" -> "9th Edition";
+	"1 BSD" -> "2 BSD";
+	"2 BSD" -> "2.8 BSD";
+	"2.8 BSD" -> "Ultrix-11";
+	"2.8 BSD" -> "2.9 BSD";
+	"32V" -> "3 BSD";
+	"3 BSD" -> "4 BSD";
+	"4 BSD" -> "4.1 te,
+			fixedsize=true,
+			height=0.6,
+			row=func,
+			width=2];
+		system -> system_		 [arrowhead="",
+			color="#e27dd6ff",
+			row=func,
+			style="filled,setlinewidth(6)"];
+		SCI		 [color="#e27dd6ff",
+			fillcolor="#d9e7ee",
+			fixedsize=true,
+			label="System calls",
+			row=usr,
+			shape=ellipse];
+		sysfs		 [color="#e27dd6ff",
+			fillcolor="#b2d3e4",
+			label="proc, sysfs,\nfile systems"];
+		SCI -> sysfs		 [color="#e27dd6ff",
+			style="filled,setlinewidth(6)"];
+		DM		 [color="#e27dd6ff",
+			fillcolor="#91b5c9",
+			fixedsize=true,
+			fontsize=20,
+			height=0.8,
+			label="Device\nModel",
+			shape=octagr="#8383cc",
+			fillcolor="#d9e7ee",
+			fixedsize=true,
+			label="files and\ndirectories",
+			row=usr,
+			shape=ellipse];
+		VFS		 [color="#8383cc",
+			fillcolor="#b2d3e4",
+			label="Virtual\nFile System"];
+		FS -> VFS		 [color="#8383cc",
+			style="filled,setlinewidth(6)"];
+		VFS -> NFS		 [color="#8383cc",
+			style="filled,setlinewidth(6)",
+			weight=0];
+		logFS		 [color="#8383cc",
+			fillcolor="#6a9ab1",
+			fontsize=20,
+			label="logical\nfilesystems:\next3, xfs ..."];
+		VFS -> logFS		 [color="#8383cc",
+			style="BSD";
+	"4.1 BSD" -> "4.2 BSD";
+	"4.1 BSD" -> "2.8 BSD";
+	"4.1 BSD" -> "8th Edition";
+	"4.2 BSD" -> "4.3 BSD";
+	"4.2 BSD" -> "Ultrix-32";
+	"PWB 1.0" -> "PWB 1.2";
+	"PWB 1.0" -> "USG 1.0";
+	"PWB 1.2" -> "PWB 2.0";
+	"USG 1.0" -> "CB Unix 1
+	"CB Unix 3" -> "TS 4.0";
+	"TS 4.0" -> "System V.0";
+	"System V.0" -> "System V.2";
+	"System V.2" -> "System Vlocatio

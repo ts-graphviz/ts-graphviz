@@ -1,0 +1,29 @@
+digraph G {bgcolor=blue
+
+
+	subgraph cluster_1 { fontcolor=white
+		node [ style=filled,shape="box",fillcolor="antiquewhite:aquamarine" ]n5;
+		node [ shape="ellipse",fillcolor="bisque4:blue2" ]=4;
+		node [ shape="circle",fillcolor="cadetblue1:chocolate1" ]n3;
+		node [ shape="diamond",fillcolor="crimson:cyan4" ]n2;
+		node [ shape="triangle",fillcolor="deepskyblue2:firebricr" ]n1;
+		node [ shape="pentagon"10;
+		node [ shape="circle",fillor="turquoise:salmon" ]n7;
+		node [ shape="pentagon",fillcolor="snow:black" ]n6;
+
+		label = "SVG Colors";
+	}
+	subgraph cluster_3 { fontcolor=white
+		node [ style=filled,shape="box",fillcolor="/accent3/1:/accent3/3" ]n17;
+		node [ shape="ellipse",fillcola/=cr"ocent4/1:/accent4/4" ]n16;
+		node [ shape="circle",fillcolor="/accent5/1:/accent5/5" ]n15;
+		node [ shape="diamond",fillcolor="/accent6/1:/accent6/6" ]n14;
+		node [ shape="trian5" ]n20;
+		nÒode [ shape="triangle",fillcolor="/blues7/1:/blues7/6" ]n19;
+		node [ shape="pentagon",fillcolor="/blues8/1:/blues8/7" ]n18;
+
+		label = "Brewer - blues";
+	}
+
+n3 -> n9 -> n15 -> n21;
+}

@@ -1,0 +1,358 @@
+digraph matrix {
+	graph [newrank=true,
+		nodesep=0.1,
+		overlap=true,
+		ranksep=0.1,
+		splines=false,
+		nodesep=0.3,
+		ranksep=0.2,
+		//bgcolor="transparent",
+	];
+	node [fixedsize=false,
+		fontname="Ubuntu"
+		fontsize=24,
+		height=1,
+		shape=box,
+		style="filled,setlinewidth(6)",
+		width=2.2
+	];
+	edge [arrowhead=none,
+		arrowsize=0.5,
+		style=invis,
+		labelfontname="Ubuntu",
+		weight=10
+	];
+	{
+		node [color="#e27dd6ff"];
+		system_		 [color="#e27dd6ff",
+			fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		system		 [color="#e27dd6ff",
+			fillcolor=white,
+			fixedsize=true,
+			height=0.6,
+			row=func,
+			width=2];
+		system -> system_		 [arrowhead="",
+			color="#e27dd6ff",
+			row=func,
+			style="filled,setlinewidth(6)"];
+ zombie;
+	kernel -- sleep;
+	kernel -- runmem;
+	sleep -- swap;
+	swap -- runswap;
+		SCI		 [color="#e27dd6ff",
+			fillcolor="#d9e7ee",
+			fixedsize=true,
+			label="System calls",
+			row=usr,
+			shape=ellipse];
+		sysfs		 [color="#e27dd6ff",
+			fillcolor="#b2d3e4",
+			label="proc, sysfs,\nfile systems"];
+		SCI -> sysfs		 [color="#e27dd6ff",
+			style="filled,setlinewidth(6)"];
+		DM		 [color="#e27dd6ff",
+			fillcolor="#91b5c9",
+			fixedsize=true,
+			fontsize=20,
+			height=0.8,
+			label="Device\nModel",
+			shape=octagon,
+			width=2];
+		sysfs -> DM		 [color="#e27dd6ff",
+			style="filled,setlinewidth(6)"];
+		log_sys		 [color="#e27dd6ff",
+			fillcolor="#6a9ab1",
+			fontsize=20,
+			label="system run,\nmodules,\ngeneric\nHW access "];
+		DM -> log_sys		 [color="#e27dd6ff",
+			style="filled,setlinewidth(6)"];
+		bus_drv		 [color="#e27dd6ff",
+			fillcolor="#71809b",
+			label="bus drivers"];
+		log_sys -> bus_drv		 [color="#e27dd6ff",
+			style="filled,setlinewidth(6)"];
+		H2		 [color="#e27dd6ff",
+			fillcolor="#777777",
+			fontcolor=white,
+			fontsize=20,
+			label="busess:\nPCI, USB ...",
+			row=chip];
+		bus_drv -> H2		 [color="#e27dd6ff",
+			style="filled,setlinewidth(6)"];
+	}
+	{
+		node [color="#61c2c5"];
+		edge [color="#61c2c5"];
+		networking_		 [color="#61c2c5",
+			fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		networking		 [color="#61c2c5",
+			fillcolor=white,
+			fixedsize=true,
+			height=0.6,
+			row=func,
+			width=2];
+		networking -> networking_		 [arrowhead="",
+			color="#61c2c5",
+			row=func,
+			style="filled,setlinewidth(6)"];
+		sock		 [color="#61c2c5",
+			fillcolor="#d9e7ee",
+			fixedsize=true,
+			label=Sockets,
+			row=usr,
+			shape=ellipse];
+		prot_fam		 [color="#61c2c5",
+			fillcolor="#b2d3e4",
+			label="protocol\nfamilies"];
+		sock -> prot_fam		 [color="#61c2c5",
+			style="filled,setlinewidth(6)"];
+		log_prot		 [color="#61c2c5",
+			fillcolor="#6a9ab1",
+			label="protocols:\nTCP, UDP, IP"];
+		prot_fam -> log_prot		 [color="#61c2c5",
+			style="filled,setlinewidth(6)"];
+		netif		 [color="#61c2c5",
+			fillcolor="#71809b",
+			fontsize=20,
+			label="network\ninterfaces\nand drivers"];
+		log_prot -> netif		 [color="#61c2c5",
+			style="filled,setlinewidth(6)"];
+		net_hw		 [color="#61c2c5",
+			fillcolor="#777777",
+			fontcolor=white,
+			fontsize=20,
+			label="network:\nEthernet, WiFi ...",
+			row=chip];
+		netif -> net_hw		 [color="#61c2c5",
+			style="filled,setlinewidth(6)"];
+		NFS		 [color="#8383cc",
+			fillcolor="#91b5c9",
+			fixedsize=true,
+			height=0.8,
+			label=NFS,
+			shape=octagon,
+			width=1.2];
+		NFS -> log_prot		 [color="#61c2c5",
+			style="filled,setlinewidth(6)",
+			weight=0];
+	}
+	{
+		node [color="#8383cc"];
+		edge [color="#8383cc"];
+		NFS;
+		storage_		 [color="#8383cc",
+			fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		storage		 [color="#8383cc",
+			fillcolor=white,
+			fixedsize=true,
+			height=0.6,
+			row=func,
+			width=2];
+		storage -> storage_		 [arrowhead="",
+			color="#8383cc",
+			row=func,
+			style="filled,setlinewidth(6)"];
+		FS		 [color="#8383cc",
+			fillcolor="#d9e7ee",
+			fixedsize=true,
+			label="files and\ndirectories",
+			row=usr,
+			shape=ellipse];
+		VFS		 [color="#8383cc",
+			fillcolor="#b2d3e4",
+			label="Virtual\nFile System"];
+		FS -> VFS		 [color="#8383cc",
+			style="filled,setlinewidth(6)"];
+		VFS -> NFS		 [color="#8383cc",
+			style="filled,setlinewidth(6)",
+			weight=0];
+		logFS		 [color="#8383cc",
+			fillcolor="#6a9ab1",
+			fontsize=20,
+			label="logical\nfilesystems:\next3, xfs ..."];
+		VFS -> logFS		 [color="#8383cc",
+			style="filled,setlinewidth(6)"];
+		PC		 [color="#51bf5b",
+			fillcolor="#91b5c9",
+			fixedsize=true,
+			fontsize=20,
+			height=0.8,
+			label="page\ncache",
+			shape=octagon,
+			width=1.2];
+		VFS -> PC		 [color="#8383cc",
+			style="filled,setlinewidth(6)",
+			weight=0];
+		mmap		 [color="#51bf5b",
+			fillcolor="#91b5c9",
+			fixedsize=true,
+			fontsize=20,
+			height=0.8,
+			label="memory\nmapping",
+			shape=octagon,
+			width=2];
+		VFS -> mmap		 [color="#8383cc",
+			style="filled,setlinewidth(6)",
+			weight=0];
+		block		 [color="#8383cc",
+			fillcolor="#71809b",
+			fontsize=20,
+			label="Block\ndevices\nand drivers"];
+		logFS -> block		 [color="#8383cc",
+			style="filled,setlinewidth(6)"];
+		PA		 [color="#51bf5b",
+			fillcolor="#71809b
+		log_mem		 [color="#51bf5b",
+			fillcolor="#6a9ab1",
+			label="logical\nmemory"];
+	}
+	{
+		graph [rank=same];
+		bus_drv;
+		netif;
+		block;
+		PA;
+		IRQ;
+		HID;
+		{G0		 [fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		HWI		 [fillcolor="#71809b",
+			label="hardware\ninterfaces",
+			style="filled,setlinewidth(0)"];
+	}
+	{
+		graph [rank=same];
+		H2;
+		net_hw;
+		H4;
+		CPU;
+		H7;
+		H0		 [fixedsize=true,
+			height=0,
+			shape="",
+			style=invis,
+			width=0];
+		HW		 [fillcolor="#777777",
+			fontcolor=white,
+			label="electronics,\nhardware",
+			row=chip,
+			style="filled,setlinewidth(0)"];
+		H5		 [color="#51bf5b",
+			fillcolor="#777777",
+			fontcolor=white,
+			fontsize=20,
+			label="MMU, RAM",
+			row=chip];
+	}
+	subgraph mem {
+		node [color="#51bf5b",
+			height=0.5
+		];
+		edge [color="#51bf5b"];
+		PC;
+		mmap;
+		SW;
+		mmap -> SW		 [color="#51bf5b",
+			style="filled,setlinewidth(6)",
+			weight=0];
+		log_mem;
+		mmap -> log_mem		 [color="#51bf5b",
+			style="filled,setlinewidth(6)"];
+		PA;
+		H5;
+		PA -> H5		 [color="#51bf5b",
+			style="filled,setlinewidth(6)"];
+		memory;
+		memory_;
+		memory -> memory_		 [arrowhead="",
+			color="#51bf5b",
+			row=func,
+			style="filled,setlinewidth(6)"];
+		MA;
+		VM;
+		MA -> VM		 [color="#51bf5b",
+			style="filled,setlinewidth(6)"];
+		VM -> mmap		 [color="#51bf5b",
+			style="filled,setlinewidth(6)"];
+		log_mem -> PA		 [color="#51bf5b",
+			style="filled,setlinewidth(6)"];
+	}
+	bottom	 [label="© 2007-2019 Constantine Shulyupin http://www.MakeLinux.net/kernel/diagram",
+		shape=plaintext,
+		style=""];
+	H4 -> bottom	 [weight=""];
+	layers	 [fillcolor=lightgray,
+		tooltip="Functionalities are divided to common layers. It is approximate division.",
+		height=0.1,
+		style="filled,setlinewidth(0)",
+		width=0.5];
+	functions -> layers;
+	usr -> usr_	 [arrowhead="",
+		color="#d9e7eeff",
+		minlen=2,
+		style="filled,setlinewidth(6)"];
+	usr -> virt	 [color="#d9e7eeff",
+		style="filled,setlinewidth(6)"];
+	virt -> D0	 [arrowhead="",
+		color="#b2d3e4",
+		minlen=2,
+		style="filled,setlinewidth(6)"];
+	virt -> bridges	 [color="#b2d3e4",
+		style="filled,setlinewidth(6)"];
+	bridges -> E0	 [arrowhead="",
+		color="#91b5c9",
+		minlen=2,
+		style="filled,setlinewidth(6)",
+		weight=""];
+	bridges -> logical	 [color="#91b5c9",
+		style="filled,setlinewidth(6)"];
+	logical -> F0	 [arrowhead="",
+		color="#6a9ab1",
+		minlen=2,
+		row=logical,
+		style="filled,setlinewidth(6)",
+		weight=""];
+	logical -> HWI	 [color="#6a9ab1",
+		row=logical,
+		style="filled,setlinewidth(6)"];
+	HWI -> G0	 [arrowhead="",
+		color="#71809b",
+		minlen=2,
+		row=HWI,
+		style="filled,setlinewidth(6)",
+		weight=""];
+	HWI -> HW	 [color="#71809b",
+		row=HWI,
+		style="filled,setlinewidth(6)"];
+	HW -> H0	 [arrowhead="",
+		color="#777777",
+		minlen=2,
+		row=chip,
+		style="filled,setlinewidth(6)",
+		weight=""];
+	layers -> usr	 [arrowhead="",
+		color=gray,
+		style="filled,setlinewidth(1)"];
+	LKD	 [fontsize=40,
+		label="Linux kernel diagram",
+		shape=plain,
+		style=""];
+	LKD -> storage;
+}

@@ -1,0 +1,7 @@
+digraph G { bgcolor="purple:pink" label="agraph" fontcolor="white"
+  subgraph cluster1 {fillcolor="blue:cynodelabel="acluster" fontcolor="white" style="filled" gradientangle="270"
+		nodlcolor="red:yellow" "e=tlfysil3"d" gradientangle=90]
+		anode;
+	}
+
+}

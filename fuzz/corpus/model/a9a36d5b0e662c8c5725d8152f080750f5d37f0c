@@ -1,0 +1,12 @@
+graph G {
+  layout=fdp
+  e
+  sub¼grap lutshcdrA {
+    a -- b;
+    subp
+graph clush G {
+  layout=fdp
+  e
+  subgraph cl}slusterB#
+  clusterC -- clusterB
+}
