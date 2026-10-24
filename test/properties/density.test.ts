@@ -66,7 +66,8 @@ function classifyString(s: string): string[] {
   if (/[<>]/.test(s)) labels.push('has angle bracket');
   if (DOT_KEYWORDS.test(s)) labels.push('dot keyword');
   if (/^-?(\.\d+|\d+(\.\d*)?)$/.test(s)) labels.push('numeral');
-  if (/[^\x20-\x7e]/.test(s) && !/[\r\n\t]/.test(s)) labels.push('non-ascii');
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: the range is the ASCII block
+  if (/[^\x00-\x7f]/.test(s)) labels.push('non-ascii');
   if (/[\r\n]/.test(s)) labels.push('has newline');
   if (s.includes('\r\n')) labels.push('has crlf');
   if (/^[\r\n]|[\r\n]$/.test(s)) labels.push('newline at edge');
