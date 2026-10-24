@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isCompass, toNodeRef } from './models.js';
+import { isCompass, toNodeRef } from './edge-targets.js';
 
 describe('isCompass', () => {
   it.each(['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c', '_'])(

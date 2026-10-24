@@ -5,7 +5,7 @@ import type {
   NodeModel,
   Port,
 } from '@ts-graphviz/common';
-import { AttributesGroup } from './AttributesGroup.js';
+import { AttributesGroup } from '../attributes/AttributesGroup.js';
 import { DotObject } from './DotObject.js';
 
 /**

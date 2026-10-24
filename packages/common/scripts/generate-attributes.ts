@@ -1,5 +1,5 @@
 /**
- * Generate `src/attribute.ts` from the Graphviz documentation snapshot in
+ * Generate `src/attributes/attribute.ts` from the Graphviz documentation snapshot in
  * `graphviz-docs/attrs.json` (see `fetch-graphviz-docs.ts`).
  *
  * The output keeps the structure that user code can augment (see the
@@ -23,7 +23,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const docs: AttributeDoc[] = JSON.parse(
   readFileSync(join(here, '..', 'graphviz-docs', 'attrs.json'), 'utf8'),
 );
-const outFile = join(here, '..', 'src', 'attribute.ts');
+const outFile = join(here, '..', 'src', 'attributes', 'attribute.ts');
 
 /** Graphviz attribute type name -> TypeScript type (from `./types.js` unless primitive). */
 const TYPE_MAP: Record<string, string> = {
