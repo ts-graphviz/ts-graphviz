@@ -10,7 +10,7 @@ import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphContainer } from '../contexts/GraphContainer.js';
 import { useGraphContainer } from '../hooks/useGraphContainer.js';
 import { useGraphvizContext } from '../hooks/useGraphvizContext.js';
-import { HOST, identityKey } from '../host.js';
+import { HOST, hostProps, identityKey } from '../host.js';
 import type { AnyGraphContainer } from '../types/container.js';
 
 /**
@@ -19,7 +19,12 @@ import type { AnyGraphContainer } from '../types/container.js';
  * `useCurrentGraph`. A new id makes a new model.
  */
 export function useHostGraph(
-  props: { id?: string; strict?: boolean; children?: ReactNode },
+  props: {
+    id?: string;
+    strict?: boolean;
+    label?: unknown;
+    children?: ReactNode;
+  },
   create: (
     models: ModelsContext,
     parent: AnyGraphContainer | null,
@@ -51,7 +56,7 @@ export function useHostGraph(
   return createElement(
     HOST.graph,
     // A new model, a new host element (and a ref set again).
-    { ...props, model, key: identityKey(model) },
+    { ...hostProps(props), model, key: identityKey(model) },
     content,
   );
 }

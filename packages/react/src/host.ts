@@ -46,17 +46,33 @@ const NOT_ATTRIBUTES: ReadonlySet<string> = new Set([
   'graph',
 ]);
 
-/** The attributes in a host element's props; React labels are rendered. */
+/** The attributes in a host element's props (labels already rendered). */
 function attributesOf(props: ComponentProps): Record<string, unknown> {
   const attributes: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(props)) {
     if (NOT_ATTRIBUTES.has(key) || value === undefined) continue;
-    attributes[key] =
-      key === 'label' || key === 'xlabel'
-        ? renderId(value as ReactElement | string)
-        : value;
+    attributes[key] = value;
   }
   return attributes;
+}
+
+/**
+ * Props for a host element, with React labels rendered to HTML-like
+ * values. The components call this during render, so an invalid label
+ * throws there, where an error boundary can catch it, not in the commit.
+ */
+export function hostProps<P extends { label?: unknown; xlabel?: unknown }>(
+  props: P,
+): P {
+  const rendered = { ...props };
+  for (const key of ['label', 'xlabel'] as const) {
+    if (rendered[key] !== undefined) {
+      (rendered as Record<string, unknown>)[key] = renderId(
+        rendered[key] as ReactElement | string,
+      );
+    }
+  }
+  return rendered;
 }
 
 const identityKeys = new WeakMap<object, number>();

@@ -1,4 +1,5 @@
 import {
+  Component,
   createRef,
   Fragment,
   type ReactElement,
@@ -434,6 +435,52 @@ describe('host components', () => {
     ).rejects.toThrow(
       /<Node> must be rendered inside a Digraph, Graph or Subgraph/,
     );
+  });
+
+  it('reports an invalid label to the error boundary, during render', async () => {
+    class Boundary extends Component<
+      { children: ReactNode },
+      { failed: boolean }
+    > {
+      override state = { failed: false };
+      static getDerivedStateFromError() {
+        return { failed: true };
+      }
+      override render() {
+        return this.state.failed ? <Node id="fallback" /> : this.props.children;
+      }
+    }
+    const caught: unknown[] = [];
+    const root = createRoot({ onCaughtError: (error) => caught.push(error) });
+    const element = (label: ReactElement | string) => (
+      <Digraph id="G">
+        <Boundary>
+          <Node id="a" label={label} />
+        </Boundary>
+      </Digraph>
+    );
+    expect(await dotOf(root, element(<div />))).toBe(
+      'digraph "G" {\n  "fallback";\n}',
+    );
+    expect(caught).toHaveLength(1);
+    expect(caught[0]).toBeInstanceOf(TypeError);
+
+    const updated = createRoot({
+      onCaughtError: (error) => caught.push(error),
+    });
+    await updated.render(element('ok'));
+    await updated.render(element(<div />));
+    expect(caught).toHaveLength(2);
+  });
+
+  it('rejects render() with an error a graph throws while adding models, and can still unmount', async () => {
+    const container = new DigraphModel('C');
+    container.createNode = () => {
+      throw new RangeError('no nodes here');
+    };
+    const root = createRoot({ container });
+    await expect(root.render(<Node id="a" />)).rejects.toThrow('no nodes here');
+    root.unmount();
   });
 
   it('rejects a node outside any graph', async () => {

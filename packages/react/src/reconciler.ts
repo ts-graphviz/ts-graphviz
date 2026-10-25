@@ -339,9 +339,15 @@ export class HostConfig
     return null;
   }
 
-  // The instances are in place: make the models match them.
+  // The instances are in place: make the models match them. An error (from
+  // a model class) must not leave the commit half done, which would break
+  // the renderer: render() rejects with it instead.
   public resetAfterCommit(containerInfo: Container): void {
-    syncContainer(containerInfo);
+    try {
+      syncContainer(containerInfo);
+    } catch (error) {
+      containerInfo.uncaughtErrors.push(error);
+    }
   }
 
   public createInstance(
