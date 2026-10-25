@@ -22,7 +22,7 @@
 
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=GitHub&style=flat)](https://github.com/ts-graphviz/ts-graphviz)
 [![npm](https://img.shields.io/badge/-npm-CB3837?logo=npm&style=flat)](https://www.npmjs.com/package/ts-graphviz)
-[![Reference](https://img.shields.io/badge/-API_Reference-3178C6?logo=TypeScript&style=flat&logoColor=fff)](https://ts-graphviz.github.io/ts-graphviz/)
+[![Reference](https://img.shields.io/badge/-API_Reference-3178C6?logo=TypeScript&style=flat&logoColor=fff)](https://ts-graphviz.github.io/api/)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ts-graphviz/ts-graphviz)
 
 [![Sponsor](https://img.shields.io/badge/-GitHub%20Sponsor-fff?logo=GitHub%20Sponsors&style=flat)](https://github.com/sponsors/ts-graphviz)
@@ -252,7 +252,7 @@ const dot = await renderToDot(<TeamStructure />);
 
 More detailed documentation and examples can be found in the following resources:
 
-- [API Reference](https://ts-graphviz.github.io/ts-graphviz/)
+- [API Reference](https://ts-graphviz.github.io/api/)
   - See the **API Reference** for detailed documentation on how to use the library.
 - [DeepWiki](https://deepwiki.com/ts-graphviz/ts-graphviz)
   - See the AI generated documentation for more information.
