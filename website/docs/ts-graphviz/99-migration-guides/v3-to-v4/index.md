@@ -125,6 +125,9 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 - `useDigraph` / `useGraph` / `useSubgraph` create models through the `GraphvizContext`'s models; `createRoot` and `renderToDot` take a `models` option. A hand-written `GraphvizContext` value must include `models` (use `createModelsContext()`).
 - `<Digraph strict>` / `<Graph strict>` render strict graphs.
 - `renderHTMLLike` returns an `HTMLLikeValue` (see section 1).
+- `renderHTMLLike` (and so a JSX `label`) escapes strings: text children and attribute values are written with `&`, `<`, `>` and `"` as entities. Code that put markup in a string (`<dot:td>{'<b>x</b>'}</dot:td>`) writes it as elements instead (`<dot:td><dot:b>x</dot:b></dot:td>`) (#1745).
+- `<dot:port>` is removed: HTML-like labels have no port element, and Graphviz rejected its output. Use the `port` attribute: `<dot:td port="p">`.
+- `renderHTMLLike` throws instead of logging a warning and returning an empty label: `RangeError` past `maxDepth`; `TypeError` for a circular tree, an element HTML-like labels do not have (`<div>`, `<span>`, …), or an attribute name that is not a name. Errors from components are no longer swallowed.
 
 ## 10. Small behaviour fixes
 

@@ -1,5 +1,5 @@
 import { type HTMLLikeValue, htmlLike } from '@ts-graphviz/common';
-import type { ReactElement, ReactNode } from 'react';
+import { Fragment, type ReactElement, type ReactNode } from 'react';
 
 /**
  * Default maximum allowed recursion depth to prevent stack overflow attacks.
@@ -18,7 +18,10 @@ export interface RenderHTMLLikeOptions {
 }
 
 /**
- * Map of known dot: prefixed elements to their HTML equivalents.
+ * Map of the dot: prefixed elements to the elements of Graphviz's HTML-like
+ * labels.
+ *
+ * @see {@link https://graphviz.org/doc/info/shapes.html#html HTML-Like Labels}
  */
 const DOT_ELEMENT_MAP = {
   'dot:table': 'table',
@@ -38,6 +41,41 @@ const DOT_ELEMENT_MAP = {
   'dot:vr': 'vr',
 } as const;
 
+const ELEMENTS: ReadonlySet<string> = new Set(Object.values(DOT_ELEMENT_MAP));
+
+/** An attribute name of Graphviz's HTML-like labels (`point-size`, …). */
+const ATTRIBUTE_NAME = /^[A-Za-z][A-Za-z0-9_-]*$/;
+
+/** Props React uses itself; they are not attributes. */
+const REACT_PROPS: ReadonlySet<string> = new Set(['children', 'key', 'ref']);
+
+/** Text: `&`, `<` and `>` as entities, so a string is never markup. */
+function escapeText(text: string): string {
+  return text
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
+}
+
+/** An attribute value: text that also cannot end the quoted value. */
+function escapeAttribute(value: string): string {
+  return escapeText(value).replaceAll('"', '&quot;');
+}
+
+/** The element name of an intrinsic element, or a TypeError. */
+function elementName(type: string): string {
+  const name =
+    DOT_ELEMENT_MAP[type as keyof typeof DOT_ELEMENT_MAP] ?? type.toLowerCase();
+  if (!ELEMENTS.has(name)) {
+    throw new TypeError(
+      type === 'dot:port'
+        ? '<dot:port> is not an element of HTML-like labels; set a port with the port attribute of <dot:table> or <dot:td>.'
+        : `<${type}> is not an element of HTML-like labels.`,
+    );
+  }
+  return name;
+}
+
 /**
  * Manually traverse and render React element tree.
  * @param element - React element to render
@@ -53,14 +91,14 @@ function manuallyRenderElement(
 ): string {
   // Prevent stack overflow from deeply nested structures
   if (depth >= maxDepth) {
-    throw new Error(
+    throw new RangeError(
       `Maximum rendering depth of ${maxDepth} exceeded. This may indicate deeply nested or circular element structures.`,
     );
   }
 
   // Prevent circular reference attacks (only detect true recursion cycles)
   if (inStack.has(element)) {
-    throw new Error(
+    throw new TypeError(
       'Circular reference detected in React element tree. Cannot render elements that reference themselves.',
     );
   }
@@ -69,84 +107,59 @@ function manuallyRenderElement(
   inStack.add(element);
 
   try {
-    const { type, props } = element;
+    const { type } = element;
+    // props is typed as unknown for function components
+    const props = (element.props ?? {}) as Record<string, unknown>;
 
-    // For function components, try to execute them first
-    if (typeof type === 'function') {
-      try {
-        // Handle both function components and class components
-        const result =
-          typeof type === 'function' && type.prototype?.render
-            ? new (type as any)(props).render()
-            : (type as any)(props);
-        if (result && typeof result === 'object' && result.type) {
-          return manuallyRenderElement(
-            result as ReactElement,
-            depth + 1,
-            inStack,
-            maxDepth,
-          );
-        }
-      } catch {
-        // Ignore errors from function components
-      }
-      return '';
-    }
-
-    if (typeof type === 'string') {
-      let tagName = type;
-
-      // Handle dot:port special case: render as <content> instead of <dot:port>content</dot:port>
-      if (tagName === 'dot:port') {
-        const propsWithChildren = props as any;
-        const childrenString = renderChildrenToString(
-          propsWithChildren?.children,
-          depth + 1,
-          inStack,
-          maxDepth,
-        );
-        return `<${childrenString}>`;
-      }
-
-      // Transform dot: prefixed elements to HTML equivalents
-      if (tagName.startsWith('dot:')) {
-        const htmlElement =
-          DOT_ELEMENT_MAP[tagName as keyof typeof DOT_ELEMENT_MAP];
-        if (htmlElement) {
-          tagName = htmlElement;
-        }
-      }
-
-      const attributes: string[] = [];
-
-      // Build attributes string - props is typed as any for function components
-      const propsWithChildren = props as any;
-      Object.entries(propsWithChildren || {}).forEach(([key, value]) => {
-        if (key !== 'children' && value != null) {
-          if (typeof value === 'string' || typeof value === 'number') {
-            attributes.push(`${key}="${String(value)}"`);
-          } else if (typeof value === 'boolean' && value) {
-            attributes.push(key);
-          }
-        }
-      });
-
-      const attrsString =
-        attributes.length > 0 ? ` ${attributes.join(' ')}` : '';
-      const childrenString = renderChildrenToString(
-        propsWithChildren?.children,
+    if (type === Fragment) {
+      return renderChildrenToString(
+        props.children as ReactNode,
         depth + 1,
         inStack,
         maxDepth,
       );
-
-      if (childrenString) {
-        return `<${tagName}${attrsString}>${childrenString}</${tagName}>`;
-      }
-      return `<${tagName}${attrsString}></${tagName}>`;
     }
 
-    return '';
+    // Function and class components render to another element; their
+    // errors are the caller's.
+    if (typeof type === 'function') {
+      const result: ReactNode = type.prototype?.render
+        ? new (type as any)(props).render()
+        : (type as any)(props);
+      return renderChildrenToString(result, depth + 1, inStack, maxDepth);
+    }
+
+    if (typeof type !== 'string') {
+      throw new TypeError(
+        'Only dot: elements, fragments and components can be rendered to an HTML-like label.',
+      );
+    }
+
+    const tagName = elementName(type);
+    let attributes = '';
+    for (const [key, value] of Object.entries(props)) {
+      if (REACT_PROPS.has(key) || value == null || value === false) {
+        continue;
+      }
+      if (!ATTRIBUTE_NAME.test(key)) {
+        throw new TypeError(
+          `${JSON.stringify(key)} is not an attribute name of HTML-like labels.`,
+        );
+      }
+      if (value === true) {
+        attributes += ` ${key}`;
+      } else if (typeof value === 'string' || typeof value === 'number') {
+        attributes += ` ${key}="${escapeAttribute(String(value))}"`;
+      }
+    }
+
+    const childrenString = renderChildrenToString(
+      props.children as ReactNode,
+      depth + 1,
+      inStack,
+      maxDepth,
+    );
+    return `<${tagName}${attributes}>${childrenString}</${tagName}>`;
   } finally {
     // Remove from stack when exiting this recursion branch
     inStack.delete(element);
@@ -170,7 +183,7 @@ function renderChildrenToString(
     return '';
   }
   if (typeof children === 'string' || typeof children === 'number') {
-    return String(children);
+    return escapeText(String(children));
   }
   if (Array.isArray(children)) {
     return children
@@ -190,24 +203,30 @@ function renderChildrenToString(
 }
 
 /**
- * Converts a React element into a custom HTML-like string representation.
+ * Converts a React element into an HTML-like label.
  *
- * If no {@link label} is provided, returns the string '<>'. Otherwise, renders the React element to static markup, transforms any `dot:`-prefixed tags by removing the prefix, and wraps the result in angle brackets.
+ * `dot:`-prefixed elements become the elements of Graphviz's HTML-like
+ * labels (`<dot:table>` → `<table>`). Strings and numbers, as children or as
+ * attribute values, are text: `&`, `<`, `>` (and `"` in attributes) are
+ * written as entities, so they cannot add markup. If no {@link label} is
+ * provided, returns an empty label (`<>`).
  *
  * @param label - Optional React element to render.
  * @param options - Optional rendering options.
- * @returns A string representing the transformed HTML-like markup.
+ * @returns The HTML-like label.
+ * @throws {TypeError} An element that HTML-like labels do not have (such as
+ * `<div>` or `<dot:port>`), an attribute name that is not a name, or a
+ * circular element tree.
+ * @throws {RangeError} An element tree deeper than `maxDepth`.
+ * @throws Whatever a component throws while rendering.
  *
  * @example
- * ```ts
+ * ```tsx
  * // Default behavior (max depth: 1000)
- * renderHTMLLike(<div><span>Hello</span></div>);
+ * renderHTMLLike(<dot:b>Hello</dot:b>);
  *
  * // Custom max depth for deeply nested structures
- * renderHTMLLike(<div>...</div>, { maxDepth: 5000 });
- *
- * // Lower max depth for strict validation
- * renderHTMLLike(<div>...</div>, { maxDepth: 100 });
+ * renderHTMLLike(<dot:table>...</dot:table>, { maxDepth: 5000 });
  * ```
  */
 export function renderHTMLLike(
@@ -229,21 +248,5 @@ export function renderHTMLLike(
     maxDepth = Math.floor(options.maxDepth);
   }
 
-  try {
-    // Use manual rendering with built-in dot: element transformation
-    const markup = manuallyRenderElement(label, 0, new WeakSet(), maxDepth);
-
-    if (!markup) {
-      return htmlLike('');
-    }
-
-    return htmlLike(markup);
-  } catch (error) {
-    // Fallback for any rendering issues
-    console.warn(
-      'renderHTMLLike fallback:',
-      error instanceof Error ? error.message : error,
-    );
-    return htmlLike('');
-  }
+  return htmlLike(manuallyRenderElement(label, 0, new WeakSet(), maxDepth));
 }
