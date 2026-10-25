@@ -109,14 +109,14 @@ describe('class Subgraph', () => {
   });
 
   test('create subgraph with attributes', () => {
-    subgraph = subgraph.createSubgraph('test', {
+    subgraph = subgraph.createSubgraph('cluster_test', {
       label: 'Label',
     });
-    expect(subgraph.id).toBe('test');
+    expect(subgraph.id).toBe('cluster_test');
     expect(subgraph.size).toBe(1);
 
     subgraph = subgraph.createSubgraph({
-      label: 'Label',
+      rank: 'same',
     });
     expect(subgraph.size).toBe(1);
   });

@@ -19,8 +19,10 @@ import {
   type NodeAttributeKey,
   type NodeAttributesObject,
   type NodeModel,
+  type NonClusterSubgraphAttributesObject,
   type ReadonlyEdgeTargetLikeTuple,
   type SubgraphAttributeKey,
+  type SubgraphAttributesFor,
   type SubgraphAttributesObject,
   type SubgraphModel,
   toNodeRef,
@@ -220,12 +222,14 @@ export abstract class GraphBase<
     return this.#objects.subgraphs.has(subgraph);
   }
 
-  public createSubgraph(
-    id?: string,
-    attributes?: SubgraphAttributesObject,
+  public createSubgraph<const Id extends string>(
+    id?: Id,
+    attributes?: SubgraphAttributesFor<Id>,
   ): M['Subgraph'];
 
-  public createSubgraph(attributes?: SubgraphAttributesObject): M['Subgraph'];
+  public createSubgraph(
+    attributes?: NonClusterSubgraphAttributesObject,
+  ): M['Subgraph'];
 
   public createSubgraph(...args: unknown[]): M['Subgraph'] {
     const id = args.find((arg): arg is string => typeof arg === 'string');
@@ -288,17 +292,17 @@ export abstract class GraphBase<
     return edge;
   }
 
-  public subgraph(
-    id: string,
+  public subgraph<const Id extends string>(
+    id: Id,
+    callback?: (subgraph: M['Subgraph']) => void,
+  ): M['Subgraph'];
+  public subgraph<const Id extends string>(
+    id: Id,
+    attributes: SubgraphAttributesFor<Id>,
     callback?: (subgraph: M['Subgraph']) => void,
   ): M['Subgraph'];
   public subgraph(
-    id: string,
-    attributes: SubgraphAttributesObject,
-    callback?: (subgraph: M['Subgraph']) => void,
-  ): M['Subgraph'];
-  public subgraph(
-    attributes: SubgraphAttributesObject,
+    attributes: NonClusterSubgraphAttributesObject,
     callback?: (subgraph: M['Subgraph']) => void,
   ): M['Subgraph'];
   public subgraph(callback?: (subgraph: M['Subgraph']) => void): M['Subgraph'];
