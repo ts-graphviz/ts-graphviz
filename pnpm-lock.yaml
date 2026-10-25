@@ -227,6 +227,9 @@ importers:
       lefthook:
         specifier: 2.2.1
         version: 2.2.1
+      oxc-parser:
+        specifier: ^0.154.0
+        version: 0.154.0
       publint:
         specifier: ^0.3.25
         version: 0.3.25
