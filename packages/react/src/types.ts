@@ -10,7 +10,7 @@ import type {
   NodeModel,
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';
-import type { ReactElement, ReactNode, Ref } from 'react';
+import type { Attributes, ReactElement, ReactNode, Ref } from 'react';
 
 // Re-export ReactNode to ensure it's available for JSX declarations
 export type { ReactNode };
@@ -96,26 +96,33 @@ export interface GraphPortalProps {
 }
 
 /**
+ * Props every dot:* element with content takes besides its attributes:
+ * its children and React's `key`.
+ */
+export interface DotElementProps extends Attributes {
+  children?: ReactNode;
+}
+
+/**
  * JSX intrinsic elements for dot:* HTML-like elements.
  * These type definitions are automatically available when importing @ts-graphviz/react.
  */
 export interface DotJSXElements {
-  'dot:port': { children: string };
-  'dot:table': HTMLLikeLabel.TableAttributes & { children?: ReactNode };
-  'dot:tr': HTMLLikeLabel.TrAttributes & { children?: ReactNode };
-  'dot:td': HTMLLikeLabel.TdAttributes & { children?: ReactNode };
-  'dot:font': HTMLLikeLabel.FontAttributes & { children?: ReactNode };
-  'dot:br': HTMLLikeLabel.BrAttributes;
-  'dot:img': HTMLLikeLabel.ImgAttributes;
-  'dot:i': HTMLLikeLabel.IAttributes & { children?: ReactNode };
-  'dot:b': HTMLLikeLabel.BAttributes & { children?: ReactNode };
-  'dot:u': HTMLLikeLabel.UAttributes & { children?: ReactNode };
-  'dot:o': HTMLLikeLabel.OAttributes & { children?: ReactNode };
-  'dot:sub': HTMLLikeLabel.SubAttributes & { children?: ReactNode };
-  'dot:sup': HTMLLikeLabel.SupAttributes & { children?: ReactNode };
-  'dot:s': HTMLLikeLabel.SAttributes & { children?: ReactNode };
-  'dot:hr': HTMLLikeLabel.HrAttributes;
-  'dot:vr': HTMLLikeLabel.VrAttributes;
+  'dot:table': HTMLLikeLabel.TableAttributes & DotElementProps;
+  'dot:tr': HTMLLikeLabel.TrAttributes & DotElementProps;
+  'dot:td': HTMLLikeLabel.TdAttributes & DotElementProps;
+  'dot:font': HTMLLikeLabel.FontAttributes & DotElementProps;
+  'dot:br': HTMLLikeLabel.BrAttributes & Attributes;
+  'dot:img': HTMLLikeLabel.ImgAttributes & Attributes;
+  'dot:i': HTMLLikeLabel.IAttributes & DotElementProps;
+  'dot:b': HTMLLikeLabel.BAttributes & DotElementProps;
+  'dot:u': HTMLLikeLabel.UAttributes & DotElementProps;
+  'dot:o': HTMLLikeLabel.OAttributes & DotElementProps;
+  'dot:sub': HTMLLikeLabel.SubAttributes & DotElementProps;
+  'dot:sup': HTMLLikeLabel.SupAttributes & DotElementProps;
+  'dot:s': HTMLLikeLabel.SAttributes & DotElementProps;
+  'dot:hr': HTMLLikeLabel.HrAttributes & Attributes;
+  'dot:vr': HTMLLikeLabel.VrAttributes & Attributes;
 }
 
 declare module 'react' {

@@ -1,9 +1,28 @@
-import { describe, expect, it, vi } from 'vitest';
+import fc from 'fast-check';
+import { createElement, type ReactElement, type ReactNode } from 'react';
+import { describe, expect, it } from 'vitest';
 import { renderHTMLLike } from './renderHTMLLike.js';
 
 // Tests compare the markup form; renderHTMLLike itself returns an HTMLLikeValue.
 const html = (...args: Parameters<typeof renderHTMLLike>) =>
   `<${renderHTMLLike(...args).value}>`;
+
+/** `<dot:b>` nested `levels` times around `leaf`. */
+function nested(levels: number, leaf: ReactNode = 'content'): ReactElement {
+  let element = <dot:b>{leaf}</dot:b>;
+  for (let i = 0; i < levels; i++) {
+    element = <dot:b>{element}</dot:b>;
+  }
+  return element;
+}
+
+/** Decodes the entities renderHTMLLike writes. */
+const unescape = (text: string) =>
+  text
+    .replaceAll('&quot;', '"')
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>')
+    .replaceAll('&amp;', '&');
 
 describe('[SM-3] renderHTMLLike()', () => {
   it('returns "<>" for undefined label', () => {
@@ -12,12 +31,6 @@ describe('[SM-3] renderHTMLLike()', () => {
 
   it('returns "<>" for null label', () => {
     expect(html(null as any)).toBe('<>');
-  });
-
-  it('handles simple dot:port transformation', () => {
-    const element = <dot:port>portname</dot:port>;
-    const result = html(element);
-    expect(result).toBe('<<portname>>');
   });
 
   it('handles dot:table transformation', () => {
@@ -29,44 +42,9 @@ describe('[SM-3] renderHTMLLike()', () => {
         </dot:tr>
       </dot:table>
     );
-    const result = html(element);
-    expect(result).toContain('<table border="0" cellborder="1">');
-    expect(result).toContain('<tr>');
-    expect(result).toContain('<td>');
-    expect(result).toContain('Cell1');
-    expect(result).toContain('Cell2');
-  });
-
-  it('handles mixed dot: and regular elements', () => {
-    const element = (
-      <div>
-        <dot:table>
-          <tr>
-            <dot:td>Mixed</dot:td>
-          </tr>
-        </dot:table>
-      </div>
+    expect(html(element)).toBe(
+      '<<table border="0" cellborder="1"><tr><td>Cell1</td><td>Cell2</td></tr></table>>',
     );
-    const result = html(element);
-    expect(result).toContain('<div>');
-    expect(result).toContain('<table>');
-    expect(result).toContain('<tr>');
-    expect(result).toContain('<td>');
-  });
-
-  it('handles nested dot:port elements', () => {
-    const element = (
-      <dot:table>
-        <dot:tr>
-          <dot:td>
-            <dot:port>port1</dot:port>
-          </dot:td>
-        </dot:tr>
-      </dot:table>
-    );
-    const result = html(element);
-    expect(result).toContain('<table>');
-    expect(result).toContain('<port1>');
   });
 
   it('handles closing tags with dot: prefix', () => {
@@ -75,84 +53,135 @@ describe('[SM-3] renderHTMLLike()', () => {
         <dot:b>Bold text</dot:b>
       </dot:font>
     );
-    const result = html(element);
-    expect(result).toContain('<font color="red">');
-    expect(result).toContain('</font>');
-    expect(result).toContain('<b>');
-    expect(result).toContain('</b>');
-  });
-
-  it('handles malformed HTML gracefully', () => {
-    // This tests edge cases where tags might be incomplete
-    const element = <div>Content with &lt; and &gt;</div>;
-    const result = html(element);
-    expect(result).toContain('Content with < and >');
-  });
-
-  it('handles multiple dot:port elements', () => {
-    const element = (
-      <dot:table>
-        <dot:tr>
-          <dot:td>
-            <dot:port>port1</dot:port>
-          </dot:td>
-          <dot:td>
-            <dot:port>port2</dot:port>
-          </dot:td>
-        </dot:tr>
-      </dot:table>
-    );
-    const result = html(element);
-    expect(result).toContain('<port1>');
-    expect(result).toContain('<port2>');
+    expect(html(element)).toBe('<<font color="red"><b>Bold text</b></font>>');
   });
 
   it('handles empty elements', () => {
-    const element = <dot:br />;
-    const result = html(element);
-    expect(result).toContain('<br');
+    expect(html(<dot:br />)).toBe('<<br></br>>');
   });
 
   it('preserves attributes on transformed elements', () => {
     const element = (
-      <dot:table border={1} cellspacing={0} cellpadding={4}>
+      <dot:table border={1} cellspacing={0} cellpadding="4">
         Content
       </dot:table>
     );
-    const result = html(element);
-    expect(result).toContain('border="1"');
-    expect(result).toContain('cellspacing="0"');
-    expect(result).toContain('cellpadding="4"');
-    expect(result).toContain('<table');
+    expect(html(element)).toBe(
+      '<<table border="1" cellspacing="0" cellpadding="4">Content</table>>',
+    );
   });
 
-  it('handles complex nested structures', () => {
+  it('sets a port with the port attribute', () => {
     const element = (
-      <dot:table>
+      <dot:table port="t">
         <dot:tr>
-          <dot:td>
-            <dot:font color="blue">
-              <dot:b>Header</dot:b>
-            </dot:font>
-          </dot:td>
-        </dot:tr>
-        <dot:tr>
-          <dot:td>
-            <dot:port>data</dot:port>
-          </dot:td>
+          <dot:td port="p1">a</dot:td>
         </dot:tr>
       </dot:table>
     );
-    const result = html(element);
-    expect(result).toContain('<table>');
-    expect(result).toContain('<font color="blue">');
-    expect(result).toContain('<b>Header</b>');
-    expect(result).toContain('<data>');
+    expect(html(element)).toBe(
+      '<<table port="t"><tr><td port="p1">a</td></tr></table>>',
+    );
+  });
+
+  it('renders fragments and components by their content', () => {
+    const Cell = ({ text }: { text: string }) => <dot:td>{text}</dot:td>;
+    const element = (
+      <dot:tr>
+        {/* biome-ignore lint/complexity/noUselessFragments: the fragment is what is tested */}
+        <>
+          <Cell text="a" />
+          <Cell text="b" />
+        </>
+      </dot:tr>
+    );
+    expect(html(element)).toBe('<<tr><td>a</td><td>b</td></tr>>');
+  });
+
+  it('writes a true attribute bare and leaves out false and null', () => {
+    const element = createElement('dot:td', {
+      fixedsize: true,
+      href: null,
+      title: false,
+    } as any);
+    expect(html(element)).toBe('<<td fixedsize></td>>');
+  });
+
+  describe('escaping (#1745)', () => {
+    it('writes text children as text', () => {
+      expect(html(<dot:td>{'<b>hi</b> & </td>'}</dot:td>)).toBe(
+        '<<td>&lt;b&gt;hi&lt;/b&gt; &amp; &lt;/td&gt;</td>>',
+      );
+    });
+
+    it('keeps JSX entities as text', () => {
+      expect(html(<dot:td>Content with &lt; and &gt;</dot:td>)).toBe(
+        '<<td>Content with &lt; and &gt;</td>>',
+      );
+    });
+
+    it('writes attribute values so that they cannot end the value', () => {
+      expect(html(<dot:table title={'x" href="https://evil.example/'} />)).toBe(
+        '<<table title="x&quot; href=&quot;https://evil.example/"></table>>',
+      );
+    });
+
+    it('any string is text, as a child or as an attribute value', () => {
+      fc.assert(
+        fc.property(fc.string(), fc.string(), (title, text) => {
+          const markup = renderHTMLLike(
+            <dot:td title={title}>{text}</dot:td>,
+          ).value;
+          // The structure is the element and nothing else; the strings come
+          // back unchanged from the value and the content.
+          const match = /^<td title="([^"<>]*)">([^<>]*)<\/td>$/.exec(markup);
+          expect(match).not.toBeNull();
+          expect(unescape(match?.[1] ?? '')).toBe(title);
+          expect(unescape(match?.[2] ?? '')).toBe(text);
+        }),
+      );
+    });
+  });
+
+  describe('elements and attributes HTML-like labels do not have', () => {
+    it('rejects an element that is not one of HTML-like labels', () => {
+      expect(() => html(createElement('div', null, 'x'))).toThrow(TypeError);
+      expect(() =>
+        html(createElement('script', null, 'alert(1)') as ReactElement),
+      ).toThrow('<script> is not an element of HTML-like labels.');
+    });
+
+    it('rejects dot:port, pointing at the port attribute', () => {
+      expect(() => html(createElement('dot:port', null, 'p'))).toThrow(
+        /port attribute of <dot:table> or <dot:td>/,
+      );
+    });
+
+    it('rejects an attribute name that is not a name', () => {
+      expect(() =>
+        html(createElement('dot:td', { 'x onclick': 'y' } as any)),
+      ).toThrow(TypeError);
+      expect(() =>
+        html(createElement('dot:td', { 'a="b"': '' } as any)),
+      ).toThrow(TypeError);
+    });
+
+    it('lets a component error through', () => {
+      const Broken = (): ReactElement => {
+        throw new Error('broken');
+      };
+      expect(() =>
+        html(
+          <dot:td>
+            <Broken />
+          </dot:td>,
+        ),
+      ).toThrow('broken');
+    });
   });
 
   // Test for potential ReDoS protection
   it('handles pathological input efficiently', () => {
-    // Create a string that would be problematic for the original regex
     const problematicContent = 'a'.repeat(1000);
     const element = (
       <dot:table>
@@ -166,193 +195,94 @@ describe('[SM-3] renderHTMLLike()', () => {
     const result = html(element);
     const duration = Date.now() - start;
 
-    // Should complete in reasonable time (< 100ms)
     expect(duration).toBeLessThan(100);
     expect(result).toContain(problematicContent);
   });
 
   // Security tests: Stack overflow prevention
   describe('security: stack overflow prevention', () => {
-    it('returns fallback on deeply nested structures (>1000 levels)', () => {
-      // Create deeply nested structure
-      let element: any = <div>content</div>;
-      for (let i = 0; i < 1001; i++) {
-        element = <div>{element}</div>;
-      }
-
-      // Should return fallback '<>' due to error being caught
-      const result = html(element);
-      expect(result).toBe('<>');
+    it('throws on deeply nested structures (>1000 levels)', () => {
+      expect(() => html(nested(1001))).toThrow(RangeError);
+      expect(() => html(nested(1001))).toThrow(
+        'Maximum rendering depth of 1000 exceeded',
+      );
     });
 
     it('allows custom maxDepth option to handle deeper nesting', () => {
-      // Create structure with 1500 levels
-      let element: any = <div>content</div>;
-      for (let i = 0; i < 1500; i++) {
-        element = <div>{element}</div>;
-      }
-
-      // With default depth (1000), should fail
-      expect(html(element)).toBe('<>');
-
-      // With custom maxDepth (2000), should succeed
-      const result = html(element, { maxDepth: 2000 });
-      expect(result).not.toBe('<>');
-      expect(result).toContain('<div>');
+      const element = nested(1500);
+      expect(() => html(element)).toThrow(RangeError);
+      expect(html(element, { maxDepth: 2000 })).toContain('<b>content</b>');
     });
 
     it('allows custom maxDepth option for stricter limits', () => {
-      // Create structure with 150 levels
-      let element: any = <div>content</div>;
-      for (let i = 0; i < 150; i++) {
-        element = <div>{element}</div>;
-      }
-
-      // With default depth (1000), should succeed
-      expect(html(element)).not.toBe('<>');
-
-      // With custom maxDepth (100), should fail
-      expect(html(element, { maxDepth: 100 })).toBe('<>');
+      const element = nested(150);
+      expect(html(element)).toContain('<b>content</b>');
+      expect(() => html(element, { maxDepth: 100 })).toThrow(RangeError);
     });
 
     it('sanitizes invalid maxDepth values', () => {
-      let element: any = <div>content</div>;
-      for (let i = 0; i < 50; i++) {
-        element = <div>{element}</div>;
+      const element = nested(50);
+      // Infinity, NaN, negative values and zero fall back to the default
+      for (const maxDepth of [Number.POSITIVE_INFINITY, Number.NaN, -100, 0]) {
+        expect(html(element, { maxDepth })).toContain('content');
       }
-
-      // Infinity should fall back to default (1000)
-      expect(html(element, { maxDepth: Number.POSITIVE_INFINITY })).not.toBe(
-        '<>',
-      );
-
-      // NaN should fall back to default (1000)
-      expect(html(element, { maxDepth: Number.NaN })).not.toBe('<>');
-
-      // Negative values should fall back to default (1000)
-      expect(html(element, { maxDepth: -100 })).not.toBe('<>');
-
-      // Zero should fall back to default (1000)
-      expect(html(element, { maxDepth: 0 })).not.toBe('<>');
-
-      // Decimal values should be floored
-      expect(html(element, { maxDepth: 75.9 })).not.toBe('<>');
-      expect(html(element, { maxDepth: 49.9 })).toBe('<>');
+      // Decimal values are floored
+      expect(html(element, { maxDepth: 75.9 })).toContain('content');
+      expect(() => html(element, { maxDepth: 49.9 })).toThrow(RangeError);
     });
 
     it('handles structures just under the limit (1000 levels)', () => {
-      // Create structure at exactly the limit
-      let element: any = <div>content</div>;
-      for (let i = 0; i < 999; i++) {
-        element = <div>{element}</div>;
-      }
-
-      // Should complete without error
-      const result = html(element);
-      expect(result).not.toBe('<>');
-      expect(result).toContain('<div>');
-    });
-
-    it('logs warning with descriptive message on depth limit', () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-      let element: any = <div>deep</div>;
-      for (let i = 0; i < 2000; i++) {
-        element = <div>{element}</div>;
-      }
-
-      html(element);
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'renderHTMLLike fallback:',
-        expect.stringContaining('Maximum rendering depth of 1000 exceeded'),
-      );
-
-      consoleSpy.mockRestore();
+      expect(html(nested(999))).toContain('<b>content</b>');
     });
   });
 
   // Security tests: Circular reference prevention
   describe('security: circular reference prevention', () => {
     it('allows reusing the same ReactElement instance multiple times', () => {
-      // Create a reusable element
-      const sharedElement = <span>Shared Text</span>;
-
-      // Use the same element twice as children
-      const parent = (
-        <div>
+      const sharedElement = <dot:i>Shared Text</dot:i>;
+      const result = html(
+        <dot:td>
           {sharedElement}
           {sharedElement}
-        </div>
+        </dot:td>,
       );
-
-      const result = html(parent);
-
-      // Should NOT be treated as circular reference
-      expect(result).not.toBe('<>');
-      expect(result).toContain('Shared Text');
-      // The shared text should appear twice
-      const matches = result.match(/Shared Text/g);
-      expect(matches).toHaveLength(2);
+      expect(result.match(/Shared Text/g)).toHaveLength(2);
     });
 
     it('detects circular element references', () => {
-      // Create circular reference by making element reference itself
-      const element: any = { type: 'div', props: {} };
+      const element: any = { type: 'dot:b', props: {} };
       element.props.children = element;
-
-      // Should return fallback '<>' due to circular reference error
-      const result = html(element as any);
-      expect(result).toBe('<>');
-    });
-
-    it('logs warning on circular reference detection', () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-      const element: any = { type: 'div', props: {} };
-      element.props.children = element;
-
-      html(element as any);
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'renderHTMLLike fallback:',
-        expect.stringContaining('Circular reference detected'),
-      );
-
-      consoleSpy.mockRestore();
+      expect(() => html(element)).toThrow(TypeError);
+      expect(() => html(element)).toThrow('Circular reference detected');
     });
 
     it('handles deeply nested arrays without false positive circular detection', () => {
       const element = (
-        <div>
+        <dot:table>
           {[1, 2, 3].map((i) => (
-            <div key={i}>
+            <dot:tr key={i}>
               {[4, 5, 6].map((j) => (
-                <span key={j}>
+                <dot:td key={j}>
                   Item {i}-{j}
-                </span>
+                </dot:td>
               ))}
-            </div>
+            </dot:tr>
           ))}
-        </div>
+        </dot:table>
       );
-
-      const result = html(element);
-      expect(result).not.toBe('<>');
-      expect(result).toContain('Item');
+      expect(html(element).match(/Item/g)).toHaveLength(9);
     });
   });
 
   // Performance test with security constraints
   it('completes rendering within reasonable time even with complex structures', () => {
-    // Create complex but safe structure (< 1000 depth)
-    let element: any = <div>leaf</div>;
+    let element: ReactElement = <dot:b>leaf</dot:b>;
     for (let i = 0; i < 500; i++) {
       element = (
-        <div>
+        <dot:b>
           {element}
-          <span>sibling-{i}</span>
-        </div>
+          <dot:i>sibling-{i}</dot:i>
+        </dot:b>
       );
     }
 
@@ -360,7 +290,6 @@ describe('[SM-3] renderHTMLLike()', () => {
     html(element);
     const duration = Date.now() - start;
 
-    // Should complete reasonably fast (< 1000ms for 500 levels)
     expect(duration).toBeLessThan(1000);
   });
 });

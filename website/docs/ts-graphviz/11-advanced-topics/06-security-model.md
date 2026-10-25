@@ -82,9 +82,15 @@ Two value kinds deliberately bypass the literal-text rule because their content 
 
 **Not promised**
 
-- **The content of an HTML-like label is not sanitised.** Graphviz interprets it (tables, fonts, `IMG SRC`, `HREF`). Passing untrusted text through `htmlLike()` is the application's responsibility; use a plain string (escaped as text) unless the markup is yours. The React package builds HTML-like labels from JSX, so text nodes in JSX are escaped, but attributes such as `href` and `src` are passed through.
+- **The content of an HTML-like label is not sanitised.** Graphviz interprets it (tables, fonts, `IMG SRC`, `HREF`). Passing untrusted text through `htmlLike()` is the application's responsibility; use a plain string (escaped as text) unless the markup is yours.
+- **What an attribute value means.** The React renderer below keeps a value inside its attribute, but a URL in `href` or a path in `src` is passed as given; an application that puts user data there decides whether it is acceptable (and `sanitize` checks the DOT before rendering, SM-7).
 
-**Evidence**: tests tagged `SM-3` — properties that escString values print idempotently and never break out of the string and that htmlLike values round-trip exactly or are rejected; the unit tests of the sanitising and validation rules and of the React HTML-like renderer.
+**The React renderer** (`renderHTMLLike` and JSX labels in `@ts-graphviz/react`) builds the markup from elements, and its strings are data:
+
+- A string or number, as a child or as an attribute value, is text: `&`, `<`, `>` (and `"` in an attribute) are written as entities, so it cannot add elements, add attributes or end the label (#1745).
+- Only the elements of HTML-like labels are written; any other element, an attribute name that is not a name, a circular tree or a tree deeper than `maxDepth` throws (`TypeError` / `RangeError`) instead of being written.
+
+**Evidence**: tests tagged `SM-3` — properties that escString values print idempotently and never break out of the string and that htmlLike values round-trip exactly or are rejected, and that any string given to the React renderer as a child or attribute value comes back unchanged as text inside the one element; the unit tests of the sanitising and validation rules and of the React HTML-like renderer.
 
 ## SM-4. `@ts-graphviz/adapter` (running Graphviz)
 

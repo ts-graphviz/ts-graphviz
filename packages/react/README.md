@@ -490,6 +490,8 @@ const dotString = await renderToDot(<ProjectDiagram />);
 
 The `renderHTMLLike` function converts React elements with HTML-like labels into an HTML-like label value (`HTMLLikeValue` from `@ts-graphviz/common`) that can be assigned to any label attribute; `.value` holds the markup without the outer `<` `>`. It includes built-in security protections against deeply nested structures and circular references.
 
+Strings and numbers are text, as in the DOM: a child or an attribute value is written with `&`, `<`, `>` (and `"` in attributes) as entities, so text from your users cannot add markup or attributes. Markup is written with `dot:` elements. Only the elements of Graphviz's HTML-like labels can be rendered (`dot:table`, `dot:tr`, `dot:td`, `dot:font`, `dot:b`, …, plus fragments and components); a port is the `port` attribute of `<dot:table>` or `<dot:td>`. Other elements and attribute names that are not names throw a `TypeError`.
+
 ```ts
 import { renderHTMLLike } from "@ts-graphviz/react";
 
@@ -539,7 +541,7 @@ The `renderHTMLLike` function provides security protections against stack overfl
   - Adjust based on your use case:
     - **Increase** for complex, trusted structures (e.g., `maxDepth: 5000`)
     - **Decrease** for user-generated content (e.g., `maxDepth: 100`)
-  - When the limit is exceeded, the function returns a safe fallback value (`'<>'`)
+  - When the limit is exceeded, the function throws a `RangeError` (a circular element tree throws a `TypeError`)
 
 ```ts
 import { renderHTMLLike, type RenderHTMLLikeOptions } from "@ts-graphviz/react";
