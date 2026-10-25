@@ -540,22 +540,34 @@
   "Run": {
     "message": "実行"
   },
-  "Layout Engine:": {
-    "message": "レイアウトエンジン:"
-  },
-  "Graphviz Version: {version}": {
-    "message": "Graphviz バージョン: {version}"
-  },
   "Image": {
     "message": "画像"
-  },
-  "DOT": {
-    "message": "DOT"
   },
   "Failed to render graph: {message}": {
     "message": "グラフのレンダリングに失敗しました: {message}"
   },
-  "Loading...": {
-    "message": "ローディング..."
+  "Layout engine": {
+    "message": "レイアウトエンジン"
+  },
+  "Graphviz {version}": {
+    "message": "Graphviz {version}"
+  },
+  "Running…": {
+    "message": "実行中…"
+  },
+  "Rendered graph": {
+    "message": "描画されたグラフ"
+  },
+  "TypeScript code": {
+    "message": "TypeScript コード"
+  },
+  "Script": {
+    "message": "スクリプト"
+  },
+  "Result": {
+    "message": "結果"
+  },
+  "Laying out…": {
+    "message": "レイアウト中…"
   }
 }

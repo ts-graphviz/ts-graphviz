@@ -32,7 +32,8 @@
     },
     "website": {
       "entry": [
-        "src/theme/**/*.{ts,tsx}"
+        "src/theme/**/*.{ts,tsx}",
+        "test/mocks/*.{ts,tsx}"
       ],
       "ignoreDependencies": [
         "@docusaurus/theme-classic",

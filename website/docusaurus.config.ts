@@ -160,6 +160,11 @@ const config: Config = {
       name: 'docusaurus-plugin-esmodule-shims',
       configureWebpack() {
         return {
+          resolve: {
+            // The Playground bundles ts-graphviz from the workspace, whose
+            // TypeScript sources import each other as `./file.js`.
+            extensionAlias: { '.js': ['.ts', '.js'] },
+          },
           module: {
             rules: [
               {

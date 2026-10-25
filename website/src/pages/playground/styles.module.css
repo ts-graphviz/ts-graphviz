@@ -1,7 +1,19 @@
 .main {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  padding-block: 1.25rem;
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
 }
 
 .editor {
-  height: 70vh;
+  flex: 1 1 auto;
+}
+
+/* On wide screens the Playground fills the window below the navbar. */
+@media (min-width: 997px) {
+  .main {
+    height: calc(100svh - var(--ifm-navbar-height));
+    min-height: 32rem;
+  }
 }
