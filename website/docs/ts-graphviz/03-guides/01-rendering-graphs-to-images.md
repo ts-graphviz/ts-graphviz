@@ -26,6 +26,7 @@ Ensure that [Graphviz](https://graphviz.org/download/) is installed on your syst
 ### Converting DOT to an Image Stream
 
 ```typescript
+import { Writable } from 'node:stream';
 import { toStream } from 'ts-graphviz/adapter';
 
 const dot = `
@@ -37,10 +38,9 @@ const dot = `
 const stream = await toStream(dot, { format: 'svg' });
 
 // In Node.js
-stream.pipe(process.stdout);
+await stream.pipeTo(Writable.toWeb(process.stdout));
 
-// In Deno
-await stream.pipeTo(Deno.stdout.writable);
+// In Deno: await stream.pipeTo(Deno.stdout.writable);
 ```
 
 ### Writing DOT to an Image File

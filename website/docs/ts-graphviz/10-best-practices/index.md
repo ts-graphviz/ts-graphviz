@@ -8,13 +8,15 @@ description: Best practices for effectively using ts-graphviz in projects.
 Utilize TypeScript's interfaces and types for better type safety.
 
 ```typescript
+import { digraph, type GraphBaseModel } from 'ts-graphviz';
+
 interface CustomNodeOptions {
   id: string;
   label: string;
   color?: string;
 }
 
-function addCustomNodes(g, nodes: CustomNodeOptions[]) {
+function addCustomNodes(g: GraphBaseModel, nodes: CustomNodeOptions[]) {
   nodes.forEach((node) => {
     g.node(node.id, { label: node.label, color: node.color });
   });

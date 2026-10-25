@@ -90,7 +90,7 @@ $ pnpm add ts-graphviz
 
 You can install and use the package by specifying the following:
 
-```ts
+```ts no-check
 import { toDot } from 'npm:ts-graphviz';
 ```
 
@@ -122,9 +122,6 @@ graph.addEdge(edge);
 
 // Convert to DOT language
 const dot = toDot(graph);
-
-// Convert to DOT language
-const dot = toDot(G);
 // digraph {
 //   "node1" [
 //     color = "red",
@@ -141,8 +138,6 @@ const dot = toDot(G);
 #### Declarative API (Factory Function)
 
 Create graphs using a declarative approach with a factory function:
-
-```typescript
 
 ```ts
 import { attribute as _, digraph, toDot } from 'ts-graphviz';
@@ -188,7 +183,7 @@ The `@ts-graphviz/react` package provides React components for creating Graphviz
 import { Digraph, Node, Edge, renderToDot } from '@ts-graphviz/react';
 
 // Define reusable components
-const UserCard = ({ id, name, role }) => (
+const UserCard = ({ id, name, role }: { id: string; name: string; role: string }) => (
   <Node
     id={id}
     shape="record"
@@ -207,7 +202,7 @@ const UserCard = ({ id, name, role }) => (
   />
 );
 
-const StatusBadge = ({ status }) => (
+const StatusBadge = ({ status }: { status: string }) => (
   <dot:font color={status === 'active' ? 'green' : 'red'}>
     <dot:b>{status.toUpperCase()}</dot:b>
   </dot:font>

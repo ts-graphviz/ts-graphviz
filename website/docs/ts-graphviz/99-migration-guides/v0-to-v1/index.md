@@ -87,8 +87,9 @@ With the introduction of attribute types, you can now import specific attribute 
 **Example:**
 
 ```typescript
-import { attribute } from 'ts-graphviz';
+import { attribute, digraph } from 'ts-graphviz';
 
+const g = digraph('G');
 g.node('Node1', {
   [attribute.label]: 'My Node',
   [attribute.color]: 'red',

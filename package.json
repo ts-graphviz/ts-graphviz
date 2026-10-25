@@ -42,6 +42,7 @@
     "check:packages": "node scripts/check-packages.ts",
     "api:check": "node scripts/api-report.ts",
     "api:update": "node scripts/api-report.ts --update",
+    "check:doc-examples": "node scripts/check-doc-examples.ts",
     "build:website": "pnpm build && pnpm doc && pnpm --filter @ts-graphviz/website build && pnpm --filter @ts-graphviz/website copy-api && pnpm --filter @ts-graphviz/website check-links"
   },
   "devDependencies": {

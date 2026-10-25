@@ -70,6 +70,24 @@ digraph "G" {
 `Digraph`、`Graph`、および `Subgraph` の `with` メソッドを使用すると、カスタムモデルを事前に定義できます。
 
 ```typescript
+import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
+
+class MyCustomNode extends Node {
+  constructor(id: string) {
+    super(`node_${id}`, {
+      [_.label]: `これはカスタムノード ${id} です`,
+    });
+  }
+}
+
+class MyCustomEdge extends Edge {
+  constructor(targets: EdgeTargetTuple) {
+    super(targets, {
+      [_.label]: 'これはカスタムエッジです',
+    });
+  }
+}
+
 const g = new Digraph();
 g.with({
   Node: MyCustomNode,

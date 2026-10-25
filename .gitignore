@@ -139,3 +139,6 @@ fuzz/dist/
 fuzz/corpus/
 fuzz/findings/
 crash-*
+
+# Code blocks of the docs, extracted by scripts/check-doc-examples.ts
+.doc-examples/

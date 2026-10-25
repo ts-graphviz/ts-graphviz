@@ -8,13 +8,15 @@ description: プロジェクトでts-graphvizを効果的に使うためのベ�
 TypeScript のインターフェイスや型を利用して、より安全な型チェックを行いましょう。
 
 ```typescript
+import { digraph, type GraphBaseModel } from 'ts-graphviz';
+
 interface CustomNodeOptions {
   id: string;
   label: string;
   color?: string;
 }
 
-function addCustomNodes(g, nodes: CustomNodeOptions[]) {
+function addCustomNodes(g: GraphBaseModel, nodes: CustomNodeOptions[]) {
   nodes.forEach((node) => {
     g.node(node.id, { label: node.label, color: node.color });
   });

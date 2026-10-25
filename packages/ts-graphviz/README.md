@@ -76,7 +76,7 @@ $ pnpm add ts-graphviz
 
 You can install and use the package by specifying the following:
 
-```ts
+```ts no-check
 import { toDot } from 'npm:ts-graphviz';
 ```
 
@@ -197,6 +197,24 @@ You can also use the _Models Context API_ to create custom classes for objects g
 The `with` methods of `Digraph`, `Graph`, and `Subgraph`, which are implementations of `GraphBaseModel`, are provided to predefine custom models.
 
 ```typescript
+import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
+
+class MyCustomNode extends Node {
+  constructor(id: string) {
+    super(`node_${id}`, {
+      [_.label]: `This is Custom Node ${id}`,
+    });
+  }
+}
+
+class MyCustomEdge extends Edge {
+  constructor(targets: EdgeTargetTuple) {
+    super(targets, {
+      [_.label]: 'This is Custom Edge',
+    });
+  }
+}
+
 const g = new Digraph();
 g.with({
   Node: MyCustomNode,
@@ -228,6 +246,8 @@ The main scenario for using this library is to use the `toDot` function, but it 
 By converting **DOT** to **Model**, a portion of the code can be written in the DOT language.
 
 ```typescript
+import { fromDot, toDot } from 'ts-graphviz';
+
 const G = fromDot(
   `digraph {
     node_A [
@@ -329,6 +349,32 @@ This _Model Factory_ provides a means to replace `RootGraphModel` with a custom 
 This API provides a way to integrate declarative APIs and custom classes.
 
 ```typescript
+import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot, withContext } from 'ts-graphviz';
+
+class MyCustomDigraph extends Digraph {
+  constructor() {
+    super('G', {
+      [_.label]: 'This is Custom Digraph',
+    });
+  }
+}
+
+class MyCustomNode extends Node {
+  constructor(id: string) {
+    super(`node_${id}`, {
+      [_.label]: `This is Custom Node ${id}`,
+    });
+  }
+}
+
+class MyCustomEdge extends Edge {
+  constructor(targets: EdgeTargetTuple) {
+    super(targets, {
+      [_.label]: 'This is Custom Edge',
+    });
+  }
+}
+
 const { digraph } = withContext({
   Digraph: MyCustomDigraph,
   Node: MyCustomNode,
@@ -340,7 +386,7 @@ const G = digraph((g) => {
   const b = g.node('B'); // MyCustomNode
   g.edge([a, b]); // MyCustomEdge
 });
-const dot = toDot(g);
+const dot = toDot(G);
 // digraph "G" {
 //   label = "This is Custom Digraph";
 //   "node_A" [

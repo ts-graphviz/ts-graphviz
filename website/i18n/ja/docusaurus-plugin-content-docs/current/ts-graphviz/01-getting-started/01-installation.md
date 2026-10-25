@@ -15,7 +15,7 @@ npm install ts-graphviz
 
 以下を指定してパッケージをインポートして使用できます。
 
-```ts
+```ts no-check
 import { toDot } from 'npm:ts-graphviz';
 ```
 

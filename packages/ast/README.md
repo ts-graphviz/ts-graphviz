@@ -73,6 +73,8 @@ The `parse` function accepts an optional second argument for configuration:
 ```ts
 import { parse } from "@ts-graphviz/ast";
 
+const dotString = "digraph G { A -> B; }";
+
 // Parse with custom security limits
 const ast = parse(dotString, {
   maxHtmlNestingDepth: 200,      // Maximum HTML nesting depth (default: 100)
