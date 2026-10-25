@@ -76,18 +76,28 @@ export interface FromDotOptions<
  * @returns A model of type {@link RootGraphModel}, {@link NodeModel}, {@link EdgeModel}, or {@link SubgraphModel},
  * depending on the type specified in the options.
  */
+export function fromDot<const P extends Partial<ModelsContext>>(
+  dot: string,
+  options: FromDotOptions<'Dot' | 'Graph', P> & {
+    convert: { models: P };
+  },
+): ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'];
 export function fromDot<
-  const R extends FromDotRule = 'Dot',
-  const P extends Partial<ModelsContext> = Partial<ModelsContext>,
+  const P extends Partial<ModelsContext>,
+  const R extends FromDotRule,
 >(
   dot: string,
   options: FromDotOptions<R, P> & {
     convert: { models: P };
   },
 ): FromDotModel<R, ResolvedModelTypes<P>>;
-export function fromDot<const R extends FromDotRule = 'Dot'>(
+export function fromDot(
   dot: string,
-  options?: FromDotOptions<R>,
+  options?: FromDotOptions<'Dot' | 'Graph'>,
+): RootGraphModel;
+export function fromDot<const R extends FromDotRule>(
+  dot: string,
+  options: FromDotOptions<R>,
 ): FromDotModel<R>;
 export function fromDot(
   dot: string,

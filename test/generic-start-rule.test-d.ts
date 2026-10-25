@@ -10,6 +10,7 @@ import {
 } from '@ts-graphviz/ast';
 import {
   type EdgeModel,
+  type FromDotOptions,
   fromDot,
   Node,
   type NodeModel,
@@ -85,6 +86,27 @@ describe('fromDot', () => {
       convert: { models: { Node: MyNode } },
     });
     expectTypeOf(node).toEqualTypeOf<MyNode>();
+  });
+
+  it('keeps an explicit models type argument working (#1738)', () => {
+    class MyNode extends Node {
+      readonly mine = true;
+    }
+    const g = fromDot<{ Node: typeof MyNode }>('digraph { a }', {
+      convert: { models: { Node: MyNode } },
+    });
+    expectTypeOf(g.node('a')).toEqualTypeOf<MyNode>();
+  });
+
+  it('does not let a type argument claim a rule the call does not use', () => {
+    // @ts-expect-error parsed with 'Dot', so it is not a node
+    fromDot<'Node'>('digraph {}');
+  });
+
+  it('accepts options held in a variable', () => {
+    const options: FromDotOptions<'Node'> = { parse: { startRule: 'Node' } };
+    expectTypeOf(fromDot('a', options)).toEqualTypeOf<NodeModel>();
+    expectTypeOf(fromDot('digraph {}', {})).toEqualTypeOf<RootGraphModel>();
   });
 
   it('rejects rules it cannot convert', () => {
