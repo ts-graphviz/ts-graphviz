@@ -81,8 +81,16 @@ export function applyStatements(
         break;
       case 'Node': {
         const node = context.convert(stmt);
-        commentHolder.apply(node, stmt.location);
-        graph.addNode(node);
+        // A node mentioned again adds to its attributes, as in Graphviz
+        // (`a [color=red]; a [shape=box]` is one node with both).
+        const existing = graph.getNode(node.id);
+        if (existing) {
+          existing.attributes.apply(node.attributes.values);
+          commentHolder.apply(existing, stmt.location);
+        } else {
+          commentHolder.apply(node, stmt.location);
+          graph.addNode(node);
+        }
         break;
       }
       case 'Edge': {
