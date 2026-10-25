@@ -1,4 +1,4 @@
-import type { ModelsContext } from '@ts-graphviz/common';
+import type { ModelsContext, ResolvedModelTypes } from '@ts-graphviz/common';
 import { Digraph } from './Digraph.js';
 import { Dot } from './Dot.js';
 import { Edge } from './Edge.js';
@@ -28,9 +28,9 @@ export function defaultModelsContext(): ModelsContext {
  *
  * @group Models Context
  */
-export function createModelsContext(
-  models: Partial<ModelsContext> = {},
-): ModelsContext {
+export function createModelsContext<
+  const P extends Partial<ModelsContext> = Record<never, never>,
+>(models: P = {} as P): ModelsContext<ResolvedModelTypes<P>> {
   const context = { ...defaultModelsContext() };
   for (const key of Object.keys(models) as (keyof ModelsContext)[]) {
     const model = models[key];
@@ -40,5 +40,6 @@ export function createModelsContext(
       (context as Record<keyof ModelsContext, unknown>)[key] = model;
     }
   }
-  return Object.freeze(context);
+  // The classes in `models` decide the instance types (#1736).
+  return Object.freeze(context) as ModelsContext<ResolvedModelTypes<P>>;
 }

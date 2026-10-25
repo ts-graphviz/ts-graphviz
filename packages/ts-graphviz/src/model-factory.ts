@@ -1,4 +1,4 @@
-import type { ModelsContext } from '@ts-graphviz/common';
+import type { ModelsContext, ResolvedModelTypes } from '@ts-graphviz/common';
 import { createModelsContext } from '@ts-graphviz/core';
 import { createModelFactories } from './model-factory-builder.js';
 import type {
@@ -35,9 +35,9 @@ export const strict: ModelFactories = createModelFactories(true);
  * @returns An object with model factories ('digraph', 'graph', and 'strict') that operate within the given context.
  * @group Model Factory
  */
-export function withContext(
-  models: Partial<ModelsContext>,
-): ModelFactoriesWithStrict {
+export function withContext<const P extends Partial<ModelsContext>>(
+  models: P,
+): ModelFactoriesWithStrict<ResolvedModelTypes<P>> {
   const context = createModelsContext(models);
   return Object.freeze({
     ...createModelFactories(false, context),

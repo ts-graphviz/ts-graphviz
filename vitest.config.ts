@@ -14,6 +14,10 @@ export default defineConfig({
     },
     typecheck: {
       enabled: true,
+      // Type tests (`*.test-d.ts`) are checked on their own, with the
+      // sources they import; the other test files are run, not type-checked
+      // here (`pnpm typecheck` covers them).
+      tsconfig: './tsconfig.typecheck.json',
     },
     testTimeout: 0,
   },

@@ -9,6 +9,7 @@ import {
   isDotModel,
   type ModelsContext,
   type NodeModel,
+  type ResolvedModelTypes,
   type RootGraphModel,
   type SubgraphModel,
   withCode,
@@ -21,6 +22,7 @@ import { createModelsContext } from '@ts-graphviz/core';
  */
 export interface FromDotOptions<
   T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph',
+  P extends Partial<ModelsContext> = Partial<ModelsContext>,
 > {
   /**
    * Options for parsing DOT.
@@ -32,9 +34,9 @@ export interface FromDotOptions<
   convert?: Omit<ConvertToModelOptions, 'models'> & {
     /**
      * Classes to create the models from; the ones left out default to the
-     * classes of `@ts-graphviz/core`.
+     * classes of `@ts-graphviz/core`. The result is typed by them (#1736).
      */
-    models?: Partial<ModelsContext>;
+    models?: P;
   };
 }
 
@@ -48,6 +50,12 @@ export interface FromDotOptions<
  * @returns A model of type {@link RootGraphModel}, {@link NodeModel}, {@link EdgeModel}, or {@link SubgraphModel},
  * depending on the type specified in the options.
  */
+export function fromDot<const P extends Partial<ModelsContext>>(
+  dot: string,
+  options: FromDotOptions<'Dot' | 'Graph', P> & {
+    convert: { models: P };
+  },
+): ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'];
 export function fromDot(
   dot: string,
   options?: FromDotOptions<'Dot' | 'Graph'>,
@@ -124,6 +132,19 @@ export function fromDot<
  * @param options Parser limits and conversion options.
  * @returns The graphs, possibly none.
  */
+export function fromDotAll<const P extends Partial<ModelsContext>>(
+  dot: string,
+  options: Omit<FromDotOptions<'Dot', P>, 'parse'> & {
+    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    convert: { models: P };
+  },
+): (ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'])[];
+export function fromDotAll(
+  dot: string,
+  options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
+    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+  },
+): RootGraphModel[];
 export function fromDotAll(
   dot: string,
   options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {

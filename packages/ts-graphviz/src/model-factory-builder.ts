@@ -1,10 +1,11 @@
 import type {
   GraphAttributesObject,
   ModelsContext,
+  ModelTypes,
   RootGraphModel,
 } from '@ts-graphviz/common';
 import { defaultModelsContext } from '@ts-graphviz/core';
-import type { ModelFactory } from './types.js';
+import type { ModelFactories, ModelFactory } from './types.js';
 
 /**
  * ModelFactoryBuilder is a function that takes two parameters, directed and strictMode, and returns a ModelFactory.
@@ -44,12 +45,17 @@ export function ModelFactoryBuilder(
  * @param context An optional ModelsContext parameter.
  * @returns An object containing two ModelFactories, one for directed graphs and one for undirected graphs.
  */
-export function createModelFactories(
+export function createModelFactories<M extends ModelTypes = ModelTypes>(
   strict: boolean,
-  context: ModelsContext = defaultModelsContext(),
-): Readonly<{ digraph: ModelFactory; graph: ModelFactory }> {
+  context: ModelsContext<M> = defaultModelsContext() as ModelsContext<M>,
+): Readonly<ModelFactories<M>> {
+  // The graphs come from the context's classes, which `M` describes.
   return Object.freeze({
-    digraph: ModelFactoryBuilder.call(context, true, strict),
-    graph: ModelFactoryBuilder.call(context, false, strict),
+    digraph: ModelFactoryBuilder.call(context, true, strict) as ModelFactory<
+      M['Digraph']
+    >,
+    graph: ModelFactoryBuilder.call(context, false, strict) as ModelFactory<
+      M['Graph']
+    >,
   });
 }

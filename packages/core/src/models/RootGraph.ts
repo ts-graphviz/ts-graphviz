@@ -1,6 +1,7 @@
 import type {
   GraphAttributeKey,
   GraphAttributesObject,
+  ModelTypes,
   RootGraphModel,
 } from '@ts-graphviz/common';
 import { GraphBase } from './GraphBase.js';
@@ -9,9 +10,9 @@ import { GraphBase } from './GraphBase.js';
  * Base class representing a root graph(digraph, graph).
  * @group Models
  */
-export abstract class RootGraph
-  extends GraphBase<'Graph', GraphAttributeKey>
-  implements RootGraphModel
+export abstract class RootGraph<M extends ModelTypes = ModelTypes>
+  extends GraphBase<'Graph', GraphAttributeKey, M>
+  implements RootGraphModel<M>
 {
   public get $$type(): 'Graph' {
     return 'Graph';

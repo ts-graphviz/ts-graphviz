@@ -298,17 +298,18 @@ export interface GraphCommonAttributes {
 export interface GraphBaseModel<
   T extends DotObjectType = DotObjectType,
   K extends AttributeKey = AttributeKey,
+  M extends ModelTypes = ModelTypes,
 > extends HasComment,
     Attributes<K>,
     DotObjectModel<T> {
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes>;
   /** Node objects in the graph. */
-  readonly nodes: ReadonlyArray<NodeModel>;
+  readonly nodes: ReadonlyArray<M['Node']>;
   /** Edge objects in the graph. */
-  readonly edges: ReadonlyArray<EdgeModel>;
+  readonly edges: ReadonlyArray<M['Edge']>;
   /** Subgraph objects in the graph. */
-  readonly subgraphs: ReadonlyArray<SubgraphModel>;
+  readonly subgraphs: ReadonlyArray<M['Subgraph']>;
   /**
    * The graph's contents in the order they were added: nodes, edges and
    * subgraphs, which `toDot` writes in this order (after the graph's
@@ -316,7 +317,9 @@ export interface GraphBaseModel<
    * an {@link AttributeListModel} here; model classes that keep default
    * attribute statements in their place may (#1732).
    */
-  readonly statements: ReadonlyArray<GraphStatementModel>;
+  readonly statements: ReadonlyArray<
+    M['Node'] | M['Edge'] | M['Subgraph'] | AttributeListModel
+  >;
 
   with(models: Partial<ModelsContext>): void;
 
@@ -374,7 +377,7 @@ export interface GraphBaseModel<
   /**
    * Create a Node in the graph.
    */
-  createNode(id: string, attributes?: NodeAttributesObject): NodeModel;
+  createNode(id: string, attributes?: NodeAttributesObject): M['Node'];
   /**
    * Create a Subgraph and add it to the graph.
    *
@@ -384,26 +387,26 @@ export interface GraphBaseModel<
   createSubgraph(
     id?: string,
     attributes?: SubgraphAttributesObject,
-  ): SubgraphModel;
-  createSubgraph(attributes?: SubgraphAttributesObject): SubgraphModel;
+  ): M['Subgraph'];
+  createSubgraph(attributes?: SubgraphAttributesObject): M['Subgraph'];
   /**
    * Get Subgraph in cluster by specifying id.
    *
    * If there is no Subgraph with the specified id in the graph, return undefined.
    */
-  getSubgraph(id: string): SubgraphModel | undefined;
+  getSubgraph(id: string): M['Subgraph'] | undefined;
 
   /**
    * Get Node in cluster by specifying id.
    *
    * If there is no Node with the specified id in the graph, return undefined.
    */
-  getNode(id: string): NodeModel | undefined;
+  getNode(id: string): M['Node'] | undefined;
   /** Create Edge and add it to the graph. */
   createEdge(
     targets: EdgeTargetLikeTuple,
     attributes?: EdgeAttributesObject,
-  ): EdgeModel;
+  ): M['Edge'];
 
   /**
    * Create a subgraph by specifying its id (or get it if it already exists).
@@ -432,8 +435,8 @@ export interface GraphBaseModel<
    */
   subgraph(
     id: string,
-    callback?: (subgraph: SubgraphModel) => void,
-  ): SubgraphModel;
+    callback?: (subgraph: M['Subgraph']) => void,
+  ): M['Subgraph'];
   /**
    * Create a subgraph (or get one if it already exists) and adapt the attributes.
    *
@@ -465,8 +468,8 @@ export interface GraphBaseModel<
   subgraph(
     id: string,
     attributes: SubgraphAttributesObject,
-    callback?: (subgraph: SubgraphModel) => void,
-  ): SubgraphModel;
+    callback?: (subgraph: M['Subgraph']) => void,
+  ): M['Subgraph'];
   /**
    * Create anonymous subgraphs and and adapt the attributes.
    *
@@ -496,8 +499,8 @@ export interface GraphBaseModel<
    */
   subgraph(
     attributes: SubgraphAttributesObject,
-    callback?: (subgraph: SubgraphModel) => void,
-  ): SubgraphModel;
+    callback?: (subgraph: M['Subgraph']) => void,
+  ): M['Subgraph'];
   /**
    * Create anonymous subgraphs and manipulate them with callback functions.
    *
@@ -505,7 +508,7 @@ export interface GraphBaseModel<
    *
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
-  subgraph(callback?: (subgraph: SubgraphModel) => void): SubgraphModel;
+  subgraph(callback?: (subgraph: M['Subgraph']) => void): M['Subgraph'];
 
   /**
    * Create a node by specifying its id (or get it if it already exists).
@@ -527,7 +530,7 @@ export interface GraphBaseModel<
    * @param id Node ID.
    * @param callback Callbacks for manipulating created or retrieved node.
    */
-  node(id: string, callback?: (node: NodeModel) => void): NodeModel;
+  node(id: string, callback?: (node: M['Node']) => void): M['Node'];
   /**
    * Create a node (or get one if it already exists) and adapt the attributes.
    *
@@ -558,8 +561,8 @@ export interface GraphBaseModel<
   node(
     id: string,
     attributes: NodeAttributesObject,
-    callback?: (node: NodeModel) => void,
-  ): NodeModel;
+    callback?: (node: M['Node']) => void,
+  ): M['Node'];
   /**
    * Set a common attribute for the nodes in the graph.
    *
@@ -605,8 +608,8 @@ export interface GraphBaseModel<
    */
   edge(
     targets: EdgeTargetLikeTuple,
-    callback?: (edge: EdgeModel) => void,
-  ): EdgeModel;
+    callback?: (edge: M['Edge']) => void,
+  ): M['Edge'];
   /**
    * Create a edge and adapt the attributes.
    *
@@ -636,8 +639,8 @@ export interface GraphBaseModel<
   edge(
     targets: EdgeTargetLikeTuple,
     attributes: EdgeAttributesObject,
-    callback?: (edge: EdgeModel) => void,
-  ): EdgeModel;
+    callback?: (edge: M['Edge']) => void,
+  ): M['Edge'];
   /**
    * Set a common attribute for the edges in the graph.
    *
@@ -691,10 +694,11 @@ export interface GraphBaseModel<
  * DOT model representing a subgraph.
  * @group Models
  */
-export interface SubgraphModel
+export interface SubgraphModel<M extends ModelTypes = ModelTypes>
   extends GraphBaseModel<
     'Subgraph',
-    SubgraphAttributeKey | ClusterSubgraphAttributeKey
+    SubgraphAttributeKey | ClusterSubgraphAttributeKey,
+    M
   > {
   /** Determines whether the Subgraph is a SubgraphCluster. */
   isSubgraphCluster(): boolean;
@@ -704,8 +708,8 @@ export interface SubgraphModel
  * DOT model representing a root graphs(digraph and graph).
  * @group Models
  */
-export interface RootGraphModel
-  extends GraphBaseModel<'Graph', GraphAttributeKey> {
+export interface RootGraphModel<M extends ModelTypes = ModelTypes>
+  extends GraphBaseModel<'Graph', GraphAttributeKey, M> {
   directed: boolean;
 
   /**
@@ -745,46 +749,59 @@ export interface DotModel extends HasComment, DotObjectModel<'Dot'> {
 }
 
 /**
+ * The instance types a {@link ModelsContext} creates: what graphs return
+ * from `node()`, `edge()`, `subgraph()` and the like (#1736). The defaults
+ * are the base interfaces.
  * @group Models
  */
-export interface DotConstructor {
-  new (graphs?: RootGraphModel[], comment?: string): DotModel;
+export interface ModelTypes {
+  Dot: DotModel;
+  Graph: RootGraphModel;
+  Digraph: RootGraphModel;
+  Subgraph: SubgraphModel;
+  Node: NodeModel;
+  Edge: EdgeModel;
 }
 
 /**
  * @group Models
  */
-export interface RootGraphConstructor {
-  new (id?: string, attributes?: GraphAttributesObject): RootGraphModel;
-  new (
-    id?: string,
-    strict?: boolean,
-    attributes?: GraphAttributesObject,
-  ): RootGraphModel;
-  new (strict?: boolean, attributes?: GraphAttributesObject): RootGraphModel;
-  new (attributes?: GraphAttributesObject): RootGraphModel;
+export interface DotConstructor<D extends DotModel = DotModel> {
+  new (graphs?: RootGraphModel[], comment?: string): D;
 }
 
 /**
  * @group Models
  */
-export interface SubgraphConstructor {
-  new (id?: string, attributes?: SubgraphAttributesObject): SubgraphModel;
-  new (attributes?: SubgraphAttributesObject): SubgraphModel;
+export interface RootGraphConstructor<
+  G extends RootGraphModel = RootGraphModel,
+> {
+  new (id?: string, attributes?: GraphAttributesObject): G;
+  new (id?: string, strict?: boolean, attributes?: GraphAttributesObject): G;
+  new (strict?: boolean, attributes?: GraphAttributesObject): G;
+  new (attributes?: GraphAttributesObject): G;
 }
 
 /**
  * @group Models
  */
-export interface NodeConstructor {
-  new (id: string, attributes?: NodeAttributesObject): NodeModel;
+export interface SubgraphConstructor<S extends SubgraphModel = SubgraphModel> {
+  new (id?: string, attributes?: SubgraphAttributesObject): S;
+  new (attributes?: SubgraphAttributesObject): S;
 }
 
 /**
  * @group Models
  */
-export interface EdgeConstructor {
-  new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): EdgeModel;
+export interface NodeConstructor<N extends NodeModel = NodeModel> {
+  new (id: string, attributes?: NodeAttributesObject): N;
+}
+
+/**
+ * @group Models
+ */
+export interface EdgeConstructor<E extends EdgeModel = EdgeModel> {
+  new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): E;
 }
 
 /**

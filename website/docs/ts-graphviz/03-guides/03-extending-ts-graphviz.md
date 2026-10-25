@@ -94,6 +94,29 @@ digraph {
 */
 ```
 
+### Typed custom classes
+
+The classes of a models context also decide the types of what graphs create, in nested subgraphs too:
+
+```typescript
+import { Node, withContext } from 'ts-graphviz';
+
+class MyNode extends Node {
+  get label(): string {
+    return this.id.toUpperCase();
+  }
+}
+
+const { digraph } = withContext({ Node: MyNode });
+
+digraph((g) => {
+  g.node('a').label;                      // MyNode
+  g.subgraph('s', (s) => s.node('b').label); // MyNode in subgraphs too
+});
+```
+
+`createModelsContext`, `withContext`, `createModelFactories`, and `fromDot` / `fromDotAll` with `convert.models` infer the types from the classes given; a class left out keeps the base type, carrying the same context into subgraphs. A custom root or subgraph class that should itself return the custom types extends `RootGraph<M>` / `Subgraph<M>` with `M` describing them (`ModelTypes`).
+
 ### Ordered default attribute statements
 
 In DOT, a default attribute statement applies only to what follows it:
