@@ -65,7 +65,7 @@ describe('Model Collection Edge Cases', () => {
         </>,
       );
 
-      const models = root.getTopLevelModels();
+      const models = root.getTopLevelModels<NodeModel>();
       expect(models).toHaveLength(3);
       expect(models.map((m) => m.id)).toEqual(['a', 'b', 'c']);
       models.forEach((model) => {
@@ -111,7 +111,7 @@ describe('Model Collection Edge Cases', () => {
         </>,
       );
 
-      const models = root.getTopLevelModels();
+      const models = root.getTopLevelModels<NodeModel>();
       // Both models are collected during render
       expect(models).toHaveLength(2);
       models.forEach((model) => {
@@ -136,7 +136,7 @@ describe('Model Collection Edge Cases', () => {
         </>,
       );
 
-      const models = root.getTopLevelModels();
+      const models = root.getTopLevelModels<NodeModel>();
       expect(models).toHaveLength(2);
       models.forEach((model) => {
         expectNode(model);
@@ -158,7 +158,7 @@ describe('Model Collection Edge Cases', () => {
         </>,
       );
 
-      const models = root.getTopLevelModels();
+      const models = root.getTopLevelModels<NodeModel>();
       expect(models).toHaveLength(2);
       models.forEach((model) => {
         expectNode(model);
@@ -242,7 +242,7 @@ describe('Model Collection Edge Cases', () => {
       const root1 = createRoot({ container: container1 });
       await root1.render(<ConditionalComponent showFirst={true} />);
 
-      const models1 = root1.getTopLevelModels();
+      const models1 = root1.getTopLevelModels<NodeModel>();
       expect(models1).toHaveLength(2);
       expect(models1.map((m) => m.id)).toEqual([
         'conditional_first',
@@ -258,7 +258,7 @@ describe('Model Collection Edge Cases', () => {
       const root2 = createRoot({ container: container2 });
       await root2.render(<ConditionalComponent showFirst={false} />);
 
-      const models2 = root2.getTopLevelModels();
+      const models2 = root2.getTopLevelModels<NodeModel>();
       expect(models2).toHaveLength(2);
       expect(models2.map((m) => m.id)).toEqual([
         'always_second',
@@ -308,7 +308,7 @@ describe('Model Collection Edge Cases', () => {
         </>,
       );
 
-      const models = root.getTopLevelModels();
+      const models = root.getTopLevelModels<NodeModel>();
       expect(models).toHaveLength(5);
       models.forEach((model) => {
         expectNode(model);
@@ -364,7 +364,7 @@ describe('Model Collection Edge Cases', () => {
         </>,
       );
 
-      const models = root.getTopLevelModels();
+      const models = root.getTopLevelModels<NodeModel>();
       expect(models).toHaveLength(5);
       models.forEach((model) => {
         expectNode(model);
@@ -397,7 +397,7 @@ describe('Model Collection Edge Cases', () => {
 
       await root.render(<LargeGraph />);
 
-      const models = root.getTopLevelModels();
+      const models = root.getTopLevelModels<NodeModel>();
       expect(models).toHaveLength(nodeCount);
       models.forEach((model) => {
         expectNode(model);

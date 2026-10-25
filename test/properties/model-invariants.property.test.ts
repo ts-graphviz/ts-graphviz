@@ -303,7 +303,7 @@ describe('[SM-5] subgraph nesting', () => {
         const chain: SubgraphModel[] = [];
         let parent: RootGraphModel | SubgraphModel = root;
         for (const id of ids) {
-          const sub = parent.subgraph(id);
+          const sub: SubgraphModel = parent.subgraph(id);
           chain.push(sub);
           parent = sub;
         }

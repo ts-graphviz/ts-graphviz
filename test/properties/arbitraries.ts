@@ -168,11 +168,16 @@ const attributes = fc.uniqueArray(fc.tuple(stringAttributeKey, dotString()), {
   selector: ([key]) => key,
 });
 
+/** No attributes; a new array each time, typed as mutable. */
+const noAttributes: fc.Arbitrary<Attributes> = fc
+  .constant(null)
+  .map((): Attributes => []);
+
 /** Mostly empty, so that graphs without default statements stay common. */
 const defaults: fc.Arbitrary<DefaultsSpec> = fc.record({
-  graph: fc.oneof({ arbitrary: fc.constant([]), weight: 2 }, attributes),
-  node: fc.oneof({ arbitrary: fc.constant([]), weight: 2 }, attributes),
-  edge: fc.oneof({ arbitrary: fc.constant([]), weight: 2 }, attributes),
+  graph: fc.oneof({ arbitrary: noAttributes, weight: 2 }, attributes),
+  node: fc.oneof({ arbitrary: noAttributes, weight: 2 }, attributes),
+  edge: fc.oneof({ arbitrary: noAttributes, weight: 2 }, attributes),
 });
 
 const COMPASS_POINTS = [
@@ -232,12 +237,15 @@ const subgraphSpec: fc.Arbitrary<SubgraphSpec> = fc.letrec<{
 }>((tie) => ({
   subgraph: fc.record({
     id: fc.option(dotString(), { nil: undefined }),
-    attributes: fc.oneof({ arbitrary: fc.constant([]), weight: 2 }, attributes),
+    attributes: fc.oneof({ arbitrary: noAttributes, weight: 2 }, attributes),
     defaults,
     nodes: fc.array(dotString(), { maxLength: 3 }),
     subgraphs: fc.oneof(
       { depthSize: 'small', maxDepth: 2 },
-      { arbitrary: fc.constant([]), weight: 3 },
+      {
+        arbitrary: fc.constant(null).map((): SubgraphSpec[] => []),
+        weight: 3,
+      },
       { arbitrary: fc.array(tie('subgraph'), { maxLength: 2 }), weight: 1 },
     ),
   }),

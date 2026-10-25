@@ -355,7 +355,8 @@ describe('[SM-1] parser robustness', () => {
 });
 
 describe('[SM-2] attribute values of every kind', () => {
-  // The value kinds the model accepts, including the ones DOT writes bare.
+  // The value kinds the model accepts, including the ones DOT writes bare;
+  // typed as a label, which names fewer kinds than the model takes.
   const anyValue = fc.oneof(
     dotString({ newlines: true }),
     fc.double({ noNaN: true, noDefaultInfinity: true }),
@@ -365,7 +366,7 @@ describe('[SM-2] attribute values of every kind', () => {
     dotString()
       .filter((s) => !/[<>]/.test(s))
       .map((s) => htmlLike(`<b>${s}</b>`)),
-  );
+  ) as fc.Arbitrary<string>;
 
   it('toDot never throws and its output always parses', () => {
     fc.assert(

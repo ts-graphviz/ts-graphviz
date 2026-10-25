@@ -1,4 +1,4 @@
-import type { Compass } from '@ts-graphviz/common';
+import type { AttributeKey, Compass } from '@ts-graphviz/common';
 import fc from 'fast-check';
 import {
   type ASTNode,
@@ -236,7 +236,15 @@ const edgeTarget: fc.Arbitrary<EdgeTargetASTNode> = fc.oneof(
 
 export const attribute: fc.Arbitrary<AttributeASTNode> = fc
   .tuple(idLiteral, valueLiteral)
-  .map(([key, value]) => createElement('Attribute', { key, value }, []));
+  // Any ID is a key in the syntax, as the parser produces; the AST types
+  // name the known keys.
+  .map(([key, value]) =>
+    createElement(
+      'Attribute',
+      { key: key as LiteralASTNode<AttributeKey>, value },
+      [],
+    ),
+  );
 
 const attributes = fc.array(attribute, { maxLength: 3 });
 

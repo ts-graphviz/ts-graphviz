@@ -147,7 +147,7 @@ describe('createRoot()', () => {
         </Digraph>,
       );
 
-      const [model] = root.getTopLevelModels();
+      const [model] = root.getTopLevelModels<MyDigraph>();
       expect(model).toBeInstanceOf(MyDigraph);
       expect(model.strict).toBe(true);
       expect(model.getNode('a')).toBeInstanceOf(MyNode);

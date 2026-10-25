@@ -8,20 +8,75 @@ import type {
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';
 
+/**
+ * An output format of Graphviz (`-T`).
+ *
+ * The formats that write to a file or stream, as listed in
+ * {@link https://graphviz.org/docs/outputs/ Output Formats}; the interactive
+ * ones (`gtk`, `x11`, `xlib`) are left out. Which ones work depends on how
+ * Graphviz was built. More can be added by merging into `Format.$values`.
+ */
 export type Format = Format.values;
 export namespace Format {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
   export interface $values
     extends $keywords<
-      | 'png'
-      | 'svg'
-      | 'json'
-      | 'jpg'
-      | 'pdf'
-      | 'xdot'
+      | 'bmp'
+      | 'canon'
+      | 'cmap'
+      | 'cmapx'
+      | 'cmapx_np'
       | 'dot'
-      | 'plain'
       | 'dot_json'
+      | 'eps'
+      | 'exr'
+      | 'fig'
+      | 'gd'
+      | 'gd2'
+      | 'gif'
+      | 'gv'
+      | 'ico'
+      | 'imap'
+      | 'imap_np'
+      | 'ismap'
+      | 'jp2'
+      | 'jpe'
+      | 'jpeg'
+      | 'jpg'
+      | 'json'
+      | 'json0'
+      | 'kitty'
+      | 'kittyz'
+      | 'mp'
+      | 'pct'
+      | 'pdf'
+      | 'pic'
+      | 'pict'
+      | 'plain'
+      | 'plain-ext'
+      | 'png'
+      | 'pov'
+      | 'ps'
+      | 'ps2'
+      | 'psd'
+      | 'sgi'
+      | 'svg'
+      | 'svg_inline'
+      | 'svgz'
+      | 'tga'
+      | 'tif'
+      | 'tiff'
+      | 'tk'
+      | 'vdx'
+      | 'vml'
+      | 'vmlz'
+      | 'vrml'
+      | 'wbmp'
+      | 'webp'
+      | 'xdot'
+      | 'xdot1.2'
+      | 'xdot1.4'
+      | 'xdot_json'
     > {}
   export interface $exclude extends $keywordsValidation {}
 }

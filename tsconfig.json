@@ -1,6 +1,9 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
+    // Declarations are only emitted for package sources, which
+    // tsconfig.packages.json checks with isolatedDeclarations.
+    "isolatedDeclarations": false,
     "paths": {
       "ts-graphviz": [
         "./packages/ts-graphviz/src/ts-graphviz.js"

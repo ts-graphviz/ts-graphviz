@@ -8,13 +8,8 @@ import { optimize } from 'svgo';
 import { toDot } from 'ts-graphviz';
 import { test } from 'vitest';
 
-async function streamToString(stream: NodeJS.ReadableStream) {
-  const chunks = [];
-  for await (const chunk of stream) {
-    chunks.push(Buffer.from(chunk));
-  }
-
-  return Buffer.concat(chunks).toString('utf-8');
+async function streamToString(stream: ReadableStream<Uint8Array>) {
+  return new Response(stream).text();
 }
 
 interface TSGraphvizModule {

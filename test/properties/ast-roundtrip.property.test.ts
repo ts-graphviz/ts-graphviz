@@ -1,5 +1,5 @@
 import fc from 'fast-check';
-import { Dot, defaultModelsContext, toDot } from 'ts-graphviz';
+import { type Compass, Dot, defaultModelsContext, toDot } from 'ts-graphviz';
 import {
   type ASTNode,
   createElement,
@@ -7,6 +7,7 @@ import {
   type LiteralASTNode,
   type LiteralKind,
   parse,
+  parseFragment,
   stringify,
   toModel,
 } from 'ts-graphviz/ast';
@@ -59,17 +60,22 @@ describe('[SM-1] printer and parser', () => {
           graph.map((g) => ['Graph', g] as const),
         ),
         ([startRule, ast]) => {
-          expect(normalize(parse(stringify(ast), { startRule }))).toStrictEqual(
-            normalize(ast),
-          );
+          // The rule is a union here, which the overloads do not take yet
+          // (#1741); each of these rules gives one node.
+          const parsed = (
+            parseFragment as (input: string, rule: string) => ASTNode
+          )(stringify(ast), startRule);
+          expect(normalize(parsed)).toStrictEqual(normalize(ast));
         },
       ),
     );
   });
 
   describe('node ports and compass points', () => {
-    const bare = (value: string) =>
-      createElement('Literal', { value, kind: 'bare' }, []);
+    const bare = <T extends string>(value: T): LiteralASTNode<T> => ({
+      ...createElement('Literal', { value, kind: 'bare' }, []),
+      value,
+    });
     const edgeTo = (port?: string, compass?: string) =>
       createElement(
         'Edge',
@@ -80,7 +86,7 @@ describe('[SM-1] printer and parser', () => {
               {
                 id: bare('a'),
                 ...(port ? { port: bare(port) } : {}),
-                ...(compass ? { compass: bare(compass as 'n') } : {}),
+                ...(compass ? { compass: bare(compass as Compass) } : {}),
               },
               [],
             ),
