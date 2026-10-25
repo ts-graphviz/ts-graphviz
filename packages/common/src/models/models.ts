@@ -186,20 +186,38 @@ export type NonClusterSubgraphAttributesObject =
 
 /**
  * The attribute object a subgraph with the id `Id` takes. Graphviz draws a
- * subgraph as a cluster when its id starts with `cluster` (or it has
- * `cluster: true`), and ignores attributes that do not apply, so the id
- * picks them:
+ * subgraph as a cluster when its id starts with `cluster` (in any case) or
+ * it has `cluster: true`, and ignores attributes that do not apply, so the
+ * id picks them:
  *
  * - an id starting with `cluster`: {@link ClusterSubgraphAttributesObject};
- * - any other id: {@link NonClusterSubgraphAttributesObject};
+ * - any other id, or none (`undefined`):
+ *   {@link NonClusterSubgraphAttributesObject};
+ * - a union of both kinds: cluster attributes with `cluster: true`, which
+ *   hold for either;
  * - an id not known until run time (`string`): {@link SubgraphAttributesObject}.
  * @group Models
  */
-export type SubgraphAttributesFor<Id extends string> = string extends Id
-  ? SubgraphAttributesObject
-  : Id extends `cluster${string}`
-    ? ClusterSubgraphAttributesObject
-    : NonClusterSubgraphAttributesObject;
+export type SubgraphAttributesFor<Id extends string | undefined> = [
+  Id,
+] extends [undefined]
+  ? NonClusterSubgraphAttributesObject
+  : string extends Exclude<Id, undefined>
+    ? SubgraphAttributesObject
+    : [Lowercase<Exclude<Id, undefined>>] extends [`cluster${string}`]
+      ? undefined extends Id
+        ? AsClusterSubgraphAttributesObject
+        : ClusterSubgraphAttributesObject
+      : [
+            Extract<Lowercase<Exclude<Id, undefined>>, `cluster${string}`>,
+          ] extends [never]
+        ? NonClusterSubgraphAttributesObject
+        : AsClusterSubgraphAttributesObject;
+
+/** Cluster attributes with `cluster: true`: valid whatever the id. */
+type AsClusterSubgraphAttributesObject = AttributesObject<
+  Exclude<ClusterSubgraphAttributeKey, 'cluster'>
+> & { cluster: true };
 
 /**
  * @group Models
@@ -460,7 +478,7 @@ export interface GraphBaseModel<
    * @param id - Subgraph ID
    * @param attributes - Subgraph attribute object
    */
-  createSubgraph<const Id extends string>(
+  createSubgraph<const Id extends string | undefined = undefined>(
     id?: Id,
     attributes?: SubgraphAttributesFor<Id>,
   ): M['Subgraph'];
@@ -783,7 +801,11 @@ export interface SubgraphModel<M extends ModelTypes = ModelTypes>
     SubgraphAttributeKey | ClusterSubgraphAttributeKey,
     M
   > {
-  /** Determines whether the Subgraph is a SubgraphCluster. */
+  /**
+   * Whether Graphviz draws the subgraph as a cluster: its id starts with
+   * `cluster` (in any case), or its `cluster` attribute is true (`true`,
+   * `yes` or a non-zero number, as Graphviz reads it).
+   */
   isSubgraphCluster(): boolean;
 }
 

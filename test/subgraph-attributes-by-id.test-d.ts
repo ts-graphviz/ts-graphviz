@@ -57,6 +57,31 @@ describe('subgraph attributes by id', () => {
     g.subgraph('s', { cluster: true, rank: 'same' });
   });
 
+  it('matches the "cluster" prefix in any case, as Graphviz does', () => {
+    g.subgraph('CLUSTER_a', { label: 'A' });
+    g.subgraph('Cluster_b', { pencolor: 'red' });
+    // @ts-expect-error rank applies to subgraphs that are not clusters
+    g.subgraph('CLUSTER_c', { rank: 'same' });
+  });
+
+  it('takes only what holds for every id of a union', () => {
+    const id = Math.random() > 0.5 ? ('row' as const) : ('cluster_b' as const);
+    g.subgraph(id, { cluster: true, label: 'x' });
+    // @ts-expect-error pencolor does not apply when the id is "row"
+    g.subgraph(id, { pencolor: 'red' });
+    // @ts-expect-error rank does not apply when the id is "cluster_b"
+    g.subgraph(id, { rank: 'same' });
+  });
+
+  it('treats an explicit undefined id as no id', () => {
+    g.createSubgraph(undefined, { rank: 'same' });
+    g.createSubgraph(undefined, { cluster: true, label: 'x' });
+    // @ts-expect-error label applies to clusters
+    g.createSubgraph(undefined, { label: 'x' });
+    const maybe = undefined as string | undefined;
+    g.createSubgraph(maybe, { label: 'x', rank: 'same' }); // not known: as before
+  });
+
   it('applies the same rules to anonymous subgraphs', () => {
     g.subgraph({ rank: 'same' });
     g.createSubgraph({ rank: 'source' });

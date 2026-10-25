@@ -222,7 +222,7 @@ export abstract class GraphBase<
     return this.#objects.subgraphs.has(subgraph);
   }
 
-  public createSubgraph<const Id extends string>(
+  public createSubgraph<const Id extends string | undefined = undefined>(
     id?: Id,
     attributes?: SubgraphAttributesFor<Id>,
   ): M['Subgraph'];
