@@ -1,155 +1,148 @@
 // @vitest-environment jsdom
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { FakeWorker } from '../../../test/fake-worker';
 import { mockMatchMedia } from '../../../test/mocks/match-media';
-import { GraphvizProvider } from '../../contexts/Graphviz';
-import { PLAYGROUND_MODULES } from '../../playground/runtime/modules';
-import type {
-  RunRequest,
-  RunResponse,
-} from '../../playground/runtime/protocol';
-import { runScript } from '../../playground/runtime/run-script';
-import type { WorkerLike } from '../../playground/runtime/runner';
 import { ScriptRunnerProvider } from '../../playground/runtime/ScriptRunnerContext';
 import TSGraphvizPreviewEditor from '.';
 
-/** Runs scripts synchronously on request, like worker.ts would. */
-class InlineWorker implements WorkerLike {
-  static instances: InlineWorker[] = [];
-  onmessage: WorkerLike['onmessage'] = null;
-  onerror: WorkerLike['onerror'] = null;
-  queue: RunRequest[] = [];
-  constructor() {
-    InlineWorker.instances.push(this);
-  }
-  postMessage(message: RunRequest) {
-    this.queue.push(message);
-  }
-  terminate() {}
-  /** Answer every queued request. */
-  flush() {
-    for (const request of this.queue.splice(0)) {
-      const data: RunResponse = {
-        id: request.id,
-        ...runScript(request.source, PLAYGROUND_MODULES),
-      };
-      this.onmessage?.({ data } as MessageEvent<RunResponse>);
-    }
-  }
-}
+const options = { createWorker: () => new FakeWorker(), timeoutMs: 1000 };
+const worker = () => FakeWorker.instances[0];
 
-const options = { createWorker: () => new InlineWorker(), timeoutMs: 1000 };
-const graphviz = () =>
-  Promise.resolve({
-    version: () => '99.0.0',
-    layout: (dot: string) => `<svg>${dot}</svg>`,
-  });
-
-async function flush() {
-  await act(async () => {
-    for (const worker of InlineWorker.instances) worker.flush();
-  });
+/** Let the worker answer everything queued, until nothing new is queued. */
+async function settle() {
+  for (let i = 0; i < 5; i++) {
+    await act(async () => {
+      worker()?.respondAll();
+    });
+  }
 }
 
 function renderPlayground(script: string) {
   return render(
     <ScriptRunnerProvider options={options}>
-      <GraphvizProvider load={graphviz}>
-        <TSGraphvizPreviewEditor script={script} />
-      </GraphvizProvider>
+      <TSGraphvizPreviewEditor script={script} />
     </ScriptRunnerProvider>,
   );
 }
 
-const resultRegion = () => screen.getByRole('region', { name: 'Result' });
+const result = () => screen.getByRole('region', { name: 'Result' });
+const showDot = () =>
+  fireEvent.click(within(result()).getByRole('tab', { name: 'DOT' }));
 
 beforeAll(() => {
-  URL.createObjectURL = () => 'blob:test';
+  let n = 0;
+  URL.createObjectURL = () => `blob:test/${n++}`;
   URL.revokeObjectURL = () => {};
 });
 beforeEach(() => {
-  InlineWorker.instances = [];
+  FakeWorker.instances = [];
   mockMatchMedia(['(pointer: coarse)']);
 });
 
 describe('TSGraphvizPreviewEditor', () => {
   it('runs the script on load and shows the graph', async () => {
     renderPlayground("'digraph { a -> b }'");
-    expect(within(resultRegion()).getByRole('status').textContent).toContain(
+    expect(within(result()).getByRole('status').textContent).toContain(
       'Running',
     );
-    await flush();
-    expect(await within(resultRegion()).findByRole('img')).toBeTruthy();
-    expect(resultRegion().textContent).toContain('Graphviz 99.0.0');
+    await settle();
+    expect(
+      within(result()).getByRole('img', { name: 'Rendered graph' }),
+    ).toBeTruthy();
+    expect(result().textContent).toContain('Graphviz 99.0.0');
+    showDot();
+    expect(within(result()).getByText('digraph { a -> b }')).toBeTruthy();
+  });
 
-    fireEvent.click(within(resultRegion()).getByRole('tab', { name: 'DOT' }));
-    expect(within(resultRegion()).getByText('digraph { a -> b }')).toBeTruthy();
+  it('shows that the layout is in progress', async () => {
+    renderPlayground("'digraph { a }'");
+    await act(async () => {
+      worker().respond(); // the script, not yet the layout
+    });
+    expect(within(result()).getByRole('status').textContent).toContain(
+      'Laying out',
+    );
+    expect(worker().queue).toMatchObject([
+      { type: 'layout', dot: 'digraph { a }', engine: 'dot' },
+    ]);
   });
 
   it('runs the edited script on Run', async () => {
     renderPlayground("'digraph { a }'");
-    await flush();
+    await settle();
     fireEvent.change(screen.getByRole('textbox'), {
       target: {
         value: "import { graph } from 'ts-graphviz'; graph('Edited');",
       },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Run' }));
-    expect(resultRegion().getAttribute('aria-busy')).toBe('true');
-    await flush();
-    fireEvent.click(within(resultRegion()).getByRole('tab', { name: 'DOT' }));
-    expect(resultRegion().textContent).toContain('graph "Edited" {');
+    expect(result().getAttribute('aria-busy')).toBe('true');
+    await settle();
+    showDot();
+    expect(result().textContent).toContain('graph "Edited" {');
   });
 
   it('shows script errors', async () => {
     renderPlayground("throw new RangeError('out of range');");
-    await flush();
-    const alert = within(resultRegion()).getByRole('alert');
+    await settle();
+    const alert = within(result()).getByRole('alert');
     expect(alert.textContent).toContain('RangeError');
     expect(alert.textContent).toContain('out of range');
   });
 
-  it('shows only the result of the latest run', async () => {
+  it('shows layout errors', async () => {
+    renderPlayground("'digraph { ! }'");
+    await settle();
+    expect(within(result()).getByRole('alert').textContent).toBe(
+      "Failed to render graph: syntax error near '!'",
+    );
+    // The DOT is still there to look at.
+    showDot();
+    expect(result().textContent).toContain('digraph { ! }');
+  });
+
+  it('keeps the latest run when an older one answers last', async () => {
     renderPlayground("'digraph { first }'");
-    const textarea = screen.getByRole('textbox');
-    fireEvent.change(textarea, { target: { value: "'digraph { second }'" } });
-    // The initial run is still pending; Run starts a newer one.
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: "'digraph { second }'" },
+    });
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: 'Run' }));
     });
-    await flush();
-    fireEvent.click(within(resultRegion()).getByRole('tab', { name: 'DOT' }));
-    expect(resultRegion().textContent).toContain('second');
-    expect(resultRegion().textContent).not.toContain('first');
+    const [first, second] = worker().queue;
+    expect([first.type, second.type]).toEqual(['run', 'run']);
+    await act(async () => {
+      worker().respond(second);
+    });
+    await act(async () => {
+      worker().respond(first);
+    });
+    await settle();
+    showDot();
+    expect(result().textContent).toContain('second');
+    expect(result().textContent).not.toContain('first');
   });
 
   it('runs on Ctrl+Enter in the editor', async () => {
     renderPlayground("'digraph { a }'");
-    await flush();
+    await settle();
     const textarea = screen.getByRole('textbox');
     fireEvent.change(textarea, { target: { value: "'digraph { keyboard }'" } });
     fireEvent.keyDown(textarea, { key: 'Enter', ctrlKey: true });
-    await flush();
-    fireEvent.click(within(resultRegion()).getByRole('tab', { name: 'DOT' }));
-    expect(resultRegion().textContent).toContain('keyboard');
+    await settle();
+    showDot();
+    expect(result().textContent).toContain('keyboard');
   });
 
-  it('lays out with the chosen engine', async () => {
-    const layout = vi.fn((dot: string) => `<svg>${dot}</svg>`);
-    render(
-      <ScriptRunnerProvider options={options}>
-        <GraphvizProvider
-          load={() => Promise.resolve({ version: () => '1', layout })}
-        >
-          <TSGraphvizPreviewEditor script="'digraph { a }'" />
-        </GraphvizProvider>
-      </ScriptRunnerProvider>,
-    );
-    await flush();
-    await within(resultRegion()).findByRole('img');
-    fireEvent.change(within(resultRegion()).getByLabelText('Layout engine'), {
+  it('lays out again with the chosen engine', async () => {
+    renderPlayground("'digraph { a }'");
+    await settle();
+    fireEvent.change(within(result()).getByLabelText('Layout engine'), {
       target: { value: 'circo' },
     });
-    expect(layout).toHaveBeenLastCalledWith('digraph { a }', 'svg', 'circo');
+    expect(worker().queue).toMatchObject([{ type: 'layout', engine: 'circo' }]);
+    await settle();
+    expect(within(result()).getByRole('img')).toBeTruthy();
   });
 });

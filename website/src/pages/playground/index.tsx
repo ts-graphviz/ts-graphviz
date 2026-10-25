@@ -1,6 +1,5 @@
 import { translate } from '@docusaurus/Translate';
 import TSGraphvizPreviewEditor from '@site/src/components/TSGraphvizPreviewEditor';
-import { GraphvizProvider } from '@site/src/contexts/Graphviz';
 import { ScriptRunnerProvider } from '@site/src/playground/runtime/ScriptRunnerContext';
 import Layout from '@theme/Layout';
 import type { ReactElement } from 'react';
@@ -35,12 +34,7 @@ export default function Editor(): ReactElement {
     >
       <main className={styles.main}>
         <ScriptRunnerProvider>
-          <GraphvizProvider>
-            <TSGraphvizPreviewEditor
-              script={script}
-              className={styles.editor}
-            />
-          </GraphvizProvider>
+          <TSGraphvizPreviewEditor script={script} className={styles.editor} />
         </ScriptRunnerProvider>
       </main>
     </Layout>

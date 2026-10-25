@@ -548,12 +548,6 @@
   "Graphviz {version}": {
     "message": "Graphviz {version}"
   },
-  "Loading Graphviz…": {
-    "message": "正在加载 Graphviz…"
-  },
-  "Failed to load Graphviz: {message}": {
-    "message": "加载 Graphviz 失败：{message}"
-  },
   "Running…": {
     "message": "运行中…"
   },
@@ -568,5 +562,8 @@
   },
   "Result": {
     "message": "结果"
+  },
+  "Laying out…": {
+    "message": "正在布局…"
   }
 }

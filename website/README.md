@@ -21,7 +21,7 @@ pnpm --filter @ts-graphviz/website start:zh    # zh-CN
 - `docs/` — guides (English source); translations in `i18n/<locale>/docusaurus-plugin-content-docs/current/`
 - `blog/` — release notes and announcements; translations in `i18n/<locale>/docusaurus-plugin-content-blog/`
 - `src/` — the landing page, the playground and the live editor used in code blocks
-- `src/playground/runtime/` — runs Playground scripts: types are stripped with sucrase and the script is evaluated in a Web Worker against the workspace's ts-graphviz (the only importable module), with a timeout; the DOT it returns is laid out by Graphviz WASM on the page
+- `src/playground/runtime/` — runs Playground scripts: types are stripped with sucrase and the script is evaluated in a Web Worker against the workspace's ts-graphviz (the only importable module), then the DOT it returns is laid out by Graphviz WASM in the same worker; both steps have a timeout that terminates and replaces the worker
 - `plugins/remark-plugin-tsgraphviz.ts` — turns ` ```ts ts-graphviz ` code blocks into live editors (` ```ts ts-graphviz:read-only ` for read-only ones)
 - `scripts/extract-dts.mts` — collects the packages' `.d.ts` files for the editor
 - `scripts/copy-api-reference.mts` — puts the typedoc output under `build/api/`

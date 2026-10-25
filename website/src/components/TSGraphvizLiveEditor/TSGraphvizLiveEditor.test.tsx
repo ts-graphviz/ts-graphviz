@@ -116,6 +116,35 @@ describe('TSGraphvizLiveEditor with a mouse', () => {
     expect(editor.setValue).toHaveBeenCalledWith('typed');
   });
 
+  it('shows the plain view again until a remounted Monaco is ready', async () => {
+    const media = mockMatchMedia([]);
+    const { container } = render(<TSGraphvizLiveEditor script="x" readOnly />);
+    const root = container.firstElementChild as HTMLElement;
+    await screen.findByTestId('monaco');
+    const mount = (monacoProps.current as Record<string, any>).onMount;
+    const editor = {
+      getValue: () => 'x',
+      setValue: () => {},
+      addCommand: () => {},
+      getContentHeight: () => 120,
+      onDidContentSizeChange: () => {},
+    };
+    const monaco = { KeyMod: { CtrlCmd: 1 }, KeyCode: { Enter: 2 } };
+    const { act } = await import('@testing-library/react');
+    act(() => mount(editor, monaco));
+    expect(root.dataset.editor).toBe('monaco');
+
+    act(() => media.setMatching(['(pointer: coarse)']));
+    expect(screen.queryByTestId('monaco')).toBeNull();
+    expect(root.dataset.editor).toBe('plain');
+
+    act(() => media.setMatching([]));
+    await screen.findByTestId('monaco');
+    // The new Monaco has not mounted yet: the code stays readable.
+    expect(root.dataset.editor).toBe('plain');
+    expect(container.querySelector('pre')?.textContent).toBe('x');
+  });
+
   it('gives each editor its own model', async () => {
     mockMatchMedia([]);
     render(

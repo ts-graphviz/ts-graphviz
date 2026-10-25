@@ -552,12 +552,6 @@
   "Graphviz {version}": {
     "message": "Graphviz {version}"
   },
-  "Loading Graphviz…": {
-    "message": "Graphviz を読み込み中…"
-  },
-  "Failed to load Graphviz: {message}": {
-    "message": "Graphviz の読み込みに失敗しました: {message}"
-  },
   "Running…": {
     "message": "実行中…"
   },
@@ -572,5 +566,8 @@
   },
   "Result": {
     "message": "結果"
+  },
+  "Laying out…": {
+    "message": "レイアウト中…"
   }
 }

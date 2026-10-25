@@ -67,6 +67,11 @@ function TSGraphvizLiveEditor({
     [onChange],
   );
   const showMonaco = coarse === false;
+  // A Monaco that unmounted (the pointer became coarse) is no longer ready;
+  // the next one shows the plain view until it mounts.
+  useEffect(() => {
+    if (!showMonaco) setMonacoReady(false);
+  }, [showMonaco]);
 
   return (
     <div

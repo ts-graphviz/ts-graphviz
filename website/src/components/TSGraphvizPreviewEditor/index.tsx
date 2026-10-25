@@ -1,10 +1,10 @@
 import Translate, { translate } from '@docusaurus/Translate';
 import type { Engine } from '@hpcc-js/wasm-graphviz';
-import { Graphviz } from '@site/src/components/Graphviz';
+import { GraphImage } from '@site/src/components/GraphImage';
 import TSGraphvizLiveEditor from '@site/src/components/TSGraphvizLiveEditor';
-import { useGraphviz } from '@site/src/contexts/Graphviz';
 import type { RunResult } from '@site/src/playground/runtime/protocol';
 import { useScriptRunner } from '@site/src/playground/runtime/ScriptRunnerContext';
+import { useLayout } from '@site/src/playground/runtime/useLayout';
 import CodeBlock from '@theme/CodeBlock';
 import TabItem from '@theme/TabItem';
 import Tabs from '@theme/Tabs';
@@ -41,12 +41,12 @@ type Output = { state: 'running' } | ({ state: 'done' } & RunResult);
  * The Playground: a ts-graphviz script on one side, the graph it produces
  * on the other (side by side on wide screens, stacked on narrow ones).
  *
- * Needs a ScriptRunnerProvider and a GraphvizProvider above it. The script
- * runs once when the runner is ready, then on Run or Ctrl/Cmd+Enter.
+ * Needs a ScriptRunnerProvider above it. The script runs once when the
+ * runner is ready, then on Run or Ctrl/Cmd+Enter; scripts and Graphviz
+ * layouts both run in the runner's worker.
  */
 function TSGraphvizPreviewEditor({ script, className }: Props): JSX.Element {
   const runner = useScriptRunner();
-  const graphviz = useGraphviz();
   const source = useRef(script);
   const latestRun = useRef(0);
   const [output, setOutput] = useState<Output>({ state: 'running' });
@@ -71,6 +71,8 @@ function TSGraphvizPreviewEditor({ script, className }: Props): JSX.Element {
   }, []);
 
   const running = runner === null || output.state === 'running';
+  const dot = output.state === 'done' && output.ok ? output.dot : null;
+  const layout = useLayout(dot, engine);
 
   return (
     <div className={clsx(styles.playground, className)}>
@@ -137,20 +139,32 @@ function TSGraphvizPreviewEditor({ script, className }: Props): JSX.Element {
                     ))}
                   </select>
                 </label>
-                {graphviz.status === 'ready' ? (
+                {layout.status === 'done' && layout.ok ? (
                   <span className={styles.version}>
                     {translate(
                       { message: 'Graphviz {version}' },
-                      { version: graphviz.version },
+                      { version: layout.version },
                     )}
                   </span>
                 ) : null}
               </div>
-              <Graphviz
-                className={styles.graph}
-                dot={output.dot}
-                engine={engine}
-              />
+              {layout.status === 'done' ? (
+                layout.ok ? (
+                  <GraphImage className={styles.graph} svg={layout.svg} />
+                ) : (
+                  <div role="alert" className={styles.error}>
+                    {translate(
+                      { message: 'Failed to render graph: {message}' },
+                      { message: layout.error.message },
+                    )}
+                  </div>
+                )
+              ) : (
+                <output className={styles.message}>
+                  <span className={styles.spinner} aria-hidden="true" />
+                  <Translate>Laying out…</Translate>
+                </output>
+              )}
             </TabItem>
             <TabItem value="dot" label="DOT">
               <CodeBlock language="dot" className={styles.dot}>
