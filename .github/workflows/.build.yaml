@@ -40,6 +40,10 @@ jobs:
         run: pnpm typecheck
       - name: Check packages as they would be published
         run: pnpm check:packages
+      # Type-checks test/consumer/ against the packed packages with
+      # TypeScript 5.0, 6.0 and 7.0 and several module settings.
+      - name: Type-check the packages as users install them
+        run: pnpm check:consumer-types
       # api-reports/ holds the public API of every entry point; a change of a
       # public type must come with the updated report (`pnpm api:update`).
       - name: Check the public API against api-reports/

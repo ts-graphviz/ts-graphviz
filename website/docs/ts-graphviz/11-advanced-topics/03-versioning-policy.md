@@ -29,6 +29,13 @@ There are scenarios where **ts-graphviz** may deviate from strict Semantic Versi
 For TypeScript projects, we recommend pinning the **ts-graphviz** minor version to control upgrade timing and compatibility testing.
 :::
 
+### Supported TypeScript versions {#supported-typescript-versions}
+
+- **v4 requires TypeScript 5.0 or later.** A raise of this minimum is announced in the release notes of the minor release that makes it.
+- CI type-checks the published packages, as installed from their tarballs, with the minimum (5.0), TypeScript 6 and TypeScript 7. Each is checked with `moduleResolution` `node16`, `nodenext` and `bundler` (including the adapter's `browser` and `deno` conditions), and with `strict`, `exactOptionalPropertyTypes` and `skipLibCheck: false`.
+- The packages are ES modules only. `require()` from CommonJS type-checks with TypeScript 5.8 or later (`module: nodenext`) or 5.9 or later (`module: node20`).
+- With TypeScript 5.0, use an `@types/node` that still supports it (the `ts5.0` dist-tag, `npm install -D @types/node@ts5.0`); the latest `@types/node` needs TypeScript 5.1 or later.
+
 ---
 
 ## Information Sharing

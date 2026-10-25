@@ -32,6 +32,9 @@
     }
   },
   "exclude": [
+    // require()s the ESM-only packages, which needs `module: nodenext`;
+    // `pnpm check:consumer-types` type-checks it so.
+    "test/consumer/cjs.cts",
     "website",
     "**/node_modules",
     "**/lib",

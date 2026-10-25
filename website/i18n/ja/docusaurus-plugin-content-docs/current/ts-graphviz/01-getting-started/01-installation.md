@@ -11,6 +11,8 @@ description: ts-graphvizをインストールしてすぐにグラフ作成を�
 npm install ts-graphviz
 ```
 
+TypeScript で使う場合は **TypeScript 5.0 以降**が必要です（[バージョニングポリシー](../11-advanced-topics/03-versioning-policy.md#supported-typescript-versions)を参照）。
+
 ## Deno
 
 以下を指定してパッケージをインポートして使用できます。

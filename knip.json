@@ -5,11 +5,14 @@
       "entry": [
         "media/*.tsx",
         "scripts/*.ts",
+        "test/consumer/*.{ts,tsx,cts}",
         "fuzz/targets/*.fuzz.ts"
       ],
       "ignoreDependencies": [
         "publint",
-        "@arethetypeswrong/cli"
+        "@arethetypeswrong/cli",
+        "typescript-5.0",
+        "types-node-ts5.0"
       ],
       "ignoreBinaries": [
         "dot"

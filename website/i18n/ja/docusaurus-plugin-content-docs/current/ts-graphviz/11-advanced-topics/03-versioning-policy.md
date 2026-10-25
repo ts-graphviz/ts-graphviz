@@ -28,6 +28,13 @@ description: ts-graphvizのバージョニングポリシー
 TypeScriptプロジェクトでは、アップグレードのタイミングと互換性テストを制御するために、**ts-graphviz** のマイナーバージョンを固定することを推奨します。
 :::
 
+### 対応する TypeScript のバージョン {#supported-typescript-versions}
+
+- **v4 は TypeScript 5.0 以降が必要です。** この下限を引き上げる場合は、そのマイナーリリースのリリースノートでお知らせします。
+- CI では、公開するパッケージを tarball からインストールした状態で、下限の 5.0、TypeScript 6、TypeScript 7 の各バージョンで型検査しています。`moduleResolution` は `node16`・`nodenext`・`bundler`（adapter の `browser`・`deno` 条件を含む）、設定は `strict`・`exactOptionalPropertyTypes`・`skipLibCheck: false` です。
+- パッケージは ES モジュールのみです。CommonJS からの `require()` は TypeScript 5.8 以降（`module: nodenext`）または 5.9 以降（`module: node20`）で型検査が通ります。
+- TypeScript 5.0 では、5.0 に対応した `@types/node`（`ts5.0` dist-tag、`npm install -D @types/node@ts5.0`）を使ってください。最新の `@types/node` は TypeScript 5.1 以降が必要です。
+
 ---
 
 ## 情報共有
