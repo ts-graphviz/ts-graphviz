@@ -18,5 +18,12 @@
     "**/vite.config.ts",
     "**/vitest.config.ts",
     "**/examples/**"
-  ]
+  ],
+  "customCss": "./typedoc.css",
+  "sidebarLinks": {
+    "ts-graphviz.github.io": "https://ts-graphviz.github.io/",
+    "Guides": "https://ts-graphviz.github.io/docs/ts-graphviz/introduction",
+    "Playground": "https://ts-graphviz.github.io/playground/",
+    "GitHub": "https://github.com/ts-graphviz/ts-graphviz"
+  }
 }
