@@ -43,6 +43,11 @@ export interface FileRange {
 export interface ASTCommonProperties {
   /**
    * The start and end location of the AST object.
+   *
+   * The parser sets it on every node it makes; nodes made in other ways
+   * (`createElement`, `fromModel`) have none. Code should not rely on it
+   * being present: a parsing option to leave it out and save memory is
+   * planned (#1723).
    */
   location?: FileRange;
   /**

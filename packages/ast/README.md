@@ -75,7 +75,6 @@ import { parse } from "@ts-graphviz/ast";
 
 // Parse with custom security limits
 const ast = parse(dotString, {
-  startRule: 'Dot',              // Specify the starting rule (default: 'Dot')
   maxHtmlNestingDepth: 200,      // Maximum HTML nesting depth (default: 100)
   maxEdgeChainDepth: 2000,       // Maximum edge chain depth (default: 1000)
   maxInputSize: 20971520,        // Maximum input size in bytes (default: 10MB)
@@ -87,11 +86,19 @@ const ast = parse(dotString, {
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `startRule` | `'Dot'` | Starting grammar rule for parsing |
 | `maxHtmlNestingDepth` | `100` | Maximum depth of nested HTML-like structures |
 | `maxEdgeChainDepth` | `1000` | Maximum depth of chained edges (e.g., `a -> b -> c -> ...`) |
 | `maxInputSize` | `10485760` (10MB) | Maximum input size in bytes |
 | `maxASTNodes` | `100000` | Maximum number of AST nodes to create |
+
+To read a fragment of a DOT source rather than a whole one, use `parseFragment` (beta, low-level API) with the grammar rule; it takes the same limits. The `startRule` option of `parse` is deprecated in its favour and will be removed in 5.0.
+
+```ts
+import { parseFragment } from "@ts-graphviz/ast";
+
+const edge = parseFragment('a -> b [color=red]', 'Edge');
+const statements = parseFragment('a; b -> c; rank=same', 'ClusterStatements');
+```
 
 **Security Note**:
 
