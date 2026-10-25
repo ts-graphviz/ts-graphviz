@@ -1,6 +1,6 @@
 import ReactReconciler from 'react-reconciler';
 import {
-  DefaultEventPriority,
+  DiscreteEventPriority,
   NoEventPriority,
 } from 'react-reconciler/constants.js';
 import type {
@@ -113,21 +113,26 @@ export class HostConfig
     });
   }
 
-  // Update priorities, as react-dom tracks them (#1752): the priority set by
-  // the reconciler, or the default one outside of an event. Arrow functions,
-  // because the reconciler calls host config methods without `this`.
+  // Update priorities (#1752), from react-reconciler/constants. A render
+  // produces a snapshot of models, so every update runs at the discrete
+  // (synchronous) priority, including those effects schedule: React lowers
+  // the priority to the default one while it runs passive effects, which
+  // would leave their updates for later, after render() returned. The set
+  // priority is still tracked, so React's save-and-restore keeps working.
+  // Arrow functions, because the reconciler calls host config methods
+  // without `this`.
   #currentUpdatePriority: UpdatePriority = NoEventPriority;
 
-  resolveUpdatePriority = (): UpdatePriority =>
-    this.#currentUpdatePriority !== NoEventPriority
-      ? this.#currentUpdatePriority
-      : DefaultEventPriority;
+  resolveUpdatePriority = (): UpdatePriority => DiscreteEventPriority;
 
   setCurrentUpdatePriority = (priority: UpdatePriority): void => {
     this.#currentUpdatePriority = priority;
   };
 
-  getCurrentUpdatePriority = (): UpdatePriority => this.#currentUpdatePriority;
+  getCurrentUpdatePriority = (): UpdatePriority =>
+    this.#currentUpdatePriority === NoEventPriority
+      ? NoEventPriority
+      : DiscreteEventPriority;
 
   // form-related methods
   resetFormInstance(_form: FormInstance): void {

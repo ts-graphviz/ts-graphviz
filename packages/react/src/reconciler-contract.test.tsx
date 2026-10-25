@@ -1,7 +1,8 @@
-import { Component, type ReactNode } from 'react';
+import { Component, type ReactNode, useEffect, useState } from 'react';
 import {
   DefaultEventPriority,
   DiscreteEventPriority,
+  NoEventPriority,
 } from 'react-reconciler/constants.js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Digraph } from './components/Digraph.js';
@@ -86,12 +87,16 @@ describe('error callbacks', () => {
 });
 
 describe('host config', () => {
-  it('uses event priorities and tracks the current one', () => {
+  it('runs every update at the discrete (synchronous) priority', () => {
     const host = new HostConfig();
-    expect(host.resolveUpdatePriority()).toBe(DefaultEventPriority);
-    host.setCurrentUpdatePriority(DiscreteEventPriority);
-    expect(host.getCurrentUpdatePriority()).toBe(DiscreteEventPriority);
+    expect(host.getCurrentUpdatePriority()).toBe(NoEventPriority);
     expect(host.resolveUpdatePriority()).toBe(DiscreteEventPriority);
+    // React lowers the priority to the default one around passive effects;
+    // their updates still run synchronously.
+    host.setCurrentUpdatePriority(DefaultEventPriority);
+    expect(host.getCurrentUpdatePriority()).toBe(DiscreteEventPriority);
+    host.setCurrentUpdatePriority(NoEventPriority);
+    expect(host.getCurrentUpdatePriority()).toBe(NoEventPriority);
   });
 
   it('runs a scheduled microtask as a microtask, not at once', async () => {
@@ -125,5 +130,54 @@ describe('synchronous rendering', () => {
       </Digraph>,
     );
     expect(dot).toContain('"a";');
+  });
+});
+
+describe('updates scheduled by effects', () => {
+  function RevealedGraph(): ReactNode {
+    const [shown, setShown] = useState(false);
+    useEffect(() => setShown(true), []);
+    return shown ? (
+      <Digraph id="G">
+        <Node id="late" />
+      </Digraph>
+    ) : null;
+  }
+
+  function RevealedNode(): ReactNode {
+    const [shown, setShown] = useState(false);
+    useEffect(() => setShown(true), []);
+    return shown ? <Node id="late" /> : null;
+  }
+
+  function ThrowsAfterEffect(): ReactNode {
+    const [failed, setFailed] = useState(false);
+    useEffect(() => setFailed(true), []);
+    if (failed) throw new RangeError('after effect');
+    return null;
+  }
+
+  it('settles before render resolves: a graph shown by an effect is there', async () => {
+    const dot = await renderToDot(<RevealedGraph />);
+    expect(dot).toContain('"late";');
+  });
+
+  it('settles before render resolves: a node shown by an effect is there', async () => {
+    const dot = await renderToDot(
+      <Digraph id="G">
+        <RevealedNode />
+      </Digraph>,
+    );
+    expect(dot).toContain('"late";');
+  });
+
+  it('rejects with an error thrown by a render an effect caused', async () => {
+    await expect(
+      renderToDot(
+        <Digraph id="G">
+          <ThrowsAfterEffect />
+        </Digraph>,
+      ),
+    ).rejects.toThrow('after effect');
   });
 });

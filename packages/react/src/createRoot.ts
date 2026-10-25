@@ -238,6 +238,8 @@ function renderInternal<
   const { onRenderComplete } = options;
   containerInfo.uncaughtErrors = [];
   reconciler.updateContainerSync(wrappedElement, fiberRoot, null, null);
+  // Updates that effects schedule are synchronous too (see the host config's
+  // update priorities), so the tree has settled once sync work is flushed.
   reconciler.flushSyncWork();
   const [error] = containerInfo.uncaughtErrors;
   if (containerInfo.uncaughtErrors.length > 0) {
