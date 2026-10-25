@@ -1,7 +1,61 @@
 .editor {
-  border: 1px solid #ced4da;
+  position: relative;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-code-border-radius);
+  overflow: hidden;
+  margin-bottom: var(--ifm-leading);
 }
 
-[data-theme="dark"] .editor {
-  border: 1px solid #3c3c3c;
+.fill {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+.fill > * {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.monaco {
+  width: 100%;
+}
+
+.fill .monaco {
+  height: 100%;
+}
+
+.codeBlock {
+  margin-bottom: 0;
+  /* the outer border already frames it */
+  box-shadow: none;
+}
+
+.textarea {
+  display: block;
+  width: 100%;
+  min-height: 12rem;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border: 0;
+  resize: vertical;
+  background: var(--prism-background-color, var(--ifm-pre-background));
+  color: var(--ifm-pre-color);
+  font-family: var(--ifm-font-family-monospace);
+  /* 16px keeps iOS Safari from zooming in when the field gets focus */
+  font-size: 16px;
+  line-height: 1.5;
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+}
+
+.fill .textarea {
+  height: 100%;
+  resize: none;
+}
+
+.textarea:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: -2px;
 }
