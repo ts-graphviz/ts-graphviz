@@ -32,9 +32,15 @@ export function isNodeRefLike(node: unknown): node is NodeRefLike {
  * @param target - Object to check
  * @returns True if the object is NodeRefGroupLike
  */
-export function isNodeRefGroupLike<
-  T extends NodeRefLike | ReadonlyNodeRefGroupLike,
->(target: T): target is Extract<T, readonly unknown[]> {
+export function isNodeRefGroupLike(
+  target: NodeRefLike | NodeRefGroupLike,
+): target is NodeRefGroupLike;
+export function isNodeRefGroupLike(
+  target: NodeRefLike | ReadonlyNodeRefGroupLike,
+): target is ReadonlyNodeRefGroupLike;
+export function isNodeRefGroupLike(
+  target: NodeRefLike | ReadonlyNodeRefGroupLike,
+): boolean {
   return Array.isArray(target) && target.every(isNodeRefLike);
 }
 

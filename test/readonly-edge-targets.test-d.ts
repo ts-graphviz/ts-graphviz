@@ -56,6 +56,11 @@ describe('edge targets as inputs', () => {
     if (isNodeRefGroupLike(frozen)) {
       expectTypeOf(frozen).toEqualTypeOf<readonly NodeRefLike[]>();
     }
+    // An untyped value narrows as before.
+    const parsed: any = JSON.parse('["a"]');
+    if (isNodeRefGroupLike(parsed)) {
+      expectTypeOf(parsed).toEqualTypeOf<NodeRefGroupLike>();
+    }
   });
 });
 
