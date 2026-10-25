@@ -231,9 +231,9 @@ describe('Declarative API', () => {
 
       test('only attributes', () => {
         const createSubgraphSpy = vi.spyOn(g, 'createSubgraph');
-        const subgraph = g.subgraph({ label: 'Test label' });
+        const subgraph = g.subgraph({ rank: 'same' });
         expect(createSubgraphSpy).toHaveBeenCalled();
-        expect(subgraph.get('label')).toStrictEqual('Test label');
+        expect(subgraph.get('rank')).toStrictEqual('same');
       });
 
       test('by id', () => {
@@ -244,8 +244,8 @@ describe('Declarative API', () => {
 
       test('with attributes', () => {
         const createSubgraphSpy = vi.spyOn(g, 'createSubgraph');
-        const subgraph = g.subgraph('foo', { label: 'Test label' });
-        expect(createSubgraphSpy).toHaveBeenCalledWith('foo');
+        const subgraph = g.subgraph('cluster_foo', { label: 'Test label' });
+        expect(createSubgraphSpy).toHaveBeenCalledWith('cluster_foo');
         expect(subgraph.get('label')).toStrictEqual('Test label');
       });
 
@@ -258,9 +258,9 @@ describe('Declarative API', () => {
 
         test('first argument is attribute, seccond argument is callback', () => {
           const callback = vi.fn();
-          const subgraph = g.subgraph({ label: 'Test label' }, callback);
+          const subgraph = g.subgraph({ rank: 'same' }, callback);
           expect(callback).toHaveBeenCalledWith(subgraph);
-          expect(subgraph.get('label')).toStrictEqual('Test label');
+          expect(subgraph.get('rank')).toStrictEqual('same');
         });
 
         test('first argument is id, seccond argument is callback', () => {
@@ -271,7 +271,11 @@ describe('Declarative API', () => {
 
         test('first argument is id, seccond argument is attribute object, third argument is callback', () => {
           const callback = vi.fn();
-          const subgraph = g.subgraph('foo', { label: 'Test label' }, callback);
+          const subgraph = g.subgraph(
+            'cluster_foo',
+            { label: 'Test label' },
+            callback,
+          );
           expect(callback).toHaveBeenCalledWith(subgraph);
           expect(subgraph.get('label')).toStrictEqual('Test label');
         });
@@ -290,10 +294,12 @@ describe('Declarative API', () => {
       });
 
       test('with attributes', () => {
-        const createdSubgraph = g.createSubgraph('foo');
+        const createdSubgraph = g.createSubgraph('cluster_foo');
         const createSubgraphSpy = vi.spyOn(g, 'createSubgraph');
 
-        const returnedSubgraph = g.subgraph('foo', { label: 'Test label' });
+        const returnedSubgraph = g.subgraph('cluster_foo', {
+          label: 'Test label',
+        });
 
         expect(createSubgraphSpy).not.toHaveBeenCalled();
         expect(returnedSubgraph).toBe(createdSubgraph);

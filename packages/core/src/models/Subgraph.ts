@@ -43,14 +43,28 @@ export class Subgraph<M extends ModelTypes = ModelTypes>
   }
 
   public isSubgraphCluster(): boolean {
-    if (typeof this.id === 'string') {
-      return this.id.startsWith('cluster');
-    }
-    return false;
+    // As Graphviz decides (is_a_cluster): an id starting with "cluster" in
+    // any case, or the cluster attribute.
+    return (
+      (typeof this.id === 'string' &&
+        this.id.slice(0, 7).toLowerCase() === 'cluster') ||
+      graphvizBool(this.get('cluster'))
+    );
   }
 
   /** @hidden */
   protected override defaultModels(): ModelsContext {
     return defaultModelsContext();
   }
+}
+
+// How Graphviz reads a boolean attribute (mapbool): true / yes in any case,
+// or a number other than 0. Values parsed from DOT may be strings.
+function graphvizBool(value: unknown): boolean {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value !== 0;
+  if (typeof value !== 'string') return false;
+  const text = value.toLowerCase();
+  if (text === 'true' || text === 'yes') return true;
+  return /^\d/.test(text) && Number.parseInt(text, 10) !== 0;
 }

@@ -48,7 +48,7 @@ describe('[SM-5] createModelsContext', () => {
     expect(sub.id).toBe('cluster_0');
     expect(sub.get('label')).toBe('x');
     expect(sub.createNode('b')).toBeInstanceOf(MyNode);
-    expect(g.createSubgraph({ label: 'y' }).id).toBeUndefined();
+    expect(g.createSubgraph({ rank: 'same' }).id).toBeUndefined();
   });
 
   it('with() keeps the classes it is not given', () => {

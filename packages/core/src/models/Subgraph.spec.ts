@@ -109,14 +109,14 @@ describe('class Subgraph', () => {
   });
 
   test('create subgraph with attributes', () => {
-    subgraph = subgraph.createSubgraph('test', {
+    subgraph = subgraph.createSubgraph('cluster_test', {
       label: 'Label',
     });
-    expect(subgraph.id).toBe('test');
+    expect(subgraph.id).toBe('cluster_test');
     expect(subgraph.size).toBe(1);
 
     subgraph = subgraph.createSubgraph({
-      label: 'Label',
+      rank: 'same',
     });
     expect(subgraph.size).toBe(1);
   });
@@ -124,6 +124,8 @@ describe('class Subgraph', () => {
   test.each([
     ['cluster', true],
     ['cluster_hoge', true],
+    ['CLUSTER_hoge', true],
+    ['Cluster', true],
     ['hoge_cluster', false],
     ['example', false],
   ])(
@@ -189,5 +191,27 @@ describe('class Subgraph', () => {
         `[TypeError: The element of Edge target is missing or not satisfied as Edge target.]`,
       );
     });
+  });
+});
+
+describe('isSubgraphCluster with the cluster attribute', () => {
+  test.each([
+    [true, true],
+    [false, false],
+    ['true', true],
+    ['YES', true],
+    ['1', true],
+    ['0', false],
+    ['no', false],
+    ['maybe', false],
+  ])('cluster = %j makes it a cluster: %p', (value, expected) => {
+    const subgraph = new Subgraph('s');
+    subgraph.set('cluster', value as boolean);
+    expect(subgraph.isSubgraphCluster()).toBe(expected);
+  });
+
+  test('an anonymous subgraph with cluster = true is a cluster', () => {
+    expect(new Subgraph({ cluster: true }).isSubgraphCluster()).toBe(true);
+    expect(new Subgraph().isSubgraphCluster()).toBe(false);
   });
 });
