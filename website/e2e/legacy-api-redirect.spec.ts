@@ -19,8 +19,10 @@ test('old page addresses keep their page and fragment', async ({ page }) => {
   const path = new URL(href ?? '', page.url()).pathname.replace(/^\/api\//, '');
   await page.goto(`/ts-graphviz/${path}#section`);
   // `docusaurus serve` drops the .html that GitHub Pages keeps.
-  const expected = path.replace(/\.html$/, '').replace(/[.]/g, '\\.');
-  await expect(page).toHaveURL(
-    new RegExp(`/api/${expected}(\\.html)?#section$`),
+  const withoutHtml = (p: string) => p.replace(/\.html$/, '');
+  await page.waitForURL(
+    (url) =>
+      withoutHtml(url.pathname) === `/api/${withoutHtml(path)}` &&
+      url.hash === '#section',
   );
 });
