@@ -679,6 +679,20 @@ try {
 }
 ```
 
+### Waiting for the tree to settle
+
+`render()` and `renderToDot()` resolve once the tree has settled, including work React schedules after the first render: transitions, deferred values and suspended data (`use` with `Suspense`). Pass a `signal` to stop waiting; it rejects with `signal.reason`. Without one there is no limit, so bound trees you do not control:
+
+```ts
+import { renderToDot } from "@ts-graphviz/react";
+
+declare function UntrustedGraph(): React.ReactElement;
+
+const dot = await renderToDot(<UntrustedGraph />, {
+  signal: AbortSignal.timeout(5000), // rejects with a TimeoutError after 5 s
+});
+```
+
 ### Ref as Prop Support
 
 The package supports using `ref` to access and manipulate graph models directly, allowing for dynamic updates and interactions:

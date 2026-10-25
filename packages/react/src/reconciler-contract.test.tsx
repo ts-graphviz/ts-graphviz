@@ -239,21 +239,42 @@ describe('updates outside the synchronous lane', () => {
     expect(dot).not.toContain('"loading";');
   });
 
-  it('rejects when the work does not settle within the timeout', async () => {
+  it('stops waiting when the signal aborts, with its reason', async () => {
     const never = new Promise<string>(() => {});
     function Forever(): ReactNode {
       return <Node id={use(never)} />;
     }
+    const element = (
+      <Digraph id="G">
+        <Suspense fallback={null}>
+          <Forever />
+        </Suspense>
+      </Digraph>
+    );
     await expect(
-      renderToDot(
+      renderToDot(element, { signal: AbortSignal.timeout(50) }),
+    ).rejects.toMatchObject({ name: 'TimeoutError' });
+
+    const controller = new AbortController();
+    const root = createRoot();
+    const pending = root.render(element, { signal: controller.signal });
+    controller.abort(new RangeError('stop'));
+    await expect(pending).rejects.toThrow('stop');
+  });
+
+  it('does not render when the signal has already aborted', async () => {
+    const onRenderComplete = vi.fn();
+    const root = createRoot({ onRenderComplete });
+    await expect(
+      root.render(
         <Digraph id="G">
-          <Suspense fallback={null}>
-            <Forever />
-          </Suspense>
+          <Node id="a" />
         </Digraph>,
-        { timeout: 50 },
+        { signal: AbortSignal.abort(new RangeError('before')) },
       ),
-    ).rejects.toThrow(/did not settle within 50 ms/);
+    ).rejects.toThrow('before');
+    expect(onRenderComplete).not.toHaveBeenCalled();
+    expect(root.getTopLevelModels()).toEqual([]);
   });
 });
 

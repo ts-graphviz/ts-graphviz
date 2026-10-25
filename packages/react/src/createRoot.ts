@@ -56,13 +56,6 @@ export interface CreateRootOptions<
    */
   onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;
   /**
-   * How long `render()` waits, in milliseconds, for work React schedules
-   * outside the synchronous render: transitions, deferred values and
-   * suspended data. It then rejects. Synchronous renders do not wait.
-   * @default 5000
-   */
-  timeout?: number;
-  /**
    * Called when rendering completes successfully
    */
   onRenderComplete?: (models: AnyDotObjectModel[]) => void;
@@ -71,11 +64,24 @@ export interface CreateRootOptions<
 /**
  * Graphviz root interface
  */
+export interface RenderOptions {
+  /**
+   * Stop waiting for the tree to settle: when the signal aborts, `render()`
+   * rejects with `signal.reason` (an `AbortError`, or a `TimeoutError` for
+   * `AbortSignal.timeout(ms)`). Without a signal, `render()` waits until
+   * the work React scheduled (transitions, deferred values, suspended data)
+   * is done; bound it for trees you do not control, e.g.
+   * `signal: AbortSignal.timeout(5000)`.
+   */
+  signal?: AbortSignal;
+}
+
 export interface GraphvizRoot {
   /**
-   * Render a React element asynchronously
+   * Render a React element. Resolves once the tree has settled; renders on
+   * one root run one after another.
    */
-  render(element: ReactElement): Promise<void>;
+  render(element: ReactElement, options?: RenderOptions): Promise<void>;
   /**
    * Unmount the root and cleanup resources
    */
@@ -236,7 +242,7 @@ function validateModels(
  * (`updateContainerSync`, `flushSyncWork`, and the discrete priority of the
  * host config). Work React puts on other lanes (transitions, deferred values,
  * suspended data) runs on its scheduler; `render()` yields to it until the
- * root has no pending lanes, for at most `timeout` milliseconds.
+ * root has no pending lanes, or until `signal` aborts.
  */
 async function renderInternal<
   Container extends AnyGraphContainer = AnyGraphContainer,
@@ -247,23 +253,20 @@ async function renderInternal<
   originalContainer: Container | undefined,
   options: CreateRootOptions = {},
   isUnmounted: () => boolean = () => false,
+  signal?: AbortSignal,
 ): Promise<void> {
-  const { onRenderComplete, timeout = DEFAULT_TIMEOUT } = options;
+  const { onRenderComplete } = options;
+  signal?.throwIfAborted();
   containerInfo.uncaughtErrors = [];
   reconciler.updateContainerSync(wrappedElement, fiberRoot, null, null);
   reconciler.flushSyncWork();
-  const deadline = Date.now() + timeout;
   // Passive effects of a render that finished outside the synchronous lane
   // (e.g. the cleanup of a Suspense fallback) are flushed here too.
   while (
     (reconciler.flushPassiveEffects() || hasPendingWork(fiberRoot)) &&
     containerInfo.uncaughtErrors.length === 0
   ) {
-    if (Date.now() >= deadline) {
-      throw new Error(
-        `Rendering did not settle within ${timeout} ms (pending transitions, deferred values or suspended data).`,
-      );
-    }
+    signal?.throwIfAborted();
     await yieldToScheduler();
     if (isUnmounted()) break;
   }
@@ -277,8 +280,6 @@ async function renderInternal<
   validateModels(containerInfo.renderedModels, originalContainer);
   onRenderComplete?.([...containerInfo.renderedModels]);
 }
-
-const DEFAULT_TIMEOUT = 5000;
 
 // FiberRoot#pendingLanes: React's lanes with work left. Internal, which is
 // why react-reconciler is pinned to the React minor it was built for.
@@ -340,7 +341,11 @@ export function createRoot<
   // to settle, so each sees its own tree, models and errors.
   let previous: Promise<void> = Promise.resolve();
 
-  const renderNow = async (element: ReactElement): Promise<void> => {
+  const renderNow = async (
+    element: ReactElement,
+    signal?: AbortSignal,
+  ): Promise<void> => {
+    signal?.throwIfAborted();
     if (isUnmounted) {
       throw new Error('Cannot render on an unmounted root');
     }
@@ -362,12 +367,14 @@ export function createRoot<
       container,
       otherOptions,
       () => isUnmounted,
+      signal,
     );
   };
 
   return {
-    render(element: ReactElement): Promise<void> {
-      const result = previous.then(() => renderNow(element));
+    render(element: ReactElement, options?: RenderOptions): Promise<void> {
+      const { signal } = ownOptions(options ?? {});
+      const result = previous.then(() => renderNow(element, signal));
       previous = result.catch(noop);
       return result;
     },

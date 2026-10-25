@@ -1,7 +1,11 @@
 import type { ReactElement } from 'react';
 import { ownOptions, toDot } from 'ts-graphviz';
 
-import { type CreateRootOptions, createRoot } from './createRoot.js';
+import {
+  type CreateRootOptions,
+  createRoot,
+  type RenderOptions,
+} from './createRoot.js';
 import type { AnyGraphContainer } from './types/container.js';
 
 /**
@@ -9,7 +13,8 @@ import type { AnyGraphContainer } from './types/container.js';
  */
 export interface RenderToDotOptions<
   Container extends AnyGraphContainer = AnyGraphContainer,
-> extends CreateRootOptions {
+> extends CreateRootOptions,
+    RenderOptions {
   /**
    * Container graph to render into. When provided, the element will be rendered
    * as children of this container and the container's DOT will be returned.
@@ -69,14 +74,14 @@ export async function renderToDot<
   options: RenderToDotOptions<Container> = {},
 ): Promise<string> {
   // Own properties only: an inherited one is never an option (#1757).
-  const { container, ...rootOptions } = ownOptions(options);
+  const { container, signal, ...rootOptions } = ownOptions(options);
 
   if (container) {
     // Container mode: render elements into container and return container's DOT
     const root = createRoot({ container, ...rootOptions });
 
     try {
-      await root.render(element);
+      await root.render(element, { signal });
       return toDot(container);
     } finally {
       root.unmount();
@@ -86,7 +91,7 @@ export async function renderToDot<
     const root = createRoot(rootOptions);
 
     try {
-      await root.render(element);
+      await root.render(element, { signal });
       const models = root.getTopLevelModels();
 
       if (models.length !== 1) {

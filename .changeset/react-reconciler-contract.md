@@ -11,7 +11,7 @@ The renderer is wired to react-reconciler's React 19 contract (#1752).
 - **`render()` resolves once the tree has settled.** The render and the updates effects schedule run synchronously (`updateContainerSync`, `flushSyncWork`, and the discrete priority throughout). Work React schedules on other lanes (transitions started in effects, `useDeferredValue`, suspended data with `use` / `Suspense`) is waited for.
   - A graph or node revealed by such work is in the result.
   - An error it throws rejects `render()`.
-  - `timeout` (default 5000 ms) now bounds that wait and no longer wraps every render. A synchronous render does not wait.
+  - The `timeout` option is replaced by a per-render `signal` (AbortSignal): `root.render(element, { signal })` and `renderToDot(element, { signal })` reject with `signal.reason` when it aborts. This matches the adapter's `signal`; use `AbortSignal.timeout(ms)` for a time limit. Without a signal there is no limit. A synchronous render does not wait.
 - **Renders on one root run one after another**, each with its own result and errors. A render that the root is unmounted during rejects.
 - **Host config fixes:**
   - event priorities from `react-reconciler/constants` (discrete throughout, with React's priority still tracked);
