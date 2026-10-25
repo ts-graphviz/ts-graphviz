@@ -94,6 +94,34 @@ digraph {
 */
 ```
 
+### Ordered default attribute statements
+
+In DOT, a default attribute statement applies only to what follows it:
+
+```dot
+digraph {
+  node [color=red];
+  a;                  // red
+  node [color=blue];
+  b;                  // blue
+}
+```
+
+The default model classes keep one set of defaults per graph (`attributes.node`, `attributes.edge`, `attributes.graph`), which `toDot` writes first, so the last values win for every node. To keep the statements where they are, use the classes of `orderedModels` (`OrderedGraph`, `OrderedDigraph`, `OrderedSubgraph`):
+
+```typescript
+import { fromDot, OrderedDigraph, orderedModels, toDot } from 'ts-graphviz';
+
+const g = fromDot(source, { convert: { models: orderedModels } });
+
+const h = new OrderedDigraph();
+h.node('a');
+h.addAttributeList('Node', { color: 'blue' }); // applies to what follows
+h.node('b');
+```
+
+`addAttributeList(kind, attributes)` exists on every graph model: the default classes merge it into `attributes`, the ordered classes put it into `statements` once something precedes it. Graphs keep nodes, edges and subgraphs in the order they were added either way.
+
 ## Extending the Type System
 
 With `ts-graphviz`, you can extend the library's type system to customize graph visualization solutions. This is useful when you need to specify custom graph layouts, output formats, or add custom attributes not supported by default.
