@@ -1,4 +1,5 @@
 import { createCommandArgs } from './create-command-args.js';
+import { ownOptions } from './own-options.js';
 import type { Layout, Options } from './types.js';
 
 /**
@@ -10,5 +11,6 @@ import type { Layout, Options } from './types.js';
 export function createCommandAndArgs<T extends Layout>(
   options: Options<T>,
 ): [command: string, args: string[]] {
-  return [options.dotCommand ?? 'dot', Array.from(createCommandArgs(options))];
+  const own = ownOptions(options);
+  return [own.dotCommand ?? 'dot', Array.from(createCommandArgs(own))];
 }

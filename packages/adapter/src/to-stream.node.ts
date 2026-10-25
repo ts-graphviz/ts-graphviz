@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { type SpawnOptionsWithoutStdio, spawn } from 'node:child_process';
 import { PassThrough, Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { createCommandAndArgs } from './create-command-and-args.js';
@@ -13,7 +13,13 @@ export async function toStream<T extends Layout>(
 ): Promise<NodeJS.ReadableStream> {
   const [command, args] = createCommandAndArgs(options ?? {});
   return new Promise(function toStreamInternal(resolve, reject) {
-    const p = spawn(command, args, { stdio: 'pipe' });
+    // Spawn options, and the environment, in objects without a prototype.
+    const p = spawn(command, args, {
+      __proto__: null,
+      stdio: 'pipe',
+      shell: false,
+      env: ownEnv(),
+    } as SpawnOptionsWithoutStdio);
 
     // error handling
     p.on('error', (e) => {
@@ -47,4 +53,16 @@ export async function toStream<T extends Layout>(
 
     pipeline(Readable.from([dot]), p.stdin);
   });
+}
+
+/**
+ * The environment variables the process owns, in an object without a
+ * prototype.
+ */
+function ownEnv(): NodeJS.ProcessEnv {
+  const env = Object.create(null) as NodeJS.ProcessEnv;
+  for (const key of Object.keys(process.env)) {
+    env[key] = process.env[key];
+  }
+  return env;
 }

@@ -1,4 +1,5 @@
 import {
+  type Compass,
   type EdgeModel,
   isForwardRefNode,
   isNodeModel,
@@ -6,6 +7,14 @@ import {
 import type { EdgeTargetASTNode } from '../../../types.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute, convertComment } from './utils/index.js';
+
+/** A field of an edge target, read only when the target owns it. */
+function ownField<T extends object, K extends keyof T>(
+  target: T,
+  field: K,
+): T[K] | undefined {
+  return Object.hasOwn(target, field) ? target[field] : undefined;
+}
 
 export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
   match(model) {
@@ -45,21 +54,21 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
                   },
                   [],
                 ),
-                port: target.port
+                port: ownField(target, 'port')
                   ? createElement(
                       'Literal',
                       {
-                        value: target.port,
+                        value: ownField(target, 'port') as string,
                         quoted: true,
                       },
                       [],
                     )
                   : undefined,
-                compass: target.compass
+                compass: ownField(target, 'compass')
                   ? createElement(
                       'Literal',
                       {
-                        value: target.compass,
+                        value: ownField(target, 'compass') as Compass,
                         quoted: true,
                       },
                       [],
@@ -100,21 +109,21 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
                     },
                     [],
                   ),
-                  port: n.port
+                  port: ownField(n, 'port')
                     ? createElement(
                         'Literal',
                         {
-                          value: n.port,
+                          value: ownField(n, 'port') as string,
                           quoted: true,
                         },
                         [],
                       )
                     : undefined,
-                  compass: n.compass
+                  compass: ownField(n, 'compass')
                     ? createElement(
                         'Literal',
                         {
-                          value: n.compass,
+                          value: ownField(n, 'compass') as Compass,
                           quoted: true,
                         },
                         [],

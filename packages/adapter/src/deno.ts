@@ -17,7 +17,10 @@ export async function toStream<T extends Layout>(
   options?: Options<T>,
 ): Promise<ReadableStream<Uint8Array>> {
   const [command, args] = createCommandAndArgs(options ?? {});
+  // Options without a prototype: nothing inherited from Object.prototype is
+  // read as an option.
   const cp = new Deno.Command(command, {
+    __proto__: null,
     args: args,
     stdin: 'piped',
     stdout: 'piped',
@@ -30,10 +33,10 @@ export async function toStream<T extends Layout>(
 
 function open(path: string) {
   try {
-    return Deno.open(path, { write: true });
+    return Deno.open(path, { __proto__: null, write: true });
   } catch (e) {
     if (e instanceof Deno.errors.NotFound) {
-      return Deno.open(path, { createNew: true, write: true });
+      return Deno.open(path, { __proto__: null, createNew: true, write: true });
     }
     throw e;
   }

@@ -1,4 +1,5 @@
 import { createModelsContext } from '@ts-graphviz/common';
+import { ownOptions } from '../../own-options.js';
 import { defaultPlugins } from './plugins/index.js';
 import type {
   ASTToModel,
@@ -17,7 +18,10 @@ export class ToModelConverter {
     ...defaultPlugins,
   ];
 
-  constructor(private options: ConvertToModelOptions = {}) {}
+  constructor(private options: ConvertToModelOptions = {}) {
+    // Own properties only: an inherited one is never an option.
+    this.options = ownOptions(options);
+  }
 
   /**
    * Convert AST to Model.

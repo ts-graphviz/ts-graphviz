@@ -10,7 +10,9 @@
     const matches = str.match(/\n([\t ]+|(?!\s).)/g);
     if (matches) {
       const indentLengths = matches.map((match) => match.match(/[\t ]/g)?.length ?? 0);
-      const pattern = new RegExp(`\n[\t ]{${Math.min(...indentLengths)}}`, 'g');
+      let indent = Infinity;
+      for (const length of indentLengths) if (length < indent) indent = length;
+      const pattern = new RegExp(`\n[\t ]{${indent}}`, 'g');
       return str.replace(pattern, '\n');
     }
     return str;
@@ -295,7 +297,7 @@ _block_comment
         'Comment',
         {
           kind: 'Block',
-          value: dedent(v.join('').replace(/[ \t]*\*/g, '')),
+          value: dedent(v.join('').replace(/^[ \t]*\*/gm, '')),
         },
         [],
       );

@@ -25,7 +25,7 @@ const ZERO_WIDTH_SPACE = '\u200B';
  */
 export function escapeComment(value: string, kind: CommentKind): string {
   // Remove null bytes from all comment types
-  let escaped = value.replace(/\0/g, '');
+  let escaped = String(value).replace(/\0/g, '');
 
   // For block comments, break up asterisk-slash sequences to prevent comment injection
   if (kind === 'Block') {

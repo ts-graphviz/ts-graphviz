@@ -26,14 +26,24 @@ describe('toFile (Node adapter)', () => {
   it('should call toStream, createWriteStream, and pipeline with provided options', async () => {
     await toFile('dot input', '/path/output', { layout: 'dot' });
     expect(toStream).toHaveBeenCalledWith('dot input', { layout: 'dot' });
-    expect(createWriteStream).toHaveBeenCalledWith('/path/output');
+    expect(createWriteStream).toHaveBeenCalledWith('/path/output', {
+      flags: 'w',
+    });
+    expect(
+      Object.getPrototypeOf(vi.mocked(createWriteStream).mock.calls[0][1]),
+    ).toBeNull();
     expect(pipeline).toHaveBeenCalledWith('stream', 'writeStream');
   });
 
   it('should use default options when options not provided', async () => {
     await toFile('dot input', '/path/output');
     expect(toStream).toHaveBeenCalledWith('dot input', undefined);
-    expect(createWriteStream).toHaveBeenCalledWith('/path/output');
+    expect(createWriteStream).toHaveBeenCalledWith('/path/output', {
+      flags: 'w',
+    });
+    expect(
+      Object.getPrototypeOf(vi.mocked(createWriteStream).mock.calls[0][1]),
+    ).toBeNull();
     expect(pipeline).toHaveBeenCalledWith('stream', 'writeStream');
   });
 

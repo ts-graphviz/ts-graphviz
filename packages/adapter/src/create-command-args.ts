@@ -1,4 +1,5 @@
 import type { Attribute, AttributeKey } from '@ts-graphviz/common';
+import { ownOptions } from './own-options.js';
 import type { Layout, Options } from './types.js';
 
 /**
@@ -28,40 +29,47 @@ export function escapeValue<T extends AttributeKey>(value: Attribute<T>) {
 export function* createCommandArgs<T extends Layout>(
   options: Options<T>,
 ): Generator<string> {
+  const own = ownOptions(options);
   const {
     suppressWarnings = true,
     format = 'svg',
-    attributes = {},
+    attributes,
     library = [],
     y = false,
     scale,
-  } = options;
+  } = own;
   if (suppressWarnings) yield '-q';
   yield `-T${format}`;
-  if (attributes.graph) {
-    for (const [key, value] of Object.entries(attributes.graph)) {
+  const { graph, node, edge } = ownOptions(attributes);
+  if (graph) {
+    for (const [key, value] of Object.entries(graph)) {
       yield `-G${key}${escapeValue(value)}`;
     }
   }
-  if (attributes.node) {
-    for (const [key, value] of Object.entries(attributes.node)) {
+  if (node) {
+    for (const [key, value] of Object.entries(node)) {
       yield `-N${key}${escapeValue(value)}`;
     }
   }
-  if (attributes.edge) {
-    for (const [key, value] of Object.entries(attributes.edge)) {
+  if (edge) {
+    for (const [key, value] of Object.entries(edge)) {
       yield `-E${key}${escapeValue(value)}`;
     }
   }
   if (typeof scale === 'number' && !Number.isNaN(scale)) yield `-s${scale}`;
-  if (Array.isArray(library)) for (const lib of library) yield `-l${lib}`;
+  // Own elements only: a hole would read an inherited index.
+  if (Array.isArray(library)) {
+    for (let i = 0; i < library.length; i++) {
+      if (Object.hasOwn(library, i)) yield `-l${library[i]}`;
+    }
+  }
   if (y === true) yield '-y';
 
-  if (typeof options.layout === 'string') {
-    yield `-K${options.layout}`;
-    switch (options.layout) {
+  if (typeof own.layout === 'string') {
+    yield `-K${own.layout}`;
+    switch (own.layout) {
       case 'neato': {
-        const { reduce, noop } = options;
+        const { reduce, noop } = own;
         if (reduce === true) yield '-x';
         if (typeof noop === 'number') yield `-n${noop}`;
         break;
@@ -74,7 +82,7 @@ export function* createCommandArgs<T extends Layout>(
           unscaledFactor,
           overlapExpansionFactor,
           temperature,
-        } = options;
+        } = own;
         yield ['-L', grid ? '' : 'g', oldAttractive ? 'O' : ''].join('');
         if (typeof iterations === 'number') yield `-Ln${iterations}`;
         if (typeof unscaledFactor === 'number') yield `-LU${unscaledFactor}`;

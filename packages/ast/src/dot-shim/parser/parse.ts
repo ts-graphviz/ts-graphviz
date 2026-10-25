@@ -1,4 +1,5 @@
 import { ASTNodeCountExceededError } from '../../builder/errors.js';
+import { ownOptions } from '../../own-options.js';
 import type {
   ASTNode,
   AttributeASTNode,
@@ -142,7 +143,7 @@ export function parse(
     maxEdgeChainDepth,
     maxInputSize,
     maxASTNodes,
-  } = options ?? {};
+  } = ownOptions(options);
 
   // Input size validation
   const inputSizeLimit = maxInputSize ?? DEFAULT_MAX_INPUT_SIZE;
