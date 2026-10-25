@@ -77,25 +77,23 @@ export interface CommonParseOptions {
  * @group Convert DOT to AST
  */
 export interface ParseOptions<T extends Rule> extends CommonParseOptions {
+  /**
+   * The grammar rule to parse the input with.
+   *
+   * @deprecated `parse` reads a whole DOT source; read a fragment (a
+   * graph, a statement, an attribute list, ...) with {@link parseFragment}
+   * instead. `startRule` keeps working in 4.x and is removed in 5.0.
+   */
   startRule?: T;
 }
 
 /**
- * parse is a function that takes a string input and optional parse options and
- * returns an ASTNode or an array of ClusterStatementASTNodes.
+ * Parse a DOT source (any number of graphs and comments) into a
+ * {@link DotASTNode}.
  *
- * Depending on the type of parse option specified, the function will return different types of ASTNodes.
- *
- * The types of ASTNodes that can be returned are:
- *
- * - {@link DotASTNode}
- * - {@link GraphASTNode}
- * - {@link NodeASTNode}
- * - {@link EdgeASTNode}
- * - {@link AttributeListASTNode}
- * - {@link AttributeASTNode}
- * - {@link SubgraphASTNode}
- * - {@link ClusterStatementASTNode}
+ * To read a fragment of a DOT source (a graph, a node, an edge, ...), use
+ * {@link parseFragment}; the `startRule` option that did this here is
+ * deprecated.
  *
  * @throws {@link DotSyntaxError}
  * @group Convert DOT to AST
@@ -138,14 +136,88 @@ export function parse(
   input: string,
   options?: ParseOptions<Rule>,
 ): ASTNode | ClusterStatementASTNode[] {
+  const { startRule = 'Dot', ...common } = options ?? {};
+  return parseRule(input, startRule, common);
+}
+
+/**
+ * Parse a fragment of a DOT source by grammar rule: one graph, subgraph,
+ * node, edge, attribute list, attribute, or a list of statements.
+ * {@link parse} reads a whole DOT source.
+ *
+ * This is the low-level parsing API: it is in beta, and is where the
+ * lower layers of the parser (such as a streaming lexer, #1723) will be
+ * exposed.
+ *
+ * @throws {@link DotSyntaxError}
+ * @beta
+ * @group Convert DOT to AST
+ */
+export function parseFragment(
+  input: string,
+  rule: 'Dot',
+  options?: CommonParseOptions,
+): DotASTNode;
+export function parseFragment(
+  input: string,
+  rule: 'Graph',
+  options?: CommonParseOptions,
+): GraphASTNode;
+export function parseFragment(
+  input: string,
+  rule: 'Subgraph',
+  options?: CommonParseOptions,
+): SubgraphASTNode;
+export function parseFragment(
+  input: string,
+  rule: 'Node',
+  options?: CommonParseOptions,
+): NodeASTNode;
+export function parseFragment(
+  input: string,
+  rule: 'Edge',
+  options?: CommonParseOptions,
+): EdgeASTNode;
+export function parseFragment(
+  input: string,
+  rule: 'AttributeList',
+  options?: CommonParseOptions,
+): AttributeListASTNode;
+export function parseFragment(
+  input: string,
+  rule: 'Attribute',
+  options?: CommonParseOptions,
+): AttributeASTNode;
+export function parseFragment(
+  input: string,
+  rule: 'ClusterStatements',
+  options?: CommonParseOptions,
+): ClusterStatementASTNode[];
+export function parseFragment(
+  input: string,
+  rule: Rule,
+  options?: CommonParseOptions,
+): ASTNode | ClusterStatementASTNode[];
+export function parseFragment(
+  input: string,
+  rule: Rule,
+  options?: CommonParseOptions,
+): ASTNode | ClusterStatementASTNode[] {
+  return parseRule(input, rule, options ?? {});
+}
+
+function parseRule(
+  input: string,
+  startRule: Rule,
+  options: CommonParseOptions,
+): ASTNode | ClusterStatementASTNode[] {
   const {
-    startRule,
     filename,
     maxHtmlNestingDepth,
     maxEdgeChainDepth,
     maxInputSize,
     maxASTNodes,
-  } = options ?? {};
+  } = options;
 
   // Input size validation
   const inputSizeLimit = maxInputSize ?? DEFAULT_MAX_INPUT_SIZE;
