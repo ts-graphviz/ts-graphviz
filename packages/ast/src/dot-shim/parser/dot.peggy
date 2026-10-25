@@ -80,7 +80,7 @@ ClusterStatements = (Attribute / AttributeList / Edge / Subgraph / Node / Commen
 _dot = c1:Comment* graphs:(graph:Graph c2:Comment* { return [graph, ...c2]; })* { return b.createElement('Dot', {}, [...c1, ...graphs.flat()]); }
 
 _graph
-  = _strict:"strict"i? _ _kind:("graph"i / "digraph"i) _ id:_literal? __ "{" children:ClusterStatements __ "}" {
+  = _strict:("strict"i !StringPart __)? _kind:("graph"i / "digraph"i) !StringPart __ id:_literal? __ "{" children:ClusterStatements __ "}" {
       const strict = !!_strict;
       const kind = _kind.toLowerCase();
       const directed = kind === 'digraph';
@@ -125,7 +125,7 @@ _attribute
     }
 
 _attributes
-  = _kind:("graph"i / "node"i / "edge"i) children:_attribute_list _ ";"? {
+  = _kind:("graph"i / "node"i / "edge"i) !StringPart children:_attribute_list _ ";"? {
       return b.createElement(
         'AttributeList',
         {
@@ -248,7 +248,9 @@ _port "port"
       return { port };
     }
 
-_subgraph_id = "subgraph"i _ id:_literal? _ { return id; }
+// Keywords end where an identifier would: `subgraphx` is an ID, not the
+// keyword. Any whitespace, newlines included, may separate header tokens.
+_subgraph_id = "subgraph"i !StringPart __ id:_literal? __ { return id; }
 
 _subgraph
   = id:_subgraph_id? "{" _children:ClusterStatements? __ "}" {
@@ -283,7 +285,7 @@ _compass
 _literal
   = QUOTED_STRING
   / HTML_STRING
-  / value:(STRING / NUMBER_STRING / NUMBER) {
+  / value:(!KEYWORD v:STRING { return v; } / NUMBER) {
       return b.createElement(
         'Literal',
         {
@@ -343,7 +345,14 @@ _macro_comment_line = _ "#" v:(!_line_end v:. { return v; })* _line_end? { retur
 
 STRING "UNICODE_STRING" = first:StringStart rest:StringPart* { return first + rest.join(''); }
 
-NUMBER_STRING = first:NUMBER rest:STRING { return first + rest; }
+// A bare ID is never a keyword (in any case): Graphviz's lexer returns the
+// keyword token, so `subgraph` or `node` can only be an ID when quoted.
+KEYWORD = ("strict"i / "graph"i / "digraph"i / "subgraph"i / "node"i / "edge"i) !StringPart
+
+// No rule joins a numeral and the letters after it into one ID: Graphviz's
+// lexer ends the number there and reads the letters as the next token, with
+// a "badly delimited number" warning (`1image=x` is node 1 and the graph
+// attribute image=x). Reading `1image` as one ID would hide that attribute.
 
 // Graphviz treats every byte >= 0x80 as an identifier character, so any
 // non-ASCII code unit (symbols, emoji via surrogate pairs) may appear bare,
