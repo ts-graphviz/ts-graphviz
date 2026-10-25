@@ -67,8 +67,10 @@ describe('[SM-7] sanitize', () => {
       'a [fontname="Times-Roman"]',
       'a [fontname="游ゴシック"]',
       'a [fontname="Noto Sans CJK JP,Bold"]',
-    ])('accepts %j', (stmt) => {
-      expect(() => sanitize(`digraph { ${stmt} }`)).not.toThrow();
+    ])('accepts %j for SVG', (stmt) => {
+      expect(() =>
+        sanitize(`digraph { ${stmt} }`, { format: 'svg' }),
+      ).not.toThrow();
     });
 
     it.each([
@@ -257,8 +259,71 @@ describe('[SM-7] sanitize', () => {
       'a [color="red:blue;0.3" fillcolor="#ff000080"]',
       'a [color="0.6,0.7,0.7" fontcolor="/accent3/1"]',
       'a [label=<<table bgcolor="red" style="rounded"><tr><td color="blue">x</td></tr></table>>]',
+    ])('accepts %j for SVG', (stmt) => {
+      expect(() =>
+        sanitize(`digraph { ${stmt} }`, { format: 'svg' }),
+      ).not.toThrow();
+    });
+
+    it('allows no whitespace in style for plain output, which writes it as one field', () => {
+      const dot = 'digraph { a [style="dashed, bold"] }';
+      expect(() => sanitize(dot, { format: 'svg' })).not.toThrow();
+      for (const format of ['plain', 'plain-ext', undefined]) {
+        expect(() => sanitize(dot, { format })).toThrow(
+          expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }),
+        );
+      }
+      expect(() =>
+        sanitize('digraph { a [style="dashed,bold"] }', { format: 'plain' }),
+      ).not.toThrow();
+    });
+
+    it.each([
+      'a [color="\\""]',
+      'a [fillcolor="red\'"]',
+      'a [style="solid\n"]',
+    ])('rejects %j, which plain output writes raw', (stmt) => {
+      expect(rejection(`digraph { ${stmt} }`).code).toBe('TSG_ERR_UNSAFE_DOT');
+    });
+  });
+
+  describe('substitution escapes', () => {
+    // Graphviz expands \N, \G, \E, \T, \H and \L after reading values, so a
+    // name and a value can form text neither contains (Graphviz 2.43).
+    it.each([
+      ['a [label="\\N &amp;x"]', 'combines a substitution escape'],
+      ['"&" [label="\\N#1;"]', 'together they can form'],
+      ['"&#x" -> "1;" [label="\\T\\H"]', 'together they can form'],
+      ['a [shape=record label="&bogus;" id="\\L"]', 'copies the label'],
+      [
+        'a [label=<<table title="\\L"><tr><td>x</td></tr></table>>]',
+        'copies the label',
+      ],
+    ])('rejects %j', (stmt, message) => {
+      expect(rejection(`digraph { ${stmt} }`).message).toContain(message);
+    });
+
+    it.each([
+      '"R&D"',
+      '"R&D" [id="\\N"]',
+      'a [label="\\N\\n(\\G)" tooltip="\\L"]',
+      'a -> b [label="\\E" id="\\T-\\H"]',
     ])('accepts %j', (stmt) => {
       expect(() => sanitize(`digraph { ${stmt} }`)).not.toThrow();
+    });
+  });
+
+  describe('URLs in SVG attributes', () => {
+    // Graphviz 2.43 writes href between quotes without escaping it.
+    it.each([
+      'a [URL="\\""]',
+      'a [URL="/x\\"onmouseover=\\"x"]',
+      'a [URL="/x\'"]',
+      'a [URL="/<x>"]',
+      'a [URL="/x&#34;"]',
+      'a [label=<<table href="&quot;"><tr><td>x</td></tr></table>>]',
+    ])('rejects %j', (stmt) => {
+      expect(rejection(`digraph { ${stmt} }`).code).toBe('TSG_ERR_UNSAFE_DOT');
     });
 
     it.each([
@@ -353,7 +418,10 @@ describe('[SM-7] sanitize', () => {
     it('requires single-token font names for PostScript, where spaces separate code', () => {
       const dot = 'digraph { a [fontname="Times New Roman"] }';
       expect(() => sanitize(dot, { format: 'svg' })).not.toThrow();
-      expect(() => sanitize(dot)).not.toThrow();
+      // Without a format, the rules of every checked format apply.
+      expect(() => sanitize(dot)).toThrow(
+        expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }),
+      );
       for (const format of ['ps', 'ps2', 'eps', 'ps:cairo']) {
         expect(() => sanitize(dot, { format })).toThrow(
           expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }),

@@ -62,6 +62,9 @@ const CHECKED_FORMATS = new Set([
 /** Formats that are PostScript programs: font names are written as code. */
 const POSTSCRIPT_FORMATS = new Set(['ps', 'ps2', 'eps']);
 
+/** Formats of space-separated raw fields, one record per line. */
+const PLAIN_FORMATS = new Set(['plain', 'plain-ext']);
+
 /** Attributes that make Graphviz read a file, or reference one from the output. */
 const FILE_ATTRIBUTES = new Map([
   ['image', 'makes Graphviz read an image file'],
@@ -131,10 +134,15 @@ const STYLE_NAMES = new Set([
 ]);
 
 const STYLE_ITEM =
-  /\s*(?:([A-Za-z]+)|setlinewidth\s*\(\s*(?:\d+\.?\d*|\.\d+)\s*\))\s*(?:,|$)/y;
+  /[ \t]*(?:([A-Za-z]+)|setlinewidth[ \t]*\([ \t]*(?:\d+\.?\d*|\.\d+)[ \t]*\))[ \t]*(?:,|$)/y;
 
-/** Whether every item of a `style` value is a known style or `setlinewidth(n)`. */
-function isKnownStyle(value: string): boolean {
+/**
+ * Whether every item of a `style` value is a known style or
+ * `setlinewidth(n)`, with spaces only where the format allows them: `plain`
+ * output writes the style as one raw field (Graphviz 2.43).
+ */
+function isKnownStyle(value: string, rules: FormatRules): boolean {
+  if (!rules.spacesInStyle && /\s/.test(value)) return false;
   let i = 0;
   while (i < value.length) {
     STYLE_ITEM.lastIndex = i;
@@ -191,7 +199,23 @@ function unsafe(message: string) {
 /** The rules that depend on the output format. */
 interface FormatRules {
   fontName: RegExp;
+  spacesInStyle: boolean;
 }
+
+/**
+ * The characters of Graphviz colors: names, `#rrggbbaa`, `/scheme/name`,
+ * HSV with commas and weighted lists (`red:blue;0.3`). `plain` output
+ * writes colors as raw fields (Graphviz 2.43).
+ */
+const COLOR = /^[A-Za-z0-9#/:;.,_+-]*$/;
+
+/**
+ * Escapes Graphviz substitutes in values: `\N` node name, `\G` graph name,
+ * `\E` edge (`tail->head` with ports), `\T` / `\H` tail and head names,
+ * `\L` the object's label. A preceding `\\` is a literal backslash.
+ */
+const SUBSTITUTION = /(?<!\\)(?:\\\\)*\\[NGETHL]/;
+const LABEL_SUBSTITUTION = /(?<!\\)(?:\\\\)*\\L/;
 
 /**
  * Checks every value: control characters at any decoding level, and (for
@@ -218,7 +242,49 @@ function isUnsafeFontName(value: string, rules: FormatRules): boolean {
   );
 }
 
-function checkAttribute(attribute: AttributeASTNode, rules: FormatRules): void {
+/**
+ * What the whole document must be checked for after the walk: Graphviz
+ * substitutes names into values, so a name and a value that each pass can
+ * form a character reference together (`"&"` and `"\N#1;"`).
+ */
+interface DocumentState {
+  /** A value with a substitution escape and other text. */
+  composite?: string;
+  /** A name or port containing `&`. */
+  ampersandName?: string;
+}
+
+/**
+ * Checks a value that Graphviz expands escapes in: the literal text must
+ * not contain `&` (an expansion could complete a reference), and `\L`,
+ * which copies a label Graphviz decodes, only goes into text Graphviz
+ * decodes too.
+ */
+function checkSubstitutions(
+  value: string,
+  at: string,
+  decoded: boolean,
+  state: DocumentState,
+): void {
+  if (!SUBSTITUTION.test(value)) return;
+  if (value.includes('&')) {
+    throw unsafe(
+      `${at} combines a substitution escape such as \\N with "&", which can form a character reference.`,
+    );
+  }
+  if (!decoded && LABEL_SUBSTITUTION.test(value)) {
+    throw unsafe(
+      `${at} copies the label with \\L into a value Graphviz writes without decoding.`,
+    );
+  }
+  if (!/^(?:\\[NGETHL])$/.test(value)) state.composite ??= at;
+}
+
+function checkAttribute(
+  attribute: AttributeASTNode,
+  rules: FormatRules,
+  state: DocumentState,
+): void {
   const name = textOf(attribute.key);
   const key = name.toLowerCase();
   const value = textOf(attribute.value);
@@ -227,11 +293,11 @@ function checkAttribute(attribute: AttributeASTNode, rules: FormatRules): void {
   if (fileProblem !== undefined) {
     throw unsafe(`${at} ${fileProblem}.`);
   }
-  checkCharacters(
-    value,
-    at,
-    TEXT_ATTRIBUTES.has(key) || attribute.value.quoted === 'html',
-  );
+  const decoded = TEXT_ATTRIBUTES.has(key) || attribute.value.quoted === 'html';
+  checkCharacters(value, at, decoded);
+  if (attribute.value.quoted !== 'html') {
+    checkSubstitutions(value, at, decoded, state);
+  }
   if (URL_ATTRIBUTES.has(key)) {
     const problem = urlProblem(value);
     if (problem !== undefined) throw unsafe(`${at} ${problem}.`);
@@ -243,21 +309,24 @@ function checkAttribute(attribute: AttributeASTNode, rules: FormatRules): void {
     throw unsafe(`${at} contains a line break.`);
   }
   // `plain` output writes style, shape and colors as raw space-separated
-  // fields, so whitespace in them adds fields (Graphviz 2.43).
-  if (key === 'style' && !isKnownStyle(value)) {
+  // fields, so whitespace or quotes in them add fields (Graphviz 2.43).
+  if (key === 'style' && !isKnownStyle(value, rules)) {
     throw unsafe(`${at} is not a list of known styles.`);
   }
   if (key === 'shape' && !/^[A-Za-z0-9_]*$/.test(value)) {
     throw unsafe(`${at} is not a shape name.`);
   }
-  if (key.endsWith('color') && /\s/.test(value)) {
+  if (key.endsWith('color') && !COLOR.test(value)) {
     throw unsafe(
-      `${at} contains whitespace (write HSV colors with commas, e.g. "0.6,0.7,0.7").`,
+      `${at} is not a color (write HSV colors with commas, e.g. "0.6,0.7,0.7").`,
     );
   }
 }
 
-function checkName(literal: LiteralASTNode | undefined): void {
+function checkName(
+  literal: LiteralASTNode | undefined,
+  state: DocumentState,
+): void {
   if (literal === undefined) return;
   const text = textOf(literal);
   const at = `name${where(literal)}`;
@@ -266,9 +335,14 @@ function checkName(literal: LiteralASTNode | undefined): void {
   }
   // Names are written into SVG `<title>`s and comments as they are.
   checkCharacters(text, at, false);
+  if (text.includes('&')) state.ampersandName ??= at;
 }
 
-function checkHtml(literal: LiteralASTNode, rules: FormatRules): void {
+function checkHtml(
+  literal: LiteralASTNode,
+  rules: FormatRules,
+  state: DocumentState,
+): void {
   const at = `HTML-like string${where(literal)}`;
   // Text is decoded and escaped by Graphviz; attribute values only decoded.
   checkCharacters(literal.value, at, true);
@@ -287,6 +361,8 @@ function checkHtml(literal: LiteralASTNode, rules: FormatRules): void {
         throw unsafe(`${on} reads a file.`);
       }
       checkCharacters(value, on, false);
+      // Anchor attributes (HREF, TITLE, TARGET, ID) are expanded too.
+      checkSubstitutions(value, on, false, state);
       if (key === 'href' || key === 'url') {
         const problem = urlProblem(value);
         if (problem !== undefined) throw unsafe(`${on} ${problem}.`);
@@ -294,11 +370,11 @@ function checkHtml(literal: LiteralASTNode, rules: FormatRules): void {
       if (key === 'face' && isUnsafeFontName(value, rules)) {
         throw unsafe(`${on} is not a plain font name.`);
       }
-      if (key === 'style' && !isKnownStyle(value)) {
+      if (key === 'style' && !isKnownStyle(value, rules)) {
         throw unsafe(`${on} is not a list of known styles.`);
       }
-      if (key.endsWith('color') && /\s/.test(value)) {
-        throw unsafe(`${on} contains whitespace.`);
+      if (key.endsWith('color') && !COLOR.test(value)) {
+        throw unsafe(`${on} is not a color.`);
       }
     }
   }
@@ -322,6 +398,7 @@ function* walk(node: ASTNode): Generator<ASTNode> {
  */
 function checkSafety(rules: FormatRules) {
   return (ast: DotASTNode): undefined => {
+    const state: DocumentState = {};
     for (const node of walk(ast)) {
       switch (node.type) {
         case 'Attribute':
@@ -330,29 +407,40 @@ function checkSafety(rules: FormatRules) {
             `attribute name${where(node)}`,
             false,
           );
-          checkAttribute(node, rules);
+          checkAttribute(node, rules, state);
           break;
         case 'Literal':
-          if (node.quoted === 'html') checkHtml(node, rules);
+          if (node.quoted === 'html') checkHtml(node, rules, state);
           break;
         case 'Graph':
         case 'Subgraph':
         case 'Node':
-          checkName(node.id);
+          checkName(node.id, state);
           break;
         case 'NodeRef':
           // `\E` in a value expands to the edge's names and ports.
-          checkName(node.id);
-          checkName(node.port);
+          checkName(node.id, state);
+          checkName(node.port, state);
           break;
       }
+    }
+    if (state.composite !== undefined && state.ampersandName !== undefined) {
+      throw unsafe(
+        `${state.composite} puts a substitution escape such as \\N next to other text, and ${state.ampersandName} contains "&": together they can form a character reference.`,
+      );
     }
     return undefined;
   };
 }
 
+/** The rules of every checked format at once, for a call without a format. */
+const STRICTEST_RULES: FormatRules = {
+  fontName: POSTSCRIPT_FONT_NAME,
+  spacesInStyle: false,
+};
+
 function rulesFor(format: string | undefined): FormatRules {
-  if (format === undefined) return { fontName: PLAIN_FONT_NAME };
+  if (format === undefined) return STRICTEST_RULES;
   const base = format.split(':')[0].toLowerCase();
   if (base === 'ismap') {
     throw unsafe(
@@ -368,6 +456,7 @@ function rulesFor(format: string | undefined): FormatRules {
     fontName: POSTSCRIPT_FORMATS.has(base)
       ? POSTSCRIPT_FONT_NAME
       : PLAIN_FONT_NAME,
+    spacesInStyle: !PLAIN_FORMATS.has(base),
   };
 }
 
@@ -384,15 +473,24 @@ function rulesFor(format: string | undefined): FormatRules {
  *   xdot drawing programs (`_draw_`, …, `_background`);
  * - URL-like attributes (`URL`, `href`, `labelURL`, `HREF` in HTML-like
  *   labels, …) unless they are relative or use `http`, `https` or `mailto`,
- *   and any containing whitespace, control characters or backslash escapes;
+ *   and any containing whitespace, control characters, quotes, angle
+ *   brackets or backslash escapes;
  * - `<IMG>` and `SRC` in HTML-like strings, and markup it cannot read;
  * - font names (`fontname`, `labelfontname`, `FACE`) other than plain names
  *   (letters, digits and `_ . , : = + -`, and spaces except for PostScript);
- * - `style` values other than known styles and `setlinewidth(n)`, `shape`
- *   values other than names, and colors containing whitespace;
- * - control characters anywhere, line breaks in names and `comment`, and
- *   named character references other than XML's outside label and tooltip
- *   text.
+ * - `style` values other than known styles and `setlinewidth(n)` (spaces
+ *   only outside `plain`), `shape` values other than names, and colors
+ *   outside the color syntax;
+ * - control characters anywhere, line breaks in names, ports and `comment`,
+ *   and named character references other than XML's outside label and
+ *   tooltip text;
+ * - substitution escapes (`\N`, `\G`, `\E`, `\T`, `\H`, `\L`) that could
+ *   assemble a character reference once Graphviz expands them, and `\L`
+ *   outside label and tooltip text.
+ *
+ * Without `options.format` the rules of every checked format apply at
+ * once; pass the format to allow what is safe for it (spaces in font names
+ * outside PostScript, in styles outside `plain`).
  *
  * Values are checked at every level of character-reference decoding.
  * Attribute names are compared case-insensitively. Layout and size

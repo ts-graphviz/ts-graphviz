@@ -46,6 +46,12 @@ const piece = fc.constantFrom(
   '#',
   '?',
   'alert(1)',
+  '\\"',
+  '&quot;',
+  '&#34;',
+  "'",
+  '<',
+  ' onmouseover=x ',
 );
 
 const link = fc
@@ -115,7 +121,10 @@ describe.skipIf(!hasDot)(
         try {
           checked = sanitize(dot);
         } catch (e) {
-          expect(e).toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+          // Unsafe, or (a raw `<` in an HTML-like string) not DOT at all.
+          expect(['TSG_ERR_UNSAFE_DOT', 'TSG_ERR_DOT_SYNTAX']).toContain(
+            (e as { code?: unknown }).code,
+          );
           continue;
         }
         accepted++;
@@ -124,6 +133,11 @@ describe.skipIf(!hasDot)(
           encoding: 'utf8',
         });
         expect(r.status, `${checked}\n${r.stderr}`).toBe(0);
+        // Every anchor is made of well-formed attributes only: a quote in a
+        // link would end its attribute and start others.
+        for (const [anchor] of r.stdout.matchAll(/<a\b[^>]*>/g)) {
+          expect(anchor, checked).toMatch(/^<a(?:\s+[\w:-]+="[^"<]*")*\s*>$/);
+        }
         for (const href of svgLinks(r.stdout)) {
           links++;
           const url = browserUrl(href);

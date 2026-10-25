@@ -16,8 +16,8 @@ const hasDot = spawnSync('dot', ['-V']).status === 0;
 
 const source = String.raw`digraph "G \"<b>(p)%" {
   label="L &nbsp;&eacute; \"<b>(p)% \n x"
-  subgraph "cluster C(p)%" { label="C\l" "n \"(p)%&amp;" }
-  "n \"(p)%&amp;" -> b [label="e(p)" tooltip="t \N" URL="https://x/?a=1&amp;b=(2)" target="_blank" id="i(p)" class="c(p)" style="setlinewidth(2),dashed" color="red:blue" fontname="Times-Roman"]
+  subgraph "cluster C(p)%" { label="C\l" "n \"(p)%" }
+  "n \"(p)%" -> b [label="e(p)" tooltip="t \N" URL="https://x/?a=1&amp;b=(2)" target="_blank" id="i(p)" class="c(p)" style="setlinewidth(2),dashed" color="red:blue" fontname="Times-Roman"]
   b [shape=record label="<f0> a\"(p)|{<f1> b}" fillcolor="#ff0000" style=filled]
   c [label=<<table href="/x" title="t(p)"><tr><td>H &amp;(p)</td></tr></table>>]
 }`;

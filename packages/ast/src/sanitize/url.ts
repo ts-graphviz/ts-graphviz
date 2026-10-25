@@ -84,6 +84,12 @@ export function urlProblem(value: string): string | undefined {
     if (/[\0-\x20\x7f]/.test(level)) {
       return 'contains whitespace or a control character';
     }
+    // SVG output writes the URL between quotes without escaping it, so a
+    // quote (also one decoded from `&quot;` in an HTML-like label) ends the
+    // attribute (Graphviz 2.43).
+    if (/["'<>`]/.test(level)) {
+      return 'contains a quote or an angle bracket';
+    }
     const scheme = /^([A-Za-z][A-Za-z0-9+.-]*):/.exec(level)?.[1];
     if (
       scheme !== undefined &&
