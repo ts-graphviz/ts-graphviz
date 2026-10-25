@@ -1,7 +1,0 @@
-graph G {
-	la#out=neato
-	run -- i-1.5ntr;
-	intr -- runbeep -- swap;
-	swap -- runswap;m;
-	sleep - runmem;
-}

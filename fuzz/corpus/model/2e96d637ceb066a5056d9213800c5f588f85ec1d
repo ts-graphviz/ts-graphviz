@@ -1,6 +1,0 @@
-graph ER {
-	layout=neato
-	node [shape=b;o ]xcourse; institute;code; 	code; grade; number;
-	nram\ndrawn by NEATO";
-	fontsize=20;
-}

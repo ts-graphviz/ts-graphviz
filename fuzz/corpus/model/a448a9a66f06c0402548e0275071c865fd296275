@@ -1,7 +1,0 @@
-graph G {ø	layout=neato
-		layout=neato
-	run -- intr;
-	intr -- runbl;
-	runbl -- run;
-	run mem;
-}

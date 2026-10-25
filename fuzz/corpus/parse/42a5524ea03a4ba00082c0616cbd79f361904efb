@@ -1,4 +1,0 @@
-graph G {
-	layout=neato-2 runmem;
-	sleep -- :nerunmem;
-}

@@ -1,7 +1,0 @@
-##"I played some days with making an interface between our ConceptBase system (essentially a database system to store models) and graphviz. One example graph is attached. It is a so-called petri net for Dutch traffic lights. The example is  yellow1; red1;
-gy2->yellow2;
-rg2->green2;
-yr2->safe1;
-yr2->red Graphviz"
-fontsize=11;
-}

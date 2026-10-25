@@ -1,6 +1,0 @@
-graph G {
-  layout=fdp
-  e
-  subgraph clusturA {
-    a:ne }9dlusterB
-}

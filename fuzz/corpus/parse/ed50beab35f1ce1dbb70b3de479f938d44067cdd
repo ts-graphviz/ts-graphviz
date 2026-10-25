@@ -1,5 +1,0 @@
-digraph G { bgcolor="purple:pink" label="agraph" fontcolor="white"
-  subgraph cluster0 {fillcolor="blue:cyan" label="acluster
-"white" stylÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿe="filled" gradientangle="270"
-		node [shape=box fillcolor="red:yellow
-}

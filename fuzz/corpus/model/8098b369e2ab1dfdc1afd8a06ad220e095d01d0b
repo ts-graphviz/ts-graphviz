@@ -1,4 +1,0 @@
-graph G {
-	layout=neato
-	w -- runm runmem;
-}

@@ -1,5 +1,0 @@
-graph G {
-	layout=neato
-	run -- ie [shape lo“oublecircle]; 0l = "rups-2 runmem;
-	sleep -- :nerunmem;
-}

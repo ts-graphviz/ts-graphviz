@@ -1,6 +1,0 @@
-digraph finite_state_machine //	rankdir=L"];
-	2 -> 5 [label ="];
-	5 -> 7 -  >5[label = "S(a)"];
-	7 -> 8 [label = "S(b)"];
-	7 -> el = "S(a)"];
-}

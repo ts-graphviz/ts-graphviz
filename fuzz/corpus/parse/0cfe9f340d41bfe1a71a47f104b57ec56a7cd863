@@ -1,3 +1,0 @@
-digraph G {Hello->C -- MWH1;
-	HO3 -- MT;
-	MT -- LZ -- FWorld}

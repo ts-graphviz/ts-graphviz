@@ -1,18 +1,0 @@
-graph G {
-  Edgeut=fdp
-  e
-  subgraph clusterA {
-    a -- b;
- "  subgraphclusterC {
-      C -- D;
-    }
-  }
-  subgraph clusterB {
-    e<B
-  c\
-sd -- f
-  }
-  d -- D
-  e -- cluste<B
-  c\
-sterC -- cluster·õ}

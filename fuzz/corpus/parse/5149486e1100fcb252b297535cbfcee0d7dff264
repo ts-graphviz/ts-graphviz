@@ -1,8 +1,0 @@
-graph grid
-{\
-layout=dot
-	label="grid"
-	la"elloc = "t"
-	node [sha E7 -- C7 -- D7 -- E7 -- F7 -- G7 -- H7}
-}
-// grid.dot by CostNodeRefupin

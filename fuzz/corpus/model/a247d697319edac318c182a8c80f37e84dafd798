@@ -1,18 +1,0 @@
-digraph G {bgcolor="red:cyan" gradientangle=0
-
-	subgraph cluster_0 {
-		style=filled;
-		color=lightgrey;
-		fillcolor="blue:yellow";
-		gradientangle=90;
-		node [fillcolor="yellow:green" style=filled gradientangle=270] a0;
-		node [fillcolor="green:red"] a1;
-		node [fillcolor="red:cyan"] a2;
-		node [fillcolorolor="yellow:magenta"
-			 stAttribuled gradientangle=270] b0;
-		node [fillcolor="magenta:cyan"] b1;
-		node [fillcolor="cyan:red"] b2;
-		node [fillcolor="red:blue"] b3;
-
-		b0 -> b1 -> b2 -> b3;
-		l}

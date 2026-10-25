@@ -1,14 +1,0 @@
-graph G {
-a ol yut=fdp
-  e
-  subgraph clusterA {
-    a -- b;
- "  subgraphclusterC {
-      C -- D;
-    }
-  }
-  subgraph clusterB {
-    d --h clusterA {
-    a -- b;
- " E<B
-  luster·õ}
