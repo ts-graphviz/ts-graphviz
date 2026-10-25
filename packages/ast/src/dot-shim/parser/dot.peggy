@@ -38,6 +38,11 @@
       : b.createElement('NodeRefList', {}, refs.map(nodeRefOf));
   }
 
+  /** Comments inside statements by offset; see `ic`. */
+  function recordComment(comment) {
+    options.inlineComments?.set(comment.location.start.offset, comment);
+  }
+
   const b = new Builder({
     locationFunction: location,
     maxASTNodes: options.maxASTNodes,
@@ -98,7 +103,7 @@ HeadStatement = __ v:_head_statement __ { return v; }
 _dot = c1:Comment* graphs:(graph:Graph c2:Comment* { return [graph, ...c2]; })* { return b.createElement('Dot', {}, [...c1, ...graphs.flat()]); }
 
 _graph
-  = _strict:("strict"i !StringPart __)? _kind:("graph"i / "digraph"i) !StringPart __ id:_literal? __ "{" children:ClusterStatements __ "}" {
+  = _strict:("strict"i !StringPart ic)? _kind:("graph"i / "digraph"i) !StringPart ic id:_literal? ic "{" children:ClusterStatements __ "}" {
       const strict = !!_strict;
       const kind = _kind.toLowerCase();
       const directed = kind === 'digraph';
@@ -132,7 +137,7 @@ _graph
     }
 
 _attribute
-  = keyValue:_key_value _ ";"? {
+  = keyValue:_key_value (ic ";")? {
       return b.createElement(
         'Attribute',
         {
@@ -143,7 +148,7 @@ _attribute
     }
 
 _attributes
-  = _kind:("graph"i / "node"i / "edge"i) !StringPart children:_attribute_list _ ";"? {
+  = _kind:("graph"i / "node"i / "edge"i) !StringPart ic children:_attribute_list (ic ";")? {
       return b.createElement(
         'AttributeList',
         {
@@ -154,7 +159,7 @@ _attributes
     }
 
 _edge
-  = id:_edge_target rhs:_edge_rhs _children:_attribute_list? _ ";"? {
+  = id:_edge_target rhs:_edge_rhs _children:(ic v:_attribute_list { return v; })? (ic ";")? {
       // Reset edge chain depth counter after successful edge parse
       edgeChainDepth = 0;
       // @ts-ignore
@@ -170,7 +175,7 @@ _edge
 
 _head_statement
   // `{ ... }` / `subgraph s { ... }`, alone or as the first edge target.
-  = head:_subgraph tail:(rhs:_edge_rhs _children:(__ v:_attribute_list { return v; })? { return { rhs, _children }; })? _ ";"? {
+  = head:_subgraph tail:(rhs:_edge_rhs _children:(ic v:_attribute_list { return v; })? { return { rhs, _children }; })? (ic ";")? {
       if (!tail) return head;
       edgeChainDepth = 0;
       return b.createElement('Edge', { targets: [head, ...tail.rhs] }, tail._children ?? []);
@@ -178,7 +183,7 @@ _head_statement
   // `a`, `a:p`, `a, b`: an edge when an edge operator follows, node
   // statements otherwise (a port there means nothing to Graphviz and is
   // dropped, as Graphviz drops it).
-  / refs:_node_refs rhs:_edge_rhs? _children:(__ v:_attribute_list { return v; })? _ ";"? {
+  / refs:_node_refs rhs:_edge_rhs? _children:(ic v:_attribute_list { return v; })? (ic ";")? {
       if (rhs) {
         edgeChainDepth = 0;
         return b.createElement('Edge', { targets: [edgeTargetOf(refs), ...rhs] }, _children ?? []);
@@ -187,7 +192,7 @@ _head_statement
     }
 
 _node
-  = id:_literal _ _children:_attribute_list? _ ";"? {
+  = id:_literal _children:(ic v:_attribute_list { return v; })? (ic ";")? {
       return b.createElement(
         'Node',
         {
@@ -197,10 +202,10 @@ _node
       );
     }
 
-_key_value = key:_literal _ "=" _ value:_literal { return { key, value }; }
+_key_value = key:_literal ic "=" ic value:_literal { return { key, value }; }
 
 _attibutes_item
-  = kv:_key_value _ ("," / ";")? {
+  = kv:_key_value (ic ("," / ";"))? {
       return b.createElement(
         'Attribute',
         {
@@ -211,12 +216,12 @@ _attibutes_item
       );
     }
 
-_attribute_list = _ "[" list:(AttibutesItem / Comment)* __ "]" { return list; }
+_attribute_list = "[" list:(AttibutesItem / Comment)* __ "]" { return list; }
 
 // One or more node references (`a:p, b`), read as data: the AST nodes are
 // made once the statement they belong to is known, so backtracking does not
 // create (and count against maxASTNodes) nodes that are thrown away.
-_node_refs = first:_node_ref_data rest:(__ "," __ v:_node_ref_data { return v; })* { return [first, ...rest]; }
+_node_refs = first:_node_ref_data rest:(ic "," ic v:_node_ref_data { return v; })* { return [first, ...rest]; }
 
 _node_ref_data = id:_literal port:_port? { return { id, ...port, location: location() }; }
 
@@ -229,7 +234,7 @@ _edge_target
 _edge_operator = operator:("->" / "--") { return { operator, location: location() }; }
 
 _edge_rhs
-  = __ edgeop:_edge_operator __ id:_edge_target rest:_edge_rhs? {
+  = ic edgeop:_edge_operator ic id:_edge_target rest:_edge_rhs? {
       // Track edge chain depth to prevent stack overflow from deeply chained edges
       // Each edge operator (-> or --) represents one link in the chain
       //
@@ -273,7 +278,7 @@ _node_ref
     }
 
 _port "port"
-  = ":" port:_literal compass:(":" compass:_compass { return compass; })? {
+  = ic ":" ic port:_literal compass:(ic ":" ic compass:_compass { return compass; })? {
       // `node_id : compass_pt`: a lone port whose text is a compass point is
       // the compass point, as Graphviz reads it (quoted or not).
       if (
@@ -290,7 +295,7 @@ _port "port"
 
 // Keywords end where an identifier would: `subgraphx` is an ID, not the
 // keyword. Any whitespace, newlines included, may separate header tokens.
-_subgraph_id = "subgraph"i !StringPart __ id:_literal? __ { return id; }
+_subgraph_id = "subgraph"i !StringPart ic id:_literal? ic { return id; }
 
 _subgraph
   = id:_subgraph_id? "{" _children:ClusterStatements? __ "}" {
@@ -496,6 +501,23 @@ char
   / "\\" { return '\\'; }
 
 _ "whitespace" = _whitespace*
+
+// Whitespace inside a statement, where Graphviz also allows comments (it
+// treats them as whitespace anywhere). The comments are recorded, once per
+// offset whatever backtracking does, and attached to the nodes next to
+// them after parsing; comments between statements stay Comment nodes.
+ic "whitespace" = (_whitespace / _newline / c:_inline_comment { recordComment(c); })*
+
+_inline_comment
+  = "/*" v:(!"*/" v:. { return v; })* "*/" {
+      return { kind: 'Block', value: dedent(v.join('').replace(/^[ \t]*\*/gm, '')), location: location() };
+    }
+  / "//" v:(!_line_end v:. { return v; })* {
+      return { kind: 'Slash', value: v.join('').trim(), location: location() };
+    }
+  / "#" v:(!_line_end v:. { return v; })* {
+      return { kind: 'Macro', value: v.join('').trim(), location: location() };
+    }
 
 __ "WHITESPACE" = (_whitespace / _newline)*
 

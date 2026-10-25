@@ -12,6 +12,7 @@ import type {
   SubgraphASTNode,
 } from '../../types.js';
 import { parse as _parse, SyntaxError as PeggySyntaxError } from './_parse.js';
+import { attachComments, type InlineComment } from './attach-comments.js';
 
 /**
  * Default maximum input size in bytes (10MB).
@@ -171,13 +172,25 @@ export function parse(
   }
 
   try {
-    return _parse(input, {
+    // Comments inside statements, by offset; attached once parsing is done.
+    const inlineComments = new Map<number, InlineComment>();
+    const ast: ASTNode | ClusterStatementASTNode[] = _parse(input, {
       startRule,
       filename,
       maxHtmlNestingDepth,
       maxEdgeChainDepth,
       maxASTNodes,
+      inlineComments,
     });
+    if (inlineComments.size > 0) {
+      attachComments(
+        Array.isArray(ast)
+          ? ({ type: 'Dot', children: ast } as unknown as ASTNode)
+          : ast,
+        inlineComments.values(),
+      );
+    }
+    return ast;
   } catch (e) {
     if (e instanceof PeggySyntaxError) {
       throw new DotSyntaxError(e.message, {

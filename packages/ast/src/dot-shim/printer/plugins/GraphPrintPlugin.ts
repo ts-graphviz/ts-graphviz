@@ -11,6 +11,9 @@ export const GraphPrintPlugin: PrintPlugin<GraphASTNode> = {
       yield 'strict ';
     }
     yield ast.directed ? 'digraph ' : 'graph ';
+    if (ast.danglingComments?.length) {
+      yield* context.printComments(ast.danglingComments, 'inline');
+    }
     if (ast.id) {
       yield* context.print(ast.id);
       yield ' ';

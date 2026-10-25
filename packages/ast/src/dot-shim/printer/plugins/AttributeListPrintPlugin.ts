@@ -6,10 +6,17 @@ export const AttributeListPrintPlugin: PrintPlugin<AttributeListASTNode> = {
     return ast.type === 'AttributeList';
   },
   *print(context, ast) {
-    if (ast.children.length === 0) {
-      yield `${ast.kind.toLocaleLowerCase()} [];`;
+    yield ast.kind.toLocaleLowerCase();
+    if (ast.danglingComments?.length) {
+      yield ' ';
+      yield* context.printComments(ast.danglingComments, 'inline');
     } else {
-      yield `${ast.kind.toLocaleLowerCase()} [`;
+      yield ' ';
+    }
+    if (ast.children.length === 0) {
+      yield '[];';
+    } else {
+      yield '[';
       yield* context.printChildren(ast.children);
       yield '];';
     }

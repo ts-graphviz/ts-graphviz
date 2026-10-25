@@ -1,7 +1,11 @@
 import { withCode } from '@ts-graphviz/common';
 import type { ASTNode, CommentASTNode } from '../../types.js';
 import { defaultPlugins } from './plugins/index.js';
+import { escapeComment } from './plugins/utils/escape-comment.js';
 import type { PrintContext, PrintOptions, PrintPlugin } from './types.js';
+
+/** Nodes whose plugin writes their dangling comments in the header. */
+const HEADER_DANGLING = new Set(['Graph', 'Subgraph', 'AttributeList']);
 
 /**
  * Printer is a class responsible for converting an AST into a DOT string.
@@ -37,6 +41,36 @@ export class Printer {
     const context: PrintContext = {
       directed: true,
       EOL,
+      *printComments(comments, placement) {
+        // A leading comment comes after a node on an earlier line, so it is
+        // written on lines of its own: written after that node on its line,
+        // it would be read back as that node's trailing comment.
+        if (placement === 'leading' && comments?.length) yield EOL;
+        for (const comment of comments ?? []) {
+          if (placement === 'trailing') yield ' ';
+          const lines = escapeComment(comment.value, comment.kind).split(
+            /\r?\n/,
+          );
+          if (comment.kind === 'Block') {
+            yield '/* ';
+            yield* lines.flatMap((line, i) => (i === 0 ? [line] : [EOL, line]));
+            yield ' */';
+            yield placement === 'leading'
+              ? EOL
+              : placement === 'inline'
+                ? ' '
+                : '';
+          } else {
+            // A line comment runs to the end of the line, so the line ends
+            // after it, whatever follows.
+            const marker = comment.kind === 'Slash' ? '//' : '#';
+            for (const line of lines) {
+              yield line === '' ? marker : `${marker} ${line}`;
+              yield EOL;
+            }
+          }
+        }
+      },
       *printChildren(children: ASTNode[]) {
         yield* indent(function* () {
           yield EOL;
@@ -47,7 +81,12 @@ export class Printer {
       *print(a: ASTNode) {
         for (const plugin of plugins) {
           if (plugin.match(a)) {
+            yield* context.printComments(a.leadingComments, 'leading');
             yield* plugin.print(this, a);
+            yield* context.printComments(a.trailingComments, 'trailing');
+            if (!HEADER_DANGLING.has(a.type)) {
+              yield* context.printComments(a.danglingComments, 'trailing');
+            }
             return;
           }
         }

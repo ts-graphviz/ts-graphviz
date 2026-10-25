@@ -6939,9 +6939,9 @@
               },
               "location": {
                 "end": {
-                  "column": 54,
+                  "column": 53,
                   "line": 56,
-                  "offset": 2705,
+                  "offset": 2704,
                 },
                 "source": undefined,
                 "start": {

@@ -1,4 +1,4 @@
-import type { ASTNode } from '../../types.js';
+import type { ASTNode, CommentASTNode } from '../../types.js';
 
 /**
  * The IndentStyle type represents an indentation style for text. It can either be a `"space"` or a `"tab"`.
@@ -53,6 +53,16 @@ export interface PrintContext {
   print(ast: ASTNode): Iterable<string>;
   printChildren(children: ASTNode[]): Iterable<string>;
   join(children: ASTNode[], separator: string): Iterable<string>;
+  /**
+   * Prints comments attached to a node: `'leading'` on lines of their own
+   * before it, `'trailing'` after it on its line, `'inline'` where the
+   * printer is (header comments after a keyword). A line comment always
+   * ends its line.
+   */
+  printComments(
+    comments: CommentASTNode[] | undefined,
+    placement: 'leading' | 'trailing' | 'inline',
+  ): Iterable<string>;
 }
 
 /**

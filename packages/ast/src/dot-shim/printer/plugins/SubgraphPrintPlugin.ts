@@ -7,6 +7,10 @@ export const SubgraphPrintPlugin: PrintPlugin<SubgraphASTNode> = {
   },
   *print(context, ast) {
     yield 'subgraph';
+    if (ast.danglingComments?.length) {
+      yield ' ';
+      yield* context.printComments(ast.danglingComments, 'inline');
+    }
     if (ast.id) {
       yield ' ';
       yield* context.print(ast.id);

@@ -13,7 +13,17 @@ function plainNodes(target: EdgeTargetASTNode): NodeASTNode[] | undefined {
   if (target.type !== 'Subgraph' || target.id !== undefined) return undefined;
   const nodes = target.children;
   return nodes.length > 0 &&
-    nodes.every((n) => n.type === 'Node' && n.children.length === 0)
+    !target.leadingComments &&
+    !target.trailingComments &&
+    !target.danglingComments &&
+    nodes.every(
+      (n) =>
+        n.type === 'Node' &&
+        n.children.length === 0 &&
+        !n.leadingComments &&
+        !n.trailingComments &&
+        !n.danglingComments,
+    )
     ? (nodes as NodeASTNode[])
     : undefined;
 }
