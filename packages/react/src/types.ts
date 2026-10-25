@@ -8,6 +8,7 @@ import type {
   NodeAttributesObject,
   NodeModel,
   ReadonlyEdgeTargetLikeTuple,
+  SubgraphAttributesFor,
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';
 import type { Attributes, ReactElement, ReactNode, Ref } from 'react';
@@ -36,13 +37,23 @@ export interface RootGraphOptions
 }
 
 /** Options for Subgraph */
-export interface SubgraphOptions
-  extends SubgraphAttributesObject,
-    GraphBaseAttributesProps,
-    HasComment {
-  /** Cluster id */
-  id?: string;
-}
+/**
+ * Options for Subgraph. Like `subgraph()`, the id picks the attributes
+ * ({@link SubgraphAttributesFor}): cluster attributes for an id starting with
+ * `cluster` (or with `cluster: true`), `rank` otherwise. Without a type
+ * argument the id is not known, and either kind is accepted.
+ */
+export type SubgraphOptions<
+  Id extends string | undefined = string | undefined,
+> =
+  // `id` and `comment` here are the subgraph's name and the model comment,
+  // not the Graphviz attributes of the same names.
+  DistributiveOmit<SubgraphAttributesFor<Id>, 'id' | 'comment'> &
+    GraphBaseAttributesProps &
+    HasComment & {
+      /** Subgraph id; one starting with `cluster` makes a cluster. */
+      id?: Id;
+    };
 
 /** Options for Edge */
 export interface EdgeOptions extends EdgeAttributesObject {}
@@ -78,12 +89,33 @@ export interface NodeProps extends Omit<NodeOptions, 'label' | 'xlabel'> {
 }
 
 /** Props for Subgraph component */
-export interface SubgraphProps extends Omit<SubgraphOptions, 'label'> {
-  /** Subgraph label */
-  label?: ReactElement | string;
-  children?: ReactNode;
-  ref?: Ref<GraphBaseModel>;
-}
+/**
+ * Props for Subgraph component: {@link SubgraphOptions}, with `label` taking
+ * a React element (an HTML-like label) where a label applies.
+ */
+export type SubgraphProps<Id extends string | undefined = string | undefined> =
+  WithReactLabel<SubgraphOptions<Id>> & {
+    children?: ReactNode;
+    ref?: Ref<GraphBaseModel>;
+  };
+
+/** `Omit` applied to each member of a union, so the union stays discriminated. */
+type DistributiveOmit<T, K extends PropertyKey> = T extends unknown
+  ? Omit<T, K>
+  : never;
+
+/**
+ * Replaces `label` with a React element or string, in each union member that
+ * takes a label (not in those where it is absent or `never`).
+ */
+type WithReactLabel<T> = T extends unknown
+  ? T extends { label?: undefined }
+    ? T
+    : Omit<T, 'label'> & {
+        /** Subgraph label */
+        label?: ReactElement | string;
+      }
+  : never;
 
 /** Props for GraphPortal component */
 export interface GraphPortalProps {

@@ -196,7 +196,7 @@ describe('Subgraph Component', () => {
       await root.render(
         <Digraph>
           <Subgraph
-            id="funcref"
+            id="cluster_funcref"
             ref={(subgraph) => {
               subgraphModel = subgraph;
             }}
@@ -210,7 +210,7 @@ describe('Subgraph Component', () => {
       expect(subgraphModel).not.toBeNull();
       if (subgraphModel) {
         expectSubgraph(subgraphModel);
-        expect(subgraphModel.id).toBe('funcref');
+        expect(subgraphModel.id).toBe('cluster_funcref');
         expect(subgraphModel.get('label')).toBe('Function Ref Subgraph');
         expectGraphStructure(subgraphModel, {
           nodeCount: 1,

@@ -740,7 +740,7 @@ export type NodeRefLike = NodeRef | string;
 
 export type NonClusterSubgraphAttributesObject = (AttributesObject<Exclude<SubgraphAttributeKey, "cluster">> & {
   cluster?: false;
-}) | (AttributesObject<Exclude<ClusterSubgraphAttributeKey, "cluster">> & {
+} & { [K in Exclude<ClusterSubgraphAttributeKey, SubgraphAttributeKey>]?: never; }) | (AttributesObject<Exclude<ClusterSubgraphAttributeKey, "cluster">> & {
   cluster: true;
 });
 

@@ -109,17 +109,19 @@ export interface RootGraphProps extends Omit<RootGraphOptions, "label"> {
   ref?: Ref<GraphBaseModel>;
 }
 
-export declare const Subgraph: FC<SubgraphProps>;
+export declare const Subgraph: {
+  <const Id extends string | undefined = undefined>(props: SubgraphProps<Id>): ReactElement;
+  displayName?: string;
+};
 
-export interface SubgraphOptions extends SubgraphAttributesObject, GraphBaseAttributesProps, HasComment {
-  id?: string;
-}
+export type SubgraphOptions<Id extends string | undefined = string | undefined> = DistributiveOmit<SubgraphAttributesFor<Id>, "id" | "comment"> & GraphBaseAttributesProps & HasComment & {
+  id?: Id;
+};
 
-export interface SubgraphProps extends Omit<SubgraphOptions, "label"> {
-  label?: ReactElement | string;
+export type SubgraphProps<Id extends string | undefined = string | undefined> = WithReactLabel<SubgraphOptions<Id>> & {
   children?: ReactNode;
   ref?: Ref<GraphBaseModel>;
-}
+};
 
 export type TopLevelModel = FilterableModel;
 
@@ -150,6 +152,16 @@ export { isEdgeModel } from "ts-graphviz";
 export { isNodeModel } from "ts-graphviz";
 export { isRootGraphModel } from "ts-graphviz";
 export { isSubgraphModel } from "ts-graphviz";
+
+// Used by the exports, not exported
+
+type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
+
+type WithReactLabel<T> = T extends unknown ? T extends {
+  label?: undefined;
+} ? T : Omit<T, "label"> & {
+  label?: ReactElement | string;
+} : never;
 
 // Module augmentations
 
