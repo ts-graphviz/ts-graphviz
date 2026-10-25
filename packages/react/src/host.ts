@@ -333,18 +333,42 @@ function createStatement(
   instance: NodeInstance | EdgeInstance,
 ): NodeModel | EdgeModel {
   if (instance.kind === 'edge') {
-    const edge = graph.createEdge(instance.props.targets);
+    const before = new Set(graph.edges);
+    let edge: EdgeModel;
+    try {
+      edge = graph.createEdge(instance.props.targets);
+    } catch (error) {
+      // Take back an edge the factory added before it threw.
+      for (const added of graph.edges) {
+        if (!before.has(added)) graph.removeEdge(added);
+      }
+      throw error;
+    }
     graph.removeEdge(edge);
     applyProps(edge, instance.props);
     return edge;
   }
-  const existing = graph.getNode(instance.props.id);
-  const node = graph.createNode(instance.props.id);
-  if (graph.getNode(node.id) === node) {
-    // createNode put it in the place of a node with its id: give that back.
-    if (existing !== undefined && existing !== node) graph.addNode(existing);
-    else graph.removeNode(node);
+  const { id } = instance.props;
+  const existing = graph.getNode(id);
+  // createNode may put its node in the place of the one with its id: give
+  // that back (in the same place), or take the new one out.
+  const restore = (node: NodeModel | undefined) => {
+    if (node === undefined || node === existing) return;
+    // A factory may also give the node another id.
+    if (existing !== undefined && node.id === existing.id) {
+      graph.addNode(existing);
+    } else {
+      graph.removeNode(node);
+    }
+  };
+  let node: NodeModel;
+  try {
+    node = graph.createNode(id);
+  } catch (error) {
+    restore(graph.getNode(id));
+    throw error;
   }
+  if (graph.getNode(node.id) === node) restore(node);
   applyProps(node, instance.props);
   return node;
 }

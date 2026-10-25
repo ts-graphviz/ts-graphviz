@@ -483,6 +483,32 @@ describe('host components', () => {
     root.unmount();
   });
 
+  it('takes back what a factory added before it threw', async () => {
+    const container = new DigraphModel('C');
+    const createNode = container.createNode.bind(container);
+    const createEdge = container.createEdge.bind(container);
+    container.createNode = ((id: string) => {
+      createNode(id);
+      throw new RangeError('after adding');
+    }) as typeof container.createNode;
+    const nodes = createRoot({ container });
+    await expect(nodes.render(<Node id="a" />)).rejects.toThrow('after adding');
+    expect(container.nodes).toHaveLength(0);
+    nodes.unmount();
+
+    container.createNode = createNode;
+    container.createEdge = ((targets: never) => {
+      createEdge(targets);
+      throw new RangeError('after adding');
+    }) as typeof container.createEdge;
+    const edges = createRoot({ container });
+    await expect(edges.render(<Edge targets={['a', 'b']} />)).rejects.toThrow(
+      'after adding',
+    );
+    expect(container.edges).toHaveLength(0);
+    edges.unmount();
+  });
+
   it('rejects a node outside any graph', async () => {
     await expect(renderToDot(<Node id="a" />)).rejects.toThrow(
       /<Node> must be rendered inside a Digraph, Graph or Subgraph/,
