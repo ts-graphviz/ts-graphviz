@@ -198,7 +198,7 @@ describe('createRoot()', () => {
       root.unmount();
     });
 
-    it('throws error when no top-level graph is provided', async () => {
+    it('reports a node outside any graph', async () => {
       const root = createRoot();
 
       await expect(
@@ -208,7 +208,17 @@ describe('createRoot()', () => {
             <Edge targets={['a', 'b']} />
           </>,
         ),
-      ).rejects.toThrow(/No top-level graph found/);
+      ).rejects.toThrow(/useCurrentGraph must be called within a cluster/);
+
+      root.unmount();
+    });
+
+    it('throws error when no top-level graph is provided', async () => {
+      const root = createRoot();
+
+      await expect(root.render(<Nothing />)).rejects.toThrow(
+        /No top-level graph found/,
+      );
 
       root.unmount();
     });
@@ -448,3 +458,7 @@ describe('createRoot()', () => {
     });
   });
 });
+
+function Nothing(): null {
+  return null;
+}

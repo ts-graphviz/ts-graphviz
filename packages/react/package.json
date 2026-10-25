@@ -38,21 +38,21 @@
   },
   "dependencies": {
     "@ts-graphviz/common": "workspace:^",
-    "react-reconciler": "^0.32.0",
+    "react-reconciler": "^0.34.0",
     "ts-graphviz": "workspace:^"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
     "@types/react": "^19.3.0",
-    "@types/react-reconciler": "0.32.0",
+    "@types/react-reconciler": "^0.34.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "rolldown-plugin-dts": "catalog:",
     "vite": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=19"
+    "react": "^19.3.0"
   },
   "publishConfig": {
     "access": "public",

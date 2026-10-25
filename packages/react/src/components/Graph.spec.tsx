@@ -123,7 +123,7 @@ describe('Graph Component', () => {
             <Graph />
           </Graph>,
         ),
-      ).rejects.toThrow('No top-level graph found');
+      ).rejects.toThrow('RootCluster is duplicated');
     });
 
     it('throws error when multiple root Graphs are provided', async () => {

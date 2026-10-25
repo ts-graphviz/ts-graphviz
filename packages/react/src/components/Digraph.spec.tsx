@@ -121,7 +121,7 @@ describe('Digraph Component', () => {
             <Digraph />
           </Digraph>,
         ),
-      ).rejects.toThrow('No top-level graph found');
+      ).rejects.toThrow('RootCluster is duplicated');
     });
 
     it('throws error when multiple root Digraphs are provided', async () => {

@@ -12,11 +12,10 @@ export type ComponentType = FC<any>;
 export interface CreateRootOptions<Container extends AnyGraphContainer = AnyGraphContainer> {
   container?: Container;
   models?: Partial<ModelsContext>;
-  onUncaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
-  onCaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
-  onRecoverableError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onUncaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
+  onCaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
+  onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;
   onRenderComplete?: (models: AnyDotObjectModel[]) => void;
-  timeout?: number;
 }
 
 export declare const Digraph: FC<RootGraphProps>;
@@ -73,7 +72,7 @@ export interface GraphPortalProps {
 }
 
 export interface GraphvizRoot {
-  render(element: ReactElement): Promise<void>;
+  render(element: ReactElement, options?: RenderOptions): Promise<void>;
   unmount(): void;
   getTopLevelModels(): AnyDotObjectModel[];
   getTopLevelModels<T extends DotObjectModel>(typeGuard?: (model: DotObjectModel) => model is T): T[];
@@ -94,7 +93,11 @@ export interface RenderHTMLLikeOptions {
   maxDepth?: number;
 }
 
-export interface RenderToDotOptions<Container extends AnyGraphContainer = AnyGraphContainer> extends CreateRootOptions {
+export interface RenderOptions {
+  signal?: AbortSignal;
+}
+
+export interface RenderToDotOptions<Container extends AnyGraphContainer = AnyGraphContainer> extends CreateRootOptions, RenderOptions {
   container?: Container;
 }
 

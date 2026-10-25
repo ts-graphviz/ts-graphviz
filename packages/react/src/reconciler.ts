@@ -1,19 +1,22 @@
 import ReactReconciler from 'react-reconciler';
+import {
+  DiscreteEventPriority,
+  NoEventPriority,
+} from 'react-reconciler/constants.js';
 import type {
-  ComponentType,
   HostContext,
   ReconcilerInstance as Instance,
   ComponentProps as Props,
   PublicInstance,
   RenderContainer,
   TextInstance,
-  UpdatePayload,
 } from './types/reconciler.js';
 
 /**
  * Type aliases for reconciler compatibility
  */
-type Type = ComponentType;
+// Host element types are strings (`dot:td`, ...); components never get here.
+type Type = string;
 type Container = RenderContainer;
 
 /**
@@ -47,9 +50,12 @@ type NoTimeout = -1;
 type OpaqueHandle = ReactReconciler.Fiber;
 
 /**
- * Update priority types
+ * An event priority from `react-reconciler/constants`.
  */
 type UpdatePriority = number;
+
+/** Nothing reads the host context; one object serves every element. */
+const HOST_CONTEXT: HostContext = {};
 
 /**
  * Form instance type (not used in Graphviz rendering)
@@ -61,7 +67,7 @@ type FormInstance = never;
  */
 type TransitionStatus = null;
 
-class HostConfig
+export class HostConfig
   implements
     ReactReconciler.HostConfig<
       Type,
@@ -69,6 +75,7 @@ class HostConfig
       Container,
       Instance,
       TextInstance,
+      never, // ActivityInstance
       SuspenseInstance,
       HydratableInstance,
       FormInstance,
@@ -77,7 +84,12 @@ class HostConfig
       ChildSet,
       TimeoutHandle,
       NoTimeout,
-      TransitionStatus
+      TransitionStatus,
+      null, // SuspendedState
+      null, // RendererInspectionConfig
+      never, // FormStateMarkerInstance
+      never, // HoistableRoot
+      never // Resource
     >
 {
   preparePortalMount(_containerInfo: Container): void {
@@ -95,26 +107,32 @@ class HostConfig
     clearTimeout(id);
   }
 
-  queueMicrotask(fn: () => void): void {
-    // Execute immediately to ensure synchronous behavior
-    fn();
+  scheduleMicrotask(fn: () => unknown): void {
+    queueMicrotask(() => {
+      fn();
+    });
   }
 
-  // For update priority management
-  resolveUpdatePriority(): UpdatePriority {
-    // Return SyncLane priority for immediate execution
-    // This is typically 1 for synchronous updates
-    return 1;
-  }
+  // Update priorities (#1752), from react-reconciler/constants. A render
+  // produces a snapshot of models, so every update runs at the discrete
+  // (synchronous) priority, including those effects schedule: React lowers
+  // the priority to the default one while it runs passive effects, which
+  // would leave their updates for later, after render() returned. The set
+  // priority is still tracked, so React's save-and-restore keeps working.
+  // Arrow functions, because the reconciler calls host config methods
+  // without `this`.
+  #currentUpdatePriority: UpdatePriority = NoEventPriority;
 
-  setCurrentUpdatePriority(_priority: UpdatePriority): void {
-    // NoOp - we force synchronous rendering by design
-  }
+  resolveUpdatePriority = (): UpdatePriority => DiscreteEventPriority;
 
-  getCurrentUpdatePriority(): UpdatePriority {
-    // Always return sync priority to ensure immediate execution
-    return 1;
-  }
+  setCurrentUpdatePriority = (priority: UpdatePriority): void => {
+    this.#currentUpdatePriority = priority;
+  };
+
+  getCurrentUpdatePriority = (): UpdatePriority =>
+    this.#currentUpdatePriority === NoEventPriority
+      ? NoEventPriority
+      : DiscreteEventPriority;
 
   // form-related methods
   resetFormInstance(_form: FormInstance): void {
@@ -129,21 +147,52 @@ class HostConfig
     return false;
   }
 
-  preloadInstance(_type: Type, _props: Props): boolean {
+  maySuspendCommitOnUpdate(
+    _type: Type,
+    _oldProps: Props,
+    _newProps: Props,
+  ): boolean {
     return false;
   }
 
-  startSuspendingCommit(): void {
+  maySuspendCommitInSyncRender(_type: Type, _props: Props): boolean {
+    return false;
+  }
+
+  preloadInstance(_instance: Instance, _type: Type, _props: Props): boolean {
+    // Nothing to load: every instance is ready.
+    return true;
+  }
+
+  startSuspendingCommit(): null {
+    return null;
+  }
+
+  suspendInstance(
+    _state: null,
+    _instance: Instance,
+    _type: Type,
+    _props: Props,
+  ): void {
     // NoOp
   }
 
-  suspendInstance(_type: Type, _props: Props): void {
+  suspendOnActiveViewTransition(_state: null, _container: Container): void {
     // NoOp
   }
 
-  waitForCommitToBeReady():
-    | ((initiateCommit: () => void) => () => void)
+  waitForCommitToBeReady(
+    _state: null,
+    _timeoutOffset: number,
+  ):
+    | ((
+        initiateCommit: (...args: unknown[]) => unknown,
+      ) => (...args: unknown[]) => unknown)
     | null {
+    return null;
+  }
+
+  getSuspendedCommitReason(_state: null, _container: Container): null {
     return null;
   }
 
@@ -186,7 +235,7 @@ class HostConfig
   }
 
   // transition context and scheduling methods
-  HostTransitionContext: any = null;
+  HostTransitionContext: any = null as any;
 
   shouldAttemptEagerTransition(): boolean {
     return false;
@@ -220,11 +269,7 @@ class HostConfig
 
   cloneHiddenTextInstance?: any;
 
-  public now = Date.now;
-
-  public setTimeout = setTimeout;
-
-  public clearTimeout = clearTimeout;
+  public now: () => number = Date.now;
 
   public noTimeout: NoTimeout = -1; // TODO
 
@@ -233,35 +278,44 @@ class HostConfig
   // same page. DOM is the primary renderer; ART is the secondary renderer.
   public isPrimaryRenderer = true;
 
+  // Reported to React DevTools.
+  public rendererPackageName = '@ts-graphviz/react';
+
+  public rendererVersion = '';
+
+  public extraDevToolsConfig: null = null;
+
+  // React calls this to replay console calls logged on a server; a renderer
+  // of models has none, and the library does not write to the console.
+  public bindToConsole(
+    _methodName: string,
+    _args: unknown[],
+    _badgeName: string,
+  ): () => void {
+    return () => {};
+  }
+
   public supportsMutation = true;
 
   public supportsPersistence = false;
 
   public supportsHydration = false;
 
-  // specific configurations for synchronous rendering
-  public supportsMicrotasks = false;
+  public supportsMicrotasks = true;
 
   public getPublicInstance(instance: Instance | TextInstance): PublicInstance {
     return instance;
   }
 
   public getRootHostContext(_rootContainerInstance: Container): HostContext {
-    return {
-      graph: undefined,
-    };
+    return HOST_CONTEXT;
   }
 
   public getChildHostContext(
     parentHostContext: HostContext,
     _type: Type,
-    _rootContainerInstance: Container,
   ): HostContext {
-    // Preserve parent context for nested components
-    return {
-      ...parentHostContext,
-      // You could extend context based on component type if needed
-    };
+    return parentHostContext;
   }
 
   public prepareForCommit(
@@ -285,7 +339,7 @@ class HostConfig
     _internalInstanceHandle: OpaqueHandle,
   ): Instance {
     const instance: Instance = {
-      type: type.displayName || type.name || 'Unknown',
+      type,
       props,
       children: [],
       appendChild: (child: Instance | TextInstance) => {
@@ -309,29 +363,9 @@ class HostConfig
     _instance: Instance,
     _type: Type,
     _props: Props,
-    _rootContainerInstance: Container,
     _hostContext: HostContext,
   ): boolean {
     return false;
-  }
-
-  public prepareUpdate(
-    _instance: Instance,
-    _type: Type,
-    oldProps: Props,
-    newProps: Props,
-    _rootContainerInstance: Container,
-    _hostContext: HostContext,
-  ): null | UpdatePayload {
-    // Check if props have actually changed
-    if (JSON.stringify(oldProps) !== JSON.stringify(newProps)) {
-      return {
-        type: 'UPDATE',
-        oldProps,
-        newProps,
-      };
-    }
-    return null;
   }
 
   public shouldSetTextContent(_type: Type, _props: Props): boolean {
@@ -454,8 +488,8 @@ class HostConfig
 export const reconciler: ReactReconciler.Reconciler<
   Container,
   Instance,
-  string,
-  string | Instance,
-  never,
+  TextInstance,
+  SuspenseInstance,
+  FormInstance,
   PublicInstance
 > = ReactReconciler(new HostConfig());
