@@ -1,5 +1,5 @@
 import type { FC, ComponentProps as ReactComponentProps } from 'react';
-import type { AnyDotObjectModel, GraphBaseModel } from 'ts-graphviz';
+import type { AnyDotObjectModel } from 'ts-graphviz';
 import type { Context } from '../contexts/GraphvizContext.js';
 import type { AnyGraphContainer } from './container.js';
 
@@ -20,6 +20,8 @@ export interface RenderContainer<
   Container extends AnyGraphContainer = AnyGraphContainer,
 > {
   renderedModels: AnyDotObjectModel[];
+  /** Errors no error boundary caught during the current render. */
+  uncaughtErrors: unknown[];
   context?: Context<Container>;
   __rootInstance?: ReconcilerInstance | TextInstance;
 }
@@ -47,15 +49,4 @@ export type PublicInstance = ReconcilerInstance | TextInstance;
 /**
  * Host context for rendering
  */
-export interface HostContext {
-  graph?: GraphBaseModel;
-}
-
-/**
- * Update payload for element updates
- */
-export type UpdatePayload = {
-  type: 'UPDATE';
-  oldProps: ComponentProps;
-  newProps: ComponentProps;
-} | null;
+export type HostContext = Record<string, never>;

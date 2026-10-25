@@ -412,8 +412,8 @@ importers:
         specifier: workspace:^
         version: link:../common
       react-reconciler:
-        specifier: ^0.32.0
-        version: 0.32.0(react@19.3.1)
+        specifier: ^0.34.0
+        version: 0.34.0(react@19.3.1)
       ts-graphviz:
         specifier: workspace:^
         version: link:../ts-graphviz
@@ -428,8 +428,8 @@ importers:
         specifier: ^19.3.0
         version: 19.3.0
       '@types/react-reconciler':
-        specifier: 0.32.0
-        version: 0.32.0(@types/react@19.3.0)
+        specifier: ^0.34.1
+        version: 0.34.1(@types/react@19.3.0)
       react:
         specifier: ^19.3.1
         version: 19.3.1
@@ -3228,8 +3228,8 @@ packages:
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
 
-  '@types/react-reconciler@0.32.0':
-    resolution: {integrity: sha512-+WHarFkJevhH1s655qeeSEf/yxFST0dVRsmSqUgxG8mMOKqycgYBv2wVpyubBY7MX8KiX5FQ03rNIwrxfm7Bmw==}
+  '@types/react-reconciler@0.34.1':
+    resolution: {integrity: sha512-XAzeH3rARrfApMETpkcFmfJQRS3rPpXsSR/XA8H3sV8WgA0bp6UE7sLNM92l1ZbCclUKmrH28Ik2fSejh9UxRg==}
     peerDependencies:
       '@types/react': '*'
 
@@ -7302,11 +7302,11 @@ packages:
       react-loadable: '*'
       webpack: '>=4.41.1 || 5.x'
 
-  react-reconciler@0.32.0:
-    resolution: {integrity: sha512-2NPMOzgTlG0ZWdIf3qG+dcbLSoAc/uLfOwckc3ofy5sSK0pLJqnQLpUFxvGcN2rlXSjnVtGeeFLNimCQEj5gOQ==}
+  react-reconciler@0.34.0:
+    resolution: {integrity: sha512-eVibvB1fc9j5Qf1KRkiM3GzRPBdjg2P6G6QV2f3P6Eb3OGMxRBhdg2rrUwjbV5JrQaJj8nOa8uajmmJA5tJWjQ==}
     engines: {node: '>=0.10.0'}
     peerDependencies:
-      react: ^19.1.0
+      react: ^19.3.0
 
   react-router-config@5.1.1:
     resolution: {integrity: sha512-DuanZjaD8mQp1ppHjgnnUnyOlqYXZVjnov/JzFhjLEwd3Z4dYjMSnqrEzzGThH47vpCOqPPwJM2FtthLeJ8Pbg==}
@@ -12438,7 +12438,7 @@ snapshots:
 
   '@types/range-parser@1.2.7': {}
 
-  '@types/react-reconciler@0.32.0(@types/react@19.3.0)':
+  '@types/react-reconciler@0.34.1(@types/react@19.3.0)':
     dependencies:
       '@types/react': 19.3.0
 
@@ -17040,10 +17040,10 @@ snapshots:
       react-loadable: '@docusaurus/react-loadable@6.0.0(react@19.1.0)'
       webpack: 5.112.2(clean-css@5.3.3)(cssnano@6.1.2(postcss@8.5.31))(csso@5.0.5)(esbuild@0.28.2)(html-minifier-terser@7.2.0)(lightningcss@1.33.0)(postcss@8.5.31)(svgo@4.1.0)(uglify-js@3.19.3)
 
-  react-reconciler@0.32.0(react@19.3.1):
+  react-reconciler@0.34.0(react@19.3.1):
     dependencies:
       react: 19.3.1
-      scheduler: 0.26.0
+      scheduler: 0.28.0
 
   react-router-config@5.1.1(react-router@5.3.4(react@19.1.0))(react@19.1.0):
     dependencies:

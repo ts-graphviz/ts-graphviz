@@ -22,6 +22,7 @@ export default defineConfig({
         'react',
         'react/jsx-runtime',
         'react-reconciler',
+        'react-reconciler/constants.js',
         'ts-graphviz',
       ],
     },

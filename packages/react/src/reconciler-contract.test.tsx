@@ -1,0 +1,129 @@
+import { Component, type ReactNode } from 'react';
+import {
+  DefaultEventPriority,
+  DiscreteEventPriority,
+} from 'react-reconciler/constants.js';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Digraph } from './components/Digraph.js';
+import { Node } from './components/Node.js';
+import { createRoot } from './createRoot.js';
+import { HostConfig, reconciler } from './reconciler.js';
+import { renderToDot } from './renderToDot.js';
+
+// #1752: the reconciler wired to its React 19 contract.
+
+class Boundary extends Component<
+  { children: ReactNode; fallback: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children;
+  }
+}
+
+function Thrower(): ReactNode {
+  throw new RangeError('boom');
+}
+
+afterEach(() => {
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+});
+
+describe('error callbacks', () => {
+  it('lets an error boundary inside the tree catch, and reports it to onCaughtError', async () => {
+    const onCaughtError = vi.fn();
+    const onUncaughtError = vi.fn();
+    const root = createRoot({ onCaughtError, onUncaughtError });
+    await root.render(
+      <Digraph id="G">
+        <Boundary fallback={<Node id="fallback" />}>
+          <Thrower />
+        </Boundary>
+      </Digraph>,
+    );
+    expect(onCaughtError).toHaveBeenCalledOnce();
+    expect(onCaughtError.mock.calls[0][0]).toBeInstanceOf(RangeError);
+    expect(onUncaughtError).not.toHaveBeenCalled();
+    const [graph] = root.getTopLevelModels();
+    expect(graph.$$type === 'Graph' && graph.nodes.map((n) => n.id)).toEqual([
+      'fallback',
+    ]);
+  });
+
+  it('rejects render with an uncaught error and reports it to onUncaughtError', async () => {
+    const onUncaughtError = vi.fn();
+    const root = createRoot({ onUncaughtError });
+    await expect(
+      root.render(
+        <Digraph id="G">
+          <Thrower />
+        </Digraph>,
+      ),
+    ).rejects.toThrow(RangeError);
+    expect(onUncaughtError).toHaveBeenCalledOnce();
+  });
+
+  it('passes each callback in its own createContainer position', () => {
+    const spy = vi.spyOn(reconciler, 'createContainer');
+    const onUncaughtError = vi.fn();
+    const onCaughtError = vi.fn();
+    const onRecoverableError = vi.fn();
+    createRoot({ onUncaughtError, onCaughtError, onRecoverableError });
+    const args = spy.mock.calls[0];
+    const error = new Error('x');
+    (args[6] as (e: unknown, i: object) => void)(error, {});
+    (args[7] as (e: unknown, i: object) => void)(error, {});
+    (args[8] as (e: unknown, i: object) => void)(error, {});
+    expect(onUncaughtError).toHaveBeenCalledWith(error, expect.any(Object));
+    expect(onCaughtError).toHaveBeenCalledWith(error, expect.any(Object));
+    expect(onRecoverableError).toHaveBeenCalledWith(error, expect.any(Object));
+  });
+});
+
+describe('host config', () => {
+  it('uses event priorities and tracks the current one', () => {
+    const host = new HostConfig();
+    expect(host.resolveUpdatePriority()).toBe(DefaultEventPriority);
+    host.setCurrentUpdatePriority(DiscreteEventPriority);
+    expect(host.getCurrentUpdatePriority()).toBe(DiscreteEventPriority);
+    expect(host.resolveUpdatePriority()).toBe(DiscreteEventPriority);
+  });
+
+  it('runs a scheduled microtask as a microtask, not at once', async () => {
+    const host = new HostConfig();
+    const fn = vi.fn();
+    host.scheduleMicrotask(fn);
+    expect(fn).not.toHaveBeenCalled();
+    await Promise.resolve();
+    expect(fn).toHaveBeenCalledOnce();
+  });
+
+  it('keeps the string type of a host element', () => {
+    const host = new HostConfig();
+    const instance = host.createInstance(
+      'dot:td' as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+    expect(instance.type).toBe('dot:td');
+  });
+});
+
+describe('synchronous rendering', () => {
+  it('renders without waiting for timers', async () => {
+    vi.useFakeTimers();
+    const dot = await renderToDot(
+      <Digraph id="G">
+        <Node id="a" />
+      </Digraph>,
+    );
+    expect(dot).toContain('"a";');
+  });
+});

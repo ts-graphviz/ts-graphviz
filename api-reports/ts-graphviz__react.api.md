@@ -12,11 +12,10 @@ export type ComponentType = FC<any>;
 export interface CreateRootOptions<Container extends AnyGraphContainer = AnyGraphContainer> {
   container?: Container;
   models?: Partial<ModelsContext>;
-  onUncaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
-  onCaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
-  onRecoverableError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onUncaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
+  onCaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
+  onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;
   onRenderComplete?: (models: AnyDotObjectModel[]) => void;
-  timeout?: number;
 }
 
 export declare const Digraph: FC<RootGraphProps>;

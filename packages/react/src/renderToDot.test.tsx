@@ -151,7 +151,7 @@ describe('renderToDot()', () => {
       ).rejects.toThrow(/Multiple top-level graphs detected/);
     });
 
-    it('throws error when no top-level graph is provided', async () => {
+    it('reports a node outside any graph', async () => {
       await expect(
         renderToDot(
           <>
@@ -159,7 +159,13 @@ describe('renderToDot()', () => {
             <Edge targets={['a', 'b']} />
           </>,
         ),
-      ).rejects.toThrow(/No top-level graph found/);
+      ).rejects.toThrow(/useCurrentGraph must be called within a cluster/);
+    });
+
+    it('throws error when no top-level graph is provided', async () => {
+      await expect(renderToDot(<Nothing />)).rejects.toThrow(
+        /No top-level graph found/,
+      );
     });
 
     it('throws error for fragment with multiple graphs', async () => {
@@ -203,3 +209,7 @@ describe('renderToDot()', () => {
     });
   });
 });
+
+function Nothing(): null {
+  return null;
+}

@@ -52,7 +52,7 @@ $ npm install -S @ts-graphviz/react react@^19
 $ pnpm add @ts-graphviz/react react@^19
 ```
 
-> **Important**: Install React 19+ as a peerDependency. React 18 and earlier versions are not supported. Note that `react-dom` is no longer required as this package now uses a custom HTML rendering implementation.
+> **Important**: Install React 19.3 or later (19.x) as a peerDependency. The renderer is built on react-reconciler 0.34, which targets React 19.3; earlier React versions are not supported. Note that `react-dom` is no longer required as this package now uses a custom HTML rendering implementation.
 
 ## Key Features
 
@@ -651,21 +651,20 @@ declare function MyGraph(): React.ReactElement;
 declare function ComplexGraph(): React.ReactElement;
 // Your error tracking service
 declare const errorTracker: {
-  captureException(error: Error, context: object): void;
+  captureException(error: unknown, context: object): void;
 };
 
-// Error handling with createRoot
+// Error handling with createRoot. A thrown value need not be an Error, so
+// the callbacks receive `unknown`.
 const root = createRoot({
   onUncaughtError: (error, errorInfo) => {
-    console.error('Uncaught rendering error:', error.message);
-    console.log('Component stack:', errorInfo.componentStack);
-    // Send to error tracking service
+    // Send to error tracking service; render() also rejects with the error
     errorTracker.captureException(error, { extra: errorInfo });
   },
   onCaughtError: (error, errorInfo) => {
-    console.error('Caught by error boundary:', error.message);
-    // Handle recoverable errors
-  }
+    // An error boundary in the tree caught it and rendered its fallback
+    errorTracker.captureException(error, { extra: errorInfo, caught: true });
+  },
 });
 
 await root.render(<MyGraph />);

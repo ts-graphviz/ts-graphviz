@@ -43,26 +43,22 @@ export interface CreateRootOptions<
    */
   models?: Partial<ModelsContext>;
   /**
-   * Called when an error is not caught by any error boundary
+   * Called when an error is not caught by any error boundary. `render()`
+   * also rejects with it.
    */
-  onUncaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onUncaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
   /**
-   * Called when an error is caught by an error boundary
+   * Called when an error boundary in the rendered tree catches an error.
    */
-  onCaughtError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onCaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
   /**
-   * Called when React automatically recovers from errors
+   * Called when React recovers from an error by itself.
    */
-  onRecoverableError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;
   /**
    * Called when rendering completes successfully
    */
   onRenderComplete?: (models: AnyDotObjectModel[]) => void;
-  /**
-   * Timeout for async rendering in milliseconds
-   * @default 5000
-   */
-  timeout?: number;
 }
 
 /**
@@ -160,26 +156,40 @@ function createWrappedElement<Container extends AnyGraphContainer>(
   );
 }
 
+function toErrorInfo(info: { componentStack?: string | null }): ErrorInfo {
+  return info.componentStack == null
+    ? {}
+    : { componentStack: info.componentStack };
+}
+
 /**
- * Creates a fiber root for rendering.
+ * Creates a fiber root for rendering. An uncaught error is recorded on the
+ * container, so that `render()` can reject with it.
  */
 function createFiberRoot<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(containerInfo: RenderContainer<Container>, options: CreateRootOptions = {}) {
-  const { onUncaughtError = noop } = options;
+  const {
+    onUncaughtError = noop,
+    onCaughtError = noop,
+    onRecoverableError = noop,
+  } = options;
 
+  // react-reconciler 0.34's createContainer (React 19.3).
   return reconciler.createContainer(
     containerInfo,
-    1, // tag - ConcurrentRoot = 1 for concurrent mode (React 19 default)
+    1, // tag: ConcurrentRoot
     null, // hydrationCallbacks
     false, // isStrictMode
     null, // concurrentUpdatesByDefaultOverride
     '@ts-graphviz/react', // identifierPrefix
-    // Enhance onRecoverableError to forward componentStack for better diagnostics
-    onUncaughtError
-      ? (error: Error, errorInfo: ErrorInfo = {}) =>
-          onUncaughtError(error, errorInfo)
-      : noop, // onRecoverableError
+    (error, info) => {
+      containerInfo.uncaughtErrors.push(error);
+      onUncaughtError(error, toErrorInfo(info));
+    },
+    (error, info) => onCaughtError(error, toErrorInfo(info)),
+    (error, info) => onRecoverableError(error, toErrorInfo(info)),
+    noop, // onDefaultTransitionIndicator
     null, // transitionCallbacks
   );
 }
@@ -213,47 +223,28 @@ function validateModels(
 }
 
 /**
- * Internal rendering function
+ * Render synchronously (`updateContainerSync` and `flushSyncWork`), then
+ * check the result.
  */
-async function renderInternal<
+function renderInternal<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(
   containerInfo: RenderContainer<Container>,
-  fiberRoot: any,
+  fiberRoot: ReturnType<typeof reconciler.createContainer>,
   wrappedElement: ReactElement,
   originalContainer: Container | undefined,
   options: CreateRootOptions = {},
-): Promise<void> {
-  const { timeout = 5000, onRenderComplete } = options;
-
-  return new Promise<void>((resolve, reject) => {
-    const timeoutId = setTimeout(() => {
-      reject(new Error(`Rendering timeout after ${timeout}ms`));
-    }, timeout);
-
-    try {
-      reconciler.updateContainer(wrappedElement, fiberRoot, null, () => {
-        clearTimeout(timeoutId);
-
-        try {
-          // Validate the rendered models
-          validateModels(containerInfo.renderedModels, originalContainer);
-
-          // Call completion callback
-          if (onRenderComplete) {
-            onRenderComplete([...containerInfo.renderedModels]);
-          }
-
-          resolve();
-        } catch (error) {
-          reject(error);
-        }
-      });
-    } catch (error) {
-      clearTimeout(timeoutId);
-      reject(error);
-    }
-  });
+): void {
+  const { onRenderComplete } = options;
+  containerInfo.uncaughtErrors = [];
+  reconciler.updateContainerSync(wrappedElement, fiberRoot, null, null);
+  reconciler.flushSyncWork();
+  const [error] = containerInfo.uncaughtErrors;
+  if (containerInfo.uncaughtErrors.length > 0) {
+    throw error;
+  }
+  validateModels(containerInfo.renderedModels, originalContainer);
+  onRenderComplete?.([...containerInfo.renderedModels]);
 }
 
 /**
@@ -269,6 +260,7 @@ export function createRoot<
 
   const containerInfo: RenderContainer<Container> = {
     renderedModels: [],
+    uncaughtErrors: [],
   };
 
   // Use imported type guard for root graph models
@@ -313,7 +305,7 @@ export function createRoot<
         container,
       );
 
-      return renderInternal(
+      renderInternal(
         containerInfo,
         fiberRoot,
         wrappedElement,
@@ -328,7 +320,8 @@ export function createRoot<
       }
 
       isUnmounted = true;
-      reconciler.updateContainer(null, fiberRoot, null, noop);
+      reconciler.updateContainerSync(null, fiberRoot, null, null);
+      reconciler.flushSyncWork();
       containerInfo.renderedModels = [];
     },
 
