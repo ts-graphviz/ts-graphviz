@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { renderHTMLLike } from './renderHTMLLike.js';
 
@@ -78,11 +79,58 @@ describe('renderHTMLLike()', () => {
     expect(result).toContain('</b>');
   });
 
-  it('handles malformed HTML gracefully', () => {
-    // This tests edge cases where tags might be incomplete
+  it('writes text children as text', () => {
+    // JSX entities are decoded by the compiler; the text is escaped again
     const element = <div>Content with &lt; and &gt;</div>;
     const result = renderHTMLLike(element);
-    expect(result).toContain('Content with < and >');
+    expect(result).toContain('Content with &lt; and &gt;');
+    expect(renderHTMLLike(<dot:td>{'<b>hi</b> & </td>'}</dot:td>)).toBe(
+      '<<td>&lt;b&gt;hi&lt;/b&gt; &amp; &lt;/td&gt;</td>>',
+    );
+  });
+
+  it('writes attribute values so that they cannot end the value', () => {
+    expect(renderHTMLLike(<dot:table title={'x" href="other'} />)).toBe(
+      '<<table title="x&quot; href=&quot;other"></table>>',
+    );
+  });
+
+  it('reads children only when the props own them', () => {
+    const proto = Object.prototype as Record<string, unknown>;
+    proto.children = 'injected';
+    try {
+      expect(renderHTMLLike(<dot:td />)).toBe('<<td></td>>');
+    } finally {
+      delete proto.children;
+    }
+  });
+
+  it('reads maxDepth from own options and elements by their own type', () => {
+    const proto = Object.prototype as Record<string, unknown>;
+    proto.maxDepth = 1;
+    proto.type = 'b';
+    try {
+      expect(
+        renderHTMLLike(
+          <dot:td>
+            <dot:b>x</dot:b>
+            {{} as never}
+          </dot:td>,
+        ),
+      ).toBe('<<td><b>x</b></td>>');
+    } finally {
+      delete proto.maxDepth;
+      delete proto.type;
+    }
+  });
+
+  it('leaves out attribute and tag names that would add markup', () => {
+    expect(
+      renderHTMLLike(createElement('dot:td', { 'x y': 'y', id: 'a' })),
+    ).toBe('<<td id="a"></td>>');
+    expect(renderHTMLLike(createElement('b><i a="x"', null, 'text'))).toBe(
+      '<text>',
+    );
   });
 
   it('handles multiple dot:port elements', () => {

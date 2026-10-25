@@ -7,11 +7,12 @@ export const NodeRefPrintPlugin: PrintPlugin<NodeRefASTNode> = {
   },
   *print(context, ast) {
     yield* context.print(ast.id);
-    if (ast.port) {
+    // A node parsed without a port or compass point does not own the field.
+    if (Object.hasOwn(ast, 'port') && ast.port) {
       yield ':';
       yield* context.print(ast.port);
     }
-    if (ast.compass) {
+    if (Object.hasOwn(ast, 'compass') && ast.compass) {
       yield ':';
       yield* context.print(ast.compass);
     }

@@ -1,5 +1,6 @@
 import type { DotObjectModel } from '@ts-graphviz/common';
 import { createElementFactory } from '../../builder/create-element.js';
+import { ownOptions } from '../../own-options.js';
 import { defaultPlugins } from './plugins/index.js';
 import type {
   ConvertFromModelContext,
@@ -17,7 +18,10 @@ export class FromModelConverter {
   /** @hidden */
   #plugins: ConvertFromModelPlugin<DotObjectModel>[] = [...defaultPlugins];
 
-  constructor(private options: ConvertFromModelOptions = {}) {}
+  constructor(private options: ConvertFromModelOptions = {}) {
+    // Own properties only: an inherited one is never an option.
+    this.options = ownOptions(options);
+  }
 
   /**
    * Converts a DotObjectModel into an AST.

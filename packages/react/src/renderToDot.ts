@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import { toDot } from 'ts-graphviz';
-
 import { type CreateRootOptions, createRoot } from './createRoot.js';
+import { ownOptions } from './own-options.js';
 import type { AnyGraphContainer } from './types/container.js';
 
 /**
@@ -68,7 +68,9 @@ export async function renderToDot<
   element: ReactElement,
   options: RenderToDotOptions<Container> = {},
 ): Promise<string> {
-  const { container, ...rootOptions } = options;
+  // Own properties only: an inherited one is never an option.
+  const { container, ...rest } = ownOptions(options);
+  const rootOptions = ownOptions(rest);
 
   if (container) {
     // Container mode: render elements into container and return container's DOT

@@ -16,19 +16,33 @@
  * @param value - The string to escape
  * @returns The escaped string
  */
-export const escape = (value: string): string =>
-  value
-    .replace(/\0/g, '') // Remove null bytes
-    .replace(/(?<!\\)"|[\r\n]/g, escapeReplacer);
-// NOTE: The regular expression used to escape the string is `/(?<!\\)"|[\r\n]/g`.
-// - `(?<!\\)"`: This part of the regular expression matches a double quote (`"`) **only if** it is **not preceded by a backslash**, effectively ignoring already-escaped quotes like `\"`.
-// - `[\r\n]`: This part matches every carriage return (`\r`) or newline (`\n`) character in the input, regardless of whether they are escaped.
-
-const escapeMap: Record<string, string> = {
-  '\r': String.raw`\r`,
-  '\n': String.raw`\n`,
-  '"': String.raw`\"`,
-};
-function escapeReplacer(match: string) {
-  return escapeMap[match];
+export function escape(value: string): string {
+  // A model can hold a non-string (an array from parsed JSON, say): escape
+  // its text, never its elements.
+  const text = String(value);
+  let out = '';
+  // Length of the run of backslashes just before the current character: a
+  // quote or line break after an odd run is already escaped, after an even
+  // run (`\\"`) it is not, and a trailing odd run would escape the closing
+  // quote.
+  let backslashes = 0;
+  for (const ch of text) {
+    if (ch === '\0') continue; // Remove null bytes
+    if (ch === '\\') {
+      backslashes++;
+      out += ch;
+      continue;
+    }
+    if (ch === '\n' || ch === '\r') {
+      // A raw line break is written as its escape sequence, after closing an
+      // odd backslash run that would otherwise make it a line continuation.
+      if (backslashes % 2 === 1) out += '\\';
+      out += ch === '\n' ? String.raw`\n` : String.raw`\r`;
+    } else {
+      if (ch === '"' && backslashes % 2 === 0) out += '\\';
+      out += ch;
+    }
+    backslashes = 0;
+  }
+  return backslashes % 2 === 1 ? `${out}\\` : out;
 }

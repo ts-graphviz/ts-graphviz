@@ -12,5 +12,11 @@ export async function toFile<T extends Layout>(
   options?: Options<T>,
 ): Promise<void> {
   const stream = await toStream(dot, options);
-  await pipeline(stream, createWriteStream(path));
+  await pipeline(
+    stream,
+    createWriteStream(path, {
+      __proto__: null,
+      flags: 'w',
+    } as Parameters<typeof createWriteStream>[1]),
+  );
 }

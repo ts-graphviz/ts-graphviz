@@ -1,12 +1,12 @@
 import { createElement, type ReactElement } from 'react';
 import type { DotObjectModel, FilterableModel } from 'ts-graphviz';
 import { isRootGraphModel } from 'ts-graphviz';
-
 import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
 import { GraphMap } from './contexts/GraphMap.js';
 import { type Context, GraphvizContext } from './contexts/GraphvizContext.js';
 import { ModelCollectorContext } from './contexts/ModelCollector.js';
+import { ownOptions } from './own-options.js';
 import { reconciler } from './reconciler.js';
 import type { AnyGraphContainer } from './types/container.js';
 import type { RenderContainer } from './types/reconciler.js';
@@ -253,7 +253,9 @@ async function renderInternal<
 export function createRoot<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(options: CreateRootOptions<Container> = {}): GraphvizRoot {
-  const { container, ...otherOptions } = options;
+  // Own properties only: an inherited one is never an option.
+  const { container, ...rest } = ownOptions(options);
+  const otherOptions = ownOptions(rest);
 
   const containerInfo: RenderContainer<Container> = {
     renderedModels: [],

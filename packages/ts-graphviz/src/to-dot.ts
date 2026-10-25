@@ -5,6 +5,7 @@ import {
   stringify,
 } from '@ts-graphviz/ast';
 import type { DotObjectModel } from '@ts-graphviz/common';
+import { ownOptions } from './own-options.js';
 
 /**
  * This interface provides options for converting a model to DOT.
@@ -31,6 +32,8 @@ export interface ToDotOptions {
  * @returns DOT string
  */
 export function toDot(model: DotObjectModel, options?: ToDotOptions): string {
-  const ast = fromModel(model, options?.convert);
-  return stringify(ast, options?.print);
+  // Own properties only: an inherited one is never an option.
+  const { convert, print } = ownOptions(options);
+  const ast = fromModel(model, convert);
+  return stringify(ast, print);
 }

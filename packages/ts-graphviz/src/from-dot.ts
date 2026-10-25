@@ -10,6 +10,7 @@ import type {
   RootGraphModel,
   SubgraphModel,
 } from '@ts-graphviz/common';
+import { ownOptions } from './own-options.js';
 
 /**
  * This interface provides options for converting DOT to a model.
@@ -57,7 +58,9 @@ export function fromDot(
 export function fromDot<
   T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph',
 >(dot: string, options?: FromDotOptions<T>) {
-  const ast = parse(dot, options?.parse);
+  // Own properties only: an inherited one is never an option.
+  const own = ownOptions(options);
+  const ast = parse(dot, own.parse);
   if (
     Array.isArray(ast) ||
     ast.type === 'Attribute' ||
@@ -69,5 +72,5 @@ export function fromDot<
   ) {
     throw new Error();
   }
-  return toModel(ast, options?.convert);
+  return toModel(ast, own.convert);
 }

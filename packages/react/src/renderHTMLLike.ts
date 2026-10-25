@@ -1,4 +1,5 @@
 import type { ReactElement, ReactNode } from 'react';
+import { ownOptions } from './own-options.js';
 
 /**
  * Default maximum allowed recursion depth to prevent stack overflow attacks.
@@ -36,6 +37,13 @@ const DOT_ELEMENT_MAP = {
   'dot:hr': 'hr',
   'dot:vr': 'vr',
 } as const;
+
+/** The children of props, only when the props own them. */
+function ownChildren(props: unknown): ReactNode {
+  return props != null && Object.hasOwn(props, 'children')
+    ? (props as { children: ReactNode }).children
+    : undefined;
+}
 
 /**
  * Manually traverse and render React element tree.
@@ -99,7 +107,7 @@ function manuallyRenderElement(
       if (tagName === 'dot:port') {
         const propsWithChildren = props as any;
         const childrenString = renderChildrenToString(
-          propsWithChildren?.children,
+          ownChildren(propsWithChildren),
           depth + 1,
           inStack,
           maxDepth,
@@ -116,14 +124,33 @@ function manuallyRenderElement(
         }
       }
 
+      // A tag name that is not a name would add markup: render its children
+      // only.
+      if (!NAME.test(tagName)) {
+        return renderChildrenToString(
+          ownChildren(props),
+          depth + 1,
+          inStack,
+          maxDepth,
+        );
+      }
+
       const attributes: string[] = [];
 
       // Build attributes string - props is typed as any for function components
       const propsWithChildren = props as any;
       Object.entries(propsWithChildren || {}).forEach(([key, value]) => {
-        if (key !== 'children' && value != null) {
+        // React's own props are not attributes; a key that is not a name
+        // would add markup, so it is left out.
+        if (
+          key !== 'children' &&
+          key !== 'key' &&
+          key !== 'ref' &&
+          value != null &&
+          NAME.test(key)
+        ) {
           if (typeof value === 'string' || typeof value === 'number') {
-            attributes.push(`${key}="${String(value)}"`);
+            attributes.push(`${key}="${escapeAttribute(String(value))}"`);
           } else if (typeof value === 'boolean' && value) {
             attributes.push(key);
           }
@@ -133,7 +160,7 @@ function manuallyRenderElement(
       const attrsString =
         attributes.length > 0 ? ` ${attributes.join(' ')}` : '';
       const childrenString = renderChildrenToString(
-        propsWithChildren?.children,
+        ownChildren(propsWithChildren),
         depth + 1,
         inStack,
         maxDepth,
@@ -152,6 +179,22 @@ function manuallyRenderElement(
   }
 }
 
+/** Text: `&`, `<` and `>` as entities, so a string is never markup. */
+function escapeText(text: string): string {
+  return text
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
+}
+
+/** An attribute value: text that also cannot end the quoted value. */
+function escapeAttribute(value: string): string {
+  return escapeText(value).replaceAll('"', '&quot;');
+}
+
+/** A tag or attribute name that cannot add markup. */
+const NAME = /^[A-Za-z][A-Za-z0-9_:-]*$/;
+
 /**
  * Safely renders React children to string.
  * @param children - React children to render
@@ -169,7 +212,7 @@ function renderChildrenToString(
     return '';
   }
   if (typeof children === 'string' || typeof children === 'number') {
-    return String(children);
+    return escapeText(String(children));
   }
   if (Array.isArray(children)) {
     return children
@@ -177,7 +220,11 @@ function renderChildrenToString(
       .join('');
   }
   // If it's a React element, render it manually
-  if (typeof children === 'object' && children !== null && 'type' in children) {
+  if (
+    typeof children === 'object' &&
+    children !== null &&
+    Object.hasOwn(children, 'type')
+  ) {
     return manuallyRenderElement(
       children as ReactElement,
       depth,
@@ -218,14 +265,15 @@ export function renderHTMLLike(
   }
 
   // Sanitize and validate maxDepth option
+  const { maxDepth: givenMaxDepth } = ownOptions(options);
   let maxDepth = DEFAULT_MAX_RECURSION_DEPTH;
   if (
-    options?.maxDepth != null &&
-    Number.isFinite(options.maxDepth) &&
-    options.maxDepth > 0
+    givenMaxDepth != null &&
+    Number.isFinite(givenMaxDepth) &&
+    givenMaxDepth > 0
   ) {
     // Use Math.floor to ensure integer
-    maxDepth = Math.floor(options.maxDepth);
+    maxDepth = Math.floor(givenMaxDepth);
   }
 
   try {

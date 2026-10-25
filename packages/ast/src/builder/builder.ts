@@ -1,3 +1,4 @@
+import { ownOptions } from '../own-options.js';
 import type { ASTChildNode, ASTNode, FileRange } from '../types.js';
 import { ASTNodeCountExceededError } from './errors.js';
 import type { ASTBuilder, BuilderOptions } from './types.js';
@@ -30,7 +31,9 @@ export class Builder implements ASTBuilder {
    * @param options - Options to initialize Builder
    */
   constructor(private options?: Partial<BuilderOptions>) {
-    this.maxNodes = options?.maxASTNodes ?? DEFAULT_MAX_AST_NODES;
+    // Own properties only: an inherited one is never an option.
+    this.options = ownOptions(options);
+    this.maxNodes = this.options.maxASTNodes ?? DEFAULT_MAX_AST_NODES;
   }
 
   /**
