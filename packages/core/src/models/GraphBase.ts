@@ -16,6 +16,7 @@ import {
   type GraphStatementModel,
   isNodeRefGroupLike,
   type ModelsContext,
+  type ModelTypes,
   type NodeAttributeKey,
   type NodeAttributesObject,
   type NodeModel,
@@ -45,9 +46,10 @@ const MODEL_KEYS = [
 export abstract class GraphBase<
     T extends DotObjectType,
     K extends AttributeKey = AttributeKey,
+    M extends ModelTypes = ModelTypes,
   >
   extends AttributesBase<K>
-  implements GraphBaseModel<T, K>
+  implements GraphBaseModel<T, K, M>
 {
   public abstract get $$type(): T;
   #models?: ModelsContext;
@@ -92,20 +94,28 @@ export abstract class GraphBase<
     node: new AttributeList<'Node', NodeAttributeKey>('Node'),
   });
 
-  get nodes(): ReadonlyArray<NodeModel> {
-    return Array.from(this.#objects.nodes.values());
+  // The objects are created from the context's classes, which `M` describes.
+  get nodes(): ReadonlyArray<M['Node']> {
+    return Array.from(this.#objects.nodes.values()) as M['Node'][];
   }
 
-  get edges(): ReadonlyArray<EdgeModel> {
-    return Array.from(this.#objects.edges.values());
+  get edges(): ReadonlyArray<M['Edge']> {
+    return Array.from(this.#objects.edges.values()) as M['Edge'][];
   }
 
-  get subgraphs(): ReadonlyArray<SubgraphModel> {
-    return Array.from(this.#objects.subgraphs.values());
+  get subgraphs(): ReadonlyArray<M['Subgraph']> {
+    return Array.from(this.#objects.subgraphs.values()) as M['Subgraph'][];
   }
 
-  get statements(): ReadonlyArray<GraphStatementModel> {
-    return Array.from(this.#statements);
+  get statements(): ReadonlyArray<
+    M['Node'] | M['Edge'] | M['Subgraph'] | AttributeListModel
+  > {
+    return Array.from(this.#statements) as (
+      | M['Node']
+      | M['Edge']
+      | M['Subgraph']
+      | AttributeListModel
+    )[];
   }
 
   /** Nodes, edges and subgraphs in the order they were added. */
@@ -213,11 +223,11 @@ export abstract class GraphBase<
   public createSubgraph(
     id?: string,
     attributes?: SubgraphAttributesObject,
-  ): SubgraphModel;
+  ): M['Subgraph'];
 
-  public createSubgraph(attributes?: SubgraphAttributesObject): SubgraphModel;
+  public createSubgraph(attributes?: SubgraphAttributesObject): M['Subgraph'];
 
-  public createSubgraph(...args: unknown[]): SubgraphModel {
+  public createSubgraph(...args: unknown[]): M['Subgraph'] {
     const id = args.find((arg): arg is string => typeof arg === 'string');
     const attributes = args.find(
       (arg): arg is SubgraphAttributesObject => typeof arg === 'object',
@@ -250,26 +260,26 @@ export abstract class GraphBase<
     this.#statements.delete(subgraph);
   }
 
-  public createNode(id: string, attributes?: NodeAttributesObject): NodeModel {
+  public createNode(id: string, attributes?: NodeAttributesObject): M['Node'] {
     const node = new this.models.Node(id, attributes);
     this.addNode(node);
-    return node;
+    return node as M['Node'];
   }
 
-  public getSubgraph(id: string): SubgraphModel | undefined {
+  public getSubgraph(id: string): M['Subgraph'] | undefined {
     return Array.from(this.#objects.subgraphs.values()).find(
       (subgraph) => subgraph.id === id,
-    );
+    ) as M['Subgraph'] | undefined;
   }
 
-  public getNode(id: string): NodeModel | undefined {
-    return this.#objects.nodes.get(id);
+  public getNode(id: string): M['Node'] | undefined {
+    return this.#objects.nodes.get(id) as M['Node'] | undefined;
   }
 
   public createEdge(
     targets: EdgeTargetLikeTuple,
     attributes?: EdgeAttributesObject,
-  ): EdgeModel {
+  ): M['Edge'] {
     const ts = targets.map((t) =>
       isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t),
     ) as EdgeTargetTuple;
@@ -280,19 +290,19 @@ export abstract class GraphBase<
 
   public subgraph(
     id: string,
-    callback?: (subgraph: SubgraphModel) => void,
-  ): SubgraphModel;
+    callback?: (subgraph: M['Subgraph']) => void,
+  ): M['Subgraph'];
   public subgraph(
     id: string,
     attributes: SubgraphAttributesObject,
-    callback?: (subgraph: SubgraphModel) => void,
-  ): SubgraphModel;
+    callback?: (subgraph: M['Subgraph']) => void,
+  ): M['Subgraph'];
   public subgraph(
     attributes: SubgraphAttributesObject,
-    callback?: (subgraph: SubgraphModel) => void,
-  ): SubgraphModel;
-  public subgraph(callback?: (subgraph: SubgraphModel) => void): SubgraphModel;
-  public subgraph(...args: unknown[]): SubgraphModel {
+    callback?: (subgraph: M['Subgraph']) => void,
+  ): M['Subgraph'];
+  public subgraph(callback?: (subgraph: M['Subgraph']) => void): M['Subgraph'];
+  public subgraph(...args: unknown[]): M['Subgraph'] {
     const id = args.find(
       (arg: unknown): arg is string => typeof arg === 'string',
     );
@@ -301,7 +311,7 @@ export abstract class GraphBase<
         typeof arg === 'object' && arg !== null,
     );
     const callback = args.find(
-      (arg: unknown): arg is (subgraph: SubgraphModel) => void =>
+      (arg: unknown): arg is (subgraph: M['Subgraph']) => void =>
         typeof arg === 'function',
     );
     const subgraph: SubgraphModel =
@@ -317,14 +327,14 @@ export abstract class GraphBase<
     return subgraph;
   }
 
-  public node(id: string, callback?: (node: NodeModel) => void): NodeModel;
+  public node(id: string, callback?: (node: M['Node']) => void): M['Node'];
   public node(
     id: string,
     attributes: NodeAttributesObject,
-    callback?: (node: NodeModel) => void,
-  ): NodeModel;
+    callback?: (node: M['Node']) => void,
+  ): M['Node'];
   public node(attributes: NodeAttributesObject): void;
-  public node(firstArg: unknown, ...args: unknown[]): NodeModel | undefined {
+  public node(firstArg: unknown, ...args: unknown[]): M['Node'] | undefined {
     if (typeof firstArg === 'string') {
       const id = firstArg;
       const attributes = args.find(
@@ -332,7 +342,7 @@ export abstract class GraphBase<
           typeof arg === 'object' && arg !== null,
       );
       const callback = args.find(
-        (arg: unknown): arg is (node: NodeModel) => void =>
+        (arg: unknown): arg is (node: M['Node']) => void =>
           typeof arg === 'function',
       );
       const node = this.getNode(id) ?? this.createNode(id);
@@ -351,18 +361,18 @@ export abstract class GraphBase<
 
   public edge(
     targets: EdgeTargetLikeTuple,
-    callback?: (edge: EdgeModel) => void,
-  ): EdgeModel;
+    callback?: (edge: M['Edge']) => void,
+  ): M['Edge'];
   public edge(
     targets: EdgeTargetLikeTuple,
     attributes: EdgeAttributesObject,
-    callback?: (edge: EdgeModel) => void,
-  ): EdgeModel;
+    callback?: (edge: M['Edge']) => void,
+  ): M['Edge'];
   public edge(attributes: EdgeAttributesObject): void;
   public edge(
     firstArg: EdgeTargetLikeTuple | EdgeAttributesObject,
     ...args: unknown[]
-  ): EdgeModel | undefined {
+  ): M['Edge'] | undefined {
     if (Array.isArray(firstArg)) {
       const targets = firstArg;
       const attributes = args.find(
@@ -370,7 +380,7 @@ export abstract class GraphBase<
           typeof arg === 'object' && arg !== null,
       );
       const callback = args.find(
-        (arg: unknown): arg is (edge: EdgeModel) => void =>
+        (arg: unknown): arg is (edge: M['Edge']) => void =>
           typeof arg === 'function',
       );
       const edge = this.createEdge(targets, attributes);

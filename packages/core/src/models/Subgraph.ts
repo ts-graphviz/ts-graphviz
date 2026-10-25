@@ -1,6 +1,7 @@
 import type {
   ClusterSubgraphAttributeKey,
   ModelsContext,
+  ModelTypes,
   SubgraphAttributeKey,
   SubgraphAttributesObject,
   SubgraphModel,
@@ -12,12 +13,13 @@ import { defaultModelsContext } from './models-context.js';
  * DOT object class representing a subgraph.
  * @group Models
  */
-export class Subgraph
+export class Subgraph<M extends ModelTypes = ModelTypes>
   extends GraphBase<
     'Subgraph',
-    SubgraphAttributeKey | ClusterSubgraphAttributeKey
+    SubgraphAttributeKey | ClusterSubgraphAttributeKey,
+    M
   >
-  implements SubgraphModel
+  implements SubgraphModel<M>
 {
   public get $$type(): 'Subgraph' {
     return 'Subgraph';

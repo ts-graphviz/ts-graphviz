@@ -1,5 +1,6 @@
 import type {
   GraphAttributesObject,
+  ModelTypes,
   RootGraphModel,
 } from '@ts-graphviz/common';
 
@@ -13,37 +14,35 @@ import type {
  * @returns {@link RootGraphModel} - Returns a {@link RootGraphModel} object.
  * @group Model Factory
  */
-export interface ModelFactory {
+export interface ModelFactory<G extends RootGraphModel = RootGraphModel> {
   (
     id?: string,
     attributes?: GraphAttributesObject,
-    callback?: (g: RootGraphModel) => void,
-  ): RootGraphModel;
-  (
-    attributes?: GraphAttributesObject,
-    callback?: (g: RootGraphModel) => void,
-  ): RootGraphModel;
-  (id?: string, callback?: (g: RootGraphModel) => void): RootGraphModel;
-  (callback?: (g: RootGraphModel) => void): RootGraphModel;
+    callback?: (g: G) => void,
+  ): G;
+  (attributes?: GraphAttributesObject, callback?: (g: G) => void): G;
+  (id?: string, callback?: (g: G) => void): G;
+  (callback?: (g: G) => void): G;
 }
 
 /**
  * @group Model Factory
  */
-export interface ModelFactories {
+export interface ModelFactories<M extends ModelTypes = ModelTypes> {
   /**
    * API for creating directional graph objects.
    */
-  digraph: ModelFactory;
+  digraph: ModelFactory<M['Digraph']>;
   /**
    * API for creating omnidirectional graph objects.
    */
-  graph: ModelFactory;
+  graph: ModelFactory<M['Graph']>;
 }
 
 /**
  * @group Model Factory
  */
-export interface ModelFactoriesWithStrict extends ModelFactories {
-  strict: ModelFactories;
+export interface ModelFactoriesWithStrict<M extends ModelTypes = ModelTypes>
+  extends ModelFactories<M> {
+  strict: ModelFactories<M>;
 }
