@@ -45,10 +45,8 @@
     "@ts-graphviz/core": "workspace:^"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "catalog:",
-    "typescript": "catalog:",
-    "vite": "catalog:",
-    "vite-plugin-dts": "catalog:"
+    "rolldown-plugin-dts": "catalog:",
+    "vite": "catalog:"
   },
   "engines": {
     "node": ">=22"

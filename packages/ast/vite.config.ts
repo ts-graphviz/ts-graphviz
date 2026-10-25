@@ -1,23 +1,28 @@
+import { dts } from 'rolldown-plugin-dts';
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
 
 export default defineConfig({
+  // rolldown-plugin-dts emits .d.ts modules; keep Vite's Oxc transform off them.
+  oxc: {
+    exclude: [/\.js$/, /\.d\.[cm]?ts$/],
+  },
   build: {
     target: 'ES2022',
     outDir: './lib',
     minify: false,
     lib: {
-      entry: './src/ast.ts',
+      entry: {
+        ast: './src/ast.ts',
+      },
       formats: ['es'],
-      fileName: 'ast',
     },
     rollupOptions: {
       external: ['@ts-graphviz/common'],
     },
   },
   plugins: [
-    dts({
-      bundleTypes: true,
-    }),
+    // Declarations come from Oxc, file by file (isolatedDeclarations), and
+    // are bundled per entry; no TypeScript compiler is involved.
+    dts({ generator: 'oxc', tsconfig: './tsconfig.json' }),
   ],
 });

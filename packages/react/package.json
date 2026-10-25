@@ -42,16 +42,14 @@
     "ts-graphviz": "workspace:^"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "catalog:",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
     "@types/react": "^19.3.0",
     "@types/react-reconciler": "0.32.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "typescript": "catalog:",
-    "vite": "catalog:",
-    "vite-plugin-dts": "catalog:"
+    "rolldown-plugin-dts": "catalog:",
+    "vite": "catalog:"
   },
   "peerDependencies": {
     "react": ">=19"
