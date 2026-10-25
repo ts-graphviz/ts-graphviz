@@ -1,4 +1,4 @@
-import { withCode } from '@ts-graphviz/common';
+import { warnDeprecated, withCode } from '@ts-graphviz/common';
 import { ASTNodeCountExceededError } from '../../builder/errors.js';
 import type {
   ASTNode,
@@ -136,8 +136,14 @@ export function parse(
   input: string,
   options?: ParseOptions<Rule>,
 ): ASTNode | ClusterStatementASTNode[] {
-  const { startRule = 'Dot', ...common } = options ?? {};
-  return parseRule(input, startRule, common);
+  const { startRule, ...common } = options ?? {};
+  if (startRule !== undefined) {
+    warnDeprecated(
+      'TSG_DEP_PARSE_START_RULE',
+      `parse(input, { startRule }) is deprecated and will be removed in 5.0; use parseFragment(input, '${startRule}') instead.`,
+    );
+  }
+  return parseRule(input, startRule ?? 'Dot', common);
 }
 
 /**
