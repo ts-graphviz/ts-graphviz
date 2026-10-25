@@ -91,6 +91,18 @@ export type EdgeTargetLikeTuple = [
 ];
 
 /**
+ * The targets of an edge as an input to the {@link EdgeModel} constructor:
+ * node references (no ids) and groups of them, readonly ones (e.g.
+ * `as const`) included. Every {@link EdgeTargetTuple} is one.
+ * @group Models
+ */
+export type ReadonlyEdgeTargetTuple = readonly [
+  from: NodeRef | readonly NodeRef[],
+  to: NodeRef | readonly NodeRef[],
+  ...rest: (NodeRef | readonly NodeRef[])[],
+];
+
+/**
  * The targets of an edge as an input: at least two, given as any tuple or
  * array, readonly ones (e.g. `as const`) included. Every
  * {@link EdgeTargetLikeTuple} is one.

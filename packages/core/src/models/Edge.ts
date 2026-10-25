@@ -5,6 +5,7 @@ import {
   type EdgeModel,
   type EdgeTargetTuple,
   isNodeRefLike,
+  type ReadonlyEdgeTargetTuple,
   withCode,
 } from '@ts-graphviz/common';
 import { AttributesGroup } from '../attributes/AttributesGroup.js';
@@ -23,8 +24,10 @@ export class Edge extends DotObject implements EdgeModel {
 
   public readonly attributes: AttributesGroupModel<EdgeAttributeKey>;
 
+  public readonly targets: EdgeTargetTuple;
+
   constructor(
-    public readonly targets: EdgeTargetTuple,
+    targets: ReadonlyEdgeTargetTuple,
     attributes?: EdgeAttributesObject,
   ) {
     super();
@@ -39,6 +42,10 @@ export class Edge extends DotObject implements EdgeModel {
         'TSG_ERR_INVALID_EDGE_TARGETS',
       );
     }
+    // A copy, so the edge does not change with the caller's arrays.
+    this.targets = targets.map((target) =>
+      Array.isArray(target) ? [...target] : target,
+    ) as EdgeTargetTuple;
     this.attributes = new AttributesGroup(attributes);
   }
 }

@@ -1,6 +1,7 @@
 import type { EdgeProps } from '@ts-graphviz/react';
 import {
   digraph,
+  Edge,
   type EdgeModel,
   type EdgeTargetLikeTuple,
   isNodeRefGroupLike,
@@ -40,6 +41,17 @@ describe('edge targets as inputs', () => {
     g.edge(['a'] as const);
     // @ts-expect-error one target
     g.edge(['a']);
+  });
+
+  it('constructs an Edge from readonly node references', () => {
+    const a = { id: 'a' };
+    const b = { id: 'b' };
+    expectTypeOf(new Edge([a, b] as const)).toEqualTypeOf<Edge>();
+    expectTypeOf(
+      new Edge([a, [b, { id: 'c' }] as const] as const),
+    ).toEqualTypeOf<Edge>();
+    // @ts-expect-error one target
+    new Edge([a] as const);
   });
 
   it('converts readonly groups', () => {
