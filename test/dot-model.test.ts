@@ -60,6 +60,7 @@ describe('Dot model', () => {
       expect(toDot(model)).toMatchInlineSnapshot(`
         "// file header
         // trailing
+
         // first graph
         digraph "a" {
           "x";

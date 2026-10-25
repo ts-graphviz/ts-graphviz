@@ -1,3 +1,4 @@
+import { withCode } from '@ts-graphviz/common';
 import type { CommentKind } from '../../../../types.js';
 
 /**
@@ -5,7 +6,7 @@ import type { CommentKind } from '../../../../types.js';
  * This invisible character prevents `* /` from being interpreted as a comment delimiter
  * while maintaining visual appearance.
  */
-const ZERO_WIDTH_SPACE = '\u200B';
+const ZERO_WIDTH_SPACE = '​';
 
 /**
  * Escape comment content to prevent comment injection attacks.
@@ -13,7 +14,9 @@ const ZERO_WIDTH_SPACE = '\u200B';
  * @remarks
  * This function prevents malicious content from breaking out of comment context:
  * - Block comments: Breaks up asterisk-slash sequences to prevent early comment termination
- * - All comments: Strips null bytes that could cause parsing issues
+ * - All comments: a NUL character is rejected (`RangeError`, code
+ *   `TSG_ERR_NUL_CHARACTER`), as in any other DOT text: Graphviz stops reading
+ *   at a NUL, so it cannot be written, and dropping it would change the text.
  *
  * According to C/C++ and DOT language specifications, block comments cannot be nested
  * and there is no escape sequence for the closing delimiter within comments.
@@ -24,15 +27,19 @@ const ZERO_WIDTH_SPACE = '\u200B';
  * @returns The escaped comment content
  */
 export function escapeComment(value: string, kind: CommentKind): string {
-  // Remove null bytes from all comment types
-  let escaped = value.replace(/\0/g, '');
+  if (value.includes('\0')) {
+    throw withCode(
+      new RangeError('A comment must not contain a null character'),
+      'TSG_ERR_NUL_CHARACTER',
+    );
+  }
 
   // For block comments, break up asterisk-slash sequences to prevent comment injection
   if (kind === 'Block') {
     // Replace asterisk-slash with asterisk + zero-width space + slash
     // This prevents early comment termination while preserving visual appearance
-    escaped = escaped.replace(/\*\//g, `*${ZERO_WIDTH_SPACE}/`);
+    return value.replace(/\*\//g, `*${ZERO_WIDTH_SPACE}/`);
   }
 
-  return escaped;
+  return value;
 }

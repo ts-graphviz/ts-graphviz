@@ -490,6 +490,46 @@ describe('parse', () => {
     });
   });
 
+  describe('[SM-1] line comments end only at "\\n" (found by fuzzing)', () => {
+    // Graphviz reads `// c\rx -- y` as one comment: no edge.
+    test.each([['// c\rx -- y'], ['# c\rx -- y']])(
+      '%j is a single comment, as in Graphviz',
+      (line) => {
+        const ast = parse(`graph {\n  ${line}\n  a\n}`);
+        const graph = ast.children[0] as { children: { type: string }[] };
+        expect(graph.children.map((c) => c.type)).toStrictEqual([
+          'Comment',
+          'Node',
+        ]);
+      },
+    );
+
+    test('the "\\r" of a CRLF line ending is not part of the comment', () => {
+      const ast = parse('// a\r\n// b\r\ngraph {}');
+      expect(ast.children[0]).toMatchObject({ kind: 'Slash', value: 'a\nb' });
+    });
+  });
+
+  describe('[SM-1] NUL characters (found by fuzzing)', () => {
+    // Graphviz stops reading at a NUL, so a source with one cannot mean the
+    // same thing to Graphviz and to this parser.
+    test.each([['#\0'], ['graph{#\0\n7}'], ['graph { "a\0b" }'], ['/* \0 */']])(
+      '%j is rejected with DotSyntaxError',
+      (source) => {
+        expect(() => parse(source)).toThrow(
+          expect.objectContaining({
+            name: 'DotSyntaxError',
+            code: 'TSG_ERR_DOT_SYNTAX',
+          }),
+        );
+      },
+    );
+
+    test('the error points at the NUL', () => {
+      expect(() => parse('graph {\n  a\0 }')).toThrow(/line 2, column 4/);
+    });
+  });
+
   describe('[SM-1] Input size limit', () => {
     test('normal input size should work', () => {
       const input = 'digraph { a -> b; }';

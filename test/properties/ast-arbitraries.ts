@@ -333,18 +333,6 @@ export const dot: fc.Arbitrary<DotASTNode> = fc
     ]),
   );
 
-/** Every node of a tree, depth first. */
-function* walk(ast: ASTNode): Generator<ASTNode> {
-  yield ast;
-  for (const value of Object.values(ast)) {
-    for (const child of Array.isArray(value) ? value : [value]) {
-      if (child && typeof child === 'object' && 'type' in child) {
-        yield* walk(child as ASTNode);
-      }
-    }
-  }
-}
-
 /**
  * A plain copy of an AST without `location` and without `undefined`-valued
  * properties, for structural comparison between built and parsed trees.

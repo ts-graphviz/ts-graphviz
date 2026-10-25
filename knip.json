@@ -4,7 +4,8 @@
     ".": {
       "entry": [
         "media/*.tsx",
-        "scripts/*.ts"
+        "scripts/*.ts",
+        "fuzz/targets/*.fuzz.ts"
       ],
       "ignoreDependencies": [
         "publint",

@@ -35,6 +35,23 @@ describe('stringify', () => {
     });
   });
 
+  describe('separate line comments (found by fuzzing)', () => {
+    test.each([
+      ['#\n\n#'],
+      ['#a\n\n#b'],
+      ['//a\n\n//b'],
+      ['graph {\n  //a\n\n  //b\n}'],
+      ['graph { a [\n //x\n\n //y\n c=d] }'],
+    ])('%j stays two comments through stringify', (source) => {
+      const ast = parse(source);
+      const printed = stringify(ast);
+      const strip = (v: unknown) =>
+        JSON.stringify(v, (k, x) => (k === 'location' ? undefined : x));
+      expect(strip(parse(printed))).toBe(strip(ast));
+      expect(printed).not.toMatch(/[ \t]+\n/);
+    });
+  });
+
   describe('raw newlines inside literals', () => {
     test('are written verbatim, without the indentation', () => {
       const source = 'graph {\n  a:"\n" -- "x\ny" [label = <a\nb>];\n}';
@@ -714,18 +731,14 @@ describe('stringify', () => {
       `);
     });
 
-    test('block comment with null bytes', () => {
-      expect(
+    test('a comment with a null byte is rejected, not altered', () => {
+      expect(() =>
         stringify({
           type: 'Comment',
           kind: 'Block',
           value: 'test\0null\0byte',
         }),
-      ).toMatchInlineSnapshot(`
-        "/**
-         * testnullbyte
-         */"
-      `);
+      ).toThrow(expect.objectContaining({ code: 'TSG_ERR_NUL_CHARACTER' }));
     });
   });
 

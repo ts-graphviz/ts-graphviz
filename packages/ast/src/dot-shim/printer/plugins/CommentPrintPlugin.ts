@@ -23,7 +23,8 @@ export const CommentPrintPlugin: PrintPlugin<CommentASTNode> = {
     const lines = escapedValue.split(EOL_PATTERN);
     const lineLength = lines.length;
     for (let i = 0; i < lineLength; i++) {
-      yield padding;
+      // No trailing whitespace on an empty comment line.
+      yield lines[i] === '' ? padding.trimEnd() : padding;
       yield lines[i];
       if (i < lineLength - 1) {
         yield context.EOL;

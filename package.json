@@ -37,6 +37,8 @@
     "typecheck:strict": "tsc --project tsconfig.packages.json --noEmit --skipLibCheck false",
     "test:e2e": "pnpm --filter @ts-graphviz/e2e test",
     "knip": "knip",
+    "fuzz:build": "vite build --config fuzz/vite.config.ts",
+    "fuzz": "bash fuzz/run.sh",
     "check:packages": "node scripts/check-packages.ts",
     "build:website": "pnpm build && pnpm doc && pnpm --filter @ts-graphviz/website build && pnpm --filter @ts-graphviz/website copy-api && pnpm --filter @ts-graphviz/website check-links"
   },
@@ -45,6 +47,7 @@
     "@biomejs/biome": "2.6.2",
     "@changesets/changelog-github": "^1.0.1",
     "@changesets/cli": "^3.0.3",
+    "@jazzer.js/core": "4.0.0",
     "@types/node": "catalog:",
     "@types/react": "^19.3.0",
     "@vitest/coverage-v8": "^5.0.5",
