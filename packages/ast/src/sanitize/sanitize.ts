@@ -25,6 +25,12 @@ const FILE_ATTRIBUTES = new Map([
   ['imagepath', 'sets where Graphviz reads image files'],
   ['fontpath', 'sets where Graphviz reads font files'],
   ['stylesheet', 'is written into SVG output as a stylesheet reference'],
+  // xdot drawing programs: Graphviz runs them, and they name fonts (`F`)
+  // and images (`I`) of their own.
+  ...['_draw_', '_ldraw_', '_hdraw_', '_tdraw_', '_hldraw_', '_tldraw_'].map(
+    (key) => [key, 'is an xdot drawing program'] as const,
+  ),
+  ['_background', 'is an xdot drawing program'],
 ]);
 
 /** Attributes Graphviz writes into the output as links. */
@@ -44,16 +50,30 @@ const URL_ATTRIBUTES = new Set([
 const FONT_ATTRIBUTES = new Set(['fontname', 'labelfontname']);
 
 /**
- * A font name with a path separator, in any reading (`&#47;` is `/` to the
- * XML parser of HTML-like labels), can name a font file to read.
+ * Letters, digits and the punctuation of fontconfig patterns
+ * (`DejaVu Sans:style=Bold`).
  */
-function isFontPath(value: string): boolean {
+const PLAIN_FONT_NAME = /^[\p{L}\p{M}\p{N} _.,:=+-]*$/u;
+
+/**
+ * Whether a font name, in any reading (`&#47;` is `/` to the XML parser of
+ * HTML-like labels), is more than a plain name: a path separator can name a
+ * font file to read, and Graphviz writes the name raw into PostScript
+ * output, where `(`, `)`, `%` or a line break is code (Graphviz 2.43).
+ */
+function isUnsafeFontName(value: string): boolean {
   const levels = readings(value);
   return (
-    levels === undefined ||
-    levels.some((level) => level.includes('/') || level.includes('\\'))
+    levels === undefined || levels.some((level) => !PLAIN_FONT_NAME.test(level))
   );
 }
+
+/**
+ * Graphviz writes graph, cluster and node names and the `comment` attribute
+ * raw into PostScript comments, so a line break ends the comment and the
+ * rest of the line is code (Graphviz 2.43).
+ */
+const LINE_BREAK = /[\n\r\f]/;
 
 /** The text of a literal as Graphviz reads it. */
 function textOf(literal: LiteralASTNode): string {
@@ -91,8 +111,17 @@ function checkAttribute(attribute: AttributeASTNode): void {
     const problem = urlProblem(value);
     if (problem !== undefined) throw unsafe(`${at} ${problem}.`);
   }
-  if (FONT_ATTRIBUTES.has(key) && isFontPath(value)) {
-    throw unsafe(`${at} names a font file.`);
+  if (FONT_ATTRIBUTES.has(key) && isUnsafeFontName(value)) {
+    throw unsafe(`${at} is not a plain font name.`);
+  }
+  if (key === 'comment' && LINE_BREAK.test(value)) {
+    throw unsafe(`${at} contains a line break.`);
+  }
+}
+
+function checkId(literal: LiteralASTNode | undefined): void {
+  if (literal !== undefined && LINE_BREAK.test(textOf(literal))) {
+    throw unsafe(`name${where(literal)} contains a line break.`);
   }
 }
 
@@ -117,8 +146,10 @@ function checkHtml(literal: LiteralASTNode): void {
           throw unsafe(`${at}: ${name} on <${tag.name}> ${problem}.`);
         }
       }
-      if (key === 'face' && isFontPath(value)) {
-        throw unsafe(`${at}: ${name} on <${tag.name}> names a font file.`);
+      if (key === 'face' && isUnsafeFontName(value)) {
+        throw unsafe(
+          `${at}: ${name} on <${tag.name}> is not a plain font name.`,
+        );
       }
     }
   }
@@ -144,6 +175,14 @@ function checkSafety(ast: DotASTNode): undefined {
   for (const node of walk(ast)) {
     if (node.type === 'Attribute') checkAttribute(node);
     if (node.type === 'Literal' && node.quoted === 'html') checkHtml(node);
+    if (
+      node.type === 'Graph' ||
+      node.type === 'Subgraph' ||
+      node.type === 'Node' ||
+      node.type === 'NodeRef'
+    ) {
+      checkId(node.id);
+    }
   }
   return undefined;
 }
@@ -153,14 +192,22 @@ function checkSafety(ast: DotASTNode): undefined {
  * return the DOT to render.
  *
  * Graphviz has no sandbox: some attributes make it read local files into
- * its output, and URLs are written into SVG as links. `sanitize` parses the
- * source (with the parser limits) and rejects:
+ * its output, URLs are written into SVG and image maps as links, and some
+ * values are written raw into PostScript. `sanitize` parses the source (with
+ * the parser limits) and rejects:
  *
- * - `image`, `shapefile`, `imagepath`, `fontpath` and `stylesheet`;
- * - font names with a path separator (`fontname`, `labelfontname`, `FACE`);
+ * - `image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet` and the
+ *   xdot drawing programs (`_draw_`, …, `_background`);
+ * - font names (`fontname`, `labelfontname`, `FACE`) other than plain
+ *   names: letters, digits and `space _ . , : = + -`;
+ * - line breaks in graph, cluster and node names and in `comment`;
  * - URL-like attributes (`URL`, `href`, `labelURL`, `HREF` in HTML-like
- *   labels, …) unless they are relative or use `http`, `https` or `mailto`;
+ *   labels, …) unless they are relative or use `http`, `https` or `mailto`,
+ *   and any containing whitespace, control characters or backslash escapes;
  * - `<IMG>` and `SRC` in HTML-like strings, and markup it cannot read.
+ *
+ * URLs and font names are checked at every level of character-reference
+ * decoding.
  *
  * Attribute names are compared case-insensitively. Layout and size
  * attributes are not checked: bound their cost with the limits of the

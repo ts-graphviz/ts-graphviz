@@ -61,21 +61,64 @@ describe('[SM-7] sanitize', () => {
       expect(rejection(`digraph { ${stmt} }`).code).toBe('TSG_ERR_UNSAFE_DOT');
     });
 
-    it.each(['fontname="Helvetica"', 'a [fontname="DejaVu Sans:bold"]'])(
-      'accepts %j',
-      (stmt) => {
-        expect(() => sanitize(`digraph { ${stmt} }`)).not.toThrow();
-      },
-    );
+    it.each([
+      'fontname="Helvetica"',
+      'a [fontname="DejaVu Sans:style=Bold"]',
+      'a [fontname="Times-Roman"]',
+      'a [fontname="游ゴシック"]',
+      'a [fontname="Noto Sans CJK JP,Bold"]',
+    ])('accepts %j', (stmt) => {
+      expect(() => sanitize(`digraph { ${stmt} }`)).not.toThrow();
+    });
 
-    it.each(['fontname="/tmp/x.ttf"', 'a [labelfontname="..\\\\x.ttf"]'])(
-      'rejects the font path %j',
-      (stmt) => {
-        expect(rejection(`digraph { ${stmt} }`).message).toContain(
-          'names a font file',
-        );
-      },
-    );
+    it.each([
+      'fontname="/tmp/x.ttf"',
+      'a [labelfontname="..\\\\x.ttf"]',
+      // Written raw into PostScript output, where it is code (Graphviz 2.43).
+      'a [fontname="Helvetica (x) (r) file pop"]',
+      'a [fontname="Helvetica\n(x) pop"]',
+      'a [fontname="Helvetica %x"]',
+    ])('rejects the font name %j', (stmt) => {
+      expect(rejection(`digraph { ${stmt} }`).message).toContain(
+        'is not a plain font name',
+      );
+    });
+
+    it.each([
+      '_draw_',
+      '_ldraw_',
+      '_hdraw_',
+      '_tdraw_',
+      '_hldraw_',
+      '_tldraw_',
+      '_background',
+    ])('rejects the xdot program %s', (key) => {
+      expect(
+        rejection(`digraph { ${key}="F 14 10 -/tmp/x.ttf T 0 0 0 10 1 -x" }`)
+          .message,
+      ).toContain('is an xdot drawing program');
+    });
+  });
+
+  describe('PostScript comments', () => {
+    // Graphviz writes these raw into `%` comments (Graphviz 2.43).
+    it.each([
+      'digraph "g\n(x) pop" { a }',
+      'digraph { subgraph "cluster\r(x) pop" { a } }',
+      'digraph { "a\n(x) pop" }',
+      'digraph { "a\f(x) pop" -> b }',
+      'digraph { <a\n(x) pop> }',
+      'digraph { comment="c\n(x) pop" }',
+      'digraph { a [comment="c\r\n(x) pop"] }',
+    ])('rejects a line break in %j', (dot) => {
+      expect(rejection(dot).message).toContain('contains a line break');
+    });
+
+    it('accepts escaped line breaks and line breaks in labels', () => {
+      expect(() =>
+        sanitize('digraph { "a\\nb" [label="x\ny" comment="c\\nd"] }'),
+      ).not.toThrow();
+    });
   });
 
   describe('URL attributes', () => {
@@ -98,6 +141,10 @@ describe('[SM-7] sanitize', () => {
       ' javascript:alert(1)',
       'java\tscript:alert(1)',
       'java\nscript:alert(1)',
+      // A line break adds an image map directive (-Timap, Graphviz 2.43).
+      'https://example.com/\ndefault javascript:alert(1)\n#',
+      'https://example.com/&#10;default javascript:alert(1)',
+      'https://example.com/ x',
       'javascript&#58;alert(1)',
       'javascript&#x3a;alert(1)',
       'javascript&#x3A alert(1)',

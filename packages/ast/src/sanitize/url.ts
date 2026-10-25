@@ -73,10 +73,14 @@ export function urlProblem(value: string): string | undefined {
       // e.g. `\N` becomes the node name, which can be anything.
       return 'contains a backslash escape, which Graphviz expands';
     }
-    // A URL parser drops tabs and newlines anywhere and leading controls and
-    // spaces, so `java\tscript:` is a `javascript:` URL.
-    const url = level.replace(/[\t\n\r]/g, '').replace(/^[\0-\x20]+/, '');
-    const scheme = /^([A-Za-z][A-Za-z0-9+.-]*):/.exec(url)?.[1];
+    // Image maps (-Timap, -Tismap) are lines of space-separated fields with
+    // the URL written raw, so whitespace adds fields and a line break adds
+    // directives (Graphviz 2.43). A browser's URL parser also drops tabs and
+    // newlines, which would hide a scheme (`java\tscript:`).
+    if (/[\0-\x20\x7f]/.test(level)) {
+      return 'contains whitespace or a control character';
+    }
+    const scheme = /^([A-Za-z][A-Za-z0-9+.-]*):/.exec(level)?.[1];
     if (
       scheme !== undefined &&
       !ALLOWED_SCHEMES.includes(scheme.toLowerCase())

@@ -123,15 +123,16 @@ How the packages reach you is part of the model: the strongest parser is useless
 
 ## SM-7. `sanitize` (rendering untrusted DOT)
 
-Graphviz has no sandbox. Verified with Graphviz 2.43: an EPS file named by `shapefile` (with `shape=epsf`) or by `image` is copied into `-Tps` output; `image` and HTML-like `<IMG SRC>` embed images in raster output and reveal paths and sizes in SVG; `stylesheet` and URL attributes (`URL`, `href`, …, and `HREF` in HTML-like labels) are written into SVG, so a `javascript:` URL becomes script when the SVG is served inline. Graphviz keeps character references such as `&#58;` in the links it writes and expands `\N`-style escapes in URLs. The old `GV_FILE_PATH` restriction was removed in Graphviz 6. `sanitize` from `@ts-graphviz/ast`, which the adapter runs by default, is the supported way to render DOT from an untrusted party.
+Graphviz has no sandbox. Verified with Graphviz 2.43: an EPS file named by `shapefile` (with `shape=epsf`) or by `image` is copied into `-Tps` output; `image` and HTML-like `<IMG SRC>` embed images in raster output and reveal paths and sizes in SVG; `stylesheet` and URL attributes (`URL`, `href`, …, and `HREF` in HTML-like labels) are written into SVG, so a `javascript:` URL becomes script when the SVG is served inline. Graphviz keeps character references such as `&#58;` in the links it writes and expands `\N`-style escapes in URLs; PostScript output and image maps contain some values unescaped. The old `GV_FILE_PATH` restriction was removed in Graphviz 6. `sanitize` from `@ts-graphviz/ast`, which the adapter runs by default, is the supported way to render DOT from an untrusted party.
 
 **Guarantees**
 
 - **Parsed, not pattern-matched.** The source is parsed with the SM-1 limits, checked on the AST, and printed again; the returned text (the one the adapter renders) is printed from the checked AST, never copied from the input, so Graphviz reads what was checked. That this text means the same to Graphviz as to the parser is what the differential test and the fuzz targets of SM-1 and SM-2 check.
 - **Rejected**, with a `DOMException` named `SecurityError` and code `TSG_ERR_UNSAFE_DOT` naming the attribute and its position:
-  - `image`, `shapefile`, `imagepath`, `fontpath` and `stylesheet`, on any statement and in any case;
-  - font names containing a path separator (`fontname`, `labelfontname`, `FACE` in HTML-like labels);
-  - URL attributes (`URL`, `href`, `edgeURL`, `headURL`, `tailURL`, `labelURL` and their `href` forms, `HREF` in HTML-like labels) unless relative or `http`, `https` or `mailto` — judged after decoding character references and removing what a URL parser ignores, and rejected when they contain a backslash escape or a named reference other than the XML ones;
+  - `image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet` and the xdot drawing programs (`_draw_`, `_ldraw_`, …, `_background`), on any statement and in any case;
+  - font names (`fontname`, `labelfontname`, `FACE` in HTML-like labels) other than letters, digits and `space _ . , : = + -`: a path names a font file, and Graphviz writes the name raw into PostScript output, where `(`, `)`, `%` or a line break is code;
+  - line breaks in graph, cluster and node names and in `comment`, which Graphviz writes raw into PostScript comments;
+  - URL attributes (`URL`, `href`, `edgeURL`, `headURL`, `tailURL`, `labelURL` and their `href` forms, `HREF` in HTML-like labels) unless relative or `http`, `https` or `mailto`, or when they contain whitespace or a control character (a line break adds a directive to `-Timap` / `-Tismap` image maps), a backslash escape (`\N` expands to the node name) or a named reference other than the XML ones. Each check runs on every reading of the value, from as written to fully decoded, because HTML-like labels are decoded by Graphviz's XML parser and the SVG again by the browser;
   - `<IMG>` and any `SRC` in HTML-like strings, and markup that cannot be read as XML.
 
 **Not promised**

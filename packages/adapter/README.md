@@ -124,7 +124,7 @@ const stream = await toStream(dot, {
 
 Graphviz has no sandbox. It reads files named in the DOT and can copy them into its output: an EPS file named by `shapefile` or `image` ends up inside `-Tps` output, images named by `image` or `<IMG SRC>` are embedded in raster output, and their paths appear in SVG. URL attributes are written into SVG links, so a `javascript:` URL becomes script when the SVG is served inline.
 
-`toStream` and `toFile` therefore check every source with `sanitize` from `@ts-graphviz/ast` before starting the command, and render the checked text. A source that names a file to read (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, font paths, `<IMG>`) or an unsafe link (`URL`, `href`, `HREF`, … other than relative, `http`, `https` and `mailto`) is rejected with a `DOMException` named `SecurityError`:
+`toStream` and `toFile` therefore check every source with `sanitize` from `@ts-graphviz/ast` before starting the command, and render the checked text. A source that names a file to read (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), an unsafe link (`URL`, `href`, `HREF`, … other than relative, `http`, `https` and `mailto`), or text that Graphviz would write raw into PostScript or image maps (font names other than plain names, line breaks in names) is rejected with a `DOMException` named `SecurityError`:
 
 ```ts
 import { isTsGraphvizError } from '@ts-graphviz/common';
