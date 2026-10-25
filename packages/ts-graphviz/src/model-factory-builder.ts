@@ -47,7 +47,7 @@ export function ModelFactoryBuilder(
 export function createModelFactories(
   strict: boolean,
   context: ModelsContext = defaultModelsContext(),
-) {
+): Readonly<{ digraph: ModelFactory; graph: ModelFactory }> {
   return Object.freeze({
     digraph: ModelFactoryBuilder.call(context, true, strict),
     graph: ModelFactoryBuilder.call(context, false, strict),

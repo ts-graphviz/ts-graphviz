@@ -451,4 +451,11 @@ class HostConfig
   }
 }
 
-export const reconciler = ReactReconciler(new HostConfig());
+export const reconciler: ReactReconciler.Reconciler<
+  Container,
+  Instance,
+  string,
+  string | Instance,
+  never,
+  PublicInstance
+> = ReactReconciler(new HostConfig());

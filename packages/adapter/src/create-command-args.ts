@@ -16,7 +16,9 @@ import type { Layout, Options } from './types.js';
  * `-Glabel=a b` sets the label to `a b`, and a quote in the value is just a
  * quote. `true` is written as a bare key (`-Gcenter`).
  */
-export function escapeValue<T extends AttributeKey>(value: Attribute<T>) {
+export function escapeValue<T extends AttributeKey>(
+  value: Attribute<T>,
+): string {
   if (value === true) return '';
   return `=${value}`;
 }

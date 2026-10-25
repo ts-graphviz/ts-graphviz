@@ -37,7 +37,7 @@ export class Builder implements ASTBuilder {
    * Constructor of Builder
    * @param options - Options to initialize Builder
    */
-  constructor(private options?: Partial<BuilderOptions>) {
+  constructor(private options?: Partial<BuilderOptions> | undefined) {
     this.maxNodes = options?.maxASTNodes ?? DEFAULT_MAX_AST_NODES;
   }
 
