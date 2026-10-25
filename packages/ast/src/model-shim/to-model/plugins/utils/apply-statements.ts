@@ -122,19 +122,9 @@ export function applyStatements(
         const attributes = stmt.children.filter<AttributeASTNode>(
           (v): v is AttributeASTNode => v.type === 'Attribute',
         );
-        // `attributes.<kind>.apply` takes the entries as is; `graph.edge()`
-        // would read an array as edge targets.
-        switch (stmt.kind) {
-          case 'Edge':
-            graph.attributes.edge.apply(collectAttributes(attributes));
-            break;
-          case 'Node':
-            graph.attributes.node.apply(collectAttributes(attributes));
-            break;
-          case 'Graph':
-            graph.attributes.graph.apply(collectAttributes(attributes));
-            break;
-        }
+        // The graph decides: merged into its defaults (the default classes)
+        // or kept in place (`orderedModels`, #1732).
+        graph.addAttributeList(stmt.kind, collectAttributes(attributes));
         commentHolder.reset();
         break;
       }

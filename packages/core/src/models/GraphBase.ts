@@ -1,5 +1,9 @@
 import {
   type AttributeKey,
+  type AttributeListKind,
+  type AttributeListModel,
+  type AttributesEntities,
+  type AttributesObject,
   type ClusterSubgraphAttributeKey,
   type DotObjectType,
   type EdgeAttributeKey,
@@ -159,6 +163,39 @@ export abstract class GraphBase<
   public addSubgraph(subgraph: SubgraphModel): void {
     this.#objects.subgraphs.add(subgraph);
     this.#statements.add(subgraph);
+  }
+
+  /**
+   * Whether a default attribute statement added after other statements
+   * keeps its place in {@link statements} (applying, as in DOT, only to
+   * what follows it) instead of being merged into {@link attributes}.
+   * `false` here; the classes of `orderedModels` return `true`.
+   */
+  protected get keepsDefaultsInPlace(): boolean {
+    return false;
+  }
+
+  public addAttributeList(
+    kind: AttributeListKind,
+    attributes:
+      | AttributesObject<AttributeKey>
+      | AttributesEntities<AttributeKey>,
+  ): void {
+    if (!this.keepsDefaultsInPlace || this.#statements.size === 0) {
+      const target =
+        kind === 'Graph'
+          ? this.attributes.graph
+          : kind === 'Node'
+            ? this.attributes.node
+            : this.attributes.edge;
+      (target as AttributeListModel<AttributeListKind, AttributeKey>).apply(
+        attributes,
+      );
+      return;
+    }
+    const list = new AttributeList<AttributeListKind, AttributeKey>(kind);
+    list.apply(attributes);
+    this.#statements.add(list);
   }
 
   public existNode(nodeId: string): boolean {

@@ -333,6 +333,21 @@ export interface GraphBaseModel<
    */
   addSubgraph(subgraph: SubgraphModel): void;
   /**
+   * Add a default attribute statement (`node [...]`, `edge [...]`,
+   * `graph [...]`). The default classes merge it into
+   * {@link GraphBaseModel.attributes}, so the defaults apply to the whole
+   * graph; model classes that keep statements in their place (such as
+   * `orderedModels` of `@ts-graphviz/core`) put it into
+   * {@link GraphBaseModel.statements} once other statements precede it, so
+   * it applies, as in DOT, only to what comes after it (#1732).
+   */
+  addAttributeList(
+    kind: AttributeListKind,
+    attributes:
+      | AttributesObject<AttributeKey>
+      | AttributesEntities<AttributeKey>,
+  ): void;
+  /**
    * Check if the Node exists in the graph.
    */
   existNode(nodeId: string): boolean;
