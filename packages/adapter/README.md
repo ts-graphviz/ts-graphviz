@@ -124,110 +124,42 @@ const stream = await toStream(dot, {
 
 Graphviz has no sandbox. It reads files named in the DOT and can copy them into its output: an EPS file named by `shapefile` or `image` ends up inside `-Tps` output, images named by `image` or `<IMG SRC>` are embedded in raster output, and their paths appear in SVG. URL attributes are written into SVG links, so a `javascript:` URL becomes script when the SVG is served inline.
 
-When rendering DOT files uploaded by users or generated from user input, implement validation before passing them to this library:
+`toStream` and `toFile` therefore check every source with `sanitize` from `@ts-graphviz/ast` before starting the command, and render the checked text. A source that names a file to read (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), an unsafe link (`URL`, `href`, `HREF`, … other than relative, `http`, `https` and `mailto`), or text that Graphviz would write raw into PostScript, image maps or `plain` output (font names other than plain names, unknown `style` values, line breaks in names, control characters) is rejected with a `DOMException` named `SecurityError`. The check knows the output `format`: it refuses `ismap` and formats whose output has not been checked (e.g. `vml`, `fig`), and requires single-word font names for PostScript:
 
-**Validation Steps**:
-1. **Syntax validation**: Verify the DOT file is well-formed and parseable
-2. **Attribute filtering**: Check for potentially dangerous attributes that reference file system resources:
-   - `image`, `shapefile` - Read arbitrary files; EPS contents are copied into PostScript output
-   - `IMG SRC` inside HTML-like labels - Same as `image`
-   - `fontpath`, `fontname` - Can reference font files
-   - `imagepath` - Defines search path for images
-   - `stylesheet` - Written into SVG output as a stylesheet reference
-   - `URL`, `href`, `labelURL`, `headURL`, `tailURL`, `edgeURL` and their `*href` forms, and `HREF` in HTML-like labels - Written into SVG links; reject schemes other than `http`/`https`
-   - `layout` - Lets the DOT choose the layout engine
-3. **Content sanitization**: Consider using a DOT parser to rebuild the graph with only allowed attributes, and render the rebuilt text rather than the original (a supported way to do this is planned in [#1681](https://github.com/ts-graphviz/ts-graphviz/issues/1681))
-4. **Sandboxing**: Run Graphviz in a sandboxed environment with restricted file system access when processing untrusted input
+```ts
+import { isTsGraphvizError } from '@ts-graphviz/common';
 
-**Example Risk Scenario**:
-
-⚠️ **Warning**: The following is an example of **unsafe** DOT content that should be rejected by validation:
-
-```dot
-digraph G {
-  node [image="/etc/passwd"];  // ⚠️ DANGEROUS: Attempts to access sensitive file
-  node1;
+try {
+  const stream = await toStream(userDot, {
+    format: 'svg',
+    signal: AbortSignal.timeout(10_000),
+    // Options for the check; `true` (the default) uses the defaults.
+    // `policy: 'strict'` allows only attributes and HTML-like tags Graphviz
+    // defines, with plain values: use it for DOT from anyone.
+    sanitize: { policy: 'strict', maxASTNodes: 10_000 },
+  });
+} catch (e) {
+  if (isTsGraphvizError(e) && e.code === 'TSG_ERR_UNSAFE_DOT') {
+    // e.message names the attribute and its line and column
+  }
 }
 ```
 
-While Graphviz will handle file access errors gracefully, processing untrusted DOT files without validation may expose information about your file system or cause unexpected behavior. **Always validate and sanitize user-provided DOT files before processing.**
+The check can be run on its own, e.g. when DOT is accepted from users and rendered later:
 
-**Example: Validating and Sanitizing User-Provided DOT Files**
+```ts
+import { sanitize } from '@ts-graphviz/ast';
 
-Here's an example of how to use the `@ts-graphviz/ast` package to parse, validate, and sanitize DOT files:
-
-```typescript
-import { parse, stringify } from '@ts-graphviz/ast';
-
-// Potentially dangerous attributes that can access file system
-const DANGEROUS_ATTRIBUTES = new Set([
-  'image',
-  'shapefile',
-  'fontpath',
-  'fontname',
-  'imagepath',
-]);
-
-/**
- * Validates and sanitizes a DOT file by removing dangerous attributes
- */
-function validateAndSanitizeDOT(dotString: string): string {
-  try {
-    // Parse the DOT string into an AST
-    const ast = parse(dotString);
-
-    // Remove dangerous attributes from the AST
-    sanitizeAST(ast);
-
-    // Convert back to DOT string
-    return stringify(ast);
-  } catch (error) {
-    throw new Error(`Invalid DOT syntax: ${error.message}`);
-  }
-}
-
-/**
- * Recursively sanitize AST nodes by removing dangerous attributes
- */
-function sanitizeAST(node: any): void {
-  if (!node || typeof node !== 'object') return;
-
-  // Handle nodes with children
-  if (Array.isArray(node.children)) {
-    node.children = node.children.filter((child: any) => {
-      // Filter out dangerous attribute nodes
-      if (child.type === 'Attribute') {
-        const attributeName = child.key?.value;
-        if (DANGEROUS_ATTRIBUTES.has(attributeName)) {
-          console.warn(`Removed dangerous attribute: ${attributeName}`);
-          return false;
-        }
-      }
-      // Recursively sanitize child nodes
-      sanitizeAST(child);
-      return true;
-    });
-  }
-}
-
-// Usage example
-const userUploadedDOT = `
-  digraph G {
-    node [image="/etc/passwd"];
-    node1 [label="Safe label"];
-  }
-`;
-
-const sanitizedDOT = validateAndSanitizeDOT(userUploadedDOT);
-// Result: digraph G { node1 [label="Safe label"]; }
+const checked = sanitize(userDot, { format: 'svg' }); // throws on unsafe or invalid DOT
 ```
+
+Pass `sanitize: false` only for DOT your application wrote, for example to render your own images. Layout attributes are not checked: bound their cost with `signal` and `maxOutputSize`. For untrusted DOT, also run Graphviz as an unprivileged user with restricted file system access. The [security model](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-model/) (SM-7) lists exactly what is checked.
 
 **Best Practices**:
 - Use the default `dot` command when possible
 - If you need to customize `dotCommand`, use a hardcoded path or environment variable controlled by the deployment environment
 - Do not allow end-user input to control the configuration options
-- Validate and sanitize DOT strings from untrusted sources before rendering
-- Consider using a whitelist approach for allowed attributes when processing user-provided DOT files
+- Keep `sanitize` on for DOT from untrusted sources (it is on by default)
 - Run Graphviz in a restricted environment when handling untrusted input
 
 ## Contributors 👥

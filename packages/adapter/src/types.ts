@@ -1,3 +1,4 @@
+import type { SanitizeOptions } from '@ts-graphviz/ast';
 import type {
   $keywords,
   $keywordsValidation,
@@ -182,6 +183,21 @@ export interface CommonOptions {
    * @default 134217728 (128 MiB)
    */
   maxOutputSize?: number;
+  /**
+   * Check the DOT source with `sanitize` from `@ts-graphviz/ast` and render
+   * the checked text. The call rejects with a `DOMException` named
+   * `SecurityError` (`code` `TSG_ERR_UNSAFE_DOT`) when the source makes
+   * Graphviz read a file (`image`, `shapefile`, `<IMG>`, …) or write an
+   * unsafe link (`URL="javascript:…"`, …), and with a `DotSyntaxError` when
+   * it does not parse. Pass options as an object: parser limits, or
+   * `policy: 'strict'` to allow only the attributes and HTML-like tags
+   * Graphviz defines, with plain values.
+   *
+   * Set `false` only for sources you trust, e.g. to render your own images.
+   *
+   * @default true
+   */
+  sanitize?: boolean | SanitizeOptions;
 }
 
 export type Options<T extends Layout = Layout> = CommonOptions &

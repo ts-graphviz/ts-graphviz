@@ -7,6 +7,7 @@ export type * from './types.js';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
+import { sourceToRender } from './source.js';
 import type { Layout, Options } from './types.js';
 
 export * from './errors.js';
@@ -44,6 +45,8 @@ async function readAll(
  * bytes) and the stream is returned once the command has succeeded, so a
  * failure is always reported by the returned promise.
  *
+ * @throws `DOMException` named `SecurityError` (`code` `TSG_ERR_UNSAFE_DOT`)
+ * or `DotSyntaxError` when `sanitize` (on by default) rejects the source.
  * @throws {CommandExecutionError} when the command cannot be started, fails
  * while reading its input, or exits with a non-zero code.
  * @throws `RangeError` with `code` `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` when the
@@ -59,6 +62,7 @@ export async function toStream<T extends Layout>(
   const limit = outputLimit(opts);
   const { signal } = opts;
   signal?.throwIfAborted();
+  const source = sourceToRender(dot, opts);
 
   // biome-ignore lint/suspicious/noExplicitAny: Deno.ChildProcess
   let child: any;
@@ -125,7 +129,7 @@ export async function toStream<T extends Layout>(
         return;
       }
       try {
-        await input.write(new TextEncoder().encode(dot));
+        await input.write(new TextEncoder().encode(source));
         await input.close();
       } catch (e) {
         onIoError(e);

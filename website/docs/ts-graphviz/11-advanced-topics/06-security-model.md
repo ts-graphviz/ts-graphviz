@@ -8,7 +8,7 @@ This document states what ts-graphviz trusts, what it guarantees at each boundar
 
 ## Summary
 
-Each boundary below has an identifier (`SM-1` … `SM-6`). Where a guarantee is enforced by tests, the tests carry the identifier in their title (for example `describe('[SM-2] …')`), and `test/security-model.test.ts` fails if an identifier claimed here has no test or a test names an identifier that is not here. The document therefore does not list test files; search the repository for the identifier.
+Each boundary below has an identifier (`SM-1` … `SM-7`). Where a guarantee is enforced by tests, the tests carry the identifier in their title (for example `describe('[SM-2] …')`), and `test/security-model.test.ts` fails if an identifier claimed here has no test or a test names an identifier that is not here. The document therefore does not list test files; search the repository for the identifier.
 
 ts-graphviz converts between three representations of a Graphviz graph: DOT text, an AST, and object models. The library itself performs no I/O: it does not touch the network or the file system and runs no code from its input. The only package that leaves the process is `@ts-graphviz/adapter`, which spawns the Graphviz `dot` executable.
 
@@ -18,7 +18,8 @@ ts-graphviz converts between three representations of a Graphviz graph: DOT text
 | strings placed in models and written by `toDot` / `fromModel` | **untrusted** (as data) | written as literal text: cannot terminate the string, add statements or change the graph structure |
 | `escString()` / `htmlLike()` values | **trusted** (caller opts in) | escape sequences / markup kept; only sanitised so they cannot end the string or label early (NUL rejected) |
 | model classes, plugins, `ModelsContext`, `dotCommand` and other options | **trusted code and configuration** | none; misuse by the application is not a library vulnerability |
-| `@ts-graphviz/adapter` | spawns `dot` with argv, no shell | no shell injection; the DOT it renders is still interpreted by Graphviz |
+| `@ts-graphviz/adapter` | spawns `dot` with argv, no shell | no shell injection; the source is checked by `sanitize` unless the application turns it off |
+| DOT text given to `sanitize` (and to the adapter by default) | **untrusted** | what passes contains nothing that makes Graphviz read a file or write an unsafe link, and is the text Graphviz gets |
 | the npm packages themselves | supply chain | SHA-pinned actions, provenance, scorecard, dependency cooldown |
 
 ## SM-1. DOT text → `parse` / `fromDot` (untrusted input)
@@ -97,11 +98,12 @@ Two value kinds deliberately bypass the literal-text rule because their content 
 - **Bounded output.** The output kept in memory is limited by `maxOutputSize` (default 128 MiB; the command is killed and the call rejects with a `RangeError`, code `TSG_ERR_OUTPUT_LIMIT_EXCEEDED`); the command's stderr is kept to its last 64 KiB.
 - **Stoppable.** With `signal`, the command is killed when the signal aborts and the call rejects with `signal.reason`; `AbortSignal.timeout(ms)` gives a time limit.
 - **Files are replaced, not patched.** `toFile` writes only after the command succeeded and truncates an existing file.
+- **Checked source by default.** Unless `sanitize: false` is set, the source is checked by `sanitize` (SM-7) before the command starts, and the command gets the checked text; a model rendered through `ts-graphviz/adapter` is checked the same way after `toDot`.
 
 **Not promised, and what the application must do**
 
-- `dotCommand`, `library` and the other options are configuration: never derive them from end-user input.
-- **Graphviz reads local files named in the DOT and can copy them into its output.** Verified with Graphviz 2.43: an EPS file named by `shapefile` (with `shape=epsf`) or by `image` is embedded in `-Tps` output; `image` and HTML-like `<IMG SRC>` embed images in raster output and reveal paths and sizes in SVG. `stylesheet` and URL attributes (`URL`, `href`, …, and `HREF` in HTML-like labels) are written into SVG, so a `javascript:` URL becomes script when the SVG is served inline. Graphviz has no sandbox (the old `GV_FILE_PATH` restriction was removed in Graphviz 6). ts-graphviz passes DOT through unchanged: when the DOT comes from an untrusted source, remove those attributes before rendering (a supported way to do this is tracked in #1681), run Graphviz as an unprivileged user in an isolated file system, and set `signal` and `maxOutputSize`.
+- `dotCommand`, `library`, `layout`, `format` and the other options are configuration: never derive them from end-user input. The one exception that is checked is `attributes` (the `-G` / `-N` / `-E` arguments): while `sanitize` is on, its keys and values are checked by the same rules as the DOT source, split at the first `=` as Graphviz splits them.
+- **Graphviz reads local files named in the DOT and can copy them into its output**, and writes URLs into SVG (details in SM-7). With `sanitize: false`, ts-graphviz passes the DOT through unchanged: do that only for DOT the application wrote itself. For untrusted DOT, also run Graphviz as an unprivileged user in an isolated file system, and set `signal` and `maxOutputSize`.
 - Without `signal`, layout time is not bounded: the DOT chooses the layout engine (`layout` attribute) and its cost.
 
 **Evidence**: tests tagged `SM-4` and the `adapter-args` fuzz target — the argv construction, the stream and file entry points with their failure paths, the output limit, abort and file replacement against the real `dot`, and the browser stubs.
@@ -109,6 +111,8 @@ Two value kinds deliberately bypass the literal-text rule because their content 
 ## SM-5. Trusted code: models, plugins and contexts
 
 Model classes, `ModelsContext` (`createModelsContext`), converter and printer plugins, and `react` components run with the application's privileges. Supplying a class or plugin that misbehaves, or calling an API in a way the types forbid, is a bug in the application, not a vulnerability in ts-graphviz. The library still fails safely where it can: an invalid edge target is a `TypeError` (`TSG_ERR_INVALID_EDGE_TARGETS`), a missing plugin is an `Error` (`TSG_ERR_NO_PLUGIN`), and `renderHTMLLike` in React limits recursion depth (default 1000) and detects cycles.
+
+**Type extensions** (augmenting `$keywords` types such as attribute keys, `Layout` or `Format`, see *Extending ts-graphviz*) change TypeScript types only: they add no code that runs and are not an attack surface of their own. They are also invisible to `sanitize`, which checks what is in the DOT at run time: under the default policy a custom attribute gets the checks every value gets, the strict policy rejects it, and a custom output format is refused while `sanitize` is on. Extending, and deciding to render a custom attribute or format from untrusted input, is the application's responsibility.
 
 ## SM-6. Supply chain
 
@@ -119,6 +123,34 @@ How the packages reach you is part of the model: the strongest parser is useless
 - Dependencies are updated by Dependabot with a cooldown, and pnpm enforces `minimumReleaseAge` and a trust policy so a freshly published malicious version is not installed automatically.
 - OpenSSF Scorecard and the Best Practices badge track the remaining practices publicly.
 
+## SM-7. `sanitize` (rendering untrusted DOT)
+
+Graphviz has no sandbox. Verified with Graphviz 2.43: an EPS file named by `shapefile` (with `shape=epsf`) or by `image` is copied into `-Tps` output; `image` and HTML-like `<IMG SRC>` embed images in raster output and reveal paths and sizes in SVG; `stylesheet` and URL attributes (`URL`, `href`, …, and `HREF` in HTML-like labels) are written into SVG, so a `javascript:` URL becomes script when the SVG is served inline. Graphviz keeps character references such as `&#58;` in the links it writes and expands `\N`-style escapes in URLs; PostScript output and image maps contain some values unescaped. The old `GV_FILE_PATH` restriction was removed in Graphviz 6. `sanitize` from `@ts-graphviz/ast`, which the adapter runs by default, is the supported way to render DOT from an untrusted party.
+
+**Guarantees**
+
+- **Parsed, not pattern-matched.** The source is parsed with the SM-1 limits, checked on the AST, and printed again; the returned text (the one the adapter renders) is printed from the checked AST, never copied from the input, so Graphviz reads what was checked. That this text means the same to Graphviz as to the parser is what the differential test and the fuzz targets of SM-1 and SM-2 check.
+- **Rejected**, with a `DOMException` named `SecurityError` and code `TSG_ERR_UNSAFE_DOT` naming the attribute and its position:
+  - `image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet` and the xdot drawing programs (`_draw_`, `_ldraw_`, …, `_background`), on any statement and in any case;
+  - URL attributes (`URL`, `href`, `edgeURL`, `headURL`, `tailURL`, `labelURL` and their `href` forms, `HREF` in HTML-like labels) unless relative or `http`, `https` or `mailto`, or when they contain whitespace or a control character (a line break adds a directive to `-Timap` image maps), a quote or angle bracket (SVG output writes the link between quotes unescaped, so a quote, also one decoded from `&quot;` in an HTML-like label, ends the attribute), or a backslash escape (`\N` expands to the node name);
+  - `<IMG>` and any `SRC` in HTML-like strings, and markup that cannot be read as XML;
+  - font names (`fontname`, `labelfontname`, `FACE`) other than letters, digits and `_ . , : = + -`, with spaces allowed except for PostScript formats: a path names a font file, and Graphviz writes the name raw into PostScript, where any other character, and a space between words, is code;
+  - `style` values other than known styles and `setlinewidth(n)` (written raw into PostScript), with line breaks, or with spaces for `plain` formats; `shape` values other than names; colors with characters outside the color syntax (letters, digits, `# / : ; . , _ + -`) — `plain` output writes style, shape and colors as raw fields;
+  - substitution escapes (`\N`, `\G`, `\E`, `\T`, `\H`, `\L`) that could assemble a character reference after Graphviz expands them: `&` in a value with an escape, a name containing `&` when some value mixes an escape with other text, and `\L` (a copy of a label, which Graphviz decodes) outside label and tooltip text;
+  - control characters anywhere (copied into JSON and XML output, which cannot hold them), line breaks in names, ports and `comment` (raw in PostScript comments), and named character references other than XML's outside label and tooltip text (copied as written into SVG, where they are undefined).
+
+  Each check runs on every reading of a value, from as written to fully decoded, because HTML-like labels are decoded by Graphviz's XML parser and the SVG again by the browser.
+- **Strict policy.** With `policy: 'strict'`, `sanitize` also rejects every attribute ts-graphviz does not know (exact names, from the generated attribute types; the compiler keeps the two in sync), values outside numbers, names and lists (no quotes, backslashes, `< > & ( ) %` or line breaks) for attributes without a grammar of their own, and HTML-like label tags and attributes Graphviz does not define. Attributes and output quirks nobody has listed yet cannot get through it; use it for DOT from parties you do not trust at all.
+- **Output formats.** Without a format, `sanitize` applies the rules of every checked format at once (no spaces in font names or styles). Given the output format (the adapter always passes it), it applies only that format's rules, rejects `ismap` (it writes each area's tooltip, which defaults to the label, raw on the line of its URL, so an ordinary `\n` adds a line), and rejects every format not checked. Checked with Graphviz 2.43: `svg`, `svgz`, `png`, `jpg` / `jpeg` / `jpe`, `gif`, `webp`, `pdf`, `json`, `json0`, `dot_json`, `xdot_json`, `xdot`, `dot`, `gv`, `canon`, `plain`, `plain-ext`, `ps`, `ps2`, `eps`, `imap`, `imap_np`, `cmapx`, `cmapx_np`, with any renderer suffix (`png:cairo`).
+
+**Not promised**
+
+- Layout cost: `layout`, `size`, `dpi`, `maxiter` and the like pass; bound them with `signal` and `maxOutputSize` (SM-4).
+- Text in the output: labels, tooltips, ids and comments are written by Graphviz as text (escaped in SVG); applications that put the output into HTML in other ways must escape it themselves.
+- Under the default policy, attributes that newer Graphviz versions may add: it is a list of what is known to read files, write links or reach an output unescaped. The strict policy does not have this gap.
+
+**Evidence**: tests tagged `SM-7` — unit tests for each rule, including the encoded and escaped forms, checked against real Graphviz output; properties that `sanitize` either rejects generated DOT or returns text that parses to the same AST and is a fixed point; unit tests of the strict policy's allowlists; a test against the real `dot`, under both policies, that every link in the SVG written for accepted DOT, decoded as a browser decodes it, is relative or `http`, `https` or `mailto` (link values built from encoded schemes, references at several levels, `\N` and whitespace; it fails when `sanitize` is bypassed); a test, under both policies, that a source full of awkward but accepted values renders to every checked format and each output holds together (JSON parses, DOT reads back, `plain` and image maps hold only their own records, PostScript font settings are one token); and the adapter tests that an unsafe source is rejected before the command starts while `sanitize: false` lets the real `dot` copy a file into its output.
+
 ## What is in scope for a security report
 
 In scope, please report privately (see [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md)):
@@ -127,6 +159,7 @@ In scope, please report privately (see [SECURITY.md](https://github.com/ts-graph
 - any string that, as a plain `string` in a model, changes the DOT structure after `toDot` (injection);
 - any exception from the documented APIs that is not a typed, coded error;
 - the adapter starting a shell, or passing user data where a command or option belongs;
+- DOT that passes `sanitize` and still makes Graphviz read a file or write a `javascript:` (or other non-allowed) link;
 - a defect in the release pipeline or published artifacts.
 
 Out of scope:

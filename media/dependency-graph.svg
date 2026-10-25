@@ -1,43 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1684" height="275pt" viewBox="0 0 1263 275.37"><g class="graph" transform="translate(4 271.37)"><title>dependency_graph</title><path fill="#fff" stroke="transparent" d="M-4 4v-275.37h1263V4z"/><g class="node"><title>@ts-graphviz/adapter</title><a xlink:href="https://www.npmjs.com/package/@ts-graphviz/adapter" xlink:title="&lt;TABLE&gt;">
-<path fill="#f0f0f0" stroke="transparent" d="M296.5-239.37v-21h340v21z"/>
-<path fill="none" stroke="#000" d="M296.5-239.37v-21h340v21z"/>
-<text x="389" y="-246.17" font-family="Times,serif" font-size="14">@ts-graphviz/adapter</text>
-<path fill="none" stroke="#000" d="M296.5-216.37v-21h340v21z"/>
-<text x="299.5" y="-223.17" font-family="Times,serif" font-size="14">Graphviz Runtime adapters for Cross Platform</text>
-<path fill="none" stroke="#000" d="M293.5-213.37v-50h346v50z"/>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1649pt" height="271pt" viewBox="0 0 1649 271.27"><g class="graph" transform="translate(4 267.27)"><title>dependency_graph</title><path fill="#fff" stroke="transparent" d="M-4 4v-271.27h1649V4z"/><g class="node"><title>@ts-graphviz/adapter</title><a xlink:href="https://www.npmjs.com/package/@ts-graphviz/adapter" xlink:title="&lt;TABLE&gt;">
+<path fill="#f0f0f0" stroke="transparent" d="M682.5-174.05v-21h340v21z"/>
+<path fill="none" stroke="#000" d="M682.5-174.05v-21h340v21z"/>
+<text x="775" y="-180.85" font-family="Times,serif" font-size="14">@ts-graphviz/adapter</text>
+<path fill="none" stroke="#000" d="M682.5-151.05v-21h340v21z"/>
+<text x="685.5" y="-157.85" font-family="Times,serif" font-size="14">Graphviz Runtime adapters for Cross Platform</text>
+<path fill="none" stroke="#000" d="M679.5-148.05v-50h346v50z"/>
 </a></g><g class="node"><title>ts-graphviz</title><a xlink:href="https://www.npmjs.com/package/ts-graphviz" xlink:title="&lt;TABLE&gt;">
-<path fill="#f0f0f0" stroke="transparent" d="M711.5-87.37v-21h231v21z"/>
-<path fill="none" stroke="#000" d="M711.5-87.37v-21h231v21z"/>
-<text x="786.5" y="-94.17" font-family="Times,serif" font-size="14">ts-graphviz</text>
-<path fill="none" stroke="#000" d="M711.5-64.37v-21h231v21z"/>
-<text x="714.5" y="-71.17" font-family="Times,serif" font-size="14">Graphviz library for TypeScript</text>
-<path fill="none" stroke="#000" d="M708-61.37v-50h237v50z"/>
-</a></g><g class="edge"><title>@ts-graphviz/adapter-&gt;ts-graphviz</title><path fill="none" stroke="#000" d="M649.68-206.04c4.86 1.79 9.65 3.68 14.32 5.67 49.1 20.92 98.13 58.49 129.07 84.76"/><path stroke="#000" d="m648.51-202.74-8.27-6.63 10.6.02z"/></g><g class="node"><title>@ts-graphviz/ast</title><a xlink:href="https://www.npmjs.com/package/@ts-graphviz/ast" xlink:title="&lt;TABLE&gt;">
-<path fill="#f0f0f0" stroke="transparent" d="M302.5-163.37v-21h328v21z"/>
-<path fill="none" stroke="#000" d="M302.5-163.37v-21h328v21z"/>
-<text x="406" y="-170.17" font-family="Times,serif" font-size="14">@ts-graphviz/ast</text>
-<path fill="none" stroke="#000" d="M302.5-140.37v-21h328v21z"/>
-<text x="305.5" y="-147.17" font-family="Times,serif" font-size="14">Graphviz AST(Abstract Syntax Tree) Utilities</text>
-<path fill="none" stroke="#000" d="M299.5-137.37v-50h334v50z"/>
-</a></g><g class="edge"><title>@ts-graphviz/ast-&gt;ts-graphviz</title><path fill="none" stroke="#000" d="M630.69-131.33c11.28 2.3 22.47 4.64 33.31 6.96 13.1 2.8 26.76 5.84 40.36 8.94"/><path stroke="#000" d="m629.85-127.93-9.1-5.42 10.5-1.44z"/></g><g class="node"><title>@ts-graphviz/common</title><a xlink:href="https://www.npmjs.com/package/@ts-graphviz/common" xlink:title="&lt;TABLE&gt;">
-<path fill="#f0f0f0" stroke="transparent" d="M11.5-87.37v-21h211v21z"/>
-<path fill="none" stroke="#000" d="M11.5-87.37v-21h211v21z"/>
-<text x="37" y="-94.17" font-family="Times,serif" font-size="14">@ts-graphviz/common</text>
-<path fill="none" stroke="#000" d="M11.5-64.37v-21h211v21z"/>
-<text x="14.5" y="-71.17" font-family="Times,serif" font-size="14">Graphviz Types and Utilities</text>
-<path fill="none" stroke="#000" d="M8-61.37v-50h217v50z"/>
-</a></g><g class="edge"><title>@ts-graphviz/common-&gt;@ts-graphviz/adapter</title><path fill="none" stroke="#000" d="M155.1-122.45c28.89-25.67 71.01-58.87 113.9-77.92 7.3-3.25 14.88-6.21 22.62-8.93"/><path stroke="#000" d="m157.08-119.52-9.77 4.1 5.08-9.3z"/></g><g class="edge"><title>@ts-graphviz/common-&gt;@ts-graphviz/ast</title><path fill="none" stroke="#000" d="M240.05-117.72c9.78-2.31 19.52-4.56 28.95-6.65 13.65-3.03 27.87-6.05 42.14-8.98"/><path stroke="#000" d="m240.8-114.3-10.54-1.08 8.92-5.73z"/></g><g class="node"><title>@ts-graphviz/core</title><a xlink:href="https://www.npmjs.com/package/@ts-graphviz/core" xlink:title="&lt;TABLE&gt;">
-<path fill="#f0f0f0" stroke="transparent" d="M280.5-87.37v-21h373v21z"/>
-<path fill="none" stroke="#000" d="M280.5-87.37v-21h373v21z"/>
-<text x="402" y="-94.17" font-family="Times,serif" font-size="14">@ts-graphviz/core</text>
-<path fill="none" stroke="#000" d="M280.5-64.37v-21h373v21z"/>
-<text x="283.5" y="-71.17" font-family="Times,serif" font-size="14">Graphviz Models for Object-Oriented Programming</text>
-<path fill="none" stroke="#000" d="M277-61.37v-50h379v50z"/>
-</a></g><g class="edge"><title>@ts-graphviz/common-&gt;@ts-graphviz/core</title><path fill="none" stroke="#000" d="M243.41-86.37h25.28"/><path stroke="#000" d="m243.38-82.87-10-3.5 10-3.5z"/></g><g class="node"><title>@ts-graphviz/react</title><a xlink:href="https://www.npmjs.com/package/@ts-graphviz/react" xlink:title="&lt;TABLE&gt;">
-<path fill="#f0f0f0" stroke="transparent" d="M1000-39.37v-21h244v21z"/>
-<path fill="none" stroke="#000" d="M1000-39.37v-21h244v21z"/>
-<text x="1054" y="-46.17" font-family="Times,serif" font-size="14">@ts-graphviz/react</text>
-<path fill="none" stroke="#000" d="M1000-16.37v-21h244v21z"/>
-<text x="1003" y="-23.17" font-family="Times,serif" font-size="14">Graphviz-dot Renderer for React.</text>
-<path fill="none" stroke="#000" d="M997-13.37v-50h250v50z"/>
-</a></g><g class="edge"><title>@ts-graphviz/common-&gt;@ts-graphviz/react</title><path fill="none" stroke="#000" d="M187.72-53.36c25.07 10.12 53.9 19.93 81.28 24.99 251.1 46.42 550.97 25.69 719.65 7.26"/><path stroke="#000" d="m186.21-50.2-7.91-7.05 10.58.58z"/></g><g class="edge"><title>@ts-graphviz/common-&gt;ts-graphviz</title><path fill="none" stroke="#000" d="M228.54-55.22c13.54 2.81 27.25 5.22 40.46 6.85 174.23 21.52 220.62 20.24 395 0 17.45-2.03 35.76-5.25 53.52-8.97"/><path stroke="#000" d="m227.75-51.81-9.03-5.54 10.51-1.31z"/></g><g class="edge"><title>@ts-graphviz/core-&gt;ts-graphviz</title><path fill="none" stroke="#000" d="M674.17-86.37h25.44"/><path stroke="#000" d="m674.04-82.87-10-3.5 10-3.5z"/></g><g class="edge"><title>ts-graphviz-&gt;@ts-graphviz/react</title><path fill="none" stroke="#000" d="M963.26-64.17c8.56 1.4 17.16 2.81 25.7 4.2"/><path stroke="#000" d="m962.55-60.74-9.3-5.07 10.43-1.84z"/></g></g></svg>
+<path fill="#f0f0f0" stroke="transparent" d="M1097.5-117.05v-21h231v21z"/>
+<path fill="none" stroke="#000" d="M1097.5-117.05v-21h231v21z"/>
+<text x="1172.5" y="-123.85" font-family="Times,serif" font-size="14">ts-graphviz</text>
+<path fill="none" stroke="#000" d="M1097.5-94.05v-21h231v21z"/>
+<text x="1100.5" y="-100.85" font-family="Times,serif" font-size="14">Graphviz library for TypeScript</text>
+<path fill="none" stroke="#000" d="M1094-91.05v-50h237v50z"/>
+</a></g><g class="edge"><title>@ts-graphviz/adapter-&gt;ts-graphviz</title><path fill="none" stroke="#000" d="M1043.48-142.8c14.34 2.28 28.58 4.55 42.36 6.74"/><path stroke="#000" d="m1042.87-139.35-9.32-5.03 10.42-1.89z"/></g><g class="node"><title>@ts-graphviz/ast</title><a xlink:href="https://www.npmjs.com/package/@ts-graphviz/ast" xlink:title="&lt;TABLE&gt;">
+<path fill="#f0f0f0" stroke="transparent" d="M280-117.05v-21h328v21z"/>
+<path fill="none" stroke="#000" d="M280-117.05v-21h328v21z"/>
+<text x="383.5" y="-123.85" font-family="Times,serif" font-size="14">@ts-graphviz/ast</text>
+<path fill="none" stroke="#000" d="M280-94.05v-21h328v21z"/>
+<text x="283" y="-100.85" font-family="Times,serif" font-size="14">Graphviz AST(Abstract Syntax Tree) Utilities</text>
+<path fill="none" stroke="#000" d="M277-91.05v-50h334v50z"/>
+</a></g><g class="edge"><title>@ts-graphviz/ast-&gt;@ts-graphviz/adapter</title><path fill="none" stroke="#000" d="M629.29-141.89c13.95-1.96 28.01-3.93 41.93-5.88"/><path stroke="#000" d="m629.55-138.39-10.39-2.08 9.42-4.86z"/></g><g class="edge"><title>@ts-graphviz/ast-&gt;ts-graphviz</title><path fill="none" stroke="#000" d="M629.49-116.05h456.39"/><path stroke="#000" d="m629.41-112.55-10-3.5 10-3.5z"/></g><g class="node"><title>@ts-graphviz/common</title><a xlink:href="https://www.npmjs.com/package/@ts-graphviz/common" xlink:title="&lt;TABLE&gt;">
+<path fill="#f0f0f0" stroke="transparent" d="M11.5-117.05v-21h211v21z"/>
+<path fill="none" stroke="#000" d="M11.5-117.05v-21h211v21z"/>
+<text x="37" y="-123.85" font-family="Times,serif" font-size="14">@ts-graphviz/common</text>
+<path fill="none" stroke="#000" d="M11.5-94.05v-21h211v21z"/>
+<text x="14.5" y="-100.85" font-family="Times,serif" font-size="14">Graphviz Types and Utilities</text>
+<path fill="none" stroke="#000" d="M8-91.05v-50h217v50z"/>
+</a></g><g class="edge"><title>@ts-graphviz/common-&gt;@ts-graphviz/adapter</title><path fill="none" stroke="#000" d="M230.63-147.21c12.87-2.71 25.85-5.09 38.37-6.84 133.9-18.76 286.72-23.11 402.23-22.98"/><path stroke="#000" d="m231.35-143.78-10.52-1.29 9.03-5.55z"/></g><g class="edge"><title>@ts-graphviz/common-&gt;@ts-graphviz/ast</title><path fill="none" stroke="#000" d="M243.32-116.05h25.45"/><path stroke="#000" d="m243.18-112.55-10-3.5 10-3.5z"/></g><g class="node"><title>@ts-graphviz/core</title><a xlink:href="https://www.npmjs.com/package/@ts-graphviz/core" xlink:title="&lt;TABLE&gt;">
+<path fill="#f0f0f0" stroke="transparent" d="M666.5-60.05v-21h373v21z"/>
+<path fill="none" stroke="#000" d="M666.5-60.05v-21h373v21z"/>
+<text x="788" y="-66.85" font-family="Times,serif" font-size="14">@ts-graphviz/core</text>
+<path fill="none" stroke="#000" d="M666.5-37.05v-21h373v21z"/>
+<text x="669.5" y="-43.85" font-family="Times,serif" font-size="14">Graphviz Models for Object-Oriented Programming</text>
+<path fill="none" stroke="#000" d="M663-34.05v-50h379v50z"/>
+</a></g><g class="edge"><title>@ts-graphviz/common-&gt;@ts-graphviz/core</title><path fill="none" stroke="#000" d="M230.63-84.89c12.87 2.71 25.85 5.09 38.37 6.84 127.63 17.88 272.46 22.67 385.78 22.97"/><path stroke="#000" d="m229.86-81.48-9.03-5.54 10.52-1.3z"/></g><g class="node"><title>@ts-graphviz/react</title><a xlink:href="https://www.npmjs.com/package/@ts-graphviz/react" xlink:title="&lt;TABLE&gt;">
+<path fill="#f0f0f0" stroke="transparent" d="M1386-60.05v-21h244v21z"/>
+<path fill="none" stroke="#000" d="M1386-60.05v-21h244v21z"/>
+<text x="1440" y="-66.85" font-family="Times,serif" font-size="14">@ts-graphviz/react</text>
+<path fill="none" stroke="#000" d="M1386-37.05v-21h244v21z"/>
+<text x="1389" y="-43.85" font-family="Times,serif" font-size="14">Graphviz-dot Renderer for React.</text>
+<path fill="none" stroke="#000" d="M1383-34.05v-50h250v50z"/>
+</a></g><g class="edge"><title>@ts-graphviz/common-&gt;@ts-graphviz/react</title><path fill="none" stroke="#000" d="M183.65-82.69C209.63-71.04 240.1-59.12 269-52.05c337.43 82.55 433.91 45.41 781 31 109.57-4.55 233.55-15.2 324.7-24.08"/><path stroke="#000" d="m181.93-79.62-7.64-7.34 10.55.97z"/></g><g class="edge"><title>@ts-graphviz/common-&gt;ts-graphviz</title><path fill="none" stroke="#000" d="M184.71-149.28c25.76-11.32 55.82-22.85 84.29-29.77 337.58-82.04 445.8-123.28 781-32 46.92 12.78 94.12 43.03 125.27 65.99"/><path stroke="#000" d="m185.98-146.01-10.56.88 7.7-7.27z"/></g><g class="edge"><title>@ts-graphviz/core-&gt;ts-graphviz</title><path fill="none" stroke="#000" d="M1045.56-89.63c13.59-2.16 27.08-4.31 40.15-6.39"/><path stroke="#000" d="m1046.07-86.17-10.42-1.88 9.32-5.03z"/></g><g class="edge"><title>ts-graphviz-&gt;@ts-graphviz/react</title><path fill="none" stroke="#000" d="M1349.26-89.68c8.56 1.66 17.16 3.33 25.7 4.99"/><path stroke="#000" d="m1348.4-86.29-9.15-5.34 10.48-1.53z"/></g></g></svg>

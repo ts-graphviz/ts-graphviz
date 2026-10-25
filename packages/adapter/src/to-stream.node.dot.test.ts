@@ -24,7 +24,9 @@ describe.skipIf(!hasDot)(
     });
 
     it('reports invalid DOT as CommandExecutionError with the stderr', async () => {
-      await expect(toStream('digraph { a -> }')).rejects.toMatchObject({
+      await expect(
+        toStream('digraph { a -> }', { sanitize: false }),
+      ).rejects.toMatchObject({
         name: 'CommandExecutionError',
         code: 'TSG_ERR_COMMAND_FAILED',
         exit: { code: 1, stderr: expect.stringContaining('syntax error') },
@@ -62,7 +64,10 @@ describe.skipIf(!hasDot)(
 
     it('reports an argument the OS cannot pass as CommandExecutionError', async () => {
       await expect(
-        toStream('digraph {}', { attributes: { graph: { label: 'a\0b' } } }),
+        toStream('digraph {}', {
+          attributes: { graph: { label: 'a\0b' } },
+          sanitize: false,
+        }),
       ).rejects.toMatchObject({
         name: 'CommandExecutionError',
         code: 'TSG_ERR_COMMAND_FAILED',
@@ -84,6 +89,7 @@ describe.skipIf(!hasDot)(
       await expect(
         toStream(`digraph { ${'a -> b; '.repeat(50_000)} }`, {
           dotCommand: script,
+          sanitize: false,
         }),
       ).rejects.toMatchObject({
         name: 'CommandExecutionError',
@@ -106,6 +112,7 @@ describe.skipIf(!hasDot)(
       const started = Date.now();
       const error = await toStream(`digraph { ${'a -> b; '.repeat(50_000)} }`, {
         dotCommand: script,
+        sanitize: false,
       }).catch((e: unknown) => e);
       expect(error).toMatchObject({ name: 'CommandExecutionError' });
       // Which comes first is up to the OS: the script exits with 3, or the
@@ -121,6 +128,101 @@ describe.skipIf(!hasDot)(
       writeFileSync(path, 'X'.repeat(5000));
       await toFile('digraph { a }', path, { format: 'dot' });
       expect(readFileSync(path, 'utf8')).not.toContain('XXXX');
+    });
+  },
+);
+
+describe.skipIf(!hasDot)(
+  '[SM-7] toStream / toFile check the source with sanitize (#1681)',
+  () => {
+    const secret = join(dir, 'secret.eps');
+    writeFileSync(
+      secret,
+      '%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 10 10\n% SECRET-CONTENT\n',
+    );
+    const leak = `digraph { a [shape=epsf shapefile="${secret}"] }`;
+
+    it('rejects a source that reads a file, before running the command', async () => {
+      await expect(toStream(leak, { format: 'ps' })).rejects.toMatchObject({
+        name: 'SecurityError',
+        code: 'TSG_ERR_UNSAFE_DOT',
+      });
+      const path = join(dir, 'not-written.ps');
+      await expect(toFile(leak, path, { format: 'ps' })).rejects.toMatchObject({
+        code: 'TSG_ERR_UNSAFE_DOT',
+      });
+      expect(() => readFileSync(path)).toThrow();
+    });
+
+    it('rejects a javascript: link', async () => {
+      await expect(
+        toStream('digraph { a [URL="javascript:alert(1)"] }'),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+    });
+
+    it('rejects DOT that does not parse with DotSyntaxError', async () => {
+      await expect(toStream('digraph { a -> }')).rejects.toMatchObject({
+        name: 'DotSyntaxError',
+        code: 'TSG_ERR_DOT_SYNTAX',
+      });
+    });
+
+    it('passes parser limits on', async () => {
+      await expect(
+        toStream('digraph { a; b; c }', { sanitize: { maxASTNodes: 3 } }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_DOT_SYNTAX' });
+    });
+
+    it('checks the attributes option, which reaches dot as -G/-N/-E arguments', async () => {
+      await expect(
+        toStream('digraph { a }', {
+          format: 'ps',
+          attributes: { node: { shape: 'epsf', shapefile: secret } as never },
+        }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+      // dot splits an argument at its first '=': this key sets `image`.
+      await expect(
+        toStream('digraph { a }', {
+          attributes: { node: { [`image=${secret}`]: true } as never },
+        }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+      // A NUL is refused by the parser before the safety rules run.
+      await expect(
+        toStream('digraph { a }', {
+          attributes: { graph: { label: 'a\0b' } },
+        }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_DOT_SYNTAX' });
+      const stream = await toStream('digraph { a }', {
+        format: 'dot',
+        attributes: {
+          graph: { rankdir: 'LR', label: 'Title "quoted"' },
+          node: { shape: 'box', fontname: 'Helvetica' },
+          edge: { color: 'red' },
+        },
+      });
+      expect(await new Response(stream).text()).toContain('rankdir=LR');
+    });
+
+    it('passes the policy on, and checks for its own format', async () => {
+      await expect(
+        toStream('digraph { a [foo=x] }', { sanitize: { policy: 'strict' } }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+      await expect(
+        toStream('digraph { a [fontname="Times New Roman"] }', {
+          format: 'ps',
+        }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+      const svg = await toStream('digraph { a [fontname="Times New Roman"] }');
+      expect(await new Response(svg).text()).toContain('Times New Roman');
+      await expect(
+        toStream('digraph { a }', { format: 'vml' as 'svg' }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+    });
+
+    it('renders the source unchecked with sanitize: false', async () => {
+      // Graphviz itself copies the file into the output: what sanitize prevents.
+      const stream = await toStream(leak, { format: 'ps', sanitize: false });
+      expect(await new Response(stream).text()).toContain('SECRET-CONTENT');
     });
   },
 );

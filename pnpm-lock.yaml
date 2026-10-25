@@ -336,6 +336,9 @@ importers:
 
   packages/adapter:
     dependencies:
+      '@ts-graphviz/ast':
+        specifier: workspace:^
+        version: link:../ast
       '@ts-graphviz/common':
         specifier: workspace:^
         version: link:../common

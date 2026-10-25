@@ -46,7 +46,10 @@ describe('[SM-4] toStream (Node adapter)', () => {
       pipelineMock.mockResolvedValue(undefined);
 
       // Act
-      const resultPromise = toStream('input-data', { layout: 'dot' });
+      const resultPromise = toStream('input-data', {
+        layout: 'dot',
+        sanitize: false,
+      });
 
       // Assert pipeline called with Readable.from and stdin
       expect(pipelineMock).toHaveBeenCalledTimes(1);
@@ -86,7 +89,7 @@ describe('[SM-4] toStream (Node adapter)', () => {
       pipelineMock.mockResolvedValue(undefined);
 
       // Act: call toStream first to set up listeners
-      const promise = toStream('dot', { layout: 'dot' });
+      const promise = toStream('dot', { layout: 'dot', sanitize: false });
       // Write stderr data after listeners are attached
       stderr.write('error occurred');
       stderr.end();
@@ -127,7 +130,7 @@ describe('[SM-4] toStream (Node adapter)', () => {
       pipelineMock.mockResolvedValue(undefined);
 
       // Act
-      const promise = toStream('dot', { layout: 'dot' });
+      const promise = toStream('dot', { layout: 'dot', sanitize: false });
       const error = new Error('spawn failed');
       for (const handler of events.error) handler(error);
 
@@ -146,9 +149,9 @@ describe('[SM-4] toStream (Node adapter)', () => {
       });
 
       // Act & Assert
-      await expect(toStream('dot', { layout: 'dot' })).rejects.toThrow(
-        'spawn crash',
-      );
+      await expect(
+        toStream('dot', { layout: 'dot', sanitize: false }),
+      ).rejects.toThrow('spawn crash');
     });
   });
 
@@ -175,7 +178,7 @@ describe('[SM-4] toStream (Node adapter)', () => {
       const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
       pipelineMock.mockRejectedValue(epipe);
 
-      const promise = toStream('dot', { layout: 'dot' });
+      const promise = toStream('dot', { layout: 'dot', sanitize: false });
       await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
       await expect(promise).rejects.toMatchObject({
         command: 'dot',
@@ -203,7 +206,7 @@ describe('[SM-4] toStream (Node adapter)', () => {
       const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
       pipelineMock.mockRejectedValue(epipe);
 
-      const promise = toStream('dot', { layout: 'dot' });
+      const promise = toStream('dot', { layout: 'dot', sanitize: false });
       stderr.write('syntax error in line 1');
       await new Promise((r) => setImmediate(r));
       for (const handler of handlers.close ?? []) handler(1, null);
