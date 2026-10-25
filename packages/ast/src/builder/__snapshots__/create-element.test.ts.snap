@@ -96,7 +96,7 @@ exports[`createElement > NodeRef 1`] = `
 }
 `;
 
-exports[`createElement > NodeRefGroup 1`] = `
+exports[`createElement > NodeRefList 1`] = `
 {
   "refs": [
     {
@@ -116,7 +116,7 @@ exports[`createElement > NodeRefGroup 1`] = `
       "type": "NodeRef",
     },
   ],
-  "type": "NodeRefGroup",
+  "type": "NodeRefList",
 }
 `;
 

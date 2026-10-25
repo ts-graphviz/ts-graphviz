@@ -26,6 +26,18 @@
   let htmlNestingDepth = 0;
   let edgeChainDepth = 0;
 
+  /** A NodeRef for node reference data from `_node_ref_data`. */
+  function nodeRefOf(ref) {
+    return b.createElement('NodeRef', ref, []);
+  }
+
+  /** The edge target for one or more node references. */
+  function edgeTargetOf(refs) {
+    return refs.length === 1
+      ? nodeRefOf(refs[0])
+      : b.createElement('NodeRefList', {}, refs.map(nodeRefOf));
+  }
+
   const b = new Builder({
     locationFunction: location,
     maxASTNodes: options.maxASTNodes,
@@ -73,7 +85,13 @@ AttibutesItem = __ v:_attibutes_item __ { return v; }
 
 Comment = __ v:_comment __ { return v; }
 
-ClusterStatements = (Attribute / AttributeList / Edge / Subgraph / Node / Comment)*
+// A statement that starts with a subgraph or node references is read
+// once and becomes an Edge, a Subgraph or Node(s) by what follows it, so no
+// part of it is parsed twice (backtracking over a subgraph body would be
+// exponential in its nesting).
+ClusterStatements = v:(Attribute / AttributeList / HeadStatement / Comment)* { return v.flat(); }
+
+HeadStatement = __ v:_head_statement __ { return v; }
 
 // A DOT source may hold any number of root graphs (dot processes them in
 // order), interleaved with comments.
@@ -150,6 +168,24 @@ _edge
       );
     }
 
+_head_statement
+  // `{ ... }` / `subgraph s { ... }`, alone or as the first edge target.
+  = head:_subgraph tail:(rhs:_edge_rhs _children:(__ v:_attribute_list { return v; })? { return { rhs, _children }; })? _ ";"? {
+      if (!tail) return head;
+      edgeChainDepth = 0;
+      return b.createElement('Edge', { targets: [head, ...tail.rhs] }, tail._children ?? []);
+    }
+  // `a`, `a:p`, `a, b`: an edge when an edge operator follows, node
+  // statements otherwise (a port there means nothing to Graphviz and is
+  // dropped, as Graphviz drops it).
+  / refs:_node_refs rhs:_edge_rhs? _children:(__ v:_attribute_list { return v; })? _ ";"? {
+      if (rhs) {
+        edgeChainDepth = 0;
+        return b.createElement('Edge', { targets: [edgeTargetOf(refs), ...rhs] }, _children ?? []);
+      }
+      return refs.map((ref) => b.createElement('Node', { id: ref.id }, [...(_children ?? [])]));
+    }
+
 _node
   = id:_literal _ _children:_attribute_list? _ ";"? {
       return b.createElement(
@@ -177,19 +213,23 @@ _attibutes_item
 
 _attribute_list = _ "[" list:(AttibutesItem / Comment)* __ "]" { return list; }
 
-_edge_target_group
-  = "{" id:NodeRef rest:(("," / ";")? v:NodeRef { return v; })* ("," / ";")? __ "}" {
-      return b.createElement('NodeRefGroup', {}, [id, ...rest]);
-    }
+// One or more node references (`a:p, b`), read as data: the AST nodes are
+// made once the statement they belong to is known, so backtracking does not
+// create (and count against maxASTNodes) nodes that are thrown away.
+_node_refs = first:_node_ref_data rest:(__ "," __ v:_node_ref_data { return v; })* { return [first, ...rest]; }
 
+_node_ref_data = id:_literal port:_port? { return { id, ...port, location: location() }; }
+
+// A subgraph target is a whole subgraph; Graphviz ignores ports inside it.
+// Several node references are a NodeRefList, which keeps their ports.
 _edge_target
-  = _edge_target_group
-  / NodeRef
+  = _subgraph
+  / refs:_node_refs { return edgeTargetOf(refs); }
 
 _edge_operator = operator:("->" / "--") { return { operator, location: location() }; }
 
 _edge_rhs
-  = _ edgeop:_edge_operator _ id:_edge_target _ rest:_edge_rhs? {
+  = __ edgeop:_edge_operator __ id:_edge_target rest:_edge_rhs? {
       // Track edge chain depth to prevent stack overflow from deeply chained edges
       // Each edge operator (-> or --) represents one link in the chain
       //

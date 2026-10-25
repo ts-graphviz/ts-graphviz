@@ -22,7 +22,7 @@ export type ASTType =
   | 'Comment'
   | 'AttributeList'
   | 'NodeRef'
-  | 'NodeRefGroup'
+  | 'NodeRefList'
   | 'Edge'
   | 'Node'
   | 'Subgraph';

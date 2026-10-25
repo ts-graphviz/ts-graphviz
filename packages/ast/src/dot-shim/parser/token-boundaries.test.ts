@@ -45,10 +45,11 @@ describe('[SM-1] token boundaries', () => {
       expect(() => parse(dot)).toThrow();
     });
 
-    it('reads `a -> subgraph s { ... }` as an edge to a subgraph or not at all', () => {
-      // dot: subgraph s { b c }, a -> b, a -> c. Edges to subgraphs are not
-      // supported yet; the parser must not read `subgraph` as a node.
-      expect(() => parse('digraph { a -> subgraph s { b c } }')).toThrow();
+    it('reads `a -> subgraph s { ... }` as an edge to a subgraph', () => {
+      // dot: subgraph s { b c }, a -> b, a -> c (#1708).
+      expect(reprint('digraph { a -> subgraph s { b c } }')).toBe(
+        'digraph { a -> subgraph s { b; c; }; }',
+      );
     });
 
     it.each([

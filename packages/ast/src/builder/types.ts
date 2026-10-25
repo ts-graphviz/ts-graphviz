@@ -20,8 +20,8 @@ import type {
   NodeASTProperties,
   NodeRefASTNode,
   NodeRefASTProperties,
-  NodeRefGroupASTNode,
-  NodeRefGroupASTProperties,
+  NodeRefListASTNode,
+  NodeRefListASTProperties,
   SubgraphASTNode,
   SubgraphASTProperties,
 } from '../types.js';
@@ -167,18 +167,18 @@ export interface CreateElement {
   ): NodeRefASTNode;
 
   /**
-   * Creates a {@link NodeRefGroupASTNode} with the given type, properties, and children.
+   * Creates a {@link NodeRefListASTNode} with the given type, properties, and children.
    *
    * @param type The type of the AST node.
    * @param props The properties of the AST node.
    * @param children The children of the AST node.
-   * @returns A {@link NodeRefGroupASTNode} with the given type, properties, and children.
+   * @returns A {@link NodeRefListASTNode} with the given type, properties, and children.
    */
   (
-    type: 'NodeRefGroup',
-    props: NodeRefGroupASTProperties,
-    children?: ASTChildNode<NodeRefGroupASTNode>[],
-  ): NodeRefGroupASTNode;
+    type: 'NodeRefList',
+    props: NodeRefListASTProperties,
+    children?: ASTChildNode<NodeRefListASTNode>[],
+  ): NodeRefListASTNode;
 
   /**
    * Creates an {@link EdgeASTNode} with the given type, properties, and children.

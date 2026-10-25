@@ -1247,21 +1247,9 @@
               "type": "NodeRef",
             },
             {
-              "location": {
-                "end": {
-                  "column": 16,
-                  "line": 18,
-                  "offset": 353,
-                },
-                "source": undefined,
-                "start": {
-                  "column": 10,
-                  "line": 18,
-                  "offset": 347,
-                },
-              },
-              "refs": [
+              "children": [
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -1282,9 +1270,9 @@
                   },
                   "location": {
                     "end": {
-                      "column": 12,
+                      "column": 15,
                       "line": 18,
-                      "offset": 349,
+                      "offset": 352,
                     },
                     "source": undefined,
                     "start": {
@@ -1293,9 +1281,10 @@
                       "offset": 348,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -1322,15 +1311,28 @@
                     },
                     "source": undefined,
                     "start": {
-                      "column": 14,
+                      "column": 11,
                       "line": 18,
-                      "offset": 351,
+                      "offset": 348,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
               ],
-              "type": "NodeRefGroup",
+              "location": {
+                "end": {
+                  "column": 16,
+                  "line": 18,
+                  "offset": 353,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 10,
+                  "line": 18,
+                  "offset": 347,
+                },
+              },
+              "type": "Subgraph",
             },
           ],
           "type": "Edge",
@@ -1386,21 +1388,9 @@
               "type": "NodeRef",
             },
             {
-              "location": {
-                "end": {
-                  "column": 22,
-                  "line": 20,
-                  "offset": 392,
-                },
-                "source": undefined,
-                "start": {
-                  "column": 10,
-                  "line": 20,
-                  "offset": 380,
-                },
-              },
-              "refs": [
+              "children": [
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -1421,9 +1411,9 @@
                   },
                   "location": {
                     "end": {
-                      "column": 13,
+                      "column": 21,
                       "line": 20,
-                      "offset": 383,
+                      "offset": 391,
                     },
                     "source": undefined,
                     "start": {
@@ -1432,9 +1422,10 @@
                       "offset": 381,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -1455,20 +1446,21 @@
                   },
                   "location": {
                     "end": {
-                      "column": 17,
+                      "column": 21,
                       "line": 20,
-                      "offset": 387,
+                      "offset": 391,
                     },
                     "source": undefined,
                     "start": {
-                      "column": 15,
+                      "column": 11,
                       "line": 20,
-                      "offset": 385,
+                      "offset": 381,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -1495,15 +1487,28 @@
                     },
                     "source": undefined,
                     "start": {
-                      "column": 19,
+                      "column": 11,
                       "line": 20,
-                      "offset": 389,
+                      "offset": 381,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
               ],
-              "type": "NodeRefGroup",
+              "location": {
+                "end": {
+                  "column": 22,
+                  "line": 20,
+                  "offset": 392,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 10,
+                  "line": 20,
+                  "offset": 380,
+                },
+              },
+              "type": "Subgraph",
             },
           ],
           "type": "Edge",
@@ -1559,21 +1564,9 @@
               "type": "NodeRef",
             },
             {
-              "location": {
-                "end": {
-                  "column": 22,
-                  "line": 21,
-                  "offset": 415,
-                },
-                "source": undefined,
-                "start": {
-                  "column": 10,
-                  "line": 21,
-                  "offset": 403,
-                },
-              },
-              "refs": [
+              "children": [
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -1594,9 +1587,9 @@
                   },
                   "location": {
                     "end": {
-                      "column": 13,
+                      "column": 21,
                       "line": 21,
-                      "offset": 406,
+                      "offset": 414,
                     },
                     "source": undefined,
                     "start": {
@@ -1605,9 +1598,10 @@
                       "offset": 404,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -1628,20 +1622,21 @@
                   },
                   "location": {
                     "end": {
-                      "column": 17,
+                      "column": 21,
                       "line": 21,
-                      "offset": 410,
+                      "offset": 414,
                     },
                     "source": undefined,
                     "start": {
-                      "column": 15,
+                      "column": 11,
                       "line": 21,
-                      "offset": 408,
+                      "offset": 404,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -1668,15 +1663,28 @@
                     },
                     "source": undefined,
                     "start": {
-                      "column": 19,
+                      "column": 11,
                       "line": 21,
-                      "offset": 412,
+                      "offset": 404,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
               ],
-              "type": "NodeRefGroup",
+              "location": {
+                "end": {
+                  "column": 22,
+                  "line": 21,
+                  "offset": 415,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 10,
+                  "line": 21,
+                  "offset": 403,
+                },
+              },
+              "type": "Subgraph",
             },
           ],
           "type": "Edge",
@@ -1732,21 +1740,9 @@
               "type": "NodeRef",
             },
             {
-              "location": {
-                "end": {
-                  "column": 19,
-                  "line": 23,
-                  "offset": 436,
-                },
-                "source": undefined,
-                "start": {
-                  "column": 11,
-                  "line": 23,
-                  "offset": 428,
-                },
-              },
-              "refs": [
+              "children": [
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -1767,9 +1763,9 @@
                   },
                   "location": {
                     "end": {
-                      "column": 14,
+                      "column": 18,
                       "line": 23,
-                      "offset": 431,
+                      "offset": 435,
                     },
                     "source": undefined,
                     "start": {
@@ -1778,9 +1774,10 @@
                       "offset": 429,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -1807,15 +1804,28 @@
                     },
                     "source": undefined,
                     "start": {
-                      "column": 16,
+                      "column": 12,
                       "line": 23,
-                      "offset": 433,
+                      "offset": 429,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
               ],
-              "type": "NodeRefGroup",
+              "location": {
+                "end": {
+                  "column": 19,
+                  "line": 23,
+                  "offset": 436,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 11,
+                  "line": 23,
+                  "offset": 428,
+                },
+              },
+              "type": "Subgraph",
             },
           ],
           "type": "Edge",
@@ -1871,21 +1881,9 @@
               "type": "NodeRef",
             },
             {
-              "location": {
-                "end": {
-                  "column": 15,
-                  "line": 24,
-                  "offset": 452,
-                },
-                "source": undefined,
-                "start": {
-                  "column": 11,
-                  "line": 24,
-                  "offset": 448,
-                },
-              },
-              "refs": [
+              "children": [
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -1917,10 +1915,23 @@
                       "offset": 449,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
               ],
-              "type": "NodeRefGroup",
+              "location": {
+                "end": {
+                  "column": 15,
+                  "line": 24,
+                  "offset": 452,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 11,
+                  "line": 24,
+                  "offset": 448,
+                },
+              },
+              "type": "Subgraph",
             },
           ],
           "type": "Edge",
@@ -1976,21 +1987,9 @@
               "type": "NodeRef",
             },
             {
-              "location": {
-                "end": {
-                  "column": 19,
-                  "line": 25,
-                  "offset": 472,
-                },
-                "source": undefined,
-                "start": {
-                  "column": 11,
-                  "line": 25,
-                  "offset": 464,
-                },
-              },
-              "refs": [
+              "children": [
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -2011,9 +2010,9 @@
                   },
                   "location": {
                     "end": {
-                      "column": 14,
+                      "column": 18,
                       "line": 25,
-                      "offset": 467,
+                      "offset": 471,
                     },
                     "source": undefined,
                     "start": {
@@ -2022,9 +2021,10 @@
                       "offset": 465,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
                 {
+                  "children": [],
                   "id": {
                     "kind": "bare",
                     "location": {
@@ -2051,15 +2051,28 @@
                     },
                     "source": undefined,
                     "start": {
-                      "column": 16,
+                      "column": 12,
                       "line": 25,
-                      "offset": 469,
+                      "offset": 465,
                     },
                   },
-                  "type": "NodeRef",
+                  "type": "Node",
                 },
               ],
-              "type": "NodeRefGroup",
+              "location": {
+                "end": {
+                  "column": 19,
+                  "line": 25,
+                  "offset": 472,
+                },
+                "source": undefined,
+                "start": {
+                  "column": 11,
+                  "line": 25,
+                  "offset": 464,
+                },
+              },
+              "type": "Subgraph",
             },
           ],
           "type": "Edge",

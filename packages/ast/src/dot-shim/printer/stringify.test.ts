@@ -483,7 +483,7 @@ describe('stringify', () => {
             },
 
             {
-              type: 'NodeRefGroup',
+              type: 'NodeRefList',
               refs: [
                 {
                   type: 'NodeRef',
@@ -508,7 +508,7 @@ describe('stringify', () => {
 
           children: [],
         }),
-      ).toMatchInlineSnapshot(`""id1":"port1" -> {"id2" "id3"};"`);
+      ).toMatchInlineSnapshot(`""id1":"port1" -> "id2", "id3";"`);
     });
   });
 

@@ -1,16 +1,56 @@
 import type {
   AttributeKey,
   AttributeValue,
+  EdgeModel,
   GraphBaseModel,
+  SubgraphModel,
 } from '@ts-graphviz/common';
 import type {
   AttributeASTNode,
   ClusterStatementASTNode,
+  SubgraphASTNode,
 } from '../../../../types.js';
 import { idFromLiteral, valueFromLiteral } from '../../../literal.js';
 import type { ConvertToModelContext } from '../../types.js';
+import { convertEdge } from '../EdgePlugin.js';
 import { collectAttributes } from './collect-attributes.js';
 import { CommentHolder } from './comment-holder.js';
+import { nodeIdsOf } from './subgraph-nodes.js';
+
+/**
+ * The nodes each subgraph model has had in this conversion, over every
+ * place it is opened: `subgraph s { a } -> subgraph s { b }` reaches both
+ * a and b at each end, as in Graphviz.
+ */
+const subgraphNodes = new WeakMap<SubgraphModel, Set<string>>();
+
+/**
+ * Whether a subgraph target is only a set of nodes (`{a b}`): anonymous and
+ * holding plain node statements. Graphviz keeps no trace of such a subgraph
+ * (`dot -Tcanon` prints only the edges), so it becomes a model group, the
+ * form `fromModel` writes groups in, rather than a model subgraph.
+ */
+function isNodeGroup(target: SubgraphASTNode): boolean {
+  return (
+    target.id === undefined &&
+    target.children.every((c) => c.type === 'Node' && c.children.length === 0)
+  );
+}
+
+function applySubgraph(
+  context: ConvertToModelContext,
+  graph: GraphBaseModel,
+  stmt: SubgraphASTNode,
+): SubgraphModel {
+  const subgraph = stmt.id
+    ? graph.subgraph(idFromLiteral(stmt.id))
+    : graph.subgraph();
+  applyStatements(context, subgraph, stmt.children);
+  const nodes = subgraphNodes.get(subgraph) ?? new Set<string>();
+  for (const id of nodeIdsOf(stmt)) nodes.add(id);
+  subgraphNodes.set(subgraph, nodes);
+  return subgraph;
+}
 
 /**
  * Applies an array of graph statement AST nodes to a graph model within a conversion context.
@@ -28,10 +68,7 @@ export function applyStatements(
   for (const stmt of statements) {
     switch (stmt.type) {
       case 'Subgraph': {
-        const subgraph = stmt.id
-          ? graph.subgraph(idFromLiteral(stmt.id))
-          : graph.subgraph();
-        applyStatements(context, subgraph, stmt.children);
+        const subgraph = applySubgraph(context, graph, stmt);
         commentHolder.apply(subgraph, stmt.location);
         break;
       }
@@ -49,7 +86,26 @@ export function applyStatements(
         break;
       }
       case 'Edge': {
-        const edge = context.convert(stmt);
+        let edge: EdgeModel;
+        if (
+          stmt.targets.some((t) => t.type === 'Subgraph' && !isNodeGroup(t))
+        ) {
+          // As in Graphviz, a subgraph target is a subgraph of the graph
+          // (with its statements) and the edge reaches all of its nodes.
+          // All of them are built before the edge is, so a subgraph opened
+          // at both ends counts its nodes from both.
+          const subgraphs = stmt.targets.map((t) =>
+            t.type === 'Subgraph' && !isNodeGroup(t)
+              ? applySubgraph(context, graph, t)
+              : undefined,
+          );
+          edge = convertEdge(context, stmt, (i) => {
+            const subgraph = subgraphs[i];
+            return subgraph && [...(subgraphNodes.get(subgraph) ?? [])];
+          });
+        } else {
+          edge = context.convert(stmt);
+        }
         commentHolder.apply(edge, stmt.location);
         graph.addEdge(edge);
         break;
