@@ -140,6 +140,7 @@ Graphviz has no sandbox. Verified with Graphviz 2.43: an EPS file named by `shap
 - Layout cost: `layout`, `size`, `dpi`, `maxiter` and the like pass; bound them with `signal` and `maxOutputSize` (SM-4).
 - Text in the output: labels, tooltips, ids and comments are written by Graphviz as text (escaped in SVG); applications that put the output into HTML in other ways must escape it themselves.
 - Attributes that newer Graphviz versions may add: the check is a list of what is known to read files or write links. A strict allowlist mode is planned.
+- Output formats other than those checked: the rules were checked against Graphviz 2.43 for `svg`, `png`, `ps`, `imap` / `ismap` and `cmapx` output. Other formats and renderers (for example `vml`, `pdf`, `fig`, plugins) may write values in ways not covered; render untrusted DOT to the checked formats.
 
 **Evidence**: tests tagged `SM-7` — unit tests for each rule including the encoded and escaped URL forms checked against real Graphviz output, properties that `sanitize` either rejects generated DOT or returns text that parses to the same AST and is a fixed point, and the adapter tests that an unsafe source is rejected before the command starts while `sanitize: false` lets the real `dot` copy a file into its output.
 
