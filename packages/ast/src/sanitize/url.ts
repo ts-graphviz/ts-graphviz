@@ -15,9 +15,10 @@ const MAX_DECODING_ROUNDS = 8;
 /**
  * Decode one level of character references. A named reference other than
  * the XML ones (such as `&colon;` or `&Tab;`) cannot be checked without the
- * HTML entity table, so it gives `undefined`.
+ * HTML entity table, so it gives `undefined`, or is kept as written with
+ * `keepUnknown`.
  */
-function decodeOnce(text: string): string | undefined {
+function decodeOnce(text: string, keepUnknown: boolean): string | undefined {
   let unknown = false;
   const decoded = text.replace(
     /&(?:#(\d+)|#[xX]([0-9a-fA-F]+)|([A-Za-z][A-Za-z0-9]*));?/g,
@@ -32,7 +33,7 @@ function decodeOnce(text: string): string | undefined {
       return char ?? match;
     },
   );
-  return unknown ? undefined : decoded;
+  return unknown && !keepUnknown ? undefined : decoded;
 }
 
 /**
@@ -41,14 +42,17 @@ function decodeOnce(text: string): string | undefined {
  * references it produced (`&amp;#58;` → `&#58;`) into SVG for the browser to
  * decode again; checking every level covers every such chain.
  *
- * Returns `undefined` when a level cannot be decoded or decoding does not
- * settle.
+ * Returns `undefined` when decoding does not settle, or when a level has a
+ * named reference other than the XML ones, unless `keepUnknown` is set.
  */
-export function readings(value: string): string[] | undefined {
+export function readings(
+  value: string,
+  keepUnknown = false,
+): string[] | undefined {
   const levels = [value];
   for (let round = 0; round < MAX_DECODING_ROUNDS; round++) {
     const current = levels[levels.length - 1];
-    const next = decodeOnce(current);
+    const next = decodeOnce(current, keepUnknown);
     if (next === undefined) return undefined;
     if (next === current) return levels;
     levels.push(next);

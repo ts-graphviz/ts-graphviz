@@ -3,13 +3,14 @@ import type { CommonOptions } from './types.js';
 
 /**
  * The DOT text to give the command: the source checked and reprinted by
- * `sanitize`, or the source itself when `options.sanitize` is `false`.
+ * `sanitize` for the output format, or the source itself when
+ * `options.sanitize` is `false`.
  */
 export function sourceToRender(
   dot: string,
-  options: Pick<CommonOptions, 'sanitize'>,
+  options: Pick<CommonOptions, 'sanitize' | 'format'>,
 ): string {
-  const { sanitize: check = true } = options;
+  const { sanitize: check = true, format = 'svg' } = options;
   if (check === false) return dot;
-  return sanitize(dot, check === true ? undefined : check);
+  return sanitize(dot, { ...(check === true ? {} : check), format });
 }

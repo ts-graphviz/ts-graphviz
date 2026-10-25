@@ -124,7 +124,7 @@ const stream = await toStream(dot, {
 
 Graphviz has no sandbox. It reads files named in the DOT and can copy them into its output: an EPS file named by `shapefile` or `image` ends up inside `-Tps` output, images named by `image` or `<IMG SRC>` are embedded in raster output, and their paths appear in SVG. URL attributes are written into SVG links, so a `javascript:` URL becomes script when the SVG is served inline.
 
-`toStream` and `toFile` therefore check every source with `sanitize` from `@ts-graphviz/ast` before starting the command, and render the checked text. A source that names a file to read (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), an unsafe link (`URL`, `href`, `HREF`, … other than relative, `http`, `https` and `mailto`), or text that Graphviz would write raw into PostScript or image maps (font names other than plain names, line breaks in names) is rejected with a `DOMException` named `SecurityError`:
+`toStream` and `toFile` therefore check every source with `sanitize` from `@ts-graphviz/ast` before starting the command, and render the checked text. A source that names a file to read (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), an unsafe link (`URL`, `href`, `HREF`, … other than relative, `http`, `https` and `mailto`), or text that Graphviz would write raw into PostScript, image maps or `plain` output (font names other than plain names, unknown `style` values, line breaks in names, control characters) is rejected with a `DOMException` named `SecurityError`. The check knows the output `format`: it refuses `ismap` and formats whose output has not been checked (e.g. `vml`, `fig`), and requires single-word font names for PostScript:
 
 ```ts
 import { isTsGraphvizError } from '@ts-graphviz/common';
@@ -148,7 +148,7 @@ The check can be run on its own, e.g. when DOT is accepted from users and render
 ```ts
 import { sanitize } from '@ts-graphviz/ast';
 
-const checked = sanitize(userDot); // throws on unsafe or invalid DOT
+const checked = sanitize(userDot, { format: 'svg' }); // throws on unsafe or invalid DOT
 ```
 
 Pass `sanitize: false` only for DOT your application wrote, for example to render your own images. Layout attributes are not checked: bound their cost with `signal` and `maxOutputSize`. For untrusted DOT, also run Graphviz as an unprivileged user with restricted file system access. The [security model](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-model/) (SM-7) lists exactly what is checked.

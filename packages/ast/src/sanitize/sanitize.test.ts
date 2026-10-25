@@ -230,7 +230,7 @@ describe('[SM-7] sanitize', () => {
       sanitize(
         'digraph { a [constructor="x" __proto__="y" toString="z" URL="&constructor;"] }',
       ),
-    ).toThrow(/URL.*cannot be checked/);
+    ).toThrow(/URL.*character reference/);
     expect(() =>
       sanitize('digraph { a [constructor="x" __proto__="y" toString="z"] }'),
     ).not.toThrow();
@@ -240,5 +240,128 @@ describe('[SM-7] sanitize', () => {
     expect(() =>
       sanitize('digraph { layout=neato size="100,100" dpi=300 maxiter=10 }'),
     ).not.toThrow();
+  });
+
+  describe('style, shape and colors', () => {
+    // style is written raw into PostScript; style, shape and colors are raw
+    // space-separated fields of `plain` output (Graphviz 2.43).
+    it.each([
+      'a [style=filled]',
+      'a [style="filled,rounded"]',
+      'a [style="dashed, bold"]',
+      'a -> b [style="setlinewidth(2)"]',
+      'a [style="setlinewidth(.5),filled"]',
+      'a [style=""]',
+      'a [shape=box]',
+      'a [shape=Mrecord]',
+      'a [color="red:blue;0.3" fillcolor="#ff000080"]',
+      'a [color="0.6,0.7,0.7" fontcolor="/accent3/1"]',
+      'a [label=<<table bgcolor="red" style="rounded"><tr><td color="blue">x</td></tr></table>>]',
+    ])('accepts %j', (stmt) => {
+      expect(() => sanitize(`digraph { ${stmt} }`)).not.toThrow();
+    });
+
+    it.each([
+      'a [style="quit"]',
+      'a [style="dashed(quit)"]',
+      'a [style="setlinewidth(quit)"]',
+      'a [style="filled quit"]',
+      'a [shape="box x"]',
+      'a [color="red blue"]',
+      'a [fillcolor="0.6 0.7 0.7"]',
+      'a [color="red\nstop"]',
+      'a [label=<<table style="quit"><tr><td>x</td></tr></table>>]',
+      'a [label=<<table><tr><td bgcolor="red x">x</td></tr></table>>]',
+    ])('rejects %j', (stmt) => {
+      expect(rejection(`digraph { ${stmt} }`).code).toBe('TSG_ERR_UNSAFE_DOT');
+    });
+  });
+
+  describe('characters JSON and XML output cannot hold', () => {
+    const c1 = String.fromCharCode(1);
+    it.each([
+      `a [x="${c1}"]`,
+      `a [tooltip="t${c1}"]`,
+      `"n${c1}"`,
+      `a ["k${c1}"=x]`,
+      'a [label="l&#1;"]',
+      'a [label="l&amp;#x1f;"]',
+      'a [label=<x&#1;>]',
+      'a [label=<<table title="&#2;"><tr><td>x</td></tr></table>>]',
+    ])('rejects a control character in %j', (stmt) => {
+      expect(rejection(`digraph { ${stmt} }`).message).toContain(
+        'control character',
+      );
+    });
+
+    it.each([
+      'a [URL="/" target="&bogus;"]',
+      'a [id="&nbsp;"]',
+      '"n &bogus;"',
+      'a [label=<<table target="&amp;bogus;"><tr><td>x</td></tr></table>>]',
+    ])('rejects a named reference Graphviz copies as written in %j', (stmt) => {
+      expect(rejection(`digraph { ${stmt} }`).message).toContain(
+        'character reference other than',
+      );
+    });
+
+    it('accepts named references in label and tooltip text, which Graphviz decodes', () => {
+      expect(() =>
+        sanitize(
+          'digraph { a [label="&nbsp;&eacute;&bogus;" tooltip="&nbsp;" URL="/"]; b [label=<&nbsp;&eacute;>] }',
+        ),
+      ).not.toThrow();
+    });
+
+    it('rejects a line break in a port, which \\E writes', () => {
+      expect(rejection('digraph { a:"p\nq" -> b }').message).toContain(
+        'line break',
+      );
+    });
+  });
+
+  describe('output formats', () => {
+    function formatRejection(format: string): DOMException & { code: string } {
+      try {
+        sanitize('digraph { a }', { format });
+      } catch (e) {
+        return e as DOMException & { code: string };
+      }
+      throw new Error(`sanitize accepted the format ${format}`);
+    }
+
+    it.each(['svg', 'png', 'png:cairo', 'pdf', 'json', 'plain', 'cmapx', 'PS'])(
+      'accepts %s',
+      (format) => {
+        expect(() => sanitize('digraph { a }', { format })).not.toThrow();
+      },
+    );
+
+    it('rejects ismap, which writes labels raw one area per line', () => {
+      expect(formatRejection('ismap').message).toContain('"ismap"');
+    });
+
+    it.each(['vml', 'fig', 'pic', 'x11', 'cmap'])(
+      'rejects the unchecked %s',
+      (format) => {
+        expect(formatRejection(format).message).toContain(
+          'has not been checked',
+        );
+      },
+    );
+
+    it('requires single-token font names for PostScript, where spaces separate code', () => {
+      const dot = 'digraph { a [fontname="Times New Roman"] }';
+      expect(() => sanitize(dot, { format: 'svg' })).not.toThrow();
+      expect(() => sanitize(dot)).not.toThrow();
+      for (const format of ['ps', 'ps2', 'eps', 'ps:cairo']) {
+        expect(() => sanitize(dot, { format })).toThrow(
+          expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }),
+        );
+      }
+      expect(() =>
+        sanitize('digraph { a [fontname="Times-Roman"] }', { format: 'ps' }),
+      ).not.toThrow();
+    });
   });
 });
