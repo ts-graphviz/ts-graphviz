@@ -25,6 +25,9 @@ export const DEPRECATION_CODES = [
   /** `parse(input, { startRule })`: read fragments with `parseFragment(input, rule)`. Removed in 5.0. */
   'TSG_DEP_PARSE_START_RULE',
 ] as const;
+// Shared by every module of the process: frozen, so no code can change what
+// counts as a deprecation code (#1757).
+Object.freeze(DEPRECATION_CODES);
 
 /**
  * One of {@link DEPRECATION_CODES}.

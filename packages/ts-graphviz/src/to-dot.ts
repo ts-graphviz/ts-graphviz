@@ -4,7 +4,11 @@ import {
   type PrintOptions,
   stringify,
 } from '@ts-graphviz/ast';
-import { type DotObjectModel, isRootGraphModel } from '@ts-graphviz/common';
+import {
+  type DotObjectModel,
+  isRootGraphModel,
+  ownOptions,
+} from '@ts-graphviz/common';
 import { Dot } from '@ts-graphviz/core';
 
 /**
@@ -35,9 +39,11 @@ export interface ToDotOptions {
  * @returns DOT string
  */
 export function toDot(model: DotObjectModel, options?: ToDotOptions): string {
+  // Own properties only: an inherited one is never an option (#1757).
+  const { convert, print } = ownOptions(options);
   const ast = fromModel(
     isRootGraphModel(model) ? new Dot([model]) : model,
-    options?.convert,
+    convert,
   );
-  return stringify(ast, options?.print);
+  return stringify(ast, print);
 }

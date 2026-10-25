@@ -6,4 +6,5 @@ export * from './models/edge-targets.js';
 export * from './models/guards.js';
 export * from './models/models.js';
 export * from './models/models-context.js';
+export * from './options.js';
 export * from './values.js';

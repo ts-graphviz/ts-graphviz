@@ -11,6 +11,7 @@ import {
   type ModelsContext,
   type ModelTypes,
   type NodeModel,
+  ownOptions,
   type ResolvedModelTypes,
   type RootGraphModel,
   type SubgraphModel,
@@ -103,9 +104,11 @@ export function fromDot(
   dot: string,
   options?: FromDotOptions<FromDotRule>,
 ): AnyFromDotModel {
+  // Own properties only: an inherited one is never an option (#1757).
+  const own = ownOptions(options);
   // `startRule` picks what fromDot returns; it is not the deprecated
   // option of `parse`.
-  const { startRule = 'Dot', ...limits } = options?.parse ?? {};
+  const { startRule = 'Dot', ...limits } = ownOptions(own.parse);
   // Widened to every rule on purpose: JavaScript callers can pass any.
   const ast = parseFragment(dot, startRule as Rule, limits);
 
@@ -121,9 +124,10 @@ export function fromDot(
       'TSG_ERR_UNCONVERTIBLE_AST',
     );
   }
+  const convert = ownOptions(own.convert);
   const model = toModel(ast, {
-    ...options?.convert,
-    models: createModelsContext(options?.convert?.models),
+    ...convert,
+    models: createModelsContext(convert.models),
   });
   if (isDotModel(model)) {
     // A whole DOT source converts to a Dot model; fromDot returns its graph.
@@ -177,10 +181,13 @@ export function fromDotAll(
     parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
   },
 ): RootGraphModel[] {
-  const ast = parseFragment(dot, 'Dot', options?.parse);
+  // Own properties only: an inherited one is never an option (#1757).
+  const own = ownOptions(options);
+  const ast = parseFragment(dot, 'Dot', own.parse);
+  const convert = ownOptions(own.convert);
   const model = toModel(ast, {
-    ...options?.convert,
-    models: createModelsContext(options?.convert?.models),
+    ...convert,
+    models: createModelsContext(convert.models),
   });
   return [...model.graphs];
 }

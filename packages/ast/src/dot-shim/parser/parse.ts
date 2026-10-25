@@ -1,4 +1,4 @@
-import { warnDeprecated, withCode } from '@ts-graphviz/common';
+import { ownOptions, warnDeprecated, withCode } from '@ts-graphviz/common';
 import { ASTNodeCountExceededError } from '../../builder/errors.js';
 import type {
   ASTNode,
@@ -136,7 +136,7 @@ export function parse(
   input: string,
   options?: ParseOptions<Rule>,
 ): ASTNode | ClusterStatementASTNode[] {
-  const { startRule, ...common } = options ?? {};
+  const { startRule, ...common } = ownOptions(options);
   if (startRule !== undefined) {
     warnDeprecated(
       'TSG_DEP_PARSE_START_RULE',
@@ -200,7 +200,7 @@ function parseRule(
     maxEdgeChainDepth,
     maxInputSize,
     maxASTNodes,
-  } = options;
+  } = ownOptions(options);
 
   // Input size validation
   const inputSizeLimit = maxInputSize ?? DEFAULT_MAX_INPUT_SIZE;

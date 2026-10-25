@@ -1,4 +1,5 @@
 import { sanitize } from '@ts-graphviz/ast';
+import { ownOptions } from '@ts-graphviz/common';
 import { escapeValue } from './create-command-args.js';
 import type { CommonOptions } from './types.js';
 
@@ -23,7 +24,8 @@ function attributesSource(attributes: Attributes): string {
     });
     return `${kind} [${items.join(' ')}];`;
   };
-  return `digraph { ${list('graph', attributes.graph)} ${list('node', attributes.node)} ${list('edge', attributes.edge)} }`;
+  const { graph, node, edge } = ownOptions(attributes);
+  return `digraph { ${list('graph', graph)} ${list('node', node)} ${list('edge', edge)} }`;
 }
 
 /**

@@ -5,7 +5,7 @@ import type {
   FilterableModel,
   ModelsContext,
 } from 'ts-graphviz';
-import { createModelsContext, isRootGraphModel } from 'ts-graphviz';
+import { createModelsContext, isRootGraphModel, ownOptions } from 'ts-graphviz';
 
 import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
@@ -263,7 +263,9 @@ async function renderInternal<
 export function createRoot<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(options: CreateRootOptions<Container> = {}): GraphvizRoot {
-  const { container, models, ...otherOptions } = options;
+  // Own properties only: an inherited one is never an option (#1757).
+  const { container, models, ...rest } = ownOptions(options);
+  const otherOptions = ownOptions(rest);
 
   const containerInfo: RenderContainer<Container> = {
     renderedModels: [],
