@@ -1,5 +1,5 @@
 import {
-  type FC,
+  type ReactElement,
   useEffect,
   useImperativeHandle,
   useLayoutEffect,
@@ -10,15 +10,13 @@ import { useModelCollector } from '../hooks/useModelCollector.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
 import { useSubgraph } from '../hooks/useSubgraph.js';
 import type { SubgraphProps } from '../types.js';
-/**
- * `Subgraph` component.
- */
-export const Subgraph: FC<SubgraphProps> = ({
+
+const SubgraphComponent = ({
   children,
   label,
   ref,
   ...options
-}) => {
+}: SubgraphProps): ReactElement => {
   const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined)
     Object.assign(options, { label: renderedLabel });
@@ -42,6 +40,20 @@ export const Subgraph: FC<SubgraphProps> = ({
   return (
     <CurrentGraph.Provider value={subgraph}>{children}</CurrentGraph.Provider>
   );
+};
+
+/**
+ * `Subgraph` component. Its `id` picks the attributes it takes, as for
+ * `subgraph()`: `<Subgraph id="cluster_a" label="A">` or
+ * `<Subgraph id="row" rank="same">`.
+ */
+// The id-dependent props are a type-level view of the same component, which
+// is written against the props of an id not known in advance.
+export const Subgraph = SubgraphComponent as {
+  <const Id extends string | undefined = undefined>(
+    props: SubgraphProps<Id>,
+  ): ReactElement;
+  displayName?: string;
 };
 
 Subgraph.displayName = 'Subgraph';

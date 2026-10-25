@@ -179,6 +179,11 @@ export type ClusterSubgraphAttributesObject =
 export type NonClusterSubgraphAttributesObject =
   | (AttributesObject<Exclude<SubgraphAttributeKey, 'cluster'>> & {
       cluster?: false;
+    } & {
+      // Spelled out so that an object with a subgraph attribute cannot also
+      // carry cluster attributes: excess-property checks on a union only
+      // reject keys that no member declares.
+      [K in Exclude<ClusterSubgraphAttributeKey, SubgraphAttributeKey>]?: never;
     })
   | (AttributesObject<Exclude<ClusterSubgraphAttributeKey, 'cluster'>> & {
       cluster: true;

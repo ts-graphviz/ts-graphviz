@@ -47,6 +47,10 @@ describe('subgraph attributes by id', () => {
     g.createSubgraph('not_a_cluster', { label: 'x' });
     // @ts-expect-error "cluster" must start the id
     g.subgraph('my_cluster', { pencolor: 'red' });
+    // @ts-expect-error not even next to a subgraph attribute
+    g.subgraph('row', { rank: 'same', pencolor: 'red' });
+    // @ts-expect-error nor next to only the id-independent ones
+    g.subgraph({ rank: 'same', label: 'x' });
   });
 
   it('takes cluster attributes with cluster: true, on any id or none', () => {
