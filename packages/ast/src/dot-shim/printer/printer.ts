@@ -12,7 +12,6 @@ const HEADER_DANGLING = new Set(['Graph', 'Subgraph', 'AttributeList']);
  * @group Convert AST to DOT
  */
 export class Printer {
-  /** @internal */
   #plugins: PrintPlugin[] = [...defaultPlugins];
 
   /**
