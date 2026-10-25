@@ -1,6 +1,6 @@
 import type { EdgeTargetTuple, NodeModel } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test, vi } from 'vitest';
-import { AttributesBase } from './AttributesBase.js';
+import { AttributesBase } from '../attributes/AttributesBase.js';
 import { DotObject } from './DotObject.js';
 import { Edge } from './Edge.js';
 import { GraphBase } from './GraphBase.js';

@@ -1,7 +1,7 @@
 import type { Attributes } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
+import { DotObject } from '../models/DotObject.js';
 import { AttributesBase } from './AttributesBase.js';
-import { DotObject } from './DotObject.js';
 
 class TestAttributes extends AttributesBase<any> {}
 

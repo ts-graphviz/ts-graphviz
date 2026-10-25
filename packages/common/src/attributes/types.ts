@@ -1,4 +1,4 @@
-import type { EscStringValue, HTMLLikeValue } from './values.js';
+import type { EscStringValue, HTMLLikeValue } from '../values.js';
 
 /**
  * @hidden

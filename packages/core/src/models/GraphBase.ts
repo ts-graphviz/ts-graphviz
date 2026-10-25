@@ -21,8 +21,8 @@ import {
   toNodeRefGroup,
   withCode,
 } from '@ts-graphviz/common';
-import { AttributeList } from './AttributeList.js';
-import { AttributesBase } from './AttributesBase.js';
+import { AttributeList } from '../attributes/AttributeList.js';
+import { AttributesBase } from '../attributes/AttributesBase.js';
 
 const MODEL_KEYS = [
   'Dot',
