@@ -24,7 +24,7 @@ pnpm --filter @ts-graphviz/website start:zh    # zh-CN
 - `src/playground/runtime/` — runs Playground scripts: types are stripped with sucrase and the script is evaluated in a Web Worker against the workspace's ts-graphviz (the only importable module), then the DOT it returns is laid out by Graphviz WASM in the same worker; both steps have a timeout that terminates and replaces the worker
 - `plugins/remark-plugin-tsgraphviz.ts` — turns ` ```ts ts-graphviz ` code blocks into live editors (` ```ts ts-graphviz:read-only ` for read-only ones)
 - `scripts/extract-dts.mts` — collects the packages' `.d.ts` files for the editor
-- `scripts/copy-api-reference.mts` — puts the typedoc output under `build/api/`
+- `scripts/copy-api-reference.mts` — puts the typedoc output under `build/api/`, and redirects from its former address `/ts-graphviz/` (one page per API page)
 - `scripts/check-links.mts` — crawls the built site and fails on broken internal links (`pnpm check-links`; runs in CI)
 
 ## Tests
