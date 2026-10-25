@@ -189,7 +189,9 @@ export interface CommonOptions {
    * `SecurityError` (`code` `TSG_ERR_UNSAFE_DOT`) when the source makes
    * Graphviz read a file (`image`, `shapefile`, `<IMG>`, …) or write an
    * unsafe link (`URL="javascript:…"`, …), and with a `DotSyntaxError` when
-   * it does not parse. Pass parser limits as an object.
+   * it does not parse. Pass options as an object: parser limits, or
+   * `policy: 'strict'` to allow only the attributes and HTML-like tags
+   * Graphviz defines, with plain values.
    *
    * Set `false` only for sources you trust, e.g. to render your own images.
    *

@@ -133,8 +133,10 @@ try {
   const stream = await toStream(userDot, {
     format: 'svg',
     signal: AbortSignal.timeout(10_000),
-    // Parser limits for the check; `true` (the default) uses the defaults.
-    sanitize: { maxASTNodes: 10_000 },
+    // Options for the check; `true` (the default) uses the defaults.
+    // `policy: 'strict'` allows only attributes and HTML-like tags Graphviz
+    // defines, with plain values: use it for DOT from anyone.
+    sanitize: { policy: 'strict', maxASTNodes: 10_000 },
   });
 } catch (e) {
   if (isTsGraphvizError(e) && e.code === 'TSG_ERR_UNSAFE_DOT') {

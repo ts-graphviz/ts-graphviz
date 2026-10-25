@@ -8,6 +8,7 @@ import type {
   LiteralASTNode,
 } from '../types.js';
 import { readTags } from './html.js';
+import { strictAttributeProblem, strictTagProblem } from './strict.js';
 import { readings, urlProblem } from './url.js';
 
 /**
@@ -20,10 +21,22 @@ export interface SanitizeOptions extends CommonParseOptions {
    * The output format the DOT will be rendered to (`-T` value, e.g. `svg`
    * or `png:cairo`). With a format, `sanitize` also applies that format's
    * rules and rejects formats whose output has not been checked; the
-   * adapter passes its `format`. Without one, only the rules shared by all
-   * checked formats apply.
+   * adapter passes its `format`. Without one, the rules of every checked
+   * format apply at once.
    */
   format?: string;
+  /**
+   * `'default'` rejects what is known to read files, write unsafe links or
+   * reach an output format unescaped. `'strict'` also rejects every
+   * attribute ts-graphviz does not know (exact names), values outside
+   * numbers, names and lists for attributes without a grammar of their
+   * own, and HTML-like label tags and attributes Graphviz does not define,
+   * so attributes and output quirks nobody has listed yet cannot get
+   * through either.
+   *
+   * @default 'default'
+   */
+  policy?: 'default' | 'strict';
 }
 
 /**
@@ -200,6 +213,7 @@ function unsafe(message: string) {
 interface FormatRules {
   fontName: RegExp;
   spacesInStyle: boolean;
+  strict: boolean;
 }
 
 /**
@@ -321,6 +335,18 @@ function checkAttribute(
       `${at} is not a color (write HSV colors with commas, e.g. "0.6,0.7,0.7").`,
     );
   }
+  if (rules.strict) {
+    const ownRule =
+      decoded ||
+      key === 'comment' ||
+      URL_ATTRIBUTES.has(key) ||
+      FONT_ATTRIBUTES.has(key) ||
+      key === 'style' ||
+      key === 'shape' ||
+      key.endsWith('color');
+    const problem = strictAttributeProblem(name, value, ownRule);
+    if (problem !== undefined) throw unsafe(`${at} ${problem}.`);
+  }
 }
 
 function checkName(
@@ -351,6 +377,10 @@ function checkHtml(
     throw unsafe(`${at} cannot be read as markup.`);
   }
   for (const tag of tags) {
+    if (rules.strict) {
+      const problem = strictTagProblem(tag);
+      if (problem !== undefined) throw unsafe(`${at} ${problem}.`);
+    }
     if (tag.name.toLowerCase() === 'img') {
       throw unsafe(`${at} contains <${tag.name}>, which reads an image file.`);
     }
@@ -433,14 +463,11 @@ function checkSafety(rules: FormatRules) {
   };
 }
 
-/** The rules of every checked format at once, for a call without a format. */
-const STRICTEST_RULES: FormatRules = {
-  fontName: POSTSCRIPT_FONT_NAME,
-  spacesInStyle: false,
-};
-
-function rulesFor(format: string | undefined): FormatRules {
-  if (format === undefined) return STRICTEST_RULES;
+function rulesFor(format: string | undefined, strict: boolean): FormatRules {
+  // Without a format: the rules of every checked format at once.
+  if (format === undefined) {
+    return { fontName: POSTSCRIPT_FONT_NAME, spacesInStyle: false, strict };
+  }
   const base = format.split(':')[0].toLowerCase();
   if (base === 'ismap') {
     throw unsafe(
@@ -457,6 +484,7 @@ function rulesFor(format: string | undefined): FormatRules {
       ? POSTSCRIPT_FONT_NAME
       : PLAIN_FONT_NAME,
     spacesInStyle: !PLAIN_FORMATS.has(base),
+    strict,
   };
 }
 
@@ -510,8 +538,8 @@ function rulesFor(format: string | undefined): FormatRules {
  * @group Sanitize DOT
  */
 export function sanitize(dot: string, options?: SanitizeOptions): string {
-  const { format, ...parse } = options ?? {};
+  const { format, policy = 'default', ...parse } = options ?? {};
   return new Pipeline({ parse })
-    .use(checkSafety(rulesFor(format)))
+    .use(checkSafety(rulesFor(format, policy === 'strict')))
     .process(dot);
 }

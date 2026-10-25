@@ -170,6 +170,22 @@ describe.skipIf(!hasDot)(
       ).rejects.toMatchObject({ code: 'TSG_ERR_DOT_SYNTAX' });
     });
 
+    it('passes the policy on, and checks for its own format', async () => {
+      await expect(
+        toStream('digraph { a [foo=x] }', { sanitize: { policy: 'strict' } }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+      await expect(
+        toStream('digraph { a [fontname="Times New Roman"] }', {
+          format: 'ps',
+        }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+      const svg = await toStream('digraph { a [fontname="Times New Roman"] }');
+      expect(await new Response(svg).text()).toContain('Times New Roman');
+      await expect(
+        toStream('digraph { a }', { format: 'vml' as 'svg' }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+    });
+
     it('renders the source unchecked with sanitize: false', async () => {
       // Graphviz itself copies the file into the output: what sanitize prevents.
       const stream = await toStream(leak, { format: 'ps', sanitize: false });
