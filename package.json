@@ -6,7 +6,7 @@
     "graphviz",
     "dot"
   ],
-  "homepage": "https://ts-graphviz.github.io/ts-graphviz/",
+  "homepage": "https://ts-graphviz.github.io/api/",
   "bugs": {
     "url": "https://github.com/ts-graphviz/ts-graphviz/issues"
   },
