@@ -15,6 +15,7 @@ export interface CreateRootOptions<Container extends AnyGraphContainer = AnyGrap
   onUncaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
   onCaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
   onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;
+  timeout?: number;
   onRenderComplete?: (models: AnyDotObjectModel[]) => void;
 }
 

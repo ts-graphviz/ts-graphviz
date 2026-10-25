@@ -56,6 +56,13 @@ export interface CreateRootOptions<
    */
   onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;
   /**
+   * How long `render()` waits, in milliseconds, for work React schedules
+   * outside the synchronous render: transitions, deferred values and
+   * suspended data. It then rejects. Synchronous renders do not wait.
+   * @default 5000
+   */
+  timeout?: number;
+  /**
    * Called when rendering completes successfully
    */
   onRenderComplete?: (models: AnyDotObjectModel[]) => void;
@@ -223,10 +230,15 @@ function validateModels(
 }
 
 /**
- * Render synchronously (`updateContainerSync` and `flushSyncWork`), then
- * check the result.
+ * Render, wait until no work is left, then check the result.
+ *
+ * The render and the updates effects schedule run synchronously
+ * (`updateContainerSync`, `flushSyncWork`, and the discrete priority of the
+ * host config). Work React puts on other lanes (transitions, deferred values,
+ * suspended data) runs on its scheduler; `render()` yields to it until the
+ * root has no pending lanes, for at most `timeout` milliseconds.
  */
-function renderInternal<
+async function renderInternal<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(
   containerInfo: RenderContainer<Container>,
@@ -234,19 +246,45 @@ function renderInternal<
   wrappedElement: ReactElement,
   originalContainer: Container | undefined,
   options: CreateRootOptions = {},
-): void {
-  const { onRenderComplete } = options;
+): Promise<void> {
+  const { onRenderComplete, timeout = DEFAULT_TIMEOUT } = options;
   containerInfo.uncaughtErrors = [];
   reconciler.updateContainerSync(wrappedElement, fiberRoot, null, null);
-  // Updates that effects schedule are synchronous too (see the host config's
-  // update priorities), so the tree has settled once sync work is flushed.
   reconciler.flushSyncWork();
+  const deadline = Date.now() + timeout;
+  while (
+    hasPendingWork(fiberRoot) &&
+    containerInfo.uncaughtErrors.length === 0
+  ) {
+    if (Date.now() >= deadline) {
+      throw new Error(
+        `Rendering did not settle within ${timeout} ms (pending transitions, deferred values or suspended data).`,
+      );
+    }
+    await yieldToScheduler();
+  }
   const [error] = containerInfo.uncaughtErrors;
   if (containerInfo.uncaughtErrors.length > 0) {
     throw error;
   }
   validateModels(containerInfo.renderedModels, originalContainer);
   onRenderComplete?.([...containerInfo.renderedModels]);
+}
+
+const DEFAULT_TIMEOUT = 5000;
+
+// FiberRoot#pendingLanes: React's lanes with work left. Internal, which is
+// why react-reconciler is pinned to the React minor it was built for.
+function hasPendingWork(
+  fiberRoot: ReturnType<typeof reconciler.createContainer>,
+): boolean {
+  return (fiberRoot as { pendingLanes?: number }).pendingLanes !== 0;
+}
+
+// A macrotask, so React's scheduler (setImmediate / MessageChannel) and
+// resolved promises get to run.
+function yieldToScheduler(): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
 /**
@@ -307,7 +345,7 @@ export function createRoot<
         container,
       );
 
-      renderInternal(
+      await renderInternal(
         containerInfo,
         fiberRoot,
         wrappedElement,

@@ -1,4 +1,13 @@
-import { Component, type ReactNode, useEffect, useState } from 'react';
+import {
+  Component,
+  type ReactNode,
+  Suspense,
+  startTransition,
+  use,
+  useDeferredValue,
+  useEffect,
+  useState,
+} from 'react';
 import {
   DefaultEventPriority,
   DiscreteEventPriority,
@@ -179,5 +188,71 @@ describe('updates scheduled by effects', () => {
         </Digraph>,
       ),
     ).rejects.toThrow('after effect');
+  });
+});
+
+describe('updates outside the synchronous lane', () => {
+  function RevealedInTransition(): ReactNode {
+    const [shown, setShown] = useState(false);
+    useEffect(() => startTransition(() => setShown(true)), []);
+    return shown ? <Node id="transition" /> : null;
+  }
+
+  function Deferred(): ReactNode {
+    const shown = useDeferredValue(true, false);
+    return shown ? <Node id="deferred" /> : null;
+  }
+
+  it('waits for a transition an effect started', async () => {
+    const dot = await renderToDot(
+      <Digraph id="G">
+        <RevealedInTransition />
+      </Digraph>,
+    );
+    expect(dot).toContain('"transition";');
+  });
+
+  it('waits for the final value of a deferred value', async () => {
+    const dot = await renderToDot(
+      <Digraph id="G">
+        <Deferred />
+      </Digraph>,
+    );
+    expect(dot).toContain('"deferred";');
+  });
+
+  it('waits for suspended data', async () => {
+    const data = new Promise<string>((resolve) =>
+      setTimeout(() => resolve('loaded'), 10),
+    );
+    function Loaded(): ReactNode {
+      return <Node id={use(data)} />;
+    }
+    const dot = await renderToDot(
+      <Digraph id="G">
+        <Suspense fallback={<Node id="loading" />}>
+          <Loaded />
+        </Suspense>
+      </Digraph>,
+    );
+    expect(dot).toContain('"loaded";');
+    expect(dot).not.toContain('"loading";');
+  });
+
+  it('rejects when the work does not settle within the timeout', async () => {
+    const never = new Promise<string>(() => {});
+    function Forever(): ReactNode {
+      return <Node id={use(never)} />;
+    }
+    await expect(
+      renderToDot(
+        <Digraph id="G">
+          <Suspense fallback={null}>
+            <Forever />
+          </Suspense>
+        </Digraph>,
+        { timeout: 50 },
+      ),
+    ).rejects.toThrow(/did not settle within 50 ms/);
   });
 });
