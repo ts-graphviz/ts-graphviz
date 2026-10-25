@@ -562,9 +562,9 @@ from Japheth Cleaver",
               },
               "location": {
                 "end": {
-                  "column": 20,
+                  "column": 19,
                   "line": 27,
-                  "offset": 1183,
+                  "offset": 1182,
                 },
                 "source": undefined,
                 "start": {

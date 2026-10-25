@@ -77,9 +77,9 @@
               },
               "location": {
                 "end": {
-                  "column": 24,
+                  "column": 23,
                   "line": 3,
-                  "offset": 47,
+                  "offset": 46,
                 },
                 "source": undefined,
                 "start": {
@@ -200,9 +200,9 @@
               },
               "location": {
                 "end": {
-                  "column": 21,
+                  "column": 20,
                   "line": 4,
-                  "offset": 88,
+                  "offset": 87,
                 },
                 "source": undefined,
                 "start": {

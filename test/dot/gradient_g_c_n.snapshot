@@ -23,9 +23,9 @@
           },
           "location": {
             "end": {
-              "column": 35,
+              "column": 34,
               "line": 1,
-              "offset": 34,
+              "offset": 33,
             },
             "source": undefined,
             "start": {
@@ -75,9 +75,9 @@
           },
           "location": {
             "end": {
-              "column": 50,
+              "column": 49,
               "line": 1,
-              "offset": 49,
+              "offset": 48,
             },
             "source": undefined,
             "start": {
@@ -181,9 +181,9 @@
               },
               "location": {
                 "end": {
-                  "column": 44,
+                  "column": 43,
                   "line": 2,
-                  "offset": 110,
+                  "offset": 109,
                 },
                 "source": undefined,
                 "start": {
@@ -233,9 +233,9 @@
               },
               "location": {
                 "end": {
-                  "column": 61,
+                  "column": 60,
                   "line": 2,
-                  "offset": 127,
+                  "offset": 126,
                 },
                 "source": undefined,
                 "start": {
@@ -285,9 +285,9 @@
               },
               "location": {
                 "end": {
-                  "column": 79,
+                  "column": 78,
                   "line": 2,
-                  "offset": 145,
+                  "offset": 144,
                 },
                 "source": undefined,
                 "start": {
@@ -337,9 +337,9 @@
               },
               "location": {
                 "end": {
-                  "column": 94,
+                  "column": 93,
                   "line": 2,
-                  "offset": 160,
+                  "offset": 159,
                 },
                 "source": undefined,
                 "start": {
@@ -443,9 +443,9 @@
                   },
                   "location": {
                     "end": {
-                      "column": 19,
+                      "column": 18,
                       "line": 3,
-                      "offset": 198,
+                      "offset": 197,
                     },
                     "source": undefined,
                     "start": {
@@ -495,9 +495,9 @@
                   },
                   "location": {
                     "end": {
-                      "column": 42,
+                      "column": 41,
                       "line": 3,
-                      "offset": 221,
+                      "offset": 220,
                     },
                     "source": undefined,
                     "start": {
@@ -547,9 +547,9 @@
                   },
                   "location": {
                     "end": {
-                      "column": 57,
+                      "column": 56,
                       "line": 3,
-                      "offset": 236,
+                      "offset": 235,
                     },
                     "source": undefined,
                     "start": {

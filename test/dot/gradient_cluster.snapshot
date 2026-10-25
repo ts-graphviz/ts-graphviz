@@ -23,9 +23,9 @@
           },
           "location": {
             "end": {
-              "column": 31,
+              "column": 30,
               "line": 1,
-              "offset": 30,
+              "offset": 29,
             },
             "source": undefined,
             "start": {
@@ -339,9 +339,9 @@
                   },
                   "location": {
                     "end": {
-                      "column": 34,
+                      "column": 33,
                       "line": 8,
-                      "offset": 184,
+                      "offset": 183,
                     },
                     "source": undefined,
                     "start": {
@@ -391,9 +391,9 @@
                   },
                   "location": {
                     "end": {
-                      "column": 47,
+                      "column": 46,
                       "line": 8,
-                      "offset": 197,
+                      "offset": 196,
                     },
                     "source": undefined,
                     "start": {
@@ -478,9 +478,9 @@
               "kind": "Node",
               "location": {
                 "end": {
-                  "column": 66,
+                  "column": 65,
                   "line": 8,
-                  "offset": 216,
+                  "offset": 215,
                 },
                 "source": undefined,
                 "start": {
@@ -584,9 +584,9 @@
               "kind": "Node",
               "location": {
                 "end": {
-                  "column": 32,
+                  "column": 31,
                   "line": 9,
-                  "offset": 251,
+                  "offset": 250,
                 },
                 "source": undefined,
                 "start": {
@@ -690,9 +690,9 @@
               "kind": "Node",
               "location": {
                 "end": {
-                  "column": 31,
+                  "column": 30,
                   "line": 10,
-                  "offset": 285,
+                  "offset": 284,
                 },
                 "source": undefined,
                 "start": {
@@ -796,9 +796,9 @@
               "kind": "Node",
               "location": {
                 "end": {
-                  "column": 32,
+                  "column": 31,
                   "line": 11,
-                  "offset": 320,
+                  "offset": 319,
                 },
                 "source": undefined,
                 "start": {
@@ -1162,9 +1162,9 @@
                   },
                   "location": {
                     "end": {
-                      "column": 18,
+                      "column": 17,
                       "line": 19,
-                      "offset": 451,
+                      "offset": 450,
                     },
                     "source": undefined,
                     "start": {
@@ -1249,9 +1249,9 @@
               "kind": "Node",
               "location": {
                 "end": {
-                  "column": 37,
+                  "column": 36,
                   "line": 19,
-                  "offset": 470,
+                  "offset": 469,
                 },
                 "source": undefined,
                 "start": {
@@ -1355,9 +1355,9 @@
               "kind": "Node",
               "location": {
                 "end": {
-                  "column": 35,
+                  "column": 34,
                   "line": 20,
-                  "offset": 508,
+                  "offset": 507,
                 },
                 "source": undefined,
                 "start": {
@@ -1461,9 +1461,9 @@
               "kind": "Node",
               "location": {
                 "end": {
-                  "column": 31,
+                  "column": 30,
                   "line": 21,
-                  "offset": 542,
+                  "offset": 541,
                 },
                 "source": undefined,
                 "start": {
@@ -1567,9 +1567,9 @@
               "kind": "Node",
               "location": {
                 "end": {
-                  "column": 31,
+                  "column": 30,
                   "line": 22,
-                  "offset": 576,
+                  "offset": 575,
                 },
                 "source": undefined,
                 "start": {

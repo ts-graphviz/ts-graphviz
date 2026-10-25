@@ -45,6 +45,22 @@ export interface ASTCommonProperties {
    * The start and end location of the AST object.
    */
   location?: FileRange;
+  /**
+   * Comments inside a statement written before this node, on an earlier
+   * line or after a node on another line (`a -> /* c *\/ b` puts `c` here
+   * on `b`'s NodeRef when it starts its own line).
+   */
+  leadingComments?: CommentASTNode[];
+  /**
+   * Comments inside a statement written after this node on the same line
+   * (`a /* c *\/ -> b` puts `c` here on `a`'s NodeRef).
+   */
+  trailingComments?: CommentASTNode[];
+  /**
+   * Comments inside this node with no node before or after them, such as
+   * `digraph /* c *\/ { }` without an id.
+   */
+  danglingComments?: CommentASTNode[];
 }
 
 /**

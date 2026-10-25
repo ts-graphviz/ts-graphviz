@@ -33,8 +33,18 @@ function canon(source: string): string | undefined {
 const sep = fc.oneof(
   { arbitrary: fc.constant(''), weight: 6 },
   { arbitrary: fc.constant(' '), weight: 6 },
-  { arbitrary: fc.constantFrom('\t', '\n'), weight: 1 },
-  { arbitrary: fc.constantFrom(' /* c */ ', '\n# x\n', ' // y\n'), weight: 1 },
+  { arbitrary: fc.constantFrom('\t', '\n'), weight: 2 },
+  // Comments inside statements are kept on the nodes next to them (#1710).
+  {
+    arbitrary: fc.constantFrom(
+      ' /* c */ ',
+      '/*c*/',
+      '\n# x\n',
+      ' // y\n',
+      '\n/* m\nn */\n',
+    ),
+    weight: 3,
+  },
 );
 /** At least some whitespace (where tokens must be apart for the source to mean anything). */
 const gap = fc.constantFrom(' ', '\n', '\t', ' /* c */ ', '\n// y\n');
@@ -83,7 +93,11 @@ const id = fc.oneof(
     ),
     weight: 3,
   },
-  { arbitrary: fc.constantFrom('<b>', '<<i>x</i>>', '<a&amp;b>'), weight: 1 },
+  // HTML strings whose text is no other id: Graphviz interns strings by
+  // text, and the first of an HTML and a plain string with the same text
+  // decides what both are (`b; x [label=<b>]` makes the label plain text),
+  // so a reprint that drops a port (`x:b;`) may change which comes first.
+  { arbitrary: fc.constantFrom('<hb>', '<<i>x</i>>', '<a&amp;b>'), weight: 1 },
 );
 
 const join = (parts: string[]) => parts.join('');
@@ -256,7 +270,7 @@ describe.skipIf(!hasDot)('[SM-1] the parser reads DOT as Graphviz does', () => {
       ).toBeDefined();
       expect(
         canon(printed),
-        `dot reads the reprint differently:\n${dot}\n--- reprint\n${printed}`,
+        `dot reads the reprint differently: ${JSON.stringify(dot)}\n--- reprint\n${printed}`,
       ).toBe(original);
     }
     expect(accepted).toBeGreaterThan(runs / 10);

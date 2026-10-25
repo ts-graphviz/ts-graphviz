@@ -361,9 +361,9 @@
               "kind": "Node",
               "location": {
                 "end": {
-                  "column": 45,
+                  "column": 44,
                   "line": 4,
-                  "offset": 116,
+                  "offset": 115,
                 },
                 "source": undefined,
                 "start": {

@@ -1,0 +1,127 @@
+import { spawnSync } from 'node:child_process';
+import { describe, expect, it } from 'vitest';
+import type {
+  ASTNode,
+  AttributeASTNode,
+  EdgeASTNode,
+  GraphASTNode,
+  NodeASTNode,
+  NodeRefASTNode,
+} from '../../types.js';
+import { stringify } from '../printer/stringify.js';
+import { parse } from './parse.js';
+
+// Comments inside statements (#1710): Graphviz reads them as whitespace;
+// the parser keeps them on the node next to them.
+const graphOf = (dot: string) => parse(dot).children[0] as GraphASTNode;
+const values = (comments: ASTNode['leadingComments']) =>
+  comments?.map((c) => `${c.kind}:${c.value}`);
+
+describe('[SM-1] comments inside statements', () => {
+  it('attaches a comment after a node on the same line as trailing', () => {
+    const edge = graphOf('digraph { a /* c */ -> b }')
+      .children[0] as EdgeASTNode;
+    expect(
+      values((edge.targets[0] as NodeRefASTNode).trailingComments),
+    ).toEqual(['Block:c']);
+  });
+
+  it('attaches a comment that starts a line as leading of the next node', () => {
+    const edge = graphOf('digraph { a ->\n  /* c */ b }')
+      .children[0] as EdgeASTNode;
+    expect(values((edge.targets[1] as NodeRefASTNode).leadingComments)).toEqual(
+      ['Block:c'],
+    );
+  });
+
+  it('attaches comments around `=` to the key and value', () => {
+    const attr = graphOf('digraph { a [color /* k */ =\n /* v */ red] }')
+      .children[0] as NodeASTNode;
+    const item = attr.children[0] as AttributeASTNode;
+    expect(values(item.key.trailingComments)).toEqual(['Block:k']);
+    expect(values(item.value.leadingComments)).toEqual(['Block:v']);
+  });
+
+  it('attaches a header comment without an id as dangling on the graph', () => {
+    expect(values(graphOf('digraph /* c */ { a }').danglingComments)).toEqual([
+      'Block:c',
+    ]);
+    expect(values(graphOf('digraph /* c */ G { a }').danglingComments)).toEqual(
+      ['Block:c'],
+    );
+  });
+
+  it('keeps line comments inside a statement', () => {
+    const edge = graphOf('digraph { a // c\n -> # m\n b }')
+      .children[0] as EdgeASTNode;
+    expect(
+      values((edge.targets[0] as NodeRefASTNode).trailingComments),
+    ).toEqual(['Slash:c']);
+    expect(values((edge.targets[1] as NodeRefASTNode).leadingComments)).toEqual(
+      ['Macro:m'],
+    );
+  });
+
+  it('leaves comments between statements as Comment statements', () => {
+    const graph = graphOf('digraph {\n a\n // between\n b\n}');
+    expect(graph.children.map((c) => c.type)).toEqual([
+      'Node',
+      'Comment',
+      'Node',
+    ]);
+    expect(
+      graph.children.some((c) => c.trailingComments || c.leadingComments),
+    ).toBe(false);
+  });
+
+  it('does not duplicate a line of a multi-line // comment', () => {
+    const graph = graphOf('digraph {\n a -> b\n // one\n // two\n c\n}');
+    expect(graph.children.map((c) => c.type)).toEqual([
+      'Edge',
+      'Comment',
+      'Node',
+    ]);
+    expect(JSON.stringify(graph)).not.toContain('Comments');
+  });
+});
+
+const hasDot = spawnSync('dot', ['-V']).status === 0;
+const canon = (dot: string) => {
+  const r = spawnSync('dot', ['-Tcanon'], { input: dot, encoding: 'utf8' });
+  expect(r.status, `${dot}\n${r.stderr}`).toBe(0);
+  return r.stdout;
+};
+
+describe.skipIf(!hasDot)(
+  '[SM-1] comments inside statements are printed back',
+  () => {
+    it.each([
+      'digraph /* c */ G /* d */ { a }',
+      'digraph /* c */ { a }',
+      'strict /* s */ graph { a -- b }',
+      'digraph { a /* c */ -> /* d */ b }',
+      'digraph { a // line\n -> b }',
+      'digraph { a ->\n # macro\n b }',
+      'digraph { a /* c */ [color=red] }',
+      'digraph { a [color /* k */ = /* v */ red, /* x */ shape=box] }',
+      'digraph { node /* n */ [shape=box] }',
+      'digraph { rankdir /* r */ = LR }',
+      'digraph { a /* p */ : /* q */ p -> b }',
+      'digraph { subgraph /* s */ x /* t */ { a } }',
+      'digraph { subgraph // s\n { a } -> b }',
+      'digraph { a, /* l */ b -> c }',
+      'digraph { a -> b /* e */ ; c }',
+      'digraph { a /* multi\n line */ -> b }',
+    ])('%j', (dot) => {
+      const printed = stringify(parse(dot));
+      // Graphviz reads the reprint as the same graph, and the comments survive
+      // a second round.
+      expect(canon(printed)).toBe(canon(dot));
+      expect(stringify(parse(printed))).toBe(printed);
+      for (const word of dot.match(/[a-z]+(?= \*\/)|(?<=\/\/ |# )[a-z]+/g) ??
+        []) {
+        expect(printed).toContain(word);
+      }
+    });
+  },
+);
