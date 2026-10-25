@@ -4,4 +4,4 @@
 "ts-graphviz": minor
 ---
 
-Deprecated uses are reported at run time, once per code: `DEPRECATION_CODES` (`TSG_DEP_…`) and `warnDeprecated(code, message)` in `@ts-graphviz/common` emit a Node.js `DeprecationWarning` where `process.emitWarning` exists (Node.js, Deno, Bun; `--no-deprecation`, `--trace-deprecation` and `--throw-deprecation` apply) and fall back to `console.warn` in browsers. `parse(input, { startRule })` reports `TSG_DEP_PARSE_START_RULE`.
+Deprecated uses are reported at run time, once per code (`DEPRECATION_CODES`, `TSG_DEP_…`), without ts-graphviz writing to the console: to listeners registered with `onDeprecation(listener)` on every runtime; on the `ts-graphviz:deprecation` diagnostics channel and through `process.emitWarning` as a `DeprecationWarning` where the runtime has them (Node.js, and runtimes with Node compatibility; `--no-deprecation`, `--trace-deprecation` and `--throw-deprecation` apply). In a browser, only `onDeprecation` listeners receive them. `parse(input, { startRule })` reports `TSG_DEP_PARSE_START_RULE`.
