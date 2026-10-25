@@ -6,6 +6,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 15,
@@ -19,7 +20,6 @@
                     "offset": 20,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "center",
               },
@@ -38,6 +38,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 17,
@@ -51,13 +52,13 @@
                     "offset": 27,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "1",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 25,
@@ -71,7 +72,6 @@
                     "offset": 29,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "rankdir",
               },
@@ -90,6 +90,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 28,
@@ -103,13 +104,13 @@
                     "offset": 37,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "LR",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 36,
@@ -123,7 +124,6 @@
                     "offset": 40,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "bgcolor",
               },
@@ -142,6 +142,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 46,
@@ -155,7 +156,6 @@
                     "offset": 48,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "#808080",
               },
@@ -181,6 +181,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -194,7 +195,6 @@
                     "offset": 66,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "dir",
               },
@@ -213,6 +213,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 16,
@@ -226,7 +227,6 @@
                     "offset": 70,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "none",
               },
@@ -252,6 +252,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 13,
@@ -265,7 +266,6 @@
                     "offset": 83,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "width",
               },
@@ -284,6 +284,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 17,
@@ -297,13 +298,13 @@
                     "offset": 89,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "0.3",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -317,7 +318,6 @@
                     "offset": 93,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "height",
               },
@@ -336,6 +336,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 28,
@@ -349,13 +350,13 @@
                     "offset": 100,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "0.3",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 34,
@@ -369,7 +370,6 @@
                     "offset": 104,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -388,6 +388,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 37,
@@ -401,7 +402,6 @@
                     "offset": 110,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "",
               },
@@ -429,6 +429,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -442,7 +443,6 @@
                         "offset": 123,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -461,6 +461,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 22,
@@ -474,13 +475,13 @@
                         "offset": 129,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "circle",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 28,
@@ -494,7 +495,6 @@
                         "offset": 136,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "style",
                   },
@@ -513,6 +513,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 34,
@@ -526,7 +527,6 @@
                         "offset": 142,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "invis",
                   },
@@ -551,6 +551,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -564,7 +565,6 @@
                     "offset": 151,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "1",
               },
@@ -586,6 +586,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 6,
@@ -599,7 +600,6 @@
                     "offset": 153,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "2",
               },
@@ -621,6 +621,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -634,7 +635,6 @@
                     "offset": 155,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "3",
               },
@@ -656,6 +656,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -669,7 +670,6 @@
                     "offset": 157,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "4",
               },
@@ -691,6 +691,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -704,7 +705,6 @@
                     "offset": 159,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "5",
               },
@@ -726,6 +726,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 14,
@@ -739,7 +740,6 @@
                     "offset": 161,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "6",
               },
@@ -761,6 +761,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 16,
@@ -774,7 +775,6 @@
                     "offset": 163,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "7",
               },
@@ -796,6 +796,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 18,
@@ -809,7 +810,6 @@
                     "offset": 165,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "8",
               },
@@ -831,6 +831,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 22,
@@ -844,7 +845,6 @@
                     "offset": 168,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "10",
               },
@@ -866,6 +866,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 25,
@@ -879,7 +880,6 @@
                     "offset": 171,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "20",
               },
@@ -901,6 +901,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 28,
@@ -914,7 +915,6 @@
                     "offset": 174,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "30",
               },
@@ -936,6 +936,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 31,
@@ -949,7 +950,6 @@
                     "offset": 177,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "40",
               },
@@ -971,6 +971,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 34,
@@ -984,7 +985,6 @@
                     "offset": 180,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "50",
               },
@@ -1006,6 +1006,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 37,
@@ -1019,7 +1020,6 @@
                     "offset": 183,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "60",
               },
@@ -1041,6 +1041,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 40,
@@ -1054,7 +1055,6 @@
                     "offset": 186,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "70",
               },
@@ -1076,6 +1076,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 43,
@@ -1089,7 +1090,6 @@
                     "offset": 189,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "80",
               },
@@ -1130,6 +1130,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -1143,7 +1144,6 @@
                         "offset": 204,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -1162,6 +1162,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 22,
@@ -1175,7 +1176,6 @@
                         "offset": 210,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "circle",
                   },
@@ -1200,6 +1200,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -1213,7 +1214,6 @@
                     "offset": 220,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "a",
               },
@@ -1235,6 +1235,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 6,
@@ -1248,7 +1249,6 @@
                     "offset": 222,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "b",
               },
@@ -1270,6 +1270,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -1283,7 +1284,6 @@
                     "offset": 224,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "c",
               },
@@ -1305,6 +1305,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -1318,7 +1319,6 @@
                     "offset": 226,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "d",
               },
@@ -1340,6 +1340,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -1353,7 +1354,6 @@
                     "offset": 228,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "e",
               },
@@ -1375,6 +1375,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 14,
@@ -1388,7 +1389,6 @@
                     "offset": 230,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "f",
               },
@@ -1410,6 +1410,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 16,
@@ -1423,7 +1424,6 @@
                     "offset": 232,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "g",
               },
@@ -1445,6 +1445,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 18,
@@ -1458,7 +1459,6 @@
                     "offset": 234,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "h",
               },
@@ -1480,6 +1480,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 21,
@@ -1493,7 +1494,6 @@
                     "offset": 237,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "i",
               },
@@ -1515,6 +1515,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 23,
@@ -1528,7 +1529,6 @@
                     "offset": 239,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "j",
               },
@@ -1550,6 +1550,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 25,
@@ -1563,7 +1564,6 @@
                     "offset": 241,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "k",
               },
@@ -1585,6 +1585,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 27,
@@ -1598,7 +1599,6 @@
                     "offset": 243,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "l",
               },
@@ -1620,6 +1620,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 29,
@@ -1633,7 +1634,6 @@
                     "offset": 245,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "m",
               },
@@ -1655,6 +1655,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 31,
@@ -1668,7 +1669,6 @@
                     "offset": 247,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n",
               },
@@ -1690,6 +1690,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 33,
@@ -1703,7 +1704,6 @@
                     "offset": 249,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "o",
               },
@@ -1725,6 +1725,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 35,
@@ -1738,7 +1739,6 @@
                     "offset": 251,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "p",
               },
@@ -1760,6 +1760,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 38,
@@ -1773,7 +1774,6 @@
                     "offset": 254,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "q",
               },
@@ -1795,6 +1795,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 40,
@@ -1808,7 +1809,6 @@
                     "offset": 256,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "r",
               },
@@ -1830,6 +1830,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 42,
@@ -1843,7 +1844,6 @@
                     "offset": 258,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "s",
               },
@@ -1865,6 +1865,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 44,
@@ -1878,7 +1879,6 @@
                     "offset": 260,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "t",
               },
@@ -1900,6 +1900,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 46,
@@ -1913,7 +1914,6 @@
                     "offset": 262,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "u",
               },
@@ -1935,6 +1935,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 48,
@@ -1948,7 +1949,6 @@
                     "offset": 264,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "v",
               },
@@ -1970,6 +1970,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 50,
@@ -1983,7 +1984,6 @@
                     "offset": 266,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "w",
               },
@@ -2005,6 +2005,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 52,
@@ -2018,7 +2019,6 @@
                     "offset": 268,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "x",
               },
@@ -2059,6 +2059,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2072,7 +2073,6 @@
                         "offset": 282,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -2091,6 +2091,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 23,
@@ -2104,7 +2105,6 @@
                         "offset": 288,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "diamond",
                   },
@@ -2129,6 +2129,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -2142,7 +2143,6 @@
                     "offset": 299,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "A",
               },
@@ -2164,6 +2164,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 6,
@@ -2177,7 +2178,6 @@
                     "offset": 301,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "B",
               },
@@ -2199,6 +2199,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -2212,7 +2213,6 @@
                     "offset": 303,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "C",
               },
@@ -2234,6 +2234,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -2247,7 +2248,6 @@
                     "offset": 305,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "D",
               },
@@ -2269,6 +2269,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -2282,7 +2283,6 @@
                     "offset": 307,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "E",
               },
@@ -2304,6 +2304,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 14,
@@ -2317,7 +2318,6 @@
                     "offset": 309,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "F",
               },
@@ -2339,6 +2339,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 16,
@@ -2352,7 +2353,6 @@
                     "offset": 311,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "G",
               },
@@ -2374,6 +2374,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 18,
@@ -2387,7 +2388,6 @@
                     "offset": 313,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "H",
               },
@@ -2409,6 +2409,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 21,
@@ -2422,7 +2423,6 @@
                     "offset": 316,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "I",
               },
@@ -2444,6 +2444,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 23,
@@ -2457,7 +2458,6 @@
                     "offset": 318,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "J",
               },
@@ -2479,6 +2479,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 25,
@@ -2492,7 +2493,6 @@
                     "offset": 320,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "K",
               },
@@ -2514,6 +2514,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 27,
@@ -2527,7 +2528,6 @@
                     "offset": 322,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "L",
               },
@@ -2549,6 +2549,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 29,
@@ -2562,7 +2563,6 @@
                     "offset": 324,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "M",
               },
@@ -2584,6 +2584,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 31,
@@ -2597,7 +2598,6 @@
                     "offset": 326,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "N",
               },
@@ -2619,6 +2619,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 33,
@@ -2632,7 +2633,6 @@
                     "offset": 328,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "O",
               },
@@ -2654,6 +2654,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 35,
@@ -2667,7 +2668,6 @@
                     "offset": 330,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "P",
               },
@@ -2689,6 +2689,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 38,
@@ -2702,7 +2703,6 @@
                     "offset": 333,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "Q",
               },
@@ -2724,6 +2724,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 40,
@@ -2737,7 +2738,6 @@
                     "offset": 335,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "R",
               },
@@ -2759,6 +2759,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 42,
@@ -2772,7 +2773,6 @@
                     "offset": 337,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "S",
               },
@@ -2794,6 +2794,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 44,
@@ -2807,7 +2808,6 @@
                     "offset": 339,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "T",
               },
@@ -2829,6 +2829,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 46,
@@ -2842,7 +2843,6 @@
                     "offset": 341,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "U",
               },
@@ -2864,6 +2864,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 48,
@@ -2877,7 +2878,6 @@
                     "offset": 343,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "V",
               },
@@ -2899,6 +2899,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 50,
@@ -2912,7 +2913,6 @@
                     "offset": 345,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "W",
               },
@@ -2934,6 +2934,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 52,
@@ -2947,7 +2948,6 @@
                     "offset": 347,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "X",
               },
@@ -2986,6 +2986,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -2999,7 +3000,6 @@
                     "offset": 370,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "color",
               },
@@ -3018,6 +3018,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 34,
@@ -3031,7 +3032,6 @@
                     "offset": 376,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "#0000ff",
               },
@@ -3053,6 +3053,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 3,
@@ -3066,7 +3067,6 @@
                     "offset": 353,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "1",
               },
@@ -3087,6 +3087,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -3100,7 +3101,6 @@
                     "offset": 358,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "a",
               },
@@ -3136,6 +3136,7 @@
               "refs": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 14,
@@ -3149,7 +3150,6 @@
                         "offset": 364,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "A",
                   },
@@ -3170,6 +3170,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -3183,7 +3184,6 @@
                         "offset": 366,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "B",
                   },
@@ -3212,6 +3212,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -3225,7 +3226,6 @@
                     "offset": 405,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "color",
               },
@@ -3244,6 +3244,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 34,
@@ -3257,7 +3258,6 @@
                     "offset": 411,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "#ff0000",
               },
@@ -3279,6 +3279,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 3,
@@ -3292,7 +3293,6 @@
                     "offset": 388,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "2",
               },
@@ -3313,6 +3313,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -3326,7 +3327,6 @@
                     "offset": 393,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "b",
               },
@@ -3362,6 +3362,7 @@
               "refs": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 14,
@@ -3375,7 +3376,6 @@
                         "offset": 399,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "B",
                   },
@@ -3396,6 +3396,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -3409,7 +3410,6 @@
                         "offset": 401,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "A",
                   },
@@ -3438,6 +3438,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -3451,7 +3452,6 @@
                     "offset": 440,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "color",
               },
@@ -3470,6 +3470,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 34,
@@ -3483,7 +3484,6 @@
                     "offset": 446,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "#ffff00",
               },
@@ -3505,6 +3505,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 3,
@@ -3518,7 +3519,6 @@
                     "offset": 423,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "3",
               },
@@ -3539,6 +3539,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -3552,7 +3553,6 @@
                     "offset": 428,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "c",
               },
@@ -3588,6 +3588,7 @@
               "refs": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 14,
@@ -3601,7 +3602,6 @@
                         "offset": 434,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "C",
                   },
@@ -3622,6 +3622,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -3635,7 +3636,6 @@
                         "offset": 436,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "D",
                   },
@@ -3664,6 +3664,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -3677,7 +3678,6 @@
                     "offset": 475,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "color",
               },
@@ -3696,6 +3696,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 34,
@@ -3709,7 +3710,6 @@
                     "offset": 481,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "#00ff00",
               },
@@ -3731,6 +3731,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 3,
@@ -3744,7 +3745,6 @@
                     "offset": 458,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "4",
               },
@@ -3765,6 +3765,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -3778,7 +3779,6 @@
                     "offset": 463,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "d",
               },
@@ -3814,6 +3814,7 @@
               "refs": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 14,
@@ -3827,7 +3828,6 @@
                         "offset": 469,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "D",
                   },
@@ -3848,6 +3848,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -3861,7 +3862,6 @@
                         "offset": 471,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "C",
                   },
@@ -3890,6 +3890,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -3903,7 +3904,6 @@
                     "offset": 510,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "color",
               },
@@ -3922,6 +3922,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 34,
@@ -3935,7 +3936,6 @@
                     "offset": 516,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "#000000",
               },
@@ -3957,6 +3957,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 3,
@@ -3970,7 +3971,6 @@
                     "offset": 493,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "5",
               },
@@ -3991,6 +3991,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -4004,7 +4005,6 @@
                     "offset": 498,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "e",
               },
@@ -4040,6 +4040,7 @@
               "refs": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 14,
@@ -4053,7 +4054,6 @@
                         "offset": 504,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "E",
                   },
@@ -4074,6 +4074,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -4087,7 +4088,6 @@
                         "offset": 506,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "F",
                   },
@@ -4116,6 +4116,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -4129,7 +4130,6 @@
                     "offset": 545,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "color",
               },
@@ -4148,6 +4148,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 34,
@@ -4161,7 +4162,6 @@
                     "offset": 551,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "#00ffff",
               },
@@ -4183,6 +4183,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 3,
@@ -4196,7 +4197,6 @@
                     "offset": 528,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "6",
               },
@@ -4217,6 +4217,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -4230,7 +4231,6 @@
                     "offset": 533,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "f",
               },
@@ -4266,6 +4266,7 @@
               "refs": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 14,
@@ -4279,7 +4280,6 @@
                         "offset": 539,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "F",
                   },
@@ -4300,6 +4300,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -4313,7 +4314,6 @@
                         "offset": 541,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "E",
                   },
@@ -4342,6 +4342,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -4355,7 +4356,6 @@
                     "offset": 580,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "color",
               },
@@ -4374,6 +4374,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 34,
@@ -4387,7 +4388,6 @@
                     "offset": 586,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "#ffffff",
               },
@@ -4409,6 +4409,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 3,
@@ -4422,7 +4423,6 @@
                     "offset": 563,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "7",
               },
@@ -4443,6 +4443,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -4456,7 +4457,6 @@
                     "offset": 568,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "g",
               },
@@ -4492,6 +4492,7 @@
               "refs": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 14,
@@ -4505,7 +4506,6 @@
                         "offset": 574,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "G",
                   },
@@ -4526,6 +4526,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -4539,7 +4540,6 @@
                         "offset": 576,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "H",
                   },
@@ -4568,6 +4568,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -4581,7 +4582,6 @@
                     "offset": 615,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "color",
               },
@@ -4600,6 +4600,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 34,
@@ -4613,7 +4614,6 @@
                     "offset": 621,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "#ff00ff",
               },
@@ -4635,6 +4635,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 3,
@@ -4648,7 +4649,6 @@
                     "offset": 598,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "8",
               },
@@ -4669,6 +4669,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -4682,7 +4683,6 @@
                     "offset": 603,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "h",
               },
@@ -4718,6 +4718,7 @@
               "refs": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 14,
@@ -4731,7 +4732,6 @@
                         "offset": 609,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "H",
                   },
@@ -4752,6 +4752,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -4765,7 +4766,6 @@
                         "offset": 611,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "G",
                   },
@@ -4796,6 +4796,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -4809,7 +4810,6 @@
                         "offset": 641,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "color",
                   },
@@ -4828,6 +4828,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 33,
@@ -4841,7 +4842,6 @@
                         "offset": 647,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "#ff0000:#0000ff",
                   },
@@ -4881,6 +4881,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -4894,7 +4895,6 @@
                         "offset": 668,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "A",
                   },
@@ -4915,6 +4915,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -4928,7 +4929,6 @@
                         "offset": 673,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "i",
                   },
@@ -4964,6 +4964,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -4977,7 +4978,6 @@
                             "offset": 679,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "I",
                       },
@@ -4998,6 +4998,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -5011,7 +5012,6 @@
                             "offset": 681,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "K",
                       },
@@ -5054,6 +5054,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -5067,7 +5068,6 @@
                         "offset": 686,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "B",
                   },
@@ -5088,6 +5088,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -5101,7 +5102,6 @@
                         "offset": 691,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "j",
                   },
@@ -5137,6 +5137,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -5150,7 +5151,6 @@
                             "offset": 697,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "J",
                       },
@@ -5171,6 +5171,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -5184,7 +5185,6 @@
                             "offset": 699,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "L",
                       },
@@ -5231,6 +5231,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -5244,7 +5245,6 @@
                         "offset": 714,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "color",
                   },
@@ -5263,6 +5263,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 33,
@@ -5276,7 +5277,6 @@
                         "offset": 720,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "#00ff00:#ffff00",
                   },
@@ -5316,6 +5316,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -5329,7 +5330,6 @@
                         "offset": 741,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "C",
                   },
@@ -5350,6 +5350,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -5363,7 +5364,6 @@
                         "offset": 746,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "k",
                   },
@@ -5399,6 +5399,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -5412,7 +5413,6 @@
                             "offset": 752,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "K",
                       },
@@ -5433,6 +5433,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -5446,7 +5447,6 @@
                             "offset": 754,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "I",
                       },
@@ -5489,6 +5489,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -5502,7 +5503,6 @@
                         "offset": 759,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "D",
                   },
@@ -5523,6 +5523,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -5536,7 +5537,6 @@
                         "offset": 764,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "l",
                   },
@@ -5572,6 +5572,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -5585,7 +5586,6 @@
                             "offset": 770,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "L",
                       },
@@ -5606,6 +5606,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -5619,7 +5620,6 @@
                             "offset": 772,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "J",
                       },
@@ -5666,6 +5666,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -5679,7 +5680,6 @@
                         "offset": 787,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "color",
                   },
@@ -5698,6 +5698,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 33,
@@ -5711,7 +5712,6 @@
                         "offset": 793,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "#00ffff:#000000",
                   },
@@ -5751,6 +5751,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -5764,7 +5765,6 @@
                         "offset": 814,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "E",
                   },
@@ -5785,6 +5785,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -5798,7 +5799,6 @@
                         "offset": 819,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "m",
                   },
@@ -5834,6 +5834,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -5847,7 +5848,6 @@
                             "offset": 825,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "M",
                       },
@@ -5868,6 +5868,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -5881,7 +5882,6 @@
                             "offset": 827,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "O",
                       },
@@ -5924,6 +5924,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -5937,7 +5938,6 @@
                         "offset": 832,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "F",
                   },
@@ -5958,6 +5958,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -5971,7 +5972,6 @@
                         "offset": 837,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n",
                   },
@@ -6007,6 +6007,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -6020,7 +6021,6 @@
                             "offset": 843,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "N",
                       },
@@ -6041,6 +6041,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -6054,7 +6055,6 @@
                             "offset": 845,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "P",
                       },
@@ -6101,6 +6101,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -6114,7 +6115,6 @@
                         "offset": 860,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "color",
                   },
@@ -6133,6 +6133,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 33,
@@ -6146,7 +6147,6 @@
                         "offset": 866,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "#ff00ff:#ffffff",
                   },
@@ -6186,6 +6186,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -6199,7 +6200,6 @@
                         "offset": 887,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "G",
                   },
@@ -6220,6 +6220,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -6233,7 +6234,6 @@
                         "offset": 892,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "o",
                   },
@@ -6269,6 +6269,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -6282,7 +6283,6 @@
                             "offset": 898,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "O",
                       },
@@ -6303,6 +6303,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -6316,7 +6317,6 @@
                             "offset": 900,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "M",
                       },
@@ -6359,6 +6359,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -6372,7 +6373,6 @@
                         "offset": 905,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "H",
                   },
@@ -6393,6 +6393,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -6406,7 +6407,6 @@
                         "offset": 910,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "p",
                   },
@@ -6442,6 +6442,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -6455,7 +6456,6 @@
                             "offset": 916,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "P",
                       },
@@ -6476,6 +6476,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -6489,7 +6490,6 @@
                             "offset": 918,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "N",
                       },
@@ -6536,6 +6536,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -6549,7 +6550,6 @@
                         "offset": 933,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "color",
                   },
@@ -6568,6 +6568,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 49,
@@ -6581,7 +6582,6 @@
                         "offset": 939,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "#00ff00:#ffff00:#ff0000:#0000ff",
                   },
@@ -6621,6 +6621,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -6634,7 +6635,6 @@
                         "offset": 976,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "I",
                   },
@@ -6655,6 +6655,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -6668,7 +6669,6 @@
                         "offset": 981,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "q",
                   },
@@ -6704,6 +6704,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -6717,7 +6718,6 @@
                             "offset": 987,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "Q",
                       },
@@ -6738,6 +6738,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -6751,7 +6752,6 @@
                             "offset": 989,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "U",
                       },
@@ -6794,6 +6794,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -6807,7 +6808,6 @@
                         "offset": 994,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "J",
                   },
@@ -6828,6 +6828,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -6841,7 +6842,6 @@
                         "offset": 999,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "r",
                   },
@@ -6877,6 +6877,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -6890,7 +6891,6 @@
                             "offset": 1005,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "R",
                       },
@@ -6911,6 +6911,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -6924,7 +6925,6 @@
                             "offset": 1007,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "V",
                       },
@@ -6967,6 +6967,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -6980,7 +6981,6 @@
                         "offset": 1012,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "K",
                   },
@@ -7001,6 +7001,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -7014,7 +7015,6 @@
                         "offset": 1017,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "s",
                   },
@@ -7050,6 +7050,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -7063,7 +7064,6 @@
                             "offset": 1023,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "S",
                       },
@@ -7084,6 +7084,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -7097,7 +7098,6 @@
                             "offset": 1025,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "W",
                       },
@@ -7140,6 +7140,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -7153,7 +7154,6 @@
                         "offset": 1030,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "L",
                   },
@@ -7174,6 +7174,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -7187,7 +7188,6 @@
                         "offset": 1035,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "t",
                   },
@@ -7223,6 +7223,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -7236,7 +7237,6 @@
                             "offset": 1041,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "T",
                       },
@@ -7257,6 +7257,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -7270,7 +7271,6 @@
                             "offset": 1043,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "X",
                       },
@@ -7317,6 +7317,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -7330,7 +7331,6 @@
                         "offset": 1058,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "color",
                   },
@@ -7349,6 +7349,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 49,
@@ -7362,7 +7363,6 @@
                         "offset": 1064,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "#ff00ff:#ffffff:#00ffff:#000000",
                   },
@@ -7402,6 +7402,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -7415,7 +7416,6 @@
                         "offset": 1101,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "M",
                   },
@@ -7436,6 +7436,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -7449,7 +7450,6 @@
                         "offset": 1106,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "u",
                   },
@@ -7485,6 +7485,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -7498,7 +7499,6 @@
                             "offset": 1112,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "U",
                       },
@@ -7519,6 +7519,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -7532,7 +7533,6 @@
                             "offset": 1114,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "Q",
                       },
@@ -7575,6 +7575,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -7588,7 +7589,6 @@
                         "offset": 1119,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "N",
                   },
@@ -7609,6 +7609,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -7622,7 +7623,6 @@
                         "offset": 1124,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "v",
                   },
@@ -7658,6 +7658,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -7671,7 +7672,6 @@
                             "offset": 1130,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "V",
                       },
@@ -7692,6 +7692,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -7705,7 +7706,6 @@
                             "offset": 1132,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "R",
                       },
@@ -7748,6 +7748,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -7761,7 +7762,6 @@
                         "offset": 1137,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "O",
                   },
@@ -7782,6 +7782,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -7795,7 +7796,6 @@
                         "offset": 1142,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "w",
                   },
@@ -7831,6 +7831,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -7844,7 +7845,6 @@
                             "offset": 1148,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "W",
                       },
@@ -7865,6 +7865,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -7878,7 +7879,6 @@
                             "offset": 1150,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "S",
                       },
@@ -7921,6 +7921,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -7934,7 +7935,6 @@
                         "offset": 1155,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "P",
                   },
@@ -7955,6 +7955,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 9,
@@ -7968,7 +7969,6 @@
                         "offset": 1160,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "x",
                   },
@@ -8004,6 +8004,7 @@
                   "refs": [
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 15,
@@ -8017,7 +8018,6 @@
                             "offset": 1166,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "X",
                       },
@@ -8038,6 +8038,7 @@
                     },
                     {
                       "id": {
+                        "kind": "bare",
                         "location": {
                           "end": {
                             "column": 17,
@@ -8051,7 +8052,6 @@
                             "offset": 1168,
                           },
                         },
-                        "quoted": false,
                         "type": "Literal",
                         "value": "T",
                       },
@@ -8098,6 +8098,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -8111,7 +8112,6 @@
                         "offset": 1183,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "color",
                   },
@@ -8130,6 +8130,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 81,
@@ -8143,7 +8144,6 @@
                         "offset": 1189,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "#ff00ff:#ffffff:#00ffff:#000000:#00ff00:#ffff00:#ff0000:#0000ff",
                   },
@@ -8183,6 +8183,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -8196,7 +8197,6 @@
                         "offset": 1258,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "Q",
                   },
@@ -8217,6 +8217,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 10,
@@ -8230,7 +8231,6 @@
                         "offset": 1263,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "10",
                   },
@@ -8270,6 +8270,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -8283,7 +8284,6 @@
                         "offset": 1268,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "R",
                   },
@@ -8304,6 +8304,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 10,
@@ -8317,7 +8318,6 @@
                         "offset": 1273,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "20",
                   },
@@ -8357,6 +8357,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -8370,7 +8371,6 @@
                         "offset": 1278,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "S",
                   },
@@ -8391,6 +8391,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 10,
@@ -8404,7 +8405,6 @@
                         "offset": 1283,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "30",
                   },
@@ -8444,6 +8444,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -8457,7 +8458,6 @@
                         "offset": 1288,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "T",
                   },
@@ -8478,6 +8478,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 10,
@@ -8491,7 +8492,6 @@
                         "offset": 1293,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "40",
                   },
@@ -8531,6 +8531,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -8544,7 +8545,6 @@
                         "offset": 1298,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "U",
                   },
@@ -8565,6 +8565,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 10,
@@ -8578,7 +8579,6 @@
                         "offset": 1303,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "50",
                   },
@@ -8618,6 +8618,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -8631,7 +8632,6 @@
                         "offset": 1308,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "V",
                   },
@@ -8652,6 +8652,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 10,
@@ -8665,7 +8666,6 @@
                         "offset": 1313,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "60",
                   },
@@ -8705,6 +8705,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -8718,7 +8719,6 @@
                         "offset": 1318,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "W",
                   },
@@ -8739,6 +8739,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 10,
@@ -8752,7 +8753,6 @@
                         "offset": 1323,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "70",
                   },
@@ -8792,6 +8792,7 @@
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 4,
@@ -8805,7 +8806,6 @@
                         "offset": 1328,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "X",
                   },
@@ -8826,6 +8826,7 @@
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 10,
@@ -8839,7 +8840,6 @@
                         "offset": 1333,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "80",
                   },
@@ -8880,6 +8880,7 @@
       ],
       "directed": true,
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 10,
@@ -8893,7 +8894,6 @@
             "offset": 8,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "G",
       },

@@ -12,6 +12,7 @@ import {
   type EdgeTargetASTNode,
   type GraphASTNode,
   type LiteralASTNode,
+  type LiteralKind,
   type NodeASTNode,
   type NodeRefASTNode,
   type SubgraphASTNode,
@@ -149,15 +150,15 @@ const htmlRawText: fc.Arbitrary<string> = fc.letrec<{
 
 const literal = <T extends string>(
   value: T,
-  quoted: boolean | 'html',
+  kind: LiteralKind,
 ): LiteralASTNode<T> =>
-  createElement('Literal', { value, quoted }, []) as LiteralASTNode<T>;
+  createElement('Literal', { value, kind }, []) as LiteralASTNode<T>;
 
 /** A literal usable as an id: bare identifier, numeral or quoted string. */
 const idLiteral: fc.Arbitrary<LiteralASTNode> = fc.oneof(
-  { arbitrary: bareIdText.map((v) => literal(v, false)), weight: 3 },
-  { arbitrary: numeralText.map((v) => literal(v, false)), weight: 1 },
-  { arbitrary: quotedRawText.map((v) => literal(v, true)), weight: 3 },
+  { arbitrary: bareIdText.map((v) => literal(v, 'bare')), weight: 3 },
+  { arbitrary: numeralText.map((v) => literal(v, 'bare')), weight: 1 },
+  { arbitrary: quotedRawText.map((v) => literal(v, 'quoted')), weight: 3 },
 );
 
 /** Any literal, including HTML strings. */
@@ -167,8 +168,11 @@ const valueLiteral: fc.Arbitrary<LiteralASTNode> = fc.oneof(
 );
 
 const compassLiteral: fc.Arbitrary<LiteralASTNode<Compass>> = fc
-  .tuple(fc.constantFrom(...COMPASS_POINTS), fc.boolean())
-  .map(([value, quoted]) => literal<Compass>(value, quoted));
+  .tuple(
+    fc.constantFrom(...COMPASS_POINTS),
+    fc.constantFrom<LiteralKind>('bare', 'quoted'),
+  )
+  .map(([value, kind]) => literal<Compass>(value, kind));
 
 /**
  * A port name. Compass points are excluded: `a:n` is a compass point in DOT,

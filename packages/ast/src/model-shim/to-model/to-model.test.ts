@@ -62,12 +62,12 @@ describe('HTML Lavel', () => {
     const ast = createElement(
       'Node',
       {
-        id: createElement('Literal', { value: 'A', quoted: false }),
+        id: createElement('Literal', { value: 'A', kind: 'bare' }),
       },
       [
         createElement('Attribute', {
-          key: createElement('Literal', { value: 'label', quoted: false }),
-          value: createElement('Literal', { value: 'A', quoted: 'html' }),
+          key: createElement('Literal', { value: 'label', kind: 'bare' }),
+          value: createElement('Literal', { value: 'A', kind: 'html' }),
         }),
       ],
     );
@@ -83,17 +83,17 @@ describe('HTML Lavel', () => {
       {
         targets: [
           createElement('NodeRef', {
-            id: createElement('Literal', { value: 'A', quoted: false }),
+            id: createElement('Literal', { value: 'A', kind: 'bare' }),
           }),
           createElement('NodeRef', {
-            id: createElement('Literal', { value: 'B', quoted: false }),
+            id: createElement('Literal', { value: 'B', kind: 'bare' }),
           }),
         ],
       },
       [
         createElement('Attribute', {
-          key: createElement('Literal', { value: 'label', quoted: false }),
-          value: createElement('Literal', { value: 'A', quoted: 'html' }),
+          key: createElement('Literal', { value: 'label', kind: 'bare' }),
+          value: createElement('Literal', { value: 'A', kind: 'html' }),
         }),
       ],
     );

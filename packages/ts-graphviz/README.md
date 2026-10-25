@@ -453,7 +453,7 @@ const ast = parse(`
 //     {
 //       id: {
 //         value: 'example',
-//         quoted: false,
+//         kind: 'bare',
 //         type: 'Literal',
 //         location: {
 //           start: { offset: 11, line: 2, column: 11 },
@@ -472,7 +472,7 @@ const ast = parse(`
 //         {
 //           id: {
 //             value: 'node1',
-//             quoted: false,
+//             kind: 'bare',
 //             type: 'Literal',
 //             location: {
 //               start: { offset: 25, line: 3, column: 5 },
@@ -489,7 +489,7 @@ const ast = parse(`
 //             {
 //               key: {
 //                 value: 'label',
-//                 quoted: false,
+//                 kind: 'bare',
 //                 type: 'Literal',
 //                 location: {
 //                   start: { offset: 39, line: 4, column: 7 },
@@ -499,7 +499,7 @@ const ast = parse(`
 //               },
 //               value: {
 //                 value: 'My Node',
-//                 quoted: true,
+//                 kind: 'quoted',
 //                 type: 'Literal',
 //                 location: {
 //                   start: { offset: 47, line: 4, column: 15 },

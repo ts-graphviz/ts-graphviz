@@ -238,7 +238,7 @@ _port "port"
       // the compass point, as Graphviz reads it (quoted or not).
       if (
         !compass &&
-        port.quoted !== 'html' &&
+        port.kind !== 'html' &&
         ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c', '_'].includes(port.value)
       ) {
         return { compass: port };
@@ -267,8 +267,8 @@ _compass_keyword
 // `b:"":""`. The keyword is tried first so `a:p:ne` keeps its meaning.
 _compass
   = v:(
-    value:_compass_keyword { return { value, quoted: false }; }
-    / "\"" value:_compass_keyword "\"" { return { value, quoted: true }; }
+    value:_compass_keyword { return { value, kind: 'bare' }; }
+    / "\"" value:_compass_keyword "\"" { return { value, kind: 'quoted' }; }
   ) {
       return b.createElement(
         'Literal',
@@ -288,7 +288,7 @@ _literal
         'Literal',
         {
           value,
-          quoted: false,
+          kind: 'bare',
         },
         [],
       );
@@ -371,7 +371,7 @@ HTML_STRING
         'Literal',
         {
           value: v.slice(1, v.length - 1),
-          quoted: 'html',
+          kind: 'html',
         },
         [],
       );
@@ -413,7 +413,7 @@ QUOTED_STRING
         'Literal',
         {
           value: chars.join(''),
-          quoted: true,
+          kind: 'quoted',
         },
         [],
       );

@@ -84,11 +84,28 @@ export interface LiteralASTProperties<T extends string = string>
    */
   value: T;
   /**
-   * A flag indicating whether the literal was quoted or not.
-   * If 'html' then the literal is an html like value.
+   * Which kind of DOT ID the literal is. See {@link LiteralKind}.
    */
-  quoted: boolean | 'html';
+  kind: LiteralKind;
 }
+
+/**
+ * The kinds of DOT ID a {@link LiteralASTNode} can be:
+ *
+ * - `'bare'`: an identifier or a numeral, written without quotes (`a`,
+ *   `-1.5`);
+ * - `'quoted'`: a double-quoted string; `value` is the text between the
+ *   quotes as written, escape sequences intact;
+ * - `'html'`: an HTML-like string; `value` is the markup between the outer
+ *   `<` and `>`.
+ *
+ * `'bare'` and `'quoted'` differ only in how the text is written: Graphviz
+ * reads `a` and `"a"` as the same string. `'html'` is a different kind of
+ * value that Graphviz keeps apart (an HTML-like label, not text).
+ *
+ * @group AST
+ */
+export type LiteralKind = 'bare' | 'quoted' | 'html';
 
 /**
  * SubgraphASTProperties describes the properties of an AST node representing a subgraph.

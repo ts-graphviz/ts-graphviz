@@ -19,7 +19,7 @@ export const SubgraphPlugin: ConvertFromModelPlugin<SubgraphModel> = {
                 'Literal',
                 {
                   value: idToRaw(model.id),
-                  quoted: true,
+                  kind: 'quoted',
                 },
                 [],
               )

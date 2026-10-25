@@ -16,7 +16,7 @@ export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {
           'Literal',
           {
             value: idToRaw(model.id),
-            quoted: true,
+            kind: 'quoted',
           },
           [],
         ),

@@ -186,15 +186,15 @@ function classifyAST(root: ASTNode): string[] {
     switch (node.type) {
       case 'Literal':
         labels.add(
-          node.quoted === 'html'
+          node.kind === 'html'
             ? 'html literal'
-            : node.quoted
+            : node.kind === 'quoted'
               ? 'quoted literal'
               : /^-?[.\d]/.test(node.value)
                 ? 'numeral literal'
                 : 'bare literal',
         );
-        if (node.quoted === true && node.value.includes('\\')) {
+        if (node.kind === 'quoted' && node.value.includes('\\')) {
           labels.add('quoted literal with escape');
         }
         break;

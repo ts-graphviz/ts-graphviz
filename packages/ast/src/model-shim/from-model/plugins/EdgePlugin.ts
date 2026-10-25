@@ -16,7 +16,7 @@ const nodeRef = (
 ): NodeRefASTNode => {
   const id = createElement(
     'Literal',
-    { value: idToRaw(target.id), quoted: true },
+    { value: idToRaw(target.id), kind: 'quoted' },
     [],
   );
   if (isNodeModel(target)) {
@@ -40,12 +40,16 @@ const nodeRef = (
       port: target.port
         ? createElement(
             'Literal',
-            { value: idToRaw(target.port), quoted: true },
+            { value: idToRaw(target.port), kind: 'quoted' },
             [],
           )
         : undefined,
       compass: target.compass
-        ? createElement('Literal', { value: target.compass, quoted: true }, [])
+        ? createElement(
+            'Literal',
+            { value: target.compass, kind: 'quoted' },
+            [],
+          )
         : undefined,
     },
     [],

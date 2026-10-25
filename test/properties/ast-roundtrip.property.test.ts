@@ -5,6 +5,7 @@ import {
   createElement,
   fromModel,
   type LiteralASTNode,
+  type LiteralKind,
   parse,
   stringify,
   toModel,
@@ -68,7 +69,7 @@ describe('[SM-1] printer and parser', () => {
 
   describe('node ports and compass points', () => {
     const bare = (value: string) =>
-      createElement('Literal', { value, quoted: false }, []);
+      createElement('Literal', { value, kind: 'bare' }, []);
     const edgeTo = (port?: string, compass?: string) =>
       createElement(
         'Edge',
@@ -162,13 +163,13 @@ describe('fromModel and toModel', () => {
     // every other string is literal text and is written quoted; HTML strings
     // stay HTML strings. One node with unique keys, so each attribute can be
     // compared to its original.
-    const expectedQuoting = (value: LiteralASTNode): boolean | 'html' => {
-      if (value.quoted === 'html') return 'html';
-      if (value.quoted === false) {
-        if (value.value === 'true' || value.value === 'false') return false;
-        if (String(Number(value.value)) === value.value) return false;
+    const expectedKind = (value: LiteralASTNode): LiteralKind => {
+      if (value.kind === 'html') return 'html';
+      if (value.kind === 'bare') {
+        if (value.value === 'true' || value.value === 'false') return 'bare';
+        if (String(Number(value.value)) === value.value) return 'bare';
       }
-      return true;
+      return 'quoted';
     };
     const attributesOf = (n: { children: ASTNode[] }) =>
       n.children.filter(
@@ -178,7 +179,7 @@ describe('fromModel and toModel', () => {
     // Keys are bare identifiers so that they match themselves after the
     // round trip (quoted keys are re-escaped).
     const identifierKeyed = attribute.filter(
-      (a) => a.key.quoted === false && /^[A-Za-z_]/.test(a.key.value),
+      (a) => a.key.kind === 'bare' && /^[A-Za-z_]/.test(a.key.value),
     );
     const nodeWithUniqueKeys = fc
       .tuple(
@@ -194,9 +195,9 @@ describe('fromModel and toModel', () => {
       fc.property(nodeWithUniqueKeys, (ast) => {
         const back = fromModel(toModel(ast, { models }));
         expect(
-          attributesOf(back).map((a) => [a.key.value, a.value.quoted]),
+          attributesOf(back).map((a) => [a.key.value, a.value.kind]),
         ).toStrictEqual(
-          attributesOf(ast).map((a) => [a.key.value, expectedQuoting(a.value)]),
+          attributesOf(ast).map((a) => [a.key.value, expectedKind(a.value)]),
         );
       }),
     );

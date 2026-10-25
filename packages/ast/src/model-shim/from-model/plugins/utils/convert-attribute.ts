@@ -27,7 +27,7 @@ export function convertAttribute<K extends AttributeKey>(
       // the AST types the key literal by K; a quoted key holds its escaped form
       key: createElement(
         'Literal',
-        literalFromKey(key) as { value: K; quoted: boolean },
+        literalFromKey(key) as { value: K; kind: 'bare' | 'quoted' },
         [],
       ),
       value: createElement('Literal', literalFromValue(value), []),
