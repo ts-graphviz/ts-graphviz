@@ -66,6 +66,10 @@ jobs:
         run: pnpm codegen
       - name: Build packages
         run: pnpm build
+      - name: Type check the site
+        run: pnpm --filter @ts-graphviz/website typecheck
+      - name: Unit and component tests of the site
+        run: pnpm --filter @ts-graphviz/website test
       - name: Build the API reference
         run: pnpm doc
       - name: Build the site
@@ -74,6 +78,16 @@ jobs:
         run: pnpm --filter @ts-graphviz/website copy-api
       - name: Check internal links of the built site
         run: pnpm --filter @ts-graphviz/website check-links
+      - name: Install browsers for the end-to-end tests
+        run: pnpm --filter @ts-graphviz/website exec playwright install --with-deps chromium webkit
+      - name: End-to-end tests of the built site (desktop and phones)
+        run: pnpm --filter @ts-graphviz/website test:e2e
+      - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+        if: ${{ failure() }}
+        with:
+          name: website-e2e-results
+          path: website/test-results
+          retention-days: 7
       - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
         with:
           name: website

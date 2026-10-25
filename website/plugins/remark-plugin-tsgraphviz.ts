@@ -23,11 +23,17 @@ const transformNode = (code: Code): MdxJsxFlowElement[] => {
           name: 'script',
           value: script,
         },
-        {
-          type: 'mdxJsxAttribute',
-          name: 'readOnly',
-          value: options.readOnly ? 'true' : 'false',
-        },
+        // A bare `readOnly` (value null) is `true`; a string "false" would be
+        // truthy, so the attribute is left out instead.
+        ...(options.readOnly
+          ? [
+              {
+                type: 'mdxJsxAttribute' as const,
+                name: 'readOnly',
+                value: null,
+              },
+            ]
+          : []),
       ],
       children: [],
     },
@@ -44,7 +50,8 @@ const isTSGraphvizLiveEditorImport = (node: Node): boolean =>
 const isParent = (node: Node): node is Parent =>
   Array.isArray((node as Parent).children);
 const isTSGraphvizScript = (node: Node): node is Code =>
-  node.type === 'code' && (node as Code).meta?.startsWith('ts-graphviz');
+  node.type === 'code' &&
+  (node as Code).meta?.startsWith('ts-graphviz') === true;
 
 const getTSGraphvizOptions = (code: Code): CodeBlockOptions => {
   const options = code.meta ? code.meta.split(':').slice(1) : [];

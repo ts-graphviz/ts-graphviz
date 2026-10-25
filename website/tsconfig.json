@@ -1,10 +1,17 @@
 {
-  // This file is not used in compilation. It is here just for a nice editor experience.
+  // Used for type checking (`pnpm typecheck`) and editors; Docusaurus
+  // compiles with Babel and does not read it.
   "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
-    "baseUrl": "."
+    "baseUrl": ".",
+    // The Playground imports ts-graphviz's sources from the workspace, which
+    // are written for strict mode.
+    "strict": true,
+    "types": ["node"]
   },
   "exclude": [
-    "scripts"
+    "scripts",
+    "build",
+    ".docusaurus"
   ]
 }

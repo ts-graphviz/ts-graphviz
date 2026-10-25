@@ -1,10 +1,10 @@
 import Translate, { translate } from '@docusaurus/Translate';
 import type { Engine } from '@hpcc-js/wasm-graphviz';
-import { Graphviz } from '@site/src/components/Graphviz';
+import { GraphImage } from '@site/src/components/GraphImage';
 import TSGraphvizLiveEditor from '@site/src/components/TSGraphvizLiveEditor';
-import { useGraphviz } from '@site/src/contexts/Graphviz';
-import { useContainer } from '@site/src/contexts/WebContainer';
-// import { monaco as monaco_editor } from 'monaco-editor';
+import type { RunResult } from '@site/src/playground/runtime/protocol';
+import { useScriptRunner } from '@site/src/playground/runtime/ScriptRunnerContext';
+import { useLayout } from '@site/src/playground/runtime/useLayout';
 import CodeBlock from '@theme/CodeBlock';
 import TabItem from '@theme/TabItem';
 import Tabs from '@theme/Tabs';
@@ -14,10 +14,9 @@ import {
   memo,
   useCallback,
   useEffect,
-  useMemo,
+  useRef,
   useState,
 } from 'react';
-import { OrbitProgress, Riple } from 'react-loading-indicators';
 import styles from './styles.module.css';
 
 interface Props {
@@ -25,155 +24,156 @@ interface Props {
   className?: string;
 }
 
+export const ENGINES: readonly Engine[] = [
+  'dot',
+  'neato',
+  'fdp',
+  'sfdp',
+  'circo',
+  'twopi',
+  'osage',
+  'patchwork',
+];
+
+type Output = { state: 'running' } | ({ state: 'done' } & RunResult);
+
+/**
+ * The Playground: a ts-graphviz script on one side, the graph it produces
+ * on the other (side by side on wide screens, stacked on narrow ones).
+ *
+ * Needs a ScriptRunnerProvider above it. The script runs once when the
+ * runner is ready, then on Run or Ctrl/Cmd+Enter; scripts and Graphviz
+ * layouts both run in the runner's worker.
+ */
 function TSGraphvizPreviewEditor({ script, className }: Props): JSX.Element {
-  const [dot, setDot] = useState<string>(null);
-  const container = useContainer();
-  useEffect(() => {
-    if (!dot && container.status === 'ready') {
-      container.run(script).then(setDot);
-    }
-  }, [dot, container.status, container.run, script, setDot]);
-
-  const [tsCode, setTsCode] = useState<string>(script);
-  const onChangeCallback = useCallback(
-    (value: string) => {
-      setTsCode(value);
-    },
-    [setTsCode],
-  );
-
+  const runner = useScriptRunner();
+  const source = useRef(script);
+  const latestRun = useRef(0);
+  const [output, setOutput] = useState<Output>({ state: 'running' });
   const [engine, setEngine] = useState<Engine>('dot');
 
   const run = useCallback(() => {
-    console.log('run', tsCode, container.status);
-    if (container.status === 'ready') {
-      setDot(null);
-      container.run(tsCode).then(setDot);
-    }
-  }, [container.status, container.run, tsCode, setDot]);
-  const graphviz = useGraphviz();
-  const version = useMemo(() => graphviz.version, [graphviz]);
+    if (runner === null) return;
+    const id = ++latestRun.current;
+    setOutput({ state: 'running' });
+    runner.run(source.current).then((result) => {
+      // A newer run replaces this one.
+      if (id === latestRun.current) setOutput({ state: 'done', ...result });
+    });
+  }, [runner]);
+
+  useEffect(() => {
+    run();
+  }, [run]);
+
+  const onChange = useCallback((value: string) => {
+    source.current = value;
+  }, []);
+
+  const running = runner === null || output.state === 'running';
+  const dot = output.state === 'done' && output.ok ? output.dot : null;
+  const layout = useLayout(dot, engine);
+
   return (
-    <div>
-      <div className={clsx([styles.container, className])}>
-        <div className={styles.editorContainer}>
-          <div className={styles.actionMenu}>
-            <button
-              type="button"
-              disabled={container.status !== 'ready'}
-              onClick={run}
-              className={clsx('button button--primary')}
-            >
-              <Translate>Run</Translate>
-            </button>
+    <div className={clsx(styles.playground, className)}>
+      <section
+        className={styles.editorPane}
+        aria-label={translate({ message: 'Script' })}
+      >
+        <div className={styles.toolbar}>
+          <button
+            type="button"
+            className="button button--primary"
+            disabled={runner === null}
+            onClick={run}
+          >
+            <Translate>Run</Translate>
+          </button>
+          <span className={styles.hint}>
+            <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd>
+          </span>
+        </div>
+        <TSGraphvizLiveEditor
+          script={script}
+          height="fill"
+          className={styles.editor}
+          onChange={onChange}
+          onRun={run}
+        />
+      </section>
+      <section
+        className={styles.resultPane}
+        aria-label={translate({ message: 'Result' })}
+        aria-busy={running}
+      >
+        {running ? (
+          <output className={styles.message}>
+            <span className={styles.spinner} aria-hidden="true" />
+            <Translate>Running…</Translate>
+          </output>
+        ) : output.state === 'done' && !output.ok ? (
+          <div role="alert" className={styles.error}>
+            <strong>{output.error.name}</strong>
+            <pre>{output.error.message}</pre>
           </div>
-          <TSGraphvizLiveEditor
-            script={script}
-            className={styles.editor}
-            onMount={() => {}}
-            onChange={onChangeCallback}
-          />
-        </div>
-        <div
-          className={styles.result}
-          style={
-            container.status === 'booted' || container.status === 'installing'
-              ? {
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }
-              : null
-          }
-        >
-          {container.status === 'booted' ||
-          container.status === 'installing' ? (
-            <OrbitProgress
-              color="#3478c6"
-              size="medium"
-              text="Installing ts-graphviz"
-              textColor="white"
-              easing="ease-in-out"
-            />
-          ) : (
-            <Tabs className={styles.tabs}>
-              <TabItem
-                value="image"
-                label={translate({ message: 'Image' })}
-                default
-              >
-                {container.status === 'processing' ? (
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
+        ) : output.state === 'done' && output.ok ? (
+          <Tabs className={styles.tabs} lazy>
+            <TabItem
+              value="image"
+              label={translate({ message: 'Image' })}
+              default
+            >
+              <div className={styles.imageHeader}>
+                <label className={styles.engine}>
+                  <Translate>Layout engine</Translate>
+                  <select
+                    value={engine}
+                    onChange={(event) =>
+                      setEngine(event.target.value as Engine)
+                    }
                   >
-                    <Riple color="#3478c6" size="medium" />
-                  </div>
+                    {ENGINES.map((name) => (
+                      <option key={name} value={name}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {layout.status === 'done' && layout.ok ? (
+                  <span className={styles.version}>
+                    {translate(
+                      { message: 'Graphviz {version}' },
+                      { version: layout.version },
+                    )}
+                  </span>
+                ) : null}
+              </div>
+              {layout.status === 'done' ? (
+                layout.ok ? (
+                  <GraphImage className={styles.graph} svg={layout.svg} />
                 ) : (
-                  <>
-                    <div className={styles.graphvizHeader}>
-                      <label htmlFor="engine">
-                        {translate({
-                          message: 'Layout Engine:',
-                        })}
-                        <select
-                          id="engine"
-                          value={engine}
-                          onChange={(e) => setEngine(e.target.value as Engine)}
-                        >
-                          <option value="dot">dot</option>
-                          {/* <option value="cicro">cicro</option> */}
-                          <option value="sfdp">sfdp</option>
-                          <option value="fdp">fdp</option>
-                          <option value="neato">neato</option>
-                          <option value="osage">osage</option>
-                          <option value="patchwork">patchwork</option>
-                          <option value="twopi">twopi</option>
-                          <option value="nop">nop</option>
-                          <option value="nop2">nop2</option>
-                        </select>
-                      </label>
-                      <p>
-                        {translate(
-                          {
-                            message: 'Graphviz Version: {version}',
-                          },
-                          { version },
-                        )}
-                      </p>
-                    </div>
-                    <Graphviz
-                      className={styles.graphviz}
-                      dot={dot}
-                      engine={engine}
-                    />
-                  </>
-                )}
-              </TabItem>
-              <TabItem value="dot" label={translate({ message: 'DOT' })}>
-                <div className={styles.dot}>
-                  {container.status === 'processing' ? (
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Riple color="#3478c6" size="medium" />
-                    </div>
-                  ) : (
-                    <CodeBlock language="dot">{dot}</CodeBlock>
-                  )}
-                </div>
-              </TabItem>
-            </Tabs>
-          )}
-        </div>
-      </div>
+                  <div role="alert" className={styles.error}>
+                    {translate(
+                      { message: 'Failed to render graph: {message}' },
+                      { message: layout.error.message },
+                    )}
+                  </div>
+                )
+              ) : (
+                <output className={styles.message}>
+                  <span className={styles.spinner} aria-hidden="true" />
+                  <Translate>Laying out…</Translate>
+                </output>
+              )}
+            </TabItem>
+            <TabItem value="dot" label="DOT">
+              <CodeBlock language="dot" className={styles.dot}>
+                {output.dot}
+              </CodeBlock>
+            </TabItem>
+          </Tabs>
+        ) : null}
+      </section>
     </div>
   );
 }
