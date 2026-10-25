@@ -101,10 +101,16 @@ describe('Dot model', () => {
   });
 
   describe('fromDot', () => {
-    it('returns the first root graph of a DOT source', () => {
-      const g = fromDot('digraph a {} graph b {}');
+    it('returns the root graph of a DOT source', () => {
+      const g = fromDot('digraph a {}');
       expect(isRootGraphModel(g)).toBe(true);
       expect(g.id).toBe('a');
+    });
+
+    it('throws when the source has several graphs (read them with fromDotAll)', () => {
+      expect(() => fromDot('digraph a {} graph b {}')).toThrow(
+        expect.objectContaining({ code: 'TSG_ERR_MULTIPLE_GRAPHS' }),
+      );
     });
 
     it('throws when the source has no graph', () => {

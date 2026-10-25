@@ -44,6 +44,8 @@ export const ERROR_CODES = [
   'TSG_ERR_UNCONVERTIBLE_AST',
   /** `fromDot` was given a DOT source without a graph (`Error`). */
   'TSG_ERR_NO_GRAPH',
+  /** `fromDot` was given a DOT source with more than one graph; read them with `fromDotAll` (`Error`). */
+  'TSG_ERR_MULTIPLE_GRAPHS',
   /** A `GraphBase` subclass created a model without a models context (`Error`). */
   'TSG_ERR_NO_MODELS_CONTEXT',
   /** The feature is not available on the current runtime, e.g. the adapter in a browser (`Error`). */

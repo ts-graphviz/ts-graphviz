@@ -1,7 +1,7 @@
 import {
   type ConvertToModelOptions,
   type ParseOptions,
-  parse,
+  parseFragment,
   toModel,
 } from '@ts-graphviz/ast';
 import {
@@ -67,7 +67,10 @@ export function fromDot(
 export function fromDot<
   T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph',
 >(dot: string, options?: FromDotOptions<T>) {
-  const ast = parse(dot, options?.parse);
+  // `startRule` picks what fromDot returns; it is not the deprecated
+  // option of `parse`.
+  const { startRule = 'Dot', ...limits } = options?.parse ?? {};
+  const ast = parseFragment(dot, startRule, limits);
   if (
     Array.isArray(ast) ||
     ast.type === 'Attribute' ||
@@ -89,15 +92,48 @@ export function fromDot<
     models: createModelsContext(options?.convert?.models),
   });
   if (isDotModel(model)) {
-    // A whole DOT source converts to a Dot model; return its first graph.
-    const [graph] = model.graphs;
+    // A whole DOT source converts to a Dot model; fromDot returns its graph.
+    const [graph, ...more] = model.graphs;
     if (!graph) {
       throw withCode(
         new Error('fromDot: the DOT source contains no graph'),
         'TSG_ERR_NO_GRAPH',
       );
     }
+    if (more.length > 0) {
+      throw withCode(
+        new Error(
+          `fromDot: the DOT source contains ${model.graphs.length} graphs; read them all with fromDotAll`,
+        ),
+        'TSG_ERR_MULTIPLE_GRAPHS',
+      );
+    }
     return graph;
   }
   return model;
+}
+
+/**
+ * Convert a DOT source to models of all the graphs in it, in order. A DOT
+ * source may hold any number of graphs (Graphviz renders each); `fromDot`
+ * reads exactly one.
+ *
+ * @group Convert DOT to Model
+ *
+ * @param dot The DOT source to convert.
+ * @param options Parser limits and conversion options.
+ * @returns The graphs, possibly none.
+ */
+export function fromDotAll(
+  dot: string,
+  options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
+    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+  },
+): RootGraphModel[] {
+  const ast = parseFragment(dot, 'Dot', options?.parse);
+  const model = toModel(ast, {
+    ...options?.convert,
+    models: createModelsContext(options?.convert?.models),
+  });
+  return [...model.graphs];
 }
