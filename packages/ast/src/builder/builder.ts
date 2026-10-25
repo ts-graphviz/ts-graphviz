@@ -47,7 +47,7 @@ export class Builder implements ASTBuilder {
    * @param type - Type of the {@link ASTNode}
    * @param props - Properties of the {@link ASTNode}
    * @param children - The nodes the new node contains: the `children` of a
-   * statement container, the `refs` of a `NodeRefGroup`; ignored for leaves.
+   * statement container, the `refs` of a `NodeRefList`; ignored for leaves.
    * @returns An {@link ASTNode}
    * @throws {ASTNodeCountExceededError} if the maximum number of AST nodes is exceeded
    */
@@ -65,7 +65,7 @@ export class Builder implements ASTBuilder {
     // The contained nodes come from the third argument only, never from props.
     const { children: _children, refs: _refs, ...rest } = props ?? {};
     const node = { ...(location && { location }), ...rest, type };
-    if (type === 'NodeRefGroup') {
+    if (type === 'NodeRefList') {
       return { ...node, refs: children };
     }
     if (LEAF_TYPES.has(type)) {

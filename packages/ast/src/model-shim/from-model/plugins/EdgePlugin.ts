@@ -65,16 +65,22 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
     return createElement(
       'Edge',
       {
-        targets: model.targets.map(
-          (target): EdgeTargetASTNode =>
-            Array.isArray(target)
-              ? createElement(
-                  'NodeRefGroup',
-                  {},
-                  target.map((n) => nodeRef(createElement, n)),
-                )
-              : nodeRef(createElement, target),
-        ) as [
+        targets: model.targets.map((target): EdgeTargetASTNode => {
+          if (!Array.isArray(target)) return nodeRef(createElement, target);
+          const refs = target.map((n) => nodeRef(createElement, n));
+          // Graphviz ignores ports inside `{a b}`, but keeps them in a
+          // comma list, so a group with a port is written `a:p, b`.
+          if (refs.some((ref) => ref.port || ref.compass)) {
+            return refs.length === 1
+              ? refs[0]
+              : createElement('NodeRefList', {}, refs);
+          }
+          return createElement(
+            'Subgraph',
+            {},
+            refs.map((ref) => createElement('Node', { id: ref.id }, [])),
+          );
+        }) as [
           from: EdgeTargetASTNode,
           to: EdgeTargetASTNode,
           ...rest: EdgeTargetASTNode[],

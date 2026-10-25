@@ -206,11 +206,13 @@ function classifyAST(root: ASTNode): string[] {
         if (node.port) labels.add('port');
         if (node.compass) labels.add('compass');
         break;
-      case 'NodeRefGroup':
-        labels.add('edge group target');
+      case 'NodeRefList':
+        labels.add('edge node list target');
         break;
       case 'Edge':
         if (node.targets.length > 2) labels.add('edge with 3+ targets');
+        if (node.targets.some((t) => t.type === 'Subgraph'))
+          labels.add('edge subgraph target');
         if (node.children.length > 0) labels.add('edge attributes');
         break;
       case 'AttributeList':
@@ -322,7 +324,8 @@ describe('generator density', () => {
       'html literal': 0.2,
       port: 0.3,
       compass: 0.2,
-      'edge group target': 0.3,
+      'edge node list target': 0.2,
+      'edge subgraph target': 0.2,
       'edge with 3+ targets': 0.3,
       'edge attributes': 0.3,
       'attribute list: Graph': 0.15,

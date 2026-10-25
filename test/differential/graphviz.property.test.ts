@@ -6,8 +6,9 @@
  * - `gvpr` with `dump.gvpr` reports the graph Graphviz actually built, with
  *   the attribute values Graphviz resolved, and that must match what the
  *   model means under Graphviz's own rules, computed here from the model:
- *   - `a -> b -> c` and `{a b} -> c` are binary edges; a group is a set of
- *     nodes whose ports and compass points mean nothing;
+ *   - `a -> b -> c` and `{a b} -> c` are binary edges; a group without
+ *     ports is written `{a b}`, a set of nodes, and a group with a port or
+ *     compass point `a:p, b`, a list whose ports count (#1708);
  *   - ports become the `tailport` / `headport` attributes (`p:n`);
  *   - `node [...]` / `edge [...]` defaults apply when an object is created
  *     (in statement order: attributes, defaults, nodes, subgraphs, edges);
@@ -179,11 +180,14 @@ function expected(root: RootGraphSummary): Expected {
     for (const n of g.nodes) node(gvId(n.id), nd).mention(n.attributes);
     for (const sub of g.subgraphs) walk(sub, nd, ed);
     for (const e of g.edges) {
-      // A group is a set of nodes without ports; a chain is binary edges.
+      // A group without ports is a set of nodes (`{a b}`); with one, a list
+      // that keeps every port (`a:p, b`). A chain is binary edges.
       const ends = e.targets.map((t) =>
-        Array.isArray(t)
-          ? [...new Set(t.map((r) => gvId(r.id)))].map((id) => ({ id }))
-          : [{ id: gvId(t.id), port: portText(t) }],
+        !Array.isArray(t)
+          ? [{ id: gvId(t.id), port: portText(t) }]
+          : t.some((r) => r.port !== undefined || r.compass !== undefined)
+            ? t.map((r) => ({ id: gvId(r.id), port: portText(r) }))
+            : [...new Set(t.map((r) => gvId(r.id)))].map((id) => ({ id })),
       );
       for (const end of ends) for (const r of end) node(r.id, nd);
       for (let i = 0; i + 1 < ends.length; i++) {

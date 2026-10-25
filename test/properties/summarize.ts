@@ -39,16 +39,25 @@ export interface RootGraphSummary extends GraphSummary {
 const sorted = (values: ReadonlyArray<[string, unknown]>) =>
   [...values].sort(([a], [b]) => a.localeCompare(b));
 
-/** A node reference as a plain object; a group as an array of them. */
+/**
+ * A node reference as a plain object; a group as an array of them. A group
+ * of one node is that node: the same edge to Graphviz, and `toDot` writes a
+ * one-node group with a port as the node itself (a comma list needs two).
+ */
 type TargetSummary =
   | { id: string; port?: string; compass?: string }
   | { id: string; port?: string; compass?: string }[];
 
 function summarizeTarget(target: EdgeModel['targets'][number]): TargetSummary {
   if (Array.isArray(target)) {
-    return target.map(
+    let refs = target.map(
       (t) => summarizeTarget(t) as Exclude<TargetSummary, unknown[]>,
     );
+    // Without ports a group is written `{a b}`, a subgraph: a set of nodes.
+    if (refs.every((r) => r.port === undefined && r.compass === undefined)) {
+      refs = [...new Map(refs.map((r) => [r.id, r])).values()];
+    }
+    return refs.length === 1 ? refs[0] : refs;
   }
   if (isNodeModel(target)) {
     return { id: target.id };

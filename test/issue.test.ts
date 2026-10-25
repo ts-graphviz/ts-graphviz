@@ -68,7 +68,7 @@ describe('escaping of NodeRefGroup members', () => {
     const dot = toDot(g);
     expect(dot).toMatchInlineSnapshot(`
       "digraph {
-        "a\\"" -> {"b\\"":"p\\\\q" "c"};
+        "a\\"" -> "b\\"":"p\\\\q", "c";
       }"
     `);
     const again = fromDot(dot);

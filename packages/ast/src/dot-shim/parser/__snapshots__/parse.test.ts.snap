@@ -1509,21 +1509,9 @@ exports[`parse > edge > grouped edge targets 1`] = `
   },
   "targets": [
     {
-      "location": {
-        "end": {
-          "column": 9,
-          "line": 1,
-          "offset": 8,
-        },
-        "source": undefined,
-        "start": {
-          "column": 1,
-          "line": 1,
-          "offset": 0,
-        },
-      },
-      "refs": [
+      "children": [
         {
+          "children": [],
           "id": {
             "kind": "bare",
             "location": {
@@ -1544,9 +1532,9 @@ exports[`parse > edge > grouped edge targets 1`] = `
           },
           "location": {
             "end": {
-              "column": 4,
+              "column": 8,
               "line": 1,
-              "offset": 3,
+              "offset": 7,
             },
             "source": undefined,
             "start": {
@@ -1555,9 +1543,10 @@ exports[`parse > edge > grouped edge targets 1`] = `
               "offset": 1,
             },
           },
-          "type": "NodeRef",
+          "type": "Node",
         },
         {
+          "children": [],
           "id": {
             "kind": "bare",
             "location": {
@@ -1584,32 +1573,33 @@ exports[`parse > edge > grouped edge targets 1`] = `
             },
             "source": undefined,
             "start": {
-              "column": 6,
+              "column": 2,
               "line": 1,
-              "offset": 5,
+              "offset": 1,
             },
           },
-          "type": "NodeRef",
+          "type": "Node",
         },
       ],
-      "type": "NodeRefGroup",
-    },
-    {
       "location": {
         "end": {
-          "column": 21,
+          "column": 9,
           "line": 1,
-          "offset": 20,
+          "offset": 8,
         },
         "source": undefined,
         "start": {
-          "column": 13,
+          "column": 1,
           "line": 1,
-          "offset": 12,
+          "offset": 0,
         },
       },
-      "refs": [
+      "type": "Subgraph",
+    },
+    {
+      "children": [
         {
+          "children": [],
           "id": {
             "kind": "bare",
             "location": {
@@ -1630,9 +1620,9 @@ exports[`parse > edge > grouped edge targets 1`] = `
           },
           "location": {
             "end": {
-              "column": 16,
+              "column": 20,
               "line": 1,
-              "offset": 15,
+              "offset": 19,
             },
             "source": undefined,
             "start": {
@@ -1641,9 +1631,10 @@ exports[`parse > edge > grouped edge targets 1`] = `
               "offset": 13,
             },
           },
-          "type": "NodeRef",
+          "type": "Node",
         },
         {
+          "children": [],
           "id": {
             "kind": "bare",
             "location": {
@@ -1670,15 +1661,28 @@ exports[`parse > edge > grouped edge targets 1`] = `
             },
             "source": undefined,
             "start": {
-              "column": 18,
+              "column": 14,
               "line": 1,
-              "offset": 17,
+              "offset": 13,
             },
           },
-          "type": "NodeRef",
+          "type": "Node",
         },
       ],
-      "type": "NodeRefGroup",
+      "location": {
+        "end": {
+          "column": 21,
+          "line": 1,
+          "offset": 20,
+        },
+        "source": undefined,
+        "start": {
+          "column": 13,
+          "line": 1,
+          "offset": 12,
+        },
+      },
+      "type": "Subgraph",
     },
   ],
   "type": "Edge",
@@ -1703,21 +1707,9 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
   },
   "targets": [
     {
-      "location": {
-        "end": {
-          "column": 17,
-          "line": 1,
-          "offset": 16,
-        },
-        "source": undefined,
-        "start": {
-          "column": 1,
-          "line": 1,
-          "offset": 0,
-        },
-      },
-      "refs": [
+      "children": [
         {
+          "children": [],
           "id": {
             "kind": "bare",
             "location": {
@@ -1738,9 +1730,9 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
           },
           "location": {
             "end": {
-              "column": 7,
+              "column": 16,
               "line": 1,
-              "offset": 6,
+              "offset": 15,
             },
             "source": undefined,
             "start": {
@@ -1749,45 +1741,10 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
               "offset": 1,
             },
           },
-          "port": {
-            "kind": "bare",
-            "location": {
-              "end": {
-                "column": 7,
-                "line": 1,
-                "offset": 6,
-              },
-              "source": undefined,
-              "start": {
-                "column": 5,
-                "line": 1,
-                "offset": 4,
-              },
-            },
-            "type": "Literal",
-            "value": "p1",
-          },
-          "type": "NodeRef",
+          "type": "Node",
         },
         {
-          "compass": {
-            "kind": "bare",
-            "location": {
-              "end": {
-                "column": 16,
-                "line": 1,
-                "offset": 15,
-              },
-              "source": undefined,
-              "start": {
-                "column": 15,
-                "line": 1,
-                "offset": 14,
-              },
-            },
-            "type": "Literal",
-            "value": "w",
-          },
+          "children": [],
           "id": {
             "kind": "bare",
             "location": {
@@ -1814,68 +1771,33 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
             },
             "source": undefined,
             "start": {
-              "column": 9,
+              "column": 2,
               "line": 1,
-              "offset": 8,
+              "offset": 1,
             },
           },
-          "port": {
-            "kind": "bare",
-            "location": {
-              "end": {
-                "column": 14,
-                "line": 1,
-                "offset": 13,
-              },
-              "source": undefined,
-              "start": {
-                "column": 12,
-                "line": 1,
-                "offset": 11,
-              },
-            },
-            "type": "Literal",
-            "value": "p2",
-          },
-          "type": "NodeRef",
+          "type": "Node",
         },
       ],
-      "type": "NodeRefGroup",
-    },
-    {
       "location": {
         "end": {
-          "column": 34,
+          "column": 17,
           "line": 1,
-          "offset": 33,
+          "offset": 16,
         },
         "source": undefined,
         "start": {
-          "column": 21,
+          "column": 1,
           "line": 1,
-          "offset": 20,
+          "offset": 0,
         },
       },
-      "refs": [
+      "type": "Subgraph",
+    },
+    {
+      "children": [
         {
-          "compass": {
-            "kind": "bare",
-            "location": {
-              "end": {
-                "column": 26,
-                "line": 1,
-                "offset": 25,
-              },
-              "source": undefined,
-              "start": {
-                "column": 25,
-                "line": 1,
-                "offset": 24,
-              },
-            },
-            "type": "Literal",
-            "value": "e",
-          },
+          "children": [],
           "id": {
             "kind": "bare",
             "location": {
@@ -1896,9 +1818,9 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
           },
           "location": {
             "end": {
-              "column": 26,
+              "column": 33,
               "line": 1,
-              "offset": 25,
+              "offset": 32,
             },
             "source": undefined,
             "start": {
@@ -1907,9 +1829,10 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
               "offset": 21,
             },
           },
-          "type": "NodeRef",
+          "type": "Node",
         },
         {
+          "children": [],
           "id": {
             "kind": "bare",
             "location": {
@@ -1936,33 +1859,28 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
             },
             "source": undefined,
             "start": {
-              "column": 28,
+              "column": 22,
               "line": 1,
-              "offset": 27,
+              "offset": 21,
             },
           },
-          "port": {
-            "kind": "bare",
-            "location": {
-              "end": {
-                "column": 33,
-                "line": 1,
-                "offset": 32,
-              },
-              "source": undefined,
-              "start": {
-                "column": 31,
-                "line": 1,
-                "offset": 30,
-              },
-            },
-            "type": "Literal",
-            "value": "p3",
-          },
-          "type": "NodeRef",
+          "type": "Node",
         },
       ],
-      "type": "NodeRefGroup",
+      "location": {
+        "end": {
+          "column": 34,
+          "line": 1,
+          "offset": 33,
+        },
+        "source": undefined,
+        "start": {
+          "column": 21,
+          "line": 1,
+          "offset": 20,
+        },
+      },
+      "type": "Subgraph",
     },
   ],
   "type": "Edge",

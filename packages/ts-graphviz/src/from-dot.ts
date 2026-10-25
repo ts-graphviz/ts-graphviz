@@ -74,7 +74,7 @@ export function fromDot<
     ast.type === 'AttributeList' ||
     ast.type === 'Comment' ||
     ast.type === 'NodeRef' ||
-    ast.type === 'NodeRefGroup' ||
+    ast.type === 'NodeRefList' ||
     ast.type === 'Literal'
   ) {
     throw withCode(

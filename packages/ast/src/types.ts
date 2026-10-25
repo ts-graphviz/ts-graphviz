@@ -156,10 +156,10 @@ export interface NodeRefASTProperties extends ASTCommonProperties {
 }
 
 /**
- * NodeRefGroupASTProperties is an interface that defines the properties of a {@link NodeRefGroupASTNode}.
+ * NodeRefListASTProperties is an interface that defines the properties of a {@link NodeRefListASTNode}.
  * @group AST
  */
-export interface NodeRefGroupASTProperties extends ASTCommonProperties {}
+export interface NodeRefListASTProperties extends ASTCommonProperties {}
 
 /**
  * AttributeASTProperties interface defines the properties of an {@link AttributeASTNode}.
@@ -219,7 +219,7 @@ export interface ASTBaseNode {
  * ASTBaseParentNode represents a node that contains a list of statements:
  * `Dot`, `Graph`, `Subgraph` (statements), `Node`, `Edge` and `AttributeList`
  * (attributes and comments). Leaf nodes (`Literal`, `Attribute`, `Comment`,
- * `NodeRef`) and `NodeRefGroup` (which holds `refs`) extend
+ * `NodeRef`) and `NodeRefList` (which holds `refs`) extend
  * {@link ASTBaseNode} directly and have no `children`.
  *
  * @template STMT The type of {@link ASTBaseNode} to be stored in the children array.
@@ -300,24 +300,35 @@ export interface NodeRefASTNode extends ASTBaseNode, NodeRefASTProperties {
 }
 
 /**
- * NodeRefGroupASTNode is a type of AST node that represents a group of nodes
- * referenced together (`{a b c}` as an edge target). The group holds its
- * node references in `refs`; it is not a statement container.
+ * NodeRefListASTNode is a comma-separated list of node references as an edge
+ * target (`a:p, b -> c`). Unlike a subgraph, it keeps each reference's port
+ * and compass point, as Graphviz does. It holds its references in `refs`
+ * (two or more); it is not a statement container.
  * @group AST
  */
-export interface NodeRefGroupASTNode
+export interface NodeRefListASTNode
   extends ASTBaseNode,
-    NodeRefGroupASTProperties {
-  type: 'NodeRefGroup';
+    NodeRefListASTProperties {
+  type: 'NodeRefList';
   refs: NodeRefASTNode[];
 }
 
 /**
- * This type is used to represent a target of an edge in an AST (Abstract Syntax Tree).
+ * A target of an edge, as Graphviz has them:
+ *
+ * - {@link NodeRefASTNode}: one node, with an optional port and compass
+ *   point (`a`, `a:p:n`);
+ * - {@link NodeRefListASTNode}: several nodes, ports kept (`a:p, b`);
+ * - {@link SubgraphASTNode}: a subgraph (`{ a b }`, `subgraph s { ... }`)
+ *   with any statements; the target is every node in it, and ports written
+ *   inside it are ignored by Graphviz.
  *
  * @group AST
  */
-export type EdgeTargetASTNode = NodeRefASTNode | NodeRefGroupASTNode;
+export type EdgeTargetASTNode =
+  | NodeRefASTNode
+  | NodeRefListASTNode
+  | SubgraphASTNode;
 
 /**
  * EdgeASTNode is a type of AST node that represents an edge in a graph.
@@ -378,7 +389,7 @@ export type ASTNode =
   | CommentASTNode
   | AttributeListASTNode
   | NodeRefASTNode
-  | NodeRefGroupASTNode
+  | NodeRefListASTNode
   | EdgeASTNode
   | NodeASTNode
   | SubgraphASTNode;
@@ -386,12 +397,12 @@ export type ASTNode =
 /**
  * ASTChildNode is the type of the nodes a given node contains: the
  * `children` of an {@link ASTBaseParentNode}, the `refs` of a
- * {@link NodeRefGroupASTNode}, and `never` for a leaf node.
+ * {@link NodeRefListASTNode}, and `never` for a leaf node.
  * @group AST
  */
 export type ASTChildNode<T> =
   T extends ASTBaseParentNode<infer C>
     ? C
-    : T extends NodeRefGroupASTNode
+    : T extends NodeRefListASTNode
       ? NodeRefASTNode
       : never;

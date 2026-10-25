@@ -341,9 +341,9 @@
               "children": [],
               "location": {
                 "end": {
-                  "column": 3,
-                  "line": 12,
-                  "offset": 144,
+                  "column": 11,
+                  "line": 11,
+                  "offset": 141,
                 },
                 "source": undefined,
                 "start": {
@@ -462,9 +462,9 @@
           "children": [],
           "location": {
             "end": {
-              "column": 3,
-              "line": 14,
-              "offset": 157,
+              "column": 9,
+              "line": 13,
+              "offset": 154,
             },
             "source": undefined,
             "start": {
@@ -549,9 +549,9 @@
           "children": [],
           "location": {
             "end": {
-              "column": 3,
-              "line": 15,
-              "offset": 173,
+              "column": 16,
+              "line": 14,
+              "offset": 170,
             },
             "source": undefined,
             "start": {
@@ -636,9 +636,9 @@
           "children": [],
           "location": {
             "end": {
-              "column": 1,
-              "line": 16,
-              "offset": 194,
+              "column": 23,
+              "line": 15,
+              "offset": 193,
             },
             "source": undefined,
             "start": {

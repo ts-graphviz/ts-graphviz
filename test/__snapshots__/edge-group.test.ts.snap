@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Edge grouping feature > AST conversion > should include a NodeRefGroup when multiple targets are grouped 1`] = `
+exports[`Edge grouping feature > AST conversion > should write a group without ports as a subgraph of its nodes 1`] = `
 {
   "children": [
     {
@@ -17,29 +17,27 @@ exports[`Edge grouping feature > AST conversion > should include a NodeRefGroup 
           "type": "NodeRef",
         },
         {
-          "refs": [
+          "children": [
             {
-              "compass": undefined,
+              "children": [],
               "id": {
                 "kind": "quoted",
                 "type": "Literal",
                 "value": "b",
               },
-              "port": undefined,
-              "type": "NodeRef",
+              "type": "Node",
             },
             {
-              "compass": undefined,
+              "children": [],
               "id": {
                 "kind": "quoted",
                 "type": "Literal",
                 "value": "c",
               },
-              "port": undefined,
-              "type": "NodeRef",
+              "type": "Node",
             },
           ],
-          "type": "NodeRefGroup",
+          "type": "Subgraph",
         },
       ],
       "type": "Edge",

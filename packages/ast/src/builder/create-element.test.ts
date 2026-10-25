@@ -15,8 +15,8 @@ describe('createElement', () => {
     const ref = createElement('NodeRef', { id: literal }, []);
     expect('children' in ref).toBe(false);
 
-    const group = createElement('NodeRefGroup', {}, [ref]);
-    expect(group).toStrictEqual({ type: 'NodeRefGroup', refs: [ref] });
+    const group = createElement('NodeRefList', {}, [ref]);
+    expect(group).toStrictEqual({ type: 'NodeRefList', refs: [ref] });
 
     const node = createElement('Node', { id: literal }, []);
     expect(node).toStrictEqual({ type: 'Node', id: literal, children: [] });
@@ -32,11 +32,11 @@ describe('createElement', () => {
     } as never);
     expect('children' in leaf).toBe(false);
     const group = createElement(
-      'NodeRefGroup',
+      'NodeRefList',
       { children: [ref], refs: [] } as never,
       [ref],
     );
-    expect(group).toStrictEqual({ type: 'NodeRefGroup', refs: [ref] });
+    expect(group).toStrictEqual({ type: 'NodeRefList', refs: [ref] });
   });
 
   test('Dot', () => {
@@ -92,8 +92,8 @@ describe('createElement', () => {
     expect(ast).toMatchSnapshot();
   });
 
-  test('NodeRefGroup', () => {
-    const ast = createElement('NodeRefGroup', {}, [
+  test('NodeRefList', () => {
+    const ast = createElement('NodeRefList', {}, [
       createElement('NodeRef', {
         id: createElement('Literal', {
           value: 'a',

@@ -149,7 +149,19 @@ function graphOf(directed: boolean): fc.Arbitrary<string> {
       target: fc.oneof(
         { depthSize: 'small', maxDepth: 2 },
         { arbitrary: nodeRef, weight: 5 },
-        { arbitrary: tie('subgraph'), weight: 1 },
+        // `a:p, b`: a comma list keeps its ports (#1708).
+        {
+          arbitrary: fc
+            .array(fc.tuple(nodeRef, sep, fc.constant(','), sep), {
+              minLength: 1,
+              maxLength: 2,
+            })
+            .chain((items) =>
+              nodeRef.map((last) => join([...items.map(join), last])),
+            ),
+          weight: 1,
+        },
+        { arbitrary: tie('subgraph'), weight: 2 },
       ),
       stmts: fc
         .array(
