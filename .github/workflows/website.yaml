@@ -12,6 +12,7 @@ on:
       - website/**
       - packages/**
       - typedoc.json
+      - typedoc.css
       - tsconfig.doc.json
       - tsconfig.base.json
       - package.json
@@ -25,6 +26,7 @@ on:
       - website/**
       - packages/**
       - typedoc.json
+      - typedoc.css
       - tsconfig.doc.json
       - tsconfig.base.json
       - package.json

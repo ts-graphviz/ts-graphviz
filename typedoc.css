@@ -1,0 +1,28 @@
+/*
+ * Additions to typedoc's default theme for the API reference
+ * (https://ts-graphviz.github.io/api/). Loaded through `customCss` in
+ * typedoc.json.
+ */
+
+/*
+ * Phones: typedoc's menu lists the current page's outline before the site
+ * navigation. On the index page that outline is the whole README, which
+ * pushes the package and module links a screen or more down. Show the site
+ * navigation first.
+ */
+@media (max-width: 769px) {
+  .has-menu .col-sidebar .site-menu {
+    order: -1;
+  }
+}
+
+/*
+ * Wide tables in the READMEs (the contributors table) scroll inside
+ * themselves instead of widening the page, which on phones zoomed the page
+ * out and moved the menu off screen.
+ */
+.tsd-typography table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
