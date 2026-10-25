@@ -22,7 +22,7 @@ if [[ ! -f "$dist" ]]; then
 fi
 mkdir -p "$corpus" "$findings"
 case "$target" in
-  parse | model)
+  parse | model | sanitize)
     # Seed DOT targets with the sample files used by the snapshot tests.
     cp -n "$root"/test/dot/*.dot "$corpus"/ 2>/dev/null || true
     ;;

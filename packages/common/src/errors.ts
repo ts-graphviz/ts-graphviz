@@ -3,8 +3,9 @@
  *
  * The packages throw the standard error type that matches the situation
  * (`SyntaxError` for DOT that does not parse, `RangeError` for a value that
- * cannot be written, `TypeError` for an argument of the wrong shape, `Error`
- * otherwise) and tag it with a `code` from {@link ERROR_CODES}. The code is
+ * cannot be written, `TypeError` for an argument of the wrong shape, a
+ * `DOMException` named `SecurityError` for DOT that is unsafe to render,
+ * `Error` otherwise) and tag it with a `code` from {@link ERROR_CODES}. The code is
  * the stable contract: messages may change in any release, codes only in a
  * major one. Check errors with {@link isTsGraphvizError} or by comparing
  * `error.code`; neither depends on `instanceof`, which fails across realms or
@@ -51,6 +52,8 @@ export const ERROR_CODES = [
   'TSG_ERR_COMMAND_FAILED',
   /** The Graphviz command wrote more than `maxOutputSize` bytes and was stopped (`RangeError`). */
   'TSG_ERR_OUTPUT_LIMIT_EXCEEDED',
+  /** `sanitize` found something that makes Graphviz read a file or write an unsafe reference (`DOMException` named `SecurityError`). */
+  'TSG_ERR_UNSAFE_DOT',
 ] as const;
 
 /**
@@ -70,6 +73,9 @@ export interface CodedError<C extends ErrorCode = ErrorCode> extends Error {
 /**
  * Tag an error with a code, in place, and return it.
  *
+ * The code is defined as an own property, so it also replaces an inherited
+ * getter such as the legacy numeric `code` of `DOMException`.
+ *
  * @example
  * throw withCode(new RangeError('value out of range'), 'TSG_ERR_NUL_CHARACTER');
  * @group Errors
@@ -77,8 +83,14 @@ export interface CodedError<C extends ErrorCode = ErrorCode> extends Error {
 export function withCode<E extends Error, C extends ErrorCode>(
   error: E,
   code: C,
-): E & CodedError<C> {
-  return Object.assign(error, { code });
+): Omit<E, 'code'> & CodedError<C> {
+  Object.defineProperty(error, 'code', {
+    value: code,
+    enumerable: true,
+    writable: true,
+    configurable: true,
+  });
+  return error as unknown as Omit<E, 'code'> & CodedError<C>;
 }
 
 /**

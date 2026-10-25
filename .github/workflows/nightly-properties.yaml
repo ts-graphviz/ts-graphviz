@@ -69,7 +69,7 @@ jobs:
       fail-fast: false
       matrix:
         ref: [next]
-        target: [parse, model, adapter-args]
+        target: [parse, model, sanitize, adapter-args]
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2

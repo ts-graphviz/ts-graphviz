@@ -31,6 +31,7 @@ digraph "dependency_graph" {
     label = <<table><tr><td port="name" bgcolor="#f0f0f0" align="CENTER">ts-graphviz</td></tr><tr><td port="description" align="CENTER">Graphviz library for TypeScript</td></tr></table>>;
     URL = "https://www.npmjs.com/package/ts-graphviz";
   ];
+  "@ts-graphviz/ast" -> "@ts-graphviz/adapter";
   "@ts-graphviz/common" -> "@ts-graphviz/adapter";
   "@ts-graphviz/common" -> "@ts-graphviz/ast";
   "@ts-graphviz/common" -> "@ts-graphviz/core";

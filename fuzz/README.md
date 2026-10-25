@@ -8,6 +8,7 @@ Coverage-guided fuzzing with [Jazzer.js](https://github.com/CodeIntelligenceTest
 | --- | --- | --- |
 | `parse` | `parse(s)` returns or throws a coded error; whatever parses prints to text that parses back to the same tree | SM-1 |
 | `model` | `fromDot(s)` returns a model or throws a coded error; `toDot` of that model reads back and prints identically | SM-1, SM-2 |
+| `sanitize` | `sanitize(s)` returns or throws a coded error; what it returns parses to the same tree as `s` and is a fixed point of `sanitize` | SM-7 |
 | `adapter-args` | whatever option values an application passes, the argv given to `dot` has one flag per option and nothing else | SM-4 |
 
 A target signals a finding by throwing `Finding` (`fuzz/targets/expect.ts`).

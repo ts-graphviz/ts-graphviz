@@ -17,6 +17,7 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
+        '@ts-graphviz/ast',
         '@ts-graphviz/common',
         'node:stream',
         'node:stream/promises',

@@ -16,6 +16,20 @@ describe('withCode', () => {
   });
 });
 
+describe('withCode on a DOMException', () => {
+  it('replaces the legacy numeric code with the string code', () => {
+    const error = withCode(
+      new DOMException('unsafe', 'SecurityError'),
+      'TSG_ERR_UNSAFE_DOT',
+    );
+    expect(error).toBeInstanceOf(DOMException);
+    expect(error).toBeInstanceOf(Error);
+    expect(error.name).toBe('SecurityError');
+    expect(error.code).toBe('TSG_ERR_UNSAFE_DOT');
+    expect(isTsGraphvizError(error)).toBe(true);
+  });
+});
+
 describe('isTsGraphvizError', () => {
   it('accepts an error with a known code, whatever its prototype', () => {
     expect(

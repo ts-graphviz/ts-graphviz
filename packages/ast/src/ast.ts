@@ -6,4 +6,5 @@
 export * from './builder/index.js';
 export * from './dot-shim/index.js';
 export * from './model-shim/index.js';
+export * from './sanitize/index.js';
 export * from './types.js';

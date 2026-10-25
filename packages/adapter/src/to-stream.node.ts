@@ -4,6 +4,7 @@ import { pipeline } from 'node:stream/promises';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
+import { sourceToRender } from './source.js';
 import type { Layout, Options } from './types.js';
 
 /**
@@ -17,6 +18,8 @@ import type { Layout, Options } from './types.js';
  * @param dot - The DOT source.
  * @param options - Layout, output format, limits and the other options of the command.
  * @returns The output of the command as a stream of bytes.
+ * @throws `DOMException` named `SecurityError` (`code` `TSG_ERR_UNSAFE_DOT`)
+ * or `DotSyntaxError` when `sanitize` (on by default) rejects the source.
  * @throws {CommandExecutionError} when the command cannot be started, fails
  * while reading its input, or exits with a non-zero code.
  * @throws `RangeError` with `code` `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` when the
@@ -32,6 +35,7 @@ export async function toStream<T extends Layout>(
   const limit = outputLimit(opts);
   const { signal } = opts;
   signal?.throwIfAborted();
+  const source = sourceToRender(dot, opts);
 
   return new Promise(function toStreamInternal(resolve, reject) {
     let settled = false;
@@ -160,7 +164,7 @@ export async function toStream<T extends Layout>(
     // before reading). Never leave the process running and never leave the
     // call pending: kill it, and report as soon as it has exited (it may
     // already have).
-    pipeline(Readable.from([dot]), stdin).catch((e: unknown) => {
+    pipeline(Readable.from([source]), stdin).catch((e: unknown) => {
       inputError ??= e;
       p.kill('SIGKILL');
       if (exited) report(exited.code, exited.signal);
