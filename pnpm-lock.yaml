@@ -170,6 +170,9 @@ catalogs:
     '@types/node':
       specifier: ^22.20.5
       version: 22.20.5
+    '@typescript/native':
+      specifier: npm:typescript@^7.0.2
+      version: 7.0.2
     typescript:
       specifier: ^6.0.3
       version: 6.0.3
@@ -209,6 +212,9 @@ importers:
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0
+      '@typescript/native':
+        specifier: 'catalog:'
+        version: typescript@7.0.2
       '@vitest/coverage-v8':
         specifier: ^5.0.5
         version: 5.0.5(vitest@5.0.5)
