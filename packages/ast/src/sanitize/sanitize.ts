@@ -8,7 +8,7 @@ import type {
   LiteralASTNode,
 } from '../types.js';
 import { readTags } from './html.js';
-import { urlProblem } from './url.js';
+import { readings, urlProblem } from './url.js';
 
 /**
  * Options of {@link sanitize}: the parser limits, which apply as in
@@ -19,13 +19,13 @@ import { urlProblem } from './url.js';
 export type SanitizeOptions = CommonParseOptions;
 
 /** Attributes that make Graphviz read a file, or reference one from the output. */
-const FILE_ATTRIBUTES: Record<string, string> = {
-  image: 'makes Graphviz read an image file',
-  shapefile: 'makes Graphviz read a file',
-  imagepath: 'sets where Graphviz reads image files',
-  fontpath: 'sets where Graphviz reads font files',
-  stylesheet: 'is written into SVG output as a stylesheet reference',
-};
+const FILE_ATTRIBUTES = new Map([
+  ['image', 'makes Graphviz read an image file'],
+  ['shapefile', 'makes Graphviz read a file'],
+  ['imagepath', 'sets where Graphviz reads image files'],
+  ['fontpath', 'sets where Graphviz reads font files'],
+  ['stylesheet', 'is written into SVG output as a stylesheet reference'],
+]);
 
 /** Attributes Graphviz writes into the output as links. */
 const URL_ATTRIBUTES = new Set([
@@ -43,9 +43,16 @@ const URL_ATTRIBUTES = new Set([
 
 const FONT_ATTRIBUTES = new Set(['fontname', 'labelfontname']);
 
-/** A font name with a path separator can name a font file to read. */
+/**
+ * A font name with a path separator, in any reading (`&#47;` is `/` to the
+ * XML parser of HTML-like labels), can name a font file to read.
+ */
 function isFontPath(value: string): boolean {
-  return value.includes('/') || value.includes('\\');
+  const levels = readings(value);
+  return (
+    levels === undefined ||
+    levels.some((level) => level.includes('/') || level.includes('\\'))
+  );
 }
 
 /** The text of a literal as Graphviz reads it. */
@@ -76,7 +83,7 @@ function checkAttribute(attribute: AttributeASTNode): void {
   const key = name.toLowerCase();
   const value = textOf(attribute.value);
   const at = `attribute "${name}"${where(attribute)}`;
-  const fileProblem = FILE_ATTRIBUTES[key];
+  const fileProblem = FILE_ATTRIBUTES.get(key);
   if (fileProblem !== undefined) {
     throw unsafe(`${at} ${fileProblem}.`);
   }

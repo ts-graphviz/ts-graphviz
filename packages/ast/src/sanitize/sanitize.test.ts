@@ -155,6 +155,13 @@ describe('[SM-7] sanitize', () => {
       "<td HREF='javascript&#58;x'>x</td>",
       '<td url="data:x">x</td>',
       '<font face="/tmp/x.ttf">x</font>',
+      // The XML parser decodes references before Graphviz uses a value, and
+      // references it produces are decoded again by the browser (Graphviz 2.43).
+      '<table href="&#92;N"><tr><td>x</td></tr></table>',
+      '<table href="javascript&amp;#58;x"><tr><td>x</td></tr></table>',
+      '<table href="javascript&amp;amp;#58;x"><tr><td>x</td></tr></table>',
+      '<font face="&#47;tmp&#47;x.ttf">x</font>',
+      '<font face="&#x5c;x.ttf">x</font>',
       '<!-- unterminated>',
       '<!DOCTYPE x>',
       '<1>',
@@ -169,6 +176,17 @@ describe('[SM-7] sanitize', () => {
         'TSG_ERR_UNSAFE_DOT',
       );
     });
+  });
+
+  it('does not mistake Object.prototype names for checked attributes', () => {
+    expect(() =>
+      sanitize(
+        'digraph { a [constructor="x" __proto__="y" toString="z" URL="&constructor;"] }',
+      ),
+    ).toThrow(/URL.*cannot be checked/);
+    expect(() =>
+      sanitize('digraph { a [constructor="x" __proto__="y" toString="z"] }'),
+    ).not.toThrow();
   });
 
   it('does not check layout or cost attributes', () => {

@@ -1,21 +1,23 @@
 const ALLOWED_SCHEMES = ['http', 'https', 'mailto'];
 
-/** The character references an XML or HTML reader may decode in a URL. */
-const SAFE_NAMED_REFERENCES: Record<string, string> = {
-  amp: '&',
-  lt: '<',
-  gt: '>',
-  quot: '"',
-  apos: "'",
-};
+/** The named character references of XML. */
+const XML_NAMED_REFERENCES = new Map([
+  ['amp', '&'],
+  ['lt', '<'],
+  ['gt', '>'],
+  ['quot', '"'],
+  ['apos', "'"],
+]);
+
+/** More rounds of decoding than any reader between the DOT and a browser does. */
+const MAX_DECODING_ROUNDS = 8;
 
 /**
- * Decode character references as a browser reading Graphviz's SVG would:
- * Graphviz keeps `&…;` sequences when it writes a URL. A named reference
- * other than the XML ones (such as `&colon;` or `&Tab;`) cannot be checked
- * without the HTML entity table, so it makes the URL unsafe.
+ * Decode one level of character references. A named reference other than
+ * the XML ones (such as `&colon;` or `&Tab;`) cannot be checked without the
+ * HTML entity table, so it gives `undefined`.
  */
-function decodeReferences(text: string): string | undefined {
+function decodeOnce(text: string): string | undefined {
   let unknown = false;
   const decoded = text.replace(
     /&(?:#(\d+)|#[xX]([0-9a-fA-F]+)|([A-Za-z][A-Za-z0-9]*));?/g,
@@ -25,7 +27,7 @@ function decodeReferences(text: string): string | undefined {
         return codePoint <= 0x10ffff ? String.fromCodePoint(codePoint) : '';
       }
       if (!match.endsWith(';')) return match;
-      const char = SAFE_NAMED_REFERENCES[`${name}`];
+      const char = XML_NAMED_REFERENCES.get(`${name}`);
       if (char === undefined) unknown = true;
       return char ?? match;
     },
@@ -34,26 +36,53 @@ function decodeReferences(text: string): string | undefined {
 }
 
 /**
+ * Every reading of a value, from as written to fully decoded. A value in an
+ * HTML-like label is decoded once by Graphviz's XML parser, which writes
+ * references it produced (`&amp;#58;` → `&#58;`) into SVG for the browser to
+ * decode again; checking every level covers every such chain.
+ *
+ * Returns `undefined` when a level cannot be decoded or decoding does not
+ * settle.
+ */
+export function readings(value: string): string[] | undefined {
+  const levels = [value];
+  for (let round = 0; round < MAX_DECODING_ROUNDS; round++) {
+    const current = levels[levels.length - 1];
+    const next = decodeOnce(current);
+    if (next === undefined) return undefined;
+    if (next === current) return levels;
+    levels.push(next);
+  }
+  return undefined;
+}
+
+/**
  * Why a URL-like value is unsafe to put into Graphviz output, or `undefined`
- * when it is a relative URL or uses `http`, `https` or `mailto`.
+ * when every reading of it is a relative URL or uses `http`, `https` or
+ * `mailto`.
  *
  * @param value - The value as Graphviz reads it.
  */
 export function urlProblem(value: string): string | undefined {
-  if (value.includes('\\')) {
-    // e.g. `\N` becomes the node name, which can be anything.
-    return 'contains a backslash escape, which Graphviz expands';
-  }
-  const decoded = decodeReferences(value);
-  if (decoded === undefined) {
+  const levels = readings(value);
+  if (levels === undefined) {
     return 'contains a character reference that cannot be checked';
   }
-  // A URL parser drops tabs and newlines anywhere and leading controls and
-  // spaces, so `java\tscript:` is a `javascript:` URL.
-  const url = decoded.replace(/[\t\n\r]/g, '').replace(/^[\0-\x20]+/, '');
-  const scheme = /^([A-Za-z][A-Za-z0-9+.-]*):/.exec(url)?.[1];
-  if (scheme !== undefined && !ALLOWED_SCHEMES.includes(scheme.toLowerCase())) {
-    return `uses the "${scheme}:" scheme`;
+  for (const level of levels) {
+    if (level.includes('\\')) {
+      // e.g. `\N` becomes the node name, which can be anything.
+      return 'contains a backslash escape, which Graphviz expands';
+    }
+    // A URL parser drops tabs and newlines anywhere and leading controls and
+    // spaces, so `java\tscript:` is a `javascript:` URL.
+    const url = level.replace(/[\t\n\r]/g, '').replace(/^[\0-\x20]+/, '');
+    const scheme = /^([A-Za-z][A-Za-z0-9+.-]*):/.exec(url)?.[1];
+    if (
+      scheme !== undefined &&
+      !ALLOWED_SCHEMES.includes(scheme.toLowerCase())
+    ) {
+      return `uses the "${scheme}:" scheme`;
+    }
   }
   return undefined;
 }
