@@ -50,6 +50,13 @@ export type NodeRefLike = NodeRef | string;
 export type NodeRefGroupLike = NodeRefLike[];
 
 /**
+ * A group of node references as an input, readonly arrays (e.g. `as const`)
+ * included.
+ * @group Models
+ */
+export type ReadonlyNodeRefGroupLike = readonly NodeRefLike[];
+
+/**
  * @group Models
  */
 export type EdgeTarget = NodeRef | NodeRefGroup;
@@ -58,6 +65,12 @@ export type EdgeTarget = NodeRef | NodeRefGroup;
  * @group Models
  */
 export type EdgeTargetLike = NodeRefLike | NodeRefGroupLike;
+
+/**
+ * An edge target as an input, readonly groups included.
+ * @group Models
+ */
+export type ReadonlyEdgeTargetLike = NodeRefLike | ReadonlyNodeRefGroupLike;
 
 /**
  * @group Models
@@ -75,6 +88,30 @@ export type EdgeTargetLikeTuple = [
   from: EdgeTargetLike,
   to: EdgeTargetLike,
   ...rest: EdgeTargetLike[],
+];
+
+/**
+ * The targets of an edge as an input to the {@link EdgeModel} constructor:
+ * node references (no ids) and groups of them, readonly ones (e.g.
+ * `as const`) included. Every {@link EdgeTargetTuple} is one.
+ * @group Models
+ */
+export type ReadonlyEdgeTargetTuple = readonly [
+  from: NodeRef | readonly NodeRef[],
+  to: NodeRef | readonly NodeRef[],
+  ...rest: (NodeRef | readonly NodeRef[])[],
+];
+
+/**
+ * The targets of an edge as an input: at least two, given as any tuple or
+ * array, readonly ones (e.g. `as const`) included. Every
+ * {@link EdgeTargetLikeTuple} is one.
+ * @group Models
+ */
+export type ReadonlyEdgeTargetLikeTuple = readonly [
+  from: ReadonlyEdgeTargetLike,
+  to: ReadonlyEdgeTargetLike,
+  ...rest: ReadonlyEdgeTargetLike[],
 ];
 
 /**
@@ -404,7 +441,7 @@ export interface GraphBaseModel<
   getNode(id: string): M['Node'] | undefined;
   /** Create Edge and add it to the graph. */
   createEdge(
-    targets: EdgeTargetLikeTuple,
+    targets: ReadonlyEdgeTargetLikeTuple,
     attributes?: EdgeAttributesObject,
   ): M['Edge'];
 
@@ -607,7 +644,7 @@ export interface GraphBaseModel<
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
   edge(
-    targets: EdgeTargetLikeTuple,
+    targets: ReadonlyEdgeTargetLikeTuple,
     callback?: (edge: M['Edge']) => void,
   ): M['Edge'];
   /**
@@ -637,7 +674,7 @@ export interface GraphBaseModel<
    * @param callback Callbacks for manipulating created or retrieved edge.
    */
   edge(
-    targets: EdgeTargetLikeTuple,
+    targets: ReadonlyEdgeTargetLikeTuple,
     attributes: EdgeAttributesObject,
     callback?: (edge: M['Edge']) => void,
   ): M['Edge'];

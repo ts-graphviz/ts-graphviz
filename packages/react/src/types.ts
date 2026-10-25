@@ -1,13 +1,13 @@
 import type {
   EdgeAttributesObject,
   EdgeModel,
-  EdgeTargetLikeTuple,
   GraphAttributesObject,
   GraphBaseModel,
   HasComment,
   HTMLLikeLabel,
   NodeAttributesObject,
   NodeModel,
+  ReadonlyEdgeTargetLikeTuple,
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';
 import type { Attributes, ReactElement, ReactNode, Ref } from 'react';
@@ -60,7 +60,7 @@ export interface RootGraphProps extends Omit<RootGraphOptions, 'label'> {
 /** Props for Edge component */
 export interface EdgeProps extends Omit<EdgeOptions, 'label'> {
   /** Edge targets */
-  targets: EdgeTargetLikeTuple;
+  targets: ReadonlyEdgeTargetLikeTuple;
   /** Edge label */
   label?: ReactElement | string;
   ref?: Ref<EdgeModel>;

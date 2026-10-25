@@ -9,7 +9,6 @@ import {
   type EdgeAttributeKey,
   type EdgeAttributesObject,
   type EdgeModel,
-  type EdgeTargetLikeTuple,
   type EdgeTargetTuple,
   type GraphBaseModel,
   type GraphCommonAttributes,
@@ -20,6 +19,7 @@ import {
   type NodeAttributeKey,
   type NodeAttributesObject,
   type NodeModel,
+  type ReadonlyEdgeTargetLikeTuple,
   type SubgraphAttributeKey,
   type SubgraphAttributesObject,
   type SubgraphModel,
@@ -277,7 +277,7 @@ export abstract class GraphBase<
   }
 
   public createEdge(
-    targets: EdgeTargetLikeTuple,
+    targets: ReadonlyEdgeTargetLikeTuple,
     attributes?: EdgeAttributesObject,
   ): M['Edge'] {
     const ts = targets.map((t) =>
@@ -360,20 +360,20 @@ export abstract class GraphBase<
   }
 
   public edge(
-    targets: EdgeTargetLikeTuple,
+    targets: ReadonlyEdgeTargetLikeTuple,
     callback?: (edge: M['Edge']) => void,
   ): M['Edge'];
   public edge(
-    targets: EdgeTargetLikeTuple,
+    targets: ReadonlyEdgeTargetLikeTuple,
     attributes: EdgeAttributesObject,
     callback?: (edge: M['Edge']) => void,
   ): M['Edge'];
   public edge(attributes: EdgeAttributesObject): void;
   public edge(
-    firstArg: EdgeTargetLikeTuple | EdgeAttributesObject,
+    firstArg: ReadonlyEdgeTargetLikeTuple | EdgeAttributesObject,
     ...args: unknown[]
   ): M['Edge'] | undefined {
-    if (Array.isArray(firstArg)) {
+    if (isEdgeTargets(firstArg)) {
       const targets = firstArg;
       const attributes = args.find(
         (arg: unknown): arg is EdgeAttributesObject =>
@@ -397,4 +397,11 @@ export abstract class GraphBase<
   public graph(attributes: SubgraphAttributesObject): void {
     this.attributes.graph.apply(attributes);
   }
+}
+
+// `Array.isArray` does not narrow readonly arrays out of a union.
+function isEdgeTargets(
+  arg: ReadonlyEdgeTargetLikeTuple | EdgeAttributesObject,
+): arg is ReadonlyEdgeTargetLikeTuple {
+  return Array.isArray(arg);
 }

@@ -6,6 +6,7 @@ import type {
   NodeRefGroup,
   NodeRefGroupLike,
   NodeRefLike,
+  ReadonlyNodeRefGroupLike,
 } from './models.js';
 
 /**
@@ -33,7 +34,13 @@ export function isNodeRefLike(node: unknown): node is NodeRefLike {
  */
 export function isNodeRefGroupLike(
   target: NodeRefLike | NodeRefGroupLike,
-): target is NodeRefGroupLike {
+): target is NodeRefGroupLike;
+export function isNodeRefGroupLike(
+  target: NodeRefLike | ReadonlyNodeRefGroupLike,
+): target is ReadonlyNodeRefGroupLike;
+export function isNodeRefGroupLike(
+  target: NodeRefLike | ReadonlyNodeRefGroupLike,
+): boolean {
   return Array.isArray(target) && target.every(isNodeRefLike);
 }
 
@@ -91,7 +98,9 @@ export function toNodeRef(target: NodeRefLike): NodeRef {
  * // [{ id: 'node1' }, { id: 'node2', port: 'port' }]
  * ```
  */
-export function toNodeRefGroup(targets: NodeRefGroupLike): NodeRefGroup {
+export function toNodeRefGroup(
+  targets: ReadonlyNodeRefGroupLike,
+): NodeRefGroup {
   if (targets.length < 1) {
     throw withCode(
       new TypeError('EdgeTargets must have at least 1 elements.'),
