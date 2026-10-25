@@ -222,6 +222,16 @@ export type AttributeListKind = 'Graph' | 'Edge' | 'Node';
  * @typeParam T - The attribute keys to set DOT object.
  * @group Models
  */
+/**
+ * What {@link GraphBaseModel.statements} holds.
+ * @group Models
+ */
+export type GraphStatementModel =
+  | NodeModel
+  | EdgeModel
+  | SubgraphModel
+  | AttributeListModel;
+
 export interface AttributeListModel<
   K extends AttributeListKind = AttributeListKind,
   T extends AttributeKey = AttributeKey,
@@ -299,6 +309,14 @@ export interface GraphBaseModel<
   readonly edges: ReadonlyArray<EdgeModel>;
   /** Subgraph objects in the graph. */
   readonly subgraphs: ReadonlyArray<SubgraphModel>;
+  /**
+   * The graph's contents in the order they were added: nodes, edges and
+   * subgraphs, which `toDot` writes in this order (after the graph's
+   * attributes and default attribute lists). The default classes never put
+   * an {@link AttributeListModel} here; model classes that keep default
+   * attribute statements in their place may (#1732).
+   */
+  readonly statements: ReadonlyArray<GraphStatementModel>;
 
   with(models: Partial<ModelsContext>): void;
 

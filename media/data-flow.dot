@@ -5,6 +5,15 @@ digraph {
   ];
   subgraph "cluster_creation" {
     label = "Graph Creation";
+    subgraph "cluster_parsing" {
+      label = "Parsing";
+      "dot_input" [
+        label = "DOT\nString";
+      ];
+      "parsed_ast" [
+        label = "AST";
+      ];
+    }
     "oop" [
       label = "Object-Oriented API";
       shape = "box";
@@ -19,15 +28,6 @@ digraph {
     "model" [
       label = "Graph\nModel";
     ];
-    subgraph "cluster_parsing" {
-      label = "Parsing";
-      "dot_input" [
-        label = "DOT\nString";
-      ];
-      "parsed_ast" [
-        label = "AST";
-      ];
-    }
     {"oop" "react" "declarative"} -> "model";
     "dot_input" -> "parsed_ast" -> "model";
   }

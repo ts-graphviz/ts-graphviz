@@ -26,35 +26,17 @@ export function convertClusterChildren(
           yield context.convert(attrs);
         }
       }
-      for (const node of model.nodes) {
-        if (node.comment !== undefined) {
+      // Nodes, edges and subgraphs (and, for model classes that keep them
+      // in place, default attribute lists) in the order they were added.
+      for (const statement of model.statements) {
+        if (statement.comment !== undefined) {
           yield convertComment(
             createElement,
-            node.comment,
+            statement.comment,
             context.commentKind,
           );
         }
-        yield context.convert(node);
-      }
-      for (const subgraph of model.subgraphs) {
-        if (subgraph.comment !== undefined) {
-          yield convertComment(
-            createElement,
-            subgraph.comment,
-            context.commentKind,
-          );
-        }
-        yield context.convert(subgraph);
-      }
-      for (const edge of model.edges) {
-        if (edge.comment !== undefined) {
-          yield convertComment(
-            createElement,
-            edge.comment,
-            context.commentKind,
-          );
-        }
-        yield context.convert(edge);
+        yield context.convert(statement);
       }
     })(),
   );
