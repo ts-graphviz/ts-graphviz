@@ -949,6 +949,8 @@ export declare function isTsGraphvizError(value: unknown): value is CodedError;
 
 export declare function onDeprecation(listener: (event: DeprecationEvent) => void): () => void;
 
+export declare function ownOptions<T extends object>(options: T | undefined): T;
+
 export declare function toNodeRef(target: NodeRefLike): NodeRef;
 
 export declare function toNodeRefGroup(targets: ReadonlyNodeRefGroupLike): NodeRefGroup;

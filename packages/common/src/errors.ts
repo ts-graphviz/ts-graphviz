@@ -57,6 +57,9 @@ export const ERROR_CODES = [
   /** `sanitize` found something that makes Graphviz read a file or write an unsafe reference (`DOMException` named `SecurityError`). */
   'TSG_ERR_UNSAFE_DOT',
 ] as const;
+// Shared by every module of the process: frozen, so no code can change what
+// isTsGraphvizError accepts (#1757).
+Object.freeze(ERROR_CODES);
 
 /**
  * One of {@link ERROR_CODES}.

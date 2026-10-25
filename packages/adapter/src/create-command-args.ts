@@ -1,4 +1,8 @@
-import type { Attribute, AttributeKey } from '@ts-graphviz/common';
+import {
+  type Attribute,
+  type AttributeKey,
+  ownOptions,
+} from '@ts-graphviz/common';
 import type { Layout, Options } from './types.js';
 
 /**
@@ -36,25 +40,27 @@ export function* createCommandArgs<T extends Layout>(
   const {
     suppressWarnings = true,
     format = 'svg',
-    attributes = {},
+    attributes,
     library = [],
     y = false,
     scale,
   } = options;
   if (suppressWarnings) yield '-q';
   yield `-T${format}`;
-  if (attributes.graph) {
-    for (const [key, value] of Object.entries(attributes.graph)) {
+  // Own properties only, also when no attributes are given (#1757).
+  const { graph, node, edge } = ownOptions(attributes);
+  if (graph) {
+    for (const [key, value] of Object.entries(graph)) {
       yield `-G${key}${escapeValue(value)}`;
     }
   }
-  if (attributes.node) {
-    for (const [key, value] of Object.entries(attributes.node)) {
+  if (node) {
+    for (const [key, value] of Object.entries(node)) {
       yield `-N${key}${escapeValue(value)}`;
     }
   }
-  if (attributes.edge) {
-    for (const [key, value] of Object.entries(attributes.edge)) {
+  if (edge) {
+    for (const [key, value] of Object.entries(edge)) {
       yield `-E${key}${escapeValue(value)}`;
     }
   }

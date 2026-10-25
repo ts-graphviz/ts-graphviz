@@ -8,7 +8,7 @@ This document states what ts-graphviz trusts, what it guarantees at each boundar
 
 ## Summary
 
-Each boundary below has an identifier (`SM-1` … `SM-7`). Where a guarantee is enforced by tests, the tests carry the identifier in their title (for example `describe('[SM-2] …')`), and `test/security-model.test.ts` fails if an identifier claimed here has no test or a test names an identifier that is not here. The document therefore does not list test files; search the repository for the identifier.
+Each boundary below has an identifier (`SM-1` … `SM-8`). Where a guarantee is enforced by tests, the tests carry the identifier in their title (for example `describe('[SM-2] …')`), and `test/security-model.test.ts` fails if an identifier claimed here has no test or a test names an identifier that is not here. The document therefore does not list test files; search the repository for the identifier.
 
 ts-graphviz converts between three representations of a Graphviz graph: DOT text, an AST, and object models. The library itself performs no I/O: it does not touch the network or the file system and runs no code from its input. The only package that leaves the process is `@ts-graphviz/adapter`, which spawns the Graphviz `dot` executable.
 
@@ -21,6 +21,7 @@ ts-graphviz converts between three representations of a Graphviz graph: DOT text
 | `@ts-graphviz/adapter` | spawns `dot` with argv, no shell | no shell injection; the source is checked by `sanitize` unless the application turns it off |
 | DOT text given to `sanitize` (and to the adapter by default) | **untrusted** | what passes contains nothing that makes Graphviz read a file or write an unsafe link, and is the text Graphviz gets |
 | the npm packages themselves | supply chain | SHA-pinned actions, provenance, scorecard, dependency cooldown |
+| `Object.prototype` and other state shared by the process | **untrusted** (may be polluted by other code) | options are read from their own properties only; exported data is frozen |
 
 ## SM-1. DOT text → `parse` / `fromDot` (untrusted input)
 
@@ -174,3 +175,20 @@ Out of scope:
 - content placed in `htmlLike()` / `escString()` or JSX attributes by the application;
 - custom model classes, plugins or `dotCommand` values supplied by the application;
 - vulnerabilities in dependencies that ts-graphviz does not expose (report to the dependency; we still bump it).
+
+## SM-8. State shared by the process (prototype pollution)
+
+ES modules, and the built-in prototypes, are shared by every module of a process. A bug elsewhere in the application (a deep merge, a query-string or JSON parser) can add properties to `Object.prototype`; such a polluted property must not change what ts-graphviz does.
+
+**Guarantees**
+
+- **Options are own properties.** Every public entry point reads its options object, and the option objects nested in it (`attributes` and its `graph` / `node` / `edge`, a `sanitize` options object, `parse`, `convert`, `print`), from their own enumerable properties only (`ownOptions` in `@ts-graphviz/common`). An inherited property never chooses the command (`dotCommand`), turns `sanitize` off, adds arguments (`library`, `-G`), raises a parse limit or changes what is parsed or printed (#1757).
+- **No shared configuration.** Importing a package changes no shared state (v4 removed the shared models context, see the v3-to-v4 guide); defaults come from frozen objects (`defaultModelsContext()`, `orderedModels`, the model factories).
+- **Exported data is frozen.** `ERROR_CODES` and `DEPRECATION_CODES` cannot be changed, so no module can change what `isTsGraphvizError` accepts.
+
+**Not promised**
+
+- **Code running in the process is trusted** (SM-5). The exported classes and functions are not frozen, so that tests can spy on them and applications can extend them; code that replaces a method of an exported class, or a built-in such as `String.prototype.replaceAll`, can change what the library does. Freezing would not stop it: such code can change the built-ins the library itself relies on.
+- `onDeprecation` listeners and the deprecation report (once per code) are process-wide by design.
+
+**Evidence**: tests tagged `SM-8` — properties that, with any option name of any entry point set on `Object.prototype` to an arbitrary value, the adapter's command, arguments and checked source, `parse`, `sanitize`, `fromDot`, `toDot` and `renderHTMLLike` give what they give on a clean prototype; and that the exported data is frozen.

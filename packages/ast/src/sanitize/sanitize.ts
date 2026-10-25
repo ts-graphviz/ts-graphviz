@@ -1,4 +1,4 @@
-import { withCode } from '@ts-graphviz/common';
+import { ownOptions, withCode } from '@ts-graphviz/common';
 import type { CommonParseOptions } from '../dot-shim/parser/index.js';
 import { Pipeline } from '../pipeline/pipeline.js';
 import type {
@@ -538,7 +538,7 @@ function rulesFor(format: string | undefined, strict: boolean): FormatRules {
  * @group Sanitize DOT
  */
 export function sanitize(dot: string, options?: SanitizeOptions): string {
-  const { format, policy = 'default', ...parse } = options ?? {};
+  const { format, policy = 'default', ...parse } = ownOptions(options);
   return new Pipeline({ parse })
     .use(checkSafety(rulesFor(format, policy === 'strict')))
     .process(dot);

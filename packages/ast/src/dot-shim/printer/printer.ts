@@ -1,4 +1,4 @@
-import { withCode } from '@ts-graphviz/common';
+import { ownOptions, withCode } from '@ts-graphviz/common';
 import type { ASTNode, CommentASTNode } from '../../types.js';
 import { defaultPlugins } from './plugins/index.js';
 import { escapeComment } from './plugins/utils/escape-comment.js';
@@ -17,7 +17,10 @@ export class Printer {
   /**
    * @param options Options to be used when generating the DOT string.
    */
-  constructor(private options: PrintOptions = {}) {}
+  constructor(private options: PrintOptions = {}) {
+    // Own properties only: an inherited one is never an option (#1757).
+    this.options = ownOptions(options);
+  }
 
   /**
    * Generates a DOT string from an ASTNode.

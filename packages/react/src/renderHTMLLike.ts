@@ -1,4 +1,4 @@
-import { type HTMLLikeValue, htmlLike } from '@ts-graphviz/common';
+import { type HTMLLikeValue, htmlLike, ownOptions } from '@ts-graphviz/common';
 import { Fragment, type ReactElement, type ReactNode } from 'react';
 
 /**
@@ -237,15 +237,12 @@ export function renderHTMLLike(
     return htmlLike('');
   }
 
-  // Sanitize and validate maxDepth option
+  // Own properties only: an inherited one is never an option (#1757).
+  const requested = ownOptions(options).maxDepth;
   let maxDepth = DEFAULT_MAX_RECURSION_DEPTH;
-  if (
-    options?.maxDepth != null &&
-    Number.isFinite(options.maxDepth) &&
-    options.maxDepth > 0
-  ) {
+  if (requested != null && Number.isFinite(requested) && requested > 0) {
     // Use Math.floor to ensure integer
-    maxDepth = Math.floor(options.maxDepth);
+    maxDepth = Math.floor(requested);
   }
 
   return htmlLike(manuallyRenderElement(label, 0, new WeakSet(), maxDepth));

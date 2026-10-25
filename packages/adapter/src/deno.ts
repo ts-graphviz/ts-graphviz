@@ -7,6 +7,7 @@ export type * from './types.js';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
+import { ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
 import type { Layout, Options } from './types.js';
 
@@ -57,7 +58,7 @@ export async function toStream<T extends Layout>(
   dot: string,
   options?: Options<T>,
 ): Promise<ReadableStream<Uint8Array>> {
-  const opts: Options<T> = options ?? ({} as Options<T>);
+  const opts = ownAdapterOptions(options);
   const [command, args] = createCommandAndArgs(opts);
   const limit = outputLimit(opts);
   const { signal } = opts;
