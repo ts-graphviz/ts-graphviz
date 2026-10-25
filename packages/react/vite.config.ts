@@ -28,7 +28,11 @@ export default defineConfig({
   },
   plugins: [
     // Declarations come from Oxc, file by file (isolatedDeclarations), and
-    // are bundled per entry; no TypeScript compiler is involved.
-    dts({ generator: 'oxc', tsconfig: './tsconfig.json' }),
+    // are bundled per entry; no TypeScript compiler is involved. Build only:
+    // under vitest (run in the package directory) there is no build input.
+    ...dts({ generator: 'oxc', tsconfig: './tsconfig.json' }).map((plugin) => ({
+      ...plugin,
+      apply: 'build' as const,
+    })),
   ],
 });
