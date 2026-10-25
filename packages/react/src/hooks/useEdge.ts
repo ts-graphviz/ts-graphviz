@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import type { EdgeModel, EdgeTargetLikeTuple } from 'ts-graphviz';
+import type { EdgeModel, ReadonlyEdgeTargetLikeTuple } from 'ts-graphviz';
 import type { EdgeOptions } from '../types.js';
 import { useCurrentGraph } from './useCurrentGraph.js';
 import { useHasAttributes } from './useHasAttributes.js';
@@ -10,7 +10,7 @@ import { useHasComment } from './useHasComment.js';
  * according to the object given by props.
  */
 export function useEdge(
-  targets: EdgeTargetLikeTuple,
+  targets: ReadonlyEdgeTargetLikeTuple,
   props: EdgeOptions = {},
 ): EdgeModel {
   const { comment, ...attributes } = props;
