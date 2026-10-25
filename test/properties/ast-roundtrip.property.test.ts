@@ -60,11 +60,8 @@ describe('[SM-1] printer and parser', () => {
           graph.map((g) => ['Graph', g] as const),
         ),
         ([startRule, ast]) => {
-          // The rule is a union here, which the overloads do not take yet
-          // (#1741); each of these rules gives one node.
-          const parsed = (
-            parseFragment as (input: string, rule: string) => ASTNode
-          )(stringify(ast), startRule);
+          // A union rule gives the union of its nodes (#1741).
+          const parsed = parseFragment(stringify(ast), startRule);
           expect(normalize(parsed)).toStrictEqual(normalize(ast));
         },
       ),

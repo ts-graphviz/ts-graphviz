@@ -2,12 +2,14 @@ import {
   type ConvertToModelOptions,
   type ParseOptions,
   parseFragment,
+  type Rule,
   toModel,
 } from '@ts-graphviz/ast';
 import {
   type EdgeModel,
   isDotModel,
   type ModelsContext,
+  type ModelTypes,
   type NodeModel,
   type ResolvedModelTypes,
   type RootGraphModel,
@@ -17,11 +19,35 @@ import {
 import { createModelsContext } from '@ts-graphviz/core';
 
 /**
+ * The `startRule`s {@link fromDot} can convert to a model.
+ * @group Convert DOT to Model
+ */
+export type FromDotRule = 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph';
+
+/**
+ * What {@link fromDot} returns for a `startRule`, with the model classes
+ * `M`. For a union of rules, it is the union of their models.
+ * @group Convert DOT to Model
+ */
+export type FromDotModel<
+  R extends FromDotRule,
+  M extends ModelTypes = ModelTypes,
+> = R extends 'Dot' | 'Graph'
+  ? M['Graph'] | M['Digraph']
+  : R extends 'Node'
+    ? M['Node']
+    : R extends 'Edge'
+      ? M['Edge']
+      : M['Subgraph'];
+
+type AnyFromDotModel = RootGraphModel | NodeModel | EdgeModel | SubgraphModel;
+
+/**
  * This interface provides options for converting DOT to a model.
  * @group Convert DOT to Model
  */
 export interface FromDotOptions<
-  T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph',
+  T extends FromDotRule,
   P extends Partial<ModelsContext> = Partial<ModelsContext>,
 > {
   /**
@@ -56,37 +82,37 @@ export function fromDot<const P extends Partial<ModelsContext>>(
     convert: { models: P };
   },
 ): ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'];
+export function fromDot<
+  const P extends Partial<ModelsContext>,
+  const R extends FromDotRule,
+>(
+  dot: string,
+  options: FromDotOptions<R, P> & {
+    convert: { models: P };
+  },
+): FromDotModel<R, ResolvedModelTypes<P>>;
 export function fromDot(
   dot: string,
   options?: FromDotOptions<'Dot' | 'Graph'>,
 ): RootGraphModel;
+export function fromDot<const R extends FromDotRule>(
+  dot: string,
+  options: FromDotOptions<R>,
+): FromDotModel<R>;
 export function fromDot(
   dot: string,
-  options?: FromDotOptions<'Node'>,
-): NodeModel;
-export function fromDot(
-  dot: string,
-  options?: FromDotOptions<'Edge'>,
-): EdgeModel;
-export function fromDot(
-  dot: string,
-  options?: FromDotOptions<'Subgraph'>,
-): SubgraphModel;
-export function fromDot<
-  T extends 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph',
->(dot: string, options?: FromDotOptions<T>) {
+  options?: FromDotOptions<FromDotRule>,
+): AnyFromDotModel {
   // `startRule` picks what fromDot returns; it is not the deprecated
   // option of `parse`.
   const { startRule = 'Dot', ...limits } = options?.parse ?? {};
-  const ast = parseFragment(dot, startRule, limits);
+  // Widened to every rule on purpose: JavaScript callers can pass any.
+  const ast = parseFragment(dot, startRule as Rule, limits);
+
   if (
     Array.isArray(ast) ||
     ast.type === 'Attribute' ||
-    ast.type === 'AttributeList' ||
-    ast.type === 'Comment' ||
-    ast.type === 'NodeRef' ||
-    ast.type === 'NodeRefList' ||
-    ast.type === 'Literal'
+    ast.type === 'AttributeList'
   ) {
     throw withCode(
       new TypeError(

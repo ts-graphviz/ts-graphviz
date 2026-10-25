@@ -147,6 +147,23 @@ export function parse(
 }
 
 /**
+ * What {@link parseFragment} returns for each grammar {@link Rule}. For a
+ * union of rules, `FragmentByRule[R]` is the union of their results.
+ * @beta
+ * @group Convert DOT to AST
+ */
+export interface FragmentByRule {
+  Dot: DotASTNode;
+  Graph: GraphASTNode;
+  Subgraph: SubgraphASTNode;
+  Node: NodeASTNode;
+  Edge: EdgeASTNode;
+  AttributeList: AttributeListASTNode;
+  Attribute: AttributeASTNode;
+  ClusterStatements: ClusterStatementASTNode[];
+}
+
+/**
  * Parse a fragment of a DOT source by grammar rule: one graph, subgraph,
  * node, edge, attribute list, attribute, or a list of statements.
  * {@link parse} reads a whole DOT source.
@@ -159,51 +176,11 @@ export function parse(
  * @beta
  * @group Convert DOT to AST
  */
-export function parseFragment(
+export function parseFragment<R extends Rule>(
   input: string,
-  rule: 'Dot',
+  rule: R,
   options?: CommonParseOptions,
-): DotASTNode;
-export function parseFragment(
-  input: string,
-  rule: 'Graph',
-  options?: CommonParseOptions,
-): GraphASTNode;
-export function parseFragment(
-  input: string,
-  rule: 'Subgraph',
-  options?: CommonParseOptions,
-): SubgraphASTNode;
-export function parseFragment(
-  input: string,
-  rule: 'Node',
-  options?: CommonParseOptions,
-): NodeASTNode;
-export function parseFragment(
-  input: string,
-  rule: 'Edge',
-  options?: CommonParseOptions,
-): EdgeASTNode;
-export function parseFragment(
-  input: string,
-  rule: 'AttributeList',
-  options?: CommonParseOptions,
-): AttributeListASTNode;
-export function parseFragment(
-  input: string,
-  rule: 'Attribute',
-  options?: CommonParseOptions,
-): AttributeASTNode;
-export function parseFragment(
-  input: string,
-  rule: 'ClusterStatements',
-  options?: CommonParseOptions,
-): ClusterStatementASTNode[];
-export function parseFragment(
-  input: string,
-  rule: Rule,
-  options?: CommonParseOptions,
-): ASTNode | ClusterStatementASTNode[];
+): FragmentByRule[R];
 export function parseFragment(
   input: string,
   rule: Rule,
