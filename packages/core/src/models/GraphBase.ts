@@ -9,6 +9,7 @@ import {
   type EdgeTargetTuple,
   type GraphBaseModel,
   type GraphCommonAttributes,
+  type GraphStatementModel,
   isNodeRefGroupLike,
   type ModelsContext,
   type NodeAttributeKey,
@@ -99,6 +100,13 @@ export abstract class GraphBase<
     return Array.from(this.#objects.subgraphs.values());
   }
 
+  get statements(): ReadonlyArray<GraphStatementModel> {
+    return Array.from(this.#statements);
+  }
+
+  /** Nodes, edges and subgraphs in the order they were added. */
+  #statements = new Set<GraphStatementModel>();
+
   /** @hidden */
   #objects: Readonly<{
     nodes: Map<string, NodeModel>;
@@ -131,15 +139,26 @@ export abstract class GraphBase<
   }
 
   public addNode(node: NodeModel): void {
+    const replaced = this.#objects.nodes.get(node.id);
     this.#objects.nodes.set(node.id, node);
+    if (replaced === undefined) {
+      this.#statements.add(node);
+    } else if (replaced !== node) {
+      // A node with the same id takes the place of the one it replaces.
+      this.#statements = new Set(
+        Array.from(this.#statements, (s) => (s === replaced ? node : s)),
+      );
+    }
   }
 
   public addEdge(edge: EdgeModel): void {
     this.#objects.edges.add(edge);
+    this.#statements.add(edge);
   }
 
   public addSubgraph(subgraph: SubgraphModel): void {
     this.#objects.subgraphs.add(subgraph);
+    this.#statements.add(subgraph);
   }
 
   public existNode(nodeId: string): boolean {
@@ -178,15 +197,20 @@ export abstract class GraphBase<
   }
 
   public removeNode(node: NodeModel | string): void {
-    this.#objects.nodes.delete(typeof node === 'string' ? node : node.id);
+    const id = typeof node === 'string' ? node : node.id;
+    const removed = this.#objects.nodes.get(id);
+    this.#objects.nodes.delete(id);
+    if (removed) this.#statements.delete(removed);
   }
 
   public removeEdge(edge: EdgeModel): void {
     this.#objects.edges.delete(edge);
+    this.#statements.delete(edge);
   }
 
   public removeSubgraph(subgraph: SubgraphModel): void {
     this.#objects.subgraphs.delete(subgraph);
+    this.#statements.delete(subgraph);
   }
 
   public createNode(id: string, attributes?: NodeAttributesObject): NodeModel {

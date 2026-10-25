@@ -138,18 +138,18 @@ exports[`toDot serialization for Digraph > Basic graph rendering > renders graph
 
 exports[`toDot serialization for Digraph > Basic graph rendering > renders nested subgraphs to arbitrary depth 1`] = `
 "digraph {
-  "node1";
-  "node2";
   subgraph "depth1" {
     "depth1_node1";
     "depth1_node2";
+    "depth1_node1" -> "depth1_node2";
     subgraph "depth2" {
       "depth2_node1";
       "depth2_node2";
       "depth2_node1" -> "depth2_node2";
     }
-    "depth1_node1" -> "depth1_node2";
   }
+  "node1";
+  "node2";
   "node1" -> "node2";
 }"
 `;
@@ -164,8 +164,6 @@ exports[`toDot serialization for Digraph > Basic graph rendering > renders simpl
 
 exports[`toDot serialization for Digraph > Basic graph rendering > renders single-level subgraphs with nodes and edges 1`] = `
 "digraph {
-  "node1";
-  "node2";
   subgraph "A" {
     "A_node1";
     "A_node2";
@@ -176,6 +174,8 @@ exports[`toDot serialization for Digraph > Basic graph rendering > renders singl
     "B_node1";
     "B_node2";
   }
+  "node1";
+  "node2";
   "node1" -> "node2";
 }"
 `;
@@ -318,18 +318,18 @@ exports[`toDot serialization for Graph > Basic graph rendering > renders graph, 
 
 exports[`toDot serialization for Graph > Basic graph rendering > renders nested subgraphs to arbitrary depth 1`] = `
 "graph {
-  "node1";
-  "node2";
   subgraph "depth1" {
     "depth1_node1";
     "depth1_node2";
+    "depth1_node1" -- "depth1_node2";
     subgraph "depth2" {
       "depth2_node1";
       "depth2_node2";
       "depth2_node1" -- "depth2_node2";
     }
-    "depth1_node1" -- "depth1_node2";
   }
+  "node1";
+  "node2";
   "node1" -- "node2";
 }"
 `;
@@ -344,8 +344,6 @@ exports[`toDot serialization for Graph > Basic graph rendering > renders simple 
 
 exports[`toDot serialization for Graph > Basic graph rendering > renders single-level subgraphs with nodes and edges 1`] = `
 "graph {
-  "node1";
-  "node2";
   subgraph "A" {
     "A_node1";
     "A_node2";
@@ -356,6 +354,8 @@ exports[`toDot serialization for Graph > Basic graph rendering > renders single-
     "B_node1";
     "B_node2";
   }
+  "node1";
+  "node2";
   "node1" -- "node2";
 }"
 `;

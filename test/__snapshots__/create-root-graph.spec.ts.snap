@@ -5,6 +5,9 @@ exports[`Root Graph Creation Functions > digraph() > builds graph using callback
   "aa";
   "bb";
   "cc";
+  "aa" -> "bb" -> "cc" [
+    color = "red";
+  ];
   subgraph "A" {
     "Aaa" [
       color = "pink";
@@ -17,9 +20,6 @@ exports[`Root Graph Creation Functions > digraph() > builds graph using callback
       color = "red";
     ];
   }
-  "aa" -> "bb" -> "cc" [
-    color = "red";
-  ];
 }"
 `;
 
@@ -28,6 +28,9 @@ exports[`Root Graph Creation Functions > digraph() > builds graph with attribute
   "aa";
   "bb";
   "cc";
+  "aa" -> "bb" -> "cc" [
+    color = "red";
+  ];
   subgraph "A" {
     "Aaa" [
       color = "pink";
@@ -40,9 +43,6 @@ exports[`Root Graph Creation Functions > digraph() > builds graph with attribute
       color = "red";
     ];
   }
-  "aa" -> "bb" -> "cc" [
-    color = "red";
-  ];
 }"
 `;
 
@@ -55,6 +55,11 @@ digraph "G" {
   "bb";
   // This is node c.
   "cc";
+  // This is edge.
+  // It connects a, b and c.
+  "aa" -> "bb" -> "cc" [
+    color = "red";
+  ];
   // It is subgraph A.
   // It is not cluster
   subgraph "A" {
@@ -63,11 +68,6 @@ digraph "G" {
       color = "pink";
     ];
   }
-  // This is edge.
-  // It connects a, b and c.
-  "aa" -> "bb" -> "cc" [
-    color = "red";
-  ];
 }"
 `;
 
@@ -112,6 +112,9 @@ exports[`Root Graph Creation Functions > graph() > builds graph using callback-s
   "aa";
   "bb";
   "cc";
+  "aa" -- "bb" -- "cc" [
+    color = "red";
+  ];
   subgraph "A" {
     "Aaa" [
       color = "pink";
@@ -128,9 +131,6 @@ exports[`Root Graph Creation Functions > graph() > builds graph using callback-s
       color = "red";
     ];
   }
-  "aa" -- "bb" -- "cc" [
-    color = "red";
-  ];
 }"
 `;
 
@@ -139,6 +139,9 @@ exports[`Root Graph Creation Functions > graph() > builds graph with attributes 
   "aa";
   "bb";
   "cc";
+  "aa" -- "bb" -- "cc" [
+    color = "red";
+  ];
   subgraph "A" {
     "Aaa" [
       color = "pink";
@@ -151,9 +154,6 @@ exports[`Root Graph Creation Functions > graph() > builds graph with attributes 
       color = "red";
     ];
   }
-  "aa" -- "bb" -- "cc" [
-    color = "red";
-  ];
 }"
 `;
 
@@ -164,6 +164,9 @@ exports[`Root Graph Creation Functions > graph() > escapes special characters in
   ];
   "b\\"b";
   "c\\nc\\"";
+  "a\\na" -- "b\\"b" -- "c\\nc\\"" [
+    color = "red";
+  ];
   subgraph "graph.name" {
     "node.name" [
       label = "node";
@@ -173,16 +176,11 @@ exports[`Root Graph Creation Functions > graph() > escapes special characters in
     ];
     "node.name" -- "another.name";
   }
-  "a\\na" -- "b\\"b" -- "c\\nc\\"" [
-    color = "red";
-  ];
 }"
 `;
 
 exports[`Root Graph Creation Functions > graph() > supports script-style subgraph and edge creation 1`] = `
 "graph "G" {
-  "node1";
-  "node2";
   subgraph "A" {
     "A_node1";
     "A_node2";
@@ -193,6 +191,8 @@ exports[`Root Graph Creation Functions > graph() > supports script-style subgrap
     "B_node1";
     "B_node2";
   }
+  "node1";
+  "node2";
   "node1" -- "node2";
 }"
 `;
