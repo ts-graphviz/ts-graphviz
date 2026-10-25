@@ -7,6 +7,7 @@ import type {
   ClusterStatementASTNode,
   DotASTNode,
   EdgeASTNode,
+  FileRange,
   GraphASTNode,
   NodeASTNode,
   SubgraphASTNode,
@@ -166,8 +167,15 @@ export function parse(
     const before = input.slice(0, nul);
     const line = before.split('\n').length;
     const column = nul - before.lastIndexOf('\n');
+    const position = { offset: nul, line, column };
     throw new DotSyntaxError(
       `A DOT source must not contain a NUL character (line ${line}, column ${column}).`,
+      {
+        location: {
+          start: position,
+          end: { ...position, offset: nul + 1, column: column + 1 },
+        },
+      },
     );
   }
 
@@ -195,6 +203,7 @@ export function parse(
     if (e instanceof PeggySyntaxError) {
       throw new DotSyntaxError(e.message, {
         cause: e,
+        location: rangeOf(e.location),
       });
     }
     if (e instanceof ASTNodeCountExceededError) {
@@ -225,4 +234,36 @@ export class DotSyntaxError extends SyntaxError {
   override readonly name = 'DotSyntaxError';
   /** Stable identifier of this error kind. */
   readonly code = 'TSG_ERR_DOT_SYNTAX';
+  /**
+   * Where in the source the error is, when it is at a place (not, for
+   * example, for an input over `maxInputSize`).
+   */
+  readonly location: FileRange | undefined;
+
+  /**
+   * @remarks The message text and the `cause` (the parser's own error, if
+   * any) may change in any release; `code` and `location` are the
+   * contract.
+   */
+  constructor(
+    message: string,
+    options?: ErrorOptions & { location?: FileRange | undefined },
+  ) {
+    super(message, options);
+    this.location = options?.location;
+  }
+}
+
+/** A peggy location as a {@link FileRange}, without its `source`. */
+function rangeOf(location: unknown): FileRange | undefined {
+  const l = location as
+    | { start?: FileRange['start']; end?: FileRange['end'] }
+    | undefined;
+  if (!l?.start || !l.end) return undefined;
+  const position = (p: FileRange['start']) => ({
+    offset: p.offset,
+    line: p.line,
+    column: p.column,
+  });
+  return { start: position(l.start), end: position(l.end) };
 }
