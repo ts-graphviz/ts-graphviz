@@ -256,3 +256,47 @@ describe('updates outside the synchronous lane', () => {
     ).rejects.toThrow(/did not settle within 50 ms/);
   });
 });
+
+describe('renders on one root', () => {
+  function Slow({ id }: { id: string }): ReactNode {
+    const [shown, setShown] = useState(false);
+    useEffect(() => startTransition(() => setShown(true)), []);
+    return shown ? <Node id={id} /> : null;
+  }
+
+  it('runs one after another, each with its own result', async () => {
+    const seen: string[][] = [];
+    const root = createRoot({
+      onRenderComplete: (models) =>
+        seen.push(
+          models.flatMap((m) =>
+            m.$$type === 'Graph' ? m.nodes.map((n) => n.id) : [],
+          ),
+        ),
+    });
+    const first = root.render(
+      <Digraph id="G">
+        <Slow id="first" />
+      </Digraph>,
+    );
+    const second = root.render(
+      <Digraph id="G">
+        <Thrower />
+      </Digraph>,
+    );
+    await expect(first).resolves.toBeUndefined();
+    await expect(second).rejects.toThrow(RangeError);
+    expect(seen).toEqual([['first']]);
+  });
+
+  it('rejects a render the root was unmounted during', async () => {
+    const root = createRoot();
+    const pending = root.render(
+      <Digraph id="G">
+        <Slow id="late" />
+      </Digraph>,
+    );
+    root.unmount();
+    await expect(pending).rejects.toThrow(/unmounted/);
+  });
+});

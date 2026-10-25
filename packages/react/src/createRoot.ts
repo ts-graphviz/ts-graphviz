@@ -246,6 +246,7 @@ async function renderInternal<
   wrappedElement: ReactElement,
   originalContainer: Container | undefined,
   options: CreateRootOptions = {},
+  isUnmounted: () => boolean = () => false,
 ): Promise<void> {
   const { onRenderComplete, timeout = DEFAULT_TIMEOUT } = options;
   containerInfo.uncaughtErrors = [];
@@ -264,6 +265,10 @@ async function renderInternal<
       );
     }
     await yieldToScheduler();
+    if (isUnmounted()) break;
+  }
+  if (isUnmounted()) {
+    throw new Error('The root was unmounted before the render settled');
   }
   const [error] = containerInfo.uncaughtErrors;
   if (containerInfo.uncaughtErrors.length > 0) {
@@ -331,29 +336,40 @@ export function createRoot<
   const fiberRoot = createFiberRoot(containerInfo, otherOptions);
   let isUnmounted = false;
 
+  // Renders on one root run one after another: each waits for the previous
+  // to settle, so each sees its own tree, models and errors.
+  let previous: Promise<void> = Promise.resolve();
+
+  const renderNow = async (element: ReactElement): Promise<void> => {
+    if (isUnmounted) {
+      throw new Error('Cannot render on an unmounted root');
+    }
+
+    // Clear previous models for fresh render
+    containerInfo.renderedModels = [];
+
+    const wrappedElement = createWrappedElement(
+      element,
+      context,
+      collectModel,
+      container,
+    );
+
+    await renderInternal(
+      containerInfo,
+      fiberRoot,
+      wrappedElement,
+      container,
+      otherOptions,
+      () => isUnmounted,
+    );
+  };
+
   return {
-    async render(element: ReactElement): Promise<void> {
-      if (isUnmounted) {
-        throw new Error('Cannot render on an unmounted root');
-      }
-
-      // Clear previous models for fresh render
-      containerInfo.renderedModels = [];
-
-      const wrappedElement = createWrappedElement(
-        element,
-        context,
-        collectModel,
-        container,
-      );
-
-      await renderInternal(
-        containerInfo,
-        fiberRoot,
-        wrappedElement,
-        container,
-        otherOptions,
-      );
+    render(element: ReactElement): Promise<void> {
+      const result = previous.then(() => renderNow(element));
+      previous = result.catch(noop);
+      return result;
     },
 
     unmount(): void {
