@@ -64,7 +64,10 @@ describe.skipIf(!hasDot)(
 
     it('reports an argument the OS cannot pass as CommandExecutionError', async () => {
       await expect(
-        toStream('digraph {}', { attributes: { graph: { label: 'a\0b' } } }),
+        toStream('digraph {}', {
+          attributes: { graph: { label: 'a\0b' } },
+          sanitize: false,
+        }),
       ).rejects.toMatchObject({
         name: 'CommandExecutionError',
         code: 'TSG_ERR_COMMAND_FAILED',
@@ -168,6 +171,36 @@ describe.skipIf(!hasDot)(
       await expect(
         toStream('digraph { a; b; c }', { sanitize: { maxASTNodes: 3 } }),
       ).rejects.toMatchObject({ code: 'TSG_ERR_DOT_SYNTAX' });
+    });
+
+    it('checks the attributes option, which reaches dot as -G/-N/-E arguments', async () => {
+      await expect(
+        toStream('digraph { a }', {
+          format: 'ps',
+          attributes: { node: { shape: 'epsf', shapefile: secret } as never },
+        }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+      // dot splits an argument at its first '=': this key sets `image`.
+      await expect(
+        toStream('digraph { a }', {
+          attributes: { node: { [`image=${secret}`]: true } as never },
+        }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
+      // A NUL is refused by the parser before the safety rules run.
+      await expect(
+        toStream('digraph { a }', {
+          attributes: { graph: { label: 'a\0b' } },
+        }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_DOT_SYNTAX' });
+      const stream = await toStream('digraph { a }', {
+        format: 'dot',
+        attributes: {
+          graph: { rankdir: 'LR', label: 'Title "quoted"' },
+          node: { shape: 'box', fontname: 'Helvetica' },
+          edge: { color: 'red' },
+        },
+      });
+      expect(await new Response(stream).text()).toContain('rankdir=LR');
     });
 
     it('passes the policy on, and checks for its own format', async () => {
