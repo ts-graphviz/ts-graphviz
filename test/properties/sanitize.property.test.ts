@@ -1,7 +1,9 @@
 import fc from 'fast-check';
+import type { AttributeKey } from 'ts-graphviz';
 import {
   createElementFactory,
   type DotASTNode,
+  type LiteralASTNode,
   parse,
   sanitize,
   stringify,
@@ -33,6 +35,9 @@ const anyCase = (name: string) =>
 
 const literal = (value: string, quoted: boolean) =>
   createElement('Literal', { value, kind: quoted ? 'quoted' : 'bare' }, []);
+// Any ID is a key in the syntax; the AST types name the known keys.
+const key = (value: string, quoted: boolean) =>
+  literal(value, quoted) as LiteralASTNode<AttributeKey>;
 
 const fileAttribute = fc
   .tuple(
@@ -41,10 +46,10 @@ const fileAttribute = fc
       .chain(anyCase),
     fc.boolean(),
   )
-  .map(([key, quoted]) =>
+  .map(([name, quoted]) =>
     createElement(
       'Attribute',
-      { key: literal(key, quoted), value: literal('/etc/passwd', true) },
+      { key: key(name, quoted), value: literal('/etc/passwd', true) },
       [],
     ),
   );
@@ -65,10 +70,10 @@ const unsafeUrlAttribute = fc
       '\\N',
     ),
   )
-  .map(([key, value]) =>
+  .map(([name, value]) =>
     createElement(
       'Attribute',
-      { key: literal(key, false), value: literal(value, true) },
+      { key: key(name, false), value: literal(value, true) },
       [],
     ),
   );

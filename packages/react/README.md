@@ -338,7 +338,7 @@ for (const model of allModels) {
 When using container mode, you get access to all rendered models with full type safety:
 
 ```tsx
-import { digraph } from 'ts-graphviz';
+import { digraph, isNodeRef } from 'ts-graphviz';
 import { isNodeModel, isEdgeModel, isSubgraphModel } from '@ts-graphviz/react';
 
 const container = digraph('myContainer');
@@ -372,7 +372,11 @@ allNodes.forEach(node => {
 });
 
 allEdges.forEach(edge => {
-  console.log(`Edge from ${edge.targets[0]} to ${edge.targets[1]}`);
+  // A target is a node (NodeRef) or a group of nodes
+  const [from, to] = edge.targets.map(t =>
+    isNodeRef(t) ? t.id : t.map(n => n.id).join(','),
+  );
+  console.log(`Edge from ${from} to ${to}`);
 });
 ```
 

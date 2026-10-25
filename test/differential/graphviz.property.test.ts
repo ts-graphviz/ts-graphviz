@@ -201,8 +201,12 @@ function expected(root: RootGraphSummary): Expected {
             // explicit attributes without going through gvText again.
             const withPorts = (edge: Effective) => {
               edge.mention(e.attributes);
-              if (tail.port) edge.attributes.set('tailport', tail.port);
-              if (head.port) edge.attributes.set('headport', head.port);
+              if ('port' in tail && tail.port) {
+                edge.attributes.set('tailport', tail.port);
+              }
+              if ('port' in head && head.port) {
+                edge.attributes.set('headport', head.port);
+              }
               return edge;
             };
             if (root.strict) {

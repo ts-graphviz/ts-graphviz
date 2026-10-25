@@ -244,29 +244,35 @@ export type EscString = string | EscStringValue;
 export type HTMLLikeLabel = HTMLLikeValue;
 /** @hidden */
 export namespace HTMLLikeLabel {
+  /**
+   * A number, also accepted as its string form (`border="1"`), as HTML
+   * attributes are written.
+   */
+  export type Value = number | `${number}`;
+
   export type TableAttributes = Insensitive<{
     align?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
     bgcolor?: Color | ColorList; // "color"
-    border?: number; // "value"
-    cellborder?: number; // "value"
-    cellPadding?: number; // "value"
-    cellSpacing?: number; // "value"
+    border?: Value; // "value"
+    cellborder?: Value; // "value"
+    cellPadding?: Value; // "value"
+    cellSpacing?: Value; // "value"
     color?: Color | ColorList; // "color"
-    columns?: number; // "value"
+    columns?: Value; // "value"
     fixedSize?: true; // "FALSE|TRUE"
-    gradientAngle?: number; // "value"
-    height?: number; // "value"
+    gradientAngle?: Value; // "value"
+    height?: Value; // "value"
     href?: string; // "value"
     id?: string; // "value"
     port?: Compass | string; // "portName"
-    rows?: number; // "value"
+    rows?: Value; // "value"
     sides?: Side.Combinations; // "value"
     style?: Style; // "value"
     target?: string; // "value"
     title?: string; // "value"
     tooltip?: string; // "value"
     valign?: 'MIDDLE' | 'BOTTOM' | 'TOP'; // "MIDDLE|BOTTOM|TOP"
-    width?: number; // "value"
+    width?: Value; // "value"
   }>;
 
   export type NoAttributes = Record<string, unknown>;
@@ -277,31 +283,31 @@ export namespace HTMLLikeLabel {
     align?: 'CENTER' | 'LEFT' | 'RIGHT' | 'TEXT'; // "CENTER|LEFT|RIGHT|TEXT"
     balign?: 'CENTER' | 'LEFT' | 'RIGHT'; // "CENTER|LEFT|RIGHT"
     bgcolor?: Color | ColorList; // "color"
-    border?: number; // "value"
-    cellPadding?: number; // "value"
-    cellSpacing?: number; // "value"
+    border?: Value; // "value"
+    cellPadding?: Value; // "value"
+    cellSpacing?: Value; // "value"
     color?: Color | ColorList; // "color"
-    colspan?: number; // "value"
+    colspan?: Value; // "value"
     fixedSize?: boolean; // "FALSE|TRUE"
-    gradientAngle?: number; // "value"
-    height?: number; // "value"
+    gradientAngle?: Value; // "value"
+    height?: Value; // "value"
     href?: string; // "value"
     id?: string; // "value"
     port?: Compass | string; // "portName"
-    rowSpan?: number; // "value"
+    rowSpan?: Value; // "value"
     sides?: Side.Combinations; // "value"
     style?: Style; // "value"
     target?: string; // "value"
     title?: string; // "value"
     tooltip?: string; // "value"
     valign?: 'MIDDLE' | 'BOTTOM' | 'TOP'; // "MIDDLE|BOTTOM|TOP"
-    width?: number; // "value"
+    width?: Value; // "value"
   }>;
 
   export type FontAttributes = Insensitive<{
     color?: Color | ColorList; // "color"
     face?: string; // "fontname"
-    'point-size'?: number; // "value"
+    'point-size'?: Value; // "value"
   }>;
 
   export type BrAttributes = Insensitive<{

@@ -220,7 +220,8 @@ describe('Node Component', () => {
     });
 
     it('provides access to NodeModel via function ref', async () => {
-      let nodeModel: NodeModel | null = null;
+      // Assigned in a callback, which TypeScript does not see.
+      let nodeModel = null as NodeModel | null;
       const root = createRoot();
 
       await root.render(
@@ -247,7 +248,8 @@ describe('Node Component', () => {
 
     it('handles ref updates correctly', async () => {
       let refCallCount = 0;
-      let currentNode: NodeModel | null = null;
+      // Assigned in a callback, which TypeScript does not see.
+      let currentNode = null as NodeModel | null;
 
       const TestComponent = ({ nodeId }: { nodeId: string }) => (
         <Digraph>

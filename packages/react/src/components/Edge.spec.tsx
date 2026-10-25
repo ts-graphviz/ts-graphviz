@@ -141,7 +141,8 @@ describe('Edge Component', () => {
     });
 
     it('provides access to EdgeModel via function ref', async () => {
-      let edgeModel: EdgeModel | null = null;
+      // Assigned in a callback, which TypeScript does not see.
+      let edgeModel = null as EdgeModel | null;
       const root = createRoot();
 
       await root.render(

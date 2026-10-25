@@ -164,7 +164,8 @@ describe('Graph Component', () => {
     });
 
     it('provides access to GraphBaseModel via function ref', async () => {
-      let graphModel: GraphBaseModel | null = null;
+      // Assigned in a callback, which TypeScript does not see.
+      let graphModel = null as GraphBaseModel | null;
 
       const root = createRoot();
       await root.render(

@@ -199,8 +199,15 @@ describe('parse', () => {
     });
 
     describe('compass points', () => {
-      const ref = (source: string) =>
-        parse(`${source} -- b;`, { startRule: 'Edge' }).targets[0];
+      const ref = (source: string) => {
+        const [target] = parse(`${source} -- b;`, {
+          startRule: 'Edge',
+        }).targets;
+        if (target.type !== 'NodeRef') {
+          throw new TypeError(`expected a NodeRef, got ${target.type}`);
+        }
+        return target;
+      };
 
       test.each(['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c', '_'])(
         'a:p:%s is a port with a compass point',

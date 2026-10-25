@@ -2,6 +2,7 @@ import {
   digraph,
   isEdgeModel,
   isNodeModel,
+  isNodeRef,
   isRootGraphModel,
 } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
@@ -60,9 +61,10 @@ describe('README examples', () => {
     const allEdges = root.getTopLevelModels(isEdgeModel); // EdgeModel[]
     expect(allEdges).toHaveLength(1);
     // Targets are NodeRef objects with id property
-    expect(allEdges[0].targets).toHaveLength(2);
-    expect(allEdges[0].targets[0].id).toBe('node1');
-    expect(allEdges[0].targets[1].id).toBe('node2');
+    expect(allEdges[0].targets).toMatchObject([
+      { id: 'node1' },
+      { id: 'node2' },
+    ]);
 
     // Type-safe operations
     allNodes.forEach((node) => {
@@ -70,8 +72,11 @@ describe('README examples', () => {
     });
 
     allEdges.forEach((edge) => {
-      const fromTo = `Edge from ${edge.targets[0].id} to ${edge.targets[1].id}`;
-      expect(fromTo).toBe('Edge from node1 to node2');
+      // A target is a node (NodeRef) or a group of nodes
+      const [from, to] = edge.targets.map((t) =>
+        isNodeRef(t) ? t.id : t.map((n) => n.id).join(','),
+      );
+      expect(`Edge from ${from} to ${to}`).toBe('Edge from node1 to node2');
     });
 
     root.unmount();

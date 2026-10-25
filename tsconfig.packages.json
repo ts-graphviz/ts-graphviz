@@ -8,7 +8,9 @@
     "packages/ast/src/**/*.ts",
     "packages/core/src/**/*.ts",
     "packages/adapter/src/**/*.ts",
-    "packages/ts-graphviz/src/**/*.ts"
+    "packages/ts-graphviz/src/**/*.ts",
+    "packages/react/src/**/*.ts",
+    "packages/react/src/**/*.tsx"
   ],
   "exclude": [
     "**/*.test.ts",
@@ -16,6 +18,7 @@
     "**/*.spec.ts",
     "**/*.spec.tsx",
     "**/test-utils/**",
+    "**/__tests__/**",
     "**/node_modules",
     "**/lib",
     "**/dist"
