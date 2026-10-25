@@ -204,7 +204,9 @@ const withDoc = (code: string, doc: string) => `/*${doc}*/\n${code}`;
 
 const IDENTIFIER = /^[A-Za-z_$][\w$]*$/;
 const quote = (text: string) => `'${text.replace(/[\\']/g, '\\$&')}'`;
-const union = (members: string[]) => members.join(' | ');
+/** Members joined by `|`; no members is `never` (as the TypeScript printer wrote it). */
+const union = (members: string[]) =>
+  members.length === 0 ? 'never' : members.join(' | ');
 /** `keyof $exclude | symbol | number` */
 const EXCLUDED_KEYS = 'keyof $exclude | symbol | number';
 
@@ -228,6 +230,8 @@ const excludeInterface = () =>
 for (const attr of docs) {
   if (!IDENTIFIER.test(attr.name))
     throw new Error(`attribute name "${attr.name}" is not an identifier`);
+  if (attr.types.length === 0 && !(attr.name in TYPE_OVERRIDES))
+    throw new Error(`attribute "${attr.name}" has no types in the docs`);
   for (const t of attr.types) {
     if (!(t in TYPE_MAP))
       throw new Error(
