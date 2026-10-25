@@ -252,8 +252,10 @@ async function renderInternal<
   reconciler.updateContainerSync(wrappedElement, fiberRoot, null, null);
   reconciler.flushSyncWork();
   const deadline = Date.now() + timeout;
+  // Passive effects of a render that finished outside the synchronous lane
+  // (e.g. the cleanup of a Suspense fallback) are flushed here too.
   while (
-    hasPendingWork(fiberRoot) &&
+    (reconciler.flushPassiveEffects() || hasPendingWork(fiberRoot)) &&
     containerInfo.uncaughtErrors.length === 0
   ) {
     if (Date.now() >= deadline) {
