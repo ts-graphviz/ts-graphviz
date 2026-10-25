@@ -6,6 +6,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -19,7 +20,6 @@
                     "offset": 22,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -38,6 +38,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 20,
@@ -51,13 +52,13 @@
                     "offset": 28,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "regexp",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 25,
@@ -71,7 +72,6 @@
                     "offset": 38,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -90,6 +90,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 52,
@@ -103,13 +104,13 @@
                     "offset": 42,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/regexp",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 61,
@@ -123,7 +124,6 @@
                     "offset": 70,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -142,6 +142,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 116,
@@ -155,13 +156,13 @@
                     "offset": 78,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package regexp implements regular expression search.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -175,7 +176,6 @@
                 "offset": 18,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n0",
           },
@@ -198,6 +198,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -211,7 +212,6 @@
                     "offset": 140,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -230,6 +230,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 19,
@@ -243,13 +244,13 @@
                     "offset": 146,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "bytes",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -263,7 +264,6 @@
                     "offset": 155,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -282,6 +282,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 50,
@@ -295,13 +296,13 @@
                     "offset": 159,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/bytes",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 59,
@@ -315,7 +316,6 @@
                     "offset": 186,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -334,6 +334,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 133,
@@ -347,13 +348,13 @@
                     "offset": 194,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package bytes implements functions for the manipulation of byte slices.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -367,7 +368,6 @@
                 "offset": 136,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n1",
           },
@@ -390,6 +390,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -403,7 +404,6 @@
                     "offset": 275,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -422,6 +422,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 16,
@@ -435,13 +436,13 @@
                     "offset": 281,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "io",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 21,
@@ -455,7 +456,6 @@
                     "offset": 287,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -474,6 +474,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 44,
@@ -487,13 +488,13 @@
                     "offset": 291,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/io",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 53,
@@ -507,7 +508,6 @@
                     "offset": 315,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -526,6 +526,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 111,
@@ -539,13 +540,13 @@
                     "offset": 323,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package io provides basic interfaces to I/O primitives.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -559,7 +560,6 @@
                 "offset": 271,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n2",
           },
@@ -582,6 +582,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -595,7 +596,6 @@
                     "offset": 388,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -614,6 +614,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 27,
@@ -627,13 +628,13 @@
                     "offset": 394,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "regexp/syntax",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 32,
@@ -647,7 +648,6 @@
                     "offset": 411,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -666,6 +666,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 66,
@@ -679,13 +680,13 @@
                     "offset": 415,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/regexp/syntax",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 75,
@@ -699,7 +700,6 @@
                     "offset": 450,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -718,6 +718,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 176,
@@ -731,13 +732,13 @@
                     "offset": 458,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package syntax parses regular expressions into parse trees and compiles parse trees into programs.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -751,7 +752,6 @@
                 "offset": 384,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n3",
           },
@@ -774,6 +774,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -787,7 +788,6 @@
                     "offset": 566,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -806,6 +806,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 18,
@@ -819,13 +820,13 @@
                     "offset": 572,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "sort",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 23,
@@ -839,7 +840,6 @@
                     "offset": 580,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -858,6 +858,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 48,
@@ -871,13 +872,13 @@
                     "offset": 584,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/sort",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 57,
@@ -891,7 +892,6 @@
                     "offset": 610,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -910,6 +910,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 141,
@@ -923,13 +924,13 @@
                     "offset": 618,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package sort provides primitives for sorting slices and user-defined collections.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -943,7 +944,6 @@
                 "offset": 562,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n4",
           },
@@ -966,6 +966,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -979,7 +980,6 @@
                     "offset": 709,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -998,6 +998,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 21,
@@ -1011,13 +1012,13 @@
                     "offset": 715,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "strconv",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 26,
@@ -1031,7 +1032,6 @@
                     "offset": 726,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -1050,6 +1050,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 54,
@@ -1063,13 +1064,13 @@
                     "offset": 730,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/strconv",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 63,
@@ -1083,7 +1084,6 @@
                     "offset": 759,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -1102,6 +1102,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 160,
@@ -1115,13 +1116,13 @@
                     "offset": 767,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package strconv implements conversions to and from string representations of basic data types.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -1135,7 +1136,6 @@
                 "offset": 705,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n5",
           },
@@ -1158,6 +1158,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -1171,7 +1172,6 @@
                     "offset": 871,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -1190,6 +1190,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 21,
@@ -1203,13 +1204,13 @@
                     "offset": 877,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "strings",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 26,
@@ -1223,7 +1224,6 @@
                     "offset": 888,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -1242,6 +1242,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 54,
@@ -1255,13 +1256,13 @@
                     "offset": 892,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/strings",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 63,
@@ -1275,7 +1276,6 @@
                     "offset": 921,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -1294,6 +1294,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 146,
@@ -1307,13 +1308,13 @@
                     "offset": 929,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package strings implements simple functions to manipulate UTF-8 encoded strings.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -1327,7 +1328,6 @@
                 "offset": 867,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n6",
           },
@@ -1350,6 +1350,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -1363,7 +1364,6 @@
                     "offset": 1019,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -1382,6 +1382,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 18,
@@ -1395,13 +1396,13 @@
                     "offset": 1025,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "sync",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 23,
@@ -1415,7 +1416,6 @@
                     "offset": 1033,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -1434,6 +1434,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 48,
@@ -1447,13 +1448,13 @@
                     "offset": 1037,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/sync",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 57,
@@ -1467,7 +1468,6 @@
                     "offset": 1063,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -1486,6 +1486,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 146,
@@ -1499,13 +1500,13 @@
                     "offset": 1071,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package sync provides basic synchronization primitives such as mutual exclusion locks.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -1519,7 +1520,6 @@
                 "offset": 1015,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n7",
           },
@@ -1542,6 +1542,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -1555,7 +1556,6 @@
                     "offset": 1167,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -1574,6 +1574,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 21,
@@ -1587,13 +1588,13 @@
                     "offset": 1173,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "unicode",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 26,
@@ -1607,7 +1608,6 @@
                     "offset": 1184,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -1626,6 +1626,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 54,
@@ -1639,13 +1640,13 @@
                     "offset": 1188,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/unicode",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 63,
@@ -1659,7 +1660,6 @@
                     "offset": 1217,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -1678,6 +1678,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 157,
@@ -1691,13 +1692,13 @@
                     "offset": 1225,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package unicode provides data and functions to test some properties of Unicode code points.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -1711,7 +1712,6 @@
                 "offset": 1163,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n8",
           },
@@ -1734,6 +1734,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -1747,7 +1748,6 @@
                     "offset": 1326,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -1766,6 +1766,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 26,
@@ -1779,13 +1780,13 @@
                     "offset": 1332,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "unicode/utf8",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 31,
@@ -1799,7 +1800,6 @@
                     "offset": 1348,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -1818,6 +1818,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 64,
@@ -1831,13 +1832,13 @@
                     "offset": 1352,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/unicode/utf8",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 73,
@@ -1851,7 +1852,6 @@
                     "offset": 1386,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -1870,6 +1870,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 157,
@@ -1883,13 +1884,13 @@
                     "offset": 1394,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package utf8 implements functions and constants to support text encoded in UTF-8.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -1903,7 +1904,6 @@
                 "offset": 1322,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n9",
           },
@@ -1926,6 +1926,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -1939,7 +1940,6 @@
                     "offset": 1486,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -1958,6 +1958,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 31,
@@ -1971,13 +1972,13 @@
                     "offset": 1492,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "internal/bytealg",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 36,
@@ -1991,7 +1992,6 @@
                     "offset": 1512,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -2010,6 +2010,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 73,
@@ -2023,13 +2024,13 @@
                     "offset": 1516,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/internal/bytealg",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 82,
@@ -2043,7 +2044,6 @@
                     "offset": 1554,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -2062,6 +2062,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 85,
@@ -2075,13 +2076,13 @@
                     "offset": 1562,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -2095,7 +2096,6 @@
                 "offset": 1481,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n10",
           },
@@ -2118,6 +2118,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -2131,7 +2132,6 @@
                     "offset": 1573,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -2150,6 +2150,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 21,
@@ -2163,13 +2164,13 @@
                     "offset": 1579,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "errors",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 26,
@@ -2183,7 +2184,6 @@
                     "offset": 1589,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -2202,6 +2202,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 53,
@@ -2215,13 +2216,13 @@
                     "offset": 1593,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/errors",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 62,
@@ -2235,7 +2236,6 @@
                     "offset": 1621,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -2254,6 +2254,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 122,
@@ -2267,13 +2268,13 @@
                     "offset": 1629,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package errors implements functions to manipulate errors.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -2287,7 +2288,6 @@
                 "offset": 1568,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n11",
           },
@@ -2310,6 +2310,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -2323,7 +2324,6 @@
                     "offset": 1697,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -2342,6 +2342,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 35,
@@ -2355,13 +2356,13 @@
                     "offset": 1703,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "internal/reflectlite",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 40,
@@ -2375,7 +2376,6 @@
                     "offset": 1727,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -2394,6 +2394,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 81,
@@ -2407,13 +2408,13 @@
                     "offset": 1731,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/internal/reflectlite",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 90,
@@ -2427,7 +2428,6 @@
                     "offset": 1773,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -2446,6 +2446,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 216,
@@ -2459,13 +2460,13 @@
                     "offset": 1781,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package reflectlite implements lightweight version of reflect, not using any package except for \"runtime\" and \"unsafe\".",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -2479,7 +2480,6 @@
                 "offset": 1692,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n12",
           },
@@ -2502,6 +2502,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -2515,7 +2516,6 @@
                     "offset": 1915,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -2534,6 +2534,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 19,
@@ -2547,13 +2548,13 @@
                     "offset": 1921,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "math",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -2567,7 +2568,6 @@
                     "offset": 1929,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -2586,6 +2586,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 49,
@@ -2599,13 +2600,13 @@
                     "offset": 1933,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/math",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 58,
@@ -2619,7 +2620,6 @@
                     "offset": 1959,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -2638,6 +2638,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 126,
@@ -2651,13 +2652,13 @@
                     "offset": 1967,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package math provides basic constants and mathematical functions.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -2671,7 +2672,6 @@
                 "offset": 1910,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n13",
           },
@@ -2694,6 +2694,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -2707,7 +2708,6 @@
                     "offset": 2043,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -2726,6 +2726,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -2739,13 +2740,13 @@
                     "offset": 2049,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "math/bits",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 29,
@@ -2759,7 +2760,6 @@
                     "offset": 2062,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -2778,6 +2778,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 59,
@@ -2791,13 +2792,13 @@
                     "offset": 2066,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/math/bits",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 68,
@@ -2811,7 +2812,6 @@
                     "offset": 2097,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -2830,6 +2830,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 178,
@@ -2843,13 +2844,13 @@
                     "offset": 2105,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package bits implements bit counting and manipulation functions for the predeclared unsigned integer types.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -2863,7 +2864,6 @@
                 "offset": 2038,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n14",
           },
@@ -2886,6 +2886,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -2899,7 +2900,6 @@
                     "offset": 2223,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -2918,6 +2918,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 21,
@@ -2931,13 +2932,13 @@
                     "offset": 2229,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "unsafe",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 26,
@@ -2951,7 +2952,6 @@
                     "offset": 2239,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -2970,6 +2970,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 53,
@@ -2983,13 +2984,13 @@
                     "offset": 2243,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/unsafe",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 62,
@@ -3003,7 +3004,6 @@
                     "offset": 2271,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -3022,6 +3022,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 148,
@@ -3035,13 +3036,13 @@
                     "offset": 2279,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package unsafe contains operations that step around the type safety of Go programs.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -3055,7 +3056,6 @@
                 "offset": 2218,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n15",
           },
@@ -3078,6 +3078,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -3091,7 +3092,6 @@
                     "offset": 2373,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -3110,6 +3110,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 28,
@@ -3123,13 +3124,13 @@
                     "offset": 2379,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "internal/race",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 33,
@@ -3143,7 +3144,6 @@
                     "offset": 2396,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -3162,6 +3162,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 67,
@@ -3175,13 +3176,13 @@
                     "offset": 2400,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/internal/race",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 76,
@@ -3195,7 +3196,6 @@
                     "offset": 2435,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -3214,6 +3214,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 172,
@@ -3227,13 +3228,13 @@
                     "offset": 2443,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package race contains helper functions for manually instrumenting code for the race detector.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -3247,7 +3248,6 @@
                 "offset": 2368,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n16",
           },
@@ -3270,6 +3270,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -3283,7 +3284,6 @@
                     "offset": 2547,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -3302,6 +3302,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 22,
@@ -3315,13 +3316,13 @@
                     "offset": 2553,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "runtime",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 27,
@@ -3335,7 +3336,6 @@
                     "offset": 2564,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -3354,6 +3354,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 55,
@@ -3367,13 +3368,13 @@
                     "offset": 2568,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/runtime",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 64,
@@ -3387,7 +3388,6 @@
                     "offset": 2597,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -3406,6 +3406,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 67,
@@ -3419,13 +3420,13 @@
                     "offset": 2605,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -3439,7 +3440,6 @@
                 "offset": 2542,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n17",
           },
@@ -3462,6 +3462,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -3475,7 +3476,6 @@
                     "offset": 2616,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -3494,6 +3494,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 26,
@@ -3507,13 +3508,13 @@
                     "offset": 2622,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "sync/atomic",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 31,
@@ -3527,7 +3528,6 @@
                     "offset": 2637,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -3546,6 +3546,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 63,
@@ -3559,13 +3560,13 @@
                     "offset": 2641,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/sync/atomic",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 72,
@@ -3579,7 +3580,6 @@
                     "offset": 2674,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -3598,6 +3598,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 185,
@@ -3611,13 +3612,13 @@
                     "offset": 2682,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package atomic provides low-level atomic memory primitives useful for implementing synchronization algorithms.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -3631,7 +3632,6 @@
                 "offset": 2611,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n18",
           },
@@ -3654,6 +3654,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -3667,7 +3668,6 @@
                     "offset": 2803,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -3686,6 +3686,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 27,
@@ -3699,13 +3700,13 @@
                     "offset": 2809,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "internal/cpu",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 32,
@@ -3719,7 +3720,6 @@
                     "offset": 2825,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "URL",
               },
@@ -3738,6 +3738,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 65,
@@ -3751,13 +3752,13 @@
                     "offset": 2829,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "https://godoc.org/internal/cpu",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 74,
@@ -3771,7 +3772,6 @@
                     "offset": 2863,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "tooltip",
               },
@@ -3790,6 +3790,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 160,
@@ -3803,13 +3804,13 @@
                     "offset": 2871,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Package cpu implements processor feature detection used by the Go standard library.",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -3823,7 +3824,6 @@
                 "offset": 2798,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "n19",
           },
@@ -3860,6 +3860,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -3873,7 +3874,6 @@
                     "offset": 2960,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n0",
               },
@@ -3894,6 +3894,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -3907,7 +3908,6 @@
                     "offset": 2966,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n1",
               },
@@ -3947,6 +3947,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -3960,7 +3961,6 @@
                     "offset": 2971,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n0",
               },
@@ -3981,6 +3981,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -3994,7 +3995,6 @@
                     "offset": 2977,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n2",
               },
@@ -4034,6 +4034,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -4047,7 +4048,6 @@
                     "offset": 2982,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n0",
               },
@@ -4068,6 +4068,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -4081,7 +4082,6 @@
                     "offset": 2988,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n3",
               },
@@ -4121,6 +4121,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -4134,7 +4135,6 @@
                     "offset": 2993,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n0",
               },
@@ -4155,6 +4155,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -4168,7 +4169,6 @@
                     "offset": 2999,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n4",
               },
@@ -4208,6 +4208,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -4221,7 +4222,6 @@
                     "offset": 3004,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n0",
               },
@@ -4242,6 +4242,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -4255,7 +4256,6 @@
                     "offset": 3010,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n5",
               },
@@ -4295,6 +4295,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -4308,7 +4309,6 @@
                     "offset": 3015,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n0",
               },
@@ -4329,6 +4329,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -4342,7 +4343,6 @@
                     "offset": 3021,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n6",
               },
@@ -4382,6 +4382,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -4395,7 +4396,6 @@
                     "offset": 3026,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n0",
               },
@@ -4416,6 +4416,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -4429,7 +4430,6 @@
                     "offset": 3032,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n7",
               },
@@ -4469,6 +4469,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -4482,7 +4483,6 @@
                     "offset": 3037,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n0",
               },
@@ -4503,6 +4503,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -4516,7 +4517,6 @@
                     "offset": 3043,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n8",
               },
@@ -4556,6 +4556,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -4569,7 +4570,6 @@
                     "offset": 3048,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n0",
               },
@@ -4590,6 +4590,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -4603,7 +4604,6 @@
                     "offset": 3054,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n9",
               },
@@ -4643,6 +4643,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -4656,7 +4657,6 @@
                     "offset": 3059,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n1",
               },
@@ -4677,6 +4677,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -4690,7 +4691,6 @@
                     "offset": 3065,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n10",
               },
@@ -4730,6 +4730,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -4743,7 +4744,6 @@
                     "offset": 3071,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n1",
               },
@@ -4764,6 +4764,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -4777,7 +4778,6 @@
                     "offset": 3077,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n2",
               },
@@ -4817,6 +4817,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -4830,7 +4831,6 @@
                     "offset": 3082,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n1",
               },
@@ -4851,6 +4851,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -4864,7 +4865,6 @@
                     "offset": 3088,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n8",
               },
@@ -4904,6 +4904,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -4917,7 +4918,6 @@
                     "offset": 3093,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n1",
               },
@@ -4938,6 +4938,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -4951,7 +4952,6 @@
                     "offset": 3099,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n9",
               },
@@ -4991,6 +4991,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5004,7 +5005,6 @@
                     "offset": 3104,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n1",
               },
@@ -5025,6 +5025,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -5038,7 +5039,6 @@
                     "offset": 3110,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n11",
               },
@@ -5078,6 +5078,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5091,7 +5092,6 @@
                     "offset": 3116,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n2",
               },
@@ -5112,6 +5112,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -5125,7 +5126,6 @@
                     "offset": 3122,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n11",
               },
@@ -5165,6 +5165,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5178,7 +5179,6 @@
                     "offset": 3128,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n2",
               },
@@ -5199,6 +5199,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -5212,7 +5213,6 @@
                     "offset": 3134,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n7",
               },
@@ -5252,6 +5252,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5265,7 +5266,6 @@
                     "offset": 3139,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n3",
               },
@@ -5286,6 +5286,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -5299,7 +5300,6 @@
                     "offset": 3145,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n4",
               },
@@ -5339,6 +5339,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5352,7 +5353,6 @@
                     "offset": 3150,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n3",
               },
@@ -5373,6 +5373,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -5386,7 +5387,6 @@
                     "offset": 3156,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n5",
               },
@@ -5426,6 +5426,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5439,7 +5440,6 @@
                     "offset": 3161,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n3",
               },
@@ -5460,6 +5460,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -5473,7 +5474,6 @@
                     "offset": 3167,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n6",
               },
@@ -5513,6 +5513,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5526,7 +5527,6 @@
                     "offset": 3172,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n3",
               },
@@ -5547,6 +5547,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -5560,7 +5561,6 @@
                     "offset": 3178,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n8",
               },
@@ -5600,6 +5600,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5613,7 +5614,6 @@
                     "offset": 3183,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n3",
               },
@@ -5634,6 +5634,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -5647,7 +5648,6 @@
                     "offset": 3189,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n9",
               },
@@ -5687,6 +5687,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5700,7 +5701,6 @@
                     "offset": 3194,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n4",
               },
@@ -5721,6 +5721,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -5734,7 +5735,6 @@
                     "offset": 3200,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n12",
               },
@@ -5774,6 +5774,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5787,7 +5788,6 @@
                     "offset": 3206,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n5",
               },
@@ -5808,6 +5808,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -5821,7 +5822,6 @@
                     "offset": 3212,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n10",
               },
@@ -5861,6 +5861,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5874,7 +5875,6 @@
                     "offset": 3218,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n5",
               },
@@ -5895,6 +5895,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -5908,7 +5909,6 @@
                     "offset": 3224,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n13",
               },
@@ -5948,6 +5948,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -5961,7 +5962,6 @@
                     "offset": 3230,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n5",
               },
@@ -5982,6 +5982,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -5995,7 +5996,6 @@
                     "offset": 3236,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n9",
               },
@@ -6035,6 +6035,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -6048,7 +6049,6 @@
                     "offset": 3241,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n5",
               },
@@ -6069,6 +6069,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -6082,7 +6083,6 @@
                     "offset": 3247,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n11",
               },
@@ -6122,6 +6122,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -6135,7 +6136,6 @@
                     "offset": 3253,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n5",
               },
@@ -6156,6 +6156,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -6169,7 +6170,6 @@
                     "offset": 3259,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n14",
               },
@@ -6209,6 +6209,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -6222,7 +6223,6 @@
                     "offset": 3265,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n6",
               },
@@ -6243,6 +6243,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -6256,7 +6257,6 @@
                     "offset": 3271,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n2",
               },
@@ -6296,6 +6296,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -6309,7 +6310,6 @@
                     "offset": 3276,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n6",
               },
@@ -6330,6 +6330,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -6343,7 +6344,6 @@
                     "offset": 3282,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n7",
               },
@@ -6383,6 +6383,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -6396,7 +6397,6 @@
                     "offset": 3287,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n6",
               },
@@ -6417,6 +6417,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -6430,7 +6431,6 @@
                     "offset": 3293,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n15",
               },
@@ -6470,6 +6470,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -6483,7 +6484,6 @@
                     "offset": 3299,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n6",
               },
@@ -6504,6 +6504,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -6517,7 +6518,6 @@
                     "offset": 3305,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n11",
               },
@@ -6557,6 +6557,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -6570,7 +6571,6 @@
                     "offset": 3311,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n6",
               },
@@ -6591,6 +6591,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -6604,7 +6605,6 @@
                     "offset": 3317,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n10",
               },
@@ -6644,6 +6644,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -6657,7 +6658,6 @@
                     "offset": 3323,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n6",
               },
@@ -6678,6 +6678,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -6691,7 +6692,6 @@
                     "offset": 3329,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n8",
               },
@@ -6731,6 +6731,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -6744,7 +6745,6 @@
                     "offset": 3334,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n6",
               },
@@ -6765,6 +6765,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 10,
@@ -6778,7 +6779,6 @@
                     "offset": 3340,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n9",
               },
@@ -6818,6 +6818,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -6831,7 +6832,6 @@
                     "offset": 3345,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n7",
               },
@@ -6852,6 +6852,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -6865,7 +6866,6 @@
                     "offset": 3351,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n16",
               },
@@ -6905,6 +6905,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -6918,7 +6919,6 @@
                     "offset": 3357,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n7",
               },
@@ -6939,6 +6939,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -6952,7 +6953,6 @@
                     "offset": 3363,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n17",
               },
@@ -6992,6 +6992,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -7005,7 +7006,6 @@
                     "offset": 3369,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n7",
               },
@@ -7026,6 +7026,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -7039,7 +7040,6 @@
                     "offset": 3375,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n18",
               },
@@ -7079,6 +7079,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 4,
@@ -7092,7 +7093,6 @@
                     "offset": 3381,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n7",
               },
@@ -7113,6 +7113,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 11,
@@ -7126,7 +7127,6 @@
                     "offset": 3387,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n15",
               },
@@ -7166,6 +7166,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 5,
@@ -7179,7 +7180,6 @@
                     "offset": 3393,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n10",
               },
@@ -7200,6 +7200,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -7213,7 +7214,6 @@
                     "offset": 3400,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n19",
               },
@@ -7253,6 +7253,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 5,
@@ -7266,7 +7267,6 @@
                     "offset": 3406,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n10",
               },
@@ -7287,6 +7287,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -7300,7 +7301,6 @@
                     "offset": 3413,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n15",
               },
@@ -7340,6 +7340,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 5,
@@ -7353,7 +7354,6 @@
                     "offset": 3419,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n11",
               },
@@ -7374,6 +7374,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -7387,7 +7388,6 @@
                     "offset": 3426,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n12",
               },
@@ -7427,6 +7427,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 5,
@@ -7440,7 +7441,6 @@
                     "offset": 3432,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n12",
               },
@@ -7461,6 +7461,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -7474,7 +7475,6 @@
                     "offset": 3439,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n17",
               },
@@ -7514,6 +7514,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 5,
@@ -7527,7 +7528,6 @@
                     "offset": 3445,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n12",
               },
@@ -7548,6 +7548,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -7561,7 +7562,6 @@
                     "offset": 3452,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n15",
               },
@@ -7601,6 +7601,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 5,
@@ -7614,7 +7615,6 @@
                     "offset": 3458,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n13",
               },
@@ -7635,6 +7635,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -7648,7 +7649,6 @@
                     "offset": 3465,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n15",
               },
@@ -7688,6 +7688,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 5,
@@ -7701,7 +7702,6 @@
                     "offset": 3471,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n13",
               },
@@ -7722,6 +7722,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -7735,7 +7736,6 @@
                     "offset": 3478,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n19",
               },
@@ -7775,6 +7775,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 5,
@@ -7788,7 +7789,6 @@
                     "offset": 3484,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n13",
               },
@@ -7809,6 +7809,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -7822,7 +7823,6 @@
                     "offset": 3491,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n14",
               },
@@ -7862,6 +7862,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 5,
@@ -7875,7 +7876,6 @@
                     "offset": 3497,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n14",
               },
@@ -7896,6 +7896,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -7909,7 +7910,6 @@
                     "offset": 3504,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n15",
               },
@@ -7949,6 +7949,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 5,
@@ -7962,7 +7963,6 @@
                     "offset": 3510,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n16",
               },
@@ -7983,6 +7983,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -7996,7 +7997,6 @@
                     "offset": 3517,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n15",
               },
@@ -8036,6 +8036,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 5,
@@ -8049,7 +8050,6 @@
                     "offset": 3523,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n18",
               },
@@ -8070,6 +8070,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -8083,7 +8084,6 @@
                     "offset": 3530,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n15",
               },
@@ -8108,6 +8108,7 @@
       ],
       "directed": true,
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 15,
@@ -8121,7 +8122,6 @@
             "offset": 8,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "regexp",
       },

@@ -32,7 +32,7 @@ const anyCase = (name: string) =>
     );
 
 const literal = (value: string, quoted: boolean) =>
-  createElement('Literal', { value, quoted }, []);
+  createElement('Literal', { value, kind: quoted ? 'quoted' : 'bare' }, []);
 
 const fileAttribute = fc
   .tuple(

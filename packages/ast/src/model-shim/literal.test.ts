@@ -34,21 +34,24 @@ describe('[SM-2] literal text', () => {
   it('writes attribute keys bare when they are identifiers, quoted otherwise', () => {
     expect(literalFromKey('label')).toStrictEqual({
       value: 'label',
-      quoted: false,
+      kind: 'bare',
     });
     expect(literalFromKey('a"b')).toStrictEqual({
       value: 'a\\"b',
-      quoted: true,
+      kind: 'quoted',
     });
-    expect(literalFromKey('1st')).toStrictEqual({ value: '1st', quoted: true });
+    expect(literalFromKey('1st')).toStrictEqual({
+      value: '1st',
+      kind: 'quoted',
+    });
     // DOT keywords cannot appear bare, even as attribute names
     expect(literalFromKey('node')).toStrictEqual({
       value: 'node',
-      quoted: true,
+      kind: 'quoted',
     });
     expect(literalFromKey('Graph')).toStrictEqual({
       value: 'Graph',
-      quoted: true,
+      kind: 'quoted',
     });
   });
 
@@ -60,8 +63,8 @@ describe('[SM-2] literal text', () => {
 
   it('treats ids as literal text', () => {
     expect(idToRaw('a"b')).toBe('a\\"b');
-    expect(idFromLiteral({ value: 'a\\"b', quoted: true })).toBe('a"b');
-    expect(idFromLiteral({ value: 'bare', quoted: false })).toBe('bare');
+    expect(idFromLiteral({ value: 'a\\"b', kind: 'quoted' })).toBe('a"b');
+    expect(idFromLiteral({ value: 'bare', kind: 'bare' })).toBe('bare');
   });
 });
 
@@ -69,11 +72,11 @@ describe('[SM-3] escString', () => {
   it('is written as is, with only quotes escaped', () => {
     expect(literalFromValue(escString('\\N\\lleft'))).toStrictEqual({
       value: '\\N\\lleft',
-      quoted: true,
+      kind: 'quoted',
     });
     expect(literalFromValue(escString('say "hi"'))).toStrictEqual({
       value: 'say \\"hi\\"',
-      quoted: true,
+      kind: 'quoted',
     });
   });
 
@@ -94,7 +97,7 @@ describe('[SM-3] escString', () => {
 
   it('is canonicalised but keeps its meaning on a round trip', () => {
     const sanitized = literalFromValue(escString('\\N"'));
-    expect(sanitized).toStrictEqual({ value: '\\N\\"', quoted: true });
+    expect(sanitized).toStrictEqual({ value: '\\N\\"', kind: 'quoted' });
     expect(valueFromLiteral(sanitized)).toStrictEqual(escString('\\N\\"'));
     // without a Graphviz escape the kind is not recoverable from DOT text
     expect(valueFromLiteral(literalFromValue(escString('plain')))).toBe(
@@ -103,14 +106,14 @@ describe('[SM-3] escString', () => {
   });
 
   it('is recognised when parsing a Graphviz escape sequence', () => {
-    expect(valueFromLiteral({ value: '\\N', quoted: true })).toStrictEqual(
+    expect(valueFromLiteral({ value: '\\N', kind: 'quoted' })).toStrictEqual(
       escString('\\N'),
     );
-    expect(valueFromLiteral({ value: 'a\\lb', quoted: true })).toStrictEqual(
+    expect(valueFromLiteral({ value: 'a\\lb', kind: 'quoted' })).toStrictEqual(
       escString('a\\lb'),
     );
     // `\\` `\"` `\n` `\r` alone are literal text
-    expect(valueFromLiteral({ value: 'a\\\\b\\"c\\n', quoted: true })).toBe(
+    expect(valueFromLiteral({ value: 'a\\\\b\\"c\\n', kind: 'quoted' })).toBe(
       'a\\b"c\n',
     );
   });
@@ -120,11 +123,11 @@ describe('[SM-3] HTML-like', () => {
   it('maps to and from an html literal', () => {
     expect(literalFromValue(htmlLike('<b>x</b>'))).toStrictEqual({
       value: '<b>x</b>',
-      quoted: 'html',
+      kind: 'html',
     });
-    expect(
-      valueFromLiteral({ value: '<b>x</b>', quoted: 'html' }),
-    ).toStrictEqual(htmlLike('<b>x</b>'));
+    expect(valueFromLiteral({ value: '<b>x</b>', kind: 'html' })).toStrictEqual(
+      htmlLike('<b>x</b>'),
+    );
   });
 
   it('rejects markup whose angle brackets are not balanced', () => {
@@ -141,7 +144,7 @@ describe('[SM-3] HTML-like', () => {
   it('no longer guesses from the shape of a string', () => {
     expect(literalFromValue('<b>x</b>')).toStrictEqual({
       value: '<b>x</b>',
-      quoted: true,
+      kind: 'quoted',
     });
   });
 });
@@ -151,43 +154,43 @@ describe('[SM-2] numbers and booleans', () => {
     // DOT numerals have no exponent, and NaN / Infinity would be identifiers
     expect(literalFromValue(1e21)).toStrictEqual({
       value: '1e+21',
-      quoted: true,
+      kind: 'quoted',
     });
     expect(literalFromValue(1e-7)).toStrictEqual({
       value: '1e-7',
-      quoted: true,
+      kind: 'quoted',
     });
     expect(literalFromValue(Number.NaN)).toStrictEqual({
       value: 'NaN',
-      quoted: true,
+      kind: 'quoted',
     });
     expect(literalFromValue(Number.NEGATIVE_INFINITY)).toStrictEqual({
       value: '-Infinity',
-      quoted: true,
+      kind: 'quoted',
     });
     expect(literalFromValue(-0.5)).toStrictEqual({
       value: '-0.5',
-      quoted: false,
+      kind: 'bare',
     });
   });
 
   it('are written unquoted', () => {
     expect(literalFromValue(1.5)).toStrictEqual({
       value: '1.5',
-      quoted: false,
+      kind: 'bare',
     });
     expect(literalFromValue(true)).toStrictEqual({
       value: 'true',
-      quoted: false,
+      kind: 'bare',
     });
   });
 
   it('are read back typed from bare literals', () => {
-    expect(valueFromLiteral({ value: '1.5', quoted: false })).toBe(1.5);
-    expect(valueFromLiteral({ value: '-0.5', quoted: false })).toBe(-0.5);
-    expect(valueFromLiteral({ value: '7', quoted: false })).toBe(7);
-    expect(valueFromLiteral({ value: 'true', quoted: false })).toBe(true);
-    expect(valueFromLiteral({ value: 'false', quoted: false })).toBe(false);
+    expect(valueFromLiteral({ value: '1.5', kind: 'bare' })).toBe(1.5);
+    expect(valueFromLiteral({ value: '-0.5', kind: 'bare' })).toBe(-0.5);
+    expect(valueFromLiteral({ value: '7', kind: 'bare' })).toBe(7);
+    expect(valueFromLiteral({ value: 'true', kind: 'bare' })).toBe(true);
+    expect(valueFromLiteral({ value: 'false', kind: 'bare' })).toBe(false);
   });
 
   it('round-trip through literalFromValue / valueFromLiteral', () => {
@@ -197,11 +200,11 @@ describe('[SM-2] numbers and booleans', () => {
   });
 
   it('do not apply to quoted strings or other bare ids', () => {
-    expect(valueFromLiteral({ value: '1.5', quoted: true })).toBe('1.5');
-    expect(valueFromLiteral({ value: 'true', quoted: true })).toBe('true');
-    expect(valueFromLiteral({ value: 'True', quoted: false })).toBe('True');
-    expect(valueFromLiteral({ value: 'foo', quoted: false })).toBe('foo');
-    expect(valueFromLiteral({ value: '1e5', quoted: false })).toBe('1e5');
+    expect(valueFromLiteral({ value: '1.5', kind: 'quoted' })).toBe('1.5');
+    expect(valueFromLiteral({ value: 'true', kind: 'quoted' })).toBe('true');
+    expect(valueFromLiteral({ value: 'True', kind: 'bare' })).toBe('True');
+    expect(valueFromLiteral({ value: 'foo', kind: 'bare' })).toBe('foo');
+    expect(valueFromLiteral({ value: '1e5', kind: 'bare' })).toBe('1e5');
   });
 
   it('keep numerals a number could not reproduce exactly as strings', () => {
@@ -215,7 +218,7 @@ describe('[SM-2] numbers and booleans', () => {
       '1000000000000000000000',
       '0.0000001',
     ]) {
-      expect(valueFromLiteral({ value: text, quoted: false })).toBe(text);
+      expect(valueFromLiteral({ value: text, kind: 'bare' })).toBe(text);
     }
   });
 });

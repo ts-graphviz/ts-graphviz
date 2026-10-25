@@ -5,6 +5,7 @@ exports[`parse > AttributeList > edge 1`] = `
   "children": [
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 16,
@@ -18,7 +19,6 @@ exports[`parse > AttributeList > edge 1`] = `
             "offset": 26,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "color",
       },
@@ -37,6 +37,7 @@ exports[`parse > AttributeList > edge 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 20,
@@ -50,13 +51,13 @@ exports[`parse > AttributeList > edge 1`] = `
             "offset": 32,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "red",
       },
     },
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 16,
@@ -70,7 +71,6 @@ exports[`parse > AttributeList > edge 1`] = `
             "offset": 47,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "label",
       },
@@ -89,6 +89,7 @@ exports[`parse > AttributeList > edge 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "quoted",
         "location": {
           "end": {
             "column": 36,
@@ -102,7 +103,6 @@ exports[`parse > AttributeList > edge 1`] = `
             "offset": 55,
           },
         },
-        "quoted": true,
         "type": "Literal",
         "value": "example example",
       },
@@ -131,6 +131,7 @@ exports[`parse > AttributeList > graph 1`] = `
   "children": [
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 18,
@@ -144,7 +145,6 @@ exports[`parse > AttributeList > graph 1`] = `
             "offset": 8,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "fillcolor",
       },
@@ -163,6 +163,7 @@ exports[`parse > AttributeList > graph 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 22,
@@ -176,13 +177,13 @@ exports[`parse > AttributeList > graph 1`] = `
             "offset": 18,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "red",
       },
     },
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 29,
@@ -196,7 +197,6 @@ exports[`parse > AttributeList > graph 1`] = `
             "offset": 23,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "label",
       },
@@ -215,6 +215,7 @@ exports[`parse > AttributeList > graph 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "quoted",
         "location": {
           "end": {
             "column": 49,
@@ -228,7 +229,6 @@ exports[`parse > AttributeList > graph 1`] = `
             "offset": 31,
           },
         },
-        "quoted": true,
         "type": "Literal",
         "value": "example example",
       },
@@ -257,6 +257,7 @@ exports[`parse > AttributeList > node 1`] = `
   "children": [
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 16,
@@ -270,7 +271,6 @@ exports[`parse > AttributeList > node 1`] = `
             "offset": 26,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "style",
       },
@@ -289,6 +289,7 @@ exports[`parse > AttributeList > node 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 23,
@@ -302,13 +303,13 @@ exports[`parse > AttributeList > node 1`] = `
             "offset": 32,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "filled",
       },
     },
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 16,
@@ -322,7 +323,6 @@ exports[`parse > AttributeList > node 1`] = `
             "offset": 50,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "color",
       },
@@ -341,6 +341,7 @@ exports[`parse > AttributeList > node 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 26,
@@ -354,13 +355,13 @@ exports[`parse > AttributeList > node 1`] = `
             "offset": 56,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "lightgrey",
       },
     },
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 16,
@@ -374,7 +375,6 @@ exports[`parse > AttributeList > node 1`] = `
             "offset": 77,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "label",
       },
@@ -393,6 +393,7 @@ exports[`parse > AttributeList > node 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "quoted",
         "location": {
           "end": {
             "column": 31,
@@ -406,7 +407,6 @@ exports[`parse > AttributeList > node 1`] = `
             "offset": 85,
           },
         },
-        "quoted": true,
         "type": "Literal",
         "value": "example #1",
       },
@@ -453,6 +453,7 @@ exports[`parse > AttributeList > with comment 1`] = `
     },
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 16,
@@ -466,7 +467,6 @@ exports[`parse > AttributeList > with comment 1`] = `
             "offset": 49,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "style",
       },
@@ -485,6 +485,7 @@ exports[`parse > AttributeList > with comment 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 23,
@@ -498,7 +499,6 @@ exports[`parse > AttributeList > with comment 1`] = `
             "offset": 55,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "filled",
       },
@@ -525,6 +525,7 @@ exports[`parse > AttributeList > with comment 1`] = `
 exports[`parse > attribute > set HTMLLike value 1`] = `
 {
   "key": {
+    "kind": "bare",
     "location": {
       "end": {
         "column": 14,
@@ -538,7 +539,6 @@ exports[`parse > attribute > set HTMLLike value 1`] = `
         "offset": 9,
       },
     },
-    "quoted": false,
     "type": "Literal",
     "value": "label",
   },
@@ -557,6 +557,7 @@ exports[`parse > attribute > set HTMLLike value 1`] = `
   },
   "type": "Attribute",
   "value": {
+    "kind": "html",
     "location": {
       "end": {
         "column": 10,
@@ -570,7 +571,6 @@ exports[`parse > attribute > set HTMLLike value 1`] = `
         "offset": 17,
       },
     },
-    "quoted": "html",
     "type": "Literal",
     "value": "
           <table border="0">
@@ -588,6 +588,7 @@ exports[`parse > attribute > set HTMLLike value 1`] = `
 exports[`parse > attribute > set quoted value 1`] = `
 {
   "key": {
+    "kind": "bare",
     "location": {
       "end": {
         "column": 6,
@@ -601,7 +602,6 @@ exports[`parse > attribute > set quoted value 1`] = `
         "offset": 0,
       },
     },
-    "quoted": false,
     "type": "Literal",
     "value": "label",
   },
@@ -620,6 +620,7 @@ exports[`parse > attribute > set quoted value 1`] = `
   },
   "type": "Attribute",
   "value": {
+    "kind": "quoted",
     "location": {
       "end": {
         "column": 21,
@@ -633,7 +634,6 @@ exports[`parse > attribute > set quoted value 1`] = `
         "offset": 8,
       },
     },
-    "quoted": true,
     "type": "Literal",
     "value": "example #1",
   },
@@ -643,6 +643,7 @@ exports[`parse > attribute > set quoted value 1`] = `
 exports[`parse > attribute > set value 1`] = `
 {
   "key": {
+    "kind": "bare",
     "location": {
       "end": {
         "column": 6,
@@ -656,7 +657,6 @@ exports[`parse > attribute > set value 1`] = `
         "offset": 0,
       },
     },
-    "quoted": false,
     "type": "Literal",
     "value": "style",
   },
@@ -675,6 +675,7 @@ exports[`parse > attribute > set value 1`] = `
   },
   "type": "Attribute",
   "value": {
+    "kind": "bare",
     "location": {
       "end": {
         "column": 13,
@@ -688,7 +689,6 @@ exports[`parse > attribute > set value 1`] = `
         "offset": 6,
       },
     },
-    "quoted": false,
     "type": "Literal",
     "value": "filled",
   },
@@ -887,6 +887,7 @@ exports[`parse > edge > digraph edge 1`] = `
   "targets": [
     {
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 2,
@@ -900,7 +901,6 @@ exports[`parse > edge > digraph edge 1`] = `
             "offset": 0,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "a",
       },
@@ -921,6 +921,7 @@ exports[`parse > edge > digraph edge 1`] = `
     },
     {
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 7,
@@ -934,7 +935,6 @@ exports[`parse > edge > digraph edge 1`] = `
             "offset": 5,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "b",
       },
@@ -963,6 +963,7 @@ exports[`parse > edge > edge with attributes 1`] = `
   "children": [
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 18,
@@ -976,7 +977,6 @@ exports[`parse > edge > edge with attributes 1`] = `
             "offset": 32,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "color",
       },
@@ -995,6 +995,7 @@ exports[`parse > edge > edge with attributes 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 28,
@@ -1008,13 +1009,13 @@ exports[`parse > edge > edge with attributes 1`] = `
             "offset": 38,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "lightgrey",
       },
     },
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 18,
@@ -1028,7 +1029,6 @@ exports[`parse > edge > edge with attributes 1`] = `
             "offset": 61,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "label",
       },
@@ -1047,6 +1047,7 @@ exports[`parse > edge > edge with attributes 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "quoted",
         "location": {
           "end": {
             "column": 33,
@@ -1060,7 +1061,6 @@ exports[`parse > edge > edge with attributes 1`] = `
             "offset": 69,
           },
         },
-        "quoted": true,
         "type": "Literal",
         "value": "example #1",
       },
@@ -1082,6 +1082,7 @@ exports[`parse > edge > edge with attributes 1`] = `
   "targets": [
     {
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 12,
@@ -1095,7 +1096,6 @@ exports[`parse > edge > edge with attributes 1`] = `
             "offset": 11,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "a",
       },
@@ -1116,6 +1116,7 @@ exports[`parse > edge > edge with attributes 1`] = `
     },
     {
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 17,
@@ -1129,7 +1130,6 @@ exports[`parse > edge > edge with attributes 1`] = `
             "offset": 16,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "b",
       },
@@ -1172,6 +1172,7 @@ exports[`parse > edge > edge with port 1`] = `
   "targets": [
     {
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 2,
@@ -1185,7 +1186,6 @@ exports[`parse > edge > edge with port 1`] = `
             "offset": 0,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "a",
       },
@@ -1203,6 +1203,7 @@ exports[`parse > edge > edge with port 1`] = `
         },
       },
       "port": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 5,
@@ -1216,7 +1217,6 @@ exports[`parse > edge > edge with port 1`] = `
             "offset": 2,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "p1",
       },
@@ -1224,6 +1224,7 @@ exports[`parse > edge > edge with port 1`] = `
     },
     {
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 10,
@@ -1237,7 +1238,6 @@ exports[`parse > edge > edge with port 1`] = `
             "offset": 8,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "b",
       },
@@ -1255,6 +1255,7 @@ exports[`parse > edge > edge with port 1`] = `
         },
       },
       "port": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 13,
@@ -1268,7 +1269,6 @@ exports[`parse > edge > edge with port 1`] = `
             "offset": 10,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "p2",
       },
@@ -1276,6 +1276,7 @@ exports[`parse > edge > edge with port 1`] = `
     },
     {
       "compass": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 23,
@@ -1289,11 +1290,11 @@ exports[`parse > edge > edge with port 1`] = `
             "offset": 21,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "w",
       },
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 18,
@@ -1307,7 +1308,6 @@ exports[`parse > edge > edge with port 1`] = `
             "offset": 16,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "c",
       },
@@ -1325,6 +1325,7 @@ exports[`parse > edge > edge with port 1`] = `
         },
       },
       "port": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 21,
@@ -1338,7 +1339,6 @@ exports[`parse > edge > edge with port 1`] = `
             "offset": 18,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "p3",
       },
@@ -1346,6 +1346,7 @@ exports[`parse > edge > edge with port 1`] = `
     },
     {
       "compass": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 30,
@@ -1359,11 +1360,11 @@ exports[`parse > edge > edge with port 1`] = `
             "offset": 28,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "w",
       },
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 28,
@@ -1377,7 +1378,6 @@ exports[`parse > edge > edge with port 1`] = `
             "offset": 26,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "d",
       },
@@ -1420,6 +1420,7 @@ exports[`parse > edge > graph edge 1`] = `
   "targets": [
     {
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 2,
@@ -1433,7 +1434,6 @@ exports[`parse > edge > graph edge 1`] = `
             "offset": 0,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "a",
       },
@@ -1454,6 +1454,7 @@ exports[`parse > edge > graph edge 1`] = `
     },
     {
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 7,
@@ -1467,7 +1468,6 @@ exports[`parse > edge > graph edge 1`] = `
             "offset": 5,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "b",
       },
@@ -1525,6 +1525,7 @@ exports[`parse > edge > grouped edge targets 1`] = `
       "refs": [
         {
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -1538,7 +1539,6 @@ exports[`parse > edge > grouped edge targets 1`] = `
                 "offset": 1,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "a1",
           },
@@ -1559,6 +1559,7 @@ exports[`parse > edge > grouped edge targets 1`] = `
         },
         {
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 8,
@@ -1572,7 +1573,6 @@ exports[`parse > edge > grouped edge targets 1`] = `
                 "offset": 5,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "a2",
           },
@@ -1611,6 +1611,7 @@ exports[`parse > edge > grouped edge targets 1`] = `
       "refs": [
         {
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 16,
@@ -1624,7 +1625,6 @@ exports[`parse > edge > grouped edge targets 1`] = `
                 "offset": 13,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "b1",
           },
@@ -1645,6 +1645,7 @@ exports[`parse > edge > grouped edge targets 1`] = `
         },
         {
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 20,
@@ -1658,7 +1659,6 @@ exports[`parse > edge > grouped edge targets 1`] = `
                 "offset": 17,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "b2",
           },
@@ -1719,6 +1719,7 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
       "refs": [
         {
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 4,
@@ -1732,7 +1733,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
                 "offset": 1,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "a1",
           },
@@ -1750,6 +1750,7 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
             },
           },
           "port": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 7,
@@ -1763,7 +1764,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
                 "offset": 4,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "p1",
           },
@@ -1771,6 +1771,7 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
         },
         {
           "compass": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 16,
@@ -1784,11 +1785,11 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
                 "offset": 14,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "w",
           },
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 11,
@@ -1802,7 +1803,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
                 "offset": 8,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "a2",
           },
@@ -1820,6 +1820,7 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
             },
           },
           "port": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 14,
@@ -1833,7 +1834,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
                 "offset": 11,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "p2",
           },
@@ -1859,6 +1859,7 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
       "refs": [
         {
           "compass": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 26,
@@ -1872,11 +1873,11 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
                 "offset": 24,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "e",
           },
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 24,
@@ -1890,7 +1891,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
                 "offset": 21,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "b1",
           },
@@ -1911,6 +1911,7 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
         },
         {
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 30,
@@ -1924,7 +1925,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
                 "offset": 27,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "b2",
           },
@@ -1942,6 +1942,7 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
             },
           },
           "port": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 33,
@@ -1955,7 +1956,6 @@ exports[`parse > edge > grouped ported edge targets 1`] = `
                 "offset": 30,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "p3",
           },
@@ -1996,6 +1996,7 @@ exports[`parse > graph > digraph named test 1`] = `
   "children": [],
   "directed": true,
   "id": {
+    "kind": "bare",
     "location": {
       "end": {
         "column": 13,
@@ -2009,7 +2010,6 @@ exports[`parse > graph > digraph named test 1`] = `
         "offset": 8,
       },
     },
-    "quoted": false,
     "type": "Literal",
     "value": "test",
   },
@@ -2036,6 +2036,7 @@ exports[`parse > graph > digraph named test(quoted) 1`] = `
   "children": [],
   "directed": true,
   "id": {
+    "kind": "quoted",
     "location": {
       "end": {
         "column": 15,
@@ -2049,7 +2050,6 @@ exports[`parse > graph > digraph named test(quoted) 1`] = `
         "offset": 8,
       },
     },
-    "quoted": true,
     "type": "Literal",
     "value": "test",
   },
@@ -2076,6 +2076,7 @@ exports[`parse > graph > graph named test 1`] = `
   "children": [],
   "directed": false,
   "id": {
+    "kind": "bare",
     "location": {
       "end": {
         "column": 11,
@@ -2089,7 +2090,6 @@ exports[`parse > graph > graph named test 1`] = `
         "offset": 6,
       },
     },
-    "quoted": false,
     "type": "Literal",
     "value": "test",
   },
@@ -2116,6 +2116,7 @@ exports[`parse > graph > strict digraph named test 1`] = `
   "children": [],
   "directed": true,
   "id": {
+    "kind": "bare",
     "location": {
       "end": {
         "column": 20,
@@ -2129,7 +2130,6 @@ exports[`parse > graph > strict digraph named test 1`] = `
         "offset": 15,
       },
     },
-    "quoted": false,
     "type": "Literal",
     "value": "test",
   },
@@ -2156,6 +2156,7 @@ exports[`parse > graph > strict graph named test 1`] = `
   "children": [],
   "directed": false,
   "id": {
+    "kind": "bare",
     "location": {
       "end": {
         "column": 18,
@@ -2169,7 +2170,6 @@ exports[`parse > graph > strict graph named test 1`] = `
         "offset": 13,
       },
     },
-    "quoted": false,
     "type": "Literal",
     "value": "test",
   },
@@ -2196,6 +2196,7 @@ exports[`parse > node > node with attributes 1`] = `
   "children": [
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 18,
@@ -2209,7 +2210,6 @@ exports[`parse > node > node with attributes 1`] = `
             "offset": 30,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "style",
       },
@@ -2228,6 +2228,7 @@ exports[`parse > node > node with attributes 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 25,
@@ -2241,13 +2242,13 @@ exports[`parse > node > node with attributes 1`] = `
             "offset": 36,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "filled",
       },
     },
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 18,
@@ -2261,7 +2262,6 @@ exports[`parse > node > node with attributes 1`] = `
             "offset": 56,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "color",
       },
@@ -2280,6 +2280,7 @@ exports[`parse > node > node with attributes 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 28,
@@ -2293,13 +2294,13 @@ exports[`parse > node > node with attributes 1`] = `
             "offset": 62,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "lightgrey",
       },
     },
     {
       "key": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 18,
@@ -2313,7 +2314,6 @@ exports[`parse > node > node with attributes 1`] = `
             "offset": 85,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "label",
       },
@@ -2332,6 +2332,7 @@ exports[`parse > node > node with attributes 1`] = `
       },
       "type": "Attribute",
       "value": {
+        "kind": "quoted",
         "location": {
           "end": {
             "column": 33,
@@ -2345,13 +2346,13 @@ exports[`parse > node > node with attributes 1`] = `
             "offset": 93,
           },
         },
-        "quoted": true,
         "type": "Literal",
         "value": "example #1",
       },
     },
   ],
   "id": {
+    "kind": "bare",
     "location": {
       "end": {
         "column": 15,
@@ -2365,7 +2366,6 @@ exports[`parse > node > node with attributes 1`] = `
         "offset": 11,
       },
     },
-    "quoted": false,
     "type": "Literal",
     "value": "test",
   },
@@ -2390,6 +2390,7 @@ exports[`parse > node > simple node 1`] = `
 {
   "children": [],
   "id": {
+    "kind": "bare",
     "location": {
       "end": {
         "column": 5,
@@ -2403,7 +2404,6 @@ exports[`parse > node > simple node 1`] = `
         "offset": 0,
       },
     },
-    "quoted": false,
     "type": "Literal",
     "value": "test",
   },
@@ -2448,6 +2448,7 @@ exports[`parse > subgraph > named subgraph 1`] = `
 {
   "children": [],
   "id": {
+    "kind": "bare",
     "location": {
       "end": {
         "column": 14,
@@ -2461,7 +2462,6 @@ exports[`parse > subgraph > named subgraph 1`] = `
         "offset": 9,
       },
     },
-    "quoted": false,
     "type": "Literal",
     "value": "hoge",
   },

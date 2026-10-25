@@ -127,23 +127,23 @@ function assertHTMLLikeMarkup(markup: string): void {
 /** The raw text and quoting for an attribute value. */
 export function literalFromValue(
   value: string | number | boolean | EscStringValue | HTMLLikeValue,
-): Pick<LiteralASTNode, 'value' | 'quoted'> {
+): Pick<LiteralASTNode, 'value' | 'kind'> {
   if (typeof value === 'string') {
-    return { value: escapeLiteral(value), quoted: true };
+    return { value: escapeLiteral(value), kind: 'quoted' };
   }
   if (isHTMLLike(value)) {
     assertHTMLLikeMarkup(value.value);
-    return { value: value.value, quoted: 'html' };
+    return { value: value.value, kind: 'html' };
   }
   if (isEscString(value)) {
-    return { value: sanitizeEscString(value.value), quoted: true };
+    return { value: sanitizeEscString(value.value), kind: 'quoted' };
   }
   const text = String(value);
   // Booleans and numbers in DOT's own numeral form are written bare; anything
   // else JavaScript can produce (1e+21, NaN, Infinity) is written as a string.
   return typeof value === 'boolean' || DOT_NUMERAL.test(text)
-    ? { value: text, quoted: false }
-    : { value: text, quoted: true };
+    ? { value: text, kind: 'bare' }
+    : { value: text, kind: 'quoted' };
 }
 
 /** DOT numerals: `[-]?(.[0-9]+ | [0-9]+(.[0-9]*)?)`, no exponent. */
@@ -162,16 +162,16 @@ const DOT_NUMERAL = /^-?(\.\d+|\d+(\.\d*)?)$/;
  * print in exponent form), so no DOT text is changed by the round trip.
  */
 export function valueFromLiteral(
-  literal: Pick<LiteralASTNode, 'value' | 'quoted'>,
+  literal: Pick<LiteralASTNode, 'value' | 'kind'>,
 ): string | number | boolean | EscStringValue | HTMLLikeValue {
-  switch (literal.quoted) {
+  switch (literal.kind) {
     case 'html':
       return htmlLike(literal.value);
-    case true:
+    case 'quoted':
       return hasGraphvizEscape(literal.value)
         ? escString(literal.value)
         : unescapeLiteral(literal.value);
-    default:
+    case 'bare':
       if (literal.value === 'true') return true;
       if (literal.value === 'false') return false;
       if (DOT_NUMERAL.test(literal.value)) {
@@ -189,9 +189,9 @@ export function idToRaw(id: string): string {
 
 /** Id text from a `Literal` AST node. */
 export function idFromLiteral(
-  literal: Pick<LiteralASTNode, 'value' | 'quoted'>,
+  literal: Pick<LiteralASTNode, 'value' | 'kind'>,
 ): string {
-  return literal.quoted === true
+  return literal.kind === 'quoted'
     ? unescapeLiteral(literal.value)
     : literal.value;
 }
@@ -207,8 +207,8 @@ const KEYWORD = /^(graph|digraph|subgraph|node|edge|strict)$/i;
 /** The raw text and quoting for an attribute key: bare when it is a plain identifier. */
 export function literalFromKey(
   key: string,
-): Pick<LiteralASTNode, 'value' | 'quoted'> {
+): Pick<LiteralASTNode, 'value' | 'kind'> {
   return BARE_ID.test(key) && !KEYWORD.test(key)
-    ? { value: key, quoted: false }
-    : { value: idToRaw(key), quoted: true };
+    ? { value: key, kind: 'bare' }
+    : { value: idToRaw(key), kind: 'quoted' };
 }

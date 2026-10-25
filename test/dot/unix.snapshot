@@ -22,6 +22,7 @@
       "children": [
         {
           "key": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 6,
@@ -35,7 +36,6 @@
                 "offset": 75,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "size",
           },
@@ -54,6 +54,7 @@
           },
           "type": "Attribute",
           "value": {
+            "kind": "quoted",
             "location": {
               "end": {
                 "column": 12,
@@ -67,7 +68,6 @@
                 "offset": 80,
               },
             },
-            "quoted": true,
             "type": "Literal",
             "value": "6,6",
           },
@@ -76,6 +76,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 13,
@@ -89,7 +90,6 @@
                     "offset": 94,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "color",
               },
@@ -108,6 +108,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 24,
@@ -121,13 +122,13 @@
                     "offset": 100,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "lightblue2",
               },
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 31,
@@ -141,7 +142,6 @@
                     "offset": 112,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "style",
               },
@@ -160,6 +160,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 38,
@@ -173,7 +174,6 @@
                     "offset": 118,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "filled",
               },
@@ -213,6 +213,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -226,7 +227,6 @@
                     "offset": 128,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "5th Edition",
               },
@@ -247,6 +247,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 32,
@@ -260,7 +261,6 @@
                     "offset": 145,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "6th Edition",
               },
@@ -300,6 +300,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -313,7 +314,6 @@
                     "offset": 161,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "5th Edition",
               },
@@ -334,6 +334,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 28,
@@ -347,7 +348,6 @@
                     "offset": 178,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "PWB 1.0",
               },
@@ -387,6 +387,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -400,7 +401,6 @@
                     "offset": 190,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "6th Edition",
               },
@@ -421,6 +421,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -434,7 +435,6 @@
                     "offset": 207,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "LSX",
               },
@@ -474,6 +474,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -487,7 +488,6 @@
                     "offset": 215,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "6th Edition",
               },
@@ -508,6 +508,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 26,
@@ -521,7 +522,6 @@
                     "offset": 232,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "1 BSD",
               },
@@ -561,6 +561,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -574,7 +575,6 @@
                     "offset": 242,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "6th Edition",
               },
@@ -595,6 +595,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 30,
@@ -608,7 +609,6 @@
                     "offset": 259,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Mini Unix",
               },
@@ -648,6 +648,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -661,7 +662,6 @@
                     "offset": 273,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "6th Edition",
               },
@@ -682,6 +682,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 31,
@@ -695,7 +696,6 @@
                     "offset": 290,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Wollongong",
               },
@@ -735,6 +735,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -748,7 +749,6 @@
                     "offset": 305,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "6th Edition",
               },
@@ -769,6 +769,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 30,
@@ -782,7 +783,6 @@
                     "offset": 322,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Interdata",
               },
@@ -822,6 +822,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 13,
@@ -835,7 +836,6 @@
                     "offset": 336,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Interdata",
               },
@@ -856,6 +856,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 30,
@@ -869,7 +870,6 @@
                     "offset": 351,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Unix/TS 3.0",
               },
@@ -909,6 +909,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 13,
@@ -922,7 +923,6 @@
                     "offset": 367,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Interdata",
               },
@@ -943,6 +943,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 26,
@@ -956,7 +957,6 @@
                     "offset": 382,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "PWB 2.0",
               },
@@ -996,6 +996,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 13,
@@ -1009,7 +1010,6 @@
                     "offset": 394,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Interdata",
               },
@@ -1030,6 +1030,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 30,
@@ -1043,7 +1044,6 @@
                     "offset": 409,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "7th Edition",
               },
@@ -1083,6 +1083,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -1096,7 +1097,6 @@
                     "offset": 425,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "7th Edition",
               },
@@ -1117,6 +1117,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 32,
@@ -1130,7 +1131,6 @@
                     "offset": 442,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "8th Edition",
               },
@@ -1170,6 +1170,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -1183,7 +1184,6 @@
                     "offset": 458,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "7th Edition",
               },
@@ -1204,6 +1204,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -1217,7 +1218,6 @@
                     "offset": 475,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "32V",
               },
@@ -1257,6 +1257,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -1270,7 +1271,6 @@
                     "offset": 483,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "7th Edition",
               },
@@ -1291,6 +1291,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -1304,7 +1305,6 @@
                     "offset": 500,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "V7M",
               },
@@ -1344,6 +1344,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -1357,7 +1358,6 @@
                     "offset": 508,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "7th Edition",
               },
@@ -1378,6 +1378,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 30,
@@ -1391,7 +1392,6 @@
                     "offset": 525,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Ultrix-11",
               },
@@ -1431,6 +1431,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -1444,7 +1445,6 @@
                     "offset": 539,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "7th Edition",
               },
@@ -1465,6 +1465,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 26,
@@ -1478,7 +1479,6 @@
                     "offset": 556,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Xenix",
               },
@@ -1518,6 +1518,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -1531,7 +1532,6 @@
                     "offset": 566,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "7th Edition",
               },
@@ -1552,6 +1552,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 29,
@@ -1565,7 +1566,6 @@
                     "offset": 583,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "UniPlus+",
               },
@@ -1605,6 +1605,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 7,
@@ -1618,7 +1619,6 @@
                     "offset": 596,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "V7M",
               },
@@ -1639,6 +1639,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 22,
@@ -1652,7 +1653,6 @@
                     "offset": 605,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Ultrix-11",
               },
@@ -1692,6 +1692,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -1705,7 +1706,6 @@
                     "offset": 619,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "8th Edition",
               },
@@ -1726,6 +1726,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 32,
@@ -1739,7 +1740,6 @@
                     "offset": 636,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "9th Edition",
               },
@@ -1779,6 +1779,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 9,
@@ -1792,7 +1793,6 @@
                     "offset": 652,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "1 BSD",
               },
@@ -1813,6 +1813,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 20,
@@ -1826,7 +1827,6 @@
                     "offset": 663,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "2 BSD",
               },
@@ -1866,6 +1866,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 9,
@@ -1879,7 +1880,6 @@
                     "offset": 673,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "2 BSD",
               },
@@ -1900,6 +1900,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 22,
@@ -1913,7 +1914,6 @@
                     "offset": 684,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "2.8 BSD",
               },
@@ -1953,6 +1953,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -1966,7 +1967,6 @@
                     "offset": 696,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "2.8 BSD",
               },
@@ -1987,6 +1987,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 26,
@@ -2000,7 +2001,6 @@
                     "offset": 709,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Ultrix-11",
               },
@@ -2040,6 +2040,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -2053,7 +2054,6 @@
                     "offset": 723,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "2.8 BSD",
               },
@@ -2074,6 +2074,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -2087,7 +2088,6 @@
                     "offset": 736,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "2.9 BSD",
               },
@@ -2127,6 +2127,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 7,
@@ -2140,7 +2141,6 @@
                     "offset": 748,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "32V",
               },
@@ -2161,6 +2161,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 18,
@@ -2174,7 +2175,6 @@
                     "offset": 757,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "3 BSD",
               },
@@ -2214,6 +2214,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 9,
@@ -2227,7 +2228,6 @@
                     "offset": 767,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "3 BSD",
               },
@@ -2248,6 +2248,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 20,
@@ -2261,7 +2262,6 @@
                     "offset": 778,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "4 BSD",
               },
@@ -2301,6 +2301,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 9,
@@ -2314,7 +2315,6 @@
                     "offset": 788,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "4 BSD",
               },
@@ -2335,6 +2335,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 22,
@@ -2348,7 +2349,6 @@
                     "offset": 799,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "4.1 BSD",
               },
@@ -2388,6 +2388,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -2401,7 +2402,6 @@
                     "offset": 811,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "4.1 BSD",
               },
@@ -2422,6 +2422,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -2435,7 +2436,6 @@
                     "offset": 824,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "4.2 BSD",
               },
@@ -2475,6 +2475,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -2488,7 +2489,6 @@
                     "offset": 836,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "4.1 BSD",
               },
@@ -2509,6 +2509,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -2522,7 +2523,6 @@
                     "offset": 849,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "2.8 BSD",
               },
@@ -2562,6 +2562,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -2575,7 +2576,6 @@
                     "offset": 861,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "4.1 BSD",
               },
@@ -2596,6 +2596,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 28,
@@ -2609,7 +2610,6 @@
                     "offset": 874,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "8th Edition",
               },
@@ -2649,6 +2649,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -2662,7 +2663,6 @@
                     "offset": 890,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "4.2 BSD",
               },
@@ -2683,6 +2683,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -2696,7 +2697,6 @@
                     "offset": 903,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "4.3 BSD",
               },
@@ -2736,6 +2736,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -2749,7 +2750,6 @@
                     "offset": 915,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "4.2 BSD",
               },
@@ -2770,6 +2770,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 26,
@@ -2783,7 +2784,6 @@
                     "offset": 928,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Ultrix-32",
               },
@@ -2823,6 +2823,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -2836,7 +2837,6 @@
                     "offset": 942,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "PWB 1.0",
               },
@@ -2857,6 +2857,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -2870,7 +2871,6 @@
                     "offset": 955,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "PWB 1.2",
               },
@@ -2910,6 +2910,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -2923,7 +2924,6 @@
                     "offset": 967,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "PWB 1.0",
               },
@@ -2944,6 +2944,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -2957,7 +2958,6 @@
                     "offset": 980,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "USG 1.0",
               },
@@ -2997,6 +2997,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -3010,7 +3011,6 @@
                     "offset": 992,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "PWB 1.2",
               },
@@ -3031,6 +3031,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -3044,7 +3045,6 @@
                     "offset": 1005,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "PWB 2.0",
               },
@@ -3084,6 +3084,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -3097,7 +3098,6 @@
                     "offset": 1017,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "USG 1.0",
               },
@@ -3118,6 +3118,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 26,
@@ -3131,7 +3132,6 @@
                     "offset": 1030,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "CB Unix 1",
               },
@@ -3171,6 +3171,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -3184,7 +3185,6 @@
                     "offset": 1044,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "USG 1.0",
               },
@@ -3205,6 +3205,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -3218,7 +3219,6 @@
                     "offset": 1057,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "USG 2.0",
               },
@@ -3258,6 +3258,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 13,
@@ -3271,7 +3272,6 @@
                     "offset": 1069,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "CB Unix 1",
               },
@@ -3292,6 +3292,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 28,
@@ -3305,7 +3306,6 @@
                     "offset": 1084,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "CB Unix 2",
               },
@@ -3345,6 +3345,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 13,
@@ -3358,7 +3359,6 @@
                     "offset": 1098,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "CB Unix 2",
               },
@@ -3379,6 +3379,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 28,
@@ -3392,7 +3393,6 @@
                     "offset": 1113,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "CB Unix 3",
               },
@@ -3432,6 +3432,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 13,
@@ -3445,7 +3446,6 @@
                     "offset": 1127,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "CB Unix 3",
               },
@@ -3466,6 +3466,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 28,
@@ -3479,7 +3480,6 @@
                     "offset": 1142,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Unix/TS++",
               },
@@ -3519,6 +3519,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 13,
@@ -3532,7 +3533,6 @@
                     "offset": 1156,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "CB Unix 3",
               },
@@ -3553,6 +3553,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 31,
@@ -3566,7 +3567,6 @@
                     "offset": 1171,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "PDP-11 Sys V",
               },
@@ -3606,6 +3606,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -3619,7 +3620,6 @@
                     "offset": 1188,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "USG 2.0",
               },
@@ -3640,6 +3640,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 24,
@@ -3653,7 +3654,6 @@
                     "offset": 1201,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "USG 3.0",
               },
@@ -3693,6 +3693,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -3706,7 +3707,6 @@
                     "offset": 1213,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "USG 3.0",
               },
@@ -3727,6 +3727,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 28,
@@ -3740,7 +3741,6 @@
                     "offset": 1226,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Unix/TS 3.0",
               },
@@ -3780,6 +3780,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 11,
@@ -3793,7 +3794,6 @@
                     "offset": 1242,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "PWB 2.0",
               },
@@ -3814,6 +3814,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 28,
@@ -3827,7 +3828,6 @@
                     "offset": 1255,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Unix/TS 3.0",
               },
@@ -3867,6 +3867,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -3880,7 +3881,6 @@
                     "offset": 1271,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Unix/TS 1.0",
               },
@@ -3901,6 +3901,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 32,
@@ -3914,7 +3915,6 @@
                     "offset": 1288,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Unix/TS 3.0",
               },
@@ -3954,6 +3954,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 15,
@@ -3967,7 +3968,6 @@
                     "offset": 1304,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Unix/TS 3.0",
               },
@@ -3988,6 +3988,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 27,
@@ -4001,7 +4002,6 @@
                     "offset": 1321,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "TS 4.0",
               },
@@ -4041,6 +4041,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 13,
@@ -4054,7 +4055,6 @@
                     "offset": 1332,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Unix/TS++",
               },
@@ -4075,6 +4075,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 25,
@@ -4088,7 +4089,6 @@
                     "offset": 1347,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "TS 4.0",
               },
@@ -4128,6 +4128,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 13,
@@ -4141,7 +4142,6 @@
                     "offset": 1358,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "CB Unix 3",
               },
@@ -4162,6 +4162,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 25,
@@ -4175,7 +4176,6 @@
                     "offset": 1373,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "TS 4.0",
               },
@@ -4215,6 +4215,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 10,
@@ -4228,7 +4229,6 @@
                     "offset": 1384,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "TS 4.0",
               },
@@ -4249,6 +4249,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 26,
@@ -4262,7 +4263,6 @@
                     "offset": 1396,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "System V.0",
               },
@@ -4302,6 +4302,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 14,
@@ -4315,7 +4316,6 @@
                     "offset": 1411,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "System V.0",
               },
@@ -4336,6 +4336,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 30,
@@ -4349,7 +4350,6 @@
                     "offset": 1427,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "System V.2",
               },
@@ -4389,6 +4389,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 14,
@@ -4402,7 +4403,6 @@
                     "offset": 1442,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "System V.2",
               },
@@ -4423,6 +4423,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 30,
@@ -4436,7 +4437,6 @@
                     "offset": 1458,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "System V.3",
               },
@@ -4461,6 +4461,7 @@
       ],
       "directed": true,
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 13,
@@ -4474,7 +4475,6 @@
             "offset": 67,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "unix",
       },

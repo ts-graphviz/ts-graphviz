@@ -59,6 +59,7 @@ graph[fontsize=8];",
         },
         {
           "key": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 9,
@@ -72,7 +73,6 @@ graph[fontsize=8];",
                 "offset": 694,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "label",
           },
@@ -91,6 +91,7 @@ graph[fontsize=8];",
           },
           "type": "Attribute",
           "value": {
+            "kind": "quoted",
             "location": {
               "end": {
                 "column": 219,
@@ -104,7 +105,6 @@ graph[fontsize=8];",
                 "offset": 700,
               },
             },
-            "quoted": true,
             "type": "Literal",
             "value": "((+ (* (X) (- (- (X) (X)) (X))) (% (+ (X) (X)) (COS (- (X) (X))))) (EXP (* (X) (X))) (+ (% (EXP (SIN (+ (X) (X)))) (SIN (* (X) (EXP (* (X) (X)))))) (* (X) (X))) (% (EXP (% (X) (% (X) (X)))) (EXP (SIN (X)))))",
           },
@@ -112,6 +112,7 @@ graph[fontsize=8];",
         {
           "children": [],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 12,
@@ -125,7 +126,6 @@ graph[fontsize=8];",
                 "offset": 914,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "subgraph",
           },
@@ -147,6 +147,7 @@ graph[fontsize=8];",
         {
           "children": [],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 22,
@@ -160,7 +161,6 @@ graph[fontsize=8];",
                 "offset": 923,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "cluster01",
           },
@@ -183,6 +183,7 @@ graph[fontsize=8];",
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 9,
@@ -196,7 +197,6 @@ graph[fontsize=8];",
                     "offset": 941,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -215,6 +215,7 @@ graph[fontsize=8];",
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 77,
@@ -228,7 +229,6 @@ graph[fontsize=8];",
                     "offset": 947,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "(+ (* (X) (- (- (X) (X)) (X))) (% (+ (X) (X)) (COS (- (X) (X)))))",
               },
@@ -236,6 +236,7 @@ graph[fontsize=8];",
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -249,7 +250,6 @@ graph[fontsize=8];",
                     "offset": 1018,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n002",
               },
@@ -272,6 +272,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -285,7 +286,6 @@ graph[fontsize=8];",
                         "offset": 1034,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -304,6 +304,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -317,13 +318,13 @@ graph[fontsize=8];",
                         "offset": 1040,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "+",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -337,7 +338,6 @@ graph[fontsize=8];",
                     "offset": 1028,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n002",
               },
@@ -374,6 +374,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -387,7 +388,6 @@ graph[fontsize=8];",
                         "offset": 1050,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n002",
                   },
@@ -408,6 +408,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -421,7 +422,6 @@ graph[fontsize=8];",
                         "offset": 1058,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n003",
                   },
@@ -447,6 +447,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -460,7 +461,6 @@ graph[fontsize=8];",
                         "offset": 1074,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -479,6 +479,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -492,13 +493,13 @@ graph[fontsize=8];",
                         "offset": 1080,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "*",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -512,7 +513,6 @@ graph[fontsize=8];",
                     "offset": 1068,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n003",
               },
@@ -549,6 +549,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -562,7 +563,6 @@ graph[fontsize=8];",
                         "offset": 1090,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n003",
                   },
@@ -583,6 +583,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -596,7 +597,6 @@ graph[fontsize=8];",
                         "offset": 1098,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n004",
                   },
@@ -622,6 +622,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -635,7 +636,6 @@ graph[fontsize=8];",
                         "offset": 1114,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -654,6 +654,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -667,13 +668,13 @@ graph[fontsize=8];",
                         "offset": 1120,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -687,7 +688,6 @@ graph[fontsize=8];",
                     "offset": 1108,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n004",
               },
@@ -724,6 +724,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -737,7 +738,6 @@ graph[fontsize=8];",
                         "offset": 1130,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n003",
                   },
@@ -758,6 +758,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -771,7 +772,6 @@ graph[fontsize=8];",
                         "offset": 1138,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n005",
                   },
@@ -797,6 +797,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -810,7 +811,6 @@ graph[fontsize=8];",
                         "offset": 1154,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -829,6 +829,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -842,13 +843,13 @@ graph[fontsize=8];",
                         "offset": 1160,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "-",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -862,7 +863,6 @@ graph[fontsize=8];",
                     "offset": 1148,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n005",
               },
@@ -899,6 +899,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -912,7 +913,6 @@ graph[fontsize=8];",
                         "offset": 1170,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n005",
                   },
@@ -933,6 +933,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -946,7 +947,6 @@ graph[fontsize=8];",
                         "offset": 1178,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n006",
                   },
@@ -972,6 +972,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -985,7 +986,6 @@ graph[fontsize=8];",
                         "offset": 1194,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -1004,6 +1004,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -1017,13 +1018,13 @@ graph[fontsize=8];",
                         "offset": 1200,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "-",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -1037,7 +1038,6 @@ graph[fontsize=8];",
                     "offset": 1188,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n006",
               },
@@ -1074,6 +1074,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -1087,7 +1088,6 @@ graph[fontsize=8];",
                         "offset": 1210,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n006",
                   },
@@ -1108,6 +1108,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -1121,7 +1122,6 @@ graph[fontsize=8];",
                         "offset": 1218,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n007",
                   },
@@ -1147,6 +1147,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -1160,7 +1161,6 @@ graph[fontsize=8];",
                         "offset": 1234,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -1179,6 +1179,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -1192,13 +1193,13 @@ graph[fontsize=8];",
                         "offset": 1240,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -1212,7 +1213,6 @@ graph[fontsize=8];",
                     "offset": 1228,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n007",
               },
@@ -1249,6 +1249,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -1262,7 +1263,6 @@ graph[fontsize=8];",
                         "offset": 1250,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n006",
                   },
@@ -1283,6 +1283,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -1296,7 +1297,6 @@ graph[fontsize=8];",
                         "offset": 1258,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n008",
                   },
@@ -1322,6 +1322,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -1335,7 +1336,6 @@ graph[fontsize=8];",
                         "offset": 1274,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -1354,6 +1354,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -1367,13 +1368,13 @@ graph[fontsize=8];",
                         "offset": 1280,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -1387,7 +1388,6 @@ graph[fontsize=8];",
                     "offset": 1268,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n008",
               },
@@ -1424,6 +1424,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -1437,7 +1438,6 @@ graph[fontsize=8];",
                         "offset": 1290,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n005",
                   },
@@ -1458,6 +1458,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -1471,7 +1472,6 @@ graph[fontsize=8];",
                         "offset": 1298,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n009",
                   },
@@ -1497,6 +1497,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -1510,7 +1511,6 @@ graph[fontsize=8];",
                         "offset": 1314,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -1529,6 +1529,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -1542,13 +1543,13 @@ graph[fontsize=8];",
                         "offset": 1320,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -1562,7 +1563,6 @@ graph[fontsize=8];",
                     "offset": 1308,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n009",
               },
@@ -1599,6 +1599,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -1612,7 +1613,6 @@ graph[fontsize=8];",
                         "offset": 1330,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n002",
                   },
@@ -1633,6 +1633,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -1646,7 +1647,6 @@ graph[fontsize=8];",
                         "offset": 1338,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n010",
                   },
@@ -1672,6 +1672,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -1685,7 +1686,6 @@ graph[fontsize=8];",
                         "offset": 1354,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -1704,6 +1704,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -1717,13 +1718,13 @@ graph[fontsize=8];",
                         "offset": 1360,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "%",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -1737,7 +1738,6 @@ graph[fontsize=8];",
                     "offset": 1348,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n010",
               },
@@ -1774,6 +1774,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -1787,7 +1788,6 @@ graph[fontsize=8];",
                         "offset": 1370,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n010",
                   },
@@ -1808,6 +1808,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -1821,7 +1822,6 @@ graph[fontsize=8];",
                         "offset": 1378,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n011",
                   },
@@ -1847,6 +1847,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -1860,7 +1861,6 @@ graph[fontsize=8];",
                         "offset": 1394,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -1879,6 +1879,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -1892,13 +1893,13 @@ graph[fontsize=8];",
                         "offset": 1400,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "+",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -1912,7 +1913,6 @@ graph[fontsize=8];",
                     "offset": 1388,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n011",
               },
@@ -1949,6 +1949,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -1962,7 +1963,6 @@ graph[fontsize=8];",
                         "offset": 1410,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n011",
                   },
@@ -1983,6 +1983,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -1996,7 +1997,6 @@ graph[fontsize=8];",
                         "offset": 1418,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n012",
                   },
@@ -2022,6 +2022,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2035,7 +2036,6 @@ graph[fontsize=8];",
                         "offset": 1434,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -2054,6 +2054,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -2067,13 +2068,13 @@ graph[fontsize=8];",
                         "offset": 1440,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -2087,7 +2088,6 @@ graph[fontsize=8];",
                     "offset": 1428,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n012",
               },
@@ -2124,6 +2124,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -2137,7 +2138,6 @@ graph[fontsize=8];",
                         "offset": 1450,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n011",
                   },
@@ -2158,6 +2158,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -2171,7 +2172,6 @@ graph[fontsize=8];",
                         "offset": 1458,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n013",
                   },
@@ -2197,6 +2197,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2210,7 +2211,6 @@ graph[fontsize=8];",
                         "offset": 1474,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -2229,6 +2229,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -2242,13 +2243,13 @@ graph[fontsize=8];",
                         "offset": 1480,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -2262,7 +2263,6 @@ graph[fontsize=8];",
                     "offset": 1468,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n013",
               },
@@ -2299,6 +2299,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -2312,7 +2313,6 @@ graph[fontsize=8];",
                         "offset": 1490,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n010",
                   },
@@ -2333,6 +2333,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -2346,7 +2347,6 @@ graph[fontsize=8];",
                         "offset": 1498,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n014",
                   },
@@ -2372,6 +2372,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2385,7 +2386,6 @@ graph[fontsize=8];",
                         "offset": 1514,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -2404,6 +2404,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 21,
@@ -2417,13 +2418,13 @@ graph[fontsize=8];",
                         "offset": 1520,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "COS",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -2437,7 +2438,6 @@ graph[fontsize=8];",
                     "offset": 1508,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n014",
               },
@@ -2474,6 +2474,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -2487,7 +2488,6 @@ graph[fontsize=8];",
                         "offset": 1532,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n014",
                   },
@@ -2508,6 +2508,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -2521,7 +2522,6 @@ graph[fontsize=8];",
                         "offset": 1540,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n015",
                   },
@@ -2547,6 +2547,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2560,7 +2561,6 @@ graph[fontsize=8];",
                         "offset": 1556,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -2579,6 +2579,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -2592,13 +2593,13 @@ graph[fontsize=8];",
                         "offset": 1562,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "-",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -2612,7 +2613,6 @@ graph[fontsize=8];",
                     "offset": 1550,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n015",
               },
@@ -2649,6 +2649,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -2662,7 +2663,6 @@ graph[fontsize=8];",
                         "offset": 1572,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n015",
                   },
@@ -2683,6 +2683,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -2696,7 +2697,6 @@ graph[fontsize=8];",
                         "offset": 1580,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n016",
                   },
@@ -2722,6 +2722,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2735,7 +2736,6 @@ graph[fontsize=8];",
                         "offset": 1596,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -2754,6 +2754,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -2767,13 +2768,13 @@ graph[fontsize=8];",
                         "offset": 1602,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -2787,7 +2788,6 @@ graph[fontsize=8];",
                     "offset": 1590,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n016",
               },
@@ -2824,6 +2824,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -2837,7 +2838,6 @@ graph[fontsize=8];",
                         "offset": 1612,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n015",
                   },
@@ -2858,6 +2858,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -2871,7 +2872,6 @@ graph[fontsize=8];",
                         "offset": 1620,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n017",
                   },
@@ -2897,6 +2897,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2910,7 +2911,6 @@ graph[fontsize=8];",
                         "offset": 1636,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -2929,6 +2929,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -2942,13 +2943,13 @@ graph[fontsize=8];",
                         "offset": 1642,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -2962,7 +2963,6 @@ graph[fontsize=8];",
                     "offset": 1630,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n017",
               },
@@ -3000,6 +3000,7 @@ graph[fontsize=8];",
         {
           "children": [],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 12,
@@ -3013,7 +3014,6 @@ graph[fontsize=8];",
                 "offset": 1658,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "subgraph",
           },
@@ -3035,6 +3035,7 @@ graph[fontsize=8];",
         {
           "children": [],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 22,
@@ -3048,7 +3049,6 @@ graph[fontsize=8];",
                 "offset": 1667,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "cluster17",
           },
@@ -3071,6 +3071,7 @@ graph[fontsize=8];",
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 9,
@@ -3084,7 +3085,6 @@ graph[fontsize=8];",
                     "offset": 1685,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -3103,6 +3103,7 @@ graph[fontsize=8];",
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 29,
@@ -3116,7 +3117,6 @@ graph[fontsize=8];",
                     "offset": 1691,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "(EXP (* (X) (X)))",
               },
@@ -3124,6 +3124,7 @@ graph[fontsize=8];",
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -3137,7 +3138,6 @@ graph[fontsize=8];",
                     "offset": 1714,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n018",
               },
@@ -3160,6 +3160,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -3173,7 +3174,6 @@ graph[fontsize=8];",
                         "offset": 1730,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -3192,6 +3192,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 21,
@@ -3205,13 +3206,13 @@ graph[fontsize=8];",
                         "offset": 1736,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "EXP",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -3225,7 +3226,6 @@ graph[fontsize=8];",
                     "offset": 1724,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n018",
               },
@@ -3262,6 +3262,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -3275,7 +3276,6 @@ graph[fontsize=8];",
                         "offset": 1748,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n018",
                   },
@@ -3296,6 +3296,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -3309,7 +3310,6 @@ graph[fontsize=8];",
                         "offset": 1756,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n019",
                   },
@@ -3335,6 +3335,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -3348,7 +3349,6 @@ graph[fontsize=8];",
                         "offset": 1772,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -3367,6 +3367,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -3380,13 +3381,13 @@ graph[fontsize=8];",
                         "offset": 1778,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "*",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -3400,7 +3401,6 @@ graph[fontsize=8];",
                     "offset": 1766,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n019",
               },
@@ -3437,6 +3437,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -3450,7 +3451,6 @@ graph[fontsize=8];",
                         "offset": 1788,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n019",
                   },
@@ -3471,6 +3471,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -3484,7 +3485,6 @@ graph[fontsize=8];",
                         "offset": 1796,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n020",
                   },
@@ -3510,6 +3510,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -3523,7 +3524,6 @@ graph[fontsize=8];",
                         "offset": 1812,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -3542,6 +3542,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -3555,13 +3556,13 @@ graph[fontsize=8];",
                         "offset": 1818,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -3575,7 +3576,6 @@ graph[fontsize=8];",
                     "offset": 1806,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n020",
               },
@@ -3612,6 +3612,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -3625,7 +3626,6 @@ graph[fontsize=8];",
                         "offset": 1828,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n019",
                   },
@@ -3646,6 +3646,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -3659,7 +3660,6 @@ graph[fontsize=8];",
                         "offset": 1836,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n021",
                   },
@@ -3685,6 +3685,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -3698,7 +3699,6 @@ graph[fontsize=8];",
                         "offset": 1852,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -3717,6 +3717,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -3730,13 +3731,13 @@ graph[fontsize=8];",
                         "offset": 1858,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -3750,7 +3751,6 @@ graph[fontsize=8];",
                     "offset": 1846,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n021",
               },
@@ -3788,6 +3788,7 @@ graph[fontsize=8];",
         {
           "children": [],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 12,
@@ -3801,7 +3802,6 @@ graph[fontsize=8];",
                 "offset": 1874,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "subgraph",
           },
@@ -3823,6 +3823,7 @@ graph[fontsize=8];",
         {
           "children": [],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 22,
@@ -3836,7 +3837,6 @@ graph[fontsize=8];",
                 "offset": 1883,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "cluster21",
           },
@@ -3859,6 +3859,7 @@ graph[fontsize=8];",
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 9,
@@ -3872,7 +3873,6 @@ graph[fontsize=8];",
                     "offset": 1901,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -3891,6 +3891,7 @@ graph[fontsize=8];",
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 87,
@@ -3904,7 +3905,6 @@ graph[fontsize=8];",
                     "offset": 1907,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "(+ (% (EXP (SIN (+ (X) (X)))) (SIN (* (X) (EXP (* (X) (X)))))) (* (X) (X)))",
               },
@@ -3912,6 +3912,7 @@ graph[fontsize=8];",
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -3925,7 +3926,6 @@ graph[fontsize=8];",
                     "offset": 1988,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n022",
               },
@@ -3948,6 +3948,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -3961,7 +3962,6 @@ graph[fontsize=8];",
                         "offset": 2004,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -3980,6 +3980,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -3993,13 +3994,13 @@ graph[fontsize=8];",
                         "offset": 2010,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "+",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -4013,7 +4014,6 @@ graph[fontsize=8];",
                     "offset": 1998,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n022",
               },
@@ -4050,6 +4050,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -4063,7 +4064,6 @@ graph[fontsize=8];",
                         "offset": 2020,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n022",
                   },
@@ -4084,6 +4084,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -4097,7 +4098,6 @@ graph[fontsize=8];",
                         "offset": 2028,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n023",
                   },
@@ -4123,6 +4123,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -4136,7 +4137,6 @@ graph[fontsize=8];",
                         "offset": 2044,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -4155,6 +4155,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -4168,13 +4169,13 @@ graph[fontsize=8];",
                         "offset": 2050,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "%",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -4188,7 +4189,6 @@ graph[fontsize=8];",
                     "offset": 2038,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n023",
               },
@@ -4225,6 +4225,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -4238,7 +4239,6 @@ graph[fontsize=8];",
                         "offset": 2060,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n023",
                   },
@@ -4259,6 +4259,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -4272,7 +4273,6 @@ graph[fontsize=8];",
                         "offset": 2068,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n024",
                   },
@@ -4298,6 +4298,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -4311,7 +4312,6 @@ graph[fontsize=8];",
                         "offset": 2084,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -4330,6 +4330,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 21,
@@ -4343,13 +4344,13 @@ graph[fontsize=8];",
                         "offset": 2090,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "EXP",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -4363,7 +4364,6 @@ graph[fontsize=8];",
                     "offset": 2078,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n024",
               },
@@ -4400,6 +4400,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -4413,7 +4414,6 @@ graph[fontsize=8];",
                         "offset": 2102,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n024",
                   },
@@ -4434,6 +4434,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -4447,7 +4448,6 @@ graph[fontsize=8];",
                         "offset": 2110,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n025",
                   },
@@ -4473,6 +4473,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -4486,7 +4487,6 @@ graph[fontsize=8];",
                         "offset": 2126,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -4505,6 +4505,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 21,
@@ -4518,13 +4519,13 @@ graph[fontsize=8];",
                         "offset": 2132,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "SIN",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -4538,7 +4539,6 @@ graph[fontsize=8];",
                     "offset": 2120,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n025",
               },
@@ -4575,6 +4575,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -4588,7 +4589,6 @@ graph[fontsize=8];",
                         "offset": 2144,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n025",
                   },
@@ -4609,6 +4609,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -4622,7 +4623,6 @@ graph[fontsize=8];",
                         "offset": 2152,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n026",
                   },
@@ -4648,6 +4648,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -4661,7 +4662,6 @@ graph[fontsize=8];",
                         "offset": 2168,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -4680,6 +4680,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -4693,13 +4694,13 @@ graph[fontsize=8];",
                         "offset": 2174,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "+",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -4713,7 +4714,6 @@ graph[fontsize=8];",
                     "offset": 2162,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n026",
               },
@@ -4750,6 +4750,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -4763,7 +4764,6 @@ graph[fontsize=8];",
                         "offset": 2184,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n026",
                   },
@@ -4784,6 +4784,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -4797,7 +4798,6 @@ graph[fontsize=8];",
                         "offset": 2192,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n027",
                   },
@@ -4823,6 +4823,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -4836,7 +4837,6 @@ graph[fontsize=8];",
                         "offset": 2208,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -4855,6 +4855,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -4868,13 +4869,13 @@ graph[fontsize=8];",
                         "offset": 2214,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -4888,7 +4889,6 @@ graph[fontsize=8];",
                     "offset": 2202,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n027",
               },
@@ -4925,6 +4925,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -4938,7 +4939,6 @@ graph[fontsize=8];",
                         "offset": 2224,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n026",
                   },
@@ -4959,6 +4959,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -4972,7 +4973,6 @@ graph[fontsize=8];",
                         "offset": 2232,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n028",
                   },
@@ -4998,6 +4998,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -5011,7 +5012,6 @@ graph[fontsize=8];",
                         "offset": 2248,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -5030,6 +5030,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -5043,13 +5044,13 @@ graph[fontsize=8];",
                         "offset": 2254,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -5063,7 +5064,6 @@ graph[fontsize=8];",
                     "offset": 2242,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n028",
               },
@@ -5100,6 +5100,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -5113,7 +5114,6 @@ graph[fontsize=8];",
                         "offset": 2264,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n023",
                   },
@@ -5134,6 +5134,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -5147,7 +5148,6 @@ graph[fontsize=8];",
                         "offset": 2272,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n029",
                   },
@@ -5173,6 +5173,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -5186,7 +5187,6 @@ graph[fontsize=8];",
                         "offset": 2288,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -5205,6 +5205,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 21,
@@ -5218,13 +5219,13 @@ graph[fontsize=8];",
                         "offset": 2294,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "SIN",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -5238,7 +5239,6 @@ graph[fontsize=8];",
                     "offset": 2282,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n029",
               },
@@ -5275,6 +5275,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -5288,7 +5289,6 @@ graph[fontsize=8];",
                         "offset": 2306,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n029",
                   },
@@ -5309,6 +5309,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -5322,7 +5323,6 @@ graph[fontsize=8];",
                         "offset": 2314,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n030",
                   },
@@ -5348,6 +5348,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -5361,7 +5362,6 @@ graph[fontsize=8];",
                         "offset": 2330,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -5380,6 +5380,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -5393,13 +5394,13 @@ graph[fontsize=8];",
                         "offset": 2336,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "*",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -5413,7 +5414,6 @@ graph[fontsize=8];",
                     "offset": 2324,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n030",
               },
@@ -5450,6 +5450,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -5463,7 +5464,6 @@ graph[fontsize=8];",
                         "offset": 2346,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n030",
                   },
@@ -5484,6 +5484,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -5497,7 +5498,6 @@ graph[fontsize=8];",
                         "offset": 2354,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n031",
                   },
@@ -5523,6 +5523,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -5536,7 +5537,6 @@ graph[fontsize=8];",
                         "offset": 2370,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -5555,6 +5555,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -5568,13 +5569,13 @@ graph[fontsize=8];",
                         "offset": 2376,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -5588,7 +5589,6 @@ graph[fontsize=8];",
                     "offset": 2364,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n031",
               },
@@ -5625,6 +5625,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -5638,7 +5639,6 @@ graph[fontsize=8];",
                         "offset": 2386,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n030",
                   },
@@ -5659,6 +5659,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -5672,7 +5673,6 @@ graph[fontsize=8];",
                         "offset": 2394,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n032",
                   },
@@ -5698,6 +5698,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -5711,7 +5712,6 @@ graph[fontsize=8];",
                         "offset": 2410,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -5730,6 +5730,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 21,
@@ -5743,13 +5744,13 @@ graph[fontsize=8];",
                         "offset": 2416,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "EXP",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -5763,7 +5764,6 @@ graph[fontsize=8];",
                     "offset": 2404,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n032",
               },
@@ -5800,6 +5800,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -5813,7 +5814,6 @@ graph[fontsize=8];",
                         "offset": 2428,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n032",
                   },
@@ -5834,6 +5834,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -5847,7 +5848,6 @@ graph[fontsize=8];",
                         "offset": 2436,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n033",
                   },
@@ -5873,6 +5873,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -5886,7 +5887,6 @@ graph[fontsize=8];",
                         "offset": 2452,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -5905,6 +5905,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -5918,13 +5919,13 @@ graph[fontsize=8];",
                         "offset": 2458,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "*",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -5938,7 +5939,6 @@ graph[fontsize=8];",
                     "offset": 2446,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n033",
               },
@@ -5975,6 +5975,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -5988,7 +5989,6 @@ graph[fontsize=8];",
                         "offset": 2468,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n033",
                   },
@@ -6009,6 +6009,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -6022,7 +6023,6 @@ graph[fontsize=8];",
                         "offset": 2476,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n034",
                   },
@@ -6048,6 +6048,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -6061,7 +6062,6 @@ graph[fontsize=8];",
                         "offset": 2492,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -6080,6 +6080,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -6093,13 +6094,13 @@ graph[fontsize=8];",
                         "offset": 2498,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -6113,7 +6114,6 @@ graph[fontsize=8];",
                     "offset": 2486,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n034",
               },
@@ -6150,6 +6150,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -6163,7 +6164,6 @@ graph[fontsize=8];",
                         "offset": 2508,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n033",
                   },
@@ -6184,6 +6184,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -6197,7 +6198,6 @@ graph[fontsize=8];",
                         "offset": 2516,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n035",
                   },
@@ -6223,6 +6223,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -6236,7 +6237,6 @@ graph[fontsize=8];",
                         "offset": 2532,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -6255,6 +6255,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -6268,13 +6269,13 @@ graph[fontsize=8];",
                         "offset": 2538,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -6288,7 +6289,6 @@ graph[fontsize=8];",
                     "offset": 2526,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n035",
               },
@@ -6325,6 +6325,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -6338,7 +6339,6 @@ graph[fontsize=8];",
                         "offset": 2548,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n022",
                   },
@@ -6359,6 +6359,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -6372,7 +6373,6 @@ graph[fontsize=8];",
                         "offset": 2556,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n036",
                   },
@@ -6398,6 +6398,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -6411,7 +6412,6 @@ graph[fontsize=8];",
                         "offset": 2572,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -6430,6 +6430,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -6443,13 +6444,13 @@ graph[fontsize=8];",
                         "offset": 2578,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "*",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -6463,7 +6464,6 @@ graph[fontsize=8];",
                     "offset": 2566,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n036",
               },
@@ -6500,6 +6500,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -6513,7 +6514,6 @@ graph[fontsize=8];",
                         "offset": 2588,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n036",
                   },
@@ -6534,6 +6534,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -6547,7 +6548,6 @@ graph[fontsize=8];",
                         "offset": 2596,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n037",
                   },
@@ -6573,6 +6573,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -6586,7 +6587,6 @@ graph[fontsize=8];",
                         "offset": 2612,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -6605,6 +6605,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -6618,13 +6619,13 @@ graph[fontsize=8];",
                         "offset": 2618,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -6638,7 +6639,6 @@ graph[fontsize=8];",
                     "offset": 2606,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n037",
               },
@@ -6675,6 +6675,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -6688,7 +6689,6 @@ graph[fontsize=8];",
                         "offset": 2628,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n036",
                   },
@@ -6709,6 +6709,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -6722,7 +6723,6 @@ graph[fontsize=8];",
                         "offset": 2636,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n038",
                   },
@@ -6748,6 +6748,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -6761,7 +6762,6 @@ graph[fontsize=8];",
                         "offset": 2652,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -6780,6 +6780,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -6793,13 +6794,13 @@ graph[fontsize=8];",
                         "offset": 2658,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -6813,7 +6814,6 @@ graph[fontsize=8];",
                     "offset": 2646,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n038",
               },
@@ -6851,6 +6851,7 @@ graph[fontsize=8];",
         {
           "children": [],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 12,
@@ -6864,7 +6865,6 @@ graph[fontsize=8];",
                 "offset": 2674,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "subgraph",
           },
@@ -6886,6 +6886,7 @@ graph[fontsize=8];",
         {
           "children": [],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 22,
@@ -6899,7 +6900,6 @@ graph[fontsize=8];",
                 "offset": 2683,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "cluster38",
           },
@@ -6922,6 +6922,7 @@ graph[fontsize=8];",
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 9,
@@ -6935,7 +6936,6 @@ graph[fontsize=8];",
                     "offset": 2701,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -6954,6 +6954,7 @@ graph[fontsize=8];",
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 57,
@@ -6967,7 +6968,6 @@ graph[fontsize=8];",
                     "offset": 2707,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "(% (EXP (% (X) (% (X) (X)))) (EXP (SIN (X))))",
               },
@@ -6975,6 +6975,7 @@ graph[fontsize=8];",
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -6988,7 +6989,6 @@ graph[fontsize=8];",
                     "offset": 2758,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n039",
               },
@@ -7011,6 +7011,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -7024,7 +7025,6 @@ graph[fontsize=8];",
                         "offset": 2774,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -7043,6 +7043,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -7056,13 +7057,13 @@ graph[fontsize=8];",
                         "offset": 2780,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "%",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -7076,7 +7077,6 @@ graph[fontsize=8];",
                     "offset": 2768,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n039",
               },
@@ -7113,6 +7113,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -7126,7 +7127,6 @@ graph[fontsize=8];",
                         "offset": 2790,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n039",
                   },
@@ -7147,6 +7147,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -7160,7 +7161,6 @@ graph[fontsize=8];",
                         "offset": 2798,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n040",
                   },
@@ -7186,6 +7186,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -7199,7 +7200,6 @@ graph[fontsize=8];",
                         "offset": 2814,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -7218,6 +7218,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 21,
@@ -7231,13 +7232,13 @@ graph[fontsize=8];",
                         "offset": 2820,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "EXP",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -7251,7 +7252,6 @@ graph[fontsize=8];",
                     "offset": 2808,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n040",
               },
@@ -7288,6 +7288,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -7301,7 +7302,6 @@ graph[fontsize=8];",
                         "offset": 2832,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n040",
                   },
@@ -7322,6 +7322,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -7335,7 +7336,6 @@ graph[fontsize=8];",
                         "offset": 2840,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n041",
                   },
@@ -7361,6 +7361,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -7374,7 +7375,6 @@ graph[fontsize=8];",
                         "offset": 2856,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -7393,6 +7393,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -7406,13 +7407,13 @@ graph[fontsize=8];",
                         "offset": 2862,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "%",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -7426,7 +7427,6 @@ graph[fontsize=8];",
                     "offset": 2850,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n041",
               },
@@ -7463,6 +7463,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -7476,7 +7477,6 @@ graph[fontsize=8];",
                         "offset": 2872,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n041",
                   },
@@ -7497,6 +7497,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -7510,7 +7511,6 @@ graph[fontsize=8];",
                         "offset": 2880,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n042",
                   },
@@ -7536,6 +7536,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -7549,7 +7550,6 @@ graph[fontsize=8];",
                         "offset": 2896,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -7568,6 +7568,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -7581,13 +7582,13 @@ graph[fontsize=8];",
                         "offset": 2902,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -7601,7 +7602,6 @@ graph[fontsize=8];",
                     "offset": 2890,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n042",
               },
@@ -7638,6 +7638,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -7651,7 +7652,6 @@ graph[fontsize=8];",
                         "offset": 2912,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n041",
                   },
@@ -7672,6 +7672,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -7685,7 +7686,6 @@ graph[fontsize=8];",
                         "offset": 2920,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n043",
                   },
@@ -7711,6 +7711,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -7724,7 +7725,6 @@ graph[fontsize=8];",
                         "offset": 2936,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -7743,6 +7743,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -7756,13 +7757,13 @@ graph[fontsize=8];",
                         "offset": 2942,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "%",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -7776,7 +7777,6 @@ graph[fontsize=8];",
                     "offset": 2930,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n043",
               },
@@ -7813,6 +7813,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -7826,7 +7827,6 @@ graph[fontsize=8];",
                         "offset": 2952,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n043",
                   },
@@ -7847,6 +7847,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -7860,7 +7861,6 @@ graph[fontsize=8];",
                         "offset": 2960,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n044",
                   },
@@ -7886,6 +7886,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -7899,7 +7900,6 @@ graph[fontsize=8];",
                         "offset": 2976,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -7918,6 +7918,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -7931,13 +7932,13 @@ graph[fontsize=8];",
                         "offset": 2982,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -7951,7 +7952,6 @@ graph[fontsize=8];",
                     "offset": 2970,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n044",
               },
@@ -7988,6 +7988,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -8001,7 +8002,6 @@ graph[fontsize=8];",
                         "offset": 2992,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n043",
                   },
@@ -8022,6 +8022,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -8035,7 +8036,6 @@ graph[fontsize=8];",
                         "offset": 3000,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n045",
                   },
@@ -8061,6 +8061,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -8074,7 +8075,6 @@ graph[fontsize=8];",
                         "offset": 3016,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -8093,6 +8093,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -8106,13 +8107,13 @@ graph[fontsize=8];",
                         "offset": 3022,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -8126,7 +8127,6 @@ graph[fontsize=8];",
                     "offset": 3010,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n045",
               },
@@ -8163,6 +8163,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -8176,7 +8177,6 @@ graph[fontsize=8];",
                         "offset": 3032,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n039",
                   },
@@ -8197,6 +8197,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -8210,7 +8211,6 @@ graph[fontsize=8];",
                         "offset": 3040,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n046",
                   },
@@ -8236,6 +8236,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -8249,7 +8250,6 @@ graph[fontsize=8];",
                         "offset": 3056,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -8268,6 +8268,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 21,
@@ -8281,13 +8282,13 @@ graph[fontsize=8];",
                         "offset": 3062,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "EXP",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -8301,7 +8302,6 @@ graph[fontsize=8];",
                     "offset": 3050,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n046",
               },
@@ -8338,6 +8338,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -8351,7 +8352,6 @@ graph[fontsize=8];",
                         "offset": 3074,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n046",
                   },
@@ -8372,6 +8372,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -8385,7 +8386,6 @@ graph[fontsize=8];",
                         "offset": 3082,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n047",
                   },
@@ -8411,6 +8411,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -8424,7 +8425,6 @@ graph[fontsize=8];",
                         "offset": 3098,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -8443,6 +8443,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 21,
@@ -8456,13 +8457,13 @@ graph[fontsize=8];",
                         "offset": 3104,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "SIN",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -8476,7 +8477,6 @@ graph[fontsize=8];",
                     "offset": 3092,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n047",
               },
@@ -8513,6 +8513,7 @@ graph[fontsize=8];",
               "targets": [
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 8,
@@ -8526,7 +8527,6 @@ graph[fontsize=8];",
                         "offset": 3116,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n047",
                   },
@@ -8547,6 +8547,7 @@ graph[fontsize=8];",
                 },
                 {
                   "id": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 16,
@@ -8560,7 +8561,6 @@ graph[fontsize=8];",
                         "offset": 3124,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "n048",
                   },
@@ -8586,6 +8586,7 @@ graph[fontsize=8];",
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -8599,7 +8600,6 @@ graph[fontsize=8];",
                         "offset": 3140,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "label",
                   },
@@ -8618,6 +8618,7 @@ graph[fontsize=8];",
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 19,
@@ -8631,13 +8632,13 @@ graph[fontsize=8];",
                         "offset": 3146,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "X",
                   },
                 },
               ],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -8651,7 +8652,6 @@ graph[fontsize=8];",
                     "offset": 3134,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n048",
               },
@@ -8689,6 +8689,7 @@ graph[fontsize=8];",
       ],
       "directed": false,
       "id": {
+        "kind": "quoted",
         "location": {
           "end": {
             "column": 9,
@@ -8702,7 +8703,6 @@ graph[fontsize=8];",
             "offset": 602,
           },
         },
-        "quoted": true,
         "type": "Literal",
         "value": "",
       },

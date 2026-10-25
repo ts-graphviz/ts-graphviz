@@ -9,7 +9,7 @@ describe('stringify', () => {
         stringify({
           type: 'Literal',
           value: 'hoge',
-          quoted: true,
+          kind: 'quoted',
         }),
       ).toMatchInlineSnapshot(`""hoge""`);
     });
@@ -19,7 +19,7 @@ describe('stringify', () => {
         stringify({
           type: 'Literal',
           value: 'hoge',
-          quoted: false,
+          kind: 'bare',
         }),
       ).toMatchInlineSnapshot(`"hoge"`);
     });
@@ -29,7 +29,7 @@ describe('stringify', () => {
         stringify({
           type: 'Literal',
           value: 'hoge',
-          quoted: 'html',
+          kind: 'html',
         }),
       ).toMatchInlineSnapshot(`"<hoge>"`);
     });
@@ -68,7 +68,7 @@ describe('stringify', () => {
         stringify({
           type: 'Literal',
           value: 'hoge',
-          quoted: 'html',
+          kind: 'html',
         }),
       ).toMatchInlineSnapshot(`"<hoge>"`);
     });
@@ -116,13 +116,13 @@ describe('stringify', () => {
               key: {
                 type: 'Literal',
                 value: 'color',
-                quoted: false,
+                kind: 'bare',
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
-                quoted: false,
+                kind: 'bare',
               },
             },
           ],
@@ -144,13 +144,13 @@ describe('stringify', () => {
               key: {
                 type: 'Literal',
                 value: 'color',
-                quoted: false,
+                kind: 'bare',
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
-                quoted: false,
+                kind: 'bare',
               },
             },
 
@@ -159,13 +159,13 @@ describe('stringify', () => {
               key: {
                 type: 'Literal',
                 value: 'bgcolor',
-                quoted: false,
+                kind: 'bare',
               },
 
               value: {
                 type: 'Literal',
                 value: 'fuga',
-                quoted: false,
+                kind: 'bare',
               },
             },
           ],
@@ -187,13 +187,13 @@ describe('stringify', () => {
           key: {
             type: 'Literal',
             value: 'color',
-            quoted: false,
+            kind: 'bare',
           },
 
           value: {
             type: 'Literal',
             value: 'hoge',
-            quoted: false,
+            kind: 'bare',
           },
         }),
       ).toMatchInlineSnapshot(`"color = hoge;"`);
@@ -209,13 +209,13 @@ describe('stringify', () => {
               key: {
                 type: 'Literal',
                 value: 'color',
-                quoted: false,
+                kind: 'bare',
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
-                quoted: false,
+                kind: 'bare',
               },
             },
           ],
@@ -223,7 +223,7 @@ describe('stringify', () => {
           id: {
             type: 'Literal',
             value: 'hoge',
-            quoted: true,
+            kind: 'quoted',
           },
         }),
       ).toMatchInlineSnapshot(`
@@ -243,13 +243,13 @@ describe('stringify', () => {
               key: {
                 type: 'Literal',
                 value: 'color',
-                quoted: false,
+                kind: 'bare',
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
-                quoted: false,
+                kind: 'bare',
               },
             },
 
@@ -258,13 +258,13 @@ describe('stringify', () => {
               key: {
                 type: 'Literal',
                 value: 'bgcolor',
-                quoted: false,
+                kind: 'bare',
               },
 
               value: {
                 type: 'Literal',
                 value: 'fuga',
-                quoted: false,
+                kind: 'bare',
               },
             },
           ],
@@ -272,7 +272,7 @@ describe('stringify', () => {
           id: {
             type: 'Literal',
             value: 'hoge',
-            quoted: true,
+            kind: 'quoted',
           },
         }),
       ).toMatchInlineSnapshot(`
@@ -295,13 +295,13 @@ describe('stringify', () => {
               id: {
                 type: 'Literal',
                 value: 'id1',
-                quoted: true,
+                kind: 'quoted',
               },
 
               port: {
                 type: 'Literal',
                 value: 'port1',
-                quoted: true,
+                kind: 'quoted',
               },
             },
 
@@ -310,13 +310,13 @@ describe('stringify', () => {
               id: {
                 type: 'Literal',
                 value: 'id2',
-                quoted: true,
+                kind: 'quoted',
               },
 
               compass: {
                 type: 'Literal',
                 value: 'w',
-                quoted: false,
+                kind: 'bare',
               },
             },
           ],
@@ -336,13 +336,13 @@ describe('stringify', () => {
               id: {
                 type: 'Literal',
                 value: 'id1',
-                quoted: true,
+                kind: 'quoted',
               },
 
               port: {
                 type: 'Literal',
                 value: 'port1',
-                quoted: true,
+                kind: 'quoted',
               },
             },
 
@@ -351,13 +351,13 @@ describe('stringify', () => {
               id: {
                 type: 'Literal',
                 value: 'id2',
-                quoted: true,
+                kind: 'quoted',
               },
 
               compass: {
                 type: 'Literal',
                 value: 'w',
-                quoted: false,
+                kind: 'bare',
               },
             },
           ],
@@ -368,13 +368,13 @@ describe('stringify', () => {
               key: {
                 type: 'Literal',
                 value: 'color',
-                quoted: false,
+                kind: 'bare',
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
-                quoted: false,
+                kind: 'bare',
               },
             },
           ],
@@ -396,13 +396,13 @@ describe('stringify', () => {
               id: {
                 type: 'Literal',
                 value: 'id1',
-                quoted: true,
+                kind: 'quoted',
               },
 
               port: {
                 type: 'Literal',
                 value: 'port1',
-                quoted: true,
+                kind: 'quoted',
               },
             },
 
@@ -411,13 +411,13 @@ describe('stringify', () => {
               id: {
                 type: 'Literal',
                 value: 'id2',
-                quoted: true,
+                kind: 'quoted',
               },
 
               compass: {
                 type: 'Literal',
                 value: 'w',
-                quoted: false,
+                kind: 'bare',
               },
             },
           ],
@@ -428,13 +428,13 @@ describe('stringify', () => {
               key: {
                 type: 'Literal',
                 value: 'color',
-                quoted: false,
+                kind: 'bare',
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
-                quoted: false,
+                kind: 'bare',
               },
             },
 
@@ -443,13 +443,13 @@ describe('stringify', () => {
               key: {
                 type: 'Literal',
                 value: 'color',
-                quoted: false,
+                kind: 'bare',
               },
 
               value: {
                 type: 'Literal',
                 value: 'fuga',
-                quoted: false,
+                kind: 'bare',
               },
             },
           ],
@@ -472,13 +472,13 @@ describe('stringify', () => {
               id: {
                 type: 'Literal',
                 value: 'id1',
-                quoted: true,
+                kind: 'quoted',
               },
 
               port: {
                 type: 'Literal',
                 value: 'port1',
-                quoted: true,
+                kind: 'quoted',
               },
             },
 
@@ -490,7 +490,7 @@ describe('stringify', () => {
                   id: {
                     type: 'Literal',
                     value: 'id2',
-                    quoted: true,
+                    kind: 'quoted',
                   },
                 },
 
@@ -499,7 +499,7 @@ describe('stringify', () => {
                   id: {
                     type: 'Literal',
                     value: 'id3',
-                    quoted: true,
+                    kind: 'quoted',
                   },
                 },
               ],
@@ -520,7 +520,7 @@ describe('stringify', () => {
           id: {
             type: 'Literal',
             value: 'id1',
-            quoted: true,
+            kind: 'quoted',
           },
           children: [],
         }),
@@ -546,13 +546,13 @@ describe('stringify', () => {
               key: {
                 type: 'Literal',
                 value: 'color',
-                quoted: false,
+                kind: 'bare',
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
-                quoted: false,
+                kind: 'bare',
               },
             },
           ],
@@ -575,7 +575,7 @@ describe('stringify', () => {
           id: {
             type: 'Literal',
             value: 'id1',
-            quoted: true,
+            kind: 'quoted',
           },
           children: [],
         }),
@@ -591,7 +591,7 @@ describe('stringify', () => {
           id: {
             type: 'Literal',
             value: 'id1',
-            quoted: true,
+            kind: 'quoted',
           },
 
           children: [],
@@ -608,7 +608,7 @@ describe('stringify', () => {
           id: {
             type: 'Literal',
             value: 'id1',
-            quoted: true,
+            kind: 'quoted',
           },
 
           children: [],
@@ -625,7 +625,7 @@ describe('stringify', () => {
           id: {
             type: 'Literal',
             value: 'id1',
-            quoted: true,
+            kind: 'quoted',
           },
 
           children: [],
@@ -656,13 +656,13 @@ describe('stringify', () => {
               key: {
                 type: 'Literal',
                 value: 'color',
-                quoted: false,
+                kind: 'bare',
               },
 
               value: {
                 type: 'Literal',
                 value: 'hoge',
-                quoted: false,
+                kind: 'bare',
               },
             },
           ],
@@ -761,7 +761,7 @@ describe('stringify', () => {
               id: {
                 type: 'Literal',
                 value: 'id1',
-                quoted: true,
+                kind: 'quoted',
               },
 
               children: [],

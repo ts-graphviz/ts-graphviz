@@ -9,13 +9,13 @@ describe('convertAttribute', () => {
     expect(result).toMatchInlineSnapshot(`
       {
         "key": {
-          "quoted": false,
+          "kind": "bare",
           "type": "Literal",
           "value": "size",
         },
         "type": "Attribute",
         "value": {
-          "quoted": false,
+          "kind": "bare",
           "type": "Literal",
           "value": "1",
         },
@@ -29,13 +29,13 @@ describe('convertAttribute', () => {
       expect(result).toMatchInlineSnapshot(`
         {
           "key": {
-            "quoted": false,
+            "kind": "bare",
             "type": "Literal",
             "value": "label",
           },
           "type": "Attribute",
           "value": {
-            "quoted": true,
+            "kind": "quoted",
             "type": "Literal",
             "value": "A",
           },
@@ -49,13 +49,13 @@ describe('convertAttribute', () => {
         expect(result).toMatchInlineSnapshot(`
           {
             "key": {
-              "quoted": false,
+              "kind": "bare",
               "type": "Literal",
               "value": "label",
             },
             "type": "Attribute",
             "value": {
-              "quoted": "html",
+              "kind": "html",
               "type": "Literal",
               "value": "A",
             },
@@ -71,13 +71,13 @@ describe('convertAttribute', () => {
         expect(result).toMatchInlineSnapshot(`
           {
             "key": {
-              "quoted": false,
+              "kind": "bare",
               "type": "Literal",
               "value": "label",
             },
             "type": "Attribute",
             "value": {
-              "quoted": "html",
+              "kind": "html",
               "type": "Literal",
               "value": "<b>Hi</b>",
             },
@@ -91,13 +91,13 @@ describe('convertAttribute', () => {
         expect(result).toMatchInlineSnapshot(`
           {
             "key": {
-              "quoted": false,
+              "kind": "bare",
               "type": "Literal",
               "value": "label",
             },
             "type": "Attribute",
             "value": {
-              "quoted": true,
+              "kind": "quoted",
               "type": "Literal",
               "value": "  <A>  ",
             },
@@ -110,13 +110,13 @@ describe('convertAttribute', () => {
         expect(result).toMatchInlineSnapshot(`
           {
             "key": {
-              "quoted": false,
+              "kind": "bare",
               "type": "Literal",
               "value": "label",
             },
             "type": "Attribute",
             "value": {
-              "quoted": true,
+              "kind": "quoted",
               "type": "Literal",
               "value": "<A",
             },
@@ -129,13 +129,13 @@ describe('convertAttribute', () => {
         expect(result).toMatchInlineSnapshot(`
           {
             "key": {
-              "quoted": false,
+              "kind": "bare",
               "type": "Literal",
               "value": "label",
             },
             "type": "Attribute",
             "value": {
-              "quoted": true,
+              "kind": "quoted",
               "type": "Literal",
               "value": "A>",
             },

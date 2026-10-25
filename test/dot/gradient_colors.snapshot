@@ -4,6 +4,7 @@
       "children": [
         {
           "key": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 19,
@@ -17,7 +18,6 @@
                 "offset": 11,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "bgcolor",
           },
@@ -36,6 +36,7 @@
           },
           "type": "Attribute",
           "value": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 24,
@@ -49,7 +50,6 @@
                 "offset": 19,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "blue",
           },
@@ -58,6 +58,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 32,
@@ -71,7 +72,6 @@
                     "offset": 48,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "fontcolor",
               },
@@ -90,6 +90,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 38,
@@ -103,7 +104,6 @@
                     "offset": 58,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "white",
               },
@@ -112,6 +112,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -125,7 +126,6 @@
                         "offset": 73,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "style",
                   },
@@ -144,6 +144,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 22,
@@ -157,13 +158,13 @@
                         "offset": 79,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "filled",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 28,
@@ -177,7 +178,6 @@
                         "offset": 86,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -196,6 +196,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 34,
@@ -209,13 +210,13 @@
                         "offset": 92,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "box",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 44,
@@ -229,7 +230,6 @@
                         "offset": 98,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -248,6 +248,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 70,
@@ -261,7 +262,6 @@
                         "offset": 108,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "antiquewhite:aquamarine",
                   },
@@ -286,6 +286,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 74,
@@ -299,7 +300,6 @@
                     "offset": 135,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n5",
               },
@@ -322,6 +322,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -335,7 +336,6 @@
                         "offset": 148,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -354,6 +354,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 25,
@@ -367,13 +368,13 @@
                         "offset": 154,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "ellipse",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 35,
@@ -387,7 +388,6 @@
                         "offset": 164,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -406,6 +406,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 51,
@@ -419,7 +420,6 @@
                         "offset": 174,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "bisque4:blue2",
                   },
@@ -444,6 +444,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 55,
@@ -457,7 +458,6 @@
                     "offset": 191,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n4",
               },
@@ -480,6 +480,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -493,7 +494,6 @@
                         "offset": 204,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -512,6 +512,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 24,
@@ -525,13 +526,13 @@
                         "offset": 210,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "circle",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 34,
@@ -545,7 +546,6 @@
                         "offset": 219,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -564,6 +564,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 58,
@@ -577,7 +578,6 @@
                         "offset": 229,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "cadetblue1:chocolate1",
                   },
@@ -602,6 +602,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 62,
@@ -615,7 +616,6 @@
                     "offset": 254,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n3",
               },
@@ -638,6 +638,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -651,7 +652,6 @@
                         "offset": 267,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -670,6 +670,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 25,
@@ -683,13 +684,13 @@
                         "offset": 273,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "diamond",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 35,
@@ -703,7 +704,6 @@
                         "offset": 283,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -722,6 +722,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 51,
@@ -735,7 +736,6 @@
                         "offset": 293,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "crimson:cyan4",
                   },
@@ -760,6 +760,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 55,
@@ -773,7 +774,6 @@
                     "offset": 310,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n2",
               },
@@ -796,6 +796,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -809,7 +810,6 @@
                         "offset": 323,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -828,6 +828,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 26,
@@ -841,13 +842,13 @@
                         "offset": 329,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "triangle",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 36,
@@ -861,7 +862,6 @@
                         "offset": 340,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -880,6 +880,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 61,
@@ -893,7 +894,6 @@
                         "offset": 350,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "deepskyblue2:firebrick",
                   },
@@ -918,6 +918,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 65,
@@ -931,7 +932,6 @@
                     "offset": 376,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n1",
               },
@@ -954,6 +954,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -967,7 +968,6 @@
                         "offset": 389,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -986,6 +986,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 26,
@@ -999,13 +1000,13 @@
                         "offset": 395,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "pentagon",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 36,
@@ -1019,7 +1020,6 @@
                         "offset": 406,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -1038,6 +1038,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 52,
@@ -1051,7 +1052,6 @@
                         "offset": 416,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "gray24:gray88",
                   },
@@ -1076,6 +1076,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 56,
@@ -1089,7 +1090,6 @@
                     "offset": 433,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n0",
               },
@@ -1110,6 +1110,7 @@
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -1123,7 +1124,6 @@
                     "offset": 440,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -1142,6 +1142,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 23,
@@ -1155,13 +1156,13 @@
                     "offset": 448,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "X11 Colors",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 20,
@@ -1175,7 +1176,6 @@
                 "offset": 36,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "cluster_1",
           },
@@ -1198,6 +1198,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 32,
@@ -1211,7 +1212,6 @@
                     "offset": 487,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "fontcolor",
               },
@@ -1230,6 +1230,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 38,
@@ -1243,7 +1244,6 @@
                     "offset": 497,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "white",
               },
@@ -1252,6 +1252,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -1265,7 +1266,6 @@
                         "offset": 512,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "style",
                   },
@@ -1284,6 +1284,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 22,
@@ -1297,13 +1298,13 @@
                         "offset": 518,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "filled",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 28,
@@ -1317,7 +1318,6 @@
                         "offset": 525,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -1336,6 +1336,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 34,
@@ -1349,13 +1350,13 @@
                         "offset": 531,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "box",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 44,
@@ -1369,7 +1370,6 @@
                         "offset": 537,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -1388,6 +1388,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 59,
@@ -1401,7 +1402,6 @@
                         "offset": 547,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "bisque:brown",
                   },
@@ -1426,6 +1426,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 64,
@@ -1439,7 +1440,6 @@
                     "offset": 563,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n11",
               },
@@ -1462,6 +1462,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -1475,7 +1476,6 @@
                         "offset": 577,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -1494,6 +1494,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 25,
@@ -1507,13 +1508,13 @@
                         "offset": 583,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "ellipse",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 35,
@@ -1527,7 +1528,6 @@
                         "offset": 593,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -1546,6 +1546,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 54,
@@ -1559,7 +1560,6 @@
                         "offset": 603,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "green:darkorchid",
                   },
@@ -1584,6 +1584,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 59,
@@ -1597,7 +1598,6 @@
                     "offset": 623,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n10",
               },
@@ -1620,6 +1620,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -1633,7 +1634,6 @@
                         "offset": 637,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -1652,6 +1652,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 24,
@@ -1665,13 +1666,13 @@
                         "offset": 643,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "circle",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 34,
@@ -1685,7 +1686,6 @@
                         "offset": 652,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -1704,6 +1704,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 53,
@@ -1717,7 +1718,6 @@
                         "offset": 662,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "deepskyblue:gold",
                   },
@@ -1742,6 +1742,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 57,
@@ -1755,7 +1756,6 @@
                     "offset": 682,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n9",
               },
@@ -1778,6 +1778,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -1791,7 +1792,6 @@
                         "offset": 695,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -1810,6 +1810,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 25,
@@ -1823,13 +1824,13 @@
                         "offset": 701,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "diamond",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 35,
@@ -1843,7 +1844,6 @@
                         "offset": 711,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -1862,6 +1862,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 61,
@@ -1875,7 +1876,6 @@
                         "offset": 721,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "lightseagreen:orangered",
                   },
@@ -1900,6 +1900,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 65,
@@ -1913,7 +1914,6 @@
                     "offset": 748,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n8",
               },
@@ -1936,6 +1936,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -1949,7 +1950,6 @@
                         "offset": 761,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -1968,6 +1968,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 26,
@@ -1981,13 +1982,13 @@
                         "offset": 767,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "triangle",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 36,
@@ -2001,7 +2002,6 @@
                         "offset": 778,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -2020,6 +2020,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 55,
@@ -2033,7 +2034,6 @@
                         "offset": 788,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "turquoise:salmon",
                   },
@@ -2058,6 +2058,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 59,
@@ -2071,7 +2072,6 @@
                     "offset": 808,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n7",
               },
@@ -2094,6 +2094,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2107,7 +2108,6 @@
                         "offset": 821,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -2126,6 +2126,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 26,
@@ -2139,13 +2140,13 @@
                         "offset": 827,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "pentagon",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 36,
@@ -2159,7 +2160,6 @@
                         "offset": 838,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -2178,6 +2178,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 49,
@@ -2191,7 +2192,6 @@
                         "offset": 848,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "snow:black",
                   },
@@ -2216,6 +2216,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 53,
@@ -2229,7 +2230,6 @@
                     "offset": 862,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n6",
               },
@@ -2250,6 +2250,7 @@
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -2263,7 +2264,6 @@
                     "offset": 869,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -2282,6 +2282,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 23,
@@ -2295,13 +2296,13 @@
                     "offset": 877,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "SVG Colors",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 20,
@@ -2315,7 +2316,6 @@
                 "offset": 475,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "cluster_2",
           },
@@ -2338,6 +2338,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 32,
@@ -2351,7 +2352,6 @@
                     "offset": 916,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "fontcolor",
               },
@@ -2370,6 +2370,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 38,
@@ -2383,7 +2384,6 @@
                     "offset": 926,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "white",
               },
@@ -2392,6 +2392,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2405,7 +2406,6 @@
                         "offset": 941,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "style",
                   },
@@ -2424,6 +2424,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 22,
@@ -2437,13 +2438,13 @@
                         "offset": 947,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "filled",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 28,
@@ -2457,7 +2458,6 @@
                         "offset": 954,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -2476,6 +2476,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 34,
@@ -2489,13 +2490,13 @@
                         "offset": 960,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "box",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 44,
@@ -2509,7 +2510,6 @@
                         "offset": 966,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -2528,6 +2528,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 68,
@@ -2541,7 +2542,6 @@
                         "offset": 976,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/accent3/1:/accent3/3",
                   },
@@ -2566,6 +2566,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 73,
@@ -2579,7 +2580,6 @@
                     "offset": 1001,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n17",
               },
@@ -2602,6 +2602,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2615,7 +2616,6 @@
                         "offset": 1015,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -2634,6 +2634,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 25,
@@ -2647,13 +2648,13 @@
                         "offset": 1021,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "ellipse",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 35,
@@ -2667,7 +2668,6 @@
                         "offset": 1031,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -2686,6 +2686,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 59,
@@ -2699,7 +2700,6 @@
                         "offset": 1041,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/accent4/1:/accent4/4",
                   },
@@ -2724,6 +2724,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 64,
@@ -2737,7 +2738,6 @@
                     "offset": 1066,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n16",
               },
@@ -2760,6 +2760,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2773,7 +2774,6 @@
                         "offset": 1080,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -2792,6 +2792,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 24,
@@ -2805,13 +2806,13 @@
                         "offset": 1086,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "circle",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 34,
@@ -2825,7 +2826,6 @@
                         "offset": 1095,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -2844,6 +2844,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 58,
@@ -2857,7 +2858,6 @@
                         "offset": 1105,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/accent5/1:/accent5/5",
                   },
@@ -2882,6 +2882,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 63,
@@ -2895,7 +2896,6 @@
                     "offset": 1130,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n15",
               },
@@ -2918,6 +2918,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -2931,7 +2932,6 @@
                         "offset": 1144,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -2950,6 +2950,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 25,
@@ -2963,13 +2964,13 @@
                         "offset": 1150,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "diamond",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 35,
@@ -2983,7 +2984,6 @@
                         "offset": 1160,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -3002,6 +3002,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 59,
@@ -3015,7 +3016,6 @@
                         "offset": 1170,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/accent6/1:/accent6/6",
                   },
@@ -3040,6 +3040,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 64,
@@ -3053,7 +3054,6 @@
                     "offset": 1195,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n14",
               },
@@ -3076,6 +3076,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -3089,7 +3090,6 @@
                         "offset": 1209,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -3108,6 +3108,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 26,
@@ -3121,13 +3122,13 @@
                         "offset": 1215,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "triangle",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 36,
@@ -3141,7 +3142,6 @@
                         "offset": 1226,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -3160,6 +3160,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 60,
@@ -3173,7 +3174,6 @@
                         "offset": 1236,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/accent7/1:/accent7/7",
                   },
@@ -3198,6 +3198,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 65,
@@ -3211,7 +3212,6 @@
                     "offset": 1261,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n13",
               },
@@ -3234,6 +3234,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -3247,7 +3248,6 @@
                         "offset": 1275,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -3266,6 +3266,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 26,
@@ -3279,13 +3280,13 @@
                         "offset": 1281,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "pentagon",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 36,
@@ -3299,7 +3300,6 @@
                         "offset": 1292,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -3318,6 +3318,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 60,
@@ -3331,7 +3332,6 @@
                         "offset": 1302,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/accent8/1:/accent8/8",
                   },
@@ -3356,6 +3356,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 65,
@@ -3369,7 +3370,6 @@
                     "offset": 1327,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n12",
               },
@@ -3390,6 +3390,7 @@
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -3403,7 +3404,6 @@
                     "offset": 1335,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -3422,6 +3422,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 28,
@@ -3435,13 +3436,13 @@
                     "offset": 1343,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Brewer - accent",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 20,
@@ -3455,7 +3456,6 @@
                 "offset": 904,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "cluster_3",
           },
@@ -3478,6 +3478,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 32,
@@ -3491,7 +3492,6 @@
                     "offset": 1387,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "fontcolor",
               },
@@ -3510,6 +3510,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 38,
@@ -3523,7 +3524,6 @@
                     "offset": 1397,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "white",
               },
@@ -3532,6 +3532,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -3545,7 +3546,6 @@
                         "offset": 1412,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "style",
                   },
@@ -3564,6 +3564,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 22,
@@ -3577,13 +3578,13 @@
                         "offset": 1418,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "filled",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 28,
@@ -3597,7 +3598,6 @@
                         "offset": 1425,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -3616,6 +3616,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 34,
@@ -3629,13 +3630,13 @@
                         "offset": 1431,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "box",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 44,
@@ -3649,7 +3650,6 @@
                         "offset": 1437,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -3668,6 +3668,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 66,
@@ -3681,7 +3682,6 @@
                         "offset": 1447,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/blues3/1:/blues3/2",
                   },
@@ -3706,6 +3706,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 71,
@@ -3719,7 +3720,6 @@
                     "offset": 1470,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n23",
               },
@@ -3742,6 +3742,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -3755,7 +3756,6 @@
                         "offset": 1484,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -3774,6 +3774,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 25,
@@ -3787,13 +3788,13 @@
                         "offset": 1490,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "ellipse",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 35,
@@ -3807,7 +3808,6 @@
                         "offset": 1500,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -3826,6 +3826,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 57,
@@ -3839,7 +3840,6 @@
                         "offset": 1510,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/blues4/1:/blues4/3",
                   },
@@ -3864,6 +3864,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 62,
@@ -3877,7 +3878,6 @@
                     "offset": 1533,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n22",
               },
@@ -3900,6 +3900,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -3913,7 +3914,6 @@
                         "offset": 1547,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -3932,6 +3932,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 24,
@@ -3945,13 +3946,13 @@
                         "offset": 1553,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "circle",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 34,
@@ -3965,7 +3966,6 @@
                         "offset": 1562,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -3984,6 +3984,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 56,
@@ -3997,7 +3998,6 @@
                         "offset": 1572,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/blues5/1:/blues5/4",
                   },
@@ -4022,6 +4022,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 61,
@@ -4035,7 +4036,6 @@
                     "offset": 1595,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n21",
               },
@@ -4058,6 +4058,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -4071,7 +4072,6 @@
                         "offset": 1609,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -4090,6 +4090,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 25,
@@ -4103,13 +4104,13 @@
                         "offset": 1615,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "diamond",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 35,
@@ -4123,7 +4124,6 @@
                         "offset": 1625,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -4142,6 +4142,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 57,
@@ -4155,7 +4156,6 @@
                         "offset": 1635,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/blues6/1:/blues6/5",
                   },
@@ -4180,6 +4180,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 62,
@@ -4193,7 +4194,6 @@
                     "offset": 1658,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n20",
               },
@@ -4216,6 +4216,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -4229,7 +4230,6 @@
                         "offset": 1672,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -4248,6 +4248,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 26,
@@ -4261,13 +4262,13 @@
                         "offset": 1678,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "triangle",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 36,
@@ -4281,7 +4282,6 @@
                         "offset": 1689,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -4300,6 +4300,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 58,
@@ -4313,7 +4314,6 @@
                         "offset": 1699,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/blues7/1:/blues7/6",
                   },
@@ -4338,6 +4338,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 63,
@@ -4351,7 +4352,6 @@
                     "offset": 1722,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n19",
               },
@@ -4374,6 +4374,7 @@
               "children": [
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 15,
@@ -4387,7 +4388,6 @@
                         "offset": 1736,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "shape",
                   },
@@ -4406,6 +4406,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 26,
@@ -4419,13 +4420,13 @@
                         "offset": 1742,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "pentagon",
                   },
                 },
                 {
                   "key": {
+                    "kind": "bare",
                     "location": {
                       "end": {
                         "column": 36,
@@ -4439,7 +4440,6 @@
                         "offset": 1753,
                       },
                     },
-                    "quoted": false,
                     "type": "Literal",
                     "value": "fillcolor",
                   },
@@ -4458,6 +4458,7 @@
                   },
                   "type": "Attribute",
                   "value": {
+                    "kind": "quoted",
                     "location": {
                       "end": {
                         "column": 58,
@@ -4471,7 +4472,6 @@
                         "offset": 1763,
                       },
                     },
-                    "quoted": true,
                     "type": "Literal",
                     "value": "/blues8/1:/blues8/7",
                   },
@@ -4496,6 +4496,7 @@
             {
               "children": [],
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 63,
@@ -4509,7 +4510,6 @@
                     "offset": 1786,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n18",
               },
@@ -4530,6 +4530,7 @@
             },
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 8,
@@ -4543,7 +4544,6 @@
                     "offset": 1794,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -4562,6 +4562,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 27,
@@ -4575,13 +4576,13 @@
                     "offset": 1802,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "Brewer - blues",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 20,
@@ -4595,7 +4596,6 @@
                 "offset": 1375,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "cluster_4",
           },
@@ -4632,6 +4632,7 @@
           "targets": [
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 3,
@@ -4645,7 +4646,6 @@
                     "offset": 1824,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n3",
               },
@@ -4666,6 +4666,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 9,
@@ -4679,7 +4680,6 @@
                     "offset": 1830,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n9",
               },
@@ -4700,6 +4700,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 16,
@@ -4713,7 +4714,6 @@
                     "offset": 1836,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n15",
               },
@@ -4734,6 +4734,7 @@
             },
             {
               "id": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 23,
@@ -4747,7 +4748,6 @@
                     "offset": 1843,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "n21",
               },
@@ -4772,6 +4772,7 @@
       ],
       "directed": true,
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 10,
@@ -4785,7 +4786,6 @@
             "offset": 8,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "G",
       },

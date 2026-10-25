@@ -6,6 +6,7 @@
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 14,
@@ -19,7 +20,6 @@
                     "offset": 26,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "shape",
               },
@@ -38,6 +38,7 @@
               },
               "type": "Attribute",
               "value": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 18,
@@ -51,7 +52,6 @@
                     "offset": 32,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "box",
               },
@@ -76,6 +76,7 @@
         {
           "children": [],
           "id": {
+            "kind": "quoted",
             "location": {
               "end": {
                 "column": 25,
@@ -89,7 +90,6 @@
                 "offset": 40,
               },
             },
-            "quoted": true,
             "type": "Literal",
             "value": "//absl/random:random",
           },
@@ -126,6 +126,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 25,
@@ -139,7 +140,6 @@
                     "offset": 65,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random:random",
               },
@@ -160,6 +160,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 58,
@@ -173,7 +174,6 @@
                     "offset": 91,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random:distributions",
               },
@@ -213,6 +213,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 25,
@@ -226,7 +227,6 @@
                     "offset": 123,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random:random",
               },
@@ -247,6 +247,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 59,
@@ -260,7 +261,6 @@
                     "offset": 149,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random:seed_sequences",
               },
@@ -300,6 +300,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 25,
@@ -313,7 +314,6 @@
                     "offset": 182,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random:random",
               },
@@ -334,6 +334,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 63,
@@ -347,7 +348,6 @@
                     "offset": 208,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:pool_urbg",
               },
@@ -387,6 +387,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 25,
@@ -400,7 +401,6 @@
                     "offset": 245,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random:random",
               },
@@ -421,6 +421,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 68,
@@ -434,7 +435,6 @@
                     "offset": 271,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:nonsecure_base",
               },
@@ -459,6 +459,7 @@
         {
           "children": [],
           "id": {
+            "kind": "quoted",
             "location": {
               "end": {
                 "column": 32,
@@ -472,7 +473,6 @@
                 "offset": 313,
               },
             },
-            "quoted": true,
             "type": "Literal",
             "value": "//absl/random:distributions",
           },
@@ -509,6 +509,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 32,
@@ -522,7 +523,6 @@
                     "offset": 345,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random:distributions",
               },
@@ -543,6 +543,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 60,
@@ -556,7 +557,6 @@
                     "offset": 378,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/strings:strings",
               },
@@ -581,6 +581,7 @@
         {
           "children": [],
           "id": {
+            "kind": "quoted",
             "location": {
               "end": {
                 "column": 33,
@@ -594,7 +595,6 @@
                 "offset": 405,
               },
             },
-            "quoted": true,
             "type": "Literal",
             "value": "//absl/random:seed_sequences",
           },
@@ -631,6 +631,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 33,
@@ -644,7 +645,6 @@
                     "offset": 438,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random:seed_sequences",
               },
@@ -665,6 +665,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 75,
@@ -678,7 +679,6 @@
                     "offset": 472,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:seed_material",
               },
@@ -718,6 +718,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 33,
@@ -731,7 +732,6 @@
                     "offset": 513,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random:seed_sequences",
               },
@@ -752,6 +752,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 77,
@@ -765,7 +766,6 @@
                     "offset": 547,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:salted_seed_seq",
               },
@@ -805,6 +805,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 33,
@@ -818,7 +819,6 @@
                     "offset": 590,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random:seed_sequences",
               },
@@ -839,6 +839,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 71,
@@ -852,7 +853,6 @@
                     "offset": 624,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:pool_urbg",
               },
@@ -892,6 +892,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 33,
@@ -905,7 +906,6 @@
                     "offset": 661,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random:seed_sequences",
               },
@@ -926,6 +926,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 76,
@@ -939,7 +940,6 @@
                     "offset": 695,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:nonsecure_base",
               },
@@ -964,6 +964,7 @@
         {
           "children": [],
           "id": {
+            "kind": "quoted",
             "location": {
               "end": {
                 "column": 42,
@@ -977,7 +978,6 @@
                 "offset": 737,
               },
             },
-            "quoted": true,
             "type": "Literal",
             "value": "//absl/random/internal:nonsecure_base",
           },
@@ -1014,6 +1014,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 42,
@@ -1027,7 +1028,6 @@
                     "offset": 779,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:nonsecure_base",
               },
@@ -1048,6 +1048,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 80,
@@ -1061,7 +1062,6 @@
                     "offset": 822,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:pool_urbg",
               },
@@ -1101,6 +1101,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 42,
@@ -1114,7 +1115,6 @@
                     "offset": 859,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:nonsecure_base",
               },
@@ -1135,6 +1135,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 86,
@@ -1148,7 +1149,6 @@
                     "offset": 902,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:salted_seed_seq",
               },
@@ -1188,6 +1188,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 42,
@@ -1201,7 +1202,6 @@
                     "offset": 945,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:nonsecure_base",
               },
@@ -1222,6 +1222,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 84,
@@ -1235,7 +1236,6 @@
                     "offset": 988,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:seed_material",
               },
@@ -1260,6 +1260,7 @@
         {
           "children": [],
           "id": {
+            "kind": "quoted",
             "location": {
               "end": {
                 "column": 37,
@@ -1273,7 +1274,6 @@
                 "offset": 1029,
               },
             },
-            "quoted": true,
             "type": "Literal",
             "value": "//absl/random/internal:pool_urbg",
           },
@@ -1310,6 +1310,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 37,
@@ -1323,7 +1324,6 @@
                     "offset": 1066,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:pool_urbg",
               },
@@ -1344,6 +1344,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 79,
@@ -1357,7 +1358,6 @@
                     "offset": 1104,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:seed_material",
               },
@@ -1382,6 +1382,7 @@
         {
           "children": [],
           "id": {
+            "kind": "quoted",
             "location": {
               "end": {
                 "column": 43,
@@ -1395,7 +1396,6 @@
                 "offset": 1145,
               },
             },
-            "quoted": true,
             "type": "Literal",
             "value": "//absl/random/internal:salted_seed_seq",
           },
@@ -1432,6 +1432,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 43,
@@ -1445,7 +1446,6 @@
                     "offset": 1188,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:salted_seed_seq",
               },
@@ -1466,6 +1466,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 85,
@@ -1479,7 +1480,6 @@
                     "offset": 1232,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:seed_material",
               },
@@ -1504,6 +1504,7 @@
         {
           "children": [],
           "id": {
+            "kind": "quoted",
             "location": {
               "end": {
                 "column": 41,
@@ -1517,7 +1518,6 @@
                 "offset": 1273,
               },
             },
-            "quoted": true,
             "type": "Literal",
             "value": "//absl/random/internal:seed_material",
           },
@@ -1554,6 +1554,7 @@
           "targets": [
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 41,
@@ -1567,7 +1568,6 @@
                     "offset": 1314,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/random/internal:seed_material",
               },
@@ -1588,6 +1588,7 @@
             },
             {
               "id": {
+                "kind": "quoted",
                 "location": {
                   "end": {
                     "column": 69,
@@ -1601,7 +1602,6 @@
                     "offset": 1356,
                   },
                 },
-                "quoted": true,
                 "type": "Literal",
                 "value": "//absl/strings:strings",
               },
@@ -1626,6 +1626,7 @@
         {
           "children": [],
           "id": {
+            "kind": "quoted",
             "location": {
               "end": {
                 "column": 27,
@@ -1639,7 +1640,6 @@
                 "offset": 1383,
               },
             },
-            "quoted": true,
             "type": "Literal",
             "value": "//absl/strings:strings",
           },
@@ -1661,6 +1661,7 @@
       ],
       "directed": true,
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 16,
@@ -1674,7 +1675,6 @@
             "offset": 8,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "mygraph",
       },

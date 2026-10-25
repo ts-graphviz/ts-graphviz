@@ -4,11 +4,11 @@ import { ASTNodeCountExceededError } from './errors.js';
 
 describe('createElement', () => {
   test('node shapes: leaves have no children, groups have refs, no null location', () => {
-    const literal = createElement('Literal', { value: 'a', quoted: false }, []);
+    const literal = createElement('Literal', { value: 'a', kind: 'bare' }, []);
     expect(literal).toStrictEqual({
       type: 'Literal',
       value: 'a',
-      quoted: false,
+      kind: 'bare',
     });
     expect('location' in literal).toBe(false);
 
@@ -23,11 +23,11 @@ describe('createElement', () => {
   });
 
   test('children and refs in props are ignored; the third argument wins', () => {
-    const literal = createElement('Literal', { value: 'a', quoted: false });
+    const literal = createElement('Literal', { value: 'a', kind: 'bare' });
     const ref = createElement('NodeRef', { id: literal });
     const leaf = createElement('Literal', {
       value: 'a',
-      quoted: false,
+      kind: 'bare',
       children: [ref],
     } as never);
     expect('children' in leaf).toBe(false);
@@ -56,7 +56,7 @@ describe('createElement', () => {
     const ast = createElement('Node', {
       id: createElement('Literal', {
         value: 'node_id',
-        quoted: false,
+        kind: 'bare',
       }),
     });
     expect(ast).toMatchSnapshot();
@@ -68,13 +68,13 @@ describe('createElement', () => {
         createElement('NodeRef', {
           id: createElement('Literal', {
             value: 'a',
-            quoted: true,
+            kind: 'quoted',
           }),
         }),
         createElement('NodeRef', {
           id: createElement('Literal', {
             value: 'b',
-            quoted: true,
+            kind: 'quoted',
           }),
         }),
       ],
@@ -86,7 +86,7 @@ describe('createElement', () => {
     const ast = createElement('NodeRef', {
       id: createElement('Literal', {
         value: 'b',
-        quoted: true,
+        kind: 'quoted',
       }),
     });
     expect(ast).toMatchSnapshot();
@@ -97,13 +97,13 @@ describe('createElement', () => {
       createElement('NodeRef', {
         id: createElement('Literal', {
           value: 'a',
-          quoted: true,
+          kind: 'quoted',
         }),
       }),
       createElement('NodeRef', {
         id: createElement('Literal', {
           value: 'b',
-          quoted: true,
+          kind: 'quoted',
         }),
       }),
     ]);
@@ -118,7 +118,7 @@ describe('createElement', () => {
   test('Literal', () => {
     const ast = createElement('Literal', {
       value: 'literal value',
-      quoted: true,
+      kind: 'quoted',
     });
     expect(ast).toMatchSnapshot();
   });
@@ -135,11 +135,11 @@ describe('createElement', () => {
     const ast = createElement('Attribute', {
       key: createElement('Literal', {
         value: 'color',
-        quoted: false,
+        kind: 'bare',
       }),
       value: createElement('Literal', {
         value: 'red',
-        quoted: false,
+        kind: 'bare',
       }),
     });
     expect(ast).toMatchSnapshot();
@@ -151,7 +151,7 @@ describe('[SM-1] the shared createElement', () => {
   test('does not stop after 100,000 nodes in one process', () => {
     expect(() => {
       for (let i = 0; i < 100_001; i++) {
-        createElement('Literal', { value: 'a', quoted: false }, []);
+        createElement('Literal', { value: 'a', kind: 'bare' }, []);
       }
     }).not.toThrow();
   });
@@ -164,24 +164,24 @@ describe('createElementFactory', () => {
 
     // Each factory produces its own counter
     for (let i = 0; i < 10; i++) {
-      createElement1('Literal', { value: `a${i}`, quoted: false }, []);
+      createElement1('Literal', { value: `a${i}`, kind: 'bare' }, []);
     }
 
     // createElement2 should not be affected by createElement1's count
     expect(() =>
-      createElement2('Literal', { value: 'b', quoted: false }, []),
+      createElement2('Literal', { value: 'b', kind: 'bare' }, []),
     ).not.toThrow();
   });
 
   test('respects maxASTNodes option', () => {
     const createElement = createElementFactory({ maxASTNodes: 3 });
 
-    createElement('Literal', { value: 'a', quoted: false }, []);
-    createElement('Literal', { value: 'b', quoted: false }, []);
-    createElement('Literal', { value: 'c', quoted: false }, []);
+    createElement('Literal', { value: 'a', kind: 'bare' }, []);
+    createElement('Literal', { value: 'b', kind: 'bare' }, []);
+    createElement('Literal', { value: 'c', kind: 'bare' }, []);
 
     expect(() =>
-      createElement('Literal', { value: 'd', quoted: false }, []),
+      createElement('Literal', { value: 'd', kind: 'bare' }, []),
     ).toThrow(ASTNodeCountExceededError);
   });
 
@@ -190,7 +190,7 @@ describe('createElementFactory', () => {
 
     // Should not throw even with many nodes
     for (let i = 0; i < 1000; i++) {
-      createElement('Literal', { value: `v${i}`, quoted: false }, []);
+      createElement('Literal', { value: `v${i}`, kind: 'bare' }, []);
     }
   });
 
@@ -199,7 +199,7 @@ describe('createElementFactory', () => {
     for (let i = 0; i < 200; i++) {
       const createElement = createElementFactory({ maxASTNodes: 1000 });
       for (let j = 0; j < 10; j++) {
-        createElement('Literal', { value: `v${j}`, quoted: false }, []);
+        createElement('Literal', { value: `v${j}`, kind: 'bare' }, []);
       }
     }
     // Total nodes created = 2000, but no single factory exceeded 1000

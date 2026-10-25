@@ -190,7 +190,7 @@ const CONTROL = /[\0-\x08\x0b\x0c\x0e-\x1f\ufffe\uffff]/;
 function textOf(literal: LiteralASTNode): string {
   // A quoted literal keeps escapes as written; Graphviz only turns `\"`
   // into `"` (line continuations are already removed by the parser).
-  return literal.quoted === true
+  return literal.kind === 'quoted'
     ? literal.value.replaceAll('\\"', '"')
     : literal.value;
 }
@@ -307,9 +307,9 @@ function checkAttribute(
   if (fileProblem !== undefined) {
     throw unsafe(`${at} ${fileProblem}.`);
   }
-  const decoded = TEXT_ATTRIBUTES.has(key) || attribute.value.quoted === 'html';
+  const decoded = TEXT_ATTRIBUTES.has(key) || attribute.value.kind === 'html';
   checkCharacters(value, at, decoded);
-  if (attribute.value.quoted !== 'html') {
+  if (attribute.value.kind !== 'html') {
     checkSubstitutions(value, at, decoded, state);
   }
   if (URL_ATTRIBUTES.has(key)) {
@@ -440,7 +440,7 @@ function checkSafety(rules: FormatRules) {
           checkAttribute(node, rules, state);
           break;
         case 'Literal':
-          if (node.quoted === 'html') checkHtml(node, rules, state);
+          if (node.kind === 'html') checkHtml(node, rules, state);
           break;
         case 'Graph':
         case 'Subgraph':

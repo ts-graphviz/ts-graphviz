@@ -9,6 +9,7 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -22,7 +23,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
                     "offset": 18,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -41,6 +41,7 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
               },
               "type": "Attribute",
               "value": {
+                "kind": "html",
                 "location": {
                   "end": {
                     "column": 51,
@@ -54,13 +55,13 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
                     "offset": 24,
                   },
                 },
-                "quoted": "html",
                 "type": "Literal",
                 "value": "<table><tr><td>NOK</td></tr></table>",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -74,7 +75,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
                 "offset": 15,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "a",
           },
@@ -97,6 +97,7 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -110,7 +111,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
                     "offset": 70,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -129,6 +129,7 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
               },
               "type": "Attribute",
               "value": {
+                "kind": "html",
                 "location": {
                   "end": {
                     "column": 24,
@@ -142,13 +143,13 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
                     "offset": 76,
                   },
                 },
-                "quoted": "html",
                 "type": "Literal",
                 "value": "<b>NOK<b>",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -162,7 +163,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
                 "offset": 67,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "b",
           },
@@ -185,6 +185,7 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
           "children": [
             {
               "key": {
+                "kind": "bare",
                 "location": {
                   "end": {
                     "column": 12,
@@ -198,7 +199,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
                     "offset": 95,
                   },
                 },
-                "quoted": false,
                 "type": "Literal",
                 "value": "label",
               },
@@ -217,6 +217,7 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
               },
               "type": "Attribute",
               "value": {
+                "kind": "html",
                 "location": {
                   "end": {
                     "column": 17,
@@ -230,13 +231,13 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
                     "offset": 101,
                   },
                 },
-                "quoted": "html",
                 "type": "Literal",
                 "value": "OK",
               },
             },
           ],
           "id": {
+            "kind": "bare",
             "location": {
               "end": {
                 "column": 5,
@@ -250,7 +251,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
                 "offset": 92,
               },
             },
-            "quoted": false,
             "type": "Literal",
             "value": "c",
           },
@@ -272,6 +272,7 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
       ],
       "directed": true,
       "id": {
+        "kind": "bare",
         "location": {
           "end": {
             "column": 10,
@@ -285,7 +286,6 @@ exports[`HTML-like label handling in AST parser and DOT serializer > parses HTML
             "offset": 8,
           },
         },
-        "quoted": false,
         "type": "Literal",
         "value": "g",
       },

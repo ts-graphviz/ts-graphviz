@@ -22,7 +22,7 @@ export const GraphPlugin: ConvertFromModelPlugin<RootGraphModel> = {
                 'Literal',
                 {
                   value: idToRaw(model.id),
-                  quoted: true,
+                  kind: 'quoted',
                 },
                 [],
               )

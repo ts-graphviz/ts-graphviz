@@ -193,7 +193,7 @@ describe('parse', () => {
       test.each(['￠', '😀', 'kéy', 'ñ1'])('%s parses bare', (id) => {
         const result = parse(`${id} -- b;`, { startRule: 'Edge' });
         expect(result.targets[0]).toMatchObject({
-          id: { value: id, quoted: false },
+          id: { value: id, kind: 'bare' },
         });
       });
     });
@@ -236,8 +236,8 @@ describe('parse', () => {
 
       test('an empty quoted compass point printed by dot -Tcanon parses (#1641)', () => {
         expect(ref('a:"":""')).toMatchObject({
-          port: { value: '', quoted: true },
-          compass: { value: '', quoted: true },
+          port: { value: '', kind: 'quoted' },
+          compass: { value: '', kind: 'quoted' },
         });
       });
     });

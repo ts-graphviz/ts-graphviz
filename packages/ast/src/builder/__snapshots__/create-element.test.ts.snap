@@ -3,13 +3,13 @@
 exports[`createElement > Attribute 1`] = `
 {
   "key": {
-    "quoted": false,
+    "kind": "bare",
     "type": "Literal",
     "value": "color",
   },
   "type": "Attribute",
   "value": {
-    "quoted": false,
+    "kind": "bare",
     "type": "Literal",
     "value": "red",
   },
@@ -37,7 +37,7 @@ exports[`createElement > Edge 1`] = `
   "targets": [
     {
       "id": {
-        "quoted": true,
+        "kind": "quoted",
         "type": "Literal",
         "value": "a",
       },
@@ -45,7 +45,7 @@ exports[`createElement > Edge 1`] = `
     },
     {
       "id": {
-        "quoted": true,
+        "kind": "quoted",
         "type": "Literal",
         "value": "b",
       },
@@ -67,7 +67,7 @@ exports[`createElement > Graph 1`] = `
 
 exports[`createElement > Literal 1`] = `
 {
-  "quoted": true,
+  "kind": "quoted",
   "type": "Literal",
   "value": "literal value",
 }
@@ -77,7 +77,7 @@ exports[`createElement > Node 1`] = `
 {
   "children": [],
   "id": {
-    "quoted": false,
+    "kind": "bare",
     "type": "Literal",
     "value": "node_id",
   },
@@ -88,7 +88,7 @@ exports[`createElement > Node 1`] = `
 exports[`createElement > NodeRef 1`] = `
 {
   "id": {
-    "quoted": true,
+    "kind": "quoted",
     "type": "Literal",
     "value": "b",
   },
@@ -101,7 +101,7 @@ exports[`createElement > NodeRefGroup 1`] = `
   "refs": [
     {
       "id": {
-        "quoted": true,
+        "kind": "quoted",
         "type": "Literal",
         "value": "a",
       },
@@ -109,7 +109,7 @@ exports[`createElement > NodeRefGroup 1`] = `
     },
     {
       "id": {
-        "quoted": true,
+        "kind": "quoted",
         "type": "Literal",
         "value": "b",
       },

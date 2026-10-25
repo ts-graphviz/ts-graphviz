@@ -9,7 +9,7 @@ exports[`Edge grouping feature > AST conversion > should include a NodeRefGroup 
         {
           "compass": undefined,
           "id": {
-            "quoted": true,
+            "kind": "quoted",
             "type": "Literal",
             "value": "a",
           },
@@ -21,7 +21,7 @@ exports[`Edge grouping feature > AST conversion > should include a NodeRefGroup 
             {
               "compass": undefined,
               "id": {
-                "quoted": true,
+                "kind": "quoted",
                 "type": "Literal",
                 "value": "b",
               },
@@ -31,7 +31,7 @@ exports[`Edge grouping feature > AST conversion > should include a NodeRefGroup 
             {
               "compass": undefined,
               "id": {
-                "quoted": true,
+                "kind": "quoted",
                 "type": "Literal",
                 "value": "c",
               },

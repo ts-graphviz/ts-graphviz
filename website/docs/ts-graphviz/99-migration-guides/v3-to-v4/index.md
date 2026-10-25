@@ -99,6 +99,7 @@ The augmentation points (`Attribute.$keys`, `Attribute.$types`, `EdgeAttributeKe
 
 - Leaf nodes (`Literal`, `Attribute`, `Comment`, `NodeRef`) have no `children` and extend `ASTBaseNode` directly; `ASTBaseParentNode` is only for statement containers. `NodeRefGroup` keeps its references in `refs`, and `ASTChildNode<T>` resolves to `NodeRefASTNode` for it and to `never` for leaves. `location` is absent (not `null`) outside the parser. `createElement` keeps its three-argument form.
 - The `*ASTPropaties` types are spelled `*ASTProperties`.
+- `Literal`'s `quoted: boolean | 'html'` is replaced by `kind: 'bare' | 'quoted' | 'html'` (`LiteralKind`): `quoted: false` → `kind: 'bare'`, `quoted: true` → `kind: 'quoted'`, `quoted: 'html'` → `kind: 'html'`. The old field mixed how a string is written (bare or quoted, which Graphviz reads the same) with what it is (an HTML-like value), and `if (literal.quoted)` was also true for HTML strings.
 - A quoted `Literal` holds the raw source text (escape sequences intact) and `stringify` writes it back verbatim; escaping and unescaping happen in the model ⇄ AST conversion.
 - The shared `createElement` no longer counts nodes across calls; use `createElementFactory({ maxASTNodes })` for a limit.
 
