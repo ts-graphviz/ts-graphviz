@@ -15,6 +15,12 @@ allowBuilds:
 catalog:
   '@microsoft/api-extractor': ^7.59.4
   '@types/node': ^22.20.5
+  # TypeScript 7 type-checks (`@typescript/native`; root scripts call its tsc
+  # by path, since both packages provide a `tsc` command). 7.0 has no
+  # compiler API, so tools that import `typescript` (vite-plugin-dts with API
+  # Extractor, typedoc, the attribute codegen) stay on 6.0 until they support
+  # the API that TypeScript 7.1 is to bring.
+  '@typescript/native': npm:typescript@^7.0.2
   typescript: ^6.0.3
   vite: ^8.3.5
   vite-plugin-dts: ^5.1.2
