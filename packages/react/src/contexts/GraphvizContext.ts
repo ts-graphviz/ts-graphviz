@@ -1,5 +1,5 @@
 import type { ModelsContext } from '@ts-graphviz/common';
-import { createContext } from 'react';
+import { createContext, type Context as ReactContext } from 'react';
 import type { AnyGraphContainer } from '../types/container.js';
 
 export interface Context<
@@ -10,5 +10,6 @@ export interface Context<
   models: ModelsContext;
 }
 
-export const GraphvizContext = createContext<Context | null>(null);
+export const GraphvizContext: ReactContext<Context | null> =
+  createContext<Context | null>(null);
 GraphvizContext.displayName = 'GraphvizContext';

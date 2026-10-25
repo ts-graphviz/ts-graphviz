@@ -7,7 +7,7 @@ import { convertComment } from './convert-comment.js';
 export function convertClusterChildren(
   context: ConvertFromModelContext,
   model: GraphBaseModel,
-) {
+): ClusterStatementASTNode[] {
   const { createElement } = context;
   return Array.from(
     (function* (): Generator<ClusterStatementASTNode> {

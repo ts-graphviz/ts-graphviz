@@ -5,6 +5,8 @@
     "lib": ["ES2022"],
     "types": ["node"],
     "strict": true,
+    "isolatedDeclarations": true,
+    "declaration": true,
     "alwaysStrict": true,
     "strictNullChecks": true,
     "outDir": "lib",

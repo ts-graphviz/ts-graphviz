@@ -1,4 +1,4 @@
-import { withCode } from '@ts-graphviz/common';
+import { type CodedError, withCode } from '@ts-graphviz/common';
 
 /** Default for `maxOutputSize`: 128 MiB. */
 const DEFAULT_MAX_OUTPUT_SIZE = 128 * 1024 * 1024;
@@ -20,7 +20,10 @@ export function outputLimit(options: { maxOutputSize?: number }): number {
   return limit;
 }
 
-export function outputLimitExceeded(command: string, limit: number) {
+export function outputLimitExceeded(
+  command: string,
+  limit: number,
+): Omit<RangeError, 'code'> & CodedError<'TSG_ERR_OUTPUT_LIMIT_EXCEEDED'> {
   return withCode(
     new RangeError(
       `Command "${command}" wrote more than ${limit} bytes (maxOutputSize) and was stopped.`,
@@ -36,7 +39,7 @@ export function outputLimitExceeded(command: string, limit: number) {
 export class TailBuffer {
   #chunks: Uint8Array[] = [];
   #size = 0;
-  constructor(private readonly max = MAX_STDERR_SIZE) {}
+  constructor(private readonly max: number = MAX_STDERR_SIZE) {}
   push(chunk: Uint8Array): void {
     this.#chunks.push(chunk);
     this.#size += chunk.byteLength;

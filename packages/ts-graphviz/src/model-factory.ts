@@ -1,7 +1,11 @@
 import type { ModelsContext } from '@ts-graphviz/common';
 import { createModelsContext } from '@ts-graphviz/core';
 import { createModelFactories } from './model-factory-builder.js';
-import type { ModelFactories, ModelFactoriesWithStrict } from './types.js';
+import type {
+  ModelFactories,
+  ModelFactoriesWithStrict,
+  ModelFactory,
+} from './types.js';
 
 const noStrict: ModelFactories = createModelFactories(false);
 
@@ -9,13 +13,13 @@ const noStrict: ModelFactories = createModelFactories(false);
  *  digraph is a factory for creating Digraph objects.
  * @group Model Factory
  */
-export const digraph = noStrict.digraph;
+export const digraph: ModelFactory = noStrict.digraph;
 
 /**
  * graph is a factory for creating Graph objects.
  * @group Model Factory
  */
-export const graph = noStrict.graph;
+export const graph: ModelFactory = noStrict.graph;
 
 /**
  * Provides a strict mode API.

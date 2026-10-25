@@ -56,7 +56,7 @@ export function expectSubgraph(
 export function expectModelsToContainTypes(
   models: DotObjectModel[],
   expectedTypes: Array<'Node' | 'Edge' | 'Graph' | 'Subgraph'>,
-) {
+): void {
   const actualTypes = models.map((m) => m.$$type);
   for (const type of expectedTypes) {
     expect(actualTypes).toContain(type);
@@ -87,7 +87,7 @@ export function expectGraphStructure(
     subgraphCount?: number;
     directed?: boolean;
   },
-) {
+): void {
   if (expected.nodeCount !== undefined) {
     expect(graph.nodes.length).toBe(expected.nodeCount);
   }
