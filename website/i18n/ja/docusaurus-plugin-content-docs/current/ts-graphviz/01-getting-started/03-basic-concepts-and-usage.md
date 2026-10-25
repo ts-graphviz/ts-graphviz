@@ -11,6 +11,9 @@ description: グラフを構築・操作するための ts-graphviz の基本を
 ノードはグラフの基本単位であり、エンティティやオブジェクトを表します。
 
 ```typescript
+import { digraph } from 'ts-graphviz';
+
+const g = digraph('G');
 g.node('Node1', { label: 'ノード 1', color: 'red' });
 ```
 
@@ -34,6 +37,9 @@ g.node('Node1', { label: 'ノード 1', color: 'red' });
 エッジはノード間の関係や接続を表します。
 
 ```typescript
+import { digraph } from 'ts-graphviz';
+
+const g = digraph('G');
 g.edge(['Node1', 'Node2'], { label: 'エッジラベル', color: 'blue' });
 ```
 
@@ -57,6 +63,9 @@ g.edge(['Node1', 'Node2'], { label: 'エッジラベル', color: 'blue' });
 サブグラフを使用すると、ノードやエッジをグループ化できます。これは、クラスターを作成したり、レイアウトを制御したりする際によく使われます。
 
 ```typescript
+import { digraph } from 'ts-graphviz';
+
+const g = digraph('G');
 g.subgraph('ClusterA', { label: 'クラスター A' }, (cluster) => {
   cluster.node('A1');
   cluster.node('A2');

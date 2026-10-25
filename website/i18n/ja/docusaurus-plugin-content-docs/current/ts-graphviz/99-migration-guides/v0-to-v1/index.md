@@ -85,8 +85,9 @@ const newDot = stringify(ast);
 **例：**
 
 ```typescript
-import { attribute } from 'ts-graphviz';
+import { attribute, digraph } from 'ts-graphviz';
 
+const g = digraph('G');
 g.node('Node1', {
   [attribute.label]: '私のノード',
   [attribute.color]: 'red',

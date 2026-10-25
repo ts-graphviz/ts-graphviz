@@ -11,6 +11,9 @@ In this section, we'll cover the fundamental concepts of `ts-graphviz` and how t
 Nodes are the basic units of a graph, representing entities or objects.
 
 ```typescript
+import { digraph } from 'ts-graphviz';
+
+const g = digraph('G');
 g.node('Node1', { label: 'My Node', color: 'red' });
 ```
 
@@ -34,6 +37,9 @@ g.node('Node1', { label: 'My Node', color: 'red' });
 Edges represent relationships or connections between nodes.
 
 ```typescript
+import { digraph } from 'ts-graphviz';
+
+const g = digraph('G');
 g.edge(['Node1', 'Node2'], { label: 'Edge Label', color: 'blue' });
 ```
 
@@ -57,6 +63,9 @@ g.edge(['Node1', 'Node2'], { label: 'Edge Label', color: 'blue' });
 Subgraphs allow you to group nodes and edges, often used to create clusters or to control layout.
 
 ```typescript
+import { digraph } from 'ts-graphviz';
+
+const g = digraph('G');
 g.subgraph('ClusterA', { label: 'Cluster A' }, (cluster) => {
   cluster.node('A1');
   cluster.node('A2');

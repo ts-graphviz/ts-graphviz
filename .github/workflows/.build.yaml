@@ -47,6 +47,8 @@ jobs:
           pnpm api:update
           git add --intent-to-add api-reports
           git diff --exit-code -- api-reports
+      - name: Type-check the code examples of the docs
+        run: pnpm check:doc-examples
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           path: |

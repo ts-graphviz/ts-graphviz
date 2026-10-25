@@ -56,6 +56,7 @@ The `toStream` function converts a DOT language string to a Web `ReadableStream<
 
 
 ```ts
+import { Writable } from 'node:stream';
 import { toStream } from '@ts-graphviz/adapter';
 
 const dot = `
@@ -70,8 +71,7 @@ const dot = `
 const stream = await toStream(dot, { format: 'svg' });
 // Node.js
 await stream.pipeTo(Writable.toWeb(process.stdout));
-// Deno
-await stream.pipeTo(Deno.stdout.writable);
+// Deno: await stream.pipeTo(Deno.stdout.writable);
 ```
 
 ### `toFile`
@@ -110,6 +110,10 @@ The `dotCommand` and `library` options are intended to be configured by applicat
 Layout time and output size depend on the DOT source. Bound both when the DOT is not your own:
 
 ```ts
+import { toStream } from '@ts-graphviz/adapter';
+
+declare const dot: string;
+
 const stream = await toStream(dot, {
   format: 'svg',
   // Kill dot after 10 seconds; the call rejects with a TimeoutError.
@@ -127,7 +131,10 @@ Graphviz has no sandbox. It reads files named in the DOT and can copy them into 
 `toStream` and `toFile` therefore check every source with `sanitize` from `@ts-graphviz/ast` before starting the command, and render the checked text. A source that names a file to read (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), an unsafe link (`URL`, `href`, `HREF`, … other than relative, `http`, `https` and `mailto`), or text that Graphviz would write raw into PostScript, image maps or `plain` output (font names other than plain names, unknown `style` values, line breaks in names, control characters) is rejected with a `DOMException` named `SecurityError`. The check knows the output `format`: it refuses `ismap` and formats whose output has not been checked (e.g. `vml`, `fig`), and requires single-word font names for PostScript:
 
 ```ts
+import { toStream } from '@ts-graphviz/adapter';
 import { isTsGraphvizError } from '@ts-graphviz/common';
+
+declare const userDot: string;
 
 try {
   const stream = await toStream(userDot, {
@@ -149,6 +156,8 @@ The check can be run on its own, e.g. when DOT is accepted from users and render
 
 ```ts
 import { sanitize } from '@ts-graphviz/ast';
+
+declare const userDot: string;
 
 const checked = sanitize(userDot, { format: 'svg' }); // throws on unsafe or invalid DOT
 ```

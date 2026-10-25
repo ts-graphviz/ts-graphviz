@@ -70,6 +70,11 @@ The package excels at providing type safety for graph model operations:
 
 
 ```ts
+import type {
+  EdgeAttributesObject,
+  NodeAttributesObject,
+} from '@ts-graphviz/common';
+
 const nodeAttr: NodeAttributesObject = {
   label: 'Node label',
   shape: 'ellipse',
@@ -93,6 +98,8 @@ import {
   isSubgraphModel,
   isAttributeListModel
 } from '@ts-graphviz/common';
+
+declare const someModel: unknown;
 
 // Type-safe model checking
 if (isNodeModel(someModel)) {
@@ -150,6 +157,7 @@ import {
   isNodeRefGroupLike,
   isNodeRef,
   isNodeRefLike,
+  toNodeRefGroup,
   FilterableModel
 } from '@ts-graphviz/common';
 

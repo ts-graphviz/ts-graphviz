@@ -32,7 +32,9 @@ Numbers and booleans are typed in both directions: `width=1.5` parses to the num
 There is no `TsGraphvizError` base class. Every error the library raises on purpose is the standard type that fits (`SyntaxError`, `RangeError`, `TypeError`, `Error`) tagged with a `code` from `ERROR_CODES` (prefix `TSG_ERR_`), exported by `@ts-graphviz/common`. The code is the stable contract; messages may change in any release.
 
 ```ts
-import { isTsGraphvizError } from 'ts-graphviz';
+import { fromDot, isTsGraphvizError } from 'ts-graphviz';
+
+const source = 'digraph { a -> }';
 
 try {
   fromDot(source);

@@ -76,34 +76,43 @@ The package provides React components that map directly to Graphviz DOT language
 All components accept Graphviz DOT attributes as props with full TypeScript support:
 
 ```tsx
+import { Digraph, Edge, Node } from "@ts-graphviz/react";
+
 // Node with styling attributes
-<Node
-  id="server1"
-  label="Web Server"
-  shape="box"
-  color="blue"
-  style="filled"
-  fillcolor="lightblue"
-/>
+const server = (
+  <Node
+    id="server1"
+    label="Web Server"
+    shape="box"
+    color="blue"
+    style="filled"
+    fillcolor="lightblue"
+  />
+);
 
 // Edge with custom styling
-<Edge
-  targets={["server1", "database1"]}
-  label="API calls"
-  color="red"
-  style="dashed"
-  weight={2}
-/>
+const calls = (
+  <Edge
+    targets={["server1", "database1"]}
+    label="API calls"
+    color="red"
+    style="dashed"
+    weight={2}
+  />
+);
 
 // Digraph with global attributes
-<Digraph
-  rankdir="LR"
-  bgcolor="white"
-  node={{ shape: "ellipse", color: "gray" }}
-  edge={{ color: "black", arrowhead: "vee" }}
->
-  {/* nodes and edges */}
-</Digraph>
+const graph = (
+  <Digraph
+    rankdir="LR"
+    bgcolor="white"
+    node={{ shape: "ellipse", color: "gray" }}
+    edge={{ color: "black", arrowhead: "vee" }}
+  >
+    {server}
+    {calls}
+  </Digraph>
+);
 ```
 
 ### Nested Structure & Composition
@@ -111,8 +120,11 @@ All components accept Graphviz DOT attributes as props with full TypeScript supp
 Components can be freely nested to create complex graph structures:
 
 ```tsx
+import type { ReactNode } from "react";
+import { Digraph, Edge, Node, Subgraph } from "@ts-graphviz/react";
+
 // Define reusable components
-const ServerNode = ({ id, name, type }) => (
+const ServerNode = ({ id, name, type }: { id: string; name: string; type: string }) => (
   <Node
     id={id}
     label={
@@ -131,7 +143,7 @@ const ServerNode = ({ id, name, type }) => (
   />
 );
 
-const ServiceCluster = ({ id, label, children }) => (
+const ServiceCluster = ({ id, label, children }: { id: string; label: string; children: ReactNode }) => (
   <Subgraph id={id} label={label} style="filled" fillcolor="lightblue">
     {children}
   </Subgraph>
@@ -169,8 +181,10 @@ const SystemArchitecture = () => (
 Create rich, formatted labels using Graphviz's HTML-like label syntax with natural JSX:
 
 ```tsx
+import { Digraph, Edge, Node } from "@ts-graphviz/react";
+
 // Reusable table component for data records
-const DataRecord = ({ title, fields }) => (
+const DataRecord = ({ title, fields }: { title: string; fields: [string, string][] }) => (
   <dot:table border="1" cellborder="0" cellspacing="0">
     <dot:tr>
       <dot:td bgcolor="lightblue" colspan="2">
@@ -187,7 +201,7 @@ const DataRecord = ({ title, fields }) => (
 );
 
 // Status indicator component
-const StatusIndicator = ({ status, message }) => (
+const StatusIndicator = ({ status, message }: { status: string; message: string }) => (
   <>
     <dot:b>Status:</dot:b><dot:br/>
     <dot:font color={status === 'active' ? 'green' : 'red'}>
@@ -237,7 +251,8 @@ const DatabaseDiagram = () => (
 Full type safety with IntelliSense support for all Graphviz attributes:
 
 ```tsx
-import type { NodeProps, EdgeProps, DigraphProps } from '@ts-graphviz/react';
+import { Edge, Node } from '@ts-graphviz/react';
+import type { NodeProps, EdgeProps, RootGraphProps } from '@ts-graphviz/react';
 
 // Typed component props
 const MyNode: React.FC<NodeProps> = (props) => (
@@ -285,6 +300,16 @@ The `DotJSXElements` type is also exported for advanced use cases where you need
 The package provides sophisticated TypeScript support with automatic type inference and runtime type filtering:
 
 ```tsx
+import { Digraph, Edge, Node, createRoot } from '@ts-graphviz/react';
+import {
+  isEdgeModel,
+  isNodeModel,
+  isNodeRef,
+  isRootGraphModel,
+  type EdgeModel,
+  type NodeModel,
+} from '@ts-graphviz/common';
+
 // ✅ Automatic type inference - no casting needed
 const root = createRoot();
 await root.render(
@@ -300,8 +325,6 @@ const models = root.getTopLevelModels();
 // models is automatically typed as DotObjectModel[]
 
 // ✅ Runtime type filtering with built-in type guards
-import { isNodeModel, isEdgeModel, isRootGraphModel } from '@ts-graphviz/common';
-
 // Filter by model type with automatic type narrowing
 const nodes = root.getTopLevelModels(isNodeModel);
 nodes.forEach(node => console.log(node.id)); // TypeScript knows this is NodeModel
@@ -326,7 +349,11 @@ for (const model of allModels) {
   if (isNodeModel(model)) {
     console.log(`Node: ${model.id}`);
   } else if (isEdgeModel(model)) {
-    console.log(`Edge: ${model.targets.map(t => t.id).join(' -> ')}`);
+    // A target is a node (NodeRef) or a group of nodes
+    const ids = model.targets.map(t =>
+      isNodeRef(t) ? t.id : t.map(n => n.id).join(','),
+    );
+    console.log(`Edge: ${ids.join(' -> ')}`);
   } else if (isRootGraphModel(model)) {
     console.log(`Graph: ${model.id} (directed: ${model.directed})`);
   }
@@ -338,8 +365,16 @@ for (const model of allModels) {
 When using container mode, you get access to all rendered models with full type safety:
 
 ```tsx
-import { digraph, isNodeRef } from 'ts-graphviz';
-import { isNodeModel, isEdgeModel, isSubgraphModel } from '@ts-graphviz/react';
+import { digraph, isNodeRef, type EdgeModel, type NodeModel } from 'ts-graphviz';
+import {
+  createRoot,
+  Edge,
+  Node,
+  Subgraph,
+  isNodeModel,
+  isEdgeModel,
+  isSubgraphModel,
+} from '@ts-graphviz/react';
 
 const container = digraph('myContainer');
 const root = createRoot({ container });
@@ -397,7 +432,7 @@ All rendering functions are **async-only** and provide a clean, consistent API s
 import { Digraph, Node, Edge, createRoot, renderToDot } from "@ts-graphviz/react";
 
 // Define a reusable process component
-const ProcessNode = ({ id, label, color = "lightblue" }) => (
+const ProcessNode = ({ id, label, color = "lightblue" }: { id: string; label: string; color?: string }) => (
   <Node
     id={id}
     label={
@@ -442,7 +477,7 @@ const dotString = await renderToDot(<WorkflowDiagram />);
 import { Digraph, Node, Edge, renderToDot } from "@ts-graphviz/react";
 
 // Reusable card component with HTML-like labels
-const InfoCard = ({ id, title, items }) => (
+const InfoCard = ({ id, title, items }: { id: string; title: string; items: string[] }) => (
   <Node
     id={id}
     label={
@@ -456,7 +491,7 @@ const InfoCard = ({ id, title, items }) => (
         </dot:tr>
         {items.map((item, index) => (
           <dot:tr key={index}>
-            <dot:td align="left">• {item}</dot:td>
+            <dot:td align="LEFT">• {item}</dot:td>
           </dot:tr>
         ))}
       </dot:table>
@@ -493,7 +528,11 @@ The `renderHTMLLike` function converts React elements with HTML-like labels into
 Strings and numbers are text, as in the DOM: a child or an attribute value is written with `&`, `<`, `>` (and `"` in attributes) as entities, so text from your users cannot add markup or attributes. Markup is written with `dot:` elements. Only the elements of Graphviz's HTML-like labels can be rendered (`dot:table`, `dot:tr`, `dot:td`, `dot:font`, `dot:b`, …, plus fragments and components); a port is the `port` attribute of `<dot:table>` or `<dot:td>`. Other elements and attribute names that are not names throw a `TypeError`.
 
 ```ts
+import type { ReactElement } from "react";
 import { renderHTMLLike } from "@ts-graphviz/react";
+
+// An element built from user input
+declare const userProvidedElement: ReactElement;
 
 // Basic usage
 const htmlLabel = renderHTMLLike(
@@ -558,6 +597,10 @@ const result = renderHTMLLike(<dot:table>...</dot:table>, options);
 
 ```ts
 import { Digraph, Node, Edge, createRoot } from "@ts-graphviz/react";
+import { digraph } from 'ts-graphviz';
+
+// A graph component of your application
+declare function MyComplexGraph(): React.ReactElement;
 
 // Basic usage
 const root = createRoot();
@@ -570,7 +613,6 @@ await root.render(
 );
 
 // Container mode - render into existing graph
-import { digraph } from 'ts-graphviz';
 const container = digraph('MyGraph');
 const containerRoot = createRoot({ container });
 await containerRoot.render(
@@ -604,6 +646,14 @@ The package provides robust error handling capabilities for rendering errors:
 ```ts
 import { createRoot, renderToDot } from "@ts-graphviz/react";
 
+// Graph components of your application
+declare function MyGraph(): React.ReactElement;
+declare function ComplexGraph(): React.ReactElement;
+// Your error tracking service
+declare const errorTracker: {
+  captureException(error: Error, context: object): void;
+};
+
 // Error handling with createRoot
 const root = createRoot({
   onUncaughtError: (error, errorInfo) => {
@@ -624,7 +674,7 @@ await root.render(<MyGraph />);
 try {
   const dotString = await renderToDot(<ComplexGraph />);
 } catch (error) {
-  if (error.message.includes('Multiple top-level graphs')) {
+  if (error instanceof Error && error.message.includes('Multiple top-level graphs')) {
     console.error('Invalid graph structure');
   }
 }

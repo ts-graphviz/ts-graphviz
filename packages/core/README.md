@@ -56,6 +56,8 @@ The package adheres to object-oriented programming principles, allowing for:
 The most straightforward approach is to instantiate the model classes directly:
 
 ```ts
+import { Digraph, Edge, Node } from '@ts-graphviz/core';
+
 // Create a directed graph
 const graph = new Digraph();
 
@@ -77,6 +79,8 @@ graph.addEdge(edge);
 Graph models provide factory methods to create and automatically add elements:
 
 ```ts
+import { Digraph } from '@ts-graphviz/core';
+
 // Create a directed graph
 const graph = new Digraph();
 
@@ -93,6 +97,8 @@ graph.createEdge([node1, node2], { label: 'Edge Label' });
 Graphs can be composed with subgraphs to create hierarchical structures:
 
 ```ts
+import { Digraph, Node, Subgraph } from '@ts-graphviz/core';
+
 // Create a directed graph
 const graph = new Digraph();
 
@@ -120,6 +126,9 @@ graph.addSubgraph(subgraph);
 You can create custom graph element classes by extending the base classes:
 
 ```ts
+import type { EdgeTargetTuple } from '@ts-graphviz/common';
+import { Edge, Node } from '@ts-graphviz/core';
+
 class MyCustomNode extends Node {
   constructor(id: string) {
     super(`node_${id}`, {
@@ -133,7 +142,7 @@ class MyCustomEdge extends Edge {
   constructor(targets: EdgeTargetTuple) {
     super(targets, {
       color: 'blue',
-      penwidth: '2.0'
+      penwidth: 2
     });
   }
 }
@@ -151,6 +160,12 @@ The Models Context API allows you to specify which model classes should be used 
 This is implemented through the with method on graph models:
 
 ```ts
+import { Digraph, Edge, Node } from '@ts-graphviz/core';
+
+// Custom classes, as in the example above
+class MyCustomNode extends Node {}
+class MyCustomEdge extends Edge {}
+
 // Create a directed graph
 const graph = new Digraph();
 

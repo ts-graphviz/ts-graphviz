@@ -24,6 +24,7 @@ description: ts-graphvizでグラフをSVGやPNGの画像にレンダリング
 ### DOT を画像ストリームに変換する
 
 ```typescript
+import { Writable } from 'node:stream';
 import { toStream } from 'ts-graphviz/adapter';
 
 const dot = `
@@ -35,10 +36,9 @@ const dot = `
 const stream = await toStream(dot, { format: 'svg' });
 
 // In Node.js
-stream.pipe(process.stdout);
+await stream.pipeTo(Writable.toWeb(process.stdout));
 
-// In Deno
-await stream.pipeTo(Deno.stdout.writable);
+// In Deno: await stream.pipeTo(Deno.stdout.writable);
 ```
 
 ### DOT を画像ファイルに書き込む

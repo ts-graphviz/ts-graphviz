@@ -67,6 +67,24 @@ digraph "G" {
 You can also use the **Models Context API** to create custom classes for objects generated inside a graph. The `with` methods of `Digraph`, `Graph`, and `Subgraph` allow you to predefine custom models.
 
 ```typescript
+import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
+
+class MyCustomNode extends Node {
+  constructor(id: string) {
+    super(`node_${id}`, {
+      [_.label]: `This is Custom Node ${id}`,
+    });
+  }
+}
+
+class MyCustomEdge extends Edge {
+  constructor(targets: EdgeTargetTuple) {
+    super(targets, {
+      [_.label]: 'This is Custom Edge',
+    });
+  }
+}
+
 const g = new Digraph();
 g.with({
   Node: MyCustomNode,
@@ -134,6 +152,13 @@ The default model classes keep one set of defaults per graph (`attributes.node`,
 
 ```typescript
 import { fromDot, OrderedDigraph, orderedModels, toDot } from 'ts-graphviz';
+
+const source = `digraph {
+  node [color=red];
+  a;
+  node [color=blue];
+  b;
+}`;
 
 const g = fromDot(source, { convert: { models: orderedModels } });
 

@@ -15,7 +15,7 @@ npm install ts-graphviz
 
 You can install and use the package by specifying the following:
 
-```ts
+```ts no-check
 import { toDot } from 'npm:ts-graphviz';
 ```
 
