@@ -1,9 +1,0 @@
-digraph world {
-size="7,7";
-	{rank=same; S8 S24 S1 S35 S30;}
-	{rank=same; T8 T24 T1 T35 T30;}
-T24;
-	2 -> {3 ; 16 ; 17 ; T1 ; 18}
-	10 -> { 11 ; 14 ; T1 ; 13; 12;}
-	31
-}

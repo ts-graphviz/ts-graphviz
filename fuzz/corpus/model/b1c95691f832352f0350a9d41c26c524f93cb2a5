@@ -1,7 +1,0 @@
-graph G {
-	layout=neato
-	ªrun -- intr;
-	intr -- runbl;
-	runbep -- 	new -- runmem;
-	sleep -- runmem;
-}

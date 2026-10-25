@@ -1,5 +1,0 @@
-digraph finite_state_machine {
-	r3 [la2 -> 5 [label = "SS(a)"];
-	2 -> 4R [label = "S(A6 <> 5 [label  "S(a)"];
-	8 -> 6 [label = "S(b)"@;
-	8a#[lbel = "S(a)inite_

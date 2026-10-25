@@ -1,5 +1,0 @@
-digraph fi4 8grap c
-	0 -> 2 [labl = "SS(B)"];
-	0 -: 1 [labe "S($end?"]@;
-	2l = "S(aÿÿÿÿÿÿÿ[)"];
-}

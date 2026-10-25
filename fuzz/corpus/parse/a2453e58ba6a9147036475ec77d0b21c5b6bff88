@@ -1,8 +1,0 @@
-graph ER {
-	la;out=neato
-	node [shape=box]; course; institute; student;
-	node [shap0=ellipse]; {node [label="nmae"] name0; name1; name2.5;#}
-		code; grade`; numbee -- course;
-	course -- "C-I""4.3 BSD";
-	"4.2 BSD" -1.e1;
-	institute}

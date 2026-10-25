@@ -1,6 +1,0 @@
-digraph G { bgcolor="purple:pink" label="agraph" fontcolor="white"
-  subgraph cluster1 {fillcolor="blue:cyan" label=ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿFÿÿÿÿÿÿÿÿÿÿÿÿ<ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿe_1_e="filled" gradientangle=90]
-		anode;
-	}
-
-}

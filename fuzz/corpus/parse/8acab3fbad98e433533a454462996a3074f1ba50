@@ -1,6 +1,0 @@
-graph ER {
-	layout=neato
-	node [shape=box]; course; institute; student;
-	node [shape=	code;institute [labsize=20;
-}
-/*

@@ -1,8 +1,0 @@
-##"I played some days wath making an interfaceAbetween our ConceptBase system (essentially a ample graph is attached. It is a s Dutch traffic lights. The example is actually takÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿLÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿen from a book by Wlocati der Aalst." Contributed by Manfred Jeusfeld.
-
-##Command to produce the output: "ÿÿÿÿÿÿÿÿÿÿÿen from a book by Wil van der Aalst." Contributed by Manfred Jeusfeld.
-
-##Command to produce the output: "neato -Tpng thisfile > thisfile.png"
-
-digraph TrafficLie=11;
-}

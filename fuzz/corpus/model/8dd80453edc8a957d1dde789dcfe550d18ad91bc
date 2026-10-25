@@ -1,4 +1,0 @@
-digraph G {φω	subgraph cluster_0 {
-		style=fillobjectcolor=lightgrey;
-		no[style=re];
-}

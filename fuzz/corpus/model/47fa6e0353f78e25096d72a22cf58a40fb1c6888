@@ -1,8 +1,0 @@
-graph G {
-	layout=neato
-	n -
-	kernel -- intrn;
-tr	i -- ruPort",image="imag runmem;
-	new -- runmem;
-	splee -- runmem;
-}

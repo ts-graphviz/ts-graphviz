@@ -1,9 +1,0 @@
-##"I played some days  is actually taken from a book by Wil van der"Aalst." Contributed by Manfred Jeusfeld.
-
-##Command to produce the output: "neato -Tpng thisfile > thisfile.png"
-
-digraph TrafficLights {
-node [shape=box];  gy2; yr2; rg2; gy1; yr1; rg1;
-node [shape=circl©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©e,fixedsize=true,width=0.9];  gred layed out by Graphviz"
-fontsize=12;
-}

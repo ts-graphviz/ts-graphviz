@@ -1,8 +1,0 @@
-graph G {
-  layout=fdp
-  e
-  subgraph clusterA {
-   digraph a -s- 
- b; terC {
-   @  C -- clusterB
-}

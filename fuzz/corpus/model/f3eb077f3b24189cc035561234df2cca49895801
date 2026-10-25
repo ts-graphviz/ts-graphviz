@@ -1,8 +1,0 @@
-strict graph ip_map {
-	MH -- { ERC ALC WH0 HO1 IH1 };
-	ALC -- MV -- AN;
-	MV};
-	HO1 -- HO3;
-	HO3 -- IH1;
-	IH2 -- IH4 [len=4];	// hack
-}

@@ -1,8 +1,0 @@
-digraph G { bgcolor="purple:pink" label="agraph" fontcolor="white"
-  sur="white"
-  subgraph cluster1 {fillentangle="270"
-	÷÷÷÷ox fillcolor="red:yellow! style="filled" gradientangle=10]
-		anode;
-	}
-
-}

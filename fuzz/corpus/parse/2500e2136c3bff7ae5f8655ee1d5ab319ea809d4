@@ -1,4 +1,0 @@
-graph G -- H7
-
-	rank=same {A0 -- B0 -- C0 -- D0 -- E0 -- F0¨-- G0 -- H0}eep -- runmem;
-}

@@ -138,7 +138,13 @@ tmp
 fuzz/dist/
 fuzz/corpus/
 fuzz/findings/
+# Artifacts libFuzzer/Jazzer writes to the working directory when run
+# without -artifact_prefix (fuzz/run.sh sets it to fuzz/findings/)
 crash-*
+timeout-*
+oom-*
+leak-*
+slow-unit-*
 
 # Code blocks of the docs, extracted by scripts/check-doc-examples.ts
 .doc-examples/

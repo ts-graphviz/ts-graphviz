@@ -1,8 +1,0 @@
-graph G {
-	layout=neato
-	run -
-	knerel -- rbuteLisnbl -- run;
-	run -leep;
-	kernel -- runmem;-- runmem;
-	splee -- runmem;
-}

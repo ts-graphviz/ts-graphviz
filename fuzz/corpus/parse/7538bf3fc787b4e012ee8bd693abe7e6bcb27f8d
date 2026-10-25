@@ -1,6 +1,0 @@
-digraph G { bgctyle="filled* gradientangle="270"
-		node [shape=box fillcolor="rgrapheç:yellow" style="filled0" glow" style="filled0" gradiradientangle=13]
-		anode;
-	}
-
-}
