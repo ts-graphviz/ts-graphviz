@@ -10,13 +10,13 @@
  *   `$values` / `$exclude` interfaces,
  * - `Attribute.$keys` (key names with TSDoc) and `Attribute.$types` (value types).
  *
- * The declarations are built with the TypeScript factory API and printed with
- * the TypeScript printer, then formatted by Biome via `pnpm codegen`.
+ * The declarations are written as plain text and formatted by Biome via
+ * `pnpm codegen`. (They used to be built with the TypeScript factory API,
+ * which TypeScript 7 no longer provides.)
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import ts from 'typescript';
 import type { AttributeDoc } from './fetch-graphviz-docs.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -197,88 +197,37 @@ function tsdocFor(attr: AttributeDoc): string {
   return `*\n${lines.map((l) => (l ? ` * ${l}` : ' *')).join('\n')}\n `;
 }
 
-function withDoc<T extends ts.Node>(node: T, doc: string): T {
-  return ts.addSyntheticLeadingComment(
-    node,
-    ts.SyntaxKind.MultiLineCommentTrivia,
-    doc,
-    true,
-  );
-}
+/** A declaration preceded by a block comment; `doc` is the comment body, starting with `*`. */
+const withDoc = (code: string, doc: string) => `/*${doc}*/\n${code}`;
 
-// --- factories -------------------------------------------------------------------
+// --- declarations ------------------------------------------------------------
 
-const { factory: f } = ts;
-const exportMod = () => f.createModifier(ts.SyntaxKind.ExportKeyword);
-const ref = (name: string, args?: ts.TypeNode[]) =>
-  f.createTypeReferenceNode(f.createIdentifier(name), args);
-const union = (members: ts.TypeNode[]) =>
-  members.length === 1 ? members[0] : f.createUnionTypeNode(members);
-const literalUnion = (names: string[]) =>
-  union(names.map((n) => f.createLiteralTypeNode(f.createStringLiteral(n))));
+const IDENTIFIER = /^[A-Za-z_$][\w$]*$/;
+const quote = (text: string) => `'${text.replace(/[\\']/g, '\\$&')}'`;
+const union = (members: string[]) => members.join(' | ');
 /** `keyof $exclude | symbol | number` */
-const excludedKeys = () =>
-  f.createUnionTypeNode([
-    f.createTypeOperatorNode(ts.SyntaxKind.KeyOfKeyword, ref('$exclude')),
-    f.createKeywordTypeNode(ts.SyntaxKind.SymbolKeyword),
-    f.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
-  ]);
+const EXCLUDED_KEYS = 'keyof $exclude | symbol | number';
+
+const namespace = (name: string, body: string[]) =>
+  `export namespace ${name} {\n${body.join('\n')}\n}`;
 
 /** `export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;` */
 const valuesAlias = () =>
-  f.createTypeAliasDeclaration(
-    [exportMod()],
-    'values',
-    undefined,
-    ref('Exclude', [
-      f.createTypeOperatorNode(ts.SyntaxKind.KeyOfKeyword, ref('$values')),
-      excludedKeys(),
-    ]),
-  );
+  `export type values = Exclude<keyof $values, ${EXCLUDED_KEYS}>;`;
 
 /** `export interface $values extends $keywords<'a' | 'b'> {}` */
 const valuesInterface = (keys: string[]) =>
-  f.createInterfaceDeclaration(
-    [exportMod()],
-    '$values',
-    undefined,
-    [
-      f.createHeritageClause(ts.SyntaxKind.ExtendsKeyword, [
-        f.createExpressionWithTypeArguments(f.createIdentifier('$keywords'), [
-          literalUnion(keys),
-        ]),
-      ]),
-    ],
-    [],
-  );
+  `export interface $values extends $keywords<${union(keys.map(quote))}> {}`;
 
 /** `export interface $exclude extends $keywordsValidation {}` */
 const excludeInterface = () =>
-  f.createInterfaceDeclaration(
-    [exportMod()],
-    '$exclude',
-    undefined,
-    [
-      f.createHeritageClause(ts.SyntaxKind.ExtendsKeyword, [
-        f.createExpressionWithTypeArguments(
-          f.createIdentifier('$keywordsValidation'),
-          undefined,
-        ),
-      ]),
-    ],
-    [],
-  );
+  'export interface $exclude extends $keywordsValidation {}';
 
-const namespace = (name: string, body: ts.Statement[]) =>
-  f.createModuleDeclaration(
-    [exportMod()],
-    f.createIdentifier(name),
-    f.createModuleBlock(body),
-    ts.NodeFlags.Namespace,
-  );
-
-// Fail with a useful message before an unmapped type reaches the TypeScript factory.
+// Fail with a useful message before an unmapped type or a name that is not an
+// identifier reaches the output.
 for (const attr of docs) {
+  if (!IDENTIFIER.test(attr.name))
+    throw new Error(`attribute name "${attr.name}" is not an identifier`);
   for (const t of attr.types) {
     if (!(t in TYPE_MAP))
       throw new Error(
@@ -287,7 +236,7 @@ for (const attr of docs) {
   }
 }
 
-const statements: ts.Statement[] = [];
+const statements: string[] = [];
 
 // import type { ... } from './types.js';
 const valueTypeNames = new Set<string>(['$keywords', '$keywordsValidation']);
@@ -298,21 +247,7 @@ for (const attr of docs) {
   }
 }
 statements.push(
-  f.createImportDeclaration(
-    undefined,
-    f.createImportClause(
-      ts.SyntaxKind.TypeKeyword,
-      undefined,
-      f.createNamedImports(
-        [...valueTypeNames]
-          .sort(byName)
-          .map((n) =>
-            f.createImportSpecifier(false, undefined, f.createIdentifier(n)),
-          ),
-      ),
-    ),
-    f.createStringLiteral('./types.js'),
-  ),
+  `import type { ${[...valueTypeNames].sort(byName).join(', ')} } from './types.js';`,
 );
 
 // per-object key namespaces
@@ -323,14 +258,7 @@ for (const obj of OBJECTS) {
     .sort(byName);
   statements.push(
     withDoc(
-      f.createTypeAliasDeclaration(
-        [exportMod()],
-        obj.name,
-        undefined,
-        f.createTypeReferenceNode(
-          f.createQualifiedName(f.createIdentifier(obj.name), 'values'),
-        ),
-      ),
+      `export type ${obj.name} = ${obj.name}.values;`,
       `*\n * ${obj.doc}\n * @group Attribute\n `,
     ),
     withDoc(
@@ -347,12 +275,7 @@ for (const obj of OBJECTS) {
 // export type AttributeKey = ...;
 statements.push(
   withDoc(
-    f.createTypeAliasDeclaration(
-      [exportMod()],
-      'AttributeKey',
-      undefined,
-      f.createUnionTypeNode(OBJECTS.map((o) => ref(o.name))),
-    ),
+    `export type AttributeKey = ${union(OBJECTS.map((o) => o.name))};`,
     '*\n * Attribute keys for any DOT object.\n * @group Attribute\n ',
   ),
 );
@@ -360,123 +283,47 @@ statements.push(
 // export type Attribute<T extends AttributeKey> = Attribute.types[T];
 statements.push(
   withDoc(
-    f.createTypeAliasDeclaration(
-      [exportMod()],
-      'Attribute',
-      [f.createTypeParameterDeclaration(undefined, 'T', ref('AttributeKey'))],
-      f.createIndexedAccessTypeNode(
-        f.createTypeReferenceNode(
-          f.createQualifiedName(f.createIdentifier('Attribute'), 'types'),
-        ),
-        ref('T'),
-      ),
-    ),
+    'export type Attribute<T extends AttributeKey> = Attribute.types[T];',
     '*\n * This type represents an Attribute, which is a key-value mapping of an {@link AttributeKey} to a value.\n *\n * @param T The {@link AttributeKey} to be mapped to a value.\n * @group Attribute\n ',
   ),
 );
 
 const sortedDocs = [...docs].sort((a, b) => byName(a.name, b.name));
-const omit = (from: string) => ref('Omit', [ref(from), excludedKeys()]);
 
 statements.push(
   namespace('Attribute', [
-    f.createTypeAliasDeclaration(
-      [exportMod()],
-      'keys',
-      undefined,
-      omit('$keys'),
-    ),
-    f.createTypeAliasDeclaration(
-      [exportMod()],
-      'types',
-      undefined,
-      omit('$types'),
-    ),
+    `export type keys = Omit<$keys, ${EXCLUDED_KEYS}>;`,
+    `export type types = Omit<$types, ${EXCLUDED_KEYS}>;`,
     // No TSDoc on this declaration: `@hidden` on one declaration of a merged
     // interface hides the whole interface from typedoc, including the
     // documented keys below.
-    f.createInterfaceDeclaration(
-      [exportMod()],
-      '$keys',
-      undefined,
-      [
-        f.createHeritageClause(ts.SyntaxKind.ExtendsKeyword, [
-          f.createExpressionWithTypeArguments(f.createIdentifier('$keywords'), [
-            ref('AttributeKey'),
-          ]),
-        ]),
-      ],
-      [],
-    ),
+    'export interface $keys extends $keywords<AttributeKey> {}',
     excludeInterface(),
     withDoc(
-      f.createInterfaceDeclaration(
-        [exportMod()],
-        '$keys',
-        undefined,
-        undefined,
-        sortedDocs.map((attr) =>
-          withDoc(
-            f.createPropertySignature(
-              undefined,
-              f.createIdentifier(attr.name),
-              undefined,
-              f.createLiteralTypeNode(f.createStringLiteral(attr.name)),
-            ),
-            tsdocFor(attr),
-          ),
-        ),
-      ),
+      `export interface $keys {\n${sortedDocs
+        .map((attr) =>
+          withDoc(`${attr.name}: ${quote(attr.name)};`, tsdocFor(attr)),
+        )
+        .join('\n')}\n}`,
       '*\n * @group Attribute\n ',
     ),
     withDoc(
-      f.createInterfaceDeclaration(
-        [exportMod()],
-        '$types',
-        undefined,
-        undefined,
-        sortedDocs.map((attr) =>
-          f.createPropertySignature(
-            undefined,
-            f.createIdentifier(attr.name),
-            undefined,
-            union(
-              (
-                TYPE_OVERRIDES[attr.name] ?? attr.types.map((t) => TYPE_MAP[t])
-              ).map((t) =>
-                PRIMITIVES.has(t)
-                  ? f.createKeywordTypeNode(
-                      t === 'string'
-                        ? ts.SyntaxKind.StringKeyword
-                        : t === 'boolean'
-                          ? ts.SyntaxKind.BooleanKeyword
-                          : ts.SyntaxKind.NumberKeyword,
-                    )
-                  : ref(t),
-              ),
-            ),
-          ),
-        ),
-      ),
+      `export interface $types {\n${sortedDocs
+        .map(
+          (attr) =>
+            `${attr.name}: ${union(
+              TYPE_OVERRIDES[attr.name] ?? attr.types.map((t) => TYPE_MAP[t]),
+            )};`,
+        )
+        .join('\n')}\n}`,
       '*\n * $types is an interface that defines a set of attributes that can be used to configure a graph.\n ',
     ),
   ]),
 );
 
-const source = ts.createSourceFile(
-  'attribute.ts',
-  '',
-  ts.ScriptTarget.Latest,
-  false,
-  ts.ScriptKind.TS,
-);
-const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
 const header = `// Generated by scripts/generate-attributes.ts from graphviz-docs/attrs.json.
 // Do not edit by hand; run \`pnpm codegen\` after updating the snapshot with
 // \`pnpm fetch:graphviz-docs\`.
 `;
-const code = statements
-  .map((s) => printer.printNode(ts.EmitHint.Unspecified, s, source))
-  .join('\n\n');
-writeFileSync(outFile, `${header}\n${code}\n`);
+writeFileSync(outFile, `${header}\n${statements.join('\n\n')}\n`);
 console.log(`Wrote ${outFile} (${docs.length} attributes)`);
