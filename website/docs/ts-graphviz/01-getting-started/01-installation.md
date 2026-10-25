@@ -11,6 +11,8 @@ This package can then be installed using a package manager.
 npm install ts-graphviz
 ```
 
+TypeScript users need **TypeScript 5.0 or later** (see [Versioning Policy](../11-advanced-topics/03-versioning-policy.md#supported-typescript-versions)).
+
 ## Deno
 
 You can install and use the package by specifying the following:
