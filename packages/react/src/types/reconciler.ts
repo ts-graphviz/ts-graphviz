@@ -1,5 +1,5 @@
 import type { FC, ComponentProps as ReactComponentProps } from 'react';
-import type { DotObjectModel, GraphBaseModel } from 'ts-graphviz';
+import type { AnyDotObjectModel, GraphBaseModel } from 'ts-graphviz';
 import type { Context } from '../contexts/GraphvizContext.js';
 import type { AnyGraphContainer } from './container.js';
 
@@ -19,7 +19,7 @@ export type ComponentProps = ReactComponentProps<any>;
 export interface RenderContainer<
   Container extends AnyGraphContainer = AnyGraphContainer,
 > {
-  renderedModels: DotObjectModel[];
+  renderedModels: AnyDotObjectModel[];
   context?: Context<Container>;
   __rootInstance?: ReconcilerInstance | TextInstance;
 }

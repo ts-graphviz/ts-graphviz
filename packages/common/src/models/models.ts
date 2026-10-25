@@ -749,6 +749,29 @@ export interface DotModel extends HasComment, DotObjectModel<'Dot'> {
 }
 
 /**
+ * Any concrete model: what a graph holds ({@link GraphStatementModel}), a
+ * root graph, or a {@link DotModel}.
+ *
+ * Unlike {@link DotObjectModel}, it is a union discriminated by `$$type`, so
+ * checking `$$type` narrows it:
+ *
+ * ```ts
+ * function describe(model: AnyDotObjectModel): string {
+ *   switch (model.$$type) {
+ *     case 'Node':
+ *       return `node ${model.id}`;
+ *     case 'Edge':
+ *       return `edge with ${model.targets.length} targets`;
+ *     default:
+ *       return model.$$type;
+ *   }
+ * }
+ * ```
+ * @group Models
+ */
+export type AnyDotObjectModel = GraphStatementModel | RootGraphModel | DotModel;
+
+/**
  * The instance types a {@link ModelsContext} creates: what graphs return
  * from `node()`, `edge()`, `subgraph()` and the like (#1736). The defaults
  * are the base interfaces.

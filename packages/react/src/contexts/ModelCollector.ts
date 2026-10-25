@@ -1,8 +1,8 @@
 import { type Context, createContext } from 'react';
-import type { DotObjectModel } from 'ts-graphviz';
+import type { AnyDotObjectModel } from 'ts-graphviz';
 
 export interface ModelCollectorContext {
-  collectModel: (model: DotObjectModel) => void;
+  collectModel: (model: AnyDotObjectModel) => void;
 }
 
 export const ModelCollectorContext: Context<ModelCollectorContext | null> =

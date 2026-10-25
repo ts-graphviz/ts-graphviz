@@ -1,5 +1,6 @@
 import { createElement, type ReactElement } from 'react';
 import type {
+  AnyDotObjectModel,
   DotObjectModel,
   FilterableModel,
   ModelsContext,
@@ -56,7 +57,7 @@ export interface CreateRootOptions<
   /**
    * Called when rendering completes successfully
    */
-  onRenderComplete?: (models: DotObjectModel[]) => void;
+  onRenderComplete?: (models: AnyDotObjectModel[]) => void;
   /**
    * Timeout for async rendering in milliseconds
    * @default 5000
@@ -81,7 +82,7 @@ export interface GraphvizRoot {
    * @returns Array of rendered models. In container mode, returns all non-container models.
    *          In non-container mode, returns top-level graph models.
    */
-  getTopLevelModels(): DotObjectModel[];
+  getTopLevelModels(): AnyDotObjectModel[];
   /**
    * Get top-level models with generic type casting or type guard filtering
    *
@@ -131,7 +132,7 @@ function clusterMap(
 function createWrappedElement<Container extends AnyGraphContainer>(
   element: ReactElement,
   context: Context<Container>,
-  collectModel: (model: DotObjectModel) => void,
+  collectModel: (model: AnyDotObjectModel) => void,
   container?: Container,
 ): ReactElement {
   return createElement(
@@ -187,7 +188,7 @@ function createFiberRoot<
  * Validates the rendered models for constraints
  */
 function validateModels(
-  models: DotObjectModel[],
+  models: AnyDotObjectModel[],
   container?: AnyGraphContainer,
 ): void {
   if (container) {
@@ -271,7 +272,7 @@ export function createRoot<
   // Use imported type guard for root graph models
 
   // Model collector function
-  const collectModel = (model: DotObjectModel) => {
+  const collectModel = (model: AnyDotObjectModel) => {
     if (container) {
       // With container: collect all non-container models at top level only
       if (model !== container) {
@@ -336,7 +337,7 @@ export function createRoot<
       if (typeGuard) {
         return models.filter(typeGuard);
       }
-      return models as T[];
+      return models as DotObjectModel[] as T[];
     },
   };
 }
