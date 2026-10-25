@@ -260,6 +260,7 @@ async function renderInternal<
   containerInfo.uncaughtErrors = [];
   reconciler.updateContainerSync(wrappedElement, fiberRoot, null, null);
   reconciler.flushSyncWork();
+  signal?.throwIfAborted();
   // Passive effects of a render that finished outside the synchronous lane
   // (e.g. the cleanup of a Suspense fallback) are flushed here too.
   while (
@@ -273,6 +274,7 @@ async function renderInternal<
   if (isUnmounted()) {
     throw new Error('The root was unmounted before the render settled');
   }
+  signal?.throwIfAborted();
   const [error] = containerInfo.uncaughtErrors;
   if (containerInfo.uncaughtErrors.length > 0) {
     throw error;
@@ -287,6 +289,23 @@ function hasPendingWork(
   fiberRoot: ReturnType<typeof reconciler.createContainer>,
 ): boolean {
   return (fiberRoot as { pendingLanes?: number }).pendingLanes !== 0;
+}
+
+// Settles like `promise`, or rejects with `signal.reason` as soon as the
+// signal aborts, e.g. while the render waits behind another one (which then
+// does not run: renderNow checks the signal first).
+function rejectOnAbort<T>(
+  promise: Promise<T>,
+  signal: AbortSignal,
+): Promise<T> {
+  if (signal.aborted) return Promise.reject(signal.reason);
+  return new Promise<T>((resolve, reject) => {
+    const onAbort = () => reject(signal.reason);
+    signal.addEventListener('abort', onAbort, { once: true });
+    promise.then(resolve, reject).finally(() => {
+      signal.removeEventListener('abort', onAbort);
+    });
+  });
 }
 
 // A macrotask, so React's scheduler (setImmediate / MessageChannel) and
@@ -376,7 +395,7 @@ export function createRoot<
       const { signal } = ownOptions(options ?? {});
       const result = previous.then(() => renderNow(element, signal));
       previous = result.catch(noop);
-      return result;
+      return signal ? rejectOnAbort(result, signal) : result;
     },
 
     unmount(): void {

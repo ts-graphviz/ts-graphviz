@@ -262,6 +262,58 @@ describe('updates outside the synchronous lane', () => {
     await expect(pending).rejects.toThrow('stop');
   });
 
+  it('rejects a queued render at once when its signal aborts, without running it', async () => {
+    const root = createRoot();
+    const slow = new Promise<string>((resolve) =>
+      setTimeout(() => resolve('slow'), 200),
+    );
+    function Slow(): ReactNode {
+      return <Node id={use(slow)} />;
+    }
+    const first = root.render(
+      <Digraph id="G">
+        <Suspense fallback={null}>
+          <Slow />
+        </Suspense>
+      </Digraph>,
+    );
+    const controller = new AbortController();
+    const queued = root.render(
+      <Digraph id="queued">
+        <Node id="never" />
+      </Digraph>,
+      { signal: controller.signal },
+    );
+    controller.abort(new RangeError('queued'));
+    const settled = await Promise.race([
+      queued.then(
+        () => 'resolved',
+        (e: unknown) => (e as Error).message,
+      ),
+      new Promise((resolve) => setTimeout(() => resolve('still pending'), 50)),
+    ]);
+    expect(settled).toBe('queued');
+    await first;
+    const [graph] = root.getTopLevelModels();
+    expect(graph.$$type === 'Graph' && graph.id).toBe('G');
+  });
+
+  it('notices an abort during a render that settles synchronously', async () => {
+    const controller = new AbortController();
+    function AbortsInEffect(): ReactNode {
+      useEffect(() => controller.abort(new RangeError('in effect')), []);
+      return <Node id="a" />;
+    }
+    await expect(
+      renderToDot(
+        <Digraph id="G">
+          <AbortsInEffect />
+        </Digraph>,
+        { signal: controller.signal },
+      ),
+    ).rejects.toThrow('in effect');
+  });
+
   it('does not render when the signal has already aborted', async () => {
     const onRenderComplete = vi.fn();
     const root = createRoot({ onRenderComplete });
