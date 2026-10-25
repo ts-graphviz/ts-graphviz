@@ -20,11 +20,24 @@ pnpm --filter @ts-graphviz/website start:zh    # zh-CN
 
 - `docs/` — guides (English source); translations in `i18n/<locale>/docusaurus-plugin-content-docs/current/`
 - `blog/` — release notes and announcements; translations in `i18n/<locale>/docusaurus-plugin-content-blog/`
-- `src/` — the landing page, the playground (WebContainer + Graphviz WASM) and the live editor used in code blocks
-- `plugins/remark-plugin-tsgraphviz.ts` — turns ` ```ts tsgraphviz ` code blocks into live editors
+- `src/` — the landing page, the playground and the live editor used in code blocks
+- `src/playground/runtime/` — runs Playground scripts: types are stripped with sucrase and the script is evaluated in a Web Worker against the workspace's ts-graphviz (the only importable module), with a timeout; the DOT it returns is laid out by Graphviz WASM on the page
+- `plugins/remark-plugin-tsgraphviz.ts` — turns ` ```ts ts-graphviz ` code blocks into live editors (` ```ts ts-graphviz:read-only ` for read-only ones)
 - `scripts/extract-dts.mts` — collects the packages' `.d.ts` files for the editor
 - `scripts/copy-api-reference.mts` — puts the typedoc output under `build/api/`
 - `scripts/check-links.mts` — crawls the built site and fails on broken internal links (`pnpm check-links`; runs in CI)
+
+## Tests
+
+```bash
+pnpm --filter @ts-graphviz/website typecheck
+pnpm --filter @ts-graphviz/website test        # unit and component tests (vitest, jsdom)
+pnpm --filter @ts-graphviz/website build
+pnpm --filter @ts-graphviz/website exec playwright install chromium webkit   # once
+pnpm --filter @ts-graphviz/website test:e2e    # the built site on desktop Chrome, Pixel 7 and iPhone 15
+```
+
+The editor is Monaco on devices with a mouse and a plain text area (or a highlighted code block when read-only) on touch devices; the end-to-end tests cover both. All of these run in the `Website` workflow.
 
 ## Translations
 

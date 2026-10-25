@@ -51,9 +51,6 @@
   "Failed to render graph: {message}": {
     "message": "渲染图形失败：{message}"
   },
-  "Loading...": {
-    "message": "加载中..."
-  },
   "HeroSection.copy": {
     "message": "将 Graphviz 的强大功能带入 TypeScript/JavaScript 生态系统。"
   },
@@ -74,15 +71,6 @@
   },
   "Image": {
     "message": "图片"
-  },
-  "Layout Engine:": {
-    "message": "布局引擎："
-  },
-  "Graphviz Version: {version}": {
-    "message": "Graphviz 版本：{version}"
-  },
-  "DOT": {
-    "message": "DOT"
   },
   "ts-graphviz Library": {
     "message": "ts-graphviz 库",
@@ -553,5 +541,32 @@
   "theme.tags.tagsPageTitle": {
     "message": "标签",
     "description": "The title of the tag list page"
+  },
+  "Layout engine": {
+    "message": "布局引擎"
+  },
+  "Graphviz {version}": {
+    "message": "Graphviz {version}"
+  },
+  "Loading Graphviz…": {
+    "message": "正在加载 Graphviz…"
+  },
+  "Failed to load Graphviz: {message}": {
+    "message": "加载 Graphviz 失败：{message}"
+  },
+  "Running…": {
+    "message": "运行中…"
+  },
+  "Rendered graph": {
+    "message": "渲染的图"
+  },
+  "TypeScript code": {
+    "message": "TypeScript 代码"
+  },
+  "Script": {
+    "message": "脚本"
+  },
+  "Result": {
+    "message": "结果"
   }
 }

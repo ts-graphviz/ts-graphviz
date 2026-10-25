@@ -1,7 +1,6 @@
-import { type Engine, Graphviz } from '@hpcc-js/wasm-graphviz';
+import type { Engine } from '@hpcc-js/wasm-graphviz';
 import {
   createContext,
-  type FC,
   type ReactNode,
   useContext,
   useEffect,
@@ -9,43 +8,88 @@ import {
   useState,
 } from 'react';
 
-const GraphVizContext = createContext<Graphviz | null>(null);
+/** The part of `@hpcc-js/wasm-graphviz`'s Graphviz the site uses. */
+export interface GraphvizInstance {
+  version(): string;
+  layout(dot: string, format: 'svg', engine: Engine): string;
+}
 
-type GraphvizAPI = {
-  status: 'loading' | 'ready';
-  version: string;
-  renderToSVG: (dot: string, engine: Engine) => string;
-};
+export type GraphvizState =
+  | { status: 'loading' }
+  | {
+      status: 'ready';
+      version: string;
+      renderToSVG: (dot: string, engine: Engine) => string;
+    }
+  | { status: 'error'; error: Error };
 
-export const GraphvizProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [graphviz, setGraphviz] = useState<Graphviz>(null);
+const GraphvizContext = createContext<GraphvizState>({ status: 'loading' });
+
+async function loadGraphviz(): Promise<GraphvizInstance> {
+  // Imported here so the WASM is fetched only by pages that render graphs.
+  const { Graphviz } = await import('@hpcc-js/wasm-graphviz');
+  return Graphviz.load();
+}
+
+export function GraphvizProvider({
+  children,
+  load = loadGraphviz,
+}: {
+  children: ReactNode;
+  /** Loads Graphviz; tests pass a stand-in. */
+  load?: () => Promise<GraphvizInstance>;
+}) {
+  const [state, setState] = useState<GraphvizState>({ status: 'loading' });
   useEffect(() => {
-    Graphviz.load().then((instance) => {
-      console.log('Graphviz loaded', instance.version());
-      setGraphviz(instance);
-    });
+    let active = true;
+    load().then(
+      (instance) => {
+        if (!active) return;
+        setState({
+          status: 'ready',
+          version: instance.version(),
+          renderToSVG: (dot, engine) => instance.layout(dot, 'svg', engine),
+        });
+      },
+      (error: unknown) => {
+        if (!active) return;
+        setState({
+          status: 'error',
+          error: error instanceof Error ? error : new Error(String(error)),
+        });
+      },
+    );
     return () => {
-      Graphviz.unload();
+      active = false;
     };
-  }, [setGraphviz]);
+  }, [load]);
   return (
-    <GraphVizContext.Provider value={graphviz}>
+    <GraphvizContext.Provider value={state}>
       {children}
-    </GraphVizContext.Provider>
+    </GraphvizContext.Provider>
   );
-};
+}
 
-export const useGraphviz = () => {
-  const wasm = useContext(GraphVizContext);
+export function useGraphviz(): GraphvizState {
+  return useContext(GraphvizContext);
+}
 
-  const api = useMemo<GraphvizAPI>(
-    () => ({
-      status: wasm ? 'ready' : 'loading',
-      version: wasm?.version(),
-      renderToSVG: (dot: string, engine: Engine) =>
-        wasm?.layout(dot, 'svg', engine),
-    }),
-    [wasm],
-  );
-  return api;
-};
+export function useGraphvizSVG(
+  dot: string | null,
+  engine: Engine,
+): { svg: string | null; error: Error | null } {
+  const graphviz = useGraphviz();
+  return useMemo(() => {
+    if (dot === null || graphviz.status !== 'ready') {
+      return { svg: null, error: null };
+    }
+    try {
+      return { svg: graphviz.renderToSVG(dot, engine), error: null };
+    } catch (error) {
+      return {
+        svg: null,
+        error: error instanceof Error ? error : new Error(String(error)),
+      };
+    }
+  }, [graphviz, dot, engine]);
+}
