@@ -3,7 +3,16 @@ import {
   DiscreteEventPriority,
   NoEventPriority,
 } from 'react-reconciler/constants.js';
+import {
+  createHostInstance,
+  HOST,
+  insertChild,
+  removeChild,
+  syncContainer,
+  updateHostInstance,
+} from './host.js';
 import type {
+  Child,
   HostContext,
   ReconcilerInstance as Instance,
   ComponentProps as Props,
@@ -54,8 +63,9 @@ type OpaqueHandle = ReactReconciler.Fiber;
  */
 type UpdatePriority = number;
 
-/** Nothing reads the host context; one object serves every element. */
-const HOST_CONTEXT: HostContext = {};
+/** The host contexts, shared: whether nodes and edges may be rendered. */
+const IN_GRAPH: HostContext = { inGraph: true };
+const OUTSIDE_GRAPH: HostContext = { inGraph: false };
 
 /**
  * Form instance type (not used in Graphviz rendering)
@@ -230,8 +240,8 @@ export class HostConfig
   }
 
   // container clearing method
-  clearContainer(_container: Container): void {
-    // NoOp - our containers don't need special clearing
+  clearContainer(container: Container): void {
+    container.children = [];
   }
 
   // transition context and scheduling methods
@@ -303,19 +313,24 @@ export class HostConfig
 
   public supportsMicrotasks = true;
 
+  /** A `ref` on a component resolves to its model. */
   public getPublicInstance(instance: Instance | TextInstance): PublicInstance {
-    return instance;
+    return 'model' in instance
+      ? ((instance.model ?? null) as PublicInstance)
+      : null;
   }
 
-  public getRootHostContext(_rootContainerInstance: Container): HostContext {
-    return HOST_CONTEXT;
+  // Nodes and edges need a graph: the container, or a graph element.
+  public getRootHostContext(container: Container): HostContext {
+    return container.context?.container ? IN_GRAPH : OUTSIDE_GRAPH;
   }
 
   public getChildHostContext(
     parentHostContext: HostContext,
-    _type: Type,
+    type: Type,
   ): HostContext {
-    return parentHostContext;
+    // A portal adds to a graph of the tree it is in: none outside one.
+    return type === HOST.graph ? IN_GRAPH : parentHostContext;
   }
 
   public prepareForCommit(
@@ -324,39 +339,24 @@ export class HostConfig
     return null;
   }
 
-  public resetAfterCommit(_containerInfo: Container): void {
-    // containerInfo.setRoot
+  // The instances are in place: make the models match them.
+  public resetAfterCommit(containerInfo: Container): void {
+    syncContainer(containerInfo);
   }
 
-  /**
-   * Create component instance for Graphviz elements
-   */
   public createInstance(
     type: Type,
     props: Props,
     _rootContainerInstance: Container,
-    _hostContext: HostContext,
+    hostContext: HostContext,
     _internalInstanceHandle: OpaqueHandle,
   ): Instance {
-    const instance: Instance = {
-      type,
-      props,
-      children: [],
-      appendChild: (child: Instance | TextInstance) => {
-        instance.children.push(child);
-      },
-    };
-
-    return instance;
+    return createHostInstance(type, props, hostContext);
   }
 
-  public appendInitialChild(
-    parentInstance: Instance,
-    child: Instance | TextInstance,
-  ): void {
-    if (parentInstance.appendChild) {
-      parentInstance.appendChild(child);
-    }
+  public appendInitialChild(parentInstance: Instance, child: Child): void {
+    if ('children' in parentInstance)
+      insertChild(parentInstance.children, child);
   }
 
   public finalizeInitialChildren(
@@ -377,46 +377,48 @@ export class HostConfig
   }
 
   public createTextInstance(
-    text: string,
+    _text: string,
     _rootContainerInstance: Container,
     _hostContext: HostContext,
     _internalInstanceHandle: OpaqueHandle,
   ): TextInstance {
-    return text.trim();
+    return { kind: 'text', hidden: false };
   }
 
-  public scheduleDeferredCallback(
-    _callback: () => any,
-    _options?: { timeout: number },
-  ): any {
-    // NoOp
+  public appendChild(parentInstance: Instance, child: Child): void {
+    if ('children' in parentInstance)
+      insertChild(parentInstance.children, child);
   }
 
-  public cancelDeferredCallback(_callbackID: any): void {
-    // NoOp
+  public appendChildToContainer(container: Container, child: Child): void {
+    insertChild(container.children, child);
   }
 
-  // -------------------
-  //      Mutation
-  //     (optional)
-  // -------------------
-  public appendChild(
+  public insertBefore(
     parentInstance: Instance,
-    child: Instance | TextInstance,
+    child: Child,
+    beforeChild: Child,
   ): void {
-    if (parentInstance.appendChild) {
-      parentInstance.appendChild(child);
+    if ('children' in parentInstance) {
+      insertChild(parentInstance.children, child, beforeChild);
     }
   }
 
-  public appendChildToContainer(
+  public insertInContainerBefore(
     container: Container,
-    child: Instance | TextInstance,
+    child: Child,
+    beforeChild: Child,
   ): void {
-    // Store the root instance for debugging
-    if (typeof child === 'object' && 'type' in child) {
-      container.__rootInstance = child;
-    }
+    insertChild(container.children, child, beforeChild);
+  }
+
+  public removeChild(parentInstance: Instance, child: Child): void {
+    if ('children' in parentInstance)
+      removeChild(parentInstance.children, child);
+  }
+
+  public removeChildFromContainer(container: Container, child: Child): void {
+    removeChild(container.children, child);
   }
 
   public commitTextUpdate(
@@ -424,7 +426,7 @@ export class HostConfig
     _oldText: string,
     _newText: string,
   ): void {
-    // NoOp
+    // Text is not part of the graph.
   }
 
   public commitMount(
@@ -433,51 +435,34 @@ export class HostConfig
     _props: Props,
     _internalInstanceHandle: OpaqueHandle,
   ): void {
-    // Ref handling is done via useImperativeHandle in components
+    // NoOp
   }
 
-  public commitUpdate?(
+  public commitUpdate(
     instance: Instance,
     _type: Type,
     _prevProps: Props,
     nextProps: Props,
     _internalHandle: OpaqueHandle,
   ): void {
-    // Update instance props
-    instance.props = nextProps;
-
-    // Don't re-execute component function here - let React handle updates
-    // This avoids issues with React's changed execution timing
+    updateHostInstance(instance, nextProps);
   }
 
-  public insertBefore(
-    _parentInstance: Instance,
-    _child: Instance | TextInstance,
-    _beforeChild: Instance | TextInstance,
-  ): void {
-    // NoOp
+  // A Suspense boundary showing its fallback again hides its content.
+  public hideInstance(instance: Instance): void {
+    instance.hidden = true;
   }
 
-  public insertInContainerBefore(
-    _container: Container,
-    _child: Instance | TextInstance,
-    _beforeChild: Instance | TextInstance,
-  ): void {
-    // NoOp
+  public unhideInstance(instance: Instance, _props: Props): void {
+    instance.hidden = false;
   }
 
-  public removeChild(
-    _parentInstance: Instance,
-    _child: Instance | TextInstance,
-  ): void {
-    // NoOp
+  public hideTextInstance(textInstance: TextInstance): void {
+    textInstance.hidden = true;
   }
 
-  public removeChildFromContainer(
-    _container: Container,
-    _child: Instance | TextInstance,
-  ): void {
-    // NoOp
+  public unhideTextInstance(textInstance: TextInstance, _text: string): void {
+    textInstance.hidden = false;
   }
 
   public resetTextContent(_instance: Instance): void {

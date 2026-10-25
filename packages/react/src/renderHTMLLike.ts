@@ -1,5 +1,10 @@
 import { type HTMLLikeValue, htmlLike, ownOptions } from '@ts-graphviz/common';
-import { Fragment, type ReactElement, type ReactNode } from 'react';
+import {
+  Fragment,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 
 /**
  * Default maximum allowed recursion depth to prevent stack overflow attacks.
@@ -185,21 +190,40 @@ function renderChildrenToString(
   if (typeof children === 'string' || typeof children === 'number') {
     return escapeText(String(children));
   }
+  if (isValidElement(children)) {
+    return manuallyRenderElement(children, depth, inStack, maxDepth);
+  }
   if (Array.isArray(children)) {
-    return children
-      .map((child) => renderChildrenToString(child, depth, inStack, maxDepth))
-      .join('');
+    // An array in an array counts toward the depth, like an element.
+    if (depth >= maxDepth) {
+      throw new RangeError(
+        `Maximum rendering depth of ${maxDepth} exceeded. This may indicate deeply nested or circular element structures.`,
+      );
+    }
+    if (inStack.has(children)) {
+      throw new TypeError(
+        'Circular reference detected in React element tree. Cannot render elements that reference themselves.',
+      );
+    }
+    inStack.add(children);
+    try {
+      return children
+        .map((child) =>
+          renderChildrenToString(
+            child,
+            Array.isArray(child) ? depth + 1 : depth,
+            inStack,
+            maxDepth,
+          ),
+        )
+        .join('');
+    } finally {
+      inStack.delete(children);
+    }
   }
-  // If it's a React element, render it manually
-  if (typeof children === 'object' && children !== null && 'type' in children) {
-    return manuallyRenderElement(
-      children as ReactElement,
-      depth,
-      inStack,
-      maxDepth,
-    );
-  }
-  return '';
+  throw new TypeError(
+    'Only elements, strings, numbers, booleans, null and arrays of them can be children of an HTML-like label.',
+  );
 }
 
 /**

@@ -5,13 +5,12 @@ import type {
   FilterableModel,
   ModelsContext,
 } from 'ts-graphviz';
-import { createModelsContext, isRootGraphModel, ownOptions } from 'ts-graphviz';
+import { createModelsContext, ownOptions } from 'ts-graphviz';
 
 import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
 import { GraphMap } from './contexts/GraphMap.js';
 import { type Context, GraphvizContext } from './contexts/GraphvizContext.js';
-import { ModelCollectorContext } from './contexts/ModelCollector.js';
 import { reconciler } from './reconciler.js';
 import type { AnyGraphContainer } from './types/container.js';
 import type { RenderContainer } from './types/reconciler.js';
@@ -141,29 +140,20 @@ function clusterMap(
 function createWrappedElement<Container extends AnyGraphContainer>(
   element: ReactElement,
   context: Context<Container>,
-  collectModel: (model: AnyDotObjectModel) => void,
   container?: Container,
 ): ReactElement {
   return createElement(
     GraphvizContext.Provider,
     { value: context },
     createElement(
-      ModelCollectorContext.Provider,
-      { value: { collectModel } },
+      GraphMap.Provider,
+      { value: clusterMap(container) },
       createElement(
-        GraphMap.Provider,
-        { value: clusterMap(container) },
-        createElement(
-          GraphContainer.Provider,
-          { value: container ?? null },
-          container
-            ? createElement(
-                CurrentGraph.Provider,
-                { value: container },
-                element,
-              )
-            : element,
-        ),
+        GraphContainer.Provider,
+        { value: container ?? null },
+        container
+          ? createElement(CurrentGraph.Provider, { value: container }, element)
+          : element,
       ),
     ),
   );
@@ -325,33 +315,17 @@ export function createRoot<
   const { container, models, ...rest } = ownOptions(options);
   const otherOptions = ownOptions(rest);
 
-  const containerInfo: RenderContainer<Container> = {
-    renderedModels: [],
-    uncaughtErrors: [],
-  };
-
-  // Use imported type guard for root graph models
-
-  // Model collector function
-  const collectModel = (model: AnyDotObjectModel) => {
-    if (container) {
-      // With container: collect all non-container models at top level only
-      if (model !== container) {
-        containerInfo.renderedModels.push(model);
-      }
-    } else {
-      // Without container: collect all root graph models (Graph/Digraph)
-      if (isRootGraphModel(model)) {
-        containerInfo.renderedModels.push(model);
-      }
-    }
-  };
-
   const context: Context<Container> = {
     container,
     models: createModelsContext(models ?? {}),
   };
-  containerInfo.context = context;
+  // The host config adds the models at commit and lists the rendered ones.
+  const containerInfo: RenderContainer<Container> = {
+    renderedModels: [],
+    uncaughtErrors: [],
+    context,
+    children: [],
+  };
 
   const fiberRoot = createFiberRoot(containerInfo, otherOptions);
   let isUnmounted = false;
@@ -369,15 +343,7 @@ export function createRoot<
       throw new Error('Cannot render on an unmounted root');
     }
 
-    // Clear previous models for fresh render
-    containerInfo.renderedModels = [];
-
-    const wrappedElement = createWrappedElement(
-      element,
-      context,
-      collectModel,
-      container,
-    );
+    const wrappedElement = createWrappedElement(element, context, container);
 
     await renderInternal(
       containerInfo,
