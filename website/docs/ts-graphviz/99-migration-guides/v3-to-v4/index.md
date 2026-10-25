@@ -6,7 +6,7 @@ description: |-
 
 v4 is the release where the API review of the 3.x line landed: attribute values became explicit about what they mean, errors became identifiable, the model classes stopped depending on import order, and the AST was tidied. Most programs that build a graph with the factory API and call `toDot` keep working unchanged. This guide lists every change that can affect existing code, by area, with what to do about it.
 
-Requirements: **Node.js 22 or later** (Node.js 20 reached end of life) and, for TypeScript users, **TypeScript 5.0 or later** (see the [versioning policy](../../11-advanced-topics/03-versioning-policy.md#supported-typescript-versions)).
+Requirements: **Node.js 22 or later** (Node.js 20 reached end of life) and, for TypeScript users, **TypeScript 5.0 or later** (see *Supported TypeScript versions* in the Versioning Policy).
 
 ## 1. Strings are literal text; DOT syntax is opt-in
 
