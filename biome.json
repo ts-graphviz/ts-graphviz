@@ -23,7 +23,8 @@
       "!packages/ast/src/dot-shim/parser/_parse.d.ts",
       "!website/build",
       "!website/.docusaurus",
-      "!website/static/dts.json"
+      "!website/static/dts.json",
+      "!tools/biome-plugins/fixtures"
     ]
   },
   "assist": {
@@ -103,6 +104,21 @@
           }
         }
       }
+    },
+    {
+      "includes": [
+        "packages/*/src/**/*.ts",
+        "packages/*/src/**/*.tsx",
+        "!**/*.test.ts",
+        "!**/*.test.tsx",
+        "!**/*.spec.ts",
+        "!**/*.spec.tsx"
+      ],
+      "plugins": [
+        "./tools/biome-plugins/no-inherited-option-reads.grit",
+        "./tools/biome-plugins/spawn-options-null-prototype.grit",
+        "./tools/biome-plugins/no-node-stream-options.grit"
+      ]
     }
   ]
 }

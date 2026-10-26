@@ -1,5 +1,5 @@
 import { sanitize } from '@ts-graphviz/ast';
-import { withCode } from '@ts-graphviz/common';
+import { ownOptions, withCode } from '@ts-graphviz/common';
 import { attributeArgs } from './create-command-args.js';
 import type { CommonOptions } from './types.js';
 
@@ -68,7 +68,11 @@ export function sourceToRender(
   dot: string,
   options: Pick<CommonOptions, 'sanitize' | 'format' | 'attributes'>,
 ): string {
-  const { sanitize: check = true, format = 'svg', attributes } = options;
+  const {
+    sanitize: check = true,
+    format = 'svg',
+    attributes,
+  } = ownOptions(options);
   if (check === false) return dot;
   const sanitizeOptions = { ...(check === true ? {} : check), format };
   if (attributes !== undefined) {

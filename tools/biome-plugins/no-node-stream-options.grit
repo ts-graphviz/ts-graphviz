@@ -1,0 +1,17 @@
+language js
+
+// Node.js copies a stream's options object into a plain object, so a
+// prototype-less options object does not keep inherited properties such as
+// `fd`, `start` or `flags` out. Open files with fs.promises.open() and write
+// with positional arguments instead.
+or {
+  `createWriteStream($_)`,
+  `createWriteStream($_, $_)`,
+  `createReadStream($_)`,
+  `createReadStream($_, $_)`
+} as $call where {
+  register_diagnostic(
+    span = $call,
+    message = "Do not create Node.js file streams: their options are copied into a plain object, so inherited `fd`, `start` or `flags` apply. Use fs.promises.open() with positional reads and writes."
+  )
+}

@@ -1,0 +1,51 @@
+language js
+
+// An object literal under up to three type assertions or parentheses
+// (Biome's GritQL does not take recursive patterns).
+pattern wrapped($inner) {
+  or {
+    TsAsExpression(expression = $inner),
+    TsSatisfiesExpression(expression = $inner),
+    TsNonNullAssertionExpression(expression = $inner),
+    JsParenthesizedExpression(expression = $inner)
+  }
+}
+
+pattern unwrapped($object) {
+  or {
+    JsObjectExpression() as $object,
+    wrapped(JsObjectExpression() as $object),
+    wrapped(wrapped(JsObjectExpression() as $object)),
+    wrapped(wrapped(wrapped(JsObjectExpression() as $object)))
+  }
+}
+
+// What the adapter hands to the runtime must not inherit from
+// Object.prototype: child_process.spawn copies inherited enumerable keys
+// into the child's environment and some Node.js releases read an inherited
+// `shell`; Deno and the Web stream constructors read their options and
+// sources the same way.
+or {
+  `spawn($_, $options)`,
+  `spawn($_, $_, $options)`,
+  `spawnSync($_, $options)`,
+  `spawnSync($_, $_, $options)`,
+  `execFile($_, $options)`,
+  `execFile($_, $_, $options)`,
+  `execFile($_, $_, $options, $_)`,
+  `new Deno.Command($_, $options)`,
+  `Deno.open($_, $options)`,
+  `new ReadableStream($options)`,
+  `new WritableStream($options)`
+} where {
+  // The object itself, also under a type assertion.
+  $options <: unwrapped($object),
+  // `__proto__: null` of the options object itself, not of one inside it.
+  not $object <: JsObjectExpression(members = $members) where {
+    $members <: some `__proto__: null`
+  },
+  register_diagnostic(
+    span = $options,
+    message = "Give options passed to the runtime a null prototype (`__proto__: null`); for spawn, also state `shell` and `env`."
+  )
+}

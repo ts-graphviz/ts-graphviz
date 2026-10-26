@@ -1,0 +1,12 @@
+{
+  "root": true,
+  "vcs": { "enabled": false },
+  "formatter": { "enabled": false },
+  "assist": { "enabled": false },
+  "linter": { "enabled": true, "rules": { "preset": "none" } },
+  "plugins": [
+    "../no-inherited-option-reads.grit",
+    "../spawn-options-null-prototype.grit",
+    "../no-node-stream-options.grit"
+  ]
+}

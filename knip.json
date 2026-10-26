@@ -16,6 +16,9 @@
       ],
       "ignoreBinaries": [
         "dot"
+      ],
+      "ignore": [
+        "tools/biome-plugins/fixtures/**"
       ]
     },
     "packages/ts-graphviz": {

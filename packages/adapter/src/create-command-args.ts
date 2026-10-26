@@ -60,6 +60,8 @@ export function* attributeArgs(
 export function* createCommandArgs<T extends Layout>(
   options: Options<T>,
 ): Generator<string> {
+  // Own properties only, whoever calls this (#1757).
+  const own = ownOptions(options);
   const {
     suppressWarnings = true,
     format = 'svg',
@@ -67,7 +69,7 @@ export function* createCommandArgs<T extends Layout>(
     library = [],
     y = false,
     scale,
-  } = options;
+  } = own;
   if (suppressWarnings) yield '-q';
   yield `-T${format}`;
   for (const [flag, arg] of attributeArgs(attributes)) yield `-${flag}${arg}`;
@@ -80,11 +82,11 @@ export function* createCommandArgs<T extends Layout>(
   }
   if (y === true) yield '-y';
 
-  if (typeof options.layout === 'string') {
-    yield `-K${options.layout}`;
-    switch (options.layout) {
+  if (typeof own.layout === 'string') {
+    yield `-K${own.layout}`;
+    switch (own.layout) {
       case 'neato': {
-        const { reduce, noop } = options;
+        const { reduce, noop } = own;
         if (reduce === true) yield '-x';
         if (typeof noop === 'number') yield `-n${noop}`;
         break;
@@ -97,7 +99,7 @@ export function* createCommandArgs<T extends Layout>(
           unscaledFactor,
           overlapExpansionFactor,
           temperature,
-        } = options;
+        } = own;
         // Graphviz defaults: grid on (`-Lg` turns it off), old attractive
         // force off (`-LO` turns it on). Only emit a flag when the option
         // differs, one `-L` argument per flag (Graphviz reads one per `-L`).
