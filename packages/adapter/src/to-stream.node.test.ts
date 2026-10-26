@@ -1,32 +1,26 @@
 import { spawn } from 'node:child_process';
-import { PassThrough, Readable } from 'node:stream';
-import { pipeline } from 'node:stream/promises';
+import { PassThrough, Writable } from 'node:stream';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CommandExecutionError } from './errors.js';
 import { toStream } from './to-stream.node.js';
 
-// Mock child_process.spawn and pipeline inline to avoid hoisting
+// Mock child_process.spawn inline to avoid hoisting
 vi.mock('node:child_process', () => ({
   spawn: vi.fn(),
-}));
-vi.mock('node:stream/promises', () => ({
-  pipeline: vi.fn(),
 }));
 
 // Retrieve mock functions
 const spawnMock = spawn as unknown as ReturnType<typeof vi.fn>;
-const pipelineMock = pipeline as unknown as ReturnType<typeof vi.fn>;
 
 type Callback = (...args: any) => any;
 
 describe('[SM-4] toStream (Node adapter)', () => {
   beforeEach(() => {
     spawnMock.mockReset();
-    pipelineMock.mockReset();
   });
 
   describe('when process exits successfully (code 0)', () => {
-    it('should resolve with stdout stream and invoke pipeline', async () => {
+    it('should resolve with stdout stream and write the source to stdin', async () => {
       // Arrange
       const stdout = new PassThrough();
       const stderr = new PassThrough();
@@ -43,7 +37,6 @@ describe('[SM-4] toStream (Node adapter)', () => {
         },
       };
       spawnMock.mockReturnValue(p);
-      pipelineMock.mockResolvedValue(undefined);
 
       // Act
       const resultPromise = toStream('input-data', {
@@ -51,11 +44,8 @@ describe('[SM-4] toStream (Node adapter)', () => {
         sanitize: false,
       });
 
-      // Assert pipeline called with Readable.from and stdin
-      expect(pipelineMock).toHaveBeenCalledTimes(1);
-      const [readableArg, stdinArg] = pipelineMock.mock.calls[0];
-      expect(readableArg).toBeInstanceOf(Readable);
-      expect(stdinArg).toBe(stdin);
+      // Assert: the source is written to stdin
+      expect(stdin.read()?.toString()).toBe('input-data');
 
       // Trigger close event
       stdout.end('<svg/>');
@@ -78,7 +68,6 @@ describe('[SM-4] toStream (Node adapter)', () => {
         on: () => {},
       };
       spawnMock.mockReturnValue(p);
-      pipelineMock.mockResolvedValue(undefined);
       const proto = Object.prototype as Record<string, unknown>;
       proto.shell = true;
       proto.env = { TS_GRAPHVIZ_TEST: '1' };
@@ -95,6 +84,40 @@ describe('[SM-4] toStream (Node adapter)', () => {
       expect(options.shell).toBe(false);
       expect(Object.getPrototypeOf(options.env)).toBeNull();
       expect({ ...options.env }).toStrictEqual({ ...process.env });
+    });
+  });
+
+  describe('[SM-8] output stream', () => {
+    it.each([
+      ['encoding', 'hex'],
+      ['signal', { aborted: true }],
+    ])('ignores an inherited %s', async (key, value) => {
+      const stdout = new PassThrough();
+      const stdin = new PassThrough();
+      const events: Record<string, Callback[]> = {};
+      const p: any = {
+        stdout,
+        stderr: new PassThrough(),
+        stdin,
+        kill: vi.fn(() => true),
+        on: (event: string, handler: Callback) => {
+          events[event] ??= [];
+          events[event].push(handler);
+        },
+      };
+      spawnMock.mockReturnValue(p);
+      const proto = Object.prototype as Record<string, unknown>;
+      proto[key] = value;
+      try {
+        const promise = toStream('input-data', { sanitize: false });
+        stdout.end('<svg/>');
+        await new Promise((r) => setImmediate(r));
+        for (const handler of events.close) handler(0, null);
+        const result = await promise;
+        expect(await new Response(result).text()).toBe('<svg/>');
+      } finally {
+        delete proto[key];
+      }
     });
   });
 
@@ -116,7 +139,6 @@ describe('[SM-4] toStream (Node adapter)', () => {
         },
       };
       spawnMock.mockReturnValue(p);
-      pipelineMock.mockResolvedValue(undefined);
 
       // Act: call toStream first to set up listeners
       const promise = toStream('dot', { layout: 'dot', sanitize: false });
@@ -157,7 +179,6 @@ describe('[SM-4] toStream (Node adapter)', () => {
         },
       };
       spawnMock.mockReturnValue(p);
-      pipelineMock.mockResolvedValue(undefined);
 
       // Act
       const promise = toStream('dot', { layout: 'dot', sanitize: false });
@@ -206,9 +227,9 @@ describe('[SM-4] toStream (Node adapter)', () => {
       };
       spawnMock.mockReturnValue(p);
       const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
-      pipelineMock.mockRejectedValue(epipe);
 
       const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      p.stdin.destroy(epipe);
       await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
       await expect(promise).rejects.toMatchObject({
         command: 'dot',
@@ -217,6 +238,33 @@ describe('[SM-4] toStream (Node adapter)', () => {
         exit: { code: null, signal: 'SIGKILL' },
       });
       expect(p.kill).toHaveBeenCalledWith('SIGKILL');
+    });
+
+    it('fails when stdin closes before the source is written, even with exit code 0', async () => {
+      const handlers: Record<string, Callback[]> = {};
+      const p: any = {
+        stdout: new PassThrough(),
+        stderr: new PassThrough(),
+        // A pipe the process never reads from: the write stays pending.
+        stdin: new Writable({ write() {} }),
+        on: (event: string, handler: Callback) => {
+          handlers[event] ??= [];
+          handlers[event].push(handler);
+        },
+        kill: vi.fn(() => true),
+      };
+      spawnMock.mockReturnValue(p);
+
+      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      // As Node.js does when the process exits: no error, just closed.
+      p.stdin.destroy();
+      await new Promise((r) => setImmediate(r));
+      for (const handler of handlers.exit ?? []) handler(0, null);
+      for (const handler of handlers.close ?? []) handler(0, null);
+      await expect(promise).rejects.toMatchObject({
+        code: 'TSG_ERR_COMMAND_FAILED',
+        cause: { code: 'ERR_STREAM_PREMATURE_CLOSE' },
+      });
     });
 
     it('reports the exit status when the command failed on its own', async () => {
@@ -234,9 +282,9 @@ describe('[SM-4] toStream (Node adapter)', () => {
       };
       spawnMock.mockReturnValue(p);
       const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
-      pipelineMock.mockRejectedValue(epipe);
 
       const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      p.stdin.destroy(epipe);
       stderr.write('syntax error in line 1');
       await new Promise((r) => setImmediate(r));
       for (const handler of handlers.close ?? []) handler(1, null);

@@ -1,6 +1,4 @@
 import { type SpawnOptionsWithoutStdio, spawn } from 'node:child_process';
-import { Readable } from 'node:stream';
-import { pipeline } from 'node:stream/promises';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
@@ -103,7 +101,14 @@ export async function toStream<T extends Layout>(
 
     const chunks: Buffer[] = [];
     let size = 0;
-    stdout.on('data', (chunk: Buffer) => {
+    // Node.js creates these pipes with options of its own that inherit from
+    // Object.prototype, so an inherited `encoding` would turn the output
+    // into text. Read it as latin1, which maps each byte to one character,
+    // and turn it back into the same bytes.
+    stdout.setEncoding('latin1');
+    stderr.setEncoding('latin1');
+    stdout.on('data', (text: string) => {
+      const chunk = Buffer.from(text, 'latin1');
       if (settled) return;
       size += chunk.byteLength;
       if (limit > 0 && size > limit) {
@@ -113,7 +118,14 @@ export async function toStream<T extends Layout>(
       chunks.push(chunk);
     });
     const errors = new TailBuffer();
-    stderr.on('data', (chunk: Buffer) => errors.push(chunk));
+    stderr.on('data', (text: string) =>
+      errors.push(Buffer.from(text, 'latin1')),
+    );
+    // Let go of each output pipe once it has ended: with an inherited
+    // `allowHalfOpen`, Node.js keeps an ended pipe open, and the process
+    // would never report 'close'.
+    stdout.on('end', () => stdout.destroy());
+    stderr.on('end', () => stderr.destroy());
 
     // Set when writing the DOT source fails.
     let inputError: unknown;
@@ -131,7 +143,18 @@ export async function toStream<T extends Layout>(
       if (code === 0 && inputError === undefined) {
         settle(() =>
           resolve(
-            Readable.toWeb(Readable.from(chunks)) as ReadableStream<Uint8Array>,
+            // A source without a prototype, and no Node.js stream in
+            // between: Node.js copies a stream's options into a plain
+            // object, so an inherited `encoding` or `signal` would apply.
+            new ReadableStream<Uint8Array>({
+              __proto__: null,
+              start(controller) {
+                for (const chunk of chunks) {
+                  controller.enqueue(chunk as Uint8Array<ArrayBuffer>);
+                }
+                controller.close();
+              },
+            } as ConstructorParameters<typeof ReadableStream<Uint8Array>>[0]),
           ),
         );
       } else if (code !== 0 && code !== null) {
@@ -173,10 +196,31 @@ export async function toStream<T extends Layout>(
     // before reading). Never leave the process running and never leave the
     // call pending: kill it, and report as soon as it has exited (it may
     // already have).
-    pipeline(Readable.from([source]), stdin).catch((e: unknown) => {
+    const onInputError = (e: unknown) => {
       inputError ??= e;
       p.kill('SIGKILL');
       if (exited) report(exited.code, exited.signal);
+    };
+    stdin.on('error', onInputError);
+    // Closed before all of the source was written (Node.js destroys stdin
+    // when the process exits), possibly without an error.
+    let written = false;
+    stdin.on('close', () => {
+      if (written) return;
+      // Node.js's own code for this, as `pipeline` reported it.
+      onInputError(
+        Object.assign(new Error('Premature close'), {
+          code: 'ERR_STREAM_PREMATURE_CLOSE',
+        }),
+      );
+    });
+    // Bytes, so that no encoding is looked up for a string. Destroyed once
+    // written: with an inherited `allowHalfOpen` the pipe would otherwise
+    // stay open, and the process never reports 'close'.
+    stdin.end(Buffer.from(source, 'utf8'), (e?: Error | null) => {
+      if (e) return onInputError(e);
+      written = true;
+      stdin.destroy();
     });
   });
 }

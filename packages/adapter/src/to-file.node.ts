@@ -1,7 +1,4 @@
-import { createWriteStream } from 'node:fs';
-import { Readable } from 'node:stream';
-import { pipeline } from 'node:stream/promises';
-import type { ReadableStream as NodeWebReadableStream } from 'node:stream/web';
+import { open } from 'node:fs/promises';
 import { toStream } from './to-stream.node.js';
 import type { Layout, Options } from './types.js';
 
@@ -18,10 +15,23 @@ export async function toFile<T extends Layout>(
   options?: Options<T>,
 ): Promise<void> {
   const stream = await toStream(dot, options);
-  await pipeline(
-    // The global ReadableStream type and node:stream/web's are the same at
-    // runtime but distinct to TypeScript.
-    Readable.fromWeb(stream as NodeWebReadableStream<Uint8Array>),
-    createWriteStream(path),
-  );
+  // Opened and written with positional arguments only: Node.js copies a
+  // stream's options object into a plain one, so an options object would
+  // let an inherited `fd`, `start` or `flags` choose where the output goes.
+  const file = await open(path, 'w');
+  try {
+    for await (const chunk of stream) {
+      let offset = 0;
+      while (offset < chunk.byteLength) {
+        const { bytesWritten } = await file.write(
+          chunk,
+          offset,
+          chunk.byteLength - offset,
+        );
+        offset += bytesWritten;
+      }
+    }
+  } finally {
+    await file.close();
+  }
 }
