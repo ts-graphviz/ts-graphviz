@@ -174,3 +174,24 @@ describe('attachComments on nodes from a custom builder', () => {
     expect(b.trailingComments).toBe(shared);
   });
 });
+
+describe('comment text', () => {
+  it('reads CRLF line breaks in a block comment as "\\n"', () => {
+    const ast = parse(
+      'digraph {\r\n/* a\r\n b */\r\nx;\r\n/* c\r\n */ y;\r\n}',
+    );
+    const graph = ast.children[0] as GraphASTNode;
+    const texts = JSON.stringify(graph);
+    expect(texts).not.toContain('\\r');
+    expect(graph.children[0]).toMatchObject({ type: 'Comment', value: 'a\nb' });
+  });
+
+  it('reads a comment with more lines than a call takes arguments', () => {
+    const lines = 500_000;
+    const ast = parse(`/*${'\n x'.repeat(lines)}\n*/\ndigraph {}`, {
+      maxInputSize: 0,
+    });
+    const comment = ast.children[0] as { value: string };
+    expect(comment.value.split('\n')).toHaveLength(lines);
+  });
+});
