@@ -19,6 +19,9 @@ import { dot } from './ast-arbitraries.js';
 // FC_STATS=1 to print the full distribution.
 
 const SAMPLES = 2000;
+// One fixed seed, so the shares measured are the same on every run (the
+// thresholds sit close to them); set FC_SEED to measure another sample.
+const SEED = Number(process.env.FC_SEED ?? 20261026);
 
 /** Share of samples (0..1) per label; a sample may carry several labels. */
 function distribution<T>(
@@ -26,7 +29,7 @@ function distribution<T>(
   classify: (value: T) => string[],
 ): Map<string, number> {
   const counts = new Map<string, number>();
-  for (const value of fc.sample(arbitrary, { numRuns: SAMPLES })) {
+  for (const value of fc.sample(arbitrary, { numRuns: SAMPLES, seed: SEED })) {
     for (const label of classify(value)) {
       counts.set(label, (counts.get(label) ?? 0) + 1);
     }

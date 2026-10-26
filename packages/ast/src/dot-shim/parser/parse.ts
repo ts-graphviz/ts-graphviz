@@ -1,4 +1,5 @@
 import { ownOptions, warnDeprecated, withCode } from '@ts-graphviz/common';
+import type { Builder } from '../../builder/builder.js';
 import { ASTNodeCountExceededError } from '../../builder/errors.js';
 import type {
   ASTNode,
@@ -237,6 +238,7 @@ function parseRule(
   try {
     // Comments inside statements, by offset; attached once parsing is done.
     const inlineComments = new Map<number, InlineComment>();
+    let builder: Builder | undefined;
     const ast: ASTNode | ClusterStatementASTNode[] = _parse(input, {
       startRule,
       filename,
@@ -244,13 +246,18 @@ function parseRule(
       maxEdgeChainDepth,
       maxASTNodes,
       inlineComments,
+      onBuilder: (b: Builder) => {
+        builder = b;
+      },
     });
     if (inlineComments.size > 0) {
+      // Each attached comment is an AST node too.
       attachComments(
         Array.isArray(ast)
           ? ({ type: 'Dot', children: ast } as unknown as ASTNode)
           : ast,
         inlineComments.values(),
+        () => builder?.countNode(),
       );
     }
     return ast;

@@ -246,7 +246,10 @@ describe('[SM-7] sanitize', () => {
 
   describe('style, shape and colors', () => {
     it('checks a long style value in linear time', () => {
-      const digits = '1'.repeat(1_000_000);
+      // 6 s with the quadratic check; a few milliseconds now. Kept well
+      // under the 1 s bound: parsing the source takes most of the time on
+      // CI with coverage (1 MB took about 1.1 s there).
+      const digits = '1'.repeat(100_000);
       for (const style of [
         `setlinewidth(${digits}`,
         `setlinewidth(${digits}x)`,
