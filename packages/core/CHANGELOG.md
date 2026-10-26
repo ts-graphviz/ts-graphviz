@@ -1,5 +1,23 @@
 # @ts-graphviz/core
 
+## 3.0.11
+
+### Patch Changes
+
+- [#1803](https://github.com/ts-graphviz/ts-graphviz/pull/1803) [`cec67fa`](https://github.com/ts-graphviz/ts-graphviz/commit/cec67fa244a97dc37e811c68f79fd838902e63e9) Thanks [@kamiazya](https://github.com/kamiazya)! - Bounded work for deeply nested and large graphs, and stricter printing of hand-built ASTs:
+
+  - `stringify` / `toDot` indent each line once instead of once per enclosing level, so printing nested graphs no longer slows down sharply with depth.
+  - `parse` / `fromDot` and `stringify` / `toDot` accept graph and subgraph bodies nested up to `maxNestingDepth` levels (default 100); deeper input throws a `DotSyntaxError` when parsing and a `RangeError` when printing. Raise the limit with the `maxNestingDepth` parse or print option if you need deeper nesting.
+  - Long edge chains are parsed without recursion; a parse that runs out of stack throws a `DotSyntaxError`.
+  - `getSubgraph` (and `subgraph(id)`) looks subgraphs up by id in constant time.
+  - `stringify` writes a literal without quotes only when it is a single identifier or numeral, and as HTML-like text only when its `<` and `>` balance; it rejects unknown attribute list and comment kinds with a `TypeError`, and names an unknown node type without printing the node.
+  - The shared `createElement` from `@ts-graphviz/ast` no longer counts the nodes it creates; use `createElementFactory` for a limited builder.
+  - On Deno, `toFile` creates the output file if it is missing and empties it if it exists.
+  - `renderHTMLLike` renders only React elements (checked with `isValidElement`), and nested arrays of children count toward `maxDepth`.
+
+- Updated dependencies [[`cec67fa`](https://github.com/ts-graphviz/ts-graphviz/commit/cec67fa244a97dc37e811c68f79fd838902e63e9)]:
+  - @ts-graphviz/ast@3.0.10
+
 ## 3.0.10
 
 ### Patch Changes
