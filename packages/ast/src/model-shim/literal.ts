@@ -40,8 +40,12 @@ function rejectNul(text: string, what: string): void {
   }
 }
 
-/** Escape literal text so it can be written between double quotes. */
-export function escapeLiteral(text: string): string {
+/**
+ * Escape literal text so it can be written between double quotes. A value
+ * that is not a string (an id from parsed JSON, say) is escaped as its text.
+ */
+export function escapeLiteral(value: string): string {
+  const text = String(value);
   rejectNul(text, 'A DOT string');
   return text
     .replace(/\\/g, '\\\\')
@@ -141,9 +145,16 @@ export function literalFromValue(
   const text = String(value);
   // Booleans and numbers in DOT's own numeral form are written bare; anything
   // else JavaScript can produce (1e+21, NaN, Infinity) is written as a string.
-  return typeof value === 'boolean' || DOT_NUMERAL.test(text)
-    ? { value: text, kind: 'bare' }
-    : { value: text, kind: 'quoted' };
+  if (
+    typeof value === 'boolean' ||
+    ((typeof value === 'number' || typeof value === 'bigint') &&
+      DOT_NUMERAL.test(text))
+  ) {
+    return { value: text, kind: 'bare' };
+  }
+  // Anything else (an array or object from parsed JSON, say) is written as
+  // its text, escaped like a string.
+  return { value: escapeLiteral(text), kind: 'quoted' };
 }
 
 /** DOT numerals: `[-]?(.[0-9]+ | [0-9]+(.[0-9]*)?)`, no exponent. */

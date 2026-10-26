@@ -58,7 +58,7 @@ Applications build graphs from their own data: node ids from database keys, labe
 
 **Guarantees**
 
-- **A plain string is literal text.** Any `string` used as an id, port, attribute key or attribute value is escaped completely when written, so it cannot terminate the quoted string, add statements, or be read as an HTML-like label. `fromDot(toDot(g))` gives the same string back.
+- **A plain string is literal text.** Any `string` used as an id, port, attribute key or attribute value is escaped completely when written, so it cannot terminate the quoted string, add statements, or be read as an HTML-like label. `fromDot(toDot(g))` gives the same string back. An attribute value or id of another type, such as an array or object from parsed JSON, is converted with `String()` and escaped the same way (numbers and booleans excepted, below). A value that `String()` cannot convert, such as `Object.create(null)`, throws the `TypeError` it raises.
 - **Values that must not be written are rejected.** A null character (`RangeError`, code `TSG_ERR_NUL_CHARACTER`) cannot be represented in DOT and is refused instead of dropped.
 - **Booleans are written bare as `true`/`false`; numbers are written bare only in DOT's own numeral form.** Anything JavaScript could print differently (`1e21`, `NaN`, `Infinity`) is written as a quoted string.
 - **Edge-target shorthand is the one place a string is parsed.** `g.edge(['a:p:n', 'b'])` splits the string on `:` into id, port and compass (as in DOT). An id that itself contains `:` must be given as `{ id: 'a:b' }`; then it is literal text like any other id.
