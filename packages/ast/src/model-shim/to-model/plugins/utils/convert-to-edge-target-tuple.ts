@@ -47,7 +47,7 @@ function toNodeRef(t: NodeRefASTNode): ForwardRefNode {
  * written, so a model group comes back exactly as `fromModel` wrote it.
  */
 function plainNodeIds(target: SubgraphASTNode): string[] | undefined {
-  if (target.id !== undefined) return undefined;
+  if (ownField(target, 'id') !== undefined) return undefined;
   const ids: string[] = [];
   for (const child of target.children) {
     if (child.type !== 'Node' || child.children.length > 0) return undefined;

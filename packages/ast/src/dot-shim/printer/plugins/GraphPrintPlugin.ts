@@ -1,3 +1,4 @@
+import { ownField } from '../../../own-field.js';
 import type { GraphASTNode } from '../../../types.js';
 import type { PrintPlugin } from '../types.js';
 
@@ -11,11 +12,12 @@ export const GraphPrintPlugin: PrintPlugin<GraphASTNode> = {
       yield 'strict ';
     }
     yield ast.directed ? 'digraph ' : 'graph ';
-    if (ast.danglingComments?.length) {
-      yield* context.printComments(ast.danglingComments, 'inline');
+    if (ownField(ast, 'danglingComments')?.length) {
+      yield* context.printComments(ownField(ast, 'danglingComments'), 'inline');
     }
-    if (ast.id) {
-      yield* context.print(ast.id);
+    const id = ownField(ast, 'id');
+    if (id) {
+      yield* context.print(id);
       yield ' ';
     }
     yield '{';

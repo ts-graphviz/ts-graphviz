@@ -125,3 +125,52 @@ describe.skipIf(!hasDot)(
     });
   },
 );
+
+describe('attachComments on nodes from a custom builder', () => {
+  it('fills a comment field that is present but undefined', async () => {
+    const { attachComments } = await import('./attach-comments.js');
+    const at = (offset: number) => ({ offset, line: 1, column: offset + 1 });
+    const node = {
+      type: 'Node',
+      location: { start: at(10), end: at(11) },
+      children: [],
+      trailingComments: undefined,
+    };
+    const root = {
+      type: 'Dot',
+      location: { start: at(0), end: at(30) },
+      children: [node],
+    };
+    attachComments(root as never, [
+      { kind: 'Block', value: 'c', location: { start: at(12), end: at(17) } },
+    ]);
+    expect(node.trailingComments).toMatchObject([{ value: 'c' }]);
+  });
+
+  it('gives each node an array of its own, not one from its class', async () => {
+    const { attachComments } = await import('./attach-comments.js');
+    const at = (offset: number) => ({ offset, line: 1, column: offset + 1 });
+    const shared: unknown[] = [];
+    class CustomNode {
+      readonly type = 'Node';
+      readonly children = [];
+      constructor(readonly location: object) {}
+      get trailingComments() {
+        return shared;
+      }
+    }
+    const a = new CustomNode({ start: at(10), end: at(11) });
+    const b = new CustomNode({ start: at(20), end: at(21) });
+    const root = {
+      type: 'Dot',
+      location: { start: at(0), end: at(30) },
+      children: [a, b],
+    };
+    attachComments(root as never, [
+      { kind: 'Block', value: 'c', location: { start: at(12), end: at(17) } },
+    ]);
+    expect(shared).toStrictEqual([]);
+    expect(a.trailingComments).toMatchObject([{ value: 'c' }]);
+    expect(b.trailingComments).toBe(shared);
+  });
+});

@@ -1,3 +1,4 @@
+import { ownField } from '../../../own-field.js';
 import type { SubgraphASTNode } from '../../../types.js';
 import type { PrintPlugin } from '../types.js';
 
@@ -7,13 +8,14 @@ export const SubgraphPrintPlugin: PrintPlugin<SubgraphASTNode> = {
   },
   *print(context, ast) {
     yield 'subgraph';
-    if (ast.danglingComments?.length) {
+    if (ownField(ast, 'danglingComments')?.length) {
       yield ' ';
-      yield* context.printComments(ast.danglingComments, 'inline');
+      yield* context.printComments(ownField(ast, 'danglingComments'), 'inline');
     }
-    if (ast.id) {
+    const id = ownField(ast, 'id');
+    if (id) {
       yield ' ';
-      yield* context.print(ast.id);
+      yield* context.print(id);
     }
     yield ' {';
     if (ast.children.length >= 1) {

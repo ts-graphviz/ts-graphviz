@@ -1,3 +1,4 @@
+import { ownOptions } from '@ts-graphviz/common';
 import {
   type CommonParseOptions,
   parseFragment,
@@ -35,7 +36,10 @@ export interface PipelineOptions {
 export class Pipeline {
   private readonly transformers: Transformer[] = [];
 
-  constructor(private readonly options: PipelineOptions = {}) {}
+  constructor(private readonly options: PipelineOptions = {}) {
+    // Own properties only: an inherited one is never an option (#1757).
+    this.options = ownOptions(options);
+  }
 
   /** Add a transformer, run after the ones added before it. */
   use(transformer: Transformer): this {

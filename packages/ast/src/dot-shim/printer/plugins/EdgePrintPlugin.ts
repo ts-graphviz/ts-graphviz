@@ -1,3 +1,4 @@
+import { ownField } from '../../../own-field.js';
 import type {
   EdgeASTNode,
   EdgeTargetASTNode,
@@ -10,19 +11,20 @@ import type { PrintContext, PrintPlugin } from '../types.js';
  * statements, which is written in the short form `{a b}`.
  */
 function plainNodes(target: EdgeTargetASTNode): NodeASTNode[] | undefined {
-  if (target.type !== 'Subgraph' || target.id !== undefined) return undefined;
+  if (target.type !== 'Subgraph' || ownField(target, 'id') !== undefined)
+    return undefined;
   const nodes = target.children;
   return nodes.length > 0 &&
-    !target.leadingComments &&
-    !target.trailingComments &&
-    !target.danglingComments &&
+    !ownField(target, 'leadingComments') &&
+    !ownField(target, 'trailingComments') &&
+    !ownField(target, 'danglingComments') &&
     nodes.every(
       (n) =>
         n.type === 'Node' &&
         n.children.length === 0 &&
-        !n.leadingComments &&
-        !n.trailingComments &&
-        !n.danglingComments,
+        !ownField(n, 'leadingComments') &&
+        !ownField(n, 'trailingComments') &&
+        !ownField(n, 'danglingComments'),
     )
     ? (nodes as NodeASTNode[])
     : undefined;
