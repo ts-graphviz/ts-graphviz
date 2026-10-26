@@ -6,6 +6,7 @@ import type {
   NodeModel,
   SubgraphModel,
 } from 'ts-graphviz';
+import { isNodeModel, ownOptions } from 'ts-graphviz';
 import { renderId } from './renderId.js';
 import type { AnyGraphContainer } from './types/container.js';
 import type {
@@ -64,7 +65,8 @@ function attributesOf(props: ComponentProps): Record<string, unknown> {
 export function hostProps<P extends { label?: unknown; xlabel?: unknown }>(
   props: P,
 ): P {
-  const rendered = { ...props };
+  // Own props only: one inherited from Object.prototype is not a prop.
+  const rendered = ownOptions(props);
   for (const key of ['label', 'xlabel'] as const) {
     if (rendered[key] !== undefined) {
       (rendered as Record<string, unknown>)[key] = renderId(
@@ -97,8 +99,8 @@ export function edgeKey(targets: ReadonlyEdgeTargetLikeTuple): string {
     if (Array.isArray(target)) return target.map(part);
     if (typeof target !== 'object' || target === null) return target;
     // A node model, by identity.
-    if ('$$type' in target) return { node: identityKey(target) };
-    const { id, port, compass } = target as Record<string, unknown>;
+    if (isNodeModel(target)) return { node: identityKey(target) };
+    const { id, port, compass } = ownOptions(target as Record<string, unknown>);
     return { id, port, compass };
   };
   return JSON.stringify(Array.from(targets, part));
@@ -106,9 +108,11 @@ export function edgeKey(targets: ReadonlyEdgeTargetLikeTuple): string {
 
 export function createHostInstance(
   type: string,
-  props: ComponentProps,
+  rawProps: ComponentProps,
   hostContext: HostContext,
 ): ReconcilerInstance {
+  // Own props only, kept on the instance for every later read.
+  const props = ownOptions(rawProps);
   if ((type === HOST.node || type === HOST.edge) && !hostContext.inGraph) {
     throw new Error(
       `<${COMPONENT_NAMES[type]}> must be rendered inside a Digraph, Graph or Subgraph.`,
@@ -117,13 +121,13 @@ export function createHostInstance(
   switch (type) {
     // The model is made at the first commit, by the graph it goes to.
     case HOST.node:
-      return { kind: 'node', props, hidden: false };
+      return { kind: 'node', props, model: undefined, hidden: false };
     case HOST.edge: {
       const targets: ReadonlyEdgeTargetLikeTuple = props.targets;
       if (targets.length < 2) {
         throw new Error('Edges must have at least 2 targets.');
       }
-      return { kind: 'edge', props, hidden: false };
+      return { kind: 'edge', props, model: undefined, hidden: false };
     }
     case HOST.graph: {
       const model: AnyGraphContainer = props.model;
@@ -164,8 +168,9 @@ function applyGraphProps(
 /** Apply the new props of a host element (its identity props never change). */
 export function updateHostInstance(
   instance: ReconcilerInstance,
-  props: ComponentProps,
+  rawProps: ComponentProps,
 ): void {
+  const props = ownOptions(rawProps);
   switch (instance.kind) {
     case 'node':
     case 'edge':

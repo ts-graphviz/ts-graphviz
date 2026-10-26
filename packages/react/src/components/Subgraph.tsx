@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import type { ModelsContext } from 'ts-graphviz';
+import { type ModelsContext, ownOptions } from 'ts-graphviz';
 import type { AnyGraphContainer } from '../types/container.js';
 import type { SubgraphProps } from '../types.js';
 import { useHostGraph } from './hostGraph.js';
@@ -24,7 +24,7 @@ function createSubgraph(
 const SubgraphComponent = (props: SubgraphProps): ReactElement =>
   useHostGraph(
     props,
-    (models, parent) => createSubgraph(models, parent, props.id),
+    (models, parent) => createSubgraph(models, parent, ownOptions(props).id),
     false,
   );
 

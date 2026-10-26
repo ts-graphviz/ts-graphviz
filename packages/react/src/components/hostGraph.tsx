@@ -5,7 +5,7 @@ import {
   useContext,
   useMemo,
 } from 'react';
-import type { ModelsContext } from 'ts-graphviz';
+import { type ModelsContext, ownOptions } from 'ts-graphviz';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphContainer } from '../contexts/GraphContainer.js';
 import { useGraphContainer } from '../hooks/useGraphContainer.js';
@@ -39,7 +39,7 @@ export function useHostGraph(
   }
   const { models } = useGraphvizContext();
   const parent = useContext(CurrentGraph);
-  const { id, strict, children } = props;
+  const { id, strict, children } = ownOptions(props);
   // biome-ignore lint/correctness/useExhaustiveDependencies: the model is made from the id and strict
   const model = useMemo(
     () => create(models, parent),

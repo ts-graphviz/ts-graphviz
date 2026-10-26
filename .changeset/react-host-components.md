@@ -17,3 +17,5 @@ Render through host components: the renderer adds the models when React commits,
   - only React elements are rendered as elements, and other objects among the children throw a `TypeError`;
   - an array nested in an array counts toward `maxDepth`;
   - an array that contains itself throws a `TypeError`.
+
+The components read only the props they are given: a prop inherited from `Object.prototype` (a `comment`, `label`, `strict`, default attributes) is never applied.

@@ -1,4 +1,5 @@
 import { createElement, type FC } from 'react';
+import { ownOptions } from 'ts-graphviz';
 import { edgeKey, HOST, hostProps } from '../host.js';
 import type { EdgeProps } from '../types.js';
 
@@ -8,7 +9,7 @@ import type { EdgeProps } from '../types.js';
 export const Edge: FC<EdgeProps> = (props) =>
   createElement(HOST.edge, {
     ...hostProps(props),
-    key: edgeKey(props.targets),
+    key: edgeKey(ownOptions(props).targets),
   });
 
 Edge.displayName = 'Edge';
