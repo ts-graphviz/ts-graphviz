@@ -228,9 +228,10 @@ export interface CommentASTProperties extends ASTCommonProperties {
    *
    * So a comment written by `stringify` reads back as the same text, except
    * for whitespace at its start or end, indentation that every line after
-   * the first has, and `"\r"` (alone or in `"\r\n"`), which `stringify`
-   * writes as a line break and which reads back as `"\n"`. For example,
-   * `"a\n b"` reads back as `"a\nb"`.
+   * the first has, a `"\r\n"`, which reads back as `"\n"`, and a lone
+   * `"\r"` in a comment statement, which `stringify` writes as a line break.
+   * (In a comment attached to a node, a lone `"\r"` stays text of that one
+   * comment.) For example, `"a\n b"` reads back as `"a\nb"`.
    */
   value: string;
 }

@@ -195,16 +195,18 @@ describe('comment text', () => {
     expect(comment.value.split('\n')).toHaveLength(lines);
   });
 
-  it('writes a lone CR in an attached comment as a line break', () => {
+  it('keeps a lone CR in an attached comment as text of one comment', () => {
     const ast = parse('digraph { a /* c */ -> b }');
     const edge = (ast.children[0] as GraphASTNode).children[0] as EdgeASTNode;
     const ref = edge.targets[0] as NodeRefASTNode;
     ref.trailingComments = [
       { type: 'Comment', kind: 'Slash', value: 'first\rsecond' },
     ] as never;
-    const dot = stringify(ast);
-    expect(dot).not.toContain('\r');
-    expect(dot).toContain('// first\n');
-    expect(dot).toContain('// second\n');
+    const again = parse(stringify(ast));
+    const edgeAgain = (again.children[0] as GraphASTNode)
+      .children[0] as EdgeASTNode;
+    expect(
+      values((edgeAgain.targets[0] as NodeRefASTNode).trailingComments),
+    ).toEqual(['Slash:first\rsecond']);
   });
 });
