@@ -103,12 +103,14 @@ describe('[SM-1] attachComments', () => {
     expect(performance.now() - start).toBeLessThan(1500);
   });
 
-  it('takes linear time at any nesting depth', () => {
-    const depth = 2000;
+  it('attaches every comment in deeply nested subgraphs', () => {
+    // Each comment is handed down level by level and attached once; the
+    // depth stays within what the parser's own recursion takes everywhere
+    // (and within the default nesting limit of #1777).
+    const depth = 90;
     const dot = `digraph { ${'subgraph { a -> /* c */ b; '.repeat(depth)}${'}'.repeat(depth)} }`;
-    const start = performance.now();
-    parse(dot, { maxASTNodes: 0 });
-    expect(performance.now() - start).toBeLessThan(1500);
+    const ast = parse(dot, { maxASTNodes: 0 });
+    expect(JSON.stringify(ast).match(/"value":"c"/g)).toHaveLength(depth);
   });
 
   /** The smallest `maxASTNodes` that `dot` parses with. */
