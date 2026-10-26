@@ -34,28 +34,58 @@ export class Printer {
       indentSize = 2,
       indentStyle = 'space',
       endOfLine = 'lf',
+      maxNestingDepth = 100,
     } = this.options;
     const EOL = endOfLine === 'crlf' ? '\r\n' : '\n';
     const PADDING = indentStyle === 'space' ? ' '.repeat(indentSize) : '\t';
+    // Each line is indented once, by the depth at which it is printed,
+    // instead of every line passing through one indenting step per level.
+    const paddings = new Map<number, string>();
+    const padding = (depth: number) => {
+      let value = paddings.get(depth);
+      if (value === undefined) {
+        value = PADDING.repeat(depth);
+        paddings.set(depth, value);
+      }
+      return value;
+    };
+    let depth = 0;
+    // Graph and subgraph bodies entered, for the nesting limit.
+    let graphDepth = 0;
     const context: PrintContext = {
       directed: true,
       EOL,
       *printChildren(children: ASTNode[]) {
-        yield* indent(function* () {
+        depth++;
+        try {
           yield EOL;
           yield* context.join(children, EOL);
-        });
+        } finally {
+          depth--;
+        }
         yield EOL;
       },
       *print(a: ASTNode) {
+        const body = a.type === 'Graph' || a.type === 'Subgraph';
+        if (body && graphDepth >= maxNestingDepth) {
+          throw new RangeError(
+            `Nesting depth exceeds maximum allowed depth of ${maxNestingDepth}. ` +
+              `Consider increasing the 'maxNestingDepth' option.`,
+          );
+        }
         for (const plugin of plugins) {
           if (plugin.match(a)) {
-            yield* plugin.print(this, a);
+            if (body) graphDepth++;
+            try {
+              yield* plugin.print(this, a);
+            } finally {
+              if (body) graphDepth--;
+            }
             return;
           }
         }
-        throw new Error(
-          `No matching plugin found for AST node: ${JSON.stringify(a)}`,
+        throw new TypeError(
+          `No matching plugin found for AST node of type ${JSON.stringify(String((a as { type?: unknown })?.type))}.`,
         );
       },
       *join(array: ASTNode[], separator: string) {
@@ -70,18 +100,14 @@ export class Printer {
     };
     return {
       [Symbol.iterator]: function* () {
-        yield* context.print(ast);
+        for (const token of context.print(ast)) {
+          yield token;
+          // `depth` is the depth of the line this line break starts.
+          if (token === EOL && depth > 0) {
+            yield padding(depth);
+          }
+        }
       },
     };
-    function* indent(
-      tokens: () => IterableIterator<string>,
-    ): IterableIterator<string> {
-      for (const token of tokens()) {
-        yield token;
-        if (token === EOL) {
-          yield PADDING;
-        }
-      }
-    }
   }
 }

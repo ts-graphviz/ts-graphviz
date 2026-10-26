@@ -15,6 +15,11 @@ export const CommentPrintPlugin: PrintPlugin<CommentASTNode> = {
     return ast.type === 'Comment';
   },
   *print(context, ast) {
+    if (!Object.hasOwn(paddingMap, ast.kind)) {
+      throw new TypeError(
+        `A comment's kind must be 'Block', 'Macro' or 'Slash', not ${JSON.stringify(String(ast.kind))}.`,
+      );
+    }
     const padding = paddingMap[ast.kind];
     if (ast.kind === 'Block') {
       yield* ['/**', context.EOL];

@@ -31,17 +31,6 @@ export async function toStream<T extends Layout>(
   return cp.stdout;
 }
 
-function open(path: string) {
-  try {
-    return Deno.open(path, { __proto__: null, write: true });
-  } catch (e) {
-    if (e instanceof Deno.errors.NotFound) {
-      return Deno.open(path, { __proto__: null, createNew: true, write: true });
-    }
-    throw e;
-  }
-}
-
 /**
  * Execute the Graphviz dot command and output the results to a file.
  */
@@ -50,7 +39,14 @@ export async function toFile<T extends Layout>(
   path: string,
   options?: Options<T>,
 ): Promise<void> {
-  const output = await open(path);
   const stream = await toStream(dot, options);
+  // Created if missing and emptied if present, so the file holds exactly
+  // this output.
+  const output = await Deno.open(path, {
+    __proto__: null,
+    write: true,
+    create: true,
+    truncate: true,
+  });
   await stream.pipeTo(output.writable);
 }

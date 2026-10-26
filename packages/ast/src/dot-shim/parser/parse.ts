@@ -12,12 +12,18 @@ import type {
   SubgraphASTNode,
 } from '../../types.js';
 import { parse as _parse, SyntaxError as PeggySyntaxError } from './_parse.js';
+import { deepBlockOffset } from './nesting.js';
 
 /**
  * Default maximum input size in bytes (10MB).
  * This limit prevents memory exhaustion from extremely large DOT files.
  */
 const DEFAULT_MAX_INPUT_SIZE = 10 * 1024 * 1024;
+
+/**
+ * Default maximum nesting depth of graph and subgraph bodies.
+ */
+const DEFAULT_MAX_NESTING_DEPTH = 100;
 
 /**
  * @group Convert DOT to AST
@@ -67,6 +73,14 @@ export interface CommonParseOptions {
    * @default 100000
    */
   maxASTNodes?: number;
+  /**
+   * maxNestingDepth (optional): Maximum allowed nesting depth of graph and
+   * subgraph bodies (a graph's own body is depth 1).
+   * Default is 100. This limit keeps parsing, converting and printing deeply
+   * nested input bounded.
+   * @default 100
+   */
+  maxNestingDepth?: number;
 }
 
 /**
@@ -143,6 +157,7 @@ export function parse(
     maxEdgeChainDepth,
     maxInputSize,
     maxASTNodes,
+    maxNestingDepth,
   } = ownOptions(options);
 
   // Input size validation
@@ -155,6 +170,19 @@ export function parse(
           `Consider increasing 'maxInputSize' option or reducing the input size.`,
       );
     }
+  }
+
+  // Nesting, before the recursive parser could run out of stack on it.
+  const nestingLimit = maxNestingDepth ?? DEFAULT_MAX_NESTING_DEPTH;
+  const deep = deepBlockOffset(input, nestingLimit);
+  if (deep !== -1) {
+    const before = input.slice(0, deep);
+    const line = before.split('\n').length;
+    const column = deep - before.lastIndexOf('\n');
+    throw new DotSyntaxError(
+      `Nesting depth exceeds maximum allowed depth of ${nestingLimit} (line ${line}, column ${column}). ` +
+        `Consider increasing the 'maxNestingDepth' option.`,
+    );
   }
 
   try {
@@ -178,6 +206,13 @@ export function parse(
       throw new DotSyntaxError(e.message, {
         cause: e,
       });
+    }
+    if (e instanceof RangeError) {
+      // The call stack ran out (a raised limit, or another deep structure).
+      throw new DotSyntaxError(
+        'The input is nested too deeply to parse. Consider lowering the depth of the input.',
+        { cause: e },
+      );
     }
     throw new Error('Unexpected parse error', {
       cause: e,
