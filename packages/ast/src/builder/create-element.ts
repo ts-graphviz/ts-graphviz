@@ -19,10 +19,16 @@ export function createElementFactory(
 /**
  * Create an {@link ASTNode} of the specified type
  *
+ * This shared function does not count the nodes it creates (a count shared
+ * by every caller in the process would eventually refuse all of them). Use
+ * {@link createElementFactory} for a counted, limited builder.
+ *
  * @param type - Type of the {@link ASTNode}
  * @param props - Properties of the {@link ASTNode}
  * @param children - Children of the {@link ASTNode}
  * @group Create AST
  * @returns An {@link ASTNode}
  */
-export const createElement: CreateElement = createElementFactory();
+export const createElement: CreateElement = createElementFactory({
+  maxASTNodes: 0,
+});

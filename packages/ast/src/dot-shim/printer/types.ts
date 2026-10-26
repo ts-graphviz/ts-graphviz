@@ -35,6 +35,13 @@ export interface PrintOptions {
    * @default lf
    */
   endOfLine?: EndOfLine;
+  /**
+   * Maximum allowed nesting depth of graph and subgraph bodies (a graph's
+   * own body is depth 1). Printing a deeper AST throws a `RangeError`.
+   *
+   * @default 100
+   */
+  maxNestingDepth?: number;
 }
 
 /**

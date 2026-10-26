@@ -342,7 +342,11 @@ describe('renderHTMLLike()', () => {
 
     it('detects circular element references', () => {
       // Create circular reference by making element reference itself
-      const element: any = { type: 'div', props: {} };
+      const element: any = {
+        $$typeof: Symbol.for('react.transitional.element'),
+        type: 'div',
+        props: {},
+      };
       element.props.children = element;
 
       // Should return fallback '<>' due to circular reference error
@@ -353,7 +357,11 @@ describe('renderHTMLLike()', () => {
     it('logs warning on circular reference detection', () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      const element: any = { type: 'div', props: {} };
+      const element: any = {
+        $$typeof: Symbol.for('react.transitional.element'),
+        type: 'div',
+        props: {},
+      };
       element.props.children = element;
 
       renderHTMLLike(element as any);

@@ -187,35 +187,28 @@ _edge_target
 _edge_operator = operator:("->" / "--") { return { operator, location: location() }; }
 
 _edge_rhs
-  = _ edgeop:_edge_operator _ id:_edge_target _ rest:_edge_rhs? {
-      // Track edge chain depth to prevent stack overflow from deeply chained edges
-      // Each edge operator (-> or --) represents one link in the chain
-      //
-      // KNOWN LIMITATION: This uses mutable state which can be corrupted by backtracking.
-      // Peggy doesn't support parameterized rules (e.g., rule[depth]) which would be
-      // the ideal stateless solution. The per-parse initializer resets state between
-      // parse() calls to prevent state leakage.
-      //
-      // In practice, the backtracking issue is rare because:
-      // 1. Edge chains typically have a clear structure (node op node op ...)
-      // 2. The depth counter is reset at the start of each parse() call
-      // 3. Most malformed input fails quickly without deep backtracking
-      //
-      // If backtracking becomes problematic, consider alternative parsing libraries
-      // with better support for parameterized rules or stateless parsing.
-
-      edgeChainDepth++;
-      if (edgeChainDepth > MAX_EDGE_CHAIN_DEPTH) {
-        const loc = location();
+  = links:(_ edgeop:_edge_operator _ id:_edge_target _ { return { edgeop, id, loc: location() }; })+ {
+      // The chain is read as a repetition, not by recursion, so its length
+      // does not use the stack; the limit bounds the edges one statement makes.
+      // The error and the operator order are those of the former recursive
+      // rule, which counted links from the end of the chain.
+      if (links.length > MAX_EDGE_CHAIN_DEPTH) {
+        const loc = links[links.length - MAX_EDGE_CHAIN_DEPTH - 1].loc;
         error(
           `Edge chain depth exceeds maximum allowed depth of ${MAX_EDGE_CHAIN_DEPTH} ` +
           `at line ${loc.start.line}, column ${loc.start.column}. ` +
-          `Consider breaking up long edge chains or increasing the 'maxEdgeChainDepth' option.`
+          `Consider breaking up long edge chains or increasing the 'maxEdgeChainDepth' option.`,
+          {
+            source: loc.source,
+            start: loc.start,
+            end: links[links.length - 1].loc.end,
+          }
         );
       }
-
-      edgeops.push(edgeop);
-      return [id].concat(rest || []);
+      for (let i = links.length - 1; i >= 0; i--) {
+        edgeops.push(links[i].edgeop);
+      }
+      return links.map((link) => link.id);
     }
 
 _node_ref

@@ -1,4 +1,4 @@
-import type { ReactElement, ReactNode } from 'react';
+import { isValidElement, type ReactElement, type ReactNode } from 'react';
 import { ownOptions } from './own-options.js';
 
 /**
@@ -215,16 +215,21 @@ function renderChildrenToString(
     return escapeText(String(children));
   }
   if (Array.isArray(children)) {
+    // Nested arrays count toward the depth limit, as nested elements do.
+    if (depth >= maxDepth) {
+      throw new Error(
+        `Maximum rendering depth of ${maxDepth} exceeded. This may indicate deeply nested or circular element structures.`,
+      );
+    }
     return children
-      .map((child) => renderChildrenToString(child, depth, inStack, maxDepth))
+      .map((child) =>
+        renderChildrenToString(child, depth + 1, inStack, maxDepth),
+      )
       .join('');
   }
-  // If it's a React element, render it manually
-  if (
-    typeof children === 'object' &&
-    children !== null &&
-    Object.hasOwn(children, 'type')
-  ) {
+  // Only a real React element is rendered; an object that merely has a
+  // `type` (for example one parsed from JSON) is not.
+  if (isValidElement(children)) {
     return manuallyRenderElement(
       children as ReactElement,
       depth,

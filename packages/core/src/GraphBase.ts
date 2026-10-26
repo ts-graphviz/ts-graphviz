@@ -25,6 +25,14 @@ import {
 import { AttributeList } from './AttributeList.js';
 import { AttributesBase } from './AttributesBase.js';
 
+/** A subgraph in the per-id list of a graph's subgraphs. */
+interface SubgraphEntry {
+  id: string;
+  subgraph: SubgraphModel;
+  prev?: SubgraphEntry;
+  next?: SubgraphEntry;
+}
+
 /**
  * Base class for Graph objects.
  * @group Models
@@ -70,10 +78,19 @@ export abstract class GraphBase<
     nodes: Map<string, NodeModel>;
     edges: Set<EdgeModel>;
     subgraphs: Set<SubgraphModel>;
+    /**
+     * For {@link getSubgraph}: the subgraphs with each id in the order added,
+     * as a linked list, so that lookup, addition and removal take constant
+     * time however many subgraphs share an id.
+     */
+    subgraphsById: Map<string, { head: SubgraphEntry; tail: SubgraphEntry }>;
+    subgraphEntries: Map<SubgraphModel, SubgraphEntry>;
   }> = {
     nodes: new Map(),
     edges: new Set(),
     subgraphs: new Set(),
+    subgraphsById: new Map(),
+    subgraphEntries: new Map(),
   };
 
   public with(models: Partial<ModelsContext>): void {
@@ -89,7 +106,26 @@ export abstract class GraphBase<
   }
 
   public addSubgraph(subgraph: SubgraphModel): void {
-    this.#objects.subgraphs.add(subgraph);
+    const { subgraphs, subgraphsById } = this.#objects;
+    if (subgraphs.has(subgraph)) return;
+    subgraphs.add(subgraph);
+    const { id } = subgraph;
+    if (id !== undefined) {
+      const list = subgraphsById.get(id);
+      const entry: SubgraphEntry = {
+        id,
+        subgraph,
+        prev: list?.tail,
+        next: undefined,
+      };
+      if (list) {
+        list.tail.next = entry;
+        list.tail = entry;
+      } else {
+        subgraphsById.set(id, { head: entry, tail: entry });
+      }
+      this.#objects.subgraphEntries.set(subgraph, entry);
+    }
   }
 
   public existNode(nodeId: string): boolean {
@@ -127,7 +163,18 @@ export abstract class GraphBase<
   }
 
   public removeSubgraph(subgraph: SubgraphModel): void {
-    this.#objects.subgraphs.delete(subgraph);
+    const { subgraphs, subgraphsById, subgraphEntries } = this.#objects;
+    if (!subgraphs.delete(subgraph)) return;
+    const entry = subgraphEntries.get(subgraph);
+    if (entry === undefined) return;
+    subgraphEntries.delete(subgraph);
+    const list = subgraphsById.get(entry.id);
+    if (list === undefined) return;
+    if (entry.prev) entry.prev.next = entry.next;
+    else if (entry.next) list.head = entry.next;
+    if (entry.next) entry.next.prev = entry.prev;
+    else if (entry.prev) list.tail = entry.prev;
+    if (!entry.prev && !entry.next) subgraphsById.delete(entry.id);
   }
 
   public createNode(id: string, attributes?: NodeAttributesObject): NodeModel {
@@ -137,9 +184,8 @@ export abstract class GraphBase<
   }
 
   public getSubgraph(id: string): SubgraphModel | undefined {
-    return Array.from(this.#objects.subgraphs.values()).find(
-      (subgraph) => subgraph.id === id,
-    );
+    // The first one added with this id, as a search in insertion order finds.
+    return this.#objects.subgraphsById.get(id)?.head.subgraph;
   }
 
   public getNode(id: string): NodeModel | undefined {
