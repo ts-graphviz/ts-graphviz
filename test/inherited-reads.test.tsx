@@ -148,7 +148,7 @@ const DOTS = [
   'graph { a -- b -- c; a, b -- c; subgraph s { d } -- e }',
 ];
 
-describe('[SM-8] the packages read no inherited property', () => {
+describe('the packages read no inherited property', { tags: ['SM-8'] }, () => {
   afterEach(() => reads.clear());
 
   it('when parsing, printing, checking and converting DOT', () => {
@@ -218,7 +218,7 @@ describe('[SM-8] the packages read no inherited property', () => {
   });
 });
 
-describe('[SM-8] parse with a polluted Object.prototype', () => {
+describe('parse with a polluted Object.prototype', { tags: ['SM-8'] }, () => {
   it('returns the AST, not the parser state', () => {
     const proto = Object.prototype as Record<string, unknown>;
     proto.peg$library = true;
@@ -232,7 +232,9 @@ describe('[SM-8] parse with a polluted Object.prototype', () => {
   });
 });
 
-describe('[SM-8] model guards with a polluted Object.prototype', () => {
+describe('model guards with a polluted Object.prototype', {
+  tags: ['SM-8'],
+}, () => {
   it.each([
     ['id', 'extra', () => isForwardRefNode({})],
     ['targets', [], () => isEdgeModel({ $$type: 'Edge' })],

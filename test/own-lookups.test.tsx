@@ -16,7 +16,7 @@ function withInherited<T>(key: string, value: unknown, fn: () => T): T {
   }
 }
 
-describe('[SM-8] lookups read own properties only', () => {
+describe('lookups read own properties only', { tags: ['SM-8'] }, () => {
   it('isTsGraphvizError needs a code of its own', () => {
     const plain = { message: 'm', name: 'Error' };
     expect(

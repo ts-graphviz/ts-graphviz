@@ -408,7 +408,7 @@ describe('parse', () => {
     });
   });
 
-  describe('[SM-1] HTML string nesting depth limit', () => {
+  describe('HTML string nesting depth limit', { tags: ['SM-1'] }, () => {
     test('normal nesting should work', () => {
       const result = parse(
         'label = <<table><tr><td><b>text</b></td></tr></table>>',
@@ -497,7 +497,9 @@ describe('parse', () => {
     });
   });
 
-  describe('[SM-1] line comments end only at "\\n" (found by fuzzing)', () => {
+  describe('line comments end only at "\\n" (found by fuzzing)', {
+    tags: ['SM-1'],
+  }, () => {
     // Graphviz reads `// c\rx -- y` as one comment: no edge.
     test.each([['// c\rx -- y'], ['# c\rx -- y']])(
       '%j is a single comment, as in Graphviz',
@@ -517,7 +519,7 @@ describe('parse', () => {
     });
   });
 
-  describe('[SM-1] NUL characters (found by fuzzing)', () => {
+  describe('NUL characters (found by fuzzing)', { tags: ['SM-1'] }, () => {
     // Graphviz stops reading at a NUL, so a source with one cannot mean the
     // same thing to Graphviz and to this parser.
     test.each([['#\0'], ['graph{#\0\n7}'], ['graph { "a\0b" }'], ['/* \0 */']])(
@@ -537,7 +539,7 @@ describe('parse', () => {
     });
   });
 
-  describe('[SM-1] Input size limit', () => {
+  describe('Input size limit', { tags: ['SM-1'] }, () => {
     test('normal input size should work', () => {
       const input = 'digraph { a -> b; }';
       const result = parse(input, { startRule: 'Graph' });
@@ -608,7 +610,7 @@ describe('parse', () => {
     });
   });
 
-  describe('[SM-1] Edge chain depth limit', () => {
+  describe('Edge chain depth limit', { tags: ['SM-1'] }, () => {
     test('normal edge chain should work', () => {
       const result = parse('a -> b -> c -> d;', { startRule: 'Edge' });
       expect(result).toBeDefined();

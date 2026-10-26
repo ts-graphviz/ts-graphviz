@@ -4,7 +4,7 @@ import { sanitize } from './sanitize.js';
 const strict = (dot: string) =>
   sanitize(dot, { policy: 'strict', format: 'svg' });
 
-describe('[SM-7] sanitize with the strict policy', () => {
+describe('sanitize with the strict policy', { tags: ['SM-7'] }, () => {
   it.each([
     'digraph { a -> b }',
     'digraph { rankdir=LR; node [shape=box style="filled,rounded" fillcolor="#eeeeee" fontname="Helvetica"]; a [label="A\\nline" tooltip="t" URL="https://example.com/"]; a -> b [label="x" color="red:blue" penwidth=2 arrowhead=vee headport="n:sw"] }',

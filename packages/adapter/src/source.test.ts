@@ -12,7 +12,7 @@ const reject = (attributes: Parameters<typeof attributeArgs>[0]) =>
     }),
   );
 
-describe('[SM-4] attributes passed as arguments', () => {
+describe('attributes passed as arguments', { tags: ['SM-4'] }, () => {
   it('rejects a line break in an argument, also after a backslash', () => {
     // A backslash before a line break is a line continuation in a DOT
     // string, so the line break never reached the check before.

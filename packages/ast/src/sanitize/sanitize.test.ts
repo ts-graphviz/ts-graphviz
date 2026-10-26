@@ -12,7 +12,7 @@ function rejection(dot: string): DOMException & { code: string } {
   throw new Error(`sanitize accepted ${JSON.stringify(dot)}`);
 }
 
-describe('[SM-7] sanitize', () => {
+describe('sanitize', { tags: ['SM-7'] }, () => {
   it('returns the source printed from the checked AST', () => {
     expect(
       sanitize('digraph{a->b[label="x" URL="https://example.com/"]}'),

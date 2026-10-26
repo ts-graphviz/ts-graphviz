@@ -110,7 +110,8 @@ function svgLinks(svg: string): string[] {
 }
 
 describe.skipIf(!hasDot)(
-  '[SM-7] sanitize and the links Graphviz writes',
+  'sanitize and the links Graphviz writes',
+  { tags: ['SM-7'] },
   () => {
     it.each(['default', 'strict'] as const)(
       'every link in the SVG of DOT accepted by the %s policy is relative, http, https or mailto',

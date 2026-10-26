@@ -1,7 +1,7 @@
 import { digraph, fromDot, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
-describe('[SM-2] ports and compass points (#1641)', () => {
+describe('ports and compass points (#1641)', { tags: ['SM-2'] }, () => {
   it("rejects a port containing ':' instead of writing DOT Graphviz reads differently", () => {
     const g = digraph((g) => {
       g.edge([{ id: 'a', port: 'p:q' }, 'b']);
