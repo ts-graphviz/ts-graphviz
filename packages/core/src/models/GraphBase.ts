@@ -20,6 +20,7 @@ import {
   type NodeAttributesObject,
   type NodeModel,
   type NonClusterSubgraphAttributesObject,
+  ownOptions,
   type ReadonlyEdgeTargetLikeTuple,
   type SubgraphAttributeKey,
   type SubgraphAttributesFor,
@@ -139,9 +140,15 @@ export abstract class GraphBase<
    * left out stay as they are.
    */
   public with(models: Partial<ModelsContext>): void {
-    const next: Partial<ModelsContext> = { ...this.#models };
+    // Own properties only, here and in the result: a class inherited from
+    // Object.prototype is never taken for a model.
+    const given = ownOptions(models);
+    const next: Partial<ModelsContext> = Object.assign(
+      Object.create(null),
+      this.#models,
+    );
     for (const key of MODEL_KEYS) {
-      const model = models[key];
+      const model = given[key];
       if (model !== undefined) {
         (next as Record<keyof ModelsContext, unknown>)[key] = model;
       }
@@ -150,7 +157,9 @@ export abstract class GraphBase<
     // left out come from the current (or default) context.
     const complete = MODEL_KEYS.every((key) => next[key] !== undefined);
     this.#models = Object.freeze(
-      complete ? (next as ModelsContext) : { ...this.models, ...next },
+      complete
+        ? (next as ModelsContext)
+        : Object.assign(Object.create(null), this.models, next),
     );
   }
 
@@ -193,6 +202,15 @@ export abstract class GraphBase<
       | AttributesObject<AttributeKey>
       | AttributesEntities<AttributeKey>,
   ): void {
+    // The kind is printed as a keyword, so it must be one of the three.
+    if (kind !== 'Graph' && kind !== 'Node' && kind !== 'Edge') {
+      throw withCode(
+        new TypeError(
+          `An attribute list must be of kind Graph, Node or Edge: ${typeof kind === 'string' ? JSON.stringify(kind) : `a value of type ${typeof kind}`}`,
+        ),
+        'TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND',
+      );
+    }
     if (!this.keepsDefaultsInPlace || this.#statements.size === 0) {
       const target =
         kind === 'Graph'

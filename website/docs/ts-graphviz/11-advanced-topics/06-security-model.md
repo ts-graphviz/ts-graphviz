@@ -183,6 +183,7 @@ ES modules, and the built-in prototypes, are shared by every module of a process
 **Guarantees**
 
 - **Options are own properties.** Every public entry point reads its options object, and the option objects nested in it (`attributes` and its `graph` / `node` / `edge`, a `sanitize` options object, `parse`, `convert`, `print`), from their own enumerable properties only (`ownOptions` in `@ts-graphviz/common`). An inherited property never chooses the command (`dotCommand`), turns `sanitize` off, adds arguments (`library`, `-G`), raises a parse limit or changes what is parsed or printed (#1757).
+- **Lookups by name read own entries.** The model classes given to `with()`, the element table of `renderHTMLLike` and the `code` that `isTsGraphvizError` checks are read only as own properties.
 - **No shared configuration.** Importing a package changes no shared state (v4 removed the shared models context, see the v3-to-v4 guide); defaults come from frozen objects (`defaultModelsContext()`, `orderedModels`, the model factories).
 - **Exported data is frozen.** `ERROR_CODES` and `DEPRECATION_CODES` cannot be changed, so no module can change what `isTsGraphvizError` accepts.
 
