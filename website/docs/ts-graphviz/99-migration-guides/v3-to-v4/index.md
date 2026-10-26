@@ -124,7 +124,12 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 
 ## 9. `@ts-graphviz/react`
 
-- `useDigraph` / `useGraph` / `useSubgraph` create models through the `GraphvizContext`'s models; `createRoot` and `renderToDot` take a `models` option. A hand-written `GraphvizContext` value must include `models` (use `createModelsContext()`).
+- React 19.3 or later is required (`react-reconciler` 0.34).
+- `useDigraph`, `useGraph`, `useSubgraph`, `useNode` and `useEdge` are removed. The components are host elements of the renderer, which adds the models when React commits: render `<Digraph>`, `<Subgraph>`, `<Node>` and `<Edge>`, and get a model through `ref` or, for the enclosing graph, `useCurrentGraph()`.
+- The statements of a graph follow the element tree, also across re-renders (reordered, inserted and removed children), and StrictMode, Suspense or a discarded render no longer adds statements twice or leaves them behind.
+- In container mode, a re-render replaces only the statements the renderer added before; statements the container already had stay first. Models are made by the graph they go to (`createNode` / `createEdge` / `createSubgraph`), so a graph class that overrides them still applies.
+- `createRoot` and `renderToDot` take a `models` option. A hand-written `GraphvizContext` value must include `models` (use `createModelsContext()`).
+- `render()` / `renderToDot()` resolve once the tree has settled, including transitions, deferred values and suspended data. `timeout` is replaced by a per-render `signal` (`AbortSignal.timeout(ms)` for a time limit). Uncaught errors reject with the error itself, and the error callbacks receive `error: unknown`.
 - `<Digraph strict>` / `<Graph strict>` render strict graphs.
 - `renderHTMLLike` returns an `HTMLLikeValue` (see section 1).
 - `renderHTMLLike` (and so a JSX `label`) escapes strings: text children and attribute values are written with `&`, `<`, `>` and `"` as entities. Code that put markup in a string (`<dot:td>{'<b>x</b>'}</dot:td>`) writes it as elements instead (`<dot:td><dot:b>x</dot:b></dot:td>`) (#1745).

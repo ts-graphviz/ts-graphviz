@@ -250,8 +250,10 @@ describe('[SM-3] renderHTMLLike()', () => {
     });
 
     it('detects circular element references', () => {
-      const element: any = { type: 'dot:b', props: {} };
-      element.props.children = element;
+      // An element whose children array is changed to hold the element.
+      const children: ReactNode[] = [];
+      const element = createElement('dot:b', null, children);
+      children.push(element);
       expect(() => html(element)).toThrow(TypeError);
       expect(() => html(element)).toThrow('Circular reference detected');
     });
@@ -271,6 +273,38 @@ describe('[SM-3] renderHTMLLike()', () => {
         </dot:table>
       );
       expect(html(element).match(/Item/g)).toHaveLength(9);
+    });
+  });
+
+  describe('children', () => {
+    it('renders only React elements as elements, not objects shaped like them', () => {
+      const lookalike = { type: 'dot:b', props: { children: 'text' } };
+      expect(() =>
+        html(<dot:td>{lookalike as unknown as ReactNode}</dot:td>),
+      ).toThrow(
+        new TypeError(
+          'Only elements, strings, numbers, booleans, null and arrays of them can be children of an HTML-like label.',
+        ),
+      );
+    });
+
+    it('counts nested arrays toward maxDepth', () => {
+      let children: ReactNode = 'leaf';
+      for (let i = 0; i < 20; i++) children = [children];
+      expect(() => html(<dot:td>{children}</dot:td>, { maxDepth: 10 })).toThrow(
+        RangeError,
+      );
+      expect(html(<dot:td>{children}</dot:td>, { maxDepth: 30 })).toBe(
+        '<<td>leaf</td>>',
+      );
+    });
+
+    it('rejects an array that contains itself', () => {
+      const children: unknown[] = ['a'];
+      children.push(children);
+      expect(() => html(<dot:td>{children as ReactNode}</dot:td>)).toThrow(
+        TypeError,
+      );
     });
   });
 

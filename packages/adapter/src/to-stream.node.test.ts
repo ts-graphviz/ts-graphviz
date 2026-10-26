@@ -68,6 +68,36 @@ describe('[SM-4] toStream (Node adapter)', () => {
     });
   });
 
+  describe('[SM-8] spawn options', () => {
+    it('inherit nothing, turn shell off and pass the own environment', () => {
+      const p: any = {
+        stdout: new PassThrough(),
+        stderr: new PassThrough(),
+        stdin: new PassThrough(),
+        kill: vi.fn(() => true),
+        on: () => {},
+      };
+      spawnMock.mockReturnValue(p);
+      pipelineMock.mockResolvedValue(undefined);
+      const proto = Object.prototype as Record<string, unknown>;
+      proto.shell = true;
+      proto.env = { TS_GRAPHVIZ_TEST: '1' };
+      proto.TS_GRAPHVIZ_TEST = '1';
+      try {
+        void toStream('digraph {}');
+      } finally {
+        delete proto.shell;
+        delete proto.env;
+        delete proto.TS_GRAPHVIZ_TEST;
+      }
+      const options = spawnMock.mock.calls[0][2];
+      expect(Object.getPrototypeOf(options)).toBeNull();
+      expect(options.shell).toBe(false);
+      expect(Object.getPrototypeOf(options.env)).toBeNull();
+      expect({ ...options.env }).toStrictEqual({ ...process.env });
+    });
+  });
+
   describe('when process exits with error code', () => {
     it('should reject with error containing code, signal, and stderr message', async () => {
       // Arrange

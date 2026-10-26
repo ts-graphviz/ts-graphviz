@@ -159,7 +159,9 @@ describe('renderToDot()', () => {
             <Edge targets={['a', 'b']} />
           </>,
         ),
-      ).rejects.toThrow(/useCurrentGraph must be called within a cluster/);
+      ).rejects.toThrow(
+        /<Node> must be rendered inside a Digraph, Graph or Subgraph/,
+      );
     });
 
     it('throws error when no top-level graph is provided', async () => {

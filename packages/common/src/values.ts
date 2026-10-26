@@ -11,6 +11,31 @@
 import { withCode } from './errors.js';
 
 /**
+ * The key of the brand that marks a value made by {@link escString} or
+ * {@link htmlLike}. A symbol, so data such as parsed JSON cannot carry it
+ * (`{ "$$kind": "html" }` is not an HTML-like value); from the global
+ * registry, so two copies of this package recognise each other's values.
+ */
+const KIND = Symbol.for('@ts-graphviz/common/value-kind');
+
+/** Freeze `value` with a non-enumerable brand for `kind`. */
+function branded<T extends EscStringValue | HTMLLikeValue>(value: T): T {
+  Object.defineProperty(value, KIND, { value: value.$$kind });
+  return Object.freeze(value);
+}
+
+/** Whether `value` carries the brand for `kind` as its own property. */
+function hasBrand(value: unknown, kind: string): boolean {
+  if (typeof value !== 'object' || value === null) return false;
+  const brand = Object.getOwnPropertyDescriptor(value, KIND);
+  return (
+    brand !== undefined &&
+    brand.value === kind &&
+    typeof Object.getOwnPropertyDescriptor(value, 'value')?.value === 'string'
+  );
+}
+
+/**
  * A Graphviz escString: the text is written into the DOT output as is, so
  * Graphviz escape sequences such as `\N`, `\G`, `\l` and `\n` keep their
  * meaning. Only `"` is escaped.
@@ -50,7 +75,7 @@ export interface HTMLLikeValue {
  * @group Attribute Types
  */
 export function escString(value: string): EscStringValue {
-  return Object.freeze({ $$kind: 'escString', value });
+  return branded({ $$kind: 'escString', value });
 }
 
 /**
@@ -78,31 +103,23 @@ export function htmlLike(markup: string): HTMLLikeValue {
       'TSG_ERR_INVALID_HTML_LIKE',
     );
   }
-  return Object.freeze({ $$kind: 'html', value: markup });
+  return branded({ $$kind: 'html', value: markup });
 }
 
 /**
- * Type guard for {@link EscStringValue}.
+ * Type guard for {@link EscStringValue}: true only for a value made by
+ * {@link escString}, never for an object that merely has the same fields.
  * @group Attribute Types
  */
 export function isEscString(value: unknown): value is EscStringValue {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    (value as EscStringValue).$$kind === 'escString' &&
-    typeof (value as EscStringValue).value === 'string'
-  );
+  return hasBrand(value, 'escString');
 }
 
 /**
- * Type guard for {@link HTMLLikeValue}.
+ * Type guard for {@link HTMLLikeValue}: true only for a value made by
+ * {@link htmlLike}, never for an object that merely has the same fields.
  * @group Attribute Types
  */
 export function isHTMLLike(value: unknown): value is HTMLLikeValue {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    (value as HTMLLikeValue).$$kind === 'html' &&
-    typeof (value as HTMLLikeValue).value === 'string'
-  );
+  return hasBrand(value, 'html');
 }

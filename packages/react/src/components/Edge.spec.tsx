@@ -65,9 +65,9 @@ describe('Edge Component', () => {
           "A";
           "B";
           "A" -> "B" [
+            label = "Styled Edge";
             color = "red";
             style = "dashed";
-            label = "Styled Edge";
           ];
         }"
       `);

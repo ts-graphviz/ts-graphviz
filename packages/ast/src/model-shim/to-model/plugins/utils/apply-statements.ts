@@ -11,6 +11,7 @@ import type {
   SubgraphASTNode,
 } from '../../../../types.js';
 import { idFromLiteral, valueFromLiteral } from '../../../literal.js';
+import { takeEdgeTargets } from '../../edge-target-budget.js';
 import type { ConvertToModelContext } from '../../types.js';
 import { convertEdge } from '../EdgePlugin.js';
 import { collectAttributes } from './collect-attributes.js';
@@ -109,7 +110,13 @@ export function applyStatements(
           );
           edge = convertEdge(context, stmt, (i) => {
             const subgraph = subgraphs[i];
-            return subgraph && [...(subgraphNodes.get(subgraph) ?? [])];
+            if (subgraph === undefined) return undefined;
+            const nodes = subgraphNodes.get(subgraph) ?? new Set<string>();
+            // A subgraph opened again keeps its nodes, so these grow with
+            // every edge to it: bounded by `maxEdgeTargets`, checked before
+            // they are copied.
+            takeEdgeTargets(context, nodes.size);
+            return [...nodes];
           });
         } else {
           edge = context.convert(stmt);
