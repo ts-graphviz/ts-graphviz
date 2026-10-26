@@ -157,7 +157,11 @@ function manuallyRenderElement(
       }
       if (value === true) {
         attributes += ` ${key}`;
-      } else if (typeof value === 'string' || typeof value === 'number') {
+      } else if (
+        typeof value === 'string' ||
+        typeof value === 'number' ||
+        typeof value === 'bigint'
+      ) {
         attributes += ` ${key}="${escapeAttribute(String(value))}"`;
       }
     }
@@ -191,7 +195,12 @@ function renderChildrenToString(
   if (children == null || typeof children === 'boolean') {
     return '';
   }
-  if (typeof children === 'string' || typeof children === 'number') {
+  // Text, as React renders strings, numbers and bigints.
+  if (
+    typeof children === 'string' ||
+    typeof children === 'number' ||
+    typeof children === 'bigint'
+  ) {
     return escapeText(String(children));
   }
   if (isValidElement(children)) {
@@ -226,7 +235,7 @@ function renderChildrenToString(
     }
   }
   throw new TypeError(
-    'Only elements, strings, numbers, booleans, null and arrays of them can be children of an HTML-like label.',
+    'Only elements, strings, numbers, bigints, booleans, null and arrays of them can be children of an HTML-like label.',
   );
 }
 

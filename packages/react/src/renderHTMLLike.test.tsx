@@ -283,7 +283,7 @@ describe('[SM-3] renderHTMLLike()', () => {
         html(<dot:td>{lookalike as unknown as ReactNode}</dot:td>),
       ).toThrow(
         new TypeError(
-          'Only elements, strings, numbers, booleans, null and arrays of them can be children of an HTML-like label.',
+          'Only elements, strings, numbers, bigints, booleans, null and arrays of them can be children of an HTML-like label.',
         ),
       );
     });
@@ -325,5 +325,19 @@ describe('[SM-3] renderHTMLLike()', () => {
     const duration = Date.now() - start;
 
     expect(duration).toBeLessThan(1000);
+  });
+
+  it('renders bigints as text, in children and attributes', () => {
+    expect(
+      html(
+        <dot:table border={1n as never}>
+          <dot:tr>
+            <dot:td>{12345678901234567890n}</dot:td>
+          </dot:tr>
+        </dot:table>,
+      ),
+    ).toBe(
+      '<<table border="1"><tr><td>12345678901234567890</td></tr></table>>',
+    );
   });
 });
