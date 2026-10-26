@@ -81,7 +81,8 @@ Two value kinds deliberately bypass the literal-text rule because their content 
 **Guarantees**
 
 - An `escString` value cannot terminate the quoted string or add statements.
-- An `htmlLike` value must have balanced `<`/`>` and no NUL; otherwise Graphviz would end the label early and read the rest as DOT. `htmlLike()` rejects such markup when the value is created (`RangeError`, code `TSG_ERR_INVALID_HTML_LIKE`); a structurally equal value built by hand is checked again when written (`TSG_ERR_INVALID_HTML_LIKE`, or `TSG_ERR_NUL_CHARACTER` for a NUL).
+- An `htmlLike` value must have balanced `<`/`>` and no NUL; otherwise Graphviz would end the label early and read the rest as DOT. `htmlLike()` rejects such markup when the value is created (`RangeError`, code `TSG_ERR_INVALID_HTML_LIKE`), and the markup is checked again when written (`TSG_ERR_INVALID_HTML_LIKE`, or `TSG_ERR_NUL_CHARACTER` for a NUL).
+- **Only the factories make these kinds.** `escString()` and `htmlLike()` mark their values with a non-enumerable property whose key is a registered symbol. Data cannot carry that mark: parsed JSON, a copy through `JSON.stringify`, or an object built with the same fields. So `{ "$$kind": "html", "value": "…" }` from a request is not an HTML-like label. Like any other non-string value, it is written as escaped text.
 
 **Not promised**
 
