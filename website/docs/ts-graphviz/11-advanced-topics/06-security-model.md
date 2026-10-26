@@ -62,6 +62,7 @@ Applications build graphs from their own data: node ids from database keys, labe
 - **Values that must not be written are rejected.** A null character (`RangeError`, code `TSG_ERR_NUL_CHARACTER`) cannot be represented in DOT and is refused instead of dropped.
 - **Booleans are written bare as `true`/`false`; numbers are written bare only in DOT's own numeral form.** Anything JavaScript could print differently (`1e21`, `NaN`, `Infinity`) is written as a quoted string.
 - **Edge-target shorthand is the one place a string is parsed.** `g.edge(['a:p:n', 'b'])` splits the string on `:` into id, port and compass (as in DOT). An id that itself contains `:` must be given as `{ id: 'a:b' }`; then it is literal text like any other id.
+- **Compass points are keywords, checked.** A compass point is written as it is, so `toDot` / `fromModel` accept only DOT's (`n`, `ne`, `e`, `se`, `s`, `sw`, `w`, `nw`, `c`, `_`) and reject anything else with a `TypeError` (code `TSG_ERR_INVALID_EDGE_TARGETS`), also in an edge target given as an object.
 - **Keys cannot smuggle syntax.** Attribute keys that are DOT keywords or not plain identifiers are quoted; a `__proto__` key from parsed input lands on a null-prototype record and does not change the object's prototype.
 
 **Not promised**
