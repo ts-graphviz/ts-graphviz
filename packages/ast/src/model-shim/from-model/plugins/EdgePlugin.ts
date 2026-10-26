@@ -6,6 +6,7 @@ import {
   withCode,
 } from '@ts-graphviz/common';
 import type { CreateElement } from '../../../builder/types.js';
+import { ownField } from '../../../own-field.js';
 import type { EdgeTargetASTNode, NodeRefASTNode } from '../../../types.js';
 import { idToRaw } from '../../literal.js';
 import type { ConvertFromModelPlugin } from '../types.js';
@@ -23,25 +24,25 @@ const nodeRef = (
   if (isNodeModel(target)) {
     return createElement('NodeRef', { id }, []);
   }
+  // Only the fields the target owns: `{ id: 'a' }` has no port.
+  const port = ownField(target, 'port');
+  const compass = ownField(target, 'compass');
   // Graphviz splits a port on ':' even inside quotes (`b:"p:q"` is port p,
   // compass q), so such a port cannot be written faithfully.
-  if (target.port?.includes(':')) {
+  if (port?.includes(':')) {
     throw withCode(
       new TypeError(
-        `A port must not contain ':' (Graphviz reads it as "port:compass"): ${JSON.stringify(target.port)}`,
+        `A port must not contain ':' (Graphviz reads it as "port:compass"): ${JSON.stringify(port)}`,
       ),
       'TSG_ERR_INVALID_PORT',
     );
   }
   // A compass point is a keyword, written as it is: only the ones DOT has.
   // (An empty one is left out, as before.)
-  if (
-    target.compass &&
-    (typeof target.compass !== 'string' || !isCompass(target.compass))
-  ) {
+  if (compass && (typeof compass !== 'string' || !isCompass(compass))) {
     throw withCode(
       new TypeError(
-        `A compass point must be one of n, ne, e, se, s, sw, w, nw, c and _: ${typeof target.compass === 'string' ? JSON.stringify(target.compass) : `a value of type ${typeof target.compass}`}`,
+        `A compass point must be one of n, ne, e, se, s, sw, w, nw, c and _: ${typeof compass === 'string' ? JSON.stringify(compass) : `a value of type ${typeof compass}`}`,
       ),
       'TSG_ERR_INVALID_EDGE_TARGETS',
     );
@@ -51,19 +52,11 @@ const nodeRef = (
     'NodeRef',
     {
       id,
-      port: target.port
-        ? createElement(
-            'Literal',
-            { value: idToRaw(target.port), kind: 'quoted' },
-            [],
-          )
+      port: port
+        ? createElement('Literal', { value: idToRaw(port), kind: 'quoted' }, [])
         : undefined,
-      compass: target.compass
-        ? createElement(
-            'Literal',
-            { value: target.compass, kind: 'quoted' },
-            [],
-          )
+      compass: compass
+        ? createElement('Literal', { value: compass, kind: 'quoted' }, [])
         : undefined,
     },
     [],

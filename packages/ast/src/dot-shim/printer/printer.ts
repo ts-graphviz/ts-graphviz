@@ -1,4 +1,5 @@
 import { ownOptions, withCode } from '@ts-graphviz/common';
+import { ownField } from '../../own-field.js';
 import type { ASTNode, CommentASTNode } from '../../types.js';
 import { defaultPlugins } from './plugins/index.js';
 import { escapeComment } from './plugins/utils/escape-comment.js';
@@ -83,11 +84,20 @@ export class Printer {
       *print(a: ASTNode) {
         for (const plugin of plugins) {
           if (plugin.match(a)) {
-            yield* context.printComments(a.leadingComments, 'leading');
+            yield* context.printComments(
+              ownField(a, 'leadingComments'),
+              'leading',
+            );
             yield* plugin.print(this, a);
-            yield* context.printComments(a.trailingComments, 'trailing');
+            yield* context.printComments(
+              ownField(a, 'trailingComments'),
+              'trailing',
+            );
             if (!HEADER_DANGLING.has(a.type)) {
-              yield* context.printComments(a.danglingComments, 'trailing');
+              yield* context.printComments(
+                ownField(a, 'danglingComments'),
+                'trailing',
+              );
             }
             return;
           }

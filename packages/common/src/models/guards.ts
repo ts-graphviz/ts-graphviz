@@ -10,6 +10,24 @@ import type {
 } from './models.js';
 
 /**
+ * The `$$type` of a model: from the object or the classes it comes from,
+ * never from Object.prototype, so a plain object does not pass for a model
+ * because of an inherited `$$type`.
+ */
+function typeOf(object: object): unknown {
+  for (
+    let o: object | null = object;
+    o !== null && o !== Object.prototype;
+    o = Object.getPrototypeOf(o)
+  ) {
+    if (Object.getOwnPropertyDescriptor(o, '$$type') !== undefined) {
+      return Reflect.get(object, '$$type');
+    }
+  }
+  return undefined;
+}
+
+/**
  * Type guard to check if an object is a ForwardRefNode
  * @param object - Object to check
  * @returns True if the object is a ForwardRefNode
@@ -33,7 +51,7 @@ export function isNodeModel(object: unknown): object is NodeModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as NodeModel).$$type === 'Node' &&
+    typeOf(object) === 'Node' &&
     typeof (object as NodeModel).id === 'string'
   );
 }
@@ -49,7 +67,7 @@ export function isEdgeModel(object: unknown): object is EdgeModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as EdgeModel).$$type === 'Edge' &&
+    typeOf(object) === 'Edge' &&
     Array.isArray((object as EdgeModel).targets)
   );
 }
@@ -65,7 +83,7 @@ export function isSubgraphModel(object: unknown): object is SubgraphModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as SubgraphModel).$$type === 'Subgraph'
+    typeOf(object) === 'Subgraph'
   );
 }
 
@@ -82,7 +100,7 @@ export function isRootGraphModel(object: unknown): object is RootGraphModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as RootGraphModel).$$type === 'Graph' &&
+    typeOf(object) === 'Graph' &&
     typeof (object as RootGraphModel).directed === 'boolean'
   );
 }
@@ -98,7 +116,7 @@ export function isDotModel(object: unknown): object is DotModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as DotModel).$$type === 'Dot' &&
+    typeOf(object) === 'Dot' &&
     Array.isArray((object as DotModel).graphs)
   );
 }
@@ -120,6 +138,6 @@ export function isAttributeListModel(
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as AttributeListModel).$$type === 'AttributeList'
+    typeOf(object) === 'AttributeList'
   );
 }

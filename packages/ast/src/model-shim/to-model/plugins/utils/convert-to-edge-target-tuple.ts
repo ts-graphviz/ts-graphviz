@@ -4,6 +4,7 @@ import type {
   EdgeTargetTuple,
   ForwardRefNode,
 } from '@ts-graphviz/common';
+import { ownField } from '../../../../own-field.js';
 import type {
   EdgeASTNode,
   NodeRefASTNode,
@@ -28,10 +29,12 @@ const COMPASS_POINTS: ReadonlySet<string> = new Set<Compass>([
 function toNodeRef(t: NodeRefASTNode): ForwardRefNode {
   // A compass point that is not a keyword (e.g. `b:p:""` printed by
   // `dot -Tcanon`) is ignored, as Graphviz ignores it.
-  const compass = t.compass ? idFromLiteral(t.compass) : undefined;
+  const port = ownField(t, 'port');
+  const compassLiteral = ownField(t, 'compass');
+  const compass = compassLiteral ? idFromLiteral(compassLiteral) : undefined;
   return {
     id: idFromLiteral(t.id),
-    port: t.port ? idFromLiteral(t.port) : undefined,
+    port: port ? idFromLiteral(port) : undefined,
     compass:
       compass !== undefined && COMPASS_POINTS.has(compass)
         ? (compass as Compass)
@@ -44,7 +47,7 @@ function toNodeRef(t: NodeRefASTNode): ForwardRefNode {
  * written, so a model group comes back exactly as `fromModel` wrote it.
  */
 function plainNodeIds(target: SubgraphASTNode): string[] | undefined {
-  if (target.id !== undefined) return undefined;
+  if (ownField(target, 'id') !== undefined) return undefined;
   const ids: string[] = [];
   for (const child of target.children) {
     if (child.type !== 'Node' || child.children.length > 0) return undefined;
