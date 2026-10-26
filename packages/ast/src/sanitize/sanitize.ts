@@ -1,5 +1,6 @@
 import { ownOptions, withCode } from '@ts-graphviz/common';
 import type { CommonParseOptions } from '../dot-shim/parser/index.js';
+import { ownField } from '../own-field.js';
 import { Pipeline } from '../pipeline/pipeline.js';
 import type {
   ASTNode,
@@ -417,7 +418,7 @@ function checkSafety(rules: FormatRules) {
         case 'NodeRef':
           // `\E` in a value expands to the edge's names and ports.
           checkName(node.id, state);
-          checkName(node.port, state);
+          checkName(ownField(node, 'port'), state);
           break;
       }
     }
