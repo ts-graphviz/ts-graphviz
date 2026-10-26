@@ -28,6 +28,29 @@ export function escapeValue<T extends AttributeKey>(
 }
 
 /**
+ * The `-G` / `-N` / `-E` arguments of `attributes`, without the leading
+ * `-G` / `-N` / `-E`: exactly the text Graphviz gets. The command line and
+ * the check of `options.attributes` (see `sourceToRender`) both use these.
+ * @internal
+ */
+export function* attributeArgs(
+  attributes: Options['attributes'],
+): Generator<[flag: 'G' | 'N' | 'E', arg: string]> {
+  // Own properties only, also when no attributes are given (#1757).
+  const { graph, node, edge } = ownOptions(attributes);
+  for (const [flag, record] of [
+    ['G', graph],
+    ['N', node],
+    ['E', edge],
+  ] as const) {
+    if (!record) continue;
+    for (const [key, value] of Object.entries(record)) {
+      yield [flag, `${key}${escapeValue(value as Attribute<AttributeKey>)}`];
+    }
+  }
+}
+
+/**
  * createCommandArgs is a function that creates command arguments from a given Options object.
  * It reads the properties of the Options object and creates corresponding command line arguments accordingly.
  *
@@ -47,23 +70,7 @@ export function* createCommandArgs<T extends Layout>(
   } = options;
   if (suppressWarnings) yield '-q';
   yield `-T${format}`;
-  // Own properties only, also when no attributes are given (#1757).
-  const { graph, node, edge } = ownOptions(attributes);
-  if (graph) {
-    for (const [key, value] of Object.entries(graph)) {
-      yield `-G${key}${escapeValue(value)}`;
-    }
-  }
-  if (node) {
-    for (const [key, value] of Object.entries(node)) {
-      yield `-N${key}${escapeValue(value)}`;
-    }
-  }
-  if (edge) {
-    for (const [key, value] of Object.entries(edge)) {
-      yield `-E${key}${escapeValue(value)}`;
-    }
-  }
+  for (const [flag, arg] of attributeArgs(attributes)) yield `-${flag}${arg}`;
   if (typeof scale === 'number' && !Number.isNaN(scale)) yield `-s${scale}`;
   // Own elements only: a hole would read an inherited index.
   if (Array.isArray(library)) {
