@@ -57,6 +57,17 @@ export interface ConvertToModelOptions {
    * or `createModelsContext({ Node: MyNode })` of `@ts-graphviz/core`.
    */
   models: ModelsContext;
+  /**
+   * The most node references that edges to subgraphs may reach in one
+   * conversion, counted over all of them. An edge to a subgraph reaches
+   * every node the subgraph has had so far, and a subgraph opened again
+   * keeps its nodes, so a short source can reach very many
+   * (`subgraph s { … } -> x` repeated). Past the limit the conversion
+   * throws a `RangeError` with code `TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED`.
+   * `0` disables the limit (not recommended for untrusted input).
+   * @default 100000
+   */
+  maxEdgeTargets?: number;
 }
 
 /**

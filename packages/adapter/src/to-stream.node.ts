@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { type SpawnOptionsWithoutStdio, spawn } from 'node:child_process';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { createCommandAndArgs } from './create-command-and-args.js';
@@ -57,7 +57,15 @@ export async function toStream<T extends Layout>(
 
     let p: ReturnType<typeof spawn>;
     try {
-      p = spawn(command, args, { stdio: 'pipe' });
+      // Spawn options, and the environment, in objects without a prototype:
+      // spawn copies inherited enumerable keys into the child's environment,
+      // and some Node.js releases read an inherited `shell`.
+      p = spawn(command, args, {
+        __proto__: null,
+        stdio: 'pipe',
+        shell: false,
+        env: ownEnv(),
+      } as SpawnOptionsWithoutStdio);
     } catch (e) {
       // e.g. an argument containing a NUL character
       const message = e instanceof Error ? e.message : String(e);
@@ -171,4 +179,16 @@ export async function toStream<T extends Layout>(
       if (exited) report(exited.code, exited.signal);
     });
   });
+}
+
+/**
+ * The environment variables the process owns, in an object without a
+ * prototype.
+ */
+function ownEnv(): NodeJS.ProcessEnv {
+  const env = Object.create(null) as NodeJS.ProcessEnv;
+  for (const key of Object.keys(process.env)) {
+    env[key] = process.env[key];
+  }
+  return env;
 }

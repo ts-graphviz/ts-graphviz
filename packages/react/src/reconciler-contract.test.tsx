@@ -117,16 +117,17 @@ describe('host config', () => {
     expect(fn).toHaveBeenCalledOnce();
   });
 
-  it('keeps the string type of a host element', () => {
+  it('rejects an element it does not render, by its string type', () => {
     const host = new HostConfig();
-    const instance = host.createInstance(
-      'dot:td' as never,
-      {} as never,
-      {} as never,
-      {} as never,
-      {} as never,
-    );
-    expect(instance.type).toBe('dot:td');
+    expect(() =>
+      host.createInstance(
+        'dot:td',
+        {},
+        {} as never,
+        { inGraph: true },
+        {} as never,
+      ),
+    ).toThrow('<dot:td> can only be used in an HTML-like label.');
   });
 });
 

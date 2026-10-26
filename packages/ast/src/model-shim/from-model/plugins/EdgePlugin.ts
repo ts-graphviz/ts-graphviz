@@ -1,5 +1,6 @@
 import {
   type EdgeModel,
+  isCompass,
   isNodeModel,
   type NodeRef,
   withCode,
@@ -30,6 +31,19 @@ const nodeRef = (
         `A port must not contain ':' (Graphviz reads it as "port:compass"): ${JSON.stringify(target.port)}`,
       ),
       'TSG_ERR_INVALID_PORT',
+    );
+  }
+  // A compass point is a keyword, written as it is: only the ones DOT has.
+  // (An empty one is left out, as before.)
+  if (
+    target.compass &&
+    (typeof target.compass !== 'string' || !isCompass(target.compass))
+  ) {
+    throw withCode(
+      new TypeError(
+        `A compass point must be one of n, ne, e, se, s, sw, w, nw, c and _: ${typeof target.compass === 'string' ? JSON.stringify(target.compass) : `a value of type ${typeof target.compass}`}`,
+      ),
+      'TSG_ERR_INVALID_EDGE_TARGETS',
     );
   }
   // Ports are ids and are escaped like one; a compass point is a keyword.
