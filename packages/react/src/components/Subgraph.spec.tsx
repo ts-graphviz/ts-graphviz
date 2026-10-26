@@ -80,8 +80,8 @@ describe('Subgraph Component', () => {
       expect(dot).toMatchInlineSnapshot(`
         "digraph {
           subgraph "cluster_styled" {
-            bgcolor = "lightgray";
             label = "Cluster";
+            bgcolor = "lightgray";
             "styled_node";
           }
         }"
