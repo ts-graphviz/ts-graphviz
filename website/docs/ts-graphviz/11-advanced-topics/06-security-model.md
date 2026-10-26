@@ -38,7 +38,7 @@ The parser is the component most exposed to attacker-controlled data: a web serv
   | edge chain length (`a -> b -> c …`) | `maxEdgeChainDepth` | 1000 |
   | AST node count | `maxASTNodes` | 100 000 |
 
-  The input size is checked (on the UTF-8 encoding) before parsing starts; the other limits stop the parse as soon as they are crossed, so no structure larger than the limit is built. `maxInputSize` and `maxASTNodes` can be disabled with `0`; do not do that for untrusted input. The two depth limits cannot be disabled.
+  The input size is checked (on the UTF-8 encoding) before parsing starts; the other limits stop the parse as soon as they are crossed, so no structure larger than the limit is built. Every comment counts toward `maxASTNodes`, including one inside a statement (`a -> /* c */ b`), which is attached to the node next to it in time linear in the number of comments. `maxInputSize` and `maxASTNodes` can be disabled with `0`; do not do that for untrusted input. The two depth limits cannot be disabled.
 - **No NUL characters.** Graphviz stops reading at a NUL, so a source containing one is rejected with `DotSyntaxError` instead of being read differently from Graphviz.
 - **Typed, coded errors only.** For any string, `parse` either returns or throws `DotSyntaxError` (a `SyntaxError`, code `TSG_ERR_DOT_SYNTAX`) or another error carrying a `code` from `ERROR_CODES` (`isTsGraphvizError(e)` is true), so a caller can catch and classify every failure. (Passing a non-string is a type error on the caller's side.)
 - **No code execution, no I/O.** Parsing produces plain objects. Attribute values are stored as text; nothing in the input is evaluated, resolved or fetched.
