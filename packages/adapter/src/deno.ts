@@ -68,7 +68,10 @@ export async function toStream<T extends Layout>(
   // biome-ignore lint/suspicious/noExplicitAny: Deno.ChildProcess
   let child: any;
   try {
+    // Options without a prototype: nothing inherited from Object.prototype
+    // is read as an option.
     child = new Deno.Command(command, {
+      __proto__: null,
       args,
       stdin: 'piped',
       stdout: 'piped',
@@ -223,6 +226,7 @@ export async function toFile<T extends Layout>(
   // Render first, so a failed command does not truncate an existing file.
   const stream = await toStream(dot, options);
   const output = await Deno.open(path, {
+    __proto__: null,
     write: true,
     create: true,
     truncate: true,

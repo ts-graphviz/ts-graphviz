@@ -105,4 +105,21 @@ describe('createCommandArgs type', () => {
       Generator<string>
     >();
   });
+
+  it('passes only the libraries the array owns', () => {
+    // biome-ignore lint/suspicious/noSparseArray: a hole is the case under test
+    const library = ['lib1', , 'lib2'] as string[];
+    const proto = Array.prototype as unknown as Record<number, unknown>;
+    proto[1] = 'extra';
+    let args: string[];
+    try {
+      args = Array.from(createCommandArgs({ library }));
+    } finally {
+      delete proto[1];
+    }
+    expect(args.filter((arg) => arg.startsWith('-l'))).toStrictEqual([
+      '-llib1',
+      '-llib2',
+    ]);
+  });
 });
