@@ -9,6 +9,7 @@ import type {
 } from '../types.js';
 import { readTags } from './html.js';
 import { strictAttributeProblem, strictTagProblem } from './strict.js';
+import { isStyleList } from './style.js';
 import { readings, urlProblem } from './url.js';
 
 /**
@@ -126,47 +127,13 @@ const TEXT_ATTRIBUTES = new Set([
 ]);
 
 /**
- * Style names Graphviz knows. It writes the style raw into PostScript
- * output, names and arguments alike, so anything else would be code
- * (Graphviz 2.43).
- */
-const STYLE_NAMES = new Set([
-  'solid',
-  'dashed',
-  'dotted',
-  'bold',
-  'invis',
-  'invisible',
-  'filled',
-  'rounded',
-  'diagonals',
-  'striped',
-  'wedged',
-  'radial',
-  'tapered',
-]);
-
-const STYLE_ITEM =
-  /[ \t]*(?:([A-Za-z]+)|setlinewidth[ \t]*\([ \t]*(?:\d+\.?\d*|\.\d+)[ \t]*\))[ \t]*(?:,|$)/y;
-
-/**
  * Whether every item of a `style` value is a known style or
  * `setlinewidth(n)`, with spaces only where the format allows them: `plain`
  * output writes the style as one raw field (Graphviz 2.43).
  */
 function isKnownStyle(value: string, rules: FormatRules): boolean {
   if (!rules.spacesInStyle && /\s/.test(value)) return false;
-  let i = 0;
-  while (i < value.length) {
-    STYLE_ITEM.lastIndex = i;
-    const match = STYLE_ITEM.exec(value);
-    if (!match || STYLE_ITEM.lastIndex === i) return false;
-    if (match[1] !== undefined && !STYLE_NAMES.has(match[1].toLowerCase())) {
-      return false;
-    }
-    i = STYLE_ITEM.lastIndex;
-  }
-  return true;
+  return isStyleList(value);
 }
 
 /**
