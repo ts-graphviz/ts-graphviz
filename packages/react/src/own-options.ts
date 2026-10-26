@@ -14,10 +14,33 @@ export function ownOptions<T extends object>(options: T | undefined): T {
     const descriptors = Object.getOwnPropertyDescriptors(options);
     for (const key of Object.getOwnPropertyNames(descriptors)) {
       const descriptor = descriptors[key];
-      own[key] =
-        'value' in descriptor
-          ? descriptor.value
-          : descriptor.get?.call(options);
+      own[key] = Object.hasOwn(descriptor, 'value')
+        ? descriptor.value
+        : descriptor.get?.call(options);
+    }
+  }
+  return own as T;
+}
+
+/**
+ * The own enumerable properties of a props object, in an object without a
+ * prototype, like object rest does but without reading `Object.prototype`.
+ *
+ * Non-enumerable props (such as React's `key` warning getter) are skipped,
+ * as object rest skips them.
+ *
+ * @internal
+ */
+export function ownProps<T extends object>(props: T | undefined): T {
+  const own = Object.create(null) as Record<string, unknown>;
+  if (props != null) {
+    const descriptors = Object.getOwnPropertyDescriptors(props);
+    for (const key of Object.getOwnPropertyNames(descriptors)) {
+      const descriptor = descriptors[key];
+      if (!descriptor.enumerable) continue;
+      own[key] = Object.hasOwn(descriptor, 'value')
+        ? descriptor.value
+        : descriptor.get?.call(props);
     }
   }
   return own as T;

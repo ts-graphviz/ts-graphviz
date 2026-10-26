@@ -1,5 +1,13 @@
-import { digraph, fromDot, toDot } from 'ts-graphviz';
-import { parse, stringify } from 'ts-graphviz/ast';
+import {
+  digraph,
+  fromDot,
+  isEdgeModel,
+  isForwardRefNode,
+  isNodeModel,
+  isRootGraphModel,
+  toDot,
+} from 'ts-graphviz';
+import { createElement, parse, stringify } from 'ts-graphviz/ast';
 import { afterEach, describe, expect, it } from 'vitest';
 import { createCommandAndArgs } from '../packages/adapter/src/create-command-and-args.js';
 
@@ -88,6 +96,45 @@ describe('options are read from their own properties', () => {
     inherit({ indentSize: 9, print: { indentSize: 9 }, convert: {} });
     expect(toDot(g)).toBe(clean);
     expect(stringify(parse(clean))).toBe(clean);
+  });
+
+  it('options of the generated parser', () => {
+    inherit({ peg$library: true, peg$currPos: 5 });
+    const ast = parse('digraph { a }');
+    expect(ast.type).toBe('Dot');
+    expect(fromDot('digraph { a }').nodes.map((n) => n.id)).toStrictEqual([
+      'a',
+    ]);
+  });
+
+  it('ids of graphs and subgraphs created without one', () => {
+    inherit({
+      id: { type: 'Literal', value: 'x', quoted: false, children: [] },
+    });
+    const ast = createElement('Dot', {}, [
+      createElement('Graph', { directed: true, strict: false }, [
+        createElement('Subgraph', {}, []),
+      ]),
+    ]);
+    expect(stringify(ast)).toBe('digraph {\n  subgraph {}\n}');
+    const model = fromDot('graph { subgraph { a } }');
+    expect(model.id).toBeUndefined();
+    expect(model.subgraphs.map((s) => s.id)).toStrictEqual([undefined]);
+  });
+
+  it('model type guards', () => {
+    inherit({ $$type: 'Node', id: 'a' });
+    expect(isNodeModel({})).toBe(false);
+    expect(isForwardRefNode({})).toBe(false);
+    expect(isForwardRefNode({ id: 'a' })).toBe(true);
+    expect(isNodeModel(digraph().node('a'))).toBe(true);
+  });
+
+  it('model type guards read the other fields from the object too', () => {
+    inherit({ id: 'a', targets: [], directed: true });
+    expect(isNodeModel({ $$type: 'Node' })).toBe(false);
+    expect(isEdgeModel({ $$type: 'Edge' })).toBe(false);
+    expect(isRootGraphModel({ $$type: 'Graph' })).toBe(false);
   });
 });
 

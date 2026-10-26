@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { Digraph, type RootGraphModel } from 'ts-graphviz';
+import { ownOptions } from '../own-options.js';
 import type { RootGraphOptions } from '../types.js';
 import { useGraphAttributes } from './useGraphAttributes.js';
 import { useGraphvizContext } from './useGraphvizContext.js';
@@ -10,7 +11,7 @@ import { useHasComment } from './useHasComment.js';
  * according to the object given by props.
  */
 export function useDigraph(options: RootGraphOptions = {}): RootGraphModel {
-  const { id, comment, edge, node, graph, ...attributes } = options;
+  const { id, comment, edge, node, graph, ...attributes } = ownOptions(options);
   const context = useGraphvizContext<RootGraphModel>();
 
   const digraph = useMemo(() => {

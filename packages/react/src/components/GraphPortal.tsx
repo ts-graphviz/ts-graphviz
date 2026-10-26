@@ -2,12 +2,14 @@ import { type FC, useContext, useMemo } from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphMap } from '../contexts/GraphMap.js';
 import { useGraphContainer } from '../hooks/useGraphContainer.js';
+import { ownProps } from '../own-options.js';
 import type { GraphPortalProps } from '../types.js';
 
 /**
  * GraphPortal component.
  */
-export const GraphPortal: FC<GraphPortalProps> = ({ children, id }) => {
+export const GraphPortal: FC<GraphPortalProps> = (props) => {
+  const { children, id } = ownProps(props);
   const container = useGraphContainer();
   const map = useContext(GraphMap);
   const cluster = useMemo(

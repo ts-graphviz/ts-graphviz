@@ -8,7 +8,10 @@ export const GraphPlugin: ConvertToModelPlugin<GraphASTNode> = {
   },
   convert(context, ast) {
     const G = ast.directed ? context.models.Digraph : context.models.Graph;
-    const graph = new G(ast.id?.value, ast.strict);
+    const graph = new G(
+      Object.hasOwn(ast, 'id') ? ast.id?.value : undefined,
+      ast.strict,
+    );
     applyStatements(context, graph, ast.children);
     return graph;
   },

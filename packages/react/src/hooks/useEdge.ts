@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import type { EdgeModel, EdgeTargetLikeTuple } from 'ts-graphviz';
+import { ownOptions } from '../own-options.js';
 import type { EdgeOptions } from '../types.js';
 import { useCurrentGraph } from './useCurrentGraph.js';
 import { useHasAttributes } from './useHasAttributes.js';
@@ -13,7 +14,7 @@ export function useEdge(
   targets: EdgeTargetLikeTuple,
   props: EdgeOptions = {},
 ): EdgeModel {
-  const { comment, ...attributes } = props;
+  const { comment, ...attributes } = ownOptions(props);
   const cluster = useCurrentGraph();
   if (targets.length < 2) {
     throw Error('Edges must have at least 2 targets.');

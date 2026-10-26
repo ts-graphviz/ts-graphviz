@@ -735,8 +735,29 @@ export function isForwardRefNode(object: unknown): object is ForwardRefNode {
   return (
     typeof object === 'object' &&
     object !== null &&
-    typeof (object as ForwardRefNode).id === 'string'
+    typeof ownOrClassField(object, 'id') === 'string'
   );
+}
+
+/**
+ * Reads a field from the object or its classes, but never from
+ * `Object.prototype`, so that a property added there is not read as a
+ * model's field.
+ */
+function ownOrClassField(object: object, key: string): unknown {
+  for (
+    let target: object | null = object;
+    target !== null && target !== Object.prototype;
+    target = Object.getPrototypeOf(target)
+  ) {
+    const descriptor = Object.getOwnPropertyDescriptor(target, key);
+    if (descriptor) {
+      return Object.hasOwn(descriptor, 'value')
+        ? descriptor.value
+        : descriptor.get?.call(object);
+    }
+  }
+  return undefined;
 }
 
 /**
@@ -750,8 +771,8 @@ export function isNodeModel(object: unknown): object is NodeModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as NodeModel).$$type === 'Node' &&
-    typeof (object as NodeModel).id === 'string'
+    ownOrClassField(object, '$$type') === 'Node' &&
+    typeof ownOrClassField(object, 'id') === 'string'
   );
 }
 
@@ -855,8 +876,8 @@ export function isEdgeModel(object: unknown): object is EdgeModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as EdgeModel).$$type === 'Edge' &&
-    Array.isArray((object as EdgeModel).targets)
+    ownOrClassField(object, '$$type') === 'Edge' &&
+    Array.isArray(ownOrClassField(object, 'targets'))
   );
 }
 
@@ -871,7 +892,7 @@ export function isSubgraphModel(object: unknown): object is SubgraphModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as SubgraphModel).$$type === 'Subgraph'
+    ownOrClassField(object, '$$type') === 'Subgraph'
   );
 }
 
@@ -888,8 +909,8 @@ export function isRootGraphModel(object: unknown): object is RootGraphModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as RootGraphModel).$$type === 'Graph' &&
-    typeof (object as RootGraphModel).directed === 'boolean'
+    ownOrClassField(object, '$$type') === 'Graph' &&
+    typeof ownOrClassField(object, 'directed') === 'boolean'
   );
 }
 
@@ -910,7 +931,7 @@ export function isAttributeListModel(
   return (
     typeof object === 'object' &&
     object !== null &&
-    (object as AttributeListModel).$$type === 'AttributeList'
+    ownOrClassField(object, '$$type') === 'AttributeList'
   );
 }
 

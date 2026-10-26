@@ -7,7 +7,8 @@ export const SubgraphPrintPlugin: PrintPlugin<SubgraphASTNode> = {
   },
   *print(context, ast) {
     yield 'subgraph';
-    if (ast.id) {
+    // A subgraph created without an id does not own the field.
+    if (Object.hasOwn(ast, 'id') && ast.id) {
       yield ' ';
       yield* context.print(ast.id);
     }
