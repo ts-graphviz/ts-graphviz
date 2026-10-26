@@ -18,6 +18,43 @@ afterAll(() => rmSync(dir, { recursive: true, force: true }));
 describe.skipIf(!hasDot)(
   '[SM-4] toStream / toFile with the real dot (#1680)',
   () => {
+    it('[SM-8] renders and writes the file whatever Object.prototype holds', async () => {
+      const proto = Object.prototype as Record<string, unknown>;
+      for (const [key, value] of [
+        ['allowHalfOpen', true],
+        ['defaultEncoding', 'hex'],
+        ['encoding', 'hex'],
+        ['start', 3],
+        ['fd', 1],
+      ] as const) {
+        const path = join(dir, `inherited-${key}.dot`);
+        writeFileSync(path, 'previous content');
+        proto[key] = value;
+        try {
+          const stream = await toStream('digraph { a -> b }', {
+            format: 'dot',
+            signal: AbortSignal.timeout(5000),
+          });
+          expect(await new Response(stream).text(), key).toContain('a -> b');
+          await toFile('digraph { a -> b }', path, {
+            format: 'dot',
+            signal: AbortSignal.timeout(5000),
+          });
+        } finally {
+          delete proto[key];
+        }
+        expect(readFileSync(path, 'utf8'), key).toMatch(/^digraph/);
+      }
+    });
+
+    it('gives the bytes dot writes for a binary format', async () => {
+      const dot = 'digraph { a -> b -> c; b -> d }';
+      const stream = await toStream(dot, { format: 'png' });
+      const bytes = Buffer.from(await new Response(stream).arrayBuffer());
+      const direct = spawnSync('dot', ['-q', '-Tpng'], { input: dot }).stdout;
+      expect(bytes.equals(direct)).toBe(true);
+    });
+
     it('renders', async () => {
       const stream = await toStream('digraph { a -> b }', { format: 'dot' });
       expect(await new Response(stream).text()).toContain('a -> b');

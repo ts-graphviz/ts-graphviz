@@ -14,13 +14,19 @@ function stubDeno() {
       spawn() {
         return {
           stdin: new WritableStream(),
+          // Sources without a prototype, so that only the adapter's own
+          // objects are under test.
           stdout: new ReadableStream({
-            start: (c) => {
+            __proto__: null,
+            start: (c: ReadableStreamDefaultController) => {
               c.enqueue(new TextEncoder().encode('out'));
               c.close();
             },
-          }),
-          stderr: new ReadableStream({ start: (c) => c.close() }),
+          } as UnderlyingDefaultSource),
+          stderr: new ReadableStream({
+            __proto__: null,
+            start: (c: ReadableStreamDefaultController) => c.close(),
+          } as UnderlyingDefaultSource),
           status: Promise.resolve({ code: 0, signal: null, success: true }),
           kill() {},
         };
@@ -53,5 +59,18 @@ describe('[SM-8] Deno adapter', () => {
       create: true,
       truncate: true,
     });
+  });
+
+  it('returns a stream whose source inherits nothing', async () => {
+    stubDeno();
+    const proto = Object.prototype as Record<string, unknown>;
+    proto.type = 'other';
+    let text: string;
+    try {
+      text = await new Response(await toStream('digraph {}')).text();
+    } finally {
+      delete proto.type;
+    }
+    expect(text).toBe('out');
   });
 });
