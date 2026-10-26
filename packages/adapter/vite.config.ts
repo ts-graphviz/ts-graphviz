@@ -22,6 +22,7 @@ export default defineConfig({
         'node:stream/promises',
         'node:child_process',
         'node:fs',
+        'node:fs/promises',
       ],
     },
   },
