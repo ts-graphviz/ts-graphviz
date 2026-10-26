@@ -88,4 +88,8 @@ describe('escapeComment', () => {
       );
     });
   });
+
+  test('writes a non-string value as its text', () => {
+    expect(escapeComment(42 as unknown as string, 'Slash')).toBe('42');
+  });
 });

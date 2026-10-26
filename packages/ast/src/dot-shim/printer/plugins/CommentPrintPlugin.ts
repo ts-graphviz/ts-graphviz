@@ -2,7 +2,8 @@ import type { CommentASTNode, CommentKind } from '../../../types.js';
 import type { PrintPlugin } from '../types.js';
 import { escapeComment } from './utils/escape-comment.js';
 
-const EOL_PATTERN = /\r?\n/;
+// Every line break the parser reads, a lone CR included.
+const EOL_PATTERN = /\r\n|\r|\n/;
 
 const paddingMap: Record<CommentKind, string> = {
   Block: ' * ',

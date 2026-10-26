@@ -775,4 +775,33 @@ describe('stringify', () => {
       `);
     });
   });
+
+  describe('comment line breaks', () => {
+    test.each(['Slash', 'Macro', 'Block'] as const)(
+      'a lone CR starts a new %s comment line, as the parser reads it',
+      (kind) => {
+        const dot = stringify({
+          type: 'Dot',
+          children: [
+            { type: 'Comment', kind, value: 'first\rextra', children: [] },
+            {
+              type: 'Graph',
+              directed: true,
+              strict: false,
+              children: [],
+            },
+          ],
+        } as never);
+        expect(dot).not.toContain('\r');
+        const ast = parse(dot);
+        expect(ast.children.map((c) => c.type)).toStrictEqual([
+          'Comment',
+          'Graph',
+        ]);
+        expect(
+          (ast.children[1] as { children: unknown[] }).children,
+        ).toStrictEqual([]);
+      },
+    );
+  });
 });
