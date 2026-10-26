@@ -46,3 +46,24 @@ describe('[SM-8] components read only the props they are given', () => {
     expect(dot).toBe(clean);
   });
 });
+
+describe('[SM-8] renderHTMLLike reads only the props an element has', () => {
+  it.each([
+    ['children', 'extra'],
+    ['border', 'extra'],
+  ])('ignores an inherited %s', async (key, value) => {
+    const { renderHTMLLike } = await import('./renderHTMLLike.js');
+    const label = (
+      <dot:table>
+        <dot:tr>
+          <dot:td />
+        </dot:tr>
+      </dot:table>
+    );
+    const clean = renderHTMLLike(label);
+    const html = await withInherited(key, value, async () =>
+      renderHTMLLike(label),
+    );
+    expect(html).toStrictEqual(clean);
+  });
+});

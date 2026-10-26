@@ -114,7 +114,9 @@ function manuallyRenderElement(
   try {
     const { type } = element;
     // props is typed as unknown for function components
-    const props = (element.props ?? {}) as Record<string, unknown>;
+    // Own props only: `children` or an attribute inherited from
+    // Object.prototype is not part of the element.
+    const props = ownOptions((element.props ?? {}) as Record<string, unknown>);
 
     if (type === Fragment) {
       return renderChildrenToString(

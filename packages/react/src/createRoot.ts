@@ -176,7 +176,7 @@ function createFiberRoot<
     onUncaughtError = noop,
     onCaughtError = noop,
     onRecoverableError = noop,
-  } = options;
+  } = ownOptions(options);
 
   // react-reconciler 0.34's createContainer (React 19.3).
   return reconciler.createContainer(
@@ -245,7 +245,7 @@ async function renderInternal<
   isUnmounted: () => boolean = () => false,
   signal?: AbortSignal,
 ): Promise<void> {
-  const { onRenderComplete } = options;
+  const { onRenderComplete } = ownOptions(options);
   signal?.throwIfAborted();
   containerInfo.uncaughtErrors = [];
   reconciler.updateContainerSync(wrappedElement, fiberRoot, null, null);
