@@ -1,5 +1,13 @@
 # @ts-graphviz/core
 
+## 3.0.10
+
+### Patch Changes
+
+- Updated dependencies [[`d527f0d`](https://github.com/ts-graphviz/ts-graphviz/commit/d527f0ded9bd6f0a8fe38a47f6505aea98905989)]:
+  - @ts-graphviz/ast@3.0.9
+  - @ts-graphviz/common@3.0.6
+
 ## 3.0.9
 
 ### Patch Changes
