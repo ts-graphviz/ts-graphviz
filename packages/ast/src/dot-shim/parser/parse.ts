@@ -237,7 +237,11 @@ function parseRule(
   try {
     // Comments inside statements, by offset; attached once parsing is done.
     const inlineComments = new Map<number, InlineComment>();
+    // Without a prototype: the generated parser reads options of its own
+    // (`peg$library`, `grammarSource`, …) that must not come from
+    // Object.prototype.
     const ast: ASTNode | ClusterStatementASTNode[] = _parse(input, {
+      __proto__: null,
       startRule,
       filename,
       maxHtmlNestingDepth,
