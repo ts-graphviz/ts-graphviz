@@ -10,7 +10,7 @@ const text = 'x" ]; extra [shape=box]; a [label="y';
 describe('[SM-2] values that are not strings', () => {
   it.each([
     ['an array', [text]],
-    ['an object', { toString: () => text }],
+    ['an object', { toString: (): string => text }],
   ])('writes %s as its escaped text', (_, value) => {
     const g = new Digraph();
     g.node('a', { label: value as never });
