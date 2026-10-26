@@ -23,10 +23,8 @@ export default defineConfig({
       external: [
         '@ts-graphviz/ast',
         '@ts-graphviz/common',
-        'node:stream',
-        'node:stream/promises',
-        'node:child_process',
-        'node:fs',
+        // Node.js built-ins (bundling one would put a browser stub in).
+        /^node:/,
       ],
     },
   },

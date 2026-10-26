@@ -59,11 +59,7 @@ export class Builder implements ASTBuilder {
     props: any,
     children: ASTChildNode<T>[] = [],
   ): T {
-    // Always increment node count
-    this.nodeCount++;
-    if (this.maxNodes > 0 && this.nodeCount > this.maxNodes) {
-      throw new ASTNodeCountExceededError(this.nodeCount, this.maxNodes);
-    }
+    this.countNode();
     const location = this.getLocation();
     // The contained nodes come from the third argument only, never from props.
     // Own properties only (a spread copies no inherited ones).
@@ -78,6 +74,19 @@ export class Builder implements ASTBuilder {
       return node;
     }
     return { ...node, children };
+  }
+
+  /**
+   * Count a node made outside {@link Builder.createElement} (a comment the
+   * parser attaches after parsing) toward `maxASTNodes`.
+   * @throws {ASTNodeCountExceededError} if the maximum number of AST nodes is exceeded
+   * @internal
+   */
+  public countNode(): void {
+    this.nodeCount++;
+    if (this.maxNodes > 0 && this.nodeCount > this.maxNodes) {
+      throw new ASTNodeCountExceededError(this.nodeCount, this.maxNodes);
+    }
   }
 
   /**

@@ -198,12 +198,15 @@ export async function toStream<T extends Layout>(
         cause,
       );
     }
+    // A source without a prototype: an inherited `type` or `pull` is never
+    // read as part of it.
     return new ReadableStream<Uint8Array>({
+      __proto__: null,
       start(controller) {
         for (const chunk of chunks) controller.enqueue(chunk);
         controller.close();
       },
-    });
+    } as UnderlyingDefaultSource<Uint8Array>);
   } catch (e) {
     // An unexpected error above: make sure the process does not outlive us.
     kill();
