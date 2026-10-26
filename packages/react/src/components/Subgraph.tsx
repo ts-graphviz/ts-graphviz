@@ -1,46 +1,32 @@
-import {
-  type ReactElement,
-  useEffect,
-  useImperativeHandle,
-  useLayoutEffect,
-} from 'react';
-import { CurrentGraph } from '../contexts/CurrentGraph.js';
-import { useGraphMap } from '../hooks/useGraphMap.js';
-import { useModelCollector } from '../hooks/useModelCollector.js';
-import { useRenderedID } from '../hooks/useRenderedID.js';
-import { useSubgraph } from '../hooks/useSubgraph.js';
+import type { ReactElement } from 'react';
+import { type ModelsContext, ownOptions } from 'ts-graphviz';
+import type { AnyGraphContainer } from '../types/container.js';
 import type { SubgraphProps } from '../types.js';
+import { useHostGraph } from './hostGraph.js';
 
-const SubgraphComponent = ({
-  children,
-  label,
-  ref,
-  ...options
-}: SubgraphProps): ReactElement => {
-  const renderedLabel = useRenderedID(label);
-  if (renderedLabel !== undefined)
-    Object.assign(options, { label: renderedLabel });
-  const subgraph = useSubgraph(options);
-  const clusters = useGraphMap();
-  const modelCollector = useModelCollector();
+// Made by the enclosing graph's createSubgraph, so a graph class that
+// overrides it still decides, and taken out at once: the commit adds it.
+function createSubgraph(
+  models: ModelsContext,
+  parent: AnyGraphContainer | null,
+  id: string | undefined,
+): AnyGraphContainer {
+  if (parent === null) {
+    const subgraph = new models.Subgraph(id);
+    subgraph.with(models);
+    return subgraph;
+  }
+  const subgraph = parent.createSubgraph(id);
+  parent.removeSubgraph(subgraph);
+  return subgraph;
+}
 
-  // Handle ref as prop
-  useImperativeHandle(ref, () => subgraph, [subgraph]);
-
-  // Collect model for render result
-  useLayoutEffect(() => {
-    modelCollector?.collectModel(subgraph);
-  }, [modelCollector, subgraph]);
-
-  useEffect(() => {
-    if (subgraph.id !== undefined) {
-      clusters.set(subgraph.id, subgraph);
-    }
-  }, [subgraph, clusters]);
-  return (
-    <CurrentGraph.Provider value={subgraph}>{children}</CurrentGraph.Provider>
+const SubgraphComponent = (props: SubgraphProps): ReactElement =>
+  useHostGraph(
+    props,
+    (models, parent) => createSubgraph(models, parent, ownOptions(props).id),
+    false,
   );
-};
 
 /**
  * `Subgraph` component. Its `id` picks the attributes it takes, as for

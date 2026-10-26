@@ -39,6 +39,7 @@ The parser is the component most exposed to attacker-controlled data: a web serv
   | AST node count | `maxASTNodes` | 100 000 |
 
   The input size is checked (on the UTF-8 encoding) before parsing starts; the other limits stop the parse as soon as they are crossed, so no structure larger than the limit is built. `maxInputSize` and `maxASTNodes` can be disabled with `0`; do not do that for untrusted input. The two depth limits cannot be disabled.
+- **Bounded model conversion.** `fromDot` / `toModel` make an edge to a subgraph reach every node the subgraph has had so far, as Graphviz does. Since a subgraph opened again keeps its nodes, a short source could make that grow with the square of its length (`subgraph s { … } -> x` repeated). The node references all such edges reach are limited by `maxEdgeTargets` (100 000 by default, a `convert` option); past it, the conversion throws a `RangeError` with code `TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED`.
 - **No NUL characters.** Graphviz stops reading at a NUL, so a source containing one is rejected with `DotSyntaxError` instead of being read differently from Graphviz.
 - **Typed, coded errors only.** For any string, `parse` either returns or throws `DotSyntaxError` (a `SyntaxError`, code `TSG_ERR_DOT_SYNTAX`) or another error carrying a `code` from `ERROR_CODES` (`isTsGraphvizError(e)` is true), so a caller can catch and classify every failure. (Passing a non-string is a type error on the caller's side.)
 - **No code execution, no I/O.** Parsing produces plain objects. Attribute values are stored as text; nothing in the input is evaluated, resolved or fetched.
@@ -61,6 +62,7 @@ Applications build graphs from their own data: node ids from database keys, labe
 - **Values that must not be written are rejected.** A null character (`RangeError`, code `TSG_ERR_NUL_CHARACTER`) cannot be represented in DOT and is refused instead of dropped.
 - **Booleans are written bare as `true`/`false`; numbers are written bare only in DOT's own numeral form.** Anything JavaScript could print differently (`1e21`, `NaN`, `Infinity`) is written as a quoted string.
 - **Edge-target shorthand is the one place a string is parsed.** `g.edge(['a:p:n', 'b'])` splits the string on `:` into id, port and compass (as in DOT). An id that itself contains `:` must be given as `{ id: 'a:b' }`; then it is literal text like any other id.
+- **Compass points are keywords, checked.** A compass point is written as it is, so `toDot` / `fromModel` accept only DOT's (`n`, `ne`, `e`, `se`, `s`, `sw`, `w`, `nw`, `c`, `_`) and reject anything else with a `TypeError` (code `TSG_ERR_INVALID_EDGE_TARGETS`), also in an edge target given as an object.
 - **Keys cannot smuggle syntax.** Attribute keys that are DOT keywords or not plain identifiers are quoted; a `__proto__` key from parsed input lands on a null-prototype record and does not change the object's prototype.
 
 **Not promised**
@@ -79,7 +81,8 @@ Two value kinds deliberately bypass the literal-text rule because their content 
 **Guarantees**
 
 - An `escString` value cannot terminate the quoted string or add statements.
-- An `htmlLike` value must have balanced `<`/`>` and no NUL; otherwise Graphviz would end the label early and read the rest as DOT. `htmlLike()` rejects such markup when the value is created (`RangeError`, code `TSG_ERR_INVALID_HTML_LIKE`); a structurally equal value built by hand is checked again when written (`TSG_ERR_INVALID_HTML_LIKE`, or `TSG_ERR_NUL_CHARACTER` for a NUL).
+- An `htmlLike` value must have balanced `<`/`>` and no NUL; otherwise Graphviz would end the label early and read the rest as DOT. `htmlLike()` rejects such markup when the value is created (`RangeError`, code `TSG_ERR_INVALID_HTML_LIKE`), and the markup is checked again when written (`TSG_ERR_INVALID_HTML_LIKE`, or `TSG_ERR_NUL_CHARACTER` for a NUL).
+- **Only the factories make these kinds.** `escString()` and `htmlLike()` mark their values with a non-enumerable property whose key is a registered symbol. Data cannot carry that mark: parsed JSON, a copy through `JSON.stringify`, or an object built with the same fields. So `{ "$$kind": "html", "value": "…" }` from a request is not an HTML-like label. Like any other non-string value, it is written as escaped text.
 
 **Not promised**
 
@@ -183,6 +186,7 @@ ES modules, and the built-in prototypes, are shared by every module of a process
 **Guarantees**
 
 - **Options are own properties.** Every public entry point reads its options object, and the option objects nested in it (`attributes` and its `graph` / `node` / `edge`, a `sanitize` options object, `parse`, `convert`, `print`), from their own enumerable properties only (`ownOptions` in `@ts-graphviz/common`). An inherited property never chooses the command (`dotCommand`), turns `sanitize` off, adds arguments (`library`, `-G`), raises a parse limit or changes what is parsed or printed (#1757).
+- **Process options and the command line are own properties.** The Node.js entry spawns `dot` with options that have no prototype, `shell: false`, and an environment that is a prototype-less copy of `process.env`'s own variables (`child_process.spawn` would otherwise copy inherited enumerable keys into the child's environment, and some Node.js releases read an inherited `shell`). The Deno entry passes `Deno.Command` and `Deno.open` prototype-less options. Only the array elements of `library` that the array owns are passed; a hole is skipped.
 - **No shared configuration.** Importing a package changes no shared state (v4 removed the shared models context, see the v3-to-v4 guide); defaults come from frozen objects (`defaultModelsContext()`, `orderedModels`, the model factories).
 - **Exported data is frozen.** `ERROR_CODES` and `DEPRECATION_CODES` cannot be changed, so no module can change what `isTsGraphvizError` accepts.
 

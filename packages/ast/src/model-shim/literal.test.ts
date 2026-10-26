@@ -136,9 +136,11 @@ describe('[SM-3] HTML-like', () => {
     expect(() => htmlLike('<b>a</b><')).toThrow(RangeError);
     // unbalanced *tags* are Graphviz's business; only the bracket count matters here
     expect(() => htmlLike('<b>unclosed')).not.toThrow();
-    expect(() =>
+    // An object with the same fields is not an HTML-like value: it is
+    // written as escaped text.
+    expect(
       literalFromValue({ $$kind: 'html', value: 'x>' } as HTMLLikeValue),
-    ).toThrow(RangeError);
+    ).toMatchObject({ kind: 'quoted' });
   });
 
   it('no longer guesses from the shape of a string', () => {

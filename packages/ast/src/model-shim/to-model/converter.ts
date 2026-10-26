@@ -1,4 +1,5 @@
 import { ownOptions, withCode } from '@ts-graphviz/common';
+import { startEdgeTargetBudget } from './edge-target-budget.js';
 import { defaultPlugins } from './plugins/index.js';
 import type {
   ASTToModel,
@@ -45,6 +46,7 @@ export class ToModelConverter {
         );
       },
     };
+    startEdgeTargetBudget(context, this.options.maxEdgeTargets);
     return context.convert(ast);
   }
 }
