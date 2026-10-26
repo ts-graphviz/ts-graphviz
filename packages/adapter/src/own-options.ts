@@ -14,10 +14,9 @@ export function ownOptions<T extends object>(options: T | undefined): T {
     const descriptors = Object.getOwnPropertyDescriptors(options);
     for (const key of Object.getOwnPropertyNames(descriptors)) {
       const descriptor = descriptors[key];
-      own[key] =
-        'value' in descriptor
-          ? descriptor.value
-          : descriptor.get?.call(options);
+      own[key] = Object.hasOwn(descriptor, 'value')
+        ? descriptor.value
+        : descriptor.get?.call(options);
     }
   }
   return own as T;

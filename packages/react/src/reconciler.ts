@@ -380,7 +380,7 @@ export class HostConfig
     child: Instance | TextInstance,
   ): void {
     // Store the root instance for debugging
-    if (typeof child === 'object' && 'type' in child) {
+    if (typeof child === 'object' && Object.hasOwn(child, 'type')) {
       container.__rootInstance = child;
     }
   }

@@ -23,9 +23,11 @@ export function applyStatements(
   for (const stmt of statements) {
     switch (stmt.type) {
       case 'Subgraph': {
-        const subgraph = stmt.id
-          ? graph.subgraph(stmt.id.value)
-          : graph.subgraph();
+        // A subgraph without an id does not own the field.
+        const subgraph =
+          Object.hasOwn(stmt, 'id') && stmt.id
+            ? graph.subgraph(stmt.id.value)
+            : graph.subgraph();
         applyStatements(context, subgraph, stmt.children);
         commentHolder.apply(subgraph, stmt.location);
         break;

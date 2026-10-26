@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { type GraphBaseModel, Subgraph, type SubgraphModel } from 'ts-graphviz';
+import { ownOptions } from '../own-options.js';
 import type { SubgraphOptions } from '../types.js';
 import { useCurrentGraph } from './useCurrentGraph.js';
 import { useGraphAttributes } from './useGraphAttributes.js';
@@ -11,7 +12,7 @@ import { useHasComment } from './useHasComment.js';
  * according to the object given by props.
  */
 export function useSubgraph(props: SubgraphOptions = {}): SubgraphModel {
-  const { id, comment, edge, node, graph, ...attributes } = props;
+  const { id, comment, edge, node, graph, ...attributes } = ownOptions(props);
   const context = useGraphvizContext();
   const cluster = useCurrentGraph();
 

@@ -158,13 +158,16 @@ export function parse(
   }
 
   try {
+    // The generated parser also reads options it is not given (e.g. its
+    // library and position options), so they are passed without a prototype.
     return _parse(input, {
+      __proto__: null,
       startRule,
       filename,
       maxHtmlNestingDepth,
       maxEdgeChainDepth,
       maxASTNodes,
-    });
+    } as Parameters<typeof _parse>[1]);
   } catch (e) {
     if (e instanceof PeggySyntaxError) {
       throw new DotSyntaxError(e.message, {

@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import type { NodeModel } from 'ts-graphviz';
+import { ownOptions } from '../own-options.js';
 import type { NodeOptions } from '../types.js';
 import { useCurrentGraph } from './useCurrentGraph.js';
 import { useHasAttributes } from './useHasAttributes.js';
@@ -10,7 +11,7 @@ import { useHasComment } from './useHasComment.js';
  * according to the object given by props.
  */
 export function useNode(id: string, options: NodeOptions = {}): NodeModel {
-  const { comment, ...attributes } = options;
+  const { comment, ...attributes } = ownOptions(options);
   const cluster = useCurrentGraph();
 
   const node = useMemo(() => {

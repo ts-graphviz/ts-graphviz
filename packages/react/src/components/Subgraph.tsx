@@ -9,16 +9,13 @@ import { useGraphMap } from '../hooks/useGraphMap.js';
 import { useModelCollector } from '../hooks/useModelCollector.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
 import { useSubgraph } from '../hooks/useSubgraph.js';
+import { ownProps } from '../own-options.js';
 import type { SubgraphProps } from '../types.js';
 /**
  * `Subgraph` component.
  */
-export const Subgraph: FC<SubgraphProps> = ({
-  children,
-  label,
-  ref,
-  ...options
-}) => {
+export const Subgraph: FC<SubgraphProps> = (props) => {
+  const { children, label, ref, ...options } = ownProps(props);
   const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined)
     Object.assign(options, { label: renderedLabel });

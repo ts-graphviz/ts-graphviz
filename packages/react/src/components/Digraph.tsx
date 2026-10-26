@@ -11,17 +11,14 @@ import { useGraphContainer } from '../hooks/useGraphContainer.js';
 import { useGraphMap } from '../hooks/useGraphMap.js';
 import { useModelCollector } from '../hooks/useModelCollector.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
+import { ownProps } from '../own-options.js';
 import type { RootGraphProps } from '../types.js';
 
 /**
  * `Digraph` component.
  */
-export const Digraph: FC<RootGraphProps> = ({
-  children,
-  label,
-  ref,
-  ...options
-}) => {
+export const Digraph: FC<RootGraphProps> = (props) => {
+  const { children, label, ref, ...options } = ownProps(props);
   const container = useGraphContainer();
   if (container !== null) {
     throw Error(

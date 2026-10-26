@@ -1,6 +1,6 @@
 import React from 'react';
 import { Digraph as DigraphModel } from 'ts-graphviz';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
 import { Graph } from './components/Graph.js';
@@ -182,6 +182,54 @@ describe('renderToDot()', () => {
       expect(dot).toContain('table');
       expect(dot).toContain('Cell 1');
       expect(dot).toContain('Cell 2');
+    });
+  });
+
+  describe('props are read from their own properties', () => {
+    it('renders the same DOT whatever Object.prototype holds', async () => {
+      const element = (
+        <Digraph id="G">
+          <Node id="a" />
+          <Edge targets={['a', 'b']} />
+          <Subgraph id="s">
+            <Node id="c" />
+          </Subgraph>
+        </Digraph>
+      );
+      const clean = await renderToDot(element);
+      const proto = Object.prototype as Record<string, unknown>;
+      const inherited = {
+        label: 'extra',
+        xlabel: 'extra',
+        comment: 'extra',
+        node: { shape: 'box' },
+        edge: { color: 'red' },
+        graph: { rankdir: 'LR' },
+      };
+      Object.assign(proto, inherited);
+      let dot: string;
+      try {
+        dot = await renderToDot(element);
+      } finally {
+        for (const key of Object.keys(inherited)) delete proto[key];
+      }
+      expect(dot).toBe(clean);
+    });
+
+    it('does not read a keyed element key as a prop', async () => {
+      const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
+      try {
+        await renderToDot(
+          <Digraph id="G">
+            {['a', 'b'].map((id) => (
+              <Node key={id} id={id} />
+            ))}
+          </Digraph>,
+        );
+        expect(errors).not.toHaveBeenCalled();
+      } finally {
+        errors.mockRestore();
+      }
     });
   });
 });

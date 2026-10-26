@@ -3,12 +3,14 @@ import { useImperativeHandle, useLayoutEffect } from 'react';
 import { useEdge } from '../hooks/useEdge.js';
 import { useModelCollector } from '../hooks/useModelCollector.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
+import { ownProps } from '../own-options.js';
 import type { EdgeProps } from '../types.js';
 
 /**
  * `Edge` component.
  */
-export const Edge: FC<EdgeProps> = ({ targets, label, ref, ...options }) => {
+export const Edge: FC<EdgeProps> = (props) => {
+  const { targets, label, ref, ...options } = ownProps(props);
   const renderedLabel = useRenderedID(label);
   if (renderedLabel !== undefined)
     Object.assign(options, { label: renderedLabel });

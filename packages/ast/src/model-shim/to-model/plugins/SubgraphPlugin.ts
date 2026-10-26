@@ -7,7 +7,9 @@ export const SubgraphPlugin: ConvertToModelPlugin<SubgraphASTNode> = {
     return ast.type === 'Subgraph';
   },
   convert(context, ast) {
-    const subgraph = new context.models.Subgraph(ast.id?.value);
+    const subgraph = new context.models.Subgraph(
+      Object.hasOwn(ast, 'id') ? ast.id?.value : undefined,
+    );
     applyStatements(context, subgraph, ast.children);
     return subgraph;
   },

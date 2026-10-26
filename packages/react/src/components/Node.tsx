@@ -3,12 +3,14 @@ import { useImperativeHandle, useLayoutEffect } from 'react';
 import { useModelCollector } from '../hooks/useModelCollector.js';
 import { useNode } from '../hooks/useNode.js';
 import { useRenderedID } from '../hooks/useRenderedID.js';
+import { ownProps } from '../own-options.js';
 import type { NodeProps } from '../types.js';
 
 /**
  * `Node` component.
  */
-export const Node: FC<NodeProps> = ({ id, label, xlabel, ref, ...options }) => {
+export const Node: FC<NodeProps> = (props) => {
+  const { id, label, xlabel, ref, ...options } = ownProps(props);
   const renderedLabel = useRenderedID(label);
   const renderedXlabel = useRenderedID(xlabel);
 

@@ -11,7 +11,8 @@ export const GraphPrintPlugin: PrintPlugin<GraphASTNode> = {
       yield 'strict ';
     }
     yield ast.directed ? 'digraph ' : 'graph ';
-    if (ast.id) {
+    // A graph created without an id does not own the field.
+    if (Object.hasOwn(ast, 'id') && ast.id) {
       yield* context.print(ast.id);
       yield ' ';
     }
