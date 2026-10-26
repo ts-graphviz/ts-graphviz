@@ -45,4 +45,11 @@ describe('[SM-1] maxEdgeTargets', () => {
       [{ id: 'n0' }, { id: 'n1' }, { id: 'n2' }],
     ]);
   });
+
+  it.each([Number.NaN, -1, '5' as never])(
+    'keeps the default limit for maxEdgeTargets %s',
+    (maxEdgeTargets) => {
+      expect(() => convert(reopened(2000), maxEdgeTargets)).toThrow(RangeError);
+    },
+  );
 });
