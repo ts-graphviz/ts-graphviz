@@ -1,5 +1,12 @@
 # @ts-graphviz/react
 
+## 0.12.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - ts-graphviz@3.0.10
+
 ## 0.12.2
 
 ### Patch Changes
