@@ -10,18 +10,19 @@ import type {
 } from './models.js';
 
 /**
- * The `$$type` of a model: from the object or the classes it comes from,
- * never from Object.prototype, so a plain object does not pass for a model
- * because of an inherited `$$type`.
+ * A field of a model or node reference: from the object or the classes it
+ * comes from, never from Object.prototype, so a plain object does not pass
+ * for a model because of an inherited `$$type`, `id`, `targets` or
+ * `directed`.
  */
-function typeOf(object: object): unknown {
+function field(object: object, key: string): unknown {
   for (
     let o: object | null = object;
     o !== null && o !== Object.prototype;
     o = Object.getPrototypeOf(o)
   ) {
-    if (Object.getOwnPropertyDescriptor(o, '$$type') !== undefined) {
-      return Reflect.get(object, '$$type');
+    if (Object.getOwnPropertyDescriptor(o, key) !== undefined) {
+      return Reflect.get(object, key);
     }
   }
   return undefined;
@@ -36,7 +37,7 @@ export function isForwardRefNode(object: unknown): object is ForwardRefNode {
   return (
     typeof object === 'object' &&
     object !== null &&
-    typeof (object as ForwardRefNode).id === 'string'
+    typeof field(object, 'id') === 'string'
   );
 }
 
@@ -51,8 +52,8 @@ export function isNodeModel(object: unknown): object is NodeModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    typeOf(object) === 'Node' &&
-    typeof (object as NodeModel).id === 'string'
+    field(object, '$$type') === 'Node' &&
+    typeof field(object, 'id') === 'string'
   );
 }
 
@@ -67,8 +68,8 @@ export function isEdgeModel(object: unknown): object is EdgeModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    typeOf(object) === 'Edge' &&
-    Array.isArray((object as EdgeModel).targets)
+    field(object, '$$type') === 'Edge' &&
+    Array.isArray(field(object, 'targets'))
   );
 }
 
@@ -83,7 +84,7 @@ export function isSubgraphModel(object: unknown): object is SubgraphModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    typeOf(object) === 'Subgraph'
+    field(object, '$$type') === 'Subgraph'
   );
 }
 
@@ -100,8 +101,8 @@ export function isRootGraphModel(object: unknown): object is RootGraphModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    typeOf(object) === 'Graph' &&
-    typeof (object as RootGraphModel).directed === 'boolean'
+    field(object, '$$type') === 'Graph' &&
+    typeof field(object, 'directed') === 'boolean'
   );
 }
 
@@ -116,8 +117,8 @@ export function isDotModel(object: unknown): object is DotModel {
   return (
     typeof object === 'object' &&
     object !== null &&
-    typeOf(object) === 'Dot' &&
-    Array.isArray((object as DotModel).graphs)
+    field(object, '$$type') === 'Dot' &&
+    Array.isArray(field(object, 'graphs'))
   );
 }
 
@@ -138,6 +139,6 @@ export function isAttributeListModel(
   return (
     typeof object === 'object' &&
     object !== null &&
-    typeOf(object) === 'AttributeList'
+    field(object, '$$type') === 'AttributeList'
   );
 }
