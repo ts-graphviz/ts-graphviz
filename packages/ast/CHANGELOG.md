@@ -1,5 +1,15 @@
 # @ts-graphviz/ast
 
+## 3.0.8
+
+### Patch Changes
+
+- [#1763](https://github.com/ts-graphviz/ts-graphviz/pull/1763) [`24cc46e`](https://github.com/ts-graphviz/ts-graphviz/commit/24cc46ebf0078440fa498f89b21e7224725c16b6) Thanks [@kamiazya](https://github.com/kamiazya)! - Options are read from their own properties only, and values are always written as DOT text:
+
+  - `toStream` / `toFile`, `parse`, `stringify`, `fromModel` / `toModel`, `fromDot` and `toDot` read only the options their caller set. `toStream` / `toFile` also pass Node.js only the options and environment they set.
+  - Attribute keys and values, IDs, ports, compass points and comments are written so that DOT reads them back as the same text. A string of the form `<…>` is written as an HTML-like label only when it is well-formed; otherwise it is written as a quoted string.
+  - Writing attribute values and reading block comments are faster on large inputs.
+
 ## 3.0.7
 
 ### Patch Changes

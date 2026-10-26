@@ -1,5 +1,14 @@
 # @ts-graphviz/react
 
+## 0.12.2
+
+### Patch Changes
+
+- [#1763](https://github.com/ts-graphviz/ts-graphviz/pull/1763) [`24cc46e`](https://github.com/ts-graphviz/ts-graphviz/commit/24cc46ebf0078440fa498f89b21e7224725c16b6) Thanks [@kamiazya](https://github.com/kamiazya)! - `renderHTMLLike` writes strings as text, as React DOM does: text children and attribute values are written with character references where needed, so a string that already contains a character reference such as `&nbsp;` is written as that literal text (use `' '` instead). Names that are not valid tag or attribute names, and React's `key` / `ref`, are not written. `renderHTMLLike`, `renderToDot` and `createRoot` read their options and props from own properties only.
+
+- Updated dependencies [[`24cc46e`](https://github.com/ts-graphviz/ts-graphviz/commit/24cc46ebf0078440fa498f89b21e7224725c16b6)]:
+  - ts-graphviz@3.0.9
+
 ## 0.12.1
 
 ### Patch Changes
