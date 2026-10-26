@@ -1,6 +1,6 @@
 import { ownOptions, withCode } from '@ts-graphviz/common';
 import type { CommonParseOptions } from '../dot-shim/parser/index.js';
-import { ownField } from '../own-field.js';
+import { hasField, ownField } from '../own-field.js';
 import { Pipeline } from '../pipeline/pipeline.js';
 import type {
   ASTNode,
@@ -383,7 +383,11 @@ function* walk(node: ASTNode): Generator<ASTNode> {
   yield node;
   for (const value of Object.values(node)) {
     for (const child of Array.isArray(value) ? value : [value]) {
-      if (typeof child === 'object' && child !== null && 'type' in child) {
+      if (
+        typeof child === 'object' &&
+        child !== null &&
+        hasField(child, 'type')
+      ) {
         yield* walk(child as ASTNode);
       }
     }
@@ -396,7 +400,7 @@ function* walk(node: ASTNode): Generator<ASTNode> {
  */
 function checkSafety(rules: FormatRules) {
   return (ast: DotASTNode): undefined => {
-    const state: DocumentState = {};
+    const state: DocumentState = Object.create(null);
     for (const node of walk(ast)) {
       switch (node.type) {
         case 'Attribute':
@@ -413,7 +417,7 @@ function checkSafety(rules: FormatRules) {
         case 'Graph':
         case 'Subgraph':
         case 'Node':
-          checkName(node.id, state);
+          checkName(ownField(node, 'id'), state);
           break;
         case 'NodeRef':
           // `\E` in a value expands to the edge's names and ports.

@@ -1,3 +1,4 @@
+import { hasField } from '../../own-field.js';
 import type {
   ASTNode,
   CommentASTNode,
@@ -22,8 +23,9 @@ function isNode(value: unknown): value is ASTNode & { location: FileRange } {
   return (
     typeof value === 'object' &&
     value !== null &&
-    'type' in value &&
-    'location' in value
+    // Own fields: an inherited `type` or `location` does not make a node.
+    hasField(value, 'type') &&
+    hasField(value, 'location')
   );
 }
 
@@ -76,8 +78,19 @@ function add(
   comment: CommentASTNode,
 ): void {
   const holder = node as Record<typeof field, CommentASTNode[] | undefined>;
-  holder[field] ??= [];
-  holder[field].push(comment);
+  // Written into, so an array of the node's own: never one it shares
+  // through a prototype (a class's or Object.prototype's).
+  if (!Object.hasOwn(holder, field) || holder[field] == null) {
+    // Defined, not assigned: a getter without a setter on a class would
+    // refuse an assignment.
+    Object.defineProperty(holder, field, {
+      value: [],
+      writable: true,
+      enumerable: true,
+      configurable: true,
+    });
+  }
+  (holder[field] as CommentASTNode[]).push(comment);
 }
 
 function collectStatementComments(node: ASTNode, ranges: FileRange[]): void {

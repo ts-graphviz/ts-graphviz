@@ -1,3 +1,4 @@
+import { ownField } from '../../../own-field.js';
 import type { ASTNode, AttributeListASTNode } from '../../../types.js';
 import type { PrintPlugin } from '../types.js';
 
@@ -7,9 +8,9 @@ export const AttributeListPrintPlugin: PrintPlugin<AttributeListASTNode> = {
   },
   *print(context, ast) {
     yield ast.kind.toLocaleLowerCase();
-    if (ast.danglingComments?.length) {
+    if (ownField(ast, 'danglingComments')?.length) {
       yield ' ';
-      yield* context.printComments(ast.danglingComments, 'inline');
+      yield* context.printComments(ownField(ast, 'danglingComments'), 'inline');
     } else {
       yield ' ';
     }
