@@ -66,8 +66,10 @@ export class Printer {
             if (placement === 'leading' && comments?.length) yield EOL;
             for (const comment of comments ?? []) {
               if (placement === 'trailing') yield ' ';
+              // Every line break, a lone CR included, as CommentPrintPlugin
+              // splits a comment statement.
               const lines = escapeComment(comment.value, comment.kind).split(
-                /\r?\n/,
+                /\r\n|\r|\n/,
               );
               if (comment.kind === 'Block') {
                 yield '/* ';
