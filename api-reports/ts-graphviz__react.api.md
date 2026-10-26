@@ -136,17 +136,7 @@ export declare function renderToDot<Container extends AnyGraphContainer = AnyGra
 
 export declare function useCurrentGraph(): AnyGraphContainer;
 
-export declare function useDigraph(options?: RootGraphOptions): RootGraphModel;
-
-export declare function useEdge(targets: ReadonlyEdgeTargetLikeTuple, props?: EdgeOptions): EdgeModel;
-
-export declare function useGraph(options?: RootGraphOptions): RootGraphModel;
-
 export declare function useGraphContainer(): AnyGraphContainer | null;
-
-export declare function useNode(id: string, options?: NodeOptions): NodeModel;
-
-export declare function useSubgraph(props?: SubgraphOptions): SubgraphModel;
 
 export { FilterableModel } from "ts-graphviz";
 export { ReactNode } from "react";

@@ -2,7 +2,6 @@ import {
   Subgraph,
   type SubgraphOptions,
   type SubgraphProps,
-  useSubgraph,
 } from '@ts-graphviz/react';
 import { describe, expectTypeOf, it } from 'vitest';
 
@@ -47,13 +46,13 @@ describe('<Subgraph> attributes by id', () => {
     />;
   });
 
-  it('keeps the options without a type argument loose (useSubgraph)', () => {
+  it('keeps the options without a type argument loose', () => {
     expectTypeOf<SubgraphOptions>().toMatchTypeOf<{ id?: string }>();
     const options: SubgraphOptions = {
       id: 'row',
       pencolor: 'red',
       rank: 'same',
     };
-    expectTypeOf(useSubgraph).toBeCallableWith(options);
+    expectTypeOf(options).toMatchTypeOf<SubgraphOptions>();
   });
 });

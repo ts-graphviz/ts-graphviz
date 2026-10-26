@@ -7,20 +7,17 @@ import { Subgraph } from '../../components/Subgraph.js';
 import { GraphContainer } from '../../contexts/GraphContainer.js';
 import { GraphMap } from '../../contexts/GraphMap.js';
 import { GraphvizContext } from '../../contexts/GraphvizContext.js';
-import { ModelCollectorContext } from '../../contexts/ModelCollector.js';
 
 export const context =
   ({ models = {} }: { models?: Partial<ModelsContext> } = {}) =>
   ({ children }: { children: ReactNode }) => {
     return (
       <GraphvizContext.Provider value={{ models: createModelsContext(models) }}>
-        <ModelCollectorContext.Provider value={{ collectModel: () => {} }}>
-          <GraphMap.Provider value={new Map()}>
-            <GraphContainer.Provider value={null}>
-              {children}
-            </GraphContainer.Provider>
-          </GraphMap.Provider>
-        </ModelCollectorContext.Provider>
+        <GraphMap.Provider value={new Map()}>
+          <GraphContainer.Provider value={null}>
+            {children}
+          </GraphContainer.Provider>
+        </GraphMap.Provider>
       </GraphvizContext.Provider>
     );
   };
@@ -30,13 +27,11 @@ export const digraph =
   ({ children }: { children: ReactNode }) => {
     return (
       <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
-        <ModelCollectorContext.Provider value={{ collectModel: () => {} }}>
-          <GraphMap.Provider value={new Map()}>
-            <GraphContainer.Provider value={null}>
-              <Digraph {...props}>{children}</Digraph>
-            </GraphContainer.Provider>
-          </GraphMap.Provider>
-        </ModelCollectorContext.Provider>
+        <GraphMap.Provider value={new Map()}>
+          <GraphContainer.Provider value={null}>
+            <Digraph {...props}>{children}</Digraph>
+          </GraphContainer.Provider>
+        </GraphMap.Provider>
       </GraphvizContext.Provider>
     );
   };
@@ -46,15 +41,13 @@ export const digraphInSubgraph =
   ({ children }: { children: ReactNode }) => {
     return (
       <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
-        <ModelCollectorContext.Provider value={{ collectModel: () => {} }}>
-          <GraphMap.Provider value={new Map()}>
-            <GraphContainer.Provider value={null}>
-              <Digraph>
-                <Subgraph {...props}>{children}</Subgraph>
-              </Digraph>
-            </GraphContainer.Provider>
-          </GraphMap.Provider>
-        </ModelCollectorContext.Provider>
+        <GraphMap.Provider value={new Map()}>
+          <GraphContainer.Provider value={null}>
+            <Digraph>
+              <Subgraph {...props}>{children}</Subgraph>
+            </Digraph>
+          </GraphContainer.Provider>
+        </GraphMap.Provider>
       </GraphvizContext.Provider>
     );
   };
@@ -64,13 +57,11 @@ export const graph =
   ({ children }: { children: ReactNode }) => {
     return (
       <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
-        <ModelCollectorContext.Provider value={{ collectModel: () => {} }}>
-          <GraphMap.Provider value={new Map()}>
-            <GraphContainer.Provider value={null}>
-              <Graph {...props}>{children}</Graph>
-            </GraphContainer.Provider>
-          </GraphMap.Provider>
-        </ModelCollectorContext.Provider>
+        <GraphMap.Provider value={new Map()}>
+          <GraphContainer.Provider value={null}>
+            <Graph {...props}>{children}</Graph>
+          </GraphContainer.Provider>
+        </GraphMap.Provider>
       </GraphvizContext.Provider>
     );
   };
@@ -80,15 +71,13 @@ export const graphInSubgraph =
   ({ children }: { children: ReactNode }) => {
     return (
       <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
-        <ModelCollectorContext.Provider value={{ collectModel: () => {} }}>
-          <GraphMap.Provider value={new Map()}>
-            <GraphContainer.Provider value={null}>
-              <Graph>
-                <Subgraph {...props}>{children}</Subgraph>
-              </Graph>
-            </GraphContainer.Provider>
-          </GraphMap.Provider>
-        </ModelCollectorContext.Provider>
+        <GraphMap.Provider value={new Map()}>
+          <GraphContainer.Provider value={null}>
+            <Graph>
+              <Subgraph {...props}>{children}</Subgraph>
+            </Graph>
+          </GraphContainer.Provider>
+        </GraphMap.Provider>
       </GraphvizContext.Provider>
     );
   };

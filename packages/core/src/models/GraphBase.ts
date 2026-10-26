@@ -181,7 +181,23 @@ export abstract class GraphBase<
     this.#statements.add(edge);
   }
 
+  /**
+   * The subgraphs with each id, in the order they were added, so that
+   * `getSubgraph` (and `subgraph(id)`) find one without a scan. A subgraph
+   * is filed under the id it had when it was added (`#indexedAs`), so it is
+   * taken out of the right list even if a custom model's id changed.
+   */
+  #subgraphsById = new Map<string, SubgraphModel[]>();
+  #indexedAs = new Map<SubgraphModel, string>();
+
   public addSubgraph(subgraph: SubgraphModel): void {
+    if (!this.#objects.subgraphs.has(subgraph) && subgraph.id !== undefined) {
+      const id = subgraph.id;
+      const same = this.#subgraphsById.get(id);
+      if (same === undefined) this.#subgraphsById.set(id, [subgraph]);
+      else same.push(subgraph);
+      this.#indexedAs.set(subgraph, id);
+    }
     this.#objects.subgraphs.add(subgraph);
     this.#statements.add(subgraph);
   }
@@ -278,6 +294,14 @@ export abstract class GraphBase<
   }
 
   public removeSubgraph(subgraph: SubgraphModel): void {
+    const id = this.#indexedAs.get(subgraph);
+    if (id !== undefined) {
+      this.#indexedAs.delete(subgraph);
+      const same = this.#subgraphsById.get(id) ?? [];
+      const at = same.indexOf(subgraph);
+      if (at !== -1) same.splice(at, 1);
+      if (same.length === 0) this.#subgraphsById.delete(id);
+    }
     this.#objects.subgraphs.delete(subgraph);
     this.#statements.delete(subgraph);
   }
@@ -289,9 +313,11 @@ export abstract class GraphBase<
   }
 
   public getSubgraph(id: string): M['Subgraph'] | undefined {
-    return Array.from(this.#objects.subgraphs.values()).find(
-      (subgraph) => subgraph.id === id,
-    ) as M['Subgraph'] | undefined;
+    // The first one added with this id, as before (a subgraph's id is not
+    // expected to change; one whose id did is found under neither).
+    return this.#subgraphsById.get(id)?.find((s) => s.id === id) as
+      | M['Subgraph']
+      | undefined;
   }
 
   public getNode(id: string): M['Node'] | undefined {
