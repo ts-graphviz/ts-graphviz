@@ -111,6 +111,7 @@ export interface ConvertToModelContext {
 
 export interface ConvertToModelOptions {
   models: ModelsContext;
+  maxEdgeTargets?: number;
 }
 
 export interface ConvertToModelPlugin<T extends ToModelConvertableASTNode = ToModelConvertableASTNode> {
