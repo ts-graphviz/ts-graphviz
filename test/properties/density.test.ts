@@ -21,7 +21,19 @@ import { dot } from './ast-arbitraries.js';
 const SAMPLES = 2000;
 // One fixed seed, so the shares measured are the same on every run (the
 // thresholds sit close to them); set FC_SEED to measure another sample.
-const SEED = Number(process.env.FC_SEED ?? 20261026);
+const SEED = seedFrom(process.env.FC_SEED);
+
+/** FC_SEED as an integer seed; any other value is a mistake, not seed 0. */
+function seedFrom(value: string | undefined): number {
+  if (value === undefined || value === '') return 20261026;
+  const seed = Number(value);
+  if (!Number.isSafeInteger(seed)) {
+    throw new TypeError(
+      `FC_SEED must be an integer, got ${JSON.stringify(value)}`,
+    );
+  }
+  return seed;
+}
 
 /** Share of samples (0..1) per label; a sample may carry several labels. */
 function distribution<T>(
