@@ -1,0 +1,46 @@
+language js
+
+// An options object is read through ownOptions() (or ownAdapterOptions()),
+// never destructured directly: destructuring also reads the properties the
+// object inherits, so a polluted Object.prototype would supply options.
+or {
+  `const $pattern = $source`,
+  `let $pattern = $source`,
+  JsAssignmentExpression(left = $pattern, right = $source)
+} where {
+  $pattern <: or { JsObjectBindingPattern(), JsObjectAssignmentPattern() },
+  $source <: or {
+    `options`,
+    `opts`,
+    `props`,
+    `config`,
+    `properties`,
+    `options ?? {}`,
+    `options || {}`,
+    `opts ?? {}`,
+    `props ?? {}`,
+    `$_.options`,
+    `$_?.options`
+  },
+  // Already the own properties: assigned from ownOptions() in the same
+  // function.
+  not $source <: within or {
+    JsFunctionBody() as $body where {
+      $body <: contains or {
+        `const $source = ownOptions($_)`,
+        `const $source = ownAdapterOptions($_)`
+      }
+    }
+  },
+  // In a class that keeps `this.options = ownOptions(options)`.
+  not and {
+    $source <: `this.options`,
+    $source <: within or { JsClassDeclaration(), JsClassExpression() } as $class where {
+      $class <: contains `this.options = ownOptions($_)`
+    }
+  },
+  register_diagnostic(
+    span = $source,
+    message = "Read options through ownOptions(): destructuring an options object also reads the properties it inherits from Object.prototype."
+  )
+}
