@@ -65,7 +65,12 @@ export function* createCommandArgs<T extends Layout>(
     }
   }
   if (typeof scale === 'number' && !Number.isNaN(scale)) yield `-s${scale}`;
-  if (Array.isArray(library)) for (const lib of library) yield `-l${lib}`;
+  // Own elements only: a hole would read an inherited index.
+  if (Array.isArray(library)) {
+    for (let i = 0; i < library.length; i++) {
+      if (Object.hasOwn(library, i)) yield `-l${library[i]}`;
+    }
+  }
   if (y === true) yield '-y';
 
   if (typeof options.layout === 'string') {
