@@ -62,7 +62,10 @@ export class Builder implements ASTBuilder {
     this.countNode();
     const location = this.getLocation();
     // The contained nodes come from the third argument only, never from props.
-    const { children: _children, refs: _refs, ...rest } = props ?? {};
+    // Own properties only (a spread copies no inherited ones).
+    const rest = { ...props };
+    delete rest.children;
+    delete rest.refs;
     const node = { ...(location && { location }), ...rest, type };
     if (type === 'NodeRefList') {
       return { ...node, refs: children };

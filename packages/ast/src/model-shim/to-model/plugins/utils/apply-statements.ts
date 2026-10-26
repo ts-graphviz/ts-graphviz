@@ -5,6 +5,7 @@ import type {
   GraphBaseModel,
   SubgraphModel,
 } from '@ts-graphviz/common';
+import { ownField } from '../../../../own-field.js';
 import type {
   AttributeASTNode,
   ClusterStatementASTNode,
@@ -33,7 +34,7 @@ const subgraphNodes = new WeakMap<SubgraphModel, Set<string>>();
  */
 function isNodeGroup(target: SubgraphASTNode): boolean {
   return (
-    target.id === undefined &&
+    ownField(target, 'id') === undefined &&
     target.children.every((c) => c.type === 'Node' && c.children.length === 0)
   );
 }
@@ -43,9 +44,8 @@ function applySubgraph(
   graph: GraphBaseModel,
   stmt: SubgraphASTNode,
 ): SubgraphModel {
-  const subgraph = stmt.id
-    ? graph.subgraph(idFromLiteral(stmt.id))
-    : graph.subgraph();
+  const id = ownField(stmt, 'id');
+  const subgraph = id ? graph.subgraph(idFromLiteral(id)) : graph.subgraph();
   applyStatements(context, subgraph, stmt.children);
   const nodes = subgraphNodes.get(subgraph) ?? new Set<string>();
   for (const id of nodeIdsOf(stmt)) nodes.add(id);
