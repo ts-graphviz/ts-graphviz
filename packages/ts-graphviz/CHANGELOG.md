@@ -1,5 +1,12 @@
 # ts-graphviz
 
+## 3.0.10
+
+### Patch Changes
+
+- Updated dependencies [[`0d478f7`](https://github.com/ts-graphviz/ts-graphviz/commit/0d478f79dfab21c440dc0c7239f0b2aa7256677d)]:
+  - @ts-graphviz/adapter@3.0.9
+
 ## 3.0.9
 
 ### Patch Changes

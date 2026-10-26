@@ -1,5 +1,11 @@
 # @ts-graphviz/adapter
 
+## 3.0.9
+
+### Patch Changes
+
+- [#1768](https://github.com/ts-graphviz/ts-graphviz/pull/1768) [`0d478f7`](https://github.com/ts-graphviz/ts-graphviz/commit/0d478f79dfab21c440dc0c7239f0b2aa7256677d) Thanks [@kamiazya](https://github.com/kamiazya)! - `toFile` opens the output file and writes it with positional arguments only, without an options object, so the whole output always replaces the file at the given path.
+
 ## 3.0.8
 
 ### Patch Changes
