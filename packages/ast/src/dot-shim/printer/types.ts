@@ -48,7 +48,10 @@ export interface PrintContext {
   directed: boolean;
   readonly EOL: string;
   /**
-   * A function to print an ASTNode, taking in an ASTNode as an argument. Returns a string.
+   * Prints an ASTNode where the calling plugin is. Use it only as
+   * `yield* context.print(node)` inside a plugin's `print`: the node is
+   * printed by the printer's own loop (so printing does not recurse), and
+   * the iterable returned here is not the node's text.
    */
   print(ast: ASTNode): Iterable<string>;
   printChildren(children: ASTNode[]): Iterable<string>;

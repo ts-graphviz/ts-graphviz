@@ -15,12 +15,14 @@ import type {
 } from '../../types.js';
 import { parse as _parse, SyntaxError as PeggySyntaxError } from './_parse.js';
 import { attachComments, type InlineComment } from './attach-comments.js';
+import { deepBlockOffset } from './nesting.js';
 
 /**
  * Default maximum input size in bytes (10MB).
  * This limit prevents memory exhaustion from extremely large DOT files.
  */
 const DEFAULT_MAX_INPUT_SIZE = 10 * 1024 * 1024;
+const DEFAULT_MAX_NESTING_DEPTH = 100;
 
 /**
  * @group Convert DOT to AST
@@ -56,6 +58,14 @@ export interface CommonParseOptions {
    * @default 1000
    */
   maxEdgeChainDepth?: number;
+  /**
+   * maxNestingDepth (optional): Maximum allowed nesting depth of graph and
+   * subgraph bodies (`{ … }`); a graph's own body is at depth 1.
+   * Default is 100. This limit prevents stack overflow from deeply nested
+   * subgraphs; like the other depth limits, it cannot be disabled.
+   * @default 100
+   */
+  maxNestingDepth?: number;
   /**
    * maxInputSize (optional): Maximum allowed input size in bytes.
    * Default is 10MB (10485760 bytes). This limit prevents memory exhaustion from extremely large inputs.
@@ -199,6 +209,7 @@ function parseRule(
     filename,
     maxHtmlNestingDepth,
     maxEdgeChainDepth,
+    maxNestingDepth,
     maxInputSize,
     maxASTNodes,
   } = ownOptions(options);
@@ -220,10 +231,8 @@ function parseRule(
   // thing to Graphviz and to this parser. Reject it.
   const nul = input.indexOf('\0');
   if (nul !== -1) {
-    const before = input.slice(0, nul);
-    const line = before.split('\n').length;
-    const column = nul - before.lastIndexOf('\n');
-    const position = { offset: nul, line, column };
+    const position = positionAt(input, nul);
+    const { line, column } = position;
     throw new DotSyntaxError(
       `A DOT source must not contain a NUL character (line ${line}, column ${column}).`,
       {
@@ -233,6 +242,25 @@ function parseRule(
         },
       },
     );
+  }
+
+  // Nesting, before the recursive parser could run out of stack on it.
+  const nestingLimit = maxNestingDepth ?? DEFAULT_MAX_NESTING_DEPTH;
+  {
+    const deep = deepBlockOffset(input, nestingLimit);
+    if (deep !== -1) {
+      const position = positionAt(input, deep);
+      throw new DotSyntaxError(
+        `Nesting depth exceeds maximum allowed depth of ${nestingLimit} (line ${position.line}, column ${position.column}). ` +
+          `Consider increasing the 'maxNestingDepth' option.`,
+        {
+          location: {
+            start: position,
+            end: { ...position, offset: deep + 1, column: position.column + 1 },
+          },
+        },
+      );
+    }
   }
 
   try {
@@ -332,4 +360,12 @@ function rangeOf(location: unknown): FileRange | undefined {
     column: p.column,
   });
   return { start: position(l.start), end: position(l.end) };
+}
+
+/** The line and column (1-based) of `offset` in `input`. */
+function positionAt(input: string, offset: number) {
+  const before = input.slice(0, offset);
+  const line = before.split('\n').length;
+  const column = offset - before.lastIndexOf('\n');
+  return { offset, line, column };
 }

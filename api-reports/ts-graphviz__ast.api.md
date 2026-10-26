@@ -85,6 +85,7 @@ export interface CommonParseOptions {
   filename?: string;
   maxHtmlNestingDepth?: number;
   maxEdgeChainDepth?: number;
+  maxNestingDepth?: number;
   maxInputSize?: number;
   maxASTNodes?: number;
 }
