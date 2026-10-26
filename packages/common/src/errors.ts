@@ -40,6 +40,8 @@ export const ERROR_CODES = [
   'TSG_ERR_INVALID_EDGE_TARGETS',
   /** A port name contains ':', which Graphviz always reads as a port/compass separator (`TypeError`). */
   'TSG_ERR_INVALID_PORT',
+  /** An attribute list was given a kind other than `Graph`, `Node` or `Edge` (`TypeError`). */
+  'TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND',
   /** No converter or printer plugin handles a node or model (`Error`). */
   'TSG_ERR_NO_PLUGIN',
   /** `fromDot` was given an AST node that has no model (`TypeError`). */
@@ -113,6 +115,9 @@ export function isTsGraphvizError(value: unknown): value is CodedError {
     value !== null &&
     typeof (value as { message?: unknown }).message === 'string' &&
     typeof (value as { name?: unknown }).name === 'string' &&
+    // Its own code: `withCode` and the error classes set it on the error,
+    // so one inherited from Object.prototype never counts.
+    Object.hasOwn(value, 'code') &&
     (ERROR_CODES as readonly unknown[]).includes(
       (value as { code?: unknown }).code,
     )

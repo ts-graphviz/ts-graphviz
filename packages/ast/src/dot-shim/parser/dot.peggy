@@ -47,6 +47,9 @@
     locationFunction: location,
     maxASTNodes: options.maxASTNodes,
   });
+  // The comments inside statements are attached, and counted toward
+  // `maxASTNodes`, once parsing is done.
+  options.onBuilder?.(b);
 
   /**
    * Reset parser state at the beginning of each exported rule.

@@ -1,3 +1,4 @@
+import { ownField } from '../../../own-field.js';
 import type { NodeRefASTNode } from '../../../types.js';
 import type { PrintPlugin } from '../types.js';
 
@@ -7,13 +8,15 @@ export const NodeRefPrintPlugin: PrintPlugin<NodeRefASTNode> = {
   },
   *print(context, ast) {
     yield* context.print(ast.id);
-    if (ast.port) {
+    const port = ownField(ast, 'port');
+    if (port) {
       yield ':';
-      yield* context.print(ast.port);
+      yield* context.print(port);
     }
-    if (ast.compass) {
+    const compass = ownField(ast, 'compass');
+    if (compass) {
       yield ':';
-      yield* context.print(ast.compass);
+      yield* context.print(compass);
     }
   },
 };

@@ -69,8 +69,10 @@ function escapeAttribute(value: string): string {
 
 /** The element name of an intrinsic element, or a TypeError. */
 function elementName(type: string): string {
-  const name =
-    DOT_ELEMENT_MAP[type as keyof typeof DOT_ELEMENT_MAP] ?? type.toLowerCase();
+  // Own entries only: a name inherited from Object.prototype is not one.
+  const name = Object.hasOwn(DOT_ELEMENT_MAP, type)
+    ? DOT_ELEMENT_MAP[type as keyof typeof DOT_ELEMENT_MAP]
+    : type.toLowerCase();
   if (!ELEMENTS.has(name)) {
     throw new TypeError(
       type === 'dot:port'
