@@ -136,8 +136,17 @@ export function literalFromValue(
     return { value: escapeLiteral(value), kind: 'quoted' };
   }
   if (isHTMLLike(value)) {
-    assertHTMLLikeMarkup(value.value);
-    return { value: value.value, kind: 'html' };
+    // Read once: what is checked is what is written, even if `value` is a
+    // getter or a proxy that answers differently on a second read.
+    const markup: unknown = value.value;
+    if (typeof markup !== 'string') {
+      throw withCode(
+        new RangeError('An HTML-like label must be a string'),
+        'TSG_ERR_INVALID_HTML_LIKE',
+      );
+    }
+    assertHTMLLikeMarkup(markup);
+    return { value: markup, kind: 'html' };
   }
   if (isEscString(value)) {
     return { value: sanitizeEscString(value.value), kind: 'quoted' };
