@@ -37,15 +37,12 @@ const edgeChain = (edges: number, prefix = 'n') =>
 const nodeStatements = (count: number) =>
   `digraph { ${Array.from({ length: count }, (_, i) => `n${i};`).join('\n')} }`;
 
-/** The smallest `maxASTNodes` with which `source` parses as a graph. */
-const nodeCountOf = (source: string) => {
-  for (let limit = 1; ; limit++) {
-    try {
-      parseFragment(source, 'Graph', { maxASTNodes: limit });
-      return limit;
-    } catch {}
-  }
-};
+/**
+ * The AST nodes the parser counts for `nodeStatements(count)`: the graph,
+ * and for each statement the node, its id and the node reference it is read
+ * as first.
+ */
+const nodeCountOf = (count: number) => 1 + 3 * count;
 
 describe('parser limits', { tags: ['SM-1'] }, () => {
   describe('input size (maxInputSize)', () => {
@@ -207,8 +204,8 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
       });
 
     test('a custom limit is inclusive', () => {
-      const source = 'digraph { a; b; c; d; e; f; g; h; i; j; }';
-      const count = nodeCountOf(source);
+      const source = nodeStatements(10);
+      const count = nodeCountOf(10);
       expect(
         parseFragment(source, 'Graph', { maxASTNodes: count }),
       ).toMatchObject({ type: 'Graph' });
@@ -273,8 +270,8 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
 
   describe('each limit is per parse', () => {
     test('the node count starts again at each parse', () => {
-      const source = 'digraph { a; b; c; d; e; }';
-      const count = nodeCountOf(source);
+      const source = nodeStatements(5);
+      const count = nodeCountOf(5);
       for (let i = 0; i < 5; i++) {
         expect(
           parseFragment(source, 'Graph', { maxASTNodes: count }),
@@ -283,8 +280,8 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
     });
 
     test('a parse stopped by the node count does not count toward the next', () => {
-      const source = 'digraph { a; b; c; d; e; }';
-      const count = nodeCountOf(source);
+      const source = nodeStatements(5);
+      const count = nodeCountOf(5);
       expect(() =>
         parseFragment(nodeStatements(100), 'Graph', { maxASTNodes: count }),
       ).toThrow(dotSyntaxError());
