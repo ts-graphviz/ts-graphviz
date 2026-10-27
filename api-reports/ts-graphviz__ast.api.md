@@ -92,7 +92,7 @@ export interface CommonParseOptions {
 
 export interface ConvertFromModelContext extends Required<Pick<ConvertFromModelOptions, "commentKind">> {
   createElement: CreateElement;
-  convert<T extends DotObjectModel>(model: T): ModelToAST<T>;
+  convert<T extends AnyReadonlyDotObjectModel>(model: T): ModelToAST<T>;
 }
 
 export interface ConvertFromModelOptions {
@@ -100,7 +100,7 @@ export interface ConvertFromModelOptions {
   maxASTNodes?: number;
 }
 
-export interface ConvertFromModelPlugin<T extends DotObjectModel> {
+export interface ConvertFromModelPlugin<T extends AnyReadonlyDotObjectModel> {
   match(model: T): boolean;
   convert(context: ConvertFromModelContext, model: T): ModelToAST<T>;
 }
@@ -193,7 +193,7 @@ export declare class FromModelConverter {
   #private;
   private options;
   constructor(options?: ConvertFromModelOptions);
-  convert<T extends DotObjectModel>(model: T): ModelToAST<T>;
+  convert<T extends AnyReadonlyDotObjectModel>(model: T): ModelToAST<T>;
 }
 
 export interface GraphASTNode extends ASTBaseParentNode<ClusterStatementASTNode>, GraphASTProperties {
@@ -310,7 +310,7 @@ export declare const createElement: CreateElement;
 
 export declare function createElementFactory(options?: Partial<Pick<BuilderOptions, "maxASTNodes">>): CreateElement;
 
-export declare function fromModel<T extends DotObjectModel>(model: T, options?: ConvertFromModelOptions): ModelToAST<T>;
+export declare function fromModel<T extends AnyReadonlyDotObjectModel>(model: T, options?: ConvertFromModelOptions): ModelToAST<T>;
 
 export declare function parse(input: string): DotASTNode;
 export declare function parse(input: string, options?: ParseOptions<"Dot">): DotASTNode;

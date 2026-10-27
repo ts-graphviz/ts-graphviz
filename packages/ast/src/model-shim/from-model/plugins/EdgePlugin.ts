@@ -1,8 +1,8 @@
 import {
-  type EdgeModel,
   isCompass,
   isNodeModel,
   type NodeRef,
+  type ReadonlyEdgeModel,
   withCode,
 } from '@ts-graphviz/common';
 import type { CreateElement } from '../../../builder/types.js';
@@ -63,7 +63,12 @@ const nodeRef = (
   );
 };
 
-export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
+/** Whether an edge target is a group of node references. */
+const isGroup = (
+  target: ReadonlyEdgeModel['targets'][number],
+): target is readonly NodeRef[] => Array.isArray(target);
+
+export const EdgePlugin: ConvertFromModelPlugin<ReadonlyEdgeModel> = {
   match(model) {
     return model.$$type === 'Edge';
   },
@@ -73,7 +78,7 @@ export const EdgePlugin: ConvertFromModelPlugin<EdgeModel> = {
       'Edge',
       {
         targets: model.targets.map((target): EdgeTargetASTNode => {
-          if (!Array.isArray(target)) return nodeRef(createElement, target);
+          if (!isGroup(target)) return nodeRef(createElement, target);
           const refs = target.map((n) => nodeRef(createElement, n));
           // Graphviz ignores ports inside `{a b}`, but keeps them in a
           // comma list, so a group with a port is written `a:p, b`.

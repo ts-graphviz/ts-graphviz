@@ -15,6 +15,8 @@ export type AddPoint = `+${Point}`;
 
 export type AnyDotObjectModel = GraphStatementModel | RootGraphModel | DotModel;
 
+export type AnyReadonlyDotObjectModel = ReadonlyGraphStatementModel | ReadonlyRootGraphModel | ReadonlyDotModel;
+
 export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.aname}`;
 export declare namespace ArrowType {
   type shape = keyof $shape;
@@ -491,6 +493,8 @@ export interface DotObjectModel<T extends DotObjectType = DotObjectType> {
 
 export type DotObjectType = "AttributeList" | "Node" | "Edge" | "Subgraph" | "Graph" | "Dot";
 
+export type DotValue = string | number | boolean | EscStringValue | HTMLLikeValue;
+
 export type Double = number;
 
 export type DoubleList = Double | `${Double}:${Double}` | `${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
@@ -730,7 +734,7 @@ export interface NodeModel extends HasComment, HasAttributes<NodeAttributeKey>, 
   port(port: string | Partial<Port>): ForwardRefNode;
 }
 
-export type NodeRef = NodeModel | ForwardRefNode;
+export type NodeRef = ReadonlyNodeModel | ForwardRefNode;
 
 export type NodeRefGroup = NodeRef[];
 
@@ -795,13 +799,74 @@ export declare namespace RankType {
 
 export type Rankdir = "TB" | "BT" | "LR" | "RL";
 
+export interface ReadonlyAttributeListModel<K extends AttributeListKind = AttributeListKind> extends ReadonlyAttributes {
+  readonly $$type: "AttributeList";
+  readonly $$kind: K;
+  readonly comment?: string;
+}
+
+export interface ReadonlyAttributes {
+  readonly size: number;
+  readonly values: ReadonlyArray<readonly [key: string, value: DotValue]>;
+  get(key: string): DotValue | undefined;
+}
+
+export interface ReadonlyDotModel {
+  readonly $$type: "Dot";
+  readonly comment?: string;
+  readonly graphs: ReadonlyArray<ReadonlyRootGraphModel>;
+}
+
+export interface ReadonlyEdgeModel {
+  readonly $$type: "Edge";
+  readonly comment?: string;
+  readonly attributes: ReadonlyAttributes;
+  readonly targets: ReadonlyEdgeTargetTuple;
+}
+
 export type ReadonlyEdgeTargetLike = NodeRefLike | ReadonlyNodeRefGroupLike;
 
 export type ReadonlyEdgeTargetLikeTuple = readonly [from: ReadonlyEdgeTargetLike, to: ReadonlyEdgeTargetLike, ...rest: ReadonlyEdgeTargetLike[]];
 
 export type ReadonlyEdgeTargetTuple = readonly [from: NodeRef | readonly NodeRef[], to: NodeRef | readonly NodeRef[], ...rest: (NodeRef | readonly NodeRef[])[]];
 
+export interface ReadonlyGraphBaseModel<T extends "Graph" | "Subgraph" = "Graph" | "Subgraph"> extends ReadonlyAttributes {
+  readonly $$type: T;
+  readonly id?: string;
+  readonly comment?: string;
+  readonly attributes: {
+    readonly graph: ReadonlyAttributeListModel<"Graph">;
+    readonly edge: ReadonlyAttributeListModel<"Edge">;
+    readonly node: ReadonlyAttributeListModel<"Node">;
+  };
+  readonly nodes: ReadonlyArray<ReadonlyNodeModel>;
+  readonly edges: ReadonlyArray<ReadonlyEdgeModel>;
+  readonly subgraphs: ReadonlyArray<ReadonlySubgraphModel>;
+  readonly statements: ReadonlyArray<ReadonlyGraphStatementModel>;
+  existNode(nodeId: string): boolean;
+  getNode(id: string): ReadonlyNodeModel | undefined;
+  getSubgraph(id: string): ReadonlySubgraphModel | undefined;
+}
+
+export type ReadonlyGraphStatementModel = ReadonlyNodeModel | ReadonlyEdgeModel | ReadonlySubgraphModel | ReadonlyAttributeListModel;
+
+export interface ReadonlyNodeModel {
+  readonly $$type: "Node";
+  readonly id: string;
+  readonly comment?: string;
+  readonly attributes: ReadonlyAttributes;
+}
+
 export type ReadonlyNodeRefGroupLike = readonly NodeRefLike[];
+
+export interface ReadonlyRootGraphModel extends ReadonlyGraphBaseModel<"Graph"> {
+  readonly directed: boolean;
+  readonly strict: boolean;
+}
+
+export interface ReadonlySubgraphModel extends ReadonlyGraphBaseModel<"Subgraph"> {
+  isSubgraphCluster(): boolean;
+}
 
 export type Rect = `${Double},${Double},${Double},${Double}`;
 
@@ -912,16 +977,19 @@ export declare function escString(value: string): EscStringValue;
 
 export declare function htmlLike(markup: string): HTMLLikeValue;
 
-export declare function isAttributeListModel(object: unknown): object is AttributeListModel;
-export declare function isAttributeListModel(model: DotObjectModel): model is AttributeListModel;
+export declare function isAttributeListModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"AttributeList">>;
+export declare function isAttributeListModel(object: unknown): object is ReadonlyAttributeListModel;
+export declare function isAttributeListModel(model: AnyDotObjectModel): model is AttributeListModel;
 
 export declare function isCompass(c: string): c is Compass;
 
-export declare function isDotModel(object: unknown): object is DotModel;
-export declare function isDotModel(model: DotObjectModel): model is DotModel;
+export declare function isDotModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"Dot">>;
+export declare function isDotModel(object: unknown): object is ReadonlyDotModel;
+export declare function isDotModel(model: AnyDotObjectModel): model is DotModel;
 
-export declare function isEdgeModel(object: unknown): object is EdgeModel;
-export declare function isEdgeModel(model: DotObjectModel): model is EdgeModel;
+export declare function isEdgeModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"Edge">>;
+export declare function isEdgeModel(object: unknown): object is ReadonlyEdgeModel;
+export declare function isEdgeModel(model: AnyDotObjectModel): model is EdgeModel;
 
 export declare function isEscString(value: unknown): value is EscStringValue;
 
@@ -929,8 +997,9 @@ export declare function isForwardRefNode(object: unknown): object is ForwardRefN
 
 export declare function isHTMLLike(value: unknown): value is HTMLLikeValue;
 
-export declare function isNodeModel(object: unknown): object is NodeModel;
-export declare function isNodeModel(model: DotObjectModel): model is NodeModel;
+export declare function isNodeModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"Node">>;
+export declare function isNodeModel(object: unknown): object is ReadonlyNodeModel;
+export declare function isNodeModel(model: AnyDotObjectModel): model is NodeModel;
 
 export declare function isNodeRef(node: unknown): node is NodeRef;
 
@@ -939,11 +1008,13 @@ export declare function isNodeRefGroupLike(target: NodeRefLike | ReadonlyNodeRef
 
 export declare function isNodeRefLike(node: unknown): node is NodeRefLike;
 
-export declare function isRootGraphModel(object: unknown): object is RootGraphModel;
-export declare function isRootGraphModel(model: DotObjectModel): model is RootGraphModel;
+export declare function isRootGraphModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"Graph">>;
+export declare function isRootGraphModel(object: unknown): object is ReadonlyRootGraphModel;
+export declare function isRootGraphModel(model: AnyDotObjectModel): model is RootGraphModel;
 
-export declare function isSubgraphModel(object: unknown): object is SubgraphModel;
-export declare function isSubgraphModel(model: DotObjectModel): model is SubgraphModel;
+export declare function isSubgraphModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"Subgraph">>;
+export declare function isSubgraphModel(object: unknown): object is ReadonlySubgraphModel;
+export declare function isSubgraphModel(model: AnyDotObjectModel): model is SubgraphModel;
 
 export declare function isTsGraphvizError(value: unknown): value is CodedError;
 

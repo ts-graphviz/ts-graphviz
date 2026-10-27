@@ -5,7 +5,7 @@
 ```ts
 export * from "@ts-graphviz/adapter";
 
-export type DotInput = string | DotObjectModel;
+export type DotInput = string | AnyReadonlyDotObjectModel;
 
 export declare function toFile<T extends Layout>(input: DotInput, path: string, options?: Options<T>): Promise<void>;
 

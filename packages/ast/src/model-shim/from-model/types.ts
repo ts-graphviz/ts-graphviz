@@ -1,4 +1,7 @@
-import type { DotObjectModel } from '@ts-graphviz/common';
+import type {
+  AnyReadonlyDotObjectModel,
+  DotObjectModel,
+} from '@ts-graphviz/common';
 import type { CreateElement } from '../../builder/types.js';
 import type {
   AttributeListASTNode,
@@ -62,13 +65,15 @@ export interface ConvertFromModelOptions {
 export interface ConvertFromModelContext
   extends Required<Pick<ConvertFromModelOptions, 'commentKind'>> {
   createElement: CreateElement;
-  convert<T extends DotObjectModel>(model: T): ModelToAST<T>;
+  convert<T extends AnyReadonlyDotObjectModel>(model: T): ModelToAST<T>;
 }
 
 /**
+ * Converts one kind of model to its AST node. It only reads the model, so
+ * `T` is a read-only model type ({@link AnyReadonlyDotObjectModel}).
  * @group Convert Model to AST
  */
-export interface ConvertFromModelPlugin<T extends DotObjectModel> {
+export interface ConvertFromModelPlugin<T extends AnyReadonlyDotObjectModel> {
   match(model: T): boolean;
   convert(context: ConvertFromModelContext, model: T): ModelToAST<T>;
 }

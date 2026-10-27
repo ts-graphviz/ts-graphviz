@@ -1,4 +1,4 @@
-import type { Attribute, AttributeKey } from '@ts-graphviz/common';
+import type { AttributeKey, DotValue } from '@ts-graphviz/common';
 import type { CreateElement } from '../../../../builder/types.js';
 import type { AttributeASTNode } from '../../../../types.js';
 import { literalFromKey, literalFromValue } from '../../../literal.js';
@@ -16,18 +16,19 @@ import { literalFromKey, literalFromValue } from '../../../literal.js';
  * @param value - The attribute value associated with {@link key}.
  * @returns An {@link AttributeASTNode} representing the attribute.
  */
-export function convertAttribute<K extends AttributeKey>(
+export function convertAttribute(
   createElement: CreateElement,
-  key: K,
-  value: Attribute<K>,
+  key: string,
+  value: DotValue,
 ): AttributeASTNode {
   return createElement(
     'Attribute',
     {
-      // the AST types the key literal by K; a quoted key holds its escaped form
+      // the AST types the key literal as an attribute key; a quoted key
+      // holds its escaped form
       key: createElement(
         'Literal',
-        literalFromKey(key) as { value: K; kind: 'bare' | 'quoted' },
+        literalFromKey(key) as { value: AttributeKey; kind: 'bare' | 'quoted' },
         [],
       ),
       value: createElement('Literal', literalFromValue(value), []),
