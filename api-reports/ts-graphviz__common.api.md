@@ -24,6 +24,8 @@ export declare namespace ArrowType {
   type aname = shape | `${modifiers}${shape}`;
 }
 
+export type ArrowTypeOf<S extends string> = ArrowNameOf<S> | `${ArrowNameOf<S>}${ArrowNameOf<S>}`;
+
 export type Attribute<T extends AttributeKey> = Attribute.types[T];
 export declare namespace Attribute {
   type keys = Omit<$keys, keyof $exclude | symbol | number>;
@@ -400,6 +402,224 @@ export interface AttributeListModel<K extends AttributeListKind = AttributeListK
 
 export type AttributeValue = Attribute<AttributeKey>;
 
+export interface AttributeValueTypeNames {
+  _background: "xdot";
+  area: "double";
+  arrowhead: "arrowType";
+  arrowsize: "double";
+  arrowtail: "arrowType";
+  bb: "rect";
+  beautify: "bool";
+  bgcolor: "color" | "colorList";
+  center: "bool";
+  charset: "string";
+  class: "string";
+  cluster: "bool";
+  clusterrank: "clusterMode";
+  color: "color" | "colorList";
+  colorscheme: "string";
+  comment: "string";
+  compound: "bool";
+  concentrate: "bool";
+  constraint: "bool";
+  Damping: "double";
+  decorate: "bool";
+  defaultdist: "double";
+  dim: "int";
+  dimen: "int";
+  dir: "dirType";
+  diredgeconstraints: "string" | "bool";
+  distortion: "double";
+  dpi: "double";
+  edgehref: "escString";
+  edgetarget: "escString";
+  edgetooltip: "escString";
+  edgeURL: "escString";
+  epsilon: "double";
+  esep: "addDouble" | "addPoint";
+  fillcolor: "color" | "colorList";
+  fixedsize: "bool" | "string";
+  fontcolor: "color";
+  fontname: "string";
+  fontnames: "string";
+  fontpath: "string";
+  fontsize: "double";
+  forcelabels: "bool";
+  gradientangle: "blank" | "int";
+  group: "string";
+  head_lp: "point";
+  headclip: "bool";
+  headhref: "escString";
+  headlabel: "lblString";
+  headport: "portPos";
+  headtarget: "escString";
+  headtooltip: "escString";
+  headURL: "escString";
+  height: "blank" | "double";
+  href: "escString";
+  id: "escString";
+  image: "string";
+  imagepath: "string";
+  imagepos: "string";
+  imagescale: "bool" | "string";
+  inputscale: "double";
+  K: "double";
+  label: "lblString";
+  label_scheme: "int";
+  labelangle: "double";
+  labeldistance: "double";
+  labelfloat: "bool";
+  labelfontcolor: "color";
+  labelfontname: "string";
+  labelfontsize: "double";
+  labelhref: "escString";
+  labeljust: "string";
+  labelloc: "string";
+  labeltarget: "escString";
+  labeltooltip: "escString";
+  labelURL: "escString";
+  landscape: "bool";
+  layer: "layerRange";
+  layerlistsep: "string";
+  layers: "layerList";
+  layerselect: "layerRange";
+  layersep: "string";
+  layout: "string";
+  len: "double";
+  levels: "int";
+  levelsgap: "double";
+  lhead: "string";
+  lheight: "double";
+  linelength: "int";
+  lp: "point";
+  ltail: "string";
+  lwidth: "double";
+  margin: "double" | "point";
+  maxiter: "int";
+  mclimit: "double";
+  mindist: "double";
+  minlen: "int";
+  mode: "string";
+  model: "string";
+  newrank: "bool";
+  nodesep: "double";
+  nojustify: "bool";
+  normalize: "double" | "bool";
+  notranslate: "bool";
+  nslimit: "double";
+  nslimit1: "double";
+  oneblock: "bool";
+  ordering: "string";
+  orientation: "double" | "string";
+  outputorder: "outputMode";
+  overlap: "string" | "bool";
+  overlap_scaling: "double";
+  overlap_shrink: "bool";
+  pack: "bool" | "int";
+  packmode: "packMode";
+  pad: "double" | "point";
+  page: "double" | "point";
+  pagedir: "pagedir";
+  pencolor: "color";
+  penwidth: "double";
+  peripheries: "int";
+  pin: "bool";
+  pos: "point" | "splineType";
+  quadtree: "quadType" | "bool";
+  quantum: "double";
+  radius: "double";
+  rank: "rankType";
+  rankdir: "rankdir";
+  ranksep: "double" | "doubleList";
+  ratio: "double" | "string";
+  rects: "rect";
+  regular: "bool";
+  remincross: "bool";
+  repulsiveforce: "double";
+  resolution: "double";
+  root: "string" | "bool";
+  rotate: "int";
+  rotation: "double";
+  samehead: "string";
+  sametail: "string";
+  samplepoints: "int";
+  scale: "double" | "point";
+  searchsize: "int";
+  sep: "addDouble" | "addPoint";
+  shape: "shape";
+  shapefile: "string";
+  showboxes: "int";
+  sides: "int";
+  size: "double" | "point";
+  skew: "double";
+  smoothing: "smoothType";
+  sortv: "int";
+  splines: "bool" | "string";
+  start: "blank" | "startType";
+  style: "blank" | "style";
+  stylesheet: "string";
+  tail_lp: "point";
+  tailclip: "bool";
+  tailhref: "escString";
+  taillabel: "lblString";
+  tailport: "portPos";
+  tailtarget: "escString";
+  tailtooltip: "escString";
+  tailURL: "escString";
+  target: "escString" | "string";
+  TBbalance: "tbBalanceType";
+  tooltip: "escString";
+  truecolor: "bool";
+  URL: "escString";
+  vertices: "pointList";
+  viewport: "blank" | "viewPort";
+  voro_margin: "double";
+  weight: "int" | "double";
+  width: "double";
+  xdotversion: "string";
+  xlabel: "lblString";
+  xlp: "point";
+  z: "blank" | "double";
+}
+
+export interface AttributeValueTypes<V extends Record<ValueTypeName, unknown> = ValueTypes> {
+  addDouble: AddDouble;
+  addPoint: AddPoint;
+  arrowType: ArrowTypeOf<V["arrowType"] & string>;
+  blank: Blank;
+  bool: boolean;
+  clusterMode: V["clusterMode"];
+  color: V["color"];
+  colorList: ColorList;
+  dirType: V["dirType"];
+  double: Double;
+  doubleList: DoubleList;
+  escString: EscString;
+  int: Int;
+  layerList: LayerList;
+  layerRange: LayerRange;
+  lblString: LblString;
+  outputMode: V["outputMode"];
+  packMode: V["packMode"];
+  pagedir: V["pagedir"];
+  point: Point;
+  pointList: PointList;
+  portPos: PortPosOf<V["compass"] & string>;
+  quadType: V["quadType"];
+  rankdir: V["rankdir"];
+  rankType: V["rankType"];
+  rect: Rect;
+  shape: V["shape"];
+  smoothType: V["smoothType"];
+  splineType: SplineType;
+  startType: V["startType"];
+  string: string;
+  style: StyleOf<V["style"] & string>;
+  tbBalanceType: V["tbBalanceType"];
+  viewPort: ViewPort;
+  xdot: string;
+}
+
 export interface Attributes<T extends AttributeKey> {
   readonly size: number;
   readonly values: ReadonlyArray<[T, Attribute<T>]>;
@@ -410,11 +630,11 @@ export interface Attributes<T extends AttributeKey> {
   clear(): void;
 }
 
-export type AttributesEntities<T extends AttributeKey> = readonly [T, Attribute<T>][];
+export type AttributesEntities<T extends AttributeKey, E extends object = Record<never, never>> = [keyof E] extends [never] ? readonly [T, Attribute<T>][] : readonly { [K in SchemaAttributeKey<T, E>]: [K, SchemaAttribute<K, E>]; }[SchemaAttributeKey<T, E>][];
 
 export interface AttributesGroupModel<T extends AttributeKey> extends Attributes<T> {}
 
-export type AttributesObject<T extends AttributeKey> = { [K in T]?: Attribute<K>; };
+export type AttributesObject<T extends AttributeKey, E extends object = Record<never, never>> = [keyof E] extends [never] ? { [K in T]?: Attribute<K>; } : { [K in SchemaAttributeKey<T, E>]?: SchemaAttribute<K, E>; };
 
 export type Blank = "";
 
@@ -432,7 +652,7 @@ export declare namespace ClusterSubgraphAttributeKey {
   interface $exclude extends $keywordsValidation {}
 }
 
-export type ClusterSubgraphAttributesObject = AttributesObject<ClusterSubgraphAttributeKey>;
+export type ClusterSubgraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<ClusterSubgraphAttributeKey, SchemaAttributeTypes<S, "cluster">>;
 
 export interface CodedError<C extends ErrorCode = ErrorCode> extends Error {
   readonly code: C;
@@ -504,7 +724,7 @@ export declare namespace EdgeAttributeKey {
   interface $exclude extends $keywordsValidation {}
 }
 
-export type EdgeAttributesObject = AttributesObject<EdgeAttributeKey>;
+export type EdgeAttributesObject<S extends Schema = EmptySchema> = AttributesObject<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>;
 
 export interface EdgeConstructor<E extends EdgeModel = EdgeModel> {
   new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): E;
@@ -521,6 +741,8 @@ export type EdgeTargetLike = NodeRefLike | NodeRefGroupLike;
 export type EdgeTargetLikeTuple = [from: EdgeTargetLike, to: EdgeTargetLike, ...rest: EdgeTargetLike[]];
 
 export type EdgeTargetTuple = [from: EdgeTarget, to: EdgeTarget, ...rest: EdgeTarget[]];
+
+export type EmptySchema = Record<never, never>;
 
 export type ErrorCode = (typeof ERROR_CODES)[number];
 
@@ -544,7 +766,7 @@ export declare namespace GraphAttributeKey {
   interface $exclude extends $keywordsValidation {}
 }
 
-export type GraphAttributesObject = AttributesObject<GraphAttributeKey>;
+export type GraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<GraphAttributeKey, SchemaAttributeTypes<S, "graph">>;
 
 export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K extends AttributeKey = AttributeKey, M extends ModelTypes = ModelTypes> extends HasComment, Attributes<K>, DotObjectModel<T> {
   readonly id?: string;
@@ -701,6 +923,7 @@ export interface ModelTypes {
   Subgraph: SubgraphModel;
   Node: NodeModel;
   Edge: EdgeModel;
+  Schema?: Schema;
 }
 
 export interface ModelsContext<M extends ModelTypes = ModelTypes> {
@@ -719,7 +942,7 @@ export declare namespace NodeAttributeKey {
   interface $exclude extends $keywordsValidation {}
 }
 
-export type NodeAttributesObject = AttributesObject<NodeAttributeKey>;
+export type NodeAttributesObject<S extends Schema = EmptySchema> = AttributesObject<NodeAttributeKey, SchemaAttributeTypes<S, "node">>;
 
 export interface NodeConstructor<N extends NodeModel = NodeModel> {
   new (id: string, attributes?: NodeAttributesObject): N;
@@ -738,11 +961,9 @@ export type NodeRefGroupLike = NodeRefLike[];
 
 export type NodeRefLike = NodeRef | string;
 
-export type NonClusterSubgraphAttributesObject = (AttributesObject<Exclude<SubgraphAttributeKey, "cluster">> & {
+export type NonClusterSubgraphAttributesObject<S extends Schema = EmptySchema> = (AttributesObject<Exclude<SubgraphAttributeKey, "cluster">, Omit<SchemaAttributeTypes<S, "subgraph">, "cluster">> & {
   cluster?: false;
-} & { [K in Exclude<ClusterSubgraphAttributeKey, SubgraphAttributeKey>]?: never; }) | (AttributesObject<Exclude<ClusterSubgraphAttributeKey, "cluster">> & {
-  cluster: true;
-});
+} & { [K in ClusterOnlyAttributeKey<S>]?: never; }) | AsClusterSubgraphAttributesObject<S>;
 
 export type OutputMode = OutputMode.values;
 export declare namespace OutputMode {
@@ -778,6 +999,8 @@ export interface Port {
 }
 
 export type PortPos = `${string}:${Compass}` | Compass;
+
+export type PortPosOf<C extends string> = `${string}:${C}` | C;
 
 export type QuadType = QuadType.values;
 export declare namespace QuadType {
@@ -838,6 +1061,134 @@ export interface RootGraphModel<M extends ModelTypes = ModelTypes> extends Graph
   strict: boolean;
 }
 
+export interface Schema {
+  readonly types?: SchemaValueTypeEntries;
+  readonly graph?: SchemaAttributeEntries;
+  readonly subgraph?: SchemaAttributeEntries;
+  readonly cluster?: SchemaAttributeEntries;
+  readonly node?: SchemaAttributeEntries;
+  readonly edge?: SchemaAttributeEntries;
+}
+
+export type SchemaAttribute<K extends string, E extends object = Record<never, never>> = [keyof E] extends [never] ? Attribute<K & AttributeKey> : K extends keyof E ? E[K] : Attribute<K & AttributeKey>;
+
+export type SchemaAttributeEntries = {
+  readonly [key: string]: SchemaEntry;
+};
+
+export type SchemaAttributeKey<T extends AttributeKey, E extends object = Record<never, never>> = [keyof E] extends [never] ? T : T | (keyof E & string);
+
+export interface SchemaAttributeListModel<K extends AttributeListKind, T extends AttributeKey, E extends object> extends SchemaAttributes<T, E>, HasComment, DotObjectModel<"AttributeList"> {
+  $$kind: K;
+}
+
+export type SchemaAttributeTypes<S, Kind extends SchemaKind> = { [K in (keyof EntriesOf<S, Kind> & string) | ChangedKeys<SchemaKindAttributeKeys[Kind], TypesOf<S>>]: Apply<K extends AttributeKey ? TypedAttribute<K, TypesOf<S>> : never, K extends keyof EntriesOf<S, Kind> ? EntriesOf<S, Kind>[K] : undefined>; };
+
+export interface SchemaAttributes<T extends AttributeKey, E extends object> extends Attributes<T> {
+  get(key: never): never;
+  get<K extends SchemaAttributeKey<T, E>>(key: K): SchemaAttribute<K, E> | undefined;
+  set(key: never, value: never): void;
+  set<K extends SchemaAttributeKey<T, E>>(key: K, value: SchemaAttribute<K, E>): void;
+  apply(attributes: never): void;
+  apply(attributes: AttributesObject<T, E> | AttributesEntities<T, E>): void;
+  delete(key: SchemaAttributeKey<T, E>): void;
+}
+
+export interface SchemaAttributesGroupModel<T extends AttributeKey, E extends object> extends SchemaAttributes<T, E> {}
+
+export interface SchemaEdgeModel<S extends Schema> extends EdgeModel {
+  readonly attributes: SchemaAttributesGroupModel<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>;
+}
+
+export interface SchemaEntry<T = unknown, Mode extends SchemaEntryMode = SchemaEntryMode> {
+  readonly mode: Mode;
+  readonly "~type"?: {
+    readonly type: T;
+  };
+}
+
+export type SchemaEntryMode = "add" | "extend" | "override";
+
+export interface SchemaGraphBaseModel<T extends DotObjectType, K extends AttributeKey, M extends ModelTypes, E extends object> extends GraphBaseModel<T, K, M> {
+  readonly attributes: Readonly<SchemaGraphCommonAttributes<SchemaOf<M>>>;
+  get(key: never): never;
+  get<A extends SchemaAttributeKey<K, E>>(key: A): SchemaAttribute<A, E> | undefined;
+  set(key: never, value: never): void;
+  set<A extends SchemaAttributeKey<K, E>>(key: A, value: SchemaAttribute<A, E>): void;
+  apply(attributes: never): void;
+  apply(attributes: AttributesObject<K, E> | AttributesEntities<K, E>): void;
+  delete(key: SchemaAttributeKey<K, E>): void;
+  createNode(id: never, ...rest: never[]): never;
+  createNode(id: string, attributes?: NodeAttributesObject<SchemaOf<M>>): M["Node"];
+  createSubgraph(first: never, ...rest: never[]): never;
+  createSubgraph<const Id extends string | undefined = undefined>(id?: Id, attributes?: SubgraphAttributesFor<Id, SchemaOf<M>>): M["Subgraph"];
+  createSubgraph(attributes?: NonClusterSubgraphAttributesObject<SchemaOf<M>>): M["Subgraph"];
+  createEdge(targets: never, ...rest: never[]): never;
+  createEdge(targets: ReadonlyEdgeTargetLikeTuple, attributes?: EdgeAttributesObject<SchemaOf<M>>): M["Edge"];
+  subgraph(first: never, ...rest: never[]): never;
+  subgraph<const Id extends string>(id: Id, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
+  subgraph<const Id extends string>(id: Id, attributes: SubgraphAttributesFor<Id, SchemaOf<M>>, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
+  subgraph(attributes: NonClusterSubgraphAttributesObject<SchemaOf<M>>, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
+  subgraph(callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
+  node(first: never, ...rest: never[]): never;
+  node(id: string, callback?: (node: M["Node"]) => void): M["Node"];
+  node(id: string, attributes: NodeAttributesObject<SchemaOf<M>>, callback?: (node: M["Node"]) => void): M["Node"];
+  node(attributes: NodeAttributesObject<SchemaOf<M>>): void;
+  edge(first: never, ...rest: never[]): never;
+  edge(targets: ReadonlyEdgeTargetLikeTuple, callback?: (edge: M["Edge"]) => void): M["Edge"];
+  edge(targets: ReadonlyEdgeTargetLikeTuple, attributes: EdgeAttributesObject<SchemaOf<M>>, callback?: (edge: M["Edge"]) => void): M["Edge"];
+  edge(attributes: EdgeAttributesObject<SchemaOf<M>>): void;
+  graph(attributes: never): void;
+  graph(attributes: SubgraphAttributesObject<SchemaOf<M>>): void;
+}
+
+export interface SchemaGraphCommonAttributes<S extends Schema> extends GraphCommonAttributes {
+  graph: SchemaAttributeListModel<"Graph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, SubgraphSchemaAttributeTypes<S>>;
+  edge: SchemaAttributeListModel<"Edge", EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>;
+  node: SchemaAttributeListModel<"Node", NodeAttributeKey, SchemaAttributeTypes<S, "node">>;
+}
+
+export type SchemaKind = "graph" | "subgraph" | "cluster" | "node" | "edge";
+
+export interface SchemaKindAttributeKeys {
+  graph: GraphAttributeKey;
+  subgraph: SubgraphAttributeKey;
+  cluster: ClusterSubgraphAttributeKey;
+  node: NodeAttributeKey;
+  edge: EdgeAttributeKey;
+}
+
+export interface SchemaModelTypes<S extends Schema> extends ModelTypes {
+  Schema: S;
+  Dot: DotModel;
+  Graph: SchemaRootGraphModel<SchemaModelTypes<S>>;
+  Digraph: SchemaRootGraphModel<SchemaModelTypes<S>>;
+  Subgraph: SchemaSubgraphModel<SchemaModelTypes<S>>;
+  Node: SchemaNodeModel<S>;
+  Edge: SchemaEdgeModel<S>;
+}
+
+export interface SchemaNodeModel<S extends Schema> extends NodeModel {
+  readonly attributes: SchemaAttributesGroupModel<NodeAttributeKey, SchemaAttributeTypes<S, "node">>;
+}
+
+export type SchemaOf<M extends ModelTypes> = M extends {
+  Schema: infer S extends Schema;
+} ? S : EmptySchema;
+
+export interface SchemaRootGraphModel<M extends ModelTypes> extends SchemaGraphBaseModel<"Graph", GraphAttributeKey, M, SchemaAttributeTypes<SchemaOf<M>, "graph">> {
+  directed: boolean;
+  strict: boolean;
+}
+
+export interface SchemaSubgraphModel<M extends ModelTypes> extends SchemaGraphBaseModel<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, M, SubgraphSchemaAttributeTypes<SchemaOf<M>>> {
+  isSubgraphCluster(): boolean;
+}
+
+export type SchemaValueTypeEntries = { readonly [N in ValueTypeName]?: SchemaEntry<unknown, "extend" | "override">; };
+
+export type SchemaValueTypes<T> = { [N in ValueTypeName]: N extends keyof T ? Apply<ValueTypes[N], T[N]> : ValueTypes[N]; };
+
 export type Shape = string;
 
 export declare namespace Side {
@@ -879,6 +1230,8 @@ export declare namespace Style {
   interface $exclude extends $keywordsValidation {}
 }
 
+export type StyleOf<I extends string> = I | `${I},${I}` | `${I},${I},${I}` | `${I},${I},${I},${I}`;
+
 export type SubgraphAttributeKey = SubgraphAttributeKey.values;
 export declare namespace SubgraphAttributeKey {
   type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
@@ -886,9 +1239,9 @@ export declare namespace SubgraphAttributeKey {
   interface $exclude extends $keywordsValidation {}
 }
 
-export type SubgraphAttributesFor<Id extends string | undefined> = [Id] extends [undefined] ? NonClusterSubgraphAttributesObject : string extends Exclude<Id, undefined> ? SubgraphAttributesObject : [Lowercase<Exclude<Id, undefined>>] extends [`cluster${string}`] ? undefined extends Id ? AsClusterSubgraphAttributesObject : ClusterSubgraphAttributesObject : [Extract<Lowercase<Exclude<Id, undefined>>, `cluster${string}`>] extends [never] ? NonClusterSubgraphAttributesObject : AsClusterSubgraphAttributesObject;
+export type SubgraphAttributesFor<Id extends string | undefined, S extends Schema = EmptySchema> = [Id] extends [undefined] ? NonClusterSubgraphAttributesObject<S> : string extends Exclude<Id, undefined> ? SubgraphAttributesObject<S> : [Lowercase<Exclude<Id, undefined>>] extends [`cluster${string}`] ? undefined extends Id ? AsClusterSubgraphAttributesObject<S> : ClusterSubgraphAttributesObject<S> : [Extract<Lowercase<Exclude<Id, undefined>>, `cluster${string}`>] extends [never] ? NonClusterSubgraphAttributesObject<S> : AsClusterSubgraphAttributesObject<S>;
 
-export type SubgraphAttributesObject = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey>;
+export type SubgraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey, SubgraphSchemaAttributeTypes<S>>;
 
 export interface SubgraphConstructor<S extends SubgraphModel = SubgraphModel> {
   new (id?: string, attributes?: SubgraphAttributesObject): S;
@@ -899,11 +1252,36 @@ export interface SubgraphModel<M extends ModelTypes = ModelTypes> extends GraphB
   isSubgraphCluster(): boolean;
 }
 
+export type SubgraphSchemaAttributeTypes<S> = { [K in keyof SchemaAttributeTypes<S, "subgraph"> | keyof SchemaAttributeTypes<S, "cluster">]: KindAttributeType<S, "subgraph", K> | KindAttributeType<S, "cluster", K>; };
+
 export type TBbalanceType = TBbalanceType.values;
 export declare namespace TBbalanceType {
   type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
   interface $values extends $keywords<"min" | "max"> {}
   interface $exclude extends $keywordsValidation {}
+}
+
+export type ValueTypeName = keyof ValueTypes;
+
+export type ValueTypeNamesUsing<N extends ValueTypeName> = N | ("compass" extends N ? "portPos" : never);
+
+export interface ValueTypes {
+  arrowType: ArrowType.shape;
+  clusterMode: ClusterMode;
+  color: Color;
+  compass: Compass;
+  dirType: DirType;
+  outputMode: OutputMode;
+  packMode: PackMode;
+  pagedir: Pagedir;
+  quadType: QuadType;
+  rankdir: Rankdir;
+  rankType: RankType;
+  shape: Shape;
+  smoothType: SmoothType;
+  startType: StartType;
+  style: Style.styleItem;
+  tbBalanceType: TBbalanceType;
 }
 
 export type ViewPort = `${Double},${Double},${Double},${Double},${Double}` | `${Double},${Double},${Double},${string}`;
@@ -961,9 +1339,29 @@ export declare function withCode<E extends Error, C extends ErrorCode>(error: E,
 
 // Used by the exports, not exported
 
-type AsClusterSubgraphAttributesObject = AttributesObject<Exclude<ClusterSubgraphAttributeKey, "cluster">> & {
+type Apply<Base, E> = E extends SchemaEntry<infer T, "extend"> ? Base | T : E extends SchemaEntry<infer T, "add" | "override"> ? T : Base;
+
+type ArrowNameOf<S extends string> = S | `${ArrowType.modifiers}${S}`;
+
+type AsClusterSubgraphAttributesObject<S extends Schema> = AttributesObject<Exclude<ClusterSubgraphAttributeKey, "cluster">, Omit<SchemaAttributeTypes<S, "cluster">, "cluster">> & {
   cluster: true;
 };
 
+type ChangedKeys<Keys extends AttributeKey, T> = Keys extends AttributeKey ? [Extract<AttributeValueTypeNames[Keys], ChangedNames<T>>] extends [never] ? never : Keys : never;
+
+type ChangedNames<T> = ValueTypeNamesUsing<keyof T & ValueTypeName>;
+
+type ClusterOnlyAttributeKey<S> = Exclude<ClusterSubgraphAttributeKey | keyof SchemaAttributeTypes<S, "cluster">, SubgraphAttributeKey | keyof SchemaAttributeTypes<S, "subgraph">>;
+
 type Creates<C, Base> = C extends (abstract new (...args: any[]) => infer I) ? I extends Base ? I : Base : Base;
+
+type EntriesOf<S, Kind extends SchemaKind> = S extends { readonly [P in Kind]: infer A extends object; } ? A : EmptySchema;
+
+type KindAttributeType<S, Kind extends SchemaKind, K extends PropertyKey> = K extends keyof SchemaAttributeTypes<S, Kind> ? SchemaAttributeTypes<S, Kind>[K] : K extends SchemaKindAttributeKeys[Kind] ? Attribute<K> : never;
+
+type TypedAttribute<K extends AttributeKey, T> = [Extract<AttributeValueTypeNames[K], ChangedNames<T>>] extends [never] ? Attribute<K> : AttributeValueTypes<SchemaValueTypes<T>>[AttributeValueTypeNames[K]];
+
+type TypesOf<S> = S extends {
+  readonly types: infer T extends object;
+} ? T : EmptySchema;
 ```

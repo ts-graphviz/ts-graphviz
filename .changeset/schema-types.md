@@ -1,0 +1,5 @@
+---
+"@ts-graphviz/common": minor
+---
+
+Types for attribute schemas (#1841, first part). A `Schema` describes, for the models of one context, value types to extend or override (`types`, such as `color` or `style`, which changes every attribute that uses them) and attributes to add, extend or override per kind (`graph`, `subgraph`, `cluster`, `node`, `edge`); an entry of a kind applies after `types`. `ModelTypes` takes a type-only `Schema`, and `SchemaModelTypes<S>` gives the model types of a schema: `SchemaRootGraphModel`, `SchemaSubgraphModel`, `SchemaNodeModel`, `SchemaEdgeModel` and their attribute interfaces, which stay assignable to the models without a schema. `AttributesObject` / `AttributesEntities` take the attribute types a schema adds or changes, and `NodeAttributesObject`, `EdgeAttributesObject`, `GraphAttributesObject`, `SubgraphAttributesObject`, `ClusterSubgraphAttributesObject`, `NonClusterSubgraphAttributesObject` and `SubgraphAttributesFor` a schema, all optional. `AttributeValueTypeNames` (generated) lists the value types of each attribute. Types only; without a schema the types are the same as before. `defineSchema` follows.

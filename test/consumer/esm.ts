@@ -12,8 +12,11 @@ import {
   type EdgeModel,
   fromDot,
   type graph,
+  type ModelsContext,
   type NodeModel,
   type RootGraphModel,
+  type SchemaEntry,
+  type SchemaModelTypes,
   type SubgraphModel,
   strict,
   toDot,
@@ -75,6 +78,31 @@ class MyNode extends Node {
 }
 withContext({ Node: MyNode }).digraph((g) => g.node('a').extra());
 createModelsContext({ Node: MyNode });
+
+// models typed with a schema (#1841); written by hand until defineSchema
+type MySchema = {
+  types: { color: SchemaEntry<'brand-blue', 'extend'> };
+  cluster: { team: SchemaEntry<'core' | 'infra', 'add'> };
+  node: {
+    'data-id': SchemaEntry<number, 'add'>;
+    label: SchemaEntry<number, 'override'>;
+  };
+};
+declare const schemaModels: ModelsContext<SchemaModelTypes<MySchema>>;
+withContext(schemaModels).digraph((g) => {
+  const a = g.node('a', { 'data-id': 1, label: 2, color: 'brand-blue' });
+  const label = a.attributes.get('label');
+  assertType<Equal<typeof label, number | undefined>>();
+  // @ts-expect-error overridden: a number
+  a.attributes.set('label', 'x');
+  g.subgraph('cluster_a', { team: 'core' });
+  // @ts-expect-error a cluster attribute
+  g.subgraph('row', { team: 'core' });
+  g.edge([a, 'b'], { color: 'brand-blue' });
+  // A model with a schema is still a model.
+  const plain: RootGraphModel = g;
+  toDot(plain);
+});
 
 // parse / parseFragment / stringify / sanitize
 const dot: DotASTNode = parse(sanitize(text));
