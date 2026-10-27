@@ -37,4 +37,4 @@ Every error ts-graphviz raises on purpose is the standard error type that fits t
 - `DotSyntaxError` has a `location` (`{ start, end }`; `undefined` for an input over `maxInputSize`). Its `code` and `location` are the contract; the message text and `cause` (the parser's internal error) may change in any release.
 - The classes that remain (`DotSyntaxError`, `ASTNodeCountExceededError`, `CommandExecutionError`) set `name` to a literal string.
 
-Compared with 3.x: errors had no `code`; `ASTNodeCountExceededError` extended `Error` and is now a `RangeError`; edge-target errors were a bare `Error` and are now `TypeError`; the browser adapter and the converters threw bare `Error`s; a failed Graphviz command rejected with a bare `Error`.
+Compared with 3.x: errors had no `code`; `ASTNodeCountExceededError` extended `Error` and is now a `RangeError`; edge-target errors were a bare `Error` and are now `TypeError`; the browser adapter and the converters threw bare `Error`s; on Node.js, a failed Graphviz command rejected with a bare `Error` (see the process controls note for Deno).
