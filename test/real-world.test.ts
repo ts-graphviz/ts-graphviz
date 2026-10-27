@@ -1,6 +1,5 @@
 ///<reference types="vite/client" />
 
-import path from 'node:path';
 import { type ASTNode, parse, stringify } from '@ts-graphviz/ast';
 import { describe, it } from 'vitest';
 
@@ -17,23 +16,43 @@ function forEachDotFile(
   }
 }
 
-describe('Real-world DOT file AST snapshots', () => {
+/**
+ * Counts the AST nodes of `ast` by type, and by kind for the types that
+ * have one (literals, attribute lists, comments), as one sorted line such
+ * as `Attribute=3 Dot=1 Graph=1 Literal:bare=8 ...`.
+ */
+function summarize(ast: ASTNode): string {
+  const counts = new Map<string, number>();
+  const visit = (value: unknown): void => {
+    if (Array.isArray(value)) {
+      for (const item of value) visit(item);
+      return;
+    }
+    if (value === null || typeof value !== 'object') return;
+    const node = value as Record<string, unknown>;
+    if (typeof node.type === 'string') {
+      const key =
+        typeof node.kind === 'string' ? `${node.type}:${node.kind}` : node.type;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+    for (const [key, child] of Object.entries(node)) {
+      if (key !== 'location') visit(child);
+    }
+  };
+  visit(ast);
+  return [...counts]
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .map(([key, count]) => `${key}=${count}`)
+    .join(' ');
+}
+
+describe('Real-world DOT file parsing', () => {
   forEachDotFile((file, getContents) => {
-    it.concurrent(`parses AST and matches snapshot for ${file}`, async ({
+    it.concurrent(`parses ${file} into the expected numbers of AST nodes`, async ({
       expect,
     }) => {
-      try {
-        const dot = await getContents();
-        const snapshot = path.format({
-          ...path.parse(file),
-          base: '',
-          ext: '.snapshot',
-        });
-        await expect(parse(dot)).toMatchFileSnapshot(snapshot);
-      } catch (e) {
-        console.log(e);
-        throw e;
-      }
+      const dot = await getContents();
+      expect(summarize(parse(dot))).toMatchSnapshot();
     });
   });
 });

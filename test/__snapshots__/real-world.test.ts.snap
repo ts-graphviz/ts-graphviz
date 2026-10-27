@@ -1,0 +1,85 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Real-world DOT file parsing > parses ./dot/ER.dot into the expected numbers of AST nodes 1`] = `"Attribute=21 AttributeList:Node=4 Dot=1 Edge=12 Graph=1 Literal:bare=62 Literal:quoted=17 Node=12 NodeRef=24 Subgraph=1"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/Genetic_Programming.dot into the expected numbers of AST nodes 1`] = `"Attribute=52 Comment:Macro=3 Dot=1 Edge=43 Graph=1 Literal:bare=193 Literal:quoted=53 Node=51 NodeRef=86 Subgraph=4"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/Linux_kernel_diagram.dot into the expected numbers of AST nodes 1`] = `"Attribute=530 AttributeList:Edge=8 AttributeList:Graph=8 AttributeList:Node=7 Comment:Slash=1 Dot=1 Edge=68 Graph=1 Literal:bare=1029 Literal:quoted=291 Node=122 NodeRef=136 Subgraph=14"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/bazel.dot into the expected numbers of AST nodes 1`] = `"Attribute=1 AttributeList:Node=1 Dot=1 Edge=15 Graph=1 Literal:bare=3 Literal:quoted=38 Node=8 NodeRef=30"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/cluster.dot into the expected numbers of AST nodes 1`] = `"Attribute=10 AttributeList:Node=2 Dot=1 Edge=9 Graph=1 Literal:bare=45 Literal:quoted=2 Node=2 NodeRef=22 Subgraph=2"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/crazy.dot into the expected numbers of AST nodes 1`] = `"Attribute=206 AttributeList:Graph=1 AttributeList:Node=1 Dot=1 Edge=49 Graph=1 Literal:bare=337 Literal:quoted=215 Node=41 NodeRef=98"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/datastruct.dot into the expected numbers of AST nodes 1`] = `"Attribute=46 AttributeList:Edge=1 AttributeList:Graph=1 AttributeList:Node=1 Dot=1 Edge=17 Graph=1 Literal:bare=98 Literal:quoted=76 Node=13 NodeRef=34"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/fdpclust.dot into the expected numbers of AST nodes 1`] = `"Attribute=1 Dot=1 Edge=6 Graph=1 Literal:bare=19 Node=1 NodeRef=12 Subgraph=3"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/fsm.dot into the expected numbers of AST nodes 1`] = `"Attribute=18 AttributeList:Node=2 Dot=1 Edge=14 Graph=1 Literal:bare=54 Literal:quoted=15 Node=4 NodeRef=28"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/gd_1994_2007.dot into the expected numbers of AST nodes 1`] = `"Attribute=5804 AttributeList:Graph=2 AttributeList:Node=1 Comment:Block=1 Dot=1 Edge=1380 Graph=1 Literal:bare=10577 Literal:quoted=4297 Node=506 NodeRef=2760"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/go-package.dot into the expected numbers of AST nodes 1`] = `"Attribute=60 Dot=1 Edge=49 Graph=1 Literal:bare=179 Literal:quoted=60 Node=20 NodeRef=98"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/gradient_angles.dot into the expected numbers of AST nodes 1`] = `"Attribute=49 AttributeList:Node=18 Dot=1 Edge=1 Graph=1 Literal:bare=77 Literal:quoted=44 Node=18 NodeRef=2 Subgraph=2"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/gradient_cluster.dot into the expected numbers of AST nodes 1`] = `"Attribute=32 AttributeList:Node=8 Dot=1 Edge=9 Graph=1 Literal:bare=84 Literal:quoted=15 Node=10 NodeRef=22 Subgraph=2"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/gradient_colors.dot into the expected numbers of AST nodes 1`] = `"Attribute=61 AttributeList:Node=24 Dot=1 Edge=1 Graph=1 Literal:bare=103 Literal:quoted=52 Node=24 NodeRef=4 Subgraph=4"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/gradient_datastruct.dot into the expected numbers of AST nodes 1`] = `"Attribute=71 AttributeList:Edge=1 AttributeList:Graph=1 AttributeList:Node=1 Dot=1 Edge=17 Graph=1 Literal:bare=131 Literal:quoted=93 Node=13 NodeRef=34"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/gradient_g_c_n.dot into the expected numbers of AST nodes 1`] = `"Attribute=12 AttributeList:Node=1 Dot=1 Graph=1 Literal:bare=17 Literal:quoted=10 Node=1 Subgraph=1"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/gradient_linear_angle.dot into the expected numbers of AST nodes 1`] = `"Attribute=9 AttributeList:Node=1 Dot=1 Graph=1 Literal:bare=14 Literal:html=1 Literal:quoted=6 Node=1 Subgraph=1"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/gradient_radial_angle.dot into the expected numbers of AST nodes 1`] = `"Attribute=9 AttributeList:Node=1 Dot=1 Graph=1 Literal:bare=14 Literal:html=1 Literal:quoted=6 Node=1 Subgraph=1"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/gradient_table.dot into the expected numbers of AST nodes 1`] = `"Attribute=8 AttributeList:Node=1 Dot=1 Graph=1 Literal:bare=13 Literal:html=1 Literal:quoted=5 Node=1 Subgraph=1"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/grid.dot into the expected numbers of AST nodes 1`] = `"Attribute=15 AttributeList:Edge=1 AttributeList:Node=1 Comment:Slash=3 Dot=1 Edge=18 Graph=1 Literal:bare=173 Literal:quoted=2 NodeRef=144 Subgraph=8"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/hello.dot into the expected numbers of AST nodes 1`] = `"Dot=1 Edge=1 Graph=1 Literal:bare=3 NodeRef=2"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/inet.dot into the expected numbers of AST nodes 1`] = `"Attribute=1 Comment:Slash=1 Dot=1 Edge=16 Graph=1 Literal:bare=54 Node=19 NodeRef=32 Subgraph=5"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/issue1147.dot into the expected numbers of AST nodes 1`] = `"Attribute=19 AttributeList:Node=1 Comment:Slash=2 Dot=1 Edge=6 Graph=1 Literal:bare=68 Literal:quoted=7 Node=30 NodeRef=6 Subgraph=9"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/kennedyanc.dot into the expected numbers of AST nodes 1`] = `"Attribute=118 Comment:Block=2 Dot=1 Edge=22 Graph=1 Literal:bare=272 Literal:quoted=23 Node=14 NodeRef=44"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/lion_share.dot into the expected numbers of AST nodes 1`] = `"Attribute=310 Comment:Macro=3 Dot=1 Edge=51 Graph=1 Literal:bare=602 Literal:quoted=168 Node=47 NodeRef=102"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/networkmap_twopi.dot into the expected numbers of AST nodes 1`] = `"Attribute=5965 Comment:Block=1 Dot=1 Edge=425 Graph=1 Literal:bare=9801 Literal:html=426 Literal:quoted=2980 Node=426 NodeRef=850"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/neural-network.dot into the expected numbers of AST nodes 1`] = `"Attribute=13 AttributeList:Node=1 Dot=1 Edge=9 Graph=1 Literal:bare=45 Literal:quoted=10 Node=10 NodeRef=18"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/ninja.dot into the expected numbers of AST nodes 1`] = `"Attribute=262 AttributeList:Edge=1 AttributeList:Node=1 Dot=1 Edge=131 Graph=1 Literal:bare=350 Literal:quoted=562 Node=125 NodeRef=262"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/philo.dot into the expected numbers of AST nodes 1`] = `"Attribute=8 AttributeList:Node=2 Comment:Macro=1 Dot=1 Edge=27 Graph=1 Literal:bare=91 Literal:quoted=1 Node=21 NodeRef=54"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/process.dot into the expected numbers of AST nodes 1`] = `"Attribute=1 Dot=1 Edge=13 Graph=1 Literal:bare=29 NodeRef=26"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/profile.dot into the expected numbers of AST nodes 1`] = `"Attribute=149 AttributeList:Node=1 Dot=1 Edge=85 Graph=1 Literal:bare=383 Literal:quoted=147 Node=61 NodeRef=170"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/psg.dot into the expected numbers of AST nodes 1`] = `"Attribute=123 AttributeList:Graph=1 Comment:Macro=2 Dot=1 Edge=14 Graph=1 Literal:bare=194 Literal:html=10 Literal:quoted=81 Node=10 NodeRef=28"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/root.dot into the expected numbers of AST nodes 1`] = `"Attribute=6848 AttributeList:Graph=1 Comment:Block=1 Dot=1 Edge=1083 Graph=1 Literal:bare=13461 Literal:quoted=3456 Node=1054 NodeRef=2166"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/sdh.dot into the expected numbers of AST nodes 1`] = `"Attribute=68 AttributeList:Edge=5 AttributeList:Graph=2 AttributeList:Node=18 Comment:Block=1 Dot=1 Edge=120 Graph=1 Literal:bare=483 Literal:quoted=3 Node=75 NodeRef=251 Subgraph=23"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/siblings.dot into the expected numbers of AST nodes 1`] = `"Attribute=412 AttributeList:Graph=1 AttributeList:Node=2 Comment:Block=1 Dot=1 Edge=284 Graph=1 Literal:bare=618 Literal:quoted=975 Node=200 NodeRef=568"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/softmaint.dot into the expected numbers of AST nodes 1`] = `"Attribute=512 AttributeList:Node=1 Dot=1 Edge=269 Graph=1 Literal:bare=1560 Literal:quoted=104 Node=101 NodeRef=538"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/switch.dot into the expected numbers of AST nodes 1`] = `"Attribute=26 AttributeList:Edge=8 AttributeList:Graph=1 AttributeList:Node=4 Dot=1 Edge=32 Graph=1 Literal:bare=212 Literal:quoted=17 Node=112 NodeRef=64 Subgraph=34"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/traffic_lights.dot into the expected numbers of AST nodes 1`] = `"Attribute=7 AttributeList:Node=2 Comment:Macro=2 Dot=1 Edge=16 Graph=1 Literal:bare=60 Literal:quoted=1 Node=14 NodeRef=32"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/transparency.dot into the expected numbers of AST nodes 1`] = `"Attribute=105 AttributeList:Graph=1 AttributeList:Node=1 Dot=1 Edge=100 Graph=1 Literal:bare=409 Literal:quoted=2 NodeRef=200"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/twopi2.dot into the expected numbers of AST nodes 1`] = `"Attribute=7188 Dot=1 Edge=1118 Graph=1 Literal:bare=7191 Literal:quoted=10512 Node=1090 NodeRef=2236"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/unix.dot into the expected numbers of AST nodes 1`] = `"Attribute=3 AttributeList:Node=1 Comment:Block=1 Dot=1 Edge=49 Graph=1 Literal:bare=6 Literal:quoted=99 NodeRef=98"`;
+
+exports[`Real-world DOT file parsing > parses ./dot/world.dot into the expected numbers of AST nodes 1`] = `"Attribute=10 Dot=1 Edge=54 Graph=1 Literal:bare=191 Literal:quoted=1 Node=68 NodeRef=103 Subgraph=14"`;
