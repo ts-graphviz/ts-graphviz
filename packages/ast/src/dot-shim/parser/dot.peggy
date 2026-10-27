@@ -257,6 +257,7 @@ _edge_rhs
       edgeChainDepth++;
       if (edgeChainDepth > MAX_EDGE_CHAIN_DEPTH) {
         const loc = location();
+        options.onLimit('maxEdgeChainDepth');
         error(
           `Edge chain depth exceeds maximum allowed depth of ${MAX_EDGE_CHAIN_DEPTH} ` +
           `at line ${loc.start.line}, column ${loc.start.column}. ` +
@@ -451,6 +452,7 @@ html_raw_string
       // 2. The depth counter is reset at the start of each parse() call
       // 3. Most malformed input fails quickly without deep backtracking
       if (htmlNestingDepth >= MAX_HTML_NESTING_DEPTH) {
+        options.onLimit('maxHtmlNestingDepth');
         error(`HTML nesting depth exceeds maximum allowed depth of ${MAX_HTML_NESTING_DEPTH}`);
       }
       htmlNestingDepth++;
