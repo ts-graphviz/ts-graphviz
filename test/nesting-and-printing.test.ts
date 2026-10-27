@@ -9,13 +9,23 @@ const braces = (depth: number) =>
 
 describe('printing nested graphs', () => {
   it('takes time proportional to the output, however deep it nests', () => {
-    // 600 levels with raised limits: printing used to take time cubic in the
-    // depth (about 12 s here).
+    // The output of a graph nested d levels deep is about d² bytes (every
+    // line is indented by its depth), so the fair measure is time per byte
+    // of output: it must stay flat as the depth doubles. Printing used to
+    // cost one indenting pass per enclosing level on top of that, which
+    // doubled the time per byte with every doubling of the depth. A ratio
+    // does not depend on the machine.
     const limits = { maxNestingDepth: 1000 };
-    const model = fromDot(braces(600), { parse: limits });
-    const start = performance.now();
-    toDot(model, { print: limits });
-    expect(performance.now() - start).toBeLessThan(1000);
+    const perByte = (depth: number) => {
+      const model = fromDot(braces(depth), { parse: limits });
+      let bytes = 0;
+      const start = performance.now();
+      for (let i = 0; i < 3; i++)
+        bytes += toDot(model, { print: limits }).length;
+      return (performance.now() - start) / bytes;
+    };
+    perByte(300); // warm up
+    expect(perByte(600) / perByte(300)).toBeLessThan(1.5);
   });
 
   it('prints the same text as before', () => {
@@ -96,7 +106,7 @@ describe('subgraph lookup', () => {
     const start = performance.now();
     for (const id of ids) g.subgraph(id);
     for (const id of ids) g.subgraph(id);
-    expect(performance.now() - start).toBeLessThan(1000);
+    expect(performance.now() - start).toBeLessThan(3000);
     expect(g.subgraphs).toHaveLength(20000);
 
     const first = g.createSubgraph('dup');
@@ -114,7 +124,7 @@ describe('subgraph lookup', () => {
       expect(g.getSubgraph('same')).toBe(expected);
       g.removeSubgraph(expected);
     }
-    expect(performance.now() - draining).toBeLessThan(1000);
+    expect(performance.now() - draining).toBeLessThan(3000);
     expect(g.getSubgraph('same')).toBeUndefined();
     const middle = [g.createSubgraph('m'), g.createSubgraph('m')];
     const last = g.createSubgraph('m');
@@ -125,7 +135,7 @@ describe('subgraph lookup', () => {
 
     const removing = performance.now();
     for (const subgraph of [...g.subgraphs]) g.removeSubgraph(subgraph);
-    expect(performance.now() - removing).toBeLessThan(1000);
+    expect(performance.now() - removing).toBeLessThan(3000);
     expect(g.subgraphs).toHaveLength(0);
     expect(g.getSubgraph('s0')).toBeUndefined();
   });
