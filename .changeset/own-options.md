@@ -1,15 +1,17 @@
 ---
-"@ts-graphviz/common": major
-"@ts-graphviz/ast": major
-"@ts-graphviz/adapter": major
-"ts-graphviz": major
-"@ts-graphviz/react": minor
+"@ts-graphviz/common": minor
+"@ts-graphviz/core": patch
+"@ts-graphviz/ast": patch
+"@ts-graphviz/adapter": patch
+"ts-graphviz": patch
+"@ts-graphviz/react": patch
 ---
 
-Options are read from their own properties only, so a polluted `Object.prototype` (from a bug elsewhere in the application) no longer changes what ts-graphviz does (#1757). Before, `Object.prototype.dotCommand = '/bin/sh'` made the adapter run `/bin/sh`, `Object.prototype.sanitize = false` turned the source check off, and inherited `library`, `attributes`, parse limits, `startRule`, `policy`, `print` and `convert` options were used as well.
+Options, props and optional fields are read from the objects that own them
 
-- Every public entry point (`toStream` / `toFile`, `parse` / `parseFragment`, `sanitize`, `stringify`, `fromModel` / `toModel`, `createElementFactory`, `fromDot` / `fromDotAll`, `toDot`, react's `createRoot` / `renderToDot` / `renderHTMLLike`) reads its options, and the option objects nested in them, through `ownOptions`, new in `@ts-graphviz/common`.
+What ts-graphviz does never depends on properties inherited from `Object.prototype`:
+
+- Every public entry point (`toStream` / `toFile`, `parse` / `parseFragment`, `sanitize`, `stringify`, `fromModel` / `toModel`, `createElementFactory`, `fromDot` / `fromDotAll`, `toDot`, `GraphBase.with`, react's `createRoot` / `renderToDot` / `renderHTMLLike` and components) reads its options or props, and the option objects nested in them, from own properties only. An option given through a prototype (an options object made with `Object.create(defaults)` or a class instance with getters) is not read; pass a plain object with own properties. The helper that does this, `ownOptions`, is exported by `@ts-graphviz/common`.
+- Optional fields of AST nodes and edge targets (ids, ports, compass points, comment arrays) are read only when the object has them, and the model type guards (`isNodeModel`, `isEdgeModel`, `isRootGraphModel`, `isDotModel`, `isForwardRefNode`, …) read `$$type`, `id`, `targets`, `directed` and `graphs` from the object or its classes only, so a plain object does not pass for a model. Class-based AST nodes and models keep working.
+- The adapter starts the command, and Deno opens files, with options that inherit nothing; `toFile` writes with positional arguments only; and `toStream` reads the command's output as bytes into a stream built from a prototype-less source.
 - `ERROR_CODES` and `DEPRECATION_CODES` are frozen.
-- The security model has a new boundary, SM-8, for state shared by the process.
-
-An option given through a prototype (an options object made with `Object.create(defaults)` or a class instance with getters) is no longer read; pass a plain object with own properties.
