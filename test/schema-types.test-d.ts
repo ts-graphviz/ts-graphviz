@@ -320,9 +320,29 @@ describe('a schema', () => {
       g.addAttributeList('Edge', { 'data-id': 1 });
     });
     const plain = digraph().node('a');
+    // The same keys as MySchema; only the type of a node's label differs.
+    type OtherSchema = Omit<MySchema, 'node'> & {
+      node: Omit<MySchema['node'], 'label'> & { label: Override<string> };
+    };
+    type OtherTypes = SchemaModelTypes<OtherSchema>;
+    const other = withContext({} as ModelsContext<OtherTypes>);
     myDigraph((g) => {
       // @ts-expect-error a node without the schema may hold a string label
       g.addNode(plain);
+      other.digraph((o) => {
+        // @ts-expect-error a node of another schema may hold a string label
+        g.addNode(o.node('a'));
+        // Its edges have the same attribute types as ours.
+        g.addEdge(o.edge(['a', 'b']));
+        // @ts-expect-error nor a subgraph of another schema
+        g.addSubgraph(o.subgraph('s'));
+      });
+      expectTypeOf<SchemaNodeModel<OtherSchema>>().not.toExtend<
+        SchemaNodeModel<MySchema>
+      >();
+      expectTypeOf<SchemaRootGraphModel<OtherTypes>>().not.toExtend<
+        SchemaRootGraphModel<MyTypes>
+      >();
     });
   });
 

@@ -59,6 +59,13 @@ import type {
  */
 export interface SchemaAttributes<T extends AttributeKey, E extends object>
   extends Attributes<T> {
+  /**
+   * Type only, never present: makes attributes typed with different
+   * attribute types unassignable to each other (the overloads taking
+   * `never` alone would let them pass).
+   * @hidden
+   */
+  readonly '~types'?: (types: E) => E;
   /** @hidden Keeps this assignable to {@link Attributes}; cannot be called. */
   get(key: never): never;
   get<K extends SchemaAttributeKey<T, E>>(
@@ -163,6 +170,12 @@ export interface SchemaGraphBaseModel<
   M extends ModelTypes,
   E extends object,
 > extends GraphBaseModel<T, K, M> {
+  /**
+   * Type only, never present: makes graphs typed with different schemas
+   * unassignable to each other (see {@link SchemaAttributes}).
+   * @hidden
+   */
+  readonly '~schema'?: (schema: SchemaOf<M>) => SchemaOf<M>;
   readonly attributes: Readonly<SchemaGraphCommonAttributes<SchemaOf<M>>>;
 
   /** @hidden Keeps this assignable to {@link Attributes}; cannot be called. */

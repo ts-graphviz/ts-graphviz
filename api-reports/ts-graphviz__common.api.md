@@ -1085,6 +1085,7 @@ export interface SchemaAttributeListModel<K extends AttributeListKind, T extends
 export type SchemaAttributeTypes<S, Kind extends SchemaKind> = { [K in (keyof EntriesOf<S, Kind> & string) | ChangedKeys<SchemaKindAttributeKeys[Kind], TypesOf<S>>]: Apply<K extends AttributeKey ? TypedAttribute<K, TypesOf<S>> : never, K extends keyof EntriesOf<S, Kind> ? EntriesOf<S, Kind>[K] : undefined>; };
 
 export interface SchemaAttributes<T extends AttributeKey, E extends object> extends Attributes<T> {
+  readonly "~types"?: (types: E) => E;
   get(key: never): never;
   get<K extends SchemaAttributeKey<T, E>>(key: K): SchemaAttribute<K, E> | undefined;
   set(key: never, value: never): void;
@@ -1110,6 +1111,7 @@ export interface SchemaEntry<T = unknown, Mode extends SchemaEntryMode = SchemaE
 export type SchemaEntryMode = "add" | "extend" | "override";
 
 export interface SchemaGraphBaseModel<T extends DotObjectType, K extends AttributeKey, M extends ModelTypes, E extends object> extends GraphBaseModel<T, K, M> {
+  readonly "~schema"?: (schema: SchemaOf<M>) => SchemaOf<M>;
   readonly attributes: Readonly<SchemaGraphCommonAttributes<SchemaOf<M>>>;
   get(key: never): never;
   get<A extends SchemaAttributeKey<K, E>>(key: A): SchemaAttribute<A, E> | undefined;
