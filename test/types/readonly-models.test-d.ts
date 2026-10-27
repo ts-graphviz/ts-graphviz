@@ -349,6 +349,16 @@ describe('the guards', () => {
       expectTypeOf(object).toExtend<ReadonlyNodeModel>();
       expectTypeOf(object).not.toExtend<NodeModel>();
     }
+    // A type of your own that a model can also be.
+    const tagged = {} as { id: string; source: string };
+    if (isNodeModel(tagged)) {
+      expectTypeOf(tagged).toEqualTypeOf<
+        { id: string; source: string } & ReadonlyNodeModel
+      >();
+    }
+    expectTypeOf([tagged].filter(isNodeModel)).toEqualTypeOf<
+      ({ id: string; source: string } & ReadonlyNodeModel)[]
+    >();
     const nodeOrId = {} as NodeModel | string;
     if (isNodeModel(nodeOrId))
       expectTypeOf(nodeOrId).toEqualTypeOf<NodeModel>();

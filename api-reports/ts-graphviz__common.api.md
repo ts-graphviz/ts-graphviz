@@ -718,7 +718,7 @@ export interface ModelsContext<M extends ModelTypes = ModelTypes> {
 
 export type NarrowedModel<T, K extends DotObjectType> = unknown extends T ? T & ReadonlyModelOf<K> : T extends unknown ? T extends AnyReadonlyDotObjectModel ? Extract<T, {
   readonly $$type: K;
-}> : ReadonlyModelOf<K> extends T ? T & ReadonlyModelOf<K> : never : never;
+}> : T extends Primitive ? never : T & ReadonlyModelOf<K> : never;
 
 export type NodeAttributeKey = NodeAttributeKey.values;
 export declare namespace NodeAttributeKey {
@@ -1029,6 +1029,8 @@ type AsClusterSubgraphAttributesObject = AttributesObject<Exclude<ClusterSubgrap
 };
 
 type Creates<C, Base> = C extends (abstract new (...args: any[]) => infer I) ? I extends Base ? I : Base : Base;
+
+type Primitive = string | number | bigint | boolean | symbol | null | undefined;
 
 type ReadonlyModelOf<K extends DotObjectType> = Extract<AnyReadonlyDotObjectModel, {
   readonly $$type: K;

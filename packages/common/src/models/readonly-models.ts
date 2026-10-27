@@ -188,9 +188,10 @@ export type AnyReadonlyDotObjectModel =
  *   out of a union of custom classes);
  * - `unknown`: the read-only model of that kind (e.g.
  *   {@link ReadonlyNodeModel}), since the guard checks only `$$type` and a
- *   few fields; a type wider than the model, such as `DotObjectModel`,
- *   likewise, intersected with it;
- * - anything else: `never`.
+ *   few fields;
+ * - another object type (such as `DotObjectModel`, or a type with fields
+ *   of your own): its intersection with the read-only model;
+ * - a primitive type: `never`.
  *
  * Applied to each member of a union.
  * @group Models
@@ -200,10 +201,13 @@ export type NarrowedModel<T, K extends DotObjectType> = unknown extends T
   : T extends unknown
     ? T extends AnyReadonlyDotObjectModel
       ? Extract<T, { readonly $$type: K }>
-      : ReadonlyModelOf<K> extends T
-        ? T & ReadonlyModelOf<K>
-        : never
+      : T extends Primitive
+        ? never
+        : T & ReadonlyModelOf<K>
     : never;
+
+/** The values that are not objects: a guard never passes them. */
+type Primitive = string | number | bigint | boolean | symbol | null | undefined;
 
 /** The read-only model of `$$type` `K`. */
 type ReadonlyModelOf<K extends DotObjectType> = Extract<
