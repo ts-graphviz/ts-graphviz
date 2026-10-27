@@ -43,14 +43,9 @@ describe('useCurrentGraph', () => {
   });
 
   test('should throw error when called outside any graph context', () => {
-    try {
-      expect(() => {
-        renderHook(() => useCurrentGraph());
-      }).toThrowErrorMatchingInlineSnapshot(
-        `[Error: useCurrentGraph must be called within a cluster such as Digraph, Graph, Subgraph.]`,
-      );
-    } catch (e) {
-      console.error(e);
-    }
+    // The hook throws a plain Error (no code): its message names the hook.
+    expect(() => {
+      renderHook(() => useCurrentGraph());
+    }).toThrow(/useCurrentGraph must be called within a cluster/);
   });
 });

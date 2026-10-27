@@ -98,7 +98,7 @@ const unsafeDot: fc.Arbitrary<DotASTNode> = fc
     return ast;
   });
 
-describe('[SM-7] sanitize', () => {
+describe('sanitize', { tags: ['SM-7'] }, () => {
   it('returns DOT that parses to the same AST, or rejects it as unsafe', () => {
     fc.assert(
       fc.property(dot, (ast) => {

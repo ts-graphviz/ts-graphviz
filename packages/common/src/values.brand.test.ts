@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { escString, htmlLike, isEscString, isHTMLLike } from './values.js';
 
-describe('[SM-3] value kinds cannot be forged from data', () => {
+describe('value kinds cannot be forged from data', { tags: ['SM-3'] }, () => {
   it('recognises only values made by escString and htmlLike', () => {
     expect(isHTMLLike(htmlLike('<b>x</b>'))).toBe(true);
     expect(isEscString(escString('\\N'))).toBe(true);

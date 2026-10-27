@@ -24,7 +24,7 @@ const unescape = (text: string) =>
     .replaceAll('&gt;', '>')
     .replaceAll('&amp;', '&');
 
-describe('[SM-3] renderHTMLLike()', () => {
+describe('renderHTMLLike()', { tags: ['SM-3'] }, () => {
   it('returns "<>" for undefined label', () => {
     expect(html()).toBe('<>');
   });

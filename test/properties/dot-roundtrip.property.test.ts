@@ -7,6 +7,8 @@ import {
   fromDot,
   htmlLike,
   isTsGraphvizError,
+  orderedModels,
+  type RootGraphModel,
   toDot,
 } from 'ts-graphviz';
 
@@ -17,19 +19,31 @@ import {
   type GraphSpec,
   graphSpec,
   looksHtmlLikeToPrinter,
+  statementOrder,
 } from './arbitraries.js';
 import { summarize } from './summarize.js';
 
 // Property-based tests for the DOT printer and parser (see #1504).
 // A failing run prints its seed; reproduce it with FC_SEED=<seed>.
 
+// A graph built with the classes of `orderedModels` is read back with them,
+// so that default statements kept in place stay in place.
 const roundTrip = (spec: Parameters<typeof buildGraph>[0]) => {
   const model = buildGraph(spec);
   const dot = toDot(model);
-  return { model, dot, reparsed: fromDot(dot) };
+  const reparsed = spec.ordered
+    ? fromDot(dot, { convert: { models: orderedModels } })
+    : fromDot(dot);
+  return { model, dot, reparsed };
 };
 
-describe('[SM-2] DOT round trip', () => {
+/** Same contents, and every statement in the same place (#1732). */
+const expectSameGraph = (actual: RootGraphModel, expected: RootGraphModel) => {
+  expect(summarize(actual)).toStrictEqual(summarize(expected));
+  expect(statementOrder(actual)).toStrictEqual(statementOrder(expected));
+};
+
+describe('DOT round trip', { tags: ['SM-2'] }, () => {
   // Backslashes have no defined meaning in model strings today (#1587): the
   // printer passes them through, so `\\"` breaks out of the string and `\"`
   // comes back as `"`. These properties are expected to fail until #1587
@@ -38,7 +52,7 @@ describe('[SM-2] DOT round trip', () => {
     fc.assert(
       fc.property(graphSpec, (spec) => {
         const { model, reparsed } = roundTrip(spec);
-        expect(summarize(reparsed)).toStrictEqual(summarize(model));
+        expectSameGraph(reparsed, model);
       }),
     );
   });
@@ -46,8 +60,8 @@ describe('[SM-2] DOT round trip', () => {
   it('printing is idempotent: toDot(fromDot(dot)) === dot (#1587)', () => {
     fc.assert(
       fc.property(graphSpec, (spec) => {
-        const { dot } = roundTrip(spec);
-        expect(toDot(fromDot(dot))).toBe(dot);
+        const { dot, reparsed } = roundTrip(spec);
+        expect(toDot(reparsed)).toBe(dot);
       }),
     );
   });
@@ -119,6 +133,9 @@ describe('[SM-2] DOT round trip', () => {
       ...spec.nodes.flatMap((n) => [n.id, ...n.attributes.map(([, v]) => v)]),
       ...spec.edges.flatMap((e) => e.attributes.map(([, v]) => v)),
       ...spec.subgraphs.flatMap((s) => [s.id, ...s.nodes]),
+      ...(spec.ops ?? []).flatMap((op) =>
+        op.op === 'mention' ? op.attributes.map(([, v]) => v) : [],
+      ),
     ];
     fc.assert(
       fc.property(
@@ -128,7 +145,7 @@ describe('[SM-2] DOT round trip', () => {
         ),
         (spec) => {
           const { model, reparsed } = roundTrip(spec);
-          expect(summarize(reparsed)).toStrictEqual(summarize(model));
+          expectSameGraph(reparsed, model);
         },
       ),
     );
@@ -153,7 +170,7 @@ describe('[SM-2] DOT round trip', () => {
   });
 });
 
-describe('[SM-3] explicit value kinds', () => {
+describe('explicit value kinds', { tags: ['SM-3'] }, () => {
   // DOT text carries no kind marker, so an escString without Graphviz escapes
   // reads back as plain text; what must hold is that printing is idempotent
   // and that no value can break out of its string.
@@ -272,7 +289,7 @@ describe('[SM-3] explicit value kinds', () => {
   });
 });
 
-describe('[SM-1] parser robustness', () => {
+describe('parser robustness', { tags: ['SM-1'] }, () => {
   // Every error the library raises carries a TSG_ERR_* code (#776, #1627);
   // anything else is a crash.
   const allowed = (error: unknown) => isTsGraphvizError(error);
@@ -354,7 +371,7 @@ describe('[SM-1] parser robustness', () => {
   });
 });
 
-describe('[SM-2] attribute values of every kind', () => {
+describe('attribute values of every kind', { tags: ['SM-2'] }, () => {
   // The value kinds the model accepts, including the ones DOT writes bare;
   // typed as a label, which names fewer kinds than the model takes.
   const anyValue = fc.oneof(

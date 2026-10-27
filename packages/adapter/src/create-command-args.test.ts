@@ -1,8 +1,8 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
-import { createCommandArgs, escapeValue } from './create-command-args.js';
+import { createCommandArgs } from './create-command-args.js';
 import type { Options } from './types.js';
 
-describe('[SM-4] createCommandArgs', () => {
+describe('createCommandArgs', { tags: ['SM-4'] }, () => {
   it('generates expected Graphviz arguments for neato layout with all options', () => {
     const options: Options = {
       suppressWarnings: true,
@@ -89,23 +89,17 @@ describe('[SM-4] createCommandArgs', () => {
   });
 });
 
-describe('escapeValue', () => {
-  it('writes attribute values verbatim', () => {
-    expect(escapeValue('foo bar')).toEqual('=foo bar');
-    expect(escapeValue('foo')).toEqual('=foo');
-    expect(escapeValue(true)).toEqual('');
-    expect(escapeValue(false)).toEqual('=false');
-    expect(escapeValue(10)).toEqual('=10');
-  });
-});
-
 describe('createCommandArgs type', () => {
   it('return type is Generator<string>', () => {
     expectTypeOf<typeof createCommandArgs>().returns.toEqualTypeOf<
       Generator<string>
     >();
   });
+});
 
+describe('createCommandArgs on a polluted prototype', {
+  tags: ['SM-8'],
+}, () => {
   it('passes only the libraries the array owns', () => {
     // biome-ignore lint/suspicious/noSparseArray: a hole is the case under test
     const library = ['lib1', , 'lib2'] as string[];

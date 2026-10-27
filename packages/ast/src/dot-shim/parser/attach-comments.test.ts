@@ -57,7 +57,7 @@ const source = fc
       .map((seps) => tokens.map((t, i) => (i ? seps[i - 1] : '') + t).join('')),
   );
 
-describe('[SM-1] attachComments', () => {
+describe('attachComments', { tags: ['SM-1'] }, () => {
   it('attaches every comment where the quadratic implementation did', () => {
     // Measured over 5 seeds × 300 sources: all distinct, all parse, about
     // 7.5 comments inside statements each (none in 1%), 6.5 of them within
@@ -96,11 +96,25 @@ describe('[SM-1] attachComments', () => {
   });
 
   it('takes linear time in the number of comments', () => {
-    // 1.8 s for 8000 such edges with the quadratic implementation.
-    const dot = `digraph { ${'a -> /* c */ b;'.repeat(20_000)} }`;
-    const start = performance.now();
-    parse(dot, { maxASTNodes: 0 });
-    expect(performance.now() - start).toBeLessThan(1500);
+    // 1.8 s for 8000 such edges with the quadratic implementation. The
+    // bound is on growth, not on wall-clock time, which coverage and a busy
+    // machine stretch: four times the comments must take well under the
+    // sixteen times a quadratic implementation takes. Each size keeps its
+    // fastest of three runs.
+    const time = (edges: number) => {
+      const dot = `digraph { ${'a -> /* c */ b;'.repeat(edges)} }`;
+      let best = Number.POSITIVE_INFINITY;
+      for (let run = 0; run < 3; run++) {
+        const start = performance.now();
+        parse(dot, { maxASTNodes: 0 });
+        best = Math.min(best, performance.now() - start);
+      }
+      return best;
+    };
+    time(1000); // warm up
+    // About 4 here (with coverage and under load too); 11 for an
+    // implementation that rescans a node's children for every comment.
+    expect(time(20_000) / time(5000)).toBeLessThan(8);
   });
 
   it('attaches every comment in deeply nested subgraphs', () => {

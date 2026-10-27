@@ -8,7 +8,7 @@ import { parse } from './parse.js';
 // can hide an attribute from sanitize.
 const reprint = (dot: string) => stringify(parse(dot)).replace(/\s+/g, ' ');
 
-describe('[SM-1] token boundaries', () => {
+describe('token boundaries', { tags: ['SM-1'] }, () => {
   describe('a numeral ends where letters start', () => {
     it.each([
       // dot: graph [image=...]; node 1

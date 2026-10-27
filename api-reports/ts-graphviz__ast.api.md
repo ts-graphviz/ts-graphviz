@@ -146,10 +146,14 @@ export declare class DotSyntaxError extends SyntaxError {
   override readonly name = "DotSyntaxError";
   readonly code = "TSG_ERR_DOT_SYNTAX";
   readonly location: FileRange | undefined;
+  readonly limit: DotSyntaxLimit | undefined;
   constructor(message: string, options?: ErrorOptions & {
     location?: FileRange | undefined;
+    limit?: DotSyntaxLimit | undefined;
   });
 }
+
+export type DotSyntaxLimit = "maxInputSize" | "maxNestingDepth" | "maxHtmlNestingDepth" | "maxEdgeChainDepth" | "maxASTNodes";
 
 export interface EdgeASTNode extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>, EdgeASTProperties {
   type: "Edge";

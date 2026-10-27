@@ -31,14 +31,16 @@ describe('Constructor', () => {
 
 it('throws an error when the EdgeTarget element is missing', () => {
   const n = new Node('id');
-  expect(
-    () => new Edge([] as unknown as EdgeTargetTuple),
-  ).toThrowErrorMatchingInlineSnapshot(
-    `[TypeError: The element of Edge target is missing or not satisfied as Edge target.]`,
+  expect(() => new Edge([] as unknown as EdgeTargetTuple)).toThrow(
+    expect.objectContaining({
+      name: 'TypeError',
+      code: 'TSG_ERR_INVALID_EDGE_TARGETS',
+    }),
   );
-  expect(
-    () => new Edge([n] as unknown as EdgeTargetTuple),
-  ).toThrowErrorMatchingInlineSnapshot(
-    `[TypeError: The element of Edge target is missing or not satisfied as Edge target.]`,
+  expect(() => new Edge([n] as unknown as EdgeTargetTuple)).toThrow(
+    expect.objectContaining({
+      name: 'TypeError',
+      code: 'TSG_ERR_INVALID_EDGE_TARGETS',
+    }),
   );
 });

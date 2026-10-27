@@ -71,35 +71,39 @@ function check(format: string, output: Buffer): void {
   }
 }
 
-describe.skipIf(!hasDot)('[SM-7] sanitize and the output formats', () => {
-  it.each(formats)(
-    'accepted DOT renders to %s and holds together',
-    (format) => {
-      const checked = sanitize(source, { format });
-      const r = spawnSync('dot', [`-T${format}`], {
-        input: checked,
-        maxBuffer: 64 * 1024 * 1024,
-      });
-      expect(r.status, r.stderr.toString()).toBe(0);
-      check(format, r.stdout);
-    },
-  );
+describe.skipIf(!hasDot)(
+  'sanitize and the output formats',
+  { tags: ['SM-7'] },
+  () => {
+    it.each(formats)(
+      'accepted DOT renders to %s and holds together',
+      (format) => {
+        const checked = sanitize(source, { format });
+        const r = spawnSync('dot', [`-T${format}`], {
+          input: checked,
+          maxBuffer: 64 * 1024 * 1024,
+        });
+        expect(r.status, r.stderr.toString()).toBe(0);
+        check(format, r.stdout);
+      },
+    );
 
-  // The same source with ids the strict policy accepts (no parentheses).
-  const strictSource = source
-    .replace('id="i(p)"', 'id="i-p"')
-    .replace('class="c(p)"', 'class="c p"');
+    // The same source with ids the strict policy accepts (no parentheses).
+    const strictSource = source
+      .replace('id="i(p)"', 'id="i-p"')
+      .replace('class="c(p)"', 'class="c p"');
 
-  it.each(formats)(
-    'DOT accepted by the strict policy renders to %s and holds together',
-    (format) => {
-      const checked = sanitize(strictSource, { format, policy: 'strict' });
-      const r = spawnSync('dot', [`-T${format}`], {
-        input: checked,
-        maxBuffer: 64 * 1024 * 1024,
-      });
-      expect(r.status, r.stderr.toString()).toBe(0);
-      check(format, r.stdout);
-    },
-  );
-});
+    it.each(formats)(
+      'DOT accepted by the strict policy renders to %s and holds together',
+      (format) => {
+        const checked = sanitize(strictSource, { format, policy: 'strict' });
+        const r = spawnSync('dot', [`-T${format}`], {
+          input: checked,
+          maxBuffer: 64 * 1024 * 1024,
+        });
+        expect(r.status, r.stderr.toString()).toBe(0);
+        check(format, r.stdout);
+      },
+    );
+  },
+);

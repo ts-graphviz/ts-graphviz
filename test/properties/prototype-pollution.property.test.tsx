@@ -121,7 +121,9 @@ function outcome(fn: () => unknown): unknown {
 const UNSAFE = 'digraph { a [shapefile="/etc/passwd"] }';
 const DOT = 'digraph G { a -> b; subgraph cluster_x { c [label="x"] } }';
 
-describe('[SM-8] a polluted Object.prototype changes nothing', () => {
+describe('a polluted Object.prototype changes nothing', {
+  tags: ['SM-8'],
+}, () => {
   const cases: [string, () => unknown][] = [
     [
       'adapter command and arguments',
@@ -174,7 +176,7 @@ describe('[SM-8] a polluted Object.prototype changes nothing', () => {
   });
 });
 
-describe('[SM-8] exported data is frozen', () => {
+describe('exported data is frozen', { tags: ['SM-8'] }, () => {
   it('cannot change what counts as an error or deprecation code', () => {
     expect(Object.isFrozen(ERROR_CODES)).toBe(true);
     expect(Object.isFrozen(DEPRECATION_CODES)).toBe(true);

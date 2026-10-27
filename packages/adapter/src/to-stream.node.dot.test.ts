@@ -16,9 +16,12 @@ const dir = mkdtempSync(join(tmpdir(), 'ts-graphviz-adapter-'));
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
 describe.skipIf(!hasDot)(
-  '[SM-4] toStream / toFile with the real dot (#1680)',
+  'toStream / toFile with the real dot (#1680)',
+  { tags: ['SM-4'] },
   () => {
-    it('[SM-8] renders and writes the file whatever Object.prototype holds', async () => {
+    it('renders and writes the file whatever Object.prototype holds', {
+      tags: ['SM-8'],
+    }, async () => {
       const proto = Object.prototype as Record<string, unknown>;
       for (const [key, value] of [
         ['allowHalfOpen', true],
@@ -170,7 +173,8 @@ describe.skipIf(!hasDot)(
 );
 
 describe.skipIf(!hasDot)(
-  '[SM-7] toStream / toFile check the source with sanitize (#1681)',
+  'toStream / toFile check the source with sanitize (#1681)',
+  { tags: ['SM-7'] },
   () => {
     const secret = join(dir, 'secret.eps');
     writeFileSync(

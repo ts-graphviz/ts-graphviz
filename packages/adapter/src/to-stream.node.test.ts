@@ -14,7 +14,7 @@ const spawnMock = spawn as unknown as ReturnType<typeof vi.fn>;
 
 type Callback = (...args: any) => any;
 
-describe('[SM-4] toStream (Node adapter)', () => {
+describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
   beforeEach(() => {
     spawnMock.mockReset();
   });
@@ -58,7 +58,7 @@ describe('[SM-4] toStream (Node adapter)', () => {
     });
   });
 
-  describe('[SM-8] spawn options', () => {
+  describe('spawn options', { tags: ['SM-8'] }, () => {
     it('inherit nothing, turn shell off and pass the own environment', () => {
       const p: any = {
         stdout: new PassThrough(),
@@ -87,7 +87,7 @@ describe('[SM-4] toStream (Node adapter)', () => {
     });
   });
 
-  describe('[SM-8] output stream', () => {
+  describe('output stream', { tags: ['SM-8'] }, () => {
     it.each([
       ['encoding', 'hex'],
       ['signal', { aborted: true }],

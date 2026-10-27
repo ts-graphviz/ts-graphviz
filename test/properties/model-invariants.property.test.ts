@@ -194,7 +194,7 @@ class RemoveSubgraphCommand implements Command {
   toString = () => `removeSubgraph(#${this.index})`;
 }
 
-describe('[SM-5] graph contents', () => {
+describe('graph contents', { tags: ['SM-5'] }, () => {
   // a small pool of ids, so that operations hit the same node often
   const ids = fc.array(nodeId, { minLength: 1, maxLength: 5 });
 
@@ -293,7 +293,7 @@ describe('[SM-5] graph contents', () => {
   });
 });
 
-describe('[SM-5] subgraph nesting', () => {
+describe('subgraph nesting', { tags: ['SM-5'] }, () => {
   const path = fc.array(nodeId, { minLength: 1, maxLength: 5 });
 
   it('subgraphs nested along any path are found again at every depth', () => {
@@ -346,7 +346,7 @@ describe('[SM-5] subgraph nesting', () => {
   });
 });
 
-describe('[SM-5] edge targets', () => {
+describe('edge targets', { tags: ['SM-5'] }, () => {
   it('object targets keep their id, port and compass point as given', () => {
     fc.assert(
       fc.property(
@@ -419,7 +419,7 @@ describe('[SM-5] edge targets', () => {
   });
 });
 
-describe('[SM-5] root graphs', () => {
+describe('root graphs', { tags: ['SM-5'] }, () => {
   it('every way of creating a root graph sets directed and strict as asked', () => {
     fc.assert(
       fc.property(
@@ -476,7 +476,7 @@ describe('[SM-5] root graphs', () => {
   });
 });
 
-describe('[SM-5] models context', () => {
+describe('models context', { tags: ['SM-5'] }, () => {
   class MyNode extends Node {}
   class MyEdge extends Edge {}
   class MySubgraph extends Subgraph {}
@@ -600,7 +600,7 @@ const attrCommands = [
   }),
 ];
 
-describe('[SM-5] attributes', () => {
+describe('attributes', { tags: ['SM-5'] }, () => {
   const holders: [string, () => Holder][] = [
     ['root graph', () => new Digraph() as unknown as Holder],
     ['subgraph', () => new Digraph().subgraph('s') as unknown as Holder],

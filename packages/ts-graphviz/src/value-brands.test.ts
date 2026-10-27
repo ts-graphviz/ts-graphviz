@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { fromDot } from './from-dot.js';
 import { toDot } from './to-dot.js';
 
-describe('[SM-3] value kinds in toDot', () => {
+describe('value kinds in toDot', { tags: ['SM-3'] }, () => {
   it('writes an object shaped like an HTML-like value as a string', () => {
     const g = new Digraph();
     g.node('a', {

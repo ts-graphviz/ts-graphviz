@@ -22,7 +22,7 @@ function depthOf(node: ASTNode, depth = 0): number {
   return max;
 }
 
-describe('[SM-1] maxNestingDepth', () => {
+describe('maxNestingDepth', { tags: ['SM-1'] }, () => {
   it('accepts nesting up to the limit (100 by default) and rejects deeper', () => {
     expect(() => parse(nested(100))).not.toThrow();
     let error: unknown;
@@ -34,6 +34,7 @@ describe('[SM-1] maxNestingDepth', () => {
     expect(error).toBeInstanceOf(DotSyntaxError);
     expect(error).toMatchObject({
       code: 'TSG_ERR_DOT_SYNTAX',
+      limit: 'maxNestingDepth',
       location: { start: { offset: nested(101).lastIndexOf('{') } },
     });
     expect(() => parse(nested(3), { maxNestingDepth: 2 })).toThrow(
@@ -43,7 +44,18 @@ describe('[SM-1] maxNestingDepth', () => {
 
   it('rejects nesting too deep for the parser with its own error', () => {
     // Before, a stack overflow inside the parser: TSG_ERR_PARSE_FAILED.
-    expect(() => parse(nested(5000))).toThrow(/Nesting depth exceeds/);
+    let error: unknown;
+    try {
+      parse(nested(5000));
+    } catch (e) {
+      error = e;
+    }
+    // The block beyond the limit, not another syntax error.
+    expect(error).toMatchObject({
+      code: 'TSG_ERR_DOT_SYNTAX',
+      limit: 'maxNestingDepth',
+      location: { start: { offset: nested(101).lastIndexOf('{') } },
+    });
   });
 
   it('does not count braces in strings or comments', () => {

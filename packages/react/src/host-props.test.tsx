@@ -30,7 +30,9 @@ const element = (
   </Digraph>
 );
 
-describe('[SM-8] components read only the props they are given', () => {
+describe('components read only the props they are given', {
+  tags: ['SM-8'],
+}, () => {
   it.each([
     ['comment', 'extra'],
     ['label', 'extra'],
@@ -47,7 +49,9 @@ describe('[SM-8] components read only the props they are given', () => {
   });
 });
 
-describe('[SM-8] renderHTMLLike reads only the props an element has', () => {
+describe('renderHTMLLike reads only the props an element has', {
+  tags: ['SM-8'],
+}, () => {
   it.each([
     ['children', 'extra'],
     ['border', 'extra'],

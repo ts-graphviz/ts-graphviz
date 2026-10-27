@@ -17,7 +17,7 @@ const graphOf = (dot: string) => parse(dot).children[0] as GraphASTNode;
 const values = (comments: ASTNode['leadingComments']) =>
   comments?.map((c) => `${c.kind}:${c.value}`);
 
-describe('[SM-1] comments inside statements', () => {
+describe('comments inside statements', { tags: ['SM-1'] }, () => {
   it('attaches a comment after a node on the same line as trailing', () => {
     const edge = graphOf('digraph { a /* c */ -> b }')
       .children[0] as EdgeASTNode;
@@ -93,7 +93,8 @@ const canon = (dot: string) => {
 };
 
 describe.skipIf(!hasDot)(
-  '[SM-1] comments inside statements are printed back',
+  'comments inside statements are printed back',
+  { tags: ['SM-1'] },
   () => {
     it.each([
       'digraph /* c */ G /* d */ { a }',
