@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { Builder } from './builder.js';
 import { createElement, createElementFactory } from './create-element.js';
 import { ASTNodeCountExceededError } from './errors.js';
 
@@ -37,6 +38,25 @@ describe('createElement', () => {
       [ref],
     );
     expect(group).toStrictEqual({ type: 'NodeRefList', refs: [ref] });
+  });
+
+  test('a Builder with a locationFunction gives each node the current location', () => {
+    const location = {
+      start: { offset: 0, line: 1, column: 1 },
+      end: { offset: 3, line: 1, column: 3 },
+    };
+    const builder = new Builder({ locationFunction: () => location });
+    const literal = builder.createElement('Literal', {
+      value: 'a',
+      kind: 'bare',
+    });
+    const node = builder.createElement('Node', { id: literal }, []);
+    expect(node).toStrictEqual({
+      type: 'Node',
+      id: { type: 'Literal', value: 'a', kind: 'bare', location },
+      children: [],
+      location,
+    });
   });
 
   test('Dot', () => {
