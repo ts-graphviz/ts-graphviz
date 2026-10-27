@@ -184,6 +184,9 @@ type ChangedKeys<Keys extends AttributeKey, T> = Keys extends AttributeKey
  * key: its entries for that kind, and the built-in attributes of that kind
  * whose value types it changes. A key it does not list keeps its built-in
  * type; with no schema this has no keys.
+ *
+ * `S` is one schema: the models of a context have one. A union of schemas
+ * keeps only what all of them have.
  * @group Schema
  */
 export type SchemaAttributeTypes<S, Kind extends SchemaKind> = {
