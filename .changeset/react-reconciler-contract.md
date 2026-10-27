@@ -4,7 +4,7 @@
 
 The renderer follows react-reconciler's React 19 contract
 
-- **React 19.3 or later is required.** The renderer uses react-reconciler 0.34, whose peer range is `react ^19.3.0`; the peer range narrows from `react >=19` (0.12) to `^19.3.0`. Each reconciler minor bundles the internals of one React minor.
+- **React `^19.3.0` is required** (React 19.3 or a later 19.x release). The renderer uses react-reconciler 0.34, whose peer range is `react ^19.3.0`; the peer range narrows from `react >=19` (0.12) to `^19.3.0`. Each reconciler minor bundles the internals of one React minor.
 - **Error callbacks reach React.** `onUncaughtError`, `onCaughtError` and `onRecoverableError` are each passed to React. In 0.12 only `onUncaughtError` was, and an error boundary inside a rendered tree crashed with `onCaughtError is not a function`.
   - The callbacks receive `error: unknown`, since a thrown value need not be an `Error`.
   - `render()` (and `renderToDot`) rejects with an uncaught error instead of a generic "No top-level graph found".
