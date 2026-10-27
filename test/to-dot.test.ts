@@ -177,6 +177,10 @@ describe.each([
         sg.createNode('test');
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
+        expect(statements[0]).toMatchObject({ type: 'Subgraph' });
+        expect(
+          'children' in statements[0] ? statements[0].children : [],
+        ).toMatchObject([{ type: 'Node', id: { value: 'test' } }]);
         expect(back.nodes).toHaveLength(0);
         expect(back.subgraphs.map((s) => s.id)).toEqual([id]);
         expect(back.subgraphs[0].nodes.map((n) => n.id)).toEqual(['test']);
