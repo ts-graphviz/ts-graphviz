@@ -2,9 +2,4 @@
 "@ts-graphviz/ast": patch
 ---
 
-Comment text reads back the same after `stringify` in more cases:
-
-- A block comment written with CRLF line breaks (`endOfLine: 'crlf'`) reads back with `"\n"` line breaks. Before, its text kept the `"\r"`, so `stringify(parse(dot))` changed it on every round.
-- A comment with very many lines no longer fails with `TSG_ERR_PARSE_FAILED`: the indentation is measured with a loop instead of `Math.min(...)` (3.x does the same since #1763).
-
-The `value` of a `Comment` node now documents what `parse` normalises: the comment markers, whitespace at the start and end of the text, the indentation that every line after the first shares, and CRLF line breaks.
+Comment text reads back the same after `stringify`: a block comment written with CRLF line breaks (`endOfLine: 'crlf'`) reads back with `"\n"` line breaks. In 3.x its text kept the `"\r"`, so `stringify(parse(dot))` changed it on every round. The `value` of a `Comment` node documents what `parse` normalises: the comment markers, whitespace at the start and end of the text, the indentation that every line after the first shares, and CRLF line breaks.
