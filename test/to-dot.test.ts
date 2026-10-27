@@ -1,6 +1,8 @@
+import { parse } from '@ts-graphviz/ast';
 import {
   attribute as _,
   Digraph,
+  fromDot,
   Graph,
   htmlLike,
   type RootGraphModel,
@@ -125,60 +127,120 @@ describe.each([
       });
     });
 
-    describe('Security: DOT injection prevention', () => {
+    describe('Security: DOT injection prevention', { tags: ['SM-2'] }, () => {
+      /**
+       * Writes `model` with toDot and reads it back, as a model and as an
+       * AST, so a test can check that the written text holds exactly the
+       * statements of `model`: one graph, whose statements (comments aside)
+       * are the ones `model` declares.
+       */
+      function readBack(model: RootGraphModel) {
+        const dot = toDot(model);
+        const graphs = parse(dot).children.filter((c) => c.type === 'Graph');
+        expect(graphs).toHaveLength(1);
+        const statements = graphs[0].children.filter(
+          (c) => c.type !== 'Comment',
+        );
+        return { back: fromDot(dot), statements };
+      }
+
       it('prevents injection via semicolon in node IDs', () => {
-        g.createNode('node1"; injected_node [label="owned"]; dummy="');
-        expect(toDot(g)).toMatchSnapshot();
+        const id = 'node1"; injected_node [label="owned"]; dummy="';
+        g.createNode(id);
+        const { back, statements } = readBack(g);
+        expect(statements).toHaveLength(1);
+        expect(back.nodes.map((n) => n.id)).toEqual([id]);
+        expect(back.nodes[0].attributes.size).toBe(0);
       });
 
       it('prevents injection via edge operator in node IDs', () => {
-        g.createNode('node1" -> "malicious');
-        expect(toDot(g)).toMatchSnapshot();
+        const id = 'node1" -> "malicious';
+        g.createNode(id);
+        const { back, statements } = readBack(g);
+        expect(statements).toHaveLength(1);
+        expect(back.nodes.map((n) => n.id)).toEqual([id]);
+        expect(back.edges).toHaveLength(0);
       });
 
       it('prevents graph termination injection via quotes and newlines', () => {
-        g.createNode('node1"\n} malicious { node');
-        expect(toDot(g)).toMatchSnapshot();
+        const id = 'node1"\n} malicious { node';
+        g.createNode(id);
+        const { back, statements } = readBack(g);
+        expect(statements).toHaveLength(1);
+        expect(back.nodes.map((n) => n.id)).toEqual([id]);
+        expect(back.subgraphs).toHaveLength(0);
       });
 
       it('prevents statement injection in subgraph IDs', () => {
-        const sg = g.createSubgraph('graph1"; malicious_node [label="injected');
+        const id = 'graph1"; malicious_node [label="injected';
+        const sg = g.createSubgraph(id);
         sg.createNode('test');
-        expect(toDot(g)).toMatchSnapshot();
+        const { back, statements } = readBack(g);
+        expect(statements).toHaveLength(1);
+        expect(back.nodes).toHaveLength(0);
+        expect(back.subgraphs.map((s) => s.id)).toEqual([id]);
+        expect(back.subgraphs[0].nodes.map((n) => n.id)).toEqual(['test']);
       });
 
       it('prevents injection via attribute values', () => {
+        const label = 'label"; injected_attr="malicious';
         const node = g.createNode('safe_node');
-        node.attributes.set(_.label, 'label"; injected_attr="malicious');
-        expect(toDot(g)).toMatchSnapshot();
+        node.attributes.set(_.label, label);
+        const { back, statements } = readBack(g);
+        expect(statements).toHaveLength(1);
+        expect(back.nodes.map((n) => n.id)).toEqual(['safe_node']);
+        expect(back.nodes[0].attributes.size).toBe(1);
+        expect(back.nodes[0].attributes.get(_.label)).toBe(label);
       });
 
       it('prevents injection via edge IDs', () => {
+        const id = 'n2" } malicious { "n3';
         const n1 = g.createNode('n1');
-        const n2 = g.createNode('n2" } malicious { "n3');
+        const n2 = g.createNode(id);
         g.createEdge([n1, n2]);
-        expect(toDot(g)).toMatchSnapshot();
+        const { back, statements } = readBack(g);
+        expect(statements).toHaveLength(3);
+        expect(back.nodes.map((n) => n.id)).toEqual(['n1', id]);
+        expect(back.subgraphs).toHaveLength(0);
+        expect(back.edges).toHaveLength(1);
+        expect(back.edges[0].targets).toMatchObject([{ id: 'n1' }, { id }]);
       });
 
       it('prevents injection with multiple quotes in node ID', () => {
-        g.createNode('""""""');
-        expect(toDot(g)).toMatchSnapshot();
+        const id = '""""""';
+        g.createNode(id);
+        const { back, statements } = readBack(g);
+        expect(statements).toHaveLength(1);
+        expect(back.nodes.map((n) => n.id)).toEqual([id]);
       });
 
       it('prevents injection via port specification', () => {
-        g.createNode('node":port1" -> "evil');
-        expect(toDot(g)).toMatchSnapshot();
+        const id = 'node":port1" -> "evil';
+        g.createNode(id);
+        const { back, statements } = readBack(g);
+        expect(statements).toHaveLength(1);
+        expect(back.nodes.map((n) => n.id)).toEqual([id]);
+        expect(back.edges).toHaveLength(0);
       });
 
       it('prevents injection via graph comment', () => {
-        g.comment = 'comment"; digraph evil { "node"';
-        expect(toDot(g)).toMatchSnapshot();
+        const comment = 'comment"; digraph evil { "node"';
+        g.comment = comment;
+        const { back, statements } = readBack(g);
+        expect(statements).toHaveLength(0);
+        expect(back.comment).toBe(comment);
+        expect(back.nodes).toHaveLength(0);
       });
 
       it('prevents injection via node comment', () => {
+        const comment = 'comment"; injected_node [label="owned"';
         const node = g.createNode('test');
-        node.comment = 'comment"; injected_node [label="owned"';
-        expect(toDot(g)).toMatchSnapshot();
+        node.comment = comment;
+        const { back, statements } = readBack(g);
+        expect(statements).toHaveLength(1);
+        expect(back.nodes.map((n) => n.id)).toEqual(['test']);
+        expect(back.nodes[0].comment).toBe(comment);
+        expect(back.nodes[0].attributes.size).toBe(0);
       });
     });
   });
