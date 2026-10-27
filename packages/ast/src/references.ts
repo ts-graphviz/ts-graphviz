@@ -3,26 +3,29 @@ import { ownField } from './own-field.js';
 
 const DEFAULT_MAX_SHARED_NODES = 100_000;
 
-/** The fields of each node type that hold the nodes it contains. */
+/**
+ * The fields of each node type that hold the nodes it contains, read as the
+ * printer and the conversions read them: an optional field (`?`) only when
+ * the node has it, itself or from its class (a NodeRef without a port has
+ * no `port`), and a field every node of the type has directly.
+ */
 const NODE_FIELDS: ReadonlyMap<unknown, readonly string[]> = new Map([
   ['Dot', ['children']],
-  ['Graph', ['id', 'children']],
-  ['Subgraph', ['id', 'children']],
+  ['Graph', ['?id', 'children']],
+  ['Subgraph', ['?id', 'children']],
   ['Node', ['id', 'children']],
   ['Edge', ['targets', 'children']],
-  ['NodeRef', ['id', 'port', 'compass']],
+  ['NodeRef', ['id', '?port', '?compass']],
   ['NodeRefList', ['refs']],
   ['Attribute', ['key', 'value']],
   ['AttributeList', ['children']],
 ]);
 
-/** A field of a node, read as the conversions read it. */
+/** A field of a node (see {@link NODE_FIELDS}). */
 function field(node: object, name: string): unknown {
-  // Only fields the node has, itself or from its class (a NodeRef without
-  // a port has no `port`); own ones, the usual case, are read directly.
-  return Object.hasOwn(node, name)
-    ? (node as Record<string, unknown>)[name]
-    : ownField(node as Record<string, unknown>, name);
+  return name.startsWith('?')
+    ? ownField(node as Record<string, unknown>, name.slice(1))
+    : (node as Record<string, unknown>)[name];
 }
 
 /**

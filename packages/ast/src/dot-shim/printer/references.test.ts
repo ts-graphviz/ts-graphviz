@@ -87,6 +87,35 @@ describe('printing an AST that contains itself', { tags: ['SM-2'] }, () => {
   });
 });
 
+describe('printing an AST whose nodes come from Object.prototype', {
+  tags: ['SM-2', 'SM-8'],
+}, () => {
+  it('checks the fields the printer reads, inherited ones included', () => {
+    // A graph without children of its own reads `children` through the
+    // prototype chain; the check read only own fields, passed, and the
+    // printer printed the graph inside itself without end.
+    const g = {
+      type: 'Graph',
+      directed: true,
+      strict: false,
+    } as unknown as ASTNode;
+    Object.defineProperty(Object.prototype, 'children', {
+      value: [g],
+      configurable: true,
+      writable: true,
+    });
+    let error: unknown;
+    try {
+      stringify(g);
+    } catch (e) {
+      error = e;
+    } finally {
+      delete (Object.prototype as { children?: unknown }).children;
+    }
+    expect(error).toMatchObject({ code: 'TSG_ERR_CYCLIC_STRUCTURE' });
+  });
+});
+
 describe('printing an AST that shares nodes', { tags: ['SM-2'] }, () => {
   it('stops a node shared at every level from printing 2^k times', () => {
     // k = 20 printed 140 MB in 4 s before; k = 40 would never finish.

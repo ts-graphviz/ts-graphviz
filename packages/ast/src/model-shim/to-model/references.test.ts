@@ -97,6 +97,24 @@ describe('toModel of an AST that shares nodes', { tags: ['SM-5'] }, () => {
   });
 });
 
+describe('toModel of deeply nested subgraphs', { tags: ['SM-5'] }, () => {
+  it('collects the nodes of each level once, not once per level above', () => {
+    // 2 s before: each level walked every level below it again.
+    let inner: Raw = node('a');
+    for (let i = 0; i < 3000; i++) {
+      const attributes = Array.from({ length: 30 }, () => ({
+        type: 'Attribute',
+        key: literal('color'),
+        value: literal('red'),
+      }));
+      inner = { type: 'Subgraph', children: [...attributes, inner] };
+    }
+    const start = performance.now();
+    convert(graph(inner));
+    expect(performance.now() - start).toBeLessThan(1000);
+  });
+});
+
 describe('the error for an AST node no plugin converts', {
   tags: ['SM-5'],
 }, () => {
