@@ -3,6 +3,13 @@ import { isFormat, isLayout } from './formats.js';
 import type { Layout, Options } from './types.js';
 
 /**
+ * The options as the adapter reads them once the public signature has
+ * checked the call: any custom format; a custom layout is read as a
+ * `Layout` (it gets no layout-specific arguments).
+ */
+export type AnyOptions = Options<Layout, string>;
+
+/**
  * The options as given, without anything inherited, and checked: the options
  * object, its `attributes` (and their `graph` / `node` / `edge` records) and
  * a `sanitize` options object are read from their own properties only, so a
@@ -13,9 +20,7 @@ import type { Layout, Options } from './types.js';
  *
  * @throws `TypeError` or `RangeError` with `code` `TSG_ERR_INVALID_OPTION`.
  */
-export function ownAdapterOptions<T extends Layout>(
-  options: Options<T> | undefined,
-): Options<T> {
+export function ownAdapterOptions(options: AnyOptions | undefined): AnyOptions {
   if (options !== undefined) {
     expectObject(options, 'options');
   }
@@ -37,13 +42,16 @@ export function ownAdapterOptions<T extends Layout>(
       ...(edge !== undefined && { edge: ownOptions(edge) }),
     });
   }
-  if (Array.isArray(own.library)) {
-    // A copy of the elements the array owns (a hole would read an
-    // inherited index), read once: the copy is what is checked and used.
-    const library = own.library;
-    own.library = [];
-    for (let i = 0; i < library.length; i++) {
-      if (Object.hasOwn(library, i)) own.library.push(library[i]);
+  // Copies of the elements the arrays own (a hole would read an inherited
+  // index), read once: the copy is what is checked and used.
+  for (const key of ['library', 'customFormats', 'customLayouts'] as const) {
+    const list: unknown = own[key];
+    if (Array.isArray(list)) {
+      const copy: unknown[] = [];
+      for (let i = 0; i < list.length; i++) {
+        if (Object.hasOwn(list, i)) copy.push(list[i]);
+      }
+      (own as Record<string, unknown>)[key] = copy;
     }
   }
   if (typeof own.sanitize === 'object' && own.sanitize !== null) {
@@ -189,31 +197,52 @@ const SIZE_LIMITS = ['maxInputSize', 'maxASTNodes'] as const;
  * - `sanitize` must be a boolean or an options object; its parser limits
  *   must be non-negative numbers (depth limits finite) and `policy` one of
  *   `'default'` / `'strict'`.
- * - `dotCommand` and `library` are configuration, not data: they are only
- *   checked to be a non-empty string and an array of strings, so a value
- *   of another type is rejected rather than converted.
+ * - `dotCommand`, `library`, `customFormats` and `customLayouts` are
+ *   configuration, not data: they are only checked to be a non-empty string
+ *   and arrays of strings (non-empty, without NUL, for the custom names), so
+ *   a value of another type is rejected rather than converted.
  *
  * `maxOutputSize` is checked by `outputLimit`.
  */
-function checkOptions(own: Options<Layout>): void {
+function checkOptions(own: AnyOptions): void {
   const options = own as Record<string, unknown>;
-  const { format, layout, dotCommand, library, attributes, sanitize } =
-    ownOptions(options);
+  const {
+    format,
+    layout,
+    dotCommand,
+    library,
+    customFormats,
+    customLayouts,
+    attributes,
+    sanitize,
+  } = ownOptions(options);
 
-  if (format !== undefined && !isFormat(format)) {
+  // Configuration first: the custom names widen what format and layout may be.
+  expectNames(customFormats, 'customFormats');
+  expectNames(customLayouts, 'customLayouts');
+
+  if (
+    format !== undefined &&
+    !isFormat(format) &&
+    !(customFormats as string[] | undefined)?.includes(format as string)
+  ) {
     if (typeof format !== 'string') {
       throw invalidType(`format must be a string, not ${show(format)}.`);
     }
     throw invalidValue(
-      `format must be one of the documented output formats, without a ":renderer" suffix, not ${show(format)}.`,
+      `format must be one of the documented output formats (without a ":renderer" suffix) or of customFormats, not ${show(format)}.`,
     );
   }
-  if (layout !== undefined && !isLayout(layout)) {
+  if (
+    layout !== undefined &&
+    !isLayout(layout) &&
+    !(customLayouts as string[] | undefined)?.includes(layout as string)
+  ) {
     if (typeof layout !== 'string') {
       throw invalidType(`layout must be a string, not ${show(layout)}.`);
     }
     throw invalidValue(
-      `layout must be one of the documented layout engines, not ${show(layout)}.`,
+      `layout must be one of the documented layout engines or of customLayouts, not ${show(layout)}.`,
     );
   }
 
@@ -291,6 +320,31 @@ function checkOptions(own: Options<Layout>): void {
           `library[${i}] must be a string, not ${show(library[i])}.`,
         );
       }
+    }
+  }
+}
+
+/**
+ * `customFormats` / `customLayouts`: trusted configuration naming formats or
+ * layout engines a plugin adds. Each name must be a non-empty string without
+ * a NUL character; nothing else is checked.
+ */
+function expectNames(names: unknown, name: string): void {
+  if (names === undefined) return;
+  if (!Array.isArray(names)) {
+    throw invalidType(
+      `${name} must be an array of strings, not ${show(names)}.`,
+    );
+  }
+  for (let i = 0; i < names.length; i++) {
+    const value: unknown = names[i];
+    if (typeof value !== 'string') {
+      throw invalidType(`${name}[${i}] must be a string, not ${show(value)}.`);
+    }
+    if (value === '' || value.includes('\0')) {
+      throw invalidValue(
+        `${name}[${i}] must be a non-empty string without a NUL character, not ${show(value)}.`,
+      );
     }
   }
 }

@@ -19,8 +19,8 @@ export declare class CommandExecutionError extends Error {
   } | undefined, options?: ErrorOptions);
 }
 
-export interface CommonOptions {
-  format?: Format;
+export interface CommonOptions<F extends string = never, L extends string = never> {
+  format?: Format | NoInfer<F>;
   suppressWarnings?: boolean;
   dotCommand?: string;
   attributes?: {
@@ -30,6 +30,8 @@ export interface CommonOptions {
   };
   scale?: number;
   library?: string[];
+  customFormats?: readonly F[];
+  customLayouts?: readonly L[];
   y?: boolean;
   signal?: AbortSignal;
   maxOutputSize?: number;
@@ -46,19 +48,9 @@ export interface FdpOptions {
   temperature?: number;
 }
 
-export type Format = Format.values;
-export declare namespace Format {
-  type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
-  interface $values extends $keywords<"bmp" | "canon" | "cmap" | "cmapx" | "cmapx_np" | "dot" | "dot_json" | "eps" | "exr" | "fig" | "gd" | "gd2" | "gif" | "gv" | "ico" | "imap" | "imap_np" | "ismap" | "jp2" | "jpe" | "jpeg" | "jpg" | "json" | "json0" | "kitty" | "kittyz" | "mp" | "pct" | "pdf" | "pic" | "pict" | "plain" | "plain-ext" | "png" | "pov" | "ps" | "ps2" | "psd" | "sgi" | "svg" | "svg_inline" | "svgz" | "tga" | "tif" | "tiff" | "tk" | "vdx" | "vml" | "vmlz" | "vrml" | "wbmp" | "webp" | "xdot" | "xdot1.2" | "xdot1.4" | "xdot_json"> {}
-  interface $exclude extends $keywordsValidation {}
-}
+export type Format = "bmp" | "canon" | "cmap" | "cmapx" | "cmapx_np" | "dot" | "dot_json" | "eps" | "exr" | "fig" | "gd" | "gd2" | "gif" | "gv" | "ico" | "imap" | "imap_np" | "ismap" | "jp2" | "jpe" | "jpeg" | "jpg" | "json" | "json0" | "kitty" | "kittyz" | "mp" | "pct" | "pdf" | "pic" | "pict" | "plain" | "plain-ext" | "png" | "pov" | "ps" | "ps2" | "psd" | "sgi" | "svg" | "svg_inline" | "svgz" | "tga" | "tif" | "tiff" | "tk" | "vdx" | "vml" | "vmlz" | "vrml" | "wbmp" | "webp" | "xdot" | "xdot1.2" | "xdot1.4" | "xdot_json";
 
-export type Layout = Layout.values;
-export declare namespace Layout {
-  type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
-  interface $values extends $keywords<"dot" | "neato" | "fdp" | "sfdp" | "circo" | "twopi" | "nop" | "nop2" | "osage" | "patchwork"> {}
-  interface $exclude extends $keywordsValidation {}
-}
+export type Layout = "dot" | "neato" | "fdp" | "sfdp" | "circo" | "twopi" | "nop" | "nop2" | "osage" | "patchwork";
 
 export interface NeatoOptions {
   layout: "neato";
@@ -66,17 +58,21 @@ export interface NeatoOptions {
   reduce?: boolean;
 }
 
-export type Options<T extends Layout = Layout> = CommonOptions & (T extends "neato" ? NeatoOptions : T extends "fdp" ? FdpOptions : OtherOptions);
+export type Options<T extends string = Layout, F extends string = never, L extends string = never> = CommonOptions<F, L> & (T extends "neato" ? NeatoOptions : T extends "fdp" ? FdpOptions : OtherOptions<L>);
 
-export interface OtherOptions {
-  layout?: Exclude<Layout, "neato" | "fdp">;
+export interface OtherOptions<L extends string = never> {
+  layout?: Exclude<Layout, "neato" | "fdp"> | NoInfer<L>;
 }
 
 export declare function isFormat(value: unknown): value is Format;
 
 export declare function isLayout(value: unknown): value is Layout;
 
-export declare function toFile<T extends Layout>(dot: string, path: string, options?: Options<T>): Promise<void>;
+export declare function toFile<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(dot: string, path: string, options?: Options<T, F, L>): Promise<void>;
 
-export declare function toStream<T extends Layout>(dot: string, options?: Options<T>): Promise<ReadableStream<Uint8Array>>;
+export declare function toStream<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(dot: string, options?: Options<T, F, L>): Promise<ReadableStream<Uint8Array>>;
+
+// Used by the exports, not exported
+
+type NoInfer<T> = [T][T extends unknown ? 0 : never];
 ```

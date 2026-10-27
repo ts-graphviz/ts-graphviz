@@ -7,6 +7,7 @@ export type * from './types.js';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
+import type { AnyOptions } from './options.js';
 import { ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
 import type { Layout, Options } from './types.js';
@@ -55,11 +56,15 @@ async function readAll(
  * output exceeds `maxOutputSize`.
  * @throws `signal.reason` when `signal` aborts.
  */
-export async function toStream<T extends Layout>(
+export async function toStream<
+  const F extends string = never,
+  const L extends string = never,
+  T extends Layout | L = Layout | L,
+>(
   dot: string,
-  options?: Options<T>,
+  options?: Options<T, F, L>,
 ): Promise<ReadableStream<Uint8Array>> {
-  const opts = ownAdapterOptions(options);
+  const opts = ownAdapterOptions(options as AnyOptions | undefined);
   const [command, args] = createCommandAndArgs(opts);
   const limit = outputLimit(opts);
   const { signal } = opts;
@@ -222,11 +227,11 @@ export async function toStream<T extends Layout>(
  * Execute the Graphviz dot command and output the results to a file. An
  * existing file is replaced.
  */
-export async function toFile<T extends Layout>(
-  dot: string,
-  path: string,
-  options?: Options<T>,
-): Promise<void> {
+export async function toFile<
+  const F extends string = never,
+  const L extends string = never,
+  T extends Layout | L = Layout | L,
+>(dot: string, path: string, options?: Options<T, F, L>): Promise<void> {
   // Render first, so a failed command does not truncate an existing file.
   const stream = await toStream(dot, options);
   const output = await Deno.open(path, {

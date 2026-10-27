@@ -23,9 +23,13 @@ Learn more: https://github.com/ts-graphviz/ts-graphviz`;
  * Not available in browsers: always throws an `Error` with
  * `code: 'TSG_ERR_UNSUPPORTED_ENVIRONMENT'`.
  */
-export function toStream<T extends Layout>(
+export function toStream<
+  const F extends string = never,
+  const L extends string = never,
+  T extends Layout | L = Layout | L,
+>(
   _dot: string,
-  _options?: Options<T>,
+  _options?: Options<T, F, L>,
 ): Promise<ReadableStream<Uint8Array>> {
   throw withCode(new Error(ERROR_MESSAGE), 'TSG_ERR_UNSUPPORTED_ENVIRONMENT');
 }
@@ -36,10 +40,10 @@ export function toStream<T extends Layout>(
  * Not available in browsers: always throws an `Error` with
  * `code: 'TSG_ERR_UNSUPPORTED_ENVIRONMENT'`.
  */
-export function toFile<T extends Layout>(
-  _dot: string,
-  _path: string,
-  _options?: Options<T>,
-): Promise<void> {
+export function toFile<
+  const F extends string = never,
+  const L extends string = never,
+  T extends Layout | L = Layout | L,
+>(_dot: string, _path: string, _options?: Options<T, F, L>): Promise<void> {
   throw withCode(new Error(ERROR_MESSAGE), 'TSG_ERR_UNSUPPORTED_ENVIRONMENT');
 }

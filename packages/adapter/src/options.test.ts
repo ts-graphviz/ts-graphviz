@@ -2,7 +2,7 @@ import { inspect } from 'node:util';
 import { describe, expect, it } from 'vitest';
 import { createCommandArgs } from './create-command-args.js';
 import { isFormat, isLayout } from './formats.js';
-import { ownAdapterOptions } from './options.js';
+import { type AnyOptions, ownAdapterOptions } from './options.js';
 import type { Options } from './types.js';
 
 function rejects(options: unknown, type: 'TypeError' | 'RangeError') {
@@ -249,5 +249,65 @@ describe('ownAdapterOptions checks the options at run time', {
         expect.stringMatching(/^-(llib\.ps|Glabel=lib\.ps)$/),
       );
     }
+  });
+});
+
+describe('customFormats / customLayouts', { tags: ['SM-4'] }, () => {
+  it('accept the names they list as format and layout', () => {
+    expect(() =>
+      ownAdapterOptions({ customFormats: ['mp4'], format: 'mp4' }),
+    ).not.toThrow();
+    expect(() =>
+      ownAdapterOptions(
+        // As toStream passes them on once its signature has checked them.
+        {
+          customLayouts: ['my-layout'],
+          layout: 'my-layout',
+        } as unknown as AnyOptions,
+      ),
+    ).not.toThrow();
+    const args = [
+      ...createCommandArgs(
+        ownAdapterOptions({
+          customFormats: ['mp4'],
+          customLayouts: ['my-layout'],
+          format: 'mp4',
+          layout: 'my-layout',
+        } as unknown as AnyOptions),
+      ),
+    ];
+    expect(args).toContain('-Tmp4');
+    expect(args).toContain('-Kmy-layout');
+  });
+
+  it('do not widen isFormat / isLayout, or another call', () => {
+    ownAdapterOptions({ customFormats: ['mp4'], format: 'mp4' });
+    expect(isFormat('mp4')).toBe(false);
+    rejects({ format: 'mp4' }, 'RangeError');
+    rejects({ customFormats: ['webm'], format: 'mp4' }, 'RangeError');
+    rejects({ customLayouts: ['x'], layout: 'y' }, 'RangeError');
+  });
+
+  it.each([
+    [{ customFormats: 'mp4' }, 'TypeError'],
+    [{ customFormats: [1] }, 'TypeError'],
+    [{ customFormats: [''] }, 'RangeError'],
+    [{ customFormats: ['a\0b'] }, 'RangeError'],
+    [{ customLayouts: {} }, 'TypeError'],
+    [{ customLayouts: [''] }, 'RangeError'],
+  ] as const)('reject %o', (options, type) => {
+    rejects(options, type);
+  });
+
+  it('read each list once: the copy is what is checked and used', () => {
+    let reads = 0;
+    const formats = ['mp4'];
+    Object.defineProperty(formats, 0, {
+      get: () => (reads++ === 0 ? 'mp4' : 'png:cairo'),
+      enumerable: true,
+    });
+    const own = ownAdapterOptions({ customFormats: formats, format: 'mp4' });
+    expect(own.customFormats).toStrictEqual(['mp4']);
+    expect(reads).toBe(1);
   });
 });

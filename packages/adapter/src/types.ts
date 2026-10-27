@@ -1,7 +1,5 @@
 import type { SanitizeOptions } from '@ts-graphviz/ast';
 import type {
-  $keywords,
-  $keywordsValidation,
   EdgeAttributesObject,
   GraphAttributesObject,
   NodeAttributesObject,
@@ -19,98 +17,85 @@ import type {
  * The adapter accepts exactly these names at run time (check a format chosen
  * by a request with `isFormat`); anything else, including a `:renderer`
  * suffix such as `png:cairo`, is rejected before the command starts.
- * Merging into `Format.$values` changes the type only.
+ * Formats a plugin adds are named per call with `customFormats`.
  */
-export type Format = Format.values;
-export namespace Format {
-  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
-  export interface $values
-    extends $keywords<
-      | 'bmp'
-      | 'canon'
-      | 'cmap'
-      | 'cmapx'
-      | 'cmapx_np'
-      | 'dot'
-      | 'dot_json'
-      | 'eps'
-      | 'exr'
-      | 'fig'
-      | 'gd'
-      | 'gd2'
-      | 'gif'
-      | 'gv'
-      | 'ico'
-      | 'imap'
-      | 'imap_np'
-      | 'ismap'
-      | 'jp2'
-      | 'jpe'
-      | 'jpeg'
-      | 'jpg'
-      | 'json'
-      | 'json0'
-      | 'kitty'
-      | 'kittyz'
-      | 'mp'
-      | 'pct'
-      | 'pdf'
-      | 'pic'
-      | 'pict'
-      | 'plain'
-      | 'plain-ext'
-      | 'png'
-      | 'pov'
-      | 'ps'
-      | 'ps2'
-      | 'psd'
-      | 'sgi'
-      | 'svg'
-      | 'svg_inline'
-      | 'svgz'
-      | 'tga'
-      | 'tif'
-      | 'tiff'
-      | 'tk'
-      | 'vdx'
-      | 'vml'
-      | 'vmlz'
-      | 'vrml'
-      | 'wbmp'
-      | 'webp'
-      | 'xdot'
-      | 'xdot1.2'
-      | 'xdot1.4'
-      | 'xdot_json'
-    > {}
-  export interface $exclude extends $keywordsValidation {}
-}
+export type Format =
+  | 'bmp'
+  | 'canon'
+  | 'cmap'
+  | 'cmapx'
+  | 'cmapx_np'
+  | 'dot'
+  | 'dot_json'
+  | 'eps'
+  | 'exr'
+  | 'fig'
+  | 'gd'
+  | 'gd2'
+  | 'gif'
+  | 'gv'
+  | 'ico'
+  | 'imap'
+  | 'imap_np'
+  | 'ismap'
+  | 'jp2'
+  | 'jpe'
+  | 'jpeg'
+  | 'jpg'
+  | 'json'
+  | 'json0'
+  | 'kitty'
+  | 'kittyz'
+  | 'mp'
+  | 'pct'
+  | 'pdf'
+  | 'pic'
+  | 'pict'
+  | 'plain'
+  | 'plain-ext'
+  | 'png'
+  | 'pov'
+  | 'ps'
+  | 'ps2'
+  | 'psd'
+  | 'sgi'
+  | 'svg'
+  | 'svg_inline'
+  | 'svgz'
+  | 'tga'
+  | 'tif'
+  | 'tiff'
+  | 'tk'
+  | 'vdx'
+  | 'vml'
+  | 'vmlz'
+  | 'vrml'
+  | 'wbmp'
+  | 'webp'
+  | 'xdot'
+  | 'xdot1.2'
+  | 'xdot1.4'
+  | 'xdot_json';
 
 /**
  * A layout engine of Graphviz (`-K`).
  *
  * The adapter accepts exactly these names at run time (check a layout
  * chosen by a request with `isLayout`); anything else is rejected before
- * the command starts. Merging into `Layout.$values` changes the type only.
+ * the command starts. Layout engines a plugin adds are named per call with
+ * `customLayouts`.
  */
-export type Layout = Layout.values;
-export namespace Layout {
-  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
-  export interface $values
-    extends $keywords<
-      | 'dot'
-      | 'neato'
-      | 'fdp'
-      | 'sfdp'
-      | 'circo'
-      | 'twopi'
-      | 'nop'
-      | 'nop2'
-      | 'osage'
-      | 'patchwork'
-    > {}
-  export interface $exclude extends $keywordsValidation {}
-}
+export type Layout =
+  | 'dot'
+  | 'neato'
+  | 'fdp'
+  | 'sfdp'
+  | 'circo'
+  | 'twopi'
+  | 'nop'
+  | 'nop2'
+  | 'osage'
+  | 'patchwork';
 
 /**
  * NeatoOptions interface provides options for the neato layout.
@@ -171,14 +156,23 @@ export interface FdpOptions {
  * excluding 'neato' and 'fdp'.
  * @public
  */
-export interface OtherOptions {
+export interface OtherOptions<L extends string = never> {
   /**
-   * Set layout engine.
+   * Set layout engine: one of the {@link Layout} names other than `neato` and
+   * `fdp`, or of `customLayouts`.
    *
    * @default 'dot'
    */
-  layout?: Exclude<Layout, 'neato' | 'fdp'>;
+  layout?: Exclude<Layout, 'neato' | 'fdp'> | NoInfer<L>;
 }
+
+/**
+ * `T`, without letting this position infer it: TypeScript 5.0 has no
+ * built-in `NoInfer`. A custom name is then accepted only when it is listed
+ * in `customFormats` / `customLayouts`, not because it was written as the
+ * `format` / `layout` itself.
+ */
+type NoInfer<T> = [T][T extends unknown ? 0 : never];
 
 /**
  * The options every layout takes.
@@ -188,18 +182,22 @@ export interface OtherOptions {
  * may come from a request: a value outside the documented type or range is
  * rejected before the command starts with a `TypeError` or `RangeError`
  * whose `code` is `TSG_ERR_INVALID_OPTION` (`TSG_ERR_OUTPUT_LIMIT_EXCEEDED`
- * for `maxOutputSize`). `dotCommand` and `library` choose code to run: they
- * are trusted configuration, checked for their type only.
+ * for `maxOutputSize`). `dotCommand`, `library`, `customFormats` and
+ * `customLayouts` choose code to run or what it may be asked to do: they are
+ * trusted configuration, checked for their type only.
  * @public
  */
-export interface CommonOptions {
+export interface CommonOptions<
+  F extends string = never,
+  L extends string = never,
+> {
   /**
    * Set output format: exactly one of the {@link Format} names (see
-   * `isFormat`), without a `:renderer` suffix.
+   * `isFormat`), without a `:renderer` suffix, or of `customFormats`.
    *
    * @default 'svg'
    */
-  format?: Format;
+  format?: Format | NoInfer<F>;
   /**
    * If true, set level of message suppression (=1).
    *
@@ -249,6 +247,30 @@ export interface CommonOptions {
    */
   library?: string[];
   /**
+   * Output formats a Graphviz plugin adds, accepted as `format` besides the
+   * documented {@link Format} names, for this call only (`isFormat` still
+   * answers for the documented names only). The names also widen the type
+   * of `format` for this call: `toStream(dot, { customFormats: ['mp4'],
+   * format: 'mp4' })`.
+   *
+   * **These are trusted configuration defined in your application code. Do
+   * not derive them from end-user input.** They are checked to be non-empty
+   * strings without a NUL character only. While `sanitize` is on, a format
+   * it has not checked is refused, so a custom format needs `sanitize: false`.
+   */
+  customFormats?: readonly F[];
+  /**
+   * Layout engines a Graphviz plugin adds, accepted as `layout` besides the
+   * documented {@link Layout} names, for this call only (`isLayout` still
+   * answers for the documented names only). The names also widen the type
+   * of `layout` for this call.
+   *
+   * **These are trusted configuration defined in your application code. Do
+   * not derive them from end-user input.** They are checked to be non-empty
+   * strings without a NUL character only.
+   */
+  customLayouts?: readonly L[];
+  /**
    * Invert y coordinate in output.
    */
   y?: boolean;
@@ -289,9 +311,17 @@ export interface CommonOptions {
   sanitize?: boolean | SanitizeOptions;
 }
 
-export type Options<T extends Layout = Layout> = CommonOptions &
+/**
+ * The options of `toStream` / `toFile`. `F` and `L` are the names listed in
+ * `customFormats` and `customLayouts`, inferred from them.
+ */
+export type Options<
+  T extends string = Layout,
+  F extends string = never,
+  L extends string = never,
+> = CommonOptions<F, L> &
   (T extends 'neato'
     ? NeatoOptions
     : T extends 'fdp'
       ? FdpOptions
-      : OtherOptions);
+      : OtherOptions<L>);
