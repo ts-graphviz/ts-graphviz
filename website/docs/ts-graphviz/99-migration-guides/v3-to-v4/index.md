@@ -10,7 +10,7 @@ Requirements: **Node.js 22 or later** (Node.js 20 reached end of life) and, for 
 
 ## 1. Strings are literal text; DOT syntax is opt-in
 
-In 3.x a string placed in a model was written into DOT more or less as is, so a value could break out of the quoted string (a DOT injection) and any string shaped like `<…>` was silently treated as an HTML-like label. In v4:
+In 3.x a string placed in a model was written into DOT with its backslashes passed through, so `\N` or `\l` kept their Graphviz meaning, and a string shaped like `<…>` with balanced brackets was written as an HTML-like label. In v4:
 
 - A plain `string` is **literal text**. `toDot` escapes it completely and `fromDot` gives the same text back. A JavaScript newline (`'\n'`) is a line break.
 - `escString(text)` marks a Graphviz escString: `\N`, `\G`, `\l`, `\n` and friends keep their meaning.
@@ -29,7 +29,7 @@ Numbers and booleans are typed in both directions: `width=1.5` parses to the num
 
 ## 2. Errors: standard types with a stable `code`
 
-There is no `TsGraphvizError` base class. Every error the library raises on purpose is the standard type that fits (`SyntaxError`, `RangeError`, `TypeError`, `Error`) tagged with a `code` from `ERROR_CODES` (prefix `TSG_ERR_`), exported by `@ts-graphviz/common`. The code is the stable contract; messages may change in any release.
+Errors have no shared custom base class. Every error the library raises on purpose is the standard type that fits (`SyntaxError`, `RangeError`, `TypeError`, a `DOMException` named `SecurityError`, `Error`) tagged with a `code` from `ERROR_CODES` (prefix `TSG_ERR_`), exported by `@ts-graphviz/common`. The code is the stable contract; messages may change in any release.
 
 ```ts
 import { fromDot, isTsGraphvizError } from 'ts-graphviz';
@@ -54,12 +54,18 @@ try {
 | null character in text | `RangeError` | `TSG_ERR_NUL_CHARACTER` |
 | unbalanced HTML-like markup | `RangeError` | `TSG_ERR_INVALID_HTML_LIKE` |
 | edge with fewer than two targets or a malformed target | `TypeError` (was a bare `Error`) | `TSG_ERR_INVALID_EDGE_TARGETS` |
+| port containing `:` | `TypeError` | `TSG_ERR_INVALID_PORT` |
+| attribute list kind other than `Graph`, `Node`, `Edge` | `TypeError` | `TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND` |
+| edges to subgraphs reach more than `maxEdgeTargets` nodes | `RangeError` | `TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED` |
 | no converter / printer plugin for a node or model | `Error` | `TSG_ERR_NO_PLUGIN` |
 | `fromDot` given an AST node that has no model | `TypeError` | `TSG_ERR_UNCONVERTIBLE_AST` |
 | `fromDot` of a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` |
+| `fromDot` of a source with several graphs | `Error` | `TSG_ERR_MULTIPLE_GRAPHS` |
 | a `GraphBase` subclass without a models context | `Error` | `TSG_ERR_NO_MODELS_CONTEXT` |
 | adapter in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
 | Graphviz command failed | `CommandExecutionError` (`Error`) | `TSG_ERR_COMMAND_FAILED` |
+| Graphviz output over `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
+| `sanitize` (and so the adapter) rejects the DOT | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
 
 Code that matched on `error.message` should match on `error.code`.
 
@@ -81,9 +87,10 @@ A direct subclass of `GraphBase` (rare) must override `defaultModels()` or call 
 A DOT source (comments and one or more root graphs) has a model of its own: `DotModel` / the `Dot` class (`graphs`, `addGraph`, `removeGraph`, `comment`).
 
 - `fromModel(rootGraph)` returns a `Graph` AST node (3.x: a `Dot` wrapping it); `fromModel(dot)` returns a `Dot` node.
-- `toModel(dotAst)` returns a `DotModel` holding every graph (3.x: the first graph only).
-- `toDot(rootGraph)` is unchanged and also accepts a `DotModel`; `fromDot(source)` still returns the first root graph. Use `toModel(parse(source), { models })` for the whole document.
-- The parser accepts any number of root graphs, including none.
+- `toModel(dotAst, { models })` returns a `DotModel` holding every graph (3.x: the root graph model).
+- `toDot(rootGraph)` is unchanged and also accepts a `DotModel`.
+- The parser accepts any number of root graphs, including none (3.x required exactly one).
+- `fromDot(source)` returns the source's one root graph: a source with several graphs throws `TSG_ERR_MULTIPLE_GRAPHS`, and one without a graph `TSG_ERR_NO_GRAPH`. Read them all with the new `fromDotAll(dot, options?)`, which returns an array (empty for a source without graphs), or use `toModel(parse(source), { models })` for the whole document.
 
 ## 5. Attribute groups: one `comment`
 
@@ -102,21 +109,20 @@ The augmentation points (`Attribute.$keys`, `Attribute.$types`, `EdgeAttributeKe
 
 - Leaf nodes (`Literal`, `Attribute`, `Comment`, `NodeRef`) have no `children` and extend `ASTBaseNode` directly; `ASTBaseParentNode` is only for statement containers. `NodeRefList` keeps its references in `refs`, and `ASTChildNode<T>` resolves to `NodeRefASTNode` for it and to `never` for leaves. `location` is absent (not `null`) outside the parser. `createElement` keeps its three-argument form.
 - The `*ASTPropaties` types are spelled `*ASTProperties`.
-- `fromDot` throws `TSG_ERR_MULTIPLE_GRAPHS` for a DOT source with more than one graph (it used to return the first and drop the rest silently); read them all with the new `fromDotAll(dot, options?)`, which returns an array (empty for a source without graphs).
-- **Graphs keep their contents in order** (#1732): `GraphBaseModel.statements` lists nodes, edges and subgraphs in the order they were added, and `toDot` writes them in that order (after the graph's attributes and default attribute lists) instead of all nodes, then subgraphs, then edges. Node order affects Graphviz's layout, so DOT read with `fromDot` now renders as its source did; a program that interleaves `node()` and `edge()` gets DOT in its own order. Custom classes implementing `GraphBaseModel` directly must add `statements` and `addAttributeList`. `ModelsContext`, `GraphBaseModel`, `RootGraphModel`, `SubgraphModel`, the constructor types and the model factories take an optional type parameter describing the model classes (`ModelTypes`, inferred by `createModelsContext` / `withContext` / `fromDot` with `convert.models`), so custom classes show in the types of `node()`, `edge()`, `subgraph()` and their callbacks (#1736); code that does not use custom classes sees the same types as before. Default attribute statements that change halfway through a graph can be kept in place with the new `orderedModels` (see *Extending ts-graphviz*); the default classes still keep one set of defaults per graph.
+- **Graphs keep their contents in order**: `GraphBaseModel.statements` lists nodes, edges and subgraphs in the order they were added, and `toDot` writes them in that order (after the graph's attributes and default attribute lists) instead of all nodes, then subgraphs, then edges. Node order affects Graphviz's layout, so DOT read with `fromDot` now renders as its source did; a program that interleaves `node()` and `edge()` gets DOT in its own order. Custom classes implementing `GraphBaseModel` directly must add `statements` and `addAttributeList`. `ModelsContext`, `GraphBaseModel`, `RootGraphModel`, `SubgraphModel`, the constructor types and the model factories take an optional type parameter describing the model classes (`ModelTypes`, inferred by `createModelsContext` / `withContext` / `fromDot` with `convert.models`), so custom classes show in the types of `node()`, `edge()`, `subgraph()` and their callbacks; code that does not use custom classes sees the same types as before. Default attribute statements that change halfway through a graph can be kept in place with the new `orderedModels` (see *Extending ts-graphviz*); the default classes still keep one set of defaults per graph.
 - `parse` reads a whole DOT source. Its `startRule` option is deprecated (removed in 5.0): read fragments with `parseFragment(input, rule, options)`, a beta low-level API (`parse(s, { startRule: 'Edge' })` → `parseFragment(s, 'Edge')`). Using `startRule` reports a deprecation once, with code `TSG_DEP_PARSE_START_RULE`: to `onDeprecation` listeners on every runtime, on the `ts-graphviz:deprecation` diagnostics channel and as a Node.js `DeprecationWarning` (so `--no-deprecation` / `--throw-deprecation` apply) where the runtime has them. ts-graphviz writes nothing to the console itself; in a browser, subscribe with `onDeprecation` to see deprecations.
-- `DotSyntaxError` has a `location` (`{ start, end }` with `offset`, `line`, `column`), or `undefined` when the error is not at a place (an input over `maxInputSize` or `maxASTNodes`), and a `limit`: the parse option whose limit the source exceeded (`'maxInputSize'`, `'maxASTNodes'`, `'maxNestingDepth'`, `'maxHtmlNestingDepth'` or `'maxEdgeChainDepth'`), or `undefined` for any other syntax error. Every DOT the parser refuses still has the one code `TSG_ERR_DOT_SYNTAX`; read `limit` to tell a source that is too large or too deep (report it as such, or raise that option for trusted input) from a syntax error. Its `code`, `location` and `limit` are the contract; the message text and `cause` (the parser's internal error) are not and may change in any release, so do not read positions or limits from `cause`.
-- Comments inside statements parse and are kept on the nearest node as `leadingComments` / `trailingComments` / `danglingComments` (#1710); code that walks every property of AST nodes will now also meet these arrays of `Comment` nodes. Locations of statements without `;` end at their last token.
-- **Edge targets are what Graphviz has** (#1708): `EdgeTargetASTNode` is `NodeRef` (`a:p`), `NodeRefList` (`a:p, b` — a comma list, ports kept) or `Subgraph` (`{ a b }`, `subgraph s { ... }` with any statements; the target is every node in it). `NodeRefGroup` is gone: `{a b}` parses as an anonymous `Subgraph` of `Node` statements, whose ports Graphviz always ignored. `toDot` writes a model group with a port or compass point as a comma list, so the ports now reach Graphviz (they were silently dropped inside `{...}`); groups without ports are still written `{a b}`. The parser also reads comma lists (`a, b -> c`, `a, b [shape=box];`) and subgraphs as edge targets, and the location of an edge without `;` no longer includes the whitespace after it.
+- `DotSyntaxError` has a `location` (`{ start, end }` with `offset`, `line`, `column`), or `undefined` when the error is not at a place (an input over `maxInputSize` or `maxASTNodes`), and a `limit`: the parse option whose limit the source exceeded (`'maxInputSize'`, `'maxASTNodes'`, `'maxNestingDepth'`, `'maxHtmlNestingDepth'` or `'maxEdgeChainDepth'`), or `undefined` for any other syntax error. Every DOT the parser refuses has the one code `TSG_ERR_DOT_SYNTAX`; read `limit` to tell a source that is too large or too deep (report it as such, or raise that option for trusted input) from a syntax error. Its `code`, `location` and `limit` are the contract; the message text and `cause` (the parser's internal error) are not and may change in any release, so do not read positions or limits from `cause`.
+- Comments inside statements parse and are kept on the nearest node as `leadingComments` / `trailingComments` / `danglingComments`; code that walks every property of AST nodes will now also meet these arrays of `Comment` nodes. Locations of statements without `;` end at their last token.
+- **Edge targets are what Graphviz has**: `EdgeTargetASTNode` is `NodeRef` (`a:p`), `NodeRefList` (`a:p, b` — a comma list, ports kept) or `Subgraph` (`{ a b }`, `subgraph s { ... }` with any statements; the target is every node in it). `NodeRefGroup` is gone: `{a b}` parses as an anonymous `Subgraph` of `Node` statements, whose ports Graphviz always ignored. `toDot` writes a model group with a port or compass point as a comma list, so the ports now reach Graphviz (they were silently dropped inside `{...}`); groups without ports are still written `{a b}`. The parser also reads comma lists (`a, b -> c`, `a, b [shape=box];`) and subgraphs as edge targets, and the location of an edge without `;` no longer includes the whitespace after it.
 - `Literal`'s `quoted: boolean | 'html'` is replaced by `kind: 'bare' | 'quoted' | 'html'` (`LiteralKind`): `quoted: false` → `kind: 'bare'`, `quoted: true` → `kind: 'quoted'`, `quoted: 'html'` → `kind: 'html'`. The old field mixed how a string is written (bare or quoted, which Graphviz reads the same) with what it is (an HTML-like value), and `if (literal.quoted)` was also true for HTML strings.
 - A quoted `Literal` holds the raw source text (escape sequences intact) and `stringify` writes it back verbatim; escaping and unescaping happen in the model ⇄ AST conversion.
-- The shared `createElement` no longer counts nodes across calls; use `createElementFactory({ maxASTNodes })` for a limit.
+- The `maxNestingDepth` print option is removed: `stringify` prints an AST of any depth. The `maxNestingDepth` parse option (default 100) is unchanged.
 
-Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and `a:n` as a compass point), block comments keep their `*`, bare identifiers may contain any non-ASCII character, and raw newlines inside quoted strings survive `stringify`.
+Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and `a:n` as a compass point), bare identifiers may contain any non-ASCII character, and raw newlines inside quoted strings survive `stringify`.
 
 ## 8. `@ts-graphviz/adapter`
 
-- **`toStream` / `toFile` check the source with `sanitize` first** (from `@ts-graphviz/ast`, now a dependency of the adapter). DOT that makes Graphviz read a file (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), write a link other than relative, `http`, `https` or `mailto`, or put raw text into PostScript, image map, `plain`, JSON or XML output (font names other than plain names, unknown `style` values, colors with whitespace, control characters, line breaks in names); `ismap` and output formats that have not been checked (e.g. `vml`, `fig`) are refused rejects with a `DOMException` named `SecurityError` (code `TSG_ERR_UNSAFE_DOT`), and DOT that does not parse rejects with `DotSyntaxError` instead of a `CommandExecutionError` from `dot`. The command gets the source as reprinted by the parser. If your application renders its own images or relies on Graphviz's error messages, pass `sanitize: false`; to raise the parser limits, pass them as `sanitize: { maxASTNodes: … }`.
+- **`toStream` / `toFile` check the source with `sanitize` first** (from `@ts-graphviz/ast`, now a dependency of the adapter). DOT that makes Graphviz read a file (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), write a link other than relative, `http`, `https` or `mailto`, or put raw text into PostScript, image map, `plain`, JSON or XML output (font names other than plain names, unknown `style` values, colors with whitespace, control characters, line breaks in names); `ismap` and output formats that have not been checked (e.g. `vml`, `fig`) are refused. Such DOT rejects with a `DOMException` named `SecurityError` (code `TSG_ERR_UNSAFE_DOT`), and DOT that does not parse rejects with `DotSyntaxError` instead of a `CommandExecutionError` from `dot`. With `sanitize` on, the command gets the source as reprinted by the parser. If your application renders its own images or relies on Graphviz's error messages, pass `sanitize: false`: the source then reaches Graphviz unchanged, without parsing, and DOT that does not parse fails with a `CommandExecutionError` from `dot`; to raise the parser limits, pass them as `sanitize: { maxASTNodes: … }`.
 - `toStream` returns a Web `ReadableStream<Uint8Array>` on every runtime (Node.js included). Replace `stream.pipe(dest)` with `stream.pipeTo(Writable.toWeb(dest))`, `for await (const chunk of stream)`, or `Readable.fromWeb(stream)`.
 - `ts-graphviz/adapter`'s `toStream` / `toFile` also accept a model and call `toDot` for you.
 - Command failures reject with `CommandExecutionError` (`command`, `exit.code`, `exit.signal`, `exit.stderr`, `cause`), including a failure to write the DOT source to the command.
@@ -129,13 +135,13 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 - `useDigraph`, `useGraph`, `useSubgraph`, `useNode` and `useEdge` are removed. The components are host elements of the renderer, which adds the models when React commits: render `<Digraph>`, `<Subgraph>`, `<Node>` and `<Edge>`, and get a model through `ref` or, for the enclosing graph, `useCurrentGraph()`.
 - The statements of a graph follow the element tree, also across re-renders (reordered, inserted and removed children), and StrictMode, Suspense or a discarded render no longer adds statements twice or leaves them behind.
 - In container mode, a re-render replaces only the statements the renderer added before; statements the container already had stay first. Models are made by the graph they go to (`createNode` / `createEdge` / `createSubgraph`), so a graph class that overrides them still applies.
-- `createRoot` and `renderToDot` take a `models` option. A hand-written `GraphvizContext` value must include `models` (use `createModelsContext()`).
+- `createRoot` and `renderToDot` take a `models` option.
 - `render()` / `renderToDot()` resolve once the tree has settled, including transitions, deferred values and suspended data. `timeout` is replaced by a per-render `signal` (`AbortSignal.timeout(ms)` for a time limit). Uncaught errors reject with the error itself, and the error callbacks receive `error: unknown`.
 - `<Digraph strict>` / `<Graph strict>` render strict graphs.
 - `renderHTMLLike` returns an `HTMLLikeValue` (see section 1).
-- `renderHTMLLike` (and so a JSX `label`) escapes strings: text children and attribute values are written with `&`, `<`, `>` and `"` as entities. Code that put markup in a string (`<dot:td>{'<b>x</b>'}</dot:td>`) writes it as elements instead (`<dot:td><dot:b>x</dot:b></dot:td>`) (#1745).
+- As in 0.12, `renderHTMLLike` (and so a JSX `label`) writes strings as text: text children are written with `&`, `<` and `>` as entities, and attribute values also with `"`. Write markup as elements (`<dot:td><dot:b>x</dot:b></dot:td>`), not as a string (`<dot:td>{'<b>x</b>'}</dot:td>`).
 - `<dot:port>` is removed: HTML-like labels have no port element, and Graphviz rejected its output. Use the `port` attribute: `<dot:td port="p">`.
-- `renderHTMLLike` throws instead of logging a warning and returning an empty label: `RangeError` past `maxDepth`; `TypeError` for a circular tree, an element HTML-like labels do not have (`<div>`, `<span>`, …), or an attribute name that is not a name. Errors from components are no longer swallowed.
+- `renderHTMLLike` throws instead of logging a warning and returning an empty label: `RangeError` past `maxDepth`; `TypeError` for a circular tree, an element HTML-like labels do not have (`<div>`, `<span>`, …), an attribute name that is not a name, or an object among the children that is not a React element. Errors from components are no longer swallowed.
 
 ## 10. Small behaviour fixes
 
