@@ -1,7 +1,11 @@
 import { spawn } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { PassThrough, Writable } from 'node:stream';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CommandExecutionError } from './errors.js';
+import { toFile } from './to-file.node.js';
 import { toStream } from './to-stream.node.js';
 
 // Mock child_process.spawn inline to avoid hoisting
@@ -311,7 +315,13 @@ describe('toStream (Node adapter) on Windows', { tags: ['SM-4'] }, () => {
 
   it('rejects a .bat or .cmd dotCommand before starting it', async () => {
     setPlatform('win32');
-    for (const dotCommand of ['C:\\Graphviz\\dot.bat', 'dot.CMD', 'dot.bat.']) {
+    const path = join(tmpdir(), `ts-graphviz-bat-${process.pid}.svg`);
+    for (const dotCommand of [
+      'C:\\Graphviz\\dot.bat',
+      'dot.CMD',
+      'dot.bat.',
+      'dot.cmd\t',
+    ]) {
       await expect(
         toStream('digraph {}', { dotCommand, sanitize: false }),
       ).rejects.toMatchObject({
@@ -319,11 +329,14 @@ describe('toStream (Node adapter) on Windows', { tags: ['SM-4'] }, () => {
         code: 'TSG_ERR_COMMAND_FAILED',
         command: dotCommand,
       });
+      await expect(
+        toFile('digraph {}', path, { dotCommand }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_COMMAND_FAILED' });
     }
     expect(spawnMock).not.toHaveBeenCalled();
-  });
+    expect(existsSync(path)).toBe(false);
 
-  it('passes a script name on to spawn on other platforms', async () => {
+    // On other platforms a file named *.bat is an ordinary executable.
     setPlatform('linux');
     spawnMock.mockImplementation(() => {
       throw new Error('stop here');

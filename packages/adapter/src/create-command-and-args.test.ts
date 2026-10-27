@@ -91,6 +91,8 @@ describe('Windows command scripts', { tags: ['SM-4'] }, () => {
       'dot.bat.',
       'dot.bat ',
       'dot.cmd. . ',
+      'dot.bat\t',
+      'dot.cmd\r\n',
       '.bat',
     ]) {
       expect(isWindowsCommandScript(command), command).toBe(true);
