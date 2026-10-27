@@ -14,7 +14,12 @@ import type {
  * The formats that write to a file or stream, as listed in
  * {@link https://graphviz.org/docs/outputs/ Output Formats}; the interactive
  * ones (`gtk`, `x11`, `xlib`) are left out. Which ones work depends on how
- * Graphviz was built. More can be added by merging into `Format.$values`.
+ * Graphviz was built.
+ *
+ * The adapter accepts exactly these names at run time (check a format chosen
+ * by a request with `isFormat`); anything else, including a `:renderer`
+ * suffix such as `png:cairo`, is rejected before the command starts.
+ * Merging into `Format.$values` changes the type only.
  */
 export type Format = Format.values;
 export namespace Format {
@@ -81,6 +86,13 @@ export namespace Format {
   export interface $exclude extends $keywordsValidation {}
 }
 
+/**
+ * A layout engine of Graphviz (`-K`).
+ *
+ * The adapter accepts exactly these names at run time (check a layout
+ * chosen by a request with `isLayout`); anything else is rejected before
+ * the command starts. Merging into `Layout.$values` changes the type only.
+ */
 export type Layout = Layout.values;
 export namespace Layout {
   export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
@@ -107,7 +119,7 @@ export namespace Layout {
 export interface NeatoOptions {
   layout: 'neato';
   /**
-   * Sets no-op flag in neato.
+   * Sets no-op flag in neato (`-n`): a non-negative integer.
    */
   noop?: number;
   /**
@@ -136,19 +148,19 @@ export interface FdpOptions {
   oldAttractive?: boolean;
 
   /**
-   * Set number of iterations.
+   * Set number of iterations (`-Ln`): a non-negative integer.
    */
   iterations?: number;
   /**
-   * Set unscaled factor
+   * Set unscaled factor (`-LU`): a finite, non-negative number.
    */
   unscaledFactor?: number;
   /**
-   * Set overlap expansion factor.
+   * Set overlap expansion factor (`-LC`): a finite, non-negative number.
    */
   overlapExpansionFactor?: number;
   /**
-   * Set temperature.
+   * Set temperature (`-LT`): a finite, non-negative number.
    */
   temperature?: number;
 }
@@ -169,12 +181,21 @@ export interface OtherOptions {
 }
 
 /**
- * This interface represents the CommonOptions for setting output format.
+ * The options every layout takes.
+ *
+ * The options that are data (`format`, `layout`, `attributes`, the numbers
+ * and flags, `maxOutputSize`, `sanitize`) are checked at run time, so they
+ * may come from a request: a value outside the documented type or range is
+ * rejected before the command starts with a `TypeError` or `RangeError`
+ * whose `code` is `TSG_ERR_INVALID_OPTION` (`TSG_ERR_OUTPUT_LIMIT_EXCEEDED`
+ * for `maxOutputSize`). `dotCommand` and `library` choose code to run: they
+ * are trusted configuration, checked for their type only.
  * @public
  */
 export interface CommonOptions {
   /**
-   * Set output format.
+   * Set output format: exactly one of the {@link Format} names (see
+   * `isFormat`), without a `:renderer` suffix.
    *
    * @default 'svg'
    */
@@ -186,13 +207,22 @@ export interface CommonOptions {
    */
   suppressWarnings?: boolean;
   /**
-   * Path of graphviz dot command.
+   * Path of graphviz dot command: a non-empty string.
    *
    * **This should be a trusted, hardcoded path in your application configuration. Do not derive this value from end-user input.**
+   * It is checked for its type only; the adapter runs whatever it names.
    *
    * @defaultValue 'dot'
    */
   dotCommand?: string;
+  /**
+   * Graph, node and edge attributes given to the command as `-G` / `-N` /
+   * `-E` arguments. Each record maps attribute names (not empty, without
+   * `=` or a NUL character) to strings (without a NUL character), finite
+   * numbers or booleans; `escString()` and `htmlLike()` values cannot be
+   * given on the command line, put them in the DOT source. While `sanitize`
+   * is on, the arguments are also checked by the same rules as the source.
+   */
   attributes?: {
     /**
      * Set edge attribute.
@@ -208,13 +238,14 @@ export interface CommonOptions {
     graph?: GraphAttributesObject & SubgraphAttributesObject;
   };
   /**
-   * Scale input
+   * Scale input (`-s`): a finite number greater than 0.
    */
   scale?: number;
   /**
    * Use external library.
    *
    * **These should be trusted library names defined in your application code. Do not derive these values from end-user input.**
+   * They are checked to be an array of strings only.
    */
   library?: string[];
   /**
@@ -246,7 +277,10 @@ export interface CommonOptions {
    * unsafe link (`URL="javascript:…"`, …), and with a `DotSyntaxError` when
    * it does not parse. Pass options as an object: parser limits, or
    * `policy: 'strict'` to allow only the attributes and HTML-like tags
-   * Graphviz defines, with plain values.
+   * Graphviz defines, with plain values. The adapter rejects any other
+   * value, a `policy` other than `'default'` / `'strict'`, and parser
+   * limits that are not non-negative numbers (finite, for the depth
+   * limits).
    *
    * Set `false` only for sources you trust, e.g. to render your own images.
    *

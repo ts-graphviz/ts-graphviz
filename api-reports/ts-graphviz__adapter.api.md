@@ -72,6 +72,10 @@ export interface OtherOptions {
   layout?: Exclude<Layout, "neato" | "fdp">;
 }
 
+export declare function isFormat(value: unknown): value is Format;
+
+export declare function isLayout(value: unknown): value is Layout;
+
 export declare function toFile<T extends Layout>(dot: string, path: string, options?: Options<T>): Promise<void>;
 
 export declare function toStream<T extends Layout>(dot: string, options?: Options<T>): Promise<ReadableStream<Uint8Array>>;

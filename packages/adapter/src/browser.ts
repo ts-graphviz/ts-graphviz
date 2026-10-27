@@ -4,6 +4,7 @@
 import { withCode } from '@ts-graphviz/common';
 import type { Layout, Options } from './types.js';
 
+export { isFormat, isLayout } from './formats.js';
 export type * from './types.js';
 
 export const ERROR_MESSAGE = `@ts-graphviz/adapter cannot be used in browser environments.

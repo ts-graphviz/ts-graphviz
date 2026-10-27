@@ -12,6 +12,7 @@ import { sourceToRender } from './source.js';
 import type { Layout, Options } from './types.js';
 
 export * from './errors.js';
+export { isFormat, isLayout } from './formats.js';
 
 // biome-ignore lint/suspicious/noExplicitAny: the Deno namespace is not typed in this build
 declare let Deno: any;
