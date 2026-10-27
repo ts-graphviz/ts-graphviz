@@ -414,7 +414,7 @@ export interface GraphBaseModel<
    * subgraphs, which `toDot` writes in this order (after the graph's
    * attributes and default attribute lists). The default classes never put
    * an {@link AttributeListModel} here; model classes that keep default
-   * attribute statements in their place may (#1732).
+   * attribute statements in their place may.
    */
   readonly statements: ReadonlyArray<
     M['Node'] | M['Edge'] | M['Subgraph'] | AttributeListModel
@@ -441,7 +441,7 @@ export interface GraphBaseModel<
    * graph; model classes that keep statements in their place (such as
    * `orderedModels` of `@ts-graphviz/core`) put it into
    * {@link GraphBaseModel.statements} once other statements precede it, so
-   * it applies, as in DOT, only to what comes after it (#1732).
+   * it applies, as in DOT, only to what comes after it.
    */
   addAttributeList(
     kind: AttributeListKind,
@@ -883,7 +883,7 @@ export type AnyDotObjectModel = GraphStatementModel | RootGraphModel | DotModel;
 
 /**
  * The instance types a {@link ModelsContext} creates: what graphs return
- * from `node()`, `edge()`, `subgraph()` and the like (#1736). The defaults
+ * from `node()`, `edge()`, `subgraph()` and the like. The defaults
  * are the base interfaces.
  * @group Models
  */

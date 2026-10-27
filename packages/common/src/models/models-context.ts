@@ -45,7 +45,7 @@ type Creates<C, Base> = C extends abstract new (
  * `createModelsContext` or `withContext`): a class given there gives its
  * instance type, and a slot left out gives the base interface carrying the
  * same types, so a default subgraph in a context with a custom `Node`
- * creates that `Node` in the types too, as it does at run time (#1736).
+ * creates that `Node` in the types too, as it does at run time.
  *
  * @group Models Context
  */

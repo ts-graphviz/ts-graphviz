@@ -1,6 +1,5 @@
 import { isTsGraphvizError } from '@ts-graphviz/common';
 import { describe, expect, it } from 'vitest';
-import { DotSyntaxError } from '../dot-shim/parser/parse.js';
 import { sanitize } from './sanitize.js';
 
 function rejection(dot: string): DOMException & { code: string } {
@@ -38,9 +37,14 @@ describe('sanitize', { tags: ['SM-7'] }, () => {
   });
 
   it('passes on parser errors and limits', () => {
-    expect(() => sanitize('graph {')).toThrow(DotSyntaxError);
+    expect(() => sanitize('graph {')).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_DOT_SYNTAX', limit: undefined }),
+    );
     expect(() => sanitize('graph { a; b; c }', { maxASTNodes: 3 })).toThrow(
-      DotSyntaxError,
+      expect.objectContaining({
+        code: 'TSG_ERR_DOT_SYNTAX',
+        limit: 'maxASTNodes',
+      }),
     );
   });
 
