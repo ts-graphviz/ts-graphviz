@@ -1,51 +1,19 @@
-import fs from 'node:fs/promises';
 ///<reference types="vite/client" />
 import path from 'node:path';
 
-import { toStream } from '@ts-graphviz/adapter';
-import type { RootGraphModel } from '@ts-graphviz/common';
-import { optimize } from 'svgo';
-import { toDot } from 'ts-graphviz';
 import { test } from 'vitest';
 
-async function streamToString(stream: ReadableStream<Uint8Array>) {
-  return new Response(stream).text();
-}
+import { type MediaModule, mediaDot } from './render.js';
 
-interface TSGraphvizModule {
-  default: RootGraphModel;
-  meta?: {
-    exportTo?: string[];
-  };
-}
-
+// The DOT each media example produces. The SVG images are rendered from it
+// by `pnpm media:generate` (media/generate.ts), not here: they depend on the
+// Graphviz version, and a test must not write into the source tree.
 for (const [file, getModule] of Object.entries({
-  ...import.meta.glob<TSGraphvizModule>('./*.dot.ts'),
-  ...import.meta.glob<TSGraphvizModule>('./*.dot.tsx'),
+  ...import.meta.glob<MediaModule>('./*.dot.ts'),
+  ...import.meta.glob<MediaModule>('./*.dot.tsx'),
 })) {
   test.concurrent(file, async ({ expect }) => {
     const { name } = path.parse(file);
-    const { dot, exportTo } = await getModule().then((module) => {
-      return {
-        dot: `${toDot(module.default)}\n`,
-        exportTo: module.meta?.exportTo,
-      };
-    });
-    await expect(dot).toMatchFileSnapshot(name);
-
-    const svg = await toStream(dot, {
-      format: 'svg',
-    })
-      .then((stream) => streamToString(stream))
-      .then((svg) => optimize(svg))
-      .then((result) => result.data);
-
-    await expect(svg).toMatchFileSnapshot(`${name.slice(0, -4)}.svg`);
-
-    if (exportTo) {
-      for (const to of exportTo) {
-        await fs.writeFile(path.resolve(process.cwd(), to), svg);
-      }
-    }
+    await expect(mediaDot(await getModule())).toMatchFileSnapshot(name);
   });
 }
