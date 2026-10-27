@@ -35,27 +35,69 @@ export function outputLimitExceeded(
 /**
  * Keeps the last `max` bytes written to it, for the stderr of a failed
  * command, so a command that floods stderr cannot exhaust memory.
+ *
+ * The bytes are kept in one buffer of `max` bytes (allocated on the first
+ * write), so memory stays bounded whatever the chunk sizes, and each byte
+ * written is copied at most once.
  */
 export class TailBuffer {
-  #chunks: Uint8Array[] = [];
-  #size = 0;
+  #buffer: Uint8Array | undefined;
+  /** Where the next byte goes in `#buffer`. */
+  #position = 0;
+  /** How many bytes of `#buffer` are in use (at most `max`). */
+  #length = 0;
+  /** Whether older bytes have been dropped. */
+  #truncated = false;
   constructor(private readonly max: number = MAX_STDERR_SIZE) {}
   push(chunk: Uint8Array): void {
-    this.#chunks.push(chunk);
-    this.#size += chunk.byteLength;
-    while (this.#size > this.max && this.#chunks.length > 1) {
-      const first = this.#chunks.shift() as Uint8Array;
-      this.#size -= first.byteLength;
+    const { max } = this;
+    if (chunk.byteLength === 0) return;
+    if (max === 0) {
+      this.#truncated = true;
+      return;
     }
+    this.#buffer ??= new Uint8Array(max);
+    const buffer = this.#buffer;
+    if (this.#length + chunk.byteLength > max) this.#truncated = true;
+    if (chunk.byteLength >= max) {
+      buffer.set(chunk.subarray(chunk.byteLength - max));
+      this.#position = 0;
+      this.#length = max;
+      return;
+    }
+    const first = Math.min(chunk.byteLength, max - this.#position);
+    buffer.set(chunk.subarray(0, first), this.#position);
+    buffer.set(chunk.subarray(first), 0);
+    this.#position = (this.#position + chunk.byteLength) % max;
+    this.#length = Math.min(this.#length + chunk.byteLength, max);
   }
+  /**
+   * The kept bytes decoded as UTF-8. When older bytes were dropped, the
+   * continuation bytes of a character cut at the start are left out rather
+   * than decoded as U+FFFD.
+   */
   toString(): string {
-    const joined = new Uint8Array(this.#size);
-    let offset = 0;
-    for (const chunk of this.#chunks) {
-      joined.set(chunk, offset);
-      offset += chunk.byteLength;
+    const buffer = this.#buffer;
+    if (buffer === undefined) return '';
+    let bytes: Uint8Array;
+    if (this.#length < this.max) {
+      bytes = buffer.subarray(0, this.#length);
+    } else {
+      bytes = new Uint8Array(this.max);
+      bytes.set(buffer.subarray(this.#position));
+      bytes.set(buffer.subarray(0, this.#position), this.max - this.#position);
     }
-    const start = Math.max(0, joined.byteLength - this.max);
-    return new TextDecoder().decode(joined.subarray(start));
+    let start = 0;
+    if (this.#truncated) {
+      // At most three continuation bytes (10xxxxxx) follow a lead byte.
+      while (
+        start < 3 &&
+        start < bytes.byteLength &&
+        (bytes[start] & 0xc0) === 0x80
+      ) {
+        start++;
+      }
+    }
+    return new TextDecoder().decode(bytes.subarray(start));
   }
 }
