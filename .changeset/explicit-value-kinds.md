@@ -24,4 +24,4 @@ Migration:
 - `label: '<<b>bold</b>>'` → `label: htmlLike('<b>bold</b>')`.
 - Code that used the string returned by `renderHTMLLike` → use `.value` (the markup without the outer brackets) or pass the value to an attribute directly.
 
-AST: a quoted `Literal` now holds the raw source text with escape sequences intact, and `stringify` writes it back verbatim; escaping happens in the model ⇄ AST conversion.
+AST: a quoted `Literal` holds the raw source text with escape sequences intact, and `stringify` writes it back verbatim, including a raw newline inside a quoted or HTML string, which gets no indentation (3.x wrote it as `\n`); escaping happens in the model ⇄ AST conversion.
