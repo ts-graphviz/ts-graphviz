@@ -716,6 +716,10 @@ export interface ModelsContext<M extends ModelTypes = ModelTypes> {
   Edge: EdgeConstructor<M["Edge"]>;
 }
 
+export type NarrowedModel<T, K extends DotObjectType> = unknown extends T ? T & ReadonlyModelOf<K> : T extends unknown ? T extends AnyReadonlyDotObjectModel ? Extract<T, {
+  readonly $$type: K;
+}> : ReadonlyModelOf<K> extends T ? T & ReadonlyModelOf<K> : never : never;
+
 export type NodeAttributeKey = NodeAttributeKey.values;
 export declare namespace NodeAttributeKey {
   type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
@@ -977,19 +981,13 @@ export declare function escString(value: string): EscStringValue;
 
 export declare function htmlLike(markup: string): HTMLLikeValue;
 
-export declare function isAttributeListModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"AttributeList">>;
-export declare function isAttributeListModel(object: unknown): object is ReadonlyAttributeListModel;
-export declare function isAttributeListModel(model: AnyDotObjectModel): model is AttributeListModel;
+export declare function isAttributeListModel<T>(object: T): object is NarrowedModel<T, "AttributeList">;
 
 export declare function isCompass(c: string): c is Compass;
 
-export declare function isDotModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"Dot">>;
-export declare function isDotModel(object: unknown): object is ReadonlyDotModel;
-export declare function isDotModel(model: AnyDotObjectModel): model is DotModel;
+export declare function isDotModel<T>(object: T): object is NarrowedModel<T, "Dot">;
 
-export declare function isEdgeModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"Edge">>;
-export declare function isEdgeModel(object: unknown): object is ReadonlyEdgeModel;
-export declare function isEdgeModel(model: AnyDotObjectModel): model is EdgeModel;
+export declare function isEdgeModel<T>(object: T): object is NarrowedModel<T, "Edge">;
 
 export declare function isEscString(value: unknown): value is EscStringValue;
 
@@ -997,9 +995,7 @@ export declare function isForwardRefNode(object: unknown): object is ForwardRefN
 
 export declare function isHTMLLike(value: unknown): value is HTMLLikeValue;
 
-export declare function isNodeModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"Node">>;
-export declare function isNodeModel(object: unknown): object is ReadonlyNodeModel;
-export declare function isNodeModel(model: AnyDotObjectModel): model is NodeModel;
+export declare function isNodeModel<T>(object: T): object is NarrowedModel<T, "Node">;
 
 export declare function isNodeRef(node: unknown): node is NodeRef;
 
@@ -1008,13 +1004,9 @@ export declare function isNodeRefGroupLike(target: NodeRefLike | ReadonlyNodeRef
 
 export declare function isNodeRefLike(node: unknown): node is NodeRefLike;
 
-export declare function isRootGraphModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"Graph">>;
-export declare function isRootGraphModel(object: unknown): object is ReadonlyRootGraphModel;
-export declare function isRootGraphModel(model: AnyDotObjectModel): model is RootGraphModel;
+export declare function isRootGraphModel<T>(object: T): object is NarrowedModel<T, "Graph">;
 
-export declare function isSubgraphModel<T extends AnyReadonlyDotObjectModel>(model: T): model is Extract<T, DotObjectModel<"Subgraph">>;
-export declare function isSubgraphModel(object: unknown): object is ReadonlySubgraphModel;
-export declare function isSubgraphModel(model: AnyDotObjectModel): model is SubgraphModel;
+export declare function isSubgraphModel<T>(object: T): object is NarrowedModel<T, "Subgraph">;
 
 export declare function isTsGraphvizError(value: unknown): value is CodedError;
 
@@ -1037,4 +1029,8 @@ type AsClusterSubgraphAttributesObject = AttributesObject<Exclude<ClusterSubgrap
 };
 
 type Creates<C, Base> = C extends (abstract new (...args: any[]) => infer I) ? I extends Base ? I : Base : Base;
+
+type ReadonlyModelOf<K extends DotObjectType> = Extract<AnyReadonlyDotObjectModel, {
+  readonly $$type: K;
+}>;
 ```

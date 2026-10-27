@@ -112,6 +112,8 @@ if (isNodeModel(unknownValue)) {
 }
 const nodes = g.statements.filter(isNodeModel);
 assertType<Equal<typeof nodes, NodeModel[]>>();
+const readNodes = [unknownValue].filter(isNodeModel);
+assertType<Equal<typeof readNodes, ReadonlyNodeModel[]>>();
 // @ts-expect-error not a node
 toDot({ $$type: 'Node' });
 

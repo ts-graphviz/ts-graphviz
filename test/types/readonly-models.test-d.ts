@@ -16,6 +16,7 @@ import {
   type Digraph,
   Dot,
   type DotModel,
+  type DotObjectModel,
   type DotValue,
   digraph,
   Edge,
@@ -325,6 +326,32 @@ describe('the guards', () => {
     expectTypeOf(digraph().statements.filter(isEdgeModel)).toEqualTypeOf<
       EdgeModel[]
     >();
+    const mine = [] as (MyNode | Edge)[];
+    expectTypeOf(mine.filter(isNodeModel)).toEqualTypeOf<MyNode[]>();
+  });
+
+  it('filter arrays of unknown values or read-only models', () => {
+    const values = [] as unknown[];
+    expectTypeOf(values.filter(isNodeModel)).toEqualTypeOf<
+      ReadonlyNodeModel[]
+    >();
+    expectTypeOf(values.filter(isRootGraphModel)).toEqualTypeOf<
+      ReadonlyRootGraphModel[]
+    >();
+    const read = [] as AnyReadonlyDotObjectModel[];
+    expectTypeOf(read.filter(isEdgeModel)).toEqualTypeOf<ReadonlyEdgeModel[]>();
+    expectTypeOf(read.filter(isDotModel)).toEqualTypeOf<ReadonlyDotModel[]>();
+  });
+
+  it('narrow a wider type to the read-only type, and leave out the rest', () => {
+    const object = {} as DotObjectModel;
+    if (isNodeModel(object)) {
+      expectTypeOf(object).toExtend<ReadonlyNodeModel>();
+      expectTypeOf(object).not.toExtend<NodeModel>();
+    }
+    const nodeOrId = {} as NodeModel | string;
+    if (isNodeModel(nodeOrId))
+      expectTypeOf(nodeOrId).toEqualTypeOf<NodeModel>();
   });
 });
 
@@ -335,7 +362,9 @@ describe('edge targets are read-only references', () => {
       .targets;
     expectTypeOf(from).toEqualTypeOf<EdgeTarget>();
     if (isNodeModel(from)) {
-      expectTypeOf(from).toEqualTypeOf<ReadonlyNodeModel>();
+      expectTypeOf(from).toExtend<ReadonlyNodeModel>();
+      expectTypeOf(from).not.toExtend<NodeModel>();
+      expectTypeOf(from.id).toEqualTypeOf<string>();
     }
   });
 

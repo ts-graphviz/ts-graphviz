@@ -75,6 +75,7 @@ export interface GraphvizRoot {
   render(element: ReactElement, options?: RenderOptions): Promise<void>;
   unmount(): void;
   getTopLevelModels(): AnyDotObjectModel[];
+  getTopLevelModels<T extends AnyDotObjectModel>(typeGuard: (model: AnyDotObjectModel) => model is T): T[];
   getTopLevelModels<T extends DotObjectModel>(typeGuard?: (model: DotObjectModel) => model is T): T[];
 }
 

@@ -11,7 +11,11 @@
  * @module
  */
 import type { DotValue } from '../values.js';
-import type { AttributeListKind, ReadonlyEdgeTargetTuple } from './models.js';
+import type {
+  AttributeListKind,
+  DotObjectType,
+  ReadonlyEdgeTargetTuple,
+} from './models.js';
 
 /**
  * The attributes of a model, to read: the keys and values it holds.
@@ -174,3 +178,35 @@ export type AnyReadonlyDotObjectModel =
   | ReadonlyGraphStatementModel
   | ReadonlyRootGraphModel
   | ReadonlyDotModel;
+
+/**
+ * What a type guard for the models of `$$type` `K` (such as `isNodeModel`
+ * for `'Node'`) narrows a value of type `T` to:
+ *
+ * - a model (or a union of them): its members of that kind, with their
+ *   own types (e.g. `NodeModel` out of `AnyDotObjectModel`, a custom class
+ *   out of a union of custom classes);
+ * - `unknown`: the read-only model of that kind (e.g.
+ *   {@link ReadonlyNodeModel}), since the guard checks only `$$type` and a
+ *   few fields; a type wider than the model, such as `DotObjectModel`,
+ *   likewise, intersected with it;
+ * - anything else: `never`.
+ *
+ * Applied to each member of a union.
+ * @group Models
+ */
+export type NarrowedModel<T, K extends DotObjectType> = unknown extends T
+  ? T & ReadonlyModelOf<K>
+  : T extends unknown
+    ? T extends AnyReadonlyDotObjectModel
+      ? Extract<T, { readonly $$type: K }>
+      : ReadonlyModelOf<K> extends T
+        ? T & ReadonlyModelOf<K>
+        : never
+    : never;
+
+/** The read-only model of `$$type` `K`. */
+type ReadonlyModelOf<K extends DotObjectType> = Extract<
+  AnyReadonlyDotObjectModel,
+  { readonly $$type: K }
+>;
