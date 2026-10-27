@@ -7,6 +7,8 @@ import {
   fromDot,
   htmlLike,
   isTsGraphvizError,
+  orderedModels,
+  type RootGraphModel,
   toDot,
 } from 'ts-graphviz';
 
@@ -17,16 +19,28 @@ import {
   type GraphSpec,
   graphSpec,
   looksHtmlLikeToPrinter,
+  statementOrder,
 } from './arbitraries.js';
 import { summarize } from './summarize.js';
 
 // Property-based tests for the DOT printer and parser (see #1504).
 // A failing run prints its seed; reproduce it with FC_SEED=<seed>.
 
+// A graph built with the classes of `orderedModels` is read back with them,
+// so that default statements kept in place stay in place.
 const roundTrip = (spec: Parameters<typeof buildGraph>[0]) => {
   const model = buildGraph(spec);
   const dot = toDot(model);
-  return { model, dot, reparsed: fromDot(dot) };
+  const reparsed = spec.ordered
+    ? fromDot(dot, { convert: { models: orderedModels } })
+    : fromDot(dot);
+  return { model, dot, reparsed };
+};
+
+/** Same contents, and every statement in the same place (#1732). */
+const expectSameGraph = (actual: RootGraphModel, expected: RootGraphModel) => {
+  expect(summarize(actual)).toStrictEqual(summarize(expected));
+  expect(statementOrder(actual)).toStrictEqual(statementOrder(expected));
 };
 
 describe('DOT round trip', { tags: ['SM-2'] }, () => {
@@ -38,7 +52,7 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
     fc.assert(
       fc.property(graphSpec, (spec) => {
         const { model, reparsed } = roundTrip(spec);
-        expect(summarize(reparsed)).toStrictEqual(summarize(model));
+        expectSameGraph(reparsed, model);
       }),
     );
   });
@@ -46,8 +60,8 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
   it('printing is idempotent: toDot(fromDot(dot)) === dot (#1587)', () => {
     fc.assert(
       fc.property(graphSpec, (spec) => {
-        const { dot } = roundTrip(spec);
-        expect(toDot(fromDot(dot))).toBe(dot);
+        const { dot, reparsed } = roundTrip(spec);
+        expect(toDot(reparsed)).toBe(dot);
       }),
     );
   });
@@ -119,6 +133,9 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
       ...spec.nodes.flatMap((n) => [n.id, ...n.attributes.map(([, v]) => v)]),
       ...spec.edges.flatMap((e) => e.attributes.map(([, v]) => v)),
       ...spec.subgraphs.flatMap((s) => [s.id, ...s.nodes]),
+      ...(spec.ops ?? []).flatMap((op) =>
+        op.op === 'mention' ? op.attributes.map(([, v]) => v) : [],
+      ),
     ];
     fc.assert(
       fc.property(
@@ -128,7 +145,7 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
         ),
         (spec) => {
           const { model, reparsed } = roundTrip(spec);
-          expect(summarize(reparsed)).toStrictEqual(summarize(model));
+          expectSameGraph(reparsed, model);
         },
       ),
     );
