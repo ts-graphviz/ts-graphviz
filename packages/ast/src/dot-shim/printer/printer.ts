@@ -1,5 +1,6 @@
 import { ownOptions, withCode } from '@ts-graphviz/common';
 import { ownField } from '../../own-field.js';
+import { checkReferences } from '../../references.js';
 import type { ASTNode, CommentASTNode } from '../../types.js';
 import { defaultPlugins } from './plugins/index.js';
 import { escapeComment } from './plugins/utils/escape-comment.js';
@@ -38,12 +39,16 @@ export class Printer {
       indentSize = 2,
       indentStyle = 'space',
       endOfLine = 'lf',
+      maxSharedNodes,
     } = this.options;
     const EOL = endOfLine === 'crlf' ? '\r\n' : '\n';
     const PADDING = indentStyle === 'space' ? ' '.repeat(indentSize) : '\t';
     return {
       // Each iteration prints with state of its own.
       [Symbol.iterator]: function* () {
+        // An AST that contains itself would print forever, and one that
+        // shares nodes between parents prints them once for each place.
+        checkReferences(ast, maxSharedNodes);
         // Indentation is written by the loop below, which sees every token: a
         // line gets one PADDING per `printChildren` it is in, when its first
         // token comes (so a blank line stays empty).
@@ -151,9 +156,11 @@ export class Printer {
               return;
             }
           }
+          // The type only: the whole node can be large, or not serialisable.
+          const type: unknown = a?.type;
           throw withCode(
             new Error(
-              `No matching plugin found for AST node: ${JSON.stringify(a)}`,
+              `No matching plugin found for AST node of type ${typeof type === 'string' ? JSON.stringify(type.slice(0, 64)) : typeof type}`,
             ),
             'TSG_ERR_NO_PLUGIN',
           );
