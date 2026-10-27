@@ -23,17 +23,27 @@ export function ownAdapterOptions<T extends Layout>(
   if (own.attributes !== undefined) {
     expectObject(own.attributes, 'attributes');
     const { graph, node, edge } = ownOptions(own.attributes);
-    own.attributes = ownOptions({
-      ...(graph !== undefined && { graph: ownOptions(graph) }),
-      ...(node !== undefined && { node: ownOptions(node) }),
-      ...(edge !== undefined && { edge: ownOptions(edge) }),
-    });
+    // Shapes first: copying a record runs its getters.
     for (const [list, record] of [
       ['graph', graph],
       ['node', node],
       ['edge', edge],
     ] as const) {
       if (record !== undefined) expectObject(record, `attributes.${list}`);
+    }
+    own.attributes = ownOptions({
+      ...(graph !== undefined && { graph: ownOptions(graph) }),
+      ...(node !== undefined && { node: ownOptions(node) }),
+      ...(edge !== undefined && { edge: ownOptions(edge) }),
+    });
+  }
+  if (Array.isArray(own.library)) {
+    // A copy of the elements the array owns (a hole would read an
+    // inherited index), read once: the copy is what is checked and used.
+    const library = own.library;
+    own.library = [];
+    for (let i = 0; i < library.length; i++) {
+      if (Object.hasOwn(library, i)) own.library.push(library[i]);
     }
   }
   if (typeof own.sanitize === 'object' && own.sanitize !== null) {

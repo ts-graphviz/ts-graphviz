@@ -1,5 +1,6 @@
 import { inspect } from 'node:util';
 import { describe, expect, it } from 'vitest';
+import { createCommandArgs } from './create-command-args.js';
 import { isFormat, isLayout } from './formats.js';
 import { ownAdapterOptions } from './options.js';
 import type { Options } from './types.js';
@@ -141,6 +142,15 @@ describe('ownAdapterOptions checks the options at run time', {
     for (const record of ['label=x', 1, null, ['label']]) {
       rejects({ attributes: { graph: record } }, 'TypeError');
     }
+    // Rejected before anything in it is read.
+    const record: string[] = [];
+    Object.defineProperty(record, 0, {
+      get: () => {
+        throw new Error('read');
+      },
+      enumerable: true,
+    });
+    rejects({ attributes: { node: record } }, 'TypeError');
   });
 
   it('rejects attribute names Graphviz would read differently', () => {
@@ -222,6 +232,22 @@ describe('ownAdapterOptions checks the options at run time', {
     } finally {
       delete proto.format;
       delete proto.scale;
+    }
+  });
+
+  it('uses the values it checked, read once', () => {
+    let reads = 0;
+    const next = () => (reads++ === 0 ? 'lib.ps' : { toString: () => 'x' });
+    const library: string[] = [];
+    Object.defineProperty(library, 0, { get: next, enumerable: true });
+    const graph = {};
+    Object.defineProperty(graph, 'label', { get: next, enumerable: true });
+    for (const options of [{ library }, { attributes: { graph } }]) {
+      reads = 0;
+      const own = ownAdapterOptions(options as Options);
+      expect([...createCommandArgs(own)]).toContainEqual(
+        expect.stringMatching(/^-(llib\.ps|Glabel=lib\.ps)$/),
+      );
     }
   });
 });
