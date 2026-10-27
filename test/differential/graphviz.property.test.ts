@@ -10,12 +10,21 @@
  *     ports is written `{a b}`, a set of nodes, and a group with a port or
  *     compass point `a:p, b`, a list whose ports count (#1708);
  *   - ports become the `tailport` / `headport` attributes (`p:n`);
- *   - `node [...]` / `edge [...]` defaults apply when an object is created
- *     (in statement order: attributes, defaults, nodes, subgraphs, edges);
- *     a later mention only adds its explicit attributes;
+ *   - statements are read in the order the model keeps them (#1732), which
+ *     is the order the generated graph was built in: nodes, edges,
+ *     subgraphs and default statements interleaved, `label=a;` and the
+ *     merged `graph`/`node`/`edge [...]` defaults first;
+ *   - `node [...]` / `edge [...]` defaults apply when an object is created:
+ *     a node is created by its first mention, a node statement or an edge
+ *     that names it, with the defaults of that place, and a later mention
+ *     only adds its explicit attributes; a default statement kept in place
+ *     (`orderedModels`) applies only to what follows it;
+ *   - Graphviz lists nodes in the order it created them, so the node order
+ *     is compared too;
  *   - a strict graph keeps one edge per node pair (unordered when the
  *     graph is undirected);
- *   - `label=a;` and `graph [label=a];` both set the graph's attributes;
+ *   - `label=a;` and `graph [label=a];` both set the graph's attributes,
+ *     the one written last winning;
  *   - Graphviz keeps escape sequences in values and ids as written (only
  *     `\"` is resolved), so text is compared in that form; an empty value
  *     is "unset".
@@ -25,7 +34,7 @@
 import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import fc from 'fast-check';
-import { toDot } from 'ts-graphviz';
+import { type GraphBaseModel, type RootGraphModel, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import {
   buildGraph,
@@ -165,79 +174,119 @@ const portText = (t: { port?: string; compass?: string }) =>
     .map(gvId)
     .join(':');
 
-function expected(root: RootGraphSummary): Expected {
+/**
+ * What Graphviz should build from `model`, whose contents are `root`
+ * (`summarize(model)`): the model's statements are walked in their order
+ * (#1732), and the summary's nodes, edges and subgraphs, which keep that
+ * order within each kind, give what each statement holds.
+ */
+function expected(model: RootGraphModel, root: RootGraphSummary): Expected {
+  // In creation order, which is the order Graphviz lists nodes in.
   const nodes = new Map<string, Effective>();
   const strictEdges = new Map<string, Effective>();
   const edges: Expected['edges'] = [];
+  // `label=a;` is written before `graph [...]`, so the list wins; a
+  // default statement kept in place comes later still.
+  const graphAttributes = textAttrs([
+    ...root.attributes,
+    ...root.defaults.graph,
+  ]);
   const node = (id: string, defaults: Attrs) => {
     const n = nodes.get(id) ?? new Effective(defaults);
     nodes.set(id, n);
     return n;
   };
-  const walk = (g: Graph, nodeDefaults: Attrs, edgeDefaults: Attrs) => {
-    const nd = new Map([...nodeDefaults, ...textAttrs(g.defaults.node)]);
-    const ed = new Map([...edgeDefaults, ...textAttrs(g.defaults.edge)]);
-    for (const n of g.nodes) node(gvId(n.id), nd).mention(n.attributes);
-    for (const sub of g.subgraphs) walk(sub, nd, ed);
-    for (const e of g.edges) {
-      // A group without ports is a set of nodes (`{a b}`); with one, a list
-      // that keeps every port (`a:p, b`). A chain is binary edges.
-      const ends = e.targets.map((t) =>
-        !Array.isArray(t)
-          ? [{ id: gvId(t.id), port: portText(t) }]
-          : t.some((r) => r.port !== undefined || r.compass !== undefined)
-            ? t.map((r) => ({ id: gvId(r.id), port: portText(r) }))
-            : [...new Set(t.map((r) => gvId(r.id)))].map((id) => ({ id })),
-      );
-      for (const end of ends) for (const r of end) node(r.id, nd);
-      for (let i = 0; i + 1 < ends.length; i++) {
-        for (const from of ends[i]) {
-          for (const to of ends[i + 1]) {
-            let [tail, head] = [from, to];
-            if (root.strict && !root.directed && head.id < tail.id) {
-              [tail, head] = [to, from];
+  const walk = (
+    m: GraphBaseModel,
+    g: Graph,
+    nodeDefaults: Attrs,
+    edgeDefaults: Attrs,
+  ) => {
+    let nd = new Map([...nodeDefaults, ...textAttrs(g.defaults.node)]);
+    let ed = new Map([...edgeDefaults, ...textAttrs(g.defaults.edge)]);
+    const next = { node: 0, edge: 0, subgraph: 0 };
+    for (const statement of m.statements) {
+      switch (statement.$$type) {
+        case 'AttributeList': {
+          // Kept in place (orderedModels): applies to what follows it.
+          const values = textAttrs(statement.values);
+          if (statement.$$kind === 'Node') nd = new Map([...nd, ...values]);
+          else if (statement.$$kind === 'Edge') {
+            ed = new Map([...ed, ...values]);
+          } else if (m === model) {
+            for (const [k, v] of values) graphAttributes.set(k, v);
+          }
+          break;
+        }
+        case 'Node': {
+          const n = g.nodes[next.node++];
+          node(gvId(n.id), nd).mention(n.attributes);
+          break;
+        }
+        case 'Subgraph':
+          walk(statement, g.subgraphs[next.subgraph++], nd, ed);
+          break;
+        case 'Edge':
+          edge(g.edges[next.edge++], ed, nd);
+          break;
+      }
+    }
+  };
+  /** An edge statement, made with the node and edge defaults at its place. */
+  function edge(e: Graph['edges'][number], ed: Attrs, nd: Attrs) {
+    // A group without ports is a set of nodes (`{a b}`); with one, a list
+    // that keeps every port (`a:p, b`). A chain is binary edges.
+    const ends = e.targets.map((t) =>
+      !Array.isArray(t)
+        ? [{ id: gvId(t.id), port: portText(t) }]
+        : t.some((r) => r.port !== undefined || r.compass !== undefined)
+          ? t.map((r) => ({ id: gvId(r.id), port: portText(r) }))
+          : [...new Set(t.map((r) => gvId(r.id)))].map((id) => ({ id })),
+    );
+    // An edge creates the nodes it names that do not exist yet.
+    for (const end of ends) for (const r of end) node(r.id, nd);
+    for (let i = 0; i + 1 < ends.length; i++) {
+      for (const from of ends[i]) {
+        for (const to of ends[i + 1]) {
+          let [tail, head] = [from, to];
+          if (root.strict && !root.directed && head.id < tail.id) {
+            [tail, head] = [to, from];
+          }
+          // Ports are already Graphviz text; they are set after the
+          // explicit attributes without going through gvText again.
+          const withPorts = (edge: Effective) => {
+            edge.mention(e.attributes);
+            if ('port' in tail && tail.port) {
+              edge.attributes.set('tailport', tail.port);
             }
-            // Ports are already Graphviz text; they are set after the
-            // explicit attributes without going through gvText again.
-            const withPorts = (edge: Effective) => {
-              edge.mention(e.attributes);
-              if ('port' in tail && tail.port) {
-                edge.attributes.set('tailport', tail.port);
-              }
-              if ('port' in head && head.port) {
-                edge.attributes.set('headport', head.port);
-              }
-              return edge;
-            };
-            if (root.strict) {
-              const key = `${tail.id}${SEP}${head.id}`;
-              strictEdges.set(
-                key,
-                withPorts(strictEdges.get(key) ?? new Effective(ed)),
-              );
-            } else {
-              edges.push({
-                tail: tail.id,
-                head: head.id,
-                attributes: withPorts(new Effective(ed)).attributes,
-              });
+            if ('port' in head && head.port) {
+              edge.attributes.set('headport', head.port);
             }
+            return edge;
+          };
+          if (root.strict) {
+            const key = `${tail.id}${SEP}${head.id}`;
+            strictEdges.set(
+              key,
+              withPorts(strictEdges.get(key) ?? new Effective(ed)),
+            );
+          } else {
+            edges.push({
+              tail: tail.id,
+              head: head.id,
+              attributes: withPorts(new Effective(ed)).attributes,
+            });
           }
         }
       }
     }
-  };
-  walk(root, new Map(), new Map());
+  }
+  walk(model, root, new Map(), new Map());
   for (const [key, e] of strictEdges) {
     const [tail, head] = key.split(SEP);
     edges.push({ tail, head, attributes: e.attributes });
   }
-  return {
-    // `label=a;` is written before `graph [...]`, so the list wins.
-    attributes: textAttrs([...root.attributes, ...root.defaults.graph]),
-    nodes,
-    edges,
-  };
+  return { attributes: graphAttributes, nodes, edges };
 }
 
 // ---------------------------------------------------------------------------
@@ -295,7 +344,7 @@ describe.skipIf(!dotVersion)(
               `gvpr failed:\n${source}\n${dumped.stderr}`,
             ).toBe(0);
             const theirs = parseDump(dumped.stdout);
-            const ours = expected(summarize(model));
+            const ours = expected(model, summarize(model));
 
             expect(theirs.directed).toBe(spec.directed);
             expect(theirs.strict).toBe(spec.strict);
@@ -303,9 +352,12 @@ describe.skipIf(!dotVersion)(
             expect(sortedMap(theirs.attributes)).toStrictEqual(
               sortedMap(ours.attributes),
             );
-            expect([...theirs.nodes.keys()].sort()).toStrictEqual(
-              [...ours.nodes.keys()].sort(),
-            );
+            // Graphviz lists nodes in the order it created them, so this
+            // checks that statements are written in the model's order.
+            expect(
+              [...theirs.nodes.keys()],
+              `node order differs\nsource:\n${source}`,
+            ).toStrictEqual([...ours.nodes.keys()]);
             for (const [id, n] of ours.nodes) {
               expect(
                 sortedMap(theirs.nodes.get(id) ?? new Map()),

@@ -5,9 +5,11 @@ import {
   type DefaultsSpec,
   dotString,
   edgeRefs,
+  type GraphOp,
   type GraphSpec,
   graphSpec,
   looksHtmlLikeToPrinter,
+  type SubgraphOp,
   type SubgraphSpec,
   type TargetSpec,
 } from './arbitraries.js';
@@ -194,6 +196,116 @@ function classifySpec(spec: GraphSpec): string[] {
   return labels;
 }
 
+/** The kind of statement a step writes; a mention is a node statement. */
+const STEP_KIND: Record<GraphOp['op'], string> = {
+  attribute: 'attribute',
+  defaults: 'defaults',
+  'more defaults': 'defaults',
+  node: 'node',
+  mention: 'node',
+  subgraph: 'subgraph',
+  edge: 'edge',
+};
+/** The place of each kind in the order statements had before #1732. */
+const FIXED_RANK: Record<string, number> = {
+  attribute: 0,
+  defaults: 1,
+  node: 2,
+  subgraph: 3,
+  edge: 4,
+};
+const STATEMENT_KINDS = new Set(['node', 'subgraph', 'edge']);
+
+/** Whether some step comes before a step that the fixed order puts first. */
+function outOfFixedOrder(ops: readonly GraphOp[]): boolean {
+  return ops.some(
+    (op, i) =>
+      i > 0 &&
+      FIXED_RANK[STEP_KIND[op.op]] < FIXED_RANK[STEP_KIND[ops[i - 1].op]],
+  );
+}
+
+/** Whether a default statement is added after a node, edge or subgraph. */
+function defaultsAfterStatement(ops: readonly GraphOp[]): boolean {
+  const first = ops.findIndex((op) => STATEMENT_KINDS.has(STEP_KIND[op.op]));
+  return (
+    first !== -1 &&
+    ops.slice(first).some((op) => STEP_KIND[op.op] === 'defaults')
+  );
+}
+
+function subgraphOps(subgraphs: SubgraphSpec[]): SubgraphOp[][] {
+  return subgraphs.flatMap((s) => [s.ops ?? [], ...subgraphOps(s.subgraphs)]);
+}
+
+/** Labels for how interleaved the steps that build a graph are. */
+function classifyOrder(spec: GraphSpec): string[] {
+  const ops = spec.ops ?? [];
+  const labels: string[] = [];
+  if (spec.ordered) labels.push('ordered models');
+  const kinds = ops.map((op) => STEP_KIND[op.op]);
+  const changes = kinds.filter((k, i) => i > 0 && k !== kinds[i - 1]).length;
+  labels.push(
+    changes <= 2
+      ? 'kind changes: 0-2'
+      : changes <= 5
+        ? 'kind changes: 3-5'
+        : 'kind changes: 6+',
+  );
+  labels.push(outOfFixedOrder(ops) ? 'out of fixed order' : 'fixed order');
+  const firstStatement = kinds.findIndex((k) => STATEMENT_KINDS.has(k));
+  if (
+    firstStatement !== -1 &&
+    kinds.slice(firstStatement).includes('attribute')
+  ) {
+    labels.push('graph attribute after a statement');
+  }
+  if (defaultsAfterStatement(ops)) {
+    labels.push('defaults after a statement');
+    // Only the classes of `orderedModels` keep such a statement in place.
+    if (spec.ordered) labels.push('defaults kept in place');
+  }
+  const subs = subgraphOps(spec.subgraphs);
+  if (subs.some(outOfFixedOrder)) labels.push('subgraph out of fixed order');
+  if (spec.ordered && subs.some(defaultsAfterStatement)) {
+    labels.push('subgraph defaults kept in place');
+  }
+  // When each node is first mentioned: by its node step or a mention.
+  const declared = new Map<number, number>();
+  ops.forEach((op, i) => {
+    const node =
+      op.op === 'node' ? op.index : op.op === 'mention' ? op.node : undefined;
+    if (node !== undefined && !declared.has(node)) declared.set(node, i);
+  });
+  if (
+    ops.some(
+      (op, i) =>
+        op.op === 'edge' &&
+        edgeRefs(spec.edges[op.index]).some(
+          (r) => (declared.get(r.node) ?? Number.POSITIVE_INFINITY) > i,
+        ),
+    )
+  ) {
+    labels.push('edge before an endpoint is declared');
+  }
+  const mentions = ops.filter((op) => op.op === 'mention');
+  if (mentions.length > 0) labels.push('node mentioned again');
+  if (
+    mentions.some(
+      (m) =>
+        ops.findIndex((op) => op.op === 'node' && op.index === m.node) >
+        ops.indexOf(m),
+    )
+  ) {
+    labels.push('mention before the node step');
+  }
+  const lastSubgraph = kinds.lastIndexOf('subgraph');
+  if (kinds.indexOf('edge') !== -1 && kinds.indexOf('edge') < lastSubgraph) {
+    labels.push('edge before a subgraph');
+  }
+  return labels;
+}
+
 /** Labels for the shapes an AST generator produces, found by walking the tree. */
 function classifyAST(root: ASTNode): string[] {
   const labels = new Set<string>();
@@ -318,6 +430,25 @@ describe('generator density', () => {
       'edge with compass': 0.15,
       'edge with group target': 0.2,
       'edge with 3+ targets': 0.25,
+    });
+  });
+
+  it('graphSpec builds graphs with statements in interleaved order (#1732)', () => {
+    const shares = distribution(graphSpec, classifyOrder);
+    expectMinimumShares(shares, {
+      'ordered models': 0.4,
+      'out of fixed order': 0.85,
+      'kind changes: 3-5': 0.25,
+      'kind changes: 6+': 0.45,
+      'graph attribute after a statement': 0.4,
+      'defaults after a statement': 0.6,
+      'defaults kept in place': 0.3,
+      'subgraph out of fixed order': 0.3,
+      'subgraph defaults kept in place': 0.12,
+      'edge before an endpoint is declared': 0.4,
+      'edge before a subgraph': 0.25,
+      'node mentioned again': 0.5,
+      'mention before the node step': 0.25,
     });
   });
 

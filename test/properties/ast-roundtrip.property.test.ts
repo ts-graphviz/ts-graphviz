@@ -1,5 +1,12 @@
 import fc from 'fast-check';
-import { type Compass, Dot, defaultModelsContext, toDot } from 'ts-graphviz';
+import {
+  type Compass,
+  createModelsContext,
+  Dot,
+  defaultModelsContext,
+  orderedModels,
+  toDot,
+} from 'ts-graphviz';
 import {
   type ASTNode,
   createElement,
@@ -12,7 +19,7 @@ import {
   toModel,
 } from 'ts-graphviz/ast';
 import { describe, expect, it } from 'vitest';
-import { buildGraph, graphSpec } from './arbitraries.js';
+import { buildGraph, graphSpec, statementOrder } from './arbitraries.js';
 import {
   attribute,
   attributeList,
@@ -30,6 +37,7 @@ import { summarize } from './summarize.js';
 // reproduce it with FC_SEED=<seed>.
 
 const models = defaultModelsContext();
+const ordered = createModelsContext(orderedModels);
 
 describe('printer and parser', { tags: ['SM-1'] }, () => {
   it('parse(stringify(ast)) rebuilds the same tree', () => {
@@ -129,9 +137,17 @@ describe('fromModel and toModel', () => {
         (specs) => {
           const model = new Dot();
           for (const spec of specs) model.addGraph(buildGraph(spec));
-          const back = toModel(fromModel(model), { models });
+          // Default statements kept in place stay in place only when read
+          // back with the classes that keep them; a graph built with the
+          // default classes has none, so reads back the same with either.
+          const back = toModel(fromModel(model), {
+            models: specs.some((s) => s.ordered) ? ordered : models,
+          });
           expect(back.graphs.map(summarize)).toStrictEqual(
             model.graphs.map(summarize),
+          );
+          expect(back.graphs.map(statementOrder)).toStrictEqual(
+            model.graphs.map(statementOrder),
           );
         },
       ),
