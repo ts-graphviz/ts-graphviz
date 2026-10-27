@@ -126,6 +126,19 @@ export async function toStream<T extends Layout>(
     // would never report 'close'.
     stdout.on('end', () => stdout.destroy());
     stderr.on('end', () => stderr.destroy());
+    // A read error on an output pipe: report it as the call's failure.
+    // Without a listener, the 'error' event would be thrown out of the
+    // stream and end the process instead.
+    const onOutputError = (e: unknown) => {
+      const message = e instanceof Error ? e.message : String(e);
+      fail(
+        new CommandExecutionError(command, `MESSAGE:${message}`, undefined, {
+          cause: e,
+        }),
+      );
+    };
+    stdout.on('error', onOutputError);
+    stderr.on('error', onOutputError);
 
     // Set when writing the DOT source fails.
     let inputError: unknown;

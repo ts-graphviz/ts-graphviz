@@ -192,6 +192,39 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
     });
   });
 
+  describe('when an output pipe fails', () => {
+    it.each(['stdout', 'stderr'] as const)(
+      'rejects with the %s error and kills the process',
+      async (pipe) => {
+        const pipes = {
+          stdout: new PassThrough(),
+          stderr: new PassThrough(),
+        };
+        const stdin = new PassThrough();
+        const events: Record<string, Callback[]> = {};
+        const p: any = {
+          ...pipes,
+          stdin,
+          kill: vi.fn(() => true),
+          on: (event: string, handler: Callback) => {
+            if (!events[event]) events[event] = [];
+            events[event].push(handler);
+          },
+        };
+        spawnMock.mockReturnValue(p);
+
+        const promise = toStream('dot', { layout: 'dot', sanitize: false });
+        const error = new Error('read EIO');
+        // Thrown out of emit() when nothing listens for it.
+        pipes[pipe].emit('error', error);
+
+        await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
+        await expect(promise).rejects.toMatchObject({ cause: error });
+        expect(p.kill).toHaveBeenCalledWith('SIGKILL');
+      },
+    );
+  });
+
   describe('when spawn throws synchronously', () => {
     it('should reject if spawn throws', async () => {
       // Arrange
