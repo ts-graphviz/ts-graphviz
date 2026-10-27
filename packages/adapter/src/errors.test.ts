@@ -13,7 +13,7 @@ const LONE = String.fromCharCode(0xd800);
 /**
  * The characters of `message` that a terminal or log could act on: C0
  * controls other than tab and line feed, DEL, C1 controls, lone
- * surrogates, U+061C, U+200E/F, U+2028..U+202E and U+2066..U+2069.
+ * surrogates, U+061C, U+200E/F, U+2028..U+202E and U+2066..U+206F.
  */
 function unsafeIn(message: string): string[] {
   return Array.from(message).filter((char) => {
@@ -24,7 +24,7 @@ function unsafeIn(message: string): string[] {
       (code >= 0xd800 && code <= 0xdfff) ||
       [0x061c, 0x200e, 0x200f].includes(code) ||
       (code >= 0x2028 && code <= 0x202e) ||
-      (code >= 0x2066 && code <= 0x2069)
+      (code >= 0x2066 && code <= 0x206f)
     );
   });
 }
@@ -39,7 +39,17 @@ const char = fc.oneof(
     .oneof(
       fc.integer({ min: 0, max: 0x1f }),
       fc.integer({ min: 0x7f, max: 0x9f }),
-      fc.constantFrom(0x061c, 0x200e, 0x200f, 0x2028, 0x202e, 0x2066, 0x2069),
+      fc.constantFrom(
+        0x061c,
+        0x200e,
+        0x200f,
+        0x2028,
+        0x202e,
+        0x2066,
+        0x2069,
+        0x206a,
+        0x206f,
+      ),
       fc.integer({ min: 0xd800, max: 0xdfff }),
     )
     .map((code) => String.fromCharCode(code)),
@@ -140,7 +150,7 @@ describe('excerpt', { tags: ['SM-4'] }, () => {
             // what is left out starts with a whole character or escape
             expect(
               excerpt(
-                text.slice(text.length - Number(more)),
+                Array.from(text).slice(-Number(more)).join(''),
                 Number.POSITIVE_INFINITY,
               ),
             ).toBe(full.slice(kept.length));
@@ -148,6 +158,24 @@ describe('excerpt', { tags: ['SM-4'] }, () => {
         },
       ),
       { numRuns: 1000 },
+    );
+  });
+
+  it('counts what it leaves out in characters, not UTF-16 units', () => {
+    const face = String.fromCodePoint(0x1f600);
+    expect(excerpt(face, 0)).toBe('… (1 more characters)');
+    expect(excerpt(`a${face}b`, 2)).toBe('a… (2 more characters)');
+    expect(excerpt(`a${face}b`, 3)).toBe(`a${face}… (1 more characters)`);
+  });
+
+  it('escapes every bidirectional formatting character', () => {
+    const codes = [
+      0x061c, 0x200e, 0x200f, 0x202a, 0x202e, 0x2066, 0x2069, 0x206a, 0x206f,
+    ];
+    expect(excerpt(String.fromCharCode(...codes), 100)).toBe(
+      codes
+        .map((code) => `\\u${code.toString(16).toUpperCase().padStart(4, '0')}`)
+        .join(''),
     );
   });
 

@@ -22,7 +22,7 @@ function isUnsafe(code: number): boolean {
     code === 0x200e ||
     code === 0x200f ||
     (code >= 0x2028 && code <= 0x202e) ||
-    (code >= 0x2066 && code <= 0x2069)
+    (code >= 0x2066 && code <= 0x206f)
   );
 }
 
@@ -34,8 +34,9 @@ function escapeCharacter(code: number): string {
 
 /**
  * `text` with the characters of {@link isUnsafe} escaped (as `\xNN` / `\uNNNN`),
- * cut to at most `max` characters; a cut is marked at the end with how many
- * characters of `text` were left out.
+ * cut to at most `max` UTF-16 code units without splitting a character or
+ * an escape; a cut is marked at the end with how many characters (code
+ * points) of `text` were left out.
  */
 export function excerpt(text: string, max: number): string {
   let out = '';
@@ -48,7 +49,9 @@ export function excerpt(text: string, max: number): string {
     index += char.length;
   }
   if (index < text.length) {
-    out += `… (${text.length - index} more characters)`;
+    let left = 0;
+    for (const _ of text.slice(index)) left++;
+    out += `… (${left} more characters)`;
   }
   return out;
 }
