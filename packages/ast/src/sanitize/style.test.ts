@@ -63,7 +63,7 @@ const value = fc.oneof(
     .map((pieces) => pieces.join('')),
 );
 
-describe('isStyleList', () => {
+describe('isStyleList', { tags: ['SM-7'] }, () => {
   it('accepts what the regular expression it replaces accepts', () => {
     // Measured over 5 seeds × 2000 values: none is empty, about 82% are
     // distinct, 17% are style lists (half of those with setlinewidth, half

@@ -43,7 +43,9 @@ describe('maxNestingDepth', { tags: ['SM-1'] }, () => {
 
   it('rejects nesting too deep for the parser with its own error', () => {
     // Before, a stack overflow inside the parser: TSG_ERR_PARSE_FAILED.
-    expect(() => parse(nested(5000))).toThrow(/Nesting depth exceeds/);
+    expect(() => parse(nested(5000))).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_DOT_SYNTAX' }),
+    );
   });
 
   it('does not count braces in strings or comments', () => {

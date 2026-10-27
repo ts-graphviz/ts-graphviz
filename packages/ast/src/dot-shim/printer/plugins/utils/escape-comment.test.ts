@@ -4,7 +4,7 @@ import { escapeComment } from './escape-comment.js';
 // Zero-width space character (U+200B) used to break up */ sequences in block comments
 const ZERO_WIDTH_SPACE = '\u200B';
 
-describe('escapeComment', () => {
+describe('escapeComment', { tags: ['SM-2'] }, () => {
   describe('Block comments', () => {
     test('should escape */ sequence to prevent comment injection', () => {
       const malicious = 'test */ digraph { a -> b; } /*';
