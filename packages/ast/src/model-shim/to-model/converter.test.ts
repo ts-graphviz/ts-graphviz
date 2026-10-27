@@ -5,7 +5,7 @@ import { ToModelConverter } from './converter.js';
 import { toModel } from './to-model.js';
 import type { ToModelConvertableASTNode } from './types.js';
 
-const literal = (value: string) =>
+const literal = <T extends string>(value: T) =>
   createElement('Literal', { value, kind: 'bare' }, []);
 
 describe('toModel without a plugin for a node', { tags: ['SM-5'] }, () => {
@@ -14,7 +14,7 @@ describe('toModel without a plugin for a node', { tags: ['SM-5'] }, () => {
       'Attribute',
       createElement(
         'Attribute',
-        { key: literal('a'), value: literal('b') },
+        { key: literal('label'), value: literal('b') },
         [],
       ),
     ],
