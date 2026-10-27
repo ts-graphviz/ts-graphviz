@@ -6,7 +6,7 @@ import type { Layout, Options } from './types.js';
  * Whether Windows runs `command` as a batch script: a name ending in `.bat`
  * or `.cmd` (any case), also followed by the dots and spaces Windows strips
  * from a file name (`dot.bat.`, `dot.CMD  `) or by other trailing
- * whitespace, which Node.js's own check ignores too.
+ * ASCII whitespace, which Node.js's own check ignores too.
  *
  * Windows starts such a script through `cmd.exe`, which parses the command
  * line again with its own rules, so the arguments would no longer reach the
@@ -15,7 +15,7 @@ import type { Layout, Options } from './types.js';
  * has changed between releases (CVE-2025-61787, CVE-2026-22864).
  */
 export function isWindowsCommandScript(command: string): boolean {
-  return /\.(?:bat|cmd)$/i.test(command.replace(/[.\s]+$/, ''));
+  return /\.(?:bat|cmd)$/i.test(command.replace(/[. \t\n\v\f\r]+$/, ''));
 }
 
 /**
