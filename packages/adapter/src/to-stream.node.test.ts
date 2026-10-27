@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import { PassThrough, Writable } from 'node:stream';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CommandExecutionError } from './errors.js';
 import { toStream } from './to-stream.node.js';
 
@@ -294,5 +294,47 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
         cause: epipe,
       });
     });
+  });
+});
+
+describe('toStream (Node adapter) on Windows', { tags: ['SM-4'] }, () => {
+  const platform = Object.getOwnPropertyDescriptor(process, 'platform');
+  const setPlatform = (value: string) =>
+    Object.defineProperty(process, 'platform', { ...platform, value });
+
+  beforeEach(() => {
+    spawnMock.mockReset();
+  });
+  afterEach(() => {
+    if (platform) Object.defineProperty(process, 'platform', platform);
+  });
+
+  it('rejects a .bat or .cmd dotCommand before starting it', async () => {
+    setPlatform('win32');
+    for (const dotCommand of ['C:\\Graphviz\\dot.bat', 'dot.CMD', 'dot.bat.']) {
+      await expect(
+        toStream('digraph {}', { dotCommand, sanitize: false }),
+      ).rejects.toMatchObject({
+        name: 'CommandExecutionError',
+        code: 'TSG_ERR_COMMAND_FAILED',
+        command: dotCommand,
+      });
+    }
+    expect(spawnMock).not.toHaveBeenCalled();
+  });
+
+  it('passes a script name on to spawn on other platforms', async () => {
+    setPlatform('linux');
+    spawnMock.mockImplementation(() => {
+      throw new Error('stop here');
+    });
+    await expect(
+      toStream('digraph {}', { dotCommand: '/opt/dot.bat', sanitize: false }),
+    ).rejects.toMatchObject({ code: 'TSG_ERR_COMMAND_FAILED' });
+    expect(spawnMock).toHaveBeenCalledWith(
+      '/opt/dot.bat',
+      expect.any(Array),
+      expect.anything(),
+    );
   });
 });

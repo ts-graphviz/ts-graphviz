@@ -190,6 +190,8 @@ export interface CommonOptions {
    *
    * **This should be a trusted, hardcoded path in your application configuration. Do not derive this value from end-user input.**
    *
+   * On Windows it must name an executable (`dot.exe`), not a `.bat` or `.cmd` script: Windows runs a script through `cmd.exe`, which parses the arguments again, so such a command is rejected with `CommandExecutionError` before it starts.
+   *
    * @defaultValue 'dot'
    */
   dotCommand?: string;

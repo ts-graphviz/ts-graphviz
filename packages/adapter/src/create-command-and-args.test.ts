@@ -1,5 +1,8 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
-import { createCommandAndArgs } from './create-command-and-args.js';
+import {
+  createCommandAndArgs,
+  isWindowsCommandScript,
+} from './create-command-and-args.js';
 import type { Options } from './types.js';
 
 describe('createCommandAndArgs', () => {
@@ -74,5 +77,54 @@ describe('createCommandAndArgs type', () => {
     expectTypeOf<typeof createCommandAndArgs>().returns.toEqualTypeOf<
       [string, string[]]
     >();
+  });
+});
+
+describe('Windows command scripts', { tags: ['SM-4'] }, () => {
+  it('recognises .bat and .cmd names as Windows reads them', () => {
+    for (const command of [
+      'dot.bat',
+      'dot.cmd',
+      'DOT.BAT',
+      'dot.Cmd',
+      'C:\\Program Files\\Graphviz\\dot.bat',
+      'dot.bat.',
+      'dot.bat ',
+      'dot.cmd. . ',
+      '.bat',
+    ]) {
+      expect(isWindowsCommandScript(command), command).toBe(true);
+    }
+    for (const command of [
+      'dot',
+      'dot.exe',
+      'C:\\Program Files\\Graphviz\\bin\\dot.exe',
+      'dot.bat.exe',
+      'dot.batch',
+      'dotbat',
+      'dot.cm',
+      'dot.bat\\dot.exe',
+    ]) {
+      expect(isWindowsCommandScript(command), command).toBe(false);
+    }
+  });
+
+  it('rejects a script as dotCommand only when running on Windows', () => {
+    expect(() =>
+      createCommandAndArgs({ dotCommand: 'dot.cmd .' }, true),
+    ).toThrow(
+      expect.objectContaining({
+        name: 'CommandExecutionError',
+        code: 'TSG_ERR_COMMAND_FAILED',
+        command: 'dot.cmd .',
+      }),
+    );
+    expect(createCommandAndArgs({ dotCommand: 'dot.cmd' }, false)[0]).toBe(
+      'dot.cmd',
+    );
+    expect(createCommandAndArgs({ dotCommand: 'dot.exe' }, true)[0]).toBe(
+      'dot.exe',
+    );
+    expect(createCommandAndArgs({}, true)[0]).toBe('dot');
   });
 });

@@ -150,6 +150,32 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
     vi.unstubAllGlobals();
   });
 
+  it('rejects a .bat or .cmd dotCommand on Windows before starting it', async () => {
+    const calls = stubCommand({});
+    const deno = (globalThis as unknown as { Deno: { build?: { os: string } } })
+      .Deno;
+    deno.build = { os: 'windows' };
+    for (const dotCommand of ['C:\\dot.bat', 'dot.CMD', 'dot.bat. .']) {
+      await expect(
+        toStream('digraph {}', { dotCommand, sanitize: false }),
+      ).rejects.toMatchObject({
+        name: 'CommandExecutionError',
+        code: 'TSG_ERR_COMMAND_FAILED',
+        command: dotCommand,
+      });
+      await expect(
+        toFile('digraph {}', '/path/output', { dotCommand }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_COMMAND_FAILED' });
+    }
+    expect(calls.spawned).toBe(0);
+    expect(calls.opened).toBe(0);
+    // An executable is started; elsewhere a script name is just a file.
+    await toStream('digraph {}', { dotCommand: 'C:\\dot.exe' });
+    deno.build = { os: 'linux' };
+    await toStream('digraph {}', { dotCommand: '/opt/dot.bat' });
+    expect(calls.spawned).toBe(2);
+  });
+
   it('rejects with CommandExecutionError when the command cannot start', async () => {
     const error = new Error('NotFound: dot');
     stubCommand({ spawnError: error });
