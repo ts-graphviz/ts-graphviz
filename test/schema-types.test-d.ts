@@ -300,6 +300,32 @@ describe('a schema', () => {
     }>().toExtend<Schema>();
   });
 
+  it('cannot change cluster, which picks the subgraph attributes', () => {
+    expectTypeOf<{
+      subgraph: { cluster: Override<string> };
+    }>().not.toExtend<Schema>();
+    expectTypeOf<{
+      cluster: { cluster: Extend<'yes'> };
+    }>().not.toExtend<Schema>();
+  });
+
+  it('adds only models and default attributes typed with the schema', () => {
+    myDigraph((g) => {
+      g.addNode(g.node('a'));
+      g.addAttributeList('Node', { 'data-id': 1, label: 2 });
+      g.addAttributeList('Graph', [['team', 'core']]);
+      // @ts-expect-error a number now
+      g.addAttributeList('Node', { label: 'x' });
+      // @ts-expect-error a node attribute
+      g.addAttributeList('Edge', { 'data-id': 1 });
+    });
+    const plain = digraph().node('a');
+    myDigraph((g) => {
+      // @ts-expect-error a node without the schema may hold a string label
+      g.addNode(plain);
+    });
+  });
+
   it('keeps the built-in entry type in values', () => {
     // So that the models stay assignable to the ones without a schema;
     // get() is typed with the schema.

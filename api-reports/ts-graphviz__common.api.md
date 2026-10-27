@@ -1064,8 +1064,8 @@ export interface RootGraphModel<M extends ModelTypes = ModelTypes> extends Graph
 export interface Schema {
   readonly types?: SchemaValueTypeEntries;
   readonly graph?: SchemaAttributeEntries;
-  readonly subgraph?: SchemaAttributeEntries;
-  readonly cluster?: SchemaAttributeEntries;
+  readonly subgraph?: SubgraphSchemaAttributeEntries;
+  readonly cluster?: SubgraphSchemaAttributeEntries;
   readonly node?: SchemaAttributeEntries;
   readonly edge?: SchemaAttributeEntries;
 }
@@ -1118,6 +1118,13 @@ export interface SchemaGraphBaseModel<T extends DotObjectType, K extends Attribu
   apply(attributes: never): void;
   apply(attributes: AttributesObject<K, E> | AttributesEntities<K, E>): void;
   delete(key: SchemaAttributeKey<K, E>): void;
+  addNode(node: M["Node"]): void;
+  addEdge(edge: M["Edge"]): void;
+  addSubgraph(subgraph: M["Subgraph"]): void;
+  addAttributeList(kind: never, attributes: never): void;
+  addAttributeList(kind: "Node", attributes: AttributesObject<NodeAttributeKey, SchemaAttributeTypes<SchemaOf<M>, "node">> | AttributesEntities<NodeAttributeKey, SchemaAttributeTypes<SchemaOf<M>, "node">>): void;
+  addAttributeList(kind: "Edge", attributes: AttributesObject<EdgeAttributeKey, SchemaAttributeTypes<SchemaOf<M>, "edge">> | AttributesEntities<EdgeAttributeKey, SchemaAttributeTypes<SchemaOf<M>, "edge">>): void;
+  addAttributeList(kind: "Graph", attributes: AttributesObject<SubgraphAttributeKey | ClusterSubgraphAttributeKey, SubgraphSchemaAttributeTypes<SchemaOf<M>>> | AttributesEntities<SubgraphAttributeKey | ClusterSubgraphAttributeKey, SubgraphSchemaAttributeTypes<SchemaOf<M>>>): void;
   createNode(id: never, ...rest: never[]): never;
   createNode(id: string, attributes?: NodeAttributesObject<SchemaOf<M>>): M["Node"];
   createSubgraph(first: never, ...rest: never[]): never;
@@ -1251,6 +1258,10 @@ export interface SubgraphConstructor<S extends SubgraphModel = SubgraphModel> {
 export interface SubgraphModel<M extends ModelTypes = ModelTypes> extends GraphBaseModel<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, M> {
   isSubgraphCluster(): boolean;
 }
+
+export type SubgraphSchemaAttributeEntries = SchemaAttributeEntries & {
+  readonly cluster?: never;
+};
 
 export type SubgraphSchemaAttributeTypes<S> = { [K in keyof SchemaAttributeTypes<S, "subgraph"> | keyof SchemaAttributeTypes<S, "cluster">]: KindAttributeType<S, "subgraph", K> | KindAttributeType<S, "cluster", K>; };
 

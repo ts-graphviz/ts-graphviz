@@ -181,6 +181,52 @@ export interface SchemaGraphBaseModel<
   apply(attributes: AttributesObject<K, E> | AttributesEntities<K, E>): void;
   delete(key: SchemaAttributeKey<K, E>): void;
 
+  /** As {@link GraphBaseModel.addNode}: a node typed with the same schema. */
+  addNode(node: M['Node']): void;
+  /** As {@link GraphBaseModel.addEdge}: an edge typed with the same schema. */
+  addEdge(edge: M['Edge']): void;
+  /** As {@link GraphBaseModel.addSubgraph}: a subgraph typed with the same schema. */
+  addSubgraph(subgraph: M['Subgraph']): void;
+  /** @hidden Keeps this assignable to {@link GraphBaseModel}; cannot be called. */
+  addAttributeList(kind: never, attributes: never): void;
+  /** As {@link GraphBaseModel.addAttributeList}, with the schema's attributes. */
+  addAttributeList(
+    kind: 'Node',
+    attributes:
+      | AttributesObject<
+          NodeAttributeKey,
+          SchemaAttributeTypes<SchemaOf<M>, 'node'>
+        >
+      | AttributesEntities<
+          NodeAttributeKey,
+          SchemaAttributeTypes<SchemaOf<M>, 'node'>
+        >,
+  ): void;
+  addAttributeList(
+    kind: 'Edge',
+    attributes:
+      | AttributesObject<
+          EdgeAttributeKey,
+          SchemaAttributeTypes<SchemaOf<M>, 'edge'>
+        >
+      | AttributesEntities<
+          EdgeAttributeKey,
+          SchemaAttributeTypes<SchemaOf<M>, 'edge'>
+        >,
+  ): void;
+  addAttributeList(
+    kind: 'Graph',
+    attributes:
+      | AttributesObject<
+          SubgraphAttributeKey | ClusterSubgraphAttributeKey,
+          SubgraphSchemaAttributeTypes<SchemaOf<M>>
+        >
+      | AttributesEntities<
+          SubgraphAttributeKey | ClusterSubgraphAttributeKey,
+          SubgraphSchemaAttributeTypes<SchemaOf<M>>
+        >,
+  ): void;
+
   /** @hidden Keeps this assignable to {@link GraphBaseModel}; cannot be called. */
   createNode(id: never, ...rest: never[]): never;
   /** As {@link GraphBaseModel.createNode}, with the schema's attributes. */

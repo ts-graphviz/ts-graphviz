@@ -64,6 +64,15 @@ export type SchemaAttributeEntries = {
 };
 
 /**
+ * The `subgraph` or `cluster` attributes of a {@link Schema}. `cluster`
+ * cannot be changed: its value decides which of the two a subgraph takes.
+ * @group Schema
+ */
+export type SubgraphSchemaAttributeEntries = SchemaAttributeEntries & {
+  readonly cluster?: never;
+};
+
+/**
  * The value types a {@link Schema} changes, by name. `style`, `arrowType`
  * and `compass` take strings, the words their values are built from.
  * @group Schema
@@ -95,8 +104,8 @@ export type SchemaValueTypeEntries = {
 export interface Schema {
   readonly types?: SchemaValueTypeEntries;
   readonly graph?: SchemaAttributeEntries;
-  readonly subgraph?: SchemaAttributeEntries;
-  readonly cluster?: SchemaAttributeEntries;
+  readonly subgraph?: SubgraphSchemaAttributeEntries;
+  readonly cluster?: SubgraphSchemaAttributeEntries;
   readonly node?: SchemaAttributeEntries;
   readonly edge?: SchemaAttributeEntries;
 }
