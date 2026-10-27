@@ -34,6 +34,7 @@ describe('maxNestingDepth', { tags: ['SM-1'] }, () => {
     expect(error).toBeInstanceOf(DotSyntaxError);
     expect(error).toMatchObject({
       code: 'TSG_ERR_DOT_SYNTAX',
+      limit: 'maxNestingDepth',
       location: { start: { offset: nested(101).lastIndexOf('{') } },
     });
     expect(() => parse(nested(3), { maxNestingDepth: 2 })).toThrow(
@@ -52,6 +53,7 @@ describe('maxNestingDepth', { tags: ['SM-1'] }, () => {
     // The block beyond the limit, not another syntax error.
     expect(error).toMatchObject({
       code: 'TSG_ERR_DOT_SYNTAX',
+      limit: 'maxNestingDepth',
       location: { start: { offset: nested(101).lastIndexOf('{') } },
     });
   });

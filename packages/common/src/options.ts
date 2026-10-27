@@ -4,7 +4,7 @@
  *
  * The ts-graphviz packages read every options object through this, so a
  * property inherited from a polluted `Object.prototype` (by any other code in
- * the process) is never taken for an option (#1757). Nested option objects
+ * the process) is never taken for an option. Nested option objects
  * are read through it too.
  *
  * @example
