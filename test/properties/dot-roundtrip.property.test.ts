@@ -29,7 +29,7 @@ const roundTrip = (spec: Parameters<typeof buildGraph>[0]) => {
   return { model, dot, reparsed: fromDot(dot) };
 };
 
-describe('[SM-2] DOT round trip', () => {
+describe('DOT round trip', { tags: ['SM-2'] }, () => {
   // Backslashes have no defined meaning in model strings today (#1587): the
   // printer passes them through, so `\\"` breaks out of the string and `\"`
   // comes back as `"`. These properties are expected to fail until #1587
@@ -153,7 +153,7 @@ describe('[SM-2] DOT round trip', () => {
   });
 });
 
-describe('[SM-3] explicit value kinds', () => {
+describe('explicit value kinds', { tags: ['SM-3'] }, () => {
   // DOT text carries no kind marker, so an escString without Graphviz escapes
   // reads back as plain text; what must hold is that printing is idempotent
   // and that no value can break out of its string.
@@ -272,7 +272,7 @@ describe('[SM-3] explicit value kinds', () => {
   });
 });
 
-describe('[SM-1] parser robustness', () => {
+describe('parser robustness', { tags: ['SM-1'] }, () => {
   // Every error the library raises carries a TSG_ERR_* code (#776, #1627);
   // anything else is a crash.
   const allowed = (error: unknown) => isTsGraphvizError(error);
@@ -354,7 +354,7 @@ describe('[SM-1] parser robustness', () => {
   });
 });
 
-describe('[SM-2] attribute values of every kind', () => {
+describe('attribute values of every kind', { tags: ['SM-2'] }, () => {
   // The value kinds the model accepts, including the ones DOT writes bare;
   // typed as a label, which names fewer kinds than the model takes.
   const anyValue = fc.oneof(

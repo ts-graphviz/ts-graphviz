@@ -8,7 +8,7 @@ This document states what ts-graphviz trusts, what it guarantees at each boundar
 
 ## Summary
 
-Each boundary below has an identifier (`SM-1` … `SM-8`). Where a guarantee is enforced by tests, the tests carry the identifier in their title (for example `describe('[SM-2] …')`), and `test/security-model.test.ts` fails if an identifier claimed here has no test or a test names an identifier that is not here. The document therefore does not list test files; search the repository for the identifier.
+Each boundary below has an identifier (`SM-1` … `SM-8`). Each identifier is also a Vitest test tag, defined from the headings of this page. Where a guarantee is enforced by tests, those tests carry the tag (for example `describe(name, { tags: ['SM-2'] }, …)`). Vitest rejects a tag that is not a section here, and `test/security-model.test.ts` fails if an identifier claimed here has no tagged test. The document therefore does not list test files: run `pnpm vitest run --tags-filter SM-2` to run the tests behind a guarantee, or `pnpm vitest --list-tags` to list the tags.
 
 ts-graphviz converts between three representations of a Graphviz graph: DOT text, an AST, and object models. The library itself performs no I/O: it does not touch the network or the file system and runs no code from its input. The only package that leaves the process is `@ts-graphviz/adapter`, which spawns the Graphviz `dot` executable.
 

@@ -264,7 +264,8 @@ function names(spec: GraphSpec): string[] {
 }
 
 describe.skipIf(!dotVersion)(
-  `[SM-2] differential against ${dotVersion}`,
+  `differential against ${dotVersion}`,
+  { tags: ['SM-2'] },
   () => {
     it(
       'Graphviz accepts every generated graph and builds the graph the model means',

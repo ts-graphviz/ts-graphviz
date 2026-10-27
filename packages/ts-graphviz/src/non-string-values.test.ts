@@ -7,7 +7,7 @@ import { toDot } from './to-dot.js';
 // can hand them over.
 const text = 'x" ]; extra [shape=box]; a [label="y';
 
-describe('[SM-2] values that are not strings', () => {
+describe('values that are not strings', { tags: ['SM-2'] }, () => {
   it.each([
     ['an array', [text]],
     ['an object', { toString: (): string => text }],

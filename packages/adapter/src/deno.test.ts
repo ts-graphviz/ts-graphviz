@@ -40,7 +40,7 @@ function stubDeno() {
   return { commandOptions, openOptions };
 }
 
-describe('[SM-8] Deno adapter', () => {
+describe('Deno adapter', { tags: ['SM-8'] }, () => {
   afterEach(() => {
     vi.unstubAllGlobals();
   });

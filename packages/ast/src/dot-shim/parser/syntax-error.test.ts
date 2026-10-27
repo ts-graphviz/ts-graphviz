@@ -12,7 +12,7 @@ function syntaxError(dot: string, options?: Parameters<typeof parse>[1]) {
 
 // The contract of DotSyntaxError is `code` and `location`; the message and
 // `cause` belong to the parser implementation and may change.
-describe('[SM-1] DotSyntaxError', () => {
+describe('DotSyntaxError', { tags: ['SM-1'] }, () => {
   it('says where a syntax error is', () => {
     const error = syntaxError('digraph {\n  a -> ;\n}');
     expect(error).toBeInstanceOf(DotSyntaxError);

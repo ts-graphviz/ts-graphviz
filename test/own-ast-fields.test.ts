@@ -18,7 +18,9 @@ function withInherited<T>(key: string, value: unknown, fn: () => T): T {
 const comment = { type: 'Comment', kind: 'Block', value: 'extra' };
 const literal = { type: 'Literal', value: 'extra', kind: 'quoted' };
 
-describe('[SM-8] optional AST fields are read only when owned', () => {
+describe('optional AST fields are read only when owned', {
+  tags: ['SM-8'],
+}, () => {
   it('comments stay with the node they were read at', () => {
     const shared: unknown[] = [];
     const dot = withInherited('trailingComments', shared, () =>

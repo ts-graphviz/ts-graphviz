@@ -22,7 +22,7 @@ function depthOf(node: ASTNode, depth = 0): number {
   return max;
 }
 
-describe('[SM-1] maxNestingDepth', () => {
+describe('maxNestingDepth', { tags: ['SM-1'] }, () => {
   it('accepts nesting up to the limit (100 by default) and rejects deeper', () => {
     expect(() => parse(nested(100))).not.toThrow();
     let error: unknown;

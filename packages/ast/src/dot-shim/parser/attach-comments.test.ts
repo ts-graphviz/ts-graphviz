@@ -57,7 +57,7 @@ const source = fc
       .map((seps) => tokens.map((t, i) => (i ? seps[i - 1] : '') + t).join('')),
   );
 
-describe('[SM-1] attachComments', () => {
+describe('attachComments', { tags: ['SM-1'] }, () => {
   it('attaches every comment where the quadratic implementation did', () => {
     // Measured over 5 seeds × 300 sources: all distinct, all parse, about
     // 7.5 comments inside statements each (none in 1%), 6.5 of them within

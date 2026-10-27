@@ -251,28 +251,32 @@ const source = fc
     ),
   );
 
-describe.skipIf(!hasDot)('[SM-1] the parser reads DOT as Graphviz does', () => {
-  it('a source it accepts and its reprint are the same graph to dot', () => {
-    const runs = Number(process.env.FC_NUM_RUNS ?? 300);
-    let accepted = 0;
-    for (const dot of fc.sample(source, runs)) {
-      let printed: string;
-      try {
-        printed = stringify(parse(dot));
-      } catch {
-        continue; // failing closed is allowed
+describe.skipIf(!hasDot)(
+  'the parser reads DOT as Graphviz does',
+  { tags: ['SM-1'] },
+  () => {
+    it('a source it accepts and its reprint are the same graph to dot', () => {
+      const runs = Number(process.env.FC_NUM_RUNS ?? 300);
+      let accepted = 0;
+      for (const dot of fc.sample(source, runs)) {
+        let printed: string;
+        try {
+          printed = stringify(parse(dot));
+        } catch {
+          continue; // failing closed is allowed
+        }
+        accepted++;
+        const original = canon(dot);
+        expect(
+          original,
+          `the parser accepts what dot rejects:\n${dot}`,
+        ).toBeDefined();
+        expect(
+          canon(printed),
+          `dot reads the reprint differently: ${JSON.stringify(dot)}\n--- reprint\n${printed}`,
+        ).toBe(original);
       }
-      accepted++;
-      const original = canon(dot);
-      expect(
-        original,
-        `the parser accepts what dot rejects:\n${dot}`,
-      ).toBeDefined();
-      expect(
-        canon(printed),
-        `dot reads the reprint differently: ${JSON.stringify(dot)}\n--- reprint\n${printed}`,
-      ).toBe(original);
-    }
-    expect(accepted).toBeGreaterThan(runs / 10);
-  });
-});
+      expect(accepted).toBeGreaterThan(runs / 10);
+    });
+  },
+);
