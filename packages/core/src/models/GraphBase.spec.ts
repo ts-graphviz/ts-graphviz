@@ -212,6 +212,12 @@ describe('Declarative API', () => {
           expect(edge.attributes.get('label')).toStrictEqual('Test label');
         });
       });
+
+      test('null as the attributes is ignored (#1593)', () => {
+        const edge = g.edge(nodes, null as never);
+        expect(edge.attributes.size).toBe(0);
+        expect(g.edges).toStrictEqual([edge]);
+      });
     });
 
     test('apply atttibutes to edges in graph', () => {
@@ -305,6 +311,16 @@ describe('Declarative API', () => {
         expect(returnedSubgraph).toBe(createdSubgraph);
 
         expect(returnedSubgraph.get('label')).toStrictEqual('Test label');
+      });
+
+      test('the empty id is an id; no id still creates an anonymous subgraph (#1593)', () => {
+        const empty = g.subgraph('');
+        expect(empty.id).toBe('');
+        expect(g.subgraph('')).toBe(empty);
+        const anonymous = g.subgraph();
+        expect(anonymous).not.toBe(empty);
+        expect(anonymous.id).toBeUndefined();
+        expect(g.subgraphs).toStrictEqual([empty, anonymous]);
       });
     });
   });

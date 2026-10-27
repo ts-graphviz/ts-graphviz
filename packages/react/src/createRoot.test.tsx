@@ -5,6 +5,7 @@ import {
   isEdgeModel,
   isNodeModel,
   isRootGraphModel,
+  isSubgraphModel,
   Node as NodeClass,
   type NodeModel,
   type RootGraphModel,
@@ -428,6 +429,9 @@ describe('createRoot()', () => {
           <Node id="node1" />
           <Node id="node2" />
           <Edge targets={['node1', 'node2']} />
+          <Subgraph id="sub1">
+            <Node id="node3" />
+          </Subgraph>
         </Digraph>,
       );
 
@@ -455,6 +459,10 @@ describe('createRoot()', () => {
       // Type guard with wrong type - runtime validation catches this
       const wrongGuard = root.getTopLevelModels(isNodeModel);
       expect(wrongGuard).toHaveLength(0); // Correctly filtered out
+
+      // Nor are the edges and subgraphs inside the root graph
+      expect(root.getTopLevelModels(isEdgeModel)).toHaveLength(0);
+      expect(root.getTopLevelModels(isSubgraphModel)).toHaveLength(0);
 
       root.unmount();
     });
