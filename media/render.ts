@@ -19,10 +19,6 @@ export function mediaDot(module: MediaModule): string {
 
 /**
  * The SVG of an example's DOT, rendered by Graphviz `dot` and optimized.
- * media/generate.ts loads it through Vite's module runner, which knip does
- * not follow.
- *
- * @public
  */
 export async function mediaSvg(dot: string): Promise<string> {
   const stream = await toStream(dot, { format: 'svg' });
