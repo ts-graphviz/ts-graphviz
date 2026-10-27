@@ -2,7 +2,7 @@
 "@ts-graphviz/ast": patch
 ---
 
-Fix two edge cases found by property-based tests
+Fix two edge cases of empty ids and empty sources
 
-- `fromModel` dropped a graph or subgraph id that is the empty string (`""` is a valid DOT id).
-- `stringify` threw a bare `Error` for an empty `Dot` node; it now returns the empty string.
+- `fromModel` keeps a graph or subgraph id that is the empty string (`""` is a valid DOT id); 3.x dropped it.
+- `stringify` returns the empty string for an empty `Dot` node; 3.x threw a bare `Error`.

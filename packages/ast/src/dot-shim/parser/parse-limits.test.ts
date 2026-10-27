@@ -5,7 +5,10 @@ import { parse, parseFragment } from './parse.js';
 // depth, AST node count) and that each of them is per parse. The nesting of
 // graph and subgraph bodies (`maxNestingDepth`) is tested in nesting.test.ts.
 
-/** A DotSyntaxError, the error a parse stopped by a limit throws. */
+/**
+ * A DotSyntaxError, the error a parse stopped by a limit throws; its
+ * `limit` names the option.
+ */
 const dotSyntaxError = (fields: Record<string, unknown> = {}) =>
   expect.objectContaining({
     name: 'DotSyntaxError',
@@ -61,7 +64,7 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
     test('a source over the default limit is rejected, with no location', () => {
       expect(() =>
         parseFragment(graphOfSize(10 * 1024 * 1024 + 1), 'Graph'),
-      ).toThrow(dotSyntaxError({ location: undefined }));
+      ).toThrow(dotSyntaxError({ location: undefined, limit: 'maxInputSize' }));
     });
 
     test('a custom limit is inclusive', () => {
@@ -71,7 +74,7 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
       ).toMatchObject({ type: 'Graph' });
       expect(() =>
         parseFragment(graphOfSize(limit + 1), 'Graph', { maxInputSize: limit }),
-      ).toThrow(dotSyntaxError({ location: undefined }));
+      ).toThrow(dotSyntaxError({ location: undefined, limit: 'maxInputSize' }));
     });
 
     test('the size is counted in UTF-8 bytes, not in characters', () => {
@@ -79,13 +82,13 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
       const source = `graph { label="${'é'.repeat(600)}"; }`;
       expect(source.length).toBeLessThan(1024);
       expect(() => parse(source, { maxInputSize: 1024 })).toThrow(
-        dotSyntaxError({ location: undefined }),
+        dotSyntaxError({ location: undefined, limit: 'maxInputSize' }),
       );
     });
 
     test('the limit applies to parse as well as parseFragment', () => {
       expect(() => parse(graphOfSize(2048), { maxInputSize: 1024 })).toThrow(
-        dotSyntaxError({ location: undefined }),
+        dotSyntaxError({ location: undefined, limit: 'maxInputSize' }),
       );
     });
 
@@ -125,13 +128,21 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
         ).toMatchObject({ value: { kind: 'html' } });
         expect(() =>
           parseFragment(htmlAttribute(limit), 'Attribute', options),
-        ).toThrow(dotSyntaxError({ location: htmlNestingLocation(limit) }));
+        ).toThrow(
+          dotSyntaxError({
+            limit: 'maxHtmlNestingDepth',
+            location: htmlNestingLocation(limit),
+          }),
+        );
       },
     );
 
     test('a value far deeper than the limit is rejected at the limit', () => {
       expect(() => parseFragment(htmlAttribute(200), 'Attribute')).toThrow(
-        dotSyntaxError({ location: htmlNestingLocation(100) }),
+        dotSyntaxError({
+          limit: 'maxHtmlNestingDepth',
+          location: htmlNestingLocation(100),
+        }),
       );
     });
   });
@@ -168,21 +179,30 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
         expect(() =>
           parseFragment(`${edgeChain(limit + 1)};`, 'Edge', options),
         ).toThrow(
-          dotSyntaxError({ location: chainLocation(limit + 1, limit) }),
+          dotSyntaxError({
+            limit: 'maxEdgeChainDepth',
+            location: chainLocation(limit + 1, limit),
+          }),
         );
       },
     );
 
     test('a chain far longer than the limit is rejected', () => {
       expect(() => parseFragment(`${edgeChain(2000)};`, 'Edge')).toThrow(
-        dotSyntaxError({ location: chainLocation(2000, 1000) }),
+        dotSyntaxError({
+          limit: 'maxEdgeChainDepth',
+          location: chainLocation(2000, 1000),
+        }),
       );
     });
 
     test('the limit applies to a chain inside a graph', () => {
       const prefix = 'digraph { ';
       expect(() => parse(`${prefix}${edgeChain(1001)}; }`)).toThrow(
-        dotSyntaxError({ location: chainLocation(1001, 1000, prefix.length) }),
+        dotSyntaxError({
+          limit: 'maxEdgeChainDepth',
+          location: chainLocation(1001, 1000, prefix.length),
+        }),
       );
     });
 
@@ -197,6 +217,8 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
     const nodeCountError = (maxNodes: number) =>
       dotSyntaxError({
         location: undefined,
+        limit: 'maxASTNodes',
+        // Not the contract (`cause` may change), but which limit was hit.
         cause: expect.objectContaining({
           code: 'TSG_ERR_AST_NODE_COUNT_EXCEEDED',
           maxNodes,
@@ -284,7 +306,7 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
       const count = nodeCountOf(5);
       expect(() =>
         parseFragment(nodeStatements(100), 'Graph', { maxASTNodes: count }),
-      ).toThrow(dotSyntaxError());
+      ).toThrow(dotSyntaxError({ limit: 'maxASTNodes' }));
       expect(
         parseFragment(source, 'Graph', { maxASTNodes: count }),
       ).toMatchObject({ type: 'Graph' });
@@ -294,7 +316,7 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
       const options = { maxHtmlNestingDepth: 50 };
       expect(() =>
         parseFragment(htmlAttribute(60), 'Attribute', options),
-      ).toThrow(dotSyntaxError());
+      ).toThrow(dotSyntaxError({ limit: 'maxHtmlNestingDepth' }));
       for (let i = 0; i < 2; i++) {
         expect(
           parseFragment(htmlAttribute(49), 'Attribute', options),
@@ -306,7 +328,7 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
       const options = { maxEdgeChainDepth: 100 };
       expect(() =>
         parseFragment(`${edgeChain(150)};`, 'Edge', options),
-      ).toThrow(dotSyntaxError());
+      ).toThrow(dotSyntaxError({ limit: 'maxEdgeChainDepth' }));
       for (let i = 0; i < 2; i++) {
         expect(
           parseFragment(`${edgeChain(100)};`, 'Edge', options).targets,
@@ -318,11 +340,21 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
       expect(() => parseFragment('invalid syntax here!', 'Graph')).toThrow(
         dotSyntaxError({
           location: { start: at(0), end: at(1) },
+          limit: undefined,
         }),
       );
       expect(parseFragment('digraph { a -> b; }', 'Graph')).toMatchObject({
         type: 'Graph',
       });
+    });
+
+    test('a syntax error after a parse stopped by a limit names no limit', () => {
+      expect(() =>
+        parseFragment(`${edgeChain(150)};`, 'Edge', { maxEdgeChainDepth: 100 }),
+      ).toThrow(dotSyntaxError({ limit: 'maxEdgeChainDepth' }));
+      expect(() => parseFragment('a -> ;', 'Edge')).toThrow(
+        dotSyntaxError({ limit: undefined }),
+      );
     });
   });
 });

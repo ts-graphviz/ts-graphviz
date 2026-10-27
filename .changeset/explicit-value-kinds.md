@@ -8,13 +8,13 @@
 
 Make attribute value kinds explicit and escape literal text completely
 
-A plain `string` in a model is now **literal text**: `toDot` escapes it completely (`\` → `\\`, `"` → `\"`, newlines → `\n` / `\r`) and `fromDot` gives the same text back. This closes a DOT injection in the printer (a value such as `\\"a` could break out of the quoted string) and removes the `/^<.+>$/` guess that turned any string shaped like `<…>` into an HTML label.
+A plain `string` in a model is **literal text**: `toDot` escapes it completely (`\` → `\\`, `"` → `\"`, newlines → `\n` / `\r`) and `fromDot` gives the same text back. In 3.x, a backslash in a string was passed through, so `\N` or `\l` kept their Graphviz meaning, and a string shaped like `<…>` with balanced brackets was written as an HTML-like label; in v4 both are plain text.
 
 Values that carry DOT syntax of their own are explicit:
 
 - `escString('\\N\\lleft')` — a Graphviz escString, written as is so `\N`, `\G`, `\l`, … keep their meaning (only `"` is escaped).
 - `htmlLike('<b>bold</b>')` — an HTML-like label; `renderHTMLLike` in `@ts-graphviz/react` now returns this value instead of a `<…>` string.
-- `isEscString` / `isHTMLLike` type guards; `EscString` and `HTMLLikeLabel` types are updated accordingly.
+- `isEscString` / `isHTMLLike` type guards; `EscString` and `HTMLLikeLabel` types are updated accordingly. The guards, and so `toDot`, recognise only values made by `escString()` / `htmlLike()`, which mark them with a non-enumerable property keyed by a registered symbol (`Symbol.for`), shared by two copies of the package. An object built with the same fields, or a value that went through JSON, is written as a plain string; rebuild such values with `escString()` / `htmlLike()`.
 
 Parsing maps back the same way: `\\` and `\"` become literal characters, any other backslash sequence yields an `escString`, and `<…>` yields `htmlLike`.
 
@@ -24,4 +24,4 @@ Migration:
 - `label: '<<b>bold</b>>'` → `label: htmlLike('<b>bold</b>')`.
 - Code that used the string returned by `renderHTMLLike` → use `.value` (the markup without the outer brackets) or pass the value to an attribute directly.
 
-AST: a quoted `Literal` now holds the raw source text with escape sequences intact, and `stringify` writes it back verbatim; escaping happens in the model ⇄ AST conversion.
+AST: a quoted `Literal` holds the raw source text with escape sequences intact, and `stringify` writes it back verbatim, including a raw newline inside a quoted or HTML string, which gets no indentation (3.x wrote it as `\n`); escaping happens in the model ⇄ AST conversion.
