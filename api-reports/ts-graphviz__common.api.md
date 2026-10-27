@@ -1185,7 +1185,7 @@ export interface SchemaSubgraphModel<M extends ModelTypes> extends SchemaGraphBa
   isSubgraphCluster(): boolean;
 }
 
-export type SchemaValueTypeEntries = { readonly [N in ValueTypeName]?: SchemaEntry<unknown, "extend" | "override">; };
+export type SchemaValueTypeEntries = { readonly [N in ValueTypeName]?: SchemaEntry<N extends "style" | "arrowType" | "compass" ? string : unknown, "extend" | "override">; };
 
 export type SchemaValueTypes<T> = { [N in ValueTypeName]: N extends keyof T ? Apply<ValueTypes[N], T[N]> : ValueTypes[N]; };
 
@@ -1339,7 +1339,9 @@ export declare function withCode<E extends Error, C extends ErrorCode>(error: E,
 
 // Used by the exports, not exported
 
-type Apply<Base, E> = E extends SchemaEntry<infer T, "extend"> ? Base | T : E extends SchemaEntry<infer T, "add" | "override"> ? T : Base;
+type Apply<Base, E> = E extends SchemaEntry<infer T, infer Mode> ? ApplyMode<Base, T, Mode> : Base;
+
+type ApplyMode<Base, T, Mode> = Mode extends "extend" ? Base | T : Mode extends "add" | "override" ? T : never;
 
 type ArrowNameOf<S extends string> = S | `${ArrowType.modifiers}${S}`;
 

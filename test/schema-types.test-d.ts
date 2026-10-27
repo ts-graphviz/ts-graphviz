@@ -18,6 +18,7 @@ import type {
   NodeModel,
   NonClusterSubgraphAttributesObject,
   RootGraphModel,
+  Schema,
   SchemaAttributeTypes,
   SchemaEdgeModel,
   SchemaEntry,
@@ -277,6 +278,35 @@ describe('a schema', () => {
       // @ts-expect-error the node entry overrides types.color
       g.node('b', { fontcolor: 'brand-blue' });
       g.edge(['a', 'b'], { fontcolor: 'brand-blue' });
+    });
+  });
+
+  it('reads an entry of no single mode as the widest one', () => {
+    type Loose = {
+      node: { label: SchemaEntry<number>; 'x-new': SchemaEntry<number> };
+    };
+    expectTypeOf<SchemaAttributeTypes<Loose, 'node'>>().toEqualTypeOf<{
+      label: Attribute<'label'> | number;
+      'x-new': number;
+    }>();
+  });
+
+  it('takes words for the value types built from words', () => {
+    expectTypeOf<{
+      types: { style: Override<number> };
+    }>().not.toExtend<Schema>();
+    expectTypeOf<{
+      types: { compass: Extend<'mid'>; color: Extend<0x1234> };
+    }>().toExtend<Schema>();
+  });
+
+  it('keeps the built-in entry type in values', () => {
+    // So that the models stay assignable to the ones without a schema;
+    // get() is typed with the schema.
+    myDigraph((g) => {
+      expectTypeOf(g.node('a').attributes.values).toEqualTypeOf<
+        ReadonlyArray<[NodeAttributeKey, Attribute<NodeAttributeKey>]>
+      >();
     });
   });
 

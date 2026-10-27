@@ -64,11 +64,15 @@ export type SchemaAttributeEntries = {
 };
 
 /**
- * The value types a {@link Schema} changes, by name.
+ * The value types a {@link Schema} changes, by name. `style`, `arrowType`
+ * and `compass` take strings, the words their values are built from.
  * @group Schema
  */
 export type SchemaValueTypeEntries = {
-  readonly [N in ValueTypeName]?: SchemaEntry<unknown, 'extend' | 'override'>;
+  readonly [N in ValueTypeName]?: SchemaEntry<
+    N extends 'style' | 'arrowType' | 'compass' ? string : unknown,
+    'extend' | 'override'
+  >;
 };
 
 /**
@@ -127,11 +131,17 @@ type EntriesOf<S, Kind extends SchemaKind> = S extends {
 
 /** Apply an entry to the type `Base`. */
 type Apply<Base, E> =
-  E extends SchemaEntry<infer T, 'extend'>
-    ? Base | T
-    : E extends SchemaEntry<infer T, 'add' | 'override'>
-      ? T
-      : Base;
+  E extends SchemaEntry<infer T, infer Mode> ? ApplyMode<Base, T, Mode> : Base;
+
+/**
+ * Distributes over `Mode`: an entry whose mode is not known to be one of
+ * them (such as `SchemaEntry<T>`) gets the widest result, `Base | T`.
+ */
+type ApplyMode<Base, T, Mode> = Mode extends 'extend'
+  ? Base | T
+  : Mode extends 'add' | 'override'
+    ? T
+    : never;
 
 /**
  * The value types after the changes `T` (a schema's `types`).
