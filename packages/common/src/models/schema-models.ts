@@ -341,6 +341,12 @@ export interface SchemaRootGraphModel<M extends ModelTypes>
 /**
  * The {@link ModelTypes} of models typed with the schema `S`, using the
  * interfaces above.
+ *
+ * The constructors of a `ModelsContext<SchemaModelTypes<S>>` still take the
+ * built-in attribute objects: construct signatures are compared strictly,
+ * so constructors taking the schema's would make the context unassignable
+ * to `ModelsContext`. Models created through a graph (`node()`,
+ * `createNode()`, `subgraph()`, ...) take the schema's attributes.
  * @group Schema
  */
 export interface SchemaModelTypes<S extends Schema> extends ModelTypes {
