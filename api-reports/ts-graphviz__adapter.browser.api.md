@@ -44,7 +44,7 @@ export interface NeatoOptions {
   reduce?: boolean;
 }
 
-export type Options<T extends string = Layout, F extends string = never, L extends string = never> = CommonOptions<F, L> & (T extends "neato" ? NeatoOptions : T extends "fdp" ? FdpOptions : OtherOptions<L>);
+export type Options<T extends string = Layout, F extends string = never, L extends string = never> = CommonOptions<F, L> & ListedNames<F, L> & (T extends "neato" ? NeatoOptions : T extends "fdp" ? FdpOptions : OtherOptions<L>);
 
 export interface OtherOptions<L extends string = never> {
   layout?: Exclude<Layout, "neato" | "fdp"> | NoInfer<L>;
@@ -59,6 +59,12 @@ export declare function toFile<const F extends string = never, const L extends s
 export declare function toStream<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(_dot: string, _options?: Options<T, F, L>): Promise<ReadableStream<Uint8Array>>;
 
 // Used by the exports, not exported
+
+type ListedNames<F extends string, L extends string> = ([F] extends [never] ? unknown : {
+  customFormats: readonly F[];
+}) & ([L] extends [never] ? unknown : {
+  customLayouts: readonly L[];
+});
 
 type NoInfer<T> = [T][T extends unknown ? 0 : never];
 ```

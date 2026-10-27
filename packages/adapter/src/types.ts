@@ -320,8 +320,19 @@ export type Options<
   F extends string = never,
   L extends string = never,
 > = CommonOptions<F, L> &
+  ListedNames<F, L> &
   (T extends 'neato'
     ? NeatoOptions
     : T extends 'fdp'
       ? FdpOptions
       : OtherOptions<L>);
+
+/**
+ * Custom names must be listed: with custom format or layout names in the
+ * type (inferred from the lists, or given as type arguments), the matching
+ * list is required.
+ */
+type ListedNames<F extends string, L extends string> = ([F] extends [never]
+  ? unknown
+  : { customFormats: readonly F[] }) &
+  ([L] extends [never] ? unknown : { customLayouts: readonly L[] });

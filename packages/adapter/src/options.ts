@@ -1,13 +1,19 @@
 import { ownOptions, withCode } from '@ts-graphviz/common';
 import { isFormat, isLayout } from './formats.js';
-import type { Layout, Options } from './types.js';
+import type {
+  CommonOptions,
+  FdpOptions,
+  NeatoOptions,
+  OtherOptions,
+} from './types.js';
 
 /**
  * The options as the adapter reads them once the public signature has
  * checked the call: any custom format; a custom layout is read as a
  * `Layout` (it gets no layout-specific arguments).
  */
-export type AnyOptions = Options<Layout, string>;
+export type AnyOptions = CommonOptions<string> &
+  (NeatoOptions | FdpOptions | OtherOptions);
 
 /**
  * The options as given, without anything inherited, and checked: the options
