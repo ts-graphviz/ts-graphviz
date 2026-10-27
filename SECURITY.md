@@ -71,7 +71,9 @@ When using the adapter to execute Graphviz commands:
 
 - **Configuration Security**: The `dotCommand` and `library` options should be hardcoded by application developers, not derived from end-user input.
 
-- **User-Provided DOT Files**: When processing DOT files from untrusted sources, implement validation to check for potentially dangerous attributes that reference file system resources (e.g., `image`, `shapefile`, `fontpath`).
+- **User-Provided DOT Files**: `toStream` and `toFile` check the source with `sanitize` from `@ts-graphviz/ast` by default. It rejects the documented constructs that make Graphviz read a file named in the DOT (e.g., `image`, `shapefile`, `fontpath`) or write a link other than relative, `http`, `https` or `mailto`, for supported Graphviz versions and the checked output formats. It is not a sandbox and does not make the output inert: render DOT from untrusted sources in an isolated process or container with restricted file system and network access and operating-system limits on CPU, memory, run time and number of processes. An allowed link scheme does not make the destination safe; decide which URLs are acceptable, and serve SVG as an image or under a restrictive Content-Security-Policy rather than inline.
+
+- **Graphviz Version**: Graphviz 2.46.0 or later (or a distribution build of 2.42 with the CVE-2020-18032 fix) is the minimum supported; the latest Graphviz release is recommended. See [Supported runtimes](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-model/#supported-runtimes) for what is tested.
 
 For detailed security guidelines and validation examples, see the [@ts-graphviz/adapter documentation](./packages/adapter/README.md#security-considerations).
 
