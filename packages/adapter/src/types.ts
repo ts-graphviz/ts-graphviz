@@ -259,7 +259,9 @@ export interface CommonOptions<
    * **These are trusted configuration defined in your application code. Do
    * not derive them from end-user input.** They are checked to be non-empty
    * strings without a NUL character only. While `sanitize` is on, a format
-   * it has not checked is refused, so a custom format needs `sanitize: false`.
+   * is refused unless its name before any `:renderer` suffix is one it has
+   * checked: a new format (`'mp4'`) needs `sanitize: false`, while a renderer
+   * of a checked one (`'png:cairo'`) is checked as that format.
    */
   customFormats?: readonly F[];
   /**
