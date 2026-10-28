@@ -7,9 +7,22 @@ import type {
   NodeAttributeKey,
   SubgraphAttributeKey,
 } from '../attributes/attribute.js';
+import type {
+  EmptySchema,
+  Schema,
+  SchemaAttributeTypes,
+  SubgraphSchemaAttributeTypes,
+} from '../attributes/schema.js';
 import type { Compass } from '../attributes/types.js';
+import type { DotValue } from '../values.js';
 import type { ModelsContext } from './models-context.js';
-import type { ReadonlyNodeModel } from './readonly-models.js';
+import type {
+  ReadonlyDotModel,
+  ReadonlyEdgeModel,
+  ReadonlyNodeModel,
+  ReadonlyRootGraphModel,
+  ReadonlySubgraphModel,
+} from './readonly-models.js';
 
 /**
  * ASTType is an enumeration of the different types of nodes that can be found in an AST(Abstract Syntax Tree ).
@@ -118,12 +131,78 @@ export type ReadonlyEdgeTargetLikeTuple = readonly [
 ];
 
 /**
- * An objects of attribute key/value pairs.
+ * The keys of attributes with the built-in keys `T` and the attribute types
+ * `E` that a schema adds or changes (see {@link SchemaAttributeTypes}).
+ * Without `E`, this is `T`.
  * @group Models
  */
-export type AttributesObject<T extends AttributeKey> = {
-  [K in T]?: Attribute<K>;
-};
+export type SchemaAttributeKey<
+  T extends AttributeKey,
+  E extends object = Record<never, never>,
+> = [keyof E] extends [never] ? T : T | (keyof E & string);
+
+/**
+ * The value type of the attribute `K`, given the attribute types `E` that a
+ * schema adds or changes: `E[K]` when `E` has `K`, else the built-in
+ * {@link Attribute}. Without `E`, this is `Attribute<K>`. It is always a
+ * {@link DotValue}.
+ * @group Models
+ */
+export type SchemaAttribute<
+  K extends string,
+  E extends object = Record<never, never>,
+> = K extends keyof E ? SchemaAttributeOf<E, K> : BuiltInAttribute<K>;
+
+/**
+ * The built-in {@link Attribute} of `K`: any built-in value for `string`
+ * (the keys of `Attributes<any>`), `never` for another key. (Not
+ * `Attribute<K & AttributeKey>`: TypeScript 5.0 spreads that intersection
+ * over every key.)
+ */
+type BuiltInAttribute<K extends string> = K extends AttributeKey
+  ? Attribute<K>
+  : string extends K
+    ? Attribute<AttributeKey>
+    : never;
+
+/**
+ * `E[K]`, read through `infer` so that inferring a type argument from a
+ * built-in attribute value never descends into the types the schema
+ * computes (a value such as `style` is a union of many strings).
+ */
+type SchemaAttributeOf<E, K extends PropertyKey> = E extends {
+  readonly [P in K]: infer V extends DotValue;
+}
+  ? V
+  : never;
+
+/**
+ * An objects of attribute key/value pairs.
+ *
+ * @typeParam T - The built-in attribute keys.
+ * @typeParam E - The attribute types a schema adds or changes, by key (see
+ * {@link SchemaAttributeTypes}); none by default.
+ * @group Models
+ */
+export type AttributesObject<
+  T extends AttributeKey,
+  E extends object = Record<never, never>,
+> = {
+  [K in Exclude<T, keyof E>]?: Attribute<K>;
+} & SchemaAttributesObject<E>;
+
+/** The attributes of `E` in an {@link AttributesObject}; nothing without. */
+type SchemaAttributesObject<E extends object> = [keyof E] extends [never]
+  ? unknown
+  : {
+      [K in keyof NoInferType<E> & string]?: SchemaAttributeOf<E, K>;
+    };
+
+/**
+ * `T`, which a type argument is never inferred from: the attribute types of
+ * a schema come from the schema, not from the attributes given.
+ */
+type NoInferType<T> = [T][T extends unknown ? 0 : never];
 
 /**
  * @group Models
@@ -132,65 +211,111 @@ export type AttributeValue = Attribute<AttributeKey>;
 
 /**
  * An array of attribute key/value tuple.
+ *
+ * @typeParam T - The built-in attribute keys.
+ * @typeParam E - The attribute types a schema adds or changes, by key (see
+ * {@link SchemaAttributeTypes}); none by default.
  * @group Models
  */
-export type AttributesEntities<T extends AttributeKey> = readonly [
-  T,
-  Attribute<T>,
-][];
+export type AttributesEntities<
+  T extends AttributeKey,
+  E extends object = Record<never, never>,
+> = readonly AttributeTuple<T, E>[];
+
+/**
+ * A key/value tuple of attributes with the built-in keys `T` and the
+ * attribute types `E` that a schema adds or changes. Without `E`, this is
+ * `[T, Attribute<T>]`.
+ * @group Models
+ */
+export type AttributeTuple<
+  T extends AttributeKey,
+  E extends object = Record<never, never>,
+> =
+  | [Exclude<T, keyof E>, Attribute<Exclude<T, keyof E>>]
+  | {
+      [K in keyof E & string]: [K, SchemaAttributeOf<E, K>];
+    }[keyof E & string];
 
 /**
  * Attribute object that can be set to Edge.
+ *
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
-export type EdgeAttributesObject = AttributesObject<EdgeAttributeKey>;
+export type EdgeAttributesObject<S extends Schema = EmptySchema> =
+  AttributesObject<EdgeAttributeKey, SchemaAttributeTypes<S, 'edge'>>;
 
 /**
  * Attribute object that can be set to Node.
+ *
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
-export type NodeAttributesObject = AttributesObject<NodeAttributeKey>;
+export type NodeAttributesObject<S extends Schema = EmptySchema> =
+  AttributesObject<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>;
 
 /**
  * Attribute object that can be set to Graph.
+ *
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
-export type GraphAttributesObject = AttributesObject<GraphAttributeKey>;
+export type GraphAttributesObject<S extends Schema = EmptySchema> =
+  AttributesObject<GraphAttributeKey, SchemaAttributeTypes<S, 'graph'>>;
 
 /**
  * Attribute object that can be set to Subgraph.
+ *
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
-export type SubgraphAttributesObject = AttributesObject<
-  ClusterSubgraphAttributeKey | SubgraphAttributeKey
->;
+export type SubgraphAttributesObject<S extends Schema = EmptySchema> =
+  AttributesObject<
+    ClusterSubgraphAttributeKey | SubgraphAttributeKey,
+    SubgraphSchemaAttributeTypes<S>
+  >;
 
 /**
  * Attribute object of a cluster subgraph, one whose id starts with `cluster`.
+ *
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
-export type ClusterSubgraphAttributesObject =
-  AttributesObject<ClusterSubgraphAttributeKey>;
+export type ClusterSubgraphAttributesObject<S extends Schema = EmptySchema> =
+  AttributesObject<
+    ClusterSubgraphAttributeKey,
+    SchemaAttributeTypes<S, 'cluster'>
+  >;
 
 /**
  * Attribute object of a subgraph whose id does not start with `cluster` (or
  * that has no id). Graphviz treats it as a cluster only with `cluster: true`,
  * so cluster attributes (such as `pencolor`) need that; otherwise only
  * subgraph attributes (such as `rank`) apply.
+ *
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
-export type NonClusterSubgraphAttributesObject =
-  | (AttributesObject<Exclude<SubgraphAttributeKey, 'cluster'>> & {
+export type NonClusterSubgraphAttributesObject<S extends Schema = EmptySchema> =
+  | (AttributesObject<
+      Exclude<SubgraphAttributeKey, 'cluster'>,
+      Omit<SchemaAttributeTypes<S, 'subgraph'>, 'cluster'>
+    > & {
       cluster?: false;
     } & {
       // Spelled out so that an object with a subgraph attribute cannot also
       // carry cluster attributes: excess-property checks on a union only
       // reject keys that no member declares.
-      [K in Exclude<ClusterSubgraphAttributeKey, SubgraphAttributeKey>]?: never;
+      [K in ClusterOnlyAttributeKey<S>]?: never;
     })
-  | (AttributesObject<Exclude<ClusterSubgraphAttributeKey, 'cluster'>> & {
-      cluster: true;
-    });
+  | AsClusterSubgraphAttributesObject<S>;
+
+/** The keys of cluster attributes that a non-cluster subgraph does not take. */
+type ClusterOnlyAttributeKey<S> = Exclude<
+  ClusterSubgraphAttributeKey | keyof SchemaAttributeTypes<S, 'cluster'>,
+  SubgraphAttributeKey | keyof SchemaAttributeTypes<S, 'subgraph'>
+>;
 
 /**
  * The attribute object a subgraph with the id `Id` takes. Graphviz draws a
@@ -204,27 +329,32 @@ export type NonClusterSubgraphAttributesObject =
  * - a union of both kinds: cluster attributes with `cluster: true`, which
  *   hold for either;
  * - an id not known until run time (`string`): {@link SubgraphAttributesObject}.
+ *
+ * With a schema `S`, its `cluster` attributes go where cluster attributes
+ * do, and its `subgraph` attributes where subgraph attributes do.
  * @group Models
  */
-export type SubgraphAttributesFor<Id extends string | undefined> = [
-  Id,
-] extends [undefined]
-  ? NonClusterSubgraphAttributesObject
+export type SubgraphAttributesFor<
+  Id extends string | undefined,
+  S extends Schema = EmptySchema,
+> = [Id] extends [undefined]
+  ? NonClusterSubgraphAttributesObject<S>
   : string extends Exclude<Id, undefined>
-    ? SubgraphAttributesObject
+    ? SubgraphAttributesObject<S>
     : [Lowercase<Exclude<Id, undefined>>] extends [`cluster${string}`]
       ? undefined extends Id
-        ? AsClusterSubgraphAttributesObject
-        : ClusterSubgraphAttributesObject
+        ? AsClusterSubgraphAttributesObject<S>
+        : ClusterSubgraphAttributesObject<S>
       : [
             Extract<Lowercase<Exclude<Id, undefined>>, `cluster${string}`>,
           ] extends [never]
-        ? NonClusterSubgraphAttributesObject
-        : AsClusterSubgraphAttributesObject;
+        ? NonClusterSubgraphAttributesObject<S>
+        : AsClusterSubgraphAttributesObject<S>;
 
 /** Cluster attributes with `cluster: true`: valid whatever the id. */
-type AsClusterSubgraphAttributesObject = AttributesObject<
-  Exclude<ClusterSubgraphAttributeKey, 'cluster'>
+type AsClusterSubgraphAttributesObject<S extends Schema> = AttributesObject<
+  Exclude<ClusterSubgraphAttributeKey, 'cluster'>,
+  Omit<SchemaAttributeTypes<S, 'cluster'>, 'cluster'>
 > & { cluster: true };
 
 /**
@@ -260,10 +390,16 @@ export interface HasComment {
 }
 
 /**
+ * @typeParam T - The built-in attribute keys.
+ * @typeParam E - The attribute types a schema adds or changes, by key (see
+ * {@link SchemaAttributeTypes}); none by default.
  * @group Models
  */
-export interface HasAttributes<T extends AttributeKey> {
-  readonly attributes: AttributesGroupModel<T>;
+export interface HasAttributes<
+  T extends AttributeKey,
+  E extends object = Record<never, never>,
+> {
+  readonly attributes: AttributesGroupModel<T, E>;
 }
 
 /**
@@ -278,38 +414,54 @@ export interface ForwardRefNode extends Partial<Port> {
  * that attributes can be held as a set of keys and values.
  *
  * @typeParam T - The attribute keys to set DOT object.
+ * @typeParam E - The attribute types a schema adds or changes, by key (see
+ * {@link SchemaAttributeTypes}); none by default. Its keys are taken as
+ * well, with its types.
  * @group Models
  */
-export interface Attributes<T extends AttributeKey> {
+export interface Attributes<
+  T extends AttributeKey,
+  E extends object = Record<never, never>,
+> {
   /** Size of the set of keys and values held by the DOT object. */
   readonly size: number;
   /** The key/value tuples of the object attributes. */
-  readonly values: ReadonlyArray<[T, Attribute<T>]>;
+  readonly values: ReadonlyArray<AttributeTuple<T, E>>;
   /**
    * Get the value of an attribute by a DOT object by specifying its key.
    *
    * If the value corresponding to the key does not exist, undefined is returned.
    */
-  get<K extends T>(key: K): Attribute<K> | undefined;
+  get<K extends SchemaAttributeKey<T, E>>(
+    key: K,
+  ): SchemaAttribute<K, E> | undefined;
   /** Set a value, by specifying the key of the attributes in the DOT object. */
-  set<K extends T>(key: K, value: Attribute<K>): void;
+  set<K extends SchemaAttributeKey<T, E>>(
+    key: K,
+    value: SchemaAttribute<K, E>,
+  ): void;
   /**
    * Apply keys and values that can be specified for DOT objects collectively.
    *
    * @param attributes - An array of objects or tuples of attribute key/value pairs.
    */
-  apply(attributes: AttributesObject<T> | AttributesEntities<T>): void;
+  apply(attributes: AttributesObject<T, E> | AttributesEntities<T, E>): void;
   /** Delete the value of an attribute from a DOT object by specifying a key. */
-  delete(key: T): void;
+  delete(key: SchemaAttributeKey<T, E>): void;
   /** Delete all attributes specified for the DOT object. */
   clear(): void;
 }
 
 /**
+ * @typeParam T - The built-in attribute keys.
+ * @typeParam E - The attribute types a schema adds or changes, by key (see
+ * {@link SchemaAttributeTypes}); none by default.
  * @group Models
  */
-export interface AttributesGroupModel<T extends AttributeKey>
-  extends Attributes<T> {}
+export interface AttributesGroupModel<
+  T extends AttributeKey,
+  E extends object = Record<never, never>,
+> extends Attributes<T, E> {}
 
 /**
  * @group Models
@@ -322,6 +474,8 @@ export type AttributeListKind = 'Graph' | 'Edge' | 'Node';
  *
  * @typeParam K - The type of object is being specified.
  * @typeParam T - The attribute keys to set DOT object.
+ * @typeParam E - The attribute types a schema adds or changes, by key (see
+ * {@link SchemaAttributeTypes}); none by default.
  * @group Models
  */
 /**
@@ -337,7 +491,8 @@ export type GraphStatementModel =
 export interface AttributeListModel<
   K extends AttributeListKind = AttributeListKind,
   T extends AttributeKey = AttributeKey,
-> extends Attributes<T>,
+  E extends object = Record<never, never>,
+> extends Attributes<T, E>,
     HasComment,
     DotObjectModel<'AttributeList'> {
   $$kind: K;
@@ -354,11 +509,16 @@ export interface Port {
 
 /**
  * Model that can be converted to Node in DOT language.
+ *
+ * @typeParam S - The schema of the models, which types the attributes;
+ * none by default. A node of one schema is not a node of another (or of
+ * none): an attribute may have another type there. Code that only reads
+ * nodes can take a {@link ReadonlyNodeModel}, which every node is.
  * @group Models
  */
-export interface NodeModel
+export interface NodeModel<S extends Schema = EmptySchema>
   extends HasComment,
-    HasAttributes<NodeAttributeKey>,
+    HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>,
     DotObjectModel<'Node'> {
   /** ID of the node */
   readonly id: string;
@@ -368,44 +528,116 @@ export interface NodeModel
 
 /**
  * Model that can be converted to Edge in DOT language.
+ *
+ * @typeParam S - The schema of the models, which types the attributes;
+ * none by default. Code that only reads edges can take a
+ * {@link ReadonlyEdgeModel}, which every edge is.
  * @group Models
  */
-export interface EdgeModel
+export interface EdgeModel<S extends Schema = EmptySchema>
   extends HasComment,
-    HasAttributes<EdgeAttributeKey>,
+    HasAttributes<EdgeAttributeKey, SchemaAttributeTypes<S, 'edge'>>,
     DotObjectModel<'Edge'> {
   readonly targets: EdgeTargetTuple;
 }
 
 /**
  * Cluster common attribute interface.
+ *
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
-export interface GraphCommonAttributes {
+export interface GraphCommonAttributes<S extends Schema = EmptySchema> {
   /** Manage common attributes of graphs in a graph. */
   graph: AttributeListModel<
     'Graph',
-    SubgraphAttributeKey | ClusterSubgraphAttributeKey
+    SubgraphAttributeKey | ClusterSubgraphAttributeKey,
+    SubgraphSchemaAttributeTypes<S>
   >;
   /** Manage common attributes of edges in a graph. */
-  edge: AttributeListModel<'Edge', EdgeAttributeKey>;
+  edge: AttributeListModel<
+    'Edge',
+    EdgeAttributeKey,
+    SchemaAttributeTypes<S, 'edge'>
+  >;
   /** Manage common attributes of nodes in a graph. */
-  node: AttributeListModel<'Node', NodeAttributeKey>;
+  node: AttributeListModel<
+    'Node',
+    NodeAttributeKey,
+    SchemaAttributeTypes<S, 'node'>
+  >;
 }
 
 /**
+ * The attribute types the schema `S` adds or changes for the graph of
+ * `$$type` `T` itself: the `graph` ones for a root graph, the `subgraph`
+ * and `cluster` ones for a subgraph.
+ * @group Models
+ */
+export type GraphSchemaAttributeTypes<T extends DotObjectType, S> = [
+  T,
+] extends ['Graph']
+  ? SchemaAttributeTypes<S, 'graph'>
+  : [T] extends ['Subgraph']
+    ? SubgraphSchemaAttributeTypes<S>
+    : Record<never, never>;
+
+/**
+ * A default attribute statement in {@link GraphBaseModel.statements}, with
+ * the schema `S`: one of {@link GraphCommonAttributes}. With no schema,
+ * any {@link AttributeListModel}.
+ * @group Models
+ */
+export type StatementAttributeListModel<S extends Schema = EmptySchema> = [
+  keyof S,
+] extends [never]
+  ? AttributeListModel
+  : GraphCommonAttributes<S>[keyof GraphCommonAttributes];
+
+/**
+ * The attributes a default attribute statement takes (see
+ * {@link GraphBaseModel.addAttributeList}), with the schema `S`: those of
+ * one of {@link GraphCommonAttributes}. With no schema, any attributes.
+ * @group Models
+ */
+export type AttributeListAttributes<S extends Schema = EmptySchema> = [
+  keyof S,
+] extends [never]
+  ? AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>
+  :
+      | SubgraphAttributesObject<S>
+      | NodeAttributesObject<S>
+      | EdgeAttributesObject<S>
+      | AttributesEntities<
+          SubgraphAttributeKey | ClusterSubgraphAttributeKey,
+          SubgraphSchemaAttributeTypes<S>
+        >
+      | AttributesEntities<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>
+      | AttributesEntities<EdgeAttributeKey, SchemaAttributeTypes<S, 'edge'>>;
+
+/**
  * DOT model representing a graph/digraph/subgraph.
+ *
+ * @typeParam T - The `$$type` of the graph.
+ * @typeParam K - The built-in attribute keys of the graph itself.
+ * @typeParam M - The model types the graph creates.
+ * @typeParam S - The schema of the models, which types every attribute the
+ * graph takes; its `addNode`, `addEdge` and `addSubgraph` take models of
+ * that schema. By default the schema of `M` ({@link SchemaOf}); it is a
+ * parameter of its own so that a graph is still one of the graphs whose
+ * model types it narrows.
  * @group Models
  */
 export interface GraphBaseModel<
   T extends DotObjectType = DotObjectType,
   K extends AttributeKey = AttributeKey,
-  M extends ModelTypes = ModelTypes,
+  M extends AnyModelTypes = ModelTypes,
+  S extends Schema = SchemaOf<M>,
 > extends HasComment,
-    Attributes<K>,
+    Attributes<K, GraphSchemaAttributeTypes<T, S>>,
     DotObjectModel<T> {
   readonly id?: string;
-  readonly attributes: Readonly<GraphCommonAttributes>;
+  readonly attributes: Readonly<GraphCommonAttributes<S>>;
   /** Node objects in the graph. */
   readonly nodes: ReadonlyArray<M['Node']>;
   /** Edge objects in the graph. */
@@ -420,23 +652,27 @@ export interface GraphBaseModel<
    * attribute statements in their place may.
    */
   readonly statements: ReadonlyArray<
-    M['Node'] | M['Edge'] | M['Subgraph'] | AttributeListModel
+    M['Node'] | M['Edge'] | M['Subgraph'] | StatementAttributeListModel<S>
   >;
 
-  with(models: Partial<ModelsContext>): void;
+  /**
+   * Use the given classes for the models this graph creates; the classes
+   * left out stay as they are.
+   */
+  with(models: Partial<ModelsContext<ModelTypes<S>>>): void;
 
   /**
-   * Add a Node to the graph.
+   * Add a Node to the graph: any node of the graph's schema.
    */
-  addNode(node: NodeModel): void;
+  addNode(node: NodeModel<S>): void;
   /**
-   * Add Edge to the graph.
+   * Add Edge to the graph: any edge of the graph's schema.
    */
-  addEdge(edge: EdgeModel): void;
+  addEdge(edge: EdgeModel<S>): void;
   /**
-   * Add a Subgraph to the graph.
+   * Add a Subgraph to the graph: any subgraph of the graph's schema.
    */
-  addSubgraph(subgraph: SubgraphModel): void;
+  addSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): void;
   /**
    * Add a default attribute statement (`node [...]`, `edge [...]`,
    * `graph [...]`). The default classes merge it into
@@ -448,9 +684,7 @@ export interface GraphBaseModel<
    */
   addAttributeList(
     kind: AttributeListKind,
-    attributes:
-      | AttributesObject<AttributeKey>
-      | AttributesEntities<AttributeKey>,
+    attributes: AttributeListAttributes<S>,
   ): void;
   /**
    * Check if the Node exists in the graph.
@@ -459,27 +693,27 @@ export interface GraphBaseModel<
   /**
    * Check if the Edge exists in the graph.
    */
-  existEdge(edge: EdgeModel): boolean;
+  existEdge(edge: EdgeModel<S>): boolean;
   /**
    * Check if the Subgraph exists in the graph.
    */
-  existSubgraph(subgraph: SubgraphModel): boolean;
+  existSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): boolean;
   /**
    * Remove Node from the graph.
    */
-  removeNode(node: NodeModel | string): void;
+  removeNode(node: NodeModel<S> | string): void;
   /**
    * Remove Edge from the graph.
    */
-  removeEdge(edge: EdgeModel): void;
+  removeEdge(edge: EdgeModel<S>): void;
   /**
    * Remove Subgraph from the graph.
    */
-  removeSubgraph(subgraph: SubgraphModel): void;
+  removeSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): void;
   /**
    * Create a Node in the graph.
    */
-  createNode(id: string, attributes?: NodeAttributesObject): M['Node'];
+  createNode(id: string, attributes?: NodeAttributesObject<S>): M['Node'];
   /**
    * Create a Subgraph and add it to the graph.
    *
@@ -488,10 +722,10 @@ export interface GraphBaseModel<
    */
   createSubgraph<const Id extends string | undefined = undefined>(
     id?: Id,
-    attributes?: SubgraphAttributesFor<Id>,
+    attributes?: SubgraphAttributesFor<Id, S>,
   ): M['Subgraph'];
   createSubgraph(
-    attributes?: NonClusterSubgraphAttributesObject,
+    attributes?: NonClusterSubgraphAttributesObject<S>,
   ): M['Subgraph'];
   /**
    * Get Subgraph in cluster by specifying id.
@@ -509,7 +743,7 @@ export interface GraphBaseModel<
   /** Create Edge and add it to the graph. */
   createEdge(
     targets: ReadonlyEdgeTargetLikeTuple,
-    attributes?: EdgeAttributesObject,
+    attributes?: EdgeAttributesObject<S>,
   ): M['Edge'];
 
   /**
@@ -575,7 +809,7 @@ export interface GraphBaseModel<
    */
   subgraph<const Id extends string>(
     id: Id,
-    attributes: SubgraphAttributesFor<Id>,
+    attributes: SubgraphAttributesFor<Id, S>,
     callback?: (subgraph: M['Subgraph']) => void,
   ): M['Subgraph'];
   /**
@@ -607,7 +841,7 @@ export interface GraphBaseModel<
    * @param callback Callbacks for manipulating created or retrieved subgraph.
    */
   subgraph(
-    attributes: NonClusterSubgraphAttributesObject,
+    attributes: NonClusterSubgraphAttributesObject<S>,
     callback?: (subgraph: M['Subgraph']) => void,
   ): M['Subgraph'];
   /**
@@ -669,7 +903,7 @@ export interface GraphBaseModel<
    */
   node(
     id: string,
-    attributes: NodeAttributesObject,
+    attributes: NodeAttributesObject<S>,
     callback?: (node: M['Node']) => void,
   ): M['Node'];
   /**
@@ -695,7 +929,7 @@ export interface GraphBaseModel<
    *
    * @param attributes Object of attributes to be adapted to the nodes.
    */
-  node(attributes: NodeAttributesObject): void;
+  node(attributes: NodeAttributesObject<S>): void;
   /**
    * Create a edge.
    *
@@ -747,7 +981,7 @@ export interface GraphBaseModel<
    */
   edge(
     targets: ReadonlyEdgeTargetLikeTuple,
-    attributes: EdgeAttributesObject,
+    attributes: EdgeAttributesObject<S>,
     callback?: (edge: M['Edge']) => void,
   ): M['Edge'];
   /**
@@ -773,7 +1007,7 @@ export interface GraphBaseModel<
    * ```
    * @param attributes Object of attributes to be adapted to the edges.
    */
-  edge(attributes: EdgeAttributesObject): void;
+  edge(attributes: EdgeAttributesObject<S>): void;
 
   /**
    * Set a common attribute for the graph in the graph.
@@ -796,18 +1030,21 @@ export interface GraphBaseModel<
    * ```
    * @param attributes Object of attributes to be adapted to the graph.
    */
-  graph(attributes: SubgraphAttributesObject): void;
+  graph(attributes: SubgraphAttributesObject<S>): void;
 }
 
 /**
  * DOT model representing a subgraph.
  * @group Models
  */
-export interface SubgraphModel<M extends ModelTypes = ModelTypes>
-  extends GraphBaseModel<
+export interface SubgraphModel<
+  M extends AnyModelTypes = ModelTypes,
+  S extends Schema = SchemaOf<M>,
+> extends GraphBaseModel<
     'Subgraph',
     SubgraphAttributeKey | ClusterSubgraphAttributeKey,
-    M
+    M,
+    S
   > {
   /**
    * Whether Graphviz draws the subgraph as a cluster: its id starts with
@@ -821,8 +1058,10 @@ export interface SubgraphModel<M extends ModelTypes = ModelTypes>
  * DOT model representing a root graphs(digraph and graph).
  * @group Models
  */
-export interface RootGraphModel<M extends ModelTypes = ModelTypes>
-  extends GraphBaseModel<'Graph', GraphAttributeKey, M> {
+export interface RootGraphModel<
+  M extends AnyModelTypes = ModelTypes,
+  S extends Schema = SchemaOf<M>,
+> extends GraphBaseModel<'Graph', GraphAttributeKey, M, S> {
   directed: boolean;
 
   /**
@@ -842,23 +1081,27 @@ export interface RootGraphModel<M extends ModelTypes = ModelTypes>
  *
  * This is the model counterpart of the `Dot` AST node, so `fromModel` and
  * `toModel` map the two to each other.
+ *
+ * @typeParam S - The schema of its root graphs; none by default.
  * @group Models
  */
-export interface DotModel extends HasComment, DotObjectModel<'Dot'> {
+export interface DotModel<S extends Schema = EmptySchema>
+  extends HasComment,
+    DotObjectModel<'Dot'> {
   /** Root graphs in the order they appear in the source. */
-  readonly graphs: ReadonlyArray<RootGraphModel>;
+  readonly graphs: ReadonlyArray<RootGraphModel<ModelTypes<S>>>;
   /**
    * Add a root graph.
    */
-  addGraph(graph: RootGraphModel): void;
+  addGraph(graph: RootGraphModel<ModelTypes<S>>): void;
   /**
    * Check if the root graph exists.
    */
-  existGraph(graph: RootGraphModel): boolean;
+  existGraph(graph: RootGraphModel<ModelTypes<S>>): boolean;
   /**
    * Remove a root graph.
    */
-  removeGraph(graph: RootGraphModel): void;
+  removeGraph(graph: RootGraphModel<ModelTypes<S>>): void;
 }
 
 /**
@@ -888,56 +1131,107 @@ export type AnyDotObjectModel = GraphStatementModel | RootGraphModel | DotModel;
  * The instance types a {@link ModelsContext} creates: what graphs return
  * from `node()`, `edge()`, `subgraph()` and the like. The defaults
  * are the base interfaces.
+ *
+ * `Schema` is the {@link Schema} the models are typed with. It exists only
+ * in the types.
+ *
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
-export interface ModelTypes {
-  Dot: DotModel;
-  Graph: RootGraphModel;
-  Digraph: RootGraphModel;
-  Subgraph: SubgraphModel;
-  Node: NodeModel;
-  Edge: EdgeModel;
+export interface ModelTypes<S extends Schema = EmptySchema> {
+  Schema: S;
+  Dot: DotModel<S>;
+  Graph: RootGraphModel<ModelTypes<S>>;
+  Digraph: RootGraphModel<ModelTypes<S>>;
+  Subgraph: SubgraphModel<ModelTypes<S>>;
+  Node: NodeModel<S>;
+  Edge: EdgeModel<S>;
 }
 
 /**
+ * What every {@link ModelTypes} is, whatever its schema: the bound of the
+ * model types a graph or a context takes. It names only the read-only model
+ * types, which the models of every schema fit.
  * @group Models
  */
-export interface DotConstructor<D extends DotModel = DotModel> {
-  new (graphs?: RootGraphModel[], comment?: string): D;
+export interface AnyModelTypes {
+  Schema: Schema;
+  Dot: ReadonlyDotModel;
+  Graph: ReadonlyRootGraphModel;
+  Digraph: ReadonlyRootGraphModel;
+  Subgraph: ReadonlySubgraphModel;
+  Node: ReadonlyNodeModel;
+  Edge: ReadonlyEdgeModel;
 }
 
 /**
+ * The {@link Schema} of the model types `M`.
+ * @group Models
+ */
+export type SchemaOf<M extends AnyModelTypes> = M['Schema'];
+
+/**
+ * @typeParam D - The model the constructor creates.
+ * @typeParam S - The schema of the models; none by default.
+ * @group Models
+ */
+export interface DotConstructor<
+  D extends ReadonlyDotModel = DotModel,
+  S extends Schema = EmptySchema,
+> {
+  new (graphs?: RootGraphModel<ModelTypes<S>>[], comment?: string): D;
+}
+
+/**
+ * @typeParam G - The model the constructor creates.
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
 export interface RootGraphConstructor<
-  G extends RootGraphModel = RootGraphModel,
+  G extends ReadonlyRootGraphModel = RootGraphModel,
+  S extends Schema = EmptySchema,
 > {
-  new (id?: string, attributes?: GraphAttributesObject): G;
-  new (id?: string, strict?: boolean, attributes?: GraphAttributesObject): G;
-  new (strict?: boolean, attributes?: GraphAttributesObject): G;
-  new (attributes?: GraphAttributesObject): G;
+  new (id?: string, attributes?: GraphAttributesObject<S>): G;
+  new (id?: string, strict?: boolean, attributes?: GraphAttributesObject<S>): G;
+  new (strict?: boolean, attributes?: GraphAttributesObject<S>): G;
+  new (attributes?: GraphAttributesObject<S>): G;
 }
 
 /**
+ * @typeParam G - The model the constructor creates.
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
-export interface SubgraphConstructor<S extends SubgraphModel = SubgraphModel> {
-  new (id?: string, attributes?: SubgraphAttributesObject): S;
-  new (attributes?: SubgraphAttributesObject): S;
+export interface SubgraphConstructor<
+  G extends ReadonlySubgraphModel = SubgraphModel,
+  S extends Schema = EmptySchema,
+> {
+  new (id?: string, attributes?: SubgraphAttributesObject<S>): G;
+  new (attributes?: SubgraphAttributesObject<S>): G;
 }
 
 /**
+ * @typeParam N - The model the constructor creates.
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
-export interface NodeConstructor<N extends NodeModel = NodeModel> {
-  new (id: string, attributes?: NodeAttributesObject): N;
+export interface NodeConstructor<
+  N extends ReadonlyNodeModel = NodeModel,
+  S extends Schema = EmptySchema,
+> {
+  new (id: string, attributes?: NodeAttributesObject<S>): N;
 }
 
 /**
+ * @typeParam E - The model the constructor creates.
+ * @typeParam S - The schema of the models; none by default.
  * @group Models
  */
-export interface EdgeConstructor<E extends EdgeModel = EdgeModel> {
-  new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject): E;
+export interface EdgeConstructor<
+  E extends ReadonlyEdgeModel = EdgeModel,
+  S extends Schema = EmptySchema,
+> {
+  new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject<S>): E;
 }
 
 /**
