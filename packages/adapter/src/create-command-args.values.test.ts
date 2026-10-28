@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createCommandArgs, escapeValue } from './create-command-args.js';
 
-describe('[SM-4] escapeValue', () => {
+describe('escapeValue', { tags: ['SM-4'] }, () => {
   it('writes the value verbatim: argv needs no quoting (#1592)', () => {
     expect(escapeValue('a b')).toBe('=a b');
     expect(escapeValue('say "hi"')).toBe('=say "hi"');

@@ -15,7 +15,7 @@ const reopened = (edges: number) =>
 const convert = (ast: DotASTNode, maxEdgeTargets?: number) =>
   toModel(ast, { models: defaultModelsContext(), maxEdgeTargets });
 
-describe('[SM-1] maxEdgeTargets', () => {
+describe('maxEdgeTargets', { tags: ['SM-1'] }, () => {
   it('stops edges to a reopened subgraph from growing without bound', () => {
     // 2000 edges reach 2 001 000 nodes in all (90 MB before; 4000 took 300 MB).
     let error: unknown;

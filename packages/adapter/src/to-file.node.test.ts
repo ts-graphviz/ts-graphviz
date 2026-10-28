@@ -20,7 +20,7 @@ const streamOf = (...texts: string[]) =>
     },
   });
 
-describe('[SM-4] toFile (Node adapter)', () => {
+describe('toFile (Node adapter)', { tags: ['SM-4'] }, () => {
   beforeEach(() => {
     vi.mocked(toStream).mockReset();
   });
@@ -42,7 +42,9 @@ describe('[SM-4] toFile (Node adapter)', () => {
     expect(readFileSync(path, 'utf8')).toBe('out');
   });
 
-  it('[SM-8] writes the whole file from the start whatever Object.prototype holds', async () => {
+  it('writes the whole file from the start whatever Object.prototype holds', {
+    tags: ['SM-8'],
+  }, async () => {
     const proto = Object.prototype as Record<string, unknown>;
     for (const [key, value] of [
       ['start', 3],

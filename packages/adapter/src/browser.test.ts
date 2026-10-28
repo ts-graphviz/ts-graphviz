@@ -1,12 +1,29 @@
+import { isTsGraphvizError } from '@ts-graphviz/common';
 import { describe, expect, it } from 'vitest';
-import { ERROR_MESSAGE, toFile, toStream } from './browser.js';
+import { toFile, toStream } from './browser.js';
 
-describe('[SM-4] browser adapter', () => {
-  it('toStream throws error with correct message', () => {
-    expect(() => toStream('dot', {})).toThrow(ERROR_MESSAGE);
-  });
+function thrownBy(fn: () => unknown): unknown {
+  try {
+    fn();
+  } catch (error) {
+    return error;
+  }
+  return undefined;
+}
 
-  it('toFile throws error with correct message', () => {
-    expect(() => toFile('dot', 'path', {})).toThrow(ERROR_MESSAGE);
-  });
+describe('browser adapter', { tags: ['SM-4'] }, () => {
+  it.each([
+    ['toStream', () => toStream('dot', {})],
+    ['toFile', () => toFile('dot', 'path', {})],
+  ])(
+    '%s throws synchronously with TSG_ERR_UNSUPPORTED_ENVIRONMENT',
+    (_, call) => {
+      const error = thrownBy(call);
+      expect(isTsGraphvizError(error)).toBe(true);
+      expect(error).toMatchObject({
+        name: 'Error',
+        code: 'TSG_ERR_UNSUPPORTED_ENVIRONMENT',
+      });
+    },
+  );
 });

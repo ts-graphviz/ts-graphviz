@@ -47,7 +47,7 @@ export interface ASTCommonProperties {
    * The parser sets it on every node it makes; nodes made in other ways
    * (`createElement`, `fromModel`) have none. Code should not rely on it
    * being present: a parsing option to leave it out and save memory is
-   * planned (#1723).
+   * planned.
    */
   location?: FileRange;
   /**
@@ -216,7 +216,25 @@ export interface CommentASTProperties extends ASTCommonProperties {
    */
   kind: CommentKind;
   /**
-   * A string that contains the actual content of the comment.
+   * The text of the comment.
+   *
+   * @remarks `parse` normalises the text as a reader would see it:
+   * - the comment markers (`//`, `#`, `/*`, `*\/` and the `*` that starts a
+   *   line of a block comment) are not part of it;
+   * - whitespace at the start and the end of the text is removed;
+   * - the indentation that all lines after the first share is removed;
+   * - a CRLF line break becomes `"\n"` (a lone `"\r"` in a block comment
+   *   stays as written).
+   *
+   * So a comment written by `stringify` reads back as the same text, except
+   * for whitespace at its start or end, indentation that every line after
+   * the first has, a `"\r\n"`, which reads back as `"\n"`, and a lone
+   * `"\r"` in a comment statement, which `stringify` writes as a line break.
+   * (In a comment attached to a node, a lone `"\r"` stays text of that one
+   * comment.) In a block comment, `stringify` also writes `*\/` as `*`, a
+   * zero-width space (U+200B) and `/`, so that it does not end the comment;
+   * the space stays in the text read back. For example, `"a\n b"` reads back
+   * as `"a\nb"`.
    */
   value: string;
 }

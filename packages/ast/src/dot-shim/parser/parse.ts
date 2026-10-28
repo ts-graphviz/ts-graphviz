@@ -187,7 +187,7 @@ export interface FragmentByRule {
  * {@link parse} reads a whole DOT source.
  *
  * This is the low-level parsing API: it is in beta, and is where the
- * lower layers of the parser (such as a streaming lexer, #1723) will be
+ * lower layers of the parser (such as a streaming lexer) will be
  * exposed.
  *
  * @throws {@link DotSyntaxError}
@@ -229,6 +229,7 @@ function parseRule(
       throw new DotSyntaxError(
         `Input size (${inputBytes} bytes) exceeds maximum allowed size (${inputSizeLimit} bytes). ` +
           `Consider increasing 'maxInputSize' option or reducing the input size.`,
+        { limit: 'maxInputSize' },
       );
     }
   }
@@ -266,11 +267,14 @@ function parseRule(
             start: position,
             end: { ...position, offset: deep + 1, column: position.column + 1 },
           },
+          limit: 'maxNestingDepth',
         },
       );
     }
   }
 
+  // The limit the grammar stopped at, if it stopped at one.
+  let limit: DotSyntaxLimit | undefined;
   try {
     // Comments inside statements, by offset; attached once parsing is done.
     const inlineComments = new Map<number, InlineComment>();
@@ -289,6 +293,9 @@ function parseRule(
       onBuilder: (b: Builder) => {
         builder = b;
       },
+      onLimit: (exceeded: DotSyntaxLimit) => {
+        limit = exceeded;
+      },
     });
     if (inlineComments.size > 0) {
       // Each attached comment is an AST node too.
@@ -306,11 +313,13 @@ function parseRule(
       throw new DotSyntaxError(e.message, {
         cause: e,
         location: rangeOf(e.location),
+        limit,
       });
     }
     if (e instanceof ASTNodeCountExceededError) {
       throw new DotSyntaxError(e.message, {
         cause: e,
+        limit: 'maxASTNodes',
       });
     }
     throw withCode(
@@ -319,6 +328,19 @@ function parseRule(
     );
   }
 }
+
+/**
+ * The parse option whose limit a source exceeded: the
+ * {@link DotSyntaxError.limit} of the error.
+ *
+ * @group Convert DOT to AST
+ */
+export type DotSyntaxLimit =
+  | 'maxInputSize'
+  | 'maxNestingDepth'
+  | 'maxHtmlNestingDepth'
+  | 'maxEdgeChainDepth'
+  | 'maxASTNodes';
 
 /**
  * DotSyntaxError is a class that extends the SyntaxError class and provides additional information about the syntax error.
@@ -341,18 +363,29 @@ export class DotSyntaxError extends SyntaxError {
    * example, for an input over `maxInputSize`).
    */
   readonly location: FileRange | undefined;
+  /**
+   * The parse option whose limit the source exceeded, or `undefined` when
+   * the source does not parse for another reason. An application can tell
+   * a source that is too large or too deep (raise that option for trusted
+   * input, or report the input as too large) from a syntax error.
+   */
+  readonly limit: DotSyntaxLimit | undefined;
 
   /**
    * @remarks The message text and the `cause` (the parser's own error, if
-   * any) may change in any release; `code` and `location` are the
+   * any) may change in any release; `code`, `location` and `limit` are the
    * contract.
    */
   constructor(
     message: string,
-    options?: ErrorOptions & { location?: FileRange | undefined },
+    options?: ErrorOptions & {
+      location?: FileRange | undefined;
+      limit?: DotSyntaxLimit | undefined;
+    },
   ) {
     super(message, options);
     this.location = options?.location;
+    this.limit = options?.limit;
   }
 }
 

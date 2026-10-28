@@ -9,8 +9,14 @@
     const str = value.trim();
     const matches = str.match(/\n([\t ]+|(?!\s).)/g);
     if (matches) {
-      const indentLengths = matches.map((match) => match.match(/[\t ]/g)?.length ?? 0);
-      const pattern = new RegExp(`\n[\t ]{${Math.min(...indentLengths)}}`, 'g');
+      // A loop, not Math.min(...): a comment can have more lines than a
+      // call can take arguments.
+      let indent = Infinity;
+      for (const match of matches) {
+        const length = match.match(/[\t ]/g)?.length ?? 0;
+        if (length < indent) indent = length;
+      }
+      const pattern = new RegExp(`\n[\t ]{${indent}}`, 'g');
       return str.replace(pattern, '\n');
     }
     return str;
@@ -257,6 +263,7 @@ _edge_rhs
       edgeChainDepth++;
       if (edgeChainDepth > MAX_EDGE_CHAIN_DEPTH) {
         const loc = location();
+        options.onLimit('maxEdgeChainDepth');
         error(
           `Edge chain depth exceeds maximum allowed depth of ${MAX_EDGE_CHAIN_DEPTH} ` +
           `at line ${loc.start.line}, column ${loc.start.column}. ` +
@@ -355,7 +362,7 @@ _block_comment
         'Comment',
         {
           kind: 'Block',
-          value: dedent(v.join('').replace(/^[ \t]*\*/gm, '')),
+          value: dedent(v.join('').replace(/\r\n/g, '\n').replace(/^[ \t]*\*/gm, '')),
         },
         [],
       );
@@ -451,6 +458,7 @@ html_raw_string
       // 2. The depth counter is reset at the start of each parse() call
       // 3. Most malformed input fails quickly without deep backtracking
       if (htmlNestingDepth >= MAX_HTML_NESTING_DEPTH) {
+        options.onLimit('maxHtmlNestingDepth');
         error(`HTML nesting depth exceeds maximum allowed depth of ${MAX_HTML_NESTING_DEPTH}`);
       }
       htmlNestingDepth++;
@@ -513,7 +521,7 @@ ic "whitespace" = (_whitespace / _newline / c:_inline_comment { recordComment(c)
 
 _inline_comment
   = "/*" v:(!"*/" v:. { return v; })* "*/" {
-      return { kind: 'Block', value: dedent(v.join('').replace(/^[ \t]*\*/gm, '')), location: location() };
+      return { kind: 'Block', value: dedent(v.join('').replace(/\r\n/g, '\n').replace(/^[ \t]*\*/gm, '')), location: location() };
     }
   / "//" v:(!_line_end v:. { return v; })* {
       return { kind: 'Slash', value: v.join('').trim(), location: location() };

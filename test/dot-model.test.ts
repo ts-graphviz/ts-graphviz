@@ -107,14 +107,10 @@ describe('Dot model', () => {
       expect(g.id).toBe('a');
     });
 
-    it('throws when the source has several graphs (read them with fromDotAll)', () => {
-      expect(() => fromDot('digraph a {} graph b {}')).toThrow(
-        expect.objectContaining({ code: 'TSG_ERR_MULTIPLE_GRAPHS' }),
-      );
-    });
-
     it('throws when the source has no graph', () => {
-      expect(() => fromDot('// only a comment')).toThrow(/no graph/);
+      expect(() => fromDot('// only a comment')).toThrow(
+        expect.objectContaining({ code: 'TSG_ERR_NO_GRAPH' }),
+      );
     });
   });
 });

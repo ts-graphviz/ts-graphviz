@@ -1,4 +1,4 @@
-import { ASTNodeCountExceededError, parse } from '@ts-graphviz/ast';
+import { parse } from '@ts-graphviz/ast';
 import { Digraph, fromDot, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
@@ -10,9 +10,28 @@ describe('HTML-like label handling in AST parser and DOT serializer', () => {
    c [label=<OK>];
 }`;
 
-  it('parses HTML-like label literals into correct AST structure', () => {
-    const ast = parse(src);
-    expect(ast).toMatchSnapshot();
+  it('parses each HTML-like label as one html literal holding the markup as written', () => {
+    const [graph] = parse(src).children;
+    expect(graph).toMatchObject({ type: 'Graph', directed: true });
+    if (graph.type !== 'Graph') throw new Error('expected a graph');
+    expect(graph.children).toHaveLength(3);
+    expect(graph.children).toMatchObject(
+      [
+        ['a', '<table><tr><td>NOK</td></tr></table>'],
+        ['b', '<b>NOK<b>'],
+        ['c', 'OK'],
+      ].map(([id, markup]) => ({
+        type: 'Node',
+        id: { kind: 'bare', value: id },
+        children: [
+          {
+            type: 'Attribute',
+            key: { value: 'label' },
+            value: { type: 'Literal', kind: 'html', value: markup },
+          },
+        ],
+      })),
+    );
   });
 
   it('round-trips through model to valid DOT with proper quoting and node order', () => {
@@ -35,28 +54,21 @@ describe('HTML-like label handling in AST parser and DOT serializer', () => {
 });
 
 // issue #1563
+// The per-call count itself is tested on fromModel
+// (packages/ast/src/model-shim/from-model/from-model.test.ts); this case
+// checks that toDot passes `convert.maxASTNodes` on and counts per call.
 describe('Builder nodeCount accumulation across repeated toDot calls', () => {
-  it('should not throw when toDot is called 200+ times in sequence', () => {
-    for (let i = 0; i < 250; i++) {
-      const g = new Digraph();
-      g.createNode(`node_${i}`);
-      toDot(g);
-    }
-  });
-
-  it('should respect maxASTNodes option via toDot convert options', () => {
+  it('limits each toDot call by convert.maxASTNodes, not the calls before it', () => {
     const g = new Digraph();
     for (let j = 0; j < 10; j++) {
       g.createNode(`n${j}`);
     }
-
-    // Very small limit should trigger error
+    for (let i = 0; i < 50; i++) {
+      toDot(g, { convert: { maxASTNodes: 100 } });
+    }
     expect(() => toDot(g, { convert: { maxASTNodes: 5 } })).toThrow(
-      ASTNodeCountExceededError,
+      expect.objectContaining({ code: 'TSG_ERR_AST_NODE_COUNT_EXCEEDED' }),
     );
-
-    // Large limit should work fine
-    expect(() => toDot(g, { convert: { maxASTNodes: 10000 } })).not.toThrow();
   });
 });
 

@@ -6,7 +6,7 @@ import { toDot } from './to-dot.js';
 
 const COMPASS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c', '_'];
 
-describe('[SM-2] compass points', () => {
+describe('compass points', { tags: ['SM-2'] }, () => {
   it.each(COMPASS)('writes %s', (compass) => {
     const g = new Digraph();
     g.edge([{ id: 'a', port: 'p', compass } as never, 'b']);

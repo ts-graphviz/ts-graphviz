@@ -17,7 +17,7 @@ const graphOf = (dot: string) => parse(dot).children[0] as GraphASTNode;
 const values = (comments: ASTNode['leadingComments']) =>
   comments?.map((c) => `${c.kind}:${c.value}`);
 
-describe('[SM-1] comments inside statements', () => {
+describe('comments inside statements', { tags: ['SM-1'] }, () => {
   it('attaches a comment after a node on the same line as trailing', () => {
     const edge = graphOf('digraph { a /* c */ -> b }')
       .children[0] as EdgeASTNode;
@@ -93,7 +93,8 @@ const canon = (dot: string) => {
 };
 
 describe.skipIf(!hasDot)(
-  '[SM-1] comments inside statements are printed back',
+  'comments inside statements are printed back',
+  { tags: ['SM-1'] },
   () => {
     it.each([
       'digraph /* c */ G /* d */ { a }',
@@ -172,5 +173,41 @@ describe('attachComments on nodes from a custom builder', () => {
     expect(shared).toStrictEqual([]);
     expect(a.trailingComments).toMatchObject([{ value: 'c' }]);
     expect(b.trailingComments).toBe(shared);
+  });
+});
+
+describe('comment text', () => {
+  it('reads CRLF line breaks in a block comment as "\\n"', () => {
+    const ast = parse(
+      'digraph {\r\n/* a\r\n b */\r\nx;\r\n/* c\r\n */ y;\r\n}',
+    );
+    const graph = ast.children[0] as GraphASTNode;
+    const texts = JSON.stringify(graph);
+    expect(texts).not.toContain('\\r');
+    expect(graph.children[0]).toMatchObject({ type: 'Comment', value: 'a\nb' });
+  });
+
+  it('reads a comment with more lines than a call takes arguments', () => {
+    const lines = 500_000;
+    const ast = parse(`/*${'\n x'.repeat(lines)}\n*/\ndigraph {}`, {
+      maxInputSize: 0,
+    });
+    const comment = ast.children[0] as { value: string };
+    expect(comment.value.split('\n')).toHaveLength(lines);
+  });
+
+  it('keeps a lone CR in an attached comment as text of one comment', () => {
+    const ast = parse('digraph { a /* c */ -> b }');
+    const edge = (ast.children[0] as GraphASTNode).children[0] as EdgeASTNode;
+    const ref = edge.targets[0] as NodeRefASTNode;
+    ref.trailingComments = [
+      { type: 'Comment', kind: 'Slash', value: 'first\rsecond' },
+    ] as never;
+    const again = parse(stringify(ast));
+    const edgeAgain = (again.children[0] as GraphASTNode)
+      .children[0] as EdgeASTNode;
+    expect(
+      values((edgeAgain.targets[0] as NodeRefASTNode).trailingComments),
+    ).toEqual(['Slash:first\rsecond']);
   });
 });

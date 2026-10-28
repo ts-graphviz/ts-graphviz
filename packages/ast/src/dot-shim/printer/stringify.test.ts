@@ -4,7 +4,7 @@ import { stringify } from './stringify.js';
 
 describe('stringify', () => {
   describe('literal', () => {
-    test('quated', () => {
+    test('quoted', () => {
       expect(
         stringify({
           type: 'Literal',
@@ -14,7 +14,7 @@ describe('stringify', () => {
       ).toMatchInlineSnapshot(`""hoge""`);
     });
 
-    test('not quated', () => {
+    test('bare', () => {
       expect(
         stringify({
           type: 'Literal',
@@ -62,7 +62,7 @@ describe('stringify', () => {
     });
   });
 
-  describe('attribyte', () => {
+  describe('attribute', () => {
     test('simple', () => {
       expect(
         stringify({
@@ -74,7 +74,7 @@ describe('stringify', () => {
     });
   });
 
-  describe('attribytes', () => {
+  describe('attributes', () => {
     test('node', () => {
       expect(
         stringify({
@@ -462,7 +462,7 @@ describe('stringify', () => {
       `);
     });
 
-    test('node ref group', () => {
+    test('node ref list', () => {
       expect(
         stringify({
           type: 'Edge',

@@ -48,8 +48,8 @@ export class OrderedDigraph extends Digraph {
 }
 
 /**
- * Model classes that keep default attribute statements where they are
- * (#1732): `node [color=red]; a; node [color=blue]; b` stays two default
+ * Model classes that keep default attribute statements where they are:
+ * `node [color=red]; a; node [color=blue]; b` stays two default
  * statements, `a` red and `b` blue, instead of one set of defaults for the
  * whole graph. Pass them where models can be chosen, e.g.
  * `fromDot(dot, { convert: { models: orderedModels } })`.

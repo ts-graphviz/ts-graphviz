@@ -6,7 +6,7 @@ import { stringify } from './stringify.js';
 const nested = (depth: number) =>
   `digraph { ${'subgraph { a; '.repeat(depth)}${'}'.repeat(depth)} }`;
 
-describe('[SM-2] printing nested graphs', () => {
+describe('printing nested graphs', { tags: ['SM-2'] }, () => {
   it('takes time linear in the output at any depth', () => {
     // 5.3 s at depth 400 when every token went through one generator per level.
     const ast = parse(nested(400), { maxNestingDepth: 401 });

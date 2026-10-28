@@ -23,7 +23,7 @@ const toModel = (ast: unknown) =>
 const literal = (value: string) =>
   createElement('Literal', { value, kind: 'quoted' }, []);
 
-describe('[SM-8] node reference fields', () => {
+describe('node reference fields', { tags: ['SM-8'] }, () => {
   it('stringify writes only the port and compass point a node reference owns', () => {
     const ast = parse('digraph { a -> b }');
     for (const field of ['port', 'compass']) {

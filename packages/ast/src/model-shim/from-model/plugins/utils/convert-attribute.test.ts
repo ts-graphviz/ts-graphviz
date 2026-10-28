@@ -4,143 +4,37 @@ import { createElement } from '../../../../builder/create-element.js';
 import { convertAttribute } from './convert-attribute.js';
 
 describe('convertAttribute', () => {
-  test('number', () => {
-    const result = convertAttribute(createElement, 'size', 1);
-    expect(result).toMatchInlineSnapshot(`
-      {
-        "key": {
-          "kind": "bare",
-          "type": "Literal",
-          "value": "size",
-        },
-        "type": "Attribute",
-        "value": {
-          "kind": "bare",
-          "type": "Literal",
-          "value": "1",
-        },
-      }
-    `);
+  test('builds an Attribute node with a bare key and a bare number', () => {
+    expect(convertAttribute(createElement, 'size', 1)).toMatchObject({
+      type: 'Attribute',
+      key: { type: 'Literal', kind: 'bare', value: 'size' },
+      value: { type: 'Literal', kind: 'bare', value: '1' },
+    });
   });
 
-  describe('string', () => {
-    test('quoted string literal', () => {
-      const result = convertAttribute(createElement, 'label', 'A');
-      expect(result).toMatchInlineSnapshot(`
-        {
-          "key": {
-            "kind": "bare",
-            "type": "Literal",
-            "value": "label",
-          },
-          "type": "Attribute",
-          "value": {
-            "kind": "quoted",
-            "type": "Literal",
-            "value": "A",
-          },
-        }
-      `);
+  describe('a plain string is always quoted, whatever it looks like', () => {
+    test.each([
+      ['plain text', 'A'],
+      ['markup', '<b>Hi</b>'],
+      ['markup with surrounding whitespace', '  <A>  '],
+      ['an unclosed bracket', '<A'],
+      ['an unopened bracket', 'A>'],
+    ])('%s', (_, value) => {
+      expect(convertAttribute(createElement, 'label', value)).toMatchObject({
+        value: { type: 'Literal', kind: 'quoted', value },
+      });
     });
+  });
 
-    describe('html-like', () => {
-      test('simple HTML-like label', () => {
-        const result = convertAttribute(createElement, 'label', htmlLike('A'));
-        expect(result).toMatchInlineSnapshot(`
-          {
-            "key": {
-              "kind": "bare",
-              "type": "Literal",
-              "value": "label",
-            },
-            "type": "Attribute",
-            "value": {
-              "kind": "html",
-              "type": "Literal",
-              "value": "A",
-            },
-          }
-        `);
-      });
-      test('nested HTML-like label', () => {
-        const result = convertAttribute(
-          createElement,
-          'label',
-          htmlLike('<b>Hi</b>'),
-        );
-        expect(result).toMatchInlineSnapshot(`
-          {
-            "key": {
-              "kind": "bare",
-              "type": "Literal",
-              "value": "label",
-            },
-            "type": "Attribute",
-            "value": {
-              "kind": "html",
-              "type": "Literal",
-              "value": "<b>Hi</b>",
-            },
-          }
-        `);
-      });
-
-      // Additional edge-case tests for whitespace and malformed HTML-like values
-      test('HTML-like label with surrounding whitespace', () => {
-        const result = convertAttribute(createElement, 'label', '  <A>  ');
-        expect(result).toMatchInlineSnapshot(`
-          {
-            "key": {
-              "kind": "bare",
-              "type": "Literal",
-              "value": "label",
-            },
-            "type": "Attribute",
-            "value": {
-              "kind": "quoted",
-              "type": "Literal",
-              "value": "  <A>  ",
-            },
-          }
-        `);
-      });
-
-      test('malformed HTML-like missing closing bracket', () => {
-        const result = convertAttribute(createElement, 'label', '<A');
-        expect(result).toMatchInlineSnapshot(`
-          {
-            "key": {
-              "kind": "bare",
-              "type": "Literal",
-              "value": "label",
-            },
-            "type": "Attribute",
-            "value": {
-              "kind": "quoted",
-              "type": "Literal",
-              "value": "<A",
-            },
-          }
-        `);
-      });
-
-      test('malformed HTML-like missing opening bracket', () => {
-        const result = convertAttribute(createElement, 'label', 'A>');
-        expect(result).toMatchInlineSnapshot(`
-          {
-            "key": {
-              "kind": "bare",
-              "type": "Literal",
-              "value": "label",
-            },
-            "type": "Attribute",
-            "value": {
-              "kind": "quoted",
-              "type": "Literal",
-              "value": "A>",
-            },
-          }
-        `);
+  describe('an htmlLike() value becomes an HTML string', () => {
+    test.each([
+      ['plain text', 'A'],
+      ['nested markup', '<b>Hi</b>'],
+    ])('%s', (_, markup) => {
+      expect(
+        convertAttribute(createElement, 'label', htmlLike(markup)),
+      ).toMatchObject({
+        value: { type: 'Literal', kind: 'html', value: markup },
       });
     });
   });
