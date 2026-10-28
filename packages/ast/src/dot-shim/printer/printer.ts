@@ -66,6 +66,9 @@ export class Printer {
             if (placement === 'leading' && comments?.length) yield EOL;
             for (const comment of comments ?? []) {
               if (placement === 'trailing') yield ' ';
+              // Not at a lone CR: the parser reads it as text of a line
+              // comment, and an attached comment split into two lines would
+              // read back as two comments.
               const lines = escapeComment(comment.value, comment.kind).split(
                 /\r?\n/,
               );
