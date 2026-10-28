@@ -104,7 +104,8 @@ plus Graphviz, and the container has:
 - your uid/gid, no capabilities, `no-new-privileges`, and limits on
   processes and memory;
 - an empty environment except `PATH`, `HOME=/tmp`, `TMPDIR`, `LANG`, and
-  `CI`, `TZ`, `FC_NUM_RUNS` and `FC_SEED` when you set them;
+  `CI`, `TZ`, `FC_NUM_RUNS` and `FC_SEED` when you set them, and
+  `FORCE_COLOR=1` when the output is a terminal;
 - an init process that reaps leftover child processes, removed afterwards.
 
 It needs a Linux host (the mounted `node_modules` must be for Linux) with

@@ -15,7 +15,8 @@
  * architecture the dependencies were installed for.
  *
  * Only an allowlist of variables reaches the tests: PATH, HOME=/tmp,
- * TMPDIR=/tmp, LANG, and CI, TZ, FC_NUM_RUNS, FC_SEED when they are set.
+ * TMPDIR=/tmp, LANG, and CI, TZ, FC_NUM_RUNS, FC_SEED when they are set;
+ * FORCE_COLOR=1 when the output is a terminal (the container has none).
  */
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
