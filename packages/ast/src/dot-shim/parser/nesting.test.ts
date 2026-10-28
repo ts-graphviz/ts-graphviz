@@ -58,6 +58,15 @@ describe('maxNestingDepth', { tags: ['SM-1'] }, () => {
     });
   });
 
+  it.each([Number.NaN, Number.POSITIVE_INFINITY, -1, '5' as never])(
+    'keeps the default limit for maxNestingDepth %s',
+    (maxNestingDepth) => {
+      expect(() => parse(nested(101), { maxNestingDepth })).toThrow(
+        /Nesting depth exceeds maximum allowed depth of 100/,
+      );
+    },
+  );
+
   it('does not count braces in strings or comments', () => {
     const dot = [
       'digraph {',
