@@ -15,8 +15,12 @@ export declare abstract class AttributesBase<T extends AttributeKey, E extends o
   constructor(attributes?: AttributesObject<T, E>);
   get values(): Attributes<T, E>["values"];
   get size(): number;
-  get<K extends SchemaAttributeKey<T, E>>(key: K): SchemaAttribute<K, E> | undefined;
-  set<K extends SchemaAttributeKey<T, E>>(key: K, value: SchemaAttribute<K, E>): void;
+  get<K extends BuiltInAttributeKey<T, E>>(key: K): Attribute<K> | undefined;
+  get<K extends keyof E & string>(key: K): SchemaAttribute<E, K> | undefined;
+  get<K extends SchemaAttributeKey<T, E>>(key: K): AttributeOf<K, E> | undefined;
+  set<K extends BuiltInAttributeKey<T, E>>(key: K, value: Attribute<K>): void;
+  set<K extends keyof E & string>(key: K, value: SchemaAttribute<E, K>): void;
+  set<K extends SchemaAttributeKey<T, E>>(key: K, value: AttributeOf<K, E>): void;
   delete(key: SchemaAttributeKey<T, E>): void;
   apply(attributes: AttributesObject<T, E> | AttributesEntities<T, E>): void;
   clear(): void;
@@ -72,6 +76,9 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
   addEdge(edge: EdgeModel<SchemaOf<M>>): void;
   addSubgraph(subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>): void;
   protected get keepsDefaultsInPlace(): boolean;
+  addAttributeList(kind: "Graph", attributes: AttributeListAttributes<SchemaOf<M>, "Graph">): void;
+  addAttributeList(kind: "Node", attributes: AttributeListAttributes<SchemaOf<M>, "Node">): void;
+  addAttributeList(kind: "Edge", attributes: AttributeListAttributes<SchemaOf<M>, "Edge">): void;
   addAttributeList(kind: AttributeListKind, attributes: AttributeListAttributes<SchemaOf<M>>): void;
   existNode(nodeId: string): boolean;
   existEdge(edge: EdgeModel<SchemaOf<M>>): boolean;

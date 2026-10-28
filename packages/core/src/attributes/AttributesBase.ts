@@ -1,8 +1,11 @@
 import type {
+  Attribute,
   AttributeKey,
+  AttributeOf,
   Attributes,
   AttributesEntities,
   AttributesObject,
+  BuiltInAttributeKey,
   SchemaAttribute,
   SchemaAttributeKey,
 } from '@ts-graphviz/common';
@@ -41,16 +44,32 @@ export abstract class AttributesBase<
     return this.#attrs.size;
   }
 
+  public get<K extends BuiltInAttributeKey<T, E>>(
+    key: K,
+  ): Attribute<K> | undefined;
+  public get<K extends keyof E & string>(
+    key: K,
+  ): SchemaAttribute<E, K> | undefined;
   public get<K extends SchemaAttributeKey<T, E>>(
     key: K,
-  ): SchemaAttribute<K, E> | undefined {
-    return this.#attrs.get(key) as SchemaAttribute<K, E> | undefined;
+  ): AttributeOf<K, E> | undefined;
+  public get(key: string): unknown {
+    return this.#attrs.get(key);
   }
 
+  public set<K extends BuiltInAttributeKey<T, E>>(
+    key: K,
+    value: Attribute<K>,
+  ): void;
+  public set<K extends keyof E & string>(
+    key: K,
+    value: SchemaAttribute<E, K>,
+  ): void;
   public set<K extends SchemaAttributeKey<T, E>>(
     key: K,
-    value: SchemaAttribute<K, E>,
-  ): void {
+    value: AttributeOf<K, E>,
+  ): void;
+  public set(key: string, value: unknown): void {
     if (value !== null && value !== undefined) {
       this.#attrs.set(key, value);
     }
@@ -70,7 +89,7 @@ export abstract class AttributesBase<
       : Object.entries(attributes);
     for (const [key, value] of entries) {
       // The object or entries were typed by `T` and `E`.
-      this.set(key as SchemaAttributeKey<T, E>, value as never);
+      this.set(key as BuiltInAttributeKey<T, E>, value as never);
     }
   }
 

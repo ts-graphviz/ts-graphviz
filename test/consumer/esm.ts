@@ -134,12 +134,8 @@ type ConsumerSchema = {
 const schemaGraph = new Digraph<ModelTypes<ConsumerSchema>>();
 const schemaNode = schemaGraph.node('a', { 'data-id': 1, label: 2 });
 assertType<Equal<typeof schemaNode, NodeModel<ConsumerSchema>>>();
-assertType<
-  Equal<
-    ReturnType<typeof schemaNode.attributes.get<'label'>>,
-    number | undefined
-  >
->();
+const schemaLabel = schemaNode.attributes.get('label');
+assertType<Equal<typeof schemaLabel, number | undefined>>();
 // @ts-expect-error a number in this schema
 schemaGraph.node('b', { label: 'x' });
 // @ts-expect-error a node of no schema

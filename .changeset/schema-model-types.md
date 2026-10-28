@@ -20,6 +20,8 @@ Without a schema the types work as in 3.x. Compared with 3.x:
 
 - `new (directed ? Digraph : Graph)()` no longer compiles, since the classes are generic; type the class as a `RootGraphConstructor` (`const Class: RootGraphConstructor = directed ? Digraph : Graph`).
 - A `ModelTypes` written by hand (not extending `ModelTypes`) needs a `Schema` member, and the bound of the model types parameters is `AnyModelTypes`.
-- `GraphBaseModel` has a fourth type parameter, the schema (by default that of its model types), and `addAttributeList` takes `AttributeListAttributes<S>`.
+- `GraphBaseModel`, `RootGraphModel`, `SubgraphModel` and `ModelsContext` have one more type parameter, the schema (by default that of their model types).
+- `get` and `set` of `Attributes` have three overloads: the built-in attributes the schema keeps (`BuiltInAttributeKey`, typed as before), the attributes the schema adds or changes (`SchemaAttribute`), and keys in code generic over the schema (`AttributeOf`). A class that overrides them declares the same overloads.
+- `addAttributeList` has an overload for each kind, typed by `AttributeListAttributes<S, Kind>`; without a schema each takes any attributes, as before.
 
 The run-time behaviour is unchanged.

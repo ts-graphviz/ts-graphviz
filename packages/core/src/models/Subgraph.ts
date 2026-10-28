@@ -1,5 +1,6 @@
 import type {
   AnyModelTypes,
+  Attributes,
   ClusterSubgraphAttributeKey,
   ModelsContext,
   ModelTypes,
@@ -50,7 +51,8 @@ export class Subgraph<M extends AnyModelTypes = ModelTypes>
     return (
       (typeof this.id === 'string' &&
         this.id.slice(0, 7).toLowerCase() === 'cluster') ||
-      graphvizBool(this.get('cluster'))
+      // Read without the schema: whatever it says, Graphviz reads the value.
+      graphvizBool((this as Attributes<'cluster'>).get('cluster'))
     );
   }
 

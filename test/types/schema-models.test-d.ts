@@ -3,6 +3,7 @@ import {
   type AnyModelTypes,
   type Attribute,
   type AttributeKey,
+  type AttributeListKind,
   type AttributeListModel,
   type Attributes,
   type AttributesEntities,
@@ -152,6 +153,22 @@ describe('without a schema', () => {
     expectTypeOf(new Digraph()).toEqualTypeOf<Digraph<ModelTypes>>();
     expectTypeOf(new Dot()).toEqualTypeOf<Dot<EmptySchema>>();
     expectTypeOf(defaultModelsContext()).toEqualTypeOf<ModelsContext>();
+  });
+
+  it('forwards a generic key and its value as before', () => {
+    function write<K extends NodeAttributeKey>(
+      attributes: Attributes<NodeAttributeKey>,
+      key: K,
+      value: Attribute<K>,
+    ): Attribute<K> | undefined {
+      attributes.set(key, value);
+      return attributes.get(key);
+    }
+    expectTypeOf(write(new Node('a').attributes, 'label', 'x')).toEqualTypeOf<
+      Attribute<'label'> | undefined
+    >();
+    const anyKeys: Attributes<any> = new Node('a').attributes;
+    anyKeys.set('label', 'x');
   });
 
   it('still rejects unknown keys and values', () => {
@@ -410,16 +427,27 @@ describe('a schema', () => {
     }>().not.toExtend<Schema>();
   });
 
-  it('takes default attributes typed with the schema', () => {
-    // As without a schema, the kind does not pick the attributes: those of
-    // any one kind are taken, typed with the schema.
+  it('takes default attributes of the kind, typed with the schema', () => {
     myDigraph((g) => {
       g.addAttributeList('Node', { 'data-id': 1, label: 2 });
       g.addAttributeList('Graph', [['team', 'core']]);
-      // @ts-expect-error a number for every kind that has it
+      g.addAttributeList('Edge', { label: 'x', 'edge-only': true });
+      // @ts-expect-error a number on nodes (the label of edges is a string)
+      g.addAttributeList('Node', { label: 'x' });
+      // @ts-expect-error a number
       g.addAttributeList('Node', { 'data-id': 'x' });
+      // @ts-expect-error a node attribute
+      g.addAttributeList('Graph', { 'data-id': 1 });
       // @ts-expect-error not an attribute of any kind
       g.addAttributeList('Edge', { 'data-di': 1 });
+      // A kind known only at run time takes the built-in attributes of
+      // every kind that the schema does not change.
+      const kind = 'Node' as AttributeListKind;
+      g.addAttributeList(kind, { fontsize: 12, fontname: 'x' });
+      // @ts-expect-error a number for nodes, a string for edges
+      g.addAttributeList(kind, { label: 1 });
+      // @ts-expect-error not an edge attribute
+      g.addAttributeList(kind, { shape: 'box' });
     });
   });
 
@@ -487,11 +515,9 @@ describe('the models of a schema and the read-only model types', () => {
     expectTypeOf<Node<MySchema>>().not.toExtend<NodeModel>();
   });
 
-  it('take a node of no schema where a schema only adds attributes', () => {
-    // Its attributes are valid there too; the other way round, a node of
-    // the schema may hold an attribute the plain one does not have.
+  it('keep a schema that only adds attributes apart from no schema', () => {
     type AddOnly = { node: { 'data-id': Add<number> } };
-    expectTypeOf<NodeModel>().toExtend<NodeModel<AddOnly>>();
+    expectTypeOf<NodeModel>().not.toExtend<NodeModel<AddOnly>>();
     expectTypeOf<NodeModel<AddOnly>>().not.toExtend<NodeModel>();
   });
 
