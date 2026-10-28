@@ -35,7 +35,8 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 | `pnpm codegen` | Generate code: the DOT parser from the grammar, and the attribute types from the Graphviz documentation snapshot. |
 | `pnpm --filter @ts-graphviz/common fetch:graphviz-docs` | Update the Graphviz documentation snapshot (`packages/common/graphviz-docs/`) that the attribute types are generated from. Pass `--ref <sha>` to pin a different commit of [graphviz.gitlab.io](https://gitlab.com/graphviz/graphviz.gitlab.io). |
 | `pnpm build` | Build all packages in the monorepo. |
-| `pnpm test` | Run all tests across the monorepo. |
+| `pnpm test` | Run the tests across the monorepo, except those tagged `process` (see [Tests that start processes](#tests-that-start-processes)). |
+| `pnpm test:sandbox` | Run the tests tagged `process` in a container (Docker or Podman). |
 | `pnpm lint` | Run linting checks on the codebase. |
 | `pnpm knip` | Report unused files, exports and dependencies. |
 | `pnpm check:packages` | Pack every package as `pnpm publish` would and run publint and arethetypeswrong on the tarballs (run `pnpm build` first). |
@@ -75,4 +76,53 @@ To run tests for all packages:
 ```bash
 $ pnpm test [optional: filter glob]
 ```
+
+#### Tests that start processes
+
+Some tests start real processes: Graphviz (`dot`, `gvpr`) for the
+differential and rendering tests, stand-in `dotCommand` scripts for the
+adapter, and Biome. They carry the Vitest tag `process`, on the `describe`
+or `it` that starts the process:
+
+```ts
+describe('renders with dot', { tags: ['process'] }, () => {
+  // …
+});
+```
+
+`pnpm test` leaves them out (`--tags-filter=!process`) and says so at the end.
+`pnpm test:sandbox [vitest arguments]` runs them in a container started with
+`podman run` or `docker run` (Podman when it works, else Docker;
+`CONTAINER_RUNTIME=docker` or `podman` picks one). The image
+(`test/sandbox/Dockerfile`) is Node.js of the same major version as yours
+plus Graphviz, and the container has:
+
+- no network (`--network none`);
+- the repository, with the `node_modules` installed on your machine, mounted
+  read-only, a read-only root file system and a `/tmp` tmpfs as the only
+  writable place;
+- your uid/gid, no capabilities, `no-new-privileges`, and limits on
+  processes and memory;
+- an empty environment except `PATH`, `HOME=/tmp`, `TMPDIR`, `LANG`, and
+  `CI`, `TZ`, `FC_NUM_RUNS` and `FC_SEED` when you set them;
+- an init process that reaps leftover child processes, removed afterwards.
+
+It needs a Linux host (the mounted `node_modules` must be for Linux) with
+Docker or Podman; without either it fails with a message, and `pnpm test`
+still runs everything else. It runs `pnpm codegen` first if the parser has
+not been generated.
+
+`test/process-tag.test.ts` fails when a test file starts a process
+(`node:child_process`, `Deno.Command`, a `dotCommand:` option, or the
+adapter's `toStream`/`toFile`) without the tag, unless it mocks what it would
+start; `test/process-guard.ts` makes `node:child_process` throw in a test that
+is not tagged `process`. Give every process test a timeout or an
+`AbortSignal` (the tag sets a 120 s default), pass paths to stand-in scripts
+through arguments or the environment rather than shell text, and kill the
+background children a stand-in leaves.
+
+In CI, the Linux jobs run `pnpm test` and then `pnpm test:sandbox`. The E2E
+jobs (Windows, macOS, Linux, Deno) cannot use the container; they run
+through `node scripts/clean-env.ts`, which passes only an allowlisted
+environment and points `TMPDIR`/`TEMP`/`TMP` at a fresh directory.
 
