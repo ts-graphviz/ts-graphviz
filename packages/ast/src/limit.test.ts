@@ -20,7 +20,9 @@ const reopened = (edges: number) =>
     { maxASTNodes: 0 },
   ) as DotASTNode;
 
-describe('[SM-1] limit options that cannot be used keep the default', () => {
+describe('limit options that cannot be used keep the default', {
+  tags: ['SM-1'],
+}, () => {
   describe.each([
     [
       'maxNestingDepth',
