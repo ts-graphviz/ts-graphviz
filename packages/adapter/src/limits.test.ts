@@ -91,6 +91,40 @@ describe('TailBuffer', { tags: ['SM-4'] }, () => {
     expect(whole.toString()).toBe('€de');
   });
 
+  it('decodes any UTF-8 tail as the bytes it keeps, wherever the buffer wraps', () => {
+    // The kept bytes, without the continuation bytes of a character cut at
+    // the start, decoded in one piece.
+    const reference = (bytes: Uint8Array, max: number): string => {
+      let tail = bytes.subarray(Math.max(0, bytes.byteLength - max));
+      if (tail.byteLength < bytes.byteLength) {
+        let skip = 0;
+        while (
+          skip < 3 &&
+          skip < tail.byteLength &&
+          (tail[skip] & 0xc0) === 0x80
+        ) {
+          skip++;
+        }
+        tail = tail.subarray(skip);
+      }
+      return new TextDecoder().decode(tail);
+    };
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 1, max: 32 }),
+        fc.array(fc.string({ unit: 'binary', maxLength: 12 }), {
+          maxLength: 12,
+        }),
+        (max, texts) => {
+          const chunks = texts.map((text) => new TextEncoder().encode(text));
+          const all = new Uint8Array(Buffer.concat(chunks));
+          expect(fill(chunks, max).toString()).toBe(reference(all, max));
+        },
+      ),
+      { numRuns: 2000 },
+    );
+  });
+
   it('keeps nothing with max 0', () => {
     expect(fill([ascii(10)], 0).toString()).toBe('');
   });

@@ -38,7 +38,7 @@ export function outputLimitExceeded(
  *
  * The bytes are kept in one buffer of `max` bytes (allocated on the first
  * write), so memory stays bounded whatever the chunk sizes, and each byte
- * written is copied at most once.
+ * written is copied at most once: `toString` decodes it where it is.
  */
 export class TailBuffer {
   #buffer: Uint8Array | undefined;
@@ -79,25 +79,33 @@ export class TailBuffer {
   toString(): string {
     const buffer = this.#buffer;
     if (buffer === undefined) return '';
-    let bytes: Uint8Array;
-    if (this.#length < this.max) {
-      bytes = buffer.subarray(0, this.#length);
-    } else {
-      bytes = new Uint8Array(this.max);
-      bytes.set(buffer.subarray(this.#position));
-      bytes.set(buffer.subarray(0, this.#position), this.max - this.#position);
-    }
-    let start = 0;
+    const { max } = this;
+    // Oldest byte first. Once full, the kept bytes wrap around the end of the
+    // buffer, and the two parts are decoded in turn rather than copied into
+    // one: a character split between them is joined by the decoder.
+    const full = this.#length === max;
+    const start = full ? this.#position : 0;
+    const parts = full
+      ? [buffer.subarray(start), buffer.subarray(0, start)]
+      : [buffer.subarray(0, this.#length)];
+    let skip = 0;
     if (this.#truncated) {
       // At most three continuation bytes (10xxxxxx) follow a lead byte.
       while (
-        start < 3 &&
-        start < bytes.byteLength &&
-        (bytes[start] & 0xc0) === 0x80
+        skip < 3 &&
+        skip < this.#length &&
+        (buffer[(start + skip) % max] & 0xc0) === 0x80
       ) {
-        start++;
+        skip++;
       }
     }
-    return new TextDecoder().decode(bytes.subarray(start));
+    const decoder = new TextDecoder();
+    let text = '';
+    for (const part of parts) {
+      const drop = Math.min(skip, part.byteLength);
+      skip -= drop;
+      text += decoder.decode(part.subarray(drop), { stream: true });
+    }
+    return text + decoder.decode();
   }
 }
