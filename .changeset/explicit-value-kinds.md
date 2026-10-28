@@ -14,7 +14,7 @@ Values that carry DOT syntax of their own are explicit:
 
 - `escString('\\N\\lleft')` — a Graphviz escString, written as is so `\N`, `\G`, `\l`, … keep their meaning (only `"` is escaped).
 - `htmlLike('<b>bold</b>')` — an HTML-like label; `renderHTMLLike` in `@ts-graphviz/react` now returns this value instead of a `<…>` string.
-- `isEscString` / `isHTMLLike` type guards; `EscString` and `HTMLLikeLabel` types are updated accordingly. The guards, and so `toDot`, recognise only values made by `escString()` / `htmlLike()`, which mark them with a non-enumerable property keyed by a registered symbol (`Symbol.for`), shared by two copies of the package. An object built with the same fields, or a value that went through JSON, is written as a plain string; rebuild such values with `escString()` / `htmlLike()`.
+- `isEscString` / `isHTMLLike` type guards; `EscString` and `HTMLLikeLabel` types are updated accordingly. The guards, and so `toDot`, recognise only values made by `escString()` / `htmlLike()`, which mark them with a non-enumerable property keyed by a registered symbol (`Symbol.for`), shared by two copies of the package. An object built with the same fields, or a value that went through JSON, is written as a plain string; rebuild such values with `escString()` / `htmlLike()`. `toDot` reads the markup of an `htmlLike` value once and writes exactly what it checked; markup that is not a string is rejected (`RangeError`, `TSG_ERR_INVALID_HTML_LIKE`).
 
 Parsing maps back the same way: `\\` and `\"` become literal characters, any other backslash sequence yields an `escString`, and `<…>` yields `htmlLike`.
 

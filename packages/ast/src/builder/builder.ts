@@ -1,4 +1,5 @@
 import { ownOptions } from '@ts-graphviz/common';
+import { sizeLimit } from '../limit.js';
 import type { ASTChildNode, ASTNode, FileRange } from '../types.js';
 import { ASTNodeCountExceededError } from './errors.js';
 import type { ASTBuilder, BuilderOptions } from './types.js';
@@ -41,7 +42,8 @@ export class Builder implements ASTBuilder {
   constructor(private options?: Partial<BuilderOptions> | undefined) {
     // Own properties only: an inherited one is never an option (#1757).
     this.options = ownOptions(options);
-    this.maxNodes = this.options.maxASTNodes ?? DEFAULT_MAX_AST_NODES;
+    // 0 disables the limit; a value that cannot be used gives the default.
+    this.maxNodes = sizeLimit(this.options.maxASTNodes, DEFAULT_MAX_AST_NODES);
   }
 
   /**
