@@ -9,6 +9,7 @@ import {
   graph,
   Node,
   type NodeModel,
+  type RootGraphConstructor,
   type RootGraphModel,
   Subgraph,
   type SubgraphModel,
@@ -431,7 +432,9 @@ describe('root graphs', { tags: ['SM-5'] }, () => {
           const fromFactory = (directed ? factories.digraph : factories.graph)(
             id,
           );
-          const Class = directed ? Digraph : Graph;
+          // The classes are generic, so a union of them is not
+          // constructable.
+          const Class: RootGraphConstructor = directed ? Digraph : Graph;
           const fromClass =
             id === undefined ? new Class(isStrict) : new Class(id, isStrict);
           for (const g of [fromFactory, fromClass]) {

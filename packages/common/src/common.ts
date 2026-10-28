@@ -1,5 +1,7 @@
 export * from './attributes/attribute.js';
+export * from './attributes/schema.js';
 export * from './attributes/types.js';
+export * from './attributes/value-types.js';
 export * from './deprecation.js';
 export * from './errors.js';
 export * from './models/edge-targets.js';

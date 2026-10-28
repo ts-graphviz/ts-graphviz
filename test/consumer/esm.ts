@@ -3,8 +3,14 @@
 // entry point and uses representative API through the declarations.
 import * as adapter from '@ts-graphviz/adapter';
 import * as astPackage from '@ts-graphviz/ast';
-import { htmlLike, isTsGraphvizError } from '@ts-graphviz/common';
-import { createModelsContext, Node } from '@ts-graphviz/core';
+import {
+  htmlLike,
+  isTsGraphvizError,
+  type ModelTypes,
+  type Schema,
+  type SchemaEntry,
+} from '@ts-graphviz/common';
+import { createModelsContext, Digraph, Node } from '@ts-graphviz/core';
 import {
   attribute as _,
   type Attribute,
@@ -116,6 +122,32 @@ const readNodes = [unknownValue].filter(isNodeModel);
 assertType<Equal<typeof readNodes, ReadonlyNodeModel[]>>();
 // @ts-expect-error not a node
 toDot({ $$type: 'Node' });
+
+// schema type parameters: a graph of a schema types its attributes with it,
+// and its models fit the read-only types, also in generic code
+type ConsumerSchema = {
+  node: {
+    'data-id': SchemaEntry<number, 'add'>;
+    label: SchemaEntry<number, 'override'>;
+  };
+};
+const schemaGraph = new Digraph<ModelTypes<ConsumerSchema>>();
+const schemaNode = schemaGraph.node('a', { 'data-id': 1, label: 2 });
+assertType<Equal<typeof schemaNode, NodeModel<ConsumerSchema>>>();
+assertType<
+  Equal<
+    ReturnType<typeof schemaNode.attributes.get<'label'>>,
+    number | undefined
+  >
+>();
+// @ts-expect-error a number in this schema
+schemaGraph.node('b', { label: 'x' });
+// @ts-expect-error a node of no schema
+schemaGraph.addNode(g.node('c'));
+describeNode(schemaNode);
+const printAny = <S extends Schema>(graph: RootGraphModel<ModelTypes<S>>) =>
+  toDot(graph);
+printAny(schemaGraph);
 
 try {
   parse('{');
