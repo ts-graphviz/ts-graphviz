@@ -180,7 +180,7 @@ export interface FragmentByRule {
  * {@link parse} reads a whole DOT source.
  *
  * This is the low-level parsing API: it is in beta, and is where the
- * lower layers of the parser (such as a streaming lexer, #1723) will be
+ * lower layers of the parser (such as a streaming lexer) will be
  * exposed.
  *
  * @throws {@link DotSyntaxError}
