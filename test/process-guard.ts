@@ -8,6 +8,9 @@
  * test/process-tag.test.ts checks the same statically, file by file.
  *
  * A file that mocks `node:child_process` (vi.mock) gets the mock, not these.
+ * Start processes in tests (or beforeEach/afterEach), not in beforeAll or
+ * afterAll: those run outside any test, so the guard refuses them even in a
+ * tagged describe.
  */
 import { createRequire, syncBuiltinESMExports } from 'node:module';
 import { afterEach, beforeEach } from 'vitest';

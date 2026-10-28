@@ -116,7 +116,8 @@ not been generated.
 (`node:child_process`, `Deno.Command`, a `dotCommand:` option, or the
 adapter's `toStream`/`toFile`) without the tag, unless it mocks what it would
 start; `test/process-guard.ts` makes `node:child_process` throw in a test that
-is not tagged `process`. Give every process test a timeout or an
+is not tagged `process`, and outside tests (start processes in a test or in
+`beforeEach`/`afterEach`, not while the file loads or in `beforeAll`/`afterAll`). Give every process test a timeout or an
 `AbortSignal` (the tag sets a 120 s default), pass paths to stand-in scripts
 through arguments or the environment rather than shell text, and kill the
 background children a stand-in leaves.

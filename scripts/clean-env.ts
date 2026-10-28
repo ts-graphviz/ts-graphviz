@@ -54,6 +54,18 @@ if (command === undefined) {
   process.exit(2);
 }
 
+// On Windows the command runs through cmd.exe (pnpm is a `.cmd` shim),
+// which would read these characters as shell syntax: refuse them rather
+// than quote them.
+const shell = process.platform === 'win32';
+const unsafe = [command, ...args].find((arg) => /[\s"&|<>^%!()]/.test(arg));
+if (shell && unsafe !== undefined) {
+  console.error(
+    `clean-env: ${JSON.stringify(unsafe)} would be read as shell syntax on Windows`,
+  );
+  process.exit(2);
+}
+
 const temp = mkdtempSync(join(tmpdir(), 'ts-graphviz-tests-'));
 const env: Record<string, string> = { TMPDIR: temp, TEMP: temp, TMP: temp };
 for (const name of allowed) {
@@ -67,8 +79,7 @@ try {
   const result = spawnSync(command, args, {
     env,
     stdio: 'inherit',
-    // pnpm is a `.cmd` shim on Windows, which needs a shell to run
-    shell: process.platform === 'win32',
+    shell,
   });
   if (result.error) throw result.error;
   status = result.status ?? 1;

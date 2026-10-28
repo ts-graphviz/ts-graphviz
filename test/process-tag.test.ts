@@ -61,7 +61,7 @@ function startsProcess(source: string): string[] {
   const reasons: string[] = [];
   const mocksChildProcess = mocks(source, '(?:node:)?child_process');
   if (
-    /(?:from\s+|import\(\s*|require\(\s*)['"`](?:node:)?child_process['"`]/.test(
+    /(?:from\s+|import\s+|import\(\s*|require\(\s*)['"`](?:node:)?child_process['"`]/.test(
       source,
     ) &&
     !mocksChildProcess

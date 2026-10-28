@@ -7,7 +7,15 @@ import { spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from 'vitest';
 import { toFile } from './to-file.node.js';
 import { toStream } from './to-stream.node.js';
 
@@ -20,14 +28,18 @@ const big = `digraph { ${Array.from({ length: 2000 }, (_, i) => `n${i} -> n${(i 
 const signal = () => AbortSignal.timeout(30_000);
 
 let dir: string;
-/** The pids a stand-in recorded for its background children. */
+/** Files where a stand-in recorded the pid of its background child. */
 const children: string[] = [];
 /** A temporary directory for the tests of a describe, removed after them. */
 function useTempDir() {
   beforeAll(() => {
     dir = mkdtempSync(join(tmpdir(), 'ts-graphviz-adapter-'));
   });
-  afterAll(() => {
+  afterAll(() => rmSync(dir, { recursive: true, force: true }));
+  beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
+  // Right after the test, while the child (a sleep of 30 s or more) still
+  // runs, so that its pid has not gone to another process.
+  afterEach(() => {
     for (const pidFile of children.splice(0)) {
       try {
         process.kill(Number(readFileSync(pidFile, 'utf8')), 'SIGKILL');
@@ -35,9 +47,7 @@ function useTempDir() {
         // already gone, or never started
       }
     }
-    rmSync(dir, { recursive: true, force: true });
   });
-  beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
 }
 
 describe('toStream / toFile with the real dot (#1680)', {
