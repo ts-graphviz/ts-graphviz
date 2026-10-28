@@ -8,21 +8,34 @@
 
 Report errors with standard types and stable `code`s
 
-Every error ts-graphviz raises on purpose is now the standard error type that fits the situation, tagged with a `code` from `ERROR_CODES` (exported by `@ts-graphviz/common`, prefix `TSG_ERR_`). The code is the stable contract; messages may change in any release. There is no shared custom base class: `instanceof` a library class breaks across realms and duplicated package copies, and class names are rewritten by minifiers.
+Every error ts-graphviz raises on purpose is the standard error type that fits the situation, tagged with a `code` from `ERROR_CODES` (exported by `@ts-graphviz/common`, prefix `TSG_ERR_`). The code is the stable contract: messages may change in any release, codes only in a major one. There is no shared custom base class: `instanceof` a library class breaks across realms and duplicated package copies, and class names are rewritten by minifiers.
 
 | Situation | Thrown | `code` |
 |---|---|---|
-| DOT does not parse | `DotSyntaxError` (a `SyntaxError`) | `TSG_ERR_DOT_SYNTAX` |
+| DOT does not parse, or exceeds a parse limit (`maxInputSize`, `maxASTNodes`, the depth limits) | `DotSyntaxError` (a `SyntaxError`) | `TSG_ERR_DOT_SYNTAX` |
 | parser failed otherwise (see `cause`) | `Error` | `TSG_ERR_PARSE_FAILED` |
-| AST exceeds `maxASTNodes` | `ASTNodeCountExceededError` (now a `RangeError`) | `TSG_ERR_AST_NODE_COUNT_EXCEEDED` |
-| null character in text | `RangeError` | `TSG_ERR_NUL_CHARACTER` |
+| an AST built by `fromModel` or a `createElementFactory` builder exceeds `maxASTNodes` | `ASTNodeCountExceededError` (a `RangeError`) | `TSG_ERR_AST_NODE_COUNT_EXCEEDED` |
+| edges to subgraphs reach more than `maxEdgeTargets` nodes | `RangeError` | `TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED` |
+| null character in text written to DOT | `RangeError` | `TSG_ERR_NUL_CHARACTER` |
 | unbalanced HTML-like markup | `RangeError` | `TSG_ERR_INVALID_HTML_LIKE` |
-| edge with fewer than two or malformed targets | `TypeError` | `TSG_ERR_INVALID_EDGE_TARGETS` |
+| edge with fewer than two targets, a malformed target or an invalid compass point | `TypeError` | `TSG_ERR_INVALID_EDGE_TARGETS` |
+| port containing `:` | `TypeError` | `TSG_ERR_INVALID_PORT` |
+| attribute list kind other than `Graph`, `Node`, `Edge` | `TypeError` | `TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND` |
 | no converter/printer plugin for a node | `Error` | `TSG_ERR_NO_PLUGIN` |
 | `fromDot` on an AST node without a model | `TypeError` | `TSG_ERR_UNCONVERTIBLE_AST` |
 | `fromDot` on a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` |
+| `fromDot` on a source with several graphs (use `fromDotAll`) | `Error` | `TSG_ERR_MULTIPLE_GRAPHS` |
 | `GraphBase` subclass without a models context | `Error` | `TSG_ERR_NO_MODELS_CONTEXT` |
 | adapter used in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
 | Graphviz command failed | `CommandExecutionError` (an `Error`) | `TSG_ERR_COMMAND_FAILED` |
+| Graphviz output exceeds `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
+| an adapter option outside its type or range | `TypeError` / `RangeError` | `TSG_ERR_INVALID_OPTION` |
+| `sanitize` rejects the DOT | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
 
-Use `isTsGraphvizError(e)` (shape-based, works across realms) or compare `e.code`; `withCode()` tags your own errors the same way. The classes that remain set `name` to a literal string. Compared with 3.x: edge-target errors were a bare `Error` and are now `TypeError`; the browser adapter and the converters threw bare `Error`s without a code.
+- `isTsGraphvizError(e)` tells whether a value is one of these errors. It judges by shape (an error whose own `code` is in `ERROR_CODES`), so it works across realms and package copies. Compare `e.code` to narrow further.
+- `withCode(error, code)` tags your own errors the same way; it defines `code` as an own property, so it also tags errors whose prototype has a `code` getter (such as `DOMException`).
+- `CodedError` and `ErrorCode` type the result. `ERROR_CODES` is frozen.
+- `DotSyntaxError` has a `location` (`{ start, end }`; `undefined` for an input over `maxInputSize` or `maxASTNodes`) and a `limit`: the parse option whose limit the source exceeded (`'maxInputSize'`, `'maxASTNodes'`, `'maxNestingDepth'`, `'maxHtmlNestingDepth'` or `'maxEdgeChainDepth'`; type `DotSyntaxLimit`), or `undefined` for any other syntax error, so a source that is too large or too deep can be told from one that does not parse without reading the message. This holds for `parse`, `parseFragment`, `fromDot`, `sanitize` and the adapter's check. Its `code`, `location` and `limit` are the contract; the message text and `cause` (the parser's internal error) may change in any release.
+- The classes that remain (`DotSyntaxError`, `ASTNodeCountExceededError`, `CommandExecutionError`) set `name` to a literal string.
+
+Compared with 3.x: errors had no `code`; `ASTNodeCountExceededError` extended `Error` and is now a `RangeError`; edge-target errors were a bare `Error` and are now `TypeError`; the browser adapter and the converters threw bare `Error`s; on Node.js, a failed Graphviz command rejected with a bare `Error` (see the process controls note for Deno).

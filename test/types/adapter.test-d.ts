@@ -34,6 +34,34 @@ describe('toStream / toFile', () => {
     toStream('', { format: 'docx' });
   });
 
+  it('take formats and layouts a plugin adds for one call only', () => {
+    toStream('', { customFormats: ['mp4'], format: 'mp4' });
+    toStream('', { customLayouts: ['my-layout'], layout: 'my-layout' });
+    toFile('', 'out.mp4', { customFormats: ['mp4'], format: 'mp4' });
+    toStreamFromModel(digraph(), { customFormats: ['mp4'], format: 'mp4' });
+    // @ts-expect-error a custom name must be listed, not only written
+    toStream('', { format: 'mp4' });
+    // @ts-expect-error a custom name must be listed, not only written
+    toStream('', { layout: 'my-layout' });
+    // @ts-expect-error a name listed for one call does not widen another
+    toStream('', { customFormats: ['webm'], format: 'mp4' });
+    // @ts-expect-error a custom name given as a type argument must be listed too
+    toStream<'mp4'>('', { format: 'mp4' });
+    // @ts-expect-error the same for a layout
+    toStream<never, 'my-layout'>('', { layout: 'my-layout' });
+    toStream<'mp4'>('', { customFormats: ['mp4'], format: 'mp4' });
+    // neato's options still depend on the layout
+    toStream('', { customFormats: ['mp4'], layout: 'neato', noop: 1 });
+    toStream('', {
+      customLayouts: ['my-layout'],
+      layout: 'my-layout',
+      // @ts-expect-error neato's option on another layout
+      noop: 1,
+    });
+    // the type of Format itself is not widened
+    expectTypeOf<'mp4'>().not.toExtend<Format>();
+  });
+
   it('list the formats Graphviz writes to a file or stream', () => {
     expectTypeOf<
       'svg' | 'png' | 'pdf' | 'ps' | 'json' | 'xdot1.4'

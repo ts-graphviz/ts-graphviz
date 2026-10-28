@@ -24,11 +24,11 @@
  * @group Errors
  */
 export const ERROR_CODES = [
-  /** The DOT source does not parse (`DotSyntaxError`, a `SyntaxError`). */
+  /** The DOT source does not parse, or exceeds a parse limit named by its `limit` (`DotSyntaxError`, a `SyntaxError`). */
   'TSG_ERR_DOT_SYNTAX',
   /** The parser failed for a reason other than a syntax error (`Error`, see `cause`). */
   'TSG_ERR_PARSE_FAILED',
-  /** The AST grew past `maxASTNodes` (`ASTNodeCountExceededError`, a `RangeError`). */
+  /** An AST built from models grew past `maxASTNodes` (`ASTNodeCountExceededError`, a `RangeError`); parsing reports it as `TSG_ERR_DOT_SYNTAX` with `limit: 'maxASTNodes'`. */
   'TSG_ERR_AST_NODE_COUNT_EXCEEDED',
   /** Edges to subgraphs reached more nodes than `maxEdgeTargets` while converting to a model (`RangeError`). */
   'TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED',
@@ -60,6 +60,8 @@ export const ERROR_CODES = [
   'TSG_ERR_OUTPUT_LIMIT_EXCEEDED',
   /** `sanitize` found something that makes Graphviz read a file or write an unsafe reference (`DOMException` named `SecurityError`). */
   'TSG_ERR_UNSAFE_DOT',
+  /** An adapter option has the wrong type (`TypeError`), or a value outside the documented set or range (`RangeError`), e.g. an unknown `format`. */
+  'TSG_ERR_INVALID_OPTION',
 ] as const;
 // Shared by every module of the process: frozen, so no code can change what
 // isTsGraphvizError accepts (#1757).

@@ -1,6 +1,6 @@
 import { createCommandArgs } from './create-command-args.js';
 import { CommandExecutionError } from './errors.js';
-import type { Layout, Options } from './types.js';
+import type { AnyOptions } from './options.js';
 
 /**
  * Whether Windows runs `command` as a batch script: a name ending in `.bat`
@@ -28,8 +28,8 @@ export function isWindowsCommandScript(command: string): boolean {
  * @throws {CommandExecutionError} on Windows, when `dotCommand` names a
  * `.bat` or `.cmd` script.
  */
-export function createCommandAndArgs<T extends Layout>(
-  options: Options<T>,
+export function createCommandAndArgs(
+  options: AnyOptions,
   windows = false,
 ): [command: string, args: string[]] {
   const command = options.dotCommand ?? 'dot';
