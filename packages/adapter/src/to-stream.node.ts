@@ -87,8 +87,10 @@ export async function toStream<T extends Layout>(
     // Killed once: a failed kill() emits 'error' on the process at once,
     // and the handler must not kill (and fail) again.
     let killed = false;
+    // Set on 'close': the process has exited, there is nothing to kill.
+    let closed = false;
     const kill = () => {
-      if (killed) return;
+      if (killed || closed) return;
       killed = true;
       try {
         p.kill('SIGKILL');
@@ -216,8 +218,14 @@ export async function toStream<T extends Layout>(
       }
     }
 
-    // Normally the outcome is decided on 'close', after all output is read.
-    p.on('close', (code, exitSignal) => report(code, exitSignal));
+    // Normally the outcome is decided on 'close', after all output is read,
+    // one macrotask later: Node.js destroys stdin on exit, and an error of
+    // the write still pending is delivered after 'close'. Without the wait,
+    // a failed write could resolve with output for part of the source.
+    p.on('close', (code, exitSignal) => {
+      closed = true;
+      setImmediate(() => report(code, exitSignal));
+    });
     // After an input failure, decide on 'exit' instead: the output is not
     // needed, and 'close' waits for pipes a leftover child may hold.
     p.on('exit', (code, exitSignal) => {
@@ -231,10 +239,12 @@ export async function toStream<T extends Layout>(
     // already have). If it has not exited in time (the kill failed, or
     // 'exit' never comes), the input failure is the result.
     const onInputError = (e: unknown) => {
-      // Already settled (Node.js destroys stdin on exit, so the error can
-      // arrive after 'close'): nothing more to do.
+      // Already settled (e.g. aborted, or an error arriving later than the
+      // report after 'close'): nothing more to do.
       if (settled || inputError !== undefined) return;
       inputError = e;
+      // Closed: the process is gone, and the pending report sees the error.
+      if (closed) return;
       kill();
       if (exited) return report(exited.code, exited.signal);
       timer = setTimeout(() => {

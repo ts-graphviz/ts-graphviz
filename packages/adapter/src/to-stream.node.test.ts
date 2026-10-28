@@ -300,6 +300,33 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       });
     });
 
+    it('fails when the stdin error is queued behind a clean close', async () => {
+      const handlers: Record<string, Callback[]> = {};
+      const p: any = {
+        stdout: new PassThrough(),
+        stderr: new PassThrough(),
+        stdin: new PassThrough(),
+        on: (event: string, handler: Callback) => {
+          handlers[event] ??= [];
+          handlers[event].push(handler);
+        },
+        kill: vi.fn(() => true),
+      };
+      spawnMock.mockReturnValue(p);
+      const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
+
+      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      // Destroyed with an error, then 'close' at once: the stdin error is
+      // only delivered on the next tick, after 'close'.
+      p.stdin.destroy(epipe);
+      for (const handler of handlers.close ?? []) handler(0, null);
+      await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
+      await expect(promise).rejects.toMatchObject({
+        code: 'TSG_ERR_COMMAND_FAILED',
+        cause: epipe,
+      });
+    });
+
     it('reports the exit status when the command failed on its own', async () => {
       const handlers: Record<string, Callback[]> = {};
       const stderr = new PassThrough();
@@ -418,7 +445,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       },
     );
 
-    it('does nothing more for an input failure reported after the process closed', async () => {
+    it('fails, without killing or waiting, for an input failure reported after the process closed', async () => {
       vi.useFakeTimers();
       try {
         const p = unkillable();
@@ -431,10 +458,15 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
         p.emit('exit', 0, null);
         p.emit('close', 0, null);
         // As when Node.js destroys stdin on exit with the write pending.
-        p.stdin.destroy(new Error('write EPIPE'));
+        const epipe = new Error('write EPIPE');
+        p.stdin.destroy(epipe);
+        const rejection = expect(promise).rejects.toMatchObject({
+          exit: { code: 0 },
+          cause: epipe,
+        });
         await vi.advanceTimersByTimeAsync(0);
 
-        expect(await new Response(await promise).text()).toBe('<svg/>');
+        await rejection;
         expect(p.kill).not.toHaveBeenCalled();
         expect(vi.getTimerCount()).toBe(0);
       } finally {
