@@ -21,8 +21,8 @@ export function createElementFactory(
  *
  * This shared function does not limit the number of nodes it creates: the
  * limit guards against untrusted *input*, which the parser and `fromModel`
- * enforce with a builder of their own per call. A shared counter here would
- * otherwise throw once a process had built 100,000 nodes in total (#1624).
+ * enforce with a builder of their own per call (a count shared by every
+ * caller in the process would eventually refuse all of them).
  * Use {@link createElementFactory} to build with a limit.
  *
  * @param type - Type of the {@link ASTNode}

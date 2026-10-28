@@ -113,6 +113,7 @@ export interface ConvertToModelContext {
 export interface ConvertToModelOptions {
   models: ModelsContext;
   maxEdgeTargets?: number;
+  maxSharedNodes?: number;
 }
 
 export interface ConvertToModelPlugin<T extends ToModelConvertableASTNode = ToModelConvertableASTNode> {
@@ -265,6 +266,7 @@ export interface PrintOptions {
   indentStyle?: IndentStyle;
   indentSize?: number;
   endOfLine?: EndOfLine;
+  maxSharedNodes?: number;
 }
 
 export interface PrintPlugin<T extends ASTNode = ASTNode> {

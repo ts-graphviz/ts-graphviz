@@ -32,6 +32,10 @@ export const ERROR_CODES = [
   'TSG_ERR_AST_NODE_COUNT_EXCEEDED',
   /** Edges to subgraphs reached more nodes than `maxEdgeTargets` while converting to a model (`RangeError`). */
   'TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED',
+  /** An AST or model contains itself, e.g. a subgraph among its own statements (`TypeError`). */
+  'TSG_ERR_CYCLIC_STRUCTURE',
+  /** An AST reaches node objects it shares between parents more often than `maxSharedNodes` allows (`RangeError`). */
+  'TSG_ERR_SHARED_NODE_COUNT_EXCEEDED',
   /** A string written to DOT contains a null character (`RangeError`). */
   'TSG_ERR_NUL_CHARACTER',
   /** HTML-like markup has unbalanced `<`/`>` or a null character (`RangeError`). */

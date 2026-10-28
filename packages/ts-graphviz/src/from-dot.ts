@@ -61,7 +61,7 @@ export interface FromDotOptions<
   convert?: Omit<ConvertToModelOptions, 'models'> & {
     /**
      * Classes to create the models from; the ones left out default to the
-     * classes of `@ts-graphviz/core`. The result is typed by them (#1736).
+     * classes of `@ts-graphviz/core`. The result is typed by them.
      */
     models?: P;
   };
