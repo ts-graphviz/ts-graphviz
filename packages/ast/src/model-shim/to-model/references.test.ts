@@ -99,19 +99,29 @@ describe('toModel of an AST that shares nodes', { tags: ['SM-5'] }, () => {
 
 describe('toModel of deeply nested subgraphs', { tags: ['SM-5'] }, () => {
   it('collects the nodes of each level once, not once per level above', () => {
-    // 2 s before: each level walked every level below it again.
+    // Counted, not timed: each level's statements are read a fixed number
+    // of times (before, every level walked every level below it again, about
+    // levels² / 2 reads). A shallow tree keeps clear of the call stack, which
+    // the recursive conversion uses at every level.
+    const levels = 200;
+    let reads = 0;
     let inner: Raw = node('a');
-    for (let i = 0; i < 3000; i++) {
-      const attributes = Array.from({ length: 30 }, () => ({
-        type: 'Attribute',
-        key: literal('color'),
-        value: literal('red'),
-      }));
-      inner = { type: 'Subgraph', children: [...attributes, inner] };
+    for (let i = 0; i < levels; i++) {
+      const children = [
+        { type: 'Attribute', key: literal('color'), value: literal('red') },
+        inner,
+      ];
+      inner = { type: 'Subgraph' };
+      Object.defineProperty(inner, 'children', {
+        get: () => {
+          reads++;
+          return children;
+        },
+        enumerable: true,
+      });
     }
-    const start = performance.now();
     convert(graph(inner));
-    expect(performance.now() - start).toBeLessThan(1000);
+    expect(reads).toBeLessThanOrEqual(4 * levels);
   });
 });
 
