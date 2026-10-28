@@ -11,7 +11,7 @@ TypeScript types do not hold at run time, and options such as `format` are often
 - `attributes` must be an object of `graph` / `node` / `edge` records mapping attribute names to strings, finite numbers or booleans. A name that is empty or contains `=` (Graphviz splits the argument at the first `=`) or a NUL character, a value with a NUL character, and an object value (`escString()` / `htmlLike()` cannot be given on the command line) are rejected, also with `sanitize: false`.
 - `scale` must be a finite number greater than 0; `noop` and `iterations` non-negative integers; `unscaledFactor`, `overlapExpansionFactor` and `temperature` finite, non-negative numbers; `suppressWarnings`, `y`, `reduce`, `grid` and `oldAttractive` booleans. In 3.x a `NaN` scale was ignored and a non-boolean `suppressWarnings` was read as truthy.
 - `sanitize` must be a boolean or an options object; in it, `policy` must be `'default'` or `'strict'` and the parser limits non-negative numbers, finite for the depth limits.
-- `dotCommand` and `library` choose code to run, so they stay trusted configuration: they are checked only to be a non-empty string and an array of strings, so a value of another type (such as a `URL`) is rejected instead of being converted.
+- `dotCommand` and `library` choose code to run, so they stay trusted configuration: they are checked only to be a non-empty string and an array of strings, so a value of another type (such as a `URL`) is rejected instead of being converted. (On Windows, a `.bat` or `.cmd` `dotCommand` is also rejected; see its own note.)
 
 `maxOutputSize` has its own check (`RangeError`, `TSG_ERR_OUTPUT_LIMIT_EXCEEDED`).
 

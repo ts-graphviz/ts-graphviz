@@ -184,7 +184,8 @@ type NoInfer<T> = [T][T extends unknown ? 0 : never];
  * whose `code` is `TSG_ERR_INVALID_OPTION` (`TSG_ERR_OUTPUT_LIMIT_EXCEEDED`
  * for `maxOutputSize`). `dotCommand`, `library`, `customFormats` and
  * `customLayouts` choose code to run or what it may be asked to do: they are
- * trusted configuration, checked for their type only.
+ * trusted configuration, checked for their type only (and, on Windows,
+ * `dotCommand` must not be a `.bat` or `.cmd` script).
  * @public
  */
 export interface CommonOptions<
@@ -208,7 +209,7 @@ export interface CommonOptions<
    * Path of graphviz dot command: a non-empty string.
    *
    * **This should be a trusted, hardcoded path in your application configuration. Do not derive this value from end-user input.**
-   * It is checked for its type only; the adapter runs whatever it names.
+   * Apart from its type and the Windows check below it is not checked; the adapter runs whatever it names.
    *
    * On Windows it must name an executable (`dot.exe`), not a `.bat` or `.cmd` script: Windows runs a script through `cmd.exe`, which parses the arguments again, so such a command is rejected with `CommandExecutionError` before it starts.
    *
