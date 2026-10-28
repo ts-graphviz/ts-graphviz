@@ -244,6 +244,22 @@ export abstract class GraphBase<
   }
 
   public addAttributeList(
+    kind: 'Graph',
+    attributes: AttributeListAttributes<SchemaOf<M>, 'Graph'>,
+  ): void;
+  public addAttributeList(
+    kind: 'Node',
+    attributes: AttributeListAttributes<SchemaOf<M>, 'Node'>,
+  ): void;
+  public addAttributeList(
+    kind: 'Edge',
+    attributes: AttributeListAttributes<SchemaOf<M>, 'Edge'>,
+  ): void;
+  public addAttributeList(
+    kind: AttributeListKind,
+    attributes: AttributeListAttributes<SchemaOf<M>>,
+  ): void;
+  public addAttributeList(
     kind: AttributeListKind,
     attributes: AttributeListAttributes<SchemaOf<M>>,
   ): void {

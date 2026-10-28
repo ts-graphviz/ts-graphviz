@@ -406,7 +406,7 @@ export declare namespace Attribute {
 
 export type AttributeKey = EdgeAttributeKey | NodeAttributeKey | GraphAttributeKey | SubgraphAttributeKey | ClusterSubgraphAttributeKey;
 
-export type AttributeListAttributes<S extends Schema = EmptySchema> = [keyof S] extends [never] ? AttributesObject<AttributeKey> | AttributesEntities<AttributeKey> : SubgraphAttributesObject<S> | NodeAttributesObject<S> | EdgeAttributesObject<S> | AttributesEntities<SubgraphAttributeKey | ClusterSubgraphAttributeKey, SubgraphSchemaAttributeTypes<S>> | AttributesEntities<NodeAttributeKey, SchemaAttributeTypes<S, "node">> | AttributesEntities<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>;
+export type AttributeListAttributes<S extends Schema = EmptySchema, Kind extends AttributeListKind = AttributeListKind> = [keyof S] extends [never] ? AttributesObject<AttributeKey> | AttributesEntities<AttributeKey> : [Kind] extends ["Node"] ? NodeAttributesObject<S> | AttributesEntities<NodeAttributeKey, SchemaAttributeTypes<S, "node">> : [Kind] extends ["Edge"] ? EdgeAttributesObject<S> | AttributesEntities<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">> : [Kind] extends ["Graph"] ? SubgraphAttributesObject<S> | AttributesEntities<SubgraphAttributeKey | ClusterSubgraphAttributeKey, SubgraphSchemaAttributeTypes<S>> : AnyKindAttributesObject<S>;
 
 export type AttributeListKind = "Graph" | "Edge" | "Node";
 
@@ -414,7 +414,9 @@ export interface AttributeListModel<K extends AttributeListKind = AttributeListK
   $$kind: K;
 }
 
-export type AttributeTuple<T extends AttributeKey, E extends object = Record<never, never>> = [Exclude<T, keyof E>, Attribute<Exclude<T, keyof E>>] | { [K in keyof E & string]: [K, SchemaAttributeOf<E, K>]; }[keyof E & string];
+export type AttributeOf<K extends string, E extends object = Record<never, never>> = K extends keyof E ? SchemaAttribute<E, K> : BuiltInAttribute<K>;
+
+export type AttributeTuple<T extends AttributeKey, E extends object = Record<never, never>> = [BuiltInAttributeKey<T, E>, Attribute<BuiltInAttributeKey<T, E>>] | { [K in keyof E & string]: [K, SchemaAttribute<E, K>]; }[keyof E & string];
 
 export type AttributeValue = Attribute<AttributeKey>;
 
@@ -639,8 +641,12 @@ export interface AttributeValueTypes<V extends Record<ValueTypeName, unknown> = 
 export interface Attributes<T extends AttributeKey, E extends object = Record<never, never>> {
   readonly size: number;
   readonly values: ReadonlyArray<AttributeTuple<T, E>>;
-  get<K extends SchemaAttributeKey<T, E>>(key: K): SchemaAttribute<K, E> | undefined;
-  set<K extends SchemaAttributeKey<T, E>>(key: K, value: SchemaAttribute<K, E>): void;
+  get<K extends BuiltInAttributeKey<T, E>>(key: K): Attribute<K> | undefined;
+  get<K extends keyof E & string>(key: K): SchemaAttribute<E, K> | undefined;
+  get<K extends SchemaAttributeKey<T, E>>(key: K): AttributeOf<K, E> | undefined;
+  set<K extends BuiltInAttributeKey<T, E>>(key: K, value: Attribute<K>): void;
+  set<K extends keyof E & string>(key: K, value: SchemaAttribute<E, K>): void;
+  set<K extends SchemaAttributeKey<T, E>>(key: K, value: AttributeOf<K, E>): void;
   apply(attributes: AttributesObject<T, E> | AttributesEntities<T, E>): void;
   delete(key: SchemaAttributeKey<T, E>): void;
   clear(): void;
@@ -650,9 +656,11 @@ export type AttributesEntities<T extends AttributeKey, E extends object = Record
 
 export interface AttributesGroupModel<T extends AttributeKey, E extends object = Record<never, never>> extends Attributes<T, E> {}
 
-export type AttributesObject<T extends AttributeKey, E extends object = Record<never, never>> = { [K in Exclude<T, keyof E>]?: Attribute<K>; } & SchemaAttributesObject<E>;
+export type AttributesObject<T extends AttributeKey, E extends object = Record<never, never>> = { [K in BuiltInAttributeKey<T, E>]?: Attribute<K>; } & SchemaAttributesObject<E>;
 
 export type Blank = "";
+
+export type BuiltInAttributeKey<T extends AttributeKey, E extends object = Record<never, never>> = Exclude<T, keyof E>;
 
 export type ClusterMode = ClusterMode.values;
 export declare namespace ClusterMode {
@@ -797,6 +805,9 @@ export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K exten
   addNode(node: NodeModel<S>): void;
   addEdge(edge: EdgeModel<S>): void;
   addSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): void;
+  addAttributeList(kind: "Graph", attributes: AttributeListAttributes<S, "Graph">): void;
+  addAttributeList(kind: "Node", attributes: AttributeListAttributes<S, "Node">): void;
+  addAttributeList(kind: "Edge", attributes: AttributeListAttributes<S, "Edge">): void;
   addAttributeList(kind: AttributeListKind, attributes: AttributeListAttributes<S>): void;
   existNode(nodeId: string): boolean;
   existEdge(edge: EdgeModel<S>): boolean;
@@ -1155,7 +1166,7 @@ export interface Schema {
   readonly edge?: SchemaAttributeEntries;
 }
 
-export type SchemaAttribute<K extends string, E extends object = Record<never, never>> = K extends keyof E ? SchemaAttributeOf<E, K> : BuiltInAttribute<K>;
+export type SchemaAttribute<E, K extends PropertyKey> = E extends { readonly [P in K]: infer V extends DotValue; } ? V : never;
 
 export type SchemaAttributeEntries = {
   readonly [key: string]: SchemaEntry;
@@ -1340,6 +1351,8 @@ export declare function withCode<E extends Error, C extends ErrorCode>(error: E,
 
 // Used by the exports, not exported
 
+type AnyKindAttributesObject<S extends Schema> = AttributesObject<Exclude<NodeAttributeKey & EdgeAttributeKey & (SubgraphAttributeKey | ClusterSubgraphAttributeKey), keyof SchemaAttributeTypes<S, "node"> | keyof SchemaAttributeTypes<S, "edge"> | keyof SubgraphSchemaAttributeTypes<S>>>;
+
 type Apply<Base, E> = E extends SchemaEntry<infer T extends DotValue, infer Mode> ? ApplyMode<Base, T, Mode> : Base;
 
 type ApplyMode<Base, T, Mode> = Mode extends "extend" ? Base | T : Mode extends "add" | "override" ? T : never;
@@ -1372,9 +1385,7 @@ type ReadonlyModelOf<K extends DotObjectType> = Extract<AnyReadonlyDotObjectMode
   readonly $$type: K;
 }>;
 
-type SchemaAttributeOf<E, K extends PropertyKey> = E extends { readonly [P in K]: infer V extends DotValue; } ? V : never;
-
-type SchemaAttributesObject<E extends object> = [keyof E] extends [never] ? unknown : { [K in keyof NoInferType<E> & string]?: SchemaAttributeOf<E, K>; };
+type SchemaAttributesObject<E extends object> = [keyof E] extends [never] ? unknown : { [K in keyof NoInferType<E> & string]?: SchemaAttribute<E, K>; };
 
 type TypedAttribute<K extends AttributeKey, T> = [Extract<ValueTypeNamesOf<K>, ChangedNames<T>>] extends [never] ? Attribute<K> : AttributeValueTypes<SchemaValueTypes<T>>[ValueTypeNamesOf<K>];
 

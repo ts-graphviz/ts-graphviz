@@ -142,16 +142,42 @@ export type SchemaAttributeKey<
 > = [keyof E] extends [never] ? T : T | (keyof E & string);
 
 /**
- * The value type of the attribute `K`, given the attribute types `E` that a
- * schema adds or changes: `E[K]` when `E` has `K`, else the built-in
- * {@link Attribute}. Without `E`, this is `Attribute<K>`. It is always a
- * {@link DotValue}.
+ * The built-in keys among `T` that keep their built-in type: those the
+ * attribute types `E` of a schema do not change. Without `E`, this is `T`.
  * @group Models
  */
-export type SchemaAttribute<
+export type BuiltInAttributeKey<
+  T extends AttributeKey,
+  E extends object = Record<never, never>,
+> = Exclude<T, keyof E>;
+
+/**
+ * The value type of the attribute `K` among the attribute types `E` that a
+ * schema adds or changes (see {@link SchemaAttributeTypes}). It is always a
+ * {@link DotValue}.
+ *
+ * It reads `E[K]` through `infer`, so that inferring a type argument from a
+ * built-in attribute value never descends into the types the schema
+ * computes (a value such as `style` is a union of many strings).
+ * @group Models
+ */
+export type SchemaAttribute<E, K extends PropertyKey> = E extends {
+  readonly [P in K]: infer V extends DotValue;
+}
+  ? V
+  : never;
+
+/**
+ * The value type of the attribute `K` of an object with the attribute types
+ * `E` that a schema adds or changes: {@link SchemaAttribute} when `E` has
+ * `K`, else the built-in {@link Attribute}. What `get` and `set` of
+ * {@link Attributes} take in code generic over the schema.
+ * @group Models
+ */
+export type AttributeOf<
   K extends string,
   E extends object = Record<never, never>,
-> = K extends keyof E ? SchemaAttributeOf<E, K> : BuiltInAttribute<K>;
+> = K extends keyof E ? SchemaAttribute<E, K> : BuiltInAttribute<K>;
 
 /**
  * The built-in {@link Attribute} of `K`: any built-in value for `string`
@@ -166,17 +192,6 @@ type BuiltInAttribute<K extends string> = K extends AttributeKey
     : never;
 
 /**
- * `E[K]`, read through `infer` so that inferring a type argument from a
- * built-in attribute value never descends into the types the schema
- * computes (a value such as `style` is a union of many strings).
- */
-type SchemaAttributeOf<E, K extends PropertyKey> = E extends {
-  readonly [P in K]: infer V extends DotValue;
-}
-  ? V
-  : never;
-
-/**
  * An objects of attribute key/value pairs.
  *
  * @typeParam T - The built-in attribute keys.
@@ -188,14 +203,14 @@ export type AttributesObject<
   T extends AttributeKey,
   E extends object = Record<never, never>,
 > = {
-  [K in Exclude<T, keyof E>]?: Attribute<K>;
+  [K in BuiltInAttributeKey<T, E>]?: Attribute<K>;
 } & SchemaAttributesObject<E>;
 
 /** The attributes of `E` in an {@link AttributesObject}; nothing without. */
 type SchemaAttributesObject<E extends object> = [keyof E] extends [never]
   ? unknown
   : {
-      [K in keyof NoInferType<E> & string]?: SchemaAttributeOf<E, K>;
+      [K in keyof NoInferType<E> & string]?: SchemaAttribute<E, K>;
     };
 
 /**
@@ -232,9 +247,9 @@ export type AttributeTuple<
   T extends AttributeKey,
   E extends object = Record<never, never>,
 > =
-  | [Exclude<T, keyof E>, Attribute<Exclude<T, keyof E>>]
+  | [BuiltInAttributeKey<T, E>, Attribute<BuiltInAttributeKey<T, E>>]
   | {
-      [K in keyof E & string]: [K, SchemaAttributeOf<E, K>];
+      [K in keyof E & string]: [K, SchemaAttribute<E, K>];
     }[keyof E & string];
 
 /**
@@ -432,13 +447,29 @@ export interface Attributes<
    *
    * If the value corresponding to the key does not exist, undefined is returned.
    */
+  get<K extends BuiltInAttributeKey<T, E>>(key: K): Attribute<K> | undefined;
+  /**
+   * Get the value of an attribute that the schema adds or changes.
+   *
+   * If the value corresponding to the key does not exist, undefined is returned.
+   */
+  get<K extends keyof E & string>(key: K): SchemaAttribute<E, K> | undefined;
+  /**
+   * Get the value of an attribute, in code generic over the schema.
+   *
+   * If the value corresponding to the key does not exist, undefined is returned.
+   */
   get<K extends SchemaAttributeKey<T, E>>(
     key: K,
-  ): SchemaAttribute<K, E> | undefined;
+  ): AttributeOf<K, E> | undefined;
   /** Set a value, by specifying the key of the attributes in the DOT object. */
+  set<K extends BuiltInAttributeKey<T, E>>(key: K, value: Attribute<K>): void;
+  /** Set the value of an attribute that the schema adds or changes. */
+  set<K extends keyof E & string>(key: K, value: SchemaAttribute<E, K>): void;
+  /** Set the value of an attribute, in code generic over the schema. */
   set<K extends SchemaAttributeKey<T, E>>(
     key: K,
-    value: SchemaAttribute<K, E>,
+    value: AttributeOf<K, E>,
   ): void;
   /**
    * Apply keys and values that can be specified for DOT objects collectively.
@@ -595,25 +626,56 @@ export type StatementAttributeListModel<S extends Schema = EmptySchema> = [
   : GraphCommonAttributes<S>[keyof GraphCommonAttributes];
 
 /**
- * The attributes a default attribute statement takes (see
- * {@link GraphBaseModel.addAttributeList}), with the schema `S`: those of
- * one of {@link GraphCommonAttributes}. With no schema, any attributes.
+ * The attributes a default attribute statement of the kind `Kind` takes
+ * (see {@link GraphBaseModel.addAttributeList}), with the schema `S`:
+ *
+ * - with no schema, any attributes, whatever the kind;
+ * - `'Node'` and `'Edge'`: those of nodes and of edges;
+ * - `'Graph'`: those of subgraphs (and clusters);
+ * - a kind not known until run time ({@link AttributeListKind}): the
+ *   built-in attributes every kind has and the schema changes for none.
  * @group Models
  */
-export type AttributeListAttributes<S extends Schema = EmptySchema> = [
-  keyof S,
-] extends [never]
+export type AttributeListAttributes<
+  S extends Schema = EmptySchema,
+  Kind extends AttributeListKind = AttributeListKind,
+> = [keyof S] extends [never]
   ? AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>
-  :
-      | SubgraphAttributesObject<S>
-      | NodeAttributesObject<S>
-      | EdgeAttributesObject<S>
-      | AttributesEntities<
-          SubgraphAttributeKey | ClusterSubgraphAttributeKey,
-          SubgraphSchemaAttributeTypes<S>
-        >
-      | AttributesEntities<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>
-      | AttributesEntities<EdgeAttributeKey, SchemaAttributeTypes<S, 'edge'>>;
+  : [Kind] extends ['Node']
+    ?
+        | NodeAttributesObject<S>
+        | AttributesEntities<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>
+    : [Kind] extends ['Edge']
+      ?
+          | EdgeAttributesObject<S>
+          | AttributesEntities<
+              EdgeAttributeKey,
+              SchemaAttributeTypes<S, 'edge'>
+            >
+      : [Kind] extends ['Graph']
+        ?
+            | SubgraphAttributesObject<S>
+            | AttributesEntities<
+                SubgraphAttributeKey | ClusterSubgraphAttributeKey,
+                SubgraphSchemaAttributeTypes<S>
+              >
+        : AnyKindAttributesObject<S>;
+
+/**
+ * The built-in attributes that every kind of default attribute statement
+ * has and that the schema `S` changes for none of them: their values hold
+ * whatever the kind.
+ */
+type AnyKindAttributesObject<S extends Schema> = AttributesObject<
+  Exclude<
+    NodeAttributeKey &
+      EdgeAttributeKey &
+      (SubgraphAttributeKey | ClusterSubgraphAttributeKey),
+    | keyof SchemaAttributeTypes<S, 'node'>
+    | keyof SchemaAttributeTypes<S, 'edge'>
+    | keyof SubgraphSchemaAttributeTypes<S>
+  >
+>;
 
 /**
  * DOT model representing a graph/digraph/subgraph.
@@ -682,6 +744,18 @@ export interface GraphBaseModel<
    * {@link GraphBaseModel.statements} once other statements precede it, so
    * it applies, as in DOT, only to what comes after it.
    */
+  addAttributeList(
+    kind: 'Graph',
+    attributes: AttributeListAttributes<S, 'Graph'>,
+  ): void;
+  addAttributeList(
+    kind: 'Node',
+    attributes: AttributeListAttributes<S, 'Node'>,
+  ): void;
+  addAttributeList(
+    kind: 'Edge',
+    attributes: AttributeListAttributes<S, 'Edge'>,
+  ): void;
   addAttributeList(
     kind: AttributeListKind,
     attributes: AttributeListAttributes<S>,
