@@ -136,8 +136,9 @@ export function literalFromValue(
     return { value: escapeLiteral(value), kind: 'quoted' };
   }
   if (isHTMLLike(value)) {
-    // Read once: what is checked is what is written, even if `value` is a
-    // getter or a proxy that answers differently on a second read.
+    // Read once: what is checked is what is written, even behind a proxy
+    // that answers differently on a second read. (A getter is not taken for
+    // the markup: isHTMLLike requires an own data property.)
     const markup: unknown = value.value;
     if (typeof markup !== 'string') {
       throw withCode(

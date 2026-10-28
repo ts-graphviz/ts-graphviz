@@ -84,6 +84,24 @@ describe('an HTML-like value is checked again when written', {
     expect(dot).toBe(write(htmlLike('<b>ok</b>')));
   });
 
+  it('does not take a getter for the markup', () => {
+    // isHTMLLike promises a string `value`, which an accessor does not
+    // establish: a value with one is not HTML-like, and is written as any
+    // other object is, without running the getter.
+    let reads = 0;
+    const value = brandedUnfrozen('<b>ok</b>');
+    Object.defineProperty(value, 'value', {
+      get: () => {
+        reads++;
+        return '<b>ok</b>';
+      },
+    });
+    expect(isHTMLLike(value)).toBe(false);
+    const ordinary = { $$kind: 'html', value: '<b>ok</b>' } as const;
+    expect(write(value)).toBe(write(ordinary as unknown as HTMLLikeValue));
+    expect(reads).toBe(0);
+  });
+
   it('rejects markup that is not a string (TSG_ERR_INVALID_HTML_LIKE)', () => {
     const value = brandedUnfrozen('<b>ok</b>');
     const notString = new Proxy(value, {
