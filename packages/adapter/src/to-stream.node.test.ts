@@ -192,6 +192,39 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
     });
   });
 
+  describe('when an output pipe fails', () => {
+    it.each(['stdout', 'stderr'] as const)(
+      'rejects with the %s error and kills the process',
+      async (pipe) => {
+        const pipes = {
+          stdout: new PassThrough(),
+          stderr: new PassThrough(),
+        };
+        const stdin = new PassThrough();
+        const events: Record<string, Callback[]> = {};
+        const p: any = {
+          ...pipes,
+          stdin,
+          kill: vi.fn(() => true),
+          on: (event: string, handler: Callback) => {
+            if (!events[event]) events[event] = [];
+            events[event].push(handler);
+          },
+        };
+        spawnMock.mockReturnValue(p);
+
+        const promise = toStream('dot', { layout: 'dot', sanitize: false });
+        const error = new Error('read EIO');
+        // Thrown out of emit() when nothing listens for it.
+        pipes[pipe].emit('error', error);
+
+        await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
+        await expect(promise).rejects.toMatchObject({ cause: error });
+        expect(p.kill).toHaveBeenCalledWith('SIGKILL');
+      },
+    );
+  });
+
   describe('when spawn throws synchronously', () => {
     it('should reject if spawn throws', async () => {
       // Arrange
@@ -267,6 +300,33 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       });
     });
 
+    it('fails when the stdin error is queued behind a clean close', async () => {
+      const handlers: Record<string, Callback[]> = {};
+      const p: any = {
+        stdout: new PassThrough(),
+        stderr: new PassThrough(),
+        stdin: new PassThrough(),
+        on: (event: string, handler: Callback) => {
+          handlers[event] ??= [];
+          handlers[event].push(handler);
+        },
+        kill: vi.fn(() => true),
+      };
+      spawnMock.mockReturnValue(p);
+      const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
+
+      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      // Destroyed with an error, then 'close' at once: the stdin error is
+      // only delivered on the next tick, after 'close'.
+      p.stdin.destroy(epipe);
+      for (const handler of handlers.close ?? []) handler(0, null);
+      await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
+      await expect(promise).rejects.toMatchObject({
+        code: 'TSG_ERR_COMMAND_FAILED',
+        cause: epipe,
+      });
+    });
+
     it('reports the exit status when the command failed on its own', async () => {
       const handlers: Record<string, Callback[]> = {};
       const stderr = new PassThrough();
@@ -293,6 +353,125 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
         exit: { code: 1, stderr: 'syntax error in line 1' },
         cause: epipe,
       });
+    });
+  });
+
+  describe('when killing the process fails or does not end it', () => {
+    /** A process whose kill() fails like Node.js's: 'error' is emitted at once. */
+    function unkillable() {
+      const handlers: Record<string, Callback[]> = {};
+      const emit = (event: string, ...args: unknown[]) => {
+        for (const handler of handlers[event] ?? []) handler(...args);
+      };
+      const p = {
+        stdout: new PassThrough(),
+        stderr: new PassThrough(),
+        stdin: new PassThrough(),
+        on: (event: string, handler: Callback) => {
+          handlers[event] ??= [];
+          handlers[event].push(handler);
+        },
+        kill: vi.fn(() => {
+          emit(
+            'error',
+            Object.assign(new Error('kill EPERM'), { syscall: 'kill' }),
+          );
+          return false;
+        }),
+        emit,
+      };
+      spawnMock.mockReturnValue(p);
+      return p;
+    }
+
+    it('kills once, although the failed kill reports an error', async () => {
+      const p = unkillable();
+      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      const error = new Error('read EIO');
+      p.stdout.emit('error', error);
+
+      await expect(promise).rejects.toMatchObject({ cause: error });
+      expect(p.kill).toHaveBeenCalledTimes(1);
+    });
+
+    it('reports the exit status, not the kill error, after an input failure', async () => {
+      const p = unkillable();
+      const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
+      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      p.stdin.destroy(epipe);
+      p.stderr.write('syntax error in line 1');
+      await new Promise((r) => setImmediate(r));
+      p.emit('exit', 1, null);
+      p.emit('close', 1, null);
+
+      await expect(promise).rejects.toMatchObject({
+        exit: { code: 1, stderr: 'syntax error in line 1' },
+        cause: epipe,
+      });
+      expect(p.kill).toHaveBeenCalledTimes(1);
+    });
+
+    it.each([
+      ['fails', unkillable],
+      [
+        'is ignored',
+        () => {
+          const p = unkillable();
+          p.kill.mockImplementation(() => true);
+          return p;
+        },
+      ],
+    ])(
+      'rejects with the input failure when the kill %s and the process never exits',
+      async (_, make) => {
+        vi.useFakeTimers();
+        try {
+          const p = make();
+          const epipe = new Error('write EPIPE');
+          const promise = toStream('dot', { layout: 'dot', sanitize: false });
+          const rejection = expect(promise).rejects.toMatchObject({
+            code: 'TSG_ERR_COMMAND_FAILED',
+            message: expect.stringContaining('write EPIPE'),
+            cause: epipe,
+          });
+          p.stdin.destroy(epipe);
+          await vi.advanceTimersByTimeAsync(5000);
+
+          await rejection;
+          expect(p.kill).toHaveBeenCalledWith('SIGKILL');
+        } finally {
+          vi.useRealTimers();
+        }
+      },
+    );
+
+    it('fails, without killing or waiting, for an input failure reported after the process closed', async () => {
+      vi.useFakeTimers();
+      try {
+        const p = unkillable();
+        // A pipe the process never reads from: the write stays pending.
+        p.stdin = new Writable({ write() {} }) as PassThrough;
+        p.kill.mockImplementation(() => true);
+        const promise = toStream('dot', { layout: 'dot', sanitize: false });
+        p.stdout.end('<svg/>');
+        await vi.advanceTimersByTimeAsync(0);
+        p.emit('exit', 0, null);
+        p.emit('close', 0, null);
+        // As when Node.js destroys stdin on exit with the write pending.
+        const epipe = new Error('write EPIPE');
+        p.stdin.destroy(epipe);
+        const rejection = expect(promise).rejects.toMatchObject({
+          exit: { code: 0 },
+          cause: epipe,
+        });
+        await vi.advanceTimersByTimeAsync(0);
+
+        await rejection;
+        expect(p.kill).not.toHaveBeenCalled();
+        expect(vi.getTimerCount()).toBe(0);
+      } finally {
+        vi.useRealTimers();
+      }
     });
   });
 });
