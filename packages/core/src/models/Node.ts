@@ -99,6 +99,6 @@ export class Node<S extends Schema = EmptySchema>
     if (typeof port === 'string') {
       return { id: this.id, port };
     }
-    return { id: this.id, ...port };
+    return { ...port, id: this.id };
   }
 }
