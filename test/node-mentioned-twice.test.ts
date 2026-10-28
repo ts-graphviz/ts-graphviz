@@ -19,13 +19,18 @@ describe('a node mentioned twice', () => {
     expect(g.getNode('a')?.attributes.get('color')).toBe('blue');
   });
 
-  it.skipIf(spawnSync('dot', ['-V']).status !== 0)(
-    'renders as the source does',
-    () => {
-      const dot = 'digraph { a [color=red, label=x]; a [shape=box] }';
-      const canon = (s: string) =>
-        spawnSync('dot', ['-Tcanon'], { input: s, encoding: 'utf8' }).stdout;
-      expect(canon(toDot(fromDot(dot)))).toBe(canon(dot));
-    },
-  );
+  it('renders as the source does', { tags: ['process'] }, ({ skip }) => {
+    skip(
+      spawnSync('dot', ['-V'], { timeout: 10_000 }).status !== 0,
+      'dot is not installed',
+    );
+    const dot = 'digraph { a [color=red, label=x]; a [shape=box] }';
+    const canon = (s: string) =>
+      spawnSync('dot', ['-Tcanon'], {
+        input: s,
+        encoding: 'utf8',
+        timeout: 30_000,
+      }).stdout;
+    expect(canon(toDot(fromDot(dot)))).toBe(canon(dot));
+  });
 });

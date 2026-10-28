@@ -35,7 +35,7 @@ import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import fc from 'fast-check';
 import { type GraphBaseModel, type RootGraphModel, toDot } from 'ts-graphviz';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import {
   buildGraph,
   type GraphSpec,
@@ -43,10 +43,10 @@ import {
 } from '../properties/arbitraries.js';
 import { type RootGraphSummary, summarize } from '../properties/summarize.js';
 
-const dotVersion = (() => {
-  const r = spawnSync('dot', ['-V'], { encoding: 'utf8' });
-  return r.status === 0 ? r.stderr.trim() : undefined;
-})();
+let dotInstalled: boolean | undefined;
+/** Whether `dot` runs, asked by the first test that needs it. */
+const hasDot = () =>
+  (dotInstalled ??= spawnSync('dot', ['-V'], { timeout: 10_000 }).status === 0);
 
 const DUMP = join(import.meta.dirname, 'dump.gvpr');
 const SEP = '\x1f';
@@ -57,6 +57,7 @@ function graphviz(args: string[], input: string) {
     input,
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,
+    timeout: 30_000,
   });
 }
 
@@ -312,88 +313,85 @@ function names(spec: GraphSpec): string[] {
   ];
 }
 
-describe.skipIf(!dotVersion)(
-  `differential against ${dotVersion}`,
-  { tags: ['SM-2'] },
-  () => {
-    it(
-      'Graphviz accepts every generated graph and builds the graph the model means',
-      () => {
-        fc.assert(
-          fc.property(graphSpec, (spec) => {
-            // The dump format uses two control characters as separators.
-            // (Ports never contain ':' — toDot rejects them, #1641.)
-            const text = JSON.stringify(spec);
-            fc.pre(!text.includes('\\u001e') && !text.includes('\\u001f'));
-            // cgraph reserves names starting with '%' for anonymous objects
-            // and renames a graph or node called that (`"%"` becomes `%1`).
-            fc.pre(!names(spec).some((name) => name.startsWith('%')));
+describe('differential against Graphviz', { tags: ['SM-2', 'process'] }, () => {
+  beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
+  it(
+    'Graphviz accepts every generated graph and builds the graph the model means',
+    () => {
+      fc.assert(
+        fc.property(graphSpec, (spec) => {
+          // The dump format uses two control characters as separators.
+          // (Ports never contain ':' — toDot rejects them, #1641.)
+          const text = JSON.stringify(spec);
+          fc.pre(!text.includes('\\u001e') && !text.includes('\\u001f'));
+          // cgraph reserves names starting with '%' for anonymous objects
+          // and renames a graph or node called that (`"%"` becomes `%1`).
+          fc.pre(!names(spec).some((name) => name.startsWith('%')));
 
-            const model = buildGraph(spec);
-            const source = toDot(model);
+          const model = buildGraph(spec);
+          const source = toDot(model);
 
-            const canon = graphviz(['dot', '-Tcanon'], source);
-            expect(
-              canon.status,
-              `dot rejected:\n${source}\n${canon.stderr}`,
-            ).toBe(0);
+          const canon = graphviz(['dot', '-Tcanon'], source);
+          expect(
+            canon.status,
+            `dot rejected:\n${source}\n${canon.stderr}`,
+          ).toBe(0);
 
-            const dumped = graphviz(['gvpr', '-f', DUMP], source);
-            expect(
-              dumped.status,
-              `gvpr failed:\n${source}\n${dumped.stderr}`,
-            ).toBe(0);
-            const theirs = parseDump(dumped.stdout);
-            const ours = expected(model, summarize(model));
+          const dumped = graphviz(['gvpr', '-f', DUMP], source);
+          expect(
+            dumped.status,
+            `gvpr failed:\n${source}\n${dumped.stderr}`,
+          ).toBe(0);
+          const theirs = parseDump(dumped.stdout);
+          const ours = expected(model, summarize(model));
 
-            expect(theirs.directed).toBe(spec.directed);
-            expect(theirs.strict).toBe(spec.strict);
-            if (spec.id !== undefined) expect(theirs.name).toBe(gvId(spec.id));
-            expect(sortedMap(theirs.attributes)).toStrictEqual(
-              sortedMap(ours.attributes),
-            );
-            // Graphviz lists nodes in the order it created them, so this
-            // checks that statements are written in the model's order.
+          expect(theirs.directed).toBe(spec.directed);
+          expect(theirs.strict).toBe(spec.strict);
+          if (spec.id !== undefined) expect(theirs.name).toBe(gvId(spec.id));
+          expect(sortedMap(theirs.attributes)).toStrictEqual(
+            sortedMap(ours.attributes),
+          );
+          // Graphviz lists nodes in the order it created them, so this
+          // checks that statements are written in the model's order.
+          expect(
+            [...theirs.nodes.keys()],
+            `node order differs\nsource:\n${source}`,
+          ).toStrictEqual([...ours.nodes.keys()]);
+          for (const [id, n] of ours.nodes) {
             expect(
-              [...theirs.nodes.keys()],
-              `node order differs\nsource:\n${source}`,
-            ).toStrictEqual([...ours.nodes.keys()]);
-            for (const [id, n] of ours.nodes) {
-              expect(
-                sortedMap(theirs.nodes.get(id) ?? new Map()),
-                id,
-              ).toStrictEqual(sortedMap(n.attributes));
-            }
-            const theirEdges = theirs.edges.map((e) =>
-              spec.strict && !spec.directed && e.head < e.tail
-                ? edgeKey({
-                    tail: e.head,
-                    head: e.tail,
-                    attributes: swapPorts(e.attributes),
-                  })
-                : edgeKey(e),
-            );
-            const ourEdges = ours.edges.map(edgeKey).sort();
-            expect(
-              theirEdges.sort(),
-              `edges differ (percent-encoded)\ntheirs: ${theirEdges.map(encodeURIComponent).join('\n')}\nours:   ${ourEdges.map(encodeURIComponent).join('\n')}\nsource:\n${source}`,
-            ).toStrictEqual(ourEdges);
-          }),
-          // Each case spawns dot and gvpr, so the default is lower than the
-          // other properties'; FC_NUM_RUNS raises it (the nightly run does),
-          // and the time limit is wider than the shared 60 s for that reason.
-          {
-            numRuns: process.env.FC_NUM_RUNS
-              ? Number(process.env.FC_NUM_RUNS)
-              : 60,
-            interruptAfterTimeLimit: 20 * 60_000,
-          },
-        );
-      },
-      25 * 60_000,
-    );
-  },
-);
+              sortedMap(theirs.nodes.get(id) ?? new Map()),
+              id,
+            ).toStrictEqual(sortedMap(n.attributes));
+          }
+          const theirEdges = theirs.edges.map((e) =>
+            spec.strict && !spec.directed && e.head < e.tail
+              ? edgeKey({
+                  tail: e.head,
+                  head: e.tail,
+                  attributes: swapPorts(e.attributes),
+                })
+              : edgeKey(e),
+          );
+          const ourEdges = ours.edges.map(edgeKey).sort();
+          expect(
+            theirEdges.sort(),
+            `edges differ (percent-encoded)\ntheirs: ${theirEdges.map(encodeURIComponent).join('\n')}\nours:   ${ourEdges.map(encodeURIComponent).join('\n')}\nsource:\n${source}`,
+          ).toStrictEqual(ourEdges);
+        }),
+        // Each case spawns dot and gvpr, so the default is lower than the
+        // other properties'; FC_NUM_RUNS raises it (the nightly run does),
+        // and the time limit is wider than the shared 60 s for that reason.
+        {
+          numRuns: process.env.FC_NUM_RUNS
+            ? Number(process.env.FC_NUM_RUNS)
+            : 60,
+          interruptAfterTimeLimit: 20 * 60_000,
+        },
+      );
+    },
+    25 * 60_000,
+  );
+});
 
 function swapPorts(attributes: Attrs): Attrs {
   const m = new Map(attributes);

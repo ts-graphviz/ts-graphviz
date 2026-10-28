@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import type {
   ASTNode,
   AttributeASTNode,
@@ -85,47 +85,53 @@ describe('comments inside statements', { tags: ['SM-1'] }, () => {
   });
 });
 
-const hasDot = spawnSync('dot', ['-V']).status === 0;
+let dotInstalled: boolean | undefined;
+/** Whether `dot` runs, asked by the first test that needs it. */
+const hasDot = () =>
+  (dotInstalled ??= spawnSync('dot', ['-V'], { timeout: 10_000 }).status === 0);
 const canon = (dot: string) => {
-  const r = spawnSync('dot', ['-Tcanon'], { input: dot, encoding: 'utf8' });
+  const r = spawnSync('dot', ['-Tcanon'], {
+    input: dot,
+    encoding: 'utf8',
+    timeout: 30_000,
+  });
   expect(r.status, `${dot}\n${r.stderr}`).toBe(0);
   return r.stdout;
 };
 
-describe.skipIf(!hasDot)(
-  'comments inside statements are printed back',
-  { tags: ['SM-1'] },
-  () => {
-    it.each([
-      'digraph /* c */ G /* d */ { a }',
-      'digraph /* c */ { a }',
-      'strict /* s */ graph { a -- b }',
-      'digraph { a /* c */ -> /* d */ b }',
-      'digraph { a // line\n -> b }',
-      'digraph { a ->\n # macro\n b }',
-      'digraph { a /* c */ [color=red] }',
-      'digraph { a [color /* k */ = /* v */ red, /* x */ shape=box] }',
-      'digraph { node /* n */ [shape=box] }',
-      'digraph { rankdir /* r */ = LR }',
-      'digraph { a /* p */ : /* q */ p -> b }',
-      'digraph { subgraph /* s */ x /* t */ { a } }',
-      'digraph { subgraph // s\n { a } -> b }',
-      'digraph { a, /* l */ b -> c }',
-      'digraph { a -> b /* e */ ; c }',
-      'digraph { a /* multi\n line */ -> b }',
-    ])('%j', (dot) => {
-      const printed = stringify(parse(dot));
-      // Graphviz reads the reprint as the same graph, and the comments survive
-      // a second round.
-      expect(canon(printed)).toBe(canon(dot));
-      expect(stringify(parse(printed))).toBe(printed);
-      for (const word of dot.match(/[a-z]+(?= \*\/)|(?<=\/\/ |# )[a-z]+/g) ??
-        []) {
-        expect(printed).toContain(word);
-      }
-    });
-  },
-);
+describe('comments inside statements are printed back', {
+  tags: ['SM-1', 'process'],
+}, () => {
+  beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
+  it.each([
+    'digraph /* c */ G /* d */ { a }',
+    'digraph /* c */ { a }',
+    'strict /* s */ graph { a -- b }',
+    'digraph { a /* c */ -> /* d */ b }',
+    'digraph { a // line\n -> b }',
+    'digraph { a ->\n # macro\n b }',
+    'digraph { a /* c */ [color=red] }',
+    'digraph { a [color /* k */ = /* v */ red, /* x */ shape=box] }',
+    'digraph { node /* n */ [shape=box] }',
+    'digraph { rankdir /* r */ = LR }',
+    'digraph { a /* p */ : /* q */ p -> b }',
+    'digraph { subgraph /* s */ x /* t */ { a } }',
+    'digraph { subgraph // s\n { a } -> b }',
+    'digraph { a, /* l */ b -> c }',
+    'digraph { a -> b /* e */ ; c }',
+    'digraph { a /* multi\n line */ -> b }',
+  ])('%j', (dot) => {
+    const printed = stringify(parse(dot));
+    // Graphviz reads the reprint as the same graph, and the comments survive
+    // a second round.
+    expect(canon(printed)).toBe(canon(dot));
+    expect(stringify(parse(printed))).toBe(printed);
+    for (const word of dot.match(/[a-z]+(?= \*\/)|(?<=\/\/ |# )[a-z]+/g) ??
+      []) {
+      expect(printed).toContain(word);
+    }
+  });
+});
 
 describe('attachComments on nodes from a custom builder', () => {
   it('fills a comment field that is present but undefined', async () => {
