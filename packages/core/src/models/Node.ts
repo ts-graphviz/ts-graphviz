@@ -32,6 +32,6 @@ export class Node extends DotObject implements NodeModel {
     if (typeof port === 'string') {
       return { id: this.id, port };
     }
-    return { id: this.id, ...port };
+    return { ...port, id: this.id };
   }
 }
