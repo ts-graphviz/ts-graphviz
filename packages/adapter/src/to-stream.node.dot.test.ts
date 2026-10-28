@@ -293,6 +293,7 @@ describe('toStream / toFile check the source with sanitize (#1681)', {
     ).rejects.toMatchObject({ code: 'TSG_ERR_DOT_SYNTAX' });
     const stream = await toStream('digraph { a }', {
       format: 'dot',
+      signal: signal(),
       attributes: {
         graph: { rankdir: 'LR', label: 'Title "quoted"' },
         node: { shape: 'box', fontname: 'Helvetica' },
@@ -311,7 +312,9 @@ describe('toStream / toFile check the source with sanitize (#1681)', {
         format: 'ps',
       }),
     ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
-    const svg = await toStream('digraph { a [fontname="Times New Roman"] }');
+    const svg = await toStream('digraph { a [fontname="Times New Roman"] }', {
+      signal: signal(),
+    });
     expect(await new Response(svg).text()).toContain('Times New Roman');
     await expect(
       toStream('digraph { a }', { format: 'vml' as 'svg' }),
@@ -320,7 +323,11 @@ describe('toStream / toFile check the source with sanitize (#1681)', {
 
   it('renders the source unchecked with sanitize: false', async () => {
     // Graphviz itself copies the file into the output: what sanitize prevents.
-    const stream = await toStream(leak, { format: 'ps', sanitize: false });
+    const stream = await toStream(leak, {
+      format: 'ps',
+      sanitize: false,
+      signal: signal(),
+    });
     expect(await new Response(stream).text()).toContain('SECRET-CONTENT');
   });
 });

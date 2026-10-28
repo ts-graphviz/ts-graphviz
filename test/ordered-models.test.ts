@@ -12,12 +12,15 @@ let dotInstalled: boolean | undefined;
 /** Whether `dot` runs, asked by the first test that needs it. */
 const hasDot = () =>
   (dotInstalled ??= spawnSync('dot', ['-V'], { timeout: 10_000 }).status === 0);
-const canon = (dot: string) =>
-  spawnSync('dot', ['-Tcanon'], {
+const canon = (dot: string) => {
+  const r = spawnSync('dot', ['-Tcanon'], {
     input: dot,
     encoding: 'utf8',
     timeout: 30_000,
-  }).stdout;
+  });
+  expect(r.status, `${dot}\n${r.stderr}`).toBe(0);
+  return r.stdout;
+};
 
 // Default attribute statements apply, in DOT, only to what follows them.
 // The default model classes keep one set of defaults per graph; the

@@ -49,12 +49,15 @@ describe('statement order', () => {
       'dot is not installed',
     );
     const dot = 'digraph { a -> b; c; d -> e }';
-    const canon = (s: string) =>
-      spawnSync('dot', ['-Tcanon'], {
+    const canon = (s: string) => {
+      const r = spawnSync('dot', ['-Tcanon'], {
         input: s,
         encoding: 'utf8',
         timeout: 30_000,
-      }).stdout;
+      });
+      expect(r.status, `${s}\n${r.stderr}`).toBe(0);
+      return r.stdout;
+    };
     expect(canon(toDot(fromDot(dot)))).toBe(canon(dot));
   });
 });

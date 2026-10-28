@@ -25,12 +25,15 @@ describe('a node mentioned twice', () => {
       'dot is not installed',
     );
     const dot = 'digraph { a [color=red, label=x]; a [shape=box] }';
-    const canon = (s: string) =>
-      spawnSync('dot', ['-Tcanon'], {
+    const canon = (s: string) => {
+      const r = spawnSync('dot', ['-Tcanon'], {
         input: s,
         encoding: 'utf8',
         timeout: 30_000,
-      }).stdout;
+      });
+      expect(r.status, `${s}\n${r.stderr}`).toBe(0);
+      return r.stdout;
+    };
     expect(canon(toDot(fromDot(dot)))).toBe(canon(dot));
   });
 });
