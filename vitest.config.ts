@@ -35,13 +35,24 @@ const processTag = {
   timeout: 120_000,
 };
 
+/**
+ * Tests that bound the wall-clock time of an operation (a quadratic
+ * algorithm made linear stays linear) carry the `timing` tag. Mutation
+ * testing (vitest.mutation.config.ts) leaves them out: the instrumented
+ * sources are slower, so the bound would fail or pass by chance there.
+ */
+const timingTag = {
+  name: 'timing',
+  description: 'Asserts on elapsed time; left out of mutation testing',
+};
+
 export default defineConfig({
   assetsInclude: ['**/*.dot'],
   plugins: [tsconfigPaths()],
   test: {
     setupFiles: ['./test/properties/setup.ts', './test/process-guard.ts'],
     globalSetup: ['./test/process-notice.ts'],
-    tags: [...securityModelTags, processTag],
+    tags: [...securityModelTags, processTag, timingTag],
     strictTags: true,
     // website/ has its own setup (website/vitest.config.ts)
     exclude: [...configDefaults.exclude, 'website/**'],

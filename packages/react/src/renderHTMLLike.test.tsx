@@ -181,7 +181,7 @@ describe('renderHTMLLike()', { tags: ['SM-3'] }, () => {
   });
 
   // Test for potential ReDoS protection
-  it('handles pathological input efficiently', () => {
+  it('handles pathological input efficiently', { tags: ['timing'] }, () => {
     const problematicContent = 'a'.repeat(1000);
     const element = (
       <dot:table>
@@ -309,7 +309,9 @@ describe('renderHTMLLike()', { tags: ['SM-3'] }, () => {
   });
 
   // Performance test with security constraints
-  it('completes rendering within reasonable time even with complex structures', () => {
+  it('completes rendering within reasonable time even with complex structures', {
+    tags: ['timing'],
+  }, () => {
     let element: ReactElement = <dot:b>leaf</dot:b>;
     for (let i = 0; i < 500; i++) {
       element = (
