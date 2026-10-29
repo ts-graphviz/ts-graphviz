@@ -14,9 +14,12 @@
 import { spawnSync } from 'node:child_process';
 import fc from 'fast-check';
 import { sanitize } from 'ts-graphviz/ast';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-const hasDot = spawnSync('dot', ['-V']).status === 0;
+let dotInstalled: boolean | undefined;
+/** Whether `dot` runs, asked by the first test that needs it. */
+const hasDot = () =>
+  (dotInstalled ??= spawnSync('dot', ['-V'], { timeout: 10_000 }).status === 0);
 
 const piece = fc.constantFrom(
   'javascript',
@@ -109,55 +112,57 @@ function svgLinks(svg: string): string[] {
   return [...svg.matchAll(/[\s:]href="([^"]*)"/g)].map((m) => m[1]);
 }
 
-describe.skipIf(!hasDot)(
-  'sanitize and the links Graphviz writes',
-  { tags: ['SM-7'] },
-  () => {
-    it.each(['default', 'strict'] as const)(
-      'every link in the SVG of DOT accepted by the %s policy is relative, http, https or mailto',
-      (policy) => {
-        let accepted = 0;
-        let links = 0;
-        const runs = Number(process.env.FC_NUM_RUNS ?? 300);
-        for (const dot of fc.sample(source, runs)) {
-          let checked: string;
-          try {
-            checked = sanitize(dot, { policy });
-          } catch (e) {
-            // Unsafe, or (a raw `<` in an HTML-like string) not DOT at all.
-            expect(['TSG_ERR_UNSAFE_DOT', 'TSG_ERR_DOT_SYNTAX']).toContain(
-              (e as { code?: unknown }).code,
-            );
-            continue;
-          }
-          accepted++;
-          const r = spawnSync('dot', ['-Tsvg'], {
-            input: checked,
-            encoding: 'utf8',
-          });
-          expect(r.status, `${checked}\n${r.stderr}`).toBe(0);
-          // Every anchor is made of well-formed attributes only: a quote in a
-          // link would end its attribute and start others.
-          for (const [anchor] of r.stdout.matchAll(/<a\b[^>]*>/g)) {
-            expect(anchor, checked).toMatch(/^<a(?:\s+[\w:-]+="[^"<]*")*\s*>$/);
-          }
-          for (const href of svgLinks(r.stdout)) {
-            links++;
-            const url = browserUrl(href);
-            expect(url, `${checked}\nwrote href="${href}"`).toBeDefined();
-            const scheme = /^([A-Za-z][A-Za-z0-9+.-]*):/.exec(`${url}`)?.[1];
-            if (scheme !== undefined) {
-              expect(
-                ['http', 'https', 'mailto'],
-                `${checked}\nwrote href="${href}"`,
-              ).toContain(scheme.toLowerCase());
-            }
+describe('sanitize and the links Graphviz writes', {
+  tags: ['SM-7', 'process'],
+}, () => {
+  beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
+  // Each case runs dot; FC_NUM_RUNS (the nightly run) makes it long.
+  it.each(['default', 'strict'] as const)(
+    'every link in the SVG of DOT accepted by the %s policy is relative, http, https or mailto',
+    { timeout: 25 * 60_000 },
+    (policy) => {
+      let accepted = 0;
+      let links = 0;
+      const runs = Number(process.env.FC_NUM_RUNS ?? 300);
+      for (const dot of fc.sample(source, runs)) {
+        let checked: string;
+        try {
+          checked = sanitize(dot, { policy });
+        } catch (e) {
+          // Unsafe, or (a raw `<` in an HTML-like string) not DOT at all.
+          expect(['TSG_ERR_UNSAFE_DOT', 'TSG_ERR_DOT_SYNTAX']).toContain(
+            (e as { code?: unknown }).code,
+          );
+          continue;
+        }
+        accepted++;
+        const r = spawnSync('dot', ['-Tsvg'], {
+          input: checked,
+          encoding: 'utf8',
+          timeout: 30_000,
+        });
+        expect(r.status, `${checked}\n${r.stderr}`).toBe(0);
+        // Every anchor is made of well-formed attributes only: a quote in a
+        // link would end its attribute and start others.
+        for (const [anchor] of r.stdout.matchAll(/<a\b[^>]*>/g)) {
+          expect(anchor, checked).toMatch(/^<a(?:\s+[\w:-]+="[^"<]*")*\s*>$/);
+        }
+        for (const href of svgLinks(r.stdout)) {
+          links++;
+          const url = browserUrl(href);
+          expect(url, `${checked}\nwrote href="${href}"`).toBeDefined();
+          const scheme = /^([A-Za-z][A-Za-z0-9+.-]*):/.exec(`${url}`)?.[1];
+          if (scheme !== undefined) {
+            expect(
+              ['http', 'https', 'mailto'],
+              `${checked}\nwrote href="${href}"`,
+            ).toContain(scheme.toLowerCase());
           }
         }
-        // The generator must reach the accepting side often enough to mean something.
-        expect(accepted).toBeGreaterThan(runs / 10);
-        expect(links).toBeGreaterThan(runs / 10);
-      },
-    );
-  },
-);
+      }
+      // The generator must reach the accepting side often enough to mean something.
+      expect(accepted).toBeGreaterThan(runs / 10);
+      expect(links).toBeGreaterThan(runs / 10);
+    },
+  );
+});

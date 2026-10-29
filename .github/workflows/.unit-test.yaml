@@ -27,15 +27,23 @@ jobs:
         name: generated-code
         path: packages/ast/src/dot-shim/parser
     - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-    - name: Use Graphviz
-      uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
       with:
         node-version: ${{ matrix.node-version }}
         cache: pnpm
     - run: pnpm install --frozen-lockfile
+    # Leaves out the tests tagged `process`, which start real processes
+    # (Graphviz, stand-in commands): no Graphviz on the runner is needed.
     - run: pnpm test
+    # Runs them in a container (rootless Podman here, Docker in the job
+    # below): no network, read-only repository, an allowlisted environment.
+    # The image has Node.js ${{ matrix.node-version }} and Graphviz.
+    - name: Run the tests that start processes in a container
+      env:
+        # Not a fallback: a Podman failure fails the job.
+        CONTAINER_RUNTIME: podman
+      run: pnpm test:sandbox
 
   active_support_nodejs_latest:
     name: Active Support / Node.js Latest
@@ -53,8 +61,6 @@ jobs:
         name: generated-code
         path: packages/ast/src/dot-shim/parser
     - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-    - name: Use Graphviz
-      uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
     - name: Use Node.js latest
       uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
       with:
@@ -62,3 +68,7 @@ jobs:
         cache: pnpm
     - run: pnpm install --frozen-lockfile
     - run: pnpm test
+    - name: Run the tests that start processes in a container
+      env:
+        CONTAINER_RUNTIME: docker
+      run: pnpm test:sandbox

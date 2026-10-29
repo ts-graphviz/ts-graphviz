@@ -5,11 +5,10 @@
 import { chmodSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { toStream } from './to-stream.node.js';
 
-const dir = mkdtempSync(join(tmpdir(), 'ts-graphviz-stderr-'));
-afterAll(() => rmSync(dir, { recursive: true, force: true }));
+let dir: string;
 
 /** `size` ASCII bytes in a pattern that shows where they came from. */
 const pattern = (size: number) =>
@@ -55,8 +54,13 @@ async function stderrOf(dotCommand: string): Promise<string> {
 
 describe.skipIf(process.platform === 'win32')(
   'the stderr of a failed command (Node.js)',
-  { tags: ['SM-4'] },
+  { tags: ['SM-4', 'process'] },
   () => {
+    beforeAll(() => {
+      dir = mkdtempSync(join(tmpdir(), 'ts-graphviz-stderr-'));
+    });
+    afterAll(() => rmSync(dir, { recursive: true, force: true }));
+
     it('keeps exactly its last 64 KiB', async () => {
       const bytes = pattern(1024 * 1024);
       const stderr = await stderrOf(failingCommand('flood.js', bytes, 3500));
