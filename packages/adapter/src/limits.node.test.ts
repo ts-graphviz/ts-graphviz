@@ -52,7 +52,9 @@ async function stderrOf(dotCommand: string): Promise<string> {
   return error.exit.stderr;
 }
 
-describe.skipIf(process.platform === 'win32')(
+// The stand-in's shebang names the Node.js binary: a path with whitespace
+// cannot be one.
+describe.skipIf(process.platform === 'win32' || /\s/.test(process.execPath))(
   'the stderr of a failed command (Node.js)',
   { tags: ['SM-4', 'process'] },
   () => {
