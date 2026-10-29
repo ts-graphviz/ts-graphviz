@@ -75,11 +75,8 @@ const hash = createHash('sha256')
   .slice(0, 12);
 const image = `localhost/ts-graphviz-test-sandbox:node${nodeMajor}-${hash}`;
 
-/**
- * Mounts that hide `.git` and the top-level entries git does not track:
- * an empty tmpfs over a directory, /dev/null over a file.
- */
-function hidden(runtime: string): string[] {
+/** `.git` and the top-level entries git does not track, but node_modules. */
+function untracked() {
   const listed = spawnSync('git', ['ls-files', '-z'], {
     cwd: root,
     encoding: 'utf8',
@@ -95,22 +92,29 @@ function hidden(runtime: string): string[] {
       .filter(Boolean)
       .map((path) => path.split('/')[0]),
   );
-  return readdirSync(root, { withFileTypes: true })
-    .filter(
-      (entry) => !tracked.has(entry.name) && entry.name !== 'node_modules',
-    )
-    .flatMap((entry) =>
-      entry.isDirectory()
-        ? [
-            '--tmpfs',
-            // Podman would copy the directory's files into the tmpfs.
-            `/repo/${entry.name}:ro,size=4k,mode=0555${runtime === 'podman' ? ',notmpcopyup' : ''}`,
-          ]
-        : [
-            '--mount',
-            `type=bind,source=/dev/null,target=/repo/${entry.name},readonly`,
-          ],
-    );
+  return readdirSync(root, { withFileTypes: true }).filter(
+    (entry) => !tracked.has(entry.name) && entry.name !== 'node_modules',
+  );
+}
+const hide = untracked();
+
+/**
+ * Mounts that hide those entries: an empty tmpfs over a directory,
+ * /dev/null over a file.
+ */
+function hidden(runtime: string): string[] {
+  return hide.flatMap((entry) =>
+    entry.isDirectory()
+      ? [
+          '--tmpfs',
+          // Podman would copy the directory's files into the tmpfs.
+          `/repo/${entry.name}:ro,size=4k,mode=0555${runtime === 'podman' ? ',notmpcopyup' : ''}`,
+        ]
+      : [
+          '--mount',
+          `type=bind,source=/dev/null,target=/repo/${entry.name},readonly`,
+        ],
+  );
 }
 
 const uid = process.getuid?.() ?? 1000;
@@ -188,12 +192,25 @@ function prepare(runtime: string): string | undefined {
     );
     if (build.status !== 0) return `building ${image} failed`;
   }
-  // Graphviz must be there: without it, the tests that need it skip.
-  const check = spawnSync(runtime, [...sandbox(runtime), 'dot', '-V'], {
-    encoding: 'utf8',
-    stdio: ['ignore', 'ignore', 'pipe'],
-    timeout: 120_000,
-  });
+  // Graphviz must be there (without it, the tests that need it skip), and
+  // what is hidden must read empty.
+  const script = [
+    'dot -V || exit 1',
+    'for p; do',
+    '  if [ -d "$p" ]; then [ -z "$(ls -A "$p")" ]; else [ ! -s "$p" ]; fi ||',
+    '    { echo "$p is not hidden" >&2; exit 1; }',
+    'done',
+  ].join('\n');
+  const paths = hide.map((entry) => `/repo/${entry.name}`);
+  const check = spawnSync(
+    runtime,
+    [...sandbox(runtime), 'sh', '-c', script, 'sh', ...paths],
+    {
+      encoding: 'utf8',
+      stdio: ['ignore', 'ignore', 'pipe'],
+      timeout: 120_000,
+    },
+  );
   if (check.status !== 0) {
     return `a container with the sandbox options did not start: ${check.stderr.trim()}`;
   }
