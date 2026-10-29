@@ -11,6 +11,9 @@
  * adapter that runs a command, unless it mocks what it would start: vi.mock
  * of `node:child_process`, of the adapter module or of the Node.js
  * `toStream` under it, or vi.stubGlobal of `Deno`.
+ *
+ * Ways past the runtime guard are refused outright, tagged or not: worker
+ * threads (they run without the guard), native bindings and ChildProcess.
  */
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
@@ -93,6 +96,21 @@ function startsProcess(source: string): string[] {
   return reasons;
 }
 
+/** What in `source` would start a process past the runtime guard. */
+function bypassesGuard(source: string): string[] {
+  const reasons: string[] = [];
+  if (/['"`](?:node:)?worker_threads['"`]|\bnew\s+Worker\b/.test(source)) {
+    reasons.push('worker threads');
+  }
+  if (
+    /\bprocess\.(?:binding|_linkedBinding)\b|\binternalBinding\b/.test(source)
+  ) {
+    reasons.push('a native binding');
+  }
+  if (/\bChildProcess\b/.test(source)) reasons.push('ChildProcess');
+  return reasons;
+}
+
 const tagged = (source: string) =>
   /\btags:\s*\[[^\]]*['"`]process['"`]/.test(source);
 
@@ -104,6 +122,7 @@ const files = ['packages', 'test', 'media'].flatMap((dir) =>
       return {
         path: relative(root, file).split('\\').join('/'),
         reasons: startsProcess(source),
+        bypasses: bypassesGuard(source),
         tagged: tagged(source),
       };
     }),
@@ -120,6 +139,13 @@ describe('the process tag', () => {
       .filter((f) => f.reasons.length > 0 && !f.tagged && !notProcess[f.path])
       .map((f) => `${f.path} (${f.reasons.join(', ')})`);
     expect(untagged).toStrictEqual([]);
+  });
+
+  it('is not worked around in any test file', () => {
+    const bypassing = files
+      .filter((f) => f.bypasses.length > 0)
+      .map((f) => `${f.path} (${f.bypasses.join(', ')})`);
+    expect(bypassing).toStrictEqual([]);
   });
 
   it('is only on test files that start a process', () => {

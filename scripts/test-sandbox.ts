@@ -17,10 +17,17 @@
  * Only an allowlist of variables reaches the tests: PATH, HOME=/tmp,
  * TMPDIR=/tmp, LANG, and CI, TZ, FC_NUM_RUNS, FC_SEED when they are set;
  * FORCE_COLOR=1 when the output is a terminal (the container has none).
+ *
+ * Read-only is not private: what the tests can read, they can print. So
+ * `.git` and every top-level entry git does not track (`.env`, notes,
+ * caches), except node_modules, is hidden behind an empty mount.
+ *
+ * The run is stopped (and its container removed) after
+ * SANDBOX_TIMEOUT_MINUTES, 30 by default.
  */
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
@@ -68,6 +75,41 @@ const hash = createHash('sha256')
   .slice(0, 12);
 const image = `localhost/ts-graphviz-test-sandbox:node${nodeMajor}-${hash}`;
 
+/**
+ * Mounts that hide `.git` and the top-level entries git does not track:
+ * an empty tmpfs over a directory, /dev/null over a file.
+ */
+function hidden(): string[] {
+  const listed = spawnSync('git', ['ls-files', '-z'], {
+    cwd: root,
+    encoding: 'utf8',
+    maxBuffer: 64 * 1024 * 1024,
+    timeout: 60_000,
+  });
+  if (listed.status !== 0) {
+    fail(`\`git ls-files\` failed: ${listed.stderr?.trim() ?? listed.error}`);
+  }
+  const tracked = new Set(
+    listed.stdout
+      .split('\0')
+      .filter(Boolean)
+      .map((path) => path.split('/')[0]),
+  );
+  return readdirSync(root, { withFileTypes: true })
+    .filter(
+      (entry) => !tracked.has(entry.name) && entry.name !== 'node_modules',
+    )
+    .flatMap((entry) =>
+      entry.isDirectory()
+        ? ['--tmpfs', `/repo/${entry.name}:ro,size=4k,mode=0555`]
+        : [
+            '--mount',
+            `type=bind,source=/dev/null,target=/repo/${entry.name},readonly`,
+          ],
+    );
+}
+const hide = hidden();
+
 const uid = process.getuid?.() ?? 1000;
 const gid = process.getgid?.() ?? 1000;
 
@@ -88,6 +130,7 @@ const sandbox = (runtime: string) => [
   '/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777',
   '--mount',
   `type=bind,source=${root},target=/repo,readonly`,
+  ...hide,
   '--workdir',
   '/repo',
   '--user',
@@ -104,6 +147,9 @@ const sandbox = (runtime: string) => [
   '4g',
   '--memory-swap',
   '4g',
+  // The image's own entrypoint is not run.
+  '--entrypoint',
+  'env',
   image,
 ];
 
@@ -139,7 +185,8 @@ function prepare(runtime: string): string | undefined {
     );
     if (build.status !== 0) return `building ${image} failed`;
   }
-  const check = spawnSync(runtime, [...sandbox(runtime), 'true'], {
+  // Graphviz must be there: without it, the tests that need it skip.
+  const check = spawnSync(runtime, [...sandbox(runtime), 'dot', '-V'], {
     encoding: 'utf8',
     stdio: ['ignore', 'ignore', 'pipe'],
     timeout: 120_000,
@@ -182,12 +229,17 @@ const env = [
   ...(process.stdout.isTTY ? ['FORCE_COLOR=1'] : []),
 ];
 
+const minutes = Number(process.env.SANDBOX_TIMEOUT_MINUTES ?? 30);
+if (!(minutes > 0)) fail('SANDBOX_TIMEOUT_MINUTES must be a positive number');
+const name = `ts-graphviz-test-sandbox-${process.pid}`;
 const args = process.argv.slice(2).filter((arg) => arg !== '--');
 const run = spawnSync(
   runtime,
   [
-    ...sandbox(runtime),
-    'env',
+    ...sandbox(runtime).slice(0, 1),
+    '--name',
+    name,
+    ...sandbox(runtime).slice(1),
     '-i',
     ...env,
     'node',
@@ -201,8 +253,18 @@ const run = spawnSync(
     '--configLoader=runner',
     ...args,
   ],
-  { stdio: 'inherit' },
+  { stdio: 'inherit', timeout: minutes * 60_000, killSignal: 'SIGKILL' },
 );
+if (run.status === null) {
+  // Timed out (or the client was killed): the container may still run.
+  spawnSync(runtime, ['rm', '--force', name], {
+    stdio: 'ignore',
+    timeout: 60_000,
+  });
+  console.error(
+    `test:sandbox: stopped ${run.error ? `after ${minutes} min` : `by ${run.signal}`}`,
+  );
+}
 const seconds = (ms: number) => `${(ms / 1000).toFixed(1)} s`;
 console.log(
   `test:sandbox: ${runtime}, Node.js ${nodeMajor}; preparing ${seconds(built - started)}, tests ${seconds(Date.now() - built)}`,

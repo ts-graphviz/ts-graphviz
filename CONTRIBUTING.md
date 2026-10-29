@@ -100,13 +100,20 @@ plus Graphviz, and the container has:
 - no network (`--network none`);
 - the repository, with the `node_modules` installed on your machine, mounted
   read-only, a read-only root file system and a `/tmp` tmpfs as the only
-  writable place;
+  writable place; `.git` and every top-level entry git does not track
+  (`.env`, notes, caches), except `node_modules`, hidden behind an empty
+  mount, since what the tests can read they can print;
 - your uid/gid, no capabilities, `no-new-privileges`, and limits on
   processes and memory;
 - an empty environment except `PATH`, `HOME=/tmp`, `TMPDIR`, `LANG`, and
   `CI`, `TZ`, `FC_NUM_RUNS` and `FC_SEED` when you set them, and
   `FORCE_COLOR=1` when the output is a terminal;
-- an init process that reaps leftover child processes, removed afterwards.
+- an init process that reaps leftover child processes, removed afterwards;
+- a time limit (`SANDBOX_TIMEOUT_MINUTES`, 30 by default), after which the
+  container is removed.
+
+It refuses to run if `dot` is missing from the image, so that the tests that
+need Graphviz cannot skip.
 
 It needs a Linux host (the mounted `node_modules` must be for Linux) with
 Docker or Podman; without either it fails with a message, and `pnpm test`
@@ -121,7 +128,10 @@ is not tagged `process`, and outside tests (start processes in a test or in
 `beforeEach`/`afterEach`, not while the file loads or in `beforeAll`/`afterAll`). Give every process test a timeout or an
 `AbortSignal` (the tag sets a 120 s default), pass paths to stand-in scripts
 through arguments or the environment rather than shell text, and kill the
-background children a stand-in leaves.
+background children a stand-in leaves. Both checks catch mistakes; they are
+not a sandbox. Test files may not use worker threads, native bindings
+(`process.binding`) or `ChildProcess` directly, which would get past the
+guard.
 
 In CI, the Linux jobs run `pnpm test` and then `pnpm test:sandbox`. The E2E
 jobs (Windows, macOS, Linux, Deno) cannot use the container; they run

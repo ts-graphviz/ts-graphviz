@@ -8,6 +8,10 @@
  * test/process-tag.test.ts checks the same statically, file by file.
  *
  * A file that mocks `node:child_process` (vi.mock) gets the mock, not these.
+ *
+ * This catches mistakes, it does not contain: a worker thread, a native
+ * binding or a module of another name starts processes past it. The static
+ * check refuses those in test files; the test code itself is reviewed.
  * Start processes in tests (or beforeEach/afterEach), not in beforeAll or
  * afterAll: those run outside any test, so the guard refuses them even in a
  * tagged describe.
@@ -48,6 +52,20 @@ if (global[state] === undefined) {
       return original.apply(this, args);
     };
   }
+  // `spawn` and `fork` call it, and code may construct a ChildProcess.
+  const prototype = (
+    childProcess.ChildProcess as unknown as { prototype: Record<string, Fn> }
+  ).prototype;
+  const spawn = prototype.spawn;
+  prototype.spawn = function (this: unknown, ...args: unknown[]) {
+    const tagged = [...running.values()];
+    if (tagged.length === 0 || tagged.includes(false)) {
+      throw new Error(
+        `ChildProcess#spawn outside a test tagged 'process': tag the test (or its describe) with 'process'.`,
+      );
+    }
+    return spawn.apply(this, args);
+  };
   // Pass the wrappers on to the named exports of the ES module.
   syncBuiltinESMExports();
 }
