@@ -215,6 +215,8 @@ if (runtime === undefined) {
     `${requested ? `${requested} cannot` : 'neither Podman nor Docker can'} run the sandbox.\n  ${problems.join('\n  ')}\nInstall and start Podman or Docker to run the tests tagged process; \`pnpm test\` runs the others.`,
   );
 }
+// Say why a runtime was passed over.
+for (const problem of problems) console.log(`test:sandbox: ${problem}`);
 const built = Date.now();
 
 // The variables the tests get, and nothing else (`env -i`).
