@@ -46,7 +46,8 @@
     "api:update": "node scripts/api-report.ts --update",
     "check:doc-examples": "node scripts/check-doc-examples.ts",
     "media:generate": "node media/generate.ts",
-    "build:website": "pnpm build && pnpm doc && pnpm --filter @ts-graphviz/website build && pnpm --filter @ts-graphviz/website copy-api && pnpm --filter @ts-graphviz/website check-links"
+    "build:website": "pnpm build && pnpm doc && pnpm --filter @ts-graphviz/website build && pnpm --filter @ts-graphviz/website copy-api && pnpm --filter @ts-graphviz/website check-links",
+    "test:mutation": "stryker run"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
@@ -54,6 +55,8 @@
     "@changesets/changelog-github": "^1.0.1",
     "@changesets/cli": "^3.0.3",
     "@jazzer.js/core": "4.0.0",
+    "@stryker-mutator/core": "10.1.1",
+    "@stryker-mutator/vitest-runner": "10.1.1",
     "@types/node": "catalog:",
     "@types/react": "^19.3.0",
     "@typescript/native": "catalog:",

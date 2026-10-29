@@ -148,3 +148,7 @@ slow-unit-*
 
 # Code blocks of the docs, extracted by scripts/check-doc-examples.ts
 .doc-examples/
+
+# Mutation testing (stryker.config.mjs): reports and the incremental file
+reports/mutation/
+.stryker-tmp/
