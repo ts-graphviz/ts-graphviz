@@ -20,12 +20,28 @@ const securityModelTags = [
   ...securityModel.matchAll(/^## (SM-\d+)\. (.+)$/gm),
 ].map(([, name, title]) => ({ name, description: title }));
 
+/**
+ * Tests that start a real process (Graphviz, a stand-in `dotCommand`, Biome)
+ * carry the `process` tag. `pnpm test` leaves them out
+ * (`--tags-filter='!process'`); `pnpm test:sandbox` runs them in a container
+ * (scripts/test-sandbox.ts). test/process-tag.test.ts checks that every test
+ * file that starts a process has the tag.
+ */
+const processTag = {
+  name: 'process',
+  description:
+    'Starts a real process; left out of `pnpm test`, run by `pnpm test:sandbox`',
+  // A default bound; a test with its own timeout keeps it.
+  timeout: 120_000,
+};
+
 export default defineConfig({
   assetsInclude: ['**/*.dot'],
   plugins: [tsconfigPaths()],
   test: {
-    setupFiles: ['./test/properties/setup.ts'],
-    tags: securityModelTags,
+    setupFiles: ['./test/properties/setup.ts', './test/process-guard.ts'],
+    globalSetup: ['./test/process-notice.ts'],
+    tags: [...securityModelTags, processTag],
     strictTags: true,
     // website/ has its own setup (website/vitest.config.ts)
     exclude: [...configDefaults.exclude, 'website/**'],

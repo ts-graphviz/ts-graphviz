@@ -6,6 +6,9 @@ import { ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
 import type { Layout, Options } from './types.js';
 
+/** How long a killed process is given to exit after its input failed. */
+const KILL_GRACE_MS = 1000;
+
 /**
  * Execute the Graphviz dot command and make a Web `ReadableStream` of the
  * results, as on every other runtime.
@@ -39,9 +42,11 @@ export async function toStream<T extends Layout>(
   return new Promise(function toStreamInternal(resolve, reject) {
     let settled = false;
     let release = () => {};
+    let timer: NodeJS.Timeout | undefined;
     const settle = (action: () => void) => {
       if (settled) return;
       settled = true;
+      clearTimeout(timer);
       signal?.removeEventListener('abort', onAbort);
       action();
     };
@@ -79,8 +84,22 @@ export async function toStream<T extends Layout>(
       stdout: NonNullable<typeof p.stdout>;
       stderr: NonNullable<typeof p.stderr>;
     };
+    // Killed once: a failed kill() emits 'error' on the process at once,
+    // and the handler must not kill (and fail) again.
+    let killed = false;
+    // Set on 'close': the process has exited, there is nothing to kill.
+    let closed = false;
+    const kill = () => {
+      if (killed || closed) return;
+      killed = true;
+      try {
+        p.kill('SIGKILL');
+      } catch {
+        // Nothing more can be done; the call still settles.
+      }
+    };
     release = () => {
-      p.kill('SIGKILL');
+      kill();
       stdin.destroy();
       stdout.destroy();
       stderr.destroy();
@@ -92,6 +111,9 @@ export async function toStream<T extends Layout>(
     signal?.addEventListener('abort', onAbort, { once: true });
 
     p.on('error', (e) => {
+      // Once killed, an error is from the kill: the exit status, or the
+      // input failure after KILL_GRACE_MS, explains the failure better.
+      if (killed) return;
       fail(
         new CommandExecutionError(command, `MESSAGE:${e.message}`, undefined, {
           cause: e,
@@ -126,6 +148,19 @@ export async function toStream<T extends Layout>(
     // would never report 'close'.
     stdout.on('end', () => stdout.destroy());
     stderr.on('end', () => stderr.destroy());
+    // A read error on an output pipe: report it as the call's failure.
+    // Without a listener, the 'error' event would be thrown out of the
+    // stream and end the process instead.
+    const onOutputError = (e: unknown) => {
+      const message = e instanceof Error ? e.message : String(e);
+      fail(
+        new CommandExecutionError(command, `MESSAGE:${message}`, undefined, {
+          cause: e,
+        }),
+      );
+    };
+    stdout.on('error', onOutputError);
+    stderr.on('error', onOutputError);
 
     // Set when writing the DOT source fails.
     let inputError: unknown;
@@ -183,8 +218,14 @@ export async function toStream<T extends Layout>(
       }
     }
 
-    // Normally the outcome is decided on 'close', after all output is read.
-    p.on('close', (code, exitSignal) => report(code, exitSignal));
+    // Normally the outcome is decided on 'close', after all output is read,
+    // one macrotask later: Node.js destroys stdin on exit, and an error of
+    // the write still pending is delivered after 'close'. Without the wait,
+    // a failed write could resolve with output for part of the source.
+    p.on('close', (code, exitSignal) => {
+      closed = true;
+      setImmediate(() => report(code, exitSignal));
+    });
     // After an input failure, decide on 'exit' instead: the output is not
     // needed, and 'close' waits for pipes a leftover child may hold.
     p.on('exit', (code, exitSignal) => {
@@ -195,11 +236,26 @@ export async function toStream<T extends Layout>(
     // Feeding stdin can fail on its own (e.g. EPIPE when the command exits
     // before reading). Never leave the process running and never leave the
     // call pending: kill it, and report as soon as it has exited (it may
-    // already have).
+    // already have). If it has not exited in time (the kill failed, or
+    // 'exit' never comes), the input failure is the result.
     const onInputError = (e: unknown) => {
-      inputError ??= e;
-      p.kill('SIGKILL');
-      if (exited) report(exited.code, exited.signal);
+      // Already settled (e.g. aborted, or an error arriving later than the
+      // report after 'close'): nothing more to do.
+      if (settled || inputError !== undefined) return;
+      inputError = e;
+      // Closed: the process is gone, and the pending report sees the error.
+      if (closed) return;
+      kill();
+      if (exited) return report(exited.code, exited.signal);
+      timer = setTimeout(() => {
+        // Still no exit status: the input failure is all there is.
+        const message = e instanceof Error ? e.message : String(e);
+        fail(
+          new CommandExecutionError(command, `MESSAGE:${message}`, undefined, {
+            cause: e,
+          }),
+        );
+      }, KILL_GRACE_MS);
     };
     stdin.on('error', onInputError);
     // Closed before all of the source was written (Node.js destroys stdin

@@ -1,6 +1,7 @@
 import { ownOptions, warnDeprecated, withCode } from '@ts-graphviz/common';
 import type { Builder } from '../../builder/builder.js';
 import { ASTNodeCountExceededError } from '../../builder/errors.js';
+import { depthLimit, sizeLimit } from '../../limit.js';
 import type {
   ASTNode,
   AttributeASTNode,
@@ -58,11 +59,17 @@ export interface CommonParseOptions {
    * @default 1000
    */
   maxEdgeChainDepth?: number;
+  /*
+   * For every limit below, a value that cannot be used (NaN, a negative
+   * number, a string; Infinity for the depth limits, which cannot be
+   * disabled) gives the default.
+   */
   /**
    * maxNestingDepth (optional): Maximum allowed nesting depth of graph and
    * subgraph bodies (`{ … }`); a graph's own body is at depth 1.
    * Default is 100. This limit prevents stack overflow from deeply nested
-   * subgraphs; like the other depth limits, it cannot be disabled.
+   * subgraphs; like the other depth limits, it cannot be disabled: a value
+   * that is not a finite, non-negative number gives the default.
    * @default 100
    */
   maxNestingDepth?: number;
@@ -215,7 +222,7 @@ function parseRule(
   } = ownOptions(options);
 
   // Input size validation
-  const inputSizeLimit = maxInputSize ?? DEFAULT_MAX_INPUT_SIZE;
+  const inputSizeLimit = sizeLimit(maxInputSize, DEFAULT_MAX_INPUT_SIZE);
   if (inputSizeLimit > 0) {
     const inputBytes = new TextEncoder().encode(input).length;
     if (inputBytes > inputSizeLimit) {
@@ -246,7 +253,8 @@ function parseRule(
   }
 
   // Nesting, before the recursive parser could run out of stack on it.
-  const nestingLimit = maxNestingDepth ?? DEFAULT_MAX_NESTING_DEPTH;
+  // A value that cannot be used gives the default (see limit.ts).
+  const nestingLimit = depthLimit(maxNestingDepth, DEFAULT_MAX_NESTING_DEPTH);
   {
     const deep = deepBlockOffset(input, nestingLimit);
     if (deep !== -1) {
@@ -278,8 +286,8 @@ function parseRule(
       __proto__: null,
       startRule,
       filename,
-      maxHtmlNestingDepth,
-      maxEdgeChainDepth,
+      maxHtmlNestingDepth: depthLimit(maxHtmlNestingDepth, 100),
+      maxEdgeChainDepth: depthLimit(maxEdgeChainDepth, 1000),
       maxASTNodes,
       inlineComments,
       onBuilder: (b: Builder) => {

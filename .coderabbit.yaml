@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 reviews:
   auto_review:
-    # v4 is developed on `next`; review PRs targeting it as well as `main`
+    # v4 is developed on `next`, and stacked PRs (gh stack) target the branch
+    # of the PR below them; review PRs on any base branch, not only `main`
     base_branches:
-      - next
+      - ".*"

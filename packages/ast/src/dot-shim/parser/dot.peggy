@@ -9,8 +9,14 @@
     const str = value.trim();
     const matches = str.match(/\n([\t ]+|(?!\s).)/g);
     if (matches) {
-      const indentLengths = matches.map((match) => match.match(/[\t ]/g)?.length ?? 0);
-      const pattern = new RegExp(`\n[\t ]{${Math.min(...indentLengths)}}`, 'g');
+      // A loop, not Math.min(...): a comment can have more lines than a
+      // call can take arguments.
+      let indent = Infinity;
+      for (const match of matches) {
+        const length = match.match(/[\t ]/g)?.length ?? 0;
+        if (length < indent) indent = length;
+      }
+      const pattern = new RegExp(`\n[\t ]{${indent}}`, 'g');
       return str.replace(pattern, '\n');
     }
     return str;
@@ -356,7 +362,7 @@ _block_comment
         'Comment',
         {
           kind: 'Block',
-          value: dedent(v.join('').replace(/^[ \t]*\*/gm, '')),
+          value: dedent(v.join('').replace(/\r\n/g, '\n').replace(/^[ \t]*\*/gm, '')),
         },
         [],
       );
@@ -515,7 +521,7 @@ ic "whitespace" = (_whitespace / _newline / c:_inline_comment { recordComment(c)
 
 _inline_comment
   = "/*" v:(!"*/" v:. { return v; })* "*/" {
-      return { kind: 'Block', value: dedent(v.join('').replace(/^[ \t]*\*/gm, '')), location: location() };
+      return { kind: 'Block', value: dedent(v.join('').replace(/\r\n/g, '\n').replace(/^[ \t]*\*/gm, '')), location: location() };
     }
   / "//" v:(!_line_end v:. { return v; })* {
       return { kind: 'Slash', value: v.join('').trim(), location: location() };

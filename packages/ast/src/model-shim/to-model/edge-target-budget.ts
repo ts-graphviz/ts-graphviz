@@ -1,4 +1,5 @@
 import { withCode } from '@ts-graphviz/common';
+import { sizeLimit } from '../../limit.js';
 import type { ConvertToModelContext } from './types.js';
 
 const DEFAULT_MAX_EDGE_TARGETS = 100_000;
@@ -12,9 +13,11 @@ const budgets = new WeakMap<ConvertToModelContext, { left: number }>();
  */
 export function startEdgeTargetBudget(
   context: ConvertToModelContext,
-  maxEdgeTargets = DEFAULT_MAX_EDGE_TARGETS,
+  maxEdgeTargets: number | undefined,
 ): void {
-  if (maxEdgeTargets > 0) budgets.set(context, { left: maxEdgeTargets });
+  // 0 (and Infinity) mean no limit; see limit.ts.
+  const limit = sizeLimit(maxEdgeTargets, DEFAULT_MAX_EDGE_TARGETS);
+  if (limit > 0) budgets.set(context, { left: limit });
 }
 
 /**

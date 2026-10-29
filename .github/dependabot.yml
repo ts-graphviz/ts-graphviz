@@ -28,6 +28,23 @@ updates:
         patterns:
           - '*'
 
+  # The Node.js base images of `pnpm test:sandbox`, pinned by digest. One
+  # stage per Node.js major: only digest and minor/patch updates.
+  - package-ecosystem: docker
+    directory: /test/sandbox
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: node
+        update-types:
+          - version-update:semver-major
+    groups:
+      sandbox-images:
+        patterns:
+          - '*'
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
