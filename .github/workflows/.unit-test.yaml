@@ -40,6 +40,9 @@ jobs:
     # below): no network, read-only repository, an allowlisted environment.
     # The image has Node.js ${{ matrix.node-version }} and Graphviz.
     - name: Run the tests that start processes in a container
+      env:
+        # Not a fallback: a Podman failure fails the job.
+        CONTAINER_RUNTIME: podman
       run: pnpm test:sandbox
 
   active_support_nodejs_latest:

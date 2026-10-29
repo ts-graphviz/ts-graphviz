@@ -79,7 +79,7 @@ const image = `localhost/ts-graphviz-test-sandbox:node${nodeMajor}-${hash}`;
  * Mounts that hide `.git` and the top-level entries git does not track:
  * an empty tmpfs over a directory, /dev/null over a file.
  */
-function hidden(): string[] {
+function hidden(runtime: string): string[] {
   const listed = spawnSync('git', ['ls-files', '-z'], {
     cwd: root,
     encoding: 'utf8',
@@ -101,14 +101,17 @@ function hidden(): string[] {
     )
     .flatMap((entry) =>
       entry.isDirectory()
-        ? ['--tmpfs', `/repo/${entry.name}:ro,size=4k,mode=0555`]
+        ? [
+            '--tmpfs',
+            // Podman would copy the directory's files into the tmpfs.
+            `/repo/${entry.name}:ro,size=4k,mode=0555${runtime === 'podman' ? ',notmpcopyup' : ''}`,
+          ]
         : [
             '--mount',
             `type=bind,source=/dev/null,target=/repo/${entry.name},readonly`,
           ],
     );
 }
-const hide = hidden();
 
 const uid = process.getuid?.() ?? 1000;
 const gid = process.getgid?.() ?? 1000;
@@ -130,7 +133,7 @@ const sandbox = (runtime: string) => [
   '/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777',
   '--mount',
   `type=bind,source=${root},target=/repo,readonly`,
-  ...hide,
+  ...hidden(runtime),
   '--workdir',
   '/repo',
   '--user',
@@ -238,7 +241,7 @@ const args = process.argv.slice(2).filter((arg) => arg !== '--');
 const run = spawnSync(
   runtime,
   [
-    ...sandbox(runtime).slice(0, 1),
+    'run',
     '--name',
     name,
     ...sandbox(runtime).slice(1),
