@@ -313,7 +313,11 @@ function names(spec: GraphSpec): string[] {
   ];
 }
 
-/** Every `fontname` value in a spec: on the graphs, the defaults, nodes and edges. */
+/**
+ * Every `fontname` value in a spec: on the graphs, the defaults, nodes and
+ * edges, and in the build steps that carry attributes of their own
+ * (`more defaults`, `mention`).
+ */
 function fontnames(spec: GraphSpec): string[] {
   type Sub = GraphSpec['subgraphs'][number];
   const of = (attributes: [string, string][]) =>
@@ -323,14 +327,20 @@ function fontnames(spec: GraphSpec): string[] {
     ...of(d.node),
     ...of(d.edge),
   ];
+  const ops = (steps: NonNullable<GraphSpec['ops']> | undefined) =>
+    (steps ?? []).flatMap((step) =>
+      'attributes' in step ? of(step.attributes) : [],
+    );
   const fromSub = (s: Sub): string[] => [
     ...of(s.attributes),
     ...defaults(s.defaults),
+    ...ops(s.ops),
     ...s.subgraphs.flatMap(fromSub),
   ];
   return [
     ...of(spec.attributes),
     ...defaults(spec.defaults),
+    ...ops(spec.ops),
     ...spec.nodes.flatMap((n) => of(n.attributes)),
     ...spec.edges.flatMap((e) => of(e.attributes)),
     ...spec.subgraphs.flatMap(fromSub),
