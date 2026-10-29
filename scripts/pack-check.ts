@@ -55,6 +55,7 @@ function walk(dir: string): string[] {
     .sort();
 }
 
+/** Packs every publishable package into `destination` and writes SHA256SUMS. */
 function pack(destination: string): void {
   process.env.SOURCE_DATE_EPOCH ??= commitTime(root);
   mkdirSync(destination, { recursive: true });
@@ -123,6 +124,7 @@ function explain(a: string, b: string): void {
   }
 }
 
+/** True when both directories hold the same tarballs with the same bytes. */
 function compare(a: string, b: string): boolean {
   const tarballs = (dir: string) =>
     readdirSync(dir)
