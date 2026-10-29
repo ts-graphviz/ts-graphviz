@@ -40,32 +40,62 @@ type Item = string | { open: string; body: Item[]; close: string };
 const OPENS_BLOCK = /^\t*(?:strict )?(?:di|sub)?graph\b.*\{$/;
 
 /**
- * The items of a block, from line `from` up to the line that closes it
- * (`close`, a `}` indented like the block's first line) or the end of the
- * text. A block opener whose `}` is missing counts as a plain line.
+ * For each line, whether it starts outside a quoted or HTML string. Canon
+ * writes a string that contains newlines over several lines, and one of
+ * them may look like a subgraph's first or last line.
  */
-function readItems(
-  lines: readonly string[],
-  from: number,
-  close: string | undefined,
-): { items: Item[]; next: number } {
-  const items: Item[] = [];
-  let i = from;
-  while (i < lines.length && lines[i] !== close) {
-    const line = lines[i];
-    if (OPENS_BLOCK.test(line)) {
-      const ownClose = `${line.slice(0, line.search(/[^\t]/))}}`;
-      const inner = readItems(lines, i + 1, ownClose);
-      if (lines[inner.next] === ownClose) {
-        items.push({ open: line, body: inner.items, close: ownClose });
-        i = inner.next + 1;
-        continue;
-      }
+function startsOutsideString(lines: readonly string[]): boolean[] {
+  let quoted = false;
+  let html = 0;
+  return lines.map((line) => {
+    const outside = !quoted && html === 0;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (quoted) {
+        if (c === '\\') i++;
+        else if (c === '"') quoted = false;
+      } else if (html > 0) {
+        if (c === '<') html++;
+        else if (c === '>') html--;
+      } else if (c === '"') quoted = true;
+      else if (c === '<') html = 1;
     }
-    items.push(line);
-    i++;
+    return outside;
+  });
+}
+
+/** The items of canon output: its lines, with the subgraphs as blocks. */
+function readItems(text: string): Item[] {
+  const lines = text.split('\n');
+  const outside = startsOutsideString(lines);
+  /**
+   * The items from line `from` up to the line that closes the block
+   * (`close`, a `}` indented like the block's first line) or the end of the
+   * text. A block opener whose `}` is missing counts as a plain line.
+   */
+  function read(
+    from: number,
+    close: string | undefined,
+  ): { items: Item[]; next: number } {
+    const items: Item[] = [];
+    let i = from;
+    while (i < lines.length && !(outside[i] && lines[i] === close)) {
+      const line = lines[i];
+      if (outside[i] && OPENS_BLOCK.test(line)) {
+        const ownClose = `${line.slice(0, line.search(/[^\t]/))}}`;
+        const inner = read(i + 1, ownClose);
+        if (inner.next < lines.length) {
+          items.push({ open: line, body: inner.items, close: ownClose });
+          i = inner.next + 1;
+          continue;
+        }
+      }
+      items.push(line);
+      i++;
+    }
+    return { items, next: i };
   }
-  return { items, next: i };
+  return read(0, undefined).items;
 }
 
 function* linesOf(items: readonly Item[]): Generator<string> {
@@ -113,9 +143,7 @@ function sortBlocks(items: readonly Item[]): Item[] {
  * do not open or close a subgraph are left where they are.
  */
 function sortSubgraphs(canon: string): string {
-  return [
-    ...linesOf(sortBlocks(readItems(canon.split('\n'), 0, undefined).items)),
-  ].join('\n');
+  return [...linesOf(sortBlocks(readItems(canon)))].join('\n');
 }
 
 /**
@@ -477,6 +505,34 @@ describe('sortSubgraphs', () => {
       expect(changed).not.toBe(reordered);
       expect(sortSubgraphs(changed)).not.toBe(sortSubgraphs(original));
     }
+  });
+
+  it('leaves the lines of a string that spans lines alone', () => {
+    // `dot -Tcanon` writes a string with newlines over several lines.
+    const graph = (label: string[]) =>
+      [
+        'digraph {',
+        `\ta\t[label="${label.join('\n')}"];`,
+        `\tb\t[label=<${label.join('\n')}>];`,
+        '\tc\t[label="\\"",',
+        `\t\tlabel2="${label.join('\n')}"];`,
+        '}',
+        '',
+      ].join('\n');
+    const looksLikeBlocks = (first: string, second: string) => [
+      '',
+      `\tsubgraph ${first} {`,
+      '\t}',
+      `\tsubgraph ${second} {`,
+      '\t}',
+      '',
+    ];
+    expect(sortSubgraphs(graph(looksLikeBlocks('y', 'x')))).toBe(
+      graph(looksLikeBlocks('y', 'x')),
+    );
+    expect(sortSubgraphs(graph(looksLikeBlocks('y', 'x')))).not.toBe(
+      sortSubgraphs(graph(looksLikeBlocks('x', 'y'))),
+    );
   });
 
   it('leaves text that is not canon output alone', () => {
