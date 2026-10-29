@@ -32,16 +32,17 @@ import { basename, join, relative, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
 
-// pnpm is a `.cmd` shim on Windows, which needs a shell to run
-const shell = process.platform === 'win32';
+// pnpm is a `.cmd` shim on Windows, which needs a shell to run; nothing
+// else does, and a shell would split arguments at spaces.
+const shell = (command: string) =>
+  command === 'pnpm' && process.platform === 'win32';
 const run = (command: string, args: string[], cwd: string) =>
-  execFileSync(command, args, { cwd, stdio: 'inherit', shell });
+  execFileSync(command, args, { cwd, stdio: 'inherit', shell: shell(command) });
 
+const git = (args: string[], cwd: string) =>
+  execFileSync('git', args, { cwd, encoding: 'utf8' }).trim();
 const commitTime = (cwd: string) =>
-  execFileSync('git', ['show', '-s', '--format=%ct', 'HEAD'], {
-    cwd,
-    encoding: 'utf8',
-  }).trim();
+  git(['show', '-s', '--format=%ct', 'HEAD'], cwd);
 
 const sha256 = (file: string) =>
   createHash('sha256').update(readFileSync(file)).digest('hex');
@@ -68,7 +69,7 @@ function pack(destination: string): void {
     const output = execFileSync(
       'pnpm',
       ['pack', '--pack-destination', destination, '--json'],
-      { cwd: dir, encoding: 'utf8', shell },
+      { cwd: dir, encoding: 'utf8', shell: shell('pnpm') },
     );
     const tarball: string = JSON.parse(output).filename;
     lines.push(`${sha256(tarball)}  ${basename(tarball)}`);
@@ -129,6 +130,10 @@ function compare(a: string, b: string): boolean {
       .sort();
   const namesA = tarballs(a);
   const namesB = tarballs(b);
+  if (namesA.length === 0 || namesB.length === 0) {
+    console.log(`no tarballs in ${namesA.length === 0 ? a : b}`);
+    return false;
+  }
   let same = true;
   for (const name of new Set([...namesA, ...namesB])) {
     if (!namesA.includes(name) || !namesB.includes(name)) {
@@ -151,8 +156,9 @@ function compare(a: string, b: string): boolean {
 
 /** Builds and packs HEAD twice, from fresh clones, in a temporary directory. */
 function local(): boolean {
-  const work = mkdtempSync(join(tmpdir(), 'ts-graphviz-pack-check-'));
+  const commit = git(['rev-parse', 'HEAD'], root);
   const epoch = commitTime(root);
+  const work = mkdtempSync(join(tmpdir(), 'ts-graphviz-pack-check-'));
   try {
     const outputs: string[] = [];
     for (const round of ['first', 'second']) {
@@ -160,13 +166,13 @@ function local(): boolean {
       const output = join(work, `${round}-tarballs`);
       console.log(`\n## ${round} build in ${relative(root, clone) || clone}`);
       run('git', ['clone', '--quiet', '--no-local', root, clone], work);
-      run('git', ['checkout', '--quiet', 'HEAD'], clone);
+      run('git', ['checkout', '--quiet', commit], clone);
       const env = { ...process.env, SOURCE_DATE_EPOCH: epoch };
       const sh = (command: string, args: string[]) =>
         execFileSync(command, args, {
           cwd: clone,
           stdio: 'inherit',
-          shell,
+          shell: shell(command),
           env,
         });
       sh('pnpm', ['install', '--frozen-lockfile', '--prefer-offline']);

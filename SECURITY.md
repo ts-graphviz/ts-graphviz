@@ -98,6 +98,8 @@ The packages are built reproducibly: building the same commit twice gives tarbal
 So a published version can be rebuilt from its git tag and compared with what npm serves. Each package is tagged `<name>@<version>` (for example `ts-graphviz@3.0.13`, `@ts-graphviz/ast@3.0.7`). The build needs Node.js of the version in `.node-version` and the pnpm version in `packageManager` of `package.json` at that tag (Corepack or `pnpm env` installs them), because the output comes from the bundler and declaration tools those versions pin.
 
 ```bash
+mkdir npm local
+
 # the release, as npm serves it
 npm view ts-graphviz@3.0.13 dist.integrity dist.tarball
 npm pack ts-graphviz@3.0.13 --pack-destination npm
