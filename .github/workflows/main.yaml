@@ -54,6 +54,11 @@ jobs:
       pull-requests: write # Used to create "Version Packages" PR
       id-token: write # Used to publish to npm with OIDC trusted publishing
       # Other permissions are defaulted to none
+    env:
+      # A pull request opened with GITHUB_TOKEN starts no workflows, so the
+      # "Version Packages" PR would be merged without CI. A GitHub App token
+      # is used when the app is configured; until then GITHUB_TOKEN is used.
+      HAS_RELEASE_APP: ${{ secrets.RELEASE_APP_CLIENT_ID != '' }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
@@ -79,6 +84,15 @@ jobs:
       - name: Upgrade npm CLI for OIDC support
         # npm 12 requires Node.js >=22; npm 11 supports OIDC trusted publishing on Node.js 20
         run: npm install -g npm@11
+      - name: Create a token that starts CI on the release pull request
+        id: app-token
+        if: ${{ env.HAS_RELEASE_APP == 'true' }}
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ secrets.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@3de3850952bec538fde60aac71731376e57b9b57 # v1.4.8
@@ -87,7 +101,7 @@ jobs:
           version: pnpm exec changeset version
           createGithubReleases: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
       - name: Switch back to main branch
         run: git checkout main
       - name: Check current branch
