@@ -69,16 +69,18 @@ jobs:
           name: lib
           path: packages
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
-      - name: Setup Node.js 20
+      - name: Setup Node.js 24
+        # Node.js 24 bundles npm 11, which publishes with OIDC trusted
+        # publishing, so npm is not installed separately (an install by
+        # version cannot be pinned by hash).
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           cache: pnpm
-          node-version-file: ./.node-version
+          node-version: 24
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-      - name: Upgrade npm CLI for OIDC support
-        # npm 12 requires Node.js >=22; npm 11 supports OIDC trusted publishing on Node.js 20
-        run: npm install -g npm@11
+      - name: Check the npm CLI supports trusted publishing
+        run: npm --version && node -e "const [ma,mi]=process.argv[1].split('.').map(Number); if (ma < 11 || (ma === 11 && mi < 5)) { console.error('npm >= 11.5 is required for OIDC trusted publishing'); process.exit(1) }" "$(npm --version)"
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@3de3850952bec538fde60aac71731376e57b9b57 # v1.4.8
