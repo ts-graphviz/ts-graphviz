@@ -13,7 +13,9 @@ let dir: string;
 
 const ESC = String.fromCharCode(0x1b);
 
-describe.skipIf(process.platform === 'win32')(
+// The stand-in's shebang names the Node.js binary: a path with whitespace
+// cannot be one.
+describe.skipIf(process.platform === 'win32' || /\s/.test(process.execPath))(
   'the message of a failed command (Node.js)',
   { tags: ['SM-4', 'process'] },
   () => {
