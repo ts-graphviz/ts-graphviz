@@ -85,27 +85,77 @@ export function outputLimitExceeded(
 /**
  * Keeps the last `max` bytes written to it, for the stderr of a failed
  * command, so a command that floods stderr cannot exhaust memory.
+ *
+ * The bytes are kept in one buffer of `max` bytes (allocated on the first
+ * write), so memory stays bounded whatever the chunk sizes, and each byte
+ * written is copied at most once: `toString` decodes it where it is.
  */
 export class TailBuffer {
-  #chunks: Uint8Array[] = [];
-  #size = 0;
+  #buffer: Uint8Array | undefined;
+  /** Where the next byte goes in `#buffer`. */
+  #position = 0;
+  /** How many bytes of `#buffer` are in use (at most `max`). */
+  #length = 0;
+  /** Whether older bytes have been dropped. */
+  #truncated = false;
   constructor(private readonly max: number = MAX_STDERR_SIZE) {}
   push(chunk: Uint8Array): void {
-    this.#chunks.push(chunk);
-    this.#size += chunk.byteLength;
-    while (this.#size > this.max && this.#chunks.length > 1) {
-      const first = this.#chunks.shift() as Uint8Array;
-      this.#size -= first.byteLength;
+    const { max } = this;
+    if (chunk.byteLength === 0) return;
+    if (max === 0) {
+      this.#truncated = true;
+      return;
     }
+    this.#buffer ??= new Uint8Array(max);
+    const buffer = this.#buffer;
+    if (this.#length + chunk.byteLength > max) this.#truncated = true;
+    if (chunk.byteLength >= max) {
+      buffer.set(chunk.subarray(chunk.byteLength - max));
+      this.#position = 0;
+      this.#length = max;
+      return;
+    }
+    const first = Math.min(chunk.byteLength, max - this.#position);
+    buffer.set(chunk.subarray(0, first), this.#position);
+    buffer.set(chunk.subarray(first), 0);
+    this.#position = (this.#position + chunk.byteLength) % max;
+    this.#length = Math.min(this.#length + chunk.byteLength, max);
   }
+  /**
+   * The kept bytes decoded as UTF-8. When older bytes were dropped, the
+   * continuation bytes of a character cut at the start are left out rather
+   * than decoded as U+FFFD.
+   */
   toString(): string {
-    const joined = new Uint8Array(this.#size);
-    let offset = 0;
-    for (const chunk of this.#chunks) {
-      joined.set(chunk, offset);
-      offset += chunk.byteLength;
+    const buffer = this.#buffer;
+    if (buffer === undefined) return '';
+    const { max } = this;
+    // Oldest byte first. Once full, the kept bytes wrap around the end of the
+    // buffer, and the two parts are decoded in turn rather than copied into
+    // one: a character split between them is joined by the decoder.
+    const full = this.#length === max;
+    const start = full ? this.#position : 0;
+    const parts = full
+      ? [buffer.subarray(start), buffer.subarray(0, start)]
+      : [buffer.subarray(0, this.#length)];
+    let skip = 0;
+    if (this.#truncated) {
+      // At most three continuation bytes (10xxxxxx) follow a lead byte.
+      while (
+        skip < 3 &&
+        skip < this.#length &&
+        (buffer[(start + skip) % max] & 0xc0) === 0x80
+      ) {
+        skip++;
+      }
     }
-    const start = Math.max(0, joined.byteLength - this.max);
-    return new TextDecoder().decode(joined.subarray(start));
+    const decoder = new TextDecoder();
+    let text = '';
+    for (const part of parts) {
+      const drop = Math.min(skip, part.byteLength);
+      skip -= drop;
+      text += decoder.decode(part.subarray(drop), { stream: true });
+    }
+    return text + decoder.decode();
   }
 }
