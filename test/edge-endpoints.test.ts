@@ -6,17 +6,25 @@
  */
 import { spawnSync } from 'node:child_process';
 import { fromDot, toDot } from 'ts-graphviz';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-const hasDot = spawnSync('dot', ['-V']).status === 0;
+let dotInstalled: boolean | undefined;
+/** Whether `dot` runs, asked by the first test that needs it. */
+const hasDot = () =>
+  (dotInstalled ??= spawnSync('dot', ['-V'], { timeout: 10_000 }).status === 0);
 
 const canon = (dot: string) => {
-  const r = spawnSync('dot', ['-Tcanon'], { input: dot, encoding: 'utf8' });
+  const r = spawnSync('dot', ['-Tcanon'], {
+    input: dot,
+    encoding: 'utf8',
+    timeout: 30_000,
+  });
   expect(r.status, `${dot}\n${r.stderr}`).toBe(0);
   return r.stdout;
 };
 
-describe.skipIf(!hasDot)('edge endpoints through the model', () => {
+describe('edge endpoints through the model', { tags: ['process'] }, () => {
+  beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
   it.each([
     'digraph { {a:p b:q:n} -> c }',
     'digraph { a:p, b:q:n -> c }',
