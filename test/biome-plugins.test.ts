@@ -25,6 +25,7 @@ function lint(): { path: string; line: number }[] {
         cwd: fixtures,
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'ignore'],
+        timeout: 60_000,
       },
     );
   } catch (e) {
@@ -42,7 +43,10 @@ function lint(): { path: string; line: number }[] {
     .map((d) => ({ path: d.location.path, line: d.location.start.line }));
 }
 
-describe('Biome plugins for option and runtime reads', () => {
+// Runs the Biome binary: a `process` test (left out of `pnpm test`).
+describe('Biome plugins for option and runtime reads', {
+  tags: ['process'],
+}, () => {
   it('report each case in bad.ts and nothing in good.ts', () => {
     const found = lint();
     expect(found.filter((d) => d.path === 'good.ts')).toStrictEqual([]);

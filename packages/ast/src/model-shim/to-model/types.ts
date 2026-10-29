@@ -64,7 +64,9 @@ export interface ConvertToModelOptions {
    * keeps its nodes, so a short source can reach very many
    * (`subgraph s { … } -> x` repeated). Past the limit the conversion
    * throws a `RangeError` with code `TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED`.
-   * `0` disables the limit (not recommended for untrusted input).
+   * `0` or `Infinity` disables the limit (not recommended for untrusted
+   * input); a value that is not a non-negative number (`NaN`, a negative
+   * number) gives the default.
    * @default 100000
    */
   maxEdgeTargets?: number;
