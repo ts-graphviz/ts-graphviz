@@ -313,6 +313,40 @@ function names(spec: GraphSpec): string[] {
   ];
 }
 
+/**
+ * Every `fontname` value in a spec: on the graphs, the defaults, nodes and
+ * edges, and in the build steps that carry attributes of their own
+ * (`more defaults`, `mention`).
+ */
+function fontnames(spec: GraphSpec): string[] {
+  type Sub = GraphSpec['subgraphs'][number];
+  const of = (attributes: [string, string][]) =>
+    attributes.filter(([key]) => key === 'fontname').map(([, value]) => value);
+  const defaults = (d: Sub['defaults']) => [
+    ...of(d.graph),
+    ...of(d.node),
+    ...of(d.edge),
+  ];
+  const ops = (steps: NonNullable<GraphSpec['ops']> | undefined) =>
+    (steps ?? []).flatMap((step) =>
+      'attributes' in step ? of(step.attributes) : [],
+    );
+  const fromSub = (s: Sub): string[] => [
+    ...of(s.attributes),
+    ...defaults(s.defaults),
+    ...ops(s.ops),
+    ...s.subgraphs.flatMap(fromSub),
+  ];
+  return [
+    ...of(spec.attributes),
+    ...defaults(spec.defaults),
+    ...ops(spec.ops),
+    ...spec.nodes.flatMap((n) => of(n.attributes)),
+    ...spec.edges.flatMap((e) => of(e.attributes)),
+    ...spec.subgraphs.flatMap(fromSub),
+  ];
+}
+
 describe('differential against Graphviz', { tags: ['SM-2', 'process'] }, () => {
   beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
   it(
@@ -327,6 +361,11 @@ describe('differential against Graphviz', { tags: ['SM-2', 'process'] }, () => {
           // cgraph reserves names starting with '%' for anonymous objects
           // and renames a graph or node called that (`"%"` becomes `%1`).
           fc.pre(!names(spec).some((name) => name.startsWith('%')));
+          // Graphviz 2.42 (Debian trixie, Ubuntu 24.04) never returns from
+          // `dot -Tcanon` when a node, or an edge with a label, has a
+          // `fontname` such as `#-`, `#"`, `#'`, `#=` or `#,` (the font is
+          // looked up even though nothing is laid out); 2.43 is fine. #1880
+          fc.pre(!fontnames(spec).some((value) => value.startsWith('#')));
 
           const model = buildGraph(spec);
           const source = toDot(model);
