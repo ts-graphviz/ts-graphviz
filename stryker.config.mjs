@@ -4,18 +4,36 @@
 // a place where the tests do not pin the behaviour down. It is slow (one test
 // run per mutant), so it runs in the nightly workflow, not on pull requests.
 
+// What to mutate, as `STRYKER_SCOPE`: a comma-separated list of packages or
+// of directories under their `src` (`ast/dot-shim`), `!` in front of one to
+// leave it out, `*` for every package. The default is the packages a run on
+// a 16-core machine gets through in about 45 minutes; the nightly workflow
+// runs one job per group. (`--mutate` on the command line replaces the whole
+// list below, so it suits a single file:
+// `pnpm test:mutation --mutate packages/core/src/models/Node.ts`.)
+const scope = (process.env.STRYKER_SCOPE || 'common,core,ts-graphviz,ast')
+  .split(',')
+  .map((entry) => entry.trim())
+  .filter((entry) => entry !== '')
+  .map((entry) => {
+    const negated = entry.startsWith('!');
+    const [pkg, ...rest] = (negated ? entry.slice(1) : entry).split('/');
+    const dir = ['packages', pkg, 'src', ...rest].join('/');
+    return `${negated ? '!' : ''}${dir}/**/*.{ts,tsx}`;
+  });
+
 // Stryker validates this against its schema when it starts:
 // https://stryker-mutator.io/docs/stryker-js/configuration/
 export default {
   mutate: [
-    'packages/*/src/**/*.ts',
-    'packages/*/src/**/*.tsx',
+    ...scope,
     // Tests, type tests and their fixtures
     '!packages/*/src/**/*.test.ts',
     '!packages/*/src/**/*.test.tsx',
     '!packages/*/src/**/*.spec.ts',
     '!packages/*/src/**/*.spec.tsx',
     '!packages/*/src/**/*.reference.ts',
+    '!packages/*/src/**/test-utils/**',
     // Types only: nothing to mutate
     '!packages/*/src/**/*.d.ts',
     '!packages/*/src/**/types.ts',
@@ -39,6 +57,13 @@ export default {
   // Only the tests that covered a mutant's location in the dry run are run
   // against it.
   coverageAnalysis: 'perTest',
+  // A static mutant (in code that runs while a module loads: a regex or
+  // table constant, a default value) cannot be traced to the tests that
+  // cover it, so Stryker runs the whole suite for each; 13% of the mutants
+  // took 70% of the first full run that way. They are reported as ignored.
+  // To test them in one place, with the whole suite per mutant:
+  // `pnpm test:mutation --ignoreStatic false --mutate 'packages/ast/src/sanitize/**'`
+  ignoreStatic: true,
   // The suite runs once per mutant; with `incremental`, a later run re-tests
   // only the mutants whose source or tests changed since the last report.
   incremental: true,
@@ -55,11 +80,12 @@ export default {
   },
   thresholds: {
     high: 90,
-    low: 75,
-    // A score below `break` fails the run: a little under the measured
-    // score, so that the nightly job is green now and catches regressions.
+    low: 80,
+    // A score below `break` fails the run: a little under the lowest score
+    // of the nightly groups when this was set up (adapter + react: 74%; the
+    // others 87-88%), so that the jobs are green now and catch a regression.
     // Raise it as the tests improve.
-    break: 75,
+    break: 70,
   },
   // Per test run: generous, since a mutant can turn a fast property test
   // into a slow one before it fails.

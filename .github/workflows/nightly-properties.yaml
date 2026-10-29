@@ -113,18 +113,31 @@ jobs:
 
   mutation:
     # Mutation testing with StrykerJS (#1860): one test run per mutant of
-    # packages/*/src, so nightly rather than on pull requests. The tests
-    # tagged `process` are left out (vitest.mutation.config.ts), so no
-    # Graphviz or container is needed. A mutation score under
-    # `thresholds.break` (stryker.config.mjs) fails the job; the report
+    # packages/*/src, so nightly rather than on pull requests, and one job
+    # per group of packages (STRYKER_SCOPE, stryker.config.mjs) so that a
+    # run without an incremental file fits the time limit. The incremental
+    # file of the last run is cached: a run re-tests only the mutants whose
+    # source or tests changed. The tests tagged `process` are left out
+    # (vitest.mutation.config.ts), so no Graphviz or container is needed.
+    # A mutation score under `thresholds.break` fails the job; the report
     # (reports/mutation/index.html) is uploaded either way.
-    name: Mutation testing (${{ matrix.ref }})
+    name: Mutation testing ${{ matrix.scope }} (${{ matrix.ref }})
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 150
     strategy:
       fail-fast: false
       matrix:
         ref: [next]
+        scope: [common-core, ast-dot-shim, ast-rest, adapter-react]
+        include:
+          - scope: common-core
+            mutate: common,core,ts-graphviz
+          - scope: ast-dot-shim
+            mutate: ast/dot-shim
+          - scope: ast-rest
+            mutate: ast,!ast/dot-shim
+          - scope: adapter-react
+            mutate: adapter,react
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
@@ -145,13 +158,31 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Generate code
         run: pnpm codegen
+      # The key is unique per run, so the restore falls back to the latest
+      # file of this scope and the save below always writes a new one.
+      - name: Restore the incremental file of the last run
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: reports/mutation/incremental.json
+          key: mutation-${{ matrix.ref }}-${{ matrix.scope }}-${{ github.run_id }}
+          restore-keys: |
+            mutation-${{ matrix.ref }}-${{ matrix.scope }}-
       - name: Run mutation testing
+        env:
+          STRYKER_SCOPE: ${{ matrix.mutate }}
         run: pnpm test:mutation
+      # Also after a failed threshold, so that the next run stays incremental
+      - name: Save the incremental file
+        if: always()
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: reports/mutation/incremental.json
+          key: mutation-${{ matrix.ref }}-${{ matrix.scope }}-${{ github.run_id }}
       - name: Upload the mutation report
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: mutation-report-${{ matrix.ref }}
+          name: mutation-report-${{ matrix.scope }}-${{ matrix.ref }}
           path: reports/mutation/
           if-no-files-found: ignore
           retention-days: 14

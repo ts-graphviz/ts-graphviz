@@ -147,22 +147,29 @@ that cover the edit. A mutant the tests do not fail on *survived*: the tests
 do not pin that behaviour down.
 
 ```bash
-$ pnpm test:mutation                                        # all packages
-$ pnpm test:mutation --mutate 'packages/core/src/**/*.ts'   # one package
+$ pnpm test:mutation                                  # common, core, ts-graphviz and ast
+$ STRYKER_SCOPE=react,adapter pnpm test:mutation      # other packages
+$ STRYKER_SCOPE=ast/sanitize pnpm test:mutation       # a directory under src
+$ STRYKER_SCOPE='*' pnpm test:mutation                # everything
+$ pnpm test:mutation --mutate packages/core/src/models/Node.ts   # one file
 ```
 
 The configuration is `stryker.config.mjs`; the tests run with
 `vitest.mutation.config.ts` (the usual configuration minus coverage, type
-tests and the tests tagged `process`, so no Graphviz is needed). The report is
-`reports/mutation/index.html`, with the diff of every surviving mutant;
-`reports/mutation/incremental.json` makes the next run re-test only the
-mutants whose source or tests changed. Both are gitignored.
+tests and the tests tagged `process` or `timing`, so no Graphviz is needed).
+The report is `reports/mutation/index.html`, with the diff of every surviving
+mutant; `reports/mutation/incremental.json` makes the next run re-test only
+the mutants whose source or tests changed. Both are gitignored. Mutants in
+code that runs while a module loads (a regex or table constant) would each
+need the whole suite, so they are ignored by default; `--ignoreStatic false`
+tests them.
 
-A full run takes a while (one test run per mutant), so it is not part of
-`pnpm test` or the pull request checks: the nightly workflow runs it on `next`,
-uploads the report and fails when the mutation score drops under
-`thresholds.break` in `stryker.config.mjs`. Raise the threshold when the tests
-improve. A surviving mutant that no test could reasonably kill (logging,
-defensive code the types already rule out) can be excluded with a
-`// Stryker disable next-line <mutator>: <why>` comment.
-
+A run takes a while (one test run per mutant; the default scope about 45
+minutes on 16 cores, everything about 70), so it is not part of `pnpm test`
+or the pull request checks: the nightly workflow runs it on `next`
+in one job per group of packages, uploads the reports and fails when the
+mutation score drops under `thresholds.break` in `stryker.config.mjs`. Raise
+the threshold when the tests improve. A surviving mutant that no test could
+reasonably kill (an error message, defensive code the types already rule out)
+can be excluded with a `// Stryker disable next-line <mutator>: <why>`
+comment.
