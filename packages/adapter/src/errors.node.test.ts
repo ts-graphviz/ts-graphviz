@@ -6,18 +6,22 @@
 import { chmodSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { toStream } from './to-stream.node.js';
 
-const dir = mkdtempSync(join(tmpdir(), 'ts-graphviz-message-'));
-afterAll(() => rmSync(dir, { recursive: true, force: true }));
+let dir: string;
 
 const ESC = String.fromCharCode(0x1b);
 
 describe.skipIf(process.platform === 'win32')(
   'the message of a failed command (Node.js)',
-  { tags: ['SM-4'] },
+  { tags: ['SM-4', 'process'] },
   () => {
+    beforeAll(() => {
+      dir = mkdtempSync(join(tmpdir(), 'ts-graphviz-message-'));
+    });
+    afterAll(() => rmSync(dir, { recursive: true, force: true }));
+
     it('is bounded for a large stderr', async () => {
       const stderr = `${ESC}[2J${ESC}]0;title\u0007\rError: /home/user/secret.dot\n${'x'.repeat(100_000)}`;
       const path = join(dir, 'escapes.js');
