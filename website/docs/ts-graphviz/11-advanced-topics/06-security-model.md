@@ -131,6 +131,7 @@ Model classes, `ModelsContext` (`createModelsContext`), converter and printer pl
 How the packages reach you is part of the model: the strongest parser is useless if the tarball is not the one built from this repository.
 
 - Releases are published with npm provenance through OIDC trusted publishing; verify with `npm audit signatures`.
+- The build is reproducible: CI builds and packs every package twice from clean checkouts and fails if a tarball differs, so a release can be rebuilt from its git tag and compared with the npm tarball (see [Verifying a Release](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md#verifying-a-release)).
 - GitHub Actions are pinned by commit SHA and linted with zizmor; CodeQL scans every push and pull request.
 - Dependencies are updated by Dependabot with a cooldown, and pnpm enforces `minimumReleaseAge` and a trust policy so a freshly published malicious version is not installed automatically.
 - OpenSSF Scorecard and the Best Practices badge track the remaining practices publicly.
