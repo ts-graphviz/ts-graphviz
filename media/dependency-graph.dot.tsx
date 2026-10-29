@@ -1,5 +1,4 @@
-import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { renderHTMLLike } from '@ts-graphviz/react';
@@ -15,12 +14,14 @@ interface Manifest {
   peerDependencies?: Record<string, string>;
 }
 
-const workspaceDirs: { path: string }[] = JSON.parse(
-  execFileSync('pnpm', ['list', '--recursive', '--json', '--depth=-1'], {
-    cwd: process.cwd(),
-    encoding: 'utf8',
-  }),
-);
+// The published packages are the directories of packages/ (the other
+// workspace packages are private). Read from the file system rather than
+// `pnpm list`, so that loading this module starts no process.
+const packagesDir = join(import.meta.dirname, '..', 'packages');
+const workspaceDirs = readdirSync(packagesDir, { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => ({ path: join(packagesDir, entry.name) }))
+  .sort((a, b) => a.path.localeCompare(b.path));
 
 const publishedPackages = workspaceDirs
   .map(

@@ -50,13 +50,17 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Generate code
         run: pnpm codegen
-      # the differential tests compare against the Graphviz binaries
-      - name: Use Graphviz
-        uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
       - name: Run the property and differential tests
         env:
           FC_NUM_RUNS: ${{ inputs.num_runs || '5000' }}
-        run: pnpm vitest run test/properties test/differential --coverage.enabled=false
+        run: pnpm vitest run test/properties test/differential --coverage.enabled=false --tags-filter='!process'
+      # The differential tests run the Graphviz binaries (tag `process`):
+      # in a container with Graphviz, no network and the allowlisted
+      # environment of scripts/test-sandbox.ts (FC_NUM_RUNS among it).
+      - name: Run the tests that start processes in a container
+        env:
+          FC_NUM_RUNS: ${{ inputs.num_runs || '5000' }}
+        run: pnpm test:sandbox test/properties test/differential
 
   fuzz:
     # Coverage-guided fuzzing with Jazzer.js (#1600): each target in

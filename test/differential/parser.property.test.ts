@@ -15,13 +15,20 @@
 import { spawnSync } from 'node:child_process';
 import fc from 'fast-check';
 import { parse, stringify } from 'ts-graphviz/ast';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-const hasDot = spawnSync('dot', ['-V']).status === 0;
+let dotInstalled: boolean | undefined;
+/** Whether `dot` runs, asked by the first test that needs it. */
+const hasDot = () =>
+  (dotInstalled ??= spawnSync('dot', ['-V'], { timeout: 10_000 }).status === 0);
 
 /** `dot -Tcanon` of a source, or `undefined` when Graphviz rejects it. */
 function canon(source: string): string | undefined {
-  const r = spawnSync('dot', ['-Tcanon'], { input: source, encoding: 'utf8' });
+  const r = spawnSync('dot', ['-Tcanon'], {
+    input: source,
+    encoding: 'utf8',
+    timeout: 30_000,
+  });
   return r.status === 0 ? r.stdout : undefined;
 }
 
@@ -251,32 +258,34 @@ const source = fc
     ),
   );
 
-describe.skipIf(!hasDot)(
-  'the parser reads DOT as Graphviz does',
-  { tags: ['SM-1'] },
-  () => {
-    it('a source it accepts and its reprint are the same graph to dot', () => {
-      const runs = Number(process.env.FC_NUM_RUNS ?? 300);
-      let accepted = 0;
-      for (const dot of fc.sample(source, runs)) {
-        let printed: string;
-        try {
-          printed = stringify(parse(dot));
-        } catch {
-          continue; // failing closed is allowed
-        }
-        accepted++;
-        const original = canon(dot);
-        expect(
-          original,
-          `the parser accepts what dot rejects:\n${dot}`,
-        ).toBeDefined();
-        expect(
-          canon(printed),
-          `dot reads the reprint differently: ${JSON.stringify(dot)}\n--- reprint\n${printed}`,
-        ).toBe(original);
+describe('the parser reads DOT as Graphviz does', {
+  tags: ['SM-1', 'process'],
+}, () => {
+  beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
+  // Each case runs dot twice; FC_NUM_RUNS (the nightly run) makes it long.
+  it('a source it accepts and its reprint are the same graph to dot', {
+    timeout: 25 * 60_000,
+  }, () => {
+    const runs = Number(process.env.FC_NUM_RUNS ?? 300);
+    let accepted = 0;
+    for (const dot of fc.sample(source, runs)) {
+      let printed: string;
+      try {
+        printed = stringify(parse(dot));
+      } catch {
+        continue; // failing closed is allowed
       }
-      expect(accepted).toBeGreaterThan(runs / 10);
-    });
-  },
-);
+      accepted++;
+      const original = canon(dot);
+      expect(
+        original,
+        `the parser accepts what dot rejects:\n${dot}`,
+      ).toBeDefined();
+      expect(
+        canon(printed),
+        `dot reads the reprint differently: ${JSON.stringify(dot)}\n--- reprint\n${printed}`,
+      ).toBe(original);
+    }
+    expect(accepted).toBeGreaterThan(runs / 10);
+  });
+});

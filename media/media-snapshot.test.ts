@@ -2,11 +2,14 @@
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 
-import { describe, test } from 'vitest';
+import { beforeEach, describe, test } from 'vitest';
 
 import { type MediaModule, mediaDot, mediaSvg } from './render.js';
 
-const hasDot = spawnSync('dot', ['-V']).status === 0;
+let dotInstalled: boolean | undefined;
+/** Whether `dot` runs, asked by the first test that needs it. */
+const hasDot = () =>
+  (dotInstalled ??= spawnSync('dot', ['-V'], { timeout: 10_000 }).status === 0);
 
 // The DOT each media example produces. The SVG images are rendered from it
 // by `pnpm media:generate` (media/generate.ts), not here: they depend on the
@@ -23,7 +26,8 @@ for (const [file, getModule] of Object.entries({
 
 // What `pnpm media:generate` writes, without writing it: each example
 // renders to an SVG image (its exact markup depends on the Graphviz version).
-describe.skipIf(!hasDot)('media images', () => {
+describe('media images', { tags: ['process'] }, () => {
+  beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
   for (const [file, getModule] of Object.entries({
     ...import.meta.glob<MediaModule>('./*.dot.ts'),
     ...import.meta.glob<MediaModule>('./*.dot.tsx'),
