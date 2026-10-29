@@ -252,7 +252,10 @@ const env = [
 ];
 
 const minutes = Number(process.env.SANDBOX_TIMEOUT_MINUTES ?? 30);
-if (!(minutes > 0)) fail('SANDBOX_TIMEOUT_MINUTES must be a positive number');
+// Whole minutes: spawnSync takes an integer number of milliseconds.
+if (!Number.isInteger(minutes) || minutes < 1 || minutes > 24 * 60) {
+  fail('SANDBOX_TIMEOUT_MINUTES must be a whole number from 1 to 1440');
+}
 const name = `ts-graphviz-test-sandbox-${process.pid}`;
 const args = process.argv.slice(2).filter((arg) => arg !== '--');
 const run = spawnSync(

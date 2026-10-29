@@ -109,7 +109,7 @@ plus Graphviz, and the container has:
   `CI`, `TZ`, `FC_NUM_RUNS` and `FC_SEED` when you set them, and
   `FORCE_COLOR=1` when the output is a terminal;
 - an init process that reaps leftover child processes, removed afterwards;
-- a time limit (`SANDBOX_TIMEOUT_MINUTES`, 30 by default), after which the
+- a time limit (`SANDBOX_TIMEOUT_MINUTES`, whole minutes, 30 by default), after which the
   container is removed.
 
 It refuses to run if `dot` is missing from the image, so that the tests that
