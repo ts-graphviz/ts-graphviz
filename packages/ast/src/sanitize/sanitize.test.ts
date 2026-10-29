@@ -249,19 +249,24 @@ describe('sanitize', { tags: ['SM-7'] }, () => {
   });
 
   describe('style, shape and colors', () => {
+    const digits = '1'.repeat(100_000);
+    const longStyles = [`setlinewidth(${digits}`, `setlinewidth(${digits}x)`];
+
+    it('rejects a long invalid style value', () => {
+      for (const style of longStyles) {
+        expect(rejection(`digraph { a [style="${style}"] }`).name).toBe(
+          'SecurityError',
+        );
+      }
+    });
+
     it('checks a long style value in linear time', { tags: ['timing'] }, () => {
       // 6 s with the quadratic check; a few milliseconds now. Kept well
       // under the 1 s bound: parsing the source takes most of the time on
       // CI with coverage (1 MB took about 1.1 s there).
-      const digits = '1'.repeat(100_000);
-      for (const style of [
-        `setlinewidth(${digits}`,
-        `setlinewidth(${digits}x)`,
-      ]) {
+      for (const style of longStyles) {
         const start = performance.now();
-        expect(rejection(`digraph { a [style="${style}"] }`).name).toBe(
-          'SecurityError',
-        );
+        rejection(`digraph { a [style="${style}"] }`);
         expect(performance.now() - start).toBeLessThan(1000);
       }
     });

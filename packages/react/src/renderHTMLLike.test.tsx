@@ -181,22 +181,25 @@ describe('renderHTMLLike()', { tags: ['SM-3'] }, () => {
   });
 
   // Test for potential ReDoS protection
-  it('handles pathological input efficiently', { tags: ['timing'] }, () => {
-    const problematicContent = 'a'.repeat(1000);
-    const element = (
-      <dot:table>
-        <dot:tr>
-          <dot:td>{problematicContent}</dot:td>
-        </dot:tr>
-      </dot:table>
-    );
+  const problematicContent = 'a'.repeat(1000);
+  const problematicElement = (
+    <dot:table>
+      <dot:tr>
+        <dot:td>{problematicContent}</dot:td>
+      </dot:tr>
+    </dot:table>
+  );
 
+  it('renders pathological input', () => {
+    expect(html(problematicElement)).toContain(problematicContent);
+  });
+
+  it('handles pathological input efficiently', { tags: ['timing'] }, () => {
     const start = Date.now();
-    const result = html(element);
+    html(problematicElement);
     const duration = Date.now() - start;
 
     expect(duration).toBeLessThan(100);
-    expect(result).toContain(problematicContent);
   });
 
   // Security tests: Stack overflow prevention
