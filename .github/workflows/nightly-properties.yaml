@@ -3,7 +3,8 @@ name: Nightly Property Tests and Fuzzing
 # differential tests in test/differential (#1642): many more cases
 # than a pull request run, to catch inputs the default 200 cases miss. The
 # seed of a failing property is in the log; reproduce with FC_SEED=<seed>.
-# Plus coverage-guided fuzzing of the targets in fuzz/targets (#1600).
+# Plus coverage-guided fuzzing of the targets in fuzz/targets (#1600), and
+# mutation testing of the packages with StrykerJS (#1860).
 on:
   schedule:
     - cron: '17 3 * * *'
@@ -107,5 +108,50 @@ jobs:
         with:
           name: fuzz-findings-${{ matrix.target }}
           path: fuzz/findings/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  mutation:
+    # Mutation testing with StrykerJS (#1860): one test run per mutant of
+    # packages/*/src, so nightly rather than on pull requests. The tests
+    # tagged `process` are left out (vitest.mutation.config.ts), so no
+    # Graphviz or container is needed. A mutation score under
+    # `thresholds.break` (stryker.config.mjs) fails the job; the report
+    # (reports/mutation/index.html) is uploaded either way.
+    name: Mutation testing (${{ matrix.ref }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        ref: [next]
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        with:
+          egress-policy: audit
+      - name: Checkout Repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ matrix.ref }}
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          cache: pnpm
+          node-version-file: ./.node-version
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Generate code
+        run: pnpm codegen
+      - name: Run mutation testing
+        run: pnpm test:mutation
+      - name: Upload the mutation report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mutation-report-${{ matrix.ref }}
+          path: reports/mutation/
           if-no-files-found: ignore
           retention-days: 14
