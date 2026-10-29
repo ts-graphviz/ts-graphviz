@@ -79,7 +79,8 @@ export interface ConvertToModelOptions {
    * Each node object is reached once without counting; past the limit, the
    * conversion throws a `RangeError` with code
    * `TSG_ERR_SHARED_NODE_COUNT_EXCEEDED`. An AST that contains itself
-   * always throws a `TypeError` with code `TSG_ERR_CYCLIC_STRUCTURE`.
+   * throws a `TypeError` with code `TSG_ERR_CYCLIC_STRUCTURE`, unless the
+   * walk passes the shared-node limit before it reaches the cycle.
    * `0` disables the limit. A parsed AST shares no nodes.
    * @default 100000
    */

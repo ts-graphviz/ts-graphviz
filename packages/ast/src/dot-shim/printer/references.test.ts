@@ -180,6 +180,14 @@ describe('the error for a node no plugin prints', { tags: ['SM-2'] }, () => {
     expect(error).toMatchObject({ code: 'TSG_ERR_NO_PLUGIN' });
     expect((error as Error).message.length).toBeLessThan(200);
   });
+
+  it('quotes at most a short part of a long type', () => {
+    const error = thrown(() =>
+      stringify(graph({ type: 'x'.repeat(1_000_000) })),
+    );
+    expect(error).toMatchObject({ code: 'TSG_ERR_NO_PLUGIN' });
+    expect((error as Error).message.length).toBeLessThan(200);
+  });
 });
 
 describe('the error for an attribute list kind', { tags: ['SM-2'] }, () => {
