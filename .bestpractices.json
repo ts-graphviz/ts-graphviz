@@ -1,6 +1,6 @@
 {
   "assurance_case_status": "Unmet",
-  "assurance_case_justification": "3.x has no written assurance case. The v4 security model is one: https://github.com/ts-graphviz/ts-graphviz/blob/next/website/docs/ts-graphviz/11-advanced-topics/06-security-model.md",
+  "assurance_case_justification": "3.x has no written assurance case. v4, in development, adds a security model that is one.",
   "automated_integration_testing_status": "Met",
   "automated_integration_testing_justification": "Every pull request runs unit tests and E2E tests that install the packed packages into CJS/ESM and JavaScript/TypeScript projects.",
   "build_status": "Met",
@@ -61,7 +61,7 @@
   "documentation_security_status": "Met",
   "documentation_security_justification": "https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md lists the protections of the parser, the React renderer and the adapter.",
   "dynamic_analysis_status": "Unmet",
-  "dynamic_analysis_justification": "3.x: unit and E2E tests only. Fuzzing and property-based tests are in v4 (the next branch).",
+  "dynamic_analysis_justification": "3.x: unit and E2E tests only. Fuzzing and property-based tests are added in v4, in development.",
   "dynamic_analysis_enable_assertions_status": "Met",
   "dynamic_analysis_fixed_status": "Met",
   "dynamic_analysis_unsafe_status": "N/A",
