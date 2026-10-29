@@ -5,10 +5,11 @@
  * between tokens drawn from nothing, spaces, tabs, newlines and comments, so
  * tokens touch in every way the lexer has to split (`1image`, `subgraphx`,
  * `a->b`). Whenever the parser accepts a source, Graphviz must read the
- * source and the parser's reprint of it as the same graph (`dot -Tcanon`).
- * Rejecting a source Graphviz accepts is allowed (the parser fails closed);
- * reading it differently is not: that is how `1image="x"` hid an `image`
- * attribute from `sanitize`.
+ * source and the parser's reprint of it as the same graph (`dot -Tcanon`,
+ * compared without regard to the order of sibling subgraphs, see
+ * `sortSubgraphs`). Rejecting a source Graphviz accepts is allowed (the
+ * parser fails closed); reading it differently is not: that is how
+ * `1image="x"` hid an `image` attribute from `sanitize`.
  *
  * Skipped when `dot` is not installed. `FC_NUM_RUNS` raises the run count.
  */
@@ -30,6 +31,119 @@ function canon(source: string): string | undefined {
     timeout: 30_000,
   });
   return r.status === 0 ? r.stdout : undefined;
+}
+
+/** A line of canon output, or a subgraph block with its lines. */
+type Item = string | { open: string; body: Item[]; close: string };
+
+/** A line that opens a block: the graph itself or a subgraph. */
+const OPENS_BLOCK = /^\t*(?:strict )?(?:di|sub)?graph\b.*\{$/;
+
+/**
+ * For each line, whether it starts outside a quoted or HTML string. Canon
+ * writes a string that contains newlines over several lines, and one of
+ * them may look like a subgraph's first or last line.
+ */
+function startsOutsideString(lines: readonly string[]): boolean[] {
+  let quoted = false;
+  let html = 0;
+  return lines.map((line) => {
+    const outside = !quoted && html === 0;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (quoted) {
+        if (c === '\\') i++;
+        else if (c === '"') quoted = false;
+      } else if (html > 0) {
+        if (c === '<') html++;
+        else if (c === '>') html--;
+      } else if (c === '"') quoted = true;
+      else if (c === '<') html = 1;
+    }
+    return outside;
+  });
+}
+
+/** The items of canon output: its lines, with the subgraphs as blocks. */
+function readItems(text: string): Item[] {
+  const lines = text.split('\n');
+  const outside = startsOutsideString(lines);
+  /**
+   * The items from line `from` up to the line that closes the block
+   * (`close`, a `}` indented like the block's first line) or the end of the
+   * text. A block opener whose `}` is missing counts as a plain line.
+   */
+  function read(
+    from: number,
+    close: string | undefined,
+  ): { items: Item[]; next: number } {
+    const items: Item[] = [];
+    let i = from;
+    while (i < lines.length && !(outside[i] && lines[i] === close)) {
+      const line = lines[i];
+      if (outside[i] && OPENS_BLOCK.test(line)) {
+        const ownClose = `${line.slice(0, line.search(/[^\t]/))}}`;
+        const inner = read(i + 1, ownClose);
+        if (inner.next < lines.length) {
+          items.push({ open: line, body: inner.items, close: ownClose });
+          i = inner.next + 1;
+          continue;
+        }
+      }
+      items.push(line);
+      i++;
+    }
+    return { items, next: i };
+  }
+  return read(0, undefined).items;
+}
+
+function* linesOf(items: readonly Item[]): Generator<string> {
+  for (const item of items) {
+    if (typeof item === 'string') yield item;
+    else {
+      yield item.open;
+      yield* linesOf(item.body);
+      yield item.close;
+    }
+  }
+}
+
+/**
+ * The items with the blocks among them sorted by their text, recursively.
+ * The blocks swap places only with each other: the other lines, and the
+ * positions the blocks take among them, stay where they are.
+ */
+function sortBlocks(items: readonly Item[]): Item[] {
+  const sorted = items.map((item) =>
+    typeof item === 'string' ? item : { ...item, body: sortBlocks(item.body) },
+  );
+  const slots = sorted.flatMap((item, i) =>
+    typeof item === 'string' ? [] : [i],
+  );
+  const blocks = slots
+    .map((i) => ({
+      item: sorted[i],
+      text: [...linesOf([sorted[i]])].join('\n'),
+    }))
+    .sort((a, b) => (a.text < b.text ? -1 : a.text > b.text ? 1 : 0));
+  slots.forEach((slot, j) => {
+    sorted[slot] = blocks[j].item;
+  });
+  return sorted;
+}
+
+/**
+ * `dot -Tcanon` output with the subgraphs of every block sorted by their
+ * text. Graphviz lists sibling subgraphs in an order that depends on tokens
+ * that do not change the graph (a `;` after an edge whose target has a port
+ * and a compass point, #1775), so the source and its reprint may list the
+ * same subgraphs differently. Everything else stays in order: canon prints
+ * one statement per line and nests subgraphs with tabs, so the lines that
+ * do not open or close a subgraph are left where they are.
+ */
+function sortSubgraphs(canon: string): string {
+  return [...linesOf(sortBlocks(readItems(canon)))].join('\n');
 }
 
 /**
@@ -281,11 +395,190 @@ describe('the parser reads DOT as Graphviz does', {
         original,
         `the parser accepts what dot rejects:\n${dot}`,
       ).toBeDefined();
+      const reprinted = canon(printed);
       expect(
-        canon(printed),
+        reprinted && sortSubgraphs(reprinted),
         `dot reads the reprint differently: ${JSON.stringify(dot)}\n--- reprint\n${printed}`,
-      ).toBe(original);
+      ).toBe(sortSubgraphs(original as string));
     }
     expect(accepted).toBeGreaterThan(runs / 10);
+  });
+});
+
+/**
+ * Sources dot accepts whose reprint it lists the subgraphs of in another
+ * order (#1775). Each has an edge whose target has a port and a compass
+ * point, after which the printer writes a `;` the source lacks.
+ */
+const subgraphOrderCases = [
+  'strict graph .5\t{ image // y\n-- .5: c: /* c */ sw--subgraph\n// y\n"node" { }[]\ncolor =\tx_1\tsubgraph\tcolor { a/*c*/ /* c */ ; /* c */ } \n// y\n}',
+  'strict graph\tcolor{ color:<<i>x</i>>: // y\nsw\n/* m\nn */\n\t; subgraph .5\t{ image=\timage \n} --"a b":\n# x\nb:sw , -2:\ta:\t_--subgraph /* c */ label /* c */  { }\n[ .5= -2; image = a  /* c */ é= image; ]  /* c */ }',
+  'digraph { .5:\t"l\\nm":\n# x\n_;\nsubgraph\n// y\n3. \n{ } ; /* c */ subgraph\n// y\nx_1 { } /* c */  }',
+];
+
+describe('sortSubgraphs', () => {
+  // `dot -Tcanon` of the first of `subgraphOrderCases` and of its reprint.
+  const original = [
+    'strict graph .5 {',
+    '\tgraph [color=x_1];',
+    '\tnode [label="\\N"];',
+    '\tsubgraph color {',
+    '\t\ta;',
+    '\t}',
+    '\tsubgraph "node" {',
+    '\t}',
+    '\timage -- .5:c:sw;',
+    '}',
+    '',
+  ].join('\n');
+  const reordered = [
+    'strict graph .5 {',
+    '\tgraph [color=x_1];',
+    '\tnode [label="\\N"];',
+    '\tsubgraph "node" {',
+    '\t}',
+    '\tsubgraph color {',
+    '\t\ta;',
+    '\t}',
+    '\timage -- .5:c:sw;',
+    '}',
+    '',
+  ].join('\n');
+
+  it('makes outputs that differ only in the order of sibling subgraphs equal', () => {
+    expect(sortSubgraphs(reordered)).toBe(sortSubgraphs(original));
+    expect(sortSubgraphs(original)).toBe(reordered);
+  });
+
+  it('sorts the subgraphs nested in a subgraph too', () => {
+    // `a` holds `inner`; `b` is its sibling.
+    const graph = (outer: string[], inner: string[]) =>
+      [
+        'digraph {',
+        ...outer.flatMap((name) =>
+          name === 'a'
+            ? [
+                '\tsubgraph a {',
+                ...inner.flatMap((n) => [`\t\tsubgraph ${n} {`, '\t\t}']),
+                '\t}',
+              ]
+            : [`\tsubgraph ${name} {`, '\t}'],
+        ),
+        '}',
+        '',
+      ].join('\n');
+    const sorted = graph(['a', 'b'], ['x', 'y']);
+    expect(sortSubgraphs(graph(['b', 'a'], ['y', 'x']))).toBe(sorted);
+    expect(sortSubgraphs(sorted)).toBe(sorted);
+  });
+
+  it('keeps the order of nodes, edges and attributes', () => {
+    const swapped = original.replace(
+      '\tgraph [color=x_1];\n\tnode [label="\\N"];',
+      '\tnode [label="\\N"];\n\tgraph [color=x_1];',
+    );
+    expect(swapped).not.toBe(original);
+    expect(sortSubgraphs(swapped)).not.toBe(sortSubgraphs(original));
+    const nodes = 'digraph {\n\ta;\n\tb;\n}\n';
+    expect(sortSubgraphs(nodes)).toBe(nodes);
+    expect(sortSubgraphs('digraph {\n\tb;\n\ta;\n}\n')).not.toBe(nodes);
+  });
+
+  it('keeps the order of the statements inside a subgraph', () => {
+    const body = (lines: string) =>
+      `digraph {\n\tsubgraph s {\n${lines}\t}\n}\n`;
+    expect(sortSubgraphs(body('\t\tb;\n\t\ta;\n'))).toBe(
+      body('\t\tb;\n\t\ta;\n'),
+    );
+    expect(sortSubgraphs(body('\t\tb;\n\t\ta;\n'))).not.toBe(
+      sortSubgraphs(body('\t\ta;\n\t\tb;\n')),
+    );
+  });
+
+  it('does not hide a different edge or attribute', () => {
+    for (const changed of [
+      reordered.replace('image -- .5:c:sw', 'image -- .5:c:n'),
+      reordered.replace('color=x_1', 'color=x_2'),
+      reordered.replace('\t\ta;\n', '\t\tb;\n'),
+      reordered.replace('subgraph "node" {\n\t}\n', ''),
+    ]) {
+      expect(changed).not.toBe(reordered);
+      expect(sortSubgraphs(changed)).not.toBe(sortSubgraphs(original));
+    }
+  });
+
+  it('leaves the lines of a string that spans lines alone', () => {
+    // `dot -Tcanon` writes a string with newlines over several lines.
+    const graph = (label: string[]) =>
+      [
+        'digraph {',
+        `\ta\t[label="${label.join('\n')}"];`,
+        `\tb\t[label=<${label.join('\n')}>];`,
+        '\tc\t[label="\\"",',
+        `\t\tlabel2="${label.join('\n')}"];`,
+        '}',
+        '',
+      ].join('\n');
+    const looksLikeBlocks = (first: string, second: string) => [
+      '',
+      `\tsubgraph ${first} {`,
+      '\t}',
+      `\tsubgraph ${second} {`,
+      '\t}',
+      '',
+    ];
+    expect(sortSubgraphs(graph(looksLikeBlocks('y', 'x')))).toBe(
+      graph(looksLikeBlocks('y', 'x')),
+    );
+    expect(sortSubgraphs(graph(looksLikeBlocks('y', 'x')))).not.toBe(
+      sortSubgraphs(graph(looksLikeBlocks('x', 'y'))),
+    );
+  });
+
+  it('leaves text that is not canon output alone', () => {
+    for (const text of [
+      '',
+      'digraph {',
+      'digraph {\n\tsubgraph s {\n',
+      'x\n}\n',
+    ]) {
+      expect(sortSubgraphs(text)).toBe(text);
+    }
+  });
+});
+
+describe('dot and the order of subgraphs (#1775)', {
+  tags: ['SM-1', 'process'],
+}, () => {
+  beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
+
+  it.each(subgraphOrderCases)(
+    'reads the source and its reprint as the same graph up to subgraph order: %j',
+    { timeout: 60_000 },
+    (dot) => {
+      const original = canon(dot);
+      const reprinted = canon(stringify(parse(dot)));
+      expect(original).toBeDefined();
+      expect(reprinted).toBeDefined();
+      expect(sortSubgraphs(reprinted as string)).toBe(
+        sortSubgraphs(original as string),
+      );
+    },
+  );
+
+  it('still tells a reprint that changes the graph apart', {
+    timeout: 60_000,
+  }, () => {
+    const dot = subgraphOrderCases[0];
+    const original = sortSubgraphs(canon(dot) as string);
+    for (const changed of [
+      dot.replace('sw--', 'n--'), // another compass point
+      dot.replace('x_1', 'x_2'), // another attribute value
+      dot.replace('{ a/*c*/', '{ b/*c*/'), // another node in a subgraph
+      dot.replace('"node" { }', '{ }'), // the subgraph without its name
+    ]) {
+      expect(changed).not.toBe(dot);
+      expect(sortSubgraphs(canon(changed) as string)).not.toBe(original);
+    }
   });
 });
