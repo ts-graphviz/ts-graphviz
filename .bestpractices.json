@@ -53,7 +53,7 @@
   "documentation_basics_status": "Met",
   "documentation_basics_justification": "https://ts-graphviz.github.io/ts-graphviz",
   "documentation_current_status": "Met",
-  "documentation_current_justification": "The documentation site and the TypeDoc API reference are built together from the same commit and published on each push to main that changes them: https://github.com/ts-graphviz/ts-graphviz/blob/main/.github/workflows/website.yaml",
+  "documentation_current_justification": "The documentation site and the TypeDoc API reference are built together from the same commit and published from main only when main has no pending changesets, so the site describes the packages released on npm: https://github.com/ts-graphviz/ts-graphviz/blob/main/.github/workflows/website.yaml",
   "documentation_interface_status": "Met",
   "documentation_interface_justification": "https://ts-graphviz.github.io/ts-graphviz/",
   "documentation_quick_start_status": "Met",
