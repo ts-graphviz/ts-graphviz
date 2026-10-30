@@ -604,27 +604,15 @@ With ts-graphviz, you can extend the library's type system to customize graph vi
 #### Use Case: Specifying Custom Graph Layout and Output Formats
 
 ```ts
-import { $keywords } from '@ts-graphviz/common';
 import { toFile } from '@ts-graphviz/adapter';
 
-// 1. Declare the '@ts-graphviz/adapter' module.
-declare module '@ts-graphviz/adapter' {
-  export namespace Layout {
-    // 2. Define the $values interface in the Layout namespace.
-    // 3. Inherit from $keywords<'my-custom-algorithm'> and specify the name of the new layout engine in <...>.
-    export interface $values extends $keywords<'my-custom-algorithm'> {}
-  }
-
-  export namespace Format {
-    // 4. Define the $values interface in the Format namespace.
-    // 5. Inherit from $keywords<'mp4'> and specify the name of the new output format in <...>.
-    export interface $values extends $keywords<'mp4'> {}
-  }
-}
-
-toFile('digraph { a -> b }', '/path/to/file', {
+// Names a Graphviz plugin adds, for this call only (nothing global).
+await toFile('digraph { a -> b }', '/path/to/file', {
+  customLayouts: ['my-custom-algorithm'],
+  customFormats: ['mp4'],
   layout: 'my-custom-algorithm',
   format: 'mp4',
+  sanitize: false,
 });
 ```
 

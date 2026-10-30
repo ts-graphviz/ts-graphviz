@@ -150,8 +150,9 @@ describe('toStream / toFile with the real dot (#1680)', {
 
   it('reports an argument the OS cannot pass as CommandExecutionError', async () => {
     await expect(
+      // `library` is configuration: checked to be strings, not for NUL.
       toStream('digraph {}', {
-        attributes: { graph: { label: 'a\0b' } },
+        library: ['a\0b'],
         sanitize: false,
         signal: signal(),
       }),
@@ -279,18 +280,27 @@ describe('toStream / toFile check the source with sanitize (#1681)', {
         attributes: { node: { shape: 'epsf', shapefile: secret } as never },
       }),
     ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
-    // dot splits an argument at its first '=': this key sets `image`.
+    // dot splits an argument at its first '=': this key would set
+    // `image`. Such a key is refused as an option, sanitize or not.
+    for (const sanitize of [true, false]) {
+      await expect(
+        toStream('digraph { a }', {
+          attributes: { node: { [`image=${secret}`]: true } as never },
+          sanitize,
+        }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_INVALID_OPTION' });
+    }
     await expect(
       toStream('digraph { a }', {
-        attributes: { node: { [`image=${secret}`]: true } as never },
+        attributes: { node: { image: secret } as never },
       }),
     ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
-    // A NUL is refused by the parser before the safety rules run.
+    // So is a NUL, which no command-line argument can hold.
     await expect(
       toStream('digraph { a }', {
         attributes: { graph: { label: 'a\0b' } },
       }),
-    ).rejects.toMatchObject({ code: 'TSG_ERR_DOT_SYNTAX' });
+    ).rejects.toMatchObject({ code: 'TSG_ERR_INVALID_OPTION' });
     const stream = await toStream('digraph { a }', {
       format: 'dot',
       signal: signal(),

@@ -475,3 +475,29 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
     });
   });
 });
+
+describe('toStream (Node adapter) checks the options', {
+  tags: ['SM-4'],
+}, () => {
+  beforeEach(() => {
+    spawnMock.mockReset();
+  });
+
+  it('rejects data options outside their type before starting the command', async () => {
+    for (const options of [
+      { format: 'png:cairo' },
+      { format: 'svg -oout.svg' },
+      { layout: 'my-engine' },
+      { scale: Number.NaN },
+      { attributes: { graph: { 'label=x': 'y' } } },
+      { attributes: { node: { label: { toString: () => 'x' } } } },
+      { dotCommand: 1 },
+      { library: 'lib.ps' },
+    ]) {
+      await expect(
+        toStream('digraph {}', { ...options, sanitize: false } as never),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_INVALID_OPTION' });
+    }
+    expect(spawnMock).not.toHaveBeenCalled();
+  });
+});

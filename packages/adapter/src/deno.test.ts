@@ -150,6 +150,26 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
     vi.unstubAllGlobals();
   });
 
+  it('rejects data options outside their type before starting the command', async () => {
+    const calls = stubCommand({});
+    for (const options of [
+      { format: 'png:cairo' },
+      { layout: 'my-engine' },
+      { layout: 'neato', noop: -1 },
+      { attributes: { edge: { '': 'x' } } },
+      { dotCommand: new URL('file:///usr/bin/dot') },
+    ]) {
+      await expect(
+        toStream('digraph {}', { ...options, sanitize: false } as never),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_INVALID_OPTION' });
+      await expect(
+        toFile('digraph {}', '/path/output', options as never),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_INVALID_OPTION' });
+    }
+    expect(calls.spawned).toBe(0);
+    expect(calls.opened).toBe(0);
+  });
+
   it('rejects with CommandExecutionError when the command cannot start', async () => {
     const error = new Error('NotFound: dot');
     stubCommand({ spawnError: error });
@@ -273,7 +293,7 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
       });
       await expect(
         toStream('digraph { a }', {
-          attributes: { node: { 'image=/etc/passwd': true } as never },
+          attributes: { node: { image: '/etc/passwd' } as never },
         }),
       ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
       await expect(

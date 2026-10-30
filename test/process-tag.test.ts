@@ -30,6 +30,8 @@ const notProcess: Record<string, string> = {
     'builds the command and arguments from a dotCommand option; runs nothing',
   'test/properties/prototype-pollution.property.test.tsx':
     'dotCommand is a polluted Object.prototype key; builds the command only',
+  'packages/adapter/src/options.test.ts':
+    'checks option values with ownAdapterOptions; runs nothing',
 };
 
 /** Modules whose `toStream` / `toFile` start a command. */
@@ -75,7 +77,17 @@ function startsProcess(source: string): string[] {
   if (/\bDeno\.Command\b/.test(source) && !stubsDeno) {
     reasons.push('Deno.Command');
   }
-  if (/\bdotCommand\s*:/.test(source)) reasons.push('a dotCommand option');
+  // A dotCommand reaches whatever the file runs: node:child_process, or
+  // Deno.Command when the file runs nothing of Node.js.
+  const runsNode =
+    /['"`]\.\/(?:to-stream\.node|to-file\.node|node)\.js['"`]/.test(source);
+  if (
+    /\bdotCommand\s*:/.test(source) &&
+    !mocksChildProcess &&
+    !(stubsDeno && !runsNode)
+  ) {
+    reasons.push('a dotCommand option');
+  }
   for (const [, names, module] of source.matchAll(
     /import\s*\{([^}]*)\}\s*from\s*['"`]([^'"`]+)['"`]/g,
   )) {

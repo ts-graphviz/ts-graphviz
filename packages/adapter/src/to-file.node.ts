@@ -9,11 +9,11 @@ import type { Layout, Options } from './types.js';
  * @param path - The file to write.
  * @param options - Layout, output format and the other options of the command.
  */
-export async function toFile<T extends Layout>(
-  dot: string,
-  path: string,
-  options?: Options<T>,
-): Promise<void> {
+export async function toFile<
+  const F extends string = never,
+  const L extends string = never,
+  T extends Layout | L = Layout | L,
+>(dot: string, path: string, options?: Options<T, F, L>): Promise<void> {
   const stream = await toStream(dot, options);
   // Opened and written with positional arguments only: Node.js copies a
   // stream's options object into a plain one, so an options object would

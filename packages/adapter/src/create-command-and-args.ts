@@ -1,5 +1,5 @@
 import { createCommandArgs } from './create-command-args.js';
-import type { Layout, Options } from './types.js';
+import type { AnyOptions } from './options.js';
 
 /**
  * createCommandAndArgs creates a command and an array of arguments, based on the given {@link Options}.
@@ -7,8 +7,8 @@ import type { Layout, Options } from './types.js';
  * @param options Options to create the command and args from.
  * @returns A tuple containing the command and an array of arguments.
  */
-export function createCommandAndArgs<T extends Layout>(
-  options: Options<T>,
+export function createCommandAndArgs(
+  options: AnyOptions,
 ): [command: string, args: string[]] {
   return [options.dotCommand ?? 'dot', Array.from(createCommandArgs(options))];
 }

@@ -182,31 +182,22 @@ To allow for customization, types intended for extension are named with the `$` 
 
 #### Specifying Custom Graph Layout and Output Formats
 
-You can specify custom layout algorithms and output formats by extending the types in `@ts-graphviz/adapter`. Here's how:
+Layout engines and output formats that a Graphviz plugin adds are named per call with the `customLayouts` and `customFormats` options. They are trusted configuration, like `dotCommand`: define them in your code, never from end-user input. A `format` or `layout` from a request is checked against the documented names only (`isFormat` / `isLayout`).
 
 ```typescript
-import { $keywords } from '@ts-graphviz/common';
 import { toFile } from '@ts-graphviz/adapter';
 
-// 1. Declare the '@ts-graphviz/adapter' module.
-declare module '@ts-graphviz/adapter' {
-  export namespace Layout {
-    // 2. Define the $values interface in the Layout namespace.
-    // 3. Extend $keywords with the name of your custom layout algorithm.
-    export interface $values extends $keywords<'my-custom-algorithm'> {}
-  }
-
-  export namespace Format {
-    // 4. Define the $values interface in the Format namespace.
-    // 5. Extend $keywords with the name of your custom output format.
-    export interface $values extends $keywords<'mp4'> {}
-  }
-}
-
-// Now you can use your custom layout and format.
-toFile('digraph { a -> b }', '/path/to/file', {
+// List the names your Graphviz plugins add for this call: they are accepted
+// at run time and widen the types of `format` and `layout` for this call
+// only. Nothing is changed globally, and `isFormat` / `isLayout` still
+// answer for the documented names only.
+await toFile('digraph { a -> b }', '/path/to/file', {
+  customLayouts: ['my-custom-algorithm'],
+  customFormats: ['mp4'],
   layout: 'my-custom-algorithm',
   format: 'mp4',
+  // sanitize refuses formats it has not checked
+  sanitize: false,
 });
 ```
 
