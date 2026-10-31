@@ -52,7 +52,8 @@ jobs:
     permissions:
       contents: write # Used to commit to "Version Packages" PR
       pull-requests: write # Used to create "Version Packages" PR
-      id-token: write # Used to publish to npm with OIDC trusted publishing
+      id-token: write # Used to publish to npm with OIDC trusted publishing, and to sign provenance
+      attestations: write # Used to record the provenance of the release assets
       # Other permissions are defaulted to none
     steps:
       - name: Harden Runner
@@ -90,6 +91,24 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download the published tarballs
+        if: ${{ steps.changesets.outputs.published == 'true' }}
+        run: node .github/scripts/release-assets.mjs download release-assets
+        env:
+          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
+      - name: Attest the provenance of the published tarballs
+        id: attest
+        if: ${{ steps.changesets.outputs.published == 'true' }}
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: release-assets/*.tgz
+      - name: Attach the tarballs and their provenance to the GitHub Releases
+        if: ${{ steps.changesets.outputs.published == 'true' }}
+        run: node .github/scripts/release-assets.mjs upload release-assets "$BUNDLE_PATH"
+        env:
+          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
+          BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Switch back to main branch
         run: git checkout main
       - name: Check current branch
