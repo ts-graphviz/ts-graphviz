@@ -123,13 +123,13 @@ jobs:
         run: pnpm --filter @ts-graphviz/website exec playwright install --with-deps chromium webkit
       - name: End-to-end tests of the built site (desktop and phones)
         run: pnpm --filter @ts-graphviz/website test:e2e
-      - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ failure() }}
         with:
           name: website-e2e-results
           path: website/test-results
           retention-days: 7
-      - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: website
           path: website/build
