@@ -1,10 +1,10 @@
 import type {
-  AttributeListModel,
-  DotModel,
-  EdgeModel,
-  NodeModel,
-  RootGraphModel,
-  SubgraphModel,
+  ReadonlyAttributeListModel,
+  ReadonlyDotModel,
+  ReadonlyEdgeModel,
+  ReadonlyNodeModel,
+  ReadonlyRootGraphModel,
+  ReadonlySubgraphModel,
 } from '@ts-graphviz/common';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { AttributeListPlugin } from './AttributeListPlugin.js';
@@ -15,12 +15,12 @@ import { NodePlugin } from './NodePlugin.js';
 import { SubgraphPlugin } from './SubgraphPlugin.js';
 
 export const defaultPlugins: (
-  | ConvertFromModelPlugin<AttributeListModel>
-  | ConvertFromModelPlugin<DotModel>
-  | ConvertFromModelPlugin<EdgeModel>
-  | ConvertFromModelPlugin<NodeModel>
-  | ConvertFromModelPlugin<RootGraphModel>
-  | ConvertFromModelPlugin<SubgraphModel>
+  | ConvertFromModelPlugin<ReadonlyAttributeListModel>
+  | ConvertFromModelPlugin<ReadonlyDotModel>
+  | ConvertFromModelPlugin<ReadonlyEdgeModel>
+  | ConvertFromModelPlugin<ReadonlyNodeModel>
+  | ConvertFromModelPlugin<ReadonlyRootGraphModel>
+  | ConvertFromModelPlugin<ReadonlySubgraphModel>
 )[] = [
   AttributeListPlugin,
   EdgePlugin,

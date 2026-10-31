@@ -69,7 +69,7 @@ export declare const graph: ModelFactory;
 
 export declare const strict: ModelFactories;
 
-export declare function toDot(model: DotObjectModel, options?: ToDotOptions): string;
+export declare function toDot(model: AnyReadonlyDotObjectModel, options?: ToDotOptions): string;
 
 export declare function withContext<const P extends Partial<ModelsContext>>(models: P): ModelFactoriesWithStrict<ResolvedModelTypes<P>>;
 ```

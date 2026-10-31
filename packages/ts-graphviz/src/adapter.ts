@@ -7,16 +7,16 @@ import {
   type Options,
   toBlob as toBlobFromDot,
 } from '@ts-graphviz/adapter';
-import type { DotObjectModel } from '@ts-graphviz/common';
+import type { AnyReadonlyDotObjectModel } from '@ts-graphviz/common';
 import { toDot } from './to-dot.js';
 
 export * from '@ts-graphviz/adapter';
 
 /**
  * What the adapter renders: a DOT source, or a model that is turned into
- * one with `toDot`.
+ * one with `toDot` (any model: it is only read).
  */
-export type DotInput = string | DotObjectModel;
+export type DotInput = string | AnyReadonlyDotObjectModel;
 
 /**
  * Execute the Graphviz dot command and return its output as a `Blob`.

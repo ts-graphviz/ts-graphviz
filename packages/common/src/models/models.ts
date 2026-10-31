@@ -9,6 +9,7 @@ import type {
 } from '../attributes/attribute.js';
 import type { Compass } from '../attributes/types.js';
 import type { ModelsContext } from './models-context.js';
+import type { ReadonlyNodeModel } from './readonly-models.js';
 
 /**
  * ASTType is an enumeration of the different types of nodes that can be found in an AST(Abstract Syntax Tree ).
@@ -28,10 +29,12 @@ export type ASTType =
   | 'Subgraph';
 
 /**
- * Objects that can be Edge destinations satisfy this interface.
+ * What an edge refers to: a node, or a {@link ForwardRefNode} by id (with a
+ * port and compass point, if any). A node is a read-only reference here,
+ * since only its id is used, so a target may be any node model.
  * @group Models
  */
-export type NodeRef = NodeModel | ForwardRefNode;
+export type NodeRef = ReadonlyNodeModel | ForwardRefNode;
 
 /**
  * @group Models

@@ -12,7 +12,9 @@ import {
   type EdgeModel,
   fromDot,
   type graph,
+  isNodeModel,
   type NodeModel,
+  type ReadonlyNodeModel,
   type RootGraphModel,
   type SubgraphModel,
   strict,
@@ -102,6 +104,23 @@ await adapter.toBlob(printed, {
 await adapter.toBlob(printed, { layout: 'dot', noop: 1 });
 // @ts-expect-error not an output format
 await adapter.toBlob(printed, { format: 'docx' });
+
+// read-only model types: every model fits, the readers take them, guards
+// on unknown narrow to them and keep the caller's type given a model
+const describeNode = (n: ReadonlyNodeModel): string =>
+  `${n.id}: ${String(n.attributes.get('label'))}`;
+describeNode(new MyNode('m'));
+const unknownValue: unknown = g;
+if (isNodeModel(unknownValue)) {
+  assertType<Equal<typeof unknownValue, ReadonlyNodeModel>>();
+  toDot(unknownValue);
+}
+const nodes = g.statements.filter(isNodeModel);
+assertType<Equal<typeof nodes, NodeModel[]>>();
+const readNodes = [unknownValue].filter(isNodeModel);
+assertType<Equal<typeof readNodes, ReadonlyNodeModel[]>>();
+// @ts-expect-error not a node
+toDot({ $$type: 'Node' });
 
 try {
   parse('{');
