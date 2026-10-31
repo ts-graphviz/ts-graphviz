@@ -54,9 +54,7 @@ export declare function isFormat(value: unknown): value is Format;
 
 export declare function isLayout(value: unknown): value is Layout;
 
-export declare function toFile<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(_dot: string, _path: string, _options?: Options<T, F, L>): Promise<void>;
-
-export declare function toStream<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(_dot: string, _options?: Options<T, F, L>): Promise<ReadableStream<Uint8Array>>;
+export declare function toBlob<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(_dot: string, _options?: Options<T, F, L>): Promise<Blob>;
 
 // Used by the exports, not exported
 

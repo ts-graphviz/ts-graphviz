@@ -185,13 +185,13 @@ To allow for customization, types intended for extension are named with the `$` 
 Layout engines and output formats that a Graphviz plugin adds are named per call with the `customLayouts` and `customFormats` options. They are trusted configuration, like `dotCommand`: define them in your code, never from end-user input. A `format` or `layout` from a request is checked against the documented names only (`isFormat` / `isLayout`).
 
 ```typescript
-import { toFile } from '@ts-graphviz/adapter';
+import { toBlob } from '@ts-graphviz/adapter';
 
 // List the names your Graphviz plugins add for this call: they are accepted
 // at run time and widen the types of `format` and `layout` for this call
 // only. Nothing is changed globally, and `isFormat` / `isLayout` still
 // answer for the documented names only.
-await toFile('digraph { a -> b }', '/path/to/file', {
+const video = await toBlob('digraph { a -> b }', {
   customLayouts: ['my-custom-algorithm'],
   customFormats: ['mp4'],
   layout: 'my-custom-algorithm',
@@ -261,7 +261,7 @@ For users interested in extending or customizing `ts-graphviz`, understanding th
 
 **Usage**:
 
-- Convert DOT strings to streams or files.
+- Render DOT strings to a `Blob` with `toBlob`.
 - Use in environments where you need to render graphs to images or other formats.
 
 :::note

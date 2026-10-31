@@ -7,6 +7,7 @@ export type * from './types.js';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
+import { OutputParts } from './media-type.js';
 import type { AnyOptions } from './options.js';
 import { ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
@@ -41,12 +42,13 @@ async function readAll(
 }
 
 /**
- * Execute the Graphviz dot command and make a Web `ReadableStream` of the
- * results.
+ * Execute the Graphviz dot command and return its output as a `Blob`.
  *
- * The output is collected while the command runs (at most `maxOutputSize`
- * bytes) and the stream is returned once the command has succeeded, so a
- * failure is always reported by the returned promise.
+ * The output is collected in memory while the command runs (at most
+ * `maxOutputSize` bytes) and the Blob is returned once the command has
+ * succeeded, so a failure is always reported by the returned promise. Its
+ * `type` is the media type of the format (e.g. `image/svg+xml`), or empty
+ * for a format without a well-known one.
  *
  * @throws `DOMException` named `SecurityError` (`code` `TSG_ERR_UNSAFE_DOT`)
  * or `DotSyntaxError` when `sanitize` (on by default) rejects the source.
@@ -57,14 +59,11 @@ async function readAll(
  * output exceeds `maxOutputSize`.
  * @throws `signal.reason` when `signal` aborts.
  */
-export async function toStream<
+export async function toBlob<
   const F extends string = never,
   const L extends string = never,
   T extends Layout | L = Layout | L,
->(
-  dot: string,
-  options?: Options<T, F, L>,
-): Promise<ReadableStream<Uint8Array>> {
+>(dot: string, options?: Options<T, F, L>): Promise<Blob> {
   const opts = ownAdapterOptions(options as AnyOptions | undefined);
   const [command, args] = createCommandAndArgs(
     opts,
@@ -130,7 +129,7 @@ export async function toStream<
   signal?.addEventListener('abort', kill, { once: true });
 
   try {
-    const chunks: Uint8Array[] = [];
+    const output = new OutputParts();
     let size = 0;
     const errors = new TailBuffer();
     const writing = (async () => {
@@ -158,7 +157,7 @@ export async function toStream<
           kill();
           return false;
         }
-        chunks.push(chunk);
+        output.push(chunk);
         return true;
       },
       readers,
@@ -208,15 +207,7 @@ export async function toStream<
         cause,
       );
     }
-    // A source without a prototype: an inherited `type` or `pull` is never
-    // read as part of it.
-    return new ReadableStream<Uint8Array>({
-      __proto__: null,
-      start(controller) {
-        for (const chunk of chunks) controller.enqueue(chunk);
-        controller.close();
-      },
-    } as UnderlyingDefaultSource<Uint8Array>);
+    return output.toBlob(opts.format);
   } catch (e) {
     // An unexpected error above: make sure the process does not outlive us.
     kill();
@@ -225,24 +216,4 @@ export async function toStream<
   } finally {
     signal?.removeEventListener('abort', kill);
   }
-}
-
-/**
- * Execute the Graphviz dot command and output the results to a file. An
- * existing file is replaced.
- */
-export async function toFile<
-  const F extends string = never,
-  const L extends string = never,
-  T extends Layout | L = Layout | L,
->(dot: string, path: string, options?: Options<T, F, L>): Promise<void> {
-  // Render first, so a failed command does not truncate an existing file.
-  const stream = await toStream(dot, options);
-  const output = await Deno.open(path, {
-    __proto__: null,
-    write: true,
-    create: true,
-    truncate: true,
-  });
-  await stream.pipeTo(output.writable);
 }

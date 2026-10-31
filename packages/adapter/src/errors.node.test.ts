@@ -1,5 +1,5 @@
 /**
- * The message of a failed command through the Node.js `toStream`, with a
+ * The message of a failed command through the Node.js `toBlob`, with a
  * real process that stands in for `dot`: a Node.js script that writes
  * terminal escape sequences and a lot of text to stderr, and fails.
  */
@@ -7,7 +7,7 @@ import { chmodSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { toStream } from './to-stream.node.js';
+import { toBlob } from './to-blob.node.js';
 
 let dir: string;
 
@@ -36,7 +36,7 @@ process.exitCode = 3;
 `,
       );
       chmodSync(path, 0o755);
-      const error = await toStream('digraph {}', {
+      const error = await toBlob('digraph {}', {
         dotCommand: path,
         signal: AbortSignal.timeout(10_000),
       }).then(
@@ -69,7 +69,7 @@ process.exitCode = 1;
 `,
       );
       chmodSync(path, 0o755);
-      const error = await toStream('digraph {}', {
+      const error = await toBlob('digraph {}', {
         dotCommand: path,
         signal: AbortSignal.timeout(10_000),
       }).then(

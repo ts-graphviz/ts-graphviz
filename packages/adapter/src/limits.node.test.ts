@@ -1,12 +1,12 @@
 /**
- * The stderr tail through the Node.js `toStream`, with a real process that
+ * The stderr tail through the Node.js `toBlob`, with a real process that
  * stands in for `dot`: a Node.js script that floods stderr and fails.
  */
 import { chmodSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { toStream } from './to-stream.node.js';
+import { toBlob } from './to-blob.node.js';
 
 let dir: string;
 
@@ -37,7 +37,7 @@ process.exitCode = 1;
 }
 
 async function stderrOf(dotCommand: string): Promise<string> {
-  const error = await toStream('digraph {}', {
+  const error = await toBlob('digraph {}', {
     dotCommand,
     signal: AbortSignal.timeout(10_000),
   }).then(

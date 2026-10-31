@@ -259,7 +259,7 @@ describe('customFormats / customLayouts', { tags: ['SM-4'] }, () => {
     ).not.toThrow();
     expect(() =>
       ownAdapterOptions(
-        // As toStream passes them on once its signature has checked them.
+        // As toBlob passes them on once its signature has checked them.
         {
           customLayouts: ['my-layout'],
           layout: 'my-layout',

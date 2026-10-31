@@ -57,10 +57,15 @@ async function testEsmFromCjsTypescript() {
     // Test 3: Import and use adapter module
     console.log('\nTest 3: Dynamic import of adapter module');
     const adapter: AdapterModule = await import('ts-graphviz/adapter');
-    const { toFile } = adapter;
+    const { toBlob } = adapter;
 
-    const { devNull } = await import('node:os');
-    await toFile(dot, devNull);
+    const blob: Blob = await toBlob(dot);
+    if (
+      blob.type !== 'image/svg+xml' ||
+      !(await blob.text()).includes('<svg')
+    ) {
+      throw new Error('toBlob did not render SVG');
+    }
     console.log('✅ Successfully used adapter module');
 
     // Test 4: Import and use AST module

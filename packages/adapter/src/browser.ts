@@ -18,32 +18,15 @@ For browser-based Graphviz rendering, consider these alternatives:
 Learn more: https://github.com/ts-graphviz/ts-graphviz`;
 
 /**
- * Execute the Graphviz dot command and make a Stream of the results.
+ * Execute the Graphviz dot command and return its output as a `Blob`.
  *
  * Not available in browsers: always throws an `Error` with
  * `code: 'TSG_ERR_UNSUPPORTED_ENVIRONMENT'`.
  */
-export function toStream<
+export function toBlob<
   const F extends string = never,
   const L extends string = never,
   T extends Layout | L = Layout | L,
->(
-  _dot: string,
-  _options?: Options<T, F, L>,
-): Promise<ReadableStream<Uint8Array>> {
-  throw withCode(new Error(ERROR_MESSAGE), 'TSG_ERR_UNSUPPORTED_ENVIRONMENT');
-}
-
-/**
- * Execute the Graphviz dot command and output the results to a file.
- *
- * Not available in browsers: always throws an `Error` with
- * `code: 'TSG_ERR_UNSUPPORTED_ENVIRONMENT'`.
- */
-export function toFile<
-  const F extends string = never,
-  const L extends string = never,
-  T extends Layout | L = Layout | L,
->(_dot: string, _path: string, _options?: Options<T, F, L>): Promise<void> {
+>(_dot: string, _options?: Options<T, F, L>): Promise<Blob> {
   throw withCode(new Error(ERROR_MESSAGE), 'TSG_ERR_UNSUPPORTED_ENVIRONMENT');
 }

@@ -1,4 +1,4 @@
-import { toStream } from '@ts-graphviz/adapter';
+import { toBlob } from '@ts-graphviz/adapter';
 import type { RootGraphModel } from '@ts-graphviz/common';
 import { optimize } from 'svgo';
 import { toDot } from 'ts-graphviz';
@@ -21,6 +21,6 @@ export function mediaDot(module: MediaModule): string {
  * The SVG of an example's DOT, rendered by Graphviz `dot` and optimized.
  */
 export async function mediaSvg(dot: string): Promise<string> {
-  const stream = await toStream(dot, { format: 'svg' });
-  return optimize(await new Response(stream).text()).data;
+  const blob = await toBlob(dot, { format: 'svg' });
+  return optimize(await blob.text()).data;
 }

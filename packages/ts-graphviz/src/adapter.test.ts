@@ -1,12 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@ts-graphviz/adapter', () => ({
-  toStream: vi.fn().mockResolvedValue('stream'),
-  toFile: vi.fn().mockResolvedValue(undefined),
+  toBlob: vi.fn().mockResolvedValue('blob'),
 }));
 
 import * as adapter from '@ts-graphviz/adapter';
-import { toFile, toStream } from './adapter.js';
+import { toBlob } from './adapter.js';
 import { digraph, toDot } from './ts-graphviz.js';
 
 describe('ts-graphviz/adapter', () => {
@@ -15,10 +14,8 @@ describe('ts-graphviz/adapter', () => {
   });
 
   it('passes a DOT string through', async () => {
-    await expect(toStream('digraph {}', { format: 'svg' })).resolves.toBe(
-      'stream',
-    );
-    expect(adapter.toStream).toHaveBeenCalledWith('digraph {}', {
+    await expect(toBlob('digraph {}', { format: 'svg' })).resolves.toBe('blob');
+    expect(adapter.toBlob).toHaveBeenCalledWith('digraph {}', {
       format: 'svg',
     });
   });
@@ -27,11 +24,7 @@ describe('ts-graphviz/adapter', () => {
     const g = digraph('G', (g) => {
       g.edge(['a', 'b']);
     });
-    await toStream(g);
-    expect(adapter.toStream).toHaveBeenCalledWith(toDot(g), undefined);
-    await toFile(g, '/out.svg', { layout: 'neato' });
-    expect(adapter.toFile).toHaveBeenCalledWith(toDot(g), '/out.svg', {
-      layout: 'neato',
-    });
+    await expect(toBlob(g, { layout: 'neato' })).resolves.toBe('blob');
+    expect(adapter.toBlob).toHaveBeenCalledWith(toDot(g), { layout: 'neato' });
   });
 });

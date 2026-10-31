@@ -7,7 +7,5 @@ export * from "@ts-graphviz/adapter";
 
 export type DotInput = string | DotObjectModel;
 
-export declare function toFile<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(input: DotInput, path: string, options?: Options<T, F, L>): Promise<void>;
-
-export declare function toStream<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(input: DotInput, options?: Options<T, F, L>): Promise<ReadableStream<Uint8Array>>;
+export declare function toBlob<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(input: DotInput, options?: Options<T, F, L>): Promise<Blob>;
 ```

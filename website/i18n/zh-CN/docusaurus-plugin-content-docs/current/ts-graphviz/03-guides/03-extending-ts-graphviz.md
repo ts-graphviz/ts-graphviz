@@ -109,13 +109,13 @@ digraph {
 您可以通过扩展 `@ts-graphviz/adapter` 中的类型来指定自定义布局算法和输出格式。如下所示：
 
 ```typescript
-import { toFile } from '@ts-graphviz/adapter';
+import { toBlob } from '@ts-graphviz/adapter';
 
 // List the names your Graphviz plugins add for this call: they are accepted
 // at run time and widen the types of `format` and `layout` for this call
 // only. Nothing is changed globally, and `isFormat` / `isLayout` still
 // answer for the documented names only.
-await toFile('digraph { a -> b }', '/path/to/file', {
+const video = await toBlob('digraph { a -> b }', {
   customLayouts: ['my-custom-algorithm'],
   customFormats: ['mp4'],
   layout: 'my-custom-algorithm',
@@ -176,7 +176,7 @@ console.log(
 
 **用法**：
 
-- 将 DOT 字符串转换为流或文件。
+- 使用 `toBlob` 将 DOT 字符串渲染为 `Blob`。
 - 在需要将图表渲染为图像或其他格式的环境中使用。
 
 :::note
