@@ -22,6 +22,8 @@ Every error ts-graphviz raises on purpose is the standard error type that fits t
 | port containing `:` | `TypeError` | `TSG_ERR_INVALID_PORT` |
 | attribute list kind other than `Graph`, `Node`, `Edge` | `TypeError` | `TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND` |
 | no converter/printer plugin for a node | `Error` | `TSG_ERR_NO_PLUGIN` |
+| an AST or model that contains itself (`stringify`, `toModel`, `fromModel`, `toDot`) | `TypeError` | `TSG_ERR_CYCLIC_STRUCTURE` |
+| shared node objects reached more than `maxSharedNodes` times | `RangeError` | `TSG_ERR_SHARED_NODE_COUNT_EXCEEDED` |
 | `fromDot` on an AST node without a model | `TypeError` | `TSG_ERR_UNCONVERTIBLE_AST` |
 | `fromDot` on a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` |
 | `fromDot` on a source with several graphs (use `fromDotAll`) | `Error` | `TSG_ERR_MULTIPLE_GRAPHS` |

@@ -70,6 +70,21 @@ export interface ConvertToModelOptions {
    * @default 100000
    */
   maxEdgeTargets?: number;
+  /**
+   * How many times the conversion may reach a node object it has already
+   * reached, counted over the whole AST. An AST built in code (or by
+   * `structuredClone` or a custom deserialiser) can hold the same node
+   * object in more than one place, and such a node is converted in each:
+   * a subgraph shared twice at each of k levels is converted 2^k times.
+   * Each node object is reached once without counting; past the limit, the
+   * conversion throws a `RangeError` with code
+   * `TSG_ERR_SHARED_NODE_COUNT_EXCEEDED`. An AST that contains itself
+   * throws a `TypeError` with code `TSG_ERR_CYCLIC_STRUCTURE`, unless the
+   * walk passes the shared-node limit before it reaches the cycle.
+   * `0` disables the limit. A parsed AST shares no nodes.
+   * @default 100000
+   */
+  maxSharedNodes?: number;
 }
 
 /**

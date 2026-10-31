@@ -32,7 +32,7 @@ const nodeRef = (
   if (port?.includes(':')) {
     throw withCode(
       new TypeError(
-        `A port must not contain ':' (Graphviz reads it as "port:compass"): ${JSON.stringify(port)}`,
+        `A port must not contain ':' (Graphviz reads it as "port:compass"): ${typeof port === 'string' ? JSON.stringify(port.slice(0, 64)) : `a value of type ${typeof port}`}`,
       ),
       'TSG_ERR_INVALID_PORT',
     );
@@ -42,7 +42,7 @@ const nodeRef = (
   if (compass && (typeof compass !== 'string' || !isCompass(compass))) {
     throw withCode(
       new TypeError(
-        `A compass point must be one of n, ne, e, se, s, sw, w, nw, c and _: ${typeof compass === 'string' ? JSON.stringify(compass) : `a value of type ${typeof compass}`}`,
+        `A compass point must be one of n, ne, e, se, s, sw, w, nw, c and _: ${typeof compass === 'string' ? JSON.stringify((compass as string).slice(0, 64)) : `a value of type ${typeof compass}`}`,
       ),
       'TSG_ERR_INVALID_EDGE_TARGETS',
     );
