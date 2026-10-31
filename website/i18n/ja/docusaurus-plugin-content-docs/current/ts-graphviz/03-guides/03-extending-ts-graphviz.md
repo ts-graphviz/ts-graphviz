@@ -130,13 +130,13 @@ digraph {
 `@ts-graphviz/adapter` の型を拡張することで、カスタムレイアウトアルゴリズムや出力フォーマットを指定できます。以下はその方法です。
 
 ```typescript
-import { toFile } from '@ts-graphviz/adapter';
+import { toBlob } from '@ts-graphviz/adapter';
 
 // List the names your Graphviz plugins add for this call: they are accepted
 // at run time and widen the types of `format` and `layout` for this call
 // only. Nothing is changed globally, and `isFormat` / `isLayout` still
 // answer for the documented names only.
-await toFile('digraph { a -> b }', '/path/to/file', {
+const video = await toBlob('digraph { a -> b }', {
   customLayouts: ['my-custom-algorithm'],
   customFormats: ['mp4'],
   layout: 'my-custom-algorithm',

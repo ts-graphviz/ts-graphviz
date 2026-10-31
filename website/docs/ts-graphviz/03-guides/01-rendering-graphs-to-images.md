@@ -23,11 +23,10 @@ Ensure that [Graphviz](https://graphviz.org/download/) is installed on your syst
 
 ## Example:
 
-### Converting DOT to an Image Stream
+### Rendering DOT to a Blob
 
 ```typescript
-import { Writable } from 'node:stream';
-import { toStream } from 'ts-graphviz/adapter';
+import { toBlob } from 'ts-graphviz/adapter';
 
 const dot = `
   digraph example {
@@ -35,32 +34,37 @@ const dot = `
   }
 `;
 
-const stream = await toStream(dot, { format: 'svg' });
+const blob = await toBlob(dot, { format: 'svg' });
 
-// In Node.js
-await stream.pipeTo(Writable.toWeb(process.stdout));
-
-// In Deno: await stream.pipeTo(Deno.stdout.writable);
+console.log(blob.type); // 'image/svg+xml'
+const svg = await blob.text();
 ```
 
-### Writing DOT to an Image File
+`toBlob` returns once `dot` has succeeded, with the whole output in memory; every failure rejects the promise before you read anything. Read the Blob with `text()`, `arrayBuffer()` or `stream()`, or return it from a request handler with `new Response(blob)`.
+
+### Writing the Image to a File
+
+Where the output goes, and which paths are acceptable, is up to your application:
 
 ```typescript
-import { toFile } from 'ts-graphviz/adapter';
+import { writeFile } from 'node:fs/promises';
+import { toBlob } from 'ts-graphviz/adapter';
 
-const dot = `
-  digraph example {
-    node1 [ label = "My Node" ];
-  }
-`;
+declare const dot: string;
 
-await toFile(dot, './result.svg', { format: 'svg' });
+const blob = await toBlob(dot, { format: 'png' });
+await writeFile('./result.png', blob.stream());
+// In Deno: await Deno.writeFile('./result.png', blob.stream());
 ```
+
+:::tip
+In a browser, show an SVG Blob with `<img src>`, not as a document: a `blob:` URL of `image/svg+xml` opened in a tab or a frame runs with your application's origin.
+:::
 
 ## Explanation
 
-- **Executing the `dot` Command**: The adapter provides functions that internally execute the `dot` command with the provided DOT string and options.
-- **Output Formats**: Specify the desired output format (e.g., `svg`, `png`) through the options.
+- **Executing the `dot` Command**: `toBlob` executes the `dot` command with the provided DOT string (or model) and options.
+- **Output Formats**: Specify the desired output format (e.g., `svg`, `png`) through the options; the Blob's `type` is its media type.
 - **Runtime Compatibility**: Designed to work seamlessly in both Node.js and Deno environments.
 
 ## When to Use `ts-graphviz/adapter` module

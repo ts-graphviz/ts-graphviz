@@ -23,8 +23,8 @@ pattern unwrapped($object) {
 // What the adapter hands to the runtime must not inherit from
 // Object.prototype: child_process.spawn copies inherited enumerable keys
 // into the child's environment and some Node.js releases read an inherited
-// `shell`; Deno and the Web stream constructors read their options and
-// sources the same way.
+// `shell`; Deno, the Web stream constructors and Blob read their options
+// and sources the same way (an inherited `type` or `endings` applies).
 or {
   `spawn($_, $options)`,
   `spawn($_, $_, $options)`,
@@ -36,7 +36,8 @@ or {
   `new Deno.Command($_, $options)`,
   `Deno.open($_, $options)`,
   `new ReadableStream($options)`,
-  `new WritableStream($options)`
+  `new WritableStream($options)`,
+  `new Blob($_, $options)`
 } where {
   // The object itself, also under a type assertion.
   $options <: unwrapped($object),

@@ -19,6 +19,7 @@ export function f(options: { a?: number }, props: { b?: string }) {
   new Deno.Command('dot', { args: [] });
   Deno.open('x', { write: true });
   new ReadableStream({ start() {} });
+  new Blob([], { type: 'text/plain' });
   createWriteStream('x');
   let c: number | undefined;
   ({ a: c } = options);
