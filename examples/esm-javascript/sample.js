@@ -1,4 +1,3 @@
-import { devNull } from 'node:os';
 import {
   attribute as _,
   Digraph,
@@ -7,7 +6,7 @@ import {
   Subgraph,
   toDot,
 } from 'ts-graphviz';
-import { toFile } from 'ts-graphviz/adapter';
+import { toBlob } from 'ts-graphviz/adapter';
 import { parse } from 'ts-graphviz/ast';
 
 const G = new Digraph();
@@ -30,4 +29,5 @@ const dot = toDot(G);
 
 parse(dot);
 
-await toFile(dot, devNull);
+const svg = await (await toBlob(dot)).text();
+if (!svg.includes('<svg')) throw new Error('toBlob did not render SVG');

@@ -253,7 +253,7 @@ export interface CommonOptions<
    * Output formats a Graphviz plugin adds, accepted as `format` besides the
    * documented {@link Format} names, for this call only (`isFormat` still
    * answers for the documented names only). The names also widen the type
-   * of `format` for this call: `toStream(dot, { customFormats: ['mp4'],
+   * of `format` for this call: `toBlob(dot, { customFormats: ['mp4'],
    * format: 'mp4' })`.
    *
    * **These are trusted configuration defined in your application code. Do
@@ -317,7 +317,7 @@ export interface CommonOptions<
 }
 
 /**
- * The options of `toStream` / `toFile`. `F` and `L` are the names listed in
+ * The options of `toBlob`. `F` and `L` are the names listed in
  * `customFormats` and `customLayouts`, inferred from them.
  */
 export type Options<

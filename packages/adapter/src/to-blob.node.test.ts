@@ -1,12 +1,8 @@
 import { spawn } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 import { PassThrough, Writable } from 'node:stream';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CommandExecutionError } from './errors.js';
-import { toFile } from './to-file.node.js';
-import { toStream } from './to-stream.node.js';
+import { toBlob } from './to-blob.node.js';
 
 // Mock child_process.spawn inline to avoid hoisting
 vi.mock('node:child_process', () => ({
@@ -18,7 +14,7 @@ const spawnMock = spawn as unknown as ReturnType<typeof vi.fn>;
 
 type Callback = (...args: any) => any;
 
-describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
+describe('toBlob (Node adapter)', { tags: ['SM-4'] }, () => {
   beforeEach(() => {
     spawnMock.mockReset();
   });
@@ -43,7 +39,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       spawnMock.mockReturnValue(p);
 
       // Act
-      const resultPromise = toStream('input-data', {
+      const resultPromise = toBlob('input-data', {
         layout: 'dot',
         sanitize: false,
       });
@@ -56,9 +52,10 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       for (const handler of events.close) handler(0, null);
       const result = await resultPromise;
 
-      // Assert: a Web ReadableStream carrying stdout
-      expect(result).toBeInstanceOf(ReadableStream);
-      expect(await new Response(result).text()).toBe('<svg/>');
+      // Assert: a Blob of the format's media type carrying stdout
+      expect(result).toBeInstanceOf(Blob);
+      expect(result.type).toBe('image/svg+xml');
+      expect(await result.text()).toBe('<svg/>');
     });
   });
 
@@ -77,7 +74,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       proto.env = { TS_GRAPHVIZ_TEST: '1' };
       proto.TS_GRAPHVIZ_TEST = '1';
       try {
-        void toStream('digraph {}');
+        void toBlob('digraph {}');
       } finally {
         delete proto.shell;
         delete proto.env;
@@ -113,7 +110,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       const proto = Object.prototype as Record<string, unknown>;
       proto[key] = value;
       try {
-        const promise = toStream('input-data', { sanitize: false });
+        const promise = toBlob('input-data', { sanitize: false });
         stdout.end('<svg/>');
         await new Promise((r) => setImmediate(r));
         for (const handler of events.close) handler(0, null);
@@ -144,8 +141,8 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       };
       spawnMock.mockReturnValue(p);
 
-      // Act: call toStream first to set up listeners
-      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      // Act: call toBlob first to set up listeners
+      const promise = toBlob('dot', { layout: 'dot', sanitize: false });
       // Write stderr data after listeners are attached
       stderr.write('error occurred');
       stderr.end();
@@ -185,7 +182,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       spawnMock.mockReturnValue(p);
 
       // Act
-      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      const promise = toBlob('dot', { layout: 'dot', sanitize: false });
       const error = new Error('spawn failed');
       for (const handler of events.error) handler(error);
 
@@ -217,7 +214,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
         };
         spawnMock.mockReturnValue(p);
 
-        const promise = toStream('dot', { layout: 'dot', sanitize: false });
+        const promise = toBlob('dot', { layout: 'dot', sanitize: false });
         const error = new Error('read EIO');
         // Thrown out of emit() when nothing listens for it.
         pipes[pipe].emit('error', error);
@@ -238,7 +235,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
 
       // Act & Assert
       await expect(
-        toStream('dot', { layout: 'dot', sanitize: false }),
+        toBlob('dot', { layout: 'dot', sanitize: false }),
       ).rejects.toThrow('spawn crash');
     });
   });
@@ -265,7 +262,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       spawnMock.mockReturnValue(p);
       const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
 
-      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      const promise = toBlob('dot', { layout: 'dot', sanitize: false });
       p.stdin.destroy(epipe);
       await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
       await expect(promise).rejects.toMatchObject({
@@ -292,7 +289,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       };
       spawnMock.mockReturnValue(p);
 
-      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      const promise = toBlob('dot', { layout: 'dot', sanitize: false });
       // As Node.js does when the process exits: no error, just closed.
       p.stdin.destroy();
       await new Promise((r) => setImmediate(r));
@@ -319,7 +316,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       spawnMock.mockReturnValue(p);
       const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
 
-      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      const promise = toBlob('dot', { layout: 'dot', sanitize: false });
       // Destroyed with an error, then 'close' at once: the stdin error is
       // only delivered on the next tick, after 'close'.
       p.stdin.destroy(epipe);
@@ -347,7 +344,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
       spawnMock.mockReturnValue(p);
       const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
 
-      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      const promise = toBlob('dot', { layout: 'dot', sanitize: false });
       p.stdin.destroy(epipe);
       stderr.write('syntax error in line 1');
       await new Promise((r) => setImmediate(r));
@@ -390,7 +387,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
 
     it('kills once, although the failed kill reports an error', async () => {
       const p = unkillable();
-      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      const promise = toBlob('dot', { layout: 'dot', sanitize: false });
       const error = new Error('read EIO');
       p.stdout.emit('error', error);
 
@@ -401,7 +398,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
     it('reports the exit status, not the kill error, after an input failure', async () => {
       const p = unkillable();
       const epipe = Object.assign(new Error('write EPIPE'), { code: 'EPIPE' });
-      const promise = toStream('dot', { layout: 'dot', sanitize: false });
+      const promise = toBlob('dot', { layout: 'dot', sanitize: false });
       p.stdin.destroy(epipe);
       p.stderr.write('syntax error in line 1');
       await new Promise((r) => setImmediate(r));
@@ -432,7 +429,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
         try {
           const p = make();
           const epipe = new Error('write EPIPE');
-          const promise = toStream('dot', { layout: 'dot', sanitize: false });
+          const promise = toBlob('dot', { layout: 'dot', sanitize: false });
           const rejection = expect(promise).rejects.toMatchObject({
             code: 'TSG_ERR_COMMAND_FAILED',
             message: expect.stringContaining('write EPIPE'),
@@ -456,7 +453,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
         // A pipe the process never reads from: the write stays pending.
         p.stdin = new Writable({ write() {} }) as PassThrough;
         p.kill.mockImplementation(() => true);
-        const promise = toStream('dot', { layout: 'dot', sanitize: false });
+        const promise = toBlob('dot', { layout: 'dot', sanitize: false });
         p.stdout.end('<svg/>');
         await vi.advanceTimersByTimeAsync(0);
         p.emit('exit', 0, null);
@@ -480,7 +477,7 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
   });
 });
 
-describe('toStream (Node adapter) on Windows', { tags: ['SM-4'] }, () => {
+describe('toBlob (Node adapter) on Windows', { tags: ['SM-4'] }, () => {
   const platform = Object.getOwnPropertyDescriptor(process, 'platform');
   const setPlatform = (value: string) =>
     Object.defineProperty(process, 'platform', { ...platform, value });
@@ -494,7 +491,6 @@ describe('toStream (Node adapter) on Windows', { tags: ['SM-4'] }, () => {
 
   it('rejects a .bat or .cmd dotCommand before starting it', async () => {
     setPlatform('win32');
-    const path = join(tmpdir(), `ts-graphviz-bat-${process.pid}.svg`);
     for (const dotCommand of [
       'C:\\Graphviz\\dot.bat',
       'dot.CMD',
@@ -502,18 +498,14 @@ describe('toStream (Node adapter) on Windows', { tags: ['SM-4'] }, () => {
       'dot.cmd\t',
     ]) {
       await expect(
-        toStream('digraph {}', { dotCommand, sanitize: false }),
+        toBlob('digraph {}', { dotCommand, sanitize: false }),
       ).rejects.toMatchObject({
         name: 'CommandExecutionError',
         code: 'TSG_ERR_COMMAND_FAILED',
         command: dotCommand,
       });
-      await expect(
-        toFile('digraph {}', path, { dotCommand }),
-      ).rejects.toMatchObject({ code: 'TSG_ERR_COMMAND_FAILED' });
     }
     expect(spawnMock).not.toHaveBeenCalled();
-    expect(existsSync(path)).toBe(false);
 
     // On other platforms a file named *.bat is an ordinary executable.
     setPlatform('linux');
@@ -521,7 +513,7 @@ describe('toStream (Node adapter) on Windows', { tags: ['SM-4'] }, () => {
       throw new Error('stop here');
     });
     await expect(
-      toStream('digraph {}', { dotCommand: '/opt/dot.bat', sanitize: false }),
+      toBlob('digraph {}', { dotCommand: '/opt/dot.bat', sanitize: false }),
     ).rejects.toMatchObject({ code: 'TSG_ERR_COMMAND_FAILED' });
     expect(spawnMock).toHaveBeenCalledWith(
       '/opt/dot.bat',
@@ -531,7 +523,7 @@ describe('toStream (Node adapter) on Windows', { tags: ['SM-4'] }, () => {
   });
 });
 
-describe('toStream (Node adapter) checks the options', {
+describe('toBlob (Node adapter) checks the options', {
   tags: ['SM-4'],
 }, () => {
   beforeEach(() => {
@@ -550,7 +542,7 @@ describe('toStream (Node adapter) checks the options', {
       { library: 'lib.ps' },
     ]) {
       await expect(
-        toStream('digraph {}', { ...options, sanitize: false } as never),
+        toBlob('digraph {}', { ...options, sanitize: false } as never),
       ).rejects.toMatchObject({ code: 'TSG_ERR_INVALID_OPTION' });
     }
     expect(spawnMock).not.toHaveBeenCalled();

@@ -3,10 +3,7 @@ digraph "state_machine" {
   node [
     shape = "circle";
   ];
-  "DOT" -> "Stream" [
-    label = "toStream";
-  ];
-  "DOT" -> "File" [
-    label = "toFile";
+  "DOT" -> "Blob" [
+    label = "toBlob";
   ];
 }

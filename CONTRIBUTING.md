@@ -122,7 +122,7 @@ not been generated.
 
 `test/process-tag.test.ts` fails when a test file starts a process
 (`node:child_process`, `Deno.Command`, a `dotCommand:` option, or the
-adapter's `toStream`/`toFile`) without the tag, unless it mocks what it would
+adapter's `toBlob`) without the tag, unless it mocks what it would
 start; `test/process-guard.ts` makes `node:child_process` throw in a test that
 is not tagged `process`, and outside tests (start processes in a test or in
 `beforeEach`/`afterEach`, not while the file loads or in `beforeAll`/`afterAll`). Give every process test a timeout or an
