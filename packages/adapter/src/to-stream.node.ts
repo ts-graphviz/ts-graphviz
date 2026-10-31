@@ -23,7 +23,8 @@ const KILL_GRACE_MS = 1000;
  * @returns The output of the command as a stream of bytes.
  * @throws `DOMException` named `SecurityError` (`code` `TSG_ERR_UNSAFE_DOT`)
  * or `DotSyntaxError` when `sanitize` (on by default) rejects the source.
- * @throws {CommandExecutionError} when the command cannot be started, fails
+ * @throws {CommandExecutionError} when the command cannot be started (on
+ * Windows also when `dotCommand` is a `.bat` or `.cmd` script), fails
  * while reading its input, or exits with a non-zero code.
  * @throws `RangeError` with `code` `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` when the
  * output exceeds `maxOutputSize`.
@@ -38,7 +39,10 @@ export async function toStream<
   options?: Options<T, F, L>,
 ): Promise<ReadableStream<Uint8Array>> {
   const opts = ownAdapterOptions(options as AnyOptions | undefined);
-  const [command, args] = createCommandAndArgs(opts);
+  const [command, args] = createCommandAndArgs(
+    opts,
+    process.platform === 'win32',
+  );
   const limit = outputLimit(opts);
   const { signal } = opts;
   signal?.throwIfAborted();
