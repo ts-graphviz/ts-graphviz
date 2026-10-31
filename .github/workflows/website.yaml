@@ -4,6 +4,14 @@ name: Website
 # ts-graphviz/ts-graphviz.github.io, the organization Pages repository.
 # The site's content follows `main`; edits for the next major happen on the
 # development branch and go live when it is merged.
+#
+# The site is published only while `main` has no pending changesets, that is
+# while the packages on `main` are the ones on npm. Otherwise the guide and
+# the API reference would describe changes that are not released yet. Changes
+# merged meanwhile (a blog post, a typo fix) go live with the release: the
+# Version Packages commit consumes the changesets and touches packages/**,
+# which runs this workflow. To publish before that, run the workflow by hand
+# with `ignore-pending-changesets`.
 on:
   push:
     branches:
@@ -35,10 +43,18 @@ on:
       - .node-version
       - .github/workflows/website.yaml
   workflow_dispatch:
+    inputs:
+      ignore-pending-changesets:
+        description: Publish even though main has changes that are not released yet
+        type: boolean
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # On main a newer push must not cancel the run of a release: it may be one
+  # that cannot publish (a pending changeset), and the site would wait for the
+  # next release.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
@@ -47,6 +63,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    outputs:
+      released: ${{ steps.pending.outputs.released }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
@@ -56,6 +74,27 @@ jobs:
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
         with:
           persist-credentials: false
+      - name: Check for changes that are not released yet
+        id: pending
+        env:
+          IGNORE_PENDING_CHANGESETS: ${{ inputs.ignore-pending-changesets }}
+        run: |
+          pending=$(find .changeset -maxdepth 1 -name '*.md' ! -name README.md | sort)
+          if [ -z "$pending" ]; then
+            echo "released=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "released=false" >> "$GITHUB_OUTPUT"
+            # The deploy job publishes from main only.
+            if [ "$IGNORE_PENDING_CHANGESETS" = "true" ] && [ "$GITHUB_REF" = "refs/heads/main" ]; then
+              heading="To be published with ignore-pending-changesets, although these changesets are not released yet."
+            else
+              heading="Not published: these changesets are not released yet."
+            fi
+            {
+              echo "$heading"
+              echo "$pending" | sed 's/^/- /'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
       - name: Setup Node.js
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
@@ -100,7 +139,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
-    if: ${{ github.repository == 'ts-graphviz/ts-graphviz' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+    if: ${{ github.repository == 'ts-graphviz/ts-graphviz' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && (needs.build.outputs.released == 'true' || inputs.ignore-pending-changesets) }}
     concurrency:
       group: website-deploy
       cancel-in-progress: false
