@@ -10,7 +10,8 @@
  * start a container with the sandbox options (it runs rootless by default),
  * else Docker. The image (test/sandbox/
  * Dockerfile) is Node.js of the same major version as the Node.js running
- * this script, plus Graphviz. The repository is mounted read-only with the
+ * this script (or the nearest one it has, when there is no image for that
+ * version yet), plus Graphviz. The repository is mounted read-only with the
  * node_modules installed on the host, so this needs a Linux host on the
  * architecture the dependencies were installed for.
  *
@@ -60,11 +61,17 @@ if (!existsSync(join(root, 'packages/ast/src/dot-shim/parser/_parse.js'))) {
   if (codegen.status !== 0) fail('`pnpm codegen` failed');
 }
 
-const nodeMajor = process.versions.node.split('.')[0];
+// The Dockerfile's release lines, in order. A Node.js newer than all of
+// them (a pre-release, or a release without an image yet) gets the newest
+// image; an older or odd-numbered one gets the newest image below it.
 const supported = ['22', '24', '26'];
-if (!supported.includes(nodeMajor)) {
-  fail(
-    `no sandbox image for Node.js ${nodeMajor} (test/sandbox/Dockerfile has ${supported.join(', ')})`,
+const hostMajor = process.versions.node.split('.')[0];
+const nodeMajor =
+  supported.filter((major) => Number(major) <= Number(hostMajor)).at(-1) ??
+  supported[0];
+if (nodeMajor !== hostMajor) {
+  console.log(
+    `test:sandbox: no image for Node.js ${hostMajor} (test/sandbox/Dockerfile has ${supported.join(', ')}); using Node.js ${nodeMajor}`,
   );
 }
 // Tagged with the Dockerfile's hash: built once per change of it.
