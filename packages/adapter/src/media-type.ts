@@ -66,6 +66,6 @@ export function outputBlob(
     {
       __proto__: null,
       type: mediaType(format),
-    } as BlobPropertyBag,
+    } as ConstructorParameters<typeof Blob>[1],
   );
 }
