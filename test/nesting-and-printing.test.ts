@@ -16,16 +16,24 @@ describe('printing nested graphs', () => {
     // doubled the time per byte with every doubling of the depth. A ratio
     // does not depend on the machine.
     const limits = { maxNestingDepth: 1000 };
-    const perByte = (depth: number) => {
-      const model = fromDot(braces(depth), { parse: limits });
-      let bytes = 0;
+    const shallow = fromDot(braces(300), { parse: limits });
+    const deep = fromDot(braces(600), { parse: limits });
+    const perByte = (model: typeof shallow) => {
       const start = performance.now();
-      for (let i = 0; i < 3; i++)
-        bytes += toDot(model, { print: limits }).length;
+      const bytes = toDot(model, { print: limits }).length;
       return (performance.now() - start) / bytes;
     };
-    perByte(300); // warm up
-    expect(perByte(600) / perByte(300)).toBeLessThan(1.5);
+    perByte(shallow); // warm up
+    perByte(deep);
+    // The fastest of several runs, taken in turns, so that a pause of the
+    // runner (GC, a busy neighbour) does not count against one depth.
+    let fastestShallow = Number.POSITIVE_INFINITY;
+    let fastestDeep = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < 5; i++) {
+      fastestShallow = Math.min(fastestShallow, perByte(shallow));
+      fastestDeep = Math.min(fastestDeep, perByte(deep));
+    }
+    expect(fastestDeep / fastestShallow).toBeLessThan(1.5);
   });
 
   it('prints the same text as before', () => {
