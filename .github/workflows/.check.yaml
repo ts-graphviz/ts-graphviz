@@ -64,7 +64,9 @@ jobs:
   # Source repository: https://github.com/actions/dependency-review-action
   dependency_review:
     name: Dependency Review
-    if: github.event_name != 'push' || github.ref != 'refs/heads/main'
+    # Compares the dependencies of a pull request with its base; there is
+    # nothing to compare on a push.
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner

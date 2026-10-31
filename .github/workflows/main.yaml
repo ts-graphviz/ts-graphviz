@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - next
   pull_request:
 
 concurrency:
@@ -38,6 +39,10 @@ jobs:
     uses: ./.github/workflows/.e2e-test.yaml
     needs:
       - build
+
+  reproducible_build:
+    name: Reproducible Build
+    uses: ./.github/workflows/.reproducible-build.yaml
 
   release:
     name: Release

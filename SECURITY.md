@@ -83,6 +83,7 @@ For detailed security guidelines and validation examples, see the [@ts-graphviz/
   - Includes testing and static analysis in CI. This ensures that code is tested and issues are addressed before being merged into the main branch.
 - **Provenance**: [![Provenance](https://img.shields.io/badge/npm_package-provenanced-green)](https://www.npmjs.com/package/ts-graphviz)
   - [npm provenance](https://docs.npmjs.com/generating-provenance-statements) is a feature that allows users to verify the integrity and authenticity of npm packages. It helps ensure that the package is trustworthy and has not been tampered with.
+- **Reproducible Builds**: every pull request, and every push to `main` or `next`, builds and packs the packages twice, on separate runners, and fails if a tarball differs; see [Verifying a Release](#verifying-a-release) for how to rebuild a published version yourself.
 - **OpenSSF Scorecard**: [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ts-graphviz/ts-graphviz/badge)](https://scorecard.dev/viewer/?uri=github.com/ts-graphviz/ts-graphviz)
   - Evaluates supply chain security. It checks branch protection, maintenance status, and other security practices. The Scorecard is a CLI tool that automatically checks and evaluates security risks and can be integrated with CI tools like GitHub Actions for continuous evaluation. It publishes results to the OpenSSF API and creates a security badge. The score is published as a report.
 - **OpenSSF Best Practices Badge**: [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8396/badge)](https://www.bestpractices.dev/projects/8396)
@@ -90,3 +91,41 @@ For detailed security guidelines and validation examples, see the [@ts-graphviz/
 - **Enterprise Support**: [![Tidelift](https://tidelift.com/badges/package/npm/ts-graphviz?style=flat)](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=readme)
   - Available as part of the Tidelift Subscription. The maintainers of ts-graphviz and thousands of other packages work with Tidelift to deliver commercial support and maintenance for the open-source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=referral&utm_campaign=enterprise&utm_term=repo).
 
+## Verifying a Release
+
+The packages are built reproducibly: building the same commit twice gives tarballs with the same bytes. `pnpm pack` writes a fixed timestamp (1985-10-26), no owner and a fixed entry order into the tarball, the build writes neither dates, source maps nor absolute paths into the output, and CI checks on every change that two clean builds agree (`pnpm pack:check` runs the same check locally).
+
+So a published version can be rebuilt from its git tag and compared with what npm serves. Each package is tagged `<name>@<version>` (for example `ts-graphviz@3.0.13`, `@ts-graphviz/ast@3.0.7`). The build needs Node.js of the version in `.node-version` and the pnpm version in `packageManager` of `package.json` at that tag (Corepack or `pnpm env` installs them), because the output comes from the bundler and declaration tools those versions pin.
+
+```bash
+mkdir npm local
+
+# the release, as npm serves it
+npm view ts-graphviz@3.0.13 dist.integrity dist.tarball
+npm pack ts-graphviz@3.0.13 --pack-destination npm
+
+# the same version, built from its tag
+git clone https://github.com/ts-graphviz/ts-graphviz.git
+cd ts-graphviz
+git checkout ts-graphviz@3.0.13
+pnpm install --frozen-lockfile
+pnpm codegen
+pnpm build
+pnpm --filter ts-graphviz pack --pack-destination ../local
+
+# compare
+cd ..
+sha256sum npm/*.tgz local/*.tgz
+mkdir npm-x local-x
+tar -xzf npm/*.tgz -C npm-x
+tar -xzf local/*.tgz -C local-x
+diff -r npm-x local-x
+```
+
+What to expect:
+
+- The files under `package/lib`, the README, CHANGELOG and LICENSE are identical.
+- `package/package.json` may differ, but only in form: pnpm replaces the `workspace:` ranges of the internal dependencies with versions when it packs and when it publishes, and the two do not always write the keys in the same order; a registry or a publish step may also add fields a local pack never has (`_id`, `gitHead`, `_integrity`, `_resolved`, `_npm*` and similar). Compare it with the keys sorted (`jq -S . npm-x/package/package.json > a; jq -S . local-x/package/package.json > b; diff a b`). Because of this one file the tarball checksums (`dist.integrity`, `dist.shasum`) need not match a local pack byte for byte; the files inside do. (Checked with `ts-graphviz@3.0.13`: everything identical except the order of two `dependencies` keys.)
+- `npm audit signatures` checks the registry signature and the provenance attestation of each installed package, which ties the tarball to the GitHub Actions run and commit that published it. A rebuild confirms, independently of npm, that the published files are what that commit produces.
+
+If a file under `lib/` differs, report it privately (see [How to Report a Vulnerability](#how-to-report-a-vulnerability)) with both tarballs' checksums, the tag, and the Node.js and pnpm versions used.
