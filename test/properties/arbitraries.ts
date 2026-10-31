@@ -5,6 +5,7 @@ import type {
   EdgeTargetLikeTuple,
   ForwardRefNode,
   GraphBaseModel,
+  RootGraphConstructor,
   RootGraphModel,
 } from '@ts-graphviz/common';
 import fc from 'fast-check';
@@ -480,7 +481,8 @@ function applySubgraph(parent: GraphBaseModel, spec: SubgraphSpec): void {
  * taking its steps in order.
  */
 export function buildGraph(spec: GraphSpec): RootGraphModel {
-  const Class = spec.ordered
+  // The classes are generic, so a union of them is not constructable.
+  const Class: RootGraphConstructor = spec.ordered
     ? spec.directed
       ? OrderedDigraph
       : OrderedGraph

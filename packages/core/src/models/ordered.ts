@@ -1,4 +1,8 @@
-import type { ModelsContext } from '@ts-graphviz/common';
+import type {
+  AnyModelTypes,
+  ModelsContext,
+  ModelTypes,
+} from '@ts-graphviz/common';
 import { Digraph } from './Digraph.js';
 import { Graph } from './Graph.js';
 import { createModelsContext } from './models-context.js';
@@ -9,7 +13,9 @@ import { Subgraph } from './Subgraph.js';
  * added after other statements applies only to what follows it, as in DOT.
  * @group Models
  */
-export class OrderedSubgraph extends Subgraph {
+export class OrderedSubgraph<
+  M extends AnyModelTypes = ModelTypes,
+> extends Subgraph<M> {
   protected override get keepsDefaultsInPlace(): boolean {
     return true;
   }
@@ -20,7 +26,9 @@ export class OrderedSubgraph extends Subgraph {
  * place, and creates ordered subgraphs.
  * @group Models
  */
-export class OrderedGraph extends Graph {
+export class OrderedGraph<
+  M extends AnyModelTypes = ModelTypes,
+> extends Graph<M> {
   protected override get keepsDefaultsInPlace(): boolean {
     return true;
   }
@@ -36,7 +44,9 @@ export class OrderedGraph extends Graph {
  * and creates ordered subgraphs.
  * @group Models
  */
-export class OrderedDigraph extends Digraph {
+export class OrderedDigraph<
+  M extends AnyModelTypes = ModelTypes,
+> extends Digraph<M> {
   protected override get keepsDefaultsInPlace(): boolean {
     return true;
   }

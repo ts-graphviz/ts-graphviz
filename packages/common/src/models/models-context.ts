@@ -1,4 +1,6 @@
+import type { Schema } from '../attributes/schema.js';
 import type {
+  AnyModelTypes,
   DotConstructor,
   DotModel,
   EdgeConstructor,
@@ -8,6 +10,7 @@ import type {
   NodeModel,
   RootGraphConstructor,
   RootGraphModel,
+  SchemaOf,
   SubgraphConstructor,
   SubgraphModel,
 } from './models.js';
@@ -20,15 +23,21 @@ import type {
  * `@ts-graphviz/core` provides the default context (`defaultModelsContext()`)
  * and `createModelsContext()` to override part of it.
  *
+ * @typeParam M - The model types the classes create.
+ * @typeParam S - The schema of the models, which types the attributes the
+ * constructors take; by default the schema of `M` ({@link SchemaOf}).
  * @group Models Context
  */
-export interface ModelsContext<M extends ModelTypes = ModelTypes> {
-  Dot: DotConstructor<M['Dot']>;
-  Graph: RootGraphConstructor<M['Graph']>;
-  Digraph: RootGraphConstructor<M['Digraph']>;
-  Subgraph: SubgraphConstructor<M['Subgraph']>;
-  Node: NodeConstructor<M['Node']>;
-  Edge: EdgeConstructor<M['Edge']>;
+export interface ModelsContext<
+  M extends AnyModelTypes = ModelTypes,
+  S extends Schema = SchemaOf<M>,
+> {
+  Dot: DotConstructor<M['Dot'], S>;
+  Graph: RootGraphConstructor<M['Graph'], S>;
+  Digraph: RootGraphConstructor<M['Digraph'], S>;
+  Subgraph: SubgraphConstructor<M['Subgraph'], S>;
+  Node: NodeConstructor<M['Node'], S>;
+  Edge: EdgeConstructor<M['Edge'], S>;
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: matches any constructor arguments
