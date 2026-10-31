@@ -95,7 +95,8 @@ describe('renders with dot', { tags: ['process'] }, () => {
 `podman run` or `docker run` (Podman when it works, else Docker;
 `CONTAINER_RUNTIME=docker` or `podman` picks one). The image
 (`test/sandbox/Dockerfile`) is Node.js of the same major version as yours
-plus Graphviz, and the container has:
+(or the nearest one it has, when there is no image for your version yet; the
+script says so) plus Graphviz, and the container has:
 
 - no network (`--network none`);
 - the repository, with the `node_modules` installed on your machine, mounted
