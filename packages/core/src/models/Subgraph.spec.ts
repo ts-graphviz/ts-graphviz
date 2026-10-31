@@ -204,6 +204,8 @@ describe('isSubgraphCluster with the cluster attribute', () => {
     ['YES', true],
     ['1', true],
     ['0', false],
+    [1, true],
+    [0, false],
     ['no', false],
     ['maybe', false],
   ])('cluster = %j makes it a cluster: %p', (value, expected) => {
