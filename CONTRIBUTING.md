@@ -95,7 +95,8 @@ describe('renders with dot', { tags: ['process'] }, () => {
 `podman run` or `docker run` (Podman when it works, else Docker;
 `CONTAINER_RUNTIME=docker` or `podman` picks one). The image
 (`test/sandbox/Dockerfile`) is Node.js of the same major version as yours
-plus Graphviz, and the container has:
+(or the nearest one it has, when there is no image for your version yet; the
+script says so) plus Graphviz, and the container has:
 
 - no network (`--network none`);
 - the repository, with the `node_modules` installed on your machine, mounted
@@ -122,7 +123,7 @@ not been generated.
 
 `test/process-tag.test.ts` fails when a test file starts a process
 (`node:child_process`, `Deno.Command`, a `dotCommand:` option, or the
-adapter's `toStream`/`toFile`) without the tag, unless it mocks what it would
+adapter's `toBlob`) without the tag, unless it mocks what it would
 start; `test/process-guard.ts` makes `node:child_process` throw in a test that
 is not tagged `process`, and outside tests (start processes in a test or in
 `beforeEach`/`afterEach`, not while the file loads or in `beforeAll`/`afterAll`). Give every process test a timeout or an

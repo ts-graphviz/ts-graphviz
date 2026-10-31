@@ -23,10 +23,10 @@ description: 使用 ts-graphviz 将图表渲染为 SVG 或 PNG 等图像。
 
 ## 示例：
 
-### 将 DOT 转换为图像流
+### 将 DOT 渲染为 Blob
 
 ```typescript
-import { toStream } from 'ts-graphviz/adapter';
+import { toBlob } from 'ts-graphviz/adapter';
 
 const dot = `
   digraph example {
@@ -34,28 +34,32 @@ const dot = `
   }
 `;
 
-const stream = await toStream(dot, { format: 'svg' });
+const blob = await toBlob(dot, { format: 'svg' });
 
-// In Node.js
-stream.pipe(process.stdout);
-
-// In Deno
-await stream.pipeTo(Deno.stdout.writable);
+console.log(blob.type); // 'image/svg+xml'
+const svg = await blob.text();
 ```
 
-### 将 DOT 写入图像文件
+`toBlob` 在 `dot` 成功之后返回，整个输出都在内存中；所有失败都会在读取之前以 Promise 的 reject 报告。可以用 `text()`、`arrayBuffer()` 或 `stream()` 读取 Blob，也可以在请求处理程序中用 `new Response(blob)` 返回它。
+
+### 将图像写入文件
+
+输出写到哪里、允许哪些路径，由您的应用程序决定：
 
 ```typescript
-import { toFile } from 'ts-graphviz/adapter';
+import { writeFile } from 'node:fs/promises';
+import { toBlob } from 'ts-graphviz/adapter';
 
-const dot = `
-  digraph example {
-    node1 [ label = "My Node" ];
-  }
-`;
+declare const dot: string;
 
-await toFile(dot, './result.svg', { format: 'svg' });
+const blob = await toBlob(dot, { format: 'png' });
+await writeFile('./result.png', blob.stream());
+// In Deno: await Deno.writeFile('./result.png', blob.stream());
 ```
+
+:::tip
+在浏览器中请用 `<img src>` 显示 SVG Blob，而不要作为文档打开：在标签页或框架中打开 `image/svg+xml` 的 `blob:` URL，会以您的应用程序的源运行。
+:::
 
 ## 说明
 

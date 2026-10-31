@@ -7,10 +7,10 @@
  * tests run, test by test.
  *
  * A file can start a process when it uses `node:child_process`,
- * `Deno.Command`, a `dotCommand:` option, or the `toStream` / `toFile` of an
- * adapter that runs a command, unless it mocks what it would start: vi.mock
- * of `node:child_process`, of the adapter module or of the Node.js
- * `toStream` under it, or vi.stubGlobal of `Deno`.
+ * `Deno.Command`, a `dotCommand:` option, or the `toBlob` of an adapter
+ * that runs a command, unless it mocks what it would start: vi.mock of
+ * `node:child_process`, of the adapter module or of the Node.js `toBlob`
+ * under it, or vi.stubGlobal of `Deno`.
  *
  * Ways past the runtime guard are refused outright, tagged or not: worker
  * threads (they run without the guard), native bindings and ChildProcess.
@@ -30,12 +30,13 @@ const notProcess: Record<string, string> = {
     'builds the command and arguments from a dotCommand option; runs nothing',
   'test/properties/prototype-pollution.property.test.tsx':
     'dotCommand is a polluted Object.prototype key; builds the command only',
+  'packages/adapter/src/options.test.ts':
+    'checks option values with ownAdapterOptions; runs nothing',
 };
 
-/** Modules whose `toStream` / `toFile` start a command. */
+/** Modules whose `toBlob` starts a command. */
 const adapterModules = [
-  './to-stream.node.js',
-  './to-file.node.js',
+  './to-blob.node.js',
   './node.js',
   './deno.js',
   '@ts-graphviz/adapter',
@@ -75,7 +76,16 @@ function startsProcess(source: string): string[] {
   if (/\bDeno\.Command\b/.test(source) && !stubsDeno) {
     reasons.push('Deno.Command');
   }
-  if (/\bdotCommand\s*:/.test(source)) reasons.push('a dotCommand option');
+  // A dotCommand reaches whatever the file runs: node:child_process, or
+  // Deno.Command when the file runs nothing of Node.js.
+  const runsNode = /['"`]\.\/(?:to-blob\.node|node)\.js['"`]/.test(source);
+  if (
+    /\bdotCommand\s*:/.test(source) &&
+    !mocksChildProcess &&
+    !(stubsDeno && !runsNode)
+  ) {
+    reasons.push('a dotCommand option');
+  }
   for (const [, names, module] of source.matchAll(
     /import\s*\{([^}]*)\}\s*from\s*['"`]([^'"`]+)['"`]/g,
   )) {
@@ -84,13 +94,13 @@ function startsProcess(source: string): string[] {
         ? stubsDeno
         : mocksChildProcess ||
           mocks(source, escape(module)) ||
-          mocks(source, escape('./to-stream.node.js'));
+          mocks(source, escape('./to-blob.node.js'));
     if (
       adapterModules.includes(module) &&
-      /\b(?:toStream|toFile)\b/.test(names) &&
+      /\btoBlob\b/.test(names) &&
       !mocked
     ) {
-      reasons.push(`toStream / toFile from ${module}`);
+      reasons.push(`toBlob from ${module}`);
     }
   }
   return reasons;

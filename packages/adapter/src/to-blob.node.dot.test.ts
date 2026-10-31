@@ -16,8 +16,7 @@ import {
   expect,
   it,
 } from 'vitest';
-import { toFile } from './to-file.node.js';
-import { toStream } from './to-stream.node.js';
+import { toBlob } from './to-blob.node.js';
 
 let dotInstalled: boolean | undefined;
 /** Whether `dot` runs, asked by the first test that needs it. */
@@ -50,12 +49,12 @@ function useTempDir() {
   });
 }
 
-describe('toStream / toFile with the real dot (#1680)', {
+describe('toBlob with the real dot (#1680)', {
   tags: ['SM-4', 'process'],
 }, () => {
   useTempDir();
 
-  it('renders and writes the file whatever Object.prototype holds', {
+  it('renders whatever Object.prototype holds', {
     tags: ['SM-8'],
   }, async () => {
     const proto = Object.prototype as Record<string, unknown>;
@@ -63,33 +62,29 @@ describe('toStream / toFile with the real dot (#1680)', {
       ['allowHalfOpen', true],
       ['defaultEncoding', 'hex'],
       ['encoding', 'hex'],
-      ['start', 3],
-      ['fd', 1],
+      ['endings', 'native'],
+      ['type', 'text/html'],
     ] as const) {
-      const path = join(dir, `inherited-${key}.dot`);
-      writeFileSync(path, 'previous content');
       proto[key] = value;
+      let blob: Blob;
       try {
-        const stream = await toStream('digraph { a -> b }', {
-          format: 'dot',
-          signal: AbortSignal.timeout(5000),
-        });
-        expect(await new Response(stream).text(), key).toContain('a -> b');
-        await toFile('digraph { a -> b }', path, {
+        blob = await toBlob('digraph { a -> b }', {
           format: 'dot',
           signal: AbortSignal.timeout(5000),
         });
       } finally {
         delete proto[key];
       }
-      expect(readFileSync(path, 'utf8'), key).toMatch(/^digraph/);
+      expect(blob.type, key).toBe('text/vnd.graphviz');
+      expect(await blob.text(), key).toContain('a -> b');
     }
   });
 
   it('gives the bytes dot writes for a binary format', async () => {
     const dot = 'digraph { a -> b -> c; b -> d }';
-    const stream = await toStream(dot, { format: 'png', signal: signal() });
-    const bytes = Buffer.from(await new Response(stream).arrayBuffer());
+    const blob = await toBlob(dot, { format: 'png', signal: signal() });
+    expect(blob.type).toBe('image/png');
+    const bytes = Buffer.from(await blob.arrayBuffer());
     const direct = spawnSync('dot', ['-q', '-Tpng'], {
       input: dot,
       timeout: 30_000,
@@ -98,7 +93,7 @@ describe('toStream / toFile with the real dot (#1680)', {
   });
 
   it('renders', async () => {
-    const stream = await toStream('digraph { a -> b }', {
+    const stream = await toBlob('digraph { a -> b }', {
       format: 'dot',
       signal: signal(),
     });
@@ -107,7 +102,7 @@ describe('toStream / toFile with the real dot (#1680)', {
 
   it('reports invalid DOT as CommandExecutionError with the stderr', async () => {
     await expect(
-      toStream('digraph { a -> }', { sanitize: false, signal: signal() }),
+      toBlob('digraph { a -> }', { sanitize: false, signal: signal() }),
     ).rejects.toMatchObject({
       name: 'CommandExecutionError',
       code: 'TSG_ERR_COMMAND_FAILED',
@@ -117,7 +112,7 @@ describe('toStream / toFile with the real dot (#1680)', {
 
   it('stops a command that writes more than maxOutputSize', async () => {
     await expect(
-      toStream(big, {
+      toBlob(big, {
         format: 'svg',
         maxOutputSize: 10_000,
         signal: signal(),
@@ -131,7 +126,7 @@ describe('toStream / toFile with the real dot (#1680)', {
   it('kills the command when the signal aborts and rejects with its reason', async () => {
     const started = Date.now();
     await expect(
-      toStream(big, {
+      toBlob(big, {
         format: 'svg',
         layout: 'neato',
         signal: AbortSignal.timeout(200),
@@ -144,14 +139,15 @@ describe('toStream / toFile with the real dot (#1680)', {
     const controller = new AbortController();
     controller.abort();
     await expect(
-      toStream('digraph {}', { signal: controller.signal }),
+      toBlob('digraph {}', { signal: controller.signal }),
     ).rejects.toMatchObject({ name: 'AbortError' });
   });
 
   it('reports an argument the OS cannot pass as CommandExecutionError', async () => {
     await expect(
-      toStream('digraph {}', {
-        attributes: { graph: { label: 'a\0b' } },
+      // `library` is configuration: checked to be strings, not for NUL.
+      toBlob('digraph {}', {
+        library: ['a\0b'],
         sanitize: false,
         signal: signal(),
       }),
@@ -176,7 +172,7 @@ describe('toStream / toFile with the real dot (#1680)', {
     const started = Date.now();
     // More than a pipe buffer, so writing the input fails (EPIPE).
     await expect(
-      toStream(`digraph { ${'a -> b; '.repeat(50_000)} }`, {
+      toBlob(`digraph { ${'a -> b; '.repeat(50_000)} }`, {
         dotCommand: script,
         sanitize: false,
         signal: signal(),
@@ -204,7 +200,7 @@ describe('toStream / toFile with the real dot (#1680)', {
     );
     children.push(`${script}.child`);
     const started = Date.now();
-    const error = await toStream(`digraph { ${'a -> b; '.repeat(50_000)} }`, {
+    const error = await toBlob(`digraph { ${'a -> b; '.repeat(50_000)} }`, {
       dotCommand: script,
       sanitize: false,
       signal: signal(),
@@ -217,16 +213,9 @@ describe('toStream / toFile with the real dot (#1680)', {
     );
     expect(Date.now() - started).toBeLessThan(10_000);
   });
-
-  it('toFile replaces an existing longer file', async () => {
-    const path = join(dir, 'out.dot');
-    writeFileSync(path, 'X'.repeat(5000));
-    await toFile('digraph { a }', path, { format: 'dot', signal: signal() });
-    expect(readFileSync(path, 'utf8')).not.toContain('XXXX');
-  });
 });
 
-describe('toStream / toFile check the source with sanitize (#1681)', {
+describe('toBlob checks the source with sanitize (#1681)', {
   tags: ['SM-7', 'process'],
 }, () => {
   useTempDir();
@@ -242,25 +231,20 @@ describe('toStream / toFile check the source with sanitize (#1681)', {
   });
 
   it('rejects a source that reads a file, before running the command', async () => {
-    await expect(toStream(leak, { format: 'ps' })).rejects.toMatchObject({
+    await expect(toBlob(leak, { format: 'ps' })).rejects.toMatchObject({
       name: 'SecurityError',
       code: 'TSG_ERR_UNSAFE_DOT',
     });
-    const path = join(dir, 'not-written.ps');
-    await expect(toFile(leak, path, { format: 'ps' })).rejects.toMatchObject({
-      code: 'TSG_ERR_UNSAFE_DOT',
-    });
-    expect(() => readFileSync(path)).toThrow();
   });
 
   it('rejects a javascript: link', async () => {
     await expect(
-      toStream('digraph { a [URL="javascript:alert(1)"] }'),
+      toBlob('digraph { a [URL="javascript:alert(1)"] }'),
     ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
   });
 
   it('rejects DOT that does not parse with DotSyntaxError', async () => {
-    await expect(toStream('digraph { a -> }')).rejects.toMatchObject({
+    await expect(toBlob('digraph { a -> }')).rejects.toMatchObject({
       name: 'DotSyntaxError',
       code: 'TSG_ERR_DOT_SYNTAX',
     });
@@ -268,30 +252,39 @@ describe('toStream / toFile check the source with sanitize (#1681)', {
 
   it('passes parser limits on', async () => {
     await expect(
-      toStream('digraph { a; b; c }', { sanitize: { maxASTNodes: 3 } }),
+      toBlob('digraph { a; b; c }', { sanitize: { maxASTNodes: 3 } }),
     ).rejects.toMatchObject({ code: 'TSG_ERR_DOT_SYNTAX' });
   });
 
   it('checks the attributes option, which reaches dot as -G/-N/-E arguments', async () => {
     await expect(
-      toStream('digraph { a }', {
+      toBlob('digraph { a }', {
         format: 'ps',
         attributes: { node: { shape: 'epsf', shapefile: secret } as never },
       }),
     ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
-    // dot splits an argument at its first '=': this key sets `image`.
+    // dot splits an argument at its first '=': this key would set
+    // `image`. Such a key is refused as an option, sanitize or not.
+    for (const sanitize of [true, false]) {
+      await expect(
+        toBlob('digraph { a }', {
+          attributes: { node: { [`image=${secret}`]: true } as never },
+          sanitize,
+        }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_INVALID_OPTION' });
+    }
     await expect(
-      toStream('digraph { a }', {
-        attributes: { node: { [`image=${secret}`]: true } as never },
+      toBlob('digraph { a }', {
+        attributes: { node: { image: secret } as never },
       }),
     ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
-    // A NUL is refused by the parser before the safety rules run.
+    // So is a NUL, which no command-line argument can hold.
     await expect(
-      toStream('digraph { a }', {
+      toBlob('digraph { a }', {
         attributes: { graph: { label: 'a\0b' } },
       }),
-    ).rejects.toMatchObject({ code: 'TSG_ERR_DOT_SYNTAX' });
-    const stream = await toStream('digraph { a }', {
+    ).rejects.toMatchObject({ code: 'TSG_ERR_INVALID_OPTION' });
+    const stream = await toBlob('digraph { a }', {
       format: 'dot',
       signal: signal(),
       attributes: {
@@ -305,25 +298,25 @@ describe('toStream / toFile check the source with sanitize (#1681)', {
 
   it('passes the policy on, and checks for its own format', async () => {
     await expect(
-      toStream('digraph { a [foo=x] }', { sanitize: { policy: 'strict' } }),
+      toBlob('digraph { a [foo=x] }', { sanitize: { policy: 'strict' } }),
     ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
     await expect(
-      toStream('digraph { a [fontname="Times New Roman"] }', {
+      toBlob('digraph { a [fontname="Times New Roman"] }', {
         format: 'ps',
       }),
     ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
-    const svg = await toStream('digraph { a [fontname="Times New Roman"] }', {
+    const svg = await toBlob('digraph { a [fontname="Times New Roman"] }', {
       signal: signal(),
     });
     expect(await new Response(svg).text()).toContain('Times New Roman');
     await expect(
-      toStream('digraph { a }', { format: 'vml' as 'svg' }),
+      toBlob('digraph { a }', { format: 'vml' as 'svg' }),
     ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
   });
 
   it('renders the source unchecked with sanitize: false', async () => {
     // Graphviz itself copies the file into the output: what sanitize prevents.
-    const stream = await toStream(leak, {
+    const stream = await toBlob(leak, {
       format: 'ps',
       sanitize: false,
       signal: signal(),

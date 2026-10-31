@@ -3,7 +3,7 @@ import {
   type AttributeKey,
   ownOptions,
 } from '@ts-graphviz/common';
-import type { Layout, Options } from './types.js';
+import type { AnyOptions } from './options.js';
 
 /**
  * escapeValue is a function that escapes a given Attribute value of a given AttributeKey.
@@ -34,7 +34,7 @@ export function escapeValue<T extends AttributeKey>(
  * @internal
  */
 export function* attributeArgs(
-  attributes: Options['attributes'],
+  attributes: AnyOptions['attributes'],
 ): Generator<[flag: 'G' | 'N' | 'E', arg: string]> {
   // Own properties only, also when no attributes are given (#1757).
   const { graph, node, edge } = ownOptions(attributes);
@@ -57,9 +57,7 @@ export function* attributeArgs(
  * @param options The Options object used to create command arguments
  * @returns A generator that yields strings for command arguments
  */
-export function* createCommandArgs<T extends Layout>(
-  options: Options<T>,
-): Generator<string> {
+export function* createCommandArgs(options: AnyOptions): Generator<string> {
   // Own properties only, whoever calls this (#1757).
   const own = ownOptions(options);
   const {

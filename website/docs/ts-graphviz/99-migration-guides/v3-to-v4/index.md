@@ -67,6 +67,7 @@ try {
 | adapter in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
 | Graphviz command failed | `CommandExecutionError` (`Error`) | `TSG_ERR_COMMAND_FAILED` |
 | Graphviz output over `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
+| an adapter option outside its type or range | `TypeError` / `RangeError` | `TSG_ERR_INVALID_OPTION` |
 | `sanitize` (and so the adapter) rejects the DOT | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
 
 Code that matched on `error.message` should match on `error.code`.
@@ -124,9 +125,26 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 
 ## 8. `@ts-graphviz/adapter`
 
-- **`toStream` / `toFile` check the source with `sanitize` first** (from `@ts-graphviz/ast`, now a dependency of the adapter). DOT that makes Graphviz read a file (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), write a link other than relative, `http`, `https` or `mailto`, or put raw text into PostScript, image map, `plain`, JSON or XML output (font names other than plain names, unknown `style` values, colors with whitespace, control characters, line breaks in names); `ismap` and output formats that have not been checked (e.g. `vml`, `fig`) are refused. Such DOT rejects with a `DOMException` named `SecurityError` (code `TSG_ERR_UNSAFE_DOT`), and DOT that does not parse rejects with `DotSyntaxError` instead of a `CommandExecutionError` from `dot`. With `sanitize` on, the command gets the source as reprinted by the parser. If your application renders its own images or relies on Graphviz's error messages, pass `sanitize: false`: the source then reaches Graphviz unchanged, without parsing, and DOT that does not parse fails with a `CommandExecutionError` from `dot`; to raise the parser limits, pass them as `sanitize: { maxASTNodes: … }`.
-- `toStream` returns a Web `ReadableStream<Uint8Array>` on every runtime (Node.js included). Replace `stream.pipe(dest)` with `stream.pipeTo(Writable.toWeb(dest))`, `for await (const chunk of stream)`, or `Readable.fromWeb(stream)`.
-- `ts-graphviz/adapter`'s `toStream` / `toFile` also accept a model and call `toDot` for you.
+- **`toBlob` checks the source with `sanitize` first** (from `@ts-graphviz/ast`, now a dependency of the adapter). DOT that makes Graphviz read a file (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), write a link other than relative, `http`, `https` or `mailto`, or put raw text into PostScript, image map, `plain`, JSON or XML output (font names other than plain names, unknown `style` values, colors with whitespace, control characters, line breaks in names); `ismap` and output formats that have not been checked (e.g. `vml`, `fig`) are refused. Such DOT rejects with a `DOMException` named `SecurityError` (code `TSG_ERR_UNSAFE_DOT`), and DOT that does not parse rejects with `DotSyntaxError` instead of a `CommandExecutionError` from `dot`. With `sanitize` on, the command gets the source as reprinted by the parser. If your application renders its own images or relies on Graphviz's error messages, pass `sanitize: false`: the source then reaches Graphviz unchanged, without parsing, and DOT that does not parse fails with a `CommandExecutionError` from `dot`; to raise the parser limits, pass them as `sanitize: { maxASTNodes: … }`.
+- **`toStream` and `toFile` are replaced by `toBlob`**, which takes the same options and returns the output as a `Blob` once `dot` has succeeded. Its `type` is the media type of the format (`image/svg+xml`, `image/png`, …), or empty for formats without a well-known one.
+
+  ```ts
+  // v3
+  const stream = await toStream(dot, { format: 'svg' });
+  stream.pipe(process.stdout);
+  await toFile(dot, './result.svg', { format: 'svg' });
+
+  // v4
+  import { writeFile } from 'node:fs/promises';
+  import { Writable } from 'node:stream';
+
+  const blob = await toBlob(dot, { format: 'svg' });
+  await blob.stream().pipeTo(Writable.toWeb(process.stdout));
+  await writeFile('./result.svg', blob.stream());
+  ```
+
+  The adapter no longer writes files: choosing the path is your application's job (on Deno it needs no `--allow-write`). For the Node.js stream API, use `Readable.fromWeb(blob.stream())`.
+- `ts-graphviz/adapter`'s `toBlob` also accepts a model and calls `toDot` for you.
 - Command failures reject with `CommandExecutionError` (`command`, `exit.code`, `exit.signal`, `exit.stderr`, `cause`), including a failure to write the DOT source to the command.
 - `-G`/`-N`/`-E` attribute values are passed verbatim (3.x wrapped values containing whitespace in literal quotes). fdp `grid` and `oldAttractive` follow the Graphviz defaults (grid on, old attractive force off).
 - The browser entry is typed with the real `Options`.

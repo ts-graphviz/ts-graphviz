@@ -9,4 +9,4 @@ const g: tsg.RootGraphModel = tsg.digraph((g) => {
   g.edge(['a', 'b'], { color: 'red' });
 });
 const text: string = ast.stringify(ast.parse(tsg.toDot(g)));
-adapter.toStream(text, { format: 'svg' });
+adapter.toBlob(text, { format: 'svg' });

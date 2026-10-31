@@ -19,7 +19,7 @@ import {
   toDot,
   withContext,
 } from 'ts-graphviz';
-import { toStream } from 'ts-graphviz/adapter';
+import { toBlob } from 'ts-graphviz/adapter';
 import {
   type DotASTNode,
   type NodeASTNode,
@@ -85,8 +85,13 @@ parseFragment('a', 'Statement');
 const printed: string = stringify(dot) + astPackage.stringify(nodeAST);
 
 // adapter options
-await toStream(g, { format: 'svg', layout: 'neato', noop: 1 });
-await adapter.toStream(printed, {
+const blob: Blob = await toBlob(g, {
+  format: 'svg',
+  layout: 'neato',
+  noop: 1,
+});
+await blob.text();
+await adapter.toBlob(printed, {
   layout: 'fdp',
   grid: true,
   sanitize: false,
@@ -94,9 +99,9 @@ await adapter.toStream(printed, {
   attributes: { node: { shape: 'box' } },
 });
 // @ts-expect-error neato's option on another layout
-await adapter.toFile(printed, 'out.svg', { layout: 'dot', noop: 1 });
+await adapter.toBlob(printed, { layout: 'dot', noop: 1 });
 // @ts-expect-error not an output format
-await adapter.toStream(printed, { format: 'docx' });
+await adapter.toBlob(printed, { format: 'docx' });
 
 try {
   parse('{');

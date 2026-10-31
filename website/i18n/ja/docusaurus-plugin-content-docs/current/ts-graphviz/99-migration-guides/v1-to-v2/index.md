@@ -60,7 +60,7 @@ npm install ts-graphviz@^2.0.0
 
 **例：**
 
-```typescript
+```typescript no-check
 import { digraph } from 'ts-graphviz';
 import { toFile } from 'ts-graphviz/adapter';
 import { parse } from 'ts-graphviz/ast';

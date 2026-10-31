@@ -43,11 +43,16 @@ async function testEsmImport() {
     console.log('✅ Successfully parsed DOT string');
 
     // Test 5: Test adapter functionality
-    console.log('\nTest 5: Testing adapter (write to devNull)');
-    const { toFile } = adapter;
-    const { devNull } = await import('node:os');
-    await toFile(dot, devNull);
-    console.log('✅ Successfully wrote to file');
+    console.log('\nTest 5: Testing adapter (render to a Blob)');
+    const { toBlob } = adapter;
+    const blob = await toBlob(dot);
+    if (
+      blob.type !== 'image/svg+xml' ||
+      !(await blob.text()).includes('<svg')
+    ) {
+      throw new Error('toBlob did not render SVG');
+    }
+    console.log('✅ Successfully rendered SVG');
 
     console.log(
       '\n🎉 All tests passed! ESM package works correctly in CJS project.',
