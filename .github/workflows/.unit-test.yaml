@@ -54,7 +54,11 @@ jobs:
     - name: Use Node.js latest
       uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
       with:
-        node-version: latest
+        # The newest stable release. `latest` would also pick up the
+        # prereleases (alphas) that nodejs.org lists; with check-latest,
+        # `*` resolves to the newest stable release in setup-node's manifest.
+        node-version: '*'
+        check-latest: true
         cache: pnpm
     - run: pnpm install --frozen-lockfile
     - run: pnpm test
