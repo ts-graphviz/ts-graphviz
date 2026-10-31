@@ -93,6 +93,7 @@ export class PackageManager {
         'e2e-test',
         '--access',
         'public',
+        '--no-git-checks',
       ];
 
       const publishEnv: NodeJS.ProcessEnv = {
@@ -103,10 +104,8 @@ export class PackageManager {
         NPM_CONFIG_GIT_TAG_VERSION: 'false',
         NPM_CONFIG_COMMIT_HOOKS: 'false',
         NPM_CONFIG_FUND: 'false',
-        // Skip pnpm's git checks, as the package.json files are rewritten for
-        // the test. Set here, not as --no-git-checks: pnpm passes that on to
-        // npm publish, and newer npm rejects it as an unknown flag.
-        NPM_CONFIG_GIT_CHECKS: 'false',
+        // PNPM specific git check disable
+        PNPM_CONFIG_GIT_CHECKS: 'false',
       };
 
       // Use temporary npmrc via environment variable if available
