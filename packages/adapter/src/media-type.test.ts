@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mediaType, outputBlob } from './media-type.js';
+import { mediaType, outputBlob, outputPart } from './media-type.js';
 
 describe('mediaType', () => {
   it('is the type of SVG without a format', () => {
@@ -75,10 +75,10 @@ describe('mediaType', () => {
 });
 
 describe('outputBlob', () => {
-  it('joins the chunks into a Blob of the format', async () => {
+  it('joins the parts into a Blob of the format', async () => {
     const encoder = new TextEncoder();
     const blob = outputBlob(
-      [encoder.encode('<svg'), encoder.encode('/>')],
+      [outputPart(encoder.encode('<svg')), outputPart(encoder.encode('/>'))],
       undefined,
     );
     expect(blob).toBeInstanceOf(Blob);
@@ -89,8 +89,17 @@ describe('outputBlob', () => {
 
   it('keeps the bytes as they are', async () => {
     const bytes = new Uint8Array([0, 13, 10, 255, 10]);
-    const blob = outputBlob([bytes], 'png');
+    const blob = outputBlob([outputPart(bytes)], 'png');
     expect(new Uint8Array(await blob.arrayBuffer())).toStrictEqual(bytes);
+  });
+
+  it('does not hold the chunks it was made from', async () => {
+    const chunk = new Uint8Array([1, 2, 3]);
+    const blob = outputBlob([outputPart(chunk)], 'png');
+    chunk.fill(0);
+    expect(new Uint8Array(await blob.arrayBuffer())).toStrictEqual(
+      new Uint8Array([1, 2, 3]),
+    );
   });
 
   it('is empty without output', async () => {

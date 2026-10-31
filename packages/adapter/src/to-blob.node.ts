@@ -2,7 +2,7 @@ import { type SpawnOptionsWithoutStdio, spawn } from 'node:child_process';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
-import { outputBlob } from './media-type.js';
+import { outputBlob, outputPart } from './media-type.js';
 import type { AnyOptions } from './options.js';
 import { ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
@@ -128,7 +128,7 @@ export async function toBlob<
       );
     });
 
-    const chunks: Buffer[] = [];
+    const parts: Blob[] = [];
     let size = 0;
     // Node.js creates these pipes with options of its own that inherit from
     // Object.prototype, so an inherited `encoding` would turn the output
@@ -144,7 +144,7 @@ export async function toBlob<
         fail(outputLimitExceeded(command, limit));
         return;
       }
-      chunks.push(chunk);
+      parts.push(outputPart(chunk));
     });
     const errors = new TailBuffer();
     stderr.on('data', (text: string) =>
@@ -183,7 +183,7 @@ export async function toBlob<
       const cause =
         inputError === undefined ? undefined : { cause: inputError };
       if (code === 0 && inputError === undefined) {
-        settle(() => resolve(outputBlob(chunks, opts.format)));
+        settle(() => resolve(outputBlob(parts, opts.format)));
       } else if (code !== 0 && code !== null) {
         // The command failed on its own (e.g. a syntax error closes stdin
         // early); its exit status and stderr explain why.

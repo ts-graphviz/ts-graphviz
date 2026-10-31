@@ -54,15 +54,25 @@ export function mediaType(format = 'svg'): string {
 }
 
 /**
- * The collected output as a Blob of the type of `format`. The options
- * object has no prototype: an inherited `endings` or `type` is never read.
+ * A chunk of output, copied into a Blob as it arrives so that the chunk
+ * itself can be collected. Collecting the chunks and copying them all into
+ * one Blob at the end would hold the output twice at that moment.
+ */
+export function outputPart(chunk: Uint8Array): Blob {
+  return new Blob([chunk as Uint8Array<ArrayBuffer>]);
+}
+
+/**
+ * The collected output parts as one Blob of the type of `format`; the parts
+ * are referenced, not copied again. The options object has no prototype: an
+ * inherited `endings` or `type` is never read.
  */
 export function outputBlob(
-  chunks: readonly Uint8Array[],
+  parts: readonly Blob[],
   format: string | undefined,
 ): Blob {
   return new Blob(
-    chunks as Uint8Array<ArrayBuffer>[],
+    parts as Blob[],
     {
       __proto__: null,
       type: mediaType(format),
