@@ -2,6 +2,7 @@ import { type SpawnOptionsWithoutStdio, spawn } from 'node:child_process';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
+import type { AnyOptions } from './options.js';
 import { ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
 import type { Layout, Options } from './types.js';
@@ -22,18 +23,26 @@ const KILL_GRACE_MS = 1000;
  * @returns The output of the command as a stream of bytes.
  * @throws `DOMException` named `SecurityError` (`code` `TSG_ERR_UNSAFE_DOT`)
  * or `DotSyntaxError` when `sanitize` (on by default) rejects the source.
- * @throws {CommandExecutionError} when the command cannot be started, fails
+ * @throws {CommandExecutionError} when the command cannot be started (on
+ * Windows also when `dotCommand` is a `.bat` or `.cmd` script), fails
  * while reading its input, or exits with a non-zero code.
  * @throws `RangeError` with `code` `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` when the
  * output exceeds `maxOutputSize`.
  * @throws `signal.reason` when `signal` aborts.
  */
-export async function toStream<T extends Layout>(
+export async function toStream<
+  const F extends string = never,
+  const L extends string = never,
+  T extends Layout | L = Layout | L,
+>(
   dot: string,
-  options?: Options<T>,
+  options?: Options<T, F, L>,
 ): Promise<ReadableStream<Uint8Array>> {
-  const opts = ownAdapterOptions(options);
-  const [command, args] = createCommandAndArgs(opts);
+  const opts = ownAdapterOptions(options as AnyOptions | undefined);
+  const [command, args] = createCommandAndArgs(
+    opts,
+    process.platform === 'win32',
+  );
   const limit = outputLimit(opts);
   const { signal } = opts;
   signal?.throwIfAborted();

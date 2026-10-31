@@ -65,6 +65,7 @@ try {
 | adapter in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
 | Graphviz command failed | `CommandExecutionError` (`Error`) | `TSG_ERR_COMMAND_FAILED` |
 | Graphviz output over `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
+| an adapter option outside its type or range | `TypeError` / `RangeError` | `TSG_ERR_INVALID_OPTION` |
 | `sanitize` (and so the adapter) rejects the DOT | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
 
 Code that matched on `error.message` should match on `error.code`.

@@ -26,11 +26,15 @@ export type DotInput = string | DotObjectModel;
  * @param input - A DOT source or a model (rendered with `toDot`).
  * @param options - Layout, output format and the other options of the command.
  */
-export function toStream<T extends Layout>(
+export function toStream<
+  const F extends string = never,
+  const L extends string = never,
+  T extends Layout | L = Layout | L,
+>(
   input: DotInput,
-  options?: Options<T>,
+  options?: Options<T, F, L>,
 ): Promise<ReadableStream<Uint8Array>> {
-  return toStreamFromDot(toDotSource(input), options);
+  return toStreamFromDot<F, L, T>(toDotSource(input), options);
 }
 
 /**
@@ -40,12 +44,12 @@ export function toStream<T extends Layout>(
  * @param path - The file to write.
  * @param options - Layout, output format and the other options of the command.
  */
-export function toFile<T extends Layout>(
-  input: DotInput,
-  path: string,
-  options?: Options<T>,
-): Promise<void> {
-  return toFileFromDot(toDotSource(input), path, options);
+export function toFile<
+  const F extends string = never,
+  const L extends string = never,
+  T extends Layout | L = Layout | L,
+>(input: DotInput, path: string, options?: Options<T, F, L>): Promise<void> {
+  return toFileFromDot<F, L, T>(toDotSource(input), path, options);
 }
 
 function toDotSource(input: DotInput): string {

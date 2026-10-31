@@ -29,6 +29,7 @@ Every error ts-graphviz raises on purpose is the standard error type that fits t
 | adapter used in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
 | Graphviz command failed | `CommandExecutionError` (an `Error`) | `TSG_ERR_COMMAND_FAILED` |
 | Graphviz output exceeds `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
+| an adapter option outside its type or range | `TypeError` / `RangeError` | `TSG_ERR_INVALID_OPTION` |
 | `sanitize` rejects the DOT | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
 
 - `isTsGraphvizError(e)` tells whether a value is one of these errors. It judges by shape (an error whose own `code` is in `ERROR_CODES`), so it works across realms and package copies. Compare `e.code` to narrow further.

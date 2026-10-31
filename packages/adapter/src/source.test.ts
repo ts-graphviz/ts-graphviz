@@ -1,6 +1,7 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import type { attributeArgs } from './create-command-args.js';
+import { ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
 
 const dot = 'digraph { a }';
@@ -69,6 +70,30 @@ describe('attributes passed as arguments', { tags: ['SM-4'] }, () => {
         },
       ),
       { numRuns: 500 },
+    );
+  });
+});
+
+describe('a custom format while sanitize is on', { tags: ['SM-4'] }, () => {
+  it('is refused unless the name before ":" is a checked format', () => {
+    expect(() => sourceToRender(dot, { format: 'mp4' })).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }),
+    );
+    expect(sourceToRender(dot, { format: 'png:cairo' })).toBe(
+      sourceToRender(dot, { format: 'png' }),
+    );
+    expect(sourceToRender(dot, { format: 'mp4', sanitize: false })).toBe(dot);
+  });
+
+  it('listed in customFormats, is checked by sanitize as the adapter reads it', () => {
+    const listed = (format: string) =>
+      sourceToRender(
+        dot,
+        ownAdapterOptions({ customFormats: [format], format }),
+      );
+    expect(listed('png:cairo')).toBe(sourceToRender(dot, { format: 'png' }));
+    expect(() => listed('mp4')).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }),
     );
   });
 });

@@ -1,7 +1,11 @@
 import { spawn } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { PassThrough, Writable } from 'node:stream';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CommandExecutionError } from './errors.js';
+import { toFile } from './to-file.node.js';
 import { toStream } from './to-stream.node.js';
 
 // Mock child_process.spawn inline to avoid hoisting
@@ -473,5 +477,82 @@ describe('toStream (Node adapter)', { tags: ['SM-4'] }, () => {
         vi.useRealTimers();
       }
     });
+  });
+});
+
+describe('toStream (Node adapter) on Windows', { tags: ['SM-4'] }, () => {
+  const platform = Object.getOwnPropertyDescriptor(process, 'platform');
+  const setPlatform = (value: string) =>
+    Object.defineProperty(process, 'platform', { ...platform, value });
+
+  beforeEach(() => {
+    spawnMock.mockReset();
+  });
+  afterEach(() => {
+    if (platform) Object.defineProperty(process, 'platform', platform);
+  });
+
+  it('rejects a .bat or .cmd dotCommand before starting it', async () => {
+    setPlatform('win32');
+    const path = join(tmpdir(), `ts-graphviz-bat-${process.pid}.svg`);
+    for (const dotCommand of [
+      'C:\\Graphviz\\dot.bat',
+      'dot.CMD',
+      'dot.bat.',
+      'dot.cmd\t',
+    ]) {
+      await expect(
+        toStream('digraph {}', { dotCommand, sanitize: false }),
+      ).rejects.toMatchObject({
+        name: 'CommandExecutionError',
+        code: 'TSG_ERR_COMMAND_FAILED',
+        command: dotCommand,
+      });
+      await expect(
+        toFile('digraph {}', path, { dotCommand }),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_COMMAND_FAILED' });
+    }
+    expect(spawnMock).not.toHaveBeenCalled();
+    expect(existsSync(path)).toBe(false);
+
+    // On other platforms a file named *.bat is an ordinary executable.
+    setPlatform('linux');
+    spawnMock.mockImplementation(() => {
+      throw new Error('stop here');
+    });
+    await expect(
+      toStream('digraph {}', { dotCommand: '/opt/dot.bat', sanitize: false }),
+    ).rejects.toMatchObject({ code: 'TSG_ERR_COMMAND_FAILED' });
+    expect(spawnMock).toHaveBeenCalledWith(
+      '/opt/dot.bat',
+      expect.any(Array),
+      expect.anything(),
+    );
+  });
+});
+
+describe('toStream (Node adapter) checks the options', {
+  tags: ['SM-4'],
+}, () => {
+  beforeEach(() => {
+    spawnMock.mockReset();
+  });
+
+  it('rejects data options outside their type before starting the command', async () => {
+    for (const options of [
+      { format: 'png:cairo' },
+      { format: 'svg -oout.svg' },
+      { layout: 'my-engine' },
+      { scale: Number.NaN },
+      { attributes: { graph: { 'label=x': 'y' } } },
+      { attributes: { node: { label: { toString: () => 'x' } } } },
+      { dotCommand: 1 },
+      { library: 'lib.ps' },
+    ]) {
+      await expect(
+        toStream('digraph {}', { ...options, sanitize: false } as never),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_INVALID_OPTION' });
+    }
+    expect(spawnMock).not.toHaveBeenCalled();
   });
 });
