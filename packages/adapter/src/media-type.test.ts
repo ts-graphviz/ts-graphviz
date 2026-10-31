@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mediaType, outputBlob, outputPart } from './media-type.js';
+import { mediaType, OutputParts } from './media-type.js';
 
 describe('mediaType', () => {
   it('is the type of SVG without a format', () => {
@@ -74,13 +74,16 @@ describe('mediaType', () => {
   });
 });
 
-describe('outputBlob', () => {
-  it('joins the parts into a Blob of the format', async () => {
+function collect(chunks: Uint8Array[], format?: string): Blob {
+  const output = new OutputParts();
+  for (const chunk of chunks) output.push(chunk);
+  return output.toBlob(format);
+}
+
+describe('OutputParts', () => {
+  it('joins the chunks into a Blob of the format', async () => {
     const encoder = new TextEncoder();
-    const blob = outputBlob(
-      [outputPart(encoder.encode('<svg')), outputPart(encoder.encode('/>'))],
-      undefined,
-    );
+    const blob = collect([encoder.encode('<svg'), encoder.encode('/>')]);
     expect(blob).toBeInstanceOf(Blob);
     expect(blob.type).toBe('image/svg+xml');
     expect(blob.size).toBe(6);
@@ -89,21 +92,34 @@ describe('outputBlob', () => {
 
   it('keeps the bytes as they are', async () => {
     const bytes = new Uint8Array([0, 13, 10, 255, 10]);
-    const blob = outputBlob([outputPart(bytes)], 'png');
+    const blob = collect([bytes], 'png');
     expect(new Uint8Array(await blob.arrayBuffer())).toStrictEqual(bytes);
   });
 
-  it('does not hold the chunks it was made from', async () => {
-    const chunk = new Uint8Array([1, 2, 3]);
-    const blob = outputBlob([outputPart(chunk)], 'png');
-    chunk.fill(0);
-    expect(new Uint8Array(await blob.arrayBuffer())).toStrictEqual(
-      new Uint8Array([1, 2, 3]),
+  it('keeps the order across parts of many chunks', async () => {
+    // 3000 chunks of 100 bytes: several 64 KiB parts and a last short one.
+    const chunks = Array.from({ length: 3000 }, (_, i) =>
+      new Uint8Array(100).fill(i % 251),
     );
+    const bytes = new Uint8Array(await collect(chunks, 'png').arrayBuffer());
+    expect(bytes.byteLength).toBe(300_000);
+    for (let i = 0; i < 3000; i += 137) {
+      expect(bytes[i * 100], String(i)).toBe(i % 251);
+      expect(bytes[i * 100 + 99], String(i)).toBe(i % 251);
+    }
+  });
+
+  it('copies the chunks of a full part and lets them go', async () => {
+    const output = new OutputParts();
+    const chunk = new Uint8Array(64 * 1024).fill(1);
+    output.push(chunk);
+    chunk.fill(0);
+    const bytes = new Uint8Array(await output.toBlob('png').arrayBuffer());
+    expect(bytes.every((byte) => byte === 1)).toBe(true);
   });
 
   it('is empty without output', async () => {
-    const blob = outputBlob([], 'mp4');
+    const blob = collect([], 'mp4');
     expect(blob.size).toBe(0);
     expect(blob.type).toBe('');
   });

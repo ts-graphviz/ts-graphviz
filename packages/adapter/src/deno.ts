@@ -7,7 +7,7 @@ export type * from './types.js';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
-import { outputBlob, outputPart } from './media-type.js';
+import { OutputParts } from './media-type.js';
 import type { AnyOptions } from './options.js';
 import { ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
@@ -129,7 +129,7 @@ export async function toBlob<
   signal?.addEventListener('abort', kill, { once: true });
 
   try {
-    const parts: Blob[] = [];
+    const output = new OutputParts();
     let size = 0;
     const errors = new TailBuffer();
     const writing = (async () => {
@@ -157,7 +157,7 @@ export async function toBlob<
           kill();
           return false;
         }
-        parts.push(outputPart(chunk));
+        output.push(chunk);
         return true;
       },
       readers,
@@ -207,7 +207,7 @@ export async function toBlob<
         cause,
       );
     }
-    return outputBlob(parts, opts.format);
+    return output.toBlob(opts.format);
   } catch (e) {
     // An unexpected error above: make sure the process does not outlive us.
     kill();

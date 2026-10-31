@@ -53,29 +53,44 @@ export function mediaType(format = 'svg'): string {
   return Object.hasOwn(MEDIA_TYPES, base) ? (MEDIA_TYPES[base] as string) : '';
 }
 
-/**
- * A chunk of output, copied into a Blob as it arrives so that the chunk
- * itself can be collected. Collecting the chunks and copying them all into
- * one Blob at the end would hold the output twice at that moment.
- */
-export function outputPart(chunk: Uint8Array): Blob {
-  return new Blob([chunk as Uint8Array<ArrayBuffer>]);
-}
+const PART_SIZE = 64 * 1024;
 
 /**
- * The collected output parts as one Blob of the type of `format`; the parts
- * are referenced, not copied again. The options object has no prototype: an
- * inherited `endings` or `type` is never read.
+ * The output of a command, collected into a Blob as it arrives.
+ *
+ * Chunks are copied into Blobs of about 64 KiB and then released, so the
+ * output is held once (plus at most one part) instead of twice, as it would
+ * be when copying all the chunks into one Blob at the end, and many small
+ * chunks do not each become a Blob of their own. The final Blob references
+ * the parts without copying them again.
  */
-export function outputBlob(
-  parts: readonly Blob[],
-  format: string | undefined,
-): Blob {
-  return new Blob(
-    parts as Blob[],
-    {
+export class OutputParts {
+  #parts: Blob[] = [];
+  #pending: Uint8Array<ArrayBuffer>[] = [];
+  #pendingSize = 0;
+
+  push(chunk: Uint8Array): void {
+    this.#pending.push(chunk as Uint8Array<ArrayBuffer>);
+    this.#pendingSize += chunk.byteLength;
+    if (this.#pendingSize >= PART_SIZE) this.#flush();
+  }
+
+  /**
+   * The output as one Blob of the type of `format`. The options object has
+   * no prototype: an inherited `endings` or `type` is never read.
+   */
+  toBlob(format: string | undefined): Blob {
+    this.#flush();
+    return new Blob(this.#parts, {
       __proto__: null,
       type: mediaType(format),
-    } as ConstructorParameters<typeof Blob>[1],
-  );
+    } as ConstructorParameters<typeof Blob>[1]);
+  }
+
+  #flush(): void {
+    if (this.#pending.length === 0) return;
+    this.#parts.push(new Blob(this.#pending));
+    this.#pending = [];
+    this.#pendingSize = 0;
+  }
 }

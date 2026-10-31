@@ -293,8 +293,8 @@ export interface CommonOptions<
    * killed and the call rejects with a `RangeError` whose `code` is
    * `TSG_ERR_OUTPUT_LIMIT_EXCEEDED`. `0` disables the limit.
    *
-   * The output is kept in memory until the returned `Blob` is released, so
-   * this is also the bound of that memory.
+   * This counts output bytes. The output is kept in memory until the
+   * returned `Blob` is released, so the memory it takes is about this size.
    *
    * @default 134217728 (128 MiB)
    */
