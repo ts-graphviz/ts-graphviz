@@ -1,0 +1,73 @@
+# Known vulnerabilities in development dependencies that cannot be fixed on
+# this branch without a major upgrade. None of them is in a runtime
+# dependency of a published package. Each entry expires, so it is reviewed.
+# Tracked in https://github.com/ts-graphviz/ts-graphviz/issues/1863
+
+# Vitest 3 (test runner): fixed in Vitest 4, which the next major uses.
+[[IgnoredVulns]]
+id = "GHSA-82fw-gwwq-j7x9"
+ignoreUntil = 2027-01-31
+reason = "Vitest/@vitest/mocker dev server only; tests run locally and in CI on trusted code. Fixed by the Vitest 4 upgrade."
+
+[[IgnoredVulns]]
+id = "GHSA-qxg6-89mg-rqv8"
+ignoreUntil = 2027-01-31
+reason = "@vitest/mocker dev server only; tests run locally and in CI on trusted code. Fixed by the Vitest 4 upgrade."
+
+[[IgnoredVulns]]
+id = "GHSA-5gmw-xhrv-c9v3"
+ignoreUntil = 2027-01-31
+reason = "tinypool 1 is used only by the Vitest 3 test runner; it needs a polluted Object.prototype in the test process. Fixed by the Vitest 4 upgrade (tinypool 2)."
+
+[[IgnoredVulns]]
+id = "GHSA-85c8-ppgw-ccpr"
+ignoreUntil = 2027-01-31
+reason = "tinypool 1 is used only by the Vitest 3 test runner; it needs a polluted Object.prototype in the test process. Fixed by the Vitest 4 upgrade (tinypool 2)."
+
+# uuid 8/9 (pulled in by @pnpm/workspace.find-packages for the e2e scripts and
+# by Docusaurus for the website): the fix is in uuid 11, a major upgrade of
+# their dependency; the affected functions are not called with a buffer here.
+[[IgnoredVulns]]
+id = "GHSA-w5hq-g745-h8pq"
+ignoreUntil = 2027-01-31
+reason = "Build/e2e tooling only; the affected v3/v5/v6 buffer API is not used by this repository. Fix requires uuid 11 in third-party dependencies."
+
+# deepmerge (Docusaurus, website build only): no fixed version is published.
+[[IgnoredVulns]]
+id = "GHSA-gcqx-w48m-w2h4"
+ignoreUntil = 2027-01-31
+reason = "Website build only, on configuration from this repository; no fixed version exists."
+
+# ip-address 9 (pnpm's network stack, pulled in by @pnpm/workspace.find-packages
+# for the e2e scripts): fixed only in ip-address 10, a major upgrade of a
+# third-party dependency. The e2e scripts only read the local workspace and do
+# not parse addresses.
+[[IgnoredVulns]]
+id = "GHSA-v2v4-37r5-5v8g"
+ignoreUntil = 2027-01-31
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+
+[[IgnoredVulns]]
+id = "GHSA-mwp4-54f8-5fhr"
+ignoreUntil = 2027-01-31
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+
+[[IgnoredVulns]]
+id = "GHSA-rpw4-54j3-4h4q"
+ignoreUntil = 2027-01-31
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+
+[[IgnoredVulns]]
+id = "GHSA-j6r3-76f7-8jcv"
+ignoreUntil = 2027-01-31
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+
+[[IgnoredVulns]]
+id = "GHSA-h3mg-xc3c-68pw"
+ignoreUntil = 2027-01-31
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+
+[[IgnoredVulns]]
+id = "GHSA-rxp7-6hxx-x8q5"
+ignoreUntil = 2027-01-31
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
