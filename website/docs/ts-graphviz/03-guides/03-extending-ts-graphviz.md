@@ -261,7 +261,7 @@ For users interested in extending or customizing `ts-graphviz`, understanding th
 
 **Usage**:
 
-- Convert DOT strings to streams or files.
+- Render DOT strings to a `Blob` with `toBlob`.
 - Use in environments where you need to render graphs to images or other formats.
 
 :::note

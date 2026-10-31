@@ -24,7 +24,7 @@ describe('ts-graphviz/adapter', () => {
     const g = digraph('G', (g) => {
       g.edge(['a', 'b']);
     });
-    await toBlob(g, { layout: 'neato' });
+    await expect(toBlob(g, { layout: 'neato' })).resolves.toBe('blob');
     expect(adapter.toBlob).toHaveBeenCalledWith(toDot(g), { layout: 'neato' });
   });
 });
