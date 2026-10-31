@@ -32,18 +32,37 @@ export class FromModelConverter {
     const plugins = [...this.#plugins];
     const { commentKind = 'Slash', maxASTNodes } = this.options;
     const createElement = createElementFactory({ maxASTNodes });
+    // The models being converted, from the one passed in to the innermost:
+    // a model among its own statements (`s.addSubgraph(s)`) would be
+    // converted until the call stack runs out. A model reached again
+    // elsewhere is converted again, and every AST node that makes counts
+    // toward `maxASTNodes`.
+    const open = new Set<unknown>();
     const context: ConvertFromModelContext = {
       commentKind,
       createElement,
       convert<U extends DotObjectModel>(m: U): ModelToAST<U> {
+        if (open.has(m)) {
+          throw withCode(
+            new TypeError(
+              `The ${describeType(m.$$type)} model contains itself: it is among its own statements`,
+            ),
+            'TSG_ERR_CYCLIC_STRUCTURE',
+          );
+        }
         for (const plugin of plugins) {
           if (plugin.match(m)) {
-            return plugin.convert(context, m) as ModelToAST<U>;
+            open.add(m);
+            try {
+              return plugin.convert(context, m) as ModelToAST<U>;
+            } finally {
+              open.delete(m);
+            }
           }
         }
         throw withCode(
           new Error(
-            `No plugin can convert the "${m.$$type}" model to an AST node`,
+            `No plugin can convert the ${describeType(m.$$type)} model to an AST node`,
           ),
           'TSG_ERR_NO_PLUGIN',
         );
@@ -51,4 +70,14 @@ export class FromModelConverter {
     };
     return context.convert(model);
   }
+}
+
+/**
+ * A model's `$$type` for a message: a string as it is (shortened), anything
+ * else by its type, so describing it runs no code of the value's.
+ */
+function describeType(type: unknown): string {
+  return typeof type === 'string'
+    ? JSON.stringify(type.slice(0, 64))
+    : `(${typeof type})`;
 }
