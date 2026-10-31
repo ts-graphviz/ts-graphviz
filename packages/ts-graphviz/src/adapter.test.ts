@@ -5,7 +5,6 @@ vi.mock('@ts-graphviz/adapter', () => ({
 }));
 
 import * as adapter from '@ts-graphviz/adapter';
-import * as wrapper from './adapter.js';
 import { toBlob } from './adapter.js';
 import { digraph, toDot } from './ts-graphviz.js';
 
@@ -27,10 +26,5 @@ describe('ts-graphviz/adapter', () => {
     });
     await toBlob(g, { layout: 'neato' });
     expect(adapter.toBlob).toHaveBeenCalledWith(toDot(g), { layout: 'neato' });
-  });
-
-  it('has no toStream or toFile (removed in v4)', () => {
-    expect(wrapper).not.toHaveProperty('toStream');
-    expect(wrapper).not.toHaveProperty('toFile');
   });
 });

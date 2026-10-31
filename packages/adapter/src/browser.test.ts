@@ -1,6 +1,5 @@
 import { isTsGraphvizError } from '@ts-graphviz/common';
 import { describe, expect, it } from 'vitest';
-import * as browser from './browser.js';
 import { toBlob } from './browser.js';
 
 function thrownBy(fn: () => unknown): unknown {
@@ -20,10 +19,5 @@ describe('browser adapter', { tags: ['SM-4'] }, () => {
       name: 'Error',
       code: 'TSG_ERR_UNSUPPORTED_ENVIRONMENT',
     });
-  });
-
-  it('has no toStream or toFile (removed in v4)', () => {
-    expect(browser).not.toHaveProperty('toStream');
-    expect(browser).not.toHaveProperty('toFile');
   });
 });

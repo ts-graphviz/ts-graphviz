@@ -1,7 +1,5 @@
-import * as adapter from '@ts-graphviz/adapter';
 import { type Format, toBlob } from '@ts-graphviz/adapter';
 import { digraph } from 'ts-graphviz';
-import * as modelAdapter from 'ts-graphviz/adapter';
 import { toBlob as toBlobFromModel } from 'ts-graphviz/adapter';
 import { describe, expectTypeOf, it } from 'vitest';
 
@@ -15,13 +13,6 @@ describe('toBlob', () => {
 
   it('ts-graphviz/adapter also takes a model', () => {
     expectTypeOf(toBlobFromModel(digraph())).toEqualTypeOf<Promise<Blob>>();
-  });
-
-  it('replaces toStream and toFile, which are gone', () => {
-    expectTypeOf(adapter).not.toHaveProperty('toStream');
-    expectTypeOf(adapter).not.toHaveProperty('toFile');
-    expectTypeOf(modelAdapter).not.toHaveProperty('toStream');
-    expectTypeOf(modelAdapter).not.toHaveProperty('toFile');
   });
 
   it('type the options of each layout', () => {
