@@ -13,6 +13,9 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    env:
+      # See the release job in main.yaml: a PR opened with GITHUB_TOKEN starts no CI.
+      HAS_RELEASE_APP: ${{ secrets.RELEASE_APP_CLIENT_ID != '' }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
@@ -22,6 +25,15 @@ jobs:
       - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
         with:
           fetch-depth: 0
+      - name: Create a token that starts CI on the pull request
+        id: app-token
+        if: ${{ env.HAS_RELEASE_APP == 'true' }}
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ secrets.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
       - uses: FantasticFiasco/action-update-license-year@d837fc83ecb71196807bdf3854208f556e66f6ed # v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
