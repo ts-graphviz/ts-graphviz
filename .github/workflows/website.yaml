@@ -76,14 +76,22 @@ jobs:
           persist-credentials: false
       - name: Check for changes that are not released yet
         id: pending
+        env:
+          IGNORE_PENDING_CHANGESETS: ${{ inputs.ignore-pending-changesets }}
         run: |
           pending=$(find .changeset -maxdepth 1 -name '*.md' ! -name README.md | sort)
           if [ -z "$pending" ]; then
             echo "released=true" >> "$GITHUB_OUTPUT"
           else
             echo "released=false" >> "$GITHUB_OUTPUT"
+            # The deploy job publishes from main only.
+            if [ "$IGNORE_PENDING_CHANGESETS" = "true" ] && [ "$GITHUB_REF" = "refs/heads/main" ]; then
+              heading="To be published with ignore-pending-changesets, although these changesets are not released yet."
+            else
+              heading="Not published: these changesets are not released yet."
+            fi
             {
-              echo "Not published: these changesets are not released yet."
+              echo "$heading"
               echo "$pending" | sed 's/^/- /'
             } >> "$GITHUB_STEP_SUMMARY"
           fi
