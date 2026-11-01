@@ -492,9 +492,9 @@ export type Rect = `${Double},${Double},${Double},${Double}`;
  * modifiers. Graphviz's grammar describes 3,111,696 arrows, combinations
  * of the 42 variations of the 11 shapes.
  *
- * The names of one or two shapes are string literals ({@link ArrowType.aname},
- * and an `aname` followed by an {@link ArrowType.last}); names of three or
- * four shapes, millions of them, are made with {@link arrow}, which gives an
+ * The names of one or two shapes are string literals (a shape, `odot`, or
+ * two, `lteeoldiamond`; the second is not `none`); names of three or four
+ * shapes, millions of them, are made with {@link arrow}, which gives an
  * {@link ArrowName}.
  *
  * @see {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType}

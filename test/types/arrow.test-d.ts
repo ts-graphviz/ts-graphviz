@@ -98,6 +98,14 @@ describe('arrow', () => {
     expectTypeOf(arrow('obox', 'ltee', 'vee')).toEqualTypeOf<ArrowName>();
     expectTypeOf<ArrowName>().toExtend<ArrowType>();
     expectTypeOf<ArrowName>().toExtend<string>();
+    // Only arrow() gives one: the brand cannot be written.
+    // @ts-expect-error a string is not an ArrowName
+    const text: ArrowName = 'dotdotdot';
+    // @ts-expect-error nor a string with a property of the brand's name
+    const forged: ArrowName = Object.assign('x', {
+      $$arrowName: true as const,
+    });
+    void [text, forged];
     arrow('none');
     arrow('none', 'none', 'dot', 'olnormal');
   });

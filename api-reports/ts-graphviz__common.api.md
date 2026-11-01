@@ -18,7 +18,7 @@ export type AnyDotObjectModel = GraphStatementModel | RootGraphModel | DotModel;
 export type AnyReadonlyDotObjectModel = ReadonlyGraphStatementModel | ReadonlyRootGraphModel | ReadonlyDotModel;
 
 export type ArrowName = string & {
-  readonly $$arrowName: true;
+  readonly [arrowName]: true;
 };
 
 export type ArrowShapes = readonly [ArrowType.aname] | readonly [ArrowType.aname, ArrowType.last] | readonly [ArrowType.aname, ArrowType.aname, ArrowType.last] | readonly [ArrowType.aname, ArrowType.aname, ArrowType.aname, ArrowType.last];
@@ -1034,6 +1034,8 @@ export declare function warnDeprecated(code: DeprecationCode, message: string): 
 export declare function withCode<E extends Error, C extends ErrorCode>(error: E, code: C): Omit<E, "code"> & CodedError<C>;
 
 // Used by the exports, not exported
+
+declare const arrowName: unique symbol;
 
 type AsClusterSubgraphAttributesObject = AttributesObject<Exclude<ClusterSubgraphAttributeKey, "cluster">> & {
   cluster: true;

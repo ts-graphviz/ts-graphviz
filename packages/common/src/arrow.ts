@@ -12,11 +12,17 @@ import type { ArrowType } from './attributes/types.js';
 import { withCode } from './errors.js';
 
 /**
+ * The brand of {@link ArrowName}: a symbol that exists only in the types and
+ * is not exported, so no value but what {@link arrow} returns has it.
+ */
+declare const arrowName: unique symbol;
+
+/**
  * An arrow name made by {@link arrow}. At run time it is the name itself,
  * a string; the type marks that its shapes were checked.
  * @group Attribute Types
  */
-export type ArrowName = string & { readonly $$arrowName: true };
+export type ArrowName = string & { readonly [arrowName]: true };
 
 /**
  * The shapes of an arrow name: one to four; of two or more, the last is
