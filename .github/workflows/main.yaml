@@ -50,16 +50,11 @@ jobs:
       - e2e_test
     if: ${{ github.repository == 'ts-graphviz/ts-graphviz' && github.ref == 'refs/heads/main' && success() }}
     permissions:
-      contents: write # Used to commit to "Version Packages" PR
-      pull-requests: write # Used to create "Version Packages" PR
+      contents: write # Used to attach the release assets to the GitHub Releases
       id-token: write # Used to publish to npm with OIDC trusted publishing, and to sign provenance
       attestations: write # Used to record the provenance of the release assets
-      # Other permissions are defaulted to none
-    env:
-      # A pull request opened with GITHUB_TOKEN starts no workflows, so the
-      # "Version Packages" PR would be merged without CI. A GitHub App token
-      # is used when the app is configured; until then GITHUB_TOKEN is used.
-      HAS_RELEASE_APP: ${{ secrets.RELEASE_APP_CLIENT_ID != '' }}
+      # Other permissions are defaulted to none. The "Version Packages" PR and
+      # the GitHub Releases are made with the GitHub App token below.
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
@@ -87,9 +82,10 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Check the npm CLI supports trusted publishing
         run: npm --version && node -e "const [ma,mi]=process.argv[1].split('.').map(Number); if (ma < 11 || (ma === 11 && mi < 5)) { console.error('npm >= 11.5 is required for OIDC trusted publishing'); process.exit(1) }" "$(npm --version)"
+      # A pull request opened with GITHUB_TOKEN starts no workflows, so the
+      # "Version Packages" PR would be merged without CI.
       - name: Create a token that starts CI on the release pull request
         id: app-token
-        if: ${{ env.HAS_RELEASE_APP == 'true' }}
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
           client-id: ${{ secrets.RELEASE_APP_CLIENT_ID }}
@@ -104,7 +100,7 @@ jobs:
           version: pnpm exec changeset version
           createGithubReleases: true
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       - name: Download the published tarballs
         if: ${{ steps.changesets.outputs.published == 'true' }}
         run: node .github/scripts/release-assets.mjs download release-assets
