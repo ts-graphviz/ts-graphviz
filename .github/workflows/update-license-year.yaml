@@ -10,18 +10,14 @@ on:
 jobs:
   update-license-year:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
+    # The branch and the pull request are made with the GitHub App token
+    # below, so GITHUB_TOKEN needs no more than the default read access.
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
-        with:
-          fetch-depth: 0
       # See the release job in main.yaml: a PR opened with GITHUB_TOKEN starts no CI.
       - name: Create a token that starts CI on the pull request
         id: app-token
@@ -31,6 +27,13 @@ jobs:
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
           permission-contents: write
           permission-pull-requests: write
+      # The license action pushes its branch with the credentials that
+      # checkout keeps, so they are the App token's: a push to an existing
+      # pull request then starts CI too.
+      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
       - uses: FantasticFiasco/action-update-license-year@d837fc83ecb71196807bdf3854208f556e66f6ed # v3
         with:
           token: ${{ steps.app-token.outputs.token }}
