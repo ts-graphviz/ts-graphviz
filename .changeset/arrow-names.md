@@ -17,4 +17,4 @@ edge.attributes.set('arrowhead', arrow('obox', 'ltee', 'vee'));
 
 At run time an `ArrowName` is the name itself, a string. `arrow()` throws a `RangeError` with the code `TSG_ERR_INVALID_ARROW` for a shape Graphviz does not have, for no shapes or more than four, and for `none` last after another shape.
 
-The union of literals is smaller (1,764 names, was 4,422), which also lets deep type comparisons such as `expectTypeOf(...).toEqualTypeOf<ArrowType>()` finish.
+The union of literals is smaller: 1,764 names, down from 4,422. Deep type comparisons over it, such as expect-type's `toEqualTypeOf`, now finish; on the old union they ran out of memory on TypeScript 5.0, 6.0 and 7.0 (measured in #1897).

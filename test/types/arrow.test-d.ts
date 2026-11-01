@@ -115,6 +115,10 @@ describe('arrow', () => {
     arrow('ldot');
     // @ts-expect-error none cannot come last after another shape
     arrow('dot', 'none');
+    // @ts-expect-error nor after two
+    arrow('dot', 'dot', 'none');
+    // @ts-expect-error nor after three
+    arrow('dot', 'dot', 'dot', 'none');
     // @ts-expect-error at most four
     arrow('dot', 'dot', 'dot', 'dot', 'dot');
     // @ts-expect-error at least one
