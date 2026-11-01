@@ -1,3 +1,4 @@
+import type { ArrowName } from '../arrow.js';
 import type { EscStringValue, HTMLLikeValue } from '../values.js';
 
 /**
@@ -487,17 +488,23 @@ export namespace TBbalanceType {
 export type Rect = `${Double},${Double},${Double},${Double}`;
 
 /**
- * The examples above show a set of commonly used arrow shapes.
+ * An arrow name: one to four arrow shapes, each a shape name with its
+ * modifiers. Graphviz's grammar describes 3,111,696 arrows, combinations
+ * of the 42 variations of the 11 shapes.
  *
- * There is a grammar of arrow shapes which can be used to describe a collection of 3,111,696 arrow
- * combinations of the 42 variations of the primitive set of 11 arrows.
+ * The names of one or two shapes are string literals ({@link ArrowType.aname},
+ * and an `aname` followed by an {@link ArrowType.last}); names of three or
+ * four shapes, millions of them, are made with {@link arrow}, which gives an
+ * {@link ArrowName}.
  *
  * @see {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType}
+ * @see {@link https://graphviz.org/doc/info/arrows.html Arrow Shapes}
  * @group Attribute Types
  */
 export type ArrowType =
   | ArrowType.aname
-  | `${ArrowType.aname}${ArrowType.aname}`;
+  | `${ArrowType.aname}${ArrowType.last}`
+  | ArrowName;
 /** @hidden */
 export namespace ArrowType {
   export type shape = keyof $shape;
@@ -520,7 +527,20 @@ export namespace ArrowType {
 
   export type modifiers = side | 'o' | `o${side}`;
 
-  export type aname = shape | `${modifiers}${shape}`;
+  /** The shapes that take `o` (open). */
+  export type openShape = 'box' | 'diamond' | 'dot' | 'inv' | 'normal';
+  /** The shapes that take `l` or `r` (one side). */
+  export type sidedShape = Exclude<shape, 'dot' | 'none'>;
+
+  /** One arrow shape with its modifiers, as Graphviz's table allows them. */
+  export type aname =
+    | shape
+    | `o${openShape}`
+    | `${side}${sidedShape}`
+    | `o${side}${Extract<openShape, sidedShape>}`;
+
+  /** A shape that can end an arrow name of two or more: any but `none`. */
+  export type last = Exclude<aname, 'none'>;
 }
 
 /**
