@@ -337,9 +337,17 @@ export abstract class GraphBase<
     targets: ReadonlyEdgeTargetLikeTuple,
     attributes?: EdgeAttributesObject,
   ): M['Edge'] {
-    const ts = targets.map((t) =>
-      isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t),
-    ) as EdgeTargetTuple;
+    // The nodes themselves, never objects standing for them (a DSL).
+    const ts = targets
+      .map(
+        (t) =>
+          (Array.isArray(t)
+            ? t.map(modelOf)
+            : modelOf(t)) as ReadonlyEdgeTargetLikeTuple[number],
+      )
+      .map((t) =>
+        isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t),
+      ) as EdgeTargetTuple;
     const edge = new this.models.Edge(ts, attributes);
     this.addEdge(edge);
     return edge;

@@ -30,7 +30,9 @@ export interface ModelView<
  */
 export function modelOf<T>(value: T): ModelOf<T>;
 export function modelOf(value: unknown): unknown {
-  if (typeof value !== 'object' || value === null) return value;
+  if ((typeof value !== 'object' && typeof value !== 'function') || !value) {
+    return value;
+  }
   return (value as Partial<ModelView>)[MODEL] ?? value;
 }
 

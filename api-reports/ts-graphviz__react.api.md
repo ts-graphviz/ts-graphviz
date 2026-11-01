@@ -101,7 +101,9 @@ export interface RenderOptions {
 }
 
 export interface RenderToDotOptions<Container extends AnyGraphContainer = AnyGraphContainer> extends CreateRootOptions, RenderOptions {
-  container?: Container;
+  container?: Container | {
+    readonly [MODEL]: Container;
+  };
 }
 
 export interface RootGraphOptions extends GraphAttributesObject, GraphBaseAttributesProps {

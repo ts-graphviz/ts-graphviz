@@ -12,6 +12,12 @@ import {
   type EdgeModel,
   type ForwardRefNode,
   type GraphBaseModel,
+  isAttributeListModel,
+  isDotModel,
+  isEdgeModel,
+  isNodeModel,
+  isRootGraphModel,
+  isSubgraphModel,
   MODEL,
   type ModelsContext,
   type ModelView,
@@ -592,22 +598,21 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
 /** Each model's DSL (rule 4). */
 const views = new WeakMap<object, object>();
 
-const MODEL_TYPES: ReadonlySet<unknown> = new Set([
-  'AttributeList',
-  'Node',
-  'Edge',
-  'Subgraph',
-  'Graph',
-  'Dot',
-]);
-
-/** A model, not a DSL. */
+/**
+ * A model, not a DSL: of a model's `$$type`, with the fields a model of that
+ * type has (as the model guards check).
+ */
 function isModel(value: unknown): value is AnyDotObjectModel {
   return (
     typeof value === 'object' &&
     value !== null &&
     !(MODEL in value) &&
-    MODEL_TYPES.has((value as { $$type?: unknown }).$$type)
+    (isNodeModel(value) ||
+      isEdgeModel(value) ||
+      isSubgraphModel(value) ||
+      isRootGraphModel(value) ||
+      isDotModel(value) ||
+      isAttributeListModel(value))
   );
 }
 

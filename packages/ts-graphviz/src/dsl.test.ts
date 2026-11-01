@@ -4,16 +4,20 @@ import {
   type EdgeTargetTuple,
   isEdgeModel,
   isNodeModel,
+  isNodeRef,
   isRootGraphModel,
   isSubgraphModel,
   MODEL,
   modelOf,
   type NodeModel,
+  toNodeRef,
+  toNodeRefGroup,
 } from '@ts-graphviz/common';
 import {
   createModelsContext,
   Digraph,
   Dot,
+  Edge,
   Node,
   Subgraph,
 } from '@ts-graphviz/core';
@@ -440,7 +444,20 @@ describe('the rules', () => {
   });
 
   test('dsl takes only models', () => {
-    for (const value of [null, 1, 'a', {}, { $$type: 'Other' }, []]) {
+    const tagOnly = [
+      { $$type: 'Node' },
+      { $$type: 'Edge' },
+      { $$type: 'Graph' },
+    ];
+    for (const value of [
+      null,
+      1,
+      'a',
+      {},
+      { $$type: 'Other' },
+      [],
+      ...tagOnly,
+    ]) {
       expect(() => dsl(value as never)).toThrow(
         expect.objectContaining({
           name: 'TypeError',
@@ -535,5 +552,22 @@ describe('custom models', () => {
       g as unknown as { $node(id: string): { $id: string } }
     ).$node('b');
     expect(custom.$id).toBe('custom-b');
+  });
+});
+
+describe('node references', () => {
+  test('a DSL is not a NodeRef, but is taken where node references are', () => {
+    const g = graph();
+    const a = g.node('a');
+    expect(isNodeRef(a)).toBe(false);
+    expect(isNodeRef(modelOf(a))).toBe(true);
+    expect(toNodeRef(a as never)).toBe(modelOf(a));
+    expect(toNodeRefGroup([a, 'b'] as never)[0]).toBe(modelOf(a));
+    const raw = modelOf(g).createEdge([[a, 'b'], a] as never);
+    expect(raw.targets).toStrictEqual([
+      [modelOf(a), { id: 'b', port: undefined }],
+      modelOf(a),
+    ]);
+    expect(new Edge([a, a] as never).targets[0]).toBe(modelOf(a));
   });
 });
