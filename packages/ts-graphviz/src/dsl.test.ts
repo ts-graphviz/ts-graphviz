@@ -312,6 +312,32 @@ describe('attributes by name', () => {
   });
 });
 
+describe('models that cannot be extended', () => {
+  test('a frozen or sealed model has a DSL that works', () => {
+    const node = Object.freeze(new Node('a'));
+    const a = dsl(node);
+    a.label = 'A';
+    expect(a.id).toBeUndefined();
+    expect(a.$id).toBe('a');
+    expect(Object.keys(a)).toStrictEqual(['label']);
+    expect({ ...a }).toStrictEqual({ label: 'A' });
+    expect(a).toBeInstanceOf(Node);
+    const g = dsl(Object.seal(new Digraph('G')));
+    g.rankdir = 'LR';
+    expect(Object.keys(g)).toStrictEqual(['rankdir']);
+    expect(g.node('b').$id).toBe('b');
+  });
+
+  test('a DSL itself cannot be frozen, sealed or given a prototype', () => {
+    const a = graph().node('a');
+    expect(() => Object.freeze(a)).toThrow(TypeError);
+    expect(() => Object.seal(a)).toThrow(TypeError);
+    expect(() => Object.preventExtensions(a)).toThrow(TypeError);
+    expect(() => Object.setPrototypeOf(a, null)).toThrow(TypeError);
+    expect(Object.isExtensible(a)).toBe(true);
+  });
+});
+
 describe('the rules', () => {
   test('1. model methods run on the model (its private fields)', () => {
     const g = graph();

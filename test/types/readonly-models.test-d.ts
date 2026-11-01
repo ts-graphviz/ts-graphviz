@@ -34,6 +34,7 @@ import {
   isNodeRef,
   isRootGraphModel,
   isSubgraphModel,
+  type ModelView,
   modelOf,
   Node,
   type NodeAttributeKey,
@@ -294,22 +295,38 @@ describe('the readers take every model', () => {
 });
 
 describe('the guards', () => {
-  it('narrow unknown to the read-only types', () => {
+  it('narrow unknown to the read-only types, or a view of one', () => {
     const value: unknown = null;
     if (isNodeModel(value))
-      expectTypeOf(value).toEqualTypeOf<ReadonlyNodeModel>();
+      expectTypeOf(value).toEqualTypeOf<
+        ReadonlyNodeModel | ModelView<ReadonlyNodeModel>
+      >();
     if (isEdgeModel(value))
-      expectTypeOf(value).toEqualTypeOf<ReadonlyEdgeModel>();
+      expectTypeOf(value).toEqualTypeOf<
+        ReadonlyEdgeModel | ModelView<ReadonlyEdgeModel>
+      >();
     if (isSubgraphModel(value)) {
-      expectTypeOf(value).toEqualTypeOf<ReadonlySubgraphModel>();
+      expectTypeOf(value).toEqualTypeOf<
+        ReadonlySubgraphModel | ModelView<ReadonlySubgraphModel>
+      >();
     }
     if (isRootGraphModel(value)) {
-      expectTypeOf(value).toEqualTypeOf<ReadonlyRootGraphModel>();
+      expectTypeOf(value).toEqualTypeOf<
+        ReadonlyRootGraphModel | ModelView<ReadonlyRootGraphModel>
+      >();
     }
     if (isDotModel(value))
-      expectTypeOf(value).toEqualTypeOf<ReadonlyDotModel>();
+      expectTypeOf(value).toEqualTypeOf<
+        ReadonlyDotModel | ModelView<ReadonlyDotModel>
+      >();
     if (isAttributeListModel(value)) {
-      expectTypeOf(value).toEqualTypeOf<ReadonlyAttributeListModel>();
+      expectTypeOf(value).toEqualTypeOf<
+        ReadonlyAttributeListModel | ModelView<ReadonlyAttributeListModel>
+      >();
+    }
+    if (isNodeModel(value)) {
+      // A DSL passes too; read it through modelOf.
+      expectTypeOf(modelOf(value)).toEqualTypeOf<ReadonlyNodeModel>();
     }
     if (isNodeRef(value)) expectTypeOf(value).toEqualTypeOf<NodeRef>();
   });
@@ -361,10 +378,10 @@ describe('the guards', () => {
   it('filter arrays of unknown values or read-only models', () => {
     const values = [] as unknown[];
     expectTypeOf(values.filter(isNodeModel)).toEqualTypeOf<
-      ReadonlyNodeModel[]
+      (ReadonlyNodeModel | ModelView<ReadonlyNodeModel>)[]
     >();
     expectTypeOf(values.filter(isRootGraphModel)).toEqualTypeOf<
-      ReadonlyRootGraphModel[]
+      (ReadonlyRootGraphModel | ModelView<ReadonlyRootGraphModel>)[]
     >();
     const read = [] as AnyReadonlyDotObjectModel[];
     expectTypeOf(read.filter(isEdgeModel)).toEqualTypeOf<ReadonlyEdgeModel[]>();
@@ -374,7 +391,11 @@ describe('the guards', () => {
   it('narrow a wider type to the read-only type, and leave out the rest', () => {
     const object = {} as DotObjectModel;
     if (isNodeModel(object)) {
-      expectTypeOf(object).toExtend<ReadonlyNodeModel>();
+      // A DSL is a DotObjectModel too.
+      expectTypeOf(object).toEqualTypeOf<
+        | (DotObjectModel & ReadonlyNodeModel)
+        | (DotObjectModel & ModelView<ReadonlyNodeModel>)
+      >();
       expectTypeOf(object).not.toExtend<NodeModel>();
     }
     // A type of your own that a model can also be.

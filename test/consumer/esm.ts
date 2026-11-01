@@ -16,6 +16,7 @@ import {
   type graph,
   isNodeModel,
   type ModelOf,
+  type ModelView,
   modelOf,
   type NodeModel,
   type ReadonlyNodeModel,
@@ -123,7 +124,11 @@ const describeNode = (n: ReadonlyNodeModel): string =>
 describeNode(new MyNode('m'));
 const unknownValue: unknown = g;
 if (isNodeModel(unknownValue)) {
-  assertType<Equal<typeof unknownValue, ReadonlyNodeModel>>();
+  // a DSL passes too: read it through modelOf
+  assertType<
+    Equal<typeof unknownValue, ReadonlyNodeModel | ModelView<ReadonlyNodeModel>>
+  >();
+  assertType<Equal<ModelOf<typeof unknownValue>, ReadonlyNodeModel>>();
   toDot(unknownValue);
 }
 const nodes = modelOf(g).statements.filter(isNodeModel);
@@ -131,7 +136,9 @@ assertType<Equal<typeof nodes, NodeModel[]>>();
 const nodeViews = g.$statements.filter(isNodeModel);
 assertType<Equal<typeof nodeViews, DSL<NodeModel>[]>>();
 const readNodes = [unknownValue].filter(isNodeModel);
-assertType<Equal<typeof readNodes, ReadonlyNodeModel[]>>();
+assertType<
+  Equal<typeof readNodes, (ReadonlyNodeModel | ModelView<ReadonlyNodeModel>)[]>
+>();
 // @ts-expect-error not a node
 toDot({ $$type: 'Node' });
 

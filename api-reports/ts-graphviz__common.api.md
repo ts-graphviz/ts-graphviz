@@ -713,9 +713,9 @@ export interface ModelsContext<M extends ModelTypes = ModelTypes> {
   Edge: EdgeConstructor<M["Edge"]>;
 }
 
-export type NarrowedModel<T, K extends DotObjectType> = unknown extends T ? T & ReadonlyModelOf<K> : T extends unknown ? T extends ModelView<infer U> ? [NarrowedModel<U, K>] extends [never] ? never : T : T extends AnyReadonlyDotObjectModel ? Extract<T, {
+export type NarrowedModel<T, K extends DotObjectType> = unknown extends T ? T & GuardedModelOf<K, T> : T extends unknown ? T extends ModelView<infer U> ? [NarrowedModel<U, K>] extends [never] ? never : T : T extends AnyReadonlyDotObjectModel ? Extract<T, {
   readonly $$type: K;
-}> : T extends Primitive ? never : T & ReadonlyModelOf<K> : never;
+}> : T extends Primitive | readonly unknown[] ? never : T & GuardedModelOf<K, T> : never;
 
 export type NodeAttributeKey = NodeAttributeKey.values;
 export declare namespace NodeAttributeKey {
@@ -1029,9 +1029,15 @@ type AsClusterSubgraphAttributesObject = AttributesObject<Exclude<ClusterSubgrap
 
 type Creates<C, Base> = C extends (abstract new (...args: any[]) => infer I) ? I extends Base ? I : Base : Base;
 
+type GuardedModelOf<K extends DotObjectType, T> = ReadonlyModelOf<K> | (ViewOf<K> extends T ? ModelView<ReadonlyModelOf<K>> : never);
+
 type Primitive = string | number | bigint | boolean | symbol | null | undefined;
 
 type ReadonlyModelOf<K extends DotObjectType> = Extract<AnyReadonlyDotObjectModel, {
   readonly $$type: K;
 }>;
+
+type ViewOf<K extends DotObjectType> = ModelView<ReadonlyModelOf<K>> & {
+  readonly $$type: K;
+};
 ```

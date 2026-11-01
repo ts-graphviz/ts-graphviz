@@ -8,10 +8,13 @@ import type {
 } from 'ts-graphviz';
 import {
   createModelsContext,
+  Digraph,
   digraph,
+  dsl,
   Edge,
   fromDot,
   fromDotAll,
+  modelOf,
   Node,
   Subgraph,
   withContext,
@@ -84,6 +87,38 @@ describe('a ModelsContext with custom classes', () => {
       expectTypeOf(g.subgraph('s')).toEqualTypeOf<DSL<MySubgraph>>();
       expectTypeOf(g.subgraph('s').$tag()).toEqualTypeOf<string>();
     });
+  });
+});
+
+describe('the members a class adds', () => {
+  class Finder extends Digraph {
+    find(id: string): NodeModel | undefined {
+      return this.getNode(id);
+    }
+    accept(node: NodeModel, others: readonly NodeModel[]): number {
+      return others.length + (node ? 1 : 0);
+    }
+    label(): string {
+      return 'x';
+    }
+  }
+
+  it('give models as DSLs and take DSLs', () => {
+    const g = dsl(new Finder());
+    expectTypeOf(g.$find('a')).toEqualTypeOf<DSL<NodeModel> | undefined>();
+    const a = g.node('a');
+    expectTypeOf(g.$accept(a, [a, modelOf(a)])).toEqualTypeOf<number>();
+    expectTypeOf(g.$label).toEqualTypeOf<() => string>();
+  });
+
+  it('read edge targets as read-only node DSLs', () => {
+    const e = dsl(new Finder()).edge(['a', 'b']);
+    const [from] = e.$targets;
+    if (!Array.isArray(from) && '$id' in from) {
+      expectTypeOf(from.$id).toEqualTypeOf<string>();
+      // @ts-expect-error a target may be any node that can be read
+      from.$port('p');
+    }
   });
 });
 

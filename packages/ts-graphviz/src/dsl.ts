@@ -21,6 +21,7 @@ import {
   type NodeRefLike,
   type NonClusterSubgraphAttributesObject,
   type Port,
+  type ReadonlyAttributes,
   type ReadonlyEdgeTargetLikeTuple,
   type ReadonlyNodeModel,
   type RootGraphModel,
@@ -39,8 +40,9 @@ import {
  *   of a graph's DSL.
  * - The model's own members are reached with a `$` in front:
  *   `n.$id` (the node's name; `n.id` is Graphviz's `id` attribute),
- *   `g.$createNode('a')`, `g.$nodes`. Members whose names start with `$`
- *   keep them: `n.$$type`.
+ *   `g.$createNode('a')`, `g.$nodes`. Members whose names start with `$$`
+ *   keep them (`n.$$type`); any other member takes one more `$` (a member
+ *   `$foo` of your class is `$$foo`).
  *
  * Every model you get from a DSL is a DSL, and {@link modelOf} gives the
  * model back. `toDot`, `fromModel`, `toBlob` and the model guards take a
@@ -81,7 +83,21 @@ export type DSLEdgeTargetLikeTuple =
     ];
 
 /** An edge target as an edge's DSL gives it: a node's DSL or a reference. */
-type DSLNodeRef = NodeDSL<NodeModel> | ForwardRefNode;
+type DSLNodeRef = ReadonlyNodeDSL | ForwardRefNode;
+
+/**
+ * The DSL of a node an edge refers to. An edge takes any node that can be
+ * read ({@link ReadonlyNodeModel}), so its DSL is read-only: check it with
+ * `isNodeModel(modelOf(target))` and the like before you change it.
+ * @group DSL
+ */
+export interface ReadonlyNodeDSL extends ModelView<ReadonlyNodeModel> {
+  readonly $$type: 'Node';
+  /** The node's name (its id in DOT). */
+  readonly $id: string;
+  readonly $comment?: string;
+  readonly $attributes: ReadonlyAttributes;
+}
 
 /** The attribute keys of a model with attributes of its own or a group. */
 type AttributeKeysOf<T> = T extends {
@@ -127,8 +143,10 @@ export interface AttributesDSLMembers<K extends AttributeKey> {
 }
 
 /**
- * The members a model's class adds, with a `$` in front. Models in what
- * they return are given as DSLs.
+ * The members a model's class adds, with a `$` in front. A method that
+ * takes or returns models takes their DSLs too and returns DSLs; such a
+ * method keeps only its last overload (call it on `modelOf(x)` for the
+ * others).
  */
 type ExtraMembers<T, Known> = {
   [P in keyof T as P extends string
@@ -148,11 +166,19 @@ type Viewed<V> = V extends ModelView
     : V extends readonly unknown[]
       ? { [I in keyof V]: Viewed<V[I]> }
       : V extends (...args: infer A) => infer R
-        ? ContainsModel<R> extends true
-          ? (...args: A) => Viewed<R>
+        ? true extends ContainsModel<R> | ContainsModel<A[number]>
+          ? (...args: { [I in keyof A]: Accepted<A[I]> }) => Viewed<R>
           : V
         : V;
 
+/** A parameter as a DSL member takes it: a model's DSL as well as the model. */
+type Accepted<P> = P extends AnyDotObjectModel
+  ? P | ModelView<P>
+  : P extends readonly unknown[]
+    ? { [I in keyof P]: Accepted<P[I]> }
+    : P;
+
+/** `true` (or `boolean`, for a union) if a type has models in it. */
 type ContainsModel<V> = V extends AnyDotObjectModel
   ? true
   : V extends readonly (infer E)[]
@@ -618,10 +644,22 @@ export function dsl(model: unknown): unknown {
 function viewOf(model: AnyDotObjectModel): object {
   let view = views.get(model);
   if (view === undefined) {
-    view = new Proxy(model, handler);
+    // The Proxy's target is an empty object with the model's prototype, not
+    // the model: a Proxy may report own properties (the attributes) only as
+    // its target allows, and a frozen or sealed model allows none.
+    const target = Object.create(Object.getPrototypeOf(model)) as object;
+    modelsOf.set(target, model);
+    view = new Proxy(target, handler);
     views.set(model, view);
   }
   return view;
+}
+
+/** Each DSL's target's model. */
+const modelsOf = new WeakMap<object, AnyDotObjectModel>();
+
+function modelFor(target: object): AnyDotObjectModel {
+  return modelsOf.get(target) as AnyDotObjectModel;
 }
 
 /** Rule 2: the model for a DSL; arrays copied with their contents. */
@@ -713,14 +751,15 @@ const STATEMENT_NAMES: ReadonlySet<string> = new Set([
   'graph',
 ]);
 
-/** A graph's default attribute lists as DSLs, made once per graph. */
-const defaultsOf = new WeakMap<GraphBaseModel, object>();
+/** A graph's default attribute lists as DSLs, made once per lists object. */
+const defaultsOf = new WeakMap<object, object>();
 
 /** A model's methods as DSL members, made once per model and name. */
 const membersOf = new WeakMap<object, Map<string, unknown>>();
 
-const handler: ProxyHandler<AnyDotObjectModel> = {
-  get(model, key, receiver) {
+const handler: ProxyHandler<object> = {
+  get(target, key, receiver) {
+    const model = modelFor(target);
     // Only to the DSL itself, not to an object inheriting from it.
     if (key === MODEL) return receiver === views.get(model) ? model : undefined;
     if (typeof key !== 'string') return undefined;
@@ -730,7 +769,8 @@ const handler: ProxyHandler<AnyDotObjectModel> = {
     if (key.startsWith('$')) return member(model, memberName(model, key));
     return attributesOf(model)?.get(key);
   },
-  set(model, key, value) {
+  set(target, key, value) {
+    const model = modelFor(target);
     if (typeof key !== 'string') throw unwritable(key);
     if (key.startsWith('$')) {
       return Reflect.set(model, memberName(model, key), unwrap(value), model);
@@ -746,7 +786,8 @@ const handler: ProxyHandler<AnyDotObjectModel> = {
     else attributes.set(key, value);
     return true;
   },
-  deleteProperty(model, key) {
+  deleteProperty(target, key) {
+    const model = modelFor(target);
     if (typeof key !== 'string') return true;
     if (key.startsWith('$')) {
       return Reflect.deleteProperty(model, memberName(model, key));
@@ -756,7 +797,8 @@ const handler: ProxyHandler<AnyDotObjectModel> = {
     }
     return true;
   },
-  has(model, key) {
+  has(target, key) {
+    const model = modelFor(target);
     if (key === MODEL) return true;
     if (typeof key !== 'string') return false;
     if (isGraph(model) && STATEMENT_NAMES.has(key)) return true;
@@ -765,10 +807,11 @@ const handler: ProxyHandler<AnyDotObjectModel> = {
   },
   // The attributes are the DSL's own properties: `{ ...n }`, `Object.keys(n)`
   // and `JSON.stringify(n)` see them.
-  ownKeys(model) {
-    return (attributesOf(model)?.values ?? []).map(([key]) => key);
+  ownKeys(target) {
+    return (attributesOf(modelFor(target))?.values ?? []).map(([key]) => key);
   },
-  getOwnPropertyDescriptor(model, key) {
+  getOwnPropertyDescriptor(target, key) {
+    const model = modelFor(target);
     if (typeof key !== 'string' || key.startsWith('$')) return undefined;
     if (isGraph(model) && STATEMENT_NAMES.has(key)) return undefined;
     const value = attributesOf(model)?.get(key);
@@ -776,8 +819,18 @@ const handler: ProxyHandler<AnyDotObjectModel> = {
       ? undefined
       : { value, writable: true, enumerable: true, configurable: true };
   },
-  defineProperty(_model, key) {
+  getPrototypeOf(target) {
+    return Object.getPrototypeOf(modelFor(target));
+  },
+  defineProperty(_target, key) {
     throw unwritable(key);
+  },
+  // The target stays extensible, so the attributes can come and go.
+  preventExtensions() {
+    return false;
+  },
+  setPrototypeOf() {
+    return false;
   },
 };
 
@@ -801,15 +854,17 @@ function member(model: AnyDotObjectModel, name: string): unknown {
 }
 
 function defaults(model: GraphBaseModel): object {
-  let lists = defaultsOf.get(model);
+  // By the lists' object, so a class whose `attributes` gives new lists is
+  // followed.
+  const attributes = model.attributes;
+  let lists = defaultsOf.get(attributes);
   if (lists === undefined) {
-    const { graph, edge, node } = model.attributes;
     lists = Object.freeze({
-      graph: viewOf(graph),
-      edge: viewOf(edge),
-      node: viewOf(node),
+      graph: viewOf(attributes.graph),
+      edge: viewOf(attributes.edge),
+      node: viewOf(attributes.node),
     });
-    defaultsOf.set(model, lists);
+    defaultsOf.set(attributes, lists);
   }
   return lists;
 }

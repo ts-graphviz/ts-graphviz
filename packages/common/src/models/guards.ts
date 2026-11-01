@@ -42,7 +42,8 @@ export function isForwardRefNode(object: unknown): object is ForwardRefNode {
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `Node` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlyNodeModel}, since the check looks only at
+ * read-only view {@link ReadonlyNodeModel} (or an object standing for
+ * one, such as a DOT DSL, which also passes), since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
  * @param object - Object to check
  * @returns True if the object is a NodeModel
@@ -62,7 +63,8 @@ export function isNodeModel<T>(object: T): object is NarrowedModel<T, 'Node'> {
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `Edge` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlyEdgeModel}, since the check looks only at
+ * read-only view {@link ReadonlyEdgeModel} (or an object standing for
+ * one, such as a DOT DSL, which also passes), since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
  * @param object - Object to check
  * @returns True if the object is an EdgeModel
@@ -82,7 +84,8 @@ export function isEdgeModel<T>(object: T): object is NarrowedModel<T, 'Edge'> {
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `Subgraph` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlySubgraphModel}, since the check looks only at
+ * read-only view {@link ReadonlySubgraphModel} (or an object standing for
+ * one, such as a DOT DSL, which also passes), since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
  * @param object - Object to check
  * @returns True if the object is a SubgraphModel
@@ -103,7 +106,8 @@ export function isSubgraphModel<T>(
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `Graph` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlyRootGraphModel}, since the check looks only at
+ * read-only view {@link ReadonlyRootGraphModel} (or an object standing for
+ * one, such as a DOT DSL, which also passes), since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
  * @param object - Object to check
  * @returns True if the object is a RootGraphModel
@@ -125,7 +129,8 @@ export function isRootGraphModel<T>(
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `Dot` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlyDotModel}, since the check looks only at
+ * read-only view {@link ReadonlyDotModel} (or an object standing for
+ * one, such as a DOT DSL, which also passes), since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
  * @param object - Object to check
  * @returns True if the object is a DotModel
@@ -145,7 +150,8 @@ export function isDotModel<T>(object: T): object is NarrowedModel<T, 'Dot'> {
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `AttributeList` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlyAttributeListModel}, since the check looks only at
+ * read-only view {@link ReadonlyAttributeListModel} (or an object standing for
+ * one, such as a DOT DSL, which also passes), since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
  * @param object - Object to check
  * @returns True if the object is an AttributeListModel

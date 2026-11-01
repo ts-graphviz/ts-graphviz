@@ -122,6 +122,13 @@ export interface NodeDSLMembers<T extends NodeModel> extends ModelDSLMembers<T> 
   $port(port: string | Partial<Port>): ForwardRefNode;
 }
 
+export interface ReadonlyNodeDSL extends ModelView<ReadonlyNodeModel> {
+  readonly $$type: "Node";
+  readonly $id: string;
+  readonly $comment?: string;
+  readonly $attributes: ReadonlyAttributes;
+}
+
 export type RootGraphDSL<T extends RootGraphModel> = RootGraphDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>> & ExtraMembers<T, RootGraphDSLMembers<T>>;
 
 export interface RootGraphDSLMembers<T extends RootGraphModel> extends GraphDSLMembers<T> {
@@ -179,6 +186,8 @@ export declare function withContext<const P extends Partial<ModelsContext>>(mode
 
 // Used by the exports, not exported
 
+type Accepted<P> = P extends AnyDotObjectModel ? P | ModelView<P> : P extends readonly unknown[] ? { [I in keyof P]: Accepted<P[I]>; } : P;
+
 type AttributeKeysOf<T> = T extends {
   readonly values: ReadonlyArray<[infer K, unknown]>;
 } ? K : T extends {
@@ -191,7 +200,7 @@ type AttributeProperties<K> = { [P in K & AttributeKey]?: Attribute<P>; };
 
 type ContainsModel<V> = V extends AnyDotObjectModel ? true : V extends readonly (infer E)[] ? ContainsModel<E> : false;
 
-type DSLNodeRef = NodeDSL<NodeModel> | ForwardRefNode;
+type DSLNodeRef = ReadonlyNodeDSL | ForwardRefNode;
 
 type DSLNodeRefLike = NodeRefLike | ModelView<ReadonlyNodeModel>;
 
@@ -205,5 +214,5 @@ type NodeOf<T extends GraphBaseModel> = ReturnType<T["createNode"]>;
 
 type SubgraphOf<T extends GraphBaseModel> = T["subgraphs"][number];
 
-type Viewed<V> = V extends ModelView ? V : V extends AnyDotObjectModel ? DSL<V> : V extends readonly unknown[] ? { [I in keyof V]: Viewed<V[I]>; } : V extends ((...args: infer A) => infer R) ? ContainsModel<R> extends true ? (...args: A) => Viewed<R> : V : V;
+type Viewed<V> = V extends ModelView ? V : V extends AnyDotObjectModel ? DSL<V> : V extends readonly unknown[] ? { [I in keyof V]: Viewed<V[I]>; } : V extends ((...args: infer A) => infer R) ? true extends ContainsModel<R> | ContainsModel<A[number]> ? (...args: { [I in keyof A]: Accepted<A[I]>; }) => Viewed<R> : V : V;
 ```
