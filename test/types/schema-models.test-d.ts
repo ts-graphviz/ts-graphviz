@@ -52,7 +52,7 @@ import {
   type SubgraphModel,
   toDot,
 } from 'ts-graphviz';
-import { type DotInput, toFile } from 'ts-graphviz/adapter';
+import { type DotInput, toBlob } from 'ts-graphviz/adapter';
 import { describe, expectTypeOf, it } from 'vitest';
 
 // The schema type parameters on the model types and the generic core
@@ -529,7 +529,7 @@ describe('the models of a schema and the read-only model types', () => {
     expectTypeOf(toDot(g.node('a'))).toEqualTypeOf<string>();
     fromModel(g);
     expectTypeOf(g).toExtend<DotInput>();
-    toFile(g, 'out.svg');
+    void toBlob(g);
     const dot = new Dot<MySchema>([g]);
     expectTypeOf(toDot(dot)).toEqualTypeOf<string>();
   });
