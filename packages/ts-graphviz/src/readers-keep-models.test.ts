@@ -1,7 +1,10 @@
 import { fromModel } from '@ts-graphviz/ast';
-import type {
-  ReadonlyAttributes,
-  ReadonlyGraphBaseModel,
+import {
+  type ForwardRefNode,
+  isNodeModel,
+  type ReadonlyAttributes,
+  type ReadonlyGraphBaseModel,
+  type ReadonlyNodeModel,
 } from '@ts-graphviz/common';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -20,6 +23,11 @@ function attributes(a: ReadonlyAttributes) {
   return a.values.map(([key, value]) => [key, value]);
 }
 
+// A node model by its id; a forward reference copied with its port.
+function target(t: ReadonlyNodeModel | ForwardRefNode) {
+  return isNodeModel(t) ? t.id : { ...t };
+}
+
 function graph(g: ReadonlyGraphBaseModel): unknown {
   return {
     id: g.id,
@@ -34,10 +42,8 @@ function graph(g: ReadonlyGraphBaseModel): unknown {
       attributes(e.attributes),
       e.targets.map((t) =>
         Array.isArray(t)
-          ? t.map((n) => ('id' in n ? n.id : n))
-          : 'id' in t
-            ? t.id
-            : t,
+          ? (t as readonly (ReadonlyNodeModel | ForwardRefNode)[]).map(target)
+          : target(t as ReadonlyNodeModel | ForwardRefNode),
       ),
     ]),
     subgraphs: g.subgraphs.map(graph),
