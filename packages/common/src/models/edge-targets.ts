@@ -1,7 +1,7 @@
 import type { Compass } from '../attributes/types.js';
 import { withCode } from '../errors.js';
 import { isForwardRefNode, isNodeModel } from './guards.js';
-import { MODEL, modelOf } from './model-view.js';
+import { modelOf } from './model-view.js';
 import type {
   NodeRef,
   NodeRefGroup,
@@ -16,8 +16,6 @@ import type {
  * @returns True if the object is a NodeRef
  */
 export function isNodeRef(node: unknown): node is NodeRef {
-  // Not an object standing for a node (a DSL): its `id` is not the node's.
-  if (typeof node === 'object' && node !== null && MODEL in node) return false;
   return isNodeModel(node) || isForwardRefNode(node);
 }
 

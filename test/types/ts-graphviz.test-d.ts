@@ -10,7 +10,6 @@ import {
   fromDotAll,
   graph,
   isNodeModel,
-  type ModelView,
   modelOf,
   type NodeModel,
   type ReadonlyNodeModel,
@@ -166,23 +165,20 @@ describe('fromDot / fromDotAll / toDot', () => {
   });
 
   it('narrow models with the guards', () => {
-    // On unknown, to the read-only view (or a DSL, which passes too): the
-    // check cannot tell more.
+    // On unknown, to the read-only view: the check cannot tell more.
     const model: unknown = fromDot('digraph {}');
     if (isNodeModel(model)) {
-      expectTypeOf(model).toEqualTypeOf<
-        ReadonlyNodeModel | ModelView<ReadonlyNodeModel>
-      >();
-      expectTypeOf(modelOf(model)).toEqualTypeOf<ReadonlyNodeModel>();
+      expectTypeOf(model).toEqualTypeOf<ReadonlyNodeModel>();
     }
     // Given a model, the caller's type is kept.
     const statement = modelOf(digraph()).statements[0];
     if (statement && isNodeModel(statement)) {
       expectTypeOf(statement).toEqualTypeOf<NodeModel>();
     }
-    // Given a DSL, the DSLs of that kind.
+    // A DSL is not a model; narrow DSLs by $$type.
     const view = digraph().$statements[0];
-    if (view && isNodeModel(view)) {
+    if (view) expectTypeOf(isNodeModel(view)).toEqualTypeOf<boolean>();
+    if (view?.$$type === 'Node') {
       expectTypeOf(view).toEqualTypeOf<DSL<NodeModel>>();
     }
   });

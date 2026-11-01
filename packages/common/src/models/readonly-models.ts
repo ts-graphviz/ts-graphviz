@@ -192,36 +192,29 @@ export type AnyReadonlyDotObjectModel =
  *   out of a union of custom classes);
  * - `unknown`: the read-only model of that kind (e.g.
  *   {@link ReadonlyNodeModel}), since the guard checks only `$$type` and a
- *   few fields, or an object standing for one ({@link ModelView}, such as
- *   the DOT DSL of `ts-graphviz`), which the guards also pass: read it
- *   through `modelOf`;
+ *   few fields;
  * - another object type (such as `DotObjectModel`, or a type with fields
- *   of your own): its intersection with the read-only model, or also with
- *   a view of one if the type can hold a view (`DotObjectModel` can,
- *   `ForwardRefNode` cannot);
- * - arrays: `never`;
- * - a primitive type: `never`;
- * - an object standing for a model ({@link ModelView}): itself, when its
- *   model is of that kind.
+ *   of your own): its intersection with the read-only model;
+ * - a primitive type, or an object standing for a model ({@link ModelView},
+ *   such as the DOT DSL of `ts-graphviz`), which the guards do not pass:
+ *   `never`.
  *
  * Applied to each member of a union.
  * @group Models
  */
 export type NarrowedModel<T, K extends DotObjectType> = unknown extends T
-  ? T & GuardedModelOf<K, T>
+  ? T & ReadonlyModelOf<K>
   : T extends unknown
-    ? T extends ModelView<infer U>
-      ? [NarrowedModel<U, K>] extends [never]
-        ? never
-        : T
+    ? T extends ModelView
+      ? never
       : T extends AnyReadonlyDotObjectModel
         ? Extract<T, { readonly $$type: K }>
-        : T extends Primitive | readonly unknown[]
+        : T extends Primitive
           ? never
-          : T & GuardedModelOf<K, T>
+          : T & ReadonlyModelOf<K>
     : never;
 
-/** The values that are not objects: a guard never passes them (nor arrays). */
+/** The values that are not objects: a guard never passes them. */
 type Primitive = string | number | bigint | boolean | symbol | null | undefined;
 
 /** The read-only model of `$$type` `K`. */
@@ -229,30 +222,3 @@ type ReadonlyModelOf<K extends DotObjectType> = Extract<
   AnyReadonlyDotObjectModel,
   { readonly $$type: K }
 >;
-
-/**
- * What of type `T` passes a guard for `K`: the read-only model, or a view of
- * one (such as a DOT DSL) where `T` can hold one.
- */
-type GuardedModelOf<K extends DotObjectType, T> =
-  | ReadonlyModelOf<K>
-  | (CanHoldView<T> extends true ? ModelView<ReadonlyModelOf<K>> : never);
-
-/**
- * Whether a value of type `T` can be a view such as a DOT DSL, whose only
- * required string keys start with `$` or are DOT statements (its
- * attributes are optional): `DotObjectModel` can, `ForwardRefNode` (with
- * its required `id`) cannot.
- */
-type CanHoldView<T> = [
-  Exclude<
-    RequiredKeys<T> & string,
-    `$${string}` | 'node' | 'edge' | 'subgraph' | 'graph'
-  >,
-] extends [never]
-  ? true
-  : false;
-
-type RequiredKeys<T> = {
-  [P in keyof T]-?: object extends Pick<T, P> ? never : P;
-}[keyof T];

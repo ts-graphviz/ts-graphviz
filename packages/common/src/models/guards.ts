@@ -1,6 +1,10 @@
-import { MODEL, modelOf } from './model-view.js';
+import { MODEL } from './model-view.js';
 import type { ForwardRefNode } from './models.js';
 import type { NarrowedModel } from './readonly-models.js';
+
+// An object standing for a model (a ModelView, such as the DOT DSL of
+// ts-graphviz) passes none of the guards: it is not a model, and reads as
+// one only through modelOf (its `id`, say, is an attribute).
 
 /**
  * A field of a model or node reference: from the object or the classes it
@@ -27,8 +31,6 @@ function field(object: object, key: string): unknown {
  * @returns True if the object is a ForwardRefNode
  */
 export function isForwardRefNode(object: unknown): object is ForwardRefNode {
-  // An object standing for a model (a ModelView) is not one: its `id` is not
-  // the node's.
   return (
     typeof object === 'object' &&
     object !== null &&
@@ -42,19 +44,20 @@ export function isForwardRefNode(object: unknown): object is ForwardRefNode {
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `Node` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlyNodeModel} (or an object standing for
- * one, such as a DOT DSL, which also passes), since the check looks only at
+ * read-only view {@link ReadonlyNodeModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is a NodeModel
  */
 export function isNodeModel<T>(object: T): object is NarrowedModel<T, 'Node'> {
-  const model: unknown = modelOf(object);
   return (
-    typeof model === 'object' &&
-    model !== null &&
-    field(model, '$$type') === 'Node' &&
-    typeof field(model, 'id') === 'string'
+    typeof object === 'object' &&
+    object !== null &&
+    !(MODEL in object) &&
+    field(object, '$$type') === 'Node' &&
+    typeof field(object, 'id') === 'string'
   );
 }
 
@@ -63,19 +66,20 @@ export function isNodeModel<T>(object: T): object is NarrowedModel<T, 'Node'> {
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `Edge` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlyEdgeModel} (or an object standing for
- * one, such as a DOT DSL, which also passes), since the check looks only at
+ * read-only view {@link ReadonlyEdgeModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is an EdgeModel
  */
 export function isEdgeModel<T>(object: T): object is NarrowedModel<T, 'Edge'> {
-  const model: unknown = modelOf(object);
   return (
-    typeof model === 'object' &&
-    model !== null &&
-    field(model, '$$type') === 'Edge' &&
-    Array.isArray(field(model, 'targets'))
+    typeof object === 'object' &&
+    object !== null &&
+    !(MODEL in object) &&
+    field(object, '$$type') === 'Edge' &&
+    Array.isArray(field(object, 'targets'))
   );
 }
 
@@ -84,20 +88,21 @@ export function isEdgeModel<T>(object: T): object is NarrowedModel<T, 'Edge'> {
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `Subgraph` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlySubgraphModel} (or an object standing for
- * one, such as a DOT DSL, which also passes), since the check looks only at
+ * read-only view {@link ReadonlySubgraphModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is a SubgraphModel
  */
 export function isSubgraphModel<T>(
   object: T,
 ): object is NarrowedModel<T, 'Subgraph'> {
-  const model: unknown = modelOf(object);
   return (
-    typeof model === 'object' &&
-    model !== null &&
-    field(model, '$$type') === 'Subgraph'
+    typeof object === 'object' &&
+    object !== null &&
+    !(MODEL in object) &&
+    field(object, '$$type') === 'Subgraph'
   );
 }
 
@@ -106,21 +111,22 @@ export function isSubgraphModel<T>(
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `Graph` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlyRootGraphModel} (or an object standing for
- * one, such as a DOT DSL, which also passes), since the check looks only at
+ * read-only view {@link ReadonlyRootGraphModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is a RootGraphModel
  */
 export function isRootGraphModel<T>(
   object: T,
 ): object is NarrowedModel<T, 'Graph'> {
-  const model: unknown = modelOf(object);
   return (
-    typeof model === 'object' &&
-    model !== null &&
-    field(model, '$$type') === 'Graph' &&
-    typeof field(model, 'directed') === 'boolean'
+    typeof object === 'object' &&
+    object !== null &&
+    !(MODEL in object) &&
+    field(object, '$$type') === 'Graph' &&
+    typeof field(object, 'directed') === 'boolean'
   );
 }
 
@@ -129,19 +135,20 @@ export function isRootGraphModel<T>(
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `Dot` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlyDotModel} (or an object standing for
- * one, such as a DOT DSL, which also passes), since the check looks only at
+ * read-only view {@link ReadonlyDotModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is a DotModel
  */
 export function isDotModel<T>(object: T): object is NarrowedModel<T, 'Dot'> {
-  const model: unknown = modelOf(object);
   return (
-    typeof model === 'object' &&
-    model !== null &&
-    field(model, '$$type') === 'Dot' &&
-    Array.isArray(field(model, 'graphs'))
+    typeof object === 'object' &&
+    object !== null &&
+    !(MODEL in object) &&
+    field(object, '$$type') === 'Dot' &&
+    Array.isArray(field(object, 'graphs'))
   );
 }
 
@@ -150,19 +157,20 @@ export function isDotModel<T>(object: T): object is NarrowedModel<T, 'Dot'> {
  *
  * Given a model, it keeps the caller's type: a union of models narrows to
  * its `AttributeList` members. On a value of unknown type it narrows to the
- * read-only view {@link ReadonlyAttributeListModel} (or an object standing for
- * one, such as a DOT DSL, which also passes), since the check looks only at
+ * read-only view {@link ReadonlyAttributeListModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is an AttributeListModel
  */
 export function isAttributeListModel<T>(
   object: T,
 ): object is NarrowedModel<T, 'AttributeList'> {
-  const model: unknown = modelOf(object);
   return (
-    typeof model === 'object' &&
-    model !== null &&
-    field(model, '$$type') === 'AttributeList'
+    typeof object === 'object' &&
+    object !== null &&
+    !(MODEL in object) &&
+    field(object, '$$type') === 'AttributeList'
   );
 }

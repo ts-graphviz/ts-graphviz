@@ -34,7 +34,6 @@ import {
   isNodeRef,
   isRootGraphModel,
   isSubgraphModel,
-  type ModelView,
   modelOf,
   Node,
   type NodeAttributeKey,
@@ -262,12 +261,11 @@ describe('the readers take every model', () => {
       void toBlob(v);
     }
     expectTypeOf(fromModel(view.node('a'))).toEqualTypeOf<NodeASTNode>();
-    expectTypeOf(views.filter(isRootGraphModel)).toEqualTypeOf<
-      DSL<RootGraphModel>[]
-    >();
-    expectTypeOf(view.$statements.filter(isEdgeModel)).toEqualTypeOf<
-      DSL<EdgeModel>[]
-    >();
+    // A DSL is not a model: the guards do not pass it (narrow by $$type).
+    expectTypeOf(views.filter(isRootGraphModel)).toEqualTypeOf<never[]>();
+    for (const s of view.$statements) {
+      if (s.$$type === 'Edge') expectTypeOf(s).toEqualTypeOf<DSL<EdgeModel>>();
+    }
   });
 
   it('in generic code', () => {
@@ -295,38 +293,22 @@ describe('the readers take every model', () => {
 });
 
 describe('the guards', () => {
-  it('narrow unknown to the read-only types, or a view of one', () => {
+  it('narrow unknown to the read-only types', () => {
     const value: unknown = null;
     if (isNodeModel(value))
-      expectTypeOf(value).toEqualTypeOf<
-        ReadonlyNodeModel | ModelView<ReadonlyNodeModel>
-      >();
+      expectTypeOf(value).toEqualTypeOf<ReadonlyNodeModel>();
     if (isEdgeModel(value))
-      expectTypeOf(value).toEqualTypeOf<
-        ReadonlyEdgeModel | ModelView<ReadonlyEdgeModel>
-      >();
+      expectTypeOf(value).toEqualTypeOf<ReadonlyEdgeModel>();
     if (isSubgraphModel(value)) {
-      expectTypeOf(value).toEqualTypeOf<
-        ReadonlySubgraphModel | ModelView<ReadonlySubgraphModel>
-      >();
+      expectTypeOf(value).toEqualTypeOf<ReadonlySubgraphModel>();
     }
     if (isRootGraphModel(value)) {
-      expectTypeOf(value).toEqualTypeOf<
-        ReadonlyRootGraphModel | ModelView<ReadonlyRootGraphModel>
-      >();
+      expectTypeOf(value).toEqualTypeOf<ReadonlyRootGraphModel>();
     }
     if (isDotModel(value))
-      expectTypeOf(value).toEqualTypeOf<
-        ReadonlyDotModel | ModelView<ReadonlyDotModel>
-      >();
+      expectTypeOf(value).toEqualTypeOf<ReadonlyDotModel>();
     if (isAttributeListModel(value)) {
-      expectTypeOf(value).toEqualTypeOf<
-        ReadonlyAttributeListModel | ModelView<ReadonlyAttributeListModel>
-      >();
-    }
-    if (isNodeModel(value)) {
-      // A DSL passes too; read it through modelOf.
-      expectTypeOf(modelOf(value)).toEqualTypeOf<ReadonlyNodeModel>();
+      expectTypeOf(value).toEqualTypeOf<ReadonlyAttributeListModel>();
     }
     if (isNodeRef(value)) expectTypeOf(value).toEqualTypeOf<NodeRef>();
   });
@@ -378,10 +360,10 @@ describe('the guards', () => {
   it('filter arrays of unknown values or read-only models', () => {
     const values = [] as unknown[];
     expectTypeOf(values.filter(isNodeModel)).toEqualTypeOf<
-      (ReadonlyNodeModel | ModelView<ReadonlyNodeModel>)[]
+      ReadonlyNodeModel[]
     >();
     expectTypeOf(values.filter(isRootGraphModel)).toEqualTypeOf<
-      (ReadonlyRootGraphModel | ModelView<ReadonlyRootGraphModel>)[]
+      ReadonlyRootGraphModel[]
     >();
     const read = [] as AnyReadonlyDotObjectModel[];
     expectTypeOf(read.filter(isEdgeModel)).toEqualTypeOf<ReadonlyEdgeModel[]>();
@@ -391,20 +373,8 @@ describe('the guards', () => {
   it('narrow a wider type to the read-only type, and leave out the rest', () => {
     const object = {} as DotObjectModel;
     if (isNodeModel(object)) {
-      // A DSL is a DotObjectModel too.
-      expectTypeOf(object).toEqualTypeOf<
-        | (DotObjectModel & ReadonlyNodeModel)
-        | (DotObjectModel & ModelView<ReadonlyNodeModel>)
-      >();
+      expectTypeOf(object).toExtend<ReadonlyNodeModel>();
       expectTypeOf(object).not.toExtend<NodeModel>();
-    }
-    // A type a DSL can be.
-    const dollar = {} as { readonly $id: string };
-    if (isNodeModel(dollar)) {
-      expectTypeOf(dollar).toEqualTypeOf<
-        | ({ readonly $id: string } & ReadonlyNodeModel)
-        | ({ readonly $id: string } & ModelView<ReadonlyNodeModel>)
-      >();
     }
     // A type of your own that a model can also be.
     const tagged = {} as { id: string; source: string };

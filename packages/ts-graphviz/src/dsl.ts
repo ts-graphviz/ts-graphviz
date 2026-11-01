@@ -51,8 +51,9 @@ import {
  *   `$foo` of your class is `$$foo`).
  *
  * Every model you get from a DSL is a DSL, and {@link modelOf} gives the
- * model back. `toDot`, `fromModel`, `toBlob` and the model guards take a
- * DSL in place of its model.
+ * model back. `toDot`, `fromModel` and `toBlob` take a DSL in place of its
+ * model. A DSL is not a model: the model guards (`isNodeModel`, …) are false
+ * for it, so narrow DSLs by `$$type` or check `modelOf(x)`.
  * @group DSL
  */
 export type DSL<T extends AnyDotObjectModel> = T extends NodeModel
@@ -599,20 +600,17 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
 const views = new WeakMap<object, object>();
 
 /**
- * A model, not a DSL: of a model's `$$type`, with the fields a model of that
- * type has (as the model guards check).
+ * A model, not a DSL: the model guards check a model's `$$type` and the
+ * fields a model of that type has, and are false for a DSL.
  */
 function isModel(value: unknown): value is AnyDotObjectModel {
   return (
-    typeof value === 'object' &&
-    value !== null &&
-    !(MODEL in value) &&
-    (isNodeModel(value) ||
-      isEdgeModel(value) ||
-      isSubgraphModel(value) ||
-      isRootGraphModel(value) ||
-      isDotModel(value) ||
-      isAttributeListModel(value))
+    isNodeModel(value) ||
+    isEdgeModel(value) ||
+    isSubgraphModel(value) ||
+    isRootGraphModel(value) ||
+    isDotModel(value) ||
+    isAttributeListModel(value)
   );
 }
 

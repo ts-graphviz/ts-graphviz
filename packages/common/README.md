@@ -96,21 +96,20 @@ import {
   isEdgeModel,
   isRootGraphModel,
   isSubgraphModel,
-  isAttributeListModel,
-  modelOf,
+  isAttributeListModel
 } from '@ts-graphviz/common';
 
 declare const someModel: unknown;
 
 // Type-safe model checking
 if (isNodeModel(someModel)) {
-  // A node model, or an object standing for one (such as the DOT DSL of
-  // ts-graphviz): modelOf gives the model, typed ReadonlyNodeModel
-  console.log(modelOf(someModel).id);
+  // TypeScript knows someModel is NodeModel
+  console.log(someModel.id);
 }
 
 if (isEdgeModel(someModel)) {
-  console.log(modelOf(someModel).targets);
+  // TypeScript knows someModel is EdgeModel
+  console.log(someModel.targets);
 }
 ```
 

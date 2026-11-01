@@ -510,12 +510,19 @@ describe('the readers take a DSL', () => {
     expect(toDot(g.$nodes[0])).toBe(toDot(modelOf(g).nodes[0]));
   });
 
-  test('the guards', () => {
-    expect(isRootGraphModel(g)).toBe(true);
-    expect(isNodeModel(g.$nodes[0])).toBe(true);
-    expect(isEdgeModel(g.$edges[0])).toBe(true);
-    expect(isSubgraphModel(g.$subgraphs[0])).toBe(true);
-    expect(isNodeModel(g)).toBe(false);
+  test('the guards take the model, not the DSL', () => {
+    // A DSL is not a model (its `id` is an attribute): use modelOf.
+    expect(isRootGraphModel(g)).toBe(false);
+    expect(isNodeModel(g.$nodes[0])).toBe(false);
+    expect(isEdgeModel(g.$edges[0])).toBe(false);
+    expect(isSubgraphModel(g.$subgraphs[0])).toBe(false);
+    expect(isRootGraphModel(modelOf(g))).toBe(true);
+    expect(isNodeModel(modelOf(g.$nodes[0]))).toBe(true);
+    expect(isEdgeModel(modelOf(g.$edges[0]))).toBe(true);
+    expect(isSubgraphModel(modelOf(g.$subgraphs[0]))).toBe(true);
+    const a = g.node('a');
+    a.id = 'svg-a';
+    expect(isNodeModel(a)).toBe(false);
   });
 });
 

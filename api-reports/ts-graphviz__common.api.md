@@ -713,9 +713,9 @@ export interface ModelsContext<M extends ModelTypes = ModelTypes> {
   Edge: EdgeConstructor<M["Edge"]>;
 }
 
-export type NarrowedModel<T, K extends DotObjectType> = unknown extends T ? T & GuardedModelOf<K, T> : T extends unknown ? T extends ModelView<infer U> ? [NarrowedModel<U, K>] extends [never] ? never : T : T extends AnyReadonlyDotObjectModel ? Extract<T, {
+export type NarrowedModel<T, K extends DotObjectType> = unknown extends T ? T & ReadonlyModelOf<K> : T extends unknown ? T extends ModelView ? never : T extends AnyReadonlyDotObjectModel ? Extract<T, {
   readonly $$type: K;
-}> : T extends Primitive | readonly unknown[] ? never : T & GuardedModelOf<K, T> : never;
+}> : T extends Primitive ? never : T & ReadonlyModelOf<K> : never;
 
 export type NodeAttributeKey = NodeAttributeKey.values;
 export declare namespace NodeAttributeKey {
@@ -1027,17 +1027,11 @@ type AsClusterSubgraphAttributesObject = AttributesObject<Exclude<ClusterSubgrap
   cluster: true;
 };
 
-type CanHoldView<T> = [Exclude<RequiredKeys<T> & string, `$${string}` | "node" | "edge" | "subgraph" | "graph">] extends [never] ? true : false;
-
 type Creates<C, Base> = C extends (abstract new (...args: any[]) => infer I) ? I extends Base ? I : Base : Base;
-
-type GuardedModelOf<K extends DotObjectType, T> = ReadonlyModelOf<K> | (CanHoldView<T> extends true ? ModelView<ReadonlyModelOf<K>> : never);
 
 type Primitive = string | number | bigint | boolean | symbol | null | undefined;
 
 type ReadonlyModelOf<K extends DotObjectType> = Extract<AnyReadonlyDotObjectModel, {
   readonly $$type: K;
 }>;
-
-type RequiredKeys<T> = { [P in keyof T]-?: object extends Pick<T, P> ? never : P; }[keyof T];
 ```
