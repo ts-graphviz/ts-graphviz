@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { ownOptions, toDot } from 'ts-graphviz';
+import { type AnyReadonlyDotObjectModel, ownOptions, toDot } from 'ts-graphviz';
 
 import {
   type CreateRootOptions,
@@ -82,7 +82,9 @@ export async function renderToDot<
 
     try {
       await root.render(element, { signal });
-      return toDot(container);
+      // A container is a root graph or subgraph model; AnyGraphContainer
+      // also admits GraphBaseModel, whose $$type the types leave open.
+      return toDot(container as AnyReadonlyDotObjectModel);
     } finally {
       root.unmount();
     }

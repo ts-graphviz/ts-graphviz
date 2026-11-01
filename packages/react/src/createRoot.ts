@@ -112,6 +112,9 @@ export interface GraphvizRoot {
    * const nodes = root.getTopLevelModels<NodeModel>();
    * ```
    */
+  getTopLevelModels<T extends AnyDotObjectModel>(
+    typeGuard: (model: AnyDotObjectModel) => model is T,
+  ): T[];
   getTopLevelModels<T extends DotObjectModel>(
     typeGuard?: (model: DotObjectModel) => model is T,
   ): T[];
@@ -376,13 +379,13 @@ export function createRoot<
     },
 
     getTopLevelModels<T extends DotObjectModel>(
-      typeGuard?: (model: DotObjectModel) => model is T,
-    ) {
+      typeGuard?: (model: AnyDotObjectModel) => boolean,
+    ): T[] {
       const models = [...containerInfo.renderedModels];
-      if (typeGuard) {
-        return models.filter(typeGuard);
-      }
-      return models as DotObjectModel[] as T[];
+      // The overloads type the result: by the guard, or as the caller says.
+      return (typeGuard
+        ? models.filter(typeGuard)
+        : models) as DotObjectModel[] as T[];
     },
   };
 }

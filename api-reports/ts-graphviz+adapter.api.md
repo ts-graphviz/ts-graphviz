@@ -5,7 +5,7 @@
 ```ts
 export * from "@ts-graphviz/adapter";
 
-export type DotInput = string | DotObjectModel;
+export type DotInput = string | AnyReadonlyDotObjectModel;
 
 export declare function toBlob<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(input: DotInput, options?: Options<T, F, L>): Promise<Blob>;
 ```

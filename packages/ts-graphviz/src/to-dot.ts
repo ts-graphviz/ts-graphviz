@@ -5,11 +5,11 @@ import {
   stringify,
 } from '@ts-graphviz/ast';
 import {
-  type DotObjectModel,
+  type AnyReadonlyDotObjectModel,
   isRootGraphModel,
   ownOptions,
+  type ReadonlyDotModel,
 } from '@ts-graphviz/common';
-import { Dot } from '@ts-graphviz/core';
 
 /**
  * This interface provides options for converting a model to DOT.
@@ -30,7 +30,10 @@ export interface ToDotOptions {
  * Convert Model to DOT string.
  *
  * A root graph is written as a whole DOT source (its `comment` precedes the
- * graph statement), the same as a {@link Dot} model holding just that graph.
+ * graph statement), the same as a `Dot` model holding just that graph.
+ *
+ * It only reads the model, so it takes any model: the built-in ones, custom
+ * model classes, and the read-only views ({@link AnyReadonlyDotObjectModel}).
  *
  * @group Convert Model to DOT
  *
@@ -38,12 +41,20 @@ export interface ToDotOptions {
  * @param options Optional options for the conversion.
  * @returns DOT string
  */
-export function toDot(model: DotObjectModel, options?: ToDotOptions): string {
+export function toDot(
+  model: AnyReadonlyDotObjectModel,
+  options?: ToDotOptions,
+): string {
   // Own properties only: an inherited one is never an option (#1757).
   const { convert, print } = ownOptions(options);
   const ast = fromModel(
-    isRootGraphModel(model) ? new Dot([model]) : model,
+    isRootGraphModel(model) ? dotOf(model) : model,
     convert,
   );
   return stringify(ast, print);
+}
+
+/** A DOT source holding just `graph`, with no comment of its own. */
+function dotOf(graph: ReadonlyDotModel['graphs'][number]): ReadonlyDotModel {
+  return { $$type: 'Dot', comment: undefined, graphs: [graph] };
 }

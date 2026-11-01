@@ -1,9 +1,9 @@
-import type { SubgraphModel } from '@ts-graphviz/common';
+import type { ReadonlySubgraphModel } from '@ts-graphviz/common';
 import { idToRaw } from '../../literal.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';
 
-export const SubgraphPlugin: ConvertFromModelPlugin<SubgraphModel> = {
+export const SubgraphPlugin: ConvertFromModelPlugin<ReadonlySubgraphModel> = {
   match(model) {
     return model.$$type === 'Subgraph';
   },

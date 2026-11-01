@@ -1,9 +1,9 @@
-import type { DotModel } from '@ts-graphviz/common';
+import type { ReadonlyDotModel } from '@ts-graphviz/common';
 import type { DotASTNode } from '../../../types.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertComment } from './utils/convert-comment.js';
 
-export const DotPlugin: ConvertFromModelPlugin<DotModel> = {
+export const DotPlugin: ConvertFromModelPlugin<ReadonlyDotModel> = {
   match(model) {
     return model.$$type === 'Dot';
   },

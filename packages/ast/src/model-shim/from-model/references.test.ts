@@ -1,4 +1,7 @@
-import type { DotObjectModel, SubgraphModel } from '@ts-graphviz/common';
+import type {
+  AnyReadonlyDotObjectModel,
+  SubgraphModel,
+} from '@ts-graphviz/common';
 import { Digraph, Edge, Subgraph } from '@ts-graphviz/core';
 import { describe, expect, it } from 'vitest';
 import { fromModel } from './from-model.js';
@@ -90,7 +93,9 @@ describe('fromModel of a model that shares subgraphs', {
 describe('the error for a model no plugin converts', { tags: ['SM-5'] }, () => {
   it('describes a $$type that is not a string without converting it', () => {
     // A template literal threw an uncoded TypeError for a symbol.
-    const model = { $$type: Symbol('x') } as unknown as DotObjectModel;
+    const model = {
+      $$type: Symbol('x'),
+    } as unknown as AnyReadonlyDotObjectModel;
     expect(() => fromModel(model)).toThrow(
       expect.objectContaining({ code: 'TSG_ERR_NO_PLUGIN' }),
     );

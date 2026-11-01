@@ -1,4 +1,8 @@
-import type { EdgeTargetTuple, SubgraphModel } from '@ts-graphviz/common';
+import type {
+  EdgeTargetTuple,
+  NodeModel,
+  SubgraphModel,
+} from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import { AttributesBase } from '../attributes/AttributesBase.js';
 import { DotObject } from './DotObject.js';
@@ -93,7 +97,7 @@ describe('class Subgraph', () => {
   test('create edge with attributes', () => {
     const nodes = [...Array(2)].map((_v, i) =>
       subgraph.createNode(`node${i + 1}`),
-    ) as EdgeTargetTuple;
+    ) as [NodeModel, NodeModel];
     const edge = subgraph.createEdge(nodes, {
       label: 'Label',
     });
@@ -154,7 +158,7 @@ describe('class Subgraph', () => {
     it('Edge operation methods works', () => {
       const nodes = [...Array(2)].map((_v, i) =>
         subgraph.createNode(`node${i + 1}`),
-      ) as EdgeTargetTuple;
+      ) as [NodeModel, NodeModel];
       const edge = subgraph.createEdge(nodes);
       expect(subgraph.existEdge(edge)).toBe(true);
       subgraph.removeEdge(edge);

@@ -55,9 +55,10 @@ describe('Imperative API(addXxx existXxx removeXxx methods)', () => {
   });
 
   test('Edge operation methods works', () => {
-    const nodes = ['foo', 'bar'].map((id) =>
-      g.createNode(id),
-    ) as EdgeTargetTuple;
+    const nodes = ['foo', 'bar'].map((id) => g.createNode(id)) as [
+      NodeModel,
+      NodeModel,
+    ];
     const edge = new Edge(nodes);
     expect(g.existEdge(edge)).toBe(false);
     g.addEdge(edge);
@@ -176,7 +177,10 @@ describe('Declarative API', () => {
     describe('create edge', () => {
       let nodes: EdgeTargetTuple;
       beforeEach(() => {
-        nodes = ['foo', 'bar'].map((id) => g.createNode(id)) as EdgeTargetTuple;
+        nodes = ['foo', 'bar'].map((id) => g.createNode(id)) as [
+          NodeModel,
+          NodeModel,
+        ];
       });
 
       test('create edge with target nodes', () => {

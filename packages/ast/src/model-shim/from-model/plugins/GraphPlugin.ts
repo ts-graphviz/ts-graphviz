@@ -1,9 +1,9 @@
-import type { RootGraphModel } from '@ts-graphviz/common';
+import type { ReadonlyRootGraphModel } from '@ts-graphviz/common';
 import { idToRaw } from '../../literal.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertClusterChildren } from './utils/convert-cluster-children.js';
 
-export const GraphPlugin: ConvertFromModelPlugin<RootGraphModel> = {
+export const GraphPlugin: ConvertFromModelPlugin<ReadonlyRootGraphModel> = {
   match(model) {
     return model.$$type === 'Graph';
   },
