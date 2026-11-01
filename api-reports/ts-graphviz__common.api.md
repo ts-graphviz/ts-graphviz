@@ -1027,9 +1027,11 @@ type AsClusterSubgraphAttributesObject = AttributesObject<Exclude<ClusterSubgrap
   cluster: true;
 };
 
+type CanHoldView<T> = [Exclude<RequiredKeys<T> & string, `$${string}` | "node" | "edge" | "subgraph" | "graph">] extends [never] ? true : false;
+
 type Creates<C, Base> = C extends (abstract new (...args: any[]) => infer I) ? I extends Base ? I : Base : Base;
 
-type GuardedModelOf<K extends DotObjectType, T> = ReadonlyModelOf<K> | (ViewOf<K> extends T ? ModelView<ReadonlyModelOf<K>> : never);
+type GuardedModelOf<K extends DotObjectType, T> = ReadonlyModelOf<K> | (CanHoldView<T> extends true ? ModelView<ReadonlyModelOf<K>> : never);
 
 type Primitive = string | number | bigint | boolean | symbol | null | undefined;
 
@@ -1037,7 +1039,5 @@ type ReadonlyModelOf<K extends DotObjectType> = Extract<AnyReadonlyDotObjectMode
   readonly $$type: K;
 }>;
 
-type ViewOf<K extends DotObjectType> = ModelView<ReadonlyModelOf<K>> & {
-  readonly $$type: K;
-};
+type RequiredKeys<T> = { [P in keyof T]-?: object extends Pick<T, P> ? never : P; }[keyof T];
 ```

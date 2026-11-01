@@ -236,9 +236,23 @@ type ReadonlyModelOf<K extends DotObjectType> = Extract<
  */
 type GuardedModelOf<K extends DotObjectType, T> =
   | ReadonlyModelOf<K>
-  | (ViewOf<K> extends T ? ModelView<ReadonlyModelOf<K>> : never);
+  | (CanHoldView<T> extends true ? ModelView<ReadonlyModelOf<K>> : never);
 
-/** The least a view of a model of `$$type` `K` has. */
-type ViewOf<K extends DotObjectType> = ModelView<ReadonlyModelOf<K>> & {
-  readonly $$type: K;
-};
+/**
+ * Whether a value of type `T` can be a view such as a DOT DSL, whose only
+ * required string keys start with `$` or are DOT statements (its
+ * attributes are optional): `DotObjectModel` can, `ForwardRefNode` (with
+ * its required `id`) cannot.
+ */
+type CanHoldView<T> = [
+  Exclude<
+    RequiredKeys<T> & string,
+    `$${string}` | 'node' | 'edge' | 'subgraph' | 'graph'
+  >,
+] extends [never]
+  ? true
+  : false;
+
+type RequiredKeys<T> = {
+  [P in keyof T]-?: object extends Pick<T, P> ? never : P;
+}[keyof T];

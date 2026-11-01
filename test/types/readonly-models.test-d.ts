@@ -398,6 +398,14 @@ describe('the guards', () => {
       >();
       expectTypeOf(object).not.toExtend<NodeModel>();
     }
+    // A type a DSL can be.
+    const dollar = {} as { readonly $id: string };
+    if (isNodeModel(dollar)) {
+      expectTypeOf(dollar).toEqualTypeOf<
+        | ({ readonly $id: string } & ReadonlyNodeModel)
+        | ({ readonly $id: string } & ModelView<ReadonlyNodeModel>)
+      >();
+    }
     // A type of your own that a model can also be.
     const tagged = {} as { id: string; source: string };
     if (isNodeModel(tagged)) {
