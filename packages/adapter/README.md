@@ -42,22 +42,17 @@ This library enables rendering DOT language strings into different output format
 
 [Graphviz](https://graphviz.gitlab.io/) must be installed so that the dot command can be executed.
 
-Execute the dot command to output a DOT language string to a stream or file.
+Execute the dot command and get its output as a `Blob`.
 
 ![Adapter State Machine](./media/adapter-state-machine.svg)
 
-## Core Functions
+## `toBlob`
 
-The adapter provides two main functions for working with DOT language strings:
-
-### `toStream`
-
-The `toStream` function converts a DOT language string to a Web `ReadableStream<Uint8Array>` of the specified output format, on Node.js and Deno alike.
-
+`toBlob` renders a DOT language string with the dot command and returns its output as a [`Blob`](https://developer.mozilla.org/docs/Web/API/Blob), on Node.js and Deno alike. The output is held in memory: the Blob is returned once the command has succeeded, and every failure rejects the promise, before you read anything. Its `type` is the media type of the format (`image/svg+xml`, `image/png`, `application/pdf`, `application/json`, `text/vnd.graphviz`, …), or empty for a format without a well-known one.
 
 ```ts
-import { Writable } from 'node:stream';
-import { toStream } from '@ts-graphviz/adapter';
+import { writeFile } from 'node:fs/promises';
+import { toBlob } from '@ts-graphviz/adapter';
 
 const dot = `
   digraph example {
@@ -67,32 +62,23 @@ const dot = `
   }
 `;
 
-// A Web ReadableStream<Uint8Array> on every runtime.
-const stream = await toStream(dot, { format: 'svg' });
-// Node.js
-await stream.pipeTo(Writable.toWeb(process.stdout));
-// Deno: await stream.pipeTo(Deno.stdout.writable);
+const blob = await toBlob(dot, { format: 'svg' });
+
+const svg = await blob.text(); // a string
+const bytes = new Uint8Array(await blob.arrayBuffer());
+const stream = blob.stream(); // a Web ReadableStream<Uint8Array>
+const response = new Response(blob); // e.g. from a request handler
+
+// Writing it to a file is up to you, and so is choosing the path:
+await writeFile('./result.svg', blob.stream());
+// Deno: await Deno.writeFile('./result.svg', blob.stream());
 ```
 
-### `toFile`
+Show an SVG Blob as an image (`<img src>`), not as a document: a `blob:` URL of `image/svg+xml` opened in a tab or a frame runs any script in the SVG with your application's origin.
 
-The `toFile` function writes the rendered output directly to a file at the specified path.
+`toBlob` accepts configuration options to customize the rendering process.
 
-```ts
-import { toFile } from '@ts-graphviz/adapter';
-
-const dot = `
-  digraph example {
-    node1 [
-      label = "My Node",
-    ]
-  }
-`;
-
-await toFile(dot, './result.svg', { format: 'svg' });
-```
-
-Both functions accept configuration options to customize the rendering process.
+> In 3.x the adapter had `toStream` and `toFile`. Use `(await toBlob(dot, options)).stream()` for the first, and write that stream to the file yourself (`writeFile(path, stream)`) for the second.
 
 ## Configuration Options
 
@@ -110,11 +96,11 @@ The `dotCommand` and `library` options are intended to be configured by applicat
 Layout time and output size depend on the DOT source. Bound both when the DOT is not your own:
 
 ```ts
-import { toStream } from '@ts-graphviz/adapter';
+import { toBlob } from '@ts-graphviz/adapter';
 
 declare const dot: string;
 
-const stream = await toStream(dot, {
+const blob = await toBlob(dot, {
   format: 'svg',
   // Kill dot after 10 seconds; the call rejects with a TimeoutError.
   signal: AbortSignal.timeout(10_000),
@@ -128,16 +114,16 @@ const stream = await toStream(dot, {
 
 Graphviz has no sandbox. It reads files named in the DOT and can copy them into its output: an EPS file named by `shapefile` or `image` ends up inside `-Tps` output, images named by `image` or `<IMG SRC>` are embedded in raster output, and their paths appear in SVG. URL attributes are written into SVG links, so a `javascript:` URL becomes script when the SVG is served inline.
 
-`toStream` and `toFile` therefore check every source with `sanitize` from `@ts-graphviz/ast` before starting the command, and render the checked text. A source that names a file to read (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), an unsafe link (`URL`, `href`, `HREF`, … other than relative, `http`, `https` and `mailto`), or text that Graphviz would write raw into PostScript, image maps or `plain` output (font names other than plain names, unknown `style` values, line breaks in names, control characters) is rejected with a `DOMException` named `SecurityError`. The check knows the output `format`: it refuses `ismap` and formats whose output has not been checked (e.g. `vml`, `fig`), and requires single-word font names for PostScript:
+`toBlob` therefore checks every source with `sanitize` from `@ts-graphviz/ast` before starting the command, and render the checked text. A source that names a file to read (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), an unsafe link (`URL`, `href`, `HREF`, … other than relative, `http`, `https` and `mailto`), or text that Graphviz would write raw into PostScript, image maps or `plain` output (font names other than plain names, unknown `style` values, line breaks in names, control characters) is rejected with a `DOMException` named `SecurityError`. The check knows the output `format`: it refuses `ismap` and formats whose output has not been checked (e.g. `vml`, `fig`), and requires single-word font names for PostScript:
 
 ```ts
-import { toStream } from '@ts-graphviz/adapter';
+import { toBlob } from '@ts-graphviz/adapter';
 import { isTsGraphvizError } from '@ts-graphviz/common';
 
 declare const userDot: string;
 
 try {
-  const stream = await toStream(userDot, {
+  const blob = await toBlob(userDot, {
     format: 'svg',
     signal: AbortSignal.timeout(10_000),
     // Options for the check; `true` (the default) uses the defaults.

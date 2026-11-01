@@ -5,8 +5,7 @@ export default digraph('state_machine', (g) => {
 
   g.node({ shape: 'circle' });
 
-  g.edge(['DOT', 'Stream'], { label: 'toStream' });
-  g.edge(['DOT', 'File'], { label: 'toFile' });
+  g.edge(['DOT', 'Blob'], { label: 'toBlob' });
 });
 
 export const meta = {

@@ -3,6 +3,6 @@
  */
 
 export * from './errors.js';
-export * from './to-file.node.js';
-export * from './to-stream.node.js';
+export { isFormat, isLayout } from './formats.js';
+export * from './to-blob.node.js';
 export type * from './types.js';

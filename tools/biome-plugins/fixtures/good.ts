@@ -10,6 +10,7 @@ export function f(options: { a?: number }) {
   spawn('dot', [], { __proto__: null, stdio: 'pipe', shell: false } as never);
   new Deno.Command('dot', { __proto__: null, args: [] });
   new ReadableStream({ __proto__: null, start() {} } as never);
+  new Blob([], { __proto__: null, type: 'text/plain' } as never);
   return a;
 }
 

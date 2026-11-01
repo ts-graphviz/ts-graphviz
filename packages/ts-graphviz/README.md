@@ -412,47 +412,28 @@ Provides an interface to run Graphviz dot commands.
 
 [Graphviz](https://graphviz.gitlab.io/) must be installed so that the dot command can be executed.
 
-Execute the dot command to output a DOT language string to a stream or file.
+Execute the dot command and get its output as a `Blob`.
 
 ![Adapter State Machine](./media/adapter-state-machine.svg)
 
-This module provides the following functions.
+The `toBlob` function renders **DOT** (or a model) to a **Blob**, whose `type` is the media type of the format.
 
-- The `toStream` function converts **DOT** to **Stream**.
-    ```ts
-    import { toStream } from 'ts-graphviz/adapter';
+```ts
+import { writeFile } from 'node:fs/promises';
+import { digraph } from 'ts-graphviz';
+import { toBlob } from 'ts-graphviz/adapter';
 
-    const dot = `
-      digraph example {
-        node1 [
-          label = "My Node",
-        ]
-      }
-    `;
+const G = digraph('example', (g) => {
+  g.node('node1', { label: 'My Node' });
+});
 
-    // A Web ReadableStream<Uint8Array> on every runtime.
-    const stream = await toStream(dot, { format: 'svg' });
-    // Node.js
-    await stream.pipeTo(Writable.toWeb(process.stdout));
-    // Deno
-    await stream.pipeTo(Deno.stdout.writable);
-    ```
-- Writes **DOT** to a file at the specified path `toFile` function
-    ```ts
-    import { toFile } from 'ts-graphviz/adapter';
+const blob = await toBlob(G, { format: 'svg' }); // blob.type is 'image/svg+xml'
+const svg = await blob.text();
+// Writing it to a file is up to you:
+await writeFile('./result.svg', blob.stream());
+```
 
-    const dot = `
-      digraph example {
-        node1 [
-          label = "My Node",
-        ]
-      }
-    `;
-
-    await toFile(dot, './result.svg', { format: 'svg' });
-    ```
-
-> **Note** Designed to work with Node.js and Deno; the stream is a Web `ReadableStream` on both. From `ts-graphviz/adapter`, `toStream` and `toFile` also accept a model instead of a DOT string.
+> **Note** Designed to work with Node.js and Deno. The output is held in memory, and every failure rejects the promise before you read anything. In 3.x the adapter had `toStream` (use `blob.stream()`) and `toFile` (write `blob.stream()` to the file yourself).
 
 ### `@ts-graphviz/ast` Module 🔢
 
@@ -604,27 +585,15 @@ With ts-graphviz, you can extend the library's type system to customize graph vi
 #### Use Case: Specifying Custom Graph Layout and Output Formats
 
 ```ts
-import { $keywords } from '@ts-graphviz/common';
-import { toFile } from '@ts-graphviz/adapter';
+import { toBlob } from '@ts-graphviz/adapter';
 
-// 1. Declare the '@ts-graphviz/adapter' module.
-declare module '@ts-graphviz/adapter' {
-  export namespace Layout {
-    // 2. Define the $values interface in the Layout namespace.
-    // 3. Inherit from $keywords<'my-custom-algorithm'> and specify the name of the new layout engine in <...>.
-    export interface $values extends $keywords<'my-custom-algorithm'> {}
-  }
-
-  export namespace Format {
-    // 4. Define the $values interface in the Format namespace.
-    // 5. Inherit from $keywords<'mp4'> and specify the name of the new output format in <...>.
-    export interface $values extends $keywords<'mp4'> {}
-  }
-}
-
-toFile('digraph { a -> b }', '/path/to/file', {
+// Names a Graphviz plugin adds, for this call only (nothing global).
+const video = await toBlob('digraph { a -> b }', {
+  customLayouts: ['my-custom-algorithm'],
+  customFormats: ['mp4'],
   layout: 'my-custom-algorithm',
   format: 'mp4',
+  sanitize: false,
 });
 ```
 

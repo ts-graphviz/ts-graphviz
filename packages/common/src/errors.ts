@@ -64,6 +64,8 @@ export const ERROR_CODES = [
   'TSG_ERR_OUTPUT_LIMIT_EXCEEDED',
   /** `sanitize` found something that makes Graphviz read a file or write an unsafe reference (`DOMException` named `SecurityError`). */
   'TSG_ERR_UNSAFE_DOT',
+  /** An adapter option has the wrong type (`TypeError`), or a value outside the documented set or range (`RangeError`), e.g. an unknown `format`. */
+  'TSG_ERR_INVALID_OPTION',
 ] as const;
 // Shared by every module of the process: frozen, so no code can change what
 // isTsGraphvizError accepts (#1757).

@@ -21,11 +21,10 @@ description: ts-graphvizでグラフをSVGやPNGの画像にレンダリング
 
 ## 例
 
-### DOT を画像ストリームに変換する
+### DOT を Blob にレンダリングする
 
 ```typescript
-import { Writable } from 'node:stream';
-import { toStream } from 'ts-graphviz/adapter';
+import { toBlob } from 'ts-graphviz/adapter';
 
 const dot = `
   digraph example {
@@ -33,29 +32,32 @@ const dot = `
   }
 `;
 
-const stream = await toStream(dot, { format: 'svg' });
+const blob = await toBlob(dot, { format: 'svg' });
 
-// In Node.js
-await stream.pipeTo(Writable.toWeb(process.stdout));
-
-// In Deno: await stream.pipeTo(Deno.stdout.writable);
+console.log(blob.type); // 'image/svg+xml'
+const svg = await blob.text();
 ```
 
-### DOT を画像ファイルに書き込む
+`toBlob` は `dot` が成功してから、出力全体をメモリに持った状態で返ります。失敗はすべて、読み始める前に Promise の reject として届きます。Blob は `text()`、`arrayBuffer()`、`stream()` で読めるほか、リクエストハンドラーから `new Response(blob)` として返せます。
 
+### 画像をファイルに書き込む
+
+出力をどこに書くか、どのパスを許すかはアプリケーションが決めます。
 
 ```typescript
-import { toFile } from 'ts-graphviz/adapter';
+import { writeFile } from 'node:fs/promises';
+import { toBlob } from 'ts-graphviz/adapter';
 
-const dot = `
-  digraph example {
-    node1 [ label = "My Node" ];
-  }
-`;
+declare const dot: string;
 
-await toFile(dot, './result.svg', { format: 'svg' });
+const blob = await toBlob(dot, { format: 'png' });
+await writeFile('./result.png', blob.stream());
+// In Deno: await Deno.writeFile('./result.png', blob.stream());
 ```
 
+:::tip
+ブラウザーで SVG の Blob を表示するときは `<img src>` を使い、文書として開かないでください。`image/svg+xml` の `blob:` URL をタブやフレームで開くと、アプリケーションのオリジンで実行されます。
+:::
 
 ## 解説
 
