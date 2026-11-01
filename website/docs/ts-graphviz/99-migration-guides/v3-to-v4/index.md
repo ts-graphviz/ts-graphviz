@@ -173,7 +173,7 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 
 `@ts-graphviz/common` has read-only views of the models: `ReadonlyNodeModel`, `ReadonlyEdgeModel`, `ReadonlySubgraphModel`, `ReadonlyRootGraphModel`, `ReadonlyDotModel`, `ReadonlyAttributeListModel` and `ReadonlyAttributes`, with the union `AnyReadonlyDotObjectModel` and the value type `DotValue` (`string | number | boolean | EscStringValue | HTMLLikeValue`). They hold only what reading needs (ids, attributes as `size` / `values` / `get(key)`, the contents of a graph), so every model fits them: the built-in ones, the classes of `@ts-graphviz/core`, and your own model classes.
 
-- **Readers take any model.** `toDot`, `fromModel` / `FromModelConverter` (`@ts-graphviz/ast`) and the model input of `ts-graphviz/adapter`'s `toStream` / `toFile` (`DotInput`) take an `AnyReadonlyDotObjectModel` instead of a `DotObjectModel`. Every model is still accepted; an object that only has a `$$type` (such as `{ $$type: 'Node' }`) no longer compiles.
+- **Readers take any model.** `toDot`, `fromModel` / `FromModelConverter` (`@ts-graphviz/ast`) and the model input of `ts-graphviz/adapter`'s `toBlob` (`DotInput`) take an `AnyReadonlyDotObjectModel` instead of a `DotObjectModel`. Every model is still accepted; an object that only has a `$$type` (such as `{ $$type: 'Node' }`) no longer compiles.
 - **Edge targets are read-only references.** `NodeRef` is `ReadonlyNodeModel | ForwardRefNode` (3.x: `NodeModel | ForwardRefNode`): an edge uses only the id of a target node, so any node model can be one. Reading `edge.targets` gives read-only nodes; to change a target node, look it up in the graph (`graph.getNode(target.id)`). An array of nodes cast to the tuple type (`nodes as EdgeTargetTuple`) no longer compiles; cast it to a tuple of nodes instead (`nodes as [NodeModel, NodeModel]`).
 - **Type guards on an unknown value narrow to the read-only types.** `isNodeModel(value)` on `unknown` gives `ReadonlyNodeModel` (3.x: `NodeModel`; on another object type such as `DotObjectModel`, its intersection with `ReadonlyNodeModel`), and likewise `isEdgeModel`, `isSubgraphModel`, `isRootGraphModel`, `isDotModel` and `isAttributeListModel`: the check looks at `$$type` and a few fields, which cannot tell a writable model from another object. Given a model, a guard keeps your type: on `AnyDotObjectModel` (or a union of your own classes) `isNodeModel` narrows to `NodeModel` (or your node class), and `models.filter(isNodeModel)` is still a `NodeModel[]` (on `unknown[]`, a `ReadonlyNodeModel[]`). If you need the writable model from an unknown value, keep the model where you created it, or look it up by id in its graph.
 
@@ -192,5 +192,7 @@ function countNodes(graph: ReadonlyRootGraphModel): number {
 ```
 
 A function that changes the node keeps taking `NodeModel` (or your class).
+
+A read-only type says only that the function taking it does not change the model; it is checked by TypeScript, not at run time. Models are not frozen: `toDot(g)` leaves `g` as it was, and `g` can be changed afterwards as before. Do not cast a read-only model back to a writable type to change it.
 
 See the [Security model](../../11-advanced-topics/06-security-model.md) for what the library guarantees at each trust boundary in v4.

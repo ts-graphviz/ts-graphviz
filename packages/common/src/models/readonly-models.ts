@@ -8,6 +8,9 @@
  * classes of `@ts-graphviz/core` and their subclasses, and models whose
  * attributes are typed differently. A writable model is not one of them.
  *
+ * They describe what the code taking them does, not the object: a model is
+ * not frozen, and code that holds its own type can still change it.
+ *
  * @module
  */
 import type { DotValue } from '../values.js';

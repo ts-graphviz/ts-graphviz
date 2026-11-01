@@ -53,7 +53,7 @@ import {
   type SubgraphModel,
   toDot,
 } from 'ts-graphviz';
-import { type DotInput, toFile, toStream } from 'ts-graphviz/adapter';
+import { type DotInput, toBlob } from 'ts-graphviz/adapter';
 import { describe, expectTypeOf, it } from 'vitest';
 
 // The read-only model types (#1841, option B): every model fits them, a
@@ -231,8 +231,7 @@ describe('the readers take every model', () => {
       fromModel(model);
       new FromModelConverter().convert(model);
       expectTypeOf(model).toExtend<DotInput>();
-      void toFile(model, 'out.svg');
-      void toStream(model);
+      void toBlob(model);
     }
     expectTypeOf(fromModel(node)).toEqualTypeOf<NodeASTNode>();
     expectTypeOf(
@@ -261,7 +260,7 @@ describe('the readers take every model', () => {
     // @ts-expect-error not a node
     fromModel({ $$type: 'Node' });
     // @ts-expect-error not a node
-    void toFile({ $$type: 'Node' }, 'out.svg');
+    void toBlob({ $$type: 'Node' });
   });
 });
 
