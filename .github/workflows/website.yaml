@@ -84,8 +84,9 @@ jobs:
             echo "released=true" >> "$GITHUB_OUTPUT"
           else
             echo "released=false" >> "$GITHUB_OUTPUT"
-            # The deploy job publishes from main only.
-            if [ "$IGNORE_PENDING_CHANGESETS" = "true" ] && [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            # The deploy job publishes from main of this repository only, not
+            # from forks.
+            if [ "$IGNORE_PENDING_CHANGESETS" = "true" ] && [ "$GITHUB_REF" = "refs/heads/main" ] && [ "$GITHUB_REPOSITORY" = "ts-graphviz/ts-graphviz" ]; then
               heading="To be published with ignore-pending-changesets, although these changesets are not released yet."
             else
               heading="Not published: these changesets are not released yet."
