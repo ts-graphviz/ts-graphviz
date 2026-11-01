@@ -48,7 +48,7 @@ function OOPLabel() {
 }
 
 export default digraph((g) => {
-  g.set('rankdir', 'LR');
+  g.rankdir = 'LR';
 
   g.node({ shape: 'circle' });
   g.node('factory_fn', {

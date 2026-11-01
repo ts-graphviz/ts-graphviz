@@ -1,6 +1,7 @@
 import type { Compass } from '../attributes/types.js';
 import { withCode } from '../errors.js';
 import { isForwardRefNode, isNodeModel } from './guards.js';
+import { modelOf } from './model-view.js';
 import type {
   NodeRef,
   NodeRefGroup,
@@ -74,7 +75,8 @@ export function isCompass(c: string): c is Compass {
  */
 export function toNodeRef(target: NodeRefLike): NodeRef {
   if (isNodeRef(target)) {
-    return target;
+    // The model itself, never an object standing for it.
+    return modelOf(target);
   }
   const [id, port, compass] = target.split(':');
   if (compass !== undefined && isCompass(compass)) {

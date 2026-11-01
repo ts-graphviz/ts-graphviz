@@ -10,7 +10,9 @@ export type ComponentProps = ComponentProps<any>;
 export type ComponentType = FC<any>;
 
 export interface CreateRootOptions<Container extends AnyGraphContainer = AnyGraphContainer> {
-  container?: Container;
+  container?: Container | {
+    readonly [MODEL]: Container;
+  };
   models?: Partial<ModelsContext>;
   onUncaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
   onCaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;

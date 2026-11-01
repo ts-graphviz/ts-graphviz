@@ -5,7 +5,7 @@ import tsg = require('ts-graphviz');
 import ast = require('ts-graphviz/ast');
 import adapter = require('@ts-graphviz/adapter');
 
-const g: tsg.RootGraphModel = tsg.digraph((g) => {
+const g: tsg.DSL<tsg.RootGraphModel> = tsg.digraph((g) => {
   g.edge(['a', 'b'], { color: 'red' });
 });
 const text: string = ast.stringify(ast.parse(tsg.toDot(g)));

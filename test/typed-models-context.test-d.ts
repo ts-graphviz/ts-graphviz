@@ -1,4 +1,5 @@
 import type {
+  DSL,
   EdgeModel,
   ModelsContext,
   NodeModel,
@@ -43,19 +44,21 @@ describe('a ModelsContext with custom classes', () => {
   it('types what graph factories create, in subgraphs too', () => {
     const { digraph: myDigraph } = withContext({ Node: MyNode, Edge: MyEdge });
     myDigraph((g) => {
-      expectTypeOf(g.node('a')).toEqualTypeOf<MyNode>();
-      expectTypeOf(g.edge(['a', 'b'])).toEqualTypeOf<MyEdge>();
-      expectTypeOf(g.nodes).toEqualTypeOf<ReadonlyArray<MyNode>>();
+      expectTypeOf(g.node('a')).toEqualTypeOf<DSL<MyNode>>();
+      expectTypeOf(g.edge(['a', 'b'])).toEqualTypeOf<DSL<MyEdge>>();
+      expectTypeOf(g.$nodes).toEqualTypeOf<ReadonlyArray<DSL<MyNode>>>();
+      expectTypeOf(g.node('a').$extra()).toEqualTypeOf<string>();
+      expectTypeOf(g.edge(['a', 'b']).$weight()).toEqualTypeOf<number>();
       g.node('b', (n) => {
-        expectTypeOf(n).toEqualTypeOf<MyNode>();
+        expectTypeOf(n).toEqualTypeOf<DSL<MyNode>>();
       });
       g.subgraph('s', (s) => {
-        expectTypeOf(s.node('c')).toEqualTypeOf<MyNode>();
+        expectTypeOf(s.node('c')).toEqualTypeOf<DSL<MyNode>>();
         s.subgraph((t) => {
-          expectTypeOf(t.edge(['c', 'd'])).toEqualTypeOf<MyEdge>();
+          expectTypeOf(t.edge(['c', 'd'])).toEqualTypeOf<DSL<MyEdge>>();
         });
       });
-      expectTypeOf(g.getNode('a')).toEqualTypeOf<MyNode | undefined>();
+      expectTypeOf(g.$getNode('a')).toEqualTypeOf<DSL<MyNode> | undefined>();
     });
   });
 
@@ -78,7 +81,8 @@ describe('a ModelsContext with custom classes', () => {
     }
     const { graph } = withContext({ Subgraph: MySubgraph });
     graph((g) => {
-      expectTypeOf(g.subgraph('s')).toEqualTypeOf<MySubgraph>();
+      expectTypeOf(g.subgraph('s')).toEqualTypeOf<DSL<MySubgraph>>();
+      expectTypeOf(g.subgraph('s').$tag()).toEqualTypeOf<string>();
     });
   });
 });
@@ -86,9 +90,9 @@ describe('a ModelsContext with custom classes', () => {
 describe('without custom classes', () => {
   it('keeps the base types', () => {
     digraph((g) => {
-      expectTypeOf(g.node('a')).toEqualTypeOf<NodeModel>();
-      expectTypeOf(g.edge(['a', 'b'])).toEqualTypeOf<EdgeModel>();
-      expectTypeOf(g.subgraph('s')).toEqualTypeOf<SubgraphModel>();
+      expectTypeOf(g.node('a')).toEqualTypeOf<DSL<NodeModel>>();
+      expectTypeOf(g.edge(['a', 'b'])).toEqualTypeOf<DSL<EdgeModel>>();
+      expectTypeOf(g.subgraph('s')).toEqualTypeOf<DSL<SubgraphModel>>();
     });
     expectTypeOf(fromDot('digraph { a }')).toEqualTypeOf<RootGraphModel>();
   });

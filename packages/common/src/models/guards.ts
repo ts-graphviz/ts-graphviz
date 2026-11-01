@@ -1,3 +1,4 @@
+import { MODEL, modelOf } from './model-view.js';
 import type { ForwardRefNode } from './models.js';
 import type { NarrowedModel } from './readonly-models.js';
 
@@ -26,9 +27,12 @@ function field(object: object, key: string): unknown {
  * @returns True if the object is a ForwardRefNode
  */
 export function isForwardRefNode(object: unknown): object is ForwardRefNode {
+  // An object standing for a model (a ModelView) is not one: its `id` is not
+  // the node's.
   return (
     typeof object === 'object' &&
     object !== null &&
+    !(MODEL in object) &&
     typeof field(object, 'id') === 'string'
   );
 }
@@ -44,11 +48,12 @@ export function isForwardRefNode(object: unknown): object is ForwardRefNode {
  * @returns True if the object is a NodeModel
  */
 export function isNodeModel<T>(object: T): object is NarrowedModel<T, 'Node'> {
+  const model: unknown = modelOf(object);
   return (
-    typeof object === 'object' &&
-    object !== null &&
-    field(object, '$$type') === 'Node' &&
-    typeof field(object, 'id') === 'string'
+    typeof model === 'object' &&
+    model !== null &&
+    field(model, '$$type') === 'Node' &&
+    typeof field(model, 'id') === 'string'
   );
 }
 
@@ -63,11 +68,12 @@ export function isNodeModel<T>(object: T): object is NarrowedModel<T, 'Node'> {
  * @returns True if the object is an EdgeModel
  */
 export function isEdgeModel<T>(object: T): object is NarrowedModel<T, 'Edge'> {
+  const model: unknown = modelOf(object);
   return (
-    typeof object === 'object' &&
-    object !== null &&
-    field(object, '$$type') === 'Edge' &&
-    Array.isArray(field(object, 'targets'))
+    typeof model === 'object' &&
+    model !== null &&
+    field(model, '$$type') === 'Edge' &&
+    Array.isArray(field(model, 'targets'))
   );
 }
 
@@ -84,10 +90,11 @@ export function isEdgeModel<T>(object: T): object is NarrowedModel<T, 'Edge'> {
 export function isSubgraphModel<T>(
   object: T,
 ): object is NarrowedModel<T, 'Subgraph'> {
+  const model: unknown = modelOf(object);
   return (
-    typeof object === 'object' &&
-    object !== null &&
-    field(object, '$$type') === 'Subgraph'
+    typeof model === 'object' &&
+    model !== null &&
+    field(model, '$$type') === 'Subgraph'
   );
 }
 
@@ -104,11 +111,12 @@ export function isSubgraphModel<T>(
 export function isRootGraphModel<T>(
   object: T,
 ): object is NarrowedModel<T, 'Graph'> {
+  const model: unknown = modelOf(object);
   return (
-    typeof object === 'object' &&
-    object !== null &&
-    field(object, '$$type') === 'Graph' &&
-    typeof field(object, 'directed') === 'boolean'
+    typeof model === 'object' &&
+    model !== null &&
+    field(model, '$$type') === 'Graph' &&
+    typeof field(model, 'directed') === 'boolean'
   );
 }
 
@@ -123,11 +131,12 @@ export function isRootGraphModel<T>(
  * @returns True if the object is a DotModel
  */
 export function isDotModel<T>(object: T): object is NarrowedModel<T, 'Dot'> {
+  const model: unknown = modelOf(object);
   return (
-    typeof object === 'object' &&
-    object !== null &&
-    field(object, '$$type') === 'Dot' &&
-    Array.isArray(field(object, 'graphs'))
+    typeof model === 'object' &&
+    model !== null &&
+    field(model, '$$type') === 'Dot' &&
+    Array.isArray(field(model, 'graphs'))
   );
 }
 
@@ -144,9 +153,10 @@ export function isDotModel<T>(object: T): object is NarrowedModel<T, 'Dot'> {
 export function isAttributeListModel<T>(
   object: T,
 ): object is NarrowedModel<T, 'AttributeList'> {
+  const model: unknown = modelOf(object);
   return (
-    typeof object === 'object' &&
-    object !== null &&
-    field(object, '$$type') === 'AttributeList'
+    typeof model === 'object' &&
+    model !== null &&
+    field(model, '$$type') === 'AttributeList'
   );
 }

@@ -4,9 +4,11 @@ import {
   Digraph,
   Dot,
   digraph,
+  dsl,
   Edge,
   Graph,
   graph,
+  modelOf,
   Node,
   type NodeModel,
   type RootGraphModel,
@@ -67,11 +69,11 @@ class NodeCommand implements Command {
     // the graph's lookup agrees with the reference before the call
     expect(real.existNode(this.id)).toBe(known);
     const before = real.getNode(this.id);
-    const node = real.node(this.id);
+    const node = modelOf(dsl(real).node(this.id));
     // node(id) returns the existing node when there is one
     if (known) expect(node).toBe(before);
     else model.nodes.push(this.id);
-    expect(real.node(this.id)).toBe(node);
+    expect(modelOf(dsl(real).node(this.id))).toBe(node);
     expectConsistent(model, real);
   }
   toString = () => `node(${JSON.stringify(this.id)})`;
@@ -126,8 +128,10 @@ class EdgeCommand implements Command {
   check = () => true;
   run(model: Reference, real: RootGraphModel): void {
     // objects, so that ids containing ':' are not split into ports
-    const edge = real.edge(
-      this.ids.map((id) => ({ id })) as [{ id: string }, { id: string }],
+    const edge = modelOf(
+      dsl(real).edge(
+        this.ids.map((id) => ({ id })) as [{ id: string }, { id: string }],
+      ),
     );
     model.edges++;
     expect(real.existEdge(edge)).toBe(true);
@@ -164,8 +168,11 @@ class SubgraphCommand implements Command {
     }
     const existing =
       this.id === undefined ? undefined : real.getSubgraph(this.id);
-    const subgraph =
-      this.id === undefined ? real.subgraph() : real.subgraph(this.id);
+    const subgraph = modelOf(
+      this.id === undefined
+        ? dsl(real).subgraph()
+        : dsl(real).subgraph(this.id),
+    );
     if (known) {
       // subgraph(id) returns the existing subgraph when there is one
       expect(subgraph).toBe(existing);
@@ -248,30 +255,30 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
   it('createNode replaces a node with the same id; node() reuses it', () => {
     fc.assert(
       fc.property(nodeId, (id) => {
-        const g = new Digraph();
+        const g = dsl(new Digraph());
         const first = g.node(id);
-        const second = g.createNode(id);
+        const second = g.$createNode(id);
         expect(second).not.toBe(first);
-        expect(g.getNode(id)).toBe(second);
-        expect(g.nodes).toStrictEqual([second]);
+        expect(g.$getNode(id)).toBe(second);
+        expect(g.$nodes).toStrictEqual([second]);
         expect(g.node(id)).toBe(second);
       }),
     );
   });
 
   it('subgraph("") finds the subgraph with the empty id like any other id (#1593)', () => {
-    const g = new Digraph();
+    const g = dsl(new Digraph());
     const sub = g.subgraph('');
-    expect(sub.id).toBe('');
+    expect(sub.$id).toBe('');
     expect(g.subgraph('')).toBe(sub);
-    expect(g.subgraphs).toHaveLength(1);
+    expect(g.$subgraphs).toHaveLength(1);
   });
 
   it('edge(targets, null) ignores the null instead of failing (#1593)', () => {
     fc.assert(
       fc.property(plainId, plainId, (a, b) => {
-        const edge = new Digraph().edge([a, b], null as never);
-        expect(edge.attributes.size).toBe(0);
+        const edge = dsl(new Digraph()).edge([a, b], null as never);
+        expect(edge.$attributes.size).toBe(0);
       }),
     );
   });
@@ -286,8 +293,8 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
           g.node(a);
           g.edge([a, b]);
         });
-        g.removeNode(a);
-        expect(g.edges).toHaveLength(1);
+        g.$removeNode(a);
+        expect(g.$edges).toHaveLength(1);
       }),
     );
   });
@@ -303,18 +310,18 @@ describe('subgraph nesting', { tags: ['SM-5'] }, () => {
         const chain: SubgraphModel[] = [];
         let parent: RootGraphModel | SubgraphModel = root;
         for (const id of ids) {
-          const sub: SubgraphModel = parent.subgraph(id);
+          const sub: SubgraphModel = modelOf(dsl(parent).subgraph(id));
           chain.push(sub);
           parent = sub;
         }
-        parent.node(leaf);
+        dsl(parent).node(leaf);
 
         // walk down again by id: the same instances, and the leaf only at the bottom
         let current: RootGraphModel | SubgraphModel = root;
         for (const [depth, id] of ids.entries()) {
           const found: SubgraphModel | undefined = current.getSubgraph(id);
           expect(found).toBe(chain[depth]);
-          expect(current.subgraph(id)).toBe(found);
+          expect(modelOf(dsl(current).subgraph(id))).toBe(found);
           if (depth < ids.length - 1)
             expect(found?.existNode(leaf)).toBe(false);
           current = found as SubgraphModel;
@@ -359,7 +366,7 @@ describe('edge targets', { tags: ['SM-5'] }, () => {
             ...(port !== undefined ? { port } : {}),
             ...(compass !== undefined ? { compass } : {}),
           } as { id: string };
-          const edge = new Digraph().edge([target, { id: 'b' }]);
+          const edge = new Digraph().createEdge([target, { id: 'b' }]);
           expect(edge.targets[0]).toStrictEqual(target);
         },
       ),
@@ -399,9 +406,9 @@ describe('edge targets', { tags: ['SM-5'] }, () => {
     fc.assert(
       fc.property(nodeId, nodeId, (a, b) => {
         const g = new Digraph();
-        const na = g.node(a);
+        const na = g.createNode(a);
         const nb = new Node(b);
-        const edge = g.edge([na, [nb, { id: 'c' }]]);
+        const edge = g.createEdge([na, [nb, { id: 'c' }]]);
         expect(edge.targets[0]).toBe(na);
         expect((edge.targets[1] as NodeModel[])[0]).toBe(nb);
       }),
@@ -434,7 +441,7 @@ describe('root graphs', { tags: ['SM-5'] }, () => {
           const Class = directed ? Digraph : Graph;
           const fromClass =
             id === undefined ? new Class(isStrict) : new Class(id, isStrict);
-          for (const g of [fromFactory, fromClass]) {
+          for (const g of [modelOf(fromFactory), fromClass]) {
             expect([g.id, g.directed, g.strict]).toStrictEqual([
               id,
               directed,
@@ -494,17 +501,18 @@ describe('models context', { tags: ['SM-5'] }, () => {
           });
           const factories = withContext(models);
           const root = (directed ? factories.digraph : factories.graph)();
-          let current: RootGraphModel | SubgraphModel = root;
+          let current: RootGraphModel | SubgraphModel = modelOf(root);
           for (const id of path) {
-            expect(current.node(`${id}-n`)).toBeInstanceOf(MyNode);
-            expect(current.edge([{ id: 'a' }, { id: 'b' }])).toBeInstanceOf(
+            const g = dsl(current);
+            expect(modelOf(g.node(`${id}-n`))).toBeInstanceOf(MyNode);
+            expect(modelOf(g.edge([{ id: 'a' }, { id: 'b' }]))).toBeInstanceOf(
               MyEdge,
             );
-            const sub: SubgraphModel = current.subgraph(id);
+            const sub: SubgraphModel = modelOf(g.subgraph(id));
             expect(sub).toBeInstanceOf(MySubgraph);
             current = sub;
           }
-          expect(current.node('leaf')).toBeInstanceOf(MyNode);
+          expect(modelOf(dsl(current).node('leaf'))).toBeInstanceOf(MyNode);
         },
       ),
     );
@@ -603,7 +611,7 @@ const attrCommands = [
 describe('attributes', { tags: ['SM-5'] }, () => {
   const holders: [string, () => Holder][] = [
     ['root graph', () => new Digraph() as unknown as Holder],
-    ['subgraph', () => new Digraph().subgraph('s') as unknown as Holder],
+    ['subgraph', () => new Digraph().createSubgraph('s') as unknown as Holder],
     ['node', () => new Node('n').attributes as unknown as Holder],
     [
       'edge',

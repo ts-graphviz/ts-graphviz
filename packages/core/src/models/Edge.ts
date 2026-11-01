@@ -5,6 +5,7 @@ import {
   type EdgeModel,
   type EdgeTargetTuple,
   isNodeRefLike,
+  modelOf,
   type ReadonlyEdgeTargetTuple,
   withCode,
 } from '@ts-graphviz/common';
@@ -42,9 +43,10 @@ export class Edge extends DotObject implements EdgeModel {
         'TSG_ERR_INVALID_EDGE_TARGETS',
       );
     }
-    // A copy, so the edge does not change with the caller's arrays.
+    // A copy, so the edge does not change with the caller's arrays; and the
+    // nodes themselves, never objects standing for them (a DSL).
     this.targets = targets.map((target) =>
-      Array.isArray(target) ? [...target] : target,
+      Array.isArray(target) ? target.map(modelOf) : modelOf(target),
     ) as EdgeTargetTuple;
     this.attributes = new AttributesGroup(attributes);
   }

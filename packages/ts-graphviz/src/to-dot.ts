@@ -7,6 +7,8 @@ import {
 import {
   type AnyReadonlyDotObjectModel,
   isRootGraphModel,
+  type ModelView,
+  modelOf,
   ownOptions,
   type ReadonlyDotModel,
 } from '@ts-graphviz/common';
@@ -33,20 +35,22 @@ export interface ToDotOptions {
  * graph statement), the same as a `Dot` model holding just that graph.
  *
  * It only reads the model, so it takes any model: the built-in ones, custom
- * model classes, and the read-only views ({@link AnyReadonlyDotObjectModel}).
+ * model classes, and the read-only views ({@link AnyReadonlyDotObjectModel});
+ * or an object standing for one ({@link ModelView}), such as the DOT DSL.
  *
  * @group Convert Model to DOT
  *
- * @param model Dot Object Model, like {@link Digraph}, {@link Graph}, {@link Subgraph}, {@link Node}, and {@link Edge}
+ * @param input Dot Object Model (or its DSL), like {@link Digraph}, {@link Graph}, {@link Subgraph}, {@link Node}, and {@link Edge}
  * @param options Optional options for the conversion.
  * @returns DOT string
  */
 export function toDot(
-  model: AnyReadonlyDotObjectModel,
+  input: AnyReadonlyDotObjectModel | ModelView,
   options?: ToDotOptions,
 ): string {
   // Own properties only: an inherited one is never an option (#1757).
   const { convert, print } = ownOptions(options);
+  const model = modelOf(input);
   const ast = fromModel(
     isRootGraphModel(model) ? dotOf(model) : model,
     convert,

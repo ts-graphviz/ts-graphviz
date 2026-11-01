@@ -40,29 +40,6 @@ describe('class Subgraph', () => {
     });
   });
 
-  describe('Declaratively set the attributes of the objects in the cluster', () => {
-    test('node', () => {
-      subgraph.node({
-        label: 'test label',
-      });
-      expect(subgraph.attributes.node.get('label')).toBe('test label');
-    });
-
-    test('edge', () => {
-      subgraph.edge({
-        label: 'test label',
-      });
-      expect(subgraph.attributes.edge.get('label')).toBe('test label');
-    });
-
-    test('graph', () => {
-      subgraph.graph({
-        label: 'test label',
-      });
-      expect(subgraph.attributes.graph.get('label')).toBe('test label');
-    });
-  });
-
   test('set attributes', () => {
     subgraph.set('rank', 'same');
     expect(subgraph.get('rank')).toBe('same');
@@ -183,14 +160,18 @@ describe('class Subgraph', () => {
     });
 
     it('throws an error when the EdgeTarget element is missing', () => {
-      const n = subgraph.node('n');
-      expect(() => subgraph.edge([] as unknown as EdgeTargetTuple)).toThrow(
+      const n = subgraph.createNode('n');
+      expect(() =>
+        subgraph.createEdge([] as unknown as EdgeTargetTuple),
+      ).toThrow(
         expect.objectContaining({
           name: 'TypeError',
           code: 'TSG_ERR_INVALID_EDGE_TARGETS',
         }),
       );
-      expect(() => subgraph.edge([n] as unknown as EdgeTargetTuple)).toThrow(
+      expect(() =>
+        subgraph.createEdge([n] as unknown as EdgeTargetTuple),
+      ).toThrow(
         expect.objectContaining({
           name: 'TypeError',
           code: 'TSG_ERR_INVALID_EDGE_TARGETS',

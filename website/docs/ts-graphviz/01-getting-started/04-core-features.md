@@ -99,6 +99,30 @@ const G = digraph('G', (g) => {
 - **Adding Elements**: Use `g.node` and `g.edge` to add nodes and edges within the context.
 - **Readability**: The structure mirrors the graph's logical structure, making it easier to read.
 
+The factories give the graph's **DOT DSL**, which reads like DOT:
+
+- **Statements**: `node`, `edge`, `subgraph` and `graph` are methods, as the DOT statements of those names. `g.node({ ... })`, `g.edge({ ... })` and `g.graph({ ... })` are the default attribute statements (`node [...]` and so on).
+- **Attributes**: attributes are properties under their own names. Assigning `undefined` or `delete` removes one.
+- **The model's own members** take a `$`: `a.$id` is the node's name (`a.id` is its `id` attribute), `g.$nodes`, `g.$getNode('A')`, `a.$comment`.
+- **Every model you get from the DSL is a DSL.** `modelOf()` gives the model, and `dsl()` gives the DSL of a model, such as one `fromDot` returns. `toDot` and the adapter take either.
+
+```typescript
+import { digraph, modelOf, toDot } from 'ts-graphviz';
+
+const G = digraph('G', (g) => {
+  g.rankdir = 'LR'; // rankdir = "LR";
+  g.node({ shape: 'box' }); // node [shape = "box";];
+  const a = g.node('A');
+  a.label = 'Start'; // "A" [label = "Start";];
+  a.id = 'svg-a'; // the Graphviz id attribute
+  console.log(a.$id); // 'A': the node's name
+  g.edge([a, 'B']); // "A" -> "B";
+});
+
+toDot(G); // the DSL or its model
+modelOf(G); // the RootGraphModel
+```
+
 ### Imperative API
 
 The imperative API offers explicit control over the creation and manipulation of graph elements. It uses object-oriented methods to build the graph step by step.

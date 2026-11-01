@@ -499,7 +499,7 @@ export type Double = number;
 
 export type DoubleList = Double | `${Double}:${Double}` | `${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
 
-export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NO_MODELS_CONTEXT", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
+export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NO_MODELS_CONTEXT", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
 
 export type EdgeAttributeKey = EdgeAttributeKey.values;
 export declare namespace EdgeAttributeKey {
@@ -574,17 +574,6 @@ export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K exten
   getSubgraph(id: string): M["Subgraph"] | undefined;
   getNode(id: string): M["Node"] | undefined;
   createEdge(targets: ReadonlyEdgeTargetLikeTuple, attributes?: EdgeAttributesObject): M["Edge"];
-  subgraph<const Id extends string>(id: Id, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  subgraph<const Id extends string>(id: Id, attributes: SubgraphAttributesFor<Id>, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  subgraph(attributes: NonClusterSubgraphAttributesObject, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  subgraph(callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  node(id: string, callback?: (node: M["Node"]) => void): M["Node"];
-  node(id: string, attributes: NodeAttributesObject, callback?: (node: M["Node"]) => void): M["Node"];
-  node(attributes: NodeAttributesObject): void;
-  edge(targets: ReadonlyEdgeTargetLikeTuple, callback?: (edge: M["Edge"]) => void): M["Edge"];
-  edge(targets: ReadonlyEdgeTargetLikeTuple, attributes: EdgeAttributesObject, callback?: (edge: M["Edge"]) => void): M["Edge"];
-  edge(attributes: EdgeAttributesObject): void;
-  graph(attributes: SubgraphAttributesObject): void;
 }
 
 export interface GraphCommonAttributes {
@@ -698,6 +687,10 @@ export type LayerRange = string;
 
 export type LblString = HTMLLikeLabel | EscString;
 
+export declare const MODEL: unique symbol;
+
+export type ModelOf<T> = T extends ModelView<infer U> ? U : T;
+
 export interface ModelTypes {
   Dot: DotModel;
   Graph: RootGraphModel;
@@ -705,6 +698,10 @@ export interface ModelTypes {
   Subgraph: SubgraphModel;
   Node: NodeModel;
   Edge: EdgeModel;
+}
+
+export interface ModelView<T extends AnyReadonlyDotObjectModel = AnyReadonlyDotObjectModel> {
+  readonly [MODEL]: T;
 }
 
 export interface ModelsContext<M extends ModelTypes = ModelTypes> {
@@ -716,7 +713,7 @@ export interface ModelsContext<M extends ModelTypes = ModelTypes> {
   Edge: EdgeConstructor<M["Edge"]>;
 }
 
-export type NarrowedModel<T, K extends DotObjectType> = unknown extends T ? T & ReadonlyModelOf<K> : T extends unknown ? T extends AnyReadonlyDotObjectModel ? Extract<T, {
+export type NarrowedModel<T, K extends DotObjectType> = unknown extends T ? T & ReadonlyModelOf<K> : T extends unknown ? T extends ModelView<infer U> ? [NarrowedModel<U, K>] extends [never] ? never : T : T extends AnyReadonlyDotObjectModel ? Extract<T, {
   readonly $$type: K;
 }> : T extends Primitive ? never : T & ReadonlyModelOf<K> : never;
 
@@ -1009,6 +1006,8 @@ export declare function isRootGraphModel<T>(object: T): object is NarrowedModel<
 export declare function isSubgraphModel<T>(object: T): object is NarrowedModel<T, "Subgraph">;
 
 export declare function isTsGraphvizError(value: unknown): value is CodedError;
+
+export declare function modelOf<T>(value: T): ModelOf<T>;
 
 export declare function onDeprecation(listener: (event: DeprecationEvent) => void): () => void;
 

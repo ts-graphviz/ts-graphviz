@@ -76,7 +76,7 @@ describe('Builder nodeCount accumulation across repeated toDot calls', () => {
 describe('escaping of NodeRefGroup members', () => {
   it('writes ids and ports of grouped edge targets with the same escaping as direct targets', () => {
     const g = new Digraph();
-    g.edge(['a"', [{ id: 'b"', port: 'p\\q' }, 'c']]);
+    g.createEdge(['a"', [{ id: 'b"', port: 'p\\q' }, 'c']]);
     const dot = toDot(g);
     expect(dot).toMatchInlineSnapshot(`
       "digraph {

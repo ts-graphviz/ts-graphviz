@@ -8,11 +8,15 @@ import { createModelsContext, Node } from '@ts-graphviz/core';
 import {
   attribute as _,
   type Attribute,
+  type DSL,
   digraph,
+  dsl,
   type EdgeModel,
   fromDot,
   type graph,
   isNodeModel,
+  type ModelOf,
+  modelOf,
   type NodeModel,
   type ReadonlyNodeModel,
   type RootGraphModel,
@@ -42,25 +46,32 @@ const g = digraph('G', { rankdir: 'LR' }, (g) => {
   const a = g.node('a', { shape: 'box', label: htmlLike('<b>a</b>') });
   g.edge([a, 'b:p:n', { id: 'c', port: 'p' }, ['d', 'e']], { color: 'red' });
   g.subgraph('cluster_0', { label: 'c' }, (s) => {
-    assertType<Equal<typeof s, SubgraphModel>>();
+    assertType<Equal<typeof s, DSL<SubgraphModel>>>();
     s.node('c');
   });
   // @ts-expect-error an edge needs at least two targets
   g.edge(['a']);
 });
-assertType<Equal<typeof g, RootGraphModel>>();
-assertType<Equal<ReturnType<typeof graph>, RootGraphModel>>();
-strict.graph((g) => g.set(_.label, 'strict'));
+assertType<Equal<typeof g, DSL<RootGraphModel>>>();
+assertType<Equal<ReturnType<typeof graph>, DSL<RootGraphModel>>>();
+assertType<Equal<ModelOf<typeof g>, RootGraphModel>>();
+strict.graph((g) => {
+  g[_.label] = 'strict';
+});
 
-// attribute typing
-g.set('rankdir', 'TB');
-const rankdir = g.get('rankdir');
+// attributes by name, the model's members with $
+const rankdir = g.rankdir;
 assertType<Equal<typeof rankdir, Attribute<'rankdir'> | undefined>>();
+g.rankdir = 'TB';
 // @ts-expect-error not an attribute of graphs
-g.set('shape', 'box');
+g.shape = 'box';
 // @ts-expect-error not a value of rankdir
-g.set('rankdir', 'XX');
-g.node('a').attributes.set('shape', 'box');
+g.rankdir = 'XX';
+g.node('a').shape = 'box';
+g.$set('rankdir', 'TB');
+g.node('a').$id satisfies string;
+const model: RootGraphModel = modelOf(g);
+dsl(model).node('b');
 
 // fromDot / toDot
 const text: string = toDot(g);
@@ -75,7 +86,7 @@ class MyNode extends Node {
     return this.id;
   }
 }
-withContext({ Node: MyNode }).digraph((g) => g.node('a').extra());
+withContext({ Node: MyNode }).digraph((g) => g.node('a').$extra());
 createModelsContext({ Node: MyNode });
 
 // parse / parseFragment / stringify / sanitize
@@ -115,8 +126,10 @@ if (isNodeModel(unknownValue)) {
   assertType<Equal<typeof unknownValue, ReadonlyNodeModel>>();
   toDot(unknownValue);
 }
-const nodes = g.statements.filter(isNodeModel);
+const nodes = modelOf(g).statements.filter(isNodeModel);
 assertType<Equal<typeof nodes, NodeModel[]>>();
+const nodeViews = g.$statements.filter(isNodeModel);
+assertType<Equal<typeof nodeViews, DSL<NodeModel>[]>>();
 const readNodes = [unknownValue].filter(isNodeModel);
 assertType<Equal<typeof readNodes, ReadonlyNodeModel[]>>();
 // @ts-expect-error not a node
