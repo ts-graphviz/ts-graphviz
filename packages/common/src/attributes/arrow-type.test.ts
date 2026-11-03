@@ -58,6 +58,10 @@ describe('ArrowType.build', () => {
     );
     expect(ArrowType.build('none')).toBe('none');
     rejects('dot', 'none');
+    rejects('dot', 'dot', 'none');
+    rejects('dot', 'dot', 'dot', 'none');
+    rejects('dot', 'ldot');
+    rejects('dot', 'dot', 'dot', 'ocrow');
     rejects('dot', 'dot', 'dot', 'dot', 'dot');
     rejects();
   });

@@ -127,6 +127,8 @@ describe('ArrowType.build', () => {
     ArrowType.build('dotdot');
     // @ts-expect-error a string is not a shape
     ArrowType.build('dot' as string);
+    // @ts-expect-error build cannot be replaced
+    ArrowType.build = () => 'dot' as ArrowType.Built;
   });
 
   it('is an arrowhead and an arrowtail', () => {

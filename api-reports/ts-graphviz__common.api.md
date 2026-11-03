@@ -33,7 +33,7 @@ export declare namespace ArrowType {
   };
 }
 export declare const ArrowType: {
-  build(...shapes: ArrowType.Shapes): ArrowType.Built;
+  readonly build: (...shapes: ArrowType.Shapes) => ArrowType.Built;
 };
 
 export type Attribute<T extends AttributeKey> = Attribute.types[T];

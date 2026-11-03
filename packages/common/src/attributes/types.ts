@@ -590,7 +590,7 @@ export const ArrowType: {
    * Graphviz's, there are none or more than four, or the last of two or
    * more is `none`.
    */
-  build(...shapes: ArrowType.Shapes): ArrowType.Built;
+  readonly build: (...shapes: ArrowType.Shapes) => ArrowType.Built;
 } = Object.freeze({
   build: (...shapes: ArrowType.Shapes) => buildArrow(shapes) as ArrowType.Built,
 });
