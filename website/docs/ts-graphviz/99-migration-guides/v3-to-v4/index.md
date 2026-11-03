@@ -53,7 +53,7 @@ try {
 | `toDot` / `fromModel` build an AST larger than `maxASTNodes` | `ASTNodeCountExceededError` (now a `RangeError`) | `TSG_ERR_AST_NODE_COUNT_EXCEEDED` |
 | null character in text | `RangeError` | `TSG_ERR_NUL_CHARACTER` |
 | unbalanced HTML-like markup | `RangeError` | `TSG_ERR_INVALID_HTML_LIKE` |
-| `arrow()` given a shape Graphviz does not have, no shapes or more than four, or `none` last after another | `RangeError` | `TSG_ERR_INVALID_ARROW` |
+| `ArrowType.build()` given a shape Graphviz does not have, no shapes or more than four, or `none` last after another | `RangeError` | `TSG_ERR_INVALID_ARROW` |
 | edge with fewer than two targets or a malformed target | `TypeError` (was a bare `Error`) | `TSG_ERR_INVALID_EDGE_TARGETS` |
 | port containing `:` | `TypeError` | `TSG_ERR_INVALID_PORT` |
 | attribute list kind other than `Graph`, `Node`, `Edge` | `TypeError` | `TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND` |
@@ -106,7 +106,7 @@ The attribute keys, their documentation and value types in `@ts-graphviz/common`
 
 - Added: `radius` (edge); `beautify`, `linelength`, `oneblock`, `tooltip` (graph); `bb`, `cluster` (cluster); `cluster` (subgraph). Removed: `mosek`.
 - `tailclip` is `boolean` (was `Point`); `tail_lp` is `Point` (was `string`).
-- `ArrowType` (`arrowhead`, `arrowtail`) takes only the modifiers each shape takes in [Graphviz's table](https://graphviz.org/doc/info/arrows.html): `ldot`, `ocrow` and a two-shape name ending in `none` (`dotnone`) are type errors. Names of three or four shapes are made with `arrow()`, which checks each shape: `arrow('obox', 'ltee', 'vee')`. To find the names that changed, search for `arrowhead` and `arrowtail`.
+- `ArrowType` (`arrowhead`, `arrowtail`) takes only the modifiers each shape takes in [Graphviz's table](https://graphviz.org/doc/info/arrows.html): `ldot`, `ocrow` and a two-shape name ending in `none` (`dotnone`) are type errors. Names of three or four shapes are made with `ArrowType.build()`, which checks each shape: `ArrowType.build('obox', 'ltee', 'vee')`. To find the names that changed, search for `arrowhead` and `arrowtail`.
 
 The augmentation points (`Attribute.$keys`, `Attribute.$types`, `EdgeAttributeKey.$values`, …) are unchanged.
 

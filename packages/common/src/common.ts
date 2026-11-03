@@ -1,4 +1,3 @@
-export * from './arrow.js';
 export * from './attributes/attribute.js';
 export * from './attributes/types.js';
 export * from './deprecation.js';

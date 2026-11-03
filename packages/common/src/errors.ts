@@ -40,7 +40,7 @@ export const ERROR_CODES = [
   'TSG_ERR_NUL_CHARACTER',
   /** HTML-like markup has unbalanced `<`/`>` or a null character (`RangeError`). */
   'TSG_ERR_INVALID_HTML_LIKE',
-  /** `arrow()` was given a shape Graphviz does not have, none or more than four shapes, or `none` last after another (`RangeError`). */
+  /** `ArrowType.build()` was given a shape Graphviz does not have, none or more than four shapes, or `none` last after another (`RangeError`). */
   'TSG_ERR_INVALID_ARROW',
   /** An edge was given fewer than two targets or a target of the wrong shape (`TypeError`). */
   'TSG_ERR_INVALID_EDGE_TARGETS',

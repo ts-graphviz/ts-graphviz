@@ -17,13 +17,7 @@ export type AnyDotObjectModel = GraphStatementModel | RootGraphModel | DotModel;
 
 export type AnyReadonlyDotObjectModel = ReadonlyGraphStatementModel | ReadonlyRootGraphModel | ReadonlyDotModel;
 
-export type ArrowName = string & {
-  readonly [arrowName]: true;
-};
-
-export type ArrowShapes = readonly [ArrowType.aname] | readonly [ArrowType.aname, ArrowType.last] | readonly [ArrowType.aname, ArrowType.aname, ArrowType.last] | readonly [ArrowType.aname, ArrowType.aname, ArrowType.aname, ArrowType.last];
-
-export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.last}` | ArrowName;
+export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.last}` | ArrowType.Built;
 export declare namespace ArrowType {
   type shape = keyof $shape;
   interface $shape extends $keywords<"box" | "crow" | "curve" | "icurve" | "diamond" | "dot" | "inv" | "none" | "normal" | "tee" | "vee"> {}
@@ -33,7 +27,14 @@ export declare namespace ArrowType {
   type sidedShape = Exclude<shape, "dot" | "none">;
   type aname = shape | `o${openShape}` | `${side}${sidedShape}` | `o${side}${Extract<openShape, sidedShape>}`;
   type last = Exclude<aname, "none">;
+  type Shapes = readonly [aname] | readonly [aname, last] | readonly [aname, aname, last] | readonly [aname, aname, aname, last];
+  type Built = string & {
+    readonly [built]: true;
+  };
 }
+export declare const ArrowType: {
+  build(...shapes: ArrowType.Shapes): ArrowType.Built;
+};
 
 export type Attribute<T extends AttributeKey> = Attribute.types[T];
 export declare namespace Attribute {
@@ -986,8 +987,6 @@ export declare namespace TBbalanceType {
 
 export type ViewPort = `${Double},${Double},${Double},${Double},${Double}` | `${Double},${Double},${Double},${string}`;
 
-export declare function arrow(...shapes: ArrowShapes): ArrowName;
-
 export declare function escString(value: string): EscStringValue;
 
 export declare function htmlLike(markup: string): HTMLLikeValue;
@@ -1035,7 +1034,7 @@ export declare function withCode<E extends Error, C extends ErrorCode>(error: E,
 
 // Used by the exports, not exported
 
-declare const arrowName: unique symbol;
+declare const built: unique symbol;
 
 type AsClusterSubgraphAttributesObject = AttributesObject<Exclude<ClusterSubgraphAttributeKey, "cluster">> & {
   cluster: true;

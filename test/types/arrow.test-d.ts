@@ -1,10 +1,4 @@
-import {
-  type ArrowName,
-  type ArrowType,
-  type Attribute,
-  arrow,
-  digraph,
-} from 'ts-graphviz';
+import { ArrowType, type Attribute, digraph } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
 // The arrow names (#1897). ArrowType is a union of 1,764 literals: compare
@@ -71,8 +65,11 @@ describe('ArrowType', () => {
     >().toEqualTypeOf<true>();
   });
 
-  it('is the names of one or two shapes, or an ArrowName', () => {
-    type Expected = Table | `${Table}${Exclude<Table, 'none'>}` | ArrowName;
+  it('is the names of one or two shapes, or a built name', () => {
+    type Expected =
+      | Table
+      | `${Table}${Exclude<Table, 'none'>}`
+      | ArrowType.Built;
     expectTypeOf<Equals<ArrowType, Expected>>().toEqualTypeOf<true>();
     expectTypeOf<Attribute<'arrowhead'>>().toExtend<ArrowType>();
     expectTypeOf<ArrowType>().toExtend<Attribute<'arrowhead'>>();
@@ -86,7 +83,7 @@ describe('ArrowType', () => {
     const open: ArrowType = 'ocrow';
     // @ts-expect-error none cannot end a name of two shapes
     const last: ArrowType = 'dotnone';
-    // @ts-expect-error three shapes: made with arrow()
+    // @ts-expect-error three shapes: made with ArrowType.build()
     const three: ArrowType = 'dotdotdot';
     // @ts-expect-error any string
     const text: ArrowType = 'dot' as string;
@@ -94,46 +91,53 @@ describe('ArrowType', () => {
   });
 });
 
-describe('arrow', () => {
+describe('ArrowType.build', () => {
   it('makes names of up to four shapes', () => {
-    expectTypeOf(arrow('obox', 'ltee', 'vee')).toEqualTypeOf<ArrowName>();
-    expectTypeOf<ArrowName>().toExtend<ArrowType>();
-    expectTypeOf<ArrowName>().toExtend<string>();
-    // Only arrow() gives one: the brand cannot be written.
-    // @ts-expect-error a string is not an ArrowName
-    const text: ArrowName = 'dotdotdot';
+    expectTypeOf(
+      ArrowType.build('obox', 'ltee', 'vee'),
+    ).toEqualTypeOf<ArrowType.Built>();
+    expectTypeOf<ArrowType.Built>().toExtend<ArrowType>();
+    expectTypeOf<ArrowType.Built>().toExtend<string>();
+    // Only ArrowType.build() gives one: the brand cannot be written.
+    // @ts-expect-error a string is not an ArrowType.Built
+    const text: ArrowType.Built = 'dotdotdot';
     // @ts-expect-error nor a string with a property of the brand's name
-    const forged: ArrowName = Object.assign('x', {
+    const forged: ArrowType.Built = Object.assign('x', {
       $$arrowName: true as const,
     });
     void [text, forged];
-    arrow('none');
-    arrow('none', 'none', 'dot', 'olnormal');
+    ArrowType.build('none');
+    ArrowType.build('none', 'none', 'dot', 'olnormal');
   });
 
   it('takes only the shapes of the table, the last of two or more not none', () => {
     // @ts-expect-error dot takes no side
-    arrow('ldot');
+    ArrowType.build('ldot');
     // @ts-expect-error none cannot come last after another shape
-    arrow('dot', 'none');
+    ArrowType.build('dot', 'none');
     // @ts-expect-error nor after two
-    arrow('dot', 'dot', 'none');
+    ArrowType.build('dot', 'dot', 'none');
     // @ts-expect-error nor after three
-    arrow('dot', 'dot', 'dot', 'none');
+    ArrowType.build('dot', 'dot', 'dot', 'none');
     // @ts-expect-error at most four
-    arrow('dot', 'dot', 'dot', 'dot', 'dot');
+    ArrowType.build('dot', 'dot', 'dot', 'dot', 'dot');
     // @ts-expect-error at least one
-    arrow();
+    ArrowType.build();
     // @ts-expect-error one shape per argument
-    arrow('dotdot');
+    ArrowType.build('dotdot');
     // @ts-expect-error a string is not a shape
-    arrow('dot' as string);
+    ArrowType.build('dot' as string);
   });
 
   it('is an arrowhead and an arrowtail', () => {
     digraph((g) => {
-      const e = g.edge(['a', 'b'], { arrowhead: arrow('dot', 'dot', 'dot') });
-      e.attributes.set('arrowtail', arrow('obox', 'ltee', 'vee', 'odot'));
+      const e = g.edge(['a', 'b'], {
+        arrowhead: ArrowType.build('dot', 'dot', 'dot'),
+      });
+      e.attributes.set(
+        'arrowtail',
+        ArrowType.build('obox', 'ltee', 'vee', 'odot'),
+      );
       e.attributes.set('arrowhead', 'odot');
       expectTypeOf(e.attributes.get('arrowhead')).toExtend<
         ArrowType | undefined
