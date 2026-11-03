@@ -7,9 +7,10 @@ import {
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// The arrow names (#1897). ArrowType is a union of thousands of literals:
-// compare it by Equals or by toExtend both ways, never by toEqualTypeOf,
-// whose deep comparison does not finish on a union this large.
+// The arrow names (#1897). ArrowType is a union of 1,764 literals: compare
+// it by Equals or by toExtend both ways, not by toEqualTypeOf. Its deep
+// comparison finishes on this union but takes 5 to 15 seconds; on the old
+// union of 4,422 it ran out of memory.
 
 /** Equality by the checker's own identity relation. */
 type Equals<A, B> =
