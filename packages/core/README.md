@@ -146,7 +146,7 @@ const edge = new MyCustomEdge([node1, node2]);
 
 ### Models Context API
 
-The Models Context API allows you to specify which model classes should be used when creating graph element.
+The Models Context API allows you to specify which model classes should be used when creating graph elements.
 
 This is implemented through the with method on graph models:
 

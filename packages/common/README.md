@@ -150,7 +150,8 @@ import {
   isNodeRefGroupLike,
   isNodeRef,
   isNodeRefLike,
-  FilterableModel
+  FilterableModel,
+  toNodeRefGroup
 } from '@ts-graphviz/common';
 
 // Check for forward reference nodes

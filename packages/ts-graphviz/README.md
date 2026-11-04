@@ -221,7 +221,7 @@ const dot = toDot(g);
 
 ##### `fromDot` function ⏪
 
-> The status of this function is ! [beta](https://img.shields.io/badge/-beta-orange).
+> The status of this function is ![beta](https://img.shields.io/badge/-beta-orange).
 
 The main scenario for using this library is to use the `toDot` function, but it also supports conversions in the reverse direction.
 
@@ -340,7 +340,7 @@ const G = digraph((g) => {
   const b = g.node('B'); // MyCustomNode
   g.edge([a, b]); // MyCustomEdge
 });
-const dot = toDot(g);
+const dot = toDot(G);
 // digraph "G" {
 //   label = "This is Custom Digraph";
 //   "node_A" [
@@ -420,7 +420,7 @@ The following functions are provided as described in the state transition diagra
 - The `fromModel` function converts **Model** to **AST**.
 - The `toModel` function converts **AST** to **Model**.
 - The `stringify` function converts **AST** to **DOT**.
-- The `parse` function to convert from **DOT** to **AST**.
+- The `parse` function converts **DOT** to **AST**.
 
 > **Note** As you can see from the above figure, the `toDot` function provided by the `ts-graphviz` package is a composite of `fromModel` and `stringify`. The `fromDot` function is a composite of `parse` and `toModel`.
 

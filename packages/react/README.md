@@ -237,7 +237,7 @@ const DatabaseDiagram = () => (
 Full type safety with IntelliSense support for all Graphviz attributes:
 
 ```tsx
-import type { NodeProps, EdgeProps, DigraphProps } from '@ts-graphviz/react';
+import type { NodeProps, EdgeProps, RootGraphProps } from '@ts-graphviz/react';
 
 // Typed component props
 const MyNode: React.FC<NodeProps> = (props) => (
