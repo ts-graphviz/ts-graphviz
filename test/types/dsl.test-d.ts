@@ -167,8 +167,13 @@ describe('keys', () => {
     expectTypeOf(n.id).toEqualTypeOf<Attribute<'id'> | undefined>();
     expectTypeOf(n.comment).toEqualTypeOf<Attribute<'comment'> | undefined>();
     expectTypeOf(g.size).toEqualTypeOf<Attribute<'size'> | undefined>();
-    // (not arrowhead: its type pairs every arrow name, too many to compare)
     expectTypeOf(e.weight).toEqualTypeOf<Attribute<'weight'> | undefined>();
+    // arrowhead is a union of 1,764 names: compared by toExtend both ways,
+    // as toEqualTypeOf's deep comparison takes seconds on it (#1897)
+    expectTypeOf(e.arrowhead).toExtend<Attribute<'arrowhead'> | undefined>();
+    expectTypeOf<Attribute<'arrowhead'> | undefined>().toExtend<
+      typeof e.arrowhead
+    >();
     expectTypeOf(s.rank).toEqualTypeOf<Attribute<'rank'> | undefined>();
     n.label = 'A';
     n.label = undefined;
