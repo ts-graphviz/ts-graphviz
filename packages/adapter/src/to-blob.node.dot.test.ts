@@ -15,6 +15,7 @@ import {
   describe,
   expect,
   it,
+  vi,
 } from 'vitest';
 import { toBlob } from './to-blob.node.js';
 
@@ -124,15 +125,37 @@ describe('toBlob with the real dot (#1680)', {
   });
 
   it('kills the command when the signal aborts and rejects with its reason', async () => {
-    const started = Date.now();
-    await expect(
-      toBlob(big, {
-        format: 'svg',
-        layout: 'neato',
-        signal: AbortSignal.timeout(200),
-      }),
-    ).rejects.toMatchObject({ name: 'TimeoutError' });
-    expect(Date.now() - started).toBeLessThan(5_000);
+    // A stand-in for dot that records its pid and hangs; aborted once it
+    // runs, so the outcome does not hang on how fast dot is (#1904).
+    const script = join(dir, 'sleep.sh');
+    writeFileSync(script, '#!/bin/sh\necho $$ > "$0.pid"\nexec sleep 60\n', {
+      mode: 0o755,
+    });
+    children.push(`${script}.pid`);
+    const controller = new AbortController();
+    // Settled now, so that a failure before the abort is not unhandled.
+    const outcome = toBlob('digraph {}', {
+      dotCommand: script,
+      signal: controller.signal,
+    }).catch((error: unknown) => error);
+    const pid = await vi.waitFor(
+      () => {
+        const text = readFileSync(`${script}.pid`, 'utf8');
+        if (!text.endsWith('\n')) throw new Error('no pid yet');
+        return Number(text);
+      },
+      { timeout: 10_000 },
+    );
+    const reason = new Error('stopped by the test');
+    controller.abort(reason);
+    expect(await outcome).toBe(reason);
+    await vi.waitFor(
+      () =>
+        expect(() => process.kill(pid, 0)).toThrow(
+          expect.objectContaining({ code: 'ESRCH' }),
+        ),
+      { timeout: 10_000 },
+    );
   });
 
   it('rejects an already aborted signal without starting the command', async () => {
