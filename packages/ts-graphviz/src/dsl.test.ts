@@ -351,6 +351,12 @@ describe('attributes by name', () => {
     expect(Reflect.deleteProperty(a, symbol)).toBe(true);
     expect(Reflect.getOwnPropertyDescriptor(a, symbol)).toBeUndefined();
     expect(Object.keys(a)).toStrictEqual(['label']);
+
+    expect(Reflect.deleteProperty(a, 'label')).toBe(true);
+    expect(modelOf(a).attributes.get('label')).toBeUndefined();
+    expect('label' in a).toBe(false);
+    expect(Reflect.getOwnPropertyDescriptor(a, 'label')).toBeUndefined();
+    expect(Object.keys(a)).toStrictEqual([]);
   });
 
   test('a Dot has no attributes to read, list or delete', () => {
