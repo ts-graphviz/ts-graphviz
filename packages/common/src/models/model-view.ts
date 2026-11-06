@@ -10,7 +10,7 @@ import type { AnyReadonlyDotObjectModel } from './readonly-models.js';
  * implement {@link ModelView}, and what it gives is read as any model is.
  * @group Models
  */
-export const MODEL: unique symbol = Symbol.for('ts-graphviz.model');
+export const MODEL: unique symbol = Symbol.for('@ts-graphviz/common/model');
 
 /**
  * An object standing for a model: it gives the model under {@link MODEL}.
