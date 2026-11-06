@@ -365,7 +365,8 @@ describe('differential against Graphviz', { tags: ['SM-2', 'process'] }, () => {
           // `dot -Tcanon` when a node, or an edge with a label, has a
           // `fontname` such as `#-`, `#"`, `#'`, `#=` or `#,` (the font is
           // looked up even though nothing is laid out); 2.43 is fine. #1880
-          fc.pre(!fontnames(spec).some((value) => value.startsWith('#')));
+          // Leading whitespace does not help: `" # ࠀ"` hung on CI as well.
+          fc.pre(!fontnames(spec).some((value) => /^\s*#/.test(value)));
 
           const model = buildGraph(spec);
           const source = toDot(model);
