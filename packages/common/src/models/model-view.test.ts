@@ -15,4 +15,16 @@ describe('modelOf', () => {
     expect(modelOf('a')).toBe('a');
     expect(modelOf(null)).toBe(null);
   });
+
+  it('reads MODEL from a function and through the prototype', () => {
+    const model = { $$type: 'Node', id: 'a' };
+    const callable = Object.assign(() => {}, { [MODEL]: model });
+    expect(modelOf(callable)).toBe(model);
+    expect(modelOf(Object.create({ [MODEL]: model }))).toBe(model);
+  });
+
+  it('gives the value itself when MODEL holds nothing', () => {
+    const empty = { [MODEL]: null };
+    expect(modelOf(empty)).toBe(empty);
+  });
 });

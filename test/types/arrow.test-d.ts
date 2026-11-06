@@ -142,6 +142,8 @@ describe('ArrowType.build', () => {
       expectTypeOf(e.arrowhead).toExtend<ArrowType | undefined>();
       // @ts-expect-error three shapes as a literal
       e.arrowtail = 'dotdotdot';
+      // @ts-expect-error not an arrow name
+      e.arrowhead = 'not-an-arrow';
       // @ts-expect-error nor through the attribute list
       e.$attributes.set('arrowtail', 'dotdotdot');
     });
