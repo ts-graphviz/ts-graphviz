@@ -36,6 +36,17 @@ const root = resolve(import.meta.dirname, '..');
 // else does, and a shell would split arguments at spaces.
 const shell = (command: string) =>
   command === 'pnpm' && process.platform === 'win32';
+/**
+ * A path as one argument of `command`: quoted when it goes through cmd.exe,
+ * which expands `%` even inside quotes, so such a path is refused there.
+ */
+function pathArg(command: string, path: string): string {
+  if (!shell(command)) return path;
+  if (/["%]/.test(path)) {
+    throw new Error(`cmd.exe cannot pass this path to ${command}: ${path}`);
+  }
+  return `"${path}"`;
+}
 const run = (command: string, args: string[], cwd: string) =>
   execFileSync(command, args, { cwd, stdio: 'inherit', shell: shell(command) });
 
@@ -69,7 +80,7 @@ function pack(destination: string): void {
     if (manifest.private) continue;
     const output = execFileSync(
       'pnpm',
-      ['pack', '--pack-destination', destination, '--json'],
+      ['pack', '--pack-destination', pathArg('pnpm', destination), '--json'],
       { cwd: dir, encoding: 'utf8', shell: shell('pnpm') },
     );
     const tarball: string = JSON.parse(output).filename;
