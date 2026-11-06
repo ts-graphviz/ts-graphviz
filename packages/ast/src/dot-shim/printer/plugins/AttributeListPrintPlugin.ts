@@ -15,7 +15,7 @@ export const AttributeListPrintPlugin: PrintPlugin<AttributeListASTNode> = {
     if (!KINDS.has(ast.kind)) {
       throw withCode(
         new TypeError(
-          `An attribute list must be of kind Graph, Node or Edge: ${typeof ast.kind === 'string' ? JSON.stringify(ast.kind) : `a value of type ${typeof ast.kind}`}`,
+          `An attribute list must be of kind Graph, Node or Edge: ${typeof ast.kind === 'string' ? JSON.stringify(ast.kind.slice(0, 64)) : `a value of type ${typeof ast.kind}`}`,
         ),
         'TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND',
       );

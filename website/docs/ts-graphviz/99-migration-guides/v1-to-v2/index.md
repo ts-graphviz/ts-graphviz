@@ -60,7 +60,7 @@ If you are using modules like `ts-graphviz/adapter` or `ts-graphviz/ast`, you ca
 
 **Example:**
 
-```typescript
+```typescript no-check
 import { digraph } from 'ts-graphviz';
 import { toFile } from 'ts-graphviz/adapter';
 import { parse } from 'ts-graphviz/ast';

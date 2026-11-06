@@ -1,9 +1,9 @@
-import type { NodeModel } from '@ts-graphviz/common';
+import type { ReadonlyNodeModel } from '@ts-graphviz/common';
 import { idToRaw } from '../../literal.js';
 import type { ConvertFromModelPlugin } from '../types.js';
 import { convertAttribute } from './utils/index.js';
 
-export const NodePlugin: ConvertFromModelPlugin<NodeModel> = {
+export const NodePlugin: ConvertFromModelPlugin<ReadonlyNodeModel> = {
   match(model) {
     return model.$$type === 'Node';
   },

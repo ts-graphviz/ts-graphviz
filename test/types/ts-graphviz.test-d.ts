@@ -10,6 +10,7 @@ import {
   graph,
   isNodeModel,
   type NodeModel,
+  type ReadonlyNodeModel,
   type RootGraphModel,
   type SubgraphModel,
   strict,
@@ -109,7 +110,15 @@ describe('fromDot / fromDotAll / toDot', () => {
   });
 
   it('narrow models with the guards', () => {
+    // On unknown, to the read-only view: the check cannot tell more.
     const model: unknown = fromDot('digraph {}');
-    if (isNodeModel(model)) expectTypeOf(model).toEqualTypeOf<NodeModel>();
+    if (isNodeModel(model)) {
+      expectTypeOf(model).toEqualTypeOf<ReadonlyNodeModel>();
+    }
+    // Given a model, the caller's type is kept.
+    const statement = digraph().statements[0];
+    if (statement && isNodeModel(statement)) {
+      expectTypeOf(statement).toEqualTypeOf<NodeModel>();
+    }
   });
 });

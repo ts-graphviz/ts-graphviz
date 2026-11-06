@@ -2,6 +2,8 @@ import { type SpawnOptionsWithoutStdio, spawn } from 'node:child_process';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
+import { OutputParts } from './media-type.js';
+import type { AnyOptions } from './options.js';
 import { ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
 import type { Layout, Options } from './types.js';
@@ -10,36 +12,41 @@ import type { Layout, Options } from './types.js';
 const KILL_GRACE_MS = 1000;
 
 /**
- * Execute the Graphviz dot command and make a Web `ReadableStream` of the
- * results, as on every other runtime.
+ * Execute the Graphviz dot command and return its output as a `Blob`.
  *
- * The output is collected while the command runs (at most `maxOutputSize`
- * bytes) and the stream is returned once the command has succeeded, so a
- * failure is always reported by the returned promise.
+ * The output is collected in memory while the command runs (at most
+ * `maxOutputSize` bytes) and the Blob is returned once the command has
+ * succeeded, so a failure is always reported by the returned promise.
  *
  * @param dot - The DOT source.
  * @param options - Layout, output format, limits and the other options of the command.
- * @returns The output of the command as a stream of bytes.
+ * @returns The output of the command. Its `type` is the media type of the
+ * format (e.g. `image/svg+xml`), or empty for a format without a well-known one.
  * @throws `DOMException` named `SecurityError` (`code` `TSG_ERR_UNSAFE_DOT`)
  * or `DotSyntaxError` when `sanitize` (on by default) rejects the source.
- * @throws {CommandExecutionError} when the command cannot be started, fails
+ * @throws {CommandExecutionError} when the command cannot be started (on
+ * Windows also when `dotCommand` is a `.bat` or `.cmd` script), fails
  * while reading its input, or exits with a non-zero code.
  * @throws `RangeError` with `code` `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` when the
  * output exceeds `maxOutputSize`.
  * @throws `signal.reason` when `signal` aborts.
  */
-export async function toStream<T extends Layout>(
-  dot: string,
-  options?: Options<T>,
-): Promise<ReadableStream<Uint8Array>> {
-  const opts = ownAdapterOptions(options);
-  const [command, args] = createCommandAndArgs(opts);
+export async function toBlob<
+  const F extends string = never,
+  const L extends string = never,
+  T extends Layout | L = Layout | L,
+>(dot: string, options?: Options<T, F, L>): Promise<Blob> {
+  const opts = ownAdapterOptions(options as AnyOptions | undefined);
+  const [command, args] = createCommandAndArgs(
+    opts,
+    process.platform === 'win32',
+  );
   const limit = outputLimit(opts);
   const { signal } = opts;
   signal?.throwIfAborted();
   const source = sourceToRender(dot, opts);
 
-  return new Promise(function toStreamInternal(resolve, reject) {
+  return new Promise<Blob>(function toBlobInternal(resolve, reject) {
     let settled = false;
     let release = () => {};
     let timer: NodeJS.Timeout | undefined;
@@ -121,7 +128,7 @@ export async function toStream<T extends Layout>(
       );
     });
 
-    const chunks: Buffer[] = [];
+    const output = new OutputParts();
     let size = 0;
     // Node.js creates these pipes with options of its own that inherit from
     // Object.prototype, so an inherited `encoding` would turn the output
@@ -137,7 +144,7 @@ export async function toStream<T extends Layout>(
         fail(outputLimitExceeded(command, limit));
         return;
       }
-      chunks.push(chunk);
+      output.push(chunk);
     });
     const errors = new TailBuffer();
     stderr.on('data', (text: string) =>
@@ -176,22 +183,7 @@ export async function toStream<T extends Layout>(
       const cause =
         inputError === undefined ? undefined : { cause: inputError };
       if (code === 0 && inputError === undefined) {
-        settle(() =>
-          resolve(
-            // A source without a prototype, and no Node.js stream in
-            // between: Node.js copies a stream's options into a plain
-            // object, so an inherited `encoding` or `signal` would apply.
-            new ReadableStream<Uint8Array>({
-              __proto__: null,
-              start(controller) {
-                for (const chunk of chunks) {
-                  controller.enqueue(chunk as Uint8Array<ArrayBuffer>);
-                }
-                controller.close();
-              },
-            } as ConstructorParameters<typeof ReadableStream<Uint8Array>>[0]),
-          ),
-        );
+        settle(() => resolve(output.toBlob(opts.format)));
       } else if (code !== 0 && code !== null) {
         // The command failed on its own (e.g. a syntax error closes stdin
         // early); its exit status and stderr explain why.

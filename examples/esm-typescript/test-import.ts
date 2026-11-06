@@ -1,6 +1,5 @@
 // TypeScript ESM project testing ts-graphviz imports
 
-import { devNull } from 'node:os';
 import {
   attribute as _,
   Digraph,
@@ -11,7 +10,7 @@ import {
   Subgraph,
   toDot,
 } from 'ts-graphviz';
-import { toFile } from 'ts-graphviz/adapter';
+import { toBlob } from 'ts-graphviz/adapter';
 import { type ASTNode, parse } from 'ts-graphviz/ast';
 
 console.log('Testing ts-graphviz import from TypeScript ESM project...\n');
@@ -66,10 +65,13 @@ console.log('✅ Parsed AST type:', ast.type);
 // Test 3: Adapter functionality with async/await
 console.log('\nTest 3: Testing adapter with TypeScript');
 try {
-  await toFile(dot, devNull);
-  console.log('✅ Successfully wrote to file using adapter');
+  const blob: Blob = await toBlob(dot);
+  if (blob.type !== 'image/svg+xml' || !(await blob.text()).includes('<svg')) {
+    throw new Error('toBlob did not render SVG');
+  }
+  console.log('✅ Successfully rendered SVG using adapter');
 } catch (error) {
-  console.error('❌ Error writing file:', error);
+  console.error('❌ Error rendering:', error);
   process.exit(1);
 }
 

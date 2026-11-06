@@ -1,4 +1,5 @@
 import { ownOptions, withCode } from '@ts-graphviz/common';
+import { checkReferences } from '../../references.js';
 import { startEdgeTargetBudget } from './edge-target-budget.js';
 import { defaultPlugins } from './plugins/index.js';
 import type {
@@ -38,14 +39,20 @@ export class ToModelConverter {
             return plugin.convert(context, m) as ASTToModel<U>;
           }
         }
+        // The type only, and without running code of the value's.
+        const type: unknown = (m as { type?: unknown }).type;
         throw withCode(
           new Error(
-            `No plugin can convert the "${m.type}" AST node to a model`,
+            `No plugin can convert the ${typeof type === 'string' ? JSON.stringify(type.slice(0, 64)) : `(${typeof type})`} AST node to a model`,
           ),
           'TSG_ERR_NO_PLUGIN',
         );
       },
     };
+    // An AST that contains itself would be converted until the call stack
+    // runs out, and one that shares nodes between parents is converted
+    // once for each place.
+    checkReferences(ast, this.options.maxSharedNodes);
     startEdgeTargetBudget(context, this.options.maxEdgeTargets);
     return context.convert(ast);
   }

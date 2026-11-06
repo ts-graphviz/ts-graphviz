@@ -56,7 +56,7 @@ describe('Biome plugins for option and runtime reads', {
         .map((d) => d.line)
         .sort((a, b) => a - b),
     ).toStrictEqual([
-      9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 31,
+      9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 25, 32,
     ]);
   });
 });

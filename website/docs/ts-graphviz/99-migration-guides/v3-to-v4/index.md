@@ -53,11 +53,14 @@ try {
 | `toDot` / `fromModel` build an AST larger than `maxASTNodes` | `ASTNodeCountExceededError` (now a `RangeError`) | `TSG_ERR_AST_NODE_COUNT_EXCEEDED` |
 | null character in text | `RangeError` | `TSG_ERR_NUL_CHARACTER` |
 | unbalanced HTML-like markup | `RangeError` | `TSG_ERR_INVALID_HTML_LIKE` |
+| `ArrowType.build()` given a shape Graphviz does not have, no shapes or more than four, or `none` last after another | `RangeError` | `TSG_ERR_INVALID_ARROW` |
 | edge with fewer than two targets or a malformed target | `TypeError` (was a bare `Error`) | `TSG_ERR_INVALID_EDGE_TARGETS` |
 | port containing `:` | `TypeError` | `TSG_ERR_INVALID_PORT` |
 | attribute list kind other than `Graph`, `Node`, `Edge` | `TypeError` | `TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND` |
 | edges to subgraphs reach more than `maxEdgeTargets` nodes | `RangeError` | `TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED` |
 | no converter / printer plugin for a node or model | `Error` | `TSG_ERR_NO_PLUGIN` |
+| an AST or model that contains itself (`stringify`, `toModel`, `fromModel`, `toDot`) | `TypeError` | `TSG_ERR_CYCLIC_STRUCTURE` |
+| shared node objects reached more than `maxSharedNodes` times | `RangeError` | `TSG_ERR_SHARED_NODE_COUNT_EXCEEDED` |
 | `fromDot` given an AST node that has no model | `TypeError` | `TSG_ERR_UNCONVERTIBLE_AST` |
 | `fromDot` of a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` |
 | `fromDot` of a source with several graphs | `Error` | `TSG_ERR_MULTIPLE_GRAPHS` |
@@ -65,6 +68,7 @@ try {
 | adapter in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
 | Graphviz command failed | `CommandExecutionError` (`Error`) | `TSG_ERR_COMMAND_FAILED` |
 | Graphviz output over `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
+| an adapter option outside its type or range | `TypeError` / `RangeError` | `TSG_ERR_INVALID_OPTION` |
 | `sanitize` (and so the adapter) rejects the DOT | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
 
 Code that matched on `error.message` should match on `error.code`.
@@ -102,6 +106,7 @@ The attribute keys, their documentation and value types in `@ts-graphviz/common`
 
 - Added: `radius` (edge); `beautify`, `linelength`, `oneblock`, `tooltip` (graph); `bb`, `cluster` (cluster); `cluster` (subgraph). Removed: `mosek`.
 - `tailclip` is `boolean` (was `Point`); `tail_lp` is `Point` (was `string`).
+- `ArrowType` (`arrowhead`, `arrowtail`) takes only the modifiers each shape takes in [Graphviz's table](https://graphviz.org/doc/info/arrows.html): `ldot`, `ocrow` and a two-shape name ending in `none` (`dotnone`) are type errors. Names of three or four shapes are made with `ArrowType.build()`, which checks each shape: `ArrowType.build('obox', 'ltee', 'vee')`. To find the names that changed, search for `arrowhead` and `arrowtail`.
 
 The augmentation points (`Attribute.$keys`, `Attribute.$types`, `EdgeAttributeKey.$values`, …) are unchanged.
 
@@ -122,9 +127,26 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 
 ## 8. `@ts-graphviz/adapter`
 
-- **`toStream` / `toFile` check the source with `sanitize` first** (from `@ts-graphviz/ast`, now a dependency of the adapter). DOT that makes Graphviz read a file (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), write a link other than relative, `http`, `https` or `mailto`, or put raw text into PostScript, image map, `plain`, JSON or XML output (font names other than plain names, unknown `style` values, colors with whitespace, control characters, line breaks in names); `ismap` and output formats that have not been checked (e.g. `vml`, `fig`) are refused. Such DOT rejects with a `DOMException` named `SecurityError` (code `TSG_ERR_UNSAFE_DOT`), and DOT that does not parse rejects with `DotSyntaxError` instead of a `CommandExecutionError` from `dot`. With `sanitize` on, the command gets the source as reprinted by the parser. If your application renders its own images or relies on Graphviz's error messages, pass `sanitize: false`: the source then reaches Graphviz unchanged, without parsing, and DOT that does not parse fails with a `CommandExecutionError` from `dot`; to raise the parser limits, pass them as `sanitize: { maxASTNodes: … }`.
-- `toStream` returns a Web `ReadableStream<Uint8Array>` on every runtime (Node.js included). Replace `stream.pipe(dest)` with `stream.pipeTo(Writable.toWeb(dest))`, `for await (const chunk of stream)`, or `Readable.fromWeb(stream)`.
-- `ts-graphviz/adapter`'s `toStream` / `toFile` also accept a model and call `toDot` for you.
+- **`toBlob` checks the source with `sanitize` first** (from `@ts-graphviz/ast`, now a dependency of the adapter). DOT that makes Graphviz read a file (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), write a link other than relative, `http`, `https` or `mailto`, or put raw text into PostScript, image map, `plain`, JSON or XML output (font names other than plain names, unknown `style` values, colors with whitespace, control characters, line breaks in names); `ismap` and output formats that have not been checked (e.g. `vml`, `fig`) are refused. Such DOT rejects with a `DOMException` named `SecurityError` (code `TSG_ERR_UNSAFE_DOT`), and DOT that does not parse rejects with `DotSyntaxError` instead of a `CommandExecutionError` from `dot`. With `sanitize` on, the command gets the source as reprinted by the parser. If your application renders its own images or relies on Graphviz's error messages, pass `sanitize: false`: the source then reaches Graphviz unchanged, without parsing, and DOT that does not parse fails with a `CommandExecutionError` from `dot`; to raise the parser limits, pass them as `sanitize: { maxASTNodes: … }`.
+- **`toStream` and `toFile` are replaced by `toBlob`**, which takes the same options and returns the output as a `Blob` once `dot` has succeeded. Its `type` is the media type of the format (`image/svg+xml`, `image/png`, …), or empty for formats without a well-known one.
+
+  ```ts
+  // v3
+  const stream = await toStream(dot, { format: 'svg' });
+  stream.pipe(process.stdout);
+  await toFile(dot, './result.svg', { format: 'svg' });
+
+  // v4
+  import { writeFile } from 'node:fs/promises';
+  import { Writable } from 'node:stream';
+
+  const blob = await toBlob(dot, { format: 'svg' });
+  await blob.stream().pipeTo(Writable.toWeb(process.stdout));
+  await writeFile('./result.svg', blob.stream());
+  ```
+
+  The adapter no longer writes files: choosing the path is your application's job (on Deno it needs no `--allow-write`). For the Node.js stream API, use `Readable.fromWeb(blob.stream())`.
+- `ts-graphviz/adapter`'s `toBlob` also accepts a model and calls `toDot` for you.
 - Command failures reject with `CommandExecutionError` (`command`, `exit.code`, `exit.signal`, `exit.stderr`, `cause`), including a failure to write the DOT source to the command.
 - `-G`/`-N`/`-E` attribute values are passed verbatim (3.x wrapped values containing whitespace in literal quotes). fdp `grid` and `oldAttractive` follow the Graphviz defaults (grid on, old attractive force off).
 - The browser entry is typed with the real `Options`.
@@ -148,5 +170,31 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 - `subgraph('')` finds or creates the subgraph with the empty id (3.x created a new anonymous one); `edge(targets, null)` ignores the `null`.
 - `fromModel` keeps a graph or subgraph id that is the empty string; `stringify` of an empty `Dot` returns `''`.
 - `ts-graphviz/ast` and `ts-graphviz/adapter` resolve under `moduleResolution: node10` (`typesVersions`).
+
+## 11. Read-only model types
+
+`@ts-graphviz/common` has read-only views of the models: `ReadonlyNodeModel`, `ReadonlyEdgeModel`, `ReadonlySubgraphModel`, `ReadonlyRootGraphModel`, `ReadonlyDotModel`, `ReadonlyAttributeListModel` and `ReadonlyAttributes`, with the union `AnyReadonlyDotObjectModel` and the value type `DotValue` (`string | number | boolean | EscStringValue | HTMLLikeValue`). They hold only what reading needs (ids, attributes as `size` / `values` / `get(key)`, the contents of a graph), so every model fits them: the built-in ones, the classes of `@ts-graphviz/core`, and your own model classes.
+
+- **Readers take any model.** `toDot`, `fromModel` / `FromModelConverter` (`@ts-graphviz/ast`) and the model input of `ts-graphviz/adapter`'s `toBlob` (`DotInput`) take an `AnyReadonlyDotObjectModel` instead of a `DotObjectModel`. Every model is still accepted; an object that only has a `$$type` (such as `{ $$type: 'Node' }`) no longer compiles.
+- **Edge targets are read-only references.** `NodeRef` is `ReadonlyNodeModel | ForwardRefNode` (3.x: `NodeModel | ForwardRefNode`): an edge uses only the id of a target node, so any node model can be one. Reading `edge.targets` gives read-only nodes; to change a target node, look it up in the graph (`graph.getNode(target.id)`). An array of nodes cast to the tuple type (`nodes as EdgeTargetTuple`) no longer compiles; cast it to a tuple of nodes instead (`nodes as [NodeModel, NodeModel]`).
+- **Type guards on an unknown value narrow to the read-only types.** `isNodeModel(value)` on `unknown` gives `ReadonlyNodeModel` (3.x: `NodeModel`; on another object type such as `DotObjectModel`, its intersection with `ReadonlyNodeModel`), and likewise `isEdgeModel`, `isSubgraphModel`, `isRootGraphModel`, `isDotModel` and `isAttributeListModel`: the check looks at `$$type` and a few fields, which cannot tell a writable model from another object. Given a model, a guard keeps your type: on `AnyDotObjectModel` (or a union of your own classes) `isNodeModel` narrows to `NodeModel` (or your node class), and `models.filter(isNodeModel)` is still a `NodeModel[]` (on `unknown[]`, a `ReadonlyNodeModel[]`). If you need the writable model from an unknown value, keep the model where you created it, or look it up by id in its graph.
+
+To write a function that takes any node (or graph) and only reads it, type its parameter with the read-only type:
+
+```ts
+import type { ReadonlyNodeModel, ReadonlyRootGraphModel } from 'ts-graphviz';
+
+function describe(node: ReadonlyNodeModel): string {
+  return `${node.id}: ${String(node.attributes.get('label') ?? '')}`;
+}
+
+function countNodes(graph: ReadonlyRootGraphModel): number {
+  return graph.nodes.length;
+}
+```
+
+A function that changes the node keeps taking `NodeModel` (or your class).
+
+A read-only type says only that the function taking it does not change the model; it is checked by TypeScript, not at run time. Models are not frozen: `toDot(g)` leaves `g` as it was, and `g` can be changed afterwards as before. Do not cast a read-only model back to a writable type to change it.
 
 See the [Security model](../../11-advanced-topics/06-security-model.md) for what the library guarantees at each trust boundary in v4.

@@ -71,7 +71,9 @@ When using the adapter to execute Graphviz commands:
 
 - **Configuration Security**: The `dotCommand` and `library` options should be hardcoded by application developers, not derived from end-user input.
 
-- **User-Provided DOT Files**: When processing DOT files from untrusted sources, implement validation to check for potentially dangerous attributes that reference file system resources (e.g., `image`, `shapefile`, `fontpath`).
+- **User-Provided DOT Files**: `toBlob` checks the source with `sanitize` from `@ts-graphviz/ast` by default. It rejects the documented constructs that make Graphviz read a file named in the DOT (e.g., `image`, `shapefile`, `fontpath`) or write a link other than relative, `http`, `https` or `mailto`, for the checked output formats. It is not a sandbox and does not make the output inert: render DOT from untrusted sources in an isolated environment (a container, or a separate worker under its own unprivileged user) with restricted file system and network access and operating-system limits on CPU, memory, run time and number of processes. The adapter starts `dot` as a child process but applies none of these. An allowed link scheme does not make the destination safe; decide which URLs are acceptable and how SVG is embedded (for example as an image with `<img>`, or inline under a restrictive Content-Security-Policy). The adapter returns the output as a `Blob` typed with the format's media type; a `blob:` URL of an SVG opened as a document (in a tab or a frame) runs with your application's origin, so show it with `<img>`. The adapter writes no files: where the output goes, and which paths are acceptable, is up to the application.
+
+- **Graphviz Version**: Keep Graphviz at its latest release. Crashes and memory-safety bugs in Graphviz itself are not something a check of the DOT can catch. See [Supported runtimes](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-model/#supported-runtimes) for what is tested.
 
 For detailed security guidelines and validation examples, see the [@ts-graphviz/adapter documentation](./packages/adapter/README.md#security-considerations).
 
@@ -83,6 +85,7 @@ For detailed security guidelines and validation examples, see the [@ts-graphviz/
   - Includes testing and static analysis in CI. This ensures that code is tested and issues are addressed before being merged into the main branch.
 - **Provenance**: [![Provenance](https://img.shields.io/badge/npm_package-provenanced-green)](https://www.npmjs.com/package/ts-graphviz)
   - [npm provenance](https://docs.npmjs.com/generating-provenance-statements) is a feature that allows users to verify the integrity and authenticity of npm packages. It helps ensure that the package is trustworthy and has not been tampered with.
+- **Reproducible Builds**: every pull request, and every push to `main` or `next`, builds and packs the packages twice, on separate runners, and fails if a tarball differs; see [Verifying a Release](#verifying-a-release) for how to rebuild a published version yourself.
 - **OpenSSF Scorecard**: [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ts-graphviz/ts-graphviz/badge)](https://scorecard.dev/viewer/?uri=github.com/ts-graphviz/ts-graphviz)
   - Evaluates supply chain security. It checks branch protection, maintenance status, and other security practices. The Scorecard is a CLI tool that automatically checks and evaluates security risks and can be integrated with CI tools like GitHub Actions for continuous evaluation. It publishes results to the OpenSSF API and creates a security badge. The score is published as a report.
 - **OpenSSF Best Practices Badge**: [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8396/badge)](https://www.bestpractices.dev/projects/8396)
@@ -90,3 +93,41 @@ For detailed security guidelines and validation examples, see the [@ts-graphviz/
 - **Enterprise Support**: [![Tidelift](https://tidelift.com/badges/package/npm/ts-graphviz?style=flat)](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=readme)
   - Available as part of the Tidelift Subscription. The maintainers of ts-graphviz and thousands of other packages work with Tidelift to deliver commercial support and maintenance for the open-source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=referral&utm_campaign=enterprise&utm_term=repo).
 
+## Verifying a Release
+
+The packages are built reproducibly: building the same commit twice gives tarballs with the same bytes. `pnpm pack` writes a fixed timestamp (1985-10-26), no owner and a fixed entry order into the tarball, the build writes neither dates, source maps nor absolute paths into the output, and CI checks on every change that two clean builds agree (`pnpm pack:check` runs the same check locally).
+
+So a published version can be rebuilt from its git tag and compared with what npm serves. Each package is tagged `<name>@<version>` (for example `ts-graphviz@3.0.13`, `@ts-graphviz/ast@3.0.7`). The build needs Node.js of the version in `.node-version` and the pnpm version in `packageManager` of `package.json` at that tag (Corepack or `pnpm env` installs them), because the output comes from the bundler and declaration tools those versions pin.
+
+```bash
+mkdir npm local
+
+# the release, as npm serves it
+npm view ts-graphviz@3.0.13 dist.integrity dist.tarball
+npm pack ts-graphviz@3.0.13 --pack-destination npm
+
+# the same version, built from its tag
+git clone https://github.com/ts-graphviz/ts-graphviz.git
+cd ts-graphviz
+git checkout ts-graphviz@3.0.13
+pnpm install --frozen-lockfile
+pnpm codegen
+pnpm build
+pnpm --filter ts-graphviz pack --pack-destination ../local
+
+# compare
+cd ..
+sha256sum npm/*.tgz local/*.tgz
+mkdir npm-x local-x
+tar -xzf npm/*.tgz -C npm-x
+tar -xzf local/*.tgz -C local-x
+diff -r npm-x local-x
+```
+
+What to expect:
+
+- The files under `package/lib`, the README, CHANGELOG and LICENSE are identical.
+- `package/package.json` may differ, but only in form: pnpm replaces the `workspace:` ranges of the internal dependencies with versions when it packs and when it publishes, and the two do not always write the keys in the same order; a registry or a publish step may also add fields a local pack never has (`_id`, `gitHead`, `_integrity`, `_resolved`, `_npm*` and similar). Compare it with the keys sorted (`jq -S . npm-x/package/package.json > a; jq -S . local-x/package/package.json > b; diff a b`). Because of this one file the tarball checksums (`dist.integrity`, `dist.shasum`) need not match a local pack byte for byte; the files inside do. (Checked with `ts-graphviz@3.0.13`: everything identical except the order of two `dependencies` keys.)
+- `npm audit signatures` checks the registry signature and the provenance attestation of each installed package, which ties the tarball to the GitHub Actions run and commit that published it. A rebuild confirms, independently of npm, that the published files are what that commit produces.
+
+If a file under `lib/` differs, report it privately (see [How to Report a Vulnerability](#how-to-report-a-vulnerability)) with both tarballs' checksums, the tag, and the Node.js and pnpm versions used.

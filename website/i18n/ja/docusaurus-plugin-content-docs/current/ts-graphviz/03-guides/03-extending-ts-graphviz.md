@@ -130,28 +130,19 @@ digraph {
 `@ts-graphviz/adapter` の型を拡張することで、カスタムレイアウトアルゴリズムや出力フォーマットを指定できます。以下はその方法です。
 
 ```typescript
-import { $keywords } from '@ts-graphviz/common';
-import { toFile } from '@ts-graphviz/adapter';
+import { toBlob } from '@ts-graphviz/adapter';
 
-// 1. '@ts-graphviz/adapter' モジュールを宣言します。
-declare module '@ts-graphviz/adapter' {
-  export namespace Layout {
-    // 2. Layout 名前空間内に $values インターフェースを定義します。
-    // 3. $keywords を継承し、カスタムレイアウトアルゴリズムの名前を追加します。
-    export interface $values extends $keywords<'my-custom-algorithm'> {}
-  }
-
-  export namespace Format {
-    // 4. Format 名前空間内に $values インターフェースを定義します。
-    // 5. $keywords を継承し、カスタム出力フォーマットの名前を追加します。
-    export interface $values extends $keywords<'mp4'> {}
-  }
-}
-
-// これでカスタムレイアウトとフォーマットを使用できます。
-toFile('digraph { a -> b }', '/path/to/file', {
+// List the names your Graphviz plugins add for this call: they are accepted
+// at run time and widen the types of `format` and `layout` for this call
+// only. Nothing is changed globally, and `isFormat` / `isLayout` still
+// answer for the documented names only.
+const video = await toBlob('digraph { a -> b }', {
+  customLayouts: ['my-custom-algorithm'],
+  customFormats: ['mp4'],
   layout: 'my-custom-algorithm',
   format: 'mp4',
+  // sanitize refuses formats it has not checked
+  sanitize: false,
 });
 ```
 
@@ -206,7 +197,7 @@ console.log(
 
 **使用方法**:
 
-- DOT 文字列をストリームやファイルに変換する。
+- `toBlob` で DOT 文字列をレンダリングし、`Blob` として受け取る。
 - グラフを画像や他のフォーマットにレンダリングする必要がある環境で使用する。
 
 :::note

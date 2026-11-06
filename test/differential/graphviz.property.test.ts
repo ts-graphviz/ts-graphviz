@@ -347,6 +347,23 @@ function fontnames(spec: GraphSpec): string[] {
   ];
 }
 
+/**
+ * A `fontname` Graphviz 2.42 never returns from (#1880): one starting with
+ * `#`, after any whitespace (`" # ࠀ"` hung on CI as well, #1902).
+ */
+function hangsGraphviz242(fontname: string): boolean {
+  return /^\s*#/.test(fontname);
+}
+
+describe('the fontnames the differential test skips', () => {
+  it('are those starting with #, after any whitespace', () => {
+    for (const value of ['#-', '#,', ' # \u0800', '\t#x'])
+      expect(hangsGraphviz242(value), value).toBe(true);
+    for (const value of ['Arial', 'a#-', ' x#', ''])
+      expect(hangsGraphviz242(value), value).toBe(false);
+  });
+});
+
 describe('differential against Graphviz', { tags: ['SM-2', 'process'] }, () => {
   beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
   it(
@@ -365,7 +382,7 @@ describe('differential against Graphviz', { tags: ['SM-2', 'process'] }, () => {
           // `dot -Tcanon` when a node, or an edge with a label, has a
           // `fontname` such as `#-`, `#"`, `#'`, `#=` or `#,` (the font is
           // looked up even though nothing is laid out); 2.43 is fine. #1880
-          fc.pre(!fontnames(spec).some((value) => value.startsWith('#')));
+          fc.pre(!fontnames(spec).some(hangsGraphviz242));
 
           const model = buildGraph(spec);
           const source = toDot(model);

@@ -12,14 +12,16 @@ import {
   type EdgeModel,
   fromDot,
   type graph,
+  isNodeModel,
   type NodeModel,
+  type ReadonlyNodeModel,
   type RootGraphModel,
   type SubgraphModel,
   strict,
   toDot,
   withContext,
 } from 'ts-graphviz';
-import { toStream } from 'ts-graphviz/adapter';
+import { toBlob } from 'ts-graphviz/adapter';
 import {
   type DotASTNode,
   type NodeASTNode,
@@ -85,8 +87,13 @@ parseFragment('a', 'Statement');
 const printed: string = stringify(dot) + astPackage.stringify(nodeAST);
 
 // adapter options
-await toStream(g, { format: 'svg', layout: 'neato', noop: 1 });
-await adapter.toStream(printed, {
+const blob: Blob = await toBlob(g, {
+  format: 'svg',
+  layout: 'neato',
+  noop: 1,
+});
+await blob.text();
+await adapter.toBlob(printed, {
   layout: 'fdp',
   grid: true,
   sanitize: false,
@@ -94,9 +101,26 @@ await adapter.toStream(printed, {
   attributes: { node: { shape: 'box' } },
 });
 // @ts-expect-error neato's option on another layout
-await adapter.toFile(printed, 'out.svg', { layout: 'dot', noop: 1 });
+await adapter.toBlob(printed, { layout: 'dot', noop: 1 });
 // @ts-expect-error not an output format
-await adapter.toStream(printed, { format: 'docx' });
+await adapter.toBlob(printed, { format: 'docx' });
+
+// read-only model types: every model fits, the readers take them, guards
+// on unknown narrow to them and keep the caller's type given a model
+const describeNode = (n: ReadonlyNodeModel): string =>
+  `${n.id}: ${String(n.attributes.get('label'))}`;
+describeNode(new MyNode('m'));
+const unknownValue: unknown = g;
+if (isNodeModel(unknownValue)) {
+  assertType<Equal<typeof unknownValue, ReadonlyNodeModel>>();
+  toDot(unknownValue);
+}
+const nodes = g.statements.filter(isNodeModel);
+assertType<Equal<typeof nodes, NodeModel[]>>();
+const readNodes = [unknownValue].filter(isNodeModel);
+assertType<Equal<typeof readNodes, ReadonlyNodeModel[]>>();
+// @ts-expect-error not a node
+toDot({ $$type: 'Node' });
 
 try {
   parse('{');

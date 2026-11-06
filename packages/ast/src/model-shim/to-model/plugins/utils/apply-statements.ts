@@ -17,7 +17,7 @@ import type { ConvertToModelContext } from '../../types.js';
 import { convertEdge } from '../EdgePlugin.js';
 import { collectAttributes } from './collect-attributes.js';
 import { CommentHolder } from './comment-holder.js';
-import { nodeIdsOf } from './subgraph-nodes.js';
+import { nodeIdsOf, type SubgraphIdCache } from './subgraph-nodes.js';
 
 /**
  * The nodes each subgraph model has had in this conversion, over every
@@ -25,6 +25,22 @@ import { nodeIdsOf } from './subgraph-nodes.js';
  * a and b at each end, as in Graphviz.
  */
 const subgraphNodes = new WeakMap<SubgraphModel, Set<string>>();
+
+/**
+ * The ids of each subgraph statement, collected once per conversion: the
+ * subgraphs nested in one are applied (and collected) before it, so each
+ * level reuses the ids of the levels below instead of walking them again.
+ */
+const idCaches = new WeakMap<ConvertToModelContext, SubgraphIdCache>();
+
+function idCacheOf(context: ConvertToModelContext): SubgraphIdCache {
+  let cache = idCaches.get(context);
+  if (cache === undefined) {
+    cache = new WeakMap();
+    idCaches.set(context, cache);
+  }
+  return cache;
+}
 
 /**
  * Whether a subgraph target is only a set of nodes (`{a b}`): anonymous and
@@ -48,7 +64,7 @@ function applySubgraph(
   const subgraph = id ? graph.subgraph(idFromLiteral(id)) : graph.subgraph();
   applyStatements(context, subgraph, stmt.children);
   const nodes = subgraphNodes.get(subgraph) ?? new Set<string>();
-  for (const id of nodeIdsOf(stmt)) nodes.add(id);
+  for (const id of nodeIdsOf(stmt, idCacheOf(context))) nodes.add(id);
   subgraphNodes.set(subgraph, nodes);
   return subgraph;
 }

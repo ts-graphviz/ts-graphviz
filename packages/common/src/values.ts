@@ -66,6 +66,20 @@ export interface HTMLLikeValue {
 }
 
 /**
+ * Any value an attribute can have in DOT: literal text, a number, a
+ * boolean, an {@link EscStringValue} or an {@link HTMLLikeValue}. Every
+ * attribute's value type is one of these; an arbitrary object is not a
+ * printable value.
+ * @group Attribute Types
+ */
+export type DotValue =
+  | string
+  | number
+  | boolean
+  | EscStringValue
+  | HTMLLikeValue;
+
+/**
  * Create an {@link EscStringValue}.
  *
  * @example

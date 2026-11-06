@@ -40,6 +40,7 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 | `pnpm lint` | Run linting checks on the codebase. |
 | `pnpm knip` | Report unused files, exports and dependencies. |
 | `pnpm check:packages` | Pack every package as `pnpm publish` would and run publint and arethetypeswrong on the tarballs (run `pnpm build` first). |
+| `pnpm pack:check` | Build and pack HEAD twice from clean clones and fail if the tarballs differ: the reproducible-build check CI runs on every change (see [SECURITY.md](./SECURITY.md#verifying-a-release)). |
 | `pnpm changeset` | Create a changeset for version management. |
 
 > [!WARNING]
@@ -77,6 +78,23 @@ To run tests for all packages:
 $ pnpm test [optional: filter glob]
 ```
 
+#### Coverage
+
+`pnpm test` collects coverage (v8) for `packages/*/src` and prints a
+summary; `pnpm test --coverage.reporter=html` writes a browsable report to
+`coverage/`. Coverage is measured on `pnpm test` alone: the tests tagged
+`process` run in the sandbox without coverage, so code that only they
+exercise counts as uncovered.
+
+In CI (and locally with `CI=1 pnpm test`) the run fails below the thresholds
+in `vitest.config.ts`: 80% of statements and lines overall, the OpenSSF Best
+Practices silver level (gold is 90% statements, 80% branches; see
+[#1866](https://github.com/ts-graphviz/ts-graphviz/issues/1866)), and a
+floor per package a few points below what it reaches, so that a regression
+in one package is caught. They are off outside CI because a run of a few
+test files counts the rest as uncovered. When you raise the coverage of a
+package, raise its floor too.
+
 #### Tests that start processes
 
 Some tests start real processes: Graphviz (`dot`, `gvpr`) for the
@@ -95,7 +113,8 @@ describe('renders with dot', { tags: ['process'] }, () => {
 `podman run` or `docker run` (Podman when it works, else Docker;
 `CONTAINER_RUNTIME=docker` or `podman` picks one). The image
 (`test/sandbox/Dockerfile`) is Node.js of the same major version as yours
-plus Graphviz, and the container has:
+(or the nearest one it has, when there is no image for your version yet; the
+script says so) plus Graphviz, and the container has:
 
 - no network (`--network none`);
 - the repository, with the `node_modules` installed on your machine, mounted
@@ -122,7 +141,7 @@ not been generated.
 
 `test/process-tag.test.ts` fails when a test file starts a process
 (`node:child_process`, `Deno.Command`, a `dotCommand:` option, or the
-adapter's `toStream`/`toFile`) without the tag, unless it mocks what it would
+adapter's `toBlob`) without the tag, unless it mocks what it would
 start; `test/process-guard.ts` makes `node:child_process` throw in a test that
 is not tagged `process`, and outside tests (start processes in a test or in
 `beforeEach`/`afterEach`, not while the file loads or in `beforeAll`/`afterAll`). Give every process test a timeout or an

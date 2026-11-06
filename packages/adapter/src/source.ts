@@ -66,7 +66,7 @@ function attributesSource(attributes: Attributes): string {
  */
 export function sourceToRender(
   dot: string,
-  options: Pick<CommonOptions, 'sanitize' | 'format' | 'attributes'>,
+  options: Pick<CommonOptions<string>, 'sanitize' | 'format' | 'attributes'>,
 ): string {
   const {
     sanitize: check = true,

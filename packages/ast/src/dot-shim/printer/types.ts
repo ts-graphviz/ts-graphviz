@@ -35,6 +35,20 @@ export interface PrintOptions {
    * @default lf
    */
   endOfLine?: EndOfLine;
+  /**
+   * How many times the printer may reach a node object it has already
+   * printed, counted over the whole AST. An AST built in code (or by
+   * `structuredClone` or a custom deserialiser) can hold the same node
+   * object in more than one place, and such a node is printed in each:
+   * a node shared twice at each of k levels prints 2^k times. Each node
+   * object prints once without counting; past the limit, printing throws a
+   * `RangeError` with code `TSG_ERR_SHARED_NODE_COUNT_EXCEEDED`. An AST
+   * that contains itself always throws a `TypeError` with code
+   * `TSG_ERR_CYCLIC_STRUCTURE`. `0` disables the limit.
+   *
+   * @default 100000
+   */
+  maxSharedNodes?: number;
 }
 
 /**

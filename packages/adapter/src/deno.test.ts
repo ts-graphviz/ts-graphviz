@@ -1,12 +1,11 @@
 import { sanitize } from '@ts-graphviz/ast';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { CommandExecutionError, toFile, toStream } from './deno.js';
+import { CommandExecutionError, toBlob } from './deno.js';
 
 // A Deno namespace with a command that succeeds at once, recording the
 // options it is given.
 function stubDeno() {
   const commandOptions: object[] = [];
-  const openOptions: object[] = [];
   vi.stubGlobal('Deno', {
     Command: class {
       constructor(_command: string, options: object) {
@@ -33,12 +32,8 @@ function stubDeno() {
         };
       }
     },
-    open: async (_path: string, options: object) => {
-      openOptions.push(options);
-      return { writable: new WritableStream() };
-    },
   });
-  return { commandOptions, openOptions };
+  return { commandOptions };
 }
 
 describe('Deno adapter', { tags: ['SM-8'] }, () => {
@@ -46,33 +41,32 @@ describe('Deno adapter', { tags: ['SM-8'] }, () => {
     vi.unstubAllGlobals();
   });
 
-  it('gives Deno.Command and Deno.open options that inherit nothing', async () => {
-    const { commandOptions, openOptions } = stubDeno();
-    const stream = await toStream('digraph {}');
-    expect(await new Response(stream).text()).toBe('out');
-    await toFile('digraph {}', '/path/output');
-    expect(commandOptions).toHaveLength(2);
-    for (const options of [...commandOptions, ...openOptions]) {
-      expect(Object.getPrototypeOf(options)).toBeNull();
-    }
-    expect({ ...openOptions[0] }).toStrictEqual({
-      write: true,
-      create: true,
-      truncate: true,
-    });
+  it('gives Deno.Command options that inherit nothing', async () => {
+    const { commandOptions } = stubDeno();
+    const blob = await toBlob('digraph {}');
+    expect(await blob.text()).toBe('out');
+    expect(commandOptions).toHaveLength(1);
+    expect(Object.getPrototypeOf(commandOptions[0])).toBeNull();
   });
 
-  it('returns a stream whose source inherits nothing', async () => {
+  it('returns a Blob of the format, whatever Object.prototype holds', async () => {
     stubDeno();
     const proto = Object.prototype as Record<string, unknown>;
-    proto.type = 'other';
-    let text: string;
+    proto.type = 'text/html';
+    proto.endings = 'native';
+    let svg: Blob;
+    let png: Blob;
     try {
-      text = await new Response(await toStream('digraph {}')).text();
+      svg = await toBlob('digraph {}');
+      png = await toBlob('digraph {}', { format: 'png' });
     } finally {
       delete proto.type;
+      delete proto.endings;
     }
-    expect(text).toBe('out');
+    expect(svg).toBeInstanceOf(Blob);
+    expect(svg.type).toBe('image/svg+xml');
+    expect(png.type).toBe('image/png');
+    expect(await svg.text()).toBe('out');
   });
 });
 
@@ -96,7 +90,6 @@ function stubCommand(plan: Plan) {
     spawned: 0,
     written: '',
     kills: [] as string[],
-    opened: 0,
   };
   const encoder = new TextEncoder();
   const output = (chunks: string[], open: boolean) =>
@@ -137,10 +130,6 @@ function stubCommand(plan: Plan) {
         };
       }
     },
-    open: async () => {
-      calls.opened++;
-      return { writable: new WritableStream() };
-    },
   });
   return calls;
 }
@@ -150,11 +139,49 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
     vi.unstubAllGlobals();
   });
 
+  it('rejects a .bat or .cmd dotCommand on Windows before starting it', async () => {
+    const calls = stubCommand({});
+    const deno = (globalThis as unknown as { Deno: { build?: { os: string } } })
+      .Deno;
+    deno.build = { os: 'windows' };
+    for (const dotCommand of ['C:\\dot.bat', 'dot.CMD', 'dot.bat. .']) {
+      await expect(
+        toBlob('digraph {}', { dotCommand, sanitize: false }),
+      ).rejects.toMatchObject({
+        name: 'CommandExecutionError',
+        code: 'TSG_ERR_COMMAND_FAILED',
+        command: dotCommand,
+      });
+    }
+    expect(calls.spawned).toBe(0);
+    // An executable is started; elsewhere a script name is just a file.
+    await toBlob('digraph {}', { dotCommand: 'C:\\dot.exe' });
+    deno.build = { os: 'linux' };
+    await toBlob('digraph {}', { dotCommand: '/opt/dot.bat' });
+    expect(calls.spawned).toBe(2);
+  });
+
+  it('rejects data options outside their type before starting the command', async () => {
+    const calls = stubCommand({});
+    for (const options of [
+      { format: 'png:cairo' },
+      { layout: 'my-engine' },
+      { layout: 'neato', noop: -1 },
+      { attributes: { edge: { '': 'x' } } },
+      { dotCommand: new URL('file:///usr/bin/dot') },
+    ]) {
+      await expect(
+        toBlob('digraph {}', { ...options, sanitize: false } as never),
+      ).rejects.toMatchObject({ code: 'TSG_ERR_INVALID_OPTION' });
+    }
+    expect(calls.spawned).toBe(0);
+  });
+
   it('rejects with CommandExecutionError when the command cannot start', async () => {
     const error = new Error('NotFound: dot');
     stubCommand({ spawnError: error });
     await expect(
-      toStream('digraph {}', { sanitize: false }),
+      toBlob('digraph {}', { sanitize: false }),
     ).rejects.toMatchObject({
       name: 'CommandExecutionError',
       code: 'TSG_ERR_COMMAND_FAILED',
@@ -169,7 +196,7 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
       stderr: ['syntax error ', 'in line 1'],
       status: { code: 1, signal: null, success: false },
     });
-    const promise = toStream('digraph {}', { sanitize: false });
+    const promise = toBlob('digraph {}', { sanitize: false });
     await expect(promise).rejects.toBeInstanceOf(CommandExecutionError);
     await expect(promise).rejects.toMatchObject({
       code: 'TSG_ERR_COMMAND_FAILED',
@@ -182,7 +209,7 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
     const epipe = new Error('Broken pipe');
     const calls = stubCommand({ stdinError: epipe });
     await expect(
-      toStream('digraph {}', { sanitize: false }),
+      toBlob('digraph {}', { sanitize: false }),
     ).rejects.toMatchObject({
       code: 'TSG_ERR_COMMAND_FAILED',
       cause: epipe,
@@ -197,7 +224,7 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
       open: true,
     });
     await expect(
-      toStream('digraph {}', { sanitize: false, maxOutputSize: 15 }),
+      toBlob('digraph {}', { sanitize: false, maxOutputSize: 15 }),
     ).rejects.toMatchObject({
       name: 'RangeError',
       code: 'TSG_ERR_OUTPUT_LIMIT_EXCEEDED',
@@ -207,7 +234,7 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
 
   it('gives output up to maxOutputSize', async () => {
     stubCommand({ stdout: ['0123456789', '01234'] });
-    const stream = await toStream('digraph {}', {
+    const stream = await toBlob('digraph {}', {
       sanitize: false,
       maxOutputSize: 15,
     });
@@ -217,7 +244,7 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
   it('rejects an invalid maxOutputSize before starting the command', async () => {
     const calls = stubCommand({});
     await expect(
-      toStream('digraph {}', { sanitize: false, maxOutputSize: -1 }),
+      toBlob('digraph {}', { sanitize: false, maxOutputSize: -1 }),
     ).rejects.toMatchObject({
       name: 'RangeError',
       code: 'TSG_ERR_OUTPUT_LIMIT_EXCEEDED',
@@ -228,7 +255,7 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
   it('kills the command when the signal aborts and rejects with its reason', async () => {
     const calls = stubCommand({ open: true });
     const controller = new AbortController();
-    const promise = toStream('digraph {}', {
+    const promise = toBlob('digraph {}', {
       sanitize: false,
       signal: controller.signal,
     });
@@ -245,26 +272,16 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
     const controller = new AbortController();
     controller.abort();
     await expect(
-      toStream('digraph {}', { signal: controller.signal }),
+      toBlob('digraph {}', { signal: controller.signal }),
     ).rejects.toMatchObject({ name: 'AbortError' });
     expect(calls.spawned).toBe(0);
-  });
-
-  it('does not open the file when the command fails', async () => {
-    const calls = stubCommand({
-      status: { code: 1, signal: null, success: false },
-    });
-    await expect(
-      toFile('digraph {}', '/path/output', { sanitize: false }),
-    ).rejects.toMatchObject({ code: 'TSG_ERR_COMMAND_FAILED' });
-    expect(calls.opened).toBe(0);
   });
 
   describe('sanitize', { tags: ['SM-7'] }, () => {
     it('rejects unsafe DOT before starting the command', async () => {
       const calls = stubCommand({});
       await expect(
-        toStream('digraph { a [shape=epsf shapefile="/etc/passwd"] }', {
+        toBlob('digraph { a [shape=epsf shapefile="/etc/passwd"] }', {
           format: 'ps',
         }),
       ).rejects.toMatchObject({
@@ -272,20 +289,19 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
         code: 'TSG_ERR_UNSAFE_DOT',
       });
       await expect(
-        toStream('digraph { a }', {
-          attributes: { node: { 'image=/etc/passwd': true } as never },
+        toBlob('digraph { a }', {
+          attributes: { node: { image: '/etc/passwd' } as never },
         }),
       ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
       await expect(
-        toFile('digraph { a [URL="javascript:alert(1)"] }', '/path/output'),
+        toBlob('digraph { a [URL="javascript:alert(1)"] }'),
       ).rejects.toMatchObject({ code: 'TSG_ERR_UNSAFE_DOT' });
       expect(calls.spawned).toBe(0);
-      expect(calls.opened).toBe(0);
     });
 
     it('rejects DOT that does not parse with DotSyntaxError', async () => {
       const calls = stubCommand({});
-      await expect(toStream('digraph { a -> }')).rejects.toMatchObject({
+      await expect(toBlob('digraph { a -> }')).rejects.toMatchObject({
         name: 'DotSyntaxError',
         code: 'TSG_ERR_DOT_SYNTAX',
       });
@@ -296,7 +312,7 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
       const calls = stubCommand({});
       // Reprinted by sanitize, so the text differs from the source.
       const dot = 'digraph{a->b}';
-      await toStream(dot);
+      await toBlob(dot);
       expect(calls.written).toBe(sanitize(dot, { format: 'svg' }));
       expect(calls.written).not.toBe(dot);
     });
@@ -304,7 +320,7 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
     it('gives the command the source as it is with sanitize: false', async () => {
       const calls = stubCommand({});
       const dot = 'digraph { a [shape=epsf shapefile="/etc/passwd"] }';
-      await toStream(dot, { format: 'ps', sanitize: false });
+      await toBlob(dot, { format: 'ps', sanitize: false });
       expect(calls.written).toBe(dot);
     });
   });
