@@ -40,6 +40,7 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 | `pnpm lint` | Run linting checks on the codebase. |
 | `pnpm knip` | Report unused files, exports and dependencies. |
 | `pnpm check:packages` | Pack every package as `pnpm publish` would and run publint and arethetypeswrong on the tarballs (run `pnpm build` first). |
+| `pnpm pack:check` | Build and pack HEAD twice from clean clones and fail if the tarballs differ: the reproducible-build check CI runs on every change (see [SECURITY.md](./SECURITY.md#verifying-a-release)). |
 | `pnpm changeset` | Create a changeset for version management. |
 
 > [!WARNING]
