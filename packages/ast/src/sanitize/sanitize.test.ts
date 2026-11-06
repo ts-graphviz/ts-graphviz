@@ -157,6 +157,8 @@ describe('sanitize', { tags: ['SM-7'] }, () => {
       'java&#9;script:alert(1)',
       'javascript&colon;alert(1)',
       'java&Tab;script:alert(1)',
+      // More rounds of decoding than are checked.
+      `javascript&${'amp;'.repeat(8)}#58;alert(1)`,
       'data:text/html,x',
       'file:///etc/passwd',
       'vbscript:x',
@@ -166,6 +168,12 @@ describe('sanitize', { tags: ['SM-7'] }, () => {
       expect(rejection(`digraph { a [URL="${url}"] }`).code).toBe(
         'TSG_ERR_UNSAFE_DOT',
       );
+    });
+
+    it('says when references are nested too deep to check', () => {
+      expect(() =>
+        sanitize(`digraph { a [URL="&${'amp;'.repeat(8)}#58;"] }`),
+      ).toThrow('has character references nested too deep to check');
     });
 
     it.each([
@@ -213,6 +221,12 @@ describe('sanitize', { tags: ['SM-7'] }, () => {
       '<table href="&#92;N"><tr><td>x</td></tr></table>',
       '<table href="javascript&amp;#58;x"><tr><td>x</td></tr></table>',
       '<table href="javascript&amp;amp;#58;x"><tr><td>x</td></tr></table>',
+      // A named reference the XML parser does not define cannot be checked.
+      '<table href="javascript&colon;x"><tr><td>x</td></tr></table>',
+      // Not markup as the XML parser reads it: an unquoted attribute value,
+      // and a tag that does not end after its attributes.
+      '<td href=javascript:x>x</td>',
+      '<b !>x</b>',
       '<font face="&#47;tmp&#47;x.ttf">x</font>',
       '<font face="&#x5c;x.ttf">x</font>',
       '<!-- unterminated>',
