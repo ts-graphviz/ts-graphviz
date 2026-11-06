@@ -17,14 +17,24 @@ export type AnyDotObjectModel = GraphStatementModel | RootGraphModel | DotModel;
 
 export type AnyReadonlyDotObjectModel = ReadonlyGraphStatementModel | ReadonlyRootGraphModel | ReadonlyDotModel;
 
-export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.aname}`;
+export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.last}` | ArrowType.Built;
 export declare namespace ArrowType {
   type shape = keyof $shape;
   interface $shape extends $keywords<"box" | "crow" | "curve" | "icurve" | "diamond" | "dot" | "inv" | "none" | "normal" | "tee" | "vee"> {}
   type side = "l" | "r";
   type modifiers = side | "o" | `o${side}`;
-  type aname = shape | `${modifiers}${shape}`;
+  type openShape = "box" | "diamond" | "dot" | "inv" | "normal";
+  type sidedShape = Exclude<shape, "dot" | "none">;
+  type aname = shape | `o${openShape}` | `${side}${sidedShape}` | `o${side}${Extract<openShape, sidedShape>}`;
+  type last = Exclude<aname, "none">;
+  type Shapes = readonly [aname] | readonly [aname, last] | readonly [aname, aname, last] | readonly [aname, aname, aname, last];
+  type Built = string & {
+    readonly [built]: true;
+  };
 }
+export declare const ArrowType: {
+  readonly build: (...shapes: ArrowType.Shapes) => ArrowType.Built;
+};
 
 export type Attribute<T extends AttributeKey> = Attribute.types[T];
 export declare namespace Attribute {
@@ -499,7 +509,7 @@ export type Double = number;
 
 export type DoubleList = Double | `${Double}:${Double}` | `${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
 
-export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NO_MODELS_CONTEXT", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
+export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NO_MODELS_CONTEXT", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
 
 export type EdgeAttributeKey = EdgeAttributeKey.values;
 export declare namespace EdgeAttributeKey {
@@ -1023,6 +1033,8 @@ export declare function warnDeprecated(code: DeprecationCode, message: string): 
 export declare function withCode<E extends Error, C extends ErrorCode>(error: E, code: C): Omit<E, "code"> & CodedError<C>;
 
 // Used by the exports, not exported
+
+declare const built: unique symbol;
 
 type AsClusterSubgraphAttributesObject = AttributesObject<Exclude<ClusterSubgraphAttributeKey, "cluster">> & {
   cluster: true;
