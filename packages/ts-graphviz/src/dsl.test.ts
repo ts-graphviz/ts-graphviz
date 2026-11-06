@@ -314,6 +314,54 @@ describe('attributes by name', () => {
       (g as unknown as Record<symbol, unknown>)[Symbol.toPrimitive],
     ).toBeUndefined();
   });
+
+  test('in, delete and own properties: attributes, members and statements', () => {
+    const g = graph();
+    const a = g.node('a', { label: 'A' });
+    a.$comment = 'note';
+    const symbol = Symbol('s');
+
+    // attributes
+    expect('label' in a).toBe(true);
+    expect('shape' in a).toBe(false);
+    expect(Reflect.getOwnPropertyDescriptor(a, 'label')).toStrictEqual({
+      value: 'A',
+      writable: true,
+      enumerable: true,
+      configurable: true,
+    });
+    expect(Reflect.getOwnPropertyDescriptor(a, 'shape')).toBeUndefined();
+
+    // members, by their $ names: not own properties
+    expect('$comment' in a).toBe(true);
+    expect('$nope' in a).toBe(false);
+    expect(Reflect.getOwnPropertyDescriptor(a, '$comment')).toBeUndefined();
+    expect(Reflect.deleteProperty(a, '$comment')).toBe(true);
+    expect(modelOf(a).comment).toBeUndefined();
+
+    // statements: in a graph, not deletable, not own properties
+    expect('node' in g).toBe(true);
+    expect(Reflect.deleteProperty(g, 'node')).toBe(true);
+    expect(typeof g.node).toBe('function');
+    expect(Reflect.getOwnPropertyDescriptor(g, 'node')).toBeUndefined();
+
+    // symbols: none but MODEL
+    expect(MODEL in a).toBe(true);
+    expect(symbol in a).toBe(false);
+    expect(Reflect.deleteProperty(a, symbol)).toBe(true);
+    expect(Reflect.getOwnPropertyDescriptor(a, symbol)).toBeUndefined();
+    expect(Object.keys(a)).toStrictEqual(['label']);
+  });
+
+  test('a Dot has no attributes to read, list or delete', () => {
+    const dot = dsl(new Dot());
+    const any = dot as unknown as Record<string, unknown>;
+    expect(any.label).toBeUndefined();
+    expect('label' in dot).toBe(false);
+    expect(Reflect.deleteProperty(dot, 'label')).toBe(true);
+    expect(Object.keys(dot)).toStrictEqual([]);
+    expect(Reflect.getOwnPropertyDescriptor(dot, 'label')).toBeUndefined();
+  });
 });
 
 describe('models that cannot be extended', () => {
@@ -486,6 +534,7 @@ describe('arrays of DSLs', () => {
     expect(nodes.lastIndexOf(modelOf(a) as never)).toBe(0);
     expect(nodes.includes(new Node('a') as never)).toBe(false);
     expect(nodes.indexOf(b)).toBe(1);
+    expect(nodes.indexOf('a' as never)).toBe(-1);
   });
 
   test('stay plain arrays', () => {
