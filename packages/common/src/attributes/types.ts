@@ -1,3 +1,4 @@
+import { buildArrow } from '../arrow.js';
 import type { EscStringValue, HTMLLikeValue } from '../values.js';
 
 /**
@@ -487,17 +488,22 @@ export namespace TBbalanceType {
 export type Rect = `${Double},${Double},${Double},${Double}`;
 
 /**
- * The examples above show a set of commonly used arrow shapes.
+ * An arrow name: one to four arrow shapes, each a shape name with its
+ * modifiers. Graphviz's grammar describes 3,111,696 arrows, combinations
+ * of the 42 variations of the 11 shapes.
  *
- * There is a grammar of arrow shapes which can be used to describe a collection of 3,111,696 arrow
- * combinations of the 42 variations of the primitive set of 11 arrows.
+ * The names of one or two shapes are string literals (a shape, `odot`, or
+ * two, `lteeoldiamond`; the second is not `none`); names of three or four
+ * shapes, millions of them, are made with {@link ArrowType.build}.
  *
  * @see {@link https://graphviz.org/docs/attr-types/arrowType/ arrowType}
+ * @see {@link https://graphviz.org/doc/info/arrows.html Arrow Shapes}
  * @group Attribute Types
  */
 export type ArrowType =
   | ArrowType.aname
-  | `${ArrowType.aname}${ArrowType.aname}`;
+  | `${ArrowType.aname}${ArrowType.last}`
+  | ArrowType.Built;
 /** @hidden */
 export namespace ArrowType {
   export type shape = keyof $shape;
@@ -520,8 +526,74 @@ export namespace ArrowType {
 
   export type modifiers = side | 'o' | `o${side}`;
 
-  export type aname = shape | `${modifiers}${shape}`;
+  /** The shapes that take `o` (open). */
+  export type openShape = 'box' | 'diamond' | 'dot' | 'inv' | 'normal';
+  /** The shapes that take `l` or `r` (one side). */
+  export type sidedShape = Exclude<shape, 'dot' | 'none'>;
+
+  /** One arrow shape with its modifiers, as Graphviz's table allows them. */
+  export type aname =
+    | shape
+    | `o${openShape}`
+    | `${side}${sidedShape}`
+    | `o${side}${Extract<openShape, sidedShape>}`;
+
+  /** A shape that can end an arrow name of two or more: any but `none`. */
+  export type last = Exclude<aname, 'none'>;
+
+  /**
+   * The shapes of an arrow name, as {@link ArrowType.build} takes them: one
+   * to four; of two or more, the last is not `none`.
+   */
+  export type Shapes =
+    | readonly [aname]
+    | readonly [aname, last]
+    | readonly [aname, aname, last]
+    | readonly [aname, aname, aname, last];
+
+  /**
+   * An arrow name made by {@link ArrowType.build}. At run time it is the
+   * name itself, a string; the type marks that its shapes were checked.
+   */
+  export type Built = string & { readonly [built]: true };
 }
+
+/**
+ * The brand of {@link ArrowType.Built}: a symbol that exists only in the
+ * types and is not exported, so no value but what {@link ArrowType.build}
+ * returns has it.
+ */
+declare const built: unique symbol;
+
+/**
+ * Makes arrow names.
+ * @group Attribute Types
+ */
+export const ArrowType: {
+  /**
+   * An arrow name of one to four shapes, for `arrowhead` and `arrowtail`.
+   * The literals of {@link ArrowType} cover one or two shapes; this makes
+   * names of up to four.
+   *
+   * Each shape is a shape name with its modifiers, as in Graphviz's table:
+   * `o` (open) on `box`, `diamond`, `dot`, `inv` and `normal`, `l` or `r`
+   * (one side) on any shape but `dot` and `none`. `none` takes no modifier;
+   * alone it means no arrow, and after other shapes it cannot come last.
+   *
+   * @example
+   * ```ts
+   * edge.attributes.set('arrowhead', ArrowType.build('obox', 'ltee', 'vee'));
+   * // arrowhead = "oboxlteevee"
+   * ```
+   * @see {@link https://graphviz.org/doc/info/arrows.html Arrow Shapes}
+   * @throws RangeError (`TSG_ERR_INVALID_ARROW`) if a shape is not one of
+   * Graphviz's, there are none or more than four, or the last of two or
+   * more is `none`.
+   */
+  readonly build: (...shapes: ArrowType.Shapes) => ArrowType.Built;
+} = Object.freeze({
+  build: (...shapes: ArrowType.Shapes) => buildArrow(shapes) as ArrowType.Built,
+});
 
 /**
  * @see {@link https://graphviz.gitlab.io/docs/attr-types/clusterMode/ clusterMode}
