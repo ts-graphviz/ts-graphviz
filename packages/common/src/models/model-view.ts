@@ -4,8 +4,10 @@ import type { AnyReadonlyDotObjectModel } from './readonly-models.js';
  * The key under which an object standing for a model (such as the DOT DSL
  * of `ts-graphviz`) gives the model itself.
  *
- * It is registered with `Symbol.for`, so two copies of
- * `@ts-graphviz/common` share it.
+ * A symbol, so the DSL's string keys stay the attributes and the `$`
+ * members alone. It is registered with `Symbol.for`, so two copies of
+ * `@ts-graphviz/common` share it. It is not a trust boundary: anyone may
+ * implement {@link ModelView}, and what it gives is read as any model is.
  * @group Models
  */
 export const MODEL: unique symbol = Symbol.for('ts-graphviz.model');
