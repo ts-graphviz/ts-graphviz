@@ -135,7 +135,12 @@ jobs:
         echo "$TABLE_CONTENT"
 
         # Set overall job status
-        if [ "${{ steps.graphviz.outcome }}" != "success" ]; then
+        if [ "${{ steps.graphviz.outcome }}" = "skipped" ]; then
+          RESULT_MESSAGE="❌ A setup step failed before the Graphviz check: the E2E tests did not run on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
+          echo "$RESULT_MESSAGE"
+          echo "**$RESULT_MESSAGE**" >> "$GITHUB_STEP_SUMMARY"
+          exit 1
+        elif [ "${{ steps.graphviz.outcome }}" != "success" ]; then
           RESULT_MESSAGE="❌ Graphviz is not installed: the E2E tests did not run on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
           echo "$RESULT_MESSAGE"
           echo "**$RESULT_MESSAGE**" >> "$GITHUB_STEP_SUMMARY"
