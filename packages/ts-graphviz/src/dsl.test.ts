@@ -19,6 +19,8 @@ import {
   Dot,
   Edge,
   Node,
+  OrderedDigraph,
+  orderedModels,
   Subgraph,
 } from '@ts-graphviz/core';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -600,6 +602,71 @@ describe('custom models', () => {
     expect(createNode).toHaveBeenCalledWith('a');
     expect(modelOf(a)).toBeInstanceOf(MyNode);
     expect((a as unknown as { $mine: boolean }).$mine).toBe(true);
+  });
+
+  test('default attribute statements keep their place where the classes do', () => {
+    const model = new OrderedDigraph('G');
+    model.with(createModelsContext(orderedModels));
+    const g = dsl(model);
+    g.node({ color: 'red' });
+    g.node('a');
+    g.node({ color: 'blue' });
+    g.edge(['a', 'b']);
+    g.edge({ color: 'green' });
+    g.edge(['b', 'c']);
+    g.subgraph('s', (s) => {
+      s.node('d');
+      s.graph({ label: 'S' });
+    });
+    expect(toDot(g)).toMatchInlineSnapshot(`
+      "digraph "G" {
+        node [
+          color = "red";
+        ];
+        "a";
+        node [
+          color = "blue";
+        ];
+        "a" -> "b";
+        edge [
+          color = "green";
+        ];
+        "b" -> "c";
+        subgraph "s" {
+          "d";
+          graph [
+            label = "S";
+          ];
+        }
+      }"
+    `);
+  });
+
+  test('default attribute statements go through addAttributeList', () => {
+    const added = vi.fn();
+    class MyDigraph extends Digraph {
+      override addAttributeList(
+        ...args: Parameters<Digraph['addAttributeList']>
+      ): void {
+        added(...args);
+        super.addAttributeList(...args);
+      }
+    }
+    const g = dsl(new MyDigraph());
+    g.node('a');
+    g.node({ color: 'red' });
+    g.edge({ color: 'green' });
+    g.graph({ label: 'G' });
+    expect(added.mock.calls).toEqual([
+      ['Node', { color: 'red' }],
+      ['Edge', { color: 'green' }],
+      ['Graph', { label: 'G' }],
+    ]);
+    // The default classes merge them into the graph's defaults.
+    expect(modelOf(g).attributes.node.get('color')).toBe('red');
+    expect(modelOf(g).attributes.edge.get('color')).toBe('green');
+    expect(modelOf(g).attributes.graph.get('label')).toBe('G');
+    expect(modelOf(g).statements).toHaveLength(1);
   });
 
   test('a class’s own node() is reached with $node()', () => {

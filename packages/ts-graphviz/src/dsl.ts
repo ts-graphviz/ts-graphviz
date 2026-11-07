@@ -896,7 +896,11 @@ const isObject = (arg: unknown): arg is object =>
 const isFunction = (arg: unknown): arg is (view: unknown) => void =>
   typeof arg === 'function';
 
-/** The DOT statements: only the model's basic operations, so they follow its models context. */
+/**
+ * The DOT statements: only the model's basic operations, so they follow its
+ * models context (and keep default attribute statements in their place where
+ * its classes do).
+ */
 function createStatements(g: GraphBaseModel) {
   return {
     node(first: unknown, ...rest: unknown[]): unknown {
@@ -911,7 +915,7 @@ function createStatements(g: GraphBaseModel) {
         return view;
       }
       if (isObject(first))
-        g.attributes.node.apply(first as NodeAttributesObject);
+        g.addAttributeList('Node', first as NodeAttributesObject);
       return undefined;
     },
     edge(first: unknown, ...rest: unknown[]): unknown {
@@ -925,7 +929,7 @@ function createStatements(g: GraphBaseModel) {
         return view;
       }
       if (isObject(first))
-        g.attributes.edge.apply(first as EdgeAttributesObject);
+        g.addAttributeList('Edge', first as EdgeAttributesObject);
       return undefined;
     },
     subgraph(...args: unknown[]): unknown {
@@ -944,7 +948,7 @@ function createStatements(g: GraphBaseModel) {
     },
     graph(attributes: unknown): void {
       if (isObject(attributes)) {
-        g.attributes.graph.apply(attributes as SubgraphAttributesObject);
+        g.addAttributeList('Graph', attributes as SubgraphAttributesObject);
       }
     },
   };
