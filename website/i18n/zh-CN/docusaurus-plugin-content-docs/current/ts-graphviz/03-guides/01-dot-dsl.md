@@ -182,9 +182,9 @@ import { digraph, toDot } from 'ts-graphviz/ordered';
 
 const G = digraph((g) => {
   g.node({ color: 'red' });
-  g.node('a'); // 红色
+  g.node('a'); // red
   g.node({ color: 'blue' });
-  g.node('b'); // 蓝色
+  g.node('b'); // blue
 });
 
 console.log(toDot(G));
