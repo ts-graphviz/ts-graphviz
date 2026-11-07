@@ -4,9 +4,12 @@ import {
   type EdgeAttributesObject,
   type EdgeModel,
   type EdgeTargetTuple,
+  type EmptySchema,
   isNodeRefLike,
   modelOf,
   type ReadonlyEdgeTargetTuple,
+  type Schema,
+  type SchemaAttributeTypes,
   withCode,
 } from '@ts-graphviz/common';
 import { AttributesGroup } from '../attributes/AttributesGroup.js';
@@ -14,22 +17,31 @@ import { DotObject } from './DotObject.js';
 
 /**
  * DOT object class representing a edge.
+ *
+ * @typeParam S - The schema of the models, which types the attributes;
+ * none by default.
  * @group Models
  */
-export class Edge extends DotObject implements EdgeModel {
+export class Edge<S extends Schema = EmptySchema>
+  extends DotObject
+  implements EdgeModel<S>
+{
   public get $$type(): 'Edge' {
     return 'Edge';
   }
 
   public comment?: string;
 
-  public readonly attributes: AttributesGroupModel<EdgeAttributeKey>;
+  public readonly attributes: AttributesGroupModel<
+    EdgeAttributeKey,
+    SchemaAttributeTypes<S, 'edge'>
+  >;
 
   public readonly targets: EdgeTargetTuple;
 
   constructor(
     targets: ReadonlyEdgeTargetTuple,
-    attributes?: EdgeAttributesObject,
+    attributes?: EdgeAttributesObject<S>,
   ) {
     super();
     // A copy, so the edge does not change with the caller's arrays; and the
@@ -49,6 +61,9 @@ export class Edge extends DotObject implements EdgeModel {
       );
     }
     this.targets = ts;
-    this.attributes = new AttributesGroup(attributes);
+    this.attributes = new AttributesGroup<
+      EdgeAttributeKey,
+      SchemaAttributeTypes<S, 'edge'>
+    >(attributes);
   }
 }

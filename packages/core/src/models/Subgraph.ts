@@ -1,7 +1,10 @@
 import type {
+  AnyModelTypes,
+  Attributes,
   ClusterSubgraphAttributeKey,
   ModelsContext,
   ModelTypes,
+  SchemaOf,
   SubgraphAttributeKey,
   SubgraphAttributesObject,
   SubgraphModel,
@@ -13,7 +16,7 @@ import { defaultModelsContext } from './models-context.js';
  * DOT object class representing a subgraph.
  * @group Models
  */
-export class Subgraph<M extends ModelTypes = ModelTypes>
+export class Subgraph<M extends AnyModelTypes = ModelTypes>
   extends GraphBase<
     'Subgraph',
     SubgraphAttributeKey | ClusterSubgraphAttributeKey,
@@ -26,15 +29,15 @@ export class Subgraph<M extends ModelTypes = ModelTypes>
   }
   public readonly id?: string;
 
-  constructor(id?: string, attributes?: SubgraphAttributesObject);
+  constructor(id?: string, attributes?: SubgraphAttributesObject<SchemaOf<M>>);
 
-  constructor(attributes?: SubgraphAttributesObject);
+  constructor(attributes?: SubgraphAttributesObject<SchemaOf<M>>);
 
   constructor(...args: unknown[]) {
     super();
     this.id = args.find((arg): arg is string => typeof arg === 'string');
     const attributes = args.find(
-      (arg): arg is SubgraphAttributesObject =>
+      (arg): arg is SubgraphAttributesObject<SchemaOf<M>> =>
         typeof arg === 'object' && arg !== null,
     );
     if (attributes !== undefined) {
@@ -48,7 +51,8 @@ export class Subgraph<M extends ModelTypes = ModelTypes>
     return (
       (typeof this.id === 'string' &&
         this.id.slice(0, 7).toLowerCase() === 'cluster') ||
-      graphvizBool(this.get('cluster'))
+      // Read without the schema: whatever it says, Graphviz reads the value.
+      graphvizBool((this as Attributes<'cluster'>).get('cluster'))
     );
   }
 
