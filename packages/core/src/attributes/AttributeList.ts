@@ -13,9 +13,10 @@ import { AttributesBase } from './AttributesBase.js';
 export class AttributeList<
     K extends AttributeListKind,
     T extends AttributeKey = AttributeKey,
+    E extends object = Record<never, never>,
   >
-  extends AttributesBase<T>
-  implements AttributeListModel<K, T>
+  extends AttributesBase<T, E>
+  implements AttributeListModel<K, T, E>
 {
   public get $$type(): 'AttributeList' {
     return 'AttributeList';
@@ -25,7 +26,7 @@ export class AttributeList<
 
   constructor(
     public readonly $$kind: K,
-    attributes?: AttributesObject<T>,
+    attributes?: AttributesObject<T, E>,
   ) {
     super(attributes);
   }
