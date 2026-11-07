@@ -42,7 +42,10 @@ function useTempDir() {
   afterEach(() => {
     for (const pidFile of children.splice(0)) {
       try {
-        process.kill(Number(readFileSync(pidFile, 'utf8')), 'SIGKILL');
+        const pid = Number(readFileSync(pidFile, 'utf8'));
+        // A file read before its pid was written gives 0, and a kill of 0
+        // would reach the whole process group, these tests included.
+        if (Number.isInteger(pid) && pid > 0) process.kill(pid, 'SIGKILL');
       } catch {
         // already gone, or never started
       }
@@ -156,6 +159,8 @@ describe('toBlob with the real dot (#1680)', {
         ),
       { timeout: 10_000 },
     );
+    // Gone: its pid may go to another process, which the cleanup must spare.
+    rmSync(`${script}.pid`);
   });
 
   it('rejects an already aborted signal without starting the command', async () => {
