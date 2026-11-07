@@ -36,3 +36,6 @@ trustPolicyExclude:
 overrides:
   serialize-javascript@<7.1.3: '>=7.1.3'
   postcss-selector-parser@<7.1.6: '>=7.1.6'
+  # typed-rest-client (from @stryker-mutator/core) pins qs 6.15.1
+  # (GHSA-q8mj-m7cp-5q26, GHSA-6pq8-jhm2-2vcw).
+  qs@<6.16.1: 6.16.1
