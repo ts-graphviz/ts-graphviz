@@ -5,12 +5,12 @@
 # react-reconciler). Each entry expires, so it is reviewed.
 # Tracked in https://github.com/ts-graphviz/ts-graphviz/issues/1920
 
-# tinypool 1 (Docusaurus 3, website build only): fixed in tinypool 2.1.2,
-# which Docusaurus does not take yet (it asks for ^1).
+# tinypool 1 (Docusaurus 3, website build only): fixed in tinypool 2 (2.1.1
+# and 2.1.2), which Docusaurus does not take yet (it asks for ^1).
 [[IgnoredVulns]]
 id = "GHSA-5gmw-xhrv-c9v3"
 ignoreUntil = 2027-01-31
-reason = "Website build only (Docusaurus); it needs a polluted Object.prototype in the build process. Fix requires tinypool 2.1.2 in Docusaurus."
+reason = "Website build only (Docusaurus); it needs a polluted Object.prototype in the build process. Fix requires tinypool 2.1.1 in Docusaurus."
 
 [[IgnoredVulns]]
 id = "GHSA-85c8-ppgw-ccpr"
