@@ -9,7 +9,6 @@ import type {
   SchemaAttributeTypes,
 } from '@ts-graphviz/common';
 import { AttributesGroup } from '../attributes/AttributesGroup.js';
-import { DotObject } from './DotObject.js';
 
 /**
  * DOT object class representing a node.
@@ -18,10 +17,7 @@ import { DotObject } from './DotObject.js';
  * none by default.
  * @group Models
  */
-export class Node<S extends Schema = EmptySchema>
-  extends DotObject
-  implements NodeModel<S>
-{
+export class Node<S extends Schema = EmptySchema> implements NodeModel<S> {
   public get $$type(): 'Node' {
     return 'Node';
   }
@@ -36,7 +32,6 @@ export class Node<S extends Schema = EmptySchema>
     public readonly id: string,
     attributes?: NodeAttributesObject<S>,
   ) {
-    super();
     this.attributes = new AttributesGroup<
       NodeAttributeKey,
       SchemaAttributeTypes<S, 'node'>

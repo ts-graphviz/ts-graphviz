@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, test } from 'vitest';
-import { DotObject } from './DotObject.js';
 import { Node } from './Node.js';
 
 let node: Node;
@@ -18,7 +17,6 @@ describe('Constructor', () => {
   });
 });
 
-it('should be instance of Node/DotObject', () => {
+it('should be instance of Node', () => {
   expect(node).toBeInstanceOf(Node);
-  expect(node).toBeInstanceOf(DotObject);
 });

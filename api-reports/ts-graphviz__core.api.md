@@ -10,7 +10,7 @@ export declare class AttributeList<K extends AttributeListKind, T extends Attrib
   constructor($$kind: K, attributes?: AttributesObject<T, E>);
 }
 
-export declare abstract class AttributesBase<T extends AttributeKey, E extends object = Record<never, never>> extends DotObject implements Attributes<T, E> {
+export declare abstract class AttributesBase<T extends AttributeKey, E extends object = Record<never, never>> implements Attributes<T, E> {
   #private;
   constructor(attributes?: AttributesObject<T, E>);
   get values(): Attributes<T, E>["values"];
@@ -33,7 +33,7 @@ export declare class Digraph<M extends AnyModelTypes = ModelTypes> extends RootG
   protected override defaultModels(): ModelsContext;
 }
 
-export declare class Dot<S extends Schema = EmptySchema> extends DotObject implements DotModel<S> {
+export declare class Dot<S extends Schema = EmptySchema> implements DotModel<S> {
   #private;
   get $$type(): "Dot";
   comment?: string;
@@ -44,9 +44,7 @@ export declare class Dot<S extends Schema = EmptySchema> extends DotObject imple
   removeGraph(graph: RootGraphModel<ModelTypes<S>>): void;
 }
 
-export declare abstract class DotObject {}
-
-export declare class Edge<S extends Schema = EmptySchema> extends DotObject implements EdgeModel<S> {
+export declare class Edge<S extends Schema = EmptySchema> implements EdgeModel<S> {
   get $$type(): "Edge";
   comment?: string;
   readonly attributes: AttributesGroupModel<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>;
@@ -109,7 +107,7 @@ export declare class LegacySubgraph<M extends AnyModelTypes = ModelTypes> extend
   protected override defaultModels(): ModelsContext;
 }
 
-export declare class Node<S extends Schema = EmptySchema> extends DotObject implements NodeModel<S> {
+export declare class Node<S extends Schema = EmptySchema> implements NodeModel<S> {
   readonly id: string;
   get $$type(): "Node";
   comment?: string;

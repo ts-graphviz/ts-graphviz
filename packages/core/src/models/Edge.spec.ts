@@ -1,6 +1,5 @@
 import type { EdgeTargetTuple } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
-import { DotObject } from './DotObject.js';
 import { Edge } from './Edge.js';
 import { Node } from './Node.js';
 
@@ -14,9 +13,8 @@ beforeEach(() => {
   edge = new Edge(targets);
 });
 
-it('should be instance of Edge/DotObject', () => {
+it('should be instance of Edge', () => {
   expect(edge).toBeInstanceOf(Edge);
-  expect(edge).toBeInstanceOf(DotObject);
 });
 
 describe('Constructor', () => {
