@@ -291,6 +291,8 @@ function entries(exports: unknown, path: string[] = []): [string[], string][] {
 }
 
 const reports = new Map<string, string>();
+/** The report bodies (without the header), by file name. */
+const bodies = new Map<string, string>();
 for (const name of readdirSync(packagesDir)) {
   const dir = join(packagesDir, name);
   const manifest = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'));
@@ -308,6 +310,7 @@ for (const name of readdirSync(packagesDir)) {
       .join('')}.api.md`;
     const file = join(dir, types);
     const body = report(file);
+    bodies.set(fileName, body);
     reports.set(
       fileName,
       [
@@ -321,6 +324,57 @@ for (const name of readdirSync(packagesDir)) {
         '',
       ].join('\n'),
     );
+  }
+}
+
+/**
+ * Entry points that must export what another does, with the same
+ * declarations: `ts-graphviz/ordered` has the names and signatures of
+ * `ts-graphviz`; only the classes its factories and `fromDot` create differ.
+ * (Its report also lists the declarations of `ts-graphviz` it shadows, as
+ * ones it only uses.)
+ */
+const sameApi: [entry: string, as: string][] = [
+  ['ts-graphviz+ordered.api.md', 'ts-graphviz.api.md'],
+];
+/**
+ * A report's exports (as text), and the declarations they only use (one by
+ * one), so that those can be compared too.
+ */
+function apiOf(fileName: string) {
+  const [exported = '', used = ''] = (bodies.get(fileName) ?? '').split(
+    '\n// Used by the exports, not exported\n',
+  );
+  const declarations = (text: string) =>
+    text
+      .split(/\n(?=\S)/)
+      .map((d) => d.trim())
+      .filter((d) => d !== '' && !d.startsWith('//'));
+  return {
+    exported,
+    exportedDeclarations: declarations(exported.replace(/\n\n/g, '\n')),
+    used: new Set(declarations(used)),
+  };
+}
+for (const [entry, as] of sameApi) {
+  const a = apiOf(entry);
+  const b = apiOf(as);
+  // What `entry` only uses is what `as` only uses, and the declarations of
+  // `as` that `entry` shadows with its own.
+  const usable = new Set([
+    ...b.used,
+    ...b.exportedDeclarations.map((d) => d.replace(/^export /, '')),
+  ]);
+  const same =
+    bodies.has(entry) &&
+    a.exported === b.exported &&
+    [...a.used].every((d) => usable.has(d)) &&
+    [...b.used].every((d) => a.used.has(d));
+  if (!same) {
+    console.error(
+      `The public API of ${entry} must be that of ${as}; compare the two reports (run \`pnpm api:update\`).`,
+    );
+    process.exitCode = 1;
   }
 }
 

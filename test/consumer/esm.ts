@@ -5,6 +5,7 @@ import * as adapter from '@ts-graphviz/adapter';
 import * as astPackage from '@ts-graphviz/ast';
 import { htmlLike, isTsGraphvizError } from '@ts-graphviz/common';
 import { createModelsContext, Node } from '@ts-graphviz/core';
+import type * as tsg from 'ts-graphviz';
 import {
   attribute as _,
   type Attribute,
@@ -138,7 +139,12 @@ assertType<Equal<typeof readNodes, ReadonlyNodeModel[]>>();
 // @ts-expect-error not a node
 toDot({ $$type: 'Node' });
 
-// ts-graphviz/ordered: the same names, with orderedModels
+// ts-graphviz/ordered: the same names and types, with orderedModels
+// (export by export: two module namespaces are never Equal as a whole)
+type SameExports<A, B> = [keyof A, keyof B] extends [keyof B, keyof A]
+  ? { [K in keyof A & keyof B]: Equal<A[K], B[K]> }[keyof A & keyof B]
+  : false;
+assertType<SameExports<typeof ordered, typeof tsg>>();
 const orderedGraph = ordered.digraph((g) => {
   g.node({ color: 'red' });
   g.node('a');

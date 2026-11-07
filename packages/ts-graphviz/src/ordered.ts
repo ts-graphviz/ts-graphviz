@@ -17,9 +17,21 @@
  *
  * @module ts-graphviz/ordered
  */
-import { type ModelsContext, ownOptions } from '@ts-graphviz/common';
+import type { ParseOptions } from '@ts-graphviz/ast';
+import {
+  type EdgeModel,
+  type ModelsContext,
+  type NodeModel,
+  ownOptions,
+  type ResolvedModelTypes,
+  type RootGraphModel,
+  type SubgraphModel,
+} from '@ts-graphviz/common';
 import { orderedModels } from '@ts-graphviz/core';
 import {
+  type FromDotModel,
+  type FromDotOptions,
+  type FromDotRule,
   fromDotAll as fromDotAllOf,
   fromDot as fromDotOf,
 } from './from-dot.js';
@@ -86,25 +98,86 @@ export const strict: ModelFactories = ordered.strict;
  * @returns The factories `digraph`, `graph` and `strict` of that context.
  * @group Model Factory
  */
-export const withContext: typeof withContextOf = (models) =>
-  withContextOf(withOrdered(models) as typeof models);
+export function withContext<const P extends Partial<ModelsContext>>(
+  models: P,
+): ModelFactoriesWithStrict<ResolvedModelTypes<P>> {
+  return withContextOf(withOrdered(models) as P);
+}
+
+// The signatures below are those of `ts-graphviz`; `pnpm api:check` fails
+// if the API of `ts-graphviz/ordered` and that of `ts-graphviz` differ.
 
 /**
  * `fromDot` with the classes of `orderedModels` for the kinds
  * `convert.models` leaves out, so the models keep the default attribute
  * statements of the source in their place.
+ *
  * @group Convert DOT to Model
+ *
+ * @param dot The DOT string to convert.
+ * @param options Options for converting the DOT string to a model.
+ * @returns A model of type {@link RootGraphModel}, {@link NodeModel}, {@link EdgeModel}, or {@link SubgraphModel},
+ * depending on the type specified in the options.
  */
-export const fromDot: typeof fromDotOf = ((dot: string, options?: object) =>
-  fromDotOf(dot, withOrderedOptions(options))) as typeof fromDotOf;
+export function fromDot<const P extends Partial<ModelsContext>>(
+  dot: string,
+  options: FromDotOptions<'Dot' | 'Graph', P> & {
+    convert: { models: P };
+  },
+): ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'];
+export function fromDot<
+  const P extends Partial<ModelsContext>,
+  const R extends FromDotRule,
+>(
+  dot: string,
+  options: FromDotOptions<R, P> & {
+    convert: { models: P };
+  },
+): FromDotModel<R, ResolvedModelTypes<P>>;
+export function fromDot(
+  dot: string,
+  options?: FromDotOptions<'Dot' | 'Graph'>,
+): RootGraphModel;
+export function fromDot<const R extends FromDotRule>(
+  dot: string,
+  options: FromDotOptions<R>,
+): FromDotModel<R>;
+export function fromDot(
+  dot: string,
+  options?: FromDotOptions<FromDotRule>,
+): RootGraphModel | NodeModel | EdgeModel | SubgraphModel {
+  return fromDotOf(dot, withOrderedOptions(options));
+}
 
 /**
  * `fromDotAll` with the classes of `orderedModels` for the kinds
  * `convert.models` leaves out, so the models keep the default attribute
  * statements of the source in their place.
+ *
  * @group Convert DOT to Model
+ *
+ * @param dot The DOT source to convert.
+ * @param options Parser limits and conversion options.
+ * @returns The graphs, possibly none.
  */
-export const fromDotAll: typeof fromDotAllOf = ((
+export function fromDotAll<const P extends Partial<ModelsContext>>(
   dot: string,
-  options?: object,
-) => fromDotAllOf(dot, withOrderedOptions(options))) as typeof fromDotAllOf;
+  options: Omit<FromDotOptions<'Dot', P>, 'parse'> & {
+    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    convert: { models: P };
+  },
+): (ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'])[];
+export function fromDotAll(
+  dot: string,
+  options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
+    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+  },
+): RootGraphModel[];
+export function fromDotAll(
+  dot: string,
+  options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
+    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+  },
+): RootGraphModel[] {
+  return fromDotAllOf(dot, withOrderedOptions(options));
+}
