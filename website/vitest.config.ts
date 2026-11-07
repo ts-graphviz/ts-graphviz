@@ -9,7 +9,9 @@ const mock = (path: string) =>
 // replaced with small stand-ins; the end-to-end tests (e2e/) cover the real
 // site.
 export default defineConfig({
-  esbuild: { jsx: 'automatic' },
+  // The site's tsconfig keeps JSX for Docusaurus (`preserve`); the tests
+  // compile it with the automatic runtime.
+  oxc: { jsx: { runtime: 'automatic' } },
   resolve: {
     alias: [
       {
