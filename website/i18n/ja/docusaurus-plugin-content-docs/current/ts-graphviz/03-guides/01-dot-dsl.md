@@ -109,8 +109,8 @@ digraph((g) => {
   const a = g.node('a');
   a.label = 'A';
   a.color = 'red';
-  delete a.label; // removes the attribute
-  a.color = undefined; // so does assigning undefined
+  delete a.label; // 属性を取り除く
+  a.color = undefined; // undefined を代入しても取り除かれる
   console.log(a.label); // undefined
 });
 ```
@@ -182,9 +182,9 @@ import { digraph, toDot } from 'ts-graphviz/ordered';
 
 const G = digraph((g) => {
   g.node({ color: 'red' });
-  g.node('a'); // red
+  g.node('a'); // 赤
   g.node({ color: 'blue' });
-  g.node('b'); // blue
+  g.node('b'); // 青
 });
 
 console.log(toDot(G));
@@ -208,7 +208,7 @@ import { fromDot, orderedModels, withContext } from 'ts-graphviz';
 const { digraph } = withContext(orderedModels);
 const G = digraph((g) => {
   g.node('a');
-  g.edge({ color: 'red' }); // applies to the edges that follow
+  g.edge({ color: 'red' }); // これより後のエッジに適用される
   g.edge(['a', 'b']);
 });
 

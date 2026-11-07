@@ -133,16 +133,16 @@ digraph {
 ```typescript
 import { toBlob } from '@ts-graphviz/adapter';
 
-// List the names your Graphviz plugins add for this call: they are accepted
-// at run time and widen the types of `format` and `layout` for this call
-// only. Nothing is changed globally, and `isFormat` / `isLayout` still
-// answer for the documented names only.
+// Graphviz のプラグインが追加する名前を、この呼び出しのために列挙します。
+// 列挙した名前は実行時に受け付けられ、この呼び出しに限って `format` と
+// `layout` の型も広がります。グローバルには何も変わらず、`isFormat` /
+// `isLayout` が true を返すのは、ドキュメントにある名前だけのままです。
 const video = await toBlob('digraph { a -> b }', {
   customLayouts: ['my-custom-algorithm'],
   customFormats: ['mp4'],
   layout: 'my-custom-algorithm',
   format: 'mp4',
-  // sanitize refuses formats it has not checked
+  // sanitize は確認していないフォーマットを拒否するため無効にする
   sanitize: false,
 });
 ```

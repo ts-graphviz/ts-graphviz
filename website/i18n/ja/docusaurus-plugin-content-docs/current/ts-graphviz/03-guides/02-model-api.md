@@ -117,7 +117,7 @@ class MyNode extends Node {}
 
 const { digraph } = withContext({ Node: MyNode });
 digraph((g) => {
-  g.node('a'); // the DSL of a MyNode
+  g.node('a'); // MyNode の DSL
 });
 ```
 
