@@ -1,9 +1,9 @@
 # Known vulnerabilities in development dependencies that cannot be fixed on
-# this branch without a major upgrade of a third-party dependency (or have no
-# fixed version). None of
-# them is in a runtime dependency of a published package (those depend only
-# on each other and on react-reconciler). Each entry expires, so it is
-# reviewed. Tracked in https://github.com/ts-graphviz/ts-graphviz/issues/1920
+# this branch without a major upgrade of a third-party dependency, or that
+# have no fixed version. None of them is in a runtime dependency of a
+# published package (those depend only on each other and on
+# react-reconciler). Each entry expires, so it is reviewed.
+# Tracked in https://github.com/ts-graphviz/ts-graphviz/issues/1920
 
 # tinypool 1 (Docusaurus 3, website build only): fixed in tinypool 2.1.2,
 # which Docusaurus does not take yet (it asks for ^1).
