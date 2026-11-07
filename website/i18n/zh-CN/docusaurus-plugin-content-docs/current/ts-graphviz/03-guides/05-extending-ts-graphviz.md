@@ -3,7 +3,7 @@ description: 如何扩展 ts-graphviz 以满足高级用例。
 ---
 # 扩展 ts-graphviz
 
-`ts-graphviz` 设计为可扩展的，允许中级用户根据特定需求自定义和增强库的功能。本节介绍如何扩展类型系统和创建自定义实现。
+`ts-graphviz` 设计为可扩展的，允许中级用户根据特定需求自定义和增强库的功能。本节介绍如何扩展类型系统和创建自定义实现。关于模型本身，请参阅[使用模型 API](./02-model-api.md)。
 
 ## 创建自定义类
 
@@ -111,16 +111,15 @@ digraph {
 ```typescript
 import { toBlob } from '@ts-graphviz/adapter';
 
-// List the names your Graphviz plugins add for this call: they are accepted
-// at run time and widen the types of `format` and `layout` for this call
-// only. Nothing is changed globally, and `isFormat` / `isLayout` still
-// answer for the documented names only.
+// 列出 Graphviz 插件为这次调用添加的名称：它们在运行时会被接受，
+// 并且仅在这次调用中放宽 `format` 和 `layout` 的类型。全局不会有任何改变，
+// `isFormat` / `isLayout` 仍然只对文档中列出的名称返回 true。
 const video = await toBlob('digraph { a -> b }', {
   customLayouts: ['my-custom-algorithm'],
   customFormats: ['mp4'],
   layout: 'my-custom-algorithm',
   format: 'mp4',
-  // sanitize refuses formats it has not checked
+  // sanitize 会拒绝它未检查过的格式，因此关闭它
   sanitize: false,
 });
 ```
