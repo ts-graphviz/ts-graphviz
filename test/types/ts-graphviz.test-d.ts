@@ -8,6 +8,7 @@ import {
   type EdgeModel,
   fromDot,
   fromDotAll,
+  type GraphCommonAttributes,
   graph,
   isNodeModel,
   modelOf,
@@ -44,7 +45,9 @@ describe('model factories', () => {
         DSL<NodeModel>
       >();
       g.node('a', (n) => expectTypeOf(n).toEqualTypeOf<DSL<NodeModel>>());
-      expectTypeOf(g.node({ color: 'red' })).toEqualTypeOf<void>();
+      expectTypeOf(g.node({ color: 'red' })).toEqualTypeOf<
+        DSL<GraphCommonAttributes['node']>
+      >();
       expectTypeOf(g.edge(['a', 'b'])).toEqualTypeOf<DSL<EdgeModel>>();
       expectTypeOf(g.edge(['a', 'b'], { color: 'red' })).toEqualTypeOf<
         DSL<EdgeModel>

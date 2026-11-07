@@ -14,7 +14,7 @@ The factories give the graph's DOT DSL; the models only hold the data
 - attributes are properties under their own names: `g.rankdir = 'LR'`, `a.label`, `delete a.label` (assigning `undefined` deletes too), `g.$attributes.node.shape = 'box'`;
 - the model's own members take a `$`: `a.$id` (the node's name; `a.id` is the Graphviz `id` attribute), `a.$comment`, `g.$nodes`, `g.$getNode('a')`, `g.$createNode('a')`, `a.$port('p')`, and the members of your own classes (`g.$myMethod()`); members whose names start with `$$` keep them (`a.$$type`), and any other member takes one more `$` (a member `$foo` is `$$foo`).
 
-Every model you get from a DSL is a DSL, and a model has one DSL, so DSLs compare with `===`. `modelOf(dsl)` gives the model and `dsl(model)` the DSL of a model, such as one `fromDot` returns. The DSL works through the graph's `createNode`, `createEdge`, `getNode`, `getSubgraph`, `createSubgraph` and `addAttributeList`, so it follows the classes of the models context and the methods a custom class overrides: with `orderedModels`, `g.node({ ... })` after other statements stays in its place, as `node [...]` does in DOT.
+Every model you get from a DSL is a DSL, and a model has one DSL, so DSLs compare with `===`. `modelOf(dsl)` gives the model and `dsl(model)` the DSL of a model, such as one `fromDot` returns. The DSL works through the graph's `createNode`, `createEdge`, `getNode`, `getSubgraph`, `createSubgraph` and `addAttributeList`, so it follows the classes of the models context and the methods a custom class overrides: `g.node({ ... })` after other statements stays in its place, as `node [...]` does in DOT, and returns the list's DSL.
 
 Compared with 3.x:
 

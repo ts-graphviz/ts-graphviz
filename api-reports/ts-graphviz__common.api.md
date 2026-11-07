@@ -815,10 +815,10 @@ export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K exten
   addNode(node: NodeModel<S>): void;
   addEdge(edge: EdgeModel<S>): void;
   addSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): void;
-  addAttributeList(kind: "Graph", attributes: AttributeListAttributes<S, "Graph">): void;
-  addAttributeList(kind: "Node", attributes: AttributeListAttributes<S, "Node">): void;
-  addAttributeList(kind: "Edge", attributes: AttributeListAttributes<S, "Edge">): void;
-  addAttributeList(kind: AttributeListKind, attributes: AttributeListAttributes<S>): void;
+  addAttributeList(kind: "Graph", attributes: AttributeListAttributes<S, "Graph">): GraphCommonAttributes<S>["graph"];
+  addAttributeList(kind: "Node", attributes: AttributeListAttributes<S, "Node">): GraphCommonAttributes<S>["node"];
+  addAttributeList(kind: "Edge", attributes: AttributeListAttributes<S, "Edge">): GraphCommonAttributes<S>["edge"];
+  addAttributeList(kind: AttributeListKind, attributes: AttributeListAttributes<S>): StatementAttributeListModel<S>;
   existNode(nodeId: string): boolean;
   existEdge(edge: EdgeModel<S>): boolean;
   existSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): boolean;

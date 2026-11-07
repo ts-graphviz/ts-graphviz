@@ -3,7 +3,7 @@
 // ESM-only, which TypeScript >= 5.8 supports with `module: nodenext`.
 import tsg = require('ts-graphviz');
 import ast = require('ts-graphviz/ast');
-import ordered = require('ts-graphviz/ordered');
+import legacy = require('ts-graphviz/legacy');
 import adapter = require('@ts-graphviz/adapter');
 
 const g: tsg.DSL<tsg.RootGraphModel> = tsg.digraph((g) => {
@@ -11,4 +11,4 @@ const g: tsg.DSL<tsg.RootGraphModel> = tsg.digraph((g) => {
 });
 const text: string = ast.stringify(ast.parse(tsg.toDot(g)));
 adapter.toBlob(text, { format: 'svg' });
-ordered.toDot(ordered.fromDot(text));
+legacy.toDot(legacy.fromDot(text));

@@ -24,6 +24,7 @@ import {
   Graph,
   type GraphAttributesObject,
   type GraphCommonAttributes,
+  LegacyDigraph,
   type ModelsContext,
   type ModelTypes,
   Node,
@@ -31,7 +32,6 @@ import {
   type NodeAttributesObject,
   type NodeModel,
   type NonClusterSubgraphAttributesObject,
-  OrderedDigraph,
   type ReadonlyAttributeListModel,
   type ReadonlyDotModel,
   type ReadonlyEdgeModel,
@@ -585,7 +585,7 @@ describe('the core classes', () => {
     new Edge<MySchema>([n, n], { 'data-id': 1 });
     const s = new Subgraph<MyTypes>('cluster_a', { team: 'core' });
     expectTypeOf(s).toExtend<SubgraphModel<MyTypes>>();
-    expectTypeOf(new OrderedDigraph<MyTypes>()).toExtend<
+    expectTypeOf(new LegacyDigraph<MyTypes>()).toExtend<
       RootGraphModel<MyTypes>
     >();
     expectTypeOf(new Graph<MyTypes>().createNode('a')).toEqualTypeOf<

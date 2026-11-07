@@ -329,13 +329,13 @@ for (const name of readdirSync(packagesDir)) {
 
 /**
  * Entry points that must export what another does, with the same
- * declarations: `ts-graphviz/ordered` has the names and signatures of
+ * declarations: `ts-graphviz/legacy` has the names and signatures of
  * `ts-graphviz`; only the classes its factories and `fromDot` create differ.
  * (Its report also lists the declarations of `ts-graphviz` it shadows, as
  * ones it only uses.)
  */
 const sameApi: [entry: string, as: string][] = [
-  ['ts-graphviz+ordered.api.md', 'ts-graphviz.api.md'],
+  ['ts-graphviz+legacy.api.md', 'ts-graphviz.api.md'],
 ];
 /**
  * A report's exports (as text), and the declarations they only use (one by

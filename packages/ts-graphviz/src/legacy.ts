@@ -1,21 +1,22 @@
 /**
- * The same API as `ts-graphviz`, with the models of `orderedModels`: a
- * default attribute statement (`node [...]`, `edge [...]`, `graph [...]`)
- * written after other statements keeps its place, so it applies, as in
- * DOT, only to what follows it.
+ * The same API as `ts-graphviz`, with the deprecated models of
+ * `legacyModels`: every default attribute statement (`node [...]`,
+ * `edge [...]`, `graph [...]`) is merged into the graph's one set of
+ * defaults, written first, as 3.x did. Import from here to keep the 3.x
+ * output while moving to v4.
  *
  * ```ts
- * import { digraph, toDot } from 'ts-graphviz/ordered';
+ * import { digraph, toDot } from 'ts-graphviz/legacy';
  *
  * const G = digraph('G', (g) => {
- *   g.node({ color: 'red' });
- *   g.node('a'); // red
- *   g.node({ color: 'blue' });
- *   g.node('b'); // blue
+ *   g.node('a');
+ *   g.node({ color: 'blue' }); // a is blue too, as in 3.x
  * });
  * ```
  *
- * @module ts-graphviz/ordered
+ * @deprecated v4's models keep a default attribute statement in its place,
+ * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * @module ts-graphviz/legacy
  */
 import type { ParseOptions } from '@ts-graphviz/ast';
 import {
@@ -27,7 +28,7 @@ import {
   type RootGraphModel,
   type SubgraphModel,
 } from '@ts-graphviz/common';
-import { orderedModels } from '@ts-graphviz/core';
+import { legacyModels } from '@ts-graphviz/core';
 import {
   type FromDotModel,
   type FromDotOptions,
@@ -44,74 +45,87 @@ import type {
 
 export * from './ts-graphviz.js';
 
-/** `orderedModels`, with the classes of `models` where it gives one. */
-function withOrdered(
+/** `legacyModels`, with the classes of `models` where it gives one. */
+function withLegacy(
   models: Partial<ModelsContext> | undefined,
 ): Partial<ModelsContext> {
-  const merged: Record<string, unknown> = { ...orderedModels };
+  const merged: Record<string, unknown> = { ...legacyModels };
   for (const [key, model] of Object.entries(ownOptions(models))) {
     if (model !== undefined) merged[key] = model;
   }
   return merged as Partial<ModelsContext>;
 }
 
-/** The options, with `orderedModels` under the classes of `convert.models`. */
-function withOrderedOptions<
+/** The options, with `legacyModels` under the classes of `convert.models`. */
+function withLegacyOptions<
   T extends { convert?: { models?: Partial<ModelsContext> } },
 >(options: T | undefined): T {
   const own = ownOptions(options);
   const convert = ownOptions(own.convert);
   return {
     ...own,
-    convert: { ...convert, models: withOrdered(convert.models) },
+    convert: { ...convert, models: withLegacy(convert.models) },
   } as T;
 }
 
-const ordered: ModelFactoriesWithStrict = withContextOf(orderedModels);
+const legacy: ModelFactoriesWithStrict = withContextOf(legacyModels);
 
 /**
- * A factory for directed graphs whose default attribute statements keep
- * their place (`orderedModels`).
+ * A factory for directed graphs that merge every default attribute
+ * statement into their leading defaults, as 3.x did (`legacyModels`).
+ *
+ * @deprecated v4's models keep a default attribute statement in its place,
+ * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
  * @group Model Factory
  */
-export const digraph: ModelFactory = ordered.digraph;
+export const digraph: ModelFactory = legacy.digraph;
 
 /**
- * A factory for undirected graphs whose default attribute statements keep
- * their place (`orderedModels`).
+ * A factory for undirected graphs that merge every default attribute
+ * statement into their leading defaults, as 3.x did (`legacyModels`).
+ *
+ * @deprecated v4's models keep a default attribute statement in its place,
+ * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
  * @group Model Factory
  */
-export const graph: ModelFactory = ordered.graph;
+export const graph: ModelFactory = legacy.graph;
 
 /**
- * The factories of strict graphs whose default attribute statements keep
- * their place (`orderedModels`).
+ * The factories of strict graphs that merge every default attribute
+ * statement into their leading defaults, as 3.x did (`legacyModels`).
+ *
+ * @deprecated v4's models keep a default attribute statement in its place,
+ * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
  * @group Model Factory
  */
-export const strict: ModelFactories = ordered.strict;
+export const strict: ModelFactories = legacy.strict;
 
 /**
  * Factories with the given classes and, for the kinds it leaves out, those
- * of `orderedModels`.
+ * of `legacyModels`.
  *
  * @param models - The classes to create the models from.
  * @returns The factories `digraph`, `graph` and `strict` of that context.
+ * @deprecated v4's models keep a default attribute statement in its place,
+ * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
  * @group Model Factory
  */
 export function withContext<const P extends Partial<ModelsContext>>(
   models: P,
 ): ModelFactoriesWithStrict<ResolvedModelTypes<P>> {
-  return withContextOf(withOrdered(models) as P);
+  return withContextOf(withLegacy(models) as P);
 }
 
 // The signatures below are those of `ts-graphviz`; `pnpm api:check` fails
-// if the API of `ts-graphviz/ordered` and that of `ts-graphviz` differ.
+// if the API of `ts-graphviz/legacy` and that of `ts-graphviz` differ.
 
 /**
- * `fromDot` with the classes of `orderedModels` for the kinds
- * `convert.models` leaves out, so the models keep the default attribute
- * statements of the source in their place.
+ * `fromDot` with the classes of `legacyModels` for the kinds
+ * `convert.models` leaves out, so the models merge the default attribute
+ * statements of the source into one set of defaults, as 3.x did.
  *
+ * @deprecated v4's models keep a default attribute statement in its place,
+ * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
  * @group Convert DOT to Model
  *
  * @param dot The DOT string to convert.
@@ -125,6 +139,7 @@ export function fromDot<const P extends Partial<ModelsContext>>(
     convert: { models: P };
   },
 ): ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'];
+/** @deprecated The 3.x models (`legacyModels`); removed in v5. */
 export function fromDot<
   const P extends Partial<ModelsContext>,
   const R extends FromDotRule,
@@ -134,10 +149,12 @@ export function fromDot<
     convert: { models: P };
   },
 ): FromDotModel<R, ResolvedModelTypes<P>>;
+/** @deprecated The 3.x models (`legacyModels`); removed in v5. */
 export function fromDot(
   dot: string,
   options?: FromDotOptions<'Dot' | 'Graph'>,
 ): RootGraphModel;
+/** @deprecated The 3.x models (`legacyModels`); removed in v5. */
 export function fromDot<const R extends FromDotRule>(
   dot: string,
   options: FromDotOptions<R>,
@@ -146,14 +163,16 @@ export function fromDot(
   dot: string,
   options?: FromDotOptions<FromDotRule>,
 ): RootGraphModel | NodeModel | EdgeModel | SubgraphModel {
-  return fromDotOf(dot, withOrderedOptions(options));
+  return fromDotOf(dot, withLegacyOptions(options));
 }
 
 /**
- * `fromDotAll` with the classes of `orderedModels` for the kinds
- * `convert.models` leaves out, so the models keep the default attribute
- * statements of the source in their place.
+ * `fromDotAll` with the classes of `legacyModels` for the kinds
+ * `convert.models` leaves out, so the models merge the default attribute
+ * statements of the source into one set of defaults, as 3.x did.
  *
+ * @deprecated v4's models keep a default attribute statement in its place,
+ * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
  * @group Convert DOT to Model
  *
  * @param dot The DOT source to convert.
@@ -167,6 +186,7 @@ export function fromDotAll<const P extends Partial<ModelsContext>>(
     convert: { models: P };
   },
 ): (ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'])[];
+/** @deprecated The 3.x models (`legacyModels`); removed in v5. */
 export function fromDotAll(
   dot: string,
   options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
@@ -179,5 +199,5 @@ export function fromDotAll(
     parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
   },
 ): RootGraphModel[] {
-  return fromDotAllOf(dot, withOrderedOptions(options));
+  return fromDotAllOf(dot, withLegacyOptions(options));
 }

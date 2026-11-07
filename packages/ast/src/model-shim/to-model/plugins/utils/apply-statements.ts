@@ -150,8 +150,8 @@ export function applyStatements(
         const attributes = stmt.children.filter<AttributeASTNode>(
           (v): v is AttributeASTNode => v.type === 'Attribute',
         );
-        // The graph decides: merged into its defaults (the default classes)
-        // or kept in place (`orderedModels`, #1732).
+        // The graph decides: kept in place (the default classes, #1922) or
+        // merged into its defaults (the deprecated `legacyModels`).
         graph.addAttributeList(stmt.kind, collectAttributes(attributes));
         commentHolder.reset();
         break;
