@@ -45,7 +45,9 @@ export interface EdgeDSLMembers<T extends EdgeModel> extends ModelDSLMembers<T> 
 export type FromDotModel<R extends FromDotRule, M extends ModelTypes = ModelTypes> = R extends "Dot" | "Graph" ? M["Graph"] | M["Digraph"] : R extends "Node" ? M["Node"] : R extends "Edge" ? M["Edge"] : M["Subgraph"];
 
 export interface FromDotOptions<T extends FromDotRule, P extends Partial<ModelsContext> = Partial<ModelsContext>> {
-  parse?: ParseOptions<T>;
+  parse?: Omit<ParseOptions<T>, "startRule"> & {
+    startRule?: T;
+  };
   convert?: Omit<ConvertToModelOptions, "models"> & {
     models?: P;
   };
