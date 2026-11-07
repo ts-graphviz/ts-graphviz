@@ -147,6 +147,13 @@ assertType<Equal<typeof orderedGraph, DSL<RootGraphModel>>>();
 assertType<Equal<typeof ordered.toDot, typeof toDot>>();
 const orderedModel = ordered.fromDot('digraph { a }');
 assertType<Equal<typeof orderedModel, RootGraphModel>>();
+const orderedNode = ordered.fromDot('a', {
+  parse: { startRule: 'Node' },
+  convert: { models: { Node: MyNode } },
+});
+assertType<Equal<typeof orderedNode, MyNode>>();
+const orderedGraphs = ordered.fromDotAll('digraph { a }');
+assertType<Equal<typeof orderedGraphs, RootGraphModel[]>>();
 ordered.withContext({ Node }).strict.graph();
 
 try {
