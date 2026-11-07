@@ -34,14 +34,14 @@ import {
   isNodeRef,
   isRootGraphModel,
   isSubgraphModel,
+  LegacyDigraph,
+  type LegacyGraph,
+  type LegacySubgraph,
   modelOf,
   Node,
   type NodeAttributeKey,
   type NodeModel,
   type NodeRef,
-  OrderedDigraph,
-  type OrderedGraph,
-  type OrderedSubgraph,
   type ReadonlyAttributeListModel,
   type ReadonlyAttributes,
   type ReadonlyDotModel,
@@ -157,11 +157,11 @@ describe('every model fits its read-only type', () => {
     expectTypeOf<MyNode>().toExtend<ReadonlyNodeModel>();
     expectTypeOf<Edge>().toExtend<ReadonlyEdgeModel>();
     expectTypeOf<Subgraph>().toExtend<ReadonlySubgraphModel>();
-    expectTypeOf<OrderedSubgraph>().toExtend<ReadonlySubgraphModel>();
+    expectTypeOf<LegacySubgraph>().toExtend<ReadonlySubgraphModel>();
     expectTypeOf<Digraph>().toExtend<ReadonlyRootGraphModel>();
     expectTypeOf<Graph>().toExtend<ReadonlyRootGraphModel>();
-    expectTypeOf<OrderedDigraph>().toExtend<ReadonlyRootGraphModel>();
-    expectTypeOf<OrderedGraph>().toExtend<ReadonlyRootGraphModel>();
+    expectTypeOf<LegacyDigraph>().toExtend<ReadonlyRootGraphModel>();
+    expectTypeOf<LegacyGraph>().toExtend<ReadonlyRootGraphModel>();
     expectTypeOf<Dot>().toExtend<ReadonlyDotModel>();
   });
 
@@ -221,7 +221,7 @@ describe('the readers take every model', () => {
     g.attributes.node,
     new Dot([g]),
     new MyNode('m'),
-    new OrderedDigraph(),
+    new LegacyDigraph(),
     {} as AnyDotObjectModel,
     {} as AnyReadonlyDotObjectModel,
     {} as NumNode,
@@ -327,10 +327,10 @@ describe('the guards', () => {
     if (isAttributeListModel(model)) {
       expectTypeOf(model).toEqualTypeOf<AttributeListModel>();
     }
-    const mine = {} as MyNode | Edge | OrderedDigraph;
+    const mine = {} as MyNode | Edge | LegacyDigraph;
     if (isNodeModel(mine)) expectTypeOf(mine).toEqualTypeOf<MyNode>();
     if (isRootGraphModel(mine)) {
-      expectTypeOf(mine).toEqualTypeOf<OrderedDigraph>();
+      expectTypeOf(mine).toEqualTypeOf<LegacyDigraph>();
     }
     const read = {} as AnyReadonlyDotObjectModel;
     if (isEdgeModel(read))

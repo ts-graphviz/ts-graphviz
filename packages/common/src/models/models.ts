@@ -699,6 +699,16 @@ export interface GraphBaseModel<
     Attributes<K, GraphSchemaAttributeTypes<T, S>>,
     DotObjectModel<T> {
   readonly id?: string;
+  /**
+   * The leading default attribute statements of the graph (the first
+   * `graph [...]`, `node [...]` and `edge [...]`), which apply to every
+   * statement in it.
+   *
+   * @deprecated Write a default attribute statement with
+   * {@link GraphBaseModel.addAttributeList} (in the DOT DSL, `g.node({...})`
+   * and the like) and keep the list it returns to change it later. Removed
+   * in v5.
+   */
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
   /** Node objects in the graph. */
   readonly nodes: ReadonlyArray<M['Node']>;
@@ -708,10 +718,10 @@ export interface GraphBaseModel<
   readonly subgraphs: ReadonlyArray<M['Subgraph']>;
   /**
    * The graph's contents in the order they were added: nodes, edges and
-   * subgraphs, which `toDot` writes in this order (after the graph's
-   * attributes and default attribute lists). The default classes never put
-   * an {@link AttributeListModel} here; model classes that keep default
-   * attribute statements in their place may.
+   * subgraphs, and the default attribute statements added after them,
+   * which `toDot` writes in this order (after the graph's attributes and
+   * leading default attribute lists). The deprecated classes of
+   * `legacyModels` never put an {@link AttributeListModel} here.
    */
   readonly statements: ReadonlyArray<
     M['Node'] | M['Edge'] | M['Subgraph'] | StatementAttributeListModel<S>
@@ -737,29 +747,32 @@ export interface GraphBaseModel<
   addSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): void;
   /**
    * Add a default attribute statement (`node [...]`, `edge [...]`,
-   * `graph [...]`). The default classes merge it into
-   * {@link GraphBaseModel.attributes}, so the defaults apply to the whole
-   * graph; model classes that keep statements in their place (such as
-   * `orderedModels` of `@ts-graphviz/core`) put it into
-   * {@link GraphBaseModel.statements} once other statements precede it, so
-   * it applies, as in DOT, only to what comes after it.
+   * `graph [...]`) and return its list. As in DOT, it applies only to what
+   * follows it: added after other statements, it takes its place in
+   * {@link GraphBaseModel.statements}; added before any, it joins the
+   * leading defaults, which apply to every statement. The deprecated
+   * classes of `legacyModels` (`@ts-graphviz/core`) merge every one into
+   * the leading defaults instead, as 3.x did.
+   *
+   * The returned list is the one the attributes went into: change it to
+   * change those defaults.
    */
   addAttributeList(
     kind: 'Graph',
     attributes: AttributeListAttributes<S, 'Graph'>,
-  ): void;
+  ): GraphCommonAttributes<S>['graph'];
   addAttributeList(
     kind: 'Node',
     attributes: AttributeListAttributes<S, 'Node'>,
-  ): void;
+  ): GraphCommonAttributes<S>['node'];
   addAttributeList(
     kind: 'Edge',
     attributes: AttributeListAttributes<S, 'Edge'>,
-  ): void;
+  ): GraphCommonAttributes<S>['edge'];
   addAttributeList(
     kind: AttributeListKind,
     attributes: AttributeListAttributes<S>,
-  ): void;
+  ): StatementAttributeListModel<S>;
   /**
    * Check if the Node exists in the graph.
    */
