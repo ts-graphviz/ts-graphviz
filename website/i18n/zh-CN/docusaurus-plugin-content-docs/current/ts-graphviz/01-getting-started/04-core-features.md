@@ -88,6 +88,6 @@ const G = digraph('G', (g) => {
   g.edge([a, 'B']); // "A" -> "B";
 });
 
-toDot(G); // the DSL or its model
-modelOf(G).createNode('C'); // the model behind the DSL
+toDot(G); // DSL 或其模型均可
+modelOf(G).createNode('C'); // DSL 背后的模型
 ```

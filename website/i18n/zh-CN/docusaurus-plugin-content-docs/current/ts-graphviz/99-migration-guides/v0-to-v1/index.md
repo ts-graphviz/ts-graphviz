@@ -74,7 +74,7 @@ npm install ts-graphviz@^1.0.0
 
 const dot = 'digraph { a -> b }';
 const ast = parse(dot);
-// Manipulate AST...
+// 操作 AST...
 const newDot = stringify(ast);
 ```
 

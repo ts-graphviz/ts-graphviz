@@ -109,8 +109,8 @@ digraph((g) => {
   const a = g.node('a');
   a.label = 'A';
   a.color = 'red';
-  delete a.label; // removes the attribute
-  a.color = undefined; // so does assigning undefined
+  delete a.label; // 移除该属性
+  a.color = undefined; // 赋值 undefined 也会移除
   console.log(a.label); // undefined
 });
 ```
@@ -182,9 +182,9 @@ import { digraph, toDot } from 'ts-graphviz/ordered';
 
 const G = digraph((g) => {
   g.node({ color: 'red' });
-  g.node('a'); // red
+  g.node('a'); // 红色
   g.node({ color: 'blue' });
-  g.node('b'); // blue
+  g.node('b'); // 蓝色
 });
 
 console.log(toDot(G));
@@ -208,7 +208,7 @@ import { fromDot, orderedModels, withContext } from 'ts-graphviz';
 const { digraph } = withContext(orderedModels);
 const G = digraph((g) => {
   g.node('a');
-  g.edge({ color: 'red' }); // applies to the edges that follow
+  g.edge({ color: 'red' }); // 作用于其后的边
   g.edge(['a', 'b']);
 });
 
