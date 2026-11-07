@@ -15,4 +15,4 @@ digraph('G', (g) => {
 });
 ```
 
-`digraph`, `graph` and `strict` create the legacy classes; `withContext(models)` uses the classes you give and the legacy ones for the rest; `fromDot` and `fromDotAll` use the legacy classes for the kinds `convert.models` leaves out. Everything else is the same as in `ts-graphviz`, and `pnpm api:check` keeps the two APIs the same. The entry is deprecated and removed in v5.
+`digraph`, `graph` and `strict` create the legacy classes; `withContext(models)` uses the classes you give and the legacy ones for the rest; `fromDot` and `fromDotAll` use the legacy classes for the kinds `convert.models` leaves out. Everything else is the same as in `ts-graphviz`, and `pnpm api:check` keeps the two APIs the same: the classes exported under their own names (`Digraph`, `Graph`, `Subgraph`, …) are v4's, so construct `LegacyDigraph`, `LegacyGraph` or `LegacySubgraph` where a class is built by hand. The entry is deprecated and removed in v5.

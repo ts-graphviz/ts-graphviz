@@ -3,7 +3,11 @@
  * `legacyModels`: every default attribute statement (`node [...]`,
  * `edge [...]`, `graph [...]`) is merged into the graph's one set of
  * defaults, written first, as 3.x did. Import from here to keep the 3.x
- * output while moving to v4.
+ * output while moving to v4. Its factories and `fromDot` create the legacy
+ * classes; the classes it exports under their own names (`Digraph`,
+ * `Graph`, `Subgraph`, …) are v4's, so construct `LegacyDigraph`,
+ * `LegacyGraph` or `LegacySubgraph` directly where a class is built by
+ * hand.
  *
  * ```ts
  * import { digraph, toDot } from 'ts-graphviz/legacy';

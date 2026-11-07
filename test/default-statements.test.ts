@@ -4,6 +4,7 @@ import {
   digraph,
   fromDot,
   LegacyDigraph,
+  LegacySubgraph,
   legacyModels,
   modelOf,
   toDot,
@@ -120,6 +121,9 @@ describe('the deprecated legacyModels', () => {
     s.createNode('c');
     s.addAttributeList('Edge', { style: 'dashed' });
     expect(s.statements.map((x) => x.$$type)).toEqual(['Node']);
+    // A legacy subgraph made on its own makes legacy subgraphs too.
+    const nested = new LegacySubgraph('t').createSubgraph('u');
+    expect(nested).toBeInstanceOf(LegacySubgraph);
     const built = legacy.digraph((g) => {
       g.node('a');
       g.node({ color: 'blue' });

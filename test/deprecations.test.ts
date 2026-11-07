@@ -8,6 +8,9 @@ import { describe, expect, it } from 'vitest';
 // declaration and the JSDoc right above it are matched as text.)
 
 const root = join(import.meta.dirname, '..');
+
+/** A `@deprecated` tag: at the start of a JSDoc line, not in its prose. */
+const DEPRECATED_TAG = /^\s*(?:\/\*\*|\*)\s*@deprecated\b/m;
 const read = (path: string) => readFileSync(join(root, path), 'utf8');
 
 /** The JSDoc block right above the first line that starts with `declaration`. */
@@ -47,7 +50,7 @@ describe('deprecated until v5 (#1922)', () => {
     ['packages/ts-graphviz/src/legacy.ts', 'export const strict:'],
     ['packages/ts-graphviz/src/legacy.ts', 'export function withContext<'],
   ])('%s: %s', (path, declaration) => {
-    expect(docAbove(read(path), declaration)).toContain('@deprecated');
+    expect(docAbove(read(path), declaration)).toMatch(DEPRECATED_TAG);
   });
 
   it('every overload of the legacy fromDot and fromDotAll', () => {
@@ -67,7 +70,7 @@ describe('deprecated until v5 (#1922)', () => {
         expect(doc.trimEnd().endsWith('*/'), `${name} at line ${at + 1}`).toBe(
           true,
         );
-        expect(doc, `${name} at line ${at + 1}`).toContain('@deprecated');
+        expect(doc, `${name} at line ${at + 1}`).toMatch(DEPRECATED_TAG);
       }
       expect(starts.length).toBeGreaterThan(2);
     }

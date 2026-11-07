@@ -23,6 +23,11 @@ export class LegacySubgraph<
   protected override get keepsDefaultsInPlace(): boolean {
     return false;
   }
+
+  /** @hidden */
+  protected override defaultModels(): ModelsContext {
+    return legacyModelsContext();
+  }
 }
 
 /**

@@ -163,18 +163,28 @@ interface DefaultLists {
 const defaultLists = new WeakMap<AnyGraphContainer, DefaultLists>();
 
 /**
- * The graph's default attribute lists for the props, added once: the model
- * is new and empty when its element is created, so they lead the graph and
- * apply to every statement in it, whatever the models context.
+ * The graph's leading default attribute lists, which the props fill: they
+ * apply to every statement in the graph, whatever the models context. The
+ * model is new when its element is created, so they are added then; a class
+ * whose constructor already adds statements gets its leading lists as they
+ * are (adding them after those statements would not lead the graph).
  */
 function defaultListsOf(model: AnyGraphContainer): DefaultLists {
   let lists = defaultLists.get(model);
   if (lists === undefined) {
-    lists = {
-      node: model.addAttributeList('Node', {}),
-      edge: model.addAttributeList('Edge', {}),
-      graph: model.addAttributeList('Graph', {}),
-    };
+    lists =
+      model.statements.length === 0
+        ? {
+            node: model.addAttributeList('Node', {}),
+            edge: model.addAttributeList('Edge', {}),
+            graph: model.addAttributeList('Graph', {}),
+          }
+        : // The leading lists themselves (deprecated for users, not here).
+          {
+            node: model.attributes.node,
+            edge: model.attributes.edge,
+            graph: model.attributes.graph,
+          };
     defaultLists.set(model, lists);
   }
   return lists;
