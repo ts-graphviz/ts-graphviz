@@ -3,7 +3,7 @@ description: How to extend ts-graphviz for advanced use cases.
 ---
 # Extending ts-graphviz
 
-`ts-graphviz` is designed to be extensible, allowing intermediate users to customize and enhance the library's functionality to meet specific needs. This section covers how to extend the type system and create custom implementations.
+`ts-graphviz` is designed to be extensible, allowing intermediate users to customize and enhance the library's functionality to meet specific needs. This section covers how to extend the type system and create custom implementations. For the models themselves, see [Using the Model API](./02-model-api.md).
 
 ## Creating Custom Classes
 
@@ -137,38 +137,7 @@ digraph((g) => {
 
 ### Ordered default attribute statements
 
-In DOT, a default attribute statement applies only to what follows it:
-
-```dot
-digraph {
-  node [color=red];
-  a;                  // red
-  node [color=blue];
-  b;                  // blue
-}
-```
-
-The default model classes keep one set of defaults per graph (`attributes.node`, `attributes.edge`, `attributes.graph`), which `toDot` writes first, so the last values win for every node. To keep the statements where they are, use the classes of `orderedModels` (`OrderedGraph`, `OrderedDigraph`, `OrderedSubgraph`):
-
-```typescript
-import { fromDot, OrderedDigraph, orderedModels, toDot } from 'ts-graphviz';
-
-const source = `digraph {
-  node [color=red];
-  a;
-  node [color=blue];
-  b;
-}`;
-
-const g = fromDot(source, { convert: { models: orderedModels } });
-
-const h = new OrderedDigraph();
-h.createNode('a');
-h.addAttributeList('Node', { color: 'blue' }); // applies to what follows
-h.createNode('b');
-```
-
-`addAttributeList(kind, attributes)` exists on every graph model: the default classes merge it into `attributes`, the ordered classes put it into `statements` once something precedes it. Graphs keep nodes, edges and subgraphs in the order they were added either way.
+The classes of `orderedModels` (`OrderedGraph`, `OrderedDigraph`, `OrderedSubgraph`) keep each default attribute statement in its place, as in DOT. See [DOT's statement order](./01-dot-dsl.md#dots-statement-order) in the DSL guide, and `addAttributeList` in [Using the Model API](./02-model-api.md).
 
 ## Extending the Type System
 
