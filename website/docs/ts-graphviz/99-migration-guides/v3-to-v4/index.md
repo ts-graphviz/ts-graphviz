@@ -115,6 +115,7 @@ Code that matched on `error.message` should match on `error.code`.
 - `toModel(ast, { models })` in `@ts-graphviz/ast` now **requires** `models` (the package has no classes of its own): pass `defaultModelsContext()` or `createModelsContext({...})`. `fromDot(source, { convert: { models } })` still takes a partial context.
 - The constructor types in `ModelsContext` use the real signatures; a custom class whose constructor is incompatible is now a type error instead of a runtime surprise.
 - `graph.with(models)` merges over the graph's current context instead of replacing it.
+- `DotObject`, the empty base class of the core models, is removed. Check a model with the guards (`isNodeModel`, `isRootGraphModel`, …) or `$$type` instead of `instanceof DotObject`; a class that extended it extends nothing, or the core class it stands for.
 
 A direct subclass of `GraphBase` (rare) must override `defaultModels()` or call `with()` before creating nodes; the core classes do this for you.
 

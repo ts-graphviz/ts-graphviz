@@ -13,7 +13,6 @@ import {
   withCode,
 } from '@ts-graphviz/common';
 import { AttributesGroup } from '../attributes/AttributesGroup.js';
-import { DotObject } from './DotObject.js';
 
 /**
  * DOT object class representing a edge.
@@ -22,10 +21,7 @@ import { DotObject } from './DotObject.js';
  * none by default.
  * @group Models
  */
-export class Edge<S extends Schema = EmptySchema>
-  extends DotObject
-  implements EdgeModel<S>
-{
+export class Edge<S extends Schema = EmptySchema> implements EdgeModel<S> {
   public get $$type(): 'Edge' {
     return 'Edge';
   }
@@ -43,7 +39,6 @@ export class Edge<S extends Schema = EmptySchema>
     targets: ReadonlyEdgeTargetTuple,
     attributes?: EdgeAttributesObject<S>,
   ) {
-    super();
     // A copy, so the edge does not change with the caller's arrays; and the
     // nodes themselves, never objects standing for them (a DSL).
     const ts = targets.map((target) =>

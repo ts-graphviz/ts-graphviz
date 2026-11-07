@@ -3,7 +3,6 @@ export * from './attributes/AttributesBase.js';
 export * from './attributes/AttributesGroup.js';
 export * from './models/Digraph.js';
 export * from './models/Dot.js';
-export * from './models/DotObject.js';
 export * from './models/Edge.js';
 export * from './models/Graph.js';
 export * from './models/GraphBase.js';

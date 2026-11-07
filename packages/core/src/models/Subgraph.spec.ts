@@ -5,7 +5,6 @@ import type {
 } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import { AttributesBase } from '../attributes/AttributesBase.js';
-import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
@@ -17,11 +16,10 @@ describe('class Subgraph', () => {
     subgraph = new Subgraph();
   });
 
-  it('should be instance of Subgraph/Cluster/AttributesBase/DotObject', () => {
+  it('should be instance of Subgraph/Cluster/AttributesBase', () => {
     expect(subgraph).toBeInstanceOf(Subgraph);
     expect(subgraph).toBeInstanceOf(GraphBase);
     expect(subgraph).toBeInstanceOf(AttributesBase);
-    expect(subgraph).toBeInstanceOf(DotObject);
   });
 
   describe('Constructor', () => {
