@@ -50,3 +50,7 @@ jobs:
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
       - name: Dependency Review
         uses: actions/dependency-review-action@40c09b7dc99638e5ddb0bfd91c1673effc064d8a # v4.8.1
+        with:
+          # Fixed only in Vitest 4; see osv-scanner.toml for the reason.
+          # Without this, any change of the Vitest 3 version fails the review.
+          allow-ghsas: GHSA-82fw-gwwq-j7x9, GHSA-qxg6-89mg-rqv8
