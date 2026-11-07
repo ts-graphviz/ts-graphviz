@@ -115,7 +115,7 @@ digraph((g) => {
 });
 ```
 
-Attribute names that are not JavaScript identifiers are written with brackets (`a['data-id']`), or with the `attribute` constants (`a[attribute.label]`).
+Attributes can also be written with the `attribute` constants (`a[attribute.label]`), and attributes you add by extending the types (see [Extending ts-graphviz](./05-extending-ts-graphviz.md)) the same way.
 
 ## The `$` rule
 
@@ -175,7 +175,7 @@ Every model you reach through a DSL is a DSL, and a model has one DSL, so DSLs c
 
 ## DOT's statement order
 
-In DOT, a default attribute statement applies only to what follows it. The default models keep one set of defaults per graph, written first, so the last value wins for every node. To write graphs with DOT's meaning, import from `ts-graphviz/ordered`: it has the same names as `ts-graphviz`, with models that keep each default attribute statement in its place.
+In DOT, a default attribute statement applies only to what follows it. The default models keep one set of defaults per graph, written first, so the last value applies to every node that does not set the attribute itself (an attribute set on a node, such as `g.node('a', { color: 'green' })`, always wins over a default). To write graphs with DOT's meaning, import from `ts-graphviz/ordered`: it has the same names as `ts-graphviz`, with models that keep each default attribute statement in its place.
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz/ordered';

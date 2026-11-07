@@ -115,7 +115,7 @@ digraph((g) => {
 });
 ```
 
-JavaScript の識別子として書けない属性名は、角かっこ（`a['data-id']`）か、`attribute` の定数（`a[attribute.label]`）で書きます。
+属性は `attribute` の定数（`a[attribute.label]`）でも書けます。型を拡張して追加した属性（[ts-graphvizの拡張](./05-extending-ts-graphviz.md)を参照）も同じように書けます。
 
 ## `$` の規則
 
@@ -175,7 +175,7 @@ DSL を通してたどったモデルはすべて DSL で、一つのモデル�
 
 ## DOT の文の順序
 
-DOT では、既定属性の文（`node [...]` など）はその後に書いたものにだけ適用されます。既定のモデルはグラフごとに既定値を一組だけ持ち、先頭に書き出すため、すべてのノードに最後の値が適用されます。DOT と同じ意味でグラフを書くには、`ts-graphviz/ordered` から import します。`ts-graphviz` と同じ名前を持ち、既定属性の文を書いた位置に残すモデルを使います。
+DOT では、既定属性の文（`node [...]` など）はその後に書いたものにだけ適用されます。既定のモデルはグラフごとに既定値を一組だけ持ち、先頭に書き出すため、その属性を自分で設定していないすべてのノードに最後の値が適用されます（`g.node('a', { color: 'green' })` のようにノードに設定した属性は、常に既定値より優先されます）。DOT と同じ意味でグラフを書くには、`ts-graphviz/ordered` から import します。`ts-graphviz` と同じ名前を持ち、既定属性の文を書いた位置に残すモデルを使います。
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz/ordered';

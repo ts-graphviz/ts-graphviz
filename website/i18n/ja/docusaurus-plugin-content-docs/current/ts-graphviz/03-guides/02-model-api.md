@@ -55,8 +55,8 @@ g.addEdge(new Edge([a, b]));
 
 | メンバー | |
 | --- | --- |
-| `nodes`、`edges`、`subgraphs` | グラフのノード、エッジ、サブグラフ |
-| `statements` | 追加した順の中身。`toDot` はこの順に書き出します |
+| `nodes`、`edges`、`subgraphs` | グラフのノード、エッジ、サブグラフ。`nodes` が持つのはノード文で、エッジにだけ出てくるノードは含みません（[よくある質問](./01-dot-dsl.md#エッジにだけ出てくるノードが-nodes-に入らない)を参照） |
+| `statements` | 追加した順のノード、エッジ、サブグラフ。`toDot` はこの順に書き出します。グラフ自身の属性と既定値はその前に書き出されます（既定のクラスは既定属性の文をすべてその既定値にまとめます。`orderedModels` は書いた位置に残します） |
 | `getNode(id)`、`getSubgraph(id)` | id でノードやサブグラフを得る |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | グラフにあるかどうか |
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 取り除く |
@@ -74,6 +74,18 @@ const a = g.getNode('a');
 a?.attributes.set('color', 'red');
 console.log(a?.attributes.get('label')); // 'A'
 console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
+g.removeNode('a');
+```
+
+`removeNode` が取り除くのはノード文だけです。そのノードへのエッジは残り、Graphviz はエッジを描くときにノードを作り直します。ノードを消したい場合は、エッジも取り除いてください。
+
+```typescript
+import { fromDot } from 'ts-graphviz';
+
+const g = fromDot('digraph { a; a -> b; }');
+for (const edge of g.edges) {
+  if (edge.targets.some((t) => 'id' in t && t.id === 'a')) g.removeEdge(edge);
+}
 g.removeNode('a');
 ```
 
@@ -107,6 +119,6 @@ digraph((g) => {
 });
 ```
 
-`orderedModels` は、既定属性の文を DOT と同じように書いた位置に残すグラフのモデルコンテキストです。`ts-graphviz/ordered` はすべてのファクトリーでこれを使います（[DOT の文の順序](./01-dot-dsl.md#dot-の文の順序)を参照）。
+`orderedModels` は、既定属性の文を DOT と同じように書いた位置に残すグラフのモデルコンテキストです。`ts-graphviz/ordered` はすべてのファクトリーでこれを使います（[DOT の文の順序](./01-dot-dsl.md#dot-の文の順序)を参照）。指定したグラフのクラスが順序付きのクラスを置き換えるため、独自のクラスで順序を保つには `OrderedDigraph`、`OrderedGraph`、`OrderedSubgraph` を継承してください。
 
 独自クラス、型付きのコンテキスト、型の拡張については、[ts-graphvizの拡張](./05-extending-ts-graphviz.md)を参照してください。

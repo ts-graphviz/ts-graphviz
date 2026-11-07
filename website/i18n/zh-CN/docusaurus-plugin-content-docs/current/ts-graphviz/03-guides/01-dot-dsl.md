@@ -115,7 +115,7 @@ digraph((g) => {
 });
 ```
 
-不是合法 JavaScript 标识符的属性名，用方括号（`a['data-id']`）或 `attribute` 常量（`a[attribute.label]`）来写。
+属性也可以用 `attribute` 常量（`a[attribute.label]`）来写；通过扩展类型添加的属性（参见[扩展 ts-graphviz](./05-extending-ts-graphviz.md)）也同样可以这样写。
 
 ## `$` 规则
 
@@ -175,7 +175,7 @@ console.log(toDot(g));
 
 ## DOT 的语句顺序
 
-在 DOT 中，默认属性语句（`node [...]` 等）只作用于它之后的内容。默认模型每个图只保存一组默认值，并写在最前面，因此最后的值会作用于所有节点。要按 DOT 的含义编写图，请从 `ts-graphviz/ordered` 导入：它与 `ts-graphviz` 的名字相同，使用把每条默认属性语句保留在原位置的模型。
+在 DOT 中，默认属性语句（`node [...]` 等）只作用于它之后的内容。默认模型每个图只保存一组默认值，并写在最前面，因此最后的值会作用于所有未自行设置该属性的节点（在节点上设置的属性，例如 `g.node('a', { color: 'green' })`，总是优先于默认值）。要按 DOT 的含义编写图，请从 `ts-graphviz/ordered` 导入：它与 `ts-graphviz` 的名字相同，使用把每条默认属性语句保留在原位置的模型。
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz/ordered';

@@ -55,8 +55,8 @@ g.addEdge(new Edge([a, b]));
 
 | 成员 | |
 | --- | --- |
-| `nodes`、`edges`、`subgraphs` | 图中的节点、边和子图 |
-| `statements` | 按添加顺序排列的内容，`toDot` 按此顺序输出 |
+| `nodes`、`edges`、`subgraphs` | 图中的节点、边和子图；`nodes` 保存的是节点语句，不包括只出现在边中的节点（参见[常见问题](./01-dot-dsl.md#只出现在边中的节点不在-nodes-里)） |
+| `statements` | 按添加顺序排列的节点、边和子图，`toDot` 按此顺序输出；图自身的属性和默认值写在它们之前（默认类会把每条默认属性语句合并到这些默认值中；`orderedModels` 会把它们保留在原位置） |
 | `getNode(id)`、`getSubgraph(id)` | 按 id 获取节点或子图 |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | 图中是否存在 |
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 移除 |
@@ -74,6 +74,18 @@ const a = g.getNode('a');
 a?.attributes.set('color', 'red');
 console.log(a?.attributes.get('label')); // 'A'
 console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
+g.removeNode('a');
+```
+
+`removeNode` 只移除节点语句：指向它的边仍然保留，Graphviz 渲染该边时会重新创建这个节点。若要去掉该节点，请同时移除这些边：
+
+```typescript
+import { fromDot } from 'ts-graphviz';
+
+const g = fromDot('digraph { a; a -> b; }');
+for (const edge of g.edges) {
+  if (edge.targets.some((t) => 'id' in t && t.id === 'a')) g.removeEdge(edge);
+}
 g.removeNode('a');
 ```
 
@@ -107,6 +119,6 @@ digraph((g) => {
 });
 ```
 
-`orderedModels` 是一个模型上下文，其中的图会像 DOT 一样把每条默认属性语句保留在原位置；`ts-graphviz/ordered` 的所有工厂函数都使用它（参见 [DOT 的语句顺序](./01-dot-dsl.md#dot-的语句顺序)）。
+`orderedModels` 是一个模型上下文，其中的图会像 DOT 一样把每条默认属性语句保留在原位置；`ts-graphviz/ordered` 的所有工厂函数都使用它（参见 [DOT 的语句顺序](./01-dot-dsl.md#dot-的语句顺序)）。你提供的图类会替换有序类：若要在自定义类中保持顺序，请继承 `OrderedDigraph`、`OrderedGraph` 或 `OrderedSubgraph`。
 
 自定义类、带类型的上下文和类型扩展，请参阅[扩展 ts-graphviz](./05-extending-ts-graphviz.md)。

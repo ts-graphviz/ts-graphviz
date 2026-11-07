@@ -76,7 +76,7 @@ console.log(toDot(G));
 
 `ts-graphviz` 提供两种操作图的方式，二者操作的是同一个图：
 
-- **DOT DSL**：由工厂函数（`digraph`、`graph`、`strict`）返回。DOT 语句是它的方法，属性是它的属性，因此可以像写 DOT 一样编写图。参见[使用 DOT DSL 编写图](../03-guides/01-dot-dsl.md)。
+- **DOT DSL**：由工厂函数（`digraph`、`graph`、`strict.digraph`、`strict.graph`）返回。DOT 语句是它的方法，属性是它的属性，因此可以像写 DOT 一样编写图。参见[使用 DOT DSL 编写图](../03-guides/01-dot-dsl.md)。
 - **模型 API**：类（`Digraph`、`Node`、`Edge` 等）及其方法，适用于把图当作数据来构建、读取或转换的程序，以及定义自己的类。参见[使用模型 API](../03-guides/02-model-api.md)。
 
 ```typescript

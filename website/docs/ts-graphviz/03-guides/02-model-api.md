@@ -55,8 +55,8 @@ g.addEdge(new Edge([a, b]));
 
 | Member | |
 | --- | --- |
-| `nodes`, `edges`, `subgraphs` | the graph's nodes, edges and subgraphs |
-| `statements` | its contents in the order they were added, which `toDot` writes in that order |
+| `nodes`, `edges`, `subgraphs` | the graph's nodes, edges and subgraphs; `nodes` holds the node statements, not the nodes that appear only in edges (see [the FAQ](./01-dot-dsl.md#a-node-that-only-appears-in-an-edge-is-not-in-nodes)) |
+| `statements` | its nodes, edges and subgraphs in the order they were added, which `toDot` writes in that order; the graph's own attributes and its defaults are written before them (the default classes merge every default attribute statement into those defaults; `orderedModels` keeps them in their place) |
 | `getNode(id)`, `getSubgraph(id)` | a node or subgraph by id |
 | `existNode(id)`, `existEdge(edge)`, `existSubgraph(subgraph)` | whether the graph has it |
 | `removeNode(nodeOrId)`, `removeEdge(edge)`, `removeSubgraph(subgraph)` | take it out |
@@ -74,6 +74,18 @@ const a = g.getNode('a');
 a?.attributes.set('color', 'red');
 console.log(a?.attributes.get('label')); // 'A'
 console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
+g.removeNode('a');
+```
+
+`removeNode` takes out the node statement only: an edge to it stays, and Graphviz creates the node again when it renders the edge. Remove the edges too where the node should go:
+
+```typescript
+import { fromDot } from 'ts-graphviz';
+
+const g = fromDot('digraph { a; a -> b; }');
+for (const edge of g.edges) {
+  if (edge.targets.some((t) => 'id' in t && t.id === 'a')) g.removeEdge(edge);
+}
 g.removeNode('a');
 ```
 
@@ -107,6 +119,6 @@ digraph((g) => {
 });
 ```
 
-`orderedModels` is a models context whose graphs keep each default attribute statement in its place, as in DOT; `ts-graphviz/ordered` uses it for every factory (see [DOT's statement order](./01-dot-dsl.md#dots-statement-order)).
+`orderedModels` is a models context whose graphs keep each default attribute statement in its place, as in DOT; `ts-graphviz/ordered` uses it for every factory (see [DOT's statement order](./01-dot-dsl.md#dots-statement-order)). A graph class you give replaces the ordered one: to keep the order with a class of your own, extend `OrderedDigraph`, `OrderedGraph` or `OrderedSubgraph`.
 
 Custom classes, typed contexts and type extensions are covered in [Extending ts-graphviz](./05-extending-ts-graphviz.md).
