@@ -5,6 +5,7 @@ import * as adapter from '@ts-graphviz/adapter';
 import * as astPackage from '@ts-graphviz/ast';
 import { htmlLike, isTsGraphvizError } from '@ts-graphviz/common';
 import { createModelsContext, Node } from '@ts-graphviz/core';
+import type * as tsg from 'ts-graphviz';
 import {
   attribute as _,
   type Attribute,
@@ -34,6 +35,7 @@ import {
   sanitize,
   stringify,
 } from 'ts-graphviz/ast';
+import * as ordered from 'ts-graphviz/ordered';
 
 type Equal<A, B> =
   (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
@@ -136,6 +138,29 @@ const readNodes = [unknownValue].filter(isNodeModel);
 assertType<Equal<typeof readNodes, ReadonlyNodeModel[]>>();
 // @ts-expect-error not a node
 toDot({ $$type: 'Node' });
+
+// ts-graphviz/ordered: the same names and types, with orderedModels
+// (export by export: two module namespaces are never Equal as a whole)
+type SameExports<A, B> = [keyof A, keyof B] extends [keyof B, keyof A]
+  ? { [K in keyof A & keyof B]: Equal<A[K], B[K]> }[keyof A & keyof B]
+  : false;
+assertType<SameExports<typeof ordered, typeof tsg>>();
+const orderedGraph = ordered.digraph((g) => {
+  g.node({ color: 'red' });
+  g.node('a');
+});
+assertType<Equal<typeof orderedGraph, DSL<RootGraphModel>>>();
+assertType<Equal<typeof ordered.toDot, typeof toDot>>();
+const orderedModel = ordered.fromDot('digraph { a }');
+assertType<Equal<typeof orderedModel, RootGraphModel>>();
+const orderedNode = ordered.fromDot('a', {
+  parse: { startRule: 'Node' },
+  convert: { models: { Node: MyNode } },
+});
+assertType<Equal<typeof orderedNode, MyNode>>();
+const orderedGraphs = ordered.fromDotAll('digraph { a }');
+assertType<Equal<typeof orderedGraphs, RootGraphModel[]>>();
+ordered.withContext({ Node }).strict.graph();
 
 try {
   parse('{');

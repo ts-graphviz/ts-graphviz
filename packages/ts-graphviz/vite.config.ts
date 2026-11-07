@@ -14,6 +14,7 @@ export default defineConfig({
         'ts-graphviz': 'src/ts-graphviz.ts',
         ast: 'src/ast.ts',
         adapter: 'src/adapter.ts',
+        ordered: 'src/ordered.ts',
       },
       formats: ['es'],
     },
