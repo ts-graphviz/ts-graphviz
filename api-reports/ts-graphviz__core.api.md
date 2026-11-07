@@ -106,6 +106,7 @@ export declare class LegacyGraph<M extends AnyModelTypes = ModelTypes> extends G
 
 export declare class LegacySubgraph<M extends AnyModelTypes = ModelTypes> extends Subgraph<M> {
   protected override get keepsDefaultsInPlace(): boolean;
+  protected override defaultModels(): ModelsContext;
 }
 
 export declare class Node<S extends Schema = EmptySchema> extends DotObject implements NodeModel<S> {
