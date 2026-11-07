@@ -1,10 +1,12 @@
 import type { EdgeProps } from '@ts-graphviz/react';
 import {
+  type DSL,
   digraph,
   Edge,
   type EdgeModel,
   type EdgeTargetLikeTuple,
   isNodeRefGroupLike,
+  modelOf,
   type NodeRefGroupLike,
   type NodeRefLike,
   toNodeRefGroup,
@@ -17,23 +19,28 @@ describe('edge targets as inputs', () => {
 
   it('accepts readonly tuples and groups', () => {
     const pair = ['a', 'b'] as const;
-    expectTypeOf(g.edge(pair)).toEqualTypeOf<EdgeModel>();
-    expectTypeOf(g.createEdge(pair)).toEqualTypeOf<EdgeModel>();
-    expectTypeOf(g.edge([['a', 'b'] as const, 'c'])).toEqualTypeOf<EdgeModel>();
+    expectTypeOf(g.edge(pair)).toEqualTypeOf<DSL<EdgeModel>>();
+    expectTypeOf(g.$createEdge(pair)).toEqualTypeOf<DSL<EdgeModel>>();
+    expectTypeOf(modelOf(g).createEdge(pair)).toEqualTypeOf<EdgeModel>();
+    expectTypeOf(g.edge([['a', 'b'] as const, 'c'])).toEqualTypeOf<
+      DSL<EdgeModel>
+    >();
     const many: readonly ['a', 'b', 'c', readonly ['d', 'e']] = [
       'a',
       'b',
       'c',
       ['d', 'e'],
     ];
-    expectTypeOf(g.edge(many, { label: 'x' })).toEqualTypeOf<EdgeModel>();
+    expectTypeOf(g.edge(many, { label: 'x' })).toEqualTypeOf<DSL<EdgeModel>>();
   });
 
   it('still accepts mutable tuples and the existing tuple type', () => {
-    expectTypeOf(g.edge(['a', ['b', 'c']])).toEqualTypeOf<EdgeModel>();
+    expectTypeOf(g.edge(['a', ['b', 'c']])).toEqualTypeOf<DSL<EdgeModel>>();
     const ids: string[] = ['a', 'b'];
     // Asserting an array to the tuple type keeps working.
-    expectTypeOf(g.edge(ids as EdgeTargetLikeTuple)).toEqualTypeOf<EdgeModel>();
+    expectTypeOf(g.edge(ids as EdgeTargetLikeTuple)).toEqualTypeOf<
+      DSL<EdgeModel>
+    >();
   });
 
   it('still needs at least two targets', () => {

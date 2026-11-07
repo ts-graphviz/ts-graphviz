@@ -5,6 +5,7 @@ import type {
   RootGraphModel,
 } from '@ts-graphviz/common';
 import { defaultModelsContext } from '@ts-graphviz/core';
+import { type DSL, dsl } from './dsl.js';
 import type { ModelFactories, ModelFactory } from './types.js';
 
 /**
@@ -27,14 +28,16 @@ export function ModelFactoryBuilder(
       (arg): arg is GraphAttributesObject => typeof arg === 'object',
     );
     const callback = args.find(
-      (arg): arg is (g: RootGraphModel) => void => typeof arg === 'function',
+      (arg): arg is (g: DSL<RootGraphModel>) => void =>
+        typeof arg === 'function',
     );
     const g = new G(id, strictMode, attributes);
     g.with(this);
+    const view = dsl(g);
     if (typeof callback === 'function') {
-      callback(g);
+      callback(view);
     }
-    return g;
+    return view;
   };
 }
 

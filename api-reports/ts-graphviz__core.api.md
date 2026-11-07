@@ -92,17 +92,6 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
   getSubgraph(id: string): M["Subgraph"] | undefined;
   getNode(id: string): M["Node"] | undefined;
   createEdge(targets: ReadonlyEdgeTargetLikeTuple, attributes?: EdgeAttributesObject<SchemaOf<M>>): M["Edge"];
-  subgraph<const Id extends string>(id: Id, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  subgraph<const Id extends string>(id: Id, attributes: SubgraphAttributesFor<Id, SchemaOf<M>>, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  subgraph(attributes: NonClusterSubgraphAttributesObject<SchemaOf<M>>, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  subgraph(callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  node(id: string, callback?: (node: M["Node"]) => void): M["Node"];
-  node(id: string, attributes: NodeAttributesObject<SchemaOf<M>>, callback?: (node: M["Node"]) => void): M["Node"];
-  node(attributes: NodeAttributesObject<SchemaOf<M>>): void;
-  edge(targets: ReadonlyEdgeTargetLikeTuple, callback?: (edge: M["Edge"]) => void): M["Edge"];
-  edge(targets: ReadonlyEdgeTargetLikeTuple, attributes: EdgeAttributesObject<SchemaOf<M>>, callback?: (edge: M["Edge"]) => void): M["Edge"];
-  edge(attributes: EdgeAttributesObject<SchemaOf<M>>): void;
-  graph(attributes: SubgraphAttributesObject<SchemaOf<M>>): void;
 }
 
 export declare class Node<S extends Schema = EmptySchema> extends DotObject implements NodeModel<S> {

@@ -246,14 +246,17 @@ The main scenario for using this library is to use the `toDot` function, but it 
 By converting **DOT** to **Model**, a portion of the code can be written in the DOT language.
 
 ```typescript
-import { fromDot, toDot } from 'ts-graphviz';
+import { dsl, fromDot, toDot } from 'ts-graphviz';
 
-const G = fromDot(
-  `digraph {
-    node_A [
-      label = "This is a Label of Node A";
-    ];
-  }`,
+// fromDot gives the model; dsl() gives its DOT DSL.
+const G = dsl(
+  fromDot(
+    `digraph {
+      node_A [
+        label = "This is a Label of Node A";
+      ];
+    }`,
+  ),
 );
 
 G.edge(['node_A', 'node_B']);
@@ -273,7 +276,20 @@ const dot = toDot(G)
 
 When creating `Graph` or `Digraph`, you can use _Model Factory_ to provide a notation more similar to the **DOT** language.
 
-**Model** also has a declarative API, so you can consistently choose a declarative paradigm.
+The factories give the graph's **DOT DSL**: the DOT statements `node`, `edge`, `subgraph` and `graph` are methods, attributes are properties under their own names, and the model's own members take a `$` (`a.$id` is the node's name, `a.id` its `id` attribute). Every model you get from the DSL is a DSL; `modelOf()` gives the model, and `toDot` takes either.
+
+```typescript
+import { digraph, toDot } from 'ts-graphviz';
+
+const G = digraph('G', (g) => {
+  g.rankdir = 'LR'; //  rankdir = "LR";
+  g.node({ shape: 'box' }); //  node [shape = "box";];
+  const a = g.node('a');
+  a.label = 'A'; //  "a" [label = "A";];
+  g.edge([a, 'b']); //  "a" -> "b";
+});
+console.log(toDot(G));
+```
 
 
 ```typescript
@@ -295,7 +311,7 @@ import { attribute as _, digraph, toDot } from 'ts-graphviz';
       [_.color]: 'violet'
     });
     const Ac = A.node('Acc');
-    A.edge([Aa.port('a'), Ab, Ac, 'E'], {
+    A.edge([Aa.$port('a'), Ab, Ac, 'E'], {
       [_.color]: 'red'
     });
   });
@@ -627,7 +643,7 @@ declare module '@ts-graphviz/common' {
 console.log(
   toDot(
     digraph((g) => {
-      g.set(_.hoge, 'fuga');
+      g[_.hoge] = 'fuga';
     }),
   ),
 );

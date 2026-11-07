@@ -16,6 +16,7 @@ import {
   isNodeRefGroupLike,
   type ModelsContext,
   type ModelTypes,
+  modelOf,
   type NodeAttributeKey,
   type NodeAttributesObject,
   type NodeModel,
@@ -194,27 +195,32 @@ export abstract class GraphBase<
     return this.models as unknown as ModelsContext<ModelTypes<SchemaOf<M>>>;
   }
 
+  // The methods taking a model take the model an object such as a DSL
+  // stands for (modelOf), so a graph only ever holds models.
+
   public addNode(node: NodeModel<SchemaOf<M>>): void {
-    const replaced = this.#objects.nodes.get(node.id);
-    this.#objects.nodes.set(node.id, node);
+    const model = modelOf(node);
+    const replaced = this.#objects.nodes.get(model.id);
+    this.#objects.nodes.set(model.id, model);
     if (replaced === undefined) {
-      this.#statements.add(node);
-    } else if (replaced !== node) {
+      this.#statements.add(model);
+    } else if (replaced !== model) {
       // A node with the same id takes the place of the one it replaces.
       this.#statements = new Set(
-        Array.from(this.#statements, (s) => (s === replaced ? node : s)),
+        Array.from(this.#statements, (s) => (s === replaced ? model : s)),
       );
     }
   }
 
   public addEdge(edge: EdgeModel<SchemaOf<M>>): void {
-    this.#objects.edges.add(edge);
-    this.#statements.add(edge);
+    const model = modelOf(edge);
+    this.#objects.edges.add(model);
+    this.#statements.add(model);
   }
 
   /**
    * The subgraphs with each id, in the order they were added, so that
-   * `getSubgraph` (and `subgraph(id)`) find one without a scan. A subgraph
+   * `getSubgraph` (and the DSL's `subgraph(id)`) find one without a scan. A subgraph
    * is filed under the id it had when it was added (`#indexedAs`), so it is
    * taken out of the right list even if a custom model's id changed.
    */
@@ -222,15 +228,16 @@ export abstract class GraphBase<
   #indexedAs = new Map<SubgraphModel<ModelTypes<SchemaOf<M>>>, string>();
 
   public addSubgraph(subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>): void {
-    if (!this.#objects.subgraphs.has(subgraph) && subgraph.id !== undefined) {
-      const id = subgraph.id;
+    const model = modelOf(subgraph);
+    if (!this.#objects.subgraphs.has(model) && model.id !== undefined) {
+      const id = model.id;
       const same = this.#subgraphsById.get(id);
-      if (same === undefined) this.#subgraphsById.set(id, [subgraph]);
-      else same.push(subgraph);
-      this.#indexedAs.set(subgraph, id);
+      if (same === undefined) this.#subgraphsById.set(id, [model]);
+      else same.push(model);
+      this.#indexedAs.set(model, id);
     }
-    this.#objects.subgraphs.add(subgraph);
-    this.#statements.add(subgraph);
+    this.#objects.subgraphs.add(model);
+    this.#statements.add(model);
   }
 
   /**
@@ -295,13 +302,13 @@ export abstract class GraphBase<
   }
 
   public existEdge(edge: EdgeModel<SchemaOf<M>>): boolean {
-    return this.#objects.edges.has(edge);
+    return this.#objects.edges.has(modelOf(edge));
   }
 
   public existSubgraph(
     subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>,
   ): boolean {
-    return this.#objects.subgraphs.has(subgraph);
+    return this.#objects.subgraphs.has(modelOf(subgraph));
   }
 
   public createSubgraph<const Id extends string | undefined = undefined>(
@@ -332,30 +339,32 @@ export abstract class GraphBase<
   }
 
   public removeNode(node: NodeModel<SchemaOf<M>> | string): void {
-    const id = typeof node === 'string' ? node : node.id;
+    const id = typeof node === 'string' ? node : modelOf(node).id;
     const removed = this.#objects.nodes.get(id);
     this.#objects.nodes.delete(id);
     if (removed) this.#statements.delete(removed);
   }
 
   public removeEdge(edge: EdgeModel<SchemaOf<M>>): void {
-    this.#objects.edges.delete(edge);
-    this.#statements.delete(edge);
+    const model = modelOf(edge);
+    this.#objects.edges.delete(model);
+    this.#statements.delete(model);
   }
 
   public removeSubgraph(
     subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>,
   ): void {
-    const id = this.#indexedAs.get(subgraph);
+    const model = modelOf(subgraph);
+    const id = this.#indexedAs.get(model);
     if (id !== undefined) {
-      this.#indexedAs.delete(subgraph);
+      this.#indexedAs.delete(model);
       const same = this.#subgraphsById.get(id) ?? [];
-      const at = same.indexOf(subgraph);
+      const at = same.indexOf(model);
       if (at !== -1) same.splice(at, 1);
       if (same.length === 0) this.#subgraphsById.delete(id);
     }
-    this.#objects.subgraphs.delete(subgraph);
-    this.#statements.delete(subgraph);
+    this.#objects.subgraphs.delete(model);
+    this.#statements.delete(model);
   }
 
   public createNode(
@@ -383,132 +392,19 @@ export abstract class GraphBase<
     targets: ReadonlyEdgeTargetLikeTuple,
     attributes?: EdgeAttributesObject<SchemaOf<M>>,
   ): M['Edge'] {
-    const ts = targets.map((t) =>
-      isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t),
-    ) as EdgeTargetTuple;
+    // The nodes themselves, never objects standing for them (a DSL).
+    const ts = targets
+      .map(
+        (t) =>
+          (Array.isArray(t)
+            ? t.map(modelOf)
+            : modelOf(t)) as ReadonlyEdgeTargetLikeTuple[number],
+      )
+      .map((t) =>
+        isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t),
+      ) as EdgeTargetTuple;
     const edge = new this.#schemaModels.Edge(ts, attributes);
     this.addEdge(edge);
     return edge as M['Edge'];
   }
-
-  public subgraph<const Id extends string>(
-    id: Id,
-    callback?: (subgraph: M['Subgraph']) => void,
-  ): M['Subgraph'];
-  public subgraph<const Id extends string>(
-    id: Id,
-    attributes: SubgraphAttributesFor<Id, SchemaOf<M>>,
-    callback?: (subgraph: M['Subgraph']) => void,
-  ): M['Subgraph'];
-  public subgraph(
-    attributes: NonClusterSubgraphAttributesObject<SchemaOf<M>>,
-    callback?: (subgraph: M['Subgraph']) => void,
-  ): M['Subgraph'];
-  public subgraph(callback?: (subgraph: M['Subgraph']) => void): M['Subgraph'];
-  public subgraph(...args: unknown[]): M['Subgraph'] {
-    const id = args.find(
-      (arg: unknown): arg is string => typeof arg === 'string',
-    );
-    const attributes = args.find(
-      (arg: unknown): arg is SubgraphAttributesObject<SchemaOf<M>> =>
-        typeof arg === 'object' && arg !== null,
-    );
-    const callback = args.find(
-      (arg: unknown): arg is (subgraph: M['Subgraph']) => void =>
-        typeof arg === 'function',
-    );
-    // The context's classes create subgraphs of the graph's schema.
-    const subgraph = (
-      id !== undefined
-        ? (this.getSubgraph(id) ?? this.createSubgraph(id))
-        : this.createSubgraph()
-    ) as M['Subgraph'] & SubgraphModel<ModelTypes<SchemaOf<M>>>;
-    if (attributes !== undefined) {
-      subgraph.apply(attributes);
-    }
-    if (callback !== undefined) {
-      callback(subgraph);
-    }
-    return subgraph;
-  }
-
-  public node(id: string, callback?: (node: M['Node']) => void): M['Node'];
-  public node(
-    id: string,
-    attributes: NodeAttributesObject<SchemaOf<M>>,
-    callback?: (node: M['Node']) => void,
-  ): M['Node'];
-  public node(attributes: NodeAttributesObject<SchemaOf<M>>): void;
-  public node(firstArg: unknown, ...args: unknown[]): M['Node'] | undefined {
-    if (typeof firstArg === 'string') {
-      const id = firstArg;
-      const attributes = args.find(
-        (arg: unknown): arg is NodeAttributesObject<SchemaOf<M>> =>
-          typeof arg === 'object' && arg !== null,
-      );
-      const callback = args.find(
-        (arg: unknown): arg is (node: M['Node']) => void =>
-          typeof arg === 'function',
-      );
-      // The context's classes create nodes of the graph's schema.
-      const node = (this.getNode(id) ?? this.createNode(id)) as M['Node'] &
-        NodeModel<SchemaOf<M>>;
-      if (attributes !== undefined) {
-        node.attributes.apply(attributes);
-      }
-      if (callback !== undefined) {
-        callback(node);
-      }
-      return node;
-    }
-    if (typeof firstArg === 'object' && firstArg !== null) {
-      this.attributes.node.apply(firstArg as NodeAttributesObject<SchemaOf<M>>);
-    }
-  }
-
-  public edge(
-    targets: ReadonlyEdgeTargetLikeTuple,
-    callback?: (edge: M['Edge']) => void,
-  ): M['Edge'];
-  public edge(
-    targets: ReadonlyEdgeTargetLikeTuple,
-    attributes: EdgeAttributesObject<SchemaOf<M>>,
-    callback?: (edge: M['Edge']) => void,
-  ): M['Edge'];
-  public edge(attributes: EdgeAttributesObject<SchemaOf<M>>): void;
-  public edge(
-    firstArg: ReadonlyEdgeTargetLikeTuple | EdgeAttributesObject<SchemaOf<M>>,
-    ...args: unknown[]
-  ): M['Edge'] | undefined {
-    if (isEdgeTargets(firstArg)) {
-      const targets = firstArg;
-      const attributes = args.find(
-        (arg: unknown): arg is EdgeAttributesObject<SchemaOf<M>> =>
-          typeof arg === 'object' && arg !== null,
-      );
-      const callback = args.find(
-        (arg: unknown): arg is (edge: M['Edge']) => void =>
-          typeof arg === 'function',
-      );
-      const edge = this.createEdge(targets, attributes);
-      if (callback !== undefined) {
-        callback(edge);
-      }
-      return edge;
-    }
-    if (typeof firstArg === 'object' && firstArg !== null) {
-      this.attributes.edge.apply(firstArg);
-    }
-  }
-
-  public graph(attributes: SubgraphAttributesObject<SchemaOf<M>>): void {
-    this.attributes.graph.apply(attributes);
-  }
-}
-
-// `Array.isArray` does not narrow readonly arrays out of a union.
-function isEdgeTargets(
-  arg: ReadonlyEdgeTargetLikeTuple | object,
-): arg is ReadonlyEdgeTargetLikeTuple {
-  return Array.isArray(arg);
 }

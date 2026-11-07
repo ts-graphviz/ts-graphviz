@@ -41,6 +41,7 @@
     "fuzz:build": "vite build --config fuzz/vite.config.ts",
     "fuzz": "bash fuzz/run.sh",
     "check:packages": "node scripts/check-packages.ts",
+    "pack:check": "node scripts/pack-check.ts",
     "check:consumer-types": "node scripts/check-consumer-types.ts",
     "api:check": "node scripts/api-report.ts",
     "api:update": "node scripts/api-report.ts --update",

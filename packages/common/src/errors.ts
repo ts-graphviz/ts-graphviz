@@ -40,6 +40,8 @@ export const ERROR_CODES = [
   'TSG_ERR_NUL_CHARACTER',
   /** HTML-like markup has unbalanced `<`/`>` or a null character (`RangeError`). */
   'TSG_ERR_INVALID_HTML_LIKE',
+  /** `ArrowType.build()` was given a shape Graphviz does not have, none or more than four shapes, or `none` last after another (`RangeError`). */
+  'TSG_ERR_INVALID_ARROW',
   /** An edge was given fewer than two targets or a target of the wrong shape (`TypeError`). */
   'TSG_ERR_INVALID_EDGE_TARGETS',
   /** A port name contains ':', which Graphviz always reads as a port/compass separator (`TypeError`). */
@@ -56,6 +58,10 @@ export const ERROR_CODES = [
   'TSG_ERR_MULTIPLE_GRAPHS',
   /** A `GraphBase` subclass created a model without a models context (`Error`). */
   'TSG_ERR_NO_MODELS_CONTEXT',
+  /** `dsl` of `ts-graphviz` was given a value that is not a model (`TypeError`). */
+  'TSG_ERR_NOT_A_MODEL',
+  /** A DOT DSL property that cannot be written was assigned: a DOT statement (`node`, `edge`, `subgraph`, `graph`), a symbol, or an attribute of a model that has none (`TypeError`). */
+  'TSG_ERR_UNWRITABLE_PROPERTY',
   /** The feature is not available on the current runtime, e.g. the adapter in a browser (`Error`). */
   'TSG_ERR_UNSUPPORTED_ENVIRONMENT',
   /** The Graphviz command could not be run or exited with an error (`CommandExecutionError`, an `Error`). */

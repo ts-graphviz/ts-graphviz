@@ -27,16 +27,26 @@ export interface AnyModelTypes {
 
 export type AnyReadonlyDotObjectModel = ReadonlyGraphStatementModel | ReadonlyRootGraphModel | ReadonlyDotModel;
 
-export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.aname}`;
+export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.last}` | ArrowType.Built;
 export declare namespace ArrowType {
   type shape = keyof $shape;
   interface $shape extends $keywords<"box" | "crow" | "curve" | "icurve" | "diamond" | "dot" | "inv" | "none" | "normal" | "tee" | "vee"> {}
   type side = "l" | "r";
   type modifiers = side | "o" | `o${side}`;
-  type aname = shape | `${modifiers}${shape}`;
+  type openShape = "box" | "diamond" | "dot" | "inv" | "normal";
+  type sidedShape = Exclude<shape, "dot" | "none">;
+  type aname = shape | `o${openShape}` | `${side}${sidedShape}` | `o${side}${Extract<openShape, sidedShape>}`;
+  type last = Exclude<aname, "none">;
+  type Shapes = readonly [aname] | readonly [aname, last] | readonly [aname, aname, last] | readonly [aname, aname, aname, last];
+  type Built = string & {
+    readonly [built]: true;
+  };
 }
+export declare const ArrowType: {
+  readonly build: (...shapes: ArrowType.Shapes) => ArrowType.Built;
+};
 
-export type ArrowTypeOf<S extends string> = ArrowNameOf<S> | `${ArrowNameOf<S>}${ArrowNameOf<S>}`;
+export type ArrowTypeOf<S extends string> = ArrowNameOf<S> | `${ArrowNameOf<S>}${Exclude<ArrowNameOf<S>, "none">}` | ArrowType.Built;
 
 export type Attribute<T extends AttributeKey> = Attribute.types[T];
 export declare namespace Attribute {
@@ -741,7 +751,7 @@ export type Double = number;
 
 export type DoubleList = Double | `${Double}:${Double}` | `${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
 
-export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NO_MODELS_CONTEXT", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
+export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NO_MODELS_CONTEXT", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
 
 export type EdgeAttributeKey = EdgeAttributeKey.values;
 export declare namespace EdgeAttributeKey {
@@ -821,17 +831,6 @@ export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K exten
   getSubgraph(id: string): M["Subgraph"] | undefined;
   getNode(id: string): M["Node"] | undefined;
   createEdge(targets: ReadonlyEdgeTargetLikeTuple, attributes?: EdgeAttributesObject<S>): M["Edge"];
-  subgraph<const Id extends string>(id: Id, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  subgraph<const Id extends string>(id: Id, attributes: SubgraphAttributesFor<Id, S>, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  subgraph(attributes: NonClusterSubgraphAttributesObject<S>, callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  subgraph(callback?: (subgraph: M["Subgraph"]) => void): M["Subgraph"];
-  node(id: string, callback?: (node: M["Node"]) => void): M["Node"];
-  node(id: string, attributes: NodeAttributesObject<S>, callback?: (node: M["Node"]) => void): M["Node"];
-  node(attributes: NodeAttributesObject<S>): void;
-  edge(targets: ReadonlyEdgeTargetLikeTuple, callback?: (edge: M["Edge"]) => void): M["Edge"];
-  edge(targets: ReadonlyEdgeTargetLikeTuple, attributes: EdgeAttributesObject<S>, callback?: (edge: M["Edge"]) => void): M["Edge"];
-  edge(attributes: EdgeAttributesObject<S>): void;
-  graph(attributes: SubgraphAttributesObject<S>): void;
 }
 
 export interface GraphCommonAttributes<S extends Schema = EmptySchema> {
@@ -947,6 +946,10 @@ export type LayerRange = string;
 
 export type LblString = HTMLLikeLabel | EscString;
 
+export declare const MODEL: unique symbol;
+
+export type ModelOf<T> = T extends ModelView<infer U> ? U : T;
+
 export interface ModelTypes<S extends Schema = EmptySchema> {
   Schema: S;
   Dot: DotModel<S>;
@@ -955,6 +958,10 @@ export interface ModelTypes<S extends Schema = EmptySchema> {
   Subgraph: SubgraphModel<ModelTypes<S>>;
   Node: NodeModel<S>;
   Edge: EdgeModel<S>;
+}
+
+export interface ModelView<T extends AnyReadonlyDotObjectModel = AnyReadonlyDotObjectModel> {
+  readonly [MODEL]: T;
 }
 
 export interface ModelsContext<M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> {
@@ -966,7 +973,7 @@ export interface ModelsContext<M extends AnyModelTypes = ModelTypes, S extends S
   Edge: EdgeConstructor<M["Edge"], S>;
 }
 
-export type NarrowedModel<T, K extends DotObjectType> = unknown extends T ? T & ReadonlyModelOf<K> : T extends unknown ? T extends AnyReadonlyDotObjectModel ? Extract<T, {
+export type NarrowedModel<T, K extends DotObjectType> = unknown extends T ? T & ReadonlyModelOf<K> : T extends unknown ? T extends ModelView ? never : T extends AnyReadonlyDotObjectModel ? Extract<T, {
   readonly $$type: K;
 }> : T extends Primitive ? never : T & ReadonlyModelOf<K> : never;
 
@@ -1337,6 +1344,8 @@ export declare function isSubgraphModel<T>(object: T): object is NarrowedModel<T
 
 export declare function isTsGraphvizError(value: unknown): value is CodedError;
 
+export declare function modelOf<T>(value: T): ModelOf<T>;
+
 export declare function onDeprecation(listener: (event: DeprecationEvent) => void): () => void;
 
 export declare function ownOptions<T extends object>(options: T | undefined): T;
@@ -1351,17 +1360,21 @@ export declare function withCode<E extends Error, C extends ErrorCode>(error: E,
 
 // Used by the exports, not exported
 
+declare const built: unique symbol;
+
 type AnyKindAttributesObject<S extends Schema> = AttributesObject<Exclude<NodeAttributeKey & EdgeAttributeKey & (SubgraphAttributeKey | ClusterSubgraphAttributeKey), keyof SchemaAttributeTypes<S, "node"> | keyof SchemaAttributeTypes<S, "edge"> | keyof SubgraphSchemaAttributeTypes<S>>>;
 
 type Apply<Base, E> = E extends SchemaEntry<infer T extends DotValue, infer Mode> ? ApplyMode<Base, T, Mode> : Base;
 
 type ApplyMode<Base, T, Mode> = Mode extends "extend" ? Base | T : Mode extends "add" | "override" ? T : never;
 
-type ArrowNameOf<S extends string> = S | `${ArrowType.modifiers}${S}`;
+type ArrowNameOf<S extends string> = BuiltInArrowNameOf<Extract<S, ArrowType.shape>> | `${"" | ArrowType.modifiers}${Exclude<S, ArrowType.shape>}`;
 
 type AsClusterSubgraphAttributesObject<S extends Schema> = AttributesObject<Exclude<ClusterSubgraphAttributeKey, "cluster">, Omit<SchemaAttributeTypes<S, "cluster">, "cluster">> & {
   cluster: true;
 };
+
+type BuiltInArrowNameOf<S extends ArrowType.shape> = S extends unknown ? S | (S extends ArrowType.openShape ? `o${S}` : never) | (S extends ArrowType.sidedShape ? `${ArrowType.side}${S}` : never) | (S extends ArrowType.openShape & ArrowType.sidedShape ? `o${ArrowType.side}${S}` : never) : never;
 
 type BuiltInAttribute<K extends string> = K extends AttributeKey ? Attribute<K> : string extends K ? Attribute<AttributeKey> : never;
 

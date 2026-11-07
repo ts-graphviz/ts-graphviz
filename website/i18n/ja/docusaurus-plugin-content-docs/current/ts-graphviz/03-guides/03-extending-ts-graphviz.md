@@ -179,7 +179,7 @@ declare module '@ts-graphviz/common' {
 console.log(
   toDot(
     digraph((g) => {
-      g.set(_.hoge, 'fuga');
+      g[_.hoge] = 'fuga';
     }),
   ),
 );

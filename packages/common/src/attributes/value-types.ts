@@ -88,14 +88,33 @@ export type StyleOf<I extends string> =
 
 /**
  * The arrow types built from the arrow shapes `S`, as {@link ArrowType} is
- * built from the built-in ones.
+ * built from the built-in ones: names of one or two shapes (the second not
+ * `none`), and the names {@link ArrowType.build} makes.
  * @group Attribute
  */
 export type ArrowTypeOf<S extends string> =
   | ArrowNameOf<S>
-  | `${ArrowNameOf<S>}${ArrowNameOf<S>}`;
+  | `${ArrowNameOf<S>}${Exclude<ArrowNameOf<S>, 'none'>}`
+  | ArrowType.Built;
 
-type ArrowNameOf<S extends string> = S | `${ArrowType.modifiers}${S}`;
+/**
+ * One shape of `S` with its modifiers: a built-in shape with those
+ * Graphviz allows it ({@link ArrowType.aname}), a shape of a schema with
+ * any of them.
+ */
+type ArrowNameOf<S extends string> =
+  | BuiltInArrowNameOf<Extract<S, ArrowType.shape>>
+  | `${'' | ArrowType.modifiers}${Exclude<S, ArrowType.shape>}`;
+
+type BuiltInArrowNameOf<S extends ArrowType.shape> = S extends unknown
+  ?
+      | S
+      | (S extends ArrowType.openShape ? `o${S}` : never)
+      | (S extends ArrowType.sidedShape ? `${ArrowType.side}${S}` : never)
+      | (S extends ArrowType.openShape & ArrowType.sidedShape
+          ? `o${ArrowType.side}${S}`
+          : never)
+  : never;
 
 /**
  * The port positions built from the compass points `C`, as

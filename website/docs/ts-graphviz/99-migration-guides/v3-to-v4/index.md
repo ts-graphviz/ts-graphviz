@@ -4,11 +4,43 @@ description: |-
 ---
 # Migration from v3 to v4
 
-v4 is the release where the API review of the 3.x line landed: attribute values became explicit about what they mean, errors became identifiable, the model classes stopped depending on import order, and the AST was tidied. Most programs that build a graph with the factory API and call `toDot` keep working unchanged. This guide lists every change that can affect existing code, by area, with what to do about it.
+v4 is the release where the API review of the 3.x line landed: attribute values became explicit about what they mean, errors became identifiable, the model classes stopped depending on import order, and the AST was tidied. Programs that build a graph with the factory API keep their `node`, `edge` and `subgraph` calls, but the factories now give the graph's DOT DSL, which reads attributes and model members differently: start with section 1. This guide lists every change that can affect existing code, by area, with what to do about it.
 
 Requirements: **Node.js 22 or later** (Node.js 20 reached end of life) and, for TypeScript users, **TypeScript 5.0 or later** (see *Supported TypeScript versions* in the Versioning Policy).
 
-## 1. Strings are literal text; DOT syntax is opt-in
+## 1. The factories give the DOT DSL
+
+`digraph()`, `graph()`, `strict.*` and `withContext().*` give the graph's **DOT DSL** instead of the model, and so do the callbacks and everything you reach from a DSL. The DSL reads like DOT: the statements `node`, `edge`, `subgraph` and `graph` are methods, **attributes are properties under their own names**, and **the model's own members take a `$`**. The models only hold the data (`node()`, `edge()`, `subgraph()` and `graph()` are no longer model methods).
+
+**Names whose meaning changed.** On a DSL, `id`, `comment` and `size` are the Graphviz attributes of those names, not the model's members:
+
+| 3.x (on what the factories give) | v4 |
+| --- | --- |
+| `node.id` (the node's name) | `node.$id` (`node.id` is the Graphviz `id` attribute) |
+| `g.id` | `g.$id` |
+| `x.comment = '...'` (a DOT comment) | `x.$comment = '...'` (`x.comment` is the Graphviz `comment` attribute) |
+| `g.size` (the number of attributes) | `g.$size` (`g.size` is the Graphviz `size` attribute) |
+
+TypeScript reports most other changes, but these three still compile, so search for them: `\.id\b`, `\.comment\b` and `\.size\b`.
+
+**Other changes:**
+
+| 3.x | v4 |
+| --- | --- |
+| `g.set('rankdir', 'LR')`, `g.get('rankdir')` | `g.rankdir = 'LR'`, `g.rankdir` (or `g.$set(...)`, `g.$get(...)`) |
+| `node.attributes.set('label', 'A')` | `node.label = 'A'` (or `node.$attributes.set(...)`) |
+| `node.attributes.delete('label')` | `delete node.label` or `node.label = undefined` |
+| `g.attributes.node.set('shape', 'box')` | `g.$attributes.node.shape = 'box'` or `g.node({ shape: 'box' })` |
+| `node.port('p')` | `node.$port('p')` |
+| `g.nodes`, `g.getNode('a')`, `g.createNode('a')`, `g.addNode(n)` | `g.$nodes`, `g.$getNode('a')`, `g.$createNode('a')`, `g.$addNode(n)`: models are given as DSLs |
+| your class's own methods, `g.myMethod()` | `g.$myMethod()` |
+| `new Digraph().node('a')`, `fromDot(src).node('a')` | `dsl(new Digraph()).node('a')`, `dsl(fromDot(src)).node('a')` |
+| a custom class overriding `node()` / `edge()` | override `createNode` / `createEdge` / `createSubgraph`, which the DSL calls; your `node()` is `g.$node()` |
+| comparing a DSL with its model (`===`) | `false`: compare DSLs with DSLs (one model has one DSL), or use `modelOf()` |
+
+`modelOf(dsl)` gives the model and `dsl(model)` the DSL. `toDot`, `fromModel`, the adapter's `toBlob` and `createRoot({ container })` / `renderToDot({ container })` of `@ts-graphviz/react` take either. The model guards (`isNodeModel` and the others) are false for a DSL, which is not a model: narrow DSLs by `$$type` (`if (s.$$type === 'Node')`), or check `modelOf(x)`. A DSL is not itself a model type, so pass `modelOf(g)` where a model is typed (such as `new Dot([modelOf(g)])` or a parameter of type `RootGraphModel`). `{ ...node }`, `Object.keys(node)` and `JSON.stringify(node)` list the attributes; `String(g)` does not work, since `toString` is an attribute name too.
+
+## 2. Strings are literal text; DOT syntax is opt-in
 
 In 3.x a string placed in a model was written into DOT with its backslashes passed through, so `\N` or `\l` kept their Graphviz meaning, and a string shaped like `<…>` with balanced brackets was written as an HTML-like label. In v4:
 
@@ -27,7 +59,7 @@ In 3.x a string placed in a model was written into DOT with its backslashes pass
 
 Numbers and booleans are typed in both directions: `width=1.5` parses to the number `1.5` and `fixedsize=true` to `true` (only when the numeral is exact; `001`, `1.`, `.5` and integers beyond 2^53 stay strings), and such values are written bare again.
 
-## 2. Errors: standard types with a stable `code`
+## 3. Errors: standard types with a stable `code`
 
 Errors have no shared custom base class. Every error the library raises on purpose is the standard type that fits (`SyntaxError`, `RangeError`, `TypeError`, a `DOMException` named `SecurityError`, `Error`) tagged with a `code` from `ERROR_CODES` (prefix `TSG_ERR_`), exported by `@ts-graphviz/common`. The code is the stable contract; messages may change in any release.
 
@@ -53,6 +85,7 @@ try {
 | `toDot` / `fromModel` build an AST larger than `maxASTNodes` | `ASTNodeCountExceededError` (now a `RangeError`) | `TSG_ERR_AST_NODE_COUNT_EXCEEDED` |
 | null character in text | `RangeError` | `TSG_ERR_NUL_CHARACTER` |
 | unbalanced HTML-like markup | `RangeError` | `TSG_ERR_INVALID_HTML_LIKE` |
+| `ArrowType.build()` given a shape Graphviz does not have, no shapes or more than four, or `none` last after another | `RangeError` | `TSG_ERR_INVALID_ARROW` |
 | edge with fewer than two targets or a malformed target | `TypeError` (was a bare `Error`) | `TSG_ERR_INVALID_EDGE_TARGETS` |
 | port containing `:` | `TypeError` | `TSG_ERR_INVALID_PORT` |
 | attribute list kind other than `Graph`, `Node`, `Edge` | `TypeError` | `TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND` |
@@ -72,12 +105,12 @@ try {
 
 Code that matched on `error.message` should match on `error.code`.
 
-## 3. Model classes: no more `RootModelsContext` / `registerDefault`
+## 4. Model classes: no more `RootModelsContext` / `registerDefault`
 
 3.x filled a shared `RootModelsContext` object when `ts-graphviz` was imported, which made `@ts-graphviz/core` and `@ts-graphviz/ast` depend on import order. In v4:
 
 - `@ts-graphviz/core` exports `defaultModelsContext()` and `createModelsContext(partial)`. `registerDefault()` and `RootModelsContext` are gone; nothing mutates shared state on import. `createModelsContext` moved: import it from `@ts-graphviz/core` (or `ts-graphviz`), not `@ts-graphviz/common`.
-- `ModelsContext` has a `Dot` constructor (see section 4); a context written out by hand must supply it, or be built with `createModelsContext`.
+- `ModelsContext` has a `Dot` constructor (see section 5); a context written out by hand must supply it, or be built with `createModelsContext`.
 - `withContext({ Node: MyNode })` in `ts-graphviz` is unchanged.
 - `toModel(ast, { models })` in `@ts-graphviz/ast` now **requires** `models` (the package has no classes of its own): pass `defaultModelsContext()` or `createModelsContext({...})`. `fromDot(source, { convert: { models } })` still takes a partial context.
 - The constructor types in `ModelsContext` use the real signatures; a custom class whose constructor is incompatible is now a type error instead of a runtime surprise.
@@ -85,7 +118,7 @@ Code that matched on `error.message` should match on `error.code`.
 
 A direct subclass of `GraphBase` (rare) must override `defaultModels()` or call `with()` before creating nodes; the core classes do this for you.
 
-## 4. The `Dot` model and symmetric conversions
+## 5. The `Dot` model and symmetric conversions
 
 A DOT source (comments and one or more root graphs) has a model of its own: `DotModel` / the `Dot` class (`graphs`, `addGraph`, `removeGraph`, `comment`).
 
@@ -95,20 +128,21 @@ A DOT source (comments and one or more root graphs) has a model of its own: `Dot
 - The parser accepts any number of root graphs, including none (3.x required exactly one).
 - `fromDot(source)` returns the source's one root graph: a source with several graphs throws `TSG_ERR_MULTIPLE_GRAPHS`, and one without a graph `TSG_ERR_NO_GRAPH`. Read them all with the new `fromDotAll(dot, options?)`, which returns an array (empty for a source without graphs), or use `toModel(parse(source), { models })` for the whole document.
 
-## 5. Attribute groups: one `comment`
+## 6. Attribute groups: one `comment`
 
-`node.attributes.comment` and `edge.attributes.comment` are removed; use `node.comment` / `edge.comment`, which is written before the statement. The Graphviz `comment` *attribute* is unaffected (`attributes.set('comment', ...)`).
+`node.attributes.comment` and `edge.attributes.comment` are removed; use the model's `comment` (`node.$comment` / `edge.$comment` on a DSL), which is written before the statement. The Graphviz `comment` *attribute* is unaffected (`node.comment` on a DSL, `attributes.set('comment', ...)` on a model).
 
-## 6. Generated attribute types
+## 7. Generated attribute types
 
 The attribute keys, their documentation and value types in `@ts-graphviz/common` are generated from the Graphviz documentation.
 
 - Added: `radius` (edge); `beautify`, `linelength`, `oneblock`, `tooltip` (graph); `bb`, `cluster` (cluster); `cluster` (subgraph). Removed: `mosek`.
 - `tailclip` is `boolean` (was `Point`); `tail_lp` is `Point` (was `string`).
+- `ArrowType` (`arrowhead`, `arrowtail`) takes only the modifiers each shape takes in [Graphviz's table](https://graphviz.org/doc/info/arrows.html): `ldot`, `ocrow` and a two-shape name ending in `none` (`dotnone`) are type errors. Names of three or four shapes are made with `ArrowType.build()`, which checks each shape: `ArrowType.build('obox', 'ltee', 'vee')`. To find the names that changed, search for `arrowhead` and `arrowtail`.
 
 The augmentation points (`Attribute.$keys`, `Attribute.$types`, `EdgeAttributeKey.$values`, …) are unchanged.
 
-## 7. `@ts-graphviz/ast`
+## 8. `@ts-graphviz/ast`
 
 - Leaf nodes (`Literal`, `Attribute`, `Comment`, `NodeRef`) have no `children` and extend `ASTBaseNode` directly; `ASTBaseParentNode` is only for statement containers. `NodeRefList` keeps its references in `refs`, and `ASTChildNode<T>` resolves to `NodeRefASTNode` for it and to `never` for leaves. `location` is absent (not `null`) outside the parser. `createElement` keeps its three-argument form.
 - The `*ASTPropaties` types are spelled `*ASTProperties`.
@@ -123,7 +157,7 @@ The augmentation points (`Attribute.$keys`, `Attribute.$types`, `EdgeAttributeKe
 
 Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and `a:n` as a compass point), bare identifiers may contain any non-ASCII character, and raw newlines inside quoted strings survive `stringify`.
 
-## 8. `@ts-graphviz/adapter`
+## 9. `@ts-graphviz/adapter`
 
 - **`toBlob` checks the source with `sanitize` first** (from `@ts-graphviz/ast`, now a dependency of the adapter). DOT that makes Graphviz read a file (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), write a link other than relative, `http`, `https` or `mailto`, or put raw text into PostScript, image map, `plain`, JSON or XML output (font names other than plain names, unknown `style` values, colors with whitespace, control characters, line breaks in names); `ismap` and output formats that have not been checked (e.g. `vml`, `fig`) are refused. Such DOT rejects with a `DOMException` named `SecurityError` (code `TSG_ERR_UNSAFE_DOT`), and DOT that does not parse rejects with `DotSyntaxError` instead of a `CommandExecutionError` from `dot`. With `sanitize` on, the command gets the source as reprinted by the parser. If your application renders its own images or relies on Graphviz's error messages, pass `sanitize: false`: the source then reaches Graphviz unchanged, without parsing, and DOT that does not parse fails with a `CommandExecutionError` from `dot`; to raise the parser limits, pass them as `sanitize: { maxASTNodes: … }`.
 - **`toStream` and `toFile` are replaced by `toBlob`**, which takes the same options and returns the output as a `Blob` once `dot` has succeeded. Its `type` is the media type of the format (`image/svg+xml`, `image/png`, …), or empty for formats without a well-known one.
@@ -149,7 +183,7 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 - `-G`/`-N`/`-E` attribute values are passed verbatim (3.x wrapped values containing whitespace in literal quotes). fdp `grid` and `oldAttractive` follow the Graphviz defaults (grid on, old attractive force off).
 - The browser entry is typed with the real `Options`.
 
-## 9. `@ts-graphviz/react`
+## 10. `@ts-graphviz/react`
 
 - React 19.3 or later is required (`react-reconciler` 0.34).
 - `useDigraph`, `useGraph`, `useSubgraph`, `useNode` and `useEdge` are removed. The components are host elements of the renderer, which adds the models when React commits: render `<Digraph>`, `<Subgraph>`, `<Node>` and `<Edge>`, and get a model through `ref` or, for the enclosing graph, `useCurrentGraph()`.
@@ -158,22 +192,22 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 - `createRoot` and `renderToDot` take a `models` option.
 - `render()` / `renderToDot()` resolve once the tree has settled, including transitions, deferred values and suspended data. `timeout` is replaced by a per-render `signal` (`AbortSignal.timeout(ms)` for a time limit). Uncaught errors reject with the error itself, and the error callbacks receive `error: unknown`.
 - `<Digraph strict>` / `<Graph strict>` render strict graphs.
-- `renderHTMLLike` returns an `HTMLLikeValue` (see section 1).
+- `renderHTMLLike` returns an `HTMLLikeValue` (see section 2).
 - As in 0.12, `renderHTMLLike` (and so a JSX `label`) writes strings as text: text children are written with `&`, `<` and `>` as entities, and attribute values also with `"`. Write markup as elements (`<dot:td><dot:b>x</dot:b></dot:td>`), not as a string (`<dot:td>{'<b>x</b>'}</dot:td>`).
 - `<dot:port>` is removed: HTML-like labels have no port element, and Graphviz rejected its output. Use the `port` attribute: `<dot:td port="p">`.
 - `renderHTMLLike` throws instead of logging a warning and returning an empty label: `RangeError` past `maxDepth`; `TypeError` for a circular tree, an element HTML-like labels do not have (`<div>`, `<span>`, …), an attribute name that is not a name, or an object among the children that is not a React element. Errors from components are no longer swallowed.
 
-## 10. Small behaviour fixes
+## 11. Small behaviour fixes
 
-- `subgraph('')` finds or creates the subgraph with the empty id (3.x created a new anonymous one); `edge(targets, null)` ignores the `null`.
+- The DSL's `subgraph('')` finds or creates the subgraph with the empty id (3.x created a new anonymous one); `edge(targets, null)` ignores the `null`.
 - `fromModel` keeps a graph or subgraph id that is the empty string; `stringify` of an empty `Dot` returns `''`.
 - `ts-graphviz/ast` and `ts-graphviz/adapter` resolve under `moduleResolution: node10` (`typesVersions`).
 
-## 11. Read-only model types
+## 12. Read-only model types
 
 `@ts-graphviz/common` has read-only views of the models: `ReadonlyNodeModel`, `ReadonlyEdgeModel`, `ReadonlySubgraphModel`, `ReadonlyRootGraphModel`, `ReadonlyDotModel`, `ReadonlyAttributeListModel` and `ReadonlyAttributes`, with the union `AnyReadonlyDotObjectModel` and the value type `DotValue` (`string | number | boolean | EscStringValue | HTMLLikeValue`). They hold only what reading needs (ids, attributes as `size` / `values` / `get(key)`, the contents of a graph), so every model fits them: the built-in ones, the classes of `@ts-graphviz/core`, and your own model classes.
 
-- **Readers take any model.** `toDot`, `fromModel` / `FromModelConverter` (`@ts-graphviz/ast`) and the model input of `ts-graphviz/adapter`'s `toBlob` (`DotInput`) take an `AnyReadonlyDotObjectModel` instead of a `DotObjectModel`. Every model is still accepted; an object that only has a `$$type` (such as `{ $$type: 'Node' }`) no longer compiles.
+- **Readers take any model.** `toDot`, `fromModel` / `FromModelConverter` (`@ts-graphviz/ast`) and the model input of `ts-graphviz/adapter`'s `toBlob` (`DotInput`) take an `AnyReadonlyDotObjectModel` (or its DOT DSL, see section 1) instead of a `DotObjectModel`. Every model is still accepted; an object that only has a `$$type` (such as `{ $$type: 'Node' }`) no longer compiles.
 - **Edge targets are read-only references.** `NodeRef` is `ReadonlyNodeModel | ForwardRefNode` (3.x: `NodeModel | ForwardRefNode`): an edge uses only the id of a target node, so any node model can be one. Reading `edge.targets` gives read-only nodes; to change a target node, look it up in the graph (`graph.getNode(target.id)`). An array of nodes cast to the tuple type (`nodes as EdgeTargetTuple`) no longer compiles; cast it to a tuple of nodes instead (`nodes as [NodeModel, NodeModel]`).
 - **Type guards on an unknown value narrow to the read-only types.** `isNodeModel(value)` on `unknown` gives `ReadonlyNodeModel` (3.x: `NodeModel`; on another object type such as `DotObjectModel`, its intersection with `ReadonlyNodeModel`), and likewise `isEdgeModel`, `isSubgraphModel`, `isRootGraphModel`, `isDotModel` and `isAttributeListModel`: the check looks at `$$type` and a few fields, which cannot tell a writable model from another object. Given a model, a guard keeps your type: on `AnyDotObjectModel` (or a union of your own classes) `isNodeModel` narrows to `NodeModel` (or your node class), and `models.filter(isNodeModel)` is still a `NodeModel[]` (on `unknown[]`, a `ReadonlyNodeModel[]`). If you need the writable model from an unknown value, keep the model where you created it, or look it up by id in its graph.
 

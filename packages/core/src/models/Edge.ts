@@ -6,6 +6,7 @@ import {
   type EdgeTargetTuple,
   type EmptySchema,
   isNodeRefLike,
+  modelOf,
   type ReadonlyEdgeTargetTuple,
   type Schema,
   type SchemaAttributeTypes,
@@ -43,9 +44,14 @@ export class Edge<S extends Schema = EmptySchema>
     attributes?: EdgeAttributesObject<S>,
   ) {
     super();
+    // A copy, so the edge does not change with the caller's arrays; and the
+    // nodes themselves, never objects standing for them (a DSL).
+    const ts = targets.map((target) =>
+      Array.isArray(target) ? target.map(modelOf) : modelOf(target),
+    ) as EdgeTargetTuple;
     if (
-      targets.length < 2 &&
-      (isNodeRefLike(targets[0]) && isNodeRefLike(targets[1])) === false
+      ts.length < 2 &&
+      (isNodeRefLike(ts[0]) && isNodeRefLike(ts[1])) === false
     ) {
       throw withCode(
         new TypeError(
@@ -54,10 +60,7 @@ export class Edge<S extends Schema = EmptySchema>
         'TSG_ERR_INVALID_EDGE_TARGETS',
       );
     }
-    // A copy, so the edge does not change with the caller's arrays.
-    this.targets = targets.map((target) =>
-      Array.isArray(target) ? [...target] : target,
-    ) as EdgeTargetTuple;
+    this.targets = ts;
     this.attributes = new AttributesGroup<
       EdgeAttributeKey,
       SchemaAttributeTypes<S, 'edge'>

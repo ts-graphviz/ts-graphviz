@@ -14,7 +14,7 @@ The model types take the schema as a type parameter, `EmptySchema` (no schema) b
 - `ModelTypes<S>` has a `Schema` member, and `AnyModelTypes` (the read-only model types) is what every `ModelTypes` is, whatever its schema. `ModelsContext<M>` and the model constructor types take the attributes of the schema.
 - The classes of `@ts-graphviz/core` are generic: `Node<S>`, `Edge<S>`, `Dot<S>`, `Digraph<M>`, `Graph<M>`, `Subgraph<M>`, `RootGraph<M>`, `GraphBase<T, K, M>`, the ordered classes and the attribute classes. A class of your own for a schema is `class MyNode extends Node<MySchema> {}`.
 
-A graph of a schema types what it takes and gives with the schema: `node('a', { label: 1 })` where the schema overrides a node's `label` to a number, `get('label')` reads a number back, and `addNode` / `addEdge` / `addSubgraph` take the models of that schema. A model of one schema is not one of another or of none, since an attribute may have another type there; code that only reads models takes the read-only model types (`ReadonlyNodeModel`, …), which the models of every schema fit, and so do `toDot`, `fromModel` and the adapter.
+A graph of a schema types what it takes and gives with the schema: `createNode('a', { label: 1 })` where the schema overrides a node's `label` to a number, `get('label')` reads a number back, and `addNode` / `addEdge` / `addSubgraph` take the models of that schema. A model of one schema is not one of another or of none, since an attribute may have another type there; code that only reads models takes the read-only model types (`ReadonlyNodeModel`, …), which the models of every schema fit, and so do `toDot`, `fromModel` and the adapter.
 
 Without a schema the types work as in 3.x. Compared with 3.x:
 

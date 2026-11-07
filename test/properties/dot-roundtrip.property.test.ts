@@ -389,7 +389,7 @@ describe('attribute values of every kind', { tags: ['SM-2'] }, () => {
     fc.assert(
       fc.property(anyValue, anyValue, (label, tooltip) => {
         const g = digraph((g) => {
-          g.set('label', label);
+          g.label = label;
           g.node('a', { tooltip });
         });
         const dot = toDot(g);

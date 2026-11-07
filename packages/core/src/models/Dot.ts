@@ -1,9 +1,10 @@
-import type {
-  DotModel,
-  EmptySchema,
-  ModelTypes,
-  RootGraphModel,
-  Schema,
+import {
+  type DotModel,
+  type EmptySchema,
+  type ModelTypes,
+  modelOf,
+  type RootGraphModel,
+  type Schema,
 } from '@ts-graphviz/common';
 import { DotObject } from './DotObject.js';
 
@@ -31,7 +32,8 @@ export class Dot<S extends Schema = EmptySchema>
 
   constructor(graphs: RootGraphModel<ModelTypes<S>>[] = [], comment?: string) {
     super();
-    this.#graphs = [...graphs];
+    // The models themselves, never objects standing for them (a DSL).
+    this.#graphs = graphs.map(modelOf);
     this.comment = comment;
   }
 
@@ -41,16 +43,16 @@ export class Dot<S extends Schema = EmptySchema>
 
   public addGraph(graph: RootGraphModel<ModelTypes<S>>): void {
     if (!this.existGraph(graph)) {
-      this.#graphs.push(graph);
+      this.#graphs.push(modelOf(graph));
     }
   }
 
   public existGraph(graph: RootGraphModel<ModelTypes<S>>): boolean {
-    return this.#graphs.includes(graph);
+    return this.#graphs.includes(modelOf(graph));
   }
 
   public removeGraph(graph: RootGraphModel<ModelTypes<S>>): void {
-    const index = this.#graphs.indexOf(graph);
+    const index = this.#graphs.indexOf(modelOf(graph));
     if (index !== -1) {
       this.#graphs.splice(index, 1);
     }

@@ -206,7 +206,10 @@ const LABEL_SUBSTITUTION = /(?<!\\)(?:\\\\)*\\L/;
  */
 function checkCharacters(text: string, at: string, decoded: boolean): void {
   const all = readings(text, true);
-  if (all === undefined || all.some((level) => CONTROL.test(level))) {
+  if (all === undefined) {
+    throw unsafe(`${at} has character references nested too deep to check.`);
+  }
+  if (all.some((level) => CONTROL.test(level))) {
     throw unsafe(`${at} contains a control character.`);
   }
   if (!decoded && readings(text) === undefined) {

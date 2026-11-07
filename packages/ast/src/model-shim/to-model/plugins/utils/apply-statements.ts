@@ -61,7 +61,12 @@ function applySubgraph(
   stmt: SubgraphASTNode,
 ): SubgraphModel {
   const id = ownField(stmt, 'id');
-  const subgraph = id ? graph.subgraph(idFromLiteral(id)) : graph.subgraph();
+  // The subgraph with this id if there is one, as in DOT, where a subgraph
+  // statement with a known id adds to that subgraph.
+  const subgraph = id
+    ? (graph.getSubgraph(idFromLiteral(id)) ??
+      graph.createSubgraph(idFromLiteral(id)))
+    : graph.createSubgraph();
   applyStatements(context, subgraph, stmt.children);
   const nodes = subgraphNodes.get(subgraph) ?? new Set<string>();
   for (const id of nodeIdsOf(stmt, idCacheOf(context))) nodes.add(id);

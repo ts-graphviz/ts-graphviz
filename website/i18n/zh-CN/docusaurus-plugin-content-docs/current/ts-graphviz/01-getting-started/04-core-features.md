@@ -98,6 +98,30 @@ const G = digraph('G', (g) => {
 - **添加元素**：在上下文中使用 `g.node` 和 `g.edge` 添加节点和边。
 - **可读性**：结构反映了图表的逻辑结构，使其更易于阅读。
 
+工厂函数返回图表的 **DOT DSL**，读起来与 DOT 相同：
+
+- **语句**：`node`、`edge`、`subgraph` 和 `graph` 是方法，对应同名的 DOT 语句。`g.node({ ... })`、`g.edge({ ... })` 和 `g.graph({ ... })` 是默认属性语句（`node [...]` 等）。
+- **属性**：属性是以其名称命名的属性。赋值 `undefined` 或使用 `delete` 会删除它。
+- **模型自身的成员**前加 `$`：`a.$id` 是节点的名称（`a.id` 是 Graphviz 的 `id` 属性），此外还有 `g.$nodes`、`g.$getNode('A')`、`a.$comment` 等。
+- **从 DSL 得到的模型都是 DSL。** `modelOf()` 返回模型，`dsl()` 返回模型（例如 `fromDot` 返回的模型）的 DSL。`toDot` 和适配器两者都接受。
+
+```typescript
+import { digraph, modelOf, toDot } from 'ts-graphviz';
+
+const G = digraph('G', (g) => {
+  g.rankdir = 'LR'; // rankdir = "LR";
+  g.node({ shape: 'box' }); // node [shape = "box";];
+  const a = g.node('A');
+  a.label = 'Start'; // "A" [label = "Start";];
+  a.id = 'svg-a'; // the Graphviz id attribute
+  console.log(a.$id); // 'A': the node's name
+  g.edge([a, 'B']); // "A" -> "B";
+});
+
+toDot(G); // the DSL or its model
+modelOf(G); // the RootGraphModel
+```
+
 ### 命令式 API
 
 命令式 API 提供了对图表元素创建和操作的明确控制。它使用面向对象的方法逐步构建图表。

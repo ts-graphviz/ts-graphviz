@@ -60,11 +60,11 @@ describe('orderedModels', () => {
 
   it('builds ordered graphs by hand too, subgraphs included', () => {
     const g = new OrderedDigraph();
-    g.node('a');
+    g.createNode('a');
     g.addAttributeList('Node', { color: 'blue' });
-    g.node('b');
-    const s = g.subgraph('s');
-    s.node('c');
+    g.createNode('b');
+    const s = g.createSubgraph('s');
+    s.createNode('c');
     s.addAttributeList('Edge', { style: 'dashed' });
     expect(s.statements.map((x) => x.$$type)).toEqual([
       'Node',
@@ -78,8 +78,8 @@ describe('orderedModels', () => {
     expect(g.statements.every((s) => s.$$type === 'Node')).toBe(true);
     const built = digraph((g) => {
       g.node('a');
-      g.addAttributeList('Node', { color: 'blue' });
+      g.$addAttributeList('Node', { color: 'blue' });
     });
-    expect(built.attributes.node.get('color')).toBe('blue');
+    expect(built.$attributes.node.color).toBe('blue');
   });
 });
