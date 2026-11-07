@@ -3,26 +3,26 @@
 # dependency of a published package. Each entry expires, so it is reviewed.
 # Tracked in https://github.com/ts-graphviz/ts-graphviz/issues/1863
 
-# Vitest 3 (test runner): fixed in Vitest 4, which the next major uses.
+# Vitest 3 (test runner): fixed only in Vitest 4, a major upgrade; the next major uses Vitest 5.
 [[IgnoredVulns]]
 id = "GHSA-82fw-gwwq-j7x9"
 ignoreUntil = 2027-01-31
-reason = "Vitest/@vitest/mocker dev server only; tests run locally and in CI on trusted code. Fixed by the Vitest 4 upgrade."
+reason = "Vitest/@vitest/mocker dev server only; tests run locally and in CI on trusted code. Fixed in Vitest 4.1.11."
 
 [[IgnoredVulns]]
 id = "GHSA-qxg6-89mg-rqv8"
 ignoreUntil = 2027-01-31
-reason = "@vitest/mocker dev server only; tests run locally and in CI on trusted code. Fixed by the Vitest 4 upgrade."
+reason = "@vitest/mocker dev server only; tests run locally and in CI on trusted code. Fixed in @vitest/mocker 4.1.12."
 
 [[IgnoredVulns]]
 id = "GHSA-5gmw-xhrv-c9v3"
 ignoreUntil = 2027-01-31
-reason = "tinypool 1 is used only by the Vitest 3 test runner; it needs a polluted Object.prototype in the test process. Fixed by the Vitest 4 upgrade (tinypool 2)."
+reason = "tinypool 1 is used only by the Vitest 3 test runner; it needs a polluted Object.prototype in the test process. Fixed in tinypool 2.1.1, used by Vitest 4."
 
 [[IgnoredVulns]]
 id = "GHSA-85c8-ppgw-ccpr"
 ignoreUntil = 2027-01-31
-reason = "tinypool 1 is used only by the Vitest 3 test runner; it needs a polluted Object.prototype in the test process. Fixed by the Vitest 4 upgrade (tinypool 2)."
+reason = "tinypool 1 is used only by the Vitest 3 test runner; it needs a polluted Object.prototype in the test process. Fixed in tinypool 2.1.2, used by Vitest 4."
 
 # uuid 8/9 (pulled in by @pnpm/workspace.find-packages for the e2e scripts and
 # by Docusaurus for the website): the fix is in uuid 11, a major upgrade of
@@ -30,7 +30,7 @@ reason = "tinypool 1 is used only by the Vitest 3 test runner; it needs a pollut
 [[IgnoredVulns]]
 id = "GHSA-w5hq-g745-h8pq"
 ignoreUntil = 2027-01-31
-reason = "Build/e2e tooling only; the affected v3/v5/v6 buffer API is not used by this repository. Fix requires uuid 11 in third-party dependencies."
+reason = "Build/e2e tooling only; the affected v3/v5/v6 buffer API is not used by this repository. Fix requires uuid 11.1.1 in third-party dependencies."
 
 # deepmerge (Docusaurus, website build only): no fixed version is published.
 [[IgnoredVulns]]
@@ -45,32 +45,32 @@ reason = "Website build only, on configuration from this repository; no fixed ve
 [[IgnoredVulns]]
 id = "GHSA-v2v4-37r5-5v8g"
 ignoreUntil = 2027-01-31
-reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10.1.1 in a third-party dependency."
 
 [[IgnoredVulns]]
 id = "GHSA-mwp4-54f8-5fhr"
 ignoreUntil = 2027-01-31
-reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10.3.1 in a third-party dependency."
 
 [[IgnoredVulns]]
 id = "GHSA-rpw4-54j3-4h4q"
 ignoreUntil = 2027-01-31
-reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10.5.1 in a third-party dependency."
 
 [[IgnoredVulns]]
 id = "GHSA-j6r3-76f7-8jcv"
 ignoreUntil = 2027-01-31
-reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10.7.1 in a third-party dependency."
 
 [[IgnoredVulns]]
 id = "GHSA-h3mg-xc3c-68pw"
 ignoreUntil = 2027-01-31
-reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10.7.1 in a third-party dependency."
 
 [[IgnoredVulns]]
 id = "GHSA-rxp7-6hxx-x8q5"
 ignoreUntil = 2027-01-31
-reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10.7.4 in a third-party dependency."
 
 # glob 10/11/13 (test-exclude for coverage, typedoc, cacache, linkinator, and
 # the e2e scripts): fixed only in glob 14, a major upgrade. The flaw is that a
@@ -79,7 +79,7 @@ reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires i
 [[IgnoredVulns]]
 id = "GHSA-3g3m-2fjr-6pw4"
 ignoreUntil = 2027-01-31
-reason = "Build, test and e2e tooling only; no AbortSignal is passed and the patterns are this repository's. Fix requires glob 14."
+reason = "Build, test and e2e tooling only; no AbortSignal is passed and the patterns are this repository's. Fix requires glob 14.0.2."
 
 # minimatch 7/9/10 (glob, typedoc, @vue/language-core, Verdaccio for the e2e
 # registry): fixed only in minimatch 11, a major upgrade. The cost depends on
@@ -87,4 +87,4 @@ reason = "Build, test and e2e tooling only; no AbortSignal is passed and the pat
 [[IgnoredVulns]]
 id = "GHSA-g3hv-75wg-m249"
 ignoreUntil = 2027-01-31
-reason = "Build, test and e2e tooling only, on patterns from this repository. Fix requires minimatch 11."
+reason = "Build, test and e2e tooling only, on patterns from this repository. Fix requires minimatch 11.0.1."
