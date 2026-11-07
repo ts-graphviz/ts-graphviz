@@ -286,14 +286,17 @@ export abstract class GraphBase<
           : kind === 'Node'
             ? this.attributes.node
             : this.attributes.edge;
-      // The attributes were typed by the schema.
+      // The attributes were typed by the schema; the list takes them as
+      // they are.
       (
-        target as unknown as AttributeListModel<AttributeListKind, AttributeKey>
-      ).apply(attributes as AttributeListAttributes);
+        target as AttributeListModel<AttributeListKind, AttributeKey, object>
+      ).apply(attributes);
       return;
     }
-    const list = new AttributeList<AttributeListKind, AttributeKey>(kind);
-    list.apply(attributes as AttributeListAttributes);
+    const list = new AttributeList<AttributeListKind, AttributeKey, object>(
+      kind,
+    );
+    list.apply(attributes);
     this.#statements.add(list);
   }
 

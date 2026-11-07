@@ -88,7 +88,8 @@ export abstract class AttributesBase<
       ? attributes
       : Object.entries(attributes);
     for (const [key, value] of entries) {
-      // The object or entries were typed by `T` and `E`.
+      // The object or entries were typed by `T` and `E`. Through `set`, so a
+      // class that overrides it sees these values too.
       this.set(key as BuiltInAttributeKey<T, E>, value as never);
     }
   }
