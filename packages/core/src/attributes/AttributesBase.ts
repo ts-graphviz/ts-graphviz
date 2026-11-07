@@ -9,24 +9,20 @@ import type {
   SchemaAttribute,
   SchemaAttributeKey,
 } from '@ts-graphviz/common';
-import { DotObject } from '../models/DotObject.js';
 
 /**
  * Base class for DOT objects with attributes.
  * @group Models
  */
 export abstract class AttributesBase<
-    T extends AttributeKey,
-    E extends object = Record<never, never>,
-  >
-  extends DotObject
-  implements Attributes<T, E>
+  T extends AttributeKey,
+  E extends object = Record<never, never>,
+> implements Attributes<T, E>
 {
   /** @hidden */
   #attrs: Map<string, unknown> = new Map();
 
   constructor(attributes?: AttributesObject<T, E>) {
-    super();
     if (attributes !== undefined) {
       this.apply(attributes);
     }
