@@ -1,5 +1,10 @@
+import { MODEL } from './model-view.js';
 import type { ForwardRefNode } from './models.js';
 import type { NarrowedModel } from './readonly-models.js';
+
+// An object standing for a model (a ModelView, such as the DOT DSL of
+// ts-graphviz) passes none of the guards: it is not a model, and reads as
+// one only through modelOf (its `id`, say, is an attribute).
 
 /**
  * A field of a model or node reference: from the object or the classes it
@@ -29,6 +34,7 @@ export function isForwardRefNode(object: unknown): object is ForwardRefNode {
   return (
     typeof object === 'object' &&
     object !== null &&
+    !(MODEL in object) &&
     typeof field(object, 'id') === 'string'
   );
 }
@@ -40,6 +46,8 @@ export function isForwardRefNode(object: unknown): object is ForwardRefNode {
  * its `Node` members. On a value of unknown type it narrows to the
  * read-only view {@link ReadonlyNodeModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is a NodeModel
  */
@@ -47,6 +55,7 @@ export function isNodeModel<T>(object: T): object is NarrowedModel<T, 'Node'> {
   return (
     typeof object === 'object' &&
     object !== null &&
+    !(MODEL in object) &&
     field(object, '$$type') === 'Node' &&
     typeof field(object, 'id') === 'string'
   );
@@ -59,6 +68,8 @@ export function isNodeModel<T>(object: T): object is NarrowedModel<T, 'Node'> {
  * its `Edge` members. On a value of unknown type it narrows to the
  * read-only view {@link ReadonlyEdgeModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is an EdgeModel
  */
@@ -66,6 +77,7 @@ export function isEdgeModel<T>(object: T): object is NarrowedModel<T, 'Edge'> {
   return (
     typeof object === 'object' &&
     object !== null &&
+    !(MODEL in object) &&
     field(object, '$$type') === 'Edge' &&
     Array.isArray(field(object, 'targets'))
   );
@@ -78,6 +90,8 @@ export function isEdgeModel<T>(object: T): object is NarrowedModel<T, 'Edge'> {
  * its `Subgraph` members. On a value of unknown type it narrows to the
  * read-only view {@link ReadonlySubgraphModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is a SubgraphModel
  */
@@ -87,6 +101,7 @@ export function isSubgraphModel<T>(
   return (
     typeof object === 'object' &&
     object !== null &&
+    !(MODEL in object) &&
     field(object, '$$type') === 'Subgraph'
   );
 }
@@ -98,6 +113,8 @@ export function isSubgraphModel<T>(
  * its `Graph` members. On a value of unknown type it narrows to the
  * read-only view {@link ReadonlyRootGraphModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is a RootGraphModel
  */
@@ -107,6 +124,7 @@ export function isRootGraphModel<T>(
   return (
     typeof object === 'object' &&
     object !== null &&
+    !(MODEL in object) &&
     field(object, '$$type') === 'Graph' &&
     typeof field(object, 'directed') === 'boolean'
   );
@@ -119,6 +137,8 @@ export function isRootGraphModel<T>(
  * its `Dot` members. On a value of unknown type it narrows to the
  * read-only view {@link ReadonlyDotModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is a DotModel
  */
@@ -126,6 +146,7 @@ export function isDotModel<T>(object: T): object is NarrowedModel<T, 'Dot'> {
   return (
     typeof object === 'object' &&
     object !== null &&
+    !(MODEL in object) &&
     field(object, '$$type') === 'Dot' &&
     Array.isArray(field(object, 'graphs'))
   );
@@ -138,6 +159,8 @@ export function isDotModel<T>(object: T): object is NarrowedModel<T, 'Dot'> {
  * its `AttributeList` members. On a value of unknown type it narrows to the
  * read-only view {@link ReadonlyAttributeListModel}, since the check looks only at
  * `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
  * @param object - Object to check
  * @returns True if the object is an AttributeListModel
  */
@@ -147,6 +170,7 @@ export function isAttributeListModel<T>(
   return (
     typeof object === 'object' &&
     object !== null &&
+    !(MODEL in object) &&
     field(object, '$$type') === 'AttributeList'
   );
 }

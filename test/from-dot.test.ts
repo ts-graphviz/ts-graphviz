@@ -1,5 +1,6 @@
 import {
   Digraph,
+  dsl,
   Edge,
   fromDot,
   Node,
@@ -59,7 +60,7 @@ describe('fromDot API', () => {
         }`,
       );
 
-      G.edge(['node_A', 'node_B']);
+      dsl(G).edge(['node_A', 'node_B']);
 
       expect(toDot(G)).toMatchInlineSnapshot(`
         "digraph {

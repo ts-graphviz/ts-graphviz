@@ -3,26 +3,27 @@ import type {
   ModelTypes,
   RootGraphModel,
 } from '@ts-graphviz/common';
+import type { DSL } from './dsl.js';
 
 /**
- * ModelFactory is an interface that provides a way to create a {@link RootGraphModel} object.
+ * ModelFactory creates a root graph and gives its DOT DSL ({@link DSL}).
  *
- * @param id - Optional string parameter that specifies the id of the {@link RootGraphModel} object.
- * @param attributes - Optional GraphAttributesObject parameter that specifies the attributes of the {@link RootGraphModel} object.
- * @param callback - Optional callback function that takes a {@link RootGraphModel} object as a parameter.
+ * @param id - Optional string parameter that specifies the id of the graph.
+ * @param attributes - Optional GraphAttributesObject parameter that specifies the attributes of the graph.
+ * @param callback - Optional callback function that receives the graph's DSL.
  *
- * @returns {@link RootGraphModel} - Returns a {@link RootGraphModel} object.
+ * @returns The graph's DSL. {@link modelOf} gives the {@link RootGraphModel}.
  * @group Model Factory
  */
 export interface ModelFactory<G extends RootGraphModel = RootGraphModel> {
   (
     id?: string,
     attributes?: GraphAttributesObject,
-    callback?: (g: G) => void,
-  ): G;
-  (attributes?: GraphAttributesObject, callback?: (g: G) => void): G;
-  (id?: string, callback?: (g: G) => void): G;
-  (callback?: (g: G) => void): G;
+    callback?: (g: DSL<G>) => void,
+  ): DSL<G>;
+  (attributes?: GraphAttributesObject, callback?: (g: DSL<G>) => void): DSL<G>;
+  (id?: string, callback?: (g: DSL<G>) => void): DSL<G>;
+  (callback?: (g: DSL<G>) => void): DSL<G>;
 }
 
 /**

@@ -5,7 +5,7 @@ import type {
   FilterableModel,
   ModelsContext,
 } from 'ts-graphviz';
-import { createModelsContext, ownOptions } from 'ts-graphviz';
+import { createModelsContext, MODEL, modelOf, ownOptions } from 'ts-graphviz';
 
 import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
@@ -34,8 +34,9 @@ export interface CreateRootOptions<
   /**
    * Container graph for rendering components.
    * When provided, components will be rendered into this existing graph model.
+   * The graph's DOT DSL (such as `digraph()` returns) can stand for it.
    */
-  container?: Container;
+  container?: Container | { readonly [MODEL]: Container };
   /**
    * Model classes used to create graphs, nodes and edges.
    * Defaults to the classes registered in `RootModelsContext`.
@@ -315,7 +316,8 @@ export function createRoot<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(options: CreateRootOptions<Container> = {}): GraphvizRoot {
   // Own properties only: an inherited one is never an option (#1757).
-  const { container, models, ...rest } = ownOptions(options);
+  const { container: given, models, ...rest } = ownOptions(options);
+  const container = modelOf(given) as Container | undefined;
   const otherOptions = ownOptions(rest);
 
   const context: Context<Container> = {

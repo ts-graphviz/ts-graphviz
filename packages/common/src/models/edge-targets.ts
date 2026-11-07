@@ -1,6 +1,7 @@
 import type { Compass } from '../attributes/types.js';
 import { withCode } from '../errors.js';
 import { isForwardRefNode, isNodeModel } from './guards.js';
+import { modelOf } from './model-view.js';
 import type {
   NodeRef,
   NodeRefGroup,
@@ -73,10 +74,10 @@ export function isCompass(c: string): c is Compass {
  * ```
  */
 export function toNodeRef(target: NodeRefLike): NodeRef {
-  if (isNodeRef(target)) {
-    return target;
-  }
-  const [id, port, compass] = target.split(':');
+  // The model itself, never an object standing for it (a DSL).
+  const ref: unknown = modelOf(target);
+  if (isNodeRef(ref)) return ref;
+  const [id, port, compass] = (target as string).split(':');
   if (compass !== undefined && isCompass(compass)) {
     return { id, port, compass };
   }
@@ -107,7 +108,8 @@ export function toNodeRefGroup(
       'TSG_ERR_INVALID_EDGE_TARGETS',
     );
   }
-  if (!targets.every((target) => isNodeRefLike(target))) {
+  const refs = targets.map(modelOf);
+  if (!refs.every((target) => isNodeRefLike(target))) {
     throw withCode(
       new TypeError(
         'The element of Edge target is missing or not satisfied as Edge target.',
@@ -115,5 +117,5 @@ export function toNodeRefGroup(
       'TSG_ERR_INVALID_EDGE_TARGETS',
     );
   }
-  return targets.map((t) => toNodeRef(t));
+  return refs.map((t) => toNodeRef(t));
 }

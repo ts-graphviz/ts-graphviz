@@ -163,9 +163,9 @@ const source = `digraph {
 const g = fromDot(source, { convert: { models: orderedModels } });
 
 const h = new OrderedDigraph();
-h.node('a');
+h.createNode('a');
 h.addAttributeList('Node', { color: 'blue' }); // applies to what follows
-h.node('b');
+h.createNode('b');
 ```
 
 `addAttributeList(kind, attributes)` exists on every graph model: the default classes merge it into `attributes`, the ordered classes put it into `statements` once something precedes it. Graphs keep nodes, edges and subgraphs in the order they were added either way.
@@ -234,7 +234,7 @@ declare module '@ts-graphviz/common' {
 console.log(
   toDot(
     digraph((g) => {
-      g.set(_.hoge, 'fuga');
+      g[_.hoge] = 'fuga';
     }),
   ),
 );

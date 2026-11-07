@@ -13,7 +13,7 @@ describe('values that are not strings', { tags: ['SM-2'] }, () => {
     ['an object', { toString: (): string => text }],
   ])('writes %s as its escaped text', (_, value) => {
     const g = new Digraph();
-    g.node('a', { label: value as never });
+    g.createNode('a', { label: value as never });
     const dot = toDot(g);
     const back = fromDot(dot);
     expect(back.nodes.map((n) => n.id)).toStrictEqual(['a']);
@@ -29,19 +29,19 @@ describe('values that are not strings', { tags: ['SM-2'] }, () => {
 
   it('quotes an array that looks like a number', () => {
     const g = new Digraph();
-    g.node('a', { width: [123] as never });
+    g.createNode('a', { width: [123] as never });
     expect(toDot(g)).toContain('width = "123"');
   });
 
   it('throws the TypeError of a value that has no text', () => {
     const g = new Digraph();
-    g.node('a', { label: Object.create(null) });
+    g.createNode('a', { label: Object.create(null) });
     expect(() => toDot(g)).toThrow(TypeError);
   });
 
   it('still writes numbers and booleans bare', () => {
     const g = new Digraph();
-    g.node('a', { width: 1.5, fixedsize: true, height: Number.NaN });
+    g.createNode('a', { width: 1.5, fixedsize: true, height: Number.NaN });
     expect(toDot(g)).toContain('width = 1.5');
     expect(toDot(g)).toContain('fixedsize = true');
     expect(toDot(g)).toContain('height = "NaN"');

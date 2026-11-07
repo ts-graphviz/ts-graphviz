@@ -154,9 +154,9 @@ type DefaultsKind = keyof DefaultsSpec;
  * - `defaults`: `defaults[kind]` as a default statement;
  * - `more defaults`: another default statement of that kind (kept in place
  *   by the classes of `orderedModels`, merged by the default classes);
- * - `node`: `g.node(id)` with the node's attributes (a node already
- *   mentioned is mentioned again);
- * - `mention`: `g.node(id)` again for a node of the graph, with more
+ * - `node`: the node with that id (`getNode(id) ?? createNode(id)`) with
+ *   the node's attributes (a node already mentioned is mentioned again);
+ * - `mention`: that node again for a node of the graph, with more
  *   attributes, before or after its own `node` step;
  * - `subgraph` / `edge`: `subgraphs[index]` / `edges[index]`.
  */
@@ -430,9 +430,9 @@ function addDefaults(
   }
 }
 
-/** `g.node(id)`, then the given attributes set on the node. */
+/** The node with this id (created if there is none), then the given attributes set on it. */
 function mentionNode(g: GraphBaseModel, id: string, attrs: Attributes): void {
-  const n = g.node(id);
+  const n = g.getNode(id) ?? g.createNode(id);
   for (const [key, value] of attrs) {
     n.attributes.set(key as 'label', value);
   }
@@ -469,7 +469,10 @@ function applyCommonOp(
 }
 
 function applySubgraph(parent: GraphBaseModel, spec: SubgraphSpec): void {
-  const s = parent.subgraph(spec.id as string);
+  const s =
+    spec.id === undefined
+      ? parent.createSubgraph()
+      : (parent.getSubgraph(spec.id) ?? parent.createSubgraph(spec.id));
   for (const op of spec.ops ?? fixedOps(spec)) {
     applyCommonOp(s, spec, op);
   }
@@ -505,7 +508,7 @@ export function buildGraph(spec: GraphSpec): RootGraphModel {
         break;
       case 'edge': {
         const edge = spec.edges[op.index];
-        const e = g.edge(edge.targets.map(target) as EdgeTargetLikeTuple);
+        const e = g.createEdge(edge.targets.map(target) as EdgeTargetLikeTuple);
         for (const [key, value] of edge.attributes) {
           e.attributes.set(key as 'label', value);
         }

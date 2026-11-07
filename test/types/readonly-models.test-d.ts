@@ -18,7 +18,9 @@ import {
   type DotModel,
   type DotObjectModel,
   type DotValue,
+  type DSL,
   digraph,
+  dsl,
   Edge,
   type EdgeModel,
   type EdgeTarget,
@@ -32,6 +34,7 @@ import {
   isNodeRef,
   isRootGraphModel,
   isSubgraphModel,
+  modelOf,
   Node,
   type NodeAttributeKey,
   type NodeModel,
@@ -207,13 +210,14 @@ describe('a read-only model is not a writable one', () => {
 });
 
 describe('the readers take every model', () => {
-  const g = digraph();
-  const node = g.node('a');
+  const view = digraph();
+  const g = modelOf(view);
+  const node = g.createNode('a');
   const models = [
     g,
     node,
-    g.edge(['a', 'b']),
-    g.subgraph('s'),
+    g.createEdge(['a', 'b']),
+    g.createSubgraph('s'),
     g.attributes.node,
     new Dot([g]),
     new MyNode('m'),
@@ -238,6 +242,30 @@ describe('the readers take every model', () => {
       fromModel({} as ReadonlyNodeModel),
     ).toEqualTypeOf<NodeASTNode>();
     expectTypeOf<ModelToAST<ReadonlyNodeModel>>().toEqualTypeOf<NodeASTNode>();
+  });
+
+  it('and their DSLs', () => {
+    const views = [
+      view,
+      view.node('a'),
+      view.edge(['a', 'b']),
+      view.subgraph('s'),
+      view.$attributes.node,
+      dsl(new Dot()),
+    ] as const;
+    for (const v of views) {
+      expectTypeOf(toDot(v)).toEqualTypeOf<string>();
+      fromModel(v);
+      new FromModelConverter().convert(v);
+      expectTypeOf(v).toExtend<DotInput>();
+      void toBlob(v);
+    }
+    expectTypeOf(fromModel(view.node('a'))).toEqualTypeOf<NodeASTNode>();
+    // A DSL is not a model: the guards do not pass it (narrow by $$type).
+    expectTypeOf(views.filter(isRootGraphModel)).toEqualTypeOf<never[]>();
+    for (const s of view.$statements) {
+      if (s.$$type === 'Edge') expectTypeOf(s).toEqualTypeOf<DSL<EdgeModel>>();
+    }
   });
 
   it('in generic code', () => {
@@ -322,9 +350,9 @@ describe('the guards', () => {
       AttributeListModel[]
     >();
     expectTypeOf(models.filter(isDotModel)).toEqualTypeOf<DotModel[]>();
-    expectTypeOf(digraph().statements.filter(isEdgeModel)).toEqualTypeOf<
-      EdgeModel[]
-    >();
+    expectTypeOf(
+      modelOf(digraph()).statements.filter(isEdgeModel),
+    ).toEqualTypeOf<EdgeModel[]>();
     const mine = [] as (MyNode | Edge)[];
     expectTypeOf(mine.filter(isNodeModel)).toEqualTypeOf<MyNode[]>();
   });
@@ -381,7 +409,7 @@ describe('edge targets are read-only references', () => {
     const g = digraph();
     const node = {} as ReadonlyNodeModel;
     g.edge([node, new MyNode('m'), {} as NumNode]);
-    g.createEdge([node, [node, 'b']]);
-    new Edge([node, g.node('a')]);
+    g.$createEdge([node, [node, 'b']]);
+    new Edge([node, modelOf(g.node('a'))]);
   });
 });

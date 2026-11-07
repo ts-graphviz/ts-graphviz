@@ -136,16 +136,16 @@ describe('ArrowType.build', () => {
       const e = g.edge(['a', 'b'], {
         arrowhead: ArrowType.build('dot', 'dot', 'dot'),
       });
-      e.attributes.set(
-        'arrowtail',
-        ArrowType.build('obox', 'ltee', 'vee', 'odot'),
-      );
-      e.attributes.set('arrowhead', 'odot');
-      expectTypeOf(e.attributes.get('arrowhead')).toExtend<
-        ArrowType | undefined
-      >();
+      e.arrowtail = ArrowType.build('obox', 'ltee', 'vee', 'odot');
+      e.arrowhead = 'odot';
+      e.$attributes.set('arrowhead', ArrowType.build('dot', 'dot', 'dot'));
+      expectTypeOf(e.arrowhead).toExtend<ArrowType | undefined>();
       // @ts-expect-error three shapes as a literal
-      e.attributes.set('arrowtail', 'dotdotdot');
+      e.arrowtail = 'dotdotdot';
+      // @ts-expect-error not an arrow name
+      e.arrowhead = 'not-an-arrow';
+      // @ts-expect-error nor through the attribute list
+      e.$attributes.set('arrowtail', 'dotdotdot');
     });
   });
 });

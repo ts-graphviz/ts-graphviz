@@ -1,4 +1,4 @@
-import { isRootGraphModel, toDot } from 'ts-graphviz';
+import { isRootGraphModel, modelOf, toDot } from 'ts-graphviz';
 import type { Evaluation } from './evaluate';
 
 /**
@@ -6,15 +6,18 @@ import type { Evaluation } from './evaluate';
  *
  * A script produces its graph either as the value of its last expression
  * (`digraph('G', (g) => { … })`) or as its default export. Either can be a
- * graph model or a DOT string; the default export wins when both exist.
+ * graph (its DSL or its model) or a DOT string; the default export wins
+ * when both exist.
  */
 export function resultToDot({ completion, exports }: Evaluation): string {
   const value = exports.default !== undefined ? exports.default : completion;
   if (typeof value === 'string') {
     return value;
   }
-  if (isRootGraphModel(value)) {
-    return toDot(value);
+  // digraph(…) gives the graph's DSL; the model is under it.
+  const model = modelOf(value);
+  if (isRootGraphModel(model)) {
+    return toDot(model);
   }
   throw new TypeError(
     value === undefined

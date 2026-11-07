@@ -1,7 +1,7 @@
 import { digraph } from 'ts-graphviz';
 
 export default digraph((g) => {
-  g.set('rankdir', 'LR');
+  g.rankdir = 'LR';
   g.node({
     shape: 'circle',
   });

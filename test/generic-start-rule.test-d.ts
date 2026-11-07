@@ -95,7 +95,7 @@ describe('fromDot', () => {
     const g = fromDot<{ Node: typeof MyNode }>('digraph { a }', {
       convert: { models: { Node: MyNode } },
     });
-    expectTypeOf(g.node('a')).toEqualTypeOf<MyNode>();
+    expectTypeOf(g.createNode('a')).toEqualTypeOf<MyNode>();
   });
 
   it('does not let a type argument claim a rule the call does not use', () => {

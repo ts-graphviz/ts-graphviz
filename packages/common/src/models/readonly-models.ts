@@ -14,6 +14,7 @@
  * @module
  */
 import type { DotValue } from '../values.js';
+import type { ModelView } from './model-view.js';
 import type {
   AttributeListKind,
   DotObjectType,
@@ -194,7 +195,9 @@ export type AnyReadonlyDotObjectModel =
  *   few fields;
  * - another object type (such as `DotObjectModel`, or a type with fields
  *   of your own): its intersection with the read-only model;
- * - a primitive type: `never`.
+ * - a primitive type, or an object standing for a model ({@link ModelView},
+ *   such as the DOT DSL of `ts-graphviz`), which the guards do not pass:
+ *   `never`.
  *
  * Applied to each member of a union.
  * @group Models
@@ -202,11 +205,13 @@ export type AnyReadonlyDotObjectModel =
 export type NarrowedModel<T, K extends DotObjectType> = unknown extends T
   ? T & ReadonlyModelOf<K>
   : T extends unknown
-    ? T extends AnyReadonlyDotObjectModel
-      ? Extract<T, { readonly $$type: K }>
-      : T extends Primitive
-        ? never
-        : T & ReadonlyModelOf<K>
+    ? T extends ModelView
+      ? never
+      : T extends AnyReadonlyDotObjectModel
+        ? Extract<T, { readonly $$type: K }>
+        : T extends Primitive
+          ? never
+          : T & ReadonlyModelOf<K>
     : never;
 
 /** The values that are not objects: a guard never passes them. */

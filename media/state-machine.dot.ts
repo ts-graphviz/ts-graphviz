@@ -1,7 +1,7 @@
 import { digraph } from 'ts-graphviz';
 
 export default digraph('state_machine', (g) => {
-  g.set('newrank', true);
+  g.newrank = true;
   g.node({ shape: 'circle' });
 
   g.edge(['Model', 'DOT'], { label: 'toDot', constraint: false });
