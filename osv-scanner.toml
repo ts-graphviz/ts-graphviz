@@ -71,3 +71,20 @@ reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires i
 id = "GHSA-rxp7-6hxx-x8q5"
 ignoreUntil = 2027-01-31
 reason = "e2e tooling only; addresses are not parsed or rendered. Fix requires ip-address 10 in a third-party dependency."
+
+# glob 10/11/13 (test-exclude for coverage, typedoc, cacache, linkinator, and
+# the e2e scripts): fixed only in glob 14, a major upgrade. The flaw is that a
+# traversal can continue after its AbortSignal fires; nothing here passes a
+# signal, and the patterns come from this repository.
+[[IgnoredVulns]]
+id = "GHSA-3g3m-2fjr-6pw4"
+ignoreUntil = 2027-01-31
+reason = "Build, test and e2e tooling only; no AbortSignal is passed and the patterns are this repository's. Fix requires glob 14."
+
+# minimatch 7/9/10 (glob, typedoc, @vue/language-core, Verdaccio for the e2e
+# registry): fixed only in minimatch 11, a major upgrade. The cost depends on
+# the pattern, and the patterns come from this repository and its tooling.
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+ignoreUntil = 2027-01-31
+reason = "Build, test and e2e tooling only, on patterns from this repository. Fix requires minimatch 11."
