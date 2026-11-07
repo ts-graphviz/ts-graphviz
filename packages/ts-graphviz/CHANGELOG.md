@@ -1,5 +1,22 @@
 # ts-graphviz
 
+## 3.0.14
+
+### Patch Changes
+
+- [#1900](https://github.com/ts-graphviz/ts-graphviz/pull/1900) [`4447d09`](https://github.com/ts-graphviz/ts-graphviz/commit/4447d09a6198e25451e4381368cfc00f9b9c2e49) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix errors in the README samples and text:
+
+  - `ts-graphviz`: the Models Context API sample with `digraph()` passes the graph `G` to `toDot`, not the callback's `g`; the beta badge of `fromDot` renders; the `parse` item reads like its neighbours.
+  - `@ts-graphviz/react`: the type-safety sample imports `RootGraphProps`, which exists, instead of `DigraphProps`.
+  - `@ts-graphviz/common`: the node reference sample imports `toNodeRefGroup`, which it calls.
+  - `@ts-graphviz/core`: "graph elements", not "graph element".
+
+- Updated dependencies [[`4447d09`](https://github.com/ts-graphviz/ts-graphviz/commit/4447d09a6198e25451e4381368cfc00f9b9c2e49)]:
+  - @ts-graphviz/common@3.0.7
+  - @ts-graphviz/core@3.0.12
+  - @ts-graphviz/adapter@3.0.13
+  - @ts-graphviz/ast@3.0.11
+
 ## 3.0.13
 
 ### Patch Changes
