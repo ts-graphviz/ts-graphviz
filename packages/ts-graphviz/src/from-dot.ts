@@ -52,9 +52,16 @@ export interface FromDotOptions<
   P extends Partial<ModelsContext> = Partial<ModelsContext>,
 > {
   /**
-   * Options for parsing DOT.
+   * Options for parsing DOT: the parser's limits, and `startRule`.
    */
-  parse?: ParseOptions<T>;
+  parse?: Omit<ParseOptions<T>, 'startRule'> & {
+    /**
+     * What to read the source as, and so what `fromDot` returns: a whole
+     * graph (`'Dot'` or `'Graph'`, the default), a `'Node'`, an `'Edge'` or
+     * a `'Subgraph'`. (Not the deprecated `startRule` of `parse`.)
+     */
+    startRule?: T;
+  };
   /**
    * Options for converting the parsed DOT to a model.
    */

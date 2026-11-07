@@ -118,34 +118,63 @@ export interface ParseOptions<T extends Rule> extends CommonParseOptions {
  */
 export function parse(input: string): DotASTNode;
 export function parse(input: string, options?: ParseOptions<'Dot'>): DotASTNode;
+/**
+ * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
+ * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
+ */
 export function parse(
   input: string,
   options?: ParseOptions<'Graph'>,
 ): GraphASTNode;
+/**
+ * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
+ * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
+ */
 export function parse(
   input: string,
   options?: ParseOptions<'Node'>,
 ): NodeASTNode;
+/**
+ * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
+ * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
+ */
 export function parse(
   input: string,
   options?: ParseOptions<'Edge'>,
 ): EdgeASTNode;
+/**
+ * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
+ * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
+ */
 export function parse(
   input: string,
   options?: ParseOptions<'AttributeList'>,
 ): AttributeListASTNode;
+/**
+ * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
+ * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
+ */
 export function parse(
   input: string,
   options?: ParseOptions<'Attribute'>,
 ): AttributeASTNode;
+/**
+ * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
+ * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
+ */
 export function parse(
   input: string,
   options?: ParseOptions<'Subgraph'>,
 ): SubgraphASTNode;
+/**
+ * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
+ * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
+ */
 export function parse(
   input: string,
   options?: ParseOptions<'ClusterStatements'>,
 ): ClusterStatementASTNode[];
+// Not deprecated: options typed with any rule may well be a whole source's.
 export function parse(
   input: string,
   options?: ParseOptions<Rule>,
