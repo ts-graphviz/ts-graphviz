@@ -82,12 +82,14 @@ g.removeNode('a');
 ```typescript
 import { fromDot } from 'ts-graphviz';
 
-const g = fromDot('digraph { a; a -> b; }');
+const g = fromDot('digraph { a; a -> b; c -> { a d }; }');
 for (const edge of g.edges) {
-  if (edge.targets.some((t) => 'id' in t && t.id === 'a')) g.removeEdge(edge);
+  if (edge.targets.flat().some((t) => t.id === 'a')) g.removeEdge(edge);
 }
 g.removeNode('a');
 ```
+
+この例はエッジの文をまるごと取り除きます。`a -> b -> c` や `c -> { a d }` では、`a` に関係しないつながり（`b -> c`、`c -> d`）も消えるので、残したいものは作り直してください。また、見ているのはこのグラフ自身のエッジだけです。サブグラフ（`g.subgraphs`）のエッジにも同じことをしてください。
 
 ## モデルの型ガード
 
@@ -106,7 +108,7 @@ console.log(nodes.length); // 1
 
 ## モデルコンテキスト
 
-モデルコンテキストは、グラフが中身を作るときに使うクラスの組です。`withContext(models)` はそのコンテキストのファクトリー（`digraph`、`graph`、`strict`）を返し、`graph.with(models)` はグラフのコンテキストを設定し、`fromDot` と `fromDotAll` は `convert.models` で受け取ります。指定しなかったクラスは既定のままです。
+モデルコンテキストは、グラフが中身を作るときに使うクラスの組です。`withContext(models)` はそのコンテキストのファクトリー（`digraph`、`graph`、`strict.digraph`、`strict.graph`）を返し、`graph.with(models)` はグラフのコンテキストを設定し、`fromDot` と `fromDotAll` は `convert.models` で受け取ります。指定しなかった種類のクラスは、`withContext` と `convert.models` では既定のクラスになり、`graph.with` ではそのグラフの今のクラス（前の `with` で設定したものかもしれません）のままです。
 
 ```typescript
 import { Node, withContext } from 'ts-graphviz';

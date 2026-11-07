@@ -82,12 +82,14 @@ g.removeNode('a');
 ```typescript
 import { fromDot } from 'ts-graphviz';
 
-const g = fromDot('digraph { a; a -> b; }');
+const g = fromDot('digraph { a; a -> b; c -> { a d }; }');
 for (const edge of g.edges) {
-  if (edge.targets.some((t) => 'id' in t && t.id === 'a')) g.removeEdge(edge);
+  if (edge.targets.flat().some((t) => t.id === 'a')) g.removeEdge(edge);
 }
 g.removeNode('a');
 ```
+
+这个例子会移除整条边语句：对于 `a -> b -> c` 或 `c -> { a d }`，与 `a` 无关的连接（`b -> c`、`c -> d`）也会一并消失，需要保留的请重新创建。它只检查这个图自身的边；子图（`g.subgraphs`）中的边也需要同样处理。
 
 ## 模型的类型守卫
 
@@ -106,7 +108,7 @@ console.log(nodes.length); // 1
 
 ## 模型上下文
 
-模型上下文是图创建其内容时使用的一组类。`withContext(models)` 返回该上下文的工厂函数（`digraph`、`graph`、`strict`）；`graph.with(models)` 设置图的上下文；`fromDot` 和 `fromDotAll` 通过 `convert.models` 接受上下文。未指定的类保持默认。
+模型上下文是图创建其内容时使用的一组类。`withContext(models)` 返回该上下文的工厂函数（`digraph`、`graph`、`strict.digraph`、`strict.graph`）；`graph.with(models)` 设置图的上下文；`fromDot` 和 `fromDotAll` 通过 `convert.models` 接受上下文。对于未指定的种类，`withContext` 和 `convert.models` 使用默认的类，而 `graph.with` 保留该图当前的类（可能是之前的 `with` 设置的类）。
 
 ```typescript
 import { Node, withContext } from 'ts-graphviz';

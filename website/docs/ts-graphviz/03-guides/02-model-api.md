@@ -82,12 +82,14 @@ g.removeNode('a');
 ```typescript
 import { fromDot } from 'ts-graphviz';
 
-const g = fromDot('digraph { a; a -> b; }');
+const g = fromDot('digraph { a; a -> b; c -> { a d }; }');
 for (const edge of g.edges) {
-  if (edge.targets.some((t) => 'id' in t && t.id === 'a')) g.removeEdge(edge);
+  if (edge.targets.flat().some((t) => t.id === 'a')) g.removeEdge(edge);
 }
 g.removeNode('a');
 ```
+
+This takes out whole edge statements: with `a -> b -> c` or `c -> { a d }`, the links that do not touch `a` (`b -> c`, `c -> d`) go too, so add them back where they should stay. It reads this graph's own edges; the edges of its subgraphs (`g.subgraphs`) need the same.
 
 ## The model guards
 
@@ -106,7 +108,7 @@ console.log(nodes.length); // 1
 
 ## Models contexts
 
-A models context is the set of classes a graph creates its contents with. `withContext(models)` gives factories (`digraph`, `graph`, `strict`) of a context; `graph.with(models)` sets the context of a graph; `fromDot` and `fromDotAll` take one as `convert.models`. A class left out keeps the default.
+A models context is the set of classes a graph creates its contents with. `withContext(models)` gives factories (`digraph`, `graph`, `strict.digraph`, `strict.graph`) of a context; `graph.with(models)` sets the context of a graph; `fromDot` and `fromDotAll` take one as `convert.models`. For a kind left out, `withContext` and `convert.models` use the default class, and `graph.with` keeps the graph's current class (which may be one an earlier `with` set).
 
 ```typescript
 import { Node, withContext } from 'ts-graphviz';
