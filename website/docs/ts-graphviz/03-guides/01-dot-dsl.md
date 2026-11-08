@@ -255,7 +255,7 @@ console.log(toDot(G));
 
 `fromDot` keeps each default attribute statement of a source where it is, so `node [color=red]; a; node [color=blue]; b` renders `a` red and `b` blue, as Graphviz does. A node's own attribute (`g.node('a', { color: 'green' })`) always wins over a default.
 
-3.x merged every default attribute statement into one set of defaults per graph, written first, so a default given after other statements applied to what came before it too. To keep that output while you move to v4, import from `ts-graphviz/legacy`, which has the same names as `ts-graphviz` with the 3.x classes (`legacyModels`); it is deprecated and removed in v5:
+3.x merged every default attribute statement into one set of defaults per graph, written first, so a default given after other statements applied to what came before it too. To keep that output while you move to v4, import from `ts-graphviz/legacy`, which has the same names as `ts-graphviz`, with factories and `fromDot` that use the 3.x classes (`legacyModels`); it is deprecated and removed in v5. The classes exported under their own names (`Digraph`, `Graph`, `Subgraph`) are v4's there too: where you construct a graph yourself, use `LegacyDigraph`, `LegacyGraph` or `LegacySubgraph`.
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz/legacy';

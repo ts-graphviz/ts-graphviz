@@ -255,7 +255,7 @@ console.log(toDot(G));
 
 `fromDot` 会把源码中的每条默认属性语句保留在原位置，因此 `node [color=red]; a; node [color=blue]; b` 与 Graphviz 一样，`a` 为红色、`b` 为蓝色。节点自身设置的属性（`g.node('a', { color: 'green' })`）总是优先于默认值。
 
-3.x 会把所有默认属性语句合并为每个图一组默认值并写在最前面，因此写在其他语句之后的默认值也会作用于它之前的内容。在迁移到 v4 期间，如需保持 3.x 的输出，请从 `ts-graphviz/legacy` 导入：它与 `ts-graphviz` 的名字相同，使用 3.x 的类（`legacyModels`）。该入口已弃用，将在 v5 中移除：
+3.x 会把所有默认属性语句合并为每个图一组默认值并写在最前面，因此写在其他语句之后的默认值也会作用于它之前的内容。在迁移到 v4 期间，如需保持 3.x 的输出，请从 `ts-graphviz/legacy` 导入：它与 `ts-graphviz` 的名字相同，其工厂函数和 `fromDot` 使用 3.x 的类（`legacyModels`）。该入口已弃用，将在 v5 中移除。以原名导出的类（`Digraph`、`Graph`、`Subgraph`）在这里也是 v4 的类：自己构造图时，请使用 `LegacyDigraph`、`LegacyGraph` 或 `LegacySubgraph`。
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz/legacy';

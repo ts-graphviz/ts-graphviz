@@ -255,7 +255,7 @@ console.log(toDot(G));
 
 `fromDot` はソースの既定属性の文をその位置に残すので、`node [color=red]; a; node [color=blue]; b` は Graphviz と同じく `a` が赤、`b` が青になります。ノード自身に設定した属性（`g.node('a', { color: 'green' })`）は、常に既定値より優先されます。
 
-3.x は既定属性の文をすべてグラフごとに一組の既定値にまとめ、先頭に書き出していたため、他の文の後に書いた既定値もそれより前のものに適用されていました。v4 への移行中に 3.x と同じ出力を保つには、`ts-graphviz/legacy` から import します。`ts-graphviz` と同じ名前を持ち、3.x のクラス（`legacyModels`）を使います。このエントリーは非推奨で、v5 で削除されます。
+3.x は既定属性の文をすべてグラフごとに一組の既定値にまとめ、先頭に書き出していたため、他の文の後に書いた既定値もそれより前のものに適用されていました。v4 への移行中に 3.x と同じ出力を保つには、`ts-graphviz/legacy` から import します。`ts-graphviz` と同じ名前を持ち、ファクトリーと `fromDot` が 3.x のクラス（`legacyModels`）を使います。このエントリーは非推奨で、v5 で削除されます。そのままの名前でエクスポートされるクラス（`Digraph`、`Graph`、`Subgraph`）は、ここでも v4 のクラスです。グラフを自分で作る場合は `LegacyDigraph`、`LegacyGraph`、`LegacySubgraph` を使ってください。
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz/legacy';

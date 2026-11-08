@@ -7,7 +7,7 @@ description: DOT Object Model（DOM）を使い、グラフをデータとして
 
 **DOT Object Model（DOM）** は、グラフを構成するオブジェクトの集まりです。`Digraph` / `Graph`、`Subgraph`、`Node`、`Edge`、既定属性の文、コメントがあります。[DOT DSL](./01-dot-dsl.md) が DOT と同じようにグラフを書くためのものであるのに対し、DOM は、他のデータからグラフを組み立てたり、グラフを読み取ったり変換したり、独自のクラスを定義したりするプログラムのためのものです。
 
-DSL はそれぞれ DOM の一つのモデルの代わりです。`modelOf(dsl)` でモデルを、`dsl(model)` でモデルの DSL を得られます。どちらも同じグラフを扱います。
+DSL はそれぞれ DOM の一つのモデルの代わりです。`modelOf(dsl)` でモデルを、`dsl(model)` でモデルの DSL を得られます。どちらも同じグラフを扱います。コメントには DSL がありません。`dsl()` はコメントを受け付けず、DSL は `CommentModel` そのものを返し、受け取ります。
 
 ## グラフを組み立てる
 
@@ -65,17 +65,26 @@ g.addEdge(new Edge([a, b]));
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 取り除く |
 | `addAttributeList(kind, attributes)` | 既定属性の文（`node [...]` など）をその位置に追加して返す |
 
-`removeNode` が取り除くのはノード文だけです。そのノードへのエッジは残り、Graphviz はエッジを描くときにノードを作り直します。ノードを消したい場合は、エッジも取り除いてください。
+`removeNode` が取り除くのは、そのグラフのノード文だけです。そのノードへのエッジや、サブグラフの中にあるそのノードの文は残り、Graphviz はそれらを描くときにノードを作り直します。ノードを消したい場合は、すべてのサブグラフで、エッジのグループ（`b -> { a c }`）のメンバーも含めて、それらも取り除いてください。
 
 ```typescript
-import { fromDot } from 'ts-graphviz';
+import { fromDot, type GraphBaseModel } from 'ts-graphviz';
 
-const g = fromDot('digraph { a; a -> b; }');
-for (const edge of g.edges) {
-  if (edge.targets.some((t) => 'id' in t && t.id === 'a')) g.removeEdge(edge);
+function removeNodeEverywhere(g: GraphBaseModel, id: string): void {
+  for (const edge of g.edges) {
+    // 端点、またはグループのメンバー
+    if (edge.targets.flat().some((t) => t.id === id)) g.removeEdge(edge);
+  }
+  g.removeNode(id);
+  // サブグラフは自分の文を持つ
+  for (const s of g.subgraphs) removeNodeEverywhere(s, id);
 }
-g.removeNode('a');
+
+const g = fromDot('digraph { a; subgraph cluster_s { a -> b; } }');
+removeNodeEverywhere(g, 'a');
 ```
+
+エッジの文は一つのチェーンです。`a -> b -> c` や `b -> { a c }` を取り除くと、`b -> c` も取り除かれます。残すべきつながりは追加し直してください。
 
 ## 属性
 
@@ -149,7 +158,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` はソースのコメントを種類と位置ごと保ち、`toDot` は同じ位置に書き戻します。モデルの `comment` は非推奨で、最初の先頭コメントを読み書きします。
+`fromDot` は文と文の間のコメントを種類と位置ごと保ち、`toDot` は同じ位置に書き戻します。文の中のコメント（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）は保たれません。モデルの `comment` は非推奨で、最初の先頭コメントを読み書きします。
 
 ## モデルの型ガード
 

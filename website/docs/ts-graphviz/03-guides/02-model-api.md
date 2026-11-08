@@ -7,7 +7,7 @@ The names follow the DOM of web browsers, but there are no events, selectors or 
 
 The **DOT Object Model (DOM)** is the set of objects a graph is made of: `Digraph` / `Graph`, `Subgraph`, `Node`, `Edge`, the default attribute statements and the comments. Where the [DOT DSL](./01-dot-dsl.md) is for writing graphs as in DOT, the DOM is for programs that build graphs from other data, read them, convert them, or define classes of their own.
 
-Every DSL stands for a model of the DOM: `modelOf(dsl)` gives it, and `dsl(model)` gives the DSL of a model. Both work on the same graph.
+Every DSL stands for a model of the DOM: `modelOf(dsl)` gives it, and `dsl(model)` gives the DSL of a model. Both work on the same graph. Comments have no DSL: `dsl()` refuses them, and the DSL gives and takes the `CommentModel` itself.
 
 ## Building a graph
 
@@ -65,17 +65,26 @@ g.addEdge(new Edge([a, b]));
 | `removeNode(nodeOrId)`, `removeEdge(edge)`, `removeSubgraph(subgraph)` | take it out |
 | `addAttributeList(kind, attributes)` | add a default attribute statement (`node [...]` and so on) where the graph is, and return it |
 
-`removeNode` takes out the node statement only: an edge to it stays, and Graphviz creates the node again when it renders the edge. Remove the edges too where the node should go:
+`removeNode` takes out the node statement of this graph only: an edge to the node stays, as does a statement of it in a subgraph, and Graphviz creates the node again when it renders them. Where the node should go, remove those too, in every subgraph and with the members of edge groups (`b -> { a c }`):
 
 ```typescript
-import { fromDot } from 'ts-graphviz';
+import { fromDot, type GraphBaseModel } from 'ts-graphviz';
 
-const g = fromDot('digraph { a; a -> b; }');
-for (const edge of g.edges) {
-  if (edge.targets.some((t) => 'id' in t && t.id === 'a')) g.removeEdge(edge);
+function removeNodeEverywhere(g: GraphBaseModel, id: string): void {
+  for (const edge of g.edges) {
+    // a target or a member of a group
+    if (edge.targets.flat().some((t) => t.id === id)) g.removeEdge(edge);
+  }
+  g.removeNode(id);
+  // a subgraph holds statements of its own
+  for (const s of g.subgraphs) removeNodeEverywhere(s, id);
 }
-g.removeNode('a');
+
+const g = fromDot('digraph { a; subgraph cluster_s { a -> b; } }');
+removeNodeEverywhere(g, 'a');
 ```
+
+An edge statement is one chain: removing `a -> b -> c` or `b -> { a c }` also removes `b -> c`. Add back the links that should stay.
 
 ## Attributes
 
@@ -149,7 +158,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` keeps the comments of a source, with their kind and place, and `toDot` writes them back there. `comment` on a model is deprecated: it reads and sets the first leading comment.
+`fromDot` keeps the comments between statements, with their kind and place, and `toDot` writes them back there. A comment inside a statement (`a -> /* note */ b;`, `a [ /* note */ label = x ]`) is not kept. `comment` on a model is deprecated: it reads and sets the first leading comment.
 
 ## The model guards
 

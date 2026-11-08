@@ -7,7 +7,7 @@ description: 使用 DOT Object Model（DOM），把图当作数据来构建、�
 
 **DOT Object Model（DOM）** 是构成图的对象集合：`Digraph` / `Graph`、`Subgraph`、`Node`、`Edge`、默认属性语句以及注释。[DOT DSL](./01-dot-dsl.md) 用于像写 DOT 一样编写图，而 DOM 面向这样的程序：从其他数据构建图、读取或转换图，或者定义自己的类。
 
-每个 DSL 都代表 DOM 中的一个模型：`modelOf(dsl)` 返回该模型，`dsl(model)` 返回模型的 DSL。二者操作的是同一个图。
+每个 DSL 都代表 DOM 中的一个模型：`modelOf(dsl)` 返回该模型，`dsl(model)` 返回模型的 DSL。二者操作的是同一个图。注释没有 DSL：`dsl()` 不接受注释，DSL 直接返回和接收 `CommentModel` 本身。
 
 ## 构建图
 
@@ -65,17 +65,26 @@ g.addEdge(new Edge([a, b]));
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 移除 |
 | `addAttributeList(kind, attributes)` | 在当前位置添加一条默认属性语句（`node [...]` 等）并返回它 |
 
-`removeNode` 只移除节点语句：指向它的边仍然保留，Graphviz 渲染该边时会重新创建这个节点。若要去掉该节点，请同时移除这些边：
+`removeNode` 只移除本图中的节点语句：指向该节点的边，以及子图中该节点的语句都会保留，Graphviz 渲染它们时会重新创建这个节点。若要去掉该节点，请在所有子图中一并移除它们，包括边分组（`b -> { a c }`）中的成员：
 
 ```typescript
-import { fromDot } from 'ts-graphviz';
+import { fromDot, type GraphBaseModel } from 'ts-graphviz';
 
-const g = fromDot('digraph { a; a -> b; }');
-for (const edge of g.edges) {
-  if (edge.targets.some((t) => 'id' in t && t.id === 'a')) g.removeEdge(edge);
+function removeNodeEverywhere(g: GraphBaseModel, id: string): void {
+  for (const edge of g.edges) {
+    // 端点，或分组中的成员
+    if (edge.targets.flat().some((t) => t.id === id)) g.removeEdge(edge);
+  }
+  g.removeNode(id);
+  // 子图有自己的语句
+  for (const s of g.subgraphs) removeNodeEverywhere(s, id);
 }
-g.removeNode('a');
+
+const g = fromDot('digraph { a; subgraph cluster_s { a -> b; } }');
+removeNodeEverywhere(g, 'a');
 ```
+
+一条边语句是一整条链：移除 `a -> b -> c` 或 `b -> { a c }` 时，`b -> c` 也会被移除。请把需要保留的连接重新添加回去。
 
 ## 属性
 
@@ -149,7 +158,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` 会保留源码中的注释及其种类和位置，`toDot` 会把它们写回原处。模型的 `comment` 已弃用：它读写第一条前置注释。
+`fromDot` 会保留语句之间的注释及其种类和位置，`toDot` 会把它们写回原处。语句内部的注释（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）不会保留。模型的 `comment` 已弃用：它读写第一条前置注释。
 
 ## 模型的类型守卫
 
