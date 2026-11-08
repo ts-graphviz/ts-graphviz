@@ -8,7 +8,11 @@ import {
 } from '@ts-graphviz/common';
 import { createElementFactory } from '../../builder/create-element.js';
 import { defaultPlugins } from './plugins/index.js';
-import { withTrailingComments } from './plugins/utils/convert-comment.js';
+import {
+  checkCommentPositions,
+  withLeadingComments,
+  withTrailingComments,
+} from './plugins/utils/convert-comment.js';
 import type {
   ConvertFromModelContext,
   ConvertFromModelOptions,
@@ -69,6 +73,7 @@ export class FromModelConverter {
         }
         for (const plugin of plugins) {
           if (plugin.match(m)) {
+            checkCommentPositions(m);
             open.add(m);
             try {
               // The model's trailing comments go on the node it becomes,
@@ -92,8 +97,15 @@ export class FromModelConverter {
         );
       },
     };
-    return context.convert(
-      modelOf(model) as AnyReadonlyDotObjectModel,
+    const root = modelOf(model) as AnyReadonlyDotObjectModel;
+    const ast = context.convert(root);
+    // A parent writes the leading comments of its statements before them;
+    // a statement converted alone carries its own. A root graph's are
+    // written by the DOT source around it.
+    return (
+      root.$$type === 'Dot' || root.$$type === 'Graph'
+        ? ast
+        : withLeadingComments(createElement, ast, root, commentKind)
     ) as ModelToAST<ModelOf<T>>;
   }
 }
