@@ -1,4 +1,8 @@
-import type { AttributeKey, DotValue } from '@ts-graphviz/common';
+import type {
+  AttributeKey,
+  DotValue,
+  ReadonlyAttributes,
+} from '@ts-graphviz/common';
 import type { CreateElement } from '../../../../builder/types.js';
 import type { AttributeASTNode } from '../../../../types.js';
 import { literalFromKey, literalFromValue } from '../../../literal.js';
@@ -35,4 +39,23 @@ export function convertAttribute(
     },
     [],
   );
+}
+
+/**
+ * Converts the attributes of a model into {@link AttributeASTNode}s, in the
+ * order they were set.
+ *
+ * @param createElement - The createElement function to use.
+ * @param model - The model whose attributes to convert.
+ */
+export function convertAttributes(
+  createElement: CreateElement,
+  model: ReadonlyAttributes,
+): AttributeASTNode[] {
+  return model.getAttributeNames().flatMap((name) => {
+    const value = model.getAttribute(name);
+    return value === undefined
+      ? []
+      : [convertAttribute(createElement, name, value)];
+  });
 }

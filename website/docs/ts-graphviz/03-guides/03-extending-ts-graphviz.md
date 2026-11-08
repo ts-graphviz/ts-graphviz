@@ -166,7 +166,7 @@ const h = new Digraph();
 h.createNode('a');
 const defaults = h.addAttributeList('Node', { color: 'blue' }); // applies to what follows
 h.createNode('b');
-defaults.set('color', 'green');
+defaults.setAttribute('color', 'green');
 console.log(toDot(h));
 ```
 

@@ -41,7 +41,7 @@ export class Subgraph<M extends AnyModelTypes = ModelTypes>
         typeof arg === 'object' && arg !== null,
     );
     if (attributes !== undefined) {
-      this.apply(attributes);
+      this.setAttributes(attributes);
     }
   }
 
@@ -52,7 +52,7 @@ export class Subgraph<M extends AnyModelTypes = ModelTypes>
       (typeof this.id === 'string' &&
         this.id.slice(0, 7).toLowerCase() === 'cluster') ||
       // Read without the schema: whatever it says, Graphviz reads the value.
-      graphvizBool((this as Attributes<'cluster'>).get('cluster'))
+      graphvizBool((this as Attributes<'cluster'>).getAttribute('cluster'))
     );
   }
 

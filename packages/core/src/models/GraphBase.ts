@@ -299,13 +299,13 @@ export abstract class GraphBase<
       // they are.
       (
         target as AttributeListModel<AttributeListKind, AttributeKey, object>
-      ).apply(attributes);
+      ).setAttributes(attributes);
       return target;
     }
     const list = new AttributeList<AttributeListKind, AttributeKey, object>(
       kind,
     );
-    list.apply(attributes);
+    list.setAttributes(attributes);
     this.#statements.add(list);
     return list;
   }

@@ -11,7 +11,8 @@ import type {
 } from '@ts-graphviz/common';
 
 /**
- * Base class for DOT objects with attributes.
+ * Base class for DOT objects with attributes: graphs, subgraphs, nodes,
+ * edges and default attribute statements.
  * @group Models
  */
 export abstract class AttributesBase<
@@ -22,60 +23,62 @@ export abstract class AttributesBase<
   /** @hidden */
   #attrs: Map<string, unknown> = new Map();
 
+  /**
+   * @param attributes - Attributes to set. A subclass with fields of its own
+   * passes none here and sets them once those fields are set, so that an
+   * overridden `setAttribute` sees a whole object.
+   */
   constructor(attributes?: AttributesObject<T, E>) {
     if (attributes !== undefined) {
-      this.apply(attributes);
+      this.setAttributes(attributes);
     }
   }
 
-  get values(): Attributes<T, E>['values'] {
-    // The keys and values were given through the typed methods.
-    return Array.from(this.#attrs.entries()) as unknown as Attributes<
-      T,
-      E
-    >['values'];
-  }
-
-  get size(): number {
-    return this.#attrs.size;
-  }
-
-  public get<K extends BuiltInAttributeKey<T, E>>(
-    key: K,
+  public getAttribute<K extends BuiltInAttributeKey<T, E>>(
+    name: K,
   ): Attribute<K> | undefined;
-  public get<K extends keyof E & string>(
-    key: K,
+  public getAttribute<K extends keyof E & string>(
+    name: K,
   ): SchemaAttribute<E, K> | undefined;
-  public get<K extends SchemaAttributeKey<T, E>>(
-    key: K,
+  public getAttribute<K extends SchemaAttributeKey<T, E>>(
+    name: K,
   ): AttributeOf<K, E> | undefined;
-  public get(key: string): unknown {
-    return this.#attrs.get(key);
+  public getAttribute(name: string): unknown {
+    return this.#attrs.get(name);
   }
 
-  public set<K extends BuiltInAttributeKey<T, E>>(
-    key: K,
+  public setAttribute<K extends BuiltInAttributeKey<T, E>>(
+    name: K,
     value: Attribute<K>,
   ): void;
-  public set<K extends keyof E & string>(
-    key: K,
+  public setAttribute<K extends keyof E & string>(
+    name: K,
     value: SchemaAttribute<E, K>,
   ): void;
-  public set<K extends SchemaAttributeKey<T, E>>(
-    key: K,
+  public setAttribute<K extends SchemaAttributeKey<T, E>>(
+    name: K,
     value: AttributeOf<K, E>,
   ): void;
-  public set(key: string, value: unknown): void {
+  public setAttribute(name: string, value: unknown): void {
     if (value !== null && value !== undefined) {
-      this.#attrs.set(key, value);
+      this.#attrs.set(name, value);
     }
   }
 
-  public delete(key: SchemaAttributeKey<T, E>): void {
-    this.#attrs.delete(key);
+  public removeAttribute(name: SchemaAttributeKey<T, E>): void {
+    this.#attrs.delete(name);
   }
 
-  public apply(
+  public hasAttribute(name: SchemaAttributeKey<T, E>): boolean {
+    return this.#attrs.has(name);
+  }
+
+  public getAttributeNames(): SchemaAttributeKey<T, E>[] {
+    // The names were given through the typed methods.
+    return Array.from(this.#attrs.keys()) as SchemaAttributeKey<T, E>[];
+  }
+
+  public setAttributes(
     attributes: AttributesObject<T, E> | AttributesEntities<T, E>,
   ): void {
     const entries: readonly (readonly [string, unknown])[] = Array.isArray(
@@ -83,14 +86,85 @@ export abstract class AttributesBase<
     )
       ? attributes
       : Object.entries(attributes);
-    for (const [key, value] of entries) {
-      // The object or entries were typed by `T` and `E`. Through `set`, so a
-      // class that overrides it sees these values too.
-      this.set(key as BuiltInAttributeKey<T, E>, value as never);
+    for (const [name, value] of entries) {
+      // The object or entries were typed by `T` and `E`. Through
+      // `setAttribute`, so a class that overrides it sees these values too.
+      this.setAttribute(name as BuiltInAttributeKey<T, E>, value as never);
     }
   }
 
-  public clear(): void {
+  public removeAttributes(): void {
     this.#attrs.clear();
+  }
+
+  // The names that follow `Map`, deprecated until v5. They go through the
+  // methods above, so a class overrides those.
+
+  /** @deprecated Use `getAttributeNames().length`. Removed in v5. */
+  get size(): number {
+    return this.#attrs.size;
+  }
+
+  /**
+   * @deprecated Use {@link AttributesBase.getAttributeNames} and
+   * {@link AttributesBase.getAttribute}. Removed in v5.
+   */
+  get values(): Attributes<T, E>['values'] {
+    return this.getAttributeNames().map((name) => [
+      name,
+      this.getAttribute(name),
+    ]) as unknown as Attributes<T, E>['values'];
+  }
+
+  /** @deprecated Use {@link AttributesBase.getAttribute}. Removed in v5. */
+  public get<K extends BuiltInAttributeKey<T, E>>(
+    key: K,
+  ): Attribute<K> | undefined;
+  /** @deprecated Use {@link AttributesBase.getAttribute}. Removed in v5. */
+  public get<K extends keyof E & string>(
+    key: K,
+  ): SchemaAttribute<E, K> | undefined;
+  /** @deprecated Use {@link AttributesBase.getAttribute}. Removed in v5. */
+  public get<K extends SchemaAttributeKey<T, E>>(
+    key: K,
+  ): AttributeOf<K, E> | undefined;
+  public get(key: string): unknown {
+    return this.getAttribute(key as SchemaAttributeKey<T, E>);
+  }
+
+  /** @deprecated Use {@link AttributesBase.setAttribute}. Removed in v5. */
+  public set<K extends BuiltInAttributeKey<T, E>>(
+    key: K,
+    value: Attribute<K>,
+  ): void;
+  /** @deprecated Use {@link AttributesBase.setAttribute}. Removed in v5. */
+  public set<K extends keyof E & string>(
+    key: K,
+    value: SchemaAttribute<E, K>,
+  ): void;
+  /** @deprecated Use {@link AttributesBase.setAttribute}. Removed in v5. */
+  public set<K extends SchemaAttributeKey<T, E>>(
+    key: K,
+    value: AttributeOf<K, E>,
+  ): void;
+  public set(key: string, value: unknown): void {
+    this.setAttribute(key as BuiltInAttributeKey<T, E>, value as never);
+  }
+
+  /** @deprecated Use {@link AttributesBase.removeAttribute}. Removed in v5. */
+  public delete(key: SchemaAttributeKey<T, E>): void {
+    this.removeAttribute(key);
+  }
+
+  /** @deprecated Use {@link AttributesBase.setAttributes}. Removed in v5. */
+  public apply(
+    attributes: AttributesObject<T, E> | AttributesEntities<T, E>,
+  ): void {
+    this.setAttributes(attributes);
+  }
+
+  /** @deprecated Use {@link AttributesBase.removeAttributes}. Removed in v5. */
+  public clear(): void {
+    this.removeAttributes();
   }
 }

@@ -95,7 +95,7 @@ export function applyStatements(
         break;
       }
       case 'Attribute':
-        graph.set(
+        graph.setAttribute(
           idFromLiteral(stmt.key) as AttributeKey,
           valueFromLiteral(stmt.value) as AttributeValue,
         );
@@ -107,7 +107,9 @@ export function applyStatements(
         // (`a [color=red]; a [shape=box]` is one node with both).
         const existing = graph.getNode(node.id);
         if (existing) {
-          existing.attributes.apply(node.attributes.values);
+          for (const name of node.getAttributeNames()) {
+            existing.setAttribute(name, node.getAttribute(name) as never);
+          }
           commentHolder.apply(existing, stmt.location);
         } else {
           commentHolder.apply(node, stmt.location);

@@ -10,7 +10,7 @@ import { ownField } from '../../../own-field.js';
 import type { EdgeTargetASTNode, NodeRefASTNode } from '../../../types.js';
 import { idToRaw } from '../../literal.js';
 import type { ConvertFromModelPlugin } from '../types.js';
-import { convertAttribute } from './utils/index.js';
+import { convertAttributes } from './utils/index.js';
 
 const nodeRef = (
   createElement: CreateElement,
@@ -98,9 +98,7 @@ export const EdgePlugin: ConvertFromModelPlugin<ReadonlyEdgeModel> = {
           ...rest: EdgeTargetASTNode[],
         ],
       },
-      model.attributes.values.map(([key, value]) =>
-        convertAttribute(createElement, key, value),
-      ),
+      convertAttributes(createElement, model),
     );
   },
 };
