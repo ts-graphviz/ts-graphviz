@@ -197,7 +197,7 @@ describe('deprecated until v5: comment', () => {
   });
 });
 
-describe('deprecated until v5 (#1932)', () => {
+describe('deprecated until v5: names', () => {
   it.each([
     ['packages/common/src/models/models.ts', 'readonly id?: string;'],
     ['packages/common/src/models/readonly-models.ts', 'readonly id: string;'],

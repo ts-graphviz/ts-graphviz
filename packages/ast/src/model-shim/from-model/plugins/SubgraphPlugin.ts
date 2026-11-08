@@ -9,7 +9,7 @@ export const SubgraphPlugin: ConvertFromModelPlugin<ReadonlySubgraphModel> = {
   },
   convert(context, model) {
     const { createElement } = context;
-    // The name, from a model written for 3.x (`id` only) too.
+    // The name, also from a model with only `id`.
     const id = model.subgraphId ?? model.id;
     return createElement(
       'Subgraph',
