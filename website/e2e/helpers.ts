@@ -1,4 +1,29 @@
-import { expect, type Page } from '@playwright/test';
+import { test as base, expect, type Page } from '@playwright/test';
+
+export { expect };
+
+/**
+ * `test` with images from other hosts not loaded, so a slow image host (the
+ * README's badges and avatars on /api/) cannot hold up the `load` event a
+ * test waits for (#1941). The tests check the site, not those images.
+ * Scripts from other hosts (Monaco's loader) still load.
+ */
+export const test = base.extend<{ noRemoteImages: undefined }>({
+  noRemoteImages: [
+    async ({ context, baseURL }, use) => {
+      const { host } = new URL(baseURL ?? 'http://localhost');
+      await context.route(
+        (url) => /^https?:$/.test(url.protocol) && url.host !== host,
+        (route) =>
+          route.request().resourceType() === 'image'
+            ? route.abort()
+            : route.fallback(),
+      );
+      await use(undefined);
+    },
+    { auto: true },
+  ],
+});
 
 /** Whether the project emulates a touch device (`(pointer: coarse)`). */
 export const isTouch = (page: Page) =>

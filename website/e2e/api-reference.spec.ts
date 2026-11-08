@@ -1,5 +1,4 @@
-import { expect, test } from '@playwright/test';
-import { expectNoHorizontalScroll, isTouch } from './helpers';
+import { expect, expectNoHorizontalScroll, isTouch, test } from './helpers';
 
 // The typedoc output, copied into build/api/ (`pnpm copy-api`; typedoc.json
 // and typedoc.css at the repository root).

@@ -1,5 +1,4 @@
-import { expect, test } from '@playwright/test';
-import { expectNoHorizontalScroll, isTouch } from './helpers';
+import { expect, expectNoHorizontalScroll, isTouch, test } from './helpers';
 
 // ```ts ts-graphviz code blocks (plugins/remark-plugin-tsgraphviz.ts).
 const PAGE = '/docs/ts-graphviz/getting-started/core-features';
