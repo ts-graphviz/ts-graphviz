@@ -135,9 +135,42 @@ digraph((g) => {
 
 `createModelsContext`, `withContext`, `createModelFactories`, and `fromDot` / `fromDotAll` with `convert.models` infer the types from the classes given; a class left out keeps the base type, carrying the same context into subgraphs. A custom root or subgraph class that should itself return the custom types extends `RootGraph<M>` / `Subgraph<M>` with `M` describing them (`ModelTypes`).
 
-### Ordered default attribute statements
+### Default attribute statements in place
 
-The classes of `orderedModels` (`OrderedGraph`, `OrderedDigraph`, `OrderedSubgraph`) keep each default attribute statement in its place, as in DOT. See [DOT's statement order](./01-dot-dsl.md#dots-statement-order) in the DSL guide, and `addAttributeList` in [Using the Model API](./02-model-api.md).
+In DOT, a default attribute statement applies only to what follows it:
+
+```dot
+digraph {
+  node [color=red];
+  a;                  // red
+  node [color=blue];
+  b;                  // blue
+}
+```
+
+The model classes keep each default attribute statement where it was written, so a graph read with `fromDot`, or built by hand, renders as DOT says. `addAttributeList(kind, attributes)` adds one and returns its list, which you can keep to change those defaults later (the DSL's `g.node({ ... })` returns its DSL):
+
+```typescript
+import { Digraph, fromDot, toDot } from 'ts-graphviz';
+
+const source = `digraph {
+  node [color=red];
+  a;
+  node [color=blue];
+  b;
+}`;
+
+const g = fromDot(source); // a red, b blue
+
+const h = new Digraph();
+h.createNode('a');
+const defaults = h.addAttributeList('Node', { color: 'blue' }); // applies to what follows
+h.createNode('b');
+defaults.setAttribute('color', 'green');
+console.log(toDot(h));
+```
+
+The classes of 3.x kept one set of defaults per graph (`attributes.node`, `attributes.edge`, `attributes.graph`), written first, so the last values won for every node. They are kept, deprecated until v5, as `legacyModels` (`LegacyGraph`, `LegacyDigraph`, `LegacySubgraph`), and `ts-graphviz/legacy` is the same API with them: `fromDot(source, { convert: { models: legacyModels } })`, or `import { digraph } from 'ts-graphviz/legacy'`. `attributes` is deprecated too: write a default attribute statement instead.
 
 ## Extending the Type System
 

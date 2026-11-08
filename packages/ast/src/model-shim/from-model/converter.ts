@@ -8,6 +8,7 @@ import {
 } from '@ts-graphviz/common';
 import { createElementFactory } from '../../builder/create-element.js';
 import { defaultPlugins } from './plugins/index.js';
+import { withTrailingComments } from './plugins/utils/convert-comment.js';
 import type {
   ConvertFromModelContext,
   ConvertFromModelOptions,
@@ -70,7 +71,14 @@ export class FromModelConverter {
           if (plugin.match(m)) {
             open.add(m);
             try {
-              return plugin.convert(context, m) as ModelToAST<U>;
+              // The model's trailing comments go on the node it becomes,
+              // whoever converts it (a parent, or this call).
+              return withTrailingComments(
+                createElement,
+                plugin.convert(context, m),
+                m,
+                commentKind,
+              ) as ModelToAST<U>;
             } finally {
               open.delete(m);
             }

@@ -34,14 +34,14 @@ import {
   isNodeRef,
   isRootGraphModel,
   isSubgraphModel,
+  LegacyDigraph,
+  type LegacyGraph,
+  type LegacySubgraph,
   modelOf,
   Node,
   type NodeAttributeKey,
   type NodeModel,
   type NodeRef,
-  OrderedDigraph,
-  type OrderedGraph,
-  type OrderedSubgraph,
   type ReadonlyAttributeListModel,
   type ReadonlyAttributes,
   type ReadonlyDotModel,
@@ -77,15 +77,28 @@ class MyNode extends Node {
  * not fit.
  */
 interface NumAttributes {
+  getAttribute(name: 'label'): number | undefined;
+  setAttribute(name: 'label', value: number): void;
+  removeAttribute(name: 'label'): void;
+  hasAttribute(name: 'label'): boolean;
+  getAttributeNames(): 'label'[];
+  setAttributes(attributes: { label?: number }): void;
+  removeAttributes(): void;
   readonly size: number;
   readonly values: ReadonlyArray<['label', number]>;
   get(key: 'label'): number | undefined;
   set(key: 'label', value: number): void;
 }
-interface NumNode extends Omit<NodeModel, 'attributes'> {
+/** The members of a model that hold its attributes. */
+type AttributeMembers = keyof NumAttributes | 'apply' | 'delete' | 'clear';
+interface NumNode
+  extends Omit<NodeModel, 'attributes' | AttributeMembers>,
+    NumAttributes {
   readonly attributes: NumAttributes;
 }
-interface NumEdge extends Omit<EdgeModel, 'attributes'> {
+interface NumEdge
+  extends Omit<EdgeModel, 'attributes' | AttributeMembers>,
+    NumAttributes {
   readonly attributes: NumAttributes;
 }
 interface NumAttributeList extends NumAttributes {
@@ -157,11 +170,11 @@ describe('every model fits its read-only type', () => {
     expectTypeOf<MyNode>().toExtend<ReadonlyNodeModel>();
     expectTypeOf<Edge>().toExtend<ReadonlyEdgeModel>();
     expectTypeOf<Subgraph>().toExtend<ReadonlySubgraphModel>();
-    expectTypeOf<OrderedSubgraph>().toExtend<ReadonlySubgraphModel>();
+    expectTypeOf<LegacySubgraph>().toExtend<ReadonlySubgraphModel>();
     expectTypeOf<Digraph>().toExtend<ReadonlyRootGraphModel>();
     expectTypeOf<Graph>().toExtend<ReadonlyRootGraphModel>();
-    expectTypeOf<OrderedDigraph>().toExtend<ReadonlyRootGraphModel>();
-    expectTypeOf<OrderedGraph>().toExtend<ReadonlyRootGraphModel>();
+    expectTypeOf<LegacyDigraph>().toExtend<ReadonlyRootGraphModel>();
+    expectTypeOf<LegacyGraph>().toExtend<ReadonlyRootGraphModel>();
     expectTypeOf<Dot>().toExtend<ReadonlyDotModel>();
   });
 
@@ -221,7 +234,7 @@ describe('the readers take every model', () => {
     g.attributes.node,
     new Dot([g]),
     new MyNode('m'),
-    new OrderedDigraph(),
+    new LegacyDigraph(),
     {} as AnyDotObjectModel,
     {} as AnyReadonlyDotObjectModel,
     {} as NumNode,
@@ -250,7 +263,7 @@ describe('the readers take every model', () => {
       view.node('a'),
       view.edge(['a', 'b']),
       view.subgraph('s'),
-      view.$attributes.node,
+      view.node({}),
       dsl(new Dot()),
     ] as const;
     for (const v of views) {
@@ -263,7 +276,7 @@ describe('the readers take every model', () => {
     expectTypeOf(fromModel(view.node('a'))).toEqualTypeOf<NodeASTNode>();
     // A DSL is not a model: the guards do not pass it (narrow by $$type).
     expectTypeOf(views.filter(isRootGraphModel)).toEqualTypeOf<never[]>();
-    for (const s of view.$statements) {
+    for (const s of view.statements) {
       if (s.$$type === 'Edge') expectTypeOf(s).toEqualTypeOf<DSL<EdgeModel>>();
     }
   });
@@ -327,10 +340,10 @@ describe('the guards', () => {
     if (isAttributeListModel(model)) {
       expectTypeOf(model).toEqualTypeOf<AttributeListModel>();
     }
-    const mine = {} as MyNode | Edge | OrderedDigraph;
+    const mine = {} as MyNode | Edge | LegacyDigraph;
     if (isNodeModel(mine)) expectTypeOf(mine).toEqualTypeOf<MyNode>();
     if (isRootGraphModel(mine)) {
-      expectTypeOf(mine).toEqualTypeOf<OrderedDigraph>();
+      expectTypeOf(mine).toEqualTypeOf<LegacyDigraph>();
     }
     const read = {} as AnyReadonlyDotObjectModel;
     if (isEdgeModel(read))
@@ -409,7 +422,7 @@ describe('edge targets are read-only references', () => {
     const g = digraph();
     const node = {} as ReadonlyNodeModel;
     g.edge([node, new MyNode('m'), {} as NumNode]);
-    g.$createEdge([node, [node, 'b']]);
+    g.createEdge([node, [node, 'b']]);
     new Edge([node, modelOf(g.node('a'))]);
   });
 });

@@ -258,10 +258,10 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
       fc.property(nodeId, (id) => {
         const g = dsl(new Digraph());
         const first = g.node(id);
-        const second = g.$createNode(id);
+        const second = g.createNode(id);
         expect(second).not.toBe(first);
-        expect(g.$getNode(id)).toBe(second);
-        expect(g.$nodes).toStrictEqual([second]);
+        expect(g.getNode(id)).toBe(second);
+        expect(g.nodes).toStrictEqual([second]);
         expect(g.node(id)).toBe(second);
       }),
     );
@@ -270,16 +270,16 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
   it('subgraph("") finds the subgraph with the empty id like any other id (#1593)', () => {
     const g = dsl(new Digraph());
     const sub = g.subgraph('');
-    expect(sub.$id).toBe('');
+    expect(sub.subgraphId).toBe('');
     expect(g.subgraph('')).toBe(sub);
-    expect(g.$subgraphs).toHaveLength(1);
+    expect(g.subgraphs).toHaveLength(1);
   });
 
   it('edge(targets, null) ignores the null instead of failing (#1593)', () => {
     fc.assert(
       fc.property(plainId, plainId, (a, b) => {
         const edge = dsl(new Digraph()).edge([a, b], null as never);
-        expect(edge.$attributes.size).toBe(0);
+        expect(edge.getAttributeNames()).toHaveLength(0);
       }),
     );
   });
@@ -294,8 +294,8 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
           g.node(a);
           g.edge([a, b]);
         });
-        g.$removeNode(a);
-        expect(g.$edges).toHaveLength(1);
+        g.removeNode(a);
+        expect(g.edges).toHaveLength(1);
       }),
     );
   });

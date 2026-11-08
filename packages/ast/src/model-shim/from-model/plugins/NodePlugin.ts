@@ -1,7 +1,7 @@
 import type { ReadonlyNodeModel } from '@ts-graphviz/common';
 import { idToRaw } from '../../literal.js';
 import type { ConvertFromModelPlugin } from '../types.js';
-import { convertAttribute } from './utils/index.js';
+import { convertAttributes } from './utils/index.js';
 
 export const NodePlugin: ConvertFromModelPlugin<ReadonlyNodeModel> = {
   match(model) {
@@ -15,15 +15,13 @@ export const NodePlugin: ConvertFromModelPlugin<ReadonlyNodeModel> = {
         id: createElement(
           'Literal',
           {
-            value: idToRaw(model.id),
+            value: idToRaw(model.nodeId ?? model.id),
             kind: 'quoted',
           },
           [],
         ),
       },
-      model.attributes.values.map(([key, value]) =>
-        convertAttribute(createElement, key, value),
-      ),
+      convertAttributes(createElement, model),
     );
   },
 };

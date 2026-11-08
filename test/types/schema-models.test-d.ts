@@ -24,6 +24,7 @@ import {
   Graph,
   type GraphAttributesObject,
   type GraphCommonAttributes,
+  LegacyDigraph,
   type ModelsContext,
   type ModelTypes,
   Node,
@@ -31,7 +32,6 @@ import {
   type NodeAttributesObject,
   type NodeModel,
   type NonClusterSubgraphAttributesObject,
-  OrderedDigraph,
   type ReadonlyAttributeListModel,
   type ReadonlyDotModel,
   type ReadonlyEdgeModel,
@@ -328,6 +328,44 @@ describe('a schema', () => {
     });
   });
 
+  it('types the DOM names with the schema on every object', () => {
+    myDigraph((g) => {
+      const a = g.createNode('a', { label: 1 });
+      expectTypeOf(a.getAttribute('label')).toEqualTypeOf<number | undefined>();
+      expectTypeOf(a.getAttribute('data-id')).toEqualTypeOf<
+        number | undefined
+      >();
+      a.setAttribute('data-id', 2);
+      a.setAttributes({ label: 3, 'data-id': 4 });
+      // @ts-expect-error a number now
+      a.setAttribute('label', 'x');
+      // @ts-expect-error a number now
+      a.setAttributes({ label: 'x' });
+      // @ts-expect-error not a node attribute
+      a.setAttribute('edge-only', true);
+      expectTypeOf(a.hasAttribute('data-id')).toEqualTypeOf<boolean>();
+      a.removeAttribute('data-id');
+      // The deprecated container has the same types.
+      expectTypeOf(a.attributes.getAttribute('label')).toEqualTypeOf<
+        number | undefined
+      >();
+      const e = g.createEdge(['a', 'b'], { 'edge-only': true });
+      expectTypeOf(e.getAttribute('edge-only')).toEqualTypeOf<
+        boolean | undefined
+      >();
+      // @ts-expect-error a node attribute
+      e.setAttribute('data-id', 1);
+      g.setAttribute('hoge', 'x');
+      expectTypeOf(g.getAttribute('hoge')).toEqualTypeOf<string | undefined>();
+      // @ts-expect-error a string
+      g.setAttribute('hoge', 1);
+      const list = g.addAttributeList('Node', { 'data-id': 1 });
+      expectTypeOf(list.getAttribute('data-id')).toEqualTypeOf<
+        number | undefined
+      >();
+    });
+  });
+
   it('overrides a built-in attribute', () => {
     myDigraph((g) => {
       const a = g.createNode('a', { label: 1 });
@@ -585,7 +623,7 @@ describe('the core classes', () => {
     new Edge<MySchema>([n, n], { 'data-id': 1 });
     const s = new Subgraph<MyTypes>('cluster_a', { team: 'core' });
     expectTypeOf(s).toExtend<SubgraphModel<MyTypes>>();
-    expectTypeOf(new OrderedDigraph<MyTypes>()).toExtend<
+    expectTypeOf(new LegacyDigraph<MyTypes>()).toExtend<
       RootGraphModel<MyTypes>
     >();
     expectTypeOf(new Graph<MyTypes>().createNode('a')).toEqualTypeOf<

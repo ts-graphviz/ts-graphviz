@@ -9,16 +9,18 @@ export const SubgraphPlugin: ConvertFromModelPlugin<ReadonlySubgraphModel> = {
   },
   convert(context, model) {
     const { createElement } = context;
+    // The name, from a model written for 3.x (`id` only) too.
+    const id = model.subgraphId ?? model.id;
     return createElement(
       'Subgraph',
       {
         // `""` is a valid (empty) id, so test for presence, not truthiness
         id:
-          model.id !== undefined
+          id !== undefined
             ? createElement(
                 'Literal',
                 {
-                  value: idToRaw(model.id),
+                  value: idToRaw(id),
                   kind: 'quoted',
                 },
                 [],

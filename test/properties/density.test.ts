@@ -262,7 +262,7 @@ function classifyOrder(spec: GraphSpec): string[] {
   }
   if (defaultsAfterStatement(ops)) {
     labels.push('defaults after a statement');
-    // Only the classes of `orderedModels` keep such a statement in place.
+    // The deprecated `legacyModels` merge such a statement instead.
     if (spec.ordered) labels.push('defaults kept in place');
   }
   const subs = subgraphOps(spec.subgraphs);

@@ -8,22 +8,22 @@ import { describe, expect, it } from 'vitest';
 describe('Root graphs built with digraph() and graph()', () => {
   it('print the comments of the graph, nodes, edges and subgraphs', () => {
     const G = digraph('G', (g) => {
-      g.$comment = 'This is directed graph.';
+      g.addComment('This is directed graph.');
       const a = g.node('aa');
-      a.$comment = 'This is node a.';
+      a.addComment('This is node a.');
       const b = g.node('bb');
-      b.$comment = 'This is node b.';
+      b.addComment('This is node b.');
       const c = g.node('cc');
-      c.$comment = 'This is node c.';
+      c.addComment('This is node c.');
       g.edge([a, b, c], (e) => {
-        e.$comment = 'This is edge.\nIt connects a, b and c.';
+        e.addComment('This is edge.\nIt connects a, b and c.');
 
         e.color = 'red';
       });
       g.subgraph('A', (A) => {
-        A.$comment = 'It is subgraph A.\nIt is not cluster';
+        A.addComment('It is subgraph A.\nIt is not cluster');
         A.node('Aaa', (n) => {
-          n.$comment = 'This is node Aaa in subgraph A.';
+          n.addComment('This is node Aaa in subgraph A.');
           n.color = 'pink';
         });
       });
@@ -32,13 +32,13 @@ describe('Root graphs built with digraph() and graph()', () => {
     expect(dot).toMatchSnapshot();
   });
 
-  it('print the ports and compass points given by node.$port() and strings', () => {
+  it('print the ports and compass points given by node.port() and strings', () => {
     const G = graph('G', (g) => {
       const a = g.node('a');
       g.edge([
-        a.$port('p'),
-        a.$port({ port: 'q', compass: 'w' }),
-        a.$port({ compass: 'e' }),
+        a.port('p'),
+        a.port({ port: 'q', compass: 'w' }),
+        a.port({ compass: 'e' }),
         'b:r:se',
       ]);
     });

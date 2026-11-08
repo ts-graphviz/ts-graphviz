@@ -1,7 +1,6 @@
 import type { NodeModel } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import { AttributesBase } from '../attributes/AttributesBase.js';
-import { DotObject } from './DotObject.js';
 import { Edge } from './Edge.js';
 import { GraphBase } from './GraphBase.js';
 import { defaultModelsContext } from './models-context.js';
@@ -24,10 +23,9 @@ beforeEach(() => {
   g = new TestGraph();
 });
 
-it('should be instance of GraphBase/AttributesBase/DotObject', () => {
+it('should be instance of GraphBase/AttributesBase', () => {
   expect(g).toBeInstanceOf(GraphBase);
   expect(g).toBeInstanceOf(AttributesBase);
-  expect(g).toBeInstanceOf(DotObject);
 });
 
 describe('Constructor', () => {

@@ -5,6 +5,9 @@ import {
   type AttributeListKind,
   type AttributeListModel,
   type ClusterSubgraphAttributeKey,
+  type CommentModel,
+  type CommentOptions,
+  type CommentPosition,
   type DotObjectType,
   type EdgeAttributeKey,
   type EdgeAttributesObject,
@@ -37,6 +40,7 @@ import {
 } from '@ts-graphviz/common';
 import { AttributeList } from '../attributes/AttributeList.js';
 import { AttributesBase } from '../attributes/AttributesBase.js';
+import { CommentList, GRAPH_POSITIONS } from './comment-list.js';
 
 const MODEL_KEYS = [
   'Dot',
@@ -94,10 +98,59 @@ export abstract class GraphBase<
     );
   }
 
+  /**
+   * The graph's name.
+   * @deprecated Read `graphId` of a root graph or `subgraphId` of a
+   * subgraph. Removed in v5.
+   */
   public readonly id?: string;
 
-  public comment?: string;
+  readonly #comments: CommentList = new CommentList(GRAPH_POSITIONS);
 
+  /** The comments attached to the graph, in the order they were added. */
+  public get comments(): ReadonlyArray<CommentModel> {
+    return this.#comments.items;
+  }
+
+  /**
+   * Attach a comment, `'leading'` (default), `'trailing'` or `'end'` (at the end of the body).
+   * @returns The comment, to remove it later.
+   */
+  public addComment(
+    text: string,
+    options?: CommentOptions<CommentPosition>,
+  ): CommentModel {
+    return this.#comments.add(text, options);
+  }
+
+  /** Remove a comment that was attached to the graph. */
+  public removeComment(comment: CommentModel): void {
+    this.#comments.remove(comment);
+  }
+
+  /**
+   * The text of the first leading comment: setting replaces it (keeping its
+   * kind) or adds one, and `undefined` removes it.
+   * @deprecated Use `comments`, `addComment` and `removeComment`. Removed in
+   * v5.
+   */
+  public get comment(): string | undefined {
+    return this.#comments.firstLeading;
+  }
+
+  public set comment(text: string | undefined) {
+    this.#comments.setFirstLeading(text);
+  }
+
+  /**
+   * The leading default attribute statements of the graph (the first
+   * `graph [...]`, `node [...]` and `edge [...]`), which apply to every
+   * statement in it.
+   *
+   * @deprecated Write a default attribute statement with
+   * {@link addAttributeList} (in the DOT DSL, `g.node({...})` and the like)
+   * and keep the list it returns to change it later. Removed in v5.
+   */
   public readonly attributes: Readonly<GraphCommonAttributes<SchemaOf<M>>> =
     Object.freeze({
       graph: new AttributeList<
@@ -229,8 +282,8 @@ export abstract class GraphBase<
 
   public addSubgraph(subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>): void {
     const model = modelOf(subgraph);
-    if (!this.#objects.subgraphs.has(model) && model.id !== undefined) {
-      const id = model.id;
+    const id = subgraphName(model);
+    if (!this.#objects.subgraphs.has(model) && id !== undefined) {
       const same = this.#subgraphsById.get(id);
       if (same === undefined) this.#subgraphsById.set(id, [model]);
       else same.push(model);
@@ -244,32 +297,32 @@ export abstract class GraphBase<
    * Whether a default attribute statement added after other statements
    * keeps its place in {@link statements} (applying, as in DOT, only to
    * what follows it) instead of being merged into {@link attributes}.
-   * `false` here; the classes of `orderedModels` return `true`.
+   * `true` here; the deprecated classes of `legacyModels` return `false`.
    */
   protected get keepsDefaultsInPlace(): boolean {
-    return false;
+    return true;
   }
 
   public addAttributeList(
     kind: 'Graph',
     attributes: AttributeListAttributes<SchemaOf<M>, 'Graph'>,
-  ): void;
+  ): GraphCommonAttributes<SchemaOf<M>>['graph'];
   public addAttributeList(
     kind: 'Node',
     attributes: AttributeListAttributes<SchemaOf<M>, 'Node'>,
-  ): void;
+  ): GraphCommonAttributes<SchemaOf<M>>['node'];
   public addAttributeList(
     kind: 'Edge',
     attributes: AttributeListAttributes<SchemaOf<M>, 'Edge'>,
-  ): void;
+  ): GraphCommonAttributes<SchemaOf<M>>['edge'];
   public addAttributeList(
     kind: AttributeListKind,
     attributes: AttributeListAttributes<SchemaOf<M>>,
-  ): void;
+  ): StatementAttributeListModel<SchemaOf<M>>;
   public addAttributeList(
     kind: AttributeListKind,
     attributes: AttributeListAttributes<SchemaOf<M>>,
-  ): void {
+  ): unknown {
     // The kind is printed as a keyword, so it must be one of the three.
     if (kind !== 'Graph' && kind !== 'Node' && kind !== 'Edge') {
       throw withCode(
@@ -290,14 +343,15 @@ export abstract class GraphBase<
       // they are.
       (
         target as AttributeListModel<AttributeListKind, AttributeKey, object>
-      ).apply(attributes);
-      return;
+      ).setAttributes(attributes);
+      return target;
     }
     const list = new AttributeList<AttributeListKind, AttributeKey, object>(
       kind,
     );
-    list.apply(attributes);
+    list.setAttributes(attributes);
     this.#statements.add(list);
+    return list;
   }
 
   public existNode(nodeId: string): boolean {
@@ -382,7 +436,7 @@ export abstract class GraphBase<
   public getSubgraph(id: string): M['Subgraph'] | undefined {
     // The first one added with this id, as before (a subgraph's id is not
     // expected to change; one whose id did is found under neither).
-    return this.#subgraphsById.get(id)?.find((s) => s.id === id) as
+    return this.#subgraphsById.get(id)?.find((s) => subgraphName(s) === id) as
       | M['Subgraph']
       | undefined;
   }
@@ -410,4 +464,12 @@ export abstract class GraphBase<
     this.addEdge(edge);
     return edge as M['Edge'];
   }
+}
+
+/** A subgraph's name: `subgraphId`, or `id` for a model written for 3.x. */
+function subgraphName(subgraph: {
+  readonly subgraphId?: string | undefined;
+  readonly id?: string | undefined;
+}): string | undefined {
+  return subgraph.subgraphId ?? subgraph.id;
 }
