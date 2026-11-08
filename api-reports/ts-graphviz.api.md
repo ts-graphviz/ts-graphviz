@@ -181,13 +181,13 @@ export declare function fromDot(dot: string, options?: FromDotOptions<"Dot" | "G
 export declare function fromDot<const R extends FromDotRule>(dot: string, options: FromDotOptions<R>): FromDotModel<R>;
 
 export declare function fromDotAll<const P extends Partial<ModelsContext>>(dot: string, options: Omit<FromDotOptions<"Dot", P>, "parse"> & {
-  parse?: Omit<ParseOptions<"Dot">, "startRule">;
+  parse?: CommonParseOptions;
   convert: {
     models: P;
   };
 }): (ResolvedModelTypes<P>["Graph"] | ResolvedModelTypes<P>["Digraph"])[];
 export declare function fromDotAll(dot: string, options?: Omit<FromDotOptions<"Dot">, "parse"> & {
-  parse?: Omit<ParseOptions<"Dot">, "startRule">;
+  parse?: CommonParseOptions;
 }): RootGraphModel[];
 
 export declare const graph: ModelFactory;

@@ -10,7 +10,6 @@ import {
   type GraphASTNode,
   type NodeASTNode,
   parse,
-  parseFragment,
   type SubgraphASTNode,
   sanitize,
   stringify,
@@ -21,28 +20,28 @@ import { describe, expectTypeOf, it } from 'vitest';
 // What users of `ts-graphviz/ast` get from its overloads and inference
 // (#1744). The declarations themselves are in api-reports/.
 
-describe('parse / parseFragment', () => {
+describe('parse', () => {
   it('parse gives a whole file', () => {
     expectTypeOf(parse('digraph {}')).toEqualTypeOf<DotASTNode>();
   });
 
-  it('parseFragment types the node by the rule', () => {
-    expectTypeOf(parseFragment('a', 'Node')).toEqualTypeOf<NodeASTNode>();
-    expectTypeOf(parseFragment('a -> b', 'Edge')).toEqualTypeOf<EdgeASTNode>();
+  it('parse types the node by as', () => {
+    expectTypeOf(parse('a', { as: 'Node' })).toEqualTypeOf<NodeASTNode>();
+    expectTypeOf(parse('a -> b', { as: 'Edge' })).toEqualTypeOf<EdgeASTNode>();
     expectTypeOf(
-      parseFragment('graph {}', 'Graph'),
+      parse('graph {}', { as: 'Graph' }),
     ).toEqualTypeOf<GraphASTNode>();
     expectTypeOf(
-      parseFragment('subgraph {}', 'Subgraph'),
+      parse('subgraph {}', { as: 'Subgraph' }),
     ).toEqualTypeOf<SubgraphASTNode>();
     expectTypeOf(
-      parseFragment('node [a=1]', 'AttributeList'),
+      parse('node [a=1]', { as: 'AttributeList' }),
     ).toEqualTypeOf<AttributeListASTNode>();
-    expectTypeOf(parseFragment('a; b', 'ClusterStatements')).toEqualTypeOf<
+    expectTypeOf(parse('a; b', { as: 'ClusterStatements' })).toEqualTypeOf<
       ClusterStatementASTNode[]
     >();
     // @ts-expect-error not a rule
-    parseFragment('a', 'Statement');
+    parse('a', { as: 'Statement' });
   });
 });
 
