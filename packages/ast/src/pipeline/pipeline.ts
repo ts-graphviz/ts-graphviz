@@ -1,8 +1,5 @@
 import { ownOptions } from '@ts-graphviz/common';
-import {
-  type CommonParseOptions,
-  parseFragment,
-} from '../dot-shim/parser/index.js';
+import { type CommonParseOptions, parse } from '../dot-shim/parser/index.js';
 import { stringify } from '../dot-shim/printer/stringify.js';
 import type { PrintOptions } from '../dot-shim/printer/types.js';
 import type { DotASTNode } from '../types.js';
@@ -58,7 +55,7 @@ export class Pipeline {
 
   /** Parse a DOT source, run the transformers and print the result. */
   process(source: string): string {
-    const ast = parseFragment(source, 'Dot', this.options.parse);
+    const ast = parse(source, 'Dot', this.options.parse);
     return stringify(this.run(ast), this.options.print);
   }
 }

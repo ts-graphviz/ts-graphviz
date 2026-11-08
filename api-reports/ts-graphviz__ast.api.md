@@ -314,18 +314,15 @@ export declare function createElementFactory(options?: Partial<Pick<BuilderOptio
 
 export declare function fromModel<T extends AnyReadonlyDotObjectModel | ModelView>(model: T, options?: ConvertFromModelOptions): ModelToAST<ModelOf<T>>;
 
-export declare function parse(input: string): DotASTNode;
-export declare function parse(input: string, options?: ParseOptions<"Dot">): DotASTNode;
-export declare function parse(input: string, options?: ParseOptions<"Graph">): GraphASTNode;
-export declare function parse(input: string, options?: ParseOptions<"Node">): NodeASTNode;
-export declare function parse(input: string, options?: ParseOptions<"Edge">): EdgeASTNode;
-export declare function parse(input: string, options?: ParseOptions<"AttributeList">): AttributeListASTNode;
-export declare function parse(input: string, options?: ParseOptions<"Attribute">): AttributeASTNode;
-export declare function parse(input: string, options?: ParseOptions<"Subgraph">): SubgraphASTNode;
-export declare function parse(input: string, options?: ParseOptions<"ClusterStatements">): ClusterStatementASTNode[];
-export declare function parse(input: string, options?: ParseOptions<Rule>): ASTNode | ClusterStatementASTNode[];
+export declare function parse(input: string, options?: CommonParseOptions): DotASTNode;
+export declare function parse<R extends Rule>(input: string, rule: R, options?: CommonParseOptions): FragmentByRule[R];
 
-export declare function parseFragment<R extends Rule>(input: string, rule: R, options?: CommonParseOptions): FragmentByRule[R];
+export declare function parseLegacy(input: string, options?: Omit<ParseOptions<"Dot">, "startRule"> & {
+  startRule?: "Dot";
+}): DotASTNode;
+export declare function parseLegacy<R extends Rule>(input: string, options: ParseOptions<R> & {
+  startRule: R;
+}): FragmentByRule[R];
 
 export declare function sanitize(dot: string, options?: SanitizeOptions): string;
 

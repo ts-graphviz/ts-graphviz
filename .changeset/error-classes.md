@@ -14,6 +14,7 @@ Every error ts-graphviz raises on purpose is the standard error type that fits t
 |---|---|---|
 | DOT does not parse, or exceeds a parse limit (`maxInputSize`, `maxASTNodes`, the depth limits) | `DotSyntaxError` (a `SyntaxError`) | `TSG_ERR_DOT_SYNTAX` |
 | parser failed otherwise (see `cause`) | `Error` | `TSG_ERR_PARSE_FAILED` |
+| `parse` given 3.x's `{ startRule }` options, or a second argument that is neither a rule name nor options (see `parseLegacy`) | `TypeError` | `TSG_ERR_INVALID_PARSE_ARGUMENTS` |
 | an AST built by `fromModel` or a `createElementFactory` builder exceeds `maxASTNodes` | `ASTNodeCountExceededError` (a `RangeError`) | `TSG_ERR_AST_NODE_COUNT_EXCEEDED` |
 | edges to subgraphs reach more than `maxEdgeTargets` nodes | `RangeError` | `TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED` |
 | null character in text written to DOT | `RangeError` | `TSG_ERR_NUL_CHARACTER` |

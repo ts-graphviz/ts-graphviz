@@ -93,13 +93,13 @@ const ast = parse(dotString, {
 | `maxInputSize` | `10485760` (10MB) | Maximum input size in bytes |
 | `maxASTNodes` | `100000` | Maximum number of AST nodes to create |
 
-To read a fragment of a DOT source rather than a whole one, use `parseFragment` (beta, low-level API) with the grammar rule; it takes the same limits. The `startRule` option of `parse` is deprecated in its favour and will be removed in 5.0.
+To read a fragment of a DOT source rather than a whole one, pass the grammar rule as the second argument; the limits come third. (3.x's `parse(source, { startRule })` is `parseLegacy` in 4.x, deprecated and removed in 5.0.)
 
 ```ts
-import { parseFragment } from "@ts-graphviz/ast";
+import { parse } from "@ts-graphviz/ast";
 
-const edge = parseFragment('a -> b [color=red]', 'Edge');
-const statements = parseFragment('a; b -> c; rank=same', 'ClusterStatements');
+const edge = parse('a -> b [color=red]', 'Edge');
+const statements = parse('a; b -> c; rank=same', 'ClusterStatements', { maxASTNodes: 1000 });
 ```
 
 **Security Note**:

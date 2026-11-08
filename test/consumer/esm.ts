@@ -37,7 +37,6 @@ import {
   type DotASTNode,
   type NodeASTNode,
   parse,
-  parseFragment,
   sanitize,
   stringify,
 } from 'ts-graphviz/ast';
@@ -97,12 +96,12 @@ class MyNode extends Node {
 withContext({ Node: MyNode }).digraph((g) => g.node('a').$extra());
 createModelsContext({ Node: MyNode });
 
-// parse / parseFragment / stringify / sanitize
+// parse / stringify / sanitize
 const dot: DotASTNode = parse(sanitize(text));
-const nodeAST = parseFragment('a [color=red]', 'Node');
+const nodeAST = parse('a [color=red]', 'Node');
 assertType<Equal<typeof nodeAST, NodeASTNode>>();
 // @ts-expect-error not a rule
-parseFragment('a', 'Statement');
+parse('a', 'Statement');
 const printed: string = stringify(dot) + astPackage.stringify(nodeAST);
 
 // adapter options

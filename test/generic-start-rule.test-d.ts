@@ -5,7 +5,7 @@ import {
   type EdgeASTNode,
   type FragmentByRule,
   type NodeASTNode,
-  parseFragment,
+  parse,
   type Rule,
 } from '@ts-graphviz/ast';
 import {
@@ -20,36 +20,28 @@ import {
 import { describe, expectTypeOf, it } from 'vitest';
 
 // #1741: one generic signature per function, so a union rule works.
-describe('parseFragment', () => {
+describe('parse with a rule', () => {
   it('returns the node of each rule', () => {
-    expectTypeOf(
-      parseFragment('digraph {}', 'Dot'),
-    ).toEqualTypeOf<DotASTNode>();
-    expectTypeOf(parseFragment('a', 'Node')).toEqualTypeOf<NodeASTNode>();
-    expectTypeOf(
-      parseFragment('a=b', 'Attribute'),
-    ).toEqualTypeOf<AttributeASTNode>();
-    expectTypeOf(parseFragment('a; b', 'ClusterStatements')).toEqualTypeOf<
+    expectTypeOf(parse('digraph {}', 'Dot')).toEqualTypeOf<DotASTNode>();
+    expectTypeOf(parse('a', 'Node')).toEqualTypeOf<NodeASTNode>();
+    expectTypeOf(parse('a=b', 'Attribute')).toEqualTypeOf<AttributeASTNode>();
+    expectTypeOf(parse('a; b', 'ClusterStatements')).toEqualTypeOf<
       ClusterStatementASTNode[]
     >();
   });
 
   it('returns the union of the nodes for a union of rules', () => {
     const rule = Math.random() > 0.5 ? ('Node' as const) : ('Edge' as const);
-    expectTypeOf(parseFragment('a', rule)).toEqualTypeOf<
-      NodeASTNode | EdgeASTNode
-    >();
+    expectTypeOf(parse('a', rule)).toEqualTypeOf<NodeASTNode | EdgeASTNode>();
     const anyRule = 'Dot' as Rule;
-    expectTypeOf(parseFragment('a', anyRule)).toEqualTypeOf<
-      FragmentByRule[Rule]
-    >();
+    expectTypeOf(parse('a', anyRule)).toEqualTypeOf<FragmentByRule[Rule]>();
   });
 
   it('still rejects what is not a rule', () => {
     // @ts-expect-error not a rule
-    parseFragment('a', 'Comment');
+    parse('a', 'Comment');
     // @ts-expect-error a plain string is not a rule
-    parseFragment('a', 'Node' as string);
+    parse('a', 'Node' as string);
   });
 });
 

@@ -12,7 +12,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const CODE = 'TSG_DEP_PARSE_START_RULE' as const;
+const CODE = 'TSG_DEP_PARSE_LEGACY' as const;
 
 describe('warnDeprecated', () => {
   it('emits a Node.js DeprecationWarning with the code, once per code', async () => {
@@ -20,10 +20,10 @@ describe('warnDeprecated', () => {
     const emit = vi
       .spyOn(process, 'emitWarning')
       .mockImplementation(() => undefined);
-    warnDeprecated(CODE, 'use parseFragment');
-    warnDeprecated(CODE, 'use parseFragment');
+    warnDeprecated(CODE, 'use parse(source, rule)');
+    warnDeprecated(CODE, 'use parse(source, rule)');
     expect(emit).toHaveBeenCalledTimes(1);
-    expect(emit).toHaveBeenCalledWith('use parseFragment', {
+    expect(emit).toHaveBeenCalledWith('use parse(source, rule)', {
       type: 'DeprecationWarning',
       code: CODE,
     });
@@ -34,12 +34,12 @@ describe('warnDeprecated', () => {
     vi.spyOn(process, 'emitWarning').mockImplementation(() => undefined);
     const listener = vi.fn();
     const off = onDeprecation(listener);
-    warnDeprecated(CODE, 'use parseFragment');
-    warnDeprecated(CODE, 'use parseFragment');
+    warnDeprecated(CODE, 'use parse(source, rule)');
+    warnDeprecated(CODE, 'use parse(source, rule)');
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith({
       code: CODE,
-      message: 'use parseFragment',
+      message: 'use parse(source, rule)',
     });
     off();
     expect(off).not.toThrow();
@@ -52,12 +52,12 @@ describe('warnDeprecated', () => {
     const subscriber = (message: unknown) => received.push(message);
     diagnosticsChannel.subscribe(DEPRECATION_CHANNEL, subscriber);
     try {
-      warnDeprecated(CODE, 'use parseFragment');
+      warnDeprecated(CODE, 'use parse(source, rule)');
     } finally {
       diagnosticsChannel.unsubscribe(DEPRECATION_CHANNEL, subscriber);
     }
     expect(received).toStrictEqual([
-      { code: CODE, message: 'use parseFragment' },
+      { code: CODE, message: 'use parse(source, rule)' },
     ]);
   });
 
@@ -69,7 +69,7 @@ describe('warnDeprecated', () => {
     onDeprecation(listener);
     vi.stubGlobal('process', undefined);
     try {
-      warnDeprecated(CODE, 'use parseFragment');
+      warnDeprecated(CODE, 'use parse(source, rule)');
     } finally {
       vi.unstubAllGlobals();
     }
@@ -87,7 +87,7 @@ describe('warnDeprecated', () => {
     onDeprecation(() => {
       throw new Error('listener');
     });
-    expect(() => warnDeprecated(CODE, 'use parseFragment')).not.toThrow();
+    expect(() => warnDeprecated(CODE, 'use parse(source, rule)')).not.toThrow();
     expect(microtasks).toHaveBeenCalledTimes(1);
   });
 

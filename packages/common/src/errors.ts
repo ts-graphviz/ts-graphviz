@@ -28,6 +28,8 @@ export const ERROR_CODES = [
   'TSG_ERR_DOT_SYNTAX',
   /** The parser failed for a reason other than a syntax error (`Error`, see `cause`). */
   'TSG_ERR_PARSE_FAILED',
+  /** `parse` was given 3.x's `{ startRule }` options, or a second argument that is neither a grammar rule name nor an options object; use `parse(source, rule, options)` or the deprecated `parseLegacy` (`TypeError`). */
+  'TSG_ERR_INVALID_PARSE_ARGUMENTS',
   /** An AST built from models grew past `maxASTNodes` (`ASTNodeCountExceededError`, a `RangeError`); parsing reports it as `TSG_ERR_DOT_SYNTAX` with `limit: 'maxASTNodes'`. */
   'TSG_ERR_AST_NODE_COUNT_EXCEEDED',
   /** Edges to subgraphs reached more nodes than `maxEdgeTargets` while converting to a model (`RangeError`). */

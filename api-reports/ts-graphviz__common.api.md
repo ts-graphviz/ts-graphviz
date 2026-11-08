@@ -723,7 +723,7 @@ export declare namespace Compass {
 
 export declare const DEPRECATION_CHANNEL = "ts-graphviz:deprecation";
 
-export declare const DEPRECATION_CODES: readonly ["TSG_DEP_PARSE_START_RULE"];
+export declare const DEPRECATION_CODES: readonly ["TSG_DEP_PARSE_LEGACY"];
 
 export type DeprecationCode = (typeof DEPRECATION_CODES)[number];
 
@@ -762,7 +762,7 @@ export type Double = number;
 
 export type DoubleList = Double | `${Double}:${Double}` | `${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
 
-export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NO_MODELS_CONTEXT", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
+export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_INVALID_PARSE_ARGUMENTS", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NO_MODELS_CONTEXT", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
 
 export type EdgeAttributeKey = EdgeAttributeKey.values;
 export declare namespace EdgeAttributeKey {

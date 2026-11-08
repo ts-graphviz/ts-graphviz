@@ -22,8 +22,8 @@
  * @group Deprecation
  */
 export const DEPRECATION_CODES = [
-  /** `parse(input, { startRule })`: read fragments with `parseFragment(input, rule)`. Removed in 5.0. */
-  'TSG_DEP_PARSE_START_RULE',
+  /** `parseLegacy(source, { startRule })`, 3.x's signature of `parse`: use `parse(source, rule, options)`. Removed in 5.0. */
+  'TSG_DEP_PARSE_LEGACY',
 ] as const;
 // Shared by every module of the process: frozen, so no code can change what
 // counts as a deprecation code (#1757).
@@ -92,8 +92,8 @@ export function onDeprecation(
  *
  * @example
  * warnDeprecated(
- *   'TSG_DEP_PARSE_START_RULE',
- *   'parse(input, { startRule }) is deprecated; use parseFragment(input, rule).',
+ *   'TSG_DEP_PARSE_LEGACY',
+ *   'parseLegacy(source, { startRule }) is deprecated; use parse(source, rule, options).',
  * );
  * @group Deprecation
  */

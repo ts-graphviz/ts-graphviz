@@ -1,7 +1,7 @@
 import {
+  type CommonParseOptions,
   type ConvertToModelOptions,
-  type ParseOptions,
-  parseFragment,
+  parse,
   type Rule,
   toModel,
 } from '@ts-graphviz/ast';
@@ -54,11 +54,11 @@ export interface FromDotOptions<
   /**
    * Options for parsing DOT: the parser's limits, and `startRule`.
    */
-  parse?: Omit<ParseOptions<T>, 'startRule'> & {
+  parse?: CommonParseOptions & {
     /**
      * What to read the source as, and so what `fromDot` returns: a whole
      * graph (`'Dot'` or `'Graph'`, the default), a `'Node'`, an `'Edge'` or
-     * a `'Subgraph'`. (Not the deprecated `startRule` of `parse`.)
+     * a `'Subgraph'`. (`parseLegacy` has an option of that name; `parse` takes the rule as an argument.)
      */
     startRule?: T;
   };
@@ -117,7 +117,7 @@ export function fromDot(
   // option of `parse`.
   const { startRule = 'Dot', ...limits } = ownOptions(own.parse);
   // Widened to every rule on purpose: JavaScript callers can pass any.
-  const ast = parseFragment(dot, startRule as Rule, limits);
+  const ast = parse(dot, startRule as Rule, limits);
 
   if (
     Array.isArray(ast) ||
@@ -172,25 +172,25 @@ export function fromDot(
 export function fromDotAll<const P extends Partial<ModelsContext>>(
   dot: string,
   options: Omit<FromDotOptions<'Dot', P>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    parse?: CommonParseOptions;
     convert: { models: P };
   },
 ): (ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'])[];
 export function fromDotAll(
   dot: string,
   options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    parse?: CommonParseOptions;
   },
 ): RootGraphModel[];
 export function fromDotAll(
   dot: string,
   options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    parse?: CommonParseOptions;
   },
 ): RootGraphModel[] {
   // Own properties only: an inherited one is never an option (#1757).
   const own = ownOptions(options);
-  const ast = parseFragment(dot, 'Dot', own.parse);
+  const ast = parse(dot, 'Dot', own.parse);
   const convert = ownOptions(own.convert);
   const model = toModel(ast, {
     ...convert,

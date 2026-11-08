@@ -90,113 +90,25 @@ export interface CommonParseOptions {
 }
 
 /**
- * ParseOptions interface is used to provide additional information to the parser while parsing a rule.
+ * The options of {@link parseLegacy}: the parse limits and the grammar
+ * rule to read the input with.
  * @template T The type of the rule to be parsed.
+ * @deprecated Options of the deprecated {@link parseLegacy}. {@link parse}
+ * takes the rule as its second argument and the limits
+ * ({@link CommonParseOptions}) as its third. Removed in 5.0.
  * @group Convert DOT to AST
  */
 export interface ParseOptions<T extends Rule> extends CommonParseOptions {
   /**
-   * The grammar rule to parse the input with.
-   *
-   * @deprecated `parse` reads a whole DOT source; read a fragment (a
-   * graph, a statement, an attribute list, ...) with {@link parseFragment}
-   * instead. `startRule` keeps working in 4.x and is removed in 5.0.
+   * The grammar rule to parse the input with; `'Dot'` (a whole DOT source)
+   * by default.
    */
   startRule?: T;
 }
 
 /**
- * Parse a DOT source (any number of graphs and comments) into a
- * {@link DotASTNode}.
- *
- * To read a fragment of a DOT source (a graph, a node, an edge, ...), use
- * {@link parseFragment}; the `startRule` option that did this here is
- * deprecated.
- *
- * @throws {@link DotSyntaxError}
- * @group Convert DOT to AST
- */
-export function parse(input: string): DotASTNode;
-export function parse(input: string, options?: ParseOptions<'Dot'>): DotASTNode;
-/**
- * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
- * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
- */
-export function parse(
-  input: string,
-  options?: ParseOptions<'Graph'>,
-): GraphASTNode;
-/**
- * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
- * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
- */
-export function parse(
-  input: string,
-  options?: ParseOptions<'Node'>,
-): NodeASTNode;
-/**
- * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
- * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
- */
-export function parse(
-  input: string,
-  options?: ParseOptions<'Edge'>,
-): EdgeASTNode;
-/**
- * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
- * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
- */
-export function parse(
-  input: string,
-  options?: ParseOptions<'AttributeList'>,
-): AttributeListASTNode;
-/**
- * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
- * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
- */
-export function parse(
-  input: string,
-  options?: ParseOptions<'Attribute'>,
-): AttributeASTNode;
-/**
- * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
- * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
- */
-export function parse(
-  input: string,
-  options?: ParseOptions<'Subgraph'>,
-): SubgraphASTNode;
-/**
- * @deprecated Read a fragment with {@link parseFragment}; `parse` with a
- * `startRule` other than `'Dot'` keeps working in 4.x and is removed in 5.0.
- */
-export function parse(
-  input: string,
-  options?: ParseOptions<'ClusterStatements'>,
-): ClusterStatementASTNode[];
-// Not deprecated: options typed with any rule may well be a whole source's.
-export function parse(
-  input: string,
-  options?: ParseOptions<Rule>,
-): ASTNode | ClusterStatementASTNode[];
-export function parse(
-  input: string,
-  options?: ParseOptions<Rule>,
-): ASTNode | ClusterStatementASTNode[] {
-  const { startRule, ...common } = ownOptions(options);
-  if (startRule !== undefined) {
-    warnDeprecated(
-      'TSG_DEP_PARSE_START_RULE',
-      `parse(input, { startRule }) is deprecated and will be removed in 5.0; use parseFragment(input, '${startRule}') instead.`,
-    );
-  }
-  return parseRule(input, startRule ?? 'Dot', common);
-}
-
-/**
- * What {@link parseFragment} returns for each grammar {@link Rule}. For a
- * union of rules, `FragmentByRule[R]` is the union of their results.
- * @beta
+ * What {@link parse} returns for each grammar {@link Rule}. For a union of
+ * rules, `FragmentByRule[R]` is the union of their results.
  * @group Convert DOT to AST
  */
 export interface FragmentByRule {
@@ -211,29 +123,124 @@ export interface FragmentByRule {
 }
 
 /**
- * Parse a fragment of a DOT source by grammar rule: one graph, subgraph,
- * node, edge, attribute list, attribute, or a list of statements.
- * {@link parse} reads a whole DOT source.
+ * Parse DOT into an AST: a whole DOT source (any number of graphs and
+ * comments) by default, or the fragment that `rule` names (one graph,
+ * subgraph, node, edge, attribute list, attribute, or a list of
+ * statements). For a union of rules the result is the union of theirs.
  *
- * This is the low-level parsing API: it is in beta, and is where the
- * lower layers of the parser (such as a streaming lexer) will be
- * exposed.
- *
- * @throws {@link DotSyntaxError}
- * @beta
+ * @example
+ * ```ts
+ * const dot = parse('digraph { a -> b }'); // DotASTNode
+ * const limited = parse(source, { maxInputSize: 65536 }); // a whole source, with limits
+ * const edge = parse('a -> b [color=red]', 'Edge'); // EdgeASTNode
+ * const node = parse('a', 'Node', { maxASTNodes: 100 });
+ * ```
+ * @param input - The DOT text.
+ * @param options - The parse limits and a file name for errors.
+ * @throws {@link DotSyntaxError} when the input does not parse or exceeds a limit.
+ * @throws A `TypeError` with code `TSG_ERR_INVALID_PARSE_ARGUMENTS` for
+ * 3.x's `{ startRule }` (see {@link parseLegacy}) or a second argument
+ * that is neither a rule name nor an options object.
  * @group Convert DOT to AST
  */
-export function parseFragment<R extends Rule>(
+export function parse(input: string, options?: CommonParseOptions): DotASTNode;
+/**
+ * Parse the fragment of DOT that `rule` names.
+ *
+ * @param input - The DOT text.
+ * @param rule - The grammar rule to read it with.
+ * @param options - The parse limits and a file name for errors.
+ * @throws {@link DotSyntaxError} when the input does not parse or exceeds a limit.
+ * @group Convert DOT to AST
+ */
+export function parse<R extends Rule>(
   input: string,
   rule: R,
   options?: CommonParseOptions,
 ): FragmentByRule[R];
-export function parseFragment(
+export function parse(
   input: string,
-  rule: Rule,
+  ruleOrOptions?: Rule | CommonParseOptions,
   options?: CommonParseOptions,
 ): ASTNode | ClusterStatementASTNode[] {
-  return parseRule(input, rule, options ?? {});
+  if (typeof ruleOrOptions === 'string' && RULES.has(ruleOrOptions)) {
+    return parseRule(input, ruleOrOptions, limitsOf(options));
+  }
+  if (ruleOrOptions === undefined) {
+    return parseRule(input, 'Dot', limitsOf(options));
+  }
+  if (
+    typeof ruleOrOptions === 'object' &&
+    ruleOrOptions !== null &&
+    options === undefined
+  ) {
+    return parseRule(input, 'Dot', limitsOf(ruleOrOptions));
+  }
+  throw invalidArguments();
+}
+
+const RULES: ReadonlySet<string> = new Set<Rule>([
+  'Dot',
+  'Graph',
+  'Subgraph',
+  'Node',
+  'Edge',
+  'AttributeList',
+  'Attribute',
+  'ClusterStatements',
+]);
+
+function invalidArguments(): TypeError {
+  return withCode(
+    new TypeError(
+      'parse takes an optional grammar rule, then the options: parse(source, options) or parse(source, rule, options). For the 3.x signature parse(source, { startRule }), use parseLegacy (deprecated).',
+    ),
+    'TSG_ERR_INVALID_PARSE_ARGUMENTS',
+  );
+}
+
+/** The options' own properties, refusing 3.x's own `startRule`. */
+function limitsOf(options: CommonParseOptions | undefined): CommonParseOptions {
+  const own = ownOptions(options);
+  if (Object.hasOwn(own, 'startRule')) throw invalidArguments();
+  return own;
+}
+
+/**
+ * Parse DOT with 3.x's signature: `parseLegacy(source, { startRule, ...limits })`.
+ * It returns what {@link parse} returns for that rule.
+ *
+ * @deprecated Use {@link parse}: `parse(source, rule, limits)`. Kept for
+ * 3.x code until 5.0, where it is removed.
+ * @throws {@link DotSyntaxError}
+ * @group Convert DOT to AST
+ */
+export function parseLegacy(
+  input: string,
+  options?: Omit<ParseOptions<'Dot'>, 'startRule'> & { startRule?: 'Dot' },
+): DotASTNode;
+/**
+ * Parse the fragment that `startRule` names, with 3.x's signature.
+ *
+ * @deprecated Use {@link parse}: `parse(source, rule, limits)`. Kept for
+ * 3.x code until 5.0, where it is removed.
+ * @throws {@link DotSyntaxError}
+ * @group Convert DOT to AST
+ */
+export function parseLegacy<R extends Rule>(
+  input: string,
+  options: ParseOptions<R> & { startRule: R },
+): FragmentByRule[R];
+export function parseLegacy(
+  input: string,
+  options?: ParseOptions<Rule>,
+): ASTNode | ClusterStatementASTNode[] {
+  warnDeprecated(
+    'TSG_DEP_PARSE_LEGACY',
+    'parseLegacy(source, { startRule }) is deprecated and will be removed in 5.0; use parse(source, rule, options) instead.',
+  );
+  const { startRule, ...common } = ownOptions(options);
+  return parseRule(input, startRule ?? 'Dot', common);
 }
 
 function parseRule(

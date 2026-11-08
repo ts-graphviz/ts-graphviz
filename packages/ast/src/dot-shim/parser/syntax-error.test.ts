@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { DotSyntaxError, parse } from './parse.js';
+import { type CommonParseOptions, DotSyntaxError, parse } from './parse.js';
 
-function syntaxError(dot: string, options?: Parameters<typeof parse>[1]) {
+function syntaxError(dot: string, options?: CommonParseOptions) {
   try {
     parse(dot, options);
   } catch (e) {
