@@ -212,6 +212,29 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     expect(brief(again.comments)).toEqual(brief(g.comments));
   });
 
+  test('a node mentioned again takes the comments of each mention', () => {
+    const g = fromDot(
+      'digraph {\n  a;\n  b;\n  /* later */\n  a [color=red]\n}',
+    );
+    // One node, at its first place: the comment of the later mention joins it.
+    expect(brief(g.getNode('a')?.comments ?? [])).toEqual([
+      ['later', 'Block', 'leading'],
+    ]);
+  });
+
+  test('a comment after a graph attribute assignment leads the next statement', () => {
+    const g = fromDot('digraph {\n  color = blue; // after\n  a\n}');
+    expect(brief(g.getNode('a')?.comments ?? [])).toEqual([
+      ['after', 'Slash', 'leading'],
+    ]);
+  });
+
+  test('a default attribute list with comments but no attributes keeps them', () => {
+    const g = new Digraph();
+    g.attributes.node.addComment('defaults for nodes');
+    expect(toDot(g)).toContain('// defaults for nodes');
+  });
+
   test('around the graphs of a DOT source', () => {
     const source = `// lead G
 digraph G { a } // trails G

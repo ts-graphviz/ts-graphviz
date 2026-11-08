@@ -43,9 +43,9 @@ export interface CommentOptions<
   P extends CommentPosition = 'leading' | 'trailing',
 > {
   /** Where the comment is written; `'leading'` by default. */
-  position?: P;
+  position?: P | undefined;
   /** The kind of comment; by default as `fromModel`'s `commentKind` says. */
-  kind?: CommentKind;
+  kind?: CommentKind | undefined;
 }
 
 /**

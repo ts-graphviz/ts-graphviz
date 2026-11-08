@@ -57,6 +57,11 @@ export class BodyComments {
    */
   statement(model: Holder | undefined, ast: ASTNode): void {
     if (model === undefined) {
+      // Its own comments lead the next model too.
+      this.#pending.push(
+        ...(ownField(ast, 'leadingComments') ?? []),
+        ...(ownField(ast, 'trailingComments') ?? []),
+      );
       this.#previous = undefined;
       return;
     }

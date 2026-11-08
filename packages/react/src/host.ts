@@ -158,6 +158,8 @@ function applyComment(
   text: string | undefined,
 ): void {
   const previous = propComments.get(model);
+  // The same text keeps the comment, and its place among the others.
+  if (previous !== undefined && previous.text === text) return;
   if (previous !== undefined) {
     model.removeComment(previous);
     propComments.delete(model);

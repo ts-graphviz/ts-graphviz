@@ -724,8 +724,8 @@ export interface CommentModel {
 }
 
 export interface CommentOptions<P extends CommentPosition = "leading" | "trailing"> {
-  position?: P;
-  kind?: CommentKind;
+  position?: P | undefined;
+  kind?: CommentKind | undefined;
 }
 
 export type CommentPosition = "leading" | "trailing" | "end";

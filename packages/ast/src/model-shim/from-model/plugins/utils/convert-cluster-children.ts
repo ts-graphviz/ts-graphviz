@@ -2,7 +2,11 @@ import type { ReadonlyGraphBaseModel } from '@ts-graphviz/common';
 import type { ClusterStatementASTNode } from '../../../../types.js';
 import type { ConvertFromModelContext } from '../../types.js';
 import { convertAttributes } from './convert-attribute.js';
-import { convertComments, withTrailingComments } from './convert-comment.js';
+import {
+  commentsOf,
+  convertComments,
+  withTrailingComments,
+} from './convert-comment.js';
 
 export function convertClusterChildren(
   context: ConvertFromModelContext,
@@ -13,7 +17,11 @@ export function convertClusterChildren(
     (function* (): Generator<ClusterStatementASTNode> {
       yield* convertAttributes(createElement, model);
       for (const attrs of Object.values(model.attributes)) {
-        if (attrs.getAttributeNames().length > 0) {
+        // A list with neither attributes nor comments writes nothing.
+        if (
+          attrs.getAttributeNames().length > 0 ||
+          commentsOf(attrs).length > 0
+        ) {
           yield* convertComments(createElement, attrs, 'leading', commentKind);
           yield withTrailingComments(
             createElement,
