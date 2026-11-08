@@ -8,18 +8,23 @@ export { expect };
  * test waits for (#1941). The tests check the site, not those images.
  * Scripts from other hosts (Monaco's loader) still load.
  */
-export const test = base.extend<{ noRemoteImages: undefined }>({
-  noRemoteImages: [
+export const test = base.extend<{ abortedImages: string[] }>({
+  // The images aborted so far, for the test that checks this fixture.
+  abortedImages: [
     async ({ context, baseURL }, use) => {
       const { host } = new URL(baseURL ?? 'http://localhost');
+      const aborted: string[] = [];
       await context.route(
         (url) => /^https?:$/.test(url.protocol) && url.host !== host,
-        (route) =>
-          route.request().resourceType() === 'image'
-            ? route.abort()
-            : route.fallback(),
+        (route) => {
+          if (route.request().resourceType() !== 'image') {
+            return route.fallback();
+          }
+          aborted.push(route.request().url());
+          return route.abort();
+        },
       );
-      await use(undefined);
+      await use(aborted);
     },
     { auto: true },
   ],
