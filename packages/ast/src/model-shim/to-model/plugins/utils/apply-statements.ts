@@ -102,21 +102,21 @@ export function applyStatements(
         commentHolder.reset();
         break;
       case 'Node': {
+        // Converted by the node plugin each time, so a converter whose
+        // plugin changes nodes applies to every mention.
+        const node = context.convert(stmt);
         // A node mentioned again adds to its attributes, as in Graphviz
-        // (`a [color=red]; a [shape=box]` is one node with both). They are
-        // set on it once, through its own setAttribute.
-        const existing = graph.getNode(idFromLiteral(stmt.id));
+        // (`a [color=red]; a [shape=box]` is one node with both): the
+        // converted node's attributes are set on the existing one through
+        // its setAttribute (as 3.x applied them), so a setAttribute that
+        // changes values runs on them again.
+        const existing = graph.getNode(node.id);
         if (existing) {
-          existing.setAttributes(
-            collectAttributes(
-              stmt.children.filter<AttributeASTNode>(
-                (v): v is AttributeASTNode => v.type === 'Attribute',
-              ),
-            ),
-          );
+          for (const name of node.getAttributeNames()) {
+            existing.setAttribute(name, node.getAttribute(name) as never);
+          }
           commentHolder.apply(existing, stmt.location);
         } else {
-          const node = context.convert(stmt);
           commentHolder.apply(node, stmt.location);
           graph.addNode(node);
         }

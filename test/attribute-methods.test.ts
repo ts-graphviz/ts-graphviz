@@ -197,22 +197,21 @@ describe('the DSL of an edge, and the members as values', () => {
 });
 
 describe('the converters and custom classes', () => {
-  it('set a node mentioned again once, through its setAttribute', () => {
+  it('convert a node mentioned again with the node plugin, then merge it', () => {
     const seen: string[] = [];
-    class Upper extends Node {
+    class Recording extends Node {
       override setAttribute(name: string, value: unknown): void {
-        seen.push(name);
-        super.setAttribute(
-          name as 'label',
-          (typeof value === 'string' ? `${value}!` : value) as string,
-        );
+        seen.push(`${this.id}.${name}=${String(value)}`);
+        super.setAttribute(name as 'label', value as string);
       }
     }
-    const g = fromDot('digraph { a [label=A]; a [label=B]; }', {
-      convert: { models: { Node: Upper } },
+    const g = fromDot('digraph { a [label=A]; a [color=red]; }', {
+      convert: { models: { Node: Recording } },
     });
-    expect(g.getNode('a')?.getAttribute('label')).toBe('B!');
-    expect(seen).toEqual(['label', 'label']);
+    expect(g.getNode('a')?.getAttributeNames()).toEqual(['label', 'color']);
+    // The second mention is converted (a node of its own), then its
+    // attributes are set on the first.
+    expect(seen).toEqual(['a.label=A', 'a.color=red', 'a.color=red']);
   });
 
   it('convert a node made by hand in the 3.x shape', () => {
