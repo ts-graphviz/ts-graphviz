@@ -246,6 +246,50 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     expect(stringify(fromModel(node))).toBe('"a"; /* note */');
   });
 
+  test('leading comments are kept when a statement is converted alone', () => {
+    const node = new Node('a');
+    node.addComment('first');
+    node.addComment('second', { kind: 'Block' });
+    node.addComment('note', { position: 'trailing', kind: 'Block' });
+    expect(stringify(fromModel(node))).toBe(
+      '// first\n/* second */\n"a"; /* note */',
+    );
+    const s = new Subgraph('s');
+    s.addComment('lead s');
+    s.createNode('x').addComment('lead x');
+    expect(toDot(s)).toBe('// lead s\nsubgraph "s" {\n  // lead x\n  "x";\n}');
+  });
+
+  test('a block comment after a multi-line trailing block comment on its last line trails the statement too', () => {
+    const g = new Digraph();
+    const a = g.createNode('a');
+    a.addComment('x\ny', { position: 'trailing', kind: 'Block' });
+    a.addComment('z', { position: 'trailing', kind: 'Block' });
+    g.createNode('b');
+    const again = fromDot(toDot(g));
+    expect(brief(again.getNode('a')?.comments ?? [])).toEqual([
+      ['x\ny', 'Block', 'trailing'],
+      ['z', 'Block', 'trailing'],
+    ]);
+    expect(again.getNode('b')?.comments).toEqual([]);
+  });
+
+  test('a comment at a position the model does not take is refused', () => {
+    const node = {
+      $$type: 'Node',
+      id: 'a',
+      comments: [
+        { $$type: 'Comment', text: 'c', kind: undefined, position: 'end' },
+      ],
+      getAttribute: () => undefined,
+      hasAttribute: () => false,
+      getAttributeNames: () => [],
+    };
+    expect(() => fromModel(node as never)).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_INVALID_COMMENT' }),
+    );
+  });
+
   test('a multi-line trailing block comment keeps its text; trailing line comments of one kind read back as one', () => {
     const g = new Digraph();
     const a = g.createNode('a');
