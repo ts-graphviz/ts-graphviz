@@ -176,7 +176,7 @@ describe('deprecated until v5 (#1930)', () => {
   });
 });
 
-describe('deprecated until v5 (#1935)', () => {
+describe('deprecated until v5: comment', () => {
   it.each([
     ['packages/common/src/models/models.ts', 'comment?: string | undefined;'],
     ['packages/core/src/models/Node.ts', 'public get comment():'],

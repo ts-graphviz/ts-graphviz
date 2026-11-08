@@ -69,9 +69,9 @@ export interface ReadonlyAttributeListModel<
    */
   readonly comment?: string | undefined;
   /**
-   * The comments attached to the object, in the order they were added. A
-   * model written for 3.x has none; the readers then take its `comment`
-   * as one leading comment.
+   * The comments attached to the object, in the order they were added. An
+   * object without them is read as having its `comment` as one leading
+   * comment.
    */
   readonly comments?: ReadonlyArray<CommentModel>;
 }
@@ -93,9 +93,9 @@ export interface ReadonlyNodeModel extends ReadonlyAttributes {
    */
   readonly comment?: string | undefined;
   /**
-   * The comments attached to the object, in the order they were added. A
-   * model written for 3.x has none; the readers then take its `comment`
-   * as one leading comment.
+   * The comments attached to the object, in the order they were added. An
+   * object without them is read as having its `comment` as one leading
+   * comment.
    */
   readonly comments?: ReadonlyArray<CommentModel>;
   /**
@@ -119,9 +119,9 @@ export interface ReadonlyEdgeModel extends ReadonlyAttributes {
    */
   readonly comment?: string | undefined;
   /**
-   * The comments attached to the object, in the order they were added. A
-   * model written for 3.x has none; the readers then take its `comment`
-   * as one leading comment.
+   * The comments attached to the object, in the order they were added. An
+   * object without them is read as having its `comment` as one leading
+   * comment.
    */
   readonly comments?: ReadonlyArray<CommentModel>;
   /**
@@ -161,9 +161,9 @@ export interface ReadonlyGraphBaseModel<
    */
   readonly comment?: string | undefined;
   /**
-   * The comments attached to the object, in the order they were added. A
-   * model written for 3.x has none; the readers then take its `comment`
-   * as one leading comment.
+   * The comments attached to the object, in the order they were added. An
+   * object without them is read as having its `comment` as one leading
+   * comment.
    */
   readonly comments?: ReadonlyArray<CommentModel>;
   /** The attributes common to the graphs, edges and nodes in the graph. */
@@ -229,9 +229,9 @@ export interface ReadonlyDotModel {
    */
   readonly comment?: string | undefined;
   /**
-   * The comments attached to the object, in the order they were added. A
-   * model written for 3.x has none; the readers then take its `comment`
-   * as one leading comment.
+   * The comments attached to the object, in the order they were added. An
+   * object without them is read as having its `comment` as one leading
+   * comment.
    */
   readonly comments?: ReadonlyArray<CommentModel>;
   /** Root graphs in the order they appear in the source. */

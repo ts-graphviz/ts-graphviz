@@ -53,7 +53,7 @@ export class CommentList {
   }
 
   add(text: unknown, options?: CommentOptions<CommentPosition>): CommentModel {
-    // Own properties only: an inherited one is never an option (#1757).
+    // Own properties only: an inherited one is never an option.
     const { position = 'leading', kind } = ownOptions(options);
     if (typeof text !== 'string') {
       throw invalid(`A comment's text must be a string: ${describe(text)}`);
