@@ -2,11 +2,7 @@ import type { ReadonlyGraphBaseModel } from '@ts-graphviz/common';
 import type { ClusterStatementASTNode } from '../../../../types.js';
 import type { ConvertFromModelContext } from '../../types.js';
 import { convertAttributes } from './convert-attribute.js';
-import {
-  commentsOf,
-  convertComments,
-  withTrailingComments,
-} from './convert-comment.js';
+import { commentsOf, convertComments } from './convert-comment.js';
 
 export function convertClusterChildren(
   context: ConvertFromModelContext,
@@ -23,12 +19,7 @@ export function convertClusterChildren(
           commentsOf(attrs).length > 0
         ) {
           yield* convertComments(createElement, attrs, 'leading', commentKind);
-          yield withTrailingComments(
-            createElement,
-            context.convert(attrs),
-            attrs,
-            commentKind,
-          );
+          yield context.convert(attrs);
         }
       }
       // Nodes, edges, subgraphs and default attribute lists in the order
@@ -40,12 +31,7 @@ export function convertClusterChildren(
           'leading',
           commentKind,
         );
-        yield withTrailingComments(
-          createElement,
-          context.convert(statement),
-          statement,
-          commentKind,
-        );
+        yield context.convert(statement);
       }
       // The comments at the end of the body.
       yield* convertComments(createElement, model, 'end', commentKind);

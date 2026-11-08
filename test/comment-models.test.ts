@@ -134,6 +134,11 @@ describe('the deprecated comment', () => {
     expect(dot.comment).toBe('header\nfooter');
     dot.comment = 'only';
     expect(brief(dot.comments)).toEqual([['only', undefined, 'leading']]);
+    // A refused text removes nothing.
+    expect(() => {
+      dot.comment = 1 as unknown as string;
+    }).toThrow(expect.objectContaining({ code: 'TSG_ERR_INVALID_COMMENT' }));
+    expect(brief(dot.comments)).toEqual([['only', undefined, 'leading']]);
     dot.comment = undefined;
     expect(dot.comments).toEqual([]);
   });
@@ -233,6 +238,30 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     const g = new Digraph();
     g.attributes.node.addComment('defaults for nodes');
     expect(toDot(g)).toContain('// defaults for nodes');
+  });
+
+  test('trailing comments are kept when a statement is converted alone', () => {
+    const node = new Node('a');
+    node.addComment('note', { position: 'trailing', kind: 'Block' });
+    expect(stringify(fromModel(node))).toBe('"a"; /* note */');
+  });
+
+  test('a multi-line trailing block comment keeps its text; trailing line comments of one kind read back as one', () => {
+    const g = new Digraph();
+    const a = g.createNode('a');
+    a.addComment('one\ntwo', { position: 'trailing', kind: 'Block' });
+    const b = g.createNode('b');
+    b.addComment('x', { position: 'trailing', kind: 'Slash' });
+    b.addComment('y', { position: 'trailing', kind: 'Slash' });
+    const again = fromDot(toDot(g));
+    expect(brief(again.getNode('a')?.comments ?? [])).toEqual([
+      ['one\ntwo', 'Block', 'trailing'],
+    ]);
+    // A line comment runs to the end of its line, so the second is written
+    // on the next line, and DOT reads consecutive // lines as one comment.
+    expect(brief(again.getNode('b')?.comments ?? [])).toEqual([
+      ['x\ny', 'Slash', 'trailing'],
+    ]);
   });
 
   test('around the graphs of a DOT source', () => {

@@ -257,6 +257,20 @@ describe('host components', () => {
       </Digraph>,
     );
     expect(a?.comments.map((c) => c.text)).toEqual(['added']);
+    // A prop comment removed through a ref comes back with the prop.
+    await root.render(
+      <Digraph id="G">
+        <Node id="a" comment="again" />
+      </Digraph>,
+    );
+    const again = a?.comments.find((c) => c.text === 'again');
+    if (again) a?.removeComment(again);
+    await root.render(
+      <Digraph id="G">
+        <Node id="a" color="blue" comment="again" />
+      </Digraph>,
+    );
+    expect(a?.comments.map((c) => c.text)).toEqual(['added', 'again']);
   });
 
   it('applies state updates', async () => {

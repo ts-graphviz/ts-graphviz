@@ -7,6 +7,7 @@ import {
   type AttributesEntities,
   type AttributesGroupModel,
   type AttributesObject,
+  type CommentModel,
   type DotModel,
   type DotValue,
   type EdgeAttributesObject,
@@ -108,6 +109,8 @@ export interface ReadonlyNodeDSL extends ModelView<ReadonlyNodeModel> {
    * @deprecated Read `$comments`. Removed in v5.
    */
   readonly $comment?: string | undefined;
+  /** The comments attached to the node (none on a model written for 3.x). */
+  readonly $comments?: ReadonlyArray<CommentModel>;
   /** The value of an attribute, or undefined if it has none. */
   $getAttribute(name: string): DotValue | undefined;
   /** Whether the node has the attribute. */

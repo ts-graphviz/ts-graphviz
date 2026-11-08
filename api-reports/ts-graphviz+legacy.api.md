@@ -136,6 +136,7 @@ export interface ReadonlyNodeDSL extends ModelView<ReadonlyNodeModel> {
   readonly $$type: "Node";
   readonly $id: string;
   readonly $comment?: string | undefined;
+  readonly $comments?: ReadonlyArray<CommentModel>;
   $getAttribute(name: string): DotValue | undefined;
   $hasAttribute(name: string): boolean;
   $getAttributeNames(): string[];

@@ -1,10 +1,7 @@
 import type { ReadonlyDotModel } from '@ts-graphviz/common';
 import type { DotASTNode } from '../../../types.js';
 import type { ConvertFromModelPlugin } from '../types.js';
-import {
-  convertComments,
-  withTrailingComments,
-} from './utils/convert-comment.js';
+import { convertComments } from './utils/convert-comment.js';
 
 export const DotPlugin: ConvertFromModelPlugin<ReadonlyDotModel> = {
   match(model) {
@@ -20,12 +17,7 @@ export const DotPlugin: ConvertFromModelPlugin<ReadonlyDotModel> = {
       // its trailing ones after it on its line.
       children.push(
         ...convertComments(createElement, graph, 'leading', commentKind),
-        withTrailingComments(
-          createElement,
-          context.convert(graph),
-          graph,
-          commentKind,
-        ),
+        context.convert(graph),
       );
     }
     children.push(...convertComments(createElement, model, 'end', commentKind));

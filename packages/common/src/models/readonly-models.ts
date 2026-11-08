@@ -224,7 +224,7 @@ export interface ReadonlyRootGraphModel
 export interface ReadonlyDotModel {
   readonly $$type: 'Dot';
   /**
-   * The text of the first leading comment.
+   * The texts of the DOT source's own comments, joined by line breaks.
    * @deprecated Read `comments`. Removed in v5.
    */
   readonly comment?: string | undefined;

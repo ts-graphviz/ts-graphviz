@@ -154,16 +154,19 @@ const propComments = new WeakMap<object, CommentModel>();
 
 /** Make the element's `comment` prop the model's leading comment. */
 function applyComment(
-  model: Pick<HasComments, 'addComment' | 'removeComment'>,
+  model: Pick<HasComments, 'addComment' | 'removeComment' | 'comments'>,
   text: string | undefined,
 ): void {
-  const previous = propComments.get(model);
+  const tracked = propComments.get(model);
+  // Still attached (code with a ref may have removed or replaced it).
+  const previous =
+    tracked !== undefined && model.comments.includes(tracked)
+      ? tracked
+      : undefined;
   // The same text keeps the comment, and its place among the others.
   if (previous !== undefined && previous.text === text) return;
-  if (previous !== undefined) {
-    model.removeComment(previous);
-    propComments.delete(model);
-  }
+  if (previous !== undefined) model.removeComment(previous);
+  propComments.delete(model);
   if (text !== undefined) propComments.set(model, model.addComment(text));
 }
 

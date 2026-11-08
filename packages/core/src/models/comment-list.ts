@@ -120,7 +120,18 @@ export class CommentList {
 
   /** Replace every comment by one leading comment, or none for `undefined`. */
   setOnly(text: string | undefined): void {
+    if (text === undefined) {
+      this.#items = [];
+      return;
+    }
+    // Checked before the others go, so a refused text removes nothing.
+    const kept = this.#items;
     this.#items = [];
-    if (text !== undefined) this.add(text);
+    try {
+      this.add(text);
+    } catch (error) {
+      this.#items = kept;
+      throw error;
+    }
   }
 }
