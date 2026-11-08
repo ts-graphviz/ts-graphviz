@@ -17,8 +17,8 @@ type Container = {
  * Attaches the comments of one body (a graph's, a subgraph's or a DOT
  * source's) to the models of its statements, by where they are:
  *
- * - a comment that starts on the line where the previous statement ends
- *   trails it (`'trailing'`);
+ * - a comment that starts on the line where the previous statement, or the
+ *   last comment trailing it, ends trails it (`'trailing'`);
  * - any other comment leads the next statement that is a model
  *   (`'leading'`), so the comments keep their order;
  * - comments after the last such statement are the body's (`'end'`).
@@ -45,6 +45,12 @@ export class BodyComments {
         position: 'trailing',
         kind: comment.kind,
       });
+      // A block comment can run over lines: one after it on its last line
+      // trails the statement too. (A line comment's range takes in the
+      // line break, so its end is on the next line.)
+      if (comment.kind === 'Block') {
+        previous.line = comment.location?.end.line ?? line;
+      }
       return;
     }
     this.#pending.push(comment);
