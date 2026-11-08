@@ -1,6 +1,5 @@
 import type { Attributes } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
-import { DotObject } from '../models/DotObject.js';
 import { AttributesBase } from './AttributesBase.js';
 
 class TestAttributes extends AttributesBase<any> {}
@@ -11,8 +10,7 @@ beforeEach(() => {
 });
 
 describe('object', () => {
-  it('should be instance of AttributesBase/DotObject', () => {
-    expect(attrs).toBeInstanceOf(DotObject);
+  it('should be instance of AttributesBase', () => {
     expect(attrs).toBeInstanceOf(AttributesBase);
   });
 
@@ -54,6 +52,22 @@ describe('apply method', () => {
       ['fontsize', 16],
     ]);
     expect(attrs.size).toBe(3);
+  });
+
+  test('goes through set, so a class that overrides it sees the values', () => {
+    const seen: [string, unknown][] = [];
+    class Recording extends AttributesBase<any> {
+      override set(key: string, value: unknown): void {
+        seen.push([key, value]);
+        super.set(key, value);
+      }
+    }
+    const recording = new Recording({ label: 'a' });
+    recording.apply([['color', 'red']]);
+    expect(seen).toEqual([
+      ['label', 'a'],
+      ['color', 'red'],
+    ]);
   });
 });
 

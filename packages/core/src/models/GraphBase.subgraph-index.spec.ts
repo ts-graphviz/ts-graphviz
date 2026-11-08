@@ -65,7 +65,7 @@ describe('subgraphs by id', () => {
   it('reads ids that are Object.prototype names as ids', () => {
     const g = new Digraph();
     expect(g.getSubgraph('constructor')).toBeUndefined();
-    const s = g.subgraph('constructor');
+    const s = g.createSubgraph('constructor');
     expect(g.getSubgraph('constructor')).toBe(s);
   });
 });

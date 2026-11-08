@@ -33,6 +33,7 @@
     ".": "./src/ts-graphviz.ts",
     "./ast": "./src/ast.ts",
     "./adapter": "./src/adapter.ts",
+    "./legacy": "./src/legacy.ts",
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -67,6 +68,10 @@
         "types": "./lib/adapter.d.ts",
         "default": "./lib/adapter.js"
       },
+      "./legacy": {
+        "types": "./lib/legacy.d.ts",
+        "default": "./lib/legacy.js"
+      },
       "./package.json": "./package.json"
     },
     "module": "./lib/ts-graphviz.js",
@@ -74,7 +79,8 @@
     "typesVersions": {
       "*": {
         "ast": ["./lib/ast.d.ts"],
-        "adapter": ["./lib/adapter.d.ts"]
+        "adapter": ["./lib/adapter.d.ts"],
+        "legacy": ["./lib/legacy.d.ts"]
       }
     }
   },

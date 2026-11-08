@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it, test } from 'vitest';
 
-import { DotObject } from './DotObject.js';
 import { GraphBase } from './GraphBase.js';
 import { RootGraph } from './RootGraph.js';
 
@@ -57,9 +56,8 @@ describe('Constructor', () => {
   });
 });
 
-it('should be instance of GraphBase/DotObject', () => {
+it('should be instance of GraphBase', () => {
   expect(g).toBeInstanceOf(GraphBase);
-  expect(g).toBeInstanceOf(DotObject);
 });
 
 test('$$type propaty should be "Graph"', () => {

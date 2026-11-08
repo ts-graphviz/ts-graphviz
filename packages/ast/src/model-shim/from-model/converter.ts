@@ -1,5 +1,8 @@
 import {
   type AnyReadonlyDotObjectModel,
+  type ModelOf,
+  type ModelView,
+  modelOf,
   ownOptions,
   withCode,
 } from '@ts-graphviz/common';
@@ -17,7 +20,8 @@ import type {
  *
  * It only reads the model, so it takes any model
  * ({@link AnyReadonlyDotObjectModel}): the built-in ones, custom model
- * classes and the read-only views.
+ * classes and the read-only views; or an object standing for one
+ * ({@link ModelView}, such as the DOT DSL of `ts-graphviz`).
  *
  * @group Convert Model to AST
  */
@@ -38,7 +42,9 @@ export class FromModelConverter {
    * @param model The model to be converted.
    * @returns The AST generated from the model.
    */
-  public convert<T extends AnyReadonlyDotObjectModel>(model: T): ModelToAST<T> {
+  public convert<T extends AnyReadonlyDotObjectModel | ModelView>(
+    model: T,
+  ): ModelToAST<ModelOf<T>> {
     const plugins = [...this.#plugins];
     const { commentKind = 'Slash', maxASTNodes } = this.options;
     const createElement = createElementFactory({ maxASTNodes });
@@ -78,7 +84,9 @@ export class FromModelConverter {
         );
       },
     };
-    return context.convert(model);
+    return context.convert(
+      modelOf(model) as AnyReadonlyDotObjectModel,
+    ) as ModelToAST<ModelOf<T>>;
   }
 }
 

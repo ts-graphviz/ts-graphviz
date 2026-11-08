@@ -2,6 +2,7 @@ import { fromModel } from '@ts-graphviz/ast';
 import {
   type ForwardRefNode,
   isNodeModel,
+  modelOf,
   type ReadonlyAttributes,
   type ReadonlyGraphBaseModel,
   type ReadonlyNodeModel,
@@ -51,18 +52,19 @@ function graph(g: ReadonlyGraphBaseModel): unknown {
 }
 
 function model() {
-  return digraph('G', { label: 'root' }, (g) => {
-    g.comment = 'graph';
+  const g = digraph('G', { label: 'root' }, (g) => {
+    g.$comment = 'graph';
     g.node({ shape: 'box' });
     g.edge({ color: 'red' });
     const a = g.node('a', { label: 'A' });
-    a.comment = 'node';
-    g.edge([a, 'b', a.port({ port: 'p', compass: 'n' })], { label: 'e' });
+    a.$comment = 'node';
+    g.edge([a, 'b', a.$port({ port: 'p', compass: 'n' })], { label: 'e' });
     g.subgraph('cluster_s', { label: 'S' }, (s) => {
       s.node('c');
       s.edge(['c', a]);
     });
   });
+  return modelOf(g);
 }
 
 describe('the readers leave the model as it is', { tags: ['SM-5'] }, () => {

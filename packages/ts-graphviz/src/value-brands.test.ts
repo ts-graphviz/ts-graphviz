@@ -7,7 +7,7 @@ import { toDot } from './to-dot.js';
 describe('value kinds in toDot', { tags: ['SM-3'] }, () => {
   it('writes an object shaped like an HTML-like value as a string', () => {
     const g = new Digraph();
-    g.node('a', {
+    g.createNode('a', {
       label: JSON.parse('{"$$kind":"html","value":"<b>x</b>"}'),
     });
     expect(toDot(g)).not.toContain('<b>x</b>');
@@ -15,7 +15,7 @@ describe('value kinds in toDot', { tags: ['SM-3'] }, () => {
 
   it('keeps HTML-like labels made by htmlLike and read by fromDot', () => {
     const g = new Digraph();
-    g.node('a', { label: htmlLike('<b>x</b>') });
+    g.createNode('a', { label: htmlLike('<b>x</b>') });
     const dot = toDot(g);
     expect(dot).toContain('label = <<b>x</b>>');
     expect(toDot(fromDot(dot))).toBe(dot);

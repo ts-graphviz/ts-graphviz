@@ -7,7 +7,7 @@ import {
   fromDot,
   htmlLike,
   isTsGraphvizError,
-  orderedModels,
+  legacyModels,
   type RootGraphModel,
   toDot,
 } from 'ts-graphviz';
@@ -26,14 +26,14 @@ import { summarize } from './summarize.js';
 // Property-based tests for the DOT printer and parser (see #1504).
 // A failing run prints its seed; reproduce it with FC_SEED=<seed>.
 
-// A graph built with the classes of `orderedModels` is read back with them,
-// so that default statements kept in place stay in place.
+// A graph built with the deprecated `legacyModels` is read back with them,
+// so that merged default statements stay merged.
 const roundTrip = (spec: Parameters<typeof buildGraph>[0]) => {
   const model = buildGraph(spec);
   const dot = toDot(model);
   const reparsed = spec.ordered
-    ? fromDot(dot, { convert: { models: orderedModels } })
-    : fromDot(dot);
+    ? fromDot(dot)
+    : fromDot(dot, { convert: { models: legacyModels } });
   return { model, dot, reparsed };
 };
 
@@ -389,7 +389,7 @@ describe('attribute values of every kind', { tags: ['SM-2'] }, () => {
     fc.assert(
       fc.property(anyValue, anyValue, (label, tooltip) => {
         const g = digraph((g) => {
-          g.set('label', label);
+          g.label = label;
           g.node('a', { tooltip });
         });
         const dot = toDot(g);

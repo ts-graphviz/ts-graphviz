@@ -61,7 +61,12 @@ function applySubgraph(
   stmt: SubgraphASTNode,
 ): SubgraphModel {
   const id = ownField(stmt, 'id');
-  const subgraph = id ? graph.subgraph(idFromLiteral(id)) : graph.subgraph();
+  // The subgraph with this id if there is one, as in DOT, where a subgraph
+  // statement with a known id adds to that subgraph.
+  const subgraph = id
+    ? (graph.getSubgraph(idFromLiteral(id)) ??
+      graph.createSubgraph(idFromLiteral(id)))
+    : graph.createSubgraph();
   applyStatements(context, subgraph, stmt.children);
   const nodes = subgraphNodes.get(subgraph) ?? new Set<string>();
   for (const id of nodeIdsOf(stmt, idCacheOf(context))) nodes.add(id);
@@ -145,8 +150,8 @@ export function applyStatements(
         const attributes = stmt.children.filter<AttributeASTNode>(
           (v): v is AttributeASTNode => v.type === 'Attribute',
         );
-        // The graph decides: merged into its defaults (the default classes)
-        // or kept in place (`orderedModels`, #1732).
+        // The graph decides: kept in place (the default classes, #1922) or
+        // merged into its defaults (the deprecated `legacyModels`).
         graph.addAttributeList(stmt.kind, collectAttributes(attributes));
         commentHolder.reset();
         break;
