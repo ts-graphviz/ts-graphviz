@@ -1,5 +1,10 @@
-import { expect, test } from '@playwright/test';
-import { expectNoHorizontalScroll, isTouch, setScript } from './helpers';
+import {
+  expect,
+  expectNoHorizontalScroll,
+  isTouch,
+  setScript,
+  test,
+} from './helpers';
 
 const result = (page: import('@playwright/test').Page) =>
   page.getByRole('region', { name: 'Result' });

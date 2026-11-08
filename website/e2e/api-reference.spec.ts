@@ -1,5 +1,4 @@
-import { expect, test } from '@playwright/test';
-import { expectNoHorizontalScroll, isTouch } from './helpers';
+import { expect, expectNoHorizontalScroll, isTouch, test } from './helpers';
 
 // The typedoc output, copied into build/api/ (`pnpm copy-api`; typedoc.json
 // and typedoc.css at the repository root).
@@ -49,4 +48,27 @@ test('the menu leads to the packages and back to the site', async ({
     .click();
   await expect(page).toHaveURL(/\/api\/modules\//);
   await expect(page.locator('.col-content h1').first()).toBeVisible();
+});
+
+test('images from other hosts are not loaded (#1941)', async ({
+  page,
+  baseURL,
+  abortedImages,
+}) => {
+  const local = new URL(baseURL ?? 'http://localhost').host;
+  const loaded: string[] = [];
+  page.on('requestfinished', (request) => {
+    if (
+      request.resourceType() === 'image' &&
+      new URL(request.url()).host !== local
+    ) {
+      loaded.push(request.url());
+    }
+  });
+  await page.goto('/api/');
+  await expect(page.locator('.col-content h1').first()).toBeVisible();
+  // The README's badges and avatars were requested, aborted by the fixture
+  // (not failed on their own), and none of them loaded.
+  expect(abortedImages.length).toBeGreaterThan(0);
+  expect(loaded).toEqual([]);
 });
