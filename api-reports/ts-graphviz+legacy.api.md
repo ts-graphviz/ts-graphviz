@@ -105,7 +105,7 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
 
 export interface ModelDSLMembers<T extends AnyDotObjectModel> extends ModelView<T> {
   readonly $$type: T["$$type"];
-  $comment?: string;
+  $comment?: string | undefined;
 }
 
 export interface ModelFactories<M extends ModelTypes = ModelTypes> {
@@ -135,7 +135,7 @@ export interface NodeDSLMembers<T extends NodeModel> extends ModelDSLMembers<T>,
 export interface ReadonlyNodeDSL extends ModelView<ReadonlyNodeModel> {
   readonly $$type: "Node";
   readonly $id: string;
-  readonly $comment?: string;
+  readonly $comment?: string | undefined;
   $getAttribute(name: string): DotValue | undefined;
   $hasAttribute(name: string): boolean;
   $getAttributeNames(): string[];

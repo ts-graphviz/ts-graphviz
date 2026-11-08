@@ -79,7 +79,7 @@ export interface CommentASTProperties extends ASTCommonProperties {
   value: string;
 }
 
-export type CommentKind = "Block" | "Slash" | "Macro";
+export type CommentKind = CommentKind;
 
 export interface CommonParseOptions {
   filename?: string;
