@@ -199,11 +199,19 @@ function invalidArguments(): TypeError {
   );
 }
 
-/** The options' own properties, refusing 3.x's own `startRule`. */
+/**
+ * The options' own properties, refusing 3.x's own `startRule` (checked on
+ * the options themselves, so a non-enumerable one counts too).
+ */
 function limitsOf(options: CommonParseOptions | undefined): CommonParseOptions {
-  const own = ownOptions(options);
-  if (Object.hasOwn(own, 'startRule')) throw invalidArguments();
-  return own;
+  if (
+    typeof options === 'object' &&
+    options !== null &&
+    Object.hasOwn(options, 'startRule')
+  ) {
+    throw invalidArguments();
+  }
+  return ownOptions(options);
 }
 
 /**
@@ -231,6 +239,19 @@ export function parseLegacy<R extends Rule>(
   input: string,
   options: ParseOptions<R> & { startRule: R },
 ): FragmentByRule[R];
+/**
+ * Parse with options typed `ParseOptions<R>`, whose `startRule` may be
+ * left out (then a whole DOT source is read).
+ *
+ * @deprecated Use {@link parse}: `parse(source, rule, limits)`. Kept for
+ * 3.x code until 5.0, where it is removed.
+ * @throws {@link DotSyntaxError}
+ * @group Convert DOT to AST
+ */
+export function parseLegacy<R extends Rule>(
+  input: string,
+  options?: ParseOptions<R>,
+): FragmentByRule[R] | DotASTNode;
 export function parseLegacy(
   input: string,
   options?: ParseOptions<Rule>,

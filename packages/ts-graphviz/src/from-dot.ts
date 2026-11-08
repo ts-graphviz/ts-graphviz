@@ -190,7 +190,13 @@ export function fromDotAll(
 ): RootGraphModel[] {
   // Own properties only: an inherited one is never an option (#1757).
   const own = ownOptions(options);
-  const ast = parse(dot, 'Dot', own.parse);
+  // A `startRule` that options shared with fromDot carry is not read here.
+  const { startRule: _, ...limits } = ownOptions(
+    own.parse,
+  ) as CommonParseOptions & {
+    startRule?: unknown;
+  };
+  const ast = parse(dot, 'Dot', limits);
   const convert = ownOptions(own.convert);
   const model = toModel(ast, {
     ...convert,

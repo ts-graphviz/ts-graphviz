@@ -323,6 +323,7 @@ export declare function parseLegacy(input: string, options?: Omit<ParseOptions<"
 export declare function parseLegacy<R extends Rule>(input: string, options: ParseOptions<R> & {
   startRule: R;
 }): FragmentByRule[R];
+export declare function parseLegacy<R extends Rule>(input: string, options?: ParseOptions<R>): FragmentByRule[R] | DotASTNode;
 
 export declare function sanitize(dot: string, options?: SanitizeOptions): string;
 

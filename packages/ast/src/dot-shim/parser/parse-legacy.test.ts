@@ -5,7 +5,13 @@ import type {
   EdgeASTNode,
   NodeASTNode,
 } from '../../types.js';
-import { DotSyntaxError, parse, parseLegacy, type Rule } from './parse.js';
+import {
+  DotSyntaxError,
+  type ParseOptions,
+  parse,
+  parseLegacy,
+  type Rule,
+} from './parse.js';
 
 const fragments: [Rule, string][] = [
   ['Dot', 'digraph { a }'],
@@ -75,6 +81,14 @@ describe('parse with a rule', () => {
     ['null', [null]],
     ['a number', [1]],
     ['options twice', [{}, {}]],
+    [
+      'a non-enumerable own startRule',
+      [Object.defineProperty({}, 'startRule', { value: 'Node' })],
+    ],
+    [
+      'a non-enumerable own startRule in the third argument',
+      ['Dot', Object.defineProperty({}, 'startRule', { value: 'Edge' })],
+    ],
     ['a rule that is not a grammar rule', ['Statement']],
     ['3.x options with startRule undefined', [{ startRule: undefined }]],
     ['startRule among the third argument', ['Dot', { startRule: 'Edge' }]],
@@ -115,5 +129,12 @@ describe('parse with a rule', () => {
     expectTypeOf(
       parseLegacy('a -> b', { startRule: 'Edge' }),
     ).toEqualTypeOf<EdgeASTNode>();
+    // Options typed ParseOptions<R>, as 3.x code has them: startRule may be
+    // left out, so a whole source is possible too.
+    const typed: ParseOptions<'Node'> = { startRule: 'Node' };
+    expectTypeOf(parseLegacy('a', typed)).toEqualTypeOf<
+      NodeASTNode | DotASTNode
+    >();
+    expect(parseLegacy('a', typed)).toStrictEqual(parse('a', 'Node'));
   });
 });

@@ -180,6 +180,10 @@ describe('deprecated until v5: 3.x signature of parse (#1923)', () => {
   it.each([
     [
       'packages/ast/src/dot-shim/parser/parse.ts',
+      'export function parseLegacy(',
+    ],
+    [
+      'packages/ast/src/dot-shim/parser/parse.ts',
       'export function parseLegacy<',
     ],
     [
