@@ -466,7 +466,7 @@ export abstract class GraphBase<
   }
 }
 
-/** A subgraph's name: `subgraphId`, or `id` for a model written for 3.x. */
+/** A subgraph's name: `subgraphId`, or `id` for a model without it. */
 function subgraphName(subgraph: {
   readonly subgraphId?: string | undefined;
   readonly id?: string | undefined;

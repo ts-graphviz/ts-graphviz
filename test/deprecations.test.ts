@@ -48,8 +48,28 @@ describe('deprecated until v5 (#1922)', () => {
     ['packages/ts-graphviz/src/legacy.ts', 'export const graph:'],
     ['packages/ts-graphviz/src/legacy.ts', 'export const strict:'],
     ['packages/ts-graphviz/src/legacy.ts', 'export function withContext<'],
+    ['packages/ast/src/dot-shim/parser/parse.ts', 'startRule?: T;'],
   ])('%s: %s', (path, declaration) => {
     expect(docAbove(read(path), declaration)).toMatch(DEPRECATED_TAG);
+  });
+
+  it('the overload of parse that takes startRule, and not the others', () => {
+    const lines = read('packages/ast/src/dot-shim/parser/parse.ts').split('\n');
+    const overloads = lines.flatMap((line, i) =>
+      line.startsWith('export function parse') ? [i] : [],
+    );
+    // The last one is the implementation, which no caller sees.
+    const tagged = overloads.slice(0, -1).map((at) => {
+      const signature = lines.slice(at, at + 4).join('\n');
+      const above = lines.slice(0, at).join('\n');
+      const end = above.trimEnd();
+      const doc = end.endsWith('*/') ? end.slice(end.lastIndexOf('/**')) : '';
+      return [signature.includes('{ startRule: R;'), DEPRECATED_TAG.test(doc)];
+    });
+    expect(tagged).toContainEqual([true, true]);
+    for (const [startRule, deprecated] of tagged) {
+      expect(deprecated).toBe(startRule);
+    }
   });
 
   it('every overload of the legacy fromDot and fromDotAll', () => {
@@ -155,7 +175,7 @@ describe('deprecated until v5 (#1930)', () => {
   });
 });
 
-describe('deprecated until v5 (#1935)', () => {
+describe('deprecated until v5: comment', () => {
   it.each([
     ['packages/common/src/models/models.ts', 'comment?: string | undefined;'],
     ['packages/core/src/models/Node.ts', 'public get comment():'],
@@ -177,7 +197,7 @@ describe('deprecated until v5 (#1935)', () => {
   });
 });
 
-describe('deprecated until v5 (#1932)', () => {
+describe('deprecated until v5: names', () => {
   it.each([
     ['packages/common/src/models/models.ts', 'readonly id?: string;'],
     ['packages/common/src/models/readonly-models.ts', 'readonly id: string;'],

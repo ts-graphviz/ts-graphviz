@@ -22,7 +22,7 @@
  * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
  * @module ts-graphviz/legacy
  */
-import type { ParseOptions } from '@ts-graphviz/ast';
+import type { CommonParseOptions } from '@ts-graphviz/ast';
 import {
   type EdgeModel,
   type ModelsContext,
@@ -186,7 +186,7 @@ export function fromDot(
 export function fromDotAll<const P extends Partial<ModelsContext>>(
   dot: string,
   options: Omit<FromDotOptions<'Dot', P>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    parse?: CommonParseOptions;
     convert: { models: P };
   },
 ): (ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'])[];
@@ -194,13 +194,13 @@ export function fromDotAll<const P extends Partial<ModelsContext>>(
 export function fromDotAll(
   dot: string,
   options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    parse?: CommonParseOptions;
   },
 ): RootGraphModel[];
 export function fromDotAll(
   dot: string,
   options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    parse?: CommonParseOptions;
   },
 ): RootGraphModel[] {
   return fromDotAllOf(dot, withLegacyOptions(options));

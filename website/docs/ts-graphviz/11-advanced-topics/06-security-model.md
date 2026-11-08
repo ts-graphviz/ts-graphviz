@@ -222,12 +222,11 @@ ES modules, and the built-in prototypes, are shared by every module of a process
 - **Optional fields are read when owned.** A node reference's `port` and `compass` are read only when the AST node or model target owns them (a parsed `a -> b` has neither), so an inherited property is never printed, converted or checked in their place.
 - **Lookups by name read own entries.** The model classes given to `with()`, the element table of `renderHTMLLike` and the `code` that `isTsGraphvizError` checks are read only as own properties.
 - **No shared configuration.** Importing a package changes no shared state (v4 removed the shared models context, see the v3-to-v4 guide); defaults come from frozen objects (`defaultModelsContext()`, `legacyModels`, the model factories).
-- **Exported data is frozen.** `ERROR_CODES` and `DEPRECATION_CODES` cannot be changed, so no module can change what `isTsGraphvizError` accepts.
+- **Exported data is frozen.** `ERROR_CODES` cannot be changed, so no module can change what `isTsGraphvizError` accepts.
 
 **Not promised**
 
 - **Code running in the process is trusted** (SM-5). The exported classes and functions are not frozen, so that tests can spy on them and applications can extend them; code that replaces a method of an exported class, or a built-in such as `String.prototype.replaceAll`, can change what the library does. Freezing would not stop it: such code can change the built-ins the library itself relies on.
-- `onDeprecation` listeners and the deprecation report (once per code) are process-wide by design.
 - Node.js creates the command's pipes with stream options of its own. An inherited `highWaterMark`, `objectMode`, `signal`, `captureRejections` or `defaultEncoding` (or a variant) can make `toBlob` fail. An inherited `signal` that is aborted makes Node.js raise an `AbortError` it does not report to the caller. None of them changes the output. This happens inside Node.js, so the adapter cannot avoid it. An inherited function or typed array, such as an `onread` with a buffer and a callback, can change what Node.js does with the pipes. Only code can put one there, and code is trusted (SM-5).
 
 **Evidence**: tests tagged `SM-8` — properties that, with any option name of any entry point set on `Object.prototype` to an arbitrary value, the adapter's command, arguments and checked source, `parse`, `sanitize`, `fromDot`, `toDot` and `renderHTMLLike` give what they give on a clean prototype; and that the exported data is frozen. The Biome plugins in `tools/biome-plugins` report option objects that are destructured without `ownOptions()`, and options or stream sources that are handed to the runtime with a prototype.

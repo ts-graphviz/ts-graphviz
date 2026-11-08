@@ -12,7 +12,7 @@ import {
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
-describe('comments (#1935)', () => {
+describe('comments', () => {
   it('statements take leading and trailing comments', () => {
     for (const model of [
       new Node('a'),
@@ -65,7 +65,7 @@ describe('comments (#1935)', () => {
     });
   });
 
-  it('the read-only types may have no comments (a model written for 3.x)', () => {
+  it('the read-only types may have no comments', () => {
     expectTypeOf<ReadonlyNodeModel['comments']>().toEqualTypeOf<
       ReadonlyArray<CommentModel> | undefined
     >();

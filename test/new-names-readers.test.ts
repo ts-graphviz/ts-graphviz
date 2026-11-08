@@ -7,7 +7,7 @@ import { Digraph, dsl, Subgraph, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
 // The readers take a model's name from `nodeId` / `graphId` / `subgraphId`,
-// and from `id` for a model written for 3.x (#1932).
+// and from `id` for a model without them.
 describe('the readers take the new names', () => {
   it('a graph and a subgraph that give only the new names', () => {
     const graph = new Digraph('G');

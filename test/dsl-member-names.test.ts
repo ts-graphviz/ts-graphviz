@@ -17,8 +17,8 @@ import {
 import { describe, expect, expectTypeOf, it } from 'vitest';
 
 // The DOT DSL gives a model's members under their own names and the
-// attributes as properties, so no member may be named like an attribute
-// (#1932). The members deprecated in v4 are left out of the DSL; `id`,
+// attributes as properties, so no member may be named like an attribute.
+// The members deprecated in v4 are left out of the DSL; `id`,
 // `comment` and `size` among them are attribute names.
 const DEPRECATED = new Set([
   'id',

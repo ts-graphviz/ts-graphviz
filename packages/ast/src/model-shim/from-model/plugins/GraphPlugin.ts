@@ -11,7 +11,7 @@ export const GraphPlugin: ConvertFromModelPlugin<ReadonlyRootGraphModel> = {
   // around the graph statement; its 'end' ones by convertClusterChildren.
   convert(context, model) {
     const { createElement } = context;
-    // The name, from a model written for 3.x (`id` only) too.
+    // The name, also from a model with only `id`.
     const id = model.graphId ?? model.id;
     return createElement(
       'Graph',
