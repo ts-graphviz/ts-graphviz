@@ -649,6 +649,17 @@ export interface AttributeValueTypes<V extends Record<ValueTypeName, unknown> = 
 }
 
 export interface Attributes<T extends AttributeKey, E extends object = Record<never, never>> {
+  getAttribute<K extends BuiltInAttributeKey<T, E>>(name: K): Attribute<K> | undefined;
+  getAttribute<K extends keyof E & string>(name: K): SchemaAttribute<E, K> | undefined;
+  getAttribute<K extends SchemaAttributeKey<T, E>>(name: K): AttributeOf<K, E> | undefined;
+  setAttribute<K extends BuiltInAttributeKey<T, E>>(name: K, value: Attribute<K>): void;
+  setAttribute<K extends keyof E & string>(name: K, value: SchemaAttribute<E, K>): void;
+  setAttribute<K extends SchemaAttributeKey<T, E>>(name: K, value: AttributeOf<K, E>): void;
+  removeAttribute(name: SchemaAttributeKey<T, E>): void;
+  hasAttribute(name: SchemaAttributeKey<T, E>): boolean;
+  getAttributeNames(): SchemaAttributeKey<T, E>[];
+  setAttributes(attributes: AttributesObject<T, E> | AttributesEntities<T, E>): void;
+  removeAttributes(): void;
   readonly size: number;
   readonly values: ReadonlyArray<AttributeTuple<T, E>>;
   get<K extends BuiltInAttributeKey<T, E>>(key: K): Attribute<K> | undefined;
@@ -766,7 +777,7 @@ export interface EdgeConstructor<E extends ReadonlyEdgeModel = EdgeModel, S exte
   new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject<S>): E;
 }
 
-export interface EdgeModel<S extends Schema = EmptySchema> extends HasComment, HasAttributes<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>, DotObjectModel<"Edge"> {
+export interface EdgeModel<S extends Schema = EmptySchema> extends HasComment, Attributes<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>, HasAttributes<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>, DotObjectModel<"Edge"> {
   readonly targets: EdgeTargetTuple;
 }
 
@@ -990,7 +1001,7 @@ export interface NodeConstructor<N extends ReadonlyNodeModel = NodeModel, S exte
   new (id: string, attributes?: NodeAttributesObject<S>): N;
 }
 
-export interface NodeModel<S extends Schema = EmptySchema> extends HasComment, HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, DotObjectModel<"Node"> {
+export interface NodeModel<S extends Schema = EmptySchema> extends HasComment, Attributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, DotObjectModel<"Node"> {
   readonly id: string;
   port(port: string | Partial<Port>): ForwardRefNode;
 }
@@ -1067,6 +1078,9 @@ export interface ReadonlyAttributeListModel<K extends AttributeListKind = Attrib
 }
 
 export interface ReadonlyAttributes {
+  getAttribute(name: string): DotValue | undefined;
+  hasAttribute(name: string): boolean;
+  getAttributeNames(): string[];
   readonly size: number;
   readonly values: ReadonlyArray<readonly [key: string, value: DotValue]>;
   get(key: string): DotValue | undefined;
@@ -1078,7 +1092,7 @@ export interface ReadonlyDotModel {
   readonly graphs: ReadonlyArray<ReadonlyRootGraphModel>;
 }
 
-export interface ReadonlyEdgeModel {
+export interface ReadonlyEdgeModel extends ReadonlyAttributes {
   readonly $$type: "Edge";
   readonly comment?: string;
   readonly attributes: ReadonlyAttributes;
@@ -1111,7 +1125,7 @@ export interface ReadonlyGraphBaseModel<T extends "Graph" | "Subgraph" = "Graph"
 
 export type ReadonlyGraphStatementModel = ReadonlyNodeModel | ReadonlyEdgeModel | ReadonlySubgraphModel | ReadonlyAttributeListModel;
 
-export interface ReadonlyNodeModel {
+export interface ReadonlyNodeModel extends ReadonlyAttributes {
   readonly $$type: "Node";
   readonly id: string;
   readonly comment?: string;

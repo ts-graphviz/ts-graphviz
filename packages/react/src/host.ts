@@ -148,8 +148,8 @@ export function createHostInstance(
 }
 
 function applyProps(model: NodeModel | EdgeModel, props: ComponentProps): void {
-  model.attributes.clear();
-  model.attributes.apply(attributesOf(props));
+  model.removeAttributes();
+  model.setAttributes(attributesOf(props));
   model.comment = props.comment;
 }
 
@@ -194,15 +194,15 @@ function applyGraphProps(
   model: AnyGraphContainer,
   props: ComponentProps,
 ): void {
-  model.clear();
-  model.apply(attributesOf(props));
+  model.removeAttributes();
+  model.setAttributes(attributesOf(props));
   const lists = defaultListsOf(model);
-  lists.node.clear();
-  lists.node.apply(props.node ?? {});
-  lists.edge.clear();
-  lists.edge.apply(props.edge ?? {});
-  lists.graph.clear();
-  lists.graph.apply(props.graph ?? {});
+  lists.node.removeAttributes();
+  lists.node.setAttributes(props.node ?? {});
+  lists.edge.removeAttributes();
+  lists.edge.setAttributes(props.edge ?? {});
+  lists.graph.removeAttributes();
+  lists.graph.setAttributes(props.graph ?? {});
   model.comment = props.comment;
 }
 

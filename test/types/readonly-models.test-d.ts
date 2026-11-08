@@ -77,15 +77,28 @@ class MyNode extends Node {
  * not fit.
  */
 interface NumAttributes {
+  getAttribute(name: 'label'): number | undefined;
+  setAttribute(name: 'label', value: number): void;
+  removeAttribute(name: 'label'): void;
+  hasAttribute(name: 'label'): boolean;
+  getAttributeNames(): 'label'[];
+  setAttributes(attributes: { label?: number }): void;
+  removeAttributes(): void;
   readonly size: number;
   readonly values: ReadonlyArray<['label', number]>;
   get(key: 'label'): number | undefined;
   set(key: 'label', value: number): void;
 }
-interface NumNode extends Omit<NodeModel, 'attributes'> {
+/** The members of a model that hold its attributes. */
+type AttributeMembers = keyof NumAttributes | 'apply' | 'delete' | 'clear';
+interface NumNode
+  extends Omit<NodeModel, 'attributes' | AttributeMembers>,
+    NumAttributes {
   readonly attributes: NumAttributes;
 }
-interface NumEdge extends Omit<EdgeModel, 'attributes'> {
+interface NumEdge
+  extends Omit<EdgeModel, 'attributes' | AttributeMembers>,
+    NumAttributes {
   readonly attributes: NumAttributes;
 }
 interface NumAttributeList extends NumAttributes {

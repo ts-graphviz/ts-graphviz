@@ -8,6 +8,7 @@ import {
   type AttributesGroupModel,
   type AttributesObject,
   type DotModel,
+  type DotValue,
   type EdgeAttributesObject,
   type EdgeModel,
   type ForwardRefNode,
@@ -103,6 +104,16 @@ export interface ReadonlyNodeDSL extends ModelView<ReadonlyNodeModel> {
   /** The node's name (its id in DOT). */
   readonly $id: string;
   readonly $comment?: string;
+  /** The value of an attribute, or undefined if it has none. */
+  $getAttribute(name: string): DotValue | undefined;
+  /** Whether the node has the attribute. */
+  $hasAttribute(name: string): boolean;
+  /** The names of the node's attributes. */
+  $getAttributeNames(): string[];
+  /**
+   * @deprecated Read the attributes as properties, or with
+   * `$getAttribute`. Removed in v5.
+   */
   readonly $attributes: ReadonlyAttributes;
 }
 
@@ -140,12 +151,35 @@ export interface ModelDSLMembers<T extends AnyDotObjectModel>
  * @group DSL
  */
 export interface AttributesDSLMembers<K extends AttributeKey> {
+  /** The value of an attribute, or undefined if it has none. */
+  $getAttribute<P extends K>(name: P): Attribute<P> | undefined;
+  /** Set an attribute. `null` or `undefined` sets nothing. */
+  $setAttribute<P extends K>(name: P, value: Attribute<P>): void;
+  /** Remove an attribute. */
+  $removeAttribute(name: K): void;
+  /** Whether the object has the attribute. */
+  $hasAttribute(name: K): boolean;
+  /** The names of the attributes, in the order they were set. */
+  $getAttributeNames(): K[];
+  /** Set several attributes, from an object or from key/value tuples. */
+  $setAttributes(attributes: AttributesObject<K> | AttributesEntities<K>): void;
+  /** Remove every attribute. */
+  $removeAttributes(): void;
+  /** @deprecated Use `$getAttributeNames().length`. Removed in v5. */
   readonly $size: number;
+  /**
+   * @deprecated Use `$getAttributeNames` and `$getAttribute`. Removed in v5.
+   */
   readonly $values: ReadonlyArray<[K, Attribute<K>]>;
+  /** @deprecated Use `$getAttribute`. Removed in v5. */
   $get<P extends K>(key: P): Attribute<P> | undefined;
+  /** @deprecated Use `$setAttribute`. Removed in v5. */
   $set<P extends K>(key: P, value: Attribute<P>): void;
+  /** @deprecated Use `$setAttributes`. Removed in v5. */
   $apply(attributes: AttributesObject<K> | AttributesEntities<K>): void;
+  /** @deprecated Use `$removeAttribute`. Removed in v5. */
   $delete(key: K): void;
+  /** @deprecated Use `$removeAttributes`. Removed in v5. */
   $clear(): void;
 }
 
@@ -205,9 +239,14 @@ export type NodeDSL<T extends NodeModel> = NodeDSLMembers<T> &
  * @group DSL
  */
 export interface NodeDSLMembers<T extends NodeModel>
-  extends ModelDSLMembers<T> {
+  extends ModelDSLMembers<T>,
+    AttributesDSLMembers<AttributeKeysOf<T>> {
   /** The node's name (its id in DOT). */
   readonly $id: string;
+  /**
+   * @deprecated Read and write the attributes as properties, or with
+   * `$getAttribute`, `$setAttribute` and the others. Removed in v5.
+   */
   readonly $attributes: T['attributes'];
   $port(port: string | Partial<Port>): ForwardRefNode;
 }
@@ -225,13 +264,18 @@ export type EdgeDSL<T extends EdgeModel> = EdgeDSLMembers<T> &
  * @group DSL
  */
 export interface EdgeDSLMembers<T extends EdgeModel>
-  extends ModelDSLMembers<T> {
+  extends ModelDSLMembers<T>,
+    AttributesDSLMembers<AttributeKeysOf<T>> {
   /** The edge's targets, with nodes as DSLs. */
   readonly $targets: readonly [
     from: DSLNodeRef | readonly DSLNodeRef[],
     to: DSLNodeRef | readonly DSLNodeRef[],
     ...rest: (DSLNodeRef | readonly DSLNodeRef[])[],
   ];
+  /**
+   * @deprecated Read and write the attributes as properties, or with
+   * `$getAttribute`, `$setAttribute` and the others. Removed in v5.
+   */
   readonly $attributes: AttributesGroupModel<AttributeKeysOf<T>>;
 }
 
@@ -742,24 +786,20 @@ const searches: PropertyDescriptorMap = Object.fromEntries(
 
 /** The attributes of a model, by any key. */
 interface AnyAttributes {
-  readonly values: ReadonlyArray<readonly [string, unknown]>;
-  get(key: string): unknown;
-  set(key: string, value: unknown): void;
-  delete(key: string): void;
+  getAttributeNames(): string[];
+  getAttribute(name: string): unknown;
+  setAttribute(name: string, value: unknown): void;
+  removeAttribute(name: string): void;
 }
 
-/** The attributes a DSL's bare names read and write. */
+/**
+ * The attributes a DSL's bare names read and write: every model but a `Dot`
+ * holds its own.
+ */
 function attributesOf(model: AnyDotObjectModel): AnyAttributes | undefined {
-  switch (model.$$type) {
-    case 'Node':
-    case 'Edge':
-      return (model as NodeModel | EdgeModel)
-        .attributes as unknown as AnyAttributes;
-    case 'Dot':
-      return undefined;
-    default:
-      return model as unknown as AnyAttributes;
-  }
+  return model.$$type === 'Dot'
+    ? undefined
+    : (model as unknown as AnyAttributes);
 }
 
 /** The model member a `$` name stands for: `$id` → `id`, `$$type` as it is. */
@@ -801,7 +841,7 @@ const handler: ProxyHandler<object> = {
       return statements(model)[key];
     }
     if (key.startsWith('$')) return member(model, memberName(model, key));
-    return attributesOf(model)?.get(key);
+    return attributesOf(model)?.getAttribute(key);
   },
   set(target, key, value) {
     const model = modelFor(target);
@@ -816,8 +856,8 @@ const handler: ProxyHandler<object> = {
     ) {
       throw unwritable(key);
     }
-    if (value === undefined) attributes.delete(key);
-    else attributes.set(key, value);
+    if (value === undefined) attributes.removeAttribute(key);
+    else attributes.setAttribute(key, value);
     return true;
   },
   deleteProperty(target, key) {
@@ -827,7 +867,7 @@ const handler: ProxyHandler<object> = {
       return Reflect.deleteProperty(model, memberName(model, key));
     }
     if (!(isGraph(model) && STATEMENT_NAMES.has(key))) {
-      attributesOf(model)?.delete(key);
+      attributesOf(model)?.removeAttribute(key);
     }
     return true;
   },
@@ -837,18 +877,18 @@ const handler: ProxyHandler<object> = {
     if (typeof key !== 'string') return false;
     if (isGraph(model) && STATEMENT_NAMES.has(key)) return true;
     if (key.startsWith('$')) return memberName(model, key) in model;
-    return attributesOf(model)?.get(key) !== undefined;
+    return attributesOf(model)?.getAttribute(key) !== undefined;
   },
   // The attributes are the DSL's own properties: `{ ...n }`, `Object.keys(n)`
   // and `JSON.stringify(n)` see them.
   ownKeys(target) {
-    return (attributesOf(modelFor(target))?.values ?? []).map(([key]) => key);
+    return attributesOf(modelFor(target))?.getAttributeNames() ?? [];
   },
   getOwnPropertyDescriptor(target, key) {
     const model = modelFor(target);
     if (typeof key !== 'string' || key.startsWith('$')) return undefined;
     if (isGraph(model) && STATEMENT_NAMES.has(key)) return undefined;
-    const value = attributesOf(model)?.get(key);
+    const value = attributesOf(model)?.getAttribute(key);
     return value === undefined
       ? undefined
       : { value, writable: true, enumerable: true, configurable: true };
@@ -939,7 +979,7 @@ function createStatements(g: GraphBaseModel) {
         const node = g.getNode(first) ?? g.createNode(first);
         const attributes = find(rest, isObject);
         if (attributes !== undefined) {
-          node.attributes.apply(attributes as NodeAttributesObject);
+          node.setAttributes(attributes as NodeAttributesObject);
         }
         const view = viewOf(node);
         find(rest, isFunction)?.(view);
@@ -977,7 +1017,7 @@ function createStatements(g: GraphBaseModel) {
           : g.createSubgraph();
       const attributes = find(args, isObject);
       if (attributes !== undefined) {
-        subgraph.apply(attributes as SubgraphAttributesObject);
+        subgraph.setAttributes(attributes as SubgraphAttributesObject);
       }
       const view = viewOf(subgraph);
       find(args, isFunction)?.(view);
