@@ -37,7 +37,7 @@ describe('the factories', () => {
     expect(modelOf(legacy.graph())).toBeInstanceOf(LegacyGraph);
     const S = legacy.strict.digraph();
     expect(modelOf(S)).toBeInstanceOf(LegacyDigraph);
-    expect(S.$strict).toBe(true);
+    expect(S.strict).toBe(true);
     expect(modelOf(legacy.strict.graph())).toBeInstanceOf(LegacyGraph);
     expect(modelOf(S.subgraph('s'))).toBeInstanceOf(LegacySubgraph);
   });
@@ -49,7 +49,7 @@ describe('the factories', () => {
       g.node('a');
     });
     expect(modelOf(G)).toBeInstanceOf(LegacyDigraph);
-    expect(modelOf(G.$getNode('a') as object)).toBeInstanceOf(MyNode);
+    expect(modelOf(G.getNode('a') as object)).toBeInstanceOf(MyNode);
     // A class it is given takes the place of the legacy one; undefined
     // does not.
     expect(

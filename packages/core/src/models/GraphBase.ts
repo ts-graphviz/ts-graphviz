@@ -98,6 +98,11 @@ export abstract class GraphBase<
     );
   }
 
+  /**
+   * The graph's name.
+   * @deprecated Read `graphId` of a root graph or `subgraphId` of a
+   * subgraph. Removed in v5.
+   */
   public readonly id?: string;
 
   readonly #comments: CommentList = new CommentList(GRAPH_POSITIONS);

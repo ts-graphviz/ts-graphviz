@@ -263,7 +263,7 @@ describe('the readers take every model', () => {
       view.node('a'),
       view.edge(['a', 'b']),
       view.subgraph('s'),
-      view.$attributes.node,
+      view.node({}),
       dsl(new Dot()),
     ] as const;
     for (const v of views) {
@@ -276,7 +276,7 @@ describe('the readers take every model', () => {
     expectTypeOf(fromModel(view.node('a'))).toEqualTypeOf<NodeASTNode>();
     // A DSL is not a model: the guards do not pass it (narrow by $$type).
     expectTypeOf(views.filter(isRootGraphModel)).toEqualTypeOf<never[]>();
-    for (const s of view.$statements) {
+    for (const s of view.statements) {
       if (s.$$type === 'Edge') expectTypeOf(s).toEqualTypeOf<DSL<EdgeModel>>();
     }
   });
@@ -422,7 +422,7 @@ describe('edge targets are read-only references', () => {
     const g = digraph();
     const node = {} as ReadonlyNodeModel;
     g.edge([node, new MyNode('m'), {} as NumNode]);
-    g.$createEdge([node, [node, 'b']]);
+    g.createEdge([node, [node, 'b']]);
     new Edge([node, modelOf(g.node('a'))]);
   });
 });

@@ -86,7 +86,17 @@ export class Node<S extends Schema = EmptySchema>
     return this.#attributes;
   }
 
+  /** The node's name: its ID in DOT (`a` in `a -> b`). */
+  public get nodeId(): string {
+    return this.id;
+  }
+
   constructor(
+    /**
+     * The node's name.
+     * @deprecated Read `nodeId` (in the DOT DSL, `id` is Graphviz's `id`
+     * attribute). Removed in v5.
+     */
     public readonly id: string,
     attributes?: NodeAttributesObject<S>,
   ) {

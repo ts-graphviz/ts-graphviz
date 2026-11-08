@@ -100,7 +100,7 @@ const G = digraph('G', (g) => {
 
 - **文**：`node`、`edge`、`subgraph`、`graph` は、同じ名前の DOT の文にあたるメソッドです。`g.node({ ... })`、`g.edge({ ... })`、`g.graph({ ... })` は既定の属性の文（`node [...]` など）です。
 - **属性**：属性は、その名前のままのプロパティです。`undefined` を代入するか `delete` すると消えます。
-- **モデル自身のメンバー**には `$` を付けます。`a.$id` はノードの名前（`a.id` は Graphviz の `id` 属性）です。ほかに `g.$nodes`、`g.$getNode('A')`、`a.$addComment(...)` などがあります。
+- **モデル自身のメンバー**も、そのままの名前で使えます。`a.nodeId` はノードの名前（`a.id` は Graphviz の `id` 属性）です。ほかに `g.nodes`、`g.getNode('A')`、`a.addComment(...)` などがあります。Graphviz の属性と同じ名前のメンバーはありません。
 - **DSL から得られるモデルはすべて DSL です。** `modelOf()` でモデルに戻し、`dsl()` で（`fromDot` が返したものなどの）モデルを DSL にします。`toDot` とアダプターはどちらも受け取ります。
 
 ```typescript
@@ -112,7 +112,7 @@ const G = digraph('G', (g) => {
   const a = g.node('A');
   a.label = 'Start'; // "A" [label = "Start";];
   a.id = 'svg-a'; // the Graphviz id attribute
-  console.log(a.$id); // 'A': the node's name
+  console.log(a.nodeId); // 'A': the node's name
   g.edge([a, 'B']); // "A" -> "B";
 });
 

@@ -62,12 +62,12 @@ describe('DOT statements', () => {
       const createNode = vi.spyOn(modelOf(g), 'createNode');
       const node = g.node('foo');
       expect(createNode).toHaveBeenCalledWith('foo');
-      expect(g.$existNode('foo')).toBe(true);
-      expect(node.$id).toBe('foo');
+      expect(g.existNode('foo')).toBe(true);
+      expect(node.nodeId).toBe('foo');
     });
 
     test('gives the node there is, with the attributes applied', () => {
-      const created = g.$createNode('foo');
+      const created = g.createNode('foo');
       const createNode = vi.spyOn(modelOf(g), 'createNode');
       const node = g.node('foo', { label: 'Test label' });
       expect(createNode).not.toHaveBeenCalled();
@@ -86,7 +86,7 @@ describe('DOT statements', () => {
     test('sets the default node attributes', () => {
       const defaults = g.node({ label: 'Test label' });
       // Before any statement, the leading defaults.
-      expect(defaults).toBe(g.$attributes.node);
+      expect(defaults).toBe(dsl(modelOf(g).attributes.node));
       expect(defaults.label).toBe('Test label');
     });
   });
@@ -114,8 +114,8 @@ describe('DOT statements', () => {
 
     test('ignores null as the attributes (#1593)', () => {
       const edge = g.edge(nodes, null as never);
-      expect(edge.$attributes.size).toBe(0);
-      expect(g.$edges).toStrictEqual([edge]);
+      expect(edge.getAttributeNames()).toHaveLength(0);
+      expect(g.edges).toStrictEqual([edge]);
     });
 
     test('sets the default edge attributes', () => {
@@ -137,7 +137,7 @@ describe('DOT statements', () => {
     });
 
     test('gives the subgraph there is with this id', () => {
-      const created = g.$createSubgraph('cluster_foo');
+      const created = g.createSubgraph('cluster_foo');
       const createSubgraph = vi.spyOn(modelOf(g), 'createSubgraph');
       const subgraph = g.subgraph('cluster_foo', { label: 'Test label' });
       expect(createSubgraph).not.toHaveBeenCalled();
@@ -159,23 +159,25 @@ describe('DOT statements', () => {
 
     test('takes the empty id as an id; no id makes an anonymous one (#1593)', () => {
       const empty = g.subgraph('');
-      expect(empty.$id).toBe('');
+      expect(empty.subgraphId).toBe('');
       expect(g.subgraph('')).toBe(empty);
       const anonymous = g.subgraph();
       expect(anonymous).not.toBe(empty);
-      expect(anonymous.$id).toBeUndefined();
-      expect(g.$subgraphs).toStrictEqual([empty, anonymous]);
+      expect(anonymous.subgraphId).toBeUndefined();
+      expect(g.subgraphs).toStrictEqual([empty, anonymous]);
     });
 
     test('reads ids that are Object.prototype names as ids', () => {
       const s = g.subgraph('constructor');
-      expect(g.$getSubgraph('constructor')).toBe(s);
+      expect(g.getSubgraph('constructor')).toBe(s);
     });
   });
 
   test('graph sets the default graph attributes', () => {
     g.graph({ label: 'Test label' });
-    expect(g.$attributes.graph.label).toBe('Test label');
+    expect(modelOf(g).attributes.graph.getAttribute('label')).toBe(
+      'Test label',
+    );
   });
 
   test('statements of a subgraph', () => {
@@ -219,25 +221,25 @@ describe('attributes by name', () => {
     const e = g.edge(['a', 'b']);
     e.URL = 'https://example.com';
     expect(modelOf(e).attributes.get('URL')).toBe('https://example.com');
-    g.$attributes.node.shape = 'box';
+    dsl(modelOf(g).attributes.node).shape = 'box';
     expect(modelOf(g).attributes.node.get('shape')).toBe('box');
   });
 
-  test('id, comment and size are attributes; the members take a $', () => {
+  test('id, comment and size are attributes; the name is nodeId / graphId', () => {
     const g = graph();
     const a = g.node('a');
     a.id = 'svg-a';
     a.comment = 'attribute';
-    a.$comment = 'DOT comment';
-    expect(a.$id).toBe('a');
+    a.addComment('DOT comment');
+    expect(a.nodeId).toBe('a');
     expect(modelOf(a).attributes.get('id')).toBe('svg-a');
     expect(modelOf(a).attributes.get('comment')).toBe('attribute');
     expect(modelOf(a).comment).toBe('DOT comment');
     g.size = '7,7';
-    expect(g.$size).toBe(1);
-    expect(g.$id).toBe('G');
+    expect(g.getAttributeNames()).toStrictEqual(['size']);
+    expect(g.graphId).toBe('G');
     expect(g.$$type).toBe('Graph');
-    expect(g.$attributes.node.$$kind).toBe('Node');
+    expect(dsl(modelOf(g).attributes.node).$$kind).toBe('Node');
     expect(toDot(g)).toBe(
       [
         'digraph "G" {',
@@ -286,7 +288,7 @@ describe('attributes by name', () => {
       const a = g.node('a');
       expect(a.label).toBeUndefined();
       expect(g.node).not.toBe(proto.node);
-      expect(g.node('b').$id).toBe('b');
+      expect(g.node('b').nodeId).toBe('b');
     } finally {
       delete proto.label;
       delete proto.node;
@@ -327,7 +329,7 @@ describe('attributes by name', () => {
   test('in, delete and own properties: attributes, members and statements', () => {
     const g = graph();
     const a = g.node('a', { label: 'A' });
-    a.$comment = 'note';
+    a.addComment('note');
     const symbol = Symbol('s');
 
     // attributes
@@ -341,16 +343,15 @@ describe('attributes by name', () => {
     });
     expect(Reflect.getOwnPropertyDescriptor(a, 'shape')).toBeUndefined();
 
-    // members, by their $ names: not own properties
-    expect('$comment' in a).toBe(true);
+    // members, by their names or with a $ in front: not own properties
+    expect('comments' in a).toBe(true);
+    expect('$comments' in a).toBe(true);
     expect('$nope' in a).toBe(false);
-    expect(Reflect.getOwnPropertyDescriptor(a, '$comment')).toBeUndefined();
-    expect(Reflect.deleteProperty(a, '$comment')).toBe(true);
-    // The deprecated comment is an accessor of the class, which delete
-    // leaves; undefined removes the comment.
-    expect(modelOf(a).comment).toBe('note');
-    a.$comment = undefined;
-    expect(modelOf(a).comment).toBeUndefined();
+    expect(Reflect.getOwnPropertyDescriptor(a, 'comments')).toBeUndefined();
+    expect(Reflect.getOwnPropertyDescriptor(a, '$comments')).toBeUndefined();
+    // A member of the class: delete leaves it.
+    expect(Reflect.deleteProperty(a, 'comments')).toBe(true);
+    expect(a.comments.map((c) => c.text)).toStrictEqual(['note']);
 
     // statements: in a graph, not deletable, not own properties
     expect('node' in g).toBe(true);
@@ -389,14 +390,14 @@ describe('models that cannot be extended', () => {
     const a = dsl(node);
     a.label = 'A';
     expect(a.id).toBeUndefined();
-    expect(a.$id).toBe('a');
+    expect(a.nodeId).toBe('a');
     expect(Object.keys(a)).toStrictEqual(['label']);
     expect({ ...a }).toStrictEqual({ label: 'A' });
     expect(a).toBeInstanceOf(Node);
     const g = dsl(Object.seal(new Digraph('G')));
     g.rankdir = 'LR';
     expect(Object.keys(g)).toStrictEqual(['rankdir']);
-    expect(g.node('b').$id).toBe('b');
+    expect(g.node('b').nodeId).toBe('b');
   });
 
   test('a DSL itself cannot be frozen, sealed or given a prototype', () => {
@@ -412,9 +413,9 @@ describe('models that cannot be extended', () => {
 describe('the rules', () => {
   test('1. model methods run on the model (its private fields)', () => {
     const g = graph();
-    expect(() => g.$createNode('a')).not.toThrow();
-    expect(() => g.$createSubgraph('s')).not.toThrow();
-    expect(g.$nodes).toHaveLength(1);
+    expect(() => g.createNode('a')).not.toThrow();
+    expect(() => g.createSubgraph('s')).not.toThrow();
+    expect(g.nodes).toHaveLength(1);
   });
 
   test('2. a model holds models, never DSLs', () => {
@@ -422,9 +423,9 @@ describe('the rules', () => {
       const a = g.node('a');
       const b = g.node('b');
       const s = g.subgraph('s', (s) => s.node('c'));
-      g.edge([a, [b, s.node('c').$port('p')], 'd']);
-      g.$addSubgraph(s);
-      g.$addNode(a);
+      g.edge([a, [b, s.node('c').port('p')], 'd']);
+      g.addSubgraph(s);
+      g.addNode(a);
     });
     for (const model of modelsIn(modelOf(g))) {
       expect(model[MODEL as never]).toBeUndefined();
@@ -437,12 +438,12 @@ describe('the rules', () => {
     const g = graph();
     const s = g.subgraph('s');
     const e = g.edge(['a', 'b']);
-    expect(g.$existSubgraph(s)).toBe(true);
-    expect(g.$existEdge(e)).toBe(true);
-    g.$removeEdge(e);
-    expect(g.$edges).toStrictEqual([]);
-    g.$removeSubgraph(s);
-    expect(g.$subgraphs).toStrictEqual([]);
+    expect(g.existSubgraph(s)).toBe(true);
+    expect(g.existEdge(e)).toBe(true);
+    g.removeEdge(e);
+    expect(g.edges).toStrictEqual([]);
+    g.removeSubgraph(s);
+    expect(g.subgraphs).toStrictEqual([]);
   });
 
   test('2. a model’s methods receive models, arrays included', () => {
@@ -461,12 +462,12 @@ describe('the rules', () => {
       }
     }
     const g = dsl(new Recording());
-    const a = g.$createNode('a');
-    const b = g.$createNode('b');
+    const a = g.createNode('a');
+    const b = g.createNode('b');
     received.length = 0;
-    g.$addNode(a);
+    g.addNode(a);
     g.edge([a, [b, 'c']]);
-    g.$createEdge([b, a]);
+    g.createEdge([b, a]);
     expect(received).toStrictEqual([
       modelOf(a),
       [modelOf(a), [modelOf(b), 'c']],
@@ -490,14 +491,16 @@ describe('the rules', () => {
     const a = g.node('a');
     const s = g.subgraph('s');
     const e = g.edge([a, ['b', a]]);
-    expect(g.$nodes[0]).toBe(a);
-    expect(g.$getNode('a')).toBe(a);
-    expect(g.$subgraphs[0]).toBe(s);
-    expect(g.$statements).toStrictEqual([a, s, e]);
-    expect(e.$targets[0]).toBe(a);
-    expect((e.$targets[1] as unknown[])[1]).toBe(a);
-    expect(g.$attributes.node).toBe(dsl(modelOf(g).attributes.node));
-    expect(g.$attributes).toBe(g.$attributes);
+    expect(g.nodes[0]).toBe(a);
+    expect(g.getNode('a')).toBe(a);
+    expect(g.subgraphs[0]).toBe(s);
+    expect(g.statements).toStrictEqual([a, s, e]);
+    expect(e.targets[0]).toBe(a);
+    expect((e.targets[1] as unknown[])[1]).toBe(a);
+    // The deprecated leading lists, reached with a $ (not in the DSL's type).
+    const legacy = g as unknown as { $attributes: { node: unknown } };
+    expect(legacy.$attributes.node).toBe(dsl(modelOf(g).attributes.node));
+    expect(legacy.$attributes).toBe(legacy.$attributes);
   });
 
   test('4. a model has one DSL', () => {
@@ -506,7 +509,7 @@ describe('the rules', () => {
     expect(dsl(model)).toBe(g);
     expect(dsl(g)).toBe(g);
     expect(g.node).toBe(g.node);
-    expect(g.$createNode).toBe(g.$createNode);
+    expect(g.createNode).toBe(g.createNode);
     expect(modelOf(g)).toBe(model);
   });
 
@@ -547,7 +550,7 @@ describe('arrays of DSLs', () => {
     const g = graph();
     const a = g.node('a');
     const b = g.node('b');
-    const nodes = g.$nodes;
+    const nodes = g.nodes;
     expect(nodes.includes(modelOf(b) as never)).toBe(true);
     expect(nodes.indexOf(modelOf(b) as never)).toBe(1);
     expect(nodes.lastIndexOf(modelOf(a) as never)).toBe(0);
@@ -559,7 +562,7 @@ describe('arrays of DSLs', () => {
   test('stay plain arrays', () => {
     const g = graph();
     g.node('a');
-    const nodes = g.$nodes;
+    const nodes = g.nodes;
     expect(Array.isArray(nodes)).toBe(true);
     expect(Object.keys(nodes)).toStrictEqual(['0']);
   });
@@ -575,19 +578,19 @@ describe('the readers take a DSL', () => {
   test('toDot and fromModel', () => {
     expect(toDot(g)).toBe(toDot(modelOf(g)));
     expect(fromModel(g)).toStrictEqual(fromModel(modelOf(g)));
-    expect(toDot(g.$nodes[0])).toBe(toDot(modelOf(g).nodes[0]));
+    expect(toDot(g.nodes[0])).toBe(toDot(modelOf(g).nodes[0]));
   });
 
   test('the guards take the model, not the DSL', () => {
     // A DSL is not a model (its `id` is an attribute): use modelOf.
     expect(isRootGraphModel(g)).toBe(false);
-    expect(isNodeModel(g.$nodes[0])).toBe(false);
-    expect(isEdgeModel(g.$edges[0])).toBe(false);
-    expect(isSubgraphModel(g.$subgraphs[0])).toBe(false);
+    expect(isNodeModel(g.nodes[0])).toBe(false);
+    expect(isEdgeModel(g.edges[0])).toBe(false);
+    expect(isSubgraphModel(g.subgraphs[0])).toBe(false);
     expect(isRootGraphModel(modelOf(g))).toBe(true);
-    expect(isNodeModel(modelOf(g.$nodes[0]))).toBe(true);
-    expect(isEdgeModel(modelOf(g.$edges[0]))).toBe(true);
-    expect(isSubgraphModel(modelOf(g.$subgraphs[0]))).toBe(true);
+    expect(isNodeModel(modelOf(g.nodes[0]))).toBe(true);
+    expect(isEdgeModel(modelOf(g.edges[0]))).toBe(true);
+    expect(isSubgraphModel(modelOf(g.subgraphs[0]))).toBe(true);
     const a = g.node('a');
     a.id = 'svg-a';
     expect(isNodeModel(a)).toBe(false);
@@ -612,7 +615,7 @@ describe('custom models', () => {
     const a = g.node('a');
     expect(createNode).toHaveBeenCalledWith('a');
     expect(modelOf(a)).toBeInstanceOf(MyNode);
-    expect((a as unknown as { $mine: boolean }).$mine).toBe(true);
+    expect((a as unknown as { mine: boolean }).mine).toBe(true);
   });
 
   test('default attribute statements keep their place, as in DOT', () => {
@@ -705,11 +708,11 @@ describe('custom models', () => {
       }
     }
     const g = dsl(new Custom());
-    expect(g.node('a').$id).toBe('a');
+    expect(g.node('a').nodeId).toBe('a');
     const custom = (
-      g as unknown as { $node(id: string): { $id: string } }
+      g as unknown as { $node(id: string): { nodeId: string } }
     ).$node('b');
-    expect(custom.$id).toBe('custom-b');
+    expect(custom.nodeId).toBe('custom-b');
   });
 });
 

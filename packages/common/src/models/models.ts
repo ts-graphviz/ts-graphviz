@@ -615,7 +615,13 @@ export interface NodeModel<S extends Schema = EmptySchema>
     Attributes<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>,
     HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>,
     DotObjectModel<'Node'> {
-  /** ID of the node */
+  /** The node's name: its ID in DOT (`a` in `a -> b`). */
+  readonly nodeId: string;
+  /**
+   * The node's name.
+   * @deprecated Read `nodeId` (in the DOT DSL, `id` is Graphviz's `id`
+   * attribute). Removed in v5.
+   */
   readonly id: string;
   /** Returns ForwardRefNode with port and compass specified. */
   port(port: string | Partial<Port>): ForwardRefNode;
@@ -765,6 +771,12 @@ export interface GraphBaseModel<
     HasComments<CommentPosition>,
     Attributes<K, GraphSchemaAttributeTypes<T, S>>,
     DotObjectModel<T> {
+  /**
+   * The graph's name: its ID in DOT.
+   * @deprecated Read `graphId` of a root graph or `subgraphId` of a
+   * subgraph (in the DOT DSL, `id` is Graphviz's `id` attribute). Removed
+   * in v5.
+   */
   readonly id?: string;
   /**
    * The leading default attribute statements of the graph (the first
@@ -914,6 +926,8 @@ export interface SubgraphModel<
     M,
     S
   > {
+  /** The subgraph's name: its ID in DOT (`cluster_a` in `subgraph cluster_a`). */
+  readonly subgraphId?: string | undefined;
   /**
    * Whether Graphviz draws the subgraph as a cluster: its id starts with
    * `cluster` (in any case), or its `cluster` attribute is true (`true`,
@@ -930,6 +944,8 @@ export interface RootGraphModel<
   M extends AnyModelTypes = ModelTypes,
   S extends Schema = SchemaOf<M>,
 > extends GraphBaseModel<'Graph', GraphAttributeKey, M, S> {
+  /** The graph's name: its ID in DOT (`G` in `digraph G`). */
+  readonly graphId?: string | undefined;
   directed: boolean;
 
   /**

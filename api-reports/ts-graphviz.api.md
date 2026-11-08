@@ -13,20 +13,13 @@ export interface AttributeListDSLMembers<T extends AttributeListModel, K extends
 }
 
 export interface AttributesDSLMembers<K extends AttributeKey> {
-  $getAttribute<P extends K>(name: P): Attribute<P> | undefined;
-  $setAttribute<P extends K>(name: P, value: Attribute<P>): void;
-  $removeAttribute(name: K): void;
-  $hasAttribute(name: K): boolean;
-  $getAttributeNames(): K[];
-  $setAttributes(attributes: AttributesObject<K> | AttributesEntities<K>): void;
-  $removeAttributes(): void;
-  readonly $size: number;
-  readonly $values: ReadonlyArray<[K, Attribute<K>]>;
-  $get<P extends K>(key: P): Attribute<P> | undefined;
-  $set<P extends K>(key: P, value: Attribute<P>): void;
-  $apply(attributes: AttributesObject<K> | AttributesEntities<K>): void;
-  $delete(key: K): void;
-  $clear(): void;
+  getAttribute<P extends K>(name: P): Attribute<P> | undefined;
+  setAttribute<P extends K>(name: P, value: Attribute<P>): void;
+  removeAttribute(name: K): void;
+  hasAttribute(name: K): boolean;
+  getAttributeNames(): K[];
+  setAttributes(attributes: AttributesObject<K> | AttributesEntities<K>): void;
+  removeAttributes(): void;
 }
 
 export type DSL<T extends AnyDotObjectModel> = T extends NodeModel ? NodeDSL<T> : T extends EdgeModel ? EdgeDSL<T> : T extends SubgraphModel ? SubgraphDSL<T> : T extends RootGraphModel ? RootGraphDSL<T> : T extends AttributeListModel<infer K, infer A> ? AttributeListDSL<T, K, A> : T extends DotModel ? DotDSL<T> : never;
@@ -36,17 +29,16 @@ export type DSLEdgeTargetLikeTuple = ReadonlyEdgeTargetLikeTuple | readonly [fro
 export type DotDSL<T extends DotModel> = DotDSLMembers<T> & ExtraMembers<T, DotDSLMembers<T>>;
 
 export interface DotDSLMembers<T extends DotModel> extends ModelDSLMembers<T> {
-  readonly $graphs: ReadonlyArray<DSL<T["graphs"][number]>>;
-  $addGraph(graph: ModelArg<RootGraphModel>): void;
-  $existGraph(graph: ModelArg<RootGraphModel>): boolean;
-  $removeGraph(graph: ModelArg<RootGraphModel>): void;
+  readonly graphs: ReadonlyArray<DSL<T["graphs"][number]>>;
+  addGraph(graph: ModelArg<RootGraphModel>): void;
+  existGraph(graph: ModelArg<RootGraphModel>): boolean;
+  removeGraph(graph: ModelArg<RootGraphModel>): void;
 }
 
 export type EdgeDSL<T extends EdgeModel> = EdgeDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>> & ExtraMembers<T, EdgeDSLMembers<T>>;
 
 export interface EdgeDSLMembers<T extends EdgeModel> extends ModelDSLMembers<T>, AttributesDSLMembers<AttributeKeysOf<T>> {
-  readonly $targets: readonly [from: DSLNodeRef | readonly DSLNodeRef[], to: DSLNodeRef | readonly DSLNodeRef[], ...rest: (DSLNodeRef | readonly DSLNodeRef[])[]];
-  readonly $attributes: AttributesGroupModel<AttributeKeysOf<T>>;
+  readonly targets: readonly [from: DSLNodeRef | readonly DSLNodeRef[], to: DSLNodeRef | readonly DSLNodeRef[], ...rest: (DSLNodeRef | readonly DSLNodeRef[])[]];
 }
 
 export type FromDotModel<R extends FromDotRule, M extends ModelTypes = ModelTypes> = R extends "Dot" | "Graph" ? M["Graph"] | M["Digraph"] : R extends "Node" ? M["Node"] : R extends "Edge" ? M["Edge"] : M["Subgraph"];
@@ -61,32 +53,30 @@ export interface FromDotOptions<T extends FromDotRule, P extends Partial<ModelsC
 export type FromDotRule = "Dot" | "Graph" | "Node" | "Edge" | "Subgraph";
 
 export interface GraphDSLMembers<T extends RootGraphModel | SubgraphModel> extends ModelDSLMembers<T>, AttributesDSLMembers<AttributeKeysOf<T>>, GraphDSLStatements<T> {
-  readonly $id?: string;
-  readonly $attributes: { readonly [K in keyof T["attributes"]]: T["attributes"][K] extends AttributeListModel ? DSL<T["attributes"][K]> : never; };
-  readonly $nodes: ReadonlyArray<DSL<NodeOf<T>>>;
-  readonly $edges: ReadonlyArray<DSL<EdgeOf<T>>>;
-  readonly $subgraphs: ReadonlyArray<DSL<SubgraphOf<T>>>;
-  readonly $statements: ReadonlyArray<DSL<NodeOf<T>> | DSL<EdgeOf<T>> | DSL<SubgraphOf<T>> | DSL<AttributeListModel>>;
-  $with(models: Partial<ModelsContext>): void;
-  $addNode(node: ModelArg<NodeModel>): void;
-  $addEdge(edge: ModelArg<EdgeModel>): void;
-  $addSubgraph(subgraph: ModelArg<SubgraphModel>): void;
-  $addAttributeList(kind: "Graph", attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<T["attributes"]["graph"]>;
-  $addAttributeList(kind: "Node", attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<T["attributes"]["node"]>;
-  $addAttributeList(kind: "Edge", attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<T["attributes"]["edge"]>;
-  $addAttributeList(kind: AttributeListKind, attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<AttributeListModel>;
-  $existNode(nodeId: string): boolean;
-  $existEdge(edge: ModelArg<EdgeModel>): boolean;
-  $existSubgraph(subgraph: ModelArg<SubgraphModel>): boolean;
-  $removeNode(node: ModelArg<NodeModel> | string): void;
-  $removeEdge(edge: ModelArg<EdgeModel>): void;
-  $removeSubgraph(subgraph: ModelArg<SubgraphModel>): void;
-  $createNode(id: string, attributes?: NodeAttributesObject): DSL<NodeOf<T>>;
-  $createSubgraph<const Id extends string | undefined = undefined>(id?: Id, attributes?: SubgraphAttributesFor<Id>): DSL<SubgraphOf<T>>;
-  $createSubgraph(attributes?: NonClusterSubgraphAttributesObject): DSL<SubgraphOf<T>>;
-  $createEdge(targets: DSLEdgeTargetLikeTuple, attributes?: EdgeAttributesObject): DSL<EdgeOf<T>>;
-  $getNode(id: string): DSL<NodeOf<T>> | undefined;
-  $getSubgraph(id: string): DSL<SubgraphOf<T>> | undefined;
+  readonly nodes: ReadonlyArray<DSL<NodeOf<T>>>;
+  readonly edges: ReadonlyArray<DSL<EdgeOf<T>>>;
+  readonly subgraphs: ReadonlyArray<DSL<SubgraphOf<T>>>;
+  readonly statements: ReadonlyArray<DSL<NodeOf<T>> | DSL<EdgeOf<T>> | DSL<SubgraphOf<T>> | DSL<AttributeListModel>>;
+  with(models: Partial<ModelsContext>): void;
+  addNode(node: ModelArg<NodeModel>): void;
+  addEdge(edge: ModelArg<EdgeModel>): void;
+  addSubgraph(subgraph: ModelArg<SubgraphModel>): void;
+  addAttributeList(kind: "Graph", attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<T["attributes"]["graph"]>;
+  addAttributeList(kind: "Node", attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<T["attributes"]["node"]>;
+  addAttributeList(kind: "Edge", attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<T["attributes"]["edge"]>;
+  addAttributeList(kind: AttributeListKind, attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<AttributeListModel>;
+  existNode(nodeId: string): boolean;
+  existEdge(edge: ModelArg<EdgeModel>): boolean;
+  existSubgraph(subgraph: ModelArg<SubgraphModel>): boolean;
+  removeNode(node: ModelArg<NodeModel> | string): void;
+  removeEdge(edge: ModelArg<EdgeModel>): void;
+  removeSubgraph(subgraph: ModelArg<SubgraphModel>): void;
+  createNode(id: string, attributes?: NodeAttributesObject): DSL<NodeOf<T>>;
+  createSubgraph<const Id extends string | undefined = undefined>(id?: Id, attributes?: SubgraphAttributesFor<Id>): DSL<SubgraphOf<T>>;
+  createSubgraph(attributes?: NonClusterSubgraphAttributesObject): DSL<SubgraphOf<T>>;
+  createEdge(targets: DSLEdgeTargetLikeTuple, attributes?: EdgeAttributesObject): DSL<EdgeOf<T>>;
+  getNode(id: string): DSL<NodeOf<T>> | undefined;
+  getSubgraph(id: string): DSL<SubgraphOf<T>> | undefined;
 }
 
 export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
@@ -105,7 +95,9 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
 
 export interface ModelDSLMembers<T extends AnyDotObjectModel> extends ModelView<T> {
   readonly $$type: T["$$type"];
-  $comment?: string | undefined;
+  readonly comments: T["comments"];
+  addComment: T["addComment"];
+  removeComment: T["removeComment"];
 }
 
 export interface ModelFactories<M extends ModelTypes = ModelTypes> {
@@ -127,33 +119,32 @@ export interface ModelFactory<G extends RootGraphModel = RootGraphModel> {
 export type NodeDSL<T extends NodeModel> = NodeDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>> & ExtraMembers<T, NodeDSLMembers<T>>;
 
 export interface NodeDSLMembers<T extends NodeModel> extends ModelDSLMembers<T>, AttributesDSLMembers<AttributeKeysOf<T>> {
-  readonly $id: string;
-  readonly $attributes: T["attributes"];
-  $port(port: string | Partial<Port>): ForwardRefNode;
+  readonly nodeId: string;
+  port(port: string | Partial<Port>): ForwardRefNode;
 }
 
 export interface ReadonlyNodeDSL extends ModelView<ReadonlyNodeModel> {
   readonly $$type: "Node";
-  readonly $id: string;
-  readonly $comment?: string | undefined;
-  readonly $comments?: ReadonlyArray<CommentModel>;
-  $getAttribute(name: string): DotValue | undefined;
-  $hasAttribute(name: string): boolean;
-  $getAttributeNames(): string[];
-  readonly $attributes: ReadonlyAttributes;
+  readonly nodeId?: string;
+  readonly comments?: ReadonlyArray<CommentModel>;
+  getAttribute(name: string): DotValue | undefined;
+  hasAttribute(name: string): boolean;
+  getAttributeNames(): string[];
 }
 
 export type RootGraphDSL<T extends RootGraphModel> = RootGraphDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>> & ExtraMembers<T, RootGraphDSLMembers<T>>;
 
 export interface RootGraphDSLMembers<T extends RootGraphModel> extends GraphDSLMembers<T> {
-  $directed: boolean;
-  $strict: boolean;
+  readonly graphId?: string | undefined;
+  directed: boolean;
+  strict: boolean;
 }
 
 export type SubgraphDSL<T extends SubgraphModel> = SubgraphDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>> & ExtraMembers<T, SubgraphDSLMembers<T>>;
 
 export interface SubgraphDSLMembers<T extends SubgraphModel> extends GraphDSLMembers<T> {
-  $isSubgraphCluster(): boolean;
+  readonly subgraphId?: string | undefined;
+  isSubgraphCluster(): boolean;
 }
 
 export interface ToDotOptions {
@@ -218,9 +209,11 @@ type DSLNodeRef = ReadonlyNodeDSL | ForwardRefNode;
 
 type DSLNodeRefLike = NodeRefLike | ModelView<ReadonlyNodeModel>;
 
+type DeprecatedMembers = "id" | "comment" | "size" | "values" | "get" | "set" | "delete" | "clear" | "apply" | "attributes";
+
 type EdgeOf<T extends GraphBaseModel> = ReturnType<T["createEdge"]>;
 
-type ExtraMembers<T, Known> = { [P in keyof T as P extends string ? `$${P}` extends keyof Known ? never : P extends `$$${string}` ? P : `$${P}` : never]: Viewed<T[P]>; };
+type ExtraMembers<T, Known> = { [P in keyof T as P extends string ? P extends keyof Known | DeprecatedMembers ? never : P extends AttributeKey ? `$${P}` : P : never]: Viewed<T[P]>; };
 
 type ModelArg<T extends AnyDotObjectModel> = T | ModelView<T>;
 

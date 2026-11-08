@@ -146,13 +146,15 @@ export declare class Node<S extends Schema = EmptySchema> extends AttributesBase
   get comment(): string | undefined;
   set comment(text: string | undefined);
   get attributes(): AttributesGroupModel<NodeAttributeKey, SchemaAttributeTypes<S, "node">>;
+  get nodeId(): string;
   constructor(id: string, attributes?: NodeAttributesObject<S>);
   port(port: string | Partial<Port>): ForwardRefNode;
 }
 
 export declare abstract class RootGraph<M extends AnyModelTypes = ModelTypes> extends GraphBase<"Graph", GraphAttributeKey, M> implements RootGraphModel<M> {
   get $$type(): "Graph";
-  readonly id?: string;
+  override readonly id?: string;
+  get graphId(): string | undefined;
   abstract readonly directed: boolean;
   strict: boolean;
   constructor(id?: string, attributes?: GraphAttributesObject<SchemaOf<M>>);
@@ -163,7 +165,8 @@ export declare abstract class RootGraph<M extends AnyModelTypes = ModelTypes> ex
 
 export declare class Subgraph<M extends AnyModelTypes = ModelTypes> extends GraphBase<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, M> implements SubgraphModel<M> {
   get $$type(): "Subgraph";
-  readonly id?: string;
+  override readonly id?: string;
+  get subgraphId(): string | undefined;
   constructor(id?: string, attributes?: SubgraphAttributesObject<SchemaOf<M>>);
   constructor(attributes?: SubgraphAttributesObject<SchemaOf<M>>);
   isSubgraphCluster(): boolean;

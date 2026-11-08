@@ -102,7 +102,7 @@ const G = digraph('G', (g) => {
 
 - **语句**：`node`、`edge`、`subgraph` 和 `graph` 是方法，对应同名的 DOT 语句。`g.node({ ... })`、`g.edge({ ... })` 和 `g.graph({ ... })` 是默认属性语句（`node [...]` 等）。
 - **属性**：属性是以其名称命名的属性。赋值 `undefined` 或使用 `delete` 会删除它。
-- **模型自身的成员**前加 `$`：`a.$id` 是节点的名称（`a.id` 是 Graphviz 的 `id` 属性），此外还有 `g.$nodes`、`g.$getNode('A')`、`a.$addComment(...)` 等。
+- **模型自身的成员**也直接使用其名称：`a.nodeId` 是节点的名称（`a.id` 是 Graphviz 的 `id` 属性），此外还有 `g.nodes`、`g.getNode('A')`、`a.addComment(...)` 等。没有与 Graphviz 属性同名的成员。
 - **从 DSL 得到的模型都是 DSL。** `modelOf()` 返回模型，`dsl()` 返回模型（例如 `fromDot` 返回的模型）的 DSL。`toDot` 和适配器两者都接受。
 
 ```typescript
@@ -114,7 +114,7 @@ const G = digraph('G', (g) => {
   const a = g.node('A');
   a.label = 'Start'; // "A" [label = "Start";];
   a.id = 'svg-a'; // the Graphviz id attribute
-  console.log(a.$id); // 'A': the node's name
+  console.log(a.nodeId); // 'A': the node's name
   g.edge([a, 'B']); // "A" -> "B";
 });
 
