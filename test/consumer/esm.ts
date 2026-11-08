@@ -98,10 +98,10 @@ createModelsContext({ Node: MyNode });
 
 // parse / stringify / sanitize
 const dot: DotASTNode = parse(sanitize(text));
-const nodeAST = parse('a [color=red]', 'Node');
+const nodeAST = parse('a [color=red]', { startRule: 'Node' });
 assertType<Equal<typeof nodeAST, NodeASTNode>>();
 // @ts-expect-error not a rule
-parse('a', 'Statement');
+parse('a', { startRule: 'Statement' });
 const printed: string = stringify(dot) + astPackage.stringify(nodeAST);
 
 // adapter options

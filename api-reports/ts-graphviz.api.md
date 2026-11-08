@@ -52,9 +52,7 @@ export interface EdgeDSLMembers<T extends EdgeModel> extends ModelDSLMembers<T>,
 export type FromDotModel<R extends FromDotRule, M extends ModelTypes = ModelTypes> = R extends "Dot" | "Graph" ? M["Graph"] | M["Digraph"] : R extends "Node" ? M["Node"] : R extends "Edge" ? M["Edge"] : M["Subgraph"];
 
 export interface FromDotOptions<T extends FromDotRule, P extends Partial<ModelsContext> = Partial<ModelsContext>> {
-  parse?: CommonParseOptions & {
-    startRule?: T;
-  };
+  parse?: ParseOptions<T>;
   convert?: Omit<ConvertToModelOptions, "models"> & {
     models?: P;
   };
@@ -182,13 +180,13 @@ export declare function fromDot(dot: string, options?: FromDotOptions<"Dot" | "G
 export declare function fromDot<const R extends FromDotRule>(dot: string, options: FromDotOptions<R>): FromDotModel<R>;
 
 export declare function fromDotAll<const P extends Partial<ModelsContext>>(dot: string, options: Omit<FromDotOptions<"Dot", P>, "parse"> & {
-  parse?: CommonParseOptions;
+  parse?: Omit<ParseOptions<"Dot">, "startRule">;
   convert: {
     models: P;
   };
 }): (ResolvedModelTypes<P>["Graph"] | ResolvedModelTypes<P>["Digraph"])[];
 export declare function fromDotAll(dot: string, options?: Omit<FromDotOptions<"Dot">, "parse"> & {
-  parse?: CommonParseOptions;
+  parse?: Omit<ParseOptions<"Dot">, "startRule">;
 }): RootGraphModel[];
 
 export declare const graph: ModelFactory;

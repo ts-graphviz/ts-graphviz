@@ -68,7 +68,7 @@ describe('printer and parser', { tags: ['SM-1'] }, () => {
         ),
         ([startRule, ast]) => {
           // A union rule gives the union of its nodes (#1741).
-          const parsed = parse(stringify(ast), startRule);
+          const parsed = parse(stringify(ast), { startRule });
           expect(normalize(parsed)).toStrictEqual(normalize(ast));
         },
       ),
@@ -99,7 +99,8 @@ describe('printer and parser', { tags: ['SM-1'] }, () => {
         },
         [],
       );
-    const reparse = (ast: ASTNode) => normalize(parse(stringify(ast), 'Edge'));
+    const reparse = (ast: ASTNode) =>
+      normalize(parse(stringify(ast), { startRule: 'Edge' }));
 
     // #1619: two-letter points were split by ordered choice, `c` and `_`
     // were missing, and a compass point without a port was read as a port

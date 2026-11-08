@@ -175,31 +175,3 @@ describe('deprecated until v5 (#1930)', () => {
     }
   });
 });
-
-describe('deprecated until v5: 3.x signature of parse (#1923)', () => {
-  it.each([
-    [
-      'packages/ast/src/dot-shim/parser/parse.ts',
-      'export function parseLegacy(',
-    ],
-    [
-      'packages/ast/src/dot-shim/parser/parse.ts',
-      'export function parseLegacy<',
-    ],
-    [
-      'packages/ast/src/dot-shim/parser/parse.ts',
-      'export interface ParseOptions<',
-    ],
-  ])('%s: %s', (path, declaration) => {
-    expect(docAbove(read(path), declaration)).toMatch(DEPRECATED_TAG);
-  });
-
-  it('parse itself is not deprecated', () => {
-    expect(
-      docAbove(
-        read('packages/ast/src/dot-shim/parser/parse.ts'),
-        'export function parse<',
-      ),
-    ).not.toMatch(DEPRECATED_TAG);
-  });
-});

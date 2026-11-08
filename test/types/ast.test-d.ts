@@ -25,21 +25,27 @@ describe('parse', () => {
     expectTypeOf(parse('digraph {}')).toEqualTypeOf<DotASTNode>();
   });
 
-  it('parse types the node by the rule', () => {
-    expectTypeOf(parse('a', 'Node')).toEqualTypeOf<NodeASTNode>();
-    expectTypeOf(parse('a -> b', 'Edge')).toEqualTypeOf<EdgeASTNode>();
-    expectTypeOf(parse('graph {}', 'Graph')).toEqualTypeOf<GraphASTNode>();
+  it('parse types the node by startRule', () => {
     expectTypeOf(
-      parse('subgraph {}', 'Subgraph'),
+      parse('a', { startRule: 'Node' }),
+    ).toEqualTypeOf<NodeASTNode>();
+    expectTypeOf(
+      parse('a -> b', { startRule: 'Edge' }),
+    ).toEqualTypeOf<EdgeASTNode>();
+    expectTypeOf(
+      parse('graph {}', { startRule: 'Graph' }),
+    ).toEqualTypeOf<GraphASTNode>();
+    expectTypeOf(
+      parse('subgraph {}', { startRule: 'Subgraph' }),
     ).toEqualTypeOf<SubgraphASTNode>();
     expectTypeOf(
-      parse('node [a=1]', 'AttributeList'),
+      parse('node [a=1]', { startRule: 'AttributeList' }),
     ).toEqualTypeOf<AttributeListASTNode>();
-    expectTypeOf(parse('a; b', 'ClusterStatements')).toEqualTypeOf<
-      ClusterStatementASTNode[]
-    >();
+    expectTypeOf(
+      parse('a; b', { startRule: 'ClusterStatements' }),
+    ).toEqualTypeOf<ClusterStatementASTNode[]>();
     // @ts-expect-error not a rule
-    parse('a', 'Statement');
+    parse('a', { startRule: 'Statement' });
   });
 });
 

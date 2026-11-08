@@ -14,7 +14,6 @@ Every error ts-graphviz raises on purpose is the standard error type that fits t
 |---|---|---|
 | DOT does not parse, or exceeds a parse limit (`maxInputSize`, `maxASTNodes`, the depth limits) | `DotSyntaxError` (a `SyntaxError`) | `TSG_ERR_DOT_SYNTAX` |
 | parser failed otherwise (see `cause`) | `Error` | `TSG_ERR_PARSE_FAILED` |
-| `parse` given 3.x's `{ startRule }` options, or a second argument that is neither a rule name nor options (see `parseLegacy`) | `TypeError` | `TSG_ERR_INVALID_PARSE_ARGUMENTS` |
 | an AST built by `fromModel` or a `createElementFactory` builder exceeds `maxASTNodes` | `ASTNodeCountExceededError` (a `RangeError`) | `TSG_ERR_AST_NODE_COUNT_EXCEEDED` |
 | edges to subgraphs reach more than `maxEdgeTargets` nodes | `RangeError` | `TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED` |
 | null character in text written to DOT | `RangeError` | `TSG_ERR_NUL_CHARACTER` |
@@ -38,7 +37,7 @@ Every error ts-graphviz raises on purpose is the standard error type that fits t
 - `isTsGraphvizError(e)` tells whether a value is one of these errors. It judges by shape (an error whose own `code` is in `ERROR_CODES`), so it works across realms and package copies. Compare `e.code` to narrow further.
 - `withCode(error, code)` tags your own errors the same way; it defines `code` as an own property, so it also tags errors whose prototype has a `code` getter (such as `DOMException`).
 - `CodedError` and `ErrorCode` type the result. `ERROR_CODES` is frozen.
-- `DotSyntaxError` has a `location` (`{ start, end }`; `undefined` for an input over `maxInputSize` or `maxASTNodes`) and a `limit`: the parse option whose limit the source exceeded (`'maxInputSize'`, `'maxASTNodes'`, `'maxNestingDepth'`, `'maxHtmlNestingDepth'` or `'maxEdgeChainDepth'`; type `DotSyntaxLimit`), or `undefined` for any other syntax error, so a source that is too large or too deep can be told from one that does not parse without reading the message. This holds for `parse`, `parseLegacy`, `fromDot`, `sanitize` and the adapter's check. Its `code`, `location` and `limit` are the contract; the message text and `cause` (the parser's internal error) may change in any release.
+- `DotSyntaxError` has a `location` (`{ start, end }`; `undefined` for an input over `maxInputSize` or `maxASTNodes`) and a `limit`: the parse option whose limit the source exceeded (`'maxInputSize'`, `'maxASTNodes'`, `'maxNestingDepth'`, `'maxHtmlNestingDepth'` or `'maxEdgeChainDepth'`; type `DotSyntaxLimit`), or `undefined` for any other syntax error, so a source that is too large or too deep can be told from one that does not parse without reading the message. This holds for `parse`, `parseFragment`, `fromDot`, `sanitize` and the adapter's check. Its `code`, `location` and `limit` are the contract; the message text and `cause` (the parser's internal error) may change in any release.
 - The classes that remain (`DotSyntaxError`, `ASTNodeCountExceededError`, `CommandExecutionError`) set `name` to a literal string.
 
 Compared with 3.x: errors had no `code`; `ASTNodeCountExceededError` extended `Error` and is now a `RangeError`; edge-target errors were a bare `Error` and are now `TypeError`; the browser adapter and the converters threw bare `Error`s; on Node.js, a failed Graphviz command rejected with a bare `Error` (see the process controls note for Deno).

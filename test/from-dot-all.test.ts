@@ -1,6 +1,5 @@
 import { isTsGraphvizError } from '@ts-graphviz/common';
-import { type FromDotOptions, fromDot, fromDotAll } from 'ts-graphviz';
-import * as legacy from 'ts-graphviz/legacy';
+import { fromDot, fromDotAll } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
 describe('fromDot and fromDotAll with several graphs', () => {
@@ -33,23 +32,5 @@ describe('fromDot and fromDotAll with several graphs', () => {
     expect(fromDot('a [color=red]', { parse: { startRule: 'Node' } }).id).toBe(
       'a',
     );
-  });
-
-  it('fromDotAll ignores a startRule that options shared with fromDot carry', () => {
-    const options: FromDotOptions<'Dot'> = {
-      parse: { startRule: 'Dot', maxASTNodes: 100 },
-    };
-    expect(fromDotAll('digraph A {} digraph B {}', options)).toHaveLength(2);
-    expect(
-      legacy.fromDotAll('digraph A {} digraph B {}', options),
-    ).toHaveLength(2);
-    expect(() =>
-      fromDotAll('digraph { a; b; c }', {
-        parse: {
-          startRule: 'Dot',
-          maxASTNodes: 2,
-        } as FromDotOptions<'Dot'>['parse'],
-      }),
-    ).toThrow(expect.objectContaining({ code: 'TSG_ERR_DOT_SYNTAX' }));
   });
 });

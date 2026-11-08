@@ -1,6 +1,6 @@
 import {
-  type CommonParseOptions,
   type ConvertToModelOptions,
+  type ParseOptions,
   parse,
   type Rule,
   toModel,
@@ -52,16 +52,9 @@ export interface FromDotOptions<
   P extends Partial<ModelsContext> = Partial<ModelsContext>,
 > {
   /**
-   * Options for parsing DOT: the parser's limits, and `startRule`.
+   * Options for parsing DOT.
    */
-  parse?: CommonParseOptions & {
-    /**
-     * What to read the source as, and so what `fromDot` returns: a whole
-     * graph (`'Dot'` or `'Graph'`, the default), a `'Node'`, an `'Edge'` or
-     * a `'Subgraph'`. (`parseLegacy` has an option of that name; `parse` takes the rule as an argument.)
-     */
-    startRule?: T;
-  };
+  parse?: ParseOptions<T>;
   /**
    * Options for converting the parsed DOT to a model.
    */
@@ -113,11 +106,9 @@ export function fromDot(
 ): AnyFromDotModel {
   // Own properties only: an inherited one is never an option (#1757).
   const own = ownOptions(options);
-  // `startRule` picks what fromDot returns; it is not the deprecated
-  // option of `parse`.
-  const { startRule = 'Dot', ...limits } = ownOptions(own.parse);
-  // Widened to every rule on purpose: JavaScript callers can pass any.
-  const ast = parse(dot, startRule as Rule, limits);
+  // `startRule` picks what fromDot returns. Widened to every rule on
+  // purpose: JavaScript callers can pass any.
+  const ast = parse(dot, ownOptions(own.parse) as ParseOptions<Rule>);
 
   if (
     Array.isArray(ast) ||
@@ -172,31 +163,25 @@ export function fromDot(
 export function fromDotAll<const P extends Partial<ModelsContext>>(
   dot: string,
   options: Omit<FromDotOptions<'Dot', P>, 'parse'> & {
-    parse?: CommonParseOptions;
+    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
     convert: { models: P };
   },
 ): (ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'])[];
 export function fromDotAll(
   dot: string,
   options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
-    parse?: CommonParseOptions;
+    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
   },
 ): RootGraphModel[];
 export function fromDotAll(
   dot: string,
   options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
-    parse?: CommonParseOptions;
+    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
   },
 ): RootGraphModel[] {
   // Own properties only: an inherited one is never an option (#1757).
   const own = ownOptions(options);
-  // A `startRule` that options shared with fromDot carry is not read here.
-  const { startRule: _, ...limits } = ownOptions(
-    own.parse,
-  ) as CommonParseOptions & {
-    startRule?: unknown;
-  };
-  const ast = parse(dot, 'Dot', limits);
+  const ast = parse(dot, { ...ownOptions(own.parse), startRule: 'Dot' });
   const convert = ownOptions(own.convert);
   const model = toModel(ast, {
     ...convert,
