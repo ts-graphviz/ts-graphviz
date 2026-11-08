@@ -213,11 +213,13 @@ type DeprecatedMembers = "id" | "comment" | "size" | "values" | "get" | "set" | 
 
 type EdgeOf<T extends GraphBaseModel> = ReturnType<T["createEdge"]>;
 
-type ExtraMembers<T, Known> = { [P in keyof T as P extends string ? P extends keyof Known | DeprecatedMembers ? never : P extends AttributeKey ? `$${P}` : P : never]: Viewed<T[P]>; };
+type ExtraMembers<T, Known> = { [P in keyof T as P extends string ? P extends StatementName ? P extends keyof Known ? `$${P}` : P : P extends keyof Known | DeprecatedMembers ? never : P extends AttributeKey ? `$${P}` : P : never]: Viewed<T[P]>; };
 
 type ModelArg<T extends AnyDotObjectModel> = T | ModelView<T>;
 
 type NodeOf<T extends GraphBaseModel> = ReturnType<T["createNode"]>;
+
+type StatementName = "node" | "edge" | "subgraph" | "graph";
 
 type SubgraphOf<T extends GraphBaseModel> = T["subgraphs"][number];
 

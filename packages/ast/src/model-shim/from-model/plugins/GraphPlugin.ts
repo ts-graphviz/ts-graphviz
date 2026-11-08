@@ -11,6 +11,8 @@ export const GraphPlugin: ConvertFromModelPlugin<ReadonlyRootGraphModel> = {
   // around the graph statement; its 'end' ones by convertClusterChildren.
   convert(context, model) {
     const { createElement } = context;
+    // The name, from a model written for 3.x (`id` only) too.
+    const id = model.graphId ?? model.id;
     return createElement(
       'Graph',
       {
@@ -18,11 +20,11 @@ export const GraphPlugin: ConvertFromModelPlugin<ReadonlyRootGraphModel> = {
         strict: model.strict,
         // `""` is a valid (empty) id, so test for presence, not truthiness
         id:
-          model.id !== undefined
+          id !== undefined
             ? createElement(
                 'Literal',
                 {
-                  value: idToRaw(model.id),
+                  value: idToRaw(id),
                   kind: 'quoted',
                 },
                 [],

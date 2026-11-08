@@ -198,20 +198,30 @@ type DeprecatedMembers =
 
 /**
  * The members a model's class adds, under their own names; one named like a
- * Graphviz attribute takes a `$` in front, since the bare name is the
- * attribute. A method that takes or returns models takes their DSLs too and
+ * Graphviz attribute (or, on a graph, like a DOT statement) takes a `$` in
+ * front, since the bare name is the attribute (or the statement). A method that takes or returns models takes their DSLs too and
  * returns DSLs; such a method keeps only its last overload (call it on
  * `modelOf(x)` for the others).
  */
 type ExtraMembers<T, Known> = {
   [P in keyof T as P extends string
-    ? P extends keyof Known | DeprecatedMembers
-      ? never
-      : P extends AttributeKey
+    ? P extends StatementName
+      ? P extends keyof Known
         ? `$${P}`
         : P
+      : P extends keyof Known | DeprecatedMembers
+        ? never
+        : P extends AttributeKey
+          ? `$${P}`
+          : P
     : never]: Viewed<T[P]>;
 };
+
+/**
+ * The DOT statements of a graph's DSL: a member of a graph class under one
+ * of these names takes a `$`, since the bare name is the statement.
+ */
+type StatementName = 'node' | 'edge' | 'subgraph' | 'graph';
 
 /** A value as a DSL member gives it. */
 type Viewed<V> = V extends ModelView

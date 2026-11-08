@@ -15,7 +15,7 @@ export const NodePlugin: ConvertFromModelPlugin<ReadonlyNodeModel> = {
         id: createElement(
           'Literal',
           {
-            value: idToRaw(model.id),
+            value: idToRaw(model.nodeId ?? model.id),
             kind: 'quoted',
           },
           [],

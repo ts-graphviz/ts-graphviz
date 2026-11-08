@@ -201,8 +201,10 @@ describe('deprecated until v5 (#1932)', () => {
       read('packages/common/src/models/models.ts'),
       'readonly id: string;',
     );
+    // ForwardRefNode comes first in the file, NodeModel second.
     expect(docs).toHaveLength(2);
-    expect(docs.filter((doc) => DEPRECATED_TAG.test(doc))).toHaveLength(1);
+    expect(docs[0]).not.toMatch(DEPRECATED_TAG);
+    expect(docs[1]).toMatch(DEPRECATED_TAG);
   });
 
   it.each([

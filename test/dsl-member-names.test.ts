@@ -14,7 +14,7 @@ import {
   Subgraph,
   toDot,
 } from 'ts-graphviz';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 
 // The DOT DSL gives a model's members under their own names and the
 // attributes as properties, so no member may be named like an attribute
@@ -130,6 +130,26 @@ describe('the DSL reads a name as a member or an attribute', () => {
     expect(modelOf(g).strict).toBe(true);
     expect('strict' in g).toBe(true);
     expect(Object.keys(g)).toStrictEqual([]);
+  });
+
+  it('deletes an own member of the model through the DSL', () => {
+    class Tagged extends Digraph {
+      tag?: string = 'mine';
+    }
+    const g = dsl(new Tagged()) as unknown as { tag?: string };
+    expect(Reflect.deleteProperty(g, 'tag')).toBe(true);
+    expect(Object.hasOwn(modelOf(g as never) as object, 'tag')).toBe(false);
+  });
+
+  it('a custom graph member named like a statement is $ in the types too', () => {
+    class Custom extends Digraph {
+      node(): string {
+        return 'mine';
+      }
+    }
+    const g = dsl(new Custom());
+    expectTypeOf(g.$node).toEqualTypeOf<() => string>();
+    expect(g.$node()).toBe('mine');
   });
 });
 

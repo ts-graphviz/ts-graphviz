@@ -282,8 +282,8 @@ export abstract class GraphBase<
 
   public addSubgraph(subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>): void {
     const model = modelOf(subgraph);
-    if (!this.#objects.subgraphs.has(model) && model.id !== undefined) {
-      const id = model.id;
+    const id = subgraphName(model);
+    if (!this.#objects.subgraphs.has(model) && id !== undefined) {
       const same = this.#subgraphsById.get(id);
       if (same === undefined) this.#subgraphsById.set(id, [model]);
       else same.push(model);
@@ -436,7 +436,7 @@ export abstract class GraphBase<
   public getSubgraph(id: string): M['Subgraph'] | undefined {
     // The first one added with this id, as before (a subgraph's id is not
     // expected to change; one whose id did is found under neither).
-    return this.#subgraphsById.get(id)?.find((s) => s.id === id) as
+    return this.#subgraphsById.get(id)?.find((s) => subgraphName(s) === id) as
       | M['Subgraph']
       | undefined;
   }
@@ -464,4 +464,12 @@ export abstract class GraphBase<
     this.addEdge(edge);
     return edge as M['Edge'];
   }
+}
+
+/** A subgraph's name: `subgraphId`, or `id` for a model written for 3.x. */
+function subgraphName(subgraph: {
+  readonly subgraphId?: string | undefined;
+  readonly id?: string | undefined;
+}): string | undefined {
+  return subgraph.subgraphId ?? subgraph.id;
 }
