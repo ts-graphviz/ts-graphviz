@@ -74,10 +74,10 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
   addEdge(edge: EdgeModel<SchemaOf<M>>): void;
   addSubgraph(subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>): void;
   protected get keepsDefaultsInPlace(): boolean;
-  addAttributeList(kind: "Graph", attributes: AttributeListAttributes<SchemaOf<M>, "Graph">): void;
-  addAttributeList(kind: "Node", attributes: AttributeListAttributes<SchemaOf<M>, "Node">): void;
-  addAttributeList(kind: "Edge", attributes: AttributeListAttributes<SchemaOf<M>, "Edge">): void;
-  addAttributeList(kind: AttributeListKind, attributes: AttributeListAttributes<SchemaOf<M>>): void;
+  addAttributeList(kind: "Graph", attributes: AttributeListAttributes<SchemaOf<M>, "Graph">): GraphCommonAttributes<SchemaOf<M>>["graph"];
+  addAttributeList(kind: "Node", attributes: AttributeListAttributes<SchemaOf<M>, "Node">): GraphCommonAttributes<SchemaOf<M>>["node"];
+  addAttributeList(kind: "Edge", attributes: AttributeListAttributes<SchemaOf<M>, "Edge">): GraphCommonAttributes<SchemaOf<M>>["edge"];
+  addAttributeList(kind: AttributeListKind, attributes: AttributeListAttributes<SchemaOf<M>>): StatementAttributeListModel<SchemaOf<M>>;
   existNode(nodeId: string): boolean;
   existEdge(edge: EdgeModel<SchemaOf<M>>): boolean;
   existSubgraph(subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>): boolean;
@@ -92,6 +92,21 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
   createEdge(targets: ReadonlyEdgeTargetLikeTuple, attributes?: EdgeAttributesObject<SchemaOf<M>>): M["Edge"];
 }
 
+export declare class LegacyDigraph<M extends AnyModelTypes = ModelTypes> extends Digraph<M> {
+  protected override get keepsDefaultsInPlace(): boolean;
+  protected override defaultModels(): ModelsContext;
+}
+
+export declare class LegacyGraph<M extends AnyModelTypes = ModelTypes> extends Graph<M> {
+  protected override get keepsDefaultsInPlace(): boolean;
+  protected override defaultModels(): ModelsContext;
+}
+
+export declare class LegacySubgraph<M extends AnyModelTypes = ModelTypes> extends Subgraph<M> {
+  protected override get keepsDefaultsInPlace(): boolean;
+  protected override defaultModels(): ModelsContext;
+}
+
 export declare class Node<S extends Schema = EmptySchema> implements NodeModel<S> {
   readonly id: string;
   get $$type(): "Node";
@@ -99,20 +114,6 @@ export declare class Node<S extends Schema = EmptySchema> implements NodeModel<S
   readonly attributes: AttributesGroup<NodeAttributeKey, SchemaAttributeTypes<S, "node">>;
   constructor(id: string, attributes?: NodeAttributesObject<S>);
   port(port: string | Partial<Port>): ForwardRefNode;
-}
-
-export declare class OrderedDigraph<M extends AnyModelTypes = ModelTypes> extends Digraph<M> {
-  protected override get keepsDefaultsInPlace(): boolean;
-  protected override defaultModels(): ModelsContext;
-}
-
-export declare class OrderedGraph<M extends AnyModelTypes = ModelTypes> extends Graph<M> {
-  protected override get keepsDefaultsInPlace(): boolean;
-  protected override defaultModels(): ModelsContext;
-}
-
-export declare class OrderedSubgraph<M extends AnyModelTypes = ModelTypes> extends Subgraph<M> {
-  protected override get keepsDefaultsInPlace(): boolean;
 }
 
 export declare abstract class RootGraph<M extends AnyModelTypes = ModelTypes> extends GraphBase<"Graph", GraphAttributeKey, M> implements RootGraphModel<M> {
@@ -139,5 +140,5 @@ export declare function createModelsContext<const P extends Partial<ModelsContex
 
 export declare function defaultModelsContext(): ModelsContext;
 
-export declare const orderedModels: Partial<ModelsContext>;
+export declare const legacyModels: Partial<ModelsContext>;
 ```

@@ -9,7 +9,7 @@ import type {
   RootGraphModel,
 } from '@ts-graphviz/common';
 import fc from 'fast-check';
-import { Digraph, Graph, OrderedDigraph, OrderedGraph } from 'ts-graphviz';
+import { Digraph, Graph, LegacyDigraph, LegacyGraph } from 'ts-graphviz';
 
 /**
  * Strings that stress the DOT printer and parser: quotes, backslashes, DOT
@@ -154,7 +154,7 @@ type DefaultsKind = keyof DefaultsSpec;
  * - `attribute`: `g.set(...)` with `attributes[index]`;
  * - `defaults`: `defaults[kind]` as a default statement;
  * - `more defaults`: another default statement of that kind (kept in place
- *   by the classes of `orderedModels`, merged by the default classes);
+ *   by the default classes, merged by the deprecated `legacyModels`);
  * - `node`: the node with that id (`getNode(id) ?? createNode(id)`) with
  *   the node's attributes (a node already mentioned is mentioned again);
  * - `mention`: that node again for a node of the graph, with more
@@ -186,7 +186,10 @@ export interface SubgraphSpec {
 export interface GraphSpec {
   directed: boolean;
   strict: boolean;
-  /** Built with the classes of `orderedModels` (default statements in place). */
+  /**
+   * Built with the default classes (default statements in place); without,
+   * with the deprecated `legacyModels` (merged).
+   */
   ordered?: boolean;
   id?: string;
   comment?: string;
@@ -487,11 +490,11 @@ export function buildGraph(spec: GraphSpec): RootGraphModel {
   // The classes are generic, so a union of them is not constructable.
   const Class: RootGraphConstructor = spec.ordered
     ? spec.directed
-      ? OrderedDigraph
-      : OrderedGraph
-    : spec.directed
       ? Digraph
-      : Graph;
+      : Graph
+    : spec.directed
+      ? LegacyDigraph
+      : LegacyGraph;
   const g: RootGraphModel = new Class(spec.id, spec.strict);
   // A plain string target is split on `:` by the model API, so references are
   // passed as objects to keep ids that contain a colon intact.

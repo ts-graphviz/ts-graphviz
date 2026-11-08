@@ -41,7 +41,7 @@ import {
   sanitize,
   stringify,
 } from 'ts-graphviz/ast';
-import * as ordered from 'ts-graphviz/ordered';
+import * as legacy from 'ts-graphviz/legacy';
 
 type Equal<A, B> =
   (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
@@ -167,28 +167,28 @@ const printAny = <S extends Schema>(graph: RootGraphModel<ModelTypes<S>>) =>
   toDot(graph);
 printAny(schemaGraph);
 
-// ts-graphviz/ordered: the same names and types, with orderedModels
+// ts-graphviz/legacy: the same names and types, with legacyModels
 // (export by export: two module namespaces are never Equal as a whole)
 type SameExports<A, B> = [keyof A, keyof B] extends [keyof B, keyof A]
   ? { [K in keyof A & keyof B]: Equal<A[K], B[K]> }[keyof A & keyof B]
   : false;
-assertType<SameExports<typeof ordered, typeof tsg>>();
-const orderedGraph = ordered.digraph((g) => {
+assertType<SameExports<typeof legacy, typeof tsg>>();
+const legacyGraph = legacy.digraph((g) => {
   g.node({ color: 'red' });
   g.node('a');
 });
-assertType<Equal<typeof orderedGraph, DSL<RootGraphModel>>>();
-assertType<Equal<typeof ordered.toDot, typeof toDot>>();
-const orderedModel = ordered.fromDot('digraph { a }');
-assertType<Equal<typeof orderedModel, RootGraphModel>>();
-const orderedNode = ordered.fromDot('a', {
+assertType<Equal<typeof legacyGraph, DSL<RootGraphModel>>>();
+assertType<Equal<typeof legacy.toDot, typeof toDot>>();
+const legacyModel = legacy.fromDot('digraph { a }');
+assertType<Equal<typeof legacyModel, RootGraphModel>>();
+const legacyNode = legacy.fromDot('a', {
   parse: { startRule: 'Node' },
   convert: { models: { Node: MyNode } },
 });
-assertType<Equal<typeof orderedNode, MyNode>>();
-const orderedGraphs = ordered.fromDotAll('digraph { a }');
-assertType<Equal<typeof orderedGraphs, RootGraphModel[]>>();
-ordered.withContext({ Node }).strict.graph();
+assertType<Equal<typeof legacyNode, MyNode>>();
+const legacyGraphs = legacy.fromDotAll('digraph { a }');
+assertType<Equal<typeof legacyGraphs, RootGraphModel[]>>();
+legacy.withContext({ Node }).strict.graph();
 
 try {
   parse('{');

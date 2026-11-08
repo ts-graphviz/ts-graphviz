@@ -4,7 +4,7 @@ import {
   createModelsContext,
   Dot,
   defaultModelsContext,
-  orderedModels,
+  legacyModels,
   toDot,
 } from 'ts-graphviz';
 import {
@@ -37,7 +37,7 @@ import { summarize } from './summarize.js';
 // reproduce it with FC_SEED=<seed>.
 
 const models = defaultModelsContext();
-const ordered = createModelsContext(orderedModels);
+const legacy = createModelsContext(legacyModels);
 
 describe('printer and parser', { tags: ['SM-1'] }, () => {
   it('parse(stringify(ast)) rebuilds the same tree', () => {
@@ -141,7 +141,7 @@ describe('fromModel and toModel', () => {
           // back with the classes that keep them; a graph built with the
           // default classes has none, so reads back the same with either.
           const back = toModel(fromModel(model), {
-            models: specs.some((s) => s.ordered) ? ordered : models,
+            models: specs.some((s) => s.ordered) ? models : legacy,
           });
           expect(back.graphs.map(summarize)).toStrictEqual(
             model.graphs.map(summarize),

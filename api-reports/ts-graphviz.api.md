@@ -64,7 +64,10 @@ export interface GraphDSLMembers<T extends RootGraphModel | SubgraphModel> exten
   $addNode(node: ModelArg<NodeModel>): void;
   $addEdge(edge: ModelArg<EdgeModel>): void;
   $addSubgraph(subgraph: ModelArg<SubgraphModel>): void;
-  $addAttributeList(kind: AttributeListKind, attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): void;
+  $addAttributeList(kind: "Graph", attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<T["attributes"]["graph"]>;
+  $addAttributeList(kind: "Node", attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<T["attributes"]["node"]>;
+  $addAttributeList(kind: "Edge", attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<T["attributes"]["edge"]>;
+  $addAttributeList(kind: AttributeListKind, attributes: AttributesObject<AttributeKey> | AttributesEntities<AttributeKey>): DSL<AttributeListModel>;
   $existNode(nodeId: string): boolean;
   $existEdge(edge: ModelArg<EdgeModel>): boolean;
   $existSubgraph(subgraph: ModelArg<SubgraphModel>): boolean;
@@ -86,11 +89,11 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
   subgraph(callback?: (subgraph: DSL<SubgraphOf<T>>) => void): DSL<SubgraphOf<T>>;
   node(id: string, callback?: (node: DSL<NodeOf<T>>) => void): DSL<NodeOf<T>>;
   node(id: string, attributes: NodeAttributesObject, callback?: (node: DSL<NodeOf<T>>) => void): DSL<NodeOf<T>>;
-  node(attributes: NodeAttributesObject): void;
+  node(attributes: NodeAttributesObject): DSL<T["attributes"]["node"]>;
   edge(targets: DSLEdgeTargetLikeTuple, callback?: (edge: DSL<EdgeOf<T>>) => void): DSL<EdgeOf<T>>;
   edge(targets: DSLEdgeTargetLikeTuple, attributes: EdgeAttributesObject, callback?: (edge: DSL<EdgeOf<T>>) => void): DSL<EdgeOf<T>>;
-  edge(attributes: EdgeAttributesObject): void;
-  graph(attributes: SubgraphAttributesObject): void;
+  edge(attributes: EdgeAttributesObject): DSL<T["attributes"]["edge"]>;
+  graph(attributes: SubgraphAttributesObject): DSL<T["attributes"]["graph"]>;
 }
 
 export interface ModelDSLMembers<T extends AnyDotObjectModel> extends ModelView<T> {

@@ -98,6 +98,15 @@ export abstract class GraphBase<
 
   public comment?: string;
 
+  /**
+   * The leading default attribute statements of the graph (the first
+   * `graph [...]`, `node [...]` and `edge [...]`), which apply to every
+   * statement in it.
+   *
+   * @deprecated Write a default attribute statement with
+   * {@link addAttributeList} (in the DOT DSL, `g.node({...})` and the like)
+   * and keep the list it returns to change it later. Removed in v5.
+   */
   public readonly attributes: Readonly<GraphCommonAttributes<SchemaOf<M>>> =
     Object.freeze({
       graph: new AttributeList<
@@ -244,32 +253,32 @@ export abstract class GraphBase<
    * Whether a default attribute statement added after other statements
    * keeps its place in {@link statements} (applying, as in DOT, only to
    * what follows it) instead of being merged into {@link attributes}.
-   * `false` here; the classes of `orderedModels` return `true`.
+   * `true` here; the deprecated classes of `legacyModels` return `false`.
    */
   protected get keepsDefaultsInPlace(): boolean {
-    return false;
+    return true;
   }
 
   public addAttributeList(
     kind: 'Graph',
     attributes: AttributeListAttributes<SchemaOf<M>, 'Graph'>,
-  ): void;
+  ): GraphCommonAttributes<SchemaOf<M>>['graph'];
   public addAttributeList(
     kind: 'Node',
     attributes: AttributeListAttributes<SchemaOf<M>, 'Node'>,
-  ): void;
+  ): GraphCommonAttributes<SchemaOf<M>>['node'];
   public addAttributeList(
     kind: 'Edge',
     attributes: AttributeListAttributes<SchemaOf<M>, 'Edge'>,
-  ): void;
+  ): GraphCommonAttributes<SchemaOf<M>>['edge'];
   public addAttributeList(
     kind: AttributeListKind,
     attributes: AttributeListAttributes<SchemaOf<M>>,
-  ): void;
+  ): StatementAttributeListModel<SchemaOf<M>>;
   public addAttributeList(
     kind: AttributeListKind,
     attributes: AttributeListAttributes<SchemaOf<M>>,
-  ): void {
+  ): unknown {
     // The kind is printed as a keyword, so it must be one of the three.
     if (kind !== 'Graph' && kind !== 'Node' && kind !== 'Edge') {
       throw withCode(
@@ -291,13 +300,14 @@ export abstract class GraphBase<
       (
         target as AttributeListModel<AttributeListKind, AttributeKey, object>
       ).apply(attributes);
-      return;
+      return target;
     }
     const list = new AttributeList<AttributeListKind, AttributeKey, object>(
       kind,
     );
     list.apply(attributes);
     this.#statements.add(list);
+    return list;
   }
 
   public existNode(nodeId: string): boolean {
