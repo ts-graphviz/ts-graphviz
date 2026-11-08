@@ -49,3 +49,28 @@ test('the menu leads to the packages and back to the site', async ({
   await expect(page).toHaveURL(/\/api\/modules\//);
   await expect(page.locator('.col-content h1').first()).toBeVisible();
 });
+
+test('images from other hosts are not loaded (#1941)', async ({
+  page,
+  baseURL,
+}) => {
+  const local = new URL(baseURL ?? 'http://localhost').host;
+  const remote = (url: string) => new URL(url).host !== local;
+  const loaded: string[] = [];
+  const failed: string[] = [];
+  page.on('requestfinished', (request) => {
+    if (request.resourceType() === 'image' && remote(request.url())) {
+      loaded.push(request.url());
+    }
+  });
+  page.on('requestfailed', (request) => {
+    if (request.resourceType() === 'image' && remote(request.url())) {
+      failed.push(request.url());
+    }
+  });
+  await page.goto('/api/');
+  await expect(page.locator('.col-content h1').first()).toBeVisible();
+  // The README's badges and avatars are there, and none of them loaded.
+  expect(failed.length).toBeGreaterThan(0);
+  expect(loaded).toEqual([]);
+});
