@@ -17,7 +17,7 @@ export function convertEdge(
   const edge = new context.models.Edge(
     convertToEdgeTargetTuple(ast, subgraphNodes),
   );
-  edge.attributes.apply(
+  edge.setAttributes(
     collectAttributes(
       ast.children.filter<AttributeASTNode>(
         (v): v is AttributeASTNode => v.type === 'Attribute',

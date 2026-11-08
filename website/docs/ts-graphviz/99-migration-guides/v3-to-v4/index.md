@@ -27,8 +27,8 @@ TypeScript reports most other changes, but these three still compile, so search 
 
 | 3.x | v4 |
 | --- | --- |
-| `g.set('rankdir', 'LR')`, `g.get('rankdir')` | `g.rankdir = 'LR'`, `g.rankdir` (or `g.$set(...)`, `g.$get(...)`) |
-| `node.attributes.set('label', 'A')` | `node.label = 'A'` (or `node.$attributes.set(...)`) |
+| `g.set('rankdir', 'LR')`, `g.get('rankdir')` | `g.rankdir = 'LR'`, `g.rankdir` (or `g.$setAttribute(...)`, `g.$getAttribute(...)`; see section 14) |
+| `node.attributes.set('label', 'A')` | `node.label = 'A'` (or `node.$setAttribute(...)`) |
 | `node.attributes.delete('label')` | `delete node.label` or `node.label = undefined` |
 | `g.attributes.node.set('shape', 'box')` | `g.$attributes.node.shape = 'box'` or `g.node({ shape: 'box' })` |
 | `node.port('p')` | `node.$port('p')` |
@@ -131,7 +131,7 @@ A DOT source (comments and one or more root graphs) has a model of its own: `Dot
 
 ## 6. Attribute groups: one `comment`
 
-`node.attributes.comment` and `edge.attributes.comment` are removed; use the model's `comment` (`node.$comment` / `edge.$comment` on a DSL), which is written before the statement. The Graphviz `comment` *attribute* is unaffected (`node.comment` on a DSL, `attributes.set('comment', ...)` on a model).
+`node.attributes.comment` and `edge.attributes.comment` are removed; use the model's `comment` (`node.$comment` / `edge.$comment` on a DSL), which is written before the statement. The Graphviz `comment` *attribute* is unaffected (`node.comment` on a DSL, `setAttribute('comment', ...)` on a model).
 
 ## 7. Generated attribute types
 
@@ -218,7 +218,7 @@ To write a function that takes any node (or graph) and only reads it, type its p
 import type { ReadonlyNodeModel, ReadonlyRootGraphModel } from 'ts-graphviz';
 
 function describe(node: ReadonlyNodeModel): string {
-  return `${node.id}: ${String(node.attributes.get('label') ?? '')}`;
+  return `${node.id}: ${String(node.getAttribute('label') ?? '')}`;
 }
 
 function countNodes(graph: ReadonlyRootGraphModel): number {
@@ -248,5 +248,26 @@ digraph((g) => {
 - To keep the 3.x output, import from `ts-graphviz/legacy` (the same API with the 3.x classes), or pass `legacyModels` as the models context (`withContext(legacyModels)`, `fromDot(source, { convert: { models: legacyModels } })`). Both are deprecated and removed in v5.
 - `addAttributeList(kind, attributes)` returns the list it adds (the DSL's `g.node({ ... })` returns its DSL); keep it to change those defaults later.
 - `graph.attributes` (and the DSL's `$attributes`) is deprecated, removed in v5: it is the leading defaults only. Write a default attribute statement instead.
+
+## 14. Attributes: on every object, under the DOM's names
+
+Every object with attributes holds them itself, and the methods take the names of the DOM's `Element`. 3.x kept a node's and an edge's attributes apart, in `attributes`, and named the methods after `Map`:
+
+| 3.x | v4 |
+| --- | --- |
+| `node.attributes.set('label', 'A')`, `edge.attributes.set(...)` | `node.setAttribute('label', 'A')`, `edge.setAttribute(...)` |
+| `g.set(key, value)`, `g.get(key)` (graphs, subgraphs, attribute lists) | `g.setAttribute(name, value)`, `g.getAttribute(name)` |
+| `delete(key)` | `removeAttribute(name)` |
+| (none) | `hasAttribute(name)` |
+| `values` | `getAttributeNames()` (and `getAttribute`) |
+| `apply(object or entries)` | `setAttributes(object or entries)` |
+| `clear()` | `removeAttributes()` |
+| `size` | `getAttributeNames().length` |
+
+- The 3.x names and `node.attributes` / `edge.attributes` keep working, deprecated, and are removed in v5. A node's or edge's `attributes` changes the node or edge itself: both name the same attributes.
+- A class that overrides how attributes are written overrides `setAttribute`: every write goes through it (`setAttributes`, the constructor, the DSL, the converters, and the deprecated `set` and `apply`), and every read through `getAttribute`. One that overrode `set`, `apply` or `get` in 3.x moves to `setAttribute` or `getAttribute`. The attributes given to a constructor are set once the object's own fields are (a node's `id`, an edge's checked `targets`).
+- A model you implement yourself (not from the core classes) has the new methods; the read-only types (`ReadonlyNodeModel`, …) read through `getAttribute`, `hasAttribute` and `getAttributeNames`.
+- `AttributesGroup` (and the `AttributesGroupModel` type) is deprecated: nothing creates it any more.
+- In the DOT DSL, the attributes stay properties (`a.label = 'A'`); the methods are `a.$setAttribute(...)` and the others.
 
 See the [Security model](../../11-advanced-topics/06-security-model.md) for what the library guarantees at each trust boundary in v4.

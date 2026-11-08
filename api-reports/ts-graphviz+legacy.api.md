@@ -13,6 +13,13 @@ export interface AttributeListDSLMembers<T extends AttributeListModel, K extends
 }
 
 export interface AttributesDSLMembers<K extends AttributeKey> {
+  $getAttribute<P extends K>(name: P): Attribute<P> | undefined;
+  $setAttribute<P extends K>(name: P, value: Attribute<P>): void;
+  $removeAttribute(name: K): void;
+  $hasAttribute(name: K): boolean;
+  $getAttributeNames(): K[];
+  $setAttributes(attributes: AttributesObject<K> | AttributesEntities<K>): void;
+  $removeAttributes(): void;
   readonly $size: number;
   readonly $values: ReadonlyArray<[K, Attribute<K>]>;
   $get<P extends K>(key: P): Attribute<P> | undefined;
@@ -37,7 +44,7 @@ export interface DotDSLMembers<T extends DotModel> extends ModelDSLMembers<T> {
 
 export type EdgeDSL<T extends EdgeModel> = EdgeDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>> & ExtraMembers<T, EdgeDSLMembers<T>>;
 
-export interface EdgeDSLMembers<T extends EdgeModel> extends ModelDSLMembers<T> {
+export interface EdgeDSLMembers<T extends EdgeModel> extends ModelDSLMembers<T>, AttributesDSLMembers<AttributeKeysOf<T>> {
   readonly $targets: readonly [from: DSLNodeRef | readonly DSLNodeRef[], to: DSLNodeRef | readonly DSLNodeRef[], ...rest: (DSLNodeRef | readonly DSLNodeRef[])[]];
   readonly $attributes: AttributesGroupModel<AttributeKeysOf<T>>;
 }
@@ -121,7 +128,7 @@ export interface ModelFactory<G extends RootGraphModel = RootGraphModel> {
 
 export type NodeDSL<T extends NodeModel> = NodeDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>> & ExtraMembers<T, NodeDSLMembers<T>>;
 
-export interface NodeDSLMembers<T extends NodeModel> extends ModelDSLMembers<T> {
+export interface NodeDSLMembers<T extends NodeModel> extends ModelDSLMembers<T>, AttributesDSLMembers<AttributeKeysOf<T>> {
   readonly $id: string;
   readonly $attributes: T["attributes"];
   $port(port: string | Partial<Port>): ForwardRefNode;
@@ -131,6 +138,9 @@ export interface ReadonlyNodeDSL extends ModelView<ReadonlyNodeModel> {
   readonly $$type: "Node";
   readonly $id: string;
   readonly $comment?: string;
+  $getAttribute(name: string): DotValue | undefined;
+  $hasAttribute(name: string): boolean;
+  $getAttributeNames(): string[];
   readonly $attributes: ReadonlyAttributes;
 }
 

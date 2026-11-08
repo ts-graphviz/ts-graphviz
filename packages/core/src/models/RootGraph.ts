@@ -48,7 +48,7 @@ export abstract class RootGraph<M extends AnyModelTypes = ModelTypes>
         typeof arg === 'object' && arg !== null,
     );
     if (attributes !== undefined) {
-      this.apply(attributes);
+      this.setAttributes(attributes);
     }
   }
 }

@@ -28,6 +28,8 @@ export class AttributeList<
     public readonly $$kind: K,
     attributes?: AttributesObject<T, E>,
   ) {
-    super(attributes);
+    super();
+    // Once `$$kind` is set, for an overridden `setAttribute`.
+    if (attributes !== undefined) this.setAttributes(attributes);
   }
 }

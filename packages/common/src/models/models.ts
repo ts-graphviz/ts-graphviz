@@ -414,6 +414,12 @@ export interface HasAttributes<
   T extends AttributeKey,
   E extends object = Record<never, never>,
 > {
+  /**
+   * The object itself, as the container of its attributes (3.x held them
+   * apart).
+   * @deprecated The object holds its attributes: call
+   * `getAttribute`, `setAttribute` and the others on it. Removed in v5.
+   */
   readonly attributes: AttributesGroupModel<T, E>;
 }
 
@@ -425,8 +431,10 @@ export interface ForwardRefNode extends Partial<Port> {
 }
 
 /**
- * DOT object with the property
- * that attributes can be held as a set of keys and values.
+ * A DOT object that holds attributes: a graph, a subgraph, a node, an edge or
+ * a default attribute statement. The methods take the names of the DOM's
+ * `Element` (`getAttribute`, `setAttribute`, …); the names that follow
+ * `Map` (`get`, `set`, …) are deprecated and removed in v5.
  *
  * @typeParam T - The attribute keys to set DOT object.
  * @typeParam E - The attribute types a schema adds or changes, by key (see
@@ -438,55 +446,101 @@ export interface Attributes<
   T extends AttributeKey,
   E extends object = Record<never, never>,
 > {
-  /** Size of the set of keys and values held by the DOT object. */
+  /**
+   * The value of an attribute, or undefined if it has none.
+   */
+  getAttribute<K extends BuiltInAttributeKey<T, E>>(
+    name: K,
+  ): Attribute<K> | undefined;
+  /**
+   * The value of an attribute that the schema adds or changes, or undefined
+   * if it has none.
+   */
+  getAttribute<K extends keyof E & string>(
+    name: K,
+  ): SchemaAttribute<E, K> | undefined;
+  /**
+   * The value of an attribute, in code generic over the schema, or undefined
+   * if it has none.
+   */
+  getAttribute<K extends SchemaAttributeKey<T, E>>(
+    name: K,
+  ): AttributeOf<K, E> | undefined;
+  /** Set an attribute. `null` or `undefined` sets nothing. */
+  setAttribute<K extends BuiltInAttributeKey<T, E>>(
+    name: K,
+    value: Attribute<K>,
+  ): void;
+  /** Set an attribute that the schema adds or changes. */
+  setAttribute<K extends keyof E & string>(
+    name: K,
+    value: SchemaAttribute<E, K>,
+  ): void;
+  /** Set an attribute, in code generic over the schema. */
+  setAttribute<K extends SchemaAttributeKey<T, E>>(
+    name: K,
+    value: AttributeOf<K, E>,
+  ): void;
+  /** Remove an attribute. */
+  removeAttribute(name: SchemaAttributeKey<T, E>): void;
+  /** Whether the object has the attribute. */
+  hasAttribute(name: SchemaAttributeKey<T, E>): boolean;
+  /** The names of the attributes the object has, in the order they were set. */
+  getAttributeNames(): SchemaAttributeKey<T, E>[];
+  /**
+   * Set several attributes, from an object or from key/value tuples.
+   * (Not in the DOM; the plural of {@link Attributes.setAttribute}.)
+   */
+  setAttributes(
+    attributes: AttributesObject<T, E> | AttributesEntities<T, E>,
+  ): void;
+  /** Remove every attribute. (Not in the DOM.) */
+  removeAttributes(): void;
+
+  /**
+   * The number of attributes.
+   * @deprecated Use `getAttributeNames().length`. Removed in v5.
+   */
   readonly size: number;
-  /** The key/value tuples of the object attributes. */
+  /**
+   * The key/value tuples of the attributes.
+   * @deprecated Use {@link Attributes.getAttributeNames} and
+   * {@link Attributes.getAttribute}. Removed in v5.
+   */
   readonly values: ReadonlyArray<AttributeTuple<T, E>>;
-  /**
-   * Get the value of an attribute by a DOT object by specifying its key.
-   *
-   * If the value corresponding to the key does not exist, undefined is returned.
-   */
+  /** @deprecated Use {@link Attributes.getAttribute}. Removed in v5. */
   get<K extends BuiltInAttributeKey<T, E>>(key: K): Attribute<K> | undefined;
-  /**
-   * Get the value of an attribute that the schema adds or changes.
-   *
-   * If the value corresponding to the key does not exist, undefined is returned.
-   */
+  /** @deprecated Use {@link Attributes.getAttribute}. Removed in v5. */
   get<K extends keyof E & string>(key: K): SchemaAttribute<E, K> | undefined;
-  /**
-   * Get the value of an attribute, in code generic over the schema.
-   *
-   * If the value corresponding to the key does not exist, undefined is returned.
-   */
+  /** @deprecated Use {@link Attributes.getAttribute}. Removed in v5. */
   get<K extends SchemaAttributeKey<T, E>>(
     key: K,
   ): AttributeOf<K, E> | undefined;
-  /** Set a value, by specifying the key of the attributes in the DOT object. */
+  /** @deprecated Use {@link Attributes.setAttribute}. Removed in v5. */
   set<K extends BuiltInAttributeKey<T, E>>(key: K, value: Attribute<K>): void;
-  /** Set the value of an attribute that the schema adds or changes. */
+  /** @deprecated Use {@link Attributes.setAttribute}. Removed in v5. */
   set<K extends keyof E & string>(key: K, value: SchemaAttribute<E, K>): void;
-  /** Set the value of an attribute, in code generic over the schema. */
+  /** @deprecated Use {@link Attributes.setAttribute}. Removed in v5. */
   set<K extends SchemaAttributeKey<T, E>>(
     key: K,
     value: AttributeOf<K, E>,
   ): void;
-  /**
-   * Apply keys and values that can be specified for DOT objects collectively.
-   *
-   * @param attributes - An array of objects or tuples of attribute key/value pairs.
-   */
+  /** @deprecated Use {@link Attributes.setAttributes}. Removed in v5. */
   apply(attributes: AttributesObject<T, E> | AttributesEntities<T, E>): void;
-  /** Delete the value of an attribute from a DOT object by specifying a key. */
+  /** @deprecated Use {@link Attributes.removeAttribute}. Removed in v5. */
   delete(key: SchemaAttributeKey<T, E>): void;
-  /** Delete all attributes specified for the DOT object. */
+  /** @deprecated Use {@link Attributes.removeAttributes}. Removed in v5. */
   clear(): void;
 }
 
 /**
+ * The attributes of a node or an edge, held apart from it in 3.x.
+ *
  * @typeParam T - The built-in attribute keys.
  * @typeParam E - The attribute types a schema adds or changes, by key (see
  * {@link SchemaAttributeTypes}); none by default.
+ * @deprecated A node and an edge hold their attributes themselves; the type
+ * of the deprecated `attributes` property. Removed in v5.
  * @group Models
  */
 export interface AttributesGroupModel<
@@ -549,6 +603,7 @@ export interface Port {
  */
 export interface NodeModel<S extends Schema = EmptySchema>
   extends HasComment,
+    Attributes<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>,
     HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>,
     DotObjectModel<'Node'> {
   /** ID of the node */
@@ -567,6 +622,7 @@ export interface NodeModel<S extends Schema = EmptySchema>
  */
 export interface EdgeModel<S extends Schema = EmptySchema>
   extends HasComment,
+    Attributes<EdgeAttributeKey, SchemaAttributeTypes<S, 'edge'>>,
     HasAttributes<EdgeAttributeKey, SchemaAttributeTypes<S, 'edge'>>,
     DotObjectModel<'Edge'> {
   readonly targets: EdgeTargetTuple;
