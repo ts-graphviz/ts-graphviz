@@ -7,7 +7,7 @@ import type {
   CommentKind,
 } from '../../../../types.js';
 
-export function convertComment(
+function convertComment(
   createElement: CreateElement,
   value: string,
   kind: CommentKind,
