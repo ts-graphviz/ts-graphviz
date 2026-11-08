@@ -54,13 +54,19 @@ describe('Dot model', () => {
       const model = toModel(parse(source), { models: defaultModelsContext() });
       expect(model.$$type).toBe('Dot');
       expect(model.graphs.map((g) => g.id)).toStrictEqual(['a', 'b']);
-      expect(model.graphs[0].comment).toBe('first graph');
-      expect(model.comment).toBe('file header\ntrailing');
+      // Both comments lead the first graph, in order; the one after the
+      // last graph is the source's own, at its end.
+      expect(model.graphs[0].comments.map((c) => c.text)).toEqual([
+        'file header',
+        'first graph',
+      ]);
+      expect(model.comments.map((c) => [c.text, c.position])).toEqual([
+        ['trailing', 'end'],
+      ]);
 
-      // The Dot model's own comment is written at the top; each graph's comment precedes it.
+      // The comments are written back where they were.
       expect(toDot(model)).toMatchInlineSnapshot(`
         "// file header
-        // trailing
 
         // first graph
         digraph "a" {
@@ -68,7 +74,8 @@ describe('Dot model', () => {
         }
         graph "b" {
           "y";
-        }"
+        }
+        // trailing"
       `);
     });
   });

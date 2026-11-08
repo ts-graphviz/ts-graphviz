@@ -1,4 +1,9 @@
-import type { ASTType, AttributeKey, Compass } from '@ts-graphviz/common';
+import type {
+  ASTType,
+  AttributeKey,
+  CommentKind as CommonCommentKind,
+  Compass,
+} from '@ts-graphviz/common';
 
 /**
  * The FilePosition interface represents the position of a file in terms of its offset, line number, and column number.
@@ -201,11 +206,12 @@ export interface AttributeListASTProperties extends ASTCommonProperties {
 }
 
 /**
- * CommentKind is an enum type that describes a type of comment.
+ * CommentKind is an enum type that describes a type of comment: the same
+ * kinds as a comment model's (`@ts-graphviz/common`).
  *
  * @group AST
  */
-export type CommentKind = 'Block' | 'Slash' | 'Macro';
+export type CommentKind = CommonCommentKind;
 
 /**
  * @group AST

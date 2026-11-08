@@ -14,6 +14,7 @@
  * @module
  */
 import type { DotValue } from '../values.js';
+import type { CommentModel } from './comments.js';
 import type { ModelView } from './model-view.js';
 import type {
   AttributeListKind,
@@ -62,8 +63,17 @@ export interface ReadonlyAttributeListModel<
 > extends ReadonlyAttributes {
   readonly $$type: 'AttributeList';
   readonly $$kind: K;
-  /** Comments to include when outputting with toDot. */
-  readonly comment?: string;
+  /**
+   * The text of the first leading comment.
+   * @deprecated Read `comments`. Removed in v5.
+   */
+  readonly comment?: string | undefined;
+  /**
+   * The comments attached to the object, in the order they were added. A
+   * model written for 3.x has none; the readers then take its `comment`
+   * as one leading comment.
+   */
+  readonly comments?: ReadonlyArray<CommentModel>;
 }
 
 /**
@@ -77,8 +87,17 @@ export interface ReadonlyNodeModel extends ReadonlyAttributes {
   readonly $$type: 'Node';
   /** ID of the node. */
   readonly id: string;
-  /** Comments to include when outputting with toDot. */
-  readonly comment?: string;
+  /**
+   * The text of the first leading comment.
+   * @deprecated Read `comments`. Removed in v5.
+   */
+  readonly comment?: string | undefined;
+  /**
+   * The comments attached to the object, in the order they were added. A
+   * model written for 3.x has none; the readers then take its `comment`
+   * as one leading comment.
+   */
+  readonly comments?: ReadonlyArray<CommentModel>;
   /**
    * The object itself, as the container of its attributes.
    * @deprecated Read the attributes on the object itself. Removed in v5.
@@ -94,8 +113,17 @@ export interface ReadonlyNodeModel extends ReadonlyAttributes {
  */
 export interface ReadonlyEdgeModel extends ReadonlyAttributes {
   readonly $$type: 'Edge';
-  /** Comments to include when outputting with toDot. */
-  readonly comment?: string;
+  /**
+   * The text of the first leading comment.
+   * @deprecated Read `comments`. Removed in v5.
+   */
+  readonly comment?: string | undefined;
+  /**
+   * The comments attached to the object, in the order they were added. A
+   * model written for 3.x has none; the readers then take its `comment`
+   * as one leading comment.
+   */
+  readonly comments?: ReadonlyArray<CommentModel>;
   /**
    * The object itself, as the container of its attributes.
    * @deprecated Read the attributes on the object itself. Removed in v5.
@@ -127,8 +155,17 @@ export interface ReadonlyGraphBaseModel<
 > extends ReadonlyAttributes {
   readonly $$type: T;
   readonly id?: string;
-  /** Comments to include when outputting with toDot. */
-  readonly comment?: string;
+  /**
+   * The text of the first leading comment.
+   * @deprecated Read `comments`. Removed in v5.
+   */
+  readonly comment?: string | undefined;
+  /**
+   * The comments attached to the object, in the order they were added. A
+   * model written for 3.x has none; the readers then take its `comment`
+   * as one leading comment.
+   */
+  readonly comments?: ReadonlyArray<CommentModel>;
   /** The attributes common to the graphs, edges and nodes in the graph. */
   readonly attributes: {
     readonly graph: ReadonlyAttributeListModel<'Graph'>;
@@ -186,8 +223,17 @@ export interface ReadonlyRootGraphModel
  */
 export interface ReadonlyDotModel {
   readonly $$type: 'Dot';
-  /** Comments to include when outputting with toDot. */
-  readonly comment?: string;
+  /**
+   * The text of the first leading comment.
+   * @deprecated Read `comments`. Removed in v5.
+   */
+  readonly comment?: string | undefined;
+  /**
+   * The comments attached to the object, in the order they were added. A
+   * model written for 3.x has none; the readers then take its `comment`
+   * as one leading comment.
+   */
+  readonly comments?: ReadonlyArray<CommentModel>;
   /** Root graphs in the order they appear in the source. */
   readonly graphs: ReadonlyArray<ReadonlyRootGraphModel>;
 }

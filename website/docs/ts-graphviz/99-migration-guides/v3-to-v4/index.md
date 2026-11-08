@@ -18,7 +18,7 @@ Requirements: **Node.js 22 or later** (Node.js 20 reached end of life) and, for 
 | --- | --- |
 | `node.id` (the node's name) | `node.$id` (`node.id` is the Graphviz `id` attribute) |
 | `g.id` | `g.$id` |
-| `x.comment = '...'` (a DOT comment) | `x.$comment = '...'` (`x.comment` is the Graphviz `comment` attribute) |
+| `x.comment = '...'` (a DOT comment) | `x.$addComment('...')` (`x.comment` is the Graphviz `comment` attribute; see section 15) |
 | `g.size` (the number of attributes) | `g.$size` (`g.size` is the Graphviz `size` attribute) |
 
 TypeScript reports most other changes, but these three still compile, so search for them: `\.id\b`, `\.comment\b` and `\.size\b`.
@@ -131,7 +131,7 @@ A DOT source (comments and one or more root graphs) has a model of its own: `Dot
 
 ## 6. Attribute groups: one `comment`
 
-`node.attributes.comment` and `edge.attributes.comment` are removed; use the model's `comment` (`node.$comment` / `edge.$comment` on a DSL), which is written before the statement. The Graphviz `comment` *attribute* is unaffected (`node.comment` on a DSL, `setAttribute('comment', ...)` on a model).
+`node.attributes.comment` and `edge.attributes.comment` are removed; comment the model itself (`node.addComment(...)`, `node.$addComment(...)` on a DSL; see section 15). The Graphviz `comment` *attribute* is unaffected (`node.comment` on a DSL, `setAttribute('comment', ...)` on a model).
 
 ## 7. Generated attribute types
 
@@ -269,5 +269,21 @@ Every object with attributes holds them itself, and the methods take the names o
 - A model you implement yourself (not from the core classes) has the new methods; the read-only types (`ReadonlyNodeModel`, …) read through `getAttribute`, `hasAttribute` and `getAttributeNames`.
 - `AttributesGroup` (and the `AttributesGroupModel` type) is deprecated: nothing creates it any more.
 - In the DOT DSL, the attributes stay properties (`a.label = 'A'`); the methods are `a.$setAttribute(...)` and the others.
+
+## 15. Comments: models attached to any object
+
+Every object takes comments the same way, with their kind and place, instead of one `comment` string:
+
+| 3.x | v4 |
+| --- | --- |
+| `node.comment = 'start'` | `node.addComment('start')` (`{ kind: 'Block' }` and the like to choose the kind) |
+| (dropped) | `node.addComment('note', { position: 'trailing' })`: after the statement, on its line |
+| (none) | `g.addComment('end', { position: 'end' })`: at the end of a graph's, subgraph's or DOT source's body |
+| `node.comment` (to read) | `node.comments`: each comment's `text`, `kind` and `position` |
+| `node.comment = undefined` | `node.removeComment(comment)` |
+
+- `comment` keeps working, deprecated, and is removed in v5: it reads and sets the first leading comment (setting keeps that comment's kind). It is an accessor now, so `delete node.comment` leaves it; set it to `undefined`. A `Dot`'s `comment` reads all its comments joined by line breaks.
+- `toModel` and `fromDot` keep every comment in its place: a comment before a statement leads it, one on the line where a statement ends trails it, and those after the last statement are the body's. 3.x kept the comment right before a statement and dropped the others. Code that read `comment` after `fromDot` and expected the comment of a statement two lines down, or one comment per statement, reads `comments` instead.
+- `fromModel`'s `commentKind` option writes the comments that have no kind (those set through `comment` or added without one).
 
 See the [Security model](../../11-advanced-topics/06-security-model.md) for what the library guarantees at each trust boundary in v4.

@@ -52,9 +52,18 @@ test('multiple graphs and dangling comments', () => {
   ]);
   const model = toModel(ast, { models: defaultModelsContext() });
   expect(model.graphs.map((g) => g.directed)).toStrictEqual([true, false]);
-  expect(model.graphs[0].comment).toBe('first');
-  expect(model.graphs[1].comment).toBeUndefined();
-  expect(model.comment).toBe('header\ntrailing');
+  // Without locations, every comment leads the next graph, and those after
+  // the last graph are the source's own.
+  expect(model.graphs[0].comments.map((c) => [c.text, c.position])).toEqual([
+    ['header', 'leading'],
+    ['first', 'leading'],
+  ]);
+  expect(model.graphs[0].comment).toBe('header');
+  expect(model.graphs[1].comments).toEqual([]);
+  expect(model.comments.map((c) => [c.text, c.kind, c.position])).toEqual([
+    ['trailing', 'Slash', 'end'],
+  ]);
+  expect(model.comment).toBe('trailing');
 });
 
 describe('HTML Lavel', () => {

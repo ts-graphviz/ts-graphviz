@@ -103,7 +103,7 @@ The factories give the graph's **DOT DSL**, which reads like DOT:
 
 - **Statements**: `node`, `edge`, `subgraph` and `graph` are methods, as the DOT statements of those names. `g.node({ ... })`, `g.edge({ ... })` and `g.graph({ ... })` are the default attribute statements (`node [...]` and so on).
 - **Attributes**: attributes are properties under their own names. Assigning `undefined` or `delete` removes one.
-- **The model's own members** take a `$`: `a.$id` is the node's name (`a.id` is its `id` attribute), `g.$nodes`, `g.$getNode('A')`, `a.$comment`.
+- **The model's own members** take a `$`: `a.$id` is the node's name (`a.id` is its `id` attribute), `g.$nodes`, `g.$getNode('A')`, `a.$addComment(...)`.
 - **Every model you get from the DSL is a DSL.** `modelOf()` gives the model, and `dsl()` gives the DSL of a model, such as one `fromDot` returns. `toDot` and the adapter take either.
 
 ```typescript

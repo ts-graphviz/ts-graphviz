@@ -1,5 +1,7 @@
 import type {
   AttributeListModel,
+  CommentModel,
+  HasComments,
   ReadonlyEdgeTargetLikeTuple,
 } from '@ts-graphviz/common';
 import type { ReactElement } from 'react';
@@ -147,10 +149,26 @@ export function createHostInstance(
   );
 }
 
+/** The comment each model got from its element's `comment` prop. */
+const propComments = new WeakMap<object, CommentModel>();
+
+/** Make the element's `comment` prop the model's leading comment. */
+function applyComment(
+  model: Pick<HasComments, 'addComment' | 'removeComment'>,
+  text: string | undefined,
+): void {
+  const previous = propComments.get(model);
+  if (previous !== undefined) {
+    model.removeComment(previous);
+    propComments.delete(model);
+  }
+  if (text !== undefined) propComments.set(model, model.addComment(text));
+}
+
 function applyProps(model: NodeModel | EdgeModel, props: ComponentProps): void {
   model.removeAttributes();
   model.setAttributes(attributesOf(props));
-  model.comment = props.comment;
+  applyComment(model, props.comment);
 }
 
 /** The default attribute lists a graph element's `node`, `edge` and `graph` props fill. */
@@ -203,7 +221,7 @@ function applyGraphProps(
   lists.edge.setAttributes(props.edge ?? {});
   lists.graph.removeAttributes();
   lists.graph.setAttributes(props.graph ?? {});
-  model.comment = props.comment;
+  applyComment(model, props.comment);
 }
 
 /** Apply the new props of a host element (its identity props never change). */

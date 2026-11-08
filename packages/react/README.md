@@ -732,7 +732,7 @@ function MyGraphComponent() {
     // Access and manipulate the models directly
     if (nodeRef.current) {
       nodeRef.current.setAttribute('color', 'red');
-      nodeRef.current.comment = 'Modified via ref';
+      nodeRef.current.addComment('Modified via ref');
     }
 
     if (edgeRef.current) {

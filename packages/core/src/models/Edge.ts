@@ -1,5 +1,7 @@
 import {
   type AttributesGroupModel,
+  type CommentModel,
+  type CommentOptions,
   type EdgeAttributeKey,
   type EdgeAttributesObject,
   type EdgeModel,
@@ -14,6 +16,7 @@ import {
 } from '@ts-graphviz/common';
 import { AttributesBase } from '../attributes/AttributesBase.js';
 import { AttributesView } from '../attributes/AttributesView.js';
+import { CommentList, STATEMENT_POSITIONS } from './comment-list.js';
 
 /**
  * DOT object class representing a edge.
@@ -30,7 +33,42 @@ export class Edge<S extends Schema = EmptySchema>
     return 'Edge';
   }
 
-  public comment?: string;
+  readonly #comments: CommentList = new CommentList(STATEMENT_POSITIONS);
+
+  /** The comments attached to the edge, in the order they were added. */
+  public get comments(): ReadonlyArray<CommentModel> {
+    return this.#comments.items;
+  }
+
+  /**
+   * Attach a comment (`leading` | `trailing`).
+   * @returns The comment, to remove it later.
+   */
+  public addComment(
+    text: string,
+    options?: CommentOptions<'leading' | 'trailing'>,
+  ): CommentModel {
+    return this.#comments.add(text, options);
+  }
+
+  /** Remove a comment that was attached to the edge. */
+  public removeComment(comment: CommentModel): void {
+    this.#comments.remove(comment);
+  }
+
+  /**
+   * The text of the first leading comment: setting replaces it (keeping its
+   * kind) or adds one, and `undefined` removes it.
+   * @deprecated Use `comments`, `addComment` and `removeComment`. Removed in
+   * v5.
+   */
+  public get comment(): string | undefined {
+    return this.#comments.firstLeading;
+  }
+
+  public set comment(text: string | undefined) {
+    this.#comments.setFirstLeading(text);
+  }
 
   #attributes?: AttributesView<
     EdgeAttributeKey,
