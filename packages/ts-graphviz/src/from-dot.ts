@@ -1,4 +1,5 @@
 import {
+  type CommonParseOptions,
   type ConvertToModelOptions,
   type ParseOptions,
   parse,
@@ -20,13 +21,13 @@ import {
 import { createModelsContext } from '@ts-graphviz/core';
 
 /**
- * The `startRule`s {@link fromDot} can convert to a model.
+ * The rules (`parse.as`) {@link fromDot} can convert to a model.
  * @group Convert DOT to Model
  */
 export type FromDotRule = 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph';
 
 /**
- * What {@link fromDot} returns for a `startRule`, with the model classes
+ * What {@link fromDot} returns for a rule (`parse.as`), with the model classes
  * `M`. For a union of rules, it is the union of their models.
  * @group Convert DOT to Model
  */
@@ -106,7 +107,7 @@ export function fromDot(
 ): AnyFromDotModel {
   // Own properties only: an inherited one is never an option (#1757).
   const own = ownOptions(options);
-  // `startRule` picks what fromDot returns. Widened to every rule on
+  // `as` picks what fromDot returns. Widened to every rule on
   // purpose: JavaScript callers can pass any.
   const ast = parse(dot, ownOptions(own.parse) as ParseOptions<Rule>);
 
@@ -163,25 +164,25 @@ export function fromDot(
 export function fromDotAll<const P extends Partial<ModelsContext>>(
   dot: string,
   options: Omit<FromDotOptions<'Dot', P>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    parse?: CommonParseOptions;
     convert: { models: P };
   },
 ): (ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'])[];
 export function fromDotAll(
   dot: string,
   options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    parse?: CommonParseOptions;
   },
 ): RootGraphModel[];
 export function fromDotAll(
   dot: string,
   options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    parse?: CommonParseOptions;
   },
 ): RootGraphModel[] {
   // Own properties only: an inherited one is never an option (#1757).
   const own = ownOptions(options);
-  const ast = parse(dot, { ...ownOptions(own.parse), startRule: 'Dot' });
+  const ast = parse(dot, { ...ownOptions(own.parse), as: 'Dot' });
   const convert = ownOptions(own.convert);
   const model = toModel(ast, {
     ...convert,

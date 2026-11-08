@@ -113,33 +113,48 @@ export interface ParseResultByRule {
 export interface ParseOptions<T extends Rule = Rule>
   extends CommonParseOptions {
   /**
-   * The grammar rule to parse the input with: `'Dot'` (the default) reads
-   * a whole DOT source, the other rules read a fragment of one (a graph, a
-   * node, an edge, a list of statements, ...).
+   * What to read the input as: `'Dot'` (the default) reads a whole DOT
+   * source, the others read a fragment of one (a graph, a node, an edge, a
+   * list of statements, ...). The result is the AST node of that type.
    * @default 'Dot'
+   */
+  as?: T;
+  /**
+   * The 3.x name of {@link ParseOptions.as}; `as` wins when both are given.
+   * @deprecated Use `as`. Removed in v5.
    */
   startRule?: T;
 }
 
 /**
- * Parse a DOT source into an AST. Without a `startRule`, the input is a
- * whole DOT source (any number of graphs and comments) and the result is a
- * {@link DotASTNode}; with one, the input is the fragment the rule names
- * and the result is typed by it ({@link ParseResultByRule}).
+ * Parse a DOT source into an AST. Without `as`, the input is a whole DOT
+ * source (any number of graphs and comments) and the result is a
+ * {@link DotASTNode}; with it, the input is the fragment `as` names and
+ * the result is typed by it ({@link ParseResultByRule}).
  *
  * @example
  * ```ts
  * const dot = parse('digraph { a -> b }'); // DotASTNode
- * const edge = parse('a -> b [color=red]', { startRule: 'Edge' }); // EdgeASTNode
+ * const edge = parse('a -> b [color=red]', { as: 'Edge' }); // EdgeASTNode
  * ```
  *
  * @throws {@link DotSyntaxError}
  * @group Convert DOT to AST
  */
-export function parse(input: string, options?: ParseOptions<'Dot'>): DotASTNode;
+/** @deprecated `startRule` is named `as`; removed in v5. */
 export function parse<const R extends Rule>(
   input: string,
-  options: ParseOptions<R> & { startRule: R },
+  options: CommonParseOptions & { startRule: R; as?: undefined },
+): ParseResultByRule[R];
+export function parse(
+  input: string,
+  options?: CommonParseOptions & { as?: 'Dot'; startRule?: undefined },
+): DotASTNode;
+export function parse(input: string, options?: ParseOptions<'Dot'>): DotASTNode;
+// `as` wins over `startRule`, so only `as` types the result.
+export function parse<const R extends Rule>(
+  input: string,
+  options: CommonParseOptions & { as: R; startRule?: Rule },
 ): ParseResultByRule[R];
 export function parse(
   input: string,
@@ -149,8 +164,8 @@ export function parse(
   input: string,
   options?: ParseOptions,
 ): ASTNode | ClusterStatementASTNode[] {
-  const { startRule, ...common } = ownOptions(options);
-  return parseRule(input, startRule ?? 'Dot', common);
+  const { as, startRule, ...common } = ownOptions(options);
+  return parseRule(input, as ?? startRule ?? 'Dot', common);
 }
 
 function parseRule(

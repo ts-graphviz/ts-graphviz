@@ -29,8 +29,6 @@ describe('fromDot and fromDotAll with several graphs', () => {
 
   it('fromDot still reads one graph, and fragments', () => {
     expect(fromDot('digraph G { a }').id).toBe('G');
-    expect(fromDot('a [color=red]', { parse: { startRule: 'Node' } }).id).toBe(
-      'a',
-    );
+    expect(fromDot('a [color=red]', { parse: { as: 'Node' } }).id).toBe('a');
   });
 });

@@ -57,24 +57,24 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
 
     test('a source of exactly the default limit (10 MiB) parses', () => {
       expect(
-        parse(graphOfSize(10 * 1024 * 1024), { startRule: 'Graph' }),
+        parse(graphOfSize(10 * 1024 * 1024), { as: 'Graph' }),
       ).toMatchObject({ type: 'Graph' });
     });
 
     test('a source over the default limit is rejected, with no location', () => {
       expect(() =>
-        parse(graphOfSize(10 * 1024 * 1024 + 1), { startRule: 'Graph' }),
+        parse(graphOfSize(10 * 1024 * 1024 + 1), { as: 'Graph' }),
       ).toThrow(dotSyntaxError({ location: undefined, limit: 'maxInputSize' }));
     });
 
     test('a custom limit is inclusive', () => {
       const limit = 1024 * 1024;
       expect(
-        parse(graphOfSize(limit), { startRule: 'Graph', maxInputSize: limit }),
+        parse(graphOfSize(limit), { as: 'Graph', maxInputSize: limit }),
       ).toMatchObject({ type: 'Graph' });
       expect(() =>
         parse(graphOfSize(limit + 1), {
-          startRule: 'Graph',
+          as: 'Graph',
           maxInputSize: limit,
         }),
       ).toThrow(dotSyntaxError({ location: undefined, limit: 'maxInputSize' }));
@@ -97,9 +97,9 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
 
     test('maxInputSize: 0 disables the limit', () => {
       const source = graphOfSize(15 * 1024 * 1024);
-      expect(
-        parse(source, { startRule: 'Graph', maxInputSize: 0 }),
-      ).toMatchObject({ type: 'Graph' });
+      expect(parse(source, { as: 'Graph', maxInputSize: 0 })).toMatchObject({
+        type: 'Graph',
+      });
     });
   });
 
@@ -107,11 +107,11 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
     test('normal and mixed nesting parse', () => {
       expect(
         parse('label = <<table><tr><td><b>text</b></td></tr></table>>', {
-          startRule: 'Attribute',
+          as: 'Attribute',
         }),
       ).toMatchObject({ value: { kind: 'html' } });
       expect(
-        parse('label = <<<<aaa<<<<bbbb>>>>ccc>>>>', { startRule: 'Attribute' }),
+        parse('label = <<<<aaa<<<<bbbb>>>>ccc>>>>', { as: 'Attribute' }),
       ).toMatchObject({ value: { kind: 'html' } });
     });
 
@@ -128,11 +128,11 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
         expect(
           parse(htmlAttribute(limit - 1), {
             ...options,
-            startRule: 'Attribute',
+            as: 'Attribute',
           }),
         ).toMatchObject({ value: { kind: 'html' } });
         expect(() =>
-          parse(htmlAttribute(limit), { ...options, startRule: 'Attribute' }),
+          parse(htmlAttribute(limit), { ...options, as: 'Attribute' }),
         ).toThrow(
           dotSyntaxError({
             limit: 'maxHtmlNestingDepth',
@@ -143,9 +143,7 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
     );
 
     test('a value far deeper than the limit is rejected at the limit', () => {
-      expect(() =>
-        parse(htmlAttribute(200), { startRule: 'Attribute' }),
-      ).toThrow(
+      expect(() => parse(htmlAttribute(200), { as: 'Attribute' })).toThrow(
         dotSyntaxError({
           limit: 'maxHtmlNestingDepth',
           location: htmlNestingLocation(100),
@@ -167,9 +165,9 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
     });
 
     test('a short chain parses', () => {
-      expect(
-        parse('a -> b -> c -> d;', { startRule: 'Edge' }).targets,
-      ).toHaveLength(4);
+      expect(parse('a -> b -> c -> d;', { as: 'Edge' }).targets).toHaveLength(
+        4,
+      );
     });
 
     test.each([
@@ -181,11 +179,10 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
         const options =
           option === undefined ? {} : { maxEdgeChainDepth: option };
         expect(
-          parse(`${edgeChain(limit)};`, { ...options, startRule: 'Edge' })
-            .targets,
+          parse(`${edgeChain(limit)};`, { ...options, as: 'Edge' }).targets,
         ).toHaveLength(limit + 1);
         expect(() =>
-          parse(`${edgeChain(limit + 1)};`, { ...options, startRule: 'Edge' }),
+          parse(`${edgeChain(limit + 1)};`, { ...options, as: 'Edge' }),
         ).toThrow(
           dotSyntaxError({
             limit: 'maxEdgeChainDepth',
@@ -196,7 +193,7 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
     );
 
     test('a chain far longer than the limit is rejected', () => {
-      expect(() => parse(`${edgeChain(2000)};`, { startRule: 'Edge' })).toThrow(
+      expect(() => parse(`${edgeChain(2000)};`, { as: 'Edge' })).toThrow(
         dotSyntaxError({
           limit: 'maxEdgeChainDepth',
           location: chainLocation(2000, 1000),
@@ -216,7 +213,7 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
 
     test('separate chains do not add up', () => {
       const source = `digraph { ${edgeChain(999, 'a')}; ${edgeChain(999, 'b')}; }`;
-      expect(parse(source, { startRule: 'Graph' }).children).toHaveLength(2);
+      expect(parse(source, { as: 'Graph' }).children).toHaveLength(2);
     });
   });
 
@@ -236,18 +233,18 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
     test('a custom limit is inclusive', () => {
       const source = nodeStatements(10);
       const count = nodeCountOf(10);
-      expect(
-        parse(source, { startRule: 'Graph', maxASTNodes: count }),
-      ).toMatchObject({ type: 'Graph' });
+      expect(parse(source, { as: 'Graph', maxASTNodes: count })).toMatchObject({
+        type: 'Graph',
+      });
       expect(() =>
-        parse(source, { startRule: 'Graph', maxASTNodes: count - 1 }),
+        parse(source, { as: 'Graph', maxASTNodes: count - 1 }),
       ).toThrow(nodeCountError(count - 1));
     });
 
     test('a small limit stops a larger source', () => {
       expect(() =>
         parse('digraph { a; b; c; d; e; f; g; h; i; j; }', {
-          startRule: 'Graph',
+          as: 'Graph',
           maxASTNodes: 5,
         }),
       ).toThrow(nodeCountError(5));
@@ -255,23 +252,23 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
 
     test('15000 node statements parse with the default limit', () => {
       expect(
-        parse(nodeStatements(15000), { startRule: 'Graph' }).children,
+        parse(nodeStatements(15000), { as: 'Graph' }).children,
       ).toHaveLength(15000);
     });
 
     test('75000 node statements exceed the default limit (100000)', () => {
-      expect(() =>
-        parse(nodeStatements(75000), { startRule: 'Graph' }),
-      ).toThrow(nodeCountError(100000));
+      expect(() => parse(nodeStatements(75000), { as: 'Graph' })).toThrow(
+        nodeCountError(100000),
+      );
     });
 
     test('a custom limit counts every node of the source', () => {
       expect(
-        parse(nodeStatements(5000), { startRule: 'Graph', maxASTNodes: 30000 })
+        parse(nodeStatements(5000), { as: 'Graph', maxASTNodes: 30000 })
           .children,
       ).toHaveLength(5000);
       expect(() =>
-        parse(nodeStatements(7000), { startRule: 'Graph', maxASTNodes: 10000 }),
+        parse(nodeStatements(7000), { as: 'Graph', maxASTNodes: 10000 }),
       ).toThrow(nodeCountError(10000));
     });
 
@@ -282,7 +279,7 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
       ).join('\n');
       expect(() =>
         parse(`digraph { ${edges} }`, {
-          startRule: 'Graph',
+          as: 'Graph',
           maxASTNodes: 100000,
         }),
       ).toThrow(nodeCountError(100000));
@@ -296,8 +293,7 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
 
     test('maxASTNodes: 0 disables the limit', () => {
       expect(
-        parse(nodeStatements(150000), { startRule: 'Graph', maxASTNodes: 0 })
-          .children,
+        parse(nodeStatements(150000), { as: 'Graph', maxASTNodes: 0 }).children,
       ).toHaveLength(150000);
     });
   });
@@ -308,7 +304,7 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
       const count = nodeCountOf(5);
       for (let i = 0; i < 5; i++) {
         expect(
-          parse(source, { startRule: 'Graph', maxASTNodes: count }),
+          parse(source, { as: 'Graph', maxASTNodes: count }),
         ).toMatchObject({ type: 'Graph' });
       }
     });
@@ -317,21 +313,21 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
       const source = nodeStatements(5);
       const count = nodeCountOf(5);
       expect(() =>
-        parse(nodeStatements(100), { startRule: 'Graph', maxASTNodes: count }),
+        parse(nodeStatements(100), { as: 'Graph', maxASTNodes: count }),
       ).toThrow(dotSyntaxError({ limit: 'maxASTNodes' }));
-      expect(
-        parse(source, { startRule: 'Graph', maxASTNodes: count }),
-      ).toMatchObject({ type: 'Graph' });
+      expect(parse(source, { as: 'Graph', maxASTNodes: count })).toMatchObject({
+        type: 'Graph',
+      });
     });
 
     test('the HTML-like nesting depth starts again at each parse', () => {
       const options = { maxHtmlNestingDepth: 50 };
       expect(() =>
-        parse(htmlAttribute(60), { ...options, startRule: 'Attribute' }),
+        parse(htmlAttribute(60), { ...options, as: 'Attribute' }),
       ).toThrow(dotSyntaxError({ limit: 'maxHtmlNestingDepth' }));
       for (let i = 0; i < 2; i++) {
         expect(
-          parse(htmlAttribute(49), { ...options, startRule: 'Attribute' }),
+          parse(htmlAttribute(49), { ...options, as: 'Attribute' }),
         ).toMatchObject({ value: { kind: 'html' } });
       }
     });
@@ -339,28 +335,23 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
     test('the edge chain depth starts again at each parse', () => {
       const options = { maxEdgeChainDepth: 100 };
       expect(() =>
-        parse(`${edgeChain(150)};`, { ...options, startRule: 'Edge' }),
+        parse(`${edgeChain(150)};`, { ...options, as: 'Edge' }),
       ).toThrow(dotSyntaxError({ limit: 'maxEdgeChainDepth' }));
       for (let i = 0; i < 2; i++) {
         expect(
-          parse(`${edgeChain(100)};`, { ...options, startRule: 'Edge' })
-            .targets,
+          parse(`${edgeChain(100)};`, { ...options, as: 'Edge' }).targets,
         ).toHaveLength(101);
       }
     });
 
     test('a syntax error does not affect the next parse', () => {
-      expect(() =>
-        parse('invalid syntax here!', { startRule: 'Graph' }),
-      ).toThrow(
+      expect(() => parse('invalid syntax here!', { as: 'Graph' })).toThrow(
         dotSyntaxError({
           location: { start: at(0), end: at(1) },
           limit: undefined,
         }),
       );
-      expect(
-        parse('digraph { a -> b; }', { startRule: 'Graph' }),
-      ).toMatchObject({
+      expect(parse('digraph { a -> b; }', { as: 'Graph' })).toMatchObject({
         type: 'Graph',
       });
     });
@@ -368,11 +359,11 @@ describe('parser limits', { tags: ['SM-1'] }, () => {
     test('a syntax error after a parse stopped by a limit names no limit', () => {
       expect(() =>
         parse(`${edgeChain(150)};`, {
-          startRule: 'Edge',
+          as: 'Edge',
           maxEdgeChainDepth: 100,
         }),
       ).toThrow(dotSyntaxError({ limit: 'maxEdgeChainDepth' }));
-      expect(() => parse('a -> ;', { startRule: 'Edge' })).toThrow(
+      expect(() => parse('a -> ;', { as: 'Edge' })).toThrow(
         dotSyntaxError({ limit: undefined }),
       );
     });

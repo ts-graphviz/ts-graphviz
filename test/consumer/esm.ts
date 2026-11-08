@@ -82,9 +82,9 @@ dsl(model).node('b');
 
 // fromDot / toDot
 const text: string = toDot(g);
-const node = fromDot('a', { parse: { startRule: 'Node' } });
+const node = fromDot('a', { parse: { as: 'Node' } });
 assertType<Equal<typeof node, NodeModel>>();
-const edge = fromDot('a -> b', { parse: { startRule: 'Edge' } });
+const edge = fromDot('a -> b', { parse: { as: 'Edge' } });
 assertType<Equal<typeof edge, EdgeModel>>();
 
 // custom models through the core package
@@ -98,10 +98,10 @@ createModelsContext({ Node: MyNode });
 
 // parse / stringify / sanitize
 const dot: DotASTNode = parse(sanitize(text));
-const nodeAST = parse('a [color=red]', { startRule: 'Node' });
+const nodeAST = parse('a [color=red]', { as: 'Node' });
 assertType<Equal<typeof nodeAST, NodeASTNode>>();
 // @ts-expect-error not a rule
-parse('a', { startRule: 'Statement' });
+parse('a', { as: 'Statement' });
 const printed: string = stringify(dot) + astPackage.stringify(nodeAST);
 
 // adapter options
@@ -181,7 +181,7 @@ assertType<Equal<typeof legacy.toDot, typeof toDot>>();
 const legacyModel = legacy.fromDot('digraph { a }');
 assertType<Equal<typeof legacyModel, RootGraphModel>>();
 const legacyNode = legacy.fromDot('a', {
-  parse: { startRule: 'Node' },
+  parse: { as: 'Node' },
   convert: { models: { Node: MyNode } },
 });
 assertType<Equal<typeof legacyNode, MyNode>>();

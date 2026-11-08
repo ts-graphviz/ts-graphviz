@@ -38,6 +38,7 @@ const OPTION_NAMES = [
   'grid',
   'iterations',
   // parse / sanitize
+  'as',
   'startRule',
   'filename',
   'maxHtmlNestingDepth',
@@ -79,6 +80,7 @@ const pollutedValue = fc.oneof(
     ['/tmp/evil.ps'],
     { node: { shape: 'box' } },
     { indentSize: 9 },
+    { as: 'Node' },
     { startRule: 'Node' },
     { shapefile: '/etc/passwd' },
     Number.POSITIVE_INFINITY,

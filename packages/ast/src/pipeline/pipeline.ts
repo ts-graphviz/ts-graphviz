@@ -55,10 +55,10 @@ export class Pipeline {
 
   /** Parse a DOT source, run the transformers and print the result. */
   process(source: string): string {
-    // A whole DOT source, whatever `startRule` the options may hold.
+    // A whole DOT source, whatever `as` the options may hold.
     const ast = parse(source, {
       ...ownOptions(this.options.parse),
-      startRule: 'Dot',
+      as: 'Dot',
     });
     return stringify(this.run(ast), this.options.print);
   }

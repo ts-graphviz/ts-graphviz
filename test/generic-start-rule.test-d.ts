@@ -24,57 +24,78 @@ import { describe, expectTypeOf, it } from 'vitest';
 describe('parse', () => {
   it('returns the node of each rule', () => {
     expectTypeOf(
-      parse('digraph {}', { startRule: 'Dot' }),
+      parse('digraph {}', { as: 'Dot' }),
     ).toEqualTypeOf<DotASTNode>();
+    expectTypeOf(parse('a', { as: 'Node' })).toEqualTypeOf<NodeASTNode>();
     expectTypeOf(
-      parse('a', { startRule: 'Node' }),
-    ).toEqualTypeOf<NodeASTNode>();
-    expectTypeOf(
-      parse('a=b', { startRule: 'Attribute' }),
+      parse('a=b', { as: 'Attribute' }),
     ).toEqualTypeOf<AttributeASTNode>();
-    expectTypeOf(
-      parse('a; b', { startRule: 'ClusterStatements' }),
-    ).toEqualTypeOf<ClusterStatementASTNode[]>();
+    expectTypeOf(parse('a; b', { as: 'ClusterStatements' })).toEqualTypeOf<
+      ClusterStatementASTNode[]
+    >();
   });
 
   it('returns the union of the nodes for a union of rules', () => {
     const rule = Math.random() > 0.5 ? ('Node' as const) : ('Edge' as const);
-    expectTypeOf(parse('a', { startRule: rule })).toEqualTypeOf<
+    expectTypeOf(parse('a', { as: rule })).toEqualTypeOf<
       NodeASTNode | EdgeASTNode
     >();
     const anyRule = 'Dot' as Rule;
-    expectTypeOf(parse('a', { startRule: anyRule })).toEqualTypeOf<
+    expectTypeOf(parse('a', { as: anyRule })).toEqualTypeOf<
       ParseResultByRule[Rule]
     >();
   });
 
-  it('gives a whole DOT source without a startRule', () => {
+  it('gives a whole DOT source without as', () => {
     expectTypeOf(parse('digraph {}')).toEqualTypeOf<DotASTNode>();
     expectTypeOf(
       parse('digraph {}', { maxASTNodes: 100 }),
     ).toEqualTypeOf<DotASTNode>();
     expectTypeOf(
-      parse('digraph {}', { startRule: undefined, maxASTNodes: 100 }),
+      parse('digraph {}', { as: undefined, maxASTNodes: 100 }),
     ).toEqualTypeOf<DotASTNode>();
   });
 
-  it('gives the union for options whose startRule is not known', () => {
-    const options: ParseOptions = { startRule: 'Node' };
+  it('gives a whole DOT source for ParseOptions<"Dot">', () => {
+    const options: ParseOptions<'Dot'> = {};
+    expectTypeOf(parse('digraph {}', options)).toEqualTypeOf<DotASTNode>();
+  });
+
+  it('gives the union for options whose rule is not known', () => {
+    const options: ParseOptions = { as: 'Node' };
     expectTypeOf(parse('a', options)).toEqualTypeOf<ParseResultByRule[Rule]>();
   });
 
-  it('needs a startRule for a result other than a whole DOT source', () => {
+  it('needs as for a result other than a whole DOT source', () => {
     // @ts-expect-error the result would be a DotASTNode
     parse<'Edge'>('digraph {}');
     // @ts-expect-error the result would be a DotASTNode
     parse<'Edge'>('digraph {}', { maxASTNodes: 100 });
   });
 
+  it('types the deprecated startRule as as', () => {
+    expectTypeOf(
+      parse('a -> b', { startRule: 'Edge' }),
+    ).toEqualTypeOf<EdgeASTNode>();
+    expectTypeOf(
+      fromDot('a', { parse: { startRule: 'Node' } }),
+    ).toEqualTypeOf<NodeModel>();
+    expectTypeOf(
+      parse('digraph {}', { startRule: undefined }),
+    ).toEqualTypeOf<DotASTNode>();
+  });
+
+  it('types the result by as when startRule is given too', () => {
+    expectTypeOf(
+      parse('a', { as: 'Node', startRule: 'Edge' }),
+    ).toEqualTypeOf<NodeASTNode>();
+  });
+
   it('still rejects what is not a rule', () => {
     // @ts-expect-error not a rule
-    parse('a', { startRule: 'Comment' });
+    parse('a', { as: 'Comment' });
     // @ts-expect-error a plain string is not a rule
-    parse('a', { startRule: 'Node' as string });
+    parse('a', { as: 'Node' as string });
   });
 });
 
@@ -82,22 +103,22 @@ describe('fromDot', () => {
   it('keeps the types of single rules', () => {
     expectTypeOf(fromDot('digraph {}')).toEqualTypeOf<RootGraphModel>();
     expectTypeOf(
-      fromDot('a', { parse: { startRule: 'Node' } }),
+      fromDot('a', { parse: { as: 'Node' } }),
     ).toEqualTypeOf<NodeModel>();
     expectTypeOf(
-      fromDot('a -> b', { parse: { startRule: 'Edge' } }),
+      fromDot('a -> b', { parse: { as: 'Edge' } }),
     ).toEqualTypeOf<EdgeModel>();
     expectTypeOf(
-      fromDot('subgraph {}', { parse: { startRule: 'Subgraph' } }),
+      fromDot('subgraph {}', { parse: { as: 'Subgraph' } }),
     ).toEqualTypeOf<SubgraphModel>();
     expectTypeOf(
-      fromDot('graph {}', { parse: { startRule: 'Graph' } }),
+      fromDot('graph {}', { parse: { as: 'Graph' } }),
     ).toEqualTypeOf<RootGraphModel>();
   });
 
   it('returns the union of the models for a union of rules', () => {
     const rule = Math.random() > 0.5 ? ('Node' as const) : ('Edge' as const);
-    expectTypeOf(fromDot('a', { parse: { startRule: rule } })).toEqualTypeOf<
+    expectTypeOf(fromDot('a', { parse: { as: rule } })).toEqualTypeOf<
       NodeModel | EdgeModel
     >();
   });
@@ -107,7 +128,7 @@ describe('fromDot', () => {
       readonly mine = true;
     }
     const node = fromDot('a', {
-      parse: { startRule: 'Node' },
+      parse: { as: 'Node' },
       convert: { models: { Node: MyNode } },
     });
     expectTypeOf(node).toEqualTypeOf<MyNode>();
@@ -129,13 +150,13 @@ describe('fromDot', () => {
   });
 
   it('accepts options held in a variable', () => {
-    const options: FromDotOptions<'Node'> = { parse: { startRule: 'Node' } };
+    const options: FromDotOptions<'Node'> = { parse: { as: 'Node' } };
     expectTypeOf(fromDot('a', options)).toEqualTypeOf<NodeModel>();
     expectTypeOf(fromDot('digraph {}', {})).toEqualTypeOf<RootGraphModel>();
   });
 
   it('rejects rules it cannot convert', () => {
     // @ts-expect-error an attribute is not a model
-    fromDot('a=b', { parse: { startRule: 'Attribute' } });
+    fromDot('a=b', { parse: { as: 'Attribute' } });
   });
 });

@@ -239,6 +239,7 @@ export interface NodeRefListASTNode extends ASTBaseNode, NodeRefListASTPropertie
 export interface NodeRefListASTProperties extends ASTCommonProperties {}
 
 export interface ParseOptions<T extends Rule = Rule> extends CommonParseOptions {
+  as?: T;
   startRule?: T;
 }
 
@@ -314,9 +315,18 @@ export declare function createElementFactory(options?: Partial<Pick<BuilderOptio
 
 export declare function fromModel<T extends AnyReadonlyDotObjectModel | ModelView>(model: T, options?: ConvertFromModelOptions): ModelToAST<ModelOf<T>>;
 
-export declare function parse(input: string, options?: ParseOptions<"Dot">): DotASTNode;
-export declare function parse<const R extends Rule>(input: string, options: ParseOptions<R> & {
+export declare function parse<const R extends Rule>(input: string, options: CommonParseOptions & {
   startRule: R;
+  as?: undefined;
+}): ParseResultByRule[R];
+export declare function parse(input: string, options?: CommonParseOptions & {
+  as?: "Dot";
+  startRule?: undefined;
+}): DotASTNode;
+export declare function parse(input: string, options?: ParseOptions<"Dot">): DotASTNode;
+export declare function parse<const R extends Rule>(input: string, options: CommonParseOptions & {
+  as: R;
+  startRule?: Rule;
 }): ParseResultByRule[R];
 export declare function parse(input: string, options?: ParseOptions): ParseResultByRule[Rule];
 

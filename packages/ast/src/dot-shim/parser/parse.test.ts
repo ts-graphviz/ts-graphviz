@@ -24,12 +24,12 @@ describe('parse', () => {
   describe('attribute', () => {
     // The full shape of an attribute, locations included.
     test('set value', () => {
-      const result = parse('style=filled;', { startRule: 'Attribute' });
+      const result = parse('style=filled;', { as: 'Attribute' });
       expect(result).toMatchSnapshot();
     });
 
     test('set quoted value', () => {
-      const result = parse('label = "example #1";', { startRule: 'Attribute' });
+      const result = parse('label = "example #1";', { as: 'Attribute' });
       expect(result).toMatchObject(attribute('label', 'example #1', 'quoted'));
     });
 
@@ -38,35 +38,35 @@ describe('parse', () => {
       // https://graphviz.org/doc/info/lang.html#ids
       test('drops the marker before LF', () => {
         const result = parse('label = "one\\\ntwo";', {
-          startRule: 'Attribute',
+          as: 'Attribute',
         });
         expect(result.value.value).toBe('onetwo');
       });
 
       test('keeps surrounding whitespace', () => {
         const result = parse('label = "one \\\n  two";', {
-          startRule: 'Attribute',
+          as: 'Attribute',
         });
         expect(result.value.value).toBe('one   two');
       });
 
       test('keeps backslash + CR, like Graphviz (lib/cgraph/scan.l)', () => {
         const result = parse('label = "one\\\rtwo";', {
-          startRule: 'Attribute',
+          as: 'Attribute',
         });
         expect(result.value.value).toBe('one\\\rtwo');
       });
 
       test('keeps backslash + CRLF, like Graphviz', () => {
         const result = parse('label = "one\\\r\ntwo";', {
-          startRule: 'Attribute',
+          as: 'Attribute',
         });
         expect(result.value.value).toBe('one\\\r\ntwo');
       });
 
       test('keeps escape sequences as written (the model layer interprets them)', () => {
         const result = parse('label = "one\\ntwo \\"three\\"";', {
-          startRule: 'Attribute',
+          as: 'Attribute',
         });
         expect(result.value.value).toBe('one\\ntwo \\"three\\"');
       });
@@ -79,7 +79,7 @@ describe('parse', () => {
         ['CRLF', 'label = "one\r\ntwo";', 'one\r\ntwo'],
         ['CR', 'label = "one\rtwo";', 'one\rtwo'],
       ])('keeps a raw %s in the value', (_, dot, expected) => {
-        const result = parse(dot, { startRule: 'Attribute' });
+        const result = parse(dot, { as: 'Attribute' });
         expect(result.value.value).toBe(expected);
       });
 
@@ -96,7 +96,7 @@ describe('parse', () => {
       });
 
       test('spans multiple lines in a node id', () => {
-        const result = parse('"no\nde";', { startRule: 'Node' });
+        const result = parse('"no\nde";', { as: 'Node' });
         expect(result.id.value).toBe('no\nde');
       });
     });
@@ -114,7 +114,7 @@ describe('parse', () => {
             <tr><td align="text">The value of a closing<br align="left"/>&lt;br/&gt; tag<br align="center"/>refers to the preceeding text<br align="right"/></td></tr>
           </table>
         >`,
-        { startRule: 'Attribute' },
+        { as: 'Attribute' },
       );
       expect(result).toMatchSnapshot();
     });
@@ -130,7 +130,7 @@ describe('parse', () => {
           label = "example #1";
         ]
       `,
-        { startRule: 'AttributeList' },
+        { as: 'AttributeList' },
       );
       expect(result).toMatchObject({
         type: 'AttributeList',
@@ -151,7 +151,7 @@ describe('parse', () => {
           color=red;
           label = "example example";
         ];`,
-        { startRule: 'AttributeList' },
+        { as: 'AttributeList' },
       );
       expect(result).toMatchObject({
         type: 'AttributeList',
@@ -167,7 +167,7 @@ describe('parse', () => {
     test('graph', () => {
       const result = parse(
         'graph [ fillcolor=red, label = "example example"];',
-        { startRule: 'AttributeList' },
+        { as: 'AttributeList' },
       );
       expect(result).toMatchObject({
         type: 'AttributeList',
@@ -189,7 +189,7 @@ describe('parse', () => {
           style=filled,
         ]
       `,
-        { startRule: 'AttributeList' },
+        { as: 'AttributeList' },
       );
       expect(result).toMatchSnapshot();
     });
@@ -197,7 +197,7 @@ describe('parse', () => {
 
   describe('edge', () => {
     test('digraph edge', () => {
-      const result = parse('a -> b;', { startRule: 'Edge' });
+      const result = parse('a -> b;', { as: 'Edge' });
       expect(result).toMatchObject({
         type: 'Edge',
         targets: [
@@ -210,7 +210,7 @@ describe('parse', () => {
     });
 
     test('graph edge', () => {
-      const result = parse('a -- b;', { startRule: 'Edge' });
+      const result = parse('a -- b;', { as: 'Edge' });
       expect(result).toMatchObject({
         type: 'Edge',
         targets: [
@@ -225,7 +225,7 @@ describe('parse', () => {
     // The full shape of node references with ports and compass points.
     test('edge with port', () => {
       const result = parse('a:p1 -> b:p2 -> c:p3:w -> d:w;', {
-        startRule: 'Edge',
+        as: 'Edge',
       });
       expect(result).toMatchSnapshot();
     });
@@ -238,7 +238,7 @@ describe('parse', () => {
             label = "example #1";
           ];
         `,
-        { startRule: 'Edge' },
+        { as: 'Edge' },
       );
       expect(result).toMatchObject({
         type: 'Edge',
@@ -255,7 +255,7 @@ describe('parse', () => {
     });
 
     test('grouped edge targets', () => {
-      const result = parse('{a1, a2} -> {b1, b2};', { startRule: 'Edge' });
+      const result = parse('{a1, a2} -> {b1, b2};', { as: 'Edge' });
       const group = (...ids: string[]) => ({
         type: 'Subgraph',
         children: ids.map((id) => ({
@@ -276,7 +276,7 @@ describe('parse', () => {
       // Graphviz treats every byte >= 0x80 as an id character and `dot
       // -Tcanon` prints such values bare.
       test.each(['￠', '😀', 'kéy', 'ñ1'])('%s parses bare', (id) => {
-        const result = parse(`${id} -- b;`, { startRule: 'Edge' });
+        const result = parse(`${id} -- b;`, { as: 'Edge' });
         expect(result.targets[0]).toMatchObject({
           id: { value: id, kind: 'bare' },
         });
@@ -286,7 +286,7 @@ describe('parse', () => {
     describe('compass points', () => {
       const ref = (source: string) => {
         const [target] = parse(`${source} -- b;`, {
-          startRule: 'Edge',
+          as: 'Edge',
         }).targets;
         if (target.type !== 'NodeRef') {
           throw new TypeError(`expected a NodeRef, got ${target.type}`);
@@ -337,7 +337,7 @@ describe('parse', () => {
     // The full shape: the ports of the nodes in a group are not kept.
     test('grouped ported edge targets', () => {
       const result = parse('{a1:p1, a2:p2:w} -> {b1:e, b2:p3};', {
-        startRule: 'Edge',
+        as: 'Edge',
       });
       expect(result).toMatchSnapshot();
     });
@@ -345,7 +345,7 @@ describe('parse', () => {
 
   describe('subgraph', () => {
     test('named subgraph', () => {
-      const result = parse('subgraph hoge {}', { startRule: 'Subgraph' });
+      const result = parse('subgraph hoge {}', { as: 'Subgraph' });
       expect(result).toMatchObject({
         type: 'Subgraph',
         id: literal('hoge'),
@@ -357,7 +357,7 @@ describe('parse', () => {
       ['anonymous subgraph', 'subgraph {}'],
       ['no keyword anonymous', '{}'],
     ])('%s', (_, dot) => {
-      const result = parse(dot, { startRule: 'Subgraph' });
+      const result = parse(dot, { as: 'Subgraph' });
       expect(result).toMatchObject({ type: 'Subgraph', children: [] });
       expect(result.id).toBeUndefined();
     });
@@ -386,7 +386,7 @@ describe('parse', () => {
         { directed: false, strict: true, id: literal('test') },
       ],
     ])('%s', (dot, expected) => {
-      const result = parse(dot, { startRule: 'Graph' });
+      const result = parse(dot, { as: 'Graph' });
       expect(result).toMatchObject({
         type: 'Graph',
         children: [],
@@ -395,7 +395,7 @@ describe('parse', () => {
     });
 
     test('anonymous digraph', () => {
-      const result = parse('digraph {}', { startRule: 'Graph' });
+      const result = parse('digraph {}', { as: 'Graph' });
       expect(result).toMatchObject({
         type: 'Graph',
         directed: true,
@@ -422,7 +422,7 @@ describe('parse', () => {
         ['digraph has to use "->"', 'digraph {\n  a -- b;\n}', '--'],
         ['graph has to use "--"', 'graph {\n  a -> b;\n}', '->'],
       ])('%s, and the error points at the operator', (_, source, op) => {
-        expect(() => parse(source, { startRule: 'Graph' })).toThrow(
+        expect(() => parse(source, { as: 'Graph' })).toThrow(
           expect.objectContaining({
             name: 'DotSyntaxError',
             code: 'TSG_ERR_DOT_SYNTAX',
@@ -435,7 +435,7 @@ describe('parse', () => {
 
   describe('node', () => {
     test('simple node', () => {
-      const result = parse('test;', { startRule: 'Node' });
+      const result = parse('test;', { as: 'Node' });
       expect(result).toMatchObject({
         type: 'Node',
         id: literal('test'),
@@ -452,7 +452,7 @@ describe('parse', () => {
             label = "example #1";
           ];
         `,
-        { startRule: 'Node' },
+        { as: 'Node' },
       );
       expect(result).toMatchObject({
         type: 'Node',
@@ -497,7 +497,7 @@ describe('parse', () => {
         # comment4
         /** comment 5*/
         `,
-        { startRule: 'ClusterStatements' },
+        { as: 'ClusterStatements' },
       );
       expect(result).toMatchSnapshot();
     });
@@ -509,7 +509,7 @@ describe('parse', () => {
           * a*b, 2 * 3
           * **bold**
           */`,
-        { startRule: 'ClusterStatements' },
+        { as: 'ClusterStatements' },
       );
       expect(comment).toMatchObject({
         type: 'Comment',
@@ -568,6 +568,20 @@ describe('parse', () => {
           },
         }),
       );
+    });
+  });
+
+  describe('the deprecated startRule', () => {
+    test('still picks the rule', () => {
+      expect(parse('a -> b;', { startRule: 'Edge' })).toStrictEqual(
+        parse('a -> b;', { as: 'Edge' }),
+      );
+    });
+
+    test('loses to as', () => {
+      expect(parse('a;', { as: 'Node', startRule: 'Edge' })).toMatchObject({
+        type: 'Node',
+      });
     });
   });
 });
