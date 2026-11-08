@@ -74,7 +74,7 @@ describe('fromDot and fromDotAll', () => {
   test('take the other options and classes as they are given', () => {
     class MyNode extends Node {}
     const node = legacy.fromDot('a [label=x]', {
-      parse: { startRule: 'Node' },
+      parse: { as: 'Node' },
       convert: { models: { Node: MyNode } },
     });
     expect(node).toBeInstanceOf(MyNode);

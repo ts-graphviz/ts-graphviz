@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { fromDot } from './from-dot.js';
 
-describe('fromDot with a startRule that has no model', () => {
+describe('fromDot with a rule that has no model', () => {
   it.each([
     ['Attribute', 'a = b'],
     ['AttributeList', 'node [a = b]'],
@@ -10,7 +10,7 @@ describe('fromDot with a startRule that has no model', () => {
     expect(() =>
       // JavaScript callers can pass any rule; the types allow only the
       // rules that have a model.
-      fromDot(dot, { parse: { startRule: startRule as 'Dot' } }),
+      fromDot(dot, { parse: { as: startRule as 'Dot' } }),
     ).toThrow(
       expect.objectContaining({
         name: 'TypeError',

@@ -21,7 +21,7 @@ describe('fromDot API', () => {
 
     it('parses a node statement into a Node instance with correct id and attributes', () => {
       const node = fromDot('a[ label = hoge]', {
-        parse: { startRule: 'Node' },
+        parse: { as: 'Node' },
       });
       expect(node).toBeInstanceOf(Node);
       expect(node.id).toStrictEqual('a');
@@ -30,7 +30,7 @@ describe('fromDot API', () => {
 
     it('parses an edge statement into an Edge instance with correct targets and attributes', () => {
       const edge = fromDot('a -> b [ label = hoge]', {
-        parse: { startRule: 'Edge' },
+        parse: { as: 'Edge' },
       });
       expect(edge).toBeInstanceOf(Edge);
       expect(edge.targets).toMatchObject([{ id: 'a' }, { id: 'b' }]);
@@ -42,7 +42,7 @@ describe('fromDot API', () => {
         `subgraph sub {
           label = hoge;
         }`,
-        { parse: { startRule: 'Subgraph' } },
+        { parse: { as: 'Subgraph' } },
       );
       expect(subgraph).toBeInstanceOf(Subgraph);
       expect(subgraph.id).toStrictEqual('sub');

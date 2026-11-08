@@ -23,8 +23,8 @@ function convertComment(
 }
 
 /**
- * The comments attached to a model. A model written for 3.x (a `comment`
- * string, no `comments`) has its `comment` as one leading comment.
+ * The comments attached to a model. A model without `comments` has its
+ * `comment` string as one leading comment.
  */
 export function commentsOf(model: object): ReadonlyArray<CommentModel> {
   const comments = ownField(model as { comments?: unknown }, 'comments');

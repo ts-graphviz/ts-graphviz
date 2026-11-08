@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './helpers';
 
 // The API reference used to live at /ts-graphviz/; copy-api writes a redirect
 // for every page (scripts/copy-api-reference.mts).

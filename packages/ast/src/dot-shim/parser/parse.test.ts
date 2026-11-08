@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { stringify } from '../printer/stringify.js';
-import { parse, parseFragment } from './parse.js';
+import { parse } from './parse.js';
 
 /** A `Literal` AST node, without its location. */
 const literal = (value: string, kind: 'bare' | 'quoted' | 'html' = 'bare') => ({
@@ -24,12 +24,12 @@ describe('parse', () => {
   describe('attribute', () => {
     // The full shape of an attribute, locations included.
     test('set value', () => {
-      const result = parseFragment('style=filled;', 'Attribute');
+      const result = parse('style=filled;', { as: 'Attribute' });
       expect(result).toMatchSnapshot();
     });
 
     test('set quoted value', () => {
-      const result = parseFragment('label = "example #1";', 'Attribute');
+      const result = parse('label = "example #1";', { as: 'Attribute' });
       expect(result).toMatchObject(attribute('label', 'example #1', 'quoted'));
     });
 
@@ -37,30 +37,37 @@ describe('parse', () => {
       // Graphviz joins the lines and drops the continuation marker
       // https://graphviz.org/doc/info/lang.html#ids
       test('drops the marker before LF', () => {
-        const result = parseFragment('label = "one\\\ntwo";', 'Attribute');
+        const result = parse('label = "one\\\ntwo";', {
+          as: 'Attribute',
+        });
         expect(result.value.value).toBe('onetwo');
       });
 
       test('keeps surrounding whitespace', () => {
-        const result = parseFragment('label = "one \\\n  two";', 'Attribute');
+        const result = parse('label = "one \\\n  two";', {
+          as: 'Attribute',
+        });
         expect(result.value.value).toBe('one   two');
       });
 
       test('keeps backslash + CR, like Graphviz (lib/cgraph/scan.l)', () => {
-        const result = parseFragment('label = "one\\\rtwo";', 'Attribute');
+        const result = parse('label = "one\\\rtwo";', {
+          as: 'Attribute',
+        });
         expect(result.value.value).toBe('one\\\rtwo');
       });
 
       test('keeps backslash + CRLF, like Graphviz', () => {
-        const result = parseFragment('label = "one\\\r\ntwo";', 'Attribute');
+        const result = parse('label = "one\\\r\ntwo";', {
+          as: 'Attribute',
+        });
         expect(result.value.value).toBe('one\\\r\ntwo');
       });
 
       test('keeps escape sequences as written (the model layer interprets them)', () => {
-        const result = parseFragment(
-          'label = "one\\ntwo \\"three\\"";',
-          'Attribute',
-        );
+        const result = parse('label = "one\\ntwo \\"three\\"";', {
+          as: 'Attribute',
+        });
         expect(result.value.value).toBe('one\\ntwo \\"three\\"');
       });
     });
@@ -72,7 +79,7 @@ describe('parse', () => {
         ['CRLF', 'label = "one\r\ntwo";', 'one\r\ntwo'],
         ['CR', 'label = "one\rtwo";', 'one\rtwo'],
       ])('keeps a raw %s in the value', (_, dot, expected) => {
-        const result = parseFragment(dot, 'Attribute');
+        const result = parse(dot, { as: 'Attribute' });
         expect(result.value.value).toBe(expected);
       });
 
@@ -89,14 +96,14 @@ describe('parse', () => {
       });
 
       test('spans multiple lines in a node id', () => {
-        const result = parseFragment('"no\nde";', 'Node');
+        const result = parse('"no\nde";', { as: 'Node' });
         expect(result.id.value).toBe('no\nde');
       });
     });
 
     // The full shape of an HTML-like value: its text is kept as written.
     test('set HTMLLike value', () => {
-      const result = parseFragment(
+      const result = parse(
         `
         label = <
           <table border="0">
@@ -107,7 +114,7 @@ describe('parse', () => {
             <tr><td align="text">The value of a closing<br align="left"/>&lt;br/&gt; tag<br align="center"/>refers to the preceeding text<br align="right"/></td></tr>
           </table>
         >`,
-        'Attribute',
+        { as: 'Attribute' },
       );
       expect(result).toMatchSnapshot();
     });
@@ -115,7 +122,7 @@ describe('parse', () => {
 
   describe('AttributeList', () => {
     test('node', () => {
-      const result = parseFragment(
+      const result = parse(
         `
         node [
           style=filled;
@@ -123,7 +130,7 @@ describe('parse', () => {
           label = "example #1";
         ]
       `,
-        'AttributeList',
+        { as: 'AttributeList' },
       );
       expect(result).toMatchObject({
         type: 'AttributeList',
@@ -138,13 +145,13 @@ describe('parse', () => {
     });
 
     test('edge', () => {
-      const result = parseFragment(
+      const result = parse(
         `
         edge [
           color=red;
           label = "example example";
         ];`,
-        'AttributeList',
+        { as: 'AttributeList' },
       );
       expect(result).toMatchObject({
         type: 'AttributeList',
@@ -158,9 +165,9 @@ describe('parse', () => {
     });
 
     test('graph', () => {
-      const result = parseFragment(
+      const result = parse(
         'graph [ fillcolor=red, label = "example example"];',
-        'AttributeList',
+        { as: 'AttributeList' },
       );
       expect(result).toMatchObject({
         type: 'AttributeList',
@@ -175,14 +182,14 @@ describe('parse', () => {
 
     // The full shape of a comment inside an attribute list.
     test('with comment', () => {
-      const result = parseFragment(
+      const result = parse(
         `
         node [
            # comment 1
           style=filled,
         ]
       `,
-        'AttributeList',
+        { as: 'AttributeList' },
       );
       expect(result).toMatchSnapshot();
     });
@@ -190,7 +197,7 @@ describe('parse', () => {
 
   describe('edge', () => {
     test('digraph edge', () => {
-      const result = parseFragment('a -> b;', 'Edge');
+      const result = parse('a -> b;', { as: 'Edge' });
       expect(result).toMatchObject({
         type: 'Edge',
         targets: [
@@ -203,7 +210,7 @@ describe('parse', () => {
     });
 
     test('graph edge', () => {
-      const result = parseFragment('a -- b;', 'Edge');
+      const result = parse('a -- b;', { as: 'Edge' });
       expect(result).toMatchObject({
         type: 'Edge',
         targets: [
@@ -217,19 +224,21 @@ describe('parse', () => {
 
     // The full shape of node references with ports and compass points.
     test('edge with port', () => {
-      const result = parseFragment('a:p1 -> b:p2 -> c:p3:w -> d:w;', 'Edge');
+      const result = parse('a:p1 -> b:p2 -> c:p3:w -> d:w;', {
+        as: 'Edge',
+      });
       expect(result).toMatchSnapshot();
     });
 
     test('edge with attributes', () => {
-      const result = parseFragment(
+      const result = parse(
         `
           a -> b [
             color=lightgrey;
             label = "example #1";
           ];
         `,
-        'Edge',
+        { as: 'Edge' },
       );
       expect(result).toMatchObject({
         type: 'Edge',
@@ -246,7 +255,7 @@ describe('parse', () => {
     });
 
     test('grouped edge targets', () => {
-      const result = parseFragment('{a1, a2} -> {b1, b2};', 'Edge');
+      const result = parse('{a1, a2} -> {b1, b2};', { as: 'Edge' });
       const group = (...ids: string[]) => ({
         type: 'Subgraph',
         children: ids.map((id) => ({
@@ -267,7 +276,7 @@ describe('parse', () => {
       // Graphviz treats every byte >= 0x80 as an id character and `dot
       // -Tcanon` prints such values bare.
       test.each(['￠', '😀', 'kéy', 'ñ1'])('%s parses bare', (id) => {
-        const result = parseFragment(`${id} -- b;`, 'Edge');
+        const result = parse(`${id} -- b;`, { as: 'Edge' });
         expect(result.targets[0]).toMatchObject({
           id: { value: id, kind: 'bare' },
         });
@@ -276,7 +285,9 @@ describe('parse', () => {
 
     describe('compass points', () => {
       const ref = (source: string) => {
-        const [target] = parseFragment(`${source} -- b;`, 'Edge').targets;
+        const [target] = parse(`${source} -- b;`, {
+          as: 'Edge',
+        }).targets;
         if (target.type !== 'NodeRef') {
           throw new TypeError(`expected a NodeRef, got ${target.type}`);
         }
@@ -325,17 +336,16 @@ describe('parse', () => {
 
     // The full shape: the ports of the nodes in a group are not kept.
     test('grouped ported edge targets', () => {
-      const result = parseFragment(
-        '{a1:p1, a2:p2:w} -> {b1:e, b2:p3};',
-        'Edge',
-      );
+      const result = parse('{a1:p1, a2:p2:w} -> {b1:e, b2:p3};', {
+        as: 'Edge',
+      });
       expect(result).toMatchSnapshot();
     });
   });
 
   describe('subgraph', () => {
     test('named subgraph', () => {
-      const result = parseFragment('subgraph hoge {}', 'Subgraph');
+      const result = parse('subgraph hoge {}', { as: 'Subgraph' });
       expect(result).toMatchObject({
         type: 'Subgraph',
         id: literal('hoge'),
@@ -347,7 +357,7 @@ describe('parse', () => {
       ['anonymous subgraph', 'subgraph {}'],
       ['no keyword anonymous', '{}'],
     ])('%s', (_, dot) => {
-      const result = parseFragment(dot, 'Subgraph');
+      const result = parse(dot, { as: 'Subgraph' });
       expect(result).toMatchObject({ type: 'Subgraph', children: [] });
       expect(result.id).toBeUndefined();
     });
@@ -376,7 +386,7 @@ describe('parse', () => {
         { directed: false, strict: true, id: literal('test') },
       ],
     ])('%s', (dot, expected) => {
-      const result = parseFragment(dot, 'Graph');
+      const result = parse(dot, { as: 'Graph' });
       expect(result).toMatchObject({
         type: 'Graph',
         children: [],
@@ -385,7 +395,7 @@ describe('parse', () => {
     });
 
     test('anonymous digraph', () => {
-      const result = parseFragment('digraph {}', 'Graph');
+      const result = parse('digraph {}', { as: 'Graph' });
       expect(result).toMatchObject({
         type: 'Graph',
         directed: true,
@@ -412,7 +422,7 @@ describe('parse', () => {
         ['digraph has to use "->"', 'digraph {\n  a -- b;\n}', '--'],
         ['graph has to use "--"', 'graph {\n  a -> b;\n}', '->'],
       ])('%s, and the error points at the operator', (_, source, op) => {
-        expect(() => parseFragment(source, 'Graph')).toThrow(
+        expect(() => parse(source, { as: 'Graph' })).toThrow(
           expect.objectContaining({
             name: 'DotSyntaxError',
             code: 'TSG_ERR_DOT_SYNTAX',
@@ -425,7 +435,7 @@ describe('parse', () => {
 
   describe('node', () => {
     test('simple node', () => {
-      const result = parseFragment('test;', 'Node');
+      const result = parse('test;', { as: 'Node' });
       expect(result).toMatchObject({
         type: 'Node',
         id: literal('test'),
@@ -434,7 +444,7 @@ describe('parse', () => {
     });
 
     test('node with attributes', () => {
-      const result = parseFragment(
+      const result = parse(
         `
           test [
             style=filled;
@@ -442,7 +452,7 @@ describe('parse', () => {
             label = "example #1";
           ];
         `,
-        'Node',
+        { as: 'Node' },
       );
       expect(result).toMatchObject({
         type: 'Node',
@@ -474,7 +484,7 @@ describe('parse', () => {
   describe('cluster_statements', () => {
     // The full shape of each comment kind, and of how comments are merged.
     test('comments', () => {
-      const result = parseFragment(
+      const result = parse(
         `
         // comment1
 
@@ -487,19 +497,19 @@ describe('parse', () => {
         # comment4
         /** comment 5*/
         `,
-        'ClusterStatements',
+        { as: 'ClusterStatements' },
       );
       expect(result).toMatchSnapshot();
     });
 
     // issue #1625
     test('block comments keep asterisks inside their text', () => {
-      const [comment] = parseFragment(
+      const [comment] = parse(
         `/**
           * a*b, 2 * 3
           * **bold**
           */`,
-        'ClusterStatements',
+        { as: 'ClusterStatements' },
       );
       expect(comment).toMatchObject({
         type: 'Comment',
@@ -558,6 +568,20 @@ describe('parse', () => {
           },
         }),
       );
+    });
+  });
+
+  describe('the deprecated startRule', () => {
+    test('still picks the rule', () => {
+      expect(parse('a -> b;', { startRule: 'Edge' })).toStrictEqual(
+        parse('a -> b;', { as: 'Edge' }),
+      );
+    });
+
+    test('loses to as', () => {
+      expect(parse('a;', { as: 'Node', startRule: 'Edge' })).toMatchObject({
+        type: 'Node',
+      });
     });
   });
 });

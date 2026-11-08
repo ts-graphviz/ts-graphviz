@@ -286,7 +286,7 @@ graph H { b }
     );
   });
 
-  test('a model written for 3.x has its comment as a leading comment', () => {
+  test('a model without comments has its comment as a leading comment', () => {
     const none = {
       getAttribute: () => undefined,
       hasAttribute: () => false,

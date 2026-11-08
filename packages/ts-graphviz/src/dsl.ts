@@ -109,11 +109,14 @@ type DSLNodeRef = ReadonlyNodeDSL | ForwardRefNode;
 export interface ReadonlyNodeDSL extends ModelView<ReadonlyNodeModel> {
   readonly $$type: 'Node';
   /**
-   * The node's name (its ID in DOT). A model written for 3.x has none; read
-   * `modelOf(target).id` there.
+   * The node's name (its ID in DOT). On a model without
+   * it, read `modelOf(target).id`.
    */
   readonly nodeId?: string;
-  /** The comments attached to the node (none on a model written for 3.x). */
+  /**
+   * The comments attached to the node; without them, the model's `comment`
+   * is its one comment.
+   */
   readonly comments?: ReadonlyArray<CommentModel>;
   /** The value of an attribute, or undefined if it has none. */
   getAttribute(name: string): DotValue | undefined;
@@ -180,7 +183,7 @@ export interface AttributesDSLMembers<K extends AttributeKey> {
 
 /**
  * The members of the models that the DSL leaves out: those deprecated in
- * v4 (the attributes under 3.x's names, the separate attribute containers,
+ * v4 (the old attribute methods, the separate attribute containers,
  * the names that are also attribute names). They stay on the model
  * (`modelOf(x)`) until v5.
  */

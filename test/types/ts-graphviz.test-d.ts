@@ -145,13 +145,13 @@ describe('fromDot / fromDotAll / toDot', () => {
   it('type the model by the rule parsed', () => {
     expectTypeOf(fromDot('digraph {}')).toEqualTypeOf<RootGraphModel>();
     expectTypeOf(
-      fromDot('a', { parse: { startRule: 'Node' } }),
+      fromDot('a', { parse: { as: 'Node' } }),
     ).toEqualTypeOf<NodeModel>();
     expectTypeOf(
-      fromDot('a -> b', { parse: { startRule: 'Edge' } }),
+      fromDot('a -> b', { parse: { as: 'Edge' } }),
     ).toEqualTypeOf<EdgeModel>();
     expectTypeOf(
-      fromDot('subgraph {}', { parse: { startRule: 'Subgraph' } }),
+      fromDot('subgraph {}', { parse: { as: 'Subgraph' } }),
     ).toEqualTypeOf<SubgraphModel>();
     expectTypeOf(fromDotAll('graph {} graph {}')).toEqualTypeOf<
       RootGraphModel[]
