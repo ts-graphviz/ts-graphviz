@@ -5,10 +5,11 @@ import type {
   EdgeTargetLikeTuple,
   ForwardRefNode,
   GraphBaseModel,
+  RootGraphConstructor,
   RootGraphModel,
 } from '@ts-graphviz/common';
 import fc from 'fast-check';
-import { Digraph, Graph, OrderedDigraph, OrderedGraph } from 'ts-graphviz';
+import { Digraph, Graph, LegacyDigraph, LegacyGraph } from 'ts-graphviz';
 
 /**
  * Strings that stress the DOT printer and parser: quotes, backslashes, DOT
@@ -153,10 +154,10 @@ type DefaultsKind = keyof DefaultsSpec;
  * - `attribute`: `g.set(...)` with `attributes[index]`;
  * - `defaults`: `defaults[kind]` as a default statement;
  * - `more defaults`: another default statement of that kind (kept in place
- *   by the classes of `orderedModels`, merged by the default classes);
- * - `node`: `g.node(id)` with the node's attributes (a node already
- *   mentioned is mentioned again);
- * - `mention`: `g.node(id)` again for a node of the graph, with more
+ *   by the default classes, merged by the deprecated `legacyModels`);
+ * - `node`: the node with that id (`getNode(id) ?? createNode(id)`) with
+ *   the node's attributes (a node already mentioned is mentioned again);
+ * - `mention`: that node again for a node of the graph, with more
  *   attributes, before or after its own `node` step;
  * - `subgraph` / `edge`: `subgraphs[index]` / `edges[index]`.
  */
@@ -185,7 +186,10 @@ export interface SubgraphSpec {
 export interface GraphSpec {
   directed: boolean;
   strict: boolean;
-  /** Built with the classes of `orderedModels` (default statements in place). */
+  /**
+   * Built with the default classes (default statements in place); without,
+   * with the deprecated `legacyModels` (merged).
+   */
   ordered?: boolean;
   id?: string;
   comment?: string;
@@ -430,9 +434,9 @@ function addDefaults(
   }
 }
 
-/** `g.node(id)`, then the given attributes set on the node. */
+/** The node with this id (created if there is none), then the given attributes set on it. */
 function mentionNode(g: GraphBaseModel, id: string, attrs: Attributes): void {
-  const n = g.node(id);
+  const n = g.getNode(id) ?? g.createNode(id);
   for (const [key, value] of attrs) {
     n.attributes.set(key as 'label', value);
   }
@@ -469,7 +473,10 @@ function applyCommonOp(
 }
 
 function applySubgraph(parent: GraphBaseModel, spec: SubgraphSpec): void {
-  const s = parent.subgraph(spec.id as string);
+  const s =
+    spec.id === undefined
+      ? parent.createSubgraph()
+      : (parent.getSubgraph(spec.id) ?? parent.createSubgraph(spec.id));
   for (const op of spec.ops ?? fixedOps(spec)) {
     applyCommonOp(s, spec, op);
   }
@@ -480,13 +487,14 @@ function applySubgraph(parent: GraphBaseModel, spec: SubgraphSpec): void {
  * taking its steps in order.
  */
 export function buildGraph(spec: GraphSpec): RootGraphModel {
-  const Class = spec.ordered
+  // The classes are generic, so a union of them is not constructable.
+  const Class: RootGraphConstructor = spec.ordered
     ? spec.directed
-      ? OrderedDigraph
-      : OrderedGraph
-    : spec.directed
       ? Digraph
-      : Graph;
+      : Graph
+    : spec.directed
+      ? LegacyDigraph
+      : LegacyGraph;
   const g: RootGraphModel = new Class(spec.id, spec.strict);
   // A plain string target is split on `:` by the model API, so references are
   // passed as objects to keep ids that contain a colon intact.
@@ -505,7 +513,7 @@ export function buildGraph(spec: GraphSpec): RootGraphModel {
         break;
       case 'edge': {
         const edge = spec.edges[op.index];
-        const e = g.edge(edge.targets.map(target) as EdgeTargetLikeTuple);
+        const e = g.createEdge(edge.targets.map(target) as EdgeTargetLikeTuple);
         for (const [key, value] of edge.attributes) {
           e.attributes.set(key as 'label', value);
         }

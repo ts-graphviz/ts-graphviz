@@ -96,6 +96,30 @@ const G = digraph('G', (g) => {
 - **要素の追加**：コンテキスト内で `g.node` と `g.edge` を使用してノードとエッジを追加します。
 - **可読性**：構造がグラフの論理構造を反映しており、読みやすくなっています。
 
+ファクトリ関数が返すのは、グラフの **DOT DSL** です。DOT と同じように読めます。
+
+- **文**：`node`、`edge`、`subgraph`、`graph` は、同じ名前の DOT の文にあたるメソッドです。`g.node({ ... })`、`g.edge({ ... })`、`g.graph({ ... })` は既定の属性の文（`node [...]` など）です。
+- **属性**：属性は、その名前のままのプロパティです。`undefined` を代入するか `delete` すると消えます。
+- **モデル自身のメンバー**には `$` を付けます。`a.$id` はノードの名前（`a.id` は Graphviz の `id` 属性）です。ほかに `g.$nodes`、`g.$getNode('A')`、`a.$comment` などがあります。
+- **DSL から得られるモデルはすべて DSL です。** `modelOf()` でモデルに戻し、`dsl()` で（`fromDot` が返したものなどの）モデルを DSL にします。`toDot` とアダプターはどちらも受け取ります。
+
+```typescript
+import { digraph, modelOf, toDot } from 'ts-graphviz';
+
+const G = digraph('G', (g) => {
+  g.rankdir = 'LR'; // rankdir = "LR";
+  g.node({ shape: 'box' }); // node [shape = "box";];
+  const a = g.node('A');
+  a.label = 'Start'; // "A" [label = "Start";];
+  a.id = 'svg-a'; // the Graphviz id attribute
+  console.log(a.$id); // 'A': the node's name
+  g.edge([a, 'B']); // "A" -> "B";
+});
+
+toDot(G); // the DSL or its model
+modelOf(G); // the RootGraphModel
+```
+
 ### 命令的 API
 
 命令的 API は、グラフ要素の作成と操作に対して明示的な制御を提供します。オブジェクト指向のメソッドを使用して、ステップバイステップでグラフを構築します。

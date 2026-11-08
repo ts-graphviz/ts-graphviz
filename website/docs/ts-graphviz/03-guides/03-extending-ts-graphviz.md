@@ -135,7 +135,7 @@ digraph((g) => {
 
 `createModelsContext`, `withContext`, `createModelFactories`, and `fromDot` / `fromDotAll` with `convert.models` infer the types from the classes given; a class left out keeps the base type, carrying the same context into subgraphs. A custom root or subgraph class that should itself return the custom types extends `RootGraph<M>` / `Subgraph<M>` with `M` describing them (`ModelTypes`).
 
-### Ordered default attribute statements
+### Default attribute statements in place
 
 In DOT, a default attribute statement applies only to what follows it:
 
@@ -148,10 +148,10 @@ digraph {
 }
 ```
 
-The default model classes keep one set of defaults per graph (`attributes.node`, `attributes.edge`, `attributes.graph`), which `toDot` writes first, so the last values win for every node. To keep the statements where they are, use the classes of `orderedModels` (`OrderedGraph`, `OrderedDigraph`, `OrderedSubgraph`):
+The model classes keep each default attribute statement where it was written, so a graph read with `fromDot`, or built by hand, renders as DOT says. `addAttributeList(kind, attributes)` adds one and returns its list, which you can keep to change those defaults later (the DSL's `g.node({ ... })` returns its DSL):
 
 ```typescript
-import { fromDot, OrderedDigraph, orderedModels, toDot } from 'ts-graphviz';
+import { Digraph, fromDot, toDot } from 'ts-graphviz';
 
 const source = `digraph {
   node [color=red];
@@ -160,15 +160,17 @@ const source = `digraph {
   b;
 }`;
 
-const g = fromDot(source, { convert: { models: orderedModels } });
+const g = fromDot(source); // a red, b blue
 
-const h = new OrderedDigraph();
-h.node('a');
-h.addAttributeList('Node', { color: 'blue' }); // applies to what follows
-h.node('b');
+const h = new Digraph();
+h.createNode('a');
+const defaults = h.addAttributeList('Node', { color: 'blue' }); // applies to what follows
+h.createNode('b');
+defaults.setAttribute('color', 'green');
+console.log(toDot(h));
 ```
 
-`addAttributeList(kind, attributes)` exists on every graph model: the default classes merge it into `attributes`, the ordered classes put it into `statements` once something precedes it. Graphs keep nodes, edges and subgraphs in the order they were added either way.
+The classes of 3.x kept one set of defaults per graph (`attributes.node`, `attributes.edge`, `attributes.graph`), written first, so the last values won for every node. They are kept, deprecated until v5, as `legacyModels` (`LegacyGraph`, `LegacyDigraph`, `LegacySubgraph`), and `ts-graphviz/legacy` is the same API with them: `fromDot(source, { convert: { models: legacyModels } })`, or `import { digraph } from 'ts-graphviz/legacy'`. `attributes` is deprecated too: write a default attribute statement instead.
 
 ## Extending the Type System
 
@@ -234,7 +236,7 @@ declare module '@ts-graphviz/common' {
 console.log(
   toDot(
     digraph((g) => {
-      g.set(_.hoge, 'fuga');
+      g[_.hoge] = 'fuga';
     }),
   ),
 );

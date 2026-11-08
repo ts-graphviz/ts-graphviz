@@ -194,7 +194,7 @@ export declare class FromModelConverter {
   #private;
   private options;
   constructor(options?: ConvertFromModelOptions);
-  convert<T extends AnyReadonlyDotObjectModel>(model: T): ModelToAST<T>;
+  convert<T extends AnyReadonlyDotObjectModel | ModelView>(model: T): ModelToAST<ModelOf<T>>;
 }
 
 export interface GraphASTNode extends ASTBaseParentNode<ClusterStatementASTNode>, GraphASTProperties {
@@ -312,7 +312,7 @@ export declare const createElement: CreateElement;
 
 export declare function createElementFactory(options?: Partial<Pick<BuilderOptions, "maxASTNodes">>): CreateElement;
 
-export declare function fromModel<T extends AnyReadonlyDotObjectModel>(model: T, options?: ConvertFromModelOptions): ModelToAST<T>;
+export declare function fromModel<T extends AnyReadonlyDotObjectModel | ModelView>(model: T, options?: ConvertFromModelOptions): ModelToAST<ModelOf<T>>;
 
 export declare function parse(input: string): DotASTNode;
 export declare function parse(input: string, options?: ParseOptions<"Dot">): DotASTNode;

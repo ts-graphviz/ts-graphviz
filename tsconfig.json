@@ -14,6 +14,9 @@
       "ts-graphviz/ast": [
         "./packages/ts-graphviz/src/ast.js"
       ],
+      "ts-graphviz/legacy": [
+        "./packages/ts-graphviz/src/legacy.js"
+      ],
       "@ts-graphviz/core": [
         "./packages/core/src/core.js"
       ],

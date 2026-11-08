@@ -75,8 +75,8 @@ function PackageLabel({
 }
 
 export default digraph('dependency_graph', (g) => {
-  g.set('newrank', true);
-  g.set('rankdir', 'LR');
+  g.newrank = true;
+  g.rankdir = 'LR';
 
   g.node({ shape: 'none' });
   g.edge({ dir: 'back' });

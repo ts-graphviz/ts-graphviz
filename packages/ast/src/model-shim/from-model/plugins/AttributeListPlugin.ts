@@ -1,6 +1,6 @@
 import type { ReadonlyAttributeListModel } from '@ts-graphviz/common';
 import type { ConvertFromModelPlugin } from '../types.js';
-import { convertAttribute } from './utils/index.js';
+import { convertAttributes } from './utils/index.js';
 
 export const AttributeListPlugin: ConvertFromModelPlugin<ReadonlyAttributeListModel> =
   {
@@ -14,9 +14,7 @@ export const AttributeListPlugin: ConvertFromModelPlugin<ReadonlyAttributeListMo
         {
           kind: model.$$kind,
         },
-        model.values.map(([key, value]) =>
-          convertAttribute(createElement, key, value),
-        ),
+        convertAttributes(createElement, model),
       );
     },
   };

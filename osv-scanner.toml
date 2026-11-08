@@ -1,0 +1,50 @@
+# Known vulnerabilities in development dependencies that cannot be fixed on
+# this branch without a major upgrade of a third-party dependency, or that
+# have no fixed version. None of them is in a runtime dependency of a
+# published package (those depend only on each other and on
+# react-reconciler). Each entry expires, so it is reviewed.
+# Tracked in https://github.com/ts-graphviz/ts-graphviz/issues/1920
+
+# tinypool 1 (Docusaurus 3, website build only): fixed in tinypool 2 (2.1.1
+# and 2.1.2), which Docusaurus does not take yet (it asks for ^1).
+[[IgnoredVulns]]
+id = "GHSA-5gmw-xhrv-c9v3"
+ignoreUntil = 2027-01-31
+reason = "Website build only (Docusaurus); it needs a polluted Object.prototype in the build process. Fix requires tinypool 2.1.1 in Docusaurus."
+
+[[IgnoredVulns]]
+id = "GHSA-85c8-ppgw-ccpr"
+ignoreUntil = 2027-01-31
+reason = "Website build only (Docusaurus); it needs a polluted Object.prototype in the build process. Fix requires tinypool 2.1.2 in Docusaurus."
+
+# uuid 8 (sockjs, through webpack-dev-server for the website's dev server):
+# the fix is in uuid 11.1.1, a major upgrade of their dependency; the affected
+# functions are not called with a buffer here.
+[[IgnoredVulns]]
+id = "GHSA-w5hq-g745-h8pq"
+ignoreUntil = 2027-01-31
+reason = "Website dev server only; the affected v3/v5/v6 buffer API is not used by this repository. Fix requires uuid 11.1.1 in a third-party dependency."
+
+# deepmerge (Docusaurus through @svgr, website build only): no fixed version
+# is published.
+[[IgnoredVulns]]
+id = "GHSA-gcqx-w48m-w2h4"
+ignoreUntil = 2027-01-31
+reason = "Website build only, on configuration from this repository; no fixed version exists."
+
+# glob 13 (the e2e scripts, and linkinator for the website's link check):
+# fixed only in glob 14.0.2, a major upgrade. The flaw is that a traversal can
+# continue after its AbortSignal fires; nothing here passes a signal, and the
+# patterns come from this repository.
+[[IgnoredVulns]]
+id = "GHSA-3g3m-2fjr-6pw4"
+ignoreUntil = 2027-01-31
+reason = "e2e and website tooling only; no AbortSignal is passed and the patterns are this repository's. Fix requires glob 14.0.2."
+
+# minimatch 10 (glob, and Verdaccio for the e2e registry): fixed only in
+# minimatch 11.0.1, a major upgrade. The cost depends on the pattern, and the
+# patterns come from this repository and its tooling.
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+ignoreUntil = 2027-01-31
+reason = "e2e and website tooling only, on patterns from this repository. Fix requires minimatch 11.0.1."

@@ -103,12 +103,13 @@ declare const someModel: unknown;
 
 // Type-safe model checking
 if (isNodeModel(someModel)) {
-  // TypeScript knows someModel is NodeModel
+  // TypeScript knows someModel is a ReadonlyNodeModel: the check looks at
+  // $$type and a few fields, so it cannot tell a writable model
   console.log(someModel.id);
 }
 
 if (isEdgeModel(someModel)) {
-  // TypeScript knows someModel is EdgeModel
+  // TypeScript knows someModel is a ReadonlyEdgeModel
   console.log(someModel.targets);
 }
 ```

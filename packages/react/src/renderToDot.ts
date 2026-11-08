@@ -1,5 +1,11 @@
 import type { ReactElement } from 'react';
-import { type AnyReadonlyDotObjectModel, ownOptions, toDot } from 'ts-graphviz';
+import {
+  type AnyReadonlyDotObjectModel,
+  MODEL,
+  modelOf,
+  ownOptions,
+  toDot,
+} from 'ts-graphviz';
 
 import {
   type CreateRootOptions,
@@ -19,7 +25,7 @@ export interface RenderToDotOptions<
    * Container graph to render into. When provided, the element will be rendered
    * as children of this container and the container's DOT will be returned.
    */
-  container?: Container;
+  container?: Container | { readonly [MODEL]: Container };
 }
 
 /**
@@ -74,7 +80,8 @@ export async function renderToDot<
   options: RenderToDotOptions<Container> = {},
 ): Promise<string> {
   // Own properties only: an inherited one is never an option (#1757).
-  const { container, signal, ...rootOptions } = ownOptions(options);
+  const { container: given, signal, ...rootOptions } = ownOptions(options);
+  const container = modelOf(given) as Container | undefined;
 
   if (container) {
     // Container mode: render elements into container and return container's DOT

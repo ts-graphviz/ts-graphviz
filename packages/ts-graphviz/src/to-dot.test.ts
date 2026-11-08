@@ -7,7 +7,7 @@ describe('toDot of a model that contains itself', { tags: ['SM-5'] }, () => {
     // An uncoded RangeError (call stack exhausted) before.
     const g = digraph((g) => {
       const s = g.subgraph('s');
-      s.addSubgraph(s);
+      s.$addSubgraph(s);
     });
     expect(() => toDot(g)).toThrow(
       expect.objectContaining({

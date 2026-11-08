@@ -7,6 +7,7 @@ import {
   digraph,
   fromDot,
   Graph,
+  modelOf,
   toDot,
 } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
@@ -33,7 +34,7 @@ describe('Dot model', () => {
     it('maps a Dot model to a Dot AST and a root graph to a Graph AST', () => {
       const g = digraph('g');
       expect(fromModel(g).type).toBe('Graph');
-      expect(fromModel(new Dot([g])).type).toBe('Dot');
+      expect(fromModel(new Dot([modelOf(g)])).type).toBe('Dot');
     });
 
     it('round-trips multiple graphs and comments', () => {
@@ -88,7 +89,7 @@ describe('Dot model', () => {
   describe('toDot', () => {
     it('still writes the comment of a root graph before the graph statement', () => {
       const g = digraph('g', (g) => {
-        g.comment = 'hello';
+        g.$comment = 'hello';
         g.node('a');
       });
       expect(toDot(g)).toMatchInlineSnapshot(`

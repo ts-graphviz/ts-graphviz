@@ -21,7 +21,7 @@ import {
   isForwardRefNode,
   isRootGraphModel,
 } from '@ts-graphviz/common';
-import { Digraph, Node, OrderedDigraph } from '@ts-graphviz/core';
+import { Digraph, LegacyDigraph, Node } from '@ts-graphviz/core';
 import { renderHTMLLike } from '@ts-graphviz/react';
 import { createElement } from 'react';
 import { fromDot, fromDotAll, toDot } from 'ts-graphviz';
@@ -175,7 +175,7 @@ describe('the packages read no inherited property', { tags: ['SM-8'] }, () => {
   });
 
   it('when writing models', () => {
-    const graphs = [new Digraph('G'), new OrderedDigraph('G')];
+    const graphs = [new Digraph('G'), new LegacyDigraph('G')];
     for (const g of graphs) {
       const a = g.createNode('a', { label: escString('\\N') });
       g.createNode('b', { label: htmlLike('<b>b</b>') });

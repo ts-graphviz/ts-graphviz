@@ -14,6 +14,7 @@
  * @module
  */
 import type { DotValue } from '../values.js';
+import type { ModelView } from './model-view.js';
 import type {
   AttributeListKind,
   DotObjectType,
@@ -27,11 +28,24 @@ import type {
  * @group Models
  */
 export interface ReadonlyAttributes {
-  /** The number of attributes held. */
+  /** The value of an attribute, or undefined if it has none. */
+  getAttribute(name: string): DotValue | undefined;
+  /** Whether the object has the attribute. */
+  hasAttribute(name: string): boolean;
+  /** The names of the attributes the object has, in the order they were set. */
+  getAttributeNames(): string[];
+  /**
+   * The number of attributes held.
+   * @deprecated Use `getAttributeNames().length`. Removed in v5.
+   */
   readonly size: number;
-  /** The key/value tuples of the attributes. */
+  /**
+   * The key/value tuples of the attributes.
+   * @deprecated Use {@link ReadonlyAttributes.getAttributeNames} and
+   * {@link ReadonlyAttributes.getAttribute}. Removed in v5.
+   */
   readonly values: ReadonlyArray<readonly [key: string, value: DotValue]>;
-  /** The value of the attribute `key`, or undefined if it has none. */
+  /** @deprecated Use {@link ReadonlyAttributes.getAttribute}. Removed in v5. */
   get(key: string): DotValue | undefined;
 }
 
@@ -59,12 +73,16 @@ export interface ReadonlyAttributeListModel<
  * only its id is used.
  * @group Models
  */
-export interface ReadonlyNodeModel {
+export interface ReadonlyNodeModel extends ReadonlyAttributes {
   readonly $$type: 'Node';
   /** ID of the node. */
   readonly id: string;
   /** Comments to include when outputting with toDot. */
   readonly comment?: string;
+  /**
+   * The object itself, as the container of its attributes.
+   * @deprecated Read the attributes on the object itself. Removed in v5.
+   */
   readonly attributes: ReadonlyAttributes;
 }
 
@@ -74,10 +92,14 @@ export interface ReadonlyNodeModel {
  * Every {@link EdgeModel} is one.
  * @group Models
  */
-export interface ReadonlyEdgeModel {
+export interface ReadonlyEdgeModel extends ReadonlyAttributes {
   readonly $$type: 'Edge';
   /** Comments to include when outputting with toDot. */
   readonly comment?: string;
+  /**
+   * The object itself, as the container of its attributes.
+   * @deprecated Read the attributes on the object itself. Removed in v5.
+   */
   readonly attributes: ReadonlyAttributes;
   readonly targets: ReadonlyEdgeTargetTuple;
 }
@@ -194,7 +216,9 @@ export type AnyReadonlyDotObjectModel =
  *   few fields;
  * - another object type (such as `DotObjectModel`, or a type with fields
  *   of your own): its intersection with the read-only model;
- * - a primitive type: `never`.
+ * - a primitive type, or an object standing for a model ({@link ModelView},
+ *   such as the DOT DSL of `ts-graphviz`), which the guards do not pass:
+ *   `never`.
  *
  * Applied to each member of a union.
  * @group Models
@@ -202,11 +226,13 @@ export type AnyReadonlyDotObjectModel =
 export type NarrowedModel<T, K extends DotObjectType> = unknown extends T
   ? T & ReadonlyModelOf<K>
   : T extends unknown
-    ? T extends AnyReadonlyDotObjectModel
-      ? Extract<T, { readonly $$type: K }>
-      : T extends Primitive
-        ? never
-        : T & ReadonlyModelOf<K>
+    ? T extends ModelView
+      ? never
+      : T extends AnyReadonlyDotObjectModel
+        ? Extract<T, { readonly $$type: K }>
+        : T extends Primitive
+          ? never
+          : T & ReadonlyModelOf<K>
     : never;
 
 /** The values that are not objects: a guard never passes them. */

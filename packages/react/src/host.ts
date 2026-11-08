@@ -1,4 +1,7 @@
-import type { ReadonlyEdgeTargetLikeTuple } from '@ts-graphviz/common';
+import type {
+  AttributeListModel,
+  ReadonlyEdgeTargetLikeTuple,
+} from '@ts-graphviz/common';
 import type { ReactElement } from 'react';
 import type {
   AnyDotObjectModel,
@@ -145,23 +148,61 @@ export function createHostInstance(
 }
 
 function applyProps(model: NodeModel | EdgeModel, props: ComponentProps): void {
-  model.attributes.clear();
-  model.attributes.apply(attributesOf(props));
+  model.removeAttributes();
+  model.setAttributes(attributesOf(props));
   model.comment = props.comment;
+}
+
+/** The default attribute lists a graph element's `node`, `edge` and `graph` props fill. */
+interface DefaultLists {
+  node: AttributeListModel;
+  edge: AttributeListModel;
+  graph: AttributeListModel;
+}
+
+const defaultLists = new WeakMap<AnyGraphContainer, DefaultLists>();
+
+/**
+ * The graph's leading default attribute lists, which the props fill: they
+ * apply to every statement in the graph, whatever the models context. The
+ * model is new when its element is created, so they are added then; a class
+ * whose constructor already adds statements gets its leading lists as they
+ * are (adding them after those statements would not lead the graph).
+ */
+function defaultListsOf(model: AnyGraphContainer): DefaultLists {
+  let lists = defaultLists.get(model);
+  if (lists === undefined) {
+    lists =
+      model.statements.length === 0
+        ? {
+            node: model.addAttributeList('Node', {}),
+            edge: model.addAttributeList('Edge', {}),
+            graph: model.addAttributeList('Graph', {}),
+          }
+        : // The leading lists themselves (deprecated for users, not here).
+          {
+            node: model.attributes.node,
+            edge: model.attributes.edge,
+            graph: model.attributes.graph,
+          };
+    defaultLists.set(model, lists);
+  }
+  return lists;
 }
 
 function applyGraphProps(
   model: AnyGraphContainer,
   props: ComponentProps,
 ): void {
-  model.clear();
-  model.apply(attributesOf(props));
-  model.attributes.node.clear();
-  model.attributes.node.apply(props.node ?? {});
-  model.attributes.edge.clear();
-  model.attributes.edge.apply(props.edge ?? {});
-  model.attributes.graph.clear();
-  model.attributes.graph.apply(props.graph ?? {});
+  model.removeAttributes();
+  model.setAttributes(attributesOf(props));
+  const lists = defaultListsOf(model);
+  lists.node.removeAttributes();
+  lists.node.setAttributes(props.node ?? {});
+  lists.edge.removeAttributes();
+  lists.edge.setAttributes(props.edge ?? {});
+  lists.graph.removeAttributes();
+  lists.graph.setAttributes(props.graph ?? {});
   model.comment = props.comment;
 }
 
