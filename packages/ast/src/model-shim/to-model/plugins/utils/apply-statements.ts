@@ -102,16 +102,21 @@ export function applyStatements(
         commentHolder.reset();
         break;
       case 'Node': {
-        const node = context.convert(stmt);
         // A node mentioned again adds to its attributes, as in Graphviz
-        // (`a [color=red]; a [shape=box]` is one node with both).
-        const existing = graph.getNode(node.id);
+        // (`a [color=red]; a [shape=box]` is one node with both). They are
+        // set on it once, through its own setAttribute.
+        const existing = graph.getNode(idFromLiteral(stmt.id));
         if (existing) {
-          for (const name of node.getAttributeNames()) {
-            existing.setAttribute(name, node.getAttribute(name) as never);
-          }
+          existing.setAttributes(
+            collectAttributes(
+              stmt.children.filter<AttributeASTNode>(
+                (v): v is AttributeASTNode => v.type === 'Attribute',
+              ),
+            ),
+          );
           commentHolder.apply(existing, stmt.location);
         } else {
+          const node = context.convert(stmt);
           commentHolder.apply(node, stmt.location);
           graph.addNode(node);
         }

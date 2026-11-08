@@ -26,7 +26,10 @@ export abstract class AttributesBase<
   /**
    * @param attributes - Attributes to set. A subclass with fields of its own
    * passes none here and sets them once those fields are set, so that an
-   * overridden `setAttribute` sees a whole object.
+   * overridden `setAttribute` sees a whole object. (A class further down,
+   * whose `setAttribute` uses fields of its own, sets the constructor's
+   * attributes after `super()` itself, as JavaScript runs a base
+   * constructor before the subclass's fields exist.)
    */
   constructor(attributes?: AttributesObject<T, E>) {
     if (attributes !== undefined) {
@@ -94,7 +97,8 @@ export abstract class AttributesBase<
   }
 
   public removeAttributes(): void {
-    this.#attrs.clear();
+    // Through `removeAttribute`, so a class that overrides it sees each.
+    for (const name of this.getAttributeNames()) this.removeAttribute(name);
   }
 
   // The names that follow `Map`, deprecated until v5. They go through the
@@ -102,7 +106,7 @@ export abstract class AttributesBase<
 
   /** @deprecated Use `getAttributeNames().length`. Removed in v5. */
   get size(): number {
-    return this.#attrs.size;
+    return this.getAttributeNames().length;
   }
 
   /**

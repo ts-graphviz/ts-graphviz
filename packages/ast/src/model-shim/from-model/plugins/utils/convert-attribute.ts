@@ -52,6 +52,19 @@ export function convertAttributes(
   createElement: CreateElement,
   model: ReadonlyAttributes,
 ): AttributeASTNode[] {
+  // A model made by hand in the 3.x shape (attributes apart, `values`)
+  // still converts: the guards that admit it look only at `$$type`.
+  if (typeof model.getAttributeNames !== 'function') {
+    const legacy = model as unknown as {
+      readonly values?: ReadonlyArray<readonly [string, DotValue]>;
+      readonly attributes?: {
+        readonly values?: ReadonlyArray<readonly [string, DotValue]>;
+      };
+    };
+    return (legacy.attributes?.values ?? legacy.values ?? []).map(
+      ([key, value]) => convertAttribute(createElement, key, value),
+    );
+  }
   return model.getAttributeNames().flatMap((name) => {
     const value = model.getAttribute(name);
     return value === undefined

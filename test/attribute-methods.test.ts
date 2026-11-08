@@ -195,3 +195,32 @@ describe('the DSL of an edge, and the members as values', () => {
     });
   });
 });
+
+describe('the converters and custom classes', () => {
+  it('set a node mentioned again once, through its setAttribute', () => {
+    const seen: string[] = [];
+    class Upper extends Node {
+      override setAttribute(name: string, value: unknown): void {
+        seen.push(name);
+        super.setAttribute(
+          name as 'label',
+          (typeof value === 'string' ? `${value}!` : value) as string,
+        );
+      }
+    }
+    const g = fromDot('digraph { a [label=A]; a [label=B]; }', {
+      convert: { models: { Node: Upper } },
+    });
+    expect(g.getNode('a')?.getAttribute('label')).toBe('B!');
+    expect(seen).toEqual(['label', 'label']);
+  });
+
+  it('convert a node made by hand in the 3.x shape', () => {
+    const node = {
+      $$type: 'Node' as const,
+      id: 'a',
+      attributes: { values: [['label', 'A']] as const },
+    };
+    expect(toDot(node as never)).toBe('"a" [\n  label = "A";\n];');
+  });
+});
