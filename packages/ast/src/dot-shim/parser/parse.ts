@@ -1,4 +1,4 @@
-import { ownOptions, warnDeprecated, withCode } from '@ts-graphviz/common';
+import { ownOptions, withCode } from '@ts-graphviz/common';
 import type { Builder } from '../../builder/builder.js';
 import { ASTNodeCountExceededError } from '../../builder/errors.js';
 import { depthLimit, sizeLimit } from '../../limit.js';
@@ -90,87 +90,11 @@ export interface CommonParseOptions {
 }
 
 /**
- * ParseOptions interface is used to provide additional information to the parser while parsing a rule.
- * @template T The type of the rule to be parsed.
+ * What {@link parse} returns for each grammar {@link Rule}. For a union of
+ * rules, `ParseResultByRule[R]` is the union of their results.
  * @group Convert DOT to AST
  */
-export interface ParseOptions<T extends Rule> extends CommonParseOptions {
-  /**
-   * The grammar rule to parse the input with.
-   *
-   * @deprecated `parse` reads a whole DOT source; read a fragment (a
-   * graph, a statement, an attribute list, ...) with {@link parseFragment}
-   * instead. `startRule` keeps working in 4.x and is removed in 5.0.
-   */
-  startRule?: T;
-}
-
-/**
- * Parse a DOT source (any number of graphs and comments) into a
- * {@link DotASTNode}.
- *
- * To read a fragment of a DOT source (a graph, a node, an edge, ...), use
- * {@link parseFragment}; the `startRule` option that did this here is
- * deprecated.
- *
- * @throws {@link DotSyntaxError}
- * @group Convert DOT to AST
- */
-export function parse(input: string): DotASTNode;
-export function parse(input: string, options?: ParseOptions<'Dot'>): DotASTNode;
-export function parse(
-  input: string,
-  options?: ParseOptions<'Graph'>,
-): GraphASTNode;
-export function parse(
-  input: string,
-  options?: ParseOptions<'Node'>,
-): NodeASTNode;
-export function parse(
-  input: string,
-  options?: ParseOptions<'Edge'>,
-): EdgeASTNode;
-export function parse(
-  input: string,
-  options?: ParseOptions<'AttributeList'>,
-): AttributeListASTNode;
-export function parse(
-  input: string,
-  options?: ParseOptions<'Attribute'>,
-): AttributeASTNode;
-export function parse(
-  input: string,
-  options?: ParseOptions<'Subgraph'>,
-): SubgraphASTNode;
-export function parse(
-  input: string,
-  options?: ParseOptions<'ClusterStatements'>,
-): ClusterStatementASTNode[];
-export function parse(
-  input: string,
-  options?: ParseOptions<Rule>,
-): ASTNode | ClusterStatementASTNode[];
-export function parse(
-  input: string,
-  options?: ParseOptions<Rule>,
-): ASTNode | ClusterStatementASTNode[] {
-  const { startRule, ...common } = ownOptions(options);
-  if (startRule !== undefined) {
-    warnDeprecated(
-      'TSG_DEP_PARSE_START_RULE',
-      `parse(input, { startRule }) is deprecated and will be removed in 5.0; use parseFragment(input, '${startRule}') instead.`,
-    );
-  }
-  return parseRule(input, startRule ?? 'Dot', common);
-}
-
-/**
- * What {@link parseFragment} returns for each grammar {@link Rule}. For a
- * union of rules, `FragmentByRule[R]` is the union of their results.
- * @beta
- * @group Convert DOT to AST
- */
-export interface FragmentByRule {
+export interface ParseResultByRule {
   Dot: DotASTNode;
   Graph: GraphASTNode;
   Subgraph: SubgraphASTNode;
@@ -182,29 +106,66 @@ export interface FragmentByRule {
 }
 
 /**
- * Parse a fragment of a DOT source by grammar rule: one graph, subgraph,
- * node, edge, attribute list, attribute, or a list of statements.
- * {@link parse} reads a whole DOT source.
- *
- * This is the low-level parsing API: it is in beta, and is where the
- * lower layers of the parser (such as a streaming lexer) will be
- * exposed.
- *
- * @throws {@link DotSyntaxError}
- * @beta
+ * ParseOptions interface is used to provide additional information to the parser while parsing a rule.
+ * @template T The type of the rule to be parsed.
  * @group Convert DOT to AST
  */
-export function parseFragment<R extends Rule>(
+export interface ParseOptions<T extends Rule = Rule>
+  extends CommonParseOptions {
+  /**
+   * What to read the input as: `'Dot'` (the default) reads a whole DOT
+   * source, the others read a fragment of one (a graph, a node, an edge, a
+   * list of statements, ...). The result is the AST node of that type.
+   * @default 'Dot'
+   */
+  as?: T;
+  /**
+   * The 3.x name of {@link ParseOptions.as}; `as` wins when both are given.
+   * @deprecated Use `as`. Removed in v5.
+   */
+  startRule?: T;
+}
+
+/**
+ * Parse a DOT source into an AST. Without `as`, the input is a whole DOT
+ * source (any number of graphs and comments) and the result is a
+ * {@link DotASTNode}; with it, the input is the fragment `as` names and
+ * the result is typed by it ({@link ParseResultByRule}).
+ *
+ * @example
+ * ```ts
+ * const dot = parse('digraph { a -> b }'); // DotASTNode
+ * const edge = parse('a -> b [color=red]', { as: 'Edge' }); // EdgeASTNode
+ * ```
+ *
+ * @throws {@link DotSyntaxError}
+ * @group Convert DOT to AST
+ */
+/** @deprecated `startRule` is named `as`; removed in v5. */
+export function parse<const R extends Rule>(
   input: string,
-  rule: R,
-  options?: CommonParseOptions,
-): FragmentByRule[R];
-export function parseFragment(
+  options: CommonParseOptions & { startRule: R; as?: undefined },
+): ParseResultByRule[R];
+export function parse(
   input: string,
-  rule: Rule,
-  options?: CommonParseOptions,
+  options?: CommonParseOptions & { as?: 'Dot'; startRule?: undefined },
+): DotASTNode;
+export function parse(input: string, options?: ParseOptions<'Dot'>): DotASTNode;
+// `as` wins over `startRule`, so only `as` types the result.
+export function parse<const R extends Rule>(
+  input: string,
+  options: CommonParseOptions & { as: R; startRule?: Rule },
+): ParseResultByRule[R];
+export function parse(
+  input: string,
+  options?: ParseOptions,
+): ParseResultByRule[Rule];
+export function parse(
+  input: string,
+  options?: ParseOptions,
 ): ASTNode | ClusterStatementASTNode[] {
-  return parseRule(input, rule, options ?? {});
+  const { as, startRule, ...common } = ownOptions(options);
+  return parseRule(input, as ?? startRule ?? 'Dot', common);
 }
 
 function parseRule(

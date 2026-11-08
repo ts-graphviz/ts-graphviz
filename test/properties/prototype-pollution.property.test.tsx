@@ -1,7 +1,6 @@
 import { renderHTMLLike } from '@ts-graphviz/react';
 import fc from 'fast-check';
 import {
-  DEPRECATION_CODES,
   digraph,
   ERROR_CODES,
   fromDot,
@@ -39,6 +38,7 @@ const OPTION_NAMES = [
   'grid',
   'iterations',
   // parse / sanitize
+  'as',
   'startRule',
   'filename',
   'maxHtmlNestingDepth',
@@ -80,6 +80,7 @@ const pollutedValue = fc.oneof(
     ['/tmp/evil.ps'],
     { node: { shape: 'box' } },
     { indentSize: 9 },
+    { as: 'Node' },
     { startRule: 'Node' },
     { shapefile: '/etc/passwd' },
     Number.POSITIVE_INFINITY,
@@ -177,9 +178,8 @@ describe('a polluted Object.prototype changes nothing', {
 });
 
 describe('exported data is frozen', { tags: ['SM-8'] }, () => {
-  it('cannot change what counts as an error or deprecation code', () => {
+  it('cannot change what counts as an error code', () => {
     expect(Object.isFrozen(ERROR_CODES)).toBe(true);
-    expect(Object.isFrozen(DEPRECATION_CODES)).toBe(true);
     expect(() => (ERROR_CODES as unknown as string[]).push('X')).toThrow(
       TypeError,
     );

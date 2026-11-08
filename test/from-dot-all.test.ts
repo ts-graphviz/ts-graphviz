@@ -1,6 +1,6 @@
 import { isTsGraphvizError } from '@ts-graphviz/common';
 import { fromDot, fromDotAll } from 'ts-graphviz';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe('fromDot and fromDotAll with several graphs', () => {
   const two = 'digraph a { x } graph b { y }';
@@ -27,18 +27,8 @@ describe('fromDot and fromDotAll with several graphs', () => {
     expect(fromDotAll('// nothing')).toEqual([]);
   });
 
-  it('fromDot still reads one graph, and fragments without a deprecation report', () => {
-    const emit = vi
-      .spyOn(process, 'emitWarning')
-      .mockImplementation(() => undefined);
-    try {
-      expect(fromDot('digraph G { a }').id).toBe('G');
-      expect(
-        fromDot('a [color=red]', { parse: { startRule: 'Node' } }).id,
-      ).toBe('a');
-      expect(emit).not.toHaveBeenCalled();
-    } finally {
-      emit.mockRestore();
-    }
+  it('fromDot still reads one graph, and fragments', () => {
+    expect(fromDot('digraph G { a }').id).toBe('G');
+    expect(fromDot('a [color=red]', { parse: { as: 'Node' } }).id).toBe('a');
   });
 });
