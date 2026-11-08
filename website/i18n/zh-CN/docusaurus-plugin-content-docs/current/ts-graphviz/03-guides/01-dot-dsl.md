@@ -3,7 +3,7 @@ description: 使用 DOT DSL，像写 DOT 一样逐条语句编写图。
 ---
 # 使用 DOT DSL 编写图
 
-工厂函数 `digraph()`、`graph()` 和 `strict.*` 返回图的 **DOT DSL**。它读起来就像 DOT：DOT 语句是它的方法，属性是它的属性。会用 DOT 写图，就会用 DSL 写图。
+工厂函数 `digraph()`、`graph()`、`strict.digraph()` 和 `strict.graph()` 返回图的 **DOT DSL**。它读起来就像 DOT：DOT 语句是它的方法，属性是它的属性。会用 DOT 写图，就会用 DSL 写图。
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz';
@@ -28,7 +28,7 @@ console.log(toDot(G));
 // }
 ```
 
-如果程序需要把图当作数据来构建、读取或转换，请参阅[使用模型 API](./02-model-api.md)。
+DSL 代表图的模型，即 [DOT Object Model（DOM）](./02-model-api.md)：模型的每个成员都以原名出现在 DSL 上，与属性并列。
 
 ## 从 DOT 到 DSL
 
@@ -40,12 +40,13 @@ console.log(toDot(G));
 | `a [label = "A"];` | `g.node('a', { label: 'A' });` |
 | `a -> b -> c;` | `g.edge(['a', 'b', 'c']);` |
 | `c -> {d e};` | `g.edge(['c', ['d', 'e']]);` |
-| `a:p1:n -> a:p2:s;` | `g.edge(['a:p1:n', a.$port({ port: 'p2', compass: 's' })]);` |
+| `a:p1:n -> a:p2:s;` | `g.edge(['a:p1:n', a.port({ port: 'p2', compass: 's' })]);` |
 | `node [shape = box];` | `g.node({ shape: 'box' });` |
 | `edge [color = gray];` | `g.edge({ color: 'gray' });` |
 | `graph [fontname = Helvetica];` | `g.graph({ fontname: 'Helvetica' });` |
 | `subgraph cluster_0 { label = Group; d; e; }` | `g.subgraph('cluster_0', { label: 'Group' }, (s) => { s.node('d'); s.node('e'); });` |
 | `{ rank = same; b; c; }` | `g.subgraph({ rank: 'same' }, (s) => { s.node('b'); s.node('c'); });` |
+| `// note` | `a.addComment('note');` |
 
 合在一起：
 
@@ -58,7 +59,7 @@ const G = digraph('G', (g) => {
   g.node('b');
   g.edge([a, 'b', 'c']);
   g.edge(['c', ['d', 'e']]);
-  g.edge(['a:p1:n', a.$port({ port: 'p2', compass: 's' })]);
+  g.edge(['a:p1:n', a.port({ port: 'p2', compass: 's' })]);
   g.subgraph('cluster_0', { label: 'Group' }, (s) => {
     s.node('d');
     s.node('e');
@@ -98,9 +99,9 @@ console.log(toDot(G));
 
 属性名带有类型：编辑器会补全它们并检查取值。id 以 `cluster` 开头的子图接受簇的属性（`label`、`color` 等）。
 
-## 属性就是属性
+## 属性
 
-按属性名直接读取、写入和删除属性：
+属性就是以其名字命名的属性。赋值 `undefined` 或使用 `delete` 会删除它：
 
 ```typescript
 import { digraph } from 'ts-graphviz';
@@ -109,53 +110,107 @@ digraph((g) => {
   const a = g.node('a');
   a.label = 'A';
   a.color = 'red';
-  delete a.label; // 移除该属性
-  a.color = undefined; // 赋值 undefined 也会移除
+  delete a.label; // 删除该属性
+  a.color = undefined; // 赋值 undefined 也会删除
   console.log(a.label); // undefined
 });
 ```
 
-属性也可以用 `attribute` 常量（`a[attribute.label]`）来写；通过扩展类型添加的属性（参见[扩展 ts-graphviz](./05-extending-ts-graphviz.md)）也同样可以这样写。
-
-## `$` 规则
-
-属性使用原本的名字，因此模型自身的成员在前面加上 `$`：
-
-| DSL 写法 | 含义 |
-| --- | --- |
-| `a.$id` | 节点的名字，即 DOT 中的 id |
-| `a.id` | Graphviz 的 `id` 属性（SVG 元素的 id） |
-| `a.$comment`、`g.$nodes`、`g.$edges`、`g.$subgraphs` | 模型的成员 |
-| `g.$getNode('a')`、`g.$createNode('a')`、`a.$port('p')` | 模型的方法 |
-| `a.$$type` | 以 `$$` 开头的成员保持原名 |
+DOM 的方法同样可用，并接受任意属性名，例如保存在变量中的名字：
 
 ```typescript
 import { digraph } from 'ts-graphviz';
 
 digraph((g) => {
   const a = g.node('a');
+  a.setAttribute('label', 'A');
+  a.setAttributes({ color: 'red', shape: 'box' });
+  console.log(a.getAttribute('label')); // 'A'
+  console.log(a.hasAttribute('fontname')); // false
+  console.log(a.getAttributeNames()); // ['label', 'color', 'shape']
+  a.removeAttribute('color');
+  a.removeAttributes(); // 全部删除
+});
+```
+
+## 名字
+
+模型自身的成员在 DSL 上保持原名，并且没有与 Graphviz 属性同名的成员：
+
+| DSL 写法 | 含义 |
+| --- | --- |
+| `a.nodeId`、`g.graphId`、`s.subgraphId` | 节点、根图或子图的名字（DOT 中的 ID） |
+| `a.id`、`a.comment`、`g.size` | Graphviz 的属性 `id`、`comment` 和 `size` |
+| `g.nodes`、`g.edges`、`g.subgraphs`、`g.statements` | 图的内容（以 DSL 形式） |
+| `g.getNode('a')`、`g.createNode('a')`、`a.port('p')` | 模型的方法 |
+| `a.getAttribute('label')`、`a.addComment('note')` | DOM 的方法 |
+| `a.$$type` | 模型的种类（`'Node'`、`'Edge'` 等） |
+
+```typescript
+import { digraph } from 'ts-graphviz';
+
+digraph('G', (g) => {
+  const a = g.node('a');
   a.id = 'svg-a';
-  console.log(a.$id); // 'a'
+  console.log(a.nodeId); // 'a'
   console.log(a.id); // 'svg-a'
+  console.log(g.graphId); // 'G'
   console.log(a.$$type); // 'Node'
 });
 ```
 
-自定义类的成员遵循同样的规则：方法 `hello()` 写作 `$hello()`，名为 `$foo` 的成员写作 `$$foo`。
+只有两种情况需要在前面加 `$`：
+
+- 自定义类的成员与 Graphviz 属性同名：`weight` 是属性，因此方法 `weight()` 写作 `$weight()`；
+- 自定义类的成员与 DOT 语句同名：`node()`、`edge()`、`subgraph()` 和 `graph()` 是 DSL 的语句，因此自定义类的方法 `node()` 写作 `$node()`。
 
 ```typescript
-import { Digraph, dsl } from 'ts-graphviz';
+import { Edge, withContext } from 'ts-graphviz';
 
-class MyDigraph extends Digraph {
-  hello() {
-    return `${this.nodes.length} nodes`;
+class MyEdge extends Edge {
+  cost() {
+    return 1;
+  }
+  weight() {
+    return 2;
   }
 }
 
-const g = dsl(new MyDigraph());
-g.node('a');
-console.log(g.$hello()); // '1 nodes'
+const { digraph } = withContext({ Edge: MyEdge });
+digraph((g) => {
+  const e = g.edge(['a', 'b']);
+  console.log(e.cost()); // 1
+  console.log(e.$weight()); // 2
+  console.log(e.weight); // undefined：Graphviz 属性
+});
 ```
+
+v4 中已弃用的成员（`attributes`、模型的 `id`、模型的 `comment`、`get`、`set` 等 3.x 的属性方法）不在 DSL 的类型中。在迁移完成之前，请通过 `modelOf(x)` 读取，或在前面加 `$` 使用。
+
+## 注释
+
+`addComment` 为节点、边、子图、图或默认属性语句添加注释。默认写在语句之前；`position: 'trailing'` 写在语句之后，图或子图上的 `position: 'end'` 写在主体末尾。`kind` 为 `'Slash'`（`//`）、`'Block'`（`/* */`）或 `'Macro'`（`#`）。
+
+```typescript
+import { digraph, toDot } from 'ts-graphviz';
+
+const G = digraph((g) => {
+  const a = g.node('a');
+  a.addComment('start');
+  a.addComment('note', { position: 'trailing', kind: 'Block' });
+  a.comment = 'kept by Graphviz'; // Graphviz 的 comment 属性
+});
+
+console.log(toDot(G));
+// digraph {
+//   // start
+//   "a" [
+//     comment = "kept by Graphviz";
+//   ]; /* note */
+// }
+```
+
+`comments` 列出所有注释，`removeComment(comment)` 移除其中一条。在 DSL 上，`comment` 是 Graphviz 的属性，Graphviz 会把它写入输出；DOT 源码中的注释是 `CommentModel`。
 
 ## 编辑解析得到的图
 
@@ -175,61 +230,63 @@ console.log(toDot(g));
 
 ## DOT 的语句顺序
 
-在 DOT 中，默认属性语句（`node [...]` 等）只作用于它之后的内容。默认模型每个图只保存一组默认值，并写在最前面，因此最后的值会作用于所有未自行设置该属性的节点（在节点上设置的属性，例如 `g.node('a', { color: 'green' })`，总是优先于默认值）。要按 DOT 的含义编写图，请从 `ts-graphviz/ordered` 导入：它与 `ts-graphviz` 的名字相同，使用把每条默认属性语句保留在原位置的模型。
+与 DOT 一样，默认属性语句只作用于它之后的内容。`g.node({ ... })`、`g.edge({ ... })` 和 `g.graph({ ... })` 在调用的位置添加一条默认属性语句并返回它的 DSL；保留这个 DSL，之后就可以修改这些默认值：
 
 ```typescript
-import { digraph, toDot } from 'ts-graphviz/ordered';
+import { digraph, toDot } from 'ts-graphviz';
 
 const G = digraph((g) => {
-  g.node({ color: 'red' });
-  g.node('a'); // red
-  g.node({ color: 'blue' });
-  g.node('b'); // blue
+  g.node('a');
+  const defaults = g.node({ shape: 'box' }); // 作用于之后的内容
+  g.node('b');
+  defaults.color = 'red';
 });
 
 console.log(toDot(G));
 // digraph {
-//   node [
-//     color = "red";
-//   ];
 //   "a";
 //   node [
-//     color = "blue";
+//     shape = "box";
+//     color = "red";
 //   ];
 //   "b";
 // }
 ```
 
-`ts-graphviz/ordered` 的 `fromDot` 也会读入同样的模型，因此经过 `toDot(fromDot(source))` 后，默认属性语句的位置保持不变。（图自身的属性仍写在最前面，因此在子图之后设置的属性（在 DOT 中子图不会继承它）会移到子图之前。）在 `ts-graphviz` 中显式的写法是 `withContext(orderedModels)` 和 `fromDot(source, { convert: { models: orderedModels } })`：
+`fromDot` 会把源码中的每条默认属性语句保留在原位置，因此 `node [color=red]; a; node [color=blue]; b` 与 Graphviz 一样，`a` 为红色、`b` 为蓝色。节点自身设置的属性（`g.node('a', { color: 'green' })`）总是优先于默认值。
+
+3.x 会把所有默认属性语句合并为每个图一组默认值并写在最前面，因此写在其他语句之后的默认值也会作用于它之前的内容。在迁移到 v4 期间，如需保持 3.x 的输出，请从 `ts-graphviz/legacy` 导入：它与 `ts-graphviz` 的名字相同，使用 3.x 的类（`legacyModels`）。该入口已弃用，将在 v5 中移除：
 
 ```typescript
-import { fromDot, orderedModels, withContext } from 'ts-graphviz';
+import { digraph, toDot } from 'ts-graphviz/legacy';
 
-const { digraph } = withContext(orderedModels);
 const G = digraph((g) => {
   g.node('a');
-  g.edge({ color: 'red' }); // 作用于其后的边
-  g.edge(['a', 'b']);
+  g.node({ color: 'blue' }); // 与 3.x 一样，a 也是蓝色
 });
 
-const parsed = fromDot('digraph { node [color=red]; a; node [color=blue]; b; }', {
-  convert: { models: orderedModels },
-});
+console.log(toDot(G));
+// digraph {
+//   node [
+//     color = "blue";
+//   ];
+//   "a";
+// }
 ```
 
 ## 常见问题
 
-### 只出现在边中的节点不在 `$nodes` 里
+### 只出现在边中的节点不在 `nodes` 里
 
 ```typescript
 import { dsl, fromDot } from 'ts-graphviz';
 
 const g = dsl(fromDot('digraph { a; a -> b; }'));
-console.log(g.$nodes.map((n) => n.$id)); // ['a']
-console.log(g.$getNode('b')); // undefined
+console.log(g.nodes.map((n) => n.nodeId)); // ['a']
+console.log(g.getNode('b')); // undefined
 ```
 
-在 DOT 中，边会创建它所提到的节点。但模型只按 id 记录边的端点：`$nodes`（以及模型的 `nodes`）保存的是以节点语句写出的节点，而不是 Graphviz 意义上图的全部节点。一个节点可能属于多个子图，子图里的 `a -> b` 也可能指向写在子图外的节点，因此模型不做推测。要让节点出现在 `$nodes` 中，请用 `g.node('b')` 声明它，或者读取边端点的 id。
+在 DOT 中，边会创建它所提到的节点。但模型只按 id 记录边的端点：`nodes` 保存的是以节点语句写出的节点，而不是 Graphviz 意义上图的全部节点。一个节点可能属于多个子图，子图里的 `a -> b` 也可能指向写在子图外的节点，因此模型不做推测。要让节点出现在 `nodes` 中，请用 `g.node('b')` 声明它，或者读取边端点的 id。
 
 ### `isNodeModel(dsl)` 返回 false
 
@@ -246,19 +303,10 @@ digraph((g) => {
 });
 ```
 
-### 使用有序模型时，`$attributes.node` 只表示最初的默认值
+### 写在其他语句之后的默认值改变了 3.x 的输出
 
-使用 `ts-graphviz/ordered` 时，写在其他语句之后的默认属性语句是图中独立的一条语句。`g.$attributes.node` 是图开头的默认值，而不是最后写的 `node [...]`：
+在 v4 中，它与 DOT 一样只作用于之后的内容。要让默认值作用于整个图，请把它写在其他语句之前；或者暂时从 `ts-graphviz/legacy` 导入，保持 3.x 的输出。
 
-```typescript
-import { digraph } from 'ts-graphviz/ordered';
+### `attributes` 去哪儿了？
 
-digraph((g) => {
-  g.node({ color: 'red' });
-  g.node('a');
-  g.node({ color: 'blue' });
-  console.log(g.$attributes.node.color); // 'red'
-});
-```
-
-出于同样的原因，在后面的语句中指定 `undefined` 不会删除前面语句设置的值。
+`g.attributes.node`（在 DSL 上为 `g.$attributes.node`）已弃用：它只表示图开头的默认值。请保留 `g.node({ ... })` 返回的 DSL，并通过它修改默认值。

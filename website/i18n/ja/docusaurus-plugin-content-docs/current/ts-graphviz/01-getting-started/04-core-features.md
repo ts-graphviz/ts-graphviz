@@ -70,12 +70,12 @@ console.log(toDot(G));
 
 ---
 
-## 2 つの API：DOT DSL とモデル
+## 2 つの API：DOT DSL と DOM
 
 `ts-graphviz` には、グラフを扱う方法が 2 つあります。どちらも同じグラフを扱います。
 
 - **DOT DSL**：ファクトリー（`digraph`、`graph`、`strict.digraph`、`strict.graph`）が返すものです。DOT の文がメソッドに、属性がプロパティになっていて、DOT と同じようにグラフを書けます。[DOT DSL でグラフを書く](../03-guides/01-dot-dsl.md)を参照してください。
-- **モデル API**：クラス（`Digraph`、`Node`、`Edge` など）とそのメソッドです。グラフをデータとして組み立てたり、読み取ったり、変換したりするプログラムや、独自のクラスを定義する場合に使います。[モデル API の使い方](../03-guides/02-model-api.md)を参照してください。
+- **DOT Object Model（DOM）**：クラス（`Digraph`、`Node`、`Edge` など）とそのメソッドです。グラフをデータとして組み立てたり、読み取ったり、変換したりするプログラムや、独自のクラスを定義する場合に使います。[DOT Object Model（DOM）](../03-guides/02-model-api.md)を参照してください。
 
 ```typescript
 import { digraph, modelOf, toDot } from 'ts-graphviz';

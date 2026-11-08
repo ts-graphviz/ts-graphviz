@@ -3,7 +3,7 @@ description: Write graphs with the DOT DSL, statement by statement, as in DOT.
 ---
 # Writing Graphs with the DOT DSL
 
-The factories `digraph()`, `graph()` and `strict.*` give the graph's **DOT DSL**. It reads like DOT: the DOT statements are its methods, and attributes are its properties. If you know how to write a graph in DOT, you know how to write it with the DSL.
+The factories `digraph()`, `graph()`, `strict.digraph()` and `strict.graph()` give the graph's **DOT DSL**. It reads like DOT: the DOT statements are its methods, and attributes are its properties. If you know how to write a graph in DOT, you know how to write it with the DSL.
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz';
@@ -28,7 +28,7 @@ console.log(toDot(G));
 // }
 ```
 
-For programs that build, read or convert graphs as data, see [Using the Model API](./02-model-api.md).
+The DSL stands for the graph's models, the [DOT Object Model (DOM)](./02-model-api.md): every member of a model is there under its own name, next to the attributes.
 
 ## From DOT to the DSL
 
@@ -40,12 +40,13 @@ For programs that build, read or convert graphs as data, see [Using the Model AP
 | `a [label = "A"];` | `g.node('a', { label: 'A' });` |
 | `a -> b -> c;` | `g.edge(['a', 'b', 'c']);` |
 | `c -> {d e};` | `g.edge(['c', ['d', 'e']]);` |
-| `a:p1:n -> a:p2:s;` | `g.edge(['a:p1:n', a.$port({ port: 'p2', compass: 's' })]);` |
+| `a:p1:n -> a:p2:s;` | `g.edge(['a:p1:n', a.port({ port: 'p2', compass: 's' })]);` |
 | `node [shape = box];` | `g.node({ shape: 'box' });` |
 | `edge [color = gray];` | `g.edge({ color: 'gray' });` |
 | `graph [fontname = Helvetica];` | `g.graph({ fontname: 'Helvetica' });` |
 | `subgraph cluster_0 { label = Group; d; e; }` | `g.subgraph('cluster_0', { label: 'Group' }, (s) => { s.node('d'); s.node('e'); });` |
 | `{ rank = same; b; c; }` | `g.subgraph({ rank: 'same' }, (s) => { s.node('b'); s.node('c'); });` |
+| `// note` | `a.addComment('note');` |
 
 Together:
 
@@ -58,7 +59,7 @@ const G = digraph('G', (g) => {
   g.node('b');
   g.edge([a, 'b', 'c']);
   g.edge(['c', ['d', 'e']]);
-  g.edge(['a:p1:n', a.$port({ port: 'p2', compass: 's' })]);
+  g.edge(['a:p1:n', a.port({ port: 'p2', compass: 's' })]);
   g.subgraph('cluster_0', { label: 'Group' }, (s) => {
     s.node('d');
     s.node('e');
@@ -98,9 +99,9 @@ console.log(toDot(G));
 
 The attribute names are typed: your editor completes them and checks their values. A subgraph whose id starts with `cluster` takes the cluster attributes (`label`, `color`, …).
 
-## Attributes are properties
+## Attributes
 
-Read, write and delete attributes under their own names:
+Attributes are properties under their own names. Assigning `undefined`, or `delete`, removes one:
 
 ```typescript
 import { digraph } from 'ts-graphviz';
@@ -115,47 +116,101 @@ digraph((g) => {
 });
 ```
 
-Attributes can also be written with the `attribute` constants (`a[attribute.label]`), and attributes you add by extending the types (see [Extending ts-graphviz](./05-extending-ts-graphviz.md)) the same way.
-
-## The `$` rule
-
-Attributes take the plain names, so the model's own members take a `$` in front:
-
-| On the DSL | Meaning |
-| --- | --- |
-| `a.$id` | the node's name, its id in DOT |
-| `a.id` | the Graphviz `id` attribute (the id of the SVG element) |
-| `a.$comment`, `g.$nodes`, `g.$edges`, `g.$subgraphs` | the model's members |
-| `g.$getNode('a')`, `g.$createNode('a')`, `a.$port('p')` | the model's methods |
-| `a.$$type` | members whose names start with `$$` keep them |
+The methods of the DOM work too, and take any attribute name, such as one held in a variable:
 
 ```typescript
 import { digraph } from 'ts-graphviz';
 
 digraph((g) => {
   const a = g.node('a');
+  a.setAttribute('label', 'A');
+  a.setAttributes({ color: 'red', shape: 'box' });
+  console.log(a.getAttribute('label')); // 'A'
+  console.log(a.hasAttribute('fontname')); // false
+  console.log(a.getAttributeNames()); // ['label', 'color', 'shape']
+  a.removeAttribute('color');
+  a.removeAttributes(); // all of them
+});
+```
+
+## Names
+
+The model's own members keep their names on the DSL, and no member is named like a Graphviz attribute:
+
+| On the DSL | Meaning |
+| --- | --- |
+| `a.nodeId`, `g.graphId`, `s.subgraphId` | the name of a node, root graph or subgraph (its ID in DOT) |
+| `a.id`, `a.comment`, `g.size` | the Graphviz attributes `id`, `comment` and `size` |
+| `g.nodes`, `g.edges`, `g.subgraphs`, `g.statements` | the graph's contents, as DSLs |
+| `g.getNode('a')`, `g.createNode('a')`, `a.port('p')` | the model's methods |
+| `a.getAttribute('label')`, `a.addComment('note')` | the DOM's methods |
+| `a.$$type` | the kind of model (`'Node'`, `'Edge'`, …) |
+
+```typescript
+import { digraph } from 'ts-graphviz';
+
+digraph('G', (g) => {
+  const a = g.node('a');
   a.id = 'svg-a';
-  console.log(a.$id); // 'a'
+  console.log(a.nodeId); // 'a'
   console.log(a.id); // 'svg-a'
+  console.log(g.graphId); // 'G'
   console.log(a.$$type); // 'Node'
 });
 ```
 
-The members of your own classes follow the same rule: a method `hello()` is `$hello()`, and a member named `$foo` is `$$foo`.
+A `$` in front is needed in two cases only:
+
+- a member of your own class named like a Graphviz attribute: a method `weight()` is `$weight()`, since `weight` is the attribute;
+- a member of your own class named like a DOT statement: `node()`, `edge()`, `subgraph()` and `graph()` are the DSL's statements, so a method `node()` of your class is `$node()`.
 
 ```typescript
-import { Digraph, dsl } from 'ts-graphviz';
+import { Edge, withContext } from 'ts-graphviz';
 
-class MyDigraph extends Digraph {
-  hello() {
-    return `${this.nodes.length} nodes`;
+class MyEdge extends Edge {
+  cost() {
+    return 1;
+  }
+  weight() {
+    return 2;
   }
 }
 
-const g = dsl(new MyDigraph());
-g.node('a');
-console.log(g.$hello()); // '1 nodes'
+const { digraph } = withContext({ Edge: MyEdge });
+digraph((g) => {
+  const e = g.edge(['a', 'b']);
+  console.log(e.cost()); // 1
+  console.log(e.$weight()); // 2
+  console.log(e.weight); // undefined: the Graphviz attribute
+});
 ```
+
+The members deprecated in v4 (`attributes`, `id` of a model, `comment` of a model, the 3.x attribute methods such as `get` and `set`) are left out of the DSL's types. Read them on `modelOf(x)`, or with a `$` in front while you move off them.
+
+## Comments
+
+`addComment` attaches a comment to a node, edge, subgraph, graph or default attribute statement. It is written before the statement by default; `position: 'trailing'` writes it after the statement, and on a graph or subgraph `position: 'end'` at the end of the body. `kind` is `'Slash'` (`//`), `'Block'` (`/* */`) or `'Macro'` (`#`).
+
+```typescript
+import { digraph, toDot } from 'ts-graphviz';
+
+const G = digraph((g) => {
+  const a = g.node('a');
+  a.addComment('start');
+  a.addComment('note', { position: 'trailing', kind: 'Block' });
+  a.comment = 'kept by Graphviz'; // the Graphviz comment attribute
+});
+
+console.log(toDot(G));
+// digraph {
+//   // start
+//   "a" [
+//     comment = "kept by Graphviz";
+//   ]; /* note */
+// }
+```
+
+`comments` lists them, and `removeComment(comment)` takes one out. On the DSL, `comment` is the Graphviz attribute, which Graphviz writes into its output; a comment of the DOT source is a `CommentModel`.
 
 ## Editing a parsed graph
 
@@ -175,61 +230,63 @@ Every model you reach through a DSL is a DSL, and a model has one DSL, so DSLs c
 
 ## DOT's statement order
 
-In DOT, a default attribute statement applies only to what follows it. The default models keep one set of defaults per graph, written first, so the last value applies to every node that does not set the attribute itself (an attribute set on a node, such as `g.node('a', { color: 'green' })`, always wins over a default). To write graphs with DOT's meaning, import from `ts-graphviz/ordered`: it has the same names as `ts-graphviz`, with models that keep each default attribute statement in its place.
+As in DOT, a default attribute statement applies only to what follows it. `g.node({ ... })`, `g.edge({ ... })` and `g.graph({ ... })` add one where they are called and return its DSL, which you can keep to change those defaults later:
 
 ```typescript
-import { digraph, toDot } from 'ts-graphviz/ordered';
+import { digraph, toDot } from 'ts-graphviz';
 
 const G = digraph((g) => {
-  g.node({ color: 'red' });
-  g.node('a'); // red
-  g.node({ color: 'blue' });
-  g.node('b'); // blue
+  g.node('a');
+  const defaults = g.node({ shape: 'box' }); // applies to what follows
+  g.node('b');
+  defaults.color = 'red';
 });
 
 console.log(toDot(G));
 // digraph {
-//   node [
-//     color = "red";
-//   ];
 //   "a";
 //   node [
-//     color = "blue";
+//     shape = "box";
+//     color = "red";
 //   ];
 //   "b";
 // }
 ```
 
-`fromDot` from `ts-graphviz/ordered` reads DOT into the same models, so the default attribute statements of a source keep their places through `toDot(fromDot(source))`. (A graph's own attributes are still written first, so an attribute assigned after a subgraph, which the subgraph does not inherit in DOT, moves before it.) The explicit form, with `ts-graphviz` itself, is `withContext(orderedModels)` and `fromDot(source, { convert: { models: orderedModels } })`:
+`fromDot` keeps each default attribute statement of a source where it is, so `node [color=red]; a; node [color=blue]; b` renders `a` red and `b` blue, as Graphviz does. A node's own attribute (`g.node('a', { color: 'green' })`) always wins over a default.
+
+3.x merged every default attribute statement into one set of defaults per graph, written first, so a default given after other statements applied to what came before it too. To keep that output while you move to v4, import from `ts-graphviz/legacy`, which has the same names as `ts-graphviz` with the 3.x classes (`legacyModels`); it is deprecated and removed in v5:
 
 ```typescript
-import { fromDot, orderedModels, withContext } from 'ts-graphviz';
+import { digraph, toDot } from 'ts-graphviz/legacy';
 
-const { digraph } = withContext(orderedModels);
 const G = digraph((g) => {
   g.node('a');
-  g.edge({ color: 'red' }); // applies to the edges that follow
-  g.edge(['a', 'b']);
+  g.node({ color: 'blue' }); // a is blue too, as in 3.x
 });
 
-const parsed = fromDot('digraph { node [color=red]; a; node [color=blue]; b; }', {
-  convert: { models: orderedModels },
-});
+console.log(toDot(G));
+// digraph {
+//   node [
+//     color = "blue";
+//   ];
+//   "a";
+// }
 ```
 
 ## FAQ
 
-### A node that only appears in an edge is not in `$nodes`
+### A node that only appears in an edge is not in `nodes`
 
 ```typescript
 import { dsl, fromDot } from 'ts-graphviz';
 
 const g = dsl(fromDot('digraph { a; a -> b; }'));
-console.log(g.$nodes.map((n) => n.$id)); // ['a']
-console.log(g.$getNode('b')); // undefined
+console.log(g.nodes.map((n) => n.nodeId)); // ['a']
+console.log(g.getNode('b')); // undefined
 ```
 
-In DOT, an edge creates the nodes it names. The models, though, record an edge's targets by id only: `$nodes` (and `nodes` of the model) holds the nodes written as node statements, not every node the graph has in Graphviz's sense. A node may belong to several subgraphs, and `a -> b` inside a subgraph may refer to a node written outside it, so the models do not guess. Declare a node with `g.node('b')` to have it in `$nodes`, or read the ids of an edge's targets.
+In DOT, an edge creates the nodes it names. The models, though, record an edge's targets by id only: `nodes` holds the nodes written as node statements, not every node the graph has in Graphviz's sense. A node may belong to several subgraphs, and `a -> b` inside a subgraph may refer to a node written outside it, so the models do not guess. Declare a node with `g.node('b')` to have it in `nodes`, or read the ids of an edge's targets.
 
 ### `isNodeModel(dsl)` is false
 
@@ -246,19 +303,10 @@ digraph((g) => {
 });
 ```
 
-### With ordered models, `$attributes.node` holds the first defaults only
+### A default given after other statements changed my 3.x output
 
-With `ts-graphviz/ordered`, a default attribute statement written after other statements is a statement of its own in the graph. `g.$attributes.node` is the defaults at the top of the graph, not the latest `node [...]`:
+In v4 it applies only to what follows it, as in DOT. Give the defaults before the other statements to have them apply to the whole graph, or import from `ts-graphviz/legacy` to keep the 3.x output for now.
 
-```typescript
-import { digraph } from 'ts-graphviz/ordered';
+### Where did `attributes` go?
 
-digraph((g) => {
-  g.node({ color: 'red' });
-  g.node('a');
-  g.node({ color: 'blue' });
-  console.log(g.$attributes.node.color); // 'red'
-});
-```
-
-For the same reason, `undefined` in a later statement does not remove a value set by an earlier one.
+`g.attributes.node` (on the DSL, `g.$attributes.node`) is deprecated: it is the defaults at the top of the graph only. Keep the DSL that `g.node({ ... })` returns, and change the defaults through it.

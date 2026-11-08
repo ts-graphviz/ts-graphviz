@@ -3,7 +3,7 @@ description: DOT DSL を使い、DOT と同じように文を一つずつ書い�
 ---
 # DOT DSL でグラフを書く
 
-ファクトリー `digraph()`、`graph()`、`strict.*` は、グラフの **DOT DSL** を返します。DSL は DOT と同じように読めます。DOT の文がメソッドに、属性がプロパティになっています。DOT でグラフを書ける人は、そのまま DSL でも書けます。
+ファクトリー `digraph()`、`graph()`、`strict.digraph()`、`strict.graph()` は、グラフの **DOT DSL** を返します。DSL は DOT と同じように読めます。DOT の文がメソッドに、属性がプロパティになっています。DOT でグラフを書ける人は、そのまま DSL でも書けます。
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz';
@@ -28,7 +28,7 @@ console.log(toDot(G));
 // }
 ```
 
-グラフをデータとして組み立てたり、読み取ったり、変換したりするプログラムには、[モデル API の使い方](./02-model-api.md)を参照してください。
+DSL はグラフのモデル、つまり [DOT Object Model（DOM）](./02-model-api.md)の代わりです。モデルのメンバーはすべてその名前のまま、属性と並んで使えます。
 
 ## DOT から DSL へ
 
@@ -40,12 +40,13 @@ console.log(toDot(G));
 | `a [label = "A"];` | `g.node('a', { label: 'A' });` |
 | `a -> b -> c;` | `g.edge(['a', 'b', 'c']);` |
 | `c -> {d e};` | `g.edge(['c', ['d', 'e']]);` |
-| `a:p1:n -> a:p2:s;` | `g.edge(['a:p1:n', a.$port({ port: 'p2', compass: 's' })]);` |
+| `a:p1:n -> a:p2:s;` | `g.edge(['a:p1:n', a.port({ port: 'p2', compass: 's' })]);` |
 | `node [shape = box];` | `g.node({ shape: 'box' });` |
 | `edge [color = gray];` | `g.edge({ color: 'gray' });` |
 | `graph [fontname = Helvetica];` | `g.graph({ fontname: 'Helvetica' });` |
 | `subgraph cluster_0 { label = Group; d; e; }` | `g.subgraph('cluster_0', { label: 'Group' }, (s) => { s.node('d'); s.node('e'); });` |
 | `{ rank = same; b; c; }` | `g.subgraph({ rank: 'same' }, (s) => { s.node('b'); s.node('c'); });` |
+| `// note` | `a.addComment('note');` |
 
 まとめると次のようになります。
 
@@ -58,7 +59,7 @@ const G = digraph('G', (g) => {
   g.node('b');
   g.edge([a, 'b', 'c']);
   g.edge(['c', ['d', 'e']]);
-  g.edge(['a:p1:n', a.$port({ port: 'p2', compass: 's' })]);
+  g.edge(['a:p1:n', a.port({ port: 'p2', compass: 's' })]);
   g.subgraph('cluster_0', { label: 'Group' }, (s) => {
     s.node('d');
     s.node('e');
@@ -98,9 +99,9 @@ console.log(toDot(G));
 
 属性名には型が付いているので、エディタで補完され、値も検査されます。id が `cluster` で始まるサブグラフは、クラスターの属性（`label`、`color` など）を受け取ります。
 
-## 属性はプロパティ
+## 属性
 
-属性はその名前のまま読み書きし、削除できます。
+属性はその名前のプロパティです。`undefined` を代入するか `delete` すると削除されます。
 
 ```typescript
 import { digraph } from 'ts-graphviz';
@@ -109,53 +110,107 @@ digraph((g) => {
   const a = g.node('a');
   a.label = 'A';
   a.color = 'red';
-  delete a.label; // 属性を取り除く
-  a.color = undefined; // undefined を代入しても取り除かれる
+  delete a.label; // 属性を削除する
+  a.color = undefined; // undefined の代入でも削除される
   console.log(a.label); // undefined
 });
 ```
 
-属性は `attribute` の定数（`a[attribute.label]`）でも書けます。型を拡張して追加した属性（[ts-graphvizの拡張](./05-extending-ts-graphviz.md)を参照）も同じように書けます。
-
-## `$` の規則
-
-属性がそのままの名前を使うため、モデル自身のメンバーには先頭に `$` が付きます。
-
-| DSL での書き方 | 意味 |
-| --- | --- |
-| `a.$id` | ノードの名前（DOT での id） |
-| `a.id` | Graphviz の `id` 属性（SVG 要素の id） |
-| `a.$comment`、`g.$nodes`、`g.$edges`、`g.$subgraphs` | モデルのメンバー |
-| `g.$getNode('a')`、`g.$createNode('a')`、`a.$port('p')` | モデルのメソッド |
-| `a.$$type` | `$$` で始まるメンバーはその名前のまま |
+DOM のメソッドも使えます。変数に入った属性名など、どの属性名でも受け取ります。
 
 ```typescript
 import { digraph } from 'ts-graphviz';
 
 digraph((g) => {
   const a = g.node('a');
+  a.setAttribute('label', 'A');
+  a.setAttributes({ color: 'red', shape: 'box' });
+  console.log(a.getAttribute('label')); // 'A'
+  console.log(a.hasAttribute('fontname')); // false
+  console.log(a.getAttributeNames()); // ['label', 'color', 'shape']
+  a.removeAttribute('color');
+  a.removeAttributes(); // すべて削除する
+});
+```
+
+## 名前
+
+モデル自身のメンバーは DSL でも同じ名前で、Graphviz の属性と同じ名前のメンバーはありません。
+
+| DSL での書き方 | 意味 |
+| --- | --- |
+| `a.nodeId`、`g.graphId`、`s.subgraphId` | ノード、ルートグラフ、サブグラフの名前（DOT での ID） |
+| `a.id`、`a.comment`、`g.size` | Graphviz の属性 `id`、`comment`、`size` |
+| `g.nodes`、`g.edges`、`g.subgraphs`、`g.statements` | グラフの中身（DSL として） |
+| `g.getNode('a')`、`g.createNode('a')`、`a.port('p')` | モデルのメソッド |
+| `a.getAttribute('label')`、`a.addComment('note')` | DOM のメソッド |
+| `a.$$type` | モデルの種類（`'Node'`、`'Edge'` など） |
+
+```typescript
+import { digraph } from 'ts-graphviz';
+
+digraph('G', (g) => {
+  const a = g.node('a');
   a.id = 'svg-a';
-  console.log(a.$id); // 'a'
+  console.log(a.nodeId); // 'a'
   console.log(a.id); // 'svg-a'
+  console.log(g.graphId); // 'G'
   console.log(a.$$type); // 'Node'
 });
 ```
 
-自作クラスのメンバーも同じ規則に従います。メソッド `hello()` は `$hello()` に、`$foo` という名前のメンバーは `$$foo` になります。
+先頭に `$` が必要なのは次の 2 つの場合だけです。
+
+- 自作クラスのメンバーが Graphviz の属性と同じ名前のとき：`weight` は属性なので、メソッド `weight()` は `$weight()` になります。
+- 自作クラスのメンバーが DOT の文と同じ名前のとき：`node()`、`edge()`、`subgraph()`、`graph()` は DSL の文なので、自作クラスのメソッド `node()` は `$node()` になります。
 
 ```typescript
-import { Digraph, dsl } from 'ts-graphviz';
+import { Edge, withContext } from 'ts-graphviz';
 
-class MyDigraph extends Digraph {
-  hello() {
-    return `${this.nodes.length} nodes`;
+class MyEdge extends Edge {
+  cost() {
+    return 1;
+  }
+  weight() {
+    return 2;
   }
 }
 
-const g = dsl(new MyDigraph());
-g.node('a');
-console.log(g.$hello()); // '1 nodes'
+const { digraph } = withContext({ Edge: MyEdge });
+digraph((g) => {
+  const e = g.edge(['a', 'b']);
+  console.log(e.cost()); // 1
+  console.log(e.$weight()); // 2
+  console.log(e.weight); // undefined：Graphviz の属性
+});
 ```
+
+v4 で非推奨になったメンバー（`attributes`、モデルの `id`、モデルの `comment`、`get` や `set` などの 3.x の属性メソッド）は、DSL の型には含まれません。移行が済むまでは、`modelOf(x)` から読むか、先頭に `$` を付けて使ってください。
+
+## コメント
+
+`addComment` は、ノード、エッジ、サブグラフ、グラフ、既定属性の文にコメントを付けます。既定では文の前に書かれます。`position: 'trailing'` で文の後に、グラフやサブグラフでは `position: 'end'` で本体の最後に書かれます。`kind` は `'Slash'`（`//`）、`'Block'`（`/* */`）、`'Macro'`（`#`）のいずれかです。
+
+```typescript
+import { digraph, toDot } from 'ts-graphviz';
+
+const G = digraph((g) => {
+  const a = g.node('a');
+  a.addComment('start');
+  a.addComment('note', { position: 'trailing', kind: 'Block' });
+  a.comment = 'kept by Graphviz'; // Graphviz の comment 属性
+});
+
+console.log(toDot(G));
+// digraph {
+//   // start
+//   "a" [
+//     comment = "kept by Graphviz";
+//   ]; /* note */
+// }
+```
+
+`comments` で一覧を得て、`removeComment(comment)` で取り除けます。DSL での `comment` は Graphviz の属性で、Graphviz が出力に書き込みます。DOT ソースのコメントは `CommentModel` です。
 
 ## 読み込んだグラフを編集する
 
@@ -175,61 +230,63 @@ DSL を通してたどったモデルはすべて DSL で、一つのモデル�
 
 ## DOT の文の順序
 
-DOT では、既定属性の文（`node [...]` など）はその後に書いたものにだけ適用されます。既定のモデルはグラフごとに既定値を一組だけ持ち、先頭に書き出すため、その属性を自分で設定していないすべてのノードに最後の値が適用されます（`g.node('a', { color: 'green' })` のようにノードに設定した属性は、常に既定値より優先されます）。DOT と同じ意味でグラフを書くには、`ts-graphviz/ordered` から import します。`ts-graphviz` と同じ名前を持ち、既定属性の文を書いた位置に残すモデルを使います。
+DOT と同じく、既定属性の文はその後に書いたものにだけ適用されます。`g.node({ ... })`、`g.edge({ ... })`、`g.graph({ ... })` は、呼んだ位置に既定属性の文を追加して、その DSL を返します。返された DSL を取っておけば、後からその既定値を変更できます。
 
 ```typescript
-import { digraph, toDot } from 'ts-graphviz/ordered';
+import { digraph, toDot } from 'ts-graphviz';
 
 const G = digraph((g) => {
-  g.node({ color: 'red' });
-  g.node('a'); // red
-  g.node({ color: 'blue' });
-  g.node('b'); // blue
+  g.node('a');
+  const defaults = g.node({ shape: 'box' }); // 後に書いたものに適用される
+  g.node('b');
+  defaults.color = 'red';
 });
 
 console.log(toDot(G));
 // digraph {
-//   node [
-//     color = "red";
-//   ];
 //   "a";
 //   node [
-//     color = "blue";
+//     shape = "box";
+//     color = "red";
 //   ];
 //   "b";
 // }
 ```
 
-`ts-graphviz/ordered` の `fromDot` も同じモデルに読み込むので、`toDot(fromDot(source))` を通しても既定属性の文の位置は変わりません。（グラフ自身の属性は先頭に書き出されるため、サブグラフの後で設定した属性（DOT ではサブグラフに継承されないもの）は、サブグラフの前に移ります。）`ts-graphviz` 自体で明示的に書くと、`withContext(orderedModels)` と `fromDot(source, { convert: { models: orderedModels } })` になります。
+`fromDot` はソースの既定属性の文をその位置に残すので、`node [color=red]; a; node [color=blue]; b` は Graphviz と同じく `a` が赤、`b` が青になります。ノード自身に設定した属性（`g.node('a', { color: 'green' })`）は、常に既定値より優先されます。
+
+3.x は既定属性の文をすべてグラフごとに一組の既定値にまとめ、先頭に書き出していたため、他の文の後に書いた既定値もそれより前のものに適用されていました。v4 への移行中に 3.x と同じ出力を保つには、`ts-graphviz/legacy` から import します。`ts-graphviz` と同じ名前を持ち、3.x のクラス（`legacyModels`）を使います。このエントリーは非推奨で、v5 で削除されます。
 
 ```typescript
-import { fromDot, orderedModels, withContext } from 'ts-graphviz';
+import { digraph, toDot } from 'ts-graphviz/legacy';
 
-const { digraph } = withContext(orderedModels);
 const G = digraph((g) => {
   g.node('a');
-  g.edge({ color: 'red' }); // これより後のエッジに適用される
-  g.edge(['a', 'b']);
+  g.node({ color: 'blue' }); // 3.x と同じく a も青になる
 });
 
-const parsed = fromDot('digraph { node [color=red]; a; node [color=blue]; b; }', {
-  convert: { models: orderedModels },
-});
+console.log(toDot(G));
+// digraph {
+//   node [
+//     color = "blue";
+//   ];
+//   "a";
+// }
 ```
 
 ## よくある質問
 
-### エッジにだけ出てくるノードが `$nodes` に入らない
+### エッジにだけ出てくるノードが `nodes` に入らない
 
 ```typescript
 import { dsl, fromDot } from 'ts-graphviz';
 
 const g = dsl(fromDot('digraph { a; a -> b; }'));
-console.log(g.$nodes.map((n) => n.$id)); // ['a']
-console.log(g.$getNode('b')); // undefined
+console.log(g.nodes.map((n) => n.nodeId)); // ['a']
+console.log(g.getNode('b')); // undefined
 ```
 
-DOT では、エッジはそこに書かれたノードを作ります。一方、モデルはエッジの端点を id で記録するだけです。`$nodes`（とモデルの `nodes`）が持つのはノード文として書かれたノードで、Graphviz から見たグラフのノードすべてではありません。ノードは複数のサブグラフに属することがあり、サブグラフの中の `a -> b` が外に書かれたノードを指すこともあるため、モデルは推測しません。`$nodes` に入れたいノードは `g.node('b')` で宣言するか、エッジの端点の id を読み取ってください。
+DOT では、エッジはそこに書かれたノードを作ります。一方、モデルはエッジの端点を id で記録するだけです。`nodes` が持つのはノード文として書かれたノードで、Graphviz から見たグラフのノードすべてではありません。ノードは複数のサブグラフに属することがあり、サブグラフの中の `a -> b` が外に書かれたノードを指すこともあるため、モデルは推測しません。`nodes` に入れたいノードは `g.node('b')` で宣言するか、エッジの端点の id を読み取ってください。
 
 ### `isNodeModel(dsl)` が false になる
 
@@ -246,19 +303,10 @@ digraph((g) => {
 });
 ```
 
-### 順序付きモデルでは `$attributes.node` が最初の既定値だけを指す
+### 他の文の後に書いた既定値で 3.x の出力が変わった
 
-`ts-graphviz/ordered` では、他の文の後に書いた既定属性の文は、グラフの中で独立した文になります。`g.$attributes.node` はグラフ先頭の既定値で、最後に書いた `node [...]` ではありません。
+v4 では、DOT と同じく、その既定値は後に書いたものにだけ適用されます。グラフ全体に適用したい既定値は他の文より前に書くか、当面は `ts-graphviz/legacy` から import して 3.x の出力を保ってください。
 
-```typescript
-import { digraph } from 'ts-graphviz/ordered';
+### `attributes` はどこへ行ったのか
 
-digraph((g) => {
-  g.node({ color: 'red' });
-  g.node('a');
-  g.node({ color: 'blue' });
-  console.log(g.$attributes.node.color); // 'red'
-});
-```
-
-同じ理由で、後の文で `undefined` を指定しても、前の文で設定した値は消えません。
+`g.attributes.node`（DSL では `g.$attributes.node`）は非推奨です。これはグラフ先頭の既定値だけを指します。`g.node({ ... })` が返す DSL を取っておき、それを通して既定値を変更してください。

@@ -44,7 +44,7 @@ const PACKAGES: Record<string, string> = {
   'ts-graphviz': '../packages/ts-graphviz/lib/ts-graphviz.d.ts',
   'ts-graphviz/ast': '../packages/ts-graphviz/lib/ast.d.ts',
   'ts-graphviz/adapter': '../packages/ts-graphviz/lib/adapter.d.ts',
-  'ts-graphviz/ordered': '../packages/ts-graphviz/lib/ordered.d.ts',
+  'ts-graphviz/legacy': '../packages/ts-graphviz/lib/legacy.d.ts',
   '@ts-graphviz/common': '../packages/common/lib/common.d.ts',
   '@ts-graphviz/core': '../packages/core/lib/core.d.ts',
   '@ts-graphviz/ast': '../packages/ast/lib/ast.d.ts',

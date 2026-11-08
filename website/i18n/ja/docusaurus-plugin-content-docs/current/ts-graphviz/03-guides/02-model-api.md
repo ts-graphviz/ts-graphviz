@@ -1,11 +1,13 @@
 ---
-description: モデル API を使い、グラフをデータとして組み立て、読み取り、変換します。
+description: DOT Object Model（DOM）を使い、グラフをデータとして組み立て、読み取り、変換します。
 ---
-# モデル API の使い方
+# DOT Object Model（DOM）
 
-モデルは、グラフを構成するデータです。`Digraph` / `Graph`、`Subgraph`、`Node`、`Edge`、既定属性のリストがあります。[DOT DSL](./01-dot-dsl.md) が DOT と同じようにグラフを書くためのものであるのに対し、モデル API は、他のデータからグラフを組み立てたり、グラフを読み取ったり変換したり、独自のクラスを定義したりするプログラムのためのものです。
+名前は Web ブラウザーの DOM にならっていますが、イベント、セレクター、ライブコレクションはありません。
 
-DSL はそれぞれ一つのモデルの代わりです。`modelOf(dsl)` でモデルを、`dsl(model)` でモデルの DSL を得られます。どちらの API も同じグラフを扱います。
+**DOT Object Model（DOM）** は、グラフを構成するオブジェクトの集まりです。`Digraph` / `Graph`、`Subgraph`、`Node`、`Edge`、既定属性の文、コメントがあります。[DOT DSL](./01-dot-dsl.md) が DOT と同じようにグラフを書くためのものであるのに対し、DOM は、他のデータからグラフを組み立てたり、グラフを読み取ったり変換したり、独自のクラスを定義したりするプログラムのためのものです。
+
+DSL はそれぞれ DOM の一つのモデルの代わりです。`modelOf(dsl)` でモデルを、`dsl(model)` でモデルの DSL を得られます。どちらも同じグラフを扱います。
 
 ## グラフを組み立てる
 
@@ -55,45 +57,103 @@ g.addEdge(new Edge([a, b]));
 
 | メンバー | |
 | --- | --- |
+| `graphId`、`subgraphId`、`nodeId` | ルートグラフ、サブグラフ、ノードの名前（DOT での ID） |
 | `nodes`、`edges`、`subgraphs` | グラフのノード、エッジ、サブグラフ。`nodes` が持つのはノード文で、エッジにだけ出てくるノードは含みません（[よくある質問](./01-dot-dsl.md#エッジにだけ出てくるノードが-nodes-に入らない)を参照） |
-| `statements` | 追加した順のノード、エッジ、サブグラフ。`toDot` はこの順に書き出します。グラフ自身の属性と既定値はその前に書き出されます（既定のクラスは既定属性の文をすべてその既定値にまとめます。`orderedModels` は書いた位置に残します） |
+| `statements` | グラフのノード、エッジ、サブグラフ、先頭以外の既定属性の文を追加した順に並べたもの。`toDot` はこの順に書き出します。グラフ自身の属性と先頭の既定値はその前に書き出されます |
 | `getNode(id)`、`getSubgraph(id)` | id でノードやサブグラフを得る |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | グラフにあるかどうか |
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 取り除く |
-| `get(key)`、`set(key, value)`、`apply(attributes)`、`delete(key)` | グラフ自身の属性 |
-| `attributes.node`、`attributes.edge`、`attributes.graph` | 既定属性のリスト（`node [...]` など） |
-| `addAttributeList(kind, attributes)` | 既定属性の文を追加する |
-
-ノードとエッジの属性は `attributes` にあります。
-
-```typescript
-import { fromDot } from 'ts-graphviz';
-
-const g = fromDot('digraph { a [label = "A"]; a -> b; }');
-const a = g.getNode('a');
-a?.attributes.set('color', 'red');
-console.log(a?.attributes.get('label')); // 'A'
-console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
-g.removeNode('a');
-```
+| `addAttributeList(kind, attributes)` | 既定属性の文（`node [...]` など）をその位置に追加して返す |
 
 `removeNode` が取り除くのはノード文だけです。そのノードへのエッジは残り、Graphviz はエッジを描くときにノードを作り直します。ノードを消したい場合は、エッジも取り除いてください。
 
 ```typescript
 import { fromDot } from 'ts-graphviz';
 
-const g = fromDot('digraph { a; a -> b; c -> { a d }; }');
+const g = fromDot('digraph { a; a -> b; }');
 for (const edge of g.edges) {
-  if (edge.targets.flat().some((t) => t.id === 'a')) g.removeEdge(edge);
+  if (edge.targets.some((t) => 'id' in t && t.id === 'a')) g.removeEdge(edge);
 }
 g.removeNode('a');
 ```
 
-この例はエッジの文をまるごと取り除きます。`a -> b -> c` や `c -> { a d }` では、`a` に関係しないつながり（`b -> c`、`c -> d`）も消えるので、残したいものは作り直してください。また、見ているのはこのグラフ自身のエッジだけです。サブグラフ（`g.subgraphs`）のエッジにも同じことをしてください。
+## 属性
+
+グラフ、サブグラフ、ノード、エッジ、既定属性の文は、自分で属性を持ち、DOM の `Element` と同じ名前のメソッドで扱います。
+
+| メソッド | |
+| --- | --- |
+| `getAttribute(name)` | 値、または `undefined` |
+| `setAttribute(name, value)` | 一つ設定する |
+| `removeAttribute(name)` | 一つ削除する |
+| `hasAttribute(name)` | 設定されているかどうか |
+| `getAttributeNames()` | 設定されている名前（順序どおり） |
+| `setAttributes(attributes)` | オブジェクトかエントリーから複数設定する |
+| `removeAttributes()` | すべて削除する |
+
+```typescript
+import { fromDot } from 'ts-graphviz';
+
+const g = fromDot('digraph { a [label = "A"]; a -> b; }');
+const a = g.getNode('a');
+a?.setAttribute('color', 'red');
+console.log(a?.getAttribute('label')); // 'A'
+console.log(a?.getAttributeNames()); // ['label', 'color']
+console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
+```
+
+3.x の名前（`get`、`set`、`delete`、`apply`、`clear`、`values`、`size`、ノードやエッジの `attributes`）は、v5 まで非推奨のまま使えます。
+
+## 既定属性の文
+
+DOT と同じく、既定属性の文はその後に書いたものにだけ適用されます。`addAttributeList` は既定属性の文を追加してそのリストを返すので、取っておけば後からその既定値を変更できます。
+
+```typescript
+import { Digraph, toDot } from 'ts-graphviz';
+
+const g = new Digraph();
+g.createNode('a');
+const defaults = g.addAttributeList('Node', { shape: 'box' }); // 後に書いたものに適用される
+g.createNode('b');
+defaults.setAttribute('color', 'red');
+
+console.log(toDot(g));
+// digraph {
+//   "a";
+//   node [
+//     shape = "box";
+//     color = "red";
+//   ];
+//   "b";
+// }
+```
+
+他のどの文よりも前に追加した文は、先頭の既定値に加わります。`attributes`（`attributes.node` など）は非推奨です。これは先頭の既定値だけを指します。
+
+## コメント
+
+どのモデルもコメントを持てます。`addComment(text, { position, kind })` はコメントを追加して返し、`comments` で一覧を得て、`removeComment(comment)` で取り除けます。コメントは凍結された `CommentModel` で、`text`、`kind`（`'Slash'`、`'Block'`、`'Macro'`、または `fromModel` の `commentKind` オプションに従う `undefined`）、`position`（`'leading'`、`'trailing'`、グラフやサブグラフでは `'end'`）を持ちます。
+
+```typescript
+import { Digraph, toDot } from 'ts-graphviz';
+
+const g = new Digraph('G');
+const a = g.createNode('a');
+a.addComment('hello');
+console.log(a.comments.map((c) => [c.text, c.position])); // [['hello', 'leading']]
+
+console.log(toDot(g));
+// digraph "G" {
+//   // hello
+//   "a";
+// }
+```
+
+`fromDot` はソースのコメントを種類と位置ごと保ち、`toDot` は同じ位置に書き戻します。モデルの `comment` は非推奨で、最初の先頭コメントを読み書きします。
 
 ## モデルの型ガード
 
-`isNodeModel`、`isEdgeModel`、`isSubgraphModel`、`isRootGraphModel`、`isAttributeListModel`、`isDotModel` は、値が何であるかを判定します。DSL はモデルではないため、これらは DSL に対して false を返します。`modelOf(x)` か `$$type` で確かめてください。
+`isNodeModel`、`isEdgeModel`、`isSubgraphModel`、`isRootGraphModel`、`isAttributeListModel`、`isDotModel`、`isCommentModel` は、値が何であるかを判定します。DSL はモデルではないため、これらは DSL に対して false を返します。`modelOf(x)` か `$$type` で確かめてください。
 
 ```typescript
 import { digraph, isNodeModel, modelOf } from 'ts-graphviz';
@@ -108,7 +168,7 @@ console.log(nodes.length); // 1
 
 ## モデルコンテキスト
 
-モデルコンテキストは、グラフが中身を作るときに使うクラスの組です。`withContext(models)` はそのコンテキストのファクトリー（`digraph`、`graph`、`strict.digraph`、`strict.graph`）を返し、`graph.with(models)` はグラフのコンテキストを設定し、`fromDot` と `fromDotAll` は `convert.models` で受け取ります。指定しなかった種類のクラスは、`withContext` と `convert.models` では既定のクラスになり、`graph.with` ではそのグラフの今のクラス（前の `with` で設定したものかもしれません）のままです。
+モデルコンテキストは、グラフが中身を作るときに使うクラスの組です。`withContext(models)` はそのコンテキストのファクトリー（`digraph`、`graph`、`strict`）を返し、`graph.with(models)` はグラフのコンテキストを設定し、`fromDot` と `fromDotAll` は `convert.models` で受け取ります。指定しなかったクラスは、`withContext` と `fromDot` では既定のクラス、`graph.with` ではそのグラフが今使っているクラスのままです。
 
 ```typescript
 import { Node, withContext } from 'ts-graphviz';
@@ -121,6 +181,6 @@ digraph((g) => {
 });
 ```
 
-`orderedModels` は、既定属性の文を DOT と同じように書いた位置に残すグラフのモデルコンテキストです。`ts-graphviz/ordered` はすべてのファクトリーでこれを使います（[DOT の文の順序](./01-dot-dsl.md#dot-の文の順序)を参照）。指定したグラフのクラスが順序付きのクラスを置き換えるため、独自のクラスで順序を保つには `OrderedDigraph`、`OrderedGraph`、`OrderedSubgraph` を継承してください。
+`legacyModels`（`LegacyGraph`、`LegacyDigraph`、`LegacySubgraph`）は 3.x のクラスで、既定属性の文をすべてグラフごとに一組の既定値にまとめます。`ts-graphviz/legacy` はすべてのファクトリーでこれを使います（[DOT の文の順序](./01-dot-dsl.md#dot-の文の順序)を参照）。これらは非推奨で、v5 で削除されます。
 
 独自クラス、型付きのコンテキスト、型の拡張については、[ts-graphvizの拡張](./05-extending-ts-graphviz.md)を参照してください。

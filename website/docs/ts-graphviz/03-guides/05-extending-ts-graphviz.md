@@ -3,7 +3,7 @@ description: How to extend ts-graphviz for advanced use cases.
 ---
 # Extending ts-graphviz
 
-`ts-graphviz` is designed to be extensible, allowing intermediate users to customize and enhance the library's functionality to meet specific needs. This section covers how to extend the type system and create custom implementations. For the models themselves, see [Using the Model API](./02-model-api.md).
+`ts-graphviz` is designed to be extensible, allowing intermediate users to customize and enhance the library's functionality to meet specific needs. This section covers how to extend the type system and create custom implementations. For the models themselves, see [DOT Object Model (DOM)](./02-model-api.md).
 
 ## Creating Custom Classes
 

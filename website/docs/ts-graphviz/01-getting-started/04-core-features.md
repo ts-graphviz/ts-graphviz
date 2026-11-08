@@ -73,12 +73,12 @@ console.log(toDot(G));
 
 ---
 
-## Two APIs: the DOT DSL and the models
+## Two APIs: the DOT DSL and the DOM
 
 `ts-graphviz` gives you two ways to work with a graph, both on the same graph:
 
 - **The DOT DSL**, which the factories (`digraph`, `graph`, `strict.digraph`, `strict.graph`) give: the DOT statements are its methods and attributes are its properties, so a graph is written as in DOT. See [Writing Graphs with the DOT DSL](../03-guides/01-dot-dsl.md).
-- **The model API**: the classes (`Digraph`, `Node`, `Edge`, …) and their methods, for programs that build, read or convert graphs as data, or define classes of their own. See [Using the Model API](../03-guides/02-model-api.md).
+- **The DOT Object Model (DOM)**: the classes (`Digraph`, `Node`, `Edge`, …) and their methods, for programs that build, read or convert graphs as data, or define classes of their own. See [DOT Object Model (DOM)](../03-guides/02-model-api.md).
 
 ```typescript
 import { digraph, modelOf, toDot } from 'ts-graphviz';

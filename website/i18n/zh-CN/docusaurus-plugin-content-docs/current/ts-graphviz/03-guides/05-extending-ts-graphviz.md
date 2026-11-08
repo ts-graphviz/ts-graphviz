@@ -3,7 +3,7 @@ description: 如何扩展 ts-graphviz 以满足高级用例。
 ---
 # 扩展 ts-graphviz
 
-`ts-graphviz` 设计为可扩展的，允许中级用户根据特定需求自定义和增强库的功能。本节介绍如何扩展类型系统和创建自定义实现。关于模型本身，请参阅[使用模型 API](./02-model-api.md)。
+`ts-graphviz` 设计为可扩展的，允许中级用户根据特定需求自定义和增强库的功能。本节介绍如何扩展类型系统和创建自定义实现。关于模型本身，请参阅[DOT Object Model（DOM）](./02-model-api.md)。
 
 ## 创建自定义类
 

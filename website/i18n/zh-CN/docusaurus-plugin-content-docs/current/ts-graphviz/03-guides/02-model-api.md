@@ -1,11 +1,13 @@
 ---
-description: 使用模型 API，把图当作数据来构建、读取和转换。
+description: 使用 DOT Object Model（DOM），把图当作数据来构建、读取和转换。
 ---
-# 使用模型 API
+# DOT Object Model（DOM）
 
-模型是构成图的数据：`Digraph` / `Graph`、`Subgraph`、`Node`、`Edge` 以及默认属性列表。[DOT DSL](./01-dot-dsl.md) 用于像写 DOT 一样编写图，而模型 API 面向这样的程序：从其他数据构建图、读取或转换图，或者定义自己的类。
+名字沿用 Web 浏览器的 DOM，但没有事件、选择器和实时集合。
 
-每个 DSL 都代表一个模型：`modelOf(dsl)` 返回该模型，`dsl(model)` 返回模型的 DSL。两种 API 操作的是同一个图。
+**DOT Object Model（DOM）** 是构成图的对象集合：`Digraph` / `Graph`、`Subgraph`、`Node`、`Edge`、默认属性语句以及注释。[DOT DSL](./01-dot-dsl.md) 用于像写 DOT 一样编写图，而 DOM 面向这样的程序：从其他数据构建图、读取或转换图，或者定义自己的类。
+
+每个 DSL 都代表 DOM 中的一个模型：`modelOf(dsl)` 返回该模型，`dsl(model)` 返回模型的 DSL。二者操作的是同一个图。
 
 ## 构建图
 
@@ -55,45 +57,103 @@ g.addEdge(new Edge([a, b]));
 
 | 成员 | |
 | --- | --- |
+| `graphId`、`subgraphId`、`nodeId` | 根图、子图或节点的名字（DOT 中的 ID） |
 | `nodes`、`edges`、`subgraphs` | 图中的节点、边和子图；`nodes` 保存的是节点语句，不包括只出现在边中的节点（参见[常见问题](./01-dot-dsl.md#只出现在边中的节点不在-nodes-里)） |
-| `statements` | 按添加顺序排列的节点、边和子图，`toDot` 按此顺序输出；图自身的属性和默认值写在它们之前（默认类会把每条默认属性语句合并到这些默认值中；`orderedModels` 会把它们保留在原位置） |
+| `statements` | 按添加顺序排列的节点、边、子图以及开头之外的默认属性语句，`toDot` 按此顺序输出；图自身的属性和开头的默认值写在它们之前 |
 | `getNode(id)`、`getSubgraph(id)` | 按 id 获取节点或子图 |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | 图中是否存在 |
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 移除 |
-| `get(key)`、`set(key, value)`、`apply(attributes)`、`delete(key)` | 图自身的属性 |
-| `attributes.node`、`attributes.edge`、`attributes.graph` | 默认属性列表（`node [...]` 等） |
-| `addAttributeList(kind, attributes)` | 添加一条默认属性语句 |
-
-节点和边的属性位于 `attributes`：
-
-```typescript
-import { fromDot } from 'ts-graphviz';
-
-const g = fromDot('digraph { a [label = "A"]; a -> b; }');
-const a = g.getNode('a');
-a?.attributes.set('color', 'red');
-console.log(a?.attributes.get('label')); // 'A'
-console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
-g.removeNode('a');
-```
+| `addAttributeList(kind, attributes)` | 在当前位置添加一条默认属性语句（`node [...]` 等）并返回它 |
 
 `removeNode` 只移除节点语句：指向它的边仍然保留，Graphviz 渲染该边时会重新创建这个节点。若要去掉该节点，请同时移除这些边：
 
 ```typescript
 import { fromDot } from 'ts-graphviz';
 
-const g = fromDot('digraph { a; a -> b; c -> { a d }; }');
+const g = fromDot('digraph { a; a -> b; }');
 for (const edge of g.edges) {
-  if (edge.targets.flat().some((t) => t.id === 'a')) g.removeEdge(edge);
+  if (edge.targets.some((t) => 'id' in t && t.id === 'a')) g.removeEdge(edge);
 }
 g.removeNode('a');
 ```
 
-这个例子会移除整条边语句：对于 `a -> b -> c` 或 `c -> { a d }`，与 `a` 无关的连接（`b -> c`、`c -> d`）也会一并消失，需要保留的请重新创建。它只检查这个图自身的边；子图（`g.subgraphs`）中的边也需要同样处理。
+## 属性
+
+图、子图、节点、边和默认属性语句自己持有属性，并使用与 DOM 的 `Element` 相同名字的方法：
+
+| 方法 | |
+| --- | --- |
+| `getAttribute(name)` | 值，或 `undefined` |
+| `setAttribute(name, value)` | 设置一个 |
+| `removeAttribute(name)` | 删除一个 |
+| `hasAttribute(name)` | 是否已设置 |
+| `getAttributeNames()` | 已设置的名字（按顺序） |
+| `setAttributes(attributes)` | 从对象或条目设置多个 |
+| `removeAttributes()` | 全部删除 |
+
+```typescript
+import { fromDot } from 'ts-graphviz';
+
+const g = fromDot('digraph { a [label = "A"]; a -> b; }');
+const a = g.getNode('a');
+a?.setAttribute('color', 'red');
+console.log(a?.getAttribute('label')); // 'A'
+console.log(a?.getAttributeNames()); // ['label', 'color']
+console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
+```
+
+3.x 的名字（`get`、`set`、`delete`、`apply`、`clear`、`values`、`size`，以及节点或边的 `attributes`）在 v5 之前仍可使用，但已弃用。
+
+## 默认属性语句
+
+与 DOT 一样，默认属性语句只作用于它之后的内容。`addAttributeList` 添加一条默认属性语句并返回它的列表；保留它，之后就可以修改这些默认值：
+
+```typescript
+import { Digraph, toDot } from 'ts-graphviz';
+
+const g = new Digraph();
+g.createNode('a');
+const defaults = g.addAttributeList('Node', { shape: 'box' }); // 作用于之后的内容
+g.createNode('b');
+defaults.setAttribute('color', 'red');
+
+console.log(toDot(g));
+// digraph {
+//   "a";
+//   node [
+//     shape = "box";
+//     color = "red";
+//   ];
+//   "b";
+// }
+```
+
+在其他任何语句之前添加的语句会并入开头的默认值。`attributes`（`attributes.node` 等）已弃用：它只表示开头的默认值。
+
+## 注释
+
+每个模型都可以带注释：`addComment(text, { position, kind })` 添加一条注释并返回它，`comments` 列出所有注释，`removeComment(comment)` 移除其中一条。注释是冻结的 `CommentModel`，包含 `text`、`kind`（`'Slash'`、`'Block'`、`'Macro'`，或按 `fromModel` 的 `commentKind` 选项输出的 `undefined`）和 `position`（`'leading'`、`'trailing'`，在图或子图上还可以是 `'end'`）。
+
+```typescript
+import { Digraph, toDot } from 'ts-graphviz';
+
+const g = new Digraph('G');
+const a = g.createNode('a');
+a.addComment('hello');
+console.log(a.comments.map((c) => [c.text, c.position])); // [['hello', 'leading']]
+
+console.log(toDot(g));
+// digraph "G" {
+//   // hello
+//   "a";
+// }
+```
+
+`fromDot` 会保留源码中的注释及其种类和位置，`toDot` 会把它们写回原处。模型的 `comment` 已弃用：它读写第一条前置注释。
 
 ## 模型的类型守卫
 
-`isNodeModel`、`isEdgeModel`、`isSubgraphModel`、`isRootGraphModel`、`isAttributeListModel` 和 `isDotModel` 判断一个值是什么。DSL 不是模型，因此它们对 DSL 返回 false；请检查 `modelOf(x)` 或 `$$type`：
+`isNodeModel`、`isEdgeModel`、`isSubgraphModel`、`isRootGraphModel`、`isAttributeListModel`、`isDotModel` 和 `isCommentModel` 判断一个值是什么。DSL 不是模型，因此它们对 DSL 返回 false；请检查 `modelOf(x)` 或 `$$type`：
 
 ```typescript
 import { digraph, isNodeModel, modelOf } from 'ts-graphviz';
@@ -108,7 +168,7 @@ console.log(nodes.length); // 1
 
 ## 模型上下文
 
-模型上下文是图创建其内容时使用的一组类。`withContext(models)` 返回该上下文的工厂函数（`digraph`、`graph`、`strict.digraph`、`strict.graph`）；`graph.with(models)` 设置图的上下文；`fromDot` 和 `fromDotAll` 通过 `convert.models` 接受上下文。对于未指定的种类，`withContext` 和 `convert.models` 使用默认的类，而 `graph.with` 保留该图当前的类（可能是之前的 `with` 设置的类）。
+模型上下文是图创建其内容时使用的一组类。`withContext(models)` 返回该上下文的工厂函数（`digraph`、`graph`、`strict`）；`graph.with(models)` 设置图的上下文；`fromDot` 和 `fromDotAll` 通过 `convert.models` 接受上下文。未指定的类：对 `withContext` 和 `fromDot` 而言是默认类，对 `graph.with` 而言是该图当前使用的类。
 
 ```typescript
 import { Node, withContext } from 'ts-graphviz';
@@ -121,6 +181,6 @@ digraph((g) => {
 });
 ```
 
-`orderedModels` 是一个模型上下文，其中的图会像 DOT 一样把每条默认属性语句保留在原位置；`ts-graphviz/ordered` 的所有工厂函数都使用它（参见 [DOT 的语句顺序](./01-dot-dsl.md#dot-的语句顺序)）。你提供的图类会替换有序类：若要在自定义类中保持顺序，请继承 `OrderedDigraph`、`OrderedGraph` 或 `OrderedSubgraph`。
+`legacyModels`（`LegacyGraph`、`LegacyDigraph`、`LegacySubgraph`）是 3.x 的类，会把所有默认属性语句合并为每个图一组默认值；`ts-graphviz/legacy` 的所有工厂函数都使用它们（参见 [DOT 的语句顺序](./01-dot-dsl.md#dot-的语句顺序)）。它们已弃用，将在 v5 中移除。
 
 自定义类、带类型的上下文和类型扩展，请参阅[扩展 ts-graphviz](./05-extending-ts-graphviz.md)。
