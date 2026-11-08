@@ -32,7 +32,7 @@ export class FromModelConverter {
   ];
 
   constructor(private options: ConvertFromModelOptions = {}) {
-    // Own properties only: an inherited one is never an option (#1757).
+    // Own properties only: an inherited one is never an option.
     this.options = ownOptions(options);
   }
 

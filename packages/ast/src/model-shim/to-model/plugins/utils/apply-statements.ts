@@ -108,8 +108,8 @@ export function applyStatements(
         // A node mentioned again adds to its attributes, as in Graphviz
         // (`a [color=red]; a [shape=box]` is one node with both): the
         // converted node's attributes are set on the existing one through
-        // its setAttribute (as 3.x applied them), so a setAttribute that
-        // changes values runs on them again.
+        // its setAttribute, so a setAttribute that changes values runs on
+        // them again.
         const existing = graph.getNode(node.id);
         if (existing) {
           for (const name of node.getAttributeNames()) {
@@ -157,7 +157,7 @@ export function applyStatements(
         const attributes = stmt.children.filter<AttributeASTNode>(
           (v): v is AttributeASTNode => v.type === 'Attribute',
         );
-        // The graph decides: kept in place (the default classes, #1922) or
+        // The graph decides: kept in place (the default classes) or
         // merged into its defaults (the deprecated `legacyModels`).
         graph.addAttributeList(stmt.kind, collectAttributes(attributes));
         commentHolder.reset();

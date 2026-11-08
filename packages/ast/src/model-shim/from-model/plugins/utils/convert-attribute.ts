@@ -52,8 +52,8 @@ export function convertAttributes(
   createElement: CreateElement,
   model: ReadonlyAttributes,
 ): AttributeASTNode[] {
-  // A model made by hand in the 3.x shape (attributes apart, `values`)
-  // still converts: the guards that admit it look only at `$$type`.
+  // A model made by hand with its attributes apart (`values`) still
+  // converts: the guards that admit it look only at `$$type`.
   if (typeof model.getAttributeNames !== 'function') {
     const legacy = model as unknown as {
       readonly values?: ReadonlyArray<readonly [string, DotValue]>;

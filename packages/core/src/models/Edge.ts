@@ -38,9 +38,9 @@ export class Edge<S extends Schema = EmptySchema>
   >;
 
   /**
-   * The attributes of the edge, as 3.x held them apart: every method goes
-   * to the edge itself, so `edge.attributes.set(...)` and
-   * `edge.setAttribute(...)` change the same attributes.
+   * A view of the edge's attributes: every method goes to the edge itself, so
+   * `edge.attributes.set(...)` and `edge.setAttribute(...)` change the same
+   * attributes.
    * @deprecated Call `getAttribute`, `setAttribute` and the others on the
    * edge. Removed in v5.
    */

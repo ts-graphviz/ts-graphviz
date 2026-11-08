@@ -34,9 +34,9 @@ export class Node<S extends Schema = EmptySchema>
   >;
 
   /**
-   * The attributes of the node, as 3.x held them apart: every method goes
-   * to the node itself, so `node.attributes.set(...)` and
-   * `node.setAttribute(...)` change the same attributes.
+   * A view of the node's attributes: every method goes to the node itself, so
+   * `node.attributes.set(...)` and `node.setAttribute(...)` change the same
+   * attributes.
    * @deprecated Call `getAttribute`, `setAttribute` and the others on the
    * node. Removed in v5.
    */

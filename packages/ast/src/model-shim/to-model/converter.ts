@@ -20,7 +20,7 @@ export class ToModelConverter {
   ];
 
   constructor(private options: ConvertToModelOptions) {
-    // Own properties only: an inherited one is never an option (#1757).
+    // Own properties only: an inherited one is never an option.
     this.options = ownOptions(options);
   }
 
