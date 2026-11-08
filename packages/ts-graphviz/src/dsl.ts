@@ -884,7 +884,10 @@ const handler: ProxyHandler<object> = {
       return statements(model)[key];
     }
     const name = memberKey(model, key);
-    if (name !== undefined) return member(model, name);
+    if (name !== undefined) {
+      // A `$` name the model does not have reads nothing, not Object.prototype.
+      return hasMember(model, name) ? member(model, name) : undefined;
+    }
     return attributesOf(model)?.getAttribute(key);
   },
   set(target, key, value) {
@@ -916,7 +919,7 @@ const handler: ProxyHandler<object> = {
     if (typeof key !== 'string') return false;
     if (isGraph(model) && STATEMENT_NAMES.has(key)) return true;
     const name = memberKey(model, key);
-    if (name !== undefined) return name in model;
+    if (name !== undefined) return hasMember(model, name);
     return attributesOf(model)?.getAttribute(key) !== undefined;
   },
   // The attributes are the DSL's own properties: `{ ...n }`, `Object.keys(n)`

@@ -186,6 +186,9 @@ describe('the proxy traps agree on what a name is', () => {
     try {
       const n = dsl(new Tagged('a')) as unknown as Record<string, string>;
       expect(n.$tag).toBe('mine');
+      expect(n.$toString).toBeUndefined();
+      expect('$toString' in n).toBe(false);
+      expect('$constructor' in n).toBe(false);
     } finally {
       delete proto.$tag;
     }
