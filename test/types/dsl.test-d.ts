@@ -16,6 +16,7 @@ import {
   type EdgeDSL,
   type EdgeModel,
   type ForwardRefNode,
+  type GraphCommonAttributes,
   isNodeModel,
   MODEL,
   type ModelOf,
@@ -289,9 +290,15 @@ describe('what goes in is a model, what comes out a DSL', () => {
 describe('the statements', () => {
   it('type their overloads and callbacks', () => {
     expectTypeOf(g.node('a', { shape: 'box' })).toEqualTypeOf<DSL<NodeModel>>();
-    expectTypeOf(g.node({ shape: 'box' })).toEqualTypeOf<void>();
-    expectTypeOf(g.edge({ color: 'red' })).toEqualTypeOf<void>();
-    expectTypeOf(g.graph({ label: 'G' })).toEqualTypeOf<void>();
+    expectTypeOf(g.node({ shape: 'box' })).toEqualTypeOf<
+      DSL<GraphCommonAttributes['node']>
+    >();
+    expectTypeOf(g.edge({ color: 'red' })).toEqualTypeOf<
+      DSL<GraphCommonAttributes['edge']>
+    >();
+    expectTypeOf(g.graph({ label: 'G' })).toEqualTypeOf<
+      DSL<GraphCommonAttributes['graph']>
+    >();
     g.edge(['a', 'b'], { color: 'red' }, (edge) =>
       expectTypeOf(edge).toEqualTypeOf<DSL<EdgeModel>>(),
     );

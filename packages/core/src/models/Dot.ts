@@ -6,7 +6,6 @@ import {
   type RootGraphModel,
   type Schema,
 } from '@ts-graphviz/common';
-import { DotObject } from './DotObject.js';
 
 /**
  * Model of a whole DOT source: the root graphs it contains and the comments
@@ -17,10 +16,7 @@ import { DotObject } from './DotObject.js';
  * @typeParam S - The schema of its root graphs; none by default.
  * @group Models
  */
-export class Dot<S extends Schema = EmptySchema>
-  extends DotObject
-  implements DotModel<S>
-{
+export class Dot<S extends Schema = EmptySchema> implements DotModel<S> {
   public get $$type(): 'Dot' {
     return 'Dot';
   }
@@ -31,7 +27,6 @@ export class Dot<S extends Schema = EmptySchema>
   readonly #graphs: RootGraphModel<ModelTypes<S>>[];
 
   constructor(graphs: RootGraphModel<ModelTypes<S>>[] = [], comment?: string) {
-    super();
     // The models themselves, never objects standing for them (a DSL).
     this.#graphs = graphs.map(modelOf);
     this.comment = comment;

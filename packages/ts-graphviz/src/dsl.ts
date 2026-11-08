@@ -331,7 +331,14 @@ export interface GraphDSLMembers<T extends RootGraphModel | SubgraphModel>
     AttributesDSLMembers<AttributeKeysOf<T>>,
     GraphDSLStatements<T> {
   readonly $id?: string;
-  /** The default attribute lists, as DSLs. */
+  /**
+   * The leading default attribute lists, as DSLs: they apply to every
+   * statement.
+   *
+   * @deprecated Write a default attribute statement with `g.node({...})`,
+   * `g.edge({...})` or `g.graph({...})` and keep the DSL it returns to change
+   * it later. Removed in v5.
+   */
   readonly $attributes: {
     readonly [K in keyof T['attributes']]: T['attributes'][K] extends AttributeListModel
       ? DSL<T['attributes'][K]>
@@ -351,11 +358,29 @@ export interface GraphDSLMembers<T extends RootGraphModel | SubgraphModel>
   $addEdge(edge: ModelArg<EdgeModel>): void;
   $addSubgraph(subgraph: ModelArg<SubgraphModel>): void;
   $addAttributeList(
+    kind: 'Graph',
+    attributes:
+      | AttributesObject<AttributeKey>
+      | AttributesEntities<AttributeKey>,
+  ): DSL<T['attributes']['graph']>;
+  $addAttributeList(
+    kind: 'Node',
+    attributes:
+      | AttributesObject<AttributeKey>
+      | AttributesEntities<AttributeKey>,
+  ): DSL<T['attributes']['node']>;
+  $addAttributeList(
+    kind: 'Edge',
+    attributes:
+      | AttributesObject<AttributeKey>
+      | AttributesEntities<AttributeKey>,
+  ): DSL<T['attributes']['edge']>;
+  $addAttributeList(
     kind: AttributeListKind,
     attributes:
       | AttributesObject<AttributeKey>
       | AttributesEntities<AttributeKey>,
-  ): void;
+  ): DSL<AttributeListModel>;
   $existNode(nodeId: string): boolean;
   $existEdge(edge: ModelArg<EdgeModel>): boolean;
   $existSubgraph(subgraph: ModelArg<SubgraphModel>): boolean;
@@ -497,7 +522,9 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
     callback?: (node: DSL<NodeOf<T>>) => void,
   ): DSL<NodeOf<T>>;
   /**
-   * Default attributes for the nodes, as `node [color=red];` in DOT.
+   * Default attributes for the nodes, as `node [color=red];` in DOT: they
+   * apply to the nodes that follow. Returns the list's DSL, to change those
+   * defaults later.
    *
    * ```ts
    * const G = digraph('G', (g) => {
@@ -510,7 +537,7 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
    * // }
    * ```
    */
-  node(attributes: NodeAttributesObject): void;
+  node(attributes: NodeAttributesObject): DSL<T['attributes']['node']>;
 
   /**
    * A new edge, as `a -> b;` in DOT. A node's DSL, a node or an id
@@ -550,7 +577,9 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
     callback?: (edge: DSL<EdgeOf<T>>) => void,
   ): DSL<EdgeOf<T>>;
   /**
-   * Default attributes for the edges, as `edge [color=red];` in DOT.
+   * Default attributes for the edges, as `edge [color=red];` in DOT: they
+   * apply to the edges that follow. Returns the list's DSL, to change those
+   * defaults later.
    *
    * ```ts
    * const G = digraph('G', (g) => {
@@ -563,11 +592,13 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
    * // }
    * ```
    */
-  edge(attributes: EdgeAttributesObject): void;
+  edge(attributes: EdgeAttributesObject): DSL<T['attributes']['edge']>;
 
   /**
    * Default attributes for the subgraphs and this graph, as
-   * `graph [color=red];` in DOT.
+   * `graph [color=red];` in DOT: they set this graph's attributes, and the
+   * defaults of the subgraphs that follow. Returns the list's DSL, to change
+   * them later.
    *
    * ```ts
    * const G = digraph('G', (g) => {
@@ -580,7 +611,7 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
    * // }
    * ```
    */
-  graph(attributes: SubgraphAttributesObject): void;
+  graph(attributes: SubgraphAttributesObject): DSL<T['attributes']['graph']>;
 }
 
 // ---------------------------------------------------------------------------
@@ -914,8 +945,11 @@ function createStatements(g: GraphBaseModel) {
         find(rest, isFunction)?.(view);
         return view;
       }
-      if (isObject(first))
-        g.addAttributeList('Node', first as NodeAttributesObject);
+      if (isObject(first)) {
+        return viewOf(
+          g.addAttributeList('Node', first as NodeAttributesObject),
+        );
+      }
       return undefined;
     },
     edge(first: unknown, ...rest: unknown[]): unknown {
@@ -928,8 +962,11 @@ function createStatements(g: GraphBaseModel) {
         find(rest, isFunction)?.(view);
         return view;
       }
-      if (isObject(first))
-        g.addAttributeList('Edge', first as EdgeAttributesObject);
+      if (isObject(first)) {
+        return viewOf(
+          g.addAttributeList('Edge', first as EdgeAttributesObject),
+        );
+      }
       return undefined;
     },
     subgraph(...args: unknown[]): unknown {
@@ -946,10 +983,13 @@ function createStatements(g: GraphBaseModel) {
       find(args, isFunction)?.(view);
       return view;
     },
-    graph(attributes: unknown): void {
+    graph(attributes: unknown): unknown {
       if (isObject(attributes)) {
-        g.addAttributeList('Graph', attributes as SubgraphAttributesObject);
+        return viewOf(
+          g.addAttributeList('Graph', attributes as SubgraphAttributesObject),
+        );
       }
+      return undefined;
     },
   };
 }

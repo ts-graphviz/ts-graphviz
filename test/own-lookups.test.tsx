@@ -1,6 +1,6 @@
 import { stringify } from '@ts-graphviz/ast';
 import { isTsGraphvizError, withCode } from '@ts-graphviz/common';
-import { Digraph, Node, OrderedDigraph } from '@ts-graphviz/core';
+import { Digraph, LegacyDigraph, Node } from '@ts-graphviz/core';
 import { renderHTMLLike } from '@ts-graphviz/react';
 import { createElement } from 'react';
 import { describe, expect, it } from 'vitest';
@@ -55,7 +55,7 @@ describe('attribute list kinds', () => {
   });
 
   it('addAttributeList takes only Graph, Node and Edge', () => {
-    for (const g of [new Digraph(), new OrderedDigraph()]) {
+    for (const g of [new Digraph(), new LegacyDigraph()]) {
       // The ordered graph keeps a list in place once it has a statement.
       g.createNode('a');
       expect(() =>

@@ -1,7 +1,11 @@
 import { fromModel } from '@ts-graphviz/ast';
 import {
   type AnyDotObjectModel,
+  type AttributeListAttributes,
+  type AttributeListKind,
   type EdgeTargetTuple,
+  type EmptySchema,
+  type GraphCommonAttributes,
   isEdgeModel,
   isNodeModel,
   isNodeRef,
@@ -10,6 +14,7 @@ import {
   MODEL,
   modelOf,
   type NodeModel,
+  type StatementAttributeListModel,
   toNodeRef,
   toNodeRefGroup,
 } from '@ts-graphviz/common';
@@ -19,8 +24,6 @@ import {
   Dot,
   Edge,
   Node,
-  OrderedDigraph,
-  orderedModels,
   Subgraph,
 } from '@ts-graphviz/core';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -81,8 +84,10 @@ describe('DOT statements', () => {
     });
 
     test('sets the default node attributes', () => {
-      expect(g.node({ label: 'Test label' })).toBeUndefined();
-      expect(g.$attributes.node.label).toBe('Test label');
+      const defaults = g.node({ label: 'Test label' });
+      // Before any statement, the leading defaults.
+      expect(defaults).toBe(g.$attributes.node);
+      expect(defaults.label).toBe('Test label');
     });
   });
 
@@ -114,8 +119,10 @@ describe('DOT statements', () => {
     });
 
     test('sets the default edge attributes', () => {
-      expect(g.edge({ label: 'Test label' })).toBeUndefined();
-      expect(g.$attributes.edge.label).toBe('Test label');
+      const defaults = g.edge({ label: 'Test label' });
+      // After the two nodes, a statement in its place.
+      expect(modelOf(g).statements.at(-1)).toBe(modelOf(defaults));
+      expect(defaults.label).toBe('Test label');
     });
   });
 
@@ -604,10 +611,8 @@ describe('custom models', () => {
     expect((a as unknown as { $mine: boolean }).$mine).toBe(true);
   });
 
-  test('default attribute statements keep their place where the classes do', () => {
-    const model = new OrderedDigraph('G');
-    model.with(createModelsContext(orderedModels));
-    const g = dsl(model);
+  test('default attribute statements keep their place, as in DOT', () => {
+    const g = dsl(new Digraph('G'));
     g.node({ color: 'red' });
     g.node('a');
     g.node({ color: 'blue' });
@@ -645,11 +650,29 @@ describe('custom models', () => {
   test('default attribute statements go through addAttributeList', () => {
     const added = vi.fn();
     class MyDigraph extends Digraph {
+      // An override declares the overloads of every kind.
       override addAttributeList(
-        ...args: Parameters<Digraph['addAttributeList']>
-      ): void {
-        added(...args);
-        super.addAttributeList(...args);
+        kind: 'Graph',
+        attributes: AttributeListAttributes<EmptySchema, 'Graph'>,
+      ): GraphCommonAttributes['graph'];
+      override addAttributeList(
+        kind: 'Node',
+        attributes: AttributeListAttributes<EmptySchema, 'Node'>,
+      ): GraphCommonAttributes['node'];
+      override addAttributeList(
+        kind: 'Edge',
+        attributes: AttributeListAttributes<EmptySchema, 'Edge'>,
+      ): GraphCommonAttributes['edge'];
+      override addAttributeList(
+        kind: AttributeListKind,
+        attributes: AttributeListAttributes,
+      ): StatementAttributeListModel;
+      override addAttributeList(
+        kind: AttributeListKind,
+        attributes: AttributeListAttributes,
+      ): unknown {
+        added(kind, attributes);
+        return super.addAttributeList(kind, attributes);
       }
     }
     const g = dsl(new MyDigraph());
@@ -662,11 +685,13 @@ describe('custom models', () => {
       ['Edge', { color: 'green' }],
       ['Graph', { label: 'G' }],
     ]);
-    // The default classes merge them into the graph's defaults.
-    expect(modelOf(g).attributes.node.get('color')).toBe('red');
-    expect(modelOf(g).attributes.edge.get('color')).toBe('green');
-    expect(modelOf(g).attributes.graph.get('label')).toBe('G');
-    expect(modelOf(g).statements).toHaveLength(1);
+    // After the node, each keeps its place.
+    expect(modelOf(g).statements.map((s) => s.$$type)).toEqual([
+      'Node',
+      'AttributeList',
+      'AttributeList',
+      'AttributeList',
+    ]);
   });
 
   test('a class’s own node() is reached with $node()', () => {

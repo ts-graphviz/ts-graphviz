@@ -18,7 +18,7 @@
  *     a node is created by its first mention, a node statement or an edge
  *     that names it, with the defaults of that place, and a later mention
  *     only adds its explicit attributes; a default statement kept in place
- *     (`orderedModels`) applies only to what follows it;
+ *     (the default classes) applies only to what follows it;
  *   - Graphviz lists nodes in the order it created them, so the node order
  *     is compared too;
  *   - a strict graph keeps one edge per node pair (unordered when the
@@ -209,7 +209,7 @@ function expected(model: RootGraphModel, root: RootGraphSummary): Expected {
     for (const statement of m.statements) {
       switch (statement.$$type) {
         case 'AttributeList': {
-          // Kept in place (orderedModels): applies to what follows it.
+          // Kept in place (the default classes): applies to what follows it.
           const values = textAttrs(statement.values);
           if (statement.$$kind === 'Node') nd = new Map([...nd, ...values]);
           else if (statement.$$kind === 'Edge') {
