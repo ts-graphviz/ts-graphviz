@@ -1,4 +1,4 @@
-import { describe, expect, expectTypeOf, it, vi } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 import type {
   ClusterStatementASTNode,
   DotASTNode,
@@ -115,27 +115,5 @@ describe('parse with a rule', () => {
     expectTypeOf(
       parseLegacy('a -> b', { startRule: 'Edge' }),
     ).toEqualTypeOf<EdgeASTNode>();
-  });
-
-  it('reports parseLegacy once, and parse never', async () => {
-    vi.resetModules();
-    const fresh = await import('./parse.js');
-    const emit = vi
-      .spyOn(process, 'emitWarning')
-      .mockImplementation(() => undefined);
-    try {
-      fresh.parse('a -> b', 'Edge');
-      fresh.parse('digraph { a }');
-      expect(emit).not.toHaveBeenCalled();
-      fresh.parseLegacy('a -> b', { startRule: 'Edge' });
-      fresh.parseLegacy('digraph { a }');
-      expect(emit).toHaveBeenCalledTimes(1);
-      expect(emit.mock.calls[0][1]).toStrictEqual({
-        type: 'DeprecationWarning',
-        code: 'TSG_DEP_PARSE_LEGACY',
-      });
-    } finally {
-      emit.mockRestore();
-    }
   });
 });

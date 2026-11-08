@@ -1,4 +1,4 @@
-import { ownOptions, warnDeprecated, withCode } from '@ts-graphviz/common';
+import { ownOptions, withCode } from '@ts-graphviz/common';
 import type { Builder } from '../../builder/builder.js';
 import { ASTNodeCountExceededError } from '../../builder/errors.js';
 import { depthLimit, sizeLimit } from '../../limit.js';
@@ -235,10 +235,6 @@ export function parseLegacy(
   input: string,
   options?: ParseOptions<Rule>,
 ): ASTNode | ClusterStatementASTNode[] {
-  warnDeprecated(
-    'TSG_DEP_PARSE_LEGACY',
-    'parseLegacy(source, { startRule }) is deprecated and will be removed in 5.0; use parse(source, rule, options) instead.',
-  );
   const { startRule, ...common } = ownOptions(options);
   return parseRule(input, startRule ?? 'Dot', common);
 }

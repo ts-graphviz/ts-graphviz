@@ -721,17 +721,6 @@ export declare namespace Compass {
   interface $exclude extends $keywordsValidation {}
 }
 
-export declare const DEPRECATION_CHANNEL = "ts-graphviz:deprecation";
-
-export declare const DEPRECATION_CODES: readonly ["TSG_DEP_PARSE_LEGACY"];
-
-export type DeprecationCode = (typeof DEPRECATION_CODES)[number];
-
-export interface DeprecationEvent {
-  readonly code: DeprecationCode;
-  readonly message: string;
-}
-
 export type DirType = DirType.values;
 export declare namespace DirType {
   type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
@@ -1360,15 +1349,11 @@ export declare function isTsGraphvizError(value: unknown): value is CodedError;
 
 export declare function modelOf<T>(value: T): ModelOf<T>;
 
-export declare function onDeprecation(listener: (event: DeprecationEvent) => void): () => void;
-
 export declare function ownOptions<T extends object>(options: T | undefined): T;
 
 export declare function toNodeRef(target: NodeRefLike): NodeRef;
 
 export declare function toNodeRefGroup(targets: ReadonlyNodeRefGroupLike): NodeRefGroup;
-
-export declare function warnDeprecated(code: DeprecationCode, message: string): void;
 
 export declare function withCode<E extends Error, C extends ErrorCode>(error: E, code: C): Omit<E, "code"> & CodedError<C>;
 
