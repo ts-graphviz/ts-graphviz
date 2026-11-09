@@ -99,11 +99,11 @@ export class FromModelConverter {
     };
     const root = modelOf(model) as AnyReadonlyDotObjectModel;
     const ast = context.convert(root);
-    // A parent writes the leading comments of its statements before them;
-    // a statement converted alone carries its own. A root graph's are
-    // written by the DOT source around it.
+    // A parent (a body, or the DOT source for a root graph) writes the
+    // leading comments of what it holds before it; a model converted alone
+    // carries its own.
     return (
-      root.$$type === 'Dot' || root.$$type === 'Graph'
+      root.$$type === 'Dot'
         ? ast
         : withLeadingComments(createElement, ast, root, commentKind)
     ) as ModelToAST<ModelOf<T>>;
