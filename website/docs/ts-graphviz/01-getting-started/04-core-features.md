@@ -73,6 +73,8 @@ console.log(toDot(G));
 
 ---
 
+<a id="understanding-apis-declarative-vs-imperative"></a>
+
 ## Two APIs: the DOT DSL and the DOM
 
 `ts-graphviz` gives you two ways to work with a graph, both on the same graph:

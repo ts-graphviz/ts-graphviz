@@ -115,7 +115,7 @@ console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
 
 ## 默认属性语句
 
-与 DOT 一样，默认属性语句只作用于它之后的内容。`addAttributeList` 添加一条默认属性语句并返回它的列表；保留它，之后就可以修改这些默认值：
+与 DOT 一样，默认属性语句只作用于它之后的内容（已弃用的 `legacyModels` 类则会把每一条都合并到开头的默认值中；参见[模型上下文](#模型上下文)）。`addAttributeList` 添加一条默认属性语句并返回它的列表；保留它，之后就可以修改这些默认值：
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';
@@ -141,7 +141,7 @@ console.log(toDot(g));
 
 ## 注释
 
-每个模型都可以带注释：`addComment(text, { position, kind })` 添加一条注释并返回它，`comments` 列出所有注释，`removeComment(comment)` 移除其中一条。注释是冻结的 `CommentModel`，包含 `text`、`kind`（`'Slash'`、`'Block'`、`'Macro'`，或按 `fromModel` 的 `commentKind` 选项输出的 `undefined`）和 `position`（`'leading'`、`'trailing'`，在图或子图上还可以是 `'end'`）。
+除注释外，每个模型都可以带注释：`addComment(text, { position, kind })` 添加一条注释并返回它，`comments` 列出所有注释，`removeComment(comment)` 移除其中一条。注释是冻结的 `CommentModel`，包含 `text`、`kind`（`'Slash'`、`'Block'`、`'Macro'`，或按 `fromModel` 的 `commentKind` 选项输出的 `undefined`）和 `position`（`'leading'`、`'trailing'`，在图或子图上还可以是 `'end'`）。
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';

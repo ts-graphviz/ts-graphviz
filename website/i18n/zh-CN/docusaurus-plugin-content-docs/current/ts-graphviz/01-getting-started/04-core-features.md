@@ -72,6 +72,8 @@ console.log(toDot(G));
 
 ---
 
+<a id="理解-api声明式-vs-命令式"></a>
+
 ## 两种 API：DOT DSL 与 DOM
 
 `ts-graphviz` 提供两种操作图的方式，二者操作的是同一个图：

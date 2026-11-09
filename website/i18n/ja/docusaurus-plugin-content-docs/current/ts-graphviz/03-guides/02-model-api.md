@@ -115,7 +115,7 @@ console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
 
 ## 既定属性の文
 
-DOT と同じく、既定属性の文はその後に書いたものにだけ適用されます。`addAttributeList` は既定属性の文を追加してそのリストを返すので、取っておけば後からその既定値を変更できます。
+DOT と同じく、既定属性の文はその後に書いたものにだけ適用されます（非推奨の `legacyModels` のクラスは、どれも先頭の既定値にまとめます。[モデルコンテキスト](#モデルコンテキスト)を参照）。`addAttributeList` は既定属性の文を追加してそのリストを返すので、取っておけば後からその既定値を変更できます。
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';
@@ -141,7 +141,7 @@ console.log(toDot(g));
 
 ## コメント
 
-どのモデルもコメントを持てます。`addComment(text, { position, kind })` はコメントを追加して返し、`comments` で一覧を得て、`removeComment(comment)` で取り除けます。コメントは凍結された `CommentModel` で、`text`、`kind`（`'Slash'`、`'Block'`、`'Macro'`、または `fromModel` の `commentKind` オプションに従う `undefined`）、`position`（`'leading'`、`'trailing'`、グラフやサブグラフでは `'end'`）を持ちます。
+コメント以外のどのモデルもコメントを持てます。`addComment(text, { position, kind })` はコメントを追加して返し、`comments` で一覧を得て、`removeComment(comment)` で取り除けます。コメントは凍結された `CommentModel` で、`text`、`kind`（`'Slash'`、`'Block'`、`'Macro'`、または `fromModel` の `commentKind` オプションに従う `undefined`）、`position`（`'leading'`、`'trailing'`、グラフやサブグラフでは `'end'`）を持ちます。
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';

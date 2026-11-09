@@ -115,7 +115,7 @@ The 3.x names (`get`, `set`, `delete`, `apply`, `clear`, `values`, `size`, and a
 
 ## Default attribute statements
 
-As in DOT, a default attribute statement applies only to what follows it. `addAttributeList` adds one and returns its list, which you can keep to change those defaults later:
+As in DOT, a default attribute statement applies only to what follows it (the deprecated `legacyModels` classes merge every one into the leading defaults instead; see [Models contexts](#models-contexts)). `addAttributeList` adds one and returns its list, which you can keep to change those defaults later:
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';
@@ -141,7 +141,7 @@ A statement added before any other joins the leading defaults. `attributes` (`at
 
 ## Comments
 
-Every model takes comments: `addComment(text, { position, kind })` adds one and returns it, `comments` lists them, and `removeComment(comment)` takes one out. A comment is a frozen `CommentModel` with its `text`, `kind` (`'Slash'`, `'Block'` or `'Macro'`, or `undefined` for `fromModel`'s `commentKind` option) and `position` (`'leading'`, `'trailing'`, or on a graph or subgraph `'end'`).
+Every model but a comment takes comments: `addComment(text, { position, kind })` adds one and returns it, `comments` lists them, and `removeComment(comment)` takes one out. A comment is a frozen `CommentModel` with its `text`, `kind` (`'Slash'`, `'Block'` or `'Macro'`, or `undefined` for `fromModel`'s `commentKind` option) and `position` (`'leading'`, `'trailing'`, or on a graph or subgraph `'end'`).
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';

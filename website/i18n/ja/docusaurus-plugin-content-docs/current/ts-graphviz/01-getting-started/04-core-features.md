@@ -70,6 +70,8 @@ console.log(toDot(G));
 
 ---
 
+<a id="api-の理解宣言的-vs-命令的"></a>
+
 ## 2 つの API：DOT DSL と DOM
 
 `ts-graphviz` には、グラフを扱う方法が 2 つあります。どちらも同じグラフを扱います。
