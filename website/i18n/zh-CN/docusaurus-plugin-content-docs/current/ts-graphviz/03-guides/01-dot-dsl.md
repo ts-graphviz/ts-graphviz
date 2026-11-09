@@ -28,7 +28,7 @@ console.log(toDot(G));
 // }
 ```
 
-DSL 代表图的模型，即 [DOT Object Model（DOM）](./02-model-api.md)：模型的每个成员都以原名出现在 DSL 上，与属性并列。
+DSL 代表图的模型，即 [DOT Object Model（DOM）](./02-model-api.md)，并且只包含 DOT 的词汇：属性、语句、端口和注释。模型的其他功能都在模型上，用 `modelOf(x)` 获取（参见 [DSL 上有什么，模型上有什么](#what-is-on-the-dsl-and-what-on-the-model)）。
 
 ## 从 DOT 到 DSL
 
@@ -116,76 +116,65 @@ digraph((g) => {
 });
 ```
 
-DOM 的方法同样可用，并接受任意属性名，例如保存在变量中的名字：
+属性方法（`getAttribute`、`setAttributes`、`getAttributeNames` 等）在模型上，并接受任意属性名，例如保存在变量中的名字：
 
 ```typescript
-import { digraph } from 'ts-graphviz';
+import { digraph, modelOf } from 'ts-graphviz';
 
 digraph((g) => {
-  const a = g.node('a');
-  a.setAttribute('label', 'A');
-  a.setAttributes({ color: 'red', shape: 'box' });
+  const a = modelOf(g.node('a'));
+  a.setAttributes({ label: 'A', color: 'red' });
   console.log(a.getAttribute('label')); // 'A'
-  console.log(a.hasAttribute('fontname')); // false
-  console.log(a.getAttributeNames()); // ['label', 'color', 'shape']
-  a.removeAttribute('color');
-  a.removeAttributes(); // 全部删除
+  console.log(a.getAttributeNames()); // ['label', 'color']
+  a.removeAttributes(); // 全部
 });
 ```
 
-## 名字
+## DSL 上有什么，模型上有什么 {#what-is-on-the-dsl-and-what-on-the-model}
 
-模型自身的成员在 DSL 上保持原名，并且没有与 Graphviz 属性同名的成员：
+DSL 只包含 DOT 的词汇，所以它的名字不会与属性冲突，编辑器的补完中只有属性和少数几个 DSL 成员：
 
-| DSL 写法 | 含义 |
+| DSL 上 | 含义 |
 | --- | --- |
-| `a.nodeId`、`g.graphId`、`s.subgraphId` | 节点、根图或子图的名字（DOT 中的 ID） |
-| `a.id`、`a.comment`、`g.size` | Graphviz 的属性 `id`、`comment` 和 `size` |
-| `g.nodes`、`g.edges`、`g.subgraphs`、`g.statements` | 图的内容（以 DSL 形式） |
-| `g.getNode('a')`、`g.createNode('a')`、`a.port('p')` | 模型的方法 |
-| `a.getAttribute('label')`、`a.addComment('note')` | DOM 的方法 |
-| `a.$$type` | 模型的种类（`'Node'`、`'Edge'` 等） |
+| `a.label`、`a.id`、`a.comment`、`g.size` 等 | Graphviz 的属性 |
+| `g.node(...)`、`g.edge(...)`、`g.subgraph(...)`、`g.graph(...)` | DOT 语句（图和子图上） |
+| `a.port('p')` | 用作边端点的、带端口的节点 |
+| `a.addComment('note')` | 写入 DOT 源码的注释 |
+| `a.$$type`、`list.$$kind` | 模型的种类（`'Node'`、`'Edge'` 等）和默认属性列表的种类 |
+
+其余的都在模型上，用 `modelOf(x)` 获取：节点或图的名字（`id`）、图的内容（`nodes`、`edges`、`subgraphs`、`statements`）、它的方法（`getNode`、`createNode`、`removeNode` 等）、属性方法、`comments`、边的 `targets`，以及自定义模型类的成员。
 
 ```typescript
-import { digraph } from 'ts-graphviz';
+import { digraph, modelOf } from 'ts-graphviz';
 
 digraph('G', (g) => {
   const a = g.node('a');
-  a.id = 'svg-a';
-  console.log(a.nodeId); // 'a'
+  a.id = 'svg-a'; // Graphviz 的 id 属性
+  console.log(modelOf(a).id); // 'a'：节点的名字
   console.log(a.id); // 'svg-a'
-  console.log(g.graphId); // 'G'
+  console.log(modelOf(g).id); // 'G'
+  console.log(modelOf(g).nodes.length); // 1
   console.log(a.$$type); // 'Node'
 });
 ```
 
-只有两种情况需要在前面加 `$`：
-
-- 自定义类的成员与 Graphviz 属性同名：`weight` 是属性，因此方法 `weight()` 写作 `$weight()`；
-- 自定义类的成员与 DOT 语句同名：`node()`、`edge()`、`subgraph()` 和 `graph()` 是 DSL 的语句，因此自定义类的方法 `node()` 写作 `$node()`。
+自定义类的成员同样在模型上：
 
 ```typescript
-import { Edge, withContext } from 'ts-graphviz';
+import { Edge, modelOf, withContext } from 'ts-graphviz';
 
 class MyEdge extends Edge {
   cost() {
     return 1;
-  }
-  weight() {
-    return 2;
   }
 }
 
 const { digraph } = withContext({ Edge: MyEdge });
 digraph((g) => {
   const e = g.edge(['a', 'b']);
-  console.log(e.cost()); // 1
-  console.log(e.$weight()); // 2
-  console.log(e.weight); // undefined：Graphviz 属性
+  console.log(modelOf(e).cost()); // 1
 });
 ```
-
-v4 中已弃用的成员（`attributes`、模型的 `id`、模型的 `comment`、`get`、`set` 等 3.x 的属性方法）不在 DSL 的类型中。在迁移完成之前，请通过 `modelOf(x)` 读取，或在前面加 `$` 使用。
 
 ## 注释
 
@@ -210,7 +199,7 @@ console.log(toDot(G));
 // }
 ```
 
-`comments` 列出所有注释，`removeComment(comment)` 移除其中一条。在 DSL 上，`comment` 是 Graphviz 的属性，Graphviz 会把它写入输出；DOT 源码中的注释是 `CommentModel`。
+在模型上，`comments` 列出所有注释，`removeComment(comment)` 移除其中一条（`modelOf(a).comments`）。在 DSL 上，`comment` 是 Graphviz 的属性，Graphviz 会把它写入输出；DOT 源码中的注释是 `CommentModel`。
 
 ## 编辑解析得到的图
 
@@ -226,7 +215,7 @@ g.edge(['b', 'c']);
 console.log(toDot(g));
 ```
 
-通过 DSL 访问到的每个模型都是 DSL，而且一个模型只有一个 DSL，所以 DSL 可以用 `===` 比较。`modelOf(x)` 返回对应的模型。`toDot`、`fromModel` 和适配器的 `toBlob` 既接受模型，也接受 DSL。
+语句返回的是 DSL，而且一个模型只有一个 DSL，所以 DSL 可以用 `===` 比较。`modelOf(x)` 返回对应的模型，从中读到的模型可以用 `dsl(model)` 得到它的 DSL。`toDot`、`fromModel` 和适配器的 `toBlob` 既接受模型，也接受 DSL。
 
 ## DOT 的语句顺序
 
@@ -279,10 +268,10 @@ console.log(toDot(G));
 ### 只出现在边中的节点不在 `nodes` 里
 
 ```typescript
-import { dsl, fromDot } from 'ts-graphviz';
+import { fromDot } from 'ts-graphviz';
 
-const g = dsl(fromDot('digraph { a; a -> b; }'));
-console.log(g.nodes.map((n) => n.nodeId)); // ['a']
+const g = fromDot('digraph { a; a -> b; }');
+console.log(g.nodes.map((n) => n.id)); // ['a']
 console.log(g.getNode('b')); // undefined
 ```
 
@@ -309,4 +298,4 @@ digraph((g) => {
 
 ### `attributes` 去哪儿了？
 
-`g.attributes.node`（在 DSL 上为 `g.$attributes.node`）已弃用：它只表示图开头的默认值。请保留 `g.node({ ... })` 返回的 DSL，并通过它修改默认值。
+`modelOf(g).attributes.node` 已弃用：它只表示图开头的默认值。请保留 `g.node({ ... })` 返回的 DSL，并通过它修改默认值。

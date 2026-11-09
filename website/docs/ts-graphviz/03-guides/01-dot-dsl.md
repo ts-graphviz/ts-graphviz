@@ -28,7 +28,7 @@ console.log(toDot(G));
 // }
 ```
 
-The DSL stands for the graph's models, the [DOT Object Model (DOM)](./02-model-api.md): every member of a model is there under its own name, next to the attributes.
+The DSL stands for the graph's models, the [DOT Object Model (DOM)](./02-model-api.md), and holds only DOT's words: attributes, statements, ports and comments. Everything else a model does is on the model, which `modelOf(x)` gives (see [What is on the DSL, and what on the model](#what-is-on-the-dsl-and-what-on-the-model)).
 
 ## From DOT to the DSL
 
@@ -116,76 +116,65 @@ digraph((g) => {
 });
 ```
 
-The methods of the DOM work too, and take any attribute name, such as one held in a variable:
+The attribute methods (`getAttribute`, `setAttributes`, `getAttributeNames`, …) are on the model. They take any attribute name, such as one held in a variable:
 
 ```typescript
-import { digraph } from 'ts-graphviz';
+import { digraph, modelOf } from 'ts-graphviz';
 
 digraph((g) => {
-  const a = g.node('a');
-  a.setAttribute('label', 'A');
-  a.setAttributes({ color: 'red', shape: 'box' });
+  const a = modelOf(g.node('a'));
+  a.setAttributes({ label: 'A', color: 'red' });
   console.log(a.getAttribute('label')); // 'A'
-  console.log(a.hasAttribute('fontname')); // false
-  console.log(a.getAttributeNames()); // ['label', 'color', 'shape']
-  a.removeAttribute('color');
+  console.log(a.getAttributeNames()); // ['label', 'color']
   a.removeAttributes(); // all of them
 });
 ```
 
-## Names
+## What is on the DSL, and what on the model {#what-is-on-the-dsl-and-what-on-the-model}
 
-The model's own members keep their names on the DSL, and no member is named like a Graphviz attribute:
+The DSL keeps DOT's words only, so its names never collide with the attributes, and your editor's completion lists the attributes and the few DSL members:
 
 | On the DSL | Meaning |
 | --- | --- |
-| `a.nodeId`, `g.graphId`, `s.subgraphId` | the name of a node, root graph or subgraph (its ID in DOT) |
-| `a.id`, `a.comment`, `g.size` | the Graphviz attributes `id`, `comment` and `size` |
-| `g.nodes`, `g.edges`, `g.subgraphs`, `g.statements` | the graph's contents, as DSLs |
-| `g.getNode('a')`, `g.createNode('a')`, `a.port('p')` | the model's methods |
-| `a.getAttribute('label')`, `a.addComment('note')` | the DOM's methods |
-| `a.$$type` | the kind of model (`'Node'`, `'Edge'`, …) |
+| `a.label`, `a.id`, `a.comment`, `g.size`, … | the Graphviz attributes |
+| `g.node(...)`, `g.edge(...)`, `g.subgraph(...)`, `g.graph(...)` | the DOT statements (on graphs and subgraphs) |
+| `a.port('p')` | a node at a port, for an edge target |
+| `a.addComment('note')` | a comment written into the DOT source |
+| `a.$$type`, `list.$$kind` | the kind of model (`'Node'`, `'Edge'`, …) and of default attribute list |
+
+Everything else is on the model, which `modelOf(x)` gives: the name of a node or graph (`id`), the graph's contents (`nodes`, `edges`, `subgraphs`, `statements`), its methods (`getNode`, `createNode`, `removeNode`, …), the attribute methods, `comments`, an edge's `targets`, and the members of your own model classes.
 
 ```typescript
-import { digraph } from 'ts-graphviz';
+import { digraph, modelOf } from 'ts-graphviz';
 
 digraph('G', (g) => {
   const a = g.node('a');
-  a.id = 'svg-a';
-  console.log(a.nodeId); // 'a'
+  a.id = 'svg-a'; // the Graphviz id attribute
+  console.log(modelOf(a).id); // 'a': the node's name
   console.log(a.id); // 'svg-a'
-  console.log(g.graphId); // 'G'
+  console.log(modelOf(g).id); // 'G'
+  console.log(modelOf(g).nodes.length); // 1
   console.log(a.$$type); // 'Node'
 });
 ```
 
-A `$` in front is needed in two cases only:
-
-- a member of your own class named like a Graphviz attribute: a method `weight()` is `$weight()`, since `weight` is the attribute;
-- a member of your own class named like a DOT statement: `node()`, `edge()`, `subgraph()` and `graph()` are the DSL's statements, so a method `node()` of your class is `$node()`.
+The members of your own classes are on the model too:
 
 ```typescript
-import { Edge, withContext } from 'ts-graphviz';
+import { Edge, modelOf, withContext } from 'ts-graphviz';
 
 class MyEdge extends Edge {
   cost() {
     return 1;
-  }
-  weight() {
-    return 2;
   }
 }
 
 const { digraph } = withContext({ Edge: MyEdge });
 digraph((g) => {
   const e = g.edge(['a', 'b']);
-  console.log(e.cost()); // 1
-  console.log(e.$weight()); // 2
-  console.log(e.weight); // undefined: the Graphviz attribute
+  console.log(modelOf(e).cost()); // 1
 });
 ```
-
-The members deprecated in v4 (`attributes`, `id` of a model, `comment` of a model, the 3.x attribute methods such as `get` and `set`) are left out of the DSL's types. Read them on `modelOf(x)`, or with a `$` in front while you move off them.
 
 ## Comments
 
@@ -210,7 +199,7 @@ console.log(toDot(G));
 // }
 ```
 
-`comments` lists them, and `removeComment(comment)` takes one out. On the DSL, `comment` is the Graphviz attribute, which Graphviz writes into its output; a comment of the DOT source is a `CommentModel`.
+On the model, `comments` lists them and `removeComment(comment)` takes one out (`modelOf(a).comments`). On the DSL, `comment` is the Graphviz attribute, which Graphviz writes into its output; a comment of the DOT source is a `CommentModel`.
 
 ## Editing a parsed graph
 
@@ -226,7 +215,7 @@ g.edge(['b', 'c']);
 console.log(toDot(g));
 ```
 
-Every model you reach through a DSL is a DSL, and a model has one DSL, so DSLs compare with `===`. `modelOf(x)` gives the model back. `toDot`, `fromModel` and the adapter's `toBlob` take a DSL as well as a model.
+What a statement gives is a DSL, and a model has one DSL, so DSLs compare with `===`. `modelOf(x)` gives the model back, and `dsl(model)` the DSL of any model you read from it. `toDot`, `fromModel` and the adapter's `toBlob` take a DSL as well as a model.
 
 ## DOT's statement order
 
@@ -279,10 +268,10 @@ console.log(toDot(G));
 ### A node that only appears in an edge is not in `nodes`
 
 ```typescript
-import { dsl, fromDot } from 'ts-graphviz';
+import { fromDot } from 'ts-graphviz';
 
-const g = dsl(fromDot('digraph { a; a -> b; }'));
-console.log(g.nodes.map((n) => n.nodeId)); // ['a']
+const g = fromDot('digraph { a; a -> b; }');
+console.log(g.nodes.map((n) => n.id)); // ['a']
 console.log(g.getNode('b')); // undefined
 ```
 
@@ -309,4 +298,4 @@ In v4 it applies only to what follows it, as in DOT. Give the defaults before th
 
 ### Where did `attributes` go?
 
-`g.attributes.node` (on the DSL, `g.$attributes.node`) is deprecated: it is the defaults at the top of the graph only. Keep the DSL that `g.node({ ... })` returns, and change the defaults through it.
+`modelOf(g).attributes.node` is deprecated: it is the defaults at the top of the graph only. Keep the DSL that `g.node({ ... })` returns, and change the defaults through it.

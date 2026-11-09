@@ -7,7 +7,7 @@ The names follow the DOM of web browsers, but there are no events, selectors or 
 
 The **DOT Object Model (DOM)** is the set of objects a graph is made of: `Digraph` / `Graph`, `Subgraph`, `Node`, `Edge`, the default attribute statements and the comments. Where the [DOT DSL](./01-dot-dsl.md) is for writing graphs as in DOT, the DOM is for programs that build graphs from other data, read them, convert them, or define classes of their own.
 
-Every DSL stands for a model of the DOM: `modelOf(dsl)` gives it, and `dsl(model)` gives the DSL of a model. Both work on the same graph. Comments have no DSL: `dsl()` refuses them, and the DSL gives and takes the `CommentModel` itself.
+Every DSL stands for a model of the DOM: `modelOf(dsl)` gives it, and `dsl(model)` gives the DSL of a model. Both work on the same graph. The DSL keeps DOT's words only (attributes, statements, `port`, `addComment`); everything on this page is on the model. Comments have no DSL: `dsl()` refuses them, and `addComment` gives the `CommentModel` itself.
 
 ## Building a graph
 
@@ -57,7 +57,7 @@ g.addEdge(new Edge([a, b]));
 
 | Member | |
 | --- | --- |
-| `graphId`, `subgraphId`, `nodeId` | the name of a root graph, subgraph or node (its ID in DOT) |
+| `id` | the name of a root graph, subgraph or node (its ID in DOT) |
 | `nodes`, `edges`, `subgraphs` | the graph's nodes, edges and subgraphs; `nodes` holds the node statements, not the nodes that appear only in edges (see [the FAQ](./01-dot-dsl.md#a-node-that-only-appears-in-an-edge-is-not-in-nodes)) |
 | `statements` | the graph's nodes, edges, subgraphs and default attribute statements after the leading ones, in the order they were added, which `toDot` writes in that order; the graph's own attributes and the leading defaults are written before them |
 | `getNode(id)`, `getSubgraph(id)` | a node or subgraph by id |

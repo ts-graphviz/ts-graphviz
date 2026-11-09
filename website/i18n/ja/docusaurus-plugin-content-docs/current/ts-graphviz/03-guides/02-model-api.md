@@ -7,7 +7,7 @@ description: DOT Object Model（DOM）を使い、グラフをデータとして
 
 **DOT Object Model（DOM）** は、グラフを構成するオブジェクトの集まりです。`Digraph` / `Graph`、`Subgraph`、`Node`、`Edge`、既定属性の文、コメントがあります。[DOT DSL](./01-dot-dsl.md) が DOT と同じようにグラフを書くためのものであるのに対し、DOM は、他のデータからグラフを組み立てたり、グラフを読み取ったり変換したり、独自のクラスを定義したりするプログラムのためのものです。
 
-DSL はそれぞれ DOM の一つのモデルの代わりです。`modelOf(dsl)` でモデルを、`dsl(model)` でモデルの DSL を得られます。どちらも同じグラフを扱います。コメントには DSL がありません。`dsl()` はコメントを受け付けず、DSL は `CommentModel` そのものを返し、受け取ります。
+DSL はそれぞれ DOM の一つのモデルの代わりです。`modelOf(dsl)` でモデルを、`dsl(model)` でモデルの DSL を得られます。どちらも同じグラフを扱います。DSL は DOT の語彙（属性、文、`port`、`addComment`）だけを持ち、このページで扱うものはすべてモデルにあります。コメントには DSL がありません。`dsl()` はコメントを受け付けず、`addComment` は `CommentModel` そのものを返します。
 
 ## グラフを組み立てる
 
@@ -57,7 +57,7 @@ g.addEdge(new Edge([a, b]));
 
 | メンバー | |
 | --- | --- |
-| `graphId`、`subgraphId`、`nodeId` | ルートグラフ、サブグラフ、ノードの名前（DOT での ID） |
+| `id` | ルートグラフ、サブグラフ、ノードの名前（DOT での ID） |
 | `nodes`、`edges`、`subgraphs` | グラフのノード、エッジ、サブグラフ。`nodes` が持つのはノード文で、エッジにだけ出てくるノードは含みません（[よくある質問](./01-dot-dsl.md#エッジにだけ出てくるノードが-nodes-に入らない)を参照） |
 | `statements` | グラフのノード、エッジ、サブグラフ、先頭以外の既定属性の文を追加した順に並べたもの。`toDot` はこの順に書き出します。グラフ自身の属性と先頭の既定値はその前に書き出されます |
 | `getNode(id)`、`getSubgraph(id)` | id でノードやサブグラフを得る |

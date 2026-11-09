@@ -28,7 +28,7 @@ console.log(toDot(G));
 // }
 ```
 
-DSL はグラフのモデル、つまり [DOT Object Model（DOM）](./02-model-api.md)の代わりです。モデルのメンバーはすべてその名前のまま、属性と並んで使えます。
+DSL はグラフのモデル、つまり [DOT Object Model（DOM）](./02-model-api.md)の代わりで、DOT の語彙だけを持ちます：属性、文、ポート、コメントです。モデルのそれ以外の機能はモデルにあり、`modelOf(x)` で得られます（[DSL にあるもの、モデルにあるもの](#what-is-on-the-dsl-and-what-on-the-model)を参照）。
 
 ## DOT から DSL へ
 
@@ -116,76 +116,65 @@ digraph((g) => {
 });
 ```
 
-DOM のメソッドも使えます。変数に入った属性名など、どの属性名でも受け取ります。
+属性メソッド（`getAttribute`、`setAttributes`、`getAttributeNames` など）はモデルにあります。変数に入った属性名など、どの属性名でも受け取ります。
 
 ```typescript
-import { digraph } from 'ts-graphviz';
+import { digraph, modelOf } from 'ts-graphviz';
 
 digraph((g) => {
-  const a = g.node('a');
-  a.setAttribute('label', 'A');
-  a.setAttributes({ color: 'red', shape: 'box' });
+  const a = modelOf(g.node('a'));
+  a.setAttributes({ label: 'A', color: 'red' });
   console.log(a.getAttribute('label')); // 'A'
-  console.log(a.hasAttribute('fontname')); // false
-  console.log(a.getAttributeNames()); // ['label', 'color', 'shape']
-  a.removeAttribute('color');
-  a.removeAttributes(); // すべて削除する
+  console.log(a.getAttributeNames()); // ['label', 'color']
+  a.removeAttributes(); // すべて
 });
 ```
 
-## 名前
+## DSL にあるもの、モデルにあるもの {#what-is-on-the-dsl-and-what-on-the-model}
 
-モデル自身のメンバーは DSL でも同じ名前で、Graphviz の属性と同じ名前のメンバーはありません。
+DSL は DOT の語彙だけを持つので、その名前が属性とぶつかることはなく、エディターの補完には属性と少数の DSL のメンバーが並びます。
 
-| DSL での書き方 | 意味 |
+| DSL にあるもの | 意味 |
 | --- | --- |
-| `a.nodeId`、`g.graphId`、`s.subgraphId` | ノード、ルートグラフ、サブグラフの名前（DOT での ID） |
-| `a.id`、`a.comment`、`g.size` | Graphviz の属性 `id`、`comment`、`size` |
-| `g.nodes`、`g.edges`、`g.subgraphs`、`g.statements` | グラフの中身（DSL として） |
-| `g.getNode('a')`、`g.createNode('a')`、`a.port('p')` | モデルのメソッド |
-| `a.getAttribute('label')`、`a.addComment('note')` | DOM のメソッド |
-| `a.$$type` | モデルの種類（`'Node'`、`'Edge'` など） |
+| `a.label`、`a.id`、`a.comment`、`g.size` など | Graphviz の属性 |
+| `g.node(...)`、`g.edge(...)`、`g.subgraph(...)`、`g.graph(...)` | DOT の文（グラフとサブグラフ） |
+| `a.port('p')` | エッジの端点にする、ポート付きのノード |
+| `a.addComment('note')` | DOT ソースに書き込むコメント |
+| `a.$$type`、`list.$$kind` | モデルの種類（`'Node'`、`'Edge'` など）と既定属性リストの種類 |
+
+それ以外はすべて、`modelOf(x)` で得られるモデルにあります。ノードやグラフの名前（`id`）、グラフの中身（`nodes`、`edges`、`subgraphs`、`statements`）、そのメソッド（`getNode`、`createNode`、`removeNode` など）、属性メソッド、`comments`、エッジの `targets`、自作のモデルクラスのメンバーです。
 
 ```typescript
-import { digraph } from 'ts-graphviz';
+import { digraph, modelOf } from 'ts-graphviz';
 
 digraph('G', (g) => {
   const a = g.node('a');
-  a.id = 'svg-a';
-  console.log(a.nodeId); // 'a'
+  a.id = 'svg-a'; // Graphviz の id 属性
+  console.log(modelOf(a).id); // 'a'：ノードの名前
   console.log(a.id); // 'svg-a'
-  console.log(g.graphId); // 'G'
+  console.log(modelOf(g).id); // 'G'
+  console.log(modelOf(g).nodes.length); // 1
   console.log(a.$$type); // 'Node'
 });
 ```
 
-先頭に `$` が必要なのは次の 2 つの場合だけです。
-
-- 自作クラスのメンバーが Graphviz の属性と同じ名前のとき：`weight` は属性なので、メソッド `weight()` は `$weight()` になります。
-- 自作クラスのメンバーが DOT の文と同じ名前のとき：`node()`、`edge()`、`subgraph()`、`graph()` は DSL の文なので、自作クラスのメソッド `node()` は `$node()` になります。
+自作クラスのメンバーもモデルにあります。
 
 ```typescript
-import { Edge, withContext } from 'ts-graphviz';
+import { Edge, modelOf, withContext } from 'ts-graphviz';
 
 class MyEdge extends Edge {
   cost() {
     return 1;
-  }
-  weight() {
-    return 2;
   }
 }
 
 const { digraph } = withContext({ Edge: MyEdge });
 digraph((g) => {
   const e = g.edge(['a', 'b']);
-  console.log(e.cost()); // 1
-  console.log(e.$weight()); // 2
-  console.log(e.weight); // undefined：Graphviz の属性
+  console.log(modelOf(e).cost()); // 1
 });
 ```
-
-v4 で非推奨になったメンバー（`attributes`、モデルの `id`、モデルの `comment`、`get` や `set` などの 3.x の属性メソッド）は、DSL の型には含まれません。移行が済むまでは、`modelOf(x)` から読むか、先頭に `$` を付けて使ってください。
 
 ## コメント
 
@@ -210,7 +199,7 @@ console.log(toDot(G));
 // }
 ```
 
-`comments` で一覧を得て、`removeComment(comment)` で取り除けます。DSL での `comment` は Graphviz の属性で、Graphviz が出力に書き込みます。DOT ソースのコメントは `CommentModel` です。
+モデルでは、`comments` で一覧を得て、`removeComment(comment)` で取り除けます（`modelOf(a).comments`）。DSL での `comment` は Graphviz の属性で、Graphviz が出力に書き込みます。DOT ソースのコメントは `CommentModel` です。
 
 ## 読み込んだグラフを編集する
 
@@ -226,7 +215,7 @@ g.edge(['b', 'c']);
 console.log(toDot(g));
 ```
 
-DSL を通してたどったモデルはすべて DSL で、一つのモデルに DSL は一つなので、DSL は `===` で比較できます。`modelOf(x)` でモデルに戻せます。`toDot`、`fromModel`、アダプターの `toBlob` は、モデルだけでなく DSL も受け取ります。
+文が返すものは DSL で、一つのモデルに DSL は一つなので、DSL は `===` で比較できます。`modelOf(x)` でモデルに戻せ、そこから読んだモデルの DSL は `dsl(model)` で得られます。`toDot`、`fromModel`、アダプターの `toBlob` は、モデルだけでなく DSL も受け取ります。
 
 ## DOT の文の順序
 
@@ -279,10 +268,10 @@ console.log(toDot(G));
 ### エッジにだけ出てくるノードが `nodes` に入らない
 
 ```typescript
-import { dsl, fromDot } from 'ts-graphviz';
+import { fromDot } from 'ts-graphviz';
 
-const g = dsl(fromDot('digraph { a; a -> b; }'));
-console.log(g.nodes.map((n) => n.nodeId)); // ['a']
+const g = fromDot('digraph { a; a -> b; }');
+console.log(g.nodes.map((n) => n.id)); // ['a']
 console.log(g.getNode('b')); // undefined
 ```
 
@@ -309,4 +298,4 @@ v4 では、DOT と同じく、その既定値は後に書いたものにだけ�
 
 ### `attributes` はどこへ行ったのか
 
-`g.attributes.node`（DSL では `g.$attributes.node`）は非推奨です。これはグラフ先頭の既定値だけを指します。`g.node({ ... })` が返す DSL を取っておき、それを通して既定値を変更してください。
+`modelOf(g).attributes.node` は非推奨です。これはグラフ先頭の既定値だけを指します。`g.node({ ... })` が返す DSL を取っておき、それを通して既定値を変更してください。

@@ -7,7 +7,7 @@ description: 使用 DOT Object Model（DOM），把图当作数据来构建、�
 
 **DOT Object Model（DOM）** 是构成图的对象集合：`Digraph` / `Graph`、`Subgraph`、`Node`、`Edge`、默认属性语句以及注释。[DOT DSL](./01-dot-dsl.md) 用于像写 DOT 一样编写图，而 DOM 面向这样的程序：从其他数据构建图、读取或转换图，或者定义自己的类。
 
-每个 DSL 都代表 DOM 中的一个模型：`modelOf(dsl)` 返回该模型，`dsl(model)` 返回模型的 DSL。二者操作的是同一个图。注释没有 DSL：`dsl()` 不接受注释，DSL 直接返回和接收 `CommentModel` 本身。
+每个 DSL 都代表 DOM 中的一个模型：`modelOf(dsl)` 返回该模型，`dsl(model)` 返回模型的 DSL。二者操作的是同一个图。DSL 只包含 DOT 的词汇（属性、语句、`port`、`addComment`），本页介绍的内容都在模型上。注释没有 DSL：`dsl()` 不接受注释，`addComment` 直接返回 `CommentModel` 本身。
 
 ## 构建图
 
@@ -57,7 +57,7 @@ g.addEdge(new Edge([a, b]));
 
 | 成员 | |
 | --- | --- |
-| `graphId`、`subgraphId`、`nodeId` | 根图、子图或节点的名字（DOT 中的 ID） |
+| `id` | 根图、子图或节点的名字（DOT 中的 ID） |
 | `nodes`、`edges`、`subgraphs` | 图中的节点、边和子图；`nodes` 保存的是节点语句，不包括只出现在边中的节点（参见[常见问题](./01-dot-dsl.md#只出现在边中的节点不在-nodes-里)） |
 | `statements` | 按添加顺序排列的节点、边、子图以及开头之外的默认属性语句，`toDot` 按此顺序输出；图自身的属性和开头的默认值写在它们之前 |
 | `getNode(id)`、`getSubgraph(id)` | 按 id 获取节点或子图 |
