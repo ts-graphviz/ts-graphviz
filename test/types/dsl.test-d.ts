@@ -3,7 +3,6 @@ import {
   type Attribute,
   type AttributeListDSL,
   type AttributeListModel,
-  type AttributesGroupModel,
   createModelsContext,
   Digraph,
   Dot,
@@ -27,8 +26,6 @@ import {
   type NodeAttributeKey,
   type NodeDSL,
   type NodeModel,
-  type ReadonlyAttributes,
-  type ReadonlyNodeDSL,
   type RootGraphDSL,
   type RootGraphModel,
   Subgraph,
@@ -39,10 +36,11 @@ import {
 import { describe, expectTypeOf, it } from 'vitest';
 
 // The types of the DOT DSL (packages/ts-graphviz/src/dsl.ts), by the rules
-// of its design: what DSL<T> is for each model, how keys are routed
-// ($ members, statements, attributes), what goes in and out (models in,
-// DSLs out), and the members of custom classes. The run-time side of each
-// rule is in packages/ts-graphviz/src/dsl.test.ts.
+// of its design: what DSL<T> is for each model, how keys are routed (DOT's
+// words: statements, a few members, attributes), what goes in (models or
+// DSLs) and comes out of the statements (DSLs), and where the members of
+// custom classes are (on the model). The run-time side of each rule is in
+// packages/ts-graphviz/src/dsl.test.ts.
 
 const g = dsl(new Digraph('G'));
 const n = g.node('a');
@@ -115,19 +113,28 @@ describe('dsl()', () => {
 });
 
 describe('keys', () => {
-  it('reach the model’s members with a $', () => {
-    expectTypeOf(n.$id).toEqualTypeOf<string>();
-    expectTypeOf(n.$comment).toEqualTypeOf<string | undefined>();
-    expectTypeOf(g.$directed).toEqualTypeOf<boolean>();
-    expectTypeOf(s.$isSubgraphCluster()).toEqualTypeOf<boolean>();
-    expectTypeOf(g.$size).toEqualTypeOf<number>();
-    expectTypeOf(e.$attributes).toEqualTypeOf<
-      AttributesGroupModel<Parameters<EdgeModel['attributes']['get']>[0]>
-    >();
-    // @ts-expect-error a model member: n.$attributes
-    n.attributes;
-    // @ts-expect-error a model member: g.$getNode
-    g.getNode;
+  it('give only DOT’s words as members', () => {
+    expectTypeOf(n.port('p')).toEqualTypeOf<ForwardRefNode>();
+    expectTypeOf(n.addComment).toEqualTypeOf<NodeModel['addComment']>();
+    expectTypeOf(d.addComment).toEqualTypeOf<DotModel['addComment']>();
+    // The rest of the model is on modelOf(x).
+    // @ts-expect-error on the model: modelOf(g).createNode
+    g.createNode;
+    // @ts-expect-error on the model: modelOf(g).nodes
+    g.nodes;
+    // @ts-expect-error on the model: modelOf(n).getAttribute
+    n.getAttribute;
+    // @ts-expect-error on the model: modelOf(n).comments
+    n.comments;
+    // @ts-expect-error on the model: modelOf(e).targets
+    e.targets;
+    // @ts-expect-error on the model: modelOf(s).isSubgraphCluster
+    s.isSubgraphCluster;
+    // @ts-expect-error a port is a node's
+    e.port;
+    // @ts-expect-error no $ names
+    n.$id;
+    expectTypeOf(modelOf(n).id).toEqualTypeOf<string>();
   });
 
   it('keep the name of members that start with $$', () => {
@@ -136,20 +143,16 @@ describe('keys', () => {
     expectTypeOf(s.$$type).toEqualTypeOf<'Subgraph'>();
     expectTypeOf(g.$$type).toEqualTypeOf<'Graph'>();
     expectTypeOf(d.$$type).toEqualTypeOf<'Dot'>();
-    expectTypeOf(g.$attributes.graph.$$kind).toEqualTypeOf<'Graph'>();
+    expectTypeOf(g.graph({}).$$kind).toEqualTypeOf<'Graph'>();
     // @ts-expect-error no member $type
     n.$type;
   });
 
-  it('keep the members read-only that are', () => {
-    // @ts-expect-error the node's name cannot change
-    n.$id = 'b';
+  it('keep the members read-only', () => {
     // @ts-expect-error
     n.$$type = 'Node';
     // @ts-expect-error
-    g.$nodes = [];
-    n.$comment = 'c';
-    g.$strict = true;
+    n.addComment = modelOf(n).addComment;
   });
 
   it('give the statements on graphs only', () => {
@@ -170,7 +173,7 @@ describe('keys', () => {
     expectTypeOf(g.size).toEqualTypeOf<Attribute<'size'> | undefined>();
     expectTypeOf(e.weight).toEqualTypeOf<Attribute<'weight'> | undefined>();
     // arrowhead is a union of 1,764 names: compared by toExtend both ways,
-    // as toEqualTypeOf's deep comparison takes seconds on it (#1897)
+    // as toEqualTypeOf's deep comparison takes seconds on it
     expectTypeOf(e.arrowhead).toExtend<Attribute<'arrowhead'> | undefined>();
     expectTypeOf<Attribute<'arrowhead'> | undefined>().toExtend<
       typeof e.arrowhead
@@ -188,16 +191,17 @@ describe('keys', () => {
   });
 
   it('give the attributes of each default list by its kind', () => {
-    g.$attributes.node.shape = 'box';
-    g.$attributes.edge.arrowhead = 'dot';
-    g.$attributes.graph.label = 'G';
+    const lists = modelOf(g).attributes;
+    dsl(lists.node).shape = 'box';
+    dsl(lists.edge).arrowhead = 'dot';
+    dsl(lists.graph).label = 'G';
     // @ts-expect-error graph [...] takes the attributes of subgraphs
-    g.$attributes.graph.rankdir = 'LR';
+    dsl(lists.graph).rankdir = 'LR';
     // @ts-expect-error not an attribute of nodes
-    g.$attributes.node.arrowhead = 'dot';
+    dsl(lists.node).arrowhead = 'dot';
     // @ts-expect-error not an attribute of edges
-    g.$attributes.edge.shape = 'box';
-    expectTypeOf(g.$attributes.node.$get('shape')).toEqualTypeOf<
+    dsl(lists.edge).shape = 'box';
+    expectTypeOf(g.node({}).shape).toEqualTypeOf<
       Attribute<'shape'> | undefined
     >();
   });
@@ -205,80 +209,17 @@ describe('keys', () => {
   it('give a Dot no attributes', () => {
     // @ts-expect-error a Dot has no attributes
     d.label = 'x';
-    expectTypeOf(d.$graphs).toEqualTypeOf<ReadonlyArray<DSL<RootGraphModel>>>();
+    // @ts-expect-error on the model: modelOf(d).graphs
+    d.graphs;
   });
 });
 
-describe('what goes in is a model, what comes out a DSL', () => {
-  it('takes models and DSLs', () => {
-    const model = modelOf(n);
-    g.$addNode(n);
-    g.$addNode(model);
-    g.$removeNode('a');
-    g.$addSubgraph(s);
-    g.$addEdge(e);
-    expectTypeOf(g.$existEdge(modelOf(e))).toEqualTypeOf<boolean>();
-    d.$addGraph(g);
-    d.$addGraph(modelOf(g));
-    // @ts-expect-error not a node
-    g.$addNode(e);
-    // @ts-expect-error not a node's DSL
-    g.$addNode(modelOf(e));
-  });
-
-  it('gives models as DSLs, in arrays too', () => {
-    expectTypeOf(g.$createNode('a')).toEqualTypeOf<DSL<NodeModel>>();
-    expectTypeOf(g.$getSubgraph('s')).toEqualTypeOf<
-      DSL<SubgraphModel> | undefined
-    >();
-    expectTypeOf(g.$edges).toEqualTypeOf<ReadonlyArray<DSL<EdgeModel>>>();
-    expectTypeOf(g.$subgraphs).toEqualTypeOf<
-      ReadonlyArray<DSL<SubgraphModel>>
-    >();
-    expectTypeOf(g.$statements).toEqualTypeOf<
-      ReadonlyArray<
-        | DSL<NodeModel>
-        | DSL<EdgeModel>
-        | DSL<SubgraphModel>
-        | DSL<AttributeListModel>
-      >
-    >();
-    expectTypeOf(g.$attributes.node).toEqualTypeOf<
-      DSL<RootGraphModel['attributes']['node']>
-    >();
-  });
-
-  it('gives a node’s and an edge’s attribute group as it is', () => {
-    expectTypeOf(n.$attributes).toEqualTypeOf<NodeModel['attributes']>();
-    n.$attributes.set('shape', 'box');
-  });
-
-  it('gives an edge’s targets as read-only node DSLs or references', () => {
-    type Target = ReadonlyNodeDSL | ForwardRefNode;
-    expectTypeOf(e.$targets[0]).toEqualTypeOf<Target | readonly Target[]>();
-    expectTypeOf(e.$targets[2]).toEqualTypeOf<Target | readonly Target[]>();
-    const [from] = e.$targets;
-    if (!Array.isArray(from) && '$$type' in from) {
-      expectTypeOf(from.$id).toEqualTypeOf<string>();
-      expectTypeOf(from.$attributes).toEqualTypeOf<ReadonlyAttributes>();
-      // @ts-expect-error read-only: a target may be any node that can be read
-      from.$id = 'b';
-      // @ts-expect-error
-      from.$comment = 'c';
-      // @ts-expect-error no attributes as properties either
-      from.label = 'x';
-      expectTypeOf(modelOf(from)).not.toEqualTypeOf<NodeModel>();
-    }
-    // @ts-expect-error the targets are read-only
-    e.$targets[0] = n;
-  });
-
-  it('takes edge targets as DSLs, models, ids, references and groups', () => {
+describe('edge targets', () => {
+  it('take DSLs, models, ids, references and groups', () => {
     const m = modelOf(n);
     g.edge([n, m]);
-    g.edge([n, 'b:p:n', { id: 'c', port: 'p' }, [n, 'd'], n.$port('p')]);
-    g.$createEdge([[n, m], 'b']);
-    const [from, to] = e.$targets;
+    g.edge([n, 'b:p:n', { id: 'c', port: 'p' }, [n, 'd'], n.port('p')]);
+    const [from, to] = modelOf(e).targets;
     g.edge([from, to]);
     // @ts-expect-error an edge needs two targets
     g.edge([n]);
@@ -311,16 +252,11 @@ describe('the statements', () => {
   it('take the cluster attributes for a cluster only', () => {
     g.subgraph('cluster_a', { color: 'red' });
     g.subgraph({ cluster: true, color: 'red' });
-    g.$createSubgraph('cluster_a', { color: 'red' });
     g.subgraph('a', { rank: 'same' });
     // @ts-expect-error color is a cluster attribute
     g.subgraph('a', { color: 'red' });
     // @ts-expect-error color is a cluster attribute
     g.subgraph({ color: 'red' });
-    // @ts-expect-error color is a cluster attribute
-    g.$createSubgraph('a', { color: 'red' });
-    // @ts-expect-error color is a cluster attribute
-    g.$createSubgraph({ color: 'red' });
   });
 
   it('take the attributes of each kind', () => {
@@ -336,14 +272,6 @@ describe('custom classes', () => {
     extra(): string {
       return this.id;
     }
-    // A member that is a statement name or a DSL member of its own.
-    node(): string {
-      return 'mine';
-    }
-    $foo(): number {
-      return 1;
-    }
-    $$tag = 'mine';
   }
   class MyEdge extends Edge {
     weight(): number {
@@ -356,99 +284,11 @@ describe('custom classes', () => {
     }
   }
 
-  class MyGraph extends Digraph {
-    find(id: string): NodeModel | undefined {
-      return this.getNode(id);
-    }
-    all(): NodeModel[] {
-      return [...this.nodes];
-    }
-    pair(): [NodeModel, EdgeModel] {
-      return [this.createNode('a'), this.createEdge(['a', 'b'])];
-    }
-    take(node: NodeModel, nodes: readonly NodeModel[]): number {
-      return nodes.length + (node ? 1 : 0);
-    }
-    // Models only in an array, a tuple, a readonly or nested array.
-    countOf(nodes: readonly NodeModel[]): number {
-      return nodes.length;
-    }
-    link(pair: [NodeModel, NodeModel]): void {
-      void pair;
-    }
-    frozen(): readonly NodeModel[] {
-      return this.nodes;
-    }
-    nested(): NodeModel[][] {
-      return [[...this.nodes]];
-    }
-    // A model as a property; a DSL given back as it is.
-    main: NodeModel = this.createNode('main');
-    mainView: DSL<NodeModel> = dsl(this.main);
-    wrap(node: NodeModel): DSL<NodeModel> {
-      return dsl(node);
-    }
-    pick(id: string): NodeModel;
-    pick(id: string, create: false): NodeModel | undefined;
-    pick(id: string, create?: false): NodeModel | undefined {
-      return create === false ? this.getNode(id) : this.createNode(id);
-    }
-    plain(x: number): string {
-      return String(x);
-    }
-    echo<V>(x: V): V {
-      return x;
-    }
-    format(x: number): string;
-    format(x: string): number;
-    format(x: number | string): string | number {
-      return typeof x === 'number' ? String(x) : x.length;
-    }
-    count = 0;
-  }
-
-  it('reach the members a class adds with a $', () => {
+  it('keep the members a class adds on the model', () => {
     const v = dsl(new MyNode('a'));
-    expectTypeOf(v.$extra()).toEqualTypeOf<string>();
-    expectTypeOf(v.$node()).toEqualTypeOf<string>();
-    expectTypeOf(v.$$foo()).toEqualTypeOf<number>();
-    expectTypeOf(v.$$tag).toEqualTypeOf<string>();
-    // @ts-expect-error a member that starts with $$ keeps its name
-    v.$$$tag;
-    const graph = dsl(new MyGraph());
-    expectTypeOf(graph.$count).toEqualTypeOf<number>();
-    expectTypeOf(graph.$plain).toEqualTypeOf<(x: number) => string>();
-    // A method without models is kept as it is, generics and overloads too.
-    expectTypeOf(graph.$echo).toEqualTypeOf<<V>(x: V) => V>();
-    expectTypeOf(graph.$format).toEqualTypeOf<MyGraph['format']>();
-    expectTypeOf(graph.$format('a')).toEqualTypeOf<number>();
-  });
-
-  it('give models as DSLs and take DSLs', () => {
-    const graph = dsl(new MyGraph());
-    const a = graph.node('a');
-    expectTypeOf(graph.$find('a')).toEqualTypeOf<DSL<NodeModel> | undefined>();
-    expectTypeOf(graph.$all()).toEqualTypeOf<DSL<NodeModel>[]>();
-    expectTypeOf(graph.$pair()).toEqualTypeOf<
-      [DSL<NodeModel>, DSL<EdgeModel>]
-    >();
-    expectTypeOf(graph.$take(a, [a, modelOf(a)])).toEqualTypeOf<number>();
-    expectTypeOf(graph.$countOf([a, modelOf(a)])).toEqualTypeOf<number>();
-    graph.$link([a, modelOf(a)]);
-    // @ts-expect-error the tuple keeps its length
-    graph.$link([a]);
-    expectTypeOf(graph.$frozen()).toEqualTypeOf<readonly DSL<NodeModel>[]>();
-    expectTypeOf(graph.$nested()).toEqualTypeOf<DSL<NodeModel>[][]>();
-    expectTypeOf(graph.$main).toEqualTypeOf<DSL<NodeModel>>();
-    expectTypeOf(graph.$mainView).toEqualTypeOf<DSL<NodeModel>>();
-    expectTypeOf(graph.$wrap(a)).toEqualTypeOf<DSL<NodeModel>>();
-    // The last overload of a method with models; the others on the model.
-    expectTypeOf(graph.$pick('a', false)).toEqualTypeOf<
-      DSL<NodeModel> | undefined
-    >();
-    // @ts-expect-error not the first overload
-    graph.$pick('a');
-    expectTypeOf(modelOf(graph).pick('a')).toEqualTypeOf<NodeModel>();
+    // @ts-expect-error on the model: modelOf(v).extra
+    v.extra;
+    expectTypeOf(modelOf(v).extra()).toEqualTypeOf<string>();
   });
 
   it('flow through a models context', () => {
@@ -459,15 +299,13 @@ describe('custom classes', () => {
     });
     myDigraph((G) => {
       expectTypeOf(G.node('a')).toEqualTypeOf<DSL<MyNode>>();
-      expectTypeOf(G.$createNode('a')).toEqualTypeOf<DSL<MyNode>>();
-      expectTypeOf(G.$getNode('a')).toEqualTypeOf<DSL<MyNode> | undefined>();
+      expectTypeOf(modelOf(G).createNode('a')).toEqualTypeOf<MyNode>();
       expectTypeOf(G.edge(['a', 'b'])).toEqualTypeOf<DSL<MyEdge>>();
-      expectTypeOf(G.edge(['a', 'b']).$weight()).toEqualTypeOf<number>();
+      expectTypeOf(
+        modelOf(G.edge(['a', 'b'])).weight(),
+      ).toEqualTypeOf<number>();
       expectTypeOf(G.subgraph('s')).toEqualTypeOf<DSL<MySubgraph>>();
-      expectTypeOf(G.subgraph('s').$tag()).toEqualTypeOf<string>();
-      expectTypeOf(G.$statements[0]).toEqualTypeOf<
-        DSL<MyNode> | DSL<MyEdge> | DSL<MySubgraph> | DSL<AttributeListModel>
-      >();
+      expectTypeOf(modelOf(G.subgraph('s')).tag()).toEqualTypeOf<string>();
       // A subgraph's models are what its class creates: MySubgraph's
       // createNode is typed NodeModel, as on the model.
       G.subgraph((sub) => {
@@ -478,7 +316,7 @@ describe('custom classes', () => {
     withContext({ Node: MyNode }).digraph((G) => {
       G.subgraph((sub) => {
         expectTypeOf(sub.node('b')).toEqualTypeOf<DSL<MyNode>>();
-        expectTypeOf(sub.node('b').$extra()).toEqualTypeOf<string>();
+        expectTypeOf(modelOf(sub.node('b')).extra()).toEqualTypeOf<string>();
       });
     });
     const context = createModelsContext({ Node: MyNode });
@@ -487,36 +325,38 @@ describe('custom classes', () => {
 });
 
 describe('narrowing', () => {
+  type Statement =
+    | DSL<NodeModel>
+    | DSL<EdgeModel>
+    | DSL<SubgraphModel>
+    | DSL<AttributeListModel>;
+  const statement = n as Statement;
+
   it('narrows DSLs by $$type', () => {
-    for (const statement of g.$statements) {
-      switch (statement.$$type) {
-        case 'Node':
-          expectTypeOf(statement).toEqualTypeOf<DSL<NodeModel>>();
-          break;
-        case 'Edge':
-          expectTypeOf(statement).toEqualTypeOf<DSL<EdgeModel>>();
-          break;
-        case 'Subgraph':
-          expectTypeOf(statement).toEqualTypeOf<DSL<SubgraphModel>>();
-          break;
-        default:
-          expectTypeOf(statement).toEqualTypeOf<DSL<AttributeListModel>>();
-      }
+    switch (statement.$$type) {
+      case 'Node':
+        expectTypeOf(statement).toEqualTypeOf<DSL<NodeModel>>();
+        break;
+      case 'Edge':
+        expectTypeOf(statement).toEqualTypeOf<DSL<EdgeModel>>();
+        break;
+      case 'Subgraph':
+        expectTypeOf(statement).toEqualTypeOf<DSL<SubgraphModel>>();
+        break;
+      default:
+        expectTypeOf(statement).toEqualTypeOf<DSL<AttributeListModel>>();
     }
   });
 
   it('narrows the model of a DSL with the guards', () => {
-    const statement = g.$statements[0];
-    if (statement) {
-      // The guards are false for a DSL.
-      if (isNodeModel(statement)) expectTypeOf(statement).toBeNever();
-      const model = modelOf(statement);
-      if (isNodeModel(model)) expectTypeOf(model).toEqualTypeOf<NodeModel>();
-    }
+    // The guards are false for a DSL.
+    if (isNodeModel(statement)) expectTypeOf(statement).toBeNever();
+    const model = modelOf(statement);
+    if (isNodeModel(model)) expectTypeOf(model).toEqualTypeOf<NodeModel>();
   });
 
   it('keeps the factories’ graph a DSL', () => {
     expectTypeOf(digraph('G')).toEqualTypeOf<DSL<RootGraphModel>>();
-    expectTypeOf(digraph('G').$attributes.node.$$kind).toEqualTypeOf<'Node'>();
+    expectTypeOf(digraph('G').node({}).$$kind).toEqualTypeOf<'Node'>();
   });
 });

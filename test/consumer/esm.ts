@@ -75,8 +75,9 @@ g.shape = 'box';
 // @ts-expect-error not a value of rankdir
 g.rankdir = 'XX';
 g.node('a').shape = 'box';
-g.$set('rankdir', 'TB');
-g.node('a').$id satisfies string;
+modelOf(g).setAttribute('rankdir', 'TB');
+modelOf(g.node('a')).id satisfies string;
+g.node('a').port('p');
 const model: RootGraphModel = modelOf(g);
 dsl(model).node('b');
 
@@ -93,7 +94,7 @@ class MyNode extends Node {
     return this.id;
   }
 }
-withContext({ Node: MyNode }).digraph((g) => g.node('a').$extra());
+withContext({ Node: MyNode }).digraph((g) => modelOf(g.node('a')).extra());
 createModelsContext({ Node: MyNode });
 
 // parse / stringify / sanitize
@@ -135,9 +136,9 @@ if (isNodeModel(unknownValue)) {
 }
 const nodes = modelOf(g).statements.filter(isNodeModel);
 assertType<Equal<typeof nodes, NodeModel[]>>();
-const nodeViews = g.$statements.filter(
-  (s): s is DSL<NodeModel> => s.$$type === 'Node',
-);
+const nodeViews = modelOf(g)
+  .statements.map((s) => dsl(s))
+  .filter((s): s is DSL<NodeModel> => s.$$type === 'Node');
 assertType<Equal<typeof nodeViews, DSL<NodeModel>[]>>();
 const readNodes = [unknownValue].filter(isNodeModel);
 assertType<Equal<typeof readNodes, ReadonlyNodeModel[]>>();
