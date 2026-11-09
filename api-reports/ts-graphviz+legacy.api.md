@@ -49,7 +49,7 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
 
 export interface ModelDSLMembers<T extends AnyDotObjectModel> extends ModelView<T> {
   readonly $$type: T["$$type"];
-  readonly addComment: T["addComment"];
+  readonly addComment: OmitThisParameter<T["addComment"]>;
 }
 
 export interface ModelFactories<M extends ModelTypes = ModelTypes> {

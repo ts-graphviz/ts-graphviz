@@ -371,6 +371,13 @@ describe('attributes by name', () => {
     expect(Reflect.getOwnPropertyDescriptor(a, 'port')).toBeUndefined();
     expect(Reflect.deleteProperty(a, 'port')).toBe(true);
     expect(typeof a.port).toBe('function');
+    // An attribute named like a member is on the model only.
+    modelOf(a).setAttribute('port' as never, 'x' as never);
+    expect(typeof a.port).toBe('function');
+    expect(Reflect.ownKeys(a)).toStrictEqual(['label']);
+    expect(Reflect.getOwnPropertyDescriptor(a, 'port')).toBeUndefined();
+    expect(modelOf(a).getAttribute('port' as never)).toBe('x');
+    modelOf(a).removeAttribute('port' as never);
 
     // statements: in a graph, not deletable, not own properties
     expect('node' in g).toBe(true);

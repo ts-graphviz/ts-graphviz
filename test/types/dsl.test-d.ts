@@ -115,8 +115,24 @@ describe('dsl()', () => {
 describe('keys', () => {
   it('give only DOT’s words as members', () => {
     expectTypeOf(n.port('p')).toEqualTypeOf<ForwardRefNode>();
-    expectTypeOf(n.addComment).toEqualTypeOf<NodeModel['addComment']>();
-    expectTypeOf(d.addComment).toEqualTypeOf<DotModel['addComment']>();
+    expectTypeOf(n.addComment).toEqualTypeOf<
+      OmitThisParameter<NodeModel['addComment']>
+    >();
+    expectTypeOf(d.addComment).toEqualTypeOf<
+      OmitThisParameter<DotModel['addComment']>
+    >();
+    // The members are bound to the model: they can be taken off the DSL,
+    // also when a class types `this`.
+    class ThisTyped extends Node {
+      override addComment(
+        this: ThisTyped,
+        ...args: Parameters<Node['addComment']>
+      ): ReturnType<Node['addComment']> {
+        return super.addComment(...args);
+      }
+    }
+    const { addComment } = dsl(new ThisTyped('t'));
+    addComment('note');
     // The rest of the model is on modelOf(x).
     // @ts-expect-error on the model: modelOf(g).createNode
     g.createNode;
