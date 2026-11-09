@@ -109,7 +109,7 @@ export interface ModelDSLMembers<T extends AnyDotObjectModel>
    * Attach a comment, written as DOT writes one (see the model's
    * `addComment`). Read and remove comments on `modelOf(x)`.
    */
-  readonly addComment: T['addComment'];
+  readonly addComment: OmitThisParameter<T['addComment']>;
 }
 
 /**

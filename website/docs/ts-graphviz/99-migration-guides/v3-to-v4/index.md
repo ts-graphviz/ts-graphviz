@@ -18,7 +18,7 @@ Requirements: **Node.js 22 or later** (Node.js 20 reached end of life) and, for 
 | --- | --- |
 | `node.id` (the node's name) | `modelOf(node).id` (`node.id` is the Graphviz `id` attribute) |
 | `g.id` | `modelOf(g).id` |
-| `x.comment = '...'` (a DOT comment) | `x.addComment('...')` (`x.comment` is the Graphviz `comment` attribute; see section 15) |
+| `x.comment = '...'` (a DOT comment) | `x.addComment('...')` (`x.comment` is the Graphviz `comment` attribute; see section 15). Each call adds a comment: to replace one, keep what `addComment` returns and pass it to `modelOf(x).removeComment(...)` first |
 | `g.size` (the number of attributes) | `modelOf(g).getAttributeNames().length` (`g.size` is the Graphviz `size` attribute) |
 
 TypeScript reports most other changes, but these three still compile, so search for them: `\.id\b`, `\.comment\b` and `\.size\b`.
