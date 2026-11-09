@@ -6,11 +6,9 @@ import {
   digraph,
   dsl,
   Edge,
-  type EdgeModel,
   fromDot,
   modelOf,
   Node,
-  type NodeModel,
   Subgraph,
   toDot,
 } from 'ts-graphviz';
@@ -77,32 +75,21 @@ describe("a node's and an edge's deprecated attributes", () => {
 });
 
 describe('the DSL', () => {
-  it('has the DOM names, and the attributes as properties', () => {
+  it('has the attributes as properties, and the DOM names on the model', () => {
     const G = digraph((g) => {
       const a = g.node('a');
-      a.setAttribute('label', 'A');
+      modelOf(a).setAttribute('label', 'A');
       expect(a.label).toBe('A');
       a.color = 'red';
-      expect(a.getAttribute('color')).toBe('red');
-      expect(a.getAttributeNames()).toEqual(['label', 'color']);
+      expect(modelOf(a).getAttribute('color')).toBe('red');
+      expect(modelOf(a).getAttributeNames()).toEqual(['label', 'color']);
       const e = g.edge(['a', 'b']);
-      e.setAttributes({ style: 'dashed' });
+      modelOf(e).setAttributes({ style: 'dashed' });
       expect(e.style).toBe('dashed');
-      g.setAttribute('rankdir', 'LR');
+      modelOf(g).setAttribute('rankdir', 'LR');
       expect(g.rankdir).toBe('LR');
     });
     expect(toDot(G)).toContain('rankdir = "LR";');
-  });
-
-  it("gives a node's deprecated attributes, reached with a $, as is (not a DSL)", () => {
-    digraph((g) => {
-      const a = g.node('a');
-      const legacy = a as unknown as { $attributes: NodeModel['attributes'] };
-      legacy.$attributes.set('label', 'A');
-      expect(a.label).toBe('A');
-      expect(legacy.$attributes.get('label')).toBe('A');
-      expect(Object.keys(a)).toEqual(['label']);
-    });
   });
 });
 
@@ -170,32 +157,19 @@ describe('a class that overrides setAttribute', () => {
     }
     const view = dsl(new MyNode('b'));
     view.label = 'B';
-    view.setAttribute('color', 'red');
-    modelOf(view).attributes.set('shape', 'box');
-    expect(seen).toEqual(['label', 'color', 'shape']);
+    view.color = 'red';
+    expect(seen).toEqual(['label', 'color']);
   });
 });
 
 describe('the DSL of an edge, and the members as values', () => {
-  it("gives an edge's deprecated attributes, reached with a $, as is", () => {
-    digraph((g) => {
-      const e = g.edge(['a', 'b']);
-      const legacy = e as unknown as { $attributes: EdgeModel['attributes'] };
-      expect(legacy.$attributes).toBe(legacy.$attributes);
-      legacy.$attributes.set('style', 'dashed');
-      expect(e.style).toBe('dashed');
-    });
-  });
-
   it('a method taken off the DSL stays bound', () => {
     digraph((g) => {
       const a = g.node('a');
-      const { setAttribute, removeAttribute } = a;
-      setAttribute('label', 'A');
-      expect(a.label).toBe('A');
-      removeAttribute('label');
-      expect({ ...a }).toEqual({});
-      expect(Object.keys(a)).toEqual([]);
+      const { port, addComment } = a;
+      expect(port('p')).toEqual({ id: 'a', port: 'p' });
+      addComment('note');
+      expect(modelOf(a).comments.map((c) => c.text)).toEqual(['note']);
     });
   });
 });

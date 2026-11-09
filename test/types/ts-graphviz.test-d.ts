@@ -68,32 +68,33 @@ describe('model factories', () => {
   });
 });
 
-describe('the model’s members, under their own names', () => {
-  it('give models as DSLs', () => {
+describe('the model’s members are on the model', () => {
+  it('give models', () => {
     digraph((g) => {
-      expectTypeOf(g.getNode('a')).toEqualTypeOf<DSL<NodeModel> | undefined>();
-      expectTypeOf(g.nodes).toEqualTypeOf<ReadonlyArray<DSL<NodeModel>>>();
-      expectTypeOf(g.createNode('a')).toEqualTypeOf<DSL<NodeModel>>();
+      const m = modelOf(g);
+      expectTypeOf(m.getNode('a')).toEqualTypeOf<NodeModel | undefined>();
+      expectTypeOf(m.nodes).toEqualTypeOf<ReadonlyArray<NodeModel>>();
+      expectTypeOf(m.createNode('a')).toEqualTypeOf<NodeModel>();
       expectTypeOf(
-        g.createSubgraph('cluster_a', { color: 'red' }),
-      ).toEqualTypeOf<DSL<SubgraphModel>>();
+        m.createSubgraph('cluster_a', { color: 'red' }),
+      ).toEqualTypeOf<SubgraphModel>();
       expectTypeOf(g.node({}).$$kind).toEqualTypeOf<'Node'>();
       expectTypeOf(g.$$type).toEqualTypeOf<'Graph'>();
-      expectTypeOf(g.graphId).toEqualTypeOf<string | undefined>();
-      expectTypeOf(g.node('a').nodeId).toEqualTypeOf<string>();
-      g.addNode(g.node('b'));
-      g.removeEdge(g.edge(['a', 'b']));
+      expectTypeOf(m.id).toEqualTypeOf<string | undefined>();
+      expectTypeOf(modelOf(g.node('a')).id).toEqualTypeOf<string>();
     });
   });
 
-  it('leave out the deprecated members', () => {
+  it('are not on the DSL', () => {
     digraph((g) => {
-      // @ts-expect-error deprecated: the leading lists (g.node({...}) instead)
-      g.$attributes;
-      // @ts-expect-error deprecated: n.attributes (the node is the container)
+      // @ts-expect-error a model member: modelOf(g).nodes
+      g.nodes;
+      // @ts-expect-error a model member: modelOf(g).getNode
+      g.getNode('a');
+      // @ts-expect-error a model member: modelOf(g).createNode
+      g.createNode('a');
+      // @ts-expect-error a model member: modelOf(n).attributes
       g.node('a').attributes;
-      // @ts-expect-error deprecated: get (getAttribute instead)
-      g.get('rankdir');
     });
   });
 });
@@ -121,17 +122,17 @@ describe('attributes', () => {
     });
   });
 
-  it('can also be set through the model’s members', () => {
+  it('can also be set through the model', () => {
     digraph((g) => {
-      g.setAttribute('rankdir', 'LR');
-      expectTypeOf(g.getAttribute('rankdir')).toEqualTypeOf<
+      modelOf(g).setAttribute('rankdir', 'LR');
+      expectTypeOf(modelOf(g).getAttribute('rankdir')).toEqualTypeOf<
         Attribute<'rankdir'> | undefined
       >();
       // @ts-expect-error not a value of rankdir
-      g.setAttribute('rankdir', 'XX');
-      g.node('a').setAttribute('shape', 'box');
+      modelOf(g).setAttribute('rankdir', 'XX');
+      modelOf(g.node('a')).setAttribute('shape', 'box');
       // @ts-expect-error not an attribute of nodes
-      g.node('a').setAttribute('rankdir', 'LR');
+      modelOf(g.node('a')).setAttribute('rankdir', 'LR');
     });
   });
 
@@ -179,9 +180,9 @@ describe('fromDot / fromDotAll / toDot', () => {
       expectTypeOf(statement).toEqualTypeOf<NodeModel>();
     }
     // A DSL is not a model; narrow DSLs by $$type.
-    const view = digraph().statements[0];
-    if (view) expectTypeOf(isNodeModel(view)).toEqualTypeOf<boolean>();
-    if (view?.$$type === 'Node') {
+    const view = digraph().node('a') as DSL<NodeModel> | DSL<EdgeModel>;
+    expectTypeOf(isNodeModel(view)).toEqualTypeOf<boolean>();
+    if (view.$$type === 'Node') {
       expectTypeOf(view).toEqualTypeOf<DSL<NodeModel>>();
     }
   });

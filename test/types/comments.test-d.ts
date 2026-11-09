@@ -6,6 +6,7 @@ import {
   digraph,
   dsl,
   Edge,
+  modelOf,
   Node,
   type ReadonlyNodeModel,
   Subgraph,
@@ -46,11 +47,11 @@ describe('comments', () => {
     });
   });
 
-  it('the DSL has the methods with a $', () => {
+  it('the DSL has addComment; reading and removing are on the model', () => {
     digraph((g) => {
       const a = g.node('a');
       expectTypeOf(a.addComment('x')).toEqualTypeOf<CommentModel>();
-      a.removeComment(a.comments[0]);
+      modelOf(a).removeComment(modelOf(a).comments[0]);
       // (types only: these calls would throw)
       void (() => {
         // @ts-expect-error a node has no body

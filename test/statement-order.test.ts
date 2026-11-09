@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { digraph, dsl, fromDot, Node, toDot } from 'ts-graphviz';
+import { digraph, fromDot, modelOf, Node, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
 // A graph keeps its nodes, edges and subgraphs in the order they were
@@ -14,9 +14,9 @@ describe('statement order', () => {
       g.edge(['d', 'e']);
     });
     expect(
-      g.statements.map((s) =>
+      modelOf(g).statements.map((s) =>
         s.$$type === 'Node'
-          ? `node ${s.nodeId}`
+          ? `node ${s.id}`
           : s.$$type === 'Edge'
             ? 'edge'
             : s.$$type,
@@ -33,12 +33,13 @@ describe('statement order', () => {
       g.node('b');
     });
     const replacement = new Node('a', { color: 'red' });
-    g.addNode(replacement);
-    expect(g.statements).toStrictEqual([dsl(replacement), g.getNode('b')]);
-    g.removeNode('a');
-    expect(
-      g.statements.map((s) => (s.$$type === 'Node' ? s.nodeId : '?')),
-    ).toEqual(['b']);
+    const m = modelOf(g);
+    m.addNode(replacement);
+    expect(m.statements).toStrictEqual([replacement, m.getNode('b')]);
+    m.removeNode('a');
+    expect(m.statements.map((s) => (s.$$type === 'Node' ? s.id : '?'))).toEqual(
+      ['b'],
+    );
   });
 
   it('renders a DOT source with interleaved nodes and edges as the source does', {

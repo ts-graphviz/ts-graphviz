@@ -1,15 +1,10 @@
 import {
   type AnyDotObjectModel,
-  ATTRIBUTE_KEYS,
   type Attribute,
   type AttributeKey,
   type AttributeListKind,
   type AttributeListModel,
-  type AttributesEntities,
-  type AttributesObject,
-  type CommentModel,
   type DotModel,
-  type DotValue,
   type EdgeAttributesObject,
   type EdgeModel,
   type ForwardRefNode,
@@ -21,7 +16,6 @@ import {
   isRootGraphModel,
   isSubgraphModel,
   MODEL,
-  type ModelsContext,
   type ModelView,
   modelOf,
   type NodeAttributesObject,
@@ -39,29 +33,21 @@ import {
 } from '@ts-graphviz/common';
 
 /**
- * The DOT DSL of a model: the model seen as DOT.
+ * The DOT DSL of a model: the model seen as DOT, with only DOT's words.
  *
  * - Attributes are properties under their own names: `n.label = 'A'`,
  *   `g.rankdir`, `delete n.label` (assigning `undefined` deletes too).
  * - The DOT statements `node`, `edge`, `subgraph` and `graph` are methods
  *   of a graph's DSL.
- * - The model's own members are there under their own names:
- *   `n.nodeId` (the node's name; `n.id` is Graphviz's `id` attribute),
- *   `g.createNode('a')`, `g.nodes`, `n.getAttribute('label')`. No member
- *   the DSL gives is named like a Graphviz attribute ({@link ATTRIBUTE_KEYS}),
- *   so a name is one or the other; the members deprecated in v4 are left out
- *   of the DSL's types (`id`, `comment` and `size` among them are attribute
- *   names). An attribute a schema adds under a member's name is reached with
- *   `getAttribute` / `setAttribute`.
- * - A member of your own class whose name is an attribute name is reached
- *   with a `$` in front (`n.$label` for a member `label`); `$` in front of
- *   any member's name reaches it as well, and a name that starts with `$`
- *   (such as `$$type`) is read as it is when the model has it.
+ * - A node's DSL has `port`, every DSL `addComment`, `$$type` (and an
+ *   attribute list's `$$kind`).
  *
- * Every model you get from a DSL is a DSL, and {@link modelOf} gives the
- * model back. `toDot`, `fromModel` and `toBlob` take a DSL in place of its
- * model. A DSL is not a model: the model guards (`isNodeModel`, …) are false
- * for it, so narrow DSLs by `$$type` or check `modelOf(x)`.
+ * Everything else the model does (`createNode`, `nodes`, `getAttribute`,
+ * `comments`, the members of your own classes) is on the model:
+ * {@link modelOf} gives it back. Every model you get from a DSL is a DSL.
+ * `toDot`, `fromModel` and `toBlob` take a DSL in place of its model. A DSL
+ * is not a model: the model guards (`isNodeModel`, …) are false for it, so
+ * narrow DSLs by `$$type` or check `modelOf(x)`.
  * @group DSL
  */
 export type DSL<T extends AnyDotObjectModel> = T extends NodeModel
@@ -78,9 +64,6 @@ export type DSL<T extends AnyDotObjectModel> = T extends NodeModel
             ? DotDSL<T>
             : never;
 
-/** A model, or a DSL standing for one: what a DSL's members take. */
-type ModelArg<T extends AnyDotObjectModel> = T | ModelView<T>;
-
 /** An edge target a DSL takes: a node's DSL as well as a node or an id. */
 type DSLNodeRefLike = NodeRefLike | ModelView<ReadonlyNodeModel>;
 
@@ -96,35 +79,6 @@ export type DSLEdgeTargetLikeTuple =
       to: DSLNodeRefLike | readonly DSLNodeRefLike[],
       ...rest: (DSLNodeRefLike | readonly DSLNodeRefLike[])[],
     ];
-
-/** An edge target as an edge's DSL gives it: a node's DSL or a reference. */
-type DSLNodeRef = ReadonlyNodeDSL | ForwardRefNode;
-
-/**
- * The DSL of a node an edge refers to. An edge takes any node that can be
- * read ({@link ReadonlyNodeModel}), so its DSL is read-only: check it with
- * `isNodeModel(modelOf(target))` and the like before you change it.
- * @group DSL
- */
-export interface ReadonlyNodeDSL extends ModelView<ReadonlyNodeModel> {
-  readonly $$type: 'Node';
-  /**
-   * The node's name (its ID in DOT). On a model without
-   * it, read `modelOf(target).id`.
-   */
-  readonly nodeId?: string;
-  /**
-   * The comments attached to the node; without them, the model's `comment`
-   * is its one comment.
-   */
-  readonly comments?: ReadonlyArray<CommentModel>;
-  /** The value of an attribute, or undefined if it has none. */
-  getAttribute(name: string): DotValue | undefined;
-  /** Whether the node has the attribute. */
-  hasAttribute(name: string): boolean;
-  /** The names of the node's attributes. */
-  getAttributeNames(): string[];
-}
 
 /** The attribute keys of a model with attributes of its own or a group. */
 type AttributeKeysOf<T> = T extends {
@@ -145,157 +99,48 @@ type AttributeProperties<K> = {
 };
 
 /**
- * What every DSL has: its model under `MODEL`, `$$type` and the model's
- * comments.
+ * What every DSL has: its model under `MODEL`, `$$type` and `addComment`.
  * @group DSL
  */
 export interface ModelDSLMembers<T extends AnyDotObjectModel>
   extends ModelView<T> {
   readonly $$type: T['$$type'];
-  /** The comments attached to the model, in the order they were added. */
-  readonly comments: T['comments'];
-  /** Attach a comment (see the model's `addComment`). */
-  addComment: T['addComment'];
-  /** Detach a comment (see the model's `removeComment`). */
-  removeComment: T['removeComment'];
+  /**
+   * Attach a comment, written as DOT writes one (see the model's
+   * `addComment`). Read and remove comments on `modelOf(x)`.
+   */
+  readonly addComment: T['addComment'];
 }
-
-/**
- * The attribute methods of a model with attributes of its own.
- * @group DSL
- */
-export interface AttributesDSLMembers<K extends AttributeKey> {
-  /** The value of an attribute, or undefined if it has none. */
-  getAttribute<P extends K>(name: P): Attribute<P> | undefined;
-  /** Set an attribute. `null` or `undefined` sets nothing. */
-  setAttribute<P extends K>(name: P, value: Attribute<P>): void;
-  /** Remove an attribute. */
-  removeAttribute(name: K): void;
-  /** Whether the object has the attribute. */
-  hasAttribute(name: K): boolean;
-  /** The names of the attributes, in the order they were set. */
-  getAttributeNames(): K[];
-  /** Set several attributes, from an object or from key/value tuples. */
-  setAttributes(attributes: AttributesObject<K> | AttributesEntities<K>): void;
-  /** Remove every attribute. */
-  removeAttributes(): void;
-}
-
-/**
- * The members of the models that the DSL leaves out: those deprecated in
- * v4 (the old attribute methods, the separate attribute containers,
- * the names that are also attribute names). They stay on the model
- * (`modelOf(x)`) until v5.
- */
-type DeprecatedMembers =
-  | 'id'
-  | 'comment'
-  | 'size'
-  | 'values'
-  | 'get'
-  | 'set'
-  | 'delete'
-  | 'clear'
-  | 'apply'
-  | 'attributes';
-
-/**
- * The members a model's class adds, under their own names; one named like a
- * Graphviz attribute (or, on a graph, like a DOT statement) takes a `$` in
- * front, since the bare name is the attribute (or the statement). A method that takes or returns models takes their DSLs too and
- * returns DSLs; such a method keeps only its last overload (call it on
- * `modelOf(x)` for the others).
- */
-type ExtraMembers<T, Known> = {
-  [P in keyof T as P extends string
-    ? P extends StatementName
-      ? P extends keyof Known
-        ? `$${P}`
-        : P
-      : P extends keyof Known | DeprecatedMembers
-        ? never
-        : P extends AttributeKey
-          ? `$${P}`
-          : P
-    : never]: Viewed<T[P]>;
-};
-
-/**
- * The DOT statements of a graph's DSL: a member of a graph class under one
- * of these names takes a `$`, since the bare name is the statement.
- */
-type StatementName = 'node' | 'edge' | 'subgraph' | 'graph';
-
-/** A value as a DSL member gives it. */
-type Viewed<V> = V extends ModelView
-  ? V
-  : V extends AnyDotObjectModel
-    ? DSL<V>
-    : V extends readonly unknown[]
-      ? { [I in keyof V]: Viewed<V[I]> }
-      : V extends (...args: infer A) => infer R
-        ? true extends ContainsModel<R> | ContainsModel<A[number]>
-          ? (...args: { [I in keyof A]: Accepted<A[I]> }) => Viewed<R>
-          : V
-        : V;
-
-/** A parameter as a DSL member takes it: a model's DSL as well as the model. */
-type Accepted<P> = P extends AnyDotObjectModel
-  ? P | ModelView<P>
-  : P extends readonly unknown[]
-    ? { [I in keyof P]: Accepted<P[I]> }
-    : P;
-
-/** `true` (or `boolean`, for a union) if a type has models in it. */
-type ContainsModel<V> = V extends AnyDotObjectModel
-  ? true
-  : V extends readonly (infer E)[]
-    ? ContainsModel<E>
-    : false;
 
 /**
  * The DSL of a node.
  * @group DSL
  */
 export type NodeDSL<T extends NodeModel> = NodeDSLMembers<T> &
-  AttributeProperties<AttributeKeysOf<T>> &
-  ExtraMembers<T, NodeDSLMembers<T>>;
+  AttributeProperties<AttributeKeysOf<T>>;
 
 /**
- * The members of a node's model.
+ * What a node's DSL has besides its attributes.
  * @group DSL
  */
 export interface NodeDSLMembers<T extends NodeModel>
-  extends ModelDSLMembers<T>,
-    AttributesDSLMembers<AttributeKeysOf<T>> {
-  /** The node's name (its ID in DOT; `id` is Graphviz's `id` attribute). */
-  readonly nodeId: string;
-  /** A reference to the node with a port and compass point. */
-  port(port: string | Partial<Port>): ForwardRefNode;
+  extends ModelDSLMembers<T> {
+  /**
+   * The node at a port, for an edge target (`a:p:n` in DOT).
+   *
+   * ```ts
+   * g.edge([a.port('p'), b]); // "a":"p" -> "b";
+   * ```
+   */
+  readonly port: (port: string | Partial<Port>) => ForwardRefNode;
 }
 
 /**
  * The DSL of an edge.
  * @group DSL
  */
-export type EdgeDSL<T extends EdgeModel> = EdgeDSLMembers<T> &
-  AttributeProperties<AttributeKeysOf<T>> &
-  ExtraMembers<T, EdgeDSLMembers<T>>;
-
-/**
- * The members of an edge's model.
- * @group DSL
- */
-export interface EdgeDSLMembers<T extends EdgeModel>
-  extends ModelDSLMembers<T>,
-    AttributesDSLMembers<AttributeKeysOf<T>> {
-  /** The edge's targets, with nodes as DSLs. */
-  readonly targets: readonly [
-    from: DSLNodeRef | readonly DSLNodeRef[],
-    to: DSLNodeRef | readonly DSLNodeRef[],
-    ...rest: (DSLNodeRef | readonly DSLNodeRef[])[],
-  ];
-}
+export type EdgeDSL<T extends EdgeModel> = ModelDSLMembers<T> &
+  AttributeProperties<AttributeKeysOf<T>>;
 
 /**
  * The DSL of a default attribute list (`node [...]`, `edge [...]`,
@@ -306,40 +151,25 @@ export type AttributeListDSL<
   T extends AttributeListModel,
   K extends AttributeListKind,
   A extends AttributeKey,
-> = AttributeListDSLMembers<T, K, A> &
-  AttributeProperties<A> &
-  ExtraMembers<T, AttributeListDSLMembers<T, K, A>>;
+> = AttributeListDSLMembers<T, K> & AttributeProperties<A>;
 
 /**
- * The members of a default attribute list's model.
+ * What a default attribute list's DSL has besides its attributes.
  * @group DSL
  */
 export interface AttributeListDSLMembers<
   T extends AttributeListModel,
   K extends AttributeListKind,
-  A extends AttributeKey,
-> extends ModelDSLMembers<T>,
-    AttributesDSLMembers<A> {
+> extends ModelDSLMembers<T> {
   readonly $$kind: K;
 }
 
 /**
- * The DSL of a DOT source's model ({@link DotModel}).
+ * The DSL of a DOT source's model ({@link DotModel}): its graphs are on the
+ * model (`modelOf(x).graphs`).
  * @group DSL
  */
-export type DotDSL<T extends DotModel> = DotDSLMembers<T> &
-  ExtraMembers<T, DotDSLMembers<T>>;
-
-/**
- * The members of a {@link DotModel}.
- * @group DSL
- */
-export interface DotDSLMembers<T extends DotModel> extends ModelDSLMembers<T> {
-  readonly graphs: ReadonlyArray<DSL<T['graphs'][number]>>;
-  addGraph(graph: ModelArg<RootGraphModel>): void;
-  existGraph(graph: ModelArg<RootGraphModel>): boolean;
-  removeGraph(graph: ModelArg<RootGraphModel>): void;
-}
+export type DotDSL<T extends DotModel> = ModelDSLMembers<T>;
 
 /** The classes a graph creates its models from. */
 type NodeOf<T extends GraphBaseModel> = ReturnType<T['createNode']>;
@@ -350,107 +180,24 @@ type SubgraphOf<T extends GraphBaseModel> = T['subgraphs'][number];
  * The DSL of a root graph (`graph` or `digraph`).
  * @group DSL
  */
-export type RootGraphDSL<T extends RootGraphModel> = RootGraphDSLMembers<T> &
-  AttributeProperties<AttributeKeysOf<T>> &
-  ExtraMembers<T, RootGraphDSLMembers<T>>;
-
-/**
- * The members of a root graph's model, and its DOT statements.
- * @group DSL
- */
-export interface RootGraphDSLMembers<T extends RootGraphModel>
-  extends GraphDSLMembers<T> {
-  /** The graph's name (its ID in DOT; `id` is Graphviz's `id` attribute). */
-  readonly graphId?: string | undefined;
-  directed: boolean;
-  strict: boolean;
-}
+export type RootGraphDSL<T extends RootGraphModel> = GraphDSLMembers<T> &
+  AttributeProperties<AttributeKeysOf<T>>;
 
 /**
  * The DSL of a subgraph.
  * @group DSL
  */
-export type SubgraphDSL<T extends SubgraphModel> = SubgraphDSLMembers<T> &
-  AttributeProperties<AttributeKeysOf<T>> &
-  ExtraMembers<T, SubgraphDSLMembers<T>>;
+export type SubgraphDSL<T extends SubgraphModel> = GraphDSLMembers<T> &
+  AttributeProperties<AttributeKeysOf<T>>;
 
 /**
- * The members of a subgraph's model, and its DOT statements.
- * @group DSL
- */
-export interface SubgraphDSLMembers<T extends SubgraphModel>
-  extends GraphDSLMembers<T> {
-  /** The subgraph's name (its ID in DOT; `id` is Graphviz's `id` attribute). */
-  readonly subgraphId?: string | undefined;
-  isSubgraphCluster(): boolean;
-}
-
-/**
- * The members of a graph's or subgraph's model, and its DOT statements.
+ * What a graph's or subgraph's DSL has besides its attributes: its DOT
+ * statements.
  * @group DSL
  */
 export interface GraphDSLMembers<T extends RootGraphModel | SubgraphModel>
   extends ModelDSLMembers<T>,
-    AttributesDSLMembers<AttributeKeysOf<T>>,
-    GraphDSLStatements<T> {
-  readonly nodes: ReadonlyArray<DSL<NodeOf<T>>>;
-  readonly edges: ReadonlyArray<DSL<EdgeOf<T>>>;
-  readonly subgraphs: ReadonlyArray<DSL<SubgraphOf<T>>>;
-  readonly statements: ReadonlyArray<
-    | DSL<NodeOf<T>>
-    | DSL<EdgeOf<T>>
-    | DSL<SubgraphOf<T>>
-    | DSL<AttributeListModel>
-  >;
-  with(models: Partial<ModelsContext>): void;
-  addNode(node: ModelArg<NodeModel>): void;
-  addEdge(edge: ModelArg<EdgeModel>): void;
-  addSubgraph(subgraph: ModelArg<SubgraphModel>): void;
-  addAttributeList(
-    kind: 'Graph',
-    attributes:
-      | AttributesObject<AttributeKey>
-      | AttributesEntities<AttributeKey>,
-  ): DSL<T['attributes']['graph']>;
-  addAttributeList(
-    kind: 'Node',
-    attributes:
-      | AttributesObject<AttributeKey>
-      | AttributesEntities<AttributeKey>,
-  ): DSL<T['attributes']['node']>;
-  addAttributeList(
-    kind: 'Edge',
-    attributes:
-      | AttributesObject<AttributeKey>
-      | AttributesEntities<AttributeKey>,
-  ): DSL<T['attributes']['edge']>;
-  addAttributeList(
-    kind: AttributeListKind,
-    attributes:
-      | AttributesObject<AttributeKey>
-      | AttributesEntities<AttributeKey>,
-  ): DSL<AttributeListModel>;
-  existNode(nodeId: string): boolean;
-  existEdge(edge: ModelArg<EdgeModel>): boolean;
-  existSubgraph(subgraph: ModelArg<SubgraphModel>): boolean;
-  removeNode(node: ModelArg<NodeModel> | string): void;
-  removeEdge(edge: ModelArg<EdgeModel>): void;
-  removeSubgraph(subgraph: ModelArg<SubgraphModel>): void;
-  createNode(id: string, attributes?: NodeAttributesObject): DSL<NodeOf<T>>;
-  createSubgraph<const Id extends string | undefined = undefined>(
-    id?: Id,
-    attributes?: SubgraphAttributesFor<Id>,
-  ): DSL<SubgraphOf<T>>;
-  createSubgraph(
-    attributes?: NonClusterSubgraphAttributesObject,
-  ): DSL<SubgraphOf<T>>;
-  createEdge(
-    targets: DSLEdgeTargetLikeTuple,
-    attributes?: EdgeAttributesObject,
-  ): DSL<EdgeOf<T>>;
-  getNode(id: string): DSL<NodeOf<T>> | undefined;
-  getSubgraph(id: string): DSL<SubgraphOf<T>> | undefined;
-}
+    GraphDSLStatements<T> {}
 
 /**
  * The DOT statements of a graph or subgraph: `node`, `edge`, `subgraph` and
@@ -671,10 +418,10 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
 // 2. What a DSL passes to a model is the model: the arguments, and copies of
 //    arrays with their contents (edge targets). Plain objects are passed as
 //    they are. So a model only ever holds models.
-// 3. What a DSL gives back is a DSL: models, and arrays with models in them,
-//    are wrapped when they are read.
+// 3. What a statement gives back is a DSL.
 // 4. A model has one DSL, so DSLs compare with `===`.
-// 5. The DSL's own names come from a table without a prototype.
+// 5. The DSL's own names are a few fixed ones (`MEMBERS`, the statements);
+//    every other name is an attribute.
 
 /** Each model's DSL (rule 4). */
 const views = new WeakMap<object, object>();
@@ -750,45 +497,6 @@ function unwrap(value: unknown): unknown {
   return Array.isArray(value) ? value.map(unwrap) : modelOf(value);
 }
 
-/** Rule 3: a DSL for a model; arrays with models copied with DSLs. */
-function wrap(value: unknown): unknown {
-  if (isModel(value)) return viewOf(value);
-  if (!Array.isArray(value)) return value;
-  const wrapped = value.map(wrap);
-  return wrapped.some((v, i) => v !== value[i])
-    ? Object.defineProperties(wrapped, searches)
-    : value;
-}
-
-/**
- * `includes`, `indexOf` and `lastIndexOf` of an array of DSLs: a model is
- * found by its DSL, as in Vue's reactive arrays.
- */
-const searches: PropertyDescriptorMap = Object.fromEntries(
-  (['includes', 'indexOf', 'lastIndexOf'] as const).map((name) => {
-    const search = Array.prototype[name] as (
-      this: unknown[],
-      ...args: unknown[]
-    ) => unknown;
-    return [
-      name,
-      {
-        value(this: unknown[], ...args: unknown[]): unknown {
-          const found = search.apply(this, args);
-          if (found !== false && found !== -1) return found;
-          const view = isModel(args[0]) ? views.get(args[0]) : undefined;
-          return view === undefined
-            ? found
-            : search.apply(this, [view, ...args.slice(1)]);
-        },
-        writable: true,
-        configurable: true,
-        enumerable: false,
-      },
-    ];
-  }),
-);
-
 /** The attributes of a model, by any key. */
 interface AnyAttributes {
   getAttributeNames(): string[];
@@ -798,69 +506,13 @@ interface AnyAttributes {
 }
 
 /**
- * The attributes a DSL's bare names read and write: every model but a `Dot`
- * holds its own.
+ * The attributes a DSL's names read and write: every model but a `Dot` holds
+ * its own.
  */
 function attributesOf(model: AnyDotObjectModel): AnyAttributes | undefined {
   return model.$$type === 'Dot'
     ? undefined
     : (model as unknown as AnyAttributes);
-}
-
-/** The Graphviz attribute names: bare, they are attributes, never members. */
-const ATTRIBUTE_NAMES: ReadonlySet<string> = new Set(ATTRIBUTE_KEYS);
-
-/**
- * Whether the model or its classes have the name: not `Object.prototype`
- * (so nothing added to it is taken for a member) and not `constructor`.
- */
-function hasMember(model: object, key: string): boolean {
-  if (key === 'constructor') return false;
-  for (
-    let o: object | null = model;
-    o !== null && o !== Object.prototype;
-    o = Object.getPrototypeOf(o)
-  ) {
-    if (Object.hasOwn(o, key)) return true;
-  }
-  return false;
-}
-
-/**
- * The model member a `$` name stands for: the name as it is when the model
- * has it (`$$type`), else the name without the `$` (`$label` → `label`).
- */
-function memberName(model: object, key: string): string {
-  return hasMember(model, key) ? key : key.slice(1);
-}
-
-/**
- * Whether a bare name is a member: one the model has that is not a Graphviz
- * attribute name. (An attribute a schema adds under a member's name is
- * reached with `getAttribute` / `setAttribute`.)
- */
-function isMember(model: object, key: string): boolean {
-  return !ATTRIBUTE_NAMES.has(key) && hasMember(model, key);
-}
-
-/**
- * The member a name reaches, if any: a `$` name always reaches one, a bare
- * name when it is a member and not an attribute name.
- */
-function memberKey(model: object, key: string): string | undefined {
-  if (key.startsWith('$')) return memberName(model, key);
-  return isMember(model, key) ? key : undefined;
-}
-
-/** Whether a name reads as a member or, on a graph, a DOT statement. */
-function readsAsMemberOrStatement(
-  model: AnyDotObjectModel,
-  key: string,
-): boolean {
-  return (
-    (isGraph(model) && STATEMENT_NAMES.has(key)) ||
-    memberKey(model, key) !== undefined
-  );
 }
 
 function unwritable(key: PropertyKey): TypeError {
@@ -881,8 +533,25 @@ const STATEMENT_NAMES: ReadonlySet<string> = new Set([
   'graph',
 ]);
 
-/** A graph's default attribute lists as DSLs, made once per lists object. */
-const defaultsOf = new WeakMap<object, object>();
+/** The model members a DSL has, by the model's `$$type`. */
+const MEMBERS: Readonly<Record<string, ReadonlySet<string>>> = {
+  Node: new Set(['$$type', 'addComment', 'port']),
+  Edge: new Set(['$$type', 'addComment']),
+  AttributeList: new Set(['$$type', '$$kind', 'addComment']),
+  Graph: new Set(['$$type', 'addComment']),
+  Subgraph: new Set(['$$type', 'addComment']),
+  Dot: new Set(['$$type', 'addComment']),
+};
+
+/** What a name is on a DSL of `model`: a statement, a member or an attribute. */
+function kindOf(
+  model: AnyDotObjectModel,
+  key: string,
+): 'statement' | 'member' | 'attribute' {
+  if (isGraph(model) && STATEMENT_NAMES.has(key)) return 'statement';
+  if (MEMBERS[model.$$type]?.has(key)) return 'member';
+  return 'attribute';
+}
 
 /** A model's methods as DSL members, made once per model and name. */
 const membersOf = new WeakMap<object, Map<string, unknown>>();
@@ -893,60 +562,56 @@ const handler: ProxyHandler<object> = {
     // Only to the DSL itself, not to an object inheriting from it.
     if (key === MODEL) return receiver === views.get(model) ? model : undefined;
     if (typeof key !== 'string') return undefined;
-    if (isGraph(model) && STATEMENT_NAMES.has(key)) {
-      return statements(model)[key];
+    switch (kindOf(model, key)) {
+      case 'statement':
+        return statements(model as GraphBaseModel)[key];
+      case 'member':
+        return member(model, key);
+      default:
+        return attributesOf(model)?.getAttribute(key);
     }
-    const name = memberKey(model, key);
-    if (name !== undefined) {
-      // A `$` name the model does not have reads nothing, not Object.prototype.
-      return hasMember(model, name) ? member(model, name) : undefined;
-    }
-    return attributesOf(model)?.getAttribute(key);
   },
   set(target, key, value) {
     const model = modelFor(target);
-    if (typeof key !== 'string') throw unwritable(key);
-    if (isGraph(model) && STATEMENT_NAMES.has(key)) throw unwritable(key);
-    const name = memberKey(model, key);
-    if (name !== undefined) {
-      return Reflect.set(model, name, unwrap(value), model);
-    }
     const attributes = attributesOf(model);
-    if (attributes === undefined) throw unwritable(key);
+    if (
+      typeof key !== 'string' ||
+      kindOf(model, key) !== 'attribute' ||
+      attributes === undefined
+    ) {
+      throw unwritable(key);
+    }
     if (value === undefined) attributes.removeAttribute(key);
     else attributes.setAttribute(key, value);
     return true;
   },
   deleteProperty(target, key) {
     const model = modelFor(target);
-    if (typeof key !== 'string') return true;
-    if (isGraph(model) && STATEMENT_NAMES.has(key)) return true;
-    const name = memberKey(model, key);
-    if (name !== undefined) return Reflect.deleteProperty(model, name);
-    attributesOf(model)?.removeAttribute(key);
+    if (typeof key === 'string' && kindOf(model, key) === 'attribute') {
+      attributesOf(model)?.removeAttribute(key);
+    }
     return true;
   },
   has(target, key) {
     const model = modelFor(target);
     if (key === MODEL) return true;
     if (typeof key !== 'string') return false;
-    if (isGraph(model) && STATEMENT_NAMES.has(key)) return true;
-    const name = memberKey(model, key);
-    if (name !== undefined) return hasMember(model, name);
-    return attributesOf(model)?.getAttribute(key) !== undefined;
+    return kindOf(model, key) !== 'attribute'
+      ? true
+      : attributesOf(model)?.getAttribute(key) !== undefined;
   },
   // The attributes are the DSL's own properties: `{ ...n }`, `Object.keys(n)`
-  // and `JSON.stringify(n)` see them. One whose name reads as a member or a
-  // statement is not one of them (it is reached with `getAttribute`).
+  // and `JSON.stringify(n)` see them. One named like a member or statement
+  // is reached on the model.
   ownKeys(target) {
     const model = modelFor(target);
     return (attributesOf(model)?.getAttributeNames() ?? []).filter(
-      (key) => !readsAsMemberOrStatement(model, key),
+      (name) => kindOf(model, name) === 'attribute',
     );
   },
   getOwnPropertyDescriptor(target, key) {
     const model = modelFor(target);
-    if (typeof key !== 'string' || readsAsMemberOrStatement(model, key)) {
+    if (typeof key !== 'string' || kindOf(model, key) !== 'attribute') {
       return undefined;
     }
     const value = attributesOf(model)?.getAttribute(key);
@@ -970,10 +635,9 @@ const handler: ProxyHandler<object> = {
 };
 
 function member(model: AnyDotObjectModel, name: string): unknown {
-  if (name === 'attributes' && isGraph(model)) return defaults(model);
   // Rule 1: getters run on the model.
   const value: unknown = Reflect.get(model, name, model);
-  if (typeof value !== 'function') return wrap(value);
+  if (typeof value !== 'function') return value;
   let members = membersOf.get(model);
   if (members === undefined) {
     members = new Map();
@@ -983,25 +647,9 @@ function member(model: AnyDotObjectModel, name: string): unknown {
   if (known?.fn === value) return known.call;
   const fn = value as (...args: unknown[]) => unknown;
   const call = (...args: unknown[]): unknown =>
-    wrap(fn.apply(model, args.map(unwrap)));
+    fn.apply(model, args.map(unwrap));
   members.set(name, { fn, call });
   return call;
-}
-
-function defaults(model: GraphBaseModel): object {
-  // By the lists' object, so a class whose `attributes` gives new lists is
-  // followed.
-  const attributes = model.attributes;
-  let lists = defaultsOf.get(attributes);
-  if (lists === undefined) {
-    lists = Object.freeze({
-      graph: viewOf(attributes.graph),
-      edge: viewOf(attributes.edge),
-      node: viewOf(attributes.node),
-    });
-    defaultsOf.set(attributes, lists);
-  }
-  return lists;
 }
 
 function statements(model: GraphBaseModel): Record<string, unknown> {

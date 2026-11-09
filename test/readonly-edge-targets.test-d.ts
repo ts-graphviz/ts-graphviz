@@ -20,7 +20,6 @@ describe('edge targets as inputs', () => {
   it('accepts readonly tuples and groups', () => {
     const pair = ['a', 'b'] as const;
     expectTypeOf(g.edge(pair)).toEqualTypeOf<DSL<EdgeModel>>();
-    expectTypeOf(g.createEdge(pair)).toEqualTypeOf<DSL<EdgeModel>>();
     expectTypeOf(modelOf(g).createEdge(pair)).toEqualTypeOf<EdgeModel>();
     expectTypeOf(g.edge([['a', 'b'] as const, 'c'])).toEqualTypeOf<
       DSL<EdgeModel>

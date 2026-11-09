@@ -19,16 +19,7 @@ export abstract class RootGraph<M extends AnyModelTypes = ModelTypes>
   public get $$type(): 'Graph' {
     return 'Graph';
   }
-  /**
-   * The graph's name.
-   * @deprecated Read `graphId` (in the DOT DSL, `id` is Graphviz's `id`
-   * attribute). Removed in v5.
-   */
-  public override readonly id?: string;
-  /** The graph's name: its ID in DOT (`G` in `digraph G`). */
-  public get graphId(): string | undefined {
-    return this.id;
-  }
+  public readonly id?: string;
   public abstract readonly directed: boolean;
   public strict: boolean;
 

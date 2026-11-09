@@ -86,17 +86,7 @@ export class Node<S extends Schema = EmptySchema>
     return this.#attributes;
   }
 
-  /** The node's name: its ID in DOT (`a` in `a -> b`). */
-  public get nodeId(): string {
-    return this.id;
-  }
-
   constructor(
-    /**
-     * The node's name.
-     * @deprecated Read `nodeId` (in the DOT DSL, `id` is Graphviz's `id`
-     * attribute). Removed in v5.
-     */
     public readonly id: string,
     attributes?: NodeAttributesObject<S>,
   ) {
@@ -106,10 +96,9 @@ export class Node<S extends Schema = EmptySchema>
   }
 
   public port(port: string | Partial<Port>): ForwardRefNode {
-    // By the name it is written with, `nodeId`.
     if (typeof port === 'string') {
-      return { id: this.nodeId, port };
+      return { id: this.id, port };
     }
-    return { id: this.nodeId, ...port };
+    return { id: this.id, ...port };
   }
 }

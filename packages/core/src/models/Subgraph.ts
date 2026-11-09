@@ -27,16 +27,7 @@ export class Subgraph<M extends AnyModelTypes = ModelTypes>
   public get $$type(): 'Subgraph' {
     return 'Subgraph';
   }
-  /**
-   * The subgraph's name.
-   * @deprecated Read `subgraphId` (in the DOT DSL, `id` is Graphviz's `id`
-   * attribute). Removed in v5.
-   */
-  public override readonly id?: string;
-  /** The subgraph's name: its ID in DOT (`cluster_a` in `subgraph cluster_a`). */
-  public get subgraphId(): string | undefined {
-    return this.id;
-  }
+  public readonly id?: string;
 
   constructor(id?: string, attributes?: SubgraphAttributesObject<SchemaOf<M>>);
 
@@ -57,11 +48,9 @@ export class Subgraph<M extends AnyModelTypes = ModelTypes>
   public isSubgraphCluster(): boolean {
     // As Graphviz decides (is_a_cluster): an id starting with "cluster" in
     // any case, or the cluster attribute.
-    // By the name it is written with, `subgraphId`.
-    const name = this.subgraphId;
     return (
-      (typeof name === 'string' &&
-        name.slice(0, 7).toLowerCase() === 'cluster') ||
+      (typeof this.id === 'string' &&
+        this.id.slice(0, 7).toLowerCase() === 'cluster') ||
       // Read without the schema: whatever it says, Graphviz reads the value.
       graphvizBool((this as Attributes<'cluster'>).getAttribute('cluster'))
     );

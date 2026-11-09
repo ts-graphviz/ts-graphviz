@@ -1,4 +1,4 @@
-import { ArrowType, type Attribute, digraph } from 'ts-graphviz';
+import { ArrowType, type Attribute, digraph, modelOf } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
 // The arrow names (#1897). ArrowType is a union of 1,764 literals: compare
@@ -138,14 +138,17 @@ describe('ArrowType.build', () => {
       });
       e.arrowtail = ArrowType.build('obox', 'ltee', 'vee', 'odot');
       e.arrowhead = 'odot';
-      e.setAttribute('arrowhead', ArrowType.build('dot', 'dot', 'dot'));
+      modelOf(e).setAttribute(
+        'arrowhead',
+        ArrowType.build('dot', 'dot', 'dot'),
+      );
       expectTypeOf(e.arrowhead).toExtend<ArrowType | undefined>();
       // @ts-expect-error three shapes as a literal
       e.arrowtail = 'dotdotdot';
       // @ts-expect-error not an arrow name
       e.arrowhead = 'not-an-arrow';
-      // @ts-expect-error nor through the attribute list
-      e.setAttribute('arrowtail', 'dotdotdot');
+      // @ts-expect-error nor through the model
+      modelOf(e).setAttribute('arrowtail', 'dotdotdot');
     });
   });
 });
