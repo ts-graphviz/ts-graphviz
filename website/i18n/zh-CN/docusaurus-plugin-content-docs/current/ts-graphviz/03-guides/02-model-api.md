@@ -158,7 +158,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` 会保留语句之间的注释及其种类和位置，`toDot` 会把它们写回原处。语句内部的注释（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）不会保留。模型的 `comment` 已弃用：它读写第一条前置注释。
+`fromDot` 会保留语句之间的注释及其种类和位置，`toDot` 会把它们写回原处。有两个例外：语句内部的注释（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）不会保留；图属性赋值（`color = blue;`）会写在各语句之前，因此它旁边的注释会成为下一条语句的前置注释。模型的 `comment` 已弃用：它读写第一条前置注释。
 
 ## 模型的类型守卫
 
@@ -177,7 +177,7 @@ console.log(nodes.length); // 1
 
 ## 模型上下文
 
-模型上下文是图创建其内容时使用的一组类。`withContext(models)` 返回该上下文的工厂函数（`digraph`、`graph`、`strict`）；`graph.with(models)` 设置图的上下文；`fromDot` 和 `fromDotAll` 通过 `convert.models` 接受上下文。未指定的类：对 `withContext` 和 `fromDot` 而言是默认类，对 `graph.with` 而言是该图当前使用的类。
+模型上下文是图创建其内容时使用的一组类。`withContext(models)` 返回该上下文的工厂函数（`digraph`、`graph`、`strict.digraph`、`strict.graph`）；`graph.with(models)` 设置图的上下文；`fromDot` 和 `fromDotAll` 通过 `convert.models` 接受上下文。未指定的类：对 `withContext` 和 `fromDot` 而言是默认类，对 `graph.with` 而言是该图当前使用的类。
 
 ```typescript
 import { Node, withContext } from 'ts-graphviz';

@@ -158,7 +158,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` keeps the comments between statements, with their kind and place, and `toDot` writes them back there. A comment inside a statement (`a -> /* note */ b;`, `a [ /* note */ label = x ]`) is not kept. `comment` on a model is deprecated: it reads and sets the first leading comment.
+`fromDot` keeps the comments between statements, with their kind and place, and `toDot` writes them back there. Two exceptions: a comment inside a statement (`a -> /* note */ b;`, `a [ /* note */ label = x ]`) is not kept, and a graph attribute assignment (`color = blue;`) is written before the statements, so a comment next to one leads the next statement instead. `comment` on a model is deprecated: it reads and sets the first leading comment.
 
 ## The model guards
 
@@ -177,7 +177,7 @@ console.log(nodes.length); // 1
 
 ## Models contexts
 
-A models context is the set of classes a graph creates its contents with. `withContext(models)` gives factories (`digraph`, `graph`, `strict`) of a context; `graph.with(models)` sets the context of a graph; `fromDot` and `fromDotAll` take one as `convert.models`. A class left out is the default one for `withContext` and `fromDot`, and the graph's current one for `graph.with`.
+A models context is the set of classes a graph creates its contents with. `withContext(models)` gives factories (`digraph`, `graph`, `strict.digraph`, `strict.graph`) of a context; `graph.with(models)` sets the context of a graph; `fromDot` and `fromDotAll` take one as `convert.models`. A class left out is the default one for `withContext` and `fromDot`, and the graph's current one for `graph.with`.
 
 ```typescript
 import { Node, withContext } from 'ts-graphviz';

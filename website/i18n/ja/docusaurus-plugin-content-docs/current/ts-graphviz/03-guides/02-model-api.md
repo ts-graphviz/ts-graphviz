@@ -158,7 +158,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` は文と文の間のコメントを種類と位置ごと保ち、`toDot` は同じ位置に書き戻します。文の中のコメント（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）は保たれません。モデルの `comment` は非推奨で、最初の先頭コメントを読み書きします。
+`fromDot` は文と文の間のコメントを種類と位置ごと保ち、`toDot` は同じ位置に書き戻します。例外が 2 つあります。文の中のコメント（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）は保たれません。また、グラフ属性の代入（`color = blue;`）は文より前に書き出されるので、その隣のコメントは次の文の先頭コメントになります。モデルの `comment` は非推奨で、最初の先頭コメントを読み書きします。
 
 ## モデルの型ガード
 
@@ -177,7 +177,7 @@ console.log(nodes.length); // 1
 
 ## モデルコンテキスト
 
-モデルコンテキストは、グラフが中身を作るときに使うクラスの組です。`withContext(models)` はそのコンテキストのファクトリー（`digraph`、`graph`、`strict`）を返し、`graph.with(models)` はグラフのコンテキストを設定し、`fromDot` と `fromDotAll` は `convert.models` で受け取ります。指定しなかったクラスは、`withContext` と `fromDot` では既定のクラス、`graph.with` ではそのグラフが今使っているクラスのままです。
+モデルコンテキストは、グラフが中身を作るときに使うクラスの組です。`withContext(models)` はそのコンテキストのファクトリー（`digraph`、`graph`、`strict.digraph`、`strict.graph`）を返し、`graph.with(models)` はグラフのコンテキストを設定し、`fromDot` と `fromDotAll` は `convert.models` で受け取ります。指定しなかったクラスは、`withContext` と `fromDot` では既定のクラス、`graph.with` ではそのグラフが今使っているクラスのままです。
 
 ```typescript
 import { Node, withContext } from 'ts-graphviz';

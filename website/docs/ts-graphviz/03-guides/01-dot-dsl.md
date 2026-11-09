@@ -132,7 +132,7 @@ digraph((g) => {
 
 ## What is on the DSL, and what on the model {#what-is-on-the-dsl-and-what-on-the-model}
 
-The DSL keeps DOT's words only, so its names never collide with the attributes, and your editor's completion lists the attributes and the few DSL members:
+The DSL keeps DOT's words only, so none of its names is a Graphviz attribute, and your editor's completion lists the attributes and the few DSL members (an attribute of your own schema named like one, `port` say, is read and written on the model with `getAttribute` / `setAttribute`):
 
 | On the DSL | Meaning |
 | --- | --- |

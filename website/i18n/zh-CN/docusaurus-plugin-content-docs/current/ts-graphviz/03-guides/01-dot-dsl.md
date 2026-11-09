@@ -132,7 +132,7 @@ digraph((g) => {
 
 ## DSL 上有什么，模型上有什么 {#what-is-on-the-dsl-and-what-on-the-model}
 
-DSL 只包含 DOT 的词汇，所以它的名字不会与属性冲突，编辑器的补完中只有属性和少数几个 DSL 成员：
+DSL 只包含 DOT 的词汇，所以它的名字都不是 Graphviz 属性，编辑器的补完中只有属性和少数几个 DSL 成员（若你自己的 schema 中有与之同名的属性，例如 `port`，请在模型上用 `getAttribute` / `setAttribute` 读写）：
 
 | DSL 上 | 含义 |
 | --- | --- |
