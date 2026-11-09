@@ -246,7 +246,7 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     expect(stringify(fromModel(node))).toBe('"a"; /* note */');
   });
 
-  test('leading comments are kept when a statement is converted alone', () => {
+  test('leading comments are kept when a statement or a graph is converted alone', () => {
     const node = new Node('a');
     node.addComment('first');
     node.addComment('second', { kind: 'Block' });
@@ -258,6 +258,11 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     s.addComment('lead s');
     s.createNode('x').addComment('lead x');
     expect(toDot(s)).toBe('// lead s\nsubgraph "s" {\n  // lead x\n  "x";\n}');
+    const g = new Digraph('G');
+    g.addComment('lead G');
+    expect(stringify(fromModel(g))).toBe('// lead G\ndigraph "G" {}');
+    // Through the DOT source, written once.
+    expect(toDot(g)).toBe('// lead G\ndigraph "G" {}');
   });
 
   test('a block comment after a multi-line trailing block comment on its last line trails the statement too', () => {
