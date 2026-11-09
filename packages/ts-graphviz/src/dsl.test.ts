@@ -377,6 +377,14 @@ describe('attributes by name', () => {
     expect(Reflect.ownKeys(a)).toStrictEqual(['label']);
     expect(Reflect.getOwnPropertyDescriptor(a, 'port')).toBeUndefined();
     expect(modelOf(a).getAttribute('port' as never)).toBe('x');
+    // Writing or deleting the name reaches the member, not the attribute.
+    expect(() => {
+      (a as unknown as Record<string, unknown>).port = 'y';
+    }).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_UNWRITABLE_PROPERTY' }),
+    );
+    expect(Reflect.deleteProperty(a, 'port')).toBe(true);
+    expect(modelOf(a).getAttribute('port' as never)).toBe('x');
     modelOf(a).removeAttribute('port' as never);
 
     // statements: in a graph, not deletable, not own properties
