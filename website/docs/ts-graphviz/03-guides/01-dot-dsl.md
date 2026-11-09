@@ -275,7 +275,7 @@ console.log(g.nodes.map((n) => n.id)); // ['a']
 console.log(g.getNode('b')); // undefined
 ```
 
-In DOT, an edge creates the nodes it names. The models, though, record an edge's targets by id only: `nodes` holds the nodes written as node statements, not every node the graph has in Graphviz's sense. A node may belong to several subgraphs, and `a -> b` inside a subgraph may refer to a node written outside it, so the models do not guess. Declare a node with `g.node('b')` to have it in `nodes`, or read the ids of an edge's targets.
+In DOT, an edge creates the nodes it names. The models, though, record an edge's targets by id only: `nodes` holds the nodes written as node statements, not every node the graph has in Graphviz's sense. A node may belong to several subgraphs, and `a -> b` inside a subgraph may refer to a node written outside it, so the models do not guess. Declare a node with `g.createNode('b')` (`dsl(g).node('b')` on the DSL) to have it in `nodes`, or read the ids of an edge's targets.
 
 ### `isNodeModel(dsl)` is false
 

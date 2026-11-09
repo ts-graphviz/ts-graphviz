@@ -117,10 +117,10 @@ digraph {
 The classes of a models context also decide the types of what graphs create, in nested subgraphs too:
 
 ```typescript
-import { Node, withContext } from 'ts-graphviz';
+import { modelOf, Node, withContext } from 'ts-graphviz';
 
 class MyNode extends Node {
-  get label(): string {
+  get shout(): string {
     return this.id.toUpperCase();
   }
 }
@@ -128,8 +128,8 @@ class MyNode extends Node {
 const { digraph } = withContext({ Node: MyNode });
 
 digraph((g) => {
-  g.node('a').label;                      // MyNode
-  g.subgraph('s', (s) => s.node('b').label); // MyNode in subgraphs too
+  modelOf(g.node('a')).shout; // MyNode
+  g.subgraph('s', (s) => modelOf(s.node('b')).shout); // MyNode in subgraphs too
 });
 ```
 
