@@ -346,6 +346,10 @@ describe('attributes by name', () => {
     expect('$nope' in a).toBe(false);
     expect(Reflect.getOwnPropertyDescriptor(a, '$comment')).toBeUndefined();
     expect(Reflect.deleteProperty(a, '$comment')).toBe(true);
+    // The deprecated comment is an accessor of the class, which delete
+    // leaves; undefined removes the comment.
+    expect(modelOf(a).comment).toBe('note');
+    a.$comment = undefined;
     expect(modelOf(a).comment).toBeUndefined();
 
     // statements: in a graph, not deletable, not own properties

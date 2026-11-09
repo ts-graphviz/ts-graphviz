@@ -79,8 +79,6 @@ export interface CommentASTProperties extends ASTCommonProperties {
   value: string;
 }
 
-export type CommentKind = "Block" | "Slash" | "Macro";
-
 export interface CommonParseOptions {
   filename?: string;
   maxHtmlNestingDepth?: number;
@@ -335,4 +333,6 @@ export declare function sanitize(dot: string, options?: SanitizeOptions): string
 export declare function stringify(ast: ASTNode, options?: PrintOptions): string;
 
 export declare function toModel<T extends ToModelConvertableASTNode>(ast: T, options: ConvertToModelOptions): ASTToModel<T>;
+
+export { CommentKind } from "@ts-graphviz/common";
 ```

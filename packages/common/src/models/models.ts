@@ -15,6 +15,7 @@ import type {
 } from '../attributes/schema.js';
 import type { Compass } from '../attributes/types.js';
 import type { DotValue } from '../values.js';
+import type { CommentPosition, HasComments } from './comments.js';
 import type { ModelsContext } from './models-context.js';
 import type {
   ReadonlyDotModel,
@@ -400,8 +401,14 @@ export interface DotObjectModel<T extends DotObjectType = DotObjectType> {
  * @group Models
  */
 export interface HasComment {
-  /** Comments to include when outputting with toDot. */
-  comment?: string;
+  /**
+   * The text of the object's first leading comment: reading gives it (for a
+   * DOT source, all its comments joined by line breaks), setting replaces it
+   * (or adds one) and `undefined` removes it.
+   * @deprecated Use `comments`, `addComment` and `removeComment`
+   * ({@link HasComments}). Removed in v5.
+   */
+  comment?: string | undefined;
 }
 
 /**
@@ -579,6 +586,7 @@ export interface AttributeListModel<
   E extends object = Record<never, never>,
 > extends Attributes<T, E>,
     HasComment,
+    HasComments,
     DotObjectModel<'AttributeList'> {
   $$kind: K;
 }
@@ -603,6 +611,7 @@ export interface Port {
  */
 export interface NodeModel<S extends Schema = EmptySchema>
   extends HasComment,
+    HasComments,
     Attributes<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>,
     HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>,
     DotObjectModel<'Node'> {
@@ -622,6 +631,7 @@ export interface NodeModel<S extends Schema = EmptySchema>
  */
 export interface EdgeModel<S extends Schema = EmptySchema>
   extends HasComment,
+    HasComments,
     Attributes<EdgeAttributeKey, SchemaAttributeTypes<S, 'edge'>>,
     HasAttributes<EdgeAttributeKey, SchemaAttributeTypes<S, 'edge'>>,
     DotObjectModel<'Edge'> {
@@ -752,6 +762,7 @@ export interface GraphBaseModel<
   M extends AnyModelTypes = ModelTypes,
   S extends Schema = SchemaOf<M>,
 > extends HasComment,
+    HasComments<CommentPosition>,
     Attributes<K, GraphSchemaAttributeTypes<T, S>>,
     DotObjectModel<T> {
   readonly id?: string;
@@ -944,6 +955,7 @@ export interface RootGraphModel<
  */
 export interface DotModel<S extends Schema = EmptySchema>
   extends HasComment,
+    HasComments<'leading' | 'end'>,
     DotObjectModel<'Dot'> {
   /** Root graphs in the order they appear in the source. */
   readonly graphs: ReadonlyArray<RootGraphModel<ModelTypes<S>>>;

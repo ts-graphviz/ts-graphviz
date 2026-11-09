@@ -100,7 +100,7 @@ const G = digraph('G', (g) => {
 
 - **文**：`node`、`edge`、`subgraph`、`graph` は、同じ名前の DOT の文にあたるメソッドです。`g.node({ ... })`、`g.edge({ ... })`、`g.graph({ ... })` は既定の属性の文（`node [...]` など）です。
 - **属性**：属性は、その名前のままのプロパティです。`undefined` を代入するか `delete` すると消えます。
-- **モデル自身のメンバー**には `$` を付けます。`a.$id` はノードの名前（`a.id` は Graphviz の `id` 属性）です。ほかに `g.$nodes`、`g.$getNode('A')`、`a.$comment` などがあります。
+- **モデル自身のメンバー**には `$` を付けます。`a.$id` はノードの名前（`a.id` は Graphviz の `id` 属性）です。ほかに `g.$nodes`、`g.$getNode('A')`、`a.$addComment(...)` などがあります。
 - **DSL から得られるモデルはすべて DSL です。** `modelOf()` でモデルに戻し、`dsl()` で（`fromDot` が返したものなどの）モデルを DSL にします。`toDot` とアダプターはどちらも受け取ります。
 
 ```typescript

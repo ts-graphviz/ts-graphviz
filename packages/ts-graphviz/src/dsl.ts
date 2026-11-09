@@ -7,6 +7,7 @@ import {
   type AttributesEntities,
   type AttributesGroupModel,
   type AttributesObject,
+  type CommentModel,
   type DotModel,
   type DotValue,
   type EdgeAttributesObject,
@@ -103,7 +104,16 @@ export interface ReadonlyNodeDSL extends ModelView<ReadonlyNodeModel> {
   readonly $$type: 'Node';
   /** The node's name (its id in DOT). */
   readonly $id: string;
-  readonly $comment?: string;
+  /**
+   * The text of the node's first leading comment.
+   * @deprecated Read `$comments`. Removed in v5.
+   */
+  readonly $comment?: string | undefined;
+  /**
+   * The comments attached to the node; without them, `$comment` is its one
+   * comment.
+   */
+  readonly $comments?: ReadonlyArray<CommentModel>;
   /** The value of an attribute, or undefined if it has none. */
   $getAttribute(name: string): DotValue | undefined;
   /** Whether the node has the attribute. */
@@ -142,8 +152,13 @@ type AttributeProperties<K> = {
 export interface ModelDSLMembers<T extends AnyDotObjectModel>
   extends ModelView<T> {
   readonly $$type: T['$$type'];
-  /** The model's comment. */
-  $comment?: string;
+  /**
+   * The text of the model's first leading comment (for a DOT source, all its
+   * comments joined by line breaks).
+   * @deprecated Use `$comments`, `$addComment` and `$removeComment`.
+   * Removed in v5.
+   */
+  $comment?: string | undefined;
 }
 
 /**

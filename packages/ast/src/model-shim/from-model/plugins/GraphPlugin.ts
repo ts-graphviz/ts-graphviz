@@ -7,7 +7,8 @@ export const GraphPlugin: ConvertFromModelPlugin<ReadonlyRootGraphModel> = {
   match(model) {
     return model.$$type === 'Graph';
   },
-  // The graph's own `comment` is emitted by DotPlugin, before the graph statement.
+  // The graph's leading and trailing comments are written by DotPlugin,
+  // around the graph statement; its 'end' ones by convertClusterChildren.
   convert(context, model) {
     const { createElement } = context;
     return createElement(

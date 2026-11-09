@@ -420,7 +420,7 @@ export type AttributeListAttributes<S extends Schema = EmptySchema, Kind extends
 
 export type AttributeListKind = "Graph" | "Edge" | "Node";
 
-export interface AttributeListModel<K extends AttributeListKind = AttributeListKind, T extends AttributeKey = AttributeKey, E extends object = Record<never, never>> extends Attributes<T, E>, HasComment, DotObjectModel<"AttributeList"> {
+export interface AttributeListModel<K extends AttributeListKind = AttributeListKind, T extends AttributeKey = AttributeKey, E extends object = Record<never, never>> extends Attributes<T, E>, HasComment, HasComments, DotObjectModel<"AttributeList"> {
   $$kind: K;
 }
 
@@ -714,6 +714,22 @@ export declare namespace Color {
 
 export type ColorList = string;
 
+export type CommentKind = "Block" | "Slash" | "Macro";
+
+export interface CommentModel {
+  readonly $$type: "Comment";
+  readonly text: string;
+  readonly kind: CommentKind | undefined;
+  readonly position: CommentPosition;
+}
+
+export interface CommentOptions<P extends CommentPosition = "leading" | "trailing"> {
+  position?: P | undefined;
+  kind?: CommentKind | undefined;
+}
+
+export type CommentPosition = "leading" | "trailing" | "end";
+
 export type Compass = Compass.values;
 export declare namespace Compass {
   type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
@@ -732,7 +748,7 @@ export interface DotConstructor<D extends ReadonlyDotModel = DotModel, S extends
   new (graphs?: RootGraphModel<ModelTypes<S>>[], comment?: string): D;
 }
 
-export interface DotModel<S extends Schema = EmptySchema> extends HasComment, DotObjectModel<"Dot"> {
+export interface DotModel<S extends Schema = EmptySchema> extends HasComment, HasComments<"leading" | "end">, DotObjectModel<"Dot"> {
   readonly graphs: ReadonlyArray<RootGraphModel<ModelTypes<S>>>;
   addGraph(graph: RootGraphModel<ModelTypes<S>>): void;
   existGraph(graph: RootGraphModel<ModelTypes<S>>): boolean;
@@ -751,7 +767,7 @@ export type Double = number;
 
 export type DoubleList = Double | `${Double}:${Double}` | `${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
 
-export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NO_MODELS_CONTEXT", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
+export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_INVALID_COMMENT", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NO_MODELS_CONTEXT", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
 
 export type EdgeAttributeKey = EdgeAttributeKey.values;
 export declare namespace EdgeAttributeKey {
@@ -766,7 +782,7 @@ export interface EdgeConstructor<E extends ReadonlyEdgeModel = EdgeModel, S exte
   new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject<S>): E;
 }
 
-export interface EdgeModel<S extends Schema = EmptySchema> extends HasComment, Attributes<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>, HasAttributes<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>, DotObjectModel<"Edge"> {
+export interface EdgeModel<S extends Schema = EmptySchema> extends HasComment, HasComments, Attributes<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>, HasAttributes<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>, DotObjectModel<"Edge"> {
   readonly targets: EdgeTargetTuple;
 }
 
@@ -804,7 +820,7 @@ export declare namespace GraphAttributeKey {
 
 export type GraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<GraphAttributeKey, SchemaAttributeTypes<S, "graph">>;
 
-export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K extends AttributeKey = AttributeKey, M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> extends HasComment, Attributes<K, GraphSchemaAttributeTypes<T, S>>, DotObjectModel<T> {
+export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K extends AttributeKey = AttributeKey, M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> extends HasComment, HasComments<CommentPosition>, Attributes<K, GraphSchemaAttributeTypes<T, S>>, DotObjectModel<T> {
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
   readonly nodes: ReadonlyArray<M["Node"]>;
@@ -929,7 +945,13 @@ export interface HasAttributes<T extends AttributeKey, E extends object = Record
 }
 
 export interface HasComment {
-  comment?: string;
+  comment?: string | undefined;
+}
+
+export interface HasComments<P extends CommentPosition = "leading" | "trailing"> {
+  readonly comments: ReadonlyArray<CommentModel>;
+  addComment(text: string, options?: CommentOptions<P>): CommentModel;
+  removeComment(comment: CommentModel): void;
 }
 
 export type Insensitive<T> = T & Insensitive.LowercaseKeys<T> & Insensitive.UppercaseKeys<T>;
@@ -990,7 +1012,7 @@ export interface NodeConstructor<N extends ReadonlyNodeModel = NodeModel, S exte
   new (id: string, attributes?: NodeAttributesObject<S>): N;
 }
 
-export interface NodeModel<S extends Schema = EmptySchema> extends HasComment, Attributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, DotObjectModel<"Node"> {
+export interface NodeModel<S extends Schema = EmptySchema> extends HasComment, HasComments, Attributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, DotObjectModel<"Node"> {
   readonly id: string;
   port(port: string | Partial<Port>): ForwardRefNode;
 }
@@ -1063,7 +1085,8 @@ export type Rankdir = "TB" | "BT" | "LR" | "RL";
 export interface ReadonlyAttributeListModel<K extends AttributeListKind = AttributeListKind> extends ReadonlyAttributes {
   readonly $$type: "AttributeList";
   readonly $$kind: K;
-  readonly comment?: string;
+  readonly comment?: string | undefined;
+  readonly comments?: ReadonlyArray<CommentModel>;
 }
 
 export interface ReadonlyAttributes {
@@ -1077,13 +1100,15 @@ export interface ReadonlyAttributes {
 
 export interface ReadonlyDotModel {
   readonly $$type: "Dot";
-  readonly comment?: string;
+  readonly comment?: string | undefined;
+  readonly comments?: ReadonlyArray<CommentModel>;
   readonly graphs: ReadonlyArray<ReadonlyRootGraphModel>;
 }
 
 export interface ReadonlyEdgeModel extends ReadonlyAttributes {
   readonly $$type: "Edge";
-  readonly comment?: string;
+  readonly comment?: string | undefined;
+  readonly comments?: ReadonlyArray<CommentModel>;
   readonly attributes: ReadonlyAttributes;
   readonly targets: ReadonlyEdgeTargetTuple;
 }
@@ -1097,7 +1122,8 @@ export type ReadonlyEdgeTargetTuple = readonly [from: NodeRef | readonly NodeRef
 export interface ReadonlyGraphBaseModel<T extends "Graph" | "Subgraph" = "Graph" | "Subgraph"> extends ReadonlyAttributes {
   readonly $$type: T;
   readonly id?: string;
-  readonly comment?: string;
+  readonly comment?: string | undefined;
+  readonly comments?: ReadonlyArray<CommentModel>;
   readonly attributes: {
     readonly graph: ReadonlyAttributeListModel<"Graph">;
     readonly edge: ReadonlyAttributeListModel<"Edge">;
@@ -1114,10 +1140,15 @@ export interface ReadonlyGraphBaseModel<T extends "Graph" | "Subgraph" = "Graph"
 
 export type ReadonlyGraphStatementModel = ReadonlyNodeModel | ReadonlyEdgeModel | ReadonlySubgraphModel | ReadonlyAttributeListModel;
 
+export interface ReadonlyHasComments {
+  readonly comments?: ReadonlyArray<CommentModel>;
+}
+
 export interface ReadonlyNodeModel extends ReadonlyAttributes {
   readonly $$type: "Node";
   readonly id: string;
-  readonly comment?: string;
+  readonly comment?: string | undefined;
+  readonly comments?: ReadonlyArray<CommentModel>;
   readonly attributes: ReadonlyAttributes;
 }
 
@@ -1319,6 +1350,8 @@ export declare function escString(value: string): EscStringValue;
 export declare function htmlLike(markup: string): HTMLLikeValue;
 
 export declare function isAttributeListModel<T>(object: T): object is NarrowedModel<T, "AttributeList">;
+
+export declare function isCommentModel(value: unknown): value is CommentModel;
 
 export declare function isCompass(c: string): c is Compass;
 

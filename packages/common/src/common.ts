@@ -3,6 +3,7 @@ export * from './attributes/schema.js';
 export * from './attributes/types.js';
 export * from './attributes/value-types.js';
 export * from './errors.js';
+export * from './models/comments.js';
 export * from './models/edge-targets.js';
 export * from './models/guards.js';
 export * from './models/model-view.js';

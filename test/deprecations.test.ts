@@ -195,3 +195,30 @@ describe('deprecated until v5 (#1930)', () => {
     }
   });
 });
+
+describe('deprecated until v5: comment', () => {
+  it.each([
+    ['packages/common/src/models/models.ts', 'comment?: string | undefined;'],
+    ['packages/core/src/models/Node.ts', 'public get comment():'],
+    ['packages/core/src/models/Edge.ts', 'public get comment():'],
+    ['packages/core/src/models/GraphBase.ts', 'public get comment():'],
+    ['packages/core/src/models/Dot.ts', 'public get comment():'],
+    ['packages/core/src/attributes/AttributeList.ts', 'public get comment():'],
+    [
+      'packages/ts-graphviz/src/dsl.ts',
+      'readonly $comment?: string | undefined;',
+    ],
+    ['packages/ts-graphviz/src/dsl.ts', '$comment?: string | undefined;'],
+  ])('%s: %s', (path, declaration) => {
+    expect(docAbove(read(path), declaration)).toMatch(DEPRECATED_TAG);
+  });
+
+  it('every comment of the read-only model types', () => {
+    const docs = docsAboveAll(
+      read('packages/common/src/models/readonly-models.ts'),
+      'readonly comment?: string | undefined;',
+    );
+    expect(docs).toHaveLength(5);
+    for (const doc of docs) expect(doc).toMatch(DEPRECATED_TAG);
+  });
+});

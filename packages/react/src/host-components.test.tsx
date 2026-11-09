@@ -228,6 +228,51 @@ describe('host components', () => {
     ).toBe('digraph "G" {\n  "a";\n}');
   });
 
+  it('keeps the comment prop as one leading comment, beside comments added on the model', async () => {
+    const root = createRoot();
+    await root.render(
+      <Digraph id="G">
+        <Node id="a" comment="from the prop" />
+      </Digraph>,
+    );
+    const [graph] = root.getTopLevelModels() as RootGraphModel[];
+    const a = graph.getNode('a');
+    a?.addComment('added');
+    // The same prop keeps its comment, and its place.
+    await root.render(
+      <Digraph id="G">
+        <Node id="a" color="red" comment="from the prop" />
+      </Digraph>,
+    );
+    expect(a?.comments.map((c) => c.text)).toEqual(['from the prop', 'added']);
+    await root.render(
+      <Digraph id="G">
+        <Node id="a" comment="changed" />
+      </Digraph>,
+    );
+    expect(a?.comments.map((c) => c.text)).toEqual(['added', 'changed']);
+    await root.render(
+      <Digraph id="G">
+        <Node id="a" />
+      </Digraph>,
+    );
+    expect(a?.comments.map((c) => c.text)).toEqual(['added']);
+    // A prop comment removed through a ref comes back with the prop.
+    await root.render(
+      <Digraph id="G">
+        <Node id="a" comment="again" />
+      </Digraph>,
+    );
+    const again = a?.comments.find((c) => c.text === 'again');
+    if (again) a?.removeComment(again);
+    await root.render(
+      <Digraph id="G">
+        <Node id="a" color="blue" comment="again" />
+      </Digraph>,
+    );
+    expect(a?.comments.map((c) => c.text)).toEqual(['added', 'again']);
+  });
+
   it('applies state updates', async () => {
     let setColor: (color: string) => void = () => {};
     function Colored(): ReactNode {

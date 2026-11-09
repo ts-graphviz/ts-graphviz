@@ -15,8 +15,8 @@ import { idFromLiteral, valueFromLiteral } from '../../../literal.js';
 import { takeEdgeTargets } from '../../edge-target-budget.js';
 import type { ConvertToModelContext } from '../../types.js';
 import { convertEdge } from '../EdgePlugin.js';
+import { BodyComments } from './body-comments.js';
 import { collectAttributes } from './collect-attributes.js';
-import { CommentHolder } from './comment-holder.js';
 import { nodeIdsOf, type SubgraphIdCache } from './subgraph-nodes.js';
 
 /**
@@ -86,12 +86,12 @@ export function applyStatements(
   graph: GraphBaseModel,
   statements: ClusterStatementASTNode[],
 ): void {
-  const commentHolder = new CommentHolder();
+  const comments = new BodyComments();
   for (const stmt of statements) {
     switch (stmt.type) {
       case 'Subgraph': {
         const subgraph = applySubgraph(context, graph, stmt);
-        commentHolder.apply(subgraph, stmt.location);
+        comments.statement(subgraph, stmt);
         break;
       }
       case 'Attribute':
@@ -99,7 +99,7 @@ export function applyStatements(
           idFromLiteral(stmt.key) as AttributeKey,
           valueFromLiteral(stmt.value) as AttributeValue,
         );
-        commentHolder.reset();
+        comments.statement(undefined, stmt);
         break;
       case 'Node': {
         // Converted by the node plugin each time, so a converter whose
@@ -115,9 +115,9 @@ export function applyStatements(
           for (const name of node.getAttributeNames()) {
             existing.setAttribute(name, node.getAttribute(name) as never);
           }
-          commentHolder.apply(existing, stmt.location);
+          comments.statement(existing, stmt);
         } else {
-          commentHolder.apply(node, stmt.location);
+          comments.statement(node, stmt);
           graph.addNode(node);
         }
         break;
@@ -149,7 +149,7 @@ export function applyStatements(
         } else {
           edge = context.convert(stmt);
         }
-        commentHolder.apply(edge, stmt.location);
+        comments.statement(edge, stmt);
         graph.addEdge(edge);
         break;
       }
@@ -159,12 +159,16 @@ export function applyStatements(
         );
         // The graph decides: kept in place (the default classes, #1922) or
         // merged into its defaults (the deprecated `legacyModels`).
-        graph.addAttributeList(stmt.kind, collectAttributes(attributes));
-        commentHolder.reset();
+        const list = graph.addAttributeList(
+          stmt.kind,
+          collectAttributes(attributes),
+        );
+        comments.statement(list, stmt);
         break;
       }
       case 'Comment':
-        commentHolder.set(stmt);
+        comments.comment(stmt);
     }
   }
+  comments.end(graph);
 }
