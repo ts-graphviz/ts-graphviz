@@ -57,9 +57,11 @@ export class Subgraph<M extends AnyModelTypes = ModelTypes>
   public isSubgraphCluster(): boolean {
     // As Graphviz decides (is_a_cluster): an id starting with "cluster" in
     // any case, or the cluster attribute.
+    // By the name it is written with, `subgraphId`.
+    const name = this.subgraphId;
     return (
-      (typeof this.id === 'string' &&
-        this.id.slice(0, 7).toLowerCase() === 'cluster') ||
+      (typeof name === 'string' &&
+        name.slice(0, 7).toLowerCase() === 'cluster') ||
       // Read without the schema: whatever it says, Graphviz reads the value.
       graphvizBool((this as Attributes<'cluster'>).getAttribute('cluster'))
     );

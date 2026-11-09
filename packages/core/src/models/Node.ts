@@ -106,9 +106,10 @@ export class Node<S extends Schema = EmptySchema>
   }
 
   public port(port: string | Partial<Port>): ForwardRefNode {
+    // By the name it is written with, `nodeId`.
     if (typeof port === 'string') {
-      return { id: this.id, port };
+      return { id: this.nodeId, port };
     }
-    return { id: this.id, ...port };
+    return { id: this.nodeId, ...port };
   }
 }

@@ -3,7 +3,7 @@ import type {
   ReadonlyRootGraphModel,
   ReadonlySubgraphModel,
 } from 'ts-graphviz';
-import { Digraph, dsl, Subgraph, toDot } from 'ts-graphviz';
+import { Digraph, dsl, Edge, Node, Subgraph, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
 // The readers take a model's name from `nodeId` / `graphId` / `subgraphId`,
@@ -59,5 +59,28 @@ describe('the readers take the new names', () => {
     const s = new Named();
     g.addSubgraph(s);
     expect(g.getSubgraph('named')).toBe(dsl(s));
+  });
+});
+
+describe('a model is written and classified by its new name', () => {
+  class Named extends Node {
+    override get nodeId(): string {
+      return 'shown';
+    }
+  }
+  class Cluster extends Subgraph {
+    override get subgraphId(): string {
+      return 'cluster_x';
+    }
+  }
+
+  it('an edge and a port name a node by nodeId', () => {
+    const a = new Named('a');
+    expect(toDot(new Edge([a, new Node('b')]))).toBe('"shown" -> "b";');
+    expect(a.port('p')).toEqual({ id: 'shown', port: 'p' });
+  });
+
+  it('a subgraph is a cluster by subgraphId', () => {
+    expect(new Cluster().isSubgraphCluster()).toBe(true);
   });
 });
