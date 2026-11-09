@@ -533,7 +533,8 @@ export interface Attributes<
 }
 
 /**
- * The attributes of a node or an edge, held apart from it.
+ * The attributes of a node or an edge, as its deprecated `attributes` gives
+ * them: a view whose methods go to the node or edge itself.
  *
  * @typeParam T - The built-in attribute keys.
  * @typeParam E - The attribute types a schema adds or changes, by key (see
