@@ -132,7 +132,7 @@ export interface NodeDSLMembers<T extends NodeModel>
    * g.edge([a.port('p'), b]); // "a":"p" -> "b";
    * ```
    */
-  port(port: string | Partial<Port>): ForwardRefNode;
+  readonly port: (port: string | Partial<Port>) => ForwardRefNode;
 }
 
 /**

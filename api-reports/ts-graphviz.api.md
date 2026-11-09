@@ -71,7 +71,7 @@ export interface ModelFactory<G extends RootGraphModel = RootGraphModel> {
 export type NodeDSL<T extends NodeModel> = NodeDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>>;
 
 export interface NodeDSLMembers<T extends NodeModel> extends ModelDSLMembers<T> {
-  port(port: string | Partial<Port>): ForwardRefNode;
+  readonly port: (port: string | Partial<Port>) => ForwardRefNode;
 }
 
 export type RootGraphDSL<T extends RootGraphModel> = GraphDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>>;

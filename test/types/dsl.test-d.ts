@@ -153,6 +153,8 @@ describe('keys', () => {
     n.$$type = 'Node';
     // @ts-expect-error
     n.addComment = modelOf(n).addComment;
+    // @ts-expect-error
+    n.port = modelOf(n).port;
   });
 
   it('give the statements on graphs only', () => {
