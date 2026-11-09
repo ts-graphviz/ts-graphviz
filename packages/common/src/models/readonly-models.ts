@@ -85,15 +85,7 @@ export interface ReadonlyAttributeListModel<
  */
 export interface ReadonlyNodeModel extends ReadonlyAttributes {
   readonly $$type: 'Node';
-  /**
-   * The node's name (its ID in DOT). A model without it has its `id`
-   * read instead.
-   */
-  readonly nodeId?: string;
-  /**
-   * The node's name.
-   * @deprecated Read `nodeId`. Removed in v5.
-   */
+  /** ID of the node. */
   readonly id: string;
   /**
    * The text of the first leading comment.
@@ -162,11 +154,6 @@ export interface ReadonlyGraphBaseModel<
   T extends 'Graph' | 'Subgraph' = 'Graph' | 'Subgraph',
 > extends ReadonlyAttributes {
   readonly $$type: T;
-  /**
-   * The graph's name.
-   * @deprecated Read `graphId` of a root graph or `subgraphId` of a
-   * subgraph. Removed in v5.
-   */
   readonly id?: string;
   /**
    * The text of the first leading comment.
@@ -212,8 +199,6 @@ export interface ReadonlyGraphBaseModel<
  */
 export interface ReadonlySubgraphModel
   extends ReadonlyGraphBaseModel<'Subgraph'> {
-  /** The subgraph's name (its ID in DOT); it may be missing. */
-  readonly subgraphId?: string | undefined;
   /** Whether Graphviz draws the subgraph as a cluster. */
   isSubgraphCluster(): boolean;
 }
@@ -226,8 +211,6 @@ export interface ReadonlySubgraphModel
  */
 export interface ReadonlyRootGraphModel
   extends ReadonlyGraphBaseModel<'Graph'> {
-  /** The graph's name (its ID in DOT); it may be missing. */
-  readonly graphId?: string | undefined;
   readonly directed: boolean;
   readonly strict: boolean;
 }

@@ -16,14 +16,9 @@ const nodeRef = (
   createElement: CreateElement,
   target: NodeRef,
 ): NodeRefASTNode => {
-  // A node is written by its name, `nodeId` (`id` only, on a model
-  // without it), as NodePlugin writes its statement.
-  const name = isNodeModel(target)
-    ? ((target as { nodeId?: string }).nodeId ?? target.id)
-    : target.id;
   const id = createElement(
     'Literal',
-    { value: idToRaw(name), kind: 'quoted' },
+    { value: idToRaw(target.id), kind: 'quoted' },
     [],
   );
   if (isNodeModel(target)) {

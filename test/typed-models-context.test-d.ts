@@ -49,8 +49,8 @@ describe('a ModelsContext with custom classes', () => {
     myDigraph((g) => {
       expectTypeOf(g.node('a')).toEqualTypeOf<DSL<MyNode>>();
       expectTypeOf(g.edge(['a', 'b'])).toEqualTypeOf<DSL<MyEdge>>();
-      expectTypeOf(g.nodes).toEqualTypeOf<ReadonlyArray<DSL<MyNode>>>();
-      expectTypeOf(g.node('a').extra()).toEqualTypeOf<string>();
+      expectTypeOf(g.$nodes).toEqualTypeOf<ReadonlyArray<DSL<MyNode>>>();
+      expectTypeOf(g.node('a').$extra()).toEqualTypeOf<string>();
       expectTypeOf(g.edge(['a', 'b']).$weight()).toEqualTypeOf<number>();
       g.node('b', (n) => {
         expectTypeOf(n).toEqualTypeOf<DSL<MyNode>>();
@@ -61,7 +61,7 @@ describe('a ModelsContext with custom classes', () => {
           expectTypeOf(t.edge(['c', 'd'])).toEqualTypeOf<DSL<MyEdge>>();
         });
       });
-      expectTypeOf(g.getNode('a')).toEqualTypeOf<DSL<MyNode> | undefined>();
+      expectTypeOf(g.$getNode('a')).toEqualTypeOf<DSL<MyNode> | undefined>();
     });
   });
 
@@ -85,7 +85,7 @@ describe('a ModelsContext with custom classes', () => {
     const { graph } = withContext({ Subgraph: MySubgraph });
     graph((g) => {
       expectTypeOf(g.subgraph('s')).toEqualTypeOf<DSL<MySubgraph>>();
-      expectTypeOf(g.subgraph('s').tag()).toEqualTypeOf<string>();
+      expectTypeOf(g.subgraph('s').$tag()).toEqualTypeOf<string>();
     });
   });
 });
@@ -105,19 +105,19 @@ describe('the members a class adds', () => {
 
   it('give models as DSLs and take DSLs', () => {
     const g = dsl(new Finder());
-    expectTypeOf(g.find('a')).toEqualTypeOf<DSL<NodeModel> | undefined>();
+    expectTypeOf(g.$find('a')).toEqualTypeOf<DSL<NodeModel> | undefined>();
     const a = g.node('a');
-    expectTypeOf(g.accept(a, [a, modelOf(a)])).toEqualTypeOf<number>();
+    expectTypeOf(g.$accept(a, [a, modelOf(a)])).toEqualTypeOf<number>();
     expectTypeOf(g.$label).toEqualTypeOf<() => string>();
   });
 
   it('read edge targets as read-only node DSLs', () => {
     const e = dsl(new Finder()).edge(['a', 'b']);
-    const [from] = e.targets;
-    if (!Array.isArray(from) && '$$type' in from) {
-      expectTypeOf(from.nodeId).toEqualTypeOf<string | undefined>();
+    const [from] = e.$targets;
+    if (!Array.isArray(from) && '$id' in from) {
+      expectTypeOf(from.$id).toEqualTypeOf<string>();
       // @ts-expect-error a target may be any node that can be read
-      from.port('p');
+      from.$port('p');
     }
   });
 });

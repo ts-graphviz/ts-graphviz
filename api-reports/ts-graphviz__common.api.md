@@ -9,8 +9,6 @@ export interface $keywordsValidation extends $keywords<`${string} ${string}` | `
 
 export type ASTType = "Literal" | "Dot" | "Graph" | "Attribute" | "Comment" | "AttributeList" | "NodeRef" | "NodeRefList" | "Edge" | "Node" | "Subgraph";
 
-export declare const ATTRIBUTE_KEYS: readonly AttributeKey[];
-
 export type AddDouble = `+${Double}`;
 
 export type AddPoint = `+${Point}`;
@@ -1015,7 +1013,6 @@ export interface NodeConstructor<N extends ReadonlyNodeModel = NodeModel, S exte
 }
 
 export interface NodeModel<S extends Schema = EmptySchema> extends HasComment, HasComments, Attributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, DotObjectModel<"Node"> {
-  readonly nodeId: string;
   readonly id: string;
   port(port: string | Partial<Port>): ForwardRefNode;
 }
@@ -1149,7 +1146,6 @@ export interface ReadonlyHasComments {
 
 export interface ReadonlyNodeModel extends ReadonlyAttributes {
   readonly $$type: "Node";
-  readonly nodeId?: string;
   readonly id: string;
   readonly comment?: string | undefined;
   readonly comments?: ReadonlyArray<CommentModel>;
@@ -1159,13 +1155,11 @@ export interface ReadonlyNodeModel extends ReadonlyAttributes {
 export type ReadonlyNodeRefGroupLike = readonly NodeRefLike[];
 
 export interface ReadonlyRootGraphModel extends ReadonlyGraphBaseModel<"Graph"> {
-  readonly graphId?: string | undefined;
   readonly directed: boolean;
   readonly strict: boolean;
 }
 
 export interface ReadonlySubgraphModel extends ReadonlyGraphBaseModel<"Subgraph"> {
-  readonly subgraphId?: string | undefined;
   isSubgraphCluster(): boolean;
 }
 
@@ -1200,7 +1194,6 @@ export interface RootGraphConstructor<G extends ReadonlyRootGraphModel = RootGra
 }
 
 export interface RootGraphModel<M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> extends GraphBaseModel<"Graph", GraphAttributeKey, M, S> {
-  readonly graphId?: string | undefined;
   directed: boolean;
   strict: boolean;
 }
@@ -1311,7 +1304,6 @@ export interface SubgraphConstructor<G extends ReadonlySubgraphModel = SubgraphM
 }
 
 export interface SubgraphModel<M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> extends GraphBaseModel<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, M, S> {
-  readonly subgraphId?: string | undefined;
   isSubgraphCluster(): boolean;
 }
 

@@ -14,9 +14,9 @@ describe('statement order', () => {
       g.edge(['d', 'e']);
     });
     expect(
-      g.statements.map((s) =>
+      g.$statements.map((s) =>
         s.$$type === 'Node'
-          ? `node ${s.nodeId}`
+          ? `node ${s.$id}`
           : s.$$type === 'Edge'
             ? 'edge'
             : s.$$type,
@@ -33,11 +33,11 @@ describe('statement order', () => {
       g.node('b');
     });
     const replacement = new Node('a', { color: 'red' });
-    g.addNode(replacement);
-    expect(g.statements).toStrictEqual([dsl(replacement), g.getNode('b')]);
-    g.removeNode('a');
+    g.$addNode(replacement);
+    expect(g.$statements).toStrictEqual([dsl(replacement), g.$getNode('b')]);
+    g.$removeNode('a');
     expect(
-      g.statements.map((s) => (s.$$type === 'Node' ? s.nodeId : '?')),
+      g.$statements.map((s) => (s.$$type === 'Node' ? s.$id : '?')),
     ).toEqual(['b']);
   });
 

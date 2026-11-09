@@ -303,27 +303,6 @@ statements.push(
   ),
 );
 
-// export const ATTRIBUTE_KEYS: readonly AttributeKey[] = Object.freeze([...]);
-statements.push(
-  withDoc(
-    `export const ATTRIBUTE_KEYS: readonly AttributeKey[] = Object.freeze([\n${[
-      ...docs,
-    ]
-      .map((a) => a.name)
-      .sort(byName)
-      .map((name) => `  ${quote(name)},`)
-      .join('\n')}\n]);`,
-    [
-      '*',
-      ' * The name of every attribute Graphviz documents: the {@link AttributeKey}',
-      ' * values, at run time. The DOT DSL reads these names as attributes, so',
-      ' * no member of a model is named like one.',
-      ' * @group Attribute',
-      ' ',
-    ].join('\n'),
-  ),
-);
-
 // export type Attribute<T extends AttributeKey> = Attribute.types[T];
 statements.push(
   withDoc(
