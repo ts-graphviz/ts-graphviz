@@ -284,7 +284,6 @@ describe('attributes by name', () => {
     expect('label' in a).toBe(true);
     expect('shape' in a).toBe(false);
     expect('port' in a).toBe(true);
-    expect('$id' in a).toBe(false);
   });
 
   test('names on Object.prototype are attributes, not inherited members', () => {

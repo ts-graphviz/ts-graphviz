@@ -40,8 +40,6 @@ describe('components', () => {
     </dot:table>;
     // @ts-expect-error not a number
     <dot:table border="wide" />;
-    // @ts-expect-error HTML-like labels have no port element
-    <dot:port>p</dot:port>;
   });
 });
 

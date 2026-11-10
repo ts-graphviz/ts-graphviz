@@ -40,7 +40,7 @@ describe('printing nested graphs', { tags: ['SM-2'] }, () => {
     expect(dot).toContain(`\n${'\t'.repeat(depth + 1)}a;\n`);
   });
 
-  it('indents as before', () => {
+  it('indents each nesting level', () => {
     expect(
       stringify(parse('digraph { subgraph { a; subgraph { b } } c }')),
     ).toMatchInlineSnapshot(`

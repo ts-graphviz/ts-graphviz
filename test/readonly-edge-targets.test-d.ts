@@ -33,7 +33,7 @@ describe('edge targets as inputs', () => {
     expectTypeOf(g.edge(many, { label: 'x' })).toEqualTypeOf<DSL<EdgeModel>>();
   });
 
-  it('still accepts mutable tuples and the existing tuple type', () => {
+  it('accepts mutable tuples and the EdgeTargetLikeTuple type', () => {
     expectTypeOf(g.edge(['a', ['b', 'c']])).toEqualTypeOf<DSL<EdgeModel>>();
     const ids: string[] = ['a', 'b'];
     // Asserting an array to the tuple type keeps working.
@@ -74,7 +74,7 @@ describe('edge targets as inputs', () => {
     if (isNodeRefGroupLike(frozen)) {
       expectTypeOf(frozen).toEqualTypeOf<readonly NodeRefLike[]>();
     }
-    // An untyped value narrows as before.
+    // An untyped value narrows too.
     const parsed: any = JSON.parse('["a"]');
     if (isNodeRefGroupLike(parsed)) {
       expectTypeOf(parsed).toEqualTypeOf<NodeRefGroupLike>();

@@ -34,7 +34,7 @@ describe('compass points', { tags: ['SM-2'] }, () => {
     expect(error).toMatchObject({ code: 'TSG_ERR_INVALID_EDGE_TARGETS' });
   });
 
-  it('leaves out an empty compass point, as before', () => {
+  it('leaves out an empty compass point', () => {
     const g = new Digraph();
     g.createEdge([{ id: 'a', compass: '' } as never, 'b']);
     expect(toDot(g)).toContain('"a" -> "b"');

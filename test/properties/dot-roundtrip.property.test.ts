@@ -67,7 +67,7 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
   });
 
   describe('minimal counterexamples once found by the properties (#1587)', () => {
-    it('a value ending in backslashes breaks out of the string', () => {
+    it('a value ending in backslashes stays inside the string', () => {
       const { dot } = roundTrip({
         directed: true,
         strict: false,
@@ -80,8 +80,7 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
       expect(() => fromDot(dot)).not.toThrow();
     });
 
-    it('a string that looks like an HTML-like label is emitted unquoted', () => {
-      // `/^<.+>$/` decides that `<>>` is HTML-like, so it is printed as `<<>>>`
+    it('a string that looks like an HTML-like label survives the round trip', () => {
       const { model, reparsed } = roundTrip({
         directed: true,
         strict: false,
@@ -94,8 +93,7 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
       expect(reparsed.get('label')).toBe(model.get('label'));
     });
 
-    it('a multi-line value whose first line looks like a tag is emitted unquoted', () => {
-      // the heuristic's `m` flag anchors per line, so `<a>\na` counts as HTML-like
+    it('a multi-line value whose first line looks like a tag survives the round trip', () => {
       const { model, reparsed } = roundTrip({
         directed: true,
         strict: false,
@@ -108,7 +106,7 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
       expect(reparsed.get('label')).toBe(model.get('label'));
     });
 
-    it('an escaped quote is not preserved', () => {
+    it('an escaped quote survives the round trip', () => {
       const { model, reparsed } = roundTrip({
         directed: true,
         strict: false,
