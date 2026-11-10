@@ -1,10 +1,10 @@
 name: Nightly Property Tests and Fuzzing
 # A long run of the property-based tests in test/properties and the
-# differential tests in test/differential (#1642): many more cases
+# differential tests in test/differential: many more cases
 # than a pull request run, to catch inputs the default 200 cases miss. The
 # seed of a failing property is in the log; reproduce with FC_SEED=<seed>.
-# Plus coverage-guided fuzzing of the targets in fuzz/targets (#1600), and
-# mutation testing of the packages with StrykerJS (#1860).
+# Plus coverage-guided fuzzing of the targets in fuzz/targets, and
+# mutation testing of the packages with StrykerJS.
 on:
   schedule:
     - cron: '17 3 * * *'
@@ -64,7 +64,7 @@ jobs:
         run: pnpm test:sandbox test/properties test/differential
 
   fuzz:
-    # Coverage-guided fuzzing with Jazzer.js (#1600): each target in
+    # Coverage-guided fuzzing with Jazzer.js: each target in
     # fuzz/targets runs for `fuzz_seconds`; findings are uploaded and fail the
     # job. Reproduce locally with `pnpm fuzz:build && pnpm fuzz <target>`.
     name: Fuzz ${{ matrix.target }} (${{ matrix.ref }})
@@ -112,7 +112,7 @@ jobs:
           retention-days: 14
 
   mutation:
-    # Mutation testing with StrykerJS (#1860): one test run per mutant of
+    # Mutation testing with StrykerJS: one test run per mutant of
     # packages/*/src, so nightly rather than on pull requests, and one job
     # per group of packages (STRYKER_SCOPE, stryker.config.mjs) so that a
     # run without an incremental file fits the time limit. The incremental
