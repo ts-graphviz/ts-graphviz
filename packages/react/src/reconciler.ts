@@ -123,7 +123,7 @@ export class HostConfig
     });
   }
 
-  // Update priorities (#1752), from react-reconciler/constants. A render
+  // Update priorities, from react-reconciler/constants. A render
   // produces a snapshot of models, so every update runs at the discrete
   // (synchronous) priority, including those effects schedule: React lowers
   // the priority to the default one while it runs passive effects, which

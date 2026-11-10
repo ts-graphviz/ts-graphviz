@@ -32,7 +32,17 @@ jobs:
     - name: Setup pnpm
       uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
     - name: Use Graphviz
-      uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
+      uses: ts-graphviz/setup-graphviz@6005aebc0168bb7f1c4b55f1e611648e57fb15d0 # v2.0.3
+    # setup-graphviz 2.0.3 checks the Windows install and retries Chocolatey
+    # (ts-graphviz/setup-graphviz#656); check here as well, so that a missing
+    # Graphviz fails this step and not as a missing dot in the tests (#1906).
+    - name: Check Graphviz
+      id: graphviz
+      shell: bash
+      run: |
+        dot -V && exit 0
+        echo "::error::Graphviz is not installed: dot -V fails"
+        exit 1
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
       with:
@@ -83,10 +93,17 @@ jobs:
       run: |
         # Define reusable variables
         TITLE="## E2E Test Results for Node.js ${{ matrix.node-version }} on ${{ matrix.os }}"
-        CJS_JS_STATUS="${{ steps.test-cjs-js.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
-        CJS_TS_STATUS="${{ steps.test-cjs-ts.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
-        ESM_JS_STATUS="${{ steps.test-esm-js.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
-        ESM_TS_STATUS="${{ steps.test-esm-ts.outcome == 'success' && '✅ PASS' || '❌ FAIL' }}"
+        status() {
+          case "$1" in
+            success) echo '✅ PASS' ;;
+            skipped) echo '⏭️ SKIPPED' ;;
+            *) echo '❌ FAIL' ;;
+          esac
+        }
+        CJS_JS_STATUS=$(status "${{ steps.test-cjs-js.outcome }}")
+        CJS_TS_STATUS=$(status "${{ steps.test-cjs-ts.outcome }}")
+        ESM_JS_STATUS=$(status "${{ steps.test-esm-js.outcome }}")
+        ESM_TS_STATUS=$(status "${{ steps.test-esm-ts.outcome }}")
 
         # Create test results table content
         TABLE_CONTENT=$(cat << EOF
@@ -109,7 +126,17 @@ jobs:
         echo "$TABLE_CONTENT"
 
         # Set overall job status
-        if [ "${{ steps.test-cjs-js.outcome }}" != "success" ] || \
+        if [ "${{ steps.graphviz.outcome }}" = "skipped" ]; then
+          RESULT_MESSAGE="❌ A setup step failed before the Graphviz check: the E2E tests did not run on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
+          echo "$RESULT_MESSAGE"
+          echo "**$RESULT_MESSAGE**" >> "$GITHUB_STEP_SUMMARY"
+          exit 1
+        elif [ "${{ steps.graphviz.outcome }}" != "success" ]; then
+          RESULT_MESSAGE="❌ Graphviz is not installed: the E2E tests did not run on Node.js ${{ matrix.node-version }} (${{ matrix.os }})"
+          echo "$RESULT_MESSAGE"
+          echo "**$RESULT_MESSAGE**" >> "$GITHUB_STEP_SUMMARY"
+          exit 1
+        elif [ "${{ steps.test-cjs-js.outcome }}" != "success" ] || \
            [ "${{ steps.test-cjs-ts.outcome }}" != "success" ] || \
            [ "${{ steps.test-esm-js.outcome }}" != "success" ] || \
            [ "${{ steps.test-esm-ts.outcome }}" != "success" ]; then
@@ -143,7 +170,7 @@ jobs:
     - name: Setup pnpm
       uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
     - name: Use Graphviz
-      uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
+      uses: ts-graphviz/setup-graphviz@6005aebc0168bb7f1c4b55f1e611648e57fb15d0 # v2.0.3
     - name: Setup Node.js latest
       uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
       with:
@@ -181,7 +208,7 @@ jobs:
     - name: Setup pnpm
       uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
     - name: Use Graphviz
-      uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2.0.2
+      uses: ts-graphviz/setup-graphviz@6005aebc0168bb7f1c4b55f1e611648e57fb15d0 # v2.0.3
     - name: Setup Node.js
       uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
       with:

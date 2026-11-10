@@ -40,7 +40,7 @@ export class Builder implements ASTBuilder {
    * @param options - Options to initialize Builder
    */
   constructor(private options?: Partial<BuilderOptions> | undefined) {
-    // Own properties only: an inherited one is never an option (#1757).
+    // Own properties only: an inherited one is never an option.
     this.options = ownOptions(options);
     // 0 disables the limit; a value that cannot be used gives the default.
     this.maxNodes = sizeLimit(this.options.maxASTNodes, DEFAULT_MAX_AST_NODES);

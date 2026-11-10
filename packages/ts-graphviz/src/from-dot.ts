@@ -146,7 +146,7 @@ export function fromDot(
   dot: string,
   options?: FromDotOptions<FromDotRule, Partial<ModelsContext>, boolean>,
 ): AnyFromDotModel | DSL<AnyFromDotModel> {
-  // Own properties only: an inherited one is never an option (#1757).
+  // Own properties only: an inherited one is never an option.
   const own = ownOptions(options);
   const model = read(dot, own);
   return own.dsl === true ? dsl(model) : model;
@@ -244,7 +244,7 @@ export function fromDotAll(
     parse?: CommonParseOptions;
   },
 ): (RootGraphModel | DSL<RootGraphModel>)[] {
-  // Own properties only: an inherited one is never an option (#1757).
+  // Own properties only: an inherited one is never an option.
   const own = ownOptions(options);
   const ast = parse(dot, { ...ownOptions(own.parse), as: 'Dot' });
   const convert = ownOptions(own.convert);

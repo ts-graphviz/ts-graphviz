@@ -48,7 +48,7 @@ export function toDot(
   input: AnyReadonlyDotObjectModel | ModelView,
   options?: ToDotOptions,
 ): string {
-  // Own properties only: an inherited one is never an option (#1757).
+  // Own properties only: an inherited one is never an option.
   const { convert, print } = ownOptions(options);
   const model = modelOf(input);
   const ast = fromModel(
