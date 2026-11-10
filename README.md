@@ -129,7 +129,7 @@ console.log(toDot(G));
 // }
 ```
 
-To render the graph as an image, pass it to `toFile()` or `toStream()` of `ts-graphviz/adapter`.
+To render the graph as an image, pass it to `toBlob()` of `ts-graphviz/adapter`.
 
 Where to go next:
 
