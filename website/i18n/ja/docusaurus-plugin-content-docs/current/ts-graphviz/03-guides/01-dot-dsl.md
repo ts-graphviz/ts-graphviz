@@ -203,12 +203,12 @@ console.log(toDot(G));
 
 ## 読み込んだグラフを編集する
 
-`fromDot` はモデルを返します。`dsl()` はモデルの DSL を返すので、読み込んだグラフも同じ書き方で編集できます。
+`fromDot` はモデルを返し、`{ dsl: true }` を渡すとそのモデルの DSL を返すので、読み込んだグラフも同じ書き方で編集できます。`fromDotAll` も同じオプションを受け取ります。
 
 ```typescript
-import { dsl, fromDot, toDot } from 'ts-graphviz';
+import { fromDot, toDot } from 'ts-graphviz';
 
-const g = dsl(fromDot('digraph { a [label = "A"]; a -> b; }'));
+const g = fromDot('digraph { a [label = "A"]; a -> b; }', { dsl: true });
 g.node('a').color = 'red';
 g.edge(['b', 'c']);
 

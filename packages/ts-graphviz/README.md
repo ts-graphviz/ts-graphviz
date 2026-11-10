@@ -246,17 +246,16 @@ The main scenario for using this library is to use the `toDot` function, but it 
 By converting **DOT** to **Model**, a portion of the code can be written in the DOT language.
 
 ```typescript
-import { dsl, fromDot, toDot } from 'ts-graphviz';
+import { fromDot, toDot } from 'ts-graphviz';
 
-// fromDot gives the model; dsl() gives its DOT DSL.
-const G = dsl(
-  fromDot(
-    `digraph {
-      node_A [
-        label = "This is a Label of Node A";
-      ];
-    }`,
-  ),
+// fromDot gives the model; with { dsl: true }, its DOT DSL.
+const G = fromDot(
+  `digraph {
+    node_A [
+      label = "This is a Label of Node A";
+    ];
+  }`,
+  { dsl: true },
 );
 
 G.edge(['node_A', 'node_B']);
