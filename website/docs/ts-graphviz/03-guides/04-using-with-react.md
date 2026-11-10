@@ -205,9 +205,9 @@ The models are added when React commits, so read the contents of a graph after `
 
 ## Rendering into an existing graph
 
-With the `container` option, the elements are rendered into a graph you already have: a model or its [DOT DSL](./01-dot-dsl.md). The element then has no `<Digraph>` or `<Graph>` of its own. The statements the container already had stay first.
+With the `container` option, the elements are rendered into a graph you already have: a model or its [DOT DSL](./01-dot-dsl.md). The element then has no `<Digraph>` or `<Graph>` of its own. The statements the container already had stay first. Give the rendered nodes ids the container does not use: a rendered node takes the place of a node with the same id until it is unmounted.
 
-`<GraphPortal id="...">` sends its children to the graph of that id, after that graph's own statements. Without an `id`, or when no graph has it, they go to the root graph.
+`<GraphPortal id="...">` sends its children to the graph of that id, after that graph's own statements. Without an `id`, or when no graph has it, they go to the root graph. Inside a portal to a subgraph that the same tree renders, `useCurrentGraph()` gives the root graph, not that subgraph.
 
 ```tsx
 import { Edge, GraphPortal, Node, renderToDot } from '@ts-graphviz/react';

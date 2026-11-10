@@ -129,7 +129,7 @@ const blob = await toBlob(untrustedDot, {
 ```
 
 :::danger
-Set `sanitize: false` only for DOT that your application wrote itself. Whether to check is your application's decision: never take the value of `sanitize` from a request.
+Set `sanitize: false` only for DOT that your application wrote itself, with every attribute value and label in it trusted or validated: a model whose `image` comes from a request is not trusted DOT. Whether to check is your application's decision: never take the value of `sanitize` from a request.
 
 `sanitize` checks the DOT; it is not a sandbox. For DOT from a party you do not trust, also set `signal` and `maxOutputSize`, and run Graphviz in an isolated environment. The [Security model](../11-advanced-topics/06-security-model.md) lists what is checked and what is not.
 :::
@@ -161,7 +161,7 @@ Every error the adapter raises on purpose has a `code` that starts with `TSG_ERR
 | --- | --- | --- |
 | The DOT does not parse | `DotSyntaxError` | `TSG_ERR_DOT_SYNTAX` |
 | `sanitize` rejects the DOT or the output format | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
-| An option is outside its type or range | `TypeError` or `RangeError` | `TSG_ERR_INVALID_OPTION` |
+| A data option (`format`, `layout`, `attributes`, a number or a flag) is outside its type or range | `TypeError` or `RangeError` | `TSG_ERR_INVALID_OPTION` |
 | The command cannot start, or exits with an error | `CommandExecutionError` | `TSG_ERR_COMMAND_FAILED` |
 | The output is larger than `maxOutputSize`, or `maxOutputSize` is negative or not finite | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
 | `signal` aborts | `signal.reason` (an `AbortError` or `TimeoutError`) | none |

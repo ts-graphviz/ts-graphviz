@@ -211,7 +211,7 @@ console.log(edge.targets.map((target) => target.type)); // ['NodeRef', 'NodeRef'
 console.log(edge.children.map((child) => child.type)); // ['Attribute']
 ```
 
-A source that does not parse throws a `DotSyntaxError`, whose `code` is `TSG_ERR_DOT_SYNTAX` and whose `location` is the place of the error. `parse` also takes limits for untrusted input, such as `maxInputSize` and `maxASTNodes`; a source over a limit throws a `DotSyntaxError` whose `limit` names the option.
+A source that does not parse throws a `DotSyntaxError`, whose `code` is `TSG_ERR_DOT_SYNTAX` and whose `location` is the place of the error (`undefined` when the error has no place, as for `maxInputSize` and `maxASTNodes`). `parse` also takes limits for untrusted input, such as `maxInputSize` and `maxASTNodes`; a source over a limit throws a `DotSyntaxError` whose `limit` names the option.
 
 ### Editing an AST and Writing DOT
 
@@ -286,7 +286,7 @@ A string in a model is literal text, and a quoted `Literal` holds DOT source tex
 
 ## Checking untrusted DOT {#checking-untrusted-dot}
 
-Graphviz reads the files a DOT source names (`image`, `shapefile`, …) and writes the links it gives into its output. `sanitize(dot, options?)` parses the source, rejects such constructs with a `DOMException` named `SecurityError` (`code` `TSG_ERR_UNSAFE_DOT`), and returns the checked text, printed again from the AST. The adapter's `toBlob` runs it by default (see [Rendering Graphs to Images](./03-rendering-graphs-to-images.md#sanitizing-the-dot-source)). It is a check, not a sandbox: the [Security model](../11-advanced-topics/06-security-model.md) says what it covers.
+Graphviz reads the files a DOT source names (`image`, `shapefile`, …) and writes the links it gives into its output. `sanitize(dot, options?)` parses the source, rejects the attributes that name files and the links other than relative, `http`, `https` and `mailto` ones with a `DOMException` named `SecurityError` (`code` `TSG_ERR_UNSAFE_DOT`), and returns the checked text, printed again from the AST. The adapter's `toBlob` runs it by default (see [Rendering Graphs to Images](./03-rendering-graphs-to-images.md#sanitizing-the-dot-source)). It is a check, not a sandbox: the [Security model](../11-advanced-topics/06-security-model.md) says what it covers.
 
 ```typescript
 import { sanitize } from 'ts-graphviz/ast';
