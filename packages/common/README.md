@@ -195,7 +195,7 @@ console.log(isEscString(name), isHTMLLike(label), isHTMLLike('<b>bold</b>'));
 
 ### Error Codes
 
-Every error the ts-graphviz packages raise on purpose is a standard error type (`SyntaxError`, `RangeError`, `TypeError`, …) with a `code` from `ERROR_CODES`. `isTsGraphvizError` checks for such an error, and `ErrorCode` is the union of the codes.
+An error the ts-graphviz packages raise for a documented failure is a standard error type (`SyntaxError`, `RangeError`, `TypeError`, …) with a `code` from `ERROR_CODES`. `isTsGraphvizError` checks for such an error, and `ErrorCode` is the union of the codes.
 
 ```ts
 import { ERROR_CODES, isTsGraphvizError } from '@ts-graphviz/common';

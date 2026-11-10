@@ -137,7 +137,7 @@ const blob = await toBlob('graph { a -- b -- c -- a }', {
 });
 ```
 
-The options that are data (`format`, `layout`, `attributes`, the numbers and flags, `maxOutputSize`, `sanitize`) are checked at run time: a value outside its type or range rejects the call with a `TypeError` or `RangeError` (code `TSG_ERR_INVALID_OPTION`) before the command starts. `isFormat` and `isLayout` check a name chosen by a request:
+The options that are data (`format`, `layout`, `attributes`, the numbers and flags, `maxOutputSize`, `sanitize`) are checked at run time: a value outside its type or range rejects the call with a `TypeError` or `RangeError` (code `TSG_ERR_INVALID_OPTION`; for `maxOutputSize`, `TSG_ERR_OUTPUT_LIMIT_EXCEEDED`) before the command starts. `isFormat` and `isLayout` check a name chosen by a request:
 
 ```ts
 import { isFormat, toBlob } from '@ts-graphviz/adapter';

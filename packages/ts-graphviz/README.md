@@ -522,7 +522,7 @@ console.log(toDot(G));
 // }
 ```
 
-`fromDot` maps the other way: `\\` and `\"` in a quoted string become literal characters, any other backslash sequence yields an `escString`, and `<…>` yields an `htmlLike` value. The `isEscString` and `isHTMLLike` guards tell the kinds apart.
+`fromDot` maps the other way: `\\` and `\"` in a quoted string become literal characters, `\n` and `\r` become a line feed and a carriage return, any other backslash sequence yields an `escString`, and `<…>` yields an `htmlLike` value. The `isEscString` and `isHTMLLike` guards tell the kinds apart.
 
 ### `ts-graphviz/adapter` Module 🔌
 
@@ -691,7 +691,7 @@ console.dir(ast, { depth: null });
 
 ### Errors
 
-Every error the library raises on purpose is a standard error type (`SyntaxError`, `RangeError`, `TypeError`, …) with a `code` that starts with `TSG_ERR_`. `isTsGraphvizError` tells such an error from any other. Match on the `code`, not on the message.
+An error the library raises for a documented failure is a standard error type (`SyntaxError`, `RangeError`, `TypeError`, …) with a `code` that starts with `TSG_ERR_`. `isTsGraphvizError` tells such an error from any other. Match on the `code`, not on the message.
 
 ```ts
 import { fromDot, isTsGraphvizError } from 'ts-graphviz';
