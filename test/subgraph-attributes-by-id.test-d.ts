@@ -85,7 +85,7 @@ describe('subgraph attributes by id', () => {
     // @ts-expect-error label applies to clusters
     modelOf(g).createSubgraph(undefined, { label: 'x' });
     const maybe = undefined as string | undefined;
-    modelOf(g).createSubgraph(maybe, { label: 'x', rank: 'same' }); // not known: as before
+    modelOf(g).createSubgraph(maybe, { label: 'x', rank: 'same' }); // not known: loose
   });
 
   it('applies the same rules to anonymous subgraphs', () => {
@@ -95,7 +95,7 @@ describe('subgraph attributes by id', () => {
     g.subgraph({ label: 'x' });
   });
 
-  it('keeps an id known only at run time as loose as before', () => {
+  it('keeps an id known only at run time loose', () => {
     const id: string = `cluster_${Math.random()}`;
     g.subgraph(id, { pencolor: 'red', rank: 'same' });
     modelOf(g).createSubgraph(id, { label: 'x' });

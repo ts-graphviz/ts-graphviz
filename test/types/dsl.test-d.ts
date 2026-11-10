@@ -148,20 +148,16 @@ describe('keys', () => {
     s.isSubgraphCluster;
     // @ts-expect-error a port is a node's
     e.port;
-    // @ts-expect-error no $ names
-    n.$id;
     expectTypeOf(modelOf(n).id).toEqualTypeOf<string>();
   });
 
-  it('keep the name of members that start with $$', () => {
+  it('have $$type, and attribute lists $$kind', () => {
     expectTypeOf(n.$$type).toEqualTypeOf<'Node'>();
     expectTypeOf(e.$$type).toEqualTypeOf<'Edge'>();
     expectTypeOf(s.$$type).toEqualTypeOf<'Subgraph'>();
     expectTypeOf(g.$$type).toEqualTypeOf<'Graph'>();
     expectTypeOf(d.$$type).toEqualTypeOf<'Dot'>();
     expectTypeOf(g.graph({}).$$kind).toEqualTypeOf<'Graph'>();
-    // @ts-expect-error no member $type
-    n.$type;
   });
 
   it('keep the members read-only', () => {

@@ -143,7 +143,7 @@ describe('HTML-like', { tags: ['SM-3'] }, () => {
     ).toMatchObject({ kind: 'quoted' });
   });
 
-  it('no longer guesses from the shape of a string', () => {
+  it('writes a string shaped like HTML as quoted text', () => {
     expect(literalFromValue('<b>x</b>')).toStrictEqual({
       value: '<b>x</b>',
       kind: 'quoted',

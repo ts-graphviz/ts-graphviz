@@ -128,7 +128,7 @@ describe('without a schema', () => {
     }>().toEqualTypeOf<{ [K in AttributeKey]: Attribute<K> }>();
   });
 
-  it('types attributes and models as before', () => {
+  it('types attributes and models', () => {
     {
       const g = new Digraph();
       const a = g.createNode('a', { label: 'A' });
@@ -155,7 +155,7 @@ describe('without a schema', () => {
     expectTypeOf(defaultModelsContext()).toEqualTypeOf<ModelsContext>();
   });
 
-  it('forwards a generic key and its value as before', () => {
+  it('forwards a generic key and its value', () => {
     function write<K extends NodeAttributeKey>(
       attributes: Attributes<NodeAttributeKey>,
       key: K,
@@ -186,7 +186,7 @@ describe('without a schema', () => {
   });
 
   it('keeps a model with fewer keys or narrower types one of the wider', () => {
-    // As before: a list of node attributes is an attribute list.
+    // A list of node attributes is an attribute list.
     expectTypeOf<
       GraphCommonAttributes['node']
     >().toExtend<AttributeListModel>();
