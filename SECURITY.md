@@ -18,7 +18,13 @@ Please **DO NOT** file a public issue to report a security vulnerability.
 
 ## Supported Versions
 
-The latest major version is supported. If you are using an older version, please upgrade to the latest version.
+| Version | Status |
+| --- | --- |
+| 4.x | Supported: bug fixes, security fixes and new features |
+| 3.x | Security fixes only |
+| 2.x and earlier | Not supported |
+
+If you are using an unsupported version, please upgrade. The [migration guide](https://ts-graphviz.github.io/docs/ts-graphviz/migration-guides/v3-to-v4/) describes the changes from 3.x to 4.x.
 
 ## Security Updates
 
@@ -41,6 +47,8 @@ Security is maintained through several automated workflows within the CI/CD pipe
 
 The DOT parser includes multiple layers of protection against denial-of-service attacks:
 
+- **Nesting Depth Limit**: Protection against stack overflow from deeply nested subgraphs. A configurable depth limit (`maxNestingDepth`, default: 100 levels) rejects DOT files nested deeper.
+
 - **HTML Nesting Depth Limit**: Protection against stack overflow attacks from deeply nested HTML-like structures. A configurable depth limit (default: 100 levels) prevents malicious DOT files from causing application crashes.
 
 - **Edge Chain Depth Limit**: Protection against stack overflow from deeply chained edge structures. A configurable depth limit (default: 1000 edges) prevents malicious edge chains from exhausting stack space.
@@ -49,7 +57,17 @@ The DOT parser includes multiple layers of protection against denial-of-service 
 
 - **AST Node Count Limit**: Protection against memory exhaustion from inputs with excessive elements. A configurable node limit (default: 100,000 nodes) prevents creation of massive ASTs that could consume all available memory.
 
-All limits are configurable and can be adjusted or disabled based on your security requirements and use case. For more details, see the [@ts-graphviz/ast documentation](./packages/ast/README.md#parser-options).
+The same package limits the conversions that follow parsing, and checks the content of DOT text:
+
+- **Edge Target Limit**: `toModel` limits the number of targets one edge statement expands to (`maxEdgeTargets`, default: 100,000), so that a short statement such as nested node groups cannot produce a huge edge.
+
+- **Shared Node Limit**: `toModel` and `stringify` limit how often shared AST nodes are visited (`maxSharedNodes`, default: 100,000), and `fromModel` limits the nodes it creates (`maxASTNodes`, default: 100,000).
+
+- **Cyclic Structure Rejection**: An AST or a model that contains itself is rejected with a `TypeError` (code `TSG_ERR_CYCLIC_STRUCTURE`) instead of recursing without end.
+
+- **Content Check**: `sanitize` rejects DOT text with the documented constructs that make Graphviz read a file or write a link other than relative, `http`, `https` or `mailto` (see the adapter section below for what it does and does not cover).
+
+All limits can be adjusted. The size and count limits (`maxInputSize`, `maxASTNodes`, `maxEdgeTargets`, `maxSharedNodes`) are disabled with `0`; the depth limits (`maxNestingDepth`, `maxHtmlNestingDepth`, `maxEdgeChainDepth`) protect the call stack and cannot be disabled. For more details, see the [@ts-graphviz/ast documentation](./packages/ast/README.md#parser-options).
 
 **Important**: When processing untrusted inputs (e.g., user-uploaded DOT files in a web application), it is strongly recommended to keep these limits enabled with conservative values appropriate for your environment.
 

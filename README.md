@@ -30,7 +30,7 @@
 
 [![format: Biome](https://img.shields.io/badge/format%20with-Biome-F7B911?logo=biome&style=flat)](https://biomejs.dev/)
 [![test: Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest&style=flat)](https://vitest.dev/)
-[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://rollupjs.org/)
+[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://vite.dev/)
 
 <a href="https://flatt.tech/oss/gmo/trampoline" target="_blank"><img src="https://flatt.tech/assets/images/badges/gmo-oss.svg" height="24" alt="GMO OSS support"/></a>
 
@@ -40,38 +40,42 @@
 
 ## What is ts-graphviz? 🎯
 
-**ts-graphviz** is a comprehensive TypeScript library that provides tools for creating, manipulating, and rendering Graphviz graph descriptions.
-It offers a type-safe, object-oriented approach to working with the DOT language, which is used by Graphviz for defining graph visualizations.
+**ts-graphviz** is a TypeScript library for creating, reading, changing and rendering graphs in the DOT language of [Graphviz](https://graphviz.org/).
+You write a graph with typed functions that read like DOT, and the library turns it into DOT text, and DOT text back into objects.
 
 ## Key Features ✨
 
-**ts-graphviz** offers several distinctive features that make it valuable for TypeScript/JavaScript developers working with graph visualizations:
-
-- **TypeScript-friendly API**
-  - Provides fully typed models for the DOT language with type definitions for graph attributes.
-- **Flexible Programming Paradigms**
-  - Supports both object-oriented and declarative approaches.
-- **Multi-level API**
-  - Offers high-level model APIs and low-level AST manipulation.
-- **Modular Design**
-  - Structured as separate packages for specific functionalities.
-- **Cross-platform Support**
-  - Works in Node.js and Deno environments
+- **DOT DSL**
+  - `digraph()`, `g.node()`, `g.edge()` and `g.subgraph()` describe a graph statement by statement, and attributes are properties (`g.rankdir = 'LR'`).
+- **Typed attributes**
+  - Attribute names and values are checked by TypeScript for each kind of object (graph, node, edge, subgraph).
+- **Models and AST**
+  - The DSL is backed by model classes (`Digraph`, `Node`, `Edge`, …), the lower-level API, and by an AST with a DOT parser and printer.
+- **DOT in both directions**
+  - `toDot()` writes a graph as DOT and `fromDot()` parses DOT into a graph.
+- **Modular**
+  - Separate packages for the models, the AST, the Graphviz adapter and the React renderer.
 - **Extensible**
-  - Allows extending the type system for custom graph visualization solutions.
+  - Model classes can be subclassed and the attribute types can be extended.
 
 ## Why ts-graphviz? 🤔
 
-**ts-graphviz** is designed to make it easier for TypeScript and JavaScript developers to work with Graphviz by providing a type-safe, object-oriented API that abstracts away the complexities of the DOT language. It allows developers to create and manipulate graphs programmatically, making it suitable for both small-scale projects and large applications.
-It is particularly useful for applications that require dynamic graph generation, such as data visualization tools, network analysis, and more.
+Writing DOT as strings gives no help with attribute names, value types or escaping. **ts-graphviz** lets a TypeScript or JavaScript program build the graph as data: the compiler checks the attributes, IDs and labels are escaped when the DOT is written, and an existing DOT file can be parsed, changed and written again.
+It fits programs that generate graphs from data, such as dependency graphs, schema diagrams and state machines.
+
+## Requirements
+
+- Node.js 22 or later, or the current Deno LTS
+- TypeScript 5.0 or later (when you use TypeScript)
+- ES modules only: the packages have no CommonJS build
+
+The models, the DSL and the AST run in any JavaScript runtime, including browsers. Rendering images with `ts-graphviz/adapter` runs the Graphviz `dot` command, so it needs Node.js or Deno and an installed [Graphviz](https://graphviz.org/download/).
+
+Upgrading from an earlier major version? See the [migration guide](https://ts-graphviz.github.io/docs/ts-graphviz/migration-guides/v3-to-v4/).
 
 ## Getting Started 🚀
 
 ### Installation 💽
-
-#### Node.js
-
-This package can then be installed using a package manager.
 
 ```bash
 # npm
@@ -82,179 +86,68 @@ $ yarn add ts-graphviz
 $ pnpm add ts-graphviz
 ```
 
-> **Note** Want to try before installing? Check out [Runkit](https://npm.runkit.com/ts-graphviz) to see how it works.
-
-#### Deno 🦕
-
-[Deno v1.28 and above supports npm](https://deno.land/manual/node/npm_specifiers).
-
-You can install and use the package by specifying the following:
+With Deno, import the package with the `npm:` specifier:
 
 ```ts no-check
-import { toDot } from 'npm:ts-graphviz';
+import { digraph, toDot } from 'npm:ts-graphviz';
 ```
 
 ### Basic Usage 📖
 
-ts-graphviz provides two main approaches to create graph visualizations:
-
-#### Object-Oriented API
-
-Create graphs using object-oriented programming with classes:
-
-```typescript
-import { attribute as _, Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
-
-// Create a directed graph
-const graph = new Digraph();
-
-// Create nodes
-const node1 = new Node('node1', { color: 'red' });
-const node2 = new Node('node2', { color: 'blue' });
-
-// Create an edge between the nodes
-const edge = new Edge([node1, node2], { label: 'Edge Label' });
-
-// Add elements to the graph
-graph.addNode(node1);
-graph.addNode(node2);
-graph.addEdge(edge);
-
-// Convert to DOT language
-const dot = toDot(graph);
-// digraph {
-//   "node1" [
-//     color = "red",
-//   ];
-//   "node2" [
-//     color = "blue",
-//   ];
-//   "node1" -> "node2" [
-//     label = "Edge Label",
-//   ];
-// }
-```
-
-#### Declarative API (Factory Function)
-
-Create graphs using a declarative approach with a factory function:
-
 ```ts
-import { attribute as _, digraph, toDot } from 'ts-graphviz';
+import { digraph, toDot } from 'ts-graphviz';
 
-// Create a directed graph using the factory function
-const graph = digraph('G', (g) => {
-  // Create nodes within the graph context
-  const a = g.node('a');
-  const b = g.node('b');
+const G = digraph('G', (g) => {
+  g.rankdir = 'LR';
 
-  // Create an edge between nodes
+  const a = g.node('a', { color: 'red' });
+  const b = g.node('b', { color: 'blue' });
   g.edge([a, b], { label: 'connects to' });
 
-  // Create a subgraph with its own nodes and edges
-  g.subgraph('A', (sg) => {
-    const c = sg.node('c');
-    const d = sg.node('d');
-    sg.edge([c, d]);
+  g.subgraph('cluster_A', (s) => {
+    s.label = 'Group';
+    s.edge(['c', 'd']);
   });
 });
 
-// Convert to DOT language
-const dot = toDot(graph);
-// digraph G {
-//   "a";
-//   "b";
-//   "a" -> "b" [
-//     label = "connects to",
+console.log(toDot(G));
+// digraph "G" {
+//   rankdir = "LR";
+//   "a" [
+//     color = "red";
 //   ];
-//   subgraph "A" {
-//     "c";
-//     "d";
+//   "b" [
+//     color = "blue";
+//   ];
+//   "a" -> "b" [
+//     label = "connects to";
+//   ];
+//   subgraph "cluster_A" {
+//     label = "Group";
 //     "c" -> "d";
 //   }
 // }
 ```
 
-### Declarative API (React Component)
+To render the graph as an image, pass it to `toFile()` or `toStream()` of `ts-graphviz/adapter`.
 
-The `@ts-graphviz/react` package provides React components for creating Graphviz graphs declaratively with JSX:
+Where to go next:
 
-```tsx
-import { Digraph, Node, Edge, renderToDot } from '@ts-graphviz/react';
-
-// Define reusable components
-const UserCard = ({ id, name, role }: { id: string; name: string; role: string }) => (
-  <Node
-    id={id}
-    shape="record"
-    label={
-      <dot:table border="0" cellborder="1" cellspacing="0">
-        <dot:tr>
-          <dot:td bgcolor="lightblue">
-            <dot:b>{name}</dot:b>
-          </dot:td>
-        </dot:tr>
-        <dot:tr>
-          <dot:td>{role}</dot:td>
-        </dot:tr>
-      </dot:table>
-    }
-  />
-);
-
-const StatusBadge = ({ status }: { status: string }) => (
-  <dot:font color={status === 'active' ? 'green' : 'red'}>
-    <dot:b>{status.toUpperCase()}</dot:b>
-  </dot:font>
-);
-
-// Compose the graph
-const TeamStructure = () => (
-  <Digraph rankdir="TB">
-    <UserCard id="alice" name="Alice Smith" role="Team Lead" />
-    <UserCard id="bob" name="Bob Johnson" role="Developer" />
-    <UserCard id="carol" name="Carol Davis" role="Designer" />
-
-    <Node
-      id="project"
-      label={
-        <>
-          <dot:b>Project Alpha</dot:b><dot:br/>
-          Status: <StatusBadge status="active" />
-        </>
-      }
-      shape="box"
-      style="rounded,filled"
-      fillcolor="lightyellow"
-    />
-
-    <Edge targets={["alice", "bob"]} label="manages" />
-    <Edge targets={["alice", "carol"]} label="manages" />
-    <Edge targets={["project", "alice"]} label="assigned to" style="dashed" />
-  </Digraph>
-);
-
-// Render to DOT
-const dot = await renderToDot(<TeamStructure />);
-```
-
-> [!TIP]
-> See the [@ts-graphviz/react documentation](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/react/README.md) for comprehensive examples and API reference.
+- [ts-graphviz package README](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/ts-graphviz/README.md): the usage guide (the DSL, model classes, `fromDot()`, the adapter, the AST, errors, extending the types)
+- [DOT DSL guide](https://ts-graphviz.github.io/docs/ts-graphviz/guides/dot-dsl/) and [Model API guide](https://ts-graphviz.github.io/docs/ts-graphviz/guides/model-api/) on the website
+- [@ts-graphviz/react README](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/react/README.md): writing graphs as React components
+- [Migration guide](https://ts-graphviz.github.io/docs/ts-graphviz/migration-guides/v3-to-v4/)
 
 ## Useful Links 🔗
 
 ### Documentation 📖
 
-More detailed documentation and examples can be found in the following resources:
-
-- [API Reference](https://ts-graphviz.github.io/api/)
-  - See the **API Reference** for detailed documentation on how to use the library.
-- [DeepWiki](https://deepwiki.com/ts-graphviz/ts-graphviz)
-  - See the AI generated documentation for more information.
-  - And ask questions about the library.
 - [Website](https://ts-graphviz.github.io/)
-  - The official website for **ts-graphviz**.
-
+  - Guides and the migration guide.
+- [API Reference](https://ts-graphviz.github.io/api/)
+  - Reference of every exported function, class and type.
+- [DeepWiki](https://deepwiki.com/ts-graphviz/ts-graphviz)
+  - AI generated documentation, where you can also ask questions about the library.
 
 ### Architecture 🏛
 
@@ -264,19 +157,18 @@ See [ARCHITECTURE.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/ARCHI
 
 See [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md) for how to report a vulnerability and the measures in place, and the [security model](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-model/) for the trust boundaries and guarantees of the library: what you may pass it from untrusted sources (DOT text, strings in models) and what remains your responsibility (`htmlLike()` content, the adapter's command options, attributes Graphviz resolves as files).
 
-
 ## Package Structure 📦
 
-The **ts-graphviz** repository is structured as a monorepo containing several packages, each with a specific responsibility:
+The **ts-graphviz** repository is a monorepo. Most users need only `ts-graphviz`, which includes the other packages except the React renderer:
 
 | Package | Purpose |
 | --- | --- |
-| [ts-graphviz](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/ts-graphviz/README.md) | Main entry point providing a high-level API for most users |
-| [@ts-graphviz/core](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/core/README.md) | Core object models for graph manipulation |
-| [@ts-graphviz/ast](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/ast/README.md) | Parser and AST (Abstract Syntax Tree) handling for DOT language |
-| [@ts-graphviz/adapter](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/adapter/README.md) | Platform-specific implementations for rendering graphs |
-| [@ts-graphviz/common](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/common/README.md) | Shared types and utilities used across packages |
-| [@ts-graphviz/react](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/react/README.md) | React components for creating and rendering Graphviz graphs |
+| [ts-graphviz](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/ts-graphviz/README.md) | Main entry point: the DOT DSL, the model classes, `toDot()` and `fromDot()`; `ts-graphviz/ast` and `ts-graphviz/adapter` entries |
+| [@ts-graphviz/core](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/core/README.md) | The DSL factories and the model classes |
+| [@ts-graphviz/ast](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/ast/README.md) | DOT parser, printer and AST; conversion between AST and models |
+| [@ts-graphviz/adapter](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/adapter/README.md) | Runs the Graphviz `dot` command to render images (Node.js and Deno) |
+| [@ts-graphviz/common](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/common/README.md) | Shared types (attributes, model interfaces) and utilities |
+| [@ts-graphviz/react](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/react/README.md) | React components and a renderer that produce DOT |
 
 > [!TIP]
 > ![Dependency graph](https://raw.githubusercontent.com/ts-graphviz/ts-graphviz/main/media/dependency-graph.svg)
@@ -284,27 +176,14 @@ The **ts-graphviz** repository is structured as a monorepo containing several pa
 
 ## Data Flow and Processing Pipeline 🔄
 
-The following diagram illustrates how data flows through the ts-graphviz system, from graph creation to final rendering:
-
 ![Data flow](https://raw.githubusercontent.com/ts-graphviz/ts-graphviz/main/media/data-flow.svg)
 
-1. **Creation Phase**: Users create graph models through object-oriented API, React components, or parsing DOT strings
-2. **Processing Phase**: Models are converted to AST and then to DOT language strings
-3. **Rendering Phase**: Platform-specific adapters convert DOT strings to visual output formats
-    1. The adapters handle platform-specific operations, such as executing the Graphviz dot command in Node.js/Deno, while maintaining a consistent API across environments.
+1. **Creation**: a graph model is created with the DOT DSL, the model classes or React components, or by parsing DOT text.
+2. **Processing**: the model is converted to an AST and then to DOT text. `toDot()` is `fromModel()` followed by `stringify()`; `fromDot()` is `parse()` followed by `toModel()`.
+3. **Rendering**: the adapter passes DOT text to the Graphviz `dot` command, which writes the image.
 
 > [!TIP]
-> Rendering in the browser is not directly supported by this library, but you can use other libraries like [@hpcc-js/wasm-graphviz](https://www.npmjs.com/package/@hpcc-js/wasm-graphviz) to achieve rendering in the browser.
-
-### Key Data Transformations:
-
-- **Model** -> **AST**: Converts object model to abstract syntax tree
-- **AST** -> **DOT**: Generates DOT language string from AST
-- **DOT** -> **AST**: Parses DOT language into AST
-- **AST** -> **Model**: Converts AST back to object model
-- **DOT** -> **Output**: Uses adapters to render visual outputs
-
-The `toDot()` function from the **ts-graphviz** package is a composite of `fromModel()` and `stringify()`, while the `fromDot()` function is a composite of `parse()` and `toModel()`.
+> The adapter does not render in the browser. Use a library such as [@hpcc-js/wasm-graphviz](https://www.npmjs.com/package/@hpcc-js/wasm-graphviz) to render DOT text there.
 
 ## Who's using `ts-graphviz` 📜
 
@@ -417,6 +296,10 @@ The maintainers of ts-graphviz and thousands of other packages are working with 
 Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use.
 
 [Learn more](https://tidelift.com/subscription/pkg/npm-ts-graphviz?utm_source=npm-ts-graphviz&utm_medium=referral&utm_campaign=enterprise&utm_term=repo).
+
+## Changelog 📜
+
+See [CHANGELOG.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/ts-graphviz/CHANGELOG.md) for more details.
 
 ## License ⚖️
 

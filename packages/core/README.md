@@ -30,7 +30,7 @@ Models and functions provided to users for the ts-graphviz library.
 
 [![format: Biome](https://img.shields.io/badge/format%20with-Biome-F7B911?logo=biome&style=flat)](https://biomejs.dev/)
 [![test: Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest&style=flat)](https://vitest.dev/)
-[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://rollupjs.org/)
+[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://vite.dev/)
 
 </div>
 
@@ -40,12 +40,39 @@ Models and functions provided to users for the ts-graphviz library.
 
 ## Features
 
-The package adheres to object-oriented programming principles, allowing for:
+This package has the model classes of ts-graphviz: `Digraph`, `Graph`, `Subgraph`, `Node` and `Edge`. They are the lower-level API, allowing for:
 
 - Creation and manipulation of graph elements
 - Composition of complex graph structures
 - Extension through inheritance and customization
 - Type-safe graph construction with TypeScript
+
+The package runs in any JavaScript runtime. Everything it exports is also exported by `ts-graphviz`.
+
+## The DOT DSL and the Models
+
+Most programs write graphs with the **DOT DSL** of the [`ts-graphviz`](https://www.npmjs.com/package/ts-graphviz) package, whose factories (`digraph()`, `graph()`, …) create the models of this package:
+
+```ts
+import { digraph, modelOf, toDot } from 'ts-graphviz';
+
+const G = digraph('G', (g) => {
+  g.node('a', { color: 'red' });
+  g.edge(['a', 'b']);
+});
+
+console.log(modelOf(G).constructor.name);
+// Digraph
+console.log(toDot(G));
+// digraph "G" {
+//   "a" [
+//     color = "red";
+//   ];
+//   "a" -> "b";
+// }
+```
+
+The statement methods `node()`, `edge()` and `subgraph()` are on the DSL only. The model classes have `createNode`, `createEdge` and `createSubgraph`, and the `add…`, `get…` and `remove…` methods, as shown below. `dsl(model)` from `ts-graphviz` gives the DSL of a model, and `toDot` from `ts-graphviz` converts a model to DOT.
 
 ## Usage Patterns
 
@@ -117,7 +144,7 @@ subgraph.addNode(node2);
 graph.addSubgraph(subgraph);
 ```
 
-### Customization and Extension
+## Customization and Extension
 
 **@ts-graphviz/core** provides several mechanisms for customizing and extending its functionality:
 
@@ -155,9 +182,9 @@ const edge = new MyCustomEdge([node1, node2]);
 
 ### Models Context API
 
-The Models Context API allows you to specify which model classes should be used when creating graph element.
+The Models Context API allows you to specify which model classes should be used when creating graph elements.
 
-This is implemented through the with method on graph models:
+This is implemented through the `with` method on graph models:
 
 ```ts
 import { Digraph, Edge, Node } from '@ts-graphviz/core';
@@ -181,22 +208,31 @@ const nodeB = graph.createNode('B'); // Creates a MyCustomNode
 const edge = graph.createEdge([nodeA, nodeB]); // Creates a MyCustomEdge
 ```
 
-### Integration with AST
+### Models Contexts for Conversions
 
-**@ts-graphviz/core** integrates with **[@ts-graphviz/ast](https://www.npmjs.com/package/@ts-graphviz/ast)** to convert between the object model and the DOT language.
+A models context is the set of classes (`Graph`, `Digraph`, `Subgraph`, `Node`, `Edge`, …) that a graph creates its elements with. This package provides two functions that make one:
 
-This integration enables:
+- **`defaultModelsContext()`**: the classes of this package
+- **`createModelsContext(models)`**: the classes you give, and the classes of this package for the rest
 
-- Converting graph models to DOT strings
-- Parsing DOT strings into graph models
-- Working with the abstract syntax tree directly
+`toModel` of **[@ts-graphviz/ast](https://www.npmjs.com/package/@ts-graphviz/ast)**, which converts an AST to a graph model, takes the context as its `models` option. This package itself does not depend on `@ts-graphviz/ast`.
 
-The main conversion functions that link **@ts-graphviz/core** with **@ts-graphviz/ast** are:
+```ts
+import { parse, toModel } from '@ts-graphviz/ast';
+import { createModelsContext, Node } from '@ts-graphviz/core';
 
-- **`fromModel`**: Converts a graph model to an AST
-- **`toModel`**: Converts an AST to a graph model
+class MyCustomNode extends Node {}
 
-These are then used by the main ts-graphviz package to implement the toDot and fromDot functions.
+const ast = parse('a [color = red]', { as: 'Node' });
+const node = toModel(ast, {
+  models: createModelsContext({ Node: MyCustomNode }),
+});
+
+console.log(node instanceof MyCustomNode, node.id);
+// true a
+```
+
+The main `ts-graphviz` package uses these functions to implement `fromDot`, and `fromModel` of `@ts-graphviz/ast` to implement `toDot`.
 
 ## Contributors 👥
 
