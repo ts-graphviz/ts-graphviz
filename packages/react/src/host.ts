@@ -1,8 +1,9 @@
-import type {
-  AttributeListModel,
-  CommentModel,
-  HasComments,
-  ReadonlyEdgeTargetLikeTuple,
+import {
+  type AttributeListModel,
+  type CommentModel,
+  type HasComments,
+  type ReadonlyEdgeTargetLikeTuple,
+  withCode,
 } from '@ts-graphviz/common';
 import type { ReactElement } from 'react';
 import type {
@@ -119,8 +120,11 @@ export function createHostInstance(
   // Own props only, kept on the instance for every later read.
   const props = ownOptions(rawProps);
   if ((type === HOST.node || type === HOST.edge) && !hostContext.inGraph) {
-    throw new Error(
-      `<${COMPONENT_NAMES[type]}> must be rendered inside a Digraph, Graph or Subgraph.`,
+    throw withCode(
+      new Error(
+        `<${COMPONENT_NAMES[type]}> must be rendered inside a Digraph, Graph or Subgraph.`,
+      ),
+      'TSG_ERR_NO_CURRENT_GRAPH',
     );
   }
   switch (type) {
@@ -130,7 +134,10 @@ export function createHostInstance(
     case HOST.edge: {
       const targets: ReadonlyEdgeTargetLikeTuple = props.targets;
       if (targets.length < 2) {
-        throw new Error('Edges must have at least 2 targets.');
+        throw withCode(
+          new TypeError('Edges must have at least 2 targets.'),
+          'TSG_ERR_INVALID_EDGE_TARGETS',
+        );
       }
       return { kind: 'edge', props, model: undefined, hidden: false };
     }

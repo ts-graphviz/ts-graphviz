@@ -371,6 +371,9 @@ describe('renders on one root', () => {
       </Digraph>,
     );
     root.unmount();
-    await expect(pending).rejects.toThrow(/unmounted/);
+    await expect(pending).rejects.toMatchObject({
+      code: 'TSG_ERR_ROOT_UNMOUNTED',
+      message: expect.stringMatching(/unmounted/),
+    });
   });
 });

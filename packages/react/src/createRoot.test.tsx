@@ -175,7 +175,10 @@ describe('createRoot()', () => {
             </Graph>
           </>,
         ),
-      ).rejects.toThrow(/Multiple top-level graphs detected/);
+      ).rejects.toMatchObject({
+        code: 'TSG_ERR_MULTIPLE_GRAPHS',
+        message: expect.stringMatching(/Multiple top-level graphs detected/),
+      });
 
       root.unmount();
     });
@@ -194,7 +197,10 @@ describe('createRoot()', () => {
             </Digraph>
           </React.Fragment>,
         ),
-      ).rejects.toThrow(/Multiple top-level graphs detected/);
+      ).rejects.toMatchObject({
+        code: 'TSG_ERR_MULTIPLE_GRAPHS',
+        message: expect.stringMatching(/Multiple top-level graphs detected/),
+      });
 
       root.unmount();
     });
@@ -219,9 +225,10 @@ describe('createRoot()', () => {
     it('throws error when no top-level graph is provided', async () => {
       const root = createRoot();
 
-      await expect(root.render(<Nothing />)).rejects.toThrow(
-        /No top-level graph found/,
-      );
+      await expect(root.render(<Nothing />)).rejects.toMatchObject({
+        code: 'TSG_ERR_NO_GRAPH',
+        message: expect.stringMatching(/No top-level graph found/),
+      });
 
       root.unmount();
     });

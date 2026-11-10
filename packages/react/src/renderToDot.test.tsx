@@ -148,7 +148,10 @@ describe('renderToDot()', () => {
             </Graph>
           </>,
         ),
-      ).rejects.toThrow(/Multiple top-level graphs detected/);
+      ).rejects.toMatchObject({
+        code: 'TSG_ERR_MULTIPLE_GRAPHS',
+        message: expect.stringMatching(/Multiple top-level graphs detected/),
+      });
     });
 
     it('reports a node outside any graph', async () => {
@@ -165,9 +168,10 @@ describe('renderToDot()', () => {
     });
 
     it('throws error when no top-level graph is provided', async () => {
-      await expect(renderToDot(<Nothing />)).rejects.toThrow(
-        /No top-level graph found/,
-      );
+      await expect(renderToDot(<Nothing />)).rejects.toMatchObject({
+        code: 'TSG_ERR_NO_GRAPH',
+        message: expect.stringMatching(/No top-level graph found/),
+      });
     });
 
     it('throws error for fragment with multiple graphs', async () => {
@@ -182,7 +186,10 @@ describe('renderToDot()', () => {
             </Digraph>
           </React.Fragment>,
         ),
-      ).rejects.toThrow(/Multiple top-level graphs detected/);
+      ).rejects.toMatchObject({
+        code: 'TSG_ERR_MULTIPLE_GRAPHS',
+        message: expect.stringMatching(/Multiple top-level graphs detected/),
+      });
     });
   });
 
