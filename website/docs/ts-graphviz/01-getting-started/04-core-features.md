@@ -99,11 +99,11 @@ const G = digraph('G', (g) => {
 - **Adding Elements**: Use `g.node` and `g.edge` to add nodes and edges within the context.
 - **Readability**: The structure mirrors the graph's logical structure, making it easier to read.
 
-The factories give the graph's **DOT DSL**, which reads like DOT:
+The factories give the graph's **DOT DSL**, which has DOT's words only:
 
 - **Statements**: `node`, `edge`, `subgraph` and `graph` are methods, as the DOT statements of those names. `g.node({ ... })`, `g.edge({ ... })` and `g.graph({ ... })` are the default attribute statements (`node [...]` and so on).
 - **Attributes**: attributes are properties under their own names. Assigning `undefined` or `delete` removes one.
-- **The model's own members** take a `$`: `a.$id` is the node's name (`a.id` is its `id` attribute), `g.$nodes`, `g.$getNode('A')`, `a.$addComment(...)`.
+- **A few more**: `a.addComment(...)`, a node's `a.port('p')`, and `$$type`. Everything else the model does (`id` as the node's name, `nodes`, `getNode`, `createNode`, `getAttribute`) is on `modelOf(x)`, so `a.id` is the Graphviz `id` attribute.
 - **Every model you get from the DSL is a DSL.** `modelOf()` gives the model, and `dsl()` gives the DSL of a model, such as one `fromDot` returns. `toDot` and the adapter take either.
 
 ```typescript
@@ -115,7 +115,7 @@ const G = digraph('G', (g) => {
   const a = g.node('A');
   a.label = 'Start'; // "A" [label = "Start";];
   a.id = 'svg-a'; // the Graphviz id attribute
-  console.log(a.$id); // 'A': the node's name
+  console.log(modelOf(a).id); // 'A': the node's name
   g.edge([a, 'B']); // "A" -> "B";
 });
 

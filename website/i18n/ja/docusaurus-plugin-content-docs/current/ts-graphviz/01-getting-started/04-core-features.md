@@ -96,11 +96,11 @@ const G = digraph('G', (g) => {
 - **要素の追加**：コンテキスト内で `g.node` と `g.edge` を使用してノードとエッジを追加します。
 - **可読性**：構造がグラフの論理構造を反映しており、読みやすくなっています。
 
-ファクトリ関数が返すのは、グラフの **DOT DSL** です。DOT と同じように読めます。
+ファクトリ関数が返すのは、グラフの **DOT DSL** です。DOT にある言葉だけを持ちます。
 
 - **文**：`node`、`edge`、`subgraph`、`graph` は、同じ名前の DOT の文にあたるメソッドです。`g.node({ ... })`、`g.edge({ ... })`、`g.graph({ ... })` は既定の属性の文（`node [...]` など）です。
 - **属性**：属性は、その名前のままのプロパティです。`undefined` を代入するか `delete` すると消えます。
-- **モデル自身のメンバー**には `$` を付けます。`a.$id` はノードの名前（`a.id` は Graphviz の `id` 属性）です。ほかに `g.$nodes`、`g.$getNode('A')`、`a.$addComment(...)` などがあります。
+- **ほかに少しだけ**：`a.addComment(...)`、ノードの `a.port('p')`、`$$type` です。それ以外のモデルの操作（ノードの名前としての `id`、`nodes`、`getNode`、`createNode`、`getAttribute`）は `modelOf(x)` から使います。そのため `a.id` は Graphviz の `id` 属性です。
 - **DSL から得られるモデルはすべて DSL です。** `modelOf()` でモデルに戻し、`dsl()` で（`fromDot` が返したものなどの）モデルを DSL にします。`toDot` とアダプターはどちらも受け取ります。
 
 ```typescript
@@ -112,7 +112,7 @@ const G = digraph('G', (g) => {
   const a = g.node('A');
   a.label = 'Start'; // "A" [label = "Start";];
   a.id = 'svg-a'; // the Graphviz id attribute
-  console.log(a.$id); // 'A': the node's name
+  console.log(modelOf(a).id); // 'A': the node's name
   g.edge([a, 'B']); // "A" -> "B";
 });
 

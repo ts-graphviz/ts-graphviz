@@ -128,7 +128,7 @@ describe('the deprecated legacyModels', () => {
       g.node('a');
       g.node({ color: 'blue' });
     });
-    expect(built.$attributes.node.color).toBe('blue');
+    expect(modelOf(built).attributes.node.getAttribute('color')).toBe('blue');
     expect(modelOf(built).statements.map((x) => x.$$type)).toEqual(['Node']);
   });
 });

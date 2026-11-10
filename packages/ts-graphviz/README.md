@@ -276,7 +276,7 @@ const dot = toDot(G)
 
 When creating `Graph` or `Digraph`, you can use _Model Factory_ to provide a notation more similar to the **DOT** language.
 
-The factories give the graph's **DOT DSL**: the DOT statements `node`, `edge`, `subgraph` and `graph` are methods, attributes are properties under their own names, and the model's own members take a `$` (`a.$id` is the node's name, `a.id` its `id` attribute). Every model you get from the DSL is a DSL; `modelOf()` gives the model, and `toDot` takes either.
+The factories give the graph's **DOT DSL**: the DOT statements `node`, `edge`, `subgraph` and `graph` are methods, attributes are properties under their own names, and besides those it has only `addComment`, a node's `port`, `$$type` and an attribute list's `$$kind` (`a.id` is the node's `id` attribute). The model's other members are on `modelOf(x)` (`modelOf(a).id` is the node's name). The statements return DSLs; `modelOf()` gives the model, and `toDot` takes either. `addComment` returns the `CommentModel` itself (not a DSL), which `modelOf(a).removeComment(comment)` removes.
 
 ```typescript
 import { digraph, toDot } from 'ts-graphviz';
@@ -311,7 +311,7 @@ import { attribute as _, digraph, toDot } from 'ts-graphviz';
       [_.color]: 'violet'
     });
     const Ac = A.node('Acc');
-    A.edge([Aa.$port('a'), Ab, Ac, 'E'], {
+    A.edge([Aa.port('a'), Ab, Ac, 'E'], {
       [_.color]: 'red'
     });
   });

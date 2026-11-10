@@ -96,7 +96,7 @@ describe('Dot model', () => {
   describe('toDot', () => {
     it('still writes the comment of a root graph before the graph statement', () => {
       const g = digraph('g', (g) => {
-        g.$comment = 'hello';
+        g.addComment('hello');
         g.node('a');
       });
       expect(toDot(g)).toMatchInlineSnapshot(`

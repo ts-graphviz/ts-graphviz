@@ -40,7 +40,6 @@ describe('deprecated until v5 (#1922)', () => {
       'packages/core/src/models/GraphBase.ts',
       'public readonly attributes: Readonly<GraphCommonAttributes<SchemaOf<M>>> =',
     ],
-    ['packages/ts-graphviz/src/dsl.ts', 'readonly $attributes: {'],
     ['packages/core/src/models/legacy.ts', 'export class LegacySubgraph<'],
     ['packages/core/src/models/legacy.ts', 'export class LegacyGraph<'],
     ['packages/core/src/models/legacy.ts', 'export class LegacyDigraph<'],
@@ -150,25 +149,6 @@ describe('deprecated until v5 (#1930)', () => {
     ],
     ['packages/core/src/models/Node.ts', 'public get attributes():'],
     ['packages/core/src/models/Edge.ts', 'public get attributes():'],
-    ['packages/ts-graphviz/src/dsl.ts', 'readonly $size: number;'],
-    ['packages/ts-graphviz/src/dsl.ts', 'readonly $values:'],
-    ['packages/ts-graphviz/src/dsl.ts', '$get<P extends K>(key: P)'],
-    ['packages/ts-graphviz/src/dsl.ts', '$set<P extends K>(key: P'],
-    ['packages/ts-graphviz/src/dsl.ts', '$apply('],
-    ['packages/ts-graphviz/src/dsl.ts', '$delete(key: K): void;'],
-    ['packages/ts-graphviz/src/dsl.ts', '$clear(): void;'],
-    [
-      'packages/ts-graphviz/src/dsl.ts',
-      "readonly $attributes: T['attributes'];",
-    ],
-    [
-      'packages/ts-graphviz/src/dsl.ts',
-      'readonly $attributes: AttributesGroupModel<AttributeKeysOf<T>>;',
-    ],
-    [
-      'packages/ts-graphviz/src/dsl.ts',
-      'readonly $attributes: ReadonlyAttributes;',
-    ],
   ])('%s: %s', (path, declaration) => {
     expect(docAbove(read(path), declaration)).toMatch(DEPRECATED_TAG);
   });
@@ -188,7 +168,6 @@ describe('deprecated until v5 (#1930)', () => {
     ['packages/common/src/models/models.ts', 'getAttribute<K extends'],
     ['packages/common/src/models/models.ts', 'setAttribute<K extends'],
     ['packages/core/src/attributes/AttributesBase.ts', 'public getAttribute<K'],
-    ['packages/ts-graphviz/src/dsl.ts', '$getAttribute<P extends K>'],
   ])('not the DOM names: %s: %s', (path, prefix) => {
     for (const doc of docsAboveAll(read(path), prefix)) {
       expect(doc).not.toMatch(DEPRECATED_TAG);
@@ -204,11 +183,6 @@ describe('deprecated until v5: comment', () => {
     ['packages/core/src/models/GraphBase.ts', 'public get comment():'],
     ['packages/core/src/models/Dot.ts', 'public get comment():'],
     ['packages/core/src/attributes/AttributeList.ts', 'public get comment():'],
-    [
-      'packages/ts-graphviz/src/dsl.ts',
-      'readonly $comment?: string | undefined;',
-    ],
-    ['packages/ts-graphviz/src/dsl.ts', '$comment?: string | undefined;'],
   ])('%s: %s', (path, declaration) => {
     expect(docAbove(read(path), declaration)).toMatch(DEPRECATED_TAG);
   });
