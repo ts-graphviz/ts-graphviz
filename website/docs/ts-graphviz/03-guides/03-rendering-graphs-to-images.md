@@ -163,7 +163,7 @@ Every error the adapter raises on purpose has a `code` that starts with `TSG_ERR
 | `sanitize` rejects the DOT or the output format | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
 | An option is outside its type or range | `TypeError` or `RangeError` | `TSG_ERR_INVALID_OPTION` |
 | The command cannot start, or exits with an error | `CommandExecutionError` | `TSG_ERR_COMMAND_FAILED` |
-| The output is larger than `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
+| The output is larger than `maxOutputSize`, or `maxOutputSize` is negative or not finite | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
 | `signal` aborts | `signal.reason` (an `AbortError` or `TimeoutError`) | none |
 
 A `CommandExecutionError` has the `command` that was run and, when the process did start, `exit.code`, `exit.signal` and `exit.stderr`. If Graphviz is not installed, `exit` is `undefined` and `cause` is the error of the runtime.
