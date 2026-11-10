@@ -245,7 +245,7 @@ digraph((g) => {
 ```
 
 - What changes: a default given after other statements (in the DSL, `g.node({ ... })`, `g.edge({ ... })`, `g.graph({ ... })`; on a model, `addAttributeList`), and a DOT source with several statements of one kind read with `fromDot` (it now renders as its source does). A program that gives every default before its other statements (or with `attributes.node.set(...)`) and none after them renders as before: the leading defaults apply to every statement. Where a default is also given after other statements, it overrides the leading one for what follows it.
-- For defaults of the whole graph, add the default attribute statement before any other and keep what it returns. It stays first, so it applies to every statement, whenever you change it:
+- For defaults of the whole graph, add the default attribute statement before any other and keep what it returns. It stays first, so a change to it applies to the whole graph, except where a later default attribute statement or an object's own attribute overrides it:
 
   ```ts
   import { digraph } from 'ts-graphviz';

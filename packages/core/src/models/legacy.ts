@@ -16,8 +16,10 @@ import { Subgraph } from './Subgraph.js';
  * @deprecated v4's classes keep a default attribute statement in its place,
  * as in DOT. For defaults of the whole graph, add the statement before any
  * other and keep what it returns (`g.node({})` in the DSL,
- * `addAttributeList` on a model): it applies to every statement whenever it
- * is changed. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * `addAttributeList` on a model): it stays first, so a change to it applies
+ * to the whole graph, except where a later default attribute statement or an
+ * object's own attribute overrides it. Kept for code that relies on the 3.x
+ * behaviour; removed in v5.
  * @group Models
  */
 export class LegacySubgraph<
@@ -40,8 +42,10 @@ export class LegacySubgraph<
  * @deprecated v4's classes keep a default attribute statement in its place,
  * as in DOT. For defaults of the whole graph, add the statement before any
  * other and keep what it returns (`g.node({})` in the DSL,
- * `addAttributeList` on a model): it applies to every statement whenever it
- * is changed. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * `addAttributeList` on a model): it stays first, so a change to it applies
+ * to the whole graph, except where a later default attribute statement or an
+ * object's own attribute overrides it. Kept for code that relies on the 3.x
+ * behaviour; removed in v5.
  * @group Models
  */
 export class LegacyGraph<
@@ -64,8 +68,10 @@ export class LegacyGraph<
  * @deprecated v4's classes keep a default attribute statement in its place,
  * as in DOT. For defaults of the whole graph, add the statement before any
  * other and keep what it returns (`g.node({})` in the DSL,
- * `addAttributeList` on a model): it applies to every statement whenever it
- * is changed. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * `addAttributeList` on a model): it stays first, so a change to it applies
+ * to the whole graph, except where a later default attribute statement or an
+ * object's own attribute overrides it. Kept for code that relies on the 3.x
+ * behaviour; removed in v5.
  * @group Models
  */
 export class LegacyDigraph<
@@ -93,8 +99,10 @@ export class LegacyDigraph<
  * @deprecated v4's classes keep a default attribute statement in its place,
  * as in DOT. For defaults of the whole graph, add the statement before any
  * other and keep what it returns (`g.node({})` in the DSL,
- * `addAttributeList` on a model): it applies to every statement whenever it
- * is changed. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * `addAttributeList` on a model): it stays first, so a change to it applies
+ * to the whole graph, except where a later default attribute statement or an
+ * object's own attribute overrides it. Kept for code that relies on the 3.x
+ * behaviour; removed in v5.
  * @group Models Context
  */
 export const legacyModels: Partial<ModelsContext> = Object.freeze({
