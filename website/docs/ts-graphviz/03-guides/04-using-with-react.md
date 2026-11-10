@@ -86,7 +86,7 @@ console.log(dot);
 
 ## HTML-like labels
 
-A `label` takes a string or an element. An element is written as an HTML-like label, with the `dot:` elements: `<dot:table>`, `<dot:tr>`, `<dot:td>`, `<dot:font>`, `<dot:b>`, `<dot:i>`, `<dot:u>`, `<dot:br>` and the other elements Graphviz has. Their types come with the package; no setup is needed.
+A `label` takes a string or an element. An element is written as an HTML-like label, with the `dot:` elements: `<dot:table>`, `<dot:tr>`, `<dot:td>`, `<dot:font>`, `<dot:b>`, `<dot:i>`, `<dot:u>`, `<dot:br>` and the other elements Graphviz has. Their types come with the package, and TypeScript needs no setup. If Babel compiles your JSX, set the `throwIfNamespace` option of its React preset to `false`.
 
 ```tsx
 import { Digraph, Edge, Node, renderToDot } from '@ts-graphviz/react';
