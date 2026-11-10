@@ -245,6 +245,19 @@ digraph((g) => {
 ```
 
 - What changes: a default given after other statements (in the DSL, `g.node({ ... })`, `g.edge({ ... })`, `g.graph({ ... })`; on a model, `addAttributeList`), and a DOT source with several statements of one kind read with `fromDot` (it now renders as its source does). A program that gives every default before its other statements (or with `attributes.node.set(...)`) and none after them renders as before: the leading defaults apply to every statement. Where a default is also given after other statements, it overrides the leading one for what follows it.
+- For defaults of the whole graph, add the default attribute statement before any other and keep what it returns. It stays first, so it applies to every statement, whenever you change it:
+
+  ```ts
+  import { digraph } from 'ts-graphviz';
+
+  digraph((g) => {
+    const nodes = g.node({}); // the first statement: the graph's defaults
+    g.node('a');
+    nodes.shape = 'box'; // a is a box too
+  });
+  ```
+
+  On a model, `addAttributeList('Node', {})` does the same.
 - To keep the 3.x output, import from `ts-graphviz/legacy` (the same API with the 3.x classes), or pass `legacyModels` as the models context (`withContext(legacyModels)`, `fromDot(source, { convert: { models: legacyModels } })`). Both are deprecated and removed in v5.
 - `addAttributeList(kind, attributes)` returns the list it adds (the DSL's `g.node({ ... })` returns its DSL); keep it to change those defaults later.
 - `graph.attributes` is deprecated, removed in v5: it is the leading defaults only. Write a default attribute statement instead.
