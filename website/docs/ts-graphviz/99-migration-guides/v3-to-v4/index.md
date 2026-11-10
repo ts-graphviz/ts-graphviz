@@ -245,7 +245,7 @@ digraph((g) => {
 ```
 
 - What changes: a default given after other statements (in the DSL, `g.node({ ... })`, `g.edge({ ... })`, `g.graph({ ... })`; on a model, `addAttributeList`), and a DOT source with several statements of one kind read with `fromDot` (it now renders as its source does). A program that gives every default before its other statements (or with `attributes.node.set(...)`) and none after them renders as before: the leading defaults apply to every statement. Where a default is also given after other statements, it overrides the leading one for what follows it.
-- For defaults of the whole graph, add the default attribute statement before any other and keep what it returns. It stays first, so a change to it applies to the whole graph, except where a later default attribute statement or an object's own attribute overrides it:
+- For node and edge defaults of a whole graph (or subgraph), add the default attribute statement before any other and keep what it returns. It stays first, so a change to it applies throughout, except where a later default attribute statement or an object's own attribute overrides it:
 
   ```ts
   import { digraph } from 'ts-graphviz';
@@ -257,7 +257,7 @@ digraph((g) => {
   });
   ```
 
-  On a model, `addAttributeList('Node', {})` does the same.
+  On a model, `addAttributeList('Node', {})` does the same, called before any other statement is added. A graph read with `fromDot` already has its statements, so write such defaults first in the DOT source. `graph [...]` is different: written after the graph's own attributes, it overrides them.
 - To keep the 3.x output, import from `ts-graphviz/legacy` (the same API with the 3.x classes), or pass `legacyModels` as the models context (`withContext(legacyModels)`, `fromDot(source, { convert: { models: legacyModels } })`). Both are deprecated and removed in v5.
 - `addAttributeList(kind, attributes)` returns the list it adds (the DSL's `g.node({ ... })` returns its DSL); keep it to change those defaults later.
 - `graph.attributes` is deprecated, removed in v5: it is the leading defaults only. Write a default attribute statement instead.
