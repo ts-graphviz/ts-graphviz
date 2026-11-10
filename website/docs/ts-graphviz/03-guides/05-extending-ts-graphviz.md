@@ -128,8 +128,10 @@ class MyNode extends Node {
 const { digraph } = withContext({ Node: MyNode });
 
 digraph((g) => {
-  modelOf(g.node('a')).shout; // MyNode
-  g.subgraph('s', (s) => modelOf(s.node('b')).shout); // MyNode in subgraphs too
+  modelOf(g.node('a')).shout; // 'A' (the model is typed MyNode)
+  g.subgraph('s', (s) => {
+    modelOf(s.node('b')).shout; // 'B' (MyNode in subgraphs too)
+  });
 });
 ```
 
