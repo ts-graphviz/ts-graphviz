@@ -551,9 +551,9 @@ const svg = await blob.text();
 await writeFile('./result.svg', blob.stream());
 ```
 
-> **Note** The adapter runs on Node.js and Deno; in a browser, `toBlob` throws an error with the code `TSG_ERR_UNSUPPORTED_ENVIRONMENT`. The output is held in memory, and every failure rejects the promise before you read anything.
+> **Note** The adapter runs on Node.js and Deno; in a browser, `toBlob` throws an error with the code `TSG_ERR_UNSUPPORTED_ENVIRONMENT`. The output is held in memory, and a failure of the command rejects the promise before you read anything. Call `toBlob` with `await` inside `try`: the browser entry and the conversion of a model to DOT throw before a promise is returned.
 >
-> By default, `toBlob` runs `sanitize` on the DOT before it renders: attributes that make Graphviz read files are removed, and a DOT or output format that cannot be made safe is rejected. See the [`@ts-graphviz/adapter` README](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/adapter/README.md) for the options and the security notes.
+> By default, `toBlob` runs `sanitize` on the DOT before it renders: a DOT with an attribute that makes Graphviz read a file (such as `image`) or an unsafe link, and an output format that has not been checked, are rejected with the code `TSG_ERR_UNSAFE_DOT`; nothing is removed for you. See the [`@ts-graphviz/adapter` README](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/adapter/README.md) for the options and the security notes.
 
 ### `ts-graphviz/ast` Module 🔢
 

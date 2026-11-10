@@ -10,7 +10,7 @@ This guide provides comprehensive information for developers who want to contrib
 
 Before you begin contributing to ts-graphviz, ensure you have the following installed:
 
-- **Node.js**: Version 22 or later (`.node-version` has the version CI uses). Required for running the tests and building the project.
+- **Node.js**: The version in `.node-version`. The repository's scripts are TypeScript files that Node.js runs directly, which older releases do not do by default. Required for running the tests and building the project.
 - **Deno**: Required for cross-platform testing.
 - **pnpm**: A fast, disk space-efficient package manager.
 - **Graphviz**: Required for rendering DOT files and generating visualizations.
@@ -20,13 +20,6 @@ Before you begin contributing to ts-graphviz, ensure you have the following inst
 1. Start by forking the <https://github.com/ts-graphviz/ts-graphviz/fork>.
 2. Clone your fork locally.
 3. Install dependencies by running `pnpm install` in the root directory of the cloned repository.
-
-#### Branches
-
-| Branch | Version | What goes there |
-| --- | --- | --- |
-| `next` | 4.x | Development: features, bug fixes and documentation. Open pull requests against `next`. |
-| `main` | 3.x | Security fixes only. |
 
 #### Build System
 
@@ -49,7 +42,7 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 | `pnpm typecheck` | Type-check the repository with `tsc --noEmit --strict`. |
 | `pnpm api:check` | Fail if the API reports (`api-reports/*.api.md`) differ from the built declarations (run `pnpm build` first). |
 | `pnpm api:update` | Rewrite the API reports after a change of the public API; commit them with the change. |
-| `pnpm check:doc-examples` | Type-check the TypeScript code blocks of the READMEs and the website's docs against the packages' sources. |
+| `pnpm check:doc-examples` | Type-check the TypeScript code blocks of the READMEs and the website's docs against the built declarations (run `pnpm build` first). |
 | `pnpm check:consumer-types` | Pack the packages and type-check `test/consumer/` against the tarballs with several TypeScript versions and module settings (run `pnpm build` first). |
 | `pnpm fuzz:build` and `pnpm fuzz <target> [seconds]` | Build the fuzz targets (`fuzz/targets/`) and run one with Jazzer.js. |
 | `pnpm media:generate` | Render the examples in `media/` to the SVG images the READMEs show (needs Graphviz `dot`). |

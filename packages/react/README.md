@@ -309,6 +309,8 @@ const MyNode: React.FC<NodeProps> = (props) => (
 
 TypeScript type definitions for all `dot:*` HTML-like elements are **automatically available** when you import `@ts-graphviz/react`. No additional configuration or setup is required.
 
+The TypeScript compiler accepts the `dot:` names as they are. Babel's React preset rejects namespaced names by default: set its `throwIfNamespace` option to `false` when Babel compiles your JSX.
+
 ```tsx
 import { Digraph, Node, Edge } from '@ts-graphviz/react';
 
@@ -759,7 +761,7 @@ console.log(dot);
 // }
 ```
 
-`useCurrentGraph()` throws when it is called outside `<Digraph>`, `<Graph>` and `<Subgraph>`. There are no hooks that create models: render `<Digraph>`, `<Subgraph>`, `<Node>` and `<Edge>` instead (see the [migration guide](https://ts-graphviz.github.io/docs/ts-graphviz/migration-guides/v3-to-v4/#10-ts-graphvizreact)).
+`useCurrentGraph()` throws when no graph encloses the component: outside `<Digraph>`, `<Graph>` and `<Subgraph>`, unless the root has a `container`, which is then the current graph. There are no hooks that create models: render `<Digraph>`, `<Subgraph>`, `<Node>` and `<Edge>` instead (see the [migration guide](https://ts-graphviz.github.io/docs/ts-graphviz/migration-guides/v3-to-v4/#10-ts-graphvizreact)).
 
 ### Ref as Prop Support
 
