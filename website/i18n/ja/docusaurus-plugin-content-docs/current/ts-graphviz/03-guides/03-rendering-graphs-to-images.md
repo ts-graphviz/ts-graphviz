@@ -52,7 +52,7 @@ declare const dot: string;
 
 const blob = await toBlob(dot, { format: 'png' });
 await writeFile('./result.png', blob.stream());
-// In Deno: await Deno.writeFile('./result.png', blob.stream());
+// Deno の場合: await Deno.writeFile('./result.png', blob.stream());
 ```
 
 :::tip
