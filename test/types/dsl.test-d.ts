@@ -151,7 +151,7 @@ describe('keys', () => {
     expectTypeOf(modelOf(n).id).toEqualTypeOf<string>();
   });
 
-  it('have $$type, and $$kind on attribute lists', () => {
+  it('have $$type, and attribute lists $$kind', () => {
     expectTypeOf(n.$$type).toEqualTypeOf<'Node'>();
     expectTypeOf(e.$$type).toEqualTypeOf<'Edge'>();
     expectTypeOf(s.$$type).toEqualTypeOf<'Subgraph'>();
