@@ -203,12 +203,12 @@ On the model, `comments` lists them and `removeComment(comment)` takes one out (
 
 ## Editing a parsed graph
 
-`fromDot` gives a model. `dsl()` gives the DSL of a model, so a parsed graph is edited the same way:
+`fromDot` gives a model; with `{ dsl: true }` it gives the DSL of that model, so a parsed graph is edited the same way. `fromDotAll` takes the option too.
 
 ```typescript
-import { dsl, fromDot, toDot } from 'ts-graphviz';
+import { fromDot, toDot } from 'ts-graphviz';
 
-const g = dsl(fromDot('digraph { a [label = "A"]; a -> b; }'));
+const g = fromDot('digraph { a [label = "A"]; a -> b; }', { dsl: true });
 g.node('a').color = 'red';
 g.edge(['b', 'c']);
 

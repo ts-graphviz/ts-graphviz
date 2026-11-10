@@ -7,6 +7,7 @@ import {
   toModel,
 } from '@ts-graphviz/ast';
 import {
+  type AnyDotObjectModel,
   type EdgeModel,
   isDotModel,
   type ModelsContext,
@@ -19,6 +20,7 @@ import {
   withCode,
 } from '@ts-graphviz/common';
 import { createModelsContext } from '@ts-graphviz/core';
+import { type DSL, dsl } from './dsl.js';
 
 /**
  * The rules (`parse.as`) {@link fromDot} can convert to a model.
@@ -45,12 +47,23 @@ export type FromDotModel<
 type AnyFromDotModel = RootGraphModel | NodeModel | EdgeModel | SubgraphModel;
 
 /**
+ * What {@link fromDot} and {@link fromDotAll} return for a model `T`: the
+ * model, or its DOT DSL when the option `dsl` is `true` (`D`).
+ * @group Convert DOT to Model
+ */
+export type FromDotResult<
+  T extends AnyDotObjectModel,
+  D extends boolean,
+> = D extends true ? DSL<T> : T;
+
+/**
  * This interface provides options for converting DOT to a model.
  * @group Convert DOT to Model
  */
 export interface FromDotOptions<
   T extends FromDotRule,
   P extends Partial<ModelsContext> = Partial<ModelsContext>,
+  D extends boolean = false,
 > {
   /**
    * Options for parsing DOT.
@@ -66,6 +79,17 @@ export interface FromDotOptions<
      */
     models?: P;
   };
+  /**
+   * `true` to return the DOT DSL of the model, as {@link dsl} gives it,
+   * in place of the model.
+   *
+   * ```ts
+   * const G = fromDot('digraph { a }', { dsl: true });
+   * G.node('a').label = 'A';
+   * ```
+   * @defaultValue `false`
+   */
+  dsl?: D;
 }
 
 /**
@@ -77,36 +101,55 @@ export interface FromDotOptions<
  * @param options Options for converting the DOT string to a model.
  * @returns A model of type {@link RootGraphModel}, {@link NodeModel}, {@link EdgeModel}, or {@link SubgraphModel},
  * depending on the type specified in the options.
+ * With `dsl: true`, its DOT DSL.
  */
-export function fromDot<const P extends Partial<ModelsContext>>(
+export function fromDot<
+  const P extends Partial<ModelsContext>,
+  const D extends boolean = false,
+>(
   dot: string,
-  options: FromDotOptions<'Dot' | 'Graph', P> & {
+  options: FromDotOptions<'Dot' | 'Graph', P, D> & {
     convert: { models: P };
   },
-): ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'];
+): FromDotResult<
+  ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
+  D
+>;
 export function fromDot<
   const P extends Partial<ModelsContext>,
   const R extends FromDotRule,
+  const D extends boolean = false,
 >(
   dot: string,
-  options: FromDotOptions<R, P> & {
+  options: FromDotOptions<R, P, D> & {
     convert: { models: P };
   },
-): FromDotModel<R, ResolvedModelTypes<P>>;
+): FromDotResult<FromDotModel<R, ResolvedModelTypes<P>>, D>;
+export function fromDot<const D extends boolean = false>(
+  dot: string,
+  options?: FromDotOptions<'Dot' | 'Graph', Partial<ModelsContext>, D>,
+): FromDotResult<RootGraphModel, D>;
+export function fromDot<
+  const R extends FromDotRule,
+  const D extends boolean = false,
+>(
+  dot: string,
+  options: FromDotOptions<R, Partial<ModelsContext>, D>,
+): FromDotResult<FromDotModel<R>, D>;
 export function fromDot(
   dot: string,
-  options?: FromDotOptions<'Dot' | 'Graph'>,
-): RootGraphModel;
-export function fromDot<const R extends FromDotRule>(
-  dot: string,
-  options: FromDotOptions<R>,
-): FromDotModel<R>;
-export function fromDot(
-  dot: string,
-  options?: FromDotOptions<FromDotRule>,
-): AnyFromDotModel {
+  options?: FromDotOptions<FromDotRule, Partial<ModelsContext>, boolean>,
+): AnyFromDotModel | DSL<AnyFromDotModel> {
   // Own properties only: an inherited one is never an option (#1757).
   const own = ownOptions(options);
+  const model = read(dot, own);
+  return own.dsl === true ? dsl(model) : model;
+}
+
+function read(
+  dot: string,
+  own: FromDotOptions<FromDotRule, Partial<ModelsContext>, boolean>,
+): AnyFromDotModel {
   // `as` picks what fromDot returns. Widened to every rule on
   // purpose: JavaScript callers can pass any.
   const ast = parse(dot, ownOptions(own.parse) as ParseOptions<Rule>);
@@ -159,27 +202,36 @@ export function fromDot(
  *
  * @param dot The DOT source to convert.
  * @param options Parser limits and conversion options.
- * @returns The graphs, possibly none.
+ * @returns The graphs, possibly none; with `dsl: true`, their DOT DSLs.
  */
-export function fromDotAll<const P extends Partial<ModelsContext>>(
+export function fromDotAll<
+  const P extends Partial<ModelsContext>,
+  const D extends boolean = false,
+>(
   dot: string,
-  options: Omit<FromDotOptions<'Dot', P>, 'parse'> & {
+  options: Omit<FromDotOptions<'Dot', P, D>, 'parse'> & {
     parse?: CommonParseOptions;
     convert: { models: P };
   },
-): (ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'])[];
-export function fromDotAll(
+): FromDotResult<
+  ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
+  D
+>[];
+export function fromDotAll<const D extends boolean = false>(
   dot: string,
-  options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
+  options?: Omit<FromDotOptions<'Dot', Partial<ModelsContext>, D>, 'parse'> & {
     parse?: CommonParseOptions;
   },
-): RootGraphModel[];
+): FromDotResult<RootGraphModel, D>[];
 export function fromDotAll(
   dot: string,
-  options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
+  options?: Omit<
+    FromDotOptions<'Dot', Partial<ModelsContext>, boolean>,
+    'parse'
+  > & {
     parse?: CommonParseOptions;
   },
-): RootGraphModel[] {
+): (RootGraphModel | DSL<RootGraphModel>)[] {
   // Own properties only: an inherited one is never an option (#1757).
   const own = ownOptions(options);
   const ast = parse(dot, { ...ownOptions(own.parse), as: 'Dot' });
@@ -188,5 +240,7 @@ export function fromDotAll(
     ...convert,
     models: createModelsContext(convert.models),
   });
-  return [...model.graphs];
+  return own.dsl === true
+    ? model.graphs.map((graph) => dsl(graph))
+    : [...model.graphs];
 }

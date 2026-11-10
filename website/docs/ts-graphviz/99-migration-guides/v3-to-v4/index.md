@@ -34,7 +34,7 @@ TypeScript reports most other changes, but these three still compile, so search 
 | `node.port('p')` | `node.port('p')` (unchanged) |
 | `g.nodes`, `g.getNode('a')`, `g.createNode('a')`, `g.addNode(n)` | `modelOf(g).nodes`, `modelOf(g).getNode('a')`, …: models, not DSLs (`dsl(m)` gives a model's DSL) |
 | your class's own methods, `g.myMethod()` | `modelOf(g).myMethod()` |
-| `new Digraph().node('a')`, `fromDot(src).node('a')` | `dsl(new Digraph()).node('a')`, `dsl(fromDot(src)).node('a')` |
+| `new Digraph().node('a')`, `fromDot(src).node('a')` | `dsl(new Digraph()).node('a')`, `fromDot(src, { dsl: true }).node('a')` |
 | a custom class overriding `node()` / `edge()` | override `createNode` / `createEdge` / `createSubgraph`, which the DSL calls; your `node()` is `modelOf(g).node()` |
 | comparing a DSL with its model (`===`) | `false`: compare DSLs with DSLs (one model has one DSL), or use `modelOf()` |
 

@@ -203,12 +203,12 @@ console.log(toDot(G));
 
 ## 编辑解析得到的图
 
-`fromDot` 返回模型。`dsl()` 返回模型的 DSL，因此解析得到的图也可以用同样的方式编辑：
+`fromDot` 返回模型；传入 `{ dsl: true }` 时返回该模型的 DSL，因此解析得到的图也可以用同样的方式编辑。`fromDotAll` 也接受这个选项。
 
 ```typescript
-import { dsl, fromDot, toDot } from 'ts-graphviz';
+import { fromDot, toDot } from 'ts-graphviz';
 
-const g = dsl(fromDot('digraph { a [label = "A"]; a -> b; }'));
+const g = fromDot('digraph { a [label = "A"]; a -> b; }', { dsl: true });
 g.node('a').color = 'red';
 g.edge(['b', 'c']);
 
