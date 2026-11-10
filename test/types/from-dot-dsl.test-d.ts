@@ -61,6 +61,19 @@ describe('fromDot', () => {
     ({ dsl: true }) satisfies FromDotOptions<'Node'>;
   });
 
+  it('does not type a DSL without dsl: true', () => {
+    // @ts-expect-error no options say dsl: true
+    fromDot<true>('digraph {}');
+    // @ts-expect-error no options say dsl: true
+    fromDotAll<true>('digraph {}');
+    // @ts-expect-error a DSL needs dsl: true
+    ({ parse: { as: 'Node' } }) satisfies FromDotOptions<
+      'Node',
+      Partial<ModelsContext>,
+      true
+    >;
+  });
+
   it('types both for a boolean', () => {
     const d = Math.random() > 0.5;
     const G = fromDot('');

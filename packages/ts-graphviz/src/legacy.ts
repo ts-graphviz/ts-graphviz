@@ -164,9 +164,14 @@ export function fromDot<
   },
 ): FromDotResult<FromDotModel<R, ResolvedModelTypes<P>>, D>;
 /** @deprecated The 3.x models (`legacyModels`); removed in v5. */
-export function fromDot<const D extends boolean = false>(
+export function fromDot(
   dot: string,
-  options?: FromDotOptions<'Dot' | 'Graph', Partial<ModelsContext>, D>,
+  options?: FromDotOptions<'Dot' | 'Graph'>,
+): RootGraphModel;
+/** @deprecated The 3.x models (`legacyModels`); removed in v5. */
+export function fromDot<const D extends boolean>(
+  dot: string,
+  options: FromDotOptions<'Dot' | 'Graph', Partial<ModelsContext>, D>,
 ): FromDotResult<RootGraphModel, D>;
 /** @deprecated The 3.x models (`legacyModels`); removed in v5. */
 export function fromDot<
@@ -215,9 +220,16 @@ export function fromDotAll<
   D
 >[];
 /** @deprecated The 3.x models (`legacyModels`); removed in v5. */
-export function fromDotAll<const D extends boolean = false>(
+export function fromDotAll(
   dot: string,
-  options?: Omit<FromDotOptions<'Dot', Partial<ModelsContext>, D>, 'parse'> & {
+  options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
+    parse?: CommonParseOptions;
+  },
+): RootGraphModel[];
+/** @deprecated The 3.x models (`legacyModels`); removed in v5. */
+export function fromDotAll<const D extends boolean>(
+  dot: string,
+  options: Omit<FromDotOptions<'Dot', Partial<ModelsContext>, D>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): FromDotResult<RootGraphModel, D>[];

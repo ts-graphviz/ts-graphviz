@@ -11,4 +11,4 @@ G.node('a').label = 'A';
 const [A, B] = fromDotAll(src, { dsl: true });
 ```
 
-The default stays the model. The result is typed by the option and the classes given (`convert.models`): `DSL<MyNode>` for `{ dsl: true, parse: { as: 'Node' }, convert: { models: { Node: MyNode } } }`. `FromDotOptions` takes the type of `dsl` as its third type parameter (`false` by default), and `FromDotResult<T, D>` gives what a reader returns for a model `T`. `ts-graphviz/legacy` takes the option too.
+The default stays the model. The result is typed by the option and the classes given (`convert.models`): `DSL<MyNode>` for `{ dsl: true, parse: { as: 'Node' }, convert: { models: { Node: MyNode } } }`. `FromDotOptions` takes the type of `dsl` as its third type parameter (`false` by default; with `true`, `dsl: true` is required) and is now a type alias rather than an interface, and `FromDotResult<T, D>` gives what a reader returns for a model `T`. `ts-graphviz/legacy` takes the option too.

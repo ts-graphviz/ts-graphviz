@@ -57,14 +57,16 @@ export type FromDotResult<
 > = D extends true ? DSL<T> : T;
 
 /**
- * This interface provides options for converting DOT to a model.
+ * Options for converting DOT to a model: the rule `T` to parse, the
+ * classes `P` to create the models from, and whether to return the DOT
+ * DSL (`D`; `dsl: true` is required when it is `true`).
  * @group Convert DOT to Model
  */
-export interface FromDotOptions<
+export type FromDotOptions<
   T extends FromDotRule,
   P extends Partial<ModelsContext> = Partial<ModelsContext>,
   D extends boolean = false,
-> {
+> = {
   /**
    * Options for parsing DOT.
    */
@@ -90,7 +92,7 @@ export interface FromDotOptions<
    * @defaultValue `false`
    */
   dsl?: D;
-}
+} & (D extends true ? { dsl: true } : unknown);
 
 /**
  * fromDot is a function that converts a DOT string to a model.
@@ -125,9 +127,13 @@ export function fromDot<
     convert: { models: P };
   },
 ): FromDotResult<FromDotModel<R, ResolvedModelTypes<P>>, D>;
-export function fromDot<const D extends boolean = false>(
+export function fromDot(
   dot: string,
-  options?: FromDotOptions<'Dot' | 'Graph', Partial<ModelsContext>, D>,
+  options?: FromDotOptions<'Dot' | 'Graph'>,
+): RootGraphModel;
+export function fromDot<const D extends boolean>(
+  dot: string,
+  options: FromDotOptions<'Dot' | 'Graph', Partial<ModelsContext>, D>,
 ): FromDotResult<RootGraphModel, D>;
 export function fromDot<
   const R extends FromDotRule,
@@ -217,9 +223,15 @@ export function fromDotAll<
   ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
   D
 >[];
-export function fromDotAll<const D extends boolean = false>(
+export function fromDotAll(
   dot: string,
-  options?: Omit<FromDotOptions<'Dot', Partial<ModelsContext>, D>, 'parse'> & {
+  options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
+    parse?: CommonParseOptions;
+  },
+): RootGraphModel[];
+export function fromDotAll<const D extends boolean>(
+  dot: string,
+  options: Omit<FromDotOptions<'Dot', Partial<ModelsContext>, D>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): FromDotResult<RootGraphModel, D>[];

@@ -22,13 +22,15 @@ export type EdgeDSL<T extends EdgeModel> = ModelDSLMembers<T> & AttributePropert
 
 export type FromDotModel<R extends FromDotRule, M extends ModelTypes = ModelTypes> = R extends "Dot" | "Graph" ? M["Graph"] | M["Digraph"] : R extends "Node" ? M["Node"] : R extends "Edge" ? M["Edge"] : M["Subgraph"];
 
-export interface FromDotOptions<T extends FromDotRule, P extends Partial<ModelsContext> = Partial<ModelsContext>, D extends boolean = false> {
+export type FromDotOptions<T extends FromDotRule, P extends Partial<ModelsContext> = Partial<ModelsContext>, D extends boolean = false> = {
   parse?: ParseOptions<T>;
   convert?: Omit<ConvertToModelOptions, "models"> & {
     models?: P;
   };
   dsl?: D;
-}
+} & (D extends true ? {
+  dsl: true;
+} : unknown);
 
 export type FromDotResult<T extends AnyDotObjectModel, D extends boolean> = D extends true ? DSL<T> : T;
 
@@ -102,7 +104,8 @@ export declare function fromDot<const P extends Partial<ModelsContext>, const R 
     models: P;
   };
 }): FromDotResult<FromDotModel<R, ResolvedModelTypes<P>>, D>;
-export declare function fromDot<const D extends boolean = false>(dot: string, options?: FromDotOptions<"Dot" | "Graph", Partial<ModelsContext>, D>): FromDotResult<RootGraphModel, D>;
+export declare function fromDot(dot: string, options?: FromDotOptions<"Dot" | "Graph">): RootGraphModel;
+export declare function fromDot<const D extends boolean>(dot: string, options: FromDotOptions<"Dot" | "Graph", Partial<ModelsContext>, D>): FromDotResult<RootGraphModel, D>;
 export declare function fromDot<const R extends FromDotRule, const D extends boolean = false>(dot: string, options: FromDotOptions<R, Partial<ModelsContext>, D>): FromDotResult<FromDotModel<R>, D>;
 
 export declare function fromDotAll<const P extends Partial<ModelsContext>, const D extends boolean = false>(dot: string, options: Omit<FromDotOptions<"Dot", P, D>, "parse"> & {
@@ -111,7 +114,10 @@ export declare function fromDotAll<const P extends Partial<ModelsContext>, const
     models: P;
   };
 }): FromDotResult<ResolvedModelTypes<P>["Graph"] | ResolvedModelTypes<P>["Digraph"], D>[];
-export declare function fromDotAll<const D extends boolean = false>(dot: string, options?: Omit<FromDotOptions<"Dot", Partial<ModelsContext>, D>, "parse"> & {
+export declare function fromDotAll(dot: string, options?: Omit<FromDotOptions<"Dot">, "parse"> & {
+  parse?: CommonParseOptions;
+}): RootGraphModel[];
+export declare function fromDotAll<const D extends boolean>(dot: string, options: Omit<FromDotOptions<"Dot", Partial<ModelsContext>, D>, "parse"> & {
   parse?: CommonParseOptions;
 }): FromDotResult<RootGraphModel, D>[];
 
