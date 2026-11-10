@@ -8,6 +8,11 @@ import {
 } from '@ts-graphviz/common';
 import { createElementFactory } from '../../builder/create-element.js';
 import { defaultPlugins } from './plugins/index.js';
+import {
+  checkCommentPositions,
+  withLeadingComments,
+  withTrailingComments,
+} from './plugins/utils/convert-comment.js';
 import type {
   ConvertFromModelContext,
   ConvertFromModelOptions,
@@ -32,7 +37,7 @@ export class FromModelConverter {
   ];
 
   constructor(private options: ConvertFromModelOptions = {}) {
-    // Own properties only: an inherited one is never an option (#1757).
+    // Own properties only: an inherited one is never an option.
     this.options = ownOptions(options);
   }
 
@@ -68,9 +73,17 @@ export class FromModelConverter {
         }
         for (const plugin of plugins) {
           if (plugin.match(m)) {
+            checkCommentPositions(m);
             open.add(m);
             try {
-              return plugin.convert(context, m) as ModelToAST<U>;
+              // The model's trailing comments go on the node it becomes,
+              // whoever converts it (a parent, or this call).
+              return withTrailingComments(
+                createElement,
+                plugin.convert(context, m),
+                m,
+                commentKind,
+              ) as ModelToAST<U>;
             } finally {
               open.delete(m);
             }
@@ -84,8 +97,15 @@ export class FromModelConverter {
         );
       },
     };
-    return context.convert(
-      modelOf(model) as AnyReadonlyDotObjectModel,
+    const root = modelOf(model) as AnyReadonlyDotObjectModel;
+    const ast = context.convert(root);
+    // A parent (a body, or the DOT source for a root graph) writes the
+    // leading comments of what it holds before it; a model converted alone
+    // carries its own.
+    return (
+      root.$$type === 'Dot'
+        ? ast
+        : withLeadingComments(createElement, ast, root, commentKind)
     ) as ModelToAST<ModelOf<T>>;
   }
 }

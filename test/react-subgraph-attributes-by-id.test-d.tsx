@@ -30,7 +30,7 @@ describe('<Subgraph> attributes by id', () => {
     <Subgraph label="x" />;
   });
 
-  it('keeps an id known only at run time as loose as before', () => {
+  it('keeps an id known only at run time loose', () => {
     const id: string = `cluster_${Math.random()}`;
     <Subgraph id={id} label="x" rank="same" />;
     const props: SubgraphProps = { id, label: 'x' };

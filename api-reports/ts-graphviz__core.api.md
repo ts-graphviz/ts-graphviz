@@ -4,17 +4,33 @@
 
 ```ts
 export declare class AttributeList<K extends AttributeListKind, T extends AttributeKey = AttributeKey, E extends object = Record<never, never>> extends AttributesBase<T, E> implements AttributeListModel<K, T, E> {
+  #private;
   readonly $$kind: K;
   get $$type(): "AttributeList";
-  comment?: string;
+  get comments(): ReadonlyArray<CommentModel>;
+  addComment(text: string, options?: CommentOptions<"leading" | "trailing">): CommentModel;
+  removeComment(comment: CommentModel): void;
+  get comment(): string | undefined;
+  set comment(text: string | undefined);
   constructor($$kind: K, attributes?: AttributesObject<T, E>);
 }
 
 export declare abstract class AttributesBase<T extends AttributeKey, E extends object = Record<never, never>> implements Attributes<T, E> {
   #private;
   constructor(attributes?: AttributesObject<T, E>);
-  get values(): Attributes<T, E>["values"];
+  getAttribute<K extends BuiltInAttributeKey<T, E>>(name: K): Attribute<K> | undefined;
+  getAttribute<K extends keyof E & string>(name: K): SchemaAttribute<E, K> | undefined;
+  getAttribute<K extends SchemaAttributeKey<T, E>>(name: K): AttributeOf<K, E> | undefined;
+  setAttribute<K extends BuiltInAttributeKey<T, E>>(name: K, value: Attribute<K>): void;
+  setAttribute<K extends keyof E & string>(name: K, value: SchemaAttribute<E, K>): void;
+  setAttribute<K extends SchemaAttributeKey<T, E>>(name: K, value: AttributeOf<K, E>): void;
+  removeAttribute(name: SchemaAttributeKey<T, E>): void;
+  hasAttribute(name: SchemaAttributeKey<T, E>): boolean;
+  getAttributeNames(): SchemaAttributeKey<T, E>[];
+  setAttributes(attributes: AttributesObject<T, E> | AttributesEntities<T, E>): void;
+  removeAttributes(): void;
   get size(): number;
+  get values(): Attributes<T, E>["values"];
   get<K extends BuiltInAttributeKey<T, E>>(key: K): Attribute<K> | undefined;
   get<K extends keyof E & string>(key: K): SchemaAttribute<E, K> | undefined;
   get<K extends SchemaAttributeKey<T, E>>(key: K): AttributeOf<K, E> | undefined;
@@ -36,7 +52,11 @@ export declare class Digraph<M extends AnyModelTypes = ModelTypes> extends RootG
 export declare class Dot<S extends Schema = EmptySchema> implements DotModel<S> {
   #private;
   get $$type(): "Dot";
-  comment?: string;
+  get comments(): ReadonlyArray<CommentModel>;
+  addComment(text: string, options?: CommentOptions<"leading" | "end">): CommentModel;
+  removeComment(comment: CommentModel): void;
+  get comment(): string | undefined;
+  set comment(text: string | undefined);
   constructor(graphs?: RootGraphModel<ModelTypes<S>>[], comment?: string);
   get graphs(): ReadonlyArray<RootGraphModel<ModelTypes<S>>>;
   addGraph(graph: RootGraphModel<ModelTypes<S>>): void;
@@ -44,10 +64,15 @@ export declare class Dot<S extends Schema = EmptySchema> implements DotModel<S> 
   removeGraph(graph: RootGraphModel<ModelTypes<S>>): void;
 }
 
-export declare class Edge<S extends Schema = EmptySchema> implements EdgeModel<S> {
+export declare class Edge<S extends Schema = EmptySchema> extends AttributesBase<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">> implements EdgeModel<S> {
+  #private;
   get $$type(): "Edge";
-  comment?: string;
-  readonly attributes: AttributesGroupModel<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>;
+  get comments(): ReadonlyArray<CommentModel>;
+  addComment(text: string, options?: CommentOptions<"leading" | "trailing">): CommentModel;
+  removeComment(comment: CommentModel): void;
+  get comment(): string | undefined;
+  set comment(text: string | undefined);
+  get attributes(): AttributesGroupModel<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>;
   readonly targets: EdgeTargetTuple;
   constructor(targets: ReadonlyEdgeTargetTuple, attributes?: EdgeAttributesObject<S>);
 }
@@ -63,7 +88,11 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
   protected get models(): ModelsContext;
   protected defaultModels(): ModelsContext;
   readonly id?: string;
-  comment?: string;
+  get comments(): ReadonlyArray<CommentModel>;
+  addComment(text: string, options?: CommentOptions<CommentPosition>): CommentModel;
+  removeComment(comment: CommentModel): void;
+  get comment(): string | undefined;
+  set comment(text: string | undefined);
   readonly attributes: Readonly<GraphCommonAttributes<SchemaOf<M>>>;
   get nodes(): ReadonlyArray<M["Node"]>;
   get edges(): ReadonlyArray<M["Edge"]>;
@@ -107,11 +136,16 @@ export declare class LegacySubgraph<M extends AnyModelTypes = ModelTypes> extend
   protected override defaultModels(): ModelsContext;
 }
 
-export declare class Node<S extends Schema = EmptySchema> implements NodeModel<S> {
+export declare class Node<S extends Schema = EmptySchema> extends AttributesBase<NodeAttributeKey, SchemaAttributeTypes<S, "node">> implements NodeModel<S> {
+  #private;
   readonly id: string;
   get $$type(): "Node";
-  comment?: string;
-  readonly attributes: AttributesGroup<NodeAttributeKey, SchemaAttributeTypes<S, "node">>;
+  get comments(): ReadonlyArray<CommentModel>;
+  addComment(text: string, options?: CommentOptions<"leading" | "trailing">): CommentModel;
+  removeComment(comment: CommentModel): void;
+  get comment(): string | undefined;
+  set comment(text: string | undefined);
+  get attributes(): AttributesGroupModel<NodeAttributeKey, SchemaAttributeTypes<S, "node">>;
   constructor(id: string, attributes?: NodeAttributesObject<S>);
   port(port: string | Partial<Port>): ForwardRefNode;
 }

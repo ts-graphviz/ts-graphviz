@@ -20,7 +20,7 @@ function addCustomNodes(g, nodes: CustomNodeOptions[]) {
   });
 }
 
-// Usage
+// 用法
 const nodes = [
   { id: 'A', label: 'Node A', color: 'red' },
   { id: 'B', label: 'Node B' },

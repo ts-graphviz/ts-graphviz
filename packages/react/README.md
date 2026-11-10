@@ -403,7 +403,7 @@ const trustedEdges = root.getTopLevelModels<EdgeModel>(); // All models cast as 
 
 // Type-safe operations
 allNodes.forEach(node => {
-  node.attributes.set('color', 'blue'); // TypeScript knows node attributes
+  node.setAttribute('color', 'blue'); // TypeScript knows node attributes
 });
 
 allEdges.forEach(edge => {
@@ -731,12 +731,12 @@ function MyGraphComponent() {
 
     // Access and manipulate the models directly
     if (nodeRef.current) {
-      nodeRef.current.attributes.set('color', 'red');
-      nodeRef.current.comment = 'Modified via ref';
+      nodeRef.current.setAttribute('color', 'red');
+      nodeRef.current.addComment('Modified via ref');
     }
 
     if (edgeRef.current) {
-      edgeRef.current.attributes.set('style', 'dashed');
+      edgeRef.current.setAttribute('style', 'dashed');
     }
 
     console.log('Digraph nodes:', digraphRef.current?.nodes.length);

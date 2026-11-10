@@ -5,6 +5,7 @@ description: ts-graphvizの高度なユースケース向けの拡張方法
 
 `ts-graphviz` は拡張性を考慮して設計されており、中級ユーザーが特定のニーズに応じてライブラリの機能をカスタマイズおよび強化することができます。
 このセクションでは、型システムの拡張方法とカスタム実装の作成方法について説明します。
+モデルそのものについては、[DOT Object Model（DOM）](./02-model-api.md)を参照してください。
 
 ## カスタムクラスの作成
 
@@ -132,16 +133,16 @@ digraph {
 ```typescript
 import { toBlob } from '@ts-graphviz/adapter';
 
-// List the names your Graphviz plugins add for this call: they are accepted
-// at run time and widen the types of `format` and `layout` for this call
-// only. Nothing is changed globally, and `isFormat` / `isLayout` still
-// answer for the documented names only.
+// Graphviz のプラグインが追加する名前を、この呼び出しのために列挙します。
+// 列挙した名前は実行時に受け付けられ、この呼び出しに限って `format` と
+// `layout` の型も広がります。グローバルには何も変わらず、`isFormat` /
+// `isLayout` が true を返すのは、ドキュメントにある名前だけのままです。
 const video = await toBlob('digraph { a -> b }', {
   customLayouts: ['my-custom-algorithm'],
   customFormats: ['mp4'],
   layout: 'my-custom-algorithm',
   format: 'mp4',
-  // sanitize refuses formats it has not checked
+  // sanitize は確認していないフォーマットを拒否するため無効にする
   sanitize: false,
 });
 ```

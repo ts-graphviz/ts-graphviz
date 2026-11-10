@@ -3,7 +3,7 @@ description: How to extend ts-graphviz for advanced use cases.
 ---
 # Extending ts-graphviz
 
-`ts-graphviz` is designed to be extensible, allowing intermediate users to customize and enhance the library's functionality to meet specific needs. This section covers how to extend the type system and create custom implementations.
+`ts-graphviz` is designed to be extensible, allowing intermediate users to customize and enhance the library's functionality to meet specific needs. This section covers how to extend the type system and create custom implementations. For the models themselves, see [DOT Object Model (DOM)](./02-model-api.md).
 
 ## Creating Custom Classes
 
@@ -117,10 +117,10 @@ digraph {
 The classes of a models context also decide the types of what graphs create, in nested subgraphs too:
 
 ```typescript
-import { Node, withContext } from 'ts-graphviz';
+import { modelOf, Node, withContext } from 'ts-graphviz';
 
 class MyNode extends Node {
-  get label(): string {
+  get shout(): string {
     return this.id.toUpperCase();
   }
 }
@@ -128,8 +128,10 @@ class MyNode extends Node {
 const { digraph } = withContext({ Node: MyNode });
 
 digraph((g) => {
-  g.node('a').label;                      // MyNode
-  g.subgraph('s', (s) => s.node('b').label); // MyNode in subgraphs too
+  modelOf(g.node('a')).shout; // 'A' (the model is typed MyNode)
+  g.subgraph('s', (s) => {
+    modelOf(s.node('b')).shout; // 'B' (MyNode in subgraphs too)
+  });
 });
 ```
 
@@ -166,7 +168,7 @@ const h = new Digraph();
 h.createNode('a');
 const defaults = h.addAttributeList('Node', { color: 'blue' }); // applies to what follows
 h.createNode('b');
-defaults.set('color', 'green');
+defaults.setAttribute('color', 'green');
 console.log(toDot(h));
 ```
 

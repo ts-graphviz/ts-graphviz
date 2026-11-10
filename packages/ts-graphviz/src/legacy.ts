@@ -19,10 +19,16 @@
  * ```
  *
  * @deprecated v4's models keep a default attribute statement in its place,
- * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * as in DOT. For node and edge defaults of a whole graph or subgraph, add
+ * the statement before any other and keep what it returns (`g.node({})` in
+ * the DSL, `addAttributeList` on a model), or write it first in a DOT
+ * source: it stays first, so a change to it applies throughout, except where
+ * a later default attribute statement or an object's own attribute
+ * overrides it. Kept for code that relies on the 3.x behaviour; removed in
+ * v5.
  * @module ts-graphviz/legacy
  */
-import type { ParseOptions } from '@ts-graphviz/ast';
+import type { CommonParseOptions } from '@ts-graphviz/ast';
 import {
   type EdgeModel,
   type ModelsContext,
@@ -33,9 +39,11 @@ import {
   type SubgraphModel,
 } from '@ts-graphviz/common';
 import { legacyModels } from '@ts-graphviz/core';
+import type { DSL } from './dsl.js';
 import {
   type FromDotModel,
   type FromDotOptions,
+  type FromDotResult,
   type FromDotRule,
   fromDotAll as fromDotAllOf,
   fromDot as fromDotOf,
@@ -79,7 +87,13 @@ const legacy: ModelFactoriesWithStrict = withContextOf(legacyModels);
  * statement into their leading defaults, as 3.x did (`legacyModels`).
  *
  * @deprecated v4's models keep a default attribute statement in its place,
- * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * as in DOT. For node and edge defaults of a whole graph or subgraph, add
+ * the statement before any other and keep what it returns (`g.node({})` in
+ * the DSL, `addAttributeList` on a model), or write it first in a DOT
+ * source: it stays first, so a change to it applies throughout, except where
+ * a later default attribute statement or an object's own attribute
+ * overrides it. Kept for code that relies on the 3.x behaviour; removed in
+ * v5.
  * @group Model Factory
  */
 export const digraph: ModelFactory = legacy.digraph;
@@ -89,7 +103,13 @@ export const digraph: ModelFactory = legacy.digraph;
  * statement into their leading defaults, as 3.x did (`legacyModels`).
  *
  * @deprecated v4's models keep a default attribute statement in its place,
- * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * as in DOT. For node and edge defaults of a whole graph or subgraph, add
+ * the statement before any other and keep what it returns (`g.node({})` in
+ * the DSL, `addAttributeList` on a model), or write it first in a DOT
+ * source: it stays first, so a change to it applies throughout, except where
+ * a later default attribute statement or an object's own attribute
+ * overrides it. Kept for code that relies on the 3.x behaviour; removed in
+ * v5.
  * @group Model Factory
  */
 export const graph: ModelFactory = legacy.graph;
@@ -99,7 +119,13 @@ export const graph: ModelFactory = legacy.graph;
  * statement into their leading defaults, as 3.x did (`legacyModels`).
  *
  * @deprecated v4's models keep a default attribute statement in its place,
- * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * as in DOT. For node and edge defaults of a whole graph or subgraph, add
+ * the statement before any other and keep what it returns (`g.node({})` in
+ * the DSL, `addAttributeList` on a model), or write it first in a DOT
+ * source: it stays first, so a change to it applies throughout, except where
+ * a later default attribute statement or an object's own attribute
+ * overrides it. Kept for code that relies on the 3.x behaviour; removed in
+ * v5.
  * @group Model Factory
  */
 export const strict: ModelFactories = legacy.strict;
@@ -111,7 +137,13 @@ export const strict: ModelFactories = legacy.strict;
  * @param models - The classes to create the models from.
  * @returns The factories `digraph`, `graph` and `strict` of that context.
  * @deprecated v4's models keep a default attribute statement in its place,
- * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * as in DOT. For node and edge defaults of a whole graph or subgraph, add
+ * the statement before any other and keep what it returns (`g.node({})` in
+ * the DSL, `addAttributeList` on a model), or write it first in a DOT
+ * source: it stays first, so a change to it applies throughout, except where
+ * a later default attribute statement or an object's own attribute
+ * overrides it. Kept for code that relies on the 3.x behaviour; removed in
+ * v5.
  * @group Model Factory
  */
 export function withContext<const P extends Partial<ModelsContext>>(
@@ -129,44 +161,83 @@ export function withContext<const P extends Partial<ModelsContext>>(
  * statements of the source into one set of defaults, as 3.x did.
  *
  * @deprecated v4's models keep a default attribute statement in its place,
- * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * as in DOT. For node and edge defaults of a whole graph or subgraph, add
+ * the statement before any other and keep what it returns (`g.node({})` in
+ * the DSL, `addAttributeList` on a model), or write it first in a DOT
+ * source: it stays first, so a change to it applies throughout, except where
+ * a later default attribute statement or an object's own attribute
+ * overrides it. Kept for code that relies on the 3.x behaviour; removed in
+ * v5.
  * @group Convert DOT to Model
  *
  * @param dot The DOT string to convert.
  * @param options Options for converting the DOT string to a model.
  * @returns A model of type {@link RootGraphModel}, {@link NodeModel}, {@link EdgeModel}, or {@link SubgraphModel},
  * depending on the type specified in the options.
+ * With `dsl: true`, its DOT DSL.
  */
-export function fromDot<const P extends Partial<ModelsContext>>(
+export function fromDot<
+  const P extends Partial<ModelsContext>,
+  const D extends boolean = false,
+>(
   dot: string,
-  options: FromDotOptions<'Dot' | 'Graph', P> & {
+  options: FromDotOptions<'Dot' | 'Graph', P, D> & {
     convert: { models: P };
   },
-): ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'];
-/** @deprecated The 3.x models (`legacyModels`); removed in v5. */
+): FromDotResult<
+  ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
+  D
+>;
+/**
+ * @deprecated The 3.x models (`legacyModels`). For node and edge defaults
+ * of a whole graph, write them first in the DOT source. Removed in v5.
+ */
 export function fromDot<
   const P extends Partial<ModelsContext>,
   const R extends FromDotRule,
+  const D extends boolean = false,
 >(
   dot: string,
-  options: FromDotOptions<R, P> & {
+  options: FromDotOptions<R, P, D> & {
     convert: { models: P };
   },
-): FromDotModel<R, ResolvedModelTypes<P>>;
-/** @deprecated The 3.x models (`legacyModels`); removed in v5. */
+): FromDotResult<FromDotModel<R, ResolvedModelTypes<P>>, D>;
+/**
+ * @deprecated The 3.x models (`legacyModels`). For node and edge defaults
+ * of a whole graph, write them first in the DOT source. Removed in v5.
+ */
 export function fromDot(
   dot: string,
   options?: FromDotOptions<'Dot' | 'Graph'>,
 ): RootGraphModel;
-/** @deprecated The 3.x models (`legacyModels`); removed in v5. */
-export function fromDot<const R extends FromDotRule>(
+/**
+ * @deprecated The 3.x models (`legacyModels`). For node and edge defaults
+ * of a whole graph, write them first in the DOT source. Removed in v5.
+ */
+export function fromDot<const D extends boolean>(
   dot: string,
-  options: FromDotOptions<R>,
-): FromDotModel<R>;
+  options: FromDotOptions<'Dot' | 'Graph', Partial<ModelsContext>, D>,
+): FromDotResult<RootGraphModel, D>;
+/**
+ * @deprecated The 3.x models (`legacyModels`). For node and edge defaults
+ * of a whole graph, write them first in the DOT source. Removed in v5.
+ */
+export function fromDot<
+  const R extends FromDotRule,
+  const D extends boolean = false,
+>(
+  dot: string,
+  options: FromDotOptions<R, Partial<ModelsContext>, D>,
+): FromDotResult<FromDotModel<R>, D>;
 export function fromDot(
   dot: string,
-  options?: FromDotOptions<FromDotRule>,
-): RootGraphModel | NodeModel | EdgeModel | SubgraphModel {
+  options?: FromDotOptions<FromDotRule, Partial<ModelsContext>, boolean>,
+):
+  | RootGraphModel
+  | NodeModel
+  | EdgeModel
+  | SubgraphModel
+  | DSL<RootGraphModel | NodeModel | EdgeModel | SubgraphModel> {
   return fromDotOf(dot, withLegacyOptions(options));
 }
 
@@ -176,32 +247,60 @@ export function fromDot(
  * statements of the source into one set of defaults, as 3.x did.
  *
  * @deprecated v4's models keep a default attribute statement in its place,
- * as in DOT. Kept for code that relies on the 3.x behaviour; removed in v5.
+ * as in DOT. For node and edge defaults of a whole graph or subgraph, add
+ * the statement before any other and keep what it returns (`g.node({})` in
+ * the DSL, `addAttributeList` on a model), or write it first in a DOT
+ * source: it stays first, so a change to it applies throughout, except where
+ * a later default attribute statement or an object's own attribute
+ * overrides it. Kept for code that relies on the 3.x behaviour; removed in
+ * v5.
  * @group Convert DOT to Model
  *
  * @param dot The DOT source to convert.
  * @param options Parser limits and conversion options.
- * @returns The graphs, possibly none.
+ * @returns The graphs, possibly none; with `dsl: true`, their DOT DSLs.
  */
-export function fromDotAll<const P extends Partial<ModelsContext>>(
+export function fromDotAll<
+  const P extends Partial<ModelsContext>,
+  const D extends boolean = false,
+>(
   dot: string,
-  options: Omit<FromDotOptions<'Dot', P>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+  options: Omit<FromDotOptions<'Dot', P, D>, 'parse'> & {
+    parse?: CommonParseOptions;
     convert: { models: P };
   },
-): (ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'])[];
-/** @deprecated The 3.x models (`legacyModels`); removed in v5. */
+): FromDotResult<
+  ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
+  D
+>[];
+/**
+ * @deprecated The 3.x models (`legacyModels`). For node and edge defaults
+ * of a whole graph, write them first in the DOT source. Removed in v5.
+ */
 export function fromDotAll(
   dot: string,
   options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+    parse?: CommonParseOptions;
   },
 ): RootGraphModel[];
+/**
+ * @deprecated The 3.x models (`legacyModels`). For node and edge defaults
+ * of a whole graph, write them first in the DOT source. Removed in v5.
+ */
+export function fromDotAll<const D extends boolean>(
+  dot: string,
+  options: Omit<FromDotOptions<'Dot', Partial<ModelsContext>, D>, 'parse'> & {
+    parse?: CommonParseOptions;
+  },
+): FromDotResult<RootGraphModel, D>[];
 export function fromDotAll(
   dot: string,
-  options?: Omit<FromDotOptions<'Dot'>, 'parse'> & {
-    parse?: Omit<ParseOptions<'Dot'>, 'startRule'>;
+  options?: Omit<
+    FromDotOptions<'Dot', Partial<ModelsContext>, boolean>,
+    'parse'
+  > & {
+    parse?: CommonParseOptions;
   },
-): RootGraphModel[] {
+): (RootGraphModel | DSL<RootGraphModel>)[] {
   return fromDotAllOf(dot, withLegacyOptions(options));
 }

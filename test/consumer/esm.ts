@@ -37,7 +37,6 @@ import {
   type DotASTNode,
   type NodeASTNode,
   parse,
-  parseFragment,
   sanitize,
   stringify,
 } from 'ts-graphviz/ast';
@@ -76,16 +75,17 @@ g.shape = 'box';
 // @ts-expect-error not a value of rankdir
 g.rankdir = 'XX';
 g.node('a').shape = 'box';
-g.$set('rankdir', 'TB');
-g.node('a').$id satisfies string;
+modelOf(g).setAttribute('rankdir', 'TB');
+modelOf(g.node('a')).id satisfies string;
+g.node('a').port('p');
 const model: RootGraphModel = modelOf(g);
 dsl(model).node('b');
 
 // fromDot / toDot
 const text: string = toDot(g);
-const node = fromDot('a', { parse: { startRule: 'Node' } });
+const node = fromDot('a', { parse: { as: 'Node' } });
 assertType<Equal<typeof node, NodeModel>>();
-const edge = fromDot('a -> b', { parse: { startRule: 'Edge' } });
+const edge = fromDot('a -> b', { parse: { as: 'Edge' } });
 assertType<Equal<typeof edge, EdgeModel>>();
 
 // custom models through the core package
@@ -94,15 +94,15 @@ class MyNode extends Node {
     return this.id;
   }
 }
-withContext({ Node: MyNode }).digraph((g) => g.node('a').$extra());
+withContext({ Node: MyNode }).digraph((g) => modelOf(g.node('a')).extra());
 createModelsContext({ Node: MyNode });
 
-// parse / parseFragment / stringify / sanitize
+// parse / stringify / sanitize
 const dot: DotASTNode = parse(sanitize(text));
-const nodeAST = parseFragment('a [color=red]', 'Node');
+const nodeAST = parse('a [color=red]', { as: 'Node' });
 assertType<Equal<typeof nodeAST, NodeASTNode>>();
 // @ts-expect-error not a rule
-parseFragment('a', 'Statement');
+parse('a', { as: 'Statement' });
 const printed: string = stringify(dot) + astPackage.stringify(nodeAST);
 
 // adapter options
@@ -136,9 +136,9 @@ if (isNodeModel(unknownValue)) {
 }
 const nodes = modelOf(g).statements.filter(isNodeModel);
 assertType<Equal<typeof nodes, NodeModel[]>>();
-const nodeViews = g.$statements.filter(
-  (s): s is DSL<NodeModel> => s.$$type === 'Node',
-);
+const nodeViews = modelOf(g)
+  .statements.map((s) => dsl(s))
+  .filter((s): s is DSL<NodeModel> => s.$$type === 'Node');
 assertType<Equal<typeof nodeViews, DSL<NodeModel>[]>>();
 const readNodes = [unknownValue].filter(isNodeModel);
 assertType<Equal<typeof readNodes, ReadonlyNodeModel[]>>();
@@ -182,7 +182,7 @@ assertType<Equal<typeof legacy.toDot, typeof toDot>>();
 const legacyModel = legacy.fromDot('digraph { a }');
 assertType<Equal<typeof legacyModel, RootGraphModel>>();
 const legacyNode = legacy.fromDot('a', {
-  parse: { startRule: 'Node' },
+  parse: { as: 'Node' },
   convert: { models: { Node: MyNode } },
 });
 assertType<Equal<typeof legacyNode, MyNode>>();

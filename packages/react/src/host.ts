@@ -1,5 +1,7 @@
 import type {
   AttributeListModel,
+  CommentModel,
+  HasComments,
   ReadonlyEdgeTargetLikeTuple,
 } from '@ts-graphviz/common';
 import type { ReactElement } from 'react';
@@ -147,10 +149,31 @@ export function createHostInstance(
   );
 }
 
+/** The comment each model got from its element's `comment` prop. */
+const propComments = new WeakMap<object, CommentModel>();
+
+/** Make the element's `comment` prop the model's leading comment. */
+function applyComment(
+  model: Pick<HasComments, 'addComment' | 'removeComment' | 'comments'>,
+  text: string | undefined,
+): void {
+  const tracked = propComments.get(model);
+  // Still attached (code with a ref may have removed or replaced it).
+  const previous =
+    tracked !== undefined && model.comments.includes(tracked)
+      ? tracked
+      : undefined;
+  // The same text keeps the comment, and its place among the others.
+  if (previous !== undefined && previous.text === text) return;
+  if (previous !== undefined) model.removeComment(previous);
+  propComments.delete(model);
+  if (text !== undefined) propComments.set(model, model.addComment(text));
+}
+
 function applyProps(model: NodeModel | EdgeModel, props: ComponentProps): void {
-  model.attributes.clear();
-  model.attributes.apply(attributesOf(props));
-  model.comment = props.comment;
+  model.removeAttributes();
+  model.setAttributes(attributesOf(props));
+  applyComment(model, props.comment);
 }
 
 /** The default attribute lists a graph element's `node`, `edge` and `graph` props fill. */
@@ -194,16 +217,16 @@ function applyGraphProps(
   model: AnyGraphContainer,
   props: ComponentProps,
 ): void {
-  model.clear();
-  model.apply(attributesOf(props));
+  model.removeAttributes();
+  model.setAttributes(attributesOf(props));
   const lists = defaultListsOf(model);
-  lists.node.clear();
-  lists.node.apply(props.node ?? {});
-  lists.edge.clear();
-  lists.edge.apply(props.edge ?? {});
-  lists.graph.clear();
-  lists.graph.apply(props.graph ?? {});
-  model.comment = props.comment;
+  lists.node.removeAttributes();
+  lists.node.setAttributes(props.node ?? {});
+  lists.edge.removeAttributes();
+  lists.edge.setAttributes(props.edge ?? {});
+  lists.graph.removeAttributes();
+  lists.graph.setAttributes(props.graph ?? {});
+  applyComment(model, props.comment);
 }
 
 /** Apply the new props of a host element (its identity props never change). */

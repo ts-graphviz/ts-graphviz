@@ -48,6 +48,8 @@ export const ERROR_CODES = [
   'TSG_ERR_INVALID_PORT',
   /** An attribute list was given a kind other than `Graph`, `Node` or `Edge` (`TypeError`). */
   'TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND',
+  /** `addComment` was given a text that is not a string, or a position or kind the object does not take (`TypeError`). */
+  'TSG_ERR_INVALID_COMMENT',
   /** No converter or printer plugin handles a node or model (`Error`). */
   'TSG_ERR_NO_PLUGIN',
   /** `fromDot` was given an AST node that has no model (`TypeError`). */
@@ -74,7 +76,7 @@ export const ERROR_CODES = [
   'TSG_ERR_INVALID_OPTION',
 ] as const;
 // Shared by every module of the process: frozen, so no code can change what
-// isTsGraphvizError accepts (#1757).
+// isTsGraphvizError accepts.
 Object.freeze(ERROR_CODES);
 
 /**

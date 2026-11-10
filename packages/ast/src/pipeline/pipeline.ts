@@ -1,8 +1,5 @@
 import { ownOptions } from '@ts-graphviz/common';
-import {
-  type CommonParseOptions,
-  parseFragment,
-} from '../dot-shim/parser/index.js';
+import { type CommonParseOptions, parse } from '../dot-shim/parser/index.js';
 import { stringify } from '../dot-shim/printer/stringify.js';
 import type { PrintOptions } from '../dot-shim/printer/types.js';
 import type { DotASTNode } from '../types.js';
@@ -37,7 +34,7 @@ export class Pipeline {
   private readonly transformers: Transformer[] = [];
 
   constructor(private readonly options: PipelineOptions = {}) {
-    // Own properties only: an inherited one is never an option (#1757).
+    // Own properties only: an inherited one is never an option.
     this.options = ownOptions(options);
   }
 
@@ -58,7 +55,11 @@ export class Pipeline {
 
   /** Parse a DOT source, run the transformers and print the result. */
   process(source: string): string {
-    const ast = parseFragment(source, 'Dot', this.options.parse);
+    // A whole DOT source, whatever `as` the options may hold.
+    const ast = parse(source, {
+      ...ownOptions(this.options.parse),
+      as: 'Dot',
+    });
     return stringify(this.run(ast), this.options.print);
   }
 }

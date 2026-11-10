@@ -20,7 +20,7 @@ export class Printer {
    * @param options Options to be used when generating the DOT string.
    */
   constructor(private options: PrintOptions = {}) {
-    // Own properties only: an inherited one is never an option (#1757).
+    // Own properties only: an inherited one is never an option.
     this.options = ownOptions(options);
   }
 
@@ -54,6 +54,9 @@ export class Printer {
         // token comes (so a blank line stays empty).
         let level = 0;
         let lineStart = false;
+        // Nothing written yet: a node with leading comments printed alone
+        // would start with a blank line.
+        let started = false;
         const paddings: string[] = [''];
         const padding = () => {
           while (paddings.length <= level) {
@@ -179,6 +182,8 @@ export class Printer {
             stack.push(printNode(step.value.node));
           } else {
             const token = step.value;
+            if (!started && token === EOL) continue;
+            started = true;
             if (lineStart && token !== EOL) yield padding();
             yield token;
             lineStart = token === EOL;

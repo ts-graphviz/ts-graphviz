@@ -79,8 +79,6 @@ export interface CommentASTProperties extends ASTCommonProperties {
   value: string;
 }
 
-export type CommentKind = "Block" | "Slash" | "Macro";
-
 export interface CommonParseOptions {
   filename?: string;
   maxHtmlNestingDepth?: number;
@@ -179,17 +177,6 @@ export interface FileRange {
   end: FilePosition;
 }
 
-export interface FragmentByRule {
-  Dot: DotASTNode;
-  Graph: GraphASTNode;
-  Subgraph: SubgraphASTNode;
-  Node: NodeASTNode;
-  Edge: EdgeASTNode;
-  AttributeList: AttributeListASTNode;
-  Attribute: AttributeASTNode;
-  ClusterStatements: ClusterStatementASTNode[];
-}
-
 export declare class FromModelConverter {
   #private;
   private options;
@@ -249,8 +236,20 @@ export interface NodeRefListASTNode extends ASTBaseNode, NodeRefListASTPropertie
 
 export interface NodeRefListASTProperties extends ASTCommonProperties {}
 
-export interface ParseOptions<T extends Rule> extends CommonParseOptions {
+export interface ParseOptions<T extends Rule = Rule> extends CommonParseOptions {
+  as?: T;
   startRule?: T;
+}
+
+export interface ParseResultByRule {
+  Dot: DotASTNode;
+  Graph: GraphASTNode;
+  Subgraph: SubgraphASTNode;
+  Node: NodeASTNode;
+  Edge: EdgeASTNode;
+  AttributeList: AttributeListASTNode;
+  Attribute: AttributeASTNode;
+  ClusterStatements: ClusterStatementASTNode[];
 }
 
 export interface PrintContext {
@@ -314,22 +313,26 @@ export declare function createElementFactory(options?: Partial<Pick<BuilderOptio
 
 export declare function fromModel<T extends AnyReadonlyDotObjectModel | ModelView>(model: T, options?: ConvertFromModelOptions): ModelToAST<ModelOf<T>>;
 
-export declare function parse(input: string): DotASTNode;
+export declare function parse<const R extends Rule>(input: string, options: CommonParseOptions & {
+  startRule: R;
+  as?: undefined;
+}): ParseResultByRule[R];
+export declare function parse(input: string, options?: CommonParseOptions & {
+  as?: "Dot";
+  startRule?: undefined;
+}): DotASTNode;
 export declare function parse(input: string, options?: ParseOptions<"Dot">): DotASTNode;
-export declare function parse(input: string, options?: ParseOptions<"Graph">): GraphASTNode;
-export declare function parse(input: string, options?: ParseOptions<"Node">): NodeASTNode;
-export declare function parse(input: string, options?: ParseOptions<"Edge">): EdgeASTNode;
-export declare function parse(input: string, options?: ParseOptions<"AttributeList">): AttributeListASTNode;
-export declare function parse(input: string, options?: ParseOptions<"Attribute">): AttributeASTNode;
-export declare function parse(input: string, options?: ParseOptions<"Subgraph">): SubgraphASTNode;
-export declare function parse(input: string, options?: ParseOptions<"ClusterStatements">): ClusterStatementASTNode[];
-export declare function parse(input: string, options?: ParseOptions<Rule>): ASTNode | ClusterStatementASTNode[];
-
-export declare function parseFragment<R extends Rule>(input: string, rule: R, options?: CommonParseOptions): FragmentByRule[R];
+export declare function parse<const R extends Rule>(input: string, options: CommonParseOptions & {
+  as: R;
+  startRule?: Rule;
+}): ParseResultByRule[R];
+export declare function parse(input: string, options?: ParseOptions): ParseResultByRule[Rule];
 
 export declare function sanitize(dot: string, options?: SanitizeOptions): string;
 
 export declare function stringify(ast: ASTNode, options?: PrintOptions): string;
 
 export declare function toModel<T extends ToModelConvertableASTNode>(ast: T, options: ConvertToModelOptions): ASTToModel<T>;
+
+export { CommentKind } from "@ts-graphviz/common";
 ```

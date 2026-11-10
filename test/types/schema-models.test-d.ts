@@ -128,7 +128,7 @@ describe('without a schema', () => {
     }>().toEqualTypeOf<{ [K in AttributeKey]: Attribute<K> }>();
   });
 
-  it('types attributes and models as before', () => {
+  it('types attributes and models', () => {
     {
       const g = new Digraph();
       const a = g.createNode('a', { label: 'A' });
@@ -155,7 +155,7 @@ describe('without a schema', () => {
     expectTypeOf(defaultModelsContext()).toEqualTypeOf<ModelsContext>();
   });
 
-  it('forwards a generic key and its value as before', () => {
+  it('forwards a generic key and its value', () => {
     function write<K extends NodeAttributeKey>(
       attributes: Attributes<NodeAttributeKey>,
       key: K,
@@ -186,7 +186,7 @@ describe('without a schema', () => {
   });
 
   it('keeps a model with fewer keys or narrower types one of the wider', () => {
-    // As before: a list of node attributes is an attribute list.
+    // A list of node attributes is an attribute list.
     expectTypeOf<
       GraphCommonAttributes['node']
     >().toExtend<AttributeListModel>();
@@ -325,6 +325,44 @@ describe('a schema', () => {
       >();
       // @ts-expect-error neither built in nor added
       g.createEdge(['a', 'b'], { dir: 'up' });
+    });
+  });
+
+  it('types the DOM names with the schema on every object', () => {
+    myDigraph((g) => {
+      const a = g.createNode('a', { label: 1 });
+      expectTypeOf(a.getAttribute('label')).toEqualTypeOf<number | undefined>();
+      expectTypeOf(a.getAttribute('data-id')).toEqualTypeOf<
+        number | undefined
+      >();
+      a.setAttribute('data-id', 2);
+      a.setAttributes({ label: 3, 'data-id': 4 });
+      // @ts-expect-error a number now
+      a.setAttribute('label', 'x');
+      // @ts-expect-error a number now
+      a.setAttributes({ label: 'x' });
+      // @ts-expect-error not a node attribute
+      a.setAttribute('edge-only', true);
+      expectTypeOf(a.hasAttribute('data-id')).toEqualTypeOf<boolean>();
+      a.removeAttribute('data-id');
+      // The deprecated container has the same types.
+      expectTypeOf(a.attributes.getAttribute('label')).toEqualTypeOf<
+        number | undefined
+      >();
+      const e = g.createEdge(['a', 'b'], { 'edge-only': true });
+      expectTypeOf(e.getAttribute('edge-only')).toEqualTypeOf<
+        boolean | undefined
+      >();
+      // @ts-expect-error a node attribute
+      e.setAttribute('data-id', 1);
+      g.setAttribute('hoge', 'x');
+      expectTypeOf(g.getAttribute('hoge')).toEqualTypeOf<string | undefined>();
+      // @ts-expect-error a string
+      g.setAttribute('hoge', 1);
+      const list = g.addAttributeList('Node', { 'data-id': 1 });
+      expectTypeOf(list.getAttribute('data-id')).toEqualTypeOf<
+        number | undefined
+      >();
     });
   });
 

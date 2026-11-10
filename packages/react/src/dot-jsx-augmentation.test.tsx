@@ -73,12 +73,6 @@ describe('dot:* JSX auto-augmentation', () => {
     expect(elements).toBeDefined();
   });
 
-  it('has no dot:port element (ports are the port attribute)', () => {
-    // @ts-expect-error HTML-like labels have no port element
-    const port = <dot:port>port_name</dot:port>;
-    expect(() => html(port)).toThrow(TypeError);
-  });
-
   it('renderHTMLLike correctly processes dot:* elements', () => {
     const label = (
       <dot:table border={1}>

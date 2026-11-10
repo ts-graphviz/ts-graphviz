@@ -54,7 +54,7 @@ declare const dot: string;
 
 const blob = await toBlob(dot, { format: 'png' });
 await writeFile('./result.png', blob.stream());
-// In Deno: await Deno.writeFile('./result.png', blob.stream());
+// 在 Deno 中: await Deno.writeFile('./result.png', blob.stream());
 ```
 
 :::tip

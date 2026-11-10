@@ -4,22 +4,22 @@ description: |-
 ---
 # Migration from v3 to v4
 
-v4 is the release where the API review of the 3.x line landed: attribute values became explicit about what they mean, errors became identifiable, the model classes stopped depending on import order, and the AST was tidied. Programs that build a graph with the factory API keep their `node`, `edge` and `subgraph` calls, but the factories now give the graph's DOT DSL, which reads attributes and model members differently: start with section 1. This guide lists every change that can affect existing code, by area, with what to do about it.
+v4 is the release where the API review of the 3.x line landed: attribute values became explicit about what they mean, errors became identifiable, the model classes stopped depending on import order, and the AST was tidied. Programs that build a graph with the factory API keep their `node`, `edge` and `subgraph` calls, but the factories now give the graph's DOT DSL, which reads attributes differently and keeps the model's members on the model: start with section 1. This guide lists every change that can affect existing code, by area, with what to do about it.
 
 Requirements: **Node.js 22 or later** (Node.js 20 reached end of life) and, for TypeScript users, **TypeScript 5.0 or later** (see *Supported TypeScript versions* in the Versioning Policy).
 
 ## 1. The factories give the DOT DSL
 
-`digraph()`, `graph()`, `strict.*` and `withContext().*` give the graph's **DOT DSL** instead of the model, and so do the callbacks and everything you reach from a DSL. The DSL reads like DOT: the statements `node`, `edge`, `subgraph` and `graph` are methods, **attributes are properties under their own names**, and **the model's own members take a `$`**. The models only hold the data (`node()`, `edge()`, `subgraph()` and `graph()` are no longer model methods).
+`digraph()`, `graph()`, `strict.*` and `withContext().*` give the graph's **DOT DSL** instead of the model, and so do the callbacks and everything you reach from a DSL. The DSL has DOT's words only: the statements `node`, `edge`, `subgraph` and `graph` are methods, **attributes are properties under their own names**, and besides those it has `addComment`, a node's `port` and `$$type`. **The model's other members are on the model**, which `modelOf(x)` gives. The models only hold the data (`node()`, `edge()`, `subgraph()` and `graph()` are no longer model methods).
 
-**Names whose meaning changed.** On a DSL, `id`, `comment` and `size` are the Graphviz attributes of those names, not the model's members:
+**Names whose meaning changed.** On a DSL, `id`, `comment` and `size` are the Graphviz attributes of those names; the model's members of those names are on `modelOf(x)`:
 
 | 3.x (on what the factories give) | v4 |
 | --- | --- |
-| `node.id` (the node's name) | `node.$id` (`node.id` is the Graphviz `id` attribute) |
-| `g.id` | `g.$id` |
-| `x.comment = '...'` (a DOT comment) | `x.$comment = '...'` (`x.comment` is the Graphviz `comment` attribute) |
-| `g.size` (the number of attributes) | `g.$size` (`g.size` is the Graphviz `size` attribute) |
+| `node.id` (the node's name) | `modelOf(node).id` (`node.id` is the Graphviz `id` attribute) |
+| `g.id` | `modelOf(g).id` |
+| `x.comment = '...'` (a DOT comment) | `x.addComment('...')` (`x.comment` is the Graphviz `comment` attribute; see section 15). Each call adds a comment: to replace one, keep what `addComment` returns and pass it to `modelOf(x).removeComment(...)` first |
+| `g.size` (the number of attributes) | `modelOf(g).getAttributeNames().length` (`g.size` is the Graphviz `size` attribute) |
 
 TypeScript reports most other changes, but these three still compile, so search for them: `\.id\b`, `\.comment\b` and `\.size\b`.
 
@@ -27,15 +27,15 @@ TypeScript reports most other changes, but these three still compile, so search 
 
 | 3.x | v4 |
 | --- | --- |
-| `g.set('rankdir', 'LR')`, `g.get('rankdir')` | `g.rankdir = 'LR'`, `g.rankdir` (or `g.$set(...)`, `g.$get(...)`) |
-| `node.attributes.set('label', 'A')` | `node.label = 'A'` (or `node.$attributes.set(...)`) |
+| `g.set('rankdir', 'LR')`, `g.get('rankdir')` | `g.rankdir = 'LR'`, `g.rankdir` (or `modelOf(g).setAttribute(...)`, `modelOf(g).getAttribute(...)`; see section 14) |
+| `node.attributes.set('label', 'A')` | `node.label = 'A'` (or `modelOf(node).setAttribute(...)`) |
 | `node.attributes.delete('label')` | `delete node.label` or `node.label = undefined` |
-| `g.attributes.node.set('shape', 'box')` | `g.$attributes.node.shape = 'box'` or `g.node({ shape: 'box' })` |
-| `node.port('p')` | `node.$port('p')` |
-| `g.nodes`, `g.getNode('a')`, `g.createNode('a')`, `g.addNode(n)` | `g.$nodes`, `g.$getNode('a')`, `g.$createNode('a')`, `g.$addNode(n)`: models are given as DSLs |
-| your class's own methods, `g.myMethod()` | `g.$myMethod()` |
-| `new Digraph().node('a')`, `fromDot(src).node('a')` | `dsl(new Digraph()).node('a')`, `dsl(fromDot(src)).node('a')` |
-| a custom class overriding `node()` / `edge()` | override `createNode` / `createEdge` / `createSubgraph`, which the DSL calls; your `node()` is `g.$node()` |
+| `g.attributes.node.set('shape', 'box')` | `g.node({ shape: 'box' })` (before the other statements) |
+| `node.port('p')` | `node.port('p')` (unchanged) |
+| `g.nodes`, `g.getNode('a')`, `g.createNode('a')`, `g.addNode(n)` | `modelOf(g).nodes`, `modelOf(g).getNode('a')`, …: models, not DSLs (`dsl(m)` gives a model's DSL) |
+| your class's own methods, `g.myMethod()` | `modelOf(g).myMethod()` |
+| `new Digraph().node('a')`, `fromDot(src).node('a')` | `dsl(new Digraph()).node('a')`, `fromDot(src, { dsl: true }).node('a')` |
+| a custom class overriding `node()` / `edge()` | override `createNode` / `createEdge` / `createSubgraph`, which the DSL calls; your `node()` is `modelOf(g).node()` |
 | comparing a DSL with its model (`===`) | `false`: compare DSLs with DSLs (one model has one DSL), or use `modelOf()` |
 
 `modelOf(dsl)` gives the model and `dsl(model)` the DSL. `toDot`, `fromModel`, the adapter's `toBlob` and `createRoot({ container })` / `renderToDot({ container })` of `@ts-graphviz/react` take either. The model guards (`isNodeModel` and the others) are false for a DSL, which is not a model: narrow DSLs by `$$type` (`if (s.$$type === 'Node')`), or check `modelOf(x)`. A DSL is not itself a model type, so pass `modelOf(g)` where a model is typed (such as `new Dot([modelOf(g)])` or a parameter of type `RootGraphModel`). `{ ...node }`, `Object.keys(node)` and `JSON.stringify(node)` list the attributes; `String(g)` does not work, since `toString` is an attribute name too.
@@ -131,7 +131,7 @@ A DOT source (comments and one or more root graphs) has a model of its own: `Dot
 
 ## 6. Attribute groups: one `comment`
 
-`node.attributes.comment` and `edge.attributes.comment` are removed; use the model's `comment` (`node.$comment` / `edge.$comment` on a DSL), which is written before the statement. The Graphviz `comment` *attribute* is unaffected (`node.comment` on a DSL, `attributes.set('comment', ...)` on a model).
+`node.attributes.comment` and `edge.attributes.comment` are removed; comment the model itself (`node.addComment(...)`, on a model or a DSL; see section 15). The Graphviz `comment` *attribute* is unaffected (`node.comment` on a DSL, `setAttribute('comment', ...)` on a model).
 
 ## 7. Generated attribute types
 
@@ -148,7 +148,7 @@ The augmentation points (`Attribute.$keys`, `Attribute.$types`, `EdgeAttributeKe
 - Leaf nodes (`Literal`, `Attribute`, `Comment`, `NodeRef`) have no `children` and extend `ASTBaseNode` directly; `ASTBaseParentNode` is only for statement containers. `NodeRefList` keeps its references in `refs`, and `ASTChildNode<T>` resolves to `NodeRefASTNode` for it and to `never` for leaves. `location` is absent (not `null`) outside the parser. `createElement` keeps its three-argument form.
 - The `*ASTPropaties` types are spelled `*ASTProperties`.
 - **Graphs keep their contents in order**: `GraphBaseModel.statements` lists nodes, edges and subgraphs in the order they were added, and `toDot` writes them in that order (after the graph's attributes and leading default attribute lists; a default attribute list added after other statements is one of the statements, in its place) instead of all nodes, then subgraphs, then edges. Node order affects Graphviz's layout, so DOT read with `fromDot` now renders as its source did; a program that interleaves `node()` and `edge()` gets DOT in its own order. Custom classes implementing `GraphBaseModel` directly must add `statements` and `addAttributeList`. `ModelsContext`, `GraphBaseModel`, `RootGraphModel`, `SubgraphModel`, the constructor types and the model factories take an optional type parameter describing the model classes (`ModelTypes`, inferred by `createModelsContext` / `withContext` / `fromDot` with `convert.models`), so custom classes show in the types of `node()`, `edge()`, `subgraph()` and their callbacks; code that does not use custom classes sees the same types as before. Default attribute statements keep their place too (section 13).
-- `parse` reads a whole DOT source. Its `startRule` option is deprecated (removed in 5.0): read fragments with `parseFragment(input, rule, options)`, a beta low-level API (`parse(s, { startRule: 'Edge' })` → `parseFragment(s, 'Edge')`). Using `startRule` reports a deprecation once, with code `TSG_DEP_PARSE_START_RULE`: to `onDeprecation` listeners on every runtime, on the `ts-graphviz:deprecation` diagnostics channel and as a Node.js `DeprecationWarning` (so `--no-deprecation` / `--throw-deprecation` apply) where the runtime has them. ts-graphviz writes nothing to the console itself; in a browser, subscribe with `onDeprecation` to see deprecations.
+- The `startRule` option of `parse` and of `fromDot`'s `parse` is named `as`, typed by it (`ParseResultByRule[R]`; a union gives the union of the results): `parse(s, { startRule: 'Edge' })` → `parse(s, { as: 'Edge' })`, `fromDot(s, { parse: { startRule: 'Node' } })` → `fromDot(s, { parse: { as: 'Node' } })`. `startRule` keeps working, deprecated, and is removed in v5.
 - `DotSyntaxError` has a `location` (`{ start, end }` with `offset`, `line`, `column`), or `undefined` when the error is not at a place (an input over `maxInputSize` or `maxASTNodes`), and a `limit`: the parse option whose limit the source exceeded (`'maxInputSize'`, `'maxASTNodes'`, `'maxNestingDepth'`, `'maxHtmlNestingDepth'` or `'maxEdgeChainDepth'`), or `undefined` for any other syntax error. Every DOT the parser refuses has the one code `TSG_ERR_DOT_SYNTAX`; read `limit` to tell a source that is too large or too deep (report it as such, or raise that option for trusted input) from a syntax error. Its `code`, `location` and `limit` are the contract; the message text and `cause` (the parser's internal error) are not and may change in any release, so do not read positions or limits from `cause`.
 - Comments inside statements parse and are kept on the nearest node as `leadingComments` / `trailingComments` / `danglingComments`; code that walks every property of AST nodes will now also meet these arrays of `Comment` nodes. Locations of statements without `;` end at their last token.
 - **Edge targets are what Graphviz has**: `EdgeTargetASTNode` is `NodeRef` (`a:p`), `NodeRefList` (`a:p, b` — a comma list, ports kept) or `Subgraph` (`{ a b }`, `subgraph s { ... }` with any statements; the target is every node in it). `NodeRefGroup` is gone: `{a b}` parses as an anonymous `Subgraph` of `Node` statements, whose ports Graphviz always ignored. `toDot` writes a model group with a port or compass point as a comma list, so the ports now reach Graphviz (they were silently dropped inside `{...}`); groups without ports are still written `{a b}`. The parser also reads comma lists (`a, b -> c`, `a, b [shape=box];`) and subgraphs as edge targets, and the location of an edge without `;` no longer includes the whitespace after it.
@@ -218,7 +218,7 @@ To write a function that takes any node (or graph) and only reads it, type its p
 import type { ReadonlyNodeModel, ReadonlyRootGraphModel } from 'ts-graphviz';
 
 function describe(node: ReadonlyNodeModel): string {
-  return `${node.id}: ${String(node.attributes.get('label') ?? '')}`;
+  return `${node.id}: ${String(node.getAttribute('label') ?? '')}`;
 }
 
 function countNodes(graph: ReadonlyRootGraphModel): number {
@@ -245,8 +245,58 @@ digraph((g) => {
 ```
 
 - What changes: a default given after other statements (in the DSL, `g.node({ ... })`, `g.edge({ ... })`, `g.graph({ ... })`; on a model, `addAttributeList`), and a DOT source with several statements of one kind read with `fromDot` (it now renders as its source does). A program that gives every default before its other statements (or with `attributes.node.set(...)`) and none after them renders as before: the leading defaults apply to every statement. Where a default is also given after other statements, it overrides the leading one for what follows it.
+- For node and edge defaults of a whole graph (or subgraph), add the default attribute statement before any other and keep what it returns. It stays first, so a change to it applies throughout, except where a later default attribute statement or an object's own attribute overrides it:
+
+  ```ts
+  import { digraph } from 'ts-graphviz';
+
+  digraph((g) => {
+    const nodes = g.node({}); // the first statement: the graph's defaults
+    g.node('a');
+    nodes.shape = 'box'; // a is a box too
+  });
+  ```
+
+  Every default attribute statement of a kind added before any other statement joins these same leading defaults, so it is not a later one that overrides them. On a model, `addAttributeList('Node', {})` does the same, called before any other statement is added. A graph read with `fromDot` already has its statements, so write such defaults first in the DOT source. `graph [...]` is different: written after the graph's own attributes, it overrides them.
 - To keep the 3.x output, import from `ts-graphviz/legacy` (the same API with the 3.x classes), or pass `legacyModels` as the models context (`withContext(legacyModels)`, `fromDot(source, { convert: { models: legacyModels } })`). Both are deprecated and removed in v5.
 - `addAttributeList(kind, attributes)` returns the list it adds (the DSL's `g.node({ ... })` returns its DSL); keep it to change those defaults later.
-- `graph.attributes` (and the DSL's `$attributes`) is deprecated, removed in v5: it is the leading defaults only. Write a default attribute statement instead.
+- `graph.attributes` is deprecated, removed in v5: it is the leading defaults only. Write a default attribute statement instead.
+
+## 14. Attributes: on every object, under the DOM's names
+
+Every object with attributes holds them itself, and the methods take the names of the DOM's `Element`. 3.x kept a node's and an edge's attributes apart, in `attributes`, and named the methods after `Map`:
+
+| 3.x | v4 |
+| --- | --- |
+| `node.attributes.set('label', 'A')`, `edge.attributes.set(...)` | `node.setAttribute('label', 'A')`, `edge.setAttribute(...)` |
+| `g.set(key, value)`, `g.get(key)` (graphs, subgraphs, attribute lists) | `g.setAttribute(name, value)`, `g.getAttribute(name)` |
+| `delete(key)` | `removeAttribute(name)` |
+| (none) | `hasAttribute(name)` |
+| `values` | `getAttributeNames()` (and `getAttribute`) |
+| `apply(object or entries)` | `setAttributes(object or entries)` |
+| `clear()` | `removeAttributes()` |
+| `size` | `getAttributeNames().length` |
+
+- The 3.x names and `node.attributes` / `edge.attributes` keep working, deprecated, and are removed in v5. A node's or edge's `attributes` changes the node or edge itself: both name the same attributes.
+- A class that overrides how attributes are written overrides `setAttribute`: every write goes through it (`setAttributes`, the constructor, the DSL, the converters, and the deprecated `set` and `apply`), and every read through `getAttribute`. One that overrode `set`, `apply` or `get` in 3.x moves to `setAttribute` or `getAttribute`. The attributes given to a constructor are set once the object's own fields are (a node's `id`, an edge's checked `targets`).
+- A model you implement yourself (not from the core classes) has the new methods; the read-only types (`ReadonlyNodeModel`, …) read through `getAttribute`, `hasAttribute` and `getAttributeNames`.
+- `AttributesGroup` (and the `AttributesGroupModel` type) is deprecated: nothing creates it any more.
+- In the DOT DSL, the attributes stay properties (`a.label = 'A'`); the methods are on the model (`modelOf(a).setAttribute(...)`).
+
+## 15. Comments: models attached to any object
+
+Every object takes comments the same way, with their kind and place, instead of one `comment` string:
+
+| 3.x | v4 |
+| --- | --- |
+| `node.comment = 'start'` | `node.addComment('start')` (`{ kind: 'Block' }` and the like to choose the kind) |
+| (dropped) | `node.addComment('note', { position: 'trailing' })`: after the statement, on its line |
+| (none) | `g.addComment('end', { position: 'end' })`: at the end of a graph's, subgraph's or DOT source's body |
+| `node.comment` (to read) | `node.comments`: each comment's `text`, `kind` and `position` |
+| `node.comment = undefined` | `node.removeComment(comment)` |
+
+- `comment` keeps working, deprecated, and is removed in v5: it reads and sets the first leading comment (setting keeps that comment's kind). It is an accessor now, so `delete node.comment` leaves it; set it to `undefined`. A `Dot`'s `comment` reads all its comments joined by line breaks.
+- `toModel` and `fromDot` keep every comment in its place: a comment before a statement leads it, one on the line where a statement ends trails it, and those after the last statement are the body's. 3.x kept the comment right before a statement and dropped the others. Code that read `comment` after `fromDot` and expected the comment of a statement two lines down, or one comment per statement, reads `comments` instead.
+- `fromModel`'s `commentKind` option writes the comments that have no kind (those set through `comment` or added without one).
 
 See the [Security model](../../11-advanced-topics/06-security-model.md) for what the library guarantees at each trust boundary in v4.

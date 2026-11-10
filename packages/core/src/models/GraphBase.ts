@@ -5,6 +5,9 @@ import {
   type AttributeListKind,
   type AttributeListModel,
   type ClusterSubgraphAttributeKey,
+  type CommentModel,
+  type CommentOptions,
+  type CommentPosition,
   type DotObjectType,
   type EdgeAttributeKey,
   type EdgeAttributesObject,
@@ -37,6 +40,7 @@ import {
 } from '@ts-graphviz/common';
 import { AttributeList } from '../attributes/AttributeList.js';
 import { AttributesBase } from '../attributes/AttributesBase.js';
+import { CommentList, GRAPH_POSITIONS } from './comment-list.js';
 
 const MODEL_KEYS = [
   'Dot',
@@ -96,7 +100,42 @@ export abstract class GraphBase<
 
   public readonly id?: string;
 
-  public comment?: string;
+  readonly #comments: CommentList = new CommentList(GRAPH_POSITIONS);
+
+  /** The comments attached to the graph, in the order they were added. */
+  public get comments(): ReadonlyArray<CommentModel> {
+    return this.#comments.items;
+  }
+
+  /**
+   * Attach a comment, `'leading'` (default), `'trailing'` or `'end'` (at the end of the body).
+   * @returns The comment, to remove it later.
+   */
+  public addComment(
+    text: string,
+    options?: CommentOptions<CommentPosition>,
+  ): CommentModel {
+    return this.#comments.add(text, options);
+  }
+
+  /** Remove a comment that was attached to the graph. */
+  public removeComment(comment: CommentModel): void {
+    this.#comments.remove(comment);
+  }
+
+  /**
+   * The text of the first leading comment: setting replaces it (keeping its
+   * kind) or adds one, and `undefined` removes it.
+   * @deprecated Use `comments`, `addComment` and `removeComment`. Removed in
+   * v5.
+   */
+  public get comment(): string | undefined {
+    return this.#comments.firstLeading;
+  }
+
+  public set comment(text: string | undefined) {
+    this.#comments.setFirstLeading(text);
+  }
 
   /**
    * The leading default attribute statements of the graph (the first
@@ -299,13 +338,13 @@ export abstract class GraphBase<
       // they are.
       (
         target as AttributeListModel<AttributeListKind, AttributeKey, object>
-      ).apply(attributes);
+      ).setAttributes(attributes);
       return target;
     }
     const list = new AttributeList<AttributeListKind, AttributeKey, object>(
       kind,
     );
-    list.apply(attributes);
+    list.setAttributes(attributes);
     this.#statements.add(list);
     return list;
   }

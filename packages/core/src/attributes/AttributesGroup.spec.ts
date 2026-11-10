@@ -13,8 +13,4 @@ describe('AttributesGroup', () => {
     expect(attrs.get('label')).toBe('x');
     expect(attrs.size).toBe(1);
   });
-
-  test('has no comment slot of its own (use the model comment)', () => {
-    expect('comment' in attrs).toBe(false);
-  });
 });

@@ -1,4 +1,8 @@
-import type { AttributeKey, DotValue } from '@ts-graphviz/common';
+import type {
+  AttributeKey,
+  DotValue,
+  ReadonlyAttributes,
+} from '@ts-graphviz/common';
 import type { CreateElement } from '../../../../builder/types.js';
 import type { AttributeASTNode } from '../../../../types.js';
 import { literalFromKey, literalFromValue } from '../../../literal.js';
@@ -35,4 +39,36 @@ export function convertAttribute(
     },
     [],
   );
+}
+
+/**
+ * Converts the attributes of a model into {@link AttributeASTNode}s, in the
+ * order they were set.
+ *
+ * @param createElement - The createElement function to use.
+ * @param model - The model whose attributes to convert.
+ */
+export function convertAttributes(
+  createElement: CreateElement,
+  model: ReadonlyAttributes,
+): AttributeASTNode[] {
+  // A model made by hand with its attributes apart (`values`) still
+  // converts: the guards that admit it look only at `$$type`.
+  if (typeof model.getAttributeNames !== 'function') {
+    const legacy = model as unknown as {
+      readonly values?: ReadonlyArray<readonly [string, DotValue]>;
+      readonly attributes?: {
+        readonly values?: ReadonlyArray<readonly [string, DotValue]>;
+      };
+    };
+    return (legacy.attributes?.values ?? legacy.values ?? []).map(
+      ([key, value]) => convertAttribute(createElement, key, value),
+    );
+  }
+  return model.getAttributeNames().flatMap((name) => {
+    const value = model.getAttribute(name);
+    return value === undefined
+      ? []
+      : [convertAttribute(createElement, name, value)];
+  });
 }
