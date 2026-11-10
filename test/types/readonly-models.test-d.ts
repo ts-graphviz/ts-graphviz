@@ -59,7 +59,7 @@ import {
 import { type DotInput, toBlob } from 'ts-graphviz/adapter';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// The read-only model types (#1841, option B): every model fits them, a
+// The read-only model types: every model fits them, a
 // read-only one is not a writable one, and the code that only reads models
 // takes them.
 

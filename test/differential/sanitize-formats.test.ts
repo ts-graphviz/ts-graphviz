@@ -1,5 +1,5 @@
 /**
- * `sanitize` against the Graphviz `dot` binary (#1681): a source full of
+ * `sanitize` against the Graphviz `dot` binary: a source full of
  * values that pass the checks but are awkward for some format (quotes,
  * parentheses, `%`, references, escapes, records, HTML-like labels) renders
  * to every format `sanitize` accepts, and each output holds together as its

@@ -1,5 +1,5 @@
 /**
- * Differential testing against the Graphviz `dot` binary (#1504).
+ * Differential testing against the Graphviz `dot` binary.
  *
  * `toDot` output of generated graphs is fed to Graphviz twice:
  * - `dot -Tcanon` must accept it (Graphviz parses everything we write);
@@ -8,9 +8,9 @@
  *   model means under Graphviz's own rules, computed here from the model:
  *   - `a -> b -> c` and `{a b} -> c` are binary edges; a group without
  *     ports is written `{a b}`, a set of nodes, and a group with a port or
- *     compass point `a:p, b`, a list whose ports count (#1708);
+ *     compass point `a:p, b`, a list whose ports count;
  *   - ports become the `tailport` / `headport` attributes (`p:n`);
- *   - statements are read in the order the model keeps them (#1732), which
+ *   - statements are read in the order the model keeps them, which
  *     is the order the generated graph was built in: nodes, edges,
  *     subgraphs and default statements interleaved, `label=a;` and the
  *     merged `graph`/`node`/`edge [...]` defaults first;
@@ -177,8 +177,8 @@ const portText = (t: { port?: string; compass?: string }) =>
 
 /**
  * What Graphviz should build from `model`, whose contents are `root`
- * (`summarize(model)`): the model's statements are walked in their order
- * (#1732), and the summary's nodes, edges and subgraphs, which keep that
+ * (`summarize(model)`): the model's statements are walked in their order,
+ * and the summary's nodes, edges and subgraphs, which keep that
  * order within each kind, give what each statement holds.
  */
 function expected(model: RootGraphModel, root: RootGraphSummary): Expected {
@@ -348,8 +348,8 @@ function fontnames(spec: GraphSpec): string[] {
 }
 
 /**
- * A `fontname` Graphviz 2.42 never returns from (#1880): one starting with
- * `#`, after any whitespace (`" # ࠀ"` hung on CI as well, #1902).
+ * A `fontname` Graphviz 2.42 never returns from: one starting with `#`,
+ * after any whitespace (`" # ࠀ"` hung on CI as well).
  */
 function hangsGraphviz242(fontname: string): boolean {
   return /^\s*#/.test(fontname);
@@ -372,7 +372,7 @@ describe('differential against Graphviz', { tags: ['SM-2', 'process'] }, () => {
       fc.assert(
         fc.property(graphSpec, (spec) => {
           // The dump format uses two control characters as separators.
-          // (Ports never contain ':' — toDot rejects them, #1641.)
+          // (Ports never contain ':' — toDot rejects them.)
           const text = JSON.stringify(spec);
           fc.pre(!text.includes('\\u001e') && !text.includes('\\u001f'));
           // cgraph reserves names starting with '%' for anonymous objects
@@ -381,7 +381,7 @@ describe('differential against Graphviz', { tags: ['SM-2', 'process'] }, () => {
           // Graphviz 2.42 (Debian trixie, Ubuntu 24.04) never returns from
           // `dot -Tcanon` when a node, or an edge with a label, has a
           // `fontname` such as `#-`, `#"`, `#'`, `#=` or `#,` (the font is
-          // looked up even though nothing is laid out); 2.43 is fine. #1880
+          // looked up even though nothing is laid out); 2.43 is fine.
           fc.pre(!fontnames(spec).some(hangsGraphviz242));
 
           const model = buildGraph(spec);

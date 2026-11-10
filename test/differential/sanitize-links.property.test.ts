@@ -1,5 +1,5 @@
 /**
- * `sanitize` against the Graphviz `dot` binary (#1681): every link in the
+ * `sanitize` against the Graphviz `dot` binary: every link in the
  * SVG that Graphviz writes for DOT that `sanitize` accepted must be one a
  * browser reads as relative or `http`, `https` or `mailto`.
  *

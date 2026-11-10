@@ -28,8 +28,7 @@ const canon = (dot: string) => {
 
 // Default attribute statements apply, in DOT, only to what follows them.
 // The default model classes keep the statements in place; the deprecated
-// classes of `legacyModels` keep one set of defaults per graph, as 3.x did
-// (#1732, #1922).
+// classes of `legacyModels` keep one set of defaults per graph, as 3.x did.
 const sources = [
   'digraph { node [color=red]; a; node [color=blue]; b }',
   'digraph { a -> b; edge [color=red]; c -> d }',

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createCommandArgs, escapeValue } from './create-command-args.js';
 
 describe('escapeValue', { tags: ['SM-4'] }, () => {
-  it('writes the value verbatim: argv needs no quoting (#1592)', () => {
+  it('writes the value verbatim: argv needs no quoting', () => {
     expect(escapeValue('a b')).toBe('=a b');
     expect(escapeValue('say "hi"')).toBe('=say "hi"');
     expect(escapeValue('back\\slash')).toBe('=back\\slash');
@@ -27,7 +27,7 @@ describe('escapeValue', { tags: ['SM-4'] }, () => {
   });
 });
 
-describe('fdp -L flags (#1591)', () => {
+describe('fdp -L flags', () => {
   it('emits nothing for the Graphviz defaults (grid on, old attractive off)', () => {
     const args = [...createCommandArgs({ layout: 'fdp' })];
     expect(args.filter((a) => a.startsWith('-L'))).toStrictEqual([]);

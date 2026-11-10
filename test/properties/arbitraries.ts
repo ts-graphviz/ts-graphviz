@@ -114,7 +114,7 @@ export const dotString = (options: { newlines?: boolean } = {}) =>
 /**
  * Mirrors the printer's HTML-like detection (`convert-attribute.ts`): note the
  * `m` flag, which makes any value with a line starting in `<` and a later line
- * ending in `>` count as HTML-like. Settled by #1587.
+ * ending in `>` count as HTML-like.
  */
 export const looksHtmlLikeToPrinter = (s: string) => /^<.+>$/ms.test(s.trim());
 
@@ -149,7 +149,7 @@ type DefaultsKind = keyof DefaultsSpec;
 
 /**
  * One step of building a graph. A graph is built by taking its steps in
- * order, and keeps its statements in that order (#1732), so statements of
+ * order, and keeps its statements in that order, so statements of
  * every kind come in any order:
  * - `attribute`: `g.set(...)` with `attributes[index]`;
  * - `defaults`: `defaults[kind]` as a default statement;
@@ -288,7 +288,7 @@ const compass = fc.constantFrom<Compass>(...COMPASS_POINTS);
  * A port name. Compass points are excluded because `a:n` means a compass
  * point; the empty string is excluded because the model treats it as "no port";
  * ':' is excluded because toDot rejects it (Graphviz reads `p:q` as
- * port:compass, #1641).
+ * port:compass).
  */
 const port = dotString().filter(
   (s) =>
