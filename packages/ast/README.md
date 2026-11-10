@@ -93,7 +93,7 @@ const ast = parse(dotString, {
 | `maxInputSize` | `10485760` (10MB) | Maximum input size in bytes |
 | `maxASTNodes` | `100000` | Maximum number of AST nodes to create |
 
-To read a fragment of a DOT source rather than a whole one, say what to read it as with `as`; the result is typed by it, and the same limits apply. (`startRule`, the 3.x name, is deprecated.)
+To read a fragment of a DOT source rather than a whole one, say what to read it as with `as`; the result is typed by it, and the same limits apply. (`startRule`, its former name, is deprecated.)
 
 ```ts
 import { parse } from "@ts-graphviz/ast";
