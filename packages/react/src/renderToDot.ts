@@ -79,7 +79,7 @@ export async function renderToDot<
   element: ReactElement,
   options: RenderToDotOptions<Container> = {},
 ): Promise<string> {
-  // Own properties only: an inherited one is never an option (#1757).
+  // Own properties only: an inherited one is never an option.
   const { container: given, signal, ...rootOptions } = ownOptions(options);
   const container = modelOf(given) as Container | undefined;
 

@@ -18,6 +18,17 @@ Everything else the model does is on the model, which `modelOf(x)` gives: `model
 
 Every model you get from a DSL is a DSL, and a model has one DSL, so DSLs compare with `===`. `modelOf(dsl)` gives the model and `dsl(model)` the DSL of a model, such as one `fromDot` returns. The DSL works through the graph's `createNode`, `createEdge`, `getNode`, `getSubgraph`, `createSubgraph` and `addAttributeList`, so it follows the classes of the models context and the methods a custom class overrides: `g.node({ ... })` after other statements stays in its place, as `node [...]` does in DOT, and returns the list's DSL.
 
+`fromDot` and `fromDotAll` take `dsl: true` to return the DSL of what they read; the default stays the model.
+
+```ts
+const G = fromDot('digraph { a }', { dsl: true });
+G.node('a').label = 'A';
+
+const [A, B] = fromDotAll(src, { dsl: true });
+```
+
+The result is typed by the option and the classes given (`convert.models`): `DSL<MyNode>` for `{ dsl: true, parse: { as: 'Node' }, convert: { models: { Node: MyNode } } }`. `FromDotOptions` takes the type of `dsl` as its third type parameter (`false` by default; with `true`, `dsl: true` is required) and is now a type alias rather than an interface, and `FromDotResult<T, D>` gives what a reader returns for a model `T`. `ts-graphviz/legacy` takes the option too.
+
 Compared with 3.x:
 
 - `GraphBaseModel` and the core classes no longer have `node()`, `edge()`, `subgraph()` and `graph()`; use the DSL (`dsl(model).node('a')`) or the model's `createNode` and the other basic operations. A custom class that overrode them should override `createNode` / `createEdge` / `createSubgraph`.

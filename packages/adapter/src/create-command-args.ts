@@ -36,7 +36,7 @@ export function escapeValue<T extends AttributeKey>(
 export function* attributeArgs(
   attributes: AnyOptions['attributes'],
 ): Generator<[flag: 'G' | 'N' | 'E', arg: string]> {
-  // Own properties only, also when no attributes are given (#1757).
+  // Own properties only, also when no attributes are given.
   const { graph, node, edge } = ownOptions(attributes);
   for (const [flag, record] of [
     ['G', graph],
@@ -58,7 +58,7 @@ export function* attributeArgs(
  * @returns A generator that yields strings for command arguments
  */
 export function* createCommandArgs(options: AnyOptions): Generator<string> {
-  // Own properties only, whoever calls this (#1757).
+  // Own properties only, whoever calls this.
   const own = ownOptions(options);
   const {
     suppressWarnings = true,

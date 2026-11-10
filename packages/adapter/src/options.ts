@@ -20,7 +20,7 @@ export type AnyOptions = CommonOptions<string> &
  * object, its `attributes` (and their `graph` / `node` / `edge` records) and
  * a `sanitize` options object are read from their own properties only, so a
  * polluted `Object.prototype` cannot choose the command, turn `sanitize` off
- * or add arguments (#1757); then every option is checked by
+ * or add arguments; then every option is checked by
  * {@link checkOptions}, so nothing reaches the command line that its type
  * does not allow.
  *

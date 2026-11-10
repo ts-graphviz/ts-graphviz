@@ -120,7 +120,8 @@ export interface ParseOptions<T extends Rule = Rule>
    */
   as?: T;
   /**
-   * The 3.x name of {@link ParseOptions.as}; `as` wins when both are given.
+   * The former name of {@link ParseOptions.as}; `as` wins when both are
+   * given.
    * @deprecated Use `as`. Removed in v5.
    */
   startRule?: T;

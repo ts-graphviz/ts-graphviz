@@ -274,7 +274,7 @@ export function renderHTMLLike(
     return htmlLike('');
   }
 
-  // Own properties only: an inherited one is never an option (#1757).
+  // Own properties only: an inherited one is never an option.
   const requested = ownOptions(options).maxDepth;
   let maxDepth = DEFAULT_MAX_RECURSION_DEPTH;
   if (requested != null && Number.isFinite(requested) && requested > 0) {

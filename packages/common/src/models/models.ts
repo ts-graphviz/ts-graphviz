@@ -422,8 +422,7 @@ export interface HasAttributes<
   E extends object = Record<never, never>,
 > {
   /**
-   * The object itself, as the container of its attributes (3.x held them
-   * apart).
+   * The object itself, as the container of its attributes.
    * @deprecated The object holds its attributes: call
    * `getAttribute`, `setAttribute` and the others on it. Removed in v5.
    */
@@ -541,7 +540,8 @@ export interface Attributes<
 }
 
 /**
- * The attributes of a node or an edge, held apart from it in 3.x.
+ * The attributes of a node or an edge, as its deprecated `attributes` gives
+ * them: a view whose methods go to the node or edge itself.
  *
  * @typeParam T - The built-in attribute keys.
  * @typeParam E - The attribute types a schema adds or changes, by key (see

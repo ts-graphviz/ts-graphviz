@@ -31,7 +31,7 @@ Hover over `digraph` or `g.node` or `[_.color]` for type hints.
 
 ### Object-Oriented Models
 
-In addition to the declarative style, `ts-graphviz` offers an object-oriented API, providing model classes that represent graph elements. This approach leverages TypeScript's class-based features, allowing for more explicit and granular control.
+In addition to the DOT DSL, `ts-graphviz` offers an object-oriented API, providing model classes that represent graph elements. This approach leverages TypeScript's class-based features, allowing for more explicit and granular control.
 
 **Model Classes:**
 
@@ -73,79 +73,24 @@ console.log(toDot(G));
 
 ---
 
-## Understanding APIs: Declarative vs. Imperative
+<a id="understanding-apis-declarative-vs-imperative"></a>
 
-As you become more comfortable with `ts-graphviz`, you'll encounter two primary styles for building graphs: **Declarative** and **Imperative** APIs.
+## Two APIs: the DOT DSL and the DOM
 
-### Declarative API
+`ts-graphviz` gives you two ways to work with a graph, both on the same graph:
 
-The declarative API provides a concise and readable way to define your graph. It uses methods like `node`, `edge`, and `subgraph` within a callback function to build the graph structure.
-
-**Example:**
-
-```typescript
-import { digraph } from 'ts-graphviz';
-
-const G = digraph('G', (g) => {
-  g.node('A');
-  g.node('B');
-  g.edge(['A', 'B']);
-});
-```
-
-**Explanation:**
-
-- **Graph Factory Function**: The `digraph` function creates a new graph and provides a context `g`.
-- **Adding Elements**: Use `g.node` and `g.edge` to add nodes and edges within the context.
-- **Readability**: The structure mirrors the graph's logical structure, making it easier to read.
-
-The factories give the graph's **DOT DSL**, which has DOT's words only:
-
-- **Statements**: `node`, `edge`, `subgraph` and `graph` are methods, as the DOT statements of those names. `g.node({ ... })`, `g.edge({ ... })` and `g.graph({ ... })` are the default attribute statements (`node [...]` and so on).
-- **Attributes**: attributes are properties under their own names. Assigning `undefined` or `delete` removes one.
-- **A few more**: `a.addComment(...)`, a node's `a.port('p')`, and `$$type`. Everything else the model does (`id` as the node's name, `nodes`, `getNode`, `createNode`, `getAttribute`) is on `modelOf(x)`, so `a.id` is the Graphviz `id` attribute.
-- **Every model you get from the DSL is a DSL.** `modelOf()` gives the model, and `dsl()` gives the DSL of a model, such as one `fromDot` returns. `toDot` and the adapter take either.
+- **The DOT DSL**, which the factories (`digraph`, `graph`, `strict.digraph`, `strict.graph`) give: the DOT statements are its methods and attributes are its properties, so a graph is written as in DOT. See [Writing Graphs with the DOT DSL](../03-guides/01-dot-dsl.md).
+- **The DOT Object Model (DOM)**: the classes (`Digraph`, `Node`, `Edge`, …) and their methods, for programs that build, read or convert graphs as data, or define classes of their own. See [DOT Object Model (DOM)](../03-guides/02-model-api.md).
 
 ```typescript
 import { digraph, modelOf, toDot } from 'ts-graphviz';
 
 const G = digraph('G', (g) => {
   g.rankdir = 'LR'; // rankdir = "LR";
-  g.node({ shape: 'box' }); // node [shape = "box";];
-  const a = g.node('A');
-  a.label = 'Start'; // "A" [label = "Start";];
-  a.id = 'svg-a'; // the Graphviz id attribute
-  console.log(modelOf(a).id); // 'A': the node's name
+  const a = g.node('A', { label: 'Start' }); // "A" [label = "Start";];
   g.edge([a, 'B']); // "A" -> "B";
 });
 
 toDot(G); // the DSL or its model
-modelOf(G); // the RootGraphModel
+modelOf(G).createNode('C'); // the model behind the DSL
 ```
-
-### Imperative API
-
-The imperative API offers explicit control over the creation and manipulation of graph elements. It uses object-oriented methods to build the graph step by step.
-
-**Example:**
-
-```typescript
-import { Digraph } from 'ts-graphviz';
-
-const G = new Digraph('G');
-
-const nodeA = G.createNode('A');
-const nodeB = G.createNode('B');
-G.createEdge([nodeA, nodeB]);
-```
-
-**Explanation:**
-
-- **Instantiating the Graph**: Create a new `Digraph` instance.
-- **Creating Nodes and Edges**: Use `createNode` and `createEdge` methods to explicitly add elements.
-- **Explicit Control**: This style gives you more control over the creation process.
-
-**Choosing the Right API**
-
-- **Declarative API**: Ideal for quickly defining the structure of a graph with less code.
-- **Imperative API**: Useful when you need explicit control over the creation and manipulation of graph elements.

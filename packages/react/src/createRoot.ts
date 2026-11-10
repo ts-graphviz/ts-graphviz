@@ -315,7 +315,7 @@ function yieldToScheduler(): Promise<void> {
 export function createRoot<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(options: CreateRootOptions<Container> = {}): GraphvizRoot {
-  // Own properties only: an inherited one is never an option (#1757).
+  // Own properties only: an inherited one is never an option.
   const { container: given, models, ...rest } = ownOptions(options);
   const container = modelOf(given) as Container | undefined;
   const otherOptions = ownOptions(rest);

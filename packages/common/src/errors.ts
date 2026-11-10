@@ -76,7 +76,7 @@ export const ERROR_CODES = [
   'TSG_ERR_INVALID_OPTION',
 ] as const;
 // Shared by every module of the process: frozen, so no code can change what
-// isTsGraphvizError accepts (#1757).
+// isTsGraphvizError accepts.
 Object.freeze(ERROR_CODES);
 
 /**

@@ -40,6 +40,6 @@ export function createModelsContext<
       (context as Record<keyof ModelsContext, unknown>)[key] = model;
     }
   }
-  // The classes in `models` decide the instance types (#1736).
+  // The classes in `models` decide the instance types.
   return Object.freeze(context) as ModelsContext<ResolvedModelTypes<P>>;
 }
