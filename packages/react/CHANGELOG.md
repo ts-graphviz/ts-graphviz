@@ -1,5 +1,26 @@
 # @ts-graphviz/react
 
+## 0.12.7
+
+### Patch Changes
+
+- [#1968](https://github.com/ts-graphviz/ts-graphviz/pull/1968) [`25c9dd3`](https://github.com/ts-graphviz/ts-graphviz/commit/25c9dd3bd549e8cd4fd0d200c83e8a436ea579e5) Thanks [@kamiazya](https://github.com/kamiazya)! - Each root now uses its own reconciler, and the initial rendering is flushed synchronously, so `renderToDot` and `root.render` can block the caller until it completes. An error that escapes this flush rejects the promise they return.
+
+  `timeout` is checked once the synchronous flush has completed: a render that took longer rejects with the same `Rendering timeout` error as before. It does not interrupt rendering.
+
+  Root option handling is aligned with the reconciler interface.
+
+- [#1900](https://github.com/ts-graphviz/ts-graphviz/pull/1900) [`4447d09`](https://github.com/ts-graphviz/ts-graphviz/commit/4447d09a6198e25451e4381368cfc00f9b9c2e49) Thanks [@kamiazya](https://github.com/kamiazya)! - Fix errors in the README samples and text:
+
+  - `ts-graphviz`: the Models Context API sample with `digraph()` passes the graph `G` to `toDot`, not the callback's `g`; the beta badge of `fromDot` renders; the `parse` item reads like its neighbours.
+  - `@ts-graphviz/react`: the type-safety sample imports `RootGraphProps`, which exists, instead of `DigraphProps`.
+  - `@ts-graphviz/common`: the node reference sample imports `toNodeRefGroup`, which it calls.
+  - `@ts-graphviz/core`: "graph elements", not "graph element".
+
+- Updated dependencies [[`4447d09`](https://github.com/ts-graphviz/ts-graphviz/commit/4447d09a6198e25451e4381368cfc00f9b9c2e49)]:
+  - ts-graphviz@3.0.14
+  - @ts-graphviz/common@3.0.7
+
 ## 0.12.6
 
 ### Patch Changes
