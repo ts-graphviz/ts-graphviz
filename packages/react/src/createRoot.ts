@@ -246,6 +246,7 @@ async function renderInternal<
   wrappedElement: ReactElement,
   originalContainer: Container | undefined,
   options: CreateRootOptions = {},
+  onFlushError: (error: unknown) => void = noop,
 ): Promise<void> {
   const { timeout = 5000, onRenderComplete } = options;
 
@@ -322,6 +323,7 @@ async function renderInternal<
     } catch (error) {
       flushing = false;
       fail(error);
+      onFlushError(error);
     }
   });
 }
@@ -343,8 +345,15 @@ export function createRoot<
 
   // Use imported type guard for root graph models
 
-  // Model collector function
-  const collectModel = (model: DotObjectModel) => {
+  // Counts the fiber roots of this root: a tree left on a replaced one
+  // collects nothing.
+  let generation = 0;
+
+  // Model collector function, for the trees of one fiber root
+  const collectModelFor = (owner: number) => (model: DotObjectModel) => {
+    if (owner !== generation) {
+      return;
+    }
     if (container) {
       // With container: collect all non-container models at top level only
       if (model !== container) {
@@ -363,14 +372,35 @@ export function createRoot<
   };
   containerInfo.context = context;
 
-  const reconciler = createReconciler();
-  const callbackErrors: CallbackErrors = new Set();
-  const fiberRoot = createFiberRoot(
+  // Each fiber root has its own set, so that a callback of a replaced one
+  // cannot reject the renders of the next.
+  let callbackErrors: CallbackErrors = new Set();
+  let reconciler = createReconciler();
+  let fiberRoot = createFiberRoot(
     reconciler,
     containerInfo,
     callbackErrors,
     otherOptions,
   );
+  // An error thrown out of React's work loop can leave the reconciler in the
+  // middle of its work. Reject the other renders in progress with it, and
+  // continue with a new reconciler and fiber root.
+  const replaceAfterFlushError = (error: unknown) => {
+    const pending = callbackErrors;
+    callbackErrors = new Set();
+    for (const fail of [...pending]) {
+      fail(error);
+    }
+    generation++;
+    containerInfo.renderedModels = [];
+    reconciler = createReconciler();
+    fiberRoot = createFiberRoot(
+      reconciler,
+      containerInfo,
+      callbackErrors,
+      otherOptions,
+    );
+  };
   let isUnmounted = false;
 
   return {
@@ -385,7 +415,7 @@ export function createRoot<
       const wrappedElement = createWrappedElement(
         element,
         context,
-        collectModel,
+        collectModelFor(generation),
         container,
       );
 
@@ -397,6 +427,7 @@ export function createRoot<
         wrappedElement,
         container,
         otherOptions,
+        replaceAfterFlushError,
       );
     },
 
