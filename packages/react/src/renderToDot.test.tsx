@@ -6,7 +6,26 @@ import { Edge } from './components/Edge.js';
 import { Graph } from './components/Graph.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
+import { useCurrentGraph } from './hooks/useCurrentGraph.js';
 import { renderToDot } from './renderToDot.js';
+
+const Thrower = (): React.ReactElement => {
+  throw new Error('boom');
+};
+const errorCallbacks = () => {
+  const calls: string[] = [];
+  const record = (name: string) => (error: Error) => {
+    calls.push(`${name}: ${error.message}`);
+  };
+  return {
+    calls,
+    options: {
+      onUncaughtError: record('onUncaughtError'),
+      onCaughtError: record('onCaughtError'),
+      onRecoverableError: record('onRecoverableError'),
+    },
+  };
+};
 
 describe('renderToDot()', () => {
   describe('Without container', () => {
@@ -230,6 +249,99 @@ describe('renderToDot()', () => {
       } finally {
         errors.mockRestore();
       }
+    });
+
+    it('renders with one reconciler per root without renderer warnings', async () => {
+      const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
+      try {
+        for (const id of ['a', 'b', 'c']) {
+          await renderToDot(
+            <Digraph>
+              <Node id={id} />
+            </Digraph>,
+          );
+        }
+        expect(errors).not.toHaveBeenCalled();
+      } finally {
+        errors.mockRestore();
+      }
+    });
+
+    it('rejects a render that took longer than the timeout', async () => {
+      const Slow = (): React.ReactElement => {
+        const until = Date.now() + 30;
+        while (Date.now() < until) {
+          // Simulate synchronous rendering work.
+        }
+        return <Node id="slow" />;
+      };
+      await expect(
+        renderToDot(
+          <Digraph>
+            <Slow />
+          </Digraph>,
+          { timeout: 10 },
+        ),
+      ).rejects.toThrow('Rendering timeout after 10ms');
+    });
+  });
+
+  describe('Render completion', () => {
+    it('reports a component that throws without a boundary, and rejects', async () => {
+      const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
+      try {
+        const { calls, options } = errorCallbacks();
+        await expect(
+          renderToDot(
+            <Digraph>
+              <Thrower />
+            </Digraph>,
+            options,
+          ),
+        ).rejects.toThrow(/No top-level graph found/);
+        expect(calls).toEqual(['onUncaughtError: boom']);
+      } finally {
+        errors.mockRestore();
+      }
+    });
+
+    it('renders the fallback of a suspended tree', async () => {
+      const Lazy = React.lazy(
+        () =>
+          new Promise<{ default: () => React.ReactElement }>(() => undefined),
+      );
+      const dot = await renderToDot(
+        <Digraph>
+          <React.Suspense fallback={<Node id="loading" />}>
+            <Lazy />
+          </React.Suspense>
+        </Digraph>,
+      );
+      expect(dot).toContain('"loading"');
+    });
+
+    it('includes the work of effects in the output', async () => {
+      const EffectNode = (): React.ReactElement => {
+        const graph = useCurrentGraph();
+        React.useEffect(() => {
+          graph.createNode('from-effect');
+        }, [graph]);
+        return <Node id="a" />;
+      };
+      const EffectState = (): React.ReactElement => {
+        const [id, setId] = React.useState('before');
+        React.useEffect(() => setId('after'), []);
+        return <Node id={id} />;
+      };
+      const dot = await renderToDot(
+        <Digraph>
+          <EffectNode />
+          <EffectState />
+        </Digraph>,
+      );
+      expect(dot).toContain('"from-effect"');
+      expect(dot).toContain('"after"');
+      expect(dot).not.toContain('"before"');
     });
   });
 });
