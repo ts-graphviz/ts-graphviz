@@ -316,6 +316,119 @@ describe('renderToDot()', () => {
       }
     });
 
+    it('lets a root render again after its own render was too deep', async () => {
+      const unhandled: unknown[] = [];
+      const record = (error: unknown) => unhandled.push(error);
+      process.on('uncaughtException', record);
+      const root = createRoot();
+      try {
+        await expect(
+          root.render(
+            <Digraph>
+              <Item chain={chainOf(20_000)} />
+            </Digraph>,
+          ),
+        ).rejects.toThrow(RangeError);
+
+        await root.render(
+          <Digraph id="again">
+            <Item chain={chainOf(2)} />
+          </Digraph>,
+        );
+        const [graph] = root.getTopLevelModels();
+        expect(toDot(graph)).toContain('"n1"');
+        // Nothing left of the failed work runs later.
+        await new Promise((resolve) => setTimeout(resolve, 50));
+        expect(unhandled).toEqual([]);
+      } finally {
+        root.unmount();
+        process.off('uncaughtException', record);
+      }
+    });
+
+    it('keeps the tree left by a too-deep render out of the next renders', async () => {
+      const unhandled: unknown[] = [];
+      const record = (error: unknown) => unhandled.push(error);
+      process.on('uncaughtException', record);
+      let load: (module: { default: () => React.ReactElement }) => void = () =>
+        undefined;
+      const Lazy = React.lazy(
+        () =>
+          new Promise<{ default: () => React.ReactElement }>((resolve) => {
+            load = resolve;
+          }),
+      );
+      const root = createRoot();
+      try {
+        await root.render(
+          <Digraph>
+            <React.Suspense fallback={<Node id="fallback" />}>
+              <Lazy />
+            </React.Suspense>
+          </Digraph>,
+        );
+        await expect(
+          root.render(
+            <Digraph>
+              <Item chain={chainOf(20_000)} />
+            </Digraph>,
+          ),
+        ).rejects.toThrow(RangeError);
+        await root.render(
+          <Digraph id="again">
+            <Node id="a" />
+          </Digraph>,
+        );
+
+        // The suspended tree of the replaced fiber root can resume now.
+        load({ default: () => <Node id="late" /> });
+        await new Promise((resolve) => setTimeout(resolve, 50));
+        const [graph] = root.getTopLevelModels();
+        expect(toDot(graph)).toContain('"a"');
+        expect(toDot(graph)).not.toContain('"late"');
+        expect(unhandled).toEqual([]);
+      } finally {
+        root.unmount();
+        process.off('uncaughtException', record);
+      }
+    });
+
+    it('rejects the other renders in progress on a root whose render was too deep', async () => {
+      const root = createRoot();
+      try {
+        const Lazy = React.lazy(
+          () =>
+            new Promise<{ default: () => React.ReactElement }>(() => undefined),
+        );
+        // Suspends without a boundary, so it stays pending.
+        const pending = root.render(
+          <Digraph>
+            <Lazy />
+          </Digraph>,
+        );
+        const deep = root.render(
+          <Digraph>
+            <Item chain={chainOf(20_000)} />
+          </Digraph>,
+        );
+        const results = await Promise.allSettled([pending, deep]);
+        expect(results).toEqual([
+          { status: 'rejected', reason: expect.any(RangeError) },
+          { status: 'rejected', reason: expect.any(RangeError) },
+        ]);
+
+        await root.render(
+          <Digraph id="again">
+            <Node id="a" />
+          </Digraph>,
+        );
+        const [graph] = root.getTopLevelModels();
+        expect(toDot(graph)).toContain('"a"');
+      } finally {
+        root.unmount();
+      }
+    });
+
     it('renders with one reconciler per root without renderer warnings', async () => {
       const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
       try {
