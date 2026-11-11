@@ -329,6 +329,7 @@ describe('renderToDot()', () => {
             </Digraph>,
           ),
         ).rejects.toThrow(RangeError);
+        expect(root.getTopLevelModels()).toEqual([]);
 
         await root.render(
           <Digraph id="again">

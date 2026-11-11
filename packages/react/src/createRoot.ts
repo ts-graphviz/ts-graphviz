@@ -372,7 +372,9 @@ export function createRoot<
   };
   containerInfo.context = context;
 
-  const callbackErrors: CallbackErrors = new Set();
+  // Each fiber root has its own set, so that a callback of a replaced one
+  // cannot reject the renders of the next.
+  let callbackErrors: CallbackErrors = new Set();
   let reconciler = createReconciler();
   let fiberRoot = createFiberRoot(
     reconciler,
@@ -384,10 +386,13 @@ export function createRoot<
   // middle of its work. Reject the other renders in progress with it, and
   // continue with a new reconciler and fiber root.
   const replaceAfterFlushError = (error: unknown) => {
-    for (const fail of [...callbackErrors]) {
+    const pending = callbackErrors;
+    callbackErrors = new Set();
+    for (const fail of [...pending]) {
       fail(error);
     }
     generation++;
+    containerInfo.renderedModels = [];
     reconciler = createReconciler();
     fiberRoot = createFiberRoot(
       reconciler,
