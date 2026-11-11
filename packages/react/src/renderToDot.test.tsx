@@ -1,11 +1,12 @@
 import React from 'react';
-import { Digraph as DigraphModel } from 'ts-graphviz';
+import { Digraph as DigraphModel, toDot } from 'ts-graphviz';
 import { describe, expect, it, vi } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
 import { Graph } from './components/Graph.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
+import { createRoot } from './createRoot.js';
 import { useCurrentGraph } from './hooks/useCurrentGraph.js';
 import { renderToDot } from './renderToDot.js';
 
@@ -250,6 +251,70 @@ describe('renderToDot()', () => {
         errors.mockRestore();
       }
     });
+  });
+
+  describe('Deeply nested trees', () => {
+    type Chain = { id: string; next?: Chain };
+    const chainOf = (length: number): Chain => {
+      let chain: Chain = { id: 'n0' };
+      for (let i = 1; i < length; i++) {
+        chain = { id: `n${i}`, next: chain };
+      }
+      return chain;
+    };
+    const Item = ({ chain }: { chain: Chain }): React.ReactElement => (
+      <>
+        <Node id={chain.id} />
+        {chain.next && <Item chain={chain.next} />}
+      </>
+    );
+
+    it('rejects a tree too deep for the stack, and later renders still work', async () => {
+      await expect(
+        renderToDot(
+          <Digraph>
+            <Item chain={chainOf(20_000)} />
+          </Digraph>,
+        ),
+      ).rejects.toThrow(RangeError);
+
+      const dot = await renderToDot(
+        <Digraph id="after">
+          <Node id="a" />
+        </Digraph>,
+      );
+      expect(dot).toContain('digraph "after"');
+      expect(dot).toContain('"a"');
+    });
+
+    it('keeps a failing render from breaking a root that is already mounted', async () => {
+      const root = createRoot();
+      try {
+        await root.render(
+          <Digraph id="kept">
+            <Item chain={chainOf(3)} />
+          </Digraph>,
+        );
+
+        await expect(
+          renderToDot(
+            <Digraph>
+              <Item chain={chainOf(20_000)} />
+            </Digraph>,
+          ),
+        ).rejects.toThrow(RangeError);
+
+        await root.render(
+          <Digraph id="kept">
+            <Item chain={chainOf(4)} />
+          </Digraph>,
+        );
+        const [graph] = root.getTopLevelModels();
+        expect(toDot(graph)).toContain('"n3"');
+      } finally {
+        root.unmount();
+      }
+    });
 
     it('renders with one reconciler per root without renderer warnings', async () => {
       const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -343,5 +408,215 @@ describe('renderToDot()', () => {
       expect(dot).toContain('"after"');
       expect(dot).not.toContain('"before"');
     });
+  });
+
+  describe('Error callbacks', () => {
+    class Boundary extends React.Component<
+      { children: React.ReactNode },
+      { failed: boolean }
+    > {
+      state = { failed: false };
+      static getDerivedStateFromError() {
+        return { failed: true };
+      }
+      render() {
+        return this.state.failed ? <Node id="fallback" /> : this.props.children;
+      }
+    }
+    // React calls these callbacks outside the returned promise: an error
+    // they throw is unhandled, so watch for one while the render settles.
+    const unhandledDuring = async (render: () => Promise<unknown>) => {
+      const unhandled: unknown[] = [];
+      const record = (error: unknown) => unhandled.push(error);
+      process.on('uncaughtException', record);
+      try {
+        await render().catch(() => undefined);
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      } finally {
+        process.off('uncaughtException', record);
+      }
+      return unhandled;
+    };
+    const quietly = async (test: () => Promise<void>) => {
+      const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
+      try {
+        await test();
+      } finally {
+        errors.mockRestore();
+      }
+    };
+    const throwsOnce = () => {
+      let thrown = false;
+      return (): React.ReactElement => {
+        if (!thrown) {
+          thrown = true;
+          throw new Error('once');
+        }
+        return <Node id="recovered" />;
+      };
+    };
+
+    it('renders the fallback of an error boundary and calls onCaughtError', () =>
+      quietly(async () => {
+        const { calls, options } = errorCallbacks();
+        const stacks: unknown[] = [];
+        let dot = '';
+        const unhandled = await unhandledDuring(async () => {
+          dot = await renderToDot(
+            <Digraph>
+              <Boundary>
+                <Thrower />
+              </Boundary>
+            </Digraph>,
+            {
+              ...options,
+              onCaughtError: (error, errorInfo) => {
+                stacks.push(errorInfo.componentStack);
+                options.onCaughtError(error);
+              },
+            },
+          );
+        });
+        expect(unhandled).toEqual([]);
+        expect(dot).toContain('"fallback"');
+        expect(calls).toEqual(['onCaughtError: boom']);
+        expect(stacks).toEqual([expect.stringContaining('Thrower')]);
+      }));
+
+    it('renders the fallback of an error boundary without callbacks', () =>
+      quietly(async () => {
+        let dot = '';
+        const unhandled = await unhandledDuring(async () => {
+          dot = await renderToDot(
+            <Digraph>
+              <Boundary>
+                <Thrower />
+              </Boundary>
+            </Digraph>,
+          );
+        });
+        expect(unhandled).toEqual([]);
+        expect(dot).toContain('"fallback"');
+      }));
+
+    it('rejects the render with an error that onCaughtError throws', () =>
+      quietly(async () => {
+        const failure = new Error('callback failed');
+        let result: unknown;
+        const unhandled = await unhandledDuring(() =>
+          renderToDot(
+            <Digraph>
+              <Boundary>
+                <Thrower />
+              </Boundary>
+            </Digraph>,
+            {
+              onCaughtError: () => {
+                throw failure;
+              },
+            },
+          ).catch((error) => {
+            result = error;
+          }),
+        );
+        expect(unhandled).toEqual([]);
+        expect(result).toBe(failure);
+      }));
+
+    it('rejects every pending render of the root with an error a callback throws', () =>
+      quietly(async () => {
+        const failure = new Error('callback failed');
+        const root = createRoot({
+          onCaughtError: () => {
+            throw failure;
+          },
+        });
+        try {
+          const Lazy = React.lazy(
+            () =>
+              new Promise<{ default: () => React.ReactElement }>(
+                () => undefined,
+              ),
+          );
+          // Suspends without a boundary, so it stays pending.
+          const first = root.render(
+            <Digraph>
+              <Lazy />
+            </Digraph>,
+          );
+          const second = root.render(
+            <Digraph>
+              <Boundary>
+                <Thrower />
+              </Boundary>
+            </Digraph>,
+          );
+          const results = await Promise.allSettled([first, second]);
+          expect(results).toEqual([
+            { status: 'rejected', reason: failure },
+            { status: 'rejected', reason: failure },
+          ]);
+        } finally {
+          root.unmount();
+        }
+      }));
+
+    it('calls onRecoverableError for an error React recovers from', async () => {
+      const ThrowsOnce = throwsOnce();
+      const { calls, options } = errorCallbacks();
+      let dot = '';
+      const unhandled = await unhandledDuring(async () => {
+        dot = await renderToDot(
+          <Digraph>
+            <ThrowsOnce />
+          </Digraph>,
+          options,
+        );
+      });
+      expect(unhandled).toEqual([]);
+      expect(dot).toContain('"recovered"');
+      expect(calls).toHaveLength(1);
+      expect(calls[0]).toMatch(/^onRecoverableError: /);
+    });
+
+    it('recovers from an error without callbacks', async () => {
+      const ThrowsOnce = throwsOnce();
+      let dot = '';
+      const unhandled = await unhandledDuring(async () => {
+        dot = await renderToDot(
+          <Digraph>
+            <ThrowsOnce />
+          </Digraph>,
+        );
+      });
+      expect(unhandled).toEqual([]);
+      expect(dot).toContain('"recovered"');
+    });
+
+    it('unmounts a tree whose effect cleanup throws', () =>
+      quietly(async () => {
+        const CleanupThrows = (): React.ReactElement => {
+          React.useEffect(
+            () => () => {
+              throw new Error('cleanup');
+            },
+            [],
+          );
+          return <Node id="a" />;
+        };
+        const { calls, options } = errorCallbacks();
+        let dot = '';
+        const unhandled = await unhandledDuring(async () => {
+          dot = await renderToDot(
+            <Digraph>
+              <CleanupThrows />
+            </Digraph>,
+            options,
+          );
+        });
+        expect(unhandled).toEqual([]);
+        expect(dot).toContain('"a"');
+        expect(calls).toEqual(['onUncaughtError: cleanup']);
+      }));
   });
 });
