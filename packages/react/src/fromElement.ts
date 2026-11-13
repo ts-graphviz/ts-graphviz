@@ -215,6 +215,7 @@ export async function fromElement<Container extends AnyGraphContainer>(
       mount.discard(false);
       const whileUnmounting = failureNow();
       if (whileUnmounting !== undefined) throw whileUnmounting.error;
+      mount.keep();
       return result;
     } catch (error) {
       mount.discard(true);

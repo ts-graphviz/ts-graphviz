@@ -67,6 +67,35 @@ digraph "G" {
 模型套件用您提供的类创建模型。`createModelKit` 接受自定义类，其余的使用默认类。
 
 ```typescript
+import {
+  createModelKit,
+  Node,
+  Edge,
+  type EdgeAttributesObject,
+  type EdgeTargetTuple,
+  type NodeAttributesObject,
+  attribute as _,
+  toDot,
+} from 'ts-graphviz';
+
+class MyCustomNode extends Node {
+  constructor(id: string, attributes?: NodeAttributesObject) {
+    super(`node_${id}`, {
+      [_.label]: `This is Custom Node ${id}`,
+      ...attributes,
+    });
+  }
+}
+
+class MyCustomEdge extends Edge {
+  constructor(targets: EdgeTargetTuple, attributes?: EdgeAttributesObject) {
+    super(targets, {
+      [_.label]: 'This is Custom Edge',
+      ...attributes,
+    });
+  }
+}
+
 const kit = createModelKit({
   Node: MyCustomNode,
   Edge: MyCustomEdge,

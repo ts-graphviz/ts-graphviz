@@ -1,5 +1,5 @@
 import React from 'react';
-import { Digraph as DigraphModel, type NodeModel, toDot } from 'ts-graphviz';
+import { Digraph as DigraphModel, Node as NodeModel, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
@@ -209,9 +209,24 @@ function Nothing(): null {
 }
 
 describe("what a conversion added is the container's own afterwards", () => {
-  const ids = (graph: { nodes: ReadonlyArray<NodeModel> }): string[] =>
+  const ids = (graph: { nodes: ReadonlyArray<{ id: string }> }): string[] =>
     graph.nodes.map((n) => n.id);
-  const tick = () => new Promise((resolve) => setTimeout(resolve, 10));
+  /** A root on the container, and a render that waits for its commit. */
+  const rootOn = (container: DigraphModel) => {
+    let committed = (): void => {};
+    const root = createRoot({
+      container,
+      onRenderComplete: () => committed(),
+    });
+    return {
+      unmount: () => root.unmount(),
+      render: (element: React.ReactElement) =>
+        new Promise<void>((resolve) => {
+          committed = resolve;
+          root.render(element);
+        }),
+    };
+  };
 
   it('stays when the next conversion adds to the same container', async () => {
     const container = new DigraphModel();
@@ -284,9 +299,8 @@ describe("what a conversion added is the container's own afterwards", () => {
   it('stays when a root renders into the container, and when the root is unmounted', async () => {
     const container = new DigraphModel();
     await fromElement(<Node id="a" />, { container });
-    const root = createRoot({ container });
-    root.render(<Node id="b" />);
-    await tick();
+    const root = rootOn(container);
+    await root.render(<Node id="b" />);
     expect(ids(container)).toEqual(['a', 'b']);
     root.unmount();
     expect(ids(container)).toEqual(['a']);
@@ -294,17 +308,155 @@ describe("what a conversion added is the container's own afterwards", () => {
 
   it('two roots on one container each replace what they added themselves', async () => {
     const container = new DigraphModel();
-    const one = createRoot({ container });
-    const two = createRoot({ container });
-    one.render(<Node id="a" />);
-    two.render(<Node id="b" />);
-    await tick();
-    one.render(<Node id="c" />);
-    await tick();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" />);
+    await two.render(<Node id="b" />);
+    await one.render(<Node id="c" />);
     expect(ids(container).sort()).toEqual(['b', 'c']);
     two.unmount();
     expect(ids(container)).toEqual(['c']);
     one.unmount();
     expect(container.nodes).toHaveLength(0);
+  });
+});
+
+describe('two roots that render a node with the same id into one container', () => {
+  const rootOn = (container: DigraphModel) => {
+    let committed = (): void => {};
+    const root = createRoot({
+      container,
+      onRenderComplete: () => committed(),
+    });
+    return {
+      unmount: () => root.unmount(),
+      render: (element: React.ReactElement) =>
+        new Promise<void>((resolve) => {
+          committed = resolve;
+          root.render(element);
+        }),
+    };
+  };
+  const colorOf = (container: DigraphModel): unknown =>
+    container.getNode('a')?.attributes.get('color');
+
+  it('the container shows the node rendered last', async () => {
+    const container = new DigraphModel();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    expect(container.nodes).toHaveLength(1);
+    expect(colorOf(container)).toBe('blue');
+  });
+
+  it('the node of the first comes back when the second is unmounted', async () => {
+    const container = new DigraphModel();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    two.unmount();
+    expect(colorOf(container)).toBe('red');
+    one.unmount();
+    expect(container.nodes).toHaveLength(0);
+  });
+
+  it('the node of the first does not come back after the first was unmounted', async () => {
+    const container = new DigraphModel();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    one.unmount();
+    expect(colorOf(container)).toBe('blue');
+    two.unmount();
+    expect(container.nodes).toHaveLength(0);
+  });
+
+  it('the node of the first does not come back after the first rendered another', async () => {
+    const container = new DigraphModel();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    await one.render(<Node id="c" />);
+    two.unmount();
+    expect(container.nodes.map((n) => n.id)).toEqual(['c']);
+    one.unmount();
+    expect(container.nodes).toHaveLength(0);
+  });
+
+  it("the container's own node comes back when both are unmounted, in either order", async () => {
+    for (const firstGone of ['one', 'two'] as const) {
+      const container = new DigraphModel();
+      const own = new NodeModel('a', { color: 'green' });
+      container.addNode(own);
+      const roots = { one: rootOn(container), two: rootOn(container) };
+      await roots.one.render(<Node id="a" color="red" />);
+      await roots.two.render(<Node id="a" color="blue" />);
+      roots[firstGone].unmount();
+      roots[firstGone === 'one' ? 'two' : 'one'].unmount();
+      expect(container.nodes).toEqual([own]);
+    }
+  });
+
+  it('a node the container was given meanwhile is not replaced by an older one', async () => {
+    const container = new DigraphModel();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    const given = new NodeModel('a', { color: 'green' });
+    container.addNode(given);
+    two.unmount();
+    one.unmount();
+    expect(container.nodes).toEqual([given]);
+  });
+
+  it('the node of a finished conversion is what comes back, not what it replaced', async () => {
+    const container = new DigraphModel();
+    container.addNode(new NodeModel('a', { color: 'green' }));
+    await fromElement(<Node id="a" color="red" />, { container });
+    await fromElement(<Node id="a" color="blue" />, { container });
+    const root = rootOn(container);
+    await root.render(<Node id="a" color="black" />);
+    expect(colorOf(container)).toBe('black');
+    root.unmount();
+    expect(colorOf(container)).toBe('blue');
+  });
+
+  it('the node of a conversion that finished over the node of a root stays when the root is unmounted', async () => {
+    const container = new DigraphModel();
+    container.addNode(new NodeModel('a', { color: 'green' }));
+    const root = rootOn(container);
+    await root.render(<Node id="a" color="black" />);
+    await fromElement(<Node id="a" color="blue" />, { container });
+    expect(colorOf(container)).toBe('blue');
+    root.unmount();
+    expect(colorOf(container)).toBe('blue');
+    expect(container.nodes).toHaveLength(1);
+  });
+
+  it('a container that throws while a node comes back keeps the node it shows', async () => {
+    let failing = false;
+    class Failing extends DigraphModel {
+      addNode(node: NodeModel): void {
+        if (failing) throw new Error('addNode failed');
+        super.addNode(node);
+      }
+    }
+    const container = new Failing();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    failing = true;
+    two.unmount();
+    failing = false;
+    expect(colorOf(container)).toBe('blue');
+    one.unmount();
+    expect(colorOf(container)).toBe('blue');
+    expect(container.nodes).toHaveLength(1);
   });
 });

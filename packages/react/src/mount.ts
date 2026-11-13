@@ -4,7 +4,7 @@ import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
 import { GraphMap } from './contexts/GraphMap.js';
 import { type Context, GraphvizContext } from './contexts/GraphvizContext.js';
-import { syncContainer } from './host.js';
+import { keepStatements, syncContainer } from './host.js';
 import {
   currentGeneration,
   type FiberRoot,
@@ -242,6 +242,14 @@ export class Mount<Container extends AnyGraphContainer = AnyGraphContainer> {
    */
   checkRenderer(): void {
     this.#generation.check();
+  }
+
+  /**
+   * The models the tree added are the graphs' own from now on; for a tree
+   * that was given up without `rollback`.
+   */
+  keep(): void {
+    keepStatements(this.#containerInfo.added);
   }
 
   /**
