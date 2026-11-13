@@ -11,12 +11,12 @@ import {
   type AttributeValueTypeNames,
   type AttributeValueTypes,
   type ClusterSubgraphAttributesObject,
-  createModelsContext,
+  createModelKit,
   Digraph,
   Dot,
   type DotModel,
   type DotValue,
-  defaultModelsContext,
+  defaultModelKit,
   Edge,
   type EdgeAttributeKey,
   type EdgeModel,
@@ -25,7 +25,7 @@ import {
   type GraphAttributesObject,
   type GraphCommonAttributes,
   LegacyDigraph,
-  type ModelsContext,
+  type ModelKit,
   type ModelTypes,
   Node,
   type NodeAttributeKey,
@@ -152,7 +152,7 @@ describe('without a schema', () => {
     expectTypeOf(new Node('a')).toEqualTypeOf<Node<EmptySchema>>();
     expectTypeOf(new Digraph()).toEqualTypeOf<Digraph<ModelTypes>>();
     expectTypeOf(new Dot()).toEqualTypeOf<Dot<EmptySchema>>();
-    expectTypeOf(defaultModelsContext()).toEqualTypeOf<ModelsContext>();
+    expectTypeOf(defaultModelKit).toEqualTypeOf<ModelKit>();
   });
 
   it('forwards a generic key and its value', () => {
@@ -200,8 +200,8 @@ describe('without a schema', () => {
 
   it('keeps graphs of custom classes graphs of the default model types', () => {
     class MyNode extends Node {}
-    const models = createModelsContext({ Node: MyNode });
-    expectTypeOf(models).toExtend<ModelsContext>();
+    const models = createModelKit({ Node: MyNode });
+    expectTypeOf(models).toExtend<ModelKit>();
     const g = new models.Digraph();
     expectTypeOf(g).toExtend<RootGraphModel>();
     new Digraph().with(models);
@@ -557,8 +557,8 @@ describe('the models of a schema and the read-only model types', () => {
     expectTypeOf<RootGraphModel<OtherTypes>>().not.toExtend<
       RootGraphModel<MyTypes>
     >();
-    expectTypeOf<ModelsContext<MyTypes>>().not.toExtend<ModelsContext>();
-    expectTypeOf<ModelsContext>().not.toExtend<ModelsContext<MyTypes>>();
+    expectTypeOf<ModelKit<MyTypes>>().not.toExtend<ModelKit>();
+    expectTypeOf<ModelKit>().not.toExtend<ModelKit<MyTypes>>();
     expectTypeOf<Node<MySchema>>().not.toExtend<NodeModel>();
   });
 
@@ -643,7 +643,7 @@ describe('the core classes', () => {
   });
 
   it('take a context of the schema', () => {
-    const models = {} as ModelsContext<MyTypes>;
+    const models = {} as ModelKit<MyTypes>;
     expectTypeOf(new models.Node('a', { label: 1 })).toEqualTypeOf<
       NodeModel<MySchema>
     >();
@@ -653,7 +653,7 @@ describe('the core classes', () => {
       g.with(models);
       g.with({ Node: MyNode });
       // @ts-expect-error the classes create nodes of no schema
-      g.with({} as ModelsContext);
+      g.with({} as ModelKit);
     });
   });
 });

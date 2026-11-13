@@ -12,12 +12,10 @@ import {
   type EdgeAttributeKey,
   type EdgeAttributesObject,
   type EdgeModel,
-  type EdgeTargetTuple,
   type GraphBaseModel,
   type GraphCommonAttributes,
   type GraphSchemaAttributeTypes,
-  isNodeRefGroupLike,
-  type ModelsContext,
+  type ModelClasses,
   type ModelTypes,
   modelOf,
   type NodeAttributeKey,
@@ -34,13 +32,12 @@ import {
   type SubgraphAttributesObject,
   type SubgraphModel,
   type SubgraphSchemaAttributeTypes,
-  toNodeRef,
-  toNodeRefGroup,
   withCode,
 } from '@ts-graphviz/common';
 import { AttributeList } from '../attributes/AttributeList.js';
 import { AttributesBase } from '../attributes/AttributesBase.js';
 import { CommentList, GRAPH_POSITIONS } from './comment-list.js';
+import { toEdgeTargets } from './edge-targets.js';
 
 const MODEL_KEYS = [
   'Dot',
@@ -49,7 +46,7 @@ const MODEL_KEYS = [
   'Subgraph',
   'Node',
   'Edge',
-] as const satisfies readonly (keyof ModelsContext)[];
+] as const satisfies readonly (keyof ModelClasses)[];
 
 /**
  * Base class for Graph objects.
@@ -69,30 +66,30 @@ export abstract class GraphBase<
   implements GraphBaseModel<T, K, M>
 {
   public abstract get $$type(): T;
-  #models?: ModelsContext;
+  #models?: ModelClasses;
 
   /**
    * The classes used by `createNode`, `createEdge` and `createSubgraph`: the
    * ones given to {@link with}, otherwise {@link defaultModels}.
    */
-  protected get models(): ModelsContext {
+  protected get models(): ModelClasses {
     this.#models ??= this.defaultModels();
     return this.#models;
   }
 
   /**
-   * The context used when none was given to {@link with}.
+   * The classes used when none were given to {@link with}.
    *
-   * The core classes return `defaultModelsContext()`. A direct subclass of
+   * The core classes return those of `defaultModelKit`. A direct subclass of
    * `GraphBase` must override this or call `with()` before creating models.
-   * (GraphBase cannot import the default context itself: the context holds
+   * (GraphBase cannot import the default kit itself: the kit holds
    * the subclasses, and ES modules in that cycle would be evaluated before
    * their base class.)
    */
-  protected defaultModels(): ModelsContext {
+  protected defaultModels(): ModelClasses {
     throw withCode(
       new Error(
-        'This graph has no models context: call with(models) or override defaultModels()',
+        'This graph has no model classes: call with(models) or override defaultModels()',
       ),
       'TSG_ERR_NO_MODELS_CONTEXT',
     );
@@ -165,7 +162,7 @@ export abstract class GraphBase<
       >('Node'),
     });
 
-  // The objects are created from the context's classes, which `M` describes.
+  // The objects are created from the graph's classes, which `M` describes.
   get nodes(): ReadonlyArray<M['Node']> {
     return Array.from(this.#objects.nodes.values()) as M['Node'][];
   }
@@ -210,37 +207,37 @@ export abstract class GraphBase<
    * Use the given classes for the models this graph creates; the classes
    * left out stay as they are.
    */
-  public with(models: Partial<ModelsContext<ModelTypes<SchemaOf<M>>>>): void {
+  public with(models: Partial<ModelClasses<ModelTypes<SchemaOf<M>>>>): void {
     // Own properties only, here and in the result: a class inherited from
     // Object.prototype is never taken for a model.
     // The classes of any schema are the same at run time.
-    const given = ownOptions(models as Partial<ModelsContext>);
-    const next: Partial<ModelsContext> = Object.assign(
+    const given = ownOptions(models as Partial<ModelClasses>);
+    const next: Partial<ModelClasses> = Object.assign(
       Object.create(null),
       this.#models,
     );
     for (const key of MODEL_KEYS) {
       const model = given[key];
       if (model !== undefined) {
-        (next as Record<keyof ModelsContext, unknown>)[key] = model;
+        (next as Record<keyof ModelClasses, unknown>)[key] = model;
       }
     }
-    // Only a complete context can stand on its own; otherwise the slots
-    // left out come from the current (or default) context.
+    // Only a complete set can stand on its own; otherwise the slots left
+    // out come from the current (or default) classes.
     const complete = MODEL_KEYS.every((key) => next[key] !== undefined);
     this.#models = Object.freeze(
       complete
-        ? (next as ModelsContext)
+        ? (next as ModelClasses)
         : Object.assign(Object.create(null), this.models, next),
     );
   }
 
   /**
    * The classes used to create models, typed with the graph's schema: at
-   * run time the classes of a context are the same whatever the schema.
+   * run time the classes are the same whatever the schema.
    */
-  get #schemaModels(): ModelsContext<ModelTypes<SchemaOf<M>>> {
-    return this.models as unknown as ModelsContext<ModelTypes<SchemaOf<M>>>;
+  get #schemaModels(): ModelClasses<ModelTypes<SchemaOf<M>>> {
+    return this.models as unknown as ModelClasses<ModelTypes<SchemaOf<M>>>;
   }
 
   // The methods taking a model take the model an object such as a DSL
@@ -444,18 +441,10 @@ export abstract class GraphBase<
     targets: ReadonlyEdgeTargetLikeTuple,
     attributes?: EdgeAttributesObject<SchemaOf<M>>,
   ): M['Edge'] {
-    // The nodes themselves, never objects standing for them (a DSL).
-    const ts = targets
-      .map(
-        (t) =>
-          (Array.isArray(t)
-            ? t.map(modelOf)
-            : modelOf(t)) as ReadonlyEdgeTargetLikeTuple[number],
-      )
-      .map((t) =>
-        isNodeRefGroupLike(t) ? toNodeRefGroup(t) : toNodeRef(t),
-      ) as EdgeTargetTuple;
-    const edge = new this.#schemaModels.Edge(ts, attributes);
+    const edge = new this.#schemaModels.Edge(
+      toEdgeTargets(targets),
+      attributes,
+    );
     this.addEdge(edge);
     return edge as M['Edge'];
   }

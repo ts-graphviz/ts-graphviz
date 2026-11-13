@@ -104,12 +104,12 @@ export interface ConvertFromModelPlugin<T extends AnyReadonlyDotObjectModel> {
 }
 
 export interface ConvertToModelContext {
-  models: ModelsContext;
+  models: ModelKit;
   convert<T extends ToModelConvertableASTNode>(ast: T): ASTToModel<T>;
 }
 
 export interface ConvertToModelOptions {
-  models: ModelsContext;
+  models: ModelKit;
   maxEdgeTargets?: number;
   maxSharedNodes?: number;
 }

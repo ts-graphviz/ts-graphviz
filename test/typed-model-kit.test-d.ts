@@ -1,13 +1,13 @@
 import type {
   DSL,
   EdgeModel,
-  ModelsContext,
+  ModelKit,
   NodeModel,
   RootGraphModel,
   SubgraphModel,
 } from 'ts-graphviz';
 import {
-  createModelsContext,
+  createModelKit,
   Digraph,
   digraph,
   dsl,
@@ -17,11 +17,11 @@ import {
   modelOf,
   Node,
   Subgraph,
-  withContext,
+  withModelKit,
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// The classes of a ModelsContext show in the types of what graphs create,
+// The classes of a ModelKit show in the types of what graphs create,
 // in subgraphs too (#1736).
 
 class MyNode extends Node {
@@ -36,16 +36,16 @@ class MyEdge extends Edge {
   }
 }
 
-describe('a ModelsContext with custom classes', () => {
-  const context = createModelsContext({ Node: MyNode, Edge: MyEdge });
+describe('a ModelKit with custom classes', () => {
+  const context = createModelKit({ Node: MyNode, Edge: MyEdge });
 
   it('is typed by its classes', () => {
     expectTypeOf(new context.Node('a')).toEqualTypeOf<MyNode>();
-    expectTypeOf(context).toExtend<ModelsContext>();
+    expectTypeOf(context).toExtend<ModelKit>();
   });
 
   it('types what graph factories create, in subgraphs too', () => {
-    const { digraph: myDigraph } = withContext({ Node: MyNode, Edge: MyEdge });
+    const { digraph: myDigraph } = withModelKit({ Node: MyNode, Edge: MyEdge });
     myDigraph((g) => {
       expectTypeOf(g.node('a')).toEqualTypeOf<DSL<MyNode>>();
       expectTypeOf(g.edge(['a', 'b'])).toEqualTypeOf<DSL<MyEdge>>();
@@ -84,7 +84,7 @@ describe('a ModelsContext with custom classes', () => {
         return 'x';
       }
     }
-    const { graph } = withContext({ Subgraph: MySubgraph });
+    const { graph } = withModelKit({ Subgraph: MySubgraph });
     graph((g) => {
       expectTypeOf(g.subgraph('s')).toEqualTypeOf<DSL<MySubgraph>>();
       expectTypeOf(modelOf(g.subgraph('s')).tag()).toEqualTypeOf<string>();

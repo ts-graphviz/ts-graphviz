@@ -42,9 +42,9 @@ describe('the factories', () => {
     expect(modelOf(S.subgraph('s'))).toBeInstanceOf(LegacySubgraph);
   });
 
-  test('withContext keeps the legacy classes it is not given', () => {
+  test('withModelKit keeps the legacy classes it is not given', () => {
     class MyNode extends Node {}
-    const { digraph } = legacy.withContext({ Node: MyNode });
+    const { digraph } = legacy.withModelKit({ Node: MyNode });
     const G = digraph((g) => {
       g.node('a');
     });
@@ -53,10 +53,10 @@ describe('the factories', () => {
     // A class it is given takes the place of the legacy one; undefined
     // does not.
     expect(
-      modelOf(legacy.withContext({ Digraph }).digraph()),
+      modelOf(legacy.withModelKit({ Digraph }).digraph()),
     ).not.toBeInstanceOf(LegacyDigraph);
     expect(
-      modelOf(legacy.withContext({ Digraph: undefined }).digraph()),
+      modelOf(legacy.withModelKit({ Digraph: undefined }).digraph()),
     ).toBeInstanceOf(LegacyDigraph);
   });
 });
@@ -107,7 +107,7 @@ describe('fromDot and fromDotAll', () => {
     expect(
       legacy.fromDotAll(source, { convert: { models } })[0],
     ).toBeInstanceOf(LegacyDigraph);
-    expect(modelOf(legacy.withContext(models).digraph())).toBeInstanceOf(
+    expect(modelOf(legacy.withModelKit(models).digraph())).toBeInstanceOf(
       LegacyDigraph,
     );
   });
@@ -118,7 +118,7 @@ test('everything else is that of ts-graphviz', () => {
     'digraph',
     'graph',
     'strict',
-    'withContext',
+    'withModelKit',
     'fromDot',
     'fromDotAll',
   ]);

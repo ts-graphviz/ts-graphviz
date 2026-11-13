@@ -11,7 +11,7 @@ DSL はそれぞれ DOM の一つのモデルの代わりです。`modelOf(dsl)`
 
 ## グラフを組み立てる
 
-グラフは `createNode`、`createEdge`、`createSubgraph` で中身を作ります。作るときには、そのグラフのモデルコンテキストのクラスが使われます。
+グラフは `createNode`、`createEdge`、`createSubgraph` で中身を作ります。作るときには、そのグラフのモデルクラスが使われます（[モデルキット](#モデルキット)を参照）。
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';
@@ -115,7 +115,7 @@ console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
 
 ## 既定属性の文
 
-DOT と同じく、既定属性の文はその後に書いたものにだけ適用されます（非推奨の `legacyModels` のクラスは、どれも先頭の既定値にまとめます。[モデルコンテキスト](#モデルコンテキスト)を参照）。`addAttributeList` は既定属性の文を追加してそのリストを返すので、取っておけば後からその既定値を変更できます。
+DOT と同じく、既定属性の文はその後に書いたものにだけ適用されます（非推奨の `legacyModels` のクラスは、どれも先頭の既定値にまとめます。[モデルキット](#モデルキット)を参照）。`addAttributeList` は既定属性の文を追加してそのリストを返すので、取っておけば後からその既定値を変更できます。
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';
@@ -175,21 +175,37 @@ const nodes = modelOf(G).statements.filter(isNodeModel);
 console.log(nodes.length); // 1
 ```
 
-## モデルコンテキスト
+## モデルキット
 
-モデルコンテキストは、グラフが中身を作るときに使うクラスの組です。`withContext(models)` はそのコンテキストのファクトリー（`digraph`、`graph`、`strict.digraph`、`strict.graph`）を返し、`graph.with(models)` はグラフのコンテキストを設定し、`fromDot` と `fromDotAll` は `convert.models` で受け取ります。指定しなかったクラスは、`withContext` と `fromDot` では既定のクラス、`graph.with` ではそのグラフが今使っているクラスのままです。
+モデルキットは、組み合わせて使うモデルクラスの組と、そこからモデルを作る操作をまとめたものです。`createModelKit(classes)` で作り、`defaultModelKit` は既定のクラスのキットです。`withModelKit(classes)` はキットで作るファクトリー（`digraph`、`graph`、`strict.digraph`、`strict.graph`）を返し、`graph.with(classes)` はグラフのクラスを設定し、`fromDot` と `fromDotAll` は `convert.models` でクラスを受け取ります。指定しなかったクラスは、`createModelKit`、`withModelKit`、`fromDot` では既定のクラス、`graph.with` ではそのグラフが今使っているクラスのままです。
 
 ```typescript
-import { Node, withContext } from 'ts-graphviz';
+import { Node, withModelKit } from 'ts-graphviz';
 
 class MyNode extends Node {}
 
-const { digraph } = withContext({ Node: MyNode });
+const { digraph } = withModelKit({ Node: MyNode });
 digraph((g) => {
   g.node('a'); // MyNode の DSL
 });
 ```
 
+キットの `createDigraph`、`createGraph`、`createSubgraph`、`createNode`、`createEdge` は作るだけです。返されたモデルは、追加するまでどのグラフにも入っていません。
+
+```typescript
+import { createModelKit, Node } from 'ts-graphviz';
+
+class MyNode extends Node {}
+
+const kit = createModelKit({ Node: MyNode });
+const G = kit.createDigraph('G');
+const a = kit.createNode('a'); // MyNode。まだどのグラフにも入っていない
+const b = kit.createNode('b');
+G.addNode(a);
+G.addNode(b);
+G.addEdge(kit.createEdge([a, b])); // エッジだけを追加する
+```
+
 `legacyModels`（`LegacyGraph`、`LegacyDigraph`、`LegacySubgraph`）は 3.x のクラスで、既定属性の文をすべてグラフごとに一組の既定値にまとめます。`ts-graphviz/legacy` はすべてのファクトリーでこれを使います（[DOT の文の順序](./01-dot-dsl.md#dot-の文の順序)を参照）。これらは非推奨で、v5 で削除されます。
 
-独自クラス、型付きのコンテキスト、型の拡張については、[ts-graphvizの拡張](./05-extending-ts-graphviz.md)を参照してください。
+独自クラス、型付きのキット、型の拡張については、[ts-graphvizの拡張](./05-extending-ts-graphviz.md)を参照してください。

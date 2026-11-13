@@ -1,6 +1,6 @@
 import fc from 'fast-check';
 import {
-  createModelsContext,
+  createModelKit,
   Digraph,
   Dot,
   digraph,
@@ -17,7 +17,7 @@ import {
   type SubgraphModel,
   strict,
   toNodeRef,
-  withContext,
+  withModelKit,
 } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import { dotString } from './arbitraries.js';
@@ -486,7 +486,7 @@ describe('root graphs', { tags: ['SM-5'] }, () => {
   });
 });
 
-describe('models context', { tags: ['SM-5'] }, () => {
+describe('model kit', { tags: ['SM-5'] }, () => {
   class MyNode extends Node {}
   class MyEdge extends Edge {}
   class MySubgraph extends Subgraph {}
@@ -497,12 +497,12 @@ describe('models context', { tags: ['SM-5'] }, () => {
         fc.array(nodeId, { minLength: 1, maxLength: 4 }),
         fc.boolean(),
         (path, directed) => {
-          const models = createModelsContext({
+          const models = createModelKit({
             Node: MyNode,
             Edge: MyEdge,
             Subgraph: MySubgraph,
           });
-          const factories = withContext(models);
+          const factories = withModelKit(models);
           const root = (directed ? factories.digraph : factories.graph)();
           let current: RootGraphModel | SubgraphModel = modelOf(root);
           for (const id of path) {

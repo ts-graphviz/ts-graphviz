@@ -2,15 +2,15 @@ import type {
   AnyModelTypes,
   Attributes,
   ClusterSubgraphAttributeKey,
-  ModelsContext,
+  ModelClasses,
   ModelTypes,
   SchemaOf,
   SubgraphAttributeKey,
   SubgraphAttributesObject,
   SubgraphModel,
 } from '@ts-graphviz/common';
+import { lazyDefaultModelKit } from './default-model-kit.js';
 import { GraphBase } from './GraphBase.js';
-import { defaultModelsContext } from './models-context.js';
 
 /**
  * DOT object class representing a subgraph.
@@ -57,8 +57,8 @@ export class Subgraph<M extends AnyModelTypes = ModelTypes>
   }
 
   /** @hidden */
-  protected override defaultModels(): ModelsContext {
-    return defaultModelsContext();
+  protected override defaultModels(): ModelClasses {
+    return lazyDefaultModelKit();
   }
 }
 

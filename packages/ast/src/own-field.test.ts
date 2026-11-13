@@ -1,4 +1,4 @@
-import { Digraph, defaultModelsContext, Node } from '@ts-graphviz/core';
+import { Digraph, defaultModelKit, Node } from '@ts-graphviz/core';
 import { describe, expect, it } from 'vitest';
 import { createElement } from './builder/index.js';
 import { parse, stringify } from './dot-shim/index.js';
@@ -18,7 +18,7 @@ function withInherited<T>(key: string, value: unknown, fn: () => T): T {
 }
 
 const toModel = (ast: unknown) =>
-  convert(ast as DotASTNode, { models: defaultModelsContext() });
+  convert(ast as DotASTNode, { models: defaultModelKit });
 
 const literal = (value: string) =>
   createElement('Literal', { value, kind: 'quoted' }, []);

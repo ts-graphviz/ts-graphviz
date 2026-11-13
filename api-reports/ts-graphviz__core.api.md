@@ -46,7 +46,7 @@ export declare class AttributesGroup<T extends AttributeKey = AttributeKey, E ex
 
 export declare class Digraph<M extends AnyModelTypes = ModelTypes> extends RootGraph<M> {
   get directed(): boolean;
-  protected override defaultModels(): ModelsContext;
+  protected override defaultModels(): ModelClasses;
 }
 
 export declare class Dot<S extends Schema = EmptySchema> implements DotModel<S> {
@@ -79,14 +79,14 @@ export declare class Edge<S extends Schema = EmptySchema> extends AttributesBase
 
 export declare class Graph<M extends AnyModelTypes = ModelTypes> extends RootGraph<M> {
   get directed(): boolean;
-  protected override defaultModels(): ModelsContext;
+  protected override defaultModels(): ModelClasses;
 }
 
 export declare abstract class GraphBase<T extends DotObjectType, K extends AttributeKey = AttributeKey, M extends AnyModelTypes = ModelTypes> extends AttributesBase<K, GraphSchemaAttributeTypes<T, SchemaOf<M>>> implements GraphBaseModel<T, K, M> {
   #private;
   abstract get $$type(): T;
-  protected get models(): ModelsContext;
-  protected defaultModels(): ModelsContext;
+  protected get models(): ModelClasses;
+  protected defaultModels(): ModelClasses;
   readonly id?: string;
   get comments(): ReadonlyArray<CommentModel>;
   addComment(text: string, options?: CommentOptions<CommentPosition>): CommentModel;
@@ -98,7 +98,7 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
   get edges(): ReadonlyArray<M["Edge"]>;
   get subgraphs(): ReadonlyArray<M["Subgraph"]>;
   get statements(): ReadonlyArray<M["Node"] | M["Edge"] | M["Subgraph"] | StatementAttributeListModel<SchemaOf<M>>>;
-  with(models: Partial<ModelsContext<ModelTypes<SchemaOf<M>>>>): void;
+  with(models: Partial<ModelClasses<ModelTypes<SchemaOf<M>>>>): void;
   addNode(node: NodeModel<SchemaOf<M>>): void;
   addEdge(edge: EdgeModel<SchemaOf<M>>): void;
   addSubgraph(subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>): void;
@@ -123,17 +123,17 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
 
 export declare class LegacyDigraph<M extends AnyModelTypes = ModelTypes> extends Digraph<M> {
   protected override get keepsDefaultsInPlace(): boolean;
-  protected override defaultModels(): ModelsContext;
+  protected override defaultModels(): ModelClasses;
 }
 
 export declare class LegacyGraph<M extends AnyModelTypes = ModelTypes> extends Graph<M> {
   protected override get keepsDefaultsInPlace(): boolean;
-  protected override defaultModels(): ModelsContext;
+  protected override defaultModels(): ModelClasses;
 }
 
 export declare class LegacySubgraph<M extends AnyModelTypes = ModelTypes> extends Subgraph<M> {
   protected override get keepsDefaultsInPlace(): boolean;
-  protected override defaultModels(): ModelsContext;
+  protected override defaultModels(): ModelClasses;
 }
 
 export declare class Node<S extends Schema = EmptySchema> extends AttributesBase<NodeAttributeKey, SchemaAttributeTypes<S, "node">> implements NodeModel<S> {
@@ -167,12 +167,12 @@ export declare class Subgraph<M extends AnyModelTypes = ModelTypes> extends Grap
   constructor(id?: string, attributes?: SubgraphAttributesObject<SchemaOf<M>>);
   constructor(attributes?: SubgraphAttributesObject<SchemaOf<M>>);
   isSubgraphCluster(): boolean;
-  protected override defaultModels(): ModelsContext;
+  protected override defaultModels(): ModelClasses;
 }
 
-export declare function createModelsContext<const P extends Partial<ModelsContext> = Record<never, never>>(models?: P): ModelsContext<ResolvedModelTypes<P>>;
+export declare function createModelKit<const P extends Partial<ModelClasses> = Record<never, never>>(classes?: P): ModelKit<ResolvedModelTypes<P>>;
 
-export declare function defaultModelsContext(): ModelsContext;
+export declare const defaultModelKit: ModelKit;
 
-export declare const legacyModels: Partial<ModelsContext>;
+export declare const legacyModels: Partial<ModelClasses>;
 ```

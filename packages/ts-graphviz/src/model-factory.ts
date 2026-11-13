@@ -1,5 +1,5 @@
-import type { ModelsContext, ResolvedModelTypes } from '@ts-graphviz/common';
-import { createModelsContext } from '@ts-graphviz/core';
+import type { ModelClasses, ResolvedModelTypes } from '@ts-graphviz/common';
+import { createModelKit } from '@ts-graphviz/core';
 import { createModelFactories } from './model-factory-builder.js';
 import type {
   ModelFactories,
@@ -28,19 +28,21 @@ export const graph: ModelFactory = noStrict.graph;
 export const strict: ModelFactories = createModelFactories(true);
 
 /**
- * withContext creates a {@link ModelFactoriesWithStrict} object with the given context.
+ * withModelKit creates a {@link ModelFactoriesWithStrict} object whose
+ * graphs, and everything created in them, come from the given classes and,
+ * for the kinds left out, the default ones (see `createModelKit`).
  *
- * @param models - An object containing the models to be used in the context.
+ * @param classes - The classes to create the models from.
  *
- * @returns An object with model factories ('digraph', 'graph', and 'strict') that operate within the given context.
+ * @returns An object with model factories ('digraph', 'graph', and 'strict') that create with that kit.
  * @group Model Factory
  */
-export function withContext<const P extends Partial<ModelsContext>>(
-  models: P,
+export function withModelKit<const P extends Partial<ModelClasses>>(
+  classes: P,
 ): ModelFactoriesWithStrict<ResolvedModelTypes<P>> {
-  const context = createModelsContext(models);
+  const kit = createModelKit(classes);
   return Object.freeze({
-    ...createModelFactories(false, context),
-    strict: createModelFactories(true, context),
+    ...createModelFactories(false, kit),
+    strict: createModelFactories(true, kit),
   });
 }

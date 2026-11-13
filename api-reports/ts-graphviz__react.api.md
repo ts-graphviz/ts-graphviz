@@ -13,7 +13,7 @@ export interface CreateRootOptions<Container extends AnyGraphContainer = AnyGrap
   container?: Container | {
     readonly [MODEL]: Container;
   };
-  models?: Partial<ModelsContext>;
+  models?: Partial<ModelClasses>;
   onUncaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
   onCaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
   onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;

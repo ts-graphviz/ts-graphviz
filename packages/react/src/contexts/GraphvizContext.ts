@@ -1,4 +1,4 @@
-import type { ModelsContext } from '@ts-graphviz/common';
+import type { ModelKit } from '@ts-graphviz/common';
 import { createContext, type Context as ReactContext } from 'react';
 import type { AnyGraphContainer } from '../types/container.js';
 
@@ -7,7 +7,7 @@ export interface Context<
 > {
   container?: Container;
   /** Model classes used to create root graphs, nodes and edges. */
-  models: ModelsContext;
+  models: ModelKit;
 }
 
 export const GraphvizContext: ReactContext<Context | null> =

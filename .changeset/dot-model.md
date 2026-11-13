@@ -7,7 +7,7 @@
 
 Add a `Dot` model for whole DOT sources, `fromDotAll`, and make `fromModel` / `toModel` symmetric with the AST
 
-A DOT source (comments and any number of root graphs) has a model: `DotModel` in `@ts-graphviz/common` and the `Dot` class in `@ts-graphviz/core` (`graphs`, `addGraph`, `removeGraph`, `comment`). `ModelsContext` has a `Dot` constructor and `isDotModel` is exported.
+A DOT source (comments and any number of root graphs) has a model: `DotModel` in `@ts-graphviz/common` and the `Dot` class in `@ts-graphviz/core` (`graphs`, `addGraph`, `removeGraph`, `comment`). `ModelKit` has a `Dot` constructor and `isDotModel` is exported.
 
 - The parser accepts any number of root graphs in one source, as Graphviz does, including none. In 3.x a source had to hold exactly one graph.
 - New `fromDotAll(dot, options?)` returns the models of every graph, in order (an empty array for a source without graphs).

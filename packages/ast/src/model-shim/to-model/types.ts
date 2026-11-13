@@ -1,7 +1,7 @@
 import type {
   DotModel,
   EdgeModel,
-  ModelsContext,
+  ModelKit,
   NodeModel,
   RootGraphModel,
   SubgraphModel,
@@ -53,10 +53,10 @@ export type ToModelConvertableASTNode =
  */
 export interface ConvertToModelOptions {
   /**
-   * The classes to create the models from, e.g. `defaultModelsContext()`
-   * or `createModelsContext({ Node: MyNode })` of `@ts-graphviz/core`.
+   * The classes to create the models from, e.g. `defaultModelKit`
+   * or `createModelKit({ Node: MyNode })` of `@ts-graphviz/core`.
    */
-  models: ModelsContext;
+  models: ModelKit;
   /**
    * The most node references that edges to subgraphs may reach in one
    * conversion, counted over all of them. An edge to a subgraph reaches
@@ -91,7 +91,7 @@ export interface ConvertToModelOptions {
  * @group Convert AST to Model
  */
 export interface ConvertToModelContext {
-  models: ModelsContext;
+  models: ModelKit;
   convert<T extends ToModelConvertableASTNode>(ast: T): ASTToModel<T>;
 }
 

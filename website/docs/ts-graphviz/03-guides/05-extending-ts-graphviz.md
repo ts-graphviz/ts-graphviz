@@ -62,9 +62,9 @@ digraph "G" {
 */
 ```
 
-### Models Context API (`with` method)
+### Model classes of a graph (`with` method)
 
-You can also use the **Models Context API** to create custom classes for objects generated inside a graph. The `with` methods of `Digraph`, `Graph`, and `Subgraph` allow you to predefine custom models.
+You can also give a graph the custom classes to create for objects generated inside a graph. The `with` methods of `Digraph`, `Graph`, and `Subgraph` allow you to predefine custom models.
 
 ```typescript
 import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
@@ -114,10 +114,10 @@ digraph {
 
 ### Typed custom classes
 
-The classes of a models context also decide the types of what graphs create, in nested subgraphs too:
+The classes of a model kit also decide the types of what graphs create, in nested subgraphs too:
 
 ```typescript
-import { modelOf, Node, withContext } from 'ts-graphviz';
+import { modelOf, Node, withModelKit } from 'ts-graphviz';
 
 class MyNode extends Node {
   get shout(): string {
@@ -125,7 +125,7 @@ class MyNode extends Node {
   }
 }
 
-const { digraph } = withContext({ Node: MyNode });
+const { digraph } = withModelKit({ Node: MyNode });
 
 digraph((g) => {
   modelOf(g.node('a')).shout; // 'A' (the model is typed MyNode)
@@ -135,7 +135,7 @@ digraph((g) => {
 });
 ```
 
-`createModelsContext`, `withContext`, `createModelFactories`, and `fromDot` / `fromDotAll` with `convert.models` infer the types from the classes given; a class left out keeps the base type, carrying the same context into subgraphs. A custom root or subgraph class that should itself return the custom types extends `RootGraph<M>` / `Subgraph<M>` with `M` describing them (`ModelTypes`).
+`createModelKit`, `withModelKit`, `createModelFactories`, and `fromDot` / `fromDotAll` with `convert.models` infer the types from the classes given; a class left out keeps the base type, carrying the same classes into subgraphs. A custom root or subgraph class that should itself return the custom types extends `RootGraph<M>` / `Subgraph<M>` with `M` describing them (`ModelTypes`).
 
 ### Default attribute statements in place
 

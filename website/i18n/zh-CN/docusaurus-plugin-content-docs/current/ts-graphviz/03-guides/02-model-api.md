@@ -11,7 +11,7 @@ description: 使用 DOT Object Model（DOM），把图当作数据来构建、�
 
 ## 构建图
 
-图通过 `createNode`、`createEdge` 和 `createSubgraph` 创建其内容，创建时使用该图的模型上下文中的类：
+图通过 `createNode`、`createEdge` 和 `createSubgraph` 创建其内容，创建时使用该图的模型类（参见[模型套件](#模型套件)）：
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';
@@ -115,7 +115,7 @@ console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
 
 ## 默认属性语句
 
-与 DOT 一样，默认属性语句只作用于它之后的内容（已弃用的 `legacyModels` 类则会把每一条都合并到开头的默认值中；参见[模型上下文](#模型上下文)）。`addAttributeList` 添加一条默认属性语句并返回它的列表；保留它，之后就可以修改这些默认值：
+与 DOT 一样，默认属性语句只作用于它之后的内容（已弃用的 `legacyModels` 类则会把每一条都合并到开头的默认值中；参见[模型套件](#模型套件)）。`addAttributeList` 添加一条默认属性语句并返回它的列表；保留它，之后就可以修改这些默认值：
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';
@@ -175,21 +175,37 @@ const nodes = modelOf(G).statements.filter(isNodeModel);
 console.log(nodes.length); // 1
 ```
 
-## 模型上下文
+## 模型套件
 
-模型上下文是图创建其内容时使用的一组类。`withContext(models)` 返回该上下文的工厂函数（`digraph`、`graph`、`strict.digraph`、`strict.graph`）；`graph.with(models)` 设置图的上下文；`fromDot` 和 `fromDotAll` 通过 `convert.models` 接受上下文。未指定的类：对 `withContext` 和 `fromDot` 而言是默认类，对 `graph.with` 而言是该图当前使用的类。
+模型套件（model kit）是一组相互配合的模型类，以及用它们创建模型的操作。`createModelKit(classes)` 创建一个套件，`defaultModelKit` 是默认类的套件。`withModelKit(classes)` 返回用套件创建的工厂函数（`digraph`、`graph`、`strict.digraph`、`strict.graph`）；`graph.with(classes)` 设置图的类；`fromDot` 和 `fromDotAll` 通过 `convert.models` 接受这些类。未指定的类：对 `createModelKit`、`withModelKit` 和 `fromDot` 而言是默认类，对 `graph.with` 而言是该图当前使用的类。
 
 ```typescript
-import { Node, withContext } from 'ts-graphviz';
+import { Node, withModelKit } from 'ts-graphviz';
 
 class MyNode extends Node {}
 
-const { digraph } = withContext({ Node: MyNode });
+const { digraph } = withModelKit({ Node: MyNode });
 digraph((g) => {
   g.node('a'); // MyNode 的 DSL
 });
 ```
 
+套件的 `createDigraph`、`createGraph`、`createSubgraph`、`createNode` 和 `createEdge` 只负责创建：返回的模型在被添加之前不属于任何图。
+
+```typescript
+import { createModelKit, Node } from 'ts-graphviz';
+
+class MyNode extends Node {}
+
+const kit = createModelKit({ Node: MyNode });
+const G = kit.createDigraph('G');
+const a = kit.createNode('a'); // MyNode，尚未加入任何图
+const b = kit.createNode('b');
+G.addNode(a);
+G.addNode(b);
+G.addEdge(kit.createEdge([a, b])); // 只添加边
+```
+
 `legacyModels`（`LegacyGraph`、`LegacyDigraph`、`LegacySubgraph`）是 3.x 的类，会把所有默认属性语句合并为每个图一组默认值；`ts-graphviz/legacy` 的所有工厂函数都使用它们（参见 [DOT 的语句顺序](./01-dot-dsl.md#dot-的语句顺序)）。它们已弃用，将在 v5 中移除。
 
-自定义类、带类型的上下文和类型扩展，请参阅[扩展 ts-graphviz](./05-extending-ts-graphviz.md)。
+自定义类、带类型的套件和类型扩展，请参阅[扩展 ts-graphviz](./05-extending-ts-graphviz.md)。
