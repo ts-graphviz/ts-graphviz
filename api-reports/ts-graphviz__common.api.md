@@ -745,14 +745,14 @@ export declare namespace DirType {
 }
 
 export interface DotConstructor<D extends ReadonlyDotModel = DotModel, S extends Schema = EmptySchema> {
-  new (graphs?: RootGraphModel<ModelTypes<S>>[], comment?: string): D;
+  new (graphs?: RootGraphModel<S>[], comment?: string): D;
 }
 
 export interface DotModel<S extends Schema = EmptySchema> extends HasComment, HasComments<"leading" | "end">, DotObjectModel<"Dot"> {
-  readonly graphs: ReadonlyArray<RootGraphModel<ModelTypes<S>>>;
-  addGraph(graph: RootGraphModel<ModelTypes<S>>): void;
-  existGraph(graph: RootGraphModel<ModelTypes<S>>): boolean;
-  removeGraph(graph: RootGraphModel<ModelTypes<S>>): void;
+  readonly graphs: ReadonlyArray<RootGraphModel<S>>;
+  addGraph(graph: RootGraphModel<S>): void;
+  existGraph(graph: RootGraphModel<S>): boolean;
+  removeGraph(graph: RootGraphModel<S>): void;
 }
 
 export interface DotObjectModel<T extends DotObjectType = DotObjectType> {
@@ -767,7 +767,7 @@ export type Double = number;
 
 export type DoubleList = Double | `${Double}:${Double}` | `${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
 
-export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_INVALID_COMMENT", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NO_MODELS_CONTEXT", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_NOT_A_MODEL_KIT", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
+export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_INVALID_COMMENT", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_NOT_A_MODEL_KIT", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
 
 export type EdgeAttributeKey = EdgeAttributeKey.values;
 export declare namespace EdgeAttributeKey {
@@ -820,33 +820,28 @@ export declare namespace GraphAttributeKey {
 
 export type GraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<GraphAttributeKey, SchemaAttributeTypes<S, "graph">>;
 
-export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K extends AttributeKey = AttributeKey, M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> extends HasComment, HasComments<CommentPosition>, Attributes<K, GraphSchemaAttributeTypes<T, S>>, DotObjectModel<T> {
+export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K extends AttributeKey = AttributeKey, S extends Schema = EmptySchema> extends HasComment, HasComments<CommentPosition>, Attributes<K, GraphSchemaAttributeTypes<T, S>>, DotObjectModel<T> {
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
-  readonly nodes: ReadonlyArray<M["Node"]>;
-  readonly edges: ReadonlyArray<M["Edge"]>;
-  readonly subgraphs: ReadonlyArray<M["Subgraph"]>;
-  readonly statements: ReadonlyArray<M["Node"] | M["Edge"] | M["Subgraph"] | StatementAttributeListModel<S>>;
-  with(models: Partial<ModelClasses<ModelTypes<S>>>): void;
+  readonly nodes: ReadonlyArray<NodeModel<S>>;
+  readonly edges: ReadonlyArray<EdgeModel<S>>;
+  readonly subgraphs: ReadonlyArray<SubgraphModel<S>>;
+  readonly statements: ReadonlyArray<NodeModel<S> | EdgeModel<S> | SubgraphModel<S> | StatementAttributeListModel<S>>;
   addNode(node: NodeModel<S>): void;
   addEdge(edge: EdgeModel<S>): void;
-  addSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): void;
+  addSubgraph(subgraph: SubgraphModel<S>): void;
   addAttributeList(kind: "Graph", attributes: AttributeListAttributes<S, "Graph">): GraphCommonAttributes<S>["graph"];
   addAttributeList(kind: "Node", attributes: AttributeListAttributes<S, "Node">): GraphCommonAttributes<S>["node"];
   addAttributeList(kind: "Edge", attributes: AttributeListAttributes<S, "Edge">): GraphCommonAttributes<S>["edge"];
   addAttributeList(kind: AttributeListKind, attributes: AttributeListAttributes<S>): StatementAttributeListModel<S>;
   existNode(nodeId: string): boolean;
   existEdge(edge: EdgeModel<S>): boolean;
-  existSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): boolean;
+  existSubgraph(subgraph: SubgraphModel<S>): boolean;
   removeNode(node: NodeModel<S> | string): void;
   removeEdge(edge: EdgeModel<S>): void;
-  removeSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): void;
-  createNode(id: string, attributes?: NodeAttributesObject<S>): M["Node"];
-  createSubgraph<const Id extends string | undefined = undefined>(id?: Id, attributes?: SubgraphAttributesFor<Id, S>): M["Subgraph"];
-  createSubgraph(attributes?: NonClusterSubgraphAttributesObject<S>): M["Subgraph"];
-  getSubgraph(id: string): M["Subgraph"] | undefined;
-  getNode(id: string): M["Node"] | undefined;
-  createEdge(targets: ReadonlyEdgeTargetLikeTuple, attributes?: EdgeAttributesObject<S>): M["Edge"];
+  removeSubgraph(subgraph: SubgraphModel<S>): void;
+  getSubgraph(id: string): SubgraphModel<S> | undefined;
+  getNode(id: string): NodeModel<S> | undefined;
 }
 
 export interface GraphCommonAttributes<S extends Schema = EmptySchema> {
@@ -999,9 +994,9 @@ export type ModelOf<T> = T extends ModelView<infer U> ? U : T;
 export interface ModelTypes<S extends Schema = EmptySchema> {
   Schema: S;
   Dot: DotModel<S>;
-  Graph: RootGraphModel<ModelTypes<S>>;
-  Digraph: RootGraphModel<ModelTypes<S>>;
-  Subgraph: SubgraphModel<ModelTypes<S>>;
+  Graph: RootGraphModel<S>;
+  Digraph: RootGraphModel<S>;
+  Subgraph: SubgraphModel<S>;
   Node: NodeModel<S>;
   Edge: EdgeModel<S>;
 }
@@ -1186,13 +1181,13 @@ export interface ResolvedModelTypes<P extends Partial<ModelClasses> = Record<nev
   } ? Creates<C, DotModel> : DotModel;
   Graph: P extends {
     Graph: infer C;
-  } ? Creates<C, RootGraphModel> : RootGraphModel<ResolvedModelTypes<P>>;
+  } ? Creates<C, RootGraphModel> : RootGraphModel;
   Digraph: P extends {
     Digraph: infer C;
-  } ? Creates<C, RootGraphModel> : RootGraphModel<ResolvedModelTypes<P>>;
+  } ? Creates<C, RootGraphModel> : RootGraphModel;
   Subgraph: P extends {
     Subgraph: infer C;
-  } ? Creates<C, SubgraphModel> : SubgraphModel<ResolvedModelTypes<P>>;
+  } ? Creates<C, SubgraphModel> : SubgraphModel;
   Node: P extends {
     Node: infer C;
   } ? Creates<C, NodeModel> : NodeModel;
@@ -1208,7 +1203,7 @@ export interface RootGraphConstructor<G extends ReadonlyRootGraphModel = RootGra
   new (attributes?: GraphAttributesObject<S>): G;
 }
 
-export interface RootGraphModel<M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> extends GraphBaseModel<"Graph", GraphAttributeKey, M, S> {
+export interface RootGraphModel<S extends Schema = EmptySchema> extends GraphBaseModel<"Graph", GraphAttributeKey, S> {
   directed: boolean;
   strict: boolean;
 }
@@ -1318,7 +1313,7 @@ export interface SubgraphConstructor<G extends ReadonlySubgraphModel = SubgraphM
   new (attributes?: SubgraphAttributesObject<S>): G;
 }
 
-export interface SubgraphModel<M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> extends GraphBaseModel<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, M, S> {
+export interface SubgraphModel<S extends Schema = EmptySchema> extends GraphBaseModel<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, S> {
   isSubgraphCluster(): boolean;
 }
 
