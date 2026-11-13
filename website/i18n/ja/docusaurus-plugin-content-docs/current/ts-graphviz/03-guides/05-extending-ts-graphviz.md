@@ -65,13 +65,12 @@ digraph "G" {
 */
 ```
 
-### モデルコンテキスト API (`with` メソッド)
+### カスタムクラスのキット (`createModelKit`)
 
-**モデルコンテキスト API** を使用して、グラフ内で生成されるオブジェクトのカスタムクラスを作成することもできます。
-`Digraph`、`Graph`、および `Subgraph` の `with` メソッドを使用すると、カスタムモデルを事前に定義できます。
+モデルキットは、渡したクラスからモデルを作ります。`createModelKit` はカスタムクラスを受け取り、残りには既定のクラスを使います。
 
 ```typescript
-import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
+import { createModelKit, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
 
 class MyCustomNode extends Node {
   constructor(id: string) {
@@ -89,15 +88,17 @@ class MyCustomEdge extends Edge {
   }
 }
 
-const g = new Digraph();
-g.with({
+const kit = createModelKit({
   Node: MyCustomNode,
   Edge: MyCustomEdge,
 });
 
-const a = g.createNode('A'); // MyCustomNode のインスタンス
-const b = g.createNode('B'); // MyCustomNode のインスタンス
-g.createEdge([a, b]);        // MyCustomEdge のインスタンス
+const g = kit.createDigraph();
+const a = kit.createNode('A'); // MyCustomNode のインスタンス
+const b = kit.createNode('B'); // MyCustomNode のインスタンス
+g.addNode(a);
+g.addNode(b);
+g.addEdge(kit.createEdge([a, b])); // MyCustomEdge のインスタンス
 
 const dot = toDot(g);
 console.log(dot);

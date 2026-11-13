@@ -27,7 +27,6 @@ Every error ts-graphviz raises on purpose is the standard error type that fits t
 | `fromDot` on an AST node without a model | `TypeError` | `TSG_ERR_UNCONVERTIBLE_AST` |
 | `fromDot` on a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` |
 | `fromDot` on a source with several graphs (use `fromDotAll`) | `Error` | `TSG_ERR_MULTIPLE_GRAPHS` |
-| `GraphBase` subclass without model classes | `Error` | `TSG_ERR_NO_MODELS_CONTEXT` |
 | adapter used in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
 | Graphviz command failed | `CommandExecutionError` (an `Error`) | `TSG_ERR_COMMAND_FAILED` |
 | Graphviz output exceeds `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |

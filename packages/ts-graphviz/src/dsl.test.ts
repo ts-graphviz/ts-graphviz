@@ -78,7 +78,7 @@ describe('DOT statements', () => {
     });
 
     test('gives the node there is, with the attributes applied', () => {
-      const created = dsl(modelOf(g).createNode('foo'));
+      const created = g.node('foo');
       const kit = spyKit();
       const node = dsl(modelOf(g), kit).node('foo', { label: 'Test label' });
       expect(kit.createNode).not.toHaveBeenCalled();
@@ -106,7 +106,7 @@ describe('DOT statements', () => {
   describe('edge', () => {
     let nodes: EdgeTargetTuple;
     beforeEach(() => {
-      nodes = [modelOf(g).createNode('foo'), modelOf(g).createNode('bar')];
+      nodes = [modelOf(g.node('foo')), modelOf(g.node('bar'))];
     });
 
     test('creates an edge with the kit and adds it', () => {
@@ -164,7 +164,7 @@ describe('DOT statements', () => {
     });
 
     test('gives the subgraph there is with this id', () => {
-      const created = dsl(modelOf(g).createSubgraph('cluster_foo'));
+      const created = g.subgraph('cluster_foo');
       const kit = spyKit();
       const subgraph = dsl(modelOf(g), kit).subgraph('cluster_foo', {
         label: 'Test label',
@@ -775,7 +775,9 @@ describe('custom models', () => {
   test('a class’s own node() is reached on the model', () => {
     class Custom extends Digraph {
       node(id: string) {
-        return this.createNode(`custom-${id}`);
+        const node = new Node(`custom-${id}`);
+        this.addNode(node);
+        return node;
       }
     }
     const g = dsl(new Custom());
@@ -792,7 +794,7 @@ describe('node references', () => {
     expect(isNodeRef(modelOf(a))).toBe(true);
     expect(toNodeRef(a as never)).toBe(modelOf(a));
     expect(toNodeRefGroup([a, 'b'] as never)[0]).toBe(modelOf(a));
-    const raw = modelOf(g).createEdge([[a, 'b'], a] as never);
+    const raw = defaultModelKit.createEdge([[a, 'b'], a] as never);
     expect(raw.targets).toStrictEqual([
       [modelOf(a), { id: 'b', port: undefined }],
       modelOf(a),

@@ -1,6 +1,12 @@
 import { stringify } from '@ts-graphviz/ast';
 import { isTsGraphvizError, withCode } from '@ts-graphviz/common';
-import { Digraph, LegacyDigraph, Node } from '@ts-graphviz/core';
+import {
+  createModelKit,
+  Digraph,
+  defaultModelKit,
+  LegacyDigraph,
+  Node,
+} from '@ts-graphviz/core';
 import { renderHTMLLike } from '@ts-graphviz/react';
 import { createElement } from 'react';
 import { describe, expect, it } from 'vitest';
@@ -29,14 +35,10 @@ describe('lookups read own properties only', { tags: ['SM-8'] }, () => {
     ).toBe(true);
   });
 
-  it('GraphBase.with takes only the classes it is given', () => {
+  it('createModelKit takes only the classes it is given', () => {
     class Extra extends Node {}
-    const g = new Digraph();
-    withInherited('Node', Extra, () => g.with({}));
-    expect(g.createNode('a')).not.toBeInstanceOf(Extra);
-    // Whether the context is complete or not, it inherits nothing.
-    const { models } = g as unknown as { models: object };
-    expect(Object.getPrototypeOf(models)).toBeNull();
+    const kit = withInherited('Node', Extra, () => createModelKit({}));
+    expect(kit.createNode('a')).not.toBeInstanceOf(Extra);
   });
 
   it('renderHTMLLike knows only its own element names', () => {
@@ -57,7 +59,7 @@ describe('attribute list kinds', () => {
   it('addAttributeList takes only Graph, Node and Edge', () => {
     for (const g of [new Digraph(), new LegacyDigraph()]) {
       // The ordered graph keeps a list in place once it has a statement.
-      g.createNode('a');
+      g.addNode(defaultModelKit.createNode('a'));
       expect(() =>
         g.addAttributeList('node []; extra [label="x"]; node' as never, {}),
       ).toThrow(coded);

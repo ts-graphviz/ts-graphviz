@@ -32,7 +32,7 @@ TypeScript reports most other changes, but these three still compile, so search 
 | `node.attributes.delete('label')` | `delete node.label` or `node.label = undefined` |
 | `g.attributes.node.set('shape', 'box')` | `g.node({ shape: 'box' })` (before the other statements) |
 | `node.port('p')` | `node.port('p')` (unchanged) |
-| `g.nodes`, `g.getNode('a')`, `g.createNode('a')`, `g.addNode(n)` | `modelOf(g).nodes`, `modelOf(g).getNode('a')`, …: models, not DSLs (`dsl(m)` gives a model's DSL) |
+| `g.nodes`, `g.getNode('a')`, `g.addNode(n)` | `modelOf(g).nodes`, `modelOf(g).getNode('a')`, …: models, not DSLs (`dsl(m)` gives a model's DSL) |
 | your class's own methods, `g.myMethod()` | `modelOf(g).myMethod()` |
 | `new Digraph().node('a')`, `fromDot(src).node('a')` | `dsl(new Digraph()).node('a')`, `fromDot(src, { dsl: true }).node('a')` |
 | a custom class overriding `node()` / `edge()` | give the kit your classes to change what is created, or override `addNode` / `addEdge` / `addSubgraph`, which the DSL calls with what the kit created; your `node()` is `modelOf(g).node()` |
@@ -96,7 +96,6 @@ try {
 | `fromDot` given an AST node that has no model | `TypeError` | `TSG_ERR_UNCONVERTIBLE_AST` |
 | `fromDot` of a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` |
 | `fromDot` of a source with several graphs | `Error` | `TSG_ERR_MULTIPLE_GRAPHS` |
-| a `GraphBase` subclass without model classes | `Error` | `TSG_ERR_NO_MODELS_CONTEXT` |
 | adapter in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
 | Graphviz command failed | `CommandExecutionError` (`Error`) | `TSG_ERR_COMMAND_FAILED` |
 | Graphviz output over `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
@@ -119,14 +118,22 @@ Code that matched on `error.message` should match on `error.code`.
   | `withContext(...)` | `withModelKit(...)` |
 
 - A kit creates with `createDigraph`, `createGraph`, `createSubgraph`, `createNode` and `createEdge`. They only create: what they return is in no graph until you add it (`addNode`, `addEdge`, `addSubgraph`), and `createEdge` does not add the nodes its targets refer to.
-- The DSL's statements create with the kit of the DSL and add to the graph, so they no longer call the graph's `createNode`, `createEdge` and `createSubgraph`. `dsl(model)` creates with the default kit whatever classes the graph was made with: pass the kit (`dsl(model, kit)`) to create with other classes. Anything else as the second argument is a `TypeError` with `code: 'TSG_ERR_NOT_A_MODEL_KIT'`.
+- The DSL's statements create with the kit of the DSL and add to the graph. `dsl(model)` creates with the default kit whatever classes the graph was made with: pass the kit (`dsl(model, kit)`) to create with other classes. Anything else as the second argument is a `TypeError` with `code: 'TSG_ERR_NOT_A_MODEL_KIT'`.
 - A kit has a `Dot` class (see section 5); `createModelKit` fills in the classes you leave out.
 - `toModel(ast, { models })` in `@ts-graphviz/ast` now **requires** `models` (the package has no classes of its own): pass `defaultModelKit` or `createModelKit({...})`. `fromDot(source, { convert: { models } })` still takes some of the classes.
 - The constructor types in `ModelClasses` use the real signatures; a custom class whose constructor is incompatible is now a type error instead of a runtime surprise.
-- `graph.with(models)` merges over the graph's current classes instead of replacing it.
-- `DotObject`, the empty base class of the core models, is removed. Instead of `instanceof DotObject`, check the kind of model: the guards (`isNodeModel`, `isRootGraphModel`, …) or `$$type` accept any model of that kind (they look at `$$type` and a few fields, such as a node's `id`, not at every member); use `instanceof Node` and the other core classes where you need an instance of a core class. A class of your own that extended `DotObject` without being a model (no `$$type`) is recognised by neither: check it with `instanceof` your class. Such a class extends nothing now, or the core class it stands for.
+- Graphs hold state only: `createNode`, `createEdge`, `createSubgraph` and `with` are removed from them, along with the `models` member of `GraphBase`. A graph does not know a kit, and holds whatever is added to it.
 
-A direct subclass of `GraphBase` (rare) must override `defaultModels()` or give `with()` all six classes before creating nodes; the core classes do this for you.
+  | 3.x | v4 |
+  | --- | --- |
+  | `g.createNode('a')` | `g.addNode(new Node('a'))`, or `g.node('a')` on the DSL |
+  | `g.createEdge([a, b])` | `g.addEdge(new Edge([a, b]))`, or `g.edge([a, b])` on the DSL |
+  | `g.createSubgraph('s')` | `g.addSubgraph(new Subgraph('s'))`, or `g.subgraph('s')` on the DSL |
+  | `g.with({ Node: MyNode })`, then `g.createNode('a')` | `const kit = createModelKit({ Node: MyNode })`, then `g.addNode(kit.createNode('a'))`; or `withModelKit({ Node: MyNode })` for the DSL |
+
+  The `add*` methods return nothing, so keep the model in a variable where the result of `create*` was used. A `LegacyDigraph` or `LegacyGraph` no longer gives its subgraphs the legacy class: create them with `createModelKit(legacyModels)` or `new LegacySubgraph()`.
+- The graph types take the attribute schema in place of the model types: `GraphBaseModel<T, K, S>`, `RootGraphModel<S>`, `SubgraphModel<S>` and the classes (`Digraph<S>`, `Subgraph<S>`, …). `nodes`, `edges`, `subgraphs` and the lookups are typed by the model interfaces (`NodeModel<S>` and so on) whatever the classes of the kit; the kit and the DSL stay typed by the classes.
+- `DotObject`, the empty base class of the core models, is removed. Instead of `instanceof DotObject`, check the kind of model: the guards (`isNodeModel`, `isRootGraphModel`, …) or `$$type` accept any model of that kind (they look at `$$type` and a few fields, such as a node's `id`, not at every member); use `instanceof Node` and the other core classes where you need an instance of a core class. A class of your own that extended `DotObject` without being a model (no `$$type`) is recognised by neither: check it with `instanceof` your class. Such a class extends nothing now, or the core class it stands for.
 
 ## 5. The `Dot` model and symmetric conversions
 

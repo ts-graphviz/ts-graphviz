@@ -74,22 +74,24 @@ graph.addNode(node2);
 graph.addEdge(edge);
 ```
 
-### Factory Methods
+### Model kits
 
-Graph models provide factory methods to create and automatically add elements:
+A model kit creates the models. `defaultModelKit` creates the classes of this package; what it creates is in no graph until you add it:
 
 ```ts
-import { Digraph } from '@ts-graphviz/core';
+import { defaultModelKit } from '@ts-graphviz/core';
 
 // Create a directed graph
-const graph = new Digraph();
+const graph = defaultModelKit.createDigraph();
 
-// Create and add nodes using factory methods
-const node1 = graph.createNode('node1', { color: 'red' });
-const node2 = graph.createNode('node2', { color: 'blue' });
+// Create the nodes, then add them
+const node1 = defaultModelKit.createNode('node1', { color: 'red' });
+const node2 = defaultModelKit.createNode('node2', { color: 'blue' });
+graph.addNode(node1);
+graph.addNode(node2);
 
-// Create and add an edge using factory method
-graph.createEdge([node1, node2], { label: 'Edge Label' });
+// Create an edge and add it
+graph.addEdge(defaultModelKit.createEdge([node1, node2], { label: 'Edge Label' }));
 ```
 
 ### Composition with Subgraphs
@@ -153,32 +155,30 @@ const node2 = new MyCustomNode('B');
 const edge = new MyCustomEdge([node1, node2]);
 ```
 
-### Model classes of a graph
+### A kit of custom classes
 
-A graph can be told which model classes to use when creating graph element.
-
-This is implemented through the with method on graph models:
+`createModelKit` makes a kit that creates with your classes, and with the default ones for the rest:
 
 ```ts
-import { Digraph, Edge, Node } from '@ts-graphviz/core';
+import { createModelKit, Edge, Node } from '@ts-graphviz/core';
 
 // Custom classes, as in the example above
 class MyCustomNode extends Node {}
 class MyCustomEdge extends Edge {}
 
-// Create a directed graph
-const graph = new Digraph();
-
-// Set up the context with custom classes
-graph.with({
+// A kit with the custom classes
+const kit = createModelKit({
   Node: MyCustomNode,
   Edge: MyCustomEdge
 });
 
-// Now factory methods will use the custom classes
-const nodeA = graph.createNode('A'); // Creates a MyCustomNode
-const nodeB = graph.createNode('B'); // Creates a MyCustomNode
-const edge = graph.createEdge([nodeA, nodeB]); // Creates a MyCustomEdge
+const graph = kit.createDigraph();
+const nodeA = kit.createNode('A'); // Creates a MyCustomNode
+const nodeB = kit.createNode('B'); // Creates a MyCustomNode
+const edge = kit.createEdge([nodeA, nodeB]); // Creates a MyCustomEdge
+graph.addNode(nodeA);
+graph.addNode(nodeB);
+graph.addEdge(edge);
 ```
 
 ### Integration with AST

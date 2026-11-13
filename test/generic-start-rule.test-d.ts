@@ -10,6 +10,7 @@ import {
   type Rule,
 } from '@ts-graphviz/ast';
 import {
+  type DSL,
   type EdgeModel,
   type FromDotOptions,
   fromDot,
@@ -138,10 +139,11 @@ describe('fromDot', () => {
     class MyNode extends Node {
       readonly mine = true;
     }
-    const g = fromDot<{ Node: typeof MyNode }>('digraph { a }', {
+    const g = fromDot<{ Node: typeof MyNode }, true>('digraph { a }', {
       convert: { models: { Node: MyNode } },
+      dsl: true,
     });
-    expectTypeOf(g.createNode('a')).toEqualTypeOf<MyNode>();
+    expectTypeOf(g.node('a')).toEqualTypeOf<DSL<MyNode>>();
   });
 
   it('does not let a type argument claim a rule the call does not use', () => {

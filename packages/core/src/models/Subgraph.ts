@@ -1,43 +1,40 @@
 import type {
-  AnyModelTypes,
   Attributes,
   ClusterSubgraphAttributeKey,
-  ModelClasses,
-  ModelTypes,
-  SchemaOf,
+  EmptySchema,
+  Schema,
   SubgraphAttributeKey,
   SubgraphAttributesObject,
   SubgraphModel,
 } from '@ts-graphviz/common';
-import { lazyDefaultModelKit } from './default-model-kit.js';
 import { GraphBase } from './GraphBase.js';
 
 /**
  * DOT object class representing a subgraph.
  * @group Models
  */
-export class Subgraph<M extends AnyModelTypes = ModelTypes>
+export class Subgraph<S extends Schema = EmptySchema>
   extends GraphBase<
     'Subgraph',
     SubgraphAttributeKey | ClusterSubgraphAttributeKey,
-    M
+    S
   >
-  implements SubgraphModel<M>
+  implements SubgraphModel<S>
 {
   public get $$type(): 'Subgraph' {
     return 'Subgraph';
   }
   public readonly id?: string;
 
-  constructor(id?: string, attributes?: SubgraphAttributesObject<SchemaOf<M>>);
+  constructor(id?: string, attributes?: SubgraphAttributesObject<S>);
 
-  constructor(attributes?: SubgraphAttributesObject<SchemaOf<M>>);
+  constructor(attributes?: SubgraphAttributesObject<S>);
 
   constructor(...args: unknown[]) {
     super();
     this.id = args.find((arg): arg is string => typeof arg === 'string');
     const attributes = args.find(
-      (arg): arg is SubgraphAttributesObject<SchemaOf<M>> =>
+      (arg): arg is SubgraphAttributesObject<S> =>
         typeof arg === 'object' && arg !== null,
     );
     if (attributes !== undefined) {
@@ -54,11 +51,6 @@ export class Subgraph<M extends AnyModelTypes = ModelTypes>
       // Read without the schema: whatever it says, Graphviz reads the value.
       graphvizBool((this as Attributes<'cluster'>).getAttribute('cluster'))
     );
-  }
-
-  /** @hidden */
-  protected override defaultModels(): ModelClasses {
-    return lazyDefaultModelKit();
   }
 }
 

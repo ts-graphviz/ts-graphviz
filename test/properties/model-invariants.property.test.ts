@@ -3,6 +3,7 @@ import {
   createModelKit,
   Digraph,
   Dot,
+  defaultModelKit,
   digraph,
   dsl,
   Edge,
@@ -85,7 +86,8 @@ class CreateNodeCommand implements Command {
   check = () => true;
   run(model: Reference, real: RootGraphModel): void {
     const before = real.getNode(this.id);
-    const node = real.createNode(this.id);
+    const node = defaultModelKit.createNode(this.id);
+    real.addNode(node);
     // createNode always makes a new node; one with the same id is replaced
     // in place (the node keeps its position in `nodes`)
     expect(node).not.toBe(before);
@@ -253,12 +255,13 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
     );
   });
 
-  it('createNode replaces a node with the same id; node() reuses it', () => {
+  it('addNode replaces a node with the same id; node() reuses it', () => {
     fc.assert(
       fc.property(nodeId, (id) => {
         const g = dsl(new Digraph());
         const first = g.node(id);
-        const second = modelOf(g).createNode(id);
+        const second = new Node(id);
+        modelOf(g).addNode(second);
         expect(second).not.toBe(modelOf(first));
         expect(modelOf(g).getNode(id)).toBe(second);
         expect(modelOf(g).nodes).toStrictEqual([second]);
@@ -367,7 +370,7 @@ describe('edge targets', { tags: ['SM-5'] }, () => {
             ...(port !== undefined ? { port } : {}),
             ...(compass !== undefined ? { compass } : {}),
           } as { id: string };
-          const edge = new Digraph().createEdge([target, { id: 'b' }]);
+          const edge = defaultModelKit.createEdge([target, { id: 'b' }]);
           expect(edge.targets[0]).toStrictEqual(target);
         },
       ),
@@ -407,9 +410,11 @@ describe('edge targets', { tags: ['SM-5'] }, () => {
     fc.assert(
       fc.property(nodeId, nodeId, (a, b) => {
         const g = new Digraph();
-        const na = g.createNode(a);
+        const na = defaultModelKit.createNode(a);
+        g.addNode(na);
         const nb = new Node(b);
-        const edge = g.createEdge([na, [nb, { id: 'c' }]]);
+        const edge = defaultModelKit.createEdge([na, [nb, { id: 'c' }]]);
+        g.addEdge(edge);
         expect(edge.targets[0]).toBe(na);
         expect((edge.targets[1] as NodeModel[])[0]).toBe(nb);
       }),
@@ -616,7 +621,7 @@ const attrCommands = [
 describe('attributes', { tags: ['SM-5'] }, () => {
   const holders: [string, () => Holder][] = [
     ['root graph', () => new Digraph() as unknown as Holder],
-    ['subgraph', () => new Digraph().createSubgraph('s') as unknown as Holder],
+    ['subgraph', () => new Subgraph('s') as unknown as Holder],
     ['node', () => new Node('n').attributes as unknown as Holder],
     [
       'edge',

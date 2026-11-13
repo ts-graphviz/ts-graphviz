@@ -3,7 +3,7 @@
 "@ts-graphviz/core": major
 ---
 
-Subgraph attributes are typed by the subgraph's id. Graphviz draws a subgraph as a cluster only when its id starts with `cluster`, in any case (or it has `cluster=true`), and silently ignores attributes that don't apply, so `subgraph(…)` and `createSubgraph(…)` now pick the attribute object from the id (`SubgraphAttributesFor<Id>`, new):
+Subgraph attributes are typed by the subgraph's id. Graphviz draws a subgraph as a cluster only when its id starts with `cluster`, in any case (or it has `cluster=true`), and silently ignores attributes that don't apply, so `subgraph(…)` and a kit's `createSubgraph(…)` now pick the attribute object from the id (`SubgraphAttributesFor<Id>`, new):
 
 - an id starting with `cluster` takes cluster attributes (`ClusterSubgraphAttributesObject`, new): `pencolor`, `bgcolor`, `label`, …;
 - any other id, or no id, takes subgraph attributes (`rank`), or cluster attributes together with `cluster: true` (`NonClusterSubgraphAttributesObject`, new), but not both: `subgraph('row', { rank: 'same', pencolor: 'red' })` is a type error;

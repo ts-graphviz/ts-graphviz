@@ -1,27 +1,15 @@
-import type {
-  AnyModelTypes,
-  ModelClasses,
-  ModelTypes,
-} from '@ts-graphviz/common';
-import { lazyDefaultModelKit } from './default-model-kit.js';
+import type { EmptySchema, Schema } from '@ts-graphviz/common';
 import { RootGraph } from './RootGraph.js';
 
 /**
  * DOT object class representing a digraph.
  *
- * @typeParam M - The model types the graph creates; their schema types
- * the attributes.
+ * @typeParam S - The schema of the graph, which types its attributes and
+ * the models it holds; none by default.
  * @group Models
  */
-export class Digraph<
-  M extends AnyModelTypes = ModelTypes,
-> extends RootGraph<M> {
+export class Digraph<S extends Schema = EmptySchema> extends RootGraph<S> {
   public get directed(): boolean {
     return true;
-  }
-
-  /** @hidden */
-  protected override defaultModels(): ModelClasses {
-    return lazyDefaultModelKit();
   }
 }

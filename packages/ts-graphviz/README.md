@@ -189,15 +189,12 @@ const dot = toDot(digraph);
 // }
 ```
 
-##### Model classes of a graph ( `with` method) 🧅
+##### A kit of custom classes ( `createModelKit` ) 🧅
 
-You can also give a graph the classes to create custom classes for objects generated inside of Graph.
-
-
-The `with` methods of `Digraph`, `Graph`, and `Subgraph`, which are implementations of `GraphBaseModel`, are provided to predefine custom models.
+`createModelKit` makes a model kit that creates with your custom classes, and with the default ones for the rest.
 
 ```typescript
-import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
+import { createModelKit, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
 
 class MyCustomNode extends Node {
   constructor(id: string) {
@@ -215,14 +212,16 @@ class MyCustomEdge extends Edge {
   }
 }
 
-const g = new Digraph();
-g.with({
+const kit = createModelKit({
   Node: MyCustomNode,
   Edge: MyCustomEdge,
 });
-const a = g.createNode('A'); // MyCustomNode
-const b = g.createNode('B'); // MyCustomNode
-g.createEdge([a, b]); // MyCustomEdge
+const g = kit.createDigraph();
+const a = kit.createNode('A'); // MyCustomNode
+const b = kit.createNode('B'); // MyCustomNode
+g.addNode(a);
+g.addNode(b);
+g.addEdge(kit.createEdge([a, b])); // MyCustomEdge
 const dot = toDot(g);
 // digraph {
 //   "node_A" [

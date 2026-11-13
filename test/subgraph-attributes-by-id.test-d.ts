@@ -2,8 +2,8 @@ import {
   attribute as _,
   type ClusterSubgraphAttributesObject,
   type DSL,
+  defaultModelKit,
   digraph,
-  modelOf,
   type NonClusterSubgraphAttributesObject,
   type SubgraphAttributesFor,
   type SubgraphAttributesObject,
@@ -35,18 +35,18 @@ describe('subgraph attributes by id', () => {
     expectTypeOf(
       g.subgraph('cluster_a', { [_.pencolor]: 'red', [_.label]: 'A' }),
     ).toEqualTypeOf<DSL<SubgraphModel>>();
-    modelOf(g).createSubgraph('cluster_b', { bgcolor: 'lightgrey' });
+    defaultModelKit.createSubgraph('cluster_b', { bgcolor: 'lightgrey' });
     // @ts-expect-error rank applies to subgraphs that are not clusters
     g.subgraph('cluster_c', { rank: 'same' });
   });
 
   it('takes subgraph attributes on any other id', () => {
     g.subgraph('row', { rank: 'same' });
-    modelOf(g).createSubgraph('row2', { [_.rank]: 'min' });
+    defaultModelKit.createSubgraph('row2', { [_.rank]: 'min' });
     // @ts-expect-error pencolor applies to clusters
     g.subgraph('not_a_cluster', { pencolor: 'red' });
     // @ts-expect-error label applies to clusters
-    modelOf(g).createSubgraph('not_a_cluster', { label: 'x' });
+    defaultModelKit.createSubgraph('not_a_cluster', { label: 'x' });
     // @ts-expect-error "cluster" must start the id
     g.subgraph('my_cluster', { pencolor: 'red' });
     // @ts-expect-error not even next to a subgraph attribute
@@ -58,7 +58,7 @@ describe('subgraph attributes by id', () => {
   it('takes cluster attributes with cluster: true, on any id or none', () => {
     g.subgraph('domestic_cats', { cluster: true, pencolor: 'red', label: 'x' });
     g.subgraph({ [_.cluster]: true, [_.color]: 'red' });
-    modelOf(g).createSubgraph({ cluster: true, label: 'x' });
+    defaultModelKit.createSubgraph({ cluster: true, label: 'x' });
     // @ts-expect-error rank does not apply once it is a cluster
     g.subgraph('s', { cluster: true, rank: 'same' });
   });
@@ -80,17 +80,17 @@ describe('subgraph attributes by id', () => {
   });
 
   it('treats an explicit undefined id as no id', () => {
-    modelOf(g).createSubgraph(undefined, { rank: 'same' });
-    modelOf(g).createSubgraph(undefined, { cluster: true, label: 'x' });
+    defaultModelKit.createSubgraph(undefined, { rank: 'same' });
+    defaultModelKit.createSubgraph(undefined, { cluster: true, label: 'x' });
     // @ts-expect-error label applies to clusters
-    modelOf(g).createSubgraph(undefined, { label: 'x' });
+    defaultModelKit.createSubgraph(undefined, { label: 'x' });
     const maybe = undefined as string | undefined;
-    modelOf(g).createSubgraph(maybe, { label: 'x', rank: 'same' }); // not known: loose
+    defaultModelKit.createSubgraph(maybe, { label: 'x', rank: 'same' }); // not known: loose
   });
 
   it('applies the same rules to anonymous subgraphs', () => {
     g.subgraph({ rank: 'same' });
-    modelOf(g).createSubgraph({ rank: 'source' });
+    defaultModelKit.createSubgraph({ rank: 'source' });
     // @ts-expect-error label applies to clusters
     g.subgraph({ label: 'x' });
   });
@@ -98,7 +98,7 @@ describe('subgraph attributes by id', () => {
   it('keeps an id known only at run time loose', () => {
     const id: string = `cluster_${Math.random()}`;
     g.subgraph(id, { pencolor: 'red', rank: 'same' });
-    modelOf(g).createSubgraph(id, { label: 'x' });
+    defaultModelKit.createSubgraph(id, { label: 'x' });
   });
 
   it('keeps the calls without attributes', () => {
@@ -107,10 +107,14 @@ describe('subgraph attributes by id', () => {
       DSL<SubgraphModel>
     >();
     expectTypeOf(g.subgraph()).toEqualTypeOf<DSL<SubgraphModel>>();
-    expectTypeOf(modelOf(g).createSubgraph()).toEqualTypeOf<SubgraphModel>();
-    expectTypeOf(modelOf(g).createSubgraph('a')).toEqualTypeOf<SubgraphModel>();
     expectTypeOf(
-      modelOf(g).createSubgraph('cluster_a', { label: 'A' }),
+      defaultModelKit.createSubgraph(),
+    ).toEqualTypeOf<SubgraphModel>();
+    expectTypeOf(
+      defaultModelKit.createSubgraph('a'),
+    ).toEqualTypeOf<SubgraphModel>();
+    expectTypeOf(
+      defaultModelKit.createSubgraph('cluster_a', { label: 'A' }),
     ).toEqualTypeOf<SubgraphModel>();
   });
 });
