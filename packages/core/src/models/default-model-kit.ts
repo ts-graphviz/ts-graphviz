@@ -4,7 +4,6 @@ import type {
   ModelKit,
   NodeAttributesObject,
   ReadonlyEdgeTargetLikeTuple,
-  SubgraphAttributesObject,
 } from '@ts-graphviz/common';
 import { Digraph } from './Digraph.js';
 import { Dot } from './Dot.js';
@@ -46,18 +45,7 @@ export function modelKitOf(classes: ModelClasses): ModelKit {
     // call.
     createDigraph: (...args: []) => created(new Digraph(...args)),
     createGraph: (...args: []) => created(new Graph(...args)),
-    createSubgraph: (...args: unknown[]) => {
-      const id = args.find((arg): arg is string => typeof arg === 'string');
-      const attributes = args.find(
-        (arg): arg is SubgraphAttributesObject =>
-          typeof arg === 'object' && arg !== null,
-      );
-      return created(
-        id === undefined && attributes !== undefined
-          ? new Subgraph(attributes)
-          : new Subgraph(id, attributes),
-      );
-    },
+    createSubgraph: (...args: []) => created(new Subgraph(...args)),
     createNode: (id: string, attributes?: NodeAttributesObject) =>
       new Node(id, attributes),
     createEdge: (

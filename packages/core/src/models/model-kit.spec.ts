@@ -109,10 +109,12 @@ describe('createModelKit', { tags: ['SM-5'] }, () => {
     expect(sub.get('label')).toBe('x');
     expect(kit.createSubgraph({ rank: 'same' }).id).toBeUndefined();
     expect(kit.createSubgraph().id).toBeUndefined();
+    expect(kit.createSubgraph(undefined, { rank: 'min' }).id).toBeUndefined();
     expect(calls).toStrictEqual([
       ['cluster_0', { label: 'x' }],
       [{ rank: 'same' }],
-      [undefined, undefined],
+      [],
+      [undefined, { rank: 'min' }],
     ]);
   });
 
