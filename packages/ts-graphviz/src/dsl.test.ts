@@ -15,6 +15,7 @@ import {
   type ModelKit,
   modelOf,
   type StatementAttributeListModel,
+  type SubgraphAttributesObject,
   toNodeRef,
   toNodeRefGroup,
 } from '@ts-graphviz/common';
@@ -155,7 +156,9 @@ describe('DOT statements', () => {
       expect(modelOf(anonymous)).toBeInstanceOf(Subgraph);
       expect(kit.createSubgraph).toHaveBeenLastCalledWith();
       const named = G.subgraph('cluster_foo', { label: 'Test label' });
-      expect(kit.createSubgraph).toHaveBeenLastCalledWith('cluster_foo');
+      expect(kit.createSubgraph).toHaveBeenLastCalledWith('cluster_foo', {
+        label: 'Test label',
+      });
       expect(G.subgraph({ rank: 'same' }).rank).toBe('same');
       expect(modelOf(g).subgraphs.slice(0, 2)).toStrictEqual([
         modelOf(anonymous),
@@ -687,6 +690,42 @@ describe('custom models', () => {
     // The class's own members are on the model.
     expect((modelOf(a) as MyNode).mine).toBe(true);
     expect((a as unknown as { mine?: unknown }).mine).toBeUndefined();
+  });
+
+  test('a new model gets the attributes of its statement in the constructor', () => {
+    const seen: unknown[][] = [];
+    class MyNode extends Node {
+      constructor(...args: ConstructorParameters<typeof Node>) {
+        super(...args);
+        seen.push(args);
+      }
+    }
+    class MySubgraph extends Subgraph {
+      constructor(...args: (string | SubgraphAttributesObject | undefined)[]) {
+        super(...(args as [string?, SubgraphAttributesObject?]));
+        seen.push(args);
+      }
+    }
+    const g = dsl(
+      new Digraph(),
+      createModelKit({ Node: MyNode, Subgraph: MySubgraph }),
+    );
+    g.node('a', { label: 'A' });
+    g.subgraph('s', { rank: 'same' });
+    g.subgraph({ rank: 'min' });
+    g.subgraph();
+    expect(seen).toEqual([
+      ['a', { label: 'A' }],
+      ['s', { rank: 'same' }],
+      [{ rank: 'min' }],
+      [],
+    ]);
+    // A model the graph already holds takes them as an update.
+    g.node('a', { color: 'red' });
+    g.subgraph('s', { rank: 'max' });
+    expect(seen).toHaveLength(4);
+    expect(g.node('a')).toMatchObject({ label: 'A', color: 'red' });
+    expect(g.subgraph('s')).toMatchObject({ rank: 'max' });
   });
 
   test('default attribute statements keep their place, as in DOT', () => {
