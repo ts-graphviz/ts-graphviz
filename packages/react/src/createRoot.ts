@@ -3,9 +3,9 @@ import type {
   AnyDotObjectModel,
   DotObjectModel,
   FilterableModel,
-  ModelsContext,
+  ModelClasses,
 } from 'ts-graphviz';
-import { createModelsContext, MODEL, modelOf, ownOptions } from 'ts-graphviz';
+import { createModelKit, MODEL, modelOf, ownOptions } from 'ts-graphviz';
 
 import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
@@ -39,9 +39,9 @@ export interface CreateRootOptions<
   container?: Container | { readonly [MODEL]: Container };
   /**
    * Model classes used to create graphs, nodes and edges.
-   * Defaults to the classes registered in `RootModelsContext`.
+   * The default classes are used for the kinds left out.
    */
-  models?: Partial<ModelsContext>;
+  models?: Partial<ModelClasses>;
   /**
    * Called when an error is not caught by any error boundary. `render()`
    * also rejects with it.
@@ -322,7 +322,7 @@ export function createRoot<
 
   const context: Context<Container> = {
     container,
-    models: createModelsContext(models ?? {}),
+    models: createModelKit(models ?? {}),
   };
   // The host config adds the models at commit and lists the rendered ones.
   const containerInfo: RenderContainer<Container> = {

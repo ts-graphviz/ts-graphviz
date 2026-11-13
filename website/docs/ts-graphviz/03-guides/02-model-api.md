@@ -11,7 +11,7 @@ Every DSL stands for a model of the DOM: `modelOf(dsl)` gives it, and `dsl(model
 
 ## Building a graph
 
-A graph creates its contents with `createNode`, `createEdge` and `createSubgraph`, using the classes of its models context:
+A graph creates its contents with `createNode`, `createEdge` and `createSubgraph`, using its model classes (see [Model kits](#model-kits)):
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';
@@ -115,7 +115,7 @@ The 3.x names (`get`, `set`, `delete`, `apply`, `clear`, `values`, `size`, and a
 
 ## Default attribute statements
 
-As in DOT, a default attribute statement applies only to what follows it (the deprecated `legacyModels` classes merge every one into the leading defaults instead; see [Models contexts](#models-contexts)). `addAttributeList` adds one and returns its list, which you can keep to change those defaults later:
+As in DOT, a default attribute statement applies only to what follows it (the deprecated `legacyModels` classes merge every one into the leading defaults instead; see [Model kits](#model-kits)). `addAttributeList` adds one and returns its list, which you can keep to change those defaults later:
 
 ```typescript
 import { Digraph, toDot } from 'ts-graphviz';
@@ -175,21 +175,37 @@ const nodes = modelOf(G).statements.filter(isNodeModel);
 console.log(nodes.length); // 1
 ```
 
-## Models contexts
+## Model kits
 
-A models context is the set of classes a graph creates its contents with. `withContext(models)` gives factories (`digraph`, `graph`, `strict.digraph`, `strict.graph`) of a context; `graph.with(models)` sets the context of a graph; `fromDot` and `fromDotAll` take one as `convert.models`. A class left out is the default one for `withContext` and `fromDot`, and the graph's current one for `graph.with`.
+A model kit is a set of model classes that fit together, and the operations that create models from them. `createModelKit(classes)` makes one, and `defaultModelKit` is the kit of the default classes. `withModelKit(classes)` gives factories (`digraph`, `graph`, `strict.digraph`, `strict.graph`) that create with a kit; `graph.with(classes)` sets the classes of a graph; `fromDot` and `fromDotAll` take the classes as `convert.models`. A class left out is the default one for `createModelKit`, `withModelKit` and `fromDot`, and the graph's current one for `graph.with`.
 
 ```typescript
-import { Node, withContext } from 'ts-graphviz';
+import { Node, withModelKit } from 'ts-graphviz';
 
 class MyNode extends Node {}
 
-const { digraph } = withContext({ Node: MyNode });
+const { digraph } = withModelKit({ Node: MyNode });
 digraph((g) => {
   g.node('a'); // the DSL of a MyNode
 });
 ```
 
+A kit's `createDigraph`, `createGraph`, `createSubgraph`, `createNode` and `createEdge` only create: what they return is in no graph until you add it.
+
+```typescript
+import { createModelKit, Node } from 'ts-graphviz';
+
+class MyNode extends Node {}
+
+const kit = createModelKit({ Node: MyNode });
+const G = kit.createDigraph('G');
+const a = kit.createNode('a'); // a MyNode, in no graph yet
+const b = kit.createNode('b');
+G.addNode(a);
+G.addNode(b);
+G.addEdge(kit.createEdge([a, b])); // adds the edge only
+```
+
 `legacyModels` (`LegacyGraph`, `LegacyDigraph`, `LegacySubgraph`) are the 3.x classes, which merge every default attribute statement into one set of defaults per graph; `ts-graphviz/legacy` uses them for every factory (see [DOT's statement order](./01-dot-dsl.md#dots-statement-order)). They are deprecated and removed in v5.
 
-Custom classes, typed contexts and type extensions are covered in [Extending ts-graphviz](./05-extending-ts-graphviz.md).
+Custom classes, typed kits and type extensions are covered in [Extending ts-graphviz](./05-extending-ts-graphviz.md).

@@ -1,5 +1,5 @@
 import { isTsGraphvizError } from '@ts-graphviz/common';
-import { defaultModelsContext } from '@ts-graphviz/core';
+import { defaultModelKit } from '@ts-graphviz/core';
 import { describe, expect, it } from 'vitest';
 import { parse } from '../../dot-shim/parser/parse.js';
 import type { DotASTNode } from '../../types.js';
@@ -13,7 +13,7 @@ const reopened = (edges: number) =>
   ) as DotASTNode;
 
 const convert = (ast: DotASTNode, maxEdgeTargets?: number) =>
-  toModel(ast, { models: defaultModelsContext(), maxEdgeTargets });
+  toModel(ast, { models: defaultModelKit, maxEdgeTargets });
 
 describe('maxEdgeTargets', { tags: ['SM-1'] }, () => {
   it('stops edges to a reopened subgraph from growing without bound', () => {

@@ -3,7 +3,7 @@ import {
   type FromDotOptions,
   fromDot,
   fromDotAll,
-  type ModelsContext,
+  type ModelClasses,
   Node,
   type NodeModel,
 } from 'ts-graphviz';
@@ -52,7 +52,7 @@ describe('fromDot', () => {
   it('takes dsl from the type of options held in a variable', () => {
     const model: FromDotOptions<'Node'> = { parse: { as: 'Node' } };
     expectTypeOf(fromDot('a', model)).toEqualTypeOf<NodeModel>();
-    const view: FromDotOptions<'Node', Partial<ModelsContext>, true> = {
+    const view: FromDotOptions<'Node', Partial<ModelClasses>, true> = {
       parse: { as: 'Node' },
       dsl: true,
     };
@@ -69,7 +69,7 @@ describe('fromDot', () => {
     // @ts-expect-error a DSL needs dsl: true
     ({ parse: { as: 'Node' } }) satisfies FromDotOptions<
       'Node',
-      Partial<ModelsContext>,
+      Partial<ModelClasses>,
       true
     >;
   });

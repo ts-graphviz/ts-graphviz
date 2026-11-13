@@ -161,7 +161,7 @@ digraph('G', (g) => {
 自定义类的成员同样在模型上：
 
 ```typescript
-import { Edge, modelOf, withContext } from 'ts-graphviz';
+import { Edge, modelOf, withModelKit } from 'ts-graphviz';
 
 class MyEdge extends Edge {
   cost() {
@@ -169,7 +169,7 @@ class MyEdge extends Edge {
   }
 }
 
-const { digraph } = withContext({ Edge: MyEdge });
+const { digraph } = withModelKit({ Edge: MyEdge });
 digraph((g) => {
   const e = g.edge(['a', 'b']);
   console.log(modelOf(e).cost()); // 1

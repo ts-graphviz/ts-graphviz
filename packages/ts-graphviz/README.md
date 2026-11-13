@@ -189,9 +189,9 @@ const dot = toDot(digraph);
 // }
 ```
 
-##### Models Context API ( `with` method) 🧅
+##### Model classes of a graph ( `with` method) 🧅
 
-You can also use the _Models Context API_ to create custom classes for objects generated inside of Graph.
+You can also give a graph the classes to create custom classes for objects generated inside of Graph.
 
 
 The `with` methods of `Digraph`, `Graph`, and `Subgraph`, which are implementations of `GraphBaseModel`, are provided to predefine custom models.
@@ -354,17 +354,17 @@ const dot = toDot(G);
 <details>
 <summary>Advanced Usage</summary>
 
-##### Models Context API ( `withContext` function ) 💈
+##### Model Kit ( `withModelKit` function ) 💈
 
 
-The `withContext` function returns a _Model Factory_ function.
+The `withModelKit` function returns a _Model Factory_ function.
 
 This _Model Factory_ provides a means to replace `RootGraphModel` with a custom class, such as `Digraph` or `Graph`.
 
 This API provides a way to integrate declarative APIs and custom classes.
 
 ```typescript
-import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot, withContext } from 'ts-graphviz';
+import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot, withModelKit } from 'ts-graphviz';
 
 class MyCustomDigraph extends Digraph {
   constructor() {
@@ -390,7 +390,7 @@ class MyCustomEdge extends Edge {
   }
 }
 
-const { digraph } = withContext({
+const { digraph } = withModelKit({
   Digraph: MyCustomDigraph,
   Node: MyCustomNode,
   Edge: MyCustomEdge,

@@ -1,6 +1,6 @@
 ---
 description: |-
-  Upgrade your ts-graphviz project from v3 to v4. Learn how attribute values became explicit (literal text, escString, htmlLike), how errors are reported with stable codes, how the models context and the Dot model changed, and what changed in the AST, adapter and React packages.
+  Upgrade your ts-graphviz project from v3 to v4. Learn how attribute values became explicit (literal text, escString, htmlLike), how errors are reported with stable codes, how the models context became the model kit, how the Dot model changed, and what changed in the AST, adapter and React packages.
 ---
 # Migration from v3 to v4
 
@@ -10,7 +10,7 @@ Requirements: **Node.js 22 or later** (Node.js 20 reached end of life) and, for 
 
 ## 1. The factories give the DOT DSL
 
-`digraph()`, `graph()`, `strict.*` and `withContext().*` give the graph's **DOT DSL** instead of the model, and so do the callbacks and everything you reach from a DSL. The DSL has DOT's words only: the statements `node`, `edge`, `subgraph` and `graph` are methods, **attributes are properties under their own names**, and besides those it has `addComment`, a node's `port` and `$$type`. **The model's other members are on the model**, which `modelOf(x)` gives. The models only hold the data (`node()`, `edge()`, `subgraph()` and `graph()` are no longer model methods).
+`digraph()`, `graph()`, `strict.*` and `withModelKit().*` give the graph's **DOT DSL** instead of the model, and so do the callbacks and everything you reach from a DSL. The DSL has DOT's words only: the statements `node`, `edge`, `subgraph` and `graph` are methods, **attributes are properties under their own names**, and besides those it has `addComment`, a node's `port` and `$$type`. **The model's other members are on the model**, which `modelOf(x)` gives. The models only hold the data (`node()`, `edge()`, `subgraph()` and `graph()` are no longer model methods).
 
 **Names whose meaning changed.** On a DSL, `id`, `comment` and `size` are the Graphviz attributes of those names; the model's members of those names are on `modelOf(x)`:
 
@@ -96,7 +96,7 @@ try {
 | `fromDot` given an AST node that has no model | `TypeError` | `TSG_ERR_UNCONVERTIBLE_AST` |
 | `fromDot` of a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` |
 | `fromDot` of a source with several graphs | `Error` | `TSG_ERR_MULTIPLE_GRAPHS` |
-| a `GraphBase` subclass without a models context | `Error` | `TSG_ERR_NO_MODELS_CONTEXT` |
+| a `GraphBase` subclass without model classes | `Error` | `TSG_ERR_NO_MODELS_CONTEXT` |
 | adapter in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
 | Graphviz command failed | `CommandExecutionError` (`Error`) | `TSG_ERR_COMMAND_FAILED` |
 | Graphviz output over `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
@@ -105,19 +105,27 @@ try {
 
 Code that matched on `error.message` should match on `error.code`.
 
-## 4. Model classes: no more `RootModelsContext` / `registerDefault`
+## 4. Model classes: `ModelKit` replaces `ModelsContext`
 
 3.x filled a shared `RootModelsContext` object when `ts-graphviz` was imported, which made `@ts-graphviz/core` and `@ts-graphviz/ast` depend on import order. In v4:
 
-- `@ts-graphviz/core` exports `defaultModelsContext()` and `createModelsContext(partial)`. `registerDefault()` and `RootModelsContext` are gone; nothing mutates shared state on import. `createModelsContext` moved: import it from `@ts-graphviz/core` (or `ts-graphviz`), not `@ts-graphviz/common`.
-- `ModelsContext` has a `Dot` constructor (see section 5); a context written out by hand must supply it, or be built with `createModelsContext`.
-- `withContext({ Node: MyNode })` in `ts-graphviz` is unchanged.
-- `toModel(ast, { models })` in `@ts-graphviz/ast` now **requires** `models` (the package has no classes of its own): pass `defaultModelsContext()` or `createModelsContext({...})`. `fromDot(source, { convert: { models } })` still takes a partial context.
-- The constructor types in `ModelsContext` use the real signatures; a custom class whose constructor is incompatible is now a type error instead of a runtime surprise.
-- `graph.with(models)` merges over the graph's current context instead of replacing it.
+- A set of model classes is now a **model kit**: the classes, and the operations that create models from them.
+
+  | 3.x | v4 |
+  | --- | --- |
+  | `ModelsContext` | `ModelKit` (`ModelClasses` for the classes alone) |
+  | `createModelsContext(...)` of `@ts-graphviz/common` | `createModelKit(...)` of `@ts-graphviz/core` (or `ts-graphviz`) |
+  | `RootModelsContext`, `registerDefault()` | `defaultModelKit` (frozen); nothing mutates shared state on import |
+  | `withContext(...)` | `withModelKit(...)` |
+
+- A kit creates with `createDigraph`, `createGraph`, `createSubgraph`, `createNode` and `createEdge`. They only create: what they return is in no graph until you add it (`addNode`, `addEdge`, `addSubgraph`), and `createEdge` does not add the nodes its targets refer to.
+- A kit has a `Dot` class (see section 5); `createModelKit` fills in the classes you leave out.
+- `toModel(ast, { models })` in `@ts-graphviz/ast` now **requires** `models` (the package has no classes of its own): pass `defaultModelKit` or `createModelKit({...})`. `fromDot(source, { convert: { models } })` still takes some of the classes.
+- The constructor types in `ModelClasses` use the real signatures; a custom class whose constructor is incompatible is now a type error instead of a runtime surprise.
+- `graph.with(models)` merges over the graph's current classes instead of replacing it.
 - `DotObject`, the empty base class of the core models, is removed. Instead of `instanceof DotObject`, check the kind of model: the guards (`isNodeModel`, `isRootGraphModel`, …) or `$$type` accept any model of that kind (they look at `$$type` and a few fields, such as a node's `id`, not at every member); use `instanceof Node` and the other core classes where you need an instance of a core class. A class of your own that extended `DotObject` without being a model (no `$$type`) is recognised by neither: check it with `instanceof` your class. Such a class extends nothing now, or the core class it stands for.
 
-A direct subclass of `GraphBase` (rare) must override `defaultModels()` or call `with()` before creating nodes; the core classes do this for you.
+A direct subclass of `GraphBase` (rare) must override `defaultModels()` or give `with()` all six classes before creating nodes; the core classes do this for you.
 
 ## 5. The `Dot` model and symmetric conversions
 
@@ -258,7 +266,7 @@ digraph((g) => {
   ```
 
   Every default attribute statement of a kind added before any other statement joins these same leading defaults, so it is not a later one that overrides them. On a model, `addAttributeList('Node', {})` does the same, called before any other statement is added. A graph read with `fromDot` already has its statements, so write such defaults first in the DOT source. `graph [...]` is different: written after the graph's own attributes, it overrides them.
-- To keep the 3.x output, import from `ts-graphviz/legacy` (the same API with the 3.x classes), or pass `legacyModels` as the models context (`withContext(legacyModels)`, `fromDot(source, { convert: { models: legacyModels } })`). Both are deprecated and removed in v5.
+- To keep the 3.x output, import from `ts-graphviz/legacy` (the same API with the 3.x classes), or pass `legacyModels` as the model classes (`withModelKit(legacyModels)`, `fromDot(source, { convert: { models: legacyModels } })`). Both are deprecated and removed in v5.
 - `addAttributeList(kind, attributes)` returns the list it adds (the DSL's `g.node({ ... })` returns its DSL); keep it to change those defaults later.
 - `graph.attributes` is deprecated, removed in v5: it is the leading defaults only. Write a default attribute statement instead.
 

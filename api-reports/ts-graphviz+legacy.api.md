@@ -22,7 +22,7 @@ export type EdgeDSL<T extends EdgeModel> = ModelDSLMembers<T> & AttributePropert
 
 export type FromDotModel<R extends FromDotRule, M extends ModelTypes = ModelTypes> = R extends "Dot" | "Graph" ? M["Graph"] | M["Digraph"] : R extends "Node" ? M["Node"] : R extends "Edge" ? M["Edge"] : M["Subgraph"];
 
-export type FromDotOptions<T extends FromDotRule, P extends Partial<ModelsContext> = Partial<ModelsContext>, D extends boolean = false> = {
+export type FromDotOptions<T extends FromDotRule, P extends Partial<ModelClasses> = Partial<ModelClasses>, D extends boolean = false> = {
   parse?: ParseOptions<T>;
   convert?: Omit<ConvertToModelOptions, "models"> & {
     models?: P;
@@ -94,21 +94,21 @@ export declare const digraph: ModelFactory;
 
 export declare function dsl<T extends AnyDotObjectModel>(model: T | ModelView<T>): DSL<T>;
 
-export declare function fromDot<const P extends Partial<ModelsContext>, const D extends boolean = false>(dot: string, options: FromDotOptions<"Dot" | "Graph", P, D> & {
+export declare function fromDot<const P extends Partial<ModelClasses>, const D extends boolean = false>(dot: string, options: FromDotOptions<"Dot" | "Graph", P, D> & {
   convert: {
     models: P;
   };
 }): FromDotResult<ResolvedModelTypes<P>["Graph"] | ResolvedModelTypes<P>["Digraph"], D>;
-export declare function fromDot<const P extends Partial<ModelsContext>, const R extends FromDotRule, const D extends boolean = false>(dot: string, options: FromDotOptions<R, P, D> & {
+export declare function fromDot<const P extends Partial<ModelClasses>, const R extends FromDotRule, const D extends boolean = false>(dot: string, options: FromDotOptions<R, P, D> & {
   convert: {
     models: P;
   };
 }): FromDotResult<FromDotModel<R, ResolvedModelTypes<P>>, D>;
 export declare function fromDot(dot: string, options?: FromDotOptions<"Dot" | "Graph">): RootGraphModel;
-export declare function fromDot<const D extends boolean>(dot: string, options: FromDotOptions<"Dot" | "Graph", Partial<ModelsContext>, D>): FromDotResult<RootGraphModel, D>;
-export declare function fromDot<const R extends FromDotRule, const D extends boolean = false>(dot: string, options: FromDotOptions<R, Partial<ModelsContext>, D>): FromDotResult<FromDotModel<R>, D>;
+export declare function fromDot<const D extends boolean>(dot: string, options: FromDotOptions<"Dot" | "Graph", Partial<ModelClasses>, D>): FromDotResult<RootGraphModel, D>;
+export declare function fromDot<const R extends FromDotRule, const D extends boolean = false>(dot: string, options: FromDotOptions<R, Partial<ModelClasses>, D>): FromDotResult<FromDotModel<R>, D>;
 
-export declare function fromDotAll<const P extends Partial<ModelsContext>, const D extends boolean = false>(dot: string, options: Omit<FromDotOptions<"Dot", P, D>, "parse"> & {
+export declare function fromDotAll<const P extends Partial<ModelClasses>, const D extends boolean = false>(dot: string, options: Omit<FromDotOptions<"Dot", P, D>, "parse"> & {
   parse?: CommonParseOptions;
   convert: {
     models: P;
@@ -117,7 +117,7 @@ export declare function fromDotAll<const P extends Partial<ModelsContext>, const
 export declare function fromDotAll(dot: string, options?: Omit<FromDotOptions<"Dot">, "parse"> & {
   parse?: CommonParseOptions;
 }): RootGraphModel[];
-export declare function fromDotAll<const D extends boolean>(dot: string, options: Omit<FromDotOptions<"Dot", Partial<ModelsContext>, D>, "parse"> & {
+export declare function fromDotAll<const D extends boolean>(dot: string, options: Omit<FromDotOptions<"Dot", Partial<ModelClasses>, D>, "parse"> & {
   parse?: CommonParseOptions;
 }): FromDotResult<RootGraphModel, D>[];
 
@@ -127,7 +127,7 @@ export declare const strict: ModelFactories;
 
 export declare function toDot(input: AnyReadonlyDotObjectModel | ModelView, options?: ToDotOptions): string;
 
-export declare function withContext<const P extends Partial<ModelsContext>>(models: P): ModelFactoriesWithStrict<ResolvedModelTypes<P>>;
+export declare function withModelKit<const P extends Partial<ModelClasses>>(classes: P): ModelFactoriesWithStrict<ResolvedModelTypes<P>>;
 
 // Used by the exports, not exported
 
@@ -139,38 +139,38 @@ declare const strict: ModelFactories;
 
 declare function fromDot(dot: string, options?: FromDotOptions<"Dot" | "Graph">): RootGraphModel;
 
-declare function fromDot<const D extends boolean>(dot: string, options: FromDotOptions<"Dot" | "Graph", Partial<ModelsContext>, D>): FromDotResult<RootGraphModel, D>;
+declare function fromDot<const D extends boolean>(dot: string, options: FromDotOptions<"Dot" | "Graph", Partial<ModelClasses>, D>): FromDotResult<RootGraphModel, D>;
 
-declare function fromDot<const P extends Partial<ModelsContext>, const D extends boolean = false>(dot: string, options: FromDotOptions<"Dot" | "Graph", P, D> & {
+declare function fromDot<const P extends Partial<ModelClasses>, const D extends boolean = false>(dot: string, options: FromDotOptions<"Dot" | "Graph", P, D> & {
   convert: {
     models: P;
   };
 }): FromDotResult<ResolvedModelTypes<P>["Graph"] | ResolvedModelTypes<P>["Digraph"], D>;
 
-declare function fromDot<const P extends Partial<ModelsContext>, const R extends FromDotRule, const D extends boolean = false>(dot: string, options: FromDotOptions<R, P, D> & {
+declare function fromDot<const P extends Partial<ModelClasses>, const R extends FromDotRule, const D extends boolean = false>(dot: string, options: FromDotOptions<R, P, D> & {
   convert: {
     models: P;
   };
 }): FromDotResult<FromDotModel<R, ResolvedModelTypes<P>>, D>;
 
-declare function fromDot<const R extends FromDotRule, const D extends boolean = false>(dot: string, options: FromDotOptions<R, Partial<ModelsContext>, D>): FromDotResult<FromDotModel<R>, D>;
+declare function fromDot<const R extends FromDotRule, const D extends boolean = false>(dot: string, options: FromDotOptions<R, Partial<ModelClasses>, D>): FromDotResult<FromDotModel<R>, D>;
 
 declare function fromDotAll(dot: string, options?: Omit<FromDotOptions<"Dot">, "parse"> & {
   parse?: CommonParseOptions;
 }): RootGraphModel[];
 
-declare function fromDotAll<const D extends boolean>(dot: string, options: Omit<FromDotOptions<"Dot", Partial<ModelsContext>, D>, "parse"> & {
+declare function fromDotAll<const D extends boolean>(dot: string, options: Omit<FromDotOptions<"Dot", Partial<ModelClasses>, D>, "parse"> & {
   parse?: CommonParseOptions;
 }): FromDotResult<RootGraphModel, D>[];
 
-declare function fromDotAll<const P extends Partial<ModelsContext>, const D extends boolean = false>(dot: string, options: Omit<FromDotOptions<"Dot", P, D>, "parse"> & {
+declare function fromDotAll<const P extends Partial<ModelClasses>, const D extends boolean = false>(dot: string, options: Omit<FromDotOptions<"Dot", P, D>, "parse"> & {
   parse?: CommonParseOptions;
   convert: {
     models: P;
   };
 }): FromDotResult<ResolvedModelTypes<P>["Graph"] | ResolvedModelTypes<P>["Digraph"], D>[];
 
-declare function withContext<const P extends Partial<ModelsContext>>(models: P): ModelFactoriesWithStrict<ResolvedModelTypes<P>>;
+declare function withModelKit<const P extends Partial<ModelClasses>>(classes: P): ModelFactoriesWithStrict<ResolvedModelTypes<P>>;
 
 type AttributeKeysOf<T> = T extends {
   readonly values: ReadonlyArray<[infer K, unknown]>;

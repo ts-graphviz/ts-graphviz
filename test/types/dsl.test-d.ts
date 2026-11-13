@@ -3,7 +3,7 @@ import {
   type Attribute,
   type AttributeListDSL,
   type AttributeListModel,
-  createModelsContext,
+  createModelKit,
   Digraph,
   Dot,
   type DotDSL,
@@ -31,7 +31,7 @@ import {
   Subgraph,
   type SubgraphDSL,
   type SubgraphModel,
-  withContext,
+  withModelKit,
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
@@ -305,8 +305,8 @@ describe('custom classes', () => {
     expectTypeOf(modelOf(v).extra()).toEqualTypeOf<string>();
   });
 
-  it('flow through a models context', () => {
-    const { digraph: myDigraph } = withContext({
+  it('flow through a model kit', () => {
+    const { digraph: myDigraph } = withModelKit({
       Node: MyNode,
       Edge: MyEdge,
       Subgraph: MySubgraph,
@@ -327,13 +327,13 @@ describe('custom classes', () => {
         expectTypeOf(modelOf(sub).createNode('b')).toEqualTypeOf<NodeModel>();
       });
     });
-    withContext({ Node: MyNode }).digraph((G) => {
+    withModelKit({ Node: MyNode }).digraph((G) => {
       G.subgraph((sub) => {
         expectTypeOf(sub.node('b')).toEqualTypeOf<DSL<MyNode>>();
         expectTypeOf(modelOf(sub.node('b')).extra()).toEqualTypeOf<string>();
       });
     });
-    const context = createModelsContext({ Node: MyNode });
+    const context = createModelKit({ Node: MyNode });
     expectTypeOf(dsl(new context.Node('a'))).toEqualTypeOf<DSL<MyNode>>();
   });
 });

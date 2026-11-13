@@ -1,9 +1,9 @@
 import type {
   AnyModelTypes,
-  ModelsContext,
+  ModelClasses,
   ModelTypes,
 } from '@ts-graphviz/common';
-import { defaultModelsContext } from './models-context.js';
+import { lazyDefaultModelKit } from './default-model-kit.js';
 import { RootGraph } from './RootGraph.js';
 
 /**
@@ -19,7 +19,7 @@ export class Graph<M extends AnyModelTypes = ModelTypes> extends RootGraph<M> {
   }
 
   /** @hidden */
-  protected override defaultModels(): ModelsContext {
-    return defaultModelsContext();
+  protected override defaultModels(): ModelClasses {
+    return lazyDefaultModelKit();
   }
 }
