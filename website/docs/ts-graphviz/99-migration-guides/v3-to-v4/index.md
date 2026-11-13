@@ -198,7 +198,7 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 - React 19.3 or later is required (`react-reconciler` 0.34).
 - `useDigraph`, `useGraph`, `useSubgraph`, `useNode` and `useEdge` are removed. The components are host elements of the renderer, which adds the models when React commits: render `<Digraph>`, `<Subgraph>`, `<Node>` and `<Edge>`, and get a model through `ref` or, for the enclosing graph, `useCurrentGraph()`.
 - The statements of a graph follow the element tree, also across re-renders (reordered, inserted and removed children), and StrictMode, Suspense or a discarded render no longer adds statements twice or leaves them behind.
-- In container mode, a re-render replaces only the statements the renderer added before; statements the container already had stay first. Models are made by the graph they go to (`createNode` / `createEdge` / `createSubgraph`), so a graph class that overrides them still applies.
+- In container mode, a re-render replaces only the statements the renderer added before; statements the container already had stay first. Models are made by the root's model kit (the `models` option, otherwise the default classes) and added with the graph's `addNode` / `addEdge` / `addSubgraph`; a container's own classes do not decide what is rendered into it.
 - `createRoot` and `renderToDot` take a `models` option.
 - `render()` / `renderToDot()` resolve once the tree has settled, including transitions, deferred values and suspended data. `timeout` is replaced by a per-render `signal` (`AbortSignal.timeout(ms)` for a time limit). Uncaught errors reject with the error itself, and the error callbacks receive `error: unknown`.
 - `<Digraph strict>` / `<Graph strict>` render strict graphs.
