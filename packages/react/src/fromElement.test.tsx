@@ -6,6 +6,7 @@ import { Edge } from './components/Edge.js';
 import { Graph } from './components/Graph.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
+import { createRoot } from './createRoot.js';
 import { fromElement } from './fromElement.js';
 import { elementToDot } from './test-utils/render.js';
 
@@ -206,3 +207,104 @@ describe('fromElement()', () => {
 function Nothing(): null {
   return null;
 }
+
+describe("what a conversion added is the container's own afterwards", () => {
+  const ids = (graph: { nodes: ReadonlyArray<NodeModel> }): string[] =>
+    graph.nodes.map((n) => n.id);
+  const tick = () => new Promise((resolve) => setTimeout(resolve, 10));
+
+  it('stays when the next conversion adds to the same container', async () => {
+    const container = new DigraphModel();
+    await fromElement(<Node id="a" />, { container });
+    await fromElement(
+      <>
+        <Node id="b" />
+        <Edge targets={['a', 'b']} />
+      </>,
+      { container },
+    );
+    expect(ids(container)).toEqual(['a', 'b']);
+    expect(container.edges).toHaveLength(1);
+  });
+
+  it('stays when a conversion that follows is rejected', async () => {
+    const container = new DigraphModel();
+    await fromElement(<Node id="a" />, { container });
+    function Throws(): never {
+      throw new Error('no');
+    }
+    await expect(
+      fromElement(
+        <>
+          <Node id="b" />
+          <Throws />
+        </>,
+        { container },
+      ),
+    ).rejects.toThrow('no');
+    expect(ids(container)).toEqual(['a']);
+  });
+
+  it('is replaced by a node with its id, and comes back when that conversion is rejected', async () => {
+    const container = new DigraphModel();
+    await fromElement(<Node id="a" color="red" />, { container });
+    const [first] = container.nodes;
+    const controller = new AbortController();
+    function Aborts(): null {
+      React.useEffect(() => controller.abort(new Error('stop')), []);
+      return null;
+    }
+    await expect(
+      fromElement(
+        <>
+          <Node id="a" color="blue" />
+          <Aborts />
+        </>,
+        { container, signal: controller.signal },
+      ),
+    ).rejects.toThrow('stop');
+    expect(container.nodes).toEqual([first]);
+  });
+
+  it('stays in a graph a conversion made, used as the container of the next', async () => {
+    const dot = await fromElement(
+      <Digraph>
+        <Node id="a" />
+        <Subgraph id="s">
+          <Node id="in" />
+        </Subgraph>
+      </Digraph>,
+    );
+    const [graph] = dot.graphs;
+    await fromElement(<Node id="b" />, { container: graph });
+    expect(ids(graph)).toEqual(['a', 'b']);
+    expect(ids(graph.subgraphs[0])).toEqual(['in']);
+  });
+
+  it('stays when a root renders into the container, and when the root is unmounted', async () => {
+    const container = new DigraphModel();
+    await fromElement(<Node id="a" />, { container });
+    const root = createRoot({ container });
+    root.render(<Node id="b" />);
+    await tick();
+    expect(ids(container)).toEqual(['a', 'b']);
+    root.unmount();
+    expect(ids(container)).toEqual(['a']);
+  });
+
+  it('two roots on one container each replace what they added themselves', async () => {
+    const container = new DigraphModel();
+    const one = createRoot({ container });
+    const two = createRoot({ container });
+    one.render(<Node id="a" />);
+    two.render(<Node id="b" />);
+    await tick();
+    one.render(<Node id="c" />);
+    await tick();
+    expect(ids(container).sort()).toEqual(['b', 'c']);
+    two.unmount();
+    expect(ids(container)).toEqual(['c']);
+    one.unmount();
+    expect(container.nodes).toHaveLength(0);
+  });
+});

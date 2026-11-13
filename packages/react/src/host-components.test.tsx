@@ -577,6 +577,21 @@ describe('host components', () => {
     expect(container.nodes).toHaveLength(0);
   });
 
+  it('puts back the node of the container a node replaced before the graph threw', async () => {
+    const container = new DigraphModel('C');
+    const own = new CoreNode('a');
+    container.addNode(own);
+    const addNode = container.addNode.bind(container);
+    container.addNode = (node) => {
+      addNode(node);
+      if (node !== own) throw new RangeError('added, then thrown');
+    };
+    await expect(fromElement(<Node id="a" />, { container })).rejects.toThrow(
+      'added, then thrown',
+    );
+    expect(container.nodes).toEqual([own]);
+  });
+
   it('reports an error the kit throws while creating, and leaves nothing behind', async () => {
     class Failing extends CoreNode {
       constructor(id: string) {

@@ -16,7 +16,7 @@ By leveraging JSX, you can express the DOT language models in a more intuitive a
 ## Installation
 
 ```bash npm2yarn
-npm install @ts-graphviz/react react react-dom
+npm install @ts-graphviz/react ts-graphviz react react-dom
 ```
 
 ## Example

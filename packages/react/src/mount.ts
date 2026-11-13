@@ -11,7 +11,7 @@ import {
   type RendererGeneration,
 } from './reconciler.js';
 import type { AnyGraphContainer } from './types/container.js';
-import type { RenderContainer } from './types/reconciler.js';
+import type { AddedStatements, RenderContainer } from './types/reconciler.js';
 
 /**
  * Error information for React error handling
@@ -103,12 +103,21 @@ export class Mount<Container extends AnyGraphContainer = AnyGraphContainer> {
   #reporting = true;
   #rolledBack = false;
 
-  constructor(context: Context<Container>, handlers: MountHandlers) {
+  /**
+   * @param added What the tree added to each graph. The trees of one root
+   * share it: the next one replaces what a lost one left.
+   */
+  constructor(
+    context: Context<Container>,
+    handlers: MountHandlers,
+    added: AddedStatements = new Map(),
+  ) {
     this.#context = context;
     this.#containerInfo = {
       renderedModels: [],
       context,
       children: [],
+      added,
       active: true,
       onCommit: handlers.onCommit,
       onSyncError: (error) => {

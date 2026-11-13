@@ -47,7 +47,7 @@ The module can then be installed using [npm](https://www.npmjs.com/):
 # yarn
 $ yarn add @ts-graphviz/react react@^19
 # or npm
-$ npm install -S @ts-graphviz/react react@^19
+$ npm install -S @ts-graphviz/react ts-graphviz react@^19
 # or pnpm
 $ pnpm add @ts-graphviz/react react@^19
 ```
@@ -776,60 +776,50 @@ The renderer is a secondary renderer of React, so it can be used in a process or
 
 ### Ref as Prop Support
 
-The package supports using `ref` to access and manipulate graph models directly, allowing for dynamic updates and interactions:
+A `ref` gives the model of a component while the tree is mounted, as a ref of React DOM gives the DOM node:
 
-```ts
-import { useRef } from 'react';
-import { Digraph, Graph, Node, Edge, fromElement } from "@ts-graphviz/react";
-import type { NodeModel, EdgeModel, GraphBaseModel } from 'ts-graphviz';
+```tsx
+import { createRef } from "react";
+import { Digraph, Node, Edge, createRoot } from "@ts-graphviz/react";
+import { toDot } from "ts-graphviz";
+import type { NodeModel, EdgeModel } from "ts-graphviz";
 
-function MyGraphComponent() {
-  const nodeRef = useRef<NodeModel>(null);
-  const edgeRef = useRef<EdgeModel>(null);
-  const digraphRef = useRef<GraphBaseModel>(null);
-  const graphRef = useRef<GraphBaseModel>(null);
+const nodeRef = createRef<NodeModel>();
+const edgeRef = createRef<EdgeModel>();
 
-  const handleRender = async () => {
-    // Example with Digraph component
-    await fromElement(
-      <Digraph id="mygraph" ref={digraphRef}>
-        <Node id="A" ref={nodeRef} label="Node A" />
-        <Node id="B" label="Node B" />
-        <Edge targets={['A', 'B']} ref={edgeRef} label="A to B" />
-      </Digraph>
-    );
+const root = createRoot({
+  onRenderComplete: ([graph]) => {
+    // The tree is mounted: the refs hold the models
+    nodeRef.current?.setAttribute("color", "red");
+    edgeRef.current?.setAttribute("style", "dashed");
+    console.log(toDot(graph));
+  },
+});
 
-    // Example with Graph component (undirected)
-    await fromElement(
-      <Graph id="undirected-graph" ref={graphRef}>
-        <Node id="X" label="Node X" />
-        <Node id="Y" label="Node Y" />
-        <Edge targets={['X', 'Y']} label="X -- Y" />
-      </Graph>
-    );
+root.render(
+  <Digraph id="mygraph">
+    <Node id="A" ref={nodeRef} label="Node A" />
+    <Node id="B" label="Node B" />
+    <Edge targets={["A", "B"]} ref={edgeRef} label="A to B" />
+  </Digraph>
+);
+```
 
-    // Access and manipulate the models directly
-    if (nodeRef.current) {
-      nodeRef.current.setAttribute('color', 'red');
-      nodeRef.current.addComment('Modified via ref');
-    }
+`fromElement()` unmounts the tree before it resolves, and React then sets the refs back to `null`. Read the models from its result instead:
 
-    if (edgeRef.current) {
-      edgeRef.current.setAttribute('style', 'dashed');
-    }
+```tsx
+import { Digraph, Node, Edge, fromElement } from "@ts-graphviz/react";
 
-    console.log('Digraph nodes:', digraphRef.current?.nodes.length);
-    console.log('Digraph edges:', digraphRef.current?.edges.length);
-    console.log('Graph nodes:', graphRef.current?.nodes.length);
-    console.log('Graph edges:', graphRef.current?.edges.length);
-  };
-
-  return (
-    <button onClick={handleRender}>
-      Render Graph
-    </button>
-  );
-}
+const dot = await fromElement(
+  <Digraph id="mygraph">
+    <Node id="A" label="Node A" />
+    <Node id="B" label="Node B" />
+    <Edge targets={["A", "B"]} label="A to B" />
+  </Digraph>
+);
+const [graph] = dot.graphs;
+graph.getNode("A")?.setAttribute("color", "red");
+console.log(graph.nodes.length, graph.edges.length);
 ```
 
 ## Contributors 👥

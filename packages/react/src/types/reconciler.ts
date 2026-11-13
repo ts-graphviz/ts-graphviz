@@ -1,5 +1,10 @@
 import type { FC, ComponentProps as ReactComponentProps } from 'react';
-import type { AnyDotObjectModel, EdgeModel, NodeModel } from 'ts-graphviz';
+import type {
+  AnyDotObjectModel,
+  EdgeModel,
+  NodeModel,
+  SubgraphModel,
+} from 'ts-graphviz';
 import type { Context } from '../contexts/GraphvizContext.js';
 import type { AnyGraphContainer } from './container.js';
 
@@ -26,6 +31,12 @@ export interface RenderContainer<
   /** The host instances rendered at the top level, in element order. */
   children: Child[];
   /**
+   * What the tree added to each graph. A tree that takes the place of one
+   * that was lost shares it, and so replaces what that one left; when a
+   * conversion is done it is dropped, and the models are the graph's own.
+   */
+  added: AddedStatements;
+  /**
    * Whether commits still reach the models. A tree that was given up (its
    * render failed, was aborted, or is done) is unmounted without touching
    * them.
@@ -36,6 +47,16 @@ export interface RenderContainer<
   /** Making the models match threw (a model class did); never throws. */
   onSyncError(error: unknown): void;
 }
+
+/** What a tree added to a graph. */
+interface Added {
+  /** The statements, in the order added. */
+  statements: (NodeModel | EdgeModel | SubgraphModel)[];
+  /** Nodes of the graph's own that a rendered node with their id replaced. */
+  shadowed: Map<string, NodeModel>;
+}
+
+export type AddedStatements = Map<AnyGraphContainer, Added>;
 
 interface InstanceBase {
   /** Hidden by a Suspense boundary that shows its fallback again. */

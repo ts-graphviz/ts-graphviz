@@ -11,6 +11,7 @@ The renderer follows react-reconciler's React 19 contract
   - It rejects with the error no error boundary caught (0.12: a generic "No top-level graph found"), with the error a model class threw, or with `signal.reason`; whenever it rejects, what it added is taken out of the container again.
   - `timeout` is replaced by `signal` (AbortSignal), like the adapter's: use `AbortSignal.timeout(ms)` for a time limit. Without a signal there is no limit (0.12 defaulted to 5 seconds).
   - Without a container the element may have several root graphs; anything else at the top level is a `TypeError`.
+  - What a conversion added to a container is the container's own afterwards: a later conversion or root on the same container adds to it. Each root replaces only what it added itself.
 - **`createRoot` follows a root of React.** `root.render(element)` returns nothing and does not wait (0.12: a promise): React renders shortly after, and the result comes through the callbacks.
   - `onRenderComplete(models)` is called after React committed the tree, once for the commits of one turn, and not for a render that ended in an uncaught error.
   - Errors come through `onUncaughtError`, `onCaughtError` and `onRecoverableError` only. After an uncaught error the root has no models, and can render again. An error one of the callbacks throws is thrown again outside the render.

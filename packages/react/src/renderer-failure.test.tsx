@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 import { Digraph as DigraphModel, type RootGraphModel } from 'ts-graphviz';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, onTestFinished, vi } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
@@ -229,10 +229,13 @@ describe('what a lost tree still does', () => {
   it('ignores a timer of the old tree that sets state', async () => {
     const container = new DigraphModel('C');
     const ticks = vi.fn();
+    // The lost tree's effects are not cleaned up: the test stops the timer.
+    let timer: ReturnType<typeof setInterval> | undefined;
+    onTestFinished(() => clearInterval(timer));
     function Counting(): ReactNode {
       const [count, setCount] = useState(0);
       useEffect(() => {
-        const timer = setInterval(() => {
+        timer = setInterval(() => {
           ticks();
           setCount((n) => n + 1);
         }, 1);

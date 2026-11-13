@@ -593,7 +593,10 @@ export class RendererGeneration {
     new HostConfig({
       onWorkLoopError: (error) => this.fail(error),
       onWork: (containerInfo) => {
-        this.#working = containerInfo;
+        // A tree that was given up is unmounted too, and is nobody's.
+        this.#working = this.#trees.has(containerInfo)
+          ? containerInfo
+          : undefined;
       },
       isStopped: () => this.#failed,
     }),
@@ -621,6 +624,7 @@ export class RendererGeneration {
   /** Stop listening: the tree is given up. */
   forget(containerInfo: Container): void {
     this.#trees.delete(containerInfo);
+    if (this.#working === containerInfo) this.#working = undefined;
   }
 
   /**

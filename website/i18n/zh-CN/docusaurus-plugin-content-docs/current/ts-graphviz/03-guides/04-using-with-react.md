@@ -16,7 +16,7 @@ description: 使用 @ts-graphviz/react 通过 React 和 JSX 进行声明式图�
 ## 安装
 
 ```bash npm2yarn
-npm install @ts-graphviz/react react react-dom
+npm install @ts-graphviz/react ts-graphviz react react-dom
 ```
 
 ## 示例

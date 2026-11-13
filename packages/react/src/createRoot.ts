@@ -8,8 +8,9 @@ import type {
 import { createModelKit, MODEL, modelOf, ownOptions } from 'ts-graphviz';
 
 import type { Context } from './contexts/GraphvizContext.js';
-import { type ErrorInfo, Mount } from './mount.js';
+import { type ErrorInfo, Mount, type MountHandlers } from './mount.js';
 import type { AnyGraphContainer } from './types/container.js';
+import type { AddedStatements } from './types/reconciler.js';
 
 export type { ErrorInfo };
 
@@ -166,6 +167,8 @@ export function createRoot<
   };
 
   let mount: Mount<Container> | undefined;
+  // What the root's trees added, one after the other.
+  const added: AddedStatements = new Map();
   let isUnmounted = false;
   // The last commit ended in an uncaught error (React then commits the
   // emptied tree, and reports the error after it).
@@ -173,7 +176,7 @@ export function createRoot<
   let completionQueued = false;
 
   const open = (): Mount<Container> => {
-    const opened: Mount<Container> = new Mount(context, {
+    const handlers: MountHandlers = {
       onUncaughtError: (error, info) => {
         failed = true;
         callOutside(onUncaughtError, error, info);
@@ -216,7 +219,8 @@ export function createRoot<
           {},
         );
       },
-    });
+    };
+    const opened: Mount<Container> = new Mount(context, handlers, added);
     return opened;
   };
 
