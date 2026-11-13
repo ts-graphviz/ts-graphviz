@@ -63,6 +63,15 @@ describe('createModelKit', { tags: ['SM-5'] }, () => {
     expect(kit.createEdge(['a', 'b'])).toBeInstanceOf(Edge);
   });
 
+  it('is the default kit when no class differs from the default ones', () => {
+    expect(createModelKit()).toBe(defaultModelKit);
+    expect(createModelKit({})).toBe(defaultModelKit);
+    expect(createModelKit({ Node, Edge: undefined })).toBe(defaultModelKit);
+    expect(createModelKit(defaultModelKit)).toBe(defaultModelKit);
+    class MyNode extends Node {}
+    expect(createModelKit({ Node: MyNode })).not.toBe(defaultModelKit);
+  });
+
   it('takes own properties only', () => {
     class MyNode extends Node {}
     const kit = createModelKit(Object.create({ Node: MyNode }));

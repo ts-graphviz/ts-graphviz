@@ -176,6 +176,17 @@ digraph((g) => {
 });
 ```
 
+文はグラフのモデルキットでモデルを作り、作ったものをグラフに追加します。コールバックは第 2 引数でそのキットを受け取るので、追加せずにモデルを作ることもできます。
+
+```typescript
+import { digraph, modelOf } from 'ts-graphviz';
+
+digraph((g, kit) => {
+  const a = kit.createNode('a'); // まだどのグラフにも入っていない
+  modelOf(g).addNode(a);
+});
+```
+
 ## コメント
 
 `addComment` は、ノード、エッジ、サブグラフ、グラフ、既定属性の文にコメントを付けます。既定では文の前に書かれます。`position: 'trailing'` で文の後に、グラフやサブグラフでは `position: 'end'` で本体の最後に書かれます。`kind` は `'Slash'`（`//`）、`'Block'`（`/* */`）、`'Macro'`（`#`）のいずれかです。
@@ -215,7 +226,7 @@ g.edge(['b', 'c']);
 console.log(toDot(g));
 ```
 
-文が返すものは DSL で、一つのモデルに DSL は一つなので、DSL は `===` で比較できます。`modelOf(x)` でモデルに戻せ、そこから読んだモデルの DSL は `dsl(model)` で得られます。`toDot`、`fromModel`、アダプターの `toBlob` は、モデルだけでなく DSL も受け取ります。
+文が返すものは DSL です。DSL は、モデルと、文がモデルを作るときに使うキットの組です。一つのモデルと一つのキットに DSL は一つなので、DSL は `===` で比較できます。`modelOf(x)` でモデルに戻せます。そこから読んだモデルの DSL は `dsl(model)` で得られ、この DSL は既定のキットで作ります。`dsl(model, kit)` は `kit` で作る DSL を返します。`{ dsl: true }` では `convert.models` のキットが使われます。`toDot`、`fromModel`、アダプターの `toBlob` は、モデルだけでなく DSL も受け取ります。
 
 ## DOT の文の順序
 

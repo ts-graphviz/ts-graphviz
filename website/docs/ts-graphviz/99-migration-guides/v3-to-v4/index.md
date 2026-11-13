@@ -35,10 +35,10 @@ TypeScript reports most other changes, but these three still compile, so search 
 | `g.nodes`, `g.getNode('a')`, `g.createNode('a')`, `g.addNode(n)` | `modelOf(g).nodes`, `modelOf(g).getNode('a')`, …: models, not DSLs (`dsl(m)` gives a model's DSL) |
 | your class's own methods, `g.myMethod()` | `modelOf(g).myMethod()` |
 | `new Digraph().node('a')`, `fromDot(src).node('a')` | `dsl(new Digraph()).node('a')`, `fromDot(src, { dsl: true }).node('a')` |
-| a custom class overriding `node()` / `edge()` | override `createNode` / `createEdge` / `createSubgraph`, which the DSL calls; your `node()` is `modelOf(g).node()` |
-| comparing a DSL with its model (`===`) | `false`: compare DSLs with DSLs (one model has one DSL), or use `modelOf()` |
+| a custom class overriding `node()` / `edge()` | give the kit your classes to change what is created, or override `addNode` / `addEdge` / `addSubgraph`, which the DSL calls with what the kit created; your `node()` is `modelOf(g).node()` |
+| comparing a DSL with its model (`===`) | `false`: compare DSLs with DSLs (a model and a kit have one DSL), or use `modelOf()` |
 
-`modelOf(dsl)` gives the model and `dsl(model)` the DSL. `toDot`, `fromModel`, the adapter's `toBlob` and `createRoot({ container })` / `renderToDot({ container })` of `@ts-graphviz/react` take either. The model guards (`isNodeModel` and the others) are false for a DSL, which is not a model: narrow DSLs by `$$type` (`if (s.$$type === 'Node')`), or check `modelOf(x)`. A DSL is not itself a model type, so pass `modelOf(g)` where a model is typed (such as `new Dot([modelOf(g)])` or a parameter of type `RootGraphModel`). `{ ...node }`, `Object.keys(node)` and `JSON.stringify(node)` list the attributes; `String(g)` does not work, since `toString` is an attribute name too.
+`modelOf(dsl)` gives the model and `dsl(model)` the DSL. A DSL is a model together with the model kit its statements create with (see section 4): `dsl(model)` creates with the default kit, `dsl(model, kit)` with `kit`, and the factories and `fromDot` with `{ dsl: true }` give DSLs of their own kit. The callbacks take the kit as their second argument (`digraph((g, kit) => { ... })`). `toDot`, `fromModel`, the adapter's `toBlob` and `createRoot({ container })` / `renderToDot({ container })` of `@ts-graphviz/react` take either. The model guards (`isNodeModel` and the others) are false for a DSL, which is not a model: narrow DSLs by `$$type` (`if (s.$$type === 'Node')`), or check `modelOf(x)`. A DSL is not itself a model type, so pass `modelOf(g)` where a model is typed (such as `new Dot([modelOf(g)])` or a parameter of type `RootGraphModel`). `{ ...node }`, `Object.keys(node)` and `JSON.stringify(node)` list the attributes; `String(g)` does not work, since `toString` is an attribute name too.
 
 ## 2. Strings are literal text; DOT syntax is opt-in
 
@@ -119,6 +119,7 @@ Code that matched on `error.message` should match on `error.code`.
   | `withContext(...)` | `withModelKit(...)` |
 
 - A kit creates with `createDigraph`, `createGraph`, `createSubgraph`, `createNode` and `createEdge`. They only create: what they return is in no graph until you add it (`addNode`, `addEdge`, `addSubgraph`), and `createEdge` does not add the nodes its targets refer to.
+- The DSL's statements create with the kit of the DSL and add to the graph, so they no longer call the graph's `createNode`, `createEdge` and `createSubgraph`. `dsl(model)` creates with the default kit whatever classes the graph was made with: pass the kit (`dsl(model, kit)`) to create with other classes. Anything else as the second argument is a `TypeError` with `code: 'TSG_ERR_NOT_A_MODEL_KIT'`.
 - A kit has a `Dot` class (see section 5); `createModelKit` fills in the classes you leave out.
 - `toModel(ast, { models })` in `@ts-graphviz/ast` now **requires** `models` (the package has no classes of its own): pass `defaultModelKit` or `createModelKit({...})`. `fromDot(source, { convert: { models } })` still takes some of the classes.
 - The constructor types in `ModelClasses` use the real signatures; a custom class whose constructor is incompatible is now a type error instead of a runtime surprise.

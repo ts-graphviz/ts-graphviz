@@ -14,7 +14,7 @@ export function convertEdge(
   ast: EdgeASTNode,
   subgraphNodes?: (index: number) => string[] | undefined,
 ): EdgeModel {
-  const edge = new context.models.Edge(
+  const edge = context.models.createEdge(
     convertToEdgeTargetTuple(ast, subgraphNodes),
   );
   edge.setAttributes(

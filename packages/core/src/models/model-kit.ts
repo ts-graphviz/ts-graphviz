@@ -25,7 +25,8 @@ export const defaultModelKit: ModelKit = lazyDefaultModelKit();
 
 /**
  * Create a {@link ModelKit} that uses the given classes and those of
- * {@link defaultModelKit} for the rest. The kit is frozen.
+ * {@link defaultModelKit} for the rest. The kit is frozen. With no class
+ * other than the default ones, it is {@link defaultModelKit} itself.
  *
  * Custom classes are the way to extend what a kit creates: work to do on
  * every creation goes in the constructor of the class.
@@ -37,6 +38,7 @@ export function createModelKit<
   const P extends Partial<ModelClasses> = Record<never, never>,
 >(classes: P = {} as P): ModelKit<ResolvedModelTypes<P>> {
   const merged: ModelClasses = { ...pick(defaultModelKit) };
+  let custom = false;
   // Own properties only: a class inherited from Object.prototype is never
   // taken for a model.
   const given = Object.assign(
@@ -45,14 +47,17 @@ export function createModelKit<
   );
   for (const key of MODEL_KEYS) {
     const model = given[key];
-    if (model !== undefined) {
+    if (model !== undefined && model !== merged[key]) {
+      custom = true;
       // Partial<ModelClasses> values are unions of the constructor types;
       // the key picks the matching slot.
       (merged as Record<keyof ModelClasses, unknown>)[key] = model;
     }
   }
   // The classes in `classes` decide the instance types.
-  return modelKitOf(merged) as ModelKit<ResolvedModelTypes<P>>;
+  return (custom ? modelKitOf(merged) : defaultModelKit) as ModelKit<
+    ResolvedModelTypes<P>
+  >;
 }
 
 function pick(kit: ModelKit): ModelClasses {

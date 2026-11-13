@@ -11,6 +11,7 @@ import {
   type EdgeModel,
   isDotModel,
   type ModelClasses,
+  type ModelKit,
   type ModelTypes,
   type NodeModel,
   ownOptions,
@@ -48,13 +49,15 @@ type AnyFromDotModel = RootGraphModel | NodeModel | EdgeModel | SubgraphModel;
 
 /**
  * What {@link fromDot} and {@link fromDotAll} return for a model `T`: the
- * model, or its DOT DSL when the option `dsl` is `true` (`D`).
+ * model, or its DOT DSL when the option `dsl` is `true` (`D`). The DSL
+ * creates with the kit of the classes the models were created from (`M`).
  * @group Convert DOT to Model
  */
 export type FromDotResult<
   T extends AnyDotObjectModel,
   D extends boolean,
-> = D extends true ? DSL<T> : T;
+  M extends ModelTypes = ModelTypes,
+> = D extends true ? DSL<T, M> : T;
 
 /**
  * Options for converting DOT to a model: the rule `T` to parse, the
@@ -82,8 +85,8 @@ export type FromDotOptions<
     models?: P;
   };
   /**
-   * `true` to return the DOT DSL of the model, as {@link dsl} gives it,
-   * in place of the model.
+   * `true` to return the DOT DSL of the model in place of the model: the
+   * one {@link dsl} gives with the kit of `convert.models`.
    *
    * ```ts
    * const G = fromDot('digraph { a }', { dsl: true });
@@ -115,7 +118,8 @@ export function fromDot<
   },
 ): FromDotResult<
   ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
-  D
+  D,
+  ResolvedModelTypes<P>
 >;
 export function fromDot<
   const P extends Partial<ModelClasses>,
@@ -126,7 +130,11 @@ export function fromDot<
   options: FromDotOptions<R, P, D> & {
     convert: { models: P };
   },
-): FromDotResult<FromDotModel<R, ResolvedModelTypes<P>>, D>;
+): FromDotResult<
+  FromDotModel<R, ResolvedModelTypes<P>>,
+  D,
+  ResolvedModelTypes<P>
+>;
 export function fromDot(
   dot: string,
   options?: FromDotOptions<'Dot' | 'Graph'>,
@@ -148,13 +156,15 @@ export function fromDot(
 ): AnyFromDotModel | DSL<AnyFromDotModel> {
   // Own properties only: an inherited one is never an option.
   const own = ownOptions(options);
-  const model = read(dot, own);
-  return own.dsl === true ? dsl(model) : model;
+  const kit = createModelKit(ownOptions(own.convert).models);
+  const model = read(dot, own, kit);
+  return own.dsl === true ? dsl(model, kit) : model;
 }
 
 function read(
   dot: string,
   own: FromDotOptions<FromDotRule, Partial<ModelClasses>, boolean>,
+  kit: ModelKit,
 ): AnyFromDotModel {
   // `as` picks what fromDot returns. Widened to every rule on
   // purpose: JavaScript callers can pass any.
@@ -172,11 +182,7 @@ function read(
       'TSG_ERR_UNCONVERTIBLE_AST',
     );
   }
-  const convert = ownOptions(own.convert);
-  const model = toModel(ast, {
-    ...convert,
-    models: createModelKit(convert.models),
-  });
+  const model = toModel(ast, { ...ownOptions(own.convert), models: kit });
   if (isDotModel(model)) {
     // A whole DOT source converts to a Dot model; fromDot returns its graph.
     const [graph, ...more] = model.graphs;
@@ -221,7 +227,8 @@ export function fromDotAll<
   },
 ): FromDotResult<
   ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
-  D
+  D,
+  ResolvedModelTypes<P>
 >[];
 export function fromDotAll(
   dot: string,
@@ -248,11 +255,9 @@ export function fromDotAll(
   const own = ownOptions(options);
   const ast = parse(dot, { ...ownOptions(own.parse), as: 'Dot' });
   const convert = ownOptions(own.convert);
-  const model = toModel(ast, {
-    ...convert,
-    models: createModelKit(convert.models),
-  });
+  const kit = createModelKit(convert.models);
+  const model = toModel(ast, { ...convert, models: kit });
   return own.dsl === true
-    ? model.graphs.map((graph) => dsl(graph))
+    ? model.graphs.map((graph) => dsl(graph, kit))
     : [...model.graphs];
 }
