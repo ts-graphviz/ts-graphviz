@@ -11,6 +11,7 @@ import { Digraph as DigraphModel, type RootGraphModel } from 'ts-graphviz';
 import { describe, expect, it, vi } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Node } from './components/Node.js';
+import { Subgraph } from './components/Subgraph.js';
 import { createRoot, type GraphvizRoot } from './createRoot.js';
 import { fromElement } from './fromElement.js';
 import { currentGeneration } from './reconciler.js';
@@ -299,5 +300,73 @@ describe('what a lost tree still does', () => {
     expect(onUncaughtError).toHaveBeenCalledOnce();
     root.unmount();
     last.unmount();
+  });
+});
+
+describe('a tree nested deeper than the call stack allows', () => {
+  function nested(levels: number): ReactElement {
+    let element = <Node id="leaf" />;
+    for (let i = 0; i < levels; i++) {
+      element = <Subgraph>{element}</Subgraph>;
+    }
+    return element;
+  }
+
+  it('is reported to the root, which renders again', async () => {
+    const container = new DigraphModel('C');
+    const onUncaughtError = vi.fn();
+    const root = createRoot({ container, onUncaughtError });
+
+    const uncaught = await uncaughtDuring(async () => {
+      root.render(nested(50_000));
+      await tick(50);
+    });
+
+    expect(uncaught).toEqual([]);
+    expect(onUncaughtError).toHaveBeenCalledOnce();
+    expect(onUncaughtError.mock.calls[0][0]).toBeInstanceOf(RangeError);
+    expect(container.subgraphs).toHaveLength(0);
+
+    await render(root, <Node id="after" />);
+    expect(container.nodes.map((n) => n.id)).toEqual(['after']);
+    expect(onUncaughtError).toHaveBeenCalledOnce();
+    root.unmount();
+  });
+
+  it('is reported to a root that was waiting for data, which renders again', async () => {
+    const container = new DigraphModel('C');
+    const onUncaughtError = vi.fn();
+    const root = createRoot({ container, onUncaughtError });
+    // Suspended as a whole: nothing is committed, and React has work left.
+    const never = new Promise<string>(() => undefined);
+    const Pending = (): ReactNode => <Node id={use(never)} />;
+    root.render(<Pending />);
+    await tick();
+
+    const uncaught = await uncaughtDuring(async () => {
+      root.render(nested(50_000));
+      await tick(50);
+    });
+
+    expect(uncaught).toEqual([]);
+    expect(onUncaughtError).toHaveBeenCalledOnce();
+    expect(onUncaughtError.mock.calls[0][0]).toBeInstanceOf(RangeError);
+    expect(container.subgraphs).toHaveLength(0);
+
+    await render(root, <Node id="after" />);
+    expect(container.nodes.map((n) => n.id)).toEqual(['after']);
+    root.unmount();
+  });
+
+  it('rejects a conversion and leaves nothing in the container', async () => {
+    const container = new DigraphModel('C');
+    await expect(
+      fromElement(nested(50_000), { container }),
+    ).rejects.toBeInstanceOf(RangeError);
+    expect(container.subgraphs).toHaveLength(0);
+    await expect(fromElement(<Node id="after" />, { container })).resolves.toBe(
+      container,
+    );
+    expect(container.nodes.map((n) => n.id)).toEqual(['after']);
   });
 });
