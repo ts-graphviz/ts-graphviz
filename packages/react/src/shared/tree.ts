@@ -33,15 +33,8 @@ export const HOST = {
   portal: 'graphviz:portal',
 } as const;
 
-/** What a tree added to a graph. */
-interface Added {
-  /** The statements, in the order added. */
-  statements: Statement[];
-  /** Nodes of the graph's own that a rendered node with their id replaced. */
-  shadowed: Map<string, NodeModel>;
-}
-
-export type AddedStatements = Map<AnyGraphContainer, Added>;
+/** What a tree added to each graph: the statements, in the order added. */
+export type AddedStatements = Map<AnyGraphContainer, Statement[]>;
 
 /**
  * A tree of elements a renderer keeps up to date, and the models
@@ -488,7 +481,7 @@ export function sync(tree: Tree): void {
   const { container: root, added, kit } = tree;
   const desired = new Map<AnyGraphContainer, Statement[]>();
   const byId = new Map<string, AnyGraphContainer>();
-  const own: AnyGraphContainer[] = [];
+  const own = new Set<AnyGraphContainer>();
   // A portal without an id adds to the root graph it is rendered in.
   const portals: {
     id: string | undefined;
@@ -557,14 +550,10 @@ export function sync(tree: Tree): void {
     const target = (id !== undefined ? byId.get(id) : undefined) ?? top;
     if (target !== undefined) visit(children, target);
   }
-  // A graph of the container's that no portal names any more.
-  for (const graph of own) {
-    if (!desired.has(graph) && added.has(graph)) desired.set(graph, []);
-  }
-
   for (const [graph, statements] of desired) {
     applyStatements(graph, statements, added);
   }
+  forgetGraphs(tree.children, added, desired, own);
 
   tree.models = root
     ? rendered
@@ -598,14 +587,52 @@ function indexOwnGraphs(
   graph: AnyGraphContainer,
   added: AddedStatements,
   byId: Map<string, AnyGraphContainer>,
-  own: AnyGraphContainer[],
+  own: Set<AnyGraphContainer>,
 ): void {
-  own.push(graph);
+  own.add(graph);
   if (graph.id !== undefined) byId.set(graph.id, graph);
-  const rendered = new Set<Statement>(added.get(graph)?.statements);
+  const rendered = new Set<Statement>(added.get(graph));
   for (const subgraph of graph.subgraphs) {
     if (!rendered.has(subgraph)) indexOwnGraphs(subgraph, added, byId, own);
   }
+}
+
+/**
+ * The graphs the tree added to and no longer does. One of the container's
+ * that no portal names any more gets back what it had. A rendered graph
+ * that left the tree keeps what it shows, and is no longer remembered; one
+ * that is hidden is, for when it shows again.
+ */
+function forgetGraphs(
+  children: Child[],
+  added: AddedStatements,
+  desired: Map<AnyGraphContainer, Statement[]>,
+  own: Set<AnyGraphContainer>,
+): void {
+  let inTree: Set<AnyGraphContainer> | undefined;
+  for (const graph of added.keys()) {
+    if (desired.has(graph)) continue;
+    if (own.has(graph)) {
+      applyStatements(graph, [], added);
+      continue;
+    }
+    inTree ??= graphsOf(children);
+    if (!inTree.has(graph)) added.delete(graph);
+  }
+}
+
+/** The graphs of the elements, the hidden ones too. */
+function graphsOf(children: Child[]): Set<AnyGraphContainer> {
+  const graphs = new Set<AnyGraphContainer>();
+  // Without recursion: a tree may be deeper than the call stack.
+  const rest: Child[] = [...children];
+  for (let child = rest.pop(); child !== undefined; child = rest.pop()) {
+    if (child.kind === 'graph') graphs.add(child.model);
+    if (child.kind === 'graph' || child.kind === 'portal') {
+      rest.push(...child.children);
+    }
+  }
+  return graphs;
 }
 
 function applyStatements(
@@ -613,34 +640,109 @@ function applyStatements(
   statements: Statement[],
   added: AddedStatements,
 ): void {
-  const previous = added.get(graph);
+  const previous = added.get(graph) ?? [];
   if (
-    previous !== undefined &&
-    previous.statements.length === statements.length &&
-    previous.statements.every((s, i) => s === statements[i])
+    previous.length === statements.length &&
+    previous.every((s, i) => s === statements[i])
   ) {
     return;
   }
-  const shadowed = previous?.shadowed ?? new Map<string, NodeModel>();
-  for (const statement of previous?.statements ?? []) {
-    removeStatement(graph, statement, shadowed);
+  for (const statement of previous) {
+    removeStatement(graph, statement);
+  }
+  if (statements.length === 0) {
+    added.delete(graph);
+    return;
   }
   // Recorded one by one: if a model class throws half way, what is in the
   // graph by then can still be taken out.
   const applied: Statement[] = [];
-  added.set(graph, { statements: applied, shadowed });
-  const rendered = new Set<Statement>(statements);
+  added.set(graph, applied);
   for (const statement of statements) {
-    if (statement.$$type === 'Node') {
-      const current = graph.getNode(statement.id);
-      if (current !== undefined && !rendered.has(current)) {
-        shadowed.set(statement.id, current);
-      }
-    }
+    if (statement.$$type === 'Node') coverNode(graph, statement);
     // Before it is added: a model class may add it and then throw.
     applied.push(statement);
     addStatement(graph, statement);
   }
+}
+
+/**
+ * For the ids of a graph that more than one node was given for: those
+ * nodes, the one the graph shows last. A graph has one node for an id, so a
+ * rendered node takes the place of the one before it, of the graph's own or
+ * of another tree, which comes back when the rendered one goes. Every tree
+ * that renders into the graph reads the same list: a node that goes while
+ * another covers it does not come back.
+ */
+const covered = new WeakMap<AnyGraphContainer, Map<string, NodeModel[]>>();
+
+/** Remember the node that `node` is about to take the place of. */
+function coverNode(graph: AnyGraphContainer, node: NodeModel): void {
+  const current = graph.getNode(node.id);
+  if (current === node) return;
+  let byId = covered.get(graph);
+  if (current === undefined) {
+    byId?.delete(node.id);
+    return;
+  }
+  if (byId === undefined) {
+    byId = new Map();
+    covered.set(graph, byId);
+  }
+  let nodes = byId.get(node.id);
+  // A list that does not end with the node the graph shows is out of date:
+  // the graph was changed from outside.
+  if (nodes === undefined || nodes.at(-1) !== current) {
+    nodes = [current];
+    byId.set(node.id, nodes);
+  }
+  nodes.push(node);
+}
+
+/**
+ * Take a rendered node out: the node it covered comes back, in the same
+ * place, which addNode keeps for a node with the same id.
+ */
+function uncoverNode(graph: AnyGraphContainer, node: NodeModel): void {
+  const current = graph.getNode(node.id);
+  const byId = covered.get(graph);
+  const nodes = byId?.get(node.id);
+  // By id, so only when it is still this node.
+  if (current === node) {
+    const below =
+      nodes !== undefined && nodes.at(-1) === node ? nodes.at(-2) : undefined;
+    // Before the list changes: if a model class throws, the next try finds
+    // the same.
+    if (below !== undefined) graph.addNode(below);
+    else graph.removeNode(node);
+  }
+  if (nodes === undefined) return;
+  const wasLast = nodes.at(-1) === node;
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    if (nodes[i] === node) nodes.splice(i, 1);
+  }
+  const upToDate = current === node ? wasLast : nodes.at(-1) === current;
+  // One node covers nothing.
+  if (!upToDate || nodes.length < 2) byId?.delete(node.id);
+}
+
+/**
+ * The statements a tree added are the graphs' own from now on: the record
+ * is emptied, and the nodes its nodes covered do not come back.
+ */
+export function keepStatements(added: AddedStatements): void {
+  for (const [graph, statements] of added) {
+    const byId = covered.get(graph);
+    if (byId === undefined) continue;
+    for (const statement of statements) {
+      if (statement.$$type !== 'Node') continue;
+      const nodes = byId.get(statement.id);
+      if (nodes === undefined) continue;
+      nodes.splice(0, nodes.lastIndexOf(statement));
+      if (nodes.length < 2) byId.delete(statement.id);
+    }
+  }
+  added.clear();
 }
 
 function addStatement(graph: AnyGraphContainer, statement: Statement): void {
@@ -657,22 +759,11 @@ function addStatement(graph: AnyGraphContainer, statement: Statement): void {
   }
 }
 
-function removeStatement(
-  graph: AnyGraphContainer,
-  statement: Statement,
-  shadowed: Map<string, NodeModel>,
-): void {
+function removeStatement(graph: AnyGraphContainer, statement: Statement): void {
   switch (statement.$$type) {
-    case 'Node': {
-      // By id, so only when it is still this node.
-      if (graph.getNode(statement.id) !== statement) break;
-      const replaced = shadowed.get(statement.id);
-      shadowed.delete(statement.id);
-      // In the same place, which addNode keeps for a node with the same id.
-      if (replaced !== undefined) graph.addNode(replaced);
-      else graph.removeNode(statement);
+    case 'Node':
+      uncoverNode(graph, statement);
       break;
-    }
     case 'Edge':
       graph.removeEdge(statement);
       break;

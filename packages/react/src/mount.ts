@@ -14,6 +14,7 @@ import {
   type AnyGraphContainer,
   clearChildren,
   createTree,
+  keepStatements,
   sync,
 } from './shared/tree.js';
 import type { RenderContainer } from './types/reconciler.js';
@@ -244,6 +245,14 @@ export class Mount<Container extends AnyGraphContainer = AnyGraphContainer> {
    */
   checkRenderer(): void {
     this.#generation.check();
+  }
+
+  /**
+   * The models the tree added are the graphs' own from now on; for a tree
+   * that was given up without `rollback`.
+   */
+  keep(): void {
+    keepStatements(this.#containerInfo.added);
   }
 
   /**
