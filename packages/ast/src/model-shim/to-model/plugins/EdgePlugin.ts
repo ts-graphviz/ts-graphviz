@@ -14,7 +14,9 @@ export function convertEdge(
   ast: EdgeASTNode,
   subgraphNodes?: (index: number) => string[] | undefined,
 ): EdgeModel {
-  const edge = context.models.createEdge(
+  // The targets are in the model's form already (an empty group, which
+  // DOT allows, included): nothing for the kit to normalize.
+  const edge = new context.models.Edge(
     convertToEdgeTargetTuple(ast, subgraphNodes),
   );
   edge.setAttributes(
