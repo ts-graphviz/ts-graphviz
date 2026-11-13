@@ -58,6 +58,16 @@ export interface ErrorInfo {
   componentStack?: string;
 }
 
+export interface FromElementOptions<Container extends AnyGraphContainer = AnyGraphContainer> {
+  container?: Container | {
+    readonly [MODEL]: Container;
+  };
+  models?: Partial<ModelClasses>;
+  signal?: AbortSignal;
+  onCaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
+  onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;
+}
+
 export declare const Graph: FC<RootGraphProps>;
 
 export interface GraphBaseAttributesProps {
@@ -74,7 +84,7 @@ export interface GraphPortalProps {
 }
 
 export interface GraphvizRoot {
-  render(element: ReactElement, options?: RenderOptions): Promise<void>;
+  render(element: ReactElement): void;
   unmount(): void;
   getTopLevelModels(): AnyDotObjectModel[];
   getTopLevelModels<T extends AnyDotObjectModel>(typeGuard: (model: AnyDotObjectModel) => model is T): T[];
@@ -94,16 +104,6 @@ export interface NodeProps extends Omit<NodeOptions, "label" | "xlabel"> {
 
 export interface RenderHTMLLikeOptions {
   maxDepth?: number;
-}
-
-export interface RenderOptions {
-  signal?: AbortSignal;
-}
-
-export interface RenderToDotOptions<Container extends AnyGraphContainer = AnyGraphContainer> extends CreateRootOptions, RenderOptions {
-  container?: Container | {
-    readonly [MODEL]: Container;
-  };
 }
 
 export interface RootGraphOptions extends GraphAttributesObject, GraphBaseAttributesProps {
@@ -135,9 +135,17 @@ export type TopLevelModel = FilterableModel;
 
 export declare function createRoot<Container extends AnyGraphContainer = AnyGraphContainer>(options?: CreateRootOptions<Container>): GraphvizRoot;
 
-export declare function renderHTMLLike(label?: ReactElement, options?: RenderHTMLLikeOptions): HTMLLikeValue;
+export declare function fromElement<Container extends AnyGraphContainer>(element: ReactElement, options: FromElementOptions<Container> & {
+  container: Container | {
+    readonly [MODEL]: Container;
+  };
+}): Promise<Container>;
+export declare function fromElement(element: ReactElement, options?: FromElementOptions & {
+  container?: undefined;
+}): Promise<DotModel>;
+export declare function fromElement<Container extends AnyGraphContainer>(element: ReactElement, options?: FromElementOptions<Container>): Promise<Container | DotModel>;
 
-export declare function renderToDot<Container extends AnyGraphContainer = AnyGraphContainer>(element: ReactElement, options?: RenderToDotOptions<Container>): Promise<string>;
+export declare function renderHTMLLike(label?: ReactElement, options?: RenderHTMLLikeOptions): HTMLLikeValue;
 
 export declare function useCurrentGraph(): AnyGraphContainer;
 

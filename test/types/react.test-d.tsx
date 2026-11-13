@@ -2,13 +2,20 @@ import {
   createRoot,
   Digraph,
   Edge,
+  type FromElementOptions,
+  fromElement,
   Node,
   renderHTMLLike,
-  renderToDot,
   Subgraph,
 } from '@ts-graphviz/react';
-import type { HTMLLikeValue, NodeModel } from 'ts-graphviz';
-import { isNodeModel } from 'ts-graphviz';
+import type {
+  DotModel,
+  GraphBaseModel,
+  HTMLLikeValue,
+  NodeModel,
+  RootGraphModel,
+} from 'ts-graphviz';
+import { Digraph as DigraphModel, isNodeModel } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
 // What users of `@ts-graphviz/react` get from its JSX types and inference
@@ -44,8 +51,24 @@ describe('components', () => {
 });
 
 describe('rendering', () => {
-  it('renderToDot gives text; renderHTMLLike a label value', () => {
-    expectTypeOf(renderToDot(<Digraph />)).toEqualTypeOf<Promise<string>>();
+  it('fromElement gives a Dot model, or the container', () => {
+    expectTypeOf(fromElement(<Digraph />)).toEqualTypeOf<Promise<DotModel>>();
+    const container: RootGraphModel = new DigraphModel();
+    expectTypeOf(fromElement(<Node id="a" />, { container })).toEqualTypeOf<
+      Promise<RootGraphModel>
+    >();
+    // Options that may or may not have a container
+    const options: FromElementOptions = {};
+    expectTypeOf(fromElement(<Digraph />, options)).toEqualTypeOf<
+      Promise<GraphBaseModel | RootGraphModel | DotModel>
+    >();
+  });
+
+  it('render() of a root gives nothing', () => {
+    expectTypeOf(createRoot().render(<Digraph />)).toEqualTypeOf<void>();
+  });
+
+  it('renderHTMLLike gives a label value', () => {
     expectTypeOf(
       renderHTMLLike(<dot:b>x</dot:b>),
     ).toEqualTypeOf<HTMLLikeValue>();

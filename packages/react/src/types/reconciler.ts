@@ -14,17 +14,27 @@ export type ComponentType = FC<any>;
 export type ComponentProps = ReactComponentProps<any>;
 
 /**
- * Container represents the rendering container info with typed model collection
+ * What React renders one tree into: the host instances of the top level,
+ * and how the commit reaches the models and the code that started the
+ * render.
  */
 export interface RenderContainer<
   Container extends AnyGraphContainer = AnyGraphContainer,
 > {
   renderedModels: AnyDotObjectModel[];
-  /** Errors no error boundary caught during the current render. */
-  uncaughtErrors: unknown[];
   context?: Context<Container>;
   /** The host instances rendered at the top level, in element order. */
   children: Child[];
+  /**
+   * Whether commits still reach the models. A tree that was given up (its
+   * render failed, was aborted, or is done) is unmounted without touching
+   * them.
+   */
+  active: boolean;
+  /** The models match the instances of a commit. */
+  onCommit(): void;
+  /** Making the models match threw (a model class did); never throws. */
+  onSyncError(error: unknown): void;
 }
 
 interface InstanceBase {

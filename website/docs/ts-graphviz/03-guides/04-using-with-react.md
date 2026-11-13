@@ -24,7 +24,8 @@ npm install @ts-graphviz/react react react-dom
 
 ```jsx
 import React from 'react';
-import { Digraph, Node, Edge, renderToDot } from '@ts-graphviz/react';
+import { Digraph, Node, Edge, fromElement } from '@ts-graphviz/react';
+import { toDot } from 'ts-graphviz';
 
 const MyDiagram = () => (
   <Digraph id="G">
@@ -41,11 +42,11 @@ const MyDiagram = () => (
         </dot:table>
       }
     />
-    <Edge targets={['A', 'B']} label={<b>Edge from A to B</b>} />
+    <Edge targets={['A', 'B']} label={<dot:b>Edge from A to B</dot:b>} />
   </Digraph>
 );
 
-const dot = renderToDot(<MyDiagram />);
+const dot = toDot(await fromElement(<MyDiagram />));
 console.log(dot);
 ```
 

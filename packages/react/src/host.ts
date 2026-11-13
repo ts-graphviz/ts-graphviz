@@ -440,6 +440,10 @@ function applyStatements(
   for (const statement of previous?.statements ?? []) {
     removeStatement(graph, statement, shadowed);
   }
+  // Recorded one by one: if a model class throws half way, what is in the
+  // graph by then can still be taken out.
+  const applied: Statement[] = [];
+  added.set(graph, { statements: applied, shadowed });
   const rendered = new Set<Statement>(statements);
   for (const statement of statements) {
     if (statement.$$type === 'Node') {
@@ -448,9 +452,10 @@ function applyStatements(
         shadowed.set(statement.id, current);
       }
     }
+    // Before it is added: a model class may add it and then throw.
+    applied.push(statement);
     addStatement(graph, statement);
   }
-  added.set(graph, { statements, shadowed });
 }
 
 function addStatement(graph: AnyGraphContainer, statement: Statement): void {

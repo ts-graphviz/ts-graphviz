@@ -1,4 +1,4 @@
-import { createElement, type ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import type {
   AnyDotObjectModel,
   DotObjectModel,
@@ -7,20 +7,11 @@ import type {
 } from 'ts-graphviz';
 import { createModelKit, MODEL, modelOf, ownOptions } from 'ts-graphviz';
 
-import { CurrentGraph } from './contexts/CurrentGraph.js';
-import { GraphContainer } from './contexts/GraphContainer.js';
-import { GraphMap } from './contexts/GraphMap.js';
-import { type Context, GraphvizContext } from './contexts/GraphvizContext.js';
-import { reconciler } from './reconciler.js';
+import type { Context } from './contexts/GraphvizContext.js';
+import { type ErrorInfo, Mount } from './mount.js';
 import type { AnyGraphContainer } from './types/container.js';
-import type { RenderContainer } from './types/reconciler.js';
 
-/**
- * Error information for React error handling
- */
-export interface ErrorInfo {
-  componentStack?: string;
-}
+export type { ErrorInfo };
 
 // Re-export type alias for compatibility
 export type TopLevelModel = FilterableModel;
@@ -43,8 +34,14 @@ export interface CreateRootOptions<
    */
   models?: Partial<ModelClasses>;
   /**
-   * Called when an error is not caught by any error boundary. `render()`
-   * also rejects with it.
+   * Called when an error is not caught by any error boundary; React has
+   * then emptied the tree, and the models it showed are taken out. Also
+   * called when a model class throws while the models are updated, and when
+   * the renderer itself fails (see {@link GraphvizRoot.render}).
+   *
+   * An error this callback throws is thrown again outside the render, as an
+   * uncaught exception: catch inside it what you do not want to end a
+   * Node.js process. The same goes for the other callbacks.
    */
   onUncaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
   /**
@@ -56,34 +53,42 @@ export interface CreateRootOptions<
    */
   onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;
   /**
-   * Called when rendering completes successfully
+   * Called with the top-level models after React committed the tree, once
+   * for the commits of one turn: renders in a row are batched by React, so
+   * it is called fewer times than `render()`. Not called for a render that
+   * ended in an uncaught error.
    */
   onRenderComplete?: (models: AnyDotObjectModel[]) => void;
 }
 
 /**
- * Graphviz root interface
+ * A root to render into, again and again, like a root of React.
  */
-export interface RenderOptions {
-  /**
-   * Stop waiting for the tree to settle: when the signal aborts, `render()`
-   * rejects with `signal.reason` (an `AbortError`, or a `TimeoutError` for
-   * `AbortSignal.timeout(ms)`). Without a signal, `render()` waits until
-   * the work React scheduled (transitions, deferred values, suspended data)
-   * is done; bound it for trees you do not control, e.g.
-   * `signal: AbortSignal.timeout(5000)`.
-   */
-  signal?: AbortSignal;
-}
-
 export interface GraphvizRoot {
   /**
-   * Render a React element. Resolves once the tree has settled; renders on
-   * one root run one after another.
+   * Render a React element, or update the tree rendered before. Like
+   * `render()` of a React root it returns nothing and does not wait: React
+   * renders shortly after, and the result comes through the callbacks of
+   * `createRoot` (`onRenderComplete`, or one of the error callbacks). To
+   * convert an element once and wait for the models, use `fromElement`.
+   *
+   * After the renderer itself failed (an error thrown out of React's work,
+   * not by a component: `onUncaughtError` gets it), the tree and its state
+   * are lost, and its effects are not cleaned up; the next `render()`
+   * starts a new one.
+   *
+   * A tree that suspended as a whole (no `Suspense` above the data it
+   * waits for) commits nothing. React renders it to its end when `render()`
+   * is called again, so an error of that earlier tree can be reported
+   * after the later call.
+   *
+   * @throws If the root was unmounted.
    */
-  render(element: ReactElement, options?: RenderOptions): Promise<void>;
+  render(element: ReactElement): void;
   /**
-   * Unmount the root and cleanup resources
+   * Unmount the tree: its effects are cleaned up and the models it added
+   * are taken out of the container. What a cleanup throws is reported to
+   * `onUncaughtError`.
    */
   unmount(): void;
   /**
@@ -121,191 +126,22 @@ export interface GraphvizRoot {
   ): T[];
 }
 
-const noop = (): void => undefined;
-
-function clusterMap(
-  graph?: AnyGraphContainer,
-  map: Map<string, AnyGraphContainer> = new Map(),
-): Map<string, AnyGraphContainer> {
-  if (graph) {
-    if (graph.id) {
-      map.set(graph.id, graph);
-    }
-    for (const s of graph.subgraphs) {
-      clusterMap(s, map);
-    }
-  }
-  return map;
-}
-
 /**
- * Creates the wrapped React element with all necessary context providers
+ * Call a callback of the user's from inside React's work, where an error
+ * of its own must not land: it is thrown again outside, as React does for
+ * the callbacks it guards itself.
  */
-function createWrappedElement<Container extends AnyGraphContainer>(
-  element: ReactElement,
-  context: Context<Container>,
-  container?: Container,
-): ReactElement {
-  return createElement(
-    GraphvizContext.Provider,
-    { value: context },
-    createElement(
-      GraphMap.Provider,
-      { value: clusterMap(container) },
-      createElement(
-        GraphContainer.Provider,
-        { value: container ?? null },
-        container
-          ? createElement(CurrentGraph.Provider, { value: container }, element)
-          : element,
-      ),
-    ),
-  );
-}
-
-function toErrorInfo(info: { componentStack?: string | null }): ErrorInfo {
-  return info.componentStack == null
-    ? {}
-    : { componentStack: info.componentStack };
-}
-
-/**
- * Creates a fiber root for rendering. An uncaught error is recorded on the
- * container, so that `render()` can reject with it.
- */
-function createFiberRoot<
-  Container extends AnyGraphContainer = AnyGraphContainer,
->(containerInfo: RenderContainer<Container>, options: CreateRootOptions = {}) {
-  const {
-    onUncaughtError = noop,
-    onCaughtError = noop,
-    onRecoverableError = noop,
-  } = ownOptions(options);
-
-  // react-reconciler 0.34's createContainer (React 19.3).
-  return reconciler.createContainer(
-    containerInfo,
-    1, // tag: ConcurrentRoot
-    null, // hydrationCallbacks
-    false, // isStrictMode
-    null, // concurrentUpdatesByDefaultOverride
-    '@ts-graphviz/react', // identifierPrefix
-    (error, info) => {
-      containerInfo.uncaughtErrors.push(error);
-      onUncaughtError(error, toErrorInfo(info));
-    },
-    (error, info) => onCaughtError(error, toErrorInfo(info)),
-    (error, info) => onRecoverableError(error, toErrorInfo(info)),
-    noop, // onDefaultTransitionIndicator
-    null, // transitionCallbacks
-  );
-}
-
-/**
- * Validates the rendered models for constraints
- */
-function validateModels(
-  models: AnyDotObjectModel[],
-  container?: AnyGraphContainer,
+function callOutside<A extends unknown[]>(
+  callback: ((...args: A) => void) | undefined,
+  ...args: A
 ): void {
-  if (container) {
-    // With container: no validation needed for top-level graph count
-    return;
-  }
-
-  // Without container: check for exactly one top-level graph
-  const topLevelGraphs = models.filter((model) => model.$$type === 'Graph');
-
-  if (topLevelGraphs.length === 0) {
-    throw new Error(
-      'No top-level graph found. When not using a container, you must provide exactly one Graph or Digraph component at the top level.',
-    );
-  }
-
-  if (topLevelGraphs.length > 1) {
-    throw new Error(
-      `Multiple top-level graphs detected (${topLevelGraphs.length}). DOT language only supports one graph per file. Consider using a container or rendering graphs separately.`,
-    );
-  }
-}
-
-/**
- * Render, wait until no work is left, then check the result.
- *
- * The render and the updates effects schedule run synchronously
- * (`updateContainerSync`, `flushSyncWork`, and the discrete priority of the
- * host config). Work React puts on other lanes (transitions, deferred values,
- * suspended data) runs on its scheduler; `render()` yields to it until the
- * root has no pending lanes, or until `signal` aborts.
- */
-async function renderInternal<
-  Container extends AnyGraphContainer = AnyGraphContainer,
->(
-  containerInfo: RenderContainer<Container>,
-  fiberRoot: ReturnType<typeof reconciler.createContainer>,
-  wrappedElement: ReactElement,
-  originalContainer: Container | undefined,
-  options: CreateRootOptions = {},
-  isUnmounted: () => boolean = () => false,
-  signal?: AbortSignal,
-): Promise<void> {
-  const { onRenderComplete } = ownOptions(options);
-  signal?.throwIfAborted();
-  containerInfo.uncaughtErrors = [];
-  reconciler.updateContainerSync(wrappedElement, fiberRoot, null, null);
-  reconciler.flushSyncWork();
-  signal?.throwIfAborted();
-  // Passive effects of a render that finished outside the synchronous lane
-  // (e.g. the cleanup of a Suspense fallback) are flushed here too.
-  while (
-    (reconciler.flushPassiveEffects() || hasPendingWork(fiberRoot)) &&
-    containerInfo.uncaughtErrors.length === 0
-  ) {
-    signal?.throwIfAborted();
-    await yieldToScheduler();
-    if (isUnmounted()) break;
-  }
-  if (isUnmounted()) {
-    throw new Error('The root was unmounted before the render settled');
-  }
-  signal?.throwIfAborted();
-  const [error] = containerInfo.uncaughtErrors;
-  if (containerInfo.uncaughtErrors.length > 0) {
-    throw error;
-  }
-  validateModels(containerInfo.renderedModels, originalContainer);
-  onRenderComplete?.([...containerInfo.renderedModels]);
-}
-
-// FiberRoot#pendingLanes: React's lanes with work left. Internal, which is
-// why react-reconciler is pinned to the React minor it was built for.
-function hasPendingWork(
-  fiberRoot: ReturnType<typeof reconciler.createContainer>,
-): boolean {
-  return (fiberRoot as { pendingLanes?: number }).pendingLanes !== 0;
-}
-
-// Settles like `promise`, or rejects with `signal.reason` as soon as the
-// signal aborts, e.g. while the render waits behind another one (which then
-// does not run: renderNow checks the signal first).
-function rejectOnAbort<T>(
-  promise: Promise<T>,
-  signal: AbortSignal,
-): Promise<T> {
-  if (signal.aborted) return Promise.reject(signal.reason);
-  return new Promise<T>((resolve, reject) => {
-    const onAbort = () => reject(signal.reason);
-    signal.addEventListener('abort', onAbort, { once: true });
-    promise.then(resolve, reject).finally(() => {
-      signal.removeEventListener('abort', onAbort);
+  try {
+    callback?.(...args);
+  } catch (error) {
+    setTimeout(() => {
+      throw error;
     });
-  });
-}
-
-// A macrotask, so React's scheduler (setImmediate / MessageChannel) and
-// resolved promises get to run.
-function yieldToScheduler(): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, 0));
+  }
 }
 
 /**
@@ -316,57 +152,86 @@ export function createRoot<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(options: CreateRootOptions<Container> = {}): GraphvizRoot {
   // Own properties only: an inherited one is never an option.
-  const { container: given, models, ...rest } = ownOptions(options);
-  const container = modelOf(given) as Container | undefined;
-  const otherOptions = ownOptions(rest);
-
+  const {
+    container: given,
+    models,
+    onUncaughtError,
+    onCaughtError,
+    onRecoverableError,
+    onRenderComplete,
+  } = ownOptions(options);
   const context: Context<Container> = {
-    container,
+    container: modelOf(given) as Container | undefined,
     models: createModelKit(models ?? {}),
   };
-  // The host config adds the models at commit and lists the rendered ones.
-  const containerInfo: RenderContainer<Container> = {
-    renderedModels: [],
-    uncaughtErrors: [],
-    context,
-    children: [],
-  };
 
-  const fiberRoot = createFiberRoot(containerInfo, otherOptions);
+  let mount: Mount<Container> | undefined;
   let isUnmounted = false;
+  // The last commit ended in an uncaught error (React then commits the
+  // emptied tree, and reports the error after it).
+  let failed = false;
+  let completionQueued = false;
 
-  // Renders on one root run one after another: each waits for the previous
-  // to settle, so each sees its own tree, models and errors.
-  let previous: Promise<void> = Promise.resolve();
-
-  const renderNow = async (
-    element: ReactElement,
-    signal?: AbortSignal,
-  ): Promise<void> => {
-    signal?.throwIfAborted();
-    if (isUnmounted) {
-      throw new Error('Cannot render on an unmounted root');
-    }
-
-    const wrappedElement = createWrappedElement(element, context, container);
-
-    await renderInternal(
-      containerInfo,
-      fiberRoot,
-      wrappedElement,
-      container,
-      otherOptions,
-      () => isUnmounted,
-      signal,
-    );
+  const open = (): Mount<Container> => {
+    const opened: Mount<Container> = new Mount(context, {
+      onUncaughtError: (error, info) => {
+        failed = true;
+        callOutside(onUncaughtError, error, info);
+      },
+      onCaughtError: (error, info) => callOutside(onCaughtError, error, info),
+      onRecoverableError: (error, info) =>
+        callOutside(onRecoverableError, error, info),
+      onModelError: (error) => {
+        failed = true;
+        callOutside(onUncaughtError, error, {});
+      },
+      onCommit: () => {
+        // A tree that suspended as a whole is rendered to its end when the
+        // next render starts, and its error is reported then: the commit
+        // that follows is that of the new tree.
+        failed = false;
+        if (onRenderComplete === undefined || completionQueued) return;
+        completionQueued = true;
+        // After the commits of this turn, the ones effects cause included,
+        // and outside React's work, where the callback may throw.
+        queueMicrotask(() => {
+          completionQueued = false;
+          if (failed || mount !== opened || !opened.active) return;
+          onRenderComplete([...opened.models]);
+        });
+      },
+      onFailure: (error, own) => {
+        // The tree that failed loses its models; another keeps them, to be
+        // replaced by the next render.
+        opened.discard(own);
+        failed = true;
+        callOutside(
+          onUncaughtError,
+          own
+            ? error
+            : new Error(
+                'The renderer failed while it rendered another tree, and this tree was lost with it; render again to start a new one',
+                { cause: error },
+              ),
+          {},
+        );
+      },
+    });
+    return opened;
   };
 
   return {
-    render(element: ReactElement, options?: RenderOptions): Promise<void> {
-      const { signal } = ownOptions(options ?? {});
-      const result = previous.then(() => renderNow(element, signal));
-      previous = result.catch(noop);
-      return signal ? rejectOnAbort(result, signal) : result;
+    render(element: ReactElement): void {
+      if (isUnmounted) {
+        throw new Error('Cannot render on an unmounted root');
+      }
+      if (!mount?.active) mount = open();
+      failed = false;
+      const rendering = mount;
+      rendering.render(element);
+      // A task of our own, where React is not running: if it says it is,
+      // it stopped there.
+      setTimeout(() => rendering.checkRenderer());
     },
 
     unmount(): void {
@@ -375,15 +240,14 @@ export function createRoot<
       }
 
       isUnmounted = true;
-      reconciler.updateContainerSync(null, fiberRoot, null, null);
-      reconciler.flushSyncWork();
-      containerInfo.renderedModels = [];
+      mount?.discard(true);
+      mount = undefined;
     },
 
     getTopLevelModels<T extends DotObjectModel>(
       typeGuard?: (model: AnyDotObjectModel) => boolean,
     ): T[] {
-      const models = [...containerInfo.renderedModels];
+      const models = [...(mount?.models ?? [])];
       // The overloads type the result: by the guard, or as the caller says.
       return (typeGuard
         ? models.filter(typeGuard)

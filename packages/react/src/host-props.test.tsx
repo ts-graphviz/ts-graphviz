@@ -3,7 +3,7 @@ import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
-import { renderToDot } from './renderToDot.js';
+import { elementToDot } from './test-utils/render.js';
 
 /** Runs `fn` with `Object.prototype[key]` set to `value`. */
 async function withInherited<T>(
@@ -43,8 +43,8 @@ describe('components read only the props they are given', {
     ['graph', { color: 'extra' }],
     ['port', 'extra'],
   ])('ignores an inherited %s', async (key, value) => {
-    const clean = await renderToDot(element);
-    const dot = await withInherited(key, value, () => renderToDot(element));
+    const clean = await elementToDot(element);
+    const dot = await withInherited(key, value, () => elementToDot(element));
     expect(dot).toBe(clean);
   });
 });

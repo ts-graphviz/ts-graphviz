@@ -297,7 +297,7 @@ The `DotJSXElements` type is also exported for advanced use cases where you need
 
 #### Enhanced Type Safety
 
-The package provides sophisticated TypeScript support with automatic type inference and runtime type filtering:
+The models a root holds are typed, and can be filtered with the type guards:
 
 ```tsx
 import { Digraph, Edge, Node, createRoot } from '@ts-graphviz/react';
@@ -310,9 +310,11 @@ import {
   type NodeModel,
 } from '@ts-graphviz/common';
 
-// ✅ Automatic type inference - no casting needed
-const root = createRoot();
-await root.render(
+const root = createRoot({
+  // Called after React committed the tree
+  onRenderComplete: inspect,
+});
+root.render(
   <Digraph id="myGraph" rankdir="LR">
     <Node id="A" shape="box" />
     <Node id="B" shape="circle" />
@@ -320,42 +322,43 @@ await root.render(
   </Digraph>
 );
 
-// ✅ Type-safe model access
-const models = root.getTopLevelModels();
-// models is automatically typed as DotObjectModel[]
+function inspect() {
+  // ✅ Type-safe model access
+  const models = root.getTopLevelModels();
+  // models is automatically typed as AnyDotObjectModel[]
 
-// ✅ Runtime type filtering with built-in type guards
-// Filter by model type with automatic type narrowing
-const nodes = root.getTopLevelModels(isNodeModel);
-nodes.forEach(node => console.log(node.id)); // TypeScript knows this is NodeModel
+  // ✅ Runtime type filtering with built-in type guards
+  // Filter by model type with automatic type narrowing
+  const nodes = root.getTopLevelModels(isNodeModel);
+  nodes.forEach(node => console.log(node.id)); // TypeScript knows this is NodeModel
 
-const edges = root.getTopLevelModels(isEdgeModel);
-edges.forEach(edge => console.log(edge.targets)); // TypeScript knows this is EdgeModel
+  const edges = root.getTopLevelModels(isEdgeModel);
+  edges.forEach(edge => console.log(edge.targets)); // TypeScript knows this is EdgeModel
 
-const graphs = root.getTopLevelModels(isRootGraphModel);
-graphs.forEach(graph => console.log(graph.directed)); // TypeScript knows this is RootGraphModel
+  const graphs = root.getTopLevelModels(isRootGraphModel);
+  graphs.forEach(graph => console.log(graph.directed)); // TypeScript knows this is RootGraphModel
 
-// ✅ Direct type casting (trusted user assertion)
-// When you know the exact types, you can cast directly without runtime validation
-const trustedNodes = root.getTopLevelModels<NodeModel>();
-trustedNodes.forEach(node => console.log(node.id)); // TypeScript trusts your assertion
+  // ✅ Direct type casting (trusted user assertion)
+  // When you know the exact types, you can cast directly without runtime validation
+  const trustedNodes = root.getTopLevelModels<NodeModel>();
+  trustedNodes.forEach(node => console.log(node.id)); // TypeScript trusts your assertion
 
-const trustedEdges = root.getTopLevelModels<EdgeModel>();
-trustedEdges.forEach(edge => console.log(edge.targets)); // No runtime type checking
+  const trustedEdges = root.getTopLevelModels<EdgeModel>();
+  trustedEdges.forEach(edge => console.log(edge.targets)); // No runtime type checking
 
-// ✅ Advanced model type checking
-const allModels = root.getTopLevelModels();
-for (const model of allModels) {
-  if (isNodeModel(model)) {
-    console.log(`Node: ${model.id}`);
-  } else if (isEdgeModel(model)) {
-    // A target is a node (NodeRef) or a group of nodes
-    const ids = model.targets.map(t =>
-      isNodeRef(t) ? t.id : t.map(n => n.id).join(','),
-    );
-    console.log(`Edge: ${ids.join(' -> ')}`);
-  } else if (isRootGraphModel(model)) {
-    console.log(`Graph: ${model.id} (directed: ${model.directed})`);
+  // ✅ Advanced model type checking
+  for (const model of models) {
+    if (isNodeModel(model)) {
+      console.log(`Node: ${model.id}`);
+    } else if (isEdgeModel(model)) {
+      // A target is a node (NodeRef) or a group of nodes
+      const ids = model.targets.map(t =>
+        isNodeRef(t) ? t.id : t.map(n => n.id).join(','),
+      );
+      console.log(`Edge: ${ids.join(' -> ')}`);
+    } else if (isRootGraphModel(model)) {
+      console.log(`Graph: ${model.id} (directed: ${model.directed})`);
+    }
   }
 }
 ```
@@ -377,9 +380,9 @@ import {
 } from '@ts-graphviz/react';
 
 const container = digraph('myContainer');
-const root = createRoot({ container });
+const root = createRoot({ container, onRenderComplete: inspect });
 
-await root.render(
+root.render(
   <>
     <Node id="node1" />
     <Node id="node2" />
@@ -391,45 +394,54 @@ await root.render(
 );
 
 // Container mode: access all non-container models with type safety
+function inspect() {
+  // Runtime type filtering (safe, validates at runtime)
+  const allNodes = root.getTopLevelModels(isNodeModel); // NodeModel[]
+  const allEdges = root.getTopLevelModels(isEdgeModel); // EdgeModel[]
+  const subgraphs = root.getTopLevelModels(isSubgraphModel); // SubgraphModel[]
 
-// Runtime type filtering (safe, validates at runtime)
-const allNodes = root.getTopLevelModels(isNodeModel); // NodeModel[]
-const allEdges = root.getTopLevelModels(isEdgeModel); // EdgeModel[]
-const subgraphs = root.getTopLevelModels(isSubgraphModel); // SubgraphModel[]
+  // Direct type casting (user knows the types, no runtime validation)
+  const trustedNodes = root.getTopLevelModels<NodeModel>(); // All models cast as NodeModel[]
+  const trustedEdges = root.getTopLevelModels<EdgeModel>(); // All models cast as EdgeModel[]
 
-// Direct type casting (user knows the types, no runtime validation)
-const trustedNodes = root.getTopLevelModels<NodeModel>(); // All models cast as NodeModel[]
-const trustedEdges = root.getTopLevelModels<EdgeModel>(); // All models cast as EdgeModel[]
+  // Type-safe operations
+  allNodes.forEach(node => {
+    node.setAttribute('color', 'blue'); // TypeScript knows node attributes
+  });
 
-// Type-safe operations
-allNodes.forEach(node => {
-  node.setAttribute('color', 'blue'); // TypeScript knows node attributes
-});
-
-allEdges.forEach(edge => {
-  // A target is a node (NodeRef) or a group of nodes
-  const [from, to] = edge.targets.map(t =>
-    isNodeRef(t) ? t.id : t.map(n => n.id).join(','),
-  );
-  console.log(`Edge from ${from} to ${to}`);
-});
+  allEdges.forEach(edge => {
+    // A target is a node (NodeRef) or a group of nodes
+    const [from, to] = edge.targets.map(t =>
+      isNodeRef(t) ? t.id : t.map(n => n.id).join(','),
+    );
+    console.log(`Edge from ${from} to ${to}`);
+  });
+}
 ```
 
 ## Core Functions
-The package provides clean async rendering APIs:
 
-- `createRoot()` - Creates a rendering root following React 19's createRoot pattern
-- `renderToDot()` - Primary async function for converting React components to DOT language strings
+- `fromElement()` - Converts a React element to models once: it renders the element, waits until React has no work left for it, and resolves with the models. `toDot(await fromElement(element))` gives the DOT text.
+- `createRoot()` - Creates a root to render into again and again, like a root of React: `render()` returns at once, and the result comes through the callbacks.
 - `renderHTMLLike()` - Renders HTML-like label structures for use in node or edge labels
 
-All rendering functions are **async-only** and provide a clean, consistent API surface. The new `createRoot()` API follows React 19's modern patterns for better performance and error handling.
+Which one to use:
+
+| | `fromElement(element, options?)` | `createRoot(options?)` |
+| --- | --- | --- |
+| For | a script, a server, a build step: one element, one result | a tree that stays and updates (state, effects, new props) |
+| Result | a promise of one `Dot` model holding the root graphs, or of the `container` | none from `render()`; `onRenderComplete(models)` after each commit, `getTopLevelModels()` at any time |
+| Errors | the promise rejects | `onUncaughtError`, `onCaughtError`, `onRecoverableError` |
+| Waits for | effects, transitions, deferred values, data read with `use` | nothing: React renders shortly after `render()` returns |
+| The tree afterwards | unmounted (its effects clean up); the models stay | stays mounted until `unmount()`, which takes its models out |
 
 ## Usage Examples
 
 ### Creating a Simple Graph
 
 ```tsx
-import { Digraph, Node, Edge, createRoot, renderToDot } from "@ts-graphviz/react";
+import { Digraph, Node, Edge, fromElement } from "@ts-graphviz/react";
+import { toDot } from "ts-graphviz";
 
 // Define a reusable process component
 const ProcessNode = ({ id, label, color = "lightblue" }: { id: string; label: string; color?: string }) => (
@@ -462,19 +474,19 @@ const WorkflowDiagram = () => (
   </Digraph>
 );
 
-// Create root and render to graph models
-const root = createRoot();
-await root.render(<WorkflowDiagram />);
-const models = root.getTopLevelModels();
+// Convert to models: one Dot model holding the root graph
+const dot = await fromElement(<WorkflowDiagram />);
+const [graph] = dot.graphs;
 
 // Convert to DOT string
-const dotString = await renderToDot(<WorkflowDiagram />);
+const dotString = toDot(dot);
 ```
 
 ### Using HTML-Like Labels
 
 ```tsx
-import { Digraph, Node, Edge, renderToDot } from "@ts-graphviz/react";
+import { Digraph, Node, Edge, fromElement } from "@ts-graphviz/react";
+import { toDot } from "ts-graphviz";
 
 // Reusable card component with HTML-like labels
 const InfoCard = ({ id, title, items }: { id: string; title: string; items: string[] }) => (
@@ -518,7 +530,7 @@ const ProjectDiagram = () => (
   </Digraph>
 );
 
-const dotString = await renderToDot(<ProjectDiagram />);
+const dotString = toDot(await fromElement(<ProjectDiagram />));
 ```
 
 ### Using the renderHTMLLike Function
@@ -593,58 +605,55 @@ const options: RenderHTMLLikeOptions = {
 const result = renderHTMLLike(<dot:table>...</dot:table>, options);
 ```
 
-### Advanced Root Options
+### Rendering Into an Existing Graph
+
+Both functions take a `container`: the models of the element are added to that graph, and the element may have nodes, edges and subgraphs at its top level.
 
 ```ts
-import { Digraph, Node, Edge, createRoot } from "@ts-graphviz/react";
-import { digraph } from 'ts-graphviz';
+import { Node, Edge, createRoot, fromElement } from "@ts-graphviz/react";
+import { digraph, toDot } from 'ts-graphviz';
 
-// A graph component of your application
-declare function MyComplexGraph(): React.ReactElement;
-
-// Basic usage
-const root = createRoot();
-await root.render(
-  <Digraph>
-    <Node id="A" />
-    <Node id="B" />
-    <Edge targets={["A", "B"]} />
-  </Digraph>
-);
-
-// Container mode - render into existing graph
-const container = digraph('MyGraph');
-const containerRoot = createRoot({ container });
-await containerRoot.render(
+// One-time: resolves with the container
+const G = digraph('MyGraph');
+await fromElement(
   <>
     <Node id="A" />
     <Node id="B" />
     <Edge targets={["A", "B"]} />
+  </>,
+  { container: G },
+);
+console.log(toDot(G));
+
+// A root: the models stay in the container while the tree is mounted
+const container = digraph('Live');
+const root = createRoot({
+  container,
+  onRenderComplete: () => console.log(toDot(container)),
+});
+root.render(<Node id="A" />);
+root.render(
+  <>
+    <Node id="A" />
+    <Node id="B" />
   </>
 );
-
-// Error handling options
-const rootWithErrorHandling = createRoot({
-  onUncaughtError: (error, errorInfo) => {
-    console.error('Rendering error:', error);
-    console.log('Component stack:', errorInfo.componentStack);
-  },
-  onCaughtError: (error, errorInfo) => {
-    console.error('Caught error:', error);
-  }
-});
-
-await rootWithErrorHandling.render(<MyComplexGraph />);
+// Later: the nodes are taken out of the container again
+root.unmount();
 ```
+
+Without a container, the top level of the element is root graphs only (`<Digraph>`, `<Graph>`); several of them give one `Dot` model with several graphs.
 
 ## Advanced Features
 
 ### Error Handling
 
-The package provides robust error handling capabilities for rendering errors:
+`fromElement()` rejects: with the error no error boundary caught, with the error a model class threw, or with `signal.reason`. Whenever it rejects, what it added is taken out of the container again.
+
+A root reports through its callbacks, as a root of React does, and `render()` itself does not throw for them:
 
 ```ts
-import { createRoot, renderToDot } from "@ts-graphviz/react";
+import { createRoot, fromElement } from "@ts-graphviz/react";
 
 // Graph components of your application
 declare function MyGraph(): React.ReactElement;
@@ -654,44 +663,77 @@ declare const errorTracker: {
   captureException(error: unknown, context: object): void;
 };
 
-// Error handling with createRoot. A thrown value need not be an Error, so
-// the callbacks receive `unknown`.
+// A thrown value need not be an Error, so the callbacks receive `unknown`.
 const root = createRoot({
   onUncaughtError: (error, errorInfo) => {
-    // Send to error tracking service; render() also rejects with the error
+    // No error boundary caught it: React emptied the tree, and the root
+    // has no models until the next render
     errorTracker.captureException(error, { extra: errorInfo });
   },
   onCaughtError: (error, errorInfo) => {
     // An error boundary in the tree caught it and rendered its fallback
     errorTracker.captureException(error, { extra: errorInfo, caught: true });
   },
+  onRenderComplete: (models) => {
+    // Not called for a render that ended in an uncaught error
+    console.log(`${models.length} top-level models`);
+  },
 });
 
-await root.render(<MyGraph />);
+root.render(<MyGraph />);
 
-// renderToDot also supports error handling
+// fromElement rejects
 try {
-  const dotString = await renderToDot(<ComplexGraph />);
+  const dot = await fromElement(<ComplexGraph />);
 } catch (error) {
-  if (error instanceof Error && error.message.includes('Multiple top-level graphs')) {
-    console.error('Invalid graph structure');
-  }
+  errorTracker.captureException(error, {});
 }
 ```
 
-### Waiting for the tree to settle
+- An error one of the callbacks throws is thrown again outside the render, as an uncaught exception (in `fromElement`, it rejects the promise instead). Catch inside a callback what must not end a Node.js process.
+- `onUncaughtError` is also called when a model class throws while the models are updated, and when the renderer itself fails: an error thrown out of React's work, not by a component. All the trees share the renderer, so every root is told (the others with an error whose `cause` is the original one) and keeps the models it has; the tree and its state are lost, its effects are not cleaned up, and the next `render()` starts a new tree. A `fromElement()` that was waiting meanwhile starts again by itself.
+- `unmount()` reports what a cleanup of an effect throws to `onUncaughtError` too.
+- `render()` throws only when the root was unmounted.
 
-`render()` and `renderToDot()` resolve once the tree has settled, including work React schedules after the first render: transitions, deferred values and suspended data (`use` with `Suspense`). Pass a `signal` to stop waiting; it rejects with `signal.reason`. Without one there is no limit, so bound trees you do not control:
+### What `fromElement` Waits For
+
+`fromElement()` renders at once, with the updates effects schedule, and waits for the work React does later: transitions, deferred values and data read with `use`. What an effect starts by itself (a timer, a fetch that sets state later) is not waited for. Pass a `signal` to stop waiting; it rejects with `signal.reason`. Without one there is no limit, so bound trees you do not control:
 
 ```ts
-import { renderToDot } from "@ts-graphviz/react";
+import { fromElement } from "@ts-graphviz/react";
 
 declare function UntrustedGraph(): React.ReactElement;
 
-const dot = await renderToDot(<UntrustedGraph />, {
+const dot = await fromElement(<UntrustedGraph />, {
   signal: AbortSignal.timeout(5000), // rejects with a TimeoutError after 5 s
 });
 ```
+
+### Testing With `act`
+
+A root works with `act()` of React, like the roots of React DOM: inside it, the render and its effects are flushed before `act()` returns, and an uncaught error is thrown by `act()`.
+
+```ts
+import { act } from "react";
+import { Digraph, Node, createRoot } from "@ts-graphviz/react";
+
+// Tell React the code runs in a test (your test setup may already do it)
+(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+
+const root = createRoot();
+await act(async () => {
+  root.render(
+    <Digraph>
+      <Node id="A" />
+    </Digraph>
+  );
+});
+const [graph] = root.getTopLevelModels();
+```
+
+### Next to React DOM
+
+The renderer is a secondary renderer of React, so it can be used in a process or a page that also renders with React DOM. Context does not cross from one renderer to the other: a graph rendered from inside a React DOM component does not see the providers above that component. Pass what it needs as props, or wrap the element in the providers again.
 
 ### Ref as Prop Support
 
@@ -699,7 +741,7 @@ The package supports using `ref` to access and manipulate graph models directly,
 
 ```ts
 import { useRef } from 'react';
-import { Digraph, Graph, Node, Edge, createRoot } from "@ts-graphviz/react";
+import { Digraph, Graph, Node, Edge, fromElement } from "@ts-graphviz/react";
 import type { NodeModel, EdgeModel, GraphBaseModel } from 'ts-graphviz';
 
 function MyGraphComponent() {
@@ -710,8 +752,7 @@ function MyGraphComponent() {
 
   const handleRender = async () => {
     // Example with Digraph component
-    const digraphRoot = createRoot();
-    await digraphRoot.render(
+    await fromElement(
       <Digraph id="mygraph" ref={digraphRef}>
         <Node id="A" ref={nodeRef} label="Node A" />
         <Node id="B" label="Node B" />
@@ -720,8 +761,7 @@ function MyGraphComponent() {
     );
 
     // Example with Graph component (undirected)
-    const graphRoot = createRoot();
-    await graphRoot.render(
+    await fromElement(
       <Graph id="undirected-graph" ref={graphRef}>
         <Node id="X" label="Node X" />
         <Node id="Y" label="Node Y" />

@@ -1,17 +1,18 @@
 import React from 'react';
-import { Digraph as DigraphModel, type NodeModel } from 'ts-graphviz';
+import { Digraph as DigraphModel, type NodeModel, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
 import { Graph } from './components/Graph.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
-import { renderToDot } from './renderToDot.js';
+import { fromElement } from './fromElement.js';
+import { elementToDot } from './test-utils/render.js';
 
-describe('renderToDot()', () => {
+describe('fromElement()', () => {
   describe('Without container', () => {
     it('renders a simple digraph to DOT', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph id="simple">
           <Node id="a" />
           <Node id="b" />
@@ -26,7 +27,7 @@ describe('renderToDot()', () => {
     });
 
     it('renders a simple graph to DOT', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Graph id="simple">
           <Node id="a" />
           <Node id="b" />
@@ -41,7 +42,7 @@ describe('renderToDot()', () => {
     });
 
     it('renders a graph with subgraphs to DOT', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph id="complex">
           <Node id="start" />
           <Subgraph id="cluster_main">
@@ -60,7 +61,7 @@ describe('renderToDot()', () => {
     });
 
     it('renders an empty graph to DOT', async () => {
-      const dot = await renderToDot(<Digraph id="empty" />);
+      const dot = await elementToDot(<Digraph id="empty" />);
 
       expect(dot).toContain('digraph "empty"');
       expect(dot).toContain('{}');
@@ -75,7 +76,7 @@ describe('renderToDot()', () => {
           node.setAttribute('comment', 'custom');
         }
       }
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph id="G" strict>
           <Node id="a" />
         </Digraph>,
@@ -90,7 +91,7 @@ describe('renderToDot()', () => {
     it('renders container with added elements to DOT', async () => {
       const container = new DigraphModel('container');
 
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <>
           <Node id="a" />
           <Node id="b" />
@@ -108,7 +109,7 @@ describe('renderToDot()', () => {
     it('renders container with subgraphs to DOT', async () => {
       const container = new DigraphModel('main');
 
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <>
           <Node id="start" />
           <Subgraph id="cluster_sub">
@@ -129,32 +130,42 @@ describe('renderToDot()', () => {
     it('renders empty fragment with container to DOT', async () => {
       const container = new DigraphModel('empty_container');
 
-      const dot = await renderToDot(<React.Fragment />, { container });
+      const dot = await elementToDot(<React.Fragment />, { container });
 
       expect(dot).toContain('digraph "empty_container"');
       expect(dot).toContain('{}');
     });
   });
 
-  describe('Error cases', () => {
-    it('throws error for multiple top-level graphs', async () => {
-      await expect(
-        renderToDot(
-          <>
-            <Digraph id="graph1">
-              <Node id="a" />
-            </Digraph>
-            <Graph id="graph2">
-              <Node id="b" />
-            </Graph>
-          </>,
-        ),
-      ).rejects.toThrow(/Multiple top-level graphs detected/);
+  describe('Top level without a container', () => {
+    it('resolves with one Dot holding every root graph', async () => {
+      const dot = await fromElement(
+        <>
+          <Digraph id="graph1">
+            <Node id="a" />
+          </Digraph>
+          <Graph id="graph2">
+            <Node id="b" />
+          </Graph>
+        </>,
+      );
+
+      expect(dot.$$type).toBe('Dot');
+      expect(dot.graphs.map((graph) => graph.id)).toEqual(['graph1', 'graph2']);
+      expect(toDot(dot)).toBe(
+        'digraph "graph1" {\n  "a";\n}\ngraph "graph2" {\n  "b";\n}',
+      );
+    });
+
+    it('resolves with an empty Dot for an element that renders nothing', async () => {
+      const dot = await fromElement(<Nothing />);
+
+      expect(dot.graphs).toEqual([]);
     });
 
     it('reports a node outside any graph', async () => {
       await expect(
-        renderToDot(
+        fromElement(
           <>
             <Node id="orphan" />
             <Edge targets={['a', 'b']} />
@@ -164,32 +175,11 @@ describe('renderToDot()', () => {
         /<Node> must be rendered inside a Digraph, Graph or Subgraph/,
       );
     });
-
-    it('throws error when no top-level graph is provided', async () => {
-      await expect(renderToDot(<Nothing />)).rejects.toThrow(
-        /No top-level graph found/,
-      );
-    });
-
-    it('throws error for fragment with multiple graphs', async () => {
-      await expect(
-        renderToDot(
-          <React.Fragment>
-            <Digraph id="graph1">
-              <Node id="a" />
-            </Digraph>
-            <Digraph id="graph2">
-              <Node id="b" />
-            </Digraph>
-          </React.Fragment>,
-        ),
-      ).rejects.toThrow(/Multiple top-level graphs detected/);
-    });
   });
 
   describe('HTML-like labels', () => {
     it('renders graphs with HTML-like labels', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph id="html_test">
           <Node
             id="table"
