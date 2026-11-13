@@ -81,7 +81,7 @@ export abstract class GraphBase<
    * The classes used when none were given to {@link with}.
    *
    * The core classes return those of `defaultModelKit`. A direct subclass of
-   * `GraphBase` must override this or call `with()` before creating models.
+   * `GraphBase` must override this or give `with()` every class before creating models.
    * (GraphBase cannot import the default kit itself: the kit holds
    * the subclasses, and ES modules in that cycle would be evaluated before
    * their base class.)
