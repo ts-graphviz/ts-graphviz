@@ -48,15 +48,11 @@ export interface RenderContainer<
   onSyncError(error: unknown): void;
 }
 
-/** What a tree added to a graph. */
-interface Added {
-  /** The statements, in the order added. */
-  statements: (NodeModel | EdgeModel | SubgraphModel)[];
-  /** Nodes of the graph's own that a rendered node with their id replaced. */
-  shadowed: Map<string, NodeModel>;
-}
-
-export type AddedStatements = Map<AnyGraphContainer, Added>;
+/** What a tree added to each graph: the statements, in the order added. */
+export type AddedStatements = Map<
+  AnyGraphContainer,
+  (NodeModel | EdgeModel | SubgraphModel)[]
+>;
 
 interface InstanceBase {
   /** Hidden by a Suspense boundary that shows its fallback again. */

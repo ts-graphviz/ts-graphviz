@@ -70,20 +70,31 @@ digraph "G" {
 モデルキットは、渡したクラスからモデルを作ります。`createModelKit` はカスタムクラスを受け取り、残りには既定のクラスを使います。
 
 ```typescript
-import { createModelKit, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
+import {
+  createModelKit,
+  Node,
+  Edge,
+  type EdgeAttributesObject,
+  type EdgeTargetTuple,
+  type NodeAttributesObject,
+  attribute as _,
+  toDot,
+} from 'ts-graphviz';
 
 class MyCustomNode extends Node {
-  constructor(id: string) {
+  constructor(id: string, attributes?: NodeAttributesObject) {
     super(`node_${id}`, {
       [_.label]: `これはカスタムノード ${id} です`,
+      ...attributes,
     });
   }
 }
 
 class MyCustomEdge extends Edge {
-  constructor(targets: EdgeTargetTuple) {
+  constructor(targets: EdgeTargetTuple, attributes?: EdgeAttributesObject) {
     super(targets, {
       [_.label]: 'これはカスタムエッジです',
+      ...attributes,
     });
   }
 }
