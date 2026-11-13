@@ -1,11 +1,14 @@
 import {
+  createLabelContext,
   createRoot,
   Digraph,
   Edge,
   type FromElementOptions,
   fromElement,
+  htmlLikeFromElement,
+  type LabelContext,
   Node,
-  renderHTMLLike,
+  readLabelContext,
   Subgraph,
 } from '@ts-graphviz/react';
 import type {
@@ -68,10 +71,23 @@ describe('rendering', () => {
     expectTypeOf(createRoot().render(<Digraph />)).toEqualTypeOf<void>();
   });
 
-  it('renderHTMLLike gives a label value', () => {
+  it('htmlLikeFromElement gives a label value', () => {
     expectTypeOf(
-      renderHTMLLike(<dot:b>x</dot:b>),
+      htmlLikeFromElement(<dot:b>x</dot:b>),
     ).toEqualTypeOf<HTMLLikeValue>();
+  });
+
+  it('a label context carries the type of its value', () => {
+    const Accent = createLabelContext('black');
+    expectTypeOf(Accent).toEqualTypeOf<LabelContext<string>>();
+    expectTypeOf(readLabelContext(Accent)).toEqualTypeOf<string>();
+    htmlLikeFromElement(
+      <Accent.Provider value="red">
+        <dot:b>x</dot:b>
+      </Accent.Provider>,
+    );
+    // @ts-expect-error the value of the context is a string
+    <Accent.Provider value={1} />;
   });
 
   it('getTopLevelModels narrows with a guard', () => {

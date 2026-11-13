@@ -55,7 +55,7 @@ All limits are configurable and can be adjusted or disabled based on your securi
 
 #### React Rendering Security (@ts-graphviz/react)
 
-The `renderHTMLLike` function provides security protections against stack overflow attacks:
+The `htmlLikeFromElement` function provides security protections against stack overflow attacks:
 
 - **Recursion Depth Limit**: Protection against stack overflow from deeply nested React element structures. A configurable depth limit (default: 1000 levels) prevents crashes from deeply nested or circular structures.
 

@@ -53,7 +53,7 @@ In 3.x a string placed in a model was written into DOT with its backslashes pass
 | `label: 'line1\\nline2'` (literal backslash-n) | `label: 'line1\nline2'` or `escString('line1\\nline2')` |
 | `label: '\\N'` (node name substitution) | `label: escString('\\N')` |
 | `label: '<<b>bold</b>>'` | `label: htmlLike('<b>bold</b>')` |
-| string returned by `renderHTMLLike(...)` (React) | an `HTMLLikeValue`; pass it to the attribute, or use `.value` for the markup |
+| string returned by `renderHTMLLike(...)` (React) | `htmlLikeFromElement(...)` returns an `HTMLLikeValue`; pass it to the attribute, or use `.value` for the markup |
 
 `isEscString` / `isHTMLLike` are type guards for the two kinds. When parsing, `\\` and `\"` become literal characters, any other backslash sequence yields an `escString`, and `<…>` yields an `htmlLike` value.
 
@@ -236,10 +236,20 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 - `createRoot` and `fromElement` take a `models` option.
 - The renderer is a secondary renderer of React: it can be used next to React DOM, and context does not cross from one renderer to the other.
 - `<Digraph strict>` / `<Graph strict>` render strict graphs.
-- `renderHTMLLike` returns an `HTMLLikeValue` (see section 2).
-- As in 0.12, `renderHTMLLike` (and so a JSX `label`) writes strings as text: text children are written with `&`, `<` and `>` as entities, and attribute values also with `"`. Write markup as elements (`<dot:td><dot:b>x</dot:b></dot:td>`), not as a string (`<dot:td>{'<b>x</b>'}</dot:td>`).
+- `renderHTMLLike` is renamed to `htmlLikeFromElement`, and `RenderHTMLLikeOptions` to `HtmlLikeFromElementOptions`. It returns an `HTMLLikeValue` (see section 2).
+
+  ```tsx
+  // Before
+  const label = renderHTMLLike(<dot:b>bold</dot:b>);
+
+  // After
+  const label = htmlLikeFromElement(<dot:b>bold</dot:b>);
+  ```
+
+- `createLabelContext` / `readLabelContext` pass a value down the components of a label, where a React provider cannot be used.
+- As in 0.12, `htmlLikeFromElement` (and so a JSX `label`) writes strings as text: text children are written with `&`, `<` and `>` as entities, and attribute values also with `"`. Write markup as elements (`<dot:td><dot:b>x</dot:b></dot:td>`), not as a string (`<dot:td>{'<b>x</b>'}</dot:td>`).
 - `<dot:port>` is removed: HTML-like labels have no port element, and Graphviz rejected its output. Use the `port` attribute: `<dot:td port="p">`.
-- `renderHTMLLike` throws instead of logging a warning and returning an empty label: `RangeError` past `maxDepth`; `TypeError` for a circular tree, an element HTML-like labels do not have (`<div>`, `<span>`, …), an attribute name that is not a name, or an object among the children that is not a React element. Errors from components are no longer swallowed.
+- `htmlLikeFromElement` throws instead of logging a warning and returning an empty label: `RangeError` past `maxDepth`; `TypeError` for a circular tree, an element HTML-like labels do not have (`<div>`, `<span>`, …), an attribute name that is not a name, or an object among the children that is not a React element. Errors from components are no longer swallowed.
 
 ## 11. Small behaviour fixes
 
