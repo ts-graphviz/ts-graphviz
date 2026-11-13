@@ -67,20 +67,31 @@ digraph "G" {
 A model kit creates models from the classes you give it. `createModelKit` takes the custom classes and uses the default ones for the rest.
 
 ```typescript
-import { createModelKit, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
+import {
+  createModelKit,
+  Node,
+  Edge,
+  type EdgeAttributesObject,
+  type EdgeTargetTuple,
+  type NodeAttributesObject,
+  attribute as _,
+  toDot,
+} from 'ts-graphviz';
 
 class MyCustomNode extends Node {
-  constructor(id: string) {
+  constructor(id: string, attributes?: NodeAttributesObject) {
     super(`node_${id}`, {
       [_.label]: `This is Custom Node ${id}`,
+      ...attributes,
     });
   }
 }
 
 class MyCustomEdge extends Edge {
-  constructor(targets: EdgeTargetTuple) {
+  constructor(targets: EdgeTargetTuple, attributes?: EdgeAttributesObject) {
     super(targets, {
       [_.label]: 'This is Custom Edge',
+      ...attributes,
     });
   }
 }
