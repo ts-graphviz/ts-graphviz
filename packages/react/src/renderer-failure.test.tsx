@@ -131,6 +131,22 @@ describe('a failure of the renderer', () => {
     last.unmount();
   });
 
+  it('replaces the models of a tree that was lost by those of the next render', async () => {
+    const container = new DigraphModel('C');
+    const root = createRoot({ container, onUncaughtError: () => undefined });
+    await render(root, <Node id="a" />);
+    const last = createRoot();
+    await render(last, graphOf('last'));
+
+    await failWhileRendering(last);
+    await render(root, <Node id="b" />);
+
+    expect(container.nodes.map((n) => n.id)).toEqual(['b']);
+    root.unmount();
+    expect(container.nodes).toHaveLength(0);
+    last.unmount();
+  });
+
   it('takes the models of a tree that was lost out when its root is unmounted', async () => {
     const container = new DigraphModel('C');
     const root = createRoot({ container, onUncaughtError: () => undefined });
