@@ -1,4 +1,4 @@
-import { createElement, type ReactElement } from 'react';
+import { createElement, type ReactElement, Suspense } from 'react';
 import type { AnyDotObjectModel } from 'ts-graphviz';
 import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
@@ -88,6 +88,38 @@ function toErrorInfo(info: { componentStack?: string | null }): ErrorInfo {
   return info.componentStack == null
     ? {}
     : { componentStack: info.componentStack };
+}
+
+/**
+ * The part of a fiber read here. Internal to React, which is why
+ * react-reconciler is pinned to the React minor it was built for; tests
+ * hold it to what is read.
+ */
+interface Fiber {
+  elementType: unknown;
+  memoizedState: unknown;
+  child: Fiber | null;
+  sibling: Fiber | null;
+}
+
+/**
+ * Whether a Suspense boundary of the committed tree shows its fallback: it
+ * waits for data, and React renders it again when the data is there. React
+ * counts no work for the tree meanwhile.
+ */
+function showsFallback(root: Fiber): boolean {
+  // Without recursion: a tree may be deeper than the call stack. Downwards
+  // only: the parent a fiber points to may be the parent's other version,
+  // of an earlier commit.
+  const rest: Fiber[] = [root];
+  for (let fiber = rest.pop(); fiber !== undefined; fiber = rest.pop()) {
+    if (fiber.elementType === Suspense && fiber.memoizedState !== null) {
+      return true;
+    }
+    if (fiber.sibling !== null) rest.push(fiber.sibling);
+    if (fiber.child !== null) rest.push(fiber.child);
+  }
+  return false;
 }
 
 /**
@@ -184,20 +216,24 @@ export class Mount<Container extends AnyGraphContainer = AnyGraphContainer> {
   }
 
   /**
-   * Run the passive effects that are due, and tell whether React has work
-   * left for this tree (transitions, deferred values, suspended data, which
-   * run on its scheduler).
+   * Run the passive effects that are due, and tell what is left for this
+   * tree: `'work'` React has scheduled (transitions, deferred values, data
+   * the whole tree waits for), `'data'` a boundary that shows its fallback
+   * waits for (React renders it again when the data is there, and counts no
+   * work meanwhile), or `'none'`.
    */
-  hasWorkLeft(): boolean {
+  workLeft(): 'work' | 'data' | 'none' {
     const flushed = this.#generation.run((reconciler) =>
       reconciler.flushPassiveEffects(),
     );
-    // FiberRoot#pendingLanes: React's lanes with work left. Internal, which
-    // is why react-reconciler is pinned to the React minor it was built for.
-    return (
-      flushed === true ||
-      (this.#fiberRoot as { pendingLanes?: number }).pendingLanes !== 0
-    );
+    // FiberRoot#pendingLanes: React's lanes with work left. Internal, like
+    // the fibers.
+    const { pendingLanes, current } = this.#fiberRoot as {
+      pendingLanes?: number;
+      current: Fiber;
+    };
+    if (flushed === true || pendingLanes !== 0) return 'work';
+    return showsFallback(current) ? 'data' : 'none';
   }
 
   /**

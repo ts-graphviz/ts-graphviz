@@ -736,7 +736,28 @@ try {
 
 ### What `fromElement` Waits For
 
-`fromElement()` renders at once, with the updates effects schedule, and waits for the work React does later: transitions, deferred values and data read with `use`. What an effect starts by itself (a timer, a fetch that sets state later) is not waited for. Pass a `signal` to stop waiting; it rejects with `signal.reason`. Without one there is no limit, so bound trees you do not control:
+`fromElement()` renders at once, with the updates effects schedule, and waits for the work React does later: transitions, deferred values and data read with `use`. Data under a `Suspense` boundary is waited for however long it takes: the result has the content, never the fallback. What an effect starts by itself (a timer, a fetch that sets state later) is not waited for: the result is what the tree shows once its effects have run. Read such data with `use` instead:
+
+```tsx
+import { Suspense, use } from "react";
+import { Digraph, Node, fromElement } from "@ts-graphviz/react";
+
+declare function loadName(): Promise<string>;
+
+function Loaded({ name }: { name: Promise<string> }) {
+  return <Node id={use(name)} />;
+}
+
+const dot = await fromElement(
+  <Digraph>
+    <Suspense fallback={<Node id="loading" />}>
+      <Loaded name={loadName()} />
+    </Suspense>
+  </Digraph>
+); // has the loaded node, not "loading"
+```
+
+Pass a `signal` to stop waiting; it rejects with `signal.reason`. Without one there is no limit, so bound trees you do not control:
 
 ```ts
 import { fromElement } from "@ts-graphviz/react";

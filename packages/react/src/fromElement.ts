@@ -55,8 +55,21 @@ const MAX_ATTEMPTS = 3;
 
 // A macrotask, so React's scheduler (setImmediate / MessageChannel) and
 // resolved promises get to run.
-function yieldToScheduler(): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, 0));
+function yieldToScheduler(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** The longest pause between two looks at a tree that waits for data. */
+const MAX_PAUSE = 16;
+
+/**
+ * How long to pause before the next look at a tree that only waits for
+ * data, after `looks` looks in a row: React does not tell when the data of a
+ * boundary is there, so the tree is looked at again, soon for data that is
+ * nearly there and less often for data that takes long.
+ */
+function pauseFor(looks: number): number {
+  return looks < 4 ? 0 : Math.min(MAX_PAUSE, 2 ** (looks - 4));
 }
 
 /** Why an attempt ended without models. */
@@ -90,7 +103,8 @@ type Failure =
  * ```
  *
  * The render and the updates effects schedule run at once; transitions,
- * deferred values and data read with `use` are waited for. What an effect
+ * deferred values and data read with `use` are waited for, under a
+ * `Suspense` boundary too, however long the data takes. What an effect
  * starts by itself (a timer, a fetch that sets state later) is not. When
  * the models are ready the tree is unmounted, so its effects clean up; the
  * models stay.
@@ -165,9 +179,15 @@ export async function fromElement<Container extends AnyGraphContainer>(
     });
     try {
       mount.renderSync(element);
-      while (state.failure === undefined && mount.hasWorkLeft()) {
+      let looks = 0;
+      for (
+        let left = mount.workLeft();
+        state.failure === undefined && left !== 'none';
+        left = mount.workLeft()
+      ) {
         signal?.throwIfAborted();
-        await yieldToScheduler();
+        looks = left === 'data' ? looks + 1 : 0;
+        await yieldToScheduler(pauseFor(looks));
         mount.checkRenderer();
       }
       signal?.throwIfAborted();
