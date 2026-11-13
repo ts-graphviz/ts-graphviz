@@ -19,3 +19,11 @@ describe('fromDot with a rule that has no model', () => {
     );
   });
 });
+
+describe('fromDot with an empty subgraph as an edge endpoint', () => {
+  it('reads the empty group DOT allows', () => {
+    const G = fromDot('digraph { {} -> a }');
+    expect(G.edges).toHaveLength(1);
+    expect(G.edges[0].targets[0]).toEqual([]);
+  });
+});
