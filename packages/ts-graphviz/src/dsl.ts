@@ -481,9 +481,11 @@ function isKit(value: unknown): value is ModelKit {
   if (typeof value !== 'object' || value === null) return false;
   const kit = value as Record<string, unknown>;
   return (
+    typeof kit.createDigraph === 'function' &&
+    typeof kit.createGraph === 'function' &&
+    typeof kit.createSubgraph === 'function' &&
     typeof kit.createNode === 'function' &&
-    typeof kit.createEdge === 'function' &&
-    typeof kit.createSubgraph === 'function'
+    typeof kit.createEdge === 'function'
   );
 }
 
@@ -493,7 +495,9 @@ function isKit(value: unknown): value is ModelKit {
  *
  * A graph's DSL creates with the kit: pass the kit of your classes
  * (`createModelKit`) for `node`, `edge` and `subgraph` to create them. A
- * model does not remember the kit it was created with.
+ * model does not remember the kit it was created with, and the types follow
+ * the kit: `node('a')` is typed as the kit's node even when the graph already
+ * has an `a` of another class.
  *
  * ```ts
  * const G = dsl(fromDot('digraph { a }'));
@@ -512,7 +516,13 @@ function isKit(value: unknown): value is ModelKit {
 export function dsl<
   T extends AnyDotObjectModel,
   M extends ModelTypes = ModelTypes,
->(model: T | ModelView<T>, kit?: ModelKit<M>): DSL<T, M>;
+>(model: T | ModelView<T>, kit: ModelKit<M>): DSL<T, M>;
+export function dsl<T extends AnyDotObjectModel, M extends ModelTypes>(
+  dsl: DSL<T, M>,
+): DSL<T, M>;
+export function dsl<T extends AnyDotObjectModel>(
+  model: T | ModelView<T>,
+): DSL<T>;
 export function dsl(model: unknown, kit?: unknown): unknown {
   const target = modelOf(model);
   if (!isModel(target)) {

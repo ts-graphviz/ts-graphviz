@@ -587,6 +587,7 @@ describe('the rules', () => {
       [],
       { Node, Edge, Subgraph },
       { createNode() {}, createEdge() {} },
+      { createNode() {}, createEdge() {}, createSubgraph() {} },
     ]) {
       expect(() => dsl(model, value as never)).toThrow(
         expect.objectContaining({

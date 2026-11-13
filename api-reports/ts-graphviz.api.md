@@ -94,7 +94,9 @@ export declare const attribute: Attribute.keys;
 
 export declare const digraph: ModelFactory;
 
-export declare function dsl<T extends AnyDotObjectModel, M extends ModelTypes = ModelTypes>(model: T | ModelView<T>, kit?: ModelKit<M>): DSL<T, M>;
+export declare function dsl<T extends AnyDotObjectModel, M extends ModelTypes = ModelTypes>(model: T | ModelView<T>, kit: ModelKit<M>): DSL<T, M>;
+export declare function dsl<T extends AnyDotObjectModel, M extends ModelTypes>(dsl: DSL<T, M>): DSL<T, M>;
+export declare function dsl<T extends AnyDotObjectModel>(model: T | ModelView<T>): DSL<T>;
 
 export declare function fromDot<const P extends Partial<ModelClasses>, const D extends boolean = false>(dot: string, options: FromDotOptions<"Dot" | "Graph", P, D> & {
   convert: {

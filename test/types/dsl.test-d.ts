@@ -347,6 +347,13 @@ describe('custom classes', () => {
     });
     const context = createModelKit({ Node: MyNode });
     expectTypeOf(dsl(new context.Node('a'))).toEqualTypeOf<DSL<MyNode>>();
+    withModelKit({ Node: MyNode }).digraph((G) => {
+      // A DSL given back keeps the types of its kit.
+      expectTypeOf(dsl(G)).toEqualTypeOf(G);
+      expectTypeOf(dsl(G).node('a')).toEqualTypeOf<DSL<MyNode>>();
+    });
+    // @ts-expect-error the kit's types come with a kit
+    dsl<Digraph, ResolvedModelTypes<{ Node: typeof MyNode }>>(new Digraph());
   });
 });
 
