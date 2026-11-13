@@ -10,6 +10,9 @@ import {
   useState,
 } from 'react';
 import {
+  Edge as CoreEdge,
+  Node as CoreNode,
+  Subgraph as CoreSubgraph,
   Digraph as DigraphModel,
   type EdgeModel,
   type NodeModel,
@@ -17,7 +20,7 @@ import {
   type SubgraphModel,
   toDot,
 } from 'ts-graphviz';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
 import { GraphPortal } from './components/GraphPortal.js';
@@ -455,19 +458,34 @@ describe('host components', () => {
     expect(first.getNode('a')).toBeDefined();
   });
 
-  it("makes subgraphs with the enclosing graph's createSubgraph", async () => {
-    const made: unknown[] = [];
+  it("makes the models with the root's kit, not the graph's create*", async () => {
+    class MyNode extends CoreNode {}
+    class MyEdge extends CoreEdge {}
+    class MySubgraph extends CoreSubgraph {}
     const container = new DigraphModel('C');
-    const createSubgraph = container.createSubgraph.bind(container);
-    container.createSubgraph = ((id?: string) => {
-      const subgraph = createSubgraph(id);
-      made.push(subgraph);
-      return subgraph;
-    }) as typeof container.createSubgraph;
-    const root = createRoot({ container });
-    await root.render(<Subgraph id="s" />);
-    expect(container.subgraphs).toHaveLength(1);
-    expect(made).toContain(container.subgraphs[0]);
+    const create = vi.fn(() => {
+      throw new Error('not called');
+    });
+    container.createNode = create;
+    container.createEdge = create;
+    container.createSubgraph = create;
+    const root = createRoot({
+      container,
+      models: { Node: MyNode, Edge: MyEdge, Subgraph: MySubgraph },
+    });
+    await root.render(
+      <Subgraph id="s">
+        <Node id="a" />
+        <Edge targets={['a', 'b']} />
+      </Subgraph>,
+    );
+    expect(create).not.toHaveBeenCalled();
+    const [subgraph] = container.subgraphs;
+    expect(subgraph).toBeInstanceOf(MySubgraph);
+    expect(subgraph.nodes[0]).toBeInstanceOf(MyNode);
+    expect(subgraph.edges[0]).toBeInstanceOf(MyEdge);
+    // An edge does not add the nodes it names.
+    expect(subgraph.nodes).toHaveLength(1);
   });
 
   it('rejects a node in a portal outside any graph', async () => {
@@ -554,7 +572,7 @@ describe('host components', () => {
 
   it('rejects render() with an error a graph throws while adding models, and can still unmount', async () => {
     const container = new DigraphModel('C');
-    container.createNode = () => {
+    container.addNode = () => {
       throw new RangeError('no nodes here');
     };
     const root = createRoot({ container });
@@ -562,30 +580,25 @@ describe('host components', () => {
     root.unmount();
   });
 
-  it('takes back what a factory added before it threw', async () => {
+  it('rejects render() with an error the kit throws while creating, and leaves nothing behind', async () => {
+    class Failing extends CoreNode {
+      constructor(id: string) {
+        super(id);
+        throw new RangeError('no such node');
+      }
+    }
     const container = new DigraphModel('C');
-    const createNode = container.createNode.bind(container);
-    const createEdge = container.createEdge.bind(container);
-    container.createNode = ((id: string) => {
-      createNode(id);
-      throw new RangeError('after adding');
-    }) as typeof container.createNode;
-    const nodes = createRoot({ container });
-    await expect(nodes.render(<Node id="a" />)).rejects.toThrow('after adding');
+    const root = createRoot({ container, models: { Node: Failing } });
+    await expect(
+      root.render(
+        <>
+          <Edge targets={['a', 'b']} />
+          <Node id="a" />
+        </>,
+      ),
+    ).rejects.toThrow('no such node');
     expect(container.nodes).toHaveLength(0);
-    nodes.unmount();
-
-    container.createNode = createNode;
-    container.createEdge = ((targets: never) => {
-      createEdge(targets);
-      throw new RangeError('after adding');
-    }) as typeof container.createEdge;
-    const edges = createRoot({ container });
-    await expect(edges.render(<Edge targets={['a', 'b']} />)).rejects.toThrow(
-      'after adding',
-    );
-    expect(container.edges).toHaveLength(0);
-    edges.unmount();
+    root.unmount();
   });
 
   it('rejects a node outside any graph', async () => {
