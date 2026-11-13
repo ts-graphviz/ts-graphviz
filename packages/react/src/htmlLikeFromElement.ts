@@ -24,9 +24,10 @@ export interface HtmlLikeFromElementOptions {
 
 /**
  * A value the components of a label can read, made by
- * {@link createLabelContext}.
+ * {@link createLabelContext}. A context of one type does not stand for a
+ * context of a wider or a narrower type: its value is both given and read.
  */
-export interface LabelContext<T> {
+export interface LabelContext<in out T> {
   /**
    * Gives `value` to the components in `children`, for
    * {@link readLabelContext}. An element of labels only: React cannot

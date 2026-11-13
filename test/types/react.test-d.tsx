@@ -81,6 +81,13 @@ describe('rendering', () => {
     const Accent = createLabelContext('black');
     expectTypeOf(Accent).toEqualTypeOf<LabelContext<string>>();
     expectTypeOf(readLabelContext(Accent)).toEqualTypeOf<string>();
+    // Given and read: neither a wider nor a narrower context will do.
+    expectTypeOf<LabelContext<string | number>>().not.toExtend<
+      LabelContext<string>
+    >();
+    expectTypeOf<LabelContext<string>>().not.toExtend<
+      LabelContext<string | number>
+    >();
     htmlLikeFromElement(
       <Accent.Provider value="red">
         <dot:b>x</dot:b>

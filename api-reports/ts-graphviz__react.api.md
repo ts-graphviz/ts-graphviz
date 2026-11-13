@@ -95,7 +95,7 @@ export interface HtmlLikeFromElementOptions {
   maxDepth?: number;
 }
 
-export interface LabelContext<T> {
+export interface LabelContext<in out T> {
   readonly Provider: (props: {
     value: T;
     children?: ReactNode;
