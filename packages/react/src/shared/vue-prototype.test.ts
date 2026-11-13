@@ -11,6 +11,10 @@ import {
 } from '@vue/runtime-core';
 import {
   attribute as _,
+  Edge as CoreEdge,
+  Node as CoreNode,
+  Subgraph as CoreSubgraph,
+  createModelKit,
   Digraph,
   defaultModelKit,
   type EdgeTargetLikeTuple,
@@ -102,9 +106,10 @@ const Subgraph = defineComponent({
   inheritAttrs: false,
   setup(props, { attrs, slots }) {
     const kit = inject<ModelKit>(KIT, defaultModelKit);
+    // Made here, and added to its graph by the sync; a new id, a new model.
+    let model = kit.createSubgraph(props.id);
     return () => {
-      // Made here, and added to its graph by the sync.
-      const model = kit.createSubgraph(props.id);
+      if (model.id !== props.id) model = kit.createSubgraph(props.id);
       return h(
         HOST.graph,
         { ...attrs, model, key: identityKey(model) },
@@ -118,8 +123,9 @@ const Subgraph = defineComponent({
 function mount(
   container: Digraph,
   content: () => VNode | (VNode | null)[],
+  kit: ModelKit = defaultModelKit,
 ): { tree: Tree; update(): Promise<void>; unmount(): void } {
-  const tree = createTree(container, defaultModelKit);
+  const tree = createTree(container, kit);
   const Root = defineComponent({
     setup() {
       provide(KIT, tree.kit);
@@ -168,6 +174,50 @@ describe('a Vue renderer on the shared layer', () => {
         ];
       }"
     `);
+  });
+
+  it('makes the models with the kit of the tree', () => {
+    class MyNode extends CoreNode {}
+    class MyEdge extends CoreEdge {}
+    class MySubgraph extends CoreSubgraph {}
+    const G = new Digraph('G');
+    mount(
+      G,
+      () => [
+        h(Subgraph, { id: 'x' }, () => [h(Node, { id: 'a' })]),
+        h(Edge, { targets: ['a', 'b'] }),
+      ],
+      createModelKit({ Node: MyNode, Edge: MyEdge, Subgraph: MySubgraph }),
+    );
+    expect(G.subgraphs[0]).toBeInstanceOf(MySubgraph);
+    expect(G.subgraphs[0].nodes[0]).toBeInstanceOf(MyNode);
+    expect(G.edges[0]).toBeInstanceOf(MyEdge);
+  });
+
+  it('keeps a subgraph and what is in it while its attributes change', async () => {
+    const G = new Digraph('G');
+    const label = ref('X');
+    const id = ref('cluster_x');
+    const { update } = mount(G, () =>
+      h(Subgraph, { id: id.value, [_.label]: label.value }, () => [
+        h(Node, { id: 'a' }),
+      ]),
+    );
+    const [x] = G.subgraphs;
+    const [a] = x.nodes;
+
+    label.value = 'Y';
+    await update();
+    expect(G.subgraphs).toEqual([x]);
+    expect(x.getAttribute(_.label)).toBe('Y');
+    expect(x.nodes).toEqual([a]);
+
+    id.value = 'cluster_y';
+    await update();
+    expect(G.subgraphs).toHaveLength(1);
+    expect(G.subgraphs[0]).not.toBe(x);
+    expect(G.subgraphs[0].id).toBe('cluster_y');
+    expect(G.subgraphs[0].getAttribute(_.label)).toBe('Y');
   });
 
   it('adds nothing before the sync', () => {

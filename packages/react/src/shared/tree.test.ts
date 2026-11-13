@@ -73,6 +73,9 @@ describe('the place of an element in the tree', () => {
     expect(tree.children).toEqual([b, x]);
     insertChild(tree, b, a);
     expect(tree.children).toEqual([x, b]);
+    // Before itself: where it is.
+    insertChild(tree, x, x);
+    expect(tree.children).toEqual([x, b]);
   });
 
   it('is nowhere after the element was removed', () => {

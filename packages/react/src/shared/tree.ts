@@ -427,6 +427,8 @@ export function insertChild(
   child: Child,
   before?: Child,
 ): void {
+  // Before itself: where it is.
+  if (before === child && child.parent === parent) return;
   detach(child);
   const { children } = parent;
   const index = before === undefined ? -1 : children.indexOf(before);
