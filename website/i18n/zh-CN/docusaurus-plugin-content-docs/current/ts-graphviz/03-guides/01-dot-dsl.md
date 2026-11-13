@@ -176,6 +176,17 @@ digraph((g) => {
 });
 ```
 
+语句用图的模型套件创建模型，并把创建的模型添加到图中。回调的第二个参数就是这个套件，可以用它只创建而不添加：
+
+```typescript
+import { digraph, modelOf } from 'ts-graphviz';
+
+digraph((g, kit) => {
+  const a = kit.createNode('a'); // 还不属于任何图
+  modelOf(g).addNode(a);
+});
+```
+
 ## 注释
 
 `addComment` 为节点、边、子图、图或默认属性语句添加注释。默认写在语句之前；`position: 'trailing'` 写在语句之后，图或子图上的 `position: 'end'` 写在主体末尾。`kind` 为 `'Slash'`（`//`）、`'Block'`（`/* */`）或 `'Macro'`（`#`）。
@@ -215,7 +226,7 @@ g.edge(['b', 'c']);
 console.log(toDot(g));
 ```
 
-语句返回的是 DSL，而且一个模型只有一个 DSL，所以 DSL 可以用 `===` 比较。`modelOf(x)` 返回对应的模型，从中读到的模型可以用 `dsl(model)` 得到它的 DSL。`toDot`、`fromModel` 和适配器的 `toBlob` 既接受模型，也接受 DSL。
+语句返回的是 DSL。DSL 是一个模型加上语句创建模型时所用的套件；一个模型和一个套件只有一个 DSL，所以 DSL 可以用 `===` 比较。`modelOf(x)` 返回对应的模型。从中读到的模型可以用 `dsl(model)` 得到它的 DSL，这个 DSL 用默认套件创建；`dsl(model, kit)` 返回用 `kit` 创建的 DSL。使用 `{ dsl: true }` 时，套件是 `convert.models` 对应的套件。`toDot`、`fromModel` 和适配器的 `toBlob` 既接受模型，也接受 DSL。
 
 ## DOT 的语句顺序
 

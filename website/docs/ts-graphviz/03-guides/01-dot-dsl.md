@@ -176,6 +176,17 @@ digraph((g) => {
 });
 ```
 
+A statement creates with the graph's model kit and adds what it created to the graph. The callbacks take that kit as their second argument, for creating a model without adding it:
+
+```typescript
+import { digraph, modelOf } from 'ts-graphviz';
+
+digraph((g, kit) => {
+  const a = kit.createNode('a'); // in no graph yet
+  modelOf(g).addNode(a);
+});
+```
+
 ## Comments
 
 `addComment` attaches a comment to a node, edge, subgraph, graph or default attribute statement. It is written before the statement by default; `position: 'trailing'` writes it after the statement, and on a graph or subgraph `position: 'end'` at the end of the body. `kind` is `'Slash'` (`//`), `'Block'` (`/* */`) or `'Macro'` (`#`).
@@ -215,7 +226,7 @@ g.edge(['b', 'c']);
 console.log(toDot(g));
 ```
 
-What a statement gives is a DSL, and a model has one DSL, so DSLs compare with `===`. `modelOf(x)` gives the model back, and `dsl(model)` the DSL of any model you read from it. `toDot`, `fromModel` and the adapter's `toBlob` take a DSL as well as a model.
+What a statement gives is a DSL. A DSL is a model together with the kit its statements create with, and a model and a kit have one DSL, so DSLs compare with `===`. `modelOf(x)` gives the model back. `dsl(model)` gives the DSL of any model you read from it, creating with the default kit; `dsl(model, kit)` gives the one that creates with `kit`. With `{ dsl: true }`, the kit is the one of `convert.models`. `toDot`, `fromModel` and the adapter's `toBlob` take a DSL as well as a model.
 
 ## DOT's statement order
 

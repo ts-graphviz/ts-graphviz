@@ -16,6 +16,8 @@ import {
   isRootGraphModel,
   isSubgraphModel,
   MODEL,
+  type ModelKit,
+  type ModelTypes,
   type ModelView,
   modelOf,
   type NodeAttributesObject,
@@ -31,6 +33,7 @@ import {
   type SubgraphModel,
   withCode,
 } from '@ts-graphviz/common';
+import { defaultModelKit } from '@ts-graphviz/core';
 
 /**
  * The DOT DSL of a model: the model seen as DOT, with only DOT's words.
@@ -42,22 +45,34 @@ import {
  * - A node's DSL has `port`, every DSL `addComment`, `$$type` (and an
  *   attribute list's `$$kind`).
  *
- * Everything else the model does (`createNode`, `nodes`, `getAttribute`,
+ * A graph's DSL is the graph together with a model kit: `node`, `edge` and
+ * `subgraph` create with the kit and add to the graph. The kit's own
+ * `create*` only create, and the callbacks get the kit as their second
+ * argument.
+ *
+ * Everything else the model does (`addNode`, `nodes`, `getAttribute`,
  * `comments`, the members of your own classes) is on the model:
  * {@link modelOf} gives it back. Every model you get from a DSL is a DSL.
  * `toDot`, `fromModel` and `toBlob` take a DSL in place of its model. A DSL
  * is not a model: the model guards (`isNodeModel`, …) are false for it, so
  * narrow DSLs by `$$type` or check `modelOf(x)`.
+ *
+ * @typeParam T - The model.
+ * @typeParam M - The model types of the kit: what `node`, `edge` and
+ * `subgraph` of a graph's DSL give.
  * @group DSL
  */
-export type DSL<T extends AnyDotObjectModel> = T extends NodeModel
+export type DSL<
+  T extends AnyDotObjectModel,
+  M extends ModelTypes = ModelTypes,
+> = T extends NodeModel
   ? NodeDSL<T>
   : T extends EdgeModel
     ? EdgeDSL<T>
     : T extends SubgraphModel
-      ? SubgraphDSL<T>
+      ? SubgraphDSL<T, M>
       : T extends RootGraphModel
-        ? RootGraphDSL<T>
+        ? RootGraphDSL<T, M>
         : T extends AttributeListModel<infer K, infer A>
           ? AttributeListDSL<T, K, A>
           : T extends DotModel
@@ -171,45 +186,53 @@ export interface AttributeListDSLMembers<
  */
 export type DotDSL<T extends DotModel> = ModelDSLMembers<T>;
 
-/** The classes a graph creates its models from. */
-type NodeOf<T extends GraphBaseModel> = ReturnType<T['createNode']>;
-type EdgeOf<T extends GraphBaseModel> = ReturnType<T['createEdge']>;
-type SubgraphOf<T extends GraphBaseModel> = T['subgraphs'][number];
-
 /**
  * The DSL of a root graph (`graph` or `digraph`).
  * @group DSL
  */
-export type RootGraphDSL<T extends RootGraphModel> = GraphDSLMembers<T> &
-  AttributeProperties<AttributeKeysOf<T>>;
+export type RootGraphDSL<
+  T extends RootGraphModel,
+  M extends ModelTypes = ModelTypes,
+> = GraphDSLMembers<T, M> & AttributeProperties<AttributeKeysOf<T>>;
 
 /**
  * The DSL of a subgraph.
  * @group DSL
  */
-export type SubgraphDSL<T extends SubgraphModel> = GraphDSLMembers<T> &
-  AttributeProperties<AttributeKeysOf<T>>;
+export type SubgraphDSL<
+  T extends SubgraphModel,
+  M extends ModelTypes = ModelTypes,
+> = GraphDSLMembers<T, M> & AttributeProperties<AttributeKeysOf<T>>;
 
 /**
  * What a graph's or subgraph's DSL has besides its attributes: its DOT
  * statements.
  * @group DSL
  */
-export interface GraphDSLMembers<T extends RootGraphModel | SubgraphModel>
-  extends ModelDSLMembers<T>,
-    GraphDSLStatements<T> {}
+export interface GraphDSLMembers<
+  T extends RootGraphModel | SubgraphModel,
+  M extends ModelTypes = ModelTypes,
+> extends ModelDSLMembers<T>,
+    GraphDSLStatements<T, M> {}
 
 /**
  * The DOT statements of a graph or subgraph: `node`, `edge`, `subgraph` and
  * `graph`.
+ *
+ * `node`, `edge` and `subgraph` create with the DSL's kit and add to the
+ * graph. Their callbacks receive what the statement gives and, second, the
+ * kit: its `create*` only create.
  * @group DSL
  */
-export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
+export interface GraphDSLStatements<
+  T extends RootGraphModel | SubgraphModel,
+  M extends ModelTypes = ModelTypes,
+> {
   /**
    * The subgraph with this id (created if there is none), as
    * `subgraph id { ... }` in DOT.
    *
-   * The callback receives the subgraph.
+   * The callback receives the subgraph and the kit.
    *
    * ```ts
    * const G = digraph('G', (g) => {
@@ -226,8 +249,8 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
    */
   subgraph<const Id extends string>(
     id: Id,
-    callback?: (subgraph: DSL<SubgraphOf<T>>) => void,
-  ): DSL<SubgraphOf<T>>;
+    callback?: (subgraph: DSL<M['Subgraph'], M>, kit: ModelKit<M>) => void,
+  ): DSL<M['Subgraph'], M>;
   /**
    * The subgraph with this id (created if there is none), with these
    * attributes.
@@ -254,8 +277,8 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
   subgraph<const Id extends string>(
     id: Id,
     attributes: SubgraphAttributesFor<Id>,
-    callback?: (subgraph: DSL<SubgraphOf<T>>) => void,
-  ): DSL<SubgraphOf<T>>;
+    callback?: (subgraph: DSL<M['Subgraph'], M>, kit: ModelKit<M>) => void,
+  ): DSL<M['Subgraph'], M>;
   /**
    * A new anonymous subgraph with these attributes.
    *
@@ -276,12 +299,12 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
    */
   subgraph(
     attributes: NonClusterSubgraphAttributesObject,
-    callback?: (subgraph: DSL<SubgraphOf<T>>) => void,
-  ): DSL<SubgraphOf<T>>;
+    callback?: (subgraph: DSL<M['Subgraph'], M>, kit: ModelKit<M>) => void,
+  ): DSL<M['Subgraph'], M>;
   /** A new anonymous subgraph, as `subgraph { ... }` in DOT. */
   subgraph(
-    callback?: (subgraph: DSL<SubgraphOf<T>>) => void,
-  ): DSL<SubgraphOf<T>>;
+    callback?: (subgraph: DSL<M['Subgraph'], M>, kit: ModelKit<M>) => void,
+  ): DSL<M['Subgraph'], M>;
 
   /**
    * The node with this id (created if there is none), as `A;` in DOT.
@@ -295,7 +318,10 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
    * // }
    * ```
    */
-  node(id: string, callback?: (node: DSL<NodeOf<T>>) => void): DSL<NodeOf<T>>;
+  node(
+    id: string,
+    callback?: (node: DSL<M['Node']>, kit: ModelKit<M>) => void,
+  ): DSL<M['Node']>;
   /**
    * The node with this id (created if there is none), with these
    * attributes, as `A [color=red];` in DOT.
@@ -315,8 +341,8 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
   node(
     id: string,
     attributes: NodeAttributesObject,
-    callback?: (node: DSL<NodeOf<T>>) => void,
-  ): DSL<NodeOf<T>>;
+    callback?: (node: DSL<M['Node']>, kit: ModelKit<M>) => void,
+  ): DSL<M['Node']>;
   /**
    * Default attributes for the nodes, as `node [color=red];` in DOT: they
    * apply to the nodes that follow. Returns the list's DSL, to change those
@@ -351,8 +377,8 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
    */
   edge(
     targets: DSLEdgeTargetLikeTuple,
-    callback?: (edge: DSL<EdgeOf<T>>) => void,
-  ): DSL<EdgeOf<T>>;
+    callback?: (edge: DSL<M['Edge']>, kit: ModelKit<M>) => void,
+  ): DSL<M['Edge']>;
   /**
    * A new edge with these attributes, as `a -> b [color=red];` in DOT.
    *
@@ -370,8 +396,8 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
   edge(
     targets: DSLEdgeTargetLikeTuple,
     attributes: EdgeAttributesObject,
-    callback?: (edge: DSL<EdgeOf<T>>) => void,
-  ): DSL<EdgeOf<T>>;
+    callback?: (edge: DSL<M['Edge']>, kit: ModelKit<M>) => void,
+  ): DSL<M['Edge']>;
   /**
    * Default attributes for the edges, as `edge [color=red];` in DOT: they
    * apply to the edges that follow. Returns the list's DSL, to change those
@@ -419,12 +445,15 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
 //    arrays with their contents (edge targets). Plain objects are passed as
 //    they are. So a model only ever holds models.
 // 3. What a statement gives back is a DSL.
-// 4. A model has one DSL, so DSLs compare with `===`.
+// 4. A model and a kit have one DSL, so DSLs of one kit compare with `===`.
 // 5. The DSL's own names are a few fixed ones (`MEMBERS`, the statements);
 //    every other name is an attribute.
 
-/** Each model's DSL (rule 4). */
-const views = new WeakMap<object, object>();
+/** Each model's DSL with each kit (rule 4). */
+const views = new WeakMap<object, WeakMap<ModelKit, object>>();
+
+/** Every DSL. */
+const dsls = new WeakSet<object>();
 
 /**
  * A model, not a DSL: the model guards check a model's `$$type` and the
@@ -447,20 +476,54 @@ function isGraph(
   return model.$$type === 'Graph' || model.$$type === 'Subgraph';
 }
 
+/** A kit: what a DSL creates with. */
+function isKit(value: unknown): value is ModelKit {
+  if (typeof value !== 'object' || value === null) return false;
+  const kit = value as Record<string, unknown>;
+  return (
+    typeof kit.createDigraph === 'function' &&
+    typeof kit.createGraph === 'function' &&
+    typeof kit.createSubgraph === 'function' &&
+    typeof kit.createNode === 'function' &&
+    typeof kit.createEdge === 'function'
+  );
+}
+
 /**
- * The DSL of a model; a DSL as it is.
+ * The DSL of a model with a kit; without a kit, a DSL as it is, and the DSL
+ * of a model with the default kit.
+ *
+ * A graph's DSL creates with the kit: pass the kit of your classes
+ * (`createModelKit`) for `node`, `edge` and `subgraph` to create them. A
+ * model does not remember the kit it was created with, and the types follow
+ * the kit: `node('a')` is typed as the kit's node even when the graph already
+ * has an `a` of another class.
  *
  * ```ts
  * const G = dsl(fromDot('digraph { a }'));
  * G.node('a').label = 'A';
+ *
+ * const kit = createModelKit({ Node: MyNode });
+ * dsl(modelOf(G), kit).node('b'); // a MyNode
  * ```
+ * @param model - The model, or a DSL of it.
+ * @param kit - The kit the DSL creates with; by default the kit of the DSL
+ * given, or `defaultModelKit` for a model.
  * @throws TypeError (`TSG_ERR_NOT_A_MODEL`) if the value is not a model.
+ * @throws TypeError (`TSG_ERR_NOT_A_MODEL_KIT`) if the kit is not a kit.
  * @group DSL
  */
+export function dsl<
+  T extends AnyDotObjectModel,
+  M extends ModelTypes = ModelTypes,
+>(model: T | ModelView<T>, kit: ModelKit<M>): DSL<T, M>;
+export function dsl<T extends AnyDotObjectModel, M extends ModelTypes>(
+  dsl: DSL<T, M>,
+): DSL<T, M>;
 export function dsl<T extends AnyDotObjectModel>(
   model: T | ModelView<T>,
 ): DSL<T>;
-export function dsl(model: unknown): unknown {
+export function dsl(model: unknown, kit?: unknown): unknown {
   const target = modelOf(model);
   if (!isModel(target)) {
     throw withCode(
@@ -468,28 +531,53 @@ export function dsl(model: unknown): unknown {
       'TSG_ERR_NOT_A_MODEL',
     );
   }
-  return viewOf(target);
+  if (kit === undefined) {
+    if (typeof model === 'object' && model !== null && dsls.has(model)) {
+      return model;
+    }
+    return viewWith(target, defaultModelKit);
+  }
+  if (!isKit(kit)) {
+    throw withCode(
+      new TypeError('dsl() takes a model kit as its second argument'),
+      'TSG_ERR_NOT_A_MODEL_KIT',
+    );
+  }
+  return viewWith(target, kit);
 }
 
-function viewOf(model: AnyDotObjectModel): object {
-  let view = views.get(model);
+function viewWith(model: AnyDotObjectModel, kit: ModelKit): object {
+  let ofModel = views.get(model);
+  if (ofModel === undefined) {
+    ofModel = new WeakMap();
+    views.set(model, ofModel);
+  }
+  let view = ofModel.get(kit);
   if (view === undefined) {
     // The Proxy's target is an empty object with the model's prototype, not
     // the model: a Proxy may report own properties (the attributes) only as
     // its target allows, and a frozen or sealed model allows none.
     const target = Object.create(Object.getPrototypeOf(model)) as object;
-    modelsOf.set(target, model);
+    sources.set(target, { model, kit });
     view = new Proxy(target, handler);
-    views.set(model, view);
+    dsls.add(view);
+    ofModel.set(kit, view);
   }
   return view;
 }
 
-/** Each DSL's target's model. */
-const modelsOf = new WeakMap<object, AnyDotObjectModel>();
+/** Each DSL's target's model and kit. */
+const sources = new WeakMap<
+  object,
+  { readonly model: AnyDotObjectModel; readonly kit: ModelKit }
+>();
 
 function modelFor(target: object): AnyDotObjectModel {
-  return modelsOf.get(target) as AnyDotObjectModel;
+  return (sources.get(target) as { model: AnyDotObjectModel }).model;
+}
+
+function kitFor(target: object): ModelKit {
+  return (sources.get(target) as { kit: ModelKit }).kit;
 }
 
 /** Rule 2: the model for a DSL; arrays copied with their contents. */
@@ -524,8 +612,8 @@ function unwritable(key: PropertyKey): TypeError {
   );
 }
 
-/** The graph's DOT statements, made once per graph. */
-const statementsOf = new WeakMap<GraphBaseModel, Record<string, unknown>>();
+/** A graph's DOT statements, made once per DSL (by its target). */
+const statementsOf = new WeakMap<object, Record<string, unknown>>();
 const STATEMENT_NAMES: ReadonlySet<string> = new Set([
   'node',
   'edge',
@@ -560,11 +648,15 @@ const handler: ProxyHandler<object> = {
   get(target, key, receiver) {
     const model = modelFor(target);
     // Only to the DSL itself, not to an object inheriting from it.
-    if (key === MODEL) return receiver === views.get(model) ? model : undefined;
+    if (key === MODEL) {
+      return receiver === views.get(model)?.get(kitFor(target))
+        ? model
+        : undefined;
+    }
     if (typeof key !== 'string') return undefined;
     switch (kindOf(model, key)) {
       case 'statement':
-        return statements(model as GraphBaseModel)[key];
+        return statements(target, model as GraphBaseModel)[key];
       case 'member':
         return member(model, key);
       default:
@@ -652,13 +744,19 @@ function member(model: AnyDotObjectModel, name: string): unknown {
   return call;
 }
 
-function statements(model: GraphBaseModel): Record<string, unknown> {
-  let table = statementsOf.get(model);
+function statements(
+  target: object,
+  model: GraphBaseModel,
+): Record<string, unknown> {
+  let table = statementsOf.get(target);
   if (table === undefined) {
     table = Object.freeze(
-      Object.assign(Object.create(null), createStatements(model)),
+      Object.assign(
+        Object.create(null),
+        createStatements(model, kitFor(target)),
+      ),
     ) as Record<string, unknown>;
-    statementsOf.set(model, table);
+    statementsOf.set(target, table);
   }
   return table;
 }
@@ -673,25 +771,37 @@ function find<T>(
 const isString = (arg: unknown): arg is string => typeof arg === 'string';
 const isObject = (arg: unknown): arg is object =>
   typeof arg === 'object' && arg !== null;
-const isFunction = (arg: unknown): arg is (view: unknown) => void =>
-  typeof arg === 'function';
+const isFunction = (
+  arg: unknown,
+): arg is (view: unknown, kit: ModelKit) => void => typeof arg === 'function';
 
 /**
- * The DOT statements: only the model's basic operations, so they follow its
- * model classes (and keep default attribute statements in their place where
- * its classes do).
+ * The DOT statements: the kit creates and the graph adds, so they follow
+ * the kit's classes (and keep default attribute statements in their place
+ * where the graph's class does).
  */
-function createStatements(g: GraphBaseModel) {
+function createStatements(g: GraphBaseModel, kit: ModelKit) {
+  const viewOf = (model: AnyDotObjectModel) => viewWith(model, kit);
   return {
     node(first: unknown, ...rest: unknown[]): unknown {
       if (typeof first === 'string') {
-        const node = g.getNode(first) ?? g.createNode(first);
-        const attributes = find(rest, isObject);
-        if (attributes !== undefined) {
-          node.setAttributes(attributes as NodeAttributesObject);
+        const attributes = find(rest, isObject) as
+          | NodeAttributesObject
+          | undefined;
+        let node = g.getNode(first);
+        if (node === undefined) {
+          // The attributes go to the constructor, so a custom class sees
+          // them where it is created.
+          node =
+            attributes !== undefined
+              ? kit.createNode(first, attributes)
+              : kit.createNode(first);
+          g.addNode(node);
+        } else if (attributes !== undefined) {
+          node.setAttributes(attributes);
         }
         const view = viewOf(node);
-        find(rest, isFunction)?.(view);
+        find(rest, isFunction)?.(view, kit);
         return view;
       }
       if (isObject(first)) {
@@ -703,12 +813,13 @@ function createStatements(g: GraphBaseModel) {
     },
     edge(first: unknown, ...rest: unknown[]): unknown {
       if (Array.isArray(first)) {
-        const edge = g.createEdge(
+        const edge = kit.createEdge(
           unwrap(first) as ReadonlyEdgeTargetLikeTuple,
           find(rest, isObject) as EdgeAttributesObject | undefined,
         );
+        g.addEdge(edge);
         const view = viewOf(edge);
-        find(rest, isFunction)?.(view);
+        find(rest, isFunction)?.(view, kit);
         return view;
       }
       if (isObject(first)) {
@@ -720,16 +831,26 @@ function createStatements(g: GraphBaseModel) {
     },
     subgraph(...args: unknown[]): unknown {
       const id = find(args, isString);
-      const subgraph =
-        id !== undefined
-          ? (g.getSubgraph(id) ?? g.createSubgraph(id))
-          : g.createSubgraph();
-      const attributes = find(args, isObject);
-      if (attributes !== undefined) {
-        subgraph.setAttributes(attributes as SubgraphAttributesObject);
+      const attributes = find(args, isObject) as
+        | SubgraphAttributesObject
+        | undefined;
+      let subgraph = id !== undefined ? g.getSubgraph(id) : undefined;
+      if (subgraph === undefined) {
+        // The constructor gets the id and the attributes in the shape the
+        // statement has them. The statement was checked against its id
+        // where it was written; here they are those of any subgraph.
+        const create = kit.createSubgraph as (
+          ...args: (string | SubgraphAttributesObject)[]
+        ) => SubgraphModel;
+        subgraph = create(
+          ...[id, attributes].filter((arg) => arg !== undefined),
+        );
+        g.addSubgraph(subgraph);
+      } else if (attributes !== undefined) {
+        subgraph.setAttributes(attributes);
       }
       const view = viewOf(subgraph);
-      find(args, isFunction)?.(view);
+      find(args, isFunction)?.(view, kit);
       return view;
     },
     graph(attributes: unknown): unknown {

@@ -506,7 +506,7 @@ describe('model kit', { tags: ['SM-5'] }, () => {
           const root = (directed ? factories.digraph : factories.graph)();
           let current: RootGraphModel | SubgraphModel = modelOf(root);
           for (const id of path) {
-            const g = dsl(current);
+            const g = dsl(current, models);
             expect(modelOf(g.node(`${id}-n`))).toBeInstanceOf(MyNode);
             expect(modelOf(g.edge([{ id: 'a' }, { id: 'b' }]))).toBeInstanceOf(
               MyEdge,
@@ -515,7 +515,9 @@ describe('model kit', { tags: ['SM-5'] }, () => {
             expect(sub).toBeInstanceOf(MySubgraph);
             current = sub;
           }
-          expect(modelOf(dsl(current).node('leaf'))).toBeInstanceOf(MyNode);
+          expect(modelOf(dsl(current, models).node('leaf'))).toBeInstanceOf(
+            MyNode,
+          );
         },
       ),
     );

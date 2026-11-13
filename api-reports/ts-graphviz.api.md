@@ -12,7 +12,7 @@ export interface AttributeListDSLMembers<T extends AttributeListModel, K extends
   readonly $$kind: K;
 }
 
-export type DSL<T extends AnyDotObjectModel> = T extends NodeModel ? NodeDSL<T> : T extends EdgeModel ? EdgeDSL<T> : T extends SubgraphModel ? SubgraphDSL<T> : T extends RootGraphModel ? RootGraphDSL<T> : T extends AttributeListModel<infer K, infer A> ? AttributeListDSL<T, K, A> : T extends DotModel ? DotDSL<T> : never;
+export type DSL<T extends AnyDotObjectModel, M extends ModelTypes = ModelTypes> = T extends NodeModel ? NodeDSL<T> : T extends EdgeModel ? EdgeDSL<T> : T extends SubgraphModel ? SubgraphDSL<T, M> : T extends RootGraphModel ? RootGraphDSL<T, M> : T extends AttributeListModel<infer K, infer A> ? AttributeListDSL<T, K, A> : T extends DotModel ? DotDSL<T> : never;
 
 export type DSLEdgeTargetLikeTuple = ReadonlyEdgeTargetLikeTuple | readonly [from: DSLNodeRefLike | readonly DSLNodeRefLike[], to: DSLNodeRefLike | readonly DSLNodeRefLike[], ...rest: (DSLNodeRefLike | readonly DSLNodeRefLike[])[]];
 
@@ -32,22 +32,22 @@ export type FromDotOptions<T extends FromDotRule, P extends Partial<ModelClasses
   dsl: true;
 } : unknown);
 
-export type FromDotResult<T extends AnyDotObjectModel, D extends boolean> = D extends true ? DSL<T> : T;
+export type FromDotResult<T extends AnyDotObjectModel, D extends boolean, M extends ModelTypes = ModelTypes> = D extends true ? DSL<T, M> : T;
 
 export type FromDotRule = "Dot" | "Graph" | "Node" | "Edge" | "Subgraph";
 
-export interface GraphDSLMembers<T extends RootGraphModel | SubgraphModel> extends ModelDSLMembers<T>, GraphDSLStatements<T> {}
+export interface GraphDSLMembers<T extends RootGraphModel | SubgraphModel, M extends ModelTypes = ModelTypes> extends ModelDSLMembers<T>, GraphDSLStatements<T, M> {}
 
-export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel> {
-  subgraph<const Id extends string>(id: Id, callback?: (subgraph: DSL<SubgraphOf<T>>) => void): DSL<SubgraphOf<T>>;
-  subgraph<const Id extends string>(id: Id, attributes: SubgraphAttributesFor<Id>, callback?: (subgraph: DSL<SubgraphOf<T>>) => void): DSL<SubgraphOf<T>>;
-  subgraph(attributes: NonClusterSubgraphAttributesObject, callback?: (subgraph: DSL<SubgraphOf<T>>) => void): DSL<SubgraphOf<T>>;
-  subgraph(callback?: (subgraph: DSL<SubgraphOf<T>>) => void): DSL<SubgraphOf<T>>;
-  node(id: string, callback?: (node: DSL<NodeOf<T>>) => void): DSL<NodeOf<T>>;
-  node(id: string, attributes: NodeAttributesObject, callback?: (node: DSL<NodeOf<T>>) => void): DSL<NodeOf<T>>;
+export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel, M extends ModelTypes = ModelTypes> {
+  subgraph<const Id extends string>(id: Id, callback?: (subgraph: DSL<M["Subgraph"], M>, kit: ModelKit<M>) => void): DSL<M["Subgraph"], M>;
+  subgraph<const Id extends string>(id: Id, attributes: SubgraphAttributesFor<Id>, callback?: (subgraph: DSL<M["Subgraph"], M>, kit: ModelKit<M>) => void): DSL<M["Subgraph"], M>;
+  subgraph(attributes: NonClusterSubgraphAttributesObject, callback?: (subgraph: DSL<M["Subgraph"], M>, kit: ModelKit<M>) => void): DSL<M["Subgraph"], M>;
+  subgraph(callback?: (subgraph: DSL<M["Subgraph"], M>, kit: ModelKit<M>) => void): DSL<M["Subgraph"], M>;
+  node(id: string, callback?: (node: DSL<M["Node"]>, kit: ModelKit<M>) => void): DSL<M["Node"]>;
+  node(id: string, attributes: NodeAttributesObject, callback?: (node: DSL<M["Node"]>, kit: ModelKit<M>) => void): DSL<M["Node"]>;
   node(attributes: NodeAttributesObject): DSL<T["attributes"]["node"]>;
-  edge(targets: DSLEdgeTargetLikeTuple, callback?: (edge: DSL<EdgeOf<T>>) => void): DSL<EdgeOf<T>>;
-  edge(targets: DSLEdgeTargetLikeTuple, attributes: EdgeAttributesObject, callback?: (edge: DSL<EdgeOf<T>>) => void): DSL<EdgeOf<T>>;
+  edge(targets: DSLEdgeTargetLikeTuple, callback?: (edge: DSL<M["Edge"]>, kit: ModelKit<M>) => void): DSL<M["Edge"]>;
+  edge(targets: DSLEdgeTargetLikeTuple, attributes: EdgeAttributesObject, callback?: (edge: DSL<M["Edge"]>, kit: ModelKit<M>) => void): DSL<M["Edge"]>;
   edge(attributes: EdgeAttributesObject): DSL<T["attributes"]["edge"]>;
   graph(attributes: SubgraphAttributesObject): DSL<T["attributes"]["graph"]>;
 }
@@ -58,20 +58,22 @@ export interface ModelDSLMembers<T extends AnyDotObjectModel> extends ModelView<
 }
 
 export interface ModelFactories<M extends ModelTypes = ModelTypes> {
-  digraph: ModelFactory<M["Digraph"]>;
-  graph: ModelFactory<M["Graph"]>;
+  digraph: ModelFactory<M["Digraph"], M>;
+  graph: ModelFactory<M["Graph"], M>;
 }
 
 export interface ModelFactoriesWithStrict<M extends ModelTypes = ModelTypes> extends ModelFactories<M> {
   strict: ModelFactories<M>;
 }
 
-export interface ModelFactory<G extends RootGraphModel = RootGraphModel> {
-  (id?: string, attributes?: GraphAttributesObject, callback?: (g: DSL<G>) => void): DSL<G>;
-  (attributes?: GraphAttributesObject, callback?: (g: DSL<G>) => void): DSL<G>;
-  (id?: string, callback?: (g: DSL<G>) => void): DSL<G>;
-  (callback?: (g: DSL<G>) => void): DSL<G>;
+export interface ModelFactory<G extends RootGraphModel = RootGraphModel, M extends ModelTypes = ModelTypes> {
+  (id?: string, attributes?: GraphAttributesObject, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
+  (attributes?: GraphAttributesObject, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
+  (id?: string, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
+  (callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
 }
+
+export type ModelFactoryCallback<G extends RootGraphModel = RootGraphModel, M extends ModelTypes = ModelTypes> = (g: DSL<G, M>, kit: ModelKit<M>) => void;
 
 export type NodeDSL<T extends NodeModel> = NodeDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>>;
 
@@ -79,9 +81,9 @@ export interface NodeDSLMembers<T extends NodeModel> extends ModelDSLMembers<T> 
   readonly port: (port: string | Partial<Port>) => ForwardRefNode;
 }
 
-export type RootGraphDSL<T extends RootGraphModel> = GraphDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>>;
+export type RootGraphDSL<T extends RootGraphModel, M extends ModelTypes = ModelTypes> = GraphDSLMembers<T, M> & AttributeProperties<AttributeKeysOf<T>>;
 
-export type SubgraphDSL<T extends SubgraphModel> = GraphDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>>;
+export type SubgraphDSL<T extends SubgraphModel, M extends ModelTypes = ModelTypes> = GraphDSLMembers<T, M> & AttributeProperties<AttributeKeysOf<T>>;
 
 export interface ToDotOptions {
   convert?: ConvertFromModelOptions;
@@ -92,18 +94,20 @@ export declare const attribute: Attribute.keys;
 
 export declare const digraph: ModelFactory;
 
+export declare function dsl<T extends AnyDotObjectModel, M extends ModelTypes = ModelTypes>(model: T | ModelView<T>, kit: ModelKit<M>): DSL<T, M>;
+export declare function dsl<T extends AnyDotObjectModel, M extends ModelTypes>(dsl: DSL<T, M>): DSL<T, M>;
 export declare function dsl<T extends AnyDotObjectModel>(model: T | ModelView<T>): DSL<T>;
 
 export declare function fromDot<const P extends Partial<ModelClasses>, const D extends boolean = false>(dot: string, options: FromDotOptions<"Dot" | "Graph", P, D> & {
   convert: {
     models: P;
   };
-}): FromDotResult<ResolvedModelTypes<P>["Graph"] | ResolvedModelTypes<P>["Digraph"], D>;
+}): FromDotResult<ResolvedModelTypes<P>["Graph"] | ResolvedModelTypes<P>["Digraph"], D, ResolvedModelTypes<P>>;
 export declare function fromDot<const P extends Partial<ModelClasses>, const R extends FromDotRule, const D extends boolean = false>(dot: string, options: FromDotOptions<R, P, D> & {
   convert: {
     models: P;
   };
-}): FromDotResult<FromDotModel<R, ResolvedModelTypes<P>>, D>;
+}): FromDotResult<FromDotModel<R, ResolvedModelTypes<P>>, D, ResolvedModelTypes<P>>;
 export declare function fromDot(dot: string, options?: FromDotOptions<"Dot" | "Graph">): RootGraphModel;
 export declare function fromDot<const D extends boolean>(dot: string, options: FromDotOptions<"Dot" | "Graph", Partial<ModelClasses>, D>): FromDotResult<RootGraphModel, D>;
 export declare function fromDot<const R extends FromDotRule, const D extends boolean = false>(dot: string, options: FromDotOptions<R, Partial<ModelClasses>, D>): FromDotResult<FromDotModel<R>, D>;
@@ -113,7 +117,7 @@ export declare function fromDotAll<const P extends Partial<ModelClasses>, const 
   convert: {
     models: P;
   };
-}): FromDotResult<ResolvedModelTypes<P>["Graph"] | ResolvedModelTypes<P>["Digraph"], D>[];
+}): FromDotResult<ResolvedModelTypes<P>["Graph"] | ResolvedModelTypes<P>["Digraph"], D, ResolvedModelTypes<P>>[];
 export declare function fromDotAll(dot: string, options?: Omit<FromDotOptions<"Dot">, "parse"> & {
   parse?: CommonParseOptions;
 }): RootGraphModel[];
@@ -142,10 +146,4 @@ type AttributeKeysOf<T> = T extends {
 type AttributeProperties<K> = { [P in K & AttributeKey]?: Attribute<P>; };
 
 type DSLNodeRefLike = NodeRefLike | ModelView<ReadonlyNodeModel>;
-
-type EdgeOf<T extends GraphBaseModel> = ReturnType<T["createEdge"]>;
-
-type NodeOf<T extends GraphBaseModel> = ReturnType<T["createNode"]>;
-
-type SubgraphOf<T extends GraphBaseModel> = T["subgraphs"][number];
 ```

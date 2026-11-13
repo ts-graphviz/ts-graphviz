@@ -31,6 +31,17 @@ describe('fromDot with dsl: true', () => {
       convert: { models: { Node: MyNode } },
     });
     expect(modelOf(G.node('a'))).toBeInstanceOf(MyNode);
+    // The DSL creates with the kit of those classes.
+    expect(modelOf(G.node('new'))).toBeInstanceOf(MyNode);
+    G.subgraph('s', (s, kit) => {
+      expect(kit.Node).toBe(MyNode);
+      expect(modelOf(s.node('inner'))).toBeInstanceOf(MyNode);
+    });
+    const [H] = fromDotAll(source, {
+      dsl: true,
+      convert: { models: { Node: MyNode } },
+    });
+    expect(modelOf(H.node('new'))).toBeInstanceOf(MyNode);
   });
 
   it.each([

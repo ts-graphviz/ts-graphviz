@@ -27,15 +27,15 @@ export function ModelFactoryBuilder(
       (arg): arg is GraphAttributesObject => typeof arg === 'object',
     );
     const callback = args.find(
-      (arg): arg is (g: DSL<RootGraphModel>) => void =>
+      (arg): arg is (g: DSL<RootGraphModel>, kit: ModelKit) => void =>
         typeof arg === 'function',
     );
     const g = directed
       ? this.createDigraph(id, strictMode, attributes)
       : this.createGraph(id, strictMode, attributes);
-    const view = dsl(g);
+    const view = dsl(g, this);
     if (typeof callback === 'function') {
-      callback(view);
+      callback(view, this);
     }
     return view;
   };
@@ -55,10 +55,12 @@ export function createModelFactories<M extends ModelTypes = ModelTypes>(
   // The graphs come from the kit's classes, which `M` describes.
   return Object.freeze({
     digraph: ModelFactoryBuilder.call(kit, true, strict) as ModelFactory<
-      M['Digraph']
+      M['Digraph'],
+      M
     >,
     graph: ModelFactoryBuilder.call(kit, false, strict) as ModelFactory<
-      M['Graph']
+      M['Graph'],
+      M
     >,
   });
 }

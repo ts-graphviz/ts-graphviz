@@ -26,6 +26,7 @@ import {
   type NodeAttributeKey,
   type NodeDSL,
   type NodeModel,
+  type ResolvedModelTypes,
   type RootGraphDSL,
   type RootGraphModel,
   Subgraph,
@@ -311,20 +312,31 @@ describe('custom classes', () => {
       Edge: MyEdge,
       Subgraph: MySubgraph,
     });
-    myDigraph((G) => {
+    type M = ResolvedModelTypes<{
+      Node: typeof MyNode;
+      Edge: typeof MyEdge;
+      Subgraph: typeof MySubgraph;
+    }>;
+    myDigraph((G, kit) => {
+      expectTypeOf(kit.createNode('d')).toEqualTypeOf<MyNode>();
       expectTypeOf(G.node('a')).toEqualTypeOf<DSL<MyNode>>();
       expectTypeOf(modelOf(G).createNode('a')).toEqualTypeOf<MyNode>();
       expectTypeOf(G.edge(['a', 'b'])).toEqualTypeOf<DSL<MyEdge>>();
       expectTypeOf(
         modelOf(G.edge(['a', 'b'])).weight(),
       ).toEqualTypeOf<number>();
-      expectTypeOf(G.subgraph('s')).toEqualTypeOf<DSL<MySubgraph>>();
+      expectTypeOf(G.subgraph('s')).toEqualTypeOf<DSL<MySubgraph, M>>();
       expectTypeOf(modelOf(G.subgraph('s')).tag()).toEqualTypeOf<string>();
-      // A subgraph's models are what its class creates: MySubgraph's
-      // createNode is typed NodeModel, as on the model.
-      G.subgraph((sub) => {
-        expectTypeOf(sub.node('b')).toEqualTypeOf<DSL<NodeModel>>();
+      // A subgraph's DSL creates with the same kit; the model's own
+      // createNode is typed by its class (MySubgraph's gives NodeModel).
+      G.subgraph((sub, kit) => {
+        expectTypeOf(sub.node('b')).toEqualTypeOf<DSL<MyNode>>();
+        expectTypeOf(kit.createNode('d')).toEqualTypeOf<MyNode>();
         expectTypeOf(modelOf(sub).createNode('b')).toEqualTypeOf<NodeModel>();
+      });
+      G.node('a', (a, kit) => {
+        expectTypeOf(a).toEqualTypeOf<DSL<MyNode>>();
+        expectTypeOf(kit.createEdge(['a', 'b'])).toEqualTypeOf<MyEdge>();
       });
     });
     withModelKit({ Node: MyNode }).digraph((G) => {
@@ -335,6 +347,13 @@ describe('custom classes', () => {
     });
     const context = createModelKit({ Node: MyNode });
     expectTypeOf(dsl(new context.Node('a'))).toEqualTypeOf<DSL<MyNode>>();
+    withModelKit({ Node: MyNode }).digraph((G) => {
+      // A DSL given back keeps the types of its kit.
+      expectTypeOf(dsl(G)).toEqualTypeOf(G);
+      expectTypeOf(dsl(G).node('a')).toEqualTypeOf<DSL<MyNode>>();
+    });
+    // @ts-expect-error the kit's types come with a kit
+    dsl<Digraph, ResolvedModelTypes<{ Node: typeof MyNode }>>(new Digraph());
   });
 });
 
