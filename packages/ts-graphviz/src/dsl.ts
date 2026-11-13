@@ -785,14 +785,20 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
   return {
     node(first: unknown, ...rest: unknown[]): unknown {
       if (typeof first === 'string') {
+        const attributes = find(rest, isObject) as
+          | NodeAttributesObject
+          | undefined;
         let node = g.getNode(first);
         if (node === undefined) {
-          node = kit.createNode(first);
+          // The attributes go to the constructor, so a custom class sees
+          // them where it is created.
+          node =
+            attributes !== undefined
+              ? kit.createNode(first, attributes)
+              : kit.createNode(first);
           g.addNode(node);
-        }
-        const attributes = find(rest, isObject);
-        if (attributes !== undefined) {
-          node.setAttributes(attributes as NodeAttributesObject);
+        } else if (attributes !== undefined) {
+          node.setAttributes(attributes);
         }
         const view = viewOf(node);
         find(rest, isFunction)?.(view, kit);
@@ -825,15 +831,23 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
     },
     subgraph(...args: unknown[]): unknown {
       const id = find(args, isString);
+      const attributes = find(args, isObject) as
+        | SubgraphAttributesObject
+        | undefined;
       let subgraph = id !== undefined ? g.getSubgraph(id) : undefined;
       if (subgraph === undefined) {
-        subgraph =
-          id !== undefined ? kit.createSubgraph(id) : kit.createSubgraph();
+        // The constructor gets the id and the attributes in the shape the
+        // statement has them. The statement was checked against its id
+        // where it was written; here they are those of any subgraph.
+        const create = kit.createSubgraph as (
+          ...args: (string | SubgraphAttributesObject)[]
+        ) => SubgraphModel;
+        subgraph = create(
+          ...[id, attributes].filter((arg) => arg !== undefined),
+        );
         g.addSubgraph(subgraph);
-      }
-      const attributes = find(args, isObject);
-      if (attributes !== undefined) {
-        subgraph.setAttributes(attributes as SubgraphAttributesObject);
+      } else if (attributes !== undefined) {
+        subgraph.setAttributes(attributes);
       }
       const view = viewOf(subgraph);
       find(args, isFunction)?.(view, kit);
