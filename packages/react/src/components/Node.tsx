@@ -1,6 +1,7 @@
 import { createElement, type FC } from 'react';
 import { ownOptions } from 'ts-graphviz';
-import { HOST, hostProps } from '../host.js';
+import { hostProps } from '../host.js';
+import { HOST } from '../shared/tree.js';
 import type { NodeProps } from '../types.js';
 
 /**

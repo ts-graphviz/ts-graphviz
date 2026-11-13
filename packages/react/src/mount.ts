@@ -4,14 +4,19 @@ import { CurrentGraph } from './contexts/CurrentGraph.js';
 import { GraphContainer } from './contexts/GraphContainer.js';
 import { GraphMap } from './contexts/GraphMap.js';
 import { type Context, GraphvizContext } from './contexts/GraphvizContext.js';
-import { syncContainer } from './host.js';
 import {
   currentGeneration,
   type FiberRoot,
   type RendererGeneration,
 } from './reconciler.js';
-import type { AnyGraphContainer } from './types/container.js';
-import type { AddedStatements, RenderContainer } from './types/reconciler.js';
+import {
+  type AddedStatements,
+  type AnyGraphContainer,
+  clearChildren,
+  createTree,
+  sync,
+} from './shared/tree.js';
+import type { RenderContainer } from './types/reconciler.js';
 
 /**
  * Error information for React error handling
@@ -146,10 +151,7 @@ export class Mount<Container extends AnyGraphContainer = AnyGraphContainer> {
   ) {
     this.#context = context;
     this.#containerInfo = {
-      renderedModels: [],
-      context,
-      children: [],
-      added,
+      ...createTree(context.container, context.models, added),
       active: true,
       onCommit: handlers.onCommit,
       onSyncError: (error) => {
@@ -186,7 +188,7 @@ export class Mount<Container extends AnyGraphContainer = AnyGraphContainer> {
    * one, the root graphs of the top level.
    */
   get models(): AnyDotObjectModel[] {
-    return this.#containerInfo.renderedModels;
+    return this.#containerInfo.models;
   }
 
   /** Whether the top level has an element that is not a root graph. */
@@ -255,13 +257,13 @@ export class Mount<Container extends AnyGraphContainer = AnyGraphContainer> {
     const containerInfo = this.#containerInfo;
     if (rollback && !this.#rolledBack) {
       this.#rolledBack = true;
-      containerInfo.children = [];
+      clearChildren(containerInfo);
       try {
-        syncContainer(containerInfo);
+        sync(containerInfo);
       } catch {
         // A model class that throws on removal too: nothing more to try.
       }
-      containerInfo.renderedModels = [];
+      containerInfo.models = [];
     }
     if (!containerInfo.active) return;
     containerInfo.active = false;

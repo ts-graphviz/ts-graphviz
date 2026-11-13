@@ -1,6 +1,7 @@
 import { createElement, type FC } from 'react';
 import { ownOptions } from 'ts-graphviz';
-import { edgeKey, HOST, hostProps } from '../host.js';
+import { hostProps } from '../host.js';
+import { edgeKey, HOST } from '../shared/tree.js';
 import type { EdgeProps } from '../types.js';
 
 /**
