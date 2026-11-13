@@ -2,7 +2,6 @@ import {
   createElement,
   type ReactElement,
   type ReactNode,
-  useContext,
   useMemo,
 } from 'react';
 import { type ModelKit, ownOptions } from 'ts-graphviz';
@@ -25,10 +24,7 @@ export function useHostGraph(
     label?: unknown;
     children?: ReactNode;
   },
-  create: (
-    models: ModelKit,
-    parent: AnyGraphContainer | null,
-  ) => AnyGraphContainer,
+  create: (models: ModelKit) => AnyGraphContainer,
   root: boolean,
 ): ReactElement {
   const container = useGraphContainer();
@@ -38,13 +34,9 @@ export function useHostGraph(
     );
   }
   const { models } = useGraphvizContext();
-  const parent = useContext(CurrentGraph);
   const { id, strict, children } = ownOptions(props);
   // biome-ignore lint/correctness/useExhaustiveDependencies: the model is made from the id and strict
-  const model = useMemo(
-    () => create(models, parent),
-    [models, parent, id, strict],
-  );
+  const model = useMemo(() => create(models), [models, id, strict]);
   let content = (
     <CurrentGraph.Provider value={model}>{children}</CurrentGraph.Provider>
   );

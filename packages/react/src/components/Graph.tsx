@@ -8,15 +8,7 @@ import { useHostGraph } from './hostGraph.js';
  */
 export const Graph: FC<RootGraphProps> = (props) => {
   const { id, strict } = ownOptions(props);
-  return useHostGraph(
-    props,
-    (models) => {
-      const graph = new models.Graph(id, strict);
-      graph.with(models);
-      return graph;
-    },
-    true,
-  );
+  return useHostGraph(props, (models) => models.createGraph(id, strict), true);
 };
 
 Graph.displayName = 'Graph';
