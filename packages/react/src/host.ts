@@ -16,6 +16,7 @@ import { defaultModelKit, isNodeModel, ownOptions } from 'ts-graphviz';
 import { renderId } from './renderId.js';
 import type { AnyGraphContainer } from './types/container.js';
 import type {
+  AddedStatements,
   Child,
   ComponentProps,
   EdgeInstance,
@@ -272,22 +273,12 @@ export function removeChild(children: Child[], child: Child): void {
 
 type Statement = NodeModel | EdgeModel | SubgraphModel;
 
-/** What the renderer added to a graph. */
-interface Added {
-  /** The statements, in the order added. */
-  statements: Statement[];
-  /** Nodes of the graph's own that a rendered node with their id replaced. */
-  shadowed: Map<string, NodeModel>;
-}
-
-const added = new WeakMap<AnyGraphContainer, Added>();
-
 /**
  * Make the models match the host instances after a commit.
  *
  * Every graph gets the statements of its visible children in element order,
  * followed by those of the portals that name it, in element order. Only a
- * graph whose list changed is touched: the statements the renderer added
+ * graph whose list changed is touched: the statements the tree added
  * before are taken out and the new ones added, so statements a container
  * had of its own stay first (a node of its own that a rendered node with
  * the same id replaced comes back when that one goes). Nothing is added to
@@ -302,6 +293,7 @@ const added = new WeakMap<AnyGraphContainer, Added>();
  */
 export function syncContainer(container: RenderContainer): void {
   const root = container.context?.container;
+  const { added } = container;
   const kit = container.context?.models ?? defaultModelKit;
   const desired = new Map<AnyGraphContainer, Statement[]>();
   const byId = new Map<string, AnyGraphContainer>();
@@ -314,7 +306,7 @@ export function syncContainer(container: RenderContainer): void {
   }[] = [];
   const rendered: AnyDotObjectModel[] = [];
 
-  if (root) indexOwnGraphs(root, byId, own);
+  if (root) indexOwnGraphs(root, added, byId, own);
 
   // The portals in element order, nested ones included, and the graphs
   // they can name.
@@ -380,7 +372,7 @@ export function syncContainer(container: RenderContainer): void {
   }
 
   for (const [graph, statements] of desired) {
-    applyStatements(graph, statements);
+    applyStatements(graph, statements, added);
   }
 
   container.renderedModels = root
@@ -413,6 +405,7 @@ function createStatement(
 /** The graphs a container had of its own, by id. */
 function indexOwnGraphs(
   graph: AnyGraphContainer,
+  added: AddedStatements,
   byId: Map<string, AnyGraphContainer>,
   own: AnyGraphContainer[],
 ): void {
@@ -420,13 +413,14 @@ function indexOwnGraphs(
   if (graph.id !== undefined) byId.set(graph.id, graph);
   const rendered = new Set<Statement>(added.get(graph)?.statements);
   for (const subgraph of graph.subgraphs) {
-    if (!rendered.has(subgraph)) indexOwnGraphs(subgraph, byId, own);
+    if (!rendered.has(subgraph)) indexOwnGraphs(subgraph, added, byId, own);
   }
 }
 
 function applyStatements(
   graph: AnyGraphContainer,
   statements: Statement[],
+  added: AddedStatements,
 ): void {
   const previous = added.get(graph);
   if (

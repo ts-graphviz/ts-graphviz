@@ -16,7 +16,7 @@ JSX を活用することで、DOT 言語のモデルをより直感的でコン
 ## インストール
 
 ```bash npm2yarn
-npm install @ts-graphviz/react react react-dom
+npm install @ts-graphviz/react ts-graphviz react react-dom
 ```
 
 ## 例

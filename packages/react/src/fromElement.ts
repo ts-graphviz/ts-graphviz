@@ -16,7 +16,10 @@ export interface FromElementOptions<
    * A graph to add the element's models to. `fromElement` then resolves
    * with this graph, and the element may have nodes, edges and subgraphs at
    * its top level. The graph's DOT DSL (such as `digraph()` returns) can
-   * stand for it.
+   * stand for it; the result is then the graph model, not the DSL.
+   *
+   * What a conversion added is the graph's own afterwards: a later
+   * conversion or root adds to it, and takes nothing of it out.
    */
   container?: Container | { readonly [MODEL]: Container };
   /**
