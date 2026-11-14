@@ -1,7 +1,8 @@
 /**
  * The Node.js adapter against the real `dot` binary (skipped without it):
- * the process controls of #1680. Every test here starts a process, so the
- * file starts none while it is loaded (`pnpm test` loads it and runs none).
+ * how it feeds, limits, aborts and reports the process. Every test here
+ * starts a process, so the file starts none while it is loaded (`pnpm test`
+ * loads it and runs none).
  */
 import { spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -53,7 +54,7 @@ function useTempDir() {
   });
 }
 
-describe('toBlob with the real dot (#1680)', {
+describe('toBlob with the real dot', {
   tags: ['SM-4', 'process'],
 }, () => {
   useTempDir();
@@ -129,7 +130,7 @@ describe('toBlob with the real dot (#1680)', {
 
   it('kills the command when the signal aborts and rejects with its reason', async () => {
     // A stand-in for dot that records its pid and hangs; aborted once it
-    // runs, so the outcome does not hang on how fast dot is (#1904).
+    // runs, so the outcome does not hang on how fast dot is.
     const script = join(dir, 'sleep.sh');
     writeFileSync(script, '#!/bin/sh\necho $$ > "$0.pid"\nexec sleep 60\n', {
       mode: 0o755,
@@ -243,7 +244,7 @@ describe('toBlob with the real dot (#1680)', {
   });
 });
 
-describe('toBlob checks the source with sanitize (#1681)', {
+describe('toBlob checks the source with sanitize', {
   tags: ['SM-7', 'process'],
 }, () => {
   useTempDir();

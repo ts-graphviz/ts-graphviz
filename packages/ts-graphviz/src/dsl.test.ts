@@ -135,7 +135,7 @@ describe('DOT statements', () => {
       expect(callback).toHaveBeenLastCalledWith(other, defaultModelKit);
     });
 
-    test('ignores null as the attributes (#1593)', () => {
+    test('ignores null as the attributes', () => {
       const edge = g.edge(nodes, null as never);
       expect(Object.keys(edge)).toStrictEqual([]);
       expect(modelOf(g).edges).toStrictEqual([modelOf(edge)]);
@@ -204,7 +204,7 @@ describe('DOT statements', () => {
       });
     });
 
-    test('takes the empty id as an id; no id makes an anonymous one (#1593)', () => {
+    test('takes the empty id as an id; no id makes an anonymous one', () => {
       const empty = g.subgraph('');
       expect(modelOf(empty).id).toBe('');
       expect(g.subgraph('')).toBe(empty);
@@ -727,6 +727,36 @@ describe('custom models', () => {
     expect(seen).toHaveLength(4);
     expect(g.node('a')).toMatchObject({ label: 'A', color: 'red' });
     expect(g.subgraph('s')).toMatchObject({ rank: 'max' });
+  });
+
+  test('the kit is the receiver of its methods', () => {
+    // A kit of methods (not arrow functions) reaches its classes through this.
+    const kit = {
+      ...defaultModelKit,
+      Subgraph,
+      Node,
+      Edge,
+      createSubgraph(this: { Subgraph: typeof Subgraph }, id?: string) {
+        return new this.Subgraph(id);
+      },
+      createNode(this: { Node: typeof Node }, id: string) {
+        return new this.Node(id);
+      },
+      createEdge(
+        this: { Edge: typeof Edge },
+        targets: ConstructorParameters<typeof Edge>[0],
+      ) {
+        return new this.Edge(targets);
+      },
+    } as ModelKit;
+    const g = dsl(new Digraph(), kit);
+    g.subgraph('s', (s) => {
+      s.edge([s.node('a'), 'b']);
+    });
+    g.subgraph();
+    expect(modelOf(g).subgraphs.map((s) => s.id)).toEqual(['s', undefined]);
+    expect(modelOf(g).subgraphs[0].nodes.map((n) => n.id)).toEqual(['a']);
+    expect(modelOf(g).subgraphs[0].edges).toHaveLength(1);
   });
 
   test('default attribute statements keep their place, as in DOT', () => {

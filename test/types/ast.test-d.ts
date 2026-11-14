@@ -17,8 +17,8 @@ import {
 } from 'ts-graphviz/ast';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// What users of `ts-graphviz/ast` get from its overloads and inference
-// (#1744). The declarations themselves are in api-reports/.
+// What users of `ts-graphviz/ast` get from its overloads and inference.
+// The declarations themselves are in api-reports/.
 
 describe('parse', () => {
   it('parse gives a whole file', () => {

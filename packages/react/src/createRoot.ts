@@ -1,3 +1,4 @@
+import { withCode } from '@ts-graphviz/common';
 import { createElement, type ReactElement } from 'react';
 import type {
   AnyDotObjectModel,
@@ -217,14 +218,20 @@ function validateModels(
   const topLevelGraphs = models.filter((model) => model.$$type === 'Graph');
 
   if (topLevelGraphs.length === 0) {
-    throw new Error(
-      'No top-level graph found. When not using a container, you must provide exactly one Graph or Digraph component at the top level.',
+    throw withCode(
+      new Error(
+        'No top-level graph found. When not using a container, you must provide exactly one Graph or Digraph component at the top level.',
+      ),
+      'TSG_ERR_NO_GRAPH',
     );
   }
 
   if (topLevelGraphs.length > 1) {
-    throw new Error(
-      `Multiple top-level graphs detected (${topLevelGraphs.length}). DOT language only supports one graph per file. Consider using a container or rendering graphs separately.`,
+    throw withCode(
+      new Error(
+        `Multiple top-level graphs detected (${topLevelGraphs.length}). DOT language only supports one graph per file. Consider using a container or rendering graphs separately.`,
+      ),
+      'TSG_ERR_MULTIPLE_GRAPHS',
     );
   }
 }
@@ -266,7 +273,10 @@ async function renderInternal<
     if (isUnmounted()) break;
   }
   if (isUnmounted()) {
-    throw new Error('The root was unmounted before the render settled');
+    throw withCode(
+      new Error('The root was unmounted before the render settled'),
+      'TSG_ERR_ROOT_UNMOUNTED',
+    );
   }
   signal?.throwIfAborted();
   const [error] = containerInfo.uncaughtErrors;
@@ -345,7 +355,10 @@ export function createRoot<
   ): Promise<void> => {
     signal?.throwIfAborted();
     if (isUnmounted) {
-      throw new Error('Cannot render on an unmounted root');
+      throw withCode(
+        new Error('Cannot render on an unmounted root'),
+        'TSG_ERR_ROOT_UNMOUNTED',
+      );
     }
 
     const wrappedElement = createWrappedElement(element, context, container);

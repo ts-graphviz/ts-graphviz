@@ -7,8 +7,9 @@ permissions:
 
 # Builds and packs every publishable package twice, in two separate jobs
 # (clean checkouts, different runners), and fails if any tarball differs.
-# `pnpm pack:check` runs the same check locally; SECURITY.md explains how
-# a user rebuilds a release and compares it with the npm tarball.
+# `pnpm pack:check` runs the same check locally; "Verifying a Release" on
+# the website's Security Policies page explains how a user rebuilds a
+# release and compares it with the npm tarball.
 jobs:
   pack:
     name: Build and pack (${{ matrix.round }} build)

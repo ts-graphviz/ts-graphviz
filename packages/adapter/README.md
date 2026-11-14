@@ -30,7 +30,7 @@ Cross-platform interfaces for executing Graphviz DOT commands in various JavaScr
 
 [![format: Biome](https://img.shields.io/badge/format%20with-Biome-F7B911?logo=biome&style=flat)](https://biomejs.dev/)
 [![test: Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest&style=flat)](https://vitest.dev/)
-[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://rollupjs.org/)
+[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://vite.dev/)
 
 </div>
 
@@ -38,11 +38,26 @@ Cross-platform interfaces for executing Graphviz DOT commands in various JavaScr
 
 > It is part of the ts-graphviz library, which is split into modular packages to improve maintainability, flexibility, and ease of use.
 
-This library enables rendering DOT language strings into different output formats through platform-specific implementations for Node.js, and Deno.
+This library renders DOT language strings into the output formats of Graphviz by running the `dot` command, with implementations for Node.js and Deno.
 
-[Graphviz](https://graphviz.gitlab.io/) must be installed so that the dot command can be executed.
+- [Graphviz](https://graphviz.gitlab.io/) must be installed so that the dot command can be executed.
+- Node.js 22 or later, or the current Deno LTS. On Deno, `toBlob` needs the permission to run the command (`--allow-run`, which can be limited to `--allow-run=dot`).
+- The package has an entry for browsers so that a bundle builds, but nothing is rendered there: its `toBlob` throws an error with the code `TSG_ERR_UNSUPPORTED_ENVIRONMENT`.
 
 Execute the dot command and get its output as a `Blob`.
+
+## Installation
+
+```bash
+# npm
+$ npm install -S @ts-graphviz/adapter
+# or yarn
+$ yarn add @ts-graphviz/adapter
+# or pnpm
+$ pnpm add @ts-graphviz/adapter
+```
+
+The same `toBlob` is in the `ts-graphviz/adapter` entry of the `ts-graphviz` package, where it also takes a graph in place of the DOT string.
 
 ![Adapter State Machine](./media/adapter-state-machine.svg)
 
@@ -78,9 +93,62 @@ Show an SVG Blob as an image (`<img src>`), not as a document: a `blob:` URL of 
 
 `toBlob` accepts configuration options to customize the rendering process.
 
-> In 3.x the adapter had `toStream` and `toFile`. Use `(await toBlob(dot, options)).stream()` for the first, and write that stream to the file yourself (`writeFile(path, stream)`) for the second.
-
 ## Configuration Options
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `format` | `Format` | `'svg'` | Output format (`-T`): one of the documented names, without a `:renderer` suffix, or a name listed in `customFormats`. |
+| `layout` | `Layout` | `'dot'` | Layout engine (`-K`): `dot`, `neato`, `fdp`, `sfdp`, `circo`, `twopi`, `nop`, `nop2`, `osage`, `patchwork`, or a name listed in `customLayouts`. |
+| `attributes` | `{ graph?, node?, edge? }` | none | Default graph, node and edge attributes (`-G`, `-N`, `-E`). |
+| `scale` | `number` | none | Scale of the input (`-s`): a finite number greater than 0. |
+| `y` | `boolean` | none | Invert the y coordinate in the output (`-y`). |
+| `suppressWarnings` | `boolean` | `true` | Suppress Graphviz warning messages (`-q`). |
+| `signal` | `AbortSignal` | none | Kills the command when aborted; the call rejects with the signal's reason. |
+| `maxOutputSize` | `number` | `134217728` (128 MiB) | Largest output, in bytes, the command may write before it is killed. `0` disables the limit. |
+| `sanitize` | `boolean \| SanitizeOptions` | `true` | Checks the DOT with `sanitize` from `@ts-graphviz/ast` before it is rendered. See [Processing User-Provided DOT Files](#processing-user-provided-dot-files). |
+| `dotCommand` | `string` | `'dot'` | The Graphviz command to run. Trusted configuration. |
+| `library` | `string[]` | none | PostScript library files to use (`-l`). Trusted configuration. |
+| `customFormats` | `string[]` | none | Format names a Graphviz plugin adds, accepted as `format` for this call. Trusted configuration. `sanitize` refuses a format it does not know, so such a format also needs `sanitize: false`. |
+| `customLayouts` | `string[]` | none | Layout names a Graphviz plugin adds, accepted as `layout` for this call. Trusted configuration. |
+
+Two layouts take options of their own:
+
+| Layout | Option | Type | Description |
+| --- | --- | --- | --- |
+| `neato` | `noop` | `number` | Sets the no-op flag (`-n`): a non-negative integer. |
+| `neato` | `reduce` | `boolean` | Reduce the graph. |
+| `fdp` | `grid` | `boolean` | Use the grid. Default `true`. |
+| `fdp` | `oldAttractive` | `boolean` | Use the old attractive force (`-LO`). Default `false`. |
+| `fdp` | `iterations` | `number` | Number of iterations (`-Ln`): a non-negative integer. |
+| `fdp` | `unscaledFactor` | `number` | Unscaled factor (`-LU`): a finite, non-negative number. |
+| `fdp` | `overlapExpansionFactor` | `number` | Overlap expansion factor (`-LC`): a finite, non-negative number. |
+| `fdp` | `temperature` | `number` | Temperature (`-LT`): a finite, non-negative number. |
+
+```ts
+import { toBlob } from '@ts-graphviz/adapter';
+
+const blob = await toBlob('graph { a -- b -- c -- a }', {
+  format: 'png',
+  layout: 'neato',
+  attributes: {
+    graph: { bgcolor: 'white' },
+    node: { shape: 'circle' },
+  },
+});
+```
+
+The options that are data (`format`, `layout`, `attributes`, the numbers and flags, `maxOutputSize`, `sanitize`) are checked at run time: a value outside its type or range rejects the call with a `TypeError` or `RangeError` (code `TSG_ERR_INVALID_OPTION`; for `maxOutputSize`, `TSG_ERR_OUTPUT_LIMIT_EXCEEDED`) before the command starts. `isFormat` and `isLayout` check a name chosen by a request:
+
+```ts
+import { isFormat, toBlob } from '@ts-graphviz/adapter';
+
+declare const requested: unknown;
+
+const format = isFormat(requested) ? requested : 'svg';
+const blob = await toBlob('digraph { a -> b }', { format });
+```
+
+When the command fails, the call rejects with a `CommandExecutionError` (code `TSG_ERR_COMMAND_FAILED`).
 
 ### Security Considerations
 
@@ -114,7 +182,7 @@ const blob = await toBlob(dot, {
 
 Graphviz has no sandbox. It reads files named in the DOT and can copy them into its output: an EPS file named by `shapefile` or `image` ends up inside `-Tps` output, images named by `image` or `<IMG SRC>` are embedded in raster output, and their paths appear in SVG. URL attributes are written into SVG links, so a `javascript:` URL becomes script when the SVG is served inline.
 
-`toBlob` therefore checks every source with `sanitize` from `@ts-graphviz/ast` before starting the command, and render the checked text. A source that names a file to read (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), an unsafe link (`URL`, `href`, `HREF`, … other than relative, `http`, `https` and `mailto`), or text that Graphviz would write raw into PostScript, image maps or `plain` output (font names other than plain names, unknown `style` values, line breaks in names, control characters) is rejected with a `DOMException` named `SecurityError`. The check knows the output `format`: it refuses `ismap` and formats whose output has not been checked (e.g. `vml`, `fig`), and requires single-word font names for PostScript:
+`toBlob` therefore checks every source with `sanitize` from `@ts-graphviz/ast` before starting the command, and renders the checked text. A source that names a file to read (`image`, `shapefile`, `imagepath`, `fontpath`, `stylesheet`, xdot drawing programs, font paths, `<IMG>`), an unsafe link (`URL`, `href`, `HREF`, … other than relative, `http`, `https` and `mailto`), or text that Graphviz would write raw into PostScript, image maps or `plain` output (font names other than plain names, unknown `style` values, line breaks in names, control characters) is rejected with a `DOMException` named `SecurityError`. The check knows the output `format`: it refuses `ismap` and formats whose output has not been checked (e.g. `vml`, `fig`), and requires single-word font names for PostScript:
 
 ```ts
 import { toBlob } from '@ts-graphviz/adapter';

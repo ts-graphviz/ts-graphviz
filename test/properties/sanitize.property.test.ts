@@ -11,7 +11,7 @@ import {
 import { describe, expect, it } from 'vitest';
 import { dot } from './ast-arbitraries.js';
 
-// Properties of sanitize (#1681): it never changes what it accepts, and it
+// Properties of sanitize: it never changes what it accepts, and it
 // rejects a dangerous attribute wherever it is placed and however it is
 // spelled. A failing run prints its seed; reproduce it with FC_SEED=<seed>.
 

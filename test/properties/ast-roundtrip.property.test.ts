@@ -31,7 +31,7 @@ import {
 } from './ast-arbitraries.js';
 import { summarize } from './summarize.js';
 
-// Property-based tests for the AST layer (see #1612): the printer and parser
+// Property-based tests for the AST layer: the printer and parser
 // as a pair, and fromModel/toModel as a pair. A failing run prints its seed;
 // reproduce it with FC_SEED=<seed>.
 
@@ -67,7 +67,7 @@ describe('printer and parser', { tags: ['SM-1'] }, () => {
           graph.map((g) => ['Graph', g] as const),
         ),
         ([startRule, ast]) => {
-          // A union rule gives the union of its nodes (#1741).
+          // A union rule gives the union of its nodes.
           const parsed = parse(stringify(ast), { as: startRule });
           expect(normalize(parsed)).toStrictEqual(normalize(ast));
         },
@@ -102,7 +102,7 @@ describe('printer and parser', { tags: ['SM-1'] }, () => {
     const reparse = (ast: ASTNode) =>
       normalize(parse(stringify(ast), { as: 'Edge' }));
 
-    // #1619: two-letter points were split by ordered choice, `c` and `_`
+    // Once broken: two-letter points were split by ordered choice, `c` and `_`
     // were missing, and a compass point without a port was read as a port
     it.each(COMPASS_POINTS)(
       'a port with the compass point %s round-trips',
@@ -123,8 +123,8 @@ describe('printer and parser', { tags: ['SM-1'] }, () => {
 });
 
 describe('fromModel and toModel', () => {
-  // Integer-like attribute keys keep their position through the model since
-  // #1626, so every generated document is convertible.
+  // Integer-like attribute keys keep their position through the model, so
+  // every generated document is convertible.
   const convertible = dot;
 
   it('toModel(fromModel(dot)) describes the same graphs', () => {
@@ -175,7 +175,7 @@ describe('fromModel and toModel', () => {
     );
   });
 
-  it('attribute values come back in their normalized quoting (#1589, #1629)', () => {
+  it('attribute values come back in their normalized quoting', () => {
     // The model keeps the value, not the source text: a bare numeral that is
     // the exact text of its number, and `true`/`false`, come back bare;
     // every other string is literal text and is written quoted; HTML strings

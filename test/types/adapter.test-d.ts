@@ -3,7 +3,7 @@ import { digraph } from 'ts-graphviz';
 import { toBlob as toBlobFromModel } from 'ts-graphviz/adapter';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// What users of the adapter get from its options and inference (#1744).
+// What users of the adapter get from its options and inference.
 // The declarations themselves are in api-reports/.
 
 describe('toBlob', () => {

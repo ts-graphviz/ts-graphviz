@@ -1,5 +1,5 @@
 ---
-"@ts-graphviz/react": major
+"@ts-graphviz/react": minor
 ---
 
 `<Subgraph>`'s props are typed by its `id`, as `subgraph()` is (`SubgraphAttributesFor`): `<Subgraph id="cluster_a" label="A">` and `<Subgraph id="row" rank="same">` type-check, and `<Subgraph id="row" label="x">` does not (Graphviz ignores a label there). Add `cluster` to make any subgraph a cluster. An `id` not known until run time takes either kind, as before.

@@ -21,7 +21,7 @@ import {
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// What users of `ts-graphviz` get from its overloads and inference (#1744).
+// What users of `ts-graphviz` get from its overloads and inference.
 // The declarations themselves are in api-reports/.
 
 describe('model factories', () => {

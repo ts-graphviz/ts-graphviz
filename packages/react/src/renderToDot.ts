@@ -1,3 +1,4 @@
+import { withCode } from '@ts-graphviz/common';
 import type { ReactElement } from 'react';
 import {
   type AnyReadonlyDotObjectModel,
@@ -104,8 +105,11 @@ export async function renderToDot<
       const models = root.getTopLevelModels();
 
       if (models.length !== 1) {
-        throw new Error(
-          `Expected exactly one top-level graph, but got ${models.length}. Use a container or ensure only one Graph/Digraph component is at the top level.`,
+        throw withCode(
+          new Error(
+            `Expected exactly one top-level graph, but got ${models.length}. Use a container or ensure only one Graph/Digraph component is at the top level.`,
+          ),
+          models.length === 0 ? 'TSG_ERR_NO_GRAPH' : 'TSG_ERR_MULTIPLE_GRAPHS',
         );
       }
 

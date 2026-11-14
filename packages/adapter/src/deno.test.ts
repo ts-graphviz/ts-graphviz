@@ -247,7 +247,7 @@ describe('Deno adapter failures and limits', { tags: ['SM-4'] }, () => {
       toBlob('digraph {}', { sanitize: false, maxOutputSize: -1 }),
     ).rejects.toMatchObject({
       name: 'RangeError',
-      code: 'TSG_ERR_OUTPUT_LIMIT_EXCEEDED',
+      code: 'TSG_ERR_INVALID_OPTION',
     });
     expect(calls.spawned).toBe(0);
   });

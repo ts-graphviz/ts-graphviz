@@ -23,7 +23,7 @@ import {
 import { describe, expectTypeOf, it } from 'vitest';
 
 // The classes of a ModelKit show in the types of what graphs create,
-// in subgraphs too (#1736).
+// in subgraphs too.
 
 class MyNode extends Node {
   extra(): string {
