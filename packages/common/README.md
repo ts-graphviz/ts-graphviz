@@ -30,7 +30,7 @@ Type information, constants, and utility functions related to the DOT language a
 
 [![format: Biome](https://img.shields.io/badge/format%20with-Biome-F7B911?logo=biome&style=flat)](https://biomejs.dev/)
 [![test: Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest&style=flat)](https://vitest.dev/)
-[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://rollupjs.org/)
+[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://vite.dev/)
 
 </div>
 
@@ -41,12 +41,13 @@ Type information, constants, and utility functions related to the DOT language a
 ## Features
 
 - **Type definitions** for DOT language elements, including attributes and attribute values
-- **Constants** representing common attribute names and values
-- **Comprehensive type guards** for runtime type checking and TypeScript type narrowing
-- **Node reference utilities** for parsing and converting complex node references
-- **Performance-optimized utilities** for working with large model collections
-- **Seamless integration** with @ts-graphviz/react for type-safe model filtering
-- **Dual-mode type handling** - runtime validation or trusted user assertions
+- **Model interfaces** (`NodeModel`, `EdgeModel`, `RootGraphModel`, …) that the classes of `@ts-graphviz/core` implement
+- **Type guards** for the models (`isNodeModel`, `isEdgeModel`, …), which narrow the type in TypeScript
+- **Node reference utilities** (`toNodeRef`, `toNodeRefGroup`, `isCompass`, …) for edge targets
+- **Value kinds** (`escString`, `htmlLike`) for attribute values that carry DOT syntax
+- **Error codes** (`ERROR_CODES`, `isTsGraphvizError`) shared by every package
+
+The package has no runtime dependencies and runs in any JavaScript runtime. Everything it exports is also exported by `ts-graphviz`.
 
 ## Usage
 
@@ -66,8 +67,7 @@ import {
 
 ### Type-Safe Model Operations
 
-The package excels at providing type safety for graph model operations:
-
+The attribute object types check attribute names and values:
 
 ```ts
 import type {
@@ -88,7 +88,7 @@ const edgeAttr: EdgeAttributesObject = {
 
 ### Type Guards and Model Utilities
 
-The package provides powerful type guards for working with graph models with full TypeScript integration:
+The type guards tell what kind of model a value is:
 
 ```ts
 import {
@@ -114,30 +114,32 @@ if (isEdgeModel(someModel)) {
 }
 ```
 
+The guards take models. For an object of the DOT DSL of `ts-graphviz` (what `digraph()` and its statements return), `modelOf(x)` gives the model; for a model it returns the model itself.
+
 ### Node Reference Utilities
 
 Utilities for working with node references and compass directions:
 
 ```ts
 import {
-  isNodeRef,
-  isNodeRefLike,
   isCompass,
+  isNodeRefLike,
   toNodeRef,
-  toNodeRefGroup
+  toNodeRefGroup,
 } from '@ts-graphviz/common';
 
 // Check if a value is a valid node reference
 if (isNodeRefLike('node1:port:n')) {
   const nodeRef = toNodeRef('node1:port:n');
-  console.log(nodeRef); // { id: 'node1', port: 'port', compass: 'n' }
+  console.log(nodeRef);
+  // { id: 'node1', port: 'port', compass: 'n' }
 }
 
 // Convert multiple node references
 const targets = toNodeRefGroup(['node1', 'node2:port', 'node3::s']);
 console.log(targets);
 // [
-//   { id: 'node1' },
+//   { id: 'node1', port: undefined },
 //   { id: 'node2', port: 'port' },
 //   { id: 'node3', port: '', compass: 's' }
 // ]
@@ -145,6 +147,7 @@ console.log(targets);
 // Validate compass directions
 if (isCompass('ne')) {
   console.log('Valid compass direction');
+  // Valid compass direction
 }
 ```
 
@@ -156,16 +159,14 @@ The package provides additional utilities for complex type checking scenarios:
 import {
   isForwardRefNode,
   isNodeRefGroupLike,
-  isNodeRef,
-  isNodeRefLike,
   toNodeRefGroup,
-  FilterableModel
 } from '@ts-graphviz/common';
 
 // Check for forward reference nodes
 const forwardRef = { id: 'futureNode' };
 if (isForwardRefNode(forwardRef)) {
   console.log('Valid forward reference');
+  // Valid forward reference
 }
 
 // Validate arrays of node references
@@ -176,7 +177,47 @@ if (isNodeRefGroupLike(targets)) {
 }
 ```
 
-For more examples and usage details, please refer to the ts-graphviz documentation.
+### Attribute Values with DOT Syntax
+
+A plain `string` attribute value is literal text, which is escaped completely when it is written to DOT. `escString` and `htmlLike` mark a value that carries DOT syntax of its own: a Graphviz escString (`\N`, `\l`, …) or an HTML-like label. `isEscString` and `isHTMLLike` tell the kinds apart.
+
+```ts
+import { escString, htmlLike, isEscString, isHTMLLike } from '@ts-graphviz/common';
+
+const name = escString('\\N');
+const label = htmlLike('<b>bold</b>');
+
+console.log(name);
+// { '$$kind': 'escString', value: '\\N' }
+console.log(isEscString(name), isHTMLLike(label), isHTMLLike('<b>bold</b>'));
+// true true false
+```
+
+### Error Codes
+
+An error the ts-graphviz packages raise for a documented failure is a standard error type (`SyntaxError`, `RangeError`, `TypeError`, …) with a `code` from `ERROR_CODES`. `isTsGraphvizError` checks for such an error, and `ErrorCode` is the union of the codes.
+
+```ts
+import { ERROR_CODES, isTsGraphvizError } from '@ts-graphviz/common';
+
+console.log(ERROR_CODES.includes('TSG_ERR_DOT_SYNTAX'));
+// true
+
+// Something that calls ts-graphviz, such as parsing a DOT source.
+declare function work(): void;
+
+try {
+  work();
+} catch (e) {
+  if (isTsGraphvizError(e) && e.code === 'TSG_ERR_DOT_SYNTAX') {
+    // the DOT source does not parse
+  } else {
+    throw e;
+  }
+}
+```
+
+For more examples and usage details, see the [ts-graphviz documentation](https://ts-graphviz.github.io/docs/ts-graphviz/guides/dot-dsl/) and the [API reference](https://ts-graphviz.github.io/api/).
 
 ## Contributors 👥
 

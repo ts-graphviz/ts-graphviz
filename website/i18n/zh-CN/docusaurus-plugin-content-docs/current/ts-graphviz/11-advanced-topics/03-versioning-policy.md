@@ -17,6 +17,12 @@ description: ts-graphviz 的版本控制策略。
 
 ---
 
+## 支持的主版本 {#supported-major-versions}
+
+只支持最新的主版本。错误修复、安全修复和新功能都只提供给最新的主版本。新的主版本发布后，之前的主版本不再受支持。如果你在使用之前的主版本，请升级；变更内容见[迁移指南](/docs/ts-graphviz/migration-guides/v3-to-v4)。
+
+---
+
 ## 异常情况：TypeScript 版本更新
 
 在某些情况下，**ts-graphviz** 可能会偏离严格的语义化版本控制：
