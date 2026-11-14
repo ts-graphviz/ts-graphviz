@@ -23,7 +23,7 @@ describe('fromDot and fromDotAll with several graphs', () => {
       ['a', true],
       ['b', false],
     ]);
-    expect(graphs[1].getNode('y')).toBeDefined();
+    expect(graphs[1].getNodes('y')[0]).toBeDefined();
     expect(fromDotAll('// nothing')).toEqual([]);
   });
 

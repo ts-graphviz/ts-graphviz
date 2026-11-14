@@ -65,7 +65,7 @@ describe('fromElement waits for data under Suspense', () => {
       { container },
     );
     expect(ids(container)).toEqual(['outer']);
-    expect(container.getSubgraph('s')?.nodes.map((n) => n.id)).toEqual([
+    expect(container.getSubgraphs('s')[0]?.nodes.map((n) => n.id)).toEqual([
       'inner',
     ]);
   });

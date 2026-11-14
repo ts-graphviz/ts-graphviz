@@ -241,15 +241,13 @@ describe('a schema', () => {
         SubgraphModel<MySchema>
       >();
       expectTypeOf(g.nodes).toEqualTypeOf<ReadonlyArray<NodeModel<MySchema>>>();
-      expectTypeOf(g.getNode('a')).toEqualTypeOf<
-        NodeModel<MySchema> | undefined
-      >();
+      expectTypeOf(g.getNodes('a')).toEqualTypeOf<NodeModel<MySchema>[]>();
       expectTypeOf(g.edges).toEqualTypeOf<ReadonlyArray<EdgeModel<MySchema>>>();
       expectTypeOf(g.subgraphs).toEqualTypeOf<
         ReadonlyArray<SubgraphModel<MySchema>>
       >();
-      expectTypeOf(g.getSubgraph('s')).toEqualTypeOf<
-        SubgraphModel<MySchema> | undefined
+      expectTypeOf(g.getSubgraphs('s')).toEqualTypeOf<
+        SubgraphModel<MySchema>[]
       >();
     });
   });

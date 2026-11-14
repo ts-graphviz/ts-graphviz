@@ -771,7 +771,10 @@ export interface GraphBaseModel<
    * in v5.
    */
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
-  /** Node objects in the graph. */
+  /**
+   * The nodes in the graph, in the order they were added: a node declared
+   * more than once is there for each declaration.
+   */
   readonly nodes: ReadonlyArray<NodeModel<S>>;
   /** Edge objects in the graph. */
   readonly edges: ReadonlyArray<EdgeModel<S>>;
@@ -844,7 +847,8 @@ export interface GraphBaseModel<
    */
   existSubgraph(subgraph: SubgraphModel<S>): boolean;
   /**
-   * Remove Node from the graph.
+   * Remove nodes from the graph: a node model takes out that declaration;
+   * an id takes out every declaration with the id.
    */
   removeNode(node: NodeModel<S> | string): void;
   /**
@@ -856,18 +860,18 @@ export interface GraphBaseModel<
    */
   removeSubgraph(subgraph: SubgraphModel<S>): void;
   /**
-   * Get Subgraph in cluster by specifying id.
-   *
-   * If there is no Subgraph with the specified id in the graph, return undefined.
+   * The subgraphs declared with the id, in the order they were added; empty
+   * if there is none. As in DOT, a subgraph may be declared more than once.
    */
-  getSubgraph(id: string): SubgraphModel<S> | undefined;
+  getSubgraphs(id: string): SubgraphModel<S>[];
 
   /**
-   * Get Node in cluster by specifying id.
-   *
-   * If there is no Node with the specified id in the graph, return undefined.
+   * The nodes declared with the id, in the order they were added; empty if
+   * there is none. As in DOT, a node may be declared more than once: each
+   * declaration is a node model, and Graphviz applies their attributes in
+   * order.
    */
-  getNode(id: string): NodeModel<S> | undefined;
+  getNodes(id: string): NodeModel<S>[];
 }
 
 /**

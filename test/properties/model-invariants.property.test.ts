@@ -9,6 +9,7 @@ import {
   Edge,
   Graph,
   graph,
+  LegacyDigraph,
   modelOf,
   Node,
   type NodeModel,
@@ -41,7 +42,7 @@ const plainId = nodeId.filter((s) => !s.includes(':'));
 // plain reference model after every step.
 
 interface Reference {
-  /** Node ids in the order the graph first saw them. */
+  /** The ids of the node declarations, in the order they were added. */
   nodes: string[];
   edges: number;
   subgraphs: (string | undefined)[];
@@ -52,9 +53,12 @@ type Command = fc.Command<Reference, RootGraphModel>;
 /** Everything a graph says about its contents agrees with the reference. */
 function expectConsistent(model: Reference, real: RootGraphModel): void {
   expect(real.nodes.map((n) => n.id)).toStrictEqual(model.nodes);
-  for (const id of model.nodes) {
+  for (const id of new Set(model.nodes)) {
     expect(real.existNode(id)).toBe(true);
-    expect(real.getNode(id)?.id).toBe(id);
+    // getNodes gives the declarations of the id, in the order of nodes
+    expect(real.getNodes(id)).toStrictEqual(
+      real.nodes.filter((n) => n.id === id),
+    );
   }
   expect(real.edges).toHaveLength(model.edges);
   expect(real.subgraphs.map((s) => s.id)).toStrictEqual(model.subgraphs);
@@ -67,15 +71,14 @@ class NodeCommand implements Command {
   constructor(readonly id: string) {}
   check = () => true;
   run(model: Reference, real: RootGraphModel): void {
-    const known = model.nodes.includes(this.id);
     // the graph's lookup agrees with the reference before the call
-    expect(real.existNode(this.id)).toBe(known);
-    const before = real.getNode(this.id);
+    expect(real.existNode(this.id)).toBe(model.nodes.includes(this.id));
+    const before = real.getNodes(this.id);
     const node = modelOf(dsl(real).node(this.id));
-    // node(id) returns the existing node when there is one
-    if (known) expect(node).toBe(before);
-    else model.nodes.push(this.id);
-    expect(modelOf(dsl(real).node(this.id))).toBe(node);
+    // node(id) always declares a new node, after those with the id
+    expect(before).not.toContain(node);
+    expect(real.getNodes(this.id)).toStrictEqual([...before, node]);
+    model.nodes.push(this.id);
     expectConsistent(model, real);
   }
   toString = () => `node(${JSON.stringify(this.id)})`;
@@ -85,20 +88,20 @@ class CreateNodeCommand implements Command {
   constructor(readonly id: string) {}
   check = () => true;
   run(model: Reference, real: RootGraphModel): void {
-    const before = real.getNode(this.id);
+    const before = real.getNodes(this.id);
     const node = defaultModelKit.createNode(this.id);
     real.addNode(node);
-    // createNode always makes a new node; one with the same id is replaced
-    // in place (the node keeps its position in `nodes`)
-    expect(node).not.toBe(before);
-    expect(real.getNode(this.id)).toBe(node);
-    if (!model.nodes.includes(this.id)) model.nodes.push(this.id);
+    // a node with the id of another is another declaration, at the end
+    expect(real.getNodes(this.id)).toStrictEqual([...before, node]);
+    model.nodes.push(this.id);
+    // adding it again changes nothing
+    real.addNode(node);
     expectConsistent(model, real);
   }
   toString = () => `createNode(${JSON.stringify(this.id)})`;
 }
 
-/** How removeNode is called: with the id, the current node, or another instance with that id. */
+/** How removeNode is called: with the id, the first declaration, or a node with the id that is not in the graph. */
 type RemoveBy = 'id' | 'current' | 'other';
 
 class RemoveNodeCommand implements Command {
@@ -108,7 +111,7 @@ class RemoveNodeCommand implements Command {
   ) {}
   check = () => true;
   run(model: Reference, real: RootGraphModel): void {
-    const current = real.getNode(this.id);
+    const current = real.getNodes(this.id)[0];
     const target =
       this.by === 'id'
         ? this.id
@@ -116,11 +119,17 @@ class RemoveNodeCommand implements Command {
           ? current
           : new Node(this.id);
     real.removeNode(target);
-    // Pinned: removal goes by id, so any instance with that id (a replaced
-    // or unrelated one included) removes the node the graph holds.
-    model.nodes = model.nodes.filter((id) => id !== this.id);
-    expect(real.existNode(this.id)).toBe(false);
-    expect(real.getNode(this.id)).toBeUndefined();
+    if (this.by === 'id') {
+      // an id removes every declaration with it
+      model.nodes = model.nodes.filter((id) => id !== this.id);
+      expect(real.existNode(this.id)).toBe(false);
+      expect(real.getNodes(this.id)).toStrictEqual([]);
+    } else if (this.by === 'current' && current) {
+      // a node removes that declaration only
+      model.nodes.splice(model.nodes.indexOf(this.id), 1);
+      expect(real.nodes).not.toContain(current);
+    }
+    // a node that is not in the graph removes nothing
     expectConsistent(model, real);
   }
   toString = () => `removeNode(${JSON.stringify(this.id)} by ${this.by})`;
@@ -166,23 +175,19 @@ class SubgraphCommand implements Command {
   run(model: Reference, real: RootGraphModel): void {
     // decided from the reference, not from the graph's own lookup
     const known = this.id !== undefined && model.subgraphs.includes(this.id);
-    if (this.id !== undefined) {
-      expect(real.getSubgraph(this.id) !== undefined).toBe(known);
-    }
-    const existing =
-      this.id === undefined ? undefined : real.getSubgraph(this.id);
+    const before = this.id === undefined ? [] : real.getSubgraphs(this.id);
+    expect(before.length > 0).toBe(known);
     const subgraph = modelOf(
       this.id === undefined
         ? dsl(real).subgraph()
         : dsl(real).subgraph(this.id),
     );
-    if (known) {
-      // subgraph(id) returns the existing subgraph when there is one
-      expect(subgraph).toBe(existing);
-    } else {
-      // subgraph() without an id always adds a new one
-      model.subgraphs.push(this.id);
+    // subgraph(id) always declares a new subgraph, as subgraph() does
+    expect(before).not.toContain(subgraph);
+    if (this.id !== undefined) {
+      expect(real.getSubgraphs(this.id)).toStrictEqual([...before, subgraph]);
     }
+    model.subgraphs.push(this.id);
     expect(subgraph.id).toBe(this.id);
     expectConsistent(model, real);
   }
@@ -255,17 +260,23 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
     );
   });
 
-  it('addNode replaces a node with the same id; node() reuses it', () => {
+  it('addNode and node() declare a node again; the legacy models replace it', () => {
     fc.assert(
       fc.property(nodeId, (id) => {
         const g = dsl(new Digraph());
-        const first = g.node(id);
+        const first = modelOf(g.node(id));
         const second = new Node(id);
         modelOf(g).addNode(second);
-        expect(second).not.toBe(modelOf(first));
-        expect(modelOf(g).getNode(id)).toBe(second);
-        expect(modelOf(g).nodes).toStrictEqual([second]);
-        expect(g.node(id)).toBe(dsl(second));
+        const third = modelOf(g.node(id));
+        expect(modelOf(g).nodes).toStrictEqual([first, second, third]);
+
+        const legacy = dsl(new LegacyDigraph());
+        const kept = modelOf(legacy.node(id));
+        const replacement = new Node(id);
+        modelOf(legacy).addNode(replacement);
+        expect(modelOf(legacy).nodes).toStrictEqual([replacement]);
+        expect(kept).not.toBe(replacement);
+        expect(modelOf(legacy.node(id))).toBe(replacement);
       }),
     );
   });
@@ -274,7 +285,7 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
     const g = dsl(new Digraph());
     const sub = g.subgraph('');
     expect(modelOf(sub).id).toBe('');
-    expect(g.subgraph('')).toBe(sub);
+    expect(modelOf(g).getSubgraphs('')).toStrictEqual([modelOf(sub)]);
     expect(modelOf(g).subgraphs).toHaveLength(1);
   });
 
@@ -323,14 +334,14 @@ describe('subgraph nesting', { tags: ['SM-5'] }, () => {
         // walk down again by id: the same instances, and the leaf only at the bottom
         let current: RootGraphModel | SubgraphModel = root;
         for (const [depth, id] of ids.entries()) {
-          const found: SubgraphModel | undefined = current.getSubgraph(id);
+          const found: SubgraphModel | undefined = current.getSubgraphs(id)[0];
           expect(found).toBe(chain[depth]);
-          expect(modelOf(dsl(current).subgraph(id))).toBe(found);
+          expect(current.getSubgraphs(id)).toStrictEqual([found]);
           if (depth < ids.length - 1)
             expect(found?.existNode(leaf)).toBe(false);
           current = found as SubgraphModel;
         }
-        expect(current.getNode(leaf)?.id).toBe(leaf);
+        expect(current.getNodes(leaf)[0]?.id).toBe(leaf);
         expect(root.existNode(leaf)).toBe(false);
       }),
     );

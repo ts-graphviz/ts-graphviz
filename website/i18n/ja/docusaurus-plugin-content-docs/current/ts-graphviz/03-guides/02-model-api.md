@@ -63,7 +63,7 @@ g.addEdge(new Edge([a, b]));
 | `id` | ルートグラフ、サブグラフ、ノードの名前（DOT での ID） |
 | `nodes`、`edges`、`subgraphs` | グラフのノード、エッジ、サブグラフ。`nodes` が持つのはノード文で、エッジにだけ出てくるノードは含みません（[よくある質問](./01-dot-dsl.md#エッジにだけ出てくるノードが-nodes-に入らない)を参照） |
 | `statements` | グラフのノード、エッジ、サブグラフ、先頭以外の既定属性の文を追加した順に並べたもの。`toDot` はこの順に書き出します。グラフ自身の属性と先頭の既定値はその前に書き出されます |
-| `getNode(id)`、`getSubgraph(id)` | id でノードやサブグラフを得る |
+| `getNodes(id)`、`getSubgraphs(id)` | その id で宣言されたノードやサブグラフを、宣言の順に得る。DOT と同じく `a; b; a [color=red]` は `a` を 2 度宣言し、宣言ごとに別のノードモデルになる |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | グラフにあるかどうか |
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 取り除く |
 | `addAttributeList(kind, attributes)` | 既定属性の文（`node [...]` など）をその位置に追加して返す |
@@ -107,7 +107,7 @@ removeNodeEverywhere(g, 'a');
 import { fromDot } from 'ts-graphviz';
 
 const g = fromDot('digraph { a [label = "A"]; a -> b; }');
-const a = g.getNode('a');
+const [a] = g.getNodes('a');
 a?.setAttribute('color', 'red');
 console.log(a?.getAttribute('label')); // 'A'
 console.log(a?.getAttributeNames()); // ['label', 'color']

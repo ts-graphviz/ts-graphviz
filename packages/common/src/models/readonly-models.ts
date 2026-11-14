@@ -185,10 +185,10 @@ export interface ReadonlyGraphBaseModel<
   readonly statements: ReadonlyArray<ReadonlyGraphStatementModel>;
   /** Check if the Node exists in the graph. */
   existNode(nodeId: string): boolean;
-  /** The Node with the id, or undefined if the graph has none. */
-  getNode(id: string): ReadonlyNodeModel | undefined;
-  /** The Subgraph with the id, or undefined if the graph has none. */
-  getSubgraph(id: string): ReadonlySubgraphModel | undefined;
+  /** The nodes declared with the id, in order; empty if there is none. */
+  getNodes(id: string): ReadonlyArray<ReadonlyNodeModel>;
+  /** The subgraphs declared with the id, in order; empty if there is none. */
+  getSubgraphs(id: string): ReadonlyArray<ReadonlySubgraphModel>;
 }
 
 /**

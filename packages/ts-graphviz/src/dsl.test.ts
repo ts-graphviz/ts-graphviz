@@ -26,6 +26,7 @@ import {
   Dot,
   defaultModelKit,
   Edge,
+  LegacyDigraph,
   Node,
   Subgraph,
 } from '@ts-graphviz/core';
@@ -75,25 +76,58 @@ describe('DOT statements', () => {
       const kit = spyKit();
       const node = dsl(modelOf(g), kit).node('foo');
       expect(kit.createNode).toHaveBeenCalledWith('foo');
-      expect(modelOf(g).getNode('foo')).toBe(modelOf(node));
+      expect(modelOf(g).getNodes('foo')[0]).toBe(modelOf(node));
       expect(modelOf(node).id).toBe('foo');
     });
 
-    test('gives the node there is, with the attributes applied', () => {
+    test('declares the node again when the graph has one with the id', () => {
       const created = g.node('foo');
       const kit = spyKit();
       const node = dsl(modelOf(g), kit).node('foo', { label: 'Test label' });
+      expect(kit.createNode).toHaveBeenCalledWith('foo', {
+        label: 'Test label',
+      });
+      expect(modelOf(g).getNodes('foo')).toStrictEqual([
+        modelOf(created),
+        modelOf(node),
+      ]);
+      expect(created.label).toBeUndefined();
+      expect(node.label).toBe('Test label');
+    });
+
+    test('declares the node again when Object.prototype has a getNode', () => {
+      const proto = Object.prototype as {
+        getNode?: unknown;
+        getSubgraph?: unknown;
+      };
+      const first = g.node('foo');
+      proto.getNode = () => modelOf(first);
+      proto.getSubgraph = () => undefined;
+      try {
+        g.node('foo');
+        expect(modelOf(g).getNodes('foo')).toHaveLength(2);
+      } finally {
+        delete proto.getNode;
+        delete proto.getSubgraph;
+      }
+    });
+
+    test('gives the node there is in a legacy graph, with the attributes applied', () => {
+      const legacy = dsl(new LegacyDigraph());
+      const created = legacy.node('foo');
+      const kit = spyKit();
+      const node = dsl(modelOf(legacy), kit).node('foo', { label: 'L' });
       expect(kit.createNode).not.toHaveBeenCalled();
       expect(modelOf(node)).toBe(modelOf(created));
-      expect(g.node('foo')).toBe(created);
-      expect(node.label).toBe('Test label');
+      expect(node.label).toBe('L');
     });
 
     test('calls the callback with the node and the kit', () => {
       const callback = vi.fn();
       const node = g.node('foo', { label: 'Test label' }, callback);
       expect(callback).toHaveBeenCalledWith(node, defaultModelKit);
-      expect(g.node('foo', callback)).toBe(node);
+      const again = g.node('foo', callback);
+      expect(callback).toHaveBeenLastCalledWith(again, defaultModelKit);
       expect(callback).toHaveBeenCalledTimes(2);
     });
 
@@ -167,16 +201,32 @@ describe('DOT statements', () => {
       ]);
     });
 
-    test('gives the subgraph there is with this id', () => {
+    test('declares the subgraph again when the graph has one with the id', () => {
       const created = g.subgraph('cluster_foo');
       const kit = spyKit();
       const subgraph = dsl(modelOf(g), kit).subgraph('cluster_foo', {
         label: 'Test label',
       });
+      expect(kit.createSubgraph).toHaveBeenCalledWith('cluster_foo', {
+        label: 'Test label',
+      });
+      expect(modelOf(g).getSubgraphs('cluster_foo')).toStrictEqual([
+        modelOf(created),
+        modelOf(subgraph),
+      ]);
+      expect(subgraph.label).toBe('Test label');
+    });
+
+    test('gives the subgraph there is in a legacy graph', () => {
+      const legacy = dsl(new LegacyDigraph());
+      const created = legacy.subgraph('cluster_foo');
+      const kit = spyKit();
+      const subgraph = dsl(modelOf(legacy), kit).subgraph('cluster_foo', {
+        label: 'L',
+      });
       expect(kit.createSubgraph).not.toHaveBeenCalled();
       expect(modelOf(subgraph)).toBe(modelOf(created));
-      expect(g.subgraph('cluster_foo')).toBe(created);
-      expect(subgraph.label).toBe('Test label');
+      expect(subgraph.label).toBe('L');
     });
 
     test('calls the callback with the subgraph and the kit', () => {
@@ -207,7 +257,7 @@ describe('DOT statements', () => {
     test('takes the empty id as an id; no id makes an anonymous one (#1593)', () => {
       const empty = g.subgraph('');
       expect(modelOf(empty).id).toBe('');
-      expect(g.subgraph('')).toBe(empty);
+      expect(modelOf(g).getSubgraphs('')).toStrictEqual([modelOf(empty)]);
       const anonymous = g.subgraph();
       expect(anonymous).not.toBe(empty);
       expect(modelOf(anonymous).id).toBeUndefined();
@@ -219,7 +269,7 @@ describe('DOT statements', () => {
 
     test('reads ids that are Object.prototype names as ids', () => {
       const s = g.subgraph('constructor');
-      expect(modelOf(g).getSubgraph('constructor')).toBe(modelOf(s));
+      expect(modelOf(g).getSubgraphs('constructor')[0]).toBe(modelOf(s));
     });
   });
 
@@ -549,8 +599,6 @@ describe('the rules', () => {
       expect(modelOf(view)).not.toBe(view);
       expect(dsl(modelOf(view))).toBe(view);
     }
-    expect(g.node('a')).toBe(a);
-    expect(g.subgraph('s')).toBe(s);
   });
 
   test('4. a model and a kit have one DSL', () => {
@@ -576,9 +624,8 @@ describe('the rules', () => {
     expect(dsl(k, defaultModelKit)).toBe(g);
     // What a DSL gives is a DSL of the same kit.
     const a = k.node('a');
-    expect(k.node('a')).toBe(a);
     expect(a).toBe(dsl(modelOf(a), kit));
-    expect(modelOf(g.node('a'))).toBe(modelOf(a));
+    expect(dsl(modelOf(a))).not.toBe(a);
   });
 
   test('dsl takes only a kit as its second argument', () => {
@@ -655,7 +702,8 @@ describe('the readers take a DSL', () => {
   test('toDot and fromModel', () => {
     expect(toDot(g)).toBe(toDot(modelOf(g)));
     expect(fromModel(g)).toStrictEqual(fromModel(modelOf(g)));
-    expect(toDot(g.node('a'))).toBe(toDot(modelOf(g).nodes[0]));
+    const [a] = modelOf(g).nodes;
+    expect(toDot(dsl(a))).toBe(toDot(a));
   });
 
   test('the guards take the model, not the DSL', () => {
@@ -721,12 +769,13 @@ describe('custom models', () => {
       [{ rank: 'min' }],
       [],
     ]);
-    // A model the graph already holds takes them as an update.
+    // A statement written again is a new model too.
     g.node('a', { color: 'red' });
     g.subgraph('s', { rank: 'max' });
-    expect(seen).toHaveLength(4);
-    expect(g.node('a')).toMatchObject({ label: 'A', color: 'red' });
-    expect(g.subgraph('s')).toMatchObject({ rank: 'max' });
+    expect(seen.slice(4)).toEqual([
+      ['a', { color: 'red' }],
+      ['s', { rank: 'max' }],
+    ]);
   });
 
   test('default attribute statements keep their place, as in DOT', () => {

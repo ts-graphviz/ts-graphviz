@@ -162,7 +162,7 @@ describe('host components', () => {
     const [model] = root.getTopLevelModels() as RootGraphModel[];
     expect(graph.current).toBe(model);
     expect(subgraph.current).toBe(model.subgraphs[0]);
-    expect(node.current).toBe(model.subgraphs[0].getNode('a'));
+    expect(node.current).toBe(model.subgraphs[0].getNodes('a')[0]);
     expect(edge.current).toBe(model.edges[0]);
     const first = { node: node.current, edge: edge.current };
 
@@ -243,7 +243,7 @@ describe('host components', () => {
       </Digraph>,
     );
     const [graph] = root.getTopLevelModels() as RootGraphModel[];
-    const a = graph.getNode('a');
+    const a = graph.getNodes('a')[0];
     a?.addComment('added');
     // The same prop keeps its comment, and its place.
     await render(
@@ -307,7 +307,7 @@ describe('host components', () => {
       </Digraph>,
     );
     const [graph] = root.getTopLevelModels() as RootGraphModel[];
-    expect(graph.getNode('a')?.attributes.get('color')).toBe('blue');
+    expect(graph.getNodes('a')[0]?.attributes.get('color')).toBe('blue');
   });
 
   it('leaves nothing behind from a render that suspended', async () => {
@@ -382,15 +382,17 @@ describe('host components', () => {
     expect(container.nodes.map((n) => n.id)).toEqual(['existing']);
   });
 
-  it('gives back a node the container had when one with its id is removed', async () => {
+  it('declares a node with the id of one the container had after it, and takes only its own out', async () => {
     const container = new DigraphModel('C');
     container.addNode(defaultModelKit.createNode('a', { color: 'red' }));
-    const original = container.getNode('a');
+    const [original] = container.getNodes('a');
     const root = createRoot({ container });
     await render(root, <Node id="a" color="blue" />);
-    expect(container.getNode('a')?.attributes.get('color')).toBe('blue');
+    expect(
+      container.getNodes('a').map((n) => n.attributes.get('color')),
+    ).toEqual(['red', 'blue']);
     root.unmount();
-    expect(container.getNode('a')).toBe(original);
+    expect(container.getNodes('a')).toStrictEqual([original]);
     expect(original?.attributes.get('color')).toBe('red');
   });
 
@@ -470,7 +472,7 @@ describe('host components', () => {
     );
     const [first] = root.getTopLevelModels() as RootGraphModel[];
     expect(graph.current).toBe(first);
-    expect(first.getNode('a')).toBeDefined();
+    expect(first.getNodes('a')[0]).toBeDefined();
   });
 
   it("makes the models with the root's kit", async () => {

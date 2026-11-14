@@ -115,15 +115,15 @@ export abstract class GraphBase<
     });
 
   get nodes(): ReadonlyArray<NodeModel<S>> {
-    return Array.from(this.#objects.nodes.values());
+    return Array.from(this.#nodes);
   }
 
   get edges(): ReadonlyArray<EdgeModel<S>> {
-    return Array.from(this.#objects.edges.values());
+    return Array.from(this.#edges);
   }
 
   get subgraphs(): ReadonlyArray<SubgraphModel<S>> {
-    return Array.from(this.#objects.subgraphs.values());
+    return Array.from(this.#subgraphs);
   }
 
   get statements(): ReadonlyArray<
@@ -143,59 +143,65 @@ export abstract class GraphBase<
   /** Nodes, edges and subgraphs in the order they were added. */
   #statements = new Set<object>();
 
-  /** @hidden */
-  #objects: Readonly<{
-    nodes: Map<string, NodeModel<S>>;
-    edges: Set<EdgeModel<S>>;
-    subgraphs: Set<SubgraphModel<S>>;
-  }> = {
-    nodes: new Map(),
-    edges: new Set(),
-    subgraphs: new Set(),
-  };
+  #nodes = new Set<NodeModel<S>>();
+  #edges = new Set<EdgeModel<S>>();
+  #subgraphs = new Set<SubgraphModel<S>>();
+
+  /**
+   * The nodes and the subgraphs with each id, in the order they were added,
+   * so that `getNodes` and `getSubgraphs` find them without a scan. A model
+   * is filed under the id it had when it was added (`#indexedAs`), so it is
+   * taken out of the right list even if a custom model's id changed.
+   */
+  #nodesById = new Map<string, NodeModel<S>[]>();
+  #subgraphsById = new Map<string, SubgraphModel<S>[]>();
+  #indexedAs = new Map<object, string>();
+
+  /**
+   * Whether a node with the id of a node in the graph is another declaration
+   * of it, as in DOT, kept where it is added. `true` here; the deprecated
+   * classes of `legacyModels` return `false`: the new node takes the place
+   * of the one with its id.
+   */
+  protected get keepsEachNodeDeclaration(): boolean {
+    return true;
+  }
 
   // The methods taking a model take the model an object such as a DSL
   // stands for (modelOf), so a graph only ever holds models.
 
   public addNode(node: NodeModel<S>): void {
     const model = modelOf(node);
-    const replaced = this.#objects.nodes.get(model.id);
-    this.#objects.nodes.set(model.id, model);
+    if (this.#nodes.has(model)) return;
+    const [replaced] = this.keepsEachNodeDeclaration
+      ? []
+      : (this.#nodesById.get(model.id) ?? []);
+    file(this.#nodesById, this.#indexedAs, model.id, model);
     if (replaced === undefined) {
+      this.#nodes.add(model);
       this.#statements.add(model);
-    } else if (replaced !== model) {
-      // A node with the same id takes the place of the one it replaces.
-      this.#statements = new Set(
-        Array.from(this.#statements, (s) => (s === replaced ? model : s)),
-      );
+      return;
     }
+    unfile(this.#nodesById, this.#indexedAs, replaced);
+    // The node takes the place of the one it replaces.
+    const swap = <T>(s: T): T | NodeModel<S> => (s === replaced ? model : s);
+    this.#nodes = new Set(Array.from(this.#nodes, swap));
+    this.#statements = new Set(Array.from(this.#statements, swap));
   }
 
   public addEdge(edge: EdgeModel<S>): void {
     const model = modelOf(edge);
-    this.#objects.edges.add(model);
+    this.#edges.add(model);
     this.#statements.add(model);
   }
 
-  /**
-   * The subgraphs with each id, in the order they were added, so that
-   * `getSubgraph` (and the DSL's `subgraph(id)`) find one without a scan. A subgraph
-   * is filed under the id it had when it was added (`#indexedAs`), so it is
-   * taken out of the right list even if a custom model's id changed.
-   */
-  #subgraphsById = new Map<string, SubgraphModel<S>[]>();
-  #indexedAs = new Map<SubgraphModel<S>, string>();
-
   public addSubgraph(subgraph: SubgraphModel<S>): void {
     const model = modelOf(subgraph);
-    if (!this.#objects.subgraphs.has(model) && model.id !== undefined) {
-      const id = model.id;
-      const same = this.#subgraphsById.get(id);
-      if (same === undefined) this.#subgraphsById.set(id, [model]);
-      else same.push(model);
-      this.#indexedAs.set(model, id);
+    if (this.#subgraphs.has(model)) return;
+    if (model.id !== undefined) {
+      file(this.#subgraphsById, this.#indexedAs, model.id, model);
     }
-    this.#objects.subgraphs.add(model);
+    this.#subgraphs.add(model);
     this.#statements.add(model);
   }
 
@@ -261,51 +267,74 @@ export abstract class GraphBase<
   }
 
   public existNode(nodeId: string): boolean {
-    return this.#objects.nodes.has(nodeId);
+    return this.getNodes(nodeId).length > 0;
   }
 
   public existEdge(edge: EdgeModel<S>): boolean {
-    return this.#objects.edges.has(modelOf(edge));
+    return this.#edges.has(modelOf(edge));
   }
 
   public existSubgraph(subgraph: SubgraphModel<S>): boolean {
-    return this.#objects.subgraphs.has(modelOf(subgraph));
+    return this.#subgraphs.has(modelOf(subgraph));
   }
 
   public removeNode(node: NodeModel<S> | string): void {
-    const id = typeof node === 'string' ? node : modelOf(node).id;
-    const removed = this.#objects.nodes.get(id);
-    this.#objects.nodes.delete(id);
-    if (removed) this.#statements.delete(removed);
+    const removed =
+      typeof node === 'string' ? this.getNodes(node) : [modelOf(node)];
+    for (const model of removed) {
+      if (!this.#nodes.delete(model)) continue;
+      unfile(this.#nodesById, this.#indexedAs, model);
+      this.#statements.delete(model);
+    }
   }
 
   public removeEdge(edge: EdgeModel<S>): void {
     const model = modelOf(edge);
-    this.#objects.edges.delete(model);
+    this.#edges.delete(model);
     this.#statements.delete(model);
   }
 
   public removeSubgraph(subgraph: SubgraphModel<S>): void {
     const model = modelOf(subgraph);
-    const id = this.#indexedAs.get(model);
-    if (id !== undefined) {
-      this.#indexedAs.delete(model);
-      const same = this.#subgraphsById.get(id) ?? [];
-      const at = same.indexOf(model);
-      if (at !== -1) same.splice(at, 1);
-      if (same.length === 0) this.#subgraphsById.delete(id);
-    }
-    this.#objects.subgraphs.delete(model);
+    if (!this.#subgraphs.delete(model)) return;
+    unfile(this.#subgraphsById, this.#indexedAs, model);
     this.#statements.delete(model);
   }
 
-  public getSubgraph(id: string): SubgraphModel<S> | undefined {
-    // The first one added with this id, as before (a subgraph's id is not
-    // expected to change; one whose id did is found under neither).
-    return this.#subgraphsById.get(id)?.find((s) => s.id === id);
+  public getNodes(id: string): NodeModel<S>[] {
+    // A model whose id changed is found under neither id.
+    return (this.#nodesById.get(id) ?? []).filter((n) => n.id === id);
   }
 
-  public getNode(id: string): NodeModel<S> | undefined {
-    return this.#objects.nodes.get(id);
+  public getSubgraphs(id: string): SubgraphModel<S>[] {
+    return (this.#subgraphsById.get(id) ?? []).filter((s) => s.id === id);
   }
+}
+
+/** File a model under its id, after the others with the id. */
+function file<M>(
+  byId: Map<string, M[]>,
+  indexedAs: Map<object, string>,
+  id: string,
+  model: M & object,
+): void {
+  const same = byId.get(id);
+  if (same === undefined) byId.set(id, [model]);
+  else same.push(model);
+  indexedAs.set(model, id);
+}
+
+/** Take a model out of the list it was filed in. */
+function unfile<M>(
+  byId: Map<string, M[]>,
+  indexedAs: Map<object, string>,
+  model: M & object,
+): void {
+  const id = indexedAs.get(model);
+  if (id === undefined) return;
+  indexedAs.delete(model);
+  const same = byId.get(id) ?? [];
+  const at = same.indexOf(model);
+  if (at !== -1) same.splice(at, 1);
+  if (same.length === 0) byId.delete(id);
 }

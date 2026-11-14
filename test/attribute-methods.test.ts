@@ -98,8 +98,10 @@ describe('the converters', () => {
     const g = fromDot(
       'digraph { a [label=A]; a [color=red]; a -> b [style=dashed]; }',
     );
-    const a = g.getNode('a');
-    expect(a?.getAttributeNames()).toEqual(['label', 'color']);
+    expect(g.getNodes('a').map((a) => a.getAttributeNames())).toEqual([
+      ['label'],
+      ['color'],
+    ]);
     expect(g.edges[0].getAttribute('style')).toBe('dashed');
     expect(toDot(g)).toBe(toDot(fromDot(toDot(g))));
   });
@@ -108,7 +110,7 @@ describe('the converters', () => {
     const G = digraph((g) => {
       g.node('a', { label: 'A' });
     });
-    expect(modelOf(G).getNode('a')?.getAttribute('label')).toBe('A');
+    expect(modelOf(G).getNodes('a')[0]?.getAttribute('label')).toBe('A');
   });
 });
 
@@ -175,7 +177,7 @@ describe('the DSL of an edge, and the members as values', () => {
 });
 
 describe('the converters and custom classes', () => {
-  it('convert a node mentioned again with the node plugin, then merge it', () => {
+  it('convert each mention of a node with the node plugin', () => {
     const seen: string[] = [];
     class Recording extends Node {
       override setAttribute(name: string, value: unknown): void {
@@ -186,10 +188,12 @@ describe('the converters and custom classes', () => {
     const g = fromDot('digraph { a [label=A]; a [color=red]; }', {
       convert: { models: { Node: Recording } },
     });
-    expect(g.getNode('a')?.getAttributeNames()).toEqual(['label', 'color']);
-    // The second mention is converted (a node of its own), then its
-    // attributes are set on the first.
-    expect(seen).toEqual(['a.label=A', 'a.color=red', 'a.color=red']);
+    expect(g.getNodes('a').map((a) => a.getAttributeNames())).toEqual([
+      ['label'],
+      ['color'],
+    ]);
+    expect(g.getNodes('a').every((a) => a instanceof Recording)).toBe(true);
+    expect(seen).toEqual(['a.label=A', 'a.color=red']);
   });
 
   it('convert a node made by hand in the 3.x shape', () => {

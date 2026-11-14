@@ -41,7 +41,7 @@ describe('attribute order through the model (#1626)', () => {
 
   it('treats a __proto__ key as an ordinary attribute', () => {
     const g = fromDot('graph { x [__proto__ = "v"]; }');
-    expect(g.getNode('x')?.attributes.values).toStrictEqual([
+    expect(g.getNodes('x')[0]?.attributes.values).toStrictEqual([
       ['__proto__', 'v'],
     ]);
   });

@@ -839,7 +839,7 @@ const dot = await fromElement(
   </Digraph>
 );
 const [graph] = dot.graphs;
-graph.getNode("A")?.setAttribute("color", "red");
+graph.getNodes("A")[0]?.setAttribute("color", "red");
 console.log(graph.nodes.length, graph.edges.length);
 ```
 

@@ -229,8 +229,9 @@ export interface GraphDSLStatements<
   M extends ModelTypes = ModelTypes,
 > {
   /**
-   * The subgraph with this id (created if there is none), as
-   * `subgraph id { ... }` in DOT.
+   * A new subgraph with this id, as `subgraph id { ... }` in DOT. Like a
+   * statement written again in DOT, it is another declaration when the
+   * graph has a subgraph with the id; Graphviz merges their contents.
    *
    * The callback receives the subgraph and the kit.
    *
@@ -252,8 +253,8 @@ export interface GraphDSLStatements<
     callback?: (subgraph: DSL<M['Subgraph'], M>, kit: ModelKit<M>) => void,
   ): DSL<M['Subgraph'], M>;
   /**
-   * The subgraph with this id (created if there is none), with these
-   * attributes.
+   * A new subgraph with this id and these attributes (another declaration
+   * when the graph has one with the id).
    *
    * The id picks the attributes ({@link SubgraphAttributesFor}): cluster
    * attributes such as `color` or `label` apply to an id starting with
@@ -307,7 +308,9 @@ export interface GraphDSLStatements<
   ): DSL<M['Subgraph'], M>;
 
   /**
-   * The node with this id (created if there is none), as `A;` in DOT.
+   * A new node with this id, as `A;` in DOT. Like a statement written
+   * again in DOT, it is another declaration when the graph has a node with
+   * the id; Graphviz applies their attributes in turn.
    *
    * ```ts
    * const G = digraph('G', (g) => {
@@ -323,8 +326,8 @@ export interface GraphDSLStatements<
     callback?: (node: DSL<M['Node']>, kit: ModelKit<M>) => void,
   ): DSL<M['Node']>;
   /**
-   * The node with this id (created if there is none), with these
-   * attributes, as `A [color=red];` in DOT.
+   * A new node with this id and these attributes, as `A [color=red];` in
+   * DOT (another declaration when the graph has one with the id).
    *
    * ```ts
    * const G = digraph('G', (g) => {
@@ -495,13 +498,12 @@ function isKit(value: unknown): value is ModelKit {
  *
  * A graph's DSL creates with the kit: pass the kit of your classes
  * (`createModelKit`) for `node`, `edge` and `subgraph` to create them. A
- * model does not remember the kit it was created with, and the types follow
- * the kit: `node('a')` is typed as the kit's node even when the graph already
- * has an `a` of another class.
+ * model does not remember the kit it was created with; `node('a')` creates
+ * a node of the kit's class, also when the graph already has an `a`.
  *
  * ```ts
  * const G = dsl(fromDot('digraph { a }'));
- * G.node('a').label = 'A';
+ * G.node('a').label = 'A'; // a [label = "A"], after the first a
  *
  * const kit = createModelKit({ Node: MyNode });
  * dsl(modelOf(G), kit).node('b'); // a MyNode
@@ -780,6 +782,30 @@ const isFunction = (
  * the kit's classes (and keep default attribute statements in their place
  * where the graph's class does).
  */
+/**
+ * A graph of the deprecated `legacyModels`, which holds one node per id, as
+ * 3.x did: `node(id)` and `subgraph(id)` give the one it has.
+ */
+interface LegacyGraph {
+  getNode(id: string): NodeModel | undefined;
+  getSubgraph(id: string): SubgraphModel | undefined;
+}
+
+function asLegacy(g: GraphBaseModel): LegacyGraph | undefined {
+  // From the graph's classes only: a getNode inherited from Object.prototype
+  // does not make every graph a legacy one.
+  for (
+    let o: object | null = g;
+    o !== null && o !== Object.prototype;
+    o = Object.getPrototypeOf(o)
+  ) {
+    if (Object.getOwnPropertyDescriptor(o, 'getNode') !== undefined) {
+      return g as GraphBaseModel & LegacyGraph;
+    }
+  }
+  return undefined;
+}
+
 function createStatements(g: GraphBaseModel, kit: ModelKit) {
   const viewOf = (model: AnyDotObjectModel) => viewWith(model, kit);
   return {
@@ -788,7 +814,9 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
         const attributes = find(rest, isObject) as
           | NodeAttributesObject
           | undefined;
-        let node = g.getNode(first);
+        // Another declaration of the id, where it is written; a legacy
+        // graph, which holds one node per id, gives the one it has.
+        let node = asLegacy(g)?.getNode(first);
         if (node === undefined) {
           // The attributes go to the constructor, so a custom class sees
           // them where it is created.
@@ -834,7 +862,8 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
       const attributes = find(args, isObject) as
         | SubgraphAttributesObject
         | undefined;
-      let subgraph = id !== undefined ? g.getSubgraph(id) : undefined;
+      let subgraph =
+        id !== undefined ? asLegacy(g)?.getSubgraph(id) : undefined;
       if (subgraph === undefined) {
         // The constructor gets the id and the attributes in the shape the
         // statement has them. The statement was checked against its id

@@ -142,7 +142,7 @@ DSL は DOT の語彙だけを持つので、その名前はどれも Graphviz �
 | `a.addComment('note')` | DOT ソースに書き込むコメント |
 | `a.$$type`、`list.$$kind` | モデルの種類（`'Node'`、`'Edge'` など）と既定属性リストの種類 |
 
-それ以外はすべて、`modelOf(x)` で得られるモデルにあります。ノードやグラフの名前（`id`）、グラフの中身（`nodes`、`edges`、`subgraphs`、`statements`）、そのメソッド（`getNode`、`addNode`、`removeNode` など）、属性メソッド、`comments`、エッジの `targets`、自作のモデルクラスのメンバーです。
+それ以外はすべて、`modelOf(x)` で得られるモデルにあります。ノードやグラフの名前（`id`）、グラフの中身（`nodes`、`edges`、`subgraphs`、`statements`）、そのメソッド（`getNodes`、`addNode`、`removeNode` など）、属性メソッド、`comments`、エッジの `targets`、自作のモデルクラスのメンバーです。
 
 ```typescript
 import { digraph, modelOf } from 'ts-graphviz';
@@ -217,14 +217,16 @@ console.log(toDot(G));
 `fromDot` はモデルを返し、`{ dsl: true }` を渡すとそのモデルの DSL を返すので、読み込んだグラフも同じ書き方で編集できます。`fromDotAll` も同じオプションを受け取ります。
 
 ```typescript
-import { fromDot, toDot } from 'ts-graphviz';
+import { dsl, fromDot, modelOf, toDot } from 'ts-graphviz';
 
 const g = fromDot('digraph { a [label = "A"]; a -> b; }', { dsl: true });
-g.node('a').color = 'red';
+dsl(modelOf(g).getNodes('a')[0]).color = 'red';
 g.edge(['b', 'c']);
 
 console.log(toDot(g));
 ```
+
+`g.node('a')` は、DOT で文をもう一度書いたときと同じく `a` をもう一度宣言します（ほかの文の後ろに `a [color = "red"];`）。既にあるノードを変えるときは、`getNodes` でモデルから取り出してください。
 
 文が返すものは DSL です。DSL は、モデルと、文がモデルを作るときに使うキットの組です。一つのモデルと一つのキットに DSL は一つなので、DSL は `===` で比較できます。`modelOf(x)` でモデルに戻せます。そこから読んだモデルの DSL は `dsl(model)` で得られ、この DSL は既定のキットで作ります。`dsl(model, kit)` は `kit` で作る DSL を返します。`{ dsl: true }` では `convert.models` のキットが使われます。`toDot`、`fromModel`、アダプターの `toBlob` は、モデルだけでなく DSL も受け取ります。
 
@@ -283,7 +285,7 @@ import { fromDot } from 'ts-graphviz';
 
 const g = fromDot('digraph { a; a -> b; }');
 console.log(g.nodes.map((n) => n.id)); // ['a']
-console.log(g.getNode('b')); // undefined
+console.log(g.getNodes('b')); // []
 ```
 
 DOT では、エッジはそこに書かれたノードを作ります。一方、モデルはエッジの端点を id で記録するだけです。`nodes` が持つのはノード文として書かれたノードで、Graphviz から見たグラフのノードすべてではありません。ノードは複数のサブグラフに属することがあり、サブグラフの中の `a -> b` が外に書かれたノードを指すこともあるため、モデルは推測しません。`nodes` に入れたいノードは `g.addNode(new Node('b'))`（DSL では `dsl(g).node('b')`）で宣言するか、エッジの端点の id を読み取ってください。

@@ -157,10 +157,10 @@ describe('createRoot()', () => {
       const [model] = root.getTopLevelModels<MyDigraph>();
       expect(model).toBeInstanceOf(MyDigraph);
       expect(model.strict).toBe(true);
-      expect(model.getNode('a')).toBeInstanceOf(MyNode);
-      const sub = model.getSubgraph('cluster_0');
+      expect(model.getNodes('a')[0]).toBeInstanceOf(MyNode);
+      const sub = model.getSubgraphs('cluster_0')[0];
       expect(sub).toBeInstanceOf(MySubgraph);
-      expect(sub?.getNode('b')).toBeInstanceOf(MyNode);
+      expect(sub?.getNodes('b')[0]).toBeInstanceOf(MyNode);
 
       root.unmount();
     });

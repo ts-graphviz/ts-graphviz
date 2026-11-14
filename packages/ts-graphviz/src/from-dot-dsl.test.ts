@@ -13,8 +13,9 @@ describe('fromDot with dsl: true', () => {
     const G = fromDot(source, { dsl: true });
     expect(G).toBe(dsl(modelOf(G)));
     expect(isRootGraphModel(G)).toBe(false);
-    expect(G.node('a').label).toBe('A');
-    G.node('a').label = 'B';
+    const a = dsl(modelOf(G).getNodes('a')[0]);
+    expect(a.label).toBe('A');
+    a.label = 'B';
     expect(toDot(G)).toBe(toDot(fromDot(source.replace('"A"', '"B"'))));
   });
 
@@ -60,7 +61,7 @@ describe('fromDot with dsl: true', () => {
 describe('fromDotAll with dsl: true', () => {
   it('gives the DSLs of the graphs, in order', () => {
     const [G, H] = fromDotAll(`${source} graph H {}`, { dsl: true });
-    expect(G.node('a').label).toBe('A');
+    expect(dsl(modelOf(G).getNodes('a')[0]).label).toBe('A');
     expect(modelOf(H).id).toBe('H');
     expect(fromDotAll('', { dsl: true })).toEqual([]);
   });

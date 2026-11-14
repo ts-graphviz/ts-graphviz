@@ -360,57 +360,19 @@ describe('two roots that render a node with the same id into one container', () 
         }),
     };
   };
-  const colorOf = (container: DigraphModel): unknown =>
-    container.getNode('a')?.attributes.get('color');
+  const colorsOf = (container: DigraphModel): unknown[] =>
+    container.getNodes('a').map((n) => n.attributes.get('color'));
 
-  it('the container shows the node rendered last', async () => {
+  it('each root adds its node as a declaration of its own, in order', async () => {
     const container = new DigraphModel();
     const one = rootOn(container);
     const two = rootOn(container);
     await one.render(<Node id="a" color="red" />);
     await two.render(<Node id="a" color="blue" />);
-    expect(container.nodes).toHaveLength(1);
-    expect(colorOf(container)).toBe('blue');
+    expect(colorsOf(container)).toEqual(['red', 'blue']);
   });
 
-  it('the node of the first comes back when the second is unmounted', async () => {
-    const container = new DigraphModel();
-    const one = rootOn(container);
-    const two = rootOn(container);
-    await one.render(<Node id="a" color="red" />);
-    await two.render(<Node id="a" color="blue" />);
-    two.unmount();
-    expect(colorOf(container)).toBe('red');
-    one.unmount();
-    expect(container.nodes).toHaveLength(0);
-  });
-
-  it('the node of the first does not come back after the first was unmounted', async () => {
-    const container = new DigraphModel();
-    const one = rootOn(container);
-    const two = rootOn(container);
-    await one.render(<Node id="a" color="red" />);
-    await two.render(<Node id="a" color="blue" />);
-    one.unmount();
-    expect(colorOf(container)).toBe('blue');
-    two.unmount();
-    expect(container.nodes).toHaveLength(0);
-  });
-
-  it('the node of the first does not come back after the first rendered another', async () => {
-    const container = new DigraphModel();
-    const one = rootOn(container);
-    const two = rootOn(container);
-    await one.render(<Node id="a" color="red" />);
-    await two.render(<Node id="a" color="blue" />);
-    await one.render(<Node id="c" />);
-    two.unmount();
-    expect(container.nodes.map((n) => n.id)).toEqual(['c']);
-    one.unmount();
-    expect(container.nodes).toHaveLength(0);
-  });
-
-  it("the container's own node comes back when both are unmounted, in either order", async () => {
+  it('a root takes only its own node out, in either order', async () => {
     for (const firstGone of ['one', 'two'] as const) {
       const container = new DigraphModel();
       const own = new NodeModel('a', { color: 'green' });
@@ -419,67 +381,44 @@ describe('two roots that render a node with the same id into one container', () 
       await roots.one.render(<Node id="a" color="red" />);
       await roots.two.render(<Node id="a" color="blue" />);
       roots[firstGone].unmount();
+      expect(colorsOf(container)).toEqual(
+        firstGone === 'one' ? ['green', 'blue'] : ['green', 'red'],
+      );
       roots[firstGone === 'one' ? 'two' : 'one'].unmount();
       expect(container.nodes).toEqual([own]);
     }
   });
 
-  it('a node the container was given meanwhile is not replaced by an older one', async () => {
+  it('a root that updates its node changes only its own, in its place', async () => {
     const container = new DigraphModel();
     const one = rootOn(container);
     const two = rootOn(container);
     await one.render(<Node id="a" color="red" />);
     await two.render(<Node id="a" color="blue" />);
-    const given = new NodeModel('a', { color: 'green' });
-    container.addNode(given);
-    two.unmount();
+    await one.render(<Node id="a" color="black" />);
+    expect(colorsOf(container)).toEqual(['black', 'blue']);
     one.unmount();
-    expect(container.nodes).toEqual([given]);
+    two.unmount();
+    expect(container.nodes).toHaveLength(0);
   });
 
-  it('the node of a finished conversion is what comes back, not what it replaced', async () => {
+  it('the nodes of finished conversions and of the container stay', async () => {
     const container = new DigraphModel();
     container.addNode(new NodeModel('a', { color: 'green' }));
     await fromElement(<Node id="a" color="red" />, { container });
-    await fromElement(<Node id="a" color="blue" />, { container });
-    const root = rootOn(container);
-    await root.render(<Node id="a" color="black" />);
-    expect(colorOf(container)).toBe('black');
-    root.unmount();
-    expect(colorOf(container)).toBe('blue');
-  });
-
-  it('the node of a conversion that finished over the node of a root stays when the root is unmounted', async () => {
-    const container = new DigraphModel();
-    container.addNode(new NodeModel('a', { color: 'green' }));
     const root = rootOn(container);
     await root.render(<Node id="a" color="black" />);
     await fromElement(<Node id="a" color="blue" />, { container });
-    expect(colorOf(container)).toBe('blue');
+    const given = new NodeModel('a', { color: 'white' });
+    container.addNode(given);
+    expect(colorsOf(container)).toEqual([
+      'green',
+      'red',
+      'black',
+      'blue',
+      'white',
+    ]);
     root.unmount();
-    expect(colorOf(container)).toBe('blue');
-    expect(container.nodes).toHaveLength(1);
-  });
-
-  it('a container that throws while a node comes back keeps the node it shows', async () => {
-    let failing = false;
-    class Failing extends DigraphModel {
-      addNode(node: NodeModel): void {
-        if (failing) throw new Error('addNode failed');
-        super.addNode(node);
-      }
-    }
-    const container = new Failing();
-    const one = rootOn(container);
-    const two = rootOn(container);
-    await one.render(<Node id="a" color="red" />);
-    await two.render(<Node id="a" color="blue" />);
-    failing = true;
-    two.unmount();
-    failing = false;
-    expect(colorOf(container)).toBe('blue');
-    one.unmount();
-    expect(colorOf(container)).toBe('blue');
-    expect(container.nodes).toHaveLength(1);
+    expect(colorsOf(container)).toEqual(['green', 'red', 'blue', 'white']);
   });
 });

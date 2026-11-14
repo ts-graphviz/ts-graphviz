@@ -7,7 +7,7 @@
 
 Read-only model types; the code that only reads models takes them
 
-`@ts-graphviz/common` has read-only views of the models: `ReadonlyNodeModel`, `ReadonlyEdgeModel`, `ReadonlySubgraphModel`, `ReadonlyRootGraphModel`, `ReadonlyGraphBaseModel`, `ReadonlyDotModel`, `ReadonlyAttributeListModel`, `ReadonlyAttributes`, the unions `ReadonlyGraphStatementModel` and `AnyReadonlyDotObjectModel`, and `DotValue` (`string | number | boolean | EscStringValue | HTMLLikeValue`, the values an attribute can have). They hold only `readonly` properties, methods that take a string or nothing (`attributes.get(key)`, `getNode(id)`, `isSubgraphCluster()`, …) and read-only results, so every model fits them: the built-in models, the classes of `@ts-graphviz/core` and their subclasses, and model classes of your own.
+`@ts-graphviz/common` has read-only views of the models: `ReadonlyNodeModel`, `ReadonlyEdgeModel`, `ReadonlySubgraphModel`, `ReadonlyRootGraphModel`, `ReadonlyGraphBaseModel`, `ReadonlyDotModel`, `ReadonlyAttributeListModel`, `ReadonlyAttributes`, the unions `ReadonlyGraphStatementModel` and `AnyReadonlyDotObjectModel`, and `DotValue` (`string | number | boolean | EscStringValue | HTMLLikeValue`, the values an attribute can have). They hold only `readonly` properties, methods that take a string or nothing (`attributes.get(key)`, `getNodes(id)`, `isSubgraphCluster()`, …) and read-only results, so every model fits them: the built-in models, the classes of `@ts-graphviz/core` and their subclasses, and model classes of your own.
 
 Compared with 3.x:
 
