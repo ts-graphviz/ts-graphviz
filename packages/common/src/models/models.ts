@@ -333,6 +333,16 @@ type ClusterOnlyAttributeKey<S> = Exclude<
 >;
 
 /**
+ * An id that Graphviz takes as a cluster's: it starts with `cluster` in any
+ * case, as `is_a_cluster` compares the first seven letters ignoring case.
+ * Each letter is spelled out, since a constructor cannot take the type
+ * parameter that `Lowercase` would need.
+ * @group Models
+ */
+export type ClusterSubgraphId =
+  `${'c' | 'C'}${'l' | 'L'}${'u' | 'U'}${'s' | 'S'}${'t' | 'T'}${'e' | 'E'}${'r' | 'R'}${string}`;
+
+/**
  * The attribute object a subgraph with the id `Id` takes. Graphviz draws a
  * subgraph as a cluster when its id starts with `cluster` (in any case) or
  * it has `cluster: true`, and ignores attributes that do not apply, so the
@@ -1041,7 +1051,7 @@ export interface SubgraphConstructor<
 > {
   /** An id that starts with `cluster`: the attributes of a cluster. */
   new (
-    id: `cluster${string}` | `Cluster${string}` | `CLUSTER${string}`,
+    id: ClusterSubgraphId,
     attributes?: ClusterSubgraphAttributesObject<S>,
   ): G;
   /** Any other id, or none: see {@link NonClusterSubgraphAttributesObject}. */

@@ -699,6 +699,8 @@ export declare namespace ClusterSubgraphAttributeKey {
 
 export type ClusterSubgraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<ClusterSubgraphAttributeKey, SchemaAttributeTypes<S, "cluster">>;
 
+export type ClusterSubgraphId = `${"c" | "C"}${"l" | "L"}${"u" | "U"}${"s" | "S"}${"t" | "T"}${"e" | "E"}${"r" | "R"}${string}`;
+
 export interface CodedError<C extends ErrorCode = ErrorCode> extends Error {
   readonly code: C;
 }
@@ -1309,7 +1311,7 @@ export type SubgraphAttributesFor<Id extends string | undefined, S extends Schem
 export type SubgraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey, SubgraphSchemaAttributeTypes<S>>;
 
 export interface SubgraphConstructor<G extends ReadonlySubgraphModel = SubgraphModel, S extends Schema = EmptySchema> {
-  new (id: `cluster${string}` | `Cluster${string}` | `CLUSTER${string}`, attributes?: ClusterSubgraphAttributesObject<S>): G;
+  new (id: ClusterSubgraphId, attributes?: ClusterSubgraphAttributesObject<S>): G;
   new (id?: string, attributes?: NonClusterSubgraphAttributesObject<S>): G;
   new (attributes?: NonClusterSubgraphAttributesObject<S>): G;
 }

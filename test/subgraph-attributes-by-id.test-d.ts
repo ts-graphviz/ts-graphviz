@@ -1,6 +1,7 @@
 import {
   attribute as _,
   type ClusterSubgraphAttributesObject,
+  type ClusterSubgraphId,
   type DSL,
   defaultModelKit,
   digraph,
@@ -124,6 +125,11 @@ describe('subgraph attributes by id', () => {
       new Subgraph('cluster_a', { pencolor: 'red', label: 'A' });
       new Subgraph('Cluster_b', { pencolor: 'red' });
       new Subgraph('CLUSTER_c', { bgcolor: 'lightgrey' });
+      // Any case, as Graphviz compares the prefix.
+      new Subgraph('ClUsTeR_d', { pencolor: 'red' });
+      expectTypeOf<'cLUSTEr'>().toExtend<ClusterSubgraphId>();
+      expectTypeOf<'clustr_a'>().not.toExtend<ClusterSubgraphId>();
+      expectTypeOf<'_cluster'>().not.toExtend<ClusterSubgraphId>();
     });
 
     it('takes subgraph attributes on any other id, or none', () => {

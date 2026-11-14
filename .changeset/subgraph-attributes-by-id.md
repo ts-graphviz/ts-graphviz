@@ -12,7 +12,7 @@ Subgraph attributes are typed by the subgraph's id. Graphviz draws a subgraph as
 
 The constructor of `Subgraph` (and `SubgraphConstructor`, which a custom class of a kit fits) follows the same rules, with overloads instead of a type parameter, which a constructor cannot have:
 
-- an id that starts with `cluster`, `Cluster` or `CLUSTER` takes cluster attributes;
+- an id that starts with `cluster` in any case (`ClusterSubgraphId`) takes cluster attributes;
 - any other id, an id known only at run time (`string`) included, or no id, takes subgraph attributes, or cluster attributes with `cluster: true`;
 - an id that starts with `cluster` still takes `rank`: only `createSubgraph` refuses it.
 
