@@ -18,5 +18,5 @@ export * from './createRoot.js';
 export * from './fromElement.js';
 export * from './hooks/useCurrentGraph.js';
 export * from './hooks/useGraphContainer.js';
-export * from './renderHTMLLike.js';
+export * from './htmlLikeFromElement.js';
 export * from './types.js';

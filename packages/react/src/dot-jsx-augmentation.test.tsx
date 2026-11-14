@@ -2,13 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
 import { Node } from './components/Node.js';
-import { renderHTMLLike } from './renderHTMLLike.js';
+import { htmlLikeFromElement } from './htmlLikeFromElement.js';
 import { elementToDot } from './test-utils/render.js';
 import type { DotJSXElements } from './types.js';
 
-// Tests compare the markup form; renderHTMLLike itself returns an HTMLLikeValue.
-const html = (...args: Parameters<typeof renderHTMLLike>) =>
-  `<${renderHTMLLike(...args).value}>`;
+// Tests compare the markup form; htmlLikeFromElement itself returns an HTMLLikeValue.
+const html = (...args: Parameters<typeof htmlLikeFromElement>) =>
+  `<${htmlLikeFromElement(...args).value}>`;
 
 /**
  * Tests for auto-augmentation of JSX type definitions.
@@ -18,7 +18,7 @@ const html = (...args: Parameters<typeof renderHTMLLike>) =>
  * These tests verify that:
  * 1. DotJSXElements is exported and usable as a type
  * 2. dot:* elements work in JSX expressions (compile-time type check)
- * 3. dot:* elements render correctly in renderHTMLLike and fromElement
+ * 3. dot:* elements render correctly in htmlLikeFromElement and fromElement
  */
 describe('dot:* JSX auto-augmentation', () => {
   it('DotJSXElements type is exported and represents all dot:* elements', () => {
@@ -73,7 +73,7 @@ describe('dot:* JSX auto-augmentation', () => {
     expect(elements).toBeDefined();
   });
 
-  it('renderHTMLLike correctly processes dot:* elements', () => {
+  it('htmlLikeFromElement correctly processes dot:* elements', () => {
     const label = (
       <dot:table border={1}>
         <dot:tr>

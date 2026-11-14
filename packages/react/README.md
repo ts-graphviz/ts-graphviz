@@ -423,7 +423,8 @@ function inspect() {
 
 - `fromElement()` - Converts a React element to models once: it renders the element, waits until React has no work left for it, and resolves with the models. `toDot(await fromElement(element))` gives the DOT text.
 - `createRoot()` - Creates a root to render into again and again, like a root of React: `render()` returns at once, and the result comes through the callbacks.
-- `renderHTMLLike()` - Renders HTML-like label structures for use in node or edge labels
+- `htmlLikeFromElement()` - Converts an element of HTML-like label structures to a label value, for node or edge labels
+- `createLabelContext()` / `readLabelContext()` - Pass a value down the components of a label
 
 Which one to use:
 
@@ -533,21 +534,21 @@ const ProjectDiagram = () => (
 const dotString = toDot(await fromElement(<ProjectDiagram />));
 ```
 
-### Using the renderHTMLLike Function
+### Using the htmlLikeFromElement Function
 
-The `renderHTMLLike` function converts React elements with HTML-like labels into an HTML-like label value (`HTMLLikeValue` from `@ts-graphviz/common`) that can be assigned to any label attribute; `.value` holds the markup without the outer `<` `>`. It includes built-in security protections against deeply nested structures and circular references.
+The `htmlLikeFromElement` function converts React elements with HTML-like labels into an HTML-like label value (`HTMLLikeValue` from `@ts-graphviz/common`) that can be assigned to any label attribute; `.value` holds the markup without the outer `<` `>`. It includes built-in security protections against deeply nested structures and circular references.
 
 Strings and numbers are text, as in the DOM: a child or an attribute value is written with `&`, `<`, `>` (and `"` in attributes) as entities, so text from your users cannot add markup or attributes. Markup is written with `dot:` elements. Only the elements of Graphviz's HTML-like labels can be rendered (`dot:table`, `dot:tr`, `dot:td`, `dot:font`, `dot:b`, …, plus fragments and components); a port is the `port` attribute of `<dot:table>` or `<dot:td>`. Other elements and attribute names that are not names throw a `TypeError`.
 
 ```ts
 import type { ReactElement } from "react";
-import { renderHTMLLike } from "@ts-graphviz/react";
+import { htmlLikeFromElement } from "@ts-graphviz/react";
 
 // An element built from user input
 declare const userProvidedElement: ReactElement;
 
 // Basic usage
-const htmlLabel = renderHTMLLike(
+const htmlLabel = htmlLikeFromElement(
   <dot:table>
     <dot:tr>
       <dot:td>left</dot:td>
@@ -557,7 +558,7 @@ const htmlLabel = renderHTMLLike(
 );
 
 // With custom security options
-const deeplyNestedLabel = renderHTMLLike(
+const deeplyNestedLabel = htmlLikeFromElement(
   <dot:table>
     {/* ... deeply nested structure ... */}
   </dot:table>,
@@ -565,7 +566,7 @@ const deeplyNestedLabel = renderHTMLLike(
 );
 
 // Stricter validation for user-generated content
-const userContent = renderHTMLLike(
+const userContent = htmlLikeFromElement(
   userProvidedElement,
   { maxDepth: 100 } // Lower limit for untrusted input
 );
@@ -585,7 +586,7 @@ const userContent = renderHTMLLike(
 
 #### Security Options
 
-The `renderHTMLLike` function provides security protections against stack overflow attacks:
+The `htmlLikeFromElement` function provides security protections against stack overflow attacks:
 
 - **`maxDepth`** (default: `1000`): Maximum recursion depth for nested elements
   - Prevents stack overflow from deeply nested or circular structures
@@ -595,15 +596,53 @@ The `renderHTMLLike` function provides security protections against stack overfl
   - When the limit is exceeded, the function throws a `RangeError` (a circular element tree throws a `TypeError`)
 
 ```ts
-import { renderHTMLLike, type RenderHTMLLikeOptions } from "@ts-graphviz/react";
+import { htmlLikeFromElement, type HtmlLikeFromElementOptions } from "@ts-graphviz/react";
 
 // Type-safe options
-const options: RenderHTMLLikeOptions = {
+const options: HtmlLikeFromElementOptions = {
   maxDepth: 1500
 };
 
-const result = renderHTMLLike(<dot:table>...</dot:table>, options);
+const result = htmlLikeFromElement(<dot:table>...</dot:table>, options);
 ```
+
+#### Components in a Label
+
+A label may be built from your own components. `htmlLikeFromElement` (and a `label` prop, which uses it) calls them itself, at once; React does not render them. So a component of a label has no state and no effects, and a React context provider cannot be put inside a label.
+
+To pass a value down a label without handing it through every component, use a label context:
+
+```tsx
+import {
+  createLabelContext,
+  htmlLikeFromElement,
+  readLabelContext,
+} from "@ts-graphviz/react";
+
+const Accent = createLabelContext("black"); // the default value
+
+const Cell = ({ children }: { children: string }) => (
+  <dot:td>
+    <dot:font color={readLabelContext(Accent)}>{children}</dot:font>
+  </dot:td>
+);
+
+const label = htmlLikeFromElement(
+  <Accent.Provider value="red">
+    <dot:table>
+      <dot:tr>
+        <Cell>left</Cell>
+        <Cell>right</Cell>
+      </dot:tr>
+    </dot:table>
+  </Accent.Provider>
+);
+```
+
+- `readLabelContext` gives the value of the nearest `Provider` above the component, or the default value. It throws when no label is being converted, so it cannot be used in a component React renders.
+- A `Provider` works in a label only: React throws when it renders one.
+
+React hooks in a component of a label are hooks of the React component that is rendering while the label is converted: for `<Node label={<MyLabel />} />`, that is `Node`. Reading a React context there (`use(SomeContext)`) gives the value at the place of the `<Node>`. Hooks with state (`useState`, `useId`, …) follow the rules of hooks for that outer component, so a label that calls them must call the same ones on every render; prefer props and label contexts. Called outside a React render, `htmlLikeFromElement` has no component, and hooks throw.
 
 ### Rendering Into an Existing Graph
 

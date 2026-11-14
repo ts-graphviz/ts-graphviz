@@ -12,14 +12,113 @@ import {
 const DEFAULT_MAX_RECURSION_DEPTH = 1000;
 
 /**
- * Options for controlling the rendering behavior.
+ * Options of `htmlLikeFromElement`.
  */
-export interface RenderHTMLLikeOptions {
+export interface HtmlLikeFromElementOptions {
   /**
    * Maximum allowed recursion depth to prevent stack overflow attacks.
    * @default 1000
    */
   maxDepth?: number;
+}
+
+/**
+ * A value the components of a label can read, made by
+ * {@link createLabelContext}. A context of one type does not stand for a
+ * context of a wider or a narrower type: its value is both given and read.
+ */
+export interface LabelContext<in out T> {
+  /**
+   * Gives `value` to the components in `children`, for
+   * {@link readLabelContext}. An element of labels only: React cannot
+   * render it.
+   */
+  readonly Provider: (props: {
+    value: T;
+    children?: ReactNode;
+  }) => ReactElement | null;
+}
+
+/** The default value of each context, by its provider. */
+const defaultValues = new WeakMap<object, unknown>();
+
+/**
+ * The values the providers of the label being converted give, innermost
+ * last, by provider; `undefined` while no label is converted.
+ */
+let provided: Map<object, unknown[]> | undefined;
+
+/**
+ * Creates a context for labels: a way to pass a value down to the
+ * components of a label without handing it through every one of them.
+ *
+ * `htmlLikeFromElement` calls the components of a label itself, outside
+ * React's render, so a React context cannot be given inside a label. A label
+ * context does the same job there:
+ *
+ * ```tsx
+ * const Accent = createLabelContext('black');
+ *
+ * const Cell = ({ children }: { children: string }) => (
+ *   <dot:td>
+ *     <dot:font color={readLabelContext(Accent)}>{children}</dot:font>
+ *   </dot:td>
+ * );
+ *
+ * htmlLikeFromElement(
+ *   <Accent.Provider value="red">
+ *     <dot:table>
+ *       <dot:tr>
+ *         <Cell>a</Cell>
+ *       </dot:tr>
+ *     </dot:table>
+ *   </Accent.Provider>,
+ * );
+ * ```
+ *
+ * @param defaultValue - What {@link readLabelContext} gives where no
+ * provider is above the component.
+ */
+export function createLabelContext<T>(defaultValue: T): LabelContext<T> {
+  const provider = (): never => {
+    throw new Error(
+      'The Provider of a label context was rendered by React; it works only in an element given to htmlLikeFromElement or to a label.',
+    );
+  };
+  defaultValues.set(provider, defaultValue);
+  return Object.freeze({ Provider: provider });
+}
+
+/**
+ * Reads a label context: the value of the nearest provider above the
+ * component, or the default value of the context.
+ *
+ * @throws {TypeError} `context` was not made by {@link createLabelContext}.
+ * @throws {Error} Called while no label is converted (by a component React
+ * renders, or outside a component).
+ */
+export function readLabelContext<T>(context: LabelContext<T>): T {
+  // Own properties only: an inherited Provider is not the context's.
+  const provider: unknown =
+    context != null && Object.hasOwn(context, 'Provider')
+      ? context.Provider
+      : undefined;
+  if (typeof provider !== 'function' || !defaultValues.has(provider)) {
+    throw new TypeError(
+      'readLabelContext takes a context made by createLabelContext.',
+    );
+  }
+  if (provided === undefined) {
+    throw new Error(
+      'readLabelContext can be called only by a component of a label, while htmlLikeFromElement converts it.',
+    );
+  }
+  const values = provided.get(provider);
+  return (
+    values === undefined || values.length === 0
+      ? defaultValues.get(provider)
+      : values[values.length - 1]
+  ) as T;
 }
 
 /**
@@ -127,6 +226,28 @@ function manuallyRenderElement(
         inStack,
         maxDepth,
       );
+    }
+
+    // A provider of a label context: its value is what the components in
+    // its children read.
+    if (typeof type === 'function' && defaultValues.has(type)) {
+      const contexts = provided as Map<object, unknown[]>;
+      let values = contexts.get(type);
+      if (values === undefined) {
+        values = [];
+        contexts.set(type, values);
+      }
+      values.push(props.value);
+      try {
+        return renderChildrenToString(
+          props.children as ReactNode,
+          depth + 1,
+          inStack,
+          maxDepth,
+        );
+      } finally {
+        values.pop();
+      }
     }
 
     // Function and class components render to another element; their
@@ -248,8 +369,15 @@ function renderChildrenToString(
  * written as entities, so they cannot add markup. If no {@link label} is
  * provided, returns an empty label (`<>`).
  *
- * @param label - Optional React element to render.
- * @param options - Optional rendering options.
+ * Components are called here, at once, and not rendered by React: a
+ * component of a label has no state, effects or React context of its own.
+ * A hook it calls belongs to the React component that is rendering when
+ * the label is converted (the one a `label` prop is rendered in), and fails
+ * where there is none. To pass values down a label, use
+ * {@link createLabelContext}.
+ *
+ * @param label - Optional React element to convert.
+ * @param options - Optional options.
  * @returns The HTML-like label.
  * @throws {TypeError} An element that HTML-like labels do not have (such as
  * `<div>` or `<dot:port>`), an attribute name that is not a name, or a
@@ -260,15 +388,15 @@ function renderChildrenToString(
  * @example
  * ```tsx
  * // Default behavior (max depth: 1000)
- * renderHTMLLike(<dot:b>Hello</dot:b>);
+ * htmlLikeFromElement(<dot:b>Hello</dot:b>);
  *
  * // Custom max depth for deeply nested structures
- * renderHTMLLike(<dot:table>...</dot:table>, { maxDepth: 5000 });
+ * htmlLikeFromElement(<dot:table>...</dot:table>, { maxDepth: 5000 });
  * ```
  */
-export function renderHTMLLike(
+export function htmlLikeFromElement(
   label?: ReactElement,
-  options?: RenderHTMLLikeOptions,
+  options?: HtmlLikeFromElementOptions,
 ): HTMLLikeValue {
   if (!label) {
     return htmlLike('');
@@ -282,5 +410,13 @@ export function renderHTMLLike(
     maxDepth = Math.floor(requested);
   }
 
-  return htmlLike(manuallyRenderElement(label, 0, new WeakSet(), maxDepth));
+  // A label converted while another is (by one of its components) starts
+  // with no providers above it.
+  const outer = provided;
+  provided = new Map();
+  try {
+    return htmlLike(manuallyRenderElement(label, 0, new WeakSet(), maxDepth));
+  } finally {
+    provided = outer;
+  }
 }
