@@ -661,6 +661,7 @@ function applyStatements(
   added.set(graph, applied);
   unfinished.add(applied);
   for (const statement of statements) {
+    if (statement.$$type === 'Node') coverNode(graph, statement);
     // Before it is added: a model class may add it and then throw.
     applied.push(statement);
     addStatement(graph, statement);
@@ -675,10 +676,107 @@ function applyStatements(
 const unfinished = new WeakSet<Statement[]>();
 
 /**
+ * Whether the graph replaces the node with an id when it is given another
+ * (the legacy classes), instead of keeping each declaration. Read from what
+ * the classes of GraphBase say (a protected member), not from anything
+ * inherited from Object.prototype.
+ */
+function replacesNodes(graph: AnyGraphContainer): boolean {
+  for (
+    let o: object | null = graph;
+    o !== null && o !== Object.prototype;
+    o = Object.getPrototypeOf(o)
+  ) {
+    if (Object.getOwnPropertyDescriptor(o, 'keepsEachNodeDeclaration')) {
+      return Reflect.get(graph, 'keepsEachNodeDeclaration') === false;
+    }
+  }
+  return false;
+}
+
+/**
+ * For the ids of a graph that replaces a node with the next of its id, and
+ * that more than one node was given for: those nodes, the one the graph
+ * shows last. A rendered node takes the place of the one before it, of the
+ * graph's own or of another tree, which comes back when the rendered one
+ * goes. Every tree that renders into the graph reads the same list: a node
+ * that goes while another covers it does not come back.
+ */
+const covered = new WeakMap<AnyGraphContainer, Map<string, NodeModel[]>>();
+
+/** Remember the node that `node` is about to take the place of. */
+function coverNode(graph: AnyGraphContainer, node: NodeModel): void {
+  if (!replacesNodes(graph)) return;
+  const [current] = graph.getNodes(node.id);
+  if (current === node) return;
+  let byId = covered.get(graph);
+  if (current === undefined) {
+    byId?.delete(node.id);
+    return;
+  }
+  if (byId === undefined) {
+    byId = new Map();
+    covered.set(graph, byId);
+  }
+  let nodes = byId.get(node.id);
+  // A list that does not end with the node the graph shows is out of date:
+  // the graph was changed from outside.
+  if (nodes === undefined || nodes.at(-1) !== current) {
+    nodes = [current];
+    byId.set(node.id, nodes);
+  }
+  nodes.push(node);
+}
+
+/**
+ * Take a rendered node out. In a graph that replaces nodes, the node it
+ * covered comes back, in the same place, which addNode keeps for a node
+ * with the same id. Otherwise that declaration only goes: a node of the
+ * graph's own, or of another tree, with the id stays.
+ */
+function uncoverNode(graph: AnyGraphContainer, node: NodeModel): void {
+  const byId = covered.get(graph);
+  if (byId === undefined) {
+    graph.removeNode(node);
+    return;
+  }
+  const [current] = graph.getNodes(node.id);
+  const nodes = byId.get(node.id);
+  // By id, so only when it is still this node.
+  if (current === node) {
+    const below =
+      nodes !== undefined && nodes.at(-1) === node ? nodes.at(-2) : undefined;
+    // Before the list changes: if a model class throws, the next try finds
+    // the same.
+    if (below !== undefined) graph.addNode(below);
+    else graph.removeNode(node);
+  }
+  if (nodes === undefined) return;
+  const wasLast = nodes.at(-1) === node;
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    if (nodes[i] === node) nodes.splice(i, 1);
+  }
+  const upToDate = current === node ? wasLast : nodes.at(-1) === current;
+  // One node covers nothing.
+  if (!upToDate || nodes.length < 2) byId.delete(node.id);
+}
+
+/**
  * The statements a tree added are the graphs' own from now on: the record
- * is emptied.
+ * is emptied, and the nodes its nodes covered do not come back.
  */
 export function keepStatements(added: AddedStatements): void {
+  for (const [graph, statements] of added) {
+    const byId = covered.get(graph);
+    if (byId === undefined) continue;
+    for (const statement of statements) {
+      if (statement.$$type !== 'Node') continue;
+      const nodes = byId.get(statement.id);
+      if (nodes === undefined) continue;
+      nodes.splice(0, nodes.lastIndexOf(statement));
+      if (nodes.length < 2) byId.delete(statement.id);
+    }
+  }
   added.clear();
 }
 
@@ -699,9 +797,7 @@ function addStatement(graph: AnyGraphContainer, statement: Statement): void {
 function removeStatement(graph: AnyGraphContainer, statement: Statement): void {
   switch (statement.$$type) {
     case 'Node':
-      // That declaration only: a node of the graph's own, or of another
-      // tree, with the id stays.
-      graph.removeNode(statement);
+      uncoverNode(graph, statement);
       break;
     case 'Edge':
       graph.removeEdge(statement);

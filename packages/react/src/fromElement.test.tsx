@@ -1,5 +1,6 @@
 import React from 'react';
 import { Digraph as DigraphModel, Node as NodeModel, toDot } from 'ts-graphviz';
+import { LegacyDigraph } from 'ts-graphviz/legacy';
 import { describe, expect, it } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
@@ -420,5 +421,120 @@ describe('two roots that render a node with the same id into one container', () 
     ]);
     root.unmount();
     expect(colorsOf(container)).toEqual(['green', 'red', 'blue', 'white']);
+  });
+});
+
+describe('a legacy container, which keeps one node for an id', () => {
+  const rootOn = (container: DigraphModel) => {
+    let committed = (): void => {};
+    const root = createRoot({
+      container,
+      onRenderComplete: () => committed(),
+    });
+    return {
+      unmount: () => root.unmount(),
+      render: (element: React.ReactElement) =>
+        new Promise<void>((resolve) => {
+          committed = resolve;
+          root.render(element);
+        }),
+    };
+  };
+  const colorOf = (container: DigraphModel): unknown =>
+    container.getNodes('a')[0]?.attributes.get('color');
+
+  it('shows the node rendered last', async () => {
+    const container = new LegacyDigraph();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    expect(container.nodes).toHaveLength(1);
+    expect(colorOf(container)).toBe('blue');
+  });
+
+  it('gets the node of the first back when the second is unmounted', async () => {
+    const container = new LegacyDigraph();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    two.unmount();
+    expect(colorOf(container)).toBe('red');
+    one.unmount();
+    expect(container.nodes).toHaveLength(0);
+  });
+
+  it('does not get the node of the first back after the first was unmounted', async () => {
+    const container = new LegacyDigraph();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    one.unmount();
+    expect(colorOf(container)).toBe('blue');
+    two.unmount();
+    expect(container.nodes).toHaveLength(0);
+  });
+
+  it('gets its own node back when both are unmounted, in either order', async () => {
+    for (const firstGone of ['one', 'two'] as const) {
+      const container = new LegacyDigraph();
+      const own = new NodeModel('a', { color: 'green' });
+      container.addNode(own);
+      const roots = { one: rootOn(container), two: rootOn(container) };
+      await roots.one.render(<Node id="a" color="red" />);
+      await roots.two.render(<Node id="a" color="blue" />);
+      roots[firstGone].unmount();
+      roots[firstGone === 'one' ? 'two' : 'one'].unmount();
+      expect(container.nodes).toEqual([own]);
+    }
+  });
+
+  it('keeps a node it was given meanwhile', async () => {
+    const container = new LegacyDigraph();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    const given = new NodeModel('a', { color: 'green' });
+    container.addNode(given);
+    two.unmount();
+    one.unmount();
+    expect(container.nodes).toEqual([given]);
+  });
+
+  it('gets the node of a finished conversion back, not what it replaced', async () => {
+    const container = new LegacyDigraph();
+    container.addNode(new NodeModel('a', { color: 'green' }));
+    await fromElement(<Node id="a" color="red" />, { container });
+    await fromElement(<Node id="a" color="blue" />, { container });
+    const root = rootOn(container);
+    await root.render(<Node id="a" color="black" />);
+    expect(colorOf(container)).toBe('black');
+    root.unmount();
+    expect(colorOf(container)).toBe('blue');
+  });
+
+  it('keeps the node it shows when it throws while a node comes back', async () => {
+    let failing = false;
+    class Failing extends LegacyDigraph {
+      addNode(node: NodeModel): void {
+        if (failing) throw new Error('addNode failed');
+        super.addNode(node);
+      }
+    }
+    const container = new Failing();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    failing = true;
+    two.unmount();
+    failing = false;
+    expect(colorOf(container)).toBe('blue');
+    one.unmount();
+    expect(colorOf(container)).toBe('blue');
+    expect(container.nodes).toHaveLength(1);
   });
 });
