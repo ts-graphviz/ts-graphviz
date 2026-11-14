@@ -3,13 +3,13 @@ import { beforeEach, describe, expect, it, test } from 'vitest';
 import { AttributesBase } from '../attributes/AttributesBase.js';
 import { Edge } from './Edge.js';
 import { GraphBase } from './GraphBase.js';
-import { defaultModelsContext } from './models-context.js';
+import { defaultModelKit } from './model-kit.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
 
 class TestGraph extends GraphBase<'Graph', any> {
   protected override defaultModels() {
-    return defaultModelsContext();
+    return defaultModelKit;
   }
   public get $$type(): 'Graph' {
     return 'Graph';
@@ -77,7 +77,7 @@ describe('Imperative API(addXxx existXxx removeXxx methods)', () => {
   });
 });
 
-describe('Models Context API', () => {
+describe('Model classes of a graph', () => {
   class TestNode extends Node {}
   class TestEdge extends Edge {}
   class TestSubgraphA extends Subgraph {}

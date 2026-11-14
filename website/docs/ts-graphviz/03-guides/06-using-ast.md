@@ -244,16 +244,16 @@ console.log(stringify(ast));
 
 ### Converting between an AST and a Model
 
-`toModel` creates models from an AST. It needs the classes to create them from, in the `models` option: `defaultModelsContext()` gives the classes of ts-graphviz, and `createModelsContext({ ... })` a context with your own classes.
+`toModel` creates models from an AST. It needs the classes to create them from, in the `models` option: `defaultModelKit` gives the classes of ts-graphviz, and `createModelKit({ ... })` a kit with your own classes.
 
 A `Dot` node becomes a `Dot` model, which holds every graph of the source in `graphs`:
 
 ```typescript
-import { defaultModelsContext } from 'ts-graphviz';
+import { defaultModelKit } from 'ts-graphviz';
 import { parse, toModel } from 'ts-graphviz/ast';
 
 const ast = parse('digraph G { a -> b; } graph H { c; }');
-const dot = toModel(ast, { models: defaultModelsContext() });
+const dot = toModel(ast, { models: defaultModelKit });
 
 console.log(dot.$$type); // 'Dot'
 console.log(dot.graphs.map((g) => g.id)); // ['G', 'H']

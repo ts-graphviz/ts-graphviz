@@ -678,7 +678,7 @@ const isFunction = (arg: unknown): arg is (view: unknown) => void =>
 
 /**
  * The DOT statements: only the model's basic operations, so they follow its
- * models context (and keep default attribute statements in their place where
+ * model classes (and keep default attribute statements in their place where
  * its classes do).
  */
 function createStatements(g: GraphBaseModel) {

@@ -8,7 +8,7 @@
 
 The factories give the graph's DOT DSL; the models only hold the data
 
-`digraph()`, `graph()`, `strict.*` and `withContext().*` give the graph's **DOT DSL** (`DSL<G>`) instead of the model, and so do their callbacks. The DSL has DOT's words only:
+`digraph()`, `graph()`, `strict.*` and `withModelKit().*` give the graph's **DOT DSL** (`DSL<G>`) instead of the model, and so do their callbacks. The DSL has DOT's words only:
 
 - the DOT statements `node`, `edge`, `subgraph` and `graph` are its methods, with the same overloads as before (`g.node(id, attributes?, callback?)`, `g.node(attributes)` for `node [...]`, and so on);
 - attributes are properties under their own names: `g.rankdir = 'LR'`, `a.label`, `delete a.label` (assigning `undefined` deletes too), `a.id` and `a.comment` (the Graphviz attributes);
@@ -16,7 +16,7 @@ The factories give the graph's DOT DSL; the models only hold the data
 
 Everything else the model does is on the model, which `modelOf(x)` gives: `modelOf(a).id` (the node's name), `modelOf(g).nodes`, `getNode`, `createNode`, `getAttribute`, `comments`, `directed`, and the members of your own classes. A name that is not a statement or one of those few members is an attribute; none of those names is a Graphviz attribute. An attribute of your own schema named like one (`port`, say) is read and written on the model: `modelOf(a).getAttribute('port')`.
 
-Every model you get from a DSL is a DSL, and a model has one DSL, so DSLs compare with `===`. `modelOf(dsl)` gives the model and `dsl(model)` the DSL of a model, such as one `fromDot` returns. The DSL works through the graph's `createNode`, `createEdge`, `getNode`, `getSubgraph`, `createSubgraph` and `addAttributeList`, so it follows the classes of the models context and the methods a custom class overrides: `g.node({ ... })` after other statements stays in its place, as `node [...]` does in DOT, and returns the list's DSL.
+Every model you get from a DSL is a DSL, and a model has one DSL, so DSLs compare with `===`. `modelOf(dsl)` gives the model and `dsl(model)` the DSL of a model, such as one `fromDot` returns. The DSL works through the graph's `createNode`, `createEdge`, `getNode`, `getSubgraph`, `createSubgraph` and `addAttributeList`, so it follows the classes of the model kit and the methods a custom class overrides: `g.node({ ... })` after other statements stays in its place, as `node [...]` does in DOT, and returns the list's DSL.
 
 `fromDot` and `fromDotAll` take `dsl: true` to return the DSL of what they read; the default stays the model.
 

@@ -1,10 +1,10 @@
 import type {
   GraphAttributesObject,
-  ModelsContext,
+  ModelKit,
   ModelTypes,
   RootGraphModel,
 } from '@ts-graphviz/common';
-import { defaultModelsContext } from '@ts-graphviz/core';
+import { defaultModelKit } from '@ts-graphviz/core';
 import { type DSL, dsl } from './dsl.js';
 import type { ModelFactories, ModelFactory } from './types.js';
 
@@ -17,12 +17,11 @@ import type { ModelFactories, ModelFactory } from './types.js';
  * @hidden
  */
 export function ModelFactoryBuilder(
-  this: ModelsContext,
+  this: ModelKit,
   directed: boolean,
   strictMode: boolean,
 ): ModelFactory {
   return (...args: unknown[]) => {
-    const G = directed ? this.Digraph : this.Graph;
     const id = args.find((arg): arg is string => typeof arg === 'string');
     const attributes = args.find(
       (arg): arg is GraphAttributesObject => typeof arg === 'object',
@@ -31,8 +30,9 @@ export function ModelFactoryBuilder(
       (arg): arg is (g: DSL<RootGraphModel>) => void =>
         typeof arg === 'function',
     );
-    const g = new G(id, strictMode, attributes);
-    g.with(this);
+    const g = directed
+      ? this.createDigraph(id, strictMode, attributes)
+      : this.createGraph(id, strictMode, attributes);
     const view = dsl(g);
     if (typeof callback === 'function') {
       callback(view);
@@ -42,22 +42,22 @@ export function ModelFactoryBuilder(
 }
 
 /**
- * createModelFactories is a function that takes a boolean value, strict, and an optional ModelsContext parameter, context, and returns an object containing two ModelFactories.
+ * createModelFactories is a function that takes a boolean value, strict, and an optional ModelKit parameter, kit, and returns an object containing two ModelFactories.
  *
  * @param strict A boolean value indicating whether the graph should be in strict mode or not.
- * @param context An optional ModelsContext parameter.
+ * @param kit The kit that creates the graphs; by default `defaultModelKit`.
  * @returns An object containing two ModelFactories, one for directed graphs and one for undirected graphs.
  */
 export function createModelFactories<M extends ModelTypes = ModelTypes>(
   strict: boolean,
-  context: ModelsContext<M> = defaultModelsContext() as ModelsContext<M>,
+  kit: ModelKit<M> = defaultModelKit as ModelKit<M>,
 ): Readonly<ModelFactories<M>> {
-  // The graphs come from the context's classes, which `M` describes.
+  // The graphs come from the kit's classes, which `M` describes.
   return Object.freeze({
-    digraph: ModelFactoryBuilder.call(context, true, strict) as ModelFactory<
+    digraph: ModelFactoryBuilder.call(kit, true, strict) as ModelFactory<
       M['Digraph']
     >,
-    graph: ModelFactoryBuilder.call(context, false, strict) as ModelFactory<
+    graph: ModelFactoryBuilder.call(kit, false, strict) as ModelFactory<
       M['Graph']
     >,
   });

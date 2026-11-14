@@ -10,7 +10,7 @@ import {
   type Schema,
   type SchemaEntry,
 } from '@ts-graphviz/common';
-import { createModelsContext, Digraph, Node } from '@ts-graphviz/core';
+import { createModelKit, Digraph, Node } from '@ts-graphviz/core';
 import type * as tsg from 'ts-graphviz';
 import {
   attribute as _,
@@ -30,7 +30,7 @@ import {
   type SubgraphModel,
   strict,
   toDot,
-  withContext,
+  withModelKit,
 } from 'ts-graphviz';
 import { toBlob } from 'ts-graphviz/adapter';
 import {
@@ -94,8 +94,8 @@ class MyNode extends Node {
     return this.id;
   }
 }
-withContext({ Node: MyNode }).digraph((g) => modelOf(g.node('a')).extra());
-createModelsContext({ Node: MyNode });
+withModelKit({ Node: MyNode }).digraph((g) => modelOf(g.node('a')).extra());
+createModelKit({ Node: MyNode });
 
 // parse / stringify / sanitize
 const dot: DotASTNode = parse(sanitize(text));
@@ -188,7 +188,7 @@ const legacyNode = legacy.fromDot('a', {
 assertType<Equal<typeof legacyNode, MyNode>>();
 const legacyGraphs = legacy.fromDotAll('digraph { a }');
 assertType<Equal<typeof legacyGraphs, RootGraphModel[]>>();
-legacy.withContext({ Node }).strict.graph();
+legacy.withModelKit({ Node }).strict.graph();
 
 try {
   parse('{');

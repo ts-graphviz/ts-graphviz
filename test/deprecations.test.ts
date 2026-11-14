@@ -47,7 +47,7 @@ describe('deprecated until v5: the legacy models and APIs', () => {
     ['packages/ts-graphviz/src/legacy.ts', 'export const digraph:'],
     ['packages/ts-graphviz/src/legacy.ts', 'export const graph:'],
     ['packages/ts-graphviz/src/legacy.ts', 'export const strict:'],
-    ['packages/ts-graphviz/src/legacy.ts', 'export function withContext<'],
+    ['packages/ts-graphviz/src/legacy.ts', 'export function withModelKit<'],
     ['packages/ast/src/dot-shim/parser/parse.ts', 'startRule?: T;'],
   ])('%s: %s', (path, declaration) => {
     expect(docAbove(read(path), declaration)).toMatch(DEPRECATED_TAG);

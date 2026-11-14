@@ -194,7 +194,7 @@ const defaultLists = new WeakMap<AnyGraphContainer, DefaultLists>();
 
 /**
  * The graph's leading default attribute lists, which the props fill: they
- * apply to every statement in the graph, whatever the models context. The
+ * apply to every statement in the graph, whatever the model classes. The
  * model is new when its element is created, so they are added then; a class
  * whose constructor already adds statements gets its leading lists as they
  * are (adding them after those statements would not lead the graph).

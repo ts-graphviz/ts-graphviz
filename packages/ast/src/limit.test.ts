@@ -1,4 +1,4 @@
-import { defaultModelsContext } from '@ts-graphviz/core';
+import { defaultModelKit } from '@ts-graphviz/core';
 import { describe, expect, it } from 'vitest';
 import { DotSyntaxError, parse } from './dot-shim/parser/parse.js';
 import { toModel } from './model-shim/to-model/to-model.js';
@@ -64,7 +64,7 @@ describe('limit options that cannot be used keep the default', {
 
   it.each(unusable)('maxEdgeTargets %s', (value) => {
     const convert = (ast: DotASTNode) =>
-      toModel(ast, { models: defaultModelsContext(), maxEdgeTargets: value });
+      toModel(ast, { models: defaultModelKit, maxEdgeTargets: value });
     expect(() => convert(reopened(2000))).toThrow(RangeError);
     expect(() => convert(reopened(10))).not.toThrow();
   });
@@ -73,7 +73,7 @@ describe('limit options that cannot be used keep the default', {
     for (const maxEdgeTargets of [0, Number.POSITIVE_INFINITY]) {
       expect(() =>
         toModel(reopened(2000), {
-          models: defaultModelsContext(),
+          models: defaultModelKit,
           maxEdgeTargets,
         }),
       ).not.toThrow();

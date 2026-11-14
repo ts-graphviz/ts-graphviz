@@ -58,7 +58,7 @@ export const ERROR_CODES = [
   'TSG_ERR_NO_GRAPH',
   /** `fromDot` was given a DOT source with more than one graph (read them with `fromDotAll`), or a React tree rendered more than one top-level graph (`Error`). */
   'TSG_ERR_MULTIPLE_GRAPHS',
-  /** A `GraphBase` subclass created a model without a models context (`Error`). */
+  /** A `GraphBase` subclass created a model without model classes (`Error`). */
   'TSG_ERR_NO_MODELS_CONTEXT',
   /** `dsl` of `ts-graphviz` was given a value that is not a model (`TypeError`). */
   'TSG_ERR_NOT_A_MODEL',

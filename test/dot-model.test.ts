@@ -3,7 +3,7 @@ import { isDotModel, isRootGraphModel } from '@ts-graphviz/common';
 import {
   Digraph,
   Dot,
-  defaultModelsContext,
+  defaultModelKit,
   digraph,
   fromDot,
   Graph,
@@ -51,7 +51,7 @@ describe('Dot model', () => {
         '// trailing',
         '',
       ].join('\n');
-      const model = toModel(parse(source), { models: defaultModelsContext() });
+      const model = toModel(parse(source), { models: defaultModelKit });
       expect(model.$$type).toBe('Dot');
       expect(model.graphs.map((g) => g.id)).toStrictEqual(['a', 'b']);
       // Both comments lead the first graph, in order; the one after the
@@ -84,7 +84,7 @@ describe('Dot model', () => {
     it('validates edge operators per root graph', () => {
       // edge operator checks must not leak from one root graph into the next
       const model = toModel(parse('digraph { a -> b } graph { c -- d }'), {
-        models: defaultModelsContext(),
+        models: defaultModelKit,
       });
       expect(model.graphs.map((g) => g.directed)).toStrictEqual([true, false]);
       expect(() => parse('digraph { a -> b } graph { c -> d }')).toThrow(

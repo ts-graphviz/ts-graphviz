@@ -180,9 +180,9 @@ const node2 = new MyCustomNode('B');
 const edge = new MyCustomEdge([node1, node2]);
 ```
 
-### Models Context API
+### Model classes of a graph
 
-The Models Context API allows you to specify which model classes should be used when creating graph elements.
+A graph can be told which model classes to use when creating graph elements.
 
 This is implemented through the `with` method on graph models:
 
@@ -196,7 +196,7 @@ class MyCustomEdge extends Edge {}
 // Create a directed graph
 const graph = new Digraph();
 
-// Set up the context with custom classes
+// Give the graph custom classes
 graph.with({
   Node: MyCustomNode,
   Edge: MyCustomEdge
@@ -208,31 +208,31 @@ const nodeB = graph.createNode('B'); // Creates a MyCustomNode
 const edge = graph.createEdge([nodeA, nodeB]); // Creates a MyCustomEdge
 ```
 
-### Models Contexts for Conversions
+### Model Kits for Conversions
 
-A models context is the set of classes (`Graph`, `Digraph`, `Subgraph`, `Node`, `Edge`, …) that a graph creates its elements with. This package provides two functions that make one:
+A model kit holds the set of classes (`Graph`, `Digraph`, `Subgraph`, `Node`, `Edge`, …) that models are created with. This package provides two:
 
-- **`defaultModelsContext()`**: the classes of this package
-- **`createModelsContext(models)`**: the classes you give, and the classes of this package for the rest
+- **`defaultModelKit`**: the classes of this package
+- **`createModelKit(models)`**: the classes you give, and the classes of this package for the rest
 
-`toModel` of **[@ts-graphviz/ast](https://www.npmjs.com/package/@ts-graphviz/ast)**, which converts an AST to a graph model, takes the context as its `models` option. This package itself does not depend on `@ts-graphviz/ast`.
+`toModel` of **[@ts-graphviz/ast](https://www.npmjs.com/package/@ts-graphviz/ast)**, which converts an AST to a graph model, takes the kit as its `models` option. This package itself does not depend on `@ts-graphviz/ast`.
 
 ```ts
 import { parse, toModel } from '@ts-graphviz/ast';
-import { createModelsContext, Node } from '@ts-graphviz/core';
+import { createModelKit, Node } from '@ts-graphviz/core';
 
 class MyCustomNode extends Node {}
 
 const ast = parse('a [color = red]', { as: 'Node' });
 const node = toModel(ast, {
-  models: createModelsContext({ Node: MyCustomNode }),
+  models: createModelKit({ Node: MyCustomNode }),
 });
 
 console.log(node instanceof MyCustomNode, node.id);
 // true a
 ```
 
-The main `ts-graphviz` package uses these functions to implement `fromDot`, and `fromModel` of `@ts-graphviz/ast` to implement `toDot`.
+The main `ts-graphviz` package uses these to implement `fromDot`, and `fromModel` of `@ts-graphviz/ast` to implement `toDot`.
 
 ## Contributors 👥
 

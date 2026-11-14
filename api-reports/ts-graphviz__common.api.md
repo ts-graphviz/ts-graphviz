@@ -827,7 +827,7 @@ export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K exten
   readonly edges: ReadonlyArray<M["Edge"]>;
   readonly subgraphs: ReadonlyArray<M["Subgraph"]>;
   readonly statements: ReadonlyArray<M["Node"] | M["Edge"] | M["Subgraph"] | StatementAttributeListModel<S>>;
-  with(models: Partial<ModelsContext<ModelTypes<S>>>): void;
+  with(models: Partial<ModelClasses<ModelTypes<S>>>): void;
   addNode(node: NodeModel<S>): void;
   addEdge(edge: EdgeModel<S>): void;
   addSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): void;
@@ -970,6 +970,30 @@ export type LblString = HTMLLikeLabel | EscString;
 
 export declare const MODEL: unique symbol;
 
+export interface ModelClasses<M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> {
+  Dot: DotConstructor<M["Dot"], S>;
+  Graph: RootGraphConstructor<M["Graph"], S>;
+  Digraph: RootGraphConstructor<M["Digraph"], S>;
+  Subgraph: SubgraphConstructor<M["Subgraph"], S>;
+  Node: NodeConstructor<M["Node"], S>;
+  Edge: EdgeConstructor<M["Edge"], S>;
+}
+
+export interface ModelKit<M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> extends ModelClasses<M, S> {
+  createDigraph(id?: string, attributes?: GraphAttributesObject<S>): M["Digraph"];
+  createDigraph(id?: string, strict?: boolean, attributes?: GraphAttributesObject<S>): M["Digraph"];
+  createDigraph(strict?: boolean, attributes?: GraphAttributesObject<S>): M["Digraph"];
+  createDigraph(attributes?: GraphAttributesObject<S>): M["Digraph"];
+  createGraph(id?: string, attributes?: GraphAttributesObject<S>): M["Graph"];
+  createGraph(id?: string, strict?: boolean, attributes?: GraphAttributesObject<S>): M["Graph"];
+  createGraph(strict?: boolean, attributes?: GraphAttributesObject<S>): M["Graph"];
+  createGraph(attributes?: GraphAttributesObject<S>): M["Graph"];
+  createSubgraph<const Id extends string | undefined = undefined>(id?: Id, attributes?: SubgraphAttributesFor<Id, S>): M["Subgraph"];
+  createSubgraph(attributes?: NonClusterSubgraphAttributesObject<S>): M["Subgraph"];
+  createNode(id: string, attributes?: NodeAttributesObject<S>): M["Node"];
+  createEdge(targets: ReadonlyEdgeTargetLikeTuple, attributes?: EdgeAttributesObject<S>): M["Edge"];
+}
+
 export type ModelOf<T> = T extends ModelView<infer U> ? U : T;
 
 export interface ModelTypes<S extends Schema = EmptySchema> {
@@ -984,15 +1008,6 @@ export interface ModelTypes<S extends Schema = EmptySchema> {
 
 export interface ModelView<T extends AnyReadonlyDotObjectModel = AnyReadonlyDotObjectModel> {
   readonly [MODEL]: T;
-}
-
-export interface ModelsContext<M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> {
-  Dot: DotConstructor<M["Dot"], S>;
-  Graph: RootGraphConstructor<M["Graph"], S>;
-  Digraph: RootGraphConstructor<M["Digraph"], S>;
-  Subgraph: SubgraphConstructor<M["Subgraph"], S>;
-  Node: NodeConstructor<M["Node"], S>;
-  Edge: EdgeConstructor<M["Edge"], S>;
 }
 
 export type NarrowedModel<T, K extends DotObjectType> = unknown extends T ? T & ReadonlyModelOf<K> : T extends unknown ? T extends ModelView ? never : T extends AnyReadonlyDotObjectModel ? Extract<T, {
@@ -1165,7 +1180,7 @@ export interface ReadonlySubgraphModel extends ReadonlyGraphBaseModel<"Subgraph"
 
 export type Rect = `${Double},${Double},${Double},${Double}`;
 
-export interface ResolvedModelTypes<P extends Partial<ModelsContext> = Record<never, never>> extends ModelTypes {
+export interface ResolvedModelTypes<P extends Partial<ModelClasses> = Record<never, never>> extends ModelTypes {
   Dot: P extends {
     Dot: infer C;
   } ? Creates<C, DotModel> : DotModel;

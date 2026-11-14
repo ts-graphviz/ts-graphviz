@@ -19,7 +19,7 @@ import {
   toNodeRefGroup,
 } from '@ts-graphviz/common';
 import {
-  createModelsContext,
+  createModelKit,
   Digraph,
   Dot,
   Edge,
@@ -581,7 +581,7 @@ describe('the readers take a DSL', () => {
 });
 
 describe('custom models', () => {
-  test('the statements use the classes of the models context', () => {
+  test('the statements use the classes of the model kit', () => {
     class MyNode extends Node {
       public mine = true;
     }
@@ -593,7 +593,7 @@ describe('custom models', () => {
       }
     }
     const model = new MyDigraph();
-    model.with(createModelsContext({ Node: MyNode }));
+    model.with(createModelKit({ Node: MyNode }));
     const g = dsl(model);
     const a = g.node('a');
     expect(createNode).toHaveBeenCalledWith('a');

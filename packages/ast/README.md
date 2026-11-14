@@ -53,7 +53,7 @@ The AST package provides several key functions:
 - `parse(input, options?)`: Parses a DOT language string into an AST structure
 - `stringify(ast, options?)`: Converts an AST structure to a DOT language string
 - `fromModel(model, options?)`: Converts a Graph Model to an AST structure
-- `toModel(ast, { models })`: Converts an AST structure to a Graph Model. `models` is the set of model classes to create, such as `defaultModelsContext()` from `@ts-graphviz/core`
+- `toModel(ast, { models })`: Converts an AST structure to a Graph Model. `models` is the set of model classes to create, such as `defaultModelKit` from `@ts-graphviz/core`
 - `sanitize(dot, options?)`: Checks a DOT language string from an untrusted source and returns the DOT to render, or throws
 
 ## Usage Examples
@@ -161,16 +161,16 @@ console.log(outputDotString);
 
 ### Converting between AST and Model
 
-`toModel` creates the models with the classes of a models context, which `@ts-graphviz/core` provides. `fromModel` needs none.
+`toModel` creates the models with the classes of a model kit, which `@ts-graphviz/core` provides. `fromModel` needs none.
 
 ```ts
 import { fromModel, parse, stringify, toModel } from "@ts-graphviz/ast";
-import { defaultModelsContext } from "@ts-graphviz/core";
+import { defaultModelKit } from "@ts-graphviz/core";
 
 const ast = parse("digraph G { A -> B; }");
 
 // The model of a `Dot` AST node is a `DotModel`: the graphs and comments of one source.
-const dot = toModel(ast, { models: defaultModelsContext() });
+const dot = toModel(ast, { models: defaultModelKit });
 const graph = dot.graphs[0];
 graph.createNode("C");
 

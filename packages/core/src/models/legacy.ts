@@ -1,11 +1,12 @@
 import type {
   AnyModelTypes,
-  ModelsContext,
+  ModelClasses,
+  ModelKit,
   ModelTypes,
 } from '@ts-graphviz/common';
 import { Digraph } from './Digraph.js';
+import { lazyDefaultModelKit, modelKitOf } from './default-model-kit.js';
 import { Graph } from './Graph.js';
-import { createModelsContext } from './models-context.js';
 import { Subgraph } from './Subgraph.js';
 
 /**
@@ -31,8 +32,8 @@ export class LegacySubgraph<
   }
 
   /** @hidden */
-  protected override defaultModels(): ModelsContext {
-    return legacyModelsContext();
+  protected override defaultModels(): ModelClasses {
+    return legacyModelKit();
   }
 }
 
@@ -58,8 +59,8 @@ export class LegacyGraph<
   }
 
   /** @hidden */
-  protected override defaultModels(): ModelsContext {
-    return legacyModelsContext();
+  protected override defaultModels(): ModelClasses {
+    return legacyModelKit();
   }
 }
 
@@ -85,8 +86,8 @@ export class LegacyDigraph<
   }
 
   /** @hidden */
-  protected override defaultModels(): ModelsContext {
-    return legacyModelsContext();
+  protected override defaultModels(): ModelClasses {
+    return legacyModelKit();
   }
 }
 
@@ -107,17 +108,17 @@ export class LegacyDigraph<
  * a later default attribute statement or an object's own attribute
  * overrides it. Kept for code that relies on the 3.x behaviour; removed in
  * v5.
- * @group Models Context
+ * @group Model Kit
  */
-export const legacyModels: Partial<ModelsContext> = Object.freeze({
+export const legacyModels: Partial<ModelClasses> = Object.freeze({
   Graph: LegacyGraph,
   Digraph: LegacyDigraph,
   Subgraph: LegacySubgraph,
 });
 
-let legacy: ModelsContext | undefined;
+let legacy: ModelKit | undefined;
 
-function legacyModelsContext(): ModelsContext {
-  legacy ??= createModelsContext(legacyModels);
+function legacyModelKit(): ModelKit {
+  legacy ??= modelKitOf({ ...lazyDefaultModelKit(), ...legacyModels });
   return legacy;
 }

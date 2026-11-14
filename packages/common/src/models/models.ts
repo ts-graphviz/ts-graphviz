@@ -16,7 +16,7 @@ import type {
 import type { Compass } from '../attributes/types.js';
 import type { DotValue } from '../values.js';
 import type { CommentPosition, HasComments } from './comments.js';
-import type { ModelsContext } from './models-context.js';
+import type { ModelClasses } from './model-kit.js';
 import type {
   ReadonlyDotModel,
   ReadonlyEdgeModel,
@@ -798,7 +798,7 @@ export interface GraphBaseModel<
    * Use the given classes for the models this graph creates; the classes
    * left out stay as they are.
    */
-  with(models: Partial<ModelsContext<ModelTypes<S>>>): void;
+  with(models: Partial<ModelClasses<ModelTypes<S>>>): void;
 
   /**
    * Add a Node to the graph: any node of the graph's schema.
@@ -997,7 +997,7 @@ export interface DotModel<S extends Schema = EmptySchema>
 export type AnyDotObjectModel = GraphStatementModel | RootGraphModel | DotModel;
 
 /**
- * The instance types a {@link ModelsContext} creates: what graphs return
+ * The instance types a {@link ModelKit} creates: what graphs return
  * from `node()`, `edge()`, `subgraph()` and the like. The defaults
  * are the base interfaces.
  *
@@ -1019,7 +1019,7 @@ export interface ModelTypes<S extends Schema = EmptySchema> {
 
 /**
  * What every {@link ModelTypes} is, whatever its schema: the bound of the
- * model types a graph or a context takes. It names only the read-only model
+ * model types a graph or a kit takes. It names only the read-only model
  * types, which the models of every schema fit.
  * @group Models
  */

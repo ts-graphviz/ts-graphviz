@@ -7,7 +7,7 @@ export * from './models/Edge.js';
 export * from './models/Graph.js';
 export * from './models/GraphBase.js';
 export * from './models/legacy.js';
-export * from './models/models-context.js';
+export * from './models/model-kit.js';
 export * from './models/Node.js';
 export * from './models/RootGraph.js';
 export * from './models/Subgraph.js';

@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode } from 'react';
-import { createModelsContext, type ModelsContext } from 'ts-graphviz';
+import { createModelKit, type ModelClasses } from 'ts-graphviz';
 
 import { Digraph } from '../../components/Digraph.js';
 import { Graph } from '../../components/Graph.js';
@@ -9,10 +9,10 @@ import { GraphMap } from '../../contexts/GraphMap.js';
 import { GraphvizContext } from '../../contexts/GraphvizContext.js';
 
 export const context =
-  ({ models = {} }: { models?: Partial<ModelsContext> } = {}) =>
+  ({ models = {} }: { models?: Partial<ModelClasses> } = {}) =>
   ({ children }: { children: ReactNode }) => {
     return (
-      <GraphvizContext.Provider value={{ models: createModelsContext(models) }}>
+      <GraphvizContext.Provider value={{ models: createModelKit(models) }}>
         <GraphMap.Provider value={new Map()}>
           <GraphContainer.Provider value={null}>
             {children}
@@ -26,7 +26,7 @@ export const digraph =
   (props: ComponentProps<typeof Digraph> = {}) =>
   ({ children }: { children: ReactNode }) => {
     return (
-      <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
+      <GraphvizContext.Provider value={{ models: createModelKit({}) }}>
         <GraphMap.Provider value={new Map()}>
           <GraphContainer.Provider value={null}>
             <Digraph {...props}>{children}</Digraph>
@@ -40,7 +40,7 @@ export const digraphInSubgraph =
   (props: ComponentProps<typeof Subgraph> = {}) =>
   ({ children }: { children: ReactNode }) => {
     return (
-      <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
+      <GraphvizContext.Provider value={{ models: createModelKit({}) }}>
         <GraphMap.Provider value={new Map()}>
           <GraphContainer.Provider value={null}>
             <Digraph>
@@ -56,7 +56,7 @@ export const graph =
   (props: ComponentProps<typeof Graph> = {}) =>
   ({ children }: { children: ReactNode }) => {
     return (
-      <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
+      <GraphvizContext.Provider value={{ models: createModelKit({}) }}>
         <GraphMap.Provider value={new Map()}>
           <GraphContainer.Provider value={null}>
             <Graph {...props}>{children}</Graph>
@@ -70,7 +70,7 @@ export const graphInSubgraph =
   (props: ComponentProps<typeof Subgraph> = {}) =>
   ({ children }: { children: ReactNode }) => {
     return (
-      <GraphvizContext.Provider value={{ models: createModelsContext({}) }}>
+      <GraphvizContext.Provider value={{ models: createModelKit({}) }}>
         <GraphMap.Provider value={new Map()}>
           <GraphContainer.Provider value={null}>
             <Graph>

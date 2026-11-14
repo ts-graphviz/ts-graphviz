@@ -236,9 +236,9 @@ console.log(toDot(G));
 <details>
 <summary>Advanced Usage</summary>
 
-##### Models Context API ( `withContext` function ) 💈
+##### Model Kit ( `withModelKit` function ) 💈
 
-The `withContext` function takes model classes of your own and returns factories (`digraph`, `graph`, `strict`) that create graphs with them. A class left out keeps the default.
+The `withModelKit` function takes model classes of your own and returns factories (`digraph`, `graph`, `strict`) that create graphs with them. A class left out keeps the default.
 
 The statements of such a graph create your classes, in nested subgraphs too, and `modelOf()` gives them with their types.
 
@@ -251,7 +251,7 @@ import {
   modelOf,
   Node,
   toDot,
-  withContext,
+  withModelKit,
 } from 'ts-graphviz';
 
 class MyCustomDigraph extends Digraph {
@@ -278,7 +278,7 @@ class MyCustomEdge extends Edge {
   }
 }
 
-const { digraph } = withContext({
+const { digraph } = withModelKit({
   Digraph: MyCustomDigraph,
   Node: MyCustomNode,
   Edge: MyCustomEdge,
@@ -435,9 +435,9 @@ console.log(toDot(digraph));
 // }
 ```
 
-##### Models Context API ( `with` method) 🧅
+##### Model classes of a graph ( `with` method) 🧅
 
-You can also use the _Models Context API_ to create custom classes for objects generated inside of Graph.
+You can also give a graph the classes to create custom classes for objects generated inside of Graph.
 
 The `with` methods of `Digraph`, `Graph`, and `Subgraph`, which are implementations of `GraphBaseModel`, are provided to predefine custom models.
 
@@ -564,7 +564,7 @@ An API is provided to handle ASTs for advanced use.
 The following functions are provided as described in the state transition diagram.
 
 - The `fromModel` function converts **Model** to **AST**.
-- The `toModel` function converts **AST** to **Model**. It takes the model classes to create as `{ models }`; `defaultModelsContext()` gives the default ones.
+- The `toModel` function converts **AST** to **Model**. It takes the model classes to create as `{ models }`; `defaultModelKit` gives the default ones.
 - The `stringify` function converts **AST** to **DOT**.
 - The `parse` function converts **DOT** to **AST**.
 - The `sanitize` function takes **DOT** and returns **DOT** that is safe to render from an untrusted source, or throws.
@@ -572,13 +572,13 @@ The following functions are provided as described in the state transition diagra
 > **Note** As you can see from the above figure, the `toDot` function provided by the `ts-graphviz` package is a composite of `fromModel` and `stringify`. The `fromDot` function is a composite of `parse` and `toModel`.
 
 ```ts
-import { defaultModelsContext, toDot } from 'ts-graphviz';
+import { defaultModelKit, toDot } from 'ts-graphviz';
 import { fromModel, parse, stringify, toModel } from 'ts-graphviz/ast';
 
 const ast = parse('digraph example { a -> b; }');
 
 // AST -> Model -> AST -> DOT
-const model = toModel(ast, { models: defaultModelsContext() });
+const model = toModel(ast, { models: defaultModelKit });
 console.log(stringify(fromModel(model)) === toDot(model));
 // true
 

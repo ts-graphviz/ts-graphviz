@@ -1,4 +1,4 @@
-import { defaultModelsContext } from '@ts-graphviz/core';
+import { defaultModelKit } from '@ts-graphviz/core';
 import { describe, expect, it } from 'vitest';
 import type { GraphASTNode } from '../../types.js';
 import { toModel } from './to-model.js';
@@ -24,7 +24,7 @@ const graph = (...children: Raw[]) =>
   }) as unknown as GraphASTNode;
 
 const convert = (ast: GraphASTNode, maxSharedNodes?: number) =>
-  toModel(ast, { models: defaultModelsContext(), maxSharedNodes });
+  toModel(ast, { models: defaultModelKit, maxSharedNodes });
 
 const thrown = (f: () => unknown): unknown => {
   try {

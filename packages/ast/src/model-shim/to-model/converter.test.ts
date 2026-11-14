@@ -1,4 +1,4 @@
-import { defaultModelsContext } from '@ts-graphviz/core';
+import { defaultModelKit } from '@ts-graphviz/core';
 import { describe, expect, it } from 'vitest';
 import { createElement } from '../../builder/create-element.js';
 import { ToModelConverter } from './converter.js';
@@ -23,7 +23,7 @@ describe('toModel without a plugin for a node', { tags: ['SM-5'] }, () => {
   ])('throws TSG_ERR_NO_PLUGIN for a %s node', (_, ast) => {
     // Outside the types: these nodes have no model.
     const node = ast as unknown as ToModelConvertableASTNode;
-    const options = { models: defaultModelsContext() };
+    const options = { models: defaultModelKit };
     expect(() => toModel(node, options)).toThrow(
       expect.objectContaining({ name: 'Error', code: 'TSG_ERR_NO_PLUGIN' }),
     );

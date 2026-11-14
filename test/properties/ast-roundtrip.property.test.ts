@@ -1,9 +1,9 @@
 import fc from 'fast-check';
 import {
   type Compass,
-  createModelsContext,
+  createModelKit,
   Dot,
-  defaultModelsContext,
+  defaultModelKit,
   legacyModels,
   toDot,
 } from 'ts-graphviz';
@@ -35,8 +35,8 @@ import { summarize } from './summarize.js';
 // as a pair, and fromModel/toModel as a pair. A failing run prints its seed;
 // reproduce it with FC_SEED=<seed>.
 
-const models = defaultModelsContext();
-const legacy = createModelsContext(legacyModels);
+const models = defaultModelKit;
+const legacy = createModelKit(legacyModels);
 
 describe('printer and parser', { tags: ['SM-1'] }, () => {
   it('parse(stringify(ast)) rebuilds the same tree', () => {

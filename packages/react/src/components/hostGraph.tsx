@@ -5,7 +5,7 @@ import {
   useContext,
   useMemo,
 } from 'react';
-import { type ModelsContext, ownOptions } from 'ts-graphviz';
+import { type ModelKit, ownOptions } from 'ts-graphviz';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphContainer } from '../contexts/GraphContainer.js';
 import { useGraphContainer } from '../hooks/useGraphContainer.js';
@@ -26,7 +26,7 @@ export function useHostGraph(
     children?: ReactNode;
   },
   create: (
-    models: ModelsContext,
+    models: ModelKit,
     parent: AnyGraphContainer | null,
   ) => AnyGraphContainer,
   root: boolean,
