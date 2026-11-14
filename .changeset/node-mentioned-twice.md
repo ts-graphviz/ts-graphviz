@@ -3,7 +3,7 @@
 "@ts-graphviz/core": major
 "@ts-graphviz/ast": major
 "ts-graphviz": major
-"@ts-graphviz/react": major
+"@ts-graphviz/react": minor
 ---
 
 A node or a subgraph can be declared more than once, as in DOT, and each declaration is a model of its own, kept where it is written. Graphviz applies the attributes of the declarations of a node in turn, and merges the contents of the declarations of a subgraph, so the output means the same.
