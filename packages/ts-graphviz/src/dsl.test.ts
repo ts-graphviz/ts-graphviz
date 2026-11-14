@@ -14,6 +14,7 @@ import {
   MODEL,
   type ModelKit,
   modelOf,
+  type NonClusterSubgraphAttributesObject,
   type StatementAttributeListModel,
   type SubgraphAttributesObject,
   toNodeRef,
@@ -702,7 +703,7 @@ describe('custom models', () => {
     }
     class MySubgraph extends Subgraph {
       constructor(...args: (string | SubgraphAttributesObject | undefined)[]) {
-        super(...(args as [string?, SubgraphAttributesObject?]));
+        super(...(args as [string?, NonClusterSubgraphAttributesObject?]));
         seen.push(args);
       }
     }
