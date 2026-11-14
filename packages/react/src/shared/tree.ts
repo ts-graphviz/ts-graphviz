@@ -642,6 +642,7 @@ function applyStatements(
 ): void {
   const previous = added.get(graph) ?? [];
   if (
+    !unfinished.has(previous) &&
     previous.length === statements.length &&
     previous.every((s, i) => s === statements[i])
   ) {
@@ -658,13 +659,21 @@ function applyStatements(
   // graph by then can still be taken out.
   const applied: Statement[] = [];
   added.set(graph, applied);
+  unfinished.add(applied);
   for (const statement of statements) {
     if (statement.$$type === 'Node') coverNode(graph, statement);
     // Before it is added: a model class may add it and then throw.
     applied.push(statement);
     addStatement(graph, statement);
   }
+  unfinished.delete(applied);
 }
+
+/**
+ * Records of statements that a model class threw on while they were added:
+ * the next sync applies them again, even when the tree has not changed.
+ */
+const unfinished = new WeakSet<Statement[]>();
 
 /**
  * For the ids of a graph that more than one node was given for: those

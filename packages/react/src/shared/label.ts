@@ -339,7 +339,8 @@ const resolveNode: LabelResolver = (source) => {
         kind: 'element',
         type,
         props: (props ?? {}) as Record<string, unknown>,
-        children: children ?? [],
+        // Absent children are no text, and no level more of depth.
+        children: children ?? '',
       };
     }
   }

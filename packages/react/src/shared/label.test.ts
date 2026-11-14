@@ -88,6 +88,8 @@ describe('htmlLikeFromTree', () => {
         'Maximum rendering depth of 4 exceeded. This may indicate deeply nested or circular element structures.',
       ),
     );
+    // An element without children is one level.
+    expect(markup(htmlLikeFromTree({ type: 'dot:b' }, 1))).toBe('<<b></b>>');
     // Not a limit: the default applies.
     expect(markup(htmlLikeFromTree(label, 0))).toContain('x');
     expect(markup(htmlLikeFromTree(label, Number.NaN))).toContain('x');

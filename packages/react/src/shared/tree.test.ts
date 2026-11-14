@@ -141,6 +141,27 @@ describe('sync', () => {
     expect(G.nodes.map((model) => model.id)).toEqual(['a']);
   });
 
+  it('adds again what a model class threw on', () => {
+    let fail = true;
+    class Throwing extends Digraph {
+      override addNode(model: NodeModel): void {
+        if (fail) {
+          fail = false;
+          throw new Error('addNode');
+        }
+        super.addNode(model);
+      }
+    }
+    const G = new Throwing('G');
+    const tree = createTree(G, defaultModelKit);
+    insertChild(tree, node('a'));
+    expect(() => sync(tree)).toThrow('addNode');
+    expect(G.nodes).toHaveLength(0);
+
+    sync(tree);
+    expect(G.nodes.map((model) => model.id)).toEqual(['a']);
+  });
+
   it('leaves out what is hidden', () => {
     const G = new Digraph('G');
     const tree = createTree(G, defaultModelKit);
