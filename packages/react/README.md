@@ -681,6 +681,8 @@ root.render(
 root.unmount();
 ```
 
+The models of an element are added in element order, after what the container already has. When a root renders again, what it rendered up to the first change stays in its place; from there on, its models are taken out and added again in element order, after everything else in the container. So where a container holds statements of its own or of other roots, a root that adds an element at the end keeps the place of the earlier ones, while one that adds an element before others moves those after the rest of the container (for a node declared more than once, the last declaration wins in DOT).
+
 Without a container, the top level of the element is root graphs only (`<Digraph>`, `<Graph>`); several of them give one `Dot` model with several graphs.
 
 ## Advanced Features

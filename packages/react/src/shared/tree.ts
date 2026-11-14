@@ -648,7 +648,22 @@ function applyStatements(
   ) {
     return;
   }
-  for (const statement of previous) {
+  // What comes before the first change stays where it is in the graph, so
+  // a declaration keeps its place among those of the graph's own and of
+  // other trees. From there on the statements go and come back in element
+  // order, after all the others. A record that a model class threw on is
+  // applied from its start.
+  let same = 0;
+  if (!unfinished.has(previous)) {
+    while (
+      same < previous.length &&
+      same < statements.length &&
+      previous[same] === statements[same]
+    ) {
+      same++;
+    }
+  }
+  for (const statement of previous.slice(same)) {
     removeStatement(graph, statement);
   }
   if (statements.length === 0) {
@@ -657,10 +672,10 @@ function applyStatements(
   }
   // Recorded one by one: if a model class throws half way, what is in the
   // graph by then can still be taken out.
-  const applied: Statement[] = [];
+  const applied: Statement[] = statements.slice(0, same);
   added.set(graph, applied);
   unfinished.add(applied);
-  for (const statement of statements) {
+  for (const statement of statements.slice(same)) {
     if (statement.$$type === 'Node') coverNode(graph, statement);
     // Before it is added: a model class may add it and then throw.
     applied.push(statement);

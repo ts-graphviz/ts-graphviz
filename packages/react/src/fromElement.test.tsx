@@ -390,6 +390,37 @@ describe('two roots that render a node with the same id into one container', () 
     }
   });
 
+  it('a root that adds a node keeps the place of the others', async () => {
+    const container = new DigraphModel();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    await one.render(
+      <>
+        <Node id="a" color="red" />
+        <Node id="b" />
+      </>,
+    );
+    expect(colorsOf(container)).toEqual(['red', 'blue']);
+    expect(container.nodes.map((n) => n.id)).toEqual(['a', 'a', 'b']);
+  });
+
+  it('a root that adds a node before its others declares them again, in element order', async () => {
+    const container = new DigraphModel();
+    const one = rootOn(container);
+    const two = rootOn(container);
+    await one.render(<Node id="a" color="red" />);
+    await two.render(<Node id="a" color="blue" />);
+    await one.render(
+      <>
+        <Node key="green" id="a" color="green" />
+        <Node id="a" color="red" />
+      </>,
+    );
+    expect(colorsOf(container)).toEqual(['blue', 'green', 'red']);
+  });
+
   it('a root that updates its node changes only its own, in its place', async () => {
     const container = new DigraphModel();
     const one = rootOn(container);
