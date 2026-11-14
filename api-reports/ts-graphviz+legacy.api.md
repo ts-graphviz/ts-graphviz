@@ -39,15 +39,15 @@ export type FromDotRule = "Dot" | "Graph" | "Node" | "Edge" | "Subgraph";
 export interface GraphDSLMembers<T extends RootGraphModel | SubgraphModel, M extends ModelTypes = ModelTypes> extends ModelDSLMembers<T>, GraphDSLStatements<T, M> {}
 
 export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel, M extends ModelTypes = ModelTypes> {
-  subgraph<const Id extends string>(id: Id, callback?: (subgraph: DSL<M["Subgraph"], M>, kit: ModelKit<M>) => void): DSL<M["Subgraph"], M>;
-  subgraph<const Id extends string>(id: Id, attributes: SubgraphAttributesFor<Id>, callback?: (subgraph: DSL<M["Subgraph"], M>, kit: ModelKit<M>) => void): DSL<M["Subgraph"], M>;
-  subgraph(attributes: NonClusterSubgraphAttributesObject, callback?: (subgraph: DSL<M["Subgraph"], M>, kit: ModelKit<M>) => void): DSL<M["Subgraph"], M>;
-  subgraph(callback?: (subgraph: DSL<M["Subgraph"], M>, kit: ModelKit<M>) => void): DSL<M["Subgraph"], M>;
-  node(id: string, callback?: (node: DSL<M["Node"]>, kit: ModelKit<M>) => void): DSL<M["Node"]>;
-  node(id: string, attributes: NodeAttributesObject, callback?: (node: DSL<M["Node"]>, kit: ModelKit<M>) => void): DSL<M["Node"]>;
+  subgraph<const Id extends string>(id: Id, callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
+  subgraph<const Id extends string>(id: Id, attributes: SubgraphAttributesFor<Id>, callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
+  subgraph(attributes: NonClusterSubgraphAttributesObject, callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
+  subgraph(callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
+  node(id: string, callback?: (node: DSL<M["Node"]>) => void): DSL<M["Node"]>;
+  node(id: string, attributes: NodeAttributesObject, callback?: (node: DSL<M["Node"]>) => void): DSL<M["Node"]>;
   node(attributes: NodeAttributesObject): DSL<T["attributes"]["node"]>;
-  edge(targets: DSLEdgeTargetLikeTuple, callback?: (edge: DSL<M["Edge"]>, kit: ModelKit<M>) => void): DSL<M["Edge"]>;
-  edge(targets: DSLEdgeTargetLikeTuple, attributes: EdgeAttributesObject, callback?: (edge: DSL<M["Edge"]>, kit: ModelKit<M>) => void): DSL<M["Edge"]>;
+  edge(targets: DSLEdgeTargetLikeTuple, callback?: (edge: DSL<M["Edge"]>) => void): DSL<M["Edge"]>;
+  edge(targets: DSLEdgeTargetLikeTuple, attributes: EdgeAttributesObject, callback?: (edge: DSL<M["Edge"]>) => void): DSL<M["Edge"]>;
   edge(attributes: EdgeAttributesObject): DSL<T["attributes"]["edge"]>;
   graph(attributes: SubgraphAttributesObject): DSL<T["attributes"]["graph"]>;
 }
@@ -73,7 +73,7 @@ export interface ModelFactory<G extends RootGraphModel = RootGraphModel, M exten
   (callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
 }
 
-export type ModelFactoryCallback<G extends RootGraphModel = RootGraphModel, M extends ModelTypes = ModelTypes> = (g: DSL<G, M>, kit: ModelKit<M>) => void;
+export type ModelFactoryCallback<G extends RootGraphModel = RootGraphModel, M extends ModelTypes = ModelTypes> = (g: DSL<G, M>) => void;
 
 export type NodeDSL<T extends NodeModel> = NodeDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>>;
 

@@ -88,10 +88,10 @@ describe('DOT statements', () => {
       expect(node.label).toBe('Test label');
     });
 
-    test('calls the callback with the node and the kit', () => {
+    test('calls the callback with the node', () => {
       const callback = vi.fn();
       const node = g.node('foo', { label: 'Test label' }, callback);
-      expect(callback).toHaveBeenCalledWith(node, defaultModelKit);
+      expect(callback).toHaveBeenCalledWith(node);
       expect(g.node('foo', callback)).toBe(node);
       expect(callback).toHaveBeenCalledTimes(2);
     });
@@ -125,13 +125,13 @@ describe('DOT statements', () => {
       expect(modelOf(g).existNode('y')).toBe(false);
     });
 
-    test('calls the callback with the edge and the kit', () => {
+    test('calls the callback with the edge', () => {
       const callback = vi.fn();
       const edge = g.edge(nodes, { label: 'Test label' }, callback);
-      expect(callback).toHaveBeenCalledWith(edge, defaultModelKit);
+      expect(callback).toHaveBeenCalledWith(edge);
       expect(edge.label).toBe('Test label');
       const other = g.edge(nodes, callback);
-      expect(callback).toHaveBeenLastCalledWith(other, defaultModelKit);
+      expect(callback).toHaveBeenLastCalledWith(other);
     });
 
     test('ignores null as the attributes', () => {
@@ -178,24 +178,23 @@ describe('DOT statements', () => {
       expect(subgraph.label).toBe('Test label');
     });
 
-    test('calls the callback with the subgraph and the kit', () => {
+    test('calls the callback with the subgraph', () => {
       const callback = vi.fn();
       const a = g.subgraph(callback);
-      expect(callback).toHaveBeenLastCalledWith(a, defaultModelKit);
+      expect(callback).toHaveBeenLastCalledWith(a);
       const b = g.subgraph({ rank: 'same' }, callback);
-      expect(callback).toHaveBeenLastCalledWith(b, defaultModelKit);
+      expect(callback).toHaveBeenLastCalledWith(b);
       const c = g.subgraph('foo', callback);
-      expect(callback).toHaveBeenLastCalledWith(c, defaultModelKit);
+      expect(callback).toHaveBeenLastCalledWith(c);
       const d = g.subgraph('cluster_foo', { label: 'L' }, callback);
-      expect(callback).toHaveBeenLastCalledWith(d, defaultModelKit);
+      expect(callback).toHaveBeenLastCalledWith(d);
     });
 
     test('a subgraph’s DSL creates with the same kit', () => {
       class MyNode extends Node {}
       const kit = createModelKit({ Node: MyNode });
       const G = dsl(modelOf(g), kit);
-      G.subgraph('s', (s, given) => {
-        expect(given).toBe(kit);
+      G.subgraph('s', (s) => {
         expect(modelOf(s.node('a'))).toBeInstanceOf(MyNode);
         s.subgraph('t', (t) => {
           expect(modelOf(t.node('b'))).toBeInstanceOf(MyNode);
@@ -601,15 +600,19 @@ describe('the rules', () => {
     }
   });
 
-  test('the kit only creates; the statements add', () => {
-    const g = digraph((g, kit) => {
-      const d = kit.createNode('d');
-      kit.createEdge(['d', 'e']);
-      kit.createSubgraph('s');
-      expect(modelOf(g).statements).toStrictEqual([]);
-      modelOf(g).addNode(d);
+  test('the statements add what they create; a callback gets only the DSL', () => {
+    const callback = vi.fn();
+    const g = digraph((g) => {
+      g.node('d', callback);
+      g.edge(['d', 'e'], callback);
+      g.subgraph('s', callback);
     });
-    expect(modelOf(g).nodes.map((node) => node.id)).toStrictEqual(['d']);
+    expect(callback.mock.calls.map((args) => args.length)).toEqual([1, 1, 1]);
+    expect(modelOf(g).statements.map((s) => s.$$type)).toStrictEqual([
+      'Node',
+      'Edge',
+      'Subgraph',
+    ]);
   });
 
   test('dsl takes only models', () => {

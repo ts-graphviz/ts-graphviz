@@ -87,11 +87,9 @@ describe('a ModelKit with custom classes', () => {
     }
     type M = ResolvedModelTypes<{ Subgraph: typeof MySubgraph }>;
     const { graph } = withModelKit({ Subgraph: MySubgraph });
-    graph((g, kit) => {
+    graph((g) => {
       expectTypeOf(g.subgraph('s')).toEqualTypeOf<DSL<MySubgraph, M>>();
       expectTypeOf(modelOf(g.subgraph('s')).tag()).toEqualTypeOf<string>();
-      expectTypeOf(kit).toEqualTypeOf<ModelKit<M>>();
-      expectTypeOf(kit.createSubgraph('t')).toEqualTypeOf<MySubgraph>();
     });
   });
 });

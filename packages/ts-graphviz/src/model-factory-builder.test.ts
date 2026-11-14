@@ -31,7 +31,7 @@ describe.each([
     const callback = vi.fn();
     const g = factory(callback);
     expect(modelOf(g).id).toBeUndefined();
-    expect(callback).toHaveBeenCalledWith(g, defaultModelKit);
+    expect(callback).toHaveBeenCalledWith(g);
 
     expect(modelOf(g).directed).toStrictEqual(directed);
     expect(modelOf(g).strict).toStrictEqual(strict);
@@ -51,7 +51,7 @@ describe.each([
     const g = factory({ [_.label]: 'Test label' }, callback);
     expect(modelOf(g).id).toBeUndefined();
     expect({ ...g }).toStrictEqual({ [_.label]: 'Test label' });
-    expect(callback).toHaveBeenCalledWith(g, defaultModelKit);
+    expect(callback).toHaveBeenCalledWith(g);
 
     expect(modelOf(g).directed).toStrictEqual(directed);
     expect(modelOf(g).strict).toStrictEqual(strict);
@@ -71,7 +71,7 @@ describe.each([
     const g = factory('foo', { [_.label]: 'Test label' }, callback);
     expect(modelOf(g).id).toStrictEqual('foo');
     expect({ ...g }).toStrictEqual({ [_.label]: 'Test label' });
-    expect(callback).toHaveBeenCalledWith(g, defaultModelKit);
+    expect(callback).toHaveBeenCalledWith(g);
 
     expect(modelOf(g).directed).toStrictEqual(directed);
     expect(modelOf(g).strict).toStrictEqual(strict);

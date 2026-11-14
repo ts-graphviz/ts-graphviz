@@ -176,16 +176,7 @@ digraph((g) => {
 });
 ```
 
-语句用图的模型套件创建模型，并把创建的模型添加到图中。回调的第二个参数就是这个套件，可以用它只创建而不添加：
-
-```typescript
-import { digraph, modelOf } from 'ts-graphviz';
-
-digraph((g, kit) => {
-  const a = kit.createNode('a'); // 还不属于任何图
-  modelOf(g).addNode(a);
-});
-```
+语句用图的模型套件创建模型，并把创建的模型添加到图中。
 
 ## 注释
 

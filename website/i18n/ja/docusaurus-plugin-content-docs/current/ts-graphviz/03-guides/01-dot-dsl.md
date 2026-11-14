@@ -176,16 +176,7 @@ digraph((g) => {
 });
 ```
 
-文はグラフのモデルキットでモデルを作り、作ったものをグラフに追加します。コールバックは第 2 引数でそのキットを受け取るので、追加せずにモデルを作ることもできます。
-
-```typescript
-import { digraph, modelOf } from 'ts-graphviz';
-
-digraph((g, kit) => {
-  const a = kit.createNode('a'); // まだどのグラフにも入っていない
-  modelOf(g).addNode(a);
-});
-```
+文はグラフのモデルキットでモデルを作り、作ったものをグラフに追加します。
 
 ## コメント
 
