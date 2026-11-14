@@ -14,6 +14,7 @@ import {
   MODEL,
   type ModelKit,
   modelOf,
+  type NodeModel,
   type NonClusterSubgraphAttributesObject,
   type StatementAttributeListModel,
   type SubgraphAttributesObject,
@@ -110,6 +111,19 @@ describe('DOT statements', () => {
         delete proto.getNode;
         delete proto.getSubgraph;
       }
+    });
+
+    test('declares the node again in a graph whose class has a getNode of its own', () => {
+      class Finder extends Digraph {
+        getNode(id: string): NodeModel | undefined {
+          return this.getNodes(id)[0];
+        }
+      }
+      const finder = dsl(new Finder());
+      const first = finder.node('foo');
+      const second = finder.node('foo');
+      expect(second).not.toBe(first);
+      expect(modelOf(finder.subgraph('s'))).toBeInstanceOf(Subgraph);
     });
 
     test('gives the node there is in a legacy graph, with the attributes applied', () => {

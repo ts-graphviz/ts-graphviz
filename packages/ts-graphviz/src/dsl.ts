@@ -792,15 +792,18 @@ interface LegacyGraph {
 }
 
 function asLegacy(g: GraphBaseModel): LegacyGraph | undefined {
-  // From the graph's classes only: a getNode inherited from Object.prototype
-  // does not make every graph a legacy one.
+  // What the classes of GraphBase say (a protected member): not a method
+  // name, which a class of one's own may have, nor anything inherited from
+  // Object.prototype.
   for (
     let o: object | null = g;
     o !== null && o !== Object.prototype;
     o = Object.getPrototypeOf(o)
   ) {
-    if (Object.getOwnPropertyDescriptor(o, 'getNode') !== undefined) {
-      return g as GraphBaseModel & LegacyGraph;
+    if (Object.getOwnPropertyDescriptor(o, 'keepsEachNodeDeclaration')) {
+      return Reflect.get(g, 'keepsEachNodeDeclaration') === false
+        ? (g as GraphBaseModel & LegacyGraph)
+        : undefined;
     }
   }
   return undefined;

@@ -36,10 +36,23 @@ describe('edge endpoints through the model', { tags: ['process'] }, () => {
     'digraph { a -> b, c -> d }',
     'digraph { { a -> { b c } } -> d }',
     'digraph { subgraph s { a } -> subgraph s { b } }',
+    'digraph { subgraph s { subgraph t { a } } subgraph s { subgraph t { c } -> b } }',
     'digraph { subgraph cluster_x { label=X; a } -> subgraph cluster_y { b } }',
     'digraph { {} -> a }',
     'graph { { a b } -- { b c } }',
   ])('%s', (dot) => {
     expect(canon(toDot(fromDot(dot)))).toBe(canon(dot));
+  });
+});
+
+describe('a subgraph declared more than once, as an endpoint', () => {
+  it('reaches the nodes of every declaration, nested ones included', () => {
+    const g = fromDot(
+      'digraph { subgraph s { subgraph t { a } } subgraph s { subgraph t { c } -> b } }',
+    );
+    const [inner] = g.getSubgraphs('s')[1].edges;
+    expect(
+      inner.targets.map((t) => (Array.isArray(t) ? t.map((n) => n.id) : t.id)),
+    ).toEqual([['a', 'c'], 'b']);
   });
 });
