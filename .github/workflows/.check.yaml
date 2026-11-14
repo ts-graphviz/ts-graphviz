@@ -29,6 +29,9 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Check
         run: pnpm biome ci .
+      # A package on 0.x (@ts-graphviz/react) takes minor bumps only
+      - name: Check the changesets
+        run: pnpm check:changesets
 
   knip:
     name: Check for unused files, exports and dependencies
