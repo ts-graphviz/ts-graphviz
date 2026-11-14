@@ -44,9 +44,8 @@ export declare abstract class AttributesBase<T extends AttributeKey, E extends o
 
 export declare class AttributesGroup<T extends AttributeKey = AttributeKey, E extends object = Record<never, never>> extends AttributesBase<T, E> implements AttributesGroupModel<T, E> {}
 
-export declare class Digraph<M extends AnyModelTypes = ModelTypes> extends RootGraph<M> {
+export declare class Digraph<S extends Schema = EmptySchema> extends RootGraph<S> {
   get directed(): boolean;
-  protected override defaultModels(): ModelClasses;
 }
 
 export declare class Dot<S extends Schema = EmptySchema> implements DotModel<S> {
@@ -57,11 +56,11 @@ export declare class Dot<S extends Schema = EmptySchema> implements DotModel<S> 
   removeComment(comment: CommentModel): void;
   get comment(): string | undefined;
   set comment(text: string | undefined);
-  constructor(graphs?: RootGraphModel<ModelTypes<S>>[], comment?: string);
-  get graphs(): ReadonlyArray<RootGraphModel<ModelTypes<S>>>;
-  addGraph(graph: RootGraphModel<ModelTypes<S>>): void;
-  existGraph(graph: RootGraphModel<ModelTypes<S>>): boolean;
-  removeGraph(graph: RootGraphModel<ModelTypes<S>>): void;
+  constructor(graphs?: RootGraphModel<S>[], comment?: string);
+  get graphs(): ReadonlyArray<RootGraphModel<S>>;
+  addGraph(graph: RootGraphModel<S>): void;
+  existGraph(graph: RootGraphModel<S>): boolean;
+  removeGraph(graph: RootGraphModel<S>): void;
 }
 
 export declare class Edge<S extends Schema = EmptySchema> extends AttributesBase<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">> implements EdgeModel<S> {
@@ -77,63 +76,52 @@ export declare class Edge<S extends Schema = EmptySchema> extends AttributesBase
   constructor(targets: ReadonlyEdgeTargetTuple, attributes?: EdgeAttributesObject<S>);
 }
 
-export declare class Graph<M extends AnyModelTypes = ModelTypes> extends RootGraph<M> {
+export declare class Graph<S extends Schema = EmptySchema> extends RootGraph<S> {
   get directed(): boolean;
-  protected override defaultModels(): ModelClasses;
 }
 
-export declare abstract class GraphBase<T extends DotObjectType, K extends AttributeKey = AttributeKey, M extends AnyModelTypes = ModelTypes> extends AttributesBase<K, GraphSchemaAttributeTypes<T, SchemaOf<M>>> implements GraphBaseModel<T, K, M> {
+export declare abstract class GraphBase<T extends DotObjectType, K extends AttributeKey = AttributeKey, S extends Schema = EmptySchema> extends AttributesBase<K, GraphSchemaAttributeTypes<T, S>> implements GraphBaseModel<T, K, S> {
   #private;
   abstract get $$type(): T;
-  protected get models(): ModelClasses;
-  protected defaultModels(): ModelClasses;
   readonly id?: string;
   get comments(): ReadonlyArray<CommentModel>;
   addComment(text: string, options?: CommentOptions<CommentPosition>): CommentModel;
   removeComment(comment: CommentModel): void;
   get comment(): string | undefined;
   set comment(text: string | undefined);
-  readonly attributes: Readonly<GraphCommonAttributes<SchemaOf<M>>>;
-  get nodes(): ReadonlyArray<M["Node"]>;
-  get edges(): ReadonlyArray<M["Edge"]>;
-  get subgraphs(): ReadonlyArray<M["Subgraph"]>;
-  get statements(): ReadonlyArray<M["Node"] | M["Edge"] | M["Subgraph"] | StatementAttributeListModel<SchemaOf<M>>>;
-  with(models: Partial<ModelClasses<ModelTypes<SchemaOf<M>>>>): void;
-  addNode(node: NodeModel<SchemaOf<M>>): void;
-  addEdge(edge: EdgeModel<SchemaOf<M>>): void;
-  addSubgraph(subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>): void;
+  readonly attributes: Readonly<GraphCommonAttributes<S>>;
+  get nodes(): ReadonlyArray<NodeModel<S>>;
+  get edges(): ReadonlyArray<EdgeModel<S>>;
+  get subgraphs(): ReadonlyArray<SubgraphModel<S>>;
+  get statements(): ReadonlyArray<NodeModel<S> | EdgeModel<S> | SubgraphModel<S> | StatementAttributeListModel<S>>;
+  addNode(node: NodeModel<S>): void;
+  addEdge(edge: EdgeModel<S>): void;
+  addSubgraph(subgraph: SubgraphModel<S>): void;
   protected get keepsDefaultsInPlace(): boolean;
-  addAttributeList(kind: "Graph", attributes: AttributeListAttributes<SchemaOf<M>, "Graph">): GraphCommonAttributes<SchemaOf<M>>["graph"];
-  addAttributeList(kind: "Node", attributes: AttributeListAttributes<SchemaOf<M>, "Node">): GraphCommonAttributes<SchemaOf<M>>["node"];
-  addAttributeList(kind: "Edge", attributes: AttributeListAttributes<SchemaOf<M>, "Edge">): GraphCommonAttributes<SchemaOf<M>>["edge"];
-  addAttributeList(kind: AttributeListKind, attributes: AttributeListAttributes<SchemaOf<M>>): StatementAttributeListModel<SchemaOf<M>>;
+  addAttributeList(kind: "Graph", attributes: AttributeListAttributes<S, "Graph">): GraphCommonAttributes<S>["graph"];
+  addAttributeList(kind: "Node", attributes: AttributeListAttributes<S, "Node">): GraphCommonAttributes<S>["node"];
+  addAttributeList(kind: "Edge", attributes: AttributeListAttributes<S, "Edge">): GraphCommonAttributes<S>["edge"];
+  addAttributeList(kind: AttributeListKind, attributes: AttributeListAttributes<S>): StatementAttributeListModel<S>;
   existNode(nodeId: string): boolean;
-  existEdge(edge: EdgeModel<SchemaOf<M>>): boolean;
-  existSubgraph(subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>): boolean;
-  createSubgraph<const Id extends string | undefined = undefined>(id?: Id, attributes?: SubgraphAttributesFor<Id, SchemaOf<M>>): M["Subgraph"];
-  createSubgraph(attributes?: NonClusterSubgraphAttributesObject<SchemaOf<M>>): M["Subgraph"];
-  removeNode(node: NodeModel<SchemaOf<M>> | string): void;
-  removeEdge(edge: EdgeModel<SchemaOf<M>>): void;
-  removeSubgraph(subgraph: SubgraphModel<ModelTypes<SchemaOf<M>>>): void;
-  createNode(id: string, attributes?: NodeAttributesObject<SchemaOf<M>>): M["Node"];
-  getSubgraph(id: string): M["Subgraph"] | undefined;
-  getNode(id: string): M["Node"] | undefined;
-  createEdge(targets: ReadonlyEdgeTargetLikeTuple, attributes?: EdgeAttributesObject<SchemaOf<M>>): M["Edge"];
+  existEdge(edge: EdgeModel<S>): boolean;
+  existSubgraph(subgraph: SubgraphModel<S>): boolean;
+  removeNode(node: NodeModel<S> | string): void;
+  removeEdge(edge: EdgeModel<S>): void;
+  removeSubgraph(subgraph: SubgraphModel<S>): void;
+  getSubgraph(id: string): SubgraphModel<S> | undefined;
+  getNode(id: string): NodeModel<S> | undefined;
 }
 
-export declare class LegacyDigraph<M extends AnyModelTypes = ModelTypes> extends Digraph<M> {
+export declare class LegacyDigraph<S extends Schema = EmptySchema> extends Digraph<S> {
   protected override get keepsDefaultsInPlace(): boolean;
-  protected override defaultModels(): ModelClasses;
 }
 
-export declare class LegacyGraph<M extends AnyModelTypes = ModelTypes> extends Graph<M> {
+export declare class LegacyGraph<S extends Schema = EmptySchema> extends Graph<S> {
   protected override get keepsDefaultsInPlace(): boolean;
-  protected override defaultModels(): ModelClasses;
 }
 
-export declare class LegacySubgraph<M extends AnyModelTypes = ModelTypes> extends Subgraph<M> {
+export declare class LegacySubgraph<S extends Schema = EmptySchema> extends Subgraph<S> {
   protected override get keepsDefaultsInPlace(): boolean;
-  protected override defaultModels(): ModelClasses;
 }
 
 export declare class Node<S extends Schema = EmptySchema> extends AttributesBase<NodeAttributeKey, SchemaAttributeTypes<S, "node">> implements NodeModel<S> {
@@ -150,24 +138,24 @@ export declare class Node<S extends Schema = EmptySchema> extends AttributesBase
   port(port: string | Partial<Port>): ForwardRefNode;
 }
 
-export declare abstract class RootGraph<M extends AnyModelTypes = ModelTypes> extends GraphBase<"Graph", GraphAttributeKey, M> implements RootGraphModel<M> {
+export declare abstract class RootGraph<S extends Schema = EmptySchema> extends GraphBase<"Graph", GraphAttributeKey, S> implements RootGraphModel<S> {
   get $$type(): "Graph";
   readonly id?: string;
   abstract readonly directed: boolean;
   strict: boolean;
-  constructor(id?: string, attributes?: GraphAttributesObject<SchemaOf<M>>);
-  constructor(id?: string, strict?: boolean, attributes?: GraphAttributesObject<SchemaOf<M>>);
-  constructor(strict?: boolean, attributes?: GraphAttributesObject<SchemaOf<M>>);
-  constructor(attributes?: GraphAttributesObject<SchemaOf<M>>);
+  constructor(id?: string, attributes?: GraphAttributesObject<S>);
+  constructor(id?: string, strict?: boolean, attributes?: GraphAttributesObject<S>);
+  constructor(strict?: boolean, attributes?: GraphAttributesObject<S>);
+  constructor(attributes?: GraphAttributesObject<S>);
 }
 
-export declare class Subgraph<M extends AnyModelTypes = ModelTypes> extends GraphBase<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, M> implements SubgraphModel<M> {
+export declare class Subgraph<S extends Schema = EmptySchema> extends GraphBase<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, S> implements SubgraphModel<S> {
   get $$type(): "Subgraph";
   readonly id?: string;
-  constructor(id?: string, attributes?: SubgraphAttributesObject<SchemaOf<M>>);
-  constructor(attributes?: SubgraphAttributesObject<SchemaOf<M>>);
+  constructor(id: `cluster${string}` | `Cluster${string}` | `CLUSTER${string}`, attributes?: ClusterSubgraphAttributesObject<S>);
+  constructor(id?: string, attributes?: NonClusterSubgraphAttributesObject<S>);
+  constructor(attributes?: NonClusterSubgraphAttributesObject<S>);
   isSubgraphCluster(): boolean;
-  protected override defaultModels(): ModelClasses;
 }
 
 export declare function createModelKit<const P extends Partial<ModelClasses> = Record<never, never>>(classes?: P): ModelKit<ResolvedModelTypes<P>>;

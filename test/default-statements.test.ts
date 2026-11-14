@@ -1,12 +1,15 @@
 import { spawnSync } from 'node:child_process';
 import {
+  createModelKit,
   Digraph,
+  defaultModelKit,
   digraph,
   fromDot,
   LegacyDigraph,
   LegacySubgraph,
   legacyModels,
   modelOf,
+  Node,
   toDot,
 } from 'ts-graphviz';
 import * as legacy from 'ts-graphviz/legacy';
@@ -62,11 +65,12 @@ describe('the default classes', () => {
 
   it('keep it in place when built by hand too, subgraphs included', () => {
     const g = new Digraph();
-    g.createNode('a');
+    g.addNode(defaultModelKit.createNode('a'));
     g.addAttributeList('Node', { color: 'blue' });
-    g.createNode('b');
-    const s = g.createSubgraph('s');
-    s.createNode('c');
+    g.addNode(defaultModelKit.createNode('b'));
+    const s = defaultModelKit.createSubgraph('s');
+    g.addSubgraph(s);
+    s.addNode(defaultModelKit.createNode('c'));
     s.addAttributeList('Edge', { style: 'dashed' });
     expect(s.statements.map((x) => x.$$type)).toEqual([
       'Node',
@@ -79,7 +83,7 @@ describe('the default classes', () => {
     // Before any statement: the leading defaults.
     const first = g.addAttributeList('Node', { shape: 'box' });
     expect(first).toBe(g.attributes.node);
-    g.createNode('a');
+    g.addNode(defaultModelKit.createNode('a'));
     // After one: a statement of its own.
     const later = g.addAttributeList('Node', { color: 'blue' });
     expect(later.$$kind).toBe('Node');
@@ -114,16 +118,18 @@ describe('the deprecated legacyModels', () => {
 
   it('merge by hand and through ts-graphviz/legacy, subgraphs included', () => {
     const g = new LegacyDigraph();
-    g.createNode('a');
+    g.addNode(new Node('a'));
     const list = g.addAttributeList('Node', { color: 'blue' });
     expect(list).toBe(g.attributes.node);
-    const s = g.createSubgraph('s');
-    s.createNode('c');
+    const s = new LegacySubgraph('s');
+    g.addSubgraph(s);
+    s.addNode(new Node('c'));
     s.addAttributeList('Edge', { style: 'dashed' });
     expect(s.statements.map((x) => x.$$type)).toEqual(['Node']);
-    // A legacy subgraph made on its own makes legacy subgraphs too.
-    const nested = new LegacySubgraph('t').createSubgraph('u');
-    expect(nested).toBeInstanceOf(LegacySubgraph);
+    // A kit of the legacy classes creates legacy graphs and subgraphs.
+    const kit = createModelKit(legacyModels);
+    expect(kit.createDigraph()).toBeInstanceOf(LegacyDigraph);
+    expect(kit.createSubgraph('u')).toBeInstanceOf(LegacySubgraph);
     const built = legacy.digraph((g) => {
       g.node('a');
       g.node({ color: 'blue' });

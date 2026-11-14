@@ -142,7 +142,7 @@ DSL 只包含 DOT 的词汇，所以它的名字都不是 Graphviz 属性，编�
 | `a.addComment('note')` | 写入 DOT 源码的注释 |
 | `a.$$type`、`list.$$kind` | 模型的种类（`'Node'`、`'Edge'` 等）和默认属性列表的种类 |
 
-其余的都在模型上，用 `modelOf(x)` 获取：节点或图的名字（`id`）、图的内容（`nodes`、`edges`、`subgraphs`、`statements`）、它的方法（`getNode`、`createNode`、`removeNode` 等）、属性方法、`comments`、边的 `targets`，以及自定义模型类的成员。
+其余的都在模型上，用 `modelOf(x)` 获取：节点或图的名字（`id`）、图的内容（`nodes`、`edges`、`subgraphs`、`statements`）、它的方法（`getNode`、`addNode`、`removeNode` 等）、属性方法、`comments`、边的 `targets`，以及自定义模型类的成员。
 
 ```typescript
 import { digraph, modelOf } from 'ts-graphviz';
@@ -286,7 +286,7 @@ console.log(g.nodes.map((n) => n.id)); // ['a']
 console.log(g.getNode('b')); // undefined
 ```
 
-在 DOT 中，边会创建它所提到的节点。但模型只按 id 记录边的端点：`nodes` 保存的是以节点语句写出的节点，而不是 Graphviz 意义上图的全部节点。一个节点可能属于多个子图，子图里的 `a -> b` 也可能指向写在子图外的节点，因此模型不做推测。要让节点出现在 `nodes` 中，请用 `g.createNode('b')`（在 DSL 上用 `dsl(g).node('b')`）声明它，或者读取边端点的 id。
+在 DOT 中，边会创建它所提到的节点。但模型只按 id 记录边的端点：`nodes` 保存的是以节点语句写出的节点，而不是 Graphviz 意义上图的全部节点。一个节点可能属于多个子图，子图里的 `a -> b` 也可能指向写在子图外的节点，因此模型不做推测。要让节点出现在 `nodes` 中，请用 `g.addNode(new Node('b'))`（在 DSL 上用 `dsl(g).node('b')`）声明它，或者读取边端点的 id。
 
 ### `isNodeModel(dsl)` 返回 false
 

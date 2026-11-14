@@ -57,7 +57,8 @@ import { describe, expectTypeOf, it } from 'vitest';
 // The schema type parameters on the model types and the generic core
 // classes (#1841, option B, PR B). The schemas are written by hand here, as
 // `defineSchema` (PR C) will produce them; a graph of a schema is made by
-// giving the core class its model types (`new Digraph<ModelTypes<S>>()`).
+// giving the core class the schema (`new Digraph<S>()`), and its contents
+// by a kit of the schema's model types.
 
 type Add<T extends DotValue> = SchemaEntry<T, 'add'>;
 type Extend<T extends DotValue> = SchemaEntry<T, 'extend'>;
@@ -90,9 +91,15 @@ type OtherSchema = Omit<MySchema, 'node'> & {
 };
 type OtherTypes = ModelTypes<OtherSchema>;
 
+/** Kits of the schemas: only their types are used. */
+const kit = {} as ModelKit<MyTypes>;
+const otherKit = {} as ModelKit<OtherTypes>;
+
 /** A root graph of MySchema, as the core classes create it. */
-function myDigraph(callback: (g: Digraph<MyTypes>) => void): Digraph<MyTypes> {
-  const g = new Digraph<MyTypes>();
+function myDigraph(
+  callback: (g: Digraph<MySchema>) => void,
+): Digraph<MySchema> {
+  const g = new Digraph<MySchema>();
   callback(g);
   return g;
 }
@@ -117,9 +124,8 @@ describe('without a schema', () => {
     expectTypeOf<NodeModel<EmptySchema>>().toEqualTypeOf<NodeModel>();
     expectTypeOf<ModelTypes<EmptySchema>>().toEqualTypeOf<ModelTypes>();
     expectTypeOf<SchemaOf<ModelTypes>>().toEqualTypeOf<EmptySchema>();
-    expectTypeOf<
-      RootGraphModel<ModelTypes<EmptySchema>>
-    >().toEqualTypeOf<RootGraphModel>();
+    expectTypeOf<RootGraphModel<EmptySchema>>().toEqualTypeOf<RootGraphModel>();
+    expectTypeOf<ModelTypes['Digraph']>().toEqualTypeOf<RootGraphModel>();
   });
 
   it('builds every attribute type from the generated value type names', () => {
@@ -131,7 +137,7 @@ describe('without a schema', () => {
   it('types attributes and models', () => {
     {
       const g = new Digraph();
-      const a = g.createNode('a', { label: 'A' });
+      const a = defaultModelKit.createNode('a', { label: 'A' });
       expectTypeOf(a).toEqualTypeOf<NodeModel>();
       expectTypeOf(a.attributes.get('label')).toEqualTypeOf<
         Attribute<'label'> | undefined
@@ -150,7 +156,7 @@ describe('without a schema', () => {
       g.addAttributeList('Node', { label: 'x', rank: 'same' });
     }
     expectTypeOf(new Node('a')).toEqualTypeOf<Node<EmptySchema>>();
-    expectTypeOf(new Digraph()).toEqualTypeOf<Digraph<ModelTypes>>();
+    expectTypeOf(new Digraph()).toEqualTypeOf<Digraph<EmptySchema>>();
     expectTypeOf(new Dot()).toEqualTypeOf<Dot<EmptySchema>>();
     expectTypeOf(defaultModelKit).toEqualTypeOf<ModelKit>();
   });
@@ -175,13 +181,13 @@ describe('without a schema', () => {
     {
       const g = new Digraph();
       // @ts-expect-error not an attribute without a schema
-      g.createNode('a', { 'data-id': 1 });
+      defaultModelKit.createNode('a', { 'data-id': 1 });
       // @ts-expect-error not an attribute without a schema
       g.set('hoge', 'x');
       // @ts-expect-error a label is not a boolean
-      g.createNode('b', { label: true });
+      defaultModelKit.createNode('b', { label: true });
       // @ts-expect-error an edge has two targets or more
-      g.createEdge(['a']);
+      defaultModelKit.createEdge(['a']);
     }
   });
 
@@ -204,8 +210,11 @@ describe('without a schema', () => {
     expectTypeOf(models).toExtend<ModelKit>();
     const g = new models.Digraph();
     expectTypeOf(g).toExtend<RootGraphModel>();
-    new Digraph().with(models);
     new Dot().addGraph(g);
+    // A graph holds the models of any class of its schema.
+    g.addNode(models.createNode('a'));
+    new Digraph().addNode(models.createNode('a'));
+    expectTypeOf(g.nodes).toEqualTypeOf<ReadonlyArray<NodeModel>>();
   });
 
   it('constructs a union of the core classes through RootGraphConstructor', () => {
@@ -218,24 +227,36 @@ describe('without a schema', () => {
 });
 
 describe('a schema', () => {
-  it('types the models a graph of the schema creates', () => {
+  it('types the models a kit of the schema creates and its graphs hold', () => {
     myDigraph((g) => {
-      expectTypeOf(g).toExtend<RootGraphModel<MyTypes>>();
-      expectTypeOf(g.createNode('a')).toEqualTypeOf<NodeModel<MySchema>>();
-      expectTypeOf(g.createEdge(['a', 'b'])).toEqualTypeOf<
+      expectTypeOf(g).toExtend<RootGraphModel<MySchema>>();
+      expectTypeOf(kit.createDigraph()).toEqualTypeOf<
+        RootGraphModel<MySchema>
+      >();
+      expectTypeOf(kit.createNode('a')).toEqualTypeOf<NodeModel<MySchema>>();
+      expectTypeOf(kit.createEdge(['a', 'b'])).toEqualTypeOf<
         EdgeModel<MySchema>
       >();
-      {
-        const s = g.createSubgraph('s');
-        expectTypeOf(s).toEqualTypeOf<SubgraphModel<MyTypes>>();
-        expectTypeOf(s.createNode('b')).toEqualTypeOf<NodeModel<MySchema>>();
-      }
+      expectTypeOf(kit.createSubgraph('s')).toEqualTypeOf<
+        SubgraphModel<MySchema>
+      >();
+      expectTypeOf(g.nodes).toEqualTypeOf<ReadonlyArray<NodeModel<MySchema>>>();
+      expectTypeOf(g.getNode('a')).toEqualTypeOf<
+        NodeModel<MySchema> | undefined
+      >();
+      expectTypeOf(g.edges).toEqualTypeOf<ReadonlyArray<EdgeModel<MySchema>>>();
+      expectTypeOf(g.subgraphs).toEqualTypeOf<
+        ReadonlyArray<SubgraphModel<MySchema>>
+      >();
+      expectTypeOf(g.getSubgraph('s')).toEqualTypeOf<
+        SubgraphModel<MySchema> | undefined
+      >();
     });
   });
 
   it('adds node attributes to nodes only', () => {
     myDigraph((g) => {
-      const a = g.createNode('a', { 'data-id': 1 });
+      const a = kit.createNode('a', { 'data-id': 1 });
       expectTypeOf(a.attributes.get('data-id')).toEqualTypeOf<
         number | undefined
       >();
@@ -243,16 +264,16 @@ describe('a schema', () => {
       g.addAttributeList('Node', { 'data-id': 3 });
       g.attributes.node.set('data-id', 4);
       // @ts-expect-error a number
-      g.createNode('b', { 'data-id': 'x' });
+      kit.createNode('b', { 'data-id': 'x' });
       // @ts-expect-error a number
       a.attributes.set('data-id', 'x');
       // @ts-expect-error a node attribute
-      g.createEdge(['a', 'b'], { 'data-id': 1 });
+      kit.createEdge(['a', 'b'], { 'data-id': 1 });
       // @ts-expect-error a node attribute
       g.set('data-id', 1);
-      g.createEdge(['a', 'b'], { 'edge-only': true });
+      kit.createEdge(['a', 'b'], { 'edge-only': true });
       // @ts-expect-error an edge attribute
-      g.createNode('c', { 'edge-only': true });
+      kit.createNode('c', { 'edge-only': true });
     });
   });
 
@@ -264,33 +285,33 @@ describe('a schema', () => {
       // @ts-expect-error a string
       g.set('hoge', 1);
       {
-        const s = g.createSubgraph('s');
+        const s = kit.createSubgraph('s');
         // @ts-expect-error a root graph attribute
         s.set('hoge', 'x');
       }
     });
     expectTypeOf<GraphAttributesObject<MySchema>>().toHaveProperty('hoge');
-    new Digraph<MyTypes>('G', { hoge: 'x' });
+    new Digraph<MySchema>('G', { hoge: 'x' });
     // @ts-expect-error a string
-    new Digraph<MyTypes>('G', { hoge: 1 });
+    new Digraph<MySchema>('G', { hoge: 1 });
   });
 
   it('adds cluster attributes to clusters only', () => {
-    myDigraph((g) => {
-      g.createSubgraph('cluster_a', { team: 'core' });
-      g.createSubgraph('cluster_b', { team: 'infra', label: 'B' });
-      g.createSubgraph({ cluster: true, team: 'core' });
-      g.createSubgraph('x', { cluster: true, team: 'core' });
+    myDigraph(() => {
+      kit.createSubgraph('cluster_a', { team: 'core' });
+      kit.createSubgraph('cluster_b', { team: 'infra', label: 'B' });
+      kit.createSubgraph({ cluster: true, team: 'core' });
+      kit.createSubgraph('x', { cluster: true, team: 'core' });
       // @ts-expect-error not a team
-      g.createSubgraph('cluster_c', { team: 'other' });
+      kit.createSubgraph('cluster_c', { team: 'other' });
       // @ts-expect-error team applies to clusters
-      g.createSubgraph('row', { team: 'core' });
+      kit.createSubgraph('row', { team: 'core' });
       // @ts-expect-error team applies to clusters
-      g.createSubgraph({ team: 'core' });
+      kit.createSubgraph({ team: 'core' });
       // @ts-expect-error not next to a subgraph attribute either
-      g.createSubgraph('row', { lane: 1, team: 'core' });
+      kit.createSubgraph('row', { lane: 1, team: 'core' });
       // @ts-expect-error a cluster attribute
-      g.createNode('a', { team: 'core' });
+      kit.createNode('a', { team: 'core' });
     });
     expectTypeOf<SubgraphAttributesFor<'cluster_x', MySchema>>().toEqualTypeOf<
       ClusterSubgraphAttributesObject<MySchema>
@@ -299,13 +320,13 @@ describe('a schema', () => {
 
   it('adds subgraph attributes to subgraphs that are not clusters', () => {
     myDigraph((g) => {
-      g.createSubgraph('row', { lane: 1, rank: 'same' });
-      g.createSubgraph({ lane: 2 });
+      kit.createSubgraph('row', { lane: 1, rank: 'same' });
+      kit.createSubgraph({ lane: 2 });
       // @ts-expect-error lane applies to subgraphs that are not clusters
-      g.createSubgraph('cluster_a', { lane: 1 });
+      kit.createSubgraph('cluster_a', { lane: 1 });
       // A subgraph model may be either, so it takes both.
       {
-        const s = g.createSubgraph('s');
+        const s = kit.createSubgraph('s');
         s.set('lane', 1);
         s.set('team', 'core');
         // @ts-expect-error a number
@@ -317,20 +338,20 @@ describe('a schema', () => {
   });
 
   it('extends a built-in attribute', () => {
-    myDigraph((g) => {
-      g.createEdge(['a', 'b'], { dir: 'sideways' });
-      const e = g.createEdge(['a', 'b'], { dir: 'both' });
+    myDigraph(() => {
+      kit.createEdge(['a', 'b'], { dir: 'sideways' });
+      const e = kit.createEdge(['a', 'b'], { dir: 'both' });
       expectTypeOf(e.attributes.get('dir')).toEqualTypeOf<
         'forward' | 'back' | 'both' | 'none' | 'sideways' | undefined
       >();
       // @ts-expect-error neither built in nor added
-      g.createEdge(['a', 'b'], { dir: 'up' });
+      kit.createEdge(['a', 'b'], { dir: 'up' });
     });
   });
 
   it('types the DOM names with the schema on every object', () => {
     myDigraph((g) => {
-      const a = g.createNode('a', { label: 1 });
+      const a = kit.createNode('a', { label: 1 });
       expectTypeOf(a.getAttribute('label')).toEqualTypeOf<number | undefined>();
       expectTypeOf(a.getAttribute('data-id')).toEqualTypeOf<
         number | undefined
@@ -349,7 +370,7 @@ describe('a schema', () => {
       expectTypeOf(a.attributes.getAttribute('label')).toEqualTypeOf<
         number | undefined
       >();
-      const e = g.createEdge(['a', 'b'], { 'edge-only': true });
+      const e = kit.createEdge(['a', 'b'], { 'edge-only': true });
       expectTypeOf(e.getAttribute('edge-only')).toEqualTypeOf<
         boolean | undefined
       >();
@@ -367,13 +388,13 @@ describe('a schema', () => {
   });
 
   it('overrides a built-in attribute', () => {
-    myDigraph((g) => {
-      const a = g.createNode('a', { label: 1 });
+    myDigraph(() => {
+      const a = kit.createNode('a', { label: 1 });
       expectTypeOf(a.attributes.get('label')).toEqualTypeOf<
         number | undefined
       >();
       // @ts-expect-error a number now
-      g.createNode('b', { label: 'x' });
+      kit.createNode('b', { label: 'x' });
       // @ts-expect-error a number now
       a.attributes.set('label', 'x');
       // @ts-expect-error a number now
@@ -382,13 +403,13 @@ describe('a schema', () => {
       a.attributes.apply([['label', 'x']]);
       a.attributes.apply([['label', 1]]);
       // Only on nodes: edges keep the built-in label.
-      g.createEdge(['a', 'b'], { label: 'x' });
+      kit.createEdge(['a', 'b'], { label: 'x' });
     });
   });
 
   it('types the values read back with the schema', () => {
-    myDigraph((g) => {
-      const [entry] = g.createNode('a').attributes.values;
+    myDigraph(() => {
+      const [entry] = kit.createNode('a').attributes.values;
       if (entry !== undefined && entry[0] === 'label') {
         expectTypeOf(entry[1]).toEqualTypeOf<number>();
       }
@@ -400,21 +421,21 @@ describe('a schema', () => {
 
   it('extends a value type wherever it is used', () => {
     myDigraph((g) => {
-      g.createNode('a', { color: 'brand-blue', fillcolor: 'brand-blue' });
-      g.createEdge(['a', 'b'], {
+      kit.createNode('a', { color: 'brand-blue', fillcolor: 'brand-blue' });
+      kit.createEdge(['a', 'b'], {
         color: 'brand-blue',
         fontcolor: 'brand-blue',
       });
       g.set('bgcolor', 'brand-blue');
-      g.createSubgraph('cluster_a', { pencolor: 'brand-blue' });
-      g.createNode('b', { style: 'filled,my-style' });
-      g.createEdge(['a', 'b'], { arrowhead: 'omy-arrow', headport: 'p:mid' });
-      g.createNode('c', { color: 'red' });
-      g.createEdge(['a', 'b'], { labelfontcolor: 'brand-blue' });
+      kit.createSubgraph('cluster_a', { pencolor: 'brand-blue' });
+      kit.createNode('b', { style: 'filled,my-style' });
+      kit.createEdge(['a', 'b'], { arrowhead: 'omy-arrow', headport: 'p:mid' });
+      kit.createNode('c', { color: 'red' });
+      kit.createEdge(['a', 'b'], { labelfontcolor: 'brand-blue' });
       // @ts-expect-error not a color (color also takes a color list, any string)
-      g.createEdge(['a', 'b'], { labelfontcolor: 'brand-red' });
+      kit.createEdge(['a', 'b'], { labelfontcolor: 'brand-red' });
       // @ts-expect-error not a style
-      g.createNode('e', { style: 'my-other-style' });
+      kit.createNode('e', { style: 'my-other-style' });
     });
   });
 
@@ -427,11 +448,11 @@ describe('a schema', () => {
   });
 
   it('applies a per-attribute entry over the value type change', () => {
-    myDigraph((g) => {
-      g.createNode('a', { fontcolor: 'white' });
+    myDigraph(() => {
+      kit.createNode('a', { fontcolor: 'white' });
       // @ts-expect-error the node entry overrides types.color
-      g.createNode('b', { fontcolor: 'brand-blue' });
-      g.createEdge(['a', 'b'], { fontcolor: 'brand-blue' });
+      kit.createNode('b', { fontcolor: 'brand-blue' });
+      kit.createEdge(['a', 'b'], { fontcolor: 'brand-blue' });
     });
   });
 
@@ -499,33 +520,32 @@ describe('a schema', () => {
   });
 
   it('adds only models of the same schema', () => {
-    const plain = new Digraph().createNode('a');
-    const other = new Digraph<OtherTypes>();
+    const plain = new Node('a');
     myDigraph((g) => {
-      g.addNode(g.createNode('a'));
+      g.addNode(kit.createNode('a'));
       g.addNode(new Node<MySchema>('b', { label: 1 }));
       // @ts-expect-error a node without the schema may hold a string label
       g.addNode(plain);
       // @ts-expect-error a node of another schema may hold a string label
-      g.addNode(other.createNode('a'));
+      g.addNode(otherKit.createNode('a'));
       // Its edges have the same attribute types as ours.
-      g.addEdge(other.createEdge(['a', 'b']));
+      g.addEdge(otherKit.createEdge(['a', 'b']));
       // @ts-expect-error nor a subgraph of another schema
-      g.addSubgraph(other.createSubgraph('s'));
+      g.addSubgraph(otherKit.createSubgraph('s'));
       // @ts-expect-error nor remove one
-      g.removeNode(other.createNode('a'));
-      g.addSubgraph(g.createSubgraph('s'));
+      g.removeNode(otherKit.createNode('a'));
+      g.addSubgraph(kit.createSubgraph('s'));
       // An edge may refer to a node of any schema: only its id is used.
-      g.createEdge([plain, other.createNode('a')]);
+      kit.createEdge([plain, otherKit.createNode('a')]);
     });
   });
 
   it('still rejects unknown keys', () => {
     myDigraph((g) => {
       // @ts-expect-error not an attribute
-      g.createNode('a', { 'data-di': 1 });
+      kit.createNode('a', { 'data-di': 1 });
       // @ts-expect-error not an attribute
-      g.createNode('a').attributes.set('data-di', 1);
+      kit.createNode('a').attributes.set('data-di', 1);
       // @ts-expect-error not an attribute
       g.set('hoeg', 'x');
     });
@@ -536,13 +556,13 @@ describe('the models of a schema and the read-only model types', () => {
   it('fit the read-only model types', () => {
     expectTypeOf<NodeModel<MySchema>>().toExtend<ReadonlyNodeModel>();
     expectTypeOf<EdgeModel<MySchema>>().toExtend<ReadonlyEdgeModel>();
-    expectTypeOf<SubgraphModel<MyTypes>>().toExtend<ReadonlySubgraphModel>();
-    expectTypeOf<RootGraphModel<MyTypes>>().toExtend<ReadonlyRootGraphModel>();
+    expectTypeOf<SubgraphModel<MySchema>>().toExtend<ReadonlySubgraphModel>();
+    expectTypeOf<RootGraphModel<MySchema>>().toExtend<ReadonlyRootGraphModel>();
     expectTypeOf<DotModel<MySchema>>().toExtend<ReadonlyDotModel>();
     expectTypeOf<GraphCommonAttributes<MySchema>['node']>().toExtend<
       ReadonlyAttributeListModel<'Node'>
     >();
-    expectTypeOf<Digraph<MyTypes>>().toExtend<ReadonlyRootGraphModel>();
+    expectTypeOf<Digraph<MySchema>>().toExtend<ReadonlyRootGraphModel>();
     expectTypeOf<Node<MySchema>>().toExtend<ReadonlyNodeModel>();
     expectTypeOf<MyTypes>().toExtend<AnyModelTypes>();
   });
@@ -552,10 +572,10 @@ describe('the models of a schema and the read-only model types', () => {
     expectTypeOf<NodeModel>().not.toExtend<NodeModel<MySchema>>();
     expectTypeOf<NodeModel<OtherSchema>>().not.toExtend<NodeModel<MySchema>>();
     expectTypeOf<EdgeModel<MySchema>>().not.toExtend<EdgeModel>();
-    expectTypeOf<SubgraphModel<MyTypes>>().not.toExtend<SubgraphModel>();
-    expectTypeOf<RootGraphModel<MyTypes>>().not.toExtend<RootGraphModel>();
-    expectTypeOf<RootGraphModel<OtherTypes>>().not.toExtend<
-      RootGraphModel<MyTypes>
+    expectTypeOf<SubgraphModel<MySchema>>().not.toExtend<SubgraphModel>();
+    expectTypeOf<RootGraphModel<MySchema>>().not.toExtend<RootGraphModel>();
+    expectTypeOf<RootGraphModel<OtherSchema>>().not.toExtend<
+      RootGraphModel<MySchema>
     >();
     expectTypeOf<ModelKit<MyTypes>>().not.toExtend<ModelKit>();
     expectTypeOf<ModelKit>().not.toExtend<ModelKit<MyTypes>>();
@@ -569,11 +589,11 @@ describe('the models of a schema and the read-only model types', () => {
   });
 
   it('are read by toDot, fromModel and the adapter', () => {
-    const g = myDigraph((g) => {
-      g.createNode('a', { label: 1 });
+    const g = myDigraph(() => {
+      kit.createNode('a', { label: 1 });
     });
     expectTypeOf(toDot(g)).toEqualTypeOf<string>();
-    expectTypeOf(toDot(g.createNode('a'))).toEqualTypeOf<string>();
+    expectTypeOf(toDot(kit.createNode('a'))).toEqualTypeOf<string>();
     fromModel(g);
     expectTypeOf(g).toExtend<DotInput>();
     void toBlob(g);
@@ -583,14 +603,14 @@ describe('the models of a schema and the read-only model types', () => {
 
   it('are read in code generic over the schema', () => {
     function print<S extends Schema>(
-      g: RootGraphModel<ModelTypes<S>>,
+      g: RootGraphModel<S>,
       n: NodeModel<S>,
     ): string {
       const readonlyGraph: ReadonlyRootGraphModel = g;
       const readonlyNode: ReadonlyNodeModel = n;
       return `${toDot(g)}${toDot(n)}${readonlyGraph.id}${readonlyNode.id}`;
     }
-    print(new Digraph<MyTypes>(), new Node<MySchema>('a'));
+    print(new Digraph<MySchema>(), new Node<MySchema>('a'));
     print(new Digraph(), new Node('a'));
 
     function labelOf<S extends Schema>(n: NodeModel<S>) {
@@ -621,13 +641,13 @@ describe('the core classes', () => {
     expectTypeOf(e).toExtend<EdgeModel<MySchema>>();
     // @ts-expect-error an edge attribute
     new Edge<MySchema>([n, n], { 'data-id': 1 });
-    const s = new Subgraph<MyTypes>('cluster_a', { team: 'core' });
-    expectTypeOf(s).toExtend<SubgraphModel<MyTypes>>();
-    expectTypeOf(new LegacyDigraph<MyTypes>()).toExtend<
-      RootGraphModel<MyTypes>
+    const s = new Subgraph<MySchema>('cluster_a', { team: 'core' });
+    expectTypeOf(s).toExtend<SubgraphModel<MySchema>>();
+    expectTypeOf(new LegacyDigraph<MySchema>()).toExtend<
+      RootGraphModel<MySchema>
     >();
-    expectTypeOf(new Graph<MyTypes>().createNode('a')).toEqualTypeOf<
-      NodeModel<MySchema>
+    expectTypeOf(new Graph<MySchema>().nodes).toEqualTypeOf<
+      ReadonlyArray<NodeModel<MySchema>>
     >();
   });
 
@@ -642,7 +662,7 @@ describe('the core classes', () => {
     new Digraph().addNode(n);
   });
 
-  it('take a context of the schema', () => {
+  it('are created by a kit of the schema', () => {
     const models = {} as ModelKit<MyTypes>;
     expectTypeOf(new models.Node('a', { label: 1 })).toEqualTypeOf<
       NodeModel<MySchema>
@@ -650,10 +670,10 @@ describe('the core classes', () => {
     // @ts-expect-error a number
     new models.Node('a', { label: 'x' });
     myDigraph((g) => {
-      g.with(models);
-      g.with({ Node: MyNode });
-      // @ts-expect-error the classes create nodes of no schema
-      g.with({} as ModelKit);
+      g.addNode(models.createNode('a'));
+      g.addNode(new MyNode('b'));
+      // @ts-expect-error the default kit creates nodes of no schema
+      g.addNode(defaultModelKit.createNode('c'));
     });
   });
 });

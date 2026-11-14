@@ -80,7 +80,7 @@ console.log(toDot(G));
 - **DOT Object Model（DOM）**：クラス（`Digraph`、`Node`、`Edge` など）とそのメソッドです。グラフをデータとして組み立てたり、読み取ったり、変換したりするプログラムや、独自のクラスを定義する場合に使います。[DOT Object Model（DOM）](../03-guides/02-model-api.md)を参照してください。
 
 ```typescript
-import { digraph, modelOf, toDot } from 'ts-graphviz';
+import { digraph, modelOf, Node, toDot } from 'ts-graphviz';
 
 const G = digraph('G', (g) => {
   g.rankdir = 'LR'; // rankdir = "LR";
@@ -89,5 +89,5 @@ const G = digraph('G', (g) => {
 });
 
 toDot(G); // DSL でもそのモデルでもよい
-modelOf(G).createNode('C'); // DSL の元になっているモデル
+modelOf(G).addNode(new Node('C')); // DSL の元になっているモデル
 ```

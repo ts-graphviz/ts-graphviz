@@ -1,10 +1,7 @@
-import type {
-  EdgeTargetTuple,
-  NodeModel,
-  SubgraphModel,
-} from '@ts-graphviz/common';
+import type { NodeModel, SubgraphModel } from '@ts-graphviz/common';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import { AttributesBase } from '../attributes/AttributesBase.js';
+import { Edge } from './Edge.js';
 import { GraphBase } from './GraphBase.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
@@ -24,14 +21,15 @@ describe('class Subgraph', () => {
 
   describe('Constructor', () => {
     test('first argument is id, and second attributes object', () => {
-      subgraph = new Subgraph('test', {
+      subgraph = new Subgraph('cluster_test', {
         K: 1,
       });
-      expect(subgraph.id).toBe('test');
+      expect(subgraph.id).toBe('cluster_test');
       expect(subgraph.get('K')).toBe(1);
     });
     test('first argument is attributes object', () => {
       subgraph = new Subgraph({
+        cluster: true,
         K: 1,
       });
       expect(subgraph.get('K')).toBe(1);
@@ -59,45 +57,6 @@ describe('class Subgraph', () => {
 
   it('should be subgraph, when subgraph id is "test"', () => {
     expect(subgraph.isSubgraphCluster()).toBe(false);
-  });
-
-  test('create node with attributes', () => {
-    const node = subgraph.createNode('n', {
-      label: 'Label',
-    });
-    expect(node.id).toBe('n');
-    expect(node.attributes.size).toBe(1);
-  });
-
-  test('create edge with attributes', () => {
-    const nodes = [...Array(2)].map((_v, i) =>
-      subgraph.createNode(`node${i + 1}`),
-    ) as [NodeModel, NodeModel];
-    const edge = subgraph.createEdge(nodes, {
-      label: 'Label',
-    });
-    expect(edge.attributes.size).toBe(1);
-  });
-
-  test('create edge by node group', () => {
-    const [node1, node2, node3, node4] = Array(4)
-      .fill(true)
-      .map((_v, i) => subgraph.createNode(`node${i + 1}`));
-    const edge = subgraph.createEdge([node1, [node2, node3], node4]);
-    expect(edge.targets.length).toBe(3);
-  });
-
-  test('create subgraph with attributes', () => {
-    subgraph = subgraph.createSubgraph('cluster_test', {
-      label: 'Label',
-    });
-    expect(subgraph.id).toBe('cluster_test');
-    expect(subgraph.size).toBe(1);
-
-    subgraph = subgraph.createSubgraph({
-      rank: 'same',
-    });
-    expect(subgraph.size).toBe(1);
   });
 
   test.each([
@@ -131,17 +90,20 @@ describe('class Subgraph', () => {
     });
 
     it('Edge operation methods works', () => {
-      const nodes = [...Array(2)].map((_v, i) =>
-        subgraph.createNode(`node${i + 1}`),
-      ) as [NodeModel, NodeModel];
-      const edge = subgraph.createEdge(nodes);
+      const nodes: [NodeModel, NodeModel] = [
+        new Node('node1'),
+        new Node('node2'),
+      ];
+      const edge = new Edge(nodes);
+      subgraph.addEdge(edge);
       expect(subgraph.existEdge(edge)).toBe(true);
       subgraph.removeEdge(edge);
       expect(subgraph.existEdge(edge)).toBe(false);
     });
 
     it('Subgraph operation methods works', () => {
-      const sub = subgraph.createSubgraph('sub');
+      const sub = new Subgraph('sub');
+      subgraph.addSubgraph(sub);
       expect(subgraph.existSubgraph(sub)).toBe(true);
       subgraph.removeSubgraph(sub);
       expect(subgraph.existSubgraph(sub)).toBe(false);
@@ -152,29 +114,9 @@ describe('class Subgraph', () => {
     });
 
     it('should be undefined, when id not set', () => {
-      const sub = subgraph.createSubgraph();
+      const sub = new Subgraph();
       expect(sub.id).toBeUndefined();
       expect(sub.isSubgraphCluster()).toBe(false);
-    });
-
-    it('throws an error when the EdgeTarget element is missing', () => {
-      const n = subgraph.createNode('n');
-      expect(() =>
-        subgraph.createEdge([] as unknown as EdgeTargetTuple),
-      ).toThrow(
-        expect.objectContaining({
-          name: 'TypeError',
-          code: 'TSG_ERR_INVALID_EDGE_TARGETS',
-        }),
-      );
-      expect(() =>
-        subgraph.createEdge([n] as unknown as EdgeTargetTuple),
-      ).toThrow(
-        expect.objectContaining({
-          name: 'TypeError',
-          code: 'TSG_ERR_INVALID_EDGE_TARGETS',
-        }),
-      );
     });
   });
 });

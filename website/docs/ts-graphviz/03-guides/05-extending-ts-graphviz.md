@@ -62,38 +62,51 @@ digraph "G" {
 */
 ```
 
-### Model classes of a graph (`with` method)
+### A kit of custom classes (`createModelKit`)
 
-You can also give a graph the custom classes to create for objects generated inside a graph. The `with` methods of `Digraph`, `Graph`, and `Subgraph` allow you to predefine custom models.
+A model kit creates models from the classes you give it. `createModelKit` takes the custom classes and uses the default ones for the rest.
 
 ```typescript
-import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
+import {
+  createModelKit,
+  Node,
+  Edge,
+  type EdgeAttributesObject,
+  type EdgeTargetTuple,
+  type NodeAttributesObject,
+  attribute as _,
+  toDot,
+} from 'ts-graphviz';
 
 class MyCustomNode extends Node {
-  constructor(id: string) {
+  constructor(id: string, attributes?: NodeAttributesObject) {
     super(`node_${id}`, {
       [_.label]: `This is Custom Node ${id}`,
+      ...attributes,
     });
   }
 }
 
 class MyCustomEdge extends Edge {
-  constructor(targets: EdgeTargetTuple) {
+  constructor(targets: EdgeTargetTuple, attributes?: EdgeAttributesObject) {
     super(targets, {
       [_.label]: 'This is Custom Edge',
+      ...attributes,
     });
   }
 }
 
-const g = new Digraph();
-g.with({
+const kit = createModelKit({
   Node: MyCustomNode,
   Edge: MyCustomEdge,
 });
 
-const a = g.createNode('A'); // Instance of MyCustomNode
-const b = g.createNode('B'); // Instance of MyCustomNode
-g.createEdge([a, b]);        // Instance of MyCustomEdge
+const g = kit.createDigraph();
+const a = kit.createNode('A'); // Instance of MyCustomNode
+const b = kit.createNode('B'); // Instance of MyCustomNode
+g.addNode(a);
+g.addNode(b);
+g.addEdge(kit.createEdge([a, b])); // Instance of MyCustomEdge
 
 const dot = toDot(g);
 console.log(dot);
@@ -114,7 +127,7 @@ digraph {
 
 ### Typed custom classes
 
-The classes of a model kit also decide the types of what graphs create, in nested subgraphs too:
+The classes of a model kit also decide the types of what the kit and the DOT DSL create, in nested subgraphs too:
 
 ```typescript
 import { modelOf, Node, withModelKit } from 'ts-graphviz';
@@ -135,7 +148,7 @@ digraph((g) => {
 });
 ```
 
-`createModelKit`, `withModelKit`, `createModelFactories`, and `fromDot` / `fromDotAll` with `convert.models` infer the types from the classes given; a class left out keeps the base type, carrying the same classes into subgraphs. A custom root or subgraph class that should itself return the custom types extends `RootGraph<M>` / `Subgraph<M>` with `M` describing them (`ModelTypes`).
+`createModelKit`, `withModelKit`, `createModelFactories`, and `fromDot` / `fromDotAll` with `convert.models` infer the types from the classes given; a class left out keeps the base type, and subgraphs get the same classes. What a graph holds (`nodes`, `getNode`, …) has the model interfaces (`NodeModel` and so on): check with `instanceof` to reach the members of your class.
 
 ### Default attribute statements in place
 
@@ -153,7 +166,7 @@ digraph {
 The model classes keep each default attribute statement where it was written, so a graph read with `fromDot`, or built by hand, renders as DOT says. `addAttributeList(kind, attributes)` adds one and returns its list, which you can keep to change those defaults later (the DSL's `g.node({ ... })` returns its DSL):
 
 ```typescript
-import { Digraph, fromDot, toDot } from 'ts-graphviz';
+import { Digraph, fromDot, Node, toDot } from 'ts-graphviz';
 
 const source = `digraph {
   node [color=red];
@@ -165,14 +178,14 @@ const source = `digraph {
 const g = fromDot(source); // a red, b blue
 
 const h = new Digraph();
-h.createNode('a');
+h.addNode(new Node('a'));
 const defaults = h.addAttributeList('Node', { color: 'blue' }); // applies to what follows
-h.createNode('b');
+h.addNode(new Node('b'));
 defaults.setAttribute('color', 'green');
 console.log(toDot(h));
 ```
 
-The classes of 3.x kept one set of defaults per graph (`attributes.node`, `attributes.edge`, `attributes.graph`), written first, so the last values won for every node. They are kept, deprecated until v5, as `legacyModels` (`LegacyGraph`, `LegacyDigraph`, `LegacySubgraph`), and `ts-graphviz/legacy` is the same API with them: `fromDot(source, { convert: { models: legacyModels } })`, or `import { digraph } from 'ts-graphviz/legacy'`. `attributes` is deprecated too: write a default attribute statement instead.
+The classes of 3.x kept one set of defaults per graph (`attributes.node`, `attributes.edge`, `attributes.graph`), written first, so the last values won for every node. They are kept, deprecated until v5, as `legacyModels` (`LegacyGraph`, `LegacyDigraph`, `LegacySubgraph`), and `ts-graphviz/legacy` is the same API with them: `fromDot(source, { convert: { models: legacyModels } })`, `createModelKit(legacyModels)` to build by hand, or `import { digraph } from 'ts-graphviz/legacy'`. `attributes` is deprecated too: write a default attribute statement instead.
 
 ## Extending the Type System
 

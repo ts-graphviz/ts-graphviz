@@ -2,6 +2,7 @@ import { parse } from '@ts-graphviz/ast';
 import {
   attribute as _,
   Digraph,
+  defaultModelKit,
   fromDot,
   Graph,
   htmlLike,
@@ -62,43 +63,61 @@ describe.each([
     });
 
     it('renders simple nodes and an edge', () => {
-      const node1 = g.createNode('node1');
-      const node2 = g.createNode('node2');
-      g.createEdge([node1, node2]);
+      const node1 = defaultModelKit.createNode('node1');
+      g.addNode(node1);
+      const node2 = defaultModelKit.createNode('node2');
+      g.addNode(node2);
+      g.addEdge(defaultModelKit.createEdge([node1, node2]));
       expect(toDot(g)).toMatchSnapshot();
     });
 
     it('renders single-level subgraphs with nodes and edges', () => {
-      const subgraphA = g.createSubgraph('A');
-      const nodeA1 = subgraphA.createNode('A_node1');
-      const nodeA2 = subgraphA.createNode('A_node2');
-      subgraphA.createEdge([nodeA1, nodeA2]);
+      const subgraphA = defaultModelKit.createSubgraph('A');
+      g.addSubgraph(subgraphA);
+      const nodeA1 = defaultModelKit.createNode('A_node1');
+      subgraphA.addNode(nodeA1);
+      const nodeA2 = defaultModelKit.createNode('A_node2');
+      subgraphA.addNode(nodeA2);
+      subgraphA.addEdge(defaultModelKit.createEdge([nodeA1, nodeA2]));
 
-      const subgraphB = g.createSubgraph('B');
-      const nodeB1 = subgraphB.createNode('B_node1');
-      const nodeB2 = subgraphB.createNode('B_node2');
-      subgraphA.createEdge([nodeB1, nodeB2]);
+      const subgraphB = defaultModelKit.createSubgraph('B');
+      g.addSubgraph(subgraphB);
+      const nodeB1 = defaultModelKit.createNode('B_node1');
+      subgraphB.addNode(nodeB1);
+      const nodeB2 = defaultModelKit.createNode('B_node2');
+      subgraphB.addNode(nodeB2);
+      subgraphA.addEdge(defaultModelKit.createEdge([nodeB1, nodeB2]));
 
-      const node1 = g.createNode('node1');
-      const node2 = g.createNode('node2');
-      g.createEdge([node1, node2]);
+      const node1 = defaultModelKit.createNode('node1');
+      g.addNode(node1);
+      const node2 = defaultModelKit.createNode('node2');
+      g.addNode(node2);
+      g.addEdge(defaultModelKit.createEdge([node1, node2]));
       expect(toDot(g)).toMatchSnapshot();
     });
 
     it('renders nested subgraphs to arbitrary depth', () => {
-      const subgraphDepth1 = g.createSubgraph('depth1');
-      const nodeA1 = subgraphDepth1.createNode('depth1_node1');
-      const nodeA2 = subgraphDepth1.createNode('depth1_node2');
-      subgraphDepth1.createEdge([nodeA1, nodeA2]);
+      const subgraphDepth1 = defaultModelKit.createSubgraph('depth1');
+      g.addSubgraph(subgraphDepth1);
+      const nodeA1 = defaultModelKit.createNode('depth1_node1');
+      subgraphDepth1.addNode(nodeA1);
+      const nodeA2 = defaultModelKit.createNode('depth1_node2');
+      subgraphDepth1.addNode(nodeA2);
+      subgraphDepth1.addEdge(defaultModelKit.createEdge([nodeA1, nodeA2]));
 
-      const subgraphDepth2 = subgraphDepth1.createSubgraph('depth2');
-      const nodeB1 = subgraphDepth2.createNode('depth2_node1');
-      const nodeB2 = subgraphDepth2.createNode('depth2_node2');
-      subgraphDepth2.createEdge([nodeB1, nodeB2]);
+      const subgraphDepth2 = defaultModelKit.createSubgraph('depth2');
+      subgraphDepth1.addSubgraph(subgraphDepth2);
+      const nodeB1 = defaultModelKit.createNode('depth2_node1');
+      subgraphDepth2.addNode(nodeB1);
+      const nodeB2 = defaultModelKit.createNode('depth2_node2');
+      subgraphDepth2.addNode(nodeB2);
+      subgraphDepth2.addEdge(defaultModelKit.createEdge([nodeB1, nodeB2]));
 
-      const node1 = g.createNode('node1');
-      const node2 = g.createNode('node2');
-      g.createEdge([node1, node2]);
+      const node1 = defaultModelKit.createNode('node1');
+      g.addNode(node1);
+      const node2 = defaultModelKit.createNode('node2');
+      g.addNode(node2);
+      g.addEdge(defaultModelKit.createEdge([node1, node2]));
       expect(toDot(g)).toMatchSnapshot();
     });
 
@@ -146,7 +165,7 @@ describe.each([
 
       it('prevents injection via semicolon in node IDs', () => {
         const id = 'node1"; injected_node [label="owned"]; dummy="';
-        g.createNode(id);
+        g.addNode(defaultModelKit.createNode(id));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
         expect(back.nodes.map((n) => n.id)).toEqual([id]);
@@ -155,7 +174,7 @@ describe.each([
 
       it('prevents injection via edge operator in node IDs', () => {
         const id = 'node1" -> "malicious';
-        g.createNode(id);
+        g.addNode(defaultModelKit.createNode(id));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
         expect(back.nodes.map((n) => n.id)).toEqual([id]);
@@ -164,7 +183,7 @@ describe.each([
 
       it('prevents graph termination injection via quotes and newlines', () => {
         const id = 'node1"\n} malicious { node';
-        g.createNode(id);
+        g.addNode(defaultModelKit.createNode(id));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
         expect(back.nodes.map((n) => n.id)).toEqual([id]);
@@ -173,8 +192,9 @@ describe.each([
 
       it('prevents statement injection in subgraph IDs', () => {
         const id = 'graph1"; malicious_node [label="injected';
-        const sg = g.createSubgraph(id);
-        sg.createNode('test');
+        const sg = defaultModelKit.createSubgraph(id);
+        g.addSubgraph(sg);
+        sg.addNode(defaultModelKit.createNode('test'));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
         expect(statements[0]).toMatchObject({ type: 'Subgraph' });
@@ -188,7 +208,8 @@ describe.each([
 
       it('prevents injection via attribute values', () => {
         const label = 'label"; injected_attr="malicious';
-        const node = g.createNode('safe_node');
+        const node = defaultModelKit.createNode('safe_node');
+        g.addNode(node);
         node.attributes.set(_.label, label);
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
@@ -199,9 +220,11 @@ describe.each([
 
       it('prevents injection via edge IDs', () => {
         const id = 'n2" } malicious { "n3';
-        const n1 = g.createNode('n1');
-        const n2 = g.createNode(id);
-        g.createEdge([n1, n2]);
+        const n1 = defaultModelKit.createNode('n1');
+        g.addNode(n1);
+        const n2 = defaultModelKit.createNode(id);
+        g.addNode(n2);
+        g.addEdge(defaultModelKit.createEdge([n1, n2]));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(3);
         expect(back.nodes.map((n) => n.id)).toEqual(['n1', id]);
@@ -212,7 +235,7 @@ describe.each([
 
       it('prevents injection with multiple quotes in node ID', () => {
         const id = '""""""';
-        g.createNode(id);
+        g.addNode(defaultModelKit.createNode(id));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
         expect(back.nodes.map((n) => n.id)).toEqual([id]);
@@ -220,7 +243,7 @@ describe.each([
 
       it('prevents injection via port specification', () => {
         const id = 'node":port1" -> "evil';
-        g.createNode(id);
+        g.addNode(defaultModelKit.createNode(id));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
         expect(back.nodes.map((n) => n.id)).toEqual([id]);
@@ -238,7 +261,8 @@ describe.each([
 
       it('prevents injection via node comment', () => {
         const comment = 'comment"; injected_node [label="owned"';
-        const node = g.createNode('test');
+        const node = defaultModelKit.createNode('test');
+        g.addNode(node);
         node.comment = comment;
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);

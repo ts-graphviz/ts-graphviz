@@ -38,7 +38,7 @@ describe('deprecated until v5 (#1922)', () => {
     ],
     [
       'packages/core/src/models/GraphBase.ts',
-      'public readonly attributes: Readonly<GraphCommonAttributes<SchemaOf<M>>> =',
+      'public readonly attributes: Readonly<GraphCommonAttributes<S>> =',
     ],
     ['packages/core/src/models/legacy.ts', 'export class LegacySubgraph<'],
     ['packages/core/src/models/legacy.ts', 'export class LegacyGraph<'],

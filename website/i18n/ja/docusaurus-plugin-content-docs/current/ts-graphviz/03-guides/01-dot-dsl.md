@@ -142,7 +142,7 @@ DSL は DOT の語彙だけを持つので、その名前はどれも Graphviz �
 | `a.addComment('note')` | DOT ソースに書き込むコメント |
 | `a.$$type`、`list.$$kind` | モデルの種類（`'Node'`、`'Edge'` など）と既定属性リストの種類 |
 
-それ以外はすべて、`modelOf(x)` で得られるモデルにあります。ノードやグラフの名前（`id`）、グラフの中身（`nodes`、`edges`、`subgraphs`、`statements`）、そのメソッド（`getNode`、`createNode`、`removeNode` など）、属性メソッド、`comments`、エッジの `targets`、自作のモデルクラスのメンバーです。
+それ以外はすべて、`modelOf(x)` で得られるモデルにあります。ノードやグラフの名前（`id`）、グラフの中身（`nodes`、`edges`、`subgraphs`、`statements`）、そのメソッド（`getNode`、`addNode`、`removeNode` など）、属性メソッド、`comments`、エッジの `targets`、自作のモデルクラスのメンバーです。
 
 ```typescript
 import { digraph, modelOf } from 'ts-graphviz';
@@ -286,7 +286,7 @@ console.log(g.nodes.map((n) => n.id)); // ['a']
 console.log(g.getNode('b')); // undefined
 ```
 
-DOT では、エッジはそこに書かれたノードを作ります。一方、モデルはエッジの端点を id で記録するだけです。`nodes` が持つのはノード文として書かれたノードで、Graphviz から見たグラフのノードすべてではありません。ノードは複数のサブグラフに属することがあり、サブグラフの中の `a -> b` が外に書かれたノードを指すこともあるため、モデルは推測しません。`nodes` に入れたいノードは `g.createNode('b')`（DSL では `dsl(g).node('b')`）で宣言するか、エッジの端点の id を読み取ってください。
+DOT では、エッジはそこに書かれたノードを作ります。一方、モデルはエッジの端点を id で記録するだけです。`nodes` が持つのはノード文として書かれたノードで、Graphviz から見たグラフのノードすべてではありません。ノードは複数のサブグラフに属することがあり、サブグラフの中の `a -> b` が外に書かれたノードを指すこともあるため、モデルは推測しません。`nodes` に入れたいノードは `g.addNode(new Node('b'))`（DSL では `dsl(g).node('b')`）で宣言するか、エッジの端点の id を読み取ってください。
 
 ### `isNodeModel(dsl)` が false になる
 

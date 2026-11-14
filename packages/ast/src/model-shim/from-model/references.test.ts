@@ -2,7 +2,7 @@ import type {
   AnyReadonlyDotObjectModel,
   SubgraphModel,
 } from '@ts-graphviz/common';
-import { Digraph, Edge, Subgraph } from '@ts-graphviz/core';
+import { Digraph, defaultModelKit, Edge, Subgraph } from '@ts-graphviz/core';
 import { describe, expect, it } from 'vitest';
 import { fromModel } from './from-model.js';
 
@@ -63,7 +63,7 @@ describe('fromModel of a model that shares subgraphs', {
   /** k levels, each holding two subgraphs that both hold the level below. */
   const doubling = (k: number) => {
     let inner = new Subgraph();
-    inner.createNode('a');
+    inner.addNode(defaultModelKit.createNode('a'));
     for (let i = 0; i < k; i++) {
       const left = new Subgraph();
       const right = new Subgraph();

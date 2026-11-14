@@ -1,5 +1,5 @@
 import { type HTMLLikeValue, htmlLike, isHTMLLike } from '@ts-graphviz/common';
-import { Digraph } from '@ts-graphviz/core';
+import { Digraph, defaultModelKit } from '@ts-graphviz/core';
 import { describe, expect, it } from 'vitest';
 import { toDot } from './to-dot.js';
 
@@ -23,7 +23,7 @@ function brandedUnfrozen(markup: string): HTMLLikeValue {
 
 function write(label: HTMLLikeValue): string {
   const g = new Digraph();
-  g.createNode('a', { label });
+  g.addNode(defaultModelKit.createNode('a', { label }));
   return toDot(g);
 }
 

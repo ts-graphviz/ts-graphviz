@@ -138,9 +138,7 @@ type Creates<C, Base> = C extends abstract new (
 /**
  * The model types of a kit made from the classes `P` (as passed to
  * `createModelKit` or `withModelKit`): a class given there gives its
- * instance type, and a slot left out gives the base interface carrying the
- * same types, so a default subgraph in a kit with a custom `Node` creates
- * that `Node` in the types too, as it does at run time.
+ * instance type, and a slot left out gives the base interface.
  *
  * @group Model Kit
  */
@@ -150,13 +148,13 @@ export interface ResolvedModelTypes<
   Dot: P extends { Dot: infer C } ? Creates<C, DotModel> : DotModel;
   Graph: P extends { Graph: infer C }
     ? Creates<C, RootGraphModel>
-    : RootGraphModel<ResolvedModelTypes<P>>;
+    : RootGraphModel;
   Digraph: P extends { Digraph: infer C }
     ? Creates<C, RootGraphModel>
-    : RootGraphModel<ResolvedModelTypes<P>>;
+    : RootGraphModel;
   Subgraph: P extends { Subgraph: infer C }
     ? Creates<C, SubgraphModel>
-    : SubgraphModel<ResolvedModelTypes<P>>;
+    : SubgraphModel;
   Node: P extends { Node: infer C } ? Creates<C, NodeModel> : NodeModel;
   Edge: P extends { Edge: infer C } ? Creates<C, EdgeModel> : EdgeModel;
 }

@@ -57,7 +57,8 @@ describe('subgraphs by id', () => {
 
   it('does not index subgraphs without an id', () => {
     const g = new Digraph();
-    const anonymous = g.createSubgraph();
+    const anonymous = new Subgraph();
+    g.addSubgraph(anonymous);
     expect(g.getSubgraph('undefined')).toBeUndefined();
     expect(g.subgraphs).toStrictEqual([anonymous]);
   });
@@ -65,7 +66,8 @@ describe('subgraphs by id', () => {
   it('reads ids that are Object.prototype names as ids', () => {
     const g = new Digraph();
     expect(g.getSubgraph('constructor')).toBeUndefined();
-    const s = g.createSubgraph('constructor');
+    const s = new Subgraph('constructor');
+    g.addSubgraph(s);
     expect(g.getSubgraph('constructor')).toBe(s);
   });
 });

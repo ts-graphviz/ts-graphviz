@@ -1,5 +1,5 @@
 import { isTsGraphvizError } from '@ts-graphviz/common';
-import { Digraph } from '@ts-graphviz/core';
+import { Digraph, defaultModelKit } from '@ts-graphviz/core';
 import { describe, expect, it } from 'vitest';
 import { fromDot } from './from-dot.js';
 import { toDot } from './to-dot.js';
@@ -9,7 +9,12 @@ const COMPASS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c', '_'];
 describe('compass points', { tags: ['SM-2'] }, () => {
   it.each(COMPASS)('writes %s', (compass) => {
     const g = new Digraph();
-    g.createEdge([{ id: 'a', port: 'p', compass } as never, 'b']);
+    g.addEdge(
+      defaultModelKit.createEdge([
+        { id: 'a', port: 'p', compass } as never,
+        'b',
+      ]),
+    );
     const [edge] = fromDot(toDot(g)).edges;
     expect(edge.targets[0]).toMatchObject({ id: 'a', port: 'p', compass });
   });
@@ -22,7 +27,7 @@ describe('compass points', { tags: ['SM-2'] }, () => {
     ['a value that has no text', Object.create(null)],
   ])('rejects %s', (_, compass) => {
     const g = new Digraph();
-    g.createEdge([{ id: 'a', compass } as never, 'b']);
+    g.addEdge(defaultModelKit.createEdge([{ id: 'a', compass } as never, 'b']));
     let error: unknown;
     try {
       toDot(g);
@@ -36,7 +41,9 @@ describe('compass points', { tags: ['SM-2'] }, () => {
 
   it('leaves out an empty compass point', () => {
     const g = new Digraph();
-    g.createEdge([{ id: 'a', compass: '' } as never, 'b']);
+    g.addEdge(
+      defaultModelKit.createEdge([{ id: 'a', compass: '' } as never, 'b']),
+    );
     expect(toDot(g)).toContain('"a" -> "b"');
   });
 });

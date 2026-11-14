@@ -19,6 +19,7 @@ import {
   type DotObjectModel,
   type DotValue,
   type DSL,
+  defaultModelKit,
   digraph,
   dsl,
   Edge,
@@ -225,12 +226,13 @@ describe('a read-only model is not a writable one', () => {
 describe('the readers take every model', () => {
   const view = digraph();
   const g = modelOf(view);
-  const node = g.createNode('a');
+  const node = defaultModelKit.createNode('a');
+  g.addNode(node);
   const models = [
     g,
     node,
-    g.createEdge(['a', 'b']),
-    g.createSubgraph('s'),
+    defaultModelKit.createEdge(['a', 'b']),
+    defaultModelKit.createSubgraph('s'),
     g.attributes.node,
     new Dot([g]),
     new MyNode('m'),
@@ -420,7 +422,7 @@ describe('edge targets are read-only references', () => {
     const g = digraph();
     const node = {} as ReadonlyNodeModel;
     g.edge([node, new MyNode('m'), {} as NumNode]);
-    modelOf(g).createEdge([node, [node, 'b']]);
+    defaultModelKit.createEdge([node, [node, 'b']]);
     new Edge([node, modelOf(g.node('a'))]);
   });
 });

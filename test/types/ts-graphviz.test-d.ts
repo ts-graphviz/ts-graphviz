@@ -74,10 +74,7 @@ describe('the model’s members are on the model', () => {
       const m = modelOf(g);
       expectTypeOf(m.getNode('a')).toEqualTypeOf<NodeModel | undefined>();
       expectTypeOf(m.nodes).toEqualTypeOf<ReadonlyArray<NodeModel>>();
-      expectTypeOf(m.createNode('a')).toEqualTypeOf<NodeModel>();
-      expectTypeOf(
-        m.createSubgraph('cluster_a', { color: 'red' }),
-      ).toEqualTypeOf<SubgraphModel>();
+      expectTypeOf(m.subgraphs).toEqualTypeOf<ReadonlyArray<SubgraphModel>>();
       expectTypeOf(g.node({}).$$kind).toEqualTypeOf<'Node'>();
       expectTypeOf(g.$$type).toEqualTypeOf<'Graph'>();
       expectTypeOf(m.id).toEqualTypeOf<string | undefined>();

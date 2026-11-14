@@ -46,7 +46,9 @@ describe('node reference fields', { tags: ['SM-8'] }, () => {
 
   it('fromModel writes only the port and compass point an edge target owns', () => {
     const graph = new Digraph();
-    graph.createEdge([{ id: 'a' }, [{ id: 'b' }, { id: 'c' }]]);
+    graph.addEdge(
+      defaultModelKit.createEdge([{ id: 'a' }, [{ id: 'b' }, { id: 'c' }]]),
+    );
     const dot = withInherited('port', 'extra', () =>
       withInherited('compass', 'n', () => stringify(fromModel(graph))),
     );
@@ -57,7 +59,7 @@ describe('node reference fields', { tags: ['SM-8'] }, () => {
 
   it('fromModel ignores an inherited compass point, valid or not', () => {
     const graph = new Digraph();
-    graph.createEdge([{ id: 'a' }, { id: 'b' }]);
+    graph.addEdge(defaultModelKit.createEdge([{ id: 'a' }, { id: 'b' }]));
     const dot = withInherited('compass', 'extra', () =>
       stringify(fromModel(graph)),
     );
@@ -75,7 +77,12 @@ describe('node reference fields', { tags: ['SM-8'] }, () => {
     const graph = new Digraph();
     const a = new Node('a');
     graph.addNode(a);
-    graph.createEdge([a.port({ port: 'p', compass: 'n' }), { id: 'b' }]);
+    graph.addEdge(
+      defaultModelKit.createEdge([
+        a.port({ port: 'p', compass: 'n' }),
+        { id: 'b' },
+      ]),
+    );
     const dot = stringify(fromModel(graph));
     expect(dot).toContain('"a":"p":"n"');
     expect(toModel(parse(dot)).graphs[0].edges[0].targets[0]).toStrictEqual({

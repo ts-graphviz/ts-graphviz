@@ -11,17 +11,20 @@ Every DSL stands for a model of the DOM: `modelOf(dsl)` gives it, and `dsl(model
 
 ## Building a graph
 
-A graph creates its contents with `createNode`, `createEdge` and `createSubgraph`, using its model classes (see [Model kits](#model-kits)):
+A graph holds what you add to it. Create the models with their classes, or with a [model kit](#model-kits), and add them with `addNode`, `addEdge` and `addSubgraph`:
 
 ```typescript
-import { Digraph, toDot } from 'ts-graphviz';
+import { Digraph, Edge, Node, Subgraph, toDot } from 'ts-graphviz';
 
 const g = new Digraph('G', { rankdir: 'LR' });
-const a = g.createNode('a', { label: 'Start' });
-const b = g.createNode('b');
-g.createEdge([a, b], { color: 'red' });
-const s = g.createSubgraph('cluster_0', { label: 'Group' });
-s.createNode('c');
+const a = new Node('a', { label: 'Start' });
+const b = new Node('b');
+g.addNode(a);
+g.addNode(b);
+g.addEdge(new Edge([a, b], { color: 'red' }));
+const s = new Subgraph('cluster_0', { label: 'Group' });
+g.addSubgraph(s);
+s.addNode(new Node('c'));
 
 console.log(toDot(g));
 // digraph "G" {
@@ -118,12 +121,12 @@ The 3.x names (`get`, `set`, `delete`, `apply`, `clear`, `values`, `size`, and a
 As in DOT, a default attribute statement applies only to what follows it (the deprecated `legacyModels` classes merge every one into the leading defaults instead; see [Model kits](#model-kits)). `addAttributeList` adds one and returns its list, which you can keep to change those defaults later:
 
 ```typescript
-import { Digraph, toDot } from 'ts-graphviz';
+import { Digraph, Node, toDot } from 'ts-graphviz';
 
 const g = new Digraph();
-g.createNode('a');
+g.addNode(new Node('a'));
 const defaults = g.addAttributeList('Node', { shape: 'box' }); // applies to what follows
-g.createNode('b');
+g.addNode(new Node('b'));
 defaults.setAttribute('color', 'red');
 
 console.log(toDot(g));
@@ -144,10 +147,11 @@ A statement added before any other joins the leading defaults. `attributes` (`at
 Every model but a comment takes comments: `addComment(text, { position, kind })` adds one and returns it, `comments` lists them, and `removeComment(comment)` takes one out. A comment is a frozen `CommentModel` with its `text`, `kind` (`'Slash'`, `'Block'` or `'Macro'`, or `undefined` for `fromModel`'s `commentKind` option) and `position` (`'leading'`, `'trailing'`, or on a graph or subgraph `'end'`).
 
 ```typescript
-import { Digraph, toDot } from 'ts-graphviz';
+import { Digraph, Node, toDot } from 'ts-graphviz';
 
 const g = new Digraph('G');
-const a = g.createNode('a');
+const a = new Node('a');
+g.addNode(a);
 a.addComment('hello');
 console.log(a.comments.map((c) => [c.text, c.position])); // [['hello', 'leading']]
 
@@ -177,7 +181,7 @@ console.log(nodes.length); // 1
 
 ## Model kits
 
-A model kit is a set of model classes that fit together, and the operations that create models from them. `createModelKit(classes)` makes one, and `defaultModelKit` is the kit of the default classes. `withModelKit(classes)` gives factories (`digraph`, `graph`, `strict.digraph`, `strict.graph`) that create with a kit; `graph.with(classes)` sets the classes of a graph; `fromDot` and `fromDotAll` take the classes as `convert.models`. A class left out is the default one for `createModelKit`, `withModelKit` and `fromDot`, and the graph's current one for `graph.with`.
+A model kit is a set of model classes that fit together, and the operations that create models from them. `createModelKit(classes)` makes one, and `defaultModelKit` is the kit of the default classes. `withModelKit(classes)` gives factories (`digraph`, `graph`, `strict.digraph`, `strict.graph`) that create with a kit; `fromDot` and `fromDotAll` take the classes as `convert.models`. A class left out is the default one. A graph keeps no kit: it holds whatever is added to it.
 
 ```typescript
 import { Node, withModelKit } from 'ts-graphviz';
@@ -208,6 +212,6 @@ G.addEdge(kit.createEdge([a, b])); // adds the edge only
 
 The DOT DSL creates with a kit too: the factories' callbacks take it as their second argument, and `dsl(model, kit)` gives the DSL of a model that creates with `kit` (`dsl(model)` uses the default kit).
 
-`legacyModels` (`LegacyGraph`, `LegacyDigraph`, `LegacySubgraph`) are the 3.x classes, which merge every default attribute statement into one set of defaults per graph; `ts-graphviz/legacy` uses them for every factory (see [DOT's statement order](./01-dot-dsl.md#dots-statement-order)). They are deprecated and removed in v5.
+`legacyModels` (`LegacyGraph`, `LegacyDigraph`, `LegacySubgraph`) are the 3.x classes, which merge every default attribute statement into one set of defaults per graph; `ts-graphviz/legacy` uses them for every factory (see [DOT's statement order](./01-dot-dsl.md#dots-statement-order)). To build with them by hand, create with `createModelKit(legacyModels)`, so that the subgraphs are legacy ones too. They are deprecated and removed in v5.
 
 Custom classes, typed kits and type extensions are covered in [Extending ts-graphviz](./05-extending-ts-graphviz.md).

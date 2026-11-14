@@ -16,7 +16,6 @@ import type {
 import type { Compass } from '../attributes/types.js';
 import type { DotValue } from '../values.js';
 import type { CommentPosition, HasComments } from './comments.js';
-import type { ModelClasses } from './model-kit.js';
 import type {
   ReadonlyDotModel,
   ReadonlyEdgeModel,
@@ -748,19 +747,14 @@ type AnyKindAttributesObject<S extends Schema> = AttributesObject<
  *
  * @typeParam T - The `$$type` of the graph.
  * @typeParam K - The built-in attribute keys of the graph itself.
- * @typeParam M - The model types the graph creates.
- * @typeParam S - The schema of the models, which types every attribute the
- * graph takes; its `addNode`, `addEdge` and `addSubgraph` take models of
- * that schema. By default the schema of `M` ({@link SchemaOf}); it is a
- * parameter of its own so that a graph is still one of the graphs whose
- * model types it narrows.
+ * @typeParam S - The schema of the graph, which types every attribute it
+ * takes and the models it holds; none by default.
  * @group Models
  */
 export interface GraphBaseModel<
   T extends DotObjectType = DotObjectType,
   K extends AttributeKey = AttributeKey,
-  M extends AnyModelTypes = ModelTypes,
-  S extends Schema = SchemaOf<M>,
+  S extends Schema = EmptySchema,
 > extends HasComment,
     HasComments<CommentPosition>,
     Attributes<K, GraphSchemaAttributeTypes<T, S>>,
@@ -778,11 +772,11 @@ export interface GraphBaseModel<
    */
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
   /** Node objects in the graph. */
-  readonly nodes: ReadonlyArray<M['Node']>;
+  readonly nodes: ReadonlyArray<NodeModel<S>>;
   /** Edge objects in the graph. */
-  readonly edges: ReadonlyArray<M['Edge']>;
+  readonly edges: ReadonlyArray<EdgeModel<S>>;
   /** Subgraph objects in the graph. */
-  readonly subgraphs: ReadonlyArray<M['Subgraph']>;
+  readonly subgraphs: ReadonlyArray<SubgraphModel<S>>;
   /**
    * The graph's contents in the order they were added: nodes, edges and
    * subgraphs, and the default attribute statements added after them,
@@ -791,14 +785,11 @@ export interface GraphBaseModel<
    * `legacyModels` never put an {@link AttributeListModel} here.
    */
   readonly statements: ReadonlyArray<
-    M['Node'] | M['Edge'] | M['Subgraph'] | StatementAttributeListModel<S>
+    | NodeModel<S>
+    | EdgeModel<S>
+    | SubgraphModel<S>
+    | StatementAttributeListModel<S>
   >;
-
-  /**
-   * Use the given classes for the models this graph creates; the classes
-   * left out stay as they are.
-   */
-  with(models: Partial<ModelClasses<ModelTypes<S>>>): void;
 
   /**
    * Add a Node to the graph: any node of the graph's schema.
@@ -811,7 +802,7 @@ export interface GraphBaseModel<
   /**
    * Add a Subgraph to the graph: any subgraph of the graph's schema.
    */
-  addSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): void;
+  addSubgraph(subgraph: SubgraphModel<S>): void;
   /**
    * Add a default attribute statement (`node [...]`, `edge [...]`,
    * `graph [...]`) and return its list. As in DOT, it applies only to what
@@ -851,7 +842,7 @@ export interface GraphBaseModel<
   /**
    * Check if the Subgraph exists in the graph.
    */
-  existSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): boolean;
+  existSubgraph(subgraph: SubgraphModel<S>): boolean;
   /**
    * Remove Node from the graph.
    */
@@ -863,55 +854,30 @@ export interface GraphBaseModel<
   /**
    * Remove Subgraph from the graph.
    */
-  removeSubgraph(subgraph: SubgraphModel<ModelTypes<S>>): void;
-  /**
-   * Create a Node in the graph.
-   */
-  createNode(id: string, attributes?: NodeAttributesObject<S>): M['Node'];
-  /**
-   * Create a Subgraph and add it to the graph.
-   *
-   * @param id - Subgraph ID
-   * @param attributes - Subgraph attribute object
-   */
-  createSubgraph<const Id extends string | undefined = undefined>(
-    id?: Id,
-    attributes?: SubgraphAttributesFor<Id, S>,
-  ): M['Subgraph'];
-  createSubgraph(
-    attributes?: NonClusterSubgraphAttributesObject<S>,
-  ): M['Subgraph'];
+  removeSubgraph(subgraph: SubgraphModel<S>): void;
   /**
    * Get Subgraph in cluster by specifying id.
    *
    * If there is no Subgraph with the specified id in the graph, return undefined.
    */
-  getSubgraph(id: string): M['Subgraph'] | undefined;
+  getSubgraph(id: string): SubgraphModel<S> | undefined;
 
   /**
    * Get Node in cluster by specifying id.
    *
    * If there is no Node with the specified id in the graph, return undefined.
    */
-  getNode(id: string): M['Node'] | undefined;
-  /** Create Edge and add it to the graph. */
-  createEdge(
-    targets: ReadonlyEdgeTargetLikeTuple,
-    attributes?: EdgeAttributesObject<S>,
-  ): M['Edge'];
+  getNode(id: string): NodeModel<S> | undefined;
 }
 
 /**
  * DOT model representing a subgraph.
  * @group Models
  */
-export interface SubgraphModel<
-  M extends AnyModelTypes = ModelTypes,
-  S extends Schema = SchemaOf<M>,
-> extends GraphBaseModel<
+export interface SubgraphModel<S extends Schema = EmptySchema>
+  extends GraphBaseModel<
     'Subgraph',
     SubgraphAttributeKey | ClusterSubgraphAttributeKey,
-    M,
     S
   > {
   /**
@@ -926,10 +892,8 @@ export interface SubgraphModel<
  * DOT model representing a root graphs(digraph and graph).
  * @group Models
  */
-export interface RootGraphModel<
-  M extends AnyModelTypes = ModelTypes,
-  S extends Schema = SchemaOf<M>,
-> extends GraphBaseModel<'Graph', GraphAttributeKey, M, S> {
+export interface RootGraphModel<S extends Schema = EmptySchema>
+  extends GraphBaseModel<'Graph', GraphAttributeKey, S> {
   directed: boolean;
 
   /**
@@ -958,19 +922,19 @@ export interface DotModel<S extends Schema = EmptySchema>
     HasComments<'leading' | 'end'>,
     DotObjectModel<'Dot'> {
   /** Root graphs in the order they appear in the source. */
-  readonly graphs: ReadonlyArray<RootGraphModel<ModelTypes<S>>>;
+  readonly graphs: ReadonlyArray<RootGraphModel<S>>;
   /**
    * Add a root graph.
    */
-  addGraph(graph: RootGraphModel<ModelTypes<S>>): void;
+  addGraph(graph: RootGraphModel<S>): void;
   /**
    * Check if the root graph exists.
    */
-  existGraph(graph: RootGraphModel<ModelTypes<S>>): boolean;
+  existGraph(graph: RootGraphModel<S>): boolean;
   /**
    * Remove a root graph.
    */
-  removeGraph(graph: RootGraphModel<ModelTypes<S>>): void;
+  removeGraph(graph: RootGraphModel<S>): void;
 }
 
 /**
@@ -1010,9 +974,9 @@ export type AnyDotObjectModel = GraphStatementModel | RootGraphModel | DotModel;
 export interface ModelTypes<S extends Schema = EmptySchema> {
   Schema: S;
   Dot: DotModel<S>;
-  Graph: RootGraphModel<ModelTypes<S>>;
-  Digraph: RootGraphModel<ModelTypes<S>>;
-  Subgraph: SubgraphModel<ModelTypes<S>>;
+  Graph: RootGraphModel<S>;
+  Digraph: RootGraphModel<S>;
+  Subgraph: SubgraphModel<S>;
   Node: NodeModel<S>;
   Edge: EdgeModel<S>;
 }
@@ -1048,7 +1012,7 @@ export interface DotConstructor<
   D extends ReadonlyDotModel = DotModel,
   S extends Schema = EmptySchema,
 > {
-  new (graphs?: RootGraphModel<ModelTypes<S>>[], comment?: string): D;
+  new (graphs?: RootGraphModel<S>[], comment?: string): D;
 }
 
 /**
@@ -1075,8 +1039,14 @@ export interface SubgraphConstructor<
   G extends ReadonlySubgraphModel = SubgraphModel,
   S extends Schema = EmptySchema,
 > {
-  new (id?: string, attributes?: SubgraphAttributesObject<S>): G;
-  new (attributes?: SubgraphAttributesObject<S>): G;
+  /** An id that starts with `cluster`: the attributes of a cluster. */
+  new (
+    id: `cluster${string}` | `Cluster${string}` | `CLUSTER${string}`,
+    attributes?: ClusterSubgraphAttributesObject<S>,
+  ): G;
+  /** Any other id, or none: see {@link NonClusterSubgraphAttributesObject}. */
+  new (id?: string, attributes?: NonClusterSubgraphAttributesObject<S>): G;
+  new (attributes?: NonClusterSubgraphAttributesObject<S>): G;
 }
 
 /**

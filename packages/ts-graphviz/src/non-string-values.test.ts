@@ -1,4 +1,4 @@
-import { Digraph } from '@ts-graphviz/core';
+import { Digraph, defaultModelKit } from '@ts-graphviz/core';
 import { describe, expect, it } from 'vitest';
 import { fromDot } from './from-dot.js';
 import { toDot } from './to-dot.js';
@@ -13,7 +13,7 @@ describe('values that are not strings', { tags: ['SM-2'] }, () => {
     ['an object', { toString: (): string => text }],
   ])('writes %s as its escaped text', (_, value) => {
     const g = new Digraph();
-    g.createNode('a', { label: value as never });
+    g.addNode(defaultModelKit.createNode('a', { label: value as never }));
     const dot = toDot(g);
     const back = fromDot(dot);
     expect(back.nodes.map((n) => n.id)).toStrictEqual(['a']);
@@ -22,26 +22,32 @@ describe('values that are not strings', { tags: ['SM-2'] }, () => {
 
   it('writes an id that is not a string as its escaped text', () => {
     const g = new Digraph();
-    g.createNode([text] as never);
+    g.addNode(defaultModelKit.createNode([text] as never));
     const back = fromDot(toDot(g));
     expect(back.nodes.map((n) => n.id)).toStrictEqual([text]);
   });
 
   it('quotes an array that looks like a number', () => {
     const g = new Digraph();
-    g.createNode('a', { width: [123] as never });
+    g.addNode(defaultModelKit.createNode('a', { width: [123] as never }));
     expect(toDot(g)).toContain('width = "123"');
   });
 
   it('throws the TypeError of a value that has no text', () => {
     const g = new Digraph();
-    g.createNode('a', { label: Object.create(null) });
+    g.addNode(defaultModelKit.createNode('a', { label: Object.create(null) }));
     expect(() => toDot(g)).toThrow(TypeError);
   });
 
   it('still writes numbers and booleans bare', () => {
     const g = new Digraph();
-    g.createNode('a', { width: 1.5, fixedsize: true, height: Number.NaN });
+    g.addNode(
+      defaultModelKit.createNode('a', {
+        width: 1.5,
+        fixedsize: true,
+        height: Number.NaN,
+      }),
+    );
     expect(toDot(g)).toContain('width = 1.5');
     expect(toDot(g)).toContain('fixedsize = true');
     expect(toDot(g)).toContain('height = "NaN"');
