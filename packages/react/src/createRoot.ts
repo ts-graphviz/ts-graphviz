@@ -9,8 +9,7 @@ import { createModelKit, MODEL, modelOf, ownOptions } from 'ts-graphviz';
 
 import type { Context } from './contexts/GraphvizContext.js';
 import { type ErrorInfo, Mount, type MountHandlers } from './mount.js';
-import type { AnyGraphContainer } from './types/container.js';
-import type { AddedStatements } from './types/reconciler.js';
+import type { AddedStatements, AnyGraphContainer } from './shared/tree.js';
 
 export type { ErrorInfo };
 

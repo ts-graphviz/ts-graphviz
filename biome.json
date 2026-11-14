@@ -107,6 +107,35 @@
     },
     {
       "includes": [
+        "packages/react/src/shared/**",
+        "!**/*.test.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "react",
+                      "react/**",
+                      "react-*",
+                      "react-*/**",
+                      "../**"
+                    ],
+                    "message": "The shared layer is for the renderer of any framework: it imports neither React nor the code around it that does."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
         "packages/*/src/**/*.ts",
         "packages/*/src/**/*.tsx",
         "!**/*.test.ts",

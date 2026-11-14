@@ -9,7 +9,8 @@ import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphContainer } from '../contexts/GraphContainer.js';
 import { useGraphContainer } from '../hooks/useGraphContainer.js';
 import { useGraphvizContext } from '../hooks/useGraphvizContext.js';
-import { HOST, hostProps, identityKey } from '../host.js';
+import { hostProps } from '../host.js';
+import { HOST, identityKey } from '../shared/tree.js';
 import type { AnyGraphContainer } from '../types/container.js';
 
 /**
