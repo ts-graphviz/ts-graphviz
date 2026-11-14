@@ -88,6 +88,29 @@ describe('fromElement()', () => {
     });
   });
 
+  describe('retries option', () => {
+    it('takes a non-negative integer', async () => {
+      const element = (
+        <Digraph id="G">
+          <Node id="a" />
+        </Digraph>
+      );
+      await expect(fromElement(element, { retries: 2 })).resolves.toBeDefined();
+      await expect(fromElement(element, { retries: -1 })).rejects.toThrow(
+        new RangeError('retries must be a non-negative integer'),
+      );
+      await expect(fromElement(element, { retries: 1.5 })).rejects.toThrow(
+        RangeError,
+      );
+      await expect(
+        fromElement(element, { retries: Number.POSITIVE_INFINITY }),
+      ).rejects.toThrow(RangeError);
+      await expect(
+        fromElement(element, { retries: '1' as unknown as number }),
+      ).rejects.toThrow(new TypeError('retries must be a number'));
+    });
+  });
+
   describe('With container', () => {
     it('renders container with added elements to DOT', async () => {
       const container = new DigraphModel('container');

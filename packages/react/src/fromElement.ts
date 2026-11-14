@@ -36,6 +36,14 @@ export interface FromElementOptions<
    */
   signal?: AbortSignal;
   /**
+   * How many times to start the conversion again when the renderer fails
+   * while it renders another tree (an error thrown out of React's work, not
+   * by a component of this element). All trees share the renderer, so this
+   * one is lost with it. By default `0`: `fromElement` rejects at once, with
+   * an `Error` whose `cause` is the renderer's error.
+   */
+  retries?: number;
+  /**
    * Called when an error boundary in the element catches an error. If the
    * callback throws, `fromElement` rejects with what it threw.
    */
@@ -46,12 +54,6 @@ export interface FromElementOptions<
    */
   onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;
 }
-
-/**
- * How many times a conversion starts again after the renderer failed while
- * it rendered another tree.
- */
-const MAX_ATTEMPTS = 3;
 
 // A macrotask, so React's scheduler (setImmediate / MessageChannel) and
 // resolved promises get to run.
@@ -97,8 +99,9 @@ type Failure =
  *
  * It rejects with the error no error boundary caught (what an effect's
  * cleanup throws when the tree is unmounted included), with the error a
- * model class threw, with `signal.reason` on abort, and with a `TypeError`
- * when, without a container, the top level has something that is not a root
+ * model class threw, with `signal.reason` on abort, with an `Error` when the
+ * renderer failed over another tree more often than `retries` allows, and
+ * with a `TypeError` when, without a container, the top level has something that is not a root
  * graph. Whenever it rejects, what it added is taken out of the container
  * again (as far as the model classes let it: an error they throw on
  * removal is not reported).
@@ -126,9 +129,16 @@ export async function fromElement<Container extends AnyGraphContainer>(
     container: given,
     models,
     signal,
+    retries = 0,
     onCaughtError,
     onRecoverableError,
   } = ownOptions(options);
+  if (typeof retries !== 'number') {
+    throw new TypeError('retries must be a number');
+  }
+  if (!Number.isSafeInteger(retries) || retries < 0) {
+    throw new RangeError('retries must be a non-negative integer');
+  }
   signal?.throwIfAborted();
   const kit = createModelKit(models ?? {});
   const context: Context<Container> = {
@@ -136,7 +146,7 @@ export async function fromElement<Container extends AnyGraphContainer>(
     models: kit,
   };
 
-  for (let attempt = 1; ; attempt++) {
+  for (let attempt = 0; ; attempt++) {
     // The first failure decides; a wrapper function keeps the narrowing of
     // a variable assigned in callbacks.
     const state: { failure?: Failure } = {};
@@ -172,7 +182,7 @@ export async function fromElement<Container extends AnyGraphContainer>(
       }
       signal?.throwIfAborted();
       const { failure } = state;
-      if (failure?.kind === 'renderer' && attempt < MAX_ATTEMPTS) {
+      if (failure?.kind === 'renderer' && attempt < retries) {
         mount.discard(true);
         continue;
       }
@@ -180,7 +190,9 @@ export async function fromElement<Container extends AnyGraphContainer>(
         throw failure.kind === 'error'
           ? failure.error
           : new Error(
-              `The renderer failed ${MAX_ATTEMPTS} times while it rendered other trees`,
+              retries === 0
+                ? 'The renderer failed while it rendered another tree, and this conversion was lost with it'
+                : `The renderer failed while it rendered another tree, ${retries + 1} times in a row`,
               { cause: failure.error },
             );
       }

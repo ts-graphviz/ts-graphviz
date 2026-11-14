@@ -648,7 +648,7 @@ Without a container, the top level of the element is root graphs only (`<Digraph
 
 ### Error Handling
 
-`fromElement()` rejects: with the error no error boundary caught, with the error a model class threw, or with `signal.reason`. Whenever it rejects, what it added is taken out of the container again.
+`fromElement()` rejects: with the error no error boundary caught, with the error a model class threw, with `signal.reason`, or when the renderer failed while it rendered another tree (see `retries`). Whenever it rejects, what it added is taken out of the container again.
 
 A root reports through its callbacks, as a root of React does, and `render()` itself does not throw for them:
 
@@ -691,7 +691,7 @@ try {
 ```
 
 - An error one of the callbacks throws is thrown again outside the render, as an uncaught exception (in `fromElement`, it rejects the promise instead). Catch inside a callback what must not end a Node.js process.
-- `onUncaughtError` is also called when a model class throws while the models are updated, and when the renderer itself fails: an error thrown out of React's work, not by a component. All the trees share the renderer, so every root is told (the others with an error whose `cause` is the original one) and keeps the models it has; the tree and its state are lost, its effects are not cleaned up, and the next `render()` starts a new tree. A `fromElement()` that was waiting meanwhile starts again by itself.
+- `onUncaughtError` is also called when a model class throws while the models are updated, and when the renderer itself fails: an error thrown out of React's work, not by a component. All the trees share the renderer, so every root is told (the others with an error whose `cause` is the original one) and keeps the models it has; the tree and its state are lost, its effects are not cleaned up, and the next `render()` starts a new tree. A `fromElement()` that was waiting meanwhile rejects with an error whose `cause` is the original one; pass `retries` to start it again instead, up to that many times.
 - `unmount()` reports what a cleanup of an effect throws to `onUncaughtError` too.
 - `render()` throws only when the root was unmounted.
 
