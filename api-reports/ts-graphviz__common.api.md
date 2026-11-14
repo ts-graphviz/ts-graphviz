@@ -840,8 +840,8 @@ export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K exten
   removeNode(node: NodeModel<S> | string): void;
   removeEdge(edge: EdgeModel<S>): void;
   removeSubgraph(subgraph: SubgraphModel<S>): void;
-  getSubgraph(id: string): SubgraphModel<S> | undefined;
-  getNode(id: string): NodeModel<S> | undefined;
+  getSubgraphs(id: string): SubgraphModel<S>[];
+  getNodes(id: string): NodeModel<S>[];
 }
 
 export interface GraphCommonAttributes<S extends Schema = EmptySchema> {
@@ -1144,8 +1144,8 @@ export interface ReadonlyGraphBaseModel<T extends "Graph" | "Subgraph" = "Graph"
   readonly subgraphs: ReadonlyArray<ReadonlySubgraphModel>;
   readonly statements: ReadonlyArray<ReadonlyGraphStatementModel>;
   existNode(nodeId: string): boolean;
-  getNode(id: string): ReadonlyNodeModel | undefined;
-  getSubgraph(id: string): ReadonlySubgraphModel | undefined;
+  getNodes(id: string): ReadonlyArray<ReadonlyNodeModel>;
+  getSubgraphs(id: string): ReadonlyArray<ReadonlySubgraphModel>;
 }
 
 export type ReadonlyGraphStatementModel = ReadonlyNodeModel | ReadonlyEdgeModel | ReadonlySubgraphModel | ReadonlyAttributeListModel;
