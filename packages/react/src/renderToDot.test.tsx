@@ -1,5 +1,5 @@
 import React from 'react';
-import { Digraph as DigraphModel } from 'ts-graphviz';
+import { Digraph as DigraphModel, type NodeModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
@@ -70,8 +70,9 @@ describe('renderToDot()', () => {
   describe('models option', () => {
     it('forwards models to createRoot and renders strict graphs', async () => {
       class MyDigraph extends DigraphModel {
-        override createNode(id: string) {
-          return super.createNode(`${id}_custom`);
+        override addNode(node: NodeModel) {
+          super.addNode(node);
+          node.setAttribute('comment', 'custom');
         }
       }
       const dot = await renderToDot(
@@ -81,7 +82,7 @@ describe('renderToDot()', () => {
         { models: { Digraph: MyDigraph } },
       );
       expect(dot).toMatch(/^strict digraph "G" \{/);
-      expect(dot).toContain('"a_custom";');
+      expect(dot).toContain('comment = "custom";');
     });
   });
 

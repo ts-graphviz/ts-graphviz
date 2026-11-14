@@ -9,10 +9,11 @@ import type { ReactElement } from 'react';
 import type {
   AnyDotObjectModel,
   EdgeModel,
+  ModelKit,
   NodeModel,
   SubgraphModel,
 } from 'ts-graphviz';
-import { isNodeModel, ownOptions } from 'ts-graphviz';
+import { defaultModelKit, isNodeModel, ownOptions } from 'ts-graphviz';
 import { renderId } from './renderId.js';
 import type { AnyGraphContainer } from './types/container.js';
 import type {
@@ -303,11 +304,12 @@ const added = new WeakMap<AnyGraphContainer, Added>();
  * A portal names a graph of the container, or a rendered graph outside any
  * portal; so a graph never ends up inside itself.
  *
- * A node or edge keeps the model the graph it first went to made, also when
- * a portal moves it to another graph, so a ref to it stays right.
+ * A node or edge keeps its model, which the root's kit makes, also when a
+ * portal moves it to another graph, so a ref to it stays right.
  */
 export function syncContainer(container: RenderContainer): void {
   const root = container.context?.container;
+  const kit = container.context?.models ?? defaultModelKit;
   const desired = new Map<AnyGraphContainer, Statement[]>();
   const byId = new Map<string, AnyGraphContainer>();
   const own: AnyGraphContainer[] = [];
@@ -368,7 +370,7 @@ export function syncContainer(container: RenderContainer): void {
         continue;
       }
       if (graph === undefined) continue;
-      child.model ??= createStatement(graph, child);
+      child.model ??= createStatement(kit, child);
       listOf(graph).push(child.model);
       rendered.push(child.model);
     }
@@ -400,53 +402,19 @@ export function syncContainer(container: RenderContainer): void {
 }
 
 /**
- * Make the model of a node or edge with the graph's `createNode` /
- * `createEdge`, so a graph class that overrides them still decides, and
- * take it out again: the graph's statements are put in order afterwards.
+ * Make the model of a node or edge with the kit. It is in no graph yet: the
+ * graph's statements are put in order afterwards.
  */
 function createStatement(
-  graph: AnyGraphContainer,
+  kit: ModelKit,
   instance: NodeInstance | EdgeInstance,
 ): NodeModel | EdgeModel {
-  if (instance.kind === 'edge') {
-    const before = new Set(graph.edges);
-    let edge: EdgeModel;
-    try {
-      edge = graph.createEdge(instance.props.targets);
-    } catch (error) {
-      // Take back an edge the factory added before it threw.
-      for (const added of graph.edges) {
-        if (!before.has(added)) graph.removeEdge(added);
-      }
-      throw error;
-    }
-    graph.removeEdge(edge);
-    applyProps(edge, instance.props);
-    return edge;
-  }
-  const { id } = instance.props;
-  const existing = graph.getNode(id);
-  // createNode may put its node in the place of the one with its id: give
-  // that back (in the same place), or take the new one out.
-  const restore = (node: NodeModel | undefined) => {
-    if (node === undefined || node === existing) return;
-    // A factory may also give the node another id.
-    if (existing !== undefined && node.id === existing.id) {
-      graph.addNode(existing);
-    } else {
-      graph.removeNode(node);
-    }
-  };
-  let node: NodeModel;
-  try {
-    node = graph.createNode(id);
-  } catch (error) {
-    restore(graph.getNode(id));
-    throw error;
-  }
-  if (graph.getNode(node.id) === node) restore(node);
-  applyProps(node, instance.props);
-  return node;
+  const model =
+    instance.kind === 'edge'
+      ? kit.createEdge(instance.props.targets)
+      : kit.createNode(instance.props.id);
+  applyProps(model, instance.props);
+  return model;
 }
 
 /** The graphs a container had of its own, by id. */
