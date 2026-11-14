@@ -728,6 +728,36 @@ describe('custom models', () => {
     expect(g.subgraph('s')).toMatchObject({ rank: 'max' });
   });
 
+  test('the kit is the receiver of its methods', () => {
+    // A kit of methods (not arrow functions) reaches its classes through this.
+    const kit = {
+      ...defaultModelKit,
+      Subgraph,
+      Node,
+      Edge,
+      createSubgraph(this: { Subgraph: typeof Subgraph }, id?: string) {
+        return new this.Subgraph(id);
+      },
+      createNode(this: { Node: typeof Node }, id: string) {
+        return new this.Node(id);
+      },
+      createEdge(
+        this: { Edge: typeof Edge },
+        targets: ConstructorParameters<typeof Edge>[0],
+      ) {
+        return new this.Edge(targets);
+      },
+    } as ModelKit;
+    const g = dsl(new Digraph(), kit);
+    g.subgraph('s', (s) => {
+      s.edge([s.node('a'), 'b']);
+    });
+    g.subgraph();
+    expect(modelOf(g).subgraphs.map((s) => s.id)).toEqual(['s', undefined]);
+    expect(modelOf(g).subgraphs[0].nodes.map((n) => n.id)).toEqual(['a']);
+    expect(modelOf(g).subgraphs[0].edges).toHaveLength(1);
+  });
+
   test('default attribute statements keep their place, as in DOT', () => {
     const g = dsl(new Digraph('G'));
     g.node({ color: 'red' });
