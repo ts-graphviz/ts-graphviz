@@ -64,6 +64,7 @@ export interface FromElementOptions<Container extends AnyGraphContainer = AnyGra
   };
   models?: Partial<ModelClasses>;
   signal?: AbortSignal;
+  retries?: number;
   onCaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
   onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;
 }
