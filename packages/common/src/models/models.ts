@@ -1039,8 +1039,14 @@ export interface SubgraphConstructor<
   G extends ReadonlySubgraphModel = SubgraphModel,
   S extends Schema = EmptySchema,
 > {
-  new (id?: string, attributes?: SubgraphAttributesObject<S>): G;
-  new (attributes?: SubgraphAttributesObject<S>): G;
+  /** An id that starts with `cluster`: the attributes of a cluster. */
+  new (
+    id: `cluster${string}` | `Cluster${string}` | `CLUSTER${string}`,
+    attributes?: ClusterSubgraphAttributesObject<S>,
+  ): G;
+  /** Any other id, or none: see {@link NonClusterSubgraphAttributesObject}. */
+  new (id?: string, attributes?: NonClusterSubgraphAttributesObject<S>): G;
+  new (attributes?: NonClusterSubgraphAttributesObject<S>): G;
 }
 
 /**

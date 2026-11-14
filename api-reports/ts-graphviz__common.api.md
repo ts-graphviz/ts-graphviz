@@ -1309,8 +1309,9 @@ export type SubgraphAttributesFor<Id extends string | undefined, S extends Schem
 export type SubgraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey, SubgraphSchemaAttributeTypes<S>>;
 
 export interface SubgraphConstructor<G extends ReadonlySubgraphModel = SubgraphModel, S extends Schema = EmptySchema> {
-  new (id?: string, attributes?: SubgraphAttributesObject<S>): G;
-  new (attributes?: SubgraphAttributesObject<S>): G;
+  new (id: `cluster${string}` | `Cluster${string}` | `CLUSTER${string}`, attributes?: ClusterSubgraphAttributesObject<S>): G;
+  new (id?: string, attributes?: NonClusterSubgraphAttributesObject<S>): G;
+  new (attributes?: NonClusterSubgraphAttributesObject<S>): G;
 }
 
 export interface SubgraphModel<S extends Schema = EmptySchema> extends GraphBaseModel<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, S> {
