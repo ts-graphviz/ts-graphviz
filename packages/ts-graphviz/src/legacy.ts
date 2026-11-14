@@ -186,7 +186,8 @@ export function fromDot<
   },
 ): FromDotResult<
   ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
-  D
+  D,
+  ResolvedModelTypes<P>
 >;
 /**
  * @deprecated The 3.x models (`legacyModels`). For node and edge defaults
@@ -201,7 +202,11 @@ export function fromDot<
   options: FromDotOptions<R, P, D> & {
     convert: { models: P };
   },
-): FromDotResult<FromDotModel<R, ResolvedModelTypes<P>>, D>;
+): FromDotResult<
+  FromDotModel<R, ResolvedModelTypes<P>>,
+  D,
+  ResolvedModelTypes<P>
+>;
 /**
  * @deprecated The 3.x models (`legacyModels`). For node and edge defaults
  * of a whole graph, write them first in the DOT source. Removed in v5.
@@ -271,7 +276,8 @@ export function fromDotAll<
   },
 ): FromDotResult<
   ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
-  D
+  D,
+  ResolvedModelTypes<P>
 >[];
 /**
  * @deprecated The 3.x models (`legacyModels`). For node and edge defaults

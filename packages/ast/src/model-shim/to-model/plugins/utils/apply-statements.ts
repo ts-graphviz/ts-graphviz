@@ -63,10 +63,12 @@ function applySubgraph(
   const id = ownField(stmt, 'id');
   // The subgraph with this id if there is one, as in DOT, where a subgraph
   // statement with a known id adds to that subgraph.
-  const subgraph = id
-    ? (graph.getSubgraph(idFromLiteral(id)) ??
-      graph.createSubgraph(idFromLiteral(id)))
-    : graph.createSubgraph();
+  const name = id ? idFromLiteral(id) : undefined;
+  let subgraph = name !== undefined ? graph.getSubgraph(name) : undefined;
+  if (subgraph === undefined) {
+    subgraph = context.models.createSubgraph(name);
+    graph.addSubgraph(subgraph);
+  }
   applyStatements(context, subgraph, stmt.children);
   const nodes = subgraphNodes.get(subgraph) ?? new Set<string>();
   for (const id of nodeIdsOf(stmt, idCacheOf(context))) nodes.add(id);

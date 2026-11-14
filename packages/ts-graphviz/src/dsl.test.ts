@@ -12,9 +12,10 @@ import {
   isRootGraphModel,
   isSubgraphModel,
   MODEL,
+  type ModelKit,
   modelOf,
-  type NodeModel,
   type StatementAttributeListModel,
+  type SubgraphAttributesObject,
   toNodeRef,
   toNodeRefGroup,
 } from '@ts-graphviz/common';
@@ -22,6 +23,7 @@ import {
   createModelKit,
   Digraph,
   Dot,
+  defaultModelKit,
   Edge,
   Node,
   Subgraph,
@@ -57,28 +59,39 @@ describe('DOT statements', () => {
     g = graph();
   });
 
+  /** The default kit, with spies in place of its `create*`. */
+  function spyKit() {
+    return {
+      ...defaultModelKit,
+      createNode: vi.fn(defaultModelKit.createNode),
+      createEdge: vi.fn(defaultModelKit.createEdge),
+      createSubgraph: vi.fn(defaultModelKit.createSubgraph),
+    };
+  }
+
   describe('node', () => {
-    test('creates a node with the graph’s createNode', () => {
-      const createNode = vi.spyOn(modelOf(g), 'createNode');
-      const node = g.node('foo');
-      expect(createNode).toHaveBeenCalledWith('foo');
-      expect(modelOf(g).existNode('foo')).toBe(true);
+    test('creates a node with the kit and adds it', () => {
+      const kit = spyKit();
+      const node = dsl(modelOf(g), kit).node('foo');
+      expect(kit.createNode).toHaveBeenCalledWith('foo');
+      expect(modelOf(g).getNode('foo')).toBe(modelOf(node));
       expect(modelOf(node).id).toBe('foo');
     });
 
     test('gives the node there is, with the attributes applied', () => {
       const created = dsl(modelOf(g).createNode('foo'));
-      const createNode = vi.spyOn(modelOf(g), 'createNode');
-      const node = g.node('foo', { label: 'Test label' });
-      expect(createNode).not.toHaveBeenCalled();
-      expect(node).toBe(created);
+      const kit = spyKit();
+      const node = dsl(modelOf(g), kit).node('foo', { label: 'Test label' });
+      expect(kit.createNode).not.toHaveBeenCalled();
+      expect(modelOf(node)).toBe(modelOf(created));
+      expect(g.node('foo')).toBe(created);
       expect(node.label).toBe('Test label');
     });
 
-    test('calls the callback with the node', () => {
+    test('calls the callback with the node and the kit', () => {
       const callback = vi.fn();
       const node = g.node('foo', { label: 'Test label' }, callback);
-      expect(callback).toHaveBeenCalledWith(node);
+      expect(callback).toHaveBeenCalledWith(node, defaultModelKit);
       expect(g.node('foo', callback)).toBe(node);
       expect(callback).toHaveBeenCalledTimes(2);
     });
@@ -97,19 +110,28 @@ describe('DOT statements', () => {
       nodes = [modelOf(g).createNode('foo'), modelOf(g).createNode('bar')];
     });
 
-    test('creates an edge with the graph’s createEdge', () => {
-      const createEdge = vi.spyOn(modelOf(g), 'createEdge');
-      g.edge(nodes, { label: 'Test label' });
-      expect(createEdge).toHaveBeenCalledWith(nodes, { label: 'Test label' });
+    test('creates an edge with the kit and adds it', () => {
+      const kit = spyKit();
+      const edge = dsl(modelOf(g), kit).edge(nodes, { label: 'Test label' });
+      expect(kit.createEdge).toHaveBeenCalledWith(nodes, {
+        label: 'Test label',
+      });
+      expect(modelOf(g).edges).toStrictEqual([modelOf(edge)]);
     });
 
-    test('calls the callback with the edge', () => {
+    test('does not add the nodes the targets refer to', () => {
+      g.edge(['x', 'y']);
+      expect(modelOf(g).existNode('x')).toBe(false);
+      expect(modelOf(g).existNode('y')).toBe(false);
+    });
+
+    test('calls the callback with the edge and the kit', () => {
       const callback = vi.fn();
       const edge = g.edge(nodes, { label: 'Test label' }, callback);
-      expect(callback).toHaveBeenCalledWith(edge);
+      expect(callback).toHaveBeenCalledWith(edge, defaultModelKit);
       expect(edge.label).toBe('Test label');
       const other = g.edge(nodes, callback);
-      expect(callback).toHaveBeenLastCalledWith(other);
+      expect(callback).toHaveBeenLastCalledWith(other, defaultModelKit);
     });
 
     test('ignores null as the attributes', () => {
@@ -127,34 +149,58 @@ describe('DOT statements', () => {
   });
 
   describe('subgraph', () => {
-    test('creates one with the graph’s createSubgraph', () => {
-      const createSubgraph = vi.spyOn(modelOf(g), 'createSubgraph');
-      expect(modelOf(g.subgraph())).toBeInstanceOf(Subgraph);
-      expect(createSubgraph).toHaveBeenLastCalledWith();
-      g.subgraph('cluster_foo', { label: 'Test label' });
-      expect(createSubgraph).toHaveBeenLastCalledWith('cluster_foo');
-      expect(g.subgraph({ rank: 'same' }).rank).toBe('same');
+    test('creates one with the kit and adds it', () => {
+      const kit = spyKit();
+      const G = dsl(modelOf(g), kit);
+      const anonymous = G.subgraph();
+      expect(modelOf(anonymous)).toBeInstanceOf(Subgraph);
+      expect(kit.createSubgraph).toHaveBeenLastCalledWith();
+      const named = G.subgraph('cluster_foo', { label: 'Test label' });
+      expect(kit.createSubgraph).toHaveBeenLastCalledWith('cluster_foo', {
+        label: 'Test label',
+      });
+      expect(G.subgraph({ rank: 'same' }).rank).toBe('same');
+      expect(modelOf(g).subgraphs.slice(0, 2)).toStrictEqual([
+        modelOf(anonymous),
+        modelOf(named),
+      ]);
     });
 
     test('gives the subgraph there is with this id', () => {
       const created = dsl(modelOf(g).createSubgraph('cluster_foo'));
-      const createSubgraph = vi.spyOn(modelOf(g), 'createSubgraph');
-      const subgraph = g.subgraph('cluster_foo', { label: 'Test label' });
-      expect(createSubgraph).not.toHaveBeenCalled();
-      expect(subgraph).toBe(created);
+      const kit = spyKit();
+      const subgraph = dsl(modelOf(g), kit).subgraph('cluster_foo', {
+        label: 'Test label',
+      });
+      expect(kit.createSubgraph).not.toHaveBeenCalled();
+      expect(modelOf(subgraph)).toBe(modelOf(created));
+      expect(g.subgraph('cluster_foo')).toBe(created);
       expect(subgraph.label).toBe('Test label');
     });
 
-    test('calls the callback with the subgraph', () => {
+    test('calls the callback with the subgraph and the kit', () => {
       const callback = vi.fn();
       const a = g.subgraph(callback);
-      expect(callback).toHaveBeenLastCalledWith(a);
+      expect(callback).toHaveBeenLastCalledWith(a, defaultModelKit);
       const b = g.subgraph({ rank: 'same' }, callback);
-      expect(callback).toHaveBeenLastCalledWith(b);
+      expect(callback).toHaveBeenLastCalledWith(b, defaultModelKit);
       const c = g.subgraph('foo', callback);
-      expect(callback).toHaveBeenLastCalledWith(c);
+      expect(callback).toHaveBeenLastCalledWith(c, defaultModelKit);
       const d = g.subgraph('cluster_foo', { label: 'L' }, callback);
-      expect(callback).toHaveBeenLastCalledWith(d);
+      expect(callback).toHaveBeenLastCalledWith(d, defaultModelKit);
+    });
+
+    test('a subgraph’s DSL creates with the same kit', () => {
+      class MyNode extends Node {}
+      const kit = createModelKit({ Node: MyNode });
+      const G = dsl(modelOf(g), kit);
+      G.subgraph('s', (s, given) => {
+        expect(given).toBe(kit);
+        expect(modelOf(s.node('a'))).toBeInstanceOf(MyNode);
+        s.subgraph('t', (t) => {
+          expect(modelOf(t.node('b'))).toBeInstanceOf(MyNode);
+        });
+      });
     });
 
     test('takes the empty id as an id; no id makes an anonymous one', () => {
@@ -465,18 +511,17 @@ describe('the rules', () => {
     expect(modelOf(g).subgraphs).toHaveLength(1);
   });
 
-  test('2. a model’s methods receive models, arrays included', () => {
-    // A model class of your own may not unwrap what it is given.
+  test('2. the kit and the model receive models, arrays included', () => {
+    // A kit or a model class of your own may not unwrap what it is given.
     const received: unknown[] = [];
-    class Recording extends Digraph {
-      override createEdge(
-        ...args: Parameters<Digraph['createEdge']>
-      ): ReturnType<Digraph['createEdge']> {
-        received.push(args[0]);
-        return super.createEdge(...args);
-      }
-    }
-    const g = dsl(new Recording());
+    const kit: ModelKit = {
+      ...defaultModelKit,
+      createEdge: (targets, attributes) => {
+        received.push(targets);
+        return defaultModelKit.createEdge(targets, attributes);
+      },
+    };
+    const g = dsl(new Digraph(), kit);
     const a = g.node('a');
     const b = g.node('b');
     g.edge([a, [b, 'c']]);
@@ -507,14 +552,64 @@ describe('the rules', () => {
     expect(g.subgraph('s')).toBe(s);
   });
 
-  test('4. a model has one DSL', () => {
+  test('4. a model and a kit have one DSL', () => {
     const model = new Digraph();
     const g = dsl(model);
     expect(dsl(model)).toBe(g);
     expect(dsl(g)).toBe(g);
+    expect(dsl(model, defaultModelKit)).toBe(g);
+    expect(dsl(model, createModelKit())).toBe(g);
     expect(g.node).toBe(g.node);
     expect(g.addComment).toBe(g.addComment);
     expect(modelOf(g)).toBe(model);
+
+    class MyNode extends Node {}
+    const kit = createModelKit({ Node: MyNode });
+    const k = dsl(model, kit);
+    expect(k).not.toBe(g);
+    expect(dsl(model, kit)).toBe(k);
+    expect(modelOf(k)).toBe(model);
+    // A DSL as it is; with a kit, the DSL of its model with that kit.
+    expect(dsl(k)).toBe(k);
+    expect(dsl(g, kit)).toBe(k);
+    expect(dsl(k, defaultModelKit)).toBe(g);
+    // What a DSL gives is a DSL of the same kit.
+    const a = k.node('a');
+    expect(k.node('a')).toBe(a);
+    expect(a).toBe(dsl(modelOf(a), kit));
+    expect(modelOf(g.node('a'))).toBe(modelOf(a));
+  });
+
+  test('dsl takes only a kit as its second argument', () => {
+    const model = new Digraph();
+    for (const value of [
+      null,
+      1,
+      'kit',
+      {},
+      [],
+      { Node, Edge, Subgraph },
+      { createNode() {}, createEdge() {} },
+      { createNode() {}, createEdge() {}, createSubgraph() {} },
+    ]) {
+      expect(() => dsl(model, value as never)).toThrow(
+        expect.objectContaining({
+          name: 'TypeError',
+          code: 'TSG_ERR_NOT_A_MODEL_KIT',
+        }),
+      );
+    }
+  });
+
+  test('the kit only creates; the statements add', () => {
+    const g = digraph((g, kit) => {
+      const d = kit.createNode('d');
+      kit.createEdge(['d', 'e']);
+      kit.createSubgraph('s');
+      expect(modelOf(g).statements).toStrictEqual([]);
+      modelOf(g).addNode(d);
+    });
+    expect(modelOf(g).nodes.map((node) => node.id)).toStrictEqual(['d']);
   });
 
   test('dsl takes only models', () => {
@@ -585,22 +680,82 @@ describe('custom models', () => {
     class MyNode extends Node {
       public mine = true;
     }
-    const createNode = vi.fn();
-    class MyDigraph extends Digraph {
-      override createNode(id: string): NodeModel {
-        createNode(id);
-        return super.createNode(id);
-      }
-    }
-    const model = new MyDigraph();
-    model.with(createModelKit({ Node: MyNode }));
-    const g = dsl(model);
+    const kit = createModelKit({ Node: MyNode });
+    const model = new Digraph();
+    const g = dsl(model, kit);
     const a = g.node('a');
-    expect(createNode).toHaveBeenCalledWith('a');
     expect(modelOf(a)).toBeInstanceOf(MyNode);
+    // Without a kit, the default one: a model does not remember its kit.
+    expect(modelOf(dsl(model).node('b'))).not.toBeInstanceOf(MyNode);
     // The class's own members are on the model.
     expect((modelOf(a) as MyNode).mine).toBe(true);
     expect((a as unknown as { mine?: unknown }).mine).toBeUndefined();
+  });
+
+  test('a new model gets the attributes of its statement in the constructor', () => {
+    const seen: unknown[][] = [];
+    class MyNode extends Node {
+      constructor(...args: ConstructorParameters<typeof Node>) {
+        super(...args);
+        seen.push(args);
+      }
+    }
+    class MySubgraph extends Subgraph {
+      constructor(...args: (string | SubgraphAttributesObject | undefined)[]) {
+        super(...(args as [string?, SubgraphAttributesObject?]));
+        seen.push(args);
+      }
+    }
+    const g = dsl(
+      new Digraph(),
+      createModelKit({ Node: MyNode, Subgraph: MySubgraph }),
+    );
+    g.node('a', { label: 'A' });
+    g.subgraph('s', { rank: 'same' });
+    g.subgraph({ rank: 'min' });
+    g.subgraph();
+    expect(seen).toEqual([
+      ['a', { label: 'A' }],
+      ['s', { rank: 'same' }],
+      [{ rank: 'min' }],
+      [],
+    ]);
+    // A model the graph already holds takes them as an update.
+    g.node('a', { color: 'red' });
+    g.subgraph('s', { rank: 'max' });
+    expect(seen).toHaveLength(4);
+    expect(g.node('a')).toMatchObject({ label: 'A', color: 'red' });
+    expect(g.subgraph('s')).toMatchObject({ rank: 'max' });
+  });
+
+  test('the kit is the receiver of its methods', () => {
+    // A kit of methods (not arrow functions) reaches its classes through this.
+    const kit = {
+      ...defaultModelKit,
+      Subgraph,
+      Node,
+      Edge,
+      createSubgraph(this: { Subgraph: typeof Subgraph }, id?: string) {
+        return new this.Subgraph(id);
+      },
+      createNode(this: { Node: typeof Node }, id: string) {
+        return new this.Node(id);
+      },
+      createEdge(
+        this: { Edge: typeof Edge },
+        targets: ConstructorParameters<typeof Edge>[0],
+      ) {
+        return new this.Edge(targets);
+      },
+    } as ModelKit;
+    const g = dsl(new Digraph(), kit);
+    g.subgraph('s', (s) => {
+      s.edge([s.node('a'), 'b']);
+    });
+    g.subgraph();
+    expect(modelOf(g).subgraphs.map((s) => s.id)).toEqual(['s', undefined]);
+    expect(modelOf(g).subgraphs[0].nodes.map((n) => n.id)).toEqual(['a']);
+    expect(modelOf(g).subgraphs[0].edges).toHaveLength(1);
   });
 
   test('default attribute statements keep their place, as in DOT', () => {

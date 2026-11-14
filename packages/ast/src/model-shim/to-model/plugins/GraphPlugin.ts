@@ -9,9 +9,11 @@ export const GraphPlugin: ConvertToModelPlugin<GraphASTNode> = {
     return ast.type === 'Graph';
   },
   convert(context, ast) {
-    const G = ast.directed ? context.models.Digraph : context.models.Graph;
     const id = ownField(ast, 'id');
-    const graph = new G(id ? idFromLiteral(id) : undefined, ast.strict);
+    const name = id ? idFromLiteral(id) : undefined;
+    const graph = ast.directed
+      ? context.models.createDigraph(name, ast.strict)
+      : context.models.createGraph(name, ast.strict);
     applyStatements(context, graph, ast.children);
     return graph;
   },

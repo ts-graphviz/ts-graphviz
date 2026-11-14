@@ -10,7 +10,7 @@ export const SubgraphPlugin: ConvertToModelPlugin<SubgraphASTNode> = {
   },
   convert(context, ast) {
     const id = ownField(ast, 'id');
-    const subgraph = new context.models.Subgraph(
+    const subgraph = context.models.createSubgraph(
       id ? idFromLiteral(id) : undefined,
     );
     applyStatements(context, subgraph, ast.children);

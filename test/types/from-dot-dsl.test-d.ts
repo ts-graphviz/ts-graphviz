@@ -6,6 +6,7 @@ import {
   type ModelClasses,
   Node,
   type NodeModel,
+  type ResolvedModelTypes,
 } from 'ts-graphviz';
 import * as legacy from 'ts-graphviz/legacy';
 import { describe, expectTypeOf, it } from 'vitest';
@@ -38,7 +39,7 @@ describe('fromDot', () => {
     expectTypeOf(a).toEqualTypeOf<DSL<MyNode>>();
     const M = fromDot('', { convert: { models } });
     expectTypeOf(fromDot('', { dsl: true, convert: { models } })).toEqualTypeOf<
-      DSL<typeof M>
+      DSL<typeof M, ResolvedModelTypes<typeof models>>
     >();
   });
 
@@ -92,7 +93,7 @@ describe('fromDotAll', () => {
     const [M] = fromDotAll('', { convert: { models } });
     expectTypeOf(
       fromDotAll('', { dsl: true, convert: { models } }),
-    ).toEqualTypeOf<DSL<typeof M>[]>();
+    ).toEqualTypeOf<DSL<typeof M, ResolvedModelTypes<typeof models>>[]>();
   });
 });
 

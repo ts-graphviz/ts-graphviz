@@ -3,6 +3,7 @@ import type {
   EdgeModel,
   ModelKit,
   NodeModel,
+  ResolvedModelTypes,
   RootGraphModel,
   SubgraphModel,
 } from 'ts-graphviz';
@@ -84,10 +85,13 @@ describe('a ModelKit with custom classes', () => {
         return 'x';
       }
     }
+    type M = ResolvedModelTypes<{ Subgraph: typeof MySubgraph }>;
     const { graph } = withModelKit({ Subgraph: MySubgraph });
-    graph((g) => {
-      expectTypeOf(g.subgraph('s')).toEqualTypeOf<DSL<MySubgraph>>();
+    graph((g, kit) => {
+      expectTypeOf(g.subgraph('s')).toEqualTypeOf<DSL<MySubgraph, M>>();
       expectTypeOf(modelOf(g.subgraph('s')).tag()).toEqualTypeOf<string>();
+      expectTypeOf(kit).toEqualTypeOf<ModelKit<M>>();
+      expectTypeOf(kit.createSubgraph('t')).toEqualTypeOf<MySubgraph>();
     });
   });
 });
