@@ -7,7 +7,7 @@ import { GraphMap } from './contexts/GraphMap.js';
 import { type Context, GraphvizContext } from './contexts/GraphvizContext.js';
 import { ModelCollectorContext } from './contexts/ModelCollector.js';
 import { ownOptions } from './own-options.js';
-import { reconciler } from './reconciler.js';
+import { createReconciler, type Reconciler } from './reconciler.js';
 import type { AnyGraphContainer } from './types/container.js';
 import type { RenderContainer } from './types/reconciler.js';
 
@@ -49,7 +49,10 @@ export interface CreateRootOptions<
    */
   onRenderComplete?: (models: DotObjectModel[]) => void;
   /**
-   * Timeout for async rendering in milliseconds
+   * Timeout for rendering in milliseconds.
+   *
+   * Rendering is synchronous, so the timeout does not interrupt it: a render
+   * that took longer rejects once its work is done.
    * @default 5000
    */
   timeout?: number;
@@ -151,12 +154,42 @@ function createWrappedElement<Container extends AnyGraphContainer>(
 }
 
 /**
+ * Where an error thrown by a user's error callback goes: the renders of the
+ * root that have not settled. They share its tree, so each of them fails.
+ */
+type CallbackErrors = Set<(error: unknown) => void>;
+
+/**
  * Creates a fiber root for rendering.
  */
 function createFiberRoot<
   Container extends AnyGraphContainer = AnyGraphContainer,
->(containerInfo: RenderContainer<Container>, options: CreateRootOptions = {}) {
-  const { onUncaughtError = noop } = options;
+>(
+  reconciler: Reconciler,
+  containerInfo: RenderContainer<Container>,
+  callbackErrors: CallbackErrors,
+  options: CreateRootOptions = {},
+) {
+  const {
+    onUncaughtError = noop,
+    onCaughtError = noop,
+    onRecoverableError = noop,
+  } = options;
+  // Adapt React's error information to the public callback interface.
+  const forward =
+    (callback: (error: Error, errorInfo: ErrorInfo) => void) =>
+    (error: unknown, errorInfo: { componentStack?: string | null }) => {
+      try {
+        callback(error as Error, {
+          componentStack: errorInfo?.componentStack ?? undefined,
+        });
+      } catch (callbackError) {
+        // Reject the renders in progress with it, or drop it.
+        for (const fail of [...callbackErrors]) {
+          fail(callbackError);
+        }
+      }
+    };
 
   return reconciler.createContainer(
     containerInfo,
@@ -165,11 +198,9 @@ function createFiberRoot<
     false, // isStrictMode
     null, // concurrentUpdatesByDefaultOverride
     '@ts-graphviz/react', // identifierPrefix
-    // Enhance onRecoverableError to forward componentStack for better diagnostics
-    onUncaughtError
-      ? (error: Error, errorInfo: ErrorInfo = {}) =>
-          onUncaughtError(error, errorInfo)
-      : noop, // onRecoverableError
+    forward(onUncaughtError),
+    forward(onCaughtError),
+    forward(onRecoverableError),
     null, // transitionCallbacks
   );
 }
@@ -208,40 +239,91 @@ function validateModels(
 async function renderInternal<
   Container extends AnyGraphContainer = AnyGraphContainer,
 >(
+  reconciler: Reconciler,
   containerInfo: RenderContainer<Container>,
+  callbackErrors: CallbackErrors,
   fiberRoot: any,
   wrappedElement: ReactElement,
   originalContainer: Container | undefined,
   options: CreateRootOptions = {},
+  onFlushError: (error: unknown) => void = noop,
 ): Promise<void> {
   const { timeout = 5000, onRenderComplete } = options;
 
   return new Promise<void>((resolve, reject) => {
+    const timeoutError = () =>
+      new Error(`Rendering timeout after ${timeout}ms`);
+    // Settle once: a commit that comes after the timeout (such as a retry of
+    // a suspended tree) must not validate or report a rejected render.
+    let settled = false;
+    const fail = (error: unknown) => {
+      if (!settled) {
+        settled = true;
+        clearTimeout(timeoutId);
+        release();
+        reject(error);
+      }
+    };
+    const release = () => {
+      callbackErrors.delete(fail);
+    };
+    callbackErrors.add(fail);
     const timeoutId = setTimeout(() => {
-      reject(new Error(`Rendering timeout after ${timeout}ms`));
+      fail(timeoutError());
     }, timeout);
+    const startedAt = performance.now();
+    // The commit callback can run inside flushSyncWork, before the rest of
+    // the work (such as passive effects) is done: settle only once that work
+    // has finished without throwing.
+    let flushing = true;
+    let committed = false;
+
+    const settle = () => {
+      if (settled) {
+        return;
+      }
+      try {
+        // The work runs synchronously, so the timer cannot fire while it
+        // runs: check the time it took instead.
+        if (performance.now() - startedAt > timeout) {
+          throw timeoutError();
+        }
+
+        // Validate the rendered models
+        validateModels(containerInfo.renderedModels, originalContainer);
+
+        // Call completion callback
+        if (onRenderComplete) {
+          onRenderComplete([...containerInfo.renderedModels]);
+        }
+
+        settled = true;
+        clearTimeout(timeoutId);
+        release();
+        resolve();
+      } catch (error) {
+        fail(error);
+      }
+    };
 
     try {
-      reconciler.updateContainer(wrappedElement, fiberRoot, null, () => {
-        clearTimeout(timeoutId);
-
-        try {
-          // Validate the rendered models
-          validateModels(containerInfo.renderedModels, originalContainer);
-
-          // Call completion callback
-          if (onRenderComplete) {
-            onRenderComplete([...containerInfo.renderedModels]);
-          }
-
-          resolve();
-        } catch (error) {
-          reject(error);
+      // Render synchronously, so an error thrown by React's work loop
+      // rejects this render.
+      reconciler.updateContainerSync(wrappedElement, fiberRoot, null, () => {
+        committed = true;
+        if (!flushing) {
+          settle();
         }
       });
+      reconciler.flushSyncWork();
+      flushing = false;
+      if (committed) {
+        settle();
+      }
     } catch (error) {
-      clearTimeout(timeoutId);
-      reject(error);
+      flushing = false;
+      fail(error);
+      onFlushError(error);
     }
   });
 }
@@ -263,8 +345,15 @@ export function createRoot<
 
   // Use imported type guard for root graph models
 
-  // Model collector function
-  const collectModel = (model: DotObjectModel) => {
+  // Counts the fiber roots of this root: a tree left on a replaced one
+  // collects nothing.
+  let generation = 0;
+
+  // Model collector function, for the trees of one fiber root
+  const collectModelFor = (owner: number) => (model: DotObjectModel) => {
+    if (owner !== generation) {
+      return;
+    }
     if (container) {
       // With container: collect all non-container models at top level only
       if (model !== container) {
@@ -283,7 +372,35 @@ export function createRoot<
   };
   containerInfo.context = context;
 
-  const fiberRoot = createFiberRoot(containerInfo, otherOptions);
+  // Each fiber root has its own set, so that a callback of a replaced one
+  // cannot reject the renders of the next.
+  let callbackErrors: CallbackErrors = new Set();
+  let reconciler = createReconciler();
+  let fiberRoot = createFiberRoot(
+    reconciler,
+    containerInfo,
+    callbackErrors,
+    otherOptions,
+  );
+  // An error thrown out of React's work loop can leave the reconciler in the
+  // middle of its work. Reject the other renders in progress with it, and
+  // continue with a new reconciler and fiber root.
+  const replaceAfterFlushError = (error: unknown) => {
+    const pending = callbackErrors;
+    callbackErrors = new Set();
+    for (const fail of [...pending]) {
+      fail(error);
+    }
+    generation++;
+    containerInfo.renderedModels = [];
+    reconciler = createReconciler();
+    fiberRoot = createFiberRoot(
+      reconciler,
+      containerInfo,
+      callbackErrors,
+      otherOptions,
+    );
+  };
   let isUnmounted = false;
 
   return {
@@ -298,16 +415,19 @@ export function createRoot<
       const wrappedElement = createWrappedElement(
         element,
         context,
-        collectModel,
+        collectModelFor(generation),
         container,
       );
 
       return renderInternal(
+        reconciler,
         containerInfo,
+        callbackErrors,
         fiberRoot,
         wrappedElement,
         container,
         otherOptions,
+        replaceAfterFlushError,
       );
     },
 
@@ -317,8 +437,14 @@ export function createRoot<
       }
 
       isUnmounted = true;
-      reconciler.updateContainer(null, fiberRoot, null, noop);
       containerInfo.renderedModels = [];
+      try {
+        reconciler.updateContainerSync(null, fiberRoot, null, noop);
+        reconciler.flushSyncWork();
+      } catch {
+        // The root is discarded with its own reconciler: a failure while
+        // tearing it down must not hide the result of the render.
+      }
     },
 
     getTopLevelModels<T extends DotObjectModel>(

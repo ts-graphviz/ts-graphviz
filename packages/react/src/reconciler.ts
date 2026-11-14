@@ -451,4 +451,35 @@ export class HostConfig
   }
 }
 
-export const reconciler = ReactReconciler(new HostConfig());
+/**
+ * Create the reconciler used by one root.
+ */
+export function createReconciler() {
+  const reconciler = ReactReconciler(new HostConfig());
+  type Parameter<N extends number> = Parameters<
+    (typeof reconciler)['createContainer']
+  >[N];
+  type ErrorCallback = (
+    error: unknown,
+    errorInfo: { componentStack?: string | null },
+  ) => void;
+  // Types for react-reconciler 0.32, which its type definitions do not have.
+  return reconciler as unknown as Omit<typeof reconciler, 'createContainer'> & {
+    createContainer(
+      containerInfo: Parameter<0>,
+      tag: Parameter<1>,
+      hydrationCallbacks: Parameter<2>,
+      isStrictMode: Parameter<3>,
+      concurrentUpdatesByDefaultOverride: Parameter<4>,
+      identifierPrefix: Parameter<5>,
+      onUncaughtError: ErrorCallback,
+      onCaughtError: ErrorCallback,
+      onRecoverableError: ErrorCallback,
+      transitionCallbacks: Parameter<7>,
+    ): ReturnType<(typeof reconciler)['createContainer']>;
+    updateContainerSync: (typeof reconciler)['updateContainer'];
+    flushSyncWork(): boolean;
+  };
+}
+
+export type Reconciler = ReturnType<typeof createReconciler>;
