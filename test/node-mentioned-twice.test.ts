@@ -1,22 +1,34 @@
 import { spawnSync } from 'node:child_process';
-import { fromDot, toDot } from 'ts-graphviz';
+import { fromDot, legacyModels, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
-// A node statement for a node that already exists adds to its attributes,
-// as Graphviz does; the model used to keep only the last statement.
+// Each node statement is a declaration of its own, where it is written, as
+// in DOT: Graphviz applies the attributes of each in turn.
 describe('a node mentioned twice', () => {
-  it('keeps the attributes of every mention', () => {
+  it('keeps each mention where it is written, with its attributes', () => {
     const g = fromDot('digraph { a [color=red]; b; a [shape=box] }');
-    expect(g.nodes.map((n) => n.id)).toEqual(['a', 'b']);
-    expect(g.getNode('a')?.attributes.values).toEqual([
-      ['color', 'red'],
-      ['shape', 'box'],
+    expect(g.nodes.map((n) => n.id)).toEqual(['a', 'b', 'a']);
+    expect(g.getNodes('a').map((n) => n.attributes.values)).toEqual([
+      [['color', 'red']],
+      [['shape', 'box']],
     ]);
+    expect(toDot(g).replace(/\s+/g, ' ')).toBe(
+      'digraph { "a" [ color = "red"; ]; "b"; "a" [ shape = "box"; ]; }',
+    );
   });
 
-  it('lets a later mention override a value, as Graphviz does', () => {
-    const g = fromDot('digraph { a [color=red]; a [color=blue] }');
-    expect(g.getNode('a')?.attributes.get('color')).toBe('blue');
+  it('is merged into one node by the legacy models, as in 3.x', () => {
+    const g = fromDot(
+      'digraph { a [color=red]; b; a [color=blue, shape=box] }',
+      {
+        convert: { models: legacyModels },
+      },
+    );
+    expect(g.nodes.map((n) => n.id)).toEqual(['a', 'b']);
+    expect(g.nodes[0]?.attributes.values).toEqual([
+      ['color', 'blue'],
+      ['shape', 'box'],
+    ]);
   });
 
   it('renders as the source does', { tags: ['process'] }, ({ skip }) => {

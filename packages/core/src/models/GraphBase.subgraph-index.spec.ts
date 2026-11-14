@@ -20,7 +20,7 @@ describe('subgraphs by id', () => {
       g.addSubgraph(s);
     }
     reads = 0;
-    for (let i = 0; i < count; i++) g.getSubgraph(`s${i}`);
+    for (let i = 0; i < count; i++) g.getSubgraphs(`s${i}`);
     expect(reads).toBeLessThanOrEqual(count);
   });
 
@@ -31,10 +31,10 @@ describe('subgraphs by id', () => {
     Object.defineProperty(s, 'id', { get: () => id });
     g.addSubgraph(s);
     id = 'b';
-    expect(g.getSubgraph('a')).toBeUndefined();
+    expect(g.getSubgraphs('a')).toEqual([]);
     g.removeSubgraph(s);
     id = 'a';
-    expect(g.getSubgraph('a')).toBeUndefined();
+    expect(g.getSubgraphs('a')).toEqual([]);
   });
 
   it('gives the first one added with an id, then the next once it is removed', () => {
@@ -44,30 +44,30 @@ describe('subgraphs by id', () => {
     g.addSubgraph(first);
     g.addSubgraph(second);
     g.addSubgraph(first); // again: no change
-    expect(g.getSubgraph('s')).toBe(first);
+    expect(g.getSubgraphs('s')).toStrictEqual([first, second]);
     g.removeSubgraph(first);
-    expect(g.getSubgraph('s')).toBe(second);
+    expect(g.getSubgraphs('s')[0]).toBe(second);
     g.removeSubgraph(first); // not there: no change
-    expect(g.getSubgraph('s')).toBe(second);
+    expect(g.getSubgraphs('s')[0]).toBe(second);
     g.removeSubgraph(second);
-    expect(g.getSubgraph('s')).toBeUndefined();
+    expect(g.getSubgraphs('s')).toEqual([]);
     g.addSubgraph(first);
-    expect(g.getSubgraph('s')).toBe(first);
+    expect(g.getSubgraphs('s')[0]).toBe(first);
   });
 
   it('does not index subgraphs without an id', () => {
     const g = new Digraph();
     const anonymous = new Subgraph();
     g.addSubgraph(anonymous);
-    expect(g.getSubgraph('undefined')).toBeUndefined();
+    expect(g.getSubgraphs('undefined')).toEqual([]);
     expect(g.subgraphs).toStrictEqual([anonymous]);
   });
 
   it('reads ids that are Object.prototype names as ids', () => {
     const g = new Digraph();
-    expect(g.getSubgraph('constructor')).toBeUndefined();
+    expect(g.getSubgraphs('constructor')).toEqual([]);
     const s = new Subgraph('constructor');
     g.addSubgraph(s);
-    expect(g.getSubgraph('constructor')).toBe(s);
+    expect(g.getSubgraphs('constructor')[0]).toBe(s);
   });
 });

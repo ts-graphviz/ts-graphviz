@@ -104,7 +104,7 @@ describe('Model Collection Edge Cases', () => {
   });
 
   describe('Duplicate ID Handling', () => {
-    it('handles duplicate node IDs by overwriting in container', async () => {
+    it('keeps each node with a duplicate id as a declaration in the container', async () => {
       const container = new DigraphModel('container');
       const root = createRoot({ container });
 
@@ -125,9 +125,12 @@ describe('Model Collection Edge Cases', () => {
       expect(models[0].id).toBe('duplicate');
       expect(models[1].id).toBe('duplicate');
 
-      // Container has the final (overwritten) version
-      expect(container.nodes).toHaveLength(1);
-      expect(container.nodes[0].attributes.get('label')).toBe('Second');
+      // Each element is a declaration of its own, in order
+      expect(container.nodes).toStrictEqual(models);
+      expect(container.nodes.map((n) => n.attributes.get('label'))).toEqual([
+        'First',
+        'Second',
+      ]);
     });
 
     it('handles nodes with undefined IDs correctly', async () => {

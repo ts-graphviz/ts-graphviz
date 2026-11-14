@@ -17,7 +17,7 @@ describe('values that are not strings', { tags: ['SM-2'] }, () => {
     const dot = toDot(g);
     const back = fromDot(dot);
     expect(back.nodes.map((n) => n.id)).toStrictEqual(['a']);
-    expect(back.getNode('a')?.attributes.get('label')).toBe(String(value));
+    expect(back.getNodes('a')[0]?.attributes.get('label')).toBe(String(value));
   });
 
   it('writes an id that is not a string as its escaped text', () => {

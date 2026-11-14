@@ -3,9 +3,10 @@ import type {
   AttributeValue,
   EdgeModel,
   GraphBaseModel,
+  NodeModel,
   SubgraphModel,
 } from '@ts-graphviz/common';
-import { ownField } from '../../../../own-field.js';
+import { hasField, ownField } from '../../../../own-field.js';
 import type {
   AttributeASTNode,
   ClusterStatementASTNode,
@@ -20,11 +21,58 @@ import { collectAttributes } from './collect-attributes.js';
 import { nodeIdsOf, type SubgraphIdCache } from './subgraph-nodes.js';
 
 /**
- * The nodes each subgraph model has had in this conversion, over every
- * place it is opened: `subgraph s { a } -> subgraph s { b }` reaches both
- * a and b at each end, as in Graphviz.
+ * The nodes each subgraph has had in this conversion, over every place it
+ * is declared: `subgraph s { a } -> subgraph s { b }` reaches both a and b
+ * at each end, as in Graphviz. A subgraph with an id is known by the graph
+ * it is in and the id (each declaration is a model of its own); one without
+ * is known by its model.
  */
-const subgraphNodes = new WeakMap<SubgraphModel, Set<string>>();
+const subgraphNodes = new WeakMap<
+  ConvertToModelContext,
+  Map<object, Map<string, Set<string>>>
+>();
+
+function nodesOf(
+  context: ConvertToModelContext,
+  graph: GraphBaseModel,
+  subgraph: SubgraphModel,
+): Set<string> {
+  let byKey = subgraphNodes.get(context);
+  if (byKey === undefined) {
+    byKey = new Map();
+    subgraphNodes.set(context, byKey);
+  }
+  const key: object = subgraph.id === undefined ? subgraph : graph;
+  let byId = byKey.get(key);
+  if (byId === undefined) {
+    byId = new Map();
+    byKey.set(key, byId);
+  }
+  const id = subgraph.id ?? '';
+  let nodes = byId.get(id);
+  if (nodes === undefined) {
+    nodes = new Set();
+    byId.set(id, nodes);
+  }
+  return nodes;
+}
+
+/**
+ * A graph of the deprecated `legacyModels`, which holds one node per id, as
+ * 3.x did: a node or a subgraph declared again adds to the first one.
+ */
+interface LegacyGraph {
+  getNode(id: string): NodeModel | undefined;
+  getSubgraph(id: string): SubgraphModel | undefined;
+}
+
+function asLegacy(graph: GraphBaseModel): LegacyGraph | undefined {
+  // From the graph's classes only: a getNode inherited from Object.prototype
+  // does not make every graph a legacy one.
+  return hasField(graph, 'getNode') && hasField(graph, 'getSubgraph')
+    ? (graph as GraphBaseModel & LegacyGraph)
+    : undefined;
+}
 
 /**
  * The ids of each subgraph statement, collected once per conversion: the
@@ -61,18 +109,18 @@ function applySubgraph(
   stmt: SubgraphASTNode,
 ): SubgraphModel {
   const id = ownField(stmt, 'id');
-  // The subgraph with this id if there is one, as in DOT, where a subgraph
-  // statement with a known id adds to that subgraph.
   const name = id ? idFromLiteral(id) : undefined;
-  let subgraph = name !== undefined ? graph.getSubgraph(name) : undefined;
+  // Each declaration is a subgraph of its own, where it is written; a
+  // legacy graph adds to the subgraph it has with the id.
+  let subgraph =
+    name !== undefined ? asLegacy(graph)?.getSubgraph(name) : undefined;
   if (subgraph === undefined) {
     subgraph = context.models.createSubgraph(name);
     graph.addSubgraph(subgraph);
   }
   applyStatements(context, subgraph, stmt.children);
-  const nodes = subgraphNodes.get(subgraph) ?? new Set<string>();
+  const nodes = nodesOf(context, graph, subgraph);
   for (const id of nodeIdsOf(stmt, idCacheOf(context))) nodes.add(id);
-  subgraphNodes.set(subgraph, nodes);
   return subgraph;
 }
 
@@ -107,12 +155,12 @@ export function applyStatements(
         // Converted by the node plugin each time, so a converter whose
         // plugin changes nodes applies to every mention.
         const node = context.convert(stmt);
-        // A node mentioned again adds to its attributes, as in Graphviz
-        // (`a [color=red]; a [shape=box]` is one node with both): the
-        // converted node's attributes are set on the existing one through
-        // its setAttribute, so a setAttribute that changes values runs on
-        // them again.
-        const existing = graph.getNode(node.id);
+        // Each declaration is a node of its own, where it is written, and
+        // Graphviz applies their attributes in turn. A legacy graph adds a
+        // node mentioned again to the one it has (`a [color=red]; a
+        // [shape=box]` is one node with both), through its setAttribute, so
+        // a setAttribute that changes values runs on them again.
+        const existing = asLegacy(graph)?.getNode(node.id);
         if (existing) {
           for (const name of node.getAttributeNames()) {
             existing.setAttribute(name, node.getAttribute(name) as never);
@@ -141,7 +189,7 @@ export function applyStatements(
           edge = convertEdge(context, stmt, (i) => {
             const subgraph = subgraphs[i];
             if (subgraph === undefined) return undefined;
-            const nodes = subgraphNodes.get(subgraph) ?? new Set<string>();
+            const nodes = nodesOf(context, graph, subgraph);
             // A subgraph opened again keeps its nodes, so these grow with
             // every edge to it: bounded by `maxEdgeTargets`, checked before
             // they are copied.

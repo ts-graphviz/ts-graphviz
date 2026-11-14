@@ -63,7 +63,7 @@ g.addEdge(new Edge([a, b]));
 | `id` | 根图、子图或节点的名字（DOT 中的 ID） |
 | `nodes`、`edges`、`subgraphs` | 图中的节点、边和子图；`nodes` 保存的是节点语句，不包括只出现在边中的节点（参见[常见问题](./01-dot-dsl.md#只出现在边中的节点不在-nodes-里)） |
 | `statements` | 按添加顺序排列的节点、边、子图以及开头之外的默认属性语句，`toDot` 按此顺序输出；图自身的属性和开头的默认值写在它们之前 |
-| `getNode(id)`、`getSubgraph(id)` | 按 id 获取节点或子图 |
+| `getNodes(id)`、`getSubgraphs(id)` | 按声明顺序获取以该 id 声明的节点或子图；与 DOT 一样，`a; b; a [color=red]` 声明了两次 `a`，每次声明都是一个独立的节点模型 |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | 图中是否存在 |
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 移除 |
 | `addAttributeList(kind, attributes)` | 在当前位置添加一条默认属性语句（`node [...]` 等）并返回它 |
@@ -107,7 +107,7 @@ removeNodeEverywhere(g, 'a');
 import { fromDot } from 'ts-graphviz';
 
 const g = fromDot('digraph { a [label = "A"]; a -> b; }');
-const a = g.getNode('a');
+const [a] = g.getNodes('a');
 a?.setAttribute('color', 'red');
 console.log(a?.getAttribute('label')); // 'A'
 console.log(a?.getAttributeNames()); // ['label', 'color']

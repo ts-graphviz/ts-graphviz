@@ -64,9 +64,7 @@ describe('a ModelKit with custom classes', () => {
           expectTypeOf(t.edge(['c', 'd'])).toEqualTypeOf<DSL<MyEdge>>();
         });
       });
-      expectTypeOf(modelOf(g).getNode('a')).toEqualTypeOf<
-        NodeModel | undefined
-      >();
+      expectTypeOf(modelOf(g).getNodes('a')).toEqualTypeOf<NodeModel[]>();
     });
   });
 
@@ -74,7 +72,7 @@ describe('a ModelKit with custom classes', () => {
     const g = fromDot('digraph { a }', {
       convert: { models: { Node: MyNode } },
     });
-    expectTypeOf(g.getNode('a')).toEqualTypeOf<NodeModel | undefined>();
+    expectTypeOf(g.getNodes('a')).toEqualTypeOf<NodeModel[]>();
     const [first] = fromDotAll('digraph { a }', {
       convert: { models: { Node: MyNode } },
     });
@@ -101,7 +99,7 @@ describe('a ModelKit with custom classes', () => {
 describe('the members a class adds', () => {
   class Finder extends Digraph {
     find(id: string): NodeModel | undefined {
-      return this.getNode(id);
+      return this.getNodes(id)[0];
     }
     accept(node: NodeModel, others: readonly NodeModel[]): number {
       return others.length + (node ? 1 : 0);

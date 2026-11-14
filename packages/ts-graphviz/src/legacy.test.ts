@@ -49,7 +49,9 @@ describe('the factories', () => {
       g.node('a');
     });
     expect(modelOf(G)).toBeInstanceOf(LegacyDigraph);
-    expect(modelOf(modelOf(G).getNode('a') as object)).toBeInstanceOf(MyNode);
+    expect(modelOf(modelOf(G).getNodes('a')[0] as object)).toBeInstanceOf(
+      MyNode,
+    );
     // A class it is given takes the place of the legacy one; undefined
     // does not.
     expect(

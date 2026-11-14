@@ -142,7 +142,7 @@ DSL 只包含 DOT 的词汇，所以它的名字都不是 Graphviz 属性，编�
 | `a.addComment('note')` | 写入 DOT 源码的注释 |
 | `a.$$type`、`list.$$kind` | 模型的种类（`'Node'`、`'Edge'` 等）和默认属性列表的种类 |
 
-其余的都在模型上，用 `modelOf(x)` 获取：节点或图的名字（`id`）、图的内容（`nodes`、`edges`、`subgraphs`、`statements`）、它的方法（`getNode`、`addNode`、`removeNode` 等）、属性方法、`comments`、边的 `targets`，以及自定义模型类的成员。
+其余的都在模型上，用 `modelOf(x)` 获取：节点或图的名字（`id`）、图的内容（`nodes`、`edges`、`subgraphs`、`statements`）、它的方法（`getNodes`、`addNode`、`removeNode` 等）、属性方法、`comments`、边的 `targets`，以及自定义模型类的成员。
 
 ```typescript
 import { digraph, modelOf } from 'ts-graphviz';
@@ -217,14 +217,16 @@ console.log(toDot(G));
 `fromDot` 返回模型；传入 `{ dsl: true }` 时返回该模型的 DSL，因此解析得到的图也可以用同样的方式编辑。`fromDotAll` 也接受这个选项。
 
 ```typescript
-import { fromDot, toDot } from 'ts-graphviz';
+import { dsl, fromDot, modelOf, toDot } from 'ts-graphviz';
 
 const g = fromDot('digraph { a [label = "A"]; a -> b; }', { dsl: true });
-g.node('a').color = 'red';
+dsl(modelOf(g).getNodes('a')[0]).color = 'red';
 g.edge(['b', 'c']);
 
 console.log(toDot(g));
 ```
+
+`g.node('a')` 会像在 DOT 中再写一次语句那样再次声明 `a`（在其他语句之后写出 `a [color = "red"];`）；要修改已有的节点，请用 `getNodes` 从模型中取出它。
 
 语句返回的是 DSL。DSL 是一个模型加上语句创建模型时所用的套件；一个模型和一个套件只有一个 DSL，所以 DSL 可以用 `===` 比较。`modelOf(x)` 返回对应的模型。从中读到的模型可以用 `dsl(model)` 得到它的 DSL，这个 DSL 用默认套件创建；`dsl(model, kit)` 返回用 `kit` 创建的 DSL。使用 `{ dsl: true }` 时，套件是 `convert.models` 对应的套件。`toDot`、`fromModel` 和适配器的 `toBlob` 既接受模型，也接受 DSL。
 
@@ -283,7 +285,7 @@ import { fromDot } from 'ts-graphviz';
 
 const g = fromDot('digraph { a; a -> b; }');
 console.log(g.nodes.map((n) => n.id)); // ['a']
-console.log(g.getNode('b')); // undefined
+console.log(g.getNodes('b')); // []
 ```
 
 在 DOT 中，边会创建它所提到的节点。但模型只按 id 记录边的端点：`nodes` 保存的是以节点语句写出的节点，而不是 Graphviz 意义上图的全部节点。一个节点可能属于多个子图，子图里的 `a -> b` 也可能指向写在子图外的节点，因此模型不做推测。要让节点出现在 `nodes` 中，请用 `g.addNode(new Node('b'))`（在 DSL 上用 `dsl(g).node('b')`）声明它，或者读取边端点的 id。

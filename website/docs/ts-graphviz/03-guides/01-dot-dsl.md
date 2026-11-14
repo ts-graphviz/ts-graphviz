@@ -142,7 +142,7 @@ The DSL keeps DOT's words only, so none of its names is a Graphviz attribute, an
 | `a.addComment('note')` | a comment written into the DOT source |
 | `a.$$type`, `list.$$kind` | the kind of model (`'Node'`, `'Edge'`, …) and of default attribute list |
 
-Everything else is on the model, which `modelOf(x)` gives: the name of a node or graph (`id`), the graph's contents (`nodes`, `edges`, `subgraphs`, `statements`), its methods (`getNode`, `addNode`, `removeNode`, …), the attribute methods, `comments`, an edge's `targets`, and the members of your own model classes.
+Everything else is on the model, which `modelOf(x)` gives: the name of a node or graph (`id`), the graph's contents (`nodes`, `edges`, `subgraphs`, `statements`), its methods (`getNodes`, `addNode`, `removeNode`, …), the attribute methods, `comments`, an edge's `targets`, and the members of your own model classes.
 
 ```typescript
 import { digraph, modelOf } from 'ts-graphviz';
@@ -217,14 +217,16 @@ On the model, `comments` lists them and `removeComment(comment)` takes one out (
 `fromDot` gives a model; with `{ dsl: true }` it gives the DSL of that model, so a parsed graph is edited the same way. `fromDotAll` takes the option too.
 
 ```typescript
-import { fromDot, toDot } from 'ts-graphviz';
+import { dsl, fromDot, modelOf, toDot } from 'ts-graphviz';
 
 const g = fromDot('digraph { a [label = "A"]; a -> b; }', { dsl: true });
-g.node('a').color = 'red';
+dsl(modelOf(g).getNodes('a')[0]).color = 'red';
 g.edge(['b', 'c']);
 
 console.log(toDot(g));
 ```
+
+`g.node('a')` would declare `a` again, as a statement written again in DOT does (`a [color = "red"];` after the others); to change the node there is, take it from the model with `getNodes`.
 
 What a statement gives is a DSL. A DSL is a model together with the kit its statements create with, and a model and a kit have one DSL, so DSLs compare with `===`. `modelOf(x)` gives the model back. `dsl(model)` gives the DSL of any model you read from it, creating with the default kit; `dsl(model, kit)` gives the one that creates with `kit`. With `{ dsl: true }`, the kit is the one of `convert.models`. `toDot`, `fromModel` and the adapter's `toBlob` take a DSL as well as a model.
 
@@ -283,7 +285,7 @@ import { fromDot } from 'ts-graphviz';
 
 const g = fromDot('digraph { a; a -> b; }');
 console.log(g.nodes.map((n) => n.id)); // ['a']
-console.log(g.getNode('b')); // undefined
+console.log(g.getNodes('b')); // []
 ```
 
 In DOT, an edge creates the nodes it names. The models, though, record an edge's targets by id only: `nodes` holds the nodes written as node statements, not every node the graph has in Graphviz's sense. A node may belong to several subgraphs, and `a -> b` inside a subgraph may refer to a node written outside it, so the models do not guess. Declare a node with `g.addNode(new Node('b'))` (`dsl(g).node('b')` on the DSL) to have it in `nodes`, or read the ids of an edge's targets.

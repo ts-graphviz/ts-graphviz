@@ -124,8 +124,8 @@ interface NumGraphBase<T extends 'Graph' | 'Subgraph'> extends NumAttributes {
   addEdge(edge: NumEdge): void;
   removeNode(node: NumNode | string): void;
   existNode(nodeId: string): boolean;
-  getNode(id: string): NumNode | undefined;
-  getSubgraph(id: string): NumSubgraph | undefined;
+  getNodes(id: string): NumNode[];
+  getSubgraphs(id: string): NumSubgraph[];
   node(id: string, attributes?: { label?: number }): NumNode;
 }
 interface NumSubgraph extends NumGraphBase<'Subgraph'> {

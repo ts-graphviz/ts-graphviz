@@ -32,7 +32,7 @@ TypeScript reports most other changes, but these three still compile, so search 
 | `node.attributes.delete('label')` | `delete node.label` or `node.label = undefined` |
 | `g.attributes.node.set('shape', 'box')` | `g.node({ shape: 'box' })` (before the other statements) |
 | `node.port('p')` | `node.port('p')` (unchanged) |
-| `g.nodes`, `g.getNode('a')`, `g.addNode(n)` | `modelOf(g).nodes`, `modelOf(g).getNode('a')`, …: models, not DSLs (`dsl(m)` gives a model's DSL) |
+| `g.nodes`, `g.getNode('a')`, `g.addNode(n)` | `modelOf(g).nodes`, `modelOf(g).getNodes('a')[0]`, …: models, not DSLs (`dsl(m)` gives a model's DSL); see section 16 for `getNodes` |
 | your class's own methods, `g.myMethod()` | `modelOf(g).myMethod()` |
 | `new Digraph().node('a')`, `fromDot(src).node('a')` | `dsl(new Digraph()).node('a')`, `fromDot(src, { dsl: true }).node('a')` |
 | a custom class overriding `node()` / `edge()` | give the kit your classes to change what is created, or override `addNode` / `addEdge` / `addSubgraph`, which the DSL calls with what the kit created; your `node()` is `modelOf(g).node()` |
@@ -262,7 +262,7 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 `@ts-graphviz/common` has read-only views of the models: `ReadonlyNodeModel`, `ReadonlyEdgeModel`, `ReadonlySubgraphModel`, `ReadonlyRootGraphModel`, `ReadonlyDotModel`, `ReadonlyAttributeListModel` and `ReadonlyAttributes`, with the union `AnyReadonlyDotObjectModel` and the value type `DotValue` (`string | number | boolean | EscStringValue | HTMLLikeValue`). They hold only what reading needs (ids, attributes as `size` / `values` / `get(key)`, the contents of a graph), so every model fits them: the built-in ones, the classes of `@ts-graphviz/core`, and your own model classes.
 
 - **Readers take any model.** `toDot`, `fromModel` / `FromModelConverter` (`@ts-graphviz/ast`) and the model input of `ts-graphviz/adapter`'s `toBlob` (`DotInput`) take an `AnyReadonlyDotObjectModel` (or its DOT DSL, see section 1) instead of a `DotObjectModel`. Every model is still accepted; an object that only has a `$$type` (such as `{ $$type: 'Node' }`) no longer compiles.
-- **Edge targets are read-only references.** `NodeRef` is `ReadonlyNodeModel | ForwardRefNode` (3.x: `NodeModel | ForwardRefNode`): an edge uses only the id of a target node, so any node model can be one. Reading `edge.targets` gives read-only nodes; to change a target node, look it up in the graph (`graph.getNode(target.id)`). An array of nodes cast to the tuple type (`nodes as EdgeTargetTuple`) no longer compiles; cast it to a tuple of nodes instead (`nodes as [NodeModel, NodeModel]`).
+- **Edge targets are read-only references.** `NodeRef` is `ReadonlyNodeModel | ForwardRefNode` (3.x: `NodeModel | ForwardRefNode`): an edge uses only the id of a target node, so any node model can be one. Reading `edge.targets` gives read-only nodes; to change a target node, look it up in the graph (`graph.getNodes(target.id)`). An array of nodes cast to the tuple type (`nodes as EdgeTargetTuple`) no longer compiles; cast it to a tuple of nodes instead (`nodes as [NodeModel, NodeModel]`).
 - **Type guards on an unknown value narrow to the read-only types.** `isNodeModel(value)` on `unknown` gives `ReadonlyNodeModel` (3.x: `NodeModel`; on another object type such as `DotObjectModel`, its intersection with `ReadonlyNodeModel`), and likewise `isEdgeModel`, `isSubgraphModel`, `isRootGraphModel`, `isDotModel` and `isAttributeListModel`: the check looks at `$$type` and a few fields, which cannot tell a writable model from another object. Given a model, a guard keeps your type: on `AnyDotObjectModel` (or a union of your own classes) `isNodeModel` narrows to `NodeModel` (or your node class), and `models.filter(isNodeModel)` is still a `NodeModel[]` (on `unknown[]`, a `ReadonlyNodeModel[]`). If you need the writable model from an unknown value, keep the model where you created it, or look it up by id in its graph.
 
 To write a function that takes any node (or graph) and only reads it, type its parameter with the read-only type:
@@ -351,5 +351,22 @@ Every object takes comments the same way, with their kind and place, instead of 
 - `comment` keeps working, deprecated, and is removed in v5: it reads and sets the first leading comment (setting keeps that comment's kind). It is an accessor now, so `delete node.comment` leaves it; set it to `undefined`. A `Dot`'s `comment` reads all its comments joined by line breaks.
 - `toModel` and `fromDot` keep every comment in its place: a comment before a statement leads it, one on the line where a statement ends trails it, and those after the last statement are the body's. 3.x kept the comment right before a statement and dropped the others. Code that read `comment` after `fromDot` and expected the comment of a statement two lines down, or one comment per statement, reads `comments` instead.
 - `fromModel`'s `commentKind` option writes the comments that have no kind (those set through `comment` or added without one).
+
+## 16. A node can be declared more than once
+
+In DOT, `a [color=red]; b; a [shape=box]` declares `a` twice, and Graphviz applies the attributes of both. 3.x held one node per id: `fromDot` kept the last statement of `a` (and lost `color`), `addNode` replaced the node with the id, and the DSL's `node('a')` returned the node there was. v4 keeps each declaration where it is written, as a node model of its own; subgraphs likewise.
+
+| 3.x | v4 |
+| --- | --- |
+| `g.getNode('a')` | `g.getNodes('a')[0]` (`getNodes` gives every declaration with the id, in order) |
+| `g.getSubgraph('s')` | `g.getSubgraphs('s')[0]` |
+| `g.nodes`: one node per id | every declaration, several with one id included |
+| `g.addNode(new Node('a'))` replaces the `a` there is | adds another declaration of `a`, at the end |
+| `g.removeNode('a')` | removes every declaration of `a`; `g.removeNode(node)` removes that one |
+| `g.node('a')` returns the `a` there is | on the DSL, declares `a` again; take the one there is with `dsl(modelOf(g).getNodes('a')[0])` |
+
+- `toDot(fromDot(source))` writes each declaration back where it was, so it renders as the source does.
+- With `@ts-graphviz/react`, each `<Node>` is a declaration of its own, also when two elements, or two roots on one container, have one id.
+- The legacy models (`legacyModels`, `ts-graphviz/legacy`) keep one node per id, with `getNode` and `getSubgraph`, deprecated.
 
 See the [Security model](../../11-advanced-topics/06-security-model.md) for what the library guarantees at each trust boundary in v4.

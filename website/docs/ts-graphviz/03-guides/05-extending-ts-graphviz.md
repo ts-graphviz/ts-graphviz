@@ -148,7 +148,7 @@ digraph((g) => {
 });
 ```
 
-`createModelKit`, `withModelKit`, `createModelFactories`, and `fromDot` / `fromDotAll` with `convert.models` infer the types from the classes given; a class left out keeps the base type, and subgraphs get the same classes. What a graph holds (`nodes`, `getNode`, …) has the model interfaces (`NodeModel` and so on): check with `instanceof` to reach the members of your class.
+`createModelKit`, `withModelKit`, `createModelFactories`, and `fromDot` / `fromDotAll` with `convert.models` infer the types from the classes given; a class left out keeps the base type, and subgraphs get the same classes. What a graph holds (`nodes`, `getNodes`, …) has the model interfaces (`NodeModel` and so on): check with `instanceof` to reach the members of your class.
 
 ### Default attribute statements in place
 
