@@ -42,6 +42,7 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 | `pnpm typecheck` | Type-check the repository with `tsc --noEmit --strict`. |
 | `pnpm api:check` | Fail if the API reports (`api-reports/*.api.md`) differ from the built declarations (run `pnpm build` first). |
 | `pnpm api:update` | Rewrite the API reports after a change of the public API; commit them with the change. |
+| `pnpm check:changesets` | Fail when a changeset gives a major bump to a package on 0.x (`@ts-graphviz/react`), which would release it as 1.0.0; write `minor` for it. |
 | `pnpm check:doc-examples` | Type-check the TypeScript code blocks of the READMEs and the website's docs against the built declarations (run `pnpm build` first). |
 | `pnpm check:consumer-types` | Pack the packages and type-check `test/consumer/` against the tarballs with several TypeScript versions and module settings (run `pnpm build` first). |
 | `pnpm fuzz:build` and `pnpm fuzz <target> [seconds]` | Build the fuzz targets (`fuzz/targets/`) and run one with Jazzer.js. |
