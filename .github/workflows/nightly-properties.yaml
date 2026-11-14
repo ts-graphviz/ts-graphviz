@@ -55,6 +55,16 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Generate code
         run: pnpm codegen
+      # A value that is not a positive integer would make the properties run
+      # no cases (Number('ten') is NaN) and pass.
+      - name: Check num_runs
+        env:
+          NUM_RUNS: ${{ inputs.num_runs || '5000' }}
+        run: |
+          if ! [[ "$NUM_RUNS" =~ ^[1-9][0-9]*$ ]]; then
+            echo "::error::num_runs must be a positive integer"
+            exit 1
+          fi
       - name: Run the property and differential tests
         env:
           FC_NUM_RUNS: ${{ inputs.num_runs || '5000' }}
@@ -101,6 +111,14 @@ jobs:
         run: pnpm codegen
       - name: Build the fuzz targets
         run: pnpm fuzz:build
+      - name: Check fuzz_seconds
+        env:
+          SECONDS_PER_TARGET: ${{ inputs.fuzz_seconds || '900' }}
+        run: |
+          if ! [[ "$SECONDS_PER_TARGET" =~ ^[1-9][0-9]*$ ]]; then
+            echo "::error::fuzz_seconds must be a positive integer"
+            exit 1
+          fi
       - name: Fuzz
         env:
           TARGET: ${{ matrix.target }}
@@ -167,7 +185,7 @@ jobs:
       - name: Restore the incremental file of the last run
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: reports/mutation/incremental.json
+          path: reports/mutation/incremental-*.json
           key: mutation-${{ matrix.ref }}-${{ matrix.scope }}-${{ github.run_id }}
           restore-keys: |
             mutation-${{ matrix.ref }}-${{ matrix.scope }}-
@@ -180,7 +198,7 @@ jobs:
         if: always()
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: reports/mutation/incremental.json
+          path: reports/mutation/incremental-*.json
           key: mutation-${{ matrix.ref }}-${{ matrix.scope }}-${{ github.run_id }}
       - name: Upload the mutation report
         if: always()
