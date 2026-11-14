@@ -23,7 +23,7 @@ import {
 } from './arbitraries.js';
 import { summarize } from './summarize.js';
 
-// Property-based tests for the DOT printer and parser (see #1504).
+// Property-based tests for the DOT printer and parser.
 // A failing run prints its seed; reproduce it with FC_SEED=<seed>.
 
 // A graph built with the deprecated `legacyModels` is read back with them,
@@ -37,18 +37,14 @@ const roundTrip = (spec: Parameters<typeof buildGraph>[0]) => {
   return { model, dot, reparsed };
 };
 
-/** Same contents, and every statement in the same place (#1732). */
+/** Same contents, and every statement in the same place. */
 const expectSameGraph = (actual: RootGraphModel, expected: RootGraphModel) => {
   expect(summarize(actual)).toStrictEqual(summarize(expected));
   expect(statementOrder(actual)).toStrictEqual(statementOrder(expected));
 };
 
 describe('DOT round trip', { tags: ['SM-2'] }, () => {
-  // Backslashes have no defined meaning in model strings today (#1587): the
-  // printer passes them through, so `\\"` breaks out of the string and `\"`
-  // comes back as `"`. These properties are expected to fail until #1587
-  // lands; vitest then reports them as unexpectedly passing.
-  it('no DOT injection: any string survives toDot -> fromDot unchanged (#1587)', () => {
+  it('no DOT injection: any string survives toDot -> fromDot unchanged', () => {
     fc.assert(
       fc.property(graphSpec, (spec) => {
         const { model, reparsed } = roundTrip(spec);
@@ -57,7 +53,7 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
     );
   });
 
-  it('printing is idempotent: toDot(fromDot(dot)) === dot (#1587)', () => {
+  it('printing is idempotent: toDot(fromDot(dot)) === dot', () => {
     fc.assert(
       fc.property(graphSpec, (spec) => {
         const { dot, reparsed } = roundTrip(spec);
@@ -66,7 +62,7 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
     );
   });
 
-  describe('minimal counterexamples once found by the properties (#1587)', () => {
+  describe('minimal counterexamples once found by the properties', () => {
     it('a value ending in backslashes stays inside the string', () => {
       const { dot } = roundTrip({
         directed: true,
@@ -121,7 +117,7 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
   });
 
   it('strings without backslashes or HTML-like shape survive toDot -> fromDot unchanged', () => {
-    // Backslashes and `<...>` strings are the two cases #1587 settles.
+    // Backslashes and `<...>` strings have their own cases above.
     const settledBy1587 = (s: string) =>
       s.includes('\\') || looksHtmlLikeToPrinter(s);
     const values = (spec: GraphSpec) => [
@@ -149,7 +145,7 @@ describe('DOT round trip', { tags: ['SM-2'] }, () => {
     );
   });
 
-  it('raw newlines in values survive toDot -> fromDot (#1578)', () => {
+  it('raw newlines in values survive toDot -> fromDot', () => {
     // A JS newline is written as the `\n` escape and read back as a newline.
     fc.assert(
       fc.property(dotString({ newlines: true }), (value) => {
@@ -288,7 +284,7 @@ describe('explicit value kinds', { tags: ['SM-3'] }, () => {
 });
 
 describe('parser robustness', { tags: ['SM-1'] }, () => {
-  // Every error the library raises carries a TSG_ERR_* code (#776, #1627);
+  // Every error the library raises carries a TSG_ERR_* code;
   // anything else is a crash.
   const allowed = (error: unknown) => isTsGraphvizError(error);
 
@@ -408,7 +404,7 @@ describe('attribute values of every kind', { tags: ['SM-2'] }, () => {
     );
   });
 
-  it('numbers and booleans come back with their type (#1629)', () => {
+  it('numbers and booleans come back with their type', () => {
     // DOT writes them bare, and a bare numeral or boolean reads back typed.
     fc.assert(
       fc.property(fc.oneof(fc.integer(), fc.boolean()), (value) => {

@@ -13,7 +13,7 @@ import {
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// #1740: a union of the concrete models, discriminated by `$$type`.
+// A union of the concrete models, discriminated by `$$type`.
 describe('AnyDotObjectModel', () => {
   it('narrows on $$type', () => {
     const describe = (model: AnyDotObjectModel) => {
