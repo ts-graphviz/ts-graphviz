@@ -47,7 +47,7 @@ const timingTag = {
 };
 
 /**
- * Coverage thresholds (OpenSSF Best Practices, #1866): silver asks 80% of
+ * Coverage thresholds (OpenSSF Best Practices): silver asks 80% of
  * statements, gold 90% of statements and 80% of branches. Vitest exits 1
  * below one, which fails `pnpm test` in CI. The per-package values are a
  * few points below what is measured, so that a regression in one package

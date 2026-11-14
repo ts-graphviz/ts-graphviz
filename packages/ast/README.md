@@ -30,7 +30,7 @@ This package contains the module for processing the DOT language at the **A**bst
 
 [![format: Biome](https://img.shields.io/badge/format%20with-Biome-F7B911?logo=biome&style=flat)](https://biomejs.dev/)
 [![test: Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest&style=flat)](https://vitest.dev/)
-[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://rollupjs.org/)
+[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://vite.dev/)
 
 </div>
 
@@ -44,14 +44,17 @@ This package contains the module for processing the DOT language at the **A**bst
 This package is a foundational component of the ts-graphviz library that enables low-level manipulation of DOT language structures.
 It provides a parser that converts DOT language strings into AST nodes and a stringifier that converts AST nodes back to DOT language.
 
+It runs in any JavaScript runtime. The same API is in the `ts-graphviz/ast` entry of the `ts-graphviz` package.
+
 ## Main Functions
 
 The AST package provides several key functions:
 
-- `parse(input: string, options?)`: Parses a DOT language string into an AST structure
-- `stringify(ast: ASTNode)`: Converts an AST structure to a DOT language string
-- `fromModel(model)`: Converts a Graph Model to an AST structure
-- `toModel(ast)`: Converts an AST structure to a Graph Model
+- `parse(input, options?)`: Parses a DOT language string into an AST structure
+- `stringify(ast, options?)`: Converts an AST structure to a DOT language string
+- `fromModel(model, options?)`: Converts a Graph Model to an AST structure
+- `toModel(ast, { models })`: Converts an AST structure to a Graph Model. `models` is the set of model classes to create, such as `defaultModelsContext()` from `@ts-graphviz/core`
+- `sanitize(dot, options?)`: Checks a DOT language string from an untrusted source and returns the DOT to render, or throws
 
 ## Usage Examples
 
@@ -62,9 +65,16 @@ import { parse } from "@ts-graphviz/ast";
 
 const dotString = "digraph G { A -> B; }";
 const ast = parse(dotString);
-console.log(ast);
-// Output: A DotASTNode representing the DOT structure
+console.log(ast.type);
+// Dot
+const graph = ast.children[0];
+if (graph.type === "Graph") {
+  console.log(graph.directed, graph.id?.value);
+  // true G
+}
 ```
+
+An identifier or a value is a `Literal` node, whose `kind` says how it is written in DOT: `'bare'`, `'quoted'` or `'html'`. `Literal`, `Attribute` and `Comment` nodes are leaves and have no `children`.
 
 #### Parser Options
 
@@ -77,6 +87,7 @@ const dotString = "digraph G { A -> B; }";
 
 // Parse with custom security limits
 const ast = parse(dotString, {
+  maxNestingDepth: 50,           // Maximum subgraph nesting depth (default: 100)
   maxHtmlNestingDepth: 200,      // Maximum HTML nesting depth (default: 100)
   maxEdgeChainDepth: 2000,       // Maximum edge chain depth (default: 1000)
   maxInputSize: 20971520,        // Maximum input size in bytes (default: 10MB)
@@ -86,14 +97,18 @@ const ast = parse(dotString, {
 
 **Available Options**:
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `maxHtmlNestingDepth` | `100` | Maximum depth of nested HTML-like structures |
-| `maxEdgeChainDepth` | `1000` | Maximum depth of chained edges (e.g., `a -> b -> c -> ...`) |
-| `maxInputSize` | `10485760` (10MB) | Maximum input size in bytes |
-| `maxASTNodes` | `100000` | Maximum number of AST nodes to create |
+| Option | Default | Description | `0` disables |
+|--------|---------|-------------|--------------|
+| `maxNestingDepth` | `100` | Maximum nesting depth of graph and subgraph bodies (`{ … }`); a graph's own body is at depth 1 | No |
+| `maxHtmlNestingDepth` | `100` | Maximum depth of nested HTML-like structures | No |
+| `maxEdgeChainDepth` | `1000` | Maximum depth of chained edges (e.g., `a -> b -> c -> ...`) | No |
+| `maxInputSize` | `10485760` (10MB) | Maximum input size in bytes | Yes |
+| `maxASTNodes` | `100000` | Maximum number of AST nodes to create | Yes |
+| `filename` | none | A name for the source, used to identify it | |
 
-To read a fragment of a DOT source rather than a whole one, say what to read it as with `as`; the result is typed by it, and the same limits apply. (`startRule`, its former name, is deprecated.)
+The depth limits can be changed but not disabled. For every limit, a value that cannot be used (`NaN`, a negative number) gives the default.
+
+To read a fragment of a DOT source rather than a whole one, say what to read it as with `as`; the result is typed by it, and the same limits apply. (`startRule` is a deprecated alias of `as`.)
 
 ```ts
 import { parse } from "@ts-graphviz/ast";
@@ -105,6 +120,9 @@ const statements = parse('a; b -> c; rank=same', { as: 'ClusterStatements' });
 **Security Note**:
 
 These limits protect against denial-of-service attacks:
+
+- **`maxNestingDepth`**: Prevents stack overflow from deeply nested subgraphs
+  - Example dangerous input: `digraph { { { { ... } } } }`
 
 - **`maxHtmlNestingDepth`**: Prevents stack overflow from deeply nested HTML-like structures
   - Normal use cases: typically <10 levels
@@ -122,7 +140,9 @@ These limits protect against denial-of-service attacks:
   - Example: A single node statement (`node1;`) creates ~2-3 AST nodes
   - Can be disabled with `0` (not recommended for untrusted input)
 
-**Important**: When processing untrusted DOT files (e.g., user uploads), keep these limits enabled with conservative values appropriate for your environment. For additional validation of untrusted content, see the validation guide in [@ts-graphviz/adapter documentation](../adapter/README.md#security-considerations).
+The conversions have limits of their own: `fromModel` takes `maxASTNodes`, `toModel` takes `maxEdgeTargets` and `maxSharedNodes`, and `stringify` takes `maxSharedNodes` (each `100000` by default, and disabled with `0`). An AST that contains itself is always rejected.
+
+**Important**: When processing untrusted DOT files (e.g., user uploads), keep these limits enabled with conservative values appropriate for your environment. For additional validation of untrusted content, see the validation guide in [@ts-graphviz/adapter documentation](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/adapter/README.md#security-considerations).
 
 ### Generating DOT Language
 
@@ -134,14 +154,80 @@ const ast = parse(dotString);
 // Modify the AST if needed
 const outputDotString = stringify(ast);
 console.log(outputDotString);
-// Output: "digraph G { A -> B; }"
+// digraph G {
+//   A -> B;
+// }
 ```
+
+### Converting between AST and Model
+
+`toModel` creates the models with the classes of a models context, which `@ts-graphviz/core` provides. `fromModel` needs none.
+
+```ts
+import { fromModel, parse, stringify, toModel } from "@ts-graphviz/ast";
+import { defaultModelsContext } from "@ts-graphviz/core";
+
+const ast = parse("digraph G { A -> B; }");
+
+// The model of a `Dot` AST node is a `DotModel`: the graphs and comments of one source.
+const dot = toModel(ast, { models: defaultModelsContext() });
+const graph = dot.graphs[0];
+graph.createNode("C");
+
+console.log(stringify(fromModel(graph)));
+// digraph "G" {
+//   "A" -> "B";
+//   "C";
+// }
+```
+
+### Checking Untrusted DOT
+
+`sanitize` parses a DOT string, rejects what would make Graphviz read files, write unsafe links or write text unescaped, and returns DOT printed from the checked AST. `@ts-graphviz/adapter` runs it by default before rendering.
+
+```ts
+import { sanitize } from "@ts-graphviz/ast";
+
+const checked = sanitize('digraph { a [label="hello"]; }', { format: "svg" });
+console.log(checked);
+// digraph {
+//   a [
+//     label = "hello";
+//   ];
+// }
+
+try {
+  sanitize('digraph { a [image="/etc/passwd"]; }');
+} catch (e) {
+  console.log((e as DOMException).name);
+  // SecurityError
+}
+```
+
+It takes the parser limits above, the output `format` to check for, and `policy: 'strict'`, which allows only the attributes and HTML-like tags Graphviz defines. The [security model](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-model/) lists what is checked.
 
 ## Error Handling
 
-The package provides a specialized error class for handling syntax errors during parsing.
+When a DOT source does not parse, or exceeds a parser limit, the parser throws a `DotSyntaxError`, which is a `SyntaxError`.
 
-When a parsing error occurs, the parser throws a `DotSyntaxError` with detailed information about the issue, which helps in debugging DOT language syntax problems.
+- `code` is `'TSG_ERR_DOT_SYNTAX'`. Every error the package raises on purpose has a `code` that starts with `TSG_ERR_`; `isTsGraphvizError` from `@ts-graphviz/common` tells such an error from any other.
+- `location` is where in the source the error is (`start` and `end`, each with `offset`, `line` and `column`), when it is at a place.
+- `limit` is the name of the parser option whose limit the source exceeded (`'maxInputSize'`, `'maxASTNodes'`, …), or `undefined` for a syntax error.
+
+```ts
+import { DotSyntaxError, parse } from "@ts-graphviz/ast";
+
+try {
+  parse("digraph { a -> }");
+} catch (e) {
+  if (e instanceof DotSyntaxError) {
+    console.log(e.code, e.location?.start.line, e.location?.start.column);
+    // TSG_ERR_DOT_SYNTAX 1 16
+  }
+}
+```
+
+Match on `code`, `location` and `limit`; the message text may change in any release.
 
 ## Contributors 👥
 

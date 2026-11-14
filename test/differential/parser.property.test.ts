@@ -137,7 +137,7 @@ function sortBlocks(items: readonly Item[]): Item[] {
  * `dot -Tcanon` output with the subgraphs of every block sorted by their
  * text. Graphviz lists sibling subgraphs in an order that depends on tokens
  * that do not change the graph (a `;` after an edge whose target has a port
- * and a compass point, #1775), so the source and its reprint may list the
+ * and a compass point), so the source and its reprint may list the
  * same subgraphs differently. Everything else stays in order: canon prints
  * one statement per line and nests subgraphs with tabs, so the lines that
  * do not open or close a subgraph are left where they are.
@@ -155,7 +155,7 @@ const sep = fc.oneof(
   { arbitrary: fc.constant(''), weight: 6 },
   { arbitrary: fc.constant(' '), weight: 6 },
   { arbitrary: fc.constantFrom('\t', '\n'), weight: 2 },
-  // Comments inside statements are kept on the nodes next to them (#1710).
+  // Comments inside statements are kept on the nodes next to them.
   {
     arbitrary: fc.constantFrom(
       ' /* c */ ',
@@ -284,7 +284,7 @@ function graphOf(directed: boolean): fc.Arbitrary<string> {
       target: fc.oneof(
         { depthSize: 'small', maxDepth: 2 },
         { arbitrary: nodeRef, weight: 5 },
-        // `a:p, b`: a comma list keeps its ports (#1708).
+        // `a:p, b`: a comma list keeps its ports.
         {
           arbitrary: fc
             .array(fc.tuple(nodeRef, sep, fc.constant(','), sep), {
@@ -407,7 +407,7 @@ describe('the parser reads DOT as Graphviz does', {
 
 /**
  * Sources dot accepts whose reprint it lists the subgraphs of in another
- * order (#1775). Each has an edge whose target has a port and a compass
+ * order. Each has an edge whose target has a port and a compass
  * point, after which the printer writes a `;` the source lacks.
  */
 const subgraphOrderCases = [
@@ -547,7 +547,7 @@ describe('sortSubgraphs', () => {
   });
 });
 
-describe('dot and the order of subgraphs (#1775)', {
+describe('dot and the order of subgraphs', {
   tags: ['SM-1', 'process'],
 }, () => {
   beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));

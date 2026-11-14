@@ -30,7 +30,7 @@
 
 [![format: Biome](https://img.shields.io/badge/format%20with-Biome-F7B911?logo=biome&style=flat)](https://biomejs.dev/)
 [![test: Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest&style=flat)](https://vitest.dev/)
-[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://rollupjs.org/)
+[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://vite.dev/)
 
 </div>
 
@@ -38,20 +38,28 @@
 
 ## Key Features ✨
 
-`ts-graphviz` package provides models and ASTs for the Graphviz DOT language fully integrated with TypeScript.
+`ts-graphviz` builds, reads and changes graphs in the Graphviz DOT language from TypeScript.
 
+- **DOT DSL**
+  - The factories `digraph()`, `graph()`, `strict.digraph()` and `strict.graph()` give a DSL that reads like DOT: the DOT statements are its methods, and attributes are its properties.
+- **Models**
+  - Under the DSL are the model classes `Digraph`, `Graph`, `Subgraph`, `Node` and `Edge`, the lower-level API. `modelOf()` gives the model of a DSL object, and `dsl()` the DSL of a model.
 - **TypeScript-friendly API**
-  - It provides models in the DOT language. TypeScript type definitions are also provided for attributes and even attribute types.
-- **Freedom from programming paradigms**
-  - Designed to be object-oriented, it provides APIs that can be adapted to both imperative and declarative APIs. You can choose the paradigm that best fits your project.
-- **Suitable for any use cases**
-  - Both a high-layer API to provide models and a low-layer API to handle ASTs are provided to address any use cases.
+  - Attributes and their values are typed, so your editor completes them and the compiler checks them.
+- **DOT in both directions**
+  - `toDot` writes a graph as DOT, and `fromDot` reads DOT into a graph. The `ts-graphviz/ast` entry gives the syntax tree in between.
 - **Modular and Extensible**
-  - The library is split into multiple packages, each serving a specific purpose. This modular design allows users to pick and choose the functionality they need, resulting in improved maintainability and flexibility.
+  - The library is split into packages, each with one purpose. You can replace the model classes with your own and add attributes to the types.
 - **Cross Platform**
-  - It supports both Node.js and Deno and Browser.
-- **Customizable**
-  - It provides a way to extend the library's type system to customize graph visualization solutions to meet specific needs.
+  - The DSL, the models and the AST run in any JavaScript runtime, browsers included. Rendering through the Graphviz `dot` command (`ts-graphviz/adapter`) needs Node.js or Deno.
+
+## Requirements
+
+- Node.js 22 or later, or the current Deno LTS.
+- TypeScript 5.0 or later, for TypeScript users.
+- The packages are ES modules only.
+
+Upgrading from an earlier major version? See the [migration guide](https://ts-graphviz.github.io/docs/ts-graphviz/migration-guides/v3-to-v4/).
 
 ## Installation 💽
 
@@ -72,9 +80,7 @@ $ pnpm add ts-graphviz
 
 ### Deno 🦕
 
-[Deno v1.28 and above supports npm](https://deno.land/manual/node/npm_specifiers).
-
-You can install and use the package by specifying the following:
+The current Deno LTS is supported. Import the package with an `npm:` specifier:
 
 ```ts no-check
 import { toDot } from 'npm:ts-graphviz';
@@ -84,168 +90,126 @@ import { toDot } from 'npm:ts-graphviz';
 
 This section provides an overview of the package.
 
-For more detailed API specifications, please refer to the comments in the TypeScript type definitions and the [document](https://ts-graphviz.github.io/api/) automatically generated based on them.
+The [guides on the website](https://ts-graphviz.github.io/docs/ts-graphviz/guides/dot-dsl/) go further, and the [API reference](https://ts-graphviz.github.io/api/) is generated from the comments in the TypeScript type definitions.
 
 ### `ts-graphviz` Module 🚩
 
-This module provides **Model**, an interface for working with the DOT language in JavaScript/TypeScript.
+This module provides the **DOT DSL** and the **Model**, the interfaces for working with the DOT language in JavaScript/TypeScript.
 
 ![ts-graphviz](./media/ts-graphviz.svg)
 
-#### Object-Oriented ❤️
+#### DOT DSL 😎
 
-**Model** is designed to be object-oriented and provides classes `Digraph`, `Graph`, `Subgraph`, `Node`, and `Edge`.
+The factories `digraph()`, `graph()`, `strict.digraph()` and `strict.graph()` give the graph's **DOT DSL**: the DOT statements `node`, `edge`, `subgraph` and `graph` are methods, and attributes are properties under their own names. The `toDot` function converts the graph to **DOT** (a DOT language string).
 
-Provides a `toDot` function to convert **Model** to **DOT** (DOT language string).
+```ts
+import { digraph, toDot } from 'ts-graphviz';
 
-```typescript
-import { attribute as _, Digraph, Subgraph, Node, Edge, toDot } from 'ts-graphviz';
-
-const G = new Digraph();
-const A = new Subgraph('A');
-const node1 = new Node('node1', {
-  [_.color]: 'red'
+const G = digraph('G', (g) => {
+  g.rankdir = 'LR'; //  rankdir = "LR";
+  g.node({ shape: 'box' }); //  node [shape = "box";];
+  const a = g.node('a');
+  a.label = 'A'; //  "a" [label = "A";];
+  g.edge([a, 'b']); //  "a" -> "b";
 });
-const node2 = new Node('node2', {
-  [_.color]: 'blue'
+
+console.log(toDot(G));
+// digraph "G" {
+//   rankdir = "LR";
+//   node [
+//     shape = "box";
+//   ];
+//   "a" [
+//     label = "A";
+//   ];
+//   "a" -> "b";
+// }
+```
+
+Statements are written in the order they are added. Subgraphs nest, and `port()` gives a node at a port for an edge target:
+
+```ts
+import { digraph, toDot } from 'ts-graphviz';
+
+const G = digraph('G', (g) => {
+  const a = g.node('aa');
+  const b = g.node('bb');
+  const c = g.node('cc');
+  g.edge([a, b, c], { color: 'red' });
+  g.subgraph('A', (A) => {
+    const Aa = A.node('Aaa', { color: 'pink' });
+    const Ab = A.node('Abb', { color: 'violet' });
+    const Ac = A.node('Acc');
+    A.edge([Aa.port('a'), Ab, Ac, 'E'], { color: 'red' });
+  });
 });
-const edge = new Edge([node1, node2], {
-  [_.label]: 'Edge Label',
-  [_.color]: 'pink'
-});
-G.addSubgraph(A);
-A.addNode(node1);
-A.addNode(node2);
-A.addEdge(edge);
-const dot = toDot(G);
-// digraph {
+
+console.log(toDot(G));
+// digraph "G" {
+//   "aa";
+//   "bb";
+//   "cc";
+//   "aa" -> "bb" -> "cc" [
+//     color = "red";
+//   ];
 //   subgraph "A" {
-//     "node1" [
-//       color = "red",
+//     "Aaa" [
+//       color = "pink";
 //     ];
-//     "node2" [
-//       color = "blue",
+//     "Abb" [
+//       color = "violet";
 //     ];
-//     "node1" -> "node2" [
-//       label = "Edge Label",
-//       color = "pink",
+//     "Acc";
+//     "Aaa":"a" -> "Abb" -> "Acc" -> "E" [
+//       color = "red";
 //     ];
 //   }
 // }
 ```
 
-<details>
-<summary>Advanced Usage</summary>
+`strict.digraph()` and `strict.graph()` create strict graphs:
 
-##### Custom Class 🤖
+```ts
+import { strict, toDot } from 'ts-graphviz';
 
-You can also add your own implementation by inheriting from the class.
-
-```typescript
-import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
-
-class MyCustomDigraph extends Digraph {
-  constructor() {
-    super('G', {
-      [_.label]: 'This is Custom Digraph',
-    });
-  }
-}
-class MyCustomNode extends Node {
-  constructor(id: string) {
-    super(`node_${id}`, {
-      [_.label]: `This is Custom Node ${id}`,
-    });
-  }
-}
-
-class MyCustomEdge extends Edge {
-  constructor(targets: EdgeTargetTuple) {
-    super(targets, {
-      [_.label]: 'This is Custom Edge',
-    });
-  }
-}
-
-const digraph = new MyCustomDigraph();
-const node1 = new MyCustomNode('A');
-const node2 = new MyCustomNode('B');
-const edge = new MyCustomEdge([node1, node2]);
-digraph.addNode(node1);
-digraph.addNode(node2);
-digraph.addEdge(edge);
-const dot = toDot(digraph);
-// digraph "G" {
-//   label = "This is Custom Digraph";
-//   "node_A" [
-//     label = "This is Custom Node A";
-//   ];
-//   "node_B" [
-//     label = "This is Custom Node B";
-//   ];
-//   "node_A" -> "node_B" [
-//     label = "This is Custom Edge";
-//   ];
-// }
-```
-
-##### Models Context API ( `with` method) 🧅
-
-You can also use the _Models Context API_ to create custom classes for objects generated inside of Graph.
-
-
-The `with` methods of `Digraph`, `Graph`, and `Subgraph`, which are implementations of `GraphBaseModel`, are provided to predefine custom models.
-
-```typescript
-import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-graphviz';
-
-class MyCustomNode extends Node {
-  constructor(id: string) {
-    super(`node_${id}`, {
-      [_.label]: `This is Custom Node ${id}`,
-    });
-  }
-}
-
-class MyCustomEdge extends Edge {
-  constructor(targets: EdgeTargetTuple) {
-    super(targets, {
-      [_.label]: 'This is Custom Edge',
-    });
-  }
-}
-
-const g = new Digraph();
-g.with({
-  Node: MyCustomNode,
-  Edge: MyCustomEdge,
+const G = strict.graph((g) => {
+  g.edge(['a', 'b']);
 });
-const a = g.createNode('A'); // MyCustomNode
-const b = g.createNode('B'); // MyCustomNode
-g.createEdge([a, b]); // MyCustomEdge
-const dot = toDot(g);
-// digraph {
-//   "node_A" [
-//     label = "This is Custom Node A";
-//   ];
-//   "node_B" [
-//     label = "This is Custom Node B";
-//   ];
-//   "node_A" -> "node_B" [
-//     label = "This is Custom Edge";
-//   ];
+
+console.log(toDot(G));
+// strict graph {
+//   "a" -- "b";
 // }
 ```
+
+##### The DSL and the model
+
+Besides the statements and the attributes, the DSL has only `addComment`, a node's `port`, `$$type` and an attribute list's `$$kind` (`a.id` is the node's `id` attribute). The model's other members are on `modelOf(x)` (`modelOf(a).id` is the node's name). The statements return DSLs; `modelOf()` gives the model, and `toDot` takes either. `addComment` returns the `CommentModel` itself (not a DSL), which `modelOf(a).removeComment(comment)` removes.
+
+```ts
+import { digraph, modelOf } from 'ts-graphviz';
+
+digraph('G', (g) => {
+  const a = g.node('a');
+  a.id = 'svg-a'; // the Graphviz id attribute
+  console.log(a.id);
+  // svg-a
+  console.log(modelOf(a).id); // the node's name
+  // a
+  console.log(modelOf(g).nodes.length);
+  // 1
+});
+```
+
+See [Writing Graphs with the DOT DSL](https://ts-graphviz.github.io/docs/ts-graphviz/guides/dot-dsl/) for the whole DSL.
 
 ##### `fromDot` function ⏪
 
-> The status of this function is ! [beta](https://img.shields.io/badge/-beta-orange).
-
 The main scenario for using this library is to use the `toDot` function, but it also supports conversions in the reverse direction.
 
-By converting **DOT** to **Model**, a portion of the code can be written in the DOT language.
+By converting **DOT** to a graph, a portion of the code can be written in the DOT language.
 
-```typescript
+```ts
 import { fromDot, toDot } from 'ts-graphviz';
 
 // fromDot gives the model; with { dsl: true }, its DOT DSL.
@@ -260,7 +224,7 @@ const G = fromDot(
 
 G.edge(['node_A', 'node_B']);
 
-const dot = toDot(G)
+console.log(toDot(G));
 // digraph {
 //   "node_A" [
 //     label = "This is a Label of Node A";
@@ -269,102 +233,26 @@ const dot = toDot(G)
 // }
 ```
 
-</details>
-
-#### Declarative API 😎
-
-When creating `Graph` or `Digraph`, you can use _Model Factory_ to provide a notation more similar to the **DOT** language.
-
-The factories give the graph's **DOT DSL**: the DOT statements `node`, `edge`, `subgraph` and `graph` are methods, attributes are properties under their own names, and besides those it has only `addComment`, a node's `port`, `$$type` and an attribute list's `$$kind` (`a.id` is the node's `id` attribute). The model's other members are on `modelOf(x)` (`modelOf(a).id` is the node's name). The statements return DSLs; `modelOf()` gives the model, and `toDot` takes either. `addComment` returns the `CommentModel` itself (not a DSL), which `modelOf(a).removeComment(comment)` removes.
-
-```typescript
-import { digraph, toDot } from 'ts-graphviz';
-
-const G = digraph('G', (g) => {
-  g.rankdir = 'LR'; //  rankdir = "LR";
-  g.node({ shape: 'box' }); //  node [shape = "box";];
-  const a = g.node('a');
-  a.label = 'A'; //  "a" [label = "A";];
-  g.edge([a, 'b']); //  "a" -> "b";
-});
-console.log(toDot(G));
-```
-
-
-```typescript
-import { attribute as _, digraph, toDot } from 'ts-graphviz';
-
- const G = digraph('G', (g) => {
-  const a = g.node('aa');
-  const b = g.node('bb');
-  const c = g.node('cc');
-  g.edge([a, b, c], {
-    [_.color]: 'red'
-  });
-  g.subgraph('A', (A) => {
-    const Aa = A.node('Aaa', {
-      [_.color]: 'pink'
-    });
-
-    const Ab = A.node('Abb', {
-      [_.color]: 'violet'
-    });
-    const Ac = A.node('Acc');
-    A.edge([Aa.port('a'), Ab, Ac, 'E'], {
-      [_.color]: 'red'
-    });
-  });
-});
-
-const dot = toDot(G);
-// digraph "G" {
-//   "aa";
-//   "bb";
-//   "cc";
-//   subgraph "A" {
-//     "Aaa" [
-//       color = "pink",
-//     ];
-//     "Abb" [
-//       color = "violet",
-//     ];
-//     "Acc";
-//     "Aaa":"a" -> "Abb" -> "Acc" -> "E" [
-//       color = "red",
-//     ];
-//   }
-//   "aa" -> "bb" -> "cc" [
-//     color = "red",
-//   ];
-// }
-```
-
-> **Note** Of course, we also provide an API for creating strict mode graphs.
->
-> ```typescript
-> import { strict, toDot } from 'ts-graphviz';
->
-> const G = strict.graph(...);
-> const dot = toDot(G);
-> // strict graph {
-> // }
-> ```
-
-
 <details>
 <summary>Advanced Usage</summary>
 
 ##### Models Context API ( `withContext` function ) 💈
 
+The `withContext` function takes model classes of your own and returns factories (`digraph`, `graph`, `strict`) that create graphs with them. A class left out keeps the default.
 
-The `withContext` function returns a _Model Factory_ function.
+The statements of such a graph create your classes, in nested subgraphs too, and `modelOf()` gives them with their types.
 
-This _Model Factory_ provides a means to replace `RootGraphModel` with a custom class, such as `Digraph` or `Graph`.
-
-This API provides a way to integrate declarative APIs and custom classes.
-
-```typescript
-import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot, withContext } from 'ts-graphviz';
+```ts
+import {
+  attribute as _,
+  Digraph,
+  Edge,
+  type EdgeTargetTuple,
+  modelOf,
+  Node,
+  toDot,
+  withContext,
+} from 'ts-graphviz';
 
 class MyCustomDigraph extends Digraph {
   constructor() {
@@ -397,11 +285,14 @@ const { digraph } = withContext({
 });
 
 const G = digraph((g) => {
-  const a = g.node('A'); // MyCustomNode
-  const b = g.node('B'); // MyCustomNode
-  g.edge([a, b]); // MyCustomEdge
+  const a = g.node('A'); // the DSL of a MyCustomNode
+  const b = g.node('B');
+  g.edge([a, b]); // the DSL of a MyCustomEdge
+  console.log(modelOf(a) instanceof MyCustomNode);
+  // true
 });
-const dot = toDot(G);
+
+console.log(toDot(G));
 // digraph "G" {
 //   label = "This is Custom Digraph";
 //   "node_A" [
@@ -418,10 +309,222 @@ const dot = toDot(G);
 
 </details>
 
-### `@ts-graphviz/adapter` Module 🔌
+#### Model Classes ❤️
 
-> This module status is ![beta](https://img.shields.io/badge/-beta-orange).
+The **Model** is the lower-level API under the DSL. It provides the classes `Digraph`, `Graph`, `Subgraph`, `Node`, and `Edge`, which you create and put together yourself.
 
+```ts
+import { attribute as _, Digraph, Edge, Node, Subgraph, toDot } from 'ts-graphviz';
+
+const G = new Digraph();
+const A = new Subgraph('A');
+const node1 = new Node('node1', {
+  [_.color]: 'red',
+});
+const node2 = new Node('node2', {
+  [_.color]: 'blue',
+});
+const edge = new Edge([node1, node2], {
+  [_.label]: 'Edge Label',
+  [_.color]: 'pink',
+});
+G.addSubgraph(A);
+A.addNode(node1);
+A.addNode(node2);
+A.addEdge(edge);
+
+console.log(toDot(G));
+// digraph {
+//   subgraph "A" {
+//     "node1" [
+//       color = "red";
+//     ];
+//     "node2" [
+//       color = "blue";
+//     ];
+//     "node1" -> "node2" [
+//       label = "Edge Label";
+//       color = "pink";
+//     ];
+//   }
+// }
+```
+
+The model classes have `createNode`, `createEdge` and `createSubgraph`, and the `add…`, `get…` and `remove…` methods; the statement methods `node()`, `edge()` and `subgraph()` are on the DSL only. `dsl(model)` gives the DSL of a model:
+
+```ts
+import { Digraph, dsl, toDot } from 'ts-graphviz';
+
+const G = new Digraph('G');
+G.createNode('a');
+
+const g = dsl(G);
+g.edge(['a', 'b'], { color: 'red' });
+
+console.log(toDot(G));
+// digraph "G" {
+//   "a";
+//   "a" -> "b" [
+//     color = "red";
+//   ];
+// }
+```
+
+See [DOT Object Model (DOM)](https://ts-graphviz.github.io/docs/ts-graphviz/guides/model-api/) for more.
+
+<details>
+<summary>Advanced Usage</summary>
+
+##### Custom Class 🤖
+
+You can also add your own implementation by inheriting from the class.
+
+```ts
+import {
+  attribute as _,
+  Digraph,
+  Edge,
+  type EdgeTargetTuple,
+  Node,
+  toDot,
+} from 'ts-graphviz';
+
+class MyCustomDigraph extends Digraph {
+  constructor() {
+    super('G', {
+      [_.label]: 'This is Custom Digraph',
+    });
+  }
+}
+class MyCustomNode extends Node {
+  constructor(id: string) {
+    super(`node_${id}`, {
+      [_.label]: `This is Custom Node ${id}`,
+    });
+  }
+}
+
+class MyCustomEdge extends Edge {
+  constructor(targets: EdgeTargetTuple) {
+    super(targets, {
+      [_.label]: 'This is Custom Edge',
+    });
+  }
+}
+
+const digraph = new MyCustomDigraph();
+const node1 = new MyCustomNode('A');
+const node2 = new MyCustomNode('B');
+const edge = new MyCustomEdge([node1, node2]);
+digraph.addNode(node1);
+digraph.addNode(node2);
+digraph.addEdge(edge);
+
+console.log(toDot(digraph));
+// digraph "G" {
+//   label = "This is Custom Digraph";
+//   "node_A" [
+//     label = "This is Custom Node A";
+//   ];
+//   "node_B" [
+//     label = "This is Custom Node B";
+//   ];
+//   "node_A" -> "node_B" [
+//     label = "This is Custom Edge";
+//   ];
+// }
+```
+
+##### Models Context API ( `with` method) 🧅
+
+You can also use the _Models Context API_ to create custom classes for objects generated inside of Graph.
+
+The `with` methods of `Digraph`, `Graph`, and `Subgraph`, which are implementations of `GraphBaseModel`, are provided to predefine custom models.
+
+```ts
+import {
+  attribute as _,
+  Digraph,
+  Edge,
+  type EdgeTargetTuple,
+  Node,
+  toDot,
+} from 'ts-graphviz';
+
+class MyCustomNode extends Node {
+  constructor(id: string) {
+    super(`node_${id}`, {
+      [_.label]: `This is Custom Node ${id}`,
+    });
+  }
+}
+
+class MyCustomEdge extends Edge {
+  constructor(targets: EdgeTargetTuple) {
+    super(targets, {
+      [_.label]: 'This is Custom Edge',
+    });
+  }
+}
+
+const g = new Digraph();
+g.with({
+  Node: MyCustomNode,
+  Edge: MyCustomEdge,
+});
+const a = g.createNode('A'); // MyCustomNode
+const b = g.createNode('B'); // MyCustomNode
+g.createEdge([a, b]); // MyCustomEdge
+
+console.log(toDot(g));
+// digraph {
+//   "node_A" [
+//     label = "This is Custom Node A";
+//   ];
+//   "node_B" [
+//     label = "This is Custom Node B";
+//   ];
+//   "node_A" -> "node_B" [
+//     label = "This is Custom Edge";
+//   ];
+// }
+```
+
+</details>
+
+### Attribute Values: Literal Text, escStrings and HTML-Like Labels 🔤
+
+A plain `string` in a model is **literal text**. `toDot` escapes it completely, so any text — quotes, backslashes, newlines, user input — is written safely into the DOT output, and `fromDot` gives the same text back. For values that carry DOT syntax of their own, say so explicitly:
+
+```ts
+import { digraph, escString, htmlLike, toDot } from 'ts-graphviz';
+
+const G = digraph('G', (g) => {
+  // literal text: a JS newline becomes a line break, `"` and `\` are escaped
+  g.node('a', { label: 'line 1\nline 2 with "quotes"' });
+  // Graphviz escString: \N, \G, \l, ... keep their meaning (only `"` is escaped)
+  g.node('b', { label: escString('\\N\\lleft-justified') });
+  // HTML-like label: the markup between the outer < and >
+  g.node('c', { label: htmlLike('<b>bold</b>') });
+});
+
+console.log(toDot(G));
+// digraph "G" {
+//   "a" [
+//     label = "line 1\nline 2 with \"quotes\"";
+//   ];
+//   "b" [
+//     label = "\N\lleft-justified";
+//   ];
+//   "c" [
+//     label = <<b>bold</b>>;
+//   ];
+// }
+```
+
+`fromDot` maps the other way: `\\` and `\"` in a quoted string become literal characters, `\n` and `\r` become a line feed and a carriage return, any other backslash sequence yields an `escString`, and `<…>` yields an `htmlLike` value. The `isEscString` and `isHTMLLike` guards tell the kinds apart.
+
+### `ts-graphviz/adapter` Module 🔌
 
 Provides an interface to run Graphviz dot commands.
 
@@ -431,7 +534,7 @@ Execute the dot command and get its output as a `Blob`.
 
 ![Adapter State Machine](./media/adapter-state-machine.svg)
 
-The `toBlob` function renders **DOT** (or a model) to a **Blob**, whose `type` is the media type of the format.
+The `toBlob` function renders **DOT** (or a graph) to a **Blob**, whose `type` is the media type of the format.
 
 ```ts
 import { writeFile } from 'node:fs/promises';
@@ -448,11 +551,11 @@ const svg = await blob.text();
 await writeFile('./result.svg', blob.stream());
 ```
 
-> **Note** Designed to work with Node.js and Deno. The output is held in memory, and every failure rejects the promise before you read anything. In 3.x the adapter had `toStream` (use `blob.stream()`) and `toFile` (write `blob.stream()` to the file yourself).
+> **Note** The adapter runs on Node.js and Deno; in a browser, `toBlob` throws an error with the code `TSG_ERR_UNSUPPORTED_ENVIRONMENT`. The output is held in memory, and a failure of the command rejects the promise before you read anything. Call `toBlob` with `await` inside `try`: the browser entry and the conversion of a model to DOT throw before a promise is returned.
+>
+> By default, `toBlob` runs `sanitize` on the DOT before it renders: a DOT with an attribute that makes Graphviz read a file (such as `image`) or an unsafe link, and an output format that has not been checked, are rejected with the code `TSG_ERR_UNSAFE_DOT`; nothing is removed for you. See the [`@ts-graphviz/adapter` README](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/adapter/README.md) for the options and the security notes.
 
-### `@ts-graphviz/ast` Module 🔢
-
-> This module status is ![beta](https://img.shields.io/badge/-beta-orange).
+### `ts-graphviz/ast` Module 🔢
 
 An API is provided to handle ASTs for advanced use.
 
@@ -461,22 +564,37 @@ An API is provided to handle ASTs for advanced use.
 The following functions are provided as described in the state transition diagram.
 
 - The `fromModel` function converts **Model** to **AST**.
-- The `toModel` function converts **AST** to **Model**.
+- The `toModel` function converts **AST** to **Model**. It takes the model classes to create as `{ models }`; `defaultModelsContext()` gives the default ones.
 - The `stringify` function converts **AST** to **DOT**.
-- The `parse` function to convert from **DOT** to **AST**.
+- The `parse` function converts **DOT** to **AST**.
+- The `sanitize` function takes **DOT** and returns **DOT** that is safe to render from an untrusted source, or throws.
 
 > **Note** As you can see from the above figure, the `toDot` function provided by the `ts-graphviz` package is a composite of `fromModel` and `stringify`. The `fromDot` function is a composite of `parse` and `toModel`.
 
-Detailed usage is TODO.
-Please refer to the TypeScript type definition.
+```ts
+import { defaultModelsContext, toDot } from 'ts-graphviz';
+import { fromModel, parse, stringify, toModel } from 'ts-graphviz/ast';
 
+const ast = parse('digraph example { a -> b; }');
+
+// AST -> Model -> AST -> DOT
+const model = toModel(ast, { models: defaultModelsContext() });
+console.log(stringify(fromModel(model)) === toDot(model));
+// true
+
+console.log(stringify(ast));
+// digraph example {
+//   a -> b;
+// }
+```
+
+See the [`@ts-graphviz/ast` README](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/ast/README.md) for the parser options and limits.
 
 <details>
 <summary>The parse function and AST</summary>
 
-
-```typescript
-import { parse } from '@ts-graphviz/ast';
+```ts
+import { parse } from 'ts-graphviz/ast';
 
 const ast = parse(`
   digraph example {
@@ -485,76 +603,81 @@ const ast = parse(`
     ]
   }
 `);
+
+console.dir(ast, { depth: null });
 // {
-//   type: 'Dot',
 //   location: {
+//     source: undefined,
 //     start: { offset: 3, line: 2, column: 3 },
 //     end: { offset: 68, line: 7, column: 1 }
 //   },
+//   type: 'Dot',
 //   children: [
 //     {
+//       location: {
+//         source: undefined,
+//         start: { offset: 3, line: 2, column: 3 },
+//         end: { offset: 67, line: 6, column: 4 }
+//       },
 //       id: {
-//         value: 'example',
-//         kind: 'bare',
-//         type: 'Literal',
 //         location: {
+//           source: undefined,
 //           start: { offset: 11, line: 2, column: 11 },
 //           end: { offset: 18, line: 2, column: 18 }
 //         },
-//         children: []
+//         value: 'example',
+//         kind: 'bare',
+//         type: 'Literal'
 //       },
 //       directed: true,
 //       strict: false,
 //       type: 'Graph',
-//       location: {
-//         start: { offset: 3, line: 2, column: 3 },
-//         end: { offset: 67, line: 6, column: 4 }
-//       },
 //       children: [
 //         {
-//           id: {
-//             value: 'node1',
-//             kind: 'bare',
-//             type: 'Literal',
-//             location: {
-//               start: { offset: 25, line: 3, column: 5 },
-//               end: { offset: 30, line: 3, column: 10 }
-//             },
-//             children: []
-//           },
-//           type: 'Node',
 //           location: {
+//             source: undefined,
 //             start: { offset: 25, line: 3, column: 5 },
 //             end: { offset: 63, line: 5, column: 6 }
 //           },
+//           id: {
+//             location: {
+//               source: undefined,
+//               start: { offset: 25, line: 3, column: 5 },
+//               end: { offset: 30, line: 3, column: 10 }
+//             },
+//             value: 'node1',
+//             kind: 'bare',
+//             type: 'Literal'
+//           },
+//           type: 'Node',
 //           children: [
 //             {
-//               key: {
-//                 value: 'label',
-//                 kind: 'bare',
-//                 type: 'Literal',
-//                 location: {
-//                   start: { offset: 39, line: 4, column: 7 },
-//                   end: { offset: 44, line: 4, column: 12 }
-//                 },
-//                 children: []
-//               },
-//               value: {
-//                 value: 'My Node',
-//                 kind: 'quoted',
-//                 type: 'Literal',
-//                 location: {
-//                   start: { offset: 47, line: 4, column: 15 },
-//                   end: { offset: 56, line: 4, column: 24 }
-//                 },
-//                 children: []
-//               },
 //               location: {
+//                 source: undefined,
 //                 start: { offset: 39, line: 4, column: 7 },
 //                 end: { offset: 57, line: 4, column: 25 }
 //               },
-//               type: 'Attribute',
-//               children: []
+//               key: {
+//                 location: {
+//                   source: undefined,
+//                   start: { offset: 39, line: 4, column: 7 },
+//                   end: { offset: 44, line: 4, column: 12 }
+//                 },
+//                 value: 'label',
+//                 kind: 'bare',
+//                 type: 'Literal'
+//               },
+//               value: {
+//                 location: {
+//                   source: undefined,
+//                   start: { offset: 47, line: 4, column: 15 },
+//                   end: { offset: 56, line: 4, column: 24 }
+//                 },
+//                 value: 'My Node',
+//                 kind: 'quoted',
+//                 type: 'Literal'
+//               },
+//               type: 'Attribute'
 //             }
 //           ]
 //         }
@@ -566,53 +689,40 @@ const ast = parse(`
 
 </details>
 
-### Attribute Values: Literal Text, escStrings and HTML-Like Labels 🔤
+### Errors
 
-A plain `string` in a model is **literal text**. `toDot` escapes it completely, so any text — quotes, backslashes, newlines, user input — is written safely into the DOT output, and `fromDot` gives the same text back. For values that carry DOT syntax of their own, say so explicitly:
+An error the library raises for a documented failure is a standard error type (`SyntaxError`, `RangeError`, `TypeError`, …) with a `code` that starts with `TSG_ERR_`. `isTsGraphvizError` tells such an error from any other. Match on the `code`, not on the message.
 
 ```ts
-import { digraph, escString, htmlLike, toDot } from 'ts-graphviz';
+import { fromDot, isTsGraphvizError } from 'ts-graphviz';
 
-const g = digraph('G', (g) => {
-  // literal text: a JS newline becomes a line break, `"` and `\` are escaped
-  g.node('a', { label: 'line 1\nline 2 with "quotes"' });
-  // Graphviz escString: \N, \G, \l, ... keep their meaning (only `"` is escaped)
-  g.node('b', { label: escString('\\N\\lleft-justified') });
-  // HTML-like label: the markup between the outer < and >
-  g.node('c', { label: htmlLike('<b>bold</b>') });
-});
+try {
+  fromDot('digraph { a -> }');
+} catch (e) {
+  if (isTsGraphvizError(e)) {
+    console.log(e.name, e.code);
+  }
+}
+// DotSyntaxError TSG_ERR_DOT_SYNTAX
 ```
 
-`fromDot` maps the other way: `\\` and `\"` in a quoted string become literal characters, any other backslash sequence yields an `escString`, and `<…>` yields an `htmlLike` value. The `isEscString` and `isHTMLLike` guards tell the kinds apart.
+The codes are listed in the [migration guide](https://ts-graphviz.github.io/docs/ts-graphviz/migration-guides/v3-to-v4/#3-errors-standard-types-with-a-stable-code).
+
+### `ts-graphviz/legacy` Module
+
+A default attribute statement (`g.node({ ... })`, `g.edge({ ... })`, `g.graph({ ... })`) is written where it was added and applies to what follows it, as in DOT. The `ts-graphviz/legacy` entry has the same API with classes that write every default first. It is deprecated and will be removed in v5; see the [migration guide](https://ts-graphviz.github.io/docs/ts-graphviz/migration-guides/v3-to-v4/#13-default-attribute-statements-keep-their-place).
 
 ### Extending the Type System 🧰
 
-> The status of this feature is ![beta](https://img.shields.io/badge/-beta-orange).
-
 With ts-graphviz, you can extend the library's type system to customize graph visualization solutions to meet specific needs.
+
+#### Use Case: Adding Custom Attributes
 
 > **Note** To allow for customization, types are named with the `$` symbol.
 >
 > If you want to extend a type definition in cases not listed below, check the source code to see if you can extend it with `$...`.
 >
 > If not, please create an issue or pull request.
-
-#### Use Case: Specifying Custom Graph Layout and Output Formats
-
-```ts
-import { toBlob } from '@ts-graphviz/adapter';
-
-// Names a Graphviz plugin adds, for this call only (nothing global).
-const video = await toBlob('digraph { a -> b }', {
-  customLayouts: ['my-custom-algorithm'],
-  customFormats: ['mp4'],
-  layout: 'my-custom-algorithm',
-  format: 'mp4',
-  sanitize: false,
-});
-```
-
-#### Use Case: Adding Custom Attributes
 
 ```ts
 import { $keywords } from '@ts-graphviz/common';
@@ -646,7 +756,32 @@ console.log(
     }),
   ),
 );
+// digraph {
+//   hoge = "fuga";
+// }
 ```
+
+This changes the types everywhere in your program. To type the attributes of one set of models only, the model types and classes take a `Schema` type parameter instead (`class MyNode extends Node<MySchema> {}`).
+
+#### Use Case: Specifying Custom Graph Layout and Output Formats
+
+Layout engines and output formats that a Graphviz plugin adds need no type extension. Name them for one call with the `customLayouts` and `customFormats` options of `toBlob`; they widen the types of `layout` and `format` for that call only.
+
+```ts
+import { toBlob } from 'ts-graphviz/adapter';
+
+// 'my-custom-algorithm' and 'mp4' stand for the names your plugin adds.
+const video = await toBlob('digraph { a -> b }', {
+  customLayouts: ['my-custom-algorithm'],
+  customFormats: ['mp4'],
+  layout: 'my-custom-algorithm',
+  format: 'mp4',
+  // sanitize refuses formats it has not checked
+  sanitize: false,
+});
+```
+
+These names are trusted configuration: define them in your code, never from end-user input.
 
 ## Deep dive 🏊‍♂️
 
@@ -656,12 +791,13 @@ See [ARCHITECTURE.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/ARCHI
 
 ### Security 🛡️
 
-See [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md) for more details.
+See [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md) for how to report a vulnerability, [Security Policies](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-policies/) for the measures in place, and the [security model](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-model/) for the guarantees of the library.
 
 
 ## Who's using `ts-graphviz` 📜
 
 - [Apollo GraphQL](https://github.com/apollographql)
+- [Apple](https://github.com/apple/ml-mycelium)
 - [AWS](https://github.com/aws)
 - [IBM (StrongLoop)](https://strongloop.com)
 - [The University of Tokyo](https://github.com/csg-tokyo)

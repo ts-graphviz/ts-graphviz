@@ -10,7 +10,7 @@ This guide provides comprehensive information for developers who want to contrib
 
 Before you begin contributing to ts-graphviz, ensure you have the following installed:
 
-- **Node.js**: Required for running the tests and building the project.
+- **Node.js**: The version in `.node-version`. The repository's scripts are TypeScript files that Node.js runs directly, which older releases do not do by default. Required for running the tests and building the project.
 - **Deno**: Required for cross-platform testing.
 - **pnpm**: A fast, disk space-efficient package manager.
 - **Graphviz**: Required for rendering DOT files and generating visualizations.
@@ -37,10 +37,18 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 | `pnpm build` | Build all packages in the monorepo. |
 | `pnpm test` | Run the tests across the monorepo, except those tagged `process` (see [Tests that start processes](#tests-that-start-processes)). |
 | `pnpm test:sandbox` | Run the tests tagged `process` in a container (Docker or Podman). |
+| `pnpm test:e2e` | Run the end-to-end tests of the `e2e/` workspace. |
 | `pnpm lint` | Run linting checks on the codebase. |
+| `pnpm typecheck` | Type-check the repository with `tsc --noEmit --strict`. |
+| `pnpm api:check` | Fail if the API reports (`api-reports/*.api.md`) differ from the built declarations (run `pnpm build` first). |
+| `pnpm api:update` | Rewrite the API reports after a change of the public API; commit them with the change. |
+| `pnpm check:doc-examples` | Type-check the TypeScript code blocks of the READMEs and the website's docs against the built declarations (run `pnpm build` first). |
+| `pnpm check:consumer-types` | Pack the packages and type-check `test/consumer/` against the tarballs with several TypeScript versions and module settings (run `pnpm build` first). |
+| `pnpm fuzz:build` and `pnpm fuzz <target> [seconds]` | Build the fuzz targets (`fuzz/targets/`) and run one with Jazzer.js. |
+| `pnpm media:generate` | Render the examples in `media/` to the SVG images the READMEs show (needs Graphviz `dot`). |
 | `pnpm knip` | Report unused files, exports and dependencies. |
 | `pnpm check:packages` | Pack every package as `pnpm publish` would and run publint and arethetypeswrong on the tarballs (run `pnpm build` first). |
-| `pnpm pack:check` | Build and pack HEAD twice from clean clones and fail if the tarballs differ: the reproducible-build check CI runs on every change (see [SECURITY.md](./SECURITY.md#verifying-a-release)). |
+| `pnpm pack:check` | Build and pack HEAD twice from clean clones and fail if the tarballs differ: the reproducible-build check CI runs on every change (see [Verifying a Release](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-policies/#verifying-a-release)). |
 | `pnpm changeset` | Create a changeset for version management. |
 
 > [!WARNING]

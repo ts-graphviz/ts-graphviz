@@ -20,7 +20,7 @@ import {
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// #1741: one generic signature per function, so a union rule works.
+// One generic signature per function, so a union rule works.
 describe('parse', () => {
   it('returns the node of each rule', () => {
     expectTypeOf(
@@ -134,7 +134,7 @@ describe('fromDot', () => {
     expectTypeOf(node).toEqualTypeOf<MyNode>();
   });
 
-  it('keeps an explicit models type argument working (#1738)', () => {
+  it('keeps an explicit models type argument working', () => {
     class MyNode extends Node {
       readonly mine = true;
     }

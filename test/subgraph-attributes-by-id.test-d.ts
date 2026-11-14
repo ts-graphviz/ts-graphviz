@@ -11,7 +11,7 @@ import {
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// #1742: Graphviz draws a subgraph as a cluster when its id starts with
+// Graphviz draws a subgraph as a cluster when its id starts with
 // "cluster" (or it has cluster=true), and ignores attributes that do not apply.
 describe('subgraph attributes by id', () => {
   const g = digraph('G');

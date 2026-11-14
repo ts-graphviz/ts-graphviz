@@ -107,7 +107,7 @@ describe('renderHTMLLike()', { tags: ['SM-3'] }, () => {
     expect(html(element)).toBe('<<td fixedsize></td>>');
   });
 
-  describe('escaping (#1745)', () => {
+  describe('escaping', () => {
     it('writes text children as text', () => {
       expect(html(<dot:td>{'<b>hi</b> & </td>'}</dot:td>)).toBe(
         '<<td>&lt;b&gt;hi&lt;/b&gt; &amp; &lt;/td&gt;</td>>',

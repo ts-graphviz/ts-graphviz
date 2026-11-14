@@ -1,7 +1,7 @@
 /**
  * Type-check the TypeScript code blocks of the READMEs and the website's
  * docs (English and Japanese) against the packages' sources, so an example
- * that a user copies compiles (#1744). Run with `pnpm check:doc-examples`.
+ * that a user copies compiles. Run with `pnpm check:doc-examples`.
  *
  * - Every ```ts / ```tsx / ```typescript block is a module of its own and
  *   must import what it uses.
