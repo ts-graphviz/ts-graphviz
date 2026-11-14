@@ -16,6 +16,6 @@ The constructor of `Subgraph` (and `SubgraphConstructor`, which a custom class o
 - any other id, an id known only at run time (`string`) included, or no id, takes subgraph attributes, or cluster attributes with `cluster: true`;
 - an id that starts with `cluster` still takes `rank`: only `createSubgraph` refuses it.
 
-**Breaking (types only):** code that sets cluster attributes on a subgraph whose literal id does not start with `cluster` (and has no `cluster: true`), or `rank` on a cluster, no longer type-checks. Graphviz ignored those attributes; rename the subgraph to `cluster_…`, add `cluster: true`, or drop the attribute.
+**Breaking (types only):** code that sets cluster attributes on a subgraph whose literal id does not start with `cluster` (and has no `cluster: true`), or, with `subgraph(…)` and `createSubgraph(…)`, `rank` on a cluster, no longer type-checks. Graphviz ignored those attributes; rename the subgraph to `cluster_…`, add `cluster: true`, or drop the attribute. `new Subgraph(id, attributes)` with an id known only at run time and cluster attributes needs `cluster: true`, or `createSubgraph(id, attributes)`.
 
 `Subgraph#isSubgraphCluster()` decides as Graphviz does: the `cluster` prefix in any case (`CLUSTER_a` is a cluster), or the `cluster` attribute (`true`, `yes` or a non-zero number, also when parsed from DOT as a string). In 3.x it checked only for a lowercase `cluster` prefix.
