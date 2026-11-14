@@ -94,7 +94,7 @@ describe('isStyleList', { tags: ['SM-7'] }, () => {
     expect(isStyleList(input)).toBe(expected);
   });
 
-  it('takes linear time on long values', () => {
+  it('takes linear time on long values', { tags: ['timing'] }, () => {
     const inputs = [
       `setlinewidth(${'1'.repeat(1_000_000)}`,
       `setlinewidth(${'1'.repeat(1_000_000)})`,

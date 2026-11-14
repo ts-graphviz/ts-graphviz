@@ -36,6 +36,17 @@ const processTag = {
 };
 
 /**
+ * Tests that bound the wall-clock time of an operation (a quadratic
+ * algorithm made linear stays linear) carry the `timing` tag. Mutation
+ * testing (vitest.mutation.config.ts) leaves them out: the instrumented
+ * sources are slower, so the bound would fail or pass by chance there.
+ */
+const timingTag = {
+  name: 'timing',
+  description: 'Asserts on elapsed time; left out of mutation testing',
+};
+
+/**
  * Coverage thresholds (OpenSSF Best Practices): silver asks 80% of
  * statements, gold 90% of statements and 80% of branches. Vitest exits 1
  * below one, which fails `pnpm test` in CI. The per-package values are a
@@ -93,7 +104,7 @@ export default defineConfig({
   test: {
     setupFiles: ['./test/properties/setup.ts', './test/process-guard.ts'],
     globalSetup: ['./test/process-notice.ts'],
-    tags: [...securityModelTags, processTag],
+    tags: [...securityModelTags, processTag, timingTag],
     strictTags: true,
     // website/ has its own setup (website/vitest.config.ts)
     exclude: [...configDefaults.exclude, 'website/**'],
