@@ -206,7 +206,7 @@ G.addNode(b);
 G.addEdge(kit.createEdge([a, b])); // adds the edge only
 ```
 
-The DOT DSL creates with a kit too: the factories' callbacks take it as their second argument, and `dsl(model, kit)` gives the DSL of a model that creates with `kit` (`dsl(model)` uses the default kit).
+The DOT DSL creates with a kit too: the factories create with theirs, and `dsl(model, kit)` gives the DSL of a model that creates with `kit` (`dsl(model)` uses the default kit).
 
 `legacyModels` (`LegacyGraph`, `LegacyDigraph`, `LegacySubgraph`) are the 3.x classes, which merge every default attribute statement into one set of defaults per graph; `ts-graphviz/legacy` uses them for every factory (see [DOT's statement order](./01-dot-dsl.md#dots-statement-order)). They are deprecated and removed in v5.
 

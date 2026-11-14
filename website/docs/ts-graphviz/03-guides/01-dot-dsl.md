@@ -176,16 +176,7 @@ digraph((g) => {
 });
 ```
 
-A statement creates with the graph's model kit and adds what it created to the graph. The callbacks take that kit as their second argument, for creating a model without adding it:
-
-```typescript
-import { digraph, modelOf } from 'ts-graphviz';
-
-digraph((g, kit) => {
-  const a = kit.createNode('a'); // in no graph yet
-  modelOf(g).addNode(a);
-});
-```
+A statement creates with the graph's model kit and adds what it created to the graph.
 
 ## Comments
 
