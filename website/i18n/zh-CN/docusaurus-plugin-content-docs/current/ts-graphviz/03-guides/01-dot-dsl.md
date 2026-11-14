@@ -95,7 +95,7 @@ console.log(toDot(G));
 // }
 ```
 
-如果图中已有该 id 的节点或子图，`g.node(id)` 和 `g.subgraph(id)` 会返回它，否则会创建一个，与 DOT 中同一个名字写两次时一样。回调函数接收节点、边或子图的 DSL，方法也返回同一个 DSL。
+`g.node(id)` 和 `g.subgraph(id)` 每次调用都会在调用的位置添加该 id 的一个声明，与 DOT 中同一条语句写两次时一样：之前的声明仍然保留，两者设置同一个属性时以后面的为准。回调函数接收节点、边或子图的 DSL，方法也返回同一个 DSL。
 
 属性名带有类型：编辑器会补全它们并检查取值。id 以 `cluster` 开头的子图接受簇的属性（`label`、`color` 等）。
 
@@ -226,7 +226,7 @@ g.edge(['b', 'c']);
 console.log(toDot(g));
 ```
 
-`g.node('a')` 会像在 DOT 中再写一次语句那样再次声明 `a`（在其他语句之后写出 `a [color = "red"];`）；要修改已有的节点，请用 `getNodes` 从模型中取出它。
+`g.node('a')` 会像在 DOT 中再写一次语句那样再次声明 `a`（在其他语句之后写出 `a [color = "red"];`）；要修改已有的节点，请用 `getNodes` 从模型中取出它。`getNodes` 按顺序返回该 id 的所有声明。两个声明设置同一个属性时以后面的为准，所以请修改那个声明，或者在它们之后再声明该节点。
 
 语句返回的是 DSL。DSL 是一个模型加上语句创建模型时所用的套件；一个模型和一个套件只有一个 DSL，所以 DSL 可以用 `===` 比较。`modelOf(x)` 返回对应的模型。从中读到的模型可以用 `dsl(model)` 得到它的 DSL，这个 DSL 用默认套件创建；`dsl(model, kit)` 返回用 `kit` 创建的 DSL。使用 `{ dsl: true }` 时，套件是 `convert.models` 对应的套件。`toDot`、`fromModel` 和适配器的 `toBlob` 既接受模型，也接受 DSL。
 

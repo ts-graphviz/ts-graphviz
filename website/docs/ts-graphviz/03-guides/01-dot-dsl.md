@@ -95,7 +95,7 @@ console.log(toDot(G));
 // }
 ```
 
-`g.node(id)` and `g.subgraph(id)` give the node or subgraph of that id if the graph has one, and create it otherwise, as DOT does when a name is written twice. A callback receives the DSL of the node, edge or subgraph; the method also returns it.
+`g.node(id)` and `g.subgraph(id)` add a declaration of that id where they are called, each time, as a statement written twice in DOT does: the one before stays, and where both set an attribute, the later one counts. A callback receives the DSL of the node, edge or subgraph; the method also returns it.
 
 The attribute names are typed: your editor completes them and checks their values. A subgraph whose id starts with `cluster` takes the cluster attributes (`label`, `color`, …).
 
@@ -226,7 +226,7 @@ g.edge(['b', 'c']);
 console.log(toDot(g));
 ```
 
-`g.node('a')` would declare `a` again, as a statement written again in DOT does (`a [color = "red"];` after the others); to change the node there is, take it from the model with `getNodes`.
+`g.node('a')` would declare `a` once more, as a statement written twice in DOT does (`a [color = "red"];` after the others); to change the node there is, take it from the model with `getNodes`. It gives each declaration of the id, in order. Where two of them set the same attribute, the later one counts: change that one, or declare the node after them.
 
 What a statement gives is a DSL. A DSL is a model together with the kit its statements create with, and a model and a kit have one DSL, so DSLs compare with `===`. `modelOf(x)` gives the model back. `dsl(model)` gives the DSL of any model you read from it, creating with the default kit; `dsl(model, kit)` gives the one that creates with `kit`. With `{ dsl: true }`, the kit is the one of `convert.models`. `toDot`, `fromModel` and the adapter's `toBlob` take a DSL as well as a model.
 
