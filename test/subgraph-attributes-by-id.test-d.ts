@@ -9,6 +9,7 @@ import {
   Subgraph,
   type SubgraphAttributesFor,
   type SubgraphAttributesObject,
+  type SubgraphConstructor,
   type SubgraphModel,
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
@@ -130,6 +131,15 @@ describe('subgraph attributes by id', () => {
       expectTypeOf<'cLUSTEr'>().toExtend<ClusterSubgraphId>();
       expectTypeOf<'clustr_a'>().not.toExtend<ClusterSubgraphId>();
       expectTypeOf<'_cluster'>().not.toExtend<ClusterSubgraphId>();
+      expectTypeOf<'cluste'>().not.toExtend<ClusterSubgraphId>();
+      expectTypeOf<string>().not.toExtend<ClusterSubgraphId>();
+    });
+
+    it('is what SubgraphConstructor takes, which a custom class fits', () => {
+      const C: SubgraphConstructor = Subgraph;
+      new C('ClUsTeR_d', { pencolor: 'red' });
+      // @ts-expect-error pencolor applies to clusters
+      new C('row', { pencolor: 'red' });
     });
 
     it('takes subgraph attributes on any other id, or none', () => {
