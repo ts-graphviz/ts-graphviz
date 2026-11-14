@@ -55,8 +55,8 @@ import { type DotInput, toBlob } from 'ts-graphviz/adapter';
 import { describe, expectTypeOf, it } from 'vitest';
 
 // The schema type parameters on the model types and the generic core
-// classes (#1841, option B, PR B). The schemas are written by hand here, as
-// `defineSchema` (PR C) will produce them; a graph of a schema is made by
+// classes. The schemas are written by hand here, as a `defineSchema` helper
+// would produce them; a graph of a schema is made by
 // giving the core class its model types (`new Digraph<ModelTypes<S>>()`).
 
 type Add<T extends DotValue> = SchemaEntry<T, 'add'>;

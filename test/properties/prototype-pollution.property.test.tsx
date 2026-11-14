@@ -14,7 +14,7 @@ import { ownAdapterOptions } from '../../packages/adapter/src/options.js';
 import { sourceToRender } from '../../packages/adapter/src/source.js';
 
 // A bug elsewhere in an application can add properties to Object.prototype;
-// they must not change what ts-graphviz does (#1757).
+// they must not change what ts-graphviz does.
 
 /** The option names of every public entry point, and of their nested options. */
 const OPTION_NAMES = [
@@ -162,7 +162,7 @@ describe('a polluted Object.prototype changes nothing', {
     });
   }
 
-  it('the gadgets of #1757 are closed', () => {
+  it('an inherited dotCommand, library or sanitize changes nothing', () => {
     polluted({ dotCommand: '/bin/sh', library: ['/tmp/evil.ps'] }, () => {
       expect(createCommandAndArgs(ownAdapterOptions({}))).toStrictEqual([
         'dot',

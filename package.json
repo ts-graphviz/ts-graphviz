@@ -45,16 +45,21 @@
     "check:consumer-types": "node scripts/check-consumer-types.ts",
     "api:check": "node scripts/api-report.ts",
     "api:update": "node scripts/api-report.ts --update",
+    "check:changesets": "node scripts/check-changesets.ts",
     "check:doc-examples": "node scripts/check-doc-examples.ts",
     "media:generate": "node media/generate.ts",
-    "build:website": "pnpm build && pnpm doc && pnpm --filter @ts-graphviz/website build && pnpm --filter @ts-graphviz/website copy-api && pnpm --filter @ts-graphviz/website check-links"
+    "build:website": "pnpm build && pnpm doc && pnpm --filter @ts-graphviz/website build && pnpm --filter @ts-graphviz/website copy-api && pnpm --filter @ts-graphviz/website check-links",
+    "test:mutation": "stryker run"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
     "@biomejs/biome": "2.6.2",
     "@changesets/changelog-github": "^1.0.1",
     "@changesets/cli": "^3.0.3",
+    "@changesets/read": "^1.0.1",
     "@jazzer.js/core": "4.0.0",
+    "@stryker-mutator/core": "10.1.1",
+    "@stryker-mutator/vitest-runner": "10.1.1",
     "@types/node": "catalog:",
     "@types/react": "^19.3.0",
     "@typescript/native": "catalog:",

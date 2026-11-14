@@ -20,11 +20,9 @@ import {
 
 // Generators for AST nodes, built with the public builder API. They produce
 // ASTs the printer can write and the parser can read back *exactly*, so every
-// constraint below mirrors a rule of the DOT grammar; a constraint that only
-// exists to dodge a bug is marked with its issue number.
+// constraint below mirrors a rule of the DOT grammar.
 
-// The exported `createElement` shares one node counter for the whole process
-// and throws after 100,000 nodes (#1624); sampling needs far more than that.
+// No node limit: sampling builds far more nodes than the default allows.
 const createElement = createElementFactory({ maxASTNodes: 0 });
 
 const LOWER = 'abcdefghijklmnopqrstuvwxyz';
@@ -178,7 +176,7 @@ const compassLiteral: fc.Arbitrary<LiteralASTNode<Compass>> = fc
  * A port name. Compass points are excluded: `a:n` is a compass point in DOT,
  * not a port, and the parser cannot tell the two apart afterwards. ':' is
  * excluded because Graphviz reads `"p:q"` as port:compass, so a model port
- * cannot hold it and toDot rejects it (#1641).
+ * cannot hold it and toDot rejects it.
  */
 const portLiteral = idLiteral.filter(
   (l) =>
@@ -271,8 +269,8 @@ export const edge: fc.Arbitrary<EdgeASTNode> = fc
 
 /**
  * Comment text that survives the printer's padding and the parser's dedent:
- * non-empty lines without surrounding whitespace. `*` is left out until the
- * parser stops removing every asterisk from block comments (#1625).
+ * non-empty lines of letters, spaces, `/` and `#`, without surrounding
+ * whitespace.
  */
 const commentLine = fc
   .tuple(

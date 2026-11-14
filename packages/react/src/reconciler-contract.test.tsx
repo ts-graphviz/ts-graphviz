@@ -20,7 +20,7 @@ import { createRoot } from './createRoot.js';
 import { HostConfig, reconciler } from './reconciler.js';
 import { renderToDot } from './renderToDot.js';
 
-// #1752: the reconciler wired to its React 19 contract.
+// The reconciler wired to its React 19 contract.
 
 class Boundary extends Component<
   { children: ReactNode; fallback: ReactNode },
@@ -371,6 +371,9 @@ describe('renders on one root', () => {
       </Digraph>,
     );
     root.unmount();
-    await expect(pending).rejects.toThrow(/unmounted/);
+    await expect(pending).rejects.toMatchObject({
+      code: 'TSG_ERR_ROOT_UNMOUNTED',
+      message: expect.stringMatching(/unmounted/),
+    });
   });
 });

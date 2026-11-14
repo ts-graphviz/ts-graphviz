@@ -134,7 +134,7 @@ describe('DOT statements', () => {
       expect(callback).toHaveBeenLastCalledWith(other, defaultModelKit);
     });
 
-    test('ignores null as the attributes (#1593)', () => {
+    test('ignores null as the attributes', () => {
       const edge = g.edge(nodes, null as never);
       expect(Object.keys(edge)).toStrictEqual([]);
       expect(modelOf(g).edges).toStrictEqual([modelOf(edge)]);
@@ -203,7 +203,7 @@ describe('DOT statements', () => {
       });
     });
 
-    test('takes the empty id as an id; no id makes an anonymous one (#1593)', () => {
+    test('takes the empty id as an id; no id makes an anonymous one', () => {
       const empty = g.subgraph('');
       expect(modelOf(empty).id).toBe('');
       expect(g.subgraph('')).toBe(empty);

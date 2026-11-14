@@ -22,7 +22,7 @@ import {
 import { describe, expect, it } from 'vitest';
 import { dotString } from './arbitraries.js';
 
-// Property-based tests for the core models (#1613, #1504): what the model API
+// Property-based tests for the core models: what the model API
 // promises on its own, independent of DOT text. A failing run prints its
 // seed; reproduce it with FC_SEED=<seed>.
 //
@@ -267,7 +267,7 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
     );
   });
 
-  it('subgraph("") finds the subgraph with the empty id like any other id (#1593)', () => {
+  it('subgraph("") finds the subgraph with the empty id like any other id', () => {
     const g = dsl(new Digraph());
     const sub = g.subgraph('');
     expect(modelOf(sub).id).toBe('');
@@ -275,7 +275,7 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
     expect(modelOf(g).subgraphs).toHaveLength(1);
   });
 
-  it('edge(targets, null) ignores the null instead of failing (#1593)', () => {
+  it('edge(targets, null) ignores the null instead of failing', () => {
     fc.assert(
       fc.property(plainId, plainId, (a, b) => {
         const edge = dsl(new Digraph()).edge([a, b], null as never);
@@ -286,8 +286,8 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
 
   it('removing a node leaves the edges that refer to it', () => {
     // Edges hold their own references; DOT would recreate the node from the
-    // edge when rendering. Pinned here so that a change is deliberate (#1504
-    // proposed cascading removal).
+    // edge when rendering. Pinned here so that a change, such as cascading
+    // removal, is deliberate.
     fc.assert(
       fc.property(plainId, plainId, (a, b) => {
         const g = digraph((g) => {
@@ -378,7 +378,7 @@ describe('edge targets', { tags: ['SM-5'] }, () => {
     fc.assert(
       fc.property(
         plainId,
-        // a compass point alone after the id is ambiguous with a port (#1688)
+        // a compass point alone after the id is ambiguous with a port
         plainId.filter((s) => s !== '' && !COMPASS_POINTS.includes(s)),
         fc.constantFrom(...COMPASS_POINTS.filter((c) => c !== '_')),
         (id, port, compass) => {
@@ -394,7 +394,7 @@ describe('edge targets', { tags: ['SM-5'] }, () => {
     );
   });
 
-  it('the compass point `_` survives a string target (#1688)', () => {
+  it('the compass point `_` survives a string target', () => {
     // isCompass() lists every point except `_`, so the compass is dropped
     expect(toNodeRef('a:p:_')).toStrictEqual({
       id: 'a',
