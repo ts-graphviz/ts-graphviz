@@ -5,6 +5,7 @@ import {
   defaultModelKit,
   digraph,
   type NonClusterSubgraphAttributesObject,
+  Subgraph,
   type SubgraphAttributesFor,
   type SubgraphAttributesObject,
   type SubgraphModel,
@@ -116,5 +117,39 @@ describe('subgraph attributes by id', () => {
     expectTypeOf(
       defaultModelKit.createSubgraph('cluster_a', { label: 'A' }),
     ).toEqualTypeOf<SubgraphModel>();
+  });
+
+  describe('the constructor', () => {
+    it('takes cluster attributes on a cluster id', () => {
+      new Subgraph('cluster_a', { pencolor: 'red', label: 'A' });
+      new Subgraph('Cluster_b', { pencolor: 'red' });
+      new Subgraph('CLUSTER_c', { bgcolor: 'lightgrey' });
+    });
+
+    it('takes subgraph attributes on any other id, or none', () => {
+      new Subgraph('row', { rank: 'same' });
+      new Subgraph({ rank: 'same' });
+      // @ts-expect-error pencolor applies to clusters
+      new Subgraph('row', { pencolor: 'red' });
+      // @ts-expect-error label applies to clusters
+      new Subgraph({ label: 'x' });
+    });
+
+    it('takes cluster attributes with cluster: true, on any id or none', () => {
+      new Subgraph('row', { cluster: true, pencolor: 'red' });
+      new Subgraph({ cluster: true, label: 'x' });
+    });
+
+    it('needs cluster: true for an id known only at run time', () => {
+      const id: string = `cluster_${Math.random()}`;
+      new Subgraph(id, { rank: 'same' });
+      new Subgraph(id, { cluster: true, label: 'x' });
+      // @ts-expect-error not known to be a cluster
+      new Subgraph(id, { label: 'x' });
+    });
+
+    it('still takes rank on a cluster id: only a kit refuses it', () => {
+      new Subgraph('cluster_a', { rank: 'same' });
+    });
   });
 });

@@ -20,5 +20,5 @@ The renderer follows react-reconciler's React 19 contract
   - Without a container the root holds every root graph of the top level; 0.12 threw for more than one.
   - A root works with `act()` of React: the render and its effects are flushed before `act()` returns, and an uncaught error is thrown by `act()`.
 - **The renderer is a secondary renderer** (`isPrimaryRenderer: false`), so it can run next to React DOM, also while React DOM renders: the two no longer read each other's context values. Context does not cross from one renderer to the other.
-- When the renderer itself fails (an error thrown out of React's work, not by a component), every root is told through `onUncaughtError` and starts a new tree on its next `render()`; a `fromElement` that was waiting starts again by itself.
+- When the renderer itself fails (an error thrown out of React's work, not by a component), every root is told through `onUncaughtError` and starts a new tree on its next `render()`; a `fromElement` that was waiting rejects, or starts again up to `retries` times (by default 0).
 - The renderer writes nothing to the console.

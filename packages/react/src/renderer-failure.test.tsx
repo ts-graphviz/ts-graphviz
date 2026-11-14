@@ -163,7 +163,26 @@ describe('a failure of the renderer', () => {
     last.unmount();
   });
 
-  it('starts a conversion that was waiting again, on the new renderer', async () => {
+  it('rejects a conversion that was waiting, by default, with the failure as the cause', async () => {
+    const container = new DigraphModel('C');
+    const pending = fromElement(<Waits data={new Promise(() => undefined)} />, {
+      container,
+    });
+    pending.catch(() => undefined);
+    await tick();
+    const last = createRoot();
+    await render(last, graphOf('last'));
+    await failWhileRendering(last);
+    await expect(pending).rejects.toMatchObject({
+      message:
+        'The renderer failed while it rendered another tree, and this conversion was lost with it',
+      cause: failure,
+    });
+    expect(container.nodes).toHaveLength(0);
+    last.unmount();
+  });
+
+  it('starts a conversion that was waiting again, on the new renderer, with retries', async () => {
     let resolve!: (id: string) => void;
     const data = new Promise<string>((r) => {
       resolve = r;
@@ -174,7 +193,7 @@ describe('a failure of the renderer', () => {
         <Node id="shown" />
         <Waits data={data} />
       </>,
-      { container },
+      { container, retries: 1 },
     );
     await tick();
     expect(container.nodes.map((n) => n.id)).toEqual(['shown', 'first']);
@@ -196,6 +215,7 @@ describe('a failure of the renderer', () => {
     const container = new DigraphModel('C');
     const pending = fromElement(<Waits data={new Promise(() => undefined)} />, {
       container,
+      retries: 2,
     });
     pending.catch(() => undefined);
     for (let i = 0; i < 3; i++) {
@@ -206,7 +226,8 @@ describe('a failure of the renderer', () => {
       await failWhileRendering(last);
     }
     await expect(pending).rejects.toMatchObject({
-      message: 'The renderer failed 3 times while it rendered other trees',
+      message:
+        'The renderer failed while it rendered another tree, 3 times in a row',
       cause: failure,
     });
     expect(container.nodes).toHaveLength(0);

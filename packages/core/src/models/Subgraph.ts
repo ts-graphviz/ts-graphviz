@@ -1,7 +1,9 @@
 import type {
   Attributes,
   ClusterSubgraphAttributeKey,
+  ClusterSubgraphAttributesObject,
   EmptySchema,
+  NonClusterSubgraphAttributesObject,
   Schema,
   SubgraphAttributeKey,
   SubgraphAttributesObject,
@@ -26,9 +28,27 @@ export class Subgraph<S extends Schema = EmptySchema>
   }
   public readonly id?: string;
 
-  constructor(id?: string, attributes?: SubgraphAttributesObject<S>);
+  /**
+   * A subgraph whose id starts with `cluster` is a cluster, and takes the
+   * attributes of a cluster. The id is checked for `cluster`, `Cluster` and
+   * `CLUSTER`; for other spellings, and for an id known at run time only,
+   * the attributes of a cluster need `cluster: true`.
+   *
+   * Only `createSubgraph` of a kit also refuses, for a cluster id, the
+   * attributes that only a subgraph takes.
+   */
+  constructor(
+    id: `cluster${string}` | `Cluster${string}` | `CLUSTER${string}`,
+    attributes?: ClusterSubgraphAttributesObject<S>,
+  );
 
-  constructor(attributes?: SubgraphAttributesObject<S>);
+  /**
+   * Any other id, or none: the attributes of a subgraph, or those of a
+   * cluster with `cluster: true`.
+   */
+  constructor(id?: string, attributes?: NonClusterSubgraphAttributesObject<S>);
+
+  constructor(attributes?: NonClusterSubgraphAttributesObject<S>);
 
   constructor(...args: unknown[]) {
     super();
