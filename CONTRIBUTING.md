@@ -10,7 +10,7 @@ This guide provides comprehensive information for developers who want to contrib
 
 Before you begin contributing to ts-graphviz, ensure you have the following installed:
 
-- **Node.js**: Required for running the tests and building the project.
+- **Node.js**: The version in `.node-version`. The repository's scripts are TypeScript files that Node.js runs directly, which older releases do not do by default. Required for running the tests and building the project.
 - **Deno**: Required for cross-platform testing.
 - **pnpm**: A fast, disk space-efficient package manager.
 - **Graphviz**: Required for rendering DOT files and generating visualizations.
@@ -37,10 +37,19 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 | `pnpm build` | Build all packages in the monorepo. |
 | `pnpm test` | Run the tests across the monorepo, except those tagged `process` (see [Tests that start processes](#tests-that-start-processes)). |
 | `pnpm test:sandbox` | Run the tests tagged `process` in a container (Docker or Podman). |
+| `pnpm test:e2e` | Run the end-to-end tests of the `e2e/` workspace. |
 | `pnpm lint` | Run linting checks on the codebase. |
+| `pnpm typecheck` | Type-check the repository with `tsc --noEmit --strict`. |
+| `pnpm api:check` | Fail if the API reports (`api-reports/*.api.md`) differ from the built declarations (run `pnpm build` first). |
+| `pnpm api:update` | Rewrite the API reports after a change of the public API; commit them with the change. |
+| `pnpm check:changesets` | Fail when a changeset gives a major bump to a package on 0.x (`@ts-graphviz/react`), which would release it as 1.0.0; write `minor` for it. |
+| `pnpm check:doc-examples` | Type-check the TypeScript code blocks of the READMEs and the website's docs against the built declarations (run `pnpm build` first). |
+| `pnpm check:consumer-types` | Pack the packages and type-check `test/consumer/` against the tarballs with several TypeScript versions and module settings (run `pnpm build` first). |
+| `pnpm fuzz:build` and `pnpm fuzz <target> [seconds]` | Build the fuzz targets (`fuzz/targets/`) and run one with Jazzer.js. |
+| `pnpm media:generate` | Render the examples in `media/` to the SVG images the READMEs show (needs Graphviz `dot`). |
 | `pnpm knip` | Report unused files, exports and dependencies. |
 | `pnpm check:packages` | Pack every package as `pnpm publish` would and run publint and arethetypeswrong on the tarballs (run `pnpm build` first). |
-| `pnpm pack:check` | Build and pack HEAD twice from clean clones and fail if the tarballs differ: the reproducible-build check CI runs on every change (see [SECURITY.md](./SECURITY.md#verifying-a-release)). |
+| `pnpm pack:check` | Build and pack HEAD twice from clean clones and fail if the tarballs differ: the reproducible-build check CI runs on every change (see [Verifying a Release](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-policies/#verifying-a-release)). |
 | `pnpm changeset` | Create a changeset for version management. |
 
 > [!WARNING]
@@ -157,3 +166,44 @@ jobs (Windows, macOS, Linux, Deno) cannot use the container; they run
 through `node scripts/clean-env.ts`, which passes only an allowlisted
 environment and points `TMPDIR`/`TEMP`/`TMP` at a fresh directory.
 
+#### Mutation testing
+
+Coverage says which lines the tests run, not whether the tests would notice
+a change to them. [StrykerJS](https://stryker-mutator.io/) measures that: it
+changes the sources one small edit (a *mutant*) at a time and runs the tests
+that cover the edit. A mutant the tests do not fail on *survived*: the tests
+do not pin that behaviour down.
+
+```bash
+$ pnpm test:mutation                                  # common, core, ts-graphviz and ast
+$ STRYKER_SCOPE=react,adapter pnpm test:mutation      # other packages
+$ STRYKER_SCOPE=ast/sanitize pnpm test:mutation       # a directory under src
+$ STRYKER_SCOPE='*' pnpm test:mutation                # everything
+$ pnpm test:mutation --mutate packages/core/src/models/Node.ts \
+    --incrementalFile reports/mutation/incremental-node.json    # one file
+```
+
+The configuration is `stryker.config.mjs`; the tests run with
+`vitest.mutation.config.ts` (the usual configuration minus coverage, type
+tests and the tests tagged `process` or `timing`, so no Graphviz is needed).
+The report is `reports/mutation/index.html`, with the diff of every surviving
+mutant; an incremental file per scope (`reports/mutation/incremental-*.json`)
+makes the next run of that scope re-test only the mutants whose source or
+tests changed. Both are gitignored. Stryker sees changes to the mutated
+files and the test files only: after a change to a helper the tests import,
+the configuration or an environment variable such as `FC_NUM_RUNS`, run
+with `--force` to re-test every mutant in scope. Mutants in code that runs
+while a module loads (a regex or table constant) would each need the whole
+suite, so they are ignored by default; `STRYKER_STATIC=1` tests them (with
+`--force`, since the incremental file does not notice a test change for
+them).
+
+A run takes a while (one test run per mutant; the default scope about 45
+minutes on 16 cores, everything about 70), so it is not part of `pnpm test`
+or the pull request checks: the nightly workflow runs it on `next`
+in one job per group of packages, uploads the reports and fails when the
+mutation score drops under `thresholds.break` in `stryker.config.mjs`. Raise
+the threshold when the tests improve. A surviving mutant that no test could
+reasonably kill (an error message, defensive code the types already rule out)
+can be excluded with a `// Stryker disable next-line <mutator>: <why>`
+comment.

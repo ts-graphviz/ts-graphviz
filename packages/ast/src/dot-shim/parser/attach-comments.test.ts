@@ -120,7 +120,7 @@ describe('attachComments', { tags: ['SM-1'] }, () => {
   it('attaches every comment in deeply nested subgraphs', () => {
     // Each comment is handed down level by level and attached once; the
     // depth stays within what the parser's own recursion takes everywhere
-    // (and within the default nesting limit of #1777).
+    // (and within the parser's default nesting limit).
     const depth = 90;
     const dot = `digraph { ${'subgraph { a -> /* c */ b; '.repeat(depth)}${'}'.repeat(depth)} }`;
     const ast = parse(dot, { maxASTNodes: 0 });

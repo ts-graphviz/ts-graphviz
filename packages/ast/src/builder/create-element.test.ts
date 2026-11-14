@@ -166,7 +166,6 @@ describe('createElement', () => {
   });
 });
 
-// issue #1624
 describe('the shared createElement', { tags: ['SM-1'] }, () => {
   test('does not stop after 100,000 nodes in one process', () => {
     expect(() => {

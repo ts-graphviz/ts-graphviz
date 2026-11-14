@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-// The deprecations of #1922 are marked in the types only (JSDoc
+// The deprecations below are marked in the types only (JSDoc
 // `@deprecated`), so an editor shows them; this keeps the tags on the
 // declarations they belong to. (Reading tags needs no compiler API: the
 // declaration and the JSDoc right above it are matched as text.)
@@ -30,7 +30,7 @@ function docAbove(source: string, declaration: string): string {
   return block;
 }
 
-describe('deprecated until v5 (#1922)', () => {
+describe('deprecated until v5: the legacy models and APIs', () => {
   it.each([
     [
       'packages/common/src/models/models.ts',
@@ -107,7 +107,7 @@ function docsAboveAll(source: string, prefix: string): string[] {
   });
 }
 
-describe('deprecated until v5 (#1930)', () => {
+describe('deprecated until v5: the names that follow Map', () => {
   it.each([
     ['packages/common/src/models/models.ts', 'readonly size: number;'],
     [

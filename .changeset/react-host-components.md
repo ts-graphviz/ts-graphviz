@@ -1,5 +1,5 @@
 ---
-"@ts-graphviz/react": major
+"@ts-graphviz/react": minor
 ---
 
 Render through host components: the renderer adds the models when React commits, instead of hooks that made and registered them during render as in 0.12.

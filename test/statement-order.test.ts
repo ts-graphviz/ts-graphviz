@@ -3,7 +3,7 @@ import { digraph, fromDot, modelOf, Node, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
 // A graph keeps its nodes, edges and subgraphs in the order they were
-// added, and toDot writes them in that order (#1732): node order affects
+// added, and toDot writes them in that order: node order affects
 // the layout Graphviz makes.
 describe('statement order', () => {
   it('keeps nodes, edges and subgraphs in the order they were added', () => {

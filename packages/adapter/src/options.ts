@@ -208,7 +208,7 @@ const SIZE_LIMITS = ['maxInputSize', 'maxASTNodes'] as const;
  *   and arrays of strings (non-empty, without NUL, for the custom names), so
  *   a value of another type is rejected rather than converted.
  *
- * `maxOutputSize` is checked by `outputLimit`.
+ * `maxOutputSize` is checked by `outputLimit`, with the same code.
  */
 function checkOptions(own: AnyOptions): void {
   const options = own as Record<string, unknown>;

@@ -14,9 +14,9 @@ import {
 } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
-// Every object with attributes holds them itself, under the DOM's names
-// (#1930); the names that follow Map and a node's or edge's `attributes`
-// stay, deprecated, on the same attributes.
+// Every object with attributes holds them itself, under the DOM's names;
+// the names that follow Map and a node's or edge's `attributes` stay,
+// deprecated, on the same attributes.
 
 describe('every object with attributes takes the DOM names', () => {
   it.each([
