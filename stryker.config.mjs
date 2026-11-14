@@ -9,9 +9,11 @@
 // leave it out, `*` for every package. The default is the packages a run on
 // a 16-core machine gets through in about 45 minutes; the nightly workflow
 // runs one job per group. (`--mutate` on the command line replaces the whole
-// list below, so it suits a single file:
-// `pnpm test:mutation --mutate packages/core/src/models/Node.ts`.)
-const scope = (process.env.STRYKER_SCOPE || 'common,core,ts-graphviz,ast')
+// list below, so it suits a single file, with an incremental file of its
+// own: `pnpm test:mutation --mutate packages/core/src/models/Node.ts
+// --incrementalFile reports/mutation/incremental-node.json`.)
+const scopeText = process.env.STRYKER_SCOPE || 'common,core,ts-graphviz,ast';
+const scope = scopeText
   .split(',')
   .map((entry) => entry.trim())
   .filter((entry) => entry !== '')
@@ -61,13 +63,20 @@ export default {
   // table constant, a default value) cannot be traced to the tests that
   // cover it, so Stryker runs the whole suite for each; 13% of the mutants
   // took 70% of the first full run that way. They are reported as ignored.
-  // To test them in one place, with the whole suite per mutant:
-  // `pnpm test:mutation --ignoreStatic false --mutate 'packages/ast/src/sanitize/**'`
-  ignoreStatic: true,
+  // To test them in one place, with the whole suite per mutant (the CLI
+  // flag can only turn this on):
+  // `STRYKER_STATIC=1 pnpm test:mutation --force --mutate 'packages/ast/src/sanitize/**'`
+  ignoreStatic: process.env.STRYKER_STATIC !== '1',
   // The suite runs once per mutant; with `incremental`, a later run re-tests
   // only the mutants whose source or tests changed since the last report.
+  // One file per scope, so that a run of another scope does not replace
+  // the results of this one (a `--mutate` run takes its own
+  // `--incrementalFile`).
   incremental: true,
-  incrementalFile: 'reports/mutation/incremental.json',
+  incrementalFile: `reports/mutation/incremental-${scopeText
+    .replaceAll('*', 'all')
+    .replaceAll('!', 'not-')
+    .replace(/[^\w-]+/g, '_')}.json`,
   reporters: ['clear-text', 'progress', 'html', 'json'],
   htmlReporter: { fileName: 'reports/mutation/index.html' },
   jsonReporter: { fileName: 'reports/mutation/report.json' },
