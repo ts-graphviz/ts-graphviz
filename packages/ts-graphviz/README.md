@@ -791,7 +791,7 @@ See [ARCHITECTURE.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/ARCHI
 
 ### Security 🛡️
 
-See [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md) for more details.
+See [SECURITY.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/SECURITY.md) for how to report a vulnerability, [Security Policies](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-policies/) for the measures in place, and the [security model](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-model/) for the guarantees of the library.
 
 
 ## Who's using `ts-graphviz` 📜

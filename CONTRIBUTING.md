@@ -48,7 +48,7 @@ The project uses a modern TypeScript build pipeline managed by Vite:
 | `pnpm media:generate` | Render the examples in `media/` to the SVG images the READMEs show (needs Graphviz `dot`). |
 | `pnpm knip` | Report unused files, exports and dependencies. |
 | `pnpm check:packages` | Pack every package as `pnpm publish` would and run publint and arethetypeswrong on the tarballs (run `pnpm build` first). |
-| `pnpm pack:check` | Build and pack HEAD twice from clean clones and fail if the tarballs differ: the reproducible-build check CI runs on every change (see [SECURITY.md](./SECURITY.md#verifying-a-release)). |
+| `pnpm pack:check` | Build and pack HEAD twice from clean clones and fail if the tarballs differ: the reproducible-build check CI runs on every change (see [Verifying a Release](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/security-policies/#verifying-a-release)). |
 | `pnpm changeset` | Create a changeset for version management. |
 
 > [!WARNING]
