@@ -21,14 +21,15 @@ describe('class Subgraph', () => {
 
   describe('Constructor', () => {
     test('first argument is id, and second attributes object', () => {
-      subgraph = new Subgraph('test', {
+      subgraph = new Subgraph('cluster_test', {
         K: 1,
       });
-      expect(subgraph.id).toBe('test');
+      expect(subgraph.id).toBe('cluster_test');
       expect(subgraph.get('K')).toBe(1);
     });
     test('first argument is attributes object', () => {
       subgraph = new Subgraph({
+        cluster: true,
         K: 1,
       });
       expect(subgraph.get('K')).toBe(1);
