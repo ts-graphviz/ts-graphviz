@@ -18,13 +18,7 @@ Please **DO NOT** file a public issue to report a security vulnerability.
 
 ## Supported Versions
 
-| Version | Status |
-| --- | --- |
-| 4.x | Supported: bug fixes, security fixes and new features |
-| 3.x | Security fixes only |
-| 2.x and earlier | Not supported |
-
-If you are using an unsupported version, please upgrade. The [migration guide](https://ts-graphviz.github.io/docs/ts-graphviz/migration-guides/v3-to-v4/) describes the changes from 3.x to 4.x.
+See [Supported Major Versions](https://ts-graphviz.github.io/docs/ts-graphviz/advanced-topics/versioning-policy/#supported-major-versions) in the versioning policy.
 
 ## Security Updates
 

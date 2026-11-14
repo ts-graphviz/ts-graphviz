@@ -17,6 +17,12 @@ Version numbers are formatted as **MAJOR.MINOR.PATCH**, with changes classified 
 
 ---
 
+## Supported Major Versions {#supported-major-versions}
+
+Only the latest major version is supported. It receives bug fixes, security fixes and new features. When a new major version is released, the earlier one is no longer supported. If you are using an earlier major version, please upgrade; the [migration guides](../99-migration-guides/v3-to-v4/index.md) describe the changes.
+
+---
+
 ## Exceptions: TypeScript Version Updates
 
 There are scenarios where **ts-graphviz** may deviate from strict Semantic Versioning:
