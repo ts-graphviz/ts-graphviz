@@ -1,4 +1,5 @@
-import { Digraph, Edge, Node, renderToDot, Subgraph } from '@ts-graphviz/react';
+import { Digraph, Edge, fromElement, Node, Subgraph } from '@ts-graphviz/react';
+import { toDot } from 'ts-graphviz';
 
 const Example = () => (
   <Digraph
@@ -36,6 +37,6 @@ const Example = () => (
   </Digraph>
 );
 
-const dot = renderToDot(<Example />);
+const dot = toDot(await fromElement(<Example />));
 
 console.log(dot);

@@ -180,7 +180,8 @@ const dot = toDot(graph);
 The `@ts-graphviz/react` package provides React components for creating Graphviz graphs declaratively with JSX:
 
 ```tsx
-import { Digraph, Node, Edge, renderToDot } from '@ts-graphviz/react';
+import { Digraph, Node, Edge, fromElement } from '@ts-graphviz/react';
+import { toDot } from 'ts-graphviz';
 
 // Define reusable components
 const UserCard = ({ id, name, role }: { id: string; name: string; role: string }) => (
@@ -234,8 +235,8 @@ const TeamStructure = () => (
   </Digraph>
 );
 
-// Render to DOT
-const dot = await renderToDot(<TeamStructure />);
+// Convert to models, then to DOT
+const dot = toDot(await fromElement(<TeamStructure />));
 ```
 
 > [!TIP]

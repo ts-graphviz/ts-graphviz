@@ -24,13 +24,15 @@ import {
   expectGraphStructure,
   expectSubgraph,
 } from './test-utils/assertions.js';
+import { render } from './test-utils/render.js';
 
 describe('createRoot()', () => {
   describe('Basic API', () => {
     it('creates a root and renders a simple digraph', async () => {
       const root = createRoot();
 
-      await root.render(
+      await render(
+        root,
         <Digraph id="test">
           <Node id="a" />
           <Node id="b" />
@@ -53,7 +55,8 @@ describe('createRoot()', () => {
     it('creates a root and renders a simple graph', async () => {
       const root = createRoot();
 
-      await root.render(
+      await render(
+        root,
         <Graph id="test">
           <Node id="a" />
           <Node id="b" />
@@ -80,7 +83,7 @@ describe('createRoot()', () => {
     it('renders an empty graph', async () => {
       const root = createRoot();
 
-      await root.render(<Digraph id="empty" />);
+      await render(root, <Digraph id="empty" />);
 
       const models = root.getTopLevelModels();
       expect(models).toHaveLength(1);
@@ -101,7 +104,8 @@ describe('createRoot()', () => {
       const root = createRoot();
 
       // First render
-      await root.render(
+      await render(
+        root,
         <Digraph id="evolving">
           <Node id="a" />
         </Digraph>,
@@ -113,7 +117,8 @@ describe('createRoot()', () => {
       expectGraphStructure(models[0], { nodeCount: 1, edgeCount: 0 });
 
       // Second render - add more nodes
-      await root.render(
+      await render(
+        root,
         <Digraph id="evolving">
           <Node id="a" />
           <Node id="b" />
@@ -139,7 +144,8 @@ describe('createRoot()', () => {
         models: { Digraph: MyDigraph, Subgraph: MySubgraph, Node: MyNode },
       });
 
-      await root.render(
+      await render(
+        root,
         <Digraph id="test" strict>
           <Node id="a" />
           <Subgraph id="cluster_0">
@@ -160,68 +166,59 @@ describe('createRoot()', () => {
     });
   });
 
-  describe('Error cases', () => {
-    it('throws error for multiple top-level graphs', async () => {
+  describe('Top level without a container', () => {
+    it('holds every root graph of the top level', async () => {
       const root = createRoot();
 
-      await expect(
-        root.render(
-          <>
-            <Digraph id="graph1">
-              <Node id="a" />
-            </Digraph>
-            <Graph id="graph2">
-              <Node id="b" />
-            </Graph>
-          </>,
-        ),
-      ).rejects.toThrow(/Multiple top-level graphs detected/);
+      await render(
+        root,
+        <>
+          <Digraph id="graph1">
+            <Node id="a" />
+          </Digraph>
+          <Graph id="graph2">
+            <Node id="b" />
+          </Graph>
+        </>,
+      );
 
-      root.unmount();
-    });
-
-    it('throws error for fragment with multiple graphs', async () => {
-      const root = createRoot();
-
-      await expect(
-        root.render(
-          <React.Fragment>
-            <Digraph id="graph1">
-              <Node id="a" />
-            </Digraph>
-            <Digraph id="graph2">
-              <Node id="b" />
-            </Digraph>
-          </React.Fragment>,
-        ),
-      ).rejects.toThrow(/Multiple top-level graphs detected/);
+      expect(
+        root.getTopLevelModels(isRootGraphModel).map((graph) => graph.id),
+      ).toEqual(['graph1', 'graph2']);
 
       root.unmount();
     });
 
     it('reports a node outside any graph', async () => {
-      const root = createRoot();
+      const onUncaughtError = vi.fn();
+      const root = createRoot({ onUncaughtError });
 
-      await expect(
-        root.render(
-          <>
-            <Node id="orphan" />
-            <Edge targets={['a', 'b']} />
-          </>,
-        ),
-      ).rejects.toThrow(
-        /<Node> must be rendered inside a Digraph, Graph or Subgraph/,
+      root.render(
+        <>
+          <Node id="orphan" />
+          <Edge targets={['a', 'b']} />
+        </>,
       );
+      await vi.waitFor(() => expect(onUncaughtError).toHaveBeenCalledOnce());
+
+      expect(onUncaughtError.mock.calls[0][0]).toMatchObject({
+        message: expect.stringMatching(
+          /<Node> must be rendered inside a Digraph, Graph or Subgraph/,
+        ),
+      });
+      expect(root.getTopLevelModels()).toEqual([]);
 
       root.unmount();
     });
 
-    it('throws error when no top-level graph is provided', async () => {
-      const root = createRoot();
+    it('has no models for an element that renders nothing', async () => {
+      const onRenderComplete = vi.fn();
+      const root = createRoot({ onRenderComplete });
 
-      await expect(root.render(<Nothing />)).rejects.toThrow(
-        /No top-level graph found/,
-      );
+      await render(root, <Nothing />);
+
+      expect(root.getTopLevelModels()).toEqual([]);
+      expect(onRenderComplete).toHaveBeenCalledWith([]);
 
       root.unmount();
     });
@@ -232,7 +229,8 @@ describe('createRoot()', () => {
       const container = new DigraphModel('container');
       const root = createRoot({ container });
 
-      await root.render(
+      await render(
+        root,
         <>
           <Node id="a" />
           <Subgraph id="sub1">
@@ -264,7 +262,8 @@ describe('createRoot()', () => {
       const container = new DigraphModel('container');
       const root = createRoot({ container });
 
-      await root.render(
+      await render(
+        root,
         <>
           <Node id="a" />
           <Subgraph id="sub1">
@@ -299,7 +298,7 @@ describe('createRoot()', () => {
       const container = new DigraphModel('container');
       const root = createRoot({ container });
 
-      await root.render(<React.Fragment />);
+      await render(root, <React.Fragment />);
 
       const models = root.getTopLevelModels();
       expect(models).toHaveLength(0);
@@ -309,12 +308,13 @@ describe('createRoot()', () => {
     });
   });
 
-  describe('Error handling options', () => {
+  describe('onRenderComplete', () => {
     it('calls onRenderComplete when rendering succeeds', async () => {
       const onRenderComplete = vi.fn();
       const root = createRoot({ onRenderComplete });
 
-      await root.render(
+      await render(
+        root,
         <Digraph id="test">
           <Node id="a" />
         </Digraph>,
@@ -327,27 +327,6 @@ describe('createRoot()', () => {
 
       root.unmount();
     });
-
-    it('calls onCaughtError when an error occurs', async () => {
-      const onCaughtError = vi.fn();
-      const root = createRoot({ onCaughtError });
-
-      await expect(
-        root.render(
-          <>
-            <Digraph id="graph1">
-              <Node id="a" />
-            </Digraph>
-            <Digraph id="graph2">
-              <Node id="b" />
-            </Digraph>
-          </>,
-        ),
-      ).rejects.toThrow();
-
-      // Note: This test may need adjustment based on actual error handling implementation
-      root.unmount();
-    });
   });
 
   describe('getTopLevelModels with generic type casting', () => {
@@ -355,7 +334,8 @@ describe('createRoot()', () => {
       const container = new DigraphModel('container');
       const root = createRoot({ container });
 
-      await root.render(
+      await render(
+        root,
         <>
           <Node id="node1" label="First Node" />
           <Node id="node2" label="Second Node" />
@@ -395,7 +375,8 @@ describe('createRoot()', () => {
       const container = new DigraphModel('container');
       const root = createRoot({ container });
 
-      await root.render(
+      await render(
+        root,
         <>
           <Node id="node1" />
           <Node id="node2" />
@@ -424,7 +405,8 @@ describe('createRoot()', () => {
     it('compares generic casting vs type guard filtering behavior', async () => {
       const root = createRoot();
 
-      await root.render(
+      await render(
+        root,
         <Digraph id="test">
           <Node id="node1" />
           <Node id="node2" />

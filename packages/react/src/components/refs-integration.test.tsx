@@ -10,6 +10,7 @@ import { Digraph } from './Digraph.js';
 import { Edge } from './Edge.js';
 import { Node } from './Node.js';
 import '../types.js';
+import { render } from '../test-utils/render.js';
 
 // Helper functions to safely assert and cast refs
 function assertNodeRef(ref: NodeModel | null): NodeModel {
@@ -82,7 +83,7 @@ describe('React Refs Integration', () => {
       );
 
       const root = createRoot();
-      await root.render(<ComplexGraphWithRefs />);
+      await render(root, <ComplexGraphWithRefs />);
 
       // Verify and validate all refs with type safety
       const nodeA = assertNodeRef(refs.nodeA);
@@ -132,7 +133,7 @@ describe('React Refs Integration', () => {
       );
 
       const root = createRoot();
-      await root.render(<FunctionComponentWithRefs />);
+      await render(root, <FunctionComponentWithRefs />);
 
       // Validate refs with improved type safety
       const node = assertNodeRef(refs.node);
@@ -169,7 +170,7 @@ describe('React Refs Integration', () => {
 
       // Test with ref enabled
       const root1 = createRoot();
-      await root1.render(<ConditionalRefComponent shouldSetRef={true} />);
+      await render(root1, <ConditionalRefComponent shouldSetRef={true} />);
 
       const node = assertNodeRef(nodeRef);
       expect(node.id).toBe('conditional_node');
@@ -179,7 +180,7 @@ describe('React Refs Integration', () => {
       nodeRef = null;
       refCallCount = 0;
       const root2 = createRoot();
-      await root2.render(<ConditionalRefComponent shouldSetRef={false} />);
+      await render(root2, <ConditionalRefComponent shouldSetRef={false} />);
 
       expect(nodeRef).toBeNull();
       expect(refCallCount).toBe(0);
@@ -208,7 +209,7 @@ describe('React Refs Integration', () => {
 
       for (const suffix of testCases) {
         const root = createRoot();
-        await root.render(<MultipleRenderComponent suffix={suffix} />);
+        await render(root, <MultipleRenderComponent suffix={suffix} />);
       }
 
       expect(refHistory).toHaveLength(testCases.length);
@@ -242,7 +243,7 @@ describe('React Refs Integration', () => {
 
       // Render first component
       const root1 = createRoot();
-      await root1.render(<RefUpdateComponent nodeId="test1" />);
+      await render(root1, <RefUpdateComponent nodeId="test1" />);
 
       const node1 = assertNodeRef(currentRef);
       expect(node1.id).toBe('test1');
@@ -253,7 +254,7 @@ describe('React Refs Integration', () => {
 
       // Render second component (should update ref)
       const root2 = createRoot();
-      await root2.render(<RefUpdateComponent nodeId="test2" />);
+      await render(root2, <RefUpdateComponent nodeId="test2" />);
 
       const node2 = assertNodeRef(currentRef);
       expect(node2.id).toBe('test2');

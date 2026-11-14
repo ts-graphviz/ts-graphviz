@@ -2,25 +2,25 @@ import { createRef } from 'react';
 import type { GraphBaseModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import { createRoot } from '../createRoot.js';
-import { renderToDot } from '../renderToDot.js';
 import { expectGraph, expectGraphStructure } from '../test-utils/assertions.js';
 import { Digraph } from './Digraph.js';
 import { Edge } from './Edge.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
 import '../types.js';
+import { elementToDot, render } from '../test-utils/render.js';
 
 describe('Digraph Component', () => {
   describe('Basic Rendering', () => {
     it('renders empty directed graph', async () => {
-      const dot = await renderToDot(<Digraph id="empty" />);
+      const dot = await elementToDot(<Digraph id="empty" />);
       expect(dot).toMatchInlineSnapshot(`
         "digraph "empty" {}"
       `);
     });
 
     it('renders directed graph with nodes', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph id="simple">
           <Node id="A" />
           <Node id="B" />
@@ -35,7 +35,7 @@ describe('Digraph Component', () => {
     });
 
     it('renders directed graph with nodes and edges', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph id="connected">
           <Node id="A" />
           <Node id="B" />
@@ -52,7 +52,7 @@ describe('Digraph Component', () => {
     });
 
     it('renders directed graph with attributes', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph id="styled" bgcolor="lightblue" rankdir="LR">
           <Node id="styled_node" shape="box" />
         </Digraph>,
@@ -71,7 +71,7 @@ describe('Digraph Component', () => {
 
   describe('Complex Structures', () => {
     it('renders directed graph with subgraphs', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph id="complex">
           <Node id="start" />
           <Subgraph id="cluster_main">
@@ -92,7 +92,7 @@ describe('Digraph Component', () => {
     });
 
     it('renders directed graph with nested subgraphs', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph id="nested">
           <Subgraph id="outer">
             <Subgraph id="inner">
@@ -116,7 +116,7 @@ describe('Digraph Component', () => {
   describe('Error Handling', () => {
     it('throws error when duplicate Digraph components are nested', async () => {
       await expect(
-        renderToDot(
+        elementToDot(
           <Digraph>
             <Digraph />
           </Digraph>,
@@ -124,15 +124,15 @@ describe('Digraph Component', () => {
       ).rejects.toThrow('RootCluster is duplicated');
     });
 
-    it('throws error when multiple root Digraphs are provided', async () => {
+    it('renders several root Digraphs as one document', async () => {
       await expect(
-        renderToDot(
+        elementToDot(
           <>
             <Digraph id="first" />
             <Digraph id="second" />
           </>,
         ),
-      ).rejects.toThrow('Multiple top-level graphs detected');
+      ).resolves.toBe('digraph "first" {}\ndigraph "second" {}');
     });
   });
 
@@ -141,7 +141,8 @@ describe('Digraph Component', () => {
       const graphRef = createRef<GraphBaseModel>();
 
       const root = createRoot();
-      await root.render(
+      await render(
+        root,
         <Digraph id="testgraph" ref={graphRef}>
           <Node id="A" />
           <Node id="B" />
@@ -166,7 +167,8 @@ describe('Digraph Component', () => {
       let graphModel = null as GraphBaseModel | null;
 
       const root = createRoot();
-      await root.render(
+      await render(
+        root,
         <Digraph
           id="funcref"
           ref={(graph) => {

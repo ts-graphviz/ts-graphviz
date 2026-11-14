@@ -2,25 +2,25 @@ import { createRef } from 'react';
 import type { GraphBaseModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import { createRoot } from '../createRoot.js';
-import { renderToDot } from '../renderToDot.js';
 import { expectGraph, expectGraphStructure } from '../test-utils/assertions.js';
 import { Edge } from './Edge.js';
 import { Graph } from './Graph.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
 import '../types.js';
+import { elementToDot, render } from '../test-utils/render.js';
 
 describe('Graph Component', () => {
   describe('Basic Rendering', () => {
     it('renders empty undirected graph', async () => {
-      const dot = await renderToDot(<Graph id="empty" />);
+      const dot = await elementToDot(<Graph id="empty" />);
       expect(dot).toMatchInlineSnapshot(`
         "graph "empty" {}"
       `);
     });
 
     it('renders undirected graph with nodes', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Graph id="simple">
           <Node id="A" />
           <Node id="B" />
@@ -35,7 +35,7 @@ describe('Graph Component', () => {
     });
 
     it('renders undirected graph with nodes and edges', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Graph id="connected">
           <Node id="A" />
           <Node id="B" />
@@ -52,7 +52,7 @@ describe('Graph Component', () => {
     });
 
     it('renders undirected graph with attributes', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Graph id="styled" bgcolor="lightyellow" layout="neato">
           <Node id="styled_node" shape="circle" />
         </Graph>,
@@ -71,7 +71,7 @@ describe('Graph Component', () => {
 
   describe('Complex Structures', () => {
     it('renders undirected graph with subgraphs', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Graph id="complex">
           <Node id="start" />
           <Subgraph id="cluster_main">
@@ -92,7 +92,7 @@ describe('Graph Component', () => {
     });
 
     it('renders triangle graph (cycle)', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Graph id="triangle">
           <Node id="A" />
           <Node id="B" />
@@ -118,7 +118,7 @@ describe('Graph Component', () => {
   describe('Error Handling', () => {
     it('throws error when duplicate Graph components are nested', async () => {
       await expect(
-        renderToDot(
+        elementToDot(
           <Graph>
             <Graph />
           </Graph>,
@@ -126,15 +126,15 @@ describe('Graph Component', () => {
       ).rejects.toThrow('RootCluster is duplicated');
     });
 
-    it('throws error when multiple root Graphs are provided', async () => {
+    it('renders several root Graphs as one document', async () => {
       await expect(
-        renderToDot(
+        elementToDot(
           <>
             <Graph id="first" />
             <Graph id="second" />
           </>,
         ),
-      ).rejects.toThrow('Multiple top-level graphs detected');
+      ).resolves.toBe('graph "first" {}\ngraph "second" {}');
     });
   });
 
@@ -143,7 +143,8 @@ describe('Graph Component', () => {
       const graphRef = createRef<GraphBaseModel>();
 
       const root = createRoot();
-      await root.render(
+      await render(
+        root,
         <Graph id="testgraph" ref={graphRef}>
           <Node id="A" />
           <Node id="B" />
@@ -168,7 +169,8 @@ describe('Graph Component', () => {
       let graphModel = null as GraphBaseModel | null;
 
       const root = createRoot();
-      await root.render(
+      await render(
+        root,
         <Graph
           id="funcref"
           ref={(graph) => {

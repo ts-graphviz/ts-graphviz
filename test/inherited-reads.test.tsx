@@ -210,7 +210,7 @@ describe('the packages read no inherited property', { tags: ['SM-8'] }, () => {
       createElement('dot:tr', {}, createElement('dot:td', { port: 'p' }, 'x')),
     );
     expect(trace(() => renderHTMLLike(label))).toStrictEqual([]);
-    // The components and hooks behind renderToDot are rewritten in #1762,
+    // The components and hooks behind fromElement are rewritten in #1762,
     // which is where their props are traced.
   });
 

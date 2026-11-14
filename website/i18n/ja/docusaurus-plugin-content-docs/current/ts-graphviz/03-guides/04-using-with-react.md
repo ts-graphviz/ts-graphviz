@@ -16,14 +16,15 @@ JSX を活用することで、DOT 言語のモデルをより直感的でコン
 ## インストール
 
 ```bash npm2yarn
-npm install @ts-graphviz/react react react-dom
+npm install @ts-graphviz/react ts-graphviz react react-dom
 ```
 
 ## 例
 
 ```jsx
 import React from 'react';
-import { Digraph, Node, Edge, renderToDot } from '@ts-graphviz/react';
+import { Digraph, Node, Edge, fromElement } from '@ts-graphviz/react';
+import { toDot } from 'ts-graphviz';
 
 const MyDiagram = () => (
   <Digraph id="G">
@@ -40,11 +41,11 @@ const MyDiagram = () => (
         </dot:table>
       }
     />
-    <Edge targets={['A', 'B']} label={<b>A から B へのエッジ</b>} />
+    <Edge targets={['A', 'B']} label={<dot:b>A から B へのエッジ</dot:b>} />
   </Digraph>
 );
 
-const dot = renderToDot(<MyDiagram />);
+const dot = toDot(await fromElement(<MyDiagram />));
 console.log(dot);
 ```
 
