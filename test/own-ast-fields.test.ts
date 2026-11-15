@@ -1,6 +1,6 @@
 import { parse, sanitize, stringify } from '@ts-graphviz/ast';
 import { isNodeModel } from '@ts-graphviz/common';
-import { Digraph } from '@ts-graphviz/core';
+import { Digraph, defaultModelKit, Node } from '@ts-graphviz/core';
 import { fromDot, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
@@ -64,7 +64,7 @@ describe('optional AST fields are read only when owned', {
       withInherited('$$type', 'Node', () => isNodeModel({ id: 'a' })),
     ).toBe(false);
     const g = new Digraph();
-    g.createEdge([{ id: 'a', port: 'p' }, 'b']);
+    g.addEdge(defaultModelKit.createEdge([{ id: 'a', port: 'p' }, 'b']));
     expect(withInherited('$$type', 'Node', () => toDot(g))).toContain(
       '"a":"p"',
     );
@@ -92,8 +92,7 @@ describe('fields from a class still count', () => {
   });
 
   it('a model class passes the guards through its own getter', () => {
-    const g = new Digraph();
-    expect(isNodeModel(g.createNode('a'))).toBe(true);
-    expect(isNodeModel(new Proxy(g.createNode('b'), {}))).toBe(true);
+    expect(isNodeModel(new Node('a'))).toBe(true);
+    expect(isNodeModel(new Proxy(new Node('b'), {}))).toBe(true);
   });
 });

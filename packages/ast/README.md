@@ -172,7 +172,7 @@ const ast = parse("digraph G { A -> B; }");
 // The model of a `Dot` AST node is a `DotModel`: the graphs and comments of one source.
 const dot = toModel(ast, { models: defaultModelKit });
 const graph = dot.graphs[0];
-graph.createNode("C");
+graph.addNode(defaultModelKit.createNode("C"));
 
 console.log(stringify(fromModel(graph)));
 // digraph "G" {

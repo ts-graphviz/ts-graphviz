@@ -11,17 +11,20 @@ DSL はそれぞれ DOM の一つのモデルの代わりです。`modelOf(dsl)`
 
 ## グラフを組み立てる
 
-グラフは `createNode`、`createEdge`、`createSubgraph` で中身を作ります。作るときには、そのグラフのモデルクラスが使われます（[モデルキット](#モデルキット)を参照）。
+グラフは、追加されたものを保持します。モデルはそのクラスか[モデルキット](#モデルキット)で作り、`addNode`、`addEdge`、`addSubgraph` で追加します。
 
 ```typescript
-import { Digraph, toDot } from 'ts-graphviz';
+import { Digraph, Edge, Node, Subgraph, toDot } from 'ts-graphviz';
 
 const g = new Digraph('G', { rankdir: 'LR' });
-const a = g.createNode('a', { label: 'Start' });
-const b = g.createNode('b');
-g.createEdge([a, b], { color: 'red' });
-const s = g.createSubgraph('cluster_0', { label: 'Group' });
-s.createNode('c');
+const a = new Node('a', { label: 'Start' });
+const b = new Node('b');
+g.addNode(a);
+g.addNode(b);
+g.addEdge(new Edge([a, b], { color: 'red' }));
+const s = new Subgraph('cluster_0', { label: 'Group' });
+g.addSubgraph(s);
+s.addNode(new Node('c'));
 
 console.log(toDot(g));
 // digraph "G" {
@@ -118,12 +121,12 @@ console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
 DOT と同じく、既定属性の文はその後に書いたものにだけ適用されます（非推奨の `legacyModels` のクラスは、どれも先頭の既定値にまとめます。[モデルキット](#モデルキット)を参照）。`addAttributeList` は既定属性の文を追加してそのリストを返すので、取っておけば後からその既定値を変更できます。
 
 ```typescript
-import { Digraph, toDot } from 'ts-graphviz';
+import { Digraph, Node, toDot } from 'ts-graphviz';
 
 const g = new Digraph();
-g.createNode('a');
+g.addNode(new Node('a'));
 const defaults = g.addAttributeList('Node', { shape: 'box' }); // 後に書いたものに適用される
-g.createNode('b');
+g.addNode(new Node('b'));
 defaults.setAttribute('color', 'red');
 
 console.log(toDot(g));
@@ -144,10 +147,11 @@ console.log(toDot(g));
 コメント以外のどのモデルもコメントを持てます。`addComment(text, { position, kind })` はコメントを追加して返し、`comments` で一覧を得て、`removeComment(comment)` で取り除けます。コメントは凍結された `CommentModel` で、`text`、`kind`（`'Slash'`、`'Block'`、`'Macro'`、または `fromModel` の `commentKind` オプションに従う `undefined`）、`position`（`'leading'`、`'trailing'`、グラフやサブグラフでは `'end'`）を持ちます。
 
 ```typescript
-import { Digraph, toDot } from 'ts-graphviz';
+import { Digraph, Node, toDot } from 'ts-graphviz';
 
 const g = new Digraph('G');
-const a = g.createNode('a');
+const a = new Node('a');
+g.addNode(a);
 a.addComment('hello');
 console.log(a.comments.map((c) => [c.text, c.position])); // [['hello', 'leading']]
 
@@ -177,7 +181,7 @@ console.log(nodes.length); // 1
 
 ## モデルキット
 
-モデルキットは、組み合わせて使うモデルクラスの組と、そこからモデルを作る操作をまとめたものです。`createModelKit(classes)` で作り、`defaultModelKit` は既定のクラスのキットです。`withModelKit(classes)` はキットで作るファクトリー（`digraph`、`graph`、`strict.digraph`、`strict.graph`）を返し、`graph.with(classes)` はグラフのクラスを設定し、`fromDot` と `fromDotAll` は `convert.models` でクラスを受け取ります。指定しなかったクラスは、`createModelKit`、`withModelKit`、`fromDot` では既定のクラス、`graph.with` ではそのグラフが今使っているクラスのままです。
+モデルキットは、組み合わせて使うモデルクラスの組と、そこからモデルを作る操作をまとめたものです。`createModelKit(classes)` で作り、`defaultModelKit` は既定のクラスのキットです。`withModelKit(classes)` はキットで作るファクトリー（`digraph`、`graph`、`strict.digraph`、`strict.graph`）を返し、`fromDot` と `fromDotAll` は `convert.models` でクラスを受け取ります。指定しなかったクラスは既定のクラスになります。グラフはキットを持ちません。追加されたものをそのまま保持します。
 
 ```typescript
 import { Node, withModelKit } from 'ts-graphviz';
@@ -206,6 +210,6 @@ G.addNode(b);
 G.addEdge(kit.createEdge([a, b])); // エッジだけを追加する
 ```
 
-`legacyModels`（`LegacyGraph`、`LegacyDigraph`、`LegacySubgraph`）は 3.x のクラスで、既定属性の文をすべてグラフごとに一組の既定値にまとめます。`ts-graphviz/legacy` はすべてのファクトリーでこれを使います（[DOT の文の順序](./01-dot-dsl.md#dot-の文の順序)を参照）。これらは非推奨で、v5 で削除されます。
+`legacyModels`（`LegacyGraph`、`LegacyDigraph`、`LegacySubgraph`）は 3.x のクラスで、既定属性の文をすべてグラフごとに一組の既定値にまとめます。`ts-graphviz/legacy` はすべてのファクトリーでこれを使います（[DOT の文の順序](./01-dot-dsl.md#dot-の文の順序)を参照）。これらを使って手で組み立てるときは、サブグラフもレガシーのクラスになるように `createModelKit(legacyModels)` で作ってください。これらは非推奨で、v5 で削除されます。
 
 独自クラス、型付きのキット、型の拡張については、[ts-graphvizの拡張](./05-extending-ts-graphviz.md)を参照してください。

@@ -1,4 +1,4 @@
-import { renderHTMLLike } from '@ts-graphviz/react';
+import { htmlLikeFromElement } from '@ts-graphviz/react';
 import { digraph } from 'ts-graphviz';
 
 function FactoryFnLabel() {
@@ -53,12 +53,12 @@ export default digraph((g) => {
   g.node({ shape: 'circle' });
   g.node('factory_fn', {
     shape: 'plain',
-    label: renderHTMLLike(<FactoryFnLabel />),
+    label: htmlLikeFromElement(<FactoryFnLabel />),
   });
 
   g.node('oop', {
     shape: 'plain',
-    label: renderHTMLLike(<OOPLabel />),
+    label: htmlLikeFromElement(<OOPLabel />),
   });
 
   g.edge([['factory_fn', 'oop'], 'Model']);

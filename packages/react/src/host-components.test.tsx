@@ -10,35 +10,40 @@ import {
   useState,
 } from 'react';
 import {
+  Edge as CoreEdge,
+  Node as CoreNode,
+  Subgraph as CoreSubgraph,
   Digraph as DigraphModel,
+  defaultModelKit,
   type EdgeModel,
   type NodeModel,
   type RootGraphModel,
   type SubgraphModel,
   toDot,
 } from 'ts-graphviz';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
 import { GraphPortal } from './components/GraphPortal.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
 import { createRoot } from './createRoot.js';
+import { fromElement } from './fromElement.js';
 import { useCurrentGraph } from './hooks/useCurrentGraph.js';
-import { renderToDot } from './renderToDot.js';
+import { elementToDot, render } from './test-utils/render.js';
 
 async function dotOf(
   root: ReturnType<typeof createRoot>,
   element: ReactElement,
 ): Promise<string> {
-  await root.render(element);
+  await render(root, element);
   const [graph] = root.getTopLevelModels();
   return toDot(graph as RootGraphModel);
 }
 
 describe('host components', () => {
   it('renders each statement once under StrictMode', async () => {
-    const dot = await renderToDot(
+    const dot = await elementToDot(
       <StrictMode>
         <Digraph id="G">
           <Node id="a" />
@@ -84,7 +89,7 @@ describe('host components', () => {
     }
     const root = createRoot();
     const order = async (ids: string[]) => {
-      await root.render(<List ids={ids} />);
+      await render(root, <List ids={ids} />);
       const [graph] = root.getTopLevelModels() as RootGraphModel[];
       return graph.nodes.map((n) => n.id);
     };
@@ -126,7 +131,7 @@ describe('host components', () => {
   });
 
   it('flattens fragments and arrays in order', async () => {
-    const dot = await renderToDot(
+    const dot = await elementToDot(
       <Digraph id="G">
         {/* biome-ignore lint/complexity/noUselessFragments: the case is about fragments */}
         <Fragment>
@@ -153,7 +158,7 @@ describe('host components', () => {
       </Digraph>
     );
     const root = createRoot();
-    await root.render(element('red'));
+    await render(root, element('red'));
     const [model] = root.getTopLevelModels() as RootGraphModel[];
     expect(graph.current).toBe(model);
     expect(subgraph.current).toBe(model.subgraphs[0]);
@@ -161,7 +166,7 @@ describe('host components', () => {
     expect(edge.current).toBe(model.edges[0]);
     const first = { node: node.current, edge: edge.current };
 
-    await root.render(element('blue'));
+    await render(root, element('blue'));
     expect(node.current).toBe(first.node);
     expect(edge.current).toBe(first.edge);
     expect(node.current?.attributes.get('color')).toBe('blue');
@@ -174,7 +179,8 @@ describe('host components', () => {
   it('replaces a node whose id changes, and the ref follows it', async () => {
     const node = createRef<NodeModel>();
     const root = createRoot();
-    await root.render(
+    await render(
+      root,
       <Digraph id="G">
         <Node id="a" ref={node} />
       </Digraph>,
@@ -230,7 +236,8 @@ describe('host components', () => {
 
   it('keeps the comment prop as one leading comment, beside comments added on the model', async () => {
     const root = createRoot();
-    await root.render(
+    await render(
+      root,
       <Digraph id="G">
         <Node id="a" comment="from the prop" />
       </Digraph>,
@@ -239,33 +246,38 @@ describe('host components', () => {
     const a = graph.getNode('a');
     a?.addComment('added');
     // The same prop keeps its comment, and its place.
-    await root.render(
+    await render(
+      root,
       <Digraph id="G">
         <Node id="a" color="red" comment="from the prop" />
       </Digraph>,
     );
     expect(a?.comments.map((c) => c.text)).toEqual(['from the prop', 'added']);
-    await root.render(
+    await render(
+      root,
       <Digraph id="G">
         <Node id="a" comment="changed" />
       </Digraph>,
     );
     expect(a?.comments.map((c) => c.text)).toEqual(['added', 'changed']);
-    await root.render(
+    await render(
+      root,
       <Digraph id="G">
         <Node id="a" />
       </Digraph>,
     );
     expect(a?.comments.map((c) => c.text)).toEqual(['added']);
     // A prop comment removed through a ref comes back with the prop.
-    await root.render(
+    await render(
+      root,
       <Digraph id="G">
         <Node id="a" comment="again" />
       </Digraph>,
     );
     const again = a?.comments.find((c) => c.text === 'again');
     if (again) a?.removeComment(again);
-    await root.render(
+    await render(
+      root,
       <Digraph id="G">
         <Node id="a" color="blue" comment="again" />
       </Digraph>,
@@ -281,13 +293,15 @@ describe('host components', () => {
       return <Node id="a" color={color} />;
     }
     const root = createRoot();
-    await root.render(
+    await render(
+      root,
       <Digraph id="G">
         <Colored />
       </Digraph>,
     );
     setColor('blue');
-    await root.render(
+    await render(
+      root,
       <Digraph id="G">
         <Colored />
       </Digraph>,
@@ -305,7 +319,7 @@ describe('host components', () => {
       return <Node id={use(data)} />;
     }
     setTimeout(() => resolve('late'), 10);
-    const dot = await renderToDot(
+    const dot = await elementToDot(
       <Digraph id="G">
         <Suspense fallback={<Node id="loading" />}>
           <Node id="early" />
@@ -317,7 +331,7 @@ describe('host components', () => {
   });
 
   it('adds the children of a GraphPortal to a subgraph rendered in the same tree', async () => {
-    const dot = await renderToDot(
+    const dot = await elementToDot(
       <Digraph id="G">
         <Subgraph id="cluster_target">
           <Node id="inside" />
@@ -339,7 +353,7 @@ describe('host components', () => {
       seen.push(useCurrentGraph().id ?? '');
       return null;
     }
-    await renderToDot(
+    await elementToDot(
       <Digraph id="G">
         <Probe />
         <Subgraph id="s">
@@ -352,16 +366,17 @@ describe('host components', () => {
 
   it('keeps the statements a container already had, and replaces only its own', async () => {
     const container = new DigraphModel('C');
-    container.createNode('existing');
+    container.addNode(defaultModelKit.createNode('existing'));
     const root = createRoot({ container });
-    await root.render(
+    await render(
+      root,
       <>
         <Node id="a" />
         <Node id="b" />
       </>,
     );
     expect(container.nodes.map((n) => n.id)).toEqual(['existing', 'a', 'b']);
-    await root.render(<Node id="b" />);
+    await render(root, <Node id="b" />);
     expect(container.nodes.map((n) => n.id)).toEqual(['existing', 'b']);
     root.unmount();
     expect(container.nodes.map((n) => n.id)).toEqual(['existing']);
@@ -369,10 +384,10 @@ describe('host components', () => {
 
   it('gives back a node the container had when one with its id is removed', async () => {
     const container = new DigraphModel('C');
-    container.createNode('a', { color: 'red' });
+    container.addNode(defaultModelKit.createNode('a', { color: 'red' }));
     const original = container.getNode('a');
     const root = createRoot({ container });
-    await root.render(<Node id="a" color="blue" />);
+    await render(root, <Node id="a" color="blue" />);
     expect(container.getNode('a')?.attributes.get('color')).toBe('blue');
     root.unmount();
     expect(container.getNode('a')).toBe(original);
@@ -381,10 +396,12 @@ describe('host components', () => {
 
   it('adds portal children to a subgraph the container had', async () => {
     const container = new DigraphModel('C');
-    const target = container.createSubgraph('cluster_t');
-    target.createNode('own');
+    const target = defaultModelKit.createSubgraph('cluster_t');
+    container.addSubgraph(target);
+    target.addNode(defaultModelKit.createNode('own'));
     const root = createRoot({ container });
-    await root.render(
+    await render(
+      root,
       <GraphPortal id="cluster_t">
         <Node id="ported" />
       </GraphPortal>,
@@ -411,7 +428,7 @@ describe('host components', () => {
   });
 
   it('adds the children of nested portals in element order', async () => {
-    const dot = await renderToDot(
+    const dot = await elementToDot(
       <Digraph id="G">
         <Subgraph id="t" />
         <GraphPortal id="t">
@@ -431,7 +448,7 @@ describe('host components', () => {
   });
 
   it('finds a portal target rendered after the portal', async () => {
-    const dot = await renderToDot(
+    const dot = await elementToDot(
       <Digraph id="G">
         <GraphPortal id="t">
           <Node id="a" />
@@ -445,7 +462,8 @@ describe('host components', () => {
   it('points a graph ref at the model its children are in', async () => {
     const graph = createRef<RootGraphModel>();
     const root = createRoot();
-    await root.render(
+    await render(
+      root,
       <Digraph id="G" ref={graph}>
         <Node id="a" />
       </Digraph>,
@@ -455,24 +473,33 @@ describe('host components', () => {
     expect(first.getNode('a')).toBeDefined();
   });
 
-  it("makes subgraphs with the enclosing graph's createSubgraph", async () => {
-    const made: unknown[] = [];
+  it("makes the models with the root's kit", async () => {
+    class MyNode extends CoreNode {}
+    class MyEdge extends CoreEdge {}
+    class MySubgraph extends CoreSubgraph {}
     const container = new DigraphModel('C');
-    const createSubgraph = container.createSubgraph.bind(container);
-    container.createSubgraph = ((id?: string) => {
-      const subgraph = createSubgraph(id);
-      made.push(subgraph);
-      return subgraph;
-    }) as typeof container.createSubgraph;
-    const root = createRoot({ container });
-    await root.render(<Subgraph id="s" />);
-    expect(container.subgraphs).toHaveLength(1);
-    expect(made).toContain(container.subgraphs[0]);
+    const root = createRoot({
+      container,
+      models: { Node: MyNode, Edge: MyEdge, Subgraph: MySubgraph },
+    });
+    await render(
+      root,
+      <Subgraph id="s">
+        <Node id="a" />
+        <Edge targets={['a', 'b']} />
+      </Subgraph>,
+    );
+    const [subgraph] = container.subgraphs;
+    expect(subgraph).toBeInstanceOf(MySubgraph);
+    expect(subgraph.nodes[0]).toBeInstanceOf(MyNode);
+    expect(subgraph.edges[0]).toBeInstanceOf(MyEdge);
+    // An edge does not add the nodes it names.
+    expect(subgraph.nodes).toHaveLength(1);
   });
 
   it('rejects a node in a portal outside any graph', async () => {
     await expect(
-      renderToDot(
+      elementToDot(
         <GraphPortal>
           <Node id="a" />
         </GraphPortal>,
@@ -490,14 +517,14 @@ describe('host components', () => {
       useCurrentGraph();
       return null;
     };
-    await expect(renderToDot(<Outside />)).rejects.toMatchObject({
+    await expect(elementToDot(<Outside />)).rejects.toMatchObject({
       code: 'TSG_ERR_NO_CURRENT_GRAPH',
     });
   });
 
   it('rejects an edge with fewer than two targets with a code', async () => {
     await expect(
-      renderToDot(
+      elementToDot(
         <Digraph>
           <Edge targets={['a'] as unknown as ['a', 'b']} />
         </Digraph>,
@@ -508,12 +535,12 @@ describe('host components', () => {
     });
   });
 
-  it('rejects a render on an unmounted root with a code', async () => {
+  it('throws on a render on an unmounted root, with a code', () => {
     const root = createRoot();
     root.unmount();
-    await expect(root.render(<Digraph />)).rejects.toMatchObject({
-      code: 'TSG_ERR_ROOT_UNMOUNTED',
-    });
+    expect(() => root.render(<Digraph />)).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_ROOT_UNMOUNTED' }),
+    );
   });
 
   it('reports an invalid label to the error boundary, during render', async () => {
@@ -547,49 +574,95 @@ describe('host components', () => {
     const updated = createRoot({
       onCaughtError: (error) => caught.push(error),
     });
-    await updated.render(element('ok'));
-    await updated.render(element(<div />));
+    await render(updated, element('ok'));
+    await render(updated, element(<div />));
     expect(caught).toHaveLength(2);
   });
 
-  it('rejects render() with an error a graph throws while adding models, and can still unmount', async () => {
+  it('reports an error a graph throws while adding models to onUncaughtError, and can still unmount', async () => {
     const container = new DigraphModel('C');
-    container.createNode = () => {
+    container.addNode = () => {
       throw new RangeError('no nodes here');
     };
-    const root = createRoot({ container });
-    await expect(root.render(<Node id="a" />)).rejects.toThrow('no nodes here');
+    const onUncaughtError = vi.fn();
+    const onRenderComplete = vi.fn();
+    const root = createRoot({ container, onUncaughtError, onRenderComplete });
+    await render(root, <Node id="a" />);
+    expect(onUncaughtError).toHaveBeenCalledOnce();
+    expect(onUncaughtError.mock.calls[0][0]).toMatchObject({
+      name: 'RangeError',
+      message: 'no nodes here',
+    });
+    expect(onRenderComplete).not.toHaveBeenCalled();
+    expect(root.getTopLevelModels()).toEqual([]);
     root.unmount();
   });
 
-  it('takes back what a factory added before it threw', async () => {
+  it('takes out a node a graph added before it threw', async () => {
     const container = new DigraphModel('C');
-    const createNode = container.createNode.bind(container);
-    const createEdge = container.createEdge.bind(container);
-    container.createNode = ((id: string) => {
-      createNode(id);
-      throw new RangeError('after adding');
-    }) as typeof container.createNode;
-    const nodes = createRoot({ container });
-    await expect(nodes.render(<Node id="a" />)).rejects.toThrow('after adding');
-    expect(container.nodes).toHaveLength(0);
-    nodes.unmount();
-
-    container.createNode = createNode;
-    container.createEdge = ((targets: never) => {
-      createEdge(targets);
-      throw new RangeError('after adding');
-    }) as typeof container.createEdge;
-    const edges = createRoot({ container });
-    await expect(edges.render(<Edge targets={['a', 'b']} />)).rejects.toThrow(
-      'after adding',
+    const addNode = container.addNode.bind(container);
+    container.addNode = (node) => {
+      addNode(node);
+      throw new RangeError('added, then thrown');
+    };
+    await expect(fromElement(<Node id="a" />, { container })).rejects.toThrow(
+      'added, then thrown',
     );
+    expect(container.nodes).toHaveLength(0);
+  });
+
+  it('puts back the node of the container a node replaced before the graph threw', async () => {
+    const container = new DigraphModel('C');
+    const own = new CoreNode('a');
+    container.addNode(own);
+    const addNode = container.addNode.bind(container);
+    container.addNode = (node) => {
+      addNode(node);
+      if (node !== own) throw new RangeError('added, then thrown');
+    };
+    await expect(fromElement(<Node id="a" />, { container })).rejects.toThrow(
+      'added, then thrown',
+    );
+    expect(container.nodes).toEqual([own]);
+  });
+
+  it('reports an error the kit throws while creating, and leaves nothing behind', async () => {
+    class Failing extends CoreNode {
+      constructor(id: string) {
+        super(id);
+        throw new RangeError('no such node');
+      }
+    }
+    const container = new DigraphModel('C');
+    const element = (
+      <>
+        <Edge targets={['a', 'b']} />
+        <Node id="a" />
+      </>
+    );
+    const onUncaughtError = vi.fn();
+    const root = createRoot({
+      container,
+      models: { Node: Failing },
+      onUncaughtError,
+    });
+    await render(root, element);
+    expect(onUncaughtError.mock.calls.map(([error]) => error.message)).toEqual([
+      'no such node',
+    ]);
+    expect(container.nodes).toHaveLength(0);
     expect(container.edges).toHaveLength(0);
-    edges.unmount();
+    root.unmount();
+
+    await expect(
+      fromElement(element, { container, models: { Node: Failing } }),
+    ).rejects.toThrow('no such node');
+    expect(container.nodes).toHaveLength(0);
+    expect(container.edges).toHaveLength(0);
   });
 
   it('rejects a node outside any graph', async () => {
-    await expect(renderToDot(<Node id="a" />)).rejects.toThrow(
+    await expect(elementToDot(<Node id="a" />)).rejects.toThrow(
       /<Node> must be rendered inside a Digraph, Graph or Subgraph/,
     );
   });

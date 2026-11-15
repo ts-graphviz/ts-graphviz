@@ -1,12 +1,12 @@
 import type { EdgeProps } from '@ts-graphviz/react';
 import {
   type DSL,
+  defaultModelKit,
   digraph,
   Edge,
   type EdgeModel,
   type EdgeTargetLikeTuple,
   isNodeRefGroupLike,
-  modelOf,
   type NodeRefGroupLike,
   type NodeRefLike,
   toNodeRefGroup,
@@ -20,7 +20,7 @@ describe('edge targets as inputs', () => {
   it('accepts readonly tuples and groups', () => {
     const pair = ['a', 'b'] as const;
     expectTypeOf(g.edge(pair)).toEqualTypeOf<DSL<EdgeModel>>();
-    expectTypeOf(modelOf(g).createEdge(pair)).toEqualTypeOf<EdgeModel>();
+    expectTypeOf(defaultModelKit.createEdge(pair)).toEqualTypeOf<EdgeModel>();
     expectTypeOf(g.edge([['a', 'b'] as const, 'c'])).toEqualTypeOf<
       DSL<EdgeModel>
     >();

@@ -3,22 +3,24 @@ import {
   DiscreteEventPriority,
   NoEventPriority,
 } from 'react-reconciler/constants.js';
+import { createHostInstance } from './host.js';
 import {
-  createHostInstance,
+  type Child,
+  clearChildren,
+  createText,
   HOST,
+  type Instance,
   insertChild,
   removeChild,
-  syncContainer,
-  updateHostInstance,
-} from './host.js';
+  setProps,
+  sync,
+  type TextInstance,
+} from './shared/tree.js';
 import type {
-  Child,
   HostContext,
-  ReconcilerInstance as Instance,
   ComponentProps as Props,
   PublicInstance,
   RenderContainer,
-  TextInstance,
 } from './types/reconciler.js';
 
 /**
@@ -77,6 +79,24 @@ type FormInstance = never;
  */
 type TransitionStatus = null;
 
+/** What a host config tells the code that owns its reconciler. */
+export interface HostHooks {
+  /** An error came out of React's work loop, which nothing can resume. */
+  onWorkLoopError(error: unknown): void;
+  /** React starts to render or to commit the tree of this container. */
+  onWork(containerInfo: Container): void;
+  /** Whether the reconciler was given up: nothing more is to run on it. */
+  isStopped(): boolean;
+}
+
+const NO_HOOKS: HostHooks = {
+  onWorkLoopError: (error) => {
+    throw error;
+  },
+  onWork: () => undefined,
+  isStopped: () => false,
+};
+
 export class HostConfig
   implements
     ReactReconciler.HostConfig<
@@ -102,26 +122,45 @@ export class HostConfig
       never // Resource
     >
 {
+  readonly #hooks: HostHooks;
+
+  constructor(hooks: HostHooks = NO_HOOKS) {
+    this.#hooks = hooks;
+  }
+
   preparePortalMount(_containerInfo: Container): void {
     // NoOp
   }
 
-  scheduleTimeout(
+  // A reconciler that was given up cannot work again: what it would still
+  // start (a retry of suspended data, the work of a late update) is dropped
+  // instead of failing as an exception nobody can catch.
+  scheduleTimeout = (
     fn: (...args: unknown[]) => unknown,
     delay?: number,
-  ): TimeoutHandle {
-    return setTimeout(fn, delay || 0);
-  }
+  ): TimeoutHandle => {
+    return setTimeout(() => {
+      if (!this.#hooks.isStopped()) fn();
+    }, delay || 0);
+  };
 
   cancelTimeout(id: TimeoutHandle): void {
     clearTimeout(id);
   }
 
-  scheduleMicrotask(fn: () => unknown): void {
+  // React runs its work loop from here. It handles what components throw;
+  // anything that still comes out of it left React in the middle of its
+  // work, and is for the owner of the reconciler to deal with.
+  scheduleMicrotask = (fn: () => unknown): void => {
     queueMicrotask(() => {
-      fn();
+      if (this.#hooks.isStopped()) return;
+      try {
+        fn();
+      } catch (error) {
+        this.#hooks.onWorkLoopError(error);
+      }
     });
-  }
+  };
 
   // Update priorities, from react-reconciler/constants. A render
   // produces a snapshot of models, so every update runs at the discrete
@@ -241,7 +280,7 @@ export class HostConfig
 
   // container clearing method
   clearContainer(container: Container): void {
-    container.children = [];
+    clearChildren(container);
   }
 
   // transition context and scheduling methods
@@ -283,10 +322,10 @@ export class HostConfig
 
   public noTimeout: NoTimeout = -1; // TODO
 
-  // Temporary workaround for scenario where multiple renderers concurrently
-  // render using the same context objects. E.g. React DOM and React ART on the
-  // same page. DOM is the primary renderer; ART is the secondary renderer.
-  public isPrimaryRenderer = true;
+  // A context has one slot for the primary renderer and one for the others.
+  // React DOM is the primary one; taking the same slot would let a tree of
+  // each, rendered at the same time, read the other's context values.
+  public isPrimaryRenderer = false;
 
   // Reported to React DevTools.
   public rendererPackageName = '@ts-graphviz/react';
@@ -321,9 +360,10 @@ export class HostConfig
   }
 
   // Nodes and edges need a graph: the container, or a graph element.
-  public getRootHostContext(container: Container): HostContext {
-    return container.context?.container ? IN_GRAPH : OUTSIDE_GRAPH;
-  }
+  public getRootHostContext = (container: Container): HostContext => {
+    this.#hooks.onWork(container);
+    return container.container ? IN_GRAPH : OUTSIDE_GRAPH;
+  };
 
   public getChildHostContext(
     parentHostContext: HostContext,
@@ -333,21 +373,25 @@ export class HostConfig
     return type === HOST.graph ? IN_GRAPH : parentHostContext;
   }
 
-  public prepareForCommit(
-    _containerInfo: Container,
-  ): Record<string, any> | null {
+  public prepareForCommit = (
+    containerInfo: Container,
+  ): Record<string, any> | null => {
+    this.#hooks.onWork(containerInfo);
     return null;
-  }
+  };
 
   // The instances are in place: make the models match them. An error (from
   // a model class) must not leave the commit half done, which would break
-  // the renderer: render() rejects with it instead.
+  // the renderer: the container gets it instead.
   public resetAfterCommit(containerInfo: Container): void {
+    if (!containerInfo.active) return;
     try {
-      syncContainer(containerInfo);
+      sync(containerInfo);
     } catch (error) {
-      containerInfo.uncaughtErrors.push(error);
+      containerInfo.onSyncError(error);
+      return;
     }
+    containerInfo.onCommit();
   }
 
   public createInstance(
@@ -361,8 +405,7 @@ export class HostConfig
   }
 
   public appendInitialChild(parentInstance: Instance, child: Child): void {
-    if ('children' in parentInstance)
-      insertChild(parentInstance.children, child);
+    if ('children' in parentInstance) insertChild(parentInstance, child);
   }
 
   public finalizeInitialChildren(
@@ -388,16 +431,15 @@ export class HostConfig
     _hostContext: HostContext,
     _internalInstanceHandle: OpaqueHandle,
   ): TextInstance {
-    return { kind: 'text', hidden: false };
+    return createText();
   }
 
   public appendChild(parentInstance: Instance, child: Child): void {
-    if ('children' in parentInstance)
-      insertChild(parentInstance.children, child);
+    if ('children' in parentInstance) insertChild(parentInstance, child);
   }
 
   public appendChildToContainer(container: Container, child: Child): void {
-    insertChild(container.children, child);
+    insertChild(container, child);
   }
 
   public insertBefore(
@@ -406,7 +448,7 @@ export class HostConfig
     beforeChild: Child,
   ): void {
     if ('children' in parentInstance) {
-      insertChild(parentInstance.children, child, beforeChild);
+      insertChild(parentInstance, child, beforeChild);
     }
   }
 
@@ -415,16 +457,15 @@ export class HostConfig
     child: Child,
     beforeChild: Child,
   ): void {
-    insertChild(container.children, child, beforeChild);
+    insertChild(container, child, beforeChild);
   }
 
   public removeChild(parentInstance: Instance, child: Child): void {
-    if ('children' in parentInstance)
-      removeChild(parentInstance.children, child);
+    if (child.parent === parentInstance) removeChild(child);
   }
 
   public removeChildFromContainer(container: Container, child: Child): void {
-    removeChild(container.children, child);
+    if (child.parent === container) removeChild(child);
   }
 
   public commitTextUpdate(
@@ -451,7 +492,7 @@ export class HostConfig
     nextProps: Props,
     _internalHandle: OpaqueHandle,
   ): void {
-    updateHostInstance(instance, nextProps);
+    setProps(instance, nextProps);
   }
 
   // A Suspense boundary showing its fallback again hides its content.
@@ -476,11 +517,176 @@ export class HostConfig
   }
 }
 
-export const reconciler: ReactReconciler.Reconciler<
+export type Reconciler = ReactReconciler.Reconciler<
   Container,
   Instance,
   TextInstance,
   SuspenseInstance,
   FormInstance,
   PublicInstance
-> = ReactReconciler(new HostConfig());
+>;
+
+export type FiberRoot = ReturnType<Reconciler['createContainer']>;
+
+/** What React says about where an error came from. */
+interface ReactErrorInfo {
+  componentStack?: string | null;
+}
+
+export interface RootErrorCallbacks {
+  onUncaughtError(error: unknown, info: ReactErrorInfo): void;
+  onCaughtError(error: unknown, info: ReactErrorInfo): void;
+  onRecoverableError(error: unknown, info: ReactErrorInfo): void;
+}
+
+/**
+ * Create the fiber root of a container. The only call of `createContainer`:
+ * its arguments are positional and react-reconciler is 0.x, so they are
+ * placed here, by name, against react-reconciler 0.34's signature
+ * (React 19.3).
+ */
+export function createRootContainer(
+  reconciler: Pick<Reconciler, 'createContainer'>,
+  containerInfo: Container,
+  callbacks: RootErrorCallbacks,
+): FiberRoot {
+  return reconciler.createContainer(
+    containerInfo,
+    1, // tag: ConcurrentRoot
+    null, // hydrationCallbacks
+    false, // isStrictMode
+    null, // concurrentUpdatesByDefaultOverride
+    '@ts-graphviz/react', // identifierPrefix
+    callbacks.onUncaughtError,
+    callbacks.onCaughtError,
+    callbacks.onRecoverableError,
+    () => undefined, // onDefaultTransitionIndicator
+    null, // transitionCallbacks
+  );
+}
+
+/** Told that the renderer failed; `own`: while it worked on this tree. */
+type FailureListener = (error: unknown, own: boolean) => void;
+
+/**
+ * A reconciler and the trees rendered with it.
+ *
+ * All the trees share one reconciler, as the roots of React DOM do: React
+ * keeps what it is rendering (the context values among it) in state the
+ * reconcilers of a page share, so two of them rendering at the same time
+ * would read each other's. The price is that an error thrown out of React's
+ * work loop stops every tree: React handles what components throw, but not
+ * what comes out of its own traversal or of the host, and it cannot resume.
+ * The reconciler is then given up with its trees, which are told, and the
+ * next render starts on a new one.
+ */
+export class RendererGeneration {
+  #failed = false;
+  // The tree React started to render or to commit last.
+  #working: Container | undefined;
+  readonly #trees = new Map<
+    Container,
+    { fiberRoot: FiberRoot; onFailure: FailureListener }
+  >();
+  readonly #reconciler: Reconciler = ReactReconciler(
+    new HostConfig({
+      onWorkLoopError: (error) => this.fail(error),
+      onWork: (containerInfo) => {
+        // A tree that was given up is unmounted too, and is nobody's.
+        this.#working = this.#trees.has(containerInfo)
+          ? containerInfo
+          : undefined;
+      },
+      isStopped: () => this.#failed,
+    }),
+  );
+
+  get failed(): boolean {
+    return this.#failed;
+  }
+
+  /** Create the fiber root of a tree, and listen for a failure. */
+  mount(
+    containerInfo: Container,
+    callbacks: RootErrorCallbacks,
+    onFailure: FailureListener,
+  ): FiberRoot {
+    const fiberRoot = createRootContainer(
+      this.#reconciler,
+      containerInfo,
+      callbacks,
+    );
+    this.#trees.set(containerInfo, { fiberRoot, onFailure });
+    return fiberRoot;
+  }
+
+  /** Stop listening: the tree is given up. */
+  forget(containerInfo: Container): void {
+    this.#trees.delete(containerInfo);
+    if (this.#working === containerInfo) this.#working = undefined;
+  }
+
+  /**
+   * Call React. A throw out of it fails the generation; nothing runs on a
+   * failed one.
+   */
+  run<T>(work: (reconciler: Reconciler) => T): T | undefined {
+    if (this.#failed) return undefined;
+    try {
+      return work(this.#reconciler);
+    } catch (error) {
+      this.fail(error);
+      return undefined;
+    }
+  }
+
+  /**
+   * Notice a reconciler that stopped in the middle of its work, when the
+   * error went where it could not be caught (out of a task of React's
+   * scheduler). To be called from a task of our own, where React is not
+   * running.
+   */
+  check(): void {
+    if (!this.#failed && this.#reconciler.isAlreadyRendering()) {
+      this.fail(
+        new Error(
+          'React stopped in the middle of its work: an error was thrown out of it and reported as an uncaught exception',
+        ),
+      );
+    }
+  }
+
+  fail(error: unknown): void {
+    if (this.#failed) return;
+    this.#failed = true;
+    if (current === this) current = undefined;
+    const working = this.#working;
+    const trees = [...this.#trees];
+    this.#trees.clear();
+    for (const [, { fiberRoot }] of trees) cancelScheduledWork(fiberRoot);
+    for (const [containerInfo, { onFailure }] of trees) {
+      onFailure(error, containerInfo === working);
+    }
+  }
+}
+
+/**
+ * Cancel the task React's scheduler holds for a tree (the rest of a
+ * transition, say), as the scheduler's own `cancelCallback` does: on a
+ * reconciler that stopped, the task could only throw. `callbackNode` and
+ * the task's `callback` are internals of React and its scheduler.
+ */
+function cancelScheduledWork(fiberRoot: FiberRoot): void {
+  const task = (fiberRoot as { callbackNode?: unknown }).callbackNode;
+  if (typeof task === 'object' && task !== null && 'callback' in task) {
+    task.callback = null;
+  }
+}
+
+let current: RendererGeneration | undefined;
+
+/** The generation new trees are rendered with. */
+export function currentGeneration(): RendererGeneration {
+  current ??= new RendererGeneration();
+  return current;
+}

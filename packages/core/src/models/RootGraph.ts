@@ -1,10 +1,9 @@
 import type {
-  AnyModelTypes,
+  EmptySchema,
   GraphAttributeKey,
   GraphAttributesObject,
-  ModelTypes,
   RootGraphModel,
-  SchemaOf,
+  Schema,
 } from '@ts-graphviz/common';
 import { GraphBase } from './GraphBase.js';
 
@@ -12,9 +11,9 @@ import { GraphBase } from './GraphBase.js';
  * Base class representing a root graph(digraph, graph).
  * @group Models
  */
-export abstract class RootGraph<M extends AnyModelTypes = ModelTypes>
-  extends GraphBase<'Graph', GraphAttributeKey, M>
-  implements RootGraphModel<M>
+export abstract class RootGraph<S extends Schema = EmptySchema>
+  extends GraphBase<'Graph', GraphAttributeKey, S>
+  implements RootGraphModel<S>
 {
   public get $$type(): 'Graph' {
     return 'Graph';
@@ -23,20 +22,17 @@ export abstract class RootGraph<M extends AnyModelTypes = ModelTypes>
   public abstract readonly directed: boolean;
   public strict: boolean;
 
-  constructor(id?: string, attributes?: GraphAttributesObject<SchemaOf<M>>);
+  constructor(id?: string, attributes?: GraphAttributesObject<S>);
 
   constructor(
     id?: string,
     strict?: boolean,
-    attributes?: GraphAttributesObject<SchemaOf<M>>,
+    attributes?: GraphAttributesObject<S>,
   );
 
-  constructor(
-    strict?: boolean,
-    attributes?: GraphAttributesObject<SchemaOf<M>>,
-  );
+  constructor(strict?: boolean, attributes?: GraphAttributesObject<S>);
 
-  constructor(attributes?: GraphAttributesObject<SchemaOf<M>>);
+  constructor(attributes?: GraphAttributesObject<S>);
 
   constructor(...args: unknown[]) {
     super();
@@ -44,7 +40,7 @@ export abstract class RootGraph<M extends AnyModelTypes = ModelTypes>
     this.strict =
       args.find((arg): arg is boolean => typeof arg === 'boolean') ?? false;
     const attributes = args.find(
-      (arg): arg is GraphAttributesObject<SchemaOf<M>> =>
+      (arg): arg is GraphAttributesObject<S> =>
         typeof arg === 'object' && arg !== null,
     );
     if (attributes !== undefined) {

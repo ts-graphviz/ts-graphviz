@@ -21,8 +21,13 @@ import {
   isForwardRefNode,
   isRootGraphModel,
 } from '@ts-graphviz/common';
-import { Digraph, LegacyDigraph, Node } from '@ts-graphviz/core';
-import { renderHTMLLike } from '@ts-graphviz/react';
+import {
+  createModelKit,
+  defaultModelKit,
+  legacyModels,
+  Node,
+} from '@ts-graphviz/core';
+import { htmlLikeFromElement } from '@ts-graphviz/react';
 import { createElement } from 'react';
 import { fromDot, fromDotAll, toDot } from 'ts-graphviz';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -175,14 +180,23 @@ describe('the packages read no inherited property', { tags: ['SM-8'] }, () => {
   });
 
   it('when writing models', () => {
-    const graphs = [new Digraph('G'), new LegacyDigraph('G')];
-    for (const g of graphs) {
-      const a = g.createNode('a', { label: escString('\\N') });
-      g.createNode('b', { label: htmlLike('<b>b</b>') });
+    for (const kit of [defaultModelKit, createModelKit(legacyModels)]) {
+      const g = kit.createDigraph('G');
+      const a = kit.createNode('a', { label: escString('\\N') });
+      g.addNode(a);
+      g.addNode(kit.createNode('b', { label: htmlLike('<b>b</b>') }));
       g.addNode(new Node('c', { width: 1.5 }));
-      g.createEdge([a.port({ port: 'p', compass: 'n' }), 'b:q:s', ['c', 'd']]);
-      g.createEdge([{ id: 'e' }, { id: 'f', port: 'r' }]);
-      g.createSubgraph('cluster_s', { label: 's' }).createNode('g');
+      g.addEdge(
+        kit.createEdge([
+          a.port({ port: 'p', compass: 'n' }),
+          'b:q:s',
+          ['c', 'd'],
+        ]),
+      );
+      g.addEdge(kit.createEdge([{ id: 'e' }, { id: 'f', port: 'r' }]));
+      const s = kit.createSubgraph('cluster_s', { label: 's' });
+      s.addNode(kit.createNode('g'));
+      g.addSubgraph(s);
       g.addAttributeList('Node', { shape: 'box' });
       g.comment = 'comment';
       expect(trace(() => toDot(g))).toStrictEqual([]);
@@ -195,8 +209,8 @@ describe('the packages read no inherited property', { tags: ['SM-8'] }, () => {
       { border: 1 },
       createElement('dot:tr', {}, createElement('dot:td', { port: 'p' }, 'x')),
     );
-    expect(trace(() => renderHTMLLike(label))).toStrictEqual([]);
-    // The props of the components behind renderToDot are checked in
+    expect(trace(() => htmlLikeFromElement(label))).toStrictEqual([]);
+    // The props of the components behind fromElement are checked in
     // packages/react/src/host-props.test.tsx.
   });
 

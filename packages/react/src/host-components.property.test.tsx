@@ -2,6 +2,7 @@ import fc from 'fast-check';
 import { Fragment, type ReactNode, StrictMode } from 'react';
 import {
   Digraph as DigraphModel,
+  defaultModelKit,
   type RootGraphModel,
   type SubgraphModel,
   toDot,
@@ -12,6 +13,7 @@ import { Edge } from './components/Edge.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
 import { createRoot } from './createRoot.js';
+import { render } from './test-utils/render.js';
 
 // A small statement language, rendered both as React elements and with the
 // model API; the two must give the same DOT after every render of a
@@ -171,17 +173,27 @@ function build(graph: RootGraphModel | SubgraphModel, list: Statement[]): void {
   for (const s of list) {
     switch (s.kind) {
       case 'node':
-        graph.createNode(s.id, s.color ? { color: s.color } : undefined);
-        break;
-      case 'edge':
-        graph.createEdge(
-          [s.from, s.to],
-          s.color ? { color: s.color } : undefined,
+        graph.addNode(
+          defaultModelKit.createNode(
+            s.id,
+            s.color ? { color: s.color } : undefined,
+          ),
         );
         break;
-      case 'subgraph':
-        build(graph.createSubgraph(s.id), s.body);
+      case 'edge':
+        graph.addEdge(
+          defaultModelKit.createEdge(
+            [s.from, s.to],
+            s.color ? { color: s.color } : undefined,
+          ),
+        );
         break;
+      case 'subgraph': {
+        const subgraph = defaultModelKit.createSubgraph(s.id);
+        graph.addSubgraph(subgraph);
+        build(subgraph, s.body);
+        break;
+      }
     }
   }
 }
@@ -194,7 +206,8 @@ async function assertRenders(
   const root = createRoot();
   try {
     for (const list of renders) {
-      await root.render(
+      await render(
+        root,
         <Wrapper>
           <Digraph id="G">{toElements(list, options.keyed)}</Digraph>
         </Wrapper>,

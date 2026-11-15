@@ -3,26 +3,25 @@ description: Use @ts-graphviz/react for declarative graphs with React and JSX.
 ---
 # Using `@ts-graphviz/react`
 
-`@ts-graphviz/react` is a React renderer for graphs. You write a graph as JSX with the components `<Digraph>`, `<Graph>`, `<Subgraph>`, `<Node>` and `<Edge>`. The renderer builds the [models](./02-model-api.md) from the elements, and `renderToDot` gives the DOT.
+`@ts-graphviz/react` is a React renderer for graphs. You write a graph as JSX with the components `<Digraph>`, `<Graph>`, `<Subgraph>`, `<Node>` and `<Edge>`. The renderer builds the [models](./02-model-api.md) from the elements, and `toDot` of `ts-graphviz` gives the DOT.
 
 It renders to models and DOT, not to the DOM. To show a graph on a page, render the DOT to an image (see [Rendering to an image](#rendering-to-an-image)).
 
 ## Installation
 
 ```bash npm2yarn
-npm install @ts-graphviz/react react
+npm install @ts-graphviz/react ts-graphviz react
 ```
 
 React 19.3 or later is required. `react-dom` is not needed.
 
-The examples below that import from `ts-graphviz` need that package too.
-
 ## A first graph
 
-The Graphviz attributes are props. An edge takes its nodes in `targets`. `renderToDot` returns a promise of the DOT string.
+The Graphviz attributes are props. An edge takes its nodes in `targets`. `fromElement` returns a promise of the models, and `toDot` writes them in the DOT language.
 
 ```tsx
-import { Digraph, Edge, Node, renderToDot } from '@ts-graphviz/react';
+import { Digraph, Edge, Node, fromElement } from '@ts-graphviz/react';
+import { toDot } from 'ts-graphviz';
 
 const Example = () => (
   <Digraph id="G" rankdir="LR">
@@ -32,7 +31,7 @@ const Example = () => (
   </Digraph>
 );
 
-const dot = await renderToDot(<Example />);
+const dot = toDot(await fromElement(<Example />));
 console.log(dot);
 // digraph "G" {
 //   rankdir = "LR";
@@ -47,25 +46,28 @@ console.log(dot);
 // }
 ```
 
-The element given to `renderToDot` must render exactly one `<Digraph>` or `<Graph>`. `<Subgraph>`, `<Node>` and `<Edge>` go inside a graph.
+The top level of the element given to `fromElement` is `<Digraph>` or `<Graph>`, and the result is a `Dot` model holding them. `<Subgraph>`, `<Node>` and `<Edge>` go inside a graph.
 
 A graph is made of components, so you can write your own and reuse them:
 
 ```tsx
-import { Digraph, Edge, Node, Subgraph, renderToDot } from '@ts-graphviz/react';
+import { Digraph, Edge, Node, Subgraph, fromElement } from '@ts-graphviz/react';
+import { toDot } from 'ts-graphviz';
 
 const Service = ({ id, name }: { id: string; name: string }) => (
   <Node id={id} label={name} shape="box" />
 );
 
-const dot = await renderToDot(
-  <Digraph>
-    <Subgraph id="cluster_backend" label="Backend">
-      <Service id="api" name="API" />
-      <Service id="db" name="Database" />
-    </Subgraph>
-    <Edge targets={['api', 'db']} />
-  </Digraph>,
+const dot = toDot(
+  await fromElement(
+    <Digraph>
+      <Subgraph id="cluster_backend" label="Backend">
+        <Service id="api" name="API" />
+        <Service id="db" name="Database" />
+      </Subgraph>
+      <Edge targets={['api', 'db']} />
+    </Digraph>,
+  ),
 );
 console.log(dot);
 // digraph {
@@ -89,26 +91,29 @@ console.log(dot);
 A `label` takes a string or an element. An element is written as an HTML-like label, with the `dot:` elements: `<dot:table>`, `<dot:tr>`, `<dot:td>`, `<dot:font>`, `<dot:b>`, `<dot:i>`, `<dot:u>`, `<dot:br>` and the other elements Graphviz has. Their types come with the package, and TypeScript needs no setup. If Babel compiles your JSX, set the `throwIfNamespace` option of its React preset to `false`.
 
 ```tsx
-import { Digraph, Edge, Node, renderToDot } from '@ts-graphviz/react';
+import { Digraph, Edge, Node, fromElement } from '@ts-graphviz/react';
+import { toDot } from 'ts-graphviz';
 
-const dot = await renderToDot(
-  <Digraph>
-    <Node
-      id="a"
-      shape="plain"
-      label={
-        <dot:table border={0} cellborder={1} cellspacing={0}>
-          <dot:tr>
-            <dot:td port="in">in</dot:td>
-            <dot:td>
-              <dot:b>{'A & B'}</dot:b>
-            </dot:td>
-          </dot:tr>
-        </dot:table>
-      }
-    />
-    <Edge targets={['b', 'a:in']} label={<dot:i>to the port</dot:i>} />
-  </Digraph>,
+const dot = toDot(
+  await fromElement(
+    <Digraph>
+      <Node
+        id="a"
+        shape="plain"
+        label={
+          <dot:table border={0} cellborder={1} cellspacing={0}>
+            <dot:tr>
+              <dot:td port="in">in</dot:td>
+              <dot:td>
+                <dot:b>{'A & B'}</dot:b>
+              </dot:td>
+            </dot:tr>
+          </dot:table>
+        }
+      />
+      <Edge targets={['b', 'a:in']} label={<dot:i>to the port</dot:i>} />
+    </Digraph>,
+  ),
 );
 console.log(dot);
 // digraph {
@@ -128,39 +133,48 @@ Strings are text: `&`, `<` and `>` in a child or an attribute value are written 
 
 The components add models to a graph. There are three ways to reach them.
 
-`createRoot()` gives a root. `root.render(element)` returns a promise that resolves once the tree has settled. After that, `root.getTopLevelModels()` gives the rendered graph, and a `ref` gives the model of its element:
+`fromElement` resolves with them: a `Dot` model holding the root graphs, which you can change before you write the DOT.
+
+`createRoot()` gives a root that stays, like a root of React: `root.render(element)` returns at once, and React renders shortly after. `onRenderComplete` is called after each commit with the top-level models, `root.getTopLevelModels()` gives them at any time, and a `ref` gives the model of its element while the tree is mounted:
 
 ```tsx
 import { createRef } from 'react';
 import { Digraph, Edge, Node, createRoot } from '@ts-graphviz/react';
-import { type GraphBaseModel, type NodeModel, toDot } from 'ts-graphviz';
+import {
+  type GraphBaseModel,
+  isRootGraphModel,
+  type NodeModel,
+  toDot,
+} from 'ts-graphviz';
 
 const graphRef = createRef<GraphBaseModel>();
 const nodeRef = createRef<NodeModel>();
 
-const root = createRoot();
-await root.render(
+const root = createRoot({
+  onRenderComplete: () => {
+    nodeRef.current?.setAttribute('color', 'red');
+    console.log(graphRef.current?.nodes.length); // 1
+
+    const [G] = root.getTopLevelModels(isRootGraphModel);
+    console.log(G === graphRef.current); // true
+    console.log(toDot(G));
+    // digraph "G" {
+    //   "a" [
+    //     color = "red";
+    //   ];
+    //   "a" -> "b";
+    // }
+  },
+});
+root.render(
   <Digraph id="G" ref={graphRef}>
     <Node id="a" ref={nodeRef} />
     <Edge targets={['a', 'b']} />
   </Digraph>,
 );
-
-nodeRef.current?.setAttribute('color', 'red');
-console.log(graphRef.current?.nodes.length); // 1
-
-const [G] = root.getTopLevelModels();
-console.log(G === graphRef.current); // true
-console.log(toDot(G));
-// digraph "G" {
-//   "a" [
-//     color = "red";
-//   ];
-//   "a" -> "b";
-// }
 ```
 
-`root.unmount()` removes what the root rendered. `renderToDot` unmounts its own root when it is done, so a `ref` is `null` after it returns: use `createRoot` when you need the models.
+`root.unmount()` removes what the root rendered. `fromElement` unmounts its tree when the models are ready, so a `ref` is `null` after it resolves; the models stay.
 
 Inside a component, `useCurrentGraph()` gives the model of the enclosing `<Digraph>`, `<Graph>` or `<Subgraph>`:
 
@@ -169,22 +183,25 @@ import {
   Digraph,
   Node,
   Subgraph,
-  renderToDot,
+  fromElement,
   useCurrentGraph,
 } from '@ts-graphviz/react';
+import { toDot } from 'ts-graphviz';
 
 const Member = ({ id }: { id: string }) => {
   const graph = useCurrentGraph();
   return <Node id={id} label={`${id} in ${graph.id}`} />;
 };
 
-const dot = await renderToDot(
-  <Digraph id="G">
-    <Member id="a" />
-    <Subgraph id="cluster_x">
-      <Member id="b" />
-    </Subgraph>
-  </Digraph>,
+const dot = toDot(
+  await fromElement(
+    <Digraph id="G">
+      <Member id="a" />
+      <Subgraph id="cluster_x">
+        <Member id="b" />
+      </Subgraph>
+    </Digraph>,
+  ),
 );
 console.log(dot);
 // digraph "G" {
@@ -199,9 +216,9 @@ console.log(dot);
 // }
 ```
 
-The models are added when React commits, so read the contents of a graph after `render()` resolves, not while a component renders.
+The models are added when React commits, so read the contents of a graph after the commit (in `onRenderComplete`, an effect, or once `fromElement` resolves), not while a component renders.
 
-`createRoot` and `renderToDot` take a `models` option: the classes to create the models from, as in [Extending ts-graphviz](./05-extending-ts-graphviz.md).
+`createRoot` and `fromElement` take a `models` option: the classes to create the models from, as in [Extending ts-graphviz](./05-extending-ts-graphviz.md).
 
 ## Rendering into an existing graph
 
@@ -210,8 +227,8 @@ With the `container` option, the elements are rendered into a graph you already 
 `<GraphPortal id="...">` sends its children to the graph of that id, after that graph's own statements. Without an `id`, or when no graph has it, they go to the root graph. Inside a portal to a subgraph that the same tree renders, `useCurrentGraph()` gives the root graph, not that subgraph.
 
 ```tsx
-import { Edge, GraphPortal, Node, renderToDot } from '@ts-graphviz/react';
-import { digraph } from 'ts-graphviz';
+import { Edge, GraphPortal, Node, fromElement } from '@ts-graphviz/react';
+import { digraph, toDot } from 'ts-graphviz';
 
 const G = digraph('G', (g) => {
   g.node('a', { label: 'from the DSL' });
@@ -220,7 +237,7 @@ const G = digraph('G', (g) => {
   });
 });
 
-const dot = await renderToDot(
+await fromElement(
   <>
     <Node id="b" />
     <Edge targets={['a', 'b']} />
@@ -230,7 +247,7 @@ const dot = await renderToDot(
   </>,
   { container: G },
 );
-console.log(dot);
+console.log(toDot(G));
 // digraph "G" {
 //   "a" [
 //     label = "from the DSL";
@@ -245,7 +262,7 @@ console.log(dot);
 // }
 ```
 
-`renderToDot` returns the DOT of the container and then unmounts, which takes the rendered statements out of the container again. To keep them in the graph, use `createRoot({ container })`: they stay until `root.unmount()`, and another `root.render()` replaces them.
+`fromElement` resolves with the container, and what it added stays there: the graph owns it, and a later conversion or root adds to it without taking it out. With `createRoot({ container })`, what the root rendered stays while the tree is mounted: another `root.render()` replaces it, and `root.unmount()` takes it out.
 
 ```tsx
 import { Node, createRoot, isNodeModel } from '@ts-graphviz/react';
@@ -255,16 +272,20 @@ const G = digraph('G', (g) => {
   g.node('a');
 });
 
-const root = createRoot({ container: G });
-await root.render(<Node id="b" />);
+const root = createRoot({
+  container: G,
+  onRenderComplete: () => {
+    console.log(root.getTopLevelModels(isNodeModel).map((n) => n.id)); // ['b']
+    console.log(toDot(G));
+    // digraph "G" {
+    //   "a";
+    //   "b";
+    // }
+  },
+});
+root.render(<Node id="b" />);
 
-console.log(root.getTopLevelModels(isNodeModel).map((n) => n.id)); // ['b']
-console.log(toDot(G));
-// digraph "G" {
-//   "a";
-//   "b";
-// }
-
+// Later, once it has rendered
 root.unmount();
 console.log(toDot(G));
 // digraph "G" {
@@ -280,14 +301,17 @@ Give the DOT to `toBlob` of `ts-graphviz/adapter`, which runs Graphviz (Node.js 
 
 ```tsx
 import { writeFile } from 'node:fs/promises';
-import { Digraph, Edge, Node, renderToDot } from '@ts-graphviz/react';
+import { Digraph, Edge, Node, fromElement } from '@ts-graphviz/react';
+import { toDot } from 'ts-graphviz';
 import { toBlob } from 'ts-graphviz/adapter';
 
-const dot = await renderToDot(
-  <Digraph>
-    <Node id="a" label={<dot:b>A</dot:b>} />
-    <Edge targets={['a', 'b']} />
-  </Digraph>,
+const dot = toDot(
+  await fromElement(
+    <Digraph>
+      <Node id="a" label={<dot:b>A</dot:b>} />
+      <Edge targets={['a', 'b']} />
+    </Digraph>,
+  ),
 );
 
 const blob = await toBlob(dot, { format: 'svg' });
@@ -299,5 +323,5 @@ await writeFile('./result.svg', blob.stream());
 
 ## More
 
-- The [package README](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/react/README.md) covers the rest: `renderHTMLLike`, the error callbacks of `createRoot`, the `signal` option for trees that suspend, and the full list of `dot:` elements.
-- If your code uses the hooks `useDigraph`, `useGraph`, `useSubgraph`, `useNode` or `useEdge`, or calls `renderToDot` without `await`, see the [migration guide](../99-migration-guides/v3-to-v4/index.md).
+- The [package README](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/react/README.md) covers the rest: `htmlLikeFromElement`, the error callbacks of `createRoot`, the `signal` and `retries` options of `fromElement`, and the full list of `dot:` elements.
+- If your code uses the hooks `useDigraph`, `useGraph`, `useSubgraph`, `useNode` or `useEdge`, or calls `renderToDot`, which `fromElement` replaces, see the [migration guide](../99-migration-guides/v3-to-v4/index.md).

@@ -3,7 +3,6 @@ import {
   type CommentOptions,
   type DotModel,
   type EmptySchema,
-  type ModelTypes,
   modelOf,
   type RootGraphModel,
   type Schema,
@@ -63,29 +62,29 @@ export class Dot<S extends Schema = EmptySchema> implements DotModel<S> {
     this.#comments.setOnly(text);
   }
 
-  readonly #graphs: RootGraphModel<ModelTypes<S>>[];
+  readonly #graphs: RootGraphModel<S>[];
 
-  constructor(graphs: RootGraphModel<ModelTypes<S>>[] = [], comment?: string) {
+  constructor(graphs: RootGraphModel<S>[] = [], comment?: string) {
     // The models themselves, never objects standing for them (a DSL).
     this.#graphs = graphs.map(modelOf);
     this.#comments.setOnly(comment);
   }
 
-  get graphs(): ReadonlyArray<RootGraphModel<ModelTypes<S>>> {
+  get graphs(): ReadonlyArray<RootGraphModel<S>> {
     return this.#graphs;
   }
 
-  public addGraph(graph: RootGraphModel<ModelTypes<S>>): void {
+  public addGraph(graph: RootGraphModel<S>): void {
     if (!this.existGraph(graph)) {
       this.#graphs.push(modelOf(graph));
     }
   }
 
-  public existGraph(graph: RootGraphModel<ModelTypes<S>>): boolean {
+  public existGraph(graph: RootGraphModel<S>): boolean {
     return this.#graphs.includes(modelOf(graph));
   }
 
-  public removeGraph(graph: RootGraphModel<ModelTypes<S>>): void {
+  public removeGraph(graph: RootGraphModel<S>): void {
     const index = this.#graphs.indexOf(modelOf(graph));
     if (index !== -1) {
       this.#graphs.splice(index, 1);

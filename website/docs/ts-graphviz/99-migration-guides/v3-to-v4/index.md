@@ -32,13 +32,13 @@ TypeScript reports most other changes, but these three still compile, so search 
 | `node.attributes.delete('label')` | `delete node.label` or `node.label = undefined` |
 | `g.attributes.node.set('shape', 'box')` | `g.node({ shape: 'box' })` (before the other statements) |
 | `node.port('p')` | `node.port('p')` (unchanged) |
-| `g.nodes`, `g.getNode('a')`, `g.createNode('a')`, `g.addNode(n)` | `modelOf(g).nodes`, `modelOf(g).getNode('a')`, …: models, not DSLs (`dsl(m)` gives a model's DSL) |
+| `g.nodes`, `g.getNode('a')`, `g.addNode(n)` | `modelOf(g).nodes`, `modelOf(g).getNode('a')`, …: models, not DSLs (`dsl(m)` gives a model's DSL) |
 | your class's own methods, `g.myMethod()` | `modelOf(g).myMethod()` |
 | `new Digraph().node('a')`, `fromDot(src).node('a')` | `dsl(new Digraph()).node('a')`, `fromDot(src, { dsl: true }).node('a')` |
 | a custom class overriding `node()` / `edge()` | give the kit your classes to change what is created, or override `addNode` / `addEdge` / `addSubgraph`, which the DSL calls with what the kit created; your `node()` is `modelOf(g).node()` |
 | comparing a DSL with its model (`===`) | `false`: compare DSLs with DSLs (a model and a kit have one DSL), or use `modelOf()` |
 
-`modelOf(dsl)` gives the model and `dsl(model)` the DSL. A DSL is a model together with the model kit its statements create with (see section 4): `dsl(model)` creates with the default kit, `dsl(model, kit)` with `kit`, and the factories and `fromDot` with `{ dsl: true }` give DSLs of their own kit. `toDot`, `fromModel`, the adapter's `toBlob` and `createRoot({ container })` / `renderToDot({ container })` of `@ts-graphviz/react` take either. The model guards (`isNodeModel` and the others) are false for a DSL, which is not a model: narrow DSLs by `$$type` (`if (s.$$type === 'Node')`), or check `modelOf(x)`. A DSL is not itself a model type, so pass `modelOf(g)` where a model is typed (such as `new Dot([modelOf(g)])` or a parameter of type `RootGraphModel`). `{ ...node }`, `Object.keys(node)` and `JSON.stringify(node)` list the attributes; `String(g)` does not work, since `toString` is an attribute name too.
+`modelOf(dsl)` gives the model and `dsl(model)` the DSL. A DSL is a model together with the model kit its statements create with (see section 4): `dsl(model)` creates with the default kit, `dsl(model, kit)` with `kit`, and the factories and `fromDot` with `{ dsl: true }` give DSLs of their own kit. `toDot`, `fromModel`, the adapter's `toBlob` and `createRoot({ container })` / `fromElement(element, { container })` of `@ts-graphviz/react` take either. The model guards (`isNodeModel` and the others) are false for a DSL, which is not a model: narrow DSLs by `$$type` (`if (s.$$type === 'Node')`), or check `modelOf(x)`. A DSL is not itself a model type, so pass `modelOf(g)` where a model is typed (such as `new Dot([modelOf(g)])` or a parameter of type `RootGraphModel`). `{ ...node }`, `Object.keys(node)` and `JSON.stringify(node)` list the attributes; `String(g)` does not work, since `toString` is an attribute name too.
 
 ## 2. Strings are literal text; DOT syntax is opt-in
 
@@ -53,7 +53,7 @@ In 3.x a string placed in a model was written into DOT with its backslashes pass
 | `label: 'line1\\nline2'` (literal backslash-n) | `label: 'line1\nline2'` or `escString('line1\\nline2')` |
 | `label: '\\N'` (node name substitution) | `label: escString('\\N')` |
 | `label: '<<b>bold</b>>'` | `label: htmlLike('<b>bold</b>')` |
-| string returned by `renderHTMLLike(...)` (React) | an `HTMLLikeValue`; pass it to the attribute, or use `.value` for the markup |
+| string returned by `renderHTMLLike(...)` (React) | `htmlLikeFromElement(...)` returns an `HTMLLikeValue`; pass it to the attribute, or use `.value` for the markup |
 
 `isEscString` / `isHTMLLike` are type guards for the two kinds. When parsing, `\\` and `\"` become literal characters, any other backslash sequence yields an `escString`, and `<…>` yields an `htmlLike` value.
 
@@ -96,7 +96,6 @@ try {
 | `fromDot` given an AST node that has no model | `TypeError` | `TSG_ERR_UNCONVERTIBLE_AST` |
 | `fromDot` of a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` |
 | `fromDot` of a source with several graphs | `Error` | `TSG_ERR_MULTIPLE_GRAPHS` |
-| a `GraphBase` subclass without model classes | `Error` | `TSG_ERR_NO_MODELS_CONTEXT` |
 | adapter in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
 | Graphviz command failed | `CommandExecutionError` (`Error`) | `TSG_ERR_COMMAND_FAILED` |
 | Graphviz output over `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
@@ -119,14 +118,22 @@ Code that matched on `error.message` should match on `error.code`.
   | `withContext(...)` | `withModelKit(...)` |
 
 - A kit creates with `createDigraph`, `createGraph`, `createSubgraph`, `createNode` and `createEdge`. They only create: what they return is in no graph until you add it (`addNode`, `addEdge`, `addSubgraph`), and `createEdge` does not add the nodes its targets refer to.
-- The DSL's statements create with the kit of the DSL and add to the graph, so they no longer call the graph's `createNode`, `createEdge` and `createSubgraph`. `dsl(model)` creates with the default kit whatever classes the graph was made with: pass the kit (`dsl(model, kit)`) to create with other classes. Anything else as the second argument is a `TypeError` with `code: 'TSG_ERR_NOT_A_MODEL_KIT'`.
+- The DSL's statements create with the kit of the DSL and add to the graph. `dsl(model)` creates with the default kit whatever classes the graph was made with: pass the kit (`dsl(model, kit)`) to create with other classes. Anything else as the second argument is a `TypeError` with `code: 'TSG_ERR_NOT_A_MODEL_KIT'`.
 - A kit has a `Dot` class (see section 5); `createModelKit` fills in the classes you leave out.
 - `toModel(ast, { models })` in `@ts-graphviz/ast` now **requires** `models` (the package has no classes of its own): pass `defaultModelKit` or `createModelKit({...})`. `fromDot(source, { convert: { models } })` still takes some of the classes.
 - The constructor types in `ModelClasses` use the real signatures; a custom class whose constructor is incompatible is now a type error instead of a runtime surprise.
-- `graph.with(models)` merges over the graph's current classes instead of replacing it.
-- `DotObject`, the empty base class of the core models, is removed. Instead of `instanceof DotObject`, check the kind of model: the guards (`isNodeModel`, `isRootGraphModel`, …) or `$$type` accept any model of that kind (they look at `$$type` and a few fields, such as a node's `id`, not at every member); use `instanceof Node` and the other core classes where you need an instance of a core class. A class of your own that extended `DotObject` without being a model (no `$$type`) is recognised by neither: check it with `instanceof` your class. Such a class extends nothing now, or the core class it stands for.
+- Graphs hold state only: `createNode`, `createEdge`, `createSubgraph` and `with` are removed from them, along with the `models` member of `GraphBase`. A graph does not know a kit, and holds whatever is added to it.
 
-A direct subclass of `GraphBase` (rare) must override `defaultModels()` or give `with()` all six classes before creating nodes; the core classes do this for you.
+  | 3.x | v4 |
+  | --- | --- |
+  | `g.createNode('a')` | `g.addNode(new Node('a'))`, or `g.node('a')` on the DSL |
+  | `g.createEdge([a, b])` | `g.addEdge(new Edge([a, b]))`, or `g.edge([a, b])` on the DSL |
+  | `g.createSubgraph('s')` | `g.addSubgraph(new Subgraph('s'))`, or `g.subgraph('s')` on the DSL |
+  | `g.with({ Node: MyNode })`, then `g.createNode('a')` | `const kit = createModelKit({ Node: MyNode })`, then `g.addNode(kit.createNode('a'))`; or `withModelKit({ Node: MyNode })` for the DSL |
+
+  The `add*` methods return nothing, so keep the model in a variable where the result of `create*` was used. A `LegacyDigraph` or `LegacyGraph` no longer gives its subgraphs the legacy class: create them with `createModelKit(legacyModels)` or `new LegacySubgraph()`.
+- The graph types take the attribute schema in place of the model types: `GraphBaseModel<T, K, S>`, `RootGraphModel<S>`, `SubgraphModel<S>` and the classes (`Digraph<S>`, `Subgraph<S>`, …). `nodes`, `edges`, `subgraphs` and the lookups are typed by the model interfaces (`NodeModel<S>` and so on) whatever the classes of the kit; the kit and the DSL stay typed by the classes.
+- `DotObject`, the empty base class of the core models, is removed. Instead of `instanceof DotObject`, check the kind of model: the guards (`isNodeModel`, `isRootGraphModel`, …) or `$$type` accept any model of that kind (they look at `$$type` and a few fields, such as a node's `id`, not at every member); use `instanceof Node` and the other core classes where you need an instance of a core class. A class of your own that extended `DotObject` without being a model (no `$$type`) is recognised by neither: check it with `instanceof` your class. Such a class extends nothing now, or the core class it stands for.
 
 ## 5. The `Dot` model and symmetric conversions
 
@@ -198,14 +205,51 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 - React 19.3 or later is required (`react-reconciler` 0.34).
 - `useDigraph`, `useGraph`, `useSubgraph`, `useNode` and `useEdge` are removed. The components are host elements of the renderer, which adds the models when React commits: render `<Digraph>`, `<Subgraph>`, `<Node>` and `<Edge>`, and get a model through `ref` or, for the enclosing graph, `useCurrentGraph()`.
 - The statements of a graph follow the element tree, also across re-renders (reordered, inserted and removed children), and StrictMode, Suspense or a discarded render no longer adds statements twice or leaves them behind.
-- In container mode, a re-render replaces only the statements the renderer added before; statements the container already had stay first. Models are made by the graph they go to (`createNode` / `createEdge` / `createSubgraph`), so a graph class that overrides them still applies.
-- `createRoot` and `renderToDot` take a `models` option.
-- `render()` / `renderToDot()` resolve once the tree has settled, including transitions, deferred values and suspended data. `timeout` is replaced by a per-render `signal` (`AbortSignal.timeout(ms)` for a time limit). Uncaught errors reject with the error itself, and the error callbacks receive `error: unknown`.
+- In container mode, a re-render replaces only the statements the renderer added before; statements the container already had stay first. Models are made by the root's model kit (the `models` option, otherwise the default classes) and added with the graph's `addNode` / `addEdge` / `addSubgraph`; a container's own classes do not decide what is rendered into it.
+- `renderToDot` is replaced by `fromElement`, which resolves with models: one `Dot` model holding the root graphs, or the `container` it was given (the graph model, also when a DSL such as `digraph()` returns was passed for it). Write `toDot(await fromElement(element))` for the text. It waits until React has no work left for the element, including transitions, deferred values and data read with `use`, and rejects with the uncaught error itself. `timeout` is replaced by `signal` (`AbortSignal.timeout(ms)` for a time limit; without one there is no limit).
+
+  ```tsx
+  // Before
+  const dot = await renderToDot(<MyGraph />, { timeout: 5000 });
+  // After
+  const dot = toDot(
+    await fromElement(<MyGraph />, { signal: AbortSignal.timeout(5000) }),
+  );
+  ```
+
+- `root.render()` returns nothing, like `render()` of a React root: React renders shortly after. Use `onRenderComplete(models)` for the result and `onUncaughtError` / `onCaughtError` / `onRecoverableError` for errors (they receive `error: unknown`), or `fromElement` to wait for one result. `render()` takes no options.
+
+  ```tsx
+  // Before
+  const root = createRoot();
+  await root.render(<MyGraph />);
+  const models = root.getTopLevelModels();
+  // After
+  const root = createRoot({
+    onRenderComplete: (models) => { /* ... */ },
+    onUncaughtError: (error) => { /* ... */ },
+  });
+  root.render(<MyGraph />);
+  ```
+
+- Without a container, several root graphs at the top level are allowed.
+- `createRoot` and `fromElement` take a `models` option.
+- The renderer is a secondary renderer of React: it can be used next to React DOM, and context does not cross from one renderer to the other.
 - `<Digraph strict>` / `<Graph strict>` render strict graphs.
-- `renderHTMLLike` returns an `HTMLLikeValue` (see section 2).
-- As in 0.12, `renderHTMLLike` (and so a JSX `label`) writes strings as text: text children are written with `&`, `<` and `>` as entities, and attribute values also with `"`. Write markup as elements (`<dot:td><dot:b>x</dot:b></dot:td>`), not as a string (`<dot:td>{'<b>x</b>'}</dot:td>`).
+- `renderHTMLLike` is renamed to `htmlLikeFromElement`, and `RenderHTMLLikeOptions` to `HtmlLikeFromElementOptions`. It returns an `HTMLLikeValue` (see section 2).
+
+  ```tsx
+  // Before
+  const label = renderHTMLLike(<dot:b>bold</dot:b>);
+
+  // After
+  const label = htmlLikeFromElement(<dot:b>bold</dot:b>);
+  ```
+
+- `createLabelContext` / `readLabelContext` pass a value down the components of a label, where a React provider cannot be used.
+- As in 0.12, `htmlLikeFromElement` (and so a JSX `label`) writes strings as text: text children are written with `&`, `<` and `>` as entities, and attribute values also with `"`. Write markup as elements (`<dot:td><dot:b>x</dot:b></dot:td>`), not as a string (`<dot:td>{'<b>x</b>'}</dot:td>`).
 - `<dot:port>` is removed: HTML-like labels have no port element, and Graphviz rejected its output. Use the `port` attribute: `<dot:td port="p">`.
-- `renderHTMLLike` throws instead of logging a warning and returning an empty label: `RangeError` past `maxDepth`; `TypeError` for a circular tree, an element HTML-like labels do not have (`<div>`, `<span>`, …), an attribute name that is not a name, or an object among the children that is not a React element. Errors from components are no longer swallowed.
+- `htmlLikeFromElement` throws instead of logging a warning and returning an empty label: `RangeError` past `maxDepth`; `TypeError` for a circular tree, an element HTML-like labels do not have (`<div>`, `<span>`, …), an attribute name that is not a name, or an object among the children that is not a React element. Errors from components are no longer swallowed.
 
 ## 11. Small behaviour fixes
 

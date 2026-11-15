@@ -2,7 +2,7 @@ import { createElement, type FC, useContext, useMemo } from 'react';
 import { CurrentGraph } from '../contexts/CurrentGraph.js';
 import { GraphMap } from '../contexts/GraphMap.js';
 import { useGraphContainer } from '../hooks/useGraphContainer.js';
-import { HOST } from '../host.js';
+import { HOST } from '../shared/tree.js';
 import type { GraphPortalProps } from '../types.js';
 
 /**

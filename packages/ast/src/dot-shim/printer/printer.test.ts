@@ -23,3 +23,21 @@ describe('Printer without a plugin for a node', { tags: ['SM-5'] }, () => {
     );
   });
 });
+
+describe('Printer with trailing comments', { tags: ['SM-2'] }, () => {
+  const comment = (value: string, kind: 'Block' | 'Macro' | 'Slash') =>
+    createElement('Comment', { value, kind }, []);
+
+  it('writes a line comment followed by another one, dangling ones included, as a block', () => {
+    const node = createElement(
+      'Node',
+      { id: createElement('Literal', { value: 'a', kind: 'bare' }, []) },
+      [],
+    );
+    Object.assign(node, {
+      trailingComments: [comment('x', 'Macro')],
+      danglingComments: [comment('y', 'Slash'), comment('z', 'Slash')],
+    });
+    expect(new Printer().print(node)).toBe('a; /* x */ /* y */ // z\n');
+  });
+});

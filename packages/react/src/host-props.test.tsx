@@ -3,7 +3,7 @@ import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
-import { renderToDot } from './renderToDot.js';
+import { elementToDot } from './test-utils/render.js';
 
 /** Runs `fn` with `Object.prototype[key]` set to `value`. */
 async function withInherited<T>(
@@ -43,20 +43,20 @@ describe('components read only the props they are given', {
     ['graph', { color: 'extra' }],
     ['port', 'extra'],
   ])('ignores an inherited %s', async (key, value) => {
-    const clean = await renderToDot(element);
-    const dot = await withInherited(key, value, () => renderToDot(element));
+    const clean = await elementToDot(element);
+    const dot = await withInherited(key, value, () => elementToDot(element));
     expect(dot).toBe(clean);
   });
 });
 
-describe('renderHTMLLike reads only the props an element has', {
+describe('htmlLikeFromElement reads only the props an element has', {
   tags: ['SM-8'],
 }, () => {
   it.each([
     ['children', 'extra'],
     ['border', 'extra'],
   ])('ignores an inherited %s', async (key, value) => {
-    const { renderHTMLLike } = await import('./renderHTMLLike.js');
+    const { htmlLikeFromElement } = await import('./htmlLikeFromElement.js');
     const label = (
       <dot:table>
         <dot:tr>
@@ -64,9 +64,9 @@ describe('renderHTMLLike reads only the props an element has', {
         </dot:tr>
       </dot:table>
     );
-    const clean = renderHTMLLike(label);
+    const clean = htmlLikeFromElement(label);
     const html = await withInherited(key, value, async () =>
-      renderHTMLLike(label),
+      htmlLikeFromElement(label),
     );
     expect(html).toStrictEqual(clean);
   });

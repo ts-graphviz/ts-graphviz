@@ -1,9 +1,18 @@
 import type {
+  EdgeAttributesObject,
   ModelClasses,
   ModelKit,
+  NodeAttributesObject,
+  ReadonlyEdgeTargetLikeTuple,
   ResolvedModelTypes,
 } from '@ts-graphviz/common';
-import { lazyDefaultModelKit, modelKitOf } from './default-model-kit.js';
+import { Digraph } from './Digraph.js';
+import { Dot } from './Dot.js';
+import { Edge } from './Edge.js';
+import { toEdgeTargets } from './edge-targets.js';
+import { Graph } from './Graph.js';
+import { Node } from './Node.js';
+import { Subgraph } from './Subgraph.js';
 
 const MODEL_KEYS = [
   'Dot',
@@ -21,7 +30,14 @@ const MODEL_KEYS = [
  *
  * @group Model Kit
  */
-export const defaultModelKit: ModelKit = lazyDefaultModelKit();
+export const defaultModelKit: ModelKit = modelKitOf({
+  Dot,
+  Graph,
+  Digraph,
+  Subgraph,
+  Node,
+  Edge,
+});
 
 /**
  * Create a {@link ModelKit} that uses the given classes and those of
@@ -63,4 +79,33 @@ export function createModelKit<
 function pick(kit: ModelKit): ModelClasses {
   const { Dot, Graph, Digraph, Subgraph, Node, Edge } = kit;
   return { Dot, Graph, Digraph, Subgraph, Node, Edge };
+}
+
+/**
+ * A kit of the given classes: a frozen object whose `create*` functions
+ * close over the classes, so they work taken off it.
+ */
+function modelKitOf(classes: ModelClasses): ModelKit {
+  const { Dot, Graph, Digraph, Subgraph, Node, Edge } = classes;
+  const kit: ModelKit = {
+    Dot,
+    Graph,
+    Digraph,
+    Subgraph,
+    Node,
+    Edge,
+    // The arguments go to the constructor in the shape the caller used, so
+    // a custom class that treats the overloads differently sees the same
+    // call.
+    createDigraph: (...args: []) => new Digraph(...args),
+    createGraph: (...args: []) => new Graph(...args),
+    createSubgraph: (...args: []) => new Subgraph(...args),
+    createNode: (id: string, attributes?: NodeAttributesObject) =>
+      new Node(id, attributes),
+    createEdge: (
+      targets: ReadonlyEdgeTargetLikeTuple,
+      attributes?: EdgeAttributesObject,
+    ) => new Edge(toEdgeTargets(targets), attributes),
+  };
+  return Object.freeze(kit);
 }

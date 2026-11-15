@@ -62,20 +62,51 @@ digraph "G" {
 */
 ```
 
-### 模型上下文 API (`with` 方法)
+### 自定义类的套件 (`createModelKit`)
 
-您还可以使用 **模型上下文 API** 为图形内部生成的对象创建自定义类。`Digraph`、`Graph` 和 `Subgraph` 的 `with` 方法允许您预定义自定义模型。
+模型套件用您提供的类创建模型。`createModelKit` 接受自定义类，其余的使用默认类。
 
 ```typescript
-const g = new Digraph();
-g.with({
+import {
+  createModelKit,
+  Node,
+  Edge,
+  type EdgeAttributesObject,
+  type EdgeTargetTuple,
+  type NodeAttributesObject,
+  attribute as _,
+  toDot,
+} from 'ts-graphviz';
+
+class MyCustomNode extends Node {
+  constructor(id: string, attributes?: NodeAttributesObject) {
+    super(`node_${id}`, {
+      [_.label]: `This is Custom Node ${id}`,
+      ...attributes,
+    });
+  }
+}
+
+class MyCustomEdge extends Edge {
+  constructor(targets: EdgeTargetTuple, attributes?: EdgeAttributesObject) {
+    super(targets, {
+      [_.label]: 'This is Custom Edge',
+      ...attributes,
+    });
+  }
+}
+
+const kit = createModelKit({
   Node: MyCustomNode,
   Edge: MyCustomEdge,
 });
 
-const a = g.createNode('A'); // MyCustomNode 的实例
-const b = g.createNode('B'); // MyCustomNode 的实例
-g.createEdge([a, b]);        // MyCustomEdge 的实例
+const g = kit.createDigraph();
+const a = kit.createNode('A'); // MyCustomNode 的实例
+const b = kit.createNode('B'); // MyCustomNode 的实例
+g.addNode(a);
+g.addNode(b);
+g.addEdge(kit.createEdge([a, b])); // MyCustomEdge 的实例
 
 const dot = toDot(g);
 console.log(dot);

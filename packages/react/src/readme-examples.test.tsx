@@ -10,12 +10,14 @@ import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
 import { Node } from './components/Node.js';
 import { createRoot } from './createRoot.js';
+import { render } from './test-utils/render.js';
 
 describe('README examples', () => {
   it('should work with type guard examples from README', async () => {
     const root = createRoot();
 
-    await root.render(
+    await render(
+      root,
       <Digraph id="myGraph" rankdir="LR">
         <Node id="A" shape="box" />
         <Node id="B" shape="circle" />
@@ -44,7 +46,8 @@ describe('README examples', () => {
     const container = digraph('myContainer');
     const root = createRoot({ container });
 
-    await root.render(
+    await render(
+      root,
       <>
         <Node id="node1" />
         <Node id="node2" />

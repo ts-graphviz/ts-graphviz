@@ -6,7 +6,6 @@ import * as astPackage from '@ts-graphviz/ast';
 import {
   htmlLike,
   isTsGraphvizError,
-  type ModelTypes,
   type Schema,
   type SchemaEntry,
 } from '@ts-graphviz/common';
@@ -153,18 +152,20 @@ type ConsumerSchema = {
     label: SchemaEntry<number, 'override'>;
   };
 };
-const schemaGraph = new Digraph<ModelTypes<ConsumerSchema>>();
-const schemaNode = schemaGraph.createNode('a', { 'data-id': 1, label: 2 });
-assertType<Equal<typeof schemaNode, NodeModel<ConsumerSchema>>>();
+const schemaGraph = new Digraph<ConsumerSchema>();
+const schemaNode: NodeModel<ConsumerSchema> = new Node<ConsumerSchema>('a', {
+  'data-id': 1,
+  label: 2,
+});
+schemaGraph.addNode(schemaNode);
 const schemaLabel = schemaNode.attributes.get('label');
 assertType<Equal<typeof schemaLabel, number | undefined>>();
 // @ts-expect-error a number in this schema
-schemaGraph.createNode('b', { label: 'x' });
+new Node<ConsumerSchema>('b', { label: 'x' });
 // @ts-expect-error a node of no schema
 schemaGraph.addNode(modelOf(g.node('c')));
 describeNode(schemaNode);
-const printAny = <S extends Schema>(graph: RootGraphModel<ModelTypes<S>>) =>
-  toDot(graph);
+const printAny = <S extends Schema>(graph: RootGraphModel<S>) => toDot(graph);
 printAny(schemaGraph);
 
 // ts-graphviz/legacy: the same names and types, with legacyModels

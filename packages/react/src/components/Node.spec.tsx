@@ -2,16 +2,16 @@ import { createRef } from 'react';
 import type { NodeModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import { createRoot } from '../createRoot.js';
-import { renderToDot } from '../renderToDot.js';
 import { expectNode } from '../test-utils/assertions.js';
 import { Digraph } from './Digraph.js';
 import { Node } from './Node.js';
 import '../types.js';
+import { elementToDot, render } from '../test-utils/render.js';
 
 describe('Node Component', () => {
   describe('Basic Rendering', () => {
     it('renders node with only required id prop', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="foo" />
         </Digraph>,
@@ -24,7 +24,7 @@ describe('Node Component', () => {
     });
 
     it('renders node with string label attribute', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="foo" label="label test" />
         </Digraph>,
@@ -41,7 +41,7 @@ describe('Node Component', () => {
 
   describe('Label Rendering', () => {
     it('renders node with HTML-like table label element', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node
             id="foo"
@@ -67,7 +67,7 @@ describe('Node Component', () => {
     });
 
     it('renders node with string xlabel attribute', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="foo" xlabel="xlabel test" />
         </Digraph>,
@@ -82,7 +82,7 @@ describe('Node Component', () => {
     });
 
     it('renders node with HTML-like table xlabel element', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node
             id="foo"
@@ -110,7 +110,7 @@ describe('Node Component', () => {
 
   describe('Attribute Rendering', () => {
     it('renders node with various shape attributes', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="box" shape="box" />
           <Node id="circle" shape="circle" />
@@ -133,7 +133,7 @@ describe('Node Component', () => {
     });
 
     it('renders node with color and style attributes', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="styled" color="red" fillcolor="yellow" style="filled" />
         </Digraph>,
@@ -150,7 +150,7 @@ describe('Node Component', () => {
     });
 
     it('renders node with position attributes', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="positioned" pos="1,2!" pin={true} />
         </Digraph>,
@@ -168,7 +168,7 @@ describe('Node Component', () => {
 
   describe('Special ID Cases', () => {
     it('renders node with special character IDs', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="node-with-dashes" />
           <Node id="node_with_underscores" />
@@ -185,7 +185,7 @@ describe('Node Component', () => {
     });
 
     it('renders node with numeric ID', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="123" />
           <Node id="0" />
@@ -205,7 +205,8 @@ describe('Node Component', () => {
       const nodeRef = createRef<NodeModel>();
       const root = createRoot();
 
-      await root.render(
+      await render(
+        root,
         <Digraph>
           <Node id="testnode" ref={nodeRef} label="Test Node" />
         </Digraph>,
@@ -224,7 +225,8 @@ describe('Node Component', () => {
       let nodeModel = null as NodeModel | null;
       const root = createRoot();
 
-      await root.render(
+      await render(
+        root,
         <Digraph>
           <Node
             id="funcref"
@@ -266,11 +268,11 @@ describe('Node Component', () => {
       );
 
       const root = createRoot();
-      await root.render(<TestComponent nodeId="first" />);
+      await render(root, <TestComponent nodeId="first" />);
       expect(refCallCount).toBe(1);
       expect(currentNode?.id).toBe('first');
 
-      await root.render(<TestComponent nodeId="second" />);
+      await render(root, <TestComponent nodeId="second" />);
       expect(refCallCount).toBe(2);
       expect(currentNode?.id).toBe('second');
     });

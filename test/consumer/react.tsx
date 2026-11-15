@@ -1,17 +1,19 @@
 // Type-checked by `pnpm check:consumer-types` against the packed packages
 // (scripts/check-consumer-types.ts): components, `dot:*` elements and
-// renderToDot, through the declarations of @ts-graphviz/react.
+// fromElement, through the declarations of @ts-graphviz/react.
 import {
+  createLabelContext,
   Digraph,
   Edge,
+  fromElement,
+  htmlLikeFromElement,
   Node,
-  renderHTMLLike,
-  renderToDot,
+  readLabelContext,
   Subgraph,
 } from '@ts-graphviz/react';
-import { digraph, type HTMLLikeValue } from 'ts-graphviz';
+import { type DotModel, digraph, type HTMLLikeValue, toDot } from 'ts-graphviz';
 
-const label: HTMLLikeValue = renderHTMLLike(
+const label: HTMLLikeValue = htmlLikeFromElement(
   <dot:table border="1" cellpadding={4}>
     <dot:tr>
       <dot:td port="p">
@@ -21,7 +23,15 @@ const label: HTMLLikeValue = renderHTMLLike(
   </dot:table>,
 );
 
-const dot: Promise<string> = renderToDot(
+const Accent = createLabelContext('black');
+const Colored = () => <dot:font color={readLabelContext(Accent)}>x</dot:font>;
+const colored: HTMLLikeValue = htmlLikeFromElement(
+  <Accent.Provider value="red">
+    <Colored />
+  </Accent.Provider>,
+);
+
+const dot: Promise<DotModel> = fromElement(
   <Digraph id="G" rankdir="LR">
     <Node id="a" label={<dot:b>x</dot:b>} />
     <Node id="b" shape="box" />
@@ -31,8 +41,12 @@ const dot: Promise<string> = renderToDot(
     </Subgraph>
   </Digraph>,
 );
-await dot;
-digraph((g) => g.node('b', { label }));
+const text: string = toDot(await dot);
+console.log(text);
+digraph((g) => {
+  g.node('b', { label });
+  g.node('c', { label: colored });
+});
 
 // @ts-expect-error not an attribute of nodes
 <Node id="a" rankdir="LR" />;

@@ -1,22 +1,11 @@
-import { isTsGraphvizError } from '@ts-graphviz/common';
 import { describe, expect, it } from 'vitest';
 import { Digraph } from './Digraph.js';
 import { Dot } from './Dot.js';
 import { Edge } from './Edge.js';
 import { Graph } from './Graph.js';
-import { GraphBase } from './GraphBase.js';
 import { createModelKit, defaultModelKit } from './model-kit.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
-
-function getError(fn: () => unknown): unknown {
-  try {
-    fn();
-  } catch (e) {
-    return e;
-  }
-  return undefined;
-}
 
 describe('defaultModelKit', () => {
   it('holds the core classes', () => {
@@ -154,56 +143,16 @@ describe('createModelKit', { tags: ['SM-5'] }, () => {
     expect(createDigraph('G').id).toBe('G');
   });
 
-  it('graphs of a kit create from its classes', () => {
+  it('its graphs keep no kit: a graph holds whatever is added to it', () => {
     class MyNode extends Node {}
-    class MySubgraph extends Subgraph {}
-    const kit = createModelKit({ Node: MyNode, Subgraph: MySubgraph });
+    const kit = createModelKit({ Node: MyNode });
     const g = kit.createDigraph();
-    expect(g.createNode('a')).toBeInstanceOf(MyNode);
-    const sub = g.createSubgraph('s');
-    expect(sub).toBeInstanceOf(MySubgraph);
-    expect(sub.createNode('b')).toBeInstanceOf(MyNode);
-    expect(kit.createSubgraph('t').createNode('c')).toBeInstanceOf(MyNode);
-  });
-
-  it('is used by graphs for the models they create', () => {
-    class MyNode extends Node {}
-    class MySubgraph extends Subgraph {}
-    const g = new Digraph();
-    g.with({ Node: MyNode, Subgraph: MySubgraph });
-    expect(g.createNode('a')).toBeInstanceOf(MyNode);
-    const sub = g.createSubgraph('cluster_0', { label: 'x' });
-    expect(sub).toBeInstanceOf(MySubgraph);
-    expect(sub.id).toBe('cluster_0');
-    expect(sub.get('label')).toBe('x');
-    expect(sub.createNode('b')).toBeInstanceOf(MyNode);
-    expect(g.createSubgraph({ rank: 'same' }).id).toBeUndefined();
-  });
-
-  it('with() keeps the classes it is not given', () => {
-    class MyNode extends Node {}
-    class MyEdge extends Edge {}
-    const g = new Graph();
-    g.with({ Node: MyNode });
-    g.with({ Edge: MyEdge });
-    expect(g.createNode('a')).toBeInstanceOf(MyNode);
-    expect(g.createEdge(['a', 'b'])).toBeInstanceOf(MyEdge);
-  });
-
-  it('a bare GraphBase subclass needs with() or defaultModels()', () => {
-    class Bare extends GraphBase<'Graph'> {
-      get $$type() {
-        return 'Graph' as const;
-      }
-    }
-    expect(() => new Bare().createNode('a')).toThrow(
-      expect.objectContaining({ code: 'TSG_ERR_NO_MODELS_CONTEXT' }),
-    );
-    expect(isTsGraphvizError(getError(() => new Bare().createNode('a')))).toBe(
-      true,
-    );
-    const g = new Bare();
-    g.with(defaultModelKit);
-    expect(g.createNode('a')).toBeInstanceOf(Node);
+    const plain = defaultModelKit.createNode('a');
+    const mine = kit.createNode('b');
+    g.addNode(plain);
+    g.addNode(mine);
+    expect(g.nodes).toStrictEqual([plain, mine]);
+    expect('with' in g).toBe(false);
+    expect('createNode' in g).toBe(false);
   });
 });

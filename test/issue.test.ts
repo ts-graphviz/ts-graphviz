@@ -1,5 +1,5 @@
 import { parse } from '@ts-graphviz/ast';
-import { Digraph, fromDot, toDot } from 'ts-graphviz';
+import { Digraph, defaultModelKit, fromDot, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
 // issue #1335
@@ -61,7 +61,7 @@ describe('Builder nodeCount accumulation across repeated toDot calls', () => {
   it('limits each toDot call by convert.maxASTNodes, not the calls before it', () => {
     const g = new Digraph();
     for (let j = 0; j < 10; j++) {
-      g.createNode(`n${j}`);
+      g.addNode(defaultModelKit.createNode(`n${j}`));
     }
     for (let i = 0; i < 50; i++) {
       toDot(g, { convert: { maxASTNodes: 100 } });
@@ -76,7 +76,9 @@ describe('Builder nodeCount accumulation across repeated toDot calls', () => {
 describe('escaping of NodeRefGroup members', () => {
   it('writes ids and ports of grouped edge targets with the same escaping as direct targets', () => {
     const g = new Digraph();
-    g.createEdge(['a"', [{ id: 'b"', port: 'p\\q' }, 'c']]);
+    g.addEdge(
+      defaultModelKit.createEdge(['a"', [{ id: 'b"', port: 'p\\q' }, 'c']]),
+    );
     const dot = toDot(g);
     expect(dot).toMatchInlineSnapshot(`
       "digraph {

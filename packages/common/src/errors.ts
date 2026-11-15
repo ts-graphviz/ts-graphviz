@@ -54,12 +54,10 @@ export const ERROR_CODES = [
   'TSG_ERR_NO_PLUGIN',
   /** `fromDot` was given an AST node that has no model (`TypeError`). */
   'TSG_ERR_UNCONVERTIBLE_AST',
-  /** `fromDot` was given a DOT source without a graph, or a React tree rendered no top-level graph (`Error`). */
+  /** `fromDot` was given a DOT source without a graph (`Error`). */
   'TSG_ERR_NO_GRAPH',
-  /** `fromDot` was given a DOT source with more than one graph (read them with `fromDotAll`), or a React tree rendered more than one top-level graph (`Error`). */
+  /** `fromDot` was given a DOT source with more than one graph (read them with `fromDotAll`) (`Error`). */
   'TSG_ERR_MULTIPLE_GRAPHS',
-  /** A `GraphBase` subclass created a model without model classes (`Error`). */
-  'TSG_ERR_NO_MODELS_CONTEXT',
   /** `dsl` of `ts-graphviz` was given a value that is not a model (`TypeError`). */
   'TSG_ERR_NOT_A_MODEL',
   /** `dsl` of `ts-graphviz` was given a second argument that is not a model kit (`TypeError`). */
@@ -78,7 +76,7 @@ export const ERROR_CODES = [
   'TSG_ERR_INVALID_OPTION',
   /** A React hook or a `Node` / `Edge` component was used outside a `Digraph`, `Graph` or `Subgraph` (`Error`). */
   'TSG_ERR_NO_CURRENT_GRAPH',
-  /** A React root was rendered after `unmount()`, or unmounted before the render settled (`Error`). */
+  /** A React root was rendered after `unmount()` (`Error`). */
   'TSG_ERR_ROOT_UNMOUNTED',
 ] as const;
 // Shared by every module of the process: frozen, so no code can change what

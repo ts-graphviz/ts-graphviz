@@ -4,6 +4,7 @@ import {
   type CommentModel,
   Digraph,
   Dot,
+  defaultModelKit,
   Edge,
   fromDot,
   fromDotAll,
@@ -13,6 +14,7 @@ import {
   toDot,
 } from 'ts-graphviz';
 import { stringify } from 'ts-graphviz/ast';
+import * as legacy from 'ts-graphviz/legacy';
 import { describe, expect, test } from 'vitest';
 
 const brief = (comments: ReadonlyArray<CommentModel>) =>
@@ -256,7 +258,9 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     );
     const s = new Subgraph('s');
     s.addComment('lead s');
-    s.createNode('x').addComment('lead x');
+    const x = new Node('x');
+    x.addComment('lead x');
+    s.addNode(x);
     expect(toDot(s)).toBe('// lead s\nsubgraph "s" {\n  // lead x\n  "x";\n}');
     const g = new Digraph('G');
     g.addComment('lead G');
@@ -267,10 +271,11 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
 
   test('a block comment after a multi-line trailing block comment on its last line trails the statement too', () => {
     const g = new Digraph();
-    const a = g.createNode('a');
+    const a = defaultModelKit.createNode('a');
+    g.addNode(a);
     a.addComment('x\ny', { position: 'trailing', kind: 'Block' });
     a.addComment('z', { position: 'trailing', kind: 'Block' });
-    g.createNode('b');
+    g.addNode(defaultModelKit.createNode('b'));
     const again = fromDot(toDot(g));
     expect(brief(again.getNode('a')?.comments ?? [])).toEqual([
       ['x\ny', 'Block', 'trailing'],
@@ -295,22 +300,100 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     );
   });
 
-  test('a multi-line trailing block comment keeps its text; trailing line comments of one kind read back as one', () => {
+  test('a multi-line trailing block comment keeps its text; a trailing line comment followed by another is written as a block', () => {
     const g = new Digraph();
-    const a = g.createNode('a');
+    const a = defaultModelKit.createNode('a');
+    g.addNode(a);
     a.addComment('one\ntwo', { position: 'trailing', kind: 'Block' });
-    const b = g.createNode('b');
+    const b = defaultModelKit.createNode('b');
+    g.addNode(b);
     b.addComment('x', { position: 'trailing', kind: 'Slash' });
-    b.addComment('y', { position: 'trailing', kind: 'Slash' });
-    const again = fromDot(toDot(g));
+    b.addComment('y', { position: 'trailing', kind: 'Macro' });
+    b.addComment('z', { position: 'trailing', kind: 'Macro' });
+    g.addNode(defaultModelKit.createNode('c'));
+    const dot = toDot(g);
+    // A line comment runs to the end of its line, so one with a comment
+    // after it could not trail the node; written as a block, it does.
+    expect(dot).toContain('"b"; /* x */ /* y */ # z\n');
+    const again = fromDot(dot);
     expect(brief(again.getNode('a')?.comments ?? [])).toEqual([
       ['one\ntwo', 'Block', 'trailing'],
     ]);
-    // A line comment runs to the end of its line, so the second is written
-    // on the next line, and DOT reads consecutive // lines as one comment.
     expect(brief(again.getNode('b')?.comments ?? [])).toEqual([
-      ['x\ny', 'Slash', 'trailing'],
+      ['x', 'Block', 'trailing'],
+      ['y', 'Block', 'trailing'],
+      ['z', 'Macro', 'trailing'],
     ]);
+    expect(again.getNode('c')?.comments).toEqual([]);
+    expect(toDot(again)).toBe(dot);
+  });
+
+  test.each([
+    {
+      comments: [
+        ['a */ b', 'Slash'],
+        ['y', 'Macro'],
+      ],
+      // Written as a block, the text is escaped as a block comment's is.
+      read: [
+        ['a *​/ b', 'Block'],
+        ['y', 'Macro'],
+      ],
+    },
+    {
+      comments: [
+        ['one\r\ntwo', 'Macro'],
+        ['y', 'Slash'],
+      ],
+      read: [
+        ['one\ntwo', 'Block'],
+        ['y', 'Slash'],
+      ],
+    },
+    {
+      comments: [
+        ['x', 'Slash'],
+        ['y', 'Block'],
+      ],
+      read: [
+        ['x', 'Block'],
+        ['y', 'Block'],
+      ],
+    },
+    { comments: [['x', 'Slash']], read: [['x', 'Slash']] },
+  ] as const)(
+    'trailing comments $comments of a node and an edge stay theirs',
+    ({ comments, read }) => {
+      const g = new Digraph();
+      const a = defaultModelKit.createNode('a');
+      const edge = defaultModelKit.createEdge([a, { id: 'b' }]);
+      g.addNode(a);
+      g.addEdge(edge);
+      g.addNode(defaultModelKit.createNode('c'));
+      for (const [text, kind] of comments) {
+        a.addComment(text, { position: 'trailing', kind });
+        edge.addComment(text, { position: 'trailing', kind });
+      }
+      const dot = toDot(g);
+      const again = fromDot(dot);
+      const expected = read.map(([text, kind]) => [text, kind, 'trailing']);
+      expect(brief(again.getNode('a')?.comments ?? [])).toEqual(expected);
+      expect(brief(again.edges[0].comments)).toEqual(expected);
+      expect(again.getNode('c')?.comments).toEqual([]);
+      expect(toDot(again)).toBe(dot);
+    },
+  );
+
+  test('a node mentioned again with a trailing line comment each prints the same DOT twice', () => {
+    // ts-graphviz/legacy merges the mentions, comments included.
+    const g = legacy.fromDot('graph { a #x\n a #y\n}');
+    expect(brief(g.getNode('a')?.comments ?? [])).toEqual([
+      ['x', 'Macro', 'trailing'],
+      ['y', 'Macro', 'trailing'],
+    ]);
+    const dot = toDot(g);
+    expect(dot).toContain('"a"; /* x */ # y\n');
+    expect(toDot(fromDot(dot))).toBe(dot);
   });
 
   test('around the graphs of a DOT source', () => {
@@ -328,7 +411,9 @@ graph H { b }
 
   test('a comment without a kind is written as commentKind says', () => {
     const g = new Digraph();
-    g.createNode('a').addComment('note');
+    const a = new Node('a');
+    a.addComment('note');
+    g.addNode(a);
     expect(toDot(g)).toContain('// note');
     expect(toDot(g, { convert: { commentKind: 'Block' } })).toContain(
       ' * note',
