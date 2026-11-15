@@ -210,7 +210,7 @@ describe('the packages read no inherited property', { tags: ['SM-8'] }, () => {
       createElement('dot:tr', {}, createElement('dot:td', { port: 'p' }, 'x')),
     );
     expect(trace(() => renderHTMLLike(label))).toStrictEqual([]);
-    // The props of the components behind renderToDot are checked in
+    // The props of the components behind fromElement are checked in
     // packages/react/src/host-props.test.tsx.
   });
 

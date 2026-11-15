@@ -26,15 +26,15 @@ Every error ts-graphviz raises on purpose is the standard error type that fits t
 | an AST or model that contains itself (`stringify`, `toModel`, `fromModel`, `toDot`) | `TypeError` | `TSG_ERR_CYCLIC_STRUCTURE` |
 | shared node objects reached more than `maxSharedNodes` times | `RangeError` | `TSG_ERR_SHARED_NODE_COUNT_EXCEEDED` |
 | `fromDot` on an AST node without a model | `TypeError` | `TSG_ERR_UNCONVERTIBLE_AST` |
-| `fromDot` on a source without a graph, or a React tree without a top-level graph | `Error` | `TSG_ERR_NO_GRAPH` |
-| `fromDot` on a source with several graphs (use `fromDotAll`), or a React tree with several top-level graphs | `Error` | `TSG_ERR_MULTIPLE_GRAPHS` |
+| `fromDot` on a source without a graph | `Error` | `TSG_ERR_NO_GRAPH` |
+| `fromDot` on a source with several graphs (use `fromDotAll`) | `Error` | `TSG_ERR_MULTIPLE_GRAPHS` |
 | adapter used in a browser | `Error` | `TSG_ERR_UNSUPPORTED_ENVIRONMENT` |
 | Graphviz command failed | `CommandExecutionError` (an `Error`) | `TSG_ERR_COMMAND_FAILED` |
 | Graphviz output exceeds `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
 | an adapter option outside its type or range | `TypeError` / `RangeError` | `TSG_ERR_INVALID_OPTION` |
 | `sanitize` rejects the DOT | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
 | `useCurrentGraph()`, `<Node>` or `<Edge>` of `@ts-graphviz/react` outside a `Digraph`, `Graph` or `Subgraph` | `Error` | `TSG_ERR_NO_CURRENT_GRAPH` |
-| a React root rendered after `unmount()`, or unmounted before the render settled | `Error` | `TSG_ERR_ROOT_UNMOUNTED` |
+| a React root rendered after `unmount()` | `Error` | `TSG_ERR_ROOT_UNMOUNTED` |
 
 - `isTsGraphvizError(e)` tells whether a value is one of these errors. It judges by shape (an error whose own `code` is in `ERROR_CODES`), so it works across realms and package copies. Compare `e.code` to narrow further.
 - `withCode(error, code)` tags your own errors the same way; it defines `code` as an own property, so it also tags errors whose prototype has a `code` getter (such as `DOMException`).

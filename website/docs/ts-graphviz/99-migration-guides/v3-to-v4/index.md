@@ -38,7 +38,7 @@ TypeScript reports most other changes, but these three still compile, so search 
 | a custom class overriding `node()` / `edge()` | give the kit your classes to change what is created, or override `addNode` / `addEdge` / `addSubgraph`, which the DSL calls with what the kit created; your `node()` is `modelOf(g).node()` |
 | comparing a DSL with its model (`===`) | `false`: compare DSLs with DSLs (a model and a kit have one DSL), or use `modelOf()` |
 
-`modelOf(dsl)` gives the model and `dsl(model)` the DSL. A DSL is a model together with the model kit its statements create with (see section 4): `dsl(model)` creates with the default kit, `dsl(model, kit)` with `kit`, and the factories and `fromDot` with `{ dsl: true }` give DSLs of their own kit. The callbacks take the kit as their second argument (`digraph((g, kit) => { ... })`). `toDot`, `fromModel`, the adapter's `toBlob` and `createRoot({ container })` / `renderToDot({ container })` of `@ts-graphviz/react` take either. The model guards (`isNodeModel` and the others) are false for a DSL, which is not a model: narrow DSLs by `$$type` (`if (s.$$type === 'Node')`), or check `modelOf(x)`. A DSL is not itself a model type, so pass `modelOf(g)` where a model is typed (such as `new Dot([modelOf(g)])` or a parameter of type `RootGraphModel`). `{ ...node }`, `Object.keys(node)` and `JSON.stringify(node)` list the attributes; `String(g)` does not work, since `toString` is an attribute name too.
+`modelOf(dsl)` gives the model and `dsl(model)` the DSL. A DSL is a model together with the model kit its statements create with (see section 4): `dsl(model)` creates with the default kit, `dsl(model, kit)` with `kit`, and the factories and `fromDot` with `{ dsl: true }` give DSLs of their own kit. The callbacks take the kit as their second argument (`digraph((g, kit) => { ... })`). `toDot`, `fromModel`, the adapter's `toBlob` and `createRoot({ container })` / `fromElement(element, { container })` of `@ts-graphviz/react` take either. The model guards (`isNodeModel` and the others) are false for a DSL, which is not a model: narrow DSLs by `$$type` (`if (s.$$type === 'Node')`), or check `modelOf(x)`. A DSL is not itself a model type, so pass `modelOf(g)` where a model is typed (such as `new Dot([modelOf(g)])` or a parameter of type `RootGraphModel`). `{ ...node }`, `Object.keys(node)` and `JSON.stringify(node)` list the attributes; `String(g)` does not work, since `toString` is an attribute name too.
 
 ## 2. Strings are literal text; DOT syntax is opt-in
 
@@ -206,8 +206,35 @@ Parser fixes you may notice: all compass points parse (`ne`, `sw`, `c`, `_`, and
 - `useDigraph`, `useGraph`, `useSubgraph`, `useNode` and `useEdge` are removed. The components are host elements of the renderer, which adds the models when React commits: render `<Digraph>`, `<Subgraph>`, `<Node>` and `<Edge>`, and get a model through `ref` or, for the enclosing graph, `useCurrentGraph()`.
 - The statements of a graph follow the element tree, also across re-renders (reordered, inserted and removed children), and StrictMode, Suspense or a discarded render no longer adds statements twice or leaves them behind.
 - In container mode, a re-render replaces only the statements the renderer added before; statements the container already had stay first. Models are made by the root's model kit (the `models` option, otherwise the default classes) and added with the graph's `addNode` / `addEdge` / `addSubgraph`; a container's own classes do not decide what is rendered into it.
-- `createRoot` and `renderToDot` take a `models` option.
-- `render()` / `renderToDot()` resolve once the tree has settled, including transitions, deferred values and suspended data. `timeout` is replaced by a per-render `signal` (`AbortSignal.timeout(ms)` for a time limit). Uncaught errors reject with the error itself, and the error callbacks receive `error: unknown`.
+- `renderToDot` is replaced by `fromElement`, which resolves with models: one `Dot` model holding the root graphs, or the `container` it was given (the graph model, also when a DSL such as `digraph()` returns was passed for it). Write `toDot(await fromElement(element))` for the text. It waits until React has no work left for the element, including transitions, deferred values and data read with `use`, and rejects with the uncaught error itself. `timeout` is replaced by `signal` (`AbortSignal.timeout(ms)` for a time limit; without one there is no limit).
+
+  ```tsx
+  // Before
+  const dot = await renderToDot(<MyGraph />, { timeout: 5000 });
+  // After
+  const dot = toDot(
+    await fromElement(<MyGraph />, { signal: AbortSignal.timeout(5000) }),
+  );
+  ```
+
+- `root.render()` returns nothing, like `render()` of a React root: React renders shortly after. Use `onRenderComplete(models)` for the result and `onUncaughtError` / `onCaughtError` / `onRecoverableError` for errors (they receive `error: unknown`), or `fromElement` to wait for one result. `render()` takes no options.
+
+  ```tsx
+  // Before
+  const root = createRoot();
+  await root.render(<MyGraph />);
+  const models = root.getTopLevelModels();
+  // After
+  const root = createRoot({
+    onRenderComplete: (models) => { /* ... */ },
+    onUncaughtError: (error) => { /* ... */ },
+  });
+  root.render(<MyGraph />);
+  ```
+
+- Without a container, several root graphs at the top level are allowed.
+- `createRoot` and `fromElement` take a `models` option.
+- The renderer is a secondary renderer of React: it can be used next to React DOM, and context does not cross from one renderer to the other.
 - `<Digraph strict>` / `<Graph strict>` render strict graphs.
 - `renderHTMLLike` returns an `HTMLLikeValue` (see section 2).
 - As in 0.12, `renderHTMLLike` (and so a JSX `label`) writes strings as text: text children are written with `&`, `<` and `>` as entities, and attribute values also with `"`. Write markup as elements (`<dot:td><dot:b>x</dot:b></dot:td>`), not as a string (`<dot:td>{'<b>x</b>'}</dot:td>`).

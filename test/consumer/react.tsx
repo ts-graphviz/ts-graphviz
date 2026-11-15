@@ -1,15 +1,15 @@
 // Type-checked by `pnpm check:consumer-types` against the packed packages
 // (scripts/check-consumer-types.ts): components, `dot:*` elements and
-// renderToDot, through the declarations of @ts-graphviz/react.
+// fromElement, through the declarations of @ts-graphviz/react.
 import {
   Digraph,
   Edge,
+  fromElement,
   Node,
   renderHTMLLike,
-  renderToDot,
   Subgraph,
 } from '@ts-graphviz/react';
-import { digraph, type HTMLLikeValue } from 'ts-graphviz';
+import { type DotModel, digraph, type HTMLLikeValue, toDot } from 'ts-graphviz';
 
 const label: HTMLLikeValue = renderHTMLLike(
   <dot:table border="1" cellpadding={4}>
@@ -21,7 +21,7 @@ const label: HTMLLikeValue = renderHTMLLike(
   </dot:table>,
 );
 
-const dot: Promise<string> = renderToDot(
+const dot: Promise<DotModel> = fromElement(
   <Digraph id="G" rankdir="LR">
     <Node id="a" label={<dot:b>x</dot:b>} />
     <Node id="b" shape="box" />
@@ -31,7 +31,8 @@ const dot: Promise<string> = renderToDot(
     </Subgraph>
   </Digraph>,
 );
-await dot;
+const text: string = toDot(await dot);
+console.log(text);
 digraph((g) => g.node('b', { label }));
 
 // @ts-expect-error not an attribute of nodes

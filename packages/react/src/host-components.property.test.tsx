@@ -13,6 +13,7 @@ import { Edge } from './components/Edge.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
 import { createRoot } from './createRoot.js';
+import { render } from './test-utils/render.js';
 
 // A small statement language, rendered both as React elements and with the
 // model API; the two must give the same DOT after every render of a
@@ -205,7 +206,8 @@ async function assertRenders(
   const root = createRoot();
   try {
     for (const list of renders) {
-      await root.render(
+      await render(
+        root,
         <Wrapper>
           <Digraph id="G">{toElements(list, options.keyed)}</Digraph>
         </Wrapper>,

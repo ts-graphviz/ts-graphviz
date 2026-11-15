@@ -2,7 +2,6 @@ import { createRef } from 'react';
 import type { GraphBaseModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import { createRoot } from '../createRoot.js';
-import { renderToDot } from '../renderToDot.js';
 import {
   expectGraphStructure,
   expectSubgraph,
@@ -13,11 +12,12 @@ import { Graph } from './Graph.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
 import '../types.js';
+import { elementToDot, render } from '../test-utils/render.js';
 
 describe('Subgraph Component', () => {
   describe('Basic Rendering', () => {
     it('renders empty subgraph in directed graph', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Subgraph id="empty" />
         </Digraph>,
@@ -30,7 +30,7 @@ describe('Subgraph Component', () => {
     });
 
     it('renders subgraph with nodes in directed graph', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Subgraph id="simple">
             <Node id="A" />
@@ -49,7 +49,7 @@ describe('Subgraph Component', () => {
     });
 
     it('renders subgraph with nodes and edges in directed graph', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Subgraph id="connected">
             <Node id="A" />
@@ -70,7 +70,7 @@ describe('Subgraph Component', () => {
     });
 
     it('renders subgraph with attributes', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Subgraph id="cluster_styled" label="Cluster" bgcolor="lightgray">
             <Node id="styled_node" />
@@ -91,7 +91,7 @@ describe('Subgraph Component', () => {
 
   describe('Undirected Graph Context', () => {
     it('renders subgraph in undirected graph', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Graph>
           <Subgraph id="undirected_sub">
             <Node id="A" />
@@ -114,7 +114,7 @@ describe('Subgraph Component', () => {
 
   describe('Nested Structures', () => {
     it('renders nested subgraphs', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Subgraph id="outer">
             <Node id="outer_node" />
@@ -137,7 +137,7 @@ describe('Subgraph Component', () => {
     });
 
     it('renders multiple subgraphs with cross-references', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Subgraph id="cluster_1">
             <Node id="node1" />
@@ -167,7 +167,8 @@ describe('Subgraph Component', () => {
       const subgraphRef = createRef<GraphBaseModel>();
       const root = createRoot();
 
-      await root.render(
+      await render(
+        root,
         <Digraph>
           <Subgraph id="testsubgraph" ref={subgraphRef}>
             <Node id="A" />
@@ -193,7 +194,8 @@ describe('Subgraph Component', () => {
       let subgraphModel = null as GraphBaseModel | null;
       const root = createRoot();
 
-      await root.render(
+      await render(
+        root,
         <Digraph>
           <Subgraph
             id="cluster_funcref"

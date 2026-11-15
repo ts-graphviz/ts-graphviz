@@ -2,9 +2,9 @@ import { createRef } from 'react';
 import type { EdgeModel } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 import { createRoot } from '../createRoot.js';
-import { renderToDot } from '../renderToDot.js';
 import { expectEdge } from '../test-utils/assertions.js';
 import '../types.js';
+import { elementToDot, render } from '../test-utils/render.js';
 import { Digraph } from './Digraph.js';
 import { Edge } from './Edge.js';
 import { Node } from './Node.js';
@@ -12,7 +12,7 @@ import { Node } from './Node.js';
 describe('Edge Component', () => {
   describe('Basic Rendering', () => {
     it('renders edge between two nodes', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="A" />
           <Node id="B" />
@@ -29,7 +29,7 @@ describe('Edge Component', () => {
     });
 
     it('renders edge with label attribute', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="A" />
           <Node id="B" />
@@ -48,7 +48,7 @@ describe('Edge Component', () => {
     });
 
     it('renders edge with multiple attributes', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="A" />
           <Node id="B" />
@@ -76,7 +76,7 @@ describe('Edge Component', () => {
 
   describe('Multi-target Edges', () => {
     it('renders edge with multiple targets', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="A" />
           <Node id="B" />
@@ -95,7 +95,7 @@ describe('Edge Component', () => {
     });
 
     it('renders edge with port specifications', async () => {
-      const dot = await renderToDot(
+      const dot = await elementToDot(
         <Digraph>
           <Node id="A" />
           <Node id="B" />
@@ -122,7 +122,8 @@ describe('Edge Component', () => {
       const edgeRef = createRef<EdgeModel>();
       const root = createRoot();
 
-      await root.render(
+      await render(
+        root,
         <Digraph>
           <Node id="A" />
           <Node id="B" />
@@ -145,7 +146,8 @@ describe('Edge Component', () => {
       let edgeModel = null as EdgeModel | null;
       const root = createRoot();
 
-      await root.render(
+      await render(
+        root,
         <Digraph>
           <Node id="X" />
           <Node id="Y" />

@@ -3,7 +3,7 @@ import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
 import { Node } from './components/Node.js';
 import { renderHTMLLike } from './renderHTMLLike.js';
-import { renderToDot } from './renderToDot.js';
+import { elementToDot } from './test-utils/render.js';
 import type { DotJSXElements } from './types.js';
 
 // Tests compare the markup form; renderHTMLLike itself returns an HTMLLikeValue.
@@ -18,7 +18,7 @@ const html = (...args: Parameters<typeof renderHTMLLike>) =>
  * These tests verify that:
  * 1. DotJSXElements is exported and usable as a type
  * 2. dot:* elements work in JSX expressions (compile-time type check)
- * 3. dot:* elements render correctly in renderHTMLLike and renderToDot
+ * 3. dot:* elements render correctly in renderHTMLLike and fromElement
  */
 describe('dot:* JSX auto-augmentation', () => {
   it('DotJSXElements type is exported and represents all dot:* elements', () => {
@@ -94,8 +94,8 @@ describe('dot:* JSX auto-augmentation', () => {
     expect(result).toContain('Content');
   });
 
-  it('dot:* elements work as labels in renderToDot', async () => {
-    const dot = await renderToDot(
+  it('dot:* elements work as labels in fromElement', async () => {
+    const dot = await elementToDot(
       <Digraph id="html_label_test">
         <Node
           id="n1"
