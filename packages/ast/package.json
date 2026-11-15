@@ -61,6 +61,11 @@
       "./package.json": "./package.json"
     },
     "module": "lib/ast.js",
-    "types": "lib/ast.d.ts"
+    "types": "lib/ast.d.ts",
+    "typesVersions": {
+      "*": {
+        "legacy": ["./lib/legacy.d.ts"]
+      }
+    }
   }
 }
