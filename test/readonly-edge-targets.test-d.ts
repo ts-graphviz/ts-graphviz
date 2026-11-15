@@ -13,7 +13,7 @@ import {
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// #1739: edge targets given as readonly tuples and arrays.
+// Edge targets given as readonly tuples and arrays.
 describe('edge targets as inputs', () => {
   const g = digraph('G');
 

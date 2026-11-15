@@ -181,8 +181,7 @@ type NoInfer<T> = [T][T extends unknown ? 0 : never];
  * and flags, `maxOutputSize`, `sanitize`) are checked at run time, so they
  * may come from a request: a value outside the documented type or range is
  * rejected before the command starts with a `TypeError` or `RangeError`
- * whose `code` is `TSG_ERR_INVALID_OPTION` (`TSG_ERR_OUTPUT_LIMIT_EXCEEDED`
- * for `maxOutputSize`). `dotCommand`, `library`, `customFormats` and
+ * whose `code` is `TSG_ERR_INVALID_OPTION`. `dotCommand`, `library`, `customFormats` and
  * `customLayouts` choose code to run or what it may be asked to do: they are
  * trusted configuration, checked for their type only (and, on Windows,
  * `dotCommand` must not be a `.bat` or `.cmd` script).

@@ -35,7 +35,7 @@ jobs:
       uses: ts-graphviz/setup-graphviz@6005aebc0168bb7f1c4b55f1e611648e57fb15d0 # v2.0.3
     # setup-graphviz 2.0.3 checks the Windows install and retries Chocolatey
     # (ts-graphviz/setup-graphviz#656); check here as well, so that a missing
-    # Graphviz fails this step and not as a missing dot in the tests (#1906).
+    # Graphviz fails this step and not as a missing dot in the tests.
     - name: Check Graphviz
       id: graphviz
       shell: bash

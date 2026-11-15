@@ -18,8 +18,8 @@ import type {
 import { Digraph as DigraphModel, isNodeModel } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// What users of `@ts-graphviz/react` get from its JSX types and inference
-// (#1744). The declarations themselves are in api-reports/.
+// What users of `@ts-graphviz/react` get from its JSX types and inference.
+// The declarations themselves are in api-reports/.
 
 describe('components', () => {
   it('type their props by the attributes of their kind', () => {

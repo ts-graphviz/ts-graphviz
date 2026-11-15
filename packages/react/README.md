@@ -29,7 +29,7 @@ React Components and Renderer for ts-graphviz
 
 [![format: Biome](https://img.shields.io/badge/format%20with-Biome-F7B911?logo=biome&style=flat)](https://biomejs.dev/)
 [![test: Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest&style=flat)](https://vitest.dev/)
-[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://rollupjs.org/)
+[![build: Vite](https://img.shields.io/badge/build%20with-Vite-646CFF?logo=vite&style=flat)](https://vite.dev/)
 
 </div>
 
@@ -45,16 +45,53 @@ The module can then be installed using [npm](https://www.npmjs.com/):
 
 ```bash
 # yarn
-$ yarn add @ts-graphviz/react react@^19
+$ yarn add @ts-graphviz/react ts-graphviz react@^19.3.0
 # or npm
-$ npm install -S @ts-graphviz/react ts-graphviz react@^19
+$ npm install -S @ts-graphviz/react ts-graphviz react@^19.3.0
 # or pnpm
-$ pnpm add @ts-graphviz/react react@^19
+$ pnpm add @ts-graphviz/react ts-graphviz react@^19.3.0
 ```
 
-> **Important**: Install React 19.3 or later (19.x) as a peerDependency. The renderer is built on react-reconciler 0.34, which targets React 19.3; earlier React versions are not supported. Note that `react-dom` is no longer required as this package now uses a custom HTML rendering implementation.
+> **Important**: Install React 19.3 or later (19.x) as a peerDependency. The renderer is built on react-reconciler 0.34, which targets React 19.3; earlier React versions are not supported. `react-dom` is not needed: the package renders HTML-like labels itself.
 
-## Key Features
+## Overview
+
+`@ts-graphviz/react` writes a graph as a tree of React components and converts it to graph models, which `toDot` of [`ts-graphviz`](https://www.npmjs.com/package/ts-graphviz) writes in the DOT language. It creates the same models as the DOT DSL of `ts-graphviz` (`digraph()`, `g.node()`, `g.edge()`, …), which is the simpler choice when a graph needs no components. A graph written with the DSL can also be the container that components render into (see [Rendering Into an Existing Graph](#rendering-into-an-existing-graph)).
+
+```tsx
+import { Digraph, Edge, Node, Subgraph, fromElement } from "@ts-graphviz/react";
+import { toDot } from "ts-graphviz";
+
+const dot = toDot(
+  await fromElement(
+    <Digraph id="G" rankdir="LR">
+      <Subgraph id="cluster_y" label="Group">
+        <Node id="b" />
+      </Subgraph>
+      <Node id="a" shape="plain" label={<dot:b>A</dot:b>} />
+      <Edge targets={["a", "b"]} label="to" />
+    </Digraph>,
+  ),
+);
+
+console.log(dot);
+// digraph "G" {
+//   rankdir = "LR";
+//   subgraph "cluster_y" {
+//     label = "Group";
+//     "b";
+//   }
+//   "a" [
+//     shape = "plain";
+//     label = <<b>A</b>>;
+//   ];
+//   "a" -> "b" [
+//     label = "to";
+//   ];
+// }
+```
+
+Coming from an earlier version? See the [migration guide](https://ts-graphviz.github.io/docs/ts-graphviz/migration-guides/v3-to-v4/#10-ts-graphvizreact).
 
 ## React Component
 
@@ -65,7 +102,7 @@ The package provides React components that map directly to Graphviz DOT language
 #### Graph Containers
 - **`<Digraph>`** - Creates a directed graph (arrows point from source to target)
 - **`<Graph>`** - Creates an undirected graph (no arrow direction)
-- **`<Subgraph>`** - Creates a subgraph cluster for grouping related nodes
+- **`<Subgraph>`** - Creates a subgraph for grouping related nodes. Graphviz draws it as a cluster when its `id` starts with `cluster` or it has the `cluster` attribute (`<Subgraph cluster>`)
 
 #### Graph Elements
 - **`<Node>`** - Creates a node/vertex with customizable attributes
@@ -139,7 +176,7 @@ const ServerNode = ({ id, name, type }: { id: string; name: string; type: string
         </dot:tr>
       </dot:table>
     }
-    shape="record"
+    shape="plain"
   />
 );
 
@@ -220,7 +257,7 @@ const DatabaseDiagram = () => (
         title="Users"
         fields={[['id', '1001'], ['name', 'John Doe'], ['email', 'john@example.com']]}
       />}
-      shape="record"
+      shape="plain"
     />
 
     <Node
@@ -275,6 +312,8 @@ const MyNode: React.FC<NodeProps> = (props) => (
 
 TypeScript type definitions for all `dot:*` HTML-like elements are **automatically available** when you import `@ts-graphviz/react`. No additional configuration or setup is required.
 
+The TypeScript compiler accepts the `dot:` names as they are. Babel's React preset rejects namespaced names by default: set its `throwIfNamespace` option to `false` when Babel compiles your JSX.
+
 ```tsx
 import { Digraph, Node, Edge } from '@ts-graphviz/react';
 
@@ -325,7 +364,7 @@ root.render(
 function inspect() {
   // ✅ Type-safe model access
   const models = root.getTopLevelModels();
-  // models is automatically typed as AnyDotObjectModel[]
+  // models is typed as AnyDotObjectModel[]
 
   // ✅ Runtime type filtering with built-in type guards
   // Filter by model type with automatic type narrowing
@@ -456,7 +495,7 @@ const ProcessNode = ({ id, label, color = "lightblue" }: { id: string; label: st
         </dot:tr>
       </dot:table>
     }
-    shape="record"
+    shape="plain"
   />
 );
 
@@ -508,7 +547,7 @@ const InfoCard = ({ id, title, items }: { id: string; title: string; items: stri
         ))}
       </dot:table>
     }
-    shape="record"
+    shape="plain"
   />
 );
 
@@ -539,7 +578,7 @@ The `renderHTMLLike` function converts React elements with HTML-like labels into
 
 Strings and numbers are text, as in the DOM: a child or an attribute value is written with `&`, `<`, `>` (and `"` in attributes) as entities, so text from your users cannot add markup or attributes. Markup is written with `dot:` elements. Only the elements of Graphviz's HTML-like labels can be rendered (`dot:table`, `dot:tr`, `dot:td`, `dot:font`, `dot:b`, …, plus fragments and components); a port is the `port` attribute of `<dot:table>` or `<dot:td>`. Other elements and attribute names that are not names throw a `TypeError`.
 
-```ts
+```tsx
 import type { ReactElement } from "react";
 import { renderHTMLLike } from "@ts-graphviz/react";
 
@@ -594,7 +633,7 @@ The `renderHTMLLike` function provides security protections against stack overfl
     - **Decrease** for user-generated content (e.g., `maxDepth: 100`)
   - When the limit is exceeded, the function throws a `RangeError` (a circular element tree throws a `TypeError`)
 
-```ts
+```tsx
 import { renderHTMLLike, type RenderHTMLLikeOptions } from "@ts-graphviz/react";
 
 // Type-safe options
@@ -609,7 +648,7 @@ const result = renderHTMLLike(<dot:table>...</dot:table>, options);
 
 Both functions take a `container`: the models of the element are added to that graph, and the element may have nodes, edges and subgraphs at its top level.
 
-```ts
+```tsx
 import { Node, Edge, createRoot, fromElement } from "@ts-graphviz/react";
 import { digraph, toDot } from 'ts-graphviz';
 
@@ -652,7 +691,7 @@ Without a container, the top level of the element is root graphs only (`<Digraph
 
 A root reports through its callbacks, as a root of React does, and `render()` itself does not throw for them:
 
-```ts
+```tsx
 import { createRoot, fromElement } from "@ts-graphviz/react";
 
 // Graph components of your application
@@ -699,7 +738,7 @@ try {
 
 `fromElement()` renders at once, with the updates effects schedule, and waits for the work React does later: transitions, deferred values and data read with `use`. What an effect starts by itself (a timer, a fetch that sets state later) is not waited for. Pass a `signal` to stop waiting; it rejects with `signal.reason`. Without one there is no limit, so bound trees you do not control:
 
-```ts
+```tsx
 import { fromElement } from "@ts-graphviz/react";
 
 declare function UntrustedGraph(): React.ReactElement;
@@ -713,7 +752,7 @@ const dot = await fromElement(<UntrustedGraph />, {
 
 A root works with `act()` of React, like the roots of React DOM: inside it, the render and its effects are flushed before `act()` returns, and an uncaught error is thrown by `act()`.
 
-```ts
+```tsx
 import { act } from "react";
 import { Digraph, Node, createRoot } from "@ts-graphviz/react";
 
@@ -734,6 +773,42 @@ const [graph] = root.getTopLevelModels();
 ### Next to React DOM
 
 The renderer is a secondary renderer of React, so it can be used in a process or a page that also renders with React DOM. Context does not cross from one renderer to the other: a graph rendered from inside a React DOM component does not see the providers above that component. Pass what it needs as props, or wrap the element in the providers again.
+
+### Accessing the Models
+
+A component gets the model of an element through `ref`, and the graph it is rendered in through `useCurrentGraph()`:
+
+```tsx
+import { Digraph, Node, Subgraph, fromElement, useCurrentGraph } from "@ts-graphviz/react";
+import { toDot } from "ts-graphviz";
+
+// A component that reads the graph (or subgraph) it is rendered in
+const Marker = () => {
+  const graph = useCurrentGraph();
+  return <Node id={`in_${graph.id}`} />;
+};
+
+const dot = toDot(
+  await fromElement(
+    <Digraph id="G">
+      <Subgraph id="s">
+        <Marker />
+      </Subgraph>
+      <Marker />
+    </Digraph>,
+  ),
+);
+
+console.log(dot);
+// digraph "G" {
+//   subgraph "s" {
+//     "in_s";
+//   }
+//   "in_G";
+// }
+```
+
+`useCurrentGraph()` throws when no graph encloses the component: outside `<Digraph>`, `<Graph>` and `<Subgraph>`, unless the root has a `container`, which is then the current graph. There are no hooks that create models: render `<Digraph>`, `<Subgraph>`, `<Node>` and `<Edge>` instead (see the [migration guide](https://ts-graphviz.github.io/docs/ts-graphviz/migration-guides/v3-to-v4/#10-ts-graphvizreact)).
 
 ### Ref as Prop Support
 
@@ -782,6 +857,10 @@ const [graph] = dot.graphs;
 graph.getNode("A")?.setAttribute("color", "red");
 console.log(graph.nodes.length, graph.edges.length);
 ```
+
+## Changelog 📜
+
+See [CHANGELOG.md](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/react/CHANGELOG.md) for more details.
 
 ## Contributors 👥
 

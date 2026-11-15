@@ -21,7 +21,7 @@ describe('isCompass', () => {
   });
 });
 
-describe('toNodeRef with a string (#1688)', () => {
+describe('toNodeRef with a string', () => {
   it('reads id, port and compass point like DOT', () => {
     expect(toNodeRef('a')).toStrictEqual({ id: 'a', port: undefined });
     expect(toNodeRef('a:p')).toStrictEqual({ id: 'a', port: 'p' });
