@@ -14,6 +14,7 @@ import {
   toDot,
 } from 'ts-graphviz';
 import { stringify } from 'ts-graphviz/ast';
+import * as legacy from 'ts-graphviz/legacy';
 import { describe, expect, test } from 'vitest';
 
 const brief = (comments: ReadonlyArray<CommentModel>) =>
@@ -299,7 +300,7 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     );
   });
 
-  test('a multi-line trailing block comment keeps its text; trailing line comments of one kind read back as one', () => {
+  test('a multi-line trailing block comment keeps its text; a trailing line comment followed by another is written as a block', () => {
     const g = new Digraph();
     const a = defaultModelKit.createNode('a');
     g.addNode(a);
@@ -307,16 +308,92 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     const b = defaultModelKit.createNode('b');
     g.addNode(b);
     b.addComment('x', { position: 'trailing', kind: 'Slash' });
-    b.addComment('y', { position: 'trailing', kind: 'Slash' });
-    const again = fromDot(toDot(g));
+    b.addComment('y', { position: 'trailing', kind: 'Macro' });
+    b.addComment('z', { position: 'trailing', kind: 'Macro' });
+    g.addNode(defaultModelKit.createNode('c'));
+    const dot = toDot(g);
+    // A line comment runs to the end of its line, so one with a comment
+    // after it could not trail the node; written as a block, it does.
+    expect(dot).toContain('"b"; /* x */ /* y */ # z\n');
+    const again = fromDot(dot);
     expect(brief(again.getNodes('a')[0]?.comments ?? [])).toEqual([
       ['one\ntwo', 'Block', 'trailing'],
     ]);
-    // A line comment runs to the end of its line, so the second is written
-    // on the next line, and DOT reads consecutive // lines as one comment.
     expect(brief(again.getNodes('b')[0]?.comments ?? [])).toEqual([
-      ['x\ny', 'Slash', 'trailing'],
+      ['x', 'Block', 'trailing'],
+      ['y', 'Block', 'trailing'],
+      ['z', 'Macro', 'trailing'],
     ]);
+    expect(again.getNodes('c')[0]?.comments).toEqual([]);
+    expect(toDot(again)).toBe(dot);
+  });
+
+  test.each([
+    {
+      comments: [
+        ['a */ b', 'Slash'],
+        ['y', 'Macro'],
+      ],
+      // Written as a block, the text is escaped as a block comment's is.
+      read: [
+        ['a *​/ b', 'Block'],
+        ['y', 'Macro'],
+      ],
+    },
+    {
+      comments: [
+        ['one\r\ntwo', 'Macro'],
+        ['y', 'Slash'],
+      ],
+      read: [
+        ['one\ntwo', 'Block'],
+        ['y', 'Slash'],
+      ],
+    },
+    {
+      comments: [
+        ['x', 'Slash'],
+        ['y', 'Block'],
+      ],
+      read: [
+        ['x', 'Block'],
+        ['y', 'Block'],
+      ],
+    },
+    { comments: [['x', 'Slash']], read: [['x', 'Slash']] },
+  ] as const)(
+    'trailing comments $comments of a node and an edge stay theirs',
+    ({ comments, read }) => {
+      const g = new Digraph();
+      const a = defaultModelKit.createNode('a');
+      const edge = defaultModelKit.createEdge([a, { id: 'b' }]);
+      g.addNode(a);
+      g.addEdge(edge);
+      g.addNode(defaultModelKit.createNode('c'));
+      for (const [text, kind] of comments) {
+        a.addComment(text, { position: 'trailing', kind });
+        edge.addComment(text, { position: 'trailing', kind });
+      }
+      const dot = toDot(g);
+      const again = fromDot(dot);
+      const expected = read.map(([text, kind]) => [text, kind, 'trailing']);
+      expect(brief(again.getNodes('a')[0]?.comments ?? [])).toEqual(expected);
+      expect(brief(again.edges[0].comments)).toEqual(expected);
+      expect(again.getNodes('c')[0]?.comments).toEqual([]);
+      expect(toDot(again)).toBe(dot);
+    },
+  );
+
+  test('a node mentioned again with a trailing line comment each prints the same DOT twice', () => {
+    // ts-graphviz/legacy merges the mentions, comments included.
+    const g = legacy.fromDot('graph { a #x\n a #y\n}');
+    expect(brief(g.getNodes('a')[0]?.comments ?? [])).toEqual([
+      ['x', 'Macro', 'trailing'],
+      ['y', 'Macro', 'trailing'],
+    ]);
+    const dot = toDot(g);
+    expect(dot).toContain('"a"; /* x */ # y\n');
+    expect(toDot(fromDot(dot))).toBe(dot);
   });
 
   test('around the graphs of a DOT source', () => {
