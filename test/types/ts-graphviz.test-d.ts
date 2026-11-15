@@ -73,8 +73,8 @@ describe('the model’s members are on the model', () => {
     digraph((g) => {
       const m = modelOf(g);
       expectTypeOf(m.getNodes('a')).toEqualTypeOf<NodeModel[]>();
-      expectTypeOf(m.nodes).toEqualTypeOf<ReadonlyArray<NodeModel>>();
-      expectTypeOf(m.subgraphs).toEqualTypeOf<ReadonlyArray<SubgraphModel>>();
+      expectTypeOf(m.getNodes()).toEqualTypeOf<NodeModel[]>();
+      expectTypeOf(m.getSubgraphs()).toEqualTypeOf<SubgraphModel[]>();
       expectTypeOf(g.node({}).$$kind).toEqualTypeOf<'Node'>();
       expectTypeOf(g.$$type).toEqualTypeOf<'Graph'>();
       expectTypeOf(m.id).toEqualTypeOf<string | undefined>();

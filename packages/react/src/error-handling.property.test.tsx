@@ -179,7 +179,7 @@ describe('error handling', () => {
             () => false,
           );
           if (mustResolve(trees, kinds)) expect(resolved).toBe(true);
-          if (!resolved) expect(container.nodes).toHaveLength(0);
+          if (!resolved) expect(container.getNodes()).toHaveLength(0);
         }),
       );
     });
@@ -212,12 +212,12 @@ describe('error handling', () => {
             uncaught.map(() => 'Error: thrown by a callback'),
           );
           if (!kinds.includes('throw')) expect(uncaught).toEqual([]);
-          expect(container.nodes.map((n) => n.id)).toEqual(['after']);
+          expect(container.getNodes().map((n) => n.id)).toEqual(['after']);
           expect(completed.at(-1)).toEqual(['after']);
         } finally {
           root.unmount();
         }
-        expect(container.nodes).toHaveLength(0);
+        expect(container.getNodes()).toHaveLength(0);
       }),
     );
   });

@@ -60,7 +60,7 @@ describe('subgraphs by id', () => {
     const anonymous = new Subgraph();
     g.addSubgraph(anonymous);
     expect(g.getSubgraphs('undefined')).toEqual([]);
-    expect(g.subgraphs).toStrictEqual([anonymous]);
+    expect(g.getSubgraphs()).toStrictEqual([anonymous]);
   });
 
   it('reads ids that are Object.prototype names as ids', () => {

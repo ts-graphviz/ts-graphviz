@@ -167,7 +167,7 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
       ['lead a', 'Block', 'leading'],
       ['trails a', 'Slash', 'trailing'],
     ]);
-    const [edge] = g.edges;
+    const [edge] = g.getEdges();
     expect(brief(edge.comments)).toEqual([
       ['lead the edge', 'Macro', 'leading'],
       ['trails the edge', 'Block', 'trailing'],
@@ -212,7 +212,7 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     expect(brief(again.getNodes('a')[0]?.comments ?? [])).toEqual(
       brief(a?.comments ?? []),
     );
-    expect(brief(again.edges[0].comments)).toEqual(brief(edge.comments));
+    expect(brief(again.getEdges()[0].comments)).toEqual(brief(edge.comments));
     expect(brief(again.getSubgraphs('s')[0]?.comments ?? [])).toEqual(
       brief(s?.comments ?? []),
     );
@@ -378,7 +378,7 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
       const again = fromDot(dot);
       const expected = read.map(([text, kind]) => [text, kind, 'trailing']);
       expect(brief(again.getNodes('a')[0]?.comments ?? [])).toEqual(expected);
-      expect(brief(again.edges[0].comments)).toEqual(expected);
+      expect(brief(again.getEdges()[0].comments)).toEqual(expected);
       expect(again.getNodes('c')[0]?.comments).toEqual([]);
       expect(toDot(again)).toBe(dot);
     },

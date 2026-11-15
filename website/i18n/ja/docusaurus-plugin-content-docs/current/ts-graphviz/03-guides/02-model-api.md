@@ -61,7 +61,7 @@ g.addEdge(new Edge([a, b]));
 | メンバー | |
 | --- | --- |
 | `id` | ルートグラフ、サブグラフ、ノードの名前（DOT での ID） |
-| `nodes`、`edges`、`subgraphs` | グラフのノード、エッジ、サブグラフ。`nodes` が持つのはノード文で、エッジにだけ出てくるノードは含みません（[よくある質問](./01-dot-dsl.md#エッジにだけ出てくるノードが-nodes-に入らない)を参照） |
+| `getNodes()`、`getEdges()`、`getSubgraphs()` | グラフのノード、エッジ、サブグラフを順に並べた新しい配列。`getNodes()` が返すのはノード文で、エッジにだけ出てくるノードは含みません（[よくある質問](./01-dot-dsl.md#エッジにだけ出てくるノードが-getnodes-に入らない)を参照） |
 | `statements` | グラフのノード、エッジ、サブグラフ、先頭以外の既定属性の文を追加した順に並べたもの。`toDot` はこの順に書き出します。グラフ自身の属性と先頭の既定値はその前に書き出されます |
 | `getNodes(id)`、`getSubgraphs(id)` | その id で宣言されたノードやサブグラフを、宣言の順に得る。DOT と同じく `a; b; a [color=red]` は `a` を 2 度宣言し、宣言ごとに別のノードモデルになる |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | グラフにあるかどうか |
@@ -74,13 +74,13 @@ g.addEdge(new Edge([a, b]));
 import { fromDot, type GraphBaseModel } from 'ts-graphviz';
 
 function removeNodeEverywhere(g: GraphBaseModel, id: string): void {
-  for (const edge of g.edges) {
+  for (const edge of g.getEdges()) {
     // 端点、またはグループのメンバー
     if (edge.targets.flat().some((t) => t.id === id)) g.removeEdge(edge);
   }
   g.removeNode(id);
   // サブグラフは自分の文を持つ
-  for (const s of g.subgraphs) removeNodeEverywhere(s, id);
+  for (const s of g.getSubgraphs()) removeNodeEverywhere(s, id);
 }
 
 const g = fromDot('digraph { a; subgraph cluster_s { a -> b; } }');

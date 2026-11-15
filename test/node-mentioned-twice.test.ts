@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 describe('a node mentioned twice', () => {
   it('keeps each mention where it is written, with its attributes', () => {
     const g = fromDot('digraph { a [color=red]; b; a [shape=box] }');
-    expect(g.nodes.map((n) => n.id)).toEqual(['a', 'b', 'a']);
+    expect(g.getNodes().map((n) => n.id)).toEqual(['a', 'b', 'a']);
     expect(g.getNodes('a').map((n) => n.attributes.values)).toEqual([
       [['color', 'red']],
       [['shape', 'box']],
@@ -22,13 +22,13 @@ describe('a node mentioned twice', () => {
     const g = legacy.fromDot(
       'digraph { a [color=red]; b; a [color=blue, shape=box] }',
     );
-    expect(g.nodes.map((n) => n.id)).toEqual(['a', 'b']);
-    expect(g.nodes[0]?.attributes.values).toEqual([
+    expect(g.getNodes().map((n) => n.id)).toEqual(['a', 'b']);
+    expect(g.getNodes()[0]?.attributes.values).toEqual([
       ['color', 'blue'],
       ['shape', 'box'],
     ]);
     const kept = legacy.fromDot('digraph { a [color=red]; a [shape=box] }');
-    expect(kept.nodes[0]?.attributes.values).toEqual([
+    expect(kept.getNodes()[0]?.attributes.values).toEqual([
       ['color', 'red'],
       ['shape', 'box'],
     ]);
@@ -40,13 +40,18 @@ describe('a node mentioned twice', () => {
       { convert: { models: { Digraph } } },
     );
     expect(g).toBeInstanceOf(Digraph);
-    expect(g.nodes).toHaveLength(1);
-    expect(g.nodes[0]?.attributes.values).toEqual([
+    expect(g.getNodes()).toHaveLength(1);
+    expect(g.getNodes()[0]?.attributes.values).toEqual([
       ['color', 'red'],
       ['shape', 'box'],
     ]);
-    expect(g.subgraphs).toHaveLength(1);
-    expect(g.subgraphs[0]?.nodes.map((n) => n.id)).toEqual(['b', 'c']);
+    expect(g.getSubgraphs()).toHaveLength(1);
+    expect(
+      g
+        .getSubgraphs()[0]
+        ?.getNodes()
+        .map((n) => n.id),
+    ).toEqual(['b', 'c']);
   });
 
   it('replaces the node of a legacy class read by fromDot of ts-graphviz', () => {
@@ -55,8 +60,8 @@ describe('a node mentioned twice', () => {
     const g = fromDot('digraph { a [color=red]; b; a [shape=box] }', {
       convert: { models: legacyModels },
     });
-    expect(g.nodes.map((n) => n.id)).toEqual(['a', 'b']);
-    expect(g.nodes[0]?.attributes.values).toEqual([['shape', 'box']]);
+    expect(g.getNodes().map((n) => n.id)).toEqual(['a', 'b']);
+    expect(g.getNodes()[0]?.attributes.values).toEqual([['shape', 'box']]);
   });
 
   it('renders as the source does', { tags: ['process'] }, ({ skip }) => {

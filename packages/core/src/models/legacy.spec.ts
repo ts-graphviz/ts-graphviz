@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Edge } from './Edge.js';
 import { LegacyDigraph, LegacyGraph, LegacySubgraph } from './legacy.js';
 import { Node } from './Node.js';
 import { Subgraph } from './Subgraph.js';
@@ -28,5 +29,18 @@ describe.each([
     g.addSubgraph(new Subgraph('t'));
     expect(g.getSubgraph('t')).toBe(first);
     expect(g.getSubgraph('u')).toBeUndefined();
+  });
+
+  it('has the deprecated nodes, edges and subgraphs', () => {
+    const g = create();
+    const a = new Node('a');
+    const edge = new Edge([a, { id: 'b' }]);
+    const t = new Subgraph('t');
+    g.addNode(a);
+    g.addEdge(edge);
+    g.addSubgraph(t);
+    expect(g.nodes).toEqual([a]);
+    expect(g.edges).toEqual([edge]);
+    expect(g.subgraphs).toEqual([t]);
   });
 });

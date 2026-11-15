@@ -782,15 +782,6 @@ export interface GraphBaseModel<
    */
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
   /**
-   * The nodes in the graph, in the order they were added: a node declared
-   * more than once is there for each declaration.
-   */
-  readonly nodes: ReadonlyArray<NodeModel<S>>;
-  /** Edge objects in the graph. */
-  readonly edges: ReadonlyArray<EdgeModel<S>>;
-  /** Subgraph objects in the graph. */
-  readonly subgraphs: ReadonlyArray<SubgraphModel<S>>;
-  /**
    * The graph's contents in the order they were added: nodes, edges and
    * subgraphs, and the default attribute statements added after them,
    * which `toDot` writes in this order (after the graph's attributes and
@@ -870,18 +861,34 @@ export interface GraphBaseModel<
    */
   removeSubgraph(subgraph: SubgraphModel<S>): void;
   /**
+   * The subgraphs in the graph, in the order they were added; a new array
+   * each time. As in DOT, a subgraph may be declared more than once.
+   */
+  getSubgraphs(): SubgraphModel<S>[];
+  /**
    * The subgraphs declared with the id, in the order they were added; empty
-   * if there is none. As in DOT, a subgraph may be declared more than once.
+   * if there is none.
    */
   getSubgraphs(id: string): SubgraphModel<S>[];
 
   /**
-   * The nodes declared with the id, in the order they were added; empty if
-   * there is none. As in DOT, a node may be declared more than once: each
+   * The nodes in the graph, in the order they were added; a new array each
+   * time. As in DOT, a node may be declared more than once: each
    * declaration is a node model, and Graphviz applies their attributes in
    * order.
    */
+  getNodes(): NodeModel<S>[];
+  /**
+   * The nodes declared with the id, in the order they were added; empty if
+   * there is none.
+   */
   getNodes(id: string): NodeModel<S>[];
+
+  /**
+   * The edges in the graph, in the order they were added; a new array each
+   * time.
+   */
+  getEdges(): EdgeModel<S>[];
 }
 
 /**

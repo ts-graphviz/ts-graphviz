@@ -275,7 +275,7 @@ const ast = fromModel(G);
 console.log(ast.type); // 'Graph'
 console.log(ast.children.map((child) => child.type)); // ['Node', 'Edge']
 
-const [a] = modelOf(G).nodes;
+const [a] = modelOf(G).getNodes();
 console.log(stringify(fromModel(a)));
 // "a" [
 //   label = "A";

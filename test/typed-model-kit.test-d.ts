@@ -50,7 +50,7 @@ describe('a ModelKit with custom classes', () => {
     myDigraph((g) => {
       expectTypeOf(g.node('a')).toEqualTypeOf<DSL<MyNode>>();
       expectTypeOf(g.edge(['a', 'b'])).toEqualTypeOf<DSL<MyEdge>>();
-      expectTypeOf(modelOf(g).nodes).toEqualTypeOf<ReadonlyArray<NodeModel>>();
+      expectTypeOf(modelOf(g).getNodes()).toEqualTypeOf<NodeModel[]>();
       expectTypeOf(modelOf(g.node('a')).extra()).toEqualTypeOf<string>();
       expectTypeOf(
         modelOf(g.edge(['a', 'b'])).weight(),
@@ -76,7 +76,7 @@ describe('a ModelKit with custom classes', () => {
     const [first] = fromDotAll('digraph { a }', {
       convert: { models: { Node: MyNode } },
     });
-    expectTypeOf(first.nodes).toEqualTypeOf<ReadonlyArray<NodeModel>>();
+    expectTypeOf(first.getNodes()).toEqualTypeOf<NodeModel[]>();
   });
 
   it('keeps a custom subgraph class', () => {

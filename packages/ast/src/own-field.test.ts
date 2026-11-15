@@ -37,7 +37,7 @@ describe('node reference fields', { tags: ['SM-8'] }, () => {
     const model = withInherited('port', literal('extra'), () =>
       withInherited('compass', literal('n'), () => toModel(ast)),
     );
-    const [edge] = model.graphs[0].edges;
+    const [edge] = model.graphs[0].getEdges();
     expect(edge.targets).toStrictEqual([
       { id: 'a', port: undefined, compass: undefined },
       { id: 'b', port: undefined, compass: undefined },
@@ -85,7 +85,9 @@ describe('node reference fields', { tags: ['SM-8'] }, () => {
     );
     const dot = stringify(fromModel(graph));
     expect(dot).toContain('"a":"p":"n"');
-    expect(toModel(parse(dot)).graphs[0].edges[0].targets[0]).toStrictEqual({
+    expect(
+      toModel(parse(dot)).graphs[0].getEdges()[0].targets[0],
+    ).toStrictEqual({
       id: 'a',
       port: 'p',
       compass: 'n',

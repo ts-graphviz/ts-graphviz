@@ -70,3 +70,43 @@ describe('Imperative API(addXxx existXxx removeXxx methods)', () => {
     expect(g.existSubgraph(sub)).toBe(false);
   });
 });
+
+describe('getNodes, getEdges and getSubgraphs', () => {
+  test('without an id give everything, in order, as a new array', () => {
+    const a = new Node('a');
+    const b = new Node('b');
+    const again = new Node('a');
+    const edge = new Edge([a, b]);
+    const s = new Subgraph('s');
+    const t = new Subgraph('t');
+    g.addNode(a);
+    g.addSubgraph(s);
+    g.addEdge(edge);
+    g.addNode(b);
+    g.addNode(again);
+    g.addSubgraph(t);
+    expect(g.getNodes()).toEqual([a, b, again]);
+    expect(g.getEdges()).toEqual([edge]);
+    expect(g.getSubgraphs()).toEqual([s, t]);
+    expect(g.getNodes()).not.toBe(g.getNodes());
+    g.getNodes().pop();
+    expect(g.getNodes()).toHaveLength(3);
+  });
+
+  test('with an id give the declarations with it', () => {
+    const a = new Node('a');
+    const again = new Node('a');
+    g.addNode(a);
+    g.addNode(new Node('b'));
+    g.addNode(again);
+    expect(g.getNodes('a')).toEqual([a, again]);
+    expect(g.getNodes('c')).toEqual([]);
+  });
+
+  test('given undefined, look for that id and find none', () => {
+    g.addNode(new Node('a'));
+    g.addSubgraph(new Subgraph('s'));
+    expect(g.getNodes(undefined as unknown as string)).toEqual([]);
+    expect(g.getSubgraphs(undefined as unknown as string)).toEqual([]);
+  });
+});

@@ -184,7 +184,7 @@ describe('explicit value kinds', { tags: ['SM-3'] }, () => {
         });
         const dot = toDot(g);
         const again = fromDot(dot);
-        expect(again.nodes).toHaveLength(1);
+        expect(again.getNodes()).toHaveLength(1);
         expect(toDot(again)).toBe(dot);
       }),
     );
@@ -197,7 +197,9 @@ describe('explicit value kinds', { tags: ['SM-3'] }, () => {
           g.node('a', { label: value });
         });
         const again = fromDot(toDot(g));
-        expect(again.nodes[0].attributes.get('label')).toStrictEqual(value);
+        expect(again.getNodes()[0].attributes.get('label')).toStrictEqual(
+          value,
+        );
       }),
     );
   });
@@ -215,7 +217,7 @@ describe('explicit value kinds', { tags: ['SM-3'] }, () => {
             g.node('a', { fontsize: n });
           });
           const again = fromDot(toDot(g));
-          const raw = again.nodes[0].attributes.get('fontsize');
+          const raw = again.getNodes()[0].attributes.get('fontsize');
           expect(raw).toBeDefined();
           const back = Number(raw);
           // DOT has no signed zero, so -0 reads back as 0
@@ -240,8 +242,10 @@ describe('explicit value kinds', { tags: ['SM-3'] }, () => {
     // `__proto__` is an ordinary identifier in DOT; it only needs care when parsed
     expect(dot).toContain('__proto__ = "v";');
     const again = fromDot(dot);
-    expect(again.nodes[1].attributes.get('__proto__' as 'label')).toBe('v');
-    expect(Object.getPrototypeOf(again.nodes[1].attributes)).not.toBe('v');
+    expect(again.getNodes()[1].attributes.get('__proto__' as 'label')).toBe(
+      'v',
+    );
+    expect(Object.getPrototypeOf(again.getNodes()[1].attributes)).not.toBe('v');
   });
 
   it('attribute keys that are DOT keywords or not identifiers are quoted', () => {
@@ -263,7 +267,7 @@ describe('explicit value kinds', { tags: ['SM-3'] }, () => {
             g.node('a', { [key]: 'v' } as { label: string });
           });
           const again = fromDot(toDot(g));
-          expect(again.nodes[0].attributes.get(key as 'label')).toBe('v');
+          expect(again.getNodes()[0].attributes.get(key as 'label')).toBe('v');
         },
       ),
     );
@@ -411,7 +415,7 @@ describe('attribute values of every kind', { tags: ['SM-2'] }, () => {
         const g = digraph((g) => {
           g.node('a', { fontsize: value as number });
         });
-        expect(fromDot(toDot(g)).nodes[0].attributes.get('fontsize')).toBe(
+        expect(fromDot(toDot(g)).getNodes()[0].attributes.get('fontsize')).toBe(
           value,
         );
       }),

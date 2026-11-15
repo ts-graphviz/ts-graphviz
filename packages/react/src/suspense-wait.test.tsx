@@ -18,7 +18,7 @@ function Data({ data }: { data: Promise<string> }): ReactNode {
 }
 
 const ids = (container: DigraphModel): string[] =>
-  container.nodes.map((n) => n.id);
+  container.getNodes().map((n) => n.id);
 
 describe('fromElement waits for data under Suspense', () => {
   it.each([0, 100, 290, 310, 400, 700])('that takes %i ms', async (ms) => {
@@ -65,9 +65,12 @@ describe('fromElement waits for data under Suspense', () => {
       { container },
     );
     expect(ids(container)).toEqual(['outer']);
-    expect(container.getSubgraphs('s')[0]?.nodes.map((n) => n.id)).toEqual([
-      'inner',
-    ]);
+    expect(
+      container
+        .getSubgraphs('s')[0]
+        ?.getNodes()
+        .map((n) => n.id),
+    ).toEqual(['inner']);
   });
 
   it('that is read one after the other', async () => {

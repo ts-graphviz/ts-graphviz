@@ -49,7 +49,7 @@ describe('optional AST fields are read only when owned', {
     const g = withInherited('id', literal, () =>
       fromDot('digraph { subgraph { a } }'),
     );
-    expect(g.subgraphs.map((s) => s.id)).toStrictEqual([undefined]);
+    expect(g.getSubgraphs().map((s) => s.id)).toStrictEqual([undefined]);
   });
 
   it('sanitize walks only nodes', () => {

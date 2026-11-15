@@ -52,17 +52,17 @@ type Command = fc.Command<Reference, RootGraphModel>;
 
 /** Everything a graph says about its contents agrees with the reference. */
 function expectConsistent(model: Reference, real: RootGraphModel): void {
-  expect(real.nodes.map((n) => n.id)).toStrictEqual(model.nodes);
+  expect(real.getNodes().map((n) => n.id)).toStrictEqual(model.nodes);
   for (const id of new Set(model.nodes)) {
     expect(real.existNode(id)).toBe(true);
     // getNodes gives the declarations of the id, in the order of nodes
     expect(real.getNodes(id)).toStrictEqual(
-      real.nodes.filter((n) => n.id === id),
+      real.getNodes().filter((n) => n.id === id),
     );
   }
-  expect(real.edges).toHaveLength(model.edges);
-  expect(real.subgraphs.map((s) => s.id)).toStrictEqual(model.subgraphs);
-  for (const subgraph of real.subgraphs) {
+  expect(real.getEdges()).toHaveLength(model.edges);
+  expect(real.getSubgraphs().map((s) => s.id)).toStrictEqual(model.subgraphs);
+  for (const subgraph of real.getSubgraphs()) {
     expect(real.existSubgraph(subgraph)).toBe(true);
   }
 }
@@ -127,7 +127,7 @@ class RemoveNodeCommand implements Command {
     } else if (this.by === 'current' && current) {
       // a node removes that declaration only
       model.nodes.splice(model.nodes.indexOf(this.id), 1);
-      expect(real.nodes).not.toContain(current);
+      expect(real.getNodes()).not.toContain(current);
     }
     // a node that is not in the graph removes nothing
     expectConsistent(model, real);
@@ -160,7 +160,7 @@ class RemoveEdgeCommand implements Command {
   constructor(readonly index: number) {}
   check = (model: Readonly<Reference>) => model.edges > 0;
   run(model: Reference, real: RootGraphModel): void {
-    const edge = real.edges[this.index % real.edges.length];
+    const edge = real.getEdges()[this.index % real.getEdges().length];
     real.removeEdge(edge);
     model.edges--;
     expect(real.existEdge(edge)).toBe(false);
@@ -199,8 +199,8 @@ class RemoveSubgraphCommand implements Command {
   constructor(readonly index: number) {}
   check = (model: Readonly<Reference>) => model.subgraphs.length > 0;
   run(model: Reference, real: RootGraphModel): void {
-    const index = this.index % real.subgraphs.length;
-    const subgraph = real.subgraphs[index];
+    const index = this.index % real.getSubgraphs().length;
+    const subgraph = real.getSubgraphs()[index];
     real.removeSubgraph(subgraph);
     model.subgraphs.splice(index, 1);
     expect(real.existSubgraph(subgraph)).toBe(false);
@@ -268,13 +268,13 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
         const second = new Node(id);
         modelOf(g).addNode(second);
         const third = modelOf(g.node(id));
-        expect(modelOf(g).nodes).toStrictEqual([first, second, third]);
+        expect(modelOf(g).getNodes()).toStrictEqual([first, second, third]);
 
         const legacy = legacyDigraph();
         const kept = modelOf(legacy.node(id));
         const replacement = new Node(id);
         modelOf(legacy).addNode(replacement);
-        expect(modelOf(legacy).nodes).toStrictEqual([replacement]);
+        expect(modelOf(legacy).getNodes()).toStrictEqual([replacement]);
         expect(kept).not.toBe(replacement);
         expect(modelOf(legacy.node(id))).toBe(replacement);
       }),
@@ -286,7 +286,7 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
     const sub = g.subgraph('');
     expect(modelOf(sub).id).toBe('');
     expect(modelOf(g).getSubgraphs('')).toStrictEqual([modelOf(sub)]);
-    expect(modelOf(g).subgraphs).toHaveLength(1);
+    expect(modelOf(g).getSubgraphs()).toHaveLength(1);
   });
 
   it('edge(targets, null) ignores the null instead of failing', () => {
@@ -309,7 +309,7 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
           g.edge([a, b]);
         });
         modelOf(g).removeNode(a);
-        expect(modelOf(g).edges).toHaveLength(1);
+        expect(modelOf(g).getEdges()).toHaveLength(1);
       }),
     );
   });

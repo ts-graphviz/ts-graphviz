@@ -114,18 +114,6 @@ export abstract class GraphBase<
       >('Node'),
     });
 
-  get nodes(): ReadonlyArray<NodeModel<S>> {
-    return Array.from(this.#nodes);
-  }
-
-  get edges(): ReadonlyArray<EdgeModel<S>> {
-    return Array.from(this.#edges);
-  }
-
-  get subgraphs(): ReadonlyArray<SubgraphModel<S>> {
-    return Array.from(this.#subgraphs);
-  }
-
   get statements(): ReadonlyArray<
     | NodeModel<S>
     | EdgeModel<S>
@@ -301,12 +289,26 @@ export abstract class GraphBase<
     this.#statements.delete(model);
   }
 
-  public getNodes(id: string): NodeModel<S>[] {
+  public getNodes(): NodeModel<S>[];
+  public getNodes(id: string): NodeModel<S>[];
+  // By the number of arguments: `getNodes(undefined)` looks for the id
+  // `undefined` and finds none, rather than giving every node.
+  public getNodes(...args: [] | [id: string]): NodeModel<S>[] {
+    if (args.length === 0) return Array.from(this.#nodes);
+    const [id] = args;
     // A model whose id changed is found under neither id.
     return (this.#nodesById.get(id) ?? []).filter((n) => n.id === id);
   }
 
-  public getSubgraphs(id: string): SubgraphModel<S>[] {
+  public getEdges(): EdgeModel<S>[] {
+    return Array.from(this.#edges);
+  }
+
+  public getSubgraphs(): SubgraphModel<S>[];
+  public getSubgraphs(id: string): SubgraphModel<S>[];
+  public getSubgraphs(...args: [] | [id: string]): SubgraphModel<S>[] {
+    if (args.length === 0) return Array.from(this.#subgraphs);
+    const [id] = args;
     return (this.#subgraphsById.get(id) ?? []).filter((s) => s.id === id);
   }
 }

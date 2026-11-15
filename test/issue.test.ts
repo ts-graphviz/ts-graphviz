@@ -86,7 +86,7 @@ describe('escaping of NodeRefGroup members', () => {
       }"
     `);
     const again = fromDot(dot);
-    expect(again.edges[0].targets[1]).toMatchObject([
+    expect(again.getEdges()[0].targets[1]).toMatchObject([
       { id: 'b"', port: 'p\\q' },
       { id: 'c' },
     ]);

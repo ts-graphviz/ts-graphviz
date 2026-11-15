@@ -153,7 +153,7 @@ const nodeRef = createRef<NodeModel>();
 const root = createRoot({
   onRenderComplete: () => {
     nodeRef.current?.setAttribute('color', 'red');
-    console.log(graphRef.current?.nodes.length); // 1
+    console.log(graphRef.current?.getNodes().length); // 1
 
     const [G] = root.getTopLevelModels(isRootGraphModel);
     console.log(G === graphRef.current); // true

@@ -142,7 +142,7 @@ The DSL keeps DOT's words only, so none of its names is a Graphviz attribute, an
 | `a.addComment('note')` | a comment written into the DOT source |
 | `a.$$type`, `list.$$kind` | the kind of model (`'Node'`, `'Edge'`, …) and of default attribute list |
 
-Everything else is on the model, which `modelOf(x)` gives: the name of a node or graph (`id`), the graph's contents (`nodes`, `edges`, `subgraphs`, `statements`), its methods (`getNodes`, `addNode`, `removeNode`, …), the attribute methods, `comments`, an edge's `targets`, and the members of your own model classes.
+Everything else is on the model, which `modelOf(x)` gives: the name of a node or graph (`id`), the graph's contents (`statements`), its methods (`getNodes`, `getEdges`, `getSubgraphs`, `addNode`, `removeNode`, …), the attribute methods, `comments`, an edge's `targets`, and the members of your own model classes.
 
 ```typescript
 import { digraph, modelOf } from 'ts-graphviz';
@@ -153,7 +153,7 @@ digraph('G', (g) => {
   console.log(modelOf(a).id); // 'a': the node's name
   console.log(a.id); // 'svg-a'
   console.log(modelOf(g).id); // 'G'
-  console.log(modelOf(g).nodes.length); // 1
+  console.log(modelOf(g).getNodes().length); // 1
   console.log(a.$$type); // 'Node'
 });
 ```
@@ -278,17 +278,17 @@ console.log(toDot(G));
 
 ## FAQ
 
-### A node that only appears in an edge is not in `nodes`
+### A node that only appears in an edge is not in `getNodes()`
 
 ```typescript
 import { fromDot } from 'ts-graphviz';
 
 const g = fromDot('digraph { a; a -> b; }');
-console.log(g.nodes.map((n) => n.id)); // ['a']
+console.log(g.getNodes().map((n) => n.id)); // ['a']
 console.log(g.getNodes('b')); // []
 ```
 
-In DOT, an edge creates the nodes it names. The models, though, record an edge's targets by id only: `nodes` holds the nodes written as node statements, not every node the graph has in Graphviz's sense. A node may belong to several subgraphs, and `a -> b` inside a subgraph may refer to a node written outside it, so the models do not guess. Declare a node with `g.addNode(new Node('b'))` (`dsl(g).node('b')` on the DSL) to have it in `nodes`, or read the ids of an edge's targets.
+In DOT, an edge creates the nodes it names. The models, though, record an edge's targets by id only: `getNodes()` gives the nodes written as node statements, not every node the graph has in Graphviz's sense. A node may belong to several subgraphs, and `a -> b` inside a subgraph may refer to a node written outside it, so the models do not guess. Declare a node with `g.addNode(new Node('b'))` (`dsl(g).node('b')` on the DSL) to have it in `getNodes()`, or read the ids of an edge's targets.
 
 ### `isNodeModel(dsl)` is false
 

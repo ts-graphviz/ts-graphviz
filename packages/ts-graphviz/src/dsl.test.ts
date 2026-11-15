@@ -132,7 +132,7 @@ describe('DOT statements', () => {
       const created = legacy.node('foo');
       const node = legacy.node('foo', { label: 'L' });
       expect(modelOf(node)).toBe(modelOf(created));
-      expect(modelOf(legacy).nodes).toEqual([modelOf(created)]);
+      expect(modelOf(legacy).getNodes()).toEqual([modelOf(created)]);
       expect(node.label).toBe('L');
     });
 
@@ -175,7 +175,7 @@ describe('DOT statements', () => {
       expect(kit.createEdge).toHaveBeenCalledWith(nodes, {
         label: 'Test label',
       });
-      expect(modelOf(g).edges).toStrictEqual([modelOf(edge)]);
+      expect(modelOf(g).getEdges()).toStrictEqual([modelOf(edge)]);
     });
 
     test('does not add the nodes the targets refer to', () => {
@@ -196,7 +196,7 @@ describe('DOT statements', () => {
     test('ignores null as the attributes', () => {
       const edge = g.edge(nodes, null as never);
       expect(Object.keys(edge)).toStrictEqual([]);
-      expect(modelOf(g).edges).toStrictEqual([modelOf(edge)]);
+      expect(modelOf(g).getEdges()).toStrictEqual([modelOf(edge)]);
     });
 
     test('sets the default edge attributes', () => {
@@ -219,7 +219,7 @@ describe('DOT statements', () => {
         label: 'Test label',
       });
       expect(G.subgraph({ rank: 'same' }).rank).toBe('same');
-      expect(modelOf(g).subgraphs.slice(0, 2)).toStrictEqual([
+      expect(modelOf(g).getSubgraphs().slice(0, 2)).toStrictEqual([
         modelOf(anonymous),
         modelOf(named),
       ]);
@@ -246,7 +246,7 @@ describe('DOT statements', () => {
       const created = legacy.subgraph('cluster_foo');
       const subgraph = legacy.subgraph('cluster_foo', { label: 'L' });
       expect(modelOf(subgraph)).toBe(modelOf(created));
-      expect(modelOf(legacy).subgraphs).toEqual([modelOf(created)]);
+      expect(modelOf(legacy).getSubgraphs()).toEqual([modelOf(created)]);
       expect(subgraph.label).toBe('L');
     });
 
@@ -282,7 +282,7 @@ describe('DOT statements', () => {
       const anonymous = g.subgraph();
       expect(anonymous).not.toBe(empty);
       expect(modelOf(anonymous).id).toBeUndefined();
-      expect(modelOf(g).subgraphs).toStrictEqual([
+      expect(modelOf(g).getSubgraphs()).toStrictEqual([
         modelOf(empty),
         modelOf(anonymous),
       ]);
@@ -580,7 +580,7 @@ describe('the rules', () => {
       expect(model[MODEL as never]).toBeUndefined();
       expect(modelOf(model)).toBe(model);
     }
-    expect(modelOf(g).subgraphs).toHaveLength(1);
+    expect(modelOf(g).getSubgraphs()).toHaveLength(1);
   });
 
   test('2. the kit and the model receive models, arrays included', () => {
@@ -678,7 +678,11 @@ describe('the rules', () => {
       expect(modelOf(g).statements).toStrictEqual([]);
       modelOf(g).addNode(d);
     });
-    expect(modelOf(g).nodes.map((node) => node.id)).toStrictEqual(['d']);
+    expect(
+      modelOf(g)
+        .getNodes()
+        .map((node) => node.id),
+    ).toStrictEqual(['d']);
   });
 
   test('dsl takes only models', () => {
@@ -723,14 +727,14 @@ describe('the readers take a DSL', () => {
   test('toDot and fromModel', () => {
     expect(toDot(g)).toBe(toDot(modelOf(g)));
     expect(fromModel(g)).toStrictEqual(fromModel(modelOf(g)));
-    const [a] = modelOf(g).nodes;
+    const [a] = modelOf(g).getNodes();
     expect(toDot(dsl(a))).toBe(toDot(a));
   });
 
   test('the guards take the model, not the DSL', () => {
     // A DSL is not a model (its `id` is an attribute): use modelOf.
     const a = g.node('a');
-    const e = dsl(modelOf(g).edges[0]);
+    const e = dsl(modelOf(g).getEdges()[0]);
     const s = g.subgraph('cluster_s');
     expect(isRootGraphModel(g)).toBe(false);
     expect(isNodeModel(a)).toBe(false);
@@ -824,9 +828,18 @@ describe('custom models', () => {
       s.edge([s.node('a'), 'b']);
     });
     g.subgraph();
-    expect(modelOf(g).subgraphs.map((s) => s.id)).toEqual(['s', undefined]);
-    expect(modelOf(g).subgraphs[0].nodes.map((n) => n.id)).toEqual(['a']);
-    expect(modelOf(g).subgraphs[0].edges).toHaveLength(1);
+    expect(
+      modelOf(g)
+        .getSubgraphs()
+        .map((s) => s.id),
+    ).toEqual(['s', undefined]);
+    expect(
+      modelOf(g)
+        .getSubgraphs()[0]
+        .getNodes()
+        .map((n) => n.id),
+    ).toEqual(['a']);
+    expect(modelOf(g).getSubgraphs()[0].getEdges()).toHaveLength(1);
   });
 
   test('default attribute statements keep their place, as in DOT', () => {

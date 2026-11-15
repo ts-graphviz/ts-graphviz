@@ -919,7 +919,7 @@ const dot = await fromElement(
 );
 const [graph] = dot.graphs;
 graph.getNodes("A")[0]?.setAttribute("color", "red");
-console.log(graph.nodes.length, graph.edges.length);
+console.log(graph.getNodes().length, graph.getEdges().length);
 ```
 
 ## Changelog 📜

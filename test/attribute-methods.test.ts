@@ -102,7 +102,7 @@ describe('the converters', () => {
       ['label'],
       ['color'],
     ]);
-    expect(g.edges[0].getAttribute('style')).toBe('dashed');
+    expect(g.getEdges()[0].getAttribute('style')).toBe('dashed');
     expect(toDot(g)).toBe(toDot(fromDot(toDot(g))));
   });
 

@@ -50,7 +50,7 @@ describe('a subgraph declared more than once, as an endpoint', () => {
     const g = fromDot(
       'digraph { subgraph s { subgraph t { a } } subgraph s { subgraph t { c } -> b } }',
     );
-    const [inner] = g.getSubgraphs('s')[1].edges;
+    const [inner] = g.getSubgraphs('s')[1].getEdges();
     expect(
       inner.targets.map((t) => (Array.isArray(t) ? t.map((n) => n.id) : t.id)),
     ).toEqual([['a', 'c'], 'b']);

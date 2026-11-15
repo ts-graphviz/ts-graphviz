@@ -90,9 +90,6 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
   get comment(): string | undefined;
   set comment(text: string | undefined);
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
-  get nodes(): ReadonlyArray<NodeModel<S>>;
-  get edges(): ReadonlyArray<EdgeModel<S>>;
-  get subgraphs(): ReadonlyArray<SubgraphModel<S>>;
   get statements(): ReadonlyArray<NodeModel<S> | EdgeModel<S> | SubgraphModel<S> | StatementAttributeListModel<S>>;
   protected get keepsEachNodeDeclaration(): boolean;
   addNode(node: NodeModel<S>): void;
@@ -109,7 +106,10 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
   removeNode(node: NodeModel<S> | string): void;
   removeEdge(edge: EdgeModel<S>): void;
   removeSubgraph(subgraph: SubgraphModel<S>): void;
+  getNodes(): NodeModel<S>[];
   getNodes(id: string): NodeModel<S>[];
+  getEdges(): EdgeModel<S>[];
+  getSubgraphs(): SubgraphModel<S>[];
   getSubgraphs(id: string): SubgraphModel<S>[];
 }
 
@@ -118,6 +118,9 @@ export declare class LegacyDigraph<S extends Schema = EmptySchema> extends Digra
   protected override get keepsEachNodeDeclaration(): boolean;
   getNode(id: string): NodeModel<S> | undefined;
   getSubgraph(id: string): SubgraphModel<S> | undefined;
+  get nodes(): ReadonlyArray<NodeModel<S>>;
+  get edges(): ReadonlyArray<EdgeModel<S>>;
+  get subgraphs(): ReadonlyArray<SubgraphModel<S>>;
 }
 
 export declare class LegacyGraph<S extends Schema = EmptySchema> extends Graph<S> {
@@ -125,6 +128,9 @@ export declare class LegacyGraph<S extends Schema = EmptySchema> extends Graph<S
   protected override get keepsEachNodeDeclaration(): boolean;
   getNode(id: string): NodeModel<S> | undefined;
   getSubgraph(id: string): SubgraphModel<S> | undefined;
+  get nodes(): ReadonlyArray<NodeModel<S>>;
+  get edges(): ReadonlyArray<EdgeModel<S>>;
+  get subgraphs(): ReadonlyArray<SubgraphModel<S>>;
 }
 
 export declare class LegacySubgraph<S extends Schema = EmptySchema> extends Subgraph<S> {
@@ -132,6 +138,9 @@ export declare class LegacySubgraph<S extends Schema = EmptySchema> extends Subg
   protected override get keepsEachNodeDeclaration(): boolean;
   getNode(id: string): NodeModel<S> | undefined;
   getSubgraph(id: string): SubgraphModel<S> | undefined;
+  get nodes(): ReadonlyArray<NodeModel<S>>;
+  get edges(): ReadonlyArray<EdgeModel<S>>;
+  get subgraphs(): ReadonlyArray<SubgraphModel<S>>;
 }
 
 export declare class Node<S extends Schema = EmptySchema> extends AttributesBase<NodeAttributeKey, SchemaAttributeTypes<S, "node">> implements NodeModel<S> {

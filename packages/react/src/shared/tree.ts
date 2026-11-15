@@ -604,7 +604,7 @@ function indexOwnGraphs(
   own.add(graph);
   if (graph.id !== undefined) byId.set(graph.id, graph);
   const rendered = new Set<Statement>(added.get(graph));
-  for (const subgraph of graph.subgraphs) {
+  for (const subgraph of graph.getSubgraphs()) {
     if (!rendered.has(subgraph)) indexOwnGraphs(subgraph, added, byId, own);
   }
 }

@@ -32,7 +32,7 @@ TypeScript reports most other changes, but these three still compile, so search 
 | `node.attributes.delete('label')` | `delete node.label` or `node.label = undefined` |
 | `g.attributes.node.set('shape', 'box')` | `g.node({ shape: 'box' })` (before the other statements) |
 | `node.port('p')` | `node.port('p')` (unchanged) |
-| `g.nodes`, `g.getNode('a')`, `g.addNode(n)` | `modelOf(g).nodes`, `modelOf(g).getNodes('a')[0]`, …: models, not DSLs (`dsl(m)` gives a model's DSL); see section 16 for `getNodes` |
+| `g.nodes`, `g.getNode('a')`, `g.addNode(n)` | `modelOf(g).getNodes()`, `modelOf(g).getNodes('a')[0]`, …: models, not DSLs (`dsl(m)` gives a model's DSL); see section 16 for `getNodes` |
 | your class's own methods, `g.myMethod()` | `modelOf(g).myMethod()` |
 | `new Digraph().node('a')`, `fromDot(src).node('a')` | `dsl(new Digraph()).node('a')`, `fromDot(src, { dsl: true }).node('a')` |
 | a custom class overriding `node()` / `edge()` | give the kit your classes to change what is created, or override `addNode` / `addEdge` / `addSubgraph`, which the DSL calls with what the kit created; your `node()` is `modelOf(g).node()` |
@@ -132,7 +132,7 @@ Code that matched on `error.message` should match on `error.code`.
   | `g.with({ Node: MyNode })`, then `g.createNode('a')` | `const kit = createModelKit({ Node: MyNode })`, then `g.addNode(kit.createNode('a'))`; or `withModelKit({ Node: MyNode })` for the DSL |
 
   The `add*` methods return nothing, so keep the model in a variable where the result of `create*` was used. A `LegacyDigraph` or `LegacyGraph` no longer gives its subgraphs the legacy class: create them with `createModelKit(legacyModels)` or `new LegacySubgraph()`.
-- The graph types take the attribute schema in place of the model types: `GraphBaseModel<T, K, S>`, `RootGraphModel<S>`, `SubgraphModel<S>` and the classes (`Digraph<S>`, `Subgraph<S>`, …). `nodes`, `edges`, `subgraphs` and the lookups are typed by the model interfaces (`NodeModel<S>` and so on) whatever the classes of the kit; the kit and the DSL stay typed by the classes.
+- The graph types take the attribute schema in place of the model types: `GraphBaseModel<T, K, S>`, `RootGraphModel<S>`, `SubgraphModel<S>` and the classes (`Digraph<S>`, `Subgraph<S>`, …). `getNodes`, `getEdges`, `getSubgraphs` and the other lookups are typed by the model interfaces (`NodeModel<S>` and so on) whatever the classes of the kit; the kit and the DSL stay typed by the classes.
 - `DotObject`, the empty base class of the core models, is removed. Instead of `instanceof DotObject`, check the kind of model: the guards (`isNodeModel`, `isRootGraphModel`, …) or `$$type` accept any model of that kind (they look at `$$type` and a few fields, such as a node's `id`, not at every member); use `instanceof Node` and the other core classes where you need an instance of a core class. A class of your own that extended `DotObject` without being a model (no `$$type`) is recognised by neither: check it with `instanceof` your class. Such a class extends nothing now, or the core class it stands for.
 
 ## 5. The `Dot` model and symmetric conversions
@@ -275,7 +275,7 @@ function describe(node: ReadonlyNodeModel): string {
 }
 
 function countNodes(graph: ReadonlyRootGraphModel): number {
-  return graph.nodes.length;
+  return graph.getNodes().length;
 }
 ```
 
@@ -360,7 +360,7 @@ In DOT, `a [color=red]; b; a [shape=box]` declares `a` twice, and Graphviz appli
 | --- | --- |
 | `g.getNode('a')` | `g.getNodes('a')[0]` (`getNodes` gives every declaration with the id, in order) |
 | `g.getSubgraph('s')` | `g.getSubgraphs('s')[0]` |
-| `g.nodes`: one node per id | every declaration, several with one id included |
+| `g.nodes`, `g.edges`, `g.subgraphs` | `g.getNodes()`, `g.getEdges()`, `g.getSubgraphs()` (a new array each time); `getNodes()` gives every declaration, several with one id included |
 | `g.addNode(new Node('a'))` replaces the `a` there is | adds another declaration of `a`, at the end |
 | `g.removeNode('a')` | removes every declaration of `a`; `g.removeNode(node)` removes that one |
 | `g.node('a')` returns the `a` there is | on the DSL, declares `a` again; take the one there is with `dsl(modelOf(g).getNodes('a')[0])` |

@@ -233,8 +233,9 @@ function Nothing(): null {
 }
 
 describe("what a conversion added is the container's own afterwards", () => {
-  const ids = (graph: { nodes: ReadonlyArray<{ id: string }> }): string[] =>
-    graph.nodes.map((n) => n.id);
+  const ids = (graph: {
+    getNodes(): ReadonlyArray<{ id: string }>;
+  }): string[] => graph.getNodes().map((n) => n.id);
   /** A root on the container, and a render that waits for its commit. */
   const rootOn = (container: DigraphModel) => {
     let committed = (): void => {};
@@ -263,7 +264,7 @@ describe("what a conversion added is the container's own afterwards", () => {
       { container },
     );
     expect(ids(container)).toEqual(['a', 'b']);
-    expect(container.edges).toHaveLength(1);
+    expect(container.getEdges()).toHaveLength(1);
   });
 
   it('stays when a conversion that follows is rejected', async () => {
@@ -287,7 +288,7 @@ describe("what a conversion added is the container's own afterwards", () => {
   it('is replaced by a node with its id, and comes back when that conversion is rejected', async () => {
     const container = new DigraphModel();
     await fromElement(<Node id="a" color="red" />, { container });
-    const [first] = container.nodes;
+    const [first] = container.getNodes();
     const controller = new AbortController();
     function Aborts(): null {
       React.useEffect(() => controller.abort(new Error('stop')), []);
@@ -302,7 +303,7 @@ describe("what a conversion added is the container's own afterwards", () => {
         { container, signal: controller.signal },
       ),
     ).rejects.toThrow('stop');
-    expect(container.nodes).toEqual([first]);
+    expect(container.getNodes()).toEqual([first]);
   });
 
   it('stays in a graph a conversion made, used as the container of the next', async () => {
@@ -317,7 +318,7 @@ describe("what a conversion added is the container's own afterwards", () => {
     const [graph] = dot.graphs;
     await fromElement(<Node id="b" />, { container: graph });
     expect(ids(graph)).toEqual(['a', 'b']);
-    expect(ids(graph.subgraphs[0])).toEqual(['in']);
+    expect(ids(graph.getSubgraphs()[0])).toEqual(['in']);
   });
 
   it('stays when a root renders into the container, and when the root is unmounted', async () => {
@@ -341,7 +342,7 @@ describe("what a conversion added is the container's own afterwards", () => {
     two.unmount();
     expect(ids(container)).toEqual(['c']);
     one.unmount();
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 });
 
@@ -386,7 +387,7 @@ describe('two roots that render a node with the same id into one container', () 
         firstGone === 'one' ? ['green', 'blue'] : ['green', 'red'],
       );
       roots[firstGone === 'one' ? 'two' : 'one'].unmount();
-      expect(container.nodes).toEqual([own]);
+      expect(container.getNodes()).toEqual([own]);
     }
   });
 
@@ -403,7 +404,7 @@ describe('two roots that render a node with the same id into one container', () 
       </>,
     );
     expect(colorsOf(container)).toEqual(['red', 'blue']);
-    expect(container.nodes.map((n) => n.id)).toEqual(['a', 'a', 'b']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['a', 'a', 'b']);
   });
 
   it('a root that adds a node before its others declares them again, in element order', async () => {
@@ -431,7 +432,7 @@ describe('two roots that render a node with the same id into one container', () 
     expect(colorsOf(container)).toEqual(['black', 'blue']);
     one.unmount();
     two.unmount();
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 
   it('the nodes of finished conversions and of the container stay', async () => {

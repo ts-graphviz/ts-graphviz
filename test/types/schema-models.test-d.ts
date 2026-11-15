@@ -214,7 +214,7 @@ describe('without a schema', () => {
     // A graph holds the models of any class of its schema.
     g.addNode(models.createNode('a'));
     new Digraph().addNode(models.createNode('a'));
-    expectTypeOf(g.nodes).toEqualTypeOf<ReadonlyArray<NodeModel>>();
+    expectTypeOf(g.getNodes()).toEqualTypeOf<NodeModel[]>();
   });
 
   it('constructs a union of the core classes through RootGraphConstructor', () => {
@@ -240,12 +240,10 @@ describe('a schema', () => {
       expectTypeOf(kit.createSubgraph('s')).toEqualTypeOf<
         SubgraphModel<MySchema>
       >();
-      expectTypeOf(g.nodes).toEqualTypeOf<ReadonlyArray<NodeModel<MySchema>>>();
+      expectTypeOf(g.getNodes()).toEqualTypeOf<NodeModel<MySchema>[]>();
       expectTypeOf(g.getNodes('a')).toEqualTypeOf<NodeModel<MySchema>[]>();
-      expectTypeOf(g.edges).toEqualTypeOf<ReadonlyArray<EdgeModel<MySchema>>>();
-      expectTypeOf(g.subgraphs).toEqualTypeOf<
-        ReadonlyArray<SubgraphModel<MySchema>>
-      >();
+      expectTypeOf(g.getEdges()).toEqualTypeOf<EdgeModel<MySchema>[]>();
+      expectTypeOf(g.getSubgraphs()).toEqualTypeOf<SubgraphModel<MySchema>[]>();
       expectTypeOf(g.getSubgraphs('s')).toEqualTypeOf<
         SubgraphModel<MySchema>[]
       >();
@@ -644,8 +642,8 @@ describe('the core classes', () => {
     expectTypeOf(new LegacyDigraph<MySchema>()).toExtend<
       RootGraphModel<MySchema>
     >();
-    expectTypeOf(new Graph<MySchema>().nodes).toEqualTypeOf<
-      ReadonlyArray<NodeModel<MySchema>>
+    expectTypeOf(new Graph<MySchema>().getNodes()).toEqualTypeOf<
+      NodeModel<MySchema>[]
     >();
   });
 

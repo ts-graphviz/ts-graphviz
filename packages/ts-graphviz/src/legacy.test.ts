@@ -76,8 +76,8 @@ describe('a node or a subgraph declared again', () => {
       const a = s.node('a', { color: 'red' });
       s.node('a', { shape: 'box' });
       expect(G.subgraph('s')).toBe(s);
-      expect(modelOf(G).subgraphs).toHaveLength(1);
-      expect(modelOf(s).nodes).toEqual([modelOf(a)]);
+      expect(modelOf(G).getSubgraphs()).toHaveLength(1);
+      expect(modelOf(s).getNodes()).toEqual([modelOf(a)]);
       expect(modelOf(a).attributes.values).toEqual([
         ['color', 'red'],
         ['shape', 'box'],
@@ -89,12 +89,12 @@ describe('a node or a subgraph declared again', () => {
     const dot = 'digraph { a [color=red]; a [shape=box] } graph { b; b }';
     for (const dsl of [false, true]) {
       const [G, H] = legacy.fromDotAll(dot, { dsl }).map((g) => modelOf(g));
-      expect(G?.nodes).toHaveLength(1);
-      expect(G?.nodes[0]?.attributes.values).toEqual([
+      expect(G?.getNodes()).toHaveLength(1);
+      expect(G?.getNodes()[0]?.attributes.values).toEqual([
         ['color', 'red'],
         ['shape', 'box'],
       ]);
-      expect(H?.nodes).toHaveLength(1);
+      expect(H?.getNodes()).toHaveLength(1);
     }
   });
 });

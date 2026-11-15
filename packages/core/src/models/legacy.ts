@@ -1,4 +1,5 @@
 import type {
+  EdgeModel,
   EmptySchema,
   ModelClasses,
   NodeModel,
@@ -51,6 +52,30 @@ export class LegacySubgraph<
   public getSubgraph(id: string): SubgraphModel<S> | undefined {
     return this.getSubgraphs(id)[0];
   }
+
+  /**
+   * The nodes in the graph, in order.
+   * @deprecated Use `getNodes()`. Removed in v5.
+   */
+  public get nodes(): ReadonlyArray<NodeModel<S>> {
+    return this.getNodes();
+  }
+
+  /**
+   * The edges in the graph, in order.
+   * @deprecated Use `getEdges()`. Removed in v5.
+   */
+  public get edges(): ReadonlyArray<EdgeModel<S>> {
+    return this.getEdges();
+  }
+
+  /**
+   * The subgraphs in the graph, in order.
+   * @deprecated Use `getSubgraphs()`. Removed in v5.
+   */
+  public get subgraphs(): ReadonlyArray<SubgraphModel<S>> {
+    return this.getSubgraphs();
+  }
 }
 
 /**
@@ -92,6 +117,30 @@ export class LegacyGraph<S extends Schema = EmptySchema> extends Graph<S> {
   public getSubgraph(id: string): SubgraphModel<S> | undefined {
     return this.getSubgraphs(id)[0];
   }
+
+  /**
+   * The nodes in the graph, in order.
+   * @deprecated Use `getNodes()`. Removed in v5.
+   */
+  public get nodes(): ReadonlyArray<NodeModel<S>> {
+    return this.getNodes();
+  }
+
+  /**
+   * The edges in the graph, in order.
+   * @deprecated Use `getEdges()`. Removed in v5.
+   */
+  public get edges(): ReadonlyArray<EdgeModel<S>> {
+    return this.getEdges();
+  }
+
+  /**
+   * The subgraphs in the graph, in order.
+   * @deprecated Use `getSubgraphs()`. Removed in v5.
+   */
+  public get subgraphs(): ReadonlyArray<SubgraphModel<S>> {
+    return this.getSubgraphs();
+  }
 }
 
 /**
@@ -132,6 +181,30 @@ export class LegacyDigraph<S extends Schema = EmptySchema> extends Digraph<S> {
    */
   public getSubgraph(id: string): SubgraphModel<S> | undefined {
     return this.getSubgraphs(id)[0];
+  }
+
+  /**
+   * The nodes in the graph, in order.
+   * @deprecated Use `getNodes()`. Removed in v5.
+   */
+  public get nodes(): ReadonlyArray<NodeModel<S>> {
+    return this.getNodes();
+  }
+
+  /**
+   * The edges in the graph, in order.
+   * @deprecated Use `getEdges()`. Removed in v5.
+   */
+  public get edges(): ReadonlyArray<EdgeModel<S>> {
+    return this.getEdges();
+  }
+
+  /**
+   * The subgraphs in the graph, in order.
+   * @deprecated Use `getSubgraphs()`. Removed in v5.
+   */
+  public get subgraphs(): ReadonlyArray<SubgraphModel<S>> {
+    return this.getSubgraphs();
   }
 }
 
