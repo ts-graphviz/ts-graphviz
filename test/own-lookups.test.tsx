@@ -7,7 +7,7 @@ import {
   LegacyDigraph,
   Node,
 } from '@ts-graphviz/core';
-import { renderHTMLLike } from '@ts-graphviz/react';
+import { htmlLikeFromElement } from '@ts-graphviz/react';
 import { createElement } from 'react';
 import { describe, expect, it } from 'vitest';
 
@@ -41,10 +41,10 @@ describe('lookups read own properties only', { tags: ['SM-8'] }, () => {
     expect(kit.createNode('a')).not.toBeInstanceOf(Extra);
   });
 
-  it('renderHTMLLike knows only its own element names', () => {
+  it('htmlLikeFromElement knows only its own element names', () => {
     expect(() =>
       withInherited('dot:extra', 'table', () =>
-        renderHTMLLike(createElement('dot:extra' as never)),
+        htmlLikeFromElement(createElement('dot:extra' as never)),
       ),
     ).toThrow(TypeError);
   });

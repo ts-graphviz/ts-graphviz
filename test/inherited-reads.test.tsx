@@ -27,7 +27,7 @@ import {
   legacyModels,
   Node,
 } from '@ts-graphviz/core';
-import { renderHTMLLike } from '@ts-graphviz/react';
+import { htmlLikeFromElement } from '@ts-graphviz/react';
 import { createElement } from 'react';
 import { fromDot, fromDotAll, toDot } from 'ts-graphviz';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -209,7 +209,7 @@ describe('the packages read no inherited property', { tags: ['SM-8'] }, () => {
       { border: 1 },
       createElement('dot:tr', {}, createElement('dot:td', { port: 'p' }, 'x')),
     );
-    expect(trace(() => renderHTMLLike(label))).toStrictEqual([]);
+    expect(trace(() => htmlLikeFromElement(label))).toStrictEqual([]);
     // The props of the components behind fromElement are checked in
     // packages/react/src/host-props.test.tsx.
   });

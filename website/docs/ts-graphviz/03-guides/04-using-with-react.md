@@ -323,5 +323,5 @@ await writeFile('./result.svg', blob.stream());
 
 ## More
 
-- The [package README](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/react/README.md) covers the rest: `renderHTMLLike`, the error callbacks of `createRoot`, the `signal` and `retries` options of `fromElement`, and the full list of `dot:` elements.
+- The [package README](https://github.com/ts-graphviz/ts-graphviz/blob/main/packages/react/README.md) covers the rest: `htmlLikeFromElement`, the error callbacks of `createRoot`, the `signal` and `retries` options of `fromElement`, and the full list of `dot:` elements.
 - If your code uses the hooks `useDigraph`, `useGraph`, `useSubgraph`, `useNode` or `useEdge`, or calls `renderToDot`, which `fromElement` replaces, see the [migration guide](../99-migration-guides/v3-to-v4/index.md).

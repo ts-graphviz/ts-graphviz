@@ -92,6 +92,17 @@ export interface GraphvizRoot {
   getTopLevelModels<T extends DotObjectModel>(typeGuard?: (model: DotObjectModel) => model is T): T[];
 }
 
+export interface HtmlLikeFromElementOptions {
+  maxDepth?: number;
+}
+
+export interface LabelContext<in out T> {
+  readonly Provider: (props: {
+    value: T;
+    children?: ReactNode;
+  }) => ReactElement | null;
+}
+
 export declare const Node: FC<NodeProps>;
 
 export interface NodeOptions extends NodeAttributesObject {}
@@ -101,10 +112,6 @@ export interface NodeProps extends Omit<NodeOptions, "label" | "xlabel"> {
   label?: ReactElement | string;
   xlabel?: ReactElement | string;
   ref?: Ref<NodeModel>;
-}
-
-export interface RenderHTMLLikeOptions {
-  maxDepth?: number;
 }
 
 export interface RootGraphOptions extends GraphAttributesObject, GraphBaseAttributesProps {
@@ -134,6 +141,8 @@ export type SubgraphProps<Id extends string | undefined = string | undefined> = 
 
 export type TopLevelModel = FilterableModel;
 
+export declare function createLabelContext<T>(defaultValue: T): LabelContext<T>;
+
 export declare function createRoot<Container extends AnyGraphContainer = AnyGraphContainer>(options?: CreateRootOptions<Container>): GraphvizRoot;
 
 export declare function fromElement<Container extends AnyGraphContainer>(element: ReactElement, options: FromElementOptions<Container> & {
@@ -146,7 +155,9 @@ export declare function fromElement(element: ReactElement, options?: FromElement
 }): Promise<DotModel>;
 export declare function fromElement<Container extends AnyGraphContainer>(element: ReactElement, options?: FromElementOptions<Container>): Promise<Container | DotModel>;
 
-export declare function renderHTMLLike(label?: ReactElement, options?: RenderHTMLLikeOptions): HTMLLikeValue;
+export declare function htmlLikeFromElement(label?: ReactElement, options?: HtmlLikeFromElementOptions): HTMLLikeValue;
+
+export declare function readLabelContext<T>(context: LabelContext<T>): T;
 
 export declare function useCurrentGraph(): AnyGraphContainer;
 

@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { renderHTMLLike } from '@ts-graphviz/react';
+import { htmlLikeFromElement } from '@ts-graphviz/react';
 import { digraph } from 'ts-graphviz';
 
 interface Manifest {
@@ -83,7 +83,7 @@ export default digraph('dependency_graph', (g) => {
 
   for (const pkg of publishedPackages) {
     g.node(pkg.manifest.name, {
-      label: renderHTMLLike(
+      label: htmlLikeFromElement(
         <PackageLabel
           name={pkg.manifest.name}
           description={pkg.manifest.description}

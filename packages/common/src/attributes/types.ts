@@ -236,7 +236,7 @@ export type LayerRange = string;
 export type EscString = string | EscStringValue;
 
 /**
- * An HTML-like label, created with {@link htmlLike} (or `renderHTMLLike` in
+ * An HTML-like label, created with {@link htmlLike} (or `htmlLikeFromElement` in
  * `@ts-graphviz/react`).
  *
  * @see {@link https://graphviz.org/doc/info/shapes.html#html HTML-Like Labels}

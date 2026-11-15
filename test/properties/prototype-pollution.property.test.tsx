@@ -1,4 +1,4 @@
-import { renderHTMLLike } from '@ts-graphviz/react';
+import { htmlLikeFromElement } from '@ts-graphviz/react';
 import fc from 'fast-check';
 import {
   digraph,
@@ -148,7 +148,7 @@ describe('a polluted Object.prototype changes nothing', {
       'toDot of a built graph',
       () => toDot(digraph('G', (g) => g.edge(['a', 'b']))),
     ],
-    ['renderHTMLLike', () => renderHTMLLike(<dot:b>x</dot:b>).value],
+    ['htmlLikeFromElement', () => htmlLikeFromElement(<dot:b>x</dot:b>).value],
   ];
 
   for (const [name, fn] of cases) {

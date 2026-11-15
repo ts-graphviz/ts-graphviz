@@ -1,11 +1,11 @@
 import fc from 'fast-check';
 import { createElement, type ReactElement, type ReactNode } from 'react';
 import { describe, expect, it } from 'vitest';
-import { renderHTMLLike } from './renderHTMLLike.js';
+import { htmlLikeFromElement } from './htmlLikeFromElement.js';
 
-// Tests compare the markup form; renderHTMLLike itself returns an HTMLLikeValue.
-const html = (...args: Parameters<typeof renderHTMLLike>) =>
-  `<${renderHTMLLike(...args).value}>`;
+// Tests compare the markup form; htmlLikeFromElement itself returns an HTMLLikeValue.
+const html = (...args: Parameters<typeof htmlLikeFromElement>) =>
+  `<${htmlLikeFromElement(...args).value}>`;
 
 /** `<dot:b>` nested `levels` times around `leaf`. */
 function nested(levels: number, leaf: ReactNode = 'content'): ReactElement {
@@ -16,7 +16,7 @@ function nested(levels: number, leaf: ReactNode = 'content'): ReactElement {
   return element;
 }
 
-/** Decodes the entities renderHTMLLike writes. */
+/** Decodes the entities htmlLikeFromElement writes. */
 const unescape = (text: string) =>
   text
     .replaceAll('&quot;', '"')
@@ -24,7 +24,7 @@ const unescape = (text: string) =>
     .replaceAll('&gt;', '>')
     .replaceAll('&amp;', '&');
 
-describe('renderHTMLLike()', { tags: ['SM-3'] }, () => {
+describe('htmlLikeFromElement()', { tags: ['SM-3'] }, () => {
   it('returns "<>" for undefined label', () => {
     expect(html()).toBe('<>');
   });
@@ -129,7 +129,7 @@ describe('renderHTMLLike()', { tags: ['SM-3'] }, () => {
     it('any string is text, as a child or as an attribute value', () => {
       fc.assert(
         fc.property(fc.string(), fc.string(), (title, text) => {
-          const markup = renderHTMLLike(
+          const markup = htmlLikeFromElement(
             <dot:td title={title}>{text}</dot:td>,
           ).value;
           // The structure is the element and nothing else; the strings come
