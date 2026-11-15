@@ -22,10 +22,14 @@ in `biome.json`).
   - Props are given all at once (`setProps`) or one at a time (`setProp`).
   - Props reach the models at once: a graph element's model gets them when
     the element is made, and `setProps` and `setProp` set them on a model
-    that is already there. What a graph has (its nodes, edges and subgraphs),
-    and a new model for a new node id or other edge targets, wait for
-    `sync()`. A renderer calls it when an update of its own is complete:
-    React at a commit, Vue after its scheduler has flushed.
+    that is already there. What a graph has (its nodes, edges and
+    subgraphs) waits for `sync()`. A renderer calls it when an update of
+    its own is complete: React at a commit, Vue after its scheduler has
+    flushed.
+  - A new node id or other edge targets given with `setProp` make a new
+    model at the next `sync()`. `setProps` takes them to be as before: a
+    renderer that uses it makes a new element for a new identity, as React
+    does with the key of an element.
   - The models of nodes and edges are made with the `ModelKit` of the tree.
 - `label.ts`: HTML-like labels.
   - `htmlLikeFromSource` walks what a renderer has for a label; a resolver of
