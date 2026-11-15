@@ -72,15 +72,22 @@ export class Printer {
             // written on lines of its own: written after that node on its line,
             // it would be read back as that node's trailing comment.
             if (placement === 'leading' && comments?.length) yield EOL;
-            for (const comment of comments ?? []) {
+            const count = comments?.length ?? 0;
+            for (let i = 0; i < count; i++) {
+              const comment = (comments as CommentASTNode[])[i];
               if (placement === 'trailing') yield ' ';
+              // A line comment ends the line, so a trailing comment after it
+              // would be on the next line and read back as another node's.
+              // Written as a block comment, it keeps its place.
+              const kind =
+                placement === 'trailing' && i < count - 1
+                  ? 'Block'
+                  : comment.kind;
               // Not at a lone CR: the parser reads it as text of a line
               // comment, and an attached comment split into two lines would
               // read back as two comments.
-              const lines = escapeComment(comment.value, comment.kind).split(
-                /\r?\n/,
-              );
-              if (comment.kind === 'Block') {
+              const lines = escapeComment(comment.value, kind).split(/\r?\n/);
+              if (kind === 'Block') {
                 yield '/* ';
                 yield* lines.flatMap((line, i) =>
                   i === 0 ? [line] : [EOL, line],
@@ -149,16 +156,16 @@ export class Printer {
                 'leading',
               );
               yield* plugin.print(context, a);
+              // One list, so that a line comment is followed by none of them.
               yield* context.printComments(
-                ownField(a, 'trailingComments'),
+                [
+                  ...(ownField(a, 'trailingComments') ?? []),
+                  ...((!HEADER_DANGLING.has(a.type) &&
+                    ownField(a, 'danglingComments')) ||
+                    []),
+                ],
                 'trailing',
               );
-              if (!HEADER_DANGLING.has(a.type)) {
-                yield* context.printComments(
-                  ownField(a, 'danglingComments'),
-                  'trailing',
-                );
-              }
               return;
             }
           }
