@@ -1,12 +1,12 @@
 import {
   type ASTToModel,
-  legacyToModel,
   type ParseOptions,
   parse,
   type Rule,
   type ToModelConvertableASTNode,
   toModel,
 } from '@ts-graphviz/ast';
+import { legacyToModel } from '@ts-graphviz/ast/legacy';
 import {
   type EdgeModel,
   isDotModel,

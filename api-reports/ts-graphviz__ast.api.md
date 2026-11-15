@@ -207,7 +207,8 @@ export interface LiteralASTProperties<T extends string = string> extends ASTComm
 
 export type LiteralKind = "bare" | "quoted" | "html";
 
-export type ModelOf<T> = T extends "Dot" ? DotModel : T extends "Graph" ? RootGraphModel : T extends "Edge" ? EdgeModel : T extends "Node" ? NodeModel : T extends "Subgraph" ? SubgraphModel : never;
+type ModelOf<T> = T extends "Dot" ? DotModel : T extends "Graph" ? RootGraphModel : T extends "Edge" ? EdgeModel : T extends "Node" ? NodeModel : T extends "Subgraph" ? SubgraphModel : never;
+export { ModelOf as ModelOf };
 
 export type ModelToAST<T> = T extends DotObjectModel<infer U> ? U extends "Dot" ? DotASTNode : U extends "Graph" ? GraphASTNode : U extends "AttributeList" ? AttributeListASTNode : U extends "Edge" ? EdgeASTNode : U extends "Node" ? NodeASTNode : U extends "Subgraph" ? SubgraphASTNode : never : never;
 
@@ -312,8 +313,6 @@ export declare const createElement: CreateElement;
 export declare function createElementFactory(options?: Partial<Pick<BuilderOptions, "maxASTNodes">>): CreateElement;
 
 export declare function fromModel<T extends AnyReadonlyDotObjectModel | ModelView>(model: T, options?: ConvertFromModelOptions): ModelToAST<ModelOf<T>>;
-
-export declare function legacyToModel<T extends ToModelConvertableASTNode>(ast: T, options: ConvertToModelOptions): ASTToModel<T>;
 
 export declare function parse<const R extends Rule>(input: string, options: CommonParseOptions & {
   startRule: R;
