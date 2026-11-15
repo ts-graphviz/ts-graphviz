@@ -269,6 +269,23 @@ describe('one prop at a time', () => {
     expect(G.edges[0].getAttribute(_.color)).toBe('blue');
   });
 
+  it('makes a new edge for targets changed in place', () => {
+    const G = new Digraph('G');
+    const tree = createTree(G, defaultModelKit);
+    const targets = ['a', 'b'];
+    const e = edge(targets);
+    insertChild(tree, e);
+    sync(tree);
+    const [model] = G.edges;
+
+    targets[1] = 'c';
+    setProp(e, 'targets', targets);
+    sync(tree);
+    expect(G.edges).toHaveLength(1);
+    expect(G.edges[0]).not.toBe(model);
+    expect(G.edges[0].targets).toEqual([{ id: 'a' }, { id: 'c' }]);
+  });
+
   it('updates the attributes, default lists and comment of a graph', () => {
     const G = new Digraph('G');
     const tree = createTree(G, defaultModelKit);

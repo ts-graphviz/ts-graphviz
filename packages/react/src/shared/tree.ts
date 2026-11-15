@@ -86,6 +86,11 @@ interface EdgeInstance extends InstanceBase {
   kind: 'edge';
   props: Props;
   model?: EdgeModel;
+  /**
+   * The {@link edgeKey} of the targets the model was made with: the targets
+   * a renderer gives may be the same array, changed in place.
+   */
+  modelKey?: string;
 }
 
 /**
@@ -376,7 +381,7 @@ export function setProp(instance: Instance, key: string, value: unknown): void {
         const same =
           instance.kind === 'node'
             ? previous === value
-            : edgeKey(previous as ReadonlyEdgeTargetLikeTuple) ===
+            : instance.modelKey ===
               edgeKey(value as ReadonlyEdgeTargetLikeTuple);
         if (!same) instance.model = undefined;
       } else if (key === 'comment') {
@@ -578,10 +583,13 @@ function createStatement(
   kit: ModelKit,
   instance: NodeInstance | EdgeInstance,
 ): NodeModel | EdgeModel {
-  const model =
-    instance.kind === 'edge'
-      ? kit.createEdge(instance.props.targets)
-      : kit.createNode(instance.props.id);
+  let model: NodeModel | EdgeModel;
+  if (instance.kind === 'edge') {
+    model = kit.createEdge(instance.props.targets);
+    instance.modelKey = edgeKey(instance.props.targets);
+  } else {
+    model = kit.createNode(instance.props.id);
+  }
   applyProps(model, instance.props);
   return model;
 }

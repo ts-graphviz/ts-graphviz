@@ -20,9 +20,12 @@ in `biome.json`).
   - Elements know their parent, so a renderer can ask for the parent of an
     element and for what follows it (`parentOf`, `nextSiblingOf`).
   - Props are given all at once (`setProps`) or one at a time (`setProp`).
-  - Nothing reaches a model before `sync()`. A renderer calls it when an
-    update of its own is complete: React at a commit, Vue after its
-    scheduler has flushed.
+  - Props reach the models at once: a graph element's model gets them when
+    the element is made, and `setProps` and `setProp` set them on a model
+    that is already there. What a graph has (its nodes, edges and subgraphs),
+    and a new model for a new node id or other edge targets, wait for
+    `sync()`. A renderer calls it when an update of its own is complete:
+    React at a commit, Vue after its scheduler has flushed.
   - The models of nodes and edges are made with the `ModelKit` of the tree.
 - `label.ts`: HTML-like labels.
   - `htmlLikeFromSource` walks what a renderer has for a label; a resolver of
