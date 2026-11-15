@@ -3,22 +3,24 @@ import {
   DiscreteEventPriority,
   NoEventPriority,
 } from 'react-reconciler/constants.js';
+import { createHostInstance } from './host.js';
 import {
-  createHostInstance,
+  type Child,
+  clearChildren,
+  createText,
   HOST,
+  type Instance,
   insertChild,
   removeChild,
-  syncContainer,
-  updateHostInstance,
-} from './host.js';
+  setProps,
+  sync,
+  type TextInstance,
+} from './shared/tree.js';
 import type {
-  Child,
   HostContext,
-  ReconcilerInstance as Instance,
   ComponentProps as Props,
   PublicInstance,
   RenderContainer,
-  TextInstance,
 } from './types/reconciler.js';
 
 /**
@@ -278,7 +280,7 @@ export class HostConfig
 
   // container clearing method
   clearContainer(container: Container): void {
-    container.children = [];
+    clearChildren(container);
   }
 
   // transition context and scheduling methods
@@ -360,7 +362,7 @@ export class HostConfig
   // Nodes and edges need a graph: the container, or a graph element.
   public getRootHostContext = (container: Container): HostContext => {
     this.#hooks.onWork(container);
-    return container.context?.container ? IN_GRAPH : OUTSIDE_GRAPH;
+    return container.container ? IN_GRAPH : OUTSIDE_GRAPH;
   };
 
   public getChildHostContext(
@@ -384,7 +386,7 @@ export class HostConfig
   public resetAfterCommit(containerInfo: Container): void {
     if (!containerInfo.active) return;
     try {
-      syncContainer(containerInfo);
+      sync(containerInfo);
     } catch (error) {
       containerInfo.onSyncError(error);
       return;
@@ -403,8 +405,7 @@ export class HostConfig
   }
 
   public appendInitialChild(parentInstance: Instance, child: Child): void {
-    if ('children' in parentInstance)
-      insertChild(parentInstance.children, child);
+    if ('children' in parentInstance) insertChild(parentInstance, child);
   }
 
   public finalizeInitialChildren(
@@ -430,16 +431,15 @@ export class HostConfig
     _hostContext: HostContext,
     _internalInstanceHandle: OpaqueHandle,
   ): TextInstance {
-    return { kind: 'text', hidden: false };
+    return createText();
   }
 
   public appendChild(parentInstance: Instance, child: Child): void {
-    if ('children' in parentInstance)
-      insertChild(parentInstance.children, child);
+    if ('children' in parentInstance) insertChild(parentInstance, child);
   }
 
   public appendChildToContainer(container: Container, child: Child): void {
-    insertChild(container.children, child);
+    insertChild(container, child);
   }
 
   public insertBefore(
@@ -448,7 +448,7 @@ export class HostConfig
     beforeChild: Child,
   ): void {
     if ('children' in parentInstance) {
-      insertChild(parentInstance.children, child, beforeChild);
+      insertChild(parentInstance, child, beforeChild);
     }
   }
 
@@ -457,16 +457,15 @@ export class HostConfig
     child: Child,
     beforeChild: Child,
   ): void {
-    insertChild(container.children, child, beforeChild);
+    insertChild(container, child, beforeChild);
   }
 
   public removeChild(parentInstance: Instance, child: Child): void {
-    if ('children' in parentInstance)
-      removeChild(parentInstance.children, child);
+    if (child.parent === parentInstance) removeChild(child);
   }
 
   public removeChildFromContainer(container: Container, child: Child): void {
-    removeChild(container.children, child);
+    if (child.parent === container) removeChild(child);
   }
 
   public commitTextUpdate(
@@ -493,7 +492,7 @@ export class HostConfig
     nextProps: Props,
     _internalHandle: OpaqueHandle,
   ): void {
-    updateHostInstance(instance, nextProps);
+    setProps(instance, nextProps);
   }
 
   // A Suspense boundary showing its fallback again hides its content.

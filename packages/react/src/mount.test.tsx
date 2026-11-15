@@ -9,7 +9,7 @@ import { GraphPortal } from './components/GraphPortal.js';
 import { Node } from './components/Node.js';
 import { Subgraph } from './components/Subgraph.js';
 import { Mount, type MountHandlers } from './mount.js';
-import type { AddedStatements } from './types/reconciler.js';
+import type { AddedStatements } from './shared/tree.js';
 
 const errors: unknown[] = [];
 const report = (error: unknown): void => {
