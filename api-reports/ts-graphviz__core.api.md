@@ -152,7 +152,7 @@ export declare abstract class RootGraph<S extends Schema = EmptySchema> extends 
 export declare class Subgraph<S extends Schema = EmptySchema> extends GraphBase<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, S> implements SubgraphModel<S> {
   get $$type(): "Subgraph";
   readonly id?: string;
-  constructor(id: `cluster${string}` | `Cluster${string}` | `CLUSTER${string}`, attributes?: ClusterSubgraphAttributesObject<S>);
+  constructor(id: ClusterSubgraphId, attributes?: ClusterSubgraphAttributesObject<S>);
   constructor(id?: string, attributes?: NonClusterSubgraphAttributesObject<S>);
   constructor(attributes?: NonClusterSubgraphAttributesObject<S>);
   isSubgraphCluster(): boolean;

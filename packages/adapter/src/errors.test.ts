@@ -1,7 +1,7 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { CommandExecutionError } from './errors.js';
-import { excerpt, outputLimitExceeded } from './limits.js';
+import { excerpt, outputLimit, outputLimitExceeded } from './limits.js';
 
 const ESC = String.fromCharCode(0x1b);
 const CSI = String.fromCharCode(0x9b);
@@ -105,6 +105,18 @@ describe('CommandExecutionError message', { tags: ['SM-4'] }, () => {
     expect(error.message.length).toBeLessThan(360);
     expect(error.code).toBe('TSG_ERR_OUTPUT_LIMIT_EXCEEDED');
   });
+
+  it.each([-1, Number.NaN, Number.POSITIVE_INFINITY])(
+    'rejects maxOutputSize %s as an invalid option',
+    (maxOutputSize) => {
+      expect(() => outputLimit({ maxOutputSize })).toThrow(
+        expect.objectContaining({
+          name: 'RangeError',
+          code: 'TSG_ERR_INVALID_OPTION',
+        }),
+      );
+    },
+  );
 
   it('is bounded and safe to print for any detail', () => {
     fc.assert(

@@ -842,8 +842,9 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
         const create = kit.createSubgraph as (
           ...args: (string | SubgraphAttributesObject)[]
         ) => SubgraphModel;
-        subgraph = create(
-          ...[id, attributes].filter((arg) => arg !== undefined),
+        subgraph = create.apply(
+          kit,
+          [id, attributes].filter((arg) => arg !== undefined),
         );
         g.addSubgraph(subgraph);
       } else if (attributes !== undefined) {

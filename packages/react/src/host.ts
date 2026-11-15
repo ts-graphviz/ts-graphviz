@@ -1,3 +1,4 @@
+import { withCode } from '@ts-graphviz/common';
 import type { ReactElement } from 'react';
 import { ownOptions } from 'ts-graphviz';
 import { renderId } from './renderId.js';
@@ -41,8 +42,11 @@ export function createHostInstance(
   hostContext: HostContext,
 ): Instance {
   if ((type === HOST.node || type === HOST.edge) && !hostContext.inGraph) {
-    throw new Error(
-      `<${COMPONENT_NAMES[type]}> must be rendered inside a Digraph, Graph or Subgraph.`,
+    throw withCode(
+      new Error(
+        `<${COMPONENT_NAMES[type]}> must be rendered inside a Digraph, Graph or Subgraph.`,
+      ),
+      'TSG_ERR_NO_CURRENT_GRAPH',
     );
   }
   if (!HOST_TYPES.has(type) && !type.startsWith('dot:')) {

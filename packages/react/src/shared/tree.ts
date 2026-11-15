@@ -1,8 +1,9 @@
-import type {
-  AttributeListModel,
-  CommentModel,
-  HasComments,
-  ReadonlyEdgeTargetLikeTuple,
+import {
+  type AttributeListModel,
+  type CommentModel,
+  type HasComments,
+  type ReadonlyEdgeTargetLikeTuple,
+  withCode,
 } from '@ts-graphviz/common';
 import type {
   AnyDotObjectModel,
@@ -207,7 +208,10 @@ export function createInstance(type: string, rawProps: Props): Instance {
     case HOST.edge: {
       const targets: ReadonlyEdgeTargetLikeTuple = props.targets;
       if (targets.length < 2) {
-        throw new Error('Edges must have at least 2 targets.');
+        throw withCode(
+          new TypeError('Edges must have at least 2 targets.'),
+          'TSG_ERR_INVALID_EDGE_TARGETS',
+        );
       }
       return { kind: 'edge', props, model: undefined, ...base };
     }

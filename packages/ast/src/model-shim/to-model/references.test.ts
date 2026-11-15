@@ -75,7 +75,9 @@ describe('toModel of an AST that shares nodes', { tags: ['SM-5'] }, () => {
     return inner;
   };
 
-  it('stops a subgraph shared at every level from converting 2^k times', () => {
+  it('stops a subgraph shared at every level from converting 2^k times', {
+    tags: ['timing'],
+  }, () => {
     // k = 20 took 10 s before; k = 40 would never finish.
     const start = performance.now();
     const error = thrown(() => convert(graph(doubling(40))));

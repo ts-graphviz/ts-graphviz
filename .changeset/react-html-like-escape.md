@@ -1,5 +1,5 @@
 ---
-"@ts-graphviz/react": major
+"@ts-graphviz/react": minor
 ---
 
 HTML-like labels: `htmlLikeFromElement`, label contexts, errors are thrown, only HTML-like elements are written, no `dot:port`

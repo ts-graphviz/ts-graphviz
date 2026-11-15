@@ -210,8 +210,8 @@ describe('the packages read no inherited property', { tags: ['SM-8'] }, () => {
       createElement('dot:tr', {}, createElement('dot:td', { port: 'p' }, 'x')),
     );
     expect(trace(() => htmlLikeFromElement(label))).toStrictEqual([]);
-    // The components and hooks behind fromElement are rewritten in #1762,
-    // which is where their props are traced.
+    // The props of the components behind fromElement are checked in
+    // packages/react/src/host-props.test.tsx.
   });
 
   it('when building the command for the adapter', () => {

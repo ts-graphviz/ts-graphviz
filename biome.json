@@ -19,6 +19,8 @@
       "!**/doc",
       "!**/node_modules",
       "!**/coverage",
+      "!**/.stryker-tmp",
+      "!reports",
       "!packages/ast/src/dot-shim/parser/_parse.js",
       "!packages/ast/src/dot-shim/parser/_parse.d.ts",
       "!website/build",

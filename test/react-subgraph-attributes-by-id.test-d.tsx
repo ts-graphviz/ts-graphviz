@@ -5,7 +5,7 @@ import {
 } from '@ts-graphviz/react';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// #1742: <Subgraph>'s id picks its attributes, as for subgraph().
+// <Subgraph>'s id picks its attributes, as for subgraph().
 describe('<Subgraph> attributes by id', () => {
   it('takes cluster attributes and a React label on a cluster id', () => {
     <Subgraph id="cluster_a" pencolor="red" label="A" />;

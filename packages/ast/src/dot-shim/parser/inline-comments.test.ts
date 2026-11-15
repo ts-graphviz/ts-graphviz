@@ -11,7 +11,7 @@ import type {
 import { stringify } from '../printer/stringify.js';
 import { parse } from './parse.js';
 
-// Comments inside statements (#1710): Graphviz reads them as whitespace;
+// Comments inside statements: Graphviz reads them as whitespace;
 // the parser keeps them on the node next to them.
 const graphOf = (dot: string) => parse(dot).children[0] as GraphASTNode;
 const values = (comments: ASTNode['leadingComments']) =>

@@ -35,7 +35,7 @@ describe('Edge grouping feature', () => {
       expect((groupNode.children[0] as NodeASTNode).id.value).toBe('y');
     });
 
-    it('should write a group with a port as a comma list, which keeps ports (#1708)', () => {
+    it('should write a group with a port as a comma list, which keeps ports', () => {
       const ast = fromModel(
         digraph((g) => {
           g.edge(['x', ['y:p', 'z']]);

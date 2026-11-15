@@ -8,9 +8,9 @@
  * - `pnpm api:update` rewrites the reports; commit them with the change, so
  *   the diff of the public API is part of the review.
  *
- * The declarations are read with oxc-parser, without TypeScript (#1744):
- * API Extractor needs the compiler API that TypeScript 7 does not have
- * (#1721). A report lists every declaration reachable from the entry point,
+ * The declarations are read with oxc-parser, without TypeScript:
+ * API Extractor needs the compiler API that TypeScript 7 does not have.
+ * A report lists every declaration reachable from the entry point,
  * sorted by name, without comments; which chunk a declaration lives in and
  * the names the bundler gives chunks do not change it.
  */

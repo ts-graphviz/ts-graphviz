@@ -1,3 +1,4 @@
+import { withCode } from '@ts-graphviz/common';
 import type { ReactElement } from 'react';
 import type {
   AnyDotObjectModel,
@@ -226,7 +227,10 @@ export function createRoot<
   return {
     render(element: ReactElement): void {
       if (isUnmounted) {
-        throw new Error('Cannot render on an unmounted root');
+        throw withCode(
+          new Error('Cannot render on an unmounted root'),
+          'TSG_ERR_ROOT_UNMOUNTED',
+        );
       }
       if (!mount?.active) mount = open();
       failed = false;

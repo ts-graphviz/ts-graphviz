@@ -206,7 +206,7 @@ const STEP_KIND: Record<GraphOp['op'], string> = {
   subgraph: 'subgraph',
   edge: 'edge',
 };
-/** The place of each kind in the order statements had before #1732. */
+/** The place of each kind in the fixed order statements were once kept in. */
 const FIXED_RANK: Record<string, number> = {
   attribute: 0,
   defaults: 1,
@@ -433,7 +433,7 @@ describe('generator density', () => {
     });
   });
 
-  it('graphSpec builds graphs with statements in interleaved order (#1732)', () => {
+  it('graphSpec builds graphs with statements in interleaved order', () => {
     const shares = distribution(graphSpec, classifyOrder);
     expectMinimumShares(shares, {
       'ordered models': 0.4,

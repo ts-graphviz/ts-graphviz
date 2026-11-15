@@ -1,7 +1,7 @@
 import { fromDot, toDot } from 'ts-graphviz';
 import { describe, expect, it } from 'vitest';
 
-describe('attribute order through the model (#1626)', () => {
+describe('attribute order through the model', () => {
   it('keeps integer-like keys where the DOT source put them', () => {
     const source = [
       'graph {',
