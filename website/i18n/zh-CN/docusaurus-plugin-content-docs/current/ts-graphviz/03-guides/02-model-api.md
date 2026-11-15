@@ -11,17 +11,20 @@ description: 使用 DOT Object Model（DOM），把图当作数据来构建、�
 
 ## 构建图
 
-图通过 `createNode`、`createEdge` 和 `createSubgraph` 创建其内容，创建时使用该图的模型类（参见[模型套件](#模型套件)）：
+图保存添加到其中的内容。用模型的类或[模型套件](#模型套件)创建模型，再用 `addNode`、`addEdge` 和 `addSubgraph` 添加：
 
 ```typescript
-import { Digraph, toDot } from 'ts-graphviz';
+import { Digraph, Edge, Node, Subgraph, toDot } from 'ts-graphviz';
 
 const g = new Digraph('G', { rankdir: 'LR' });
-const a = g.createNode('a', { label: 'Start' });
-const b = g.createNode('b');
-g.createEdge([a, b], { color: 'red' });
-const s = g.createSubgraph('cluster_0', { label: 'Group' });
-s.createNode('c');
+const a = new Node('a', { label: 'Start' });
+const b = new Node('b');
+g.addNode(a);
+g.addNode(b);
+g.addEdge(new Edge([a, b], { color: 'red' }));
+const s = new Subgraph('cluster_0', { label: 'Group' });
+g.addSubgraph(s);
+s.addNode(new Node('c'));
 
 console.log(toDot(g));
 // digraph "G" {
@@ -118,12 +121,12 @@ console.log(g.statements.map((s) => s.$$type)); // ['Node', 'Edge']
 与 DOT 一样，默认属性语句只作用于它之后的内容（已弃用的 `legacyModels` 类则会把每一条都合并到开头的默认值中；参见[模型套件](#模型套件)）。`addAttributeList` 添加一条默认属性语句并返回它的列表；保留它，之后就可以修改这些默认值：
 
 ```typescript
-import { Digraph, toDot } from 'ts-graphviz';
+import { Digraph, Node, toDot } from 'ts-graphviz';
 
 const g = new Digraph();
-g.createNode('a');
+g.addNode(new Node('a'));
 const defaults = g.addAttributeList('Node', { shape: 'box' }); // 作用于之后的内容
-g.createNode('b');
+g.addNode(new Node('b'));
 defaults.setAttribute('color', 'red');
 
 console.log(toDot(g));
@@ -144,10 +147,11 @@ console.log(toDot(g));
 除注释外，每个模型都可以带注释：`addComment(text, { position, kind })` 添加一条注释并返回它，`comments` 列出所有注释，`removeComment(comment)` 移除其中一条。注释是冻结的 `CommentModel`，包含 `text`、`kind`（`'Slash'`、`'Block'`、`'Macro'`，或按 `fromModel` 的 `commentKind` 选项输出的 `undefined`）和 `position`（`'leading'`、`'trailing'`，在图或子图上还可以是 `'end'`）。
 
 ```typescript
-import { Digraph, toDot } from 'ts-graphviz';
+import { Digraph, Node, toDot } from 'ts-graphviz';
 
 const g = new Digraph('G');
-const a = g.createNode('a');
+const a = new Node('a');
+g.addNode(a);
 a.addComment('hello');
 console.log(a.comments.map((c) => [c.text, c.position])); // [['hello', 'leading']]
 
@@ -177,7 +181,7 @@ console.log(nodes.length); // 1
 
 ## 模型套件
 
-模型套件（model kit）是一组相互配合的模型类，以及用它们创建模型的操作。`createModelKit(classes)` 创建一个套件，`defaultModelKit` 是默认类的套件。`withModelKit(classes)` 返回用套件创建的工厂函数（`digraph`、`graph`、`strict.digraph`、`strict.graph`）；`graph.with(classes)` 设置图的类；`fromDot` 和 `fromDotAll` 通过 `convert.models` 接受这些类。未指定的类：对 `createModelKit`、`withModelKit` 和 `fromDot` 而言是默认类，对 `graph.with` 而言是该图当前使用的类。
+模型套件（model kit）是一组相互配合的模型类，以及用它们创建模型的操作。`createModelKit(classes)` 创建一个套件，`defaultModelKit` 是默认类的套件。`withModelKit(classes)` 返回用套件创建的工厂函数（`digraph`、`graph`、`strict.digraph`、`strict.graph`）；`fromDot` 和 `fromDotAll` 通过 `convert.models` 接受这些类。未指定的类使用默认类。图不持有套件：添加什么，它就保存什么。
 
 ```typescript
 import { Node, withModelKit } from 'ts-graphviz';
@@ -206,6 +210,6 @@ G.addNode(b);
 G.addEdge(kit.createEdge([a, b])); // 只添加边
 ```
 
-`legacyModels`（`LegacyGraph`、`LegacyDigraph`、`LegacySubgraph`）是 3.x 的类，会把所有默认属性语句合并为每个图一组默认值；`ts-graphviz/legacy` 的所有工厂函数都使用它们（参见 [DOT 的语句顺序](./01-dot-dsl.md#dot-的语句顺序)）。它们已弃用，将在 v5 中移除。
+`legacyModels`（`LegacyGraph`、`LegacyDigraph`、`LegacySubgraph`）是 3.x 的类，会把所有默认属性语句合并为每个图一组默认值；`ts-graphviz/legacy` 的所有工厂函数都使用它们（参见 [DOT 的语句顺序](./01-dot-dsl.md#dot-的语句顺序)）。要用它们手动构建图，请用 `createModelKit(legacyModels)` 创建，这样子图也是旧版的类。它们已弃用，将在 v5 中移除。
 
 自定义类、带类型的套件和类型扩展，请参阅[扩展 ts-graphviz](./05-extending-ts-graphviz.md)。

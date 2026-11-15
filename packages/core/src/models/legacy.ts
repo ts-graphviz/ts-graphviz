@@ -1,11 +1,5 @@
-import type {
-  AnyModelTypes,
-  ModelClasses,
-  ModelKit,
-  ModelTypes,
-} from '@ts-graphviz/common';
+import type { EmptySchema, ModelClasses, Schema } from '@ts-graphviz/common';
 import { Digraph } from './Digraph.js';
-import { lazyDefaultModelKit, modelKitOf } from './default-model-kit.js';
 import { Graph } from './Graph.js';
 import { Subgraph } from './Subgraph.js';
 
@@ -25,15 +19,10 @@ import { Subgraph } from './Subgraph.js';
  * @group Models
  */
 export class LegacySubgraph<
-  M extends AnyModelTypes = ModelTypes,
-> extends Subgraph<M> {
+  S extends Schema = EmptySchema,
+> extends Subgraph<S> {
   protected override get keepsDefaultsInPlace(): boolean {
     return false;
-  }
-
-  /** @hidden */
-  protected override defaultModels(): ModelClasses {
-    return legacyModelKit();
   }
 }
 
@@ -51,16 +40,9 @@ export class LegacySubgraph<
  * v5.
  * @group Models
  */
-export class LegacyGraph<
-  M extends AnyModelTypes = ModelTypes,
-> extends Graph<M> {
+export class LegacyGraph<S extends Schema = EmptySchema> extends Graph<S> {
   protected override get keepsDefaultsInPlace(): boolean {
     return false;
-  }
-
-  /** @hidden */
-  protected override defaultModels(): ModelClasses {
-    return legacyModelKit();
   }
 }
 
@@ -78,16 +60,9 @@ export class LegacyGraph<
  * v5.
  * @group Models
  */
-export class LegacyDigraph<
-  M extends AnyModelTypes = ModelTypes,
-> extends Digraph<M> {
+export class LegacyDigraph<S extends Schema = EmptySchema> extends Digraph<S> {
   protected override get keepsDefaultsInPlace(): boolean {
     return false;
-  }
-
-  /** @hidden */
-  protected override defaultModels(): ModelClasses {
-    return legacyModelKit();
   }
 }
 
@@ -115,10 +90,3 @@ export const legacyModels: Partial<ModelClasses> = Object.freeze({
   Digraph: LegacyDigraph,
   Subgraph: LegacySubgraph,
 });
-
-let legacy: ModelKit | undefined;
-
-function legacyModelKit(): ModelKit {
-  legacy ??= modelKitOf({ ...lazyDefaultModelKit(), ...legacyModels });
-  return legacy;
-}

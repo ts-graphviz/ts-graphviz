@@ -82,7 +82,7 @@ console.log(toDot(G));
 - **DOT Object Model（DOM）**：类（`Digraph`、`Node`、`Edge` 等）及其方法，适用于把图当作数据来构建、读取或转换的程序，以及定义自己的类。参见 [DOT Object Model（DOM）](../03-guides/02-model-api.md)。
 
 ```typescript
-import { digraph, modelOf, toDot } from 'ts-graphviz';
+import { digraph, modelOf, Node, toDot } from 'ts-graphviz';
 
 const G = digraph('G', (g) => {
   g.rankdir = 'LR'; // rankdir = "LR";
@@ -91,5 +91,5 @@ const G = digraph('G', (g) => {
 });
 
 toDot(G); // DSL 或其模型均可
-modelOf(G).createNode('C'); // DSL 背后的模型
+modelOf(G).addNode(new Node('C')); // DSL 背后的模型
 ```

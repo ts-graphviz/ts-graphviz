@@ -350,13 +350,13 @@ console.log(toDot(G));
 // }
 ```
 
-The model classes have `createNode`, `createEdge` and `createSubgraph`, and the `add…`, `get…` and `remove…` methods; the statement methods `node()`, `edge()` and `subgraph()` are on the DSL only. `dsl(model)` gives the DSL of a model:
+The model classes have the `add…`, `get…` and `remove…` methods; a model kit (`defaultModelKit`, `createModelKit`) creates models, and the statement methods `node()`, `edge()` and `subgraph()` are on the DSL only. `dsl(model)` gives the DSL of a model:
 
 ```ts
-import { Digraph, dsl, toDot } from 'ts-graphviz';
+import { Digraph, dsl, Node, toDot } from 'ts-graphviz';
 
 const G = new Digraph('G');
-G.createNode('a');
+G.addNode(new Node('a'));
 
 const g = dsl(G);
 g.edge(['a', 'b'], { color: 'red' });
@@ -435,16 +435,14 @@ console.log(toDot(digraph));
 // }
 ```
 
-##### Model classes of a graph ( `with` method) 🧅
+##### A kit of custom classes ( `createModelKit` ) 🧅
 
-You can also give a graph the classes to create custom classes for objects generated inside of Graph.
-
-The `with` methods of `Digraph`, `Graph`, and `Subgraph`, which are implementations of `GraphBaseModel`, are provided to predefine custom models.
+`createModelKit` makes a model kit that creates with your custom classes, and with the default ones for the rest.
 
 ```ts
 import {
   attribute as _,
-  Digraph,
+  createModelKit,
   Edge,
   type EdgeTargetTuple,
   Node,
@@ -467,14 +465,16 @@ class MyCustomEdge extends Edge {
   }
 }
 
-const g = new Digraph();
-g.with({
+const kit = createModelKit({
   Node: MyCustomNode,
   Edge: MyCustomEdge,
 });
-const a = g.createNode('A'); // MyCustomNode
-const b = g.createNode('B'); // MyCustomNode
-g.createEdge([a, b]); // MyCustomEdge
+const g = kit.createDigraph();
+const a = kit.createNode('A'); // MyCustomNode
+const b = kit.createNode('B'); // MyCustomNode
+g.addNode(a);
+g.addNode(b);
+g.addEdge(kit.createEdge([a, b])); // MyCustomEdge
 
 console.log(toDot(g));
 // digraph {

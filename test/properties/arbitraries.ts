@@ -5,11 +5,18 @@ import type {
   EdgeTargetLikeTuple,
   ForwardRefNode,
   GraphBaseModel,
-  RootGraphConstructor,
   RootGraphModel,
 } from '@ts-graphviz/common';
 import fc from 'fast-check';
-import { Digraph, Graph, LegacyDigraph, LegacyGraph } from 'ts-graphviz';
+import {
+  createModelKit,
+  defaultModelKit,
+  legacyModels,
+  type ModelKit,
+  Node,
+} from 'ts-graphviz';
+
+const legacyModelKit: ModelKit = createModelKit(legacyModels);
 
 /**
  * Strings that stress the DOT printer and parser: quotes, backslashes, DOT
@@ -436,7 +443,11 @@ function addDefaults(
 
 /** The node with this id (created if there is none), then the given attributes set on it. */
 function mentionNode(g: GraphBaseModel, id: string, attrs: Attributes): void {
-  const n = g.getNode(id) ?? g.createNode(id);
+  let n = g.getNode(id);
+  if (n === undefined) {
+    n = new Node(id);
+    g.addNode(n);
+  }
   for (const [key, value] of attrs) {
     n.attributes.set(key as 'label', value);
   }
@@ -447,6 +458,7 @@ function applyCommonOp(
   g: GraphBaseModel,
   spec: GraphSpec | SubgraphSpec,
   op: SubgraphOp,
+  kit: ModelKit,
 ): void {
   switch (op.op) {
     case 'attribute': {
@@ -467,18 +479,23 @@ function applyCommonOp(
       break;
     }
     case 'subgraph':
-      applySubgraph(g, spec.subgraphs[op.index]);
+      applySubgraph(g, spec.subgraphs[op.index], kit);
       break;
   }
 }
 
-function applySubgraph(parent: GraphBaseModel, spec: SubgraphSpec): void {
-  const s =
-    spec.id === undefined
-      ? parent.createSubgraph()
-      : (parent.getSubgraph(spec.id) ?? parent.createSubgraph(spec.id));
+function applySubgraph(
+  parent: GraphBaseModel,
+  spec: SubgraphSpec,
+  kit: ModelKit,
+): void {
+  let s = spec.id === undefined ? undefined : parent.getSubgraph(spec.id);
+  if (s === undefined) {
+    s = kit.createSubgraph(spec.id);
+    parent.addSubgraph(s);
+  }
   for (const op of spec.ops ?? fixedOps(spec)) {
-    applyCommonOp(s, spec, op);
+    applyCommonOp(s, spec, op, kit);
   }
 }
 
@@ -487,15 +504,11 @@ function applySubgraph(parent: GraphBaseModel, spec: SubgraphSpec): void {
  * taking its steps in order.
  */
 export function buildGraph(spec: GraphSpec): RootGraphModel {
-  // The classes are generic, so a union of them is not constructable.
-  const Class: RootGraphConstructor = spec.ordered
-    ? spec.directed
-      ? Digraph
-      : Graph
-    : spec.directed
-      ? LegacyDigraph
-      : LegacyGraph;
-  const g: RootGraphModel = new Class(spec.id, spec.strict);
+  // Legacy graphs hold legacy subgraphs.
+  const kit = spec.ordered ? defaultModelKit : legacyModelKit;
+  const g: RootGraphModel = spec.directed
+    ? kit.createDigraph(spec.id, spec.strict)
+    : kit.createGraph(spec.id, spec.strict);
   // A plain string target is split on `:` by the model API, so references are
   // passed as objects to keep ids that contain a colon intact.
   const ref = (t: NodeRefSpec): ForwardRefNode => ({
@@ -513,14 +526,17 @@ export function buildGraph(spec: GraphSpec): RootGraphModel {
         break;
       case 'edge': {
         const edge = spec.edges[op.index];
-        const e = g.createEdge(edge.targets.map(target) as EdgeTargetLikeTuple);
+        const e = kit.createEdge(
+          edge.targets.map(target) as EdgeTargetLikeTuple,
+        );
+        g.addEdge(e);
         for (const [key, value] of edge.attributes) {
           e.attributes.set(key as 'label', value);
         }
         break;
       }
       default:
-        applyCommonOp(g, spec, op);
+        applyCommonOp(g, spec, op, kit);
     }
   }
   return g;

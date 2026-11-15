@@ -2,6 +2,7 @@ import fc from 'fast-check';
 import { Fragment, type ReactNode, StrictMode } from 'react';
 import {
   Digraph as DigraphModel,
+  defaultModelKit,
   type RootGraphModel,
   type SubgraphModel,
   toDot,
@@ -171,17 +172,27 @@ function build(graph: RootGraphModel | SubgraphModel, list: Statement[]): void {
   for (const s of list) {
     switch (s.kind) {
       case 'node':
-        graph.createNode(s.id, s.color ? { color: s.color } : undefined);
-        break;
-      case 'edge':
-        graph.createEdge(
-          [s.from, s.to],
-          s.color ? { color: s.color } : undefined,
+        graph.addNode(
+          defaultModelKit.createNode(
+            s.id,
+            s.color ? { color: s.color } : undefined,
+          ),
         );
         break;
-      case 'subgraph':
-        build(graph.createSubgraph(s.id), s.body);
+      case 'edge':
+        graph.addEdge(
+          defaultModelKit.createEdge(
+            [s.from, s.to],
+            s.color ? { color: s.color } : undefined,
+          ),
+        );
         break;
+      case 'subgraph': {
+        const subgraph = defaultModelKit.createSubgraph(s.id);
+        graph.addSubgraph(subgraph);
+        build(subgraph, s.body);
+        break;
+      }
     }
   }
 }

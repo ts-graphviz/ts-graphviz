@@ -4,6 +4,7 @@ import {
   type CommentModel,
   Digraph,
   Dot,
+  defaultModelKit,
   Edge,
   fromDot,
   fromDotAll,
@@ -256,7 +257,9 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     );
     const s = new Subgraph('s');
     s.addComment('lead s');
-    s.createNode('x').addComment('lead x');
+    const x = new Node('x');
+    x.addComment('lead x');
+    s.addNode(x);
     expect(toDot(s)).toBe('// lead s\nsubgraph "s" {\n  // lead x\n  "x";\n}');
     const g = new Digraph('G');
     g.addComment('lead G');
@@ -267,10 +270,11 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
 
   test('a block comment after a multi-line trailing block comment on its last line trails the statement too', () => {
     const g = new Digraph();
-    const a = g.createNode('a');
+    const a = defaultModelKit.createNode('a');
+    g.addNode(a);
     a.addComment('x\ny', { position: 'trailing', kind: 'Block' });
     a.addComment('z', { position: 'trailing', kind: 'Block' });
-    g.createNode('b');
+    g.addNode(defaultModelKit.createNode('b'));
     const again = fromDot(toDot(g));
     expect(brief(again.getNode('a')?.comments ?? [])).toEqual([
       ['x\ny', 'Block', 'trailing'],
@@ -297,9 +301,11 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
 
   test('a multi-line trailing block comment keeps its text; trailing line comments of one kind read back as one', () => {
     const g = new Digraph();
-    const a = g.createNode('a');
+    const a = defaultModelKit.createNode('a');
+    g.addNode(a);
     a.addComment('one\ntwo', { position: 'trailing', kind: 'Block' });
-    const b = g.createNode('b');
+    const b = defaultModelKit.createNode('b');
+    g.addNode(b);
     b.addComment('x', { position: 'trailing', kind: 'Slash' });
     b.addComment('y', { position: 'trailing', kind: 'Slash' });
     const again = fromDot(toDot(g));
@@ -328,7 +334,9 @@ graph H { b }
 
   test('a comment without a kind is written as commentKind says', () => {
     const g = new Digraph();
-    g.createNode('a').addComment('note');
+    const a = new Node('a');
+    a.addComment('note');
+    g.addNode(a);
     expect(toDot(g)).toContain('// note');
     expect(toDot(g, { convert: { commentKind: 'Block' } })).toContain(
       ' * note',

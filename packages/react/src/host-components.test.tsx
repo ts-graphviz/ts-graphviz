@@ -14,13 +14,14 @@ import {
   Node as CoreNode,
   Subgraph as CoreSubgraph,
   Digraph as DigraphModel,
+  defaultModelKit,
   type EdgeModel,
   type NodeModel,
   type RootGraphModel,
   type SubgraphModel,
   toDot,
 } from 'ts-graphviz';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { Digraph } from './components/Digraph.js';
 import { Edge } from './components/Edge.js';
 import { GraphPortal } from './components/GraphPortal.js';
@@ -355,7 +356,7 @@ describe('host components', () => {
 
   it('keeps the statements a container already had, and replaces only its own', async () => {
     const container = new DigraphModel('C');
-    container.createNode('existing');
+    container.addNode(defaultModelKit.createNode('existing'));
     const root = createRoot({ container });
     await root.render(
       <>
@@ -372,7 +373,7 @@ describe('host components', () => {
 
   it('gives back a node the container had when one with its id is removed', async () => {
     const container = new DigraphModel('C');
-    container.createNode('a', { color: 'red' });
+    container.addNode(defaultModelKit.createNode('a', { color: 'red' }));
     const original = container.getNode('a');
     const root = createRoot({ container });
     await root.render(<Node id="a" color="blue" />);
@@ -384,8 +385,9 @@ describe('host components', () => {
 
   it('adds portal children to a subgraph the container had', async () => {
     const container = new DigraphModel('C');
-    const target = container.createSubgraph('cluster_t');
-    target.createNode('own');
+    const target = defaultModelKit.createSubgraph('cluster_t');
+    container.addSubgraph(target);
+    target.addNode(defaultModelKit.createNode('own'));
     const root = createRoot({ container });
     await root.render(
       <GraphPortal id="cluster_t">
@@ -458,17 +460,11 @@ describe('host components', () => {
     expect(first.getNode('a')).toBeDefined();
   });
 
-  it("makes the models with the root's kit, not the graph's create*", async () => {
+  it("makes the models with the root's kit", async () => {
     class MyNode extends CoreNode {}
     class MyEdge extends CoreEdge {}
     class MySubgraph extends CoreSubgraph {}
     const container = new DigraphModel('C');
-    const create = vi.fn(() => {
-      throw new Error('not called');
-    });
-    container.createNode = create;
-    container.createEdge = create;
-    container.createSubgraph = create;
     const root = createRoot({
       container,
       models: { Node: MyNode, Edge: MyEdge, Subgraph: MySubgraph },
@@ -479,7 +475,6 @@ describe('host components', () => {
         <Edge targets={['a', 'b']} />
       </Subgraph>,
     );
-    expect(create).not.toHaveBeenCalled();
     const [subgraph] = container.subgraphs;
     expect(subgraph).toBeInstanceOf(MySubgraph);
     expect(subgraph.nodes[0]).toBeInstanceOf(MyNode);
