@@ -46,7 +46,7 @@ describe('token boundaries', { tags: ['SM-1'] }, () => {
     });
 
     it('reads `a -> subgraph s { ... }` as an edge to a subgraph', () => {
-      // dot: subgraph s { b c }, a -> b, a -> c (#1708).
+      // dot: subgraph s { b c }, a -> b, a -> c.
       expect(reprint('digraph { a -> subgraph s { b c } }')).toBe(
         'digraph { a -> subgraph s { b; c; }; }',
       );

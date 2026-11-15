@@ -56,7 +56,7 @@ export const ERROR_CODES = [
   'TSG_ERR_UNCONVERTIBLE_AST',
   /** `fromDot` was given a DOT source without a graph (`Error`). */
   'TSG_ERR_NO_GRAPH',
-  /** `fromDot` was given a DOT source with more than one graph; read them with `fromDotAll` (`Error`). */
+  /** `fromDot` was given a DOT source with more than one graph (read them with `fromDotAll`) (`Error`). */
   'TSG_ERR_MULTIPLE_GRAPHS',
   /** `dsl` of `ts-graphviz` was given a value that is not a model (`TypeError`). */
   'TSG_ERR_NOT_A_MODEL',
@@ -74,6 +74,10 @@ export const ERROR_CODES = [
   'TSG_ERR_UNSAFE_DOT',
   /** An adapter option has the wrong type (`TypeError`), or a value outside the documented set or range (`RangeError`), e.g. an unknown `format`. */
   'TSG_ERR_INVALID_OPTION',
+  /** A React hook or a `Node` / `Edge` component was used outside a `Digraph`, `Graph` or `Subgraph` (`Error`). */
+  'TSG_ERR_NO_CURRENT_GRAPH',
+  /** A React root was rendered after `unmount()` (`Error`). */
+  'TSG_ERR_ROOT_UNMOUNTED',
 ] as const;
 // Shared by every module of the process: frozen, so no code can change what
 // isTsGraphvizError accepts.

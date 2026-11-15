@@ -1,5 +1,5 @@
 /**
- * Edge endpoints as Graphviz has them (#1708): node lists that keep ports,
+ * Edge endpoints as Graphviz has them: node lists that keep ports,
  * and subgraphs with any statements. Each source is converted to a model
  * and back, and Graphviz must read the result as the same graph as the
  * source (`dot -Tcanon`). Skipped when `dot` is not installed.

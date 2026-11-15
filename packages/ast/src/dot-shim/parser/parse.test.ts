@@ -326,7 +326,7 @@ describe('parse', () => {
         });
       });
 
-      test('an empty quoted compass point printed by dot -Tcanon parses (#1641)', () => {
+      test('an empty quoted compass point printed by dot -Tcanon parses', () => {
         expect(ref('a:"":""')).toMatchObject({
           port: { value: '', kind: 'quoted' },
           compass: { value: '', kind: 'quoted' },
@@ -502,7 +502,6 @@ describe('parse', () => {
       expect(result).toMatchSnapshot();
     });
 
-    // issue #1625
     test('block comments keep asterisks inside their text', () => {
       const [comment] = parse(
         `/**

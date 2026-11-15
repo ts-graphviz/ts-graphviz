@@ -31,7 +31,9 @@ describe('checkReferences', { tags: ['SM-2'] }, () => {
     );
   });
 
-  it('stops at the first value in a list that is not a node', () => {
+  it('stops at the first value in a list that is not a node', {
+    tags: ['timing'],
+  }, () => {
     // A sparse list of a billion would take seconds to walk; the
     // conversion fails at its first hole anyway.
     const children: unknown[] = [];

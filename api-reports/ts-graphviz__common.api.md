@@ -699,6 +699,8 @@ export declare namespace ClusterSubgraphAttributeKey {
 
 export type ClusterSubgraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<ClusterSubgraphAttributeKey, SchemaAttributeTypes<S, "cluster">>;
 
+export type ClusterSubgraphId = `${"c" | "C"}${"l" | "L"}${"u" | "U"}${"s" | "S"}${"t" | "T"}${"e" | "E"}${"r" | "R"}${string}`;
+
 export interface CodedError<C extends ErrorCode = ErrorCode> extends Error {
   readonly code: C;
 }
@@ -767,7 +769,7 @@ export type Double = number;
 
 export type DoubleList = Double | `${Double}:${Double}` | `${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
 
-export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_INVALID_COMMENT", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_NOT_A_MODEL_KIT", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION"];
+export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_INVALID_COMMENT", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_NOT_A_MODEL_KIT", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION", "TSG_ERR_NO_CURRENT_GRAPH", "TSG_ERR_ROOT_UNMOUNTED"];
 
 export type EdgeAttributeKey = EdgeAttributeKey.values;
 export declare namespace EdgeAttributeKey {
@@ -1309,7 +1311,7 @@ export type SubgraphAttributesFor<Id extends string | undefined, S extends Schem
 export type SubgraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey, SubgraphSchemaAttributeTypes<S>>;
 
 export interface SubgraphConstructor<G extends ReadonlySubgraphModel = SubgraphModel, S extends Schema = EmptySchema> {
-  new (id: `cluster${string}` | `Cluster${string}` | `CLUSTER${string}`, attributes?: ClusterSubgraphAttributesObject<S>): G;
+  new (id: ClusterSubgraphId, attributes?: ClusterSubgraphAttributesObject<S>): G;
   new (id?: string, attributes?: NonClusterSubgraphAttributesObject<S>): G;
   new (attributes?: NonClusterSubgraphAttributesObject<S>): G;
 }

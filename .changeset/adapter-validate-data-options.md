@@ -13,7 +13,7 @@ TypeScript types do not hold at run time, and options such as `format` are often
 - `sanitize` must be a boolean or an options object; in it, `policy` must be `'default'` or `'strict'` and the parser limits non-negative numbers, finite for the depth limits.
 - `dotCommand` and `library` choose code to run, so they stay trusted configuration: they are checked only to be a non-empty string and an array of strings, so a value of another type (such as a `URL`) is rejected instead of being converted. (On Windows, a `.bat` or `.cmd` `dotCommand` is also rejected; see its own note.)
 
-`maxOutputSize` has its own check (`RangeError`, `TSG_ERR_OUTPUT_LIMIT_EXCEEDED`).
+`maxOutputSize` is checked the same way (`RangeError`, `TSG_ERR_INVALID_OPTION`).
 
 New `isFormat(value)` and `isLayout(value)` type guards tell whether a value is one of the names the adapter accepts, to check a format or layout chosen by a request before rendering; the lists themselves are not exported.
 

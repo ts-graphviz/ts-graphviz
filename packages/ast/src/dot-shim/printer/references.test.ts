@@ -117,7 +117,9 @@ describe('printing an AST whose nodes come from Object.prototype', {
 });
 
 describe('printing an AST that shares nodes', { tags: ['SM-2'] }, () => {
-  it('stops a node shared at every level from printing 2^k times', () => {
+  it('stops a node shared at every level from printing 2^k times', {
+    tags: ['timing'],
+  }, () => {
     // k = 20 printed 140 MB in 4 s before; k = 40 would never finish.
     const start = performance.now();
     const error = thrown(() => stringify(graph(doubling(40))));

@@ -3,6 +3,7 @@
 "@ts-graphviz/core": major
 "@ts-graphviz/ast": major
 "@ts-graphviz/adapter": major
+"@ts-graphviz/react": minor
 "ts-graphviz": major
 ---
 
@@ -32,6 +33,8 @@ Every error ts-graphviz raises on purpose is the standard error type that fits t
 | Graphviz output exceeds `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
 | an adapter option outside its type or range | `TypeError` / `RangeError` | `TSG_ERR_INVALID_OPTION` |
 | `sanitize` rejects the DOT | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
+| `useCurrentGraph()`, `<Node>` or `<Edge>` of `@ts-graphviz/react` outside a `Digraph`, `Graph` or `Subgraph` | `Error` | `TSG_ERR_NO_CURRENT_GRAPH` |
+| a React root rendered after `unmount()` | `Error` | `TSG_ERR_ROOT_UNMOUNTED` |
 
 - `isTsGraphvizError(e)` tells whether a value is one of these errors. It judges by shape (an error whose own `code` is in `ERROR_CODES`), so it works across realms and package copies. Compare `e.code` to narrow further.
 - `withCode(error, code)` tags your own errors the same way; it defines `code` as an own property, so it also tags errors whose prototype has a `code` getter (such as `DOMException`).
@@ -39,4 +42,4 @@ Every error ts-graphviz raises on purpose is the standard error type that fits t
 - `DotSyntaxError` has a `location` (`{ start, end }`; `undefined` for an input over `maxInputSize` or `maxASTNodes`) and a `limit`: the parse option whose limit the source exceeded (`'maxInputSize'`, `'maxASTNodes'`, `'maxNestingDepth'`, `'maxHtmlNestingDepth'` or `'maxEdgeChainDepth'`; type `DotSyntaxLimit`), or `undefined` for any other syntax error, so a source that is too large or too deep can be told from one that does not parse without reading the message. This holds for `parse`, `parseFragment`, `fromDot`, `sanitize` and the adapter's check. Its `code`, `location` and `limit` are the contract; the message text and `cause` (the parser's internal error) may change in any release.
 - The classes that remain (`DotSyntaxError`, `ASTNodeCountExceededError`, `CommandExecutionError`) set `name` to a literal string.
 
-Compared with 3.x: errors had no `code`; `ASTNodeCountExceededError` extended `Error` and is now a `RangeError`; edge-target errors were a bare `Error` and are now `TypeError`; the browser adapter and the converters threw bare `Error`s; on Node.js, a failed Graphviz command rejected with a bare `Error` (see the process controls note for Deno).
+Compared with 3.x: errors had no `code`; `ASTNodeCountExceededError` extended `Error` and is now a `RangeError`; edge-target errors were a bare `Error` and are now `TypeError`; the browser adapter and the converters threw bare `Error`s; `<Edge>` of `@ts-graphviz/react` with fewer than two targets threw a bare `Error` and now throws the same `TypeError`; on Node.js, a failed Graphviz command rejected with a bare `Error` (see the process controls note for Deno).

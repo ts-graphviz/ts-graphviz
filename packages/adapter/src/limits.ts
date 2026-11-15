@@ -64,7 +64,7 @@ export function outputLimit(options: { maxOutputSize?: number }): number {
       new RangeError(
         `maxOutputSize must be a non-negative finite number: ${limit}`,
       ),
-      'TSG_ERR_OUTPUT_LIMIT_EXCEEDED',
+      'TSG_ERR_INVALID_OPTION',
     );
   }
   return limit;

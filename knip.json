@@ -5,6 +5,7 @@
       "entry": [
         "media/*.tsx",
         "scripts/*.ts",
+        "vitest.mutation.config.ts",
         "test/consumer/*.{ts,tsx,cts}",
         "fuzz/targets/*.fuzz.ts"
       ],

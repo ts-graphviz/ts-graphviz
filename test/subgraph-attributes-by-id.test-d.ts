@@ -1,6 +1,7 @@
 import {
   attribute as _,
   type ClusterSubgraphAttributesObject,
+  type ClusterSubgraphId,
   type DSL,
   defaultModelKit,
   digraph,
@@ -8,11 +9,12 @@ import {
   Subgraph,
   type SubgraphAttributesFor,
   type SubgraphAttributesObject,
+  type SubgraphConstructor,
   type SubgraphModel,
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
-// #1742: Graphviz draws a subgraph as a cluster when its id starts with
+// Graphviz draws a subgraph as a cluster when its id starts with
 // "cluster" (or it has cluster=true), and ignores attributes that do not apply.
 describe('subgraph attributes by id', () => {
   const g = digraph('G');
@@ -124,6 +126,20 @@ describe('subgraph attributes by id', () => {
       new Subgraph('cluster_a', { pencolor: 'red', label: 'A' });
       new Subgraph('Cluster_b', { pencolor: 'red' });
       new Subgraph('CLUSTER_c', { bgcolor: 'lightgrey' });
+      // Any case, as Graphviz compares the prefix.
+      new Subgraph('ClUsTeR_d', { pencolor: 'red' });
+      expectTypeOf<'cLUSTEr'>().toExtend<ClusterSubgraphId>();
+      expectTypeOf<'clustr_a'>().not.toExtend<ClusterSubgraphId>();
+      expectTypeOf<'_cluster'>().not.toExtend<ClusterSubgraphId>();
+      expectTypeOf<'cluste'>().not.toExtend<ClusterSubgraphId>();
+      expectTypeOf<string>().not.toExtend<ClusterSubgraphId>();
+    });
+
+    it('is what SubgraphConstructor takes, which a custom class fits', () => {
+      const C: SubgraphConstructor = Subgraph;
+      new C('ClUsTeR_d', { pencolor: 'red' });
+      // @ts-expect-error pencolor applies to clusters
+      new C('row', { pencolor: 'red' });
     });
 
     it('takes subgraph attributes on any other id, or none', () => {

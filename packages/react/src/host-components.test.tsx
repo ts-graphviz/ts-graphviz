@@ -504,8 +504,42 @@ describe('host components', () => {
           <Node id="a" />
         </GraphPortal>,
       ),
-    ).rejects.toThrow(
-      /<Node> must be rendered inside a Digraph, Graph or Subgraph/,
+    ).rejects.toMatchObject({
+      code: 'TSG_ERR_NO_CURRENT_GRAPH',
+      message: expect.stringMatching(
+        /<Node> must be rendered inside a Digraph, Graph or Subgraph/,
+      ),
+    });
+  });
+
+  it('rejects useCurrentGraph outside any graph with a code', async () => {
+    const Outside = () => {
+      useCurrentGraph();
+      return null;
+    };
+    await expect(elementToDot(<Outside />)).rejects.toMatchObject({
+      code: 'TSG_ERR_NO_CURRENT_GRAPH',
+    });
+  });
+
+  it('rejects an edge with fewer than two targets with a code', async () => {
+    await expect(
+      elementToDot(
+        <Digraph>
+          <Edge targets={['a'] as unknown as ['a', 'b']} />
+        </Digraph>,
+      ),
+    ).rejects.toMatchObject({
+      name: 'TypeError',
+      code: 'TSG_ERR_INVALID_EDGE_TARGETS',
+    });
+  });
+
+  it('throws on a render on an unmounted root, with a code', () => {
+    const root = createRoot();
+    root.unmount();
+    expect(() => root.render(<Digraph />)).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_ROOT_UNMOUNTED' }),
     );
   });
 
