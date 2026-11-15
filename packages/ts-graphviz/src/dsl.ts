@@ -34,6 +34,7 @@ import {
   withCode,
 } from '@ts-graphviz/common';
 import { defaultModelKit } from '@ts-graphviz/core';
+import { isLegacyKit } from './legacy-kit.js';
 
 /**
  * The DOT DSL of a model: the model seen as DOT, with only DOT's words.
@@ -780,37 +781,12 @@ const isFunction = (
 /**
  * The DOT statements: the kit creates and the graph adds, so they follow
  * the kit's classes (and keep default attribute statements in their place
- * where the graph's class does).
+ * where the graph's class does). With a kit of `ts-graphviz/legacy`,
+ * `node(id)` and `subgraph(id)` give the first one with the id, as 3.x did.
  */
-/**
- * A graph of the deprecated `legacyModels`, which holds one node per id, as
- * 3.x did: `node(id)` and `subgraph(id)` give the one it has.
- */
-interface LegacyGraph {
-  getNode(id: string): NodeModel | undefined;
-  getSubgraph(id: string): SubgraphModel | undefined;
-}
-
-function asLegacy(g: GraphBaseModel): LegacyGraph | undefined {
-  // What the classes of GraphBase say (a protected member): not a method
-  // name, which a class of one's own may have, nor anything inherited from
-  // Object.prototype.
-  for (
-    let o: object | null = g;
-    o !== null && o !== Object.prototype;
-    o = Object.getPrototypeOf(o)
-  ) {
-    if (Object.getOwnPropertyDescriptor(o, 'keepsEachNodeDeclaration')) {
-      return Reflect.get(g, 'keepsEachNodeDeclaration') === false
-        ? (g as GraphBaseModel & LegacyGraph)
-        : undefined;
-    }
-  }
-  return undefined;
-}
-
 function createStatements(g: GraphBaseModel, kit: ModelKit) {
   const viewOf = (model: AnyDotObjectModel) => viewWith(model, kit);
+  const legacy = isLegacyKit(kit);
   return {
     node(first: unknown, ...rest: unknown[]): unknown {
       if (typeof first === 'string') {
@@ -818,8 +794,8 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
           | NodeAttributesObject
           | undefined;
         // Another declaration of the id, where it is written; a legacy
-        // graph, which holds one node per id, gives the one it has.
-        let node = asLegacy(g)?.getNode(first);
+        // kit gives the first one.
+        let node = legacy ? g.getNodes(first)[0] : undefined;
         if (node === undefined) {
           // The attributes go to the constructor, so a custom class sees
           // them where it is created.
@@ -866,7 +842,7 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
         | SubgraphAttributesObject
         | undefined;
       let subgraph =
-        id !== undefined ? asLegacy(g)?.getSubgraph(id) : undefined;
+        legacy && id !== undefined ? g.getSubgraphs(id)[0] : undefined;
       if (subgraph === undefined) {
         // The constructor gets the id and the attributes in the shape the
         // statement has them. The statement was checked against its id

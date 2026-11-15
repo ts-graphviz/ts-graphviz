@@ -140,10 +140,13 @@ export class LegacyDigraph<S extends Schema = EmptySchema> extends Digraph<S> {
  * `node [...]`, `edge [...]` and `graph [...]` is merged into the graph's
  * one set of defaults, written first, so
  * `node [color=red]; a; node [color=blue]; b` makes both nodes blue; and
- * one node per id, so a node declared again adds to the first. Pass
- * them where models can be chosen, e.g.
- * `fromDot(dot, { convert: { models: legacyModels } })`, or import from
- * `ts-graphviz/legacy`.
+ * one node per id, so a node added with the id of another takes its place.
+ * Import from `ts-graphviz/legacy`, whose `fromDot` and DSL also add a node
+ * or a subgraph declared again to the first one, as 3.x did. Passed where
+ * models can be chosen in `ts-graphviz` itself, e.g.
+ * `fromDot(dot, { convert: { models: legacyModels } })`, they merge the
+ * default attribute statements, but a node declared again replaces the
+ * first.
  *
  * @deprecated v4's classes keep a default attribute statement in its place,
  * as in DOT. For node and edge defaults of a whole graph or subgraph, add

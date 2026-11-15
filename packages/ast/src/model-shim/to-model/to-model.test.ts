@@ -2,6 +2,8 @@ import { htmlLike } from '@ts-graphviz/common';
 import { defaultModelKit } from '@ts-graphviz/core';
 import { describe, expect, test } from 'vitest';
 import { createElement } from '../../builder/create-element.js';
+import { parse } from '../../dot-shim/parser/parse.js';
+import { legacyToModel } from './legacy-to-model.js';
 import { toModel } from './to-model.js';
 
 test('empty Dot converts to a Dot model without graphs', () => {
@@ -109,5 +111,29 @@ describe('HTML Lavel', () => {
 
     const model = toModel(ast, { models: defaultModelKit });
     expect(model.attributes.get('label')).toStrictEqual(htmlLike('A'));
+  });
+});
+
+describe('legacyToModel', () => {
+  const source = parse(
+    'digraph { a [color=red]; a [shape=box]; subgraph s { b } subgraph s { c } }',
+    { as: 'Graph' },
+  );
+
+  test('adds a node or a subgraph declared again to the first one', () => {
+    const G = legacyToModel(source, { models: defaultModelKit });
+    expect(G.nodes).toHaveLength(1);
+    expect(G.nodes[0]?.attributes.values).toEqual([
+      ['color', 'red'],
+      ['shape', 'box'],
+    ]);
+    expect(G.subgraphs).toHaveLength(1);
+    expect(G.subgraphs[0]?.nodes.map((n) => n.id)).toEqual(['b', 'c']);
+  });
+
+  test('toModel keeps each declaration', () => {
+    const G = toModel(source, { models: defaultModelKit });
+    expect(G.nodes).toHaveLength(2);
+    expect(G.subgraphs).toHaveLength(2);
   });
 });

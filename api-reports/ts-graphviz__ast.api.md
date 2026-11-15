@@ -313,6 +313,8 @@ export declare function createElementFactory(options?: Partial<Pick<BuilderOptio
 
 export declare function fromModel<T extends AnyReadonlyDotObjectModel | ModelView>(model: T, options?: ConvertFromModelOptions): ModelToAST<ModelOf<T>>;
 
+export declare function legacyToModel<T extends ToModelConvertableASTNode>(ast: T, options: ConvertToModelOptions): ASTToModel<T>;
+
 export declare function parse<const R extends Rule>(input: string, options: CommonParseOptions & {
   startRule: R;
   as?: undefined;

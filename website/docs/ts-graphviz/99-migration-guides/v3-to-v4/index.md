@@ -367,6 +367,7 @@ In DOT, `a [color=red]; b; a [shape=box]` declares `a` twice, and Graphviz appli
 
 - `toDot(fromDot(source))` writes each declaration back where it was, so it renders as the source does.
 - With `@ts-graphviz/react`, each `<Node>` is a declaration of its own, also when two elements, or two roots on one container, have one id.
-- The legacy models (`legacyModels`, `ts-graphviz/legacy`) keep one node per id, with `getNode` and `getSubgraph`, deprecated.
+- The legacy models (`legacyModels`) keep one node per id, with `getNode` and `getSubgraph`, deprecated: a node added with the id of another takes its place. `fromDot` and the DSL of `ts-graphviz/legacy` add a node or a subgraph declared again to the first one, as 3.x did; with `legacyModels` given to `fromDot` of `ts-graphviz`, a node declared again replaces the first.
+- Render with `@ts-graphviz/react` into graphs of v4's classes: in a graph of `legacyModels`, a rendered node takes the place of the graph's node with its id, which does not come back when the rendered one goes.
 
 See the [Security model](../../11-advanced-topics/06-security-model.md) for what the library guarantees at each trust boundary in v4.

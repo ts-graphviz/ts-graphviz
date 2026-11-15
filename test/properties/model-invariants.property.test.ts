@@ -9,7 +9,6 @@ import {
   Edge,
   Graph,
   graph,
-  LegacyDigraph,
   modelOf,
   Node,
   type NodeModel,
@@ -21,6 +20,7 @@ import {
   toNodeRef,
   withModelKit,
 } from 'ts-graphviz';
+import { digraph as legacyDigraph } from 'ts-graphviz/legacy';
 import { describe, expect, it } from 'vitest';
 import { dotString } from './arbitraries.js';
 
@@ -270,7 +270,7 @@ describe('graph contents', { tags: ['SM-5'] }, () => {
         const third = modelOf(g.node(id));
         expect(modelOf(g).nodes).toStrictEqual([first, second, third]);
 
-        const legacy = dsl(new LegacyDigraph());
+        const legacy = legacyDigraph();
         const kept = modelOf(legacy.node(id));
         const replacement = new Node(id);
         modelOf(legacy).addNode(replacement);

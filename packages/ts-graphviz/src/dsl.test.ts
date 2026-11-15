@@ -33,6 +33,7 @@ import {
 } from '@ts-graphviz/core';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { dsl } from './dsl.js';
+import { digraph as legacyDigraph } from './legacy.js';
 import { digraph } from './model-factory.js';
 import { toDot } from './to-dot.js';
 
@@ -126,14 +127,23 @@ describe('DOT statements', () => {
       expect(modelOf(finder.subgraph('s'))).toBeInstanceOf(Subgraph);
     });
 
-    test('gives the node there is in a legacy graph, with the attributes applied', () => {
+    test('gives the node there is with a kit of ts-graphviz/legacy, with the attributes applied', () => {
+      const legacy = legacyDigraph();
+      const created = legacy.node('foo');
+      const node = legacy.node('foo', { label: 'L' });
+      expect(modelOf(node)).toBe(modelOf(created));
+      expect(modelOf(legacy).nodes).toEqual([modelOf(created)]);
+      expect(node.label).toBe('L');
+    });
+
+    test('declares the node again in a legacy graph with another kit, which replaces it', () => {
       const legacy = dsl(new LegacyDigraph());
       const created = legacy.node('foo');
       const kit = spyKit();
       const node = dsl(modelOf(legacy), kit).node('foo', { label: 'L' });
-      expect(kit.createNode).not.toHaveBeenCalled();
-      expect(modelOf(node)).toBe(modelOf(created));
-      expect(node.label).toBe('L');
+      expect(kit.createNode).toHaveBeenCalledOnce();
+      expect(modelOf(legacy).nodes).toEqual([modelOf(node)]);
+      expect(modelOf(node)).not.toBe(modelOf(created));
     });
 
     test('calls the callback with the node and the kit', () => {
@@ -231,15 +241,12 @@ describe('DOT statements', () => {
       expect(subgraph.label).toBe('Test label');
     });
 
-    test('gives the subgraph there is in a legacy graph', () => {
-      const legacy = dsl(new LegacyDigraph());
+    test('gives the subgraph there is with a kit of ts-graphviz/legacy', () => {
+      const legacy = legacyDigraph();
       const created = legacy.subgraph('cluster_foo');
-      const kit = spyKit();
-      const subgraph = dsl(modelOf(legacy), kit).subgraph('cluster_foo', {
-        label: 'L',
-      });
-      expect(kit.createSubgraph).not.toHaveBeenCalled();
+      const subgraph = legacy.subgraph('cluster_foo', { label: 'L' });
       expect(modelOf(subgraph)).toBe(modelOf(created));
+      expect(modelOf(legacy).subgraphs).toEqual([modelOf(created)]);
       expect(subgraph.label).toBe('L');
     });
 

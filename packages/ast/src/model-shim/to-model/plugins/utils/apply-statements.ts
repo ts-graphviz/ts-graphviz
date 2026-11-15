@@ -3,10 +3,9 @@ import type {
   AttributeValue,
   EdgeModel,
   GraphBaseModel,
-  NodeModel,
   SubgraphModel,
 } from '@ts-graphviz/common';
-import { hasField, ownField } from '../../../../own-field.js';
+import { ownField } from '../../../../own-field.js';
 import type {
   AttributeASTNode,
   ClusterStatementASTNode,
@@ -76,25 +75,6 @@ function declare(
 }
 
 /**
- * A graph of the deprecated `legacyModels`, which holds one node per id, as
- * 3.x did: a node or a subgraph declared again adds to the first one.
- */
-interface LegacyGraph {
-  getNode(id: string): NodeModel | undefined;
-  getSubgraph(id: string): SubgraphModel | undefined;
-}
-
-function asLegacy(graph: GraphBaseModel): LegacyGraph | undefined {
-  // What the classes of GraphBase say (a protected member): not a method
-  // name, which a class of one's own may have, nor anything inherited from
-  // Object.prototype.
-  return hasField(graph, 'keepsEachNodeDeclaration') &&
-    Reflect.get(graph, 'keepsEachNodeDeclaration') === false
-    ? (graph as GraphBaseModel & LegacyGraph)
-    : undefined;
-}
-
-/**
  * The ids of each subgraph statement, collected once per conversion: the
  * subgraphs nested in one are applied (and collected) before it, so each
  * level reuses the ids of the levels below instead of walking them again.
@@ -127,13 +107,14 @@ function applySubgraph(
   context: ConvertToModelContext,
   graph: GraphBaseModel,
   stmt: SubgraphASTNode,
+  legacy: boolean,
 ): SubgraphModel {
   const id = ownField(stmt, 'id');
   const name = id ? idFromLiteral(id) : undefined;
-  // Each declaration is a subgraph of its own, where it is written; a
-  // legacy graph adds to the subgraph it has with the id.
+  // Each declaration is a subgraph of its own, where it is written; the
+  // legacy conversion adds to the first subgraph with the id.
   let subgraph =
-    name !== undefined ? asLegacy(graph)?.getSubgraph(name) : undefined;
+    legacy && name !== undefined ? graph.getSubgraphs(name)[0] : undefined;
   if (subgraph === undefined) {
     subgraph = context.models.createSubgraph(name);
     graph.addSubgraph(subgraph);
@@ -141,7 +122,7 @@ function applySubgraph(
   // Before its statements, whose subgraphs are known through it.
   declaredOf(context, graph);
   declare(context, graph, subgraph);
-  applyStatements(context, subgraph, stmt.children);
+  applyStatements(context, subgraph, stmt.children, legacy);
   const { nodes } = declaredOf(context, subgraph);
   for (const id of nodeIdsOf(stmt, idCacheOf(context))) nodes.add(id);
   return subgraph;
@@ -153,17 +134,21 @@ function applySubgraph(
  * Iterates over each statement and updates the graph model accordingly, handling subgraphs, attributes, nodes, edges, attribute lists, and comments. Comments are managed and associated with relevant graph elements as statements are processed.
  *
  * @param statements - The array of AST nodes representing graph statements to apply.
+ * @param legacy - Whether a node or a subgraph declared again adds to the
+ * first one with its id, as 3.x did (the deprecated legacy plugins), instead
+ * of being a declaration of its own.
  */
 export function applyStatements(
   context: ConvertToModelContext,
   graph: GraphBaseModel,
   statements: ClusterStatementASTNode[],
+  legacy = false,
 ): void {
   const comments = new BodyComments();
   for (const stmt of statements) {
     switch (stmt.type) {
       case 'Subgraph': {
-        const subgraph = applySubgraph(context, graph, stmt);
+        const subgraph = applySubgraph(context, graph, stmt, legacy);
         comments.statement(subgraph, stmt);
         break;
       }
@@ -179,11 +164,11 @@ export function applyStatements(
         // plugin changes nodes applies to every mention.
         const node = context.convert(stmt);
         // Each declaration is a node of its own, where it is written, and
-        // Graphviz applies their attributes in turn. A legacy graph adds a
-        // node mentioned again to the one it has (`a [color=red]; a
+        // Graphviz applies their attributes in turn. The legacy conversion
+        // adds a node mentioned again to the first one (`a [color=red]; a
         // [shape=box]` is one node with both), through its setAttribute, so
         // a setAttribute that changes values runs on them again.
-        const existing = asLegacy(graph)?.getNode(node.id);
+        const existing = legacy ? graph.getNodes(node.id)[0] : undefined;
         if (existing) {
           for (const name of node.getAttributeNames()) {
             existing.setAttribute(name, node.getAttribute(name) as never);
@@ -206,7 +191,7 @@ export function applyStatements(
           // at both ends counts its nodes from both.
           const subgraphs = stmt.targets.map((t) =>
             t.type === 'Subgraph' && !isNodeGroup(t)
-              ? applySubgraph(context, graph, t)
+              ? applySubgraph(context, graph, t, legacy)
               : undefined,
           );
           edge = convertEdge(context, stmt, (i) => {

@@ -9,6 +9,7 @@ import {
 import { describe, expect, test } from 'vitest';
 import * as legacy from './legacy.js';
 import * as main from './ts-graphviz.js';
+import type { ModelFactory } from './types.js';
 
 const source = 'digraph { node [color=red]; a; node [color=blue]; b; }';
 
@@ -60,6 +61,41 @@ describe('the factories', () => {
     expect(
       modelOf(legacy.withModelKit({ Digraph: undefined }).digraph()),
     ).toBeInstanceOf(LegacyDigraph);
+  });
+});
+
+describe('a node or a subgraph declared again', () => {
+  test('is added to the first one by the factories, in subgraphs too', () => {
+    const factories: ModelFactory[] = [
+      legacy.withModelKit({ Node: class extends Node {} }).digraph,
+      legacy.strict.graph,
+    ];
+    for (const factory of factories) {
+      const G = factory();
+      const s = G.subgraph('s');
+      const a = s.node('a', { color: 'red' });
+      s.node('a', { shape: 'box' });
+      expect(G.subgraph('s')).toBe(s);
+      expect(modelOf(G).subgraphs).toHaveLength(1);
+      expect(modelOf(s).nodes).toEqual([modelOf(a)]);
+      expect(modelOf(a).attributes.values).toEqual([
+        ['color', 'red'],
+        ['shape', 'box'],
+      ]);
+    }
+  });
+
+  test('is added to the first one by fromDotAll, with dsl: true too', () => {
+    const dot = 'digraph { a [color=red]; a [shape=box] } graph { b; b }';
+    for (const dsl of [false, true]) {
+      const [G, H] = legacy.fromDotAll(dot, { dsl }).map((g) => modelOf(g));
+      expect(G?.nodes).toHaveLength(1);
+      expect(G?.nodes[0]?.attributes.values).toEqual([
+        ['color', 'red'],
+        ['shape', 'box'],
+      ]);
+      expect(H?.nodes).toHaveLength(1);
+    }
   });
 });
 
