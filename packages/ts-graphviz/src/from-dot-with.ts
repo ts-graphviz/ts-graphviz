@@ -6,7 +6,7 @@ import {
   type ToModelConvertableASTNode,
   toModel,
 } from '@ts-graphviz/ast';
-import { legacyToModel } from '@ts-graphviz/ast/legacy';
+import * as legacy from '@ts-graphviz/ast/legacy';
 import {
   type EdgeModel,
   isDotModel,
@@ -36,7 +36,7 @@ function convert<T extends ToModelConvertableASTNode>(
 ): ASTToModel<T> {
   const convertOptions = { ...ownOptions(options), models: kit };
   return isLegacyKit(kit)
-    ? legacyToModel(ast, convertOptions)
+    ? legacy.toModel(ast, convertOptions)
     : toModel(ast, convertOptions);
 }
 

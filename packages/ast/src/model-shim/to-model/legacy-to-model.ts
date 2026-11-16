@@ -10,7 +10,7 @@ import type {
   ToModelConvertableASTNode,
 } from './types.js';
 
-/** The plugins of {@link toModel}, with those of graphs as 3.x had them. */
+/** The plugins of `toModel`, with those of graphs as 3.x had them. */
 class LegacyToModelConverter extends ToModelConverter {
   protected override plugins = [
     NodePlugin,
@@ -22,15 +22,15 @@ class LegacyToModelConverter extends ToModelConverter {
 }
 
 /**
- * {@link toModel} as 3.x converted: a node or a subgraph declared again adds
+ * `toModel` of `@ts-graphviz/ast` as 3.x converted: a node or a subgraph declared again adds
  * to the first one with its id (`a [color=red]; a [shape=box]` is one node
  * with both), instead of being a declaration of its own.
  *
  * @deprecated For the 3.x models of `ts-graphviz/legacy`, which use it. In
- * DOT each declaration is one of its own; use {@link toModel}. Removed in v5.
+ * DOT each declaration is one of its own; use `toModel` of `@ts-graphviz/ast`. Removed in v5.
  * @group Convert AST to Model
  */
-export function legacyToModel<T extends ToModelConvertableASTNode>(
+export function toModel<T extends ToModelConvertableASTNode>(
   ast: T,
   options: ConvertToModelOptions,
 ): ASTToModel<T> {

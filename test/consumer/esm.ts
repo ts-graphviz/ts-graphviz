@@ -3,7 +3,7 @@
 // entry point and uses representative API through the declarations.
 import * as adapter from '@ts-graphviz/adapter';
 import * as astPackage from '@ts-graphviz/ast';
-import { legacyToModel } from '@ts-graphviz/ast/legacy';
+import * as astLegacy from '@ts-graphviz/ast/legacy';
 import {
   htmlLike,
   isTsGraphvizError,
@@ -105,9 +105,12 @@ assertType<Equal<typeof nodeAST, NodeASTNode>>();
 parse('a', { as: 'Statement' });
 const printed: string = stringify(dot) + astPackage.stringify(nodeAST);
 // @ts-graphviz/ast/legacy: the 3.x conversion, typed as toModel
-const legacyConverted = legacyToModel(astPackage.parse('digraph { a; a }'), {
-  models: createModelKit({}),
-});
+const legacyConverted = astLegacy.toModel(
+  astPackage.parse('digraph { a; a }'),
+  {
+    models: createModelKit({}),
+  },
+);
 assertType<
   Equal<
     typeof legacyConverted,
