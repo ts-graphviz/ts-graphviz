@@ -15,6 +15,7 @@ import type {
   ReadonlyEdgeTargetLikeTuple,
   RootGraphConstructor,
   RootGraphModel,
+  RootGraphOptions,
   SchemaOf,
   SubgraphAttributesFor,
   SubgraphConstructor,
@@ -66,36 +67,66 @@ export interface ModelKit<
   S extends Schema = SchemaOf<M>,
 > extends ModelClasses<M, S> {
   /**
-   * Create a directed graph.
+   * Create a directed graph: an id, the attributes and the options, each
+   * of which may be left out, in this order
+   * (`createDigraph('G', { label: 'x' }, { strict: true })`).
    */
   createDigraph(
     id?: string,
     attributes?: GraphAttributesObject<S>,
+    options?: RootGraphOptions,
   ): M['Digraph'];
   createDigraph(
-    id?: string,
-    strict?: boolean,
-    attributes?: GraphAttributesObject<S>,
+    attributes: GraphAttributesObject<S>,
+    options?: RootGraphOptions,
   ): M['Digraph'];
-  createDigraph(
-    strict?: boolean,
-    attributes?: GraphAttributesObject<S>,
-  ): M['Digraph'];
-  createDigraph(attributes?: GraphAttributesObject<S>): M['Digraph'];
   /**
-   * Create an undirected graph.
+   * @deprecated Pass `{ strict }` after the attributes:
+   * `createDigraph(id, attributes, { strict })`. Removed in v5.
    */
-  createGraph(id?: string, attributes?: GraphAttributesObject<S>): M['Graph'];
+  createDigraph(
+    id: string | undefined,
+    strict: boolean,
+    attributes?: GraphAttributesObject<S>,
+  ): M['Digraph'];
+  /**
+   * @deprecated Pass `{ strict }` after the attributes:
+   * `createDigraph(attributes, { strict })`. Removed in v5.
+   */
+  createDigraph(
+    strict: boolean,
+    attributes?: GraphAttributesObject<S>,
+  ): M['Digraph'];
+  /**
+   * Create an undirected graph: an id, the attributes and the options, each
+   * of which may be left out, in this order.
+   */
   createGraph(
     id?: string,
-    strict?: boolean,
     attributes?: GraphAttributesObject<S>,
+    options?: RootGraphOptions,
   ): M['Graph'];
   createGraph(
-    strict?: boolean,
+    attributes: GraphAttributesObject<S>,
+    options?: RootGraphOptions,
+  ): M['Graph'];
+  /**
+   * @deprecated Pass `{ strict }` after the attributes:
+   * `createGraph(id, attributes, { strict })`. Removed in v5.
+   */
+  createGraph(
+    id: string | undefined,
+    strict: boolean,
     attributes?: GraphAttributesObject<S>,
   ): M['Graph'];
-  createGraph(attributes?: GraphAttributesObject<S>): M['Graph'];
+  /**
+   * @deprecated Pass `{ strict }` after the attributes:
+   * `createGraph(attributes, { strict })`. Removed in v5.
+   */
+  createGraph(
+    strict: boolean,
+    attributes?: GraphAttributesObject<S>,
+  ): M['Graph'];
   /**
    * Create a subgraph. It is not added to any graph.
    *

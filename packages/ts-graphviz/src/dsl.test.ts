@@ -319,6 +319,49 @@ describe('DOT statements', () => {
       );
     }
   });
+
+  test('takes undefined for an argument left out', () => {
+    // JavaScript calls: the types have no such signatures.
+    const call = (statement: 'node' | 'subgraph', ...args: unknown[]) =>
+      (g[statement] as (...args: unknown[]) => unknown)(...args);
+    const callback = vi.fn();
+    const node = call('node', 'a', undefined, callback);
+    expect(callback).toHaveBeenCalledWith(node);
+    const subgraph = call('subgraph', undefined, { rank: 'same' }, callback);
+    expect(modelOf(subgraph as typeof g).id).toBeUndefined();
+    expect({ ...(subgraph as object) }).toStrictEqual({ rank: 'same' });
+    expect(callback).toHaveBeenLastCalledWith(subgraph);
+  });
+
+  test.each([
+    ['node', ['a', 'b']],
+    ['node', ['a', () => {}, {}]],
+    ['node', [{}, () => {}]],
+    ['node', [1]],
+    ['node', []],
+    ['edge', [['a', 'b'], () => {}, {}]],
+    ['edge', [{}, {}]],
+    ['edge', ['a']],
+    ['subgraph', [() => {}, 's']],
+    ['subgraph', [{}, 's']],
+    ['subgraph', ['s', 't']],
+    ['graph', [{}, {}]],
+    ['graph', []],
+  ])(
+    '%s(%j) throws a TypeError with code TSG_ERR_INVALID_ARGUMENTS',
+    (statement, args) => {
+      const call = g[statement as 'node'] as (...args: unknown[]) => unknown;
+      expect(() => call(...args)).toThrow(
+        expect.objectContaining({
+          name: 'TypeError',
+          code: 'TSG_ERR_INVALID_ARGUMENTS',
+          message: expect.stringContaining(`${statement}()`),
+        }),
+      );
+      // Nothing was added.
+      expect(modelOf(g).statements).toStrictEqual([]);
+    },
+  );
 });
 
 describe('attributes by name', () => {

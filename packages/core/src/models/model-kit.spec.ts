@@ -80,7 +80,7 @@ describe('createModelKit', { tags: ['SM-5'] }, () => {
 
   it('creates root graphs with the arguments of their constructors', () => {
     const kit = createModelKit();
-    const g = kit.createDigraph('G', true, { label: 'x' });
+    const g = kit.createDigraph('G', { label: 'x' }, { strict: true });
     expect(g.id).toBe('G');
     expect(g.directed).toBe(true);
     expect(g.strict).toBe(true);

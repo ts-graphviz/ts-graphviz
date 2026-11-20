@@ -76,4 +76,34 @@ describe.each([
     expect(modelOf(g).directed).toStrictEqual(directed);
     expect(modelOf(g).strict).toStrictEqual(strict);
   });
+
+  test('takes undefined for an argument left out', () => {
+    const callback = vi.fn();
+    const g = factory(undefined, { [_.label]: 'Test label' }, callback);
+    expect(modelOf(g).id).toBeUndefined();
+    expect({ ...g }).toStrictEqual({ [_.label]: 'Test label' });
+    expect(callback).toHaveBeenCalledWith(g);
+    expect(modelOf(g).strict).toStrictEqual(strict);
+  });
+
+  test.each([
+    ['two ids', ['foo', 'bar']],
+    ['a callback before the id', [() => {}, 'foo']],
+    ['an id after the attributes', [{}, 'foo']],
+    ['a strict flag', ['foo', true]],
+    ['too many arguments', ['foo', {}, () => {}, undefined]],
+  ])(
+    'throws a TypeError with code TSG_ERR_INVALID_ARGUMENTS for %s',
+    (_name, args) => {
+      expect(() =>
+        (factory as (...args: unknown[]) => unknown)(...args),
+      ).toThrow(
+        expect.objectContaining({
+          name: 'TypeError',
+          code: 'TSG_ERR_INVALID_ARGUMENTS',
+          message: expect.stringContaining(directed ? 'digraph()' : 'graph()'),
+        }),
+      );
+    },
+  );
 });

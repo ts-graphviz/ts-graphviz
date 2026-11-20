@@ -924,6 +924,9 @@ export interface RootGraphModel<S extends Schema = EmptySchema>
    * This forbids the creation of multi-edges, i.e., there can be at most one edge with a given tail node and head node in the directed case.
    * For undirected graphs, there can be at most one edge connected to the same two nodes.
    * Subsequent edge statements using the same two nodes will identify the edge with the previously defined one and apply any attributes given in the edge statement.
+   *
+   * Set it when the graph is created: `{ strict: true }` after the
+   * attributes, or the `strict` factories of `ts-graphviz`.
    */
   strict: boolean;
 }
@@ -1037,6 +1040,20 @@ export interface DotConstructor<
 }
 
 /**
+ * The options of a root graph's constructor, after its id and attributes.
+ * @group Models
+ */
+export interface RootGraphOptions {
+  /** Whether the graph is strict ({@link RootGraphModel.strict}); `false` by default. */
+  strict?: boolean;
+}
+
+/**
+ * The arguments are read by position: an id, then the attributes, then the
+ * options, each of which may be left out. A call that fits none of the
+ * signatures, or options with other properties than these, throws a
+ * `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`.
+ *
  * @typeParam G - The model the constructor creates.
  * @typeParam S - The schema of the models; none by default.
  * @group Models
@@ -1045,10 +1062,26 @@ export interface RootGraphConstructor<
   G extends ReadonlyRootGraphModel = RootGraphModel,
   S extends Schema = EmptySchema,
 > {
-  new (id?: string, attributes?: GraphAttributesObject<S>): G;
-  new (id?: string, strict?: boolean, attributes?: GraphAttributesObject<S>): G;
-  new (strict?: boolean, attributes?: GraphAttributesObject<S>): G;
-  new (attributes?: GraphAttributesObject<S>): G;
+  new (
+    id?: string,
+    attributes?: GraphAttributesObject<S>,
+    options?: RootGraphOptions,
+  ): G;
+  new (attributes: GraphAttributesObject<S>, options?: RootGraphOptions): G;
+  /**
+   * @deprecated Pass `{ strict }` after the attributes:
+   * `(id, attributes, { strict })`. Removed in v5.
+   */
+  new (
+    id: string | undefined,
+    strict: boolean,
+    attributes?: GraphAttributesObject<S>,
+  ): G;
+  /**
+   * @deprecated Pass `{ strict }` after the attributes:
+   * `(attributes, { strict })`. Removed in v5.
+   */
+  new (strict: boolean, attributes?: GraphAttributesObject<S>): G;
 }
 
 /**

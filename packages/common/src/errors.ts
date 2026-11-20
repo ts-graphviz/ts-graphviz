@@ -62,6 +62,8 @@ export const ERROR_CODES = [
   'TSG_ERR_NOT_A_MODEL',
   /** `dsl` of `ts-graphviz` was given a second argument that is not a model kit (`TypeError`). */
   'TSG_ERR_NOT_A_MODEL_KIT',
+  /** A constructor, factory or DSL statement was called with arguments that fit none of its signatures, e.g. two ids or an id after the attributes (`TypeError`). */
+  'TSG_ERR_INVALID_ARGUMENTS',
   /** A DOT DSL property that cannot be written was assigned: a DOT statement (`node`, `edge`, `subgraph`, `graph`), a symbol, or an attribute of a model that has none (`TypeError`). */
   'TSG_ERR_UNWRITABLE_PROPERTY',
   /** The feature is not available on the current runtime, e.g. the adapter in a browser (`Error`). */

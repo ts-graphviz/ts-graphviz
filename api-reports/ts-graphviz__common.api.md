@@ -27,6 +27,8 @@ export interface AnyModelTypes {
 
 export type AnyReadonlyDotObjectModel = ReadonlyGraphStatementModel | ReadonlyRootGraphModel | ReadonlyDotModel;
 
+export type ArgumentFits = (arg: unknown) => boolean;
+
 export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.last}` | ArrowType.Built;
 export declare namespace ArrowType {
   type shape = keyof $shape;
@@ -769,7 +771,7 @@ export type Double = number;
 
 export type DoubleList = Double | `${Double}:${Double}` | `${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
 
-export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_INVALID_COMMENT", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_NOT_A_MODEL_KIT", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION", "TSG_ERR_NO_CURRENT_GRAPH", "TSG_ERR_ROOT_UNMOUNTED"];
+export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_INVALID_COMMENT", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_NOT_A_MODEL_KIT", "TSG_ERR_INVALID_ARGUMENTS", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION", "TSG_ERR_NO_CURRENT_GRAPH", "TSG_ERR_ROOT_UNMOUNTED"];
 
 export type EdgeAttributeKey = EdgeAttributeKey.values;
 export declare namespace EdgeAttributeKey {
@@ -977,14 +979,14 @@ export interface ModelClasses<M extends AnyModelTypes = ModelTypes, S extends Sc
 }
 
 export interface ModelKit<M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> extends ModelClasses<M, S> {
-  createDigraph(id?: string, attributes?: GraphAttributesObject<S>): M["Digraph"];
-  createDigraph(id?: string, strict?: boolean, attributes?: GraphAttributesObject<S>): M["Digraph"];
-  createDigraph(strict?: boolean, attributes?: GraphAttributesObject<S>): M["Digraph"];
-  createDigraph(attributes?: GraphAttributesObject<S>): M["Digraph"];
-  createGraph(id?: string, attributes?: GraphAttributesObject<S>): M["Graph"];
-  createGraph(id?: string, strict?: boolean, attributes?: GraphAttributesObject<S>): M["Graph"];
-  createGraph(strict?: boolean, attributes?: GraphAttributesObject<S>): M["Graph"];
-  createGraph(attributes?: GraphAttributesObject<S>): M["Graph"];
+  createDigraph(id?: string, attributes?: GraphAttributesObject<S>, options?: RootGraphOptions): M["Digraph"];
+  createDigraph(attributes: GraphAttributesObject<S>, options?: RootGraphOptions): M["Digraph"];
+  createDigraph(id: string | undefined, strict: boolean, attributes?: GraphAttributesObject<S>): M["Digraph"];
+  createDigraph(strict: boolean, attributes?: GraphAttributesObject<S>): M["Digraph"];
+  createGraph(id?: string, attributes?: GraphAttributesObject<S>, options?: RootGraphOptions): M["Graph"];
+  createGraph(attributes: GraphAttributesObject<S>, options?: RootGraphOptions): M["Graph"];
+  createGraph(id: string | undefined, strict: boolean, attributes?: GraphAttributesObject<S>): M["Graph"];
+  createGraph(strict: boolean, attributes?: GraphAttributesObject<S>): M["Graph"];
   createSubgraph<const Id extends string | undefined = undefined>(id?: Id, attributes?: SubgraphAttributesFor<Id, S>): M["Subgraph"];
   createSubgraph(attributes?: NonClusterSubgraphAttributesObject<S>): M["Subgraph"];
   createNode(id: string, attributes?: NodeAttributesObject<S>): M["Node"];
@@ -1199,15 +1201,19 @@ export interface ResolvedModelTypes<P extends Partial<ModelClasses> = Record<nev
 }
 
 export interface RootGraphConstructor<G extends ReadonlyRootGraphModel = RootGraphModel, S extends Schema = EmptySchema> {
-  new (id?: string, attributes?: GraphAttributesObject<S>): G;
-  new (id?: string, strict?: boolean, attributes?: GraphAttributesObject<S>): G;
-  new (strict?: boolean, attributes?: GraphAttributesObject<S>): G;
-  new (attributes?: GraphAttributesObject<S>): G;
+  new (id?: string, attributes?: GraphAttributesObject<S>, options?: RootGraphOptions): G;
+  new (attributes: GraphAttributesObject<S>, options?: RootGraphOptions): G;
+  new (id: string | undefined, strict: boolean, attributes?: GraphAttributesObject<S>): G;
+  new (strict: boolean, attributes?: GraphAttributesObject<S>): G;
 }
 
 export interface RootGraphModel<S extends Schema = EmptySchema> extends GraphBaseModel<"Graph", GraphAttributeKey, S> {
   directed: boolean;
   strict: boolean;
+}
+
+export interface RootGraphOptions {
+  strict?: boolean;
 }
 
 export interface Schema {
@@ -1362,6 +1368,8 @@ export declare function escString(value: string): EscStringValue;
 
 export declare function htmlLike(markup: string): HTMLLikeValue;
 
+export declare function invalidArguments(name: string, args: readonly unknown[]): CodedError<"TSG_ERR_INVALID_ARGUMENTS">;
+
 export declare function isAttributeListModel<T>(object: T): object is NarrowedModel<T, "AttributeList">;
 
 export declare function isCommentModel(value: unknown): value is CommentModel;
@@ -1396,6 +1404,8 @@ export declare function isTsGraphvizError(value: unknown): value is CodedError;
 export declare function modelOf<T>(value: T): ModelOf<T>;
 
 export declare function ownOptions<T extends object>(options: T | undefined): T;
+
+export declare function readArguments(name: string | (() => string), args: readonly unknown[], places: readonly ArgumentFits[]): unknown[];
 
 export declare function toNodeRef(target: NodeRefLike): NodeRef;
 
