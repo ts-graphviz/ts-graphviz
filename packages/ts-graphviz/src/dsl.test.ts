@@ -34,7 +34,10 @@ import {
 } from '@ts-graphviz/core';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { dsl } from './dsl.js';
-import { digraph as legacyDigraph } from './legacy.js';
+import {
+  digraph as legacyDigraph,
+  withModelKit as legacyWithModelKit,
+} from './legacy.js';
 import { digraph } from './model-factory.js';
 import { toDot } from './to-dot.js';
 
@@ -377,6 +380,30 @@ describe('DOT statements', () => {
     expect(modelOf(G).getAttribute('label')).toBe('G');
     expect(modelOf(G).getAttribute('rankdir')).toBe('LR');
     expect(modelOf(G).statements).toStrictEqual([]);
+  });
+
+  test('a graph returned from an async function, nested subgraphs included', async () => {
+    const make = async () => g.subgraph('s').subgraph('t');
+    const t = await make();
+    t.label = 'T';
+    expect(modelOf(t).statements).toMatchObject([{ key: 'label' }]);
+    expect(() => t.label).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_WRITE_ONLY_PROPERTY' }),
+    );
+  });
+
+  test('a kit of ts-graphviz/legacy with classes of its own keeps the names', () => {
+    const G = legacyWithModelKit({ Node: class extends Node {} }).digraph(
+      (g) => {
+        g.label = 'L';
+        g.subgraph('s', (s) => {
+          s.label = 'S';
+          expect(s.label).toBe('S');
+        });
+      },
+    );
+    expect(modelOf(G).getAttribute('label')).toBe('L');
+    expect(modelOf(G).statements.map((s) => s.$$type)).toEqual(['Subgraph']);
   });
 
   test('a graph of ts-graphviz/legacy has its own attributes as names', () => {
