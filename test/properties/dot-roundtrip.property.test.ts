@@ -7,7 +7,6 @@ import {
   fromDot,
   htmlLike,
   isTsGraphvizError,
-  legacyModels,
   type RootGraphModel,
   toDot,
 } from 'ts-graphviz';
