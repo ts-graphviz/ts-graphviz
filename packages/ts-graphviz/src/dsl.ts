@@ -1,7 +1,6 @@
 import {
   type AnyDotObjectModel,
   type AnyModelTypes,
-  type AnyReadonlyDotObjectModel,
   type Attribute,
   type AttributeKey,
   type AttributeListKind,
@@ -34,6 +33,7 @@ import {
   type NodeRefLike,
   type NonClusterSubgraphAttributesObject,
   type Port,
+  type ReadonlyAttributeListModel,
   type ReadonlyDotModel,
   type ReadonlyEdgeModel,
   type ReadonlyEdgeTargetLikeTuple,
@@ -108,9 +108,10 @@ export type DSL<
  */
 export type DSLModel =
   | (ReadonlyDotModel & HasComments<CommentPosition>)
-  | (Exclude<AnyReadonlyDotObjectModel, ReadonlyDotModel> &
+  | ((ReadonlyNodeModel | ReadonlyEdgeModel | ReadonlyAttributeListModel) &
       HasComments<CommentPosition> &
-      WritesAttributes);
+      WritesAttributes)
+  | DSLGraphModel;
 
 /** What a graph that its DOT statements add to has. */
 interface WritesStatements {
