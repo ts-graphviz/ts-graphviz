@@ -49,10 +49,9 @@ import { isLegacyKit } from './legacy-kit.js';
  *   assignment, each time it runs (a later one overrides an earlier one in
  *   Graphviz). Reading or deleting one throws a `TypeError` with code
  *   `TSG_ERR_WRITE_ONLY_PROPERTY`, and so does assigning `undefined` (with
- *   `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`). The graph's own attributes are
- *   the factory's attributes argument (`digraph('G', { rankdir: 'LR' })`),
- *   or the model's (`modelOf(g).setAttribute`, `getAttribute`). With a kit
- *   of `ts-graphviz/legacy` they are the graph's own attributes, as in 3.x.
+ *   `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`). Read a graph's attributes on
+ *   the model (`modelOf(g).getAttribute`). With a kit of
+ *   `ts-graphviz/legacy` they are the graph's own attributes, as in 3.x.
  * - The DOT statements `node`, `edge`, `subgraph` and `graph` are methods
  *   of a graph's DSL.
  * - A node's DSL has `port`, every DSL `addComment`, `$$type` (and an
