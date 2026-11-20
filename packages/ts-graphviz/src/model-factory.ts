@@ -1,4 +1,8 @@
-import type { ModelClasses, ResolvedModelTypes } from '@ts-graphviz/common';
+import type {
+  ModelKitOptions,
+  ModelKitOptionsOf,
+  ResolvedModelTypes,
+} from '@ts-graphviz/common';
 import { createModelKit } from '@ts-graphviz/core';
 import { createModelFactories } from './model-factory-builder.js';
 import type {
@@ -32,15 +36,16 @@ export const strict: ModelFactories = createModelFactories(true);
  * graphs, and everything created in them, come from the given classes and,
  * for the kinds left out, the default ones (see `createModelKit`).
  *
- * @param classes - The classes to create the models from.
+ * @param classes - The classes to create the models from, and the schema
+ * of the models (from `defineSchema`).
  *
  * @returns An object with model factories ('digraph', 'graph', and 'strict') that create with that kit.
  * @group Model Factory
  */
-export function withModelKit<const P extends Partial<ModelClasses>>(
-  classes: P,
+export function withModelKit<const P extends ModelKitOptions>(
+  classes: ModelKitOptionsOf<P>,
 ): ModelFactoriesWithStrict<ResolvedModelTypes<P>> {
-  const kit = createModelKit(classes);
+  const kit = createModelKit<P>(classes);
   return Object.freeze({
     ...createModelFactories(false, kit),
     strict: createModelFactories(true, kit),

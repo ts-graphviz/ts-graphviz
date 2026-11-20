@@ -1,6 +1,6 @@
 import {
-  type ModelClasses,
   type ModelKit,
+  type ModelKitOptions,
   ownOptions,
 } from '@ts-graphviz/common';
 import { createModelKit, legacyModels } from '@ts-graphviz/core';
@@ -22,13 +22,13 @@ export function isLegacyKit(kit: ModelKit): boolean {
  * of `legacyModels` for the kinds left out.
  */
 export function createLegacyKit(
-  classes: Partial<ModelClasses> | undefined,
+  classes: ModelKitOptions | undefined,
 ): ModelKit {
   const merged: Record<string, unknown> = { ...legacyModels };
   for (const [key, model] of Object.entries(ownOptions(classes))) {
     if (model !== undefined) merged[key] = model;
   }
-  const kit = createModelKit(merged as Partial<ModelClasses>);
+  const kit = createModelKit(merged as ModelKitOptions);
   legacyKits.add(kit);
   return kit;
 }

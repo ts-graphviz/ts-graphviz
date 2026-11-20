@@ -5,7 +5,8 @@ import type {
 } from '@ts-graphviz/ast';
 import {
   type EdgeModel,
-  type ModelClasses,
+  type ModelKitOptions,
+  type ModelKitOptionsOf,
   type ModelTypes,
   type NodeModel,
   ownOptions,
@@ -61,7 +62,7 @@ export type FromDotResult<
  */
 export type FromDotOptions<
   T extends FromDotRule,
-  P extends Partial<ModelClasses> = Partial<ModelClasses>,
+  P extends ModelKitOptions = ModelKitOptions,
   D extends boolean = false,
 > = {
   /**
@@ -103,12 +104,12 @@ export type FromDotOptions<
  * With `dsl: true`, its DOT DSL.
  */
 export function fromDot<
-  const P extends Partial<ModelClasses>,
+  const P extends ModelKitOptions,
   const D extends boolean = false,
 >(
   dot: string,
   options: FromDotOptions<'Dot' | 'Graph', P, D> & {
-    convert: { models: P };
+    convert: { models: ModelKitOptionsOf<P> };
   },
 ): FromDotResult<
   ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
@@ -116,13 +117,13 @@ export function fromDot<
   ResolvedModelTypes<P>
 >;
 export function fromDot<
-  const P extends Partial<ModelClasses>,
+  const P extends ModelKitOptions,
   const R extends FromDotRule,
   const D extends boolean = false,
 >(
   dot: string,
   options: FromDotOptions<R, P, D> & {
-    convert: { models: P };
+    convert: { models: ModelKitOptionsOf<P> };
   },
 ): FromDotResult<
   FromDotModel<R, ResolvedModelTypes<P>>,
@@ -135,18 +136,18 @@ export function fromDot(
 ): RootGraphModel;
 export function fromDot<const D extends boolean>(
   dot: string,
-  options: FromDotOptions<'Dot' | 'Graph', Partial<ModelClasses>, D>,
+  options: FromDotOptions<'Dot' | 'Graph', ModelKitOptions, D>,
 ): FromDotResult<RootGraphModel, D>;
 export function fromDot<
   const R extends FromDotRule,
   const D extends boolean = false,
 >(
   dot: string,
-  options: FromDotOptions<R, Partial<ModelClasses>, D>,
+  options: FromDotOptions<R, ModelKitOptions, D>,
 ): FromDotResult<FromDotModel<R>, D>;
 export function fromDot(
   dot: string,
-  options?: FromDotOptions<FromDotRule, Partial<ModelClasses>, boolean>,
+  options?: FromDotOptions<FromDotRule, ModelKitOptions, boolean>,
 ): AnyFromDotModel | DSL<AnyFromDotModel> {
   // Own properties only: an inherited one is never an option.
   const own = ownOptions(options);
@@ -165,13 +166,13 @@ export function fromDot(
  * @returns The graphs, possibly none; with `dsl: true`, their DOT DSLs.
  */
 export function fromDotAll<
-  const P extends Partial<ModelClasses>,
+  const P extends ModelKitOptions,
   const D extends boolean = false,
 >(
   dot: string,
   options: Omit<FromDotOptions<'Dot', P, D>, 'parse'> & {
     parse?: CommonParseOptions;
-    convert: { models: P };
+    convert: { models: ModelKitOptionsOf<P> };
   },
 ): FromDotResult<
   ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
@@ -186,16 +187,13 @@ export function fromDotAll(
 ): RootGraphModel[];
 export function fromDotAll<const D extends boolean>(
   dot: string,
-  options: Omit<FromDotOptions<'Dot', Partial<ModelClasses>, D>, 'parse'> & {
+  options: Omit<FromDotOptions<'Dot', ModelKitOptions, D>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): FromDotResult<RootGraphModel, D>[];
 export function fromDotAll(
   dot: string,
-  options?: Omit<
-    FromDotOptions<'Dot', Partial<ModelClasses>, boolean>,
-    'parse'
-  > & {
+  options?: Omit<FromDotOptions<'Dot', ModelKitOptions, boolean>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): (RootGraphModel | DSL<RootGraphModel>)[] {
