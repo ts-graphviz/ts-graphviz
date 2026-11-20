@@ -63,7 +63,11 @@ export type FromDotOptions<T extends FromDotRule, P extends ModelKitOptions = No
   dsl?: D;
 } & (D extends true ? {
   dsl: true;
-} : unknown);
+} : unknown) & ([keyof SchemaOfOptions<P>] extends [never] ? unknown : {
+  convert: {
+    models: P;
+  };
+});
 
 export type FromDotResult<T extends DSLModel, D extends boolean, M extends DSLModelTypes = DefaultModelTypesOf<T>> = D extends true ? DSL<T, M> : T;
 
