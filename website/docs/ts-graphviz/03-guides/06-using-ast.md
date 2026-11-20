@@ -197,6 +197,8 @@ A `Literal` has a `kind` that says how its `value` is written:
 | `'quoted'` | `"My Node"` | the text between the quotes, as written in the source, escape sequences included |
 | `'html'` | `<<b>My Node</b>>` | the markup between the outer `<` and `>` |
 
+`stringify` writes a `'bare'` value without quotes only when Graphviz reads it as one ID: an identifier that is not a keyword (`node`, `edge`, `graph`, `digraph`, `subgraph`, `strict`, in any case), or a numeral. Any other value in an AST built by hand, such as `edge`, `1abc` or `a b`, is written quoted, which Graphviz reads as the same string.
+
 ### Parsing a Part of a Graph
 
 By default `parse` reads a whole DOT source and returns a `Dot` node. The `as` option names another rule to read, and the result is typed by it: `'Graph'`, `'Subgraph'`, `'Node'`, `'Edge'`, `'AttributeList'`, `'Attribute'` or `'ClusterStatements'`.
