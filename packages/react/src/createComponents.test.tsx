@@ -28,7 +28,13 @@ describe('createComponents()', () => {
   });
 
   it('throws for something that is not a kit', () => {
-    for (const value of [undefined, null, {}, { schema }]) {
+    for (const value of [
+      undefined,
+      null,
+      {},
+      { schema },
+      { createNode() {} },
+    ]) {
       expect(() => createComponents(value as never)).toThrow(
         expect.objectContaining({
           name: 'TypeError',

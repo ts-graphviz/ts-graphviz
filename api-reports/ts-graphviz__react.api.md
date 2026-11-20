@@ -61,7 +61,7 @@ export type EdgeOptions<M extends AnyModelTypes = ModelTypes> = EdgeAttributesOb
 
 export type EdgeProps<M extends AnyModelTypes = ModelTypes> = Omit<EdgeOptions<M>, "label"> & {
   targets: ReadonlyEdgeTargetLikeTuple;
-  label?: ReactElement | string;
+  label?: ReactElement | LabelValue<EdgeOptions<M>, "label">;
   ref?: Ref<M["Edge"]>;
 };
 
@@ -120,8 +120,8 @@ export type NodeOptions<M extends AnyModelTypes = ModelTypes> = NodeAttributesOb
 
 export type NodeProps<M extends AnyModelTypes = ModelTypes> = Omit<NodeOptions<M>, "label" | "xlabel"> & {
   id: string;
-  label?: ReactElement | string;
-  xlabel?: ReactElement | string;
+  label?: ReactElement | LabelValue<NodeOptions<M>, "label">;
+  xlabel?: ReactElement | LabelValue<NodeOptions<M>, "xlabel">;
   ref?: Ref<M["Node"]>;
 };
 
@@ -131,9 +131,9 @@ export type RootGraphOptions<M extends AnyModelTypes = ModelTypes> = GraphAttrib
 };
 
 export type RootGraphProps<M extends AnyModelTypes = ModelTypes> = Omit<RootGraphOptions<M>, "label"> & {
-  label?: ReactElement | string;
+  label?: ReactElement | LabelValue<GraphAttributesObject<SchemaOf<M>>, "label">;
   children?: ReactNode;
-  ref?: Ref<GraphBaseModel<DotObjectType, AttributeKey, SchemaOf<M>>>;
+  ref?: Ref<GraphRef<M, M["Graph"] | M["Digraph"]>>;
 };
 
 export declare const Subgraph: {
@@ -147,7 +147,7 @@ export type SubgraphOptions<Id extends string | undefined = string | undefined, 
 
 export type SubgraphProps<Id extends string | undefined = string | undefined, M extends AnyModelTypes = ModelTypes> = WithReactLabel<SubgraphOptions<Id, M>> & {
   children?: ReactNode;
-  ref?: Ref<GraphBaseModel<DotObjectType, AttributeKey, SchemaOf<M>>>;
+  ref?: Ref<GraphRef<M, M["Subgraph"]>>;
 };
 
 export type TopLevelModel = FilterableModel;
@@ -187,6 +187,10 @@ export { isSubgraphModel } from "ts-graphviz";
 // Used by the exports, not exported
 
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
+
+type GraphRef<M extends AnyModelTypes, Model> = GraphBaseModel<DotObjectType, AttributeKey, SchemaOf<M>> | Model;
+
+type LabelValue<O, K extends string> = O extends { readonly [P in K]?: infer V; } ? string extends Exclude<V, undefined> ? string : Exclude<V, undefined> : string;
 
 type WithReactLabel<T> = T extends unknown ? T extends {
   label?: undefined;

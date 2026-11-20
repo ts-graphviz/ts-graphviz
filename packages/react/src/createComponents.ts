@@ -61,17 +61,26 @@ export interface Components<M extends AnyModelTypes = ModelTypes> {
 export function createComponents<M extends AnyModelTypes>(
   kit: ModelKit<M>,
 ): Components<M> {
-  if (
-    typeof kit !== 'object' ||
-    kit === null ||
-    typeof (kit as { createNode?: unknown }).createNode !== 'function'
-  ) {
+  if (!isKit(kit)) {
     throw withCode(
       new TypeError('createComponents() takes a model kit'),
       'TSG_ERR_NOT_A_MODEL_KIT',
     );
   }
   return COMPONENTS as unknown as Components<M>;
+}
+
+/** A kit, by its operations, as `dsl()` tells one. */
+function isKit(value: unknown): boolean {
+  if (typeof value !== 'object' || value === null) return false;
+  const kit = value as Record<string, unknown>;
+  return [
+    'createDigraph',
+    'createGraph',
+    'createSubgraph',
+    'createNode',
+    'createEdge',
+  ].every((name) => typeof kit[name] === 'function');
 }
 
 // The components of the package, as they are: only their types differ by

@@ -81,9 +81,11 @@ export type RootGraphProps<M extends AnyModelTypes = ModelTypes> = Omit<
   RootGraphOptions<M>,
   'label'
 > & {
-  label?: ReactElement | string;
+  label?:
+    | ReactElement
+    | LabelValue<GraphAttributesObject<SchemaOf<M>>, 'label'>;
   children?: ReactNode;
-  ref?: Ref<GraphBaseModel<DotObjectType, AttributeKey, SchemaOf<M>>>;
+  ref?: Ref<GraphRef<M, M['Graph'] | M['Digraph']>>;
 };
 
 /** Props for Edge component */
@@ -94,7 +96,7 @@ export type EdgeProps<M extends AnyModelTypes = ModelTypes> = Omit<
   /** Edge targets */
   targets: ReadonlyEdgeTargetLikeTuple;
   /** Edge label */
-  label?: ReactElement | string;
+  label?: ReactElement | LabelValue<EdgeOptions<M>, 'label'>;
   ref?: Ref<M['Edge']>;
 };
 
@@ -106,9 +108,9 @@ export type NodeProps<M extends AnyModelTypes = ModelTypes> = Omit<
   /** Node id */
   id: string;
   /** Node label */
-  label?: ReactElement | string;
+  label?: ReactElement | LabelValue<NodeOptions<M>, 'label'>;
   /** Node xlabel */
-  xlabel?: ReactElement | string;
+  xlabel?: ReactElement | LabelValue<NodeOptions<M>, 'xlabel'>;
   ref?: Ref<M['Node']>;
 };
 
@@ -122,8 +124,29 @@ export type SubgraphProps<
   M extends AnyModelTypes = ModelTypes,
 > = WithReactLabel<SubgraphOptions<Id, M>> & {
   children?: ReactNode;
-  ref?: Ref<GraphBaseModel<DotObjectType, AttributeKey, SchemaOf<M>>>;
+  ref?: Ref<GraphRef<M, M['Subgraph']>>;
 };
+
+/**
+ * A label prop's value besides a React element: a string, or the type the
+ * kit's schema gives the attribute where it changes it to one without
+ * strings.
+ */
+type LabelValue<O, K extends string> = O extends {
+  readonly [P in K]?: infer V;
+}
+  ? string extends Exclude<V, undefined>
+    ? string
+    : Exclude<V, undefined>
+  : string;
+
+/**
+ * What the `ref` of a graph or subgraph component gives: the graph, typed
+ * with the kit's schema, or a model of the kit's class.
+ */
+type GraphRef<M extends AnyModelTypes, Model> =
+  | GraphBaseModel<DotObjectType, AttributeKey, SchemaOf<M>>
+  | Model;
 
 /** `Omit` applied to each member of a union, so the union stays discriminated. */
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown

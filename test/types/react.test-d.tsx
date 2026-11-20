@@ -26,6 +26,7 @@ import {
   defaultModelKit,
   defineSchema,
   isNodeModel,
+  Node as NodeClass,
 } from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
@@ -134,6 +135,43 @@ describe('createComponents', () => {
     <C.Edge targets={['a', 'b']} tier="core" />;
     // @ts-expect-error without the kit, not an attribute
     <Node id="a" tier="core" />;
+  });
+
+  it('types the labels with the schema where it changes them', () => {
+    <C.Node id="a" label={1} />;
+    // @ts-expect-error the schema makes a node's label a number
+    <C.Node id="a" label="A" />;
+    <C.Node id="a" label={<dot:b>A</dot:b>} />;
+    <Node id="a" label="A" />;
+  });
+
+  it('gives the models of the classes of the kit to refs', () => {
+    class MyNode extends NodeClass<typeof schema> {
+      extra(): string {
+        return this.id;
+      }
+    }
+    class MyDigraph extends DigraphModel<typeof schema> {
+      tag(): string {
+        return 'g';
+      }
+    }
+    const K = createComponents(
+      createModelKit({ schema, Node: MyNode, Digraph: MyDigraph }),
+    );
+    <K.Node
+      id="a"
+      ref={(n) => {
+        n?.extra();
+      }}
+    />;
+    <K.Digraph
+      ref={(g) => {
+        if (g instanceof MyDigraph) g.tag();
+      }}
+    />;
+    const ref = { current: null } as { current: GraphBaseModel | null };
+    <Digraph ref={ref} />;
   });
 
   it('keeps the default components as they were', () => {
