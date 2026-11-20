@@ -102,6 +102,27 @@ describe('a custom format while sanitize is on', { tags: ['SM-4'] }, () => {
     ).toThrow(expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }));
   });
 
+  it('checks the attribute arguments of a schema by their kind', () => {
+    const schema = defineSchema({ node: { tier: attr<string>() } });
+    const strict = { policy: 'strict' as const };
+    expect(() =>
+      sourceToRender(dot, {
+        schema,
+        sanitize: strict,
+        format: 'svg',
+        attributes: { node: { tier: 'x' } },
+      } as never),
+    ).not.toThrow();
+    expect(() =>
+      sourceToRender(dot, {
+        schema,
+        sanitize: strict,
+        format: 'svg',
+        attributes: { graph: { tier: 'x' } },
+      } as never),
+    ).toThrow(expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }));
+  });
+
   it('of a schema, is checked by sanitize as the adapter reads it', () => {
     const listed = (format: string) =>
       sourceToRender(

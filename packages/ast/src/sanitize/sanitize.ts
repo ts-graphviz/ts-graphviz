@@ -3,6 +3,7 @@ import {
   ownOptions,
   type Schema,
   type SchemaErrors,
+  type SchemaKind,
   withCode,
 } from '@ts-graphviz/common';
 import type { CommonParseOptions } from '../dot-shim/parser/index.js';
@@ -13,6 +14,7 @@ import type {
   AttributeASTNode,
   DotASTNode,
   LiteralASTNode,
+  SubgraphASTNode,
 } from '../types.js';
 import { readTags } from './html.js';
 import { strictAttributeProblem, strictTagProblem } from './strict.js';
@@ -48,8 +50,10 @@ export interface SanitizeOptions extends CommonParseOptions {
   /**
    * The schema of the models the DOT was made with (`defineSchema`):
    * trusted configuration, like the classes of a kit. The strict policy
-   * also allows the attributes it adds, of any kind, as its own list of
-   * Graphviz attributes is not by kind either (never one that reads files),
+   * also allows the attributes it adds, each on the kind of object it is
+   * given to (`node` ones on nodes and `node [...]`, `edge` ones on edges
+   * and `edge [...]`, `graph`, `subgraph` and `cluster` ones in that kind
+   * of graph and its `graph [...]`), never one that reads files,
    * and both policies the style names its `types.style` was given
    * (`values.extend('sketchy')`; names of letters only).
    */
@@ -197,8 +201,8 @@ interface FormatRules {
   fontName: RegExp;
   spacesInStyle: boolean;
   strict: boolean;
-  /** The attribute names of the schema, of every kind. */
-  schemaAttributes: ReadonlySet<string>;
+  /** The attribute names of the schema, by the kind it gives them to. */
+  schemaAttributes: Readonly<Record<SchemaKind, ReadonlySet<string>>>;
   /** The style names of the schema, in lower case. */
   schemaStyles: ReadonlySet<string>;
 }
@@ -288,6 +292,7 @@ function checkAttribute(
   attribute: AttributeASTNode,
   rules: FormatRules,
   state: DocumentState,
+  kinds: readonly SchemaKind[],
 ): void {
   const name = textOf(attribute.key);
   const key = name.toLowerCase();
@@ -334,12 +339,11 @@ function checkAttribute(
       key === 'style' ||
       key === 'shape' ||
       key.endsWith('color');
-    const problem = strictAttributeProblem(
-      name,
-      value,
-      ownRule,
-      rules.schemaAttributes,
+    // A schema's attribute is allowed only on what its kind gives it to.
+    const ofSchema = kinds.some((kind) =>
+      rules.schemaAttributes[kind].has(name),
     );
+    const problem = strictAttributeProblem(name, value, ownRule, ofSchema);
     if (problem !== undefined) throw unsafe(`${at} ${problem}.`);
   }
 }
@@ -425,9 +429,90 @@ function* walk(node: ASTNode): Generator<ASTNode> {
  * The transformer behind {@link sanitize}: throws on the first finding and
  * leaves the AST unchanged.
  */
+/**
+ * The kinds of object each attribute of the source is on, as a schema names
+ * them: a node's and `node [...]` are `node`, an edge's and `edge [...]`
+ * `edge`, and an assignment or `graph [...]` in a graph `graph`, in a
+ * cluster (an id starting with `cluster`, any case, or `cluster` set to a
+ * true value in it) `cluster`, and in another subgraph `subgraph`.
+ */
+function attributeKinds(
+  ast: DotASTNode,
+): ReadonlyMap<AttributeASTNode, readonly SchemaKind[]> {
+  const kinds = new Map<AttributeASTNode, readonly SchemaKind[]>();
+  const visit = (node: ASTNode, graph: readonly SchemaKind[]): void => {
+    const inner: readonly SchemaKind[] =
+      node.type === 'Graph'
+        ? ['graph']
+        : node.type === 'Subgraph'
+          ? isCluster(node)
+            ? ['cluster']
+            : ['subgraph']
+          : graph;
+    const own: readonly SchemaKind[] | undefined =
+      node.type === 'Node'
+        ? ['node']
+        : node.type === 'Edge'
+          ? ['edge']
+          : node.type === 'AttributeList'
+            ? node.kind === 'Node'
+              ? ['node']
+              : node.kind === 'Edge'
+                ? ['edge']
+                : graph
+            : node.type === 'Graph' || node.type === 'Subgraph'
+              ? inner
+              : undefined;
+    for (const value of Object.values(node)) {
+      for (const child of Array.isArray(value) ? value : [value]) {
+        if (
+          typeof child !== 'object' ||
+          child === null ||
+          !hasField(child, 'type')
+        ) {
+          continue;
+        }
+        const childNode = child as ASTNode;
+        if (childNode.type === 'Attribute' && own !== undefined) {
+          kinds.set(childNode, own);
+        } else {
+          visit(childNode, inner);
+        }
+      }
+    }
+  };
+  visit(ast, []);
+  return kinds;
+}
+
+/** A Graphviz boolean that is true: `true`, `yes` or a non-zero integer. */
+const TRUE = /^(?:true|yes|[+-]?0*[1-9]\d*)$/i;
+
+/** Whether Graphviz draws the subgraph as a cluster. */
+function isCluster(subgraph: SubgraphASTNode): boolean {
+  const id = ownField(subgraph, 'id');
+  if (id !== undefined && textOf(id).toLowerCase().startsWith('cluster')) {
+    return true;
+  }
+  const attributes = subgraph.children.flatMap((child): ASTNode[] =>
+    child.type === 'Attribute'
+      ? [child]
+      : child.type === 'AttributeList' && child.kind === 'Graph'
+        ? child.children
+        : [],
+  );
+  return attributes.some(
+    (attribute) =>
+      attribute.type === 'Attribute' &&
+      textOf(attribute.key) === 'cluster' &&
+      TRUE.test(textOf(attribute.value)),
+  );
+}
+
 function checkSafety(rules: FormatRules) {
   return (ast: DotASTNode): undefined => {
     const state: DocumentState = Object.create(null);
+    const kinds = attributeKinds(ast);
     for (const node of walk(ast)) {
       switch (node.type) {
         case 'Attribute':
@@ -436,7 +521,7 @@ function checkSafety(rules: FormatRules) {
             `attribute name${where(node)}`,
             false,
           );
-          checkAttribute(node, rules, state);
+          checkAttribute(node, rules, state, kinds.get(node) ?? []);
           break;
         case 'Literal':
           if (node.kind === 'html') checkHtml(node, rules, state);
@@ -466,23 +551,22 @@ function checkSafety(rules: FormatRules) {
 type SchemaRules = Pick<FormatRules, 'schemaAttributes' | 'schemaStyles'>;
 
 function schemaRules(schema: Schema | undefined): SchemaRules {
-  if (schema === undefined) {
-    return { schemaAttributes: new Set(), schemaStyles: new Set() };
-  }
   // Checked (and copied) as a kit checks it.
-  const defined = defineSchema(schema as Schema & SchemaErrors<Schema>);
-  const attributes = new Set<string>();
-  for (const kind of [
-    'graph',
-    'subgraph',
-    'cluster',
-    'node',
-    'edge',
-  ] as const) {
-    for (const name of Object.keys(defined[kind] ?? {})) attributes.add(name);
-  }
+  const defined =
+    schema === undefined
+      ? undefined
+      : defineSchema(schema as Schema & SchemaErrors<Schema>);
+  const names = (kind: SchemaKind): ReadonlySet<string> =>
+    new Set(Object.keys(defined?.[kind] ?? {}));
+  const attributes = {
+    graph: names('graph'),
+    subgraph: names('subgraph'),
+    cluster: names('cluster'),
+    node: names('node'),
+    edge: names('edge'),
+  };
   const styles = new Set(
-    (defined.types?.style?.values ?? []).map((name) =>
+    (defined?.types?.style?.values ?? []).map((name) =>
       String(name).toLowerCase(),
     ),
   );

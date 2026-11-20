@@ -285,7 +285,8 @@ export interface CommonOptions<S extends Schema = EmptySchema> {
    * and `layout` then accept, at run time and in the types, for this call
    * (`isFormat` / `isLayout` still answer for the documented names only).
    * Its attributes type `attributes`, and `sanitize` takes it: the strict
-   * policy allows its attributes, and both policies its style names (unless
+   * policy allows its attributes on the kind of object it gives them to,
+   * and both policies its style names (unless
    * the `sanitize` options name a schema of their own, which is used
    * instead).
    *
