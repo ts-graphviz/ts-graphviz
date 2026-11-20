@@ -6,6 +6,7 @@ import {
   defineSchema,
   dsl,
   type EdgeModel,
+  type FromDotOptions,
   fromDot,
   fromDotAll,
   type ModelKit,
@@ -193,5 +194,20 @@ describe('fromDot with classes of another schema', () => {
     fromDotAll('digraph { a }', { convert: { models: plain } });
     // @ts-expect-error the same with ts-graphviz/legacy
     legacy.fromDot('digraph { a }', { convert: { models: plain } });
+  });
+});
+
+describe('FromDotOptions of a schema', () => {
+  it('needs the classes and schema, and types the result by them', () => {
+    const options: FromDotOptions<
+      'Dot' | 'Graph',
+      { readonly schema: MySchema }
+    > = { convert: { models: { schema } } };
+    expectTypeOf(fromDot('digraph {}', options)).toEqualTypeOf<
+      RootGraphModel<MySchema>
+    >();
+    // @ts-expect-error the schema is read at run time
+    const missing: FromDotOptions<'Dot', { readonly schema: MySchema }> = {};
+    missing;
   });
 });
