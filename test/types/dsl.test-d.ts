@@ -312,10 +312,11 @@ describe('custom classes', () => {
       Edge: MyEdge,
       Subgraph: MySubgraph,
     });
+    // As withModelKit infers it (a const type parameter).
     type M = ResolvedModelTypes<{
-      Node: typeof MyNode;
-      Edge: typeof MyEdge;
-      Subgraph: typeof MySubgraph;
+      readonly Node: typeof MyNode;
+      readonly Edge: typeof MyEdge;
+      readonly Subgraph: typeof MySubgraph;
     }>;
     myDigraph((G) => {
       expectTypeOf(G.node('a')).toEqualTypeOf<DSL<MyNode>>();

@@ -1,18 +1,23 @@
 import type {
   GraphAttributesObject,
-  ModelKit,
   ModelTypes,
   RootGraphModel,
+  SchemaOf,
 } from '@ts-graphviz/common';
-import type { DSL } from './dsl.js';
+import type {
+  DSL,
+  DSLGraphModel,
+  DSLModelTypes,
+  SchemaOfModel,
+} from './dsl.js';
 
 /**
  * The callback of a {@link ModelFactory}: it receives the graph's DSL.
  * @group Model Factory
  */
 export type ModelFactoryCallback<
-  G extends RootGraphModel = RootGraphModel,
-  M extends ModelTypes = ModelTypes,
+  G extends DSLGraphModel = RootGraphModel,
+  M extends DSLModelTypes = ModelTypes<SchemaOfModel<G>>,
 > = (g: DSL<G, M>) => void;
 
 /**
@@ -28,16 +33,16 @@ export type ModelFactoryCallback<
  * @group Model Factory
  */
 export interface ModelFactory<
-  G extends RootGraphModel = RootGraphModel,
-  M extends ModelTypes = ModelTypes,
+  G extends DSLGraphModel = RootGraphModel,
+  M extends DSLModelTypes = ModelTypes<SchemaOfModel<G>>,
 > {
   (
     id?: string,
-    attributes?: GraphAttributesObject,
+    attributes?: GraphAttributesObject<SchemaOf<M>>,
     callback?: ModelFactoryCallback<G, M>,
   ): DSL<G, M>;
   (
-    attributes?: GraphAttributesObject,
+    attributes?: GraphAttributesObject<SchemaOf<M>>,
     callback?: ModelFactoryCallback<G, M>,
   ): DSL<G, M>;
   (id?: string, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
@@ -47,7 +52,7 @@ export interface ModelFactory<
 /**
  * @group Model Factory
  */
-export interface ModelFactories<M extends ModelTypes = ModelTypes> {
+export interface ModelFactories<M extends DSLModelTypes = ModelTypes> {
   /**
    * API for creating directional graph objects.
    */
@@ -61,7 +66,7 @@ export interface ModelFactories<M extends ModelTypes = ModelTypes> {
 /**
  * @group Model Factory
  */
-export interface ModelFactoriesWithStrict<M extends ModelTypes = ModelTypes>
+export interface ModelFactoriesWithStrict<M extends DSLModelTypes = ModelTypes>
   extends ModelFactories<M> {
   strict: ModelFactories<M>;
 }

@@ -4,7 +4,6 @@ import type {
   ParseOptions,
 } from '@ts-graphviz/ast';
 import {
-  type AnyDotObjectModel,
   type EdgeModel,
   type ModelClasses,
   type ModelTypes,
@@ -15,7 +14,7 @@ import {
   type SubgraphModel,
 } from '@ts-graphviz/common';
 import { createModelKit } from '@ts-graphviz/core';
-import type { DSL } from './dsl.js';
+import type { DSL, DSLModel, DSLModelTypes, SchemaOfModel } from './dsl.js';
 import { fromDotAllWith, fromDotWith } from './from-dot-with.js';
 
 /**
@@ -31,7 +30,7 @@ export type FromDotRule = 'Dot' | 'Graph' | 'Node' | 'Edge' | 'Subgraph';
  */
 export type FromDotModel<
   R extends FromDotRule,
-  M extends ModelTypes = ModelTypes,
+  M extends DSLModelTypes = ModelTypes,
 > = R extends 'Dot' | 'Graph'
   ? M['Graph'] | M['Digraph']
   : R extends 'Node'
@@ -49,9 +48,9 @@ type AnyFromDotModel = RootGraphModel | NodeModel | EdgeModel | SubgraphModel;
  * @group Convert DOT to Model
  */
 export type FromDotResult<
-  T extends AnyDotObjectModel,
+  T extends DSLModel,
   D extends boolean,
-  M extends ModelTypes = ModelTypes,
+  M extends DSLModelTypes = ModelTypes<SchemaOfModel<T>>,
 > = D extends true ? DSL<T, M> : T;
 
 /**
