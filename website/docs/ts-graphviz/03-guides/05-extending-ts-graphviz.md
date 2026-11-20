@@ -14,9 +14,8 @@ import { Digraph, Node, Edge, EdgeTargetTuple, attribute as _, toDot } from 'ts-
 
 class MyCustomDigraph extends Digraph {
   constructor() {
-    super('G', {
-      [_.label]: 'This is Custom Digraph',
-    });
+    super('G');
+    this.setAttribute(_.label, 'This is Custom Digraph');
   }
 }
 

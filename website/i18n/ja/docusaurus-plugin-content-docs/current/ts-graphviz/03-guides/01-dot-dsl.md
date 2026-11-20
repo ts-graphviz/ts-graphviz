@@ -44,8 +44,8 @@ DSL はグラフのモデル、つまり [DOT Object Model（DOM）](./02-model-
 | `node [shape = box];` | `g.node({ shape: 'box' });` |
 | `edge [color = gray];` | `g.edge({ color: 'gray' });` |
 | `graph [fontname = Helvetica];` | `g.graph({ fontname: 'Helvetica' });` |
-| `subgraph cluster_0 { label = Group; d; e; }` | `g.subgraph('cluster_0', { label: 'Group' }, (s) => { s.node('d'); s.node('e'); });` |
-| `{ rank = same; b; c; }` | `g.subgraph({ rank: 'same' }, (s) => { s.node('b'); s.node('c'); });` |
+| `subgraph cluster_0 { label = Group; d; e; }` | `g.subgraph('cluster_0', (s) => { s.label = 'Group'; s.node('d'); s.node('e'); });` |
+| `{ rank = same; b; c; }` | `g.subgraph((s) => { s.rank = 'same'; s.node('b'); s.node('c'); });` |
 | `// note` | `a.addComment('note');` |
 
 まとめると次のようになります。
@@ -60,11 +60,13 @@ const G = digraph('G', (g) => {
   g.edge([a, 'b', 'c']);
   g.edge(['c', ['d', 'e']]);
   g.edge(['a:p1:n', a.port({ port: 'p2', compass: 's' })]);
-  g.subgraph('cluster_0', { label: 'Group' }, (s) => {
+  g.subgraph('cluster_0', (s) => {
+    s.label = 'Group';
     s.node('d');
     s.node('e');
   });
-  g.subgraph({ rank: 'same' }, (s) => {
+  g.subgraph((s) => {
+    s.rank = 'same';
     s.node('b');
     s.node('c');
   });
@@ -134,12 +136,13 @@ digraph((g) => {
 
 グラフやサブグラフの DSL では、属性名は DOT の `rankdir = LR;` と同じく DOT の文です。`g.rankdir = 'LR'` は、実行した位置に、実行するたびに `rankdir = "LR";` を書き込みます（グラフ属性の代入です。Graphviz では後の代入が前の代入を上書きします）。書き込み専用で、`g.rankdir` を読むか `delete g.rankdir` すると、コード `TSG_ERR_WRITE_ONLY_PROPERTY` を持つ `TypeError` を投げます。`undefined` を代入すると、コード `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` を持つ `TypeError` を投げます。JavaScript やツールがどのオブジェクトにも問い合わせる名前（`then`、`toJSON`、`Object.prototype` の名前）は `undefined` と読めるので、グラフの DSL を await したり文字列化したりできます。
 
-ファクトリの属性引数は本体の最初の代入を書き込み、グラフの属性はモデル（`modelOf(g).getAttribute`、`setAttribute`）で読み書きします。グラフの属性はその代入であり、別の表はありません。`getAttribute(key)` はそのキーの最後の代入の値です（`graph [...]` リストの値は読みません）。`setAttribute(key, value)` はそのキーの最初の代入の値を変えて残りを削除し、代入がなければ本体の先頭（すでにある代入の後）に追加します。`removeAttribute(key)` はそのキーの代入をすべて削除し、`getAttributeNames()` は代入されたキーを並べます。コンストラクタやファクトリの属性は、渡した順で最初の代入になります。
+グラフの属性はモデル（`modelOf(g).getAttribute`、`setAttribute`）で読み書きします。グラフの属性はその代入であり、別の表はありません。`getAttribute(key)` はそのキーの最後の代入の値です（`graph [...]` リストの値は読みません）。`setAttribute(key, value)` はそのキーの最初の代入の値を変えて残りを削除し、代入がなければ本体の先頭（すでにある代入の後）に追加します。`removeAttribute(key)` はそのキーの代入をすべて削除し、`getAttributeNames()` は代入されたキーを並べます。
 
 ```typescript
 import { digraph, modelOf, toDot } from 'ts-graphviz';
 
-const G = digraph('G', { bgcolor: 'white' }, (g) => {
+const G = digraph('G', (g) => {
+  g.bgcolor = 'white';
   g.node('a');
   g.bgcolor = 'gray'; // ここに bgcolor = "gray";
   g.node('b');

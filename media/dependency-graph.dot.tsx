@@ -74,29 +74,27 @@ function PackageLabel({
   );
 }
 
-export default digraph(
-  'dependency_graph',
-  { newrank: true, rankdir: 'LR' },
-  (g) => {
-    g.node({ shape: 'none' });
-    g.edge({ dir: 'back' });
+export default digraph('dependency_graph', (g) => {
+  g.newrank = true;
+  g.rankdir = 'LR';
+  g.node({ shape: 'none' });
+  g.edge({ dir: 'back' });
 
-    for (const pkg of publishedPackages) {
-      g.node(pkg.manifest.name, {
-        label: htmlLikeFromElement(
-          <PackageLabel
-            name={pkg.manifest.name}
-            description={pkg.manifest.description}
-          />,
-        ),
-        URL: `https://www.npmjs.com/package/${pkg.manifest.name}`,
-      });
-    }
+  for (const pkg of publishedPackages) {
+    g.node(pkg.manifest.name, {
+      label: htmlLikeFromElement(
+        <PackageLabel
+          name={pkg.manifest.name}
+          description={pkg.manifest.description}
+        />,
+      ),
+      URL: `https://www.npmjs.com/package/${pkg.manifest.name}`,
+    });
+  }
 
-    for (const { manifest } of publishedPackages) {
-      for (const depName of workspaceDependencies(manifest)) {
-        g.edge([depName, manifest.name]);
-      }
+  for (const { manifest } of publishedPackages) {
+    for (const depName of workspaceDependencies(manifest)) {
+      g.edge([depName, manifest.name]);
     }
-  },
-);
+  }
+});

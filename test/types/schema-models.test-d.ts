@@ -227,7 +227,9 @@ describe('without a schema', () => {
     // The classes are generic, so `new (directed ? Digraph : Graph)()` is
     // not constructable; as constructors of a context they are.
     const Class: RootGraphConstructor = directed ? Digraph : Graph;
-    expectTypeOf(new Class('G', true)).toEqualTypeOf<RootGraphModel>();
+    expectTypeOf(
+      new Class('G', { strict: true }),
+    ).toEqualTypeOf<RootGraphModel>();
   });
 });
 
@@ -292,25 +294,16 @@ describe('a schema', () => {
       }
     });
     expectTypeOf<GraphAttributesObject<MySchema>>().toHaveProperty('hoge');
-    new Digraph<MySchema>('G', { hoge: 'x' });
+    new Digraph<MySchema>('G').setAttribute('hoge', 'x');
     // @ts-expect-error a string
-    new Digraph<MySchema>('G', { hoge: 1 });
+    new Digraph<MySchema>('G').setAttribute('hoge', 1);
   });
 
-  it('adds cluster attributes to clusters only', () => {
+  it('adds cluster attributes to the object of a cluster id', () => {
     myDigraph(() => {
-      kit.createSubgraph('cluster_a', { team: 'core' });
-      kit.createSubgraph('cluster_b', { team: 'infra', label: 'B' });
-      kit.createSubgraph({ cluster: true, team: 'core' });
-      kit.createSubgraph('x', { cluster: true, team: 'core' });
+      kit.createSubgraph('cluster_a').setAttribute('team', 'core');
       // @ts-expect-error not a team
-      kit.createSubgraph('cluster_c', { team: 'other' });
-      // @ts-expect-error team applies to clusters
-      kit.createSubgraph('row', { team: 'core' });
-      // @ts-expect-error team applies to clusters
-      kit.createSubgraph({ team: 'core' });
-      // @ts-expect-error not next to a subgraph attribute either
-      kit.createSubgraph('row', { lane: 1, team: 'core' });
+      kit.createSubgraph('cluster_c').setAttribute('team', 'other');
       // @ts-expect-error a cluster attribute
       kit.createNode('a', { team: 'core' });
     });
@@ -319,12 +312,9 @@ describe('a schema', () => {
     >();
   });
 
-  it('adds subgraph attributes to subgraphs that are not clusters', () => {
+  it('adds subgraph attributes to subgraphs', () => {
     myDigraph((g) => {
-      kit.createSubgraph('row', { lane: 1, rank: 'same' });
-      kit.createSubgraph({ lane: 2 });
-      // @ts-expect-error lane applies to subgraphs that are not clusters
-      kit.createSubgraph('cluster_a', { lane: 1 });
+      kit.createSubgraph('row').setAttribute('lane', 1);
       // A subgraph model may be either, so it takes both.
       {
         const s = kit.createSubgraph('s');
@@ -435,7 +425,7 @@ describe('a schema', () => {
         fontcolor: 'brand-blue',
       });
       g.set('bgcolor', 'brand-blue');
-      kit.createSubgraph('cluster_a', { pencolor: 'brand-blue' });
+      kit.createSubgraph('cluster_a').setAttribute('pencolor', 'brand-blue');
       kit.createNode('b', { style: 'filled,my-style' });
       kit.createEdge(['a', 'b'], { arrowhead: 'omy-arrow', headport: 'p:mid' });
       kit.createNode('c', { color: 'red' });
@@ -649,7 +639,8 @@ describe('the core classes', () => {
     expectTypeOf(e).toExtend<EdgeModel<MySchema>>();
     // @ts-expect-error an edge attribute
     new Edge<MySchema>([n, n], { 'data-id': 1 });
-    const s = new Subgraph<MySchema>('cluster_a', { team: 'core' });
+    const s = new Subgraph<MySchema>('cluster_a');
+    s.setAttribute('team', 'core');
     expectTypeOf(s).toExtend<SubgraphModel<MySchema>>();
     expectTypeOf(new LegacyDigraph<MySchema>()).toExtend<
       RootGraphModel<MySchema>

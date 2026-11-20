@@ -260,7 +260,7 @@ describe('the statements', () => {
     g.edge(['a', 'b'], { color: 'red' }, (edge) =>
       expectTypeOf(edge).toEqualTypeOf<DSL<EdgeModel>>(),
     );
-    g.subgraph('cluster_a', { color: 'red' }, (sub) =>
+    g.subgraph('cluster_a', (sub) =>
       expectTypeOf(sub).toEqualTypeOf<DSL<SubgraphModel>>(),
     );
     s.subgraph((sub) => expectTypeOf(sub).toEqualTypeOf<DSL<SubgraphModel>>());
@@ -291,14 +291,12 @@ describe('the statements', () => {
     assignment.value = 'blue';
   });
 
-  it('take the cluster attributes for a cluster only', () => {
+  it('take no attributes for a subgraph: they are statements of its body', () => {
+    g.subgraph('cluster_a', (c) => {
+      c.color = 'red';
+    });
+    // @ts-expect-error as in DOT, no attributes in the header
     g.subgraph('cluster_a', { color: 'red' });
-    g.subgraph({ cluster: true, color: 'red' });
-    g.subgraph('a', { rank: 'same' });
-    // @ts-expect-error color is a cluster attribute
-    g.subgraph('a', { color: 'red' });
-    // @ts-expect-error color is a cluster attribute
-    g.subgraph({ color: 'red' });
   });
 
   it('take the attributes of each kind', () => {

@@ -66,7 +66,8 @@ g.edge(['Node1', 'Node2'], { label: 'エッジラベル', color: 'blue' });
 import { digraph } from 'ts-graphviz';
 
 const g = digraph('G');
-g.subgraph('ClusterA', { label: 'クラスター A' }, (cluster) => {
+g.subgraph('ClusterA', (cluster) => {
+  cluster.label = 'クラスター A';
   cluster.node('A1');
   cluster.node('A2');
   cluster.edge(['A1', 'A2']);
@@ -92,13 +93,16 @@ g.subgraph('ClusterA', { label: 'クラスター A' }, (cluster) => {
 ```typescript
 import { digraph } from 'ts-graphviz';
 
-const g = digraph('G', { newrank: true }, (g) => {
+const g = digraph('G', (g) => {
+  g.newrank = true;
   g.node('Node1', { label: 'ノード 1', color: 'red' });
   g.node('Node2', { label: 'ノード 2', color: 'green' });
 
   g.edge(['Node1', 'Node2'], { label: 'エッジラベル', color: 'blue' });
 
-  g.subgraph('ClusterA', { label: 'クラスター A', color: 'lightgrey' }, (cluster) => {
+  g.subgraph('ClusterA', (cluster) => {
+    cluster.label = 'クラスター A';
+    cluster.color = 'lightgrey';
     cluster.node('A1', { shape: 'box' });
     cluster.node('A2', { shape: 'ellipse' });
     cluster.edge(['A1', 'A2'], { style: 'dashed' });

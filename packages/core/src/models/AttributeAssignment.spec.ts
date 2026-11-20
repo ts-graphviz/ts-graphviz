@@ -88,7 +88,8 @@ describe('a graph', () => {
 
 describe("a graph's attributes, its assignments", () => {
   it('set the first assignment of a key and remove the others', () => {
-    const g = new Digraph('G', { bgcolor: 'red' });
+    const g = new Digraph('G');
+    g.setAttribute('bgcolor', 'red');
     const s = new Subgraph('s');
     g.addSubgraph(s);
     const later = g.addAttributeAssignment('bgcolor', 'blue');
@@ -113,7 +114,8 @@ describe("a graph's attributes, its assignments", () => {
   });
 
   it('are a table of its own with the legacy classes', () => {
-    const g = new LegacyDigraph('G', { bgcolor: 'red' });
+    const g = new LegacyDigraph('G');
+    g.setAttribute('bgcolor', 'red');
     expect(g.attributesInStatements).toBe(false);
     expect(g.statements).toStrictEqual([]);
     g.addAttributeAssignment('bgcolor', 'blue');

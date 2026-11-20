@@ -17,7 +17,8 @@ console.log('Testing ts-graphviz import from TypeScript ESM project...\n');
 
 // Test 1: Type checking with attributes
 console.log('Test 1: Creating typed graph with attributes');
-const graph = new Digraph('G', {
+const graph = new Digraph('G');
+graph.setAttributes({
   comment: 'TypeScript ESM test graph',
   [_.rankdir]: 'LR',
   [_.bgcolor]: 'lightgray',
@@ -43,7 +44,8 @@ const node2 = new Node('node2', { [_.label]: 'Node 2' });
 const edge = new Edge([node1, node2], edgeAttrs);
 
 // Test subgraph
-const subgraph = new Subgraph('cluster_0', {
+const subgraph = new Subgraph('cluster_0');
+subgraph.setAttributes({
   [_.label]: 'Subgraph',
   [_.style]: 'filled',
   [_.fillcolor]: 'lightyellow',

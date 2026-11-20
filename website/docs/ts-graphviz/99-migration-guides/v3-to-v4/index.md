@@ -18,7 +18,8 @@ Requirements: **Node.js 22 or later** (Node.js 20 reached end of life) and, for 
 import { digraph, modelOf, toDot } from 'ts-graphviz';
 
 // 3.x: g.rankdir = 'LR'; ... g.rankdir === 'LR'; delete g.rankdir;
-const G = digraph('G', { rankdir: 'LR' }, (g) => {
+const G = digraph('G', (g) => {
+  g.rankdir = 'LR';
   g.node('a');
   g.label = 'G'; // label = "G"; here
 });
@@ -57,7 +58,7 @@ TypeScript reports most other changes, but these three still compile, so search 
 
 | 3.x | v4 |
 | --- | --- |
-| `g.set('rankdir', 'LR')`, `g.get('rankdir')` | the graph's own attributes: the factory's argument (`digraph('G', { rankdir: 'LR' })`), `modelOf(g).setAttribute(...)`, `modelOf(g).getAttribute(...)` (see section 14); `g.rankdir = 'LR'` writes a graph attribute assignment where it runs (below) |
+| `g.set('rankdir', 'LR')`, `g.get('rankdir')` | `g.rankdir = 'LR'` (a graph attribute assignment where it runs, below), `modelOf(g).setAttribute(...)`, `modelOf(g).getAttribute(...)` (see section 14) |
 | `node.attributes.set('label', 'A')` | `node.label = 'A'` (or `modelOf(node).setAttribute(...)`) |
 | `node.attributes.delete('label')` | `delete node.label` or `node.label = undefined` |
 | `g.attributes.node.set('shape', 'box')` | `g.node({ shape: 'box' })` (before the other statements) |
@@ -131,6 +132,7 @@ try {
 | Graphviz command failed | `CommandExecutionError` (`Error`) | `TSG_ERR_COMMAND_FAILED` |
 | Graphviz output over `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
 | an adapter option outside its type or range | `TypeError` / `RangeError` | `TSG_ERR_INVALID_OPTION` |
+| a constructor, factory or DSL statement called with arguments that fit none of its signatures (section 17) | `TypeError` | `TSG_ERR_INVALID_ARGUMENTS` |
 | `sanitize` (and so the adapter) rejects the DOT | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
 
 Code that matched on `error.message` should match on `error.code`.
@@ -401,5 +403,23 @@ In DOT, `a [color=red]; b; a [shape=box]` declares `a` twice, and Graphviz appli
 - With `@ts-graphviz/react`, each `<Node>` is a declaration of its own, also when two elements, or two roots on one container, have one id.
 - The legacy models (`legacyModels`) keep one node per id, with `getNode` and `getSubgraph`, deprecated: a node added with the id of another takes its place. `fromDot` and the DSL of `ts-graphviz/legacy` add a node or a subgraph declared again to the first one, as 3.x did; with `legacyModels` given to `fromDot` of `ts-graphviz`, a node declared again replaces the first.
 - Render with `@ts-graphviz/react` into graphs of v4's classes: in a graph of `legacyModels`, a rendered node takes the place of the graph's node with its id, which does not come back when the rendered one goes.
+
+## 17. Arguments are read by position; a graph takes no attributes in its constructor
+
+3.x found the arguments of the root graph and subgraph constructors, the factories (`digraph`, `graph`, `strict.*`) and the DSL's statements by their type, so it took them in any order and dropped extra ones: `digraph('G', 'H')` made the graph `G`, and `g.subgraph(callback, 'id')` worked. v4 reads them by position, in the order of the signatures, each of which may be left out (`undefined` or `null` holds a place). A call that fits none of the signatures throws a `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`, as do `node()`, `edge()` and `graph()` without arguments they take, which returned `undefined`. TypeScript already rejected these calls.
+
+**A graph or subgraph takes no attributes as an argument**, as DOT has no attribute list on a graph's or subgraph's header (`digraph G [...]` is not DOT): its attributes are statements of its body. The constructors of `Digraph`, `Graph` and `Subgraph`, the kit's `createDigraph` / `createGraph` / `createSubgraph`, the factories (`digraph`, `graph`, `strict.*`, `withModelKit().*`) and the DSL's `g.subgraph()` lose the attributes argument; nodes and edges keep theirs. A root graph takes `strict` in options after its id:
+
+| 3.x | v4 |
+| --- | --- |
+| `digraph('G', { rankdir: 'LR' }, (g) => { ... })` | `digraph('G', (g) => { g.rankdir = 'LR'; ... })` |
+| `g.subgraph('cluster_a', { label: 'A' }, (s) => { ... })` | `g.subgraph('cluster_a', (s) => { s.label = 'A'; ... })` |
+| `new Digraph('G', { rankdir: 'LR' })` | `const g = new Digraph('G'); g.setAttribute('rankdir', 'LR');` |
+| `new Subgraph('cluster_a', { label: 'A' })` | `const s = new Subgraph('cluster_a'); s.setAttribute('label', 'A');` |
+| `new Digraph('G', true, { label: 'x' })` | `new Digraph('G', { strict: true })`, then `setAttribute('label', 'x')` |
+| `new Digraph(true)` | `new Digraph({ strict: true })`, or `strict.digraph()` for the DSL |
+| `kit.createGraph('G', true)` | `kit.createGraph('G', { strict: true })` |
+
+The written DOT is the same: the attributes are the first statements of the body, where 3.x wrote them. 3.x's boolean `strict` argument is not kept as a deprecated form: it came before the attributes (`new Digraph('G', true, { label: 'x' })`), whose place is gone, so no 3.x call with it would still mean the same. Every 3.x form above throws `TSG_ERR_INVALID_ARGUMENTS`, as do options with another property than `strict`. A class of your own that overrides the constructor of `Digraph`, `Graph` or `Subgraph`, and a kit whose `createDigraph` / `createGraph` / `createSubgraph` you wrote, receive an id and (for a root graph) the options from `fromDot`, `toModel`, the factories and `@ts-graphviz/react`: pass the arguments on (`super(...args)`). The props of `@ts-graphviz/react`'s `<Digraph>`, `<Graph>` and `<Subgraph>` stay: they are the graph's attribute assignments.
 
 See the [Security model](../../11-advanced-topics/06-security-model.md) for what the library guarantees at each trust boundary in v4.

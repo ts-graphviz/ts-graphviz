@@ -49,11 +49,13 @@ type Equal<A, B> =
 declare function assertType<T extends true>(): void;
 
 // factories and callbacks
-const g = digraph('G', { rankdir: 'LR' }, (g) => {
+const g = digraph('G', (g) => {
+  g.rankdir = 'LR';
   const a = g.node('a', { shape: 'box', label: htmlLike('<b>a</b>') });
   g.edge([a, 'b:p:n', { id: 'c', port: 'p' }, ['d', 'e']], { color: 'red' });
-  g.subgraph('cluster_0', { label: 'c' }, (s) => {
+  g.subgraph('cluster_0', (s) => {
     assertType<Equal<typeof s, DSL<SubgraphModel>>>();
+    s.label = 'c';
     s.node('c');
   });
   // @ts-expect-error an edge needs at least two targets

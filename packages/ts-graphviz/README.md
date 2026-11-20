@@ -256,9 +256,8 @@ import {
 
 class MyCustomDigraph extends Digraph {
   constructor() {
-    super('G', {
-      [_.label]: 'This is Custom Digraph',
-    });
+    super('G');
+    this.setAttribute(_.label, 'This is Custom Digraph');
   }
 }
 
@@ -391,9 +390,8 @@ import {
 
 class MyCustomDigraph extends Digraph {
   constructor() {
-    super('G', {
-      [_.label]: 'This is Custom Digraph',
-    });
+    super('G');
+    this.setAttribute(_.label, 'This is Custom Digraph');
   }
 }
 class MyCustomNode extends Node {
