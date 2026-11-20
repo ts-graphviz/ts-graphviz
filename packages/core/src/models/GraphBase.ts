@@ -235,7 +235,8 @@ export abstract class GraphBase<
    * `true` here; the deprecated classes of `legacyModels` return `false`.
    *
    * Then `getAttribute(key)` is the value of the last assignment of `key`
-   * (the value Graphviz gives the graph), `setAttribute(key, value)` sets
+   * (Graphviz also applies the `graph [...]` lists among the statements;
+   * those are not read here), `setAttribute(key, value)` sets
    * the value of the first assignment of `key` and removes the others, or,
    * when there is none, adds one at the start of the body (after the
    * assignments already there), `removeAttribute(key)` removes every
@@ -253,7 +254,7 @@ export abstract class GraphBase<
     if (!this.attributesInStatements) return super.readAttribute(name);
     let value: unknown;
     for (const s of this.#statements) {
-      if (s instanceof AttributeAssignment && s.key === name) value = s.value;
+      if (isAttributeAssignmentModel(s) && s.key === name) value = s.value;
     }
     return value;
   }
@@ -264,10 +265,11 @@ export abstract class GraphBase<
       super.writeAttribute(name, value);
       return;
     }
-    let first: AttributeAssignment | undefined;
+    let first: AttributeAssignmentModel | undefined;
     for (const s of this.#statements) {
-      if (!(s instanceof AttributeAssignment) || s.key !== name) continue;
-      if (first === undefined) first = s;
+      if (!isAttributeAssignmentModel(s) || s.key !== name) continue;
+      // Every statement of the graph was added as a model of its kind.
+      if (first === undefined) first = s as AttributeAssignmentModel;
       else this.#statements.delete(s);
     }
     if (first !== undefined) {
@@ -278,7 +280,7 @@ export abstract class GraphBase<
     let at = 0;
     while (
       at < statements.length &&
-      statements[at] instanceof AttributeAssignment
+      isAttributeAssignmentModel(statements[at])
     ) {
       at++;
     }
@@ -293,7 +295,7 @@ export abstract class GraphBase<
       return;
     }
     for (const s of this.#statements) {
-      if (s instanceof AttributeAssignment && s.key === name) {
+      if (isAttributeAssignmentModel(s) && s.key === name) {
         this.#statements.delete(s);
       }
     }
@@ -304,7 +306,7 @@ export abstract class GraphBase<
     if (!this.attributesInStatements) return super.attributeNames();
     const names = new Set<string>();
     for (const s of this.#statements) {
-      if (s instanceof AttributeAssignment) names.add(s.key);
+      if (isAttributeAssignmentModel(s)) names.add(s.key);
     }
     return Array.from(names);
   }

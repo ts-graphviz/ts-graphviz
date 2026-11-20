@@ -2,7 +2,9 @@ import { isAttributeAssignmentModel } from '@ts-graphviz/common';
 import { describe, expect, it, test } from 'vitest';
 import { AttributeAssignment } from './AttributeAssignment.js';
 import { Digraph } from './Digraph.js';
+import { LegacyDigraph } from './legacy.js';
 import { Node } from './Node.js';
+import { Subgraph } from './Subgraph.js';
 
 const invalid = expect.objectContaining({
   name: 'TypeError',
@@ -81,5 +83,40 @@ describe('a graph', () => {
       invalid,
     );
     expect(g.statements).toStrictEqual([]);
+  });
+});
+
+describe("a graph's attributes, its assignments", () => {
+  it('set the first assignment of a key and remove the others', () => {
+    const g = new Digraph('G', { bgcolor: 'red' });
+    const s = new Subgraph('s');
+    g.addSubgraph(s);
+    const later = g.addAttributeAssignment('bgcolor', 'blue');
+    later.addComment('blue from here');
+    expect(g.getAttribute('bgcolor')).toBe('blue');
+    g.setAttribute('bgcolor', 'green');
+    // One value throughout: the later one, and its comment, are gone.
+    expect(g.statements).toMatchObject([
+      { key: 'bgcolor', value: 'green' },
+      { $$type: 'Subgraph' },
+    ]);
+    expect(g.getAttribute('bgcolor')).toBe('green');
+    g.setAttribute('label', 'L');
+    expect(g.getAttributeNames()).toEqual(['bgcolor', 'label']);
+    expect(g.statements.map((x) => x.$$type)).toEqual([
+      'AttributeAssignment',
+      'AttributeAssignment',
+      'Subgraph',
+    ]);
+    g.removeAttributes();
+    expect(g.statements).toStrictEqual([s]);
+  });
+
+  it('are a table of its own with the legacy classes', () => {
+    const g = new LegacyDigraph('G', { bgcolor: 'red' });
+    expect(g.attributesInStatements).toBe(false);
+    expect(g.statements).toStrictEqual([]);
+    g.addAttributeAssignment('bgcolor', 'blue');
+    expect(g.getAttribute('bgcolor')).toBe('red');
   });
 });

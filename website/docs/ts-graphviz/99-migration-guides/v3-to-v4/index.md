@@ -29,7 +29,7 @@ toDot(G); // digraph "G" { "a"; label = "G"; }
 
 `ts-graphviz/legacy` keeps the 3.x meaning: the names are the graph's own attributes, readable and deletable.
 
-**A graph's attributes are its graph attribute assignments**, statements where they are written; there is no table apart. `getAttribute(key)` is the last assignment of `key` (as Graphviz gives the graph), so `fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` is `'LR'`, as in 3.x; `setAttribute` sets the first assignment of the key and removes the others (or adds one at the start of the body), and `removeAttribute` removes every one. Each assignment is in `statements`:
+**A graph's attributes are its graph attribute assignments**, statements where they are written; there is no table apart. `getAttribute(key)` is the last assignment of `key` (not of a `graph [...]` list), so `fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` is `'LR'`, as in 3.x; `setAttribute` sets the first assignment of the key and removes the others (or adds one at the start of the body), and `removeAttribute` removes every one. Each assignment is in `statements`:
 
 ```ts
 import { fromDot, isAttributeAssignmentModel } from 'ts-graphviz';
