@@ -157,7 +157,29 @@ The attribute keys, their documentation and value types in `@ts-graphviz/common`
 - `tailclip` is `boolean` (was `Point`); `tail_lp` is `Point` (was `string`).
 - `ArrowType` (`arrowhead`, `arrowtail`) takes only the modifiers each shape takes in [Graphviz's table](https://graphviz.org/doc/info/arrows.html): `ldot`, `ocrow` and a two-shape name ending in `none` (`dotnone`) are type errors. Names of three or four shapes are made with `ArrowType.build()`, which checks each shape: `ArrowType.build('obox', 'ltee', 'vee')`. To find the names that changed, search for `arrowhead` and `arrowtail`.
 
-The augmentation points (`Attribute.$keys`, `Attribute.$types`, `EdgeAttributeKey.$values`, …) are unchanged.
+**Global type augmentation is removed.** The `$` interfaces that `declare module '@ts-graphviz/common'` extended (`Attribute.$keys`, `Attribute.$types`, `EdgeAttributeKey.$values` and the other `*AttributeKey.$values`, `Style.$styleItem`, `Color.$colors`, `ArrowType.$shape`, `Compass.$values`, …), `$keywords`, `$keywordsValidation` and the `$exclude` interfaces are gone, and so are the `.values` aliases (`EdgeAttributeKey.values`, `Compass.values`, …): the types themselves are the unions. Attributes and value types of your own go in a schema, which types the models of one kit only:
+
+```ts no-check
+// 3.x
+import { $keywords } from '@ts-graphviz/common';
+declare module '@ts-graphviz/common' {
+  export namespace GraphAttributeKey {
+    export interface $values extends $keywords<'hoge'> {}
+  }
+  export namespace Attribute {
+    export interface $keys extends $keywords<'hoge'> {}
+    export interface $types { hoge: string }
+  }
+}
+const g = digraph((g) => { g.hoge = 'fuga'; });
+
+// v4
+const schema = defineSchema({ graph: { hoge: attr<string>() } });
+const { digraph } = withModelKit({ schema });
+const g = digraph((g) => { g.hoge = 'fuga'; });
+```
+
+A value enumeration extended with `declare module` (`Style.$styleItem`, `Color.$colors`, `ArrowType.$shape`, …) becomes `types: { style: values.extend<'my-style'>() }` (or `color`, `arrowType`, …) in the schema. Search your code for `declare module '@ts-graphviz/common'`: importing `$keywords` no longer compiles, but a block that does not import it compiles and adds nothing. `PackMode` no longer refers to the misspelt `PickMode` namespace, which is gone. The AST's `AttributeASTNode` and `AttributeASTProperties` take any string as their key by default (`AttributeASTNode<T extends string = string>`), as DOT does.
 
 ## 8. `@ts-graphviz/ast`
 

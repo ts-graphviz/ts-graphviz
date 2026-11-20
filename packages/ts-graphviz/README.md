@@ -718,50 +718,41 @@ With ts-graphviz, you can extend the library's type system to customize graph vi
 
 #### Use Case: Adding Custom Attributes
 
-> **Note** To allow for customization, types are named with the `$` symbol.
->
-> If you want to extend a type definition in cases not listed below, check the source code to see if you can extend it with `$...`.
->
-> If not, please create an issue or pull request.
+A schema lists the attributes and value types the models of one kit take beyond (or instead of) the built-in ones. Nothing changes for the rest of the program.
 
 ```ts
-import { $keywords } from '@ts-graphviz/common';
-import { digraph, toDot, attribute as _ } from 'ts-graphviz';
+import { attr, defineSchema, toDot, values, withModelKit } from 'ts-graphviz';
 
-// 1. Declare the '@ts-graphviz/common' module.
-declare module '@ts-graphviz/common' {
-  export namespace GraphAttributeKey {
-    // 2. Define the $values interface in the GraphAttributeKey namespace.
-    // 3. Inherit from $keywords<'hoge'> and specify the name of the new attribute in <...>.
-    export interface $values extends $keywords<'hoge'> {}
-  }
+// The attributes and value types your graphs take beyond the built-in ones.
+const schema = defineSchema({
+  graph: { hoge: attr<string>() }, // a new attribute
+  node: {
+    'data-id': attr<number>(),
+    label: attr.override<number>(), // a number instead of the built-in type
+  },
+  types: { color: values.extend<'brand-blue'>() }, // every color attribute
+});
 
-  export namespace Attribute {
-    // 4. Define the $keys interface in the Attribute namespace.
-    // 5. Inherit from $keywords<'hoge'> and specify the name of the new attribute in <...>.
-    export interface $keys extends $keywords<'hoge'> {}
-
-    // 6. Define the $types interface in the Attribute namespace.
-    // 7. Specify the new attribute in the key and define its corresponding value in the value.
-    export interface $types {
-      hoge: string;
-    }
-  }
-}
-
+const { digraph } = withModelKit({ schema });
 console.log(
   toDot(
     digraph((g) => {
-      g[_.hoge] = 'fuga';
+      g.hoge = 'fuga';
+      g.node('a', { 'data-id': 1, label: 2, color: 'brand-blue' });
     }),
   ),
 );
 // digraph {
 //   hoge = "fuga";
+//   "a" [
+//     "data-id" = 1;
+//     label = 2;
+//     color = "brand-blue";
+//   ];
 // }
 ```
 
-This changes the types everywhere in your program. To type the attributes of one set of models only, the model types and classes take a `Schema` type parameter instead (`class MyNode extends Node<MySchema> {}`).
+`attr<T>()` adds an attribute, `attr.extend<T>()` / `attr.override<T>()` change a built-in one, and `types` changes a value type with `values.extend<T>()` / `values.override<T>()`. `createModelKit({ schema, Node: MyNode })` and `fromDot(dot, { convert: { models: { schema } } })` take the schema too.
 
 #### Use Case: Specifying Custom Graph Layout and Output Formats
 

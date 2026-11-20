@@ -38,11 +38,11 @@ export type ASTToModel<T> = T extends {
   type: infer U;
 } ? ModelOf<U> : never;
 
-export interface AttributeASTNode<T extends AttributeKey = AttributeKey> extends ASTBaseNode, AttributeASTProperties<T> {
+export interface AttributeASTNode<T extends string = string> extends ASTBaseNode, AttributeASTProperties<T> {
   type: "Attribute";
 }
 
-export interface AttributeASTProperties<T extends AttributeKey = AttributeKey> extends ASTCommonProperties {
+export interface AttributeASTProperties<T extends string = string> extends ASTCommonProperties {
   key: LiteralASTNode<T>;
   value: LiteralASTNode;
 }

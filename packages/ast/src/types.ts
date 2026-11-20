@@ -1,9 +1,4 @@
-import type {
-  ASTType,
-  AttributeKey,
-  CommentKind,
-  Compass,
-} from '@ts-graphviz/common';
+import type { ASTType, CommentKind, Compass } from '@ts-graphviz/common';
 
 /**
  * The kind of a comment: `Block`, `Slash` or `Macro` (the same kinds as a
@@ -197,9 +192,12 @@ export interface NodeRefListASTProperties extends ASTCommonProperties {}
 
 /**
  * AttributeASTProperties interface defines the properties of an {@link AttributeASTNode}.
+ *
+ * @typeParam T - The key: any string by default, as DOT has it; an
+ * attribute of a schema is one too.
  * @group AST
  */
-export interface AttributeASTProperties<T extends AttributeKey = AttributeKey>
+export interface AttributeASTProperties<T extends string = string>
   extends ASTCommonProperties {
   key: LiteralASTNode<T>;
   value: LiteralASTNode;
@@ -312,7 +310,7 @@ export interface GraphASTNode
  * AttributeASTNode is a type of AST node that represents an attribute.
  * @group AST
  */
-export interface AttributeASTNode<T extends AttributeKey = AttributeKey>
+export interface AttributeASTNode<T extends string = string>
   extends ASTBaseNode,
     AttributeASTProperties<T> {
   type: 'Attribute';

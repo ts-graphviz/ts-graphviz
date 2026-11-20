@@ -129,9 +129,9 @@ digraph {
 
 使用 `ts-graphviz`，您可以扩展库的类型系统，以定制图形可视化解决方案。当您需要指定自定义图形布局、输出格式，或添加默认不支持的自定义属性时，这非常有用。
 
-### 使用 `$` 符号进行自定义
+### 自定义类型
 
-为了允许自定义，旨在扩展的类型以 `$` 符号命名。如果您需要扩展以下未列出的类型定义，请检查源代码以查看是否可以使用 `$...` 进行扩展。如果不能，请创建一个问题或拉取请求。
+自定义的属性和值类型通过模式（`defineSchema`）添加到一个套件的模型中；Graphviz 插件添加的布局引擎和输出格式在每次调用时指定名称。整个程序的类型不会改变：不能通过声明合并（`declare module '@ts-graphviz/common'`）扩展类型。
 
 ### 用例
 
@@ -157,42 +157,36 @@ const video = await toBlob('digraph { a -> b }', {
 
 #### 添加自定义属性
 
-您可以通过扩展 `@ts-graphviz/common` 中的类型来添加自定义属性：
+模式列出套件的模型在内置之外（或代替内置）接受的属性和值类型：
 
 ```typescript
-import { $keywords } from '@ts-graphviz/common';
-import { digraph, toDot, attribute as _ } from 'ts-graphviz';
+import { attr, defineSchema, toDot, values, withModelKit } from 'ts-graphviz';
 
-// 1. 声明 '@ts-graphviz/common' 模块。
-declare module '@ts-graphviz/common' {
-  export namespace GraphAttributeKey {
-    // 2. 在 GraphAttributeKey 命名空间中定义 $values 接口。
-    // 3. 使用自定义属性的名称扩展 $keywords。
-    export interface $values extends $keywords<'hoge'> {}
-  }
+// 除内置之外，图接受的属性和值类型。
+const schema = defineSchema({
+  graph: { hoge: attr<string>() }, // 新属性
+  node: {
+    'data-id': attr<number>(),
+    label: attr.override<number>(), // 用数字代替内置类型
+  },
+  types: { color: values.extend<'brand-blue'>() }, // 所有 color 类型的属性
+});
 
-  export namespace Attribute {
-    // 4. 在 Attribute 命名空间中定义 $keys 接口。
-    // 5. 使用自定义属性的名称扩展 $keywords。
-    export interface $keys extends $keywords<'hoge'> {}
-
-    // 6. 在 Attribute 命名空间中定义 $types 接口。
-    // 7. 指定自定义属性的类型。
-    export interface $types {
-      hoge: string;
-    }
-  }
-}
-
-// 现在您可以使用自定义属性。
+const { digraph } = withModelKit({ schema });
 console.log(
   toDot(
     digraph((g) => {
-      g[_.hoge] = 'fuga';
+      g.hoge = 'fuga';
+      g.node('a', { 'data-id': 1, label: 2, color: 'brand-blue' });
     }),
   ),
 );
 ```
+
+- `attr<T>()` 添加属性；`attr.extend<T>()`（内置类型或 `T`）和 `attr.override<T>()`（用 `T` 代替）修改内置属性。每个条目都给出其类型，并且总是明确说明适用哪一种：对内置属性使用 `attr<T>()` 是类型错误。
+- `types` 通过 `values.extend<T>()` 或 `values.override<T>()` 修改值类型（`color`、`style`、`shape`、`arrowType` 等），从而修改使用该类型的所有属性。
+- 种类为 `graph`、`subgraph`、`cluster`、`node` 和 `edge`。
+- 只有该套件的模型使用模式进行类型检查：`withModelKit({ schema })`、`createModelKit({ schema, Node: MyNode })`（配合 `class MyNode extends Node<typeof schema> {}`）以及 `fromDot(dot, { convert: { models: { schema } } })`。其他图（例如某个库的图）不受影响。
 
 ---
 

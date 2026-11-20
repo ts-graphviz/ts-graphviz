@@ -50,7 +50,7 @@ import type {
  *
  * @group Attribute
  */
-export interface ValueTypes {
+export type ValueTypes = {
   arrowType: ArrowType.shape;
   clusterMode: ClusterMode;
   color: Color;
@@ -67,7 +67,7 @@ export interface ValueTypes {
   startType: StartType;
   style: Style.styleItem;
   tbBalanceType: TBbalanceType;
-}
+};
 
 /**
  * The name of a value type that a {@link Schema} can change.
@@ -156,9 +156,9 @@ export type PortPosOf<C extends string> = `${string}:${C}` | C;
  * `AttributeValueTypes[AttributeValueTypeNames[K]]` is `Attribute<K>`.
  * @group Attribute
  */
-export interface AttributeValueTypes<
+export type AttributeValueTypes<
   V extends Record<ValueTypeName, unknown> = ValueTypes,
-> {
+> = {
   addDouble: AddDouble;
   addPoint: AddPoint;
   arrowType: ArrowTypeOf<V['arrowType'] & string>;
@@ -194,7 +194,7 @@ export interface AttributeValueTypes<
   tbBalanceType: V['tbBalanceType'];
   viewPort: ViewPort;
   xdot: string;
-}
+};
 
 /**
  * The type names in {@link AttributeValueTypes} whose types change when the

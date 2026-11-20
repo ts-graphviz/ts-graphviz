@@ -127,13 +127,13 @@ export type EmptySchema = Record<never, never>;
  * The built-in attribute keys of each {@link SchemaKind}.
  * @group Schema
  */
-export interface SchemaKindAttributeKeys {
+export type SchemaKindAttributeKeys = {
   graph: GraphAttributeKey;
   subgraph: SubgraphAttributeKey;
   cluster: ClusterSubgraphAttributeKey;
   node: NodeAttributeKey;
   edge: EdgeAttributeKey;
-}
+};
 
 type TypesOf<S> = S extends { readonly types: infer T extends object }
   ? T

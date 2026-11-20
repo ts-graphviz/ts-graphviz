@@ -132,9 +132,9 @@ digraph {
 
 `ts-graphviz` を使用すると、ライブラリの型システムを拡張してグラフ視覚化ソリューションをカスタマイズできます。これは、カスタムグラフレイアウト、出力フォーマット、またはデフォルトではサポートされていないカスタム属性を指定する必要がある場合に役立ちます。
 
-### `$` 記号を用いたカスタマイズ
+### 独自の型
 
-カスタマイズを可能にするため、拡張を意図した型は `$` 記号で名前付けされています。以下にリストされていない型定義を拡張する必要がある場合は、`$...` を用いて拡張できるかソースコードを確認してください。できない場合は、issue またはプルリクエストを作成してください。
+独自の属性や値の型は、スキーマ（`defineSchema`）で 1 つのキットのモデルに追加します。Graphviz のプラグインが追加するレイアウトエンジンや出力フォーマットは、呼び出しごとに名前を指定します。プログラム全体の型は変わりません。宣言のマージ（`declare module '@ts-graphviz/common'`）で型を拡張することはできません。
 
 ### ユースケース
 
@@ -161,42 +161,36 @@ const video = await toBlob('digraph { a -> b }', {
 
 #### カスタム属性の追加
 
-`@ts-graphviz/common` の型を拡張することで、カスタム属性を追加できます。
+スキーマには、キットのモデルが組み込みのものに加えて（または代わりに）受け付ける属性と値の型を列挙します。
 
 ```typescript
-import { $keywords } from '@ts-graphviz/common';
-import { digraph, toDot, attribute as _ } from 'ts-graphviz';
+import { attr, defineSchema, toDot, values, withModelKit } from 'ts-graphviz';
 
-// 1. '@ts-graphviz/common' モジュールを宣言します。
-declare module '@ts-graphviz/common' {
-  export namespace GraphAttributeKey {
-    // 2. GraphAttributeKey 名前空間内に $values インターフェースを定義します。
-    // 3. $keywords を継承し、カスタム属性の名前を追加します。
-    export interface $values extends $keywords<'hoge'> {}
-  }
+// 組み込みのもの以外にグラフが受け付ける属性と値の型。
+const schema = defineSchema({
+  graph: { hoge: attr<string>() }, // 新しい属性
+  node: {
+    'data-id': attr<number>(),
+    label: attr.override<number>(), // 組み込みの型ではなく数値
+  },
+  types: { color: values.extend<'brand-blue'>() }, // color 型のすべての属性
+});
 
-  export namespace Attribute {
-    // 4. Attribute 名前空間内に $keys インターフェースを定義します。
-    // 5. $keywords を継承し、カスタム属性の名前を追加します。
-    export interface $keys extends $keywords<'hoge'> {}
-
-    // 6. Attribute 名前空間内に $types インターフェースを定義します。
-    // 7. カスタム属性の型を指定します。
-    export interface $types {
-      hoge: string;
-    }
-  }
-}
-
-// これでカスタム属性を使用できます。
+const { digraph } = withModelKit({ schema });
 console.log(
   toDot(
     digraph((g) => {
-      g[_.hoge] = 'fuga';
+      g.hoge = 'fuga';
+      g.node('a', { 'data-id': 1, label: 2, color: 'brand-blue' });
     }),
   ),
 );
 ```
+
+- `attr<T>()` は属性を追加します。`attr.extend<T>()`（組み込みの型か `T`）と `attr.override<T>()`（`T` に置き換え）は組み込みの属性を変更します。各エントリは型を指定し、どちらを適用するかを必ず明示します。組み込みの属性に `attr<T>()` を使うと型エラーになります。
+- `types` は値の型（`color`、`style`、`shape`、`arrowType` など）を `values.extend<T>()` または `values.override<T>()` で変更し、その型を使うすべての属性に反映します。
+- 種類は `graph`、`subgraph`、`cluster`、`node`、`edge` です。
+- スキーマで型付けされるのはそのキットのモデルだけです：`withModelKit({ schema })`、`createModelKit({ schema, Node: MyNode })`（`class MyNode extends Node<typeof schema> {}` とともに）、`fromDot(dot, { convert: { models: { schema } } })`。ライブラリのグラフなど、ほかのグラフは変わりません。
 
 ---
 
