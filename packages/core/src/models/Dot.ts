@@ -19,6 +19,9 @@ import { CommentList, DOT_POSITIONS } from './comment-list.js';
  * @group Models
  */
 export class Dot<S extends Schema = EmptySchema> implements DotModel<S> {
+  /** Type only: never present at run time (`HasSchema`). */
+  declare readonly '~schema'?: S;
+
   public get $$type(): 'Dot' {
     return 'Dot';
   }

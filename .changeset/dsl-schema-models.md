@@ -17,4 +17,6 @@ g.node('b', { label: 'B' }); // type error: a number is expected
 - The kit given to `dsl(graph, kit)` is of the graph's schema: a kit of another schema, or of none for a graph of a schema, is a type error. Without a kit, the DSL of a graph of a schema creates the default classes, typed with that schema.
 - `SchemaOfModel<T>` gives the schema of a model. The kit types of `ModelFactory`, `ModelFactoryCallback` and `FromDotResult` default to those of the graph's schema, as `DSL`'s do. `NodeDSL`, `EdgeDSL`, `RootGraphDSL`, `SubgraphDSL`, `AttributeListDSL` (with the attribute types a schema adds or changes as a fourth parameter) and the factory types (`ModelFactory`, `ModelFactories`, `FromDotResult`, …) take the models and model types of any schema.
 
+- The models name their schema in a type-only property, `'~schema'` (`HasSchema<S>`, never set at run time; the core classes declare it), which the DSL reads instead of comparing whole models. A model of one schema is therefore not one of another even where the attributes of its kind are the same: `addEdge` of a graph of one schema takes no edge of another.
+
 Without a schema the types are the same as before. The run-time behaviour is unchanged.
