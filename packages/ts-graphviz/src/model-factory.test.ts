@@ -109,24 +109,22 @@ test('withModelKit builds with subclasses that set their own id and attributes, 
   );
 });
 
-test('the callback receives the kit the factories create with', () => {
+test('the callbacks get only the DSL, which creates with the kit of the factories', () => {
   class MyNode extends Node {}
   const factories = withModelKit({ Node: MyNode });
-  const kits = new Set<unknown>();
-  const g = factories.digraph('G', (g, kit) => {
-    kits.add(kit);
+  const lengths: number[] = [];
+  const g = factories.digraph('G', (...args) => {
+    lengths.push(args.length);
+    const [g] = args;
     expect(modelOf(g.node('a'))).toBeInstanceOf(MyNode);
-    const d = kit.createNode('d');
-    expect(d).toBeInstanceOf(MyNode);
-    expect(modelOf(g).existNode('d')).toBe(false);
-    g.subgraph('s', (s, kit) => {
-      kits.add(kit);
-      expect(modelOf(s.node('b'))).toBeInstanceOf(MyNode);
+    g.subgraph('s', (...args) => {
+      lengths.push(args.length);
+      expect(modelOf(args[0].node('b'))).toBeInstanceOf(MyNode);
     });
   });
-  factories.strict.graph((_, kit) => {
-    kits.add(kit);
+  factories.strict.graph((...args) => {
+    lengths.push(args.length);
   });
-  expect(kits.size).toBe(1);
+  expect(lengths).toEqual([1, 1, 1]);
   expect(modelOf(g.node('c'))).toBeInstanceOf(MyNode);
 });

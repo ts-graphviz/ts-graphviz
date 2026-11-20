@@ -7,21 +7,20 @@ import type {
 import type { DSL } from './dsl.js';
 
 /**
- * The callback of a {@link ModelFactory}: it receives the graph's DSL and
- * the kit the graph was created with, whose `create*` only create.
+ * The callback of a {@link ModelFactory}: it receives the graph's DSL.
  * @group Model Factory
  */
 export type ModelFactoryCallback<
   G extends RootGraphModel = RootGraphModel,
   M extends ModelTypes = ModelTypes,
-> = (g: DSL<G, M>, kit: ModelKit<M>) => void;
+> = (g: DSL<G, M>) => void;
 
 /**
  * ModelFactory creates a root graph and gives its DOT DSL ({@link DSL}).
  *
  * @param id - Optional string parameter that specifies the id of the graph.
  * @param attributes - Optional GraphAttributesObject parameter that specifies the attributes of the graph.
- * @param callback - Optional callback function that receives the graph's DSL and the kit.
+ * @param callback - Optional callback function that receives the graph's DSL.
  *
  * @returns The graph's DSL. {@link modelOf} gives the {@link RootGraphModel}.
  * @typeParam G - The graph.

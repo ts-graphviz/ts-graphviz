@@ -317,8 +317,7 @@ describe('custom classes', () => {
       Edge: typeof MyEdge;
       Subgraph: typeof MySubgraph;
     }>;
-    myDigraph((G, kit) => {
-      expectTypeOf(kit.createNode('d')).toEqualTypeOf<MyNode>();
+    myDigraph((G) => {
       expectTypeOf(G.node('a')).toEqualTypeOf<DSL<MyNode>>();
       expectTypeOf(G.edge(['a', 'b'])).toEqualTypeOf<DSL<MyEdge>>();
       expectTypeOf(
@@ -327,13 +326,11 @@ describe('custom classes', () => {
       expectTypeOf(G.subgraph('s')).toEqualTypeOf<DSL<MySubgraph, M>>();
       expectTypeOf(modelOf(G.subgraph('s')).tag()).toEqualTypeOf<string>();
       // A subgraph's DSL creates with the same kit.
-      G.subgraph((sub, kit) => {
+      G.subgraph((sub) => {
         expectTypeOf(sub.node('b')).toEqualTypeOf<DSL<MyNode>>();
-        expectTypeOf(kit.createNode('d')).toEqualTypeOf<MyNode>();
       });
-      G.node('a', (a, kit) => {
+      G.node('a', (a) => {
         expectTypeOf(a).toEqualTypeOf<DSL<MyNode>>();
-        expectTypeOf(kit.createEdge(['a', 'b'])).toEqualTypeOf<MyEdge>();
       });
     });
     withModelKit({ Node: MyNode }).digraph((G) => {

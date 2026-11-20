@@ -27,7 +27,7 @@ export function ModelFactoryBuilder(
       (arg): arg is GraphAttributesObject => typeof arg === 'object',
     );
     const callback = args.find(
-      (arg): arg is (g: DSL<RootGraphModel>, kit: ModelKit) => void =>
+      (arg): arg is (g: DSL<RootGraphModel>) => void =>
         typeof arg === 'function',
     );
     const g = directed
@@ -35,7 +35,7 @@ export function ModelFactoryBuilder(
       : this.createGraph(id, strictMode, attributes);
     const view = dsl(g, this);
     if (typeof callback === 'function') {
-      callback(view, this);
+      callback(view);
     }
     return view;
   };

@@ -47,9 +47,7 @@ import { isLegacyKit } from './legacy-kit.js';
  *   attribute list's `$$kind`).
  *
  * A graph's DSL is the graph together with a model kit: `node`, `edge` and
- * `subgraph` create with the kit and add to the graph. The kit's own
- * `create*` only create, and the callbacks get the kit as their second
- * argument.
+ * `subgraph` create with the kit and add to the graph.
  *
  * Everything else the model does (`addNode`, `nodes`, `getAttribute`,
  * `comments`, the members of your own classes) is on the model:
@@ -234,7 +232,7 @@ export interface GraphDSLStatements<
    * statement written again in DOT, it is another declaration when the
    * graph has a subgraph with the id; Graphviz merges their contents.
    *
-   * The callback receives the subgraph and the kit.
+   * The callback receives the subgraph.
    *
    * ```ts
    * const G = digraph('G', (g) => {
@@ -251,7 +249,7 @@ export interface GraphDSLStatements<
    */
   subgraph<const Id extends string>(
     id: Id,
-    callback?: (subgraph: DSL<M['Subgraph'], M>, kit: ModelKit<M>) => void,
+    callback?: (subgraph: DSL<M['Subgraph'], M>) => void,
   ): DSL<M['Subgraph'], M>;
   /**
    * A new subgraph with this id and these attributes (another declaration
@@ -279,7 +277,7 @@ export interface GraphDSLStatements<
   subgraph<const Id extends string>(
     id: Id,
     attributes: SubgraphAttributesFor<Id>,
-    callback?: (subgraph: DSL<M['Subgraph'], M>, kit: ModelKit<M>) => void,
+    callback?: (subgraph: DSL<M['Subgraph'], M>) => void,
   ): DSL<M['Subgraph'], M>;
   /**
    * A new anonymous subgraph with these attributes.
@@ -301,11 +299,11 @@ export interface GraphDSLStatements<
    */
   subgraph(
     attributes: NonClusterSubgraphAttributesObject,
-    callback?: (subgraph: DSL<M['Subgraph'], M>, kit: ModelKit<M>) => void,
+    callback?: (subgraph: DSL<M['Subgraph'], M>) => void,
   ): DSL<M['Subgraph'], M>;
   /** A new anonymous subgraph, as `subgraph { ... }` in DOT. */
   subgraph(
-    callback?: (subgraph: DSL<M['Subgraph'], M>, kit: ModelKit<M>) => void,
+    callback?: (subgraph: DSL<M['Subgraph'], M>) => void,
   ): DSL<M['Subgraph'], M>;
 
   /**
@@ -322,10 +320,7 @@ export interface GraphDSLStatements<
    * // }
    * ```
    */
-  node(
-    id: string,
-    callback?: (node: DSL<M['Node']>, kit: ModelKit<M>) => void,
-  ): DSL<M['Node']>;
+  node(id: string, callback?: (node: DSL<M['Node']>) => void): DSL<M['Node']>;
   /**
    * A new node with this id and these attributes, as `A [color=red];` in
    * DOT (another declaration when the graph has one with the id).
@@ -345,7 +340,7 @@ export interface GraphDSLStatements<
   node(
     id: string,
     attributes: NodeAttributesObject,
-    callback?: (node: DSL<M['Node']>, kit: ModelKit<M>) => void,
+    callback?: (node: DSL<M['Node']>) => void,
   ): DSL<M['Node']>;
   /**
    * Default attributes for the nodes, as `node [color=red];` in DOT: they
@@ -381,7 +376,7 @@ export interface GraphDSLStatements<
    */
   edge(
     targets: DSLEdgeTargetLikeTuple,
-    callback?: (edge: DSL<M['Edge']>, kit: ModelKit<M>) => void,
+    callback?: (edge: DSL<M['Edge']>) => void,
   ): DSL<M['Edge']>;
   /**
    * A new edge with these attributes, as `a -> b [color=red];` in DOT.
@@ -400,7 +395,7 @@ export interface GraphDSLStatements<
   edge(
     targets: DSLEdgeTargetLikeTuple,
     attributes: EdgeAttributesObject,
-    callback?: (edge: DSL<M['Edge']>, kit: ModelKit<M>) => void,
+    callback?: (edge: DSL<M['Edge']>) => void,
   ): DSL<M['Edge']>;
   /**
    * Default attributes for the edges, as `edge [color=red];` in DOT: they
@@ -774,9 +769,8 @@ function find<T>(
 const isString = (arg: unknown): arg is string => typeof arg === 'string';
 const isObject = (arg: unknown): arg is object =>
   typeof arg === 'object' && arg !== null;
-const isFunction = (
-  arg: unknown,
-): arg is (view: unknown, kit: ModelKit) => void => typeof arg === 'function';
+const isFunction = (arg: unknown): arg is (view: unknown) => void =>
+  typeof arg === 'function';
 
 /**
  * The DOT statements: the kit creates and the graph adds, so they follow
@@ -808,7 +802,7 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
           node.setAttributes(attributes);
         }
         const view = viewOf(node);
-        find(rest, isFunction)?.(view, kit);
+        find(rest, isFunction)?.(view);
         return view;
       }
       if (isObject(first)) {
@@ -826,7 +820,7 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
         );
         g.addEdge(edge);
         const view = viewOf(edge);
-        find(rest, isFunction)?.(view, kit);
+        find(rest, isFunction)?.(view);
         return view;
       }
       if (isObject(first)) {
@@ -859,7 +853,7 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
         subgraph.setAttributes(attributes);
       }
       const view = viewOf(subgraph);
-      find(args, isFunction)?.(view, kit);
+      find(args, isFunction)?.(view);
       return view;
     },
     graph(attributes: unknown): unknown {
