@@ -134,24 +134,31 @@ digraph {
 
 ### 独自の型
 
-独自の属性や値の型は、スキーマ（`defineSchema`）で 1 つのキットのモデルに追加します。Graphviz のプラグインが追加するレイアウトエンジンや出力フォーマットは、呼び出しごとに名前を指定します。プログラム全体の型は変わりません。宣言のマージ（`declare module '@ts-graphviz/common'`）で型を拡張することはできません。
+独自の属性や値の型、Graphviz のプラグインが追加するレイアウトエンジンや出力フォーマットは、スキーマ（`defineSchema`）に列挙します。属性は 1 つのキットのモデルを、フォーマットとレイアウトはそのスキーマを渡したアダプターの呼び出しを型付けします。プログラム全体の型は変わりません。宣言のマージ（`declare module '@ts-graphviz/common'`）で型を拡張することはできません。
 
 ### ユースケース
 
 #### カスタムグラフレイアウトおよび出力フォーマットの指定
 
-`@ts-graphviz/adapter` の型を拡張することで、カスタムレイアウトアルゴリズムや出力フォーマットを指定できます。以下はその方法です。
+Graphviz のプラグインが追加するレイアウトエンジンと出力フォーマットは、スキーマの `types.layout` と `types.format` に名前とともに（`values.extend('mp4')`）列挙し、そのスキーマをアダプターの `schema` オプションに渡します。スキーマは `dotCommand` と同じく信頼された設定です。コードで定義し、エンドユーザーの入力から作らないでください。`isFormat` / `isLayout` が true を返すのはドキュメントにある名前だけです。リクエストから来た `format` や `layout` はこれらで確認し、リクエストがプラグインのものを選べないようにしてください。
 
 ```typescript
 import { toBlob } from '@ts-graphviz/adapter';
+import { defineSchema, values } from '@ts-graphviz/common';
 
-// Graphviz のプラグインが追加する名前を、この呼び出しのために列挙します。
-// 列挙した名前は実行時に受け付けられ、この呼び出しに限って `format` と
-// `layout` の型も広がります。グローバルには何も変わらず、`isFormat` /
-// `isLayout` が true を返すのは、ドキュメントにある名前だけのままです。
+// Graphviz のプラグインが追加するレイアウトエンジンと出力フォーマットを
+// スキーマに列挙します。`schema` に渡すと、その呼び出しに限って実行時に
+// 受け付けられ、`layout` と `format` の型も広がります。グローバルには何も
+// 変わらず、`isFormat` / `isLayout` が true を返すのは、ドキュメントにある
+// 名前だけのままです。
+const schema = defineSchema({
+  types: {
+    layout: values.extend('my-custom-algorithm'),
+    format: values.extend('mp4'),
+  },
+});
 const video = await toBlob('digraph { a -> b }', {
-  customLayouts: ['my-custom-algorithm'],
-  customFormats: ['mp4'],
+  schema,
   layout: 'my-custom-algorithm',
   format: 'mp4',
   // sanitize は確認していないフォーマットを拒否するため無効にする

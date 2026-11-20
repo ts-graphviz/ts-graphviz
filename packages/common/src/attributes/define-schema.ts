@@ -20,9 +20,21 @@ type TypeArgumentRequired<T> = [T] extends [never]
 
 function entry<T extends DotValue, Mode extends SchemaEntryMode>(
   mode: Mode,
+  names?: readonly string[],
 ): SchemaEntry<T, Mode> {
-  return Object.freeze({ mode });
+  return names === undefined
+    ? Object.freeze({ mode })
+    : (Object.freeze({
+        mode,
+        values: Object.freeze([...names]),
+      }) as SchemaEntry<T, Mode>);
 }
+
+/** An entry of `values` with the names it adds at run time. */
+type NamedEntry<T extends string, Mode extends SchemaEntryMode> = SchemaEntry<
+  T,
+  Mode
+> & { readonly values: readonly T[] };
 
 function add<T extends DotValue = never>(
   ..._: TypeArgumentRequired<T>
@@ -40,6 +52,14 @@ function override<T extends DotValue = never>(
   ..._: TypeArgumentRequired<T>
 ): SchemaEntry<T, 'override'> {
   return entry('override');
+}
+
+function extendValues(...names: string[]): SchemaEntry {
+  return entry('extend', names.length > 0 ? names : undefined);
+}
+
+function overrideValues(...names: string[]): SchemaEntry {
+  return entry('override', names.length > 0 ? names : undefined);
 }
 
 /**
@@ -78,16 +98,33 @@ export const attr: {
  * - `values.extend<T>()`: the built-in value type, or `T`;
  * - `values.override<T>()`: `T` instead of the built-in value type.
  *
+ * Given names instead of a type argument (`values.extend('mp4', 'webm')`),
+ * an entry has them at run time too, as its `values`: that is how the
+ * adapter learns the output formats and layout engines a schema adds
+ * (`types.format`, `types.layout`, which take names only), and `sanitize`
+ * the style names of `types.style`.
+ *
  * @group Schema
  */
 export const values: {
+  extend<const T extends string>(
+    name: T,
+    ...names: T[]
+  ): NamedEntry<T, 'extend'>;
   extend<T extends DotValue = never>(
     ...typeArgumentRequired: TypeArgumentRequired<T>
   ): SchemaEntry<T, 'extend'>;
+  override<const T extends string>(
+    name: T,
+    ...names: T[]
+  ): NamedEntry<T, 'override'>;
   override<T extends DotValue = never>(
     ...typeArgumentRequired: TypeArgumentRequired<T>
   ): SchemaEntry<T, 'override'>;
-} = Object.freeze({ extend, override });
+} = Object.freeze({
+  extend: extendValues,
+  override: overrideValues,
+}) as never;
 
 /** The message of an entry that does not fit its attribute. */
 type EntryErrors<Entries, BuiltIn> = {
@@ -121,6 +158,8 @@ const KINDS: ReadonlySet<string> = new Set<SchemaKind>([
   'edge',
 ]);
 const VALUE_TYPES: ReadonlySet<string> = new Set(VALUE_TYPE_NAMES);
+/** The names of the adapter's options a schema's `types` also extends. */
+const OPTION_TYPES: ReadonlySet<string> = new Set(['format', 'layout']);
 const SUBGRAPH_KINDS: ReadonlySet<string> = new Set(['subgraph', 'cluster']);
 
 /** The schemas `defineSchema` made, which a kit takes as they are. */
@@ -157,10 +196,40 @@ function ownData(value: object, part: string): [string, unknown][] {
  */
 function entryOf(value: unknown, part: string): SchemaEntry | undefined {
   if (typeof value !== 'object' || value === null) return undefined;
-  const fields = ownData(value, part);
-  if (fields.length !== 1 || fields[0][0] !== 'mode') return undefined;
-  const mode = fields[0][1];
-  return MODES.has(mode) ? entry(mode as SchemaEntryMode) : undefined;
+  const fields = new Map(ownData(value, part));
+  const mode = fields.get('mode');
+  if (!MODES.has(mode)) return undefined;
+  if (fields.size === 1) return entry(mode as SchemaEntryMode);
+  if (fields.size !== 2 || !fields.has('values')) return undefined;
+  return entry(mode as SchemaEntryMode, namesOf(fields.get('values'), part));
+}
+
+/**
+ * A copy of the names of an entry: an array of non-empty strings without a
+ * NUL character.
+ */
+function namesOf(value: unknown, part: string): string[] {
+  const fields = Array.isArray(value) ? ownData(value, part) : [];
+  // Every index its own value, and nothing else: no holes (an inherited
+  // index would be read), no other properties.
+  if (
+    !Array.isArray(value) ||
+    value.length === 0 ||
+    fields.length !== value.length ||
+    fields.some(([key], i) => key !== String(i))
+  ) {
+    throw invalid(
+      `The names of an entry in the ${part} of a schema must be a non-empty array without holes`,
+    );
+  }
+  return fields.map(([, item]) => {
+    if (typeof item !== 'string' || item === '' || item.includes('\0')) {
+      throw invalid(
+        `A name of an entry in the ${part} of a schema must be a non-empty string without NUL`,
+      );
+    }
+    return item;
+  });
 }
 
 function name(key: string): string {
@@ -217,7 +286,9 @@ function entriesOf(
  * ```
  *
  * - `types` changes value types ({@link ValueTypes}), and so every attribute
- *   that uses them; it takes `values.extend` and `values.override`.
+ *   that uses them; it takes `values.extend` and `values.override`. Its
+ *   `format` and `layout` name the output formats and layout engines a
+ *   Graphviz plugin adds, for the adapter: `values.extend('mp4')`.
  * - `graph`, `subgraph`, `cluster`, `node` and `edge` take the attributes of
  *   that kind of object: `attr<T>()` for one that is not built in,
  *   `attr.extend<T>()` or `attr.override<T>()` for a built-in one. A
@@ -247,6 +318,14 @@ export function defineSchema<const S extends Schema>(
   for (const [part, value] of ownData(schema, 'parts')) {
     if (part === 'types') {
       defined.types = entriesOf(value, 'types', (key, entry) => {
+        if (OPTION_TYPES.has(key)) {
+          if (entry.mode !== 'extend' || entry.values === undefined) {
+            throw invalid(
+              `${name(key)} in the types of a schema must be values.extend with the names it adds`,
+            );
+          }
+          return;
+        }
         if (!VALUE_TYPES.has(key)) {
           throw invalid(`${name(key)} is not a value type a schema changes`);
         }

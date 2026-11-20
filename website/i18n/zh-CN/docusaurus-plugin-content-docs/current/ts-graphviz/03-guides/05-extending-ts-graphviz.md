@@ -131,23 +131,30 @@ digraph {
 
 ### 自定义类型
 
-自定义的属性和值类型通过模式（`defineSchema`）添加到一个套件的模型中；Graphviz 插件添加的布局引擎和输出格式在每次调用时指定名称。整个程序的类型不会改变：不能通过声明合并（`declare module '@ts-graphviz/common'`）扩展类型。
+自定义的属性和值类型，以及 Graphviz 插件添加的布局引擎和输出格式，都列在模式（`defineSchema`）中：属性为一个套件的模型提供类型，格式和布局为传入该模式的适配器调用提供类型。整个程序的类型不会改变：不能通过声明合并（`declare module '@ts-graphviz/common'`）扩展类型。
 
 ### 用例
 
 #### 指定自定义图形布局和输出格式
 
-您可以通过扩展 `@ts-graphviz/adapter` 中的类型来指定自定义布局算法和输出格式。如下所示：
+Graphviz 插件添加的布局引擎和输出格式，连同名称（`values.extend('mp4')`）列在模式的 `types.layout` 和 `types.format` 中，并将该模式传给适配器的 `schema` 选项。模式与 `dotCommand` 一样是受信任的配置：在代码中定义，切勿从最终用户的输入构造。`isFormat` / `isLayout` 只对文档中列出的名称返回 true：用它们检查来自请求的 `format` 或 `layout`，使请求无法选择插件的格式或布局。
 
 ```typescript
 import { toBlob } from '@ts-graphviz/adapter';
+import { defineSchema, values } from '@ts-graphviz/common';
 
-// 列出 Graphviz 插件为这次调用添加的名称：它们在运行时会被接受，
-// 并且仅在这次调用中放宽 `format` 和 `layout` 的类型。全局不会有任何改变，
-// `isFormat` / `isLayout` 仍然只对文档中列出的名称返回 true。
+// 在模式中列出 Graphviz 插件添加的布局引擎和输出格式：作为 `schema`
+// 传入后，它们仅在这次调用中在运行时被接受，并放宽 `layout` 和 `format`
+// 的类型。全局不会有任何改变，`isFormat` / `isLayout` 仍然只对文档中
+// 列出的名称返回 true。
+const schema = defineSchema({
+  types: {
+    layout: values.extend('my-custom-algorithm'),
+    format: values.extend('mp4'),
+  },
+});
 const video = await toBlob('digraph { a -> b }', {
-  customLayouts: ['my-custom-algorithm'],
-  customFormats: ['mp4'],
+  schema,
   layout: 'my-custom-algorithm',
   format: 'mp4',
   // sanitize 会拒绝它未检查过的格式，因此关闭它

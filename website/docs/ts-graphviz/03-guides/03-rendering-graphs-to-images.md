@@ -213,7 +213,7 @@ The message of a `CommandExecutionError` and its `exit.stderr` come from Graphvi
 - **Executing the `dot` Command**: `toBlob` executes the `dot` command with the provided DOT string (or model) and options. The command is started with an argument array, without a shell.
 - **Output Formats**: Specify the desired output format (e.g., `svg`, `png`) through the options; the Blob's `type` is its media type, or empty for a format without a well-known one.
 - **Runtime Compatibility**: Works in both Node.js and Deno environments.
-- **Trusted Options**: `dotCommand`, `library`, `customFormats` and `customLayouts` are configuration of your application. Do not take them from end-user input. The other options are checked at run time.
+- **Trusted Options**: `dotCommand`, `library` and `schema` are configuration of your application. Do not take them from end-user input. The other options are checked at run time.
 
 ## When to Use `ts-graphviz/adapter` module
 

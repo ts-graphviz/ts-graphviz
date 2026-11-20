@@ -1,4 +1,5 @@
 import { type SpawnOptionsWithoutStdio, spawn } from 'node:child_process';
+import type { EmptySchema, Schema } from '@ts-graphviz/common';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
@@ -6,7 +7,7 @@ import { OutputParts } from './media-type.js';
 import type { AnyOptions } from './options.js';
 import { ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
-import type { Layout, Options } from './types.js';
+import type { Layout, Options, SchemaLayout } from './types.js';
 
 /** How long a killed process is given to exit after its input failed. */
 const KILL_GRACE_MS = 1000;
@@ -32,10 +33,9 @@ const KILL_GRACE_MS = 1000;
  * @throws `signal.reason` when `signal` aborts.
  */
 export async function toBlob<
-  const F extends string = never,
-  const L extends string = never,
-  T extends Layout | L = Layout | L,
->(dot: string, options?: Options<T, F, L>): Promise<Blob> {
+  const S extends Schema = EmptySchema,
+  T extends Layout | SchemaLayout<S> = Layout | SchemaLayout<S>,
+>(dot: string, options?: Options<T, S>): Promise<Blob> {
   const opts = ownAdapterOptions(options as AnyOptions | undefined);
   const [command, args] = createCommandAndArgs(
     opts,

@@ -1188,6 +1188,7 @@ export type SchemaAttributeTypes<S, Kind extends SchemaKind> = { [K in (keyof En
 
 export interface SchemaEntry<T extends DotValue = DotValue, Mode extends SchemaEntryMode = SchemaEntryMode> {
   readonly mode: Mode;
+  readonly values?: readonly T[];
   readonly "~type"?: {
     readonly type: T;
   };
@@ -1213,7 +1214,14 @@ export type SchemaOfOptions<P> = P extends {
   readonly schema: infer S extends Schema;
 } ? S : EmptySchema;
 
-export type SchemaValueTypeEntries = { readonly [N in ValueTypeName]?: SchemaEntry<N extends "style" | "arrowType" | "compass" ? string : DotValue, "extend" | "override">; };
+export type SchemaValueTypeEntries = { readonly [N in ValueTypeName]?: SchemaEntry<N extends "style" | "arrowType" | "compass" ? string : DotValue, "extend" | "override">; } & {
+  readonly format?: SchemaEntry<string, "extend"> & {
+    readonly values: readonly string[];
+  };
+  readonly layout?: SchemaEntry<string, "extend"> & {
+    readonly values: readonly string[];
+  };
+};
 
 export type SchemaValueTypes<T> = { [N in ValueTypeName]: N extends keyof T ? Apply<ValueTypes[N], T[N]> : ValueTypes[N]; };
 
@@ -1356,7 +1364,9 @@ export declare function toNodeRef(target: NodeRefLike): NodeRef;
 export declare function toNodeRefGroup(targets: ReadonlyNodeRefGroupLike): NodeRefGroup;
 
 export declare const values: {
+  extend<const T extends string>(name: T, ...names: T[]): NamedEntry<T, "extend">;
   extend<T extends DotValue = never>(...typeArgumentRequired: TypeArgumentRequired<T>): SchemaEntry<T, "extend">;
+  override<const T extends string>(name: T, ...names: T[]): NamedEntry<T, "override">;
   override<T extends DotValue = never>(...typeArgumentRequired: TypeArgumentRequired<T>): SchemaEntry<T, "override">;
 };
 
@@ -1399,6 +1409,10 @@ type EntriesOf<S, Kind extends SchemaKind> = S extends { readonly [P in Kind]: i
 type EntryErrors<Entries, BuiltIn> = { [K in keyof Entries]: Entries[K] extends SchemaEntry<DotValue, infer Mode> ? K extends BuiltIn ? [Mode] extends ["add"] ? "a built-in attribute: use attr.extend<T>() or attr.override<T>()" : unknown : [Mode] extends ["add"] ? unknown : "not a built-in attribute: use attr<T>()" : unknown; };
 
 type KindAttributeType<S, Kind extends SchemaKind, K extends PropertyKey> = K extends keyof SchemaAttributeTypes<S, Kind> ? SchemaAttributeTypes<S, Kind>[K] : K extends SchemaKindAttributeKeys[Kind] ? Attribute<K> : never;
+
+type NamedEntry<T extends string, Mode extends SchemaEntryMode> = SchemaEntry<T, Mode> & {
+  readonly values: readonly T[];
+};
 
 type NoInferType<T> = [T][T extends unknown ? 0 : never];
 

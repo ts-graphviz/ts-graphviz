@@ -7,5 +7,5 @@ export * from "@ts-graphviz/adapter";
 
 export type DotInput = string | AnyReadonlyDotObjectModel | ModelView;
 
-export declare function toBlob<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(input: DotInput, options?: Options<T, F, L>): Promise<Blob>;
+export declare function toBlob<const S extends Schema = EmptySchema, T extends Layout | SchemaLayout<S> = Layout | SchemaLayout<S>>(input: DotInput, options?: Options<T, S>): Promise<Blob>;
 ```

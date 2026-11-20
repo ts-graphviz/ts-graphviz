@@ -1,4 +1,5 @@
 import { inspect } from 'node:util';
+import { defineSchema, values } from '@ts-graphviz/common';
 import { describe, expect, it } from 'vitest';
 import { createCommandArgs } from './create-command-args.js';
 import { isFormat, isLayout } from './formats.js';
@@ -252,25 +253,19 @@ describe('ownAdapterOptions checks the options at run time', {
   });
 });
 
-describe('customFormats / customLayouts', { tags: ['SM-4'] }, () => {
-  it('accept the names they list as format and layout', () => {
-    expect(() =>
-      ownAdapterOptions({ customFormats: ['mp4'], format: 'mp4' }),
-    ).not.toThrow();
-    expect(() =>
-      ownAdapterOptions(
-        // As toBlob passes them on once its signature has checked them.
-        {
-          customLayouts: ['my-layout'],
-          layout: 'my-layout',
-        } as unknown as AnyOptions,
-      ),
-    ).not.toThrow();
+describe('the formats and layouts of a schema', { tags: ['SM-4'] }, () => {
+  const schema = defineSchema({
+    types: {
+      format: values.extend('mp4'),
+      layout: values.extend('my-layout'),
+    },
+  });
+
+  it('are accepted as format and layout', () => {
     const args = [
       ...createCommandArgs(
         ownAdapterOptions({
-          customFormats: ['mp4'],
-          customLayouts: ['my-layout'],
+          schema,
           format: 'mp4',
           layout: 'my-layout',
         } as unknown as AnyOptions),
@@ -281,33 +276,46 @@ describe('customFormats / customLayouts', { tags: ['SM-4'] }, () => {
   });
 
   it('do not widen isFormat / isLayout, or another call', () => {
-    ownAdapterOptions({ customFormats: ['mp4'], format: 'mp4' });
+    ownAdapterOptions({ schema, format: 'mp4' } as unknown as AnyOptions);
     expect(isFormat('mp4')).toBe(false);
+    expect(isLayout('my-layout')).toBe(false);
     rejects({ format: 'mp4' }, 'RangeError');
-    rejects({ customFormats: ['webm'], format: 'mp4' }, 'RangeError');
-    rejects({ customLayouts: ['x'], layout: 'y' }, 'RangeError');
+    rejects({ schema, format: 'webm' }, 'RangeError');
+    rejects({ schema, layout: 'y' }, 'RangeError');
   });
 
-  it.each([
-    [{ customFormats: 'mp4' }, 'TypeError'],
-    [{ customFormats: [1] }, 'TypeError'],
-    [{ customFormats: [''] }, 'RangeError'],
-    [{ customFormats: ['a\0b'] }, 'RangeError'],
-    [{ customLayouts: {} }, 'TypeError'],
-    [{ customLayouts: [''] }, 'RangeError'],
-  ] as const)('reject %o', (options, type) => {
-    rejects(options, type);
+  it('come from a schema checked as defineSchema checks it', () => {
+    for (const bad of [
+      { types: { format: { mode: 'extend', values: [''] } } },
+      { types: { format: { mode: 'extend' } } },
+      { types: { format: { mode: 'override', values: ['mp4'] } } },
+      { types: { layout: { mode: 'extend', values: ['a\0b'] } } },
+      'mp4',
+    ]) {
+      expect(() =>
+        ownAdapterOptions({ schema: bad } as unknown as AnyOptions),
+      ).toThrow(expect.objectContaining({ code: 'TSG_ERR_INVALID_SCHEMA' }));
+    }
   });
 
-  it('read each list once: the copy is what is checked and used', () => {
+  it('are read once: the checked copy is what is used', () => {
     let reads = 0;
-    const formats = ['mp4'];
-    Object.defineProperty(formats, 0, {
+    const names = ['mp4'];
+    Object.defineProperty(names, 0, {
       get: () => (reads++ === 0 ? 'mp4' : 'png:cairo'),
       enumerable: true,
     });
-    const own = ownAdapterOptions({ customFormats: formats, format: 'mp4' });
-    expect(own.customFormats).toStrictEqual(['mp4']);
-    expect(reads).toBe(1);
+    // A getter is not a value: the schema is refused.
+    expect(() =>
+      ownAdapterOptions({
+        schema: { types: { format: { mode: 'extend', values: names } } },
+        format: 'mp4',
+      } as unknown as AnyOptions),
+    ).toThrow(expect.objectContaining({ code: 'TSG_ERR_INVALID_SCHEMA' }));
+    const own = ownAdapterOptions({
+      schema,
+      format: 'mp4',
+    } as unknown as AnyOptions);
+    expect(own.schema).toBe(schema);
   });
 });
