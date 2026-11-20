@@ -1,7 +1,7 @@
 ---
 "@ts-graphviz/common": major
 "@ts-graphviz/core": minor
-"ts-graphviz": minor
+"ts-graphviz": major
 ---
 
 `removeAttributeList(list)` takes out a default attribute statement
