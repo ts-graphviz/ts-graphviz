@@ -162,7 +162,7 @@ type DefaultsKind = keyof DefaultsSpec;
  * - `defaults`: `defaults[kind]` as a default statement;
  * - `more defaults`: another default statement of that kind (kept in place
  *   by the default classes, merged by the deprecated `legacyModels`);
- * - `node`: the node with that id (`getNode(id) ?? createNode(id)`) with
+ * - `node`: the node with that id (the first with the id, or a new one) with
  *   the node's attributes (a node already mentioned is mentioned again);
  * - `mention`: that node again for a node of the graph, with more
  *   attributes, before or after its own `node` step;
@@ -443,7 +443,7 @@ function addDefaults(
 
 /** The node with this id (created if there is none), then the given attributes set on it. */
 function mentionNode(g: GraphBaseModel, id: string, attrs: Attributes): void {
-  let n = g.getNode(id);
+  let n = g.getNodes(id)[0];
   if (n === undefined) {
     n = new Node(id);
     g.addNode(n);
@@ -489,7 +489,7 @@ function applySubgraph(
   spec: SubgraphSpec,
   kit: ModelKit,
 ): void {
-  let s = spec.id === undefined ? undefined : parent.getSubgraph(spec.id);
+  let s = spec.id === undefined ? undefined : parent.getSubgraphs(spec.id)[0];
   if (s === undefined) {
     s = kit.createSubgraph(spec.id);
     parent.addSubgraph(s);

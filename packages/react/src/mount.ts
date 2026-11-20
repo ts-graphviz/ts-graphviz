@@ -58,7 +58,7 @@ function clusterMap(
     if (graph.id) {
       map.set(graph.id, graph);
     }
-    for (const s of graph.subgraphs) {
+    for (const s of graph.getSubgraphs()) {
       clusterMap(s, map);
     }
   }

@@ -49,7 +49,10 @@ describe('what a mount remembers of the graphs it added to', () => {
     const { added, mount } = mountOn(container);
     for (let i = 0; i < 5; i++) {
       mount.renderSync(cluster(`s${i}`));
-      expect([...added.keys()]).toEqual([container, container.subgraphs[0]]);
+      expect([...added.keys()]).toEqual([
+        container,
+        container.getSubgraphs()[0],
+      ]);
     }
     mount.discard(true);
   });
@@ -58,10 +61,10 @@ describe('what a mount remembers of the graphs it added to', () => {
     const container = new DigraphModel();
     const { mount } = mountOn(container);
     mount.renderSync(cluster('first'));
-    const [first] = container.subgraphs;
+    const [first] = container.getSubgraphs();
     mount.renderSync(cluster('second'));
-    expect(container.subgraphs.map((s) => s.id)).toEqual(['second']);
-    expect(first.nodes.map((n) => n.id)).toEqual(['n']);
+    expect(container.getSubgraphs().map((s) => s.id)).toEqual(['second']);
+    expect(first.getNodes().map((n) => n.id)).toEqual(['n']);
     mount.discard(true);
   });
 
@@ -71,7 +74,7 @@ describe('what a mount remembers of the graphs it added to', () => {
     mount.renderSync(cluster('s'));
     mount.discard(true);
     expect(added.size).toBe(0);
-    expect(container.subgraphs).toHaveLength(0);
+    expect(container.getSubgraphs()).toHaveLength(0);
   });
 
   it("a graph of the container's that no portal names any more is forgotten", () => {
@@ -84,9 +87,9 @@ describe('what a mount remembers of the graphs it added to', () => {
         <Node id="n" />
       </GraphPortal>,
     );
-    expect(own.nodes.map((n) => n.id)).toEqual(['n']);
+    expect(own.getNodes().map((n) => n.id)).toEqual(['n']);
     mount.renderSync(<Node id="n" />);
-    expect(own.nodes).toHaveLength(0);
+    expect(own.getNodes()).toHaveLength(0);
     expect([...added.keys()]).toEqual([container]);
     mount.discard(true);
   });

@@ -22,7 +22,7 @@ describe('ports and compass points', { tags: ['SM-2'] }, () => {
 
   it('ignores a compass point that is not a keyword, as Graphviz does', () => {
     const g = fromDot('digraph { a:p:"" -> b:q:nx; c:p:ne -> d; }');
-    const [first, second] = g.edges;
+    const [first, second] = g.getEdges();
     expect(first.targets[0]).toMatchObject({ id: 'a', port: 'p' });
     expect(first.targets[0]).not.toHaveProperty('compass', expect.anything());
     expect(first.targets[1]).toMatchObject({ id: 'b', port: 'q' });

@@ -68,9 +68,9 @@ describe('error callbacks', () => {
     expect(onCaughtError.mock.calls[0][0]).toBeInstanceOf(RangeError);
     expect(onUncaughtError).not.toHaveBeenCalled();
     const [graph] = root.getTopLevelModels();
-    expect(graph.$$type === 'Graph' && graph.nodes.map((n) => n.id)).toEqual([
-      'fallback',
-    ]);
+    expect(
+      graph.$$type === 'Graph' && graph.getNodes().map((n) => n.id),
+    ).toEqual(['fallback']);
   });
 
   it('reports an uncaught error to onUncaughtError, and the root has no models', async () => {
@@ -115,7 +115,7 @@ describe('error callbacks', () => {
         { container },
       ),
     ).rejects.toThrow(RangeError);
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 
   it('throws what a callback of a root throws outside the render, and goes on', async () => {
@@ -136,9 +136,9 @@ describe('error callbacks', () => {
     });
     expect(uncaught.map(String)).toEqual(['TypeError: from the callback']);
     const [graph] = root.getTopLevelModels();
-    expect(graph.$$type === 'Graph' && graph.nodes.map((n) => n.id)).toEqual([
-      'fallback',
-    ]);
+    expect(
+      graph.$$type === 'Graph' && graph.getNodes().map((n) => n.id),
+    ).toEqual(['fallback']);
     root.unmount();
   });
 
@@ -160,7 +160,7 @@ describe('error callbacks', () => {
       ).rejects.toThrow('from the callback');
     });
     expect(uncaught).toEqual([]);
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 
   it('passes each callback in its own createContainer position', () => {
@@ -373,7 +373,7 @@ describe('updates outside the synchronous lane', () => {
     await expect(
       fromElement(element, { container, signal: AbortSignal.timeout(50) }),
     ).rejects.toMatchObject({ name: 'TimeoutError' });
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
     expect(cleanup).toHaveBeenCalledOnce();
 
     const controller = new AbortController();
@@ -383,7 +383,7 @@ describe('updates outside the synchronous lane', () => {
     });
     controller.abort(new RangeError('stop'));
     await expect(pending).rejects.toThrow('stop');
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 
   it('notices an abort during a render that settles synchronously', async () => {
@@ -416,7 +416,7 @@ describe('updates outside the synchronous lane', () => {
       }),
     ).rejects.toThrow('before');
     expect(rendered).not.toHaveBeenCalled();
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 });
 
@@ -431,7 +431,7 @@ describe('fromElement', () => {
     const result = await fromElement(<Mounted />, { container });
     expect(result).toBe(container);
     expect(cleanup).toHaveBeenCalledOnce();
-    expect(container.nodes.map((n) => n.id)).toEqual(['a']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['a']);
   });
 
   it('rejects with what a cleanup throws when the tree is unmounted, leaving nothing behind', async () => {
@@ -448,7 +448,7 @@ describe('fromElement', () => {
     await expect(fromElement(<Mounted />, { container })).rejects.toThrow(
       'thrown by a cleanup',
     );
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 
   it('rejects when the top level has something other than a root graph and there is no container', async () => {
@@ -516,7 +516,7 @@ describe('renders on one root', () => {
   }
 
   const nodeIds = (models: readonly { $$type: string }[]): string[] =>
-    (models as RootGraphModel[]).flatMap((m) => m.nodes.map((n) => n.id));
+    (models as RootGraphModel[]).flatMap((m) => m.getNodes().map((n) => n.id));
 
   it('does not render before render() returns', async () => {
     const rendered = vi.fn();
@@ -613,7 +613,7 @@ describe('renders on one root', () => {
     const container = new DigraphModel('C');
     const root = createRoot({ container, onRenderComplete, onUncaughtError });
     await render(root, <Node id="a" />);
-    expect(container.nodes).toHaveLength(1);
+    expect(container.getNodes()).toHaveLength(1);
     onRenderComplete.mockClear();
 
     root.render(<Thrower />);
@@ -622,7 +622,7 @@ describe('renders on one root', () => {
     await new Promise((resolve) => setTimeout(resolve, 10));
     expect(onRenderComplete).not.toHaveBeenCalled();
     expect(onUncaughtError).not.toHaveBeenCalled();
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
     expect(root.getTopLevelModels()).toEqual([]);
     expect(() => root.render(<Node id="b" />)).toThrow(
       'Cannot render on an unmounted root',
@@ -649,7 +649,7 @@ describe('unmount() of a root', () => {
     expect(onUncaughtError.mock.calls.map(([error]) => String(error))).toEqual([
       'RangeError: thrown by a cleanup',
     ]);
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 });
 
@@ -677,9 +677,9 @@ describe('React.act', () => {
       );
     });
     const [graph] = root.getTopLevelModels();
-    expect(graph.$$type === 'Graph' && graph.nodes.map((n) => n.id)).toEqual([
-      'late',
-    ]);
+    expect(
+      graph.$$type === 'Graph' && graph.getNodes().map((n) => n.id),
+    ).toEqual(['late']);
     // The callback is called outside React's work, a microtask later.
     expect(onRenderComplete).not.toHaveBeenCalled();
     await Promise.resolve();
@@ -705,9 +705,9 @@ describe('React.act', () => {
     });
     act(() => setId('second'));
     const [graph] = root.getTopLevelModels();
-    expect(graph.$$type === 'Graph' && graph.nodes.map((n) => n.id)).toEqual([
-      'second',
-    ]);
+    expect(
+      graph.$$type === 'Graph' && graph.getNodes().map((n) => n.id),
+    ).toEqual(['second']);
     root.unmount();
   });
 

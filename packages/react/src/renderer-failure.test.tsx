@@ -43,7 +43,7 @@ async function failWhileRendering(root: GraphvizRoot): Promise<void> {
 
 function nodeIds(root: GraphvizRoot): string[] {
   return (root.getTopLevelModels() as RootGraphModel[]).flatMap((graph) =>
-    graph.nodes.map((n) => n.id),
+    graph.getNodes().map((n) => n.id),
   );
 }
 
@@ -69,12 +69,12 @@ describe('a failure of the renderer', () => {
     const onUncaughtError = vi.fn();
     const root = createRoot({ container, onUncaughtError });
     await render(root, <Node id="a" />);
-    expect(container.nodes).toHaveLength(1);
+    expect(container.getNodes()).toHaveLength(1);
 
     failRenderer();
 
     expect(onUncaughtError).toHaveBeenCalledExactlyOnceWith(failure, {});
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
     expect(root.getTopLevelModels()).toEqual([]);
     root.unmount();
   });
@@ -117,7 +117,7 @@ describe('a failure of the renderer', () => {
     await render(last, graphOf('last'));
 
     await failWhileRendering(last);
-    expect(container.nodes.map((n) => n.id)).toEqual(['a']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['a']);
 
     await render(
       root,
@@ -126,9 +126,9 @@ describe('a failure of the renderer', () => {
         <Node id="b" />
       </>,
     );
-    expect(container.nodes.map((n) => n.id)).toEqual(['a', 'b']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['a', 'b']);
     root.unmount();
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
     last.unmount();
   });
 
@@ -142,9 +142,9 @@ describe('a failure of the renderer', () => {
     await failWhileRendering(last);
     await render(root, <Node id="b" />);
 
-    expect(container.nodes.map((n) => n.id)).toEqual(['b']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['b']);
     root.unmount();
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
     last.unmount();
   });
 
@@ -156,10 +156,10 @@ describe('a failure of the renderer', () => {
     await render(last, graphOf('last'));
 
     await failWhileRendering(last);
-    expect(container.nodes.map((n) => n.id)).toEqual(['a']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['a']);
 
     root.unmount();
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
     last.unmount();
   });
 
@@ -178,7 +178,7 @@ describe('a failure of the renderer', () => {
         'The renderer failed while it rendered another tree, and this conversion was lost with it',
       cause: failure,
     });
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
     last.unmount();
   });
 
@@ -196,18 +196,18 @@ describe('a failure of the renderer', () => {
       { container, retries: 1 },
     );
     await tick();
-    expect(container.nodes.map((n) => n.id)).toEqual(['shown', 'first']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['shown', 'first']);
     const last = createRoot();
     await render(last, graphOf('last'));
 
     await failWhileRendering(last);
     await tick();
     // Rendered from the start, with nothing of the first try left over.
-    expect(container.nodes.map((n) => n.id)).toEqual(['shown', 'first']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['shown', 'first']);
 
     resolve('loaded');
     await expect(pending).resolves.toBe(container);
-    expect(container.nodes.map((n) => n.id)).toEqual(['shown', 'loaded']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['shown', 'loaded']);
     last.unmount();
   });
 
@@ -220,7 +220,7 @@ describe('a failure of the renderer', () => {
     pending.catch(() => undefined);
     for (let i = 0; i < 3; i++) {
       await tick();
-      expect(container.nodes.map((n) => n.id)).toEqual(['first']);
+      expect(container.getNodes().map((n) => n.id)).toEqual(['first']);
       const last = createRoot();
       await render(last, graphOf('last'));
       await failWhileRendering(last);
@@ -230,7 +230,7 @@ describe('a failure of the renderer', () => {
         'The renderer failed while it rendered another tree, 3 times in a row',
       cause: failure,
     });
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 
   it('rejects the conversion React worked on last with the error', async () => {
@@ -242,7 +242,7 @@ describe('a failure of the renderer', () => {
     await tick();
     failRenderer();
     await expect(pending).rejects.toBe(failure);
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 });
 
@@ -280,13 +280,13 @@ describe('what a lost tree still does', () => {
       );
       // The old tree's timer goes on (its effects could not be cleaned up),
       // and its updates reach nothing.
-      expect(container.nodes.map((n) => n.id)).toEqual(['new']);
+      expect(container.getNodes().map((n) => n.id)).toEqual(['new']);
     });
     expect(uncaught).toEqual([]);
     expect(onUncaughtError).toHaveBeenCalledOnce();
     root.unmount();
     last.unmount();
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 
   it('ignores data of the old tree that arrives after the root rendered again', async () => {
@@ -308,17 +308,17 @@ describe('what a lost tree still does', () => {
     const last = createRoot();
     const uncaught = await uncaughtDuring(async () => {
       await render(root, element);
-      expect(container.nodes.map((n) => n.id)).toEqual(['loading']);
+      expect(container.getNodes().map((n) => n.id)).toEqual(['loading']);
       await render(last, graphOf('last'));
       await failWhileRendering(last);
 
       await render(root, element);
       resolve('loaded');
       await vi.waitFor(() =>
-        expect(container.nodes.map((n) => n.id)).toEqual(['loaded']),
+        expect(container.getNodes().map((n) => n.id)).toEqual(['loaded']),
       );
       await tick(10);
-      expect(container.nodes.map((n) => n.id)).toEqual(['loaded']);
+      expect(container.getNodes().map((n) => n.id)).toEqual(['loaded']);
     });
     expect(uncaught).toEqual([]);
     expect(onUncaughtError).toHaveBeenCalledOnce();
@@ -349,10 +349,10 @@ describe('a tree nested deeper than the call stack allows', () => {
     expect(uncaught).toEqual([]);
     expect(onUncaughtError).toHaveBeenCalledOnce();
     expect(onUncaughtError.mock.calls[0][0]).toBeInstanceOf(RangeError);
-    expect(container.subgraphs).toHaveLength(0);
+    expect(container.getSubgraphs()).toHaveLength(0);
 
     await render(root, <Node id="after" />);
-    expect(container.nodes.map((n) => n.id)).toEqual(['after']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['after']);
     expect(onUncaughtError).toHaveBeenCalledOnce();
     root.unmount();
   });
@@ -375,10 +375,10 @@ describe('a tree nested deeper than the call stack allows', () => {
     expect(uncaught).toEqual([]);
     expect(onUncaughtError).toHaveBeenCalledOnce();
     expect(onUncaughtError.mock.calls[0][0]).toBeInstanceOf(RangeError);
-    expect(container.subgraphs).toHaveLength(0);
+    expect(container.getSubgraphs()).toHaveLength(0);
 
     await render(root, <Node id="after" />);
-    expect(container.nodes.map((n) => n.id)).toEqual(['after']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['after']);
     root.unmount();
   });
 
@@ -387,10 +387,10 @@ describe('a tree nested deeper than the call stack allows', () => {
     await expect(
       fromElement(nested(50_000), { container }),
     ).rejects.toBeInstanceOf(RangeError);
-    expect(container.subgraphs).toHaveLength(0);
+    expect(container.getSubgraphs()).toHaveLength(0);
     await expect(fromElement(<Node id="after" />, { container })).resolves.toBe(
       container,
     );
-    expect(container.nodes.map((n) => n.id)).toEqual(['after']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['after']);
   });
 });

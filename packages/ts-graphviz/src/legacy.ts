@@ -38,17 +38,16 @@ import {
   type RootGraphModel,
   type SubgraphModel,
 } from '@ts-graphviz/common';
-import { legacyModels } from '@ts-graphviz/core';
 import type { DSL } from './dsl.js';
-import {
-  type FromDotModel,
-  type FromDotOptions,
-  type FromDotResult,
-  type FromDotRule,
-  fromDotAll as fromDotAllOf,
-  fromDot as fromDotOf,
+import type {
+  FromDotModel,
+  FromDotOptions,
+  FromDotResult,
+  FromDotRule,
 } from './from-dot.js';
-import { withModelKit as withModelKitOf } from './model-factory.js';
+import { fromDotAllWith, fromDotWith } from './from-dot-with.js';
+import { createLegacyKit } from './legacy-kit.js';
+import { createModelFactories } from './model-factory-builder.js';
 import type {
   ModelFactories,
   ModelFactoriesWithStrict,
@@ -57,30 +56,18 @@ import type {
 
 export * from './ts-graphviz.js';
 
-/** `legacyModels`, with the classes of `models` where it gives one. */
-function withLegacy(
-  models: Partial<ModelClasses> | undefined,
-): Partial<ModelClasses> {
-  const merged: Record<string, unknown> = { ...legacyModels };
-  for (const [key, model] of Object.entries(ownOptions(models))) {
-    if (model !== undefined) merged[key] = model;
-  }
-  return merged as Partial<ModelClasses>;
+/** The factories with a kit of `ts-graphviz/legacy` for the classes. */
+function factoriesOf(
+  classes: Partial<ModelClasses> | undefined,
+): ModelFactoriesWithStrict {
+  const kit = createLegacyKit(classes);
+  return Object.freeze({
+    ...createModelFactories(false, kit),
+    strict: createModelFactories(true, kit),
+  });
 }
 
-/** The options, with `legacyModels` under the classes of `convert.models`. */
-function withLegacyOptions<
-  T extends { convert?: { models?: Partial<ModelClasses> } },
->(options: T | undefined): T {
-  const own = ownOptions(options);
-  const convert = ownOptions(own.convert);
-  return {
-    ...own,
-    convert: { ...convert, models: withLegacy(convert.models) },
-  } as T;
-}
-
-const legacy: ModelFactoriesWithStrict = withModelKitOf(legacyModels);
+const legacy: ModelFactoriesWithStrict = factoriesOf(undefined);
 
 /**
  * A factory for directed graphs that merge every default attribute
@@ -149,7 +136,9 @@ export const strict: ModelFactories = legacy.strict;
 export function withModelKit<const P extends Partial<ModelClasses>>(
   classes: P,
 ): ModelFactoriesWithStrict<ResolvedModelTypes<P>> {
-  return withModelKitOf(withLegacy(classes) as P);
+  return factoriesOf(classes) as ModelFactoriesWithStrict<
+    ResolvedModelTypes<P>
+  >;
 }
 
 // The signatures below are those of `ts-graphviz`; `pnpm api:check` fails
@@ -243,7 +232,9 @@ export function fromDot(
   | EdgeModel
   | SubgraphModel
   | DSL<RootGraphModel | NodeModel | EdgeModel | SubgraphModel> {
-  return fromDotOf(dot, withLegacyOptions(options));
+  // Own properties only: an inherited one is never an option.
+  const own = ownOptions(options);
+  return fromDotWith(dot, own, createLegacyKit(ownOptions(own.convert).models));
 }
 
 /**
@@ -308,5 +299,11 @@ export function fromDotAll(
     parse?: CommonParseOptions;
   },
 ): (RootGraphModel | DSL<RootGraphModel>)[] {
-  return fromDotAllOf(dot, withLegacyOptions(options));
+  // Own properties only: an inherited one is never an option.
+  const own = ownOptions(options);
+  return fromDotAllWith(
+    dot,
+    own,
+    createLegacyKit(ownOptions(own.convert).models),
+  );
 }

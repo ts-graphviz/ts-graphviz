@@ -27,6 +27,7 @@
   "type": "module",
   "exports": {
     ".": "./src/ast.ts",
+    "./legacy": "./src/legacy.ts",
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -53,9 +54,18 @@
         "types": "./lib/ast.d.ts",
         "default": "./lib/ast.js"
       },
+      "./legacy": {
+        "types": "./lib/legacy.d.ts",
+        "default": "./lib/legacy.js"
+      },
       "./package.json": "./package.json"
     },
     "module": "lib/ast.js",
-    "types": "lib/ast.d.ts"
+    "types": "lib/ast.d.ts",
+    "typesVersions": {
+      "*": {
+        "legacy": ["./lib/legacy.d.ts"]
+      }
+    }
   }
 }

@@ -172,12 +172,6 @@ export interface ReadonlyGraphBaseModel<
     readonly edge: ReadonlyAttributeListModel<'Edge'>;
     readonly node: ReadonlyAttributeListModel<'Node'>;
   };
-  /** Node objects in the graph. */
-  readonly nodes: ReadonlyArray<ReadonlyNodeModel>;
-  /** Edge objects in the graph. */
-  readonly edges: ReadonlyArray<ReadonlyEdgeModel>;
-  /** Subgraph objects in the graph. */
-  readonly subgraphs: ReadonlyArray<ReadonlySubgraphModel>;
   /**
    * The graph's contents in the order they were added (see
    * {@link GraphBaseModel.statements}).
@@ -185,10 +179,16 @@ export interface ReadonlyGraphBaseModel<
   readonly statements: ReadonlyArray<ReadonlyGraphStatementModel>;
   /** Check if the Node exists in the graph. */
   existNode(nodeId: string): boolean;
-  /** The Node with the id, or undefined if the graph has none. */
-  getNode(id: string): ReadonlyNodeModel | undefined;
-  /** The Subgraph with the id, or undefined if the graph has none. */
-  getSubgraph(id: string): ReadonlySubgraphModel | undefined;
+  /** The nodes in the graph, in order. */
+  getNodes(): ReadonlyArray<ReadonlyNodeModel>;
+  /** The nodes declared with the id, in order; empty if there is none. */
+  getNodes(id: string): ReadonlyArray<ReadonlyNodeModel>;
+  /** The edges in the graph, in order. */
+  getEdges(): ReadonlyArray<ReadonlyEdgeModel>;
+  /** The subgraphs in the graph, in order. */
+  getSubgraphs(): ReadonlyArray<ReadonlySubgraphModel>;
+  /** The subgraphs declared with the id, in order; empty if there is none. */
+  getSubgraphs(id: string): ReadonlyArray<ReadonlySubgraphModel>;
 }
 
 /**

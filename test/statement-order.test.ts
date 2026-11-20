@@ -27,15 +27,16 @@ describe('statement order', () => {
     );
   });
 
-  it('keeps the place of a node replaced by one with the same id, and forgets removed ones', () => {
+  it('adds a node with the id of another as another declaration, and forgets removed ones', () => {
     const g = digraph((g) => {
       g.node('a');
       g.node('b');
     });
-    const replacement = new Node('a', { color: 'red' });
+    const again = new Node('a', { color: 'red' });
     const m = modelOf(g);
-    m.addNode(replacement);
-    expect(m.statements).toStrictEqual([replacement, m.getNode('b')]);
+    const [first] = m.getNodes('a');
+    m.addNode(again);
+    expect(m.statements).toStrictEqual([first, m.getNodes('b')[0], again]);
     m.removeNode('a');
     expect(m.statements.map((s) => (s.$$type === 'Node' ? s.id : '?'))).toEqual(
       ['b'],

@@ -168,8 +168,8 @@ describe.each([
         g.addNode(defaultModelKit.createNode(id));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
-        expect(back.nodes.map((n) => n.id)).toEqual([id]);
-        expect(back.nodes[0].attributes.size).toBe(0);
+        expect(back.getNodes().map((n) => n.id)).toEqual([id]);
+        expect(back.getNodes()[0].attributes.size).toBe(0);
       });
 
       it('prevents injection via edge operator in node IDs', () => {
@@ -177,8 +177,8 @@ describe.each([
         g.addNode(defaultModelKit.createNode(id));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
-        expect(back.nodes.map((n) => n.id)).toEqual([id]);
-        expect(back.edges).toHaveLength(0);
+        expect(back.getNodes().map((n) => n.id)).toEqual([id]);
+        expect(back.getEdges()).toHaveLength(0);
       });
 
       it('prevents graph termination injection via quotes and newlines', () => {
@@ -186,8 +186,8 @@ describe.each([
         g.addNode(defaultModelKit.createNode(id));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
-        expect(back.nodes.map((n) => n.id)).toEqual([id]);
-        expect(back.subgraphs).toHaveLength(0);
+        expect(back.getNodes().map((n) => n.id)).toEqual([id]);
+        expect(back.getSubgraphs()).toHaveLength(0);
       });
 
       it('prevents statement injection in subgraph IDs', () => {
@@ -201,9 +201,14 @@ describe.each([
         expect(
           'children' in statements[0] ? statements[0].children : [],
         ).toMatchObject([{ type: 'Node', id: { value: 'test' } }]);
-        expect(back.nodes).toHaveLength(0);
-        expect(back.subgraphs.map((s) => s.id)).toEqual([id]);
-        expect(back.subgraphs[0].nodes.map((n) => n.id)).toEqual(['test']);
+        expect(back.getNodes()).toHaveLength(0);
+        expect(back.getSubgraphs().map((s) => s.id)).toEqual([id]);
+        expect(
+          back
+            .getSubgraphs()[0]
+            .getNodes()
+            .map((n) => n.id),
+        ).toEqual(['test']);
       });
 
       it('prevents injection via attribute values', () => {
@@ -213,9 +218,9 @@ describe.each([
         node.attributes.set(_.label, label);
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
-        expect(back.nodes.map((n) => n.id)).toEqual(['safe_node']);
-        expect(back.nodes[0].attributes.size).toBe(1);
-        expect(back.nodes[0].attributes.get(_.label)).toBe(label);
+        expect(back.getNodes().map((n) => n.id)).toEqual(['safe_node']);
+        expect(back.getNodes()[0].attributes.size).toBe(1);
+        expect(back.getNodes()[0].attributes.get(_.label)).toBe(label);
       });
 
       it('prevents injection via edge IDs', () => {
@@ -227,10 +232,13 @@ describe.each([
         g.addEdge(defaultModelKit.createEdge([n1, n2]));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(3);
-        expect(back.nodes.map((n) => n.id)).toEqual(['n1', id]);
-        expect(back.subgraphs).toHaveLength(0);
-        expect(back.edges).toHaveLength(1);
-        expect(back.edges[0].targets).toMatchObject([{ id: 'n1' }, { id }]);
+        expect(back.getNodes().map((n) => n.id)).toEqual(['n1', id]);
+        expect(back.getSubgraphs()).toHaveLength(0);
+        expect(back.getEdges()).toHaveLength(1);
+        expect(back.getEdges()[0].targets).toMatchObject([
+          { id: 'n1' },
+          { id },
+        ]);
       });
 
       it('prevents injection with multiple quotes in node ID', () => {
@@ -238,7 +246,7 @@ describe.each([
         g.addNode(defaultModelKit.createNode(id));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
-        expect(back.nodes.map((n) => n.id)).toEqual([id]);
+        expect(back.getNodes().map((n) => n.id)).toEqual([id]);
       });
 
       it('prevents injection via port specification', () => {
@@ -246,8 +254,8 @@ describe.each([
         g.addNode(defaultModelKit.createNode(id));
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
-        expect(back.nodes.map((n) => n.id)).toEqual([id]);
-        expect(back.edges).toHaveLength(0);
+        expect(back.getNodes().map((n) => n.id)).toEqual([id]);
+        expect(back.getEdges()).toHaveLength(0);
       });
 
       it('prevents injection via graph comment', () => {
@@ -256,7 +264,7 @@ describe.each([
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(0);
         expect(back.comment).toBe(comment);
-        expect(back.nodes).toHaveLength(0);
+        expect(back.getNodes()).toHaveLength(0);
       });
 
       it('prevents injection via node comment', () => {
@@ -266,9 +274,9 @@ describe.each([
         node.comment = comment;
         const { back, statements } = readBack(g);
         expect(statements).toHaveLength(1);
-        expect(back.nodes.map((n) => n.id)).toEqual(['test']);
-        expect(back.nodes[0].comment).toBe(comment);
-        expect(back.nodes[0].attributes.size).toBe(0);
+        expect(back.getNodes().map((n) => n.id)).toEqual(['test']);
+        expect(back.getNodes()[0].comment).toBe(comment);
+        expect(back.getNodes()[0].attributes.size).toBe(0);
       });
     });
   });

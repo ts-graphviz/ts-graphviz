@@ -81,8 +81,8 @@ async function testEsmFromCjsTypescript() {
     console.log('\nTest 5: Testing TypeScript type inference');
 
     // Test that types are properly inferred
-    const nodes = Array.from(graph.nodes);
-    const edges = Array.from(graph.edges);
+    const nodes = graph.getNodes();
+    const edges = graph.getEdges();
 
     console.log(
       `✅ Type checking works: ${nodes.length} nodes, ${edges.length} edges`,

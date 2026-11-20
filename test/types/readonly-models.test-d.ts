@@ -116,16 +116,14 @@ interface NumGraphBase<T extends 'Graph' | 'Subgraph'> extends NumAttributes {
     readonly edge: RootGraphModel['attributes']['edge'];
     readonly node: NumAttributeList & { readonly $$kind: 'Node' };
   };
-  readonly nodes: ReadonlyArray<NumNode>;
-  readonly edges: ReadonlyArray<NumEdge>;
-  readonly subgraphs: ReadonlyArray<NumSubgraph>;
   readonly statements: ReadonlyArray<NumNode | NumEdge | NumSubgraph>;
   addNode(node: NumNode): void;
   addEdge(edge: NumEdge): void;
   removeNode(node: NumNode | string): void;
   existNode(nodeId: string): boolean;
-  getNode(id: string): NumNode | undefined;
-  getSubgraph(id: string): NumSubgraph | undefined;
+  getNodes(id?: string): NumNode[];
+  getEdges(): NumEdge[];
+  getSubgraphs(id?: string): NumSubgraph[];
   node(id: string, attributes?: { label?: number }): NumNode;
 }
 interface NumSubgraph extends NumGraphBase<'Subgraph'> {

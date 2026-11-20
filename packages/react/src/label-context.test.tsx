@@ -125,7 +125,7 @@ describe('label context', () => {
       />,
       { container },
     );
-    expect(container.getNode('a')?.attributes.get('label')).toMatchObject({
+    expect(container.getNodes('a')[0]?.attributes.get('label')).toMatchObject({
       value: '<font color="red">a</font>',
     });
   });
@@ -200,7 +200,7 @@ describe('React hooks in a component of a label', () => {
       </Theme>,
       { container },
     );
-    expect(container.getNode('a')?.attributes.get('label')).toMatchObject({
+    expect(container.getNodes('a')[0]?.attributes.get('label')).toMatchObject({
       value: '<b>dark</b>',
     });
   });

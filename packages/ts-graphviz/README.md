@@ -196,7 +196,7 @@ digraph('G', (g) => {
   // svg-a
   console.log(modelOf(a).id); // the node's name
   // a
-  console.log(modelOf(g).nodes.length);
+  console.log(modelOf(g).getNodes().length);
   // 1
 });
 ```

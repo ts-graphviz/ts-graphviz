@@ -47,12 +47,12 @@ describe('Model Collection Edge Cases', () => {
       expect((models[0] as NodeModel).id).toBe('first');
 
       // Verify container structure
-      expect(container.nodes).toHaveLength(2);
-      expect(container.nodes[0].id).toBe('first');
-      expect(container.nodes[1].id).toBe('fourth');
-      expect(container.subgraphs).toHaveLength(1);
-      expect(container.subgraphs[0].id).toBe('second');
-      expect(container.subgraphs[0].nodes[0].id).toBe('third');
+      expect(container.getNodes()).toHaveLength(2);
+      expect(container.getNodes()[0].id).toBe('first');
+      expect(container.getNodes()[1].id).toBe('fourth');
+      expect(container.getSubgraphs()).toHaveLength(1);
+      expect(container.getSubgraphs()[0].id).toBe('second');
+      expect(container.getSubgraphs()[0].getNodes()[0].id).toBe('third');
     });
 
     it('collects multiple simultaneous nodes in creation order', async () => {
@@ -74,7 +74,7 @@ describe('Model Collection Edge Cases', () => {
       models.forEach((model) => {
         expectNode(model);
       });
-      expect(container.nodes).toHaveLength(3);
+      expect(container.getNodes()).toHaveLength(3);
     });
 
     it('collects nested models before sibling models', async () => {
@@ -104,7 +104,7 @@ describe('Model Collection Edge Cases', () => {
   });
 
   describe('Duplicate ID Handling', () => {
-    it('handles duplicate node IDs by overwriting in container', async () => {
+    it('keeps each node with a duplicate id as a declaration in the container', async () => {
       const container = new DigraphModel('container');
       const root = createRoot({ container });
 
@@ -125,9 +125,11 @@ describe('Model Collection Edge Cases', () => {
       expect(models[0].id).toBe('duplicate');
       expect(models[1].id).toBe('duplicate');
 
-      // Container has the final (overwritten) version
-      expect(container.nodes).toHaveLength(1);
-      expect(container.nodes[0].attributes.get('label')).toBe('Second');
+      // Each element is a declaration of its own, in order
+      expect(container.getNodes()).toStrictEqual(models);
+      expect(
+        container.getNodes().map((n) => n.attributes.get('label')),
+      ).toEqual(['First', 'Second']);
     });
 
     it('handles nodes with undefined IDs correctly', async () => {
@@ -150,7 +152,7 @@ describe('Model Collection Edge Cases', () => {
 
       expect(models[0].id).toBeUndefined();
       expect(models[1].id).toBe('defined');
-      expect(container.nodes).toHaveLength(2);
+      expect(container.getNodes()).toHaveLength(2);
     });
 
     it('handles nodes with empty string IDs correctly', async () => {
@@ -173,7 +175,7 @@ describe('Model Collection Edge Cases', () => {
 
       expect(models[0].id).toBe('');
       expect(models[1].id).toBe('normal');
-      expect(container.nodes).toHaveLength(2);
+      expect(container.getNodes()).toHaveLength(2);
     });
   });
 
@@ -202,9 +204,11 @@ describe('Model Collection Edge Cases', () => {
       expectNode(deepestNode);
 
       // Verify nested structure in container
-      expect(container.subgraphs).toHaveLength(1);
-      expect(container.subgraphs[0].subgraphs).toHaveLength(1);
-      expect(container.subgraphs[0].subgraphs[0].subgraphs).toHaveLength(1);
+      expect(container.getSubgraphs()).toHaveLength(1);
+      expect(container.getSubgraphs()[0].getSubgraphs()).toHaveLength(1);
+      expect(
+        container.getSubgraphs()[0].getSubgraphs()[0].getSubgraphs(),
+      ).toHaveLength(1);
     });
 
     it('renders differently with and without containers', async () => {
@@ -260,7 +264,7 @@ describe('Model Collection Edge Cases', () => {
       models1.forEach((model) => {
         expectNode(model);
       });
-      expect(container1.nodes).toHaveLength(2);
+      expect(container1.getNodes()).toHaveLength(2);
 
       // Test with first condition false
       const container2 = new DigraphModel('container2');
@@ -276,7 +280,7 @@ describe('Model Collection Edge Cases', () => {
       models2.forEach((model) => {
         expectNode(model);
       });
-      expect(container2.nodes).toHaveLength(2);
+      expect(container2.getNodes()).toHaveLength(2);
     });
   });
 
@@ -299,7 +303,7 @@ describe('Model Collection Edge Cases', () => {
       expect(models).toHaveLength(1);
       expectNode(models[0]);
       expect((models[0] as NodeModel).id).toBe('after_null');
-      expect(container.nodes).toHaveLength(1);
+      expect(container.getNodes()).toHaveLength(1);
     });
 
     it('handles React fragments and mapped JSX elements', async () => {
@@ -333,7 +337,7 @@ describe('Model Collection Edge Cases', () => {
         'mapped_3',
       ];
       expect(models.map((m) => m.id)).toEqual(expectedIds);
-      expect(container.nodes).toHaveLength(5);
+      expect(container.getNodes()).toHaveLength(5);
     });
 
     it('handles multiple separate render operations correctly', async () => {
@@ -356,8 +360,8 @@ describe('Model Collection Edge Cases', () => {
         expect(models).toHaveLength(1);
         expectNode(models[0]);
         expect((models[0] as NodeModel).id).toBe(`render${index + 1}`);
-        expect(containers[index].nodes).toHaveLength(1);
-        expect(containers[index].nodes[0].id).toBe(`render${index + 1}`);
+        expect(containers[index].getNodes()).toHaveLength(1);
+        expect(containers[index].getNodes()[0].id).toBe(`render${index + 1}`);
       });
     });
 
@@ -390,7 +394,7 @@ describe('Model Collection Edge Cases', () => {
         'node/with/slashes',
       ];
       expect(models.map((m) => m.id)).toEqual(expectedIds);
-      expect(container.nodes).toHaveLength(5);
+      expect(container.getNodes()).toHaveLength(5);
     });
 
     it('handles large numbers of models efficiently', async () => {
@@ -417,7 +421,7 @@ describe('Model Collection Edge Cases', () => {
 
       expect(models[0].id).toBe('node_0');
       expect(models[nodeCount - 1].id).toBe(`node_${nodeCount - 1}`);
-      expect(container.nodes).toHaveLength(nodeCount);
+      expect(container.getNodes()).toHaveLength(nodeCount);
     });
   });
 

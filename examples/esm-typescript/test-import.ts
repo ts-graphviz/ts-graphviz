@@ -90,9 +90,9 @@ const typedNode = createNodeWithAttrs('typed', {
 graph.addNode(typedNode);
 
 // Test graph traversal with type guards
-const nodes = Array.from(graph.nodes);
-const edges = Array.from(graph.edges);
-const subgraphs = Array.from(graph.subgraphs);
+const nodes = graph.getNodes();
+const edges = graph.getEdges();
+const subgraphs = graph.getSubgraphs();
 
 console.log(
   `✅ Graph contains: ${nodes.length} nodes, ${edges.length} edges, ${subgraphs.length} subgraphs`,
