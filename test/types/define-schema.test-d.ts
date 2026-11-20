@@ -207,7 +207,7 @@ describe('FromDotOptions of a schema', () => {
       RootGraphModel<MySchema>
     >();
     // @ts-expect-error the schema is read at run time
-    const missing: FromDotOptions<'Dot', { readonly schema: MySchema }> = {};
-    missing;
+    const _missing: FromDotOptions<'Dot', { readonly schema: MySchema }> = {};
+    _missing;
   });
 });
