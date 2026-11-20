@@ -150,6 +150,30 @@ digraph((g) => {
 
 `createModelKit`, `withModelKit`, `createModelFactories`, and `fromDot` / `fromDotAll` with `convert.models` infer the types from the classes given; a class left out keeps the base type, and subgraphs get the same classes. What a graph holds (`getNodes`, `getEdges`, …) has the model interfaces (`NodeModel` and so on): check with `instanceof` to reach the members of your class.
 
+### Custom classes of a schema
+
+With a schema (see [Adding Custom Attributes](#adding-custom-attributes)), the classes of the kit are those of its models: a class extends the core class with the schema as its type argument, and a class of another schema, or of none, is a type error.
+
+```typescript
+import { attr, defineSchema, modelOf, Node, withModelKit } from 'ts-graphviz';
+
+const schema = defineSchema({ node: { tier: attr<'core' | 'edge'>() } });
+
+class TieredNode extends Node<typeof schema> {
+  isCore(): boolean {
+    return this.getAttribute('tier') === 'core';
+  }
+}
+
+const { digraph } = withModelKit({ schema, Node: TieredNode });
+digraph((g) => {
+  const a = g.node('a', { tier: 'core' });
+  modelOf(a).isCore(); // true
+});
+```
+
+A class that implements a model interface itself, instead of extending a core class, declares the schema it is of: `declare readonly '~schema'?: typeof schema;` (a type-only member, never set at run time).
+
 ### Default attribute statements in place
 
 In DOT, a default attribute statement applies only to what follows it:

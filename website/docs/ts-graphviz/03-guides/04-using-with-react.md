@@ -295,6 +295,28 @@ console.log(toDot(G));
 
 With a container, `getTopLevelModels()` gives every model the root rendered; a type guard such as `isNodeModel` filters them.
 
+## Components typed with a schema
+
+The components are typed with the default kit. For attributes of your own (a schema, see [Extending ts-graphviz](./05-extending-ts-graphviz.md#adding-custom-attributes)), `createComponents` gives the same components typed with a kit, and the root or conversion is given the same schema:
+
+```tsx
+import { createComponents, fromElement } from '@ts-graphviz/react';
+import { attr, createModelKit, defineSchema, toDot } from 'ts-graphviz';
+
+const schema = defineSchema({ node: { tier: attr<'core' | 'edge'>() } });
+const { Digraph, Node } = createComponents(createModelKit({ schema }));
+
+const dot = await fromElement(
+  <Digraph id="G">
+    <Node id="a" tier="core" />
+  </Digraph>,
+  { models: { schema } },
+);
+console.log(toDot(dot));
+```
+
+JSX cannot type a component from the root it is rendered in, so the types come from the kit given to `createComponents`, and what is created from the `models` of the root: give both the same schema and classes.
+
 ## Rendering to an image {#rendering-to-an-image}
 
 Give the DOT to `toBlob` of `ts-graphviz/adapter`, which runs Graphviz (Node.js and Deno; see [Rendering Graphs to Images](./03-rendering-graphs-to-images.md)):

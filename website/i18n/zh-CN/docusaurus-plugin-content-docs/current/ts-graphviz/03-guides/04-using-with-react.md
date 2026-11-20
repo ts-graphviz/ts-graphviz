@@ -56,6 +56,28 @@ console.log(dot);
 - **类似 HTML 的标签**：利用 JSX 为节点和边创建丰富的标签。
 - **基于组件的设计**：将图表逻辑封装在 React 组件中，以实现可重用性。
 
+## 用模式进行类型检查的组件
+
+组件使用默认套件进行类型检查。对于自定义属性（模式，参见[扩展 ts-graphviz](./05-extending-ts-graphviz.md)），`createComponents` 返回用套件进行类型检查的相同组件，并向根或转换传入相同的模式：
+
+```tsx
+import { createComponents, fromElement } from '@ts-graphviz/react';
+import { attr, createModelKit, defineSchema, toDot } from 'ts-graphviz';
+
+const schema = defineSchema({ node: { tier: attr<'core' | 'edge'>() } });
+const { Digraph, Node } = createComponents(createModelKit({ schema }));
+
+const dot = await fromElement(
+  <Digraph id="G">
+    <Node id="a" tier="core" />
+  </Digraph>,
+  { models: { schema } },
+);
+console.log(toDot(dot));
+```
+
+JSX 无法根据组件渲染所在的根来确定其类型，因此类型来自传给 `createComponents` 的套件，而创建的内容来自根的 `models`：请为两者提供相同的模式和类。
+
 ## 何时使用 `@ts-graphviz/react`
 
 - 当您倾向于使用声明式方法定义图表时。
