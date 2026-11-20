@@ -209,21 +209,27 @@ function entryOf(value: unknown, part: string): SchemaEntry | undefined {
  * NUL character.
  */
 function namesOf(value: unknown, part: string): string[] {
-  if (!Array.isArray(value) || value.length === 0) {
+  const fields = Array.isArray(value) ? ownData(value, part) : [];
+  // Every index its own value, and nothing else: no holes (an inherited
+  // index would be read), no other properties.
+  if (
+    !Array.isArray(value) ||
+    value.length === 0 ||
+    fields.length !== value.length ||
+    fields.some(([key], i) => key !== String(i))
+  ) {
     throw invalid(
-      `The names of an entry in the ${part} of a schema must be a non-empty array`,
+      `The names of an entry in the ${part} of a schema must be a non-empty array without holes`,
     );
   }
-  return ownData(value, part)
-    .filter(([key]) => key !== 'length')
-    .map(([, item]) => {
-      if (typeof item !== 'string' || item === '' || item.includes('\0')) {
-        throw invalid(
-          `A name of an entry in the ${part} of a schema must be a non-empty string without NUL`,
-        );
-      }
-      return item;
-    });
+  return fields.map(([, item]) => {
+    if (typeof item !== 'string' || item === '' || item.includes('\0')) {
+      throw invalid(
+        `A name of an entry in the ${part} of a schema must be a non-empty string without NUL`,
+      );
+    }
+    return item;
+  });
 }
 
 function name(key: string): string {

@@ -57,7 +57,9 @@ export interface NeatoOptions {
   reduce?: boolean;
 }
 
-export type Options<T extends string = Layout, S extends Schema = EmptySchema> = CommonOptions<S> & (T extends "neato" ? NeatoOptions : T extends "fdp" ? FdpOptions : OtherOptions<S>);
+export type Options<T extends string = Layout, S extends Schema = EmptySchema> = CommonOptions<S> & ([keyof S] extends [never] ? unknown : {
+  schema: S;
+}) & (T extends "neato" ? NeatoOptions : T extends "fdp" ? FdpOptions : OtherOptions<S>);
 
 export interface OtherOptions<S extends Schema = EmptySchema> {
   layout?: Exclude<Layout, "neato" | "fdp"> | NoInfer<SchemaLayout<S>>;

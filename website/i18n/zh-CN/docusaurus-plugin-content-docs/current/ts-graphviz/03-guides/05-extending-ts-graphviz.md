@@ -137,7 +137,7 @@ digraph {
 
 #### 指定自定义图形布局和输出格式
 
-Graphviz 插件添加的布局引擎和输出格式，连同名称（`values.extend('mp4')`）列在模式的 `types.layout` 和 `types.format` 中，并将该模式传给适配器的 `schema` 选项。模式与 `dotCommand` 一样是受信任的配置：在代码中定义，切勿从最终用户的输入构造。来自请求的 `format` 或 `layout` 只与文档中列出的名称核对（`isFormat` / `isLayout`）。
+Graphviz 插件添加的布局引擎和输出格式，连同名称（`values.extend('mp4')`）列在模式的 `types.layout` 和 `types.format` 中，并将该模式传给适配器的 `schema` 选项。模式与 `dotCommand` 一样是受信任的配置：在代码中定义，切勿从最终用户的输入构造。`isFormat` / `isLayout` 只对文档中列出的名称返回 true：用它们检查来自请求的 `format` 或 `layout`，使请求无法选择插件的格式或布局。
 
 ```typescript
 import { toBlob } from '@ts-graphviz/adapter';

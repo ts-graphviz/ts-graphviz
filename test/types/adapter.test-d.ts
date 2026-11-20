@@ -75,3 +75,12 @@ describe('toBlob', () => {
     expectTypeOf<'x11'>().not.toExtend<Format>();
   });
 });
+
+describe('toBlob given a schema type', () => {
+  it('needs the schema itself', () => {
+    const schema = defineSchema({ types: { format: values.extend('mp4') } });
+    // @ts-expect-error the names are read from the schema at run time
+    toBlob<typeof schema>('', { format: 'mp4' });
+    toBlob<typeof schema>('', { schema, format: 'mp4' });
+  });
+});

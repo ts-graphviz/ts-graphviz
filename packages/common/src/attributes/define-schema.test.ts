@@ -181,6 +181,37 @@ describe('defineSchema', () => {
       'an entry with a third field',
       { types: { style: { mode: 'extend', values: ['a'], x: 1 } } },
     ],
+    [
+      'names with a hole',
+      // biome-ignore lint/suspicious/noSparseArray: a hole is what is tested
+      { types: { style: { mode: 'extend', values: [, 'a'] } } },
+    ],
+    [
+      'names of an array with no element',
+      { types: { style: { mode: 'extend', values: new Array(1) } } },
+    ],
+    [
+      'names with another property',
+      {
+        types: {
+          style: { mode: 'extend', values: Object.assign(['a'], { x: 'b' }) },
+        },
+      },
+    ],
+    [
+      'names with a getter',
+      {
+        types: {
+          style: {
+            mode: 'extend',
+            values: Object.defineProperty(['a'], 0, {
+              get: () => 'a',
+              enumerable: true,
+            }),
+          },
+        },
+      },
+    ],
   ])('throws for %s', (_, schema) => {
     expect(() => defineSchema(schema as never)).toThrow(invalid);
   });

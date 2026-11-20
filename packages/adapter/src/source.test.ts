@@ -1,4 +1,4 @@
-import { defineSchema, values } from '@ts-graphviz/common';
+import { attr, defineSchema, values } from '@ts-graphviz/common';
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import type { attributeArgs } from './create-command-args.js';
@@ -84,6 +84,22 @@ describe('a custom format while sanitize is on', { tags: ['SM-4'] }, () => {
       sourceToRender(dot, { format: 'png' }),
     );
     expect(sourceToRender(dot, { format: 'mp4', sanitize: false })).toBe(dot);
+  });
+
+  it('is checked with the schema of the sanitize options when they name one', () => {
+    const own = defineSchema({ node: { tier: attr<string>() } });
+    const dot = 'digraph { a [tier=core] }';
+    const strict = { policy: 'strict' as const };
+    expect(
+      sourceToRender(dot, { schema: own, sanitize: strict, format: 'svg' }),
+    ).toContain('tier');
+    expect(() =>
+      sourceToRender(dot, {
+        schema: own,
+        sanitize: { ...strict, schema: defineSchema({}) },
+        format: 'svg',
+      }),
+    ).toThrow(expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }));
   });
 
   it('of a schema, is checked by sanitize as the adapter reads it', () => {

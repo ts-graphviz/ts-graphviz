@@ -140,7 +140,7 @@ digraph {
 
 #### カスタムグラフレイアウトおよび出力フォーマットの指定
 
-Graphviz のプラグインが追加するレイアウトエンジンと出力フォーマットは、スキーマの `types.layout` と `types.format` に名前とともに（`values.extend('mp4')`）列挙し、そのスキーマをアダプターの `schema` オプションに渡します。スキーマは `dotCommand` と同じく信頼された設定です。コードで定義し、エンドユーザーの入力から作らないでください。リクエストから来た `format` や `layout` は、ドキュメントにある名前だけと照合されます（`isFormat` / `isLayout`）。
+Graphviz のプラグインが追加するレイアウトエンジンと出力フォーマットは、スキーマの `types.layout` と `types.format` に名前とともに（`values.extend('mp4')`）列挙し、そのスキーマをアダプターの `schema` オプションに渡します。スキーマは `dotCommand` と同じく信頼された設定です。コードで定義し、エンドユーザーの入力から作らないでください。`isFormat` / `isLayout` が true を返すのはドキュメントにある名前だけです。リクエストから来た `format` や `layout` はこれらで確認し、リクエストがプラグインのものを選べないようにしてください。
 
 ```typescript
 import { toBlob } from '@ts-graphviz/adapter';

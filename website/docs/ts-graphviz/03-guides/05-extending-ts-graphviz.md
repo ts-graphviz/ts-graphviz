@@ -199,7 +199,7 @@ Attributes and value types of your own, and the layout engines and output format
 
 #### Specifying Custom Graph Layout and Output Formats
 
-Layout engines and output formats that a Graphviz plugin adds are named in a schema's `types.layout` and `types.format`, with the names (`values.extend('mp4')`), and the schema is given to the adapter's `schema` option. A schema is trusted configuration, like `dotCommand`: define it in your code, never from end-user input. A `format` or `layout` from a request is checked against the documented names only (`isFormat` / `isLayout`).
+Layout engines and output formats that a Graphviz plugin adds are named in a schema's `types.layout` and `types.format`, with the names (`values.extend('mp4')`), and the schema is given to the adapter's `schema` option. A schema is trusted configuration, like `dotCommand`: define it in your code, never from end-user input. `isFormat` / `isLayout` answer for the documented names only: check a `format` or `layout` from a request with them, so that a request cannot choose a plugin's.
 
 ```typescript
 import { toBlob } from '@ts-graphviz/adapter';

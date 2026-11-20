@@ -67,3 +67,39 @@ describe('sanitize with a schema', { tags: ['SM-7'] }, () => {
     ).toThrow(expect.objectContaining({ code: 'TSG_ERR_INVALID_SCHEMA' }));
   });
 });
+
+describe('sanitize with a schema, at its edges', { tags: ['SM-7'] }, () => {
+  it('never allows a file-access attribute in any kind, schema or not', () => {
+    const withFile = defineSchema({
+      graph: {
+        imagepath: attr.override<string>(),
+        fontpath: attr.override<string>(),
+      },
+      node: {
+        image: attr.override<string>(),
+        shapefile: attr.override<string>(),
+      },
+      edge: { stylesheet: attr<string>() },
+    });
+    for (const dot of [
+      'digraph { a [image="/etc/passwd"] }',
+      'digraph { fontpath="/etc" }',
+      'digraph { node [shapefile="/x"]; a }',
+      'digraph { edge [stylesheet="/x.css"]; a -> b }',
+      'digraph { _background="x" }',
+    ]) {
+      expect(() =>
+        sanitize(dot, { policy: 'strict', format: 'svg', schema: withFile }),
+      ).toThrow(unsafe);
+    }
+  });
+
+  it('reads style names case-insensitively, as the built-in ones', () => {
+    expect(() =>
+      sanitize('digraph { a [style="SKETCHY"] }', { schema }),
+    ).not.toThrow();
+    expect(() =>
+      sanitize('digraph { a [style="sketchy(1)"] }', { schema }),
+    ).toThrow(unsafe);
+  });
+});

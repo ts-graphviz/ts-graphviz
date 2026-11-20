@@ -285,7 +285,9 @@ export interface CommonOptions<S extends Schema = EmptySchema> {
    * and `layout` then accept, at run time and in the types, for this call
    * (`isFormat` / `isLayout` still answer for the documented names only).
    * Its attributes type `attributes`, and `sanitize` takes it: the strict
-   * policy allows its attributes, and both policies its style names.
+   * policy allows its attributes, and both policies its style names (unless
+   * the `sanitize` options name a schema of their own, which is used
+   * instead).
    *
    * **This is trusted configuration defined in your application code. Do
    * not derive it from end-user input.** It is checked as `defineSchema`
@@ -347,6 +349,8 @@ export type Options<
   T extends string = Layout,
   S extends Schema = EmptySchema,
 > = CommonOptions<S> &
+  // A schema in the type is given at run time too: its names are read there.
+  ([keyof S] extends [never] ? unknown : { schema: S }) &
   (T extends 'neato'
     ? NeatoOptions
     : T extends 'fdp'

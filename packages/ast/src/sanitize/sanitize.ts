@@ -48,9 +48,10 @@ export interface SanitizeOptions extends CommonParseOptions {
   /**
    * The schema of the models the DOT was made with (`defineSchema`):
    * trusted configuration, like the classes of a kit. The strict policy
-   * also allows the attributes it adds (not those that read files), and
-   * both policies the style names its `types.style` was given
-   * (`values.extend('my-style')`; names of letters only).
+   * also allows the attributes it adds, of any kind, as its own list of
+   * Graphviz attributes is not by kind either (never one that reads files),
+   * and both policies the style names its `types.style` was given
+   * (`values.extend('sketchy')`; names of letters only).
    */
   schema?: Schema | undefined;
 }
