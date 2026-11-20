@@ -50,6 +50,7 @@ export declare class Digraph<S extends Schema = EmptySchema> extends RootGraph<S
 
 export declare class Dot<S extends Schema = EmptySchema> implements DotModel<S> {
   #private;
+  readonly "~schema"?: S;
   get $$type(): "Dot";
   get comments(): ReadonlyArray<CommentModel>;
   addComment(text: string, options?: CommentOptions<"leading" | "end">): CommentModel;
@@ -65,6 +66,7 @@ export declare class Dot<S extends Schema = EmptySchema> implements DotModel<S> 
 
 export declare class Edge<S extends Schema = EmptySchema> extends AttributesBase<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">> implements EdgeModel<S> {
   #private;
+  readonly "~schema"?: S;
   get $$type(): "Edge";
   get comments(): ReadonlyArray<CommentModel>;
   addComment(text: string, options?: CommentOptions<"leading" | "trailing">): CommentModel;
@@ -82,6 +84,7 @@ export declare class Graph<S extends Schema = EmptySchema> extends RootGraph<S> 
 
 export declare abstract class GraphBase<T extends DotObjectType, K extends AttributeKey = AttributeKey, S extends Schema = EmptySchema> extends AttributesBase<K, GraphSchemaAttributeTypes<T, S>> implements GraphBaseModel<T, K, S> {
   #private;
+  readonly "~schema"?: S;
   abstract get $$type(): T;
   readonly id?: string;
   get comments(): ReadonlyArray<CommentModel>;
@@ -146,6 +149,7 @@ export declare class LegacySubgraph<S extends Schema = EmptySchema> extends Subg
 export declare class Node<S extends Schema = EmptySchema> extends AttributesBase<NodeAttributeKey, SchemaAttributeTypes<S, "node">> implements NodeModel<S> {
   #private;
   readonly id: string;
+  readonly "~schema"?: S;
   get $$type(): "Node";
   get comments(): ReadonlyArray<CommentModel>;
   addComment(text: string, options?: CommentOptions<"leading" | "trailing">): CommentModel;

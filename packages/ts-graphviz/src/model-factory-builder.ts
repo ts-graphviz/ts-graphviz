@@ -53,16 +53,19 @@ export function createModelFactories<M extends DSLModelTypes = ModelTypes>(
   kit: ModelKit<M> = defaultModelKit as ModelKit<M>,
 ): Readonly<ModelFactories<M>> {
   // The graphs come from the kit's classes, which `M` describes; the
-  // builder does not depend on the schema, which only types the attributes.
+  // builder does not depend on the schema, which only types the attributes,
+  // so the factories are typed with `M` here.
   const untyped = kit as ModelKit;
   return Object.freeze({
-    digraph: ModelFactoryBuilder.call(untyped, true, strict) as ModelFactory<
-      M['Digraph'],
-      M
-    >,
-    graph: ModelFactoryBuilder.call(untyped, false, strict) as ModelFactory<
-      M['Graph'],
-      M
-    >,
+    digraph: ModelFactoryBuilder.call(
+      untyped,
+      true,
+      strict,
+    ) as unknown as ModelFactory<M['Digraph'], M>,
+    graph: ModelFactoryBuilder.call(
+      untyped,
+      false,
+      strict,
+    ) as unknown as ModelFactory<M['Graph'], M>,
   });
 }

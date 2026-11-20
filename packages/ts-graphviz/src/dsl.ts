@@ -2,6 +2,7 @@ import {
   type AnyDotObjectModel,
   type AnyModelTypes,
   type AnyReadonlyDotObjectModel,
+  type Attribute,
   type AttributeKey,
   type AttributeListKind,
   type AttributeListModel,
@@ -11,7 +12,6 @@ import {
   type DotModel,
   type EdgeAttributeKey,
   type EdgeAttributesObject,
-  type EdgeModel,
   type EmptySchema,
   type ForwardRefNode,
   type GraphAttributeKey,
@@ -31,7 +31,6 @@ import {
   modelOf,
   type NodeAttributeKey,
   type NodeAttributesObject,
-  type NodeModel,
   type NodeRefLike,
   type NonClusterSubgraphAttributesObject,
   type Port,
@@ -42,6 +41,7 @@ import {
   type ReadonlyRootGraphModel,
   type ReadonlySubgraphModel,
   type RootGraphModel,
+  type Schema,
   type SchemaAttributeTypes,
   type SchemaOf,
   type SubgraphAttributeKey,
@@ -151,18 +151,11 @@ export interface DSLModelTypes extends AnyModelTypes {
  * one).
  * @group DSL
  */
-export type SchemaOfModel<T> =
-  T extends NodeModel<infer S>
-    ? S
-    : T extends EdgeModel<infer S>
-      ? S
-      : T extends SubgraphModel<infer S>
-        ? S
-        : T extends RootGraphModel<infer S>
-          ? S
-          : T extends DotModel<infer S>
-            ? S
-            : EmptySchema;
+export type SchemaOfModel<T> = T extends {
+  readonly '~schema'?: infer S extends Schema;
+}
+  ? S
+  : EmptySchema;
 
 /** An edge target a DSL takes: a node's DSL as well as a node or an id. */
 type DSLNodeRefLike = NodeRefLike | ModelView<ReadonlyNodeModel>;
@@ -182,13 +175,15 @@ export type DSLEdgeTargetLikeTuple =
 
 /**
  * The attributes of a model as properties: the built-in ones of its kind,
- * and those its schema adds or changes.
+ * and those its schema `E` (as {@link SchemaAttributeTypes} gives them) adds
+ * or changes. Without a schema, the built-in ones as they are, which the
+ * type checker does not need to work out from the schema.
  */
-type AttributeProperties<
-  T extends AttributeKey,
-  S,
-  Kind extends 'graph' | 'node' | 'edge',
-> = AttributesObject<T, SchemaAttributeTypes<S, Kind>>;
+type AttributeProperties<T extends AttributeKey, S, E extends object> = [
+  keyof S,
+] extends [never]
+  ? { [K in T]?: Attribute<K> }
+  : AttributesObject<T, E>;
 
 /**
  * What every DSL has: its model under `MODEL`, `$$type` and `addComment`.
@@ -208,7 +203,11 @@ export interface ModelDSLMembers<T extends DSLModel> extends ModelView<T> {
  * @group DSL
  */
 export type NodeDSL<T extends DSLModel> = NodeDSLMembers<T> &
-  AttributeProperties<NodeAttributeKey, SchemaOfModel<T>, 'node'>;
+  AttributeProperties<
+    NodeAttributeKey,
+    SchemaOfModel<T>,
+    SchemaAttributeTypes<SchemaOfModel<T>, 'node'>
+  >;
 
 /**
  * What a node's DSL has besides its attributes.
@@ -230,7 +229,11 @@ export interface NodeDSLMembers<T extends DSLModel> extends ModelDSLMembers<T> {
  * @group DSL
  */
 export type EdgeDSL<T extends DSLModel> = ModelDSLMembers<T> &
-  AttributeProperties<EdgeAttributeKey, SchemaOfModel<T>, 'edge'>;
+  AttributeProperties<
+    EdgeAttributeKey,
+    SchemaOfModel<T>,
+    SchemaAttributeTypes<SchemaOfModel<T>, 'edge'>
+  >;
 
 /**
  * The DSL of a default attribute list (`node [...]`, `edge [...]`,
@@ -270,7 +273,11 @@ export type RootGraphDSL<
   T extends DSLGraphModel,
   M extends DSLModelTypes = ModelTypes<SchemaOfModel<T>>,
 > = GraphDSLMembers<T, M> &
-  AttributeProperties<GraphAttributeKey, SchemaOfModel<T>, 'graph'>;
+  AttributeProperties<
+    GraphAttributeKey,
+    SchemaOfModel<T>,
+    SchemaAttributeTypes<SchemaOfModel<T>, 'graph'>
+  >;
 
 /**
  * The DSL of a subgraph.
@@ -280,8 +287,9 @@ export type SubgraphDSL<
   T extends DSLGraphModel,
   M extends DSLModelTypes = ModelTypes<SchemaOfModel<T>>,
 > = GraphDSLMembers<T, M> &
-  AttributesObject<
+  AttributeProperties<
     SubgraphAttributeKey | ClusterSubgraphAttributeKey,
+    SchemaOfModel<T>,
     GraphSchemaAttributeTypes<'Subgraph', SchemaOfModel<T>>
   >;
 
@@ -402,7 +410,10 @@ export interface GraphDSLStatements<
    * // }
    * ```
    */
-  node(id: string, callback?: (node: DSL<M['Node']>) => void): DSL<M['Node']>;
+  node(
+    id: string,
+    callback?: (node: DSL<M['Node'], M>) => void,
+  ): DSL<M['Node'], M>;
   /**
    * A new node with this id and these attributes, as `A [color=red];` in
    * DOT (another declaration when the graph has one with the id).
@@ -422,8 +433,8 @@ export interface GraphDSLStatements<
   node(
     id: string,
     attributes: NodeAttributesObject<SchemaOf<M>>,
-    callback?: (node: DSL<M['Node']>) => void,
-  ): DSL<M['Node']>;
+    callback?: (node: DSL<M['Node'], M>) => void,
+  ): DSL<M['Node'], M>;
   /**
    * Default attributes for the nodes, as `node [color=red];` in DOT: they
    * apply to the nodes that follow. Returns the list's DSL, to change those
@@ -442,7 +453,7 @@ export interface GraphDSLStatements<
    */
   node(
     attributes: NodeAttributesObject<SchemaOfModel<T>>,
-  ): DSL<T['attributes']['node']>;
+  ): DSL<T['attributes']['node'], M>;
 
   /**
    * A new edge, as `a -> b;` in DOT. A node's DSL, a node or an id
@@ -460,8 +471,8 @@ export interface GraphDSLStatements<
    */
   edge(
     targets: DSLEdgeTargetLikeTuple,
-    callback?: (edge: DSL<M['Edge']>) => void,
-  ): DSL<M['Edge']>;
+    callback?: (edge: DSL<M['Edge'], M>) => void,
+  ): DSL<M['Edge'], M>;
   /**
    * A new edge with these attributes, as `a -> b [color=red];` in DOT.
    *
@@ -479,8 +490,8 @@ export interface GraphDSLStatements<
   edge(
     targets: DSLEdgeTargetLikeTuple,
     attributes: EdgeAttributesObject<SchemaOf<M>>,
-    callback?: (edge: DSL<M['Edge']>) => void,
-  ): DSL<M['Edge']>;
+    callback?: (edge: DSL<M['Edge'], M>) => void,
+  ): DSL<M['Edge'], M>;
   /**
    * Default attributes for the edges, as `edge [color=red];` in DOT: they
    * apply to the edges that follow. Returns the list's DSL, to change those
@@ -499,7 +510,7 @@ export interface GraphDSLStatements<
    */
   edge(
     attributes: EdgeAttributesObject<SchemaOfModel<T>>,
-  ): DSL<T['attributes']['edge']>;
+  ): DSL<T['attributes']['edge'], M>;
 
   /**
    * Default attributes for the subgraphs and this graph, as
@@ -520,7 +531,7 @@ export interface GraphDSLStatements<
    */
   graph(
     attributes: SubgraphAttributesObject<SchemaOfModel<T>>,
-  ): DSL<T['attributes']['graph']>;
+  ): DSL<T['attributes']['graph'], M>;
 }
 
 // ---------------------------------------------------------------------------

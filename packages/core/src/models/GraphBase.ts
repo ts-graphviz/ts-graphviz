@@ -46,6 +46,9 @@ export abstract class GraphBase<
   extends AttributesBase<K, GraphSchemaAttributeTypes<T, S>>
   implements GraphBaseModel<T, K, S>
 {
+  /** Type only: never present at run time (`HasSchema`). */
+  declare readonly '~schema'?: S;
+
   public abstract get $$type(): T;
   public readonly id?: string;
 

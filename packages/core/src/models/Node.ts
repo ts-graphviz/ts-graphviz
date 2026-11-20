@@ -26,6 +26,9 @@ export class Node<S extends Schema = EmptySchema>
   extends AttributesBase<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>
   implements NodeModel<S>
 {
+  /** Type only: never present at run time (`HasSchema`). */
+  declare readonly '~schema'?: S;
+
   public get $$type(): 'Node' {
     return 'Node';
   }

@@ -29,6 +29,9 @@ export class Edge<S extends Schema = EmptySchema>
   extends AttributesBase<EdgeAttributeKey, SchemaAttributeTypes<S, 'edge'>>
   implements EdgeModel<S>
 {
+  /** Type only: never present at run time (`HasSchema`). */
+  declare readonly '~schema'?: S;
+
   public get $$type(): 'Edge' {
     return 'Edge';
   }
