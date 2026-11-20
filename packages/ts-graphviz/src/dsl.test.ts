@@ -16,9 +16,7 @@ import {
   type ModelKit,
   modelOf,
   type NodeModel,
-  type NonClusterSubgraphAttributesObject,
   type StatementAttributeListModel,
-  type SubgraphAttributesObject,
   toNodeRef,
   toNodeRefGroup,
 } from '@ts-graphviz/common';
