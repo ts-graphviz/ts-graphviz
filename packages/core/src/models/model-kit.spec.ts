@@ -132,8 +132,8 @@ describe('createModelKit', { tags: ['SM-5'] }, () => {
     ]);
     g.addEdge(e);
     // An edge refers to nodes; it does not put them in the graph.
-    expect(g.nodes).toStrictEqual([]);
-    expect(g.edges).toStrictEqual([e]);
+    expect(g.getNodes()).toStrictEqual([]);
+    expect(g.getEdges()).toStrictEqual([e]);
   });
 
   it('the create* functions work taken off the kit', () => {
@@ -151,7 +151,7 @@ describe('createModelKit', { tags: ['SM-5'] }, () => {
     const mine = kit.createNode('b');
     g.addNode(plain);
     g.addNode(mine);
-    expect(g.nodes).toStrictEqual([plain, mine]);
+    expect(g.getNodes()).toStrictEqual([plain, mine]);
     expect('with' in g).toBe(false);
     expect('createNode' in g).toBe(false);
   });

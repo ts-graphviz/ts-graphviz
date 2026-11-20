@@ -38,7 +38,7 @@ describe('maxEdgeTargets', { tags: ['SM-1'] }, () => {
 
   it('still reaches every node of a reopened subgraph', () => {
     const dot = convert(reopened(3));
-    const edges = dot.graphs[0].edges;
+    const edges = dot.graphs[0].getEdges();
     expect(edges.map((e) => e.targets[0])).toStrictEqual([
       [{ id: 'n0' }],
       [{ id: 'n0' }, { id: 'n1' }],

@@ -89,13 +89,13 @@ export function expectGraphStructure(
   },
 ): void {
   if (expected.nodeCount !== undefined) {
-    expect(graph.nodes.length).toBe(expected.nodeCount);
+    expect(graph.getNodes().length).toBe(expected.nodeCount);
   }
   if (expected.edgeCount !== undefined) {
-    expect(graph.edges.length).toBe(expected.edgeCount);
+    expect(graph.getEdges().length).toBe(expected.edgeCount);
   }
   if (expected.subgraphCount !== undefined) {
-    expect(graph.subgraphs.length).toBe(expected.subgraphCount);
+    expect(graph.getSubgraphs().length).toBe(expected.subgraphCount);
   }
   if (expected.directed !== undefined) {
     // Use type guard for directed property access

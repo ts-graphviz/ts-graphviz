@@ -20,11 +20,59 @@ import { collectAttributes } from './collect-attributes.js';
 import { nodeIdsOf, type SubgraphIdCache } from './subgraph-nodes.js';
 
 /**
- * The nodes each subgraph model has had in this conversion, over every
- * place it is opened: `subgraph s { a } -> subgraph s { b }` reaches both
- * a and b at each end, as in Graphviz.
+ * A subgraph as Graphviz knows it, over every place it is declared: `subgraph
+ * s { a } -> subgraph s { b }` reaches both a and b at each end. One with an
+ * id is the same in each declaration of its parent, so it is known by the
+ * path of ids from the root graph (each declaration is a model of its own);
+ * one without is a subgraph of its own.
  */
-const subgraphNodes = new WeakMap<SubgraphModel, Set<string>>();
+interface DeclaredSubgraph {
+  /** The nodes it has had in this conversion. */
+  nodes: Set<string>;
+  /** The subgraphs with an id in it. */
+  named: Map<string, DeclaredSubgraph>;
+}
+
+const declared = new WeakMap<
+  ConvertToModelContext,
+  WeakMap<GraphBaseModel, DeclaredSubgraph>
+>();
+
+function declaredOf(
+  context: ConvertToModelContext,
+  graph: GraphBaseModel,
+): DeclaredSubgraph {
+  let byModel = declared.get(context);
+  if (byModel === undefined) {
+    byModel = new WeakMap();
+    declared.set(context, byModel);
+  }
+  let found = byModel.get(graph);
+  if (found === undefined) {
+    // The root graph, which no declaration names.
+    found = { nodes: new Set(), named: new Map() };
+    byModel.set(graph, found);
+  }
+  return found;
+}
+
+/** Know a declaration of a subgraph in `graph` as the subgraph it declares. */
+function declare(
+  context: ConvertToModelContext,
+  graph: GraphBaseModel,
+  subgraph: SubgraphModel,
+): void {
+  const byModel = declared.get(context);
+  if (byModel?.has(subgraph)) return;
+  const parent = declaredOf(context, graph);
+  const id = subgraph.id;
+  let found = id === undefined ? undefined : parent.named.get(id);
+  if (found === undefined) {
+    found = { nodes: new Set(), named: new Map() };
+    if (id !== undefined) parent.named.set(id, found);
+  }
+  declared.get(context)?.set(subgraph, found);
+}
 
 /**
  * The ids of each subgraph statement, collected once per conversion: the
@@ -59,20 +107,24 @@ function applySubgraph(
   context: ConvertToModelContext,
   graph: GraphBaseModel,
   stmt: SubgraphASTNode,
+  legacy: boolean,
 ): SubgraphModel {
   const id = ownField(stmt, 'id');
-  // The subgraph with this id if there is one, as in DOT, where a subgraph
-  // statement with a known id adds to that subgraph.
   const name = id ? idFromLiteral(id) : undefined;
-  let subgraph = name !== undefined ? graph.getSubgraph(name) : undefined;
+  // Each declaration is a subgraph of its own, where it is written; the
+  // legacy conversion adds to the first subgraph with the id.
+  let subgraph =
+    legacy && name !== undefined ? graph.getSubgraphs(name)[0] : undefined;
   if (subgraph === undefined) {
     subgraph = context.models.createSubgraph(name);
     graph.addSubgraph(subgraph);
   }
-  applyStatements(context, subgraph, stmt.children);
-  const nodes = subgraphNodes.get(subgraph) ?? new Set<string>();
+  // Before its statements, whose subgraphs are known through it.
+  declaredOf(context, graph);
+  declare(context, graph, subgraph);
+  applyStatements(context, subgraph, stmt.children, legacy);
+  const { nodes } = declaredOf(context, subgraph);
   for (const id of nodeIdsOf(stmt, idCacheOf(context))) nodes.add(id);
-  subgraphNodes.set(subgraph, nodes);
   return subgraph;
 }
 
@@ -82,17 +134,21 @@ function applySubgraph(
  * Iterates over each statement and updates the graph model accordingly, handling subgraphs, attributes, nodes, edges, attribute lists, and comments. Comments are managed and associated with relevant graph elements as statements are processed.
  *
  * @param statements - The array of AST nodes representing graph statements to apply.
+ * @param legacy - Whether a node or a subgraph declared again adds to the
+ * first one with its id, as 3.x did (the deprecated legacy plugins), instead
+ * of being a declaration of its own.
  */
 export function applyStatements(
   context: ConvertToModelContext,
   graph: GraphBaseModel,
   statements: ClusterStatementASTNode[],
+  legacy = false,
 ): void {
   const comments = new BodyComments();
   for (const stmt of statements) {
     switch (stmt.type) {
       case 'Subgraph': {
-        const subgraph = applySubgraph(context, graph, stmt);
+        const subgraph = applySubgraph(context, graph, stmt, legacy);
         comments.statement(subgraph, stmt);
         break;
       }
@@ -107,12 +163,12 @@ export function applyStatements(
         // Converted by the node plugin each time, so a converter whose
         // plugin changes nodes applies to every mention.
         const node = context.convert(stmt);
-        // A node mentioned again adds to its attributes, as in Graphviz
-        // (`a [color=red]; a [shape=box]` is one node with both): the
-        // converted node's attributes are set on the existing one through
-        // its setAttribute, so a setAttribute that changes values runs on
-        // them again.
-        const existing = graph.getNode(node.id);
+        // Each declaration is a node of its own, where it is written, and
+        // Graphviz applies their attributes in turn. The legacy conversion
+        // adds a node mentioned again to the first one (`a [color=red]; a
+        // [shape=box]` is one node with both), through its setAttribute, so
+        // a setAttribute that changes values runs on them again.
+        const existing = legacy ? graph.getNodes(node.id)[0] : undefined;
         if (existing) {
           for (const name of node.getAttributeNames()) {
             existing.setAttribute(name, node.getAttribute(name) as never);
@@ -135,13 +191,13 @@ export function applyStatements(
           // at both ends counts its nodes from both.
           const subgraphs = stmt.targets.map((t) =>
             t.type === 'Subgraph' && !isNodeGroup(t)
-              ? applySubgraph(context, graph, t)
+              ? applySubgraph(context, graph, t, legacy)
               : undefined,
           );
           edge = convertEdge(context, stmt, (i) => {
             const subgraph = subgraphs[i];
             if (subgraph === undefined) return undefined;
-            const nodes = subgraphNodes.get(subgraph) ?? new Set<string>();
+            const { nodes } = declaredOf(context, subgraph);
             // A subgraph opened again keeps its nodes, so these grow with
             // every edge to it: bounded by `maxEdgeTargets`, checked before
             // they are copied.

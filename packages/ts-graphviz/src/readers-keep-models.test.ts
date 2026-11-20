@@ -37,17 +37,19 @@ function graph(g: ReadonlyGraphBaseModel): unknown {
     defaults: [g.attributes.graph, g.attributes.node, g.attributes.edge].map(
       (list) => [list.comment, attributes(list)],
     ),
-    nodes: g.nodes.map((n) => [n.id, n.comment, attributes(n.attributes)]),
-    edges: g.edges.map((e) => [
-      e.comment,
-      attributes(e.attributes),
-      e.targets.map((t) =>
-        Array.isArray(t)
-          ? (t as readonly (ReadonlyNodeModel | ForwardRefNode)[]).map(target)
-          : target(t as ReadonlyNodeModel | ForwardRefNode),
-      ),
-    ]),
-    subgraphs: g.subgraphs.map(graph),
+    nodes: g.getNodes().map((n) => [n.id, n.comment, attributes(n.attributes)]),
+    edges: g
+      .getEdges()
+      .map((e) => [
+        e.comment,
+        attributes(e.attributes),
+        e.targets.map((t) =>
+          Array.isArray(t)
+            ? (t as readonly (ReadonlyNodeModel | ForwardRefNode)[]).map(target)
+            : target(t as ReadonlyNodeModel | ForwardRefNode),
+        ),
+      ]),
+    subgraphs: g.getSubgraphs().map(graph),
   };
 }
 
@@ -80,9 +82,9 @@ describe('the readers leave the model as it is', { tags: ['SM-5'] }, () => {
     const g = model();
     const before = graph(g);
     fromModel(g);
-    for (const node of g.nodes) fromModel(node);
-    for (const edge of g.edges) fromModel(edge);
-    for (const subgraph of g.subgraphs) fromModel(subgraph);
+    for (const node of g.getNodes()) fromModel(node);
+    for (const edge of g.getEdges()) fromModel(edge);
+    for (const subgraph of g.getSubgraphs()) fromModel(subgraph);
     expect(graph(g)).toStrictEqual(before);
   });
 

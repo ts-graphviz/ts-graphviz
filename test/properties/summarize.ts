@@ -95,9 +95,9 @@ function summarizeGraph(model: GraphBaseModel | SubgraphModel): GraphSummary {
       node: sorted(model.attributes.node.values),
       edge: sorted(model.attributes.edge.values),
     },
-    nodes: model.nodes.map(summarizeNode),
-    edges: model.edges.map(summarizeEdge),
-    subgraphs: model.subgraphs.map(summarizeGraph),
+    nodes: model.getNodes().map(summarizeNode),
+    edges: model.getEdges().map(summarizeEdge),
+    subgraphs: model.getSubgraphs().map(summarizeGraph),
   };
 }
 

@@ -825,9 +825,6 @@ export type GraphAttributesObject<S extends Schema = EmptySchema> = AttributesOb
 export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K extends AttributeKey = AttributeKey, S extends Schema = EmptySchema> extends HasComment, HasComments<CommentPosition>, Attributes<K, GraphSchemaAttributeTypes<T, S>>, DotObjectModel<T> {
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
-  readonly nodes: ReadonlyArray<NodeModel<S>>;
-  readonly edges: ReadonlyArray<EdgeModel<S>>;
-  readonly subgraphs: ReadonlyArray<SubgraphModel<S>>;
   readonly statements: ReadonlyArray<NodeModel<S> | EdgeModel<S> | SubgraphModel<S> | StatementAttributeListModel<S>>;
   addNode(node: NodeModel<S>): void;
   addEdge(edge: EdgeModel<S>): void;
@@ -842,8 +839,11 @@ export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K exten
   removeNode(node: NodeModel<S> | string): void;
   removeEdge(edge: EdgeModel<S>): void;
   removeSubgraph(subgraph: SubgraphModel<S>): void;
-  getSubgraph(id: string): SubgraphModel<S> | undefined;
-  getNode(id: string): NodeModel<S> | undefined;
+  getSubgraphs(): SubgraphModel<S>[];
+  getSubgraphs(id: string): SubgraphModel<S>[];
+  getNodes(): NodeModel<S>[];
+  getNodes(id: string): NodeModel<S>[];
+  getEdges(): EdgeModel<S>[];
 }
 
 export interface GraphCommonAttributes<S extends Schema = EmptySchema> {
@@ -1141,13 +1141,13 @@ export interface ReadonlyGraphBaseModel<T extends "Graph" | "Subgraph" = "Graph"
     readonly edge: ReadonlyAttributeListModel<"Edge">;
     readonly node: ReadonlyAttributeListModel<"Node">;
   };
-  readonly nodes: ReadonlyArray<ReadonlyNodeModel>;
-  readonly edges: ReadonlyArray<ReadonlyEdgeModel>;
-  readonly subgraphs: ReadonlyArray<ReadonlySubgraphModel>;
   readonly statements: ReadonlyArray<ReadonlyGraphStatementModel>;
   existNode(nodeId: string): boolean;
-  getNode(id: string): ReadonlyNodeModel | undefined;
-  getSubgraph(id: string): ReadonlySubgraphModel | undefined;
+  getNodes(): ReadonlyArray<ReadonlyNodeModel>;
+  getNodes(id: string): ReadonlyArray<ReadonlyNodeModel>;
+  getEdges(): ReadonlyArray<ReadonlyEdgeModel>;
+  getSubgraphs(): ReadonlyArray<ReadonlySubgraphModel>;
+  getSubgraphs(id: string): ReadonlyArray<ReadonlySubgraphModel>;
 }
 
 export type ReadonlyGraphStatementModel = ReadonlyNodeModel | ReadonlyEdgeModel | ReadonlySubgraphModel | ReadonlyAttributeListModel;

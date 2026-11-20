@@ -138,7 +138,7 @@ describe('sync', () => {
     insertChild(root as GraphInstance, node('a'));
     sync(tree);
     expect(tree.models).toEqual([G]);
-    expect(G.nodes.map((model) => model.id)).toEqual(['a']);
+    expect(G.getNodes().map((model) => model.id)).toEqual(['a']);
   });
 
   it('adds again what a model class threw on', () => {
@@ -156,10 +156,10 @@ describe('sync', () => {
     const tree = createTree(G, defaultModelKit);
     insertChild(tree, node('a'));
     expect(() => sync(tree)).toThrow('addNode');
-    expect(G.nodes).toHaveLength(0);
+    expect(G.getNodes()).toHaveLength(0);
 
     sync(tree);
-    expect(G.nodes.map((model) => model.id)).toEqual(['a']);
+    expect(G.getNodes().map((model) => model.id)).toEqual(['a']);
   });
 
   it('leaves out what is hidden', () => {
@@ -168,15 +168,15 @@ describe('sync', () => {
     const a = node('a');
     insertChild(tree, a);
     sync(tree);
-    const [model] = G.nodes;
+    const [model] = G.getNodes();
 
     a.hidden = true;
     sync(tree);
-    expect(G.nodes).toHaveLength(0);
+    expect(G.getNodes()).toHaveLength(0);
 
     a.hidden = false;
     sync(tree);
-    expect(G.nodes).toEqual([model]);
+    expect(G.getNodes()).toEqual([model]);
   });
 });
 
@@ -187,7 +187,7 @@ describe('one prop at a time', () => {
     const a = node('a', props);
     insertChild(tree, a);
     sync(tree);
-    return { G, tree, a, model: G.nodes[0] as NodeModel };
+    return { G, tree, a, model: G.getNodes()[0] as NodeModel };
   }
 
   it('is kept for the model an element does not have yet', () => {
@@ -199,7 +199,7 @@ describe('one prop at a time', () => {
     setProp(a, 'comment', 'note');
     insertChild(tree, a);
     sync(tree);
-    const [model] = G.nodes;
+    const [model] = G.getNodes();
     expect(model.getAttribute(_.color)).toBe('blue');
     expect(model.hasAttribute(_.shape)).toBe(false);
     expect(model.comments.map((comment) => comment.text)).toEqual(['note']);
@@ -237,15 +237,15 @@ describe('one prop at a time', () => {
     const { G, tree, a, model } = rendered({ [_.color]: 'red' });
     setProp(a, 'id', 'a');
     sync(tree);
-    expect(G.nodes).toEqual([model]);
+    expect(G.getNodes()).toEqual([model]);
 
     setProp(a, 'id', 'b');
-    expect(G.nodes).toEqual([model]);
+    expect(G.getNodes()).toEqual([model]);
     sync(tree);
-    expect(G.nodes).toHaveLength(1);
-    expect(G.nodes[0]).not.toBe(model);
-    expect(G.nodes[0].id).toBe('b');
-    expect(G.nodes[0].getAttribute(_.color)).toBe('red');
+    expect(G.getNodes()).toHaveLength(1);
+    expect(G.getNodes()[0]).not.toBe(model);
+    expect(G.getNodes()[0].id).toBe('b');
+    expect(G.getNodes()[0].getAttribute(_.color)).toBe('red');
   });
 
   it('keeps an edge while its targets are equal, and makes a new one when not', () => {
@@ -254,19 +254,19 @@ describe('one prop at a time', () => {
     const e = edge(['a', 'b'], { [_.color]: 'red' });
     insertChild(tree, e);
     sync(tree);
-    const [model] = G.edges;
+    const [model] = G.getEdges();
 
     setProp(e, 'targets', ['a', 'b']);
     setProp(e, _.color, 'blue');
     sync(tree);
-    expect(G.edges).toEqual([model]);
+    expect(G.getEdges()).toEqual([model]);
     expect(model.getAttribute(_.color)).toBe('blue');
 
     setProp(e, 'targets', ['a', 'c']);
     sync(tree);
-    expect(G.edges).toHaveLength(1);
-    expect(G.edges[0]).not.toBe(model);
-    expect(G.edges[0].getAttribute(_.color)).toBe('blue');
+    expect(G.getEdges()).toHaveLength(1);
+    expect(G.getEdges()[0]).not.toBe(model);
+    expect(G.getEdges()[0].getAttribute(_.color)).toBe('blue');
   });
 
   it('makes a new edge for targets changed in place', () => {
@@ -276,14 +276,14 @@ describe('one prop at a time', () => {
     const e = edge(targets);
     insertChild(tree, e);
     sync(tree);
-    const [model] = G.edges;
+    const [model] = G.getEdges();
 
     targets[1] = 'c';
     setProp(e, 'targets', targets);
     sync(tree);
-    expect(G.edges).toHaveLength(1);
-    expect(G.edges[0]).not.toBe(model);
-    expect(G.edges[0].targets).toEqual([{ id: 'a' }, { id: 'c' }]);
+    expect(G.getEdges()).toHaveLength(1);
+    expect(G.getEdges()[0]).not.toBe(model);
+    expect(G.getEdges()[0].targets).toEqual([{ id: 'a' }, { id: 'c' }]);
   });
 
   it('updates the attributes, default lists and comment of a graph', () => {
@@ -342,13 +342,13 @@ describe('one prop at a time', () => {
     insertChild(tree, portal);
     if (portal.kind === 'portal') insertChild(portal, node('a'));
     sync(tree);
-    expect(x.model.nodes).toHaveLength(1);
+    expect(x.model.getNodes()).toHaveLength(1);
 
     setProp(portal, 'id', 'y');
     setProp(portal, 'other', 1);
     sync(tree);
-    expect(x.model.nodes).toHaveLength(0);
-    expect(y.model.nodes).toHaveLength(1);
+    expect(x.model.getNodes()).toHaveLength(0);
+    expect(y.model.getNodes()).toHaveLength(1);
   });
 });
 
@@ -360,7 +360,7 @@ describe('all props at once', () => {
     insertChild(tree, a);
     sync(tree);
     setProps(a, { id: 'a', [_.label]: 'A' });
-    expect(G.nodes[0].getAttributeNames()).toEqual([_.label]);
+    expect(G.getNodes()[0].getAttributeNames()).toEqual([_.label]);
   });
 });
 

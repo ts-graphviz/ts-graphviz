@@ -16,15 +16,15 @@ describe('values that are not strings', { tags: ['SM-2'] }, () => {
     g.addNode(defaultModelKit.createNode('a', { label: value as never }));
     const dot = toDot(g);
     const back = fromDot(dot);
-    expect(back.nodes.map((n) => n.id)).toStrictEqual(['a']);
-    expect(back.getNode('a')?.attributes.get('label')).toBe(String(value));
+    expect(back.getNodes().map((n) => n.id)).toStrictEqual(['a']);
+    expect(back.getNodes('a')[0]?.attributes.get('label')).toBe(String(value));
   });
 
   it('writes an id that is not a string as its escaped text', () => {
     const g = new Digraph();
     g.addNode(defaultModelKit.createNode([text] as never));
     const back = fromDot(toDot(g));
-    expect(back.nodes.map((n) => n.id)).toStrictEqual([text]);
+    expect(back.getNodes().map((n) => n.id)).toStrictEqual([text]);
   });
 
   it('quotes an array that looks like a number', () => {

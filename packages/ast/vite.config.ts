@@ -13,6 +13,7 @@ export default defineConfig({
     lib: {
       entry: {
         ast: './src/ast.ts',
+        legacy: './src/legacy.ts',
       },
       formats: ['es'],
     },

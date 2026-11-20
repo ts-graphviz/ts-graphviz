@@ -781,12 +781,6 @@ export interface GraphBaseModel<
    * in v5.
    */
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
-  /** Node objects in the graph. */
-  readonly nodes: ReadonlyArray<NodeModel<S>>;
-  /** Edge objects in the graph. */
-  readonly edges: ReadonlyArray<EdgeModel<S>>;
-  /** Subgraph objects in the graph. */
-  readonly subgraphs: ReadonlyArray<SubgraphModel<S>>;
   /**
    * The graph's contents in the order they were added: nodes, edges and
    * subgraphs, and the default attribute statements added after them,
@@ -854,7 +848,8 @@ export interface GraphBaseModel<
    */
   existSubgraph(subgraph: SubgraphModel<S>): boolean;
   /**
-   * Remove Node from the graph.
+   * Remove nodes from the graph: a node model takes out that declaration;
+   * an id takes out every declaration with the id.
    */
   removeNode(node: NodeModel<S> | string): void;
   /**
@@ -866,18 +861,34 @@ export interface GraphBaseModel<
    */
   removeSubgraph(subgraph: SubgraphModel<S>): void;
   /**
-   * Get Subgraph in cluster by specifying id.
-   *
-   * If there is no Subgraph with the specified id in the graph, return undefined.
+   * The subgraphs in the graph, in the order they were added; a new array
+   * each time. As in DOT, a subgraph may be declared more than once.
    */
-  getSubgraph(id: string): SubgraphModel<S> | undefined;
+  getSubgraphs(): SubgraphModel<S>[];
+  /**
+   * The subgraphs declared with the id, in the order they were added; empty
+   * if there is none.
+   */
+  getSubgraphs(id: string): SubgraphModel<S>[];
 
   /**
-   * Get Node in cluster by specifying id.
-   *
-   * If there is no Node with the specified id in the graph, return undefined.
+   * The nodes in the graph, in the order they were added; a new array each
+   * time. As in DOT, a node may be declared more than once: each
+   * declaration is a node model, and Graphviz applies their attributes in
+   * order.
    */
-  getNode(id: string): NodeModel<S> | undefined;
+  getNodes(): NodeModel<S>[];
+  /**
+   * The nodes declared with the id, in the order they were added; empty if
+   * there is none.
+   */
+  getNodes(id: string): NodeModel<S>[];
+
+  /**
+   * The edges in the graph, in the order they were added; a new array each
+   * time.
+   */
+  getEdges(): EdgeModel<S>[];
 }
 
 /**

@@ -15,7 +15,7 @@ describe('compass points', { tags: ['SM-2'] }, () => {
         'b',
       ]),
     );
-    const [edge] = fromDot(toDot(g)).edges;
+    const [edge] = fromDot(toDot(g)).getEdges();
     expect(edge.targets[0]).toMatchObject({ id: 'a', port: 'p', compass });
   });
 

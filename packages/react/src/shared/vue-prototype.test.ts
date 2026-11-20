@@ -189,9 +189,9 @@ describe('a Vue renderer on the shared layer', () => {
       ],
       createModelKit({ Node: MyNode, Edge: MyEdge, Subgraph: MySubgraph }),
     );
-    expect(G.subgraphs[0]).toBeInstanceOf(MySubgraph);
-    expect(G.subgraphs[0].nodes[0]).toBeInstanceOf(MyNode);
-    expect(G.edges[0]).toBeInstanceOf(MyEdge);
+    expect(G.getSubgraphs()[0]).toBeInstanceOf(MySubgraph);
+    expect(G.getSubgraphs()[0].getNodes()[0]).toBeInstanceOf(MyNode);
+    expect(G.getEdges()[0]).toBeInstanceOf(MyEdge);
   });
 
   it('keeps a subgraph and what is in it while its attributes change', async () => {
@@ -203,30 +203,30 @@ describe('a Vue renderer on the shared layer', () => {
         h(Node, { id: 'a' }),
       ]),
     );
-    const [x] = G.subgraphs;
-    const [a] = x.nodes;
+    const [x] = G.getSubgraphs();
+    const [a] = x.getNodes();
 
     label.value = 'Y';
     await update();
-    expect(G.subgraphs).toEqual([x]);
+    expect(G.getSubgraphs()).toEqual([x]);
     expect(x.getAttribute(_.label)).toBe('Y');
-    expect(x.nodes).toEqual([a]);
+    expect(x.getNodes()).toEqual([a]);
 
     id.value = 'cluster_y';
     await update();
-    expect(G.subgraphs).toHaveLength(1);
-    expect(G.subgraphs[0]).not.toBe(x);
-    expect(G.subgraphs[0].id).toBe('cluster_y');
-    expect(G.subgraphs[0].getAttribute(_.label)).toBe('Y');
+    expect(G.getSubgraphs()).toHaveLength(1);
+    expect(G.getSubgraphs()[0]).not.toBe(x);
+    expect(G.getSubgraphs()[0].id).toBe('cluster_y');
+    expect(G.getSubgraphs()[0].getAttribute(_.label)).toBe('Y');
   });
 
   it('adds nothing before the sync', () => {
     const G = new Digraph('G');
     const tree = createTree(G, defaultModelKit);
     render(h(Node, { id: 'a' }), tree);
-    expect(G.nodes).toHaveLength(0);
+    expect(G.getNodes()).toHaveLength(0);
     sync(tree);
-    expect(G.nodes.map((node) => node.id)).toEqual(['a']);
+    expect(G.getNodes().map((node) => node.id)).toEqual(['a']);
   });
 
   it('updates one attribute and keeps the model', async () => {
@@ -235,12 +235,12 @@ describe('a Vue renderer on the shared layer', () => {
     const { update } = mount(G, () =>
       h(Node, { id: 'a', [_.shape]: 'box', [_.color]: color.value }),
     );
-    const [a] = G.nodes;
+    const [a] = G.getNodes();
     expect(a.getAttribute(_.color)).toBe('red');
 
     color.value = 'blue';
     await update();
-    expect(G.nodes).toEqual([a]);
+    expect(G.getNodes()).toEqual([a]);
     expect(a.getAttribute(_.color)).toBe('blue');
     expect(a.getAttribute(_.shape)).toBe('box');
 
@@ -259,22 +259,22 @@ describe('a Vue renderer on the shared layer', () => {
       shown.value ? h(Edge, { targets: ['a', 'b'] }) : null,
       h(Node, { id: 'z' }),
     ]);
-    const idsOf = (): string[] => G.nodes.map((node) => node.id);
+    const idsOf = (): string[] => G.getNodes().map((node) => node.id);
     expect(idsOf()).toEqual(['a', 'b', 'c', 'z']);
-    expect(G.edges).toHaveLength(1);
-    const [a, , c] = G.nodes;
+    expect(G.getEdges()).toHaveLength(1);
+    const [a, , c] = G.getNodes();
 
     ids.value = ['c', 'a'];
     shown.value = false;
     await update();
     expect(idsOf()).toEqual(['c', 'a', 'z']);
-    expect(G.nodes[0]).toBe(c);
-    expect(G.nodes[1]).toBe(a);
-    expect(G.edges).toHaveLength(0);
+    expect(G.getNodes()[0]).toBe(c);
+    expect(G.getNodes()[1]).toBe(a);
+    expect(G.getEdges()).toHaveLength(0);
 
     shown.value = true;
     await update();
-    expect(G.edges).toHaveLength(1);
+    expect(G.getEdges()).toHaveLength(1);
   });
 
   it('moves the content of a subgraph with it, and removes it on unmount', async () => {
@@ -286,16 +286,20 @@ describe('a Vue renderer on the shared layer', () => {
         inner.value.map((id) => h(Node, { id })),
       ),
     );
-    const [x] = G.subgraphs;
-    expect(x.nodes.map((node) => node.id)).toEqual(['a']);
+    const [x] = G.getSubgraphs();
+    expect(x.getNodes().map((node) => node.id)).toEqual(['a']);
 
     inner.value = ['a', 'b'];
     await update();
-    expect(G.subgraphs).toHaveLength(1);
-    expect(G.subgraphs[0].nodes.map((node) => node.id)).toEqual(['a', 'b']);
+    expect(G.getSubgraphs()).toHaveLength(1);
+    expect(
+      G.getSubgraphs()[0]
+        .getNodes()
+        .map((node) => node.id),
+    ).toEqual(['a', 'b']);
 
     unmount();
-    expect(G.subgraphs).toHaveLength(0);
-    expect(G.nodes.map((node) => node.id)).toEqual(['own']);
+    expect(G.getSubgraphs()).toHaveLength(0);
+    expect(G.getNodes().map((node) => node.id)).toEqual(['own']);
   });
 });

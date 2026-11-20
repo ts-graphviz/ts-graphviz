@@ -91,7 +91,7 @@ describe('toModel of an AST that shares nodes', { tags: ['SM-5'] }, () => {
   it('converts a shared subgraph in each place within maxSharedNodes', () => {
     // 1 + 3 + 7 + 7 node objects reached again (see the printer's test).
     const ast = graph(doubling(3));
-    expect(convert(ast, 18).subgraphs[0].subgraphs).toHaveLength(2);
+    expect(convert(ast, 18).getSubgraphs()[0].getSubgraphs()).toHaveLength(2);
     expect(() => convert(ast, 17)).toThrow(
       expect.objectContaining({ code: 'TSG_ERR_SHARED_NODE_COUNT_EXCEEDED' }),
     );

@@ -48,6 +48,7 @@ const PACKAGES: Record<string, string> = {
   '@ts-graphviz/common': '../packages/common/lib/common.d.ts',
   '@ts-graphviz/core': '../packages/core/lib/core.d.ts',
   '@ts-graphviz/ast': '../packages/ast/lib/ast.d.ts',
+  '@ts-graphviz/ast/legacy': '../packages/ast/lib/legacy.d.ts',
   '@ts-graphviz/adapter': '../packages/adapter/lib/node.d.ts',
   '@ts-graphviz/react': '../packages/react/lib/react.d.ts',
 };

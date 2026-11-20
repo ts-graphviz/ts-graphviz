@@ -91,7 +91,7 @@ describe('host components', () => {
     const order = async (ids: string[]) => {
       await render(root, <List ids={ids} />);
       const [graph] = root.getTopLevelModels() as RootGraphModel[];
-      return graph.nodes.map((n) => n.id);
+      return graph.getNodes().map((n) => n.id);
     };
     expect(await order(['a', 'c'])).toEqual(['first', 'a', 'c', 'last']);
     expect(await order(['a', 'b', 'c'])).toEqual([
@@ -161,9 +161,9 @@ describe('host components', () => {
     await render(root, element('red'));
     const [model] = root.getTopLevelModels() as RootGraphModel[];
     expect(graph.current).toBe(model);
-    expect(subgraph.current).toBe(model.subgraphs[0]);
-    expect(node.current).toBe(model.subgraphs[0].getNode('a'));
-    expect(edge.current).toBe(model.edges[0]);
+    expect(subgraph.current).toBe(model.getSubgraphs()[0]);
+    expect(node.current).toBe(model.getSubgraphs()[0].getNodes('a')[0]);
+    expect(edge.current).toBe(model.getEdges()[0]);
     const first = { node: node.current, edge: edge.current };
 
     await render(root, element('blue'));
@@ -243,7 +243,7 @@ describe('host components', () => {
       </Digraph>,
     );
     const [graph] = root.getTopLevelModels() as RootGraphModel[];
-    const a = graph.getNode('a');
+    const a = graph.getNodes('a')[0];
     a?.addComment('added');
     // The same prop keeps its comment, and its place.
     await render(
@@ -307,7 +307,7 @@ describe('host components', () => {
       </Digraph>,
     );
     const [graph] = root.getTopLevelModels() as RootGraphModel[];
-    expect(graph.getNode('a')?.attributes.get('color')).toBe('blue');
+    expect(graph.getNodes('a')[0]?.attributes.get('color')).toBe('blue');
   });
 
   it('leaves nothing behind from a render that suspended', async () => {
@@ -375,22 +375,28 @@ describe('host components', () => {
         <Node id="b" />
       </>,
     );
-    expect(container.nodes.map((n) => n.id)).toEqual(['existing', 'a', 'b']);
+    expect(container.getNodes().map((n) => n.id)).toEqual([
+      'existing',
+      'a',
+      'b',
+    ]);
     await render(root, <Node id="b" />);
-    expect(container.nodes.map((n) => n.id)).toEqual(['existing', 'b']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['existing', 'b']);
     root.unmount();
-    expect(container.nodes.map((n) => n.id)).toEqual(['existing']);
+    expect(container.getNodes().map((n) => n.id)).toEqual(['existing']);
   });
 
-  it('gives back a node the container had when one with its id is removed', async () => {
+  it('declares a node with the id of one the container had after it, and takes only its own out', async () => {
     const container = new DigraphModel('C');
     container.addNode(defaultModelKit.createNode('a', { color: 'red' }));
-    const original = container.getNode('a');
+    const [original] = container.getNodes('a');
     const root = createRoot({ container });
     await render(root, <Node id="a" color="blue" />);
-    expect(container.getNode('a')?.attributes.get('color')).toBe('blue');
+    expect(
+      container.getNodes('a').map((n) => n.attributes.get('color')),
+    ).toEqual(['red', 'blue']);
     root.unmount();
-    expect(container.getNode('a')).toBe(original);
+    expect(container.getNodes('a')).toStrictEqual([original]);
     expect(original?.attributes.get('color')).toBe('red');
   });
 
@@ -406,9 +412,9 @@ describe('host components', () => {
         <Node id="ported" />
       </GraphPortal>,
     );
-    expect(target.nodes.map((n) => n.id)).toEqual(['own', 'ported']);
+    expect(target.getNodes().map((n) => n.id)).toEqual(['own', 'ported']);
     root.unmount();
-    expect(target.nodes.map((n) => n.id)).toEqual(['own']);
+    expect(target.getNodes().map((n) => n.id)).toEqual(['own']);
   });
 
   it('never puts a graph inside itself through a portal', async () => {
@@ -470,7 +476,7 @@ describe('host components', () => {
     );
     const [first] = root.getTopLevelModels() as RootGraphModel[];
     expect(graph.current).toBe(first);
-    expect(first.getNode('a')).toBeDefined();
+    expect(first.getNodes('a')[0]).toBeDefined();
   });
 
   it("makes the models with the root's kit", async () => {
@@ -489,12 +495,12 @@ describe('host components', () => {
         <Edge targets={['a', 'b']} />
       </Subgraph>,
     );
-    const [subgraph] = container.subgraphs;
+    const [subgraph] = container.getSubgraphs();
     expect(subgraph).toBeInstanceOf(MySubgraph);
-    expect(subgraph.nodes[0]).toBeInstanceOf(MyNode);
-    expect(subgraph.edges[0]).toBeInstanceOf(MyEdge);
+    expect(subgraph.getNodes()[0]).toBeInstanceOf(MyNode);
+    expect(subgraph.getEdges()[0]).toBeInstanceOf(MyEdge);
     // An edge does not add the nodes it names.
-    expect(subgraph.nodes).toHaveLength(1);
+    expect(subgraph.getNodes()).toHaveLength(1);
   });
 
   it('rejects a node in a portal outside any graph', async () => {
@@ -608,7 +614,7 @@ describe('host components', () => {
     await expect(fromElement(<Node id="a" />, { container })).rejects.toThrow(
       'added, then thrown',
     );
-    expect(container.nodes).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
   });
 
   it('puts back the node of the container a node replaced before the graph threw', async () => {
@@ -623,7 +629,7 @@ describe('host components', () => {
     await expect(fromElement(<Node id="a" />, { container })).rejects.toThrow(
       'added, then thrown',
     );
-    expect(container.nodes).toEqual([own]);
+    expect(container.getNodes()).toEqual([own]);
   });
 
   it('reports an error the kit throws while creating, and leaves nothing behind', async () => {
@@ -650,15 +656,15 @@ describe('host components', () => {
     expect(onUncaughtError.mock.calls.map(([error]) => error.message)).toEqual([
       'no such node',
     ]);
-    expect(container.nodes).toHaveLength(0);
-    expect(container.edges).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
+    expect(container.getEdges()).toHaveLength(0);
     root.unmount();
 
     await expect(
       fromElement(element, { container, models: { Node: Failing } }),
     ).rejects.toThrow('no such node');
-    expect(container.nodes).toHaveLength(0);
-    expect(container.edges).toHaveLength(0);
+    expect(container.getNodes()).toHaveLength(0);
+    expect(container.getEdges()).toHaveLength(0);
   });
 
   it('rejects a node outside any graph', async () => {

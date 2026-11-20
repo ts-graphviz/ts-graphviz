@@ -34,6 +34,7 @@ import {
   withCode,
 } from '@ts-graphviz/common';
 import { defaultModelKit } from '@ts-graphviz/core';
+import { isLegacyKit } from './legacy-kit.js';
 
 /**
  * The DOT DSL of a model: the model seen as DOT, with only DOT's words.
@@ -227,8 +228,9 @@ export interface GraphDSLStatements<
   M extends ModelTypes = ModelTypes,
 > {
   /**
-   * The subgraph with this id (created if there is none), as
-   * `subgraph id { ... }` in DOT.
+   * A new subgraph with this id, as `subgraph id { ... }` in DOT. Like a
+   * statement written again in DOT, it is another declaration when the
+   * graph has a subgraph with the id; Graphviz merges their contents.
    *
    * The callback receives the subgraph.
    *
@@ -250,8 +252,8 @@ export interface GraphDSLStatements<
     callback?: (subgraph: DSL<M['Subgraph'], M>) => void,
   ): DSL<M['Subgraph'], M>;
   /**
-   * The subgraph with this id (created if there is none), with these
-   * attributes.
+   * A new subgraph with this id and these attributes (another declaration
+   * when the graph has one with the id).
    *
    * The id picks the attributes ({@link SubgraphAttributesFor}): cluster
    * attributes such as `color` or `label` apply to an id starting with
@@ -305,7 +307,9 @@ export interface GraphDSLStatements<
   ): DSL<M['Subgraph'], M>;
 
   /**
-   * The node with this id (created if there is none), as `A;` in DOT.
+   * A new node with this id, as `A;` in DOT. Like a statement written
+   * again in DOT, it is another declaration when the graph has a node with
+   * the id; Graphviz applies their attributes in turn.
    *
    * ```ts
    * const G = digraph('G', (g) => {
@@ -318,8 +322,8 @@ export interface GraphDSLStatements<
    */
   node(id: string, callback?: (node: DSL<M['Node']>) => void): DSL<M['Node']>;
   /**
-   * The node with this id (created if there is none), with these
-   * attributes, as `A [color=red];` in DOT.
+   * A new node with this id and these attributes, as `A [color=red];` in
+   * DOT (another declaration when the graph has one with the id).
    *
    * ```ts
    * const G = digraph('G', (g) => {
@@ -490,13 +494,12 @@ function isKit(value: unknown): value is ModelKit {
  *
  * A graph's DSL creates with the kit: pass the kit of your classes
  * (`createModelKit`) for `node`, `edge` and `subgraph` to create them. A
- * model does not remember the kit it was created with, and the types follow
- * the kit: `node('a')` is typed as the kit's node even when the graph already
- * has an `a` of another class.
+ * model does not remember the kit it was created with; `node('a')` creates
+ * a node of the kit's class, also when the graph already has an `a`.
  *
  * ```ts
  * const G = dsl(fromDot('digraph { a }'));
- * G.node('a').label = 'A';
+ * G.node('a').label = 'A'; // a [label = "A"], after the first a
  *
  * const kit = createModelKit({ Node: MyNode });
  * dsl(modelOf(G), kit).node('b'); // a MyNode
@@ -772,17 +775,21 @@ const isFunction = (arg: unknown): arg is (view: unknown) => void =>
 /**
  * The DOT statements: the kit creates and the graph adds, so they follow
  * the kit's classes (and keep default attribute statements in their place
- * where the graph's class does).
+ * where the graph's class does). With a kit of `ts-graphviz/legacy`,
+ * `node(id)` and `subgraph(id)` give the first one with the id, as 3.x did.
  */
 function createStatements(g: GraphBaseModel, kit: ModelKit) {
   const viewOf = (model: AnyDotObjectModel) => viewWith(model, kit);
+  const legacy = isLegacyKit(kit);
   return {
     node(first: unknown, ...rest: unknown[]): unknown {
       if (typeof first === 'string') {
         const attributes = find(rest, isObject) as
           | NodeAttributesObject
           | undefined;
-        let node = g.getNode(first);
+        // Another declaration of the id, where it is written; a legacy
+        // kit gives the first one.
+        let node = legacy ? g.getNodes(first)[0] : undefined;
         if (node === undefined) {
           // The attributes go to the constructor, so a custom class sees
           // them where it is created.
@@ -828,7 +835,8 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
       const attributes = find(args, isObject) as
         | SubgraphAttributesObject
         | undefined;
-      let subgraph = id !== undefined ? g.getSubgraph(id) : undefined;
+      let subgraph =
+        legacy && id !== undefined ? g.getSubgraphs(id)[0] : undefined;
       if (subgraph === undefined) {
         // The constructor gets the id and the attributes in the shape the
         // statement has them. The statement was checked against its id

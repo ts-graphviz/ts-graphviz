@@ -26,6 +26,9 @@
       "@ts-graphviz/ast": [
         "./packages/ast/src/ast.js"
       ],
+      "@ts-graphviz/ast/legacy": [
+        "./packages/ast/src/legacy.js"
+      ],
       "@ts-graphviz/adapter": [
         "./packages/adapter/src/node.js"
       ],

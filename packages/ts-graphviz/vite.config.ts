@@ -24,6 +24,7 @@ export default defineConfig({
         '@ts-graphviz/core',
         '@ts-graphviz/adapter',
         '@ts-graphviz/ast',
+        '@ts-graphviz/ast/legacy',
       ],
     },
   },

@@ -162,17 +162,17 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
 } // trails G
 # end of the source`;
     const g = fromDot(source);
-    const a = g.getNode('a');
+    const a = g.getNodes('a')[0];
     expect(a && brief(a.comments)).toEqual([
       ['lead a', 'Block', 'leading'],
       ['trails a', 'Slash', 'trailing'],
     ]);
-    const [edge] = g.edges;
+    const [edge] = g.getEdges();
     expect(brief(edge.comments)).toEqual([
       ['lead the edge', 'Macro', 'leading'],
       ['trails the edge', 'Block', 'trailing'],
     ]);
-    const s = g.getSubgraph('s');
+    const s = g.getSubgraphs('s')[0];
     // A body's end comments are read before the comment that trails it.
     expect(s && brief(s.comments)).toEqual([
       ['end of s', 'Slash', 'end'],
@@ -209,29 +209,29 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     `);
     // Read again, the DOT gives the same comments.
     const again = fromDot(toDot(g));
-    expect(brief(again.getNode('a')?.comments ?? [])).toEqual(
+    expect(brief(again.getNodes('a')[0]?.comments ?? [])).toEqual(
       brief(a?.comments ?? []),
     );
-    expect(brief(again.edges[0].comments)).toEqual(brief(edge.comments));
-    expect(brief(again.getSubgraph('s')?.comments ?? [])).toEqual(
+    expect(brief(again.getEdges()[0].comments)).toEqual(brief(edge.comments));
+    expect(brief(again.getSubgraphs('s')[0]?.comments ?? [])).toEqual(
       brief(s?.comments ?? []),
     );
     expect(brief(again.comments)).toEqual(brief(g.comments));
   });
 
-  test('a node mentioned again takes the comments of each mention', () => {
+  test('each mention of a node keeps its own comments', () => {
     const g = fromDot(
       'digraph {\n  a;\n  b;\n  /* later */\n  a [color=red]\n}',
     );
-    // One node, at its first place: the comment of the later mention joins it.
-    expect(brief(g.getNode('a')?.comments ?? [])).toEqual([
-      ['later', 'Block', 'leading'],
+    expect(g.getNodes('a').map((a) => brief(a.comments))).toEqual([
+      [],
+      [['later', 'Block', 'leading']],
     ]);
   });
 
   test('a comment after a graph attribute assignment leads the next statement', () => {
     const g = fromDot('digraph {\n  color = blue; // after\n  a\n}');
-    expect(brief(g.getNode('a')?.comments ?? [])).toEqual([
+    expect(brief(g.getNodes('a')[0]?.comments ?? [])).toEqual([
       ['after', 'Slash', 'leading'],
     ]);
   });
@@ -277,11 +277,11 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     a.addComment('z', { position: 'trailing', kind: 'Block' });
     g.addNode(defaultModelKit.createNode('b'));
     const again = fromDot(toDot(g));
-    expect(brief(again.getNode('a')?.comments ?? [])).toEqual([
+    expect(brief(again.getNodes('a')[0]?.comments ?? [])).toEqual([
       ['x\ny', 'Block', 'trailing'],
       ['z', 'Block', 'trailing'],
     ]);
-    expect(again.getNode('b')?.comments).toEqual([]);
+    expect(again.getNodes('b')[0]?.comments).toEqual([]);
   });
 
   test('a comment at a position the model does not take is refused', () => {
@@ -316,15 +316,15 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     // after it could not trail the node; written as a block, it does.
     expect(dot).toContain('"b"; /* x */ /* y */ # z\n');
     const again = fromDot(dot);
-    expect(brief(again.getNode('a')?.comments ?? [])).toEqual([
+    expect(brief(again.getNodes('a')[0]?.comments ?? [])).toEqual([
       ['one\ntwo', 'Block', 'trailing'],
     ]);
-    expect(brief(again.getNode('b')?.comments ?? [])).toEqual([
+    expect(brief(again.getNodes('b')[0]?.comments ?? [])).toEqual([
       ['x', 'Block', 'trailing'],
       ['y', 'Block', 'trailing'],
       ['z', 'Macro', 'trailing'],
     ]);
-    expect(again.getNode('c')?.comments).toEqual([]);
+    expect(again.getNodes('c')[0]?.comments).toEqual([]);
     expect(toDot(again)).toBe(dot);
   });
 
@@ -377,9 +377,9 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
       const dot = toDot(g);
       const again = fromDot(dot);
       const expected = read.map(([text, kind]) => [text, kind, 'trailing']);
-      expect(brief(again.getNode('a')?.comments ?? [])).toEqual(expected);
-      expect(brief(again.edges[0].comments)).toEqual(expected);
-      expect(again.getNode('c')?.comments).toEqual([]);
+      expect(brief(again.getNodes('a')[0]?.comments ?? [])).toEqual(expected);
+      expect(brief(again.getEdges()[0].comments)).toEqual(expected);
+      expect(again.getNodes('c')[0]?.comments).toEqual([]);
       expect(toDot(again)).toBe(dot);
     },
   );
@@ -387,7 +387,7 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
   test('a node mentioned again with a trailing line comment each prints the same DOT twice', () => {
     // ts-graphviz/legacy merges the mentions, comments included.
     const g = legacy.fromDot('graph { a #x\n a #y\n}');
-    expect(brief(g.getNode('a')?.comments ?? [])).toEqual([
+    expect(brief(g.getNodes('a')[0]?.comments ?? [])).toEqual([
       ['x', 'Macro', 'trailing'],
       ['y', 'Macro', 'trailing'],
     ]);

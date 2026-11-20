@@ -1,27 +1,22 @@
-import {
-  type CommonParseOptions,
-  type ConvertToModelOptions,
-  type ParseOptions,
-  parse,
-  type Rule,
-  toModel,
+import type {
+  CommonParseOptions,
+  ConvertToModelOptions,
+  ParseOptions,
 } from '@ts-graphviz/ast';
 import {
   type AnyDotObjectModel,
   type EdgeModel,
-  isDotModel,
   type ModelClasses,
-  type ModelKit,
   type ModelTypes,
   type NodeModel,
   ownOptions,
   type ResolvedModelTypes,
   type RootGraphModel,
   type SubgraphModel,
-  withCode,
 } from '@ts-graphviz/common';
 import { createModelKit } from '@ts-graphviz/core';
-import { type DSL, dsl } from './dsl.js';
+import type { DSL } from './dsl.js';
+import { fromDotAllWith, fromDotWith } from './from-dot-with.js';
 
 /**
  * The rules (`parse.as`) {@link fromDot} can convert to a model.
@@ -156,53 +151,7 @@ export function fromDot(
 ): AnyFromDotModel | DSL<AnyFromDotModel> {
   // Own properties only: an inherited one is never an option.
   const own = ownOptions(options);
-  const kit = createModelKit(ownOptions(own.convert).models);
-  const model = read(dot, own, kit);
-  return own.dsl === true ? dsl(model, kit) : model;
-}
-
-function read(
-  dot: string,
-  own: FromDotOptions<FromDotRule, Partial<ModelClasses>, boolean>,
-  kit: ModelKit,
-): AnyFromDotModel {
-  // `as` picks what fromDot returns. Widened to every rule on
-  // purpose: JavaScript callers can pass any.
-  const ast = parse(dot, ownOptions(own.parse) as ParseOptions<Rule>);
-
-  if (
-    Array.isArray(ast) ||
-    ast.type === 'Attribute' ||
-    ast.type === 'AttributeList'
-  ) {
-    throw withCode(
-      new TypeError(
-        `fromDot cannot convert a "${Array.isArray(ast) ? 'ClusterStatements' : ast.type}" node to a model`,
-      ),
-      'TSG_ERR_UNCONVERTIBLE_AST',
-    );
-  }
-  const model = toModel(ast, { ...ownOptions(own.convert), models: kit });
-  if (isDotModel(model)) {
-    // A whole DOT source converts to a Dot model; fromDot returns its graph.
-    const [graph, ...more] = model.graphs;
-    if (!graph) {
-      throw withCode(
-        new Error('fromDot: the DOT source contains no graph'),
-        'TSG_ERR_NO_GRAPH',
-      );
-    }
-    if (more.length > 0) {
-      throw withCode(
-        new Error(
-          `fromDot: the DOT source contains ${model.graphs.length} graphs; read them all with fromDotAll`,
-        ),
-        'TSG_ERR_MULTIPLE_GRAPHS',
-      );
-    }
-    return graph;
-  }
-  return model;
+  return fromDotWith(dot, own, createModelKit(ownOptions(own.convert).models));
 }
 
 /**
@@ -253,11 +202,9 @@ export function fromDotAll(
 ): (RootGraphModel | DSL<RootGraphModel>)[] {
   // Own properties only: an inherited one is never an option.
   const own = ownOptions(options);
-  const ast = parse(dot, { ...ownOptions(own.parse), as: 'Dot' });
-  const convert = ownOptions(own.convert);
-  const kit = createModelKit(convert.models);
-  const model = toModel(ast, { ...convert, models: kit });
-  return own.dsl === true
-    ? model.graphs.map((graph) => dsl(graph, kit))
-    : [...model.graphs];
+  return fromDotAllWith(
+    dot,
+    own,
+    createModelKit(ownOptions(own.convert).models),
+  );
 }

@@ -61,9 +61,9 @@ g.addEdge(new Edge([a, b]));
 | Member | |
 | --- | --- |
 | `id` | the name of a root graph, subgraph or node (its ID in DOT) |
-| `nodes`, `edges`, `subgraphs` | the graph's nodes, edges and subgraphs; `nodes` holds the node statements, not the nodes that appear only in edges (see [the FAQ](./01-dot-dsl.md#a-node-that-only-appears-in-an-edge-is-not-in-nodes)) |
+| `getNodes()`, `getEdges()`, `getSubgraphs()` | the graph's nodes, edges and subgraphs, in order, as a new array; `getNodes()` gives the node statements, not the nodes that appear only in edges (see [the FAQ](./01-dot-dsl.md#a-node-that-only-appears-in-an-edge-is-not-in-getnodes)) |
 | `statements` | the graph's nodes, edges, subgraphs and default attribute statements after the leading ones, in the order they were added, which `toDot` writes in that order; the graph's own attributes and the leading defaults are written before them |
-| `getNode(id)`, `getSubgraph(id)` | a node or subgraph by id |
+| `getNodes(id)`, `getSubgraphs(id)` | the nodes or subgraphs declared with the id, in order; as in DOT, `a; b; a [color=red]` declares `a` twice, and each declaration is a node model of its own |
 | `existNode(id)`, `existEdge(edge)`, `existSubgraph(subgraph)` | whether the graph has it |
 | `removeNode(nodeOrId)`, `removeEdge(edge)`, `removeSubgraph(subgraph)` | take it out |
 | `addAttributeList(kind, attributes)` | add a default attribute statement (`node [...]` and so on) where the graph is, and return it |
@@ -74,13 +74,13 @@ g.addEdge(new Edge([a, b]));
 import { fromDot, type GraphBaseModel } from 'ts-graphviz';
 
 function removeNodeEverywhere(g: GraphBaseModel, id: string): void {
-  for (const edge of g.edges) {
+  for (const edge of g.getEdges()) {
     // a target or a member of a group
     if (edge.targets.flat().some((t) => t.id === id)) g.removeEdge(edge);
   }
   g.removeNode(id);
   // a subgraph holds statements of its own
-  for (const s of g.subgraphs) removeNodeEverywhere(s, id);
+  for (const s of g.getSubgraphs()) removeNodeEverywhere(s, id);
 }
 
 const g = fromDot('digraph { a; subgraph cluster_s { a -> b; } }');
@@ -107,7 +107,7 @@ Graphs, subgraphs, nodes, edges and default attribute statements hold their attr
 import { fromDot } from 'ts-graphviz';
 
 const g = fromDot('digraph { a [label = "A"]; a -> b; }');
-const a = g.getNode('a');
+const [a] = g.getNodes('a');
 a?.setAttribute('color', 'red');
 console.log(a?.getAttribute('label')); // 'A'
 console.log(a?.getAttributeNames()); // ['label', 'color']
