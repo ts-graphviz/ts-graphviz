@@ -87,6 +87,7 @@ try {
 | unbalanced HTML-like markup | `RangeError` | `TSG_ERR_INVALID_HTML_LIKE` |
 | `ArrowType.build()` given a shape Graphviz does not have, no shapes or more than four, or `none` last after another | `RangeError` | `TSG_ERR_INVALID_ARROW` |
 | edge with fewer than two targets or a malformed target | `TypeError` (was a bare `Error`) | `TSG_ERR_INVALID_EDGE_TARGETS` |
+| string edge target with more than three `:`-separated parts, or a third part that is not a compass point (`'a:b:c:d'`, `'a:p:north'`; 3.x dropped the extra part) | `TypeError` | `TSG_ERR_INVALID_EDGE_TARGETS` |
 | port containing `:` | `TypeError` | `TSG_ERR_INVALID_PORT` |
 | attribute list kind other than `Graph`, `Node`, `Edge` | `TypeError` | `TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND` |
 | edges to subgraphs reach more than `maxEdgeTargets` nodes | `RangeError` | `TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED` |

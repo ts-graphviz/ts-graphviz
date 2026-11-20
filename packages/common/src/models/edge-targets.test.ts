@@ -32,12 +32,26 @@ describe('toNodeRef with a string', () => {
     });
   });
 
-  it('drops a third part that is not a compass point', () => {
-    expect(toNodeRef('a:p:north')).toStrictEqual({ id: 'a', port: 'p' });
+  it.each(['a:p:north', 'a:p:', 'a::', 'a:p:n:x', 'a:b:c:d'])(
+    'refuses %j, which it could only read by dropping a part',
+    (target) => {
+      expect(() => toNodeRef(target)).toThrow(
+        expect.objectContaining({
+          name: 'TypeError',
+          code: 'TSG_ERR_INVALID_EDGE_TARGETS',
+        }),
+      );
+    },
+  );
+
+  it('names a long target shortened in the message', () => {
+    expect(() => toNodeRef(`a:b:${'x'.repeat(100)}`)).toThrow(
+      `"a:b:${'x'.repeat(60)}…"`,
+    );
   });
 
   it('keeps an empty port', () => {
-    expect(toNodeRef('a::')).toStrictEqual({ id: 'a', port: '' });
+    expect(toNodeRef('a:')).toStrictEqual({ id: 'a', port: '' });
     expect(toNodeRef('a::n')).toStrictEqual({
       id: 'a',
       port: '',

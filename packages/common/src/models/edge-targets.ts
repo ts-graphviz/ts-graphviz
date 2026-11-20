@@ -64,6 +64,10 @@ export function isCompass(c: string): c is Compass {
  * Converts a NodeRefLike object to a NodeRef
  * @param target - NodeRefLike to convert (string or NodeRef)
  * @returns Converted NodeRef object
+ * @throws TypeError (`TSG_ERR_INVALID_EDGE_TARGETS`) if a string is not
+ * `id`, `id:port`, `id:compass` or `id:port:compass`: more than three parts,
+ * or a third part that is not a compass point. An id that contains `:` is
+ * given as an object, `{ id: 'a:b' }`.
  * @example
  * ```typescript
  * toNodeRef('node1') // { id: 'node1' }
@@ -71,18 +75,29 @@ export function isCompass(c: string): c is Compass {
  * toNodeRef('node1:port1:n') // { id: 'node1', port: 'port1', compass: 'n' }
  * // As in DOT, a lone compass point after the id is the compass point:
  * toNodeRef('node1:n') // { id: 'node1', compass: 'n' }
+ * toNodeRef('node1:port1:north') // throws: north is not a compass point
  * ```
  */
 export function toNodeRef(target: NodeRefLike): NodeRef {
   // The model itself, never an object standing for it (a DSL).
   const ref: unknown = modelOf(target);
   if (isNodeRef(ref)) return ref;
-  const [id, port, compass] = (target as string).split(':');
-  if (compass !== undefined && isCompass(compass)) {
-    return { id, port, compass };
+  const text = target as string;
+  const parts = text.split(':');
+  const [id, port, compass] = parts;
+  // Every part is used, or the string is refused: a part left over would be
+  // dropped without a word.
+  if (parts.length > 3 || (compass !== undefined && !isCompass(compass))) {
+    throw withCode(
+      new TypeError(
+        `An edge target string is id, id:port, id:compass or id:port:compass with one of the compass points; got ${JSON.stringify(text.length > 64 ? `${text.slice(0, 64)}…` : text)}. Give an id that contains ":" as { id }.`,
+      ),
+      'TSG_ERR_INVALID_EDGE_TARGETS',
+    );
   }
+  if (compass !== undefined) return { id, port, compass };
   // `node:n` means compass point n in DOT (and to Graphviz), not a port.
-  if (compass === undefined && port !== undefined && isCompass(port)) {
+  if (port !== undefined && isCompass(port)) {
     return { id, compass: port };
   }
   return { id, port };

@@ -42,7 +42,7 @@ export const ERROR_CODES = [
   'TSG_ERR_INVALID_HTML_LIKE',
   /** `ArrowType.build()` was given a shape Graphviz does not have, none or more than four shapes, or `none` last after another (`RangeError`). */
   'TSG_ERR_INVALID_ARROW',
-  /** An edge was given fewer than two targets or a target of the wrong shape (`TypeError`). */
+  /** An edge was given fewer than two targets, a target of the wrong shape, or a string target that is not `id`, `id:port`, `id:compass` or `id:port:compass` (`TypeError`). */
   'TSG_ERR_INVALID_EDGE_TARGETS',
   /** A port name contains ':', which Graphviz always reads as a port/compass separator (`TypeError`). */
   'TSG_ERR_INVALID_PORT',
