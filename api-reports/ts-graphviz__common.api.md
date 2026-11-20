@@ -997,7 +997,7 @@ export interface ModelKit<M extends AnyModelTypes = ModelTypes, S extends Schema
 }
 
 export interface ModelKitOptions {
-  readonly schema?: Schema;
+  readonly schema?: Schema | undefined;
   readonly Dot?: AnyConstructor;
   readonly Graph?: AnyConstructor;
   readonly Digraph?: AnyConstructor;
@@ -1201,25 +1201,25 @@ export interface ReadonlySubgraphModel extends ReadonlyGraphBaseModel<"Subgraph"
 
 export type Rect = `${Double},${Double},${Double},${Double}`;
 
-export interface ResolvedModelTypes<P extends ModelKitOptions = Record<never, never>> extends ModelTypes<SchemaOfOptions<P>> {
+export interface ResolvedModelTypes<P extends ModelKitOptions = Record<never, never>, S extends Schema = SchemaOfOptions<P>> extends ModelTypes<S> {
   Dot: P extends {
     Dot: infer C;
-  } ? Creates<C, DotModel<SchemaOfOptions<P>>> : DotModel<SchemaOfOptions<P>>;
+  } ? Creates<C, DotModel<S>> : DotModel<S>;
   Graph: P extends {
     Graph: infer C;
-  } ? Creates<C, RootGraphModel<SchemaOfOptions<P>>> : RootGraphModel<SchemaOfOptions<P>>;
+  } ? Creates<C, RootGraphModel<S>> : RootGraphModel<S>;
   Digraph: P extends {
     Digraph: infer C;
-  } ? Creates<C, RootGraphModel<SchemaOfOptions<P>>> : RootGraphModel<SchemaOfOptions<P>>;
+  } ? Creates<C, RootGraphModel<S>> : RootGraphModel<S>;
   Subgraph: P extends {
     Subgraph: infer C;
-  } ? Creates<C, SubgraphModel<SchemaOfOptions<P>>> : SubgraphModel<SchemaOfOptions<P>>;
+  } ? Creates<C, SubgraphModel<S>> : SubgraphModel<S>;
   Node: P extends {
     Node: infer C;
-  } ? Creates<C, NodeModel<SchemaOfOptions<P>>> : NodeModel<SchemaOfOptions<P>>;
+  } ? Creates<C, NodeModel<S>> : NodeModel<S>;
   Edge: P extends {
     Edge: infer C;
-  } ? Creates<C, EdgeModel<SchemaOfOptions<P>>> : EdgeModel<SchemaOfOptions<P>>;
+  } ? Creates<C, EdgeModel<S>> : EdgeModel<S>;
 }
 
 export interface RootGraphConstructor<G extends ReadonlyRootGraphModel = RootGraphModel, S extends Schema = EmptySchema> {

@@ -68,7 +68,7 @@ export type FromDotResult<
  */
 export type FromDotOptions<
   T extends FromDotRule,
-  P extends ModelKitOptions = Partial<ModelClasses>,
+  P extends ModelKitOptions = NoSchemaClasses,
   D extends boolean = false,
 > = {
   /**
@@ -97,6 +97,15 @@ export type FromDotOptions<
    */
   dsl?: D;
 } & (D extends true ? { dsl: true } : unknown);
+
+/**
+ * The classes of `convert.models` without a schema: the models of the
+ * overloads that take them are of no schema.
+ * @group Convert DOT to Model
+ */
+export type NoSchemaClasses = Partial<ModelClasses> & {
+  readonly schema?: undefined;
+};
 
 /**
  * fromDot is a function that converts a DOT string to a model.
@@ -142,14 +151,14 @@ export function fromDot(
 ): RootGraphModel;
 export function fromDot<const D extends boolean>(
   dot: string,
-  options: FromDotOptions<'Dot' | 'Graph', Partial<ModelClasses>, D>,
+  options: FromDotOptions<'Dot' | 'Graph', NoSchemaClasses, D>,
 ): FromDotResult<RootGraphModel, D>;
 export function fromDot<
   const R extends FromDotRule,
   const D extends boolean = false,
 >(
   dot: string,
-  options: FromDotOptions<R, Partial<ModelClasses>, D>,
+  options: FromDotOptions<R, NoSchemaClasses, D>,
 ): FromDotResult<FromDotModel<R>, D>;
 export function fromDot(
   dot: string,
@@ -193,7 +202,7 @@ export function fromDotAll(
 ): RootGraphModel[];
 export function fromDotAll<const D extends boolean>(
   dot: string,
-  options: Omit<FromDotOptions<'Dot', Partial<ModelClasses>, D>, 'parse'> & {
+  options: Omit<FromDotOptions<'Dot', NoSchemaClasses, D>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): FromDotResult<RootGraphModel, D>[];

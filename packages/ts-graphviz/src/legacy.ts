@@ -31,7 +31,6 @@
 import type { CommonParseOptions } from '@ts-graphviz/ast';
 import {
   type EdgeModel,
-  type ModelClasses,
   type ModelKitOptions,
   type ModelKitOptionsOf,
   type NodeModel,
@@ -46,6 +45,7 @@ import type {
   FromDotOptions,
   FromDotResult,
   FromDotRule,
+  NoSchemaClasses,
 } from './from-dot.js';
 import { fromDotAllWith, fromDotWith } from './from-dot-with.js';
 import { createLegacyKit } from './legacy-kit.js';
@@ -139,7 +139,8 @@ export const strict: ModelFactories = legacy.strict;
 export function withModelKit<const P extends ModelKitOptions>(
   classes: ModelKitOptionsOf<P>,
 ): ModelFactoriesWithStrict<ResolvedModelTypes<P>> {
-  return factoriesOf(classes) as ModelFactoriesWithStrict<
+  // The factories of the kit, typed with what it was made from.
+  return factoriesOf(classes) as unknown as ModelFactoriesWithStrict<
     ResolvedModelTypes<P>
   >;
 }
@@ -213,7 +214,7 @@ export function fromDot(
  */
 export function fromDot<const D extends boolean>(
   dot: string,
-  options: FromDotOptions<'Dot' | 'Graph', Partial<ModelClasses>, D>,
+  options: FromDotOptions<'Dot' | 'Graph', NoSchemaClasses, D>,
 ): FromDotResult<RootGraphModel, D>;
 /**
  * @deprecated The 3.x models (`legacyModels`). For node and edge defaults
@@ -224,7 +225,7 @@ export function fromDot<
   const D extends boolean = false,
 >(
   dot: string,
-  options: FromDotOptions<R, Partial<ModelClasses>, D>,
+  options: FromDotOptions<R, NoSchemaClasses, D>,
 ): FromDotResult<FromDotModel<R>, D>;
 export function fromDot(
   dot: string,
@@ -289,7 +290,7 @@ export function fromDotAll(
  */
 export function fromDotAll<const D extends boolean>(
   dot: string,
-  options: Omit<FromDotOptions<'Dot', Partial<ModelClasses>, D>, 'parse'> & {
+  options: Omit<FromDotOptions<'Dot', NoSchemaClasses, D>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): FromDotResult<RootGraphModel, D>[];

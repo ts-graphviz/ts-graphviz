@@ -152,7 +152,7 @@ type Creates<C, Base> = C extends abstract new (
  * @group Model Kit
  */
 export interface ModelKitOptions {
-  readonly schema?: Schema;
+  readonly schema?: Schema | undefined;
   readonly Dot?: AnyConstructor;
   readonly Graph?: AnyConstructor;
   readonly Digraph?: AnyConstructor;
