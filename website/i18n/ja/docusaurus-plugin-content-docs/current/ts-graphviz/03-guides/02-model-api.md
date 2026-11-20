@@ -145,13 +145,13 @@ console.log(toDot(g));
 
 ## グラフ属性の代入
 
-グラフの本体にある `bgcolor=gray;` は、Graphviz にとっては書かれた位置の `graph [bgcolor=gray]` と同じです。後の代入がこれを上書きし、これが既定値になるのは後に続くサブグラフだけです。`addAttributeAssignment(key, value)` は代入をグラフの最後の文として追加し、`AttributeAssignmentModel` を返します。これは `key` と `value` を持ち（`value` を設定するとその位置のまま変わります）、コメントも持てます。`removeAttributeAssignment` で取り除けます。`setAttribute` は代わりにグラフ自身の属性を設定し、`toDot` はそれをすべての文より前に書き出します。
+グラフの本体にある `bgcolor=gray;` は、Graphviz にとっては書かれた位置の `graph [bgcolor=gray]` と同じです。後の代入がこれを上書きし、これが既定値になるのは後に続くサブグラフだけです。`addAttributeAssignment(key, value)` は代入をグラフの最後の文として追加し、`AttributeAssignmentModel` を返します。これは `key` と `value` を持ち（`value` を設定するとその位置のまま変わります）、コメントも持てます。`removeAttributeAssignment` で取り除けます。グラフの属性のメソッドはこれらの文を扱います。グラフの属性はその代入であり、別の表はありません。`getAttribute(key)` はそのキーの最後の代入の値です（`graph [...]` リストの値は読みません）。`setAttribute(key, value)` はそのキーの最初の代入の値を変えて残りを削除し、代入がなければ本体の先頭（すでにある代入の後）に追加します。`removeAttribute(key)` はそのキーの代入をすべて削除し、`getAttributeNames()` は代入されたキーを並べます。コンストラクタやファクトリの属性は、渡した順で最初の代入になります。
 
 ```typescript
 import { Digraph, Node, toDot } from 'ts-graphviz';
 
 const g = new Digraph();
-g.setAttribute('bgcolor', 'white'); // グラフ自身の属性: 最初に書き出される
+g.setAttribute('bgcolor', 'white'); // 最初の文
 g.addNode(new Node('a'));
 const later = g.addAttributeAssignment('bgcolor', 'gray'); // その位置に書き出される
 g.addNode(new Node('b'));
@@ -166,7 +166,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` は、本体のどの代入も（最初のものも含めて）書かれた位置に残します。`fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` は `undefined` で、代入は `statements` の最初にあります（`isAttributeAssignmentModel` で絞り込めます）。`toDot` が最初に書き出すグラフ自身の属性は、読み戻すとこのような代入になります。`ts-graphviz/legacy` は 3.x と同じく、どの代入もグラフ自身の属性にします。DOT DSL では、`g.rankdir = 'LR'` が実行した位置に代入を追加します。値が `null` か `undefined`、またはキーが文字列でない場合は、コード `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` を持つ `TypeError` を投げます。
+`fromDot` は本体のどの代入も書かれた位置に残し、`toDot` はそこに書き戻すので、グラフ、その DOT、読み戻したグラフは同じ文を持ちます。`fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` は `'LR'` で、代入は `statements` の最初にあります。`ts-graphviz/legacy` は 3.x と同じく、どの代入もグラフ自身の属性にします。DOT DSL では、`g.rankdir = 'LR'` が実行した位置に代入を追加します。値が `null` か `undefined`、またはキーが文字列でない場合は、コード `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` を持つ `TypeError` を投げます。
 
 ## コメント
 

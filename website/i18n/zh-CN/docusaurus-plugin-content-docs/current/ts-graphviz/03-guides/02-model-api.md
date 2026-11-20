@@ -145,13 +145,13 @@ console.log(toDot(g));
 
 ## 图属性赋值
 
-在图的主体中，`bgcolor=gray;` 对 Graphviz 来说等同于写在该位置的 `graph [bgcolor=gray]`：之后的赋值会覆盖它，而且它只作为之后子图的默认值。`addAttributeAssignment(key, value)` 把一条赋值作为图的最后一条语句添加，并返回一个 `AttributeAssignmentModel`，它带有 `key` 和 `value`（设置 `value` 会在原位置修改它），也可以带注释；`removeAttributeAssignment` 移除它。`setAttribute` 则设置图自身的属性，`toDot` 会把它写在所有语句之前：
+在图的主体中，`bgcolor=gray;` 对 Graphviz 来说等同于写在该位置的 `graph [bgcolor=gray]`：之后的赋值会覆盖它，而且它只作为之后子图的默认值。`addAttributeAssignment(key, value)` 把一条赋值作为图的最后一条语句添加，并返回一个 `AttributeAssignmentModel`，它带有 `key` 和 `value`（设置 `value` 会在原位置修改它），也可以带注释；`removeAttributeAssignment` 移除它。图的属性方法作用于这些语句：图的属性就是它的赋值，没有单独的表。`getAttribute(key)` 是该键最后一条赋值的值（不读取 `graph [...]` 列表的值）；`setAttribute(key, value)` 修改该键第一条赋值的值并删除其余的赋值，没有赋值时则在主体开头（已有赋值之后）添加一条；`removeAttribute(key)` 删除该键的所有赋值；`getAttributeNames()` 列出被赋值的键。构造函数和工厂函数的属性按给出的顺序成为最前面的赋值。
 
 ```typescript
 import { Digraph, Node, toDot } from 'ts-graphviz';
 
 const g = new Digraph();
-g.setAttribute('bgcolor', 'white'); // 图自身的属性：最先写出
+g.setAttribute('bgcolor', 'white'); // 第一条语句
 g.addNode(new Node('a'));
 const later = g.addAttributeAssignment('bgcolor', 'gray'); // 写在原位置
 g.addNode(new Node('b'));
@@ -166,7 +166,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` 会把主体中的每条赋值（包括最前面的）保留在原位置：`fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` 为 `undefined`，而该赋值是 `statements` 中的第一条（可用 `isAttributeAssignmentModel` 筛选）。`toDot` 最先写出的图自身的属性，读回时就成为这样的赋值。`ts-graphviz/legacy` 与 3.x 一样，把每条赋值都当作图自身的属性。在 DOT DSL 中，`g.rankdir = 'LR'` 会在执行的位置添加一条赋值。值为 `null` 或 `undefined`，或者键不是字符串时，会抛出带有代码 `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` 的 `TypeError`。
+`fromDot` 会把主体中的每条赋值保留在原位置，`toDot` 也会写回原处，因此图、它的 DOT 和读回的图具有相同的语句：`fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` 为 `'LR'`，而该赋值是 `statements` 中的第一条。`ts-graphviz/legacy` 与 3.x 一样，把每条赋值都当作图自身的属性。在 DOT DSL 中，`g.rankdir = 'LR'` 会在执行的位置添加一条赋值。值为 `null` 或 `undefined`，或者键不是字符串时，会抛出带有代码 `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` 的 `TypeError`。
 
 ## 注释
 

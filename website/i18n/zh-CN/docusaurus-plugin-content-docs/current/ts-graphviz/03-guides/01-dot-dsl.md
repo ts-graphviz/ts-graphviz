@@ -134,7 +134,7 @@ digraph((g) => {
 
 在图或子图的 DSL 上，属性名就是 DOT 语句，正如 DOT 中的 `rankdir = LR;`：`g.rankdir = 'LR'` 每执行一次，就在执行的位置写出一条 `rankdir = "LR";`（图属性赋值；在 Graphviz 中，后面的赋值会覆盖前面的）。它只能写入：读取 `g.rankdir` 或 `delete g.rankdir` 会抛出带有代码 `TSG_ERR_WRITE_ONLY_PROPERTY` 的 `TypeError`，赋值 `undefined` 会抛出带有代码 `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` 的 `TypeError`。JavaScript 和工具会在任何对象上查找的名字（`then`、`toJSON` 以及 `Object.prototype` 上的名字）读取为 `undefined`，因此图的 DSL 可以被 await 或序列化。
 
-`toDot` 写在所有语句之前的图自身的属性，通过工厂函数的属性参数或模型（`modelOf(g).setAttribute`、`getAttribute`）来设置和读取：
+工厂函数的属性参数写出主体最前面的赋值，图的属性则通过模型（`modelOf(g).getAttribute`、`setAttribute`）读写。图的属性就是它的赋值，没有单独的表。`getAttribute(key)` 是该键最后一条赋值的值（不读取 `graph [...]` 列表的值）；`setAttribute(key, value)` 修改该键第一条赋值的值并删除其余的赋值，没有赋值时则在主体开头（已有赋值之后）添加一条；`removeAttribute(key)` 删除该键的所有赋值；`getAttributeNames()` 列出被赋值的键。构造函数和工厂函数的属性按给出的顺序成为最前面的赋值。
 
 ```typescript
 import { digraph, modelOf, toDot } from 'ts-graphviz';
@@ -152,7 +152,7 @@ console.log(toDot(G));
 //   bgcolor = "gray";
 //   "b";
 // }
-console.log(modelOf(G).getAttribute('bgcolor')); // 'white'（图自身的属性）
+console.log(modelOf(G).getAttribute('bgcolor')); // 'gray'（最后一条赋值）
 ```
 
 在 `ts-graphviz/legacy` 中，与 3.x 一样，属性名是图自身的属性，可以读取和删除。
@@ -332,7 +332,7 @@ digraph((g) => {
 
 ### 读取 `g.rankdir` 会抛出异常
 
-在图的 DSL 上，属性名写出 DOT 语句。图自身的属性在模型上读取（`modelOf(g).getAttribute('rankdir')`），赋值则在它的语句中读取（`modelOf(g).statements`，配合 `isAttributeAssignmentModel`）。用 `fromDot` 读入的图，其主体中的每条赋值都在那里。
+在图的 DSL 上，属性名写出 DOT 语句。图的属性在模型上读取：`modelOf(g).getAttribute('rankdir')` 是 `rankdir` 最后一条赋值的值，`modelOf(g).statements` 中每条赋值都在其原位置（可用 `isAttributeAssignmentModel` 筛选）。
 
 ### `attributes` 去哪儿了？
 

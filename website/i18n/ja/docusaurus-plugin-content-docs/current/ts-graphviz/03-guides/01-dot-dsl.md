@@ -134,7 +134,7 @@ digraph((g) => {
 
 グラフやサブグラフの DSL では、属性名は DOT の `rankdir = LR;` と同じく DOT の文です。`g.rankdir = 'LR'` は、実行した位置に、実行するたびに `rankdir = "LR";` を書き込みます（グラフ属性の代入です。Graphviz では後の代入が前の代入を上書きします）。書き込み専用で、`g.rankdir` を読むか `delete g.rankdir` すると、コード `TSG_ERR_WRITE_ONLY_PROPERTY` を持つ `TypeError` を投げます。`undefined` を代入すると、コード `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` を持つ `TypeError` を投げます。JavaScript やツールがどのオブジェクトにも問い合わせる名前（`then`、`toJSON`、`Object.prototype` の名前）は `undefined` と読めるので、グラフの DSL を await したり文字列化したりできます。
 
-`toDot` がすべての文より前に書き出すグラフ自身の属性は、ファクトリの属性引数か、モデル（`modelOf(g).setAttribute`、`getAttribute`）で扱います。
+ファクトリの属性引数は本体の最初の代入を書き込み、グラフの属性はモデル（`modelOf(g).getAttribute`、`setAttribute`）で読み書きします。グラフの属性はその代入であり、別の表はありません。`getAttribute(key)` はそのキーの最後の代入の値です（`graph [...]` リストの値は読みません）。`setAttribute(key, value)` はそのキーの最初の代入の値を変えて残りを削除し、代入がなければ本体の先頭（すでにある代入の後）に追加します。`removeAttribute(key)` はそのキーの代入をすべて削除し、`getAttributeNames()` は代入されたキーを並べます。コンストラクタやファクトリの属性は、渡した順で最初の代入になります。
 
 ```typescript
 import { digraph, modelOf, toDot } from 'ts-graphviz';
@@ -152,7 +152,7 @@ console.log(toDot(G));
 //   bgcolor = "gray";
 //   "b";
 // }
-console.log(modelOf(G).getAttribute('bgcolor')); // 'white'（グラフ自身の属性）
+console.log(modelOf(G).getAttribute('bgcolor')); // 'gray'（最後の代入）
 ```
 
 `ts-graphviz/legacy` では、3.x と同じく属性名はグラフ自身の属性で、読み取りも削除もできます。
@@ -332,7 +332,7 @@ v4 では、DOT と同じく、その既定値は後に書いたものにだけ�
 
 ### `g.rankdir` を読むと例外になる
 
-グラフの DSL では、属性名は DOT の文を書き込みます。グラフ自身の属性はモデル（`modelOf(g).getAttribute('rankdir')`）で、代入はその文（`modelOf(g).statements` を `isAttributeAssignmentModel` で絞り込む）で読みます。`fromDot` で読んだグラフでは、本体のどの代入もそこにあります。
+グラフの DSL では、属性名は DOT の文を書き込みます。グラフの属性はモデルで読みます。`modelOf(g).getAttribute('rankdir')` は `rankdir` の最後の代入の値で、`modelOf(g).statements` には各代入が書かれた位置にあります（`isAttributeAssignmentModel` で絞り込めます）。
 
 ### `attributes` はどこへ行ったのか
 
