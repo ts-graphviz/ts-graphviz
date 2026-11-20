@@ -15,7 +15,12 @@
  */
 import { spawnSync } from 'node:child_process';
 import fc from 'fast-check';
-import { parse, stringify } from 'ts-graphviz/ast';
+import {
+  type GraphASTNode,
+  type LiteralKind,
+  parse,
+  stringify,
+} from 'ts-graphviz/ast';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 let dotInstalled: boolean | undefined;
@@ -579,6 +584,50 @@ describe('dot and the order of subgraphs', {
     ]) {
       expect(changed).not.toBe(dot);
       expect(sortSubgraphs(canon(changed) as string)).not.toBe(original);
+    }
+  });
+});
+
+/** A graph of one node whose id is a literal of the kind, built by hand. */
+const oneNode = (value: string, kind: LiteralKind): GraphASTNode => ({
+  type: 'Graph',
+  directed: false,
+  strict: false,
+  children: [
+    { type: 'Node', id: { type: 'Literal', value, kind }, children: [] },
+  ],
+});
+
+describe('a bare literal built by hand', { tags: ['SM-2', 'process'] }, () => {
+  beforeEach(({ skip }) => skip(!hasDot(), 'dot is not installed'));
+
+  it('is the same node to dot as the quoted string of its text', {
+    timeout: 10 * 60_000,
+  }, () => {
+    // No `"` or `\`: the quoted reference is then the text as it is.
+    const text = fc.oneof(
+      fc.string({
+        unit: fc.constantFrom(...'aZ_09.-$ :;[]{}=#', '\u00e9', '\u4e2d'),
+        maxLength: 6,
+      }),
+      fc
+        .tuple(
+          fc.constantFrom('node', 'EDGE', 'strict', 'Graph', '1', '-.5'),
+          fc.constantFrom('', 'x', '1', 'abc'),
+        )
+        .map(([a, b]) => a + b),
+    );
+    for (const value of fc.sample(
+      text,
+      Number(process.env.FC_NUM_RUNS ?? 200),
+    )) {
+      const printed = stringify(oneNode(value, 'bare'));
+      const expected = canon(stringify(oneNode(value, 'quoted')));
+      expect(expected).toBeDefined();
+      expect(
+        canon(printed),
+        `${JSON.stringify(value)} printed as ${printed}`,
+      ).toBe(expected);
     }
   });
 });

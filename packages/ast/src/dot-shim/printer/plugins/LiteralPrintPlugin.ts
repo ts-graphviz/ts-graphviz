@@ -1,5 +1,7 @@
+import { escapeLiteral } from '../../../model-shim/literal.js';
 import type { LiteralASTNode } from '../../../types.js';
 import type { PrintPlugin } from '../types.js';
+import { isBareId } from './utils/bare-id.js';
 
 export const LiteralPrintPlugin: PrintPlugin<LiteralASTNode> = {
   match(ast) {
@@ -18,8 +20,11 @@ export const LiteralPrintPlugin: PrintPlugin<LiteralASTNode> = {
       case 'quoted':
         yield `"${ast.value}"`;
         return;
+      // An AST built by hand can hold a bare value that is not one ID, such
+      // as a keyword (`edge` would start a statement) or `1abc` (two tokens):
+      // it is written quoted, which Graphviz reads as the same string.
       case 'bare':
-        yield ast.value;
+        yield isBareId(ast.value) ? ast.value : `"${escapeLiteral(ast.value)}"`;
         return;
     }
   },
