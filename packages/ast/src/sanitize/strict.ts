@@ -211,19 +211,17 @@ const TOKEN = /^[\p{L}\p{M}\p{N} _.,:;=+\-#/!@^*]*$/u;
 /**
  * Why the strict policy rejects an attribute, or `undefined`. `ownRule`
  * says whether the default rules already give the value a grammar (text,
- * links, fonts, style, colors, shape). `schema` holds the attribute names
- * a schema adds, which are allowed too, except those that access files.
+ * links, fonts, style, colors, shape). `ofSchema` says whether a schema
+ * gives the attribute to the object it is on, which allows it too, unless
+ * it accesses files.
  */
 export function strictAttributeProblem(
   name: string,
   value: string,
   ownRule: boolean,
-  schema: ReadonlySet<string> = new Set(),
+  ofSchema = false,
 ): string | undefined {
-  if (
-    !ALLOWED_ATTRIBUTES.has(name) &&
-    !(schema.has(name) && !FILE_ACCESS.has(name))
-  ) {
+  if (!ALLOWED_ATTRIBUTES.has(name) && !(ofSchema && !FILE_ACCESS.has(name))) {
     return 'is not a Graphviz attribute ts-graphviz knows (strict policy)';
   }
   if (!ownRule && !TOKEN.test(value)) {

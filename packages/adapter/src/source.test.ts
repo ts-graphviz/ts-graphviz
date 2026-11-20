@@ -102,6 +102,54 @@ describe('a custom format while sanitize is on', { tags: ['SM-4'] }, () => {
     ).toThrow(expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }));
   });
 
+  it('checks the attribute arguments of a schema by their kind', () => {
+    const schema = defineSchema({ node: { tier: attr<string>() } });
+    const strict = { policy: 'strict' as const };
+    expect(() =>
+      sourceToRender(dot, {
+        schema,
+        sanitize: strict,
+        format: 'svg',
+        attributes: { node: { tier: 'x' } },
+      } as never),
+    ).not.toThrow();
+    expect(() =>
+      sourceToRender(dot, {
+        schema,
+        sanitize: strict,
+        format: 'svg',
+        attributes: { graph: { tier: 'x' } },
+      } as never),
+    ).toThrow(expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }));
+  });
+
+  it('checks every attribute argument of a schema by its own kind', () => {
+    const schema = defineSchema({
+      graph: { hoge: attr<string>() },
+      edge: { weight2: attr<number>() },
+    });
+    const render = (attributes: unknown) =>
+      sourceToRender(dot, {
+        schema,
+        sanitize: { policy: 'strict' },
+        format: 'svg',
+        attributes,
+      } as never);
+    expect(() =>
+      render({ graph: { hoge: 'x' }, edge: { weight2: 1 } }),
+    ).not.toThrow();
+    for (const attributes of [
+      { node: { hoge: 'x' } },
+      { node: { weight2: 1 } },
+      { graph: { weight2: 1 } },
+      { edge: { hoge: 'x' } },
+    ]) {
+      expect(() => render(attributes)).toThrow(
+        expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }),
+      );
+    }
+  });
+
   it('of a schema, is checked by sanitize as the adapter reads it', () => {
     const listed = (format: string) =>
       sourceToRender(

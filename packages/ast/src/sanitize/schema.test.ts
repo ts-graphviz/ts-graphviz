@@ -103,3 +103,78 @@ describe('sanitize with a schema, at its edges', { tags: ['SM-7'] }, () => {
     ).toThrow(unsafe);
   });
 });
+
+describe('the strict policy with a schema, by kind', { tags: ['SM-7'] }, () => {
+  const byKind = defineSchema({
+    graph: { hoge: attr<string>() },
+    subgraph: { lane: attr<number>(), both: attr<string>() },
+    cluster: { team: attr<string>(), both: attr<string>() },
+    node: { tier: attr<string>() },
+    edge: { weight2: attr<number>() },
+  });
+  const strict = (dot: string) =>
+    sanitize(dot, { policy: 'strict', format: 'svg', schema: byKind });
+
+  it.each([
+    'digraph { a [tier=x]; a -> b [weight2=1]; hoge=x }',
+    'digraph { node [tier=x]; edge [weight2=1]; graph [hoge=x]; a }',
+    'digraph { subgraph cluster_a { team=core; graph [team=core]; a } }',
+    'digraph { subgraph CLUSTER_a { team=core } }',
+    'digraph { subgraph s { lane=1; graph [lane=2]; a [tier=x] } }',
+    'digraph { { a [tier=x] } -> b [weight2=1] }',
+    'digraph { subgraph s { cluster=true; both=x } }',
+    'digraph { subgraph cluster_a { subgraph cluster_b { team=x } } }',
+    'digraph { subgraph cluster_a { subgraph s { lane=1; node [tier=x] } } }',
+    'digraph { a -> { b [tier=x] } -> { subgraph cluster_c { team=x } } }',
+    'digraph { subgraph s { subgraph t { edge [weight2=1]; a -> b } } }',
+  ])('allows an attribute on the kind it is given to: %j', (dot) => {
+    expect(() => strict(dot)).not.toThrow();
+  });
+
+  it.each([
+    ['a node attribute on an edge', 'digraph { a -> b [tier=x] }'],
+    ['an edge attribute on a node', 'digraph { a [weight2=1] }'],
+    ['a node attribute in a graph', 'digraph { tier=x }'],
+    ['a node attribute in graph [...]', 'digraph { graph [tier=x] }'],
+    ['an edge attribute in node [...]', 'digraph { node [weight2=1] }'],
+    ['a graph attribute on a node', 'digraph { a [hoge=x] }'],
+    ['a graph attribute in a subgraph', 'digraph { subgraph s { hoge=x } }'],
+    [
+      'a cluster attribute in a subgraph',
+      'digraph { subgraph s { team=core } }',
+    ],
+    [
+      'a subgraph attribute in a cluster',
+      'digraph { subgraph cluster_a { lane=1 } }',
+    ],
+    ['a cluster attribute in the graph', 'digraph { team=core }'],
+    // Where the source sets cluster, a subgraph not named as a cluster may
+    // be either: only an attribute given to both kinds is allowed.
+    [
+      'a cluster attribute where cluster is set in the subgraph',
+      'digraph { subgraph s { cluster=true; team=core } }',
+    ],
+    [
+      'a cluster attribute where cluster is set in graph [...]',
+      'digraph { subgraph s { graph [cluster=true]; team=core } }',
+    ],
+    [
+      'a subgraph attribute where cluster is a default',
+      'digraph { graph [cluster=true]; subgraph s { lane=1 } }',
+    ],
+    [
+      'a cluster attribute after cluster is set and reset',
+      'digraph { subgraph s { cluster=true; cluster=false; team=core } }',
+    ],
+    [
+      'a node attribute on an edge with subgraph targets',
+      'digraph { { a } -> { b } [tier=x] }',
+    ],
+    [
+      'a cluster attribute in a subgraph target',
+      'digraph { a -> { team=x; b } }',
+    ],
+  ])('refuses %s', (_, dot) => {
+    expect(() => strict(dot)).toThrow(unsafe);
+  });
+});
