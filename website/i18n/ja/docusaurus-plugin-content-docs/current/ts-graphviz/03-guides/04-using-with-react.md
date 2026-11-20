@@ -55,6 +55,28 @@ console.log(dot);
 - **HTML ライクなラベル**: JSX を活用してリッチなラベルをノードやエッジに作成します。
 - **コンポーネントベースの設計**: グラフのロジックを React コンポーネント内にカプセル化し、再利用性を高めます。
 
+## スキーマで型付けしたコンポーネント
+
+コンポーネントはデフォルトのキットで型付けされています。独自の属性（スキーマ。[ts-graphviz の拡張](./05-extending-ts-graphviz.md)を参照）には、`createComponents` がキットで型付けした同じコンポーネントを返します。ルートや変換には同じスキーマを渡します。
+
+```tsx
+import { createComponents, fromElement } from '@ts-graphviz/react';
+import { attr, createModelKit, defineSchema, toDot } from 'ts-graphviz';
+
+const schema = defineSchema({ node: { tier: attr<'core' | 'edge'>() } });
+const { Digraph, Node } = createComponents(createModelKit({ schema }));
+
+const dot = await fromElement(
+  <Digraph id="G">
+    <Node id="a" tier="core" />
+  </Digraph>,
+  { models: { schema } },
+);
+console.log(toDot(dot));
+```
+
+JSX は、コンポーネントを描画先のルートから型付けできません。そのため型は `createComponents` に渡したキットから、作られるものはルートの `models` から決まります。両方に同じスキーマとクラスを渡してください。
+
 ## `@ts-graphviz/react` を使用するタイミング
 
 - グラフを宣言的に定義したい場合。

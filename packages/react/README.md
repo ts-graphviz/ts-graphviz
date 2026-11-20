@@ -308,6 +308,25 @@ const MyNode: React.FC<NodeProps> = (props) => (
 />
 ```
 
+#### Components Typed With a Schema
+
+For attributes of your own, defined in a schema (`defineSchema` of `ts-graphviz`), `createComponents(kit)` gives the components typed with the kit; give the root or conversion the same schema in `models`:
+
+```tsx
+import { createComponents, fromElement } from '@ts-graphviz/react';
+import { attr, createModelKit, defineSchema } from 'ts-graphviz';
+
+const schema = defineSchema({ node: { tier: attr<'core' | 'edge'>() } });
+const { Digraph, Node } = createComponents(createModelKit({ schema }));
+
+await fromElement(
+  <Digraph>
+    <Node id="a" tier="core" /> {/* ✅ typed by the schema */}
+  </Digraph>,
+  { models: { schema } },
+);
+```
+
 #### JSX Type Definitions for HTML-Like Elements
 
 TypeScript type definitions for all `dot:*` HTML-like elements are **automatically available** when you import `@ts-graphviz/react`. No additional configuration or setup is required.
