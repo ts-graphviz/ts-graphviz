@@ -26,7 +26,7 @@ export type DSL<T extends DSLModel, M extends DSLModelTypes = DefaultModelTypesO
 
 export type DSLEdgeTargetLikeTuple = ReadonlyEdgeTargetLikeTuple | readonly [from: DSLNodeRefLike | readonly DSLNodeRefLike[], to: DSLNodeRefLike | readonly DSLNodeRefLike[], ...rest: (DSLNodeRefLike | readonly DSLNodeRefLike[])[]];
 
-export type DSLGraphModel = (ReadonlyRootGraphModel | ReadonlySubgraphModel) & HasComments<CommentPosition> & WritesAttributes & {
+export type DSLGraphModel = (ReadonlyRootGraphModel | ReadonlySubgraphModel) & HasComments<CommentPosition> & WritesAttributes & WritesStatements & {
   readonly attributes: {
     readonly graph: DSLModel;
     readonly edge: DSLModel;
@@ -177,11 +177,20 @@ interface WritesAttributes {
   removeAttribute(name: never): void;
 }
 
+interface WritesStatements {
+  addNode(node: never): void;
+  addEdge(edge: never): void;
+  addSubgraph(subgraph: never): void;
+  addAttributeList(kind: never, attributes: never): unknown;
+}
+
 type AttributeProperties<T extends AttributeKey, S, E extends object> = [keyof S] extends [never] ? { [K in T]?: Attribute<K>; } : AttributesObject<T, E>;
 
 type DSLNodeRefLike = NodeRefLike | ModelView<ReadonlyNodeModel>;
 
-type KitOfSchema<T, M extends AnyModelTypes> = T extends DSLGraphModel ? [SchemaOf<M>, SchemaOfModel<T>] extends [SchemaOfModel<T>, SchemaOf<M>] ? unknown : {
+type GraphSchemaOf<T> = T extends DSLGraphModel ? SchemaOfModel<T> : never;
+
+type KitOfSchema<T, M extends AnyModelTypes> = [GraphSchemaOf<T>] extends [never] ? unknown : [SchemaOf<M>, GraphSchemaOf<T>] extends [GraphSchemaOf<T>, SchemaOf<M>] ? unknown : {
   readonly "~the kit is of another schema than the graph": never;
-} : unknown;
+};
 ```

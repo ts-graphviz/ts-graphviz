@@ -133,6 +133,12 @@ describe('the DSL of a model of a schema', () => {
     dsl(new Digraph<MySchema>(), defaultModelKit);
     // @ts-expect-error the graph has no schema
     dsl(new Digraph(), kit);
+    type OtherSchema = { graph: { other: Add<string> } };
+    const either = new Digraph<MySchema>() as
+      | Digraph<MySchema>
+      | Digraph<OtherSchema>;
+    // @ts-expect-error the graph may be of another schema than the kit's
+    dsl(either, kit);
     // A node does not create: any kit.
     dsl(new MyNode('a'), defaultModelKit);
     dsl(new Subgraph<MySchema>(), kit);

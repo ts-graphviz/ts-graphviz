@@ -112,6 +112,14 @@ export type DSLModel =
       HasComments<CommentPosition> &
       WritesAttributes);
 
+/** What a graph that its DOT statements add to has. */
+interface WritesStatements {
+  addNode(node: never): void;
+  addEdge(edge: never): void;
+  addSubgraph(subgraph: never): void;
+  addAttributeList(kind: never, attributes: never): unknown;
+}
+
 /** What a model that writes its attributes has. */
 interface WritesAttributes {
   setAttribute(name: never, value: never): void;
@@ -119,12 +127,14 @@ interface WritesAttributes {
 }
 
 /**
- * A graph or subgraph a {@link DSL} can be made of.
+ * A graph or subgraph a {@link DSL} can be made of: one that its statements
+ * can add to (`addNode`, `addEdge`, `addSubgraph`, `addAttributeList`).
  * @group DSL
  */
 export type DSLGraphModel = (ReadonlyRootGraphModel | ReadonlySubgraphModel) &
   HasComments<CommentPosition> &
-  WritesAttributes & {
+  WritesAttributes &
+  WritesStatements & {
     readonly attributes: {
       readonly graph: DSLModel;
       readonly edge: DSLModel;
@@ -562,15 +572,20 @@ export interface GraphDSLStatements<
 //    every other name is an attribute.
 
 /**
- * Nothing for a kit `M` of the schema of the graph `T` (or for a model
- * that is not a graph, which does not create); otherwise a member no kit
- * has, so that the kit is a type error.
+ * Nothing for a kit `M` of the schema of every graph `T` may be (or for
+ * models that are not graphs, which do not create); otherwise a member no
+ * kit has, so that the kit is a type error.
  */
-type KitOfSchema<T, M extends AnyModelTypes> = T extends DSLGraphModel
-  ? [SchemaOf<M>, SchemaOfModel<T>] extends [SchemaOfModel<T>, SchemaOf<M>]
+type KitOfSchema<T, M extends AnyModelTypes> = [GraphSchemaOf<T>] extends [
+  never,
+]
+  ? unknown
+  : [SchemaOf<M>, GraphSchemaOf<T>] extends [GraphSchemaOf<T>, SchemaOf<M>]
     ? unknown
-    : { readonly '~the kit is of another schema than the graph': never }
-  : unknown;
+    : { readonly '~the kit is of another schema than the graph': never };
+
+/** The schemas of the graphs among the models `T`. */
+type GraphSchemaOf<T> = T extends DSLGraphModel ? SchemaOfModel<T> : never;
 
 /** Each model's DSL with each kit (rule 4). */
 const views = new WeakMap<object, WeakMap<ModelKit, object>>();

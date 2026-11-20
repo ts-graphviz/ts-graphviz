@@ -410,8 +410,13 @@ export interface DotObjectModel<T extends DotObjectType = DotObjectType> {
  * The schema of a model, for the types: `'~schema'` is never set at run
  * time. It names the schema in one place, so that the schema of a model
  * (as the DOT DSL reads it) is found without comparing the whole model, and
- * a model of one schema is not one of another, whichever attributes they
- * share.
+ * a model of one schema is not one of another (unless that schema's type
+ * is assignable to the other's), whichever attributes they share.
+ *
+ * The core classes declare it. A class that implements a model interface
+ * itself, instead of extending a core class, declares it too
+ * (`declare readonly '~schema'?: S;`): without it, the DSL of the class's
+ * models is typed as without a schema.
  *
  * @typeParam S - The schema of the model.
  * @group Models

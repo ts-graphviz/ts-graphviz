@@ -32,6 +32,19 @@ describe('defaultModelKit', () => {
     expect(defaultModelKit.createNode('a')).not.toBeInstanceOf(MyNode);
   });
 
+  it('creates models without the type-only schema property', () => {
+    const kit = defaultModelKit;
+    for (const model of [
+      kit.createDigraph('G'),
+      kit.createSubgraph('s'),
+      kit.createNode('a'),
+      kit.createEdge(['a', 'b']),
+      new Dot(),
+    ]) {
+      expect('~schema' in model).toBe(false);
+    }
+  });
+
   it('creates the core models', () => {
     expect(defaultModelKit.createDigraph('G')).toBeInstanceOf(Digraph);
     expect(defaultModelKit.createGraph('G')).toBeInstanceOf(Graph);
