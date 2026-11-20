@@ -5,10 +5,10 @@ import type {
   SchemaOf,
 } from '@ts-graphviz/common';
 import type {
+  DefaultModelTypesOf,
   DSL,
   DSLGraphModel,
   DSLModelTypes,
-  SchemaOfModel,
 } from './dsl.js';
 
 /**
@@ -17,7 +17,7 @@ import type {
  */
 export type ModelFactoryCallback<
   G extends DSLGraphModel = RootGraphModel,
-  M extends DSLModelTypes = ModelTypes<SchemaOfModel<G>>,
+  M extends DSLModelTypes = DefaultModelTypesOf<G>,
 > = (g: DSL<G, M>) => void;
 
 /**
@@ -34,7 +34,7 @@ export type ModelFactoryCallback<
  */
 export interface ModelFactory<
   G extends DSLGraphModel = RootGraphModel,
-  M extends DSLModelTypes = ModelTypes<SchemaOfModel<G>>,
+  M extends DSLModelTypes = DefaultModelTypesOf<G>,
 > {
   (
     id?: string,
