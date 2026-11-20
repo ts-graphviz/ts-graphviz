@@ -165,6 +165,7 @@ export declare function useGraphContainer(): AnyGraphContainer | null;
 
 export { FilterableModel } from "ts-graphviz";
 export { ReactNode } from "react";
+export { isAttributeAssignmentModel } from "ts-graphviz";
 export { isAttributeListModel } from "ts-graphviz";
 export { isEdgeModel } from "ts-graphviz";
 export { isNodeModel } from "ts-graphviz";

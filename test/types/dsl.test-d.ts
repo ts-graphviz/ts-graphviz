@@ -1,6 +1,8 @@
 import {
   type AnyDotObjectModel,
   type Attribute,
+  AttributeAssignment,
+  type AttributeAssignmentDSL,
   type AttributeListDSL,
   type AttributeListModel,
   createModelKit,
@@ -262,6 +264,31 @@ describe('the statements', () => {
       expectTypeOf(sub).toEqualTypeOf<DSL<SubgraphModel>>(),
     );
     s.subgraph((sub) => expectTypeOf(sub).toEqualTypeOf<DSL<SubgraphModel>>());
+  });
+
+  it('type a graph’s attribute names by its keys, to write', () => {
+    g.bgcolor = 'red';
+    s.label = 'S';
+    // @ts-expect-error not an attribute of a root graph
+    g.shape = 'box';
+    // @ts-expect-error a string
+    s.label = 1;
+    // The DSL of an assignment in a graph's statements.
+    const assignment = dsl(
+      new AttributeAssignment<'bgcolor', Attribute<'bgcolor'>>(
+        'bgcolor',
+        'red',
+      ),
+    );
+    expectTypeOf(assignment).toEqualTypeOf<
+      AttributeAssignmentDSL<
+        AttributeAssignment<'bgcolor', Attribute<'bgcolor'>>
+      >
+    >();
+    expectTypeOf(assignment.key).toEqualTypeOf<'bgcolor'>();
+    expectTypeOf(assignment.$$type).toEqualTypeOf<'AttributeAssignment'>();
+    // @ts-expect-error read-only on the DSL: modelOf(x).value
+    assignment.value = 'blue';
   });
 
   it('take the cluster attributes for a cluster only', () => {

@@ -1,6 +1,7 @@
 import { createRoot } from '@ts-graphviz/react';
 import {
   type AnyDotObjectModel,
+  type AttributeAssignmentModel,
   type AttributeListModel,
   type DotModel,
   type DotObjectModel,
@@ -33,6 +34,9 @@ describe('AnyDotObjectModel', () => {
         case 'AttributeList':
           expectTypeOf(model).toEqualTypeOf<AttributeListModel>();
           return model.$$kind;
+        case 'AttributeAssignment':
+          expectTypeOf(model).toEqualTypeOf<AttributeAssignmentModel>();
+          return model.key;
         case 'Dot':
           expectTypeOf(model).toEqualTypeOf<DotModel>();
           return model.graphs.length;

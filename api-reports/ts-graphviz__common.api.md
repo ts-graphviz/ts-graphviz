@@ -414,6 +414,11 @@ export declare namespace Attribute {
   }
 }
 
+export interface AttributeAssignmentModel<K extends string = string, V extends DotValue = DotValue> extends HasComments, DotObjectModel<"AttributeAssignment"> {
+  readonly key: K;
+  value: V;
+}
+
 export type AttributeKey = EdgeAttributeKey | NodeAttributeKey | GraphAttributeKey | SubgraphAttributeKey | ClusterSubgraphAttributeKey;
 
 export type AttributeListAttributes<S extends Schema = EmptySchema, Kind extends AttributeListKind = AttributeListKind> = [keyof S] extends [never] ? AttributesObject<AttributeKey> | AttributesEntities<AttributeKey> : [Kind] extends ["Node"] ? NodeAttributesObject<S> | AttributesEntities<NodeAttributeKey, SchemaAttributeTypes<S, "node">> : [Kind] extends ["Edge"] ? EdgeAttributesObject<S> | AttributesEntities<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">> : [Kind] extends ["Graph"] ? SubgraphAttributesObject<S> | AttributesEntities<SubgraphAttributeKey | ClusterSubgraphAttributeKey, SubgraphSchemaAttributeTypes<S>> : AnyKindAttributesObject<S>;
@@ -761,7 +766,7 @@ export interface DotObjectModel<T extends DotObjectType = DotObjectType> {
   $$type: T;
 }
 
-export type DotObjectType = "AttributeList" | "Node" | "Edge" | "Subgraph" | "Graph" | "Dot";
+export type DotObjectType = "AttributeList" | "AttributeAssignment" | "Node" | "Edge" | "Subgraph" | "Graph" | "Dot";
 
 export type DotValue = string | number | boolean | EscStringValue | HTMLLikeValue;
 
@@ -769,7 +774,7 @@ export type Double = number;
 
 export type DoubleList = Double | `${Double}:${Double}` | `${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
 
-export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_INVALID_COMMENT", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_NOT_A_MODEL_KIT", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION", "TSG_ERR_NO_CURRENT_GRAPH", "TSG_ERR_ROOT_UNMOUNTED"];
+export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT", "TSG_ERR_INVALID_COMMENT", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_NOT_A_MODEL_KIT", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_WRITE_ONLY_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION", "TSG_ERR_NO_CURRENT_GRAPH", "TSG_ERR_ROOT_UNMOUNTED"];
 
 export type EdgeAttributeKey = EdgeAttributeKey.values;
 export declare namespace EdgeAttributeKey {
@@ -807,7 +812,7 @@ export interface EscStringValue {
   readonly value: string;
 }
 
-export type FilterableModel = NodeModel | EdgeModel | SubgraphModel | RootGraphModel | AttributeListModel;
+export type FilterableModel = NodeModel | EdgeModel | SubgraphModel | RootGraphModel | AttributeListModel | AttributeAssignmentModel;
 
 export interface ForwardRefNode extends Partial<Port> {
   readonly id: string;
@@ -825,7 +830,8 @@ export type GraphAttributesObject<S extends Schema = EmptySchema> = AttributesOb
 export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K extends AttributeKey = AttributeKey, S extends Schema = EmptySchema> extends HasComment, HasComments<CommentPosition>, Attributes<K, GraphSchemaAttributeTypes<T, S>>, DotObjectModel<T> {
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
-  readonly statements: ReadonlyArray<NodeModel<S> | EdgeModel<S> | SubgraphModel<S> | StatementAttributeListModel<S>>;
+  readonly attributesInStatements: boolean;
+  readonly statements: ReadonlyArray<NodeModel<S> | EdgeModel<S> | SubgraphModel<S> | StatementAttributeListModel<S> | AttributeAssignmentModel>;
   addNode(node: NodeModel<S>): void;
   addEdge(edge: EdgeModel<S>): void;
   addSubgraph(subgraph: SubgraphModel<S>): void;
@@ -833,12 +839,16 @@ export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K exten
   addAttributeList(kind: "Node", attributes: AttributeListAttributes<S, "Node">): GraphCommonAttributes<S>["node"];
   addAttributeList(kind: "Edge", attributes: AttributeListAttributes<S, "Edge">): GraphCommonAttributes<S>["edge"];
   addAttributeList(kind: AttributeListKind, attributes: AttributeListAttributes<S>): StatementAttributeListModel<S>;
+  addAttributeAssignment<A extends BuiltInAttributeKey<K, GraphSchemaAttributeTypes<T, S>>>(key: A, value: Attribute<A>): AttributeAssignmentModel<A, Attribute<A>>;
+  addAttributeAssignment<A extends keyof GraphSchemaAttributeTypes<T, S> & string>(key: A, value: SchemaAttribute<GraphSchemaAttributeTypes<T, S>, A>): AttributeAssignmentModel<A, SchemaAttribute<GraphSchemaAttributeTypes<T, S>, A>>;
+  addAttributeAssignment<A extends SchemaAttributeKey<K, GraphSchemaAttributeTypes<T, S>>>(key: A, value: AttributeOf<A, GraphSchemaAttributeTypes<T, S>>): AttributeAssignmentModel<A, AttributeOf<A, GraphSchemaAttributeTypes<T, S>>>;
   existNode(nodeId: string): boolean;
   existEdge(edge: EdgeModel<S>): boolean;
   existSubgraph(subgraph: SubgraphModel<S>): boolean;
   removeNode(node: NodeModel<S> | string): void;
   removeEdge(edge: EdgeModel<S>): void;
   removeSubgraph(subgraph: SubgraphModel<S>): void;
+  removeAttributeAssignment(assignment: AttributeAssignmentModel): void;
   getSubgraphs(): SubgraphModel<S>[];
   getSubgraphs(id: string): SubgraphModel<S>[];
   getNodes(): NodeModel<S>[];
@@ -854,7 +864,7 @@ export interface GraphCommonAttributes<S extends Schema = EmptySchema> {
 
 export type GraphSchemaAttributeTypes<T extends DotObjectType, S> = [T] extends ["Graph"] ? SchemaAttributeTypes<S, "graph"> : [T] extends ["Subgraph"] ? SubgraphSchemaAttributeTypes<S> : Record<never, never>;
 
-export type GraphStatementModel = NodeModel | EdgeModel | SubgraphModel | AttributeListModel;
+export type GraphStatementModel = NodeModel | EdgeModel | SubgraphModel | AttributeListModel | AttributeAssignmentModel;
 
 export type HTMLLikeLabel = HTMLLikeValue;
 export declare namespace HTMLLikeLabel {
@@ -1094,6 +1104,13 @@ export declare namespace RankType {
 
 export type Rankdir = "TB" | "BT" | "LR" | "RL";
 
+export interface ReadonlyAttributeAssignmentModel {
+  readonly $$type: "AttributeAssignment";
+  readonly key: string;
+  readonly value: DotValue;
+  readonly comments?: ReadonlyArray<CommentModel>;
+}
+
 export interface ReadonlyAttributeListModel<K extends AttributeListKind = AttributeListKind> extends ReadonlyAttributes {
   readonly $$type: "AttributeList";
   readonly $$kind: K;
@@ -1141,6 +1158,7 @@ export interface ReadonlyGraphBaseModel<T extends "Graph" | "Subgraph" = "Graph"
     readonly edge: ReadonlyAttributeListModel<"Edge">;
     readonly node: ReadonlyAttributeListModel<"Node">;
   };
+  readonly attributesInStatements?: boolean;
   readonly statements: ReadonlyArray<ReadonlyGraphStatementModel>;
   existNode(nodeId: string): boolean;
   getNodes(): ReadonlyArray<ReadonlyNodeModel>;
@@ -1150,7 +1168,7 @@ export interface ReadonlyGraphBaseModel<T extends "Graph" | "Subgraph" = "Graph"
   getSubgraphs(id: string): ReadonlyArray<ReadonlySubgraphModel>;
 }
 
-export type ReadonlyGraphStatementModel = ReadonlyNodeModel | ReadonlyEdgeModel | ReadonlySubgraphModel | ReadonlyAttributeListModel;
+export type ReadonlyGraphStatementModel = ReadonlyNodeModel | ReadonlyEdgeModel | ReadonlySubgraphModel | ReadonlyAttributeListModel | ReadonlyAttributeAssignmentModel;
 
 export interface ReadonlyHasComments {
   readonly comments?: ReadonlyArray<CommentModel>;
@@ -1361,6 +1379,8 @@ export type ViewPort = `${Double},${Double},${Double},${Double},${Double}` | `${
 export declare function escString(value: string): EscStringValue;
 
 export declare function htmlLike(markup: string): HTMLLikeValue;
+
+export declare function isAttributeAssignmentModel<T>(object: T): object is NarrowedModel<T, "AttributeAssignment">;
 
 export declare function isAttributeListModel<T>(object: T): object is NarrowedModel<T, "AttributeList">;
 

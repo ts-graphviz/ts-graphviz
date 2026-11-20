@@ -306,14 +306,14 @@ describe('one prop at a time', () => {
       "digraph "G" {
         // note
         subgraph "cluster_x" {
-          label = "Y";
-          color = "red";
           edge [
             color = "blue";
           ];
           node [
             shape = "circle";
           ];
+          label = "Y";
+          color = "red";
         }
       }"
     `);

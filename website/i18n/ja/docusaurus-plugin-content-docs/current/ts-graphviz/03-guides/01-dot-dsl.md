@@ -130,13 +130,41 @@ digraph((g) => {
 });
 ```
 
+### グラフの属性は DOT の文 {#a-graphs-attributes-are-dot-statements}
+
+グラフやサブグラフの DSL では、属性名は DOT の `rankdir = LR;` と同じく DOT の文です。`g.rankdir = 'LR'` は、実行した位置に、実行するたびに `rankdir = "LR";` を書き込みます（グラフ属性の代入です。Graphviz では後の代入が前の代入を上書きします）。書き込み専用で、`g.rankdir` を読むか `delete g.rankdir` すると、コード `TSG_ERR_WRITE_ONLY_PROPERTY` を持つ `TypeError` を投げます。`undefined` を代入すると、コード `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` を持つ `TypeError` を投げます。JavaScript やツールがどのオブジェクトにも問い合わせる名前（`then`、`toJSON`、`Object.prototype` の名前）は `undefined` と読めるので、グラフの DSL を await したり文字列化したりできます。
+
+ファクトリの属性引数は本体の最初の代入を書き込み、グラフの属性はモデル（`modelOf(g).getAttribute`、`setAttribute`）で読み書きします。グラフの属性はその代入であり、別の表はありません。`getAttribute(key)` はそのキーの最後の代入の値です（`graph [...]` リストの値は読みません）。`setAttribute(key, value)` はそのキーの最初の代入の値を変えて残りを削除し、代入がなければ本体の先頭（すでにある代入の後）に追加します。`removeAttribute(key)` はそのキーの代入をすべて削除し、`getAttributeNames()` は代入されたキーを並べます。コンストラクタやファクトリの属性は、渡した順で最初の代入になります。
+
+```typescript
+import { digraph, modelOf, toDot } from 'ts-graphviz';
+
+const G = digraph('G', { bgcolor: 'white' }, (g) => {
+  g.node('a');
+  g.bgcolor = 'gray'; // ここに bgcolor = "gray";
+  g.node('b');
+});
+
+console.log(toDot(G));
+// digraph "G" {
+//   bgcolor = "white";
+//   "a";
+//   bgcolor = "gray";
+//   "b";
+// }
+console.log(modelOf(G).getAttribute('bgcolor')); // 'gray'（最後の代入）
+```
+
+`ts-graphviz/legacy` では、3.x と同じく属性名はグラフ自身の属性で、読み取りも削除もできます。
+
 ## DSL にあるもの、モデルにあるもの {#what-is-on-the-dsl-and-what-on-the-model}
 
 DSL は DOT の語彙だけを持つので、その名前はどれも Graphviz の属性ではなく、エディターの補完には属性と少数の DSL のメンバーが並びます（自分のスキーマに `port` のような同じ名前の属性があるときは、モデルの `getAttribute` / `setAttribute` で読み書きします）。
 
 | DSL にあるもの | 意味 |
 | --- | --- |
-| `a.label`、`a.id`、`a.comment`、`g.size` など | Graphviz の属性 |
+| `a.label`、`a.id`、`a.comment` など | ノード、エッジ、既定属性リストの Graphviz の属性 |
+| `g.size = '7,7'`、`s.label = 'S'` など | グラフやサブグラフのグラフ属性の代入（`size = "7,7";`）。書き込み専用 |
 | `g.node(...)`、`g.edge(...)`、`g.subgraph(...)`、`g.graph(...)` | DOT の文（グラフとサブグラフ） |
 | `a.port('p')` | エッジの端点にする、ポート付きのノード |
 | `a.addComment('note')` | DOT ソースに書き込むコメント |
@@ -248,6 +276,8 @@ console.log(toDot(G));
 
 `fromDot` はソースの既定属性の文をその位置に残すので、`node [color=red]; a; node [color=blue]; b` は Graphviz と同じく `a` が赤、`b` が青になります。ノード自身に設定した属性（`g.node('a', { color: 'green' })`）は、常に既定値より優先されます。
 
+グラフ属性の代入（本体にある `bgcolor=gray;`）は、Graphviz にとっては書かれた位置の `graph [bgcolor=gray]` と同じです。`g.bgcolor = 'gray'` は実行した位置に代入を追加し（[グラフの属性は DOT の文](#a-graphs-attributes-are-dot-statements)を参照）、`fromDot` はどの代入も書かれた位置に残します。
+
 3.x は既定属性の文をすべてグラフごとに一組の既定値にまとめ、先頭に書き出していたため、他の文の後に書いた既定値もそれより前のものに適用されていました。v4 への移行中に 3.x と同じ出力を保つには、`ts-graphviz/legacy` から import します。`ts-graphviz` と同じ名前を持ち、ファクトリーと `fromDot` が 3.x のクラス（`legacyModels`）を使います。このエントリーは非推奨で、v5 で削除されます。そのままの名前でエクスポートされるクラス（`Digraph`、`Graph`、`Subgraph`）は、ここでも v4 のクラスです。グラフを自分で作る場合は `LegacyDigraph`、`LegacyGraph`、`LegacySubgraph` を使ってください。
 
 ```typescript
@@ -299,6 +329,10 @@ digraph((g) => {
 ### 他の文の後に書いた既定値で 3.x の出力が変わった
 
 v4 では、DOT と同じく、その既定値は後に書いたものにだけ適用されます。グラフ全体に適用したい既定値は他の文より前に書くか、当面は `ts-graphviz/legacy` から import して 3.x の出力を保ってください。
+
+### `g.rankdir` を読むと例外になる
+
+グラフの DSL では、属性名は DOT の文を書き込みます。グラフの属性はモデルで読みます。`modelOf(g).getAttribute('rankdir')` は `rankdir` の最後の代入の値で、`modelOf(g).statements` には各代入が書かれた位置にあります（`isAttributeAssignmentModel` で絞り込めます）。
 
 ### `attributes` はどこへ行ったのか
 

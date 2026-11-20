@@ -47,7 +47,7 @@ export abstract class AttributesBase<
     name: K,
   ): AttributeOf<K, E> | undefined;
   public getAttribute(name: string): unknown {
-    return this.#attrs.get(name);
+    return this.readAttribute(name);
   }
 
   public setAttribute<K extends BuiltInAttributeKey<T, E>>(
@@ -64,21 +64,44 @@ export abstract class AttributesBase<
   ): void;
   public setAttribute(name: string, value: unknown): void {
     if (value !== null && value !== undefined) {
-      this.#attrs.set(name, value);
+      this.writeAttribute(name, value);
     }
   }
 
   public removeAttribute(name: SchemaAttributeKey<T, E>): void {
-    this.#attrs.delete(name);
+    this.deleteAttribute(name);
   }
 
   public hasAttribute(name: SchemaAttributeKey<T, E>): boolean {
-    return this.#attrs.has(name);
+    return this.attributeNames().includes(name);
   }
 
   public getAttributeNames(): SchemaAttributeKey<T, E>[] {
     // The names were given through the typed methods.
-    return Array.from(this.#attrs.keys()) as SchemaAttributeKey<T, E>[];
+    return this.attributeNames() as SchemaAttributeKey<T, E>[];
+  }
+
+  // Where the attributes are kept: a table of the object's own here. A graph
+  // keeps them as statements (see GraphBase).
+
+  /** @hidden */
+  protected readAttribute(name: string): unknown {
+    return this.#attrs.get(name);
+  }
+
+  /** @hidden */
+  protected writeAttribute(name: string, value: unknown): void {
+    this.#attrs.set(name, value);
+  }
+
+  /** @hidden */
+  protected deleteAttribute(name: string): void {
+    this.#attrs.delete(name);
+  }
+
+  /** @hidden */
+  protected attributeNames(): string[] {
+    return Array.from(this.#attrs.keys());
   }
 
   public setAttributes(

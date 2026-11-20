@@ -2,6 +2,7 @@ import { fromModel } from '@ts-graphviz/ast';
 import {
   type AnyModelTypes,
   type Attribute,
+  type AttributeAssignmentModel,
   type AttributeKey,
   type AttributeListKind,
   type AttributeListModel,
@@ -150,7 +151,11 @@ describe('without a schema', () => {
       >();
       expectTypeOf(g.statements).toEqualTypeOf<
         ReadonlyArray<
-          NodeModel | EdgeModel | SubgraphModel | AttributeListModel
+          | NodeModel
+          | EdgeModel
+          | SubgraphModel
+          | AttributeListModel
+          | AttributeAssignmentModel
         >
       >();
       g.addAttributeList('Node', { label: 'x', rank: 'same' });
@@ -376,6 +381,13 @@ describe('a schema', () => {
       expectTypeOf(g.getAttribute('hoge')).toEqualTypeOf<string | undefined>();
       // @ts-expect-error a string
       g.setAttribute('hoge', 1);
+      const assignment = g.addAttributeAssignment('hoge', 'x');
+      expectTypeOf(assignment.value).toEqualTypeOf<string>();
+      // @ts-expect-error a string
+      g.addAttributeAssignment('hoge', 1);
+      // @ts-expect-error not a graph attribute
+      g.addAttributeAssignment('data-id', 1);
+      g.removeAttributeAssignment(assignment);
       const list = g.addAttributeList('Node', { 'data-id': 1 });
       expectTypeOf(list.getAttribute('data-id')).toEqualTypeOf<
         number | undefined

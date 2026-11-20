@@ -1,23 +1,32 @@
 import {
+  type Attribute,
+  type AttributeAssignmentModel,
   type AttributeKey,
   type AttributeListAttributes,
   type AttributeListKind,
   type AttributeListModel,
+  type AttributeOf,
+  type AttributesObject,
+  type BuiltInAttributeKey,
   type ClusterSubgraphAttributeKey,
   type CommentModel,
   type CommentOptions,
   type CommentPosition,
   type DotObjectType,
+  type DotValue,
   type EdgeAttributeKey,
   type EdgeModel,
   type EmptySchema,
   type GraphBaseModel,
   type GraphCommonAttributes,
   type GraphSchemaAttributeTypes,
+  isAttributeAssignmentModel,
   modelOf,
   type NodeAttributeKey,
   type NodeModel,
   type Schema,
+  type SchemaAttribute,
+  type SchemaAttributeKey,
   type SchemaAttributeTypes,
   type StatementAttributeListModel,
   type SubgraphAttributeKey,
@@ -27,6 +36,7 @@ import {
 } from '@ts-graphviz/common';
 import { AttributeList } from '../attributes/AttributeList.js';
 import { AttributesBase } from '../attributes/AttributesBase.js';
+import { AttributeAssignment } from './AttributeAssignment.js';
 import { CommentList, GRAPH_POSITIONS } from './comment-list.js';
 
 /**
@@ -48,6 +58,17 @@ export abstract class GraphBase<
 {
   public abstract get $$type(): T;
   public readonly id?: string;
+
+  /**
+   * @param attributes - The graph's attributes, set once its fields are
+   * (they may be its statements).
+   */
+  constructor(
+    attributes?: AttributesObject<K, GraphSchemaAttributeTypes<T, S>>,
+  ) {
+    super();
+    if (attributes !== undefined) this.setAttributes(attributes);
+  }
 
   readonly #comments: CommentList = new CommentList(GRAPH_POSITIONS);
 
@@ -119,16 +140,21 @@ export abstract class GraphBase<
     | EdgeModel<S>
     | SubgraphModel<S>
     | StatementAttributeListModel<S>
+    | AttributeAssignmentModel
   > {
     return Array.from(this.#statements) as (
       | NodeModel<S>
       | EdgeModel<S>
       | SubgraphModel<S>
       | StatementAttributeListModel<S>
+      | AttributeAssignmentModel
     )[];
   }
 
-  /** Nodes, edges and subgraphs in the order they were added. */
+  /**
+   * Nodes, edges, subgraphs, attribute assignments and default attribute
+   * statements in the order they were added.
+   */
   #statements = new Set<object>();
 
   #nodes = new Set<NodeModel<S>>();
@@ -203,6 +229,88 @@ export abstract class GraphBase<
     return true;
   }
 
+  /**
+   * Whether the graph's attributes are its graph attribute assignments
+   * (`key = value;` in its statements) instead of a table of its own:
+   * `true` here; the deprecated classes of `legacyModels` return `false`.
+   *
+   * Then `getAttribute(key)` is the value of the last assignment of `key`
+   * (Graphviz also applies the `graph [...]` lists among the statements;
+   * those are not read here), `setAttribute(key, value)` sets
+   * the value of the first assignment of `key` and removes the others, or,
+   * when there is none, adds one at the start of the body (after the
+   * assignments already there), `removeAttribute(key)` removes every
+   * assignment of `key`, and `getAttributeNames()` lists the keys assigned,
+   * in the order they first are: the attributes behave as an
+   * insertion-ordered map, as other objects' do. The constructor's attributes are such assignments, in their
+   * order. `fromModel` writes no attributes apart: they are statements.
+   */
+  public get attributesInStatements(): boolean {
+    return true;
+  }
+
+  /** @hidden */
+  protected override readAttribute(name: string): unknown {
+    if (!this.attributesInStatements) return super.readAttribute(name);
+    let value: unknown;
+    for (const s of this.#statements) {
+      if (isAttributeAssignmentModel(s) && s.key === name) value = s.value;
+    }
+    return value;
+  }
+
+  /** @hidden */
+  protected override writeAttribute(name: string, value: unknown): void {
+    if (!this.attributesInStatements) {
+      super.writeAttribute(name, value);
+      return;
+    }
+    let first: AttributeAssignmentModel | undefined;
+    for (const s of this.#statements) {
+      if (!isAttributeAssignmentModel(s) || s.key !== name) continue;
+      // Every statement of the graph was added as a model of its kind.
+      if (first === undefined) first = s as AttributeAssignmentModel;
+      else this.#statements.delete(s);
+    }
+    if (first !== undefined) {
+      first.value = value as DotValue;
+      return;
+    }
+    const statements = Array.from(this.#statements);
+    let at = 0;
+    while (
+      at < statements.length &&
+      isAttributeAssignmentModel(statements[at])
+    ) {
+      at++;
+    }
+    statements.splice(at, 0, new AttributeAssignment(name, value as DotValue));
+    this.#statements = new Set(statements);
+  }
+
+  /** @hidden */
+  protected override deleteAttribute(name: string): void {
+    if (!this.attributesInStatements) {
+      super.deleteAttribute(name);
+      return;
+    }
+    for (const s of this.#statements) {
+      if (isAttributeAssignmentModel(s) && s.key === name) {
+        this.#statements.delete(s);
+      }
+    }
+  }
+
+  /** @hidden */
+  protected override attributeNames(): string[] {
+    if (!this.attributesInStatements) return super.attributeNames();
+    const names = new Set<string>();
+    for (const s of this.#statements) {
+      if (isAttributeAssignmentModel(s)) names.add(s.key);
+    }
+    return Array.from(names);
+  }
+
   public addAttributeList(
     kind: 'Graph',
     attributes: AttributeListAttributes<S, 'Graph'>,
@@ -252,6 +360,44 @@ export abstract class GraphBase<
     list.setAttributes(attributes);
     this.#statements.add(list);
     return list;
+  }
+
+  public addAttributeAssignment<
+    A extends BuiltInAttributeKey<K, GraphSchemaAttributeTypes<T, S>>,
+  >(key: A, value: Attribute<A>): AttributeAssignmentModel<A, Attribute<A>>;
+  public addAttributeAssignment<
+    A extends keyof GraphSchemaAttributeTypes<T, S> & string,
+  >(
+    key: A,
+    value: SchemaAttribute<GraphSchemaAttributeTypes<T, S>, A>,
+  ): AttributeAssignmentModel<
+    A,
+    SchemaAttribute<GraphSchemaAttributeTypes<T, S>, A>
+  >;
+  public addAttributeAssignment<
+    A extends SchemaAttributeKey<K, GraphSchemaAttributeTypes<T, S>>,
+  >(
+    key: A,
+    value: AttributeOf<A, GraphSchemaAttributeTypes<T, S>>,
+  ): AttributeAssignmentModel<
+    A,
+    AttributeOf<A, GraphSchemaAttributeTypes<T, S>>
+  >;
+  public addAttributeAssignment(
+    key: string,
+    value: DotValue,
+  ): AttributeAssignmentModel {
+    // Always where it is added, whatever the graph's class: it is a
+    // statement of its own, which 3.x did not have.
+    const assignment = new AttributeAssignment(key, value);
+    this.#statements.add(assignment);
+    return assignment;
+  }
+
+  public removeAttributeAssignment(assignment: AttributeAssignmentModel): void {
+    const model = modelOf(assignment);
+    // Only an assignment: a node or another statement keeps its place.
+    if (isAttributeAssignmentModel(model)) this.#statements.delete(model);
   }
 
   public existNode(nodeId: string): boolean {

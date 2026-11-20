@@ -87,7 +87,7 @@ describe('the DSL', () => {
       modelOf(e).setAttributes({ style: 'dashed' });
       expect(e.style).toBe('dashed');
       modelOf(g).setAttribute('rankdir', 'LR');
-      expect(g.rankdir).toBe('LR');
+      expect(modelOf(g).getAttribute('rankdir')).toBe('LR');
     });
     expect(toDot(G)).toContain('rankdir = "LR";');
   });

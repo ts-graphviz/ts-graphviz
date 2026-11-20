@@ -77,6 +77,22 @@ export interface ReadonlyAttributeListModel<
 }
 
 /**
+ * A graph attribute assignment (`color=blue;` in a graph's body), to read.
+ *
+ * Every {@link AttributeAssignmentModel} is one.
+ * @group Models
+ */
+export interface ReadonlyAttributeAssignmentModel {
+  readonly $$type: 'AttributeAssignment';
+  /** The attribute's name. */
+  readonly key: string;
+  /** The attribute's value. */
+  readonly value: DotValue;
+  /** The comments attached to the object, in the order they were added. */
+  readonly comments?: ReadonlyArray<CommentModel>;
+}
+
+/**
  * A node, to read.
  *
  * Every {@link NodeModel} is one. As an edge target (a {@link NodeRef}),
@@ -140,7 +156,8 @@ export type ReadonlyGraphStatementModel =
   | ReadonlyNodeModel
   | ReadonlyEdgeModel
   | ReadonlySubgraphModel
-  | ReadonlyAttributeListModel;
+  | ReadonlyAttributeListModel
+  | ReadonlyAttributeAssignmentModel;
 
 /**
  * A graph or subgraph, to read: its attributes, default attribute lists and
@@ -172,6 +189,12 @@ export interface ReadonlyGraphBaseModel<
     readonly edge: ReadonlyAttributeListModel<'Edge'>;
     readonly node: ReadonlyAttributeListModel<'Node'>;
   };
+  /**
+   * Whether the graph's attributes are its graph attribute assignments (see
+   * {@link GraphBaseModel.attributesInStatements}); without it, a table of
+   * its own.
+   */
+  readonly attributesInStatements?: boolean;
   /**
    * The graph's contents in the order they were added (see
    * {@link GraphBaseModel.statements}).

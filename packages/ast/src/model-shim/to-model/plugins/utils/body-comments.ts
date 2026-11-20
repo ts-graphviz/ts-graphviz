@@ -24,8 +24,9 @@ type Container = {
  * - comments after the last such statement are the body's (`'end'`).
  *
  * Without locations (an AST built in code) no comment trails. A statement
- * that is not a model, a graph attribute assignment (`color=blue`), takes
- * none: the comments before it lead the next model.
+ * that is not a model, a graph attribute assignment (`color=blue`) made one
+ * of the graph's own attributes by the legacy conversion, takes none: the
+ * comments before it lead the next model.
  */
 export class BodyComments {
   #pending: CommentASTNode[] = [];

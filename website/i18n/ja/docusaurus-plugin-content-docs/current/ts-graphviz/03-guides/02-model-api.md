@@ -62,11 +62,12 @@ g.addEdge(new Edge([a, b]));
 | --- | --- |
 | `id` | ルートグラフ、サブグラフ、ノードの名前（DOT での ID） |
 | `getNodes()`、`getEdges()`、`getSubgraphs()` | グラフのノード、エッジ、サブグラフを順に並べた新しい配列。`getNodes()` が返すのはノード文で、エッジにだけ出てくるノードは含みません（[よくある質問](./01-dot-dsl.md#エッジにだけ出てくるノードが-getnodes-に入らない)を参照） |
-| `statements` | グラフのノード、エッジ、サブグラフ、先頭以外の既定属性の文を追加した順に並べたもの。`toDot` はこの順に書き出します。グラフ自身の属性と先頭の既定値はその前に書き出されます |
+| `statements` | グラフのノード、エッジ、サブグラフ、グラフ属性の代入、先頭以外の既定属性の文を追加した順に並べたもの。`toDot` はこの順に書き出します。グラフ自身の属性と先頭の既定値はその前に書き出されます |
 | `getNodes(id)`、`getSubgraphs(id)` | その id で宣言されたノードやサブグラフを、宣言の順に得る。DOT と同じく `a; b; a [color=red]` は `a` を 2 度宣言し、宣言ごとに別のノードモデルになる |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | グラフにあるかどうか |
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 取り除く |
 | `addAttributeList(kind, attributes)` | 既定属性の文（`node [...]` など）をその位置に追加して返す |
+| `addAttributeAssignment(key, value)`、`removeAttributeAssignment(assignment)` | グラフ属性の代入（`color=blue;`）を最後の文として追加して返す。取り除く |
 
 `removeNode` が取り除くのは、そのグラフのノード文だけです。そのノードへのエッジや、サブグラフの中にあるそのノードの文は残り、Graphviz はそれらを描くときにノードを作り直します。ノードを消したい場合は、すべてのサブグラフで、エッジのグループ（`b -> { a c }`）のメンバーも含めて、それらも取り除いてください。
 
@@ -142,6 +143,31 @@ console.log(toDot(g));
 
 他のどの文よりも前に追加した文は、先頭の既定値に加わります。`attributes`（`attributes.node` など）は非推奨です。これは先頭の既定値だけを指します。
 
+## グラフ属性の代入
+
+グラフの本体にある `bgcolor=gray;` は、Graphviz にとっては書かれた位置の `graph [bgcolor=gray]` と同じです。後の代入がこれを上書きし、これが既定値になるのは後に続くサブグラフだけです。`addAttributeAssignment(key, value)` は代入をグラフの最後の文として追加し、`AttributeAssignmentModel` を返します。これは `key` と `value` を持ち（`value` を設定するとその位置のまま変わります）、コメントも持てます。`removeAttributeAssignment` で取り除けます。グラフの属性のメソッドはこれらの文を扱います。グラフの属性はその代入であり、別の表はありません。`getAttribute(key)` はそのキーの最後の代入の値です（`graph [...]` リストの値は読みません）。`setAttribute(key, value)` はそのキーの最初の代入の値を変えて残りを削除し、代入がなければ本体の先頭（すでにある代入の後）に追加します。`removeAttribute(key)` はそのキーの代入をすべて削除し、`getAttributeNames()` は代入されたキーを並べます。コンストラクタやファクトリの属性は、渡した順で最初の代入になります。
+
+```typescript
+import { Digraph, Node, toDot } from 'ts-graphviz';
+
+const g = new Digraph();
+g.setAttribute('bgcolor', 'white'); // 最初の文
+g.addNode(new Node('a'));
+const later = g.addAttributeAssignment('bgcolor', 'gray'); // その位置に書き出される
+g.addNode(new Node('b'));
+later.value = 'lightgray';
+
+console.log(toDot(g));
+// digraph {
+//   bgcolor = "white";
+//   "a";
+//   bgcolor = "lightgray";
+//   "b";
+// }
+```
+
+`fromDot` は本体のどの代入も書かれた位置に残し、`toDot` はそこに書き戻すので、グラフ、その DOT、読み戻したグラフは同じ文を持ちます。`fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` は `'LR'` で、代入は `statements` の最初にあります。`ts-graphviz/legacy` は 3.x と同じく、どの代入もグラフ自身の属性にします。DOT DSL では、`g.rankdir = 'LR'` が実行した位置に代入を追加します。値が `null` か `undefined`、またはキーが文字列でない場合は、コード `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` を持つ `TypeError` を投げます。
+
 ## コメント
 
 コメント以外のどのモデルもコメントを持てます。`addComment(text, { position, kind })` はコメントを追加して返し、`comments` で一覧を得て、`removeComment(comment)` で取り除けます。コメントは凍結された `CommentModel` で、`text`、`kind`（`'Slash'`、`'Block'`、`'Macro'`、または `fromModel` の `commentKind` オプションに従う `undefined`）、`position`（`'leading'`、`'trailing'`、グラフやサブグラフでは `'end'`）を持ちます。
@@ -162,7 +188,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` は文と文の間のコメントを種類と位置ごと保ち、`toDot` は同じ位置に書き戻します。例外が 2 つあります。文の中のコメント（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）は保たれません。また、グラフ属性の代入（`color = blue;`）は文より前に書き出されるので、その隣のコメントは次の文の先頭コメントになります。モデルの `comment` は非推奨で、最初の先頭コメントを読み書きします。
+`fromDot` は文と文の間のコメントを種類と位置ごと保ち、`toDot` は同じ位置に書き戻します。例外が 2 つあります。文の中のコメント（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）は保たれません。また、`ts-graphviz/legacy` ではグラフ属性の代入（`color = blue;`）がグラフ自身の属性になり、文より前に書き出されるので、その隣のコメントは次の文の先頭コメントになります。モデルの `comment` は非推奨で、最初の先頭コメントを読み書きします。
 
 ## モデルの型ガード
 

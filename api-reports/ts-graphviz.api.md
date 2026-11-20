@@ -6,13 +6,18 @@
 export * from "@ts-graphviz/common";
 export * from "@ts-graphviz/core";
 
+export interface AttributeAssignmentDSL<T extends AttributeAssignmentModel> extends ModelDSLMembers<T> {
+  readonly key: T["key"];
+  readonly value: T["value"];
+}
+
 export type AttributeListDSL<T extends AttributeListModel, K extends AttributeListKind, A extends AttributeKey> = AttributeListDSLMembers<T, K> & AttributeProperties<A>;
 
 export interface AttributeListDSLMembers<T extends AttributeListModel, K extends AttributeListKind> extends ModelDSLMembers<T> {
   readonly $$kind: K;
 }
 
-export type DSL<T extends AnyDotObjectModel, M extends ModelTypes = ModelTypes> = T extends NodeModel ? NodeDSL<T> : T extends EdgeModel ? EdgeDSL<T> : T extends SubgraphModel ? SubgraphDSL<T, M> : T extends RootGraphModel ? RootGraphDSL<T, M> : T extends AttributeListModel<infer K, infer A> ? AttributeListDSL<T, K, A> : T extends DotModel ? DotDSL<T> : never;
+export type DSL<T extends AnyDotObjectModel, M extends ModelTypes = ModelTypes> = T extends NodeModel ? NodeDSL<T> : T extends EdgeModel ? EdgeDSL<T> : T extends SubgraphModel ? SubgraphDSL<T, M> : T extends RootGraphModel ? RootGraphDSL<T, M> : T extends AttributeListModel<infer K, infer A> ? AttributeListDSL<T, K, A> : T extends AttributeAssignmentModel ? AttributeAssignmentDSL<T> : T extends DotModel ? DotDSL<T> : never;
 
 export type DSLEdgeTargetLikeTuple = ReadonlyEdgeTargetLikeTuple | readonly [from: DSLNodeRefLike | readonly DSLNodeRefLike[], to: DSLNodeRefLike | readonly DSLNodeRefLike[], ...rest: (DSLNodeRefLike | readonly DSLNodeRefLike[])[]];
 

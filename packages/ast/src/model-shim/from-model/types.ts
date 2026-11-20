@@ -4,6 +4,7 @@ import type {
 } from '@ts-graphviz/common';
 import type { CreateElement } from '../../builder/types.js';
 import type {
+  AttributeASTNode,
   AttributeListASTNode,
   CommentKind,
   DotASTNode,
@@ -21,6 +22,7 @@ import type {
  * If U is 'Dot', the type is mapped to a {@link DotASTNode}.
  * If U is 'Graph', the type is mapped to a {@link GraphASTNode}.
  * If U is 'AttributeList', the type is mapped to an {@link AttributeListASTNode}.
+ * If U is 'AttributeAssignment', the type is mapped to an {@link AttributeASTNode}.
  * If U is 'Edge', the type is mapped to an {@link EdgeASTNode}.
  * If U is 'Node', the type is mapped to a {@link NodeASTNode}.
  * If U is 'Subgraph', the type is mapped to a {@link SubgraphASTNode}.
@@ -37,13 +39,15 @@ export type ModelToAST<T> =
         ? GraphASTNode
         : U extends 'AttributeList'
           ? AttributeListASTNode
-          : U extends 'Edge'
-            ? EdgeASTNode
-            : U extends 'Node'
-              ? NodeASTNode
-              : U extends 'Subgraph'
-                ? SubgraphASTNode
-                : never
+          : U extends 'AttributeAssignment'
+            ? AttributeASTNode
+            : U extends 'Edge'
+              ? EdgeASTNode
+              : U extends 'Node'
+                ? NodeASTNode
+                : U extends 'Subgraph'
+                  ? SubgraphASTNode
+                  : never
     : never;
 
 /**

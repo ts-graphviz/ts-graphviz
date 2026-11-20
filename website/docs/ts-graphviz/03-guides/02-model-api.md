@@ -62,11 +62,12 @@ g.addEdge(new Edge([a, b]));
 | --- | --- |
 | `id` | the name of a root graph, subgraph or node (its ID in DOT) |
 | `getNodes()`, `getEdges()`, `getSubgraphs()` | the graph's nodes, edges and subgraphs, in order, as a new array; `getNodes()` gives the node statements, not the nodes that appear only in edges (see [the FAQ](./01-dot-dsl.md#a-node-that-only-appears-in-an-edge-is-not-in-getnodes)) |
-| `statements` | the graph's nodes, edges, subgraphs and default attribute statements after the leading ones, in the order they were added, which `toDot` writes in that order; the graph's own attributes and the leading defaults are written before them |
+| `statements` | the graph's nodes, edges, subgraphs, graph attribute assignments and default attribute statements after the leading ones, in the order they were added, which `toDot` writes in that order; the graph's own attributes and the leading defaults are written before them |
 | `getNodes(id)`, `getSubgraphs(id)` | the nodes or subgraphs declared with the id, in order; as in DOT, `a; b; a [color=red]` declares `a` twice, and each declaration is a node model of its own |
 | `existNode(id)`, `existEdge(edge)`, `existSubgraph(subgraph)` | whether the graph has it |
 | `removeNode(nodeOrId)`, `removeEdge(edge)`, `removeSubgraph(subgraph)` | take it out |
 | `addAttributeList(kind, attributes)` | add a default attribute statement (`node [...]` and so on) where the graph is, and return it |
+| `addAttributeAssignment(key, value)`, `removeAttributeAssignment(assignment)` | add a graph attribute assignment (`color=blue;`) as the last statement and return it; take one out |
 
 `removeNode` takes out the node statement of this graph only: an edge to the node stays, as does a statement of it in a subgraph, and Graphviz creates the node again when it renders them. Where the node should go, remove those too, in every subgraph and with the members of edge groups (`b -> { a c }`):
 
@@ -142,6 +143,31 @@ console.log(toDot(g));
 
 A statement added before any other joins the leading defaults. `attributes` (`attributes.node` and so on) is deprecated: it is the leading defaults only.
 
+## Graph attribute assignments
+
+In a graph's body, `bgcolor=gray;` is to Graphviz the same as `graph [bgcolor=gray]` where it is written: a later one overrides it, and it is the default of the subgraphs that follow it only. `addAttributeAssignment(key, value)` adds one as the graph's last statement and returns it, an `AttributeAssignmentModel` with its `key` and `value` (setting `value` changes it where it is) that takes comments; `removeAttributeAssignment` takes it out. The graph's attribute methods work on these statements: a graph's attributes are its assignments, with no table apart. `getAttribute(key)` is the value of the last assignment of `key` (not of a `graph [...]` list); `setAttribute(key, value)` sets the first assignment of `key` and removes the others, or adds one at the start of the body (after the assignments there) when there is none; `removeAttribute(key)` removes every assignment of `key`; `getAttributeNames()` lists the keys assigned. The constructor's and the factory's attributes are the first assignments, in their order.
+
+```typescript
+import { Digraph, Node, toDot } from 'ts-graphviz';
+
+const g = new Digraph();
+g.setAttribute('bgcolor', 'white'); // the first statement
+g.addNode(new Node('a'));
+const later = g.addAttributeAssignment('bgcolor', 'gray'); // where it is
+g.addNode(new Node('b'));
+later.value = 'lightgray';
+
+console.log(toDot(g));
+// digraph {
+//   bgcolor = "white";
+//   "a";
+//   bgcolor = "lightgray";
+//   "b";
+// }
+```
+
+`fromDot` keeps every assignment of a body where it is written, and `toDot` writes them back there, so a graph, its DOT and the graph read back have the same statements: `fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` is `'LR'`, and the assignment is the first of its `statements`. `ts-graphviz/legacy` makes every one an own attribute, as 3.x did. In the DOT DSL, `g.rankdir = 'LR'` adds an assignment where it runs. A value of `null` or `undefined`, or a key that is not a string, throws a `TypeError` with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`.
+
 ## Comments
 
 Every model but a comment takes comments: `addComment(text, { position, kind })` adds one and returns it, `comments` lists them, and `removeComment(comment)` takes one out. A comment is a frozen `CommentModel` with its `text`, `kind` (`'Slash'`, `'Block'` or `'Macro'`, or `undefined` for `fromModel`'s `commentKind` option) and `position` (`'leading'`, `'trailing'`, or on a graph or subgraph `'end'`).
@@ -162,7 +188,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` keeps the comments between statements, with their kind and place, and `toDot` writes them back there. Two exceptions: a comment inside a statement (`a -> /* note */ b;`, `a [ /* note */ label = x ]`) is not kept, and a graph attribute assignment (`color = blue;`) is written before the statements, so a comment next to one leads the next statement instead. `comment` on a model is deprecated: it reads and sets the first leading comment.
+`fromDot` keeps the comments between statements, with their kind and place, and `toDot` writes them back there. Two exceptions: a comment inside a statement (`a -> /* note */ b;`, `a [ /* note */ label = x ]`) is not kept, and with `ts-graphviz/legacy` a graph attribute assignment (`color = blue;`) is the graph's own attribute, written before the statements, so a comment next to one leads the next statement instead. `comment` on a model is deprecated: it reads and sets the first leading comment.
 
 ## The model guards
 

@@ -135,8 +135,9 @@ function applySubgraph(
  *
  * @param statements - The array of AST nodes representing graph statements to apply.
  * @param legacy - Whether a node or a subgraph declared again adds to the
- * first one with its id, as 3.x did (the deprecated legacy plugins), instead
- * of being a declaration of its own.
+ * first one with its id, and a graph attribute assignment sets the graph's
+ * own attribute, as 3.x did (the deprecated legacy plugins), instead of
+ * each being a statement of its own.
  */
 export function applyStatements(
   context: ConvertToModelContext,
@@ -152,13 +153,21 @@ export function applyStatements(
         comments.statement(subgraph, stmt);
         break;
       }
-      case 'Attribute':
-        graph.setAttribute(
-          idFromLiteral(stmt.key) as AttributeKey,
-          valueFromLiteral(stmt.value) as AttributeValue,
-        );
-        comments.statement(undefined, stmt);
+      case 'Attribute': {
+        const key = idFromLiteral(stmt.key) as AttributeKey;
+        const value = valueFromLiteral(stmt.value) as AttributeValue;
+        // A statement where it is written, as Graphviz reads it (`graph
+        // [key=value]` there). The legacy conversion makes every one an own
+        // attribute, as 3.x did.
+        if (legacy) {
+          graph.setAttribute(key, value);
+          comments.statement(undefined, stmt);
+        } else {
+          const assignment = graph.addAttributeAssignment(key, value);
+          comments.statement(assignment, stmt);
+        }
         break;
+      }
       case 'Node': {
         // Converted by the node plugin each time, so a converter whose
         // plugin changes nodes applies to every mention.
@@ -221,6 +230,7 @@ export function applyStatements(
           stmt.kind,
           collectAttributes(attributes),
         );
+
         comments.statement(list, stmt);
         break;
       }

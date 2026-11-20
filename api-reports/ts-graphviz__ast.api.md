@@ -210,7 +210,7 @@ export type LiteralKind = "bare" | "quoted" | "html";
 type ModelOf<T> = T extends "Dot" ? DotModel : T extends "Graph" ? RootGraphModel : T extends "Edge" ? EdgeModel : T extends "Node" ? NodeModel : T extends "Subgraph" ? SubgraphModel : never;
 export { ModelOf as ModelOf };
 
-export type ModelToAST<T> = T extends DotObjectModel<infer U> ? U extends "Dot" ? DotASTNode : U extends "Graph" ? GraphASTNode : U extends "AttributeList" ? AttributeListASTNode : U extends "Edge" ? EdgeASTNode : U extends "Node" ? NodeASTNode : U extends "Subgraph" ? SubgraphASTNode : never : never;
+export type ModelToAST<T> = T extends DotObjectModel<infer U> ? U extends "Dot" ? DotASTNode : U extends "Graph" ? GraphASTNode : U extends "AttributeList" ? AttributeListASTNode : U extends "AttributeAssignment" ? AttributeASTNode : U extends "Edge" ? EdgeASTNode : U extends "Node" ? NodeASTNode : U extends "Subgraph" ? SubgraphASTNode : never : never;
 
 export interface NodeASTNode extends ASTBaseParentNode<AttributeASTNode | CommentASTNode>, NodeASTProperties {
   type: "Node";

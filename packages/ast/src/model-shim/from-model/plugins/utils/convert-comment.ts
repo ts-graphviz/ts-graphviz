@@ -51,6 +51,7 @@ const POSITIONS: Readonly<Record<string, ReadonlyArray<CommentPosition>>> = {
   Node: ['leading', 'trailing'],
   Edge: ['leading', 'trailing'],
   AttributeList: ['leading', 'trailing'],
+  AttributeAssignment: ['leading', 'trailing'],
   Graph: ['leading', 'trailing', 'end'],
   Subgraph: ['leading', 'trailing', 'end'],
   Dot: ['leading', 'end'],

@@ -1,0 +1,20 @@
+---
+"@ts-graphviz/common": major
+"@ts-graphviz/core": major
+"@ts-graphviz/ast": major
+"@ts-graphviz/react": minor
+"ts-graphviz": major
+---
+
+A graph's attributes are its graph attribute assignments, statements where they are written
+
+In a graph's body, `bgcolor=gray;` is to Graphviz the same as `graph [bgcolor=gray]` where it is written: a later one overrides it, and it is the default only of the subgraphs that follow it. 3.x made every assignment one of the graph's own attributes, written before every statement, so `digraph { a; graph [bgcolor=red]; bgcolor=gray; b }` read with `fromDot` and written with `toDot` rendered red where the source renders gray.
+
+A new model keeps an assignment where it is, and a graph or subgraph keeps no attribute table apart: its attributes are these statements, so the DSL, the model and DOT hold them in the same shape: `AttributeAssignmentModel` (`$$type: 'AttributeAssignment'`, `key`, `value`, leading and trailing comments), the class `AttributeAssignment`, the read-only `ReadonlyAttributeAssignmentModel` and the guard `isAttributeAssignmentModel`. It is one of a graph's `statements`.
+
+- `addAttributeAssignment(key, value)` adds one as the graph's last statement and returns it, typed by the graph's attribute keys and schema; setting its `value` changes it in place. `removeAttributeAssignment(assignment)` takes it out. A key that is not a string or a `null` / `undefined` value throws a `TypeError` with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`.
+- **A graph's attribute methods work on its assignments.** `getAttribute(key)` is the value of the last assignment of `key` (Graphviz also applies `graph [...]` lists, which `getAttribute` does not read); `setAttribute(key, value)` sets the first assignment of `key` and removes the others (with their comments), or adds one at the start of the body, after the assignments there; `removeAttribute(key)` removes every assignment of `key`; `getAttributeNames()` lists the keys assigned, in the order they first are. The constructor's and the factories' attributes are the first assignments, in their order. `GraphBaseModel.attributesInStatements` (`true`; `false` for the deprecated classes of `legacyModels`, which keep a table as in 3.x) tells `fromModel` not to write attributes apart. A default attribute statement added after them is a statement in its place, not one of the leading lists.
+- **The DOT DSL of a graph or subgraph writes its attribute names as assignments**: `g.rankdir = 'LR'` adds `rankdir = "LR";` where it runs, each time it runs. Reading `g.rankdir` or `delete g.rankdir` throws a `TypeError` with the new code `TSG_ERR_WRITE_ONLY_PROPERTY`; assigning `undefined` throws `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`. Names JavaScript and tools look up on any object (`then`, `toJSON`, those of `Object.prototype`) read as `undefined`. Read the graph's attributes on the model (`modelOf(g).getAttribute`). Node, edge and attribute list DSLs keep their attribute properties. The types still let a graph DSL's attribute be read (TypeScript has no write-only mapped properties).
+- **`toModel` (and `fromDot`) makes every assignment of a body an `AttributeAssignmentModel` in its place**, the first ones included, with the comments around it, and `fromModel` writes each back as `key = value;` there: a graph, its DOT and the graph read back have the same statements. `fromDot('digraph { rankdir=LR; a; rankdir=TB }').getAttribute('rankdir')` is `'TB'`, the last assignment.
+- `ts-graphviz/legacy` keeps 3.x (a table of attributes): its DSL's names are the graph's own attributes, and its `fromDot` (`@ts-graphviz/ast/legacy`'s `toModel`) makes every assignment an own attribute.
+- `DotObjectType`, `GraphStatementModel`, `ReadonlyGraphStatementModel`, `FilterableModel` and `ModelToAST` include the new model; code that switches on a statement's `$$type` meets `'AttributeAssignment'`. `GraphBaseModel` has the two methods, so a class that implements the interface itself needs them too. `@ts-graphviz/react` re-exports the guard.

@@ -229,9 +229,16 @@ describe('fromDot and toDot keep comments, their kind and their place', () => {
     ]);
   });
 
-  test('a comment after a graph attribute assignment leads the next statement', () => {
+  test("a comment after a graph attribute assignment is the assignment's", () => {
     const g = fromDot('digraph {\n  color = blue; // after\n  a\n}');
-    expect(brief(g.getNodes('a')[0]?.comments ?? [])).toEqual([
+    expect(brief(g.statements[0]?.comments ?? [])).toEqual([
+      ['after', 'Slash', 'trailing'],
+    ]);
+    expect(g.getNodes('a')[0]?.comments).toEqual([]);
+    // As 3.x did, ts-graphviz/legacy makes the assignment the graph's own
+    // attribute, and the comment leads the next statement.
+    const l = legacy.fromDot('digraph {\n  color = blue; // after\n  a\n}');
+    expect(brief(l.getNodes('a')[0]?.comments ?? [])).toEqual([
       ['after', 'Slash', 'leading'],
     ]);
   });

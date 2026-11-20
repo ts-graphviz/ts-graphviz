@@ -15,6 +15,7 @@ import {
   type ModelKit,
   Node,
 } from 'ts-graphviz';
+import { bodyOf } from './summarize.js';
 
 const legacyModelKit: ModelKit = createModelKit(legacyModels);
 
@@ -166,7 +167,10 @@ type DefaultsKind = keyof DefaultsSpec;
  *   the node's attributes (a node already mentioned is mentioned again);
  * - `mention`: that node again for a node of the graph, with more
  *   attributes, before or after its own `node` step;
- * - `subgraph` / `edge`: `subgraphs[index]` / `edges[index]`.
+ * - `subgraph` / `edge`: `subgraphs[index]` / `edges[index]`;
+ * - `assign`: a graph attribute assignment (`label=x;`) where it is; with
+ *   the deprecated `legacyModels`, the graph's own attribute, as 3.x read
+ *   one.
  */
 export type GraphOp =
   | { op: 'attribute'; index: number }
@@ -175,7 +179,8 @@ export type GraphOp =
   | { op: 'node'; index: number }
   | { op: 'mention'; node: number; attributes: Attributes }
   | { op: 'subgraph'; index: number }
-  | { op: 'edge'; index: number };
+  | { op: 'edge'; index: number }
+  | { op: 'assign'; key: string; value: string };
 
 /** The steps a subgraph is built with: no edges, no mentions. */
 export type SubgraphOp = Exclude<GraphOp, { op: 'mention' | 'edge' }>;
@@ -264,6 +269,13 @@ const moreDefaults = fc.record({
   attributes: attributes.filter((a) => a.length > 0),
 });
 
+/** A graph attribute assignment. */
+const moreAssignments = fc.record({
+  op: fc.constant('assign' as const),
+  key: stringAttributeKey,
+  value: dotString(),
+});
+
 /** No attributes; a new array each time, typed as mutable. */
 const noAttributes: fc.Arbitrary<Attributes> = fc
   .constant(null)
@@ -346,9 +358,10 @@ const subgraphSpec: fc.Arbitrary<SubgraphSpec> = fc.letrec<{
         { arbitrary: fc.array(tie('subgraph'), { maxLength: 2 }), weight: 1 },
       ),
       more: fc.array(moreDefaults, { maxLength: 1 }),
+      assignments: fc.array(moreAssignments, { maxLength: 1 }),
     })
-    .chain(({ more, ...spec }) =>
-      interleaved<SubgraphOp>([...fixedOps(spec), ...more]).map(
+    .chain(({ more, assignments, ...spec }) =>
+      interleaved<SubgraphOp>([...fixedOps(spec), ...more, ...assignments]).map(
         (ops): SubgraphSpec => ({ ...spec, ops }),
       ),
     ),
@@ -405,13 +418,15 @@ export const graphSpec: fc.Arbitrary<GraphSpec> = fc
           { maxLength: 2 },
         ),
         more: fc.array(moreDefaults, { maxLength: 2 }),
+        assignments: fc.array(moreAssignments, { maxLength: 2 }),
       })
-      .chain(({ edges, mentions, more }) => {
+      .chain(({ edges, mentions, more, assignments }) => {
         const built: GraphSpec = { ...spec, edges };
         return interleaved<GraphOp>([
           ...fixedOps(built),
           ...mentions,
           ...more,
+          ...assignments,
         ]).map((ops): GraphSpec => ({ ...built, ops }));
       }),
   );
@@ -481,6 +496,12 @@ function applyCommonOp(
     case 'subgraph':
       applySubgraph(g, spec.subgraphs[op.index], kit);
       break;
+    case 'assign':
+      // In place; a graph of the deprecated classes, read back with the 3.x
+      // conversion, has its own attribute instead, as in 3.x.
+      if (kit === legacyModelKit) g.setAttribute(op.key as 'label', op.value);
+      else g.addAttributeAssignment(op.key as 'label', op.value);
+      break;
   }
 }
 
@@ -543,25 +564,10 @@ export function buildGraph(spec: GraphSpec): RootGraphModel {
 }
 
 /**
- * Where each statement of a graph stands, subgraphs included: the kind of
- * each, a node's id, a kept default statement's kind and attributes. What
- * the statements hold is compared by `summarize`.
+ * Where each statement of a graph stands, subgraphs included: its body as
+ * DOT has it ({@link bodyOf}). What the statements hold is compared by
+ * `summarize`.
  */
 export function statementOrder(g: GraphBaseModel): unknown[] {
-  return g.statements.map((s) => {
-    switch (s.$$type) {
-      case 'Node':
-        return ['node', s.id];
-      case 'Edge':
-        return ['edge'];
-      case 'Subgraph':
-        return ['subgraph', s.id, statementOrder(s)];
-      default:
-        return [
-          'defaults',
-          s.$$kind,
-          [...s.values].sort(([a], [b]) => a.localeCompare(b)),
-        ];
-    }
-  });
+  return bodyOf(g);
 }

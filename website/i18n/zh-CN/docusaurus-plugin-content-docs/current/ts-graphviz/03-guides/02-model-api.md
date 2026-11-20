@@ -62,11 +62,12 @@ g.addEdge(new Edge([a, b]));
 | --- | --- |
 | `id` | 根图、子图或节点的名字（DOT 中的 ID） |
 | `getNodes()`、`getEdges()`、`getSubgraphs()` | 按顺序返回图中的节点、边和子图（每次一个新数组）；`getNodes()` 返回的是节点语句，不包括只出现在边中的节点（参见[常见问题](./01-dot-dsl.md#只出现在边中的节点不在-getnodes-里)） |
-| `statements` | 按添加顺序排列的节点、边、子图以及开头之外的默认属性语句，`toDot` 按此顺序输出；图自身的属性和开头的默认值写在它们之前 |
+| `statements` | 按添加顺序排列的节点、边、子图、图属性赋值以及开头之外的默认属性语句，`toDot` 按此顺序输出；图自身的属性和开头的默认值写在它们之前 |
 | `getNodes(id)`、`getSubgraphs(id)` | 按声明顺序获取以该 id 声明的节点或子图；与 DOT 一样，`a; b; a [color=red]` 声明了两次 `a`，每次声明都是一个独立的节点模型 |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | 图中是否存在 |
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 移除 |
 | `addAttributeList(kind, attributes)` | 在当前位置添加一条默认属性语句（`node [...]` 等）并返回它 |
+| `addAttributeAssignment(key, value)`、`removeAttributeAssignment(assignment)` | 把图属性赋值（`color=blue;`）作为最后一条语句添加并返回它；移除它 |
 
 `removeNode` 只移除本图中的节点语句：指向该节点的边，以及子图中该节点的语句都会保留，Graphviz 渲染它们时会重新创建这个节点。若要去掉该节点，请在所有子图中一并移除它们，包括边分组（`b -> { a c }`）中的成员：
 
@@ -142,6 +143,31 @@ console.log(toDot(g));
 
 在其他任何语句之前添加的语句会并入开头的默认值。`attributes`（`attributes.node` 等）已弃用：它只表示开头的默认值。
 
+## 图属性赋值
+
+在图的主体中，`bgcolor=gray;` 对 Graphviz 来说等同于写在该位置的 `graph [bgcolor=gray]`：之后的赋值会覆盖它，而且它只作为之后子图的默认值。`addAttributeAssignment(key, value)` 把一条赋值作为图的最后一条语句添加，并返回一个 `AttributeAssignmentModel`，它带有 `key` 和 `value`（设置 `value` 会在原位置修改它），也可以带注释；`removeAttributeAssignment` 移除它。图的属性方法作用于这些语句：图的属性就是它的赋值，没有单独的表。`getAttribute(key)` 是该键最后一条赋值的值（不读取 `graph [...]` 列表的值）；`setAttribute(key, value)` 修改该键第一条赋值的值并删除其余的赋值，没有赋值时则在主体开头（已有赋值之后）添加一条；`removeAttribute(key)` 删除该键的所有赋值；`getAttributeNames()` 列出被赋值的键。构造函数和工厂函数的属性按给出的顺序成为最前面的赋值。
+
+```typescript
+import { Digraph, Node, toDot } from 'ts-graphviz';
+
+const g = new Digraph();
+g.setAttribute('bgcolor', 'white'); // 第一条语句
+g.addNode(new Node('a'));
+const later = g.addAttributeAssignment('bgcolor', 'gray'); // 写在原位置
+g.addNode(new Node('b'));
+later.value = 'lightgray';
+
+console.log(toDot(g));
+// digraph {
+//   bgcolor = "white";
+//   "a";
+//   bgcolor = "lightgray";
+//   "b";
+// }
+```
+
+`fromDot` 会把主体中的每条赋值保留在原位置，`toDot` 也会写回原处，因此图、它的 DOT 和读回的图具有相同的语句：`fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` 为 `'LR'`，而该赋值是 `statements` 中的第一条。`ts-graphviz/legacy` 与 3.x 一样，把每条赋值都当作图自身的属性。在 DOT DSL 中，`g.rankdir = 'LR'` 会在执行的位置添加一条赋值。值为 `null` 或 `undefined`，或者键不是字符串时，会抛出带有代码 `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` 的 `TypeError`。
+
 ## 注释
 
 除注释外，每个模型都可以带注释：`addComment(text, { position, kind })` 添加一条注释并返回它，`comments` 列出所有注释，`removeComment(comment)` 移除其中一条。注释是冻结的 `CommentModel`，包含 `text`、`kind`（`'Slash'`、`'Block'`、`'Macro'`，或按 `fromModel` 的 `commentKind` 选项输出的 `undefined`）和 `position`（`'leading'`、`'trailing'`，在图或子图上还可以是 `'end'`）。
@@ -162,7 +188,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` 会保留语句之间的注释及其种类和位置，`toDot` 会把它们写回原处。有两个例外：语句内部的注释（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）不会保留；图属性赋值（`color = blue;`）会写在各语句之前，因此它旁边的注释会成为下一条语句的前置注释。模型的 `comment` 已弃用：它读写第一条前置注释。
+`fromDot` 会保留语句之间的注释及其种类和位置，`toDot` 会把它们写回原处。有两个例外：语句内部的注释（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）不会保留；在 `ts-graphviz/legacy` 中，图属性赋值（`color = blue;`）是图自身的属性，会写在各语句之前，因此它旁边的注释会成为下一条语句的前置注释。模型的 `comment` 已弃用：它读写第一条前置注释。
 
 ## 模型的类型守卫
 

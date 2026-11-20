@@ -1,3 +1,4 @@
+import * as astLegacy from '@ts-graphviz/ast/legacy';
 import fc from 'fast-check';
 import {
   type Compass,
@@ -139,9 +140,10 @@ describe('fromModel and toModel', () => {
           // Default statements kept in place stay in place only when read
           // back with the classes that keep them; a graph built with the
           // default classes has none, so reads back the same with either.
-          const back = toModel(fromModel(model), {
-            models: specs.some((s) => s.ordered) ? models : legacy,
-          });
+          // Graphs of the deprecated classes only: read back as 3.x did.
+          const back = specs.some((s) => s.ordered)
+            ? toModel(fromModel(model), { models })
+            : astLegacy.toModel(fromModel(model), { models: legacy });
           expect(back.graphs.map(summarize)).toStrictEqual(
             model.graphs.map(summarize),
           );

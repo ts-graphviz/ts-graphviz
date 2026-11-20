@@ -1,6 +1,7 @@
 import {
   type AnyDotObjectModel,
   type Attribute,
+  type AttributeAssignmentModel,
   type AttributeKey,
   type AttributeListKind,
   type AttributeListModel,
@@ -9,6 +10,7 @@ import {
   type EdgeModel,
   type ForwardRefNode,
   type GraphBaseModel,
+  isAttributeAssignmentModel,
   isAttributeListModel,
   isDotModel,
   isEdgeModel,
@@ -40,7 +42,16 @@ import { isLegacyKit } from './legacy-kit.js';
  * The DOT DSL of a model: the model seen as DOT, with only DOT's words.
  *
  * - Attributes are properties under their own names: `n.label = 'A'`,
- *   `g.rankdir`, `delete n.label` (assigning `undefined` deletes too).
+ *   `n.label`, `delete n.label` (assigning `undefined` deletes too) on the
+ *   DSL of a node, an edge and a default attribute list.
+ * - On a graph's or subgraph's DSL they are DOT statements:
+ *   `g.rankdir = 'LR'` writes `rankdir = "LR";` there, a graph attribute
+ *   assignment, each time it runs (a later one overrides an earlier one in
+ *   Graphviz). Reading or deleting one throws a `TypeError` with code
+ *   `TSG_ERR_WRITE_ONLY_PROPERTY`, and so does assigning `undefined` (with
+ *   `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`). Read a graph's attributes on
+ *   the model (`modelOf(g).getAttribute`). With a kit of
+ *   `ts-graphviz/legacy` they are the graph's own attributes, as in 3.x.
  * - The DOT statements `node`, `edge`, `subgraph` and `graph` are methods
  *   of a graph's DSL.
  * - A node's DSL has `port`, every DSL `addComment`, `$$type` (and an
@@ -74,9 +85,11 @@ export type DSL<
         ? RootGraphDSL<T, M>
         : T extends AttributeListModel<infer K, infer A>
           ? AttributeListDSL<T, K, A>
-          : T extends DotModel
-            ? DotDSL<T>
-            : never;
+          : T extends AttributeAssignmentModel
+            ? AttributeAssignmentDSL<T>
+            : T extends DotModel
+              ? DotDSL<T>
+              : never;
 
 /** An edge target a DSL takes: a node's DSL as well as a node or an id. */
 type DSLNodeRefLike = NodeRefLike | ModelView<ReadonlyNodeModel>;
@@ -179,6 +192,17 @@ export interface AttributeListDSLMembers<
 }
 
 /**
+ * The DSL of a graph attribute assignment (`color=blue;`): its `key` and
+ * `value` to read. Change the value on the model (`modelOf(x).value`).
+ * @group DSL
+ */
+export interface AttributeAssignmentDSL<T extends AttributeAssignmentModel>
+  extends ModelDSLMembers<T> {
+  readonly key: T['key'];
+  readonly value: T['value'];
+}
+
+/**
  * The DSL of a DOT source's model ({@link DotModel}): its graphs are on the
  * model (`modelOf(x).graphs`).
  * @group DSL
@@ -186,7 +210,10 @@ export interface AttributeListDSLMembers<
 export type DotDSL<T extends DotModel> = ModelDSLMembers<T>;
 
 /**
- * The DSL of a root graph (`graph` or `digraph`).
+ * The DSL of a root graph (`graph` or `digraph`). Its attribute properties
+ * are written only: each assignment adds a graph attribute assignment (see
+ * {@link DSL}); TypeScript cannot type a mapped property as write-only, so
+ * a read type-checks and throws.
  * @group DSL
  */
 export type RootGraphDSL<
@@ -195,7 +222,8 @@ export type RootGraphDSL<
 > = GraphDSLMembers<T, M> & AttributeProperties<AttributeKeysOf<T>>;
 
 /**
- * The DSL of a subgraph.
+ * The DSL of a subgraph. Its attribute properties are written only, as a
+ * root graph's ({@link RootGraphDSL}).
  * @group DSL
  */
 export type SubgraphDSL<
@@ -465,7 +493,8 @@ function isModel(value: unknown): value is AnyDotObjectModel {
     isSubgraphModel(value) ||
     isRootGraphModel(value) ||
     isDotModel(value) ||
-    isAttributeListModel(value)
+    isAttributeListModel(value) ||
+    isAttributeAssignmentModel(value)
   );
 }
 
@@ -592,13 +621,49 @@ interface AnyAttributes {
 }
 
 /**
- * The attributes a DSL's names read and write: every model but a `Dot` holds
- * its own.
+ * The attributes a DSL's names read and write: every model but a `Dot` and
+ * an attribute assignment holds its own.
  */
 function attributesOf(model: AnyDotObjectModel): AnyAttributes | undefined {
-  return model.$$type === 'Dot'
+  return model.$$type === 'Dot' || model.$$type === 'AttributeAssignment'
     ? undefined
     : (model as unknown as AnyAttributes);
+}
+
+function writeOnly(key: string): TypeError {
+  return withCode(
+    new TypeError(
+      `Cannot read or delete ${JSON.stringify(key.slice(0, 64))} on the DOT DSL of a graph: assigning it writes a graph attribute assignment. Read the graph's attributes on modelOf(g)`,
+    ),
+    'TSG_ERR_WRITE_ONLY_PROPERTY',
+  );
+}
+
+/**
+ * Names JavaScript and tools look up on any object: `await` and
+ * `Promise.resolve` (`then`), `JSON.stringify` (`toJSON`), test matchers and
+ * printers, and those of `Object.prototype`. A graph's DSL reads them as
+ * `undefined` instead of throwing, so it can be returned from an async
+ * function, stringified or printed.
+ */
+const PROBED: ReadonlySet<string> = new Set([
+  ...Object.getOwnPropertyNames(Object.prototype),
+  'then',
+  'toJSON',
+  'asymmetricMatch',
+  '$$typeof',
+  'nodeType',
+  '@@__IMMUTABLE_ITERABLE__@@',
+  '@@__IMMUTABLE_RECORD__@@',
+]);
+
+/**
+ * Whether a DSL's attribute names write graph attribute assignments: those
+ * of a graph or subgraph, except with a kit of `ts-graphviz/legacy`, whose
+ * names are the graph's own attributes, as in 3.x.
+ */
+function assigns(target: object, model: AnyDotObjectModel): boolean {
+  return isGraph(model) && !isLegacyKit(kitFor(target));
 }
 
 function unwritable(key: PropertyKey): TypeError {
@@ -624,6 +689,7 @@ const MEMBERS: Readonly<Record<string, ReadonlySet<string>>> = {
   Node: new Set(['$$type', 'addComment', 'port']),
   Edge: new Set(['$$type', 'addComment']),
   AttributeList: new Set(['$$type', '$$kind', 'addComment']),
+  AttributeAssignment: new Set(['$$type', 'addComment', 'key', 'value']),
   Graph: new Set(['$$type', 'addComment']),
   Subgraph: new Set(['$$type', 'addComment']),
   Dot: new Set(['$$type', 'addComment']),
@@ -658,6 +724,10 @@ const handler: ProxyHandler<object> = {
       case 'member':
         return member(model, key);
       default:
+        if (assigns(target, model)) {
+          if (PROBED.has(key)) return undefined;
+          throw writeOnly(key);
+        }
         return attributesOf(model)?.getAttribute(key);
     }
   },
@@ -671,13 +741,29 @@ const handler: ProxyHandler<object> = {
     ) {
       throw unwritable(key);
     }
-    if (value === undefined) attributes.removeAttribute(key);
-    else attributes.setAttribute(key, value);
+    if (assigns(target, model)) {
+      // A DOT statement, each time: the model checks the value (`undefined`
+      // is not one).
+      (
+        (model as GraphBaseModel).addAttributeAssignment as (
+          key: string,
+          value: unknown,
+        ) => unknown
+      ).call(model, key, value);
+    } else if (value === undefined) {
+      attributes.removeAttribute(key);
+    } else {
+      attributes.setAttribute(key, value);
+    }
     return true;
   },
   deleteProperty(target, key) {
     const model = modelFor(target);
     if (typeof key === 'string' && kindOf(model, key) === 'attribute') {
+      if (assigns(target, model)) {
+        if (PROBED.has(key)) return true;
+        throw writeOnly(key);
+      }
       attributesOf(model)?.removeAttribute(key);
     }
     return true;
@@ -686,22 +772,29 @@ const handler: ProxyHandler<object> = {
     const model = modelFor(target);
     if (key === MODEL) return true;
     if (typeof key !== 'string') return false;
-    return kindOf(model, key) !== 'attribute'
-      ? true
-      : attributesOf(model)?.getAttribute(key) !== undefined;
+    if (kindOf(model, key) !== 'attribute') return true;
+    return (
+      !assigns(target, model) &&
+      attributesOf(model)?.getAttribute(key) !== undefined
+    );
   },
   // The attributes are the DSL's own properties: `{ ...n }`, `Object.keys(n)`
   // and `JSON.stringify(n)` see them. One named like a member or statement
-  // is reached on the model.
+  // is reached on the model. A graph's DSL has none: its names write.
   ownKeys(target) {
     const model = modelFor(target);
+    if (assigns(target, model)) return [];
     return (attributesOf(model)?.getAttributeNames() ?? []).filter(
       (name) => kindOf(model, name) === 'attribute',
     );
   },
   getOwnPropertyDescriptor(target, key) {
     const model = modelFor(target);
-    if (typeof key !== 'string' || kindOf(model, key) !== 'attribute') {
+    if (
+      typeof key !== 'string' ||
+      kindOf(model, key) !== 'attribute' ||
+      assigns(target, model)
+    ) {
       return undefined;
     }
     const value = attributesOf(model)?.getAttribute(key);

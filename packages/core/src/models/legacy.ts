@@ -33,6 +33,10 @@ export class LegacySubgraph<
     return false;
   }
 
+  public override get attributesInStatements(): boolean {
+    return false;
+  }
+
   protected override get keepsEachNodeDeclaration(): boolean {
     return false;
   }
@@ -98,6 +102,10 @@ export class LegacyGraph<S extends Schema = EmptySchema> extends Graph<S> {
     return false;
   }
 
+  public override get attributesInStatements(): boolean {
+    return false;
+  }
+
   protected override get keepsEachNodeDeclaration(): boolean {
     return false;
   }
@@ -160,6 +168,10 @@ export class LegacyGraph<S extends Schema = EmptySchema> extends Graph<S> {
  */
 export class LegacyDigraph<S extends Schema = EmptySchema> extends Digraph<S> {
   protected override get keepsDefaultsInPlace(): boolean {
+    return false;
+  }
+
+  public override get attributesInStatements(): boolean {
     return false;
   }
 
