@@ -1,4 +1,5 @@
 import {
+  createComponents,
   createLabelContext,
   createRoot,
   Digraph,
@@ -18,7 +19,14 @@ import type {
   NodeModel,
   RootGraphModel,
 } from 'ts-graphviz';
-import { Digraph as DigraphModel, isNodeModel } from 'ts-graphviz';
+import {
+  attr,
+  createModelKit,
+  Digraph as DigraphModel,
+  defaultModelKit,
+  defineSchema,
+  isNodeModel,
+} from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
 // What users of `@ts-graphviz/react` get from its JSX types and inference.
@@ -105,5 +113,37 @@ describe('rendering', () => {
     expectTypeOf(root.getTopLevelModels<NodeModel>()).toEqualTypeOf<
       NodeModel[]
     >();
+  });
+});
+
+describe('createComponents', () => {
+  const schema = defineSchema({
+    node: { tier: attr<'core' | 'edge'>(), label: attr.override<number>() },
+    edge: { weight2: attr<number>() },
+  });
+  const C = createComponents(createModelKit({ schema }));
+
+  it('types the props with the schema of the kit', () => {
+    <C.Digraph id="G">
+      <C.Node id="a" tier="core" />
+      <C.Edge targets={['a', 'b']} weight2={1} />
+    </C.Digraph>;
+    // @ts-expect-error not a value of the schema's attribute
+    <C.Node id="a" tier="other" />;
+    // @ts-expect-error an attribute of nodes, not edges
+    <C.Edge targets={['a', 'b']} tier="core" />;
+    // @ts-expect-error without the kit, not an attribute
+    <Node id="a" tier="core" />;
+  });
+
+  it('keeps the default components as they were', () => {
+    expectTypeOf(createComponents(defaultModelKit).Node).toEqualTypeOf<
+      typeof Node
+    >();
+  });
+
+  it('takes a schema in createRoot and fromElement', () => {
+    createRoot({ models: { schema } });
+    fromElement(<C.Digraph />, { models: { schema } });
   });
 });

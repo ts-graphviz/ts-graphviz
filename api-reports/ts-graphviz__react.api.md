@@ -9,11 +9,22 @@ export type ComponentProps = ComponentProps<any>;
 
 export type ComponentType = FC<any>;
 
+export interface Components<M extends AnyModelTypes = ModelTypes> {
+  Digraph: FC<RootGraphProps<M>>;
+  Graph: FC<RootGraphProps<M>>;
+  Subgraph: {
+    <const Id extends string | undefined = undefined>(props: SubgraphProps<Id, M>): ReactElement;
+    displayName?: string;
+  };
+  Node: FC<NodeProps<M>>;
+  Edge: FC<EdgeProps<M>>;
+}
+
 export interface CreateRootOptions<Container extends AnyGraphContainer = AnyGraphContainer> {
   container?: Container | {
     readonly [MODEL]: Container;
   };
-  models?: Partial<ModelClasses>;
+  models?: ModelKitOptions;
   onUncaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
   onCaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
   onRecoverableError?: (error: unknown, errorInfo: ErrorInfo) => void;
@@ -46,13 +57,13 @@ export interface DotJSXElements {
 
 export declare const Edge: FC<EdgeProps>;
 
-export interface EdgeOptions extends EdgeAttributesObject {}
+export type EdgeOptions<M extends AnyModelTypes = ModelTypes> = EdgeAttributesObject<SchemaOf<M>>;
 
-export interface EdgeProps extends Omit<EdgeOptions, "label"> {
+export type EdgeProps<M extends AnyModelTypes = ModelTypes> = Omit<EdgeOptions<M>, "label"> & {
   targets: ReadonlyEdgeTargetLikeTuple;
   label?: ReactElement | string;
-  ref?: Ref<EdgeModel>;
-}
+  ref?: Ref<M["Edge"]>;
+};
 
 export interface ErrorInfo {
   componentStack?: string;
@@ -62,7 +73,7 @@ export interface FromElementOptions<Container extends AnyGraphContainer = AnyGra
   container?: Container | {
     readonly [MODEL]: Container;
   };
-  models?: Partial<ModelClasses>;
+  models?: ModelKitOptions;
   signal?: AbortSignal;
   retries?: number;
   onCaughtError?: (error: unknown, errorInfo: ErrorInfo) => void;
@@ -71,10 +82,10 @@ export interface FromElementOptions<Container extends AnyGraphContainer = AnyGra
 
 export declare const Graph: FC<RootGraphProps>;
 
-export interface GraphBaseAttributesProps {
-  edge?: EdgeAttributesObject;
-  node?: NodeAttributesObject;
-  graph?: SubgraphAttributesObject;
+export interface GraphBaseAttributesProps<M extends AnyModelTypes = ModelTypes> {
+  edge?: EdgeAttributesObject<SchemaOf<M>>;
+  node?: NodeAttributesObject<SchemaOf<M>>;
+  graph?: SubgraphAttributesObject<SchemaOf<M>>;
 }
 
 export declare const GraphPortal: FC<GraphPortalProps>;
@@ -105,41 +116,43 @@ export interface LabelContext<in out T> {
 
 export declare const Node: FC<NodeProps>;
 
-export interface NodeOptions extends NodeAttributesObject {}
+export type NodeOptions<M extends AnyModelTypes = ModelTypes> = NodeAttributesObject<SchemaOf<M>>;
 
-export interface NodeProps extends Omit<NodeOptions, "label" | "xlabel"> {
+export type NodeProps<M extends AnyModelTypes = ModelTypes> = Omit<NodeOptions<M>, "label" | "xlabel"> & {
   id: string;
   label?: ReactElement | string;
   xlabel?: ReactElement | string;
-  ref?: Ref<NodeModel>;
-}
+  ref?: Ref<M["Node"]>;
+};
 
-export interface RootGraphOptions extends GraphAttributesObject, GraphBaseAttributesProps {
+export type RootGraphOptions<M extends AnyModelTypes = ModelTypes> = GraphAttributesObject<SchemaOf<M>> & GraphBaseAttributesProps<M> & {
   id?: string;
   strict?: boolean;
-}
+};
 
-export interface RootGraphProps extends Omit<RootGraphOptions, "label"> {
+export type RootGraphProps<M extends AnyModelTypes = ModelTypes> = Omit<RootGraphOptions<M>, "label"> & {
   label?: ReactElement | string;
   children?: ReactNode;
-  ref?: Ref<GraphBaseModel>;
-}
+  ref?: Ref<GraphBaseModel<DotObjectType, AttributeKey, SchemaOf<M>>>;
+};
 
 export declare const Subgraph: {
   <const Id extends string | undefined = undefined>(props: SubgraphProps<Id>): ReactElement;
   displayName?: string;
 };
 
-export type SubgraphOptions<Id extends string | undefined = string | undefined> = DistributiveOmit<SubgraphAttributesFor<Id>, "id" | "comment"> & GraphBaseAttributesProps & HasComment & {
+export type SubgraphOptions<Id extends string | undefined = string | undefined, M extends AnyModelTypes = ModelTypes> = DistributiveOmit<SubgraphAttributesFor<Id, SchemaOf<M>>, "id" | "comment"> & GraphBaseAttributesProps<M> & HasComment & {
   id?: Id;
 };
 
-export type SubgraphProps<Id extends string | undefined = string | undefined> = WithReactLabel<SubgraphOptions<Id>> & {
+export type SubgraphProps<Id extends string | undefined = string | undefined, M extends AnyModelTypes = ModelTypes> = WithReactLabel<SubgraphOptions<Id, M>> & {
   children?: ReactNode;
-  ref?: Ref<GraphBaseModel>;
+  ref?: Ref<GraphBaseModel<DotObjectType, AttributeKey, SchemaOf<M>>>;
 };
 
 export type TopLevelModel = FilterableModel;
+
+export declare function createComponents<M extends AnyModelTypes>(kit: ModelKit<M>): Components<M>;
 
 export declare function createLabelContext<T>(defaultValue: T): LabelContext<T>;
 

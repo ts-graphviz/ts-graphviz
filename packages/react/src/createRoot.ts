@@ -4,7 +4,7 @@ import type {
   AnyDotObjectModel,
   DotObjectModel,
   FilterableModel,
-  ModelClasses,
+  ModelKitOptions,
 } from 'ts-graphviz';
 import { createModelKit, MODEL, modelOf, ownOptions } from 'ts-graphviz';
 
@@ -30,10 +30,12 @@ export interface CreateRootOptions<
    */
   container?: Container | { readonly [MODEL]: Container };
   /**
-   * Model classes used to create graphs, nodes and edges.
-   * The default classes are used for the kinds left out.
+   * Model classes used to create graphs, nodes and edges, and the schema of
+   * the models (`defineSchema`), as `createModelKit` takes them. The default
+   * classes are used for the kinds left out. Components typed with the
+   * schema come from `createComponents`.
    */
-  models?: Partial<ModelClasses>;
+  models?: ModelKitOptions;
   /**
    * Called when an error is not caught by any error boundary; React has
    * then emptied the tree, and the models it showed are taken out. Also
