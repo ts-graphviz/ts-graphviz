@@ -211,27 +211,24 @@ type ClassCheck<P, K extends keyof ModelClasses> = P extends {
  * there gives its instance type, while a kind left out gives the model
  * interface of the schema.
  *
+ * @typeParam P - The options.
+ * @typeParam S - The schema of the options; leave it to its default.
  * @group Model Kit
  */
 export interface ResolvedModelTypes<
   P extends ModelKitOptions = Record<never, never>,
-> extends ModelTypes<SchemaOfOptions<P>> {
-  Dot: P extends { Dot: infer C }
-    ? Creates<C, DotModel<SchemaOfOptions<P>>>
-    : DotModel<SchemaOfOptions<P>>;
+  S extends Schema = SchemaOfOptions<P>,
+> extends ModelTypes<S> {
+  Dot: P extends { Dot: infer C } ? Creates<C, DotModel<S>> : DotModel<S>;
   Graph: P extends { Graph: infer C }
-    ? Creates<C, RootGraphModel<SchemaOfOptions<P>>>
-    : RootGraphModel<SchemaOfOptions<P>>;
+    ? Creates<C, RootGraphModel<S>>
+    : RootGraphModel<S>;
   Digraph: P extends { Digraph: infer C }
-    ? Creates<C, RootGraphModel<SchemaOfOptions<P>>>
-    : RootGraphModel<SchemaOfOptions<P>>;
+    ? Creates<C, RootGraphModel<S>>
+    : RootGraphModel<S>;
   Subgraph: P extends { Subgraph: infer C }
-    ? Creates<C, SubgraphModel<SchemaOfOptions<P>>>
-    : SubgraphModel<SchemaOfOptions<P>>;
-  Node: P extends { Node: infer C }
-    ? Creates<C, NodeModel<SchemaOfOptions<P>>>
-    : NodeModel<SchemaOfOptions<P>>;
-  Edge: P extends { Edge: infer C }
-    ? Creates<C, EdgeModel<SchemaOfOptions<P>>>
-    : EdgeModel<SchemaOfOptions<P>>;
+    ? Creates<C, SubgraphModel<S>>
+    : SubgraphModel<S>;
+  Node: P extends { Node: infer C } ? Creates<C, NodeModel<S>> : NodeModel<S>;
+  Edge: P extends { Edge: infer C } ? Creates<C, EdgeModel<S>> : EdgeModel<S>;
 }

@@ -182,23 +182,16 @@ describe('fromDot with classes of another schema', () => {
   class PlainNode extends Node {}
 
   it('does not compile', () => {
-    fromDot('a', {
-      parse: { as: 'Node' },
-      // @ts-expect-error a class of no schema with a schema
-      convert: { models: { schema, Node: PlainNode } },
-    });
-    fromDot('digraph { a }', {
-      // @ts-expect-error a class of a schema without one
-      convert: { models: { Node: MyNode } },
-      dsl: true,
-    });
-    fromDotAll('digraph { a }', {
-      // @ts-expect-error the same with fromDotAll
-      convert: { models: { schema, Node: PlainNode } },
-    });
-    legacy.fromDot('digraph { a }', {
-      // @ts-expect-error the same with ts-graphviz/legacy
-      convert: { models: { schema, Node: PlainNode } },
-    });
+    // A call on one line: the line an overload error is reported on varies.
+    const plain = { schema, Node: PlainNode };
+    const withoutSchema = { Node: MyNode };
+    // @ts-expect-error a class of no schema with a schema
+    fromDot('a', { parse: { as: 'Node' }, convert: { models: plain } });
+    // @ts-expect-error a class of a schema without one
+    fromDot('G', { convert: { models: withoutSchema }, dsl: true });
+    // @ts-expect-error the same with fromDotAll
+    fromDotAll('digraph { a }', { convert: { models: plain } });
+    // @ts-expect-error the same with ts-graphviz/legacy
+    legacy.fromDot('digraph { a }', { convert: { models: plain } });
   });
 });
