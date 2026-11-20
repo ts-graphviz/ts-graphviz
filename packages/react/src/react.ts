@@ -13,6 +13,7 @@ export * from './components/Graph.js';
 export * from './components/GraphPortal.js';
 export * from './components/Node.js';
 export * from './components/Subgraph.js';
+export * from './createComponents.js';
 export type { TopLevelModel } from './createRoot.js';
 export * from './createRoot.js';
 export * from './fromElement.js';
