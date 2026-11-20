@@ -1,6 +1,7 @@
 // Re-export type guards and types from common for convenience
 export {
   type FilterableModel,
+  isAttributeAssignmentModel,
   isAttributeListModel,
   isEdgeModel,
   isNodeModel,

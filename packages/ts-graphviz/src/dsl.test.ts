@@ -308,6 +308,41 @@ describe('DOT statements', () => {
     expect(modelOf(s).attributes.graph.get('label')).toBe('g');
   });
 
+  test('assign adds a graph attribute assignment where it is written', () => {
+    g.node('a');
+    const assignment = g.assign('label', 'G');
+    const model = modelOf(g).statements.at(-1);
+    expect(modelOf(assignment)).toBe(model);
+    expect(assignment.$$type).toBe('AttributeAssignment');
+    expect([assignment.key, assignment.value]).toEqual(['label', 'G']);
+    // Not the graph's own attribute.
+    expect(g.label).toBeUndefined();
+    const s = g.subgraph('s');
+    expect(modelOf(s.assign('label', 'S')).$$type).toBe('AttributeAssignment');
+    expect(() => g.assign('label', undefined as never)).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT' }),
+    );
+  });
+
+  test("an assignment's DSL has its key and value, and no attributes", () => {
+    const assignment = g.assign('label', 'G');
+    const unwritable = expect.objectContaining({
+      code: 'TSG_ERR_UNWRITABLE_PROPERTY',
+    });
+    expect(() => {
+      (assignment as unknown as Record<string, unknown>).value = 'H';
+    }).toThrow(unwritable);
+    expect(() => {
+      (assignment as unknown as Record<string, unknown>).label = 'H';
+    }).toThrow(unwritable);
+    expect(
+      (assignment as unknown as Record<string, unknown>).label,
+    ).toBeUndefined();
+    expect(Reflect.ownKeys(assignment)).toStrictEqual([]);
+    modelOf(assignment).value = 'H';
+    expect(assignment.value).toBe('H');
+  });
+
   test('edge targets that are missing are rejected', () => {
     const n = g.node('n');
     for (const targets of [[], [n]]) {

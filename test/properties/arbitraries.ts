@@ -166,7 +166,10 @@ type DefaultsKind = keyof DefaultsSpec;
  *   the node's attributes (a node already mentioned is mentioned again);
  * - `mention`: that node again for a node of the graph, with more
  *   attributes, before or after its own `node` step;
- * - `subgraph` / `edge`: `subgraphs[index]` / `edges[index]`.
+ * - `subgraph` / `edge`: `subgraphs[index]` / `edges[index]`;
+ * - `assign`: a graph attribute assignment (`label=x;`), as `toModel`
+ *   makes one: before every other statement and `graph [...]`, one of the
+ *   graph's own attributes; after one, a statement where it is written.
  */
 export type GraphOp =
   | { op: 'attribute'; index: number }
@@ -175,7 +178,8 @@ export type GraphOp =
   | { op: 'node'; index: number }
   | { op: 'mention'; node: number; attributes: Attributes }
   | { op: 'subgraph'; index: number }
-  | { op: 'edge'; index: number };
+  | { op: 'edge'; index: number }
+  | { op: 'assign'; key: string; value: string };
 
 /** The steps a subgraph is built with: no edges, no mentions. */
 export type SubgraphOp = Exclude<GraphOp, { op: 'mention' | 'edge' }>;
@@ -264,6 +268,13 @@ const moreDefaults = fc.record({
   attributes: attributes.filter((a) => a.length > 0),
 });
 
+/** A graph attribute assignment. */
+const moreAssignments = fc.record({
+  op: fc.constant('assign' as const),
+  key: stringAttributeKey,
+  value: dotString(),
+});
+
 /** No attributes; a new array each time, typed as mutable. */
 const noAttributes: fc.Arbitrary<Attributes> = fc
   .constant(null)
@@ -346,9 +357,10 @@ const subgraphSpec: fc.Arbitrary<SubgraphSpec> = fc.letrec<{
         { arbitrary: fc.array(tie('subgraph'), { maxLength: 2 }), weight: 1 },
       ),
       more: fc.array(moreDefaults, { maxLength: 1 }),
+      assignments: fc.array(moreAssignments, { maxLength: 1 }),
     })
-    .chain(({ more, ...spec }) =>
-      interleaved<SubgraphOp>([...fixedOps(spec), ...more]).map(
+    .chain(({ more, assignments, ...spec }) =>
+      interleaved<SubgraphOp>([...fixedOps(spec), ...more, ...assignments]).map(
         (ops): SubgraphSpec => ({ ...spec, ops }),
       ),
     ),
@@ -405,13 +417,15 @@ export const graphSpec: fc.Arbitrary<GraphSpec> = fc
           { maxLength: 2 },
         ),
         more: fc.array(moreDefaults, { maxLength: 2 }),
+        assignments: fc.array(moreAssignments, { maxLength: 2 }),
       })
-      .chain(({ edges, mentions, more }) => {
+      .chain(({ edges, mentions, more, assignments }) => {
         const built: GraphSpec = { ...spec, edges };
         return interleaved<GraphOp>([
           ...fixedOps(built),
           ...mentions,
           ...more,
+          ...assignments,
         ]).map((ops): GraphSpec => ({ ...built, ops }));
       }),
   );
@@ -480,6 +494,20 @@ function applyCommonOp(
     }
     case 'subgraph':
       applySubgraph(g, spec.subgraphs[op.index], kit);
+      break;
+    case 'assign':
+      // As toModel reads it back: before every other statement (leading
+      // default statements included), one of the graph's own attributes.
+      if (
+        g.statements.length === 0 &&
+        [g.attributes.graph, g.attributes.node, g.attributes.edge].every(
+          (list) => list.getAttributeNames().length === 0,
+        )
+      ) {
+        g.setAttribute(op.key as 'label', op.value);
+      } else {
+        g.addAttributeAssignment(op.key as 'label', op.value);
+      }
       break;
   }
 }
@@ -556,6 +584,8 @@ export function statementOrder(g: GraphBaseModel): unknown[] {
         return ['edge'];
       case 'Subgraph':
         return ['subgraph', s.id, statementOrder(s)];
+      case 'AttributeAssignment':
+        return ['assignment', s.key, s.value];
       default:
         return [
           'defaults',

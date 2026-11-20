@@ -89,6 +89,7 @@ try {
 | edge with fewer than two targets or a malformed target | `TypeError` (was a bare `Error`) | `TSG_ERR_INVALID_EDGE_TARGETS` |
 | port containing `:` | `TypeError` | `TSG_ERR_INVALID_PORT` |
 | attribute list kind other than `Graph`, `Node`, `Edge` | `TypeError` | `TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND` |
+| graph attribute assignment with a key that is not a string, or a `null` / `undefined` value | `TypeError` | `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` |
 | edges to subgraphs reach more than `maxEdgeTargets` nodes | `RangeError` | `TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED` |
 | no converter / printer plugin for a node or model | `Error` | `TSG_ERR_NO_PLUGIN` |
 | an AST or model that contains itself (`stringify`, `toModel`, `fromModel`, `toDot`) | `TypeError` | `TSG_ERR_CYCLIC_STRUCTURE` |
@@ -314,6 +315,7 @@ digraph((g) => {
 - To keep the 3.x output, import from `ts-graphviz/legacy` (the same API with the 3.x classes), or pass `legacyModels` as the model classes (`withModelKit(legacyModels)`, `fromDot(source, { convert: { models: legacyModels } })`). Both are deprecated and removed in v5.
 - `addAttributeList(kind, attributes)` returns the list it adds (the DSL's `g.node({ ... })` returns its DSL); keep it to change those defaults later.
 - `graph.attributes` is deprecated, removed in v5: it is the leading defaults only. Write a default attribute statement instead.
+- A graph attribute assignment (`bgcolor=gray;` in a body) keeps its place too: Graphviz reads it as `graph [bgcolor=gray]` where it is written. `fromDot` makes one written before every other statement (default attribute statements included) one of the graph's own attributes (`getAttribute`), as before, and one written later an `AttributeAssignmentModel` in `statements`, which `toDot` writes back as `bgcolor = "gray";` in its place. 3.x made every one an own attribute, written first, so `a; graph [bgcolor=red]; bgcolor=gray` rendered red; `fromDot` of `ts-graphviz/legacy` still does. Passing `legacyModels` to `fromDot` of `ts-graphviz` does not: it uses the classes, not the 3.x conversion. To add one in place, use `addAttributeAssignment(key, value)` on a model or `g.assign(key, value)` in the DSL; `setAttribute` (`g.bgcolor = ...`) sets the graph's own attribute.
 
 ## 14. Attributes: on every object, under the DOM's names
 

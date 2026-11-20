@@ -62,11 +62,12 @@ g.addEdge(new Edge([a, b]));
 | --- | --- |
 | `id` | 根图、子图或节点的名字（DOT 中的 ID） |
 | `getNodes()`、`getEdges()`、`getSubgraphs()` | 按顺序返回图中的节点、边和子图（每次一个新数组）；`getNodes()` 返回的是节点语句，不包括只出现在边中的节点（参见[常见问题](./01-dot-dsl.md#只出现在边中的节点不在-getnodes-里)） |
-| `statements` | 按添加顺序排列的节点、边、子图以及开头之外的默认属性语句，`toDot` 按此顺序输出；图自身的属性和开头的默认值写在它们之前 |
+| `statements` | 按添加顺序排列的节点、边、子图、图属性赋值以及开头之外的默认属性语句，`toDot` 按此顺序输出；图自身的属性和开头的默认值写在它们之前 |
 | `getNodes(id)`、`getSubgraphs(id)` | 按声明顺序获取以该 id 声明的节点或子图；与 DOT 一样，`a; b; a [color=red]` 声明了两次 `a`，每次声明都是一个独立的节点模型 |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | 图中是否存在 |
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 移除 |
 | `addAttributeList(kind, attributes)` | 在当前位置添加一条默认属性语句（`node [...]` 等）并返回它 |
+| `addAttributeAssignment(key, value)`、`removeAttributeAssignment(assignment)` | 把图属性赋值（`color=blue;`）作为最后一条语句添加并返回它；移除它 |
 
 `removeNode` 只移除本图中的节点语句：指向该节点的边，以及子图中该节点的语句都会保留，Graphviz 渲染它们时会重新创建这个节点。若要去掉该节点，请在所有子图中一并移除它们，包括边分组（`b -> { a c }`）中的成员：
 
@@ -141,6 +142,31 @@ console.log(toDot(g));
 ```
 
 在其他任何语句之前添加的语句会并入开头的默认值。`attributes`（`attributes.node` 等）已弃用：它只表示开头的默认值。
+
+## 图属性赋值
+
+在图的主体中，`bgcolor=gray;` 对 Graphviz 来说等同于写在该位置的 `graph [bgcolor=gray]`：之后的赋值会覆盖它，而且它只作为之后子图的默认值。`addAttributeAssignment(key, value)` 把一条赋值作为图的最后一条语句添加，并返回一个 `AttributeAssignmentModel`，它带有 `key` 和 `value`（设置 `value` 会在原位置修改它），也可以带注释；`removeAttributeAssignment` 移除它。`setAttribute` 则设置图自身的属性，`toDot` 会把它写在所有语句之前：
+
+```typescript
+import { Digraph, Node, toDot } from 'ts-graphviz';
+
+const g = new Digraph();
+g.setAttribute('bgcolor', 'white'); // 图自身的属性：最先写出
+g.addNode(new Node('a'));
+const later = g.addAttributeAssignment('bgcolor', 'gray'); // 写在原位置
+g.addNode(new Node('b'));
+later.value = 'lightgray';
+
+console.log(toDot(g));
+// digraph {
+//   bgcolor = "white";
+//   "a";
+//   bgcolor = "lightgray";
+//   "b";
+// }
+```
+
+`fromDot` 会把写在其他所有语句（包括默认属性语句）之前的赋值当作图自身的属性，因此可以用 `getAttribute` 读取；之后的赋值则保留在原位置。`ts-graphviz/legacy` 与 3.x 一样，把每条赋值都当作图自身的属性。值为 `null` 或 `undefined`，或者键不是字符串时，会抛出带有代码 `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` 的 `TypeError`。
 
 ## 注释
 

@@ -62,11 +62,12 @@ g.addEdge(new Edge([a, b]));
 | --- | --- |
 | `id` | ルートグラフ、サブグラフ、ノードの名前（DOT での ID） |
 | `getNodes()`、`getEdges()`、`getSubgraphs()` | グラフのノード、エッジ、サブグラフを順に並べた新しい配列。`getNodes()` が返すのはノード文で、エッジにだけ出てくるノードは含みません（[よくある質問](./01-dot-dsl.md#エッジにだけ出てくるノードが-getnodes-に入らない)を参照） |
-| `statements` | グラフのノード、エッジ、サブグラフ、先頭以外の既定属性の文を追加した順に並べたもの。`toDot` はこの順に書き出します。グラフ自身の属性と先頭の既定値はその前に書き出されます |
+| `statements` | グラフのノード、エッジ、サブグラフ、グラフ属性の代入、先頭以外の既定属性の文を追加した順に並べたもの。`toDot` はこの順に書き出します。グラフ自身の属性と先頭の既定値はその前に書き出されます |
 | `getNodes(id)`、`getSubgraphs(id)` | その id で宣言されたノードやサブグラフを、宣言の順に得る。DOT と同じく `a; b; a [color=red]` は `a` を 2 度宣言し、宣言ごとに別のノードモデルになる |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | グラフにあるかどうか |
 | `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 取り除く |
 | `addAttributeList(kind, attributes)` | 既定属性の文（`node [...]` など）をその位置に追加して返す |
+| `addAttributeAssignment(key, value)`、`removeAttributeAssignment(assignment)` | グラフ属性の代入（`color=blue;`）を最後の文として追加して返す。取り除く |
 
 `removeNode` が取り除くのは、そのグラフのノード文だけです。そのノードへのエッジや、サブグラフの中にあるそのノードの文は残り、Graphviz はそれらを描くときにノードを作り直します。ノードを消したい場合は、すべてのサブグラフで、エッジのグループ（`b -> { a c }`）のメンバーも含めて、それらも取り除いてください。
 
@@ -141,6 +142,31 @@ console.log(toDot(g));
 ```
 
 他のどの文よりも前に追加した文は、先頭の既定値に加わります。`attributes`（`attributes.node` など）は非推奨です。これは先頭の既定値だけを指します。
+
+## グラフ属性の代入
+
+グラフの本体にある `bgcolor=gray;` は、Graphviz にとっては書かれた位置の `graph [bgcolor=gray]` と同じです。後の代入がこれを上書きし、これが既定値になるのは後に続くサブグラフだけです。`addAttributeAssignment(key, value)` は代入をグラフの最後の文として追加し、`AttributeAssignmentModel` を返します。これは `key` と `value` を持ち（`value` を設定するとその位置のまま変わります）、コメントも持てます。`removeAttributeAssignment` で取り除けます。`setAttribute` は代わりにグラフ自身の属性を設定し、`toDot` はそれをすべての文より前に書き出します。
+
+```typescript
+import { Digraph, Node, toDot } from 'ts-graphviz';
+
+const g = new Digraph();
+g.setAttribute('bgcolor', 'white'); // グラフ自身の属性: 最初に書き出される
+g.addNode(new Node('a'));
+const later = g.addAttributeAssignment('bgcolor', 'gray'); // その位置に書き出される
+g.addNode(new Node('b'));
+later.value = 'lightgray';
+
+console.log(toDot(g));
+// digraph {
+//   bgcolor = "white";
+//   "a";
+//   bgcolor = "lightgray";
+//   "b";
+// }
+```
+
+`fromDot` は、他のどの文よりも（既定属性の文も含めて）前に書かれた代入をグラフ自身の属性にするので、`getAttribute` で読めます。それより後の代入はその位置に残します。`ts-graphviz/legacy` は 3.x と同じく、どの代入もグラフ自身の属性にします。値が `null` か `undefined`、またはキーが文字列でない場合は、コード `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` を持つ `TypeError` を投げます。
 
 ## コメント
 

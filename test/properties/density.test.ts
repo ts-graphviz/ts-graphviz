@@ -205,6 +205,7 @@ const STEP_KIND: Record<GraphOp['op'], string> = {
   mention: 'node',
   subgraph: 'subgraph',
   edge: 'edge',
+  assign: 'attribute',
 };
 /** The place of each kind in the fixed order statements were once kept in. */
 const FIXED_RANK: Record<string, number> = {
@@ -259,6 +260,12 @@ function classifyOrder(spec: GraphSpec): string[] {
     kinds.slice(firstStatement).includes('attribute')
   ) {
     labels.push('graph attribute after a statement');
+  }
+  if (
+    firstStatement !== -1 &&
+    ops.slice(firstStatement).some((op) => op.op === 'assign')
+  ) {
+    labels.push('assignment after a statement');
   }
   if (defaultsAfterStatement(ops)) {
     labels.push('defaults after a statement');
@@ -441,6 +448,7 @@ describe('generator density', () => {
       'kind changes: 3-5': 0.25,
       'kind changes: 6+': 0.45,
       'graph attribute after a statement': 0.4,
+      'assignment after a statement': 0.45,
       'defaults after a statement': 0.6,
       'defaults kept in place': 0.3,
       'subgraph out of fixed order': 0.3,

@@ -219,6 +219,16 @@ function expected(model: RootGraphModel, root: RootGraphSummary): Expected {
           }
           break;
         }
+        case 'AttributeAssignment':
+          // `label=a;` in place: `graph [label=a]` there.
+          if (m === model) {
+            for (const [k, v] of textAttrs([
+              [statement.key, statement.value],
+            ])) {
+              graphAttributes.set(k, v);
+            }
+          }
+          break;
         case 'Node': {
           const n = g.nodes[next.node++];
           node(gvId(n.id), nd).mention(n.attributes);

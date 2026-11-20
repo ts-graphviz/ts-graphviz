@@ -174,3 +174,27 @@ export function isAttributeListModel<T>(
     field(object, '$$type') === 'AttributeList'
   );
 }
+
+/**
+ * Type guard to check if an object is an AttributeAssignmentModel.
+ *
+ * Given a model, it keeps the caller's type: a union of models narrows to
+ * its `AttributeAssignment` members. On a value of unknown type it narrows
+ * to the read-only view {@link ReadonlyAttributeAssignmentModel}, since the
+ * check looks only at `$$type` and a few fields (see {@link NarrowedModel}).
+ * An object standing for a model, such as a DOT DSL, is not one: use
+ * `modelOf` first.
+ * @param object - Object to check
+ * @returns True if the object is an AttributeAssignmentModel
+ */
+export function isAttributeAssignmentModel<T>(
+  object: T,
+): object is NarrowedModel<T, 'AttributeAssignment'> {
+  return (
+    typeof object === 'object' &&
+    object !== null &&
+    !(MODEL in object) &&
+    field(object, '$$type') === 'AttributeAssignment' &&
+    typeof field(object, 'key') === 'string'
+  );
+}

@@ -1,6 +1,7 @@
 import {
   type AnyDotObjectModel,
   type Attribute,
+  type AttributeAssignmentModel,
   type AttributeKey,
   type AttributeListKind,
   type AttributeListModel,
@@ -9,6 +10,7 @@ import {
   type EdgeModel,
   type ForwardRefNode,
   type GraphBaseModel,
+  isAttributeAssignmentModel,
   isAttributeListModel,
   isDotModel,
   isEdgeModel,
@@ -41,7 +43,8 @@ import { isLegacyKit } from './legacy-kit.js';
  *
  * - Attributes are properties under their own names: `n.label = 'A'`,
  *   `g.rankdir`, `delete n.label` (assigning `undefined` deletes too).
- * - The DOT statements `node`, `edge`, `subgraph` and `graph` are methods
+ * - The DOT statements `node`, `edge`, `subgraph` and `graph`, and
+ *   `assign` for a graph attribute assignment (`color=blue;`), are methods
  *   of a graph's DSL.
  * - A node's DSL has `port`, every DSL `addComment`, `$$type` (and an
  *   attribute list's `$$kind`).
@@ -74,9 +77,11 @@ export type DSL<
         ? RootGraphDSL<T, M>
         : T extends AttributeListModel<infer K, infer A>
           ? AttributeListDSL<T, K, A>
-          : T extends DotModel
-            ? DotDSL<T>
-            : never;
+          : T extends AttributeAssignmentModel
+            ? AttributeAssignmentDSL<T>
+            : T extends DotModel
+              ? DotDSL<T>
+              : never;
 
 /** An edge target a DSL takes: a node's DSL as well as a node or an id. */
 type DSLNodeRefLike = NodeRefLike | ModelView<ReadonlyNodeModel>;
@@ -179,6 +184,17 @@ export interface AttributeListDSLMembers<
 }
 
 /**
+ * The DSL of a graph attribute assignment (`color=blue;`): its `key` and
+ * `value` to read. Change the value on the model (`modelOf(x).value`).
+ * @group DSL
+ */
+export interface AttributeAssignmentDSL<T extends AttributeAssignmentModel>
+  extends ModelDSLMembers<T> {
+  readonly key: T['key'];
+  readonly value: T['value'];
+}
+
+/**
  * The DSL of a DOT source's model ({@link DotModel}): its graphs are on the
  * model (`modelOf(x).graphs`).
  * @group DSL
@@ -216,7 +232,7 @@ export interface GraphDSLMembers<
 
 /**
  * The DOT statements of a graph or subgraph: `node`, `edge`, `subgraph` and
- * `graph`.
+ * `graph`, and `assign` for a graph attribute assignment.
  *
  * `node`, `edge` and `subgraph` create with the DSL's kit and add to the
  * graph. Their callbacks receive what the statement gives and, second, the
@@ -433,6 +449,30 @@ export interface GraphDSLStatements<
    * ```
    */
   graph(attributes: SubgraphAttributesObject): DSL<T['attributes']['graph']>;
+
+  /**
+   * A graph attribute assignment, as `color=blue;` in DOT, where it is
+   * written: Graphviz reads it as `graph [color=blue]`, so a later one
+   * overrides it, and it is the default of the subgraphs that follow it.
+   * Unlike setting the attribute on the DSL (`g.color = 'blue'`), which
+   * sets the graph's own attribute, written before every statement.
+   * Returns the assignment's DSL.
+   *
+   * ```ts
+   * const G = digraph('G', (g) => {
+   *   g.node('a');
+   *   g.assign('color', 'blue');
+   * });
+   * // digraph "G" {
+   * //   "a";
+   * //   color = "blue";
+   * // }
+   * ```
+   */
+  assign<A extends AttributeKeysOf<T> & AttributeKey>(
+    key: A,
+    value: Attribute<A>,
+  ): DSL<AttributeAssignmentModel<A, Attribute<A>>>;
 }
 
 // ---------------------------------------------------------------------------
@@ -465,7 +505,8 @@ function isModel(value: unknown): value is AnyDotObjectModel {
     isSubgraphModel(value) ||
     isRootGraphModel(value) ||
     isDotModel(value) ||
-    isAttributeListModel(value)
+    isAttributeListModel(value) ||
+    isAttributeAssignmentModel(value)
   );
 }
 
@@ -592,11 +633,11 @@ interface AnyAttributes {
 }
 
 /**
- * The attributes a DSL's names read and write: every model but a `Dot` holds
- * its own.
+ * The attributes a DSL's names read and write: every model but a `Dot` and
+ * an attribute assignment holds its own.
  */
 function attributesOf(model: AnyDotObjectModel): AnyAttributes | undefined {
-  return model.$$type === 'Dot'
+  return model.$$type === 'Dot' || model.$$type === 'AttributeAssignment'
     ? undefined
     : (model as unknown as AnyAttributes);
 }
@@ -617,6 +658,7 @@ const STATEMENT_NAMES: ReadonlySet<string> = new Set([
   'edge',
   'subgraph',
   'graph',
+  'assign',
 ]);
 
 /** The model members a DSL has, by the model's `$$type`. */
@@ -624,6 +666,7 @@ const MEMBERS: Readonly<Record<string, ReadonlySet<string>>> = {
   Node: new Set(['$$type', 'addComment', 'port']),
   Edge: new Set(['$$type', 'addComment']),
   AttributeList: new Set(['$$type', '$$kind', 'addComment']),
+  AttributeAssignment: new Set(['$$type', 'addComment', 'key', 'value']),
   Graph: new Set(['$$type', 'addComment']),
   Subgraph: new Set(['$$type', 'addComment']),
   Dot: new Set(['$$type', 'addComment']),
@@ -863,6 +906,17 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
         );
       }
       return undefined;
+    },
+    assign(key: unknown, value: unknown): unknown {
+      // The model checks the key and the value.
+      return viewOf(
+        (
+          g.addAttributeAssignment as (
+            key: unknown,
+            value: unknown,
+          ) => AttributeAssignmentModel
+        ).call(g, key, value),
+      );
     },
   };
 }

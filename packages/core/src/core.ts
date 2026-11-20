@@ -1,6 +1,7 @@
 export * from './attributes/AttributeList.js';
 export * from './attributes/AttributesBase.js';
 export * from './attributes/AttributesGroup.js';
+export * from './models/AttributeAssignment.js';
 export * from './models/Digraph.js';
 export * from './models/Dot.js';
 export * from './models/Edge.js';

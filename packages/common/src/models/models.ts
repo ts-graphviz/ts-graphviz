@@ -387,6 +387,7 @@ type AsClusterSubgraphAttributesObject<S extends Schema> = AttributesObject<
  */
 export type DotObjectType =
   | 'AttributeList'
+  | 'AttributeAssignment'
   | 'Node'
   | 'Edge'
   | 'Subgraph'
@@ -587,7 +588,8 @@ export type GraphStatementModel =
   | NodeModel
   | EdgeModel
   | SubgraphModel
-  | AttributeListModel;
+  | AttributeListModel
+  | AttributeAssignmentModel;
 
 export interface AttributeListModel<
   K extends AttributeListKind = AttributeListKind,
@@ -598,6 +600,34 @@ export interface AttributeListModel<
     HasComments,
     DotObjectModel<'AttributeList'> {
   $$kind: K;
+}
+
+/**
+ * A graph attribute assignment in a graph's body (`color=blue;` in DOT),
+ * where it is written. Graphviz reads it as `graph [color=blue]`: it sets
+ * the graph's attribute, and the default of the subgraphs that follow it,
+ * so a later one overrides it.
+ *
+ * Added with {@link GraphBaseModel.addAttributeAssignment}, it is one of
+ * the graph's {@link GraphBaseModel.statements}.
+ *
+ * @typeParam K - The attribute key.
+ * @typeParam V - The type of the value.
+ * @group Models
+ */
+export interface AttributeAssignmentModel<
+  K extends string = string,
+  V extends DotValue = DotValue,
+> extends HasComments,
+    DotObjectModel<'AttributeAssignment'> {
+  /** The attribute's name. */
+  readonly key: K;
+  /**
+   * The attribute's value. Setting it changes the assignment where it is;
+   * `null` or `undefined` throws a `TypeError` with code
+   * `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`.
+   */
+  value: V;
 }
 
 /**
@@ -783,8 +813,8 @@ export interface GraphBaseModel<
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
   /**
    * The graph's contents in the order they were added: nodes, edges and
-   * subgraphs, and the default attribute statements added after them,
-   * which `toDot` writes in this order (after the graph's attributes and
+   * subgraphs, attribute assignments, and the default attribute statements
+   * added after them, which `toDot` writes in this order (after the graph's attributes and
    * leading default attribute lists). The deprecated classes of
    * `legacyModels` never put an {@link AttributeListModel} here.
    */
@@ -793,6 +823,7 @@ export interface GraphBaseModel<
     | EdgeModel<S>
     | SubgraphModel<S>
     | StatementAttributeListModel<S>
+    | AttributeAssignmentModel
   >;
 
   /**
@@ -836,6 +867,40 @@ export interface GraphBaseModel<
     attributes: AttributeListAttributes<S>,
   ): StatementAttributeListModel<S>;
   /**
+   * Add a graph attribute assignment (`color=blue;` in DOT) as the graph's
+   * last statement, and return it. Graphviz reads it as `graph [...]` with
+   * that one attribute, where it is written: a later assignment or
+   * `graph [...]` overrides it, and it is the default of the subgraphs that
+   * follow it. It is not one of the graph's own attributes
+   * (`getAttribute`), which are written before every statement.
+   *
+   * A key that is not a string, or a `null` or `undefined` value, throws a
+   * `TypeError` with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`.
+   */
+  addAttributeAssignment<
+    A extends BuiltInAttributeKey<K, GraphSchemaAttributeTypes<T, S>>,
+  >(key: A, value: Attribute<A>): AttributeAssignmentModel<A, Attribute<A>>;
+  /** An assignment of an attribute that the schema adds or changes. */
+  addAttributeAssignment<
+    A extends keyof GraphSchemaAttributeTypes<T, S> & string,
+  >(
+    key: A,
+    value: SchemaAttribute<GraphSchemaAttributeTypes<T, S>, A>,
+  ): AttributeAssignmentModel<
+    A,
+    SchemaAttribute<GraphSchemaAttributeTypes<T, S>, A>
+  >;
+  /** An assignment, in code generic over the schema. */
+  addAttributeAssignment<
+    A extends SchemaAttributeKey<K, GraphSchemaAttributeTypes<T, S>>,
+  >(
+    key: A,
+    value: AttributeOf<A, GraphSchemaAttributeTypes<T, S>>,
+  ): AttributeAssignmentModel<
+    A,
+    AttributeOf<A, GraphSchemaAttributeTypes<T, S>>
+  >;
+  /**
    * Check if the Node exists in the graph.
    */
   existNode(nodeId: string): boolean;
@@ -860,6 +925,8 @@ export interface GraphBaseModel<
    * Remove Subgraph from the graph.
    */
   removeSubgraph(subgraph: SubgraphModel<S>): void;
+  /** Remove a graph attribute assignment from the graph. */
+  removeAttributeAssignment(assignment: AttributeAssignmentModel): void;
   /**
    * The subgraphs in the graph, in the order they were added; a new array
    * each time. As in DOT, a subgraph may be declared more than once.
@@ -1102,4 +1169,5 @@ export type FilterableModel =
   | EdgeModel
   | SubgraphModel
   | RootGraphModel
-  | AttributeListModel;
+  | AttributeListModel
+  | AttributeAssignmentModel;

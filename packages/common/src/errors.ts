@@ -48,6 +48,8 @@ export const ERROR_CODES = [
   'TSG_ERR_INVALID_PORT',
   /** An attribute list was given a kind other than `Graph`, `Node` or `Edge` (`TypeError`). */
   'TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND',
+  /** A graph attribute assignment was given a key that is not a string, or a `null` or `undefined` value (`TypeError`). */
+  'TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT',
   /** `addComment` was given a text that is not a string, or a position or kind the object does not take (`TypeError`). */
   'TSG_ERR_INVALID_COMMENT',
   /** No converter or printer plugin handles a node or model (`Error`). */
@@ -62,7 +64,7 @@ export const ERROR_CODES = [
   'TSG_ERR_NOT_A_MODEL',
   /** `dsl` of `ts-graphviz` was given a second argument that is not a model kit (`TypeError`). */
   'TSG_ERR_NOT_A_MODEL_KIT',
-  /** A DOT DSL property that cannot be written was assigned: a DOT statement (`node`, `edge`, `subgraph`, `graph`), a symbol, or an attribute of a model that has none (`TypeError`). */
+  /** A DOT DSL property that cannot be written was assigned: a DOT statement (`node`, `edge`, `subgraph`, `graph`, `assign`), a symbol, or an attribute of a model that has none (`TypeError`). */
   'TSG_ERR_UNWRITABLE_PROPERTY',
   /** The feature is not available on the current runtime, e.g. the adapter in a browser (`Error`). */
   'TSG_ERR_UNSUPPORTED_ENVIRONMENT',

@@ -22,6 +22,7 @@ Every error ts-graphviz raises on purpose is the standard error type that fits t
 | edge with fewer than two targets, a malformed target or an invalid compass point | `TypeError` | `TSG_ERR_INVALID_EDGE_TARGETS` |
 | port containing `:` | `TypeError` | `TSG_ERR_INVALID_PORT` |
 | attribute list kind other than `Graph`, `Node`, `Edge` | `TypeError` | `TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND` |
+| graph attribute assignment with a key that is not a string, or a `null` / `undefined` value | `TypeError` | `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` |
 | no converter/printer plugin for a node | `Error` | `TSG_ERR_NO_PLUGIN` |
 | an AST or model that contains itself (`stringify`, `toModel`, `fromModel`, `toDot`) | `TypeError` | `TSG_ERR_CYCLIC_STRUCTURE` |
 | shared node objects reached more than `maxSharedNodes` times | `RangeError` | `TSG_ERR_SHARED_NODE_COUNT_EXCEEDED` |

@@ -62,11 +62,12 @@ g.addEdge(new Edge([a, b]));
 | --- | --- |
 | `id` | the name of a root graph, subgraph or node (its ID in DOT) |
 | `getNodes()`, `getEdges()`, `getSubgraphs()` | the graph's nodes, edges and subgraphs, in order, as a new array; `getNodes()` gives the node statements, not the nodes that appear only in edges (see [the FAQ](./01-dot-dsl.md#a-node-that-only-appears-in-an-edge-is-not-in-getnodes)) |
-| `statements` | the graph's nodes, edges, subgraphs and default attribute statements after the leading ones, in the order they were added, which `toDot` writes in that order; the graph's own attributes and the leading defaults are written before them |
+| `statements` | the graph's nodes, edges, subgraphs, graph attribute assignments and default attribute statements after the leading ones, in the order they were added, which `toDot` writes in that order; the graph's own attributes and the leading defaults are written before them |
 | `getNodes(id)`, `getSubgraphs(id)` | the nodes or subgraphs declared with the id, in order; as in DOT, `a; b; a [color=red]` declares `a` twice, and each declaration is a node model of its own |
 | `existNode(id)`, `existEdge(edge)`, `existSubgraph(subgraph)` | whether the graph has it |
 | `removeNode(nodeOrId)`, `removeEdge(edge)`, `removeSubgraph(subgraph)` | take it out |
 | `addAttributeList(kind, attributes)` | add a default attribute statement (`node [...]` and so on) where the graph is, and return it |
+| `addAttributeAssignment(key, value)`, `removeAttributeAssignment(assignment)` | add a graph attribute assignment (`color=blue;`) as the last statement and return it; take one out |
 
 `removeNode` takes out the node statement of this graph only: an edge to the node stays, as does a statement of it in a subgraph, and Graphviz creates the node again when it renders them. Where the node should go, remove those too, in every subgraph and with the members of edge groups (`b -> { a c }`):
 
@@ -141,6 +142,31 @@ console.log(toDot(g));
 ```
 
 A statement added before any other joins the leading defaults. `attributes` (`attributes.node` and so on) is deprecated: it is the leading defaults only.
+
+## Graph attribute assignments
+
+In a graph's body, `bgcolor=gray;` is to Graphviz the same as `graph [bgcolor=gray]` where it is written: a later one overrides it, and it is the default of the subgraphs that follow it only. `addAttributeAssignment(key, value)` adds one as the graph's last statement and returns it, an `AttributeAssignmentModel` with its `key` and `value` (setting `value` changes it where it is) that takes comments; `removeAttributeAssignment` takes it out. `setAttribute` sets the graph's own attribute instead, which `toDot` writes before every statement:
+
+```typescript
+import { Digraph, Node, toDot } from 'ts-graphviz';
+
+const g = new Digraph();
+g.setAttribute('bgcolor', 'white'); // the graph's own: written first
+g.addNode(new Node('a'));
+const later = g.addAttributeAssignment('bgcolor', 'gray'); // where it is
+g.addNode(new Node('b'));
+later.value = 'lightgray';
+
+console.log(toDot(g));
+// digraph {
+//   bgcolor = "white";
+//   "a";
+//   bgcolor = "lightgray";
+//   "b";
+// }
+```
+
+`fromDot` makes an assignment written before every other statement (default attribute statements included) one of the graph's own attributes, so `getAttribute` reads it, and keeps a later one where it is. `ts-graphviz/legacy` makes every one an own attribute, as 3.x did. A value of `null` or `undefined`, or a key that is not a string, throws a `TypeError` with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`.
 
 ## Comments
 

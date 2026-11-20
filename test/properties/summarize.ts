@@ -5,7 +5,7 @@ import type {
   RootGraphModel,
   SubgraphModel,
 } from '@ts-graphviz/common';
-import { isNodeModel } from '@ts-graphviz/common';
+import { isAttributeAssignmentModel, isNodeModel } from '@ts-graphviz/common';
 
 /**
  * A plain, order-preserving description of a model, for structural equality
@@ -29,6 +29,8 @@ interface GraphSummary {
     attributes: [string, unknown][];
   }[];
   subgraphs: GraphSummary[];
+  /** Graph attribute assignments kept in place (`color=blue;`), in order. */
+  assignments: [string, unknown][];
 }
 
 export interface RootGraphSummary extends GraphSummary {
@@ -98,6 +100,9 @@ function summarizeGraph(model: GraphBaseModel | SubgraphModel): GraphSummary {
     nodes: model.getNodes().map(summarizeNode),
     edges: model.getEdges().map(summarizeEdge),
     subgraphs: model.getSubgraphs().map(summarizeGraph),
+    assignments: model.statements
+      .filter(isAttributeAssignmentModel)
+      .map((a): [string, unknown] => [a.key, a.value]),
   };
 }
 
