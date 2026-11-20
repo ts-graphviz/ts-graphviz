@@ -53,7 +53,8 @@ export interface SanitizeOptions extends CommonParseOptions {
    * also allows the attributes it adds, each on the kind of object it is
    * given to (`node` ones on nodes and `node [...]`, `edge` ones on edges
    * and `edge [...]`, `graph`, `subgraph` and `cluster` ones in that kind
-   * of graph and its `graph [...]`), never one that reads files,
+   * of graph and its `graph [...]`; see the security model for clusters),
+   * never one that reads files,
    * and both policies the style names its `types.style` was given
    * (`values.extend('sketchy')`; names of letters only).
    */
@@ -339,10 +340,11 @@ function checkAttribute(
       key === 'style' ||
       key === 'shape' ||
       key.endsWith('color');
-    // A schema's attribute is allowed only on what its kind gives it to.
-    const ofSchema = kinds.some((kind) =>
-      rules.schemaAttributes[kind].has(name),
-    );
+    // A schema's attribute is allowed only where it gives it to every kind
+    // the object may be.
+    const ofSchema =
+      kinds.length > 0 &&
+      kinds.every((kind) => rules.schemaAttributes[kind].has(name));
     const problem = strictAttributeProblem(name, value, ownRule, ofSchema);
     if (problem !== undefined) throw unsafe(`${at} ${problem}.`);
   }
@@ -426,28 +428,33 @@ function* walk(node: ASTNode): Generator<ASTNode> {
 }
 
 /**
- * The transformer behind {@link sanitize}: throws on the first finding and
- * leaves the AST unchanged.
- */
-/**
  * The kinds of object each attribute of the source is on, as a schema names
- * them: a node's and `node [...]` are `node`, an edge's and `edge [...]`
- * `edge`, and an assignment or `graph [...]` in a graph `graph`, in a
- * cluster (an id starting with `cluster`, any case, or `cluster` set to a
- * true value in it) `cluster`, and in another subgraph `subgraph`.
+ * them; a schema must give the attribute to every one of them. A node's and
+ * `node [...]` are `node`, an edge's and `edge [...]` `edge`, and an
+ * assignment or `graph [...]` in the root graph `graph`, in a subgraph whose
+ * id starts with `cluster` (any case) `cluster`, and in another subgraph
+ * `subgraph`, or both `subgraph` and `cluster` when the source sets
+ * `cluster` anywhere: Graphviz then decides by that value, as the last
+ * assignment and the defaults it inherits give it, which this does not
+ * follow.
+ *
+ * The recursion follows the nesting of the AST, which the parser bounds
+ * (`maxNestingDepth`), as {@link walk} does.
  */
 function attributeKinds(
   ast: DotASTNode,
 ): ReadonlyMap<AttributeASTNode, readonly SchemaKind[]> {
   const kinds = new Map<AttributeASTNode, readonly SchemaKind[]>();
+  const setsCluster = [...walk(ast)].some(
+    (node) =>
+      node.type === 'Attribute' && textOf(node.key).toLowerCase() === 'cluster',
+  );
   const visit = (node: ASTNode, graph: readonly SchemaKind[]): void => {
     const inner: readonly SchemaKind[] =
       node.type === 'Graph'
         ? ['graph']
         : node.type === 'Subgraph'
-          ? isCluster(node)
-            ? ['cluster']
-            : ['subgraph']
+          ? subgraphKinds(node, setsCluster)
           : graph;
     const own: readonly SchemaKind[] | undefined =
       node.type === 'Node'
@@ -485,29 +492,22 @@ function attributeKinds(
   return kinds;
 }
 
-/** A Graphviz boolean that is true: `true`, `yes` or a non-zero integer. */
-const TRUE = /^(?:true|yes|[+-]?0*[1-9]\d*)$/i;
-
-/** Whether Graphviz draws the subgraph as a cluster. */
-function isCluster(subgraph: SubgraphASTNode): boolean {
+/** The kinds of the attributes of a subgraph; see {@link attributeKinds}. */
+function subgraphKinds(
+  subgraph: SubgraphASTNode,
+  setsCluster: boolean,
+): readonly SchemaKind[] {
   const id = ownField(subgraph, 'id');
   if (id !== undefined && textOf(id).toLowerCase().startsWith('cluster')) {
-    return true;
+    return ['cluster'];
   }
-  const attributes = subgraph.children.flatMap((child): ASTNode[] =>
-    child.type === 'Attribute'
-      ? [child]
-      : child.type === 'AttributeList' && child.kind === 'Graph'
-        ? child.children
-        : [],
-  );
-  return attributes.some(
-    (attribute) =>
-      attribute.type === 'Attribute' &&
-      textOf(attribute.key) === 'cluster' &&
-      TRUE.test(textOf(attribute.value)),
-  );
+  return setsCluster ? ['subgraph', 'cluster'] : ['subgraph'];
 }
+
+/**
+ * The transformer behind {@link sanitize}: throws on the first finding and
+ * leaves the AST unchanged.
+ */
 
 function checkSafety(rules: FormatRules) {
   return (ast: DotASTNode): undefined => {
