@@ -10,6 +10,7 @@ import type {
   SubgraphAttributesObject,
   SubgraphModel,
 } from '@ts-graphviz/common';
+import { isRecord, isString, readArguments } from './arguments.js';
 import { GraphBase } from './GraphBase.js';
 
 /**
@@ -52,11 +53,12 @@ export class Subgraph<S extends Schema = EmptySchema>
 
   constructor(...args: unknown[]) {
     super();
-    this.id = args.find((arg): arg is string => typeof arg === 'string');
-    const attributes = args.find(
-      (arg): arg is SubgraphAttributesObject<S> =>
-        typeof arg === 'object' && arg !== null,
-    );
+    // By position: an id, then the attributes, each of which may be left out.
+    const [id, attributes] = readArguments('new Subgraph()', args, [
+      isString,
+      isRecord,
+    ]) as [string | undefined, SubgraphAttributesObject<S> | undefined];
+    this.id = id;
     if (attributes !== undefined) {
       this.setAttributes(attributes);
     }

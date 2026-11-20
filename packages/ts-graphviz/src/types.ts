@@ -22,6 +22,10 @@ export type ModelFactoryCallback<
  * @param attributes - Optional GraphAttributesObject parameter that specifies the attributes of the graph.
  * @param callback - Optional callback function that receives the graph's DSL.
  *
+ * The arguments are read by position, in this order, and each may be left
+ * out. A call that fits none of the signatures (two ids, an id after the
+ * attributes) throws a `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`.
+ *
  * @returns The graph's DSL. {@link modelOf} gives the {@link RootGraphModel}.
  * @typeParam G - The graph.
  * @typeParam M - The model types of the kit the graph is created with.

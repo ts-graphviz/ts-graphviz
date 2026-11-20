@@ -43,6 +43,8 @@ console.log(toDot(g));
 // }
 ```
 
+The constructors read their arguments by position: an id, then the attributes, each of which may be left out. A root graph also takes options after the attributes: `new Digraph('G', { rankdir: 'LR' }, { strict: true })` creates a strict graph (the boolean before the attributes, `new Digraph('G', true)`, is deprecated). A call that fits none of the signatures throws a `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`.
+
 Models created on their own are added with `addNode`, `addEdge` and `addSubgraph`:
 
 ```typescript

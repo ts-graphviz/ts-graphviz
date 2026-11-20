@@ -20,6 +20,32 @@ describe('class Subgraph', () => {
   });
 
   describe('Constructor', () => {
+    test.each([
+      ['two ids', ['a', 'b']],
+      ['an id after the attributes', [{ label: 'x' }, 'a']],
+      ['two attribute objects', [{}, {}]],
+      ['a boolean', [true]],
+      ['too many arguments', ['a', {}, undefined]],
+    ])(
+      'throws a TypeError with code TSG_ERR_INVALID_ARGUMENTS for %s',
+      (_, args) => {
+        expect(() => new Subgraph(...(args as []))).toThrow(
+          expect.objectContaining({
+            name: 'TypeError',
+            code: 'TSG_ERR_INVALID_ARGUMENTS',
+            message: expect.stringContaining('new Subgraph()'),
+          }),
+        );
+      },
+    );
+
+    test('takes undefined or null for an argument left out', () => {
+      const s = new Subgraph(undefined, { rank: 'same' });
+      expect(s.id).toBeUndefined();
+      expect(s.values).toStrictEqual([['rank', 'same']]);
+      expect(new Subgraph('a', null as never).values).toStrictEqual([]);
+    });
+
     test('first argument is id, and second attributes object', () => {
       subgraph = new Subgraph('cluster_test', {
         K: 1,

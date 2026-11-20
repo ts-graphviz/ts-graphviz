@@ -18,9 +18,10 @@ export function graphPlugin(
     convert(context, ast) {
       const id = ownField(ast, 'id');
       const name = id ? idFromLiteral(id) : undefined;
+      const options = { strict: ast.strict };
       const graph = ast.directed
-        ? context.models.createDigraph(name, ast.strict)
-        : context.models.createGraph(name, ast.strict);
+        ? context.models.createDigraph(name, undefined, options)
+        : context.models.createGraph(name, undefined, options);
       applyStatements(context, graph, ast.children, legacy);
       return graph;
     },
