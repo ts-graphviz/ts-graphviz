@@ -2,8 +2,10 @@ import {
   attribute as _,
   type Attribute,
   type AttributeKey,
+  Digraph,
   type DotModel,
   type DSL,
+  defaultModelKit,
   digraph,
   type EdgeModel,
   fromDot,
@@ -65,6 +67,48 @@ describe('model factories', () => {
       // @ts-expect-error an edge needs at least two targets
       g.edge(['a']);
     });
+  });
+  it('take their arguments in order', () => {
+    // @ts-expect-error two ids
+    digraph('G', 'H');
+    // @ts-expect-error the id after the callback
+    digraph(() => {}, 'G');
+    // @ts-expect-error a strict flag: use strict.digraph()
+    digraph('G', true);
+    digraph((g) => {
+      // @ts-expect-error the callback before the attributes
+      g.node('a', () => {}, { color: 'red' });
+      // @ts-expect-error the id after the attributes
+      g.subgraph({ rank: 'same' }, 's');
+    });
+  });
+});
+
+describe('root graph constructors', () => {
+  it('take the options after the attributes', () => {
+    expectTypeOf(
+      new Digraph('G', { label: 'x' }, { strict: true }),
+    ).toEqualTypeOf<Digraph>();
+    new Digraph('G', undefined, { strict: true });
+    new Digraph({ label: 'x' }, { strict: true });
+    defaultModelKit.createDigraph('G', {}, { strict: true });
+    defaultModelKit.createGraph(undefined, undefined, { strict: false });
+    // @ts-expect-error strict is not an attribute: pass it in the options
+    new Digraph('G', { strict: true });
+    // @ts-expect-error strict is a boolean
+    new Digraph('G', {}, { strict: 'yes' });
+    // @ts-expect-error the id left out takes no place: options need attributes before them
+    new Digraph(undefined, { strict: true });
+    // @ts-expect-error attributes are not options
+    new Digraph('G', undefined, { label: 'x' });
+  });
+
+  it('still take the deprecated strict flag', () => {
+    new Digraph('G', true, { label: 'x' });
+    new Digraph(true);
+    defaultModelKit.createDigraph('G', true);
+    // @ts-expect-error the flag is not optional there: an object after it would be options
+    new Digraph('G', undefined as boolean | undefined, { label: 'x' });
   });
 });
 

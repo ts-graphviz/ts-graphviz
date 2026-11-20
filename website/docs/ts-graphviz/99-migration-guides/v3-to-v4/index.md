@@ -131,6 +131,7 @@ try {
 | Graphviz command failed | `CommandExecutionError` (`Error`) | `TSG_ERR_COMMAND_FAILED` |
 | Graphviz output over `maxOutputSize` | `RangeError` | `TSG_ERR_OUTPUT_LIMIT_EXCEEDED` |
 | an adapter option outside its type or range | `TypeError` / `RangeError` | `TSG_ERR_INVALID_OPTION` |
+| a constructor, factory or DSL statement called with arguments that fit none of its signatures (section 17) | `TypeError` | `TSG_ERR_INVALID_ARGUMENTS` |
 | `sanitize` (and so the adapter) rejects the DOT | `DOMException` named `SecurityError` | `TSG_ERR_UNSAFE_DOT` |
 
 Code that matched on `error.message` should match on `error.code`.
@@ -401,5 +402,19 @@ In DOT, `a [color=red]; b; a [shape=box]` declares `a` twice, and Graphviz appli
 - With `@ts-graphviz/react`, each `<Node>` is a declaration of its own, also when two elements, or two roots on one container, have one id.
 - The legacy models (`legacyModels`) keep one node per id, with `getNode` and `getSubgraph`, deprecated: a node added with the id of another takes its place. `fromDot` and the DSL of `ts-graphviz/legacy` add a node or a subgraph declared again to the first one, as 3.x did; with `legacyModels` given to `fromDot` of `ts-graphviz`, a node declared again replaces the first.
 - Render with `@ts-graphviz/react` into graphs of v4's classes: in a graph of `legacyModels`, a rendered node takes the place of the graph's node with its id, which does not come back when the rendered one goes.
+
+## 17. Arguments are read by position
+
+3.x found the arguments of the root graph and subgraph constructors, the factories (`digraph`, `graph`, `strict.*`) and the DSL's statements by their type, so it took them in any order and dropped extra ones: `digraph('G', 'H')` made the graph `G`, and `g.subgraph(callback, 'id')` worked. v4 reads them by position, in the order of the signatures: an id, then the attributes, then the callback (or, for a root graph's constructor, the options), each of which may be left out (`undefined` or `null` holds a place). A call that fits none of the signatures throws a `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`, as do `node()`, `edge()` and `graph()` without arguments they take, which returned `undefined`. TypeScript already rejected these calls.
+
+A root graph's constructor and the kit's `createDigraph` / `createGraph` take `strict` in options after the attributes:
+
+| 3.x | v4 |
+| --- | --- |
+| `new Digraph('G', true, { label: 'x' })` | `new Digraph('G', { label: 'x' }, { strict: true })` |
+| `new Digraph(true)` | `new Digraph(undefined, undefined, { strict: true })`, or `strict.digraph()` for the DSL |
+| `kit.createGraph('G', true)` | `kit.createGraph('G', undefined, { strict: true })` |
+
+The boolean before the attributes still works in v4 and is deprecated; it is removed in v5. Options with another property than `strict` throw `TSG_ERR_INVALID_ARGUMENTS`. A class of your own that overrides the constructor of `Digraph` or `Graph`, and a kit whose `createDigraph` / `createGraph` you wrote, receive the options form from `fromDot`, `toModel`, the factories and `@ts-graphviz/react`: pass the arguments on (`super(...args)`), or read `strict` from the options in the third argument instead of a boolean in the second.
 
 See the [Security model](../../11-advanced-topics/06-security-model.md) for what the library guarantees at each trust boundary in v4.

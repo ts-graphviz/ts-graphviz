@@ -43,6 +43,8 @@ console.log(toDot(g));
 // }
 ```
 
+コンストラクターは引数を位置で読みます。ID、属性の順で、どちらも省略できます。ルートグラフは属性の後にオプションも受け取ります。`new Digraph('G', { rankdir: 'LR' }, { strict: true })` は strict なグラフを作ります（属性の前に真偽値を置く `new Digraph('G', true)` は非推奨です）。どのシグネチャにも合わない呼び出しは、コード `TSG_ERR_INVALID_ARGUMENTS` の `TypeError` を投げます。
+
 単独で作ったモデルは `addNode`、`addEdge`、`addSubgraph` で追加します。
 
 ```typescript

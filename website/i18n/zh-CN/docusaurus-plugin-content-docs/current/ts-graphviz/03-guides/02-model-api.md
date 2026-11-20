@@ -43,6 +43,8 @@ console.log(toDot(g));
 // }
 ```
 
+构造函数按位置读取参数：先是 ID，再是属性，二者都可以省略。根图还在属性之后接受选项：`new Digraph('G', { rankdir: 'LR' }, { strict: true })` 创建 strict 图（在属性之前传布尔值的 `new Digraph('G', true)` 已弃用）。不符合任何签名的调用会抛出代码为 `TSG_ERR_INVALID_ARGUMENTS` 的 `TypeError`。
+
 单独创建的模型用 `addNode`、`addEdge` 和 `addSubgraph` 添加：
 
 ```typescript
