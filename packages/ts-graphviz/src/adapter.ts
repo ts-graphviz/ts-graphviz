@@ -5,9 +5,15 @@
 import {
   type Layout,
   type Options,
+  type SchemaLayout,
   toBlob as toBlobFromDot,
 } from '@ts-graphviz/adapter';
-import type { AnyReadonlyDotObjectModel, ModelView } from '@ts-graphviz/common';
+import type {
+  AnyReadonlyDotObjectModel,
+  EmptySchema,
+  ModelView,
+  Schema,
+} from '@ts-graphviz/common';
 import { toDot } from './to-dot.js';
 
 export * from '@ts-graphviz/adapter';
@@ -25,11 +31,10 @@ export type DotInput = string | AnyReadonlyDotObjectModel | ModelView;
  * @param options - Layout, output format and the other options of the command.
  */
 export function toBlob<
-  const F extends string = never,
-  const L extends string = never,
-  T extends Layout | L = Layout | L,
->(input: DotInput, options?: Options<T, F, L>): Promise<Blob> {
-  return toBlobFromDot<F, L, T>(toDotSource(input), options);
+  const S extends Schema = EmptySchema,
+  T extends Layout | SchemaLayout<S> = Layout | SchemaLayout<S>,
+>(input: DotInput, options?: Options<T, S>): Promise<Blob> {
+  return toBlobFromDot<S, T>(toDotSource(input), options);
 }
 
 function toDotSource(input: DotInput): string {

@@ -186,19 +186,19 @@ const KNOWN_ATTRIBUTES: Record<AttributeKey, true> = {
   z: true,
 };
 
+/** The attributes that read files or write them raw: never allowed. */
+const FILE_ACCESS: ReadonlySet<string> = new Set([
+  'image',
+  'imagepath',
+  'fontpath',
+  'shapefile',
+  'stylesheet',
+  '_background',
+]);
+
 /** The attributes the strict policy allows: known ones, minus file access. */
 const ALLOWED_ATTRIBUTES: ReadonlySet<string> = new Set<string>(
-  Object.keys(KNOWN_ATTRIBUTES).filter(
-    (key) =>
-      ![
-        'image',
-        'imagepath',
-        'fontpath',
-        'shapefile',
-        'stylesheet',
-        '_background',
-      ].includes(key),
-  ),
+  Object.keys(KNOWN_ATTRIBUTES).filter((key) => !FILE_ACCESS.has(key)),
 );
 
 /**
@@ -211,14 +211,19 @@ const TOKEN = /^[\p{L}\p{M}\p{N} _.,:;=+\-#/!@^*]*$/u;
 /**
  * Why the strict policy rejects an attribute, or `undefined`. `ownRule`
  * says whether the default rules already give the value a grammar (text,
- * links, fonts, style, colors, shape).
+ * links, fonts, style, colors, shape). `schema` holds the attribute names
+ * a schema adds, which are allowed too, except those that access files.
  */
 export function strictAttributeProblem(
   name: string,
   value: string,
   ownRule: boolean,
+  schema: ReadonlySet<string> = new Set(),
 ): string | undefined {
-  if (!ALLOWED_ATTRIBUTES.has(name)) {
+  if (
+    !ALLOWED_ATTRIBUTES.has(name) &&
+    !(schema.has(name) && !FILE_ACCESS.has(name))
+  ) {
     return 'is not a Graphviz attribute ts-graphviz knows (strict policy)';
   }
   if (!ownRule && !TOKEN.test(value)) {

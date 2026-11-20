@@ -1,8 +1,11 @@
 import type { SanitizeOptions } from '@ts-graphviz/ast';
 import type {
   EdgeAttributesObject,
+  EmptySchema,
   GraphAttributesObject,
   NodeAttributesObject,
+  Schema,
+  SchemaEntry,
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';
 
@@ -17,7 +20,8 @@ import type {
  * The adapter accepts exactly these names at run time (check a format chosen
  * by a request with `isFormat`); anything else, including a `:renderer`
  * suffix such as `png:cairo`, is rejected before the command starts.
- * Formats a plugin adds are named per call with `customFormats`.
+ * Formats a plugin adds are named in a schema (`types.format`), passed as
+ * `schema`.
  */
 export type Format =
   | 'bmp'
@@ -82,8 +86,8 @@ export type Format =
  *
  * The adapter accepts exactly these names at run time (check a layout
  * chosen by a request with `isLayout`); anything else is rejected before
- * the command starts. Layout engines a plugin adds are named per call with
- * `customLayouts`.
+ * the command starts. Layout engines a plugin adds are named in a schema
+ * (`types.layout`), passed as `schema`.
  */
 export type Layout =
   | 'dot'
@@ -156,21 +160,45 @@ export interface FdpOptions {
  * excluding 'neato' and 'fdp'.
  * @public
  */
-export interface OtherOptions<L extends string = never> {
+export interface OtherOptions<S extends Schema = EmptySchema> {
   /**
    * Set layout engine: one of the {@link Layout} names other than `neato` and
-   * `fdp`, or of `customLayouts`.
+   * `fdp`, or of the schema's `types.layout`.
    *
    * @default 'dot'
    */
-  layout?: Exclude<Layout, 'neato' | 'fdp'> | NoInfer<L>;
+  layout?: Exclude<Layout, 'neato' | 'fdp'> | NoInfer<SchemaLayout<S>>;
 }
 
 /**
+ * The output formats the schema `S` adds (its `types.format`), or none.
+ * @public
+ */
+export type SchemaFormat<S> = S extends {
+  readonly types: {
+    readonly format: SchemaEntry<infer F extends string, 'extend'>;
+  };
+}
+  ? F
+  : never;
+
+/**
+ * The layout engines the schema `S` adds (its `types.layout`), or none.
+ * @public
+ */
+export type SchemaLayout<S> = S extends {
+  readonly types: {
+    readonly layout: SchemaEntry<infer L extends string, 'extend'>;
+  };
+}
+  ? L
+  : never;
+
+/**
  * `T`, without letting this position infer it: TypeScript 5.0 has no
- * built-in `NoInfer`. A custom name is then accepted only when it is listed
- * in `customFormats` / `customLayouts`, not because it was written as the
- * `format` / `layout` itself.
+ * built-in `NoInfer`. A format or layout of a schema is then accepted only
+ * when the schema names it, not because it was written as the `format` /
+ * `layout` itself.
  */
 type NoInfer<T> = [T][T extends unknown ? 0 : never];
 
@@ -181,23 +209,24 @@ type NoInfer<T> = [T][T extends unknown ? 0 : never];
  * and flags, `maxOutputSize`, `sanitize`) are checked at run time, so they
  * may come from a request: a value outside the documented type or range is
  * rejected before the command starts with a `TypeError` or `RangeError`
- * whose `code` is `TSG_ERR_INVALID_OPTION`. `dotCommand`, `library`, `customFormats` and
- * `customLayouts` choose code to run or what it may be asked to do: they are
+ * whose `code` is `TSG_ERR_INVALID_OPTION`. `dotCommand`, `library` and
+ * `schema` choose code to run or what it may be asked to do: they are
  * trusted configuration, checked for their type only (and, on Windows,
  * `dotCommand` must not be a `.bat` or `.cmd` script).
+ *
+ * @typeParam S - The schema (`schema`), which adds formats, layouts and
+ * attributes; none by default.
  * @public
  */
-export interface CommonOptions<
-  F extends string = never,
-  L extends string = never,
-> {
+export interface CommonOptions<S extends Schema = EmptySchema> {
   /**
    * Set output format: exactly one of the {@link Format} names (see
-   * `isFormat`), without a `:renderer` suffix, or of `customFormats`.
+   * `isFormat`), without a `:renderer` suffix, or of the schema's
+   * `types.format`.
    *
    * @default 'svg'
    */
-  format?: Format | NoInfer<F>;
+  format?: Format | NoInfer<SchemaFormat<S>>;
   /**
    * If true, set level of message suppression (=1).
    *
@@ -227,15 +256,16 @@ export interface CommonOptions<
     /**
      * Set edge attribute.
      */
-    edge?: EdgeAttributesObject;
+    edge?: EdgeAttributesObject<NoInfer<S>>;
     /**
      * Set node attribute.
      */
-    node?: NodeAttributesObject;
+    node?: NodeAttributesObject<NoInfer<S>>;
     /**
      * Set graph attribute.
      */
-    graph?: GraphAttributesObject & SubgraphAttributesObject;
+    graph?: GraphAttributesObject<NoInfer<S>> &
+      SubgraphAttributesObject<NoInfer<S>>;
   };
   /**
    * Scale input (`-s`): a finite number greater than 0.
@@ -249,31 +279,22 @@ export interface CommonOptions<
    */
   library?: string[];
   /**
-   * Output formats a Graphviz plugin adds, accepted as `format` besides the
-   * documented {@link Format} names, for this call only (`isFormat` still
-   * answers for the documented names only). The names also widen the type
-   * of `format` for this call: `toBlob(dot, { customFormats: ['mp4'],
-   * format: 'mp4' })`.
+   * The schema of the models the DOT was made with (`defineSchema`). Its
+   * `types.format` and `types.layout` name the output formats and layout
+   * engines a Graphviz plugin adds (`values.extend('mp4')`), which `format`
+   * and `layout` then accept, at run time and in the types, for this call
+   * (`isFormat` / `isLayout` still answer for the documented names only).
+   * Its attributes type `attributes`, and `sanitize` takes it: the strict
+   * policy allows its attributes, and both policies its style names.
    *
-   * **These are trusted configuration defined in your application code. Do
-   * not derive them from end-user input.** They are checked to be non-empty
-   * strings without a NUL character only. While `sanitize` is on, a format
+   * **This is trusted configuration defined in your application code. Do
+   * not derive it from end-user input.** It is checked as `defineSchema`
+   * checks it (`TSG_ERR_INVALID_SCHEMA`). While `sanitize` is on, a format
    * is refused unless its name before any `:renderer` suffix is one it has
-   * checked: a new format (`'mp4'`) needs `sanitize: false`, while a renderer
-   * of a checked one (`'png:cairo'`) is checked as that format.
+   * checked: a new format (`'mp4'`) needs `sanitize: false`, while a
+   * renderer of a checked one (`'png:cairo'`) is checked as that format.
    */
-  customFormats?: readonly F[];
-  /**
-   * Layout engines a Graphviz plugin adds, accepted as `layout` besides the
-   * documented {@link Layout} names, for this call only (`isLayout` still
-   * answers for the documented names only). The names also widen the type
-   * of `layout` for this call.
-   *
-   * **These are trusted configuration defined in your application code. Do
-   * not derive them from end-user input.** They are checked to be non-empty
-   * strings without a NUL character only.
-   */
-  customLayouts?: readonly L[];
+  schema?: S | undefined;
   /**
    * Invert y coordinate in output.
    */
@@ -319,27 +340,15 @@ export interface CommonOptions<
 }
 
 /**
- * The options of `toBlob`. `F` and `L` are the names listed in
- * `customFormats` and `customLayouts`, inferred from them.
+ * The options of `toBlob`. `S` is the schema of `schema`, inferred from
+ * it, which adds formats, layouts and attributes.
  */
 export type Options<
   T extends string = Layout,
-  F extends string = never,
-  L extends string = never,
-> = CommonOptions<F, L> &
-  ListedNames<F, L> &
+  S extends Schema = EmptySchema,
+> = CommonOptions<S> &
   (T extends 'neato'
     ? NeatoOptions
     : T extends 'fdp'
       ? FdpOptions
-      : OtherOptions<L>);
-
-/**
- * Custom names must be listed: with custom format or layout names in the
- * type (inferred from the lists, or given as type arguments), the matching
- * list is required.
- */
-type ListedNames<F extends string, L extends string> = ([F] extends [never]
-  ? unknown
-  : { customFormats: readonly F[] }) &
-  ([L] extends [never] ? unknown : { customLayouts: readonly L[] });
+      : OtherOptions<S>);

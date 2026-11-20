@@ -193,24 +193,31 @@ With `ts-graphviz`, you can extend the library's type system to customize graph 
 
 ### Types of your own
 
-Attributes and value types of your own are added by a schema (`defineSchema`), for the models of one kit; layout engines and output formats a Graphviz plugin adds are named per call. Nothing is changed for the whole program: the types are not extended with declaration merging (`declare module '@ts-graphviz/common'`).
+Attributes and value types of your own, and the layout engines and output formats a Graphviz plugin adds, are named in a schema (`defineSchema`): its attributes type the models of one kit, and its formats and layouts the calls of the adapter given it. Nothing is changed for the whole program: the types are not extended with declaration merging (`declare module '@ts-graphviz/common'`).
 
 ### Use Cases
 
 #### Specifying Custom Graph Layout and Output Formats
 
-Layout engines and output formats that a Graphviz plugin adds are named per call with the `customLayouts` and `customFormats` options. They are trusted configuration, like `dotCommand`: define them in your code, never from end-user input. A `format` or `layout` from a request is checked against the documented names only (`isFormat` / `isLayout`).
+Layout engines and output formats that a Graphviz plugin adds are named in a schema's `types.layout` and `types.format`, with the names (`values.extend('mp4')`), and the schema is given to the adapter's `schema` option. A schema is trusted configuration, like `dotCommand`: define it in your code, never from end-user input. A `format` or `layout` from a request is checked against the documented names only (`isFormat` / `isLayout`).
 
 ```typescript
 import { toBlob } from '@ts-graphviz/adapter';
+import { defineSchema, values } from '@ts-graphviz/common';
 
-// List the names your Graphviz plugins add for this call: they are accepted
-// at run time and widen the types of `format` and `layout` for this call
-// only. Nothing is changed globally, and `isFormat` / `isLayout` still
-// answer for the documented names only.
+// Name the layout engines and output formats your Graphviz plugins add in a
+// schema: given as `schema`, they are accepted at run time and widen the
+// types of `layout` and `format` for that call only. Nothing is changed
+// globally, and `isFormat` / `isLayout` still answer for the documented
+// names only.
+const schema = defineSchema({
+  types: {
+    layout: values.extend('my-custom-algorithm'),
+    format: values.extend('mp4'),
+  },
+});
 const video = await toBlob('digraph { a -> b }', {
-  customLayouts: ['my-custom-algorithm'],
-  customFormats: ['mp4'],
+  schema,
   layout: 'my-custom-algorithm',
   format: 'mp4',
   // sanitize refuses formats it has not checked

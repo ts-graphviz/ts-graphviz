@@ -1,4 +1,10 @@
-import { ownOptions, withCode } from '@ts-graphviz/common';
+import {
+  defineSchema,
+  ownOptions,
+  type Schema,
+  type SchemaErrors,
+  withCode,
+} from '@ts-graphviz/common';
 import type { CommonParseOptions } from '../dot-shim/parser/index.js';
 import { hasField, ownField } from '../own-field.js';
 import { Pipeline } from '../pipeline/pipeline.js';
@@ -39,6 +45,14 @@ export interface SanitizeOptions extends CommonParseOptions {
    * @default 'default'
    */
   policy?: 'default' | 'strict';
+  /**
+   * The schema of the models the DOT was made with (`defineSchema`):
+   * trusted configuration, like the classes of a kit. The strict policy
+   * also allows the attributes it adds (not those that read files), and
+   * both policies the style names its `types.style` was given
+   * (`values.extend('my-style')`; names of letters only).
+   */
+  schema?: Schema | undefined;
 }
 
 /**
@@ -134,7 +148,7 @@ const TEXT_ATTRIBUTES = new Set([
  */
 function isKnownStyle(value: string, rules: FormatRules): boolean {
   if (!rules.spacesInStyle && /\s/.test(value)) return false;
-  return isStyleList(value);
+  return isStyleList(value, rules.schemaStyles);
 }
 
 /**
@@ -182,6 +196,10 @@ interface FormatRules {
   fontName: RegExp;
   spacesInStyle: boolean;
   strict: boolean;
+  /** The attribute names of the schema, of every kind. */
+  schemaAttributes: ReadonlySet<string>;
+  /** The style names of the schema, in lower case. */
+  schemaStyles: ReadonlySet<string>;
 }
 
 /**
@@ -315,7 +333,12 @@ function checkAttribute(
       key === 'style' ||
       key === 'shape' ||
       key.endsWith('color');
-    const problem = strictAttributeProblem(name, value, ownRule);
+    const problem = strictAttributeProblem(
+      name,
+      value,
+      ownRule,
+      rules.schemaAttributes,
+    );
     if (problem !== undefined) throw unsafe(`${at} ${problem}.`);
   }
 }
@@ -438,10 +461,46 @@ function checkSafety(rules: FormatRules) {
   };
 }
 
-function rulesFor(format: string | undefined, strict: boolean): FormatRules {
+/** The names of a schema that the rules take. */
+type SchemaRules = Pick<FormatRules, 'schemaAttributes' | 'schemaStyles'>;
+
+function schemaRules(schema: Schema | undefined): SchemaRules {
+  if (schema === undefined) {
+    return { schemaAttributes: new Set(), schemaStyles: new Set() };
+  }
+  // Checked (and copied) as a kit checks it.
+  const defined = defineSchema(schema as Schema & SchemaErrors<Schema>);
+  const attributes = new Set<string>();
+  for (const kind of [
+    'graph',
+    'subgraph',
+    'cluster',
+    'node',
+    'edge',
+  ] as const) {
+    for (const name of Object.keys(defined[kind] ?? {})) attributes.add(name);
+  }
+  const styles = new Set(
+    (defined.types?.style?.values ?? []).map((name) =>
+      String(name).toLowerCase(),
+    ),
+  );
+  return { schemaAttributes: attributes, schemaStyles: styles };
+}
+
+function rulesFor(
+  format: string | undefined,
+  strict: boolean,
+  schema: SchemaRules,
+): FormatRules {
   // Without a format: the rules of every checked format at once.
   if (format === undefined) {
-    return { fontName: POSTSCRIPT_FONT_NAME, spacesInStyle: false, strict };
+    return {
+      fontName: POSTSCRIPT_FONT_NAME,
+      spacesInStyle: false,
+      strict,
+      ...schema,
+    };
   }
   const base = format.split(':')[0].toLowerCase();
   if (base === 'ismap') {
@@ -460,6 +519,7 @@ function rulesFor(format: string | undefined, strict: boolean): FormatRules {
       : PLAIN_FONT_NAME,
     spacesInStyle: !PLAIN_FORMATS.has(base),
     strict,
+    ...schema,
   };
 }
 
@@ -513,8 +573,10 @@ function rulesFor(format: string | undefined, strict: boolean): FormatRules {
  * @group Sanitize DOT
  */
 export function sanitize(dot: string, options?: SanitizeOptions): string {
-  const { format, policy = 'default', ...parse } = ownOptions(options);
+  const { format, policy = 'default', schema, ...parse } = ownOptions(options);
   return new Pipeline({ parse })
-    .use(checkSafety(rulesFor(format, policy === 'strict')))
+    .use(
+      checkSafety(rulesFor(format, policy === 'strict', schemaRules(schema))),
+    )
     .process(dot);
 }

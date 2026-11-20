@@ -287,6 +287,7 @@ export type Rule = "Dot" | "Graph" | "Subgraph" | "Node" | "Edge" | "AttributeLi
 export interface SanitizeOptions extends CommonParseOptions {
   format?: string;
   policy?: "default" | "strict";
+  schema?: Schema | undefined;
 }
 
 export type StatementASTNode = GraphASTNode | CommentASTNode;

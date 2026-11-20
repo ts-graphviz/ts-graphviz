@@ -756,15 +756,21 @@ console.log(
 
 #### Use Case: Specifying Custom Graph Layout and Output Formats
 
-Layout engines and output formats that a Graphviz plugin adds need no type extension. Name them for one call with the `customLayouts` and `customFormats` options of `toBlob`; they widen the types of `layout` and `format` for that call only.
+Layout engines and output formats that a Graphviz plugin adds are named in a schema, with their names, and the schema is given to `toBlob`; they widen the types of `layout` and `format` for that call only.
 
 ```ts
+import { defineSchema, values } from 'ts-graphviz';
 import { toBlob } from 'ts-graphviz/adapter';
 
 // 'my-custom-algorithm' and 'mp4' stand for the names your plugin adds.
+const schema = defineSchema({
+  types: {
+    layout: values.extend('my-custom-algorithm'),
+    format: values.extend('mp4'),
+  },
+});
 const video = await toBlob('digraph { a -> b }', {
-  customLayouts: ['my-custom-algorithm'],
-  customFormats: ['mp4'],
+  schema,
   layout: 'my-custom-algorithm',
   format: 'mp4',
   // sanitize refuses formats it has not checked
@@ -772,7 +778,7 @@ const video = await toBlob('digraph { a -> b }', {
 });
 ```
 
-These names are trusted configuration: define them in your code, never from end-user input.
+A schema is trusted configuration: define it in your code, never from end-user input.
 
 ## Deep dive 🏊‍♂️
 

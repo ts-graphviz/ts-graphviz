@@ -20,6 +20,15 @@ describe('attr and values', () => {
   });
 });
 
+describe('values with names', () => {
+  it('keep the names at run time, frozen', () => {
+    const entry = values.extend('mp4', 'webm');
+    expect(entry).toEqual({ mode: 'extend', values: ['mp4', 'webm'] });
+    expect(Object.isFrozen(entry.values)).toBe(true);
+    expect(values.override('TB')).toEqual({ mode: 'override', values: ['TB'] });
+  });
+});
+
 describe('defineSchema', () => {
   it('gives the schema frozen, with its parts', () => {
     const schema = defineSchema({
@@ -134,6 +143,45 @@ describe('defineSchema', () => {
     ['null', null],
     ['an array', []],
   ])('throws for a schema that is %s', (_, schema) => {
+    expect(() => defineSchema(schema as never)).toThrow(invalid);
+  });
+
+  it('takes the formats and layouts of the adapter with their names', () => {
+    const schema = defineSchema({
+      types: {
+        format: values.extend('mp4'),
+        layout: values.extend('my-layout'),
+        style: values.extend('sketchy'),
+      },
+    });
+    expect(schema.types?.format?.values).toEqual(['mp4']);
+    expect(schema.types?.layout?.values).toEqual(['my-layout']);
+    expect(schema.types?.style?.values).toEqual(['sketchy']);
+  });
+
+  test.each<[string, unknown]>([
+    ['a format without names', { types: { format: values.extend<'x'>() } }],
+    ['a format overridden', { types: { format: values.override('x') } }],
+    ['a layout of attr', { types: { layout: attr<'x'>() } }],
+    [
+      'names that are not an array',
+      { types: { style: { mode: 'extend', values: 'a' } } },
+    ],
+    ['no names', { types: { style: { mode: 'extend', values: [] } } }],
+    [
+      'a name that is not a string',
+      { types: { style: { mode: 'extend', values: [1] } } },
+    ],
+    ['an empty name', { types: { style: { mode: 'extend', values: [''] } } }],
+    [
+      'a name with NUL',
+      { types: { style: { mode: 'extend', values: ['a\0'] } } },
+    ],
+    [
+      'an entry with a third field',
+      { types: { style: { mode: 'extend', values: ['a'], x: 1 } } },
+    ],
+  ])('throws for %s', (_, schema) => {
     expect(() => defineSchema(schema as never)).toThrow(invalid);
   });
 

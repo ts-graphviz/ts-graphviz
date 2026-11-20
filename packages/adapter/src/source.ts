@@ -1,6 +1,7 @@
 import { sanitize } from '@ts-graphviz/ast';
 import { ownOptions, withCode } from '@ts-graphviz/common';
 import { attributeArgs } from './create-command-args.js';
+import type { AnyOptions } from './options.js';
 import type { CommonOptions } from './types.js';
 
 type Attributes = NonNullable<CommonOptions['attributes']>;
@@ -66,15 +67,21 @@ function attributesSource(attributes: Attributes): string {
  */
 export function sourceToRender(
   dot: string,
-  options: Pick<CommonOptions<string>, 'sanitize' | 'format' | 'attributes'>,
+  options: Pick<AnyOptions, 'sanitize' | 'format' | 'attributes' | 'schema'>,
 ): string {
   const {
     sanitize: check = true,
     format = 'svg',
     attributes,
+    schema,
   } = ownOptions(options);
   if (check === false) return dot;
-  const sanitizeOptions = { ...(check === true ? {} : check), format };
+  // The adapter's schema, unless the sanitize options name one of their own.
+  const sanitizeOptions = {
+    ...(schema !== undefined && { schema }),
+    ...(check === true ? {} : check),
+    format,
+  };
   if (attributes !== undefined) {
     sanitize(attributesSource(attributes), sanitizeOptions);
   }

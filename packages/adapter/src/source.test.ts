@@ -1,7 +1,8 @@
+import { defineSchema, values } from '@ts-graphviz/common';
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import type { attributeArgs } from './create-command-args.js';
-import { ownAdapterOptions } from './options.js';
+import { type AnyOptions, ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
 
 const dot = 'digraph { a }';
@@ -85,11 +86,14 @@ describe('a custom format while sanitize is on', { tags: ['SM-4'] }, () => {
     expect(sourceToRender(dot, { format: 'mp4', sanitize: false })).toBe(dot);
   });
 
-  it('listed in customFormats, is checked by sanitize as the adapter reads it', () => {
+  it('of a schema, is checked by sanitize as the adapter reads it', () => {
     const listed = (format: string) =>
       sourceToRender(
         dot,
-        ownAdapterOptions({ customFormats: [format], format }),
+        ownAdapterOptions({
+          schema: defineSchema({ types: { format: values.extend(format) } }),
+          format,
+        } as unknown as AnyOptions),
       );
     expect(listed('png:cairo')).toBe(sourceToRender(dot, { format: 'png' }));
     expect(() => listed('mp4')).toThrow(

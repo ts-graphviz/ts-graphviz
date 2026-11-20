@@ -97,8 +97,8 @@ Show an SVG Blob as an image (`<img src>`), not as a document: a `blob:` URL of 
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `format` | `Format` | `'svg'` | Output format (`-T`): one of the documented names, without a `:renderer` suffix, or a name listed in `customFormats`. |
-| `layout` | `Layout` | `'dot'` | Layout engine (`-K`): `dot`, `neato`, `fdp`, `sfdp`, `circo`, `twopi`, `nop`, `nop2`, `osage`, `patchwork`, or a name listed in `customLayouts`. |
+| `format` | `Format` | `'svg'` | Output format (`-T`): one of the documented names, without a `:renderer` suffix, or a name in the `types.format` of `schema`. |
+| `layout` | `Layout` | `'dot'` | Layout engine (`-K`): `dot`, `neato`, `fdp`, `sfdp`, `circo`, `twopi`, `nop`, `nop2`, `osage`, `patchwork`, or a name in the `types.layout` of `schema`. |
 | `attributes` | `{ graph?, node?, edge? }` | none | Default graph, node and edge attributes (`-G`, `-N`, `-E`). |
 | `scale` | `number` | none | Scale of the input (`-s`): a finite number greater than 0. |
 | `y` | `boolean` | none | Invert the y coordinate in the output (`-y`). |
@@ -108,8 +108,7 @@ Show an SVG Blob as an image (`<img src>`), not as a document: a `blob:` URL of 
 | `sanitize` | `boolean \| SanitizeOptions` | `true` | Checks the DOT with `sanitize` from `@ts-graphviz/ast` before it is rendered. See [Processing User-Provided DOT Files](#processing-user-provided-dot-files). |
 | `dotCommand` | `string` | `'dot'` | The Graphviz command to run. Trusted configuration. |
 | `library` | `string[]` | none | PostScript library files to use (`-l`). Trusted configuration. |
-| `customFormats` | `string[]` | none | Format names a Graphviz plugin adds, accepted as `format` for this call. Trusted configuration. `sanitize` refuses a format it does not know, so such a format also needs `sanitize: false`. |
-| `customLayouts` | `string[]` | none | Layout names a Graphviz plugin adds, accepted as `layout` for this call. Trusted configuration. |
+| `schema` | `Schema` | none | A schema from `defineSchema` (`@ts-graphviz/common`). Its `types.format` and `types.layout` (`values.extend('mp4')`) name formats and layout engines a Graphviz plugin adds, accepted as `format` and `layout` for this call; its attributes type `attributes`, and `sanitize` takes it. Trusted configuration. `sanitize` refuses a format it does not know, so such a format also needs `sanitize: false`. |
 
 Two layouts take options of their own:
 

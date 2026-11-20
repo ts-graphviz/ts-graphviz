@@ -19,19 +19,18 @@ export declare class CommandExecutionError extends Error {
   } | undefined, options?: ErrorOptions);
 }
 
-export interface CommonOptions<F extends string = never, L extends string = never> {
-  format?: Format | NoInfer<F>;
+export interface CommonOptions<S extends Schema = EmptySchema> {
+  format?: Format | NoInfer<SchemaFormat<S>>;
   suppressWarnings?: boolean;
   dotCommand?: string;
   attributes?: {
-    edge?: EdgeAttributesObject;
-    node?: NodeAttributesObject;
-    graph?: GraphAttributesObject & SubgraphAttributesObject;
+    edge?: EdgeAttributesObject<NoInfer<S>>;
+    node?: NodeAttributesObject<NoInfer<S>>;
+    graph?: GraphAttributesObject<NoInfer<S>> & SubgraphAttributesObject<NoInfer<S>>;
   };
   scale?: number;
   library?: string[];
-  customFormats?: readonly F[];
-  customLayouts?: readonly L[];
+  schema?: S | undefined;
   y?: boolean;
   signal?: AbortSignal;
   maxOutputSize?: number;
@@ -58,25 +57,31 @@ export interface NeatoOptions {
   reduce?: boolean;
 }
 
-export type Options<T extends string = Layout, F extends string = never, L extends string = never> = CommonOptions<F, L> & ListedNames<F, L> & (T extends "neato" ? NeatoOptions : T extends "fdp" ? FdpOptions : OtherOptions<L>);
+export type Options<T extends string = Layout, S extends Schema = EmptySchema> = CommonOptions<S> & (T extends "neato" ? NeatoOptions : T extends "fdp" ? FdpOptions : OtherOptions<S>);
 
-export interface OtherOptions<L extends string = never> {
-  layout?: Exclude<Layout, "neato" | "fdp"> | NoInfer<L>;
+export interface OtherOptions<S extends Schema = EmptySchema> {
+  layout?: Exclude<Layout, "neato" | "fdp"> | NoInfer<SchemaLayout<S>>;
 }
+
+export type SchemaFormat<S> = S extends {
+  readonly types: {
+    readonly format: SchemaEntry<infer F extends string, "extend">;
+  };
+} ? F : never;
+
+export type SchemaLayout<S> = S extends {
+  readonly types: {
+    readonly layout: SchemaEntry<infer L extends string, "extend">;
+  };
+} ? L : never;
 
 export declare function isFormat(value: unknown): value is Format;
 
 export declare function isLayout(value: unknown): value is Layout;
 
-export declare function toBlob<const F extends string = never, const L extends string = never, T extends Layout | L = Layout | L>(dot: string, options?: Options<T, F, L>): Promise<Blob>;
+export declare function toBlob<const S extends Schema = EmptySchema, T extends Layout | SchemaLayout<S> = Layout | SchemaLayout<S>>(dot: string, options?: Options<T, S>): Promise<Blob>;
 
 // Used by the exports, not exported
-
-type ListedNames<F extends string, L extends string> = ([F] extends [never] ? unknown : {
-  customFormats: readonly F[];
-}) & ([L] extends [never] ? unknown : {
-  customLayouts: readonly L[];
-});
 
 type NoInfer<T> = [T][T extends unknown ? 0 : never];
 ```
