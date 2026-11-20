@@ -85,7 +85,8 @@ describe('a ModelKit with custom classes', () => {
         return 'x';
       }
     }
-    type M = ResolvedModelTypes<{ Subgraph: typeof MySubgraph }>;
+    // As withModelKit infers it (a const type parameter).
+    type M = ResolvedModelTypes<{ readonly Subgraph: typeof MySubgraph }>;
     const { graph } = withModelKit({ Subgraph: MySubgraph });
     graph((g) => {
       expectTypeOf(g.subgraph('s')).toEqualTypeOf<DSL<MySubgraph, M>>();

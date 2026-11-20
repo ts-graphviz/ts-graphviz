@@ -1,14 +1,22 @@
 import {
   type AnyDotObjectModel,
+  type AnyModelTypes,
   type Attribute,
   type AttributeKey,
   type AttributeListKind,
   type AttributeListModel,
+  type AttributesObject,
+  type ClusterSubgraphAttributeKey,
+  type CommentPosition,
   type DotModel,
+  type EdgeAttributeKey,
   type EdgeAttributesObject,
-  type EdgeModel,
+  type EmptySchema,
   type ForwardRefNode,
+  type GraphAttributeKey,
   type GraphBaseModel,
+  type GraphSchemaAttributeTypes,
+  type HasComments,
   isAttributeListModel,
   isDotModel,
   isEdgeModel,
@@ -20,14 +28,23 @@ import {
   type ModelTypes,
   type ModelView,
   modelOf,
+  type NodeAttributeKey,
   type NodeAttributesObject,
-  type NodeModel,
   type NodeRefLike,
   type NonClusterSubgraphAttributesObject,
   type Port,
+  type ReadonlyAttributeListModel,
+  type ReadonlyDotModel,
+  type ReadonlyEdgeModel,
   type ReadonlyEdgeTargetLikeTuple,
   type ReadonlyNodeModel,
+  type ReadonlyRootGraphModel,
+  type ReadonlySubgraphModel,
   type RootGraphModel,
+  type Schema,
+  type SchemaAttributeTypes,
+  type SchemaOf,
+  type SubgraphAttributeKey,
   type SubgraphAttributesFor,
   type SubgraphAttributesObject,
   type SubgraphModel,
@@ -56,27 +73,114 @@ import { isLegacyKit } from './legacy-kit.js';
  * is not a model: the model guards (`isNodeModel`, …) are false for it, so
  * narrow DSLs by `$$type` or check `modelOf(x)`.
  *
- * @typeParam T - The model.
+ * The models of a schema have DSLs too, typed with the schema: their
+ * attributes as properties, and what their statements take and give.
+ *
+ * @typeParam T - The model: any model that writes ({@link DSLModel}), of any
+ * schema; a read-only model has no DSL.
  * @typeParam M - The model types of the kit: what `node`, `edge` and
- * `subgraph` of a graph's DSL give.
+ * `subgraph` of a graph's DSL give. By default those of the model's schema
+ * with the default classes.
  * @group DSL
  */
 export type DSL<
-  T extends AnyDotObjectModel,
-  M extends ModelTypes = ModelTypes,
-> = T extends NodeModel
+  T extends DSLModel,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
+> = T extends { readonly $$type: 'Node' }
   ? NodeDSL<T>
-  : T extends EdgeModel
+  : T extends { readonly $$type: 'Edge' }
     ? EdgeDSL<T>
-    : T extends SubgraphModel
-      ? SubgraphDSL<T, M>
-      : T extends RootGraphModel
-        ? RootGraphDSL<T, M>
-        : T extends AttributeListModel<infer K, infer A>
-          ? AttributeListDSL<T, K, A>
-          : T extends DotModel
+    : T extends { readonly $$type: 'Subgraph' }
+      ? SubgraphDSL<Extract<T, DSLGraphModel>, M>
+      : T extends { readonly $$type: 'Graph' }
+        ? RootGraphDSL<Extract<T, DSLGraphModel>, M>
+        : T extends AttributeListModel<infer K, infer A, infer E>
+          ? AttributeListDSL<T, K, A, E>
+          : T extends { readonly $$type: 'Dot' }
             ? DotDSL<T>
             : never;
+
+/**
+ * A model a {@link DSL} can be made of: a model that writes, with or without
+ * a schema. The read-only model types (such as {@link ReadonlyNodeModel})
+ * are not: a DSL writes.
+ * @group DSL
+ */
+export type DSLModel =
+  | (ReadonlyDotModel & HasComments<CommentPosition>)
+  | ((ReadonlyNodeModel | ReadonlyEdgeModel | ReadonlyAttributeListModel) &
+      HasComments<CommentPosition> &
+      WritesAttributes)
+  | DSLGraphModel;
+
+/** What a graph that its DOT statements add to has. */
+interface WritesStatements {
+  addNode(node: never): void;
+  addEdge(edge: never): void;
+  addSubgraph(subgraph: never): void;
+  addAttributeList(kind: never, attributes: never): unknown;
+}
+
+/** What a model that writes its attributes has. */
+interface WritesAttributes {
+  setAttribute(name: never, value: never): void;
+  removeAttribute(name: never): void;
+}
+
+/**
+ * A graph or subgraph a {@link DSL} can be made of: one that its statements
+ * can add to (`addNode`, `addEdge`, `addSubgraph`, `addAttributeList`).
+ * @group DSL
+ */
+export type DSLGraphModel = (ReadonlyRootGraphModel | ReadonlySubgraphModel) &
+  HasComments<CommentPosition> &
+  WritesAttributes &
+  WritesStatements & {
+    readonly attributes: {
+      readonly graph: DSLModel;
+      readonly edge: DSLModel;
+      readonly node: DSLModel;
+    };
+  };
+
+/**
+ * The model types a {@link DSL} creates with ({@link ModelTypes} of any
+ * schema, or the types of a kit's classes): models that write.
+ * @group DSL
+ */
+export interface DSLModelTypes extends AnyModelTypes {
+  Dot: ReadonlyDotModel & DSLModel;
+  Graph: ReadonlyRootGraphModel & DSLGraphModel;
+  Digraph: ReadonlyRootGraphModel & DSLGraphModel;
+  Subgraph: ReadonlySubgraphModel & DSLGraphModel;
+  Node: ReadonlyNodeModel & DSLModel;
+  Edge: ReadonlyEdgeModel & DSLModel;
+}
+
+/**
+ * The model types a DSL of the model `T` creates without a kit: those of the
+ * default classes, typed with the model's schema ({@link ModelTypes} itself
+ * without one).
+ * @group DSL
+ */
+export type DefaultModelTypesOf<T> = T extends {
+  readonly '~schema'?: infer S extends Schema;
+}
+  ? [keyof S] extends [never]
+    ? ModelTypes
+    : ModelTypes<S>
+  : ModelTypes;
+
+/**
+ * The schema of the model `T` ({@link EmptySchema} for a model without
+ * one).
+ * @group DSL
+ */
+export type SchemaOfModel<T> = T extends {
+  readonly '~schema'?: infer S extends Schema;
+}
+  ? S
+  : EmptySchema;
 
 /** An edge target a DSL takes: a node's DSL as well as a node or an id. */
 type DSLNodeRefLike = NodeRefLike | ModelView<ReadonlyNodeModel>;
@@ -94,30 +198,23 @@ export type DSLEdgeTargetLikeTuple =
       ...rest: (DSLNodeRefLike | readonly DSLNodeRefLike[])[],
     ];
 
-/** The attribute keys of a model with attributes of its own or a group. */
-type AttributeKeysOf<T> = T extends {
-  readonly values: ReadonlyArray<[infer K, unknown]>;
-}
-  ? K
-  : T extends {
-        readonly attributes: {
-          readonly values: ReadonlyArray<[infer K, unknown]>;
-        };
-      }
-    ? K
-    : never;
-
-/** The attributes as properties. */
-type AttributeProperties<K> = {
-  [P in K & AttributeKey]?: Attribute<P>;
-};
+/**
+ * The attributes of a model as properties: the built-in ones of its kind,
+ * and those its schema `E` (as {@link SchemaAttributeTypes} gives them) adds
+ * or changes. Without a schema, the built-in ones as they are, which the
+ * type checker does not need to work out from the schema.
+ */
+type AttributeProperties<T extends AttributeKey, S, E extends object> = [
+  keyof S,
+] extends [never]
+  ? { [K in T]?: Attribute<K> }
+  : AttributesObject<T, E>;
 
 /**
  * What every DSL has: its model under `MODEL`, `$$type` and `addComment`.
  * @group DSL
  */
-export interface ModelDSLMembers<T extends AnyDotObjectModel>
-  extends ModelView<T> {
+export interface ModelDSLMembers<T extends DSLModel> extends ModelView<T> {
   readonly $$type: T['$$type'];
   /**
    * Attach a comment, written as DOT writes one (see the model's
@@ -130,15 +227,18 @@ export interface ModelDSLMembers<T extends AnyDotObjectModel>
  * The DSL of a node.
  * @group DSL
  */
-export type NodeDSL<T extends NodeModel> = NodeDSLMembers<T> &
-  AttributeProperties<AttributeKeysOf<T>>;
+export type NodeDSL<T extends DSLModel> = NodeDSLMembers<T> &
+  AttributeProperties<
+    NodeAttributeKey,
+    SchemaOfModel<T>,
+    SchemaAttributeTypes<SchemaOfModel<T>, 'node'>
+  >;
 
 /**
  * What a node's DSL has besides its attributes.
  * @group DSL
  */
-export interface NodeDSLMembers<T extends NodeModel>
-  extends ModelDSLMembers<T> {
+export interface NodeDSLMembers<T extends DSLModel> extends ModelDSLMembers<T> {
   /**
    * The node at a port, for an edge target (`a:p:n` in DOT).
    *
@@ -153,8 +253,12 @@ export interface NodeDSLMembers<T extends NodeModel>
  * The DSL of an edge.
  * @group DSL
  */
-export type EdgeDSL<T extends EdgeModel> = ModelDSLMembers<T> &
-  AttributeProperties<AttributeKeysOf<T>>;
+export type EdgeDSL<T extends DSLModel> = ModelDSLMembers<T> &
+  AttributeProperties<
+    EdgeAttributeKey,
+    SchemaOfModel<T>,
+    SchemaAttributeTypes<SchemaOfModel<T>, 'edge'>
+  >;
 
 /**
  * The DSL of a default attribute list (`node [...]`, `edge [...]`,
@@ -162,17 +266,18 @@ export type EdgeDSL<T extends EdgeModel> = ModelDSLMembers<T> &
  * @group DSL
  */
 export type AttributeListDSL<
-  T extends AttributeListModel,
+  T extends DSLModel,
   K extends AttributeListKind,
   A extends AttributeKey,
-> = AttributeListDSLMembers<T, K> & AttributeProperties<A>;
+  E extends object = Record<never, never>,
+> = AttributeListDSLMembers<T, K> & AttributesObject<A, E>;
 
 /**
  * What a default attribute list's DSL has besides its attributes.
  * @group DSL
  */
 export interface AttributeListDSLMembers<
-  T extends AttributeListModel,
+  T extends DSLModel,
   K extends AttributeListKind,
 > extends ModelDSLMembers<T> {
   readonly $$kind: K;
@@ -183,25 +288,35 @@ export interface AttributeListDSLMembers<
  * model (`modelOf(x).graphs`).
  * @group DSL
  */
-export type DotDSL<T extends DotModel> = ModelDSLMembers<T>;
+export type DotDSL<T extends DSLModel> = ModelDSLMembers<T>;
 
 /**
  * The DSL of a root graph (`graph` or `digraph`).
  * @group DSL
  */
 export type RootGraphDSL<
-  T extends RootGraphModel,
-  M extends ModelTypes = ModelTypes,
-> = GraphDSLMembers<T, M> & AttributeProperties<AttributeKeysOf<T>>;
+  T extends DSLGraphModel,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
+> = GraphDSLMembers<T, M> &
+  AttributeProperties<
+    GraphAttributeKey,
+    SchemaOfModel<T>,
+    SchemaAttributeTypes<SchemaOfModel<T>, 'graph'>
+  >;
 
 /**
  * The DSL of a subgraph.
  * @group DSL
  */
 export type SubgraphDSL<
-  T extends SubgraphModel,
-  M extends ModelTypes = ModelTypes,
-> = GraphDSLMembers<T, M> & AttributeProperties<AttributeKeysOf<T>>;
+  T extends DSLGraphModel,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
+> = GraphDSLMembers<T, M> &
+  AttributeProperties<
+    SubgraphAttributeKey | ClusterSubgraphAttributeKey,
+    SchemaOfModel<T>,
+    GraphSchemaAttributeTypes<'Subgraph', SchemaOfModel<T>>
+  >;
 
 /**
  * What a graph's or subgraph's DSL has besides its attributes: its DOT
@@ -209,8 +324,8 @@ export type SubgraphDSL<
  * @group DSL
  */
 export interface GraphDSLMembers<
-  T extends RootGraphModel | SubgraphModel,
-  M extends ModelTypes = ModelTypes,
+  T extends DSLGraphModel,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
 > extends ModelDSLMembers<T>,
     GraphDSLStatements<T, M> {}
 
@@ -219,13 +334,13 @@ export interface GraphDSLMembers<
  * `graph`.
  *
  * `node`, `edge` and `subgraph` create with the DSL's kit and add to the
- * graph. Their callbacks receive what the statement gives and, second, the
- * kit: its `create*` only create.
+ * graph; their callbacks receive what the statement gives. The attributes
+ * they take are those of the kit's schema.
  * @group DSL
  */
 export interface GraphDSLStatements<
-  T extends RootGraphModel | SubgraphModel,
-  M extends ModelTypes = ModelTypes,
+  T extends DSLGraphModel,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
 > {
   /**
    * A new subgraph with this id, as `subgraph id { ... }` in DOT. Like a
@@ -276,7 +391,7 @@ export interface GraphDSLStatements<
    */
   subgraph<const Id extends string>(
     id: Id,
-    attributes: SubgraphAttributesFor<Id>,
+    attributes: SubgraphAttributesFor<Id, SchemaOf<M>>,
     callback?: (subgraph: DSL<M['Subgraph'], M>) => void,
   ): DSL<M['Subgraph'], M>;
   /**
@@ -298,7 +413,7 @@ export interface GraphDSLStatements<
    * ```
    */
   subgraph(
-    attributes: NonClusterSubgraphAttributesObject,
+    attributes: NonClusterSubgraphAttributesObject<SchemaOf<M>>,
     callback?: (subgraph: DSL<M['Subgraph'], M>) => void,
   ): DSL<M['Subgraph'], M>;
   /** A new anonymous subgraph, as `subgraph { ... }` in DOT. */
@@ -320,7 +435,10 @@ export interface GraphDSLStatements<
    * // }
    * ```
    */
-  node(id: string, callback?: (node: DSL<M['Node']>) => void): DSL<M['Node']>;
+  node(
+    id: string,
+    callback?: (node: DSL<M['Node'], M>) => void,
+  ): DSL<M['Node'], M>;
   /**
    * A new node with this id and these attributes, as `A [color=red];` in
    * DOT (another declaration when the graph has one with the id).
@@ -339,9 +457,9 @@ export interface GraphDSLStatements<
    */
   node(
     id: string,
-    attributes: NodeAttributesObject,
-    callback?: (node: DSL<M['Node']>) => void,
-  ): DSL<M['Node']>;
+    attributes: NodeAttributesObject<SchemaOf<M>>,
+    callback?: (node: DSL<M['Node'], M>) => void,
+  ): DSL<M['Node'], M>;
   /**
    * Default attributes for the nodes, as `node [color=red];` in DOT: they
    * apply to the nodes that follow. Returns the list's DSL, to change those
@@ -358,7 +476,9 @@ export interface GraphDSLStatements<
    * // }
    * ```
    */
-  node(attributes: NodeAttributesObject): DSL<T['attributes']['node']>;
+  node(
+    attributes: NodeAttributesObject<SchemaOfModel<T>>,
+  ): DSL<T['attributes']['node'], M>;
 
   /**
    * A new edge, as `a -> b;` in DOT. A node's DSL, a node or an id
@@ -376,8 +496,8 @@ export interface GraphDSLStatements<
    */
   edge(
     targets: DSLEdgeTargetLikeTuple,
-    callback?: (edge: DSL<M['Edge']>) => void,
-  ): DSL<M['Edge']>;
+    callback?: (edge: DSL<M['Edge'], M>) => void,
+  ): DSL<M['Edge'], M>;
   /**
    * A new edge with these attributes, as `a -> b [color=red];` in DOT.
    *
@@ -394,9 +514,9 @@ export interface GraphDSLStatements<
    */
   edge(
     targets: DSLEdgeTargetLikeTuple,
-    attributes: EdgeAttributesObject,
-    callback?: (edge: DSL<M['Edge']>) => void,
-  ): DSL<M['Edge']>;
+    attributes: EdgeAttributesObject<SchemaOf<M>>,
+    callback?: (edge: DSL<M['Edge'], M>) => void,
+  ): DSL<M['Edge'], M>;
   /**
    * Default attributes for the edges, as `edge [color=red];` in DOT: they
    * apply to the edges that follow. Returns the list's DSL, to change those
@@ -413,7 +533,9 @@ export interface GraphDSLStatements<
    * // }
    * ```
    */
-  edge(attributes: EdgeAttributesObject): DSL<T['attributes']['edge']>;
+  edge(
+    attributes: EdgeAttributesObject<SchemaOfModel<T>>,
+  ): DSL<T['attributes']['edge'], M>;
 
   /**
    * Default attributes for the subgraphs and this graph, as
@@ -432,7 +554,9 @@ export interface GraphDSLStatements<
    * // }
    * ```
    */
-  graph(attributes: SubgraphAttributesObject): DSL<T['attributes']['graph']>;
+  graph(
+    attributes: SubgraphAttributesObject<SchemaOfModel<T>>,
+  ): DSL<T['attributes']['graph'], M>;
 }
 
 // ---------------------------------------------------------------------------
@@ -447,6 +571,22 @@ export interface GraphDSLStatements<
 // 4. A model and a kit have one DSL, so DSLs of one kit compare with `===`.
 // 5. The DSL's own names are a few fixed ones (`MEMBERS`, the statements);
 //    every other name is an attribute.
+
+/**
+ * Nothing for a kit `M` of the schema of every graph `T` may be (or for
+ * models that are not graphs, which do not create); otherwise a member no
+ * kit has, so that the kit is a type error.
+ */
+type KitOfSchema<T, M extends AnyModelTypes> = [GraphSchemaOf<T>] extends [
+  never,
+]
+  ? unknown
+  : [SchemaOf<M>, GraphSchemaOf<T>] extends [GraphSchemaOf<T>, SchemaOf<M>]
+    ? unknown
+    : { readonly '~the kit is of another schema than the graph': never };
+
+/** The schemas of the graphs among the models `T`. */
+type GraphSchemaOf<T> = T extends DSLGraphModel ? SchemaOfModel<T> : never;
 
 /** Each model's DSL with each kit (rule 4). */
 const views = new WeakMap<object, WeakMap<ModelKit, object>>();
@@ -495,7 +635,10 @@ function isKit(value: unknown): value is ModelKit {
  * A graph's DSL creates with the kit: pass the kit of your classes
  * (`createModelKit`) for `node`, `edge` and `subgraph` to create them. A
  * model does not remember the kit it was created with; `node('a')` creates
- * a node of the kit's class, also when the graph already has an `a`.
+ * a node of the kit's class, also when the graph already has an `a`. The
+ * kit of a graph's DSL is of the graph's schema: a kit of another schema is
+ * a type error. Without a kit, a model of a schema gets the default classes
+ * typed with its schema.
  *
  * ```ts
  * const G = dsl(fromDot('digraph { a }'));
@@ -512,15 +655,13 @@ function isKit(value: unknown): value is ModelKit {
  * @group DSL
  */
 export function dsl<
-  T extends AnyDotObjectModel,
-  M extends ModelTypes = ModelTypes,
->(model: T | ModelView<T>, kit: ModelKit<M>): DSL<T, M>;
-export function dsl<T extends AnyDotObjectModel, M extends ModelTypes>(
+  T extends DSLModel,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
+>(model: T | ModelView<T>, kit: ModelKit<M> & KitOfSchema<T, M>): DSL<T, M>;
+export function dsl<T extends DSLModel, M extends DSLModelTypes>(
   dsl: DSL<T, M>,
 ): DSL<T, M>;
-export function dsl<T extends AnyDotObjectModel>(
-  model: T | ModelView<T>,
-): DSL<T>;
+export function dsl<T extends DSLModel>(model: T | ModelView<T>): DSL<T>;
 export function dsl(model: unknown, kit?: unknown): unknown {
   const target = modelOf(model);
   if (!isModel(target)) {

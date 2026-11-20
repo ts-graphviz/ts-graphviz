@@ -48,6 +48,7 @@ export declare class Digraph<S extends Schema = EmptySchema> extends RootGraph<S
   get directed(): boolean;
 }
 
+export interface Dot<S extends Schema = EmptySchema> extends HasSchema<S> {}
 export declare class Dot<S extends Schema = EmptySchema> implements DotModel<S> {
   #private;
   get $$type(): "Dot";
@@ -63,6 +64,7 @@ export declare class Dot<S extends Schema = EmptySchema> implements DotModel<S> 
   removeGraph(graph: RootGraphModel<S>): void;
 }
 
+export interface Edge<S extends Schema = EmptySchema> extends HasSchema<S> {}
 export declare class Edge<S extends Schema = EmptySchema> extends AttributesBase<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">> implements EdgeModel<S> {
   #private;
   get $$type(): "Edge";
@@ -80,6 +82,7 @@ export declare class Graph<S extends Schema = EmptySchema> extends RootGraph<S> 
   get directed(): boolean;
 }
 
+export interface GraphBase<T extends DotObjectType, K extends AttributeKey = AttributeKey, S extends Schema = EmptySchema> extends HasSchema<S> {}
 export declare abstract class GraphBase<T extends DotObjectType, K extends AttributeKey = AttributeKey, S extends Schema = EmptySchema> extends AttributesBase<K, GraphSchemaAttributeTypes<T, S>> implements GraphBaseModel<T, K, S> {
   #private;
   abstract get $$type(): T;
@@ -143,6 +146,7 @@ export declare class LegacySubgraph<S extends Schema = EmptySchema> extends Subg
   get subgraphs(): ReadonlyArray<SubgraphModel<S>>;
 }
 
+export interface Node<S extends Schema = EmptySchema> extends HasSchema<S> {}
 export declare class Node<S extends Schema = EmptySchema> extends AttributesBase<NodeAttributeKey, SchemaAttributeTypes<S, "node">> implements NodeModel<S> {
   #private;
   readonly id: string;

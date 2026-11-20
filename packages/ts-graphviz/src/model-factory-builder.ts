@@ -5,7 +5,7 @@ import type {
   RootGraphModel,
 } from '@ts-graphviz/common';
 import { defaultModelKit } from '@ts-graphviz/core';
-import { type DSL, dsl } from './dsl.js';
+import { type DSL, type DSLModelTypes, dsl } from './dsl.js';
 import type { ModelFactories, ModelFactory } from './types.js';
 
 /**
@@ -48,19 +48,24 @@ export function ModelFactoryBuilder(
  * @param kit The kit that creates the graphs; by default `defaultModelKit`.
  * @returns An object containing two ModelFactories, one for directed graphs and one for undirected graphs.
  */
-export function createModelFactories<M extends ModelTypes = ModelTypes>(
+export function createModelFactories<M extends DSLModelTypes = ModelTypes>(
   strict: boolean,
   kit: ModelKit<M> = defaultModelKit as ModelKit<M>,
 ): Readonly<ModelFactories<M>> {
-  // The graphs come from the kit's classes, which `M` describes.
+  // The graphs come from the kit's classes, which `M` describes; the
+  // builder does not depend on the schema, which only types the attributes,
+  // so the factories are typed with `M` here.
+  const untyped = kit as ModelKit;
   return Object.freeze({
-    digraph: ModelFactoryBuilder.call(kit, true, strict) as ModelFactory<
-      M['Digraph'],
-      M
-    >,
-    graph: ModelFactoryBuilder.call(kit, false, strict) as ModelFactory<
-      M['Graph'],
-      M
-    >,
+    digraph: ModelFactoryBuilder.call(
+      untyped,
+      true,
+      strict,
+    ) as unknown as ModelFactory<M['Digraph'], M>,
+    graph: ModelFactoryBuilder.call(
+      untyped,
+      false,
+      strict,
+    ) as unknown as ModelFactory<M['Graph'], M>,
   });
 }
