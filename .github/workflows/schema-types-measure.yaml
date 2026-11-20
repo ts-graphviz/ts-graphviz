@@ -31,6 +31,8 @@ jobs:
             sha: 856bb0df8afc5f609ce4698d30d657327dea87fc
           - label: PR 1 (DSL of schema models)
             sha: 9bddce7bbe8b1f33494523a46b0fe4a0910802f6
+          - label: PR 1 v2 ('~schema')
+            sha: 7d80a0ebacc8b57fc2acf85bf668e832744d6d5d
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
