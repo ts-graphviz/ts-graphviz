@@ -163,6 +163,12 @@ describe('the factory and fromDot types of a model of a schema', () => {
     >().toEqualTypeOf<DSL<RootGraphModel<MySchema>, MyTypes>>();
   });
 
+  it('is not made of a graph its statements cannot add to', () => {
+    type NoStatements = Omit<RootGraphModel, 'addNode'>;
+    // @ts-expect-error the graph has no addNode
+    dsl({} as NoStatements);
+  });
+
   it('is not made of a read-only model with comments', () => {
     // @ts-expect-error its attributes do not write
     dsl({} as ReadonlyNodeModel & HasComments);

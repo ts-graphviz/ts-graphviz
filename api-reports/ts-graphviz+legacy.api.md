@@ -34,7 +34,7 @@ export type DSLGraphModel = (ReadonlyRootGraphModel | ReadonlySubgraphModel) & H
   };
 };
 
-export type DSLModel = (ReadonlyDotModel & HasComments<CommentPosition>) | (Exclude<AnyReadonlyDotObjectModel, ReadonlyDotModel> & HasComments<CommentPosition> & WritesAttributes);
+export type DSLModel = (ReadonlyDotModel & HasComments<CommentPosition>) | ((ReadonlyNodeModel | ReadonlyEdgeModel | ReadonlyAttributeListModel) & HasComments<CommentPosition> & WritesAttributes) | DSLGraphModel;
 
 export interface DSLModelTypes extends AnyModelTypes {
   Dot: ReadonlyDotModel & DSLModel;
