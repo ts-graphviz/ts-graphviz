@@ -31,6 +31,7 @@
 import type { CommonParseOptions } from '@ts-graphviz/ast';
 import {
   type EdgeModel,
+  type ModelClasses,
   type ModelKitOptions,
   type ModelKitOptionsOf,
   type NodeModel,
@@ -212,7 +213,7 @@ export function fromDot(
  */
 export function fromDot<const D extends boolean>(
   dot: string,
-  options: FromDotOptions<'Dot' | 'Graph', ModelKitOptions, D>,
+  options: FromDotOptions<'Dot' | 'Graph', Partial<ModelClasses>, D>,
 ): FromDotResult<RootGraphModel, D>;
 /**
  * @deprecated The 3.x models (`legacyModels`). For node and edge defaults
@@ -223,7 +224,7 @@ export function fromDot<
   const D extends boolean = false,
 >(
   dot: string,
-  options: FromDotOptions<R, ModelKitOptions, D>,
+  options: FromDotOptions<R, Partial<ModelClasses>, D>,
 ): FromDotResult<FromDotModel<R>, D>;
 export function fromDot(
   dot: string,
@@ -288,7 +289,7 @@ export function fromDotAll(
  */
 export function fromDotAll<const D extends boolean>(
   dot: string,
-  options: Omit<FromDotOptions<'Dot', ModelKitOptions, D>, 'parse'> & {
+  options: Omit<FromDotOptions<'Dot', Partial<ModelClasses>, D>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): FromDotResult<RootGraphModel, D>[];

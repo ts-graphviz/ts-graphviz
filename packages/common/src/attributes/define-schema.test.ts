@@ -71,6 +71,53 @@ describe('defineSchema', () => {
     );
   });
 
+  it('holds entries of its own, which the caller cannot change', () => {
+    const given = { mode: 'add' as const };
+    const schema = defineSchema({ node: { a: given } });
+    expect(schema.node?.a).not.toBe(given);
+    (given as { mode: string }).mode = 'override';
+    expect(schema.node?.a).toEqual({ mode: 'add' });
+    expect(Object.isFrozen(schema.node?.a)).toBe(true);
+  });
+
+  it('takes an attribute named __proto__ as one, with no prototype to set', () => {
+    const node = JSON.parse('{"__proto__": {"mode": "add"}}');
+    const schema = defineSchema({ node } as never) as {
+      node: Record<string, unknown>;
+    };
+    expect(Object.keys(schema.node)).toEqual(['__proto__']);
+    expect(Object.getPrototypeOf(schema.node)).toBe(null);
+  });
+
+  test.each<[string, object]>([
+    [
+      'an entry',
+      {
+        node: {
+          a: Object.defineProperty({}, 'mode', {
+            get: () => 'add',
+            enumerable: true,
+          }),
+        },
+      },
+    ],
+    [
+      'a part',
+      Object.defineProperty({}, 'node', { get: () => ({}), enumerable: true }),
+    ],
+    [
+      'an attribute',
+      {
+        node: Object.defineProperty({}, 'a', {
+          get: () => attr<string>(),
+          enumerable: true,
+        }),
+      },
+    ],
+  ])('throws for a getter in place of %s', (_, schema) => {
+    expect(() => defineSchema(schema as never)).toThrow(invalid);
+  });
+
   it('reads own properties only', () => {
     const proto = Object.prototype as Record<string, unknown>;
     proto.node = { a: attr<string>() };

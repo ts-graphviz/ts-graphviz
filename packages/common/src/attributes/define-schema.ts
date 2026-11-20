@@ -137,17 +137,30 @@ const MODES: ReadonlySet<unknown> = new Set<SchemaEntryMode>([
 ]);
 
 /**
- * What `attr` and `values` create, by shape: an entry from another copy of
- * this package is one too.
+ * The own enumerable properties of an object, which must be data
+ * properties: a getter could give another value after the check.
  */
-function isEntry(value: unknown): value is SchemaEntry {
-  if (typeof value !== 'object' || value === null) return false;
-  const keys = Object.keys(value);
-  return (
-    keys.length === 1 &&
-    keys[0] === 'mode' &&
-    MODES.has((value as { mode: unknown }).mode)
-  );
+function ownData(value: object, part: string): [string, unknown][] {
+  return Object.keys(value).map((key) => {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (descriptor === undefined || !('value' in descriptor)) {
+      throw invalid(`${name(key)} in the ${part} of a schema must be a value`);
+    }
+    return [key, descriptor.value];
+  });
+}
+
+/**
+ * A new entry of the mode of `value`, if it is what `attr` and `values`
+ * create, by shape (an entry from another copy of this package is one
+ * too); otherwise `undefined`.
+ */
+function entryOf(value: unknown, part: string): SchemaEntry | undefined {
+  if (typeof value !== 'object' || value === null) return undefined;
+  const fields = ownData(value, part);
+  if (fields.length !== 1 || fields[0][0] !== 'mode') return undefined;
+  const mode = fields[0][1];
+  return MODES.has(mode) ? entry(mode as SchemaEntryMode) : undefined;
 }
 
 function name(key: string): string {
@@ -163,17 +176,20 @@ function entriesOf(
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     throw invalid(`The ${part} of a schema must be an object`);
   }
-  const copy: Record<string, SchemaEntry> = {};
+  // No prototype: an attribute may be named `__proto__`.
+  const copy: Record<string, SchemaEntry> = Object.create(null);
   // Own properties only: one inherited from Object.prototype is never an
-  // entry.
-  for (const [key, entry] of Object.entries(value)) {
-    if (!isEntry(entry)) {
+  // entry. The entries are new ones, so the schema holds nothing the caller
+  // can change.
+  for (const [key, given] of ownData(value, part)) {
+    const created = entryOf(given, part);
+    if (created === undefined) {
       throw invalid(
-        `${name(key)} in the ${part} of a schema must be created by attr or values`,
+        `${name(key)} in the ${part} of a schema must be an entry of attr or values`,
       );
     }
-    check(key, entry);
-    copy[key] = entry;
+    check(key, created);
+    copy[key] = created;
   }
   return Object.freeze(copy);
 }
@@ -228,7 +244,7 @@ export function defineSchema<const S extends Schema>(
     throw invalid('A schema must be an object');
   }
   const defined: Record<string, unknown> = {};
-  for (const [part, value] of Object.entries(schema)) {
+  for (const [part, value] of ownData(schema, 'parts')) {
     if (part === 'types') {
       defined.types = entriesOf(value, 'types', (key, entry) => {
         if (!VALUE_TYPES.has(key)) {

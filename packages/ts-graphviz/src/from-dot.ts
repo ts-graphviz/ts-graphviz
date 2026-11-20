@@ -5,6 +5,7 @@ import type {
 } from '@ts-graphviz/ast';
 import {
   type EdgeModel,
+  type ModelClasses,
   type ModelKitOptions,
   type ModelKitOptionsOf,
   type ModelTypes,
@@ -67,7 +68,7 @@ export type FromDotResult<
  */
 export type FromDotOptions<
   T extends FromDotRule,
-  P extends ModelKitOptions = ModelKitOptions,
+  P extends ModelKitOptions = Partial<ModelClasses>,
   D extends boolean = false,
 > = {
   /**
@@ -141,14 +142,14 @@ export function fromDot(
 ): RootGraphModel;
 export function fromDot<const D extends boolean>(
   dot: string,
-  options: FromDotOptions<'Dot' | 'Graph', ModelKitOptions, D>,
+  options: FromDotOptions<'Dot' | 'Graph', Partial<ModelClasses>, D>,
 ): FromDotResult<RootGraphModel, D>;
 export function fromDot<
   const R extends FromDotRule,
   const D extends boolean = false,
 >(
   dot: string,
-  options: FromDotOptions<R, ModelKitOptions, D>,
+  options: FromDotOptions<R, Partial<ModelClasses>, D>,
 ): FromDotResult<FromDotModel<R>, D>;
 export function fromDot(
   dot: string,
@@ -192,7 +193,7 @@ export function fromDotAll(
 ): RootGraphModel[];
 export function fromDotAll<const D extends boolean>(
   dot: string,
-  options: Omit<FromDotOptions<'Dot', ModelKitOptions, D>, 'parse'> & {
+  options: Omit<FromDotOptions<'Dot', Partial<ModelClasses>, D>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): FromDotResult<RootGraphModel, D>[];

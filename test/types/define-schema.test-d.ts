@@ -7,6 +7,7 @@ import {
   dsl,
   type EdgeModel,
   fromDot,
+  fromDotAll,
   type ModelKit,
   type ModelTypes,
   modelOf,
@@ -17,6 +18,7 @@ import {
   values,
   withModelKit,
 } from 'ts-graphviz';
+import * as legacy from 'ts-graphviz/legacy';
 import { describe, expectTypeOf, it } from 'vitest';
 
 const schema = defineSchema({
@@ -173,5 +175,30 @@ describe('a kit with a schema', () => {
     expectTypeOf(dsl(G, createModelKit({ schema }))).toExtend<
       DSL<RootGraphModel<MySchema>, ModelTypes<MySchema>>
     >();
+  });
+});
+
+describe('fromDot with classes of another schema', () => {
+  class PlainNode extends Node {}
+
+  it('does not compile', () => {
+    fromDot('a', {
+      parse: { as: 'Node' },
+      // @ts-expect-error a class of no schema with a schema
+      convert: { models: { schema, Node: PlainNode } },
+    });
+    fromDot('digraph { a }', {
+      // @ts-expect-error a class of a schema without one
+      convert: { models: { Node: MyNode } },
+      dsl: true,
+    });
+    fromDotAll('digraph { a }', {
+      // @ts-expect-error the same with fromDotAll
+      convert: { models: { schema, Node: PlainNode } },
+    });
+    legacy.fromDot('digraph { a }', {
+      // @ts-expect-error the same with ts-graphviz/legacy
+      convert: { models: { schema, Node: PlainNode } },
+    });
   });
 });
