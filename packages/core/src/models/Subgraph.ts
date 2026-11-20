@@ -10,7 +10,8 @@ import type {
   SubgraphAttributesObject,
   SubgraphModel,
 } from '@ts-graphviz/common';
-import { isRecord, isString, readArguments } from './arguments.js';
+import { readArguments } from '@ts-graphviz/common';
+import { isRecord, isString } from './arguments.js';
 import { GraphBase } from './GraphBase.js';
 
 /**

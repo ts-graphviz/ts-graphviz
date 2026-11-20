@@ -1,11 +1,12 @@
-import type {
-  GraphAttributesObject,
-  ModelKit,
-  ModelTypes,
-  RootGraphModel,
+import {
+  type GraphAttributesObject,
+  type ModelKit,
+  type ModelTypes,
+  type RootGraphModel,
+  readArguments,
 } from '@ts-graphviz/common';
 import { defaultModelKit } from '@ts-graphviz/core';
-import { isFunction, isRecord, isString, readArguments } from './arguments.js';
+import { isFunction, isRecord, isString } from './arguments.js';
 import { type DSL, dsl } from './dsl.js';
 import type { ModelFactories, ModelFactory } from './types.js';
 

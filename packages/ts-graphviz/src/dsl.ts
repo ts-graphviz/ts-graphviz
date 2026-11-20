@@ -9,6 +9,7 @@ import {
   type EdgeModel,
   type ForwardRefNode,
   type GraphBaseModel,
+  invalidArguments,
   isAttributeListModel,
   isDotModel,
   isEdgeModel,
@@ -28,20 +29,14 @@ import {
   type ReadonlyEdgeTargetLikeTuple,
   type ReadonlyNodeModel,
   type RootGraphModel,
+  readArguments,
   type SubgraphAttributesFor,
   type SubgraphAttributesObject,
   type SubgraphModel,
   withCode,
 } from '@ts-graphviz/common';
 import { defaultModelKit } from '@ts-graphviz/core';
-import {
-  invalidArguments,
-  isArray,
-  isFunction,
-  isRecord,
-  isString,
-  readArguments,
-} from './arguments.js';
+import { isArray, isFunction, isRecord, isString } from './arguments.js';
 import { isLegacyKit } from './legacy-kit.js';
 
 /**

@@ -27,6 +27,8 @@ export interface AnyModelTypes {
 
 export type AnyReadonlyDotObjectModel = ReadonlyGraphStatementModel | ReadonlyRootGraphModel | ReadonlyDotModel;
 
+export type ArgumentFits = (arg: unknown) => boolean;
+
 export type ArrowType = ArrowType.aname | `${ArrowType.aname}${ArrowType.last}` | ArrowType.Built;
 export declare namespace ArrowType {
   type shape = keyof $shape;
@@ -1366,6 +1368,8 @@ export declare function escString(value: string): EscStringValue;
 
 export declare function htmlLike(markup: string): HTMLLikeValue;
 
+export declare function invalidArguments(name: string, args: readonly unknown[]): CodedError<"TSG_ERR_INVALID_ARGUMENTS">;
+
 export declare function isAttributeListModel<T>(object: T): object is NarrowedModel<T, "AttributeList">;
 
 export declare function isCommentModel(value: unknown): value is CommentModel;
@@ -1400,6 +1404,8 @@ export declare function isTsGraphvizError(value: unknown): value is CodedError;
 export declare function modelOf<T>(value: T): ModelOf<T>;
 
 export declare function ownOptions<T extends object>(options: T | undefined): T;
+
+export declare function readArguments(name: string | (() => string), args: readonly unknown[], places: readonly ArgumentFits[]): unknown[];
 
 export declare function toNodeRef(target: NodeRefLike): NodeRef;
 

@@ -6,14 +6,12 @@ import type {
   RootGraphOptions,
   Schema,
 } from '@ts-graphviz/common';
-import { ownOptions } from '@ts-graphviz/common';
 import {
   invalidArguments,
-  isBoolean,
-  isRecord,
-  isString,
+  ownOptions,
   readArguments,
-} from './arguments.js';
+} from '@ts-graphviz/common';
+import { isBoolean, isRecord, isString } from './arguments.js';
 import { GraphBase } from './GraphBase.js';
 
 /**
