@@ -13,7 +13,7 @@ a.label; // number | undefined
 g.node('b', { label: 'B' }); // type error: a number is expected
 ```
 
-- `DSL<T, M>` takes any model that writes (`DSLModel`: it writes its comments and attributes), of any schema; a read-only model (`ReadonlyNodeModel`, …) has none. `M`, the model types of the kit, is by default those of the model's schema (`ModelTypes<SchemaOfModel<T>>`), and is bounded by `DSLModelTypes`.
+- `DSL<T, M>` takes any model that writes (`DSLModel`: it writes its comments and attributes), of any schema; a read-only model (`ReadonlyNodeModel`, …) has none. `M`, the model types of the kit, is by default those of the default classes typed with the model's schema (`DefaultModelTypesOf<T>`: `ModelTypes` without a schema), and is bounded by `DSLModelTypes`.
 - The kit given to `dsl(graph, kit)` is of the graph's schema: a kit of another schema, or of none for a graph of a schema, is a type error. Without a kit, the DSL of a graph of a schema creates the default classes, typed with that schema.
 - `SchemaOfModel<T>` gives the schema of a model. The kit types of `ModelFactory`, `ModelFactoryCallback` and `FromDotResult` default to those of the graph's schema, as `DSL`'s do. `NodeDSL`, `EdgeDSL`, `RootGraphDSL`, `SubgraphDSL`, `AttributeListDSL` (with the attribute types a schema adds or changes as a fourth parameter) and the factory types (`ModelFactory`, `ModelFactories`, `FromDotResult`, …) take the models and model types of any schema.
 

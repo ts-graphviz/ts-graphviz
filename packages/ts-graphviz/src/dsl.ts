@@ -85,7 +85,7 @@ import { isLegacyKit } from './legacy-kit.js';
  */
 export type DSL<
   T extends DSLModel,
-  M extends DSLModelTypes = ModelTypes<SchemaOfModel<T>>,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
 > = T extends { readonly $$type: 'Node' }
   ? NodeDSL<T>
   : T extends { readonly $$type: 'Edge' }
@@ -145,6 +145,20 @@ export interface DSLModelTypes extends AnyModelTypes {
   Node: ReadonlyNodeModel & DSLModel;
   Edge: ReadonlyEdgeModel & DSLModel;
 }
+
+/**
+ * The model types a DSL of the model `T` creates without a kit: those of the
+ * default classes, typed with the model's schema ({@link ModelTypes} itself
+ * without one).
+ * @group DSL
+ */
+export type DefaultModelTypesOf<T> = T extends {
+  readonly '~schema'?: infer S extends Schema;
+}
+  ? [keyof S] extends [never]
+    ? ModelTypes
+    : ModelTypes<S>
+  : ModelTypes;
 
 /**
  * The schema of the model `T` ({@link EmptySchema} for a model without
@@ -271,7 +285,7 @@ export type DotDSL<T extends DSLModel> = ModelDSLMembers<T>;
  */
 export type RootGraphDSL<
   T extends DSLGraphModel,
-  M extends DSLModelTypes = ModelTypes<SchemaOfModel<T>>,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
 > = GraphDSLMembers<T, M> &
   AttributeProperties<
     GraphAttributeKey,
@@ -285,7 +299,7 @@ export type RootGraphDSL<
  */
 export type SubgraphDSL<
   T extends DSLGraphModel,
-  M extends DSLModelTypes = ModelTypes<SchemaOfModel<T>>,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
 > = GraphDSLMembers<T, M> &
   AttributeProperties<
     SubgraphAttributeKey | ClusterSubgraphAttributeKey,
@@ -300,7 +314,7 @@ export type SubgraphDSL<
  */
 export interface GraphDSLMembers<
   T extends DSLGraphModel,
-  M extends DSLModelTypes = ModelTypes<SchemaOfModel<T>>,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
 > extends ModelDSLMembers<T>,
     GraphDSLStatements<T, M> {}
 
@@ -315,7 +329,7 @@ export interface GraphDSLMembers<
  */
 export interface GraphDSLStatements<
   T extends DSLGraphModel,
-  M extends DSLModelTypes = ModelTypes<SchemaOfModel<T>>,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
 > {
   /**
    * A new subgraph with this id, as `subgraph id { ... }` in DOT. Like a
@@ -626,7 +640,7 @@ function isKit(value: unknown): value is ModelKit {
  */
 export function dsl<
   T extends DSLModel,
-  M extends DSLModelTypes = ModelTypes<SchemaOfModel<T>>,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
 >(model: T | ModelView<T>, kit: ModelKit<M> & KitOfSchema<T, M>): DSL<T, M>;
 export function dsl<T extends DSLModel, M extends DSLModelTypes>(
   dsl: DSL<T, M>,

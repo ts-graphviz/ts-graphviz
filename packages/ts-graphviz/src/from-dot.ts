@@ -14,7 +14,12 @@ import {
   type SubgraphModel,
 } from '@ts-graphviz/common';
 import { createModelKit } from '@ts-graphviz/core';
-import type { DSL, DSLModel, DSLModelTypes, SchemaOfModel } from './dsl.js';
+import type {
+  DefaultModelTypesOf,
+  DSL,
+  DSLModel,
+  DSLModelTypes,
+} from './dsl.js';
 import { fromDotAllWith, fromDotWith } from './from-dot-with.js';
 
 /**
@@ -50,7 +55,7 @@ type AnyFromDotModel = RootGraphModel | NodeModel | EdgeModel | SubgraphModel;
 export type FromDotResult<
   T extends DSLModel,
   D extends boolean,
-  M extends DSLModelTypes = ModelTypes<SchemaOfModel<T>>,
+  M extends DSLModelTypes = DefaultModelTypesOf<T>,
 > = D extends true ? DSL<T, M> : T;
 
 /**
