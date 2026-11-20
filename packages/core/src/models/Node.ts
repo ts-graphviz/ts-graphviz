@@ -4,6 +4,7 @@ import type {
   CommentOptions,
   EmptySchema,
   ForwardRefNode,
+  HasSchema,
   NodeAttributeKey,
   NodeAttributesObject,
   NodeModel,
@@ -15,6 +16,10 @@ import { AttributesBase } from '../attributes/AttributesBase.js';
 import { AttributesView } from '../attributes/AttributesView.js';
 import { CommentList, STATEMENT_POSITIONS } from './comment-list.js';
 
+// The schema of the models, for the types only (`HasSchema`): an interface
+// merged with the class adds the member with nothing at run time.
+export interface Node<S extends Schema = EmptySchema> extends HasSchema<S> {}
+
 /**
  * DOT object class representing a node.
  *
@@ -22,13 +27,11 @@ import { CommentList, STATEMENT_POSITIONS } from './comment-list.js';
  * none by default.
  * @group Models
  */
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: the interface above has a type-only member
 export class Node<S extends Schema = EmptySchema>
   extends AttributesBase<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>
   implements NodeModel<S>
 {
-  /** Type only: never present at run time (`HasSchema`). */
-  declare readonly '~schema'?: S;
-
   public get $$type(): 'Node' {
     return 'Node';
   }

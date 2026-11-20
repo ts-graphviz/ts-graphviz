@@ -3,11 +3,16 @@ import {
   type CommentOptions,
   type DotModel,
   type EmptySchema,
+  type HasSchema,
   modelOf,
   type RootGraphModel,
   type Schema,
 } from '@ts-graphviz/common';
 import { CommentList, DOT_POSITIONS } from './comment-list.js';
+
+// The schema of the models, for the types only (`HasSchema`): an interface
+// merged with the class adds the member with nothing at run time.
+export interface Dot<S extends Schema = EmptySchema> extends HasSchema<S> {}
 
 /**
  * Model of a whole DOT source: the root graphs it contains and the comments
@@ -18,10 +23,8 @@ import { CommentList, DOT_POSITIONS } from './comment-list.js';
  * @typeParam S - The schema of its root graphs; none by default.
  * @group Models
  */
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: the interface above has a type-only member
 export class Dot<S extends Schema = EmptySchema> implements DotModel<S> {
-  /** Type only: never present at run time (`HasSchema`). */
-  declare readonly '~schema'?: S;
-
   public get $$type(): 'Dot' {
     return 'Dot';
   }
