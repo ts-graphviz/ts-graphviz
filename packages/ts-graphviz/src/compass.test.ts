@@ -2,6 +2,7 @@ import { isTsGraphvizError } from '@ts-graphviz/common';
 import { Digraph, defaultModelKit } from '@ts-graphviz/core';
 import { describe, expect, it } from 'vitest';
 import { fromDot } from './from-dot.js';
+import { digraph } from './model-factory.js';
 import { toDot } from './to-dot.js';
 
 const COMPASS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'c', '_'];
@@ -45,5 +46,29 @@ describe('compass points', { tags: ['SM-2'] }, () => {
       defaultModelKit.createEdge([{ id: 'a', compass: '' } as never, 'b']),
     );
     expect(toDot(g)).toContain('"a" -> "b"');
+  });
+});
+
+describe('string edge targets', { tags: ['SM-2'] }, () => {
+  it('are refused when a part would be dropped, when the edge is created', () => {
+    for (const target of ['a:p:north', 'a:b:c:d']) {
+      expect(() => defaultModelKit.createEdge([target, 'b'])).toThrow(
+        expect.objectContaining({
+          name: 'TypeError',
+          code: 'TSG_ERR_INVALID_EDGE_TARGETS',
+        }),
+      );
+      expect(() => digraph((g) => g.edge([target, 'b']))).toThrow(
+        expect.objectContaining({ code: 'TSG_ERR_INVALID_EDGE_TARGETS' }),
+      );
+    }
+  });
+
+  it('take an id that contains ":" as an object', () => {
+    const g = new Digraph();
+    g.addEdge(defaultModelKit.createEdge([{ id: 'a:b' }, 'c']));
+    expect(fromDot(toDot(g)).getEdges()[0].targets[0]).toMatchObject({
+      id: 'a:b',
+    });
   });
 });
