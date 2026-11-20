@@ -4,7 +4,7 @@
 
 Generate attribute types from the Graphviz documentation
 
-The attribute keys, their TSDoc and their value types in `@ts-graphviz/common` are now generated from the official Graphviz documentation (graphviz.org, pinned to a commit of the website repository) instead of being maintained by hand. The augmentation points (`EdgeAttributeKey.$values`, `Attribute.$keys`, `Attribute.$types`, …) are unchanged.
+The attribute keys, their TSDoc and their value types in `@ts-graphviz/common` are now generated from the official Graphviz documentation (graphviz.org, pinned to a commit of the website repository) instead of being maintained by hand. The generated types are type aliases; declaration merging no longer extends them (see the entry on global type augmentation).
 
 Changes visible to users:
 

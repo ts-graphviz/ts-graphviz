@@ -3,8 +3,6 @@
 // `pnpm fetch:graphviz-docs`.
 
 import type {
-  $keywords,
-  $keywordsValidation,
   AddDouble,
   AddPoint,
   ArrowType,
@@ -43,325 +41,282 @@ import type {
  * Attribute types available for edges.
  * @group Attribute
  */
-export type EdgeAttributeKey = EdgeAttributeKey.values;
-
-/** @hidden */
-export namespace EdgeAttributeKey {
-  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
-  export interface $values
-    extends $keywords<
-      | 'arrowhead'
-      | 'arrowsize'
-      | 'arrowtail'
-      | 'class'
-      | 'color'
-      | 'colorscheme'
-      | 'comment'
-      | 'constraint'
-      | 'decorate'
-      | 'dir'
-      | 'edgehref'
-      | 'edgetarget'
-      | 'edgetooltip'
-      | 'edgeURL'
-      | 'fillcolor'
-      | 'fontcolor'
-      | 'fontname'
-      | 'fontsize'
-      | 'head_lp'
-      | 'headclip'
-      | 'headhref'
-      | 'headlabel'
-      | 'headport'
-      | 'headtarget'
-      | 'headtooltip'
-      | 'headURL'
-      | 'href'
-      | 'id'
-      | 'label'
-      | 'labelangle'
-      | 'labeldistance'
-      | 'labelfloat'
-      | 'labelfontcolor'
-      | 'labelfontname'
-      | 'labelfontsize'
-      | 'labelhref'
-      | 'labeltarget'
-      | 'labeltooltip'
-      | 'labelURL'
-      | 'layer'
-      | 'len'
-      | 'lhead'
-      | 'lp'
-      | 'ltail'
-      | 'minlen'
-      | 'nojustify'
-      | 'penwidth'
-      | 'pos'
-      | 'radius'
-      | 'samehead'
-      | 'sametail'
-      | 'showboxes'
-      | 'style'
-      | 'tail_lp'
-      | 'tailclip'
-      | 'tailhref'
-      | 'taillabel'
-      | 'tailport'
-      | 'tailtarget'
-      | 'tailtooltip'
-      | 'tailURL'
-      | 'target'
-      | 'tooltip'
-      | 'URL'
-      | 'weight'
-      | 'xlabel'
-      | 'xlp'
-    > {}
-  export interface $exclude extends $keywordsValidation {}
-}
+export type EdgeAttributeKey =
+  | 'arrowhead'
+  | 'arrowsize'
+  | 'arrowtail'
+  | 'class'
+  | 'color'
+  | 'colorscheme'
+  | 'comment'
+  | 'constraint'
+  | 'decorate'
+  | 'dir'
+  | 'edgehref'
+  | 'edgetarget'
+  | 'edgetooltip'
+  | 'edgeURL'
+  | 'fillcolor'
+  | 'fontcolor'
+  | 'fontname'
+  | 'fontsize'
+  | 'head_lp'
+  | 'headclip'
+  | 'headhref'
+  | 'headlabel'
+  | 'headport'
+  | 'headtarget'
+  | 'headtooltip'
+  | 'headURL'
+  | 'href'
+  | 'id'
+  | 'label'
+  | 'labelangle'
+  | 'labeldistance'
+  | 'labelfloat'
+  | 'labelfontcolor'
+  | 'labelfontname'
+  | 'labelfontsize'
+  | 'labelhref'
+  | 'labeltarget'
+  | 'labeltooltip'
+  | 'labelURL'
+  | 'layer'
+  | 'len'
+  | 'lhead'
+  | 'lp'
+  | 'ltail'
+  | 'minlen'
+  | 'nojustify'
+  | 'penwidth'
+  | 'pos'
+  | 'radius'
+  | 'samehead'
+  | 'sametail'
+  | 'showboxes'
+  | 'style'
+  | 'tail_lp'
+  | 'tailclip'
+  | 'tailhref'
+  | 'taillabel'
+  | 'tailport'
+  | 'tailtarget'
+  | 'tailtooltip'
+  | 'tailURL'
+  | 'target'
+  | 'tooltip'
+  | 'URL'
+  | 'weight'
+  | 'xlabel'
+  | 'xlp';
 
 /**
  * Attribute types available for nodes.
  * @group Attribute
  */
-export type NodeAttributeKey = NodeAttributeKey.values;
-
-/** @hidden */
-export namespace NodeAttributeKey {
-  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
-  export interface $values
-    extends $keywords<
-      | 'area'
-      | 'class'
-      | 'color'
-      | 'colorscheme'
-      | 'comment'
-      | 'distortion'
-      | 'fillcolor'
-      | 'fixedsize'
-      | 'fontcolor'
-      | 'fontname'
-      | 'fontsize'
-      | 'gradientangle'
-      | 'group'
-      | 'height'
-      | 'href'
-      | 'id'
-      | 'image'
-      | 'imagepos'
-      | 'imagescale'
-      | 'label'
-      | 'labelloc'
-      | 'layer'
-      | 'margin'
-      | 'nojustify'
-      | 'ordering'
-      | 'orientation'
-      | 'penwidth'
-      | 'peripheries'
-      | 'pin'
-      | 'pos'
-      | 'rects'
-      | 'regular'
-      | 'root'
-      | 'samplepoints'
-      | 'shape'
-      | 'shapefile'
-      | 'showboxes'
-      | 'sides'
-      | 'skew'
-      | 'sortv'
-      | 'style'
-      | 'target'
-      | 'tooltip'
-      | 'URL'
-      | 'vertices'
-      | 'width'
-      | 'xlabel'
-      | 'xlp'
-      | 'z'
-    > {}
-  export interface $exclude extends $keywordsValidation {}
-}
+export type NodeAttributeKey =
+  | 'area'
+  | 'class'
+  | 'color'
+  | 'colorscheme'
+  | 'comment'
+  | 'distortion'
+  | 'fillcolor'
+  | 'fixedsize'
+  | 'fontcolor'
+  | 'fontname'
+  | 'fontsize'
+  | 'gradientangle'
+  | 'group'
+  | 'height'
+  | 'href'
+  | 'id'
+  | 'image'
+  | 'imagepos'
+  | 'imagescale'
+  | 'label'
+  | 'labelloc'
+  | 'layer'
+  | 'margin'
+  | 'nojustify'
+  | 'ordering'
+  | 'orientation'
+  | 'penwidth'
+  | 'peripheries'
+  | 'pin'
+  | 'pos'
+  | 'rects'
+  | 'regular'
+  | 'root'
+  | 'samplepoints'
+  | 'shape'
+  | 'shapefile'
+  | 'showboxes'
+  | 'sides'
+  | 'skew'
+  | 'sortv'
+  | 'style'
+  | 'target'
+  | 'tooltip'
+  | 'URL'
+  | 'vertices'
+  | 'width'
+  | 'xlabel'
+  | 'xlp'
+  | 'z';
 
 /**
  * Attribute types available for root graph.
  * @group Attribute
  */
-export type GraphAttributeKey = GraphAttributeKey.values;
-
-/** @hidden */
-export namespace GraphAttributeKey {
-  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
-  export interface $values
-    extends $keywords<
-      | '_background'
-      | 'bb'
-      | 'beautify'
-      | 'bgcolor'
-      | 'center'
-      | 'charset'
-      | 'class'
-      | 'clusterrank'
-      | 'colorscheme'
-      | 'comment'
-      | 'compound'
-      | 'concentrate'
-      | 'Damping'
-      | 'defaultdist'
-      | 'dim'
-      | 'dimen'
-      | 'diredgeconstraints'
-      | 'dpi'
-      | 'epsilon'
-      | 'esep'
-      | 'fontcolor'
-      | 'fontname'
-      | 'fontnames'
-      | 'fontpath'
-      | 'fontsize'
-      | 'forcelabels'
-      | 'gradientangle'
-      | 'href'
-      | 'id'
-      | 'imagepath'
-      | 'inputscale'
-      | 'K'
-      | 'label'
-      | 'label_scheme'
-      | 'labeljust'
-      | 'labelloc'
-      | 'landscape'
-      | 'layerlistsep'
-      | 'layers'
-      | 'layerselect'
-      | 'layersep'
-      | 'layout'
-      | 'levels'
-      | 'levelsgap'
-      | 'lheight'
-      | 'linelength'
-      | 'lp'
-      | 'lwidth'
-      | 'margin'
-      | 'maxiter'
-      | 'mclimit'
-      | 'mindist'
-      | 'mode'
-      | 'model'
-      | 'newrank'
-      | 'nodesep'
-      | 'nojustify'
-      | 'normalize'
-      | 'notranslate'
-      | 'nslimit'
-      | 'nslimit1'
-      | 'oneblock'
-      | 'ordering'
-      | 'orientation'
-      | 'outputorder'
-      | 'overlap'
-      | 'overlap_scaling'
-      | 'overlap_shrink'
-      | 'pack'
-      | 'packmode'
-      | 'pad'
-      | 'page'
-      | 'pagedir'
-      | 'quadtree'
-      | 'quantum'
-      | 'rankdir'
-      | 'ranksep'
-      | 'ratio'
-      | 'remincross'
-      | 'repulsiveforce'
-      | 'resolution'
-      | 'root'
-      | 'rotate'
-      | 'rotation'
-      | 'scale'
-      | 'searchsize'
-      | 'sep'
-      | 'showboxes'
-      | 'size'
-      | 'smoothing'
-      | 'sortv'
-      | 'splines'
-      | 'start'
-      | 'style'
-      | 'stylesheet'
-      | 'target'
-      | 'TBbalance'
-      | 'tooltip'
-      | 'truecolor'
-      | 'URL'
-      | 'viewport'
-      | 'voro_margin'
-      | 'xdotversion'
-    > {}
-  export interface $exclude extends $keywordsValidation {}
-}
+export type GraphAttributeKey =
+  | '_background'
+  | 'bb'
+  | 'beautify'
+  | 'bgcolor'
+  | 'center'
+  | 'charset'
+  | 'class'
+  | 'clusterrank'
+  | 'colorscheme'
+  | 'comment'
+  | 'compound'
+  | 'concentrate'
+  | 'Damping'
+  | 'defaultdist'
+  | 'dim'
+  | 'dimen'
+  | 'diredgeconstraints'
+  | 'dpi'
+  | 'epsilon'
+  | 'esep'
+  | 'fontcolor'
+  | 'fontname'
+  | 'fontnames'
+  | 'fontpath'
+  | 'fontsize'
+  | 'forcelabels'
+  | 'gradientangle'
+  | 'href'
+  | 'id'
+  | 'imagepath'
+  | 'inputscale'
+  | 'K'
+  | 'label'
+  | 'label_scheme'
+  | 'labeljust'
+  | 'labelloc'
+  | 'landscape'
+  | 'layerlistsep'
+  | 'layers'
+  | 'layerselect'
+  | 'layersep'
+  | 'layout'
+  | 'levels'
+  | 'levelsgap'
+  | 'lheight'
+  | 'linelength'
+  | 'lp'
+  | 'lwidth'
+  | 'margin'
+  | 'maxiter'
+  | 'mclimit'
+  | 'mindist'
+  | 'mode'
+  | 'model'
+  | 'newrank'
+  | 'nodesep'
+  | 'nojustify'
+  | 'normalize'
+  | 'notranslate'
+  | 'nslimit'
+  | 'nslimit1'
+  | 'oneblock'
+  | 'ordering'
+  | 'orientation'
+  | 'outputorder'
+  | 'overlap'
+  | 'overlap_scaling'
+  | 'overlap_shrink'
+  | 'pack'
+  | 'packmode'
+  | 'pad'
+  | 'page'
+  | 'pagedir'
+  | 'quadtree'
+  | 'quantum'
+  | 'rankdir'
+  | 'ranksep'
+  | 'ratio'
+  | 'remincross'
+  | 'repulsiveforce'
+  | 'resolution'
+  | 'root'
+  | 'rotate'
+  | 'rotation'
+  | 'scale'
+  | 'searchsize'
+  | 'sep'
+  | 'showboxes'
+  | 'size'
+  | 'smoothing'
+  | 'sortv'
+  | 'splines'
+  | 'start'
+  | 'style'
+  | 'stylesheet'
+  | 'target'
+  | 'TBbalance'
+  | 'tooltip'
+  | 'truecolor'
+  | 'URL'
+  | 'viewport'
+  | 'voro_margin'
+  | 'xdotversion';
 
 /**
  * Attribute types available for subgraph.
  * @group Attribute
  */
-export type SubgraphAttributeKey = SubgraphAttributeKey.values;
-
-/** @hidden */
-export namespace SubgraphAttributeKey {
-  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
-  export interface $values extends $keywords<'cluster' | 'rank'> {}
-  export interface $exclude extends $keywordsValidation {}
-}
+export type SubgraphAttributeKey = 'cluster' | 'rank';
 
 /**
  * Attribute types available for cluster subgraph.
  * @group Attribute
  */
-export type ClusterSubgraphAttributeKey = ClusterSubgraphAttributeKey.values;
-
-/** @hidden */
-export namespace ClusterSubgraphAttributeKey {
-  export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;
-  export interface $values
-    extends $keywords<
-      | 'area'
-      | 'bb'
-      | 'bgcolor'
-      | 'class'
-      | 'cluster'
-      | 'color'
-      | 'colorscheme'
-      | 'fillcolor'
-      | 'fontcolor'
-      | 'fontname'
-      | 'fontsize'
-      | 'gradientangle'
-      | 'href'
-      | 'id'
-      | 'K'
-      | 'label'
-      | 'labeljust'
-      | 'labelloc'
-      | 'layer'
-      | 'lheight'
-      | 'lp'
-      | 'lwidth'
-      | 'margin'
-      | 'nojustify'
-      | 'pencolor'
-      | 'penwidth'
-      | 'peripheries'
-      | 'sortv'
-      | 'style'
-      | 'target'
-      | 'tooltip'
-      | 'URL'
-    > {}
-  export interface $exclude extends $keywordsValidation {}
-}
+export type ClusterSubgraphAttributeKey =
+  | 'area'
+  | 'bb'
+  | 'bgcolor'
+  | 'class'
+  | 'cluster'
+  | 'color'
+  | 'colorscheme'
+  | 'fillcolor'
+  | 'fontcolor'
+  | 'fontname'
+  | 'fontsize'
+  | 'gradientangle'
+  | 'href'
+  | 'id'
+  | 'K'
+  | 'label'
+  | 'labeljust'
+  | 'labelloc'
+  | 'layer'
+  | 'lheight'
+  | 'lp'
+  | 'lwidth'
+  | 'margin'
+  | 'nojustify'
+  | 'pencolor'
+  | 'penwidth'
+  | 'peripheries'
+  | 'sortv'
+  | 'style'
+  | 'target'
+  | 'tooltip'
+  | 'URL';
 
 /**
  * Attribute keys for any DOT object.
@@ -383,14 +338,11 @@ export type AttributeKey =
 export type Attribute<T extends AttributeKey> = Attribute.types[T];
 
 export namespace Attribute {
-  export type keys = Omit<$keys, keyof $exclude | symbol | number>;
-  export type types = Omit<$types, keyof $exclude | symbol | number>;
-  export interface $keys extends $keywords<AttributeKey> {}
-  export interface $exclude extends $keywordsValidation {}
   /**
+   * Each attribute key, by itself, with its documentation.
    * @group Attribute
    */
-  export interface $keys {
+  export type keys = {
     /**
      * A string in the [`xdot` format](/docs/attr-types/xdot/) specifying an arbitrary background.
      *
@@ -4573,11 +4525,12 @@ export namespace Attribute {
      * @category Attribute
      */
     z: 'z';
-  }
+  };
   /**
-   * $types is an interface that defines a set of attributes that can be used to configure a graph.
+   * The value type of each attribute.
+   * @group Attribute
    */
-  export interface $types {
+  export type types = {
     _background: string;
     area: Double;
     arrowhead: ArrowType;
@@ -4755,7 +4708,7 @@ export namespace Attribute {
     xlabel: LblString;
     xlp: Point;
     z: Blank | Double;
-  }
+  };
 }
 
 /**
@@ -4766,7 +4719,7 @@ export namespace Attribute {
  * here.
  * @group Attribute
  */
-export interface AttributeValueTypeNames {
+export type AttributeValueTypeNames = {
   _background: 'xdot';
   area: 'double';
   arrowhead: 'arrowType';
@@ -4944,4 +4897,4 @@ export interface AttributeValueTypeNames {
   xlabel: 'lblString';
   xlp: 'point';
   z: 'blank' | 'double';
-}
+};
