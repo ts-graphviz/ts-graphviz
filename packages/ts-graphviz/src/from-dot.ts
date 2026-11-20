@@ -13,6 +13,7 @@ import {
   ownOptions,
   type ResolvedModelTypes,
   type RootGraphModel,
+  type SchemaOfOptions,
   type SubgraphModel,
 } from '@ts-graphviz/common';
 import { createModelKit } from '@ts-graphviz/core';
@@ -96,7 +97,12 @@ export type FromDotOptions<
    * @defaultValue `false`
    */
   dsl?: D;
-} & (D extends true ? { dsl: true } : unknown);
+} & (D extends true ? { dsl: true } : unknown) &
+  // With a schema in `P`, the classes and schema are given: the result is
+  // typed by them.
+  ([keyof SchemaOfOptions<P>] extends [never]
+    ? unknown
+    : { convert: { models: P } });
 
 /**
  * The classes of `convert.models` without a schema: the models of the
